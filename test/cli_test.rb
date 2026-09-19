@@ -4318,6 +4318,62 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P102-1 (Q74): `health --accept-shed SLUG` books the source's CURRENT
+  # withdrawal-shed count as owner-accepted — the anomaly quiets to an
+  # info note, and GROWTH past the accepted level re-arms it.
+  def test_health_accept_shed_records_quiets_and_re_arms_on_growth
+    with_indexed_corpus do |config|
+      db = Sequel.sqlite(config.catalog_path)
+      doc_ids = db[:documents].order(:id).select_map(:id)
+      source_id = db[:documents].where(id: doc_ids.first).get(:source_id)
+      db[:documents].where(id: doc_ids.first).update(withdrawn: true)
+      # Keep the derived stats consistent (the loader maintains them; a
+      # raw seed must too, or the stats-drift invariant fires instead).
+      doc1_passages = db[:passages].where(document_id: doc_ids.first).count
+      db[:source_stats].where(source_id: source_id)
+                       .update(live_documents: Sequel[:live_documents] - 1,
+                               live_passages: Sequel[:live_passages] - doc1_passages,
+                               withdrawn_documents: Sequel[:withdrawn_documents] + 1)
+      db.disconnect
+
+      _out, err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status, "an unaccepted shed over the loud threshold fails health"
+      assert_match(/anomaly finding/i, err)
+
+      out, _err, status = with_config(config) do
+        run_cli(%w[health --accept-shed corpus --note upstream-cleanup])
+      end
+      assert_nil status
+      assert_match(%r{accepted withdrawal shed 1/\d+ for corpus — the creep alarm re-arms past 1}, out)
+      refute_match(/no active shed anomaly/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_nil status, "an accepted shed no longer fails health"
+      assert_match(/withdrawal shed accepted at 1 \(owner, \d{4}-\d{2}-\d{2}\)/, out)
+      assert_match(/health: OK/, out)
+
+      db = Sequel.sqlite(config.catalog_path)
+      db[:documents].where(id: doc_ids[1]).update(retired_upstream: true)
+      doc2_passages = db[:passages].where(document_id: doc_ids[1]).count
+      db[:source_stats].where(source_id: source_id)
+                       .update(live_documents: Sequel[:live_documents] - 1,
+                               live_passages: Sequel[:live_passages] - doc2_passages,
+                               retired_documents: Sequel[:retired_documents] + 1)
+      db.disconnect
+      out, err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status, "growth past the accepted level re-arms the alarm"
+      assert_match(/withdrawal creep/, err + out.to_s)
+    end
+  end
+
+  def test_health_accept_shed_unknown_slug_is_a_named_error
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[health --accept-shed nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source 'nope'/, err)
+    end
+  end
+
   def test_health_accept_creep_unknown_slug_is_a_named_error
     with_indexed_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[health --accept-creep nope]) }

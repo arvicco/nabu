@@ -3,6 +3,7 @@
 require "yaml"
 require_relative "trend_rules"
 require_relative "invariants"
+require_relative "shed_acceptance"
 
 module Nabu
   module Health
@@ -89,13 +90,14 @@ module Nabu
       # skips them honestly.
       def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now,
                      canonical_dir: nil, creep_acceptances_path: nil, workdir_resolver: nil,
-                     place_ref_errata_path: nil)
+                     place_ref_errata_path: nil, shed_acceptances_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
         @ledger = ledger
         @golden_queries = golden_queries
         @now = now
+        @shed_acceptances_path = shed_acceptances_path
         # The P18-7 mechanical invariants ride the same handles; their findings
         # fold into each SourceCheck (plus the Report's global slot), so a green
         # library prints exactly what it printed before — nothing new.
@@ -162,11 +164,18 @@ module Nabu
 
       # Cumulative shed needs the catalog's document counts; without a catalog
       # (or before this source's first load) there is nothing to measure.
+      # Acceptance-aware (P102-1 — Q74): a reviewed shed level quiets to
+      # an info note, re-arms past it, goes dormant below it.
       def creep_finding(entry)
         source = @catalog && Store::Source.first(slug: entry.slug)
         return nil if source.nil?
 
-        TrendRules.withdrawal_creep(shed: shed_count(source), total: total_count(source))
+        shed = shed_count(source)
+        ShedAcceptance.finding(
+          plain: TrendRules.withdrawal_creep(shed: shed, total: total_count(source)),
+          acceptance: ShedAcceptance.latest(@shed_acceptances_path, entry.slug),
+          shed: shed
+        )
       end
 
       # Only enabled, auto-cadence sources are held to the cadence; manual/frozen

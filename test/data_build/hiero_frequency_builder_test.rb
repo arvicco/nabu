@@ -27,8 +27,11 @@ class HieroFrequencyBuilderTest < Minitest::Test
                                       adapter_class: "TestAdapter", license_class: "attribution")
     @pyramid = document("urn:a:1", subcorpus: "pyramidtexts")
     @amarna = document("urn:a:2", subcorpus: "bbawamarna")
-    # N5 in both docs (2+1 tokens); T21 only in the pyramid doc.
-    passage(@pyramid, "urn:a:1:1", tokens: ["N5;T21", "N5"])
+    # N5 in both docs (2+1 tokens); T21 only in the pyramid doc. The
+    # "!" token is a non-Gardiner marker upstream spellings carry (the
+    # 2026-09-19 live catch) — illegal verbatim in a CLDF ID, so the
+    # row's ID minted-folds while the Gardiner column stays verbatim.
+    passage(@pyramid, "urn:a:1:1", tokens: ["N5;T21", "N5", "!"])
     passage(@amarna, "urn:a:2:1", tokens: ["N5"])
     # Withdrawn rows never count (the P77-r13 living-corpus rule).
     withdrawn_doc = document("urn:a:9", subcorpus: "pyramidtexts", withdrawn: true)
@@ -64,7 +67,9 @@ class HieroFrequencyBuilderTest < Minitest::Test
     Dir.mktmpdir do |dir|
       build!(dir)
       ids = CSV.read(File.join(dir, "hiero-frequency.csv"), headers: true)["ID"]
-      assert_equal %w[N5-all N5-bbawamarna N5-pyramidtexts T21-all T21-pyramidtexts], ids
+      assert_equal %w[all pyramidtexts N5-all N5-bbawamarna N5-pyramidtexts
+                      T21-all T21-pyramidtexts], ids,
+                   "the '!' marker's IDs mint-fold ('!' sorts first); Gardiner stays verbatim"
     end
   end
 

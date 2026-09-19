@@ -4,12 +4,14 @@ require_relative "feature"
 require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
+require_relative "cuneiform_senses_builder"
 require_relative "char_postings_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
+require_relative "kind_classifications_builder"
 require_relative "kyujitai_fold_builder"
 require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
@@ -325,6 +327,55 @@ module Nabu
         maintenance: "re-derive after journal-moving events (a sync wave re-running lect rules, " \
                      "new owner rulings, a rebuild) — the published-slice digest makes an " \
                      "unchanged journal a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/kind-classifications", language: LANGUAGES.fetch("mul"),
+        title: "Per-document kind classifications (the fourth axis) across the multilingual catalog",
+        # gold-DERIVED about the fold; the verbatim upstream label per
+        # row IS the tier honesty — every fold is checkable against the
+        # genre claim it was made from (№R-63's preservation invariant).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # The catalog kind projection is the source of truth at URN grain
+        # (the lect-assignments posture); the ruled class list and the
+        # per-source folds are Nabu config, cited by the recipe; the
+        # recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: KindClassificationsBuilder,
+        rationale: "Publishes the classification layer behind Nabu's kind axis (№R-63/№R-66) — " \
+                   "per-document ruled class paths (a 21-family cross-corpus list with named " \
+                   "sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), " \
+                   "multi-label as multiple rows, the VERBATIM upstream genre label riding every " \
+                   "row so each fold is checkable against its source. The honest `unknown` class " \
+                   "publishes; the `unmapped` curation bucket does not (a TODO marker is not a " \
+                   "classification). License classes open+attribution only (nc slices excluded " \
+                   "row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out " \
+                   "carrying the share-alike lanes.",
+        maintenance: "re-derive after classification-moving events (new kind_map folds, a class " \
+                     "tree change, a re-projection) — the published-slice digest makes an " \
+                     "unchanged projection a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/cuneiform-senses", language: LANGUAGES.fetch("mul"),
+        title: "Cuneiform sense glosses from Wiktionary (Sumerian, Akkadian, Hittite)",
+        # gold: verbatim upstream republication (the aozora-gaiji
+        # posture) — every gloss is Wiktionary's own text, anchored by
+        # the shelf entry URN it was published from.
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0",
+        anchoring: "entry-urn",
+        # Declared inputs WITH cones (unlike the catalog-projection mul/
+        # datasets): the rows republish upstream shelf content, so the
+        # stale-ingest guard is load-bearing.
+        inputs: %w[wiktionary-sux wiktionary-akk wiktionary-hit],
+        canonical_cones: %w[wiktionary-sux wiktionary-akk wiktionary-hit],
+        builder: CuneiformSensesBuilder,
+        rationale: "The BY-SA sense-lane sidecar the P73 sign-table deliberately deferred so " \
+                   "its core could stay CC-BY: Wiktionary's sense glosses for the cuneiform " \
+                   "languages (via the kaikki.org extraction), one row per sense — headword, " \
+                   "language, POS, verbatim gloss, entry URN. Sign lists and attestation " \
+                   "counts live in sux/sign-table (CC-BY); the share-alike senses live here, " \
+                   "so neither license contaminates the other.",
+        maintenance: "re-derive after a kaikki shelf re-sync (owner-fired upstream refreshes; " \
+                     "the stale-ingest guard enforces freshness)"
       ),
       Feature.new(
         slug: "mul/place-refs", language: LANGUAGES.fetch("mul"),

@@ -66,9 +66,9 @@ class PlaceMineTest < Minitest::Test
     end
   end
 
-  def miner(stop_names: [])
+  def miner(stop_names: [], allow_names: [])
     Nabu::PlaceMine.new(catalog: @catalog, journal: @journal, gazetteer: "chgis",
-                        stop_names: stop_names)
+                        stop_names: stop_names, allow_names: allow_names)
   end
 
   def test_census_counts_hits_and_applies_the_precision_rules
@@ -131,6 +131,44 @@ class PlaceMineTest < Minitest::Test
                     "22 hits over 25 passages exceeds the stop ceiling of 20"
     assert_equal 3, result.edges_written, "the derived-stopped name mines nothing"
     refute @journal[:links].where(Sequel.like(:to_urn, "%hvd_gate")).any?
+  end
+
+  # The ceiling allow-list (№R-67, owner 2026-09-18 — the 吐蕃/Tibet
+  # case): a RULED genuinely-geographic name may exceed the derived
+  # frequency ceiling and still mine. Allow exempts ONLY the derived
+  # stop — the floor, the ambiguity cap and the hand stop list still
+  # apply; the census reports the exemption instead of the stop.
+  def test_allow_names_exempt_a_ruled_name_from_the_derived_ceiling
+    gate = Place.new(id: "hvd_gate", title: "東門", lat: 6, lon: 6, place_types: [],
+                     time_periods: [], name_keys: ["東門"])
+    Nabu::Store::PlaceIndex.derive!(@catalog, gazetteer: "chgis",
+                                              places: derive_places + [gate],
+                                              names_for: :name_keys.to_proc)
+    doc = Nabu::Store::Document.create(source_id: @source.id, urn: "urn:nabu:kanripo:d3",
+                                       language: "lzh", title: "t3", canonical_path: "z",
+                                       content_sha256: "e" * 64)
+    22.times do |i|
+      Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:kanripo:d3:#{i}",
+                                  language: "lzh", text: "出東門而去",
+                                  text_normalized: "出東門而去",
+                                  content_sha256: format("%064x", 2000 + i),
+                                  sequence: i, revision: 1)
+    end
+
+    result = miner(allow_names: ["東門"]).apply!(source: "kanripo")
+
+    refute_includes result.census.names_stopped.map(&:first), "東門",
+                    "an allowed name never enters the derived stop set"
+    assert_includes result.census.names_allowed.map(&:first), "東門",
+                    "the exemption is censused, never silent"
+    assert_equal 22, @journal[:links].where(Sequel.like(:to_urn, "%hvd_gate")).count,
+                 "the allowed name mines despite exceeding the ceiling"
+  end
+
+  def test_allow_does_not_override_the_hand_stop_list
+    result = miner(stop_names: ["霸州"], allow_names: ["霸州"]).apply!(source: "kanripo")
+    assert_equal 1, result.edges_written,
+                 "allow exempts the ceiling only — a hand stop still wins"
   end
 
   def test_candidates_never_touch_place_ref

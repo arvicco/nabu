@@ -19,6 +19,30 @@ module Nabu
     #   URN column.
     # - Violations RAISE (Nabu::ValidationError) rather than publish a
     #   malformed table: the rail's output is public data.
+    # Collision-proof deterministic ID minting over CsvWriter.mint_id
+    # (P102-4, from the first live sweep: mint_id FOLDS illegal runs to
+    # a single "-", so DISTINCT inputs can mint identical IDs — tlhdig's
+    # "KBo 50.134" manuscript ids, Akkadian amēlu vs amīlu). One minter
+    # per exported table; under a stable export order the -2/-3
+    # disambiguation suffixes are deterministic across builds.
+    class IdMinter
+      def initialize
+        @used = {}
+      end
+
+      def mint(*components)
+        base = CsvWriter.mint_id(*components)
+        candidate = base
+        n = 2
+        while @used.key?(candidate)
+          candidate = "#{base}-#{n}"
+          n += 1
+        end
+        @used[candidate] = true
+        candidate
+      end
+    end
+
     class CsvWriter
       # The CLDF identifier regex, verbatim.
       ID_PATTERN = /\A[a-zA-Z0-9\-_]+\z/

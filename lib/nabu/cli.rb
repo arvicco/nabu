@@ -1732,8 +1732,11 @@ module Nabu
     option :accept_creep, type: :string, banner: "SLUG",
                           desc: "Record owner acceptance of SLUG's current quarantine baseline " \
                                 "(quiets the creep alarm; it re-arms past the accepted level)"
+    option :accept_shed, type: :string, banner: "SLUG",
+                         desc: "Record owner acceptance of SLUG's current withdrawal shed " \
+                               "(quiets the creep alarm; it re-arms past the accepted level — Q74)"
     option :note, type: :string,
-                  desc: "Optional rationale recorded with --accept-creep"
+                  desc: "Optional rationale recorded with --accept-creep / --accept-shed"
     def health
       # Bare `health` is the local, no-network P5-5 check (run-history trends +
       # live golden replay). --remote is the P5-3 upstream probe.
@@ -1742,6 +1745,7 @@ module Nabu
       # keeps its own helper, db lifetime, and exit-code raise.
       return run_backfill_pins if options[:backfill_pins]
       return run_accept_creep(options[:accept_creep]) if options[:accept_creep]
+      return run_accept_shed(options[:accept_shed]) if options[:accept_shed]
 
       options[:remote] ? run_remote_health : run_local_health
     end
@@ -3879,7 +3883,12 @@ module Nabu
         say "  … #{census.name_hits.size - 15} more attested names" if census.name_hits.size > 15
         census.names_stopped.each do |name, count|
           say "  STOPPED #{name} — #{count} passages (above the derived ceiling; " \
-              "a real exception is a config/place_stop_names.yml ruling)"
+              "a genuinely geographic name lost here is an allow_names: ruling " \
+              "in config/place_stop_names.yml — №R-67)"
+        end
+        census.names_allowed.each do |name, count|
+          say "  ALLOWED #{name} — #{count} passages (over the ceiling, mined anyway " \
+              "by allow_names: ruling)"
         end
         say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
             "#{census.candidate_edges} across #{census.name_hits.size} attested names " \
@@ -11407,6 +11416,41 @@ module Nabu
         ledger&.disconnect
       end
 
+      # --accept-shed (P102-1 — Q74): the owner reviewed a withdrawal-creep
+      # anomaly (a one-time upstream curation event) and accepts the source's
+      # CURRENT shed count. Durable in local/config/shed_acceptances.yml (the
+      # P70 posture — config only; shed is measured live from the catalog).
+      # The active-anomaly probe runs BEFORE the acceptance lands.
+      def run_accept_shed(slug)
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        if registry[slug].nil?
+          raise Thor::Error, "accept-shed: unknown source '#{slug}' — not in #{config.sources_path}"
+        end
+
+        catalog = open_catalog(config)
+        raise Thor::Error, "accept-shed: no catalog — nothing to measure" if catalog.nil?
+
+        source = Nabu::Store::Source.first(slug: slug)
+        raise Thor::Error, "accept-shed: '#{slug}' has no documents in this catalog — nothing to accept" if source.nil?
+
+        shed = Nabu::Store::Document.where(source_id: source.id)
+                                    .where(Sequel.|({ withdrawn: true }, { retired_upstream: true }))
+                                    .count
+        total = Nabu::Store::Document.where(source_id: source.id).count
+        active = Nabu::Health::ShedAcceptance.finding(
+          plain: Nabu::Health::TrendRules.withdrawal_creep(shed: shed, total: total),
+          acceptance: Nabu::Health::ShedAcceptance.latest(config.shed_acceptances_path, slug),
+          shed: shed
+        )
+        Nabu::Health::ShedAcceptance.accept!(path: config.shed_acceptances_path, slug: slug,
+                                             shed: shed, note: options[:note])
+        say "accepted withdrawal shed #{shed}/#{total} for #{slug} — the creep alarm re-arms past #{shed}"
+        say "(no active shed anomaly for #{slug} — recorded as a pre-acceptance)" if active.nil? || !anomaly?(active)
+      ensure
+        catalog&.disconnect
+      end
+
       # A finding that affects (or warns toward) the exit code — as opposed to
       # an info-grade note like an already-quieted creep.
       def anomaly?(finding)
@@ -11432,6 +11476,7 @@ module Nabu
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
           canonical_dir: config.canonical_dir,
           creep_acceptances_path: config.creep_acceptances_path,
+          shed_acceptances_path: config.shed_acceptances_path,
           workdir_resolver: config.method(:source_workdir),
           place_ref_errata_path: File.join(config.config_dir, "place_ref_errata.yml")
         ).run
