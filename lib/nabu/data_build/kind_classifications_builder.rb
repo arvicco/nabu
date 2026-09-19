@@ -68,7 +68,7 @@ module Nabu
       def published_rows(catalog)
         sources = catalog[:sources].select_hash(:id, %i[slug license_class])
         state = { rows: [], excluded: Hash.new(0), slugs: {}, kind_rows: 0, unmapped: 0,
-                  seq: Hash.new(0), sha: Digest::SHA256.new }
+                  minter: IdMinter.new, sha: Digest::SHA256.new }
         each_kind_row(catalog) do |row|
           state[:kind_rows] += 1
           if row[:value] == UNMAPPED
@@ -101,13 +101,13 @@ module Nabu
           .paged_each(&)
       end
 
-      # A multi-label document carries several class rows; the per-URN
-      # sequence keeps IDs deterministic under the (urn, facet id)
-      # export order.
+      # A multi-label document carries several class rows, and distinct
+      # urns can FOLD to one minted base (tlhdig manuscript ids) — the
+      # IdMinter disambiguates both, deterministically under the
+      # (urn, facet id) export order.
       def publish(state, row, slug)
         state[:slugs][slug] = true
-        seq = (state[:seq][row[:urn]] += 1)
-        id = seq == 1 ? CsvWriter.mint_id(row[:urn]) : CsvWriter.mint_id(row[:urn], seq.to_s)
+        id = state[:minter].mint(row[:urn])
         state[:sha] << [row[:urn], row[:value], row[:raw]].join("\x1f") << "\n"
         state[:rows] << { "ID" => id, "URN" => row[:urn],
                           "Value" => row[:value], "Kind_Raw" => row[:raw],
