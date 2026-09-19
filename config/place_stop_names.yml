@@ -33,3 +33,35 @@ stop_names:
   - "都城"   # capital city
   - "下安"   # compound crossing
   - "平安"   # peace, safety
+  # kanripo × chgis review round 3 (report 2026-09-14, top-30 sweep;
+  # owner-ratified 2026-09-18, №R-67). Same class: generic classical-
+  # Chinese words/phrases that happen to be CHGIS place names. 文昌
+  # rides from the possible-real quartet — the literature-god reading
+  # dominates the corpus (№R-67 ruling); 江北/中都/西江 stay linkable.
+  - "成章"   # "complete a composition"
+  - "石室"   # stone chamber
+  - "文中"   # "in the text"
+  - "公平"   # fair, just
+  - "三元"   # the three primes (exam/calendrical term)
+  - "同列"   # of the same rank
+  - "白衣"   # white-robed (commoner/lay)
+  - "下山"   # descend the mountain
+  - "方丈"   # abbot's quarters
+  - "老君"   # Laozi epithet
+  - "田里"   # fields and villages
+  - "大喜"   # great joy
+  - "出水"   # emerge from water
+  - "善政"   # good governance
+  - "小心"   # careful
+  - "大海"   # the great sea
+  - "城上"   # atop the walls
+  - "清流"   # clear stream / the "pure" faction
+  - "小山"   # small hill
+  - "文昌"   # the literature god (dominant reading; the Hainan place loses)
+
+# Ceiling exemptions (№R-67, owner 2026-09-18): ruled genuinely-
+# geographic names the derived frequency ceiling must not swallow.
+# Allow exempts the DERIVED stop only — floor, ambiguity cap and the
+# stop list above still apply. Every addition is an owner ruling.
+allow_names:
+  - "吐蕃"   # Tibet — 9,870 kanripo passages, real geography (№R-67)
