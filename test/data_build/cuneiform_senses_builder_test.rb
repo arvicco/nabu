@@ -42,7 +42,11 @@ class CuneiformSensesBuilderTest < Minitest::Test
   def setup
     @catalog = store_test_db
     seed_shelf("wiktionary-sux", [["𒊬", "noun", "orchard"], ["𒊬", "verb", "to write"]])
-    seed_shelf("wiktionary-akk", [%w[šarrum noun king]])
+    # amēlu and amīlu are DISTINCT entries whose urns FOLD to the same
+    # minted ID (diacritics fold to "-" — the 2026-09-19 live
+    # collision): the minter must disambiguate deterministically.
+    seed_shelf("wiktionary-akk", [%w[amēlu noun man], %w[amīlu noun person],
+                                  %w[šarrum noun king]])
     seed_shelf("wiktionary-hit", [
                  %w[𒉿𒀀𒋻 noun water],
                  %w[a noun x], %w[b noun y], %w[c noun z],
@@ -62,7 +66,7 @@ class CuneiformSensesBuilderTest < Minitest::Test
       result = build!(dir)
       table = CSV.read(File.join(dir, "cuneiform-senses.csv"), headers: true)
       assert_equal %w[ID Headword Language_ID Part_Of_Speech Description URN Source], table.headers
-      assert_equal %w[akk hit hit hit hit sux sux],
+      assert_equal %w[akk akk akk hit hit hit hit sux sux],
                    table.map { |row| row["Language_ID"] },
                    "the three cuneiform shelves only, language-then-headword order; " \
                    "withdrawn entries and the Slavonic shelf never appear"
@@ -70,19 +74,19 @@ class CuneiformSensesBuilderTest < Minitest::Test
       assert_equal [%w[noun orchard], ["verb", "to write"]],
                    sar.map { |row| row.values_at("Part_Of_Speech", "Description") },
                    "one row per sense, POS split from the entry id"
-      assert_equal "urn:nabu:dict:wiktionary-akk:šarrum:noun",
+      assert_equal "urn:nabu:dict:wiktionary-akk:amēlu:noun",
                    table.first["URN"]
       assert_equal "wiktionary-akk", table.first["Source"]
       ids = table.map { |row| row["ID"] }
-      assert_equal ids.uniq, ids
-      assert_equal 7, result.resources.first.rows
+      assert_equal ids.uniq, ids, "fold-colliding urns mint distinct deterministic IDs"
+      assert_equal 9, result.resources.first.rows
     end
   end
 
   def test_the_census_rides_in_band
     Dir.mktmpdir do |dir|
       evaluation = build!(dir).evaluation
-      assert_equal({ "akk" => 1, "hit" => 4, "sux" => 2 }, evaluation["rows_by_language"])
+      assert_equal({ "akk" => 3, "hit" => 4, "sux" => 2 }, evaluation["rows_by_language"])
     end
   end
 

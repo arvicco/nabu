@@ -66,13 +66,14 @@ module Nabu
       def published_rows(catalog)
         rows = []
         by_language = Hash.new(0)
+        minter = IdMinter.new
         sha = Digest::SHA256.new
         each_entry(catalog) do |row|
           language = SHELVES.fetch(row[:slug])
           by_language[language] += 1
           pos = part_of_speech(row)
           sha << [row[:urn], row[:gloss]].join("\x1f") << "\n"
-          rows << { "ID" => CsvWriter.mint_id(row[:urn]),
+          rows << { "ID" => minter.mint(row[:urn]),
                     "Headword" => row[:headword], "Language_ID" => language,
                     "Part_Of_Speech" => pos, "Description" => row[:gloss],
                     "URN" => row[:urn], "Source" => row[:slug] }

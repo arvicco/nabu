@@ -34,7 +34,12 @@ class KindClassificationsBuilderTest < Minitest::Test
       ["urn:nabu:alpha:d2", @alpha, [%w[unknown ignoratur]]],
       ["urn:nabu:alpha:d3", @alpha, [%w[unmapped cetera]]],
       ["urn:nabu:alpha:d4", @alpha, [["historiography/annals", nil]]], # source_kind row: no raw
-      ["urn:nabu:closed:d5", @closed, [%w[administrative Administrative]]]
+      ["urn:nabu:closed:d5", @closed, [%w[administrative Administrative]]],
+      # Two DISTINCT urns that fold to the same minted ID (the tlhdig
+      # "KBo 50.134" live collision, 2026-09-19): dots and spaces both
+      # fold to "-", so the minter must disambiguate deterministically.
+      ["urn:nabu:alpha:kbo 50.134", @alpha, [%w[letter Letter]]],
+      ["urn:nabu:alpha:kbo-50 134", @alpha, [%w[letter Letter]]]
     ]
     rows.each do |urn, source, kind_rows|
       doc = Nabu::Store::Document.create(source_id: source.id, urn: urn, title: urn,
@@ -59,7 +64,8 @@ class KindClassificationsBuilderTest < Minitest::Test
       result = build!(dir)
       table = CSV.read(File.join(dir, "kind-classifications.csv"), headers: true)
       assert_equal %w[ID URN Value Kind_Raw Source], table.headers
-      assert_equal %w[urn:nabu:alpha:d1 urn:nabu:alpha:d1 urn:nabu:alpha:d2 urn:nabu:alpha:d4],
+      assert_equal ["urn:nabu:alpha:d1", "urn:nabu:alpha:d1", "urn:nabu:alpha:d2",
+                    "urn:nabu:alpha:d4", "urn:nabu:alpha:kbo 50.134", "urn:nabu:alpha:kbo-50 134"],
                    table.map { |row| row["URN"] },
                    "multi-label = multiple rows; unmapped and the nc slice never appear; " \
                    "unknown (a ruled claim) publishes"
@@ -67,17 +73,18 @@ class KindClassificationsBuilderTest < Minitest::Test
       assert_equal %w[funerary/epitaph sepulcralis alpha],
                    first.values_at("Value", "Kind_Raw", "Source")
       assert_nil table[3]["Kind_Raw"], "a whole-source declaration row carries no upstream label"
-      assert_equal 4, result.resources.first.rows
+      assert_equal 6, result.resources.first.rows
       ids = table.map { |row| row["ID"] }
-      assert_equal ids.uniq, ids, "multi-label rows mint distinct deterministic IDs"
+      assert_equal ids.uniq, ids,
+                   "multi-label rows AND fold-colliding urns mint distinct deterministic IDs"
     end
   end
 
   def test_the_census_rides_in_band
     Dir.mktmpdir do |dir|
       evaluation = build!(dir).evaluation
-      assert_equal 6, evaluation["kind_rows"]
-      assert_equal 4, evaluation["published_rows"]
+      assert_equal 8, evaluation["kind_rows"]
+      assert_equal 6, evaluation["published_rows"]
       assert_equal({ "nc" => 1 }, evaluation["excluded_rows"])
       assert_equal 1, evaluation["unmapped_rows_excluded"]
     end
