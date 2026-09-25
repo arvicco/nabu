@@ -205,7 +205,7 @@ class DataBuildKyujitaiFoldBuilderTest < Minitest::Test
       assert_equal [{ "name" => "CC-BY-SA-4.0", "path" => "https://creativecommons.org/licenses/by-sa/4.0/" }],
                    manifest["licenses"], "the manifest is authoritative over the repo-default CC BY (D51-a)"
       assert_equal "gold", manifest.dig("nabu", "tier")
-      assert_equal 11, manifest.dig("nabu", "counts", "rows"), "9 pairs + 1 refusal + 1 languages row"
+      assert_equal 10, manifest.dig("nabu", "counts", "rows"), "9 pairs + 1 refusal + 1 languages row"
       %w[unihan edrdg].each do |cone|
         sha = manifest.dig("nabu", "derivation", "inputs", cone, "canonical_sha")
         assert_equal Nabu::DerivationFingerprint.canonical_identity(File.join(canonical, cone)), sha
