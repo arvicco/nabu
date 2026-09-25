@@ -50,7 +50,8 @@ module Nabu
         resources = result.resources + [LanguagesTable.resource(count: language_count), SourcesBib.resource]
         File.write(File.join(out_dir, "datapackage.json"),
                    Manifest.generate(feature: feature, resources: resources, input_shas: input_shas,
-                                     recipe: result.recipe, sources: sources, evaluation: result.evaluation))
+                                     recipe: result.recipe, sources: sources, evaluation: result.evaluation,
+                                     data_resources: result.resources))
         fingerprint = Manifest.fingerprint(input_shas: input_shas, recipe: result.recipe)
         File.write(File.join(out_dir, "README.md"),
                    readme(feature: feature, result: result, input_shas: input_shas, fingerprint: fingerprint))
