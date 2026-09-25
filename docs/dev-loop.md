@@ -1,6 +1,6 @@
 # Dev Loop Plan — driving Nabu's implementation with Claude models
 
-*How Nabu gets built with maximum unattended automation, minimum Fable-tier spend, and explicit human approval gates. Ratified 2026-07-03 (§9); this is the operating process, amended in place since — the "proposal" voice below is the original document's, kept for the record.*
+*How Nabu gets built with maximum unattended automation, minimum Fable-tier spend, and explicit human approval gates. Ratified 2026-07-03 (§9); this is the operating process, amended in place since — the "proposal" voice below is the original document's, kept for the record. Since 2026-09 the GENERAL process doctrine (working agreements, board machinery, the full-board slate ritual) is maintained in the owner's dev-loop tooling and applies here in full; this document records Nabu's project specifics, deltas, and history.*
 
 ## 1. Why this project fits an unattended loop
 
@@ -167,52 +167,19 @@ live corpus does. Standing rules:
 
 ## 6c. The phase slate — full-board candidacy (owner-ruled 2026-09-12)
 
-The failure mode this section exists to kill: a slate assembled from
-session memory over-weights whatever the last phase touched, and
-everything older — parked rulings, ruled-but-unscheduled queue items,
-month-old gap reviews — decays silently until it is folklore. (The
-specimen that forced the rule: the 2026-08-10 gap review named layer
-composition "the largest single gap this review found"; no slate in
-the following month surfaced it.) A slate is a **read product, never a
-recall product**. Standing rules:
-
-1. **The board census comes first.** Before any candidate is written,
-   read in full: the work queue (`.docs/work-queue.md`, every entry),
-   the decision register (`.docs/decision-register.md` — open rulings,
-   the slate-matters line, the calendar), the closing phase plan doc's
-   carried items, `.docs/inbox/` (unhandled intake verified against
-   the tree), the most recent gap/archaeology review, the live board
-   (`nabu health`), and two-way sister staleness (each sister's last
-   commit date against the catalog's growth since). The untracked
-   local gate duties (§6b item 6) run in the same sitting.
-2. **Every open item gets an explicit disposition** in the slate:
-   ADOPT (candidate or rider), HOLD (with the reason re-argued in
-   today's terms, never copy-pasted), or KILL (propose closing to the
-   owner). Silent omission is the defect this section bans.
-3. **Age is a signal, not a discount.** Every item carries its minted
-   date; the slate names the oldest open item and answers why it is
-   still open. An item HELD at three consecutive slates must be
-   promoted, owner-ruled dormant, or proposed for the kill — it may
-   not be silently carried a fourth time.
-4. **Gaps before candidates.** Score the library along the standing
-   axes — corpus breadth · enrichment depth · reader surfaces ·
-   publication/outward · operational hygiene · structural layers —
-   from measured state (counts, dates, the health board), and name
-   the weakest axis. Every candidate states which gap it closes. At
-   most ONE candidate may be a continuation of the just-merged arc,
-   and it is labeled as such.
-5. **Periodic archaeology.** Roughly every ten phases (or on owner
-   ask), refresh the plans-vs-shipped audit (the 2026-08-10 gap
-   review is the pattern): re-verify its OPEN tables against the
-   tree, close what shipped, re-mint what still stands as board
-   items. A deferral that lives only in an old plan doc is not on
-   the board and will be lost.
-6. **The slate format:** (i) the board census — every open item with
-   minted date, age, disposition, one-line reason; (ii) the gap read;
-   (iii) two to four candidates, each with value, cost, the gap it
-   closes, and its board line; (iv) ONE recommendation argued from
-   the board, never from the freshness of the last diff. The owner
-   names the phase; the slate never self-adopts.
+The full slate ritual — board census first, explicit ADOPT/HOLD/KILL
+dispositions with ages, the three-hold forcing rule, gaps before
+candidates, periodic archaeology, the slate format — is canonical in
+the owner's dev-loop tooling (its boards doctrine) and BINDING here.
+Nabu's deltas: the board files live under gitignored `.docs/`
+(work-queue.md · decision-register.md · p<N>-plan.md · inbox/); the
+gap axes are **corpus breadth · enrichment depth · reader surfaces ·
+publication/outward · operational hygiene · structural layers**,
+scored from measured state (`nabu health`, the census SSOT, sister
+last-commit dates); and the census instruments are `nabu health` plus
+two-way sister staleness across the family (CLAUDE.md §Sister
+projects). A slate is a read product, never a recall product; the
+owner names the phase.
 
 ## 7. Phase & packet breakdown
 
