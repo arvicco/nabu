@@ -199,8 +199,8 @@ class DataBuildFormLemmaTest < Minitest::Test
       ["gold", "Unsandhied", "sandhi", "Form, Unsandhied, Lemma, Lemma_ID, UPOS"].each do |claim|
         assert_includes recipe, claim, "the recipe states the sweep precisely"
       end
-      assert_equal DISTINCT_TUPLES + DISTINCT_LEMMA_PAIRS + 1, manifest.dig("nabu", "counts", "rows"),
-                   "form-lemma + lemmas + the one languages.csv row"
+      assert_equal DISTINCT_TUPLES + DISTINCT_LEMMA_PAIRS, manifest.dig("nabu", "counts", "rows"),
+                   "form-lemma + lemmas rows — counts describe the data only (P103-5)"
       assert_equal summary.rows, manifest.dig("nabu", "counts", "rows")
 
       source = manifest["sources"].first

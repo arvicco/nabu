@@ -222,7 +222,7 @@ class DataBuildSabellicLoansBuilderTest < Minitest::Test
                    manifest["licenses"], "the dataset's manifest is authoritative over the repo default"
       assert_equal "gold", manifest.dig("nabu", "tier")
       assert_empty manifest.dig("nabu", "derivation", "inputs")
-      assert_equal 85, manifest.dig("nabu", "counts", "rows") - 1, "85 loan rows + the one languages.csv row"
+      assert_equal 85, manifest.dig("nabu", "counts", "rows"), "85 loan rows — counts describe the data only (P103-5)"
       assert_equal summary.fingerprint, manifest.dig("nabu", "derivation", "fingerprint")
 
       readme = File.read(File.join(out_dir, "README.md"))
