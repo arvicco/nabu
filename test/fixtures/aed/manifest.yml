@@ -15,3 +15,11 @@ files:
     url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/dictionary.xml
     whole: false
     trim: 31 of 35,052 entries — the nfr homograph cluster + roots (join contract), empty-bibl root entries, Wb citation shapes incl. the dot-after-volume quirk, de/en/fr/it translation lanes, all eight xr types, and the egy-fold orthography quirks (ꜣ Ꜣ ꜥ ʾ i̯ ṱ 〈〉)
+  - path: files/22PCZ45OYNES7I2IKO73TV327M_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/22PCZ45OYNES7I2IKO73TV327M_hiero.xml
+    whole: true
+    note: glyph-bearing per-text hieroglyph run (P103-2 — the hiero_postings walk; 883 U+13xxx codepoints, incl. glyphs inside <unclear>)
+  - path: files/2235T5FM5VFNLFTZN7P3MXW46U_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/2235T5FM5VFNLFTZN7P3MXW46U_hiero.xml
+    whole: true
+    note: all-<unclear> damaged scene — zero glyphs, the honest empty-count case

@@ -391,6 +391,9 @@ module Nabu
       progress&.stage("kind axis")
       Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
                                   progress: progress, canonical_dir: @config.canonical_dir)
+      progress&.stage("hiero postings")
+      Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
+                                           progress: progress)
       [axes, facets]
     end
 

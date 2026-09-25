@@ -9288,9 +9288,17 @@ module Nabu
         return if card.corpus.empty?
 
         say ""
-        say "in the wild (#{Nabu::Query::HieroCard::HIERO_SOURCES.keys.join(' + ')} annotations): " \
-            "#{card.corpus['signs']} sign(s) across " \
-            "#{card.corpus['passages']} passage(s)"
+        lines = []
+        if card.corpus["passages"]
+          lines << "#{card.corpus['signs']} sign(s) across #{card.corpus['passages']} " \
+                   "passage(s) (#{Nabu::Query::HieroCard::HIERO_SOURCES.keys.join(' + ')} annotations)"
+        end
+        # The AED per-text postings (P103-2) — text grain, its own line.
+        if card.corpus["aed_texts"]
+          lines << "#{card.corpus['aed_signs']} sign(s) across #{card.corpus['aed_texts']} " \
+                   "text(s) (aed hieroglyph transcriptions)"
+        end
+        say "in the wild: #{lines.join(' · ')}"
       end
 
       # The Edubba overlay section (P72-6). The certainty grade is
