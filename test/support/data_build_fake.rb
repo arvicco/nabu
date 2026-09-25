@@ -62,6 +62,7 @@ module DataBuildFake
         Nabu::DataBuild::LanguagesTable.resource(count: 1),
         Nabu::DataBuild::SourcesBib.resource
       ],
+      data_resources: [forms_resource],
       input_shas: { "dcs" => "1111222233334444555566667777888899990000" },
       recipe: FakeFormsBuilder::RECIPE,
       sources: [

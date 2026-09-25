@@ -62,7 +62,7 @@ module Nabu
         # in-band eval hash (published as nabu.eval). Returns the JSON string
         # (pretty, trailing newline).
         def generate(feature:, resources:, input_shas:, recipe:, sources: [], evaluation: nil,
-                     nabu_version: Nabu::VERSION)
+                     nabu_version: Nabu::VERSION, data_resources: nil)
           document = {
             "$schema" => SCHEMA_URL,
             "name" => feature.package_name,
@@ -73,7 +73,8 @@ module Nabu
             "sources" => sources.map { |source| source_entry(source) },
             "resources" => resources.map { |resource| resource_entry(resource) },
             "nabu" => nabu_block(feature: feature, resources: resources, input_shas: input_shas,
-                                 recipe: recipe, evaluation: evaluation, nabu_version: nabu_version)
+                                 recipe: recipe, evaluation: evaluation, nabu_version: nabu_version,
+                                 data_resources: data_resources)
           }
           "#{JSON.pretty_generate(document)}\n"
         end
@@ -102,7 +103,12 @@ module Nabu
           entry
         end
 
-        def nabu_block(feature:, resources:, input_shas:, recipe:, nabu_version:, evaluation: nil)
+        # +data_resources+ (P103-5): the builder's OWN resources — counts
+        # describe the DATA, not the runner's sidecar furniture (the 1-row
+        # languages.csv had been inflating every dataset's headline
+        # counts.rows by one; nil falls back to all resources).
+        def nabu_block(feature:, resources:, input_shas:, recipe:, nabu_version:, evaluation: nil,
+                       data_resources: nil)
           block = {
             "producer" => "nabu data build #{feature.slug}",
             "nabu_version" => nabu_version,
@@ -113,7 +119,7 @@ module Nabu
             },
             "anchoring" => { "kind" => feature.anchoring },
             "tier" => feature.tier,
-            "counts" => { "rows" => resources.sum { |resource| resource.rows.to_i } }
+            "counts" => { "rows" => (data_resources || resources).sum { |resource| resource.rows.to_i } }
           }
           block["eval"] = evaluation if evaluation
           block
