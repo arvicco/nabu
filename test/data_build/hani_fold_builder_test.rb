@@ -91,7 +91,8 @@ class DataBuildHaniFoldBuilderTest < Minitest::Test
       assert_equal REFUSALS_COLUMNS, refusals.headers
       assert_equal 1, refusals.size, "hand-resolved: only 体 refuses (self-listing)"
 
-      assert_equal 6, summary.rows, "4 pairs + 1 refusal + 1 languages row"
+      assert_equal 5, summary.rows,
+                   "4 pairs + 1 refusal — the languages sidecar never counts (P103-5)"
 
       languages = CSV.read(File.join(out_dir, "languages.csv"))
       assert_equal %w[ID Name Glottocode ISO639P3code], languages[0]

@@ -145,7 +145,8 @@ class DataBuildKanripoGaijiBuilderTest < Minitest::Test
       assert_equal "lzh-kanripo-gaiji", manifest["name"]
       assert_equal [{ "name" => "CC-BY-SA-4.0", "path" => "https://creativecommons.org/licenses/by-sa/4.0/" }],
                    manifest["licenses"], "the manifest is authoritative over the repo-default CC BY (D51-a)"
-      assert_equal 989, manifest.dig("nabu", "counts", "rows"), "427 + 0 + 562 lane rows + 1 languages row"
+      assert_equal 989, manifest.dig("nabu", "counts", "rows"),
+                   "427 + 0 + 562 lane rows — counts describe the data only (P103-5)"
       assert_empty manifest.dig("nabu", "derivation", "inputs"),
                    "no build-time cones — provenance is the recipe's TSV shas + the recorded charlist pin"
 
