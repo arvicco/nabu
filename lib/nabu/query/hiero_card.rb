@@ -32,6 +32,14 @@ module Nabu
       #   tla-hf — "hieroglyphs": rendered glyph runs with inline
       #            <g>CODE</g> escapes for signs without codepoints
       #            (3,606 annotated passages measured at the P96 audit).
+      #   aed    — PRECOMPILED (P103-2): the hiero_postings table built
+      #            from canonical/aed's 13,949 per-text stand-off files
+      #            (Store::HieroPostingsBuilder); the card reads ONE row
+      #            and reports it under its own additive aed_texts/
+      #            aed_signs keys — text grain, never conflated with the
+      #            passage-grain counts above. Codepoint signs only (the
+      #            AED runs are plain U+13xxx; a no-codepoint sign has
+      #            no row, honestly).
       HIERO_SOURCES = { "aes" => :inventar, "tla-hf" => :glyph_run }.freeze
 
       # +overlay+ (P72-6): the Nabu::EdubbaOverlay read seam, or nil when
@@ -102,7 +110,18 @@ module Nabu
             tokens += passage_tokens
           end
         end
-        passages.zero? ? {} : { "passages" => passages, "signs" => tokens }
+        panel = passages.zero? ? {} : { "passages" => passages, "signs" => tokens }
+        panel.merge(aed_panel(sign))
+      end
+
+      # The precompiled AED postings row (P103-2) — additive keys on the
+      # frozen corpus contract; no row (unfetched cone, no-codepoint
+      # sign) → no keys, never zero-filled.
+      def aed_panel(sign)
+        return {} unless sign.glyph && @catalog&.table_exists?(:hiero_postings)
+
+        row = @catalog[:hiero_postings].first(glyph: sign.glyph)
+        row ? { "aed_texts" => row[:texts], "aed_signs" => row[:signs] } : {}
       end
 
       def count_source(slug, shape, sign)

@@ -36,10 +36,10 @@ class AedTest < Minitest::Test
     assert_equal :dictionary, Nabu::Adapters::Aed.content_kind
   end
 
-  def test_fetch_is_sparse_scoped_to_the_dictionary_cone
+  def test_fetch_is_sparse_scoped_to_the_dictionary_and_hiero_cone
     # The repo carries ~55,000 AES text files (651 MB working tree) that are
     # NOT this shelf; the sparse cone keeps a sync at dictionary weight.
-    assert_equal ["files/dictionary.xml", "README.md"], Nabu::Adapters::Aed::SPARSE_PATHS
+    assert_equal ["files/dictionary.xml", "files/*_hiero.xml", "README.md"], Nabu::Adapters::Aed::SPARSE_PATHS
   end
 
   # --- discover → parse round-trip ----------------------------------------------

@@ -54,7 +54,12 @@ module Nabu
 
       # The sparse cone: the one dictionary file + the README that carries
       # the project description (the license grant is in-file).
-      SPARSE_PATHS = ["files/dictionary.xml", "README.md"].freeze
+      # P103-2 widened the cone to the per-text stand-off hieroglyph
+      # files (13,949 `files/<TLA-text-id>_hiero.xml`, ~60 MB): the
+      # HieroPostingsBuilder walk censuses them into hiero_postings for
+      # the sign card's third counted source. The corpus half proper
+      # (per-text .xml editions) deliberately stays OUT of the cone.
+      SPARSE_PATHS = ["files/dictionary.xml", "files/*_hiero.xml", "README.md"].freeze
 
       DICTIONARY_FILE = File.join("files", "dictionary.xml").freeze
       DICTIONARY_SLUG = "aed"
