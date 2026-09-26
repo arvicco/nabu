@@ -99,6 +99,18 @@ class CroalaTest < Minitest::Test
                  adapter.parse(ref_for(DONATIO)).title
   end
 
+  # P104-1 (Q77): upstream's own two-level genre taxonomy (keywords
+  # scheme="genre") projects as a facet — one row per term, the IIP
+  # plural-values shape.
+  def test_genre_terms_ride_as_a_plural_facet
+    metadata = adapter.parse(ref_for(DONATIO)).metadata
+    assert_equal({ "values" => ["prosa oratio - donatio", "prosa oratio - diploma",
+                                "prosa oratio - acta"] },
+                 metadata.dig("facets", "genre"))
+    assert_equal ["prosa oratio - donatio", "prosa oratio - diploma", "prosa oratio - acta"],
+                 metadata["genre"], "the plain metadata key stays — consumers already read it"
+  end
+
   # -- verse: line grain, multiple sibling divs, the sparse @n ----------------
 
   def test_verse_is_line_grain_across_positional_sibling_divs

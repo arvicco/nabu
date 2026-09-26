@@ -112,8 +112,16 @@ module Nabu
       end
 
       def extraction_metadata(extraction)
-        extraction.header.slice("author", "author_gnd", "date", "place",
-                                "genre", "subgenre", "dta_dirname").compact
+        metadata = extraction.header.slice("author", "author_gnd", "date", "place",
+                                           "genre", "subgenre", "dta_dirname").compact
+        # P104-1 (Q77): the dtamain/dtasub classCodes as facets — most of
+        # the corpus carries none (2,010 genre / 1,850 subgenre of 5,478
+        # censused 2026-09-26): honest sparsity, never a blank row.
+        facets = %w[genre subgenre].filter_map do |facet|
+          [facet, { "value" => metadata[facet] }] if metadata[facet]
+        end.to_h
+        metadata["facets"] = facets unless facets.empty?
+        metadata
       end
 
       def disambiguate_collisions(units)

@@ -109,8 +109,10 @@ class AoxmlParserTest < Minitest::Test
     assert_equal ["KBo 52.195", "Bo 7016", "Bo 6803", "KBo 52.113"], doc.metadata["manuscripts"],
                  "the AO:Manuscripts witness sigla, in order"
     assert_equal({ "cth" => { "value" => "626", "raw" => "CTH 626" },
-                   "project" => { "value" => "hfr", "raw" => "HFR" } },
-                 doc.metadata["facets"])
+                   "project" => { "value" => "hfr", "raw" => "HFR" },
+                   "language" => { "values" => ["hit"] } },
+                 doc.metadata["facets"],
+                 "P104-1: the language facet joins the pair — mapped line languages, multi-valued")
   end
 
   def test_digit_selection_resolves_the_candidate_and_its_letter_sub_alternative

@@ -359,6 +359,14 @@ module Nabu
         metadata["manuscripts"] = manuscripts unless manuscripts.empty?
         rubric = rubric_text(main)
         metadata["rubric"] = rubric if rubric
+        # P104-1 (Q77): genre + formal features as facets — value the
+        # normalized genre, raw the sidebar line verbatim; one row per
+        # formal feature (the IIP plural-values shape). Manuscript sigla
+        # stay metadata-only: near-unique per song, they are future
+        # witness/collation links, not a facet.
+        facets = { "genre" => { "value" => metadata["genre"], "raw" => genre_line } }
+        facets["form"] = { "values" => form } unless form.empty?
+        metadata["facets"] = facets
         metadata
       end
 

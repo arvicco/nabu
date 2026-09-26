@@ -71,3 +71,86 @@ periods:
   "8th/7th century":       {band: [-800, -600],   basis: assyriological}
   "Late Middle Assyrian or early Neo-Assyrian":
                            {band: [-1100, -900],  basis: assyriological, note: the bridge span, coarse}
+
+  # -- SEAL's composite period labels (P104-1; census 2026-09-26: OB 314 ·
+  # MB/MA 72 · OA 11 · Archaic/OAkk/Ebla 7 · Later Periods 4 — OB/OA ride
+  # the existing rows). Each composite bands to the JOINED span of its
+  # member periods — honest envelopes, never midpoints.
+  "Middle Babylonian/Assyrian":
+                           {band: [-1400, -1000], basis: assyriological,
+                            note: the MB and MA bands joined}
+  "Archaic/Old Akkadian/Ebla":
+                           {band: [-2600, -2200], basis: assyriological,
+                            note: SEAL's earliest-Akkadian shelf — ED IIIa through the
+                              Old Akkadian upper bound (Ebla sits inside the span)}
+  "Later Periods (SB, NA, LB)":
+                           {band: [-1000, 75],    basis: assyriological,
+                            note: first-millennium manuscripts through the latest dated
+                              cuneiform text (the Late Babylonian upper bound); SB names
+                              the register of these copies, not a period of its own}
+
+  # -- Chinese dynasty spans (P104-1, №R-70 grade-2 era dating: the cbeta
+  # header bylines and the kanripo KR-Catalog 人物 DYNASTY attributions
+  # band here; census 2026-09-26 over both vocabularies). basis
+  # `sinological` = standard handbook convention (Wilkinson, Chinese
+  # History: A New Manual — conventional dynastic spans, CE unless
+  # negative). Attribution-era claims, so consumers label their rows
+  # precision "era"; a value without a row (compound "南宋 - 元 , 明",
+  # sub-period "唐初期", 日本 — a country, not an era) mints nothing.
+  "周":                    {band: [-1046, -256],  basis: sinological}    # Zhou
+  "秦":                    {band: [-221, -206],   basis: sinological}    # Qin
+  "漢":                    {band: [-206, 220],    basis: sinological}    # Han, whole span
+  "前漢":                  {band: [-206, 8],      basis: sinological}    # Western Han
+  "後漢":                  {band: [25, 220],      basis: sinological}    # Eastern Han
+  "魏":                    {band: [220, 265],     basis: sinological}    # Cao Wei
+  "曹魏":                  {band: [220, 265],     basis: sinological, note: Cao Wei spelled out}
+  "蜀":                    {band: [221, 263],     basis: sinological}    # Shu Han
+  "吳":                    {band: [222, 280],     basis: sinological}    # Eastern Wu
+  "晉":                    {band: [265, 420],     basis: sinological}    # Jin, whole span
+  "西晉":                  {band: [265, 316],     basis: sinological}
+  "東晉":                  {band: [317, 420],     basis: sinological}
+  "六朝":                  {band: [220, 589],     basis: sinological,
+                            note: the Six Dynasties — honest coarseness}
+  "前秦":                  {band: [351, 394],     basis: sinological}    # Former Qin
+  "符秦":                  {band: [351, 394],     basis: sinological, note: Former Qin, Fu-clan spelling}
+  "苻秦":                  {band: [351, 394],     basis: sinological, note: Former Qin, Fu-clan spelling}
+  "後秦":                  {band: [384, 417],     basis: sinological}    # Later Qin
+  "姚秦":                  {band: [384, 417],     basis: sinological, note: Later Qin, Yao-clan spelling}
+  "西秦":                  {band: [385, 431],     basis: sinological}    # Western Qin
+  "乞伏秦":                {band: [385, 431],     basis: sinological, note: Western Qin, Qifu-clan spelling}
+  "北涼":                  {band: [397, 439],     basis: sinological}    # Northern Liang
+  "南朝宋":                {band: [420, 479],     basis: sinological}    # Liu Song
+  "劉宋":                  {band: [420, 479],     basis: sinological, note: Liu Song, clan spelling}
+  "南齊":                  {band: [479, 502],     basis: sinological}    # Southern Qi
+  "蕭齊":                  {band: [479, 502],     basis: sinological, note: Southern Qi, Xiao-clan spelling}
+  "梁":                    {band: [502, 557],     basis: sinological}    # Liang
+  "陳":                    {band: [557, 589],     basis: sinological}    # Chen
+  "北魏":                  {band: [386, 534],     basis: sinological}    # Northern Wei
+  "後魏":                  {band: [386, 534],     basis: sinological, note: Northern Wei, older name}
+  "元魏":                  {band: [386, 534],     basis: sinological, note: Northern Wei, Yuan-clan spelling}
+  "東魏":                  {band: [534, 550],     basis: sinological}
+  "西魏":                  {band: [535, 556],     basis: sinological}
+  "北齊":                  {band: [550, 577],     basis: sinological}    # Northern Qi
+  "高齊":                  {band: [550, 577],     basis: sinological, note: Northern Qi, Gao-clan spelling}
+  "北周":                  {band: [557, 581],     basis: sinological}    # Northern Zhou
+  "隋":                    {band: [581, 618],     basis: sinological}    # Sui
+  "唐":                    {band: [618, 907],     basis: sinological}    # Tang
+  "五代":                  {band: [907, 960],     basis: sinological}    # Five Dynasties
+  "南唐":                  {band: [937, 975],     basis: sinological}    # Southern Tang
+  "後蜀":                  {band: [934, 965],     basis: sinological}    # Later Shu
+  "遼":                    {band: [916, 1125],    basis: sinological}    # Liao
+  "宋":                    {band: [960, 1279],    basis: sinological}    # Song, whole span
+  "北宋":                  {band: [960, 1127],    basis: sinological}
+  "南宋":                  {band: [1127, 1279],   basis: sinological}
+  "金":                    {band: [1115, 1234],   basis: sinological}    # Jurchen Jin
+  "元":                    {band: [1271, 1368],   basis: sinological}    # Yuan
+  "明":                    {band: [1368, 1644],   basis: sinological}    # Ming
+  "清":                    {band: [1644, 1911],   basis: sinological}    # Qing
+  "淸":                    {band: [1644, 1911],   basis: sinological, note: Qing, variant glyph}
+  "民國":                  {band: [1912, 1949],   basis: sinological,
+                            note: the Republic on the mainland — the KR-Catalog's own cutoff}
+  # Sinographic-cosmopolis era seats the cbeta bylines also carry:
+  "新羅":                  {band: [-57, 935],     basis: sinological,
+                            note: Silla's conventional whole span — honest coarseness}
+  "高麗":                  {band: [918, 1392],    basis: sinological}    # Goryeo
+  "朝鮮":                  {band: [1392, 1897],   basis: sinological}    # Joseon

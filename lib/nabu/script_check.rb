@@ -40,7 +40,8 @@ module Nabu
       "hang" => /\p{Hangul}/,
       "avst" => /\p{Avestan}/,
       "ugar" => /\p{Ugaritic}/,
-      "xpeo" => /\p{Old_Persian}/
+      "xpeo" => /\p{Old_Persian}/,
+      "mymr" => /\p{Myanmar}/
     }.freeze
 
     # Registry scripts a byte check CANNOT mirror, with the reason stated —

@@ -339,3 +339,33 @@ Full-download census (2026-07-19; upstream Last-Modified 2026-07-16):
     carry ja 茶 (roman `cha`) / ryu / ko 차(茶) readings raw_tags
     `["borrowed"]`; the ja/ko codes pass through unmapped (display-only
     until a CJK gold shelf lands — the P32-4 bridge's future join).
+
+## P104-2 addition (Q79 regression lines; cut 2026-09-26)
+
+Five lines appended to `kaikki.org-dictionary-Chinese.jsonl` (now 11
+lines, 10 entries) — the two poison shapes that quarantined the live
+1.1 GB extract on every sync from 2026-08-22 (`errored=1`, zero zh
+dictionaries in the catalog), each cut byte-verbatim from the box's own
+canonical asset
+(`canonical/wiktionary-recon/chinese/kaikki.org-dictionary-Chinese.jsonl`,
+the same 2026-07-19 download; `sed -n '<line>p'`):
+
+  - `" "` punct (upstream line **53403**) — poison shape 1, the
+    **"Unsupported titles/Space"** record: Wiktionary titles MediaWiki
+    cannot represent live under `Unsupported titles/…`, and wiktextract
+    emits them with the RAW character as `word` (here a single U+0020;
+    `original_title` carries the page name). The ONLY such record in all
+    323,840 lines — it raised through DictionaryEntry's non-empty
+    key_raw validation. Since P104-2 the parser SKIPS headwordless
+    records (whitespace-only `word`) instead of minting them; this line
+    pins the skip (re-find it by
+    `"original_title": "Unsupported titles/Space"`).
+  - `夆` character ×4 (upstream lines **5047–5050**) — poison shape 2,
+    the cross-path id collision: three etymology-less records mint
+    positionally (`夆:character`, `:2`, `:3`), then the fourth carries
+    `etymology_number: "3"` whose bare base is the SAME
+    `夆:character:3` — the duplicate-id ValidationError in
+    DictionaryDocument#<<. Two such quartets in the full file (夆 line
+    5050, 芘 line 18665). Since P104-2 the mint bumps past
+    already-minted ids (the fourth record lands on `夆:character:3:2`);
+    these lines pin the bump.

@@ -115,3 +115,25 @@ excludes exactly the translations. → translation documents carry
   types: `object`, `surface`, `line-start`, `nonw` (inline fragment, e.g.
   `"/"`), `nonx` (illegible/excised stretches). Every `line-start` carries
   a `label`, unique within its text (verified project-wide).
+
+## Glossary fixtures (P104-4 — the secondary dictionary lane)
+
+Two real per-project glossary files for the `OraccGlossaryLane`
+(`gloss-<lang>.json` — the signature-indexed lemma lists shipping inside
+the same project zips), cut **2026-09-26** from this box's own
+`canonical/oracc/` asset (fetched from the same per-project zips above):
+
+- `rimanum/gloss-sux.json` — **whole file, byte-verbatim** (168 KB, 25
+  entries; retrieved in the rimanum zip, upstream build 2024-06-28). Also
+  the streaming-honesty rig: its `instances`/`summaries` tail after the
+  `entries` array must never be read by the lane's scanner.
+- `saao-saa01/saa01/gloss-qpn.json` — **structurally-intact truncation**
+  of the real 1.4 MB file (upstream build in the saao-saa01 zip), at the
+  real NESTED zip root. Recipe: parse the canonical file, keep
+  `entries[0..5]` (ʾAtaya … Adad-abuʾa), filter `instances`/`summaries`
+  to the kept entries' `xis` keys, re-serialize with `json.dump(...,
+  ensure_ascii=False, indent=2)`. Header (type/project/lang/license
+  members) verbatim.
+
+License: both files carry the same machine-readable CC0 statement as the
+rest of the build ("This data is released under the CC0 license").

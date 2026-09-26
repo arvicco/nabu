@@ -366,12 +366,45 @@ module Nabu
       end
 
       def document_metadata(header, body, document_ref)
+        subject = book_subj(header.meta_lines)
         document_ref.metadata.slice("title_ar", "author_lat", "author_ar", "death_ah", "status")
                     .merge(
                       "meta_lines" => (header.meta_lines unless header.meta_lines.empty?),
+                      "book_subj" => subject,
+                      "facets" => facets(subject, document_ref.metadata["death_ah"]),
                       "census" => (body.census unless body.census.empty?),
                       "version_issues" => sidecar_issues(document_ref.path)
                     ).compact
+      end
+
+      # P104-1 (Q77 under №R-70): the #META# block's 021.BookSUBJ value,
+      # verbatim ("جاهلي :: دواوين الشعر العربي" — the "::" hierarchy is
+      # upstream's, kept whole); NODATA-class fillers are absence, never
+      # a value. Feeds the "subject" facet, which the kind_map openiti
+      # rule folds. (NO_META: upstream's absence fillers.)
+      def book_subj(meta_lines)
+        line = meta_lines.find { |meta| meta.include?("021.BookSUBJ") } or return nil
+
+        value = line.split("::", 2).last.to_s.strip
+        value unless value.empty? || %w[NODATA NOTGIVEN NOCODE].include?(value)
+      end
+
+      # The facet pair: subject verbatim + the AH death CENTURY as the
+      # period facet — an honest era label (the author died in that
+      # century; composition is on-or-before), value sortable as
+      # "AH 0601–0700", raw naming the claim. The exact CE conversion
+      # already rides document_axes (OpenitiDates, P41-2) — the facet is
+      # the browseable band, not a second date claim.
+      def facets(subject, death_ah)
+        facets = {}
+        facets["subject"] = { "value" => subject } if subject
+        if death_ah.is_a?(Integer) && death_ah.positive?
+          century_start = (((death_ah - 1) / 100) * 100) + 1
+          facets["period"] = { "value" => format("AH %<from>04d–%<to>04d",
+                                                 from: century_start, to: century_start + 99),
+                               "raw" => "d. AH #{death_ah}" }
+        end
+        facets unless facets.empty?
       end
 
       # The .yml sidecar's ISSUES value (PRIMARY_VERSION flags etc.),

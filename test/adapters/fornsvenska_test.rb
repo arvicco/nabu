@@ -83,6 +83,12 @@ module Adapters
       assert_equal "12901231", document.metadata["dateto"]
     end
 
+    def test_fornsvenska_is_registered_for_the_compact_date_keys_shape
+      assert_equal :compact_date_keys,
+                   Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["fornsvenska"],
+                   "P104-1: the datefrom/dateto bounds project into document_axes"
+    end
+
     def test_passages_are_sentences_at_paragraph_dot_sentence
       document = parse_urn("urn:nabu:fornsvenska:aldre-vastgotalagen")
       assert_equal %w[

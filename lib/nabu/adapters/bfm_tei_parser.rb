@@ -181,9 +181,13 @@ module Nabu
         PUNCTUATION_POS = /\APON/
         NO_LEMMA = "no_lem"
         LANGUAGE_SHAPE = /\A[a-z]{2,3}(-[A-Za-z0-9]{1,8})*\z/
+        # P104-1 (Q77): upstream's explicit unknown dialect — honest
+        # absence at facet time, never a facet value.
+        UNDEFINED_DIALECT = "non défini"
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS,
                          :CHOICE_DROPPED_ELEMENTS, :SEPARATOR_ELEMENTS,
-                         :PUNCTUATION_POS, :NO_LEMMA, :LANGUAGE_SHAPE
+                         :PUNCTUATION_POS, :NO_LEMMA, :LANGUAGE_SHAPE,
+                         :UNDEFINED_DIALECT
 
         Result = Data.define(:units, :title, :language, :metadata)
 
@@ -365,8 +369,25 @@ module Nabu
             "domaine" => flatten(@header[:domaine]),
             "genre" => flatten(@header[:genre]),
             "forme" => flatten(@header[:forme]),
-            "license_url" => @header[:license_url]
+            "license_url" => @header[:license_url],
+            "facets" => facets
           }.compact
+        end
+
+        # P104-1 (Q77): the header keywords as facets — French values
+        # verbatim (upstream's own vocabulary) under the library's shared
+        # English facet keys. The dialect lane is the recorded evidence
+        # base for a future fr:old lect-stage refinement (a mint decision,
+        # not extraction).
+        def facets
+          result = {}
+          { "domain" => :domaine, "genre" => :genre, "form" => :forme }.each do |facet, key|
+            value = flatten(@header[key])
+            result[facet] = { "value" => value } if value
+          end
+          dialect = flatten(@header[:dialect])
+          result["dialect"] = { "value" => dialect } if dialect && dialect != UNDEFINED_DIALECT
+          result.empty? ? nil : result
         end
 
         # -- body: div context ------------------------------------------------

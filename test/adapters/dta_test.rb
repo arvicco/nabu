@@ -79,6 +79,16 @@ class DtaTest < Minitest::Test
     assert_equal "1524", documents.fetch(LUTHER).metadata["date"]
   end
 
+  # P104-1 (Q77): the dtamain/dtasub classCodes project as facets (2,010
+  # genre / 1,850 subgenre docs at the 2026-09-26 census; the rest carry
+  # no classCode — honest sparsity).
+  def test_genre_class_codes_ride_as_facets
+    kant = documents.fetch(KANT)
+    assert_equal({ "value" => "Fachtext" }, kant.metadata.dig("facets", "genre"))
+    assert_equal({ "value" => "Philosophie" }, kant.metadata.dig("facets", "subgenre"))
+    assert_equal({ "value" => "Belletristik" }, documents.fetch(FONTANE).metadata.dig("facets", "genre"))
+  end
+
   def test_the_print_year_wins_over_the_digital_timestamp
     # fileDesc's publicationStmt carries the DTA edition's 2025 timestamp
     # under the SAME date @type; only sourceDesc/biblFull holds the print

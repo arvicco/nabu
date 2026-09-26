@@ -424,3 +424,25 @@ namespace :tools do
     Nabu::ToolBootstrap.new.print_status
   end
 end
+
+# The standalone corpus-wide builder pass (P104; owner rule 2026-09-26:
+# rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
+# changes refresh projections through this task, never via a rebuild).
+namespace :builders do
+  desc "Re-project timeline + places + facets + kind axis over the live catalog"
+  task :refresh do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    config = Nabu::Config.load
+    catalog = Sequel.connect("sqlite://#{File.join(config.db_dir, 'catalog.sqlite3')}")
+    progress = Nabu::ProgressReporter.new(
+      on_stage: ->(name, _eta = nil) { puts "  stage: #{name}" },
+      on_load_tick: ->(count, _errored) { puts "  … #{count}" if (count % 100_000).zero? }
+    )
+    summary = Nabu::Ops::BuilderRefresh.run(catalog: catalog, config: config,
+                                            progress: progress)
+    puts "builders:refresh done — facets #{summary.facets.rows} rows"
+  ensure
+    catalog&.disconnect
+  end
+end

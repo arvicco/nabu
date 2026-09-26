@@ -158,6 +158,22 @@ class TlhdigTest < Minitest::Test
     assert_equal({ "value" => "hfr", "raw" => "HFR" }, document.metadata.dig("facets", "project"))
   end
 
+  # P104-1 (Q77 under №R-70): the per-line lg tags were parsed since
+  # P31-1 but never faceted — a mixed-language tablet (Hattic ritual
+  # with Hittite rubrics, Akkadian beside Hittite) was invisible to any
+  # language filter. One multi-valued "language" facet per document:
+  # the distinct MAPPED line languages in attestation order ("und" and
+  # inherit-empty lines never claim).
+  def test_language_facet_carries_the_distinct_mapped_line_languages
+    hurrian = adapter.parse(ref_for("urn:nabu:tlhdig:786:hfr:kbo.20.119"))
+    assert_equal %w[hit xhu], hurrian.metadata.dig("facets", "language", "values").sort,
+                 "the Hurrian-dominant tablet still claims its Hittite lines"
+    bilingual = adapter.parse(ref_for("urn:nabu:tlhdig:314:tlh:kub.4.8"))
+    assert_equal %w[akk hit], bilingual.metadata.dig("facets", "language", "values").sort
+    monoglot = adapter.parse(ref_for(DAMAGE_URN))
+    assert_equal ["hit"], monoglot.metadata.dig("facets", "language", "values")
+  end
+
   # -- store: idempotent double-load ------------------------------------------
 
   def test_loads_idempotently_into_the_store

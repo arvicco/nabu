@@ -275,6 +275,23 @@ class OpenitiTest < Minitest::Test
                  "the opaque #META# block rides verbatim as provenance"
   end
 
+  # P104-1 (Q77 under №R-70): the #META# block's 021.BookSUBJ and the
+  # TSV death year graduate to facets — subject verbatim (the kind rule
+  # folds it), period as the AH death century (an honest era label; the
+  # CE conversion already rides document_axes via OpenitiDates).
+  def test_book_subj_and_period_facets_project_from_the_meta_block
+    poetry = parse_urn("urn:nabu:openiti:0001AbuTalibCabdManaf.Diwan.JK007501-ara1")
+    assert_equal "جاهلي :: دواوين الشعر العربي", poetry.metadata["book_subj"]
+    assert_equal "جاهلي :: دواوين الشعر العربي", poetry.metadata.dig("facets", "subject", "value")
+    assert_equal({ "value" => "AH 0001–0100", "raw" => "d. AH 1" },
+                 poetry.metadata.dig("facets", "period"))
+    hafiz = parse_urn("urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1")
+    assert_nil hafiz.metadata["book_subj"], "no BookSUBJ line — no subject, never invented"
+    assert_nil hafiz.metadata.dig("facets", "subject")
+    assert_equal "AH 0701–0800", hafiz.metadata.dig("facets", "period", "value")
+    assert_equal "d. AH 792", hafiz.metadata.dig("facets", "period", "raw")
+  end
+
   def test_yml_sidecar_issues_ride_verbatim_when_present
     urn = "urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1"
     ref = discover_ref(urn)

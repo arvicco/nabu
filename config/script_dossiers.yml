@@ -306,3 +306,17 @@ xpeo:
   desk: >-
     The Achaemenid shelves hold transliteration as the working surface;
     the artifact-script field records xpeo.
+
+mymr:
+  name: Myanmar (Burmese) script
+  context: >-
+    The Brahmi-derived abugida of Burma, reaching Old Burmese through
+    Mon letters in the Pagan period — the rounded forms are the mark of
+    palm-leaf incising, where straight strokes split the leaf. The
+    earliest dated Burmese monuments are early 12th-century (the
+    quadrilingual Myazedi inscription, 1113 CE, foremost); the script
+    also carries Mon, Shan, and Pali in Burma.
+  desk: >-
+    The Old Burmese inscription shelf holds its texts directly in the
+    Unicode Myanmar block, so artifact script and byte surface
+    coincide; transliteration rides beside, not instead.

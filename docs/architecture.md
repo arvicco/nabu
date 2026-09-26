@@ -221,7 +221,16 @@ document_facets(document_id, facet, value, ...)
    -- declaration) onto the ruled cross-corpus class list
    -- (config/kind_classes.yml + kind_map.yml), multi-label, raw
    -- upstream value preserved per row; behind `search --kind` (family
-   -- prefix matching) and the show card's kind line.
+   -- prefix matching) and the show card's kind line. Rows arrive by
+   -- TWO lanes (both Store::FacetBuilder, both drop-and-reproject):
+   -- the adapter-emitted metadata_json "facets" key, and — P104-1,
+   -- under the №R-70 aggressive-mining ruling — the config/facet_map.yml
+   -- metadata-field projections (Nabu::FacetMap: per-source
+   -- declarations of which plain metadata_json fields project as which
+   -- facet, values verbatim, arrays one row per element), so a source
+   -- whose axis-shaped fields already ride the catalog facets without
+   -- an adapter change or a canonical re-parse (okhc's 1.2M corpus
+   -- labels, seal, rsti, coptic-scriptorium).
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
@@ -621,6 +630,26 @@ LSJ ships 27 letter-split files) — never passages, so dictionary entries
 can never flood full-text search. The passage-shaped conformance suite
 cannot apply; the lexica adapter test mirrors its checks for the dictionary
 shape (manifest, round-trip, id uniqueness/stability, NFC).
+
+**The secondary dictionary lane (P104-4).** `content_kind` is a closed
+single-valued enum and stays the PRIMARY routing — but a passages source
+whose canonical tree ALSO carries dictionary-shaped content (ORACC's
+per-project `gloss-<lang>.json` glossaries, the pilot) declares
+`Adapter.dictionary_lane` beside the other capability flags
+(`reflex_bearing?`, `reference_edges?`, …). The lane is a
+dictionary-shaped sub-adapter — an `Adapter` subclass implementing only
+`#discover` (one `DocumentRef` per dictionary file) and `#parse`
+(→ `DictionaryDocument`) — so `Store::DictionaryLoader#load_from` drives
+it unchanged: attic rediscovery, per-file quarantine, the withdrawal
+sweep, entry upsert semantics. SyncRunner and Rebuild both run it right
+AFTER the primary load, inside the same run row (the run's counts are the
+field-wise sum of both reports; the sync Outcome keeps them separate so
+document- and entry-grained counts never blur), and the shared
+conformance suite checks a lane-bearing adapter for BOTH shapes. Widening
+`content_kind` to a set was rejected: every existing routing conditional
+(index inertness, deviation rules, loader construction) reads a single
+kind, and a second primary kind would fork all of them; the lane instead
+adds one post-load step at the two existing routing points.
 
 **Storage: catalog tables, by migration.** Entries are first-class
 derived-from-canonical data with the same idempotency/revision/withdrawal

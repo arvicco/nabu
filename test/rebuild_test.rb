@@ -337,12 +337,14 @@ class RebuildTest < Minitest::Test
     assert_equal 5, result.outcomes.first.report.added
     refute_nil result.facets
     assert_equal 5, result.facets.documents
-    assert_equal 19, result.facets.rows, "4+4+4 facets × 3 line-grain records + 3 + 4 fallback records"
+    assert_equal 20, result.facets.rows,
+                 "4+4+4 facets × 3 line-grain records + 3 + 4 fallback records, " \
+                 "+ HD000001's erhaltung condition facet (P104-1)"
     assert_equal 5, result.axes.edh
     db = Nabu::Store.connect(catalog_path)
     epitaphs = db[:document_facets].where(facet: "genre", value: "epitaph").count
     assert_equal 1, epitaphs
-    assert_equal 19, db[:document_facets].count
+    assert_equal 20, db[:document_facets].count
   ensure
     db&.disconnect
   end
@@ -591,6 +593,58 @@ class RebuildTest < Minitest::Test
     # and citations byte-identically, revisions reset to 1.
     assert_equal before, dictionary_snapshot
     with_db { assert(Nabu::Store::DictionaryEntry.all.all? { |row| row.revision == 1 }) }
+  end
+
+  # -- the secondary dictionary lane replays too (P104-4, Q81) --------------
+
+  # A passages source with a declared dictionary lane replays BOTH shapes
+  # under the same rebuild run — db/ stays f(canonical) with the glossary
+  # shelf included, and a second rebuild reproduces the entries
+  # byte-identically.
+  def test_rebuild_replays_the_secondary_dictionary_lane
+    write_sources(<<~YAML)
+      corpus:
+        adapter: LaneTestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD,
+                              "glossary.tsv" => "g1\tμῆνις\twrath\ng2\tθεά\tgoddess\n")
+
+    first = rebuilder.run
+    outcome = first.outcomes.first
+    assert_equal 3, outcome.report.added, "1 document + 2 lane entries under one combined replay report"
+    before = with_db do |db|
+      assert_equal %w[test-lexicon], db[:dictionaries].select_map(:slug)
+      db[:dictionary_entries].order(:urn).select_map(%i[urn entry_id headword content_sha256 revision])
+    end
+    assert_equal 2, before.size
+    assert_equal "urn:nabu:dict:test-lexicon:g1", before.first[0]
+
+    rebuilder.run
+
+    after = with_db do |db|
+      db[:dictionary_entries].order(:urn).select_map(%i[urn entry_id headword content_sha256 revision])
+    end
+    assert_equal before, after, "a second rebuild must reproduce the lane's entries byte-identically"
+  end
+
+  # No lane files on disk = no dictionaries and no error — the lane's
+  # absent-cone posture under rebuild.
+  def test_rebuild_with_a_lane_bearing_source_and_no_lane_files_is_the_honest_noop
+    write_sources(<<~YAML)
+      corpus:
+        adapter: LaneTestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+
+    result = rebuilder.run
+
+    assert_equal 1, result.outcomes.first.report.added, "just the document"
+    with_db do |db|
+      assert_equal 0, db[:dictionaries].count
+      assert_equal 0, db[:dictionary_entries].count
+    end
   end
 
   # -- one succeeded run row per rebuilt source ----------------------------

@@ -26,8 +26,10 @@ rules:
   # ruled fold sends Late Babylonian / Achaemenid (Persian) / Hellenistic /
   # Parthian into nb rather than minting stages the period labels cut finer
   # than the language does. Deliberately unmatched (bare-anchor honesty):
-  # Ur III akk, ED IIIb akk, Ebla, Middle Elamite — period labels that
-  # describe OTHER chronologies or predate the stage grid's confidence.
+  # Ur III akk, ED IIIb akk, Ebla — period labels that describe OTHER
+  # chronologies or predate the stage grid's confidence. (Middle Elamite
+  # left this list 2026-09-26: the elx anchor's own stage grid landed in
+  # nabu-lects v1.6.2 — see elx-period below.)
   - id: akk-period
     tier: certain
     # oracc joined P62-2: the catalogue period now rides discovery as an
@@ -79,6 +81,25 @@ rules:
       "Middle Assyrian": "sux:post"
       "Neo-Assyrian": "sux:post"
       "Neo-Babylonian": "sux:post"
+
+  # ── The Elamite period grid (nabu-lects v1.6.2 elx anchor, ruled via
+  # №R-65(b) + the merged mint 2026-09-26; the same CDLI vocabulary as
+  # D58-a — parentheticals strip at match time, so "Achaemenid
+  # (547-331 BC)" folds like bare "Achaemenid"). Census 2026-09-25:
+  # Achaemenid 2,139 · Neo-Elamite 300 · Middle Elamite 277 · Old
+  # Elamite 1 over 2,723 elx docs (cdli 2,700 + oracc 23). The stray
+  # OB/OAkk labels on elx docs stay honestly unmatched (other
+  # chronologies).
+  - id: elx-period
+    tier: certain
+    sources: [cdli, oracc]
+    code: elx
+    facet: period
+    map:
+      "Old Elamite": "elx:old"
+      "Middle Elamite": "elx:mid"
+      "Neo-Elamite": "elx:neo"
+      "Achaemenid": "elx:ach"
 
   # ── D58-c + D59-a: the AES corpus slices (facet `period` on source aes).
   # Ruled D58-c: ok-fip → egy:old, mk-sip → egy:mid. Ruled D59-a

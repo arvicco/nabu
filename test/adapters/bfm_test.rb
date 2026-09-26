@@ -100,6 +100,25 @@ class BfmTest < Minitest::Test
                  metadata["license_url"], "the in-file <licence target> rides verbatim"
   end
 
+  # P104-1 (Q77): the header keywords project as facets — French values
+  # verbatim (upstream's own vocabulary), English facet keys shared with
+  # the rest of the library (form = cantigas' key, dialect = the future
+  # fr:old lect-evidence lane).
+  def test_header_keywords_ride_as_facets
+    facets = adapter.parse(ref_for(NABARET)).metadata["facets"]
+    assert_equal({ "value" => "littéraire" }, facets["domain"])
+    assert_equal({ "value" => "récit bref" }, facets["genre"])
+    assert_equal({ "value" => "vers" }, facets["form"])
+    assert_equal({ "value" => "anglo-normand" }, facets["dialect"])
+  end
+
+  def test_the_undefined_dialect_mints_no_facet
+    facets = adapter.parse(ref_for(STRASB)).metadata["facets"]
+    refute facets.key?("dialect"),
+           "'non défini' is upstream's explicit unknown — honest absence, never a facet value"
+    assert_equal({ "value" => "prose" }, facets["form"], "the other keywords still facet")
+  end
+
   # -- plain prose: block grain, div @n components ----------------------------
 
   def test_plain_prose_is_block_grain_with_div_n_components
