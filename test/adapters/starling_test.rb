@@ -1026,7 +1026,11 @@ class StarlingTest < Minitest::Test
   def test_define_an_altaic_root_serves_the_aed_credit_line
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
-    results = Nabu::Query::Define.new(catalog: db).run("*èbà")
+    # lects: nil pins the "-pro" string-test scope: this is an ADAPTER
+    # acceptance test, and the registry-governed resolution would make
+    # it depend on which nabu-lects release the box carries (tut-pro
+    # rides the in-flight comparative-etymology mint).
+    results = Nabu::Query::Define.new(catalog: db, lects: nil).run("*èbà")
     assert_equal ["starling-altet"], results.map(&:dictionary_slug)
     result = results.first
     assert_match(/properly acknowledged/, result.license, "the grant rides the result")
