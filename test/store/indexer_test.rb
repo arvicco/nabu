@@ -375,6 +375,27 @@ module Store
       assert_equal 0, lemmas.count
     end
 
+    # P105-5d (Q87): the fts+lemma slice walked cbeta's 8.75M passages for
+    # ~55 minutes with ZERO ticks — the no-silent-passes class. The batch
+    # loop ticks per batch now, on both the rebuild and refresh paths.
+    TickSpy = Struct.new(:ticks) do
+      def stage(*); end
+      def load_tick(count, _errored) = (self.ticks ||= []) << count
+    end
+
+    def test_passage_batches_tick_progress_on_rebuild_and_refresh
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "alpha", sequence: 0)
+      spy = TickSpy.new([])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, progress: spy)
+      refute_empty spy.ticks, "the batch loop must tick under rebuild"
+
+      spy = TickSpy.new([])
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext,
+                                           slug: "s", progress: spy)
+      refute_empty spy.ticks, "the batch loop must tick under the incremental slice"
+    end
+
     def test_lemma_table_rebuild_is_idempotent
       doc = make_document(urn: "urn:d:1")
       make_passage(doc, urn: "urn:d:1:1", text_normalized: "x", sequence: 0,

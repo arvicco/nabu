@@ -70,10 +70,11 @@ module Nabu
       # (the Vitae). Raises Nabu::ParseError on malformed lines or an empty
       # document; ArgumentError on an unknown scheme (a wiring bug, not
       # upstream damage).
-      def parse(path, scheme:, urn:, language:, title:)
+      def parse(path, scheme:, urn:, language:, title:, metadata: {})
         builder = passage_builder(scheme)
         document = Nabu::Document.new(urn: urn, language: language, title: title,
-                                      canonical_path: File.expand_path(path))
+                                      canonical_path: File.expand_path(path),
+                                      metadata: metadata)
         builder.call(read_lines(path), document, urn, language)
         raise ParseError, "#{path}: no passages parsed" if document.empty?
 
