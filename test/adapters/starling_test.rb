@@ -27,6 +27,27 @@ class StarlingTest < Minitest::Test
   ZIP_URL = "https://starlingdb.org/download/IE.exe"
   KART_URL = "https://starlingdb.org/download/KART.exe"
 
+  # P104-3: the six further download packages (same shelf, same grant),
+  # each a plain zip despite the .exe name, each in its own subdir.
+  PACKAGE_URLS = {
+    "kart" => KART_URL,
+    "altaic" => "https://starlingdb.org/download/ALTAIC.exe",
+    "cauc" => "https://starlingdb.org/download/CAUC.exe",
+    "sintib" => "https://starlingdb.org/download/SINTIB.exe",
+    "drav" => "https://starlingdb.org/download/DRAV.exe",
+    "chukchee" => "https://starlingdb.org/download/CHUKCHEE.exe",
+    "yenisey" => "https://starlingdb.org/download/YENISEY.exe"
+  }.freeze
+
+  ALL_BASE_IDS = ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
+                  "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
+                  "starling-baltet:baltet.dbf", "starling-kart:kartet.dbf",
+                  "starling-altet:altet.dbf", "starling-japet:japet.dbf",
+                  "starling-caucet:caucet.dbf", "starling-stibet:stibet.dbf",
+                  "starling-dravet:dravet.dbf", "starling-kamet:kamet.dbf",
+                  "starling-chuket:chuket.dbf", "starling-itelet:itelet.dbf",
+                  "starling-yenet:yenet.dbf"].freeze
+
   def adapter = Nabu::Adapters::Starling.new
 
   # --- manifest: the grant and BOTH compiler credits are the license lane ---------
@@ -71,6 +92,29 @@ class StarlingTest < Minitest::Test
     assert_match(/Compiled by Sergei Starostin/, manifest.license, "kart credit: the roster's own words")
   end
 
+  # P104-3: the six further packages' credits, each in ITS OWN upstream
+  # words — the .inf DBINFO texts of the family-head bases (the grant's
+  # express condition: name the specific compilers of each database).
+  def test_manifest_carries_the_six_further_packages_credits_verbatim
+    manifest = adapter.manifest
+    assert_match(/Altaic/, manifest.name)
+    license = manifest.license
+    assert_match(/'Altaic Etymological Dictionary' by S\. Starostin, A\. Dybo and O\. Mudrak/,
+                 license, "altet credit: the altet.inf DBINFO sentence")
+    assert_match(/the Japanese part/, license, "japet credit: the japet.inf DBINFO sentence")
+    assert_match(/S\. L\. Nikolayev, S\. A\. Starostin, 'A North Caucasian Etymological Dictionary', Moscow 1994/,
+                 license, "caucet credit: the caucet.inf DBINFO sentence")
+    assert_match(/based on Peiros-Starostin 1996, but containing improved reconstructions/,
+                 license, "stibet credit: the stibet.inf DBINFO sentence")
+    assert_match(/Lepcha data were input.*by Olga Mazo/, license, "stibet credit: the Lepcha compiler")
+    assert_match(/T\. Burrow and M\. B\. Emeneau, revised and significantly modified by G\. Starostin/,
+                 license, "dravet credit: the dravet.inf DBINFO sentence")
+    assert_match(/O\. Mudrak's Chukchee-Kamchatkan database/, license,
+                 "kamet/chuket/itelet credit: the .inf DBINFO texts")
+    assert_match(/Comparative vocabulary of the Yenisseian languages, published as Starostin 1995/,
+                 license, "yenet credit: the yenet.inf DBINFO sentence")
+  end
+
   def test_content_kind_is_dictionary_and_the_source_promises_reflexes
     assert_equal :dictionary, Nabu::Adapters::Starling.content_kind
     assert Nabu::Adapters::Starling.reflex_bearing?
@@ -80,10 +124,8 @@ class StarlingTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_base_in_registry_order
     refs = adapter.discover(FIXTURES).to_a
-    assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
-                  "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
-                  "starling-baltet:baltet.dbf", "starling-kart:kartet.dbf"], refs.map(&:id)
-    assert_equal %w[starling] * 6, refs.map(&:source_id)
+    assert_equal ALL_BASE_IDS, refs.map(&:id)
+    assert_equal %w[starling] * 15, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -336,6 +378,309 @@ class StarlingTest < Minitest::Test
     assert_includes entries[4].body, "note: upstream NUMBER collision"
   end
 
+  # --- the P104-3 packages: altet + japet (ALTAIC) -----------------------------------
+
+  # The Starostin-Dybo-Mudrak Altaic Etymological Dictionary head base. All
+  # five branch columns are branch PROTOFORMS (the piet SLAV/BALT/GERM
+  # verdict) — body-only, with the five branch links riding as crosslink
+  # lines under their .inf aliases verbatim.
+  def test_parse_altet_yields_the_tut_pro_shelf_with_branch_links
+    document = parse("starling-altet")
+    assert_equal "tut-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 2 1728], entries.keys
+    entry = entries["1"]
+    assert_equal "èbà", entry.headword
+    assert_equal "*èbà", entry.key_raw
+    assert_equal "to join, meet", entry.gloss
+    assert_includes entry.body, "Russian meaning: соединять(ся), встречать"
+    assert_includes entry.body, "Turkic: *ab-", "branch protoform columns ride the body verbatim"
+    assert_includes entry.body, "Tungus-Manchu: *ebu-re-"
+    assert_includes entry.body, "Jpn.->Japet: #632", "the .inf link alias verbatim — japet #632 is IN this fixture set"
+    assert_includes entry.body, "Turk.->Turcet: #2001", "links into the DEFERRED branch bases still ride as body lines"
+    refute_includes entry.body, "Nostratic", "PRNUM=0 means no crosslink"
+    assert_empty entry.reflexes, "every altet column is a branch protoform — body-only by verdict"
+    assert_includes entries["2"].gloss, "{rage, anger}", "upstream's brace notation stays verbatim"
+  end
+
+  # THE junk-pointer pin (the parser's P104-3 first lane): altet #1728's
+  # TURC slot holds literal whitespace bytes where a var pointer belongs —
+  # the field reads honestly empty and the record parses whole.
+  def test_altet_record_with_the_whitespace_junk_pointer_parses_whole
+    entry = parse("starling-altet").entries.to_h { |e| [e.entry_id, e] }["1728"]
+    assert_equal "pā̀ró ( ~ p`-, -ŕ-)", entry.headword
+    assert_equal "to buy, sell", entry.gloss
+    refute_includes entry.body, "Turkic:", "the junk TURC cell mints no body line"
+    assert_includes entry.body, "Tungus-Manchu: *pār-", "the intact columns still ride"
+    assert_includes entry.body, "Kor.->Koret: #189"
+  end
+
+  def test_parse_japet_yields_the_jpx_pro_shelf_with_the_altet_crosslink_both_ways
+    document = parse("starling-japet")
+    assert_equal "jpx-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 2 632], entries.keys
+    entry = entries["632"]
+    assert_equal "àp-", entry.headword
+    assert_equal "to meet, join, fit, agree", entry.gloss
+    assert_includes entry.body, "Old Japanese: ap-"
+    assert_includes entry.body, "Tokyo: á-", "the accent-bearing dialect columns are body-only"
+    assert_includes entry.body, "Altaic etymology: #1",
+                    "PRNUM crosslinks into the altet shelf (both ways: altet #1 JAPNUM=632)"
+    assert_equal "together with", entries["1"].gloss
+    assert_includes entries["1"].body, "Russian meaning: вместе с"
+  end
+
+  # The japet reflex verdict: AJP is the one single-language ATTESTED
+  # column (Old Japanese, 8th c. — the ojp gold's code); MJP has no clean
+  # code and the modern dialect columns (Tokyo/Kyoto/Kagoshima/Nase/Shuri/
+  # Hateruma/Yonakuni) are accent-transcription variety columns — body-only.
+  def test_japet_old_japanese_column_mints_the_ojp_reflex_row
+    entries = parse("starling-japet").entries.to_h { |e| [e.entry_id, e] }
+    assert_equal [%w[ojp muta], %w[ojp pap(j)i], %w[ojp ap-]],
+                 entries.values.map { |e| e.reflexes.map { |r| [r.lang_code, r.word] }.flatten },
+                 "one ojp row per record; lang_code = the RESOLVED catalog tag (P57-5)"
+    assert_equal "Old Japanese", entries["1"].reflexes.first.lang_name
+  end
+
+  # --- the P104-3 packages: caucet (CAUC) --------------------------------------------
+
+  # The Nikolayev-Starostin NCED head base. Six branch columns are branch
+  # protoforms (body-only); LAK and KHIN are ACTUAL single-language forms
+  # by the caucet.inf DBINFO's own words ("The actual Lak form (no
+  # Proto-Lak reconstruction is presented)"; same for Khinalug) — they
+  # mint, under the honest names Lak/Khinalug rather than the aliases'
+  # "Proto-" labels.
+  def test_parse_caucet_yields_the_ccn_pro_shelf_with_branch_links
+    document = parse("starling-caucet")
+    assert_equal "ccn-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 2 9], entries.keys
+    entry = entries["1"]
+    assert_equal "ḳwĭrV", entry.headword
+    assert_equal "leg bone, leg (of animal)", entry.gloss
+    assert_includes entry.body, "Proto-Nakh: *ḳurV-m"
+    assert_includes entry.body, "Notes: Reconstructed for the PEC level. Cf. also HU forms: Hurr. u-krə"
+    assert_includes entry.body, "Sino-Caucasian etymology: #487", "PRNUM points into the unheld sccet base"
+    assert_includes entry.body, "> Nakh: #332", "branch links ride under the .inf aliases verbatim"
+    assert_includes entry.body, "> Lezghian: #3"
+    assert_empty entry.reflexes, "NAKH/LEZG are branch protoforms — body-only"
+  end
+
+  def test_caucet_actual_form_columns_mint_lak_and_khinalug_rows
+    entry = parse("starling-caucet").entries.to_h { |e| [e.entry_id, e] }["2"]
+    assert_equal %w[lbe kjj], entry.reflexes.map(&:lang_code)
+    assert_equal %w[ḳa zäḳ], entry.reflexes.map(&:word)
+    assert_equal %w[Lak Khinalug], entry.reflexes.map(&:lang_name),
+                 "the DBINFO's honest names — the aliases' 'Proto-Lak'/'Proto-Khinalug' labels " \
+                 "name columns that hold ACTUAL forms (caucet.inf DBINFO)"
+  end
+
+  # caucet carries 223 headword-less records (the germet #401 shape, at
+  # scale) — the mechanical placeholder keeps every slot.
+  def test_caucet_headword_less_records_keep_their_slot_with_their_content
+    entry = parse("starling-caucet").entries.to_h { |e| [e.entry_id, e] }["9"]
+    assert_equal "#9", entry.headword
+    assert_includes entry.body, "Proto-Lezghian: *ḳosʷɨ-", "the content-bearing columns still ride"
+    assert_includes entry.body, "> Lezghian: #11"
+  end
+
+  # --- the P104-3 packages: stibet (SINTIB) ------------------------------------------
+
+  # The Sino-Tibetan etymological head base (Peiros-Starostin 1996 with
+  # improved reconstructions). Reflex verdict: LEPCHA is the one minting
+  # column (single language, clean citation leads); TIB is scholarly
+  # TRANSLITERATION (script-mismatched against this catalog's
+  # Tibetan-script gold — the piet GREEK treatment), CHIN is Starostin's
+  # OC reconstruction led by a Big5-encoded character (below), BURM/LUSH
+  # mix in Proto-Lolo-Burmese / Proto-Kuki-Chin forms, KACH carries
+  # tone-digit notation that is not a clean citation form, KIR is a
+  # branch protoform — all body-only. The unaliased STLSNUM column (a
+  # LEXSTAT-lane link; LEXSTAT tables are out of scope here) rides
+  # nowhere.
+  def test_parse_stibet_yields_the_sit_pro_shelf
+    document = parse("starling-stibet")
+    assert_equal "sit-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[2 5 8 2785], entries.keys
+    entry = entries["2"]
+    assert_equal "bā(H) / *phā(H)", entry.headword
+    assert_equal "spread, extend; wide, vast", entry.gloss
+    assert_includes entry.body, "Kachin: šəpa1 to extend, as a cobra its hood"
+    assert_includes entry.body, "Old Chinese etymology: #3051", "CHINNUM points into the DEFERRED bigchina base"
+    assert_includes entry.body, "Kiranti etymology: #645"
+    assert_includes entry.body, "Sino-Caucasian etymology: #112"
+    refute_includes entry.body, "824", "the unaliased STLSNUM lexstat link rides nowhere"
+    assert_empty entry.reflexes
+    assert_includes entries["5"].body, "Tibetan: ãphar board (in compounds).",
+                    "the transliterated TIB column is body-only"
+    assert_equal [%w[lep kŭm-bŭ Lepcha]],
+                 entries["8"].reflexes.map { |r| [r.lang_code, r.word, r.lang_name] },
+                 "LEPCHA mints; the tone-digit KACH lead (nbo1) does not"
+  end
+
+  # The Big5 pin: bigchina/stibet Chinese character cells are Big5-encoded
+  # (bigchina.inf: "characters in Big5 encoding") — outside the StarLing
+  # text encoding, so the starling-dbf lane decodes each to the honest
+  # replacement character. The OC transcription after it survives whole.
+  def test_stibet_big5_character_leads_decode_to_honest_replacements
+    entry = parse("starling-stibet").entries.to_h { |e| [e.entry_id, e] }["2"]
+    assert_includes entry.body, "Chinese: � *phāʔ be vast, wide"
+  end
+
+  # THE truncated-var pin (the parser's P104-3 second lane): stibet #2785's
+  # seven var pointers sit entirely past the shipped stibet.var — every
+  # affected cell reads as the replacement character, the record keeps its
+  # slot, and nothing mints from replacement text.
+  def test_stibet_record_past_the_truncated_var_parses_as_replacements
+    entry = parse("starling-stibet").entries.to_h { |e| [e.entry_id, e] }["2785"]
+    assert_equal "�", entry.headword
+    assert_includes entry.body, "Lepcha: �"
+    assert_empty entry.reflexes, "a replacement character is not a citation form"
+  end
+
+  # --- the P104-3 packages: dravet (DRAV) --------------------------------------------
+
+  # The Burrow-Emeneau-based Proto-Dravidian head base (G. Starostin's
+  # revision). Five branch columns are branch protoforms; BRA is Brahui,
+  # an actual language — the one minting column.
+  def test_parse_dravet_yields_the_dra_pro_shelf_with_branch_links
+    document = parse("starling-dravet")
+    assert_equal "dra-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 2 16], entries.keys
+    entry = entries["1"]
+    assert_equal "ac-", entry.headword
+    assert_equal "stamp, mould", entry.gloss
+    assert_includes entry.body, "Proto-South Dravidian: *ac-"
+    assert_includes entry.body, "South Dravidian etymology: #42"
+    assert_includes entry.body, "Telugu etymology: #39"
+    assert_empty entry.reflexes
+    entry16 = entries["16"]
+    assert_equal([%w[brh aḍ Brahui]],
+                 entry16.reflexes.map { |r| [r.lang_code, r.word, r.lang_name] })
+    assert_includes entry16.body, "Brahui etymology: #1"
+  end
+
+  # dravet's numeric link cells can overflow to dBase's "****" sentinel
+  # (censused: 4 cells in the live base, three of them on #1) — a
+  # crosslink line needs a real number.
+  def test_dravet_overflowed_link_cells_mint_no_crosslink_lines
+    entry = parse("starling-dravet").entries.first
+    refute_includes entry.body, "****"
+    refute_includes entry.body, "Gondi-Kui etymology", "#1's GNDNUM is the **** sentinel"
+  end
+
+  # --- the P104-3 packages: kamet + chuket + itelet (CHUKCHEE) -----------------------
+
+  # O. Mudrak's Chukchee-Kamchatkan family: kamet is the head (PRNUM →
+  # the unheld Nostratic base), chuket and itelet are its subordinate
+  # branch bases (their PRNUM points back INTO kamet). Glosses are
+  # Russian — upstream says so itself ("no English translation is
+  # available yet") — the vasmer precedent.
+  def test_parse_kamet_yields_the_family_head_with_links_into_both_subordinates
+    document = parse("starling-kamet")
+    assert_equal "qfa-cka-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 2 689 689-b], entries.keys
+    entry = entries["1"]
+    assert_equal "maĺ'mɨ", entry.headword
+    assert_equal "грудка, брюшко, желудок", entry.gloss
+    assert_includes entry.body, "Proto-Chukchee-Koryak: *macbɨ #"
+    assert_includes entry.body, "Proto-Itelmen: *məzə-m"
+    assert_includes entry.body, "Nostratic etymology: #114"
+    assert_includes entry.body, "> Chukchee-Koryak: #804", "chuket #804 is IN this fixture set"
+    assert_includes entry.body, "> Itelmen: #1", "itelet #1 is IN this fixture set"
+    assert_empty entry.reflexes, "both branch columns are protoforms — body-only"
+    refute_includes entries["2"].body, "Nostratic", "an empty PRNUM cell means no crosslink"
+  end
+
+  def test_kamet_duplicate_numbers_disambiguate_stably
+    entries = parse("starling-kamet").entries.to_a
+    assert_equal "'el", entries[2].headword, "file order rules: the negation record wears the NUMBER"
+    assert_equal "hehe", entries[3].headword
+    assert_includes entries[3].body, "note: upstream NUMBER collision"
+  end
+
+  def test_parse_chuket_yields_the_branch_shelf_with_the_kamet_crosslink_both_ways
+    document = parse("starling-chuket")
+    assert_equal "qfa-chk-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 804], entries.keys
+    entry = entries["804"]
+    assert_equal "macbɨ #", entry.headword, "upstream's trailing marker stays verbatim"
+    assert_includes entry.body, "Chukchee: máco (macvé-jpə abl.) 1, 2"
+    assert_includes entry.body, "Chukchee-Kamchatkan etymology: #1",
+                    "PRNUM crosslinks into kamet (both ways: kamet #1 CHUKNUM=804)"
+    assert_includes entries["1"].body, "Muravyeva reference: 496",
+                    "the .inf-aliased reference columns ride the body"
+    assert_includes entries["1"].body, "Nivkh-Yukaghir etymology: #402"
+    refute_includes entries["1"].body, "проталина",
+                    "the unaliased CHFUNC/KOFUNC/ALFUNC/STPRO columns (outside the .inf " \
+                    "field_list) ride nowhere"
+  end
+
+  # The chuket reflex verdict: CHU/KOR/ALU are actual single languages
+  # (ckt/kpy/alr); PAL (Palana) is a Koryak variety with no code of its
+  # own — body-only, declared.
+  def test_chuket_single_language_columns_mint_ckt_kpy_alr_rows
+    entry = parse("starling-chuket").entries.first
+    assert_equal([%w[ckt ɛ́lɛ-ɛl], %w[kpy alá-al], %w[alr ala-al]],
+                 entry.reflexes.map { |r| [r.lang_code, r.word] })
+    assert_equal %w[Chukchee Koryak Alutor], entry.reflexes.map(&:lang_name)
+    assert_includes entry.body, "Palana: ele-el", "PAL rides the body only"
+  end
+
+  def test_parse_itelet_yields_the_proto_itelmen_shelf_with_the_dybowski_columns
+    document = parse("starling-itelet")
+    assert_equal "itl-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 2], entries.keys
+    entry = entries["1"]
+    assert_equal "məźə-m", entry.headword
+    assert_includes entry.body, "Western Kamchadal: mɨzɨm 1, mizim kumisi-zin 2"
+    assert_includes entry.body, "West Kamchadal meaning: stomachus 1"
+    assert_includes entry.body, "Number in Dybowsky (WK): 135, 136"
+    assert_includes entry.body, "Chukchee-Kamchatkan etymology: #1",
+                    "PRNUM crosslinks into kamet (both ways: kamet #1 ITELNUM=1)"
+    refute_includes entry.body, "MɨZɨ-M", "the unaliased ICOST/WCOST columns ride nowhere"
+    assert_empty entry.reflexes, "no ITE cell on #1 — Dybowski's Kamchadal columns are body-only"
+    assert_equal([["itl", "meč'a-", "Itelmen (Napana)"]],
+                 entries["2"].reflexes.map { |r| [r.lang_code, r.word, r.lang_name] })
+  end
+
+  # --- the P104-3 packages: yenet (YENISEY) ------------------------------------------
+
+  # Starostin 1995's comparative Yenisseian vocabulary: all five language
+  # columns are actual single languages (Ket/Yug/Kott/Arin/Pumpokol) and
+  # mint where the lead token is a clean citation form.
+  def test_parse_yenet_yields_the_proto_yenisseian_shelf_with_minting_columns
+    document = parse("starling-yenet")
+    assert_equal "qfa-yen-pro", document.language
+    entries = document.entries.to_h { |e| [e.entry_id, e] }
+    assert_equal %w[1 904 904-b], entries.keys
+    entry = entries["1"]
+    assert_equal "ʔaʔd (~x-)", entry.headword
+    assert_equal "bone", entry.gloss
+    assert_includes entry.body, "Ket: aʔt, pl. aŕeŋ5 (Bak., Sur. adeŋ5)"
+    assert_includes entry.body, "Kottish: araŋan, *araŋ 'limb, joint'"
+    assert_includes entry.body, "Sino-Caucasian etymology: #1", "PRNUM points into the unheld sccet base"
+    assert_equal([%w[ket aʔt], %w[yug aʔt], %w[zko araŋan]],
+                 entry.reflexes.map { |r| [r.lang_code, r.word] })
+    assert_equal %w[Ket Yug Kottish], entry.reflexes.map(&:lang_name)
+  end
+
+  def test_yenet_duplicate_numbers_disambiguate_stably_and_gate_unclean_leads
+    entries = parse("starling-yenet").entries.to_a
+    assert_equal "ʔa", entries[1].headword, "file order rules"
+    assert_equal "qo- (~ꭓ-,-ɔ-)", entries[2].headword
+    assert_includes entries[2].body, "note: upstream NUMBER collision"
+    assert_equal [%w[zko d́-äja-ŋ]],
+                 entries[1].reflexes.map { |r| [r.lang_code, r.word] },
+                 "the affix-hyphen KET/SYM leads (-a, -e-) are not citation forms"
+    assert_empty entries[2].reflexes, "qɔ: carries the length colon — not a clean citation form"
+  end
+
   # --- the reflex verdict (journaled in docs/backlog.md P22-0) ---------------------
 
   def test_single_language_attested_columns_mint_reflex_rows
@@ -408,7 +753,9 @@ class StarlingTest < Minitest::Test
   end
 
   def test_entry_ids_are_unique_stable_and_output_is_nfc
-    %w[starling-pokorny starling-piet starling-vasmer starling-germet starling-baltet].each do |slug|
+    %w[starling-pokorny starling-piet starling-vasmer starling-germet starling-baltet
+       starling-altet starling-japet starling-caucet starling-stibet starling-dravet
+       starling-kamet starling-chuket starling-itelet starling-yenet].each do |slug|
       first = parse(slug).map(&:entry_id)
       assert_equal first.uniq, first
       assert_equal first, parse(slug).map(&:entry_id)
@@ -422,7 +769,15 @@ class StarlingTest < Minitest::Test
   # --- fetch (WebMock only) ---------------------------------------------------------
 
   BASE_FILES = %w[pokorny piet vasmer germet baltet].flat_map { |base| ["#{base}.dbf", "#{base}.var"] }.freeze
-  KART_FILES = %w[kartet.dbf kartet.var].freeze
+  PACKAGE_FILES = {
+    "kart" => %w[kartet],
+    "altaic" => %w[altet japet],
+    "cauc" => %w[caucet],
+    "sintib" => %w[stibet],
+    "drav" => %w[dravet],
+    "chukchee" => %w[kamet chuket itelet],
+    "yenisey" => %w[yenet]
+  }.freeze
 
   def zip_of(dir_files)
     Dir.mktmpdir do |dir|
@@ -437,41 +792,52 @@ class StarlingTest < Minitest::Test
     @zip_body ||= zip_of(BASE_FILES.map { |name| [File.join(FIXTURES, name), name] })
   end
 
-  def kart_zip_body
-    @kart_zip_body ||= zip_of(KART_FILES.map { |name| [File.join(FIXTURES, "kart", name), name] })
+  def package_zip_body(subdir)
+    @package_zip_bodies ||= {}
+    @package_zip_bodies[subdir] ||= zip_of(
+      PACKAGE_FILES.fetch(subdir).flat_map do |base|
+        ["#{base}.dbf", "#{base}.var"].map { |name| [File.join(FIXTURES, subdir, name), name] }
+      end
+    )
   end
 
   def stub_packages
     stub_request(:get, ZIP_URL).to_return(status: 200, body: zip_body)
-    stub_request(:get, KART_URL).to_return(status: 200, body: kart_zip_body)
+    PACKAGE_URLS.each do |subdir, url|
+      stub_request(:get, url).to_return(status: 200, body: package_zip_body(subdir))
+    end
   end
 
-  def test_fetch_unpacks_both_packages_and_discovers_all_six_bases
+  def test_fetch_unpacks_all_eight_packages_and_discovers_all_fifteen_bases
     stub_packages
     Dir.mktmpdir do |workdir|
       report = adapter.fetch(workdir)
       assert_match(/\A\h{64}\z/, report.sha)
       refs = adapter.discover(workdir).to_a
-      assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
-                    "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
-                    "starling-baltet:baltet.dbf", "starling-kart:kartet.dbf"], refs.map(&:id)
+      assert_equal ALL_BASE_IDS, refs.map(&:id)
       assert File.file?(File.join(workdir, "kart", "kartet.dbf")),
-             "the second package lands in its own subdir with its own fetch state"
+             "each follow-up package lands in its own subdir with its own fetch state"
+      assert File.file?(File.join(workdir, "altaic", "altet.dbf"))
+      assert File.file?(File.join(workdir, "yenisey", "yenet.dbf"))
       assert_equal 3, adapter.parse(refs.first).size
     end
   end
 
-  # The kart subdir must survive a LATER IE.exe re-fetch: the root ZipFetch's
-  # retention sweep would otherwise read the sibling package as an upstream
-  # deletion and attic it (the P46-6 keep: contract).
-  def test_refetching_the_ie_package_never_attics_the_kart_subdir
+  # Every follow-up subdir must survive a LATER IE.exe re-fetch: the root
+  # ZipFetch's retention sweep would otherwise read the sibling packages as
+  # upstream deletions and attic them (the P46-6 keep: contract, now over
+  # all seven subdirs).
+  def test_refetching_the_ie_package_never_attics_the_follow_up_subdirs
     stub_packages
     Dir.mktmpdir do |workdir|
       adapter.fetch(workdir)
       adapter.fetch(workdir)
-      assert File.file?(File.join(workdir, "kart", "kartet.dbf")), "kart survives the IE re-fetch sweep"
-      refute Dir.exist?(File.join(workdir, ".attic", "kart")), "nothing kart-shaped was atticked"
-      assert_equal 6, adapter.discover(workdir).to_a.size
+      PACKAGE_FILES.each do |subdir, bases|
+        assert File.file?(File.join(workdir, subdir, "#{bases.first}.dbf")),
+               "#{subdir} survives the IE re-fetch sweep"
+        refute Dir.exist?(File.join(workdir, ".attic", subdir)), "nothing #{subdir}-shaped was atticked"
+      end
+      assert_equal 15, adapter.discover(workdir).to_a.size
     end
   end
 
@@ -480,15 +846,15 @@ class StarlingTest < Minitest::Test
     Dir.mktmpdir { |workdir| assert_raises(Nabu::FetchError) { adapter.fetch(workdir) } }
   end
 
-  def test_probe_heads_both_package_zips
+  def test_probe_heads_all_eight_package_zips
     assert_equal :http_zip, Nabu::Adapters::Starling.remote_probe_strategy
     targets = Nabu::Adapters::Starling.http_probe_targets
-    assert_equal [ZIP_URL, KART_URL], targets.map(&:zip_url)
-    assert_equal ["", "kart"], targets.map(&:state_subdir),
-                 "the kart package keeps its own .zip-fetch.json under its subdir"
+    assert_equal [ZIP_URL, *PACKAGE_URLS.values], targets.map(&:zip_url)
+    assert_equal ["", *PACKAGE_URLS.keys], targets.map(&:state_subdir),
+                 "each follow-up package keeps its own .zip-fetch.json under its subdir"
     assert targets.all? { |t| t.metadata_url.nil? },
            "the grant lives in e-mail + descrip.php, not a probe endpoint"
-    assert_equal [Nabu::ZipFetch::STATE_FILE] * 2, targets.map(&:state_file)
+    assert_equal [Nabu::ZipFetch::STATE_FILE] * 8, targets.map(&:state_file)
   end
 
   # --- DictionaryLoader contract -----------------------------------------------------
@@ -508,30 +874,35 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 24, first.added,
-                 "3 records per IE base + 5 kart + both halves of each fixture NUMBER collision + " \
-                 "the two headword-less pins"
+    assert_equal 51, first.added,
+                 "3 records per IE base + 5 kart + 27 across the P104-3 bases (3 altet + 3 japet + " \
+                 "3 caucet + 4 stibet + 3 dravet + 4 kamet + 2 chuket + 2 itelet + 3 yenet), " \
+                 "both halves of each fixture NUMBER collision and every placeholder pin included"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 24, second.skipped
+    assert_equal 51, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)
     assert_equal "urn:nabu:dict:starling-vasmer:12561",
                  db[:dictionary_entries].where(entry_id: "12561").get(:urn),
                  "piet #1501's `Vasmer: #12561` body line now names a live entry id"
-    assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-kart:48-b",
-                  "urn:nabu:dict:starling-piet:574-b"],
+    assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-kamet:689-b",
+                  "urn:nabu:dict:starling-kart:48-b", "urn:nabu:dict:starling-piet:574-b",
+                  "urn:nabu:dict:starling-yenet:904-b"],
                  db[:dictionary_entries].where(Sequel.like(:entry_id, "%-b")).select_order_map(:urn),
                  "the duplicate-NUMBER disambiguation is urn-stable"
-    assert_equal 54, db[:dictionary_reflexes].count,
-                 "piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2) + kart 18 (4+3+4+3+4)"
-    assert_equal ["Albanian", "Avestan", "Danish", "Dutch", "English", "Georgian", "German",
-                  "Gothic", "Latin", "Laz", "Lettish", "Lithuanian", "Megrel", "Middle Dutch",
-                  "Middle High German", "Middle Low German", "Norwegian", "Old English",
-                  "Old Frisian", "Old High German", "Old Indian", "Old Norse", "Old Prussian",
-                  "Old Saxon", "Svan", "Swedish"],
+    assert_equal 72, db[:dictionary_reflexes].count,
+                 "piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2) + kart 18 (4+3+4+3+4) " \
+                 "+ japet 3 + caucet 2 + stibet 1 + dravet 1 + chuket 6 + itelet 1 + yenet 4"
+    assert_equal ["Albanian", "Alutor", "Avestan", "Brahui", "Chukchee", "Danish", "Dutch",
+                  "English", "Georgian", "German", "Gothic", "Itelmen (Napana)", "Ket",
+                  "Khinalug", "Koryak", "Kottish", "Lak", "Latin", "Laz", "Lepcha", "Lettish",
+                  "Lithuanian", "Megrel", "Middle Dutch", "Middle High German",
+                  "Middle Low German", "Norwegian", "Old English", "Old Frisian",
+                  "Old High German", "Old Indian", "Old Japanese", "Old Norse", "Old Prussian",
+                  "Old Saxon", "Svan", "Swedish", "Yug"],
                  db[:language_names].select_map(:name).sort.uniq,
                  "the .inf aliases feed the language census reflex_bearing health checks"
   end
@@ -583,10 +954,22 @@ class StarlingTest < Minitest::Test
       assert_match(/Common Germanic/, shelf.load("gem-pro").section("witness:starling").body)
       assert_match(/Proto-Baltic/, shelf.load("bat-pro").section("witness:starling").body)
       assert_match(/Klimov/, shelf.load("ccs-pro").section("witness:starling").body)
-      before = %w[ine-pro rus gem-pro bat-pro ccs-pro].map { |code| File.read(shelf.path_for(code)) }
+      # P104-3: one honest witness note per new shelf language
+      assert_match(/Altaic Etymological Dictionary/, shelf.load("tut-pro").section("witness:starling").body)
+      assert_match(/Starostin 1975/, shelf.load("jpx-pro").section("witness:starling").body)
+      assert_match(/North Caucasian Etymological Dictionary/,
+                   shelf.load("ccn-pro").section("witness:starling").body)
+      assert_match(/Peiros/, shelf.load("sit-pro").section("witness:starling").body)
+      assert_match(/Burrow/, shelf.load("dra-pro").section("witness:starling").body)
+      assert_match(/Mudrak/, shelf.load("qfa-cka-pro").section("witness:starling").body)
+      assert_match(/Chukchee-Koryak/, shelf.load("qfa-chk-pro").section("witness:starling").body)
+      assert_match(/Itelmen/, shelf.load("itl-pro").section("witness:starling").body)
+      assert_match(/Starostin 1995/, shelf.load("qfa-yen-pro").section("witness:starling").body)
+      codes = %w[ine-pro rus gem-pro bat-pro ccs-pro tut-pro jpx-pro ccn-pro sit-pro dra-pro
+                 qfa-cka-pro qfa-chk-pro itl-pro qfa-yen-pro]
+      before = codes.map { |code| File.read(shelf.path_for(code)) }
       loader.load_from(adapter, workdir: FIXTURES)
-      assert_equal before,
-                   %w[ine-pro rus gem-pro bat-pro ccs-pro].map { |code| File.read(shelf.path_for(code)) },
+      assert_equal before, codes.map { |code| File.read(shelf.path_for(code)) },
                    "a second load accretes nothing new"
     end
   end
@@ -635,6 +1018,29 @@ class StarlingTest < Minitest::Test
     results = Nabu::Query::Etym.new(catalog: db).run("hals")
     assert_equal ["starling-germet"], results.map(&:dictionary_slug).uniq
     assert(results.map(&:headword).any? { |headword| headword.include?("xálsa-z") })
+  end
+
+  # P104-3 acceptance: an altet root serves with the grant + the AED
+  # compiler credit on its license lane, and a Ket reflex walks to the
+  # yenet proto-form.
+  def test_define_an_altaic_root_serves_the_aed_credit_line
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    results = Nabu::Query::Define.new(catalog: db).run("*èbà")
+    assert_equal ["starling-altet"], results.map(&:dictionary_slug)
+    result = results.first
+    assert_match(/properly acknowledged/, result.license, "the grant rides the result")
+    assert_match(/S\. Starostin, A\. Dybo and O\. Mudrak/, result.license,
+                 "the AED compiler credit rides the result")
+    assert_includes result.body, "Tungus-Manchu:"
+  end
+
+  def test_etym_walks_a_ket_reflex_to_the_yenet_proto_form
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    results = Nabu::Query::Etym.new(catalog: db).run("aʔt")
+    assert_equal ["starling-yenet"], results.map(&:dictionary_slug).uniq
+    assert(results.map(&:headword).any? { |headword| headword.include?("ʔaʔd") })
   end
 
   # --- registry -----------------------------------------------------------------------
