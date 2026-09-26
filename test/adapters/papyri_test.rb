@@ -96,6 +96,25 @@ class PapyriTest < Minitest::Test
     assert_equal "bgu.1.100", document.title
   end
 
+  # P104-1 (Q77 under №R-70): the HGV/TM idnos were peeked at discover
+  # but never persisted — document metadata_json was {} on all 61,414
+  # docs. They now ride as tm_nr/hgv verbatim plus a "tm:<n>" related
+  # edge per numeric TM token (the P25-1 scheme rule; HGV has no ruled
+  # edge scheme and stays metadata-only).
+  def test_parse_persists_the_idnos_and_the_tm_related_edge
+    adapter = Nabu::Adapters::Papyri.new
+    document = adapter.parse(adapter.discover(FIXTURES).first)
+    assert_equal "8875", document.metadata["tm_nr"]
+    assert_equal "8875", document.metadata["hgv"]
+    assert_equal ["tm:8875"], document.metadata["related"]
+  end
+
+  def test_reference_producer_records_under_the_source_name
+    assert_predicate Nabu::Adapters::Papyri, :reference_edges?
+    producer = Nabu::Adapters::Papyri.reference_producer(catalog: nil, journal: nil)
+    assert_equal "papyri-ddbdp", producer.producer
+  end
+
   def test_parse_latin_document_spot_check
     adapter = Nabu::Adapters::Papyri.new
     ref = adapter.discover(FIXTURES).to_a.last
