@@ -3697,6 +3697,7 @@ module Nabu
         nabu place mine kanripo --dry-run   # Q9: census Han place-name hits (writes nothing)
         nabu place mine kanripo             # mine place-candidate edges into the links journal
         nabu place mine report kanripo      # review the mined candidates, ranked by document spread
+        nabu place mine report kanripo --board   # the per-NAME verdict board (discriminators + snippets)
     HELP
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
@@ -3823,6 +3824,7 @@ module Nabu
       # and the two exits (stop-list line, place card).
       def run_place_mine_report(args)
         args = Array(args)
+        board = args.delete("--board") ? true : false
         limit = Nabu::PlaceMineReport::DEFAULT_LIMIT
         if (i = args.index("--limit"))
           limit = begin
@@ -3833,6 +3835,8 @@ module Nabu
           args.slice!(i, 2)
         end
         source, gazetteer = args
+        raise Thor::Error, "place mine report --board needs a SOURCE (verdicts are per source)" if board && source.nil?
+
         config = Nabu::Config.load
         journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
         if journal.nil?
@@ -3840,14 +3844,51 @@ module Nabu
         end
 
         catalog = Nabu::Store.connect(config.catalog_path)
-        report = Nabu::PlaceMineReport.new(catalog: catalog, journal: journal)
-                                      .run(source: source, gazetteer: gazetteer, limit: limit)
-        print_mine_report(report)
+        reporter = Nabu::PlaceMineReport.new(catalog: catalog, journal: journal)
+        if board
+          result = reporter.board(source: source, gazetteer: gazetteer || "chgis", limit: limit,
+                                  registry: Nabu::Places.load_default(canonical_dir: config.canonical_dir),
+                                  stop_names: Nabu::PlaceMine.hand_stop_names)
+          print_mine_board(result)
+        else
+          print_mine_report(reporter.run(source: source, gazetteer: gazetteer, limit: limit))
+        end
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
       ensure
         journal&.disconnect
         catalog&.disconnect
+      end
+
+      # The P105-1 verdict surface: one block per NAME — candidates with
+      # their discriminators, attestations in context, both exits.
+      def print_mine_board(result)
+        say "place-mine board: #{result.source} × #{result.gazetteer} — #{result.edges} candidate " \
+            "edges · #{result.total_names} undecided names (#{format_duration(result.seconds)})"
+        unless result.decided.empty?
+          say "  decided already in nabu-places (off the board): " \
+              "#{result.decided.map { |name, status| "#{name}=#{status}" }.join(' · ')}"
+        end
+        say "  stopped since mined (place_stop_names.yml): #{result.stopped.join(' · ')}" unless result.stopped.empty?
+        if result.rows.empty?
+          say "  nothing undecided in this scope — the board is clean"
+          return
+        end
+
+        say "  ranked by document spread; exact spread computed over the top #{result.prerank_window} by passages"
+        result.rows.each_with_index do |row, i|
+          say format("  %<rank>2d. %<name>s — %<docs>d docs · %<passages>d passages · %<n>d candidate%<s>s",
+                     rank: i + 1, name: row.name, docs: row.documents, passages: row.passages,
+                     n: row.candidates.size, s: row.candidates.size == 1 ? "" : "s")
+          row.candidates.each do |c|
+            bits = [c.title, c.place_types.first, c.time_periods.join(" "),
+                    c.parent && "parent #{c.parent}",
+                    c.lat && format("%<lat>.2f,%<lon>.2f", lat: c.lat, lon: c.lon)].compact.reject(&:empty?)
+            say "      · #{c.ref}  #{bits.join(' · ')}"
+          end
+          row.snippets.each { |urn, text| say "      ▸ #{urn}  #{text}" }
+          say "      exits: link → names.yml (#{result.source}) · stop → place_stop_names.yml: - \"#{row.name}\""
+        end
       end
 
       def print_mine_report(report)
