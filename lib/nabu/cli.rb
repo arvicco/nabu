@@ -11069,7 +11069,7 @@ module Nabu
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
-          "#{format_collided(report)}" \
+          "#{format_collided(report)}#{format_sync_dictionary_lane(outcome.dictionary_lane)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
           "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}" \
           "#{format_sync_person_index(outcome.person_index)}#{format_sync_lect_staging(outcome.lect_staging)}"
@@ -11084,6 +11084,22 @@ module Nabu
 
         "  lect: #{commafy(census.unstaged)}/#{commafy(census.stageable)} " \
           "unstaged (#{census.codes.join(', ')})"
+      end
+
+      # P104-4: the secondary dictionary lane's tail — silent for every
+      # lane-less source (nil); entry-grained, compact (zero components
+      # suppressed, house style), so the primary document counts and the
+      # lane's entry counts never blur into one number.
+      def format_sync_dictionary_lane(report)
+        return "" if report.nil?
+
+        parts = []
+        parts << "+#{report.added}" if report.added.positive?
+        parts << "~#{report.updated}" if report.updated.positive?
+        parts << "=#{report.skipped}" if report.skipped.positive?
+        parts << "-#{report.withdrawn}" if report.withdrawn.positive?
+        parts << "!#{report.errored}" if report.errored.positive?
+        "  dict #{parts.empty? ? '0' : parts.join(' ')} entries"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house

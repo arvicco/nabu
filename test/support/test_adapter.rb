@@ -90,3 +90,51 @@ class JpnTestAdapter < TestAdapter
 
   def language = "jpn"
 end
+
+# The multi-shelf sibling of the rig (P104-4, Q81): a PASSAGES source that
+# also declares a secondary dictionary lane, for the sync/rebuild routing
+# tests. The lane reads glossary.tsv beside the *.txt corpus — one
+# "id<TAB>headword<TAB>gloss" line per entry — into one "test-lexicon"
+# dictionary; no file means no dictionaries, honestly (the absent-cone
+# posture every lane must hold).
+class LaneTestAdapter < TestAdapter
+  GLOSSARY_FILENAME = "glossary.tsv"
+  DICTIONARY_SLUG = "test-lexicon"
+
+  def self.dictionary_lane = DictionaryLane.new
+
+  # The dictionary-shaped sub-adapter (see Nabu::Adapter.dictionary_lane):
+  # discover/parse only — DictionaryLoader#load_from drives it.
+  class DictionaryLane < Nabu::Adapter
+    def discover(workdir)
+      return enum_for(:discover, workdir) unless block_given?
+
+      path = File.join(workdir, GLOSSARY_FILENAME)
+      return unless File.file?(path)
+
+      yield Nabu::DocumentRef.new(
+        source_id: TestAdapter::SOURCE_ID, id: "#{DICTIONARY_SLUG}:#{GLOSSARY_FILENAME}",
+        path: File.expand_path(path)
+      )
+    end
+
+    def parse(document_ref)
+      document = Nabu::DictionaryDocument.new(
+        slug: DICTIONARY_SLUG, language: "grc", title: "Test Lexicon",
+        canonical_path: document_ref.path
+      )
+      File.readlines(document_ref.path, encoding: Encoding::UTF_8, chomp: true).each do |line|
+        id, headword, gloss = line.split("\t")
+        raise Nabu::ParseError, "#{document_ref.path}: malformed glossary line #{line.inspect}" if headword.nil?
+
+        headword = Nabu::Normalize.nfc(headword)
+        document << Nabu::DictionaryEntry.new(
+          entry_id: id, key_raw: headword, language: "grc", headword: headword,
+          headword_folded: Nabu::Normalize.search_form(headword, language: "grc"),
+          gloss: gloss, body: [headword, gloss].compact.join(" — ")
+        )
+      end
+      document
+    end
+  end
+end
