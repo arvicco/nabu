@@ -243,11 +243,14 @@ module Nabu
       Line = Data.define(:urn_suffix, :text, :leiden, :languages)
       private_constant :Line
 
-      # Same signature family as the sibling parsers.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil)
+      # Same signature family as the sibling parsers. +metadata+ (P104-1)
+      # rides the caller's document-grain claims (the papyri adapter's
+      # HGV/TM idnos) onto the Document verbatim.
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, metadata: {})
         path = resolve_canonical_path(source, canonical_path)
         lines = extract_lines(source, path: path, urn: urn, language: language)
-        build_document(lines, urn: urn, language: language, title: title, path: path)
+        build_document(lines, urn: urn, language: language, title: title, path: path,
+                              metadata: metadata)
       end
 
       private
@@ -274,8 +277,9 @@ module Nabu
         source.is_a?(String) ? File.open(source, "r", &) : yield(source)
       end
 
-      def build_document(lines, urn:, language:, title:, path:)
-        document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
+      def build_document(lines, urn:, language:, title:, path:, metadata: {})
+        document = Document.new(urn: urn, language: language, title: title, canonical_path: path,
+                                metadata: metadata)
         lines.each_with_index do |line, sequence|
           document << Passage.new(
             urn: "#{urn}:#{line.urn_suffix}",
