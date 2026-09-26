@@ -337,12 +337,14 @@ class RebuildTest < Minitest::Test
     assert_equal 5, result.outcomes.first.report.added
     refute_nil result.facets
     assert_equal 5, result.facets.documents
-    assert_equal 19, result.facets.rows, "4+4+4 facets × 3 line-grain records + 3 + 4 fallback records"
+    assert_equal 20, result.facets.rows,
+                 "4+4+4 facets × 3 line-grain records + 3 + 4 fallback records, " \
+                 "+ HD000001's erhaltung condition facet (P104-1)"
     assert_equal 5, result.axes.edh
     db = Nabu::Store.connect(catalog_path)
     epitaphs = db[:document_facets].where(facet: "genre", value: "epitaph").count
     assert_equal 1, epitaphs
-    assert_equal 19, db[:document_facets].count
+    assert_equal 20, db[:document_facets].count
   ensure
     db&.disconnect
   end
