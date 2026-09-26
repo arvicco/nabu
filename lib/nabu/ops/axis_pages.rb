@@ -43,13 +43,18 @@ module Nabu
       # house render-cap rule, P48-r3).
       LANGUAGES_ITEMS = 10
 
-      def initialize(registry:, fragments_path:, output_dir:, catalog_path:, as_of: Date.today)
+      # +fulltext_path+ (P105-5a) feeds the lemma shelf's holdings cell
+      # (tier-silver rows live in the fulltext db); nil or absent file
+      # degrades that one cell to "nothing held yet", honestly.
+      def initialize(registry:, fragments_path:, output_dir:, catalog_path:,
+                     fulltext_path: nil, as_of: Date.today)
         @registry = registry
         @axes = registry.axes
         @fragments = load_fragments(fragments_path)
         @fragments_path = fragments_path
         @output_dir = output_dir
         @catalog_path = catalog_path
+        @fulltext_path = fulltext_path
         @as_of = as_of
       end
 
@@ -103,13 +108,18 @@ module Nabu
 
         catalog = Nabu::Store.connect(@catalog_path, readonly: true)
         Nabu::Store.setup!(catalog)
-        census = Nabu::Query::List.new(catalog: catalog).census.to_h { |row| [row.slug, row] }
+        if @fulltext_path && File.exist?(@fulltext_path)
+          fulltext = Nabu::Store.connect_fulltext(@fulltext_path, readonly: true)
+        end
+        census = Nabu::Query::List.new(catalog: catalog, fulltext: fulltext)
+                                  .census.to_h { |row| [row.slug, row] }
         info = Nabu::Query::LanguageInfo.new(catalog: catalog)
         holdings = @axes.each_axis.to_h do |axis|
           [axis.name, info.language_holdings_for(@registry.public_axis_members(axis.name))]
         end
         [census, holdings]
       ensure
+        fulltext&.disconnect
         catalog&.disconnect
       end
 
@@ -314,6 +324,9 @@ module Nabu
         parts << "#{commas(row.passages)} passages" if row.passages.positive?
         parts << "#{commas(row.entries)} entries" if row.entries.positive?
         parts << "#{commas(row.dossiers)} dossiers" if row.dossiers.positive?
+        # P105-5a: the two non-document local shelves census their own grains.
+        parts << "#{commas(row.notes)} notes" if row.notes.positive?
+        parts << "#{commas(row.lemma_rows)} lemma rows" if row.lemma_rows.positive?
         parts.empty? ? "nothing held yet" : parts.join(" / ")
       end
 

@@ -100,6 +100,46 @@ module Query
       assert_equal 1, row.withdrawn
     end
 
+    # P105-5a (Q87): the two local shelves whose holdings live outside
+    # documents/entries/dossiers — owner notes (urn_notes) and the silver
+    # lemma lane (fulltext passage_lemmas, tier "silver") — must census,
+    # never read "empty" while live.
+    def test_census_counts_owner_notes_for_the_notes_shelf
+      Nabu::Store::Source.create(slug: "local-notes", name: "Owner notes",
+                                 adapter_class: "Nabu::Adapters::LocalNotes",
+                                 license_class: "open", enabled: true)
+      [["urn:nabu:ccmh:mar", "a reading note"],
+       ["urn:nabu:ccmh:mar:1", "a passage note"]].each do |urn, note|
+        @catalog[:urn_notes].insert(urn: urn, note: note, topic: "reading",
+                                    added: "2026-09-26", provenance: "owner")
+      end
+      row = list.census.find { |r| r.slug == "local-notes" }
+      assert_equal 2, row.notes, "live owner notes must never render as empty"
+      assert_equal 0, row.docs
+    end
+
+    def test_census_counts_silver_rows_for_the_lemma_shelf_and_degrades_without_fulltext
+      Nabu::Store::Source.create(slug: "local-lemmas", name: "Silver lemmas",
+                                 adapter_class: "Nabu::Adapters::LocalLemmas",
+                                 license_class: "open", enabled: true)
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      seed_ccmh
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
+      passage = @catalog[:passages].first
+      [%w[wordan wordan silver], %w[bokos boka silver], %w[gold gold gold]].each do |surface, lemma, tier|
+        fulltext[:passage_lemmas].insert(passage_id: passage[:id], urn: passage[:urn],
+                                         language: "got", lemma_raw: lemma, lemma_folded: lemma,
+                                         surface_forms: surface, tier: tier)
+      end
+      with = Nabu::Query::List.new(catalog: @catalog, fulltext: fulltext)
+                              .census.find { |r| r.slug == "local-lemmas" }
+      assert_equal 2, with.lemma_rows, "tier-silver rows ARE the shelf's holdings — gold is not"
+      without = list.census.find { |r| r.slug == "local-lemmas" }
+      assert_equal 0, without.lemma_rows, "no fulltext handle degrades to zero, honestly"
+    ensure
+      fulltext&.disconnect
+    end
+
     def test_census_counts_dictionary_entries_and_dictionary_languages
       dict = make_dictionary(source: @ccmh, slug: "lsj", language: "grc")
       make_entry(dict, entry_id: "n1", headword: "μῆνις", folded: "μηνισ", gloss: "wrath")

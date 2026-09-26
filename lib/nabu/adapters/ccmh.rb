@@ -105,6 +105,29 @@ module Nabu
 
       BOOK_TITLES = { "MAT" => "Matthew", "MAR" => "Mark", "LUK" => "Luke", "JOH" => "John" }.freeze
 
+      # The curated witness-dating overlay (P105-5c — Q87, under №R-70's
+      # aggressive-mining posture): the standard paleographic century
+      # bands for the five codices, as top-level bounds the timeline's
+      # :bounds_keys shape projects (corpus-gysseling mold). These date
+      # the WITNESS (the manuscript object), so the rows keep the default
+      # artifact date class. The two vitae are DELIBERATELY absent: the
+      # works are 9th-century compositions carried by much later
+      # witnesses (Uspenskij-sbornik-family and 15th-c. South Slavic
+      # copies), and CCMH's files name neither witness — dating either
+      # grain from here would be a guess, so the coarseness is declared.
+      DATING = {
+        "assemanianus" => { "not_before" => 1000, "not_after" => 1100,
+                            "date_raw" => "11th c. (standard paleographic dating)" },
+        "marianus" => { "not_before" => 1000, "not_after" => 1050,
+                        "date_raw" => "early 11th c." },
+        "savvina" => { "not_before" => 1000, "not_after" => 1100,
+                       "date_raw" => "11th c." },
+        "zographensis" => { "not_before" => 950, "not_after" => 1050,
+                            "date_raw" => "late 10th–early 11th c." },
+        "suprasliensis" => { "not_before" => 1000, "not_after" => 1100,
+                             "date_raw" => "11th c." }
+      }.freeze
+
       def self.manifest
         MANIFEST
       end
@@ -149,14 +172,16 @@ module Nabu
             document_ref.path,
             scheme: document_ref.metadata.fetch("scheme"),
             urn: document_ref.id, language: "chu",
-            title: document_ref.metadata["title"]
+            title: document_ref.metadata["title"],
+            metadata: dating_for(document_ref.id)
           )
         else
           CcmhCesParser.new.parse(
             document_ref.path,
             book_id: document_ref.metadata.fetch("book_id"),
             urn: document_ref.id, language: "chu",
-            title: document_ref.metadata["title"]
+            title: document_ref.metadata["title"],
+            metadata: dating_for(document_ref.id)
           )
         end
       end
@@ -177,6 +202,12 @@ module Nabu
       end
 
       private
+
+      # "urn:nabu:ccmh:<slug>[:<book>]" → the slug's curated band, {} for
+      # the declared-undated vitae.
+      def dating_for(urn)
+        DATING.fetch(urn.split(":")[3], {})
+      end
 
       def document_refs(workdir)
         parser = CcmhCesParser.new

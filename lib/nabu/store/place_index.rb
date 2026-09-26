@@ -103,6 +103,7 @@ module Nabu
                     place_types_json: JSON.generate(place.place_types),
                     time_periods_json: JSON.generate(place.time_periods),
                     accuracy: place.respond_to?(:accuracy) ? place.accuracy : nil,
+                    parent: place.respond_to?(:parent) ? place.parent : nil,
                     position: position }
           names_for.call(place).uniq.each do |key|
             name_rows << { gazetteer: gazetteer, place_id: place.id, name_key: key }

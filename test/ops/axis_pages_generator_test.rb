@@ -33,6 +33,16 @@ module Ops
             wired: true
             sync_policy: manual
             axes: [alpha]
+          local-notes:
+            adapter: Nabu::Adapters::LocalNotes
+            wired: true
+            sync_policy: manual
+            axes: [alpha]
+          local-lemmas:
+            adapter: Nabu::Adapters::LocalLemmas
+            wired: true
+            sync_policy: manual
+            axes: [alpha]
           bare:
             adapter: TestAdapter
             wired: false
@@ -44,7 +54,8 @@ module Ops
         registry = Nabu::SourceRegistry.load(sources_path)
         generator = Nabu::Ops::AxisPages.new(
           registry: registry, fragments_path: File.join(root, "_fragments.yml"),
-          output_dir: File.join(root, "out"), catalog_path: catalog_path, as_of: AS_OF
+          output_dir: File.join(root, "out"), catalog_path: catalog_path,
+          fulltext_path: File.join(root, "fulltext.sqlite3"), as_of: AS_OF
         )
         generator.generate!
         yield File.join(root, "out")
@@ -66,8 +77,44 @@ module Ops
           content_sha256: "x", revision: 1, withdrawn: false
         )
       end
+      seed_local_shelves(catalog, path)
       Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
+    end
+
+    # P105-5a (Q87): the owner-notes and lemma shelves hold their content
+    # outside documents — urn_notes rows and tier-silver fulltext rows.
+    def seed_local_shelves(catalog, catalog_path)
+      catalog[:sources].insert(slug: "local-notes", name: "Notes",
+                               adapter_class: "Nabu::Adapters::LocalNotes",
+                               license_class: "open", enabled: true)
+      catalog[:sources].insert(slug: "local-lemmas", name: "Lemmas",
+                               adapter_class: "Nabu::Adapters::LocalLemmas",
+                               license_class: "open", enabled: true)
+      2.times do |i|
+        catalog[:urn_notes].insert(urn: "urn:nabu:pack:big:#{i}", note: "n#{i}",
+                                   topic: "reading", added: "2026-07-28", provenance: "owner")
+      end
+      fulltext = Nabu::Store.connect_fulltext(File.join(File.dirname(catalog_path), "fulltext.sqlite3"))
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+      3.times do |i|
+        fulltext[:passage_lemmas].insert(passage_id: i, urn: "urn:nabu:pack:big:#{i}",
+                                         language: "got", lemma_raw: "w#{i}", lemma_folded: "w#{i}",
+                                         surface_forms: "w#{i}", tier: i.zero? ? "gold" : "silver")
+      end
+      fulltext.disconnect
+    end
+
+    def test_holdings_cells_census_the_notes_and_lemma_shelves
+      with_generator_env do |out|
+        page = File.read(File.join(out, "alpha.md"))
+        notes_row = page.lines.find { |l| l.start_with?("| `local-notes` |") }
+        refute_nil notes_row, "the notes shelf rides the alpha desk table"
+        assert_includes notes_row, "2 notes", "live owner notes must never read as nothing held"
+        lemma_row = page.lines.find { |l| l.start_with?("| `local-lemmas` |") }
+        refute_nil lemma_row
+        assert_includes lemma_row, "2 lemma rows", "tier-silver rows are the shelf's holdings"
+      end
     end
 
     def test_languages_line_is_dated_counted_descending_and_capped

@@ -1566,7 +1566,10 @@ module Nabu
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       require_timeline!(catalog) if from || to
-      query = Nabu::Query::List.new(catalog: catalog)
+      # P105-5a: the lemma shelf's holdings live in fulltext — read-only,
+      # optional (its cell degrades to zero without one).
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true) if File.exist?(config.fulltext_path)
+      query = Nabu::Query::List.new(catalog: catalog, fulltext: fulltext)
       # Bare `list SOURCE --lang X` (P44-r1): with no explicit enumeration
       # flag, --lang IMPLIES the natural mode by the shelf's content kind —
       # a dictionary shelf lists entries, a text shelf documents — and the
@@ -1633,6 +1636,7 @@ module Nabu
       # is not "unknown", it teaches its own on-ramp instead.
       raise Thor::Error, registered_not_held_message(config, catalog, slug) || e.message
     ensure
+      fulltext&.disconnect
       catalog&.disconnect
     end
 
@@ -3697,10 +3701,12 @@ module Nabu
         nabu place mine kanripo --dry-run   # Q9: census Han place-name hits (writes nothing)
         nabu place mine kanripo             # mine place-candidate edges into the links journal
         nabu place mine report kanripo      # review the mined candidates, ranked by document spread
+        nabu place mine report kanripo --board   # the per-NAME verdict board (discriminators + snippets)
     HELP
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
       return run_place_mine(query_parts[1..]) if query_parts.first == "mine"
+      return run_place_link(query_parts[1..]) if query_parts.first == "link"
 
       query = query_parts.join(" ").strip
       raise Thor::Error, "place: give a Pleiades numeric id or an exact place title" if query.empty?
@@ -3823,6 +3829,7 @@ module Nabu
       # and the two exits (stop-list line, place card).
       def run_place_mine_report(args)
         args = Array(args)
+        board = args.delete("--board") ? true : false
         limit = Nabu::PlaceMineReport::DEFAULT_LIMIT
         if (i = args.index("--limit"))
           limit = begin
@@ -3833,6 +3840,8 @@ module Nabu
           args.slice!(i, 2)
         end
         source, gazetteer = args
+        raise Thor::Error, "place mine report --board needs a SOURCE (verdicts are per source)" if board && source.nil?
+
         config = Nabu::Config.load
         journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
         if journal.nil?
@@ -3840,14 +3849,51 @@ module Nabu
         end
 
         catalog = Nabu::Store.connect(config.catalog_path)
-        report = Nabu::PlaceMineReport.new(catalog: catalog, journal: journal)
-                                      .run(source: source, gazetteer: gazetteer, limit: limit)
-        print_mine_report(report)
+        reporter = Nabu::PlaceMineReport.new(catalog: catalog, journal: journal)
+        if board
+          result = reporter.board(source: source, gazetteer: gazetteer || "chgis", limit: limit,
+                                  registry: Nabu::Places.load_default(canonical_dir: config.canonical_dir),
+                                  stop_names: Nabu::PlaceMine.hand_stop_names)
+          print_mine_board(result)
+        else
+          print_mine_report(reporter.run(source: source, gazetteer: gazetteer, limit: limit))
+        end
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
       ensure
         journal&.disconnect
         catalog&.disconnect
+      end
+
+      # The P105-1 verdict surface: one block per NAME — candidates with
+      # their discriminators, attestations in context, both exits.
+      def print_mine_board(result)
+        say "place-mine board: #{result.source} × #{result.gazetteer} — #{result.edges} candidate " \
+            "edges · #{result.total_names} undecided names (#{format_duration(result.seconds)})"
+        unless result.decided.empty?
+          say "  decided already in nabu-places (off the board): " \
+              "#{result.decided.map { |name, status| "#{name}=#{status}" }.join(' · ')}"
+        end
+        say "  stopped since mined (place_stop_names.yml): #{result.stopped.join(' · ')}" unless result.stopped.empty?
+        if result.rows.empty?
+          say "  nothing undecided in this scope — the board is clean"
+          return
+        end
+
+        say "  ranked by document spread; exact spread computed over the top #{result.prerank_window} by passages"
+        result.rows.each_with_index do |row, i|
+          say format("  %<rank>2d. %<name>s — %<docs>d docs · %<passages>d passages · %<n>d candidate%<s>s",
+                     rank: i + 1, name: row.name, docs: row.documents, passages: row.passages,
+                     n: row.candidates.size, s: row.candidates.size == 1 ? "" : "s")
+          row.candidates.each do |c|
+            bits = [c.title, c.place_types.first, c.time_periods.join(" "),
+                    c.parent && "parent #{c.parent}",
+                    c.lat && format("%<lat>.2f,%<lon>.2f", lat: c.lat, lon: c.lon)].compact.reject(&:empty?)
+            say "      · #{c.ref}  #{bits.join(' · ')}"
+          end
+          row.snippets.each { |urn, text| say "      ▸ #{urn}  #{text}" }
+          say "      exits: link → names.yml (#{result.source}) · stop → place_stop_names.yml: - \"#{row.name}\""
+        end
       end
 
       def print_mine_report(report)
@@ -3893,6 +3939,41 @@ module Nabu
         say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
             "#{census.candidate_edges} across #{census.name_hits.size} attested names " \
             "(census pass: #{format_duration(census.seconds)})"
+      end
+
+      # `nabu place link SOURCE [GAZETTEER]` (P105-4 — Q86's apply lane):
+      # promote the registry's MATCHED mined names to ruled attestation
+      # edges (kind "place") in the links journal. Passage-grain by
+      # design — never document_axes.place_ref.
+      def run_place_link(args)
+        source, gazetteer = Array(args)
+        raise Thor::Error, "usage: nabu place link SOURCE [GAZETTEER]" if source.to_s.empty?
+
+        gazetteer ||= "chgis"
+        config = Nabu::Config.load
+        registry = Nabu::Places.load_default(canonical_dir: config.canonical_dir)
+        if registry.nil?
+          raise Thor::Error, "place link: no nabu-places registry under canonical/ — " \
+                             "run `nabu sync nabu-places` first"
+        end
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        journal = Nabu::Store::LinksJournal.migrate!(
+          Nabu::Store::LinksJournal.connect("sqlite://#{config.links_path}")
+        )
+        result = Nabu::PlaceLink.new(catalog: catalog, journal: journal, registry: registry,
+                                     gazetteer: gazetteer, progress: progress_reporter)
+                                .apply!(source: source)
+        say "place link: #{result.source} × #{result.gazetteer} — #{result.names} ruled " \
+            "names → #{result.edges_written} attestation edges written " \
+            "(#{result.edges_refreshed} refreshed; superseded #{result.superseded_runs} " \
+            "prior runs / #{result.superseded_edges} edges; #{format_duration(result.seconds)}) " \
+            "— read back with `nabu links <passage urn>`"
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
       end
 
       # `nabu place apply` (P63-7): project the nabu-places registry into
@@ -5835,6 +5916,9 @@ module Nabu
         parts << "docs=#{row.docs}#{" pass=#{row.passages}" if row.passages.positive?}" if row.docs.positive?
         parts << "entries=#{row.entries}" if row.entries.positive?
         parts << "dossiers=#{row.dossiers}" if row.dossiers.positive?
+        # P105-5a: the notes and lemma shelves census their own grains.
+        parts << "notes=#{row.notes}" if row.notes.positive?
+        parts << "lemma-rows=#{row.lemma_rows}" if row.lemma_rows.positive?
         parts << "empty" if parts.empty?
         parts << "langs=#{census_langs(row.languages)}" unless row.languages.empty?
         parts << "license=#{row.license_classes.join(',')}"

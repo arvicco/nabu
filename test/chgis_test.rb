@@ -58,7 +58,15 @@ class ChgisTest < Minitest::Test
     assert_in_delta 116.39525, ba.lon, 0.0001, "x_coord is longitude"
     assert_equal ["1820"], ba.time_periods, "a same-year span collapses to one year"
     assert_includes ba.place_types, "zhou"
-    assert_equal "hvd_9513", ba.parent
+    assert_equal "hvd_9513", ba.parent_id
+    assert_equal "顺天府 (Shuntian Fu)", ba.parent,
+                 "the parent unit displays verbatim — the board's homonym discriminator"
+  end
+
+  def test_parentless_rows_carry_nil_not_a_placeholder
+    tbrc = row("TBRC_G1KR100")
+    assert_nil tbrc.parent
+    assert_nil tbrc.parent_id
   end
 
   def test_all_twelve_fixture_tuples_parse
@@ -96,6 +104,10 @@ class ChgisTest < Minitest::Test
                  "hanzi input resolves"
     assert_equal ["霸州"], resolver.titled("Ba Zhou").map(&:title),
                  "pinyin input resolves the same place"
+    assert_equal "顺天府 (Shuntian Fu)",
+                 db[:place_index].first(gazetteer: "chgis", place_id: "hvd_1")[:parent],
+                 "the derive persists the parent discriminator (migration 035)"
+    assert_nil db[:place_index].first(gazetteer: "chgis", place_id: "TBRC_G1KR100")[:parent]
   end
 
   def test_producer_without_the_dump_is_an_honest_noop

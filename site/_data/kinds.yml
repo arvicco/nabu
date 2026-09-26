@@ -3,37 +3,37 @@
 as_of: 26 September 2026
 classes:
 - head: literary
-  documents: 683212
-  documents_display: '683,212'
+  documents: 683358
+  documents_display: '683,358'
   sources: 15
 - head: administrative
-  documents: 481755
-  documents_display: '481,755'
+  documents: 482378
+  documents_display: '482,378'
   sources: 12
 - head: historiography
-  documents: 347333
-  documents_display: '347,333'
+  documents: 347393
+  documents_display: '347,393'
   sources: 16
 - head: funerary
-  documents: 114758
-  documents_display: '114,758'
+  documents: 114778
+  documents_display: '114,778'
   sources: 9
 - head: legal
-  documents: 35192
-  documents_display: '35,192'
-  sources: 10
+  documents: 35750
+  documents_display: '35,750'
+  sources: 11
 - head: letter
-  documents: 33633
-  documents_display: '33,633'
+  documents: 33698
+  documents_display: '33,698'
   sources: 9
 - head: royal
   documents: 30134
   documents_display: '30,134'
   sources: 4
 - head: dedicatory
-  documents: 22857
-  documents_display: '22,857'
-  sources: 6
+  documents: 22915
+  documents_display: '22,915'
+  sources: 7
 - head: scripture
   documents: 20448
   documents_display: '20,448'
@@ -47,49 +47,49 @@ classes:
   documents_display: '13,528'
   sources: 4
 - head: mark
-  documents: 12115
-  documents_display: '12,115'
+  documents: 12286
+  documents_display: '12,286'
   sources: 9
 - head: honorific
-  documents: 11346
-  documents_display: '11,346'
-  sources: 3
+  documents: 11413
+  documents_display: '11,413'
+  sources: 4
 - head: divination
   documents: 10493
   documents_display: '10,493'
   sources: 6
 - head: scholarly
-  documents: 8155
-  documents_display: '8,155'
+  documents: 8891
+  documents_display: '8,891'
   sources: 8
 - head: building
   documents: 8016
   documents_display: '8,016'
   sources: 4
 - head: school
-  documents: 5142
-  documents_display: '5,142'
+  documents: 5190
+  documents_display: '5,190'
   sources: 5
 - head: magic
-  documents: 3270
-  documents_display: '3,270'
-  sources: 6
-- head: boundary
-  documents: 2924
-  documents_display: '2,924'
-  sources: 2
+  documents: 3327
+  documents_display: '3,327'
+  sources: 8
 - head: hymn-prayer
-  documents: 2904
-  documents_display: '2,904'
-  sources: 7
+  documents: 3004
+  documents_display: '3,004'
+  sources: 8
+- head: boundary
+  documents: 2963
+  documents_display: '2,963'
+  sources: 3
 - head: exegesis
   documents: 616
   documents_display: '616'
   sources: 2
 unclassified_sources: 78
-unknown_documents: 46773
-unknown_documents_display: '46,773'
-unmapped_documents: 14695
-unmapped_documents_display: '14,695'
-unclassified_documents: 361250
-unclassified_documents_display: '361,250'
+unknown_documents: 46964
+unknown_documents_display: '46,964'
+unmapped_documents: 11491
+unmapped_documents_display: '11,491'
+unclassified_documents: 361570
+unclassified_documents_display: '361,570'

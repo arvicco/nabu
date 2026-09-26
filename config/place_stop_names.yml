@@ -77,6 +77,55 @@ stop_names:
   - "金城"   # the impregnable-walls idiom (金城湯池)
   - "安平"   # peace and calm
   - "玉山"   # the 玉山傾倒 figure
+  # kanripo × chgis review round 6 (the P105-2 verdict board, top-50 by
+  # document spread, 2026-09-26; every candidate a 1911 cun-zhen village
+  # row unless noted — ratified by the P105 gate merge). Same classes as
+  # rounds 2-5: generic classical words/phrases, idiom/quotation
+  # crossings, fanqie glosses, person-title crossings, and four
+  # dominant-reading judgments (清水/嘉禾/百丈 measure-or-river/南王·西王
+  # prince-title crossings). The real-geography names of the round (江北
+  # 西江 天竺 三江 杜陵 中都 平江 京口 南城 王城) go to nabu-places
+  # decisions, not here.
+  - "大作"   # "great undertaking" (利用為大作 — the Yijing line)
+  - "中土"   # the central lands
+  - "下交"   # associating with inferiors (上交不諂下交不瀆)
+  - "明光"   # bright radiance (大明光于天下)
+  - "上明"   # "the bright above" (commentary diction)
+  - "大方"   # the great method (學易之大方)
+  - "玉石"   # jade and stone (玉石俱焚)
+  - "中古"   # middle antiquity (易之興也其於中古乎)
+  - "上水"   # water drawn upward (巽乎水而上水 — the Well hexagram)
+  - "田中"   # "in the field" (上不在天下不在田中)
+  - "大化"   # the great transformation
+  - "石山"   # rocky mountain
+  - "子午"   # the zi-wu meridian / cyclical pair
+  - "富有"   # "richly possessing" (富有之謂大業 — the Xici)
+  - "高明"   # lofty brilliance
+  - "田家"   # farm household
+  - "清泉"   # clear spring
+  - "下作"   # collation notes ("below written as…") + boundary crossings
+  - "安仁"   # at rest in ren (仁者安仁 — the Analects)
+  - "公田"   # the public field (the well-field system)
+  - "治中"   # governing the center / the aide-de-camp office title
+  - "矣文"   # sentence-boundary crossing (…矣。文…)
+  - "古木"   # fanqie gloss crossing (谷, 古木反) + "ancient tree"
+  - "周家"   # the house of Zhou
+  - "上仙"   # ascending to immortality
+  - "三界"   # the Buddhist three realms
+  - "元三"   # numerological crossing (一元而二元三元)
+  - "都下"   # in the capital
+  - "老翁"   # old man
+  - "北望"   # gazing north
+  - "西郊"   # the western suburbs (自我西郊 — the Yijing)
+  - "松柏"   # pines and cypresses (歲寒然後知松柏之後凋)
+  - "石壁"   # stone cliff
+  - "清水"   # clear water, literal (一淵清水; the 文昌 dominant-reading rule)
+  - "南王"   # prince-title crossing (淮南王, X南王)
+  - "西王"   # prince-title crossing (安西王; 西王母)
+  - "百丈"   # the measure phrase (數百丈) dominates the Sichuan river reading
+  - "嘉禾"   # auspicious grain (the 歸禾/嘉禾 Documents episode)
+  - "康王"   # King Kang of Zhou — a person, not a place
+  - "晏子"   # Master Yan — a person, not a place
 
 # Ceiling exemptions (№R-67, owner 2026-09-18): ruled genuinely-
 # geographic names the derived frequency ceiling must not swallow.
