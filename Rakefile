@@ -435,8 +435,12 @@ namespace :builders do
     require "nabu"
     config = Nabu::Config.load
     catalog = Sequel.connect("sqlite://#{File.join(config.db_dir, 'catalog.sqlite3')}")
+    progress = Nabu::ProgressReporter.new(
+      on_stage: ->(name, _eta = nil) { puts "  stage: #{name}" },
+      on_load_tick: ->(count, _errored) { puts "  … #{count}" if (count % 100_000).zero? }
+    )
     summary = Nabu::Ops::BuilderRefresh.run(catalog: catalog, config: config,
-                                            progress: Nabu::Progress.new($stdout))
+                                            progress: progress)
     puts "builders:refresh done — facets #{summary.facets.rows} rows"
   ensure
     catalog&.disconnect
