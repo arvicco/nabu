@@ -61,12 +61,11 @@ class PlaceLinkTest < Minitest::Test
   end
 
   def registry
-    RegistryStub.new(
-      { "杜陵" => Nabu::Places::Decision.new(refs: ["chgis:hvd_1"], status: "matched",
-                                            certainty: "high", note: "the Han county"),
-        "王城" => Nabu::Places::Decision.new(refs: [], status: "rejected",
-                                            certainty: "high", note: "wrong identity") }
-    )
+    matched = Nabu::Places::Decision.new(refs: ["chgis:hvd_1"], status: "matched",
+                                         certainty: "high", note: "the Han county")
+    rejected = Nabu::Places::Decision.new(refs: [], status: "rejected",
+                                          certainty: "high", note: "wrong identity")
+    RegistryStub.new({ "杜陵" => matched, "王城" => rejected })
   end
 
   def apply!
