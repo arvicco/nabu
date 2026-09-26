@@ -38,7 +38,7 @@ module Nabu
           slug_docs, slug_rows = project_source(catalog, kinds, slug, canonical_dir)
           documents += slug_docs
           rows += slug_rows
-          progress&.load_tick("kind: #{slug} — #{slug_rows} rows")
+          progress&.load_tick(documents, 0)
         end
         Summary.new(documents: documents, rows: rows)
       end

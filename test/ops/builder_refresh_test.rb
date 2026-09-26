@@ -38,8 +38,14 @@ class BuilderRefreshTest < Minitest::Test
   end
 
   def test_refresh_runs_all_three_builders_and_reports
+    # A REAL reporter, not nil: builder tick calls must honor the
+    # ProgressReporter arity contract (the first live run caught a
+    # one-string tick that nil-progress tests let through).
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(_l, _e = nil) {},
+                                          on_load_tick: ->(_p, _e) {})
     summary = Dir.mktmpdir do |dir|
-      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir),
+                                    progress: reporter)
     end
     facets = @catalog[:document_facets].where(document_id: @doc.id).select_map(:facet)
     assert_includes facets, "genre", "the facet_map projection ran"
