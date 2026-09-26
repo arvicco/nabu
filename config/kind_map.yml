@@ -35,6 +35,8 @@ sources:
       "Private/Votive": dedicatory/votive        # 54
       "fake (modern)": unknown                   # 230 — №R-66: authenticity claim, not a
       #   genre; the verbatim label stays on every card
+      "Other (see subgenre)": unknown            # 39 — upstream's own other-pointer; the
+      #   subgenre field is not walked (P105-6)
   ebl:                # slash-path vocabulary — prefix rules, most-specific first
     facet: genre
     prefix_map:
@@ -83,6 +85,7 @@ sources:
       "letter": letter                           # 116
       "elogium": honorific                       # 84 (+59 "?") — praise inscriptions for persons
       "seat inscription": mark/ownership         # 75 — reserved-seat marks
+      "prayer": hymn-prayer/prayer               # 51 — P105-6 (the iip fold)
   edr:                # 115,590 docs, Latin vocabulary
     facet: genre
     map:
@@ -99,6 +102,10 @@ sources:
       "cetera": unknown                          # 7,839 — upstream's own catch-all
       #   (ruled 2026-09-14: an explicit "the rest" is a non-classification claim)
       "cetera loca": unknown                     # 165 — the same catch-all's variant
+      # P105-6:
+      "honorarius aut sepulcralis": unknown      # 41 — upstream's own either-or: an
+      #   explicit non-determination between two classes, never a both-claim
+      "cetera magica": magic                     # 26 — "other magical": magica IS the claim
   elephantine:        # 9,034 docs; pipes split upstream composites
     facet: genre
     map:
@@ -126,6 +133,12 @@ sources:
       "instruction": literary/wisdom
       "historic": historiography
       "biography": historiography
+      # P105-6 (composite-borne heads that never had their own row):
+      "contract": legal/contract                 # 44 bare + 53 "documentary | contract"
+      "dept instrument": legal/contract          # 35 composite-borne — upstream's own
+      #   truncated "debt instrument" label, verbatim
+      "legal document": legal                    # 31
+      "Order for payment or delivery": administrative # 29 composite-borne
     deliberate:
       "vertical format": "physical layout, not a genre"      # 176
       "horizontal format": "physical layout, not a genre"    # 88
@@ -149,6 +162,13 @@ sources:
       "financial": administrative                # 61
       "verse": literary/poetry                   # 57 — metrical inscriptions
       "building": building                       # 52
+      # P105-6:
+      "label.weight": mark/label                 # 47 — weight labels
+      "place_marker.boundary": boundary          # 37
+      "acclamation": honorific                   # 35 — the edh fold
+      "dedicatory.offering": dedicatory/votive   # 32
+      "honorific": honorific                     # 32
+      "magic": magic                             # 27
   isicily:
     facet: genre
     map:
@@ -164,6 +184,10 @@ sources:
       "production or ownership": mark            # 67 — either way an object mark
       "tessera (civic allotment)": administrative # 164 — allotment tokens
       "accounts": administrative/account         # 18
+      # P105-6:
+      "unassigned": unknown                      # 46 — upstream's own cannot-determine
+      "seat inscription": mark/ownership         # 29 — the edh fold
+      "decree": legal/law                        # 24
   itant:
     facet: genre
     map:
@@ -178,6 +202,7 @@ sources:
     facet: genre
     map:
       "Commemorative": funerary                  # 423 — memorial stones
+      "Unable to determine": unknown             # 44 — upstream's own cannot-determine (P105-6)
   riig:
     facet: genre
     map:
@@ -330,6 +355,44 @@ sources:
       "Schreibübungen": school                   # 6
       "Übung": school                            # 9
       "Übung (Schreiben)": school                # 7
+      # P105-6 fold round (worklist head, census 2026-09-26) — the same
+      # HGV German vocabulary, next tier down:
+      "Befehl": administrative                   # 81 — orders (the Anweisung shape)
+      "Anordnung": administrative                # 30 — directives
+      "Vorschlag": administrative                # 50 — nomination proposals (liturgy service)
+      "Mitteilung": administrative               # 49 — official communications
+      "Eingabe an den Strategen": legal/petition # 48 — the bare Eingabe fold, addressed
+      "Gesuch": legal/petition                   # 18
+      "Bittschrift": legal/petition              # 34
+      "Exercice épistolaire": school             # 48 — letter-writing exercises
+      "Angebot": legal/contract                  # 45 — lease/purchase offers
+      "Contrat de prêt en argent": legal/contract # 28
+      "Garantie": legal/contract                 # 23 — the Bürgschaft shape
+      "Verträge": legal/contract                 # 23
+      "Anerkenntnis": legal                      # 19 — debt acknowledgments
+      "Notizen": administrative/note             # 42
+      "Memorandum": administrative/note          # 36
+      "Vermerk": administrative/note             # 20
+      "Vermerk (Registrierung)": administrative/note # 28
+      "Zuteilung": administrative                # 40 — allocations
+      "Zahlungen": administrative                # 26
+      "Registrierung": administrative            # 24
+      "Zensus": administrative                   # 21 — census declarations
+      "Vermessung": administrative               # 30 — land surveys ("(?)" rides the strip rule)
+      "Liturgie": administrative                 # 20 — compulsory public service
+      #   nominations (the Greco-Egyptian liturgy), not Christian rite
+      "Ordre de transport «shiné nsa»": administrative # 33
+      "Rechnungen": administrative/account       # 24
+      "Einladung": letter                        # 26 — invitations
+      "Abschriften von Briefen (amtlich)": letter/official # 20 — the content is the
+      #   letters (the bare copy marker stays deliberate below)
+      "Schriftverkehr (amtlich)": letter/official # 19
+      "Graffitto": mark/graffito                 # 24 — upstream's double-t spelling
+      "Aufschrift": mark                         # 33 — object inscriptions
+      "tessera": administrative                  # 31 — tokens (the isicily allotment fold)
+      "Bestattung": funerary                     # 20
+      "Griechische Beischrift zu demotischer Urkunde": administrative/note # 20 — Greek
+      #   dockets on Demotic instruments
     prefix_map:
       "Brief": letter                            # 668 bare + Lettre variants ride exact/fold
       "Lettre": letter                           # 154
@@ -340,6 +403,11 @@ sources:
       "Abschrift": "a copy marker, not a genre"            # 74
       "Auszug": "an excerpt marker, not a genre"           # 57
       "Datierung": "a bare dating formula, not a genre"    # 172
+      # P105-6:
+      "Datum": "a bare dating formula, not a genre"        # 36
+      "Adresse": "an address block, not a genre"           # 19
+      "Geld": "a subject label (money), not a genre"       # 38
+      "Getreide": "a subject label (grain), not a genre"   # 21
   oracc:              # catalogue genre (P100-2 emission; 115,263 bearing entries,
     facet: genre      # CDLI-drifted vocabulary; case-insensitive fold covers lexical/letter)
     map:
@@ -379,6 +447,14 @@ sources:
       "Clay bulla inscription": mark             # 126
       "Literary": literary                       # 1,389 — №R-66 (the cdli-shared fold)
       "Literary Work": literary                  # 112
+      # P105-6:
+      "Hymn-Prayer": hymn-prayer                 # 43
+      "Scholarly": scholarly                     # 37
+      "Decree": legal/law                        # 27
+      "Votive Donation": dedicatory/votive       # 26
+      "Seal inscription": mark/ownership         # 38 — seal legends name their owner
+    deliberate:
+      "Clay tablet inscription": "an object description, not a genre"  # 46 (P105-6)
   # -- metadata graduations (P100-1): fields read from metadata_json ------
   sefaria:            # categories[0] = the top-level category (hierarchy head)
     metadata: categories
@@ -496,6 +572,19 @@ sources:
       '\bK?21\d\b': historiography               # 210s ×~90 — Japanese history
       '\bK?121\b': literary/essay                # 121 ×94 — Japanese philosophy (the dta
       #   Philosophie precedent)
+      # P105-6 fold round:
+      '\bK?9[1-9]9\b': literary                  # 9x9 "other" literature shelves (949 ×49
+      #   incl. K949, 919 kanshi, 929/939/…) — literature, not further classified;
+      #   909 (children's-lit studies) deliberately excluded from the pattern
+      '\bK?22\d\b': historiography               # 220s ×~60 — Asian history (222 ×36)
+      '\bK?29\d\b': scholarly                    # 290s ×~90 — geography and travel
+      #   (291 ×34 + "291 786" ×44; the dta Geographie precedent)
+      '\bK?4\d\d\b': scholarly                   # 400s ×~150 — natural-science writings
+      #   (451 meteorology ×40, 401 ×31, 460, 481 …; the dta Physik/Biologie shape)
+      '\bK?388\b': literary/narrative/tale       # 388 ×32 — legends and folktales: the
+      #   texts themselves, not folklore studies
+      '\bK?38[26]\b': scholarly                  # 382/386 ×~57 — ethnography of manners
+      #   and festivals (the dta Gesellschaftswissenschaften precedent)
       # remaining non-9xx compounds and singletons stay worklist-visible.
     deliberate:
       # Ruled 2026-09-26 (P103 gate, as recommended): the bare modern
@@ -507,6 +596,11 @@ sources:
       "NDC 771": "modern NDC subject shelving (performing arts), not genre"
       "NDC 775": "modern NDC subject shelving (theater), not genre"
       "NDC 778": "modern NDC subject shelving (film), not genre"
+      # P105-6 (the same stance, next tier of the arts shelves):
+      "NDC 772": "modern NDC subject shelving (theater history), not genre"
+      "NDC 774": "modern NDC subject shelving (kabuki), not genre"
+      "NDC 751": "modern NDC subject shelving (ceramics), not genre"
+      "NDC 728": "modern NDC subject shelving (calligraphy), not genre"
   dta:                # the subgenre carries the signal; genre alone is too coarse
     metadata: subgenre
     map:
@@ -530,6 +624,17 @@ sources:
       "Autobiographie": historiography           # 5
       "Biographie": historiography               # 2
       "Reiseliteratur": literary/diary           # 17 — travelogues
+      # P105-6 (the academic-subject tier, the Medizin/Technik shape):
+      "Psychologie": scholarly                   # 43
+      "Biologie": scholarly                      # 40
+      "Gesellschaft": scholarly                  # 37
+      "Ökonomie": scholarly                      # 30
+      "Physik": scholarly                        # 27
+      "Philologie": scholarly                    # 26
+      "Theologie": scholarly                     # 25 — theological scholarship (treatises,
+      #   not liturgy or scripture)
+      "Erbauungsliteratur": literary/wisdom      # 38 — Christian edification literature
+      #   (the sefaria Musar fold)
   openiti:            # census: BookSUBJ (→ the subject facet) on 4,191 of 9,079 docs,
     facet: subject    # 2026-09-26 — a long-tail Arabic library taxonomy; regex rules
     #                   fold the recurring heads (multi-label by design, the aozora

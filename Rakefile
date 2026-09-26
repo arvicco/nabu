@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# P105-5d (Q87): rake tasks announce progress through stage/tick lines;
+# when their stdout is a pipe (a background log) Ruby's default block
+# buffering held those lines back for the length of a multi-hour pass —
+# the no-silent-passes class. Flush as written, always.
+$stdout.sync = true
+
 require "rake/testtask"
 
 Rake::TestTask.new(:test) do |t|
@@ -297,6 +303,9 @@ namespace :site do
       fragments_path: File.expand_path("site/axis/_fragments.yml", __dir__),
       output_dir: File.expand_path("site/axis", __dir__),
       catalog_path: catalog_path,
+      # The lemma shelf's holdings live in fulltext (P105-5a) — the
+      # sibling file beside whichever catalog is being read.
+      fulltext_path: File.join(File.dirname(catalog_path), Nabu::Config::FULLTEXT_DB_FILENAME),
       as_of: Date.today
     )
     results = generator.generate!

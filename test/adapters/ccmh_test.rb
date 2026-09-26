@@ -91,6 +91,40 @@ class CcmhTest < Minitest::Test
     end
   end
 
+  # --- the curated dating overlay (P105-5c — Q87) ----------------------------
+
+  def test_parse_carries_the_curated_witness_dating_band
+    document = parse_urn("urn:nabu:ccmh:assemanianus:mat")
+    assert_equal 1000, document.metadata["not_before"]
+    assert_equal 1100, document.metadata["not_after"]
+    assert_includes document.metadata["date_raw"], "11th c.",
+                    "the band carries its human-readable claim"
+  end
+
+  def test_parse_zographensis_band_straddles_the_century_seam
+    document = parse_urn("urn:nabu:ccmh:zographensis:mat")
+    assert_equal 950, document.metadata["not_before"]
+    assert_equal 1050, document.metadata["not_after"]
+  end
+
+  def test_parse_suprasliensis_txt_lane_carries_its_band_too
+    document = parse_urn("urn:nabu:ccmh:suprasliensis")
+    assert_equal 1000, document.metadata["not_before"]
+    assert_equal 1100, document.metadata["not_after"]
+  end
+
+  def test_vitae_stay_deliberately_undated
+    document = parse_urn("urn:nabu:ccmh:vita-constantini")
+    refute document.metadata.key?("not_before"),
+           "9th-c. compositions carried by much later witnesses — dating either " \
+           "grain from here would be a guess (declared, never silent)"
+  end
+
+  def test_metadata_dates_registers_the_ccmh_bounds_shape
+    assert_equal :bounds_keys, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["ccmh"],
+                 "the overlay must project — a shape-less dating source is lane drift"
+  end
+
   # --- parse: shape A (<ver>-wrapped) -----------------------------------------
 
   def test_parse_round_trips_assemanianus_matthew_at_verse_grain

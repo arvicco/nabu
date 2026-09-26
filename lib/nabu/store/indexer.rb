@@ -384,7 +384,7 @@ module Nabu
         timed(profile, :fts_lemma) do
           fulltext.transaction do
             count, _lemmas, chars = insert_passage_batches(fulltext, live_passages(catalog), tiers,
-                                                           source_slugs(catalog))
+                                                           source_slugs(catalog), progress: progress)
             write_char_postings(fulltext, chars, stamp_class: true)
           end
           # P36-2: the lemma table was created BARE (create_lemma_table); build
@@ -529,7 +529,7 @@ module Nabu
             end
             count, inserted, chars = insert_passage_batches(
               fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
-              source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog)
+              source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress
             )
             # P84-1: re-apply the silver-lemma slice — the delete above
             # stripped any shelf-projected rows for these urns, and the
@@ -749,7 +749,14 @@ module Nabu
       # pre-P81-3 one source-less rows. +slugs+ maps source_id → slug (the
       # source_slugs map) for the source token; nil suppresses the column
       # even against a source-bearing table (no caller does today).
-      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil)
+      # P105-5d (Q87): the loop ticks per FULL batch — cbeta's slice
+      # walked 8.75M passages for ~55 minutes reading as a hang (openiti
+      # ~2h); a silent pass is a defect, not a style choice. Partial
+      # (final) batches deliberately do not tick: a small corpus stays
+      # silent (the non-tty one-close-line contract), and the sync
+      # fallthrough into this full rebuild would otherwise stamp passage
+      # counts onto the still-open parse+load stage.
+      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         contentless = fts_contentless?(fulltext)
@@ -768,6 +775,7 @@ module Nabu
           batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
           lemma_count += rows.size
+          progress&.load_tick(count, 0) if batch.size == BATCH_SIZE
         end
         [count, lemma_count, chars]
       end

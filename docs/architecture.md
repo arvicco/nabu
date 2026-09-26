@@ -1269,6 +1269,23 @@ without the kyoto treebank on disk, #10 without loaded e84000 catalog
 rows) is a no-op that supersedes nothing,
 so standing edges survive parse-only syncs.
 
+**The place-mining pair (#11/#12).** `nabu place mine SOURCE [GAZETTEER]`
+(`Nabu::PlaceMine`, P96-3): the gazetteer's Han name keys matched against a
+source's passage text, emitting kind=place-candidate edges — REVIEW FUEL,
+never place_ref (precision rules censused: length floor, ambiguity cap, a
+derived frequency stop plus the hand stop list in
+config/place_stop_names.yml). Its review surfaces are `place mine report`
+(per-place, document-spread ranked) and `place mine report --board`
+(per-NAME, the verdict grain: candidates with their index discriminators,
+attestations in context, decided names censused off). `nabu place link
+SOURCE [GAZETTEER]` (`Nabu::PlaceLink`, P105-4) closes the loop: the
+nabu-places registry's MATCHED decisions promote their candidate edges to
+kind=place attestation edges (producer place-link, ruled identity only,
+supersede on rerun). Both stay passage-grain in the journal by design — a
+text MENTIONING a place is not FROM it, so document_axes.place_ref (the
+provenance ladder: adapter-asserted refs, then PlaceApply's place_name
+projections) is never touched by either.
+
 **Read surface.** `nabu links <urn>` — edges BOTH directions grouped by
 kind, each counterpart re-resolved against the *current* catalog by urn
 (title/language/license; a counterpart a rebuild dropped reads "(not in

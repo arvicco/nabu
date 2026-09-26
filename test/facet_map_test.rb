@@ -53,6 +53,15 @@ class FacetMapTest < Minitest::Test
 
   # The shipped config/facet_map.yml must load and target only real
   # sources (the kind_map hygiene stance).
+  # P105-5b (Q87): every local-library doc carries a multi-language
+  # manifest but only the first code becomes documents.language — the
+  # trailing claims (ett under eng facsimiles, xum…) must stay visible
+  # through the facet lane.
+  def test_shipped_config_projects_library_manifest_languages
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    assert_equal({ "languages" => "language" }, Nabu::FacetMap.load(path).fields_for("local-library"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)

@@ -52,8 +52,12 @@ module Nabu
       parent_vn parent_tr
     ].freeze
 
+    # +parent+ is the DISPLAY form of the parent administrative unit
+    # ("顺天府 (Shuntian Fu)" — the P105-1 homonym discriminator, persisted
+    # by the place-index derive); +parent_id+ the tgaz sys_id, kept for a
+    # future part_of walk but not persisted.
     Row = Data.define(:id, :title, :lat, :lon, :place_types, :time_periods,
-                      :name_keys, :parent)
+                      :name_keys, :parent, :parent_id)
 
     module_function
 
@@ -98,8 +102,26 @@ module Nabu
         time_periods: time_periods(record),
         name_keys: [name, transcription].reject(&:empty?)
                                         .map { |n| Nabu::Pleiades.name_key(n) }.uniq,
-        parent: record["parent_sys_id"]
+        parent: parent_display(record),
+        parent_id: blank_to_nil(record["parent_sys_id"])
       )
+    end
+
+    # "顺天府 (Shuntian Fu)" from parent_vn/parent_tr — either half alone
+    # when the other is absent, nil when both are (never a placeholder).
+    def parent_display(record)
+      vn = record["parent_vn"].to_s.strip
+      tr = record["parent_tr"].to_s.strip
+      return nil if vn.empty? && tr.empty?
+      return vn if tr.empty?
+      return tr if vn.empty?
+
+      "#{vn} (#{tr})"
+    end
+
+    def blank_to_nil(value)
+      text = value.to_s.strip
+      text.empty? ? nil : text
     end
 
     def time_periods(record)
