@@ -125,3 +125,20 @@ files:
     retrieved: 2026-07-11
     whole: true
     trim: none (primed/seal label anchors)
+  # -- P104-4 glossary fixtures (2026-09-26, the secondary dictionary lane) ---
+  - path: rimanum/gloss-sux.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/rimanum.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/rimanum.zip
+    copied: 2026-09-26
+    whole: true
+    trim: none (25-entry Sumerian glossary kept whole — its instances/summaries tail is the streaming-honesty rig)
+  - path: saao-saa01/saa01/gloss-qpn.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from https://oracc.museum.upenn.edu/json/saao-saa01.zip — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/saao-saa01.zip
+    copied: 2026-09-26
+    whole: false
+    trim: entries reduced to the first 6 (ʾAtaya … Adad-abuʾa); instances/summaries filtered to the kept xis keys; header verbatim (1.4 MB -> ~15 KB; recipe in README)
