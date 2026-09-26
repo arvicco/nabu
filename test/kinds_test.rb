@@ -341,6 +341,23 @@ class KindsTest < Minitest::Test
     assert_equal ["literary/wisdom/proverb"], shipped.normalize("etcsl", "6.1.01")
   end
 
+  # P104-1: the openiti BookSUBJ fold — the subject facet's recurring
+  # Arabic library-taxonomy heads through regex rules (multi-label by
+  # design); the theology and misc buckets stay deliberately unmapped.
+  def test_shipped_openiti_folds_the_book_subjects
+    shipped = shipped_kinds
+    assert_equal "subject", shipped.facet_for("openiti")
+    assert_equal ["literary/poetry"], shipped.normalize("openiti", "جاهلي :: دواوين الشعر العربي")
+    assert_equal ["historiography"], shipped.normalize("openiti", "التراجم والطبقات")
+    assert_equal ["exegesis"], shipped.normalize("openiti", "علوم القرآن")
+    assert_equal ["scripture"], shipped.normalize("openiti", "متون الحديث")
+    assert_equal ["legal"], shipped.normalize("openiti", "الفقه الشافعي :: كتب الفقه الإسلامي")
+    assert_equal ["literary/wisdom"],
+                 shipped.normalize("openiti", "كتب الأخلاق والسلوك :: كتب متفرقة في الأخلاق والسلوك")
+    assert_equal ["unmapped"], shipped.normalize("openiti", "العقيدة"),
+                 "theology buckets stay deliberately unmapped — the sefaria Kabbalah stance"
+  end
+
   # P104-1: the kanripo KR-Catalog 部類 graduation — the coarse P100-1
   # class rule becomes per-subclass folds fed by the kr-subclass walker
   # ("KR1a 易類" values: code + the catalog's own label).
