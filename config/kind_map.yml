@@ -216,8 +216,43 @@ sources:
       # left unmapped: 221-239 / 251-290 / 299-320 / 758-829 (generic
       # TLH sub-corpus tag, genre-mixed; no in-tree evidence to fold on
       # — the honest remainder, worklist-visible).
-  okhc:               # 1,198,779 docs — the Korean dynastic-history family
-    source_kind: historiography/annals   # whole-source declaration (ruled 2026-09-13)
+  okhc:               # census: 1,198,779 docs, corpus on all, 2026-09-26 (P104-1 under
+    metadata: corpus  # №R-70) — the P100-4 blanket historiography/annals declaration
+    #                   retired: the per-record corpus field splits the shelf honestly.
+    map:
+      "Korean Literary Collections": literary                       # 652,405 — munjip 文集,
+      #   literary collections (prose + poetry), never annals
+      "The Records of Daily Reflections (Ilseongnok)": historiography/annals   # 338,084
+      "History of the Three Kingdoms (Samguk sagi)": historiography # 4,613
+      "Gaksadeungnok": administrative                               # 78,247 — 各司謄錄,
+      #   copied inter-office government records
+      "Kyujanggak Old Documents (규장각 / 고문서)": administrative      # 32,487 — documentary
+      "AKS Collection of Old Documents (한국고문서자료관 / 수집고문서)": administrative  # 24,702
+      "AKS Royal Court Documents (장서각 기록유산 DB / 왕실고문서)": administrative       # 2,273
+      "Records of the Japanese Legation and Residency-General in Korea (주한일본공사관기록·통감부문서)": administrative  # 22,502 — diplomatic archive records
+      "AKS Hangeul Letters (한국고문서자료관 / 조선시대 한글편지)": letter   # 597 — Joseon-era
+      #   Hangeul correspondence
+    deliberate:
+      "AKS Old Korean Books (옛한글 원문정보)": "a genre-mixed archive label (old Hangeul books), not a genre claim"  # 27,910
+      "GongU Madang": "a sharing-platform label, not a genre claim"  # 13,291
+      "National Hangeul Museum Archive / Hangeul Documents (국립한글박물관 / 한글 문헌)": "a holding-institution label, not a genre claim"  # 1,668
+  etcsl:              # census: 775 docs (composites + -en siblings), 2026-09-26 —
+    metadata: etcsl_no   # ETCSL's own composition-number taxonomy, frozen upstream
+    #                      since the 2006 deposit; prefix rules fold the c.0–c.6 blocks.
+    prefix_map:
+      "0.": administrative/list        # 13 — ancient catalogues of literary compositions
+      "2.1": historiography            # 14 — the Sumerian King List block (2.1.1) and
+      #   the compositions with a historical background
+      "2.2": hymn-prayer/lament        # 10 — the city laments
+      "2.": royal                      # 252 — royal praise poetry and hymns (2.4 Ur III,
+      #   2.5 Isin-Larsa, 2.6–2.9 other dynasts; honest coarseness for the block)
+      "1.": literary/narrative/myth    # 72 — mythological and heroic narratives (the
+      #   tlhdig fold; Gilgamesh's 1.8 block rides the same head)
+      "3.": letter                     # 86 — letters, letter-prayers, royal correspondence
+      "4.": hymn-prayer                # 214 — hymns and cult songs
+      "5.": literary/wisdom            # 52 — debates, dialogues, eduba narratives,
+      #   instructions: the wisdom shelf, honest coarseness
+      "6.": literary/wisdom/proverb    # 62 — the proverb collections
   papyri-ddbdp:       # HGV text types (P100-3): the LEADING <keywords scheme="hgv">
     walk: hgv-keywords   # term per record, walked from canonical (~66,700 typed docs;
     map:                 # first-term census 2026-09-14, 25% sample + the 2026-09-18 tail audit)
