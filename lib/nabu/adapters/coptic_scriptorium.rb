@@ -111,6 +111,20 @@ module Nabu
       # carries "tm:<n>" where the TT header states a number).
       def self.reference_edges? = true
 
+      # The header Trismegistos value → the bare TM number, or nil.
+      # Censused shapes (482 headers, 2026-09-26): bare "108394" (44) ·
+      # an HTML anchor "<a href='www.trismegistos.org/text/107926'>
+      # 107926</a>" (29) · prefixed "TM114340" (6) · "none" (242) /
+      # absent (161) — upstream's absence, never a claim.
+      TM_ANCHOR = %r{>(\d+)</a>}
+
+      def self.tm_number(value)
+        value = value.to_s.strip
+        value = Regexp.last_match(1) if value =~ TM_ANCHOR
+        value = value.delete_prefix("TM")
+        value if value.match?(/\A\d+\z/)
+      end
+
       def self.reference_producer(catalog:, journal:)
         LibraryReferences.new(catalog: catalog, journal: journal, producer: "coptic-scriptorium")
       end
@@ -367,10 +381,9 @@ module Nabu
         # P104-1 (Q77 under №R-70): the header's Trismegistos number →
         # a "tm:<n>" related edge (the P25-1 scheme rule; the shared
         # LibraryReferences producer reads metadata "related"), joining
-        # the papyri/elephantine TM key space. Upstream's "none" and any
-        # non-numeric value claim nothing.
-        tm = meta["Trismegistos"].to_s.strip
-        meta["related"] = ["tm:#{tm}"] if tm.match?(/\A\d+\z/)
+        # the papyri/elephantine TM key space.
+        tm = self.class.tm_number(meta["Trismegistos"])
+        meta["related"] = ["tm:#{tm}"] if tm
         Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: document_ref.metadata["title"],
           canonical_path: document_ref.path, metadata: meta,
