@@ -243,6 +243,19 @@ module Nabu
       Line = Data.define(:urn_suffix, :text, :leiden, :languages)
       private_constant :Line
 
+      # The identity family this instance parses (P104-3): DDbDP by
+      # default (idno "ddb-hybrid" minting urn:nabu:ddbdp:…, frozen), or
+      # the DCLP literary tree of the same idp.data repo (idno "dclp" —
+      # the numeric papyri.info/dclp/<n> key; the dclp-hybrid is
+      # non-unique upstream — minting urn:nabu:dclp:<n>, the Papyri
+      # adapter's DCLP lane). Everything else — Leiden policy, line
+      # minting, restart blocks — is identical between the two corpora;
+      # only the identity idno and the urn namespace differ.
+      def initialize(idno_type: "ddb-hybrid", urn_namespace: "ddbdp")
+        @idno_type = idno_type
+        @urn_namespace = urn_namespace
+      end
+
       # Same signature family as the sibling parsers.
       def parse(source, urn:, language:, title: nil, canonical_path: nil)
         path = resolve_canonical_path(source, canonical_path)
@@ -263,7 +276,8 @@ module Nabu
       def extract_lines(source, path:, urn:, language:)
         with_io(source) do |io|
           Extraction.new(
-            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language
+            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language,
+            idno_type: @idno_type, urn_namespace: @urn_namespace
           ).call
         end
       rescue Nokogiri::XML::SyntaxError => e
@@ -315,11 +329,14 @@ module Nabu
         DROPPED_ELEMENTS = %w[rdg orig note figure].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        def initialize(reader:, path:, urn:, language:)
+        def initialize(reader:, path:, urn:, language:, idno_type: "ddb-hybrid",
+                       urn_namespace: "ddbdp")
           @reader = reader
           @path = path
           @urn = urn
           @language = language
+          @idno_type = idno_type
+          @urn_namespace = urn_namespace
           @del_depths = [] # open <del> depths (rendered in ⟦…⟧, №R-17)
           @subst_depths = [] # open <subst> depths (duplicate-lb suppression)
           @hybrid = nil
@@ -360,7 +377,7 @@ module Nabu
 
           case local_name(node)
           when "idno"
-            @capture_idno = node.attribute("type") == "ddb-hybrid" && !node.empty_element?
+            @capture_idno = node.attribute("type") == @idno_type && !node.empty_element?
           when "div"
             enter_edition(node) if node.attribute("type") == "edition"
           end
@@ -448,14 +465,14 @@ module Nabu
 
         def validate_identity!
           if @hybrid.nil? || @hybrid.empty?
-            raise ParseError, "#{@path}: no <idno type=\"ddb-hybrid\"> found in teiHeader"
+            raise ParseError, "#{@path}: no <idno type=\"#{@idno_type}\"> found in teiHeader"
           end
 
-          minted = "urn:nabu:ddbdp:#{@hybrid.tr(';', ':')}"
+          minted = "urn:nabu:#{@urn_namespace}:#{@hybrid.tr(';', ':')}"
           return if minted == @urn
 
           raise ParseError, "#{@path}: urn mismatch: caller says #{@urn.inspect}, " \
-                            "<idno type=\"ddb-hybrid\"> #{@hybrid.inspect} mints #{minted.inspect}"
+                            "<idno type=\"#{@idno_type}\"> #{@hybrid.inspect} mints #{minted.inspect}"
         end
 
         def check_language!(xml_lang)
