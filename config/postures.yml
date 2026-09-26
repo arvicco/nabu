@@ -445,8 +445,13 @@ sources:
     script: {posture: qualified}
   ogham:
     lect: {posture: identity, note: pgl/sga/mga — the Irish ladder is already stage-coded}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: undatable, note: "upstream dates are free prose
+        ('Fifth century…') — honestly unparsed, never guessed"}
+    places: {posture: named, note: "P104-1: the stone-grain place hash
+        (townland/county/country + WGS84 geo + logainm refs, ~500 of 873
+        docs) projects via MetadataDates :place_only — coordinates ride
+        place_lat/lon, logainm URLs ride place_ref verbatim; layer
+        siblings without the primary's hash stay honestly bare"}
     script: {posture: qualified}
   eng-web:
     lect: {posture: identity, note: a modern English translation shelf}
@@ -504,13 +509,18 @@ sources:
   diorisis:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the per-work
+        creation_date signed year (all 767 docs) via MetadataDates
+        :signed_year_key — composition-class rows (date_class 'composition')"}
     places: {posture: unplaced}
     script: {posture: implied}
   glaux:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the per-work
+        start_date/end_date signed bounds (all 1,421 docs) via MetadataDates
+        :signed_bounds_keys — composition-class rows (date_class
+        'composition')"}
     places: {posture: unplaced}
     script: {posture: implied}
   corpus-corporum:
@@ -730,9 +740,9 @@ sources:
     # lect declaration retired P77-r8: the fsv-old rule (№R-32, the sv:old
     # whole-source claim) machine-postures fornsvenska now (the shadowing
     # rule; nabu-lects PR #4 minted the target).
-    dating: {posture: pending, note: "candidate: upstream's own per-text
-        date/datefrom/dateto attrs, riding document metadata verbatim — the
-        extractor is a small future packet over real synced data"}
+    dating: {posture: dated, note: "P104-1: upstream's own per-text
+        datefrom/dateto compact bounds (all 155 docs carry them) via
+        MetadataDates :compact_date_keys; the display date string rides raw"}
     places: {posture: unplaced}
     script: {posture: implied}
   ref:
@@ -754,9 +764,10 @@ sources:
     lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
         across the 15th-20th c. span — the period band rides document metadata;
         a stage split (Golden Age Spanish) would need a ruled rule"}
-    dating: {posture: pending, note: "candidate: the period suffix band (g/e/n/t
-        -> upstream's period dirs, in metadata) + the prosopography birth/death
-        centuries — extractor from real synced data, the isicily discipline"}
+    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the author's own
+        birth/death centuries band every doc via MetadataDates
+        :author_century_band — composition-class rows (date_class
+        'composition'), never passed off as artifact dates"}
     places: {posture: unplaced, note: "birthplace is author biography, not
         composition place — rides metadata verbatim"}
     script: {posture: implied}

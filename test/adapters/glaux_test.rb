@@ -168,6 +168,13 @@ class GlauxTest < Minitest::Test
     assert_equal "Perseus", metadata["source"]
   end
 
+  def test_glaux_is_registered_for_the_composition_class_signed_bounds_shape
+    assert_equal :signed_bounds_keys,
+                 Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["glaux"],
+                 "P104-1 (№R-70 grade 2): start/end_date project as composition-class rows"
+    assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "glaux"
+  end
+
   # -- store: idempotent load + the silver tier end to end ---------------------
 
   def test_loads_idempotently_into_the_store

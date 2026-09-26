@@ -76,6 +76,13 @@ module Adapters
       assert_equal "19th", parse_urn("urn:nabu:disco:002n").metadata["period"]
     end
 
+    def test_disco_is_registered_for_the_author_century_band_shape
+      assert_equal :author_century_band,
+                   Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["disco"],
+                   "P104-1 (№R-70 grade 2): author life bands project as composition-class rows"
+      assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "disco"
+    end
+
     # -- passages: one sonnet each, upstream's own ordinals -------------------
 
     def test_sonnets_cite_the_corpus_own_ordinals_never_positional

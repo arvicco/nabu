@@ -156,6 +156,13 @@ class DiorisisTest < Minitest::Test
     assert_match(%r{github\.com/PerseusDL}, metadata.fetch("provenance_url"))
   end
 
+  def test_diorisis_is_registered_for_the_composition_class_signed_year_shape
+    assert_equal :signed_year_key,
+                 Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["diorisis"],
+                 "P104-1 (№R-70 grade 2): creation_date projects as composition-class rows"
+    assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "diorisis"
+  end
+
   def test_parses_thucydides_with_dotted_citations
     document = adapter.parse(ref_for(THUC_URN))
     assert_equal "Thucydides — History", document.title
