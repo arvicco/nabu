@@ -3706,6 +3706,7 @@ module Nabu
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
       return run_place_mine(query_parts[1..]) if query_parts.first == "mine"
+      return run_place_link(query_parts[1..]) if query_parts.first == "link"
 
       query = query_parts.join(" ").strip
       raise Thor::Error, "place: give a Pleiades numeric id or an exact place title" if query.empty?
@@ -3938,6 +3939,41 @@ module Nabu
         say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
             "#{census.candidate_edges} across #{census.name_hits.size} attested names " \
             "(census pass: #{format_duration(census.seconds)})"
+      end
+
+      # `nabu place link SOURCE [GAZETTEER]` (P105-4 — Q86's apply lane):
+      # promote the registry's MATCHED mined names to ruled attestation
+      # edges (kind "place") in the links journal. Passage-grain by
+      # design — never document_axes.place_ref.
+      def run_place_link(args)
+        source, gazetteer = Array(args)
+        raise Thor::Error, "usage: nabu place link SOURCE [GAZETTEER]" if source.to_s.empty?
+
+        gazetteer ||= "chgis"
+        config = Nabu::Config.load
+        registry = Nabu::Places.load_default(canonical_dir: config.canonical_dir)
+        if registry.nil?
+          raise Thor::Error, "place link: no nabu-places registry under canonical/ — " \
+                             "run `nabu sync nabu-places` first"
+        end
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        journal = Nabu::Store::LinksJournal.migrate!(
+          Nabu::Store::LinksJournal.connect("sqlite://#{config.links_path}")
+        )
+        result = Nabu::PlaceLink.new(catalog: catalog, journal: journal, registry: registry,
+                                     gazetteer: gazetteer, progress: progress_reporter)
+                                .apply!(source: source)
+        say "place link: #{result.source} × #{result.gazetteer} — #{result.names} ruled " \
+            "names → #{result.edges_written} attestation edges written " \
+            "(#{result.edges_refreshed} refreshed; superseded #{result.superseded_runs} " \
+            "prior runs / #{result.superseded_edges} edges; #{format_duration(result.seconds)}) " \
+            "— read back with `nabu links <passage urn>`"
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
       end
 
       # `nabu place apply` (P63-7): project the nabu-places registry into
