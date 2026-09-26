@@ -547,7 +547,8 @@ sources:
 
   # ── pending: a real refinement candidate, not yet ruled ────────────────
   etcsl:
-    kind: {posture: unclassified}
+    # kind declaration retired P104-1: the composition-number prefix map
+    # in kind_map.yml machine-postures it now (the shadowing rule).
     # lect declaration retired P64-6 (№1 ruled): the etcsl sux→sux:post
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
