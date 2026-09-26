@@ -36,7 +36,7 @@ class ScriptDossiersBuilderTest < Minitest::Test
     refute_includes armn, "desk", "an absent desk lane emits NO row — never a placeholder"
 
     assert_equal rows.size, result.resources.first.rows
-    assert_equal 26, result.evaluation.fetch("scripts")
+    assert_equal 27, result.evaluation.fetch("scripts") # census: +mymr, 2026-09-26
   end
 
   def test_recipe_carries_the_published_slice_digest_and_is_deterministic
