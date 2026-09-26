@@ -881,7 +881,8 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   openiti:
-    kind: {posture: unclassified}
+    # kind declaration retired P104-1: the subject-facet regex rule in
+    # kind_map.yml machine-postures it now (the shadowing rule).
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}

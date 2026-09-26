@@ -519,6 +519,32 @@ sources:
       "Autobiographie": historiography           # 5
       "Biographie": historiography               # 2
       "Reiseliteratur": literary/diary           # 17 — travelogues
+  openiti:            # census: BookSUBJ (→ the subject facet) on 4,191 of 9,079 docs,
+    facet: subject    # 2026-09-26 — a long-tail Arabic library taxonomy; regex rules
+    #                   fold the recurring heads (multi-label by design, the aozora
+    #                   shape), the singleton tail stays worklist-visible.
+    regex_map:
+      'التفاسير|تفسير|علوم القرآن': exegesis          # 43 + 72 + … — Qurʾānic exegesis and sciences
+      'متون الحديث|الأجزاء الحديثية|أجزاء حديثية|مخطوطات حديثية|مصادر الحديث': scripture
+      #   337 + 190 + 112 + 67 + 52 + … — the hadith text collections (canonical
+      #   religious text in this tradition's own terms)
+      'علوم الحديث': scholarly                        # 30 — hadith methodology
+      'فقه|الفقه': legal                              # 81 + 45 + 42 + 38 + … — fiqh and uṣūl
+      'التاريخ': historiography                        # 65
+      'التراجم والطبقات|السيرة|سيرة': historiography   # 192 + 40 — biographical dictionaries
+      'دواوين الشعر|الشعر': literary/poetry            # 49 + … — the dīwāns
+      'الأدب': literary                                # 179 + 38 + 33 — adab
+      'المعاجم': lexical                               # 29 — dictionaries
+      'النحو والصرف': scholarly                        # 36 — grammar
+      'البلدان والجغرافيا والرحلات': scholarly          # 42 — geography and travels
+      'الأخلاق والسلوك': literary/wisdom               # 31 — conduct literature (the sefaria
+      #   Musar fold)
+      'الطرائف والقصص': literary/narrative             # 33 — tales and curiosa
+      # left unmapped (genuinely mixed/ambiguous, the decision list —
+      # the sefaria Kabbalah stance): العقيدة/العقائد theology buckets ·
+      # كتب متنوعة/بحوث ومسائل misc buckets · author-collection shelves
+      # (كتب ابن تيمية …) · sect-corpus buckets (مصادر الحديث الشيعية
+      # rides the hadith fold; the bare قسم العام tails stay visible).
   seal:               # genre = "Head, subject" — prefix rules ride past the subject tails
     metadata: genre
     prefix_map:
