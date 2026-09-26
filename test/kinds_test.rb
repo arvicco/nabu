@@ -378,6 +378,43 @@ class KindsTest < Minitest::Test
                  "a bare code (label missing from the frozen catalog) folds via the class fallback"
   end
 
+  # P105-6: the fold round over the worklist head (census 2026-09-26,
+  # 4,048 unmapped values / 14,695 docs) — one representative pin per
+  # extended source; the standing stay-visible rulings (openiti theology
+  # buckets, tlhdig 758-829) are untouched.
+  def test_shipped_p105_fold_round_covers_the_worklist_head
+    shipped = shipped_kinds
+    { ["papyri-ddbdp", "Befehl"] => ["administrative"],
+      ["papyri-ddbdp", "Exercice épistolaire"] => ["school"],
+      ["papyri-ddbdp", "Bittschrift"] => ["legal/petition"],
+      ["papyri-ddbdp", "Vermessung (?)"] => ["administrative"],
+      ["papyri-ddbdp", "Liturgie"] => ["administrative"],
+      ["elephantine", "documentary | contract"] => %w[administrative legal/contract],
+      ["edh", "prayer"] => ["hymn-prayer/prayer"],
+      ["edr", "honorarius aut sepulcralis"] => ["unknown"],
+      ["edr", "cetera magica"] => ["magic"],
+      ["iip", "acclamation"] => ["honorific"],
+      ["iip", "label.weight"] => ["mark/label"],
+      ["isicily", "unassigned"] => ["unknown"],
+      ["ogham", "Unable to determine"] => ["unknown"],
+      ["oracc", "Seal inscription"] => ["mark/ownership"],
+      ["oracc", "Hymn-Prayer"] => ["hymn-prayer"],
+      ["dta", "Psychologie"] => ["scholarly"],
+      ["dta", "Erbauungsliteratur"] => ["literary/wisdom"],
+      ["aozora", "NDC 388"] => ["literary/narrative/tale"],
+      ["aozora", "NDC K949"] => ["literary"],
+      ["aozora", "NDC 222"] => ["historiography"],
+      ["cdli", "Other (see subgenre)"] => ["unknown"] }.each do |(slug, value), want|
+      assert_equal want, shipped.normalize(slug, value).sort, "#{slug} #{value.inspect}"
+    end
+    assert_empty shipped.normalize("papyri-ddbdp", "Datum"),
+                 "a bare dating formula is a reviewed non-claim"
+    assert_empty shipped.normalize("aozora", "NDC 751"),
+                 "applied-arts NDC shelving is a reviewed non-claim"
+    assert_empty shipped.normalize("oracc", "Clay tablet inscription"),
+                 "an object description is a reviewed non-claim"
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
