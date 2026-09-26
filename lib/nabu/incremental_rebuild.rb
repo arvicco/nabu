@@ -385,7 +385,8 @@ module Nabu
       progress&.stage("timeline")
       axes = Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       progress&.stage("facets")
-      facets = Store::FacetBuilder.rebuild!(catalog: db)
+      facets = Store::FacetBuilder.rebuild!(catalog: db,
+                                            facet_map: Nabu::FacetMap.load_default(config: @config))
       # The kind axis (P99-2) projects FROM the facet rows just re-minted,
       # so it always rides directly behind FacetBuilder.
       progress&.stage("kind axis")

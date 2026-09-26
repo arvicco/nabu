@@ -1,0 +1,39 @@
+# The metadata-field → facet projections (P104-1, under №R-70's
+# aggressive-mining ruling 2026-09-26): per-source declarations of which
+# documents.metadata_json fields project into document_facets rows —
+# Nabu::FacetMap / Store::FacetBuilder. Values project VERBATIM (the
+# facet value IS the upstream claim; normalization is the kind lane's
+# job), arrays one row per element, absent/empty fields nothing.
+# Field censuses below are from the live catalog, 2026-09-26.
+sources:
+  okhc:                       # census: 1,198,779 docs, corpus on ALL — 12 archive labels
+    fields:
+      corpus: collection      # Korean Literary Collections 652,405 · Ilseongnok 338,084 ·
+      #                         Gaksadeungnok 78,247 · Kyujanggak old documents 32,487 ·
+      #                         AKS old books 27,910 · AKS old documents 24,702 · Japanese
+      #                         legation records 22,502 · GongU Madang 13,291 · Samguk sagi
+      #                         4,613 · royal-court documents 2,273 · Hangeul museum 1,668 ·
+      #                         Hangeul letters 597
+  seal:                       # census: 408 docs, all four fields near-universal
+    fields:
+      genre: genre            # "Hymns and Prayers, Adad" — upstream's Genre header verbatim
+      period: period          # 5 labels (OB 314 · MB/MA 72 · OA 11 · Archaic/OAkk/Ebla 7 ·
+      #                         Later Periods 4) — the dating lane bands these via
+      #                         config/period_bands.yml; the facet keeps the claim verbatim
+      collection: collection  # museum collections (Schøyen 61 · YBC 52 · BM 51 …)
+      provenance: provenance  # findspots incl. upstream's explicit "Unknown" (147 — a claim)
+  rsti:                       # census: 5,075 docs — the facet-dark Ugarit inventory
+    fields:
+      object_type: object_type  # Tablet 4,778 · Vessel 85 · Model 63 · Scarab 46 …
+      script: script          # Alphabetic/Logographic cuneiform, Hieroglyphic …
+      languages: language     # array field — one row per language
+      set: set                # 35 TEO season/collection sets
+      findspot: findspot      # TEO findspot text incl. "Not listed in TEO" (a claim)
+      museum_number: museum   # Louvre AE / RS sigla — the museum shelf join
+  coptic-scriptorium:         # census: 482 docs; only dialect was faceted before P104-1
+    fields:
+      author: author          # Besa · Shenoute · Johannes · anonymous hagiographies …
+      origPlace: place        # White Monastery 227 · Hagr Edfu · Hamuli …
+      objectType: object_type # codex · papyrus …
+      repository: repository  # holding libraries (BN Napoli, BL, Morgan …)
+      corpus: corpus          # upstream corpus ids (besa.letters, shenoute.a22 …)

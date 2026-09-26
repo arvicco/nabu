@@ -187,7 +187,7 @@ module Nabu
       # (their metadata_json is f(canonical)), so it regenerates here too.
       progress&.stage("facets", eta: corpus_eta(ledger, "facets"))
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
-        Store::FacetBuilder.rebuild!(catalog: db)
+        Store::FacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
       # The kind axis (P99-2 — №R-63) projects FROM the facet rows just
       # re-minted, so it rides directly behind FacetBuilder; nil config
