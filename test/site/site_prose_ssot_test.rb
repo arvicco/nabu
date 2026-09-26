@@ -45,7 +45,14 @@ module Site
       "twenty-three [research desks]",
       "twenty-three [research axes]",
       "twenty-three scholarly hats",
-      "all twenty-three"
+      "all twenty-three",
+      # The 2026-09-26 drift sweep (the ko/cmn lesson): literals retired
+      # when the September wave outgrew them.
+      "803 Wiktionary etymology codes", # → census.etym_codes (1,131 at retirement)
+      "the five StarLing bases",        # 15 bases since the September expansion
+      "Six etymological databases",     # the starling row's old scope line
+      "28,707",                         # old starling entry total
+      "27,397"                          # old starling entry total (library.md variant)
     ].freeze
 
     # Pure-headline pages whose only million-scale totals ARE the SSOT

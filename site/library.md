@@ -66,7 +66,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Tibetan | The Derge Kangyur and Tengyur complete, the 84000 English translations, the Old Tibetan documents (OTDO), the SOAS gold-POS corpus | 8th c. – the 18th-c. Derge woodblocks | 5,370 / 1,499,922 | PD / CC BY / CC BY-NC-ND (84000) |
 | Japanese | Aozora Bunko, the public-domain library (ruby-annotated; kyūjitai reachable through the reform fold), beside ONCOJ's gold-morphology Old Japanese (4,991 / 33,192) | 7th c. – 20th c. CE | 17,195 / 2,991,807 | open (PD grant) / CC BY |
 | Germanic | Menotec Old Norwegian treebanks + the Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German, ReN Middle Low German, the Rundata runic corpus in five text lanes | c. 200 – 1650 CE | 31,292 / 707,451 | nc / CC BY / CC BY-SA / ODbL |
-| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the five StarLing bases, three Slovenian historical dictionaries, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Guangyun), the Tibetan rack (Mahāvyutpatti, the Verbs Database), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
+| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the fifteen StarLing bases, three Slovenian historical dictionaries, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Guangyun), the Tibetan rack (Mahāvyutpatti, the Verbs Database), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
 
 ## Classical Greek literature
 
@@ -491,14 +491,18 @@ linked-data edition) — independent, expert-curated chains beside the
 Wiktionary-derived ones.
 
 Two further shelves arrived with the 17 July 2026 synchronizations. The
-StarLing / Tower of Babel etymological databases (27,397 entries, held
-under a written grant from their maintainer with per-compiler credit
-rendered on every surface) carry the Moscow-school apparatus: Pokorny's
+StarLing / Tower of Babel etymological databases (fifteen bases, 46,650
+entries since the September 2026 expansion, held under a written grant
+from their maintainer with per-compiler credit rendered on every
+surface) carry the Moscow-school apparatus: Pokorny's
 complete <em>Indogermanisches Etymologisches Wörterbuch</em> (2,222
 roots), Nikolayev's Walde-Pokorny-based PIE database (3,291 etymologies
 with per-branch reflex columns), Vasmer's etymological dictionary of
-Russian in the Trubachev edition (18,239 entries), and the Common
-Germanic and Baltic databases. The Slovenian historical dictionary shelf
+Russian in the Trubachev edition (18,239 entries), the Common
+Germanic, Baltic and Kartvelian databases, and — since the September
+2026 wave — the Altaic dictionary (Starostin-Dybo-Mudrak) with its
+Japanese companion, North Caucasian, Sino-Tibetan, Dravidian, the
+Chukchee-Kamchatkan family trio, and Yenisseian. The Slovenian historical dictionary shelf
 (ZRC SAZU via CLARIN.SI, CC BY, 139,405 entries) unites Pleteršnik's
 Slovene-German dictionary of 1894–95, the lexicon of Janez Svetokriški's
 Baroque sermons, and the complete word inventory of sixteenth-century
