@@ -270,6 +270,13 @@ module Nabu
         @crawl_delay = crawl_delay
       end
 
+      # P104-4 (Q81, the №R-69a pilot): the per-project glossaries
+      # (<project>/gloss-<lang>.json — one per project×language, already
+      # inside the fetched zips) are dictionary-shaped content on the
+      # SAME canonical tree, loaded through the secondary dictionary
+      # lane after the tablet load (Adapter.dictionary_lane).
+      def self.dictionary_lane = OraccGlossaryLane.new
+
       # P11-2: ORACC is the HTTP-zip fetch path, so the remote-health probe
       # HEADs each project zip and GETs each metadata.json instead of
       # ls-remote (there is no git repo).
