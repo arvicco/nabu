@@ -322,11 +322,50 @@ class WiktionaryJsonlParserTest < Minitest::Test
     end
   end
 
-  def test_record_without_a_word_raises_parse_error
+  # P104-2 (Q79, poison shape 2): the positional suffix and the
+  # etymology_number suffix share one id shape (word:pos:<n>), so an
+  # ety-less homograph run's ":3" can equal a sibling's ety-3 base (the
+  # zh 夆/芘 quartets — fixture-pinned at the adapter level). The minter
+  # bumps EITHER path past already-minted ids: whichever of the two
+  # arrives second lands on the next free positional slot. Ids that
+  # never collided are untouched (the frozen-minting contract).
+  def test_positional_and_etymology_suffixes_never_mint_the_same_id
     Tempfile.create(["kaikki", ".jsonl"]) do |f|
-      f.write(%({"pos":"noun","lang_code":"cu","senses":[]}\n))
+      f.write([%({"word":"甲","pos":"character","lang_code":"zh","senses":[{"glosses":["a"]}]}),
+               %({"word":"甲","pos":"character","lang_code":"zh","senses":[{"glosses":["b"]}]}),
+               %({"word":"甲","pos":"character","lang_code":"zh","senses":[{"glosses":["c"]}]}),
+               %({"word":"甲","pos":"character","lang_code":"zh","etymology_number":"3","senses":[{"glosses":["d"]}]}),
+               %({"word":"乙","pos":"character","lang_code":"zh","etymology_number":2,"senses":[{"glosses":["e"]}]}),
+               %({"word":"乙","pos":"character","lang_code":"zh","senses":[{"glosses":["f"]}]}),
+               %({"word":"乙","pos":"character","lang_code":"zh","senses":[{"glosses":["g"]}]})].join("\n"))
       f.flush
-      assert_raises(Nabu::ParseError) { Nabu::Adapters::WiktionaryJsonlParser.new.entries(f.path) }
+      ids = Nabu::Adapters::WiktionaryJsonlParser.new.entries(f.path).map(&:entry_id)
+      assert_equal ids.uniq, ids, "no two records may mint the same entry id"
+      assert_equal ["甲:character", "甲:character:2", "甲:character:3", "甲:character:3:2"],
+                   ids.first(4), "the ety-bearing record bumps past the positional :3"
+      assert_equal ["乙:character:2", "乙:character", "乙:character:3"],
+                   ids.last(3), "the reverse order: the positional run bumps past the ety base"
+    end
+  end
+
+  # P104-2 (Q79) REVISES the original expectation here (was: raise
+  # ParseError): a record without a usable headword is SKIPPED, not
+  # quarantined. The old posture let ONE wiktextract "Unsupported
+  # titles/…" record (word=" ", a single U+0020 — Wiktionary's page for
+  # the space character) quarantine the entire 1.1 GB zh extract on
+  # every sync. Malformed JSON still quarantines (structural corruption,
+  # the test above); a headwordless record is an upstream page shape.
+  # The real poison line rides byte-verbatim in the wiktionary-recon zh
+  # fixture (adapter-level regression in WiktionaryReconTest).
+  def test_record_without_a_usable_headword_is_skipped_not_quarantined
+    Tempfile.create(["kaikki", ".jsonl"]) do |f|
+      f.write([%({"pos":"noun","lang_code":"cu","senses":[]}),
+               %({"word":" ","pos":"punct","lang_code":"zh","original_title":"Unsupported titles/Space","senses":[]}),
+               %({"word":"а","pos":"noun","lang_code":"cu","senses":[{"glosses":["x"]}]})].join("\n"))
+      f.flush
+      entries = Nabu::Adapters::WiktionaryJsonlParser.new.entries(f.path)
+      assert_equal ["а:noun"], entries.map(&:entry_id),
+                   "word-less and whitespace-word records skip; real records still mint"
     end
   end
 end
