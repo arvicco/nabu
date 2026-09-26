@@ -57,6 +57,7 @@ module Nabu
       timeline: "timeline",
       facets: "facets",
       kind_axis: "kind axis",             # P99: the kind projection + stats
+      hiero_postings: "hiero postings",   # P103: the AED per-text glyph census
       lect_journal: "lect journal",       # P70: the re-minted lect journal
       lect_facets: "lect facets",         # P58-4: the flattened lect axis
       artifact_scripts: "artifact scripts", # P61-3: the artifact-script lane

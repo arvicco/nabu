@@ -74,7 +74,7 @@ class VerbLemmaBuilderTest < Minitest::Test
       assert_equal COLUMNS, table.headers
       assert_equal 61, table.size, "28 fixture rows expand to 61 attestation rows (hand-counted)"
       assert_equal 20, table.map { |row| row["Lemma"] }.uniq.size
-      assert_equal 62, summary.rows, "61 data rows + 1 languages row"
+      assert_equal 61, summary.rows, "61 data rows — the languages sidecar never counts (P103-5)"
 
       languages = CSV.read(File.join(out_dir, "languages.csv"))
       assert_equal %w[ID Name Glottocode ISO639P3code], languages[0]
@@ -91,7 +91,7 @@ class VerbLemmaBuilderTest < Minitest::Test
       assert_equal "gold-derived", manifest.dig("nabu", "tier")
       assert_equal "none", manifest.dig("nabu", "anchoring", "kind"),
                    "the anchored layer is deferred behind segmentation — anchoring stays none"
-      assert_equal 62, manifest.dig("nabu", "counts", "rows")
+      assert_equal 61, manifest.dig("nabu", "counts", "rows")
       assert_equal(%w[verb-lemma languages sources], manifest["resources"].map { |resource| resource["name"] })
 
       table = manifest["resources"].first

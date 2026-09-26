@@ -197,6 +197,13 @@ module Nabu
         Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
                                     progress: progress, canonical_dir: @config.canonical_dir)
       end
+      # The AED hieroglyph postings (P103-2): f(canonical/aed) — an
+      # absent cone yields the honest empty table.
+      progress&.stage("hiero postings")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :hiero_postings) do
+        Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
+                                             progress: progress)
+      end
       # P89-1 (№R-54 (c)): the corpus builders just ran against the current
       # code — mint their sentinel so an incremental run can skip them
       # honestly until a builder file actually changes.

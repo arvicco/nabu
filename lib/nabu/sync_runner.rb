@@ -249,6 +249,13 @@ module Nabu
     # Canonical-walking timeline extractors (HGV, EDH…) stay rebuild-scoped
     # — their sources' syncs are rare and their walks are not cheap.
     def refresh_catalog_lanes(entry, load_report)
+      # The AED hiero postings census follows the CONE, not the
+      # dictionary load (P103-2): a fetch can change the per-text
+      # stand-off files while the dictionary entries stay identical, so
+      # this refresh runs on every aed sync, before the load-gated lanes.
+      if entry.slug == Store::HieroPostingsBuilder::SOURCE_SLUG
+        Store::HieroPostingsBuilder.rebuild!(catalog: @db, canonical_dir: @config.canonical_dir)
+      end
       return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
 
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug)

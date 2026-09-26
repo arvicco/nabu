@@ -22,7 +22,8 @@ module Nabu
     # repo is the owner's explicit act, not the rail's.
     class Runner
       # What the CLI summarizes: +files+ is [[relative path, row count or
-      # nil], ...] in written order; +rows+ the data-row total; +fingerprint+
+      # nil], ...] in written order; +rows+ the data-row total (the builder's
+      # own resources — sidecar furniture never counts, P103-5); +fingerprint+
       # the manifest's derivation fingerprint.
       Summary = Data.define(:slug, :out_dir, :files, :rows, :fingerprint)
 
@@ -50,7 +51,8 @@ module Nabu
         resources = result.resources + [LanguagesTable.resource(count: language_count), SourcesBib.resource]
         File.write(File.join(out_dir, "datapackage.json"),
                    Manifest.generate(feature: feature, resources: resources, input_shas: input_shas,
-                                     recipe: result.recipe, sources: sources, evaluation: result.evaluation))
+                                     recipe: result.recipe, sources: sources, evaluation: result.evaluation,
+                                     data_resources: result.resources))
         fingerprint = Manifest.fingerprint(input_shas: input_shas, recipe: result.recipe)
         File.write(File.join(out_dir, "README.md"),
                    readme(feature: feature, result: result, input_shas: input_shas, fingerprint: fingerprint))
@@ -61,7 +63,7 @@ module Nabu
                  ["datapackage.json", nil], ["README.md", nil]]
         files << [license_file, nil] if license_file
         Summary.new(slug: feature.slug, out_dir: out_dir, files: files,
-                    rows: resources.sum { |resource| resource.rows.to_i }, fingerprint: fingerprint)
+                    rows: result.resources.sum { |resource| resource.rows.to_i }, fingerprint: fingerprint)
       end
 
       # The canonical license plaintexts the runner can emit per dataset.

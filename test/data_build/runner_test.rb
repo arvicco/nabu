@@ -57,7 +57,7 @@ class DataBuildRunnerTest < Minitest::Test
       assert_equal "san-fake-forms", manifest["name"]
       assert_equal(%w[forms languages sources], manifest["resources"].map { |resource| resource["name"] })
 
-      assert_equal 3, summary.rows, "2 forms rows + 1 languages row"
+      assert_equal 2, summary.rows, "2 forms rows — the languages sidecar never counts (P103-5)"
       assert_equal manifest.dig("nabu", "derivation", "fingerprint"), summary.fingerprint
       assert_includes summary.files.map(&:first), "forms.csv"
 

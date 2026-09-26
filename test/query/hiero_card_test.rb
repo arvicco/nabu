@@ -102,6 +102,29 @@ module Query
       db&.disconnect
     end
 
+    # P103-2 (the AED seam): the third counted source is PRECOMPILED —
+    # the hiero_postings table (the canonical/aed per-text walk), read
+    # as one row per card and reported under its own additive keys
+    # (text grain, never conflated with the passage-grain counts).
+    def test_the_corpus_panel_reads_aed_hiero_postings
+      db = store_test_db
+      db[:hiero_postings].insert(glyph: "𓈖", texts: 42, signs: 1_311)
+      corpus = card_for("N35", catalog: db).card.corpus
+      assert_equal 42, corpus["aed_texts"]
+      assert_equal 1_311, corpus["aed_signs"]
+    ensure
+      db&.disconnect
+    end
+
+    def test_the_aed_panel_is_absent_without_a_row_or_a_codepoint
+      db = store_test_db
+      load_aes_fixture(db)
+      corpus = card_for("N35", catalog: db).card.corpus
+      refute corpus.key?("aed_texts"), "no postings row → no aed keys, never zero-filled"
+    ensure
+      db&.disconnect
+    end
+
     def test_the_corpus_panel_sums_across_both_sources
       db = store_test_db
       load_aes_fixture(db)
