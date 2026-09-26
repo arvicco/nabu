@@ -146,6 +146,20 @@ module Nabu
     # replay tax, not a default.
     def self.materialized_paths = []
 
+    # The declared SECONDARY dictionary lane (P104-4, Q81 — the №R-69a
+    # multi-shelf seam): content_kind stays the PRIMARY routing, and a
+    # source whose canonical tree ALSO carries dictionary-shaped content
+    # (oracc's per-project gloss-*.json) declares it here instead of
+    # overloading the closed content_kind enum. The lane is a
+    # dictionary-shaped sub-adapter — a Nabu::Adapter subclass whose
+    # #discover yields one DocumentRef per dictionary file and whose
+    # #parse yields Nabu::DictionaryDocuments — so it flows through
+    # Store::DictionaryLoader#load_from unchanged, attic rediscovery
+    # included. SyncRunner and Rebuild both run it AFTER the primary
+    # load, under the same run row (its entry-grained counts merge into
+    # the run's totals). Default nil — no secondary lane.
+    def self.dictionary_lane = nil
+
     # Does this adapter's parser extract descendant reflexes into
     # dictionary_reflexes (P14-1)? Declared HERE — beside content_kind, the
     # other loader-facing capability — so `nabu health` can hold the promise
