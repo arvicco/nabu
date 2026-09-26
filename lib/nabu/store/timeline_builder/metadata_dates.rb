@@ -114,7 +114,14 @@ module Nabu
           "diorisis" => :signed_year_key, # P104-1: creation_date — composition class
           "glaux" => :signed_bounds_keys, # P104-1: start_date/end_date — composition class
           "disco" => :author_century_band, # P104-1: author life band — composition class
-          "ogham" => :place_only # P104-1: the coordinates/county lane; dates stay prose
+          "ogham" => :place_only, # P104-1: the coordinates/county lane; dates stay prose
+          "seal" => :period_label, # P104-1 (Q77 under №R-70): the Texts Hierarchy period
+          #                          strings (Old Babylonian …, on ALL 408 docs) band via
+          #                          the ruled table — the posture's own named candidate;
+          #                          the Provenance field rides as place (PLACE_KEYS)
+          "cbeta" => :dynasty_band # P104-1 (№R-70 grade 2): the header byline's dynasty
+          #                          seat bands via the ruled table as an ERA claim —
+          #                          precision "era", verbatim byline in date_raw
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
@@ -124,6 +131,14 @@ module Nabu
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
         COMPOSITION = %w[croala diorisis glaux disco].freeze
+
+        # P104-1: sources whose place claim rides a differently-named
+        # metadata field. An override key is a findspot vocabulary with
+        # explicit unknown-class values ("Unknown"), which mint no place
+        # — the coptic-lane NO_PLACE stance; the default "place" key's
+        # behavior is untouched.
+        PLACE_KEYS = { "seal" => "provenance" }.freeze
+        NO_PLACE = %w[unknown unclear uncertain none].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -173,7 +188,8 @@ module Nabu
             .order(:id)
             .paged_each do |doc|
               row = axis_row(doc, shape, reorder: REORDER.include?(slug),
-                                         composition: COMPOSITION.include?(slug))
+                                         composition: COMPOSITION.include?(slug),
+                                         place_key: PLACE_KEYS.fetch(slug, "place"))
               next if row.nil?
 
               buffer << row.merge(axis_source: slug)
@@ -189,11 +205,11 @@ module Nabu
 
         # One document's axis row, or nil when it carries neither a date
         # bound nor a place claim (name, ref or coordinates).
-        def axis_row(doc, shape, reorder: false, composition: false)
+        def axis_row(doc, shape, reorder: false, composition: false, place_key: "place")
           meta = JSON.parse(doc[:metadata_json].to_s)
-          not_before, not_after, raw = send(shape, meta)
+          not_before, not_after, raw, precision = send(shape, meta)
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
-          place, place_ref, lat, lon = place_claim(meta)
+          place, place_ref, lat, lon = place_claim(meta, key: place_key)
           # A ref IS placement (P73-2): a doc carrying only a parseable
           # place ref rows too — the HGV place-only precedent extended.
           # P104-1 extends it once more: a coordinate pair alone places.
@@ -203,7 +219,7 @@ module Nabu
           dated = !(not_before.nil? && not_after.nil?)
           { document_id: doc[:id], not_before: not_before, not_after: not_after,
             date_raw: raw, place_name: place, place_ref: place_ref,
-            place_lat: lat, place_lon: lon,
+            place_lat: lat, place_lon: lon, precision: precision,
             date_class: composition && dated ? "composition" : nil }
         rescue JSON::ParserError
           nil
@@ -232,8 +248,16 @@ module Nabu
         # claim and answers when no "place" key exists; repository/
         # settlement (the holding library — a PRESENT location) stay
         # metadata-only, the rundata origin-axis stance.
-        def place_claim(meta)
-          place = meta["place"]
+        def place_claim(meta, key: "place")
+          place = meta[key]
+          if key != "place"
+            # An overridden place key is a findspot vocabulary with explicit
+            # unknown-class values -- those mint no place (never a name).
+            return [nil, nil, nil, nil] if place.nil? ||
+                                           NO_PLACE.include?(place.to_s.strip.downcase)
+
+            return [place, nil, nil, nil]
+          end
           return [meta["orig_place"], nil, nil, nil] if place.nil?
           return [place, nil, nil, nil] unless place.is_a?(Hash)
 
@@ -260,6 +284,22 @@ module Nabu
 
         def period_label(meta)
           seleucid_era(meta["date"]) || king_reign(meta["date"]) || period_band(meta)
+        end
+
+        # P104-1 (№R-70 grade 2): the cbeta header byline's dynasty seat
+        # (metadata "dynasty", minted by CbetaTeiParser from the
+        # teiHeader <author> — "後秦 佛陀耶舍共竺佛念譯") bands through the
+        # ruled table's sinological rows. The claim is an ATTRIBUTED
+        # TRANSLATION ERA, not a typed date, so the row wears precision
+        # "era" — the distinct honestly-labeled class the ruling names —
+        # and date_raw carries the whole byline verbatim. An unruled seat
+        # (an Indian master's attribution, 失譯 "translator lost", 日本 —
+        # a country, not an era claim) mints nothing.
+        def dynasty_band(meta)
+          band = Nabu::PeriodBands.default&.lookup(meta["dynasty"])
+          return [nil, nil, nil, nil] if band.nil?
+
+          [band[0], band[1], meta["author"] || meta["dynasty"], "era"]
         end
 
         # A bare integer year → a one-year envelope (okhc). Anything else

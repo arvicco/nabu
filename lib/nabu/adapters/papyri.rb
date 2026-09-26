@@ -132,8 +132,30 @@ module Nabu
           document_ref.path,
           urn: document_ref.id,
           language: document_ref.metadata["language"],
-          title: document_ref.metadata["title"]
+          title: document_ref.metadata["title"],
+          metadata: idno_metadata(document_ref.metadata)
         )
+      end
+
+      # P104-1 (Q77 under №R-70): the HGV/TM idnos, peeked at discover
+      # since day one, now PERSIST — tm_nr/hgv verbatim plus a "tm:<n>"
+      # related edge per numeric TM token (the P25-1 scheme rule; a
+      # multi-text papyrus lists several, space-separated). HGV has no
+      # ruled edge scheme and stays metadata-only.
+      def idno_metadata(ref_metadata)
+        metadata = {}
+        metadata["hgv"] = ref_metadata["hgv"] if ref_metadata["hgv"]
+        metadata["tm_nr"] = ref_metadata["tm"] if ref_metadata["tm"]
+        related = ref_metadata["tm"].to_s.split(/\s+/).grep(/\A\d+\z/).map { |id| "tm:#{id}" }
+        metadata["related"] = related unless related.empty?
+        metadata
+      end
+
+      # The Trismegistos concordance edges (P104-1 — metadata "related").
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        LibraryReferences.new(catalog: catalog, journal: journal, producer: "papyri-ddbdp")
       end
 
       # Clone or non-destructively pull the idp.data repo into +workdir+ via

@@ -221,7 +221,16 @@ document_facets(document_id, facet, value, ...)
    -- declaration) onto the ruled cross-corpus class list
    -- (config/kind_classes.yml + kind_map.yml), multi-label, raw
    -- upstream value preserved per row; behind `search --kind` (family
-   -- prefix matching) and the show card's kind line.
+   -- prefix matching) and the show card's kind line. Rows arrive by
+   -- TWO lanes (both Store::FacetBuilder, both drop-and-reproject):
+   -- the adapter-emitted metadata_json "facets" key, and — P104-1,
+   -- under the №R-70 aggressive-mining ruling — the config/facet_map.yml
+   -- metadata-field projections (Nabu::FacetMap: per-source
+   -- declarations of which plain metadata_json fields project as which
+   -- facet, values verbatim, arrays one row per element), so a source
+   -- whose axis-shaped fields already ride the catalog facets without
+   -- an adapter change or a canonical re-parse (okhc's 1.2M corpus
+   -- labels, seal, rsti, coptic-scriptorium).
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source

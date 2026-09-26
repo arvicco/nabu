@@ -124,7 +124,11 @@ KR2a0038 + KR2a0039 (KR2a), KR2g0007, KR3a0001, KR3g0023, KR3i0042,
 KR4d0525, KR4j0026, KR5a0001 + KR5a0004 (KR5a — KR5a0001's block carries
 the whole DZJY 目次 plus the 版本 witness listing naming `DZJY:JY001`, the
 volume id in its witness anchors), KR5c0091, KR5g0001, KR5i0030; the
-KR-Catalog HEAD is unchanged since P33-0. **KR1b0049 古文尚書寃詞 and KR2a0039 清史稿
+KR-Catalog HEAD is unchanged since P33-0. Some slices end early inside an
+entry (a trimmed 人物 block); P104-1 re-cut `KR/KR3g.txt` from the box's
+canonical (2026-09-26, same HEAD) to carry KR3g0023's complete 人物 person
+block — its `:DATES: fl. 874 - 888` floruit span pins the KanripoDates
+life-span parse. **KR1b0049 古文尚書寃詞 and KR2a0039 清史稿
 are real catalog ids with NO github repo** (61 wave-1 + 2 wave-2 such ids
 censused 2026-07-20; KR2's other is KR2d0020) — the fetch tests'
 recorded-absent case. The inverse shape is KR2-only: **4 un-catalogued KR2

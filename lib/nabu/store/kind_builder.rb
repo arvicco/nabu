@@ -143,6 +143,7 @@ module Nabu
 
         case kinds.walk_for(slug)
         when "hgv-keywords" then hgv_keyword_rows(catalog, kinds, slug, canonical_dir)
+        when "kr-subclass" then kr_subclass_rows(catalog, kinds, slug, canonical_dir)
         else []
         end
       end
@@ -182,6 +183,57 @@ module Nabu
         hybrid = doc.at_xpath("//idno[@type='ddb-hybrid']")&.text&.strip
         term = doc.at_xpath("//keywords[@scheme='hgv']/term")&.text&.strip
         [hybrid, (term unless term.to_s.empty?)]
+      end
+
+      # The kanripo KR-Catalog subclass walk (P104-1): the KR id's 4-char
+      # prefix IS the catalog's 部類 subclass (KR1a0002 → KR1a 易類), so
+      # each held document's urn already names its fine genre — the walk
+      # reads only the subclass LABELS from canonical (the KR-Catalog/KR
+      # per-subclass header lines) and feeds "KR1a 易類" through the
+      # prefix map, raw keeping code + upstream label together. A label
+      # the frozen catalog lacks feeds the bare code (the class-prefix
+      # fallback rules still fold it); no KR-Catalog on disk = zero rows,
+      # honestly.
+      KR_URN_PREFIX = "urn:nabu:kanripo:"
+      KR_CATALOG_DIR = File.join("kanripo", "KR-Catalog", "KR").freeze
+      KR_SUBCLASS_HEADER = /^\*\*\s+(KR\d[a-z])\s+\S+\s+(\S+)/
+
+      def kr_subclass_rows(catalog, kinds, slug, canonical_dir)
+        labels = kr_subclass_labels(File.join(canonical_dir, KR_CATALOG_DIR))
+        return [] if labels.nil?
+
+        rows = []
+        seen = Hash.new { |hash, key| hash[key] = {} }
+        catalog[:documents]
+          .where(Sequel.like(:urn, "#{KR_URN_PREFIX}%"))
+          .where(withdrawn: false)
+          .select_map(%i[id urn]).each do |document_id, urn|
+            subclass = urn.delete_prefix(KR_URN_PREFIX)[0, 4]
+            value = labels[subclass] ? "#{subclass} #{labels[subclass]}" : subclass
+            kinds.normalize(slug, value).each do |path|
+              next if seen[document_id].key?(path)
+
+              seen[document_id][path] = true
+              rows << { document_id: document_id, facet: FACET, value: path, raw: value }
+            end
+          end
+        rows
+      end
+
+      # {subclass code => 部類 label} from the per-subclass catalog files'
+      # own header lines ("** KR1a ZB1a 易類"), or nil when the catalog
+      # tree is absent.
+      def kr_subclass_labels(dir)
+        return nil unless Dir.exist?(dir)
+
+        Dir.glob(File.join(dir, "KR?[a-z].txt")).each_with_object({}) do |path, labels|
+          File.foreach(path) do |line|
+            match = KR_SUBCLASS_HEADER.match(line) or next
+
+            labels[match[1]] = match[2]
+            break
+          end
+        end
       end
 
       # Facet-mapped: each (document, value) of the source's declared

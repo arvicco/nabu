@@ -301,10 +301,87 @@ class KindsTest < Minitest::Test
     assert_includes shipped.class_names, "unknown"
     assert_operator shipped.sources.size, :>=, 10,
                     "the initial map covers the genre-bearing census sources"
-    assert_equal "historiography/annals", shipped.source_kind("okhc")
     assert_equal ["literary"], shipped.normalize("cdli", "Literary"),
                  "№R-66: upstream's own literature catch-all folds to the bare head"
     assert_equal ["administrative/note"], shipped.normalize("elephantine", "note")
     assert_equal ["unknown"], shipped.normalize("cdli", "fake (modern)")
+  end
+
+  # P104-1 (Q77 under №R-70): the okhc blanket source_kind graduates to
+  # the corpus-field fold — the 1.2M-doc shelf splits into honest kinds.
+  def test_shipped_okhc_folds_the_corpus_field
+    shipped = shipped_kinds
+    assert_nil shipped.source_kind("okhc"), "the blanket declaration retired at P104-1"
+    assert_equal %w[corpus], shipped.metadata_for("okhc")
+    assert_equal ["literary"], shipped.normalize("okhc", "Korean Literary Collections")
+    assert_equal ["historiography/annals"],
+                 shipped.normalize("okhc", "The Records of Daily Reflections (Ilseongnok)")
+    assert_equal ["historiography"], shipped.normalize("okhc", "History of the Three Kingdoms (Samguk sagi)")
+    assert_equal ["administrative"], shipped.normalize("okhc", "Gaksadeungnok")
+    assert_equal ["letter"], shipped.normalize("okhc", "AKS Hangeul Letters (한국고문서자료관 / 조선시대 한글편지)")
+    assert_empty shipped.normalize("okhc", "GongU Madang"),
+                 "a platform label is a reviewed non-claim, never unmapped noise"
+    assert_empty shipped.normalize("okhc", "AKS Old Korean Books (옛한글 원문정보)")
+  end
+
+  # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
+  # a frozen prefix map — the Sumerian literary canon's first genre view.
+  def test_shipped_etcsl_folds_the_composition_number_blocks
+    shipped = shipped_kinds
+    assert_equal %w[etcsl_no], shipped.metadata_for("etcsl")
+    assert_equal ["administrative/list"], shipped.normalize("etcsl", "0.2.11")
+    assert_equal ["literary/narrative/myth"], shipped.normalize("etcsl", "1.8.2.1")
+    assert_equal ["historiography"], shipped.normalize("etcsl", "2.1.1"),
+                 "the Sumerian King List block is historiography, not royal praise"
+    assert_equal ["hymn-prayer/lament"], shipped.normalize("etcsl", "2.2.2")
+    assert_equal ["royal"], shipped.normalize("etcsl", "2.4.2.01")
+    assert_equal ["letter"], shipped.normalize("etcsl", "3.1.1")
+    assert_equal ["hymn-prayer"], shipped.normalize("etcsl", "4.80.1")
+    assert_equal ["literary/wisdom"], shipped.normalize("etcsl", "5.3.2")
+    assert_equal ["literary/wisdom/proverb"], shipped.normalize("etcsl", "6.1.01")
+  end
+
+  # P104-1: the openiti BookSUBJ fold — the subject facet's recurring
+  # Arabic library-taxonomy heads through regex rules (multi-label by
+  # design); the theology and misc buckets stay deliberately unmapped.
+  def test_shipped_openiti_folds_the_book_subjects
+    shipped = shipped_kinds
+    assert_equal "subject", shipped.facet_for("openiti")
+    assert_equal ["literary/poetry"], shipped.normalize("openiti", "جاهلي :: دواوين الشعر العربي")
+    assert_equal ["historiography"], shipped.normalize("openiti", "التراجم والطبقات")
+    assert_equal ["exegesis"], shipped.normalize("openiti", "علوم القرآن")
+    assert_equal ["scripture"], shipped.normalize("openiti", "متون الحديث")
+    assert_equal ["legal"], shipped.normalize("openiti", "الفقه الشافعي :: كتب الفقه الإسلامي")
+    assert_equal ["literary/wisdom"],
+                 shipped.normalize("openiti", "كتب الأخلاق والسلوك :: كتب متفرقة في الأخلاق والسلوك")
+    assert_equal ["unmapped"], shipped.normalize("openiti", "العقيدة"),
+                 "theology buckets stay deliberately unmapped — the sefaria Kabbalah stance"
+  end
+
+  # P104-1: the kanripo KR-Catalog 部類 graduation — the coarse P100-1
+  # class rule becomes per-subclass folds fed by the kr-subclass walker
+  # ("KR1a 易類" values: code + the catalog's own label).
+  def test_shipped_kanripo_folds_the_subclass_taxonomy
+    shipped = shipped_kinds
+    assert_equal "kr-subclass", shipped.walk_for("kanripo")
+    assert_equal ["scripture"], shipped.normalize("kanripo", "KR1a 易類")
+    assert_equal ["lexical"], shipped.normalize("kanripo", "KR1j 小學類")
+    assert_equal ["historiography/chronicle"], shipped.normalize("kanripo", "KR2b 編年類")
+    assert_equal ["administrative"], shipped.normalize("kanripo", "KR2f 詔令奏議類")
+    assert_equal %w[scholarly/astronomy scholarly/mathematics],
+                 shipped.normalize("kanripo", "KR3f 天文算法類").sort
+    assert_equal ["divination"], shipped.normalize("kanripo", "KR3g 術數類")
+    assert_equal ["literary/narrative"], shipped.normalize("kanripo", "KR3l 小說家類")
+    assert_equal ["literary"], shipped.normalize("kanripo", "KR4d 別集類-宋")
+    assert_equal ["scripture"], shipped.normalize("kanripo", "KR5c 洞神部")
+    assert_equal ["historiography"], shipped.normalize("kanripo", "KR2a"),
+                 "a bare code (label missing from the frozen catalog) folds via the class fallback"
+  end
+
+  def shipped_kinds
+    Nabu::Kinds.load(
+      classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
+      map_path: File.expand_path("../config/kind_map.yml", __dir__)
+    )
   end
 end
