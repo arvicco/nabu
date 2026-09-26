@@ -113,4 +113,20 @@ map:
   scx-Latn: "scx~latn"
   xpu-Grek: "xpu~grek"
   xpu-Latn: "xpu~latn"
+
+  # The Southeast Asian wing (v1.6.0): the DHARMA corpora hold romanized
+  # editions whose measured per-file codes carry the -Latn suffix; each
+  # resolves to its anchor with the latn surface claim, the san-Latn shape.
+  okz-Latn: "okz~latn"
+  xhm-Latn: "xhm~latn"
+  khm-Latn: "khm~latn"
+  omx-Latn: "omx~latn"
+  obr-Latn: "obr~latn"
+  pli-Latn: "pli~latn"
+  pra-Latn: "pra~latn"
+  ocm-Latn: "ocm~latn"
+  kaw-Latn: "kaw~latn"
+  omy-Latn: "omy~latn"
+  osn-Latn: "osn~latn"
+  pyx-Latn: "pyx~latn"
   osc-Grek: "osc~grek"

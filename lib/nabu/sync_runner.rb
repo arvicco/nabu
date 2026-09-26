@@ -92,12 +92,18 @@ module Nabu
     # planner-stats refresh when the load was bulk (see ANALYZE_MIN_CHANGED_ROWS);
     # nil when the load was sub-threshold (the common re-sync) or on an aborted
     # run — the CLI's report line stays silent then.
+    # +dictionary_lane+ (P104-4) is the secondary dictionary lane's own
+    # LoadReport for a dictionary_lane-bearing source (entry-grained,
+    # loaded after the primary load under the same run); nil for every
+    # lane-less source. Kept SEPARATE from load_report so document- and
+    # entry-grained counts never blur in reporting — the run row records
+    # their sum.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
                           :discovery, :references, :enrichments, :place_index, :person_index,
-                          :analyzed, :lect_staging) do
+                          :analyzed, :lect_staging, :dictionary_lane) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
                      discovery:, references: nil, enrichments: nil, place_index: nil,
-                     person_index: nil, analyzed: nil, lect_staging: nil)
+                     person_index: nil, analyzed: nil, lect_staging: nil, dictionary_lane: nil)
         super
       end
 
@@ -188,12 +194,17 @@ module Nabu
       workdir = workdir_for(entry.slug)
       fetch_report = nil
       load_report = nil
+      lane_report = nil
 
       begin
         run = Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
+          # P104-4: the secondary dictionary lane loads under the SAME run —
+          # the block's return (the run row's counts) covers both shapes.
+          lane_report = load_dictionary_lane(entry, source, workdir, progress)
+          lane_report ? load_report + lane_report : load_report
         end
       rescue Nabu::SyncAborted => e
         # Recorded "aborted" by RunRecorder; nothing was loaded, source row
@@ -207,8 +218,11 @@ module Nabu
       update_source_state(source, entry, fetch_report)
       # Warnings compare against the PREVIOUS ok run's baseline, so compute
       # them before the baseline advances (P18-7: recorded at every ok run).
-      warnings = deviation_warnings(source, load_report, adapter)
-      Health::QuarantineBaseline.record!(@ledger, entry.slug, errored: load_report.errored)
+      # The quarantine baseline counts FILES either grain, so a lane's
+      # quarantines ride the same number (P104-4).
+      combined_report = lane_report ? load_report + lane_report : load_report
+      warnings = deviation_warnings(source, load_report, adapter, lane_report: lane_report)
+      Health::QuarantineBaseline.record!(@ledger, entry.slug, errored: combined_report.errored)
       # Reindex AFTER the RunRecorder block: the index files have their own
       # lifecycle, so index work must not live inside a source's run row (an
       # indexing failure surfaces as its own error, never a falsified run).
@@ -227,8 +241,9 @@ module Nabu
                   enrichments: refresh_enrichments(entry),
                   place_index: refresh_place_index(entry),
                   person_index: refresh_person_index(entry),
-                  analyzed: analyze_after_load(load_report, adapter),
-                  lect_staging: lect_staging_census(entry))
+                  analyzed: analyze_after_load(combined_report, adapter),
+                  lect_staging: lect_staging_census(entry),
+                  dictionary_lane: lane_report)
     end
 
     # P99-5 (the P59-4 front-door bullet): the synced source's
@@ -258,7 +273,8 @@ module Nabu
       end
       return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
 
-      Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug)
+      Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug,
+                                          facet_map: Nabu::FacetMap.load_default(config: @config))
       # Kind rows project from the facet rows just refreshed (P99-2) —
       # same lesson (P47-r3): no lane may lag a sync.
       Store::KindBuilder.refresh_source!(catalog: @db, slug: entry.slug,
@@ -385,10 +401,14 @@ module Nabu
     # recent-max spike rule here: the baseline comparison is strictly more
     # sensitive, and the spike rule still guards run HISTORY in `nabu
     # health`'s trend layer).
-    def deviation_warnings(source, load_report, adapter)
+    def deviation_warnings(source, load_report, adapter, lane_report: nil)
       return [] unless load_report
 
-      delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: load_report.errored)]
+      # The quarantine delta covers the whole run (P104-4: lane quarantines
+      # count too — errored is file-grained either way); the withdrawal
+      # trend below stays document-grained, so it reads the PRIMARY report.
+      errored = load_report.errored + (lane_report&.errored || 0)
+      delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: errored)]
       # Dictionary and language sources (P11-4/P19-1): entry-/record-grained
       # counts against a document-count baseline would be apples-to-oranges —
       # the quarantine delta still applies (errored counts files either way),
@@ -470,6 +490,26 @@ module Nabu
                                            seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started,
                                            rows: report.added + report.updated + report.skipped)
       report
+    end
+
+    # P104-4 (Q81, the №R-69a seam): a source whose adapter declares a
+    # secondary dictionary lane loads it through the DictionaryLoader
+    # right after the primary load, inside the same run — announced and
+    # ticked like every long pass, timed under its own ledger stage. The
+    # lane is a dictionary-shaped sub-adapter (discover/parse yielding
+    # DictionaryDocuments), so load_from — attic rediscovery, per-file
+    # quarantine, withdrawal sweep — applies unchanged. nil for every
+    # lane-less source.
+    def load_dictionary_lane(entry, source, workdir, progress)
+      lane = entry.adapter_class.dictionary_lane
+      return nil if lane.nil?
+
+      timed_stage(entry.slug, "dictionary_lane", "dictionary lane: #{entry.slug}", progress) do
+        Store::DictionaryLoader.new(db: @db, source: source, ledger: @ledger,
+                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG))
+                               .load_from(lane, workdir: workdir, full: true,
+                                                on_document: progress&.method(:load_tick))
+      end
     end
 
     # P78-r3 mechanics: announce with the ledger's last estimate for this

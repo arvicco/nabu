@@ -15,15 +15,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 September 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 354,100 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
 | `clics` | dictionary | attribution | wired · manual | 1,647 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
-| `starling` | etymological bases | attribution | wired · manual | 28,707 entries |
+| `starling` | etymological bases | attribution | wired · manual | 46,650 entries |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `cldf-spine` | feature module | attribution | wired · manual | nothing held yet |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
@@ -31,7 +31,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 25 September 2026)</span>: `rus` 18,239 · `ine-pro` 9,117 · `gem-pro` 7,711 · `sga` 6,564 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine` 4,981 · `ote` 2,558 · `ron` 2,270 · `itc-pro` 2,211 … and 52 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 September 2026)</span>: `zho` 323,839 · `rus` 18,239 · `ine-pro` 9,117 · `gem-pro` 7,711 · `sga` 6,564 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine` 4,981 · `sit-pro` 2,823 · `tut-pro` 2,805 … and 62 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 

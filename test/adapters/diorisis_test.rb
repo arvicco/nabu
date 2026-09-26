@@ -156,6 +156,21 @@ class DiorisisTest < Minitest::Test
     assert_match(%r{github\.com/PerseusDL}, metadata.fetch("provenance_url"))
   end
 
+  # P104-1 (Q77): the xenoData genre/subgenre project as facets (all 767
+  # docs carry both at the 2026-09-26 census).
+  def test_genre_and_subgenre_ride_as_facets
+    facets = adapter.parse(ref_for(HYMN_URN)).metadata["facets"]
+    assert_equal({ "value" => "Religion" }, facets["genre"])
+    assert_equal({ "value" => "Hymns" }, facets["subgenre"])
+  end
+
+  def test_diorisis_is_registered_for_the_composition_class_signed_year_shape
+    assert_equal :signed_year_key,
+                 Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["diorisis"],
+                 "P104-1 (№R-70 grade 2): creation_date projects as composition-class rows"
+    assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "diorisis"
+  end
+
   def test_parses_thucydides_with_dotted_citations
     document = adapter.parse(ref_for(THUC_URN))
     assert_equal "Thucydides — History", document.title

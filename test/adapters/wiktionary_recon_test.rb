@@ -105,7 +105,7 @@ class WiktionaryReconTest < Minitest::Test
     assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro
                     sga mga wlm xum ett ojp zho],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 6], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 10], documents.map(&:size)
   end
 
   # P32-5: the attested Old Japanese extract (the P25-2/P29 pattern
@@ -168,6 +168,47 @@ class WiktionaryReconTest < Minitest::Test
 
     assert(ett.entries.any? { |e| e.entry_id == "vetus:romanization" },
            "romanization stubs mint as entries")
+  end
+
+  # P104-2 (Q79 — the silent-failure defect, poison shape 1 of 2):
+  # Wiktionary titles MediaWiki cannot represent live under "Unsupported
+  # titles/…", and wiktextract emits them with the RAW character as
+  # `word` — the zh extract's "Unsupported titles/Space" record
+  # (upstream line 53403 of 323,840, fixture-pinned byte-verbatim)
+  # carries word=" ", a single U+0020. One such record raised through
+  # DictionaryEntry's non-empty key_raw validation and quarantined the
+  # ENTIRE 1.1 GB shelf on every sync since 2026-08-22 (errored=1, zero
+  # zh dictionaries in the catalog). A whitespace-only headword is
+  # unrepresentable in a headword-keyed dictionary (key_raw and
+  # headword_folded both empty), so the parser skips the record instead
+  # of minting it; the validation itself stays.
+  def test_zh_skips_the_unsupported_title_space_record_instead_of_quarantining
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    zh = documents.find { |doc| doc.slug == "wiktionary-zh" }
+    assert_equal "zho", zh.language
+    assert_equal 10, zh.size, "the whitespace-word record mints no entry; the 10 real ones all do"
+    assert(zh.entries.none? { |e| e.headword.strip.empty? },
+           "no whitespace-only headword may reach the shelf")
+    assert(zh.entries.any? { |e| e.entry_id == "犬:character" },
+           "the MC/OC golden still parses beside the skipped record")
+  end
+
+  # P104-2 (Q79, poison shape 2 of 2): the positional homograph suffix
+  # could mint an id EQUAL to a sibling record's etymology_number-bearing
+  # base — upstream 夆 (lines 5047-5050, fixture-pinned byte-verbatim)
+  # ships THREE etymology-less character records (→ 夆:character, :2, :3
+  # positionally) and then a fourth with etymology_number "3" whose base
+  # is the same "夆:character:3", which raised the duplicate-id
+  # ValidationError in DictionaryDocument#<< and quarantined the file
+  # (2 such quartets in 323,840 lines: 夆 and 芘). The minter now bumps
+  # past ALREADY-MINTED ids, so the ety-bearing record lands on the next
+  # free positional slot; every id that never collided is unchanged.
+  def test_zh_homograph_quartet_mints_unique_ids_across_both_suffix_paths
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    zh = documents.find { |doc| doc.slug == "wiktionary-zh" }
+    feng = zh.entries.select { |e| e.headword == "夆" }.map(&:entry_id)
+    assert_equal ["夆:character", "夆:character:2", "夆:character:3", "夆:character:3:2"],
+                 feng, "the ety-3 record must bump past the positionally-minted 夆:character:3"
   end
 
   def test_entries_carry_reflexes_the_crosswalk_edges
@@ -360,7 +401,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 253, first.added
+    assert_equal 257, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -368,7 +409,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 253, second.skipped
+    assert_equal 257, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 

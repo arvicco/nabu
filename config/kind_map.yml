@@ -216,8 +216,43 @@ sources:
       # left unmapped: 221-239 / 251-290 / 299-320 / 758-829 (generic
       # TLH sub-corpus tag, genre-mixed; no in-tree evidence to fold on
       # — the honest remainder, worklist-visible).
-  okhc:               # 1,198,779 docs — the Korean dynastic-history family
-    source_kind: historiography/annals   # whole-source declaration (ruled 2026-09-13)
+  okhc:               # census: 1,198,779 docs, corpus on all, 2026-09-26 (P104-1 under
+    metadata: corpus  # №R-70) — the P100-4 blanket historiography/annals declaration
+    #                   retired: the per-record corpus field splits the shelf honestly.
+    map:
+      "Korean Literary Collections": literary                       # 652,405 — munjip 文集,
+      #   literary collections (prose + poetry), never annals
+      "The Records of Daily Reflections (Ilseongnok)": historiography/annals   # 338,084
+      "History of the Three Kingdoms (Samguk sagi)": historiography # 4,613
+      "Gaksadeungnok": administrative                               # 78,247 — 各司謄錄,
+      #   copied inter-office government records
+      "Kyujanggak Old Documents (규장각 / 고문서)": administrative      # 32,487 — documentary
+      "AKS Collection of Old Documents (한국고문서자료관 / 수집고문서)": administrative  # 24,702
+      "AKS Royal Court Documents (장서각 기록유산 DB / 왕실고문서)": administrative       # 2,273
+      "Records of the Japanese Legation and Residency-General in Korea (주한일본공사관기록·통감부문서)": administrative  # 22,502 — diplomatic archive records
+      "AKS Hangeul Letters (한국고문서자료관 / 조선시대 한글편지)": letter   # 597 — Joseon-era
+      #   Hangeul correspondence
+    deliberate:
+      "AKS Old Korean Books (옛한글 원문정보)": "a genre-mixed archive label (old Hangeul books), not a genre claim"  # 27,910
+      "GongU Madang": "a sharing-platform label, not a genre claim"  # 13,291
+      "National Hangeul Museum Archive / Hangeul Documents (국립한글박물관 / 한글 문헌)": "a holding-institution label, not a genre claim"  # 1,668
+  etcsl:              # census: 775 docs (composites + -en siblings), 2026-09-26 —
+    metadata: etcsl_no   # ETCSL's own composition-number taxonomy, frozen upstream
+    #                      since the 2006 deposit; prefix rules fold the c.0–c.6 blocks.
+    prefix_map:
+      "0.": administrative/list        # 13 — ancient catalogues of literary compositions
+      "2.1": historiography            # 14 — the Sumerian King List block (2.1.1) and
+      #   the compositions with a historical background
+      "2.2": hymn-prayer/lament        # 10 — the city laments
+      "2.": royal                      # 252 — royal praise poetry and hymns (2.4 Ur III,
+      #   2.5 Isin-Larsa, 2.6–2.9 other dynasts; honest coarseness for the block)
+      "1.": literary/narrative/myth    # 72 — mythological and heroic narratives (the
+      #   tlhdig fold; Gilgamesh's 1.8 block rides the same head)
+      "3.": letter                     # 86 — letters, letter-prayers, royal correspondence
+      "4.": hymn-prayer                # 214 — hymns and cult songs
+      "5.": literary/wisdom            # 52 — debates, dialogues, eduba narratives,
+      #   instructions: the wisdom shelf, honest coarseness
+      "6.": literary/wisdom/proverb    # 62 — the proverb collections
   papyri-ddbdp:       # HGV text types (P100-3): the LEADING <keywords scheme="hgv">
     walk: hgv-keywords   # term per record, walked from canonical (~66,700 typed docs;
     map:                 # first-term census 2026-09-14, 25% sample + the 2026-09-18 tail audit)
@@ -358,16 +393,60 @@ sources:
       "Liturgy": ritual/liturgy                  # siddurim
       "Musar": literary/wisdom                   # ethical instruction
       "Reference": scholarly
-      # left unmapped (genuinely mixed/ambiguous, the decision list):
-      # Kabbalah · Chasidut · Jewish Thought · Second Temple
-  kanripo:            # the sibu 四部 class (KR1–KR5)
-    metadata: class
-    map:
-      "KR1": scripture                           # 經部 — the canonical classics (715)
-      "KR2": historiography                      # 史部 — the histories (578)
-      "KR3": literary/wisdom                     # 子部 — the Masters (864; coarse fold, gate-flagged)
-      "KR4": literary                            # 集部 — belles-lettres collections (1,344; №R-66)
-      "KR5": scripture                           # 道部 — the Daoist canon (1,621)
+      # the residue ruled 2026-09-26 (as recommended at the P103 gate):
+      "Kabbalah": exegesis                       # the Zohar's own form is Torah commentary
+      "Chasidut": literary/wisdom                # the Musar precedent
+      "Jewish Thought": literary/essay           # the dta Philosophie precedent
+      "Second Temple": scripture                 # deuterocanon/pseudepigrapha
+  kanripo:            # census: 5,122 docs over 54 held subclasses, 2026-09-26 —
+    walk: kr-subclass # P104-1: the KR-Catalog 部類 taxonomy, fine grain. The KR id's
+    #                   4-char prefix IS the subclass; the walker feeds "KR1a 易類"
+    #                   (code + the catalog's own label). The P100-1 coarse class rule
+    #                   graduates to per-subclass folds; the bare class prefixes stay
+    #                   as ruled fallbacks for anything the frozen catalog leaves bare.
+    prefix_map:
+      # KR1 經部 — the canonical classics and their exegesis
+      "KR1i": scholarly                          # 樂類 18 — music treatises
+      "KR1j": lexical                            # 小學類 79 — philology, dictionaries, phonology
+      "KR1": scripture                           # 易 170 · 書 59 · 詩 66 · 禮 91 · 春秋 121 ·
+      #   孝經 13 · 五經總義 31 · 四書 67 — the classics with their commentary tradition
+      # KR2 史部 — the histories and the state's paper
+      "KR2b": historiography/chronicle           # 編年類 40 — annalistic chronicles
+      "KR2f": administrative                     # 詔令奏議類 41 — edicts and memorials
+      "KR2j": scholarly                          # 時令類 2 — seasonal-ordinance treatises
+      "KR2k": scholarly                          # 地理類 152 — geography
+      "KR2l": administrative                     # 職官類 22 — offices and their regulation
+      "KR2m": administrative                     # 政書類 57 — institutional compendia
+      "KR2n": scholarly                          # 目錄類 47 — annotated bibliographies:
+      #   scholarship of the book, not an administrative list artifact
+      "KR2o": scholarly                          # 史評類 24 — historical criticism
+      "KR2": historiography                      # 正史 38 · 編年 above · 紀事本末 23 · 別史 23 ·
+      #   雜史 22 · 傳記 61 · 史鈔 3 · 載記 23 — the histories proper
+      # KR3 子部 — the Masters and the technical arts
+      "KR3b": scholarly                          # 兵家類 20 — military treatises
+      "KR3d": scholarly                          # 農家類 10 — agriculture
+      "KR3e": scholarly/medicine                 # 醫家類 100
+      "KR3f": [scholarly/astronomy, scholarly/mathematics]   # 天文算法類 53 — the two
+      #   sciences share the subclass; ruled split (the cdli Prayer/Incantation shape)
+      "KR3g": divination                         # 術數類 46 — numerology, divination arts
+      "KR3h": scholarly                          # 藝術類 78 — treatises on the arts
+      "KR3i": scholarly                          # 譜錄類 50 — registers and monographs on things
+      "KR3k": scholarly                          # 類書類 63 — encyclopedias
+      "KR3l": literary/narrative                 # 小說家類 128 — the fiction shelf
+      "KR3": literary/wisdom                     # 儒家 117 · 法家 8 · 雜家 191 — the Masters'
+      #   philosophical texts under the №R-66 wisdom head
+      # KR4 集部 — belles-lettres
+      "KR4a": literary/poetry                    # 楚辭類 7
+      "KR4i": scholarly                          # 詩文評類 64 — poetry criticism
+      "KR4j": literary/poetry                    # 詞曲類 87 — ci and qu verse
+      "KR4": literary                            # 別集 漢六朝 19 · 唐 112 · 宋 578 · 明 243 ·
+      #   清 69 · 總集 165 — individual and collected œuvres (№R-66 bare head)
+      # KR5 道部 — the Daoist canon (all subclasses are canon divisions)
+      "KR5": scripture                           # 洞真 327 · 洞玄 318 · 洞神 373 · 太玄 119 ·
+      #   太平 68 · 太清 25 · 正一 242 · 續道藏 57 · 清代道教文獻 92
+      "KR6": scripture                           # the Buddhist canon class — excluded from
+      #   the fetch cone by doctrine (CBETA is the Buddhist shelf), ruled here so a future
+      #   widening never lands unmapped
   cbeta:              # the whole source IS the Buddhist canon (Taishō + Xuzangjing)
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
@@ -417,9 +496,17 @@ sources:
       '\bK?21\d\b': historiography               # 210s ×~90 — Japanese history
       '\bK?121\b': literary/essay                # 121 ×94 — Japanese philosophy (the dta
       #   Philosophie precedent)
-      # other non-9xx subject codes (367 · 596 · 7xx arts …) stay
-      # unmapped: modern nonfiction subject shelving, not genre — the
-      # named residue pending a subject-fold ruling.
+      # remaining non-9xx compounds and singletons stay worklist-visible.
+    deliberate:
+      # Ruled 2026-09-26 (P103 gate, as recommended): the bare modern
+      # NDC subject-shelving heads are not genre claims.
+      "NDC 367": "modern NDC subject shelving (society), not genre"
+      "NDC 596": "modern NDC subject shelving (cooking), not genre"
+      "NDC 721": "modern NDC subject shelving (Japanese painting), not genre"
+      "NDC 770": "modern NDC subject shelving (performing arts), not genre"
+      "NDC 771": "modern NDC subject shelving (performing arts), not genre"
+      "NDC 775": "modern NDC subject shelving (theater), not genre"
+      "NDC 778": "modern NDC subject shelving (film), not genre"
   dta:                # the subgenre carries the signal; genre alone is too coarse
     metadata: subgenre
     map:
@@ -443,6 +530,32 @@ sources:
       "Autobiographie": historiography           # 5
       "Biographie": historiography               # 2
       "Reiseliteratur": literary/diary           # 17 — travelogues
+  openiti:            # census: BookSUBJ (→ the subject facet) on 4,191 of 9,079 docs,
+    facet: subject    # 2026-09-26 — a long-tail Arabic library taxonomy; regex rules
+    #                   fold the recurring heads (multi-label by design, the aozora
+    #                   shape), the singleton tail stays worklist-visible.
+    regex_map:
+      'التفاسير|تفسير|علوم القرآن': exegesis          # 43 + 72 + … — Qurʾānic exegesis and sciences
+      'متون الحديث|الأجزاء الحديثية|أجزاء حديثية|مخطوطات حديثية|مصادر الحديث': scripture
+      #   337 + 190 + 112 + 67 + 52 + … — the hadith text collections (canonical
+      #   religious text in this tradition's own terms)
+      'علوم الحديث': scholarly                        # 30 — hadith methodology
+      'فقه|الفقه': legal                              # 81 + 45 + 42 + 38 + … — fiqh and uṣūl
+      'التاريخ': historiography                        # 65
+      'التراجم والطبقات|السيرة|سيرة': historiography   # 192 + 40 — biographical dictionaries
+      'دواوين الشعر|الشعر': literary/poetry            # 49 + … — the dīwāns
+      'الأدب': literary                                # 179 + 38 + 33 — adab
+      'المعاجم': lexical                               # 29 — dictionaries
+      'النحو والصرف': scholarly                        # 36 — grammar
+      'البلدان والجغرافيا والرحلات': scholarly          # 42 — geography and travels
+      'الأخلاق والسلوك': literary/wisdom               # 31 — conduct literature (the sefaria
+      #   Musar fold)
+      'الطرائف والقصص': literary/narrative             # 33 — tales and curiosa
+      # left unmapped (genuinely mixed/ambiguous, the decision list —
+      # the sefaria Kabbalah stance): العقيدة/العقائد theology buckets ·
+      # كتب متنوعة/بحوث ومسائل misc buckets · author-collection shelves
+      # (كتب ابن تيمية …) · sect-corpus buckets (مصادر الحديث الشيعية
+      # rides the hadith fold; the bare قسم العام tails stay visible).
   seal:               # genre = "Head, subject" — prefix rules ride past the subject tails
     metadata: genre
     prefix_map:

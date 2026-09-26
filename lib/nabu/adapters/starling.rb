@@ -68,6 +68,106 @@ module Nabu
     #                    ccs-pro is minted by the family-code + -pro
     #                    convention (ISO 639-5 ccs; the bat-pro precedent).
     #
+    # == The P104-3 packages (Q84: six further downloads, same shelf, same grant)
+    #
+    # ALTAIC / CAUC / SINTIB / DRAV / CHUKCHEE / YENISEY .exe — plain zips
+    # like IE.exe/KART.exe, each fetched into its own subdir with its own
+    # ZipFetch state (the kart posture, generalized). Nine further bases
+    # ride as BASES configuration — the FAMILY-HEAD etymological base of
+    # each package plus the branch bases that follow the head pattern
+    # cheaply:
+    #
+    #   starling-altet  (tut-pro)     — 2,805 Proto-Altaic etymologies: the
+    #                    database version of the Starostin-Dybo-Mudrak
+    #                    "Altaic Etymological Dictionary" (Brill 2003;
+    #                    altet.inf DBINFO). Five branch protoform columns
+    #                    (piet's SLAV/BALT/GERM verdict: body-only) with
+    #                    links into the five branch bases. ONE censused
+    #                    junk cell: #1728's TURC slot holds whitespace
+    #                    bytes where a var pointer belongs (the parser's
+    #                    junk-pointer lane).
+    #   starling-japet  (jpx-pro)     — 1,705 Proto-Japanese etymologies,
+    #                    "the Japanese part" of the AED (japet.inf;
+    #                    Starostin 1975 accent reconstruction). AJP (Old
+    #                    Japanese, 8th c.) mints ojp rows; MJP has no
+    #                    clean code and the seven modern dialect columns
+    #                    are accent transcriptions — body-only.
+    #   starling-caucet (ccn-pro)     — 2,327 Proto-North-Caucasian
+    #                    etymologies: the published Nikolayev-Starostin
+    #                    "A North Caucasian Etymological Dictionary"
+    #                    (Moscow 1994; caucet.inf DBINFO). Six branch
+    #                    protoform columns body-only; LAK/KHIN hold ACTUAL
+    #                    Lak/Khinalug forms (the DBINFO's own words) and
+    #                    mint lbe/kjj rows. 223 headword-less records
+    #                    (censused) keep their slots as "#NUMBER".
+    #   starling-stibet (sit-pro)     — 2,823 Proto-Sino-Tibetan
+    #                    etymologies (Peiros-Starostin 1996 with improved
+    #                    reconstructions; Lepcha data by Olga Mazo —
+    #                    stibet.inf DBINFO). LEPCHA mints lep rows; TIB is
+    #                    transliteration (script-mismatched against the
+    #                    Tibetan-script gold — the piet GREEK treatment),
+    #                    CHIN is Starostin's OC reconstruction led by a
+    #                    Big5 character (honest U+FFFD under the StarLing
+    #                    tables), BURM/LUSH mix in PLB/PKC protoforms,
+    #                    KACH carries tone-digit notation — all body-only.
+    #                    46 headword-less records; ONE truncated-var
+    #                    record (#2785, the parser's truncated-var lane);
+    #                    the unaliased STLSNUM lexstat link rides nowhere.
+    #   starling-dravet (dra-pro)     — 2,171 Proto-Dravidian
+    #                    reconstructions "as listed in A Dravidian
+    #                    Etymological Dictionary by T. Burrow and M. B.
+    #                    Emeneau, revised and significantly modified by
+    #                    G. Starostin" (dravet.inf DBINFO). Five branch
+    #                    protoform columns body-only; BRA (Brahui, an
+    #                    actual language) mints brh rows. Four numeric
+    #                    link cells carry dBase's "****" overflow sentinel
+    #                    (censused) — no crosslink line without a number.
+    #   starling-kamet  (qfa-cka-pro) — 1,099 Proto-Chukchee-Kamchatkan
+    #                    reconstructions: O. Mudrak's family-head database
+    #                    (kamet.inf DBINFO; Russian glosses — upstream:
+    #                    "no English translation is available yet", the
+    #                    vasmer precedent). CHUK/ITEL protoform columns
+    #                    body-only, linking into the two subordinates.
+    #                    One duplicate NUMBER (689 ×2 — the -b rule).
+    #   starling-chuket (qfa-chk-pro) — 2,281 Chukchee-Koryak
+    #                    reconstructions (O. Mudrak, subordinate). CHU/
+    #                    KOR/ALU mint ckt/kpy/alr rows; PAL (Palana, a
+    #                    Koryak variety without a code) body-only; the
+    #                    unaliased STPRO/CHFUNC/KOFUNC/ALFUNC columns sit
+    #                    outside the .inf field_list and ride nowhere.
+    #                    Four duplicate NUMBERs (1206/1584/1657/1956 ×2).
+    #   starling-itelet (itl-pro)     — 1,673 Proto-Itelmen reconstructions
+    #                    (O. Mudrak, subordinate), with Napana/Kovran/
+    #                    Stebnitski Itelmen columns (ITE mints itl rows)
+    #                    and Dybowski's extinct Western/Southern Kamchadal
+    #                    records (body-only — no codes exist). Four
+    #                    duplicate NUMBERs (199/269/1119/1521 ×2).
+    #   starling-yenet  (qfa-yen-pro) — 1,059 Proto-Yenisseian
+    #                    reconstructions (published as Starostin 1995;
+    #                    Russian glosses). All five columns are actual
+    #                    single languages: KET/SYM/KOT/ARI/PUM mint
+    #                    ket/yug/zko/xrn/xpm rows. One duplicate NUMBER
+    #                    (904 ×2); two headword-less records.
+    #
+    # DECLARED DEFERRED (deliberate coarseness, censused 2026-09-26 —
+    # each follows the head pattern and can ride as a later BASES row):
+    # ALTAIC's four branch bases (turcet 2,017 / monget 2,174 / tunget
+    # 2,435 / koret 1,206 — koret.inf carries no DBINFO credit, so its
+    # credit needs the roster); CAUC's eight branch bases (nakhet 970 /
+    # aandet 1,539 / cezet 1,108 / laket 955 / darget 924 / lezget 1,569 /
+    # khinet 349 / abadet 817); DRAV's eleven branch bases (sdret 4,692 /
+    # telet 2,774 / kogaet 1,509 / gndet 1,428 / gonet 1,475 / kuiet
+    # 1,377 / konet 961 / ktet 1,665 / ndret 989 / pemet 740 / braet 269);
+    # SINTIB's five Kiranti-lane bases (kiret 994 / dumet 1,517 / kulet
+    # 1,466 / limet 2,354 / yamet 1,974). bigchina (9,093 Old Chinese
+    # character entries, stibet's CHINNUM target) is deferred on a HARD
+    # reason, not cost: its CHARACTER/FANQIE cells are Big5-encoded
+    # (bigchina.inf: "characters in Big5 encoding") — a per-field second
+    # encoding lane the starling-dbf family does not have; landing it
+    # would also clean stibet's CHIN leads. doc.dbf is a support table
+    # (per-character dialect readings), not an etymological base. LEXSTAT
+    # tables stay out (queued separately as Q78).
+    #
     # P22-0 promised the follow-up bases as CONFIGURATION, not code: BASES
     # rows name every per-base policy (dbf file, headword/gloss/body fields,
     # crosslink labels, reflex columns). P23-0 held that promise with four
@@ -134,7 +234,8 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "starling",
         name: "StarLing / Tower of Babel — etymological databases " \
-              "(Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian)",
+              "(Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian + Altaic + " \
+              "North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian)",
         license: "Free for any use with acknowledgment (G. Starostin, e-mail 2026-07-15: \"all " \
                  "etymological data are free for anybody to use for any purposes as long as the " \
                  "source is properly acknowledged\"); required per-base credit — Pokorny base: " \
@@ -151,7 +252,22 @@ module Nabu
                  "dictionaries of Kartvelian languages\" (kartet.inf DBINFO; roster: \"Compiled by " \
                  "Sergei Starostin on the basis of the best comparative Kartvelian dictionaries " \
                  "available (G. Klimov and H. Faehnrich-Z. Sardzhveladze), with notes ... added by " \
-                 "Starostin\")",
+                 "Starostin\"); Altaic package: \"the database version of the 'Altaic Etymological " \
+                 "Dictionary' by S. Starostin, A. Dybo and O. Mudrak (Brill publishers, 2003)\" " \
+                 "(altet.inf DBINFO), the Japanese base being \"the Japanese part of the Altaic " \
+                 "Etymological Dictionary\" (japet.inf DBINFO); North Caucasian package: \"the " \
+                 "database published as S. L. Nikolayev, S. A. Starostin, 'A North Caucasian " \
+                 "Etymological Dictionary', Moscow 1994\" (caucet.inf DBINFO); Sino-Tibetan " \
+                 "package: \"based on Peiros-Starostin 1996, but containing improved " \
+                 "reconstructions\", \"The Lepcha data were input, and are continued to be input, " \
+                 "by Olga Mazo\" (stibet.inf DBINFO); Dravidian package: Proto-Dravidian " \
+                 "reconstructions \"as listed in A Dravidian Etymological Dictionary by T. Burrow " \
+                 "and M. B. Emeneau, revised and significantly modified by G. Starostin\" " \
+                 "(dravet.inf DBINFO); Chukchee-Kamchatkan package: \"O. Mudrak's " \
+                 "Chukchee-Kamchatkan database\" with his subordinate Chukchee-Koryak and Itelmen " \
+                 "databases (kamet/chuket/itelet.inf DBINFO); Yenisseian package: \"Comparative " \
+                 "vocabulary of the Yenisseian languages, published as Starostin 1995\" " \
+                 "(yenet.inf DBINFO)",
         license_class: "attribution",
         upstream_url: "https://starlingdb.org/download/IE.exe",
         parser_family: "starling-dbf"
@@ -164,6 +280,23 @@ module Nabu
       # ZipFetch state so each package's retention sweep sees only itself.
       KART_URL = "https://starlingdb.org/download/KART.exe"
       KART_SUBDIR = "kart"
+
+      # Every follow-up package (P46-6 kart; P104-3 the six further
+      # downloads), subdir => url. Each is a plain zip despite the .exe
+      # name, fetched into its own subdir with its own ZipFetch state and
+      # attic; the root IE.exe fetch declares keep: on all of them so a
+      # re-fetch of one package never attics another. LEXSTAT/ trees ride
+      # along inside each zip (out of scope here; their tables are a
+      # separate lane).
+      FOLLOW_UP_PACKAGES = {
+        KART_SUBDIR => KART_URL,
+        "altaic" => "https://starlingdb.org/download/ALTAIC.exe",
+        "cauc" => "https://starlingdb.org/download/CAUC.exe",
+        "sintib" => "https://starlingdb.org/download/SINTIB.exe",
+        "drav" => "https://starlingdb.org/download/DRAV.exe",
+        "chukchee" => "https://starlingdb.org/download/CHUKCHEE.exe",
+        "yenisey" => "https://starlingdb.org/download/YENISEY.exe"
+      }.freeze
 
       # Per-base ingestion policy (registry order = discover order). Labels
       # are the upstream .inf field aliases verbatim; :crosslinks maps a
@@ -296,6 +429,202 @@ module Nabu
             "GRU" => %w[ka Georgian].freeze, "MEG" => %w[xmf Megrel].freeze,
             "SVA" => %w[sva Svan].freeze, "LAZ" => %w[lzz Laz].freeze
           }.freeze
+        }.freeze,
+        # P104-3 (ALTAIC). Labels/credit: altet.inf. All five branch
+        # columns are branch protoforms — body-only; the link aliases
+        # ("Turk.->Turcet" …) are the .inf's own, verbatim. PRNUM points
+        # into the unheld Nostratic base.
+        "starling-altet" => {
+          dbf: "altet.dbf", language: "tut-pro",
+          title: "Altaic etymology (S. Starostin, A. Dybo, O. Mudrak, Altaic Etymological " \
+                 "Dictionary, Brill 2003; StarLing database)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "RUSMEAN" => "Russian meaning", "TURC" => "Turkic", "MONG" => "Mongolian",
+            "TUNG" => "Tungus-Manchu", "KOR" => "Korean", "JAP" => "Japanese",
+            "REFERENCE" => "Comments"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Nostratic", "TURCNUM" => "Turk.->Turcet", "MONGNUM" => "Mong.->Monget",
+            "TUNGNUM" => "Tung.->Tunget", "KORNUM" => "Kor.->Koret", "JAPNUM" => "Jpn.->Japet"
+          }.freeze,
+          reflexes: {}.freeze
+        }.freeze,
+        # P104-3 (ALTAIC). Labels: japet.inf. AJP is the one ATTESTED
+        # single-language column (Old Japanese, 8th c.) and mints ojp;
+        # MJP has no clean code, the modern dialect columns are accent
+        # transcriptions — body-only. PRNUM crosslinks into altet (held).
+        "starling-japet" => {
+          dbf: "japet.dbf", language: "jpx-pro",
+          title: "Japanese etymology (the Japanese part of the Altaic Etymological Dictionary; " \
+                 "Proto-Japanese after Starostin 1975)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "RUSMEAN" => "Russian meaning", "AJP" => "Old Japanese", "MJP" => "Middle Japanese",
+            "TOK" => "Tokyo", "KYO" => "Kyoto", "KAG" => "Kagoshima", "NAS" => "Nase",
+            "SHU" => "Shuri", "HAT" => "Hateruma", "YON" => "Yonakuni", "COMMENTS" => "Comments"
+          }.freeze,
+          crosslinks: { "PRNUM" => "Altaic etymology" }.freeze,
+          reflexes: { "AJP" => ["ojp", "Old Japanese"].freeze }.freeze
+        }.freeze,
+        # P104-3 (CAUC). Labels/credit: caucet.inf. Six branch protoform
+        # columns body-only; LAK/KHIN hold ACTUAL Lak/Khinalug forms
+        # (caucet.inf DBINFO: "The actual Lak form (no Proto-Lak
+        # reconstruction is presented)"; likewise Khinalug) — they mint,
+        # under the DBINFO's honest names rather than the aliases'
+        # "Proto-" labels. PRNUM points into the unheld sccet base.
+        "starling-caucet" => {
+          dbf: "caucet.dbf", language: "ccn-pro",
+          title: "North Caucasian etymology (S. L. Nikolayev, S. A. Starostin, A North Caucasian " \
+                 "Etymological Dictionary, Moscow 1994; StarLing database)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "NAKH" => "Proto-Nakh", "AAND" => "Proto-Avaro-Andian", "CEZ" => "Proto-Tsezian",
+            "LAK" => "Proto-Lak", "DARG" => "Proto-Dargwa", "LEZG" => "Proto-Lezghian",
+            "KHIN" => "Proto-Khinalug", "ABAD" => "Proto-West Caucasian", "COMMENT" => "Notes"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Sino-Caucasian etymology", "NAKHNUM" => "> Nakh",
+            "AANDNUM" => "> Avaro-Andian", "CEZNUM" => "> Tsezi", "LAKNUM" => "> Lak",
+            "DARGNUM" => "> Dargwa", "LEZGNUM" => "> Lezghian", "KHINNUM" => "> Khinalug",
+            "ABADNUM" => "> West Caucasian"
+          }.freeze,
+          reflexes: { "LAK" => %w[lbe Lak].freeze, "KHIN" => %w[kjj Khinalug].freeze }.freeze
+        }.freeze,
+        # P104-3 (SINTIB). Labels/credit: stibet.inf. LEPCHA mints lep;
+        # TIB is transliteration (script-mismatched against the
+        # Tibetan-script gold — the piet GREEK treatment), CHIN is the OC
+        # reconstruction led by a Big5 character, BURM/LUSH mix in
+        # PLB/PKC protoforms, KACH carries tone-digit notation, KIR is a
+        # branch protoform — body-only. The unaliased STLSNUM (lexstat
+        # link) rides nowhere; CHINNUM/KIRNUM point into the DEFERRED
+        # bigchina/kiret bases, PRNUM into the unheld sccet base.
+        "starling-stibet" => {
+          dbf: "stibet.dbf", language: "sit-pro",
+          title: "Sino-Tibetan etymology (Peiros-Starostin 1996 with improved reconstructions; " \
+                 "Lepcha data by Olga Mazo; StarLing database)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "CHIN" => "Chinese", "TIB" => "Tibetan", "BURM" => "Burmese", "KACH" => "Kachin",
+            "LUSH" => "Lushai", "LEPCHA" => "Lepcha", "KIR" => "Kiranti", "COMMENTS" => "Comments"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Sino-Caucasian etymology", "CHINNUM" => "Old Chinese etymology",
+            "KIRNUM" => "Kiranti etymology"
+          }.freeze,
+          reflexes: { "LEPCHA" => %w[lep Lepcha].freeze }.freeze
+        }.freeze,
+        # P104-3 (DRAV). Labels/credit: dravet.inf. Five branch protoform
+        # columns body-only; BRA (Brahui, an actual language) mints brh.
+        # PRNUM points into the unheld Nostratic base; the six branch
+        # links point into the DEFERRED branch bases.
+        "starling-dravet" => {
+          dbf: "dravet.dbf", language: "dra-pro",
+          title: "Dravidian etymology (Burrow-Emeneau DED reconstructions, revised and " \
+                 "significantly modified by G. Starostin; StarLing database)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "SDR" => "Proto-South Dravidian", "TEL" => "Proto-Telugu",
+            "KOGA" => "Proto-Kolami-Gadba", "GND" => "Proto-Gondi-Kui",
+            "NDR" => "Proto-North Dravidian", "BRA" => "Brahui", "NOTES" => "Notes"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Nostratic etymology", "SDRNUM" => "South Dravidian etymology",
+            "TELNUM" => "Telugu etymology", "KOGANUM" => "Kolami-Gadba etymology",
+            "GNDNUM" => "Gondi-Kui etymology", "NDRNUM" => "North Dravidian etymology",
+            "BRANUM" => "Brahui etymology"
+          }.freeze,
+          reflexes: { "BRA" => %w[brh Brahui].freeze }.freeze
+        }.freeze,
+        # P104-3 (CHUKCHEE). Labels/credit: kamet.inf (O. Mudrak; Russian
+        # glosses — upstream: "no English translation is available yet",
+        # the vasmer precedent). CHUK/ITEL are branch protoforms linking
+        # into the two held subordinates; PRNUM points into the unheld
+        # Nostratic base, NIODNUM into the unheld Nivkh-Yukaghir base.
+        "starling-kamet" => {
+          dbf: "kamet.dbf", language: "qfa-cka-pro",
+          title: "Chukchee-Kamchatkan etymology (O. Mudrak's Chukchee-Kamchatkan database; StarLing)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "CHUK" => "Proto-Chukchee-Koryak", "ITEL" => "Proto-Itelmen",
+            "COMMENTS" => "Comments", "NIOD" => "Nivkh parallels"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Nostratic etymology", "CHUKNUM" => "> Chukchee-Koryak",
+            "ITELNUM" => "> Itelmen", "NIODNUM" => "> Nivkh-Yukaghir"
+          }.freeze,
+          reflexes: {}.freeze
+        }.freeze,
+        # P104-3 (CHUKCHEE). Labels: chuket.inf; body fields follow its
+        # field_list (the unaliased STPRO/CHFUNC/KOFUNC/ALFUNC columns sit
+        # outside it and ride nowhere). CHU/KOR/ALU are actual single
+        # languages and mint; PAL (Palana, a Koryak variety without a
+        # code of its own) stays body-only. PRNUM crosslinks into kamet.
+        "starling-chuket" => {
+          dbf: "chuket.dbf", language: "qfa-chk-pro",
+          title: "Chukchee-Koryak etymology (O. Mudrak; subordinate to the Chukchee-Kamchatkan " \
+                 "database; StarLing)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "CHU" => "Chukchee", "KOR" => "Koryak", "PAL" => "Palana", "ALU" => "Alutor",
+            "IM" => "Muravyeva reference", "BOG" => "Bogoraz reference (LRS)",
+            "RKS" => "Russian-Koryak dictionary (Zhukova)", "NRS" => "Korsakov reference (NRS)",
+            "YFA" => "Language and Folklore of Alutors reference", "PAK" => "Zhukova reference (LPK)",
+            "COMMENTS" => "Comments", "NIOD" => "Nivkh parallels", "EXT" => "External parallels"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Chukchee-Kamchatkan etymology", "NIODNUM" => "Nivkh-Yukaghir etymology"
+          }.freeze,
+          reflexes: {
+            "CHU" => %w[ckt Chukchee].freeze, "KOR" => %w[kpy Koryak].freeze,
+            "ALU" => %w[alr Alutor].freeze
+          }.freeze
+        }.freeze,
+        # P104-3 (CHUKCHEE). Labels: itelet.inf; body fields follow its
+        # field_list (the unaliased ICOST/WCOST columns ride nowhere).
+        # ITE (Napana Itelmen) mints itl; Kovran/Stebnitski variants and
+        # Dybowski's extinct Western/Southern Kamchadal records stay
+        # body-only (no codes exist). PRNUM crosslinks into kamet.
+        "starling-itelet" => {
+          dbf: "itelet.dbf", language: "itl-pro",
+          title: "Itelmen etymology (O. Mudrak; subordinate to the Chukchee-Kamchatkan database; " \
+                 "StarLing)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "ITE" => "Itelmen (Napana)", "ITRUSL" => "Itelmen (Kovran)",
+            "STBIT" => "Itelmen (Stebnitski)", "ITEMEA" => "Itelmen meaning",
+            "WIT" => "Western Kamchadal", "WITMEA" => "West Kamchadal meaning",
+            "WITMEP" => "West Kamchadal meaning (Polish)", "SIT" => "Southern Kamchadal",
+            "SITMEA" => "South Kamchadal meaning (Latin)",
+            "SITMEP" => "South Kamchadal meaning (Polish)", "VOL" => "Volodin 1976 (IL)",
+            "IRSLOV" => "Khaloymova (IRS)", "VZHU" => "Volodin-Zhukova reference",
+            "STEB" => "Stebnitski reference", "WDYB" => "Number in Dybowsky (WK)",
+            "SDYB" => "Number in Dybowsky (SK)", "COMMENTS" => "Comments",
+            "NIOD" => "Nivkh parallels", "EXT" => "External parallels"
+          }.freeze,
+          crosslinks: {
+            "PRNUM" => "Chukchee-Kamchatkan etymology", "NIODNUM" => "Nivkh-Yukaghir etymology"
+          }.freeze,
+          reflexes: { "ITE" => ["itl", "Itelmen (Napana)"].freeze }.freeze
+        }.freeze,
+        # P104-3 (YENISEY). Labels/credit: yenet.inf (Russian glosses).
+        # All five columns are actual single languages and mint. PRNUM
+        # points into the unheld sccet base.
+        "starling-yenet" => {
+          dbf: "yenet.dbf", language: "qfa-yen-pro",
+          title: "Yenisseian etymology (Comparative vocabulary of the Yenisseian languages, " \
+                 "Starostin 1995; StarLing database)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "KET" => "Ket", "SYM" => "Yug", "KOT" => "Kottish", "ARI" => "Arin",
+            "PUM" => "Pumpokol", "NOTES" => "Comments"
+          }.freeze,
+          crosslinks: { "PRNUM" => "Sino-Caucasian etymology" }.freeze,
+          reflexes: {
+            "KET" => %w[ket Ket].freeze, "SYM" => %w[yug Yug].freeze,
+            "KOT" => %w[zko Kottish].freeze, "ARI" => %w[xrn Arin].freeze,
+            "PUM" => %w[xpm Pumpokol].freeze
+          }.freeze
         }.freeze
       }.freeze
 
@@ -365,7 +694,74 @@ module Nabu
          "reconstruction preferred verbatim, Fähnrich–Sardshveladze's where Klimov is silent, " \
          "with Georgian/Megrel/Svan/Laz reflex columns and Nostratic crosslinks (unheld base, " \
          "body lines). This library's first Kartvelian shelf; ccs-pro is minted by the " \
-         "family-code + -pro convention (ISO 639-5 ccs — the bat-pro precedent)."].freeze
+         "family-code + -pro convention (ISO 639-5 ccs — the bat-pro precedent)."].freeze,
+        # P104-3: one honest witness note per new shelf language.
+        ["tut-pro", "witness:starling",
+         "StarLing/Tower of Babel Altaic database (same grant, P104-3): the database version of " \
+         "the Starostin-Dybo-Mudrak Altaic Etymological Dictionary (Brill 2003) — 2,805 " \
+         "Proto-Altaic etymologies with Turkic/Mongolian/Tungus-Manchu/Korean/Japanese branch " \
+         "protoform columns and links into the five branch databases (this catalog holds the " \
+         "Japanese one). The Altaic macro-family is the Moscow school's own hypothesis — " \
+         "expressly an \"individual reconstruction\" under the grant's caveat; tut-pro is minted " \
+         "by the family-code + -pro convention (ISO 639-5 tut — the bat-pro/ccs-pro precedent)."].freeze,
+        ["jpx-pro", "witness:starling",
+         "StarLing/Tower of Babel Japanese database (same grant, P104-3): \"the Japanese part of " \
+         "the Altaic Etymological Dictionary\" — 1,705 Proto-Japanese etymologies, the accent " \
+         "reconstruction based on Starostin 1975 (\"very similar to ... Martin 1987\", the .inf), " \
+         "with Old Japanese (8th c.), Middle Japanese and seven modern dialect/Ryukyuan columns " \
+         "(Tokyo/Kyoto/Kagoshima/Nase/Shuri/Hateruma/Yonakuni); the Old Japanese column joins " \
+         "the ojp lane. jpx-pro is the Wiktionary Proto-Japonic code."].freeze,
+        ["ccn-pro", "witness:starling",
+         "StarLing/Tower of Babel North Caucasian database (same grant, P104-3): the published " \
+         "Nikolayev-Starostin \"A North Caucasian Etymological Dictionary\" (Moscow 1994) — " \
+         "2,327 Proto-North-Caucasian etymologies (often reconstructed at the Proto-East-" \
+         "Caucasian level, the DBINFO notes) with Nakh/Avaro-Andian/Tsezian/Lak/Dargwa/Lezghian/" \
+         "Khinalug/West-Caucasian columns; Lak and Khinalug are actual attested forms and mint " \
+         "reflex rows. The North Caucasian unity is the Moscow school's own claim (the grant's " \
+         "non-consensus caveat rides); ccn-pro is minted by the family-code + -pro convention " \
+         "(ISO 639-5 ccn — the ccs-pro sibling)."].freeze,
+        ["sit-pro", "witness:starling",
+         "StarLing/Tower of Babel Sino-Tibetan database (same grant, P104-3): 2,823 " \
+         "Proto-Sino-Tibetan etymologies \"based on Peiros-Starostin 1996, but containing " \
+         "improved reconstructions\", with Old Chinese (Starostin 1989 reconstruction, " \
+         "Big5-led cells), Classical Tibetan and Burmese transliterations, Kachin/Lushei/" \
+         "Lepcha (Olga Mazo's input) columns and Kiranti + Old Chinese database links " \
+         "(bigchina/kiret deferred). sit-pro is the Wiktionary Proto-Sino-Tibetan code."].freeze,
+        ["dra-pro", "witness:starling",
+         "StarLing/Tower of Babel Dravidian database (same grant, P104-3): 2,171 Proto-Dravidian " \
+         "reconstructions \"generated according to the basic correspondence system as listed in " \
+         "A Dravidian Etymological Dictionary by T. Burrow and M. B. Emeneau, revised and " \
+         "significantly modified by G. Starostin\" (his comparative-Dravidian phonology rides " \
+         "the .inf), with South-Dravidian/Telugu/Kolami-Gadba/Gondi-Kui/North-Dravidian branch " \
+         "links and a minting Brahui column. dra-pro is the Wiktionary Proto-Dravidian code."].freeze,
+        ["qfa-cka-pro", "witness:starling",
+         "StarLing/Tower of Babel Chukchee-Kamchatkan database (same grant, P104-3): O. Mudrak's " \
+         "family-head database — 1,099 Proto-Chukchee-Kamchatkan reconstructions with " \
+         "Chukchee-Koryak and Itelmen branch protoform columns linking into the two subordinate " \
+         "bases (both held), Nivkh parallels, and Russian glosses (upstream: \"no English " \
+         "translation is available yet\"). qfa-cka-pro follows Wiktionary's qfa-cka family code " \
+         "(Chukotko-Kamchatkan has no ISO 639-5 code)."].freeze,
+        ["qfa-chk-pro", "witness:starling",
+         "StarLing/Tower of Babel Chukchee-Koryak database (same grant, P104-3): O. Mudrak's " \
+         "subordinate branch base — 2,281 Chukchee-Koryak (Chukotkan) reconstructions with " \
+         "Chukchee/Koryak/Palana/Alutor columns (ckt/kpy/alr mint; Palana is a Koryak variety " \
+         "without a code) and per-source reference columns (Muravyeva, Bogoraz, Zhukova …). " \
+         "qfa-chk is coined in Wiktionary's qfa- style — neither ISO 639-5 nor Wiktionary names " \
+         "the Chukotkan branch."].freeze,
+        ["itl-pro", "witness:starling",
+         "StarLing/Tower of Babel Itelmen database (same grant, P104-3): O. Mudrak's subordinate " \
+         "branch base — 1,673 Proto-Itelmen reconstructions with Napana/Kovran/Stebnitski " \
+         "Itelmen columns (itl mints) and Dybowski's records of the extinct Western and " \
+         "Southern Kamchadal (with Latin and Polish glosses — body-only, no codes exist). " \
+         "itl-pro is a pro stage on the itl anchor (the gmq:pro shape: the proto of the " \
+         "Kamchatkan branch, whose sole survivor is Itelmen)."].freeze,
+        ["qfa-yen-pro", "witness:starling",
+         "StarLing/Tower of Babel Yenisseian database (same grant, P104-3): the comparative " \
+         "vocabulary published as Starostin 1995 — 1,059 Proto-Yenisseian reconstructions with " \
+         "Ket/Yug/Kottish/Arin/Pumpokol columns (all five mint; Yug is treated \"as a separate " \
+         "language rather than just a Ket dialect\", the .inf) and Sino-Caucasian links (unheld " \
+         "base, body lines); Russian glosses. qfa-yen-pro is the Wiktionary Proto-Yeniseian " \
+         "code."].freeze
       ].freeze
 
       def self.manifest
@@ -383,11 +779,12 @@ module Nabu
         [Nabu::Adapter::HttpProbeTarget.new(
           label: "IE.exe", zip_url: MANIFEST.upstream_url, metadata_url: nil,
           state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
-        ),
-         Nabu::Adapter::HttpProbeTarget.new(
-           label: "KART.exe", zip_url: KART_URL, metadata_url: nil,
-           state_subdir: KART_SUBDIR, state_file: Nabu::ZipFetch::STATE_FILE
-         )]
+        )] + FOLLOW_UP_PACKAGES.map do |subdir, url|
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: File.basename(url), zip_url: url, metadata_url: nil,
+            state_subdir: subdir, state_file: Nabu::ZipFetch::STATE_FILE
+          )
+        end
       end
 
       # [lang_code, kind, body] rows for the language-notes rider.
@@ -424,36 +821,41 @@ module Nabu
         raise Nabu::ParseError, "starling: #{document_ref.id}: #{e.message}"
       end
 
-      # Two packages, two ZipFetch states (P46-6): IE.exe maps onto the
-      # workdir root exactly as before (existing live trees keep their
-      # layout), declaring keep: on the kart/ subdir so its sweep never
-      # reads the sibling package as an upstream deletion; KART.exe lands
-      # in kart/ with its own state + attic (the sl-lexica subdir posture).
+      # Eight packages, eight ZipFetch states (P46-6, generalized P104-3):
+      # IE.exe maps onto the workdir root exactly as before (existing live
+      # trees keep their layout), declaring keep: on every follow-up
+      # subdir so its sweep never reads a sibling package as an upstream
+      # deletion; each follow-up lands in its own subdir with its own
+      # state + attic (the sl-lexica subdir posture).
       def fetch(workdir, progress: nil, force: false)
-        kart_dir = File.join(workdir, KART_SUBDIR)
         ie = Nabu::ZipFetch.sync!(
-          url: manifest.upstream_url, dir: workdir, keep: [KART_SUBDIR],
+          url: manifest.upstream_url, dir: workdir, keep: FOLLOW_UP_PACKAGES.keys,
           attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress,
           guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
         )
-        kart = Nabu::ZipFetch.sync!(
-          url: KART_URL, dir: kart_dir,
-          attic_dir: File.join(workdir, ATTIC_DIRNAME, KART_SUBDIR), progress: progress,
-          guard: ->(doomed) { guard_mass_deletion!(kart_dir, doomed, force: force) }
-        )
-        FetchReport.new(sha: ie.sha, fetched_at: Time.now, notes: fetch_notes(ie, kart),
-                        repos: { manifest.upstream_url => ie.sha, KART_URL => kart.sha })
+        results = FOLLOW_UP_PACKAGES.to_h do |subdir, url|
+          dir = File.join(workdir, subdir)
+          [url, Nabu::ZipFetch.sync!(
+            url: url, dir: dir,
+            attic_dir: File.join(workdir, ATTIC_DIRNAME, subdir), progress: progress,
+            guard: ->(doomed) { guard_mass_deletion!(dir, doomed, force: force) }
+          )]
+        end
+        FetchReport.new(sha: ie.sha, fetched_at: Time.now,
+                        notes: fetch_notes({ manifest.upstream_url => ie }.merge(results)),
+                        repos: { manifest.upstream_url => ie.sha }
+                          .merge(results.transform_values(&:sha)))
       rescue ZipFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "starling fetch failed into #{workdir}: #{e.message}"
       end
 
       private
 
-      def fetch_notes(ie_result, kart_result)
-        notes = []
-        notes << "IE.exe unchanged (304)" if ie_result.not_modified
-        notes << "KART.exe unchanged (304)" if kart_result.not_modified
-        notes << attic_notes(ie_result.atticked + kart_result.atticked)
+      def fetch_notes(results_by_url)
+        notes = results_by_url.filter_map do |url, result|
+          "#{File.basename(url)} unchanged (304)" if result.not_modified
+        end
+        notes << attic_notes(results_by_url.values.sum([], &:atticked))
         notes.compact!
         notes.empty? ? nil : notes.join("; ")
       end
@@ -524,7 +926,10 @@ module Nabu
         end
         lines += base.fetch(:crosslinks).filter_map do |field, label|
           number = record[field].to_s.strip
-          "#{label}: ##{number}" unless number.empty? || number == "0"
+          # A crosslink line needs a real number: dBase numeric cells can
+          # overflow to the "****" sentinel (P104-3 census: four dravet
+          # link cells, three of them on #1) — those mint no line.
+          "#{label}: ##{number}" if number.match?(/\A\d+\z/) && number != "0"
         end
         lines << note if note
         Nabu::Normalize.nfc(lines.empty? ? fallback : lines.join("\n"))

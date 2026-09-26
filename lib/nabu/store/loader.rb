@@ -27,6 +27,19 @@ module Nabu
       def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0, collided: 0)
         super
       end
+
+      # Field-wise sum (P104-4): a source with a secondary dictionary lane
+      # records ONE run whose counts cover both loads — document- and
+      # entry-grained fates merge here for the run row, never for the
+      # per-shape reports the Outcome keeps separate.
+      def +(other)
+        self.class.new(
+          added: added + other.added, updated: updated + other.updated,
+          skipped: skipped + other.skipped, withdrawn: withdrawn + other.withdrawn,
+          errored: errored + other.errored, skipped_by_rule: skipped_by_rule + other.skipped_by_rule,
+          collided: collided + other.collided
+        )
+      end
     end
 
     # Persists adapter output into the catalog with the idempotency /

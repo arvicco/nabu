@@ -23,3 +23,21 @@ files:
     url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
     whole: true
     trim: none (ddb-hybrid c.epist.lat;;10 — empty volume segment, kept whole)
+  # -- P104-3: the DCLP lane (copied 2026-09-26 byte-verbatim from the box's
+  # canonical clone; same idp.data repo, TM-sharded DCLP/ tree; README §P104-3) --
+  - path: DCLP/63/62952.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/63/62952.xml
+    whole: true
+    trim: none (dclp 62952, o.claud;1;190 — Vergil Aeneid ostracon, lat, restart-block lb; kept whole)
+  - path: DCLP/65/64388.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/65/64388.xml
+    whole: true
+    trim: none (dclp 64388, p.harr;1;98 — grc medical recipe, two textparts; kept whole)
+  - path: DCLP/806/805566.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/806/805566.xml
+    whole: true
+    trim: none (dclp 805566, tm;;805566 — grc curse text, break="no" wraps; kept whole)
+  - path: DCLP/317/316777.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/317/316777.xml
+    whole: true
+    trim: none (dclp 316777 — cop metadata-only stub, SELF-CLOSED edition div; pins the discover skip)

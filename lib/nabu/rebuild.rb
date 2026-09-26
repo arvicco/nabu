@@ -187,7 +187,7 @@ module Nabu
       # (their metadata_json is f(canonical)), so it regenerates here too.
       progress&.stage("facets", eta: corpus_eta(ledger, "facets"))
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
-        Store::FacetBuilder.rebuild!(catalog: db)
+        Store::FacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
       # The kind axis (P99-2 — №R-63) projects FROM the facet rows just
       # re-minted, so it rides directly behind FacetBuilder; nil config
@@ -325,6 +325,14 @@ module Nabu
           workdir: workdir_for(entry.slug), full: true,
           on_document: progress&.method(:load_tick)
         )
+        # P104-4: the declared secondary dictionary lane replays under the
+        # same run, exactly as it syncs — db/ stays f(canonical) with the
+        # glossary shelf included. The Outcome's report covers both shapes
+        # (the run row and the quarantine baseline see one combined count,
+        # matching what a sync of the same source records).
+        lane_report = replay_dictionary_lane(entry, db, ledger, source, progress, profile)
+        report += lane_report if lane_report
+        report
       end
       # Quarantine delta vs the ledger baseline, then advance it (P18-7: the
       # baseline is recorded at every ok sync/rebuild; the finding compares
@@ -373,6 +381,22 @@ module Nabu
         Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: stage.to_s,
                                             seconds: profile.corpus_total(stage), rows: indexed, at: at)
       end
+    end
+
+    # P104-4: the rebuild half of the secondary dictionary lane — the
+    # same DictionaryLoader#load_from the sync path runs, with the
+    # rebuild's profile threaded in so the lane's parse/insert wall time
+    # folds into this source's component buckets. nil for every
+    # lane-less source.
+    def replay_dictionary_lane(entry, db, ledger, source, progress, profile)
+      lane = entry.adapter_class.dictionary_lane
+      return nil if lane.nil?
+
+      Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
+                                  language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG),
+                                  profile: profile)
+                             .load_from(lane, workdir: workdir_for(entry.slug), full: true,
+                                              on_document: progress&.method(:load_tick))
     end
 
     # Same content-kind routing as SyncRunner (P11-4/P19-1/P24-1,

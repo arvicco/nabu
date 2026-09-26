@@ -37,6 +37,10 @@
 #     from cheap discover ids without parsing
 #   - urns are unique across the whole discover set
 #   - urns are stable across two independent discover+parse passes
+#   - a declared secondary dictionary lane (P104-4, Adapter.dictionary_lane)
+#     round-trips DictionaryDocuments — same source id, unique ref ids and
+#     (dictionary, entry_id) pairs, stable across two passes; no-op for
+#     lane-less adapters
 module AdapterConformance
   # Hook defaults: flunk with instructions rather than NoMethodError.
   def conformance_adapter
@@ -198,7 +202,64 @@ module AdapterConformance
                  "or shared state makes rebuilds nondeterministic"
   end
 
+  # P104-4 (Q81): an adapter that declares a secondary dictionary lane
+  # (Adapter.dictionary_lane) is conformance-checked for BOTH shapes — the
+  # passage checks above stay untouched, and the lane's dictionary output
+  # is held to the DictionaryLoader's contract here: refs of this source,
+  # unique ref ids, DictionaryDocuments with entries, and (slug, entry_id)
+  # unique across the whole lane discover set (the loader's upsert key).
+  # A lane-less adapter passes through untouched (the
+  # conformance_expected_source_id nil pattern — no skip, no check).
+  def test_conformance_dictionary_lane_round_trip
+    lane = conformance_adapter.class.dictionary_lane
+    return if lane.nil?
+
+    refs = lane.discover(conformance_workdir).to_a
+    refute_empty refs, "a declared dictionary lane must discover at least one dictionary file " \
+                       "from #{conformance_workdir} — cut a gloss fixture"
+    entry_keys = []
+    refs.each do |ref|
+      assert_kind_of Nabu::DocumentRef, ref
+      assert_equal conformance_adapter.manifest.id, ref.source_id,
+                   "lane ref #{ref.id.inspect}: dictionaries belong to the SAME source as the passages"
+      document = lane.parse(ref)
+      assert_kind_of Nabu::DictionaryDocument, document
+      refute_empty document.entries, "lane document #{document.slug.inspect} parsed to zero entries"
+      document.entries.each do |entry|
+        assert_kind_of Nabu::DictionaryEntry, entry
+        entry_keys << [document.slug, entry.entry_id]
+      end
+    end
+    assert_empty duplicates(refs.map(&:id)), "duplicate lane ref ids across the discover set"
+    assert_empty duplicates(entry_keys),
+                 "duplicate (dictionary, entry_id) pairs across the lane discover set — " \
+                 "the DictionaryLoader upserts on exactly that key"
+  end
+
+  # The lane's stability contract, mirroring the passage one: two
+  # independent discover+parse passes mint identical dictionary slugs,
+  # entry ids AND content hashes, or replayed shelves become artifacts of
+  # which pass ran.
+  def test_conformance_dictionary_lane_is_stable_across_independent_parses
+    return if conformance_adapter.class.dictionary_lane.nil?
+
+    first = dictionary_lane_snapshot
+    second = dictionary_lane_snapshot
+    assert_equal first, second,
+                 "dictionary-lane slugs, entry ids and content hashes must be identical across " \
+                 "two independent discover+parse passes"
+  end
+
   private
+
+  def dictionary_lane_snapshot
+    lane = conformance_adapter.class.dictionary_lane
+    lane.discover(conformance_workdir).map do |ref|
+      document = lane.parse(ref)
+      [document.slug, document.language,
+       document.entries.map { |entry| [entry.entry_id, Nabu::Store::ContentHash.dictionary_entry(entry)] }]
+    end
+  end
 
   def each_parsed_document(adapter)
     refs = adapter.discover(conformance_workdir).to_a

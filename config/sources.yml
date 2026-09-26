@@ -362,6 +362,12 @@ papyri-ddbdp:
   wired: true   # P5-1 minting fix + owner sign-off 2026-07-04: 61,347 docs / 920,766 passages; 9,354 quarantines audited honest (text-less stubs)
   # idp.data updates continuously (born-digital editing platform), but a
   # multi-GB clone/re-sync is an owner decision, not a scheduled one.
+  # P104-3: the DCLP literary tree of the SAME clone is a second document
+  # family of THIS source (urn:nabu:dclp:<dclp-idno>; walk extension, not a
+  # sibling row — one upstream repo is one canonical asset; rationale in the
+  # adapter header). Lands at the next re-parse: ~2,245 docs / ~179,783
+  # passages (grc/lat/cop/egy-Egyd; 12,571 metadata-only stubs skip at
+  # discover, 5 defective files quarantine honestly; census 2026-09-26).
   sync_policy: manual
   # P16-4: trigram fragment index (search --fuzzy), DOCUMENTARY scope — the
   # owner-approved 250–270 MB line (intertext design §4). Papyrus lines
@@ -913,6 +919,17 @@ starling:
                    # etymologies, ccs-pro) lands at the NEXT owner-fired
                    # `bin/nabu sync starling`; eyeball `nabu define '*abed-'`
                    # (Klimov credit + GRU/MEG/SVA/LAZ reflex rows).
+                   # P104-3 (Q84) QUEUE: six further packages (ALTAIC/CAUC/
+                   # SINTIB/DRAV/CHUKCHEE/YENISEY.exe → altaic/ cauc/ sintib/
+                   # drav/ chukchee/ yenisey/ subdirs, ~8.7 MB total) add nine
+                   # shelves at the NEXT owner-fired sync: altet 2,805 (tut-pro)
+                   # + japet 1,705 (jpx-pro) + caucet 2,327 (ccn-pro) + stibet
+                   # 2,823 (sit-pro) + dravet 2,171 (dra-pro) + kamet 1,099
+                   # (qfa-cka-pro) + chuket 2,281 (qfa-chk-pro) + itelet 1,673
+                   # (itl-pro) + yenet 1,059 (qfa-yen-pro) = 17,943 entries /
+                   # ~9,584 reflex rows (dry-parsed at full scale). Eyeball
+                   # `nabu define '*èbà'` (AED credit), `nabu etym 'aʔt'`
+                   # (Ket → yenet walk).
   # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
