@@ -58,6 +58,25 @@ stop_names:
   - "清流"   # clear stream / the "pure" faction
   - "小山"   # small hill
   - "文昌"   # the literature god (dominant reading; the Hainan place loses)
+  # kanripo × chgis review round 5 (round-4 board top-30, 2026-09-25;
+  # owner-ratified 2026-09-26, all as recommended). Same class + three
+  # dominant-reading judgments (金城/安平/玉山) and one wrong-identity
+  # case: 曲江's corpus reading is Chang'an's Qujiang pond while the
+  # CHGIS row is the Guangdong county — every link a wrong identity.
+  - "力所"   # "what one's strength allows"
+  - "王居"   # the king's residence
+  - "大言"   # big words, boasting
+  - "玉皇"   # the Jade Emperor
+  - "桃源"   # the Peach-Blossom Spring trope
+  - "竹林"   # bamboo grove (the Seven Sages)
+  - "白露"   # the White Dew solar term
+  - "五斗"   # five pecks (五斗米)
+  - "七星"   # the Seven Stars / Dipper
+  - "洪水"   # flood waters
+  - "曲江"   # Chang'an's Qujiang pond vs the Guangdong county row
+  - "金城"   # the impregnable-walls idiom (金城湯池)
+  - "安平"   # peace and calm
+  - "玉山"   # the 玉山傾倒 figure
 
 # Ceiling exemptions (№R-67, owner 2026-09-18): ruled genuinely-
 # geographic names the derived frequency ceiling must not swallow.
