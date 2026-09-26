@@ -56,6 +56,39 @@ module Store
       assert_equal 1, counts[:documents]
     end
 
+    # P104-1 (Q77): the koordinaten1 findspot pair — the WGS84 lane the
+    # rundata precedent opened (migration 027) finally reads EDH's own
+    # column (79,488 of 82,450 rows filled at the 2026-09-26 census).
+    def test_findspot_coordinates_ride_the_axes
+      make_document("urn:nabu:edh:hd000001")
+      build!
+      row = timeline_for("urn:nabu:edh:hd000001")
+      assert_in_delta 40.8471577, row.fetch(:place_lat)
+      assert_in_delta 14.0550756, row.fetch(:place_lon)
+    end
+
+    def test_malformed_or_lone_coordinates_mint_nothing
+      with_csv_row("hd_nr" => "HD900007", "fo_antik" => "Roma",
+                   "koordinaten1" => "41.895466") do |dir|
+        make_document("urn:nabu:edh:hd900007")
+        build!(canonical_dir: dir)
+        row = timeline_for("urn:nabu:edh:hd900007")
+        assert_nil row.fetch(:place_lat), "a lone coordinate is not a point — never guessed"
+        assert_nil row.fetch(:place_lon)
+      end
+    end
+
+    def test_coordinates_alone_place_a_document
+      with_csv_row("hd_nr" => "HD900008", "koordinaten1" => "30.578611,34.817778") do |dir|
+        make_document("urn:nabu:edh:hd900008")
+        counts = build!(canonical_dir: dir)
+        row = timeline_for("urn:nabu:edh:hd900008")
+        assert_in_delta 30.578611, row.fetch(:place_lat)
+        assert_nil row.fetch(:place_name)
+        assert_equal 1, counts[:documents]
+      end
+    end
+
     def test_modern_findspot_and_geonames_fall_back_when_no_ancient_place
       make_document("urn:nabu:edh:hd080825")
       build!
@@ -152,7 +185,8 @@ module Store
       assert_operator summary.total, :>=, 1
     end
 
-    HEADERS = %w[hd_nr fo_antik fo_modern pl_ancient_loc1 geo_id1 dat_jahr_a dat_jahr_e].freeze
+    HEADERS = %w[hd_nr fo_antik fo_modern pl_ancient_loc1 koordinaten1 geo_id1
+                 dat_jahr_a dat_jahr_e].freeze
 
     private
 
