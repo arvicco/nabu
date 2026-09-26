@@ -173,7 +173,10 @@ sources:
     script: {posture: mixed, note: "gaiji variant characters ride annotations"}
   cbeta:
     lect: {posture: codemap, note: lzh → zho/lit}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the header byline's dynasty seat
+        (3,163 of 3,707 headers censused 2026-09-26) bands via period_bands.yml through
+        MetadataDates :dynasty_band — precision `era`, an attributed translation-era claim,
+        never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing"}
     places: {posture: unplaced}
     script: {posture: implied}
   suttacentral:

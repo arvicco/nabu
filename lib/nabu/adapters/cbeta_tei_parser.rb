@@ -88,6 +88,41 @@ module Nabu
       Unit = Data.define(:citation, :text, :juan, :gaiji, :notes)
       private_constant :Unit
 
+      # A role-suffixed byline token: 譯 translated, 造/撰/述/說 authored,
+      # 集/輯/編/錄/記 compiled, 註/疏 commented. census: 3,163 spaced
+      # bylines over 3,707 headers, 2026-09-26.
+      ROLE_SUFFIX = /[譯造撰述說集輯編錄著記註疏]\z/
+      # "奉詔譯"/"奉制譯" — translated by imperial decree; the decree tail
+      # is ceremony, not name.
+      DECREE_TAIL = /(?:奉[[:space:]]*[詔制])?譯\z/
+      # 失譯 "translator lost" / 闕譯 "translation attribution missing" —
+      # upstream's own no-attribution markers (census: 135 + 7 lone
+      # headers, 2026-09-26): a claim of absence, never a name.
+      NO_ATTRIBUTION = %w[失譯 闕譯].freeze
+
+      # The structural attribution split (P104-1). Tokens are whitespace-
+      # separated (CBETA's own header convention); the final role-suffixed
+      # token is the acting person(s), the dynasty seat is the short bare
+      # token before it (an Indian master's "…菩薩造" is itself
+      # role-suffixed and never mistaken for a seat; title strings like
+      # 天竺三藏 run longer than any censused seat). Returns
+      # {dynasty:, translator:}, either absent — no seat, no claim.
+      def self.byline_attribution(author)
+        tokens = author.split(/[[:space:]]+/).reject(&:empty?)
+        role_index = tokens.rindex { |token| token.match?(ROLE_SUFFIX) }
+        return {} if role_index.nil?
+
+        seats = tokens[0...role_index].grep_v(ROLE_SUFFIX)
+        dynasty = seats.find { |token| token.length <= 3 }
+        translator = nil
+        role = tokens[role_index]
+        if role.end_with?("譯") && !NO_ATTRIBUTION.include?(role)
+          name = role.sub(DECREE_TAIL, "")
+          translator = name unless name.empty?
+        end
+        { dynasty: dynasty, translator: translator }.compact
+      end
+
       def parse(source, urn:, canon:, title: nil, canonical_path: nil)
         path = resolve_canonical_path(source, canonical_path)
         extraction = extract(source, path: path, canon: canon)
@@ -152,7 +187,30 @@ module Nabu
         metadata["canon"] = extraction.canon if extraction.canon
         metadata["vol"] = extraction.vol if extraction.vol
         metadata["no"] = extraction.no if extraction.no
+        merge_byline(metadata, extraction.author)
         metadata
+      end
+
+      # The header byline harvest (P104-1, №R-70 grade 2): the teiHeader
+      # <author> carries CBETA's own attribution ("後秦 佛陀耶舍共竺佛念譯")
+      # — verbatim in "author", the structural split in "dynasty"/
+      # "translator" plus matching facets (raw = the whole byline). The
+      # dynasty seat feeds the MetadataDates :dynasty_band era lane; an
+      # unruled seat there mints no date, so the split can stay purely
+      # structural here.
+      def merge_byline(metadata, author)
+        return if author.nil? || author.empty?
+
+        metadata["author"] = author
+        attribution = self.class.byline_attribution(author)
+        facets = {}
+        %i[dynasty translator].each do |part|
+          value = attribution[part] or next
+
+          metadata[part.to_s] = value
+          facets[part.to_s] = { "value" => value, "raw" => author }
+        end
+        metadata["facets"] = facets unless facets.empty?
       end
 
       def unit_annotations(unit)
@@ -177,16 +235,17 @@ module Nabu
         DROPPED_ELEMENTS = %w[note rdg mulu].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        Result = Data.define(:units, :title, :witnesses, :canon, :vol, :no)
+        Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no)
 
-        attr_reader :title, :witnesses, :canon, :vol, :no
+        attr_reader :title, :author, :witnesses, :canon, :vol, :no
 
         def initialize(reader:, path:, canon:)
           @reader = reader
           @path = path
           @expected_canon = canon
           @title = nil
-          @capture = nil            # header text sink (:title, :idno, :witness, :availability)
+          @author = nil
+          @capture = nil            # header text sink (:title, :author, :idno, :witness, :availability)
           @availability_text = +""
           @in_availability = false
           @witnesses = []
@@ -208,7 +267,7 @@ module Nabu
           end
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
-          Result.new(units: @units, title: @title, witnesses: @witnesses,
+          Result.new(units: @units, title: @title, author: @author, witnesses: @witnesses,
                      canon: @idno["canon"], vol: @idno["vol"], no: @idno["no"])
         end
 
@@ -272,6 +331,10 @@ module Nabu
           when "title"
             @capture = :title if @title.nil? && node.attribute("level") == "m" &&
                                  node.attribute("xml:lang") == "zh-Hant"
+          when "author"
+            # The titleStmt byline (first only — the header's own
+            # attribution seat; P104-1).
+            @capture = :author if @author.nil? && !node.empty_element?
           when "idno" then @idno_type = node.attribute("type")
           when "witness" then @capture = :witness
           when "availability" then @in_availability = true unless node.empty_element?
@@ -289,6 +352,10 @@ module Nabu
           case @capture
           when :title
             @title = value.strip
+            @capture = nil
+          when :author
+            author = Nabu::Normalize.nfc(value.strip)
+            @author = author unless author.empty?
             @capture = nil
           when :witness
             @witnesses << value.strip
