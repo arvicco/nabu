@@ -50,6 +50,29 @@ module Site
       %w[code passages millions].each { |k| assert first.key?(k), "each top_languages row needs #{k}" }
     end
 
+    # P105 (owner defect 2026-09-26: the /languages/ table rendered
+    # "ko | ko" and "cmn | cmn"): the table's Language column reads the
+    # hand-curated language_notes.yml with a bare-code Liquid fallback,
+    # so a growth wave that reshuffles census.top_languages silently
+    # exposes uncovered codes as their own names. The notes file's own
+    # header states the covenant ("cover every code that can enter
+    # top_languages") — this is its guard: coverage is total, and every
+    # note is a real "Name — gloss" line, never a placeholder.
+    def test_every_headline_language_carries_a_curated_note
+      census = YAML.safe_load_file(File.join(DATA_DIR, "census.yml"))
+      notes = YAML.safe_load_file(File.join(DATA_DIR, "language_notes.yml"))
+      census.fetch("top_languages").each do |row|
+        code = row.fetch("code")
+        note = notes[code].to_s
+        refute note.strip.empty?,
+               "language_notes.yml lacks #{code} — the /languages/ table would render " \
+               "\"#{code} | #{code}\" (the silent Liquid fallback)"
+        assert_includes note, " — ", "#{code}'s note must be a 'Name — gloss' line, got: #{note.inspect}"
+        refute_equal code, note.split(" — ").first.strip.downcase,
+                     "#{code}'s note must NAME the language, not echo the code"
+      end
+    end
+
     def test_generated_files_carry_the_do_not_hand_edit_marker
       %w[desks.yml census.yml dates.yml kinds.yml].each do |name|
         first_line = File.open(File.join(DATA_DIR, name), &:readline)
