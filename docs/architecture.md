@@ -622,6 +622,26 @@ can never flood full-text search. The passage-shaped conformance suite
 cannot apply; the lexica adapter test mirrors its checks for the dictionary
 shape (manifest, round-trip, id uniqueness/stability, NFC).
 
+**The secondary dictionary lane (P104-4).** `content_kind` is a closed
+single-valued enum and stays the PRIMARY routing — but a passages source
+whose canonical tree ALSO carries dictionary-shaped content (ORACC's
+per-project `gloss-<lang>.json` glossaries, the pilot) declares
+`Adapter.dictionary_lane` beside the other capability flags
+(`reflex_bearing?`, `reference_edges?`, …). The lane is a
+dictionary-shaped sub-adapter — an `Adapter` subclass implementing only
+`#discover` (one `DocumentRef` per dictionary file) and `#parse`
+(→ `DictionaryDocument`) — so `Store::DictionaryLoader#load_from` drives
+it unchanged: attic rediscovery, per-file quarantine, the withdrawal
+sweep, entry upsert semantics. SyncRunner and Rebuild both run it right
+AFTER the primary load, inside the same run row (the run's counts are the
+field-wise sum of both reports; the sync Outcome keeps them separate so
+document- and entry-grained counts never blur), and the shared
+conformance suite checks a lane-bearing adapter for BOTH shapes. Widening
+`content_kind` to a set was rejected: every existing routing conditional
+(index inertness, deviation rules, loader construction) reads a single
+kind, and a second primary kind would fork all of them; the lane instead
+adds one post-load step at the two existing routing points.
+
 **Storage: catalog tables, by migration.** Entries are first-class
 derived-from-canonical data with the same idempotency/revision/withdrawal
 semantics as documents — upsert on (dictionary, entry_id), skip on equal

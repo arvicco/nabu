@@ -797,6 +797,60 @@ class SyncRunnerTest < Minitest::Test
                  "a dictionary source indexes no passages (its index work is the reflex closure)"
   end
 
+  # --- the secondary dictionary lane (P104-4, Q81) --------------------------
+
+  # A passages source with a declared dictionary lane loads BOTH shapes
+  # under ONE run: the primary report stays document-grained, the lane
+  # report entry-grained, and the run row records their sum.
+  def test_lane_bearing_source_loads_both_shapes_under_one_run
+    write_lane_source
+    runner = make_runner(registry(entry("lane-src", LaneTestAdapter, wired: true)))
+
+    outcome = runner.sync("lane-src", parse_only: true)
+
+    refute outcome.aborted?
+    assert_equal 1, outcome.load_report.added, "the primary report stays document-grained"
+    assert_equal 2, outcome.dictionary_lane.added, "the lane report is entry-grained"
+    assert_equal 1, Nabu::Store::Document.count
+    assert_equal %w[test-lexicon], Nabu::Store::Dictionary.select_map(:slug)
+    assert_equal 2, Nabu::Store::DictionaryEntry.count
+    run = Nabu::Store::Run.order(:id).last
+    assert_equal "succeeded", run.status
+    assert_equal 3, run.added, "ONE run row carries both shapes' counts (the same-run contract)"
+    assert_empty outcome.warnings
+  end
+
+  def test_lane_re_sync_is_idempotent
+    write_lane_source
+    runner = make_runner(registry(entry("lane-src", LaneTestAdapter, wired: true)))
+
+    runner.sync("lane-src", parse_only: true)
+    outcome = runner.sync("lane-src", parse_only: true)
+
+    assert_equal 0, outcome.dictionary_lane.added
+    assert_equal 2, outcome.dictionary_lane.skipped
+    assert_equal 0, outcome.dictionary_lane.withdrawn
+    assert_equal 2, Nabu::Store::DictionaryEntry.count
+    assert_equal [1], Nabu::Store::DictionaryEntry.select_map(:revision).uniq
+  end
+
+  # No lane files in the cone = no dictionaries, no error; and a lane-less
+  # source's Outcome carries nil (the CLI tail stays silent for it).
+  def test_lane_absent_cone_is_honest_and_lane_less_sources_report_nil
+    dir = File.join(@canonical, "lane-src")
+    FileUtils.mkdir_p(dir)
+    File.write(File.join(dir, "one.txt"), "Iliad\nμῆνιν\n")
+    runner = make_runner(registry(entry("lane-src", LaneTestAdapter, wired: true)))
+
+    outcome = runner.sync("lane-src", parse_only: true)
+    assert_equal 0, outcome.dictionary_lane.added, "no gloss files = an empty lane report, not an error"
+    assert_equal 0, Nabu::Store::Dictionary.count
+
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    plain = make_runner(registry(entry("breaker", BreakerAdapter, wired: true))).sync("breaker")
+    assert_nil plain.dictionary_lane, "a lane-less source declares no lane report at all"
+  end
+
   # --- sync_all policy filtering ------------------------------------------
 
   def test_sync_all_runs_only_enabled_auto_sources
@@ -985,6 +1039,15 @@ class SyncRunnerTest < Minitest::Test
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count
 
   def last_run_status = Nabu::Store::Run.order(:id).last&.status
+
+  # One document + a two-entry glossary under canonical/lane-src (the
+  # P104-4 lane rig — LaneTestAdapter reads both from the same cone).
+  def write_lane_source
+    dir = File.join(@canonical, "lane-src")
+    FileUtils.mkdir_p(dir)
+    File.write(File.join(dir, "one.txt"), "Iliad\nμῆνιν\n")
+    File.write(File.join(dir, "glossary.tsv"), "g1\tμῆνις\twrath\ng2\tθεά\tgoddess\n")
+  end
 
   def seed_baseline(slug, baseline:, anchor:)
     @ledger[:quarantine_baselines].insert(
