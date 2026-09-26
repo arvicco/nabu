@@ -325,7 +325,10 @@ sources:
   cantigas:
     kind: {posture: unclassified}
     lect: {posture: identity, note: roa-opt IS medieval Galician-Portuguese}
-    dating: {posture: undatable}
+    dating: {posture: undatable, note: "P104-1 checked: Littera's pages carry
+        NO per-song date — the c. 1200–1350 corpus span is a fact about the
+        tradition, not a per-document claim; per-author floruit dating would
+        be a curated overlay, not extraction"}
     places: {posture: unplaced}
     script: {posture: implied}
   otdo:

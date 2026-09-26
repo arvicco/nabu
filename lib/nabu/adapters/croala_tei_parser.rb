@@ -311,7 +311,10 @@ module Nabu
             "date_period" => @header[:period],
             "date_precision" => @header[:precision],
             "place" => flatten(@header[:place]),
-            "genre" => (@header[:genre].empty? ? nil : @header[:genre])
+            "genre" => (@header[:genre].empty? ? nil : @header[:genre]),
+            # P104-1 (Q77): upstream's own two-level genre taxonomy as a
+            # facet — one row per term (the IIP plural-values shape).
+            "facets" => (@header[:genre].empty? ? nil : { "genre" => { "values" => @header[:genre] } })
           }.compact
         end
 
