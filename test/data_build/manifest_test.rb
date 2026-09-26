@@ -50,7 +50,9 @@ class DataBuildManifestTest < Minitest::Test
                  nabu.dig("derivation", "fingerprint")
     assert_equal({ "kind" => "none" }, nabu["anchoring"])
     assert_equal "gold-derived", nabu["tier"]
-    assert_equal({ "rows" => 3 }, nabu["counts"], "2 forms rows + 1 languages row; the bib counts 0")
+    assert_equal({ "rows" => 2 }, nabu["counts"],
+                 "counts describe the DATA resources only (P103-5): the 1-row languages.csv " \
+                 "sidecar and the bib no longer inflate the headline figure")
   end
 
   def test_an_evaluation_rides_the_nabu_block_as_eval_and_is_absent_when_nil

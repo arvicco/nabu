@@ -152,7 +152,8 @@ class DataBuildAozoraGaijiBuilderTest < Minitest::Test
       %w[descriptions.csv ids.csv languages.csv sources.bib datapackage.json README.md].each do |name|
         assert File.file?(File.join(out_dir, name)), "expected #{name}"
       end
-      assert_equal 827, summary.rows, "582 census + 244 ids + 1 languages row"
+      assert_equal 826, summary.rows,
+                   "582 census + 244 ids — the languages sidecar never counts (P103-5)"
 
       languages = CSV.read(File.join(out_dir, "languages.csv"))
       assert_equal %w[jpn Japanese nucl1643 jpn], languages[1]

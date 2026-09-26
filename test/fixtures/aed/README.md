@@ -57,3 +57,15 @@ is the authoritative one and is quoted in the adapter manifest.
   but this shelf mints `urn:nabu:dict:aed:tla159410` from the upstream
   `@xml:id` verbatim, so the etymology producer must restore the `tla`
   prefix for the edge to land here.
+
+## The `_hiero.xml` fixtures (P103-2)
+
+Two whole per-text stand-off files, cut byte-verbatim from the blobless
+clone (`git -C canonical/aed show HEAD:files/<id>_hiero.xml`),
+retrieved 2026-09-25: `22PCZ45OYNES7I2IKO73TV327M` (a glyph-bearing
+run — `<w corresp="src:tla<token-id>">` elements carrying plain
+U+13000-block codepoints, some inside `<unclear>`) and
+`2235T5FM5VFNLFTZN7P3MXW46U` (an all-`<unclear>` damaged scene, zero
+glyphs — the honest empty case). They drive the
+Store::HieroPostingsBuilder walk tests; refresh recipe = the same
+`git show` against the current cone.

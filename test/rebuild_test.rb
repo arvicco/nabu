@@ -146,7 +146,7 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "place apply", "facets", "kind axis", "lect journal",
+    assert_equal ["corpus", "timeline", "place apply", "facets", "kind axis", "hiero postings", "lect journal",
                   "lect facets", "artifact scripts", "source stats", "fulltext index", "links",
                   "analyze"],
                  stages

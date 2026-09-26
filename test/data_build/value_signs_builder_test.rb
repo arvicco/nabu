@@ -89,7 +89,8 @@ class ValueSignsBuilderTest < Minitest::Test
       assert_equal CONCORDANCES_COLUMNS, concordances.headers
       assert_equal 52, concordances.size, "52 print-list tokens hand-counted (11 on AK, 13 on ŠEŠ)"
 
-      assert_equal 60 + 18 + 52 + 1, summary.rows, "value + sign + concordance rows + 1 languages row"
+      assert_equal 60 + 18 + 52, summary.rows,
+                   "value + sign + concordance rows — the languages sidecar never counts (P103-5)"
       languages = CSV.read(File.join(out_dir, "languages.csv"))
       assert_equal %w[ID Name Glottocode ISO639P3code], languages[0]
       assert_equal %w[sux Sumerian sume1241 sux], languages[1]
@@ -206,7 +207,7 @@ class ValueSignsBuilderTest < Minitest::Test
       assert_equal "sux-value-signs", manifest["name"]
       assert_equal "gold", manifest.dig("nabu", "tier"), "the sign list is the field's hand-curated registry"
       assert_equal "none", manifest.dig("nabu", "anchoring", "kind")
-      assert_equal 131, manifest.dig("nabu", "counts", "rows")
+      assert_equal 130, manifest.dig("nabu", "counts", "rows")
       assert_equal(%w[value-signs signs concordances languages sources],
                    manifest["resources"].map { |resource| resource["name"] })
       manifest["resources"].first(3).each do |resource|
