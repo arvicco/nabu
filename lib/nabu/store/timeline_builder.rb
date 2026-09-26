@@ -287,6 +287,7 @@ module Nabu
           not_before: timeline[:not_before], not_after: timeline[:not_after],
           precision: timeline[:precision], date_raw: timeline[:date_raw],
           place_name: timeline[:place_name], place_ref: timeline[:place_ref],
+          place_lat: timeline[:place_lat], place_lon: timeline[:place_lon],
           axis_source: source
         )
       end

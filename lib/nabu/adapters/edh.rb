@@ -88,10 +88,13 @@ module Nabu
       CSVS = { "text" => "edh_data_text.csv", "pers" => "edh_data_pers.csv" }.freeze
 
       # The text-CSV columns the parser embeds (facet raws + annotation
-      # riders, survey §4.3/§4.6). Everything else stays canonical-only.
+      # riders, survey §4.3/§4.6; the P104-1/Q77 thematic codes —
+      # soziales/religion/militaer/erhaltung — joined under №R-70's
+      # mine-everything rule). Everything else stays canonical-only.
       CSV_FIELDS = %w[
         i_gattung provinz material denkmaltyp tm_nr metrik fundjahr
         aufbewahrung fundstelle people_uris godot_uris literatur
+        soziales religion militaer erhaltung
       ].freeze
 
       # pers-CSV column → persons-annotation key (survey §4.5; the German
