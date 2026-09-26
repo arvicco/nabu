@@ -101,6 +101,23 @@ class CantigasTest < Minitest::Test
                  "the Fontes manuscritas sigla, nbsp folded to plain space"
   end
 
+  # P104-1 (Q77): genre + formal features project as facets. Manuscript
+  # sigla stay metadata-only — near-unique per song, they are future
+  # witness/collation links, not a facet.
+  def test_cantiga_1_genre_and_form_ride_as_facets
+    facets = parse(1).metadata["facets"]
+    assert_equal({ "value" => "Lai", "raw" => "Lai" }, facets["genre"])
+    assert_equal({ "values" => ["Mestria", "Cobras singulares", "Finda"] }, facets["form"],
+                 "one facet row per formal feature — the IIP plural-values shape")
+    refute facets.key?("manuscripts")
+  end
+
+  def test_cantiga_600_genre_facet_keeps_the_sidebar_raw
+    assert_equal({ "value" => "Amigo", "raw" => "Cantiga de Amigo" },
+                 parse(600).metadata.dig("facets", "genre"),
+                 "value is the normalized bare genre; raw keeps the sidebar wrapper verbatim")
+  end
+
   # --- cantiga 600 (D. Dinis, Amigo — the with-notes variant) ----------------
 
   def test_cantiga_600_parses_the_with_notes_variant_cleanly

@@ -168,6 +168,16 @@ class GlauxTest < Minitest::Test
     assert_equal "Perseus", metadata["source"]
   end
 
+  # P104-1 (Q77): the metadata.txt GENRE_STANDARD column projects as a
+  # facet. DIALECT deliberately does NOT facet here: a Greek-dialect lect
+  # story needs a lects-registry ruling (registry notes carry philology)
+  # — it stays metadata-only until that decision lands.
+  def test_genre_rides_as_a_facet_and_dialect_stays_metadata
+    facets = adapter.parse(ref_for(EPIGRAM_URN)).metadata["facets"]
+    assert_equal({ "value" => "Lyric poetry" }, facets["genre"])
+    refute facets.key?("dialect")
+  end
+
   def test_glaux_is_registered_for_the_composition_class_signed_bounds_shape
     assert_equal :signed_bounds_keys,
                  Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["glaux"],

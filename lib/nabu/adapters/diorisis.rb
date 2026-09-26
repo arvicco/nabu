@@ -250,10 +250,18 @@ module Nabu
       end
 
       # Everything discover peeked, minus the raw title/author pair that
-      # became the document title.
+      # became the document title. P104-1 (Q77): the xenoData genre/
+      # subgenre also project as facets (all 767 docs carry both);
+      # creation_date rides the timeline separately (MetadataDates
+      # :signed_year_key, composition class).
       def document_metadata(header)
-        header.except("title", "author")
-              .merge("author" => header["author"], "work" => header["title"]).compact
+        metadata = header.except("title", "author")
+                         .merge("author" => header["author"], "work" => header["title"]).compact
+        facets = %w[genre subgenre].filter_map do |facet|
+          [facet, { "value" => metadata[facet] }] if metadata[facet]
+        end.to_h
+        metadata["facets"] = facets unless facets.empty?
+        metadata
       end
 
       # The teiHeader subtree, streamed: Nokogiri::XML::Reader walks the file
