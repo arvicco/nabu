@@ -215,11 +215,25 @@ module Nabu
       # value = the XML's own term (fallback: the CSV raw), raw = the CSV
       # code/term verbatim (`?` certainty survives). A facet with neither is
       # absent — honest sparsity, never a blank row.
+      #
+      # P104-1 (Q77, №R-70): the CSV-only thematic columns join — social
+      # context (soziales, 8,958 rows), religion (15,612), military
+      # (8,958) and preservation condition (erhaltung, 2,432), censused
+      # 2026-09-26. They exist only in the CSV (nil header key), and EDH
+      # ships no decode table with the dumps, so upstream's own letter
+      # codes ("CDEG", "a?", "J" = ja) ride verbatim as value AND raw —
+      # never a guessed translation. Deliberately skipped: dekor (one
+      # constant value "J" — a boolean, not a facet) and geographie
+      # (rides canonical, faceting parked with the paleography columns).
       FACET_SOURCES = {
         "genre" => [:genre, "i_gattung"],
         "province" => [:province, "provinz"],
         "material" => [:material, "material"],
-        "object_type" => [:object_type, "denkmaltyp"]
+        "object_type" => [:object_type, "denkmaltyp"],
+        "social" => [nil, "soziales"],
+        "religion" => [nil, "religion"],
+        "military" => [nil, "militaer"],
+        "condition" => [nil, "erhaltung"]
       }.freeze
       private_constant :FACET_SOURCES
 

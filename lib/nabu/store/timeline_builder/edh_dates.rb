@@ -31,7 +31,14 @@ module Nabu
       #   fallback; place_ref = the Pleiades URL (pl_ancient_loc1) where
       #   present, else the GeoNames URL (geo_id1) — the same gazetteers the
       #   HGV/ORACC refs point at, verbatim strings, no gazetteer resolution
-      #   (the §1.4 stance). Coordinates stay canonical-only (survey v2).
+      #   (the §1.4 stance).
+      # - place_lat/place_lon = the koordinaten1 WGS84 findspot pair
+      #   ("40.8471577,14.0550756" — 79,488 of 82,450 rows at the 2026-09-26
+      #   census), both-or-nothing, riding the rundata coordinates lane
+      #   (migration 027). P104-1 (Q77) reverses the survey-v2
+      #   canonical-only stance — №R-70 rules all metadata mined; the
+      #   secondary koordinaten2 pair stays canonical-only (a second locus
+      #   claim on 838 rows, no axis column pair to honestly carry it).
       #
       # Undated-and-unplaced rows contribute nothing (an absence, never a
       # row); rows whose document is not in the catalog (text-less stubs
@@ -87,14 +94,25 @@ module Nabu
             return :invalid
           end
           place_name, place_ref = extract_place(row)
-          return nil if not_before.nil? && not_after.nil? && place_name.nil?
+          lat, lon = coordinates(row)
+          return nil if not_before.nil? && not_after.nil? && place_name.nil? && lat.nil?
 
           {
             not_before: not_before, not_after: not_after,
             precision: precision(not_before, not_after),
             date_raw: date_raw(row, not_before, not_after),
-            place_name: place_name, place_ref: place_ref
+            place_name: place_name, place_ref: place_ref,
+            place_lat: lat, place_lon: lon
           }
+        end
+
+        # The koordinaten1 "lat,lon" pair → floats, both-or-nothing (a lone
+        # or malformed coordinate is not a point — never guessed).
+        COORDINATE_PAIR = /\A(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\z/
+        def coordinates(row)
+          match = COORDINATE_PAIR.match(row["koordinaten1"].to_s.strip) or return [nil, nil]
+
+          [Float(match[1]), Float(match[2])]
         end
 
         def precision(not_before, not_after)

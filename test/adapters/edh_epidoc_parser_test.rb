@@ -205,6 +205,26 @@ class EdhEpidocParserTest < Minitest::Test
     assert_equal "epitaph", facets.dig("genre", "value")
   end
 
+  # P104-1 (Q77): the CSV-only thematic columns — soziales/religion/
+  # militaer/erhaltung, upstream's own letter codes verbatim (values from
+  # the 2026-09-26 canonical census; EDH publishes no decode table with
+  # the dumps, so the codes ARE the honest facet values).
+  def test_thematic_csv_codes_facet_verbatim
+    csv = { "soziales" => "CDEG", "religion" => "a", "militaer" => "J", "erhaltung" => "F" }
+    facets = parse1(csv: csv).metadata["facets"]
+    assert_equal({ "value" => "CDEG", "raw" => "CDEG" }, facets["social"])
+    assert_equal({ "value" => "a", "raw" => "a" }, facets["religion"])
+    assert_equal({ "value" => "J", "raw" => "J" }, facets["military"])
+    assert_equal({ "value" => "F", "raw" => "F" }, facets["condition"])
+  end
+
+  def test_absent_thematic_codes_mint_no_facets
+    facets = parse1(csv: { "i_gattung" => "titsep" }).metadata["facets"]
+    %w[social religion military condition].each do |facet|
+      refute facets.key?(facet), "#{facet}: honest sparsity, never a blank row"
+    end
+  end
+
   # --- persons + annotation riders -------------------------------------------
 
   def test_persons_and_crosswalk_ids_ride_in_document_metadata

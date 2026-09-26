@@ -324,6 +324,114 @@ module Store
                    "an unregistered slug is a no-op"
     end
 
+    # -- P104-1 (Q77, №R-70): the metadata-drain shapes -----------------------
+    # Values verbatim from the 2026-09-26 live-catalog census. №R-70 rules
+    # ALL metadata mined for the axes, and grades composition-era
+    # (author-era) dating as its OWN honestly-labeled class: those rows
+    # carry date_class "composition"; artifact/typed dates keep NULL.
+
+    def test_metadata_dates_fornsvenska_compact_bounds_mint_typed_envelopes
+      seed_metadata_doc("fornsvenska", "urn:nabu:fornsvenska:aldre-vastgotalagen",
+                        { "date" => "1280–1290", "datefrom" => "12800101",
+                          "dateto" => "12901231" })
+      seed_metadata_doc("fornsvenska", "urn:nabu:fornsvenska:dateless",
+                        { "date" => "medeltida", "datefrom" => "", "dateto" => "" })
+      summary = build!
+      row = timeline_for("urn:nabu:fornsvenska:aldre-vastgotalagen")
+      assert_equal [1280, 1290, "1280–1290"], [row[:not_before], row[:not_after], row[:date_raw]]
+      assert_nil row[:date_class], "an upstream-typed text dating is NOT the composition class"
+      assert_nil timeline_for("urn:nabu:fornsvenska:dateless"),
+                 "empty compact bounds mint nothing — never guessed"
+      assert_equal 1, summary.metadata_dates.fetch("fornsvenska")
+    end
+
+    def test_metadata_dates_disco_author_century_bands_carry_the_composition_class
+      seed_metadata_doc("disco", "urn:nabu:disco:disco0001",
+                        { "author" => "Joseph Aragonés", "birth_century" => "17",
+                          "death_century" => "17", "period" => "15th-17th" })
+      seed_metadata_doc("disco", "urn:nabu:disco:disco0002",
+                        { "birth_century" => "19", "death_century" => "20" })
+      build!
+      row = timeline_for("urn:nabu:disco:disco0001")
+      assert_equal [1601, 1700], [row[:not_before], row[:not_after]],
+                   "the author's own century pair bounds the band — never a midpoint"
+      assert_equal "composition", row[:date_class],
+                   "author-era dating is №R-70 grade 2 — labeled, never passed off as an artifact date"
+      span = timeline_for("urn:nabu:disco:disco0002")
+      assert_equal [1801, 2000], [span[:not_before], span[:not_after]]
+    end
+
+    def test_metadata_dates_diorisis_creation_years_carry_the_composition_class
+      seed_metadata_doc("diorisis", "urn:nabu:diorisis:tlg0001-tlg001",
+                        { "creation_date" => "-245", "genre" => "Poetry" })
+      seed_metadata_doc("diorisis", "urn:nabu:diorisis:undated",
+                        { "genre" => "Oratory" })
+      build!
+      row = timeline_for("urn:nabu:diorisis:tlg0001-tlg001")
+      assert_equal [-245, -245], [row[:not_before], row[:not_after]]
+      assert_equal "-245", row[:date_raw]
+      assert_equal "composition", row[:date_class]
+      assert_nil timeline_for("urn:nabu:diorisis:undated")
+    end
+
+    def test_metadata_dates_glaux_start_end_bounds_carry_the_composition_class
+      seed_metadata_doc("glaux", "urn:nabu:glaux:tlg0001",
+                        { "start_date" => "-300", "end_date" => "-201" })
+      build!
+      row = timeline_for("urn:nabu:glaux:tlg0001")
+      assert_equal [-300, -201], [row[:not_before], row[:not_after]]
+      assert_equal "-300–-201", row[:date_raw]
+      assert_equal "composition", row[:date_class]
+    end
+
+    def test_metadata_dates_croala_rows_join_the_composition_class
+      seed_metadata_doc("croala", "urn:nabu:croala:grauisius-2",
+                        { "date" => "1565-1650" })
+      build!
+      assert_equal "composition", timeline_for("urn:nabu:croala:grauisius-2")[:date_class],
+                   "croala's author-era year ranges were the class's precedent — now labeled"
+    end
+
+    def test_metadata_dates_ogham_place_hash_mints_coordinates_and_logainm_refs
+      seed_metadata_doc("ogham", "urn:nabu:ogham:i-ant-001",
+                        { "layer" => "ogham",
+                          "place" => { "country" => "Northern Ireland", "county" => "Co. Antrim",
+                                       "geo" => "54.8045, -6.1961",
+                                       "logainm" => ["https://www.logainm.ie/ga/61366"],
+                                       "townland" => "Carncome (Carn Coim)" },
+                          "date" => { "text" => "Fifth century" } })
+      seed_metadata_doc("ogham", "urn:nabu:ogham:cai-001",
+                        { "layer" => "ogham",
+                          "place" => { "country" => "England", "county" => "Cornwall",
+                                       "geo" => "50.640058, -4.675453" } })
+      summary = build!
+      row = timeline_for("urn:nabu:ogham:i-ant-001")
+      assert_equal "Carncome (Carn Coim), Co. Antrim, Northern Ireland", row[:place_name],
+                   "townland → county → country, the upstream ladder joined verbatim"
+      assert_in_delta 54.8045, row[:place_lat]
+      assert_in_delta(-6.1961, row[:place_lon])
+      assert_equal "https://www.logainm.ie/ga/61366", row[:place_ref],
+                   "the logainm gazetteer URL rides verbatim (the EDH URL precedent)"
+      assert_nil row[:not_before], "the free-prose ogham dating stays honestly unparsed"
+      no_townland = timeline_for("urn:nabu:ogham:cai-001")
+      assert_equal "Cornwall, England", no_townland[:place_name]
+      assert_equal 2, summary.metadata_dates.fetch("ogham")
+    end
+
+    def test_metadata_dates_menota_orig_place_rides_the_structured_rows
+      seed_metadata_doc("menota", "urn:nabu:menota:am-1056-ix-4to",
+                        { "date" => { "not_before" => 1280, "not_after" => 1310, "raw" => "c. 1300" },
+                          "orig_place" => "Norway",
+                          "repository" => "Den Arnamagnæanske Samling",
+                          "settlement" => "Copenhagen" })
+      build!
+      row = timeline_for("urn:nabu:menota:am-1056-ix-4to")
+      assert_equal [1280, 1310], [row[:not_before], row[:not_after]]
+      assert_equal "Norway", row[:place_name],
+                   "orig_place is the origin claim; repository/settlement (the holding " \
+                   "library, a present location) deliberately never mint — the rundata stance"
+    end
+
     # -- HGV extractor: the five date shapes ----------------------------------
 
     def test_bce_point_is_stored_verbatim
