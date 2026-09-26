@@ -18,7 +18,7 @@ in the repository; this page states the system and the headline holdings.
 
 The library carries this reference as a command: `nabu language CODE`
 explains any code the tools surface — the corpus languages below and the
-803 Wiktionary etymology codes that appear in `etym` cognate lists — on
+{{ census.etym_codes }} etymology codes that appear in `etym` cognate lists — on
 one card: name, family, curated historical context, live holdings, the
 [research desks]({{ '/axis/' | relative_url }}) that hold the code, and
 (where the code is a registered anchor) the historical **stage ladder**
@@ -166,12 +166,15 @@ determine a language.
 reference shelf: Liddell-Scott-Jones (Greek, 116,497 entries), Lewis &amp;
 Short (Latin, 51,636), Monier-Williams (Sanskrit, 193,890),
 Bosworth-Toller (Old English, 62,815) — citations resolving into the
-corpora. Seven reconstruction shelves (Proto-Indo-European through
+corpora. The reconstruction shelves (Proto-Indo-European through
 Proto-Slavic, Proto-Germanic, Proto-Italic and their intermediates) carry
 multi-hop etymological chains with per-edge loan flags, joined by
 independent witnesses: IE-CoR's expert-curated cognate sets, LIV-LOD,
-de Vaan's *Etymological Dictionary of Latin*, the five StarLing bases
-(under a written grant), and — since August 2026 — DÉRom's Proto-Romance
+de Vaan's *Etymological Dictionary of Latin*, the fifteen StarLing /
+Tower of Babel bases (under a written grant — the Moscow-school
+apparatus from Pokorny and Vasmer to the Altaic, North Caucasian,
+Sino-Tibetan, Dravidian, Chukchee-Kamchatkan and Yenisseian
+proto-databases), and — since August 2026 — DÉRom's Proto-Romance
 etymons, displaying under their honest `roa:pro` lect. The Slovenian
 historical shelf (139,405 entries), the Celtic Wiktionary extracts, and
 the Tibetan lexica round out the reference floor.

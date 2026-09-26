@@ -21,6 +21,8 @@ san-Latn: Sanskrit (romanized) — GRETIL/SARIT/DCS transliteration and the Vedi
 san: Sanskrit (native script) — the DCS and Devanagari editions
 eng: English — the translation layer, never an original
 de: German — editions, apparatus and translations across the corpus
+ko: Korean — the historical shelf's vernacular hangeul and record lanes
+cmn: Mandarin — the modern half of the classical–modern parallel corpus
 pli: Pali — the segmented Tipiṭaka, aligned to English
 sl: Slovenian (historical) — Dalmatin 1584 onward, plus the Freising Manuscripts
 hit: Hittite — TLHdig at fragment scale beside the gold treebank
