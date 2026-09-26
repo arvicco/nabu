@@ -58,7 +58,7 @@ module Nabu
 
     # The canonical-tree walkers KindBuilder implements; a walk: value
     # outside this set is a config error, not a silent no-op.
-    WALKERS = %w[hgv-keywords].freeze
+    WALKERS = %w[hgv-keywords kr-subclass].freeze
 
     attr_reader :classes, :split, :strip
 

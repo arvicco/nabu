@@ -11,3 +11,8 @@
 :END:
 **** 人物
 ***** 楊筠松
+     :PROPERTIES:
+     :DYNASTY:  唐
+     :FUNCTION: 撰
+     :DATES:    fl. 874 - 888
+     :END:

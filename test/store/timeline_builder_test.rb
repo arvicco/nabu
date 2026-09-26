@@ -90,6 +90,65 @@ module Store
                  "a REGISTER label misfiled as a period mints no date claim"
     end
 
+    # P104-1 (Q77 under №R-70): the seal shape — the Texts Hierarchy
+    # period strings banded through the ruled table (the posture's own
+    # named candidate, served), with the Provenance field riding as the
+    # place name (the HGV place-only precedent; upstream's explicit
+    # "Unknown" mints no place).
+    def test_metadata_dates_seal_periods_band_and_provenance_places
+      seed_metadata_doc("seal", "urn:nabu:seal:6",
+                        { "period" => "Old Babylonian", "provenance" => "Sippar (mod. Tell Abu Ḥabbah)" })
+      seed_metadata_doc("seal", "urn:nabu:seal:7",
+                        { "period" => "Middle Babylonian/Assyrian", "provenance" => "Unknown" })
+      seed_metadata_doc("seal", "urn:nabu:seal:8",
+                        { "period" => "Later Periods (SB, NA, LB)" })
+      summary = build!
+      assert_equal 3, summary.metadata_dates.fetch("seal")
+
+      row = timeline_for("urn:nabu:seal:6")
+      assert_equal(-1900, row[:not_before])
+      assert_equal(-1600, row[:not_after])
+      assert_equal "Old Babylonian", row[:date_raw]
+      assert_equal "Sippar (mod. Tell Abu Ḥabbah)", row[:place_name]
+      assert_equal "seal", row[:axis_source]
+
+      composite = timeline_for("urn:nabu:seal:7")
+      assert_equal(-1400, composite[:not_before])
+      assert_equal(-1000, composite[:not_after], "MB/MA composite = the two bands joined")
+      assert_nil composite[:place_name], "upstream's explicit Unknown is not a findspot"
+
+      later = timeline_for("urn:nabu:seal:8")
+      assert_equal(-1000, later[:not_before])
+      assert_equal 75, later[:not_after], "first millennium through the last dated cuneiform text"
+    end
+
+    # P104-1 (№R-70 grade 2): the cbeta shape — the header byline's
+    # dynasty seat banded through the ruled table as an ERA claim
+    # (precision "era", the distinct honestly-labeled date class; the
+    # verbatim byline rides date_raw). No dynasty in the ruled table
+    # (an Indian master, 失譯 "translator lost") mints nothing.
+    def test_metadata_dates_cbeta_dynasty_bylines_band_as_era_claims
+      seed_metadata_doc("cbeta", "urn:nabu:cbeta:T01n0001",
+                        { "author" => "後秦 佛陀耶舍共竺佛念譯", "dynasty" => "後秦",
+                          "translator" => "佛陀耶舍共竺佛念" })
+      seed_metadata_doc("cbeta", "urn:nabu:cbeta:T30n1579",
+                        { "author" => "唐 玄奘譯", "dynasty" => "唐", "translator" => "玄奘" })
+      seed_metadata_doc("cbeta", "urn:nabu:cbeta:T99n9999", { "author" => "失譯" })
+      summary = build!
+      assert_equal 2, summary.metadata_dates.fetch("cbeta")
+
+      row = timeline_for("urn:nabu:cbeta:T01n0001")
+      assert_equal 384, row[:not_before]
+      assert_equal 417, row[:not_after]
+      assert_equal "era", row[:precision], "№R-70 grade 2: attributed-era dating wears its own label"
+      assert_equal "後秦 佛陀耶舍共竺佛念譯", row[:date_raw]
+
+      tang = timeline_for("urn:nabu:cbeta:T30n1579")
+      assert_equal 618, tang[:not_before]
+      assert_equal 907, tang[:not_after]
+      assert_nil timeline_for("urn:nabu:cbeta:T99n9999"), "no dynasty seat — no claim invented"
+    end
+
     # P81-1: the ebl era ladder — the exact lanes P62-0 deliberately left
     # out, now in at YEAR grain: a Seleucid-era date object converts
     # exactly (SE 1 begins Nisanu, spring 311 BCE, so SE Y spans the two
