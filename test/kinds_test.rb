@@ -341,6 +341,26 @@ class KindsTest < Minitest::Test
     assert_equal ["literary/wisdom/proverb"], shipped.normalize("etcsl", "6.1.01")
   end
 
+  # P104-1: the kanripo KR-Catalog 部類 graduation — the coarse P100-1
+  # class rule becomes per-subclass folds fed by the kr-subclass walker
+  # ("KR1a 易類" values: code + the catalog's own label).
+  def test_shipped_kanripo_folds_the_subclass_taxonomy
+    shipped = shipped_kinds
+    assert_equal "kr-subclass", shipped.walk_for("kanripo")
+    assert_equal ["scripture"], shipped.normalize("kanripo", "KR1a 易類")
+    assert_equal ["lexical"], shipped.normalize("kanripo", "KR1j 小學類")
+    assert_equal ["historiography/chronicle"], shipped.normalize("kanripo", "KR2b 編年類")
+    assert_equal ["administrative"], shipped.normalize("kanripo", "KR2f 詔令奏議類")
+    assert_equal %w[scholarly/astronomy scholarly/mathematics],
+                 shipped.normalize("kanripo", "KR3f 天文算法類").sort
+    assert_equal ["divination"], shipped.normalize("kanripo", "KR3g 術數類")
+    assert_equal ["literary/narrative"], shipped.normalize("kanripo", "KR3l 小說家類")
+    assert_equal ["literary"], shipped.normalize("kanripo", "KR4d 別集類-宋")
+    assert_equal ["scripture"], shipped.normalize("kanripo", "KR5c 洞神部")
+    assert_equal ["historiography"], shipped.normalize("kanripo", "KR2a"),
+                 "a bare code (label missing from the frozen catalog) folds via the class fallback"
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),

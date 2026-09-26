@@ -64,7 +64,8 @@ module Nabu
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :corph, :riig, :tla_hf, :aes, :ceipom, :isicily, :open_etruscan,
-                            :lexlep, :tir, :iip, :cdli, :rundata, :openiti, :metadata_dates,
+                            :lexlep, :tir, :iip, :cdli, :rundata, :openiti,
+                            :kanripo, :kanripo_undated, :metadata_dates,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
@@ -86,6 +87,7 @@ module Nabu
                        iip: 0, iip_undated: 0, iip_invalid: 0,
                        cdli: 0, cdli_undated: 0, cdli_invalid: 0,
                        rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
+                       kanripo: 0, kanripo_undated: 0,
                        metadata_dates: {}, nikh_entries: {}, **)
           super
         end
@@ -93,7 +95,7 @@ module Nabu
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
             tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
-            rundata + openiti + metadata_dates.values.sum +
+            rundata + openiti + kanripo + metadata_dates.values.sum +
             # the leaf-grain lane's DOCUMENT contribution: envelopes minted
             # for documents the metadata lane left undated (runs are
             # passage grain and never double-count a document)
@@ -128,6 +130,7 @@ module Nabu
         cdli = CdliDates.build(catalog: catalog, canonical_dir: canonical_dir)
         rundata = RundataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         openiti = OpenitiDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        kanripo = KanripoDates.build(catalog: catalog, canonical_dir: canonical_dir)
         metadata = MetadataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         nikh = NikhEntryDates.build(catalog: catalog)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
@@ -157,7 +160,8 @@ module Nabu
                     cdli: cdli[:documents], cdli_undated: cdli[:undated],
                     cdli_invalid: cdli[:invalid],
                     rundata: rundata[:documents], rundata_undated: rundata[:undated],
-                    openiti: openiti[:documents], openiti_undated: openiti[:undated])
+                    openiti: openiti[:documents], openiti_undated: openiti[:undated],
+                    kanripo: kanripo[:documents], kanripo_undated: kanripo[:undated])
       end
 
       # -- HGV (papyri) --------------------------------------------------------
@@ -307,6 +311,7 @@ require_relative "timeline_builder/oracc_dates"
 require_relative "timeline_builder/chronicle_annals"
 require_relative "timeline_builder/coptic_scriptorium_dates"
 require_relative "timeline_builder/edh_dates"
+require_relative "timeline_builder/kanripo_dates"
 require_relative "timeline_builder/metadata_dates"
 require_relative "timeline_builder/nikh_entry_dates"
 require_relative "timeline_builder/damaskini_dates"

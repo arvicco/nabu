@@ -168,7 +168,11 @@ sources:
         re-encoding of classical text, never traditional-script witness"}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P104-1 (№R-70): KanripoDates ladders the KR-Catalog —
+        the entry's own clean :DATE: year (typed, precision year), else the first 人物
+        person's :DATES: life/floruit span, else the :DYNASTY: attribution banded via
+        period_bands.yml sinological rows (both precision `era`, the grade-2 class);
+        era-name years (乾隆十三年) and compound seats honestly mint nothing"}
     places: {posture: unplaced}
     script: {posture: mixed, note: "gaiji variant characters ride annotations"}
   cbeta:
