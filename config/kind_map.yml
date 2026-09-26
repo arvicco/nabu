@@ -395,14 +395,55 @@ sources:
       "Reference": scholarly
       # left unmapped (genuinely mixed/ambiguous, the decision list):
       # Kabbalah · Chasidut · Jewish Thought · Second Temple
-  kanripo:            # the sibu 四部 class (KR1–KR5)
-    metadata: class
-    map:
-      "KR1": scripture                           # 經部 — the canonical classics (715)
-      "KR2": historiography                      # 史部 — the histories (578)
-      "KR3": literary/wisdom                     # 子部 — the Masters (864; coarse fold, gate-flagged)
-      "KR4": literary                            # 集部 — belles-lettres collections (1,344; №R-66)
-      "KR5": scripture                           # 道部 — the Daoist canon (1,621)
+  kanripo:            # census: 5,122 docs over 54 held subclasses, 2026-09-26 —
+    walk: kr-subclass # P104-1: the KR-Catalog 部類 taxonomy, fine grain. The KR id's
+    #                   4-char prefix IS the subclass; the walker feeds "KR1a 易類"
+    #                   (code + the catalog's own label). The P100-1 coarse class rule
+    #                   graduates to per-subclass folds; the bare class prefixes stay
+    #                   as ruled fallbacks for anything the frozen catalog leaves bare.
+    prefix_map:
+      # KR1 經部 — the canonical classics and their exegesis
+      "KR1i": scholarly                          # 樂類 18 — music treatises
+      "KR1j": lexical                            # 小學類 79 — philology, dictionaries, phonology
+      "KR1": scripture                           # 易 170 · 書 59 · 詩 66 · 禮 91 · 春秋 121 ·
+      #   孝經 13 · 五經總義 31 · 四書 67 — the classics with their commentary tradition
+      # KR2 史部 — the histories and the state's paper
+      "KR2b": historiography/chronicle           # 編年類 40 — annalistic chronicles
+      "KR2f": administrative                     # 詔令奏議類 41 — edicts and memorials
+      "KR2j": scholarly                          # 時令類 2 — seasonal-ordinance treatises
+      "KR2k": scholarly                          # 地理類 152 — geography
+      "KR2l": administrative                     # 職官類 22 — offices and their regulation
+      "KR2m": administrative                     # 政書類 57 — institutional compendia
+      "KR2n": scholarly                          # 目錄類 47 — annotated bibliographies:
+      #   scholarship of the book, not an administrative list artifact
+      "KR2o": scholarly                          # 史評類 24 — historical criticism
+      "KR2": historiography                      # 正史 38 · 編年 above · 紀事本末 23 · 別史 23 ·
+      #   雜史 22 · 傳記 61 · 史鈔 3 · 載記 23 — the histories proper
+      # KR3 子部 — the Masters and the technical arts
+      "KR3b": scholarly                          # 兵家類 20 — military treatises
+      "KR3d": scholarly                          # 農家類 10 — agriculture
+      "KR3e": scholarly/medicine                 # 醫家類 100
+      "KR3f": [scholarly/astronomy, scholarly/mathematics]   # 天文算法類 53 — the two
+      #   sciences share the subclass; ruled split (the cdli Prayer/Incantation shape)
+      "KR3g": divination                         # 術數類 46 — numerology, divination arts
+      "KR3h": scholarly                          # 藝術類 78 — treatises on the arts
+      "KR3i": scholarly                          # 譜錄類 50 — registers and monographs on things
+      "KR3k": scholarly                          # 類書類 63 — encyclopedias
+      "KR3l": literary/narrative                 # 小說家類 128 — the fiction shelf
+      "KR3": literary/wisdom                     # 儒家 117 · 法家 8 · 雜家 191 — the Masters'
+      #   philosophical texts under the №R-66 wisdom head
+      # KR4 集部 — belles-lettres
+      "KR4a": literary/poetry                    # 楚辭類 7
+      "KR4i": scholarly                          # 詩文評類 64 — poetry criticism
+      "KR4j": literary/poetry                    # 詞曲類 87 — ci and qu verse
+      "KR4": literary                            # 別集 漢六朝 19 · 唐 112 · 宋 578 · 明 243 ·
+      #   清 69 · 總集 165 — individual and collected œuvres (№R-66 bare head)
+      # KR5 道部 — the Daoist canon (all subclasses are canon divisions)
+      "KR5": scripture                           # 洞真 327 · 洞玄 318 · 洞神 373 · 太玄 119 ·
+      #   太平 68 · 太清 25 · 正一 242 · 續道藏 57 · 清代道教文獻 92
+      "KR6": scripture                           # the Buddhist canon class — excluded from
+      #   the fetch cone by doctrine (CBETA is the Buddhist shelf), ruled here so a future
+      #   widening never lands unmapped
   cbeta:              # the whole source IS the Buddhist canon (Taishō + Xuzangjing)
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:

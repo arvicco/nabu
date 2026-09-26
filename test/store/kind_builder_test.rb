@@ -45,6 +45,11 @@ module Store
           walk: hgv-keywords
           map:
             "Quittung": legal
+        kanripo:
+          walk: kr-subclass
+          prefix_map:
+            "KR1a": legal
+            "KR2": historiography
     YAML
 
     def setup
@@ -190,6 +195,35 @@ module Store
       Nabu::Store::KindBuilder.rebuild!(catalog: @db, kinds: @kinds)
       refute(kind_rows.any? { |row| row[1] == "legal" && row[2] == "Quittung" },
              "no canonical_dir → the walk contributes nothing, never an error")
+    end
+
+    # P104-1: the kr-subclass walker — the KR id's 4-char prefix IS the
+    # KR-Catalog's 部類 subclass, so the walk reads held urns from the
+    # catalog and only the subclass LABELS from canonical (KR-Catalog/KR
+    # header lines); raw carries "KR1a 易類" — code + upstream label.
+    def test_kr_subclass_walk_projects_fine_genre_from_urns
+      kanripo = Nabu::Store::Source.create(slug: "kanripo", name: "K", adapter_class: "X",
+                                           license_class: "attribution")
+      changes = doc(kanripo, "urn:nabu:kanripo:KR1a0149")
+      history = doc(kanripo, "urn:nabu:kanripo:KR2a0001")
+      gone = doc(kanripo, "urn:nabu:kanripo:KR1a0170", withdrawn: true)
+      Nabu::Store::KindBuilder.rebuild!(
+        catalog: @db, kinds: @kinds,
+        canonical_dir: File.dirname(Nabu::TestSupport.fixtures("kanripo"))
+      )
+      assert_includes kind_rows, [changes.id, "legal", "KR1a 易類"]
+      assert_includes kind_rows, [history.id, "historiography", "KR2a 正史類"],
+                      "the bare class prefix is the ruled fallback for unlisted subclasses"
+      refute(kind_rows.any? { |row| row[0] == gone.id }, "withdrawn documents never row")
+    end
+
+    def test_kr_subclass_walk_without_canonical_dir_skips_honestly
+      kanripo = Nabu::Store::Source.create(slug: "kanripo", name: "K", adapter_class: "X",
+                                           license_class: "attribution")
+      doc(kanripo, "urn:nabu:kanripo:KR1a0149")
+      Nabu::Store::KindBuilder.rebuild!(catalog: @db, kinds: @kinds)
+      refute(kind_rows.any? { |row| row[2].to_s.start_with?("KR1a") },
+             "no canonical_dir → no labels → the walk contributes nothing")
     end
 
     # P100-1: metadata rules read documents.metadata_json directly —
