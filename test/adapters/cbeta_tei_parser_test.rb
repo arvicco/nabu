@@ -45,6 +45,58 @@ class CbetaTeiParserTest < Minitest::Test
     assert_equal %w[T 85 2884], document.metadata.values_at("canon", "vol", "no")
   end
 
+  # --- the header byline harvest (P104-1, №R-70 grade 2) ---------------------
+  #
+  # The teiHeader <author> carries CBETA's own attribution byline —
+  # "<dynasty seat> <person(s)><role char>" ("後秦 佛陀耶舍共竺佛念譯",
+  # "明 洪恩輯") — which previously flowed nowhere: the dating posture sat
+  # `undatable` while every text carried a translation-era claim.
+
+  def test_header_author_byline_mints_dynasty_and_translator
+    metadata = parse(T01).metadata
+    assert_equal "後秦 佛陀耶舍共竺佛念譯", metadata["author"], "the byline rides verbatim"
+    assert_equal "後秦", metadata["dynasty"]
+    assert_equal "佛陀耶舍共竺佛念", metadata["translator"]
+    assert_equal({ "value" => "後秦", "raw" => "後秦 佛陀耶舍共竺佛念譯" }, metadata["facets"]["dynasty"])
+    assert_equal "佛陀耶舍共竺佛念", metadata["facets"]["translator"]["value"]
+  end
+
+  def test_header_author_compiler_byline_mints_dynasty_without_translator
+    metadata = parse(X55).metadata
+    assert_equal "明 洪恩輯", metadata["author"]
+    assert_equal "明", metadata["dynasty"]
+    assert_nil metadata["translator"], "輯 is a compiler, not a translator"
+    assert_nil metadata["facets"]["translator"]
+    assert_equal "明", metadata["facets"]["dynasty"]["value"]
+  end
+
+  def test_empty_or_absent_header_author_mints_no_attribution
+    [T85, X01].each do |path|
+      metadata = parse(path).metadata
+      assert_nil metadata["author"]
+      assert_nil metadata["dynasty"]
+      assert_nil metadata["facets"], "#{File.basename(path)}: no byline — no claim invented"
+    end
+  end
+
+  # The structural split on censused byline shapes (2026-09-26, whole-
+  # corpus census over 3,707 headers): the dynasty is the short bare
+  # token before the final role-suffixed token — an Indian master's
+  # attribution (…造) is itself role-suffixed and never mistaken for a
+  # seat; a lone 失譯 ("translator lost") claims nothing.
+  def test_byline_attribution_split_shapes
+    split = Nabu::Adapters::CbetaTeiParser.method(:byline_attribution)
+    assert_equal({ dynasty: "陳", translator: "真諦" }, split.call("天親菩薩造 陳 真諦譯"))
+    assert_equal({ dynasty: "唐", translator: "玄奘" }, split.call("唐 玄奘譯"))
+    assert_equal({ dynasty: "宋", translator: "天竺三藏求那跋陀羅" },
+                 split.call("宋 天竺三藏求那跋陀羅譯"))
+    assert_equal "法賢", split.call("宋 法賢奉詔譯")[:translator], "the 奉詔 decree tail strips"
+    assert_empty split.call("失譯")
+    assert_empty split.call("龍樹菩薩造"), "an authored śāstra without a seat claims no era"
+    assert_equal({ dynasty: "日本" }, split.call("日本 圓仁撰"),
+                 "a country seat rides the facet; the band table honestly has no row for it")
+  end
+
   # The in-file grant the gate pins, byte-verbatim (censused identical
   # across all sampled T and X files at upstream 2026.R1).
   def test_the_availability_grant_constant_is_the_censused_sentence
