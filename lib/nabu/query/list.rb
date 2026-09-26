@@ -44,9 +44,13 @@ module Nabu
       # One census row (`nabu list`). +languages+ is the sorted union of live
       # passage languages and dictionary languages; +license_classes+ the
       # sorted effective-class mix.
+      # P105-5a (Q87): +notes+ (urn_notes rows, the owner-notes shelf) and
+      # +lemma_rows+ (tier-silver passage_lemmas, the lemma shelf) keep the
+      # two non-document local shelves from censusing as "empty".
       CensusRow = Data.define(:slug, :docs, :passages, :entries, :languages,
-                              :license_classes, :withdrawn, :retired, :dossiers) do
-        def initialize(dossiers: 0, **rest) = super
+                              :license_classes, :withdrawn, :retired, :dossiers,
+                              :notes, :lemma_rows) do
+        def initialize(dossiers: 0, notes: 0, lemma_rows: 0, **rest) = super
       end
 
       # One source's card (`nabu list SOURCE`). +languages+ maps language →
@@ -126,9 +130,17 @@ module Nabu
       LANGUAGE_ADAPTER = "Nabu::Adapters::LocalLanguage"
       # Its P24-0 twin: the source-dossier shelf holds source_records.
       SOURCE_ADAPTER = "Nabu::Adapters::LocalSource"
+      # The two shelves whose holdings live outside documents/entries/
+      # dossiers (P105-5a): owner notes (urn_notes) and the silver lemma
+      # lane (fulltext passage_lemmas, tier "silver").
+      NOTES_ADAPTER = "Nabu::Adapters::LocalNotes"
+      LEMMAS_ADAPTER = "Nabu::Adapters::LocalLemmas"
 
-      def initialize(catalog:)
+      # +fulltext+ is optional (the lemma shelf's holdings live there);
+      # without it the lemma-row count degrades to 0, honestly.
+      def initialize(catalog:, fulltext: nil)
         @catalog = catalog
+        @fulltext = fulltext
       end
 
       # The content census: one CensusRow per catalog source, slug order.
@@ -145,6 +157,8 @@ module Nabu
             slug: source.fetch(:slug), docs: doc.fetch(:docs), passages: passages.fetch(id, 0),
             entries: entries.fetch(id, 0),
             dossiers: shelf_dossier_count(source),
+            notes: notes_shelf_count(source),
+            lemma_rows: lemma_shelf_count(source),
             languages: ((langs[id] || []) + dictionary_languages(id)).uniq.sort,
             license_classes: licenses.fetch(id, [source.fetch(:license_class)]).sort,
             withdrawn: doc.fetch(:withdrawn), retired: doc.fetch(:retired)
@@ -511,6 +525,26 @@ module Nabu
         return source_record_kinds if source_grain?(source)
 
         {}
+      end
+
+      # The owner-notes shelf's holdings — urn_notes rows (all provenance:
+      # the shelf is the ONE write gateway); 0 for every other source and
+      # on a catalog predating migration 015.
+      def notes_shelf_count(source)
+        return 0 unless source.fetch(:adapter_class) == NOTES_ADAPTER
+        return 0 unless @catalog.table_exists?(:urn_notes)
+
+        @catalog[:urn_notes].count
+      end
+
+      # The lemma shelf's holdings — the tier-silver rows its projection
+      # minted in fulltext (P84-1: silver IS the shelf lane); 0 without a
+      # fulltext handle or its table.
+      def lemma_shelf_count(source)
+        return 0 unless source.fetch(:adapter_class) == LEMMAS_ADAPTER
+        return 0 if @fulltext.nil? || !@fulltext.table_exists?(:passage_lemmas)
+
+        @fulltext[:passage_lemmas].where(tier: "silver").count
       end
 
       def source_dossier_count

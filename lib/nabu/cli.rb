@@ -1566,7 +1566,10 @@ module Nabu
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       require_timeline!(catalog) if from || to
-      query = Nabu::Query::List.new(catalog: catalog)
+      # P105-5a: the lemma shelf's holdings live in fulltext — read-only,
+      # optional (its cell degrades to zero without one).
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true) if File.exist?(config.fulltext_path)
+      query = Nabu::Query::List.new(catalog: catalog, fulltext: fulltext)
       # Bare `list SOURCE --lang X` (P44-r1): with no explicit enumeration
       # flag, --lang IMPLIES the natural mode by the shelf's content kind —
       # a dictionary shelf lists entries, a text shelf documents — and the
@@ -1633,6 +1636,7 @@ module Nabu
       # is not "unknown", it teaches its own on-ramp instead.
       raise Thor::Error, registered_not_held_message(config, catalog, slug) || e.message
     ensure
+      fulltext&.disconnect
       catalog&.disconnect
     end
 
@@ -5876,6 +5880,9 @@ module Nabu
         parts << "docs=#{row.docs}#{" pass=#{row.passages}" if row.passages.positive?}" if row.docs.positive?
         parts << "entries=#{row.entries}" if row.entries.positive?
         parts << "dossiers=#{row.dossiers}" if row.dossiers.positive?
+        # P105-5a: the notes and lemma shelves census their own grains.
+        parts << "notes=#{row.notes}" if row.notes.positive?
+        parts << "lemma-rows=#{row.lemma_rows}" if row.lemma_rows.positive?
         parts << "empty" if parts.empty?
         parts << "langs=#{census_langs(row.languages)}" unless row.languages.empty?
         parts << "license=#{row.license_classes.join(',')}"

@@ -30,6 +30,10 @@ sources:
       set: set                # 35 TEO season/collection sets
       findspot: findspot      # TEO findspot text incl. "Not listed in TEO" (a claim)
       museum_number: museum   # Louvre AE / RS sigla — the museum shelf join
+  local-library:              # census: 62 docs, every manifest multi-language (P105-5b) —
+    fields: #                   only languages[0] becomes documents.language; the trailing
+      languages: language     # claims (ett under 22 eng facsimile editions, xum, xfa…)
+      #                         stay visible as one facet row per code
   coptic-scriptorium:         # census: 482 docs; only dialect was faceted before P104-1
     fields:
       author: author          # Besa · Shenoute · Johannes · anonymous hagiographies …

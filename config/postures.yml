@@ -694,7 +694,11 @@ sources:
     kind: {posture: unclassified}
     # lect declaration retired P64-6 (№4 ruled): the ccmh chu→chu/cro
     # override machine-postures it now (the shadowing rule).
-    dating: {posture: undatable}
+    # P105-5c: the curated witness-dating overlay (Adapters::Ccmh::DATING,
+    # the five codices' paleographic century bands via :bounds_keys) covers
+    # 17/19 docs; the two vitae stay deliberately undated — 9th-c.
+    # compositions on much later unnamed witnesses, the declared coarseness.
+    dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
   imp:

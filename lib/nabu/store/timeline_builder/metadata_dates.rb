@@ -99,6 +99,9 @@ module Nabu
           #                                     not_after + date_raw (+ a string place —
           #                                     the croala mold); dark until now
           "corpus-oudnederlands" => :bounds_keys, # P96 hygiene: same top-level bounds shape
+          "ccmh" => :bounds_keys, # P105-5c: the curated witness-dating overlay (the five
+          #                         codices' paleographic century bands; Adapters::Ccmh::
+          #                         DATING) — the vitae stay declared-undated
           "okhc" => :year_key, # P92-6 (Q64): the per-record integer year — projected
           #                      from the CATALOG's stored metadata, no re-parse of the
           #                      1.2M documents (the whole point of the lane)

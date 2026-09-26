@@ -80,9 +80,10 @@ module Nabu
       # Extract one gospel book (by its div +book_id+) into a Nabu::Document.
       # Raises Nabu::ParseError when the book is absent, yields no verses, or
       # the XML is malformed.
-      def parse(path, book_id:, urn:, language:, title:)
+      def parse(path, book_id:, urn:, language:, title:, metadata: {})
         document = Nabu::Document.new(urn: urn, language: language, title: title,
-                                      canonical_path: File.expand_path(path))
+                                      canonical_path: File.expand_path(path),
+                                      metadata: metadata)
         extract_book(path, book_id, urn, language, document)
         raise ParseError, "#{path}: book #{book_id.inspect} yielded no verses" if document.empty?
 
