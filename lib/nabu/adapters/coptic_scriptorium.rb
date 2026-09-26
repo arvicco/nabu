@@ -107,6 +107,14 @@ module Nabu
         MANIFEST
       end
 
+      # The Trismegistos concordance edges (P104-1 — metadata "related"
+      # carries "tm:<n>" where the TT header states a number).
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        LibraryReferences.new(catalog: catalog, journal: journal, producer: "coptic-scriptorium")
+      end
+
       # Survey §3 verbatim license classes → license_class. nil = no stated
       # terms (the skip rule); nc patterns FIRST (BY-NC contains "BY").
       # Unknown terms are nc: carried restrictively, never guessed open.
@@ -356,6 +364,13 @@ module Nabu
           # are facet-grained by design.
           meta["facets"] = (meta["facets"] || {}).merge("dialect" => { "value" => dialect })
         end
+        # P104-1 (Q77 under №R-70): the header's Trismegistos number →
+        # a "tm:<n>" related edge (the P25-1 scheme rule; the shared
+        # LibraryReferences producer reads metadata "related"), joining
+        # the papyri/elephantine TM key space. Upstream's "none" and any
+        # non-numeric value claim nothing.
+        tm = meta["Trismegistos"].to_s.strip
+        meta["related"] = ["tm:#{tm}"] if tm.match?(/\A\d+\z/)
         Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: document_ref.metadata["title"],
           canonical_path: document_ref.path, metadata: meta,

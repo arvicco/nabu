@@ -277,6 +277,25 @@ class CopticScriptoriumTest < Minitest::Test
     assert_equal "urn:nabu:coptic-scriptorium:nt.mark.sahidica", document.urn
   end
 
+  # P104-1 (Q77 under №R-70): the header's Trismegistos number rode
+  # metadata unminted — now a "tm:<n>" related edge per the P25-1 scheme
+  # rule, joining the papyri/elephantine TM key space; upstream's
+  # "none" (and any non-numeric value) claims nothing.
+  def test_trismegistos_numbers_mint_tm_related_edges
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:besa.food.monbbb" }
+    assert_equal ["tm:108395"], adapter.parse(ref).metadata["related"]
+    unnumbered = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ap.100.monbeg" }
+    refute adapter.parse(unnumbered).metadata.key?("related"),
+           "Trismegistos='none' is upstream's absence — no edge invented"
+  end
+
+  def test_reference_producer_records_under_the_source_name
+    assert_predicate Nabu::Adapters::CopticScriptorium, :reference_edges?
+    producer = Nabu::Adapters::CopticScriptorium.reference_producer(catalog: nil, journal: nil)
+    assert_equal "coptic-scriptorium", producer.producer
+  end
+
   def test_parse_besa_keeps_diplomatic_text_and_mints_norm_derived_search_form
     adapter = conformance_adapter
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:besa.food.monbbb" }
