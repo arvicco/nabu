@@ -385,15 +385,29 @@ module Store
 
     def test_passage_batches_tick_progress_on_rebuild_and_refresh
       doc = make_document(urn: "urn:d:1")
-      make_passage(doc, urn: "urn:d:1:1", text_normalized: "alpha", sequence: 0)
+      rows = (0...Nabu::Store::Indexer::BATCH_SIZE).map do |i|
+        { document_id: doc.id, urn: "urn:d:1:#{i}", sequence: i, language: "grc",
+          text: "alpha", text_normalized: "alpha", content_sha256: "x", revision: 1,
+          withdrawn: false, annotations_json: "{}" }
+      end
+      @catalog[:passages].multi_insert(rows)
       spy = TickSpy.new([])
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, progress: spy)
-      refute_empty spy.ticks, "the batch loop must tick under rebuild"
+      refute_empty spy.ticks, "a full batch must tick under rebuild"
 
       spy = TickSpy.new([])
       Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext,
                                            slug: "s", progress: spy)
-      refute_empty spy.ticks, "the batch loop must tick under the incremental slice"
+      refute_empty spy.ticks, "a full batch must tick under the incremental slice"
+    end
+
+    def test_a_partial_batch_stays_silent
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "alpha", sequence: 0)
+      spy = TickSpy.new([])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, progress: spy)
+      assert_empty spy.ticks, "a small corpus must not chatter (nor stamp passage " \
+                              "counts onto sync's open parse+load stage)"
     end
 
     def test_lemma_table_rebuild_is_idempotent

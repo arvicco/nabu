@@ -749,9 +749,13 @@ module Nabu
       # pre-P81-3 one source-less rows. +slugs+ maps source_id → slug (the
       # source_slugs map) for the source token; nil suppresses the column
       # even against a source-bearing table (no caller does today).
-      # P105-5d (Q87): the loop ticks per batch — cbeta's slice walked
-      # 8.75M passages for ~55 minutes reading as a hang (openiti ~2h);
-      # a silent pass is a defect, not a style choice.
+      # P105-5d (Q87): the loop ticks per FULL batch — cbeta's slice
+      # walked 8.75M passages for ~55 minutes reading as a hang (openiti
+      # ~2h); a silent pass is a defect, not a style choice. Partial
+      # (final) batches deliberately do not tick: a small corpus stays
+      # silent (the non-tty one-close-line contract), and the sync
+      # fallthrough into this full rebuild would otherwise stamp passage
+      # counts onto the still-open parse+load stage.
       def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
@@ -771,7 +775,7 @@ module Nabu
           batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
           lemma_count += rows.size
-          progress&.load_tick(count, 0)
+          progress&.load_tick(count, 0) if batch.size == BATCH_SIZE
         end
         [count, lemma_count, chars]
       end

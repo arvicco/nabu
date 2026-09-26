@@ -35,7 +35,10 @@ class PlaceLinkTest < Minitest::Test
                 names_for: :name_keys.to_proc
     )
     seed_passages
-    Nabu::PlaceMine.new(catalog: @catalog, journal: @journal, gazetteer: "chgis")
+    # Empty stop/allow lists pin the fixture against the shipped hand
+    # stop list (the round-6 清水 lesson in the report test).
+    Nabu::PlaceMine.new(catalog: @catalog, journal: @journal, gazetteer: "chgis",
+                        stop_names: [], allow_names: [])
                    .apply!(source: "kanripo")
   end
 

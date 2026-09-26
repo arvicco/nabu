@@ -38,7 +38,11 @@ class PlaceMineReportTest < Minitest::Test
                 names_for: :name_keys.to_proc
     )
     seed_passages
-    Nabu::PlaceMine.new(catalog: @catalog, journal: @journal, gazetteer: "chgis")
+    # The empty stop/allow lists pin the fixture against the SHIPPED
+    # config/place_stop_names.yml — 清水 joined the real hand stop list
+    # in review round 6, which silently emptied this homonym fixture.
+    Nabu::PlaceMine.new(catalog: @catalog, journal: @journal, gazetteer: "chgis",
+                        stop_names: [], allow_names: [])
                    .apply!(source: "kanripo")
   end
 
