@@ -362,6 +362,12 @@ papyri-ddbdp:
   wired: true   # P5-1 minting fix + owner sign-off 2026-07-04: 61,347 docs / 920,766 passages; 9,354 quarantines audited honest (text-less stubs)
   # idp.data updates continuously (born-digital editing platform), but a
   # multi-GB clone/re-sync is an owner decision, not a scheduled one.
+  # P104-3: the DCLP literary tree of the SAME clone is a second document
+  # family of THIS source (urn:nabu:dclp:<dclp-idno>; walk extension, not a
+  # sibling row — one upstream repo is one canonical asset; rationale in the
+  # adapter header). Lands at the next re-parse: ~2,245 docs / ~179,783
+  # passages (grc/lat/cop/egy-Egyd; 12,571 metadata-only stubs skip at
+  # discover, 5 defective files quarantine honestly; census 2026-09-26).
   sync_policy: manual
   # P16-4: trigram fragment index (search --fuzzy), DOCUMENTARY scope — the
   # owner-approved 250–270 MB line (intertext design §4). Papyrus lines

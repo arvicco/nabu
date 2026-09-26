@@ -19,9 +19,14 @@ module Nabu
     #   (homographs split by pos/etymology_number: и:character:1 / и:conj:2 /
     #   и:pron:3). Ten pairs in the full OCS file STILL collide (боль:noun
     #   x2, видимъ:verb:2 x2 …); those get a positional ":<n>" suffix in
-    #   file order (the 2nd occurrence is ":2"). Stable while upstream file
-    #   order is stable; a reorder is a revision, handled by the loader's
-    #   content-sha semantics.
+    #   file order (the 2nd occurrence is ":2"), and since P104-2 the mint
+    #   bumps past already-minted ids — the positional suffix and an
+    #   etymology_number base share one shape, and the zh 夆/芘 quartets
+    #   collide across the two paths (mint_entry_id below). Records with a
+    #   whitespace-only `word` (wiktextract's "Unsupported titles/…" pages)
+    #   are skipped, never minted (headwordless? below). Stable while
+    #   upstream file order is stable; a reorder is a revision, handled by
+    #   the loader's content-sha semantics.
     # - key_raw: the `word` field verbatim (the Wiktionary page title).
     # - headword: the same, NFC.
     # - headword_folded: Normalize.search_form with the entry language — the
@@ -85,9 +90,11 @@ module Nabu
       end
 
       def entries(path)
-        occurrences = Hash.new(0)
-        each_record(path).map do |record, line_number|
-          build_entry(record, occurrences, path: path, line_number: line_number)
+        minted = { occurrences: Hash.new(0), taken: {} }
+        each_record(path).filter_map do |record, line_number|
+          next if headwordless?(record)
+
+          build_entry(record, minted, path: path, line_number: line_number)
         end
       end
 
@@ -108,11 +115,22 @@ module Nabu
         end
       end
 
-      def build_entry(record, occurrences, path:, line_number:)
+      # P104-2 (Q79): Wiktionary titles MediaWiki cannot represent live
+      # under "Unsupported titles/…" and wiktextract emits them with the
+      # RAW character as `word` — the zh extract's "Unsupported
+      # titles/Space" record (line 53403 of 323,840; the only one in the
+      # 1.1 GB file) carries word=" ". A whitespace-only headword is
+      # unrepresentable in a headword-keyed dictionary (key_raw AND
+      # headword_folded both come out empty), and one such record
+      # quarantined the whole zh shelf on every sync. Skipped, never
+      # minted; DictionaryEntry's non-empty key_raw validation stands.
+      def headwordless?(record)
+        record["word"].to_s.strip.empty?
+      end
+
+      def build_entry(record, minted, path:, line_number:)
         word = record["word"]
-        base_id = entry_id_base(record)
-        occurrences[base_id] += 1
-        entry_id = occurrences[base_id] > 1 ? "#{base_id}:#{occurrences[base_id]}" : base_id
+        entry_id = mint_entry_id(record, minted)
 
         Nabu::DictionaryEntry.new(
           entry_id: entry_id, key_raw: word, language: @language,
@@ -132,6 +150,33 @@ module Nabu
         id = "#{record['word']}:#{record['pos']}"
         ety = record["etymology_number"]
         ety ? "#{id}:#{ety}" : id
+      end
+
+      # P104-2 (Q79, poison shape 2): the positional homograph suffix and
+      # the etymology_number suffix share one id shape (word:pos:<n>), so
+      # the two paths can collide — the zh extract's 夆 quartet ships
+      # THREE etymology-less character records (positionally 夆:character,
+      # :2, :3) and then an etymology_number-"3" record whose bare base is
+      # the same "夆:character:3" (2 quartets in 323,840 lines: 夆, 芘 —
+      # each raised the duplicate-id ValidationError in
+      # DictionaryDocument#<< and quarantined the whole 1.1 GB file).
+      # The mint therefore bumps past ALREADY-MINTED ids, whichever path
+      # arrives second: the candidate (bare base, or base:<occurrence>)
+      # walks to the next free positional slot. Any id that never
+      # collided mints exactly as before — the frozen-minting contract —
+      # and file order stays the only stability assumption (docstring
+      # above).
+      def mint_entry_id(record, minted)
+        base = entry_id_base(record)
+        n = minted[:occurrences][base] += 1
+        candidate = n == 1 ? base : "#{base}:#{n}"
+        while minted[:taken].key?(candidate)
+          n += 1
+          candidate = "#{base}:#{n}"
+        end
+        minted[:occurrences][base] = n
+        minted[:taken][candidate] = true
+        candidate
       end
 
       def gloss(record)
