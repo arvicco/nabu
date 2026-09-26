@@ -110,6 +110,10 @@ module Nabu
           end,
           "dictionary_entries" => entries, "dictionary_entries_display" => self.class.commas(entries),
           "dictionary_shelves" => catalog[:dictionaries].count,
+          # The etym cognate-list code universe (languages.md cites it; it
+          # drifted from a hardcoded 803 to 1,131 before joining the SSOT —
+          # the ko/cmn lesson, P105 follow-up).
+          "etym_codes" => catalog[:dictionary_reflexes].distinct.select(:lang_code).count,
           "gold_lemmas" => gold, "gold_lemmas_display" => self.class.commas(gold),
           "gold_lemmas_m" => self.class.millions(gold),
           "gold_languages" => fulltext[:reflex_root_stats].count,
