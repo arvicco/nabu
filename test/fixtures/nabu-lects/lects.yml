@@ -224,9 +224,15 @@ anchors:
 
   # ── Greek ──────────────────────────────────────────────────────────────────
 
+  grk:
+    name: Hellenic
+    kind: family
+    parent: ine
+
   grc:
     name: Ancient Greek
     glottocode: anci1242
+    parent: grk
     stages:
       hom: {name: Epic (Homeric) Greek, band: [-800, -600], ord: 10,
             band_note: "conventional, approximate"}
@@ -401,13 +407,26 @@ anchors:
 
   # ── Chinese ────────────────────────────────────────────────────────────────
 
+  zhx:
+    name: Sinitic
+    kind: family
+    parent: sit
+
   zho:
     name: Chinese
+    parent: zhx
     stages:
       old: {name: Old Chinese,    band: [-1250, -100], ord: 10, iso: och,
             band_note: "conventional, approximate"}
       mid: {name: Middle Chinese, band: [400, 1000],   ord: 20, iso: ltc,
             band_note: "conventional, approximate"}
+      oman: {name: Old Mandarin, band: [1200, 1455], ord: 30,
+             band_note: "conventional, approximate — the Yuan-era spoken
+                         standard the phonological record attests: the
+                         Menggu Ziyun (1308, 'Phags-pa) and Zhongyuan
+                         Yinyun (1324) rhyme books. No ISO code exists;
+                         consumers tag such shelves with the honest-coarse
+                         zho and the zho:oman lect row refines"}
     varieties:
       lit: {name: Literary Chinese (wenyan), kind: register, iso: lzh,
             note: "a written register spanning stages, used for roughly two
@@ -418,6 +437,9 @@ anchors:
 
   otb:
     name: Old Tibetan
+    parent: tbq
+    note: "Tibetic (Bodish); the language of the Dunhuang documents and
+           the imperial inscriptions, ancestor of Classical Tibetan (xct)"
 
   xct:
     name: Classical Tibetan
@@ -428,10 +450,38 @@ anchors:
     name: Tibetan
     parent: xct
 
+  # ── Newar (P88 mint: the DACON corpus — the xct/bod two-anchor mold) ──────
+
+  nwc:
+    name: Classical Newari
+    band: [1100, 1900]
+    band_note: "the attested manuscript/inscription span (DACON's four
+                texts run 12th–19th century); conventional, approximate"
+    parent: sit
+    note: "Sino-Tibetan (Newaric); the literary language of the Kathmandu
+           valley's manuscript tradition, ancestor of Newar (new); DACON's
+           annotated texts are the held corpus"
+
+  new:
+    name: Newar
+    parent: nwc
+
+  # ── Afro-Asiatic ───────────────────────────────────────────────────────────
+
+  afa:
+    name: Afro-Asiatic
+    kind: family
+
+  sem:
+    name: Semitic
+    kind: family
+    parent: afa
+
   # ── Aramaic and Hebrew ─────────────────────────────────────────────────────
 
   arc:
     name: Aramaic
+    parent: sem
     stages:
       imp: {name: Imperial (Official) Aramaic, band: [-700, -300], ord: 10, iso: arc,
             band_note: "ISO 639-2 reference name: Official Aramaic (700–300 BCE)"}
@@ -465,6 +515,8 @@ anchors:
 
   hbo:
     name: Biblical Hebrew
+    parent: sem
+    note: "Canaanite, Northwest Semitic; the language of the Hebrew Bible"
 
   heb:
     name: Hebrew
@@ -473,10 +525,22 @@ anchors:
       rab: {name: Rabbinic Hebrew, ord: 10}
       med: {name: Medieval Hebrew, ord: 20}
 
+  # ── Ethiopic (P88 mint: the Geʿez shelf family — Beta maṣāḥǝft 3,774
+  # docs + TraCES 15 + the Dillmann dictionary — was the largest
+  # node-less language left after the Anatolian mint) ───────────────────────
+
+  gez:
+    name: Geʿez
+    parent: sem
+    note: "Ethio-Semitic (South Semitic). Band deliberately absent: the
+           held corpus spans Aksumite inscriptions to 19th-century
+           manuscripts and Geʿez remains liturgically alive"
+
   # ── Egyptian ───────────────────────────────────────────────────────────────
 
   egy:
     name: Egyptian
+    parent: afa
     stages:
       old:  {name: Old Egyptian,    band: [-2600, -2000], ord: 10,
              band_note: "approximate Egyptological convention"}
@@ -515,7 +579,7 @@ anchors:
   sux:
     name: Sumerian
     glottocode: sume1241
-    note: "stage grid per the CDLI period vocabulary. Uruk-era proto-cuneiform
+    note: "language isolate. Stage grid per the CDLI period vocabulary. Uruk-era proto-cuneiform
            is deliberately NOT a sux stage — see qpc."
     stages:
       arch: {name: Archaic Sumerian,        band: [-2900, -2700], ord: 10,
@@ -551,11 +615,41 @@ anchors:
            this code. A holder may claim specific ED I-II documents as
            sux:arch at document grain; the registry itself takes no side."
 
+  elx:
+    name: Elamite
+    glottocode: elam1244
+    note: "language isolate (the Elamo-Dravidian hypothesis remains
+           unproven; the registry takes no side). Cuneiform Elamite from
+           the Old Elamite treaty era to the Achaemenid chancery, where
+           it served as an imperial administrative language alongside
+           Old Persian and Babylonian; Proto-Elamite and Linear Elamite
+           are script traditions, not stages of this anchor. Stage grid
+           per the CDLI period vocabulary — the consuming library's
+           2,723 elx documents (cdli 2,700 · oracc 23, censused
+           2026-09-25) carry per-document period labels that materialize
+           all four stages (Achaemenid 2,139 · Neo-Elamite 300 · Middle
+           Elamite 277 · Old Elamite 1)"
+    stages:
+      old: {name: Old Elamite,        band: [-2700, -1500], ord: 10,
+            band_note: "per the CDLI period convention (ca. 2700-1500 BC);
+                        the treaty and sukkalmah-era record"}
+      mid: {name: Middle Elamite,     band: [-1300, -1000], ord: 20,
+            band_note: "per the CDLI period convention (ca. 1300-1000 BC);
+                        the Igihalkid-Shutrukid royal record — scholarly
+                        usage often opens the stage ~1500"}
+      neo: {name: Neo-Elamite,        band: [-770, -539], ord: 30,
+            band_note: "per the CDLI period convention (ca. 770-539 BC)"}
+      ach: {name: Achaemenid Elamite, band: [-547, -331], ord: 40,
+            band_note: "per the CDLI period convention (547-331 BC); the
+                        chancery language of the Persepolis archives and
+                        the trilingual royal inscriptions"}
+
   # ── Akkadian ───────────────────────────────────────────────────────────────
 
   akk:
     name: Akkadian
-    note: "the stage grid is dialect × period (Assyrian and Babylonian run in
+    parent: sem
+    note: "East Semitic. The stage grid is dialect × period (Assyrian and Babylonian run in
            parallel), not a single ladder — ord orders display only"
     stages:
       old: {name: Old Akkadian,     band: [-2340, -2200], ord: 5,
@@ -616,9 +710,10 @@ anchors:
   hlu:
     name: Hieroglyphic Luwian
     parent: ine-ana
-    note: "with xlu the two written traditions of the Luwian complex;
-           a joint Luwic node is deliberately unminted — no consumer
-           needs the distinction drawn finer than the ISO codes draw it"
+    note: "with xlu the two written traditions of the Luwian complex
+           (hieroglyphic vs cuneiform script, largely one language in two
+           garbs); a joint Luwic node below ine-ana carries no established
+           code, so the pair rides as siblings"
 
   plq:
     name: Palaic
@@ -630,18 +725,20 @@ anchors:
 
   xht:
     name: Hattic
-    note: "isolate (the pre-Hittite substrate of central Anatolia) —
-           no parent edge; rides the Hittite archives (tlhdig)"
+    note: "language isolate, the pre-Hittite substrate of central
+           Anatolia; survives in Hittite ritual contexts and rides the
+           Hittite archives (tlhdig)"
 
   xhu:
     name: Hurrian
-    note: "Hurro-Urartian; the family node is deliberately unminted —
-           no ISO 639-5 code exists and no consumer needs the edge"
+    note: "Hurro-Urartian, xur's sibling; the family carries no ISO
+           639-5 or Wiktionary code, and anchors require one, so the
+           pair rides as sibling anchors without a family node"
 
   xur:
     name: Urartian
-    note: "Hurro-Urartian, xhu's sibling; same deliberately-unminted
-           family node"
+    note: "Hurro-Urartian, xhu's sibling; see xhu on the codeless
+           family"
 
   # ── Sanskrit ───────────────────────────────────────────────────────────────
 
@@ -652,6 +749,27 @@ anchors:
       ved: {name: Vedic Sanskrit,     ord: 10, note: "IANA variant precedent: sa-vaidika"}
       epi: {name: Epic Sanskrit,      ord: 20, note: "IANA variant precedent: sa-itihasa"}
       cla: {name: Classical Sanskrit, ord: 30, note: "IANA variant precedent: sa-laukika"}
+
+  pli:
+    name: Pali
+    parent: san
+    note: "Middle Indo-Aryan; the language of the Theravada canon — the
+           consuming library's largest Indic holding (SuttaCentral's
+           7,288 pli documents) and the Pali inscriptions of Bagan (the
+           DHARMA Pyu corpus, 10 editions). The descent edge reads the
+           lineage from Old Indo-Aryan (san), the pra shape; held
+           romanized"
+
+  pra:
+    name: Prakrit
+    parent: san
+    note: "ISO 639-2 collective code, kept DELIBERATELY coarse: the
+           consuming corpus (SuttaCentral's 22 pra docs) claims no finer
+           identity, so the member codes (pka/pmh/psu/pgd…) stay
+           unminted until a consumer distinguishes them. The descent
+           edge reads the lineage — Middle Indo-Aryan continues from
+           Old Indo-Aryan (san); the literary-register nuance stays
+           here as prose"
 
   # ── Iranian and Armenian (the ISO-parentage wave) ──────────────────────────
 
@@ -730,6 +848,7 @@ anchors:
 
   sl:
     name: Slovene
+    parent: sla
     stages:
       old:  {name: Old Slovene, band: [950, 1550], ord: 10,
              note: "the Freising Fragments era",
@@ -747,6 +866,7 @@ anchors:
 
   bul:
     name: Bulgarian
+    parent: sla
     stages:
       emod: {name: Early Modern Bulgarian, ord: 10}
     varieties:
@@ -754,8 +874,13 @@ anchors:
 
   # ── Others forced by holdings ──────────────────────────────────────────────
 
+  jpx:
+    name: Japonic
+    kind: family
+
   jpn:
     name: Japanese
+    parent: jpx
     stages:
       mod: {name: Modern Japanese, ord: 10}
     orthos:
@@ -832,6 +957,7 @@ anchors:
 
   ara:
     name: Arabic
+    parent: sem
     stages:
       cla: {name: Classical Arabic, ord: 10}
 
@@ -859,36 +985,199 @@ anchors:
     note: "Osco-Umbrian; held in Latin-script transliteration of Old Italic
            originals (the consumer's artifact field carries Ital)"
 
+  xum:
+    name: Umbrian
+    parent: itc
+    note: "Osco-Umbrian; the Iguvine Tables are the corpus. Held in
+           Latin-script transliteration of Old Italic / Latin-alphabet
+           originals (the consumer's per-passage annotation names the
+           original alphabet). Deliberately coarse at the consuming
+           edition's own lane split: minor Sabellic dialects (Paelignian,
+           Marsian, ...) ride the nearest lane unminted until a consumer
+           distinguishes them"
+
   xpi:
     name: Pictish
-    note: "classification debated (commonly Brittonic); no parent edge
-           minted -- the ogham corpus attests it"
+    note: "classification debated (commonly held Brittonic, a non-Celtic
+           reading argued historically); the debate keeps the parent edge
+           unclaimed. The ogham corpus attests it"
 
   xly:
     name: Elymian
-    note: "fragmentary; classification uncertain -- no parent edge"
+    note: "fragmentary; an Indo-European (possibly Italic) affiliation
+           is argued but unsettled, so no parent edge is claimed"
 
   scx:
     name: Sicel
-    note: "fragmentary; classification uncertain -- no parent edge"
+    note: "fragmentary; an Indo-European (possibly Italic) affiliation
+           is argued but unsettled, so no parent edge is claimed"
+
+  phn:
+    name: Phoenician
+    parent: sem
+    note: "Canaanite, Northwest Semitic; the language of Tyre, Sidon and
+           Byblos and of the first alphabet's spread; Punic (xpu) is its
+           western descendant"
 
   xpu:
     name: Punic
-    note: "descendant of Phoenician; the Semitic fan (phn) is deliberately
-           unminted, so no parent edge yet"
+    parent: phn
+    note: "the Phoenician of the western colonies, Carthage above all;
+           attested to late antiquity (Neo-Punic, and Latino-Punic in
+           Tripolitania)"
+
+  dra:
+    name: Dravidian
+    kind: family
 
   ta:
     name: Tamil
-    note: "ISO 639-1; Dravidian -- no family node minted"
+    parent: dra
+    note: "ISO 639-1; South Dravidian. The Sangam corpus (~1st c. BCE
+           onward) opens its literature; the consuming collections hold
+           classical and modern Tamil under the one code"
+
+  inc:
+    name: Indo-Aryan
+    kind: family
+    parent: iir
 
   bra:
     name: Braj
-    note: "Indo-Aryan -- no family node minted"
+    parent: inc
+    note: "Western Hindi; the dominant literary language of early modern
+           North India (Krishna bhakti poetry, 15th-19th c.)"
 
   awa:
     name: Awadhi
-    note: "Indo-Aryan -- no family node minted"
+    parent: inc
+    note: "Eastern Hindi; the language of Tulsidas's Ramcaritmanas and
+           Jayasi's Padmavat (16th c.)"
 
+  # ── The Southeast Asian wing (v1.6.0) ──────────────────────────────────
+  # Seven language anchors from one consuming wave — the DHARMA epigraphic
+  # corpora (EFEO/ERC; per-file measured xml:lang census) and the Old
+  # Burmese inscriptions of Bagan — each wired into its family spine
+  # (ISO 639-5 codes), minted here with it: Austroasiatic (aav),
+  # Austronesian (map > poz > cmc), Sino-Tibetan (sit > tbq).
+
+  aav:
+    name: Austroasiatic
+    kind: family
+
+  omx:
+    name: Old Mon
+    parent: aav
+    note: "Austroasiatic, Monic; the language of the Dvaravati and early
+           Bagan world, attested ~6th-13th c. CE — the Myazedi
+           quadrilingual's fourth leg. No dedicated digital corpus
+           exists; the DHARMA Pyu corpus carries two Old Mon inscriptions
+           (79 lines, first-sync census 2026-09-02), the consuming
+           library's first omx text anywhere; held romanized (omx-Latn)"
+
+  okz:
+    name: Old Khmer
+    parent: aav
+    note: "the Khmeric branch of Austroasiatic (no ISO code for the
+           branch); the ancestor of Modern Khmer (khm). Attested from the
+           early 7th c. CE (pre-Angkorian) through the Angkorian period,
+           ~14th c. The DHARMA Corpus des inscriptions khmeres (the Coedes
+           K-numbers) is the corpus; held romanized (okz-Latn), the
+           stones' Khmer script rides the consumer's artifact records"
+
+  xhm:
+    name: Middle Khmer
+    parent: okz
+    note: "the stage between Old and Modern Khmer, ~15th-18th c. (the
+           post-Angkorian transition); the DHARMA Khmer corpus attests it
+           (3 editions, first-sync census 2026-09-01); held romanized
+           (xhm-Latn)"
+
+  khm:
+    name: Khmer
+    parent: xhm
+    note: "Modern Khmer; the DHARMA Khmer corpus carries 23 modern-era
+           editions (its K-numbering runs to the present); held romanized
+           (khm-Latn) there, Khmer script (khmr) natively"
+
+  map:
+    name: Austronesian
+    kind: family
+
+  poz:
+    name: Malayo-Polynesian
+    kind: family
+    parent: map
+
+  cmc:
+    name: Chamic
+    kind: family
+    parent: poz
+
+  ocm:
+    name: Old Cham
+    parent: cmc
+    note: "the ancestor of the modern Cham languages (cja/cjm). Its
+           earliest text (Dong Yen Chau, ~4th c. CE) is the oldest
+           attested Austronesian document anywhere. The DHARMA Campa
+           corpus attests it beside Sanskrit; held romanized (ocm-Latn)"
+
+  kaw:
+    name: Old Javanese (Kawi)
+    parent: poz
+    note: "the literary ancestor stage of Javanese (jav); the Javanesic
+           placement below Malayo-Polynesian carries no ISO branch code.
+           Attested from the Sukabumi inscription (804 CE); the kakawin
+           court-poetry tradition (Desavarnana, Sutasoma, Pararaton...) is
+           its literature. The DHARMA Nusantara philology and epigraphy
+           are the corpora; held romanized (kaw-Latn)"
+
+  omy:
+    name: Old Malay
+    parent: poz
+    note: "the Malayic branch of Malayo-Polynesian (no ISO code for the
+           branch); the ancestor stage of Malay (msa). Attested from the
+           Srivijaya inscriptions (Kedukan Bukit, 683 CE) to the Laguna
+           copperplate (900 CE, the Philippines' oldest document). The
+           DHARMA Nusantara epigraphy attests it; held romanized
+           (omy-Latn)"
+
+  osn:
+    name: Old Sundanese
+    parent: poz
+    note: "the ancestor stage of Sundanese (sun). Attested 14th-17th c.
+           (Kawali, Batutulis, the Sanghyang prose treatises). The DHARMA
+           Nusantara corpora attest it; held romanized (osn-Latn)"
+
+  sit:
+    name: Sino-Tibetan
+    kind: family
+
+  tbq:
+    name: Tibeto-Burman
+    kind: family
+    parent: sit
+    note: "the conventional non-Sinitic grouping (ISO 639-5 tbq); its
+           validity as a clade is debated, the code is the standard
+           filing place"
+
+  pyx:
+    name: Pyu
+    parent: sit
+    note: "Sino-Tibetan, position within it debated (parent edge kept at
+           the family root for that reason); extinct, no modern
+           descendant. The language of the Pyu city-states of the
+           Irrawaddy valley, attested ~5th-13th c. CE. The DHARMA Corpus
+           of Pyu Inscriptions (Griffiths et al.) is the corpus; held
+           romanized (pyx-Latn)"
+
+  obr:
+    name: Old Burmese
+    parent: tbq
+    note: "Lolo-Burmese, Burmish (no ISO code below tbq); the ancestor of
+           Burmese (mya). Attested from the Myazedi inscription (1112/1113
+           CE) through the Bagan period. The Bagan stone inscriptions are
+           the corpus, held in Myanmar-script Unicode with transliteration"
 
 # ── Scripts (the ~ axis) ─────────────────────────────────────────────────────
 #
@@ -930,3 +1219,4 @@ scripts:
   avst: {name: Avestan,                              iso15924: Avst}
   ugar: {name: Ugaritic,                             iso15924: Ugar}
   xpeo: {name: Old Persian cuneiform,                iso15924: Xpeo}
+  mymr: {name: Myanmar (Burmese),                    iso15924: Mymr}

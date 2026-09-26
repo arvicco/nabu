@@ -358,8 +358,11 @@ sources:
       "Liturgy": ritual/liturgy                  # siddurim
       "Musar": literary/wisdom                   # ethical instruction
       "Reference": scholarly
-      # left unmapped (genuinely mixed/ambiguous, the decision list):
-      # Kabbalah · Chasidut · Jewish Thought · Second Temple
+      # the residue ruled 2026-09-26 (as recommended at the P103 gate):
+      "Kabbalah": exegesis                       # the Zohar's own form is Torah commentary
+      "Chasidut": literary/wisdom                # the Musar precedent
+      "Jewish Thought": literary/essay           # the dta Philosophie precedent
+      "Second Temple": scripture                 # deuterocanon/pseudepigrapha
   kanripo:            # the sibu 四部 class (KR1–KR5)
     metadata: class
     map:
@@ -417,9 +420,17 @@ sources:
       '\bK?21\d\b': historiography               # 210s ×~90 — Japanese history
       '\bK?121\b': literary/essay                # 121 ×94 — Japanese philosophy (the dta
       #   Philosophie precedent)
-      # other non-9xx subject codes (367 · 596 · 7xx arts …) stay
-      # unmapped: modern nonfiction subject shelving, not genre — the
-      # named residue pending a subject-fold ruling.
+      # remaining non-9xx compounds and singletons stay worklist-visible.
+    deliberate:
+      # Ruled 2026-09-26 (P103 gate, as recommended): the bare modern
+      # NDC subject-shelving heads are not genre claims.
+      "NDC 367": "modern NDC subject shelving (society), not genre"
+      "NDC 596": "modern NDC subject shelving (cooking), not genre"
+      "NDC 721": "modern NDC subject shelving (Japanese painting), not genre"
+      "NDC 770": "modern NDC subject shelving (performing arts), not genre"
+      "NDC 771": "modern NDC subject shelving (performing arts), not genre"
+      "NDC 775": "modern NDC subject shelving (theater), not genre"
+      "NDC 778": "modern NDC subject shelving (film), not genre"
   dta:                # the subgenre carries the signal; genre alone is too coarse
     metadata: subgenre
     map:
