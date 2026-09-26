@@ -288,6 +288,22 @@ class CopticScriptoriumTest < Minitest::Test
     unnumbered = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ap.100.monbeg" }
     refute adapter.parse(unnumbered).metadata.key?("related"),
            "Trismegistos='none' is upstream's absence — no edge invented"
+    prefixed = adapter.discover(FIXTURES)
+                      .find { |r| r.id == "urn:nabu:coptic-scriptorium:helias.martyrdom.sobhy_ed:0-15" }
+    assert_equal ["tm:114340"], adapter.parse(prefixed).metadata["related"],
+                 "the TM-prefixed header shape mints too"
+  end
+
+  # The four censused header shapes (482 headers, 2026-09-26), as a pure
+  # extraction check — the HTML-anchor shape has no fixture document, so
+  # the real censused string pins it here.
+  def test_tm_number_extraction_shapes
+    extract = Nabu::Adapters::CopticScriptorium.method(:tm_number)
+    assert_equal "108394", extract.call("108394")
+    assert_equal "107926", extract.call("<a href='www.trismegistos.org/text/107926'>107926</a>")
+    assert_equal "114340", extract.call("TM114340")
+    assert_nil extract.call("none")
+    assert_nil extract.call(nil)
   end
 
   def test_reference_producer_records_under_the_source_name
