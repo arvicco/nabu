@@ -86,10 +86,25 @@ module Nabu
           "dta" => :year_range, # P94 (№R-59): the sourceDesc print year, clean "1784"
           #                       strings on every document; the de:early staging rides
           #                       LectDates date-band inference off these envelopes
-          "ebl" => :period_label
+          "ebl" => :period_label,
+          "seal" => :period_label, # P104-1 (Q77 under №R-70): the Texts Hierarchy period
+          #                          strings (Old Babylonian …, on ALL 408 docs) band via
+          #                          the ruled table — the posture's own named candidate;
+          #                          the Provenance field rides as place (PLACE_KEYS)
+          "cbeta" => :dynasty_band # P104-1 (№R-70 grade 2): the header byline's dynasty
+          #                          seat bands via the ruled table as an ERA claim —
+          #                          precision "era", verbatim byline in date_raw
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
+
+        # P104-1: sources whose place claim rides a differently-named
+        # metadata field. An override key is a findspot vocabulary with
+        # explicit unknown-class values ("Unknown"), which mint no place
+        # — the coptic-lane NO_PLACE stance; the default "place" key's
+        # behavior is untouched.
+        PLACE_KEYS = { "seal" => "provenance" }.freeze
+        NO_PLACE = %w[unknown unclear uncertain none].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -135,7 +150,8 @@ module Nabu
             .select(:id, :metadata_json)
             .order(:id)
             .paged_each do |doc|
-              row = axis_row(doc, shape, reorder: REORDER.include?(slug))
+              row = axis_row(doc, shape, reorder: REORDER.include?(slug),
+                                         place_key: PLACE_KEYS.fetch(slug, "place"))
               next if row.nil?
 
               buffer << row.merge(axis_source: slug)
@@ -151,9 +167,9 @@ module Nabu
 
         # One document's axis row, or nil when it carries neither a date
         # bound nor an ancient place name.
-        def axis_row(doc, shape, reorder: false)
+        def axis_row(doc, shape, reorder: false, place_key: "place")
           meta = JSON.parse(doc[:metadata_json].to_s)
-          not_before, not_after, raw = send(shape, meta)
+          not_before, not_after, raw, precision = send(shape, meta)
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
           # "place" is a Hash ({"ancient" => …}, EDR/Elephantine) or a bare
           # string (croala — the P44-i4 shape); the string IS the name.
@@ -167,7 +183,10 @@ module Nabu
           # whatever PlaceRefs honestly parses mints in its true namespace,
           # space-separated per the multi-claim convention; malformed
           # remainders mint nothing.
-          place = meta["place"]
+          place = meta[place_key]
+          # An overridden place key is a findspot vocabulary with explicit
+          # unknown-class values — those mint no place (never a name).
+          place = nil if place_key != "place" && NO_PLACE.include?(place.to_s.strip.downcase)
           place_ref = nil
           if place.is_a?(Hash)
             refs = []
@@ -183,13 +202,29 @@ module Nabu
                         (place.nil? || place.to_s.strip.empty?)
 
           { document_id: doc[:id], not_before: not_before, not_after: not_after,
-            date_raw: raw, place_name: place, place_ref: place_ref }
+            date_raw: raw, place_name: place, place_ref: place_ref, precision: precision }
         rescue JSON::ParserError
           nil
         end
 
         def period_label(meta)
           seleucid_era(meta["date"]) || king_reign(meta["date"]) || period_band(meta)
+        end
+
+        # P104-1 (№R-70 grade 2): the cbeta header byline's dynasty seat
+        # (metadata "dynasty", minted by CbetaTeiParser from the
+        # teiHeader <author> — "後秦 佛陀耶舍共竺佛念譯") bands through the
+        # ruled table's sinological rows. The claim is an ATTRIBUTED
+        # TRANSLATION ERA, not a typed date, so the row wears precision
+        # "era" — the distinct honestly-labeled class the ruling names —
+        # and date_raw carries the whole byline verbatim. An unruled seat
+        # (an Indian master's attribution, 失譯 "translator lost", 日本 —
+        # a country, not an era claim) mints nothing.
+        def dynasty_band(meta)
+          band = Nabu::PeriodBands.default&.lookup(meta["dynasty"])
+          return [nil, nil, nil, nil] if band.nil?
+
+          [band[0], band[1], meta["author"] || meta["dynasty"], "era"]
         end
 
         # A bare integer year → a one-year envelope (okhc). Anything else
