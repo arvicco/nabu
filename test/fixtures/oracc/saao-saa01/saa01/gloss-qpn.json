@@ -1,0 +1,615 @@
+{
+  "type": "glossary",
+  "project": "saao/saa01",
+  "source": "http://oracc.org/saao/saa01",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2024-06-07T07:23:23",
+  "lang": "qpn",
+  "entries": [
+    {
+      "headword": "ʾAtaya[of ʾAta]EN",
+      "id": "x000003020",
+      "icount": "1",
+      "ipct": "100",
+      "xis": "qpn.r00027b",
+      "dc_title": "saao/saa01/qpn/ʾAtaya[of ʾAta]",
+      "cf": "ʾAtaya",
+      "gw": "of ʾAta",
+      "pos": "EN",
+      "forms": [
+        {
+          "type": "form",
+          "id": "x00000302.1",
+          "n": "{KUR}ʾa-ta-a.a",
+          "c": "13",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r00027b"
+        }
+      ],
+      "norms": [
+        {
+          "id": "x00000302.2",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r00027b",
+          "n": "ʾAtaya",
+          "forms": [
+            {
+              "type": "normform",
+              "cbd_id": "x00000302.3",
+              "ref": "x00000302.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r00027b"
+            }
+          ]
+        }
+      ],
+      "senses": [
+        {
+          "type": "sense",
+          "id": "x00000302.4",
+          "n": "ʾAtaya[of ʾAta//of ʾAta]EN'EN",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r00027b",
+          "ok": "1",
+          "num": "1.",
+          "pos": "EN",
+          "mng": "of ʾAta",
+          "forms": [
+            {
+              "type": "form",
+              "cbd_id": "x00000302.5",
+              "n": "{KUR}ʾa-ta-a.a",
+              "ref": "x00000302.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r00027b"
+            }
+          ],
+          "norms": [
+            {
+              "id": "x00000302.6",
+              "n": "ʾAtaya",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r00027b"
+            }
+          ],
+          "sigs": [
+            {
+              "type": "sig",
+              "id": "x00000302.7",
+              "sig": "@saao/saa01%akk-x-neoass:{KUR}ʾa-ta-a.a=ʾAtaya[of ʾAta//of ʾAta]EN'EN$ʾAtaya",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r00027b"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "p": "Neo-Assyrian",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r00027b.p.s000"
+        }
+      ]
+    },
+    {
+      "headword": "Abattu[1]PN",
+      "id": "x000000840",
+      "icount": "1",
+      "ipct": "100",
+      "xis": "qpn.r000001",
+      "dc_title": "saao/saa01/qpn/Abattu[1]",
+      "cf": "Abattu",
+      "gw": "1",
+      "pos": "PN",
+      "forms": [
+        {
+          "type": "form",
+          "id": "x00000084.1",
+          "n": "{1}a-ba-tu₂",
+          "c": "14",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000001"
+        }
+      ],
+      "norms": [
+        {
+          "id": "x00000084.2",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000001",
+          "n": "Abattu",
+          "forms": [
+            {
+              "type": "normform",
+              "cbd_id": "x00000084.3",
+              "ref": "x00000084.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000001"
+            }
+          ]
+        }
+      ],
+      "senses": [
+        {
+          "type": "sense",
+          "id": "x00000084.4",
+          "n": "Abattu[1//1]PN'PN",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000001",
+          "ok": "1",
+          "num": "1.",
+          "pos": "PN",
+          "mng": "1",
+          "forms": [
+            {
+              "type": "form",
+              "cbd_id": "x00000084.5",
+              "n": "{1}a-ba-tu₂",
+              "ref": "x00000084.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000001"
+            }
+          ],
+          "norms": [
+            {
+              "id": "x00000084.6",
+              "n": "Abattu",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000001"
+            }
+          ],
+          "sigs": [
+            {
+              "type": "sig",
+              "id": "x00000084.7",
+              "sig": "@saao/saa01%akk-x-neoass:{1}a-ba-tu₂=Abattu[1//1]PN'PN$Abattu",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000001"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "p": "Neo-Assyrian",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000001.p.s000"
+        }
+      ]
+    },
+    {
+      "headword": "Abu[Ab]MN",
+      "id": "x000002330",
+      "icount": "1",
+      "ipct": "100",
+      "xis": "qpn.r000003",
+      "dc_title": "saao/saa01/qpn/Abu[Ab]",
+      "cf": "Abu",
+      "gw": "Ab",
+      "pos": "MN",
+      "forms": [
+        {
+          "type": "form",
+          "id": "x00000233.1",
+          "n": "{ITI}NE",
+          "c": "371",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000003"
+        }
+      ],
+      "norms": [
+        {
+          "id": "x00000233.2",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000003",
+          "n": "Abi",
+          "forms": [
+            {
+              "type": "normform",
+              "cbd_id": "x00000233.3",
+              "ref": "x00000233.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000003"
+            }
+          ]
+        }
+      ],
+      "senses": [
+        {
+          "type": "sense",
+          "id": "x00000233.4",
+          "n": "Abu[Ab//Ab]MN'MN",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000003",
+          "ok": "1",
+          "num": "1.",
+          "pos": "MN",
+          "mng": "Ab",
+          "forms": [
+            {
+              "type": "form",
+              "cbd_id": "x00000233.5",
+              "n": "{ITI}NE",
+              "ref": "x00000233.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000003"
+            }
+          ],
+          "norms": [
+            {
+              "id": "x00000233.6",
+              "n": "Abi",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000003"
+            }
+          ],
+          "sigs": [
+            {
+              "type": "sig",
+              "id": "x00000233.7",
+              "sig": "@saao/saa01%akk-x-neoass:{ITI}NE=Abu[Ab//Ab]MN'MN$Abi",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000003"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "p": "Neo-Assyrian",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000003.p.s000"
+        }
+      ]
+    },
+    {
+      "headword": "Abu-lešir[1]PN",
+      "id": "x000000380",
+      "icount": "2",
+      "ipct": "100",
+      "xis": "qpn.r000002",
+      "dc_title": "saao/saa01/qpn/Abu-lešir[1]",
+      "cf": "Abu-lešir",
+      "gw": "1",
+      "pos": "PN",
+      "forms": [
+        {
+          "type": "form",
+          "id": "x00000038.1",
+          "n": "{1}AD-GIŠ",
+          "c": "30",
+          "icount": "2",
+          "ipct": "100",
+          "xis": "qpn.r000002"
+        }
+      ],
+      "norms": [
+        {
+          "id": "x00000038.2",
+          "icount": "2",
+          "ipct": "100",
+          "xis": "qpn.r000002",
+          "n": "Abu-lešir",
+          "forms": [
+            {
+              "type": "normform",
+              "cbd_id": "x00000038.3",
+              "ref": "x00000038.1",
+              "icount": "2",
+              "ipct": "100",
+              "xis": "qpn.r000002"
+            }
+          ]
+        }
+      ],
+      "senses": [
+        {
+          "type": "sense",
+          "id": "x00000038.4",
+          "n": "Abu-lešir[1//1]PN'PN",
+          "icount": "2",
+          "ipct": "100",
+          "xis": "qpn.r000002",
+          "ok": "1",
+          "num": "1.",
+          "pos": "PN",
+          "mng": "1",
+          "forms": [
+            {
+              "type": "form",
+              "cbd_id": "x00000038.5",
+              "n": "{1}AD-GIŠ",
+              "ref": "x00000038.1",
+              "icount": "2",
+              "ipct": "100",
+              "xis": "qpn.r000002"
+            }
+          ],
+          "norms": [
+            {
+              "id": "x00000038.6",
+              "n": "Abu-lešir",
+              "icount": "2",
+              "ipct": "100",
+              "xis": "qpn.r000002"
+            }
+          ],
+          "sigs": [
+            {
+              "type": "sig",
+              "id": "x00000038.7",
+              "sig": "@saao/saa01%akk-x-neoass:{1}AD-GIŠ=Abu-lešir[1//1]PN'PN$Abu-lešir",
+              "icount": "2",
+              "ipct": "100",
+              "xis": "qpn.r000002"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "p": "Neo-Assyrian",
+          "icount": "2",
+          "ipct": "100",
+          "xis": "qpn.r000002.p.s000"
+        }
+      ]
+    },
+    {
+      "headword": "Adad[1]DN",
+      "id": "x000004280",
+      "icount": "3",
+      "ipct": "100",
+      "xis": "qpn.r00000c",
+      "dc_title": "saao/saa01/qpn/Adad[1]",
+      "cf": "Adad",
+      "gw": "1",
+      "pos": "DN",
+      "forms": [
+        {
+          "type": "form",
+          "id": "x00000428.1",
+          "n": "{d}IM",
+          "c": "263",
+          "icount": "3",
+          "ipct": "100",
+          "xis": "qpn.r00000c"
+        }
+      ],
+      "norms": [
+        {
+          "id": "x00000428.2",
+          "icount": "3",
+          "ipct": "100",
+          "xis": "qpn.r00000c",
+          "n": "Adad",
+          "forms": [
+            {
+              "type": "normform",
+              "cbd_id": "x00000428.3",
+              "ref": "x00000428.1",
+              "icount": "3",
+              "ipct": "100",
+              "xis": "qpn.r00000c"
+            }
+          ]
+        }
+      ],
+      "senses": [
+        {
+          "type": "sense",
+          "id": "x00000428.4",
+          "n": "Adad[1//1]DN'DN",
+          "icount": "3",
+          "ipct": "100",
+          "xis": "qpn.r00000c",
+          "ok": "1",
+          "num": "1.",
+          "pos": "DN",
+          "mng": "1",
+          "forms": [
+            {
+              "type": "form",
+              "cbd_id": "x00000428.5",
+              "n": "{d}IM",
+              "ref": "x00000428.1",
+              "icount": "3",
+              "ipct": "100",
+              "xis": "qpn.r00000c"
+            }
+          ],
+          "norms": [
+            {
+              "id": "x00000428.6",
+              "n": "Adad",
+              "icount": "3",
+              "ipct": "100",
+              "xis": "qpn.r00000c"
+            }
+          ],
+          "sigs": [
+            {
+              "type": "sig",
+              "id": "x00000428.7",
+              "sig": "@saao/saa01%akk-x-neoass:{d}IM=Adad[1//1]DN'DN$Adad",
+              "icount": "3",
+              "ipct": "100",
+              "xis": "qpn.r00000c"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "p": "Neo-Assyrian",
+          "icount": "3",
+          "ipct": "100",
+          "xis": "qpn.r00000c.p.s000"
+        }
+      ]
+    },
+    {
+      "headword": "Adad-abuʾa[1]PN",
+      "id": "x000000330",
+      "icount": "1",
+      "ipct": "100",
+      "xis": "qpn.r000004",
+      "dc_title": "saao/saa01/qpn/Adad-abuʾa[1]",
+      "cf": "Adad-abuʾa",
+      "gw": "1",
+      "pos": "PN",
+      "forms": [
+        {
+          "type": "form",
+          "id": "x00000033.1",
+          "n": "{1}10-AD-u-a",
+          "c": "2",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000004"
+        }
+      ],
+      "norms": [
+        {
+          "id": "x00000033.2",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000004",
+          "n": "Adad-abuʾa",
+          "forms": [
+            {
+              "type": "normform",
+              "cbd_id": "x00000033.3",
+              "ref": "x00000033.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000004"
+            }
+          ]
+        }
+      ],
+      "senses": [
+        {
+          "type": "sense",
+          "id": "x00000033.4",
+          "n": "Adad-abuʾa[1//1]PN'PN",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000004",
+          "ok": "1",
+          "num": "1.",
+          "pos": "PN",
+          "mng": "1",
+          "forms": [
+            {
+              "type": "form",
+              "cbd_id": "x00000033.5",
+              "n": "{1}10-AD-u-a",
+              "ref": "x00000033.1",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000004"
+            }
+          ],
+          "norms": [
+            {
+              "id": "x00000033.6",
+              "n": "Adad-abuʾa",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000004"
+            }
+          ],
+          "sigs": [
+            {
+              "type": "sig",
+              "id": "x00000033.7",
+              "sig": "@saao/saa01%akk-x-neoass:{1}10-AD-u-a=Adad-abuʾa[1//1]PN'PN$Adad-abuʾa",
+              "icount": "1",
+              "ipct": "100",
+              "xis": "qpn.r000004"
+            }
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "p": "Neo-Assyrian",
+          "icount": "1",
+          "ipct": "100",
+          "xis": "qpn.r000004.p.s000"
+        }
+      ]
+    }
+  ],
+  "instances": {
+    "qpn.r000001": [
+      "saao/saa01:P313425.53.4"
+    ],
+    "qpn.r000002": [
+      "saao/saa01:P224431.29.7",
+      "saao/saa01:P224431.9.2"
+    ],
+    "qpn.r000003": [
+      "saao/saa01:P334039.10.4"
+    ],
+    "qpn.r00000c": [
+      "saao/saa01:P313505.5.1",
+      "saao/saa01:P313509.5.1",
+      "saao/saa01:P334804.7.1"
+    ],
+    "qpn.r000004": [
+      "saao/saa01:P334830.20.6"
+    ],
+    "qpn.r00027b": [
+      "saao/saa01:P313425.28.2"
+    ],
+    "qpn.r000001.p.s000": [
+      "saao/saa01:P313425.53.4"
+    ],
+    "qpn.r000002.p.s000": [
+      "saao/saa01:P224431.9.2",
+      "saao/saa01:P224431.29.7"
+    ],
+    "qpn.r000003.p.s000": [
+      "saao/saa01:P334039.10.4"
+    ],
+    "qpn.r00000c.p.s000": [
+      "saao/saa01:P334804.7.1",
+      "saao/saa01:P313509.5.1",
+      "saao/saa01:P313505.5.1"
+    ],
+    "qpn.r000004.p.s000": [
+      "saao/saa01:P334830.20.6"
+    ],
+    "qpn.r00027b.p.s000": [
+      "saao/saa01:P313425.28.2"
+    ]
+  },
+  "summaries": {}
+}
