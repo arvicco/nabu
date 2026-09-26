@@ -202,7 +202,7 @@ module Nabu
         document = Nabu::Document.new(
           urn: urn, language: document_language(doc, lines),
           title: document_title(doc_id, cth, path), canonical_path: File.expand_path(path),
-          metadata: document_metadata(doc, doc_id, cth, project)
+          metadata: document_metadata(doc, doc_id, cth, project, lines)
         )
         append_passages(document, lines, urn: urn)
         raise ParseError, "#{path}: every line rendered empty (AOxml damage)" if document.empty?
@@ -215,7 +215,7 @@ module Nabu
         cth ? "#{base} (CTH #{cth})" : base
       end
 
-      def document_metadata(doc, doc_id, cth, project)
+      def document_metadata(doc, doc_id, cth, project, lines)
         manuscripts = doc.xpath("//AO:Manuscripts/AO:TxtPubl", "AO" => AO_NS)
                          .map { |n| n.text.strip }.reject(&:empty?)
         inventory = doc.xpath("//AO:Manuscripts//AO:InvNr", "AO" => AO_NS)
@@ -225,19 +225,31 @@ module Nabu
           "manuscripts" => (manuscripts unless manuscripts.empty?),
           "inventory" => (inventory unless inventory.empty?)
         }.compact
-        metadata["facets"] = facets(cth, project) unless cth.nil? && project.nil?
+        facet_map = facets(cth, project, line_languages(lines))
+        metadata["facets"] = facet_map unless facet_map.empty?
         metadata
       end
 
       # The CTH folder layout → facets (catalog number + contributing HPM
       # sub-project — TLH/HFR/BESRIT/…; genre BANDS are deliberately not
       # derived: no in-data genre field exists, and inventing a CTH-range
-      # table is not this parser's call).
-      def facets(cth, project)
+      # table is not this parser's call) plus the per-document language
+      # facet (P104-1, Q77 under №R-70): the distinct MAPPED line
+      # languages in attestation order, multi-valued where a tablet mixes
+      # (Hattic ritual with Hittite rubrics) — the per-line lg tags were
+      # parsed since P31-1 but never faceted. Unmapped/"und" lines never
+      # claim; the values are the same censused ISO codes the lect layer
+      # reads.
+      def facets(cth, project, languages)
         {
           "cth" => cth && { "value" => cth, "raw" => "CTH #{cth}" },
-          "project" => project && { "value" => project.downcase, "raw" => project }
+          "project" => project && { "value" => project.downcase, "raw" => project },
+          "language" => (languages.empty? ? nil : { "values" => languages })
         }.compact
+      end
+
+      def line_languages(lines)
+        lines.filter_map { |line| LINE_LANGUAGES[line.lg] }.uniq
       end
 
       def document_language(doc, lines)
