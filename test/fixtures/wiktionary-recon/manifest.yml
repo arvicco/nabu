@@ -1,10 +1,12 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All thirteen files are documented TRIMs (whole: false) of the upstream
-# extracts (253 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
+# All fourteen files are documented TRIMs (whole: false) of the upstream
+# extracts (258 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
 # Celtic + 3 P29-1 Umbrian + 4 P29-0 Etruscan + 5 P32-5 Old Japanese
-# + 6 P32-3 Chinese lines; every kept line byte-verbatim), so a fresh GET
+# + 11 P32-3/P104-2 Chinese lines, of which the whitespace-word
+# "Unsupported titles/Space" line mints NO entry — 257 entries; every
+# kept line byte-verbatim), so a fresh GET
 # returns the full extract and is fetched for URL-liveness only, never
 # byte-compared. Re-apply the README extraction recipes after any
 # refresh. NOTE the upstream files are labelled DEPRECATED (wiktextract
@@ -69,4 +71,4 @@ files:
   - path: kaikki.org-dictionary-Chinese.jsonl
     url: https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl
     whole: false
-    trim: 6 P32-3 lines retrieved 2026-07-19 (upstream lines 2/3/4/9/122/18894 — GDP no-MC modern noun; A verb/adj etymology_number homographs; 犬 — MC + BOTH OC reconstructions; MD soft-redirect stub; 茶 — Sino-Xenic borrowed ja/ryu/ko descendants) — 1,181,142,520 B -> ~180 KB; recipe in README.md
+    trim: 6 P32-3 lines retrieved 2026-07-19 (upstream lines 2/3/4/9/122/18894 — GDP no-MC modern noun; A verb/adj etymology_number homographs; 犬 — MC + BOTH OC reconstructions; MD soft-redirect stub; 茶 — Sino-Xenic borrowed ja/ryu/ko descendants) + 5 P104-2 regression lines cut 2026-09-26 from the same download (line 53403 — the "Unsupported titles/Space" whitespace-word record, skipped not minted; lines 5047-5050 — the 夆 quartet whose etymology_number-"3" record collided with the positional :3 id) — 1,181,142,520 B -> ~201 KB; recipe in README.md
