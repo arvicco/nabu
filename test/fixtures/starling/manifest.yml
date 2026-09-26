@@ -59,3 +59,78 @@ files:
     url: https://starlingdb.org/download/KART.exe
     whole: false
     trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  # P104-3: the six further packages (retrieved 2026-09-26; README section
+  # "The P104-3 packages"). Same trim recipe; upstream-defect pointer cells
+  # kept byte-verbatim (altet #1728, stibet #2785).
+  - path: altaic/altet.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 3 of 2,805 records — NUMBER 1 (*èbà, all five branch links; the japet-#632 pair), 2 (brace-notation gloss), 1728 (*pā̀ró, THE whitespace-junk var-pointer pin — the TURC slot bytes kept verbatim); header + field descriptors verbatim, var-pointers rewritten
+  - path: altaic/altet.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: altaic/japet.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 3 of 1,705 records — NUMBER 1 (*muta, AJP→ojp mint), 2 (*páp(u)í, the dialect-column spread), 632 (*àp-, the altet-#1 PRNUM pair); header + field descriptors verbatim, var-pointers rewritten
+  - path: altaic/japet.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: cauc/caucet.dbf
+    url: https://starlingdb.org/download/CAUC.exe
+    whole: false
+    trim: 3 of 2,327 records — NUMBER 1 (*ḳwĭrV, branch protoforms + sccet PRNUM), 2 (the actual-form LAK/KHIN mint pin), 9 (one of 223 headword-less records → the #9 placeholder); header + field descriptors verbatim, var-pointers rewritten
+  - path: cauc/caucet.var
+    url: https://starlingdb.org/download/CAUC.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: sintib/stibet.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 4 of 2,823 records — NUMBER 2 (the Big5-lead CHIN pin + CHINNUM/KIRNUM links + unaliased STLSNUM), 5 (TIB transliteration body-only pin), 8 (LEPCHA→lep mint, tone-digit KACH gate), 2785 (THE truncated-var pin — seven past-EOF pointers kept byte-verbatim); header + field descriptors verbatim, var-pointers rewritten
+  - path: sintib/stibet.var
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: drav/dravet.dbf
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: 3 of 2,171 records — NUMBER 1 (*ac-, the "****" overflow-sentinel pin), 2 (*as-), 16 (*aḍḍ-, BRA→brh mint + all six branch links); header + field descriptors verbatim, var-pointers rewritten
+  - path: drav/dravet.var
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: chukchee/kamet.dbf
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: 4 of 1,099 records — NUMBER 1 (the chuket-#804 + itelet-#1 both-ways pairs), 2 (empty PRNUM pin), 689 BOTH TIMES (the duplicate-NUMBER pair → entry ids 689/689-b); header + field descriptors verbatim, var-pointers rewritten
+  - path: chukchee/kamet.var
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: chukchee/chuket.dbf
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: 2 of 2,281 records — NUMBER 1 (*ạlạ, ckt/kpy/alr mints + PAL body-only + reference columns), 804 (*macbɨ #, the kamet-#1 pair); header + field descriptors verbatim, var-pointers rewritten
+  - path: chukchee/chuket.var
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: chukchee/itelet.dbf
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: 2 of 1,673 records — NUMBER 1 (*məźə-m, the kamet-#1 ITELNUM pair; Dybowski columns), 2 (*meč'a-, ITE→itl mint); header + field descriptors verbatim, var-pointers rewritten
+  - path: chukchee/itelet.var
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: yenisey/yenet.dbf
+    url: https://starlingdb.org/download/YENISEY.exe
+    whole: false
+    trim: 3 of 1,059 records — NUMBER 1 (*ʔaʔd, ket/yug/zko mints), 904 BOTH TIMES (the duplicate-NUMBER pair → entry ids 904/904-b; gated affix/colon leads); header + field descriptors verbatim, var-pointers rewritten
+  - path: yenisey/yenet.var
+    url: https://starlingdb.org/download/YENISEY.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte

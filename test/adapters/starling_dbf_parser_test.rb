@@ -12,6 +12,8 @@ class StarlingDbfParserTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("starling")
   POKORNY = File.join(FIXTURES, "pokorny.dbf")
   PIET = File.join(FIXTURES, "piet.dbf")
+  ALTET = File.join(FIXTURES, "altaic", "altet.dbf")
+  STIBET = File.join(FIXTURES, "sintib", "stibet.dbf")
 
   def parser(path = POKORNY) = Nabu::Adapters::StarlingDbfParser.new(dbf_path: path)
 
@@ -86,6 +88,31 @@ class StarlingDbfParserTest < Minitest::Test
       File.binwrite(File.join(dir, "pokorny.var"), File.binread(File.join(FIXTURES, "pokorny.var"), 40))
       assert_raises(Nabu::ParseError) { parser(File.join(dir, "pokorny.dbf")).each_record.to_a }
     end
+  end
+
+  # P104-3, the first junk-pointer lane (censused: ONE cell in the eight
+  # packages — altet #1728's TURC slot carries the literal whitespace bytes
+  # \x0a\x20\x20\x0a\x0a\x20 where a var pointer belongs). Whitespace bytes
+  # are not a pointer: the field reads empty, the record parses whole.
+  def test_whitespace_junk_in_a_var_pointer_slot_reads_as_an_empty_field
+    record = parser(ALTET).each_record.find { |r| r.fetch("NUMBER") == "1728" }
+    refute_nil record, "the defect record itself parses"
+    assert_nil record.fetch("TURC"), "the junk slot is an honest empty field"
+    assert_equal "*pā̀ró ( ~ p`-, -ŕ-)", record.fetch("PROTO").strip, "the rest of the record decodes whole"
+  end
+
+  # P104-3, the second lane (censused: ONE record — stibet #2785, whose
+  # seven pointers sit at 663142+ against the shipped 640,352-byte
+  # stibet.var: upstream's var tail is truncated). A pointer ENTIRELY past
+  # the var file decodes to the honest replacement character — marked,
+  # never silently dropped, never a whole-base quarantine. A payload
+  # RUNNING past from a valid offset keeps the torn-file raise (the test
+  # above).
+  def test_a_pointer_entirely_past_the_var_file_decodes_to_the_replacement_character
+    record = parser(STIBET).each_record.find { |r| r.fetch("NUMBER") == "2785" }
+    refute_nil record
+    assert_equal "�", record.fetch("PROTO")
+    assert_equal "�", record.fetch("COMMENTS")
   end
 
   def test_a_non_dbase_file_raises_parse_error

@@ -143,3 +143,100 @@ germet #513; the table is the authority).
   position 47 keeps the plain id; \*ćwet- at position 147 mints `48-b`
   + the body note; its GRU cell "cwet-/cwit-/cwt-" pins the unspaced
   slash-variant token minting as one form).
+
+## The P104-3 packages (six further downloads, same grant)
+
+Retrieved **2026-09-26** from `https://starlingdb.org/download/<NAME>.exe`
+(each a plain zip despite the name, like IE.exe/KART.exe):
+
+- `ALTAIC.exe` — 1,950,481 B, sha256
+  `855e82a67a8f7b1c6a9c50e6f7098b229228446210712049969f5cffd3e1d048`;
+  census: altet 2,805 / turcet 2,017 / monget 2,174 / tunget 2,435 /
+  koret 1,206 / japet 1,705 (+ LEXSTAT).
+- `CAUC.exe` — 1,304,331 B, sha256
+  `b0187353194a844b6dd458211db6733856290d747c9f67bf89e8470a1f79642c`;
+  census: caucet 2,327 (223 headword-less) / nakhet 970 / aandet 1,539 /
+  cezet 1,108 / laket 955 / darget 924 / lezget 1,569 / khinet 349 /
+  abadet 817 (+ LEXSTAT).
+- `SINTIB.exe` — 2,404,279 B, sha256
+  `dd87b7bbadf1eba4ce7ef216de377cb610cbbdfbc953527fe928a8f3c741c26d`;
+  census: stibet 2,823 (46 headword-less) / bigchina 9,093 (Big5
+  CHARACTER/FANQIE cells) / doc 2,614 (dialect-readings support table) /
+  kiret 994 / dumet 1,517 / kulet 1,466 / limet 2,354 / yamet 1,974
+  (+ LEXSTAT).
+- `DRAV.exe` — 2,118,705 B, sha256
+  `1ff655a7ca0c99e73300cd6e91710556fd098a62a0d662018d975cfe0005a5d3`;
+  census: dravet 2,171 / sdret 4,692 / telet 2,774 / kogaet 1,509 /
+  gndet 1,428 / gonet 1,475 / kuiet 1,377 / konet 961 / ktet 1,665 /
+  ndret 989 / pemet 740 / braet 269 (+ LEXSTAT).
+- `CHUKCHEE.exe` — 772,741 B, sha256
+  `9b00cca7636eb96d30e1aee17400bf8164abd075873b49a45e20771cb4136e2e`;
+  census: kamet 1,099 (dup NUMBER 689 ×2) / chuket 2,281 (dups 1206/
+  1584/1657/1956 ×2) / itelet 1,673 (dups 199/269/1119/1521 ×2)
+  (+ LEXSTAT).
+- `YENISEY.exe` — 198,208 B, sha256
+  `91ad3ddba76d68466b01438376a808508ba7463c5c65172b00deabc490cca5bf`;
+  census: yenet 1,059 (dup NUMBER 904 ×2, 2 headword-less) (+ LEXSTAT).
+
+Same trim recipe as the IE bases (records byte-verbatim, var-pointers
+rewritten against a compacted `.var`, the leading var header byte and
+any trailing `0x1A` DBF EOF byte mirrored — japet/kamet have one, the
+rest do not), with one addition: **upstream-defect pointer cells stay
+byte-verbatim** so the fixtures pin the parser's two P104-3 lanes.
+
+### What was kept (per base, one subdir per package)
+
+- `altaic/altet.dbf`/`.var` — records **1** (*èbà 'to join, meet': all
+  five branch protoform columns + all five branch links; JAPNUM=632 ⇄
+  japet #632 PRNUM=1, the both-ways pair inside this fixture set), **2**
+  (brace-notation gloss `{rage, anger}`, Nostratic PRNUM line, no KOR
+  cell), **1728** (*pā̀ró 'to buy, sell' — THE junk-pointer pin: the TURC
+  slot holds the literal whitespace bytes `0a 20 20 0a 0a 20` where a
+  var pointer belongs; kept byte-verbatim, reads as an empty field).
+- `altaic/japet.dbf`/`.var` — records **1** (*muta: AJP mints ojp;
+  English MEANING "together with" beside RUSMEAN), **2** (*páp(u)í
+  'ashes': the full dialect-column spread TOK/KYO/KAG/NAS/SHU/HAT),
+  **632** (*àp- 'to meet': PRNUM=1 ⇄ altet #1 JAPNUM=632).
+- `cauc/caucet.dbf`/`.var` — records **1** (*ḳwĭrV 'leg bone': NAKH/LEZG
+  branch protoforms + Hurro-Urartian comment; PRNUM → the unheld sccet
+  base), **2** (*Hrimq̱̇wV̆ 'ashes, soot': the ACTUAL-form columns LAK ḳa
+  and KHIN zäḳ mint lbe/kjj rows), **9** (one of the 223 headword-less
+  records — content-bearing LEZG cell under the `#9` placeholder).
+- `sintib/stibet.dbf`/`.var` — records **2** (*bā(H) / *phā(H): the
+  Big5-lead pin — the CHIN cell's character byte decodes to the honest
+  U+FFFD, Starostin's OC transcription after it survives whole;
+  CHINNUM/KIRNUM/PRNUM links; the unaliased STLSNUM=824 rides nowhere),
+  **5** (TIB `ãphar` — the transliterated column's body-only pin), **8**
+  (*[b]iw: LEPCHA `kŭm-bŭ` mints lep, KACH `nbo1` is tone-digit gated),
+  **2785** (THE truncated-var pin: seven pointers at 663142+ against
+  upstream's 640,352-byte `.var`, kept byte-verbatim — every affected
+  cell reads as U+FFFD).
+- `drav/dravet.dbf`/`.var` — records **1** (*ac- 'stamp, mould': the
+  "****" overflow sentinel in GNDNUM/NDRNUM/BRANUM — no crosslink line
+  without a number; SDRNUM/TELNUM links intact), **2** (*as- 'to move':
+  NDR branch protoform), **16** (*aḍḍ- 'to hinder': BRA `aḍ` mints brh;
+  all six branch links live).
+- `chukchee/kamet.dbf`/`.var` — records **1** (*maĺ'mɨ: CHUKNUM=804 ⇄
+  chuket #804 PRNUM=1 and ITELNUM=1 ⇄ itelet #1 PRNUM=1 — both pairs
+  inside this fixture set; Russian gloss), **2** (empty PRNUM — no
+  Nostratic line), **689 BOTH TIMES** (the upstream duplicate-NUMBER
+  pair: *'el 'no, negation' keeps the plain id, *hehe 'axe' mints
+  `689-b` + the body note).
+- `chukchee/chuket.dbf`/`.var` — records **1** (*ạlạ 'summer': CHU/KOR/
+  ALU mint ckt/kpy/alr, PAL body-only; the reference columns IM/BOG/NRS/
+  YFA/PAK; NIODNUM link; unaliased STPRO/CHFUNC/KOFUNC/ALFUNC ride
+  nowhere), **804** (*macbɨ #: the kamet #1 both-ways pair; trailing
+  `#` marker verbatim).
+- `chukchee/itelet.dbf`/`.var` — records **1** (*məźə-m: PRNUM=1 ⇄ kamet
+  #1 ITELNUM=1; Dybowski's Western Kamchadal columns with Latin/Polish
+  glosses; unaliased ICOST/WCOST ride nowhere), **2** (*meč'a- 'far':
+  ITE mints itl; Kovran/Stebnitski variant columns).
+- `yenisey/yenet.dbf`/`.var` — records **1** (*ʔaʔd 'bone': KET/SYM/KOT
+  mint ket/yug/zko; PRNUM → the unheld sccet base), **904 BOTH TIMES**
+  (the duplicate-NUMBER pair: *ʔa 'to become' keeps the plain id — its
+  KET/SYM affix leads `-a`/`-e-` are gated, KOT mints — and *qo- 'to
+  lick' mints `904-b`; its KET `qɔ:` length-colon lead is gated).
+
+Decoded output of the kept records was verified against the live
+parse of the full upstream tables (the same decoder path end to end);
+the per-base field labels are the packages' own `.inf` aliases.

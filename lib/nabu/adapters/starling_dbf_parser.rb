@@ -128,6 +128,22 @@ module Nabu
         return nil if cell == EMPTY_CELL
 
         offset, length = cell.unpack("Vv")
+        if offset >= var_data.bytesize
+          # A pointer ENTIRELY past the var file is never a live payload.
+          # Two censused upstream shapes (P104-3, one cell/record each in
+          # the eight packages): whitespace bytes where a pointer belongs
+          # (altet #1728's \x0a\x20\x20\x0a\x0a\x20 TURC slot — junk, not
+          # a pointer: an honest empty field; all-whitespace bytes always
+          # unpack to an offset over 151M, so this test is reachable), and
+          # stibet #2785's seven pointers at 663142+ against upstream's
+          # 640,352-byte .var — the var tail was cut upstream, so the cell
+          # decodes to the honest replacement character (the unmapped-byte
+          # rule's shape: marked, never silently dropped, never a
+          # whole-base quarantine). A payload RUNNING past from a valid
+          # offset keeps the torn-file raise below.
+          return cell.strip.empty? ? nil : "�"
+        end
+
         payload = var_data.byteslice(offset, length)
         if payload.nil? || payload.bytesize < length
           raise Nabu::ParseError,
