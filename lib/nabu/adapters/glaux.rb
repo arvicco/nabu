@@ -214,18 +214,26 @@ module Nabu
 
       # The document-level metadata journaled from the metadata.txt row (the
       # SOURCE_LICENSE rides verbatim — the per-text license record).
+      # P104-1 (Q77): GENRE_STANDARD also projects as a facet. DIALECT
+      # deliberately does NOT — a Greek-dialect lect story needs a
+      # lects-registry ruling (registry notes carry philology), so it
+      # stays metadata-only until that decision lands; start/end_date ride
+      # the timeline separately (MetadataDates :signed_bounds_keys,
+      # composition class).
       def document_metadata(ref_metadata)
         row = ref_metadata["row"] or return {}
+        genre = na_or(row[COL_GENRE])
         {
           "author" => presence(row[COL_AUTHOR]),
           "work" => presence(row[COL_TITLE]),
-          "genre" => na_or(row[COL_GENRE]),
+          "genre" => genre,
           "dialect" => na_or(row[COL_DIALECT]),
           "start_date" => presence(row[COL_START]),
           "end_date" => presence(row[COL_END]),
           "source" => presence(row[COL_SOURCE]),
           "source_license" => na_or(row[COL_LICENSE]),
-          "treebank_annotations" => na_or(row[COL_ANNOTATION])
+          "treebank_annotations" => na_or(row[COL_ANNOTATION]),
+          "facets" => (genre ? { "genre" => { "value" => genre } } : nil)
         }.compact
       end
 

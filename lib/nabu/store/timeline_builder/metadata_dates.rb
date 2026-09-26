@@ -34,6 +34,28 @@ module Nabu
       #   :period_label — top-level "period" Assyriological labels banded
       #     through the ruled config/period_bands.yml table (ebl, P62-0 —
       #     the P61-1 sweep's pending served; unruled labels mint nothing).
+      #   :compact_date_keys — top-level "datefrom"/"dateto" YYYYMMDD
+      #     strings (fornsvenska P104-1: "12800101"/"12901231" → 1280/1290;
+      #     the display "date" string rides raw).
+      #   :signed_year_key — a top-level signed-year STRING "creation_date"
+      #     (diorisis P104-1: "-245" → a one-year envelope; year 0 or
+      #     non-numeric mints nothing).
+      #   :signed_bounds_keys — top-level "start_date"/"end_date" signed-
+      #     year strings (glaux P104-1: "-300"/"-201").
+      #   :author_century_band — top-level "birth_century"/"death_century"
+      #     CE-century integer strings (disco P104-1: "17"/"17" → 1601–1700,
+      #     the author's own life band, never a midpoint).
+      #   :place_only — no date reading at all; the source registers for
+      #     the PLACE lane below (ogham P104-1: its "date" is free prose,
+      #     honestly unparsed, but the place hash carries townland/county/
+      #     country + WGS84 "geo" + logainm refs).
+      #
+      # == The composition class (№R-70 grade 2, ruled 2026-09-26)
+      #
+      # Author-era composition dating — the work's era, not an object's —
+      # is ruled IN as its OWN honestly-labeled class: rows from the
+      # COMPOSITION sources carry date_class "composition" (migration 034);
+      # artifact/typed dates keep NULL. A label, never a behavior switch.
       #     P81-1 adds the era ladder ABOVE the band for ebl's date
       #     objects: a Seleucid-era year converts exactly (SE Y = the two
       #     Julian years (312−Y)/(311−Y) BCE; month/day ride raw, never a
@@ -42,8 +64,8 @@ module Nabu
       #     arithmetic stays deliberately out — accession conventions are
       #     judgment, the envelope is upstream's claim); broken/uncertain
       #     years fall through to the period band.
-      # Audited and deliberately ABSENT: ogham ("date" =>
-      # {"text" => "Fifth century…"} free prose, 133 docs).
+      # (Ogham's free-prose "date" stays deliberately unparsed — the source
+      # registers :place_only for its coordinates lane, P104-1.)
       module MetadataDates
         # slug => shape (the audit roster; a new metadata-dating source
         # registers here and the health lane-drift check flags it if it
@@ -86,10 +108,22 @@ module Nabu
           "dta" => :year_range, # P94 (№R-59): the sourceDesc print year, clean "1784"
           #                       strings on every document; the de:early staging rides
           #                       LectDates date-band inference off these envelopes
-          "ebl" => :period_label
+          "ebl" => :period_label,
+          "fornsvenska" => :compact_date_keys, # P104-1: upstream's own per-text
+          #                                      datefrom/dateto, the pending posture served
+          "diorisis" => :signed_year_key, # P104-1: creation_date — composition class
+          "glaux" => :signed_bounds_keys, # P104-1: start_date/end_date — composition class
+          "disco" => :author_century_band, # P104-1: author life band — composition class
+          "ogham" => :place_only # P104-1: the coordinates/county lane; dates stay prose
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
+
+        # №R-70 grade 2 (P104-1): sources whose envelopes date the WORK's
+        # composition era (author-era), not an object — their rows carry
+        # date_class "composition". croala's year ranges were the class's
+        # precedent (its lect=dates posture rides exactly these bands).
+        COMPOSITION = %w[croala diorisis glaux disco].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -101,8 +135,11 @@ module Nabu
         # corpus-corporum joined P96 (the health reversed-bounds anomaly: 23
         # rows where the composition-envelope ladder minted "later-earlier";
         # signs are upstream-explicit CE years, so the swap is safe).
+        # fornsvenska/glaux/disco joined P104-1: signs are upstream-explicit
+        # (all-CE compact dates, signed year strings, CE centuries), so the
+        # defensive swap stays safe.
         REORDER = %w[edr bfm itant croala corpus-corporum corpus-gysseling
-                     corpus-oudnederlands].freeze
+                     corpus-oudnederlands fornsvenska glaux disco].freeze
 
         BATCH = 2_000
 
@@ -135,7 +172,8 @@ module Nabu
             .select(:id, :metadata_json)
             .order(:id)
             .paged_each do |doc|
-              row = axis_row(doc, shape, reorder: REORDER.include?(slug))
+              row = axis_row(doc, shape, reorder: REORDER.include?(slug),
+                                         composition: COMPOSITION.include?(slug))
               next if row.nil?
 
               buffer << row.merge(axis_source: slug)
@@ -150,42 +188,74 @@ module Nabu
         end
 
         # One document's axis row, or nil when it carries neither a date
-        # bound nor an ancient place name.
-        def axis_row(doc, shape, reorder: false)
+        # bound nor a place claim (name, ref or coordinates).
+        def axis_row(doc, shape, reorder: false, composition: false)
           meta = JSON.parse(doc[:metadata_json].to_s)
           not_before, not_after, raw = send(shape, meta)
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
-          # "place" is a Hash ({"ancient" => …}, EDR/Elephantine) or a bare
-          # string (croala — the P44-i4 shape); the string IS the name.
-          # P63-4: a hash carrying a bare "pleiades" id (itant — 497 docs
-          # measured 2026-08-08, ALL joining the held index) lifts it into
-          # place_ref, namespaced per Dp-b (a derivation mint, never a
-          # verbatim upstream URL). Non-numeric values never mint.
-          # P73-2 (ex-Q20): the "geonames" findspot ref (a verbatim URL —
-          # 508 real GeoNames, 1 mislabeled Trismegistos URL, 13 doubled-URL
-          # strays, measured 2026-08-10) lifts through the ONE ref reader:
-          # whatever PlaceRefs honestly parses mints in its true namespace,
-          # space-separated per the multi-claim convention; malformed
-          # remainders mint nothing.
-          place = meta["place"]
-          place_ref = nil
-          if place.is_a?(Hash)
-            refs = []
-            pleiades = place["pleiades"].to_s.strip
-            refs << "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
-            refs += Nabu::PlaceRefs.ids(place["geonames"]).map { |ns, id| "#{ns}:#{id}" }
-            place_ref = refs.uniq.join(" ") unless refs.empty?
-            place = place["ancient"]
-          end
+          place, place_ref, lat, lon = place_claim(meta)
           # A ref IS placement (P73-2): a doc carrying only a parseable
           # place ref rows too — the HGV place-only precedent extended.
-          return nil if not_before.nil? && not_after.nil? && place_ref.nil? &&
+          # P104-1 extends it once more: a coordinate pair alone places.
+          return nil if not_before.nil? && not_after.nil? && place_ref.nil? && lat.nil? &&
                         (place.nil? || place.to_s.strip.empty?)
 
+          dated = !(not_before.nil? && not_after.nil?)
           { document_id: doc[:id], not_before: not_before, not_after: not_after,
-            date_raw: raw, place_name: place, place_ref: place_ref }
+            date_raw: raw, place_name: place, place_ref: place_ref,
+            place_lat: lat, place_lon: lon,
+            date_class: composition && dated ? "composition" : nil }
         rescue JSON::ParserError
           nil
+        end
+
+        # "place" is a Hash ({"ancient" => …}, EDR/Elephantine; ogham's
+        # townland/county/country ladder) or a bare string (croala — the
+        # P44-i4 shape); the string IS the name. Returns
+        # [name, ref, lat, lon].
+        # P63-4: a hash carrying a bare "pleiades" id (itant — 497 docs
+        # measured 2026-08-08, ALL joining the held index) lifts it into
+        # place_ref, namespaced per Dp-b (a derivation mint, never a
+        # verbatim upstream URL). Non-numeric values never mint.
+        # P73-2 (ex-Q20): the "geonames" findspot ref (a verbatim URL —
+        # 508 real GeoNames, 1 mislabeled Trismegistos URL, 13 doubled-URL
+        # strays, measured 2026-08-10) lifts through the ONE ref reader:
+        # whatever PlaceRefs honestly parses mints in its true namespace,
+        # space-separated per the multi-claim convention; malformed
+        # remainders mint nothing.
+        # P104-1 (ogham): "logainm" gazetteer URLs ride verbatim (the EDH
+        # URL precedent — no logainm namespace is minted); the WGS84 "geo"
+        # pair lands in place_lat/place_lon (the rundata coordinates lane),
+        # both-or-nothing; an "ancient"-less hash names itself from the
+        # townland → county → country ladder, joined verbatim.
+        # P104-1 (menota): a top-level "orig_place" string is the origin
+        # claim and answers when no "place" key exists; repository/
+        # settlement (the holding library — a PRESENT location) stay
+        # metadata-only, the rundata origin-axis stance.
+        def place_claim(meta)
+          place = meta["place"]
+          return [meta["orig_place"], nil, nil, nil] if place.nil?
+          return [place, nil, nil, nil] unless place.is_a?(Hash)
+
+          refs = []
+          pleiades = place["pleiades"].to_s.strip
+          refs << "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
+          refs += Nabu::PlaceRefs.ids(place["geonames"]).map { |ns, id| "#{ns}:#{id}" }
+          refs += Array(place["logainm"]).map(&:to_s).reject(&:empty?)
+          name = place["ancient"] ||
+                 place.values_at("townland", "county", "country").compact.then do |ladder|
+                   ladder.empty? ? nil : ladder.join(", ")
+                 end
+          [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # A WGS84 "lat, lon" string → [lat, lon] floats, both-or-nothing
+        # (a lone or malformed coordinate is not a point — never guessed).
+        GEO_PAIR = /\A(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\z/
+        def coordinates(geo)
+          match = GEO_PAIR.match(geo.to_s.strip) or return [nil, nil]
+
+          [Float(match[1]), Float(match[2])]
         end
 
         def period_label(meta)
@@ -283,6 +353,71 @@ module Nabu
         # exactly like croala's.
         def bounds_keys(meta)
           [meta["not_before"], meta["not_after"], meta["date_raw"]]
+        end
+
+        # fornsvenska (P104-1): upstream's own compact YYYYMMDD bounds —
+        # "12800101"/"12901231" → 1280/1290, the display "date" string as
+        # raw. Anything not eight digits mints nothing.
+        COMPACT_DATE = /\A(\d{4})\d{4}\z/
+        def compact_date_keys(meta)
+          not_before = compact_year(meta["datefrom"])
+          not_after = compact_year(meta["dateto"])
+          return [nil, nil, nil] if not_before.nil? && not_after.nil?
+
+          [not_before, not_after, meta["date"]]
+        end
+
+        def compact_year(value)
+          match = COMPACT_DATE.match(value.to_s.strip)
+          match && Integer(match[1], 10)
+        end
+
+        # diorisis (P104-1): the signed composition year string ("-245") —
+        # a one-year envelope. Year 0 or non-numeric mints nothing.
+        def signed_year_key(meta)
+          year = signed_year(meta["creation_date"])
+          year ? [year, year, meta["creation_date"].to_s.strip] : [nil, nil, nil]
+        end
+
+        # glaux (P104-1): signed composition bounds strings.
+        def signed_bounds_keys(meta)
+          not_before = signed_year(meta["start_date"])
+          not_after = signed_year(meta["end_date"])
+          return [nil, nil, nil] if not_before.nil? && not_after.nil?
+
+          [not_before, not_after, [not_before, not_after].compact.join("–")]
+        end
+
+        def signed_year(value)
+          match = /\A(-?\d{1,4})\z/.match(value.to_s.strip) or return nil
+
+          year = Integer(match[1], 10)
+          year.zero? ? nil : year # no year 0 — skipped honestly, never shifted
+        end
+
+        # disco (P104-1): the author's own birth/death CE centuries band
+        # the composition envelope ("17"/"17" → 1601–1700 — honest bounds,
+        # never a midpoint). The author "birthplace" is biography, not a
+        # composition place — deliberately never projected.
+        def author_century_band(meta)
+          birth = century_int(meta["birth_century"])
+          death = century_int(meta["death_century"])
+          return [nil, nil, nil] if birth.nil? && death.nil?
+
+          raw = ["b. #{meta['birth_century']}th c.", "d. #{meta['death_century']}th c."].join(", ")
+          [birth && (((birth - 1) * 100) + 1), death && (death * 100), raw]
+        end
+
+        def century_int(value)
+          match = /\A\d{1,2}\z/.match(value.to_s.strip)
+          match && Integer(match[0], 10)
+        end
+
+        # ogham (P104-1): no date lane at all — the "date" is free prose
+        # ("Fifth century…"), honestly unparsed; registration serves the
+        # place hash (townland/county/country + geo + logainm) alone.
+        def place_only(_meta)
+          [nil, nil, nil]
         end
 
         def year_range(meta)

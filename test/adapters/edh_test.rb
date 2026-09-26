@@ -72,6 +72,16 @@ class EdhTest < Minitest::Test
     assert_equal "Latium et Campania (Regio I)", metadata.dig("facets", "province", "value")
   end
 
+  # P104-1 (Q77): the thematic CSV columns join the facet join — HD000001's
+  # real row carries erhaltung "V" (the letter codes ride verbatim; EDH
+  # ships no decode table with the dumps).
+  def test_thematic_csv_columns_ride_the_discover_join_into_facets
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:edh:hd000001" }
+    metadata = adapter.parse(ref).metadata
+    assert_equal({ "value" => "V", "raw" => "V" }, metadata.dig("facets", "condition"))
+  end
+
   # P44-2: the origPlace ancient placeName + its upstream Pleiades ref land as
   # document metadata under the cross-source place shape — the ancient name
   # verbatim, the ref normalized to the bare numeric id (place.pleiades, the
