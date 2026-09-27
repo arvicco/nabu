@@ -3175,8 +3175,18 @@ module Nabu
         raise Thor::Error, "no dictionary shelf in this catalog yet — run nabu sync lexica " \
                            "(or nabu rebuild after one)"
       end
-      shelf_langs = catalog[:dictionaries].distinct.order(:language).select_map(:language)
-      @shelf_summary = "the shelf holds #{catalog[:dictionaries].count} dictionaries " \
+      # P106-3: the header answers from the dictionary_stats census when
+      # one is derived (the desk-commands law); the live distinct scan
+      # stays the pre-036/underived fallback, byte-identical.
+      shelf_langs, shelf_count =
+        if catalog.table_exists?(:dictionary_stats) && !catalog[:dictionary_stats].empty?
+          [catalog[:dictionary_stats].distinct.order(:language).select_map(:language),
+           catalog[:dictionary_stats].count]
+        else
+          [catalog[:dictionaries].distinct.order(:language).select_map(:language),
+           catalog[:dictionaries].count]
+        end
+      @shelf_summary = "the shelf holds #{shelf_count} dictionaries " \
                        "(#{shelf_langs.join(', ')})"
       if options[:lang] && !Nabu::Languages.code_variants(options[:lang]).intersect?(shelf_langs)
         raise Thor::Error, "define: --lang must be a language on the live shelf " \
@@ -9832,6 +9842,7 @@ module Nabu
         print_language_witnesses(code, languages)
         print_language_notes(notes)
         print_language_relevance(code, relevance) if relevance
+        print_language_dictionary_group(code, info, lects) if info
         print_language_axes(code, info, registry)
         print_language_stage_ladder(code, stages, lects, info)
       end
@@ -10056,6 +10067,31 @@ module Nabu
         say "  etymology: #{commas(rel.reflex_edges)} reflex #{rel.reflex_edges == 1 ? 'edge' : 'edges'}" \
           if rel.reflex_edges.positive?
         print_language_long(code, rel) if options[:long]
+      end
+
+      # P106-3 (№R-69 g2): the dictionary GROUP — every shelf whose lect
+      # resolution lands at or under this code's node, off the
+      # dictionary_stats census. Renders only when the group is WIDER than
+      # the code's own shelves (the relevance block above already lists
+      # those); a group of one code adds nothing. Feature-off (no census
+      # derived yet, or no group): silent — the card is unchanged.
+      def print_language_dictionary_group(code, info, lects)
+        # const: render cap — the group line is a summary, not a listing
+        cap = 8
+        group = info.dictionary_group(code, lects: lects)
+        return unless group&.node
+        return if group.rows.empty? || group.rows.all? { |row| row[:language] == code.to_s }
+
+        count = group.rows.size
+        say "  dictionary group (#{group.node}): #{count} #{count == 1 ? 'dictionary' : 'dictionaries'} · " \
+            "#{commas(group.total)} entries"
+        shown = group.rows.first(cap)
+        shown.each do |row|
+          code_note = row[:language] == code.to_s ? "" : " · #{row[:language]}"
+          say "    #{row[:slug]} — #{commas(row[:entries])} entries#{code_note}"
+        end
+        hidden = group.rows.size - shown.size
+        say "    … #{hidden} more" if hidden.positive?
       end
 
       # --long: per-source document counts and the upstream-code split of
