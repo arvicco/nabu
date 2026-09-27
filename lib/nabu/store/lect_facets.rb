@@ -28,13 +28,22 @@ module Nabu
       # breath — the write-time-census stance (source_stats/P42-0): reads
       # never aggregate the half-million-row facet, and the numbers cannot
       # drift from the facet they summarize.
+      #
+      # ONE transaction end to end (P106-7, Q88.1 — the 2026-09-26
+      # incident: a killed rebuild committed the DELETE without the
+      # rewrite and the live axis went dark corpus-wide for a day): a
+      # failure anywhere rolls the drop back and the prior
+      # materialization stands.
       def rebuild!(catalog:, registry:, progress: nil)
-        catalog[:document_facets].where(facet: FACET).delete
-        unless registry
-          derive_stats!(catalog)
-          return 0
+        catalog.transaction do
+          catalog[:document_facets].where(facet: FACET).delete
+          count = registry ? rewrite!(catalog, registry, progress) : 0
+          derive_stats!(catalog) unless registry # rewrite! derives its own
+          count
         end
+      end
 
+      def rewrite!(catalog, registry, progress)
         # The no-silent-passes rule (owner, restated 2026-09-04 on this
         # exact command): this walks EVERY language document — minutes at
         # library scale — so it announces and ticks.
@@ -166,7 +175,7 @@ module Nabu
                   Sequel[:documents][:language].as(:language), Sequel[:sources][:slug].as(:slug))
           .each(&)
       end
-      private_class_method :resolved, :each_language_document, :upsert_stat
+      private_class_method :resolved, :each_language_document, :upsert_stat, :rewrite!
     end
   end
 end

@@ -162,7 +162,10 @@ determine a language.
 ## Reference-shelf languages (dictionaries)
 
 **{{ census.dictionary_entries_display }} dictionary entries** live (as of
-{{ census.as_of }}). The classical
+{{ census.as_of }}), across {{ census.dictionary_shelves }} shelves grouped
+under {{ census.dictionary_lects }} registry lect nodes
+({{ census.dictionary_unresolved_codes }} shelf language codes await a
+registry assignment and are censused as unresolved). The classical
 reference shelf: Liddell-Scott-Jones (Greek, 116,497 entries), Lewis &amp;
 Short (Latin, 51,636), Monier-Williams (Sanskrit, 193,890),
 Bosworth-Toller (Old English, 62,815) — citations resolving into the

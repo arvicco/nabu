@@ -12,7 +12,7 @@ module Nabu
     # builder invoked is drop-and-reproject, so the pass is idempotent
     # and db/ stays a pure function of the permanent folders.
     module BuilderRefresh
-      Summary = Data.define(:timeline, :facets, :kinds)
+      Summary = Data.define(:timeline, :facets, :kinds, :lect_rows, :dictionary_stats, :derge_titles)
 
       module_function
 
@@ -29,7 +29,21 @@ module Nabu
         kinds = Store::KindBuilder.rebuild!(catalog: catalog,
                                             kinds: Kinds.load_default(config: config),
                                             progress: progress, canonical_dir: canonical_dir)
-        Summary.new(timeline: timeline, facets: facets, kinds: kinds)
+        # P106-7 (Q88.2): the lect facet joins the sanctioned in-phase
+        # pass — the one rebuild-only derivation a killed rebuild could
+        # strand dark corpus-wide (the 2026-09-26 incident); with it ride
+        # the two cheap censuses derived in the same breath (P106-1/-5).
+        progress&.stage("lect facets")
+        lect_rows = Store::LectFacets.rebuild!(catalog: catalog,
+                                               registry: Lects.load_default(config: config),
+                                               progress: progress)
+        progress&.stage("dictionary stats")
+        dictionary_stats = Store::DictionaryStats.rebuild!(catalog: catalog,
+                                                           lects: Lects.load_default(config: config))
+        progress&.stage("derge titles")
+        derge_titles = E84000DergeTitles.new(catalog: catalog, canonical_dir: canonical_dir).run
+        Summary.new(timeline: timeline, facets: facets, kinds: kinds, lect_rows: lect_rows,
+                    dictionary_stats: dictionary_stats, derge_titles: derge_titles)
       end
     end
   end

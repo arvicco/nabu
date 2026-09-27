@@ -105,6 +105,26 @@ module Store
       assert_equal ["grc:koi", "overlay"], row.values_at(:value, :raw)
     end
 
+    # P106-7 (Q88.1 — the 2026-09-26 incident): the killed P104 rebuild
+    # committed the wholesale DELETE but died before the rewrite, zeroing
+    # the live lect axis corpus-wide for a day. The delete + rewrite (and
+    # the census derived in the same breath) are ONE transaction now: a
+    # failure anywhere leaves the prior materialization intact.
+    def test_rebuild_is_atomic_a_mid_rewrite_failure_keeps_the_prior_rows
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
+      before_rows = lect_rows
+      before_stats = @catalog[:lect_stats].order(:kind, :key).all
+
+      exploding = Object.new
+      def exploding.resolution(*) = raise "boom mid-rewrite"
+      assert_raises(RuntimeError) do
+        Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: exploding)
+      end
+      assert_equal before_rows, lect_rows, "the wholesale DELETE must roll back with the failure"
+      assert_equal before_stats, @catalog[:lect_stats].order(:kind, :key).all,
+                   "the census rolls back with the facet it summarizes"
+    end
+
     def test_materialized_predicate
       refute Nabu::Store::LectFacets.materialized?(@catalog)
       Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)

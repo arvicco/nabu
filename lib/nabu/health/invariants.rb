@@ -78,7 +78,8 @@ module Nabu
       # config.method(:source_workdir) so the local-* shelves resolve to
       # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
-                     creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil)
+                     creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil,
+                     lects: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -92,6 +93,9 @@ module Nabu
         @creep_acceptances_path = creep_acceptances_path
         # P98-2: config/place_ref_errata.yml — reviewed dangling refs.
         @place_ref_errata_path = place_ref_errata_path
+        # P106-7 (Q88.3): the nabu-lects registry for the override-staging
+        # check; nil (module absent, bare callers) skips it honestly.
+        @lects = lects
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -116,6 +120,9 @@ module Nabu
           pending_migrations(@catalog, Store::MIGRATIONS_DIR, "catalog", "run nabu sync or nabu rebuild"),
           pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them"),
           stats_drift,
+          lect_axis_dark,
+          lect_census_drift,
+          lect_override_dark,
           facet_lane_drift,
           timeline_lane_drift,
           reversed_axis_bounds,
@@ -676,6 +683,108 @@ module Nabu
           drift[:live_passages] = [stats.fetch(:live_passages), actual] if stats.fetch(:live_passages) != actual
         end
         drift
+      end
+
+      # -- the lect stats↔facet invariant (P106-7, Q88.3) ----------------------
+      #
+      # The 2026-09-26 incident: a killed rebuild committed LectFacets'
+      # wholesale DELETE but died before the rewrite — the materialized
+      # lect axis zeroed corpus-wide while lect_stats kept its stale rows,
+      # and nothing went red for a day. Three pairings, one loud line at a
+      # time: the stats claim staged documents so facet rows must exist
+      # (the incident's exact signature); the per-key census must match
+      # the facet it summarizes (write-time-census, now guarded); and an
+      # override-RULED source holding live documents must have staged rows
+      # (the ruling promises a materialized resolution).
+
+      def lect_axis_dark
+        return nil unless table?(@catalog, :lect_stats) && table?(@catalog, :document_facets)
+        return nil unless @catalog[:lect_stats].where(kind: "lect").sum(:documents).to_i.positive?
+        return nil unless @catalog[:document_facets].where(facet: Store::LectFacets::FACET).first.nil?
+
+        Finding.new(
+          kind: :lect_axis_dark, severity: :loud,
+          message: "the lect axis is DARK: lect_stats claims staged documents but the lect facet " \
+                   "holds zero rows — the killed-rebuild signature (2026-09-26). " \
+                   "bin/nabu lect materialize or rake builders:refresh re-derives"
+        )
+      end
+
+      def lect_census_drift
+        return nil unless table?(@catalog, :lect_stats) && table?(@catalog, :document_facets)
+
+        actual = lect_facet_truth
+        # The all-zero case is lect_axis_dark's line (one loud line at a time).
+        return nil if actual.empty? && @catalog[:lect_stats].where(kind: "lect").sum(:documents).to_i.positive?
+
+        stated = @catalog[:lect_stats].where(kind: "lect").select_hash(:key, :documents)
+        drift = (actual.keys | stated.keys).filter_map do |key|
+          [key, stated[key].to_i, actual[key].to_i] if stated[key].to_i != actual[key].to_i
+        end
+        return nil if drift.empty?
+
+        detail = drift.first(5).map { |key, s, a| "#{key} stats=#{s} actual=#{a}" }.join(", ")
+        detail << " … #{drift.size - 5} more keys" if drift.size > 5
+        Finding.new(
+          kind: :lect_census_drift, severity: :loud,
+          message: "lect_stats drift against the facet it summarizes: #{detail} — the census is " \
+                   "derived in the same pass as the facet; a write path bypassed it (a bug — " \
+                   "report it). bin/nabu lect materialize re-derives both"
+        )
+      end
+
+      def lect_override_dark
+        return nil if @lects.nil?
+        return nil unless table?(@catalog, :documents) && table?(@catalog, :document_facets)
+
+        dark = override_ruled_pairs.reject { |code, slug| pair_staged?(code, slug) }
+        return nil if dark.empty?
+
+        pairs = dark.first(5).map { |code, slug| "#{slug} (#{code})" }.join(", ")
+        pairs << " … #{dark.size - 5} more" if dark.size > 5
+        Finding.new(
+          kind: :lect_override_dark, severity: :loud,
+          message: "override-ruled sources with ZERO staged lect rows: #{pairs} — the ruling " \
+                   "promises a materialized resolution for every live document. " \
+                   "bin/nabu lect materialize or rake builders:refresh re-derives"
+        )
+      end
+
+      # {facet value => live-document count}, exactly the derive_stats!
+      # aggregation (withdrawn documents excluded).
+      def lect_facet_truth
+        @catalog[:document_facets]
+          .join(:documents, id: :document_id)
+          .where(Sequel[:document_facets][:facet] => Store::LectFacets::FACET,
+                 Sequel[:documents][:withdrawn] => false)
+          .group(Sequel[:document_facets][:value])
+          .select { [document_facets[:value].as(:key), count.function.*.as(:documents)] }
+          .to_hash(:key, :documents)
+      end
+
+      # Every live (language, source slug) pair whose lect resolution is
+      # RULED by a per-source override to a non-identity node.
+      def override_ruled_pairs
+        @catalog[:documents]
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:documents][:withdrawn] => false)
+          .exclude(Sequel[:documents][:language] => nil)
+          .distinct
+          .select_map([Sequel[:documents][:language], Sequel[:sources][:slug]])
+          .select do |code, slug|
+            @lects.override_tier(slug, code) && @lects.resolve(code, source: slug) != code
+          end
+      end
+
+      def pair_staged?(code, slug)
+        docs = @catalog[:documents]
+               .join(:sources, id: Sequel[:documents][:source_id])
+               .where(Sequel[:documents][:language] => code, Sequel[:documents][:withdrawn] => false,
+                      Sequel[:sources][:slug] => slug)
+               .select(Sequel[:documents][:id])
+        !@catalog[:document_facets]
+          .where(facet: Store::LectFacets::FACET, document_id: docs)
+          .first.nil?
       end
 
       # -- pending migrations (global) -----------------------------------------

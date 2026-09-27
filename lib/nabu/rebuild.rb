@@ -234,6 +234,20 @@ module Nabu
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
                                    progress: progress)
       end
+      # P106-1: the dictionary-group census — per-dictionary resolved-lect
+      # + entry-count rows the define/card/site surfaces read (few hundred
+      # rows, seconds to derive; same feature-detect as the lect facet).
+      progress&.stage("dictionary stats")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :dictionary_stats) do
+        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
+      end
+      # P106-5: the 84000→Derge title crosswalk — refills the derge
+      # shelves' NULL titles from canonical/e84000 headers (seconds;
+      # absent tree = clean no-op).
+      progress&.stage("derge titles")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :derge_titles) do
+        E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
+      end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.
       progress&.stage("artifact scripts", eta: corpus_eta(ledger, "artifact_scripts"))
@@ -550,8 +564,8 @@ module Nabu
       rescue Nabu::Error => e
         failures << "#{entry.slug}: #{e.message}"
       end
-      LinkScopes.load(@config.link_scopes_path).each do |scope|
-        replay_batch_scope(scope, db, fulltext, journal)
+      LinkScopeReplay.order(LinkScopes.load(@config.link_scopes_path)).each do |scope|
+        LinkScopeReplay.replay!(scope, db: db, fulltext: fulltext, journal: journal, config: @config)
       rescue Nabu::Error, ArgumentError => e
         failures << "#{scope['producer']} #{scope['scope']}: #{e.message}"
       end
@@ -559,28 +573,6 @@ module Nabu
       failures
     ensure
       journal&.disconnect
-    end
-
-    def replay_batch_scope(scope, db, fulltext, journal)
-      params = scope["params"] || {}
-      case scope["producer"]
-      when "parallels"
-        BatchParallels.new(catalog: db, fulltext: fulltext, journal: journal)
-                      .run(scope["scope"],
-                           **{ lang: params["lang"], license: params["license"],
-                               min_score: params["min_score"], per_anchor: params["per_anchor"] }.compact)
-      when "cognates"
-        BatchCognates.new(catalog: db, fulltext: fulltext, journal: journal,
-                          registry: AlignmentRegistry.load(@config.alignments_path))
-                     .run(scope["scope"], langs: params["langs"], all: params.fetch("all", false))
-      when "formulas"
-        BatchFormulas.new(catalog: db, journal: journal)
-                     .run(scope["scope"],
-                          **{ gram_size: params["gram_size"], min_count: params["min_count"],
-                              lang: params["lang"], max_formulas: params["max_formulas"] }.compact)
-      else
-        raise Nabu::Error, "unknown batch producer #{scope['producer'].inspect} in link_scopes.yml"
-      end
     end
 
     def db_path = @config.catalog_path

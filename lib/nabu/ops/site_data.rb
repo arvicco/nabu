@@ -110,6 +110,15 @@ module Nabu
           end,
           "dictionary_entries" => entries, "dictionary_entries_display" => self.class.commas(entries),
           "dictionary_shelves" => catalog[:dictionaries].count,
+          # P106-3 (№R-69 g2): the dictionary-group census — shelves
+          # grouped by resolved lect node (dictionary_stats, migration
+          # 036), plus the honestly-censused count of language codes the
+          # registry cannot yet place. Zero on a pre-036/underived
+          # catalog — the guard test treats that as the drift it is.
+          "dictionary_lects" =>
+            dictionary_stats_column(catalog) { |ds| ds.exclude(lect: nil).distinct.select(:lect).count },
+          "dictionary_unresolved_codes" =>
+            dictionary_stats_column(catalog) { |ds| ds.where(lect: nil).distinct.select(:language).count },
           # The etym cognate-list code universe (languages.md cites it; it
           # drifted from a hardcoded 803 to 1,131 before joining the SSOT —
           # the ko/cmn lesson, P105 follow-up).
@@ -137,6 +146,15 @@ module Nabu
       # The registry shape as counts (config/sources.yml): total rows split
       # by kind (source / shelf / feature module), plus the wired-source
       # count. Pure registry data — deterministic, no catalog read.
+      # The dictionary_stats read with the pre-036 guard: 0 when the
+      # table is absent or never derived (honest, and the site guard
+      # test flags it — the census must be derived before site:refresh).
+      def dictionary_stats_column(catalog)
+        return 0 unless catalog.table_exists?(:dictionary_stats)
+
+        yield catalog[:dictionary_stats]
+      end
+
       def registry_breakdown
         entries = @registry.each_source.to_a
         { rows: entries.size,

@@ -147,8 +147,8 @@ class RebuildTest < Minitest::Test
     rebuilder.run(progress: reporter)
 
     assert_equal ["corpus", "timeline", "place apply", "facets", "kind axis", "hiero postings", "lect journal",
-                  "lect facets", "artifact scripts", "source stats", "fulltext index", "links",
-                  "analyze"],
+                  "lect facets", "dictionary stats", "derge titles", "artifact scripts",
+                  "source stats", "fulltext index", "links", "analyze"],
                  stages
   end
 

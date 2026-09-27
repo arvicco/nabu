@@ -2,6 +2,7 @@
 
 require_relative "../e84000_translations"
 require_relative "e84000_tei_parser"
+require_relative "e84000_glossary_lane"
 
 module Nabu
   module Adapters
@@ -105,6 +106,11 @@ module Nabu
       def self.manifest
         MANIFEST
       end
+
+      # The back-matter glossary entities (P106-4): dictionary-shaped
+      # content riding the same publication files — loaded as the P104-4
+      # secondary dictionary lane after the passage load.
+      def self.dictionary_lane = E84000GlossaryLane.new
 
       # The Kangyur↔84000 translation crosswalk (P48-6): after every e84000
       # sync, each publication's toh_base keys re-derive kind=translation
