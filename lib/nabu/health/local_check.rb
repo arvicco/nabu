@@ -90,7 +90,7 @@ module Nabu
       # skips them honestly.
       def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now,
                      canonical_dir: nil, creep_acceptances_path: nil, workdir_resolver: nil,
-                     place_ref_errata_path: nil, shed_acceptances_path: nil)
+                     place_ref_errata_path: nil, shed_acceptances_path: nil, lects: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -105,7 +105,8 @@ module Nabu
                                      ledger: ledger, canonical_dir: canonical_dir, now: now,
                                      creep_acceptances_path: creep_acceptances_path,
                                      workdir_resolver: workdir_resolver,
-                                     place_ref_errata_path: place_ref_errata_path)
+                                     place_ref_errata_path: place_ref_errata_path,
+                                     lects: lects)
       end
 
       def run

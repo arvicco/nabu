@@ -649,6 +649,92 @@ class InvariantsTest < Minitest::Test
     assert_empty(findings.select { |f| %i[dossiers_vanished dossiers_stale dossiers_unindexed].include?(f.kind) })
   end
 
+  # -- the lect stats↔facet invariant (P106-7, Q88.3 — the 2026-09-26
+  # incident: the killed rebuild committed LectFacets' wholesale DELETE,
+  # the axis went dark corpus-wide while lect_stats kept its stale rows,
+  # and nothing went red for a day) --------------------------------------
+
+  def test_lect_stats_beside_a_zeroed_facet_is_loud
+    @db[:lect_stats].insert(kind: "lect", key: "lat:med", documents: 5)
+
+    finding = global_finding(:lect_axis_dark)
+    assert_predicate finding, :loud?
+    assert_match(/lect materialize|builders:refresh/, finding.message)
+  end
+
+  def test_matching_lect_census_is_silent
+    source = seed_source("texts")
+    doc = seed_lect_doc(source, "la-med", "urn:t:lect:1")
+    @db[:document_facets].insert(document_id: doc, facet: "lect", value: "lat:med")
+    @db[:lect_stats].insert(kind: "lect", key: "lat:med", documents: 1)
+
+    assert_nil global_finding(:lect_axis_dark)
+    assert_nil global_finding(:lect_census_drift)
+  end
+
+  def test_lect_census_key_drift_is_loud
+    source = seed_source("texts")
+    doc = seed_lect_doc(source, "la-med", "urn:t:lect:1")
+    @db[:document_facets].insert(document_id: doc, facet: "lect", value: "lat:med")
+    @db[:lect_stats].insert(kind: "lect", key: "lat:med", documents: 5)
+
+    finding = global_finding(:lect_census_drift)
+    assert_predicate finding, :loud?
+    assert_match(/lat:med stats=5 actual=1/, finding.message)
+  end
+
+  def test_a_facet_value_the_stats_never_heard_of_is_drift_too
+    source = seed_source("texts")
+    doc = seed_lect_doc(source, "grc", "urn:t:lect:2")
+    @db[:document_facets].insert(document_id: doc, facet: "lect", value: "grc:koi")
+
+    finding = global_finding(:lect_census_drift)
+    assert_predicate finding, :loud?
+    assert_match(/grc:koi stats=0 actual=1/, finding.message)
+  end
+
+  # The incident's front door: an override-ruled source (derom's la-vul →
+  # roa:pro in the fixture registry) holding live documents with ZERO lect
+  # facet rows — the ruling promises a materialized resolution.
+  def test_override_ruled_source_with_a_dark_staging_is_loud
+    source = seed_source("derom")
+    seed_lect_doc(source, "la-vul", "urn:t:lect:3")
+
+    finding = lects_invariants.global.find { |f| f.kind == :lect_override_dark }
+    assert_predicate finding, :loud?
+    assert_match(/derom/, finding.message)
+    assert_match(/la-vul/, finding.message)
+  end
+
+  def test_override_ruled_source_with_staged_rows_is_silent
+    source = seed_source("derom")
+    doc = seed_lect_doc(source, "la-vul", "urn:t:lect:4")
+    @db[:document_facets].insert(document_id: doc, facet: "lect", value: "roa:pro")
+    @db[:lect_stats].insert(kind: "lect", key: "roa:pro", documents: 1)
+
+    assert_nil(lects_invariants.global.find { |f| f.kind == :lect_override_dark })
+  end
+
+  def test_override_check_skips_without_a_lects_registry
+    source = seed_source("derom")
+    seed_lect_doc(source, "la-vul", "urn:t:lect:5")
+
+    assert_nil(invariants.global.find { |f| f.kind == :lect_override_dark })
+  end
+
+  def seed_lect_doc(source, language, urn)
+    @db[:documents].insert(source_id: source[:id], urn: urn, language: language,
+                           content_sha256: "x", withdrawn: false)
+  end
+
+  def lects_invariants
+    lects = Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
+                             overrides_path: File.join(Nabu::Config::PROJECT_ROOT, "config",
+                                                       "lect_overrides.yml"))
+    Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext,
+                                 ledger: @ledger, now: @now, lects: lects)
+  end
+
   def invariants(catalog: @db, fulltext: @fulltext, ledger: @ledger, errata_path: nil)
     Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger,
                                  now: @now, place_ref_errata_path: errata_path)

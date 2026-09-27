@@ -11622,7 +11622,8 @@ module Nabu
           creep_acceptances_path: config.creep_acceptances_path,
           shed_acceptances_path: config.shed_acceptances_path,
           workdir_resolver: config.method(:source_workdir),
-          place_ref_errata_path: File.join(config.config_dir, "place_ref_errata.yml")
+          place_ref_errata_path: File.join(config.config_dir, "place_ref_errata.yml"),
+          lects: Nabu::Lects.load_default(config: config)
         ).run
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         print_local_health(report, all: options[:all], seconds: seconds)
