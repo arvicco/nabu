@@ -438,7 +438,8 @@ end
 # rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
 # changes refresh projections through this task, never via a rebuild).
 namespace :builders do
-  desc "Re-project timeline + places + facets + kind axis over the live catalog"
+  desc "Re-project timeline + places + facets + kind axis + lect facets + " \
+       "dictionary stats + derge titles over the live catalog"
   task :refresh do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
@@ -450,7 +451,9 @@ namespace :builders do
     )
     summary = Nabu::Ops::BuilderRefresh.run(catalog: catalog, config: config,
                                             progress: progress)
-    puts "builders:refresh done — facets #{summary.facets.rows} rows"
+    puts "builders:refresh done — facets #{summary.facets.rows} rows · " \
+         "lect #{summary.lect_rows} rows · dictionaries #{summary.dictionary_stats} · " \
+         "derge titles #{summary.derge_titles.titled}"
   ensure
     catalog&.disconnect
   end
