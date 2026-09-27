@@ -261,5 +261,65 @@ module Query
       assert_equal with_stats, fallback.language_source_pairs,
                    "the pre-019 fallback must produce the identical (language, source) pair counts"
     end
+
+    # -- P106-3 (№R-69 g2): the dictionary GROUP — answers from dictionary_stats --
+
+    LECTS_FIXTURES = Nabu::TestSupport.fixtures("nabu-lects")
+    LECT_OVERRIDES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml")
+
+    def lects_registry
+      Nabu::Lects.load(LECTS_FIXTURES, overrides_path: LECT_OVERRIDES_PATH)
+    end
+
+    def seed_dictionary_stats
+      # Rows as Store::DictionaryStats would derive them: la-med resolves
+      # under lat (lat:med), lat is the anchor itself, akk-x-mbperi is a
+      # censused-unresolved code (NULL lect).
+      lexica = @texts.id
+      [{ slug: "ls", language: "la-med", lect: "lat:med", entries: 30 },
+       { slug: "lewis", language: "lat", lect: "lat", entries: 20 },
+       { slug: "oracc-mb", language: "akk-x-mbperi", lect: nil, entries: 5 }].each do |row|
+        dict_id = @catalog[:dictionaries].insert(source_id: lexica, slug: row[:slug],
+                                                 title: row[:slug].upcase, language: row[:language])
+        @catalog[:dictionary_stats].insert(dictionary_id: dict_id, slug: row[:slug],
+                                           source_id: lexica, language: row[:language],
+                                           lect: row[:lect], entries: row[:entries])
+      end
+    end
+
+    def test_dictionary_group_collects_every_shelf_under_the_resolved_node
+      seed_dictionary_stats
+      group = info.dictionary_group("lat", lects: lects_registry)
+      assert_equal "lat", group.node
+      assert_equal %w[ls lewis], group.rows.map { |row| row[:slug] },
+                   "lat:med scopes UNDER lat (prefix semantics), entries descending"
+      assert_equal 50, group.total
+    end
+
+    def test_dictionary_group_for_an_unresolved_code_groups_by_the_code_itself
+      seed_dictionary_stats
+      group = info.dictionary_group("akk-x-mbperi", lects: lects_registry)
+      assert_nil group.node
+      assert_equal(%w[oracc-mb], group.rows.map { |row| row[:slug] })
+      assert_equal 5, group.total
+    end
+
+    def test_dictionary_group_without_the_stats_table_is_nil
+      @catalog.drop_table(:dictionary_stats)
+      assert_nil info.dictionary_group("lat", lects: lects_registry)
+    end
+
+    def test_dictionary_group_on_an_underived_catalog_is_nil
+      # Table present (migration ran) but never derived: feature-off, the
+      # card keeps its live shelves block — never a false empty group.
+      assert_nil info.dictionary_group("lat", lects: lects_registry)
+    end
+
+    def test_dictionary_group_without_a_registry_groups_by_code
+      seed_dictionary_stats
+      group = info.dictionary_group("la-med", lects: nil)
+      assert_nil group.node
+      assert_equal(%w[ls], group.rows.map { |row| row[:slug] })
+    end
   end
 end

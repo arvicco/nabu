@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../store/indexer"
+require_relative "lect_filter"
 
 module Nabu
   module Query
@@ -24,7 +25,14 @@ module Nabu
     # passage nor its document withdrawn — the census rule), where the old
     # inline count included withdrawn passages under live documents.
     class LanguageInfo
+      include LectFilter
+
       Shelf = Data.define(:slug, :title, :entries)
+      # P106-3 (№R-69 generalization 2): the dictionary GROUP — every shelf
+      # whose resolved lect node is +node+ or under it, from the
+      # dictionary_stats census. +node+ nil = the code resolves to no
+      # registry node (or no registry): the group is the code's own shelves.
+      Group = Data.define(:node, :rows, :total)
       Relevance = Data.define(:documents, :passages, :lemma_rows, :shelves,
                               :reflex_edges, :edge_codes, :sources) do
         def empty?
@@ -75,6 +83,34 @@ module Nabu
           Held.new(code: code, documents: held[:documents],
                    lemma_rows: held[:lemma_rows], shelves: held[:shelves])
         end
+      end
+
+      # The dictionary group (P106-3 — №R-69 generalization 2): every
+      # dictionary-shaped request answers from the GROUP, read off the
+      # dictionary_stats census (the desk-commands law — never an entries
+      # scan). The code resolves through the registry (codemap tier —
+      # card grain carries no source); a resolution the registry defines
+      # collects every shelf AT or UNDER that node (prefix semantics, the
+      # lect-filter contract), so `lat` groups la-med's lat:med shelf.
+      # A code without a node — or no registry at all — groups by the
+      # code string itself (the censused-unresolved posture). nil when
+      # the stats table is absent OR never derived: feature-off, callers
+      # keep their live-shelf rendering rather than showing a false
+      # empty group.
+      def dictionary_group(code, lects: nil)
+        return nil unless @catalog.table_exists?(:dictionary_stats)
+        return nil if @catalog[:dictionary_stats].empty?
+
+        node = lects&.resolve(code.to_s)
+        node = nil unless node && lects.lect(node)
+        rows = if node
+                 @catalog[:dictionary_stats].exclude(lect: nil).all
+                                            .select { |row| lect_matches_target?(row[:lect], node) }
+               else
+                 @catalog[:dictionary_stats].where(language: code.to_s).all
+               end
+        rows = rows.sort_by { |row| [-row[:entries], row[:slug]] }
+        Group.new(node: node, rows: rows, total: rows.sum { |row| row[:entries] })
       end
 
       private

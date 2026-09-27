@@ -229,6 +229,15 @@ module Nabu
         progress&.stage("lect facets")
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
                                    progress: progress)
+        # P106-1: the dictionary-group census re-derives with the facet —
+        # wholesale (few hundred rows, seconds), so replayed dictionary
+        # sources and registry changes both land.
+        progress&.stage("dictionary stats")
+        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
+        # P106-5: replayed e84000/derge sources re-mint NULL titles — the
+        # crosswalk re-fills in the same breath (seconds, no-op sans tree).
+        progress&.stage("derge titles")
+        E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
       end
       if outcomes.any?
         progress&.stage("links")

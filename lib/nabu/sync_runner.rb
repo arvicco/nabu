@@ -234,6 +234,8 @@ module Nabu
       # keeps the full Indexer.rebuild! as the from-scratch guarantee.
       indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter, progress)
       refresh_catalog_lanes(entry, load_report)
+      refresh_dictionary_stats(entry, combined_report)
+      refresh_derge_titles(entry)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
@@ -282,6 +284,31 @@ module Nabu
                                          canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
+    end
+
+    # P106-1: the dictionary-group census follows every dictionary-bearing
+    # load (primary shelf or secondary lane — the combined report sees
+    # both; withdrawals count, they change the live totals). A source
+    # without dictionaries skips on the cheap existence probe; the
+    # refresh itself is a per-source drop-and-reproject, seconds at most.
+    def refresh_dictionary_stats(entry, combined_report)
+      return if combined_report.nil?
+      return if combined_report.added.zero? && combined_report.updated.zero? &&
+                combined_report.withdrawn.zero?
+      return unless @db[:dictionaries].join(:sources, id: :source_id)
+                                      .where(Sequel[:sources][:slug] => entry.slug).any?
+
+      Store::DictionaryStats.refresh_source!(catalog: @db, slug: entry.slug,
+                                             lects: Nabu::Lects.load_default(config: @config))
+    end
+
+    # P106-5: the 84000→Derge title crosswalk re-fills after any sync of
+    # either side (a new e84000 fetch carries new titles; a derge re-parse
+    # re-mints NULL titles) — seconds, exact-key joins only.
+    def refresh_derge_titles(entry)
+      return unless %w[e84000 derge-kangyur derge-tengyur].include?(entry.slug)
+
+      E84000DergeTitles.new(catalog: @db, canonical_dir: @config.canonical_dir).run
     end
 
     # P42-4: after a BULK load, refresh the query-planner statistics — the
