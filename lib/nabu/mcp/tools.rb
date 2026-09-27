@@ -1573,6 +1573,12 @@ module Nabu
         catalog = resolve(@catalog)
         return [] unless catalog&.table_exists?(:dictionaries)
 
+        # P106-3: the dictionary_stats census when derived (the desk-
+        # commands law), the live distinct scan as the underived fallback.
+        if catalog.table_exists?(:dictionary_stats) && !catalog[:dictionary_stats].empty?
+          return catalog[:dictionary_stats].distinct.order(:language).select_map(:language)
+        end
+
         catalog[:dictionaries].distinct.order(:language).select_map(:language)
       end
 

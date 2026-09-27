@@ -33,6 +33,7 @@ module Site
       %w[as_of documents documents_display passages passages_display language_codes
          registry_rows corpus_sources live_sources local_shelves feature_modules
          top_languages dictionary_entries dictionary_entries_display dictionary_shelves
+         dictionary_lects dictionary_unresolved_codes
          etym_codes
          gold_lemmas gold_lemmas_display gold_lemmas_m gold_languages
          silver_lemmas silver_lemmas_display silver_lemmas_m silver_languages
@@ -43,6 +44,9 @@ module Site
       assert_operator census.fetch("kind_class_count"), :>, 0,
                       "the live catalog carries kind classes — a zero means the census read a " \
                       "catalog without kind_stats"
+      assert_operator census.fetch("dictionary_lects"), :>, 0,
+                      "the live catalog groups dictionaries by lect node (P106-3) — a zero means " \
+                      "the census read a catalog whose dictionary_stats was never derived"
       assert_includes 0..100, census.fetch("kind_coverage_pct")
       assert_match(/\A\d{1,2} \w+ \d{4}\z/, census.fetch("as_of"), "as_of must be a dated stamp")
       assert_operator census.fetch("top_languages").size, :>=, 10,
