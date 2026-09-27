@@ -60,6 +60,8 @@ module Nabu
       hiero_postings: "hiero postings",   # P103: the AED per-text glyph census
       lect_journal: "lect journal",       # P70: the re-minted lect journal
       lect_facets: "lect facets",         # P58-4: the flattened lect axis
+      dictionary_stats: "dictionary stats", # P106-1: the dictionary-group census
+      derge_titles: "derge titles", # P106-5: the 84000→Derge title crosswalk
       artifact_scripts: "artifact scripts", # P61-3: the artifact-script lane
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",

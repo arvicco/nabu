@@ -115,7 +115,8 @@ module Nabu
           # 036), plus the honestly-censused count of language codes the
           # registry cannot yet place. Zero on a pre-036/underived
           # catalog — the guard test treats that as the drift it is.
-          "dictionary_lects" => dictionary_stats_column(catalog) { |ds| ds.exclude(lect: nil).distinct.select(:lect).count },
+          "dictionary_lects" =>
+            dictionary_stats_column(catalog) { |ds| ds.exclude(lect: nil).distinct.select(:lect).count },
           "dictionary_unresolved_codes" =>
             dictionary_stats_column(catalog) { |ds| ds.where(lect: nil).distinct.select(:language).count },
           # The etym cognate-list code universe (languages.md cites it; it
