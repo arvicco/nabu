@@ -60,10 +60,10 @@ top_languages:
 - code: eng
   passages: 804975
   millions: '0.8'
-dictionary_entries: 2551411
-dictionary_entries_display: '2,551,411'
-dictionary_shelves: 464
-dictionary_lects: 54
+dictionary_entries: 2608205
+dictionary_entries_display: '2,608,205'
+dictionary_shelves: 465
+dictionary_lects: 55
 dictionary_unresolved_codes: 61
 etym_codes: 1131
 gold_lemmas: 21896589
