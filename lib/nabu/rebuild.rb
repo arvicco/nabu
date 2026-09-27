@@ -564,8 +564,8 @@ module Nabu
       rescue Nabu::Error => e
         failures << "#{entry.slug}: #{e.message}"
       end
-      LinkScopes.load(@config.link_scopes_path).each do |scope|
-        replay_batch_scope(scope, db, fulltext, journal)
+      LinkScopeReplay.order(LinkScopes.load(@config.link_scopes_path)).each do |scope|
+        LinkScopeReplay.replay!(scope, db: db, fulltext: fulltext, journal: journal, config: @config)
       rescue Nabu::Error, ArgumentError => e
         failures << "#{scope['producer']} #{scope['scope']}: #{e.message}"
       end
@@ -573,28 +573,6 @@ module Nabu
       failures
     ensure
       journal&.disconnect
-    end
-
-    def replay_batch_scope(scope, db, fulltext, journal)
-      params = scope["params"] || {}
-      case scope["producer"]
-      when "parallels"
-        BatchParallels.new(catalog: db, fulltext: fulltext, journal: journal)
-                      .run(scope["scope"],
-                           **{ lang: params["lang"], license: params["license"],
-                               min_score: params["min_score"], per_anchor: params["per_anchor"] }.compact)
-      when "cognates"
-        BatchCognates.new(catalog: db, fulltext: fulltext, journal: journal,
-                          registry: AlignmentRegistry.load(@config.alignments_path))
-                     .run(scope["scope"], langs: params["langs"], all: params.fetch("all", false))
-      when "formulas"
-        BatchFormulas.new(catalog: db, journal: journal)
-                     .run(scope["scope"],
-                          **{ gram_size: params["gram_size"], min_count: params["min_count"],
-                              lang: params["lang"], max_formulas: params["max_formulas"] }.compact)
-      else
-        raise Nabu::Error, "unknown batch producer #{scope['producer'].inspect} in link_scopes.yml"
-      end
     end
 
     def db_path = @config.catalog_path
