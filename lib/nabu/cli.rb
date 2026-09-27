@@ -3821,6 +3821,11 @@ module Nabu
           print_mine_census(miner.census(source: source), applied: false)
         else
           result = miner.apply!(source: source)
+          # Q94 (the 2026-09-27 rebuild dropped the mine run): the scope
+          # joins the P70 derivability record so the rebuild links stage
+          # re-mints it — the batch-CLI contract, closed for this producer.
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "place-mine",
+                                                            scope: source, params: { "gazetteer" => gazetteer })
           print_mine_census(result.census, applied: true)
           say "place mine: #{result.edges_written} candidate edges written " \
               "(#{result.superseded_edges} superseded) in #{format_duration(result.seconds)} " \
@@ -3974,6 +3979,10 @@ module Nabu
         result = Nabu::PlaceLink.new(catalog: catalog, journal: journal, registry: registry,
                                      gazetteer: gazetteer, progress: progress_reporter)
                                 .apply!(source: source)
+        # Q94: recorded like every batch scope — the replay runs it AFTER
+        # place-mine (LinkScopeReplay.order), promotion needs candidates.
+        Nabu::LinkScopes.record!(config.link_scopes_path, producer: "place-link",
+                                                          scope: source, params: { "gazetteer" => gazetteer })
         say "place link: #{result.source} × #{result.gazetteer} — #{result.names} ruled " \
             "names → #{result.edges_written} attestation edges written " \
             "(#{result.edges_refreshed} refreshed; superseded #{result.superseded_runs} " \
