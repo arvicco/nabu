@@ -234,6 +234,7 @@ module Nabu
       # keeps the full Indexer.rebuild! as the from-scratch guarantee.
       indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter, progress)
       refresh_catalog_lanes(entry, load_report)
+      refresh_dictionary_stats(entry, combined_report)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
@@ -282,6 +283,22 @@ module Nabu
                                          canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
+    end
+
+    # P106-1: the dictionary-group census follows every dictionary-bearing
+    # load (primary shelf or secondary lane — the combined report sees
+    # both; withdrawals count, they change the live totals). A source
+    # without dictionaries skips on the cheap existence probe; the
+    # refresh itself is a per-source drop-and-reproject, seconds at most.
+    def refresh_dictionary_stats(entry, combined_report)
+      return if combined_report.nil?
+      return if combined_report.added.zero? && combined_report.updated.zero? &&
+                combined_report.withdrawn.zero?
+      return unless @db[:dictionaries].join(:sources, id: :source_id)
+                                      .where(Sequel[:sources][:slug] => entry.slug).any?
+
+      Store::DictionaryStats.refresh_source!(catalog: @db, slug: entry.slug,
+                                             lects: Nabu::Lects.load_default(config: @config))
     end
 
     # P42-4: after a BULK load, refresh the query-planner statistics — the

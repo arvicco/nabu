@@ -229,6 +229,11 @@ module Nabu
         progress&.stage("lect facets")
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
                                    progress: progress)
+        # P106-1: the dictionary-group census re-derives with the facet —
+        # wholesale (few hundred rows, seconds), so replayed dictionary
+        # sources and registry changes both land.
+        progress&.stage("dictionary stats")
+        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
       end
       if outcomes.any?
         progress&.stage("links")
