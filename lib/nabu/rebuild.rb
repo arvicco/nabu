@@ -241,6 +241,13 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :dictionary_stats) do
         Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
       end
+      # P106-5: the 84000→Derge title crosswalk — refills the derge
+      # shelves' NULL titles from canonical/e84000 headers (seconds;
+      # absent tree = clean no-op).
+      progress&.stage("derge titles")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :derge_titles) do
+        E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
+      end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.
       progress&.stage("artifact scripts", eta: corpus_eta(ledger, "artifact_scripts"))
