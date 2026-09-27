@@ -234,6 +234,13 @@ module Nabu
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
                                    progress: progress)
       end
+      # P106-1: the dictionary-group census — per-dictionary resolved-lect
+      # + entry-count rows the define/card/site surfaces read (few hundred
+      # rows, seconds to derive; same feature-detect as the lect facet).
+      progress&.stage("dictionary stats")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :dictionary_stats) do
+        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
+      end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.
       progress&.stage("artifact scripts", eta: corpus_eta(ledger, "artifact_scripts"))
