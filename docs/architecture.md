@@ -649,7 +649,25 @@ conformance suite checks a lane-bearing adapter for BOTH shapes. Widening
 `content_kind` to a set was rejected: every existing routing conditional
 (index inertness, deviation rules, loader construction) reads a single
 kind, and a second primary kind would fork all of them; the lane instead
-adds one post-load step at the two existing routing points.
+adds one post-load step at the two existing routing points. Second lane
+(P106-4): 84000's back-matter glossary entities — one shared xct-headed
+shelf (`e84000-glossary`), discovery delegated to the primary adapter's
+cone and duplicate-winner rule, filtered to gloss-bearing files.
+
+**The dictionary-group census (P106, №R-69 generalization 2).**
+Dictionary shelves group by LECT: `dictionary_stats` (migration 036) is
+the precompiled one-row-per-dictionary census — shipped language code,
+the lect node it resolves to through the nabu-lects ladder (per-source
+overrides included; NULL = the registry defines no such node, the
+censused-unresolved posture), live entry count. Derived wholesale in
+both rebuild flavors and in `builders:refresh`, per source after any
+dictionary-bearing sync. `define`'s header, the language card's
+dictionary-group block (`Query::LanguageInfo#dictionary_group` — every
+shelf at or under the code's node, prefix semantics), and the site
+census fields (`dictionary_lects`, `dictionary_unresolved_codes`) all
+read it instead of scanning entries (the desk-commands law). Recorded
+v1 limit: one language code per dictionary; mixed dictionaries group
+under their primary.
 
 **Storage: catalog tables, by migration.** Entries are first-class
 derived-from-canonical data with the same idempotency/revision/withdrawal
