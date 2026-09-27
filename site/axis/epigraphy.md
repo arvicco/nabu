@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 26 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
 |---|---|---|---|---|
 | `papyri-ddbdp` | papyri | attribution | wired · manual | 63,659 docs / 1,105,279 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
@@ -44,7 +44,7 @@ A source wears every desk it serves — these 26 answer this desk. Holdings are 
 | `dharma-pyu` | texts | attribution | wired · manual | 145 docs / 629 passages |
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 September 2026)</span>: `lat` 195,059 · `grc` 76,445 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,531 … and 68 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `lat` 195,059 · `grc` 76,445 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,531 … and 68 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
