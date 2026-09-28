@@ -183,8 +183,16 @@ module Nabu
     # 2026-07-24: "why are they listed TWICE?"). The hidden side: a small gap
     # names its slugs outright (P44-i2), a large one keeps the exact count
     # (the P35 honesty rule); zero-suppressed with the grow-the-set on-ramp.
-    def footer_line(entries, hidden_slugs)
+    def footer_line(entries, hidden_slugs, resolved_count: nil)
       head = "enabled: #{entries.size} #{entries.size == 1 ? 'entry' : 'entries'}"
+      # Q95 (owner confusion 2026-09-27): entries ≠ sources — an entry can
+      # be an AXIS. The arrow names the expansion, so "170 entries" under
+      # "187 sources" can never again read as a 17-source gap.
+      if resolved_count
+        total = resolved_count + hidden_slugs.size
+        head += hidden_slugs.empty? ? " → #{total} sources (all)" : " → #{resolved_count} of #{total} sources"
+      end
+      return head if resolved_count && hidden_slugs.empty?
       return "#{head} (nabu enable <axis|source> to add)" if hidden_slugs.empty?
       if hidden_slugs.size <= FOOTER_NAME_CAP
         return "#{head} — not enabled: #{hidden_slugs.join(', ')} " \

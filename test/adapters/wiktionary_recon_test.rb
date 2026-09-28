@@ -21,36 +21,8 @@ class WiktionaryReconTest < Minitest::Test
 
   FIXTURES = Nabu::TestSupport.fixtures("wiktionary-recon")
 
-  URLS = {
-    "wiktionary-sla-pro" => "https://kaikki.org/dictionary/Proto-Slavic/" \
-                            "kaikki.org-dictionary-ProtoSlavic.jsonl",
-    "wiktionary-ine-pro" => "https://kaikki.org/dictionary/Proto-Indo-European/" \
-                            "kaikki.org-dictionary-ProtoIndoEuropean.jsonl",
-    "wiktionary-gem-pro" => "https://kaikki.org/dictionary/Proto-Germanic/" \
-                            "kaikki.org-dictionary-ProtoGermanic.jsonl",
-    "wiktionary-ine-bsl-pro" => "https://kaikki.org/dictionary/Proto-Balto-Slavic/" \
-                                "kaikki.org-dictionary-ProtoBaltoSlavic.jsonl",
-    "wiktionary-gmw-pro" => "https://kaikki.org/dictionary/Proto-West%20Germanic/" \
-                            "kaikki.org-dictionary-ProtoWestGermanic.jsonl",
-    "wiktionary-itc-pro" => "https://kaikki.org/dictionary/Proto-Italic/" \
-                            "kaikki.org-dictionary-ProtoItalic.jsonl",
-    "wiktionary-iir-pro" => "https://kaikki.org/dictionary/Proto-Indo-Iranian/" \
-                            "kaikki.org-dictionary-ProtoIndoIranian.jsonl",
-    "wiktionary-sga" => "https://kaikki.org/dictionary/Old%20Irish/" \
-                        "kaikki.org-dictionary-OldIrish.jsonl",
-    "wiktionary-mga" => "https://kaikki.org/dictionary/Middle%20Irish/" \
-                        "kaikki.org-dictionary-MiddleIrish.jsonl",
-    "wiktionary-wlm" => "https://kaikki.org/dictionary/Middle%20Welsh/" \
-                        "kaikki.org-dictionary-MiddleWelsh.jsonl",
-    "wiktionary-xum" => "https://kaikki.org/dictionary/Umbrian/" \
-                        "kaikki.org-dictionary-Umbrian.jsonl",
-    "wiktionary-ett" => "https://kaikki.org/dictionary/Etruscan/" \
-                        "kaikki.org-dictionary-Etruscan.jsonl",
-    "wiktionary-ojp" => "https://kaikki.org/dictionary/Old%20Japanese/" \
-                        "kaikki.org-dictionary-OldJapanese.jsonl",
-    "wiktionary-zh" => "https://kaikki.org/dictionary/Chinese/" \
-                       "kaikki.org-dictionary-Chinese.jsonl"
-  }.freeze
+  URLS = Nabu::Adapters::WiktionaryRecon::EXTRACTS
+         .transform_values { |e| e.fetch(:url) }.freeze
 
   def adapter = Nabu::Adapters::WiktionaryRecon.new
 
@@ -350,10 +322,14 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/ett/, report.notes)
       assert_match(/ojp/, report.notes)
       assert_match(/zho/, report.notes)
-      assert_equal 14, adapter.discover(workdir).count, "all fourteen extracts discoverable in place"
+      assert_match(/otk/, report.notes)
+      assert_match(/mnc/, report.notes)
+      assert_match(/txb/, report.notes)
+      assert_equal 20, adapter.discover(workdir).count, "all twenty extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
-         old-irish middle-irish middle-welsh umbrian etruscan old-japanese].each do |subdir|
+         old-irish middle-irish middle-welsh umbrian etruscan old-japanese
+         old-turkic old-uyghur chagatai manchu tocharian-b tocharian-a].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -373,11 +349,12 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 14, targets.size
+    assert_equal 20, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[chinese etruscan middle-irish middle-welsh old-irish old-japanese
-                    proto-balto-slavic proto-germanic proto-indo-european proto-indo-iranian
-                    proto-italic proto-slavic proto-west-germanic umbrian],
+    assert_equal %w[chagatai chinese etruscan manchu middle-irish middle-welsh old-irish
+                    old-japanese old-turkic old-uyghur proto-balto-slavic proto-germanic
+                    proto-indo-european proto-indo-iranian proto-italic proto-slavic
+                    proto-west-germanic tocharian-a tocharian-b umbrian],
                  targets.map(&:state_subdir).sort
     targets.each do |target|
       assert_nil target.metadata_url
