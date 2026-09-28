@@ -4645,3 +4645,32 @@ iedc:   # P107-2
   # dates (parenthesized ISO -> date_iso), toponym lists, editorial
   # grades (Gold/Silver/Bronze facet) and shelfmarks. Folio TRANSLATIONS
   # are a declared v1 residue. DH Awards 2025 winner.
+
+skjaervo-khotanese:   # P107-3a
+  adapter: Nabu::Adapters::SkjaervoKhotanese
+  kind: source
+  axes: [iranian]
+  wired: false
+  sync_policy: manual
+  # P107-3a: Skjaervo's "Khotanese Manuscripts from Chinese Turkestan
+  # in the British Library" — the revised 2014 online edition as ONE
+  # TEI.2 XML (Zenodo doi 10.5281/zenodo.3372682, CC BY 4.0): 2,357
+  # msDescription records, 20,596 khot-Latn transliteration lines —
+  # the TEXT lane for the Khotanese documents iedc catalogs. Upstream
+  # caveat carried on every document (edition_status draft-unproofed):
+  # "draft version... not yet been proofed and checked against
+  # physical holdings". English per-item notes ride as apparatus
+  # metadata, never passages.
+
+shkz:   # P107-3b
+  adapter: Nabu::Adapters::Shkz
+  kind: source
+  axes: [iranian]
+  wired: false
+  sync_policy: manual
+  # P107-3b: the trilingual Kaaba-ye Zartosht inscription of Shabuhr I
+  # (Shamsian & Berti; Zenodo doi 10.5281/zenodo.15050878, CC BY 4.0):
+  # three version documents (grc/xpr/pal) over 50 SHARED :l<n> line
+  # citations — the first real Parthian document in the library. The
+  # 1,012-word alignment-pairs table fetches into canonical as a
+  # DECLARED v1 residue (the alignment-hub look is the future packet).
