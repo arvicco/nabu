@@ -4609,3 +4609,21 @@ gpc:   # P97-3
   # ManualDrop acquisition (docs/manual/gpc.md) — the subset arrives by
   # email; upstream announced a future site publication of the same
   # artifact. Dictionary-shaped (content_kind :dictionary, cy).
+
+scripta-bulgarica:   # P107-8
+  adapter: Nabu::Adapters::ScriptaBulgarica
+  kind: source
+  axes: [slavic]
+  wired: true    # first sync verified 2026-09-28 (124 docs / 4,491 passages; 1 upstream empty stub quarantined)
+  sync_policy: manual
+  # P107-8: Scripta Bulgarica (scripta-bulgarica.eu; BAS Institute for
+  # Literature, PI A. Miltenova) — ~125 Old/Middle Bulgarian written
+  # monuments (inscriptions, charters, chronicles, homiletic and
+  # hagiographic texts, 11th-18th c.) in Unicode Cyrillic with combining
+  # diacritics, each page recording the printed edition it was keyed
+  # from (metadata "edition", credited per the license line). Snapshot-
+  # first posture: the upstream is Drupal 7 on PHP 5.5 over plain HTTP —
+  # the canonical mirror is the insurance copy. Language bul, declared
+  # whole-source coarse (the span reaches Old Bulgarian; per-text lect
+  # refinement is a recorded future look). CC BY-NC-SA 2.0 verbatim in
+  # Bulgarian on the site's terms page -> class nc.
