@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "flat_csv_parser"
+require_relative "../qieyun_crosswalk"
 
 module Nabu
   module Adapters
@@ -76,6 +77,16 @@ module Nabu
       # Entries, not passages (architecture §11) — SyncRunner/Rebuild route
       # through Store::DictionaryLoader.
       def self.content_kind = :dictionary
+
+      # P107 (the Q78 sidecar harvest): the sparse cone's
+      # to_tshet_uinh_data/small_rimes.csv finally consumed — the
+      # 對應廣韻小韻號 join lands as reference edges into the held
+      # guangyun shelf after every sync (Nabu::QieyunCrosswalk).
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::QieyunCrosswalk.new(catalog: catalog, journal: journal)
+      end
 
       # One DocumentRef for the one ingested CSV (the tshet-uinh shape);
       # the rest of the file set is census-only. The same walk works under

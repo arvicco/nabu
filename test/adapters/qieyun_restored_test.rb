@@ -50,7 +50,9 @@ class QieyunRestoredTest < Minitest::Test
     document = parsed
     assert_equal "qieyun", document.slug
     assert_equal "ltc", document.language
-    assert_equal 165, document.count
+    # 165 head rows + the 6-row real 魚 slice (P107 — the crosswalk
+    # fallback's fixture case; README records the cut).
+    assert_equal 171, document.count
     assert_equal document.count, document.entries.map(&:entry_id).uniq.size,
                  "頁.行 is unique per row (verified ×11,158 upstream)"
   end
