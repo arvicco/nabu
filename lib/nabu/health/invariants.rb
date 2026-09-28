@@ -79,7 +79,7 @@ module Nabu
       # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
                      creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil,
-                     lects: nil)
+                     lects: nil, links_journal_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -96,6 +96,10 @@ module Nabu
         # P106-7 (Q88.3): the nabu-lects registry for the override-staging
         # check; nil (module absent, bare callers) skips it honestly.
         @lects = lects
+        # P107 (the R-health rider): the links journal path for the
+        # mined-lane occurrence probe; nil-safe, hot-WAL-safe (an
+        # unopenable journal just skips the probe).
+        @links_journal_path = links_journal_path
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -625,6 +629,12 @@ module Nabu
       # the row was seeded against a name that left the catalog). Soft: the
       # rows still validate; they just decide nothing anymore. No registry
       # synced = lane off, silent.
+      #
+      # P107 (the R-health rider — the 2026-09-28 false-positive class):
+      # decisions born of the MINED lane (P96+ place-mine) occur in the
+      # links journal's 「name」 details, not in document_axes — all 10
+      # kanripo rows fired "orphaned" against a lane they never lived
+      # in. A name now counts as occurring if EITHER surface carries it.
       def registry_orphan_names
         return nil unless @canonical_dir && table?(@catalog, :document_axes)
 
@@ -638,7 +648,9 @@ module Nabu
                  .where(document_id: @catalog[:documents].where(source_id: source_id).select(:id))
                  .exclude(place_name: nil).distinct.select_map(:place_name).to_set
           registry.decisions_for(slug).each_key do |name|
-            orphans << "#{slug}: #{name}" unless live.include?(name)
+            next if live.include?(name) || mined_name?(name)
+
+            orphans << "#{slug}: #{name}"
           end
         end
         return nil if orphans.empty?
@@ -748,6 +760,29 @@ module Nabu
                    "promises a materialized resolution for every live document. " \
                    "bin/nabu lect materialize or rake builders:refresh re-derives"
         )
+      end
+
+      # The mined-lane occurrence probe: a place-mine/place-link edge
+      # whose detail carries the 「name」 marker. LIKE over the journal —
+      # unindexed but bounded (health's low-seconds budget; ~10 names).
+      def mined_name?(name)
+        journal = links_journal or return false
+
+        !journal[:links]
+          .where(kind: %w[place-candidate place])
+          .where(Sequel.like(:detail, "%「#{name}」%"))
+          .first.nil?
+      end
+
+      def links_journal
+        return @links_journal if defined?(@links_journal)
+
+        @links_journal =
+          if @links_journal_path && File.exist?(@links_journal_path)
+            Sequel.connect("sqlite://#{@links_journal_path}", readonly: true)
+          end
+      rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
+        @links_journal = nil # hot-WAL/readonly failure — probe off, honestly
       end
 
       # {facet value => live-document count}, exactly the derive_stats!

@@ -553,6 +553,47 @@ class InvariantsTest < Minitest::Test
     end
   end
 
+  # P107 (the R-health rider): a decision born of the MINED lane occurs
+  # in the links journal's 「name」 details, not document_axes — the
+  # 2026-09-28 live health run fired all 10 kanripo rows as "orphaned"
+  # against a lane they never lived in. Either surface now counts.
+  def test_mined_lane_decisions_are_not_orphans
+    Nabu::Store::Source.create(slug: "cdli", name: "CDLI", adapter_class: "T",
+                               license_class: "open")
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "nabu-places"))
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-places"), "names.yml"),
+                   File.join(root, "nabu-places"))
+      registry = Nabu::Places.load_default(canonical_dir: root)
+      mined_name = registry.decisions_for("cdli").keys.first
+      journal_path = File.join(root, "links.sqlite3")
+      journal = Nabu::Store::LinksJournal.migrate!(
+        Nabu::Store::LinksJournal.connect("sqlite://#{journal_path}")
+      )
+      run_id = Nabu::Store::LinksJournal.record_run!(journal, producer: "place-mine",
+                                                              scope: "cdli", params: {},
+                                                              code_version: "t/1")
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:nabu:cdli:x:1",
+                                                     to_urn: "urn:nabu:place:chgis:hvd_1",
+                                                     kind: "place-candidate", score: nil,
+                                                     run_id: run_id,
+                                                     detail: "mined 「#{mined_name}」 (chgis)")
+      journal.disconnect
+
+      count = lambda do |journal_arg|
+        checker = Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext,
+                                               ledger: @ledger, canonical_dir: root, now: @now,
+                                               links_journal_path: journal_arg)
+        finding = checker.global.find { |f| f.kind == :registry_orphan_names }
+        finding ? finding.message[/\A(\d+)/, 1].to_i : 0
+      end
+      without = count.call(nil)
+      with = count.call(journal_path)
+      assert_equal without - 1, with,
+                   "the mined name (#{mined_name}) stops firing once the journal carries its edge"
+    end
+  end
+
   # P63-4 (Dp-b): the namespaced mint spelling (`pleiades:<id>`, the itant
   # metadata lift) is verified exactly like the verbatim URL spelling.
   def test_unresolvable_place_refs_verify_namespaced_pleiades_mints_too

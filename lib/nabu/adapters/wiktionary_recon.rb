@@ -224,6 +224,53 @@ module Nabu
           language: "ojp",
           title: "Wiktionary — Old Japanese (kaikki.org extract)"
         },
+        # -- P107-6 (the Central Asia seed basket; Q98) -- six ATTESTED
+        # extracts on the P25-2 pattern (real ISO codes, no display
+        # asterisk); kaikki index censuses 2026-09-28: otk 505 senses /
+        # 396 words · oui 632 · chg 813 · mnc 3,207 · txb 2,856 · xto
+        # 581. Their anchors land with the Central Asia registry wave.
+        "wiktionary-otk" => {
+          subdir: "old-turkic",
+          filename: "kaikki.org-dictionary-OldTurkic.jsonl",
+          url: "https://kaikki.org/dictionary/Old%20Turkic/kaikki.org-dictionary-OldTurkic.jsonl",
+          language: "otk",
+          title: "Wiktionary — Old Turkic (kaikki.org extract)"
+        },
+        "wiktionary-oui" => {
+          subdir: "old-uyghur",
+          filename: "kaikki.org-dictionary-OldUyghur.jsonl",
+          url: "https://kaikki.org/dictionary/Old%20Uyghur/kaikki.org-dictionary-OldUyghur.jsonl",
+          language: "oui",
+          title: "Wiktionary — Old Uyghur (kaikki.org extract)"
+        },
+        "wiktionary-chg" => {
+          subdir: "chagatai",
+          filename: "kaikki.org-dictionary-Chagatai.jsonl",
+          url: "https://kaikki.org/dictionary/Chagatai/kaikki.org-dictionary-Chagatai.jsonl",
+          language: "chg",
+          title: "Wiktionary — Chagatai (kaikki.org extract)"
+        },
+        "wiktionary-mnc" => {
+          subdir: "manchu",
+          filename: "kaikki.org-dictionary-Manchu.jsonl",
+          url: "https://kaikki.org/dictionary/Manchu/kaikki.org-dictionary-Manchu.jsonl",
+          language: "mnc",
+          title: "Wiktionary — Manchu (kaikki.org extract)"
+        },
+        "wiktionary-txb" => {
+          subdir: "tocharian-b",
+          filename: "kaikki.org-dictionary-TocharianB.jsonl",
+          url: "https://kaikki.org/dictionary/Tocharian%20B/kaikki.org-dictionary-TocharianB.jsonl",
+          language: "txb",
+          title: "Wiktionary — Tocharian B (kaikki.org extract)"
+        },
+        "wiktionary-xto" => {
+          subdir: "tocharian-a",
+          filename: "kaikki.org-dictionary-TocharianA.jsonl",
+          url: "https://kaikki.org/dictionary/Tocharian%20A/kaikki.org-dictionary-TocharianA.jsonl",
+          language: "xto",
+          title: "Wiktionary — Tocharian A (kaikki.org extract)"
+        },
         # -- P32-3 (the Sino reconstruction shelf; OWNER-APPROVED disk
         # call) -- ATTESTED Chinese, the whole-macrolanguage extract:
         # ~1.1 GB / 323,840 records (census 2026-07-19 on the full file;
