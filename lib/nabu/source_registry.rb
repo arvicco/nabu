@@ -185,7 +185,7 @@ module Nabu
                         :lemma_dictionary_filter,
                         :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
-                        :group, :requires) do
+                        :group, :requires, :adopted) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
                      embed_index: false,
@@ -193,7 +193,7 @@ module Nabu
                      classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
-                     group: nil, requires: [])
+                     group: nil, requires: [], adopted: nil)
         super
       end
 
@@ -381,6 +381,7 @@ module Nabu
         classes: classes!(slug, config),
         siblings: siblings!(slug, config),
         axes: axes!(slug, config, axis_registry),
+        adopted: adopted!(slug, config),
         grant_required: grant_required, grant: grant,
         availability: availability!(slug, config),
         quickstart: boolean!(slug, config, "quickstart"),
@@ -584,6 +585,19 @@ module Nabu
     end
     private_class_method :boolean!
 
+    # Q93 (owner ruling 2026-09-27): every entry records its adoption
+    # date — the recentness the alphabetic file order no longer carries.
+    # A plain date string, never a phase id (public surface).
+    def self.adopted!(slug, config)
+      value = config.fetch("adopted", nil)
+      return nil if value.nil? # the SHIPPED file's guard test requires it; ad-hoc registries may omit
+      unless value.is_a?(String) && value.match?(/\A\d{4}-\d{2}-\d{2}\z/)
+        raise ValidationError, "source #{slug.inspect}: adopted must be a \"YYYY-MM-DD\" string"
+      end
+
+      value
+    end
+
     def self.sync_policy!(slug, config)
       policy = config.fetch("sync_policy", DEFAULT_SYNC_POLICY)
       return policy if SYNC_POLICIES.include?(policy)
@@ -591,7 +605,7 @@ module Nabu
       raise ValidationError,
             "source #{slug.inspect}: sync_policy must be one of #{SYNC_POLICIES.join(', ')}, got #{policy.inspect}"
     end
-    private_class_method :sync_policy!
+    private_class_method :sync_policy!, :adopted!
 
     # The row's nature (P39-0): source (default) | shelf | module.
     def self.kind!(slug, config)
