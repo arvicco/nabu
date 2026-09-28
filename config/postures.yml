@@ -534,6 +534,16 @@ sources:
         curated-band candidate, declared not faked}
     places: {posture: unplaced}
     script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
+  kouigenji:   # P108-3
+    kind: {posture: unclassified, note: one work — monogatari; a kind facet would be a
+        single-value stamp, deferred}
+    lect: {posture: pending, note: jpn:emj is the candidate — the Heian classical stage rides
+        the p108-japonic-stages nabu-lects mint; identity jpn until it merges}
+    dating: {posture: undatable, note: Genji's composition dating (c. 1008) is a future
+        curated-band candidate, declared not faked}
+    places: {posture: unplaced}
+    script: {posture: implied, note: kana-heavy hentaigana-normalized transcription per the
+        project's own conventions}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old
