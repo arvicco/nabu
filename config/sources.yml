@@ -4686,6 +4686,10 @@ ud:
   # walled (romance2 survey). EXPECTED SYNC DELTA at the next owner-fired
   # `bin/nabu sync ud`: +1 repo clone / +3 docs / +3,419 passages; `it`
   # enters the lemma-indexed languages (~122k token rows), first occupant.
+  # P107-6 (2026-09-28): TREEBANKS grew to THIRTY-ONE — old-turkish-tonqq
+  # (UD_Old_Turkish-Tonqq, CC0): Old Turkic clausal examples, test split
+  # only upstream; sync-verified 1 doc / 20 sentences, language otk (the
+  # first Turkic treebank; the seed grows as upstream releases splits).
 
 unihan:
   adapter: Nabu::Adapters::Unihan
@@ -4855,6 +4859,11 @@ wiktionary-recon:
   # Zhengzhang; 8,098 with Sino-Xenic descendants) and a matching
   # catalog-growth step. The extract stays canonical-verbatim (never
   # trimmed); censuses in test/fixtures/wiktionary-recon/README.md.
+  # P107-6 (2026-09-28): SIX more extracts — the Central Asia seed pack
+  # (otk 470, oui 446, chg 599, mnc 2,577, txb 2,484, xto 502 entries;
+  # sync-verified counts). The oui first sync also surfaced the
+  # mark-only-headword fold edge (U+10F82; parser regression pinned).
+  # 20 extracts, 365,213 entries total.
   sync_policy: manual
 
 wiktionary-sux:
