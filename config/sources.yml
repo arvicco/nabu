@@ -4555,7 +4555,7 @@ ud:
   # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
   # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
   # ride axis-less (minting new axes is an owner decision, not this packet's).
-  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French)
+  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical, turkic]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French); turkic: P107-6 (Tonqq)
   # P49-r4 audit: THE archetype pack — ~40 treebanks in 18+ languages serving
   # twelve desks, and upstream adds treebanks in any language at all. Whole-
   # grain attribution made `nabu language hbo` claim all twelve desks off
@@ -4835,7 +4835,8 @@ wiktionary-recon:
   adopted: "2026-07-12"
   # P35-0 vs the D35 draft: +celtic/italic/sinitic/japonic — the manifest's own attested extracts
   # (sga/mga/wlm Celtic, xum/ett Italic-Etruscan, zho, ojp); etym stays the primary desk
-  axes: [etym, celtic, italic, sinitic, japonic]
+  # P107-6: +turkic/mongolic — the attested otk/oui/chg and mnc extracts (same precedent)
+  axes: [etym, celtic, italic, sinitic, japonic, turkic, mongolic]
   # P49-r4 audit: a pack of per-language kaikki extracts (13 shelves and
   # counting — P17-3/P32-3/P32-5 each added more; any kaikki language can
   # join), whose five-desk axes union is the ud disease in miniature: the

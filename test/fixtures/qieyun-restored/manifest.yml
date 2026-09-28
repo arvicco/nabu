@@ -14,4 +14,15 @@ files:
     whole: false
     trim: >-
       the REAL first 166 of 11,159 lines (head -n 166), byte-verbatim —
-      the complete 東 rime plus the 冬 opening (the 小韻-restart pin)
+      the complete 東 rime plus the 冬 opening (the 小韻-restart pin);
+      plus real lines 978–983 (the 魚 rows 序数 1676–1683 — the
+      crosswalk head-lane pin, appended 2026-09-28)
+  - path: to_tshet_uinh_data/small_rimes.csv
+    url: https://raw.githubusercontent.com/nk2028/qieyun-restored/main/to_tshet_uinh_data/small_rimes.csv
+    refetchable: true
+    whole: false
+    retrieved: "2026-09-28"
+    trim: >-
+      the REAL first 35 of 3,386 lines (head -n 35: 東's 32 small
+      rimes + 冬's first two) plus real line 225 (rime 224 猪, the
+      ordinal-miss case) — cut from the box's canonical sparse clone

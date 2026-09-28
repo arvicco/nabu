@@ -1,0 +1,18 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one entry is a mutool page-merge trim (pages 1+3+4) of the real
+# PDF — a fresh fetch returns the full 300+-page file, so the URL is
+# checked for liveness only. adapter_test null: count assertions would
+# false-fail against the untrimmed PDF.
+source: altaica-shm
+adapter_test:
+retrieved: "2026-09-28"
+files:
+  - path: SH-24UP.pdf
+    url: http://altaica.ru/SECRET/SH-24UP.pdf
+    refetchable: true
+    whole: false
+    trim: >-
+      pages 1+3+4 of the real PDF via mutool merge (the front matter
+      with Street's substitution table + 60 numbered text lines)

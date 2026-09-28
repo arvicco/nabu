@@ -50,6 +50,17 @@ module Nabu
 
       def self.manifest = MANIFEST
 
+      # UrlDownload keeps no state file — the probe HEADs the stable
+      # upstream URL for liveness only; drift honestly reads unknown.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "pdf", zip_url: PDF_URL, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       # The glued-footnote rule, exposed for the unit pin: "10951 text"
       # → ["1095", "1", "text"].
       def self.split_line(raw)

@@ -57,10 +57,21 @@ module Nabu
 
       def self.manifest = MANIFEST
 
+      # UrlDownload keeps no state file — the probe HEADs the stable
+      # upstream URL for liveness only; drift honestly reads unknown.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "index", zip_url: "#{BASE_URL}/index.xhtml", metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        Dir.glob(File.join(workdir, "Jarring_*.transcript.xml")).sort.each do |path|
+        Dir.glob(File.join(workdir, "Jarring_*.transcript.xml")).each do |path|
           slug = File.basename(path, ".transcript.xml").downcase.tr("_", "-")
           yield Nabu::DocumentRef.new(source_id: MANIFEST.id, id: "#{URN_PREFIX}#{slug}",
                                       path: path, metadata: { "file" => File.basename(path) })

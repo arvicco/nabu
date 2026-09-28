@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The index is upstream-whole; the two transcripts are documented trims
+# (header + first 3 tei:surface elements). adapter_test null: the trims
+# would false-fail count assertions against full fetches.
+source: atmo
+adapter_test:
+retrieved: "2026-09-28"
+files:
+  - path: index.xhtml
+    url: https://uyghur.linguistics.indiana.edu/manuscripts/index.xhtml
+    refetchable: true
+    whole: true
+    trim: none
+  - path: Jarring_Prov_2.transcript.xml
+    url: https://uyghur.linguistics.indiana.edu/manuscripts/Jarring_Prov_2.transcript.xml
+    refetchable: true
+    whole: false
+    trim: TEI header + first 3 of 96 tei:surface elements, closing tags intact
+  - path: Jarring_Prov_24.transcript.xml
+    url: https://uyghur.linguistics.indiana.edu/manuscripts/Jarring_Prov_24.transcript.xml
+    refetchable: true
+    whole: false
+    trim: TEI header + first 3 of 80 tei:surface elements, closing tags intact

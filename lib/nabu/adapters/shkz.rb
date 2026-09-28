@@ -64,6 +64,17 @@ module Nabu
 
       def self.manifest = MANIFEST
 
+      # UrlDownload keeps no state file — the probe HEADs the stable
+      # upstream URL for liveness only; drift honestly reads unknown.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "sentence csv", zip_url: SENTENCES_URL, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 

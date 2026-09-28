@@ -75,8 +75,16 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/cbdb/ inside Adapter#fetch — the downloaded zip
   # (removed after unpack), the unpacked sqlite artifact, and the
   # .cbdb-fetch.json sha pin — the zip_fetch/file_fetch law kind
-  # with a latest.json self-pinning channel. ANY new file
-  # here is a deliberate allowlist decision, not a drive-by.
+  # with a latest.json self-pinning channel. The P107 five:
+  # scripta_bulgarica_fetch writes canonical/scripta-bulgarica/
+  # (pager index sidecars + sources/<slug>.html mirrors) inside
+  # Adapter#fetch — the cantigas_fetch law kind, its fifth crawl
+  # sibling; the iedc / shkz / altaica-shm adapters move ONE
+  # UrlDownload-fetched file each to its house name inside
+  # Adapter#fetch (FileUtils.mv, the burman_concordance law kind);
+  # atmo does the same for its index + the 18 transcripts it lists.
+  # ANY new file here is a deliberate allowlist decision, not a
+  # drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
@@ -92,6 +100,9 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
+    nabu/adapters/altaica_shm.rb nabu/adapters/atmo.rb
+    nabu/adapters/iedc.rb nabu/adapters/shkz.rb
+    nabu/scripta_bulgarica_fetch.rb
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
