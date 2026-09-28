@@ -534,6 +534,17 @@ sources:
         curated-band candidate, declared not faked}
     places: {posture: unplaced}
     script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
+  kokubunken:   # P108-4
+    kind: {posture: unclassified, note: waka anthologies + the kana preface — a future
+        kind facet could stamp anthology/preface}
+    lect: {posture: identity, note: kokin jpn (the emj stage claim rides the same
+        p108-japonic-stages mint as kouigenji — one flip at merge); manyo ojp (the
+        Man'yōshū text is Old Japanese whatever the ms copy date)}
+    dating: {posture: undatable, note: compilation dates (905, c.759) are future
+        curated-band candidates, declared not faked}
+    places: {posture: unplaced}
+    script: {posture: implied, note: man'yōgana base + katakana kun layers on the manyo
+        side; kana transcription on the kokin side}
   kouigenji:   # P108-3
     kind: {posture: unclassified, note: one work — monogatari; a kind facet would be a
         single-value stamp, deferred}
