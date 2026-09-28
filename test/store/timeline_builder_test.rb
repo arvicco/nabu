@@ -382,6 +382,68 @@ module Store
                  "prose-only dates mint nothing — declared, never guessed"
     end
 
+    # P108-8 (the Q83 dates/places slice) — four new shapes + the rsti
+    # place lane, each against its live-censused metadata verbatim.
+
+    def test_metadata_dates_syriac_when_key_with_per_doc_class
+      seed_metadata_doc("syriac-corpus", "urn:nabu:syriac-corpus:c1",
+                        { "orig_date" => { "text" => "337 CE", "type" => "composition",
+                                           "when" => "0337" } })
+      seed_metadata_doc("syriac-corpus", "urn:nabu:syriac-corpus:t1",
+                        { "orig_date" => { "text" => "6th c. translation", "type" => "translation",
+                                           "when" => "0550" } })
+      build!
+      comp = timeline_for("urn:nabu:syriac-corpus:c1")
+      assert_equal [337, 337, "composition"], comp.values_at(:not_before, :not_after, :date_class)
+      trans = timeline_for("urn:nabu:syriac-corpus:t1")
+      assert_equal [550, 550, nil], trans.values_at(:not_before, :not_after, :date_class),
+                   "a translation-typed date is dated but NOT composition-classed"
+    end
+
+    def test_metadata_dates_obi_ce_year_text
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:v1",
+                        { "date" => "CS 586(580) = CE 1224(1218) CS 580 = CE 1218; CS 586 = CE 1224" })
+      build!
+      row = timeline_for("urn:nabu:obi-burmese:v1")
+      assert_equal [1218, 1224], [row[:not_before], row[:not_after]],
+                   "every CE year in the string joins the envelope"
+      assert_includes row[:date_raw], "CS 586"
+    end
+
+    def test_metadata_dates_century_prose_bands
+      seed_metadata_doc("ogham", "urn:nabu:ogham:o1",
+                        { "date" => { "text" => "Fifth century or possibly early sixth century" } })
+      seed_metadata_doc("ogham", "urn:nabu:ogham:o2",
+                        { "date" => { "text" => "Sixth to the eighth century" } })
+      seed_metadata_doc("soas-tibetan", "urn:nabu:soas-tibetan:s1",
+                        { "period" => "13th century, ecclesiastical history" })
+      build!
+      o1 = timeline_for("urn:nabu:ogham:o1")
+      assert_equal [400, 550], [o1[:not_before], o1[:not_after]],
+                   "fifth century through EARLY sixth (its first half)"
+      o2 = timeline_for("urn:nabu:ogham:o2")
+      assert_equal [500, 800], [o2[:not_before], o2[:not_after]]
+      s1 = timeline_for("urn:nabu:soas-tibetan:s1")
+      assert_equal [1200, 1300], [s1[:not_before], s1[:not_after]]
+    end
+
+    def test_metadata_dates_local_library_year_key
+      seed_metadata_doc("local-library", "urn:nabu:local-library:b1", { "year" => 2023 })
+      build!
+      row = timeline_for("urn:nabu:local-library:b1")
+      assert_equal [2023, 2023], [row[:not_before], row[:not_after]]
+    end
+
+    def test_metadata_places_rsti_findspot
+      seed_metadata_doc("rsti", "urn:nabu:rsti:r1", { "findspot" => "Kamid el-Loz" })
+      seed_metadata_doc("rsti", "urn:nabu:rsti:r2", { "findspot" => "Not listed in TEO" })
+      build!
+      row = timeline_for("urn:nabu:rsti:r1")
+      assert_equal "Kamid el-Loz", row[:place_name]
+      assert_nil timeline_for("urn:nabu:rsti:r2"),
+                 "the source's own not-listed sentinel is noise, never a place name"
+    end
+
     # P47-r3: the per-source refresh seam SyncRunner calls post-load — the
     # lane never lags a sync again (the class this audit exists to kill).
     def test_metadata_dates_refresh_source_replaces_only_that_source
@@ -488,7 +550,8 @@ module Store
       assert_in_delta(-6.1961, row[:place_lon])
       assert_equal "https://www.logainm.ie/ga/61366", row[:place_ref],
                    "the logainm gazetteer URL rides verbatim (the EDH URL precedent)"
-      assert_nil row[:not_before], "the free-prose ogham dating stays honestly unparsed"
+      assert_equal [400, 500], [row[:not_before], row[:not_after]],
+                   "P108-8 REVISES the old unparsed posture: the century-prose grammar bands it"
       no_townland = timeline_for("urn:nabu:ogham:cai-001")
       assert_equal "Cornwall, England", no_townland[:place_name]
       assert_equal 2, summary.metadata_dates.fetch("ogham")

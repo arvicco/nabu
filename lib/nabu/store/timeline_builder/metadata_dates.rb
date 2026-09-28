@@ -117,7 +117,8 @@ module Nabu
           "diorisis" => :signed_year_key, # P104-1: creation_date — composition class
           "glaux" => :signed_bounds_keys, # P104-1: start_date/end_date — composition class
           "disco" => :author_century_band, # P104-1: author life band — composition class
-          "ogham" => :place_only, # P104-1: the coordinates/county lane; dates stay prose
+          "ogham" => :century_prose, # P104-1 places; P108-8: the century-prose date
+          #                              grammar bands the "Fifth century …" texts too
           "seal" => :period_label, # P104-1 (Q77 under №R-70): the Texts Hierarchy period
           #                          strings (Old Babylonian …, on ALL 408 docs) band via
           #                          the ruled table — the posture's own named candidate;
@@ -126,6 +127,14 @@ module Nabu
           #                              adapter extracts from the prose date string
           #                              ("… (1183-10)" -> date_iso); year envelope,
           #                              date_text verbatim as raw
+          "syriac-corpus" => :when_key, # P108-8 (the Q83 slice): orig_date.when zero-padded
+          #                                 year; the per-doc type field classes composition
+          #                                 rows itself (translations dated, class-less)
+          "obi-burmese" => :ce_year_text, # P108-8: every CE year in the CS=CE date string
+          #                                 joins the envelope (typed upstream dates)
+          "soas-tibetan" => :century_prose, # P108-8: "13th century, …" period strings
+          "local-library" => :year_key, # P108-8: the shelf's own integer year
+          "rsti" => :place_only, # P108-8: the findspot lane (PLACE_KEYS); no typed dates
           "cbeta" => :dynasty_band # P104-1 (№R-70 grade 2): the header byline's dynasty
           #                          seat bands via the ruled table as an ERA claim —
           #                          precision "era", verbatim byline in date_raw
@@ -144,8 +153,9 @@ module Nabu
         # explicit unknown-class values ("Unknown"), which mint no place
         # — the coptic-lane NO_PLACE stance; the default "place" key's
         # behavior is untouched.
-        PLACE_KEYS = { "seal" => "provenance" }.freeze
-        NO_PLACE = %w[unknown unclear uncertain none].freeze
+        PLACE_KEYS = { "seal" => "provenance", "rsti" => "findspot" }.freeze
+        # "not listed in teo" — rsti's own absent-findspot sentinel.
+        NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -214,7 +224,7 @@ module Nabu
         # bound nor a place claim (name, ref or coordinates).
         def axis_row(doc, shape, reorder: false, composition: false, place_key: "place")
           meta = JSON.parse(doc[:metadata_json].to_s)
-          not_before, not_after, raw, precision = send(shape, meta)
+          not_before, not_after, raw, precision, own_class = send(shape, meta)
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
           place, place_ref, lat, lon = place_claim(meta, key: place_key)
           # A ref IS placement (P73-2): a doc carrying only a parseable
@@ -227,7 +237,7 @@ module Nabu
           { document_id: doc[:id], not_before: not_before, not_after: not_after,
             date_raw: raw, place_name: place, place_ref: place_ref,
             place_lat: lat, place_lon: lon, precision: precision,
-            date_class: composition && dated ? "composition" : nil }
+            date_class: own_class || (composition && dated ? "composition" : nil) }
         rescue JSON::ParserError
           nil
         end
@@ -316,6 +326,68 @@ module Nabu
           return [nil, nil, nil] unless year.is_a?(Integer)
 
           [year, year, year.to_s]
+        end
+
+        # P108-8: orig_date {"when" => "0337", "type" => …} — the zero-
+        # padded year is the envelope; a composition-typed row classes
+        # itself (the 5th tuple element), translations stay class-less.
+        def when_key(meta)
+          date = meta["orig_date"]
+          return [nil, nil, nil] unless date.is_a?(Hash)
+
+          year = date["when"].to_s[/\A0*(\d{3,4})\z/, 1]
+          return [nil, nil, nil] unless year
+
+          klass = date["type"] == "composition" ? "composition" : nil
+          [Integer(year, 10), Integer(year, 10), date["text"] || date["when"], nil, klass]
+        end
+
+        # P108-8: obi-burmese "CS 586(580) = CE 1224(1218) …" — every CE
+        # year in the string joins the envelope; CS-only strings mint
+        # nothing (never converted here — the CE equivalences are
+        # upstream's own).
+        def ce_year_text(meta)
+          text = meta["date"].to_s
+          years = text.scan(/CE\s*(\d{3,4})(?:\((\d{3,4})\))?/).flatten.compact.map { |y| Integer(y, 10) }
+          return [nil, nil, nil] if years.empty?
+
+          [years.min, years.max, text.strip]
+        end
+
+        ORDINAL_WORDS = %w[zeroth first second third fourth fifth sixth seventh eighth
+                           ninth tenth eleventh twelfth thirteenth fourteenth fifteenth
+                           sixteenth seventeenth eighteenth nineteenth twentieth].freeze
+
+        # P108-8: the censused ogham/soas century grammar — ordinal words
+        # or digit ordinals, optional early/mid/late halves, ranges via
+        # "to". Century N spans [100(N-1), 100N]; early = its first half,
+        # late = its second, mid = the middle half. Every century mention
+        # joins the envelope; an unparseable text mints no dates (raw
+        # rides only when a place mints the row).
+        def century_prose(meta)
+          text = meta.dig("date", "text") || meta["period"]
+          text = text.to_s
+          mentions = century_mentions(text)
+          return [nil, nil, nil] if mentions.empty?
+
+          [mentions.map(&:first).min, mentions.map(&:last).max, text.strip]
+        end
+
+        def century_mentions(text)
+          found = []
+          text.scan(/(?:(early|mid|late)[- ])?(?:(\d{1,2})(?:st|nd|rd|th)\b|\b([A-Za-z]+)\b)/) do |half, digit, word|
+            n = digit ? Integer(digit, 10) : ORDINAL_WORDS.index(word.to_s.downcase)
+            next if n.nil? || n.zero?
+
+            base = [(n - 1) * 100, n * 100]
+            found << case half&.downcase
+                     when "early" then [base[0], base[0] + 50]
+                     when "late" then [base[0] + 50, base[1]]
+                     when "mid" then [base[0] + 25, base[1] - 25]
+                     else base
+                     end
+          end
+          found
         end
 
         def period_band(meta)
