@@ -18,3 +18,10 @@ number (e.g. "10951" = line 1095, fn 1); a trailing apparatus section
 
 The Kozin transcription page (e_oldmng.php) is a JS shell as of
 2026-09-28 — recorded residue, not fetched.
+
+`SH-24UP.textlayer.txt` — the RECORDED mutool extraction of the
+fixture PDF (`mutool draw -F txt -o -`, mutool 1.26, 2026-09-28),
+checked in so the suite never depends on mutool being installed
+(the local-library law). The guarded live test pins agreement; if
+mutool output drifts across versions, re-cut this file with the
+command above and eyeball the diff.
