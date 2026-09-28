@@ -15,15 +15,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 627 dossiers |
+| `local-lemmas` | silver lemmas | open | wired · manual | 30,999,504 lemma rows |
 | `local-library` | texts | research_private | wired · manual | 62 docs / 13,278 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
-| `local-lemmas` | silver lemmas | open | wired · manual | 30,999,504 lemma rows |
 | `local-source` | source records | open | wired · manual | 156 dossiers |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `eng` 22 · `osc` 8 · `sga` 6 · `cel` 3 · `ita` 3 · `chu` 2 · `grc` 2 · `akk` 1 · `ang` 1 · `cor` 1 … and 13 more (`nabu axis local` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `eng` 22 · `osc` 8 · `sga` 6 · `cel` 3 · `ita` 3 · `chu` 2 · `grc` 2 · `akk` 1 · `ang` 1 · `cor` 1 … and 13 more (`nabu axis local` lists all).
 
 ## The desk's instruments
 
@@ -72,4 +72,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

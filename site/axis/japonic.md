@@ -22,18 +22,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 354,100 entries |
-| `unihan` | dictionary | open | wired · manual | 102,998 entries |
+| `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
-| `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
+| `unihan` | dictionary | open | wired · manual | 102,998 entries |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `zho` 426,837 · `jpn` 287,405 · `lzh` 63,807 · `ojp` 11,392 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 … and 6 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `zho` 430,294 · `jpn` 287,405 · `lzh` 63,807 · `ojp` 11,392 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 12 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 
@@ -107,4 +107,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

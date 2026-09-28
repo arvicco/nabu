@@ -13,23 +13,24 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
-| `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
 | `ccmh` | texts | attribution | wired · manual | 19 docs / 28,786 passages |
+| `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
+| `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `goo300k` | texts | attribution | wired · manual | 89 docs / 8,397 passages |
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
-| `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
-| `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
-| `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
-| `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `prilit` | texts | attribution | wired · manual | 43 docs / 8,526 passages |
+| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
+| `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
+| `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `sl` 140,207 · `chu` 4,644 · `orv` 43 · `eng` 26 · `bul` 20 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 16 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `sl` 140,207 · `chu` 4,644 · `bul` 144 · `orv` 43 · `eng` 26 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 17 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 
@@ -83,4 +84,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
