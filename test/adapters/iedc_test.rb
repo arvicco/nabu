@@ -89,9 +89,13 @@ module Adapters
     end
 
     def test_editorial_grade_and_doctype_land_as_facets
+      # The FacetBuilder contract is facet => {"value" => ...} — a flat
+      # string is SILENTLY dropped by insert_facets (the P107 first
+      # refresh projected zero iedc rows; this pins the real shape).
       facets = doc("iedc0002").metadata["facets"]
-      assert_equal "Gold", facets["grade"]
-      assert facets.key?("doctype")
+      assert_equal({ "value" => "Gold" }, facets["grade"])
+      assert_equal "Gold", facets.dig("grade", "value")
+      assert facets.dig("doctype", "value")
     end
 
     def test_toponyms_ride_metadata_with_their_coordinate_fields
