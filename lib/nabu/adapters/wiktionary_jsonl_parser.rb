@@ -131,11 +131,18 @@ module Nabu
       def build_entry(record, minted, path:, line_number:)
         word = record["word"]
         entry_id = mint_entry_id(record, minted)
+        headword = Nabu::Normalize.nfc(word.to_s)
+        # Wiktionary has entries FOR bare combining marks (the oui
+        # extract's "𐾂", U+10F82) — the mark strip folds those to
+        # empty, and a mark IS its own search key: fall back to the
+        # headword (the e84000 glossary lane's rule).
+        folded = Nabu::Normalize.search_form(word.to_s, language: @language)
+        folded = headword if folded.empty?
 
         Nabu::DictionaryEntry.new(
           entry_id: entry_id, key_raw: word, language: @language,
-          headword: Nabu::Normalize.nfc(word.to_s),
-          headword_folded: Nabu::Normalize.search_form(word.to_s, language: @language),
+          headword: headword,
+          headword_folded: folded,
           gloss: gloss(record),
           body: body_text(record),
           citations: [],
