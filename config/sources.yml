@@ -4399,9 +4399,11 @@ tla-hf:
   # would be a NEW dataset name — re-fetch is an owner decision.
   # Listing census 2026-09-28 (HF api/datasets?author=…): NO v20 — the
   # org still lists exactly three datasets, unchanged since 2025-01-19.
-  # The unheld third, tla-Earlier_Egyptian_original-v18-premium
-  # (2024-06-22), is the fresher successor of the 2018 AES snapshot's
-  # ground — the standing remainder-ingest candidate.
+  # P108-7 (2026-09-29): the third dataset INGESTED —
+  # tla-Earlier_Egyptian_original-v18-premium, 12,773 sentences (+ the
+  # -de sibling), the fresher successor of the 2018 AES snapshot's
+  # ground; Unicode hieroglyphs ride annotations as on the siblings.
+  # Source total: 6 docs / 59,524 passages.
   sync_policy: manual
   translations: true
   # German translation coverage is 100% (translation is a required field,
