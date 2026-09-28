@@ -103,6 +103,18 @@ module Nabu
           corpus_version: "v18",
           stage: %w[demotic Demotic]
         }.freeze,
+        # P108-7 (the scope-widening remainder): the org's third dataset —
+        # Earlier Egyptian ORIGINAL sentences, the fresher successor of the
+        # ground the frozen 2018 AES snapshot covers (same premium shape;
+        # Unicode hieroglyphs + transliteration + lemmatization + de).
+        "earlier-egyptian-v18" => {
+          subdir: "earlier-egyptian-v18",
+          dataset: "tla-Earlier_Egyptian_original-v18-premium",
+          url: "#{HF_BASE}/tla-Earlier_Egyptian_original-v18-premium/resolve/main/train.jsonl",
+          title: "TLA Earlier Egyptian original sentences, corpus v18, premium",
+          corpus_version: "v18",
+          stage: ["earlier-egyptian", "Earlier Egyptian"]
+        }.freeze,
         "late-egyptian-v19" => {
           subdir: "late-egyptian-v19",
           dataset: "tla-late_egyptian-v19-premium",
