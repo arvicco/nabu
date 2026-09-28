@@ -1996,6 +1996,24 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+honkoku:   # P108-5
+  adapter: Nabu::Adapters::Honkoku
+  adopted: "2026-09-29"
+  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 6,092 docs / 129,458 passages; 6,749
+                   # untranscribed materials skip by rule (dir-less or all-empty)
+  sync_policy: manual
+  # みんなで翻刻 citizen transcriptions (yuta1984/honkoku-data; README
+  # CC BY-SA 4.0 verbatim, read 2026-09-29): the v3 tree — project >
+  # material > page txts + info.tsv metadata (~46.9M chars per the
+  # README's 2025-11 census). Served HONESTLY as crowd transcription
+  # (upstream-measured ~1.5 err/100 chars) with the platform's
+  # aozora-like notation VERBATIM; a parsed ruby/gaiji layer and the
+  # v1 tree (2017 platform, ~5M chars, different layout) are DECLARED
+  # deferrals on the queue's japonic remainder. Per-material holding-
+  # institution attribution carried in document metadata.
+
 hypotactic:
   adapter: Nabu::Adapters::Hypotactic
   adopted: "2026-07-24"

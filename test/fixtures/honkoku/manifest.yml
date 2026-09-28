@@ -1,0 +1,54 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: honkoku
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: v3/21dzk/info.tsv
+    url: https://raw.githubusercontent.com/yuta1984/honkoku-data/master/v3/21dzk/info.tsv
+    refetchable: true
+    whole: false
+    trim: header + first 3 material rows (head -4)
+  - path: v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/info.tsv
+    url: https://raw.githubusercontent.com/yuta1984/honkoku-data/master/v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/info.tsv
+    refetchable: true
+    whole: true
+    trim: none
+  - path: v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/001.txt
+    url: https://raw.githubusercontent.com/yuta1984/honkoku-data/master/v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/001.txt
+    refetchable: true
+    whole: true
+    trim: none
+  - path: v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/002.txt
+    url: https://raw.githubusercontent.com/yuta1984/honkoku-data/master/v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/002.txt
+    refetchable: true
+    whole: true
+    trim: none
+  - path: v3/zukan/info.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: composed trim (index head + one specific row) from the box's canonical clone — re-cut per README
+    copied: "2026-09-29"
+    whole: false
+    trim: header + first 2 rows + the EBA1C… untranscribed material's row
+  - path: v3/zukan/EBA1C773EFD93B0ECD7B0A9F69EF0DDE/info.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: copied from the box's canonical clone with its empty pages — re-cut per README
+    copied: "2026-09-29"
+    whole: true
+    trim: none
+  - path: v3/zukan/EBA1C773EFD93B0ECD7B0A9F69EF0DDE/001.txt
+    refetchable: false
+    provenance: local-trim
+    reason: a REAL empty placeholder page (0 bytes) — the untranscribed-material case
+    copied: "2026-09-29"
+    whole: true
+    trim: none
+  - path: v3/zukan/EBA1C773EFD93B0ECD7B0A9F69EF0DDE/002.txt
+    refetchable: false
+    provenance: local-trim
+    reason: a REAL empty placeholder page (0 bytes) — the untranscribed-material case
+    copied: "2026-09-29"
+    whole: true
+    trim: none

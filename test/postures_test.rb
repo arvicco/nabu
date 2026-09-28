@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 97, lect.size,
+    assert_equal 98, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -232,7 +232,8 @@ class PosturesTest < Minitest::Test
                  "skjaervo-khotanese + shkz — identity: 91→93; P107-4/7 ADD atmo + " \
                  "altaica-shm — identity: 93→95; kouigenji ADDED P108-3 — pending on " \
                  "the jpn:emj mint (p108-japonic-stages), the titus-osco-umbrian " \
-                 "shape: 95→96; kokubunken ADDED P108-4 — identity (jpn + ojp): 96→97"
+                 "shape: 95→96; kokubunken ADDED P108-4 — identity (jpn + ojp): 96→97; " \
+                 "honkoku ADDED P108-5 — identity jpn honest-coarse: 97→98"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -292,6 +293,6 @@ class PosturesTest < Minitest::Test
     # P95 ADDS diccas + perseus-anglit + perseus-farsilit as identity
     # (62→65) and prilit as dates (10→11) — the long-tail sweep plus the
     # Slovenian anchor, all on existing molds.
-    assert_equal({ "identity" => 72, "dates" => 11, "codemap" => 13, "pending" => 1 }, by_posture)
+    assert_equal({ "identity" => 73, "dates" => 11, "codemap" => 13, "pending" => 1 }, by_posture)
   end
 end
