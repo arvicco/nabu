@@ -2313,6 +2313,22 @@ ko-wikisource-mk:
   # (scan transclusions / fragmentary — the P78-4 audit).
   license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
 
+kokubunken:   # P108-4
+  adapter: Nabu::Adapters::Kokubunken
+  adopted: "2026-09-29"
+  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 3 docs / 1,723 passages (kokin 1,230 ·
+                   # hirose 465 · genryaku 28); poem cards eyeballed
+  sync_policy: manual
+  # NIJL's own TEI lane on GitHub (both repo READMEs CC BY 4.0
+  # verbatim, read 2026-09-29): 嘉禄二年本古今和歌集 (poem-grain with
+  # 詞書/作者名 annotations; the apparatus reads lem, rdg annotated) +
+  # the Man'yōshū TEI pair — 廣瀬本 巻一 (the only complete
+  # non-Sengaku-line witness; a DIFFERENT ms line from held ONCOJ, the
+  # two-editions doctrine) and the 元暦校本 opening. Man'yōgana base
+  # text with the kun/傍訓 reading layer as annotations.
+
 kouigenji:   # P108-3
   adapter: Nabu::Adapters::Kouigenji
   adopted: "2026-09-29"
