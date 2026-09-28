@@ -1,6 +1,6 @@
 ---
 title: "The Central Asia wave: two new desks on the Silk Road"
-date: 2026-09-28 21:30:00 +0000
+date: 2026-09-28 19:45:00 +0000
 description: >-
   Six new sources open the library's Middle Iranian, Turkic and
   Mongolic lanes — Khotanese manuscripts from the British Library,
