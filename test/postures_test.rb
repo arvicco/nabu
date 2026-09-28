@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 93, lect.size,
+    assert_equal 95, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -224,7 +224,7 @@ class PosturesTest < Minitest::Test
                  "tail via date-band INFERENCE, the document grain — no facet rule, so the " \
                  "declaration stays): 84→85; P95 ADDS FOUR — prilit (dates, the goo300k/imp " \
                  "sl-bands mold), diccas (identity ara), perseus-anglit (identity ang, the aspr " \
-                 "mold), perseus-farsilit (identity fas, bare fa anchor): 85→89; scripta-bulgarica ADDED P107-8 — identity bul, declared whole-source coarse (the Old→Middle Bulgarian span; per-text chu-recension refinement a recorded future look): 89→90; iedc ADDED P107-2 — identity, eleven mapped ISO codes across the Islamicate-East belt: 90→91; P107-3 ADDS skjaervo-khotanese + shkz — identity: 91→93"
+                 "mold), perseus-farsilit (identity fas, bare fa anchor): 85→89; scripta-bulgarica ADDED P107-8 — identity bul, declared whole-source coarse (the Old→Middle Bulgarian span; per-text chu-recension refinement a recorded future look): 89→90; iedc ADDED P107-2 — identity, eleven mapped ISO codes across the Islamicate-East belt: 90→91; P107-3 ADDS skjaervo-khotanese + shkz — identity: 91→93; P107-4/7 ADD atmo + altaica-shm — identity: 93→95"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -284,6 +284,6 @@ class PosturesTest < Minitest::Test
     # P95 ADDS diccas + perseus-anglit + perseus-farsilit as identity
     # (62→65) and prilit as dates (10→11) — the long-tail sweep plus the
     # Slovenian anchor, all on existing molds.
-    assert_equal({ "identity" => 69, "dates" => 11, "codemap" => 13 }, by_posture)
+    assert_equal({ "identity" => 71, "dates" => 11, "codemap" => 13 }, by_posture)
   end
 end
