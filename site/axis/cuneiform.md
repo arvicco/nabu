@@ -15,26 +15,26 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
+| `achemenet` | texts | attribution | wired · manual | 2,774 docs / 2,774 passages |
+| `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
+| `cigs` | feature module | attribution | wired · manual | nothing held yet |
+| `cuc` | tablets | nc | wired · manual | 279 docs / 7,544 passages |
+| `ebl` | tablets | nc | wired · manual | 23,288 docs / 325,728 passages |
+| `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
+| `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
-| `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
+| `osl` | feature module | open | wired · manual | nothing held yet |
+| `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
+| `seal` | texts | research_private | wired · manual | 408 docs / 14,953 passages |
+| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 | `wiktionary-akk` | dictionary | attribution | wired · manual | 1,348 entries |
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
-| `cigs` | feature module | attribution | wired · manual | nothing held yet |
-| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
-| `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |
-| `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
-| `ebl` | tablets | nc | wired · manual | 23,288 docs / 325,728 passages |
-| `cuc` | tablets | nc | wired · manual | 279 docs / 7,544 passages |
-| `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
-| `osl` | feature module | open | wired · manual | nothing held yet |
-| `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
-| `achemenet` | texts | attribution | wired · manual | 2,774 docs / 2,774 passages |
-| `seal` | texts | research_private | wired · manual | 408 docs / 14,953 passages |
+| `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 48 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 49 more (`nabu axis cuneiform` lists all).
 
 ## The desk's instruments
 
@@ -87,4 +87,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

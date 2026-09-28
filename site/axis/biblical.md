@@ -15,25 +15,25 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
-| `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
-| `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
-| `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
-| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
-| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
+| `betamasaheft-works` | texts | attribution | wired · manual | 3,810 docs / 66,916 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
+| `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
+| `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
+| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
+| `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
+| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
+| `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
-| `betamasaheft-works` | texts | attribution | wired · manual | 3,796 docs / 66,516 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `hbo` 30,259 · `gez` 3,774 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 14 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `hbo` 30,259 · `gez` 3,788 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 15 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 
@@ -95,4 +95,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

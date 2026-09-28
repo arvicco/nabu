@@ -15,18 +15,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
+| `bibyeonsa` | texts | attribution | wired · manual | 273 docs / 93,528 passages |
+| `goryeosa` | texts | attribution | wired · manual | 138 docs / 31,207 passages |
+| `goryeosa-jeoryo` | texts | attribution | wired · manual | 36 docs / 11,226 passages |
+| `itkc` | texts | attribution | wired · manual | 473 docs / 13,185 passages |
+| `ko-wikisource-mk` | texts | attribution | wired · manual | 1 docs / 159 passages |
 | `okhc` | texts | nc | wired · manual | 1,198,779 docs / 3,542,662 passages |
 | `sillok` | texts | attribution | wired · manual | 743 docs / 414,321 passages |
 | `sjw` | texts | attribution | wired · manual | 297 docs / 1,896,858 passages |
-| `ko-wikisource-mk` | texts | attribution | wired · manual | 1 docs / 159 passages |
-| `goryeosa` | texts | attribution | wired · manual | 138 docs / 31,207 passages |
-| `goryeosa-jeoryo` | texts | attribution | wired · manual | 36 docs / 11,226 passages |
-| `bibyeonsa` | texts | attribution | wired · manual | 273 docs / 93,528 passages |
-| `itkc` | texts | attribution | wired · manual | 473 docs / 13,185 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `lzh` 1,121,611 · `ko` 58,366 · `jpn` 17,997 · `en` 2,735 · `fra` 25 · `okm` 6.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `lzh` 1,121,611 · `ko` 58,366 · `jpn` 17,997 · `en` 2,735 · `fra` 25 · `okm` 6.
 
 ## The desk's instruments
 
@@ -47,4 +47,4 @@ nabu search WORD --axis korean   # a query scoped to this desk's shelves
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -15,36 +15,36 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 26 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `papyri-ddbdp` | papyri | attribution | wired · manual | 63,659 docs / 1,105,279 passages |
-| `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
-| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
-| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
-| `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
-| `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
-| `trismegistos` | feature module | attribution | wired · manual | nothing held yet |
-| `pleiades` | feature module | attribution | wired · manual | nothing held yet |
-| `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
-| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
-| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
-| `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
-| `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
-| `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
-| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
-| `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
-| `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
-| `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
-| `nabu-places` | feature module | attribution | wired · manual | nothing held yet |
-| `ucd` | feature module | open | wired · manual | nothing held yet |
-| `dharma-khmer` | texts | attribution | wired · manual | 1,219 docs / 50,165 passages |
 | `dharma-campa` | texts | attribution | wired · manual | 121 docs / 2,728 passages |
+| `dharma-khmer` | texts | attribution | wired · manual | 1,219 docs / 50,165 passages |
 | `dharma-nusantara` | texts | attribution | wired · manual | 291 docs / 5,893 passages |
 | `dharma-pyu` | texts | attribution | wired · manual | 145 docs / 629 passages |
+| `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
+| `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
+| `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
+| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
+| `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
+| `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
+| `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
+| `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `nabu-places` | feature module | attribution | wired · manual | nothing held yet |
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
+| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
+| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
+| `papyri-ddbdp` | papyri | attribution | wired · manual | 63,659 docs / 1,105,279 passages |
+| `pleiades` | feature module | attribution | wired · manual | nothing held yet |
+| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
+| `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
+| `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
+| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
+| `trismegistos` | feature module | attribution | wired · manual | nothing held yet |
+| `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
+| `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `lat` 195,059 · `grc` 76,445 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,531 … and 68 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `lat` 195,059 · `grc` 76,445 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,531 … and 68 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
@@ -117,4 +117,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
