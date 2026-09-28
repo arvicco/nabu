@@ -2313,6 +2313,24 @@ ko-wikisource-mk:
   # (scan transclusions / fragmentary — the P78-4 audit).
   license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
 
+kouigenji:   # P108-3
+  adapter: Nabu::Adapters::Kouigenji
+  adopted: "2026-09-29"
+  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 54/54 maki, 25,065 passages, 795 waka — the
+                   # project's own published counts exactly
+  sync_policy: manual
+  # 校異源氏物語テキストDB (kouigenjimonogatari.github.io; デジタル源氏
+  # 物語 — Nakamura/Nagasaki et al.; repo LICENSE CC BY 4.0, read
+  # 2026-09-29): Ikeda Kikan's 1942 critical edition of Genji, 54 maki
+  # as one TEI each (raw GETs). Passage per MANUSCRIPT LINE (seg),
+  # cited p<page>.l<line> from the seg's own corresp API id; waka
+  # (795 upstream-stated) ride nested in their seg → annotations
+  # (id + ／-joined lines); pb facs = NDL IIIF page images annotated
+  # on each page's first line. Language jpn; lect posture claims the
+  # Heian stage (jpn:emj) pending the registry mint.
+
 kr-gaiji:
   adapter: Nabu::Adapters::KrGaiji
   adopted: "2026-07-20"
