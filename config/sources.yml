@@ -4329,6 +4329,11 @@ tla-hf:
   # egy-Egyp/Egyh are SCRIPT subtags while the stored surface is Latin
   # transliteration, so no subtag is honest). Versioned artifacts: a v20
   # would be a NEW dataset name — re-fetch is an owner decision.
+  # Listing census 2026-09-28 (HF api/datasets?author=…): NO v20 — the
+  # org still lists exactly three datasets, unchanged since 2025-01-19.
+  # The unheld third, tla-Earlier_Egyptian_original-v18-premium
+  # (2024-06-22), is the fresher successor of the 2018 AES snapshot's
+  # ground — the standing remainder-ingest candidate.
   sync_policy: manual
   translations: true
   # German translation coverage is 100% (translation is a required field,
