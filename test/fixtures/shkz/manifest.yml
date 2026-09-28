@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Real CSV heads of the two Zenodo deposit files (upstream header typos
+# preserved verbatim). adapter_test null: count assertions would
+# false-fail against the full files.
+source: shkz
+adapter_test:
+retrieved: "2026-09-28"
+files:
+  - path: SKZ-sentence-level.csv
+    url: https://zenodo.org/api/records/15050878/files/SKZ-sentence-level.csv/content
+    refetchable: true
+    whole: false
+    trim: header + first 3 of 50 sentence rows (head trim, byte-verbatim)
+  - path: alignment-pairs.csv
+    url: https://zenodo.org/api/records/15050878/files/alignment-pairs.csv/content
+    refetchable: true
+    whole: false
+    trim: header + first 5 of 1,012 pair rows (head trim, byte-verbatim)

@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Saved page snapshots of a live Drupal 7 site (plain HTTP — HTTPS
+# refuses): Drupal emits per-request form tokens, so a fresh fetch can
+# never byte-match — every entry is liveness-checked only.
+# adapter_test null for the same reason.
+source: scripta-bulgarica
+adapter_test:
+retrieved: "2026-09-28"
+files:
+  - path: manuscript-0.html
+    url: http://scripta-bulgarica.eu/bg/manuscript
+    refetchable: true
+    whole: false
+    trim: >-
+      page snapshot (the pager's page 0); Drupal per-request tokens
+      make byte-compare false-drift — liveness only
+  - path: sources/bitolski-nadpis-na-ivan-vladislav.html
+    url: http://scripta-bulgarica.eu/bg/sources/bitolski-nadpis-na-ivan-vladislav
+    refetchable: true
+    whole: false
+    trim: page snapshot (see above — liveness only)
+  - path: sources/vatopedska-gramota.html
+    url: http://scripta-bulgarica.eu/bg/sources/vatopedska-gramota
+    refetchable: true
+    whole: false
+    trim: page snapshot (see above — liveness only)

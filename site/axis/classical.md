@@ -15,26 +15,26 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
+| `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
+| `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
+| `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
+| `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
+| `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
+| `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
+| `hypotactic` | feature module | attribution | wired · manual | nothing held yet |
+| `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
+| `lila` | feature module | attribution | wired · manual | nothing held yet |
+| `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
+| `pedecerto` | feature module | nc | wired · manual | nothing held yet |
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,705 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 548 docs / 398,684 passages |
-| `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
-| `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
-| `lila` | feature module | attribution | wired · manual | nothing held yet |
-| `hypotactic` | feature module | attribution | wired · manual | nothing held yet |
-| `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
-| `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
-| `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
-| `pedecerto` | feature module | nc | wired · manual | nothing held yet |
-| `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
-| `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
-| `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `grc` 120,553 · `lat` 58,424 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 12 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `grc` 120,553 · `lat` 58,424 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 13 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
@@ -99,4 +99,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -368,4 +368,20 @@ class WiktionaryJsonlParserTest < Minitest::Test
                    "word-less and whitespace-word records skip; real records still mint"
     end
   end
+
+  # P107 (the oui first sync): Wiktionary has entries FOR bare combining
+  # marks — the Old Uyghur extract's "𐾂" (U+10F82 OLD UYGHUR COMBINING
+  # DOT ABOVE) is a real headword whose generic mark strip folds to
+  # empty, and DictionaryEntry's non-empty headword_folded validation
+  # quarantined the whole shelf. A mark IS its own search key: fall back
+  # to the unfolded headword (the e84000 glossary lane's rule).
+  def test_mark_only_headwords_fold_to_themselves_not_to_empty
+    Tempfile.create(["kaikki", ".jsonl"]) do |f|
+      f.write(%({"word":"\u{10F82}","pos":"punct","lang_code":"oui","senses":[{"glosses":["combining dot above"]}]}))
+      f.flush
+      entries = Nabu::Adapters::WiktionaryJsonlParser.new(language: "oui").entries(f.path)
+      assert_equal 1, entries.size
+      assert_equal "\u{10F82}", entries.first.headword_folded
+    end
+  end
 end

@@ -28,29 +28,29 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
-| `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
-| `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
-| `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
-| `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
+| `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
 | `corpus-gysseling` | texts | research_private | wired · manual | 2,226 docs / 207,793 passages |
+| `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
+| `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
+| `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
+| `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
+| `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
+| `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
+| `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
+| `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
+| `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
+| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `ref` | texts | attribution | wired · manual | 190 docs / 447,115 passages |
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
-| `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
-| `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
-| `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
-| `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
-| `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
-| `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
-| `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
+| `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 42 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 43 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
@@ -134,4 +134,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

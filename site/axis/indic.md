@@ -15,18 +15,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
-| `mw` | dictionary | nc | wired · manual | 193,890 entries |
-| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
-| `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · manual | 15,741 docs / 753,093 passages |
+| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
+| `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 21 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 22 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
@@ -79,4 +79,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

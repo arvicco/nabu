@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to a dozen desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-five desks
+Everything below documents **shipped behaviour** — the twenty-seven desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-four desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-seven desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (16): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`, `digiliblt`, `openmgh`, `corpus-corporum`
+**Members** (16): `corpus-corporum`, `croala`, `digiliblt`, `diorisis`, `first1k-greek`, `glaux`, `hypotactic`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `ud`, `vulgate`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (16): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`, `derom`, `osta`, `disco`, `ctilc`, `bdcamoes`, `corpus-corporum`, `lo-congres`, `cv-sardinian`, `salom`, `aranese`
+**Members** (16): `aranese`, `bdcamoes`, `bfm`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `openmgh`, `osta`, `salom`, `ud`
 
 ### epigraphy
 
@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (26): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `trismegistos-geo`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`, `elephantine`, `nabu-places`, `ucd`, `dharma-khmer`, `dharma-campa`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`
+**Members** (26): `ceipom`, `dharma-campa`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `edh`, `edr`, `elephantine`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `nabu-places`, `obi-burmese`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (11): `ud`, `proiel`, `torot`, `ccmh`, `goo300k`, `imp`, `damaskini`, `wiktionary-cu`, `freising`, `sl-lexica`, `prilit`
+**Members** (12): `ccmh`, `damaskini`, `freising`, `goo300k`, `imp`, `prilit`, `proiel`, `scripta-bulgarica`, `sl-lexica`, `torot`, `ud`, `wiktionary-cu`
 
 ### germanic
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (19): `ud`, `proiel`, `iswoc`, `menotec`, `menota`, `aspr`, `bosworth-toller`, `corpus-oudnederlands`, `corpus-gysseling`, `ref`, `rem`, `rundata`, `helipad`, `ren`, `fornsvenska`, `cme`, `eebo-tcp`, `dta`, `perseus-anglit`
+**Members** (19): `aspr`, `bosworth-toller`, `cme`, `corpus-gysseling`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `ud`
 
 ### celtic
 
@@ -99,7 +99,7 @@ Gothic on the proiel/ud treebanks beside the West and North Germanic branches: O
 
 Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
-**Members** (8): `ud`, `wiktionary-recon`, `riig`, `ogham`, `corph`, `lexlep`, `lexlep-words`, `gpc`
+**Members** (8): `corph`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `ud`, `wiktionary-recon`
 
 ### italic
 
@@ -107,7 +107,7 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
-**Members** (11): `wiktionary-recon`, `isicily`, `itant`, `sabellic-loans`, `ceipom`, `open-etruscan`, `larth-etp`, `lexlep`, `lexlep-words`, `tir`, `burman-concordance`
+**Members** (11): `burman-concordance`, `ceipom`, `isicily`, `itant`, `larth-etp`, `lexlep`, `lexlep-words`, `open-etruscan`, `sabellic-loans`, `tir`, `wiktionary-recon`
 
 ### etym
 
@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (11): `wiktionary-recon`, `iecor`, `wold`, `clics`, `liv`, `edl`, `starling`, `sabellic-loans`, `cldf-spine`, `nabu-lects`, `derom`
+**Members** (11): `cldf-spine`, `clics`, `derom`, `edl`, `iecor`, `liv`, `nabu-lects`, `sabellic-loans`, `starling`, `wiktionary-recon`, `wold`
 
 ### biblical
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (15): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`, `betamasaheft-works`
+**Members** (15): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `eng-web`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -131,7 +131,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (10): `ud`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`, `elephantine`
+**Members** (10): `bhsa`, `bridging`, `dss`, `elephantine`, `hebrew-lexicon`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`
 
 ### syriac
 
@@ -155,7 +155,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and, since P96, the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
-**Members** (4): `kitab`, `openiti`, `diccas`, `kitab-reuse`
+**Members** (4): `diccas`, `kitab`, `kitab-reuse`, `openiti`
 
 ### hittite
 
@@ -163,7 +163,7 @@ The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Qu
 
 The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank.
 
-**Members** (3): `ud`, `wiktionary-hit`, `tlhdig`
+**Members** (3): `tlhdig`, `ud`, `wiktionary-hit`
 
 ### cuneiform
 
@@ -171,7 +171,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (16): `ud`, `oracc`, `wiktionary-sux`, `wiktionary-akk`, `wiktionary-hit`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`, `edubba-overlay`, `achemenet`, `seal`
+**Members** (16): `achemenet`, `cdli`, `cigs`, `cuc`, `ebl`, `edubba-overlay`, `etcsl`, `oracc`, `osl`, `rsti`, `seal`, `tlhdig`, `ud`, `wiktionary-akk`, `wiktionary-hit`, `wiktionary-sux`
 
 ### egyptian
 
@@ -179,15 +179,15 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 
 The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium.
 
-**Members** (9): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`, `elephantine`, `edubba-overlay`, `unikemet`
+**Members** (9): `aed`, `aes`, `ccl`, `coptic-scriptorium`, `edubba-overlay`, `elephantine`, `tla-hf`, `ud`, `unikemet`
 
 ### iranian
 
 > The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 
-The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — and, since P95, classical Persian literature proper: Hafez's Divan with its aligned English (perseus-farsilit).
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and, since P107, the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
-**Members** (3): `oracc`, `cdli`, `perseus-farsilit`
+**Members** (6): `cdli`, `iedc`, `oracc`, `perseus-farsilit`, `shkz`, `skjaervo-khotanese`
 
 ### indic
 
@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (8): `ud`, `gretil`, `mw`, `suttacentral`, `sarit`, `dacon`, `dcs`, `nabu-data`
+**Members** (8): `dacon`, `dcs`, `gretil`, `mw`, `nabu-data`, `sarit`, `suttacentral`, `ud`
 
 ### buddhist
 
@@ -203,7 +203,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (8): `gretil`, `suttacentral`, `sarit`, `cbeta`, `e84000`, `derge-kangyur`, `derge-tengyur`, `mvp`
+**Members** (8): `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `mvp`, `sarit`, `suttacentral`
 
 ### tibetan
 
@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (12): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `monlam-lexicon`, `wiktionary-bo`, `nabu-data`
+**Members** (12): `actib`, `derge-kangyur`, `derge-tengyur`, `e84000`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
 
 ### korean
 
@@ -219,7 +219,7 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. Since P91-1 the OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
-**Members** (8): `okhc`, `sillok`, `sjw`, `ko-wikisource-mk`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `itkc`
+**Members** (8): `bibyeonsa`, `goryeosa`, `goryeosa-jeoryo`, `itkc`, `ko-wikisource-mk`, `okhc`, `sillok`, `sjw`
 
 ### sea
 
@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
-**Members** (7): `dharma-khmer`, `dharma-campa`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`, `dharma-javanese-texts`, `ojw`
+**Members** (7): `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`, `ojw`
 
 ### sinitic
 
@@ -235,7 +235,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (19): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `classical-modern`, `menggu-ziyun`, `zhongyuan`, `qieyun-restored`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`, `chgis`, `cbdb`
+**Members** (19): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `qieyun-restored`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zhongyuan`
 
 ### japonic
 
@@ -243,7 +243,23 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
+**Members** (8): `aozora`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
+
+### turkic
+
+> The Turkologist — the runiform steppe to the Chagatai chancery, one literary continuum.
+
+The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
+
+**Members** (3): `atmo`, `ud`, `wiktionary-recon`
+
+### mongolic
+
+> The Mongolist — the Secret History's empire in its own words, hanzi transcription beside romanization.
+
+The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
+
+**Members** (2): `altaica-shm`, `wiktionary-recon`
 
 ### local
 
@@ -251,7 +267,7 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 The canonical-memory shelves (architecture §16): local-language, local-lemmas, local-library, local-notes, local-source.
 
-**Members** (5): `local-language`, `local-library`, `local-notes`, `local-lemmas`, `local-source`
+**Members** (5): `local-language`, `local-lemmas`, `local-library`, `local-notes`, `local-source`
 
 ## Working the axes — the commands
 

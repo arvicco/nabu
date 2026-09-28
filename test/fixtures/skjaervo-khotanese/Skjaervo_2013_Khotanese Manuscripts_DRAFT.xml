@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<TEI.2>
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Khotanese Manuscripts from Chinese Turkestan in the British Library</title>
+                <author id="OS">Skjærvø, Prods Oktor</author>
+            </titleStmt>
+            <editionStmt>
+                <edition>Revised online edition of 2003 reprint</edition>
+                <date>2014</date>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>International Dunhuang Project</publisher>
+                <pubPlace>London</pubPlace>
+                <date>2013</date>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Printed book</p>
+                <bibl id="Skjærvø_2003">
+                    <author>Prods Oktor Skjærvø</author>
+                    <title level="m" lang="eng">Khotanese Manuscripts from Chinese Turkestan in the British Library: A Complete Catalogue with Texts and Translations</title>
+                    <title level="s" lang="eng">Corpus Inscriptionum Iranicarum: Part II Inscriptions of the Seleucid and Parthian Periods</title>
+                    <imprint>
+                        <biblScope type="vol">Vol. V: Saka — Texts VI</biblScope>
+                        <publisher>The British Library</publisher>
+                        <pubPlace>96 Euston Road, London, NW1 2DB</pubPlace>
+                        <date>2002</date>
+                    </imprint>
+                </bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc><p>Catalogue</p></projectDesc>
+        </encodingDesc>
+    </teiHeader>
+    <text>
+        <head>
+            <note><p>[Introduction to be linked as a separate html page]</p></note>
+        </head>
+        <body>
+            
+        <!--Or.6392–6402+6408 [Hoernle]-->
+            
+            <msDescription n="1" type="OS">
+                <msIdentifier>
+                    <settlement>London</settlement>
+                    <repository>The British Library</repository>
+                    <collection>Hoernle</collection>
+                    <idno type="current">Or.6392/1</idno>
+                    <idno type="old">M.9</idno>
+                    <idno type="old">Hoernle 1: KT II, p.64 (25)</idno>
+                </msIdentifier>
+                <msContents>
+                    <msItem n="1" type="Doc.">
+                        <note>
+                            <p>17th year of Viśaʾ Vāhaṃ  = 779. Hoernle, 1901, pl. vi, no. 1. Cf. SI M52 (year 20), P103.53.</p>
+                        </note>
+                        <q lang="khot-Latn" type="transliteration">
+                            <l n="1">@ salī 10 7 māśtä skarhvārä haḍā 5 hvaṃnä rruṃdä viśaʾ vāhaṃ ttäña beḍa siʾ pīḍakä</l>
+                            <l n="2">ttye pracaina cū ā<note type="footnote" n="a">Or: ā[ṃ].</note> sīḍakä naḍau nāsti kṣīrū<note type="footnote" n="b">rū very similar to ū, but rū has right diacritical lower than ū, which has it touching the top of the letter.</note> kīrä vī haṃtsa ūci śaṃdye jsa ci burä nvā sa-</l>
+                            <l n="3">lī pyaṃtsāṣṭa kṣīrū hir[ä] pajīde sīḍakī heḍä pharākä bakä caṃdä pajīde u ci va vā-</l>
+                            <l n="4">ra maṃgāra ṣaṃga ʾīde ttyāṃ brīyāsi u budarśaṃʾ chīyā yanīdä sīḍakä va gvārä näśtä</l>
+                            <l n="5">u vaña brīyāsi ceṃgāṃ js[ā]rä hamayä hauḍä khu vā nauha salye bisai jsārä ttū sīḍakä he-</l>
+                            <l n="6">ḍä u brīyāsi bīḍä hamayä dä u cvai varāṣṭa pamūhi tsī ttū-t-ī sīḍakä yīdä u bi-</l>
+                            <l n="7">salū nä nara[ṃ]dä himi 30<note type="footnote" n="c">With -e!?</note> haḍā vī narą̄mi ci vā trraṃdä ttī ra ṣiʾ pīḍakä prąmāṃ hi-</l>
+                            <l n="8">[mi] khu hā brīyāsi u budarśaṃʾ haṃguṣṭi viśtārä brīyāsi | haṃ | gu | ṣṭä</l>
+                            <l n="9">ttä burä vara byą̄na ya budarśaṃʾ | haṃ | gu | ṣṭä</l>
+                            <l n="10">puñargaṃ || ci vaña ustaṃ brīyāsi jaṃpha himāde budarśąʾ-n-ī hā chīyā yīdä sī-</l>
+                            <l n="11">khauśpaṃ || ḍakä va gvārä näśtä puñargaṃ | haṃ gu | ṣṭä</l>
+                            <l n="12">hatkaṃ —</l>
+                        </q>
+                        <q lang="eng" type="translation">
+                            <p>(1) Year 17, 5 days of the month of Skarhvāra, of the king of Khotan Viśaʾ Vāhaṃ.</p>
+                            <p>At that time this writ (was made) (2) for the following reason: Sīḍaka is getting a man for *official work together with water and ground. However many years accordingly they request any *official matter (3) in the future, Sīḍaka provides it, (whether) much (or) little—as much as they request. And whatever (4) old <term lang="khot-Latn">ṣaṃga</term>s (of grain are) owed—Brīyāsa and Budarśaṃʾ keeps the account of them. Sīḍaka has no dispute there.</p>
+                            <p>(5) And now Brīyāsa has delivered grain to the Chinese himself. And when—the grain at the top of the year—Sīḍaka delivers that, (6) and (= then) Brīyāsa will himself bring *that much. And whatever clothing goes to (= is sent to?) him, that Sīḍaka does for him, and (7) no <term lang="khot-Latn">bisalū</term> will have gone out. (In/for?) 30 days that goes out which has come in.</p>
+                            <p>And this document will take effect [when] (8) Brīyāsa and Budarśaṃʾ place (their) finger(s) [on it].</p>
+                            <p>(9) The following were the witnesses: Puñargaṃ, Khauśpaṃ,<note type="footnote" n="a">Also in SI M52.2, 7, P103.53.2 (Emmerick).</note> Hatkaṃ. — Budarśaṃʾ’s finger, Puñargaṃ’s finger.</p>
+                            <p>(10) Now, whatever may be the *complaints of Brīyāsa, in the future Budarśaṃʾ keeps the account of it for him. (11) Sīḍaka has no dispute there.</p>
+                        </q>
+                    </msItem>
+                </msContents>
+            </msDescription>
+<msDescription n="2" type="OS">
+                <msIdentifier>
+                    <settlement>London</settlement>
+                    <repository>The British Library</repository>
+                    <collection>Hoernle</collection>
+                    <idno type="current">Or.6392/2</idno>
+                    <idno type="old">M.9</idno>
+                    <idno type="old">Or.6392: KT V, p. 1 (1)</idno>
+                </msIdentifier>
+                <msContents>
+                    <msItem n="1" type="Doc.">
+                        <note>
+                            <p>11th year, i.e., of Viśaʾ Vāhaṃ, year of the <term lang="khot-Latn">tsīṣī</term>s (also Hedin 45) = 773. Hoernle, 1901, p. 37. The scribe was forgetful of his subscripts.</p>
+                        </note>
+                        <q lang="khot-Latn" type="transliteration">
+                            <l n="1">@ salī 10 1 māś(t)ä cvātaja haḍāʾ haṣṭa tsīṣīyyāṃ salya</l>
+                            <l n="2">ṣi pīḍaʾki ttye pracaina cu āṃ puñārrjāṃ ganaṃ nāstä</l>
+                            <l n="3">hauda kūsa puñargaṃ hīveī<note type="footnote" n="a"><term lang="khot-Latn">-ī</term> above <term lang="khot-Latn">-e</term>.</note> ye khaysaṃmaṃji jsa u ttāṃ-</l>
+                            <l n="4">jeri māś(t)ä thau heḍiʾ pęʾmīnai śūdasä chā buys(d)e<note type="footnote" n="b">Cf. Or.11252/37 a4.</note> u</l>
+                            <l n="5">drraiśa chā dva tsuna hvāne<note type="footnote" n="c">For <term lang="khot-Latn">hvāte</term>, cf. Or.6399/2.6</note> khu sīḍaki thau byęhī<note type="footnote" n="d">. Vowel tops neither quite typical of <term lang="khot-Latn">-ai</term> nor like <term lang="khot-Latn">-ę</term> in <term lang="khot-Latn">pęmīnai</term>.</note> ttāṃ-</l>
+                            <l n="6">jeri māśtä u ni b(y)ehī-t-ī paṃ-māśtä śo<note type="footnote" n="e">Like <term lang="khot-Latn">śä</term>, but no space for <term lang="khot-Latn">-au</term> below <term lang="khot-Latn">ki</term>.</note> chā ysaṃthä he-</l>
+                            <l n="7">ri tī ri ṣiʾ pīḍaki prąmā hämi khu hā puñārrjāṃ haṃ-</l>
+                            <l n="8">guṣṭi väśtä —</l>
+                            <l n="9">— puñārrjāṃ | haṃ | gu | ṣṭi</l>
+                        </q>
+                        <q lang="eng" type="translation">
+                            <p>(1) Year 11, eight days of the month of Cvātaja, in the year of the Tsīṣīs.</p>
+                            <p>(2) This writ is for the reason that Puñārrjāṃ<note type="footnote" n="a">Puñārrjāṃ and Puñargaṃ are both mentioned in a list of recipients of large sums of money in SI P 103.36, dated in the year of the <term lang="khot-Latn">ṣṣau</term> Ṣacū (= Viśaʾ Vāhaṃ’s16th or 17th). Puñārrjāṃ is mentioned in D.viii.2 (IOL Khot 3/5) and SI P 98.10. Puñargaṃ is mentioned several times in BL and SI docs. According to SI P 103.6 he comes from Gaysāta.</note> is getting wheat (in the amount of) (3) seven <term lang="khot-Latn">kūsa</term>s—it belonged to Puñargaṃ—from the <term lang="khot-Latn">khaysmaṃjā</term>.<note type="footnote" n="b">The meaning of this term, which occurs several times, is not known. In Or.8211/1456 <term lang="khot-Latn">dvī khaysmaje</term> “two <term lang="khot-Latn">khaysmajā</term>s” are mentioned.</note> And in the month of Ttuṃjārā (4) he will deliver cloth: woolen (cloth) 11 <term lang="khot-Latn">chā</term>s in length and (5) 30 <term lang="khot-Latn">chā</term>s 2 <term lang="khot-Latn">tsuna</term>s in width, so that Sīḍaka receives the cloth in the month of Ttuṃjārā. (6) And if he (Sīḍaka) should not receive it, (then) for a five-month period he (Puñārrjāṃ) shall pay one <term lang="khot-Latn">chā</term> interest.</p>
+                            <p>(7) And this writ will take effect when Puñārrjāṃ (8) places (his) finger on it.</p>
+                            <p>(9) Puñārjāṃ’s finger (mark).</p>
+                        </q>
+                    </msItem>
+                </msContents>
+            </msDescription>
+<msDescription n="3" type="OS">
+                <msIdentifier>
+                    <settlement>London</settlement>
+                    <repository>The British Library</repository>
+                    <collection>Hoernle</collection>
+                    <idno type="current">Or.6393/1</idno>
+                    <idno type="old">M.9</idno>
+                    <idno type="old">Or.6393.1: KT V, p. 1 (2); SD II/XXV; SD, TV, p. 52</idno>
+                </msIdentifier>
+                <msContents>
+                    <msItem n="1" type="Doc.">
+                        <note>
+                            <p>Report from Vaśäʾrapāña and Arrjāṃ to the <term lang="khot-Latn">spāta</term> Gaudaka. The <term lang="khot-Latn">spāta</term> Sīḍaka, Vaśaʾrapuña, and Gaudaka are mentioned together in Or.6396/2 from (Viśaʾ Vāhaṃ’s) 19th year = 781. Hoernle, 1901, p. 37. PLATE 5c.</p>
+                        </note>
+                        <q lang="khot-Latn" type="transliteration">
+                            <l n="1">@ aysi vaśäʾrapą̄ñä u arrjāṃ spāta gaudakä śaṃdā haṃbujsai haṣḍi yani</l>
+                            <l n="2">a ttanvī vī pūri paśāteṃ paṃ-ysārä mūri dvī ysāri mūri ttä dāśeṃ byehi</l>
+                            <l n="3">u drrai ysāri ttä ni dāśeṃ byehi kh[u] ttą̄ vaña spāta sīḍaki hīśtä ttä mūrä</l>
+                            <l n="4">ttyena paphūji na-ṃ haḍä hā haur[a] kuṣṭa-ṃ spāta jī ā c- -ye vīra-ṃ haʾci</l>
+                            <l n="5">nāsāte tta ttanvī gvaṣcą̄ñä himāri mūri haura pīḍakä tta x biysaṃji</l>
+                            <l n="6">u mūri ni haure ttī cäkvakä spātana paphūji ttī ra prąmāṃ himä khu hā [x]</l>
+                            <l n="7">haṃguṣṭi viśtä —</l>
+                            <l n="8">— || arrjāṃ haṃgu | ṣṭi | |</l>
+                        </q>
+                        <q lang="eng" type="translation">
+                            <p>(1) I, Vaśäʾrapuña, and Arrjāṃ embracing the earth (before) the <term lang="khot-Latn">spāta</term> Gaudaka make a report:</p>
+                            <p>(2) I sent (my) son to Ttanvī<note type="footnote" n="a">B. takes this to be a noun meaning “hostage” or “pledge.”</note> for 5,000 <term lang="khot-Latn">mūrā</term>s. 2,000 <term lang="khot-Latn">mūrā</term>s—those I have received in full, (3) and 3,000 thousand—those I have not received in full. When now the <term lang="khot-Latn">spāta</term> Sīḍaka comes to you, those <term lang="khot-Latn">mūrā</term>s (4) you collect from him (Ttanvī), (but) don’t give them (yet) to (Sīḍaka). Where the <term lang="khot-Latn">spāta</term> Jī has ... them(?) ... he will take whatever I have(?). (5) Thus Ttanvī is to hand them over,<note type="footnote" n="b">B.: “distribute,” but contexts seem to indicate “hand over, get rid of,” in accordance with the Buddh. terminology, where <term lang="khot-Latn">gvaṣṭ-</term> is “separation”; SI P 103.43 has <term lang="khot-Latn">puṣa gvaścarä pāra-vaysdāṃ</term>, which Emmerick translates as “Hand out (receipts for) the quittance of the debts.”</note>(and then you) give (pay) the <term lang="khot-Latn">mūrā</term>s (to Sīḍaka).</p>
+                            <p>Thus (first) you obtain the writ (from him) (6) and do not give (him) the <term lang="khot-Latn">mūrā</term>s. Then you shall collect the boy<note type="footnote" n="c">See Studies III, p. 56.</note> from the <term lang="khot-Latn">spāta</term>.</p>
+                            <p>And it will take effect when (7) he places (his) finger on it. — (8) Arrjāṃ’s finger.</p>
+                        </q>
+                    </msItem>
+                </msContents>
+            </msDescription>
+<msDescription n="1495" type="OS">
+                <msIdentifier>
+                    <settlement>London</settlement>
+                    <repository>The British Library</repository>
+                    <collection>Stein</collection>
+                    <idno type="current">IOL Khot 161/2</idno>
+                    <idno type="old">H. 143 NSB 75: KT V, p. 70 (155)</idno>
+                </msIdentifier>
+                <msContents>
+                    <msItem n="1" type="Sgh">
+                        <p><p>Actual: H. 143 NSB 15.  Sgh [17] 46.4-48.  Neb., p. 15 (S2 28).</p><p></p><p>Fol. 28                      ... pā]-</p>
+                        <q lang="khot-Latn" type="transliteration">
+                            <l n="r1">tco hvan[ai] kye ttū sūträ vāśī[yä</l>
+                            <l n="r2">ttītä sarvaśūrä bo[dh]i[satvä ..... vāśeme]-</l>
+                            <l n="r3">te jsa puñīnai haṃ[bīsä .............. tca]-</l>
+                            <l n="r4">haurehaṣṭevoʾ kye /</l>
+                            <l n="r5">pattīmä. kyai vā -e /</l>
+                            <l n="v1">balysūśtu varālsto /...................hvā]-</l>
+                            <l n="v2">ñāro ttīye a -e [</l>
+                            <l n="v3">jiṅga hvata hämä[te</l>
+                            <l n="v4">ta dātä käḍ[e] duṣkar[ä ............... bā]-</l>
+                            <l n="v5">ḍu tcahaurehaṣṭātä ysār[e</l>
+                        </q>
+                        <q lang="eng" type="translation">
+                        </q>
+                    </msItem>
+                </msContents>
+            </msDescription>
+</body>
+    </text>
+</TEI.2>

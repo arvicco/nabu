@@ -79,7 +79,7 @@ module Nabu
       # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
                      creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil,
-                     lects: nil)
+                     lects: nil, links_journal_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -96,6 +96,10 @@ module Nabu
         # P106-7 (Q88.3): the nabu-lects registry for the override-staging
         # check; nil (module absent, bare callers) skips it honestly.
         @lects = lects
+        # P107 (the R-health rider): the links journal path for the
+        # mined-lane occurrence probe; nil-safe, hot-WAL-safe (an
+        # unopenable journal just skips the probe).
+        @links_journal_path = links_journal_path
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -125,6 +129,7 @@ module Nabu
           lect_override_dark,
           facet_lane_drift,
           timeline_lane_drift,
+          unmined_axis_metadata,
           reversed_axis_bounds,
           script_surface_mismatch,
           *place_ref_findings,
@@ -151,6 +156,37 @@ module Nabu
       # budget: the P60-1 census sampled 40/claim, 12 keeps the standing
       # check subsecond).
       SCRIPT_CHECK_SAMPLE = 12
+
+      # P107 (Q83.3): the unmined-ore census's lane vocabularies —
+      # axis-shaped key tokens per lane (keys token-split on
+      # non-alphanumerics; one shared token flags the key).
+      MINING_TOKENS = {
+        dates: %w[date dates dated dating year years century period era dynasty reign],
+        places: %w[place places findspot provenance origin region site toponym],
+        genre: %w[genre genres doctype category subject]
+      }.freeze
+
+      # Fetch bookkeeping — keys whose FIRST token marks them as
+      # machinery, never ore.
+      MINING_META_TOKENS = %w[file url sha sha256 fetched retrieved sync synced revision].freeze
+
+      # The declared-coarseness ledger: slug => { key => reason }. The
+      # suite requires every entry to state its reason. Seeded from the
+      # 2026-09-28 live census (values sampled per source): these
+      # "provenance" keys carry DATA LINEAGE — where the file came from
+      # — never a findspot; the remaining flagged sources are the real
+      # Q83 alignment-sweep worklist and stay loud on purpose.
+      MINING_EXEMPT = {
+        "aranese" => { "provenance" => "dataset-derivation lineage (Apertium/PILAR note), not a findspot" },
+        "classical-modern" => { "provenance" => "reference-list lineage (source URLs), not a findspot" },
+        "diorisis" => { "provenance" => "edition lineage (e.g. \"Perseus\"), not a findspot",
+                        "provenance_url" => "edition lineage URL, not a findspot" },
+        "local-library" => { "provenance" => "ingest lineage (retrieval date + URL), not a findspot" },
+        "e84000" => { "publication_date" => "the MODERN translation's release date (84000.co); " \
+                                            "composition dating rides the Kangyur lanes" }
+      }.freeze
+
+      MINING_SAMPLE = 40
 
       private
 
@@ -483,6 +519,79 @@ module Nabu
         )
       end
 
+      # P107 (Q83.3): the №R-70 aggressive-mining law made
+      # self-enforcing. The drift twins above watch the STRUCTURED
+      # shapes ("facets", "not_before"); this census watches the RAW
+      # ore — a source whose sampled document metadata carries
+      # axis-shaped top-level keys (token-matched per lane) while the
+      # lane's own table holds zero rows for it is exactly "fetches
+      # axis-shaped fields and drops them", the declared defect.
+      # Deliberate coarseness stays allowed but must be DECLARED:
+      # MINING_EXEMPT (a public constant above) names each (source,
+      # key) with its reason, and the suite requires every entry to
+      # carry one.
+      def unmined_axis_metadata
+        return nil unless table?(@catalog, :document_axes) && table?(@catalog, :document_facets)
+
+        dark = @catalog[:sources].order(:slug).select_map(%i[id slug]).filter_map do |id, slug|
+          ore = ore_keys_by_lane(id, slug)
+          next nil if ore.empty?
+
+          lanes = ore.reject { |lane, _| lane_mined?(lane, id) }
+          next nil if lanes.empty?
+
+          "#{slug} (#{lanes.map { |lane, keys| "#{lane}: #{keys.sort.join('/')}" }.join('; ')})"
+        end
+        return nil if dark.empty?
+
+        Finding.new(
+          kind: :unmined_axis_metadata, severity: :loud,
+          message: "unmined axis ore in #{dark.join(' · ')} — metadata carries axis-shaped keys " \
+                   "the lane never projects (the №R-70 mining law): extract them, or declare " \
+                   "the coarseness in Invariants::MINING_EXEMPT with its reason"
+        )
+      end
+
+      def ore_keys_by_lane(source_id, slug)
+        exempt = MINING_EXEMPT.fetch(slug, {})
+        keys = sampled_metadata_keys(source_id).reject do |key|
+          exempt.key?(key) || MINING_META_TOKENS.include?(key_tokens(key).first)
+        end
+        MINING_TOKENS.each_with_object({}) do |(lane, vocab), ore|
+          hits = keys.select { |key| key_tokens(key).intersect?(vocab) }
+          ore[lane] = hits unless hits.empty?
+        end
+      end
+
+      def sampled_metadata_keys(source_id)
+        @catalog[:documents]
+          .where(source_id: source_id, withdrawn: false)
+          .exclude(metadata_json: nil).exclude(metadata_json: "{}")
+          .limit(MINING_SAMPLE).select_map(:metadata_json)
+          .flat_map { |json| JSON.parse(json).keys rescue [] } # rubocop:disable Style/RescueModifier
+          .uniq
+      end
+
+      def key_tokens(key)
+        key.to_s.downcase.split(/[^a-z0-9]+/)
+      end
+
+      def lane_mined?(lane, source_id)
+        docs = @catalog[:documents].where(source_id: source_id).select(:id)
+        case lane
+        when :dates
+          @catalog[:document_axes].where(document_id: docs)
+                                  .where(Sequel.|(Sequel.~(not_before: nil), Sequel.~(date_raw: nil)))
+                                  .limit(1).any?
+        when :places
+          @catalog[:document_axes].where(document_id: docs)
+                                  .where(Sequel.|(Sequel.~(place_name: nil), Sequel.~(place_ref: nil)))
+                                  .limit(1).any?
+        else
+          @catalog[:document_facets].where(document_id: docs).limit(1).any?
+        end
+      end
+
       # P59-0: no dating interval runs backwards. The 82-row reversed-bounds
       # cluster (elephantine/edr/coptic-scriptorium/iip/isicily/bfm) slipped
       # a bogus lect assignment past date-band containment before the
@@ -625,6 +734,12 @@ module Nabu
       # the row was seeded against a name that left the catalog). Soft: the
       # rows still validate; they just decide nothing anymore. No registry
       # synced = lane off, silent.
+      #
+      # P107 (the R-health rider — the 2026-09-28 false-positive class):
+      # decisions born of the MINED lane (P96+ place-mine) occur in the
+      # links journal's 「name」 details, not in document_axes — all 10
+      # kanripo rows fired "orphaned" against a lane they never lived
+      # in. A name now counts as occurring if EITHER surface carries it.
       def registry_orphan_names
         return nil unless @canonical_dir && table?(@catalog, :document_axes)
 
@@ -638,7 +753,9 @@ module Nabu
                  .where(document_id: @catalog[:documents].where(source_id: source_id).select(:id))
                  .exclude(place_name: nil).distinct.select_map(:place_name).to_set
           registry.decisions_for(slug).each_key do |name|
-            orphans << "#{slug}: #{name}" unless live.include?(name)
+            next if live.include?(name) || mined_name?(name)
+
+            orphans << "#{slug}: #{name}"
           end
         end
         return nil if orphans.empty?
@@ -748,6 +865,29 @@ module Nabu
                    "promises a materialized resolution for every live document. " \
                    "bin/nabu lect materialize or rake builders:refresh re-derives"
         )
+      end
+
+      # The mined-lane occurrence probe: a place-mine/place-link edge
+      # whose detail carries the 「name」 marker. LIKE over the journal —
+      # unindexed but bounded (health's low-seconds budget; ~10 names).
+      def mined_name?(name)
+        journal = links_journal or return false
+
+        !journal[:links]
+          .where(kind: %w[place-candidate place])
+          .where(Sequel.like(:detail, "%「#{name}」%"))
+          .first.nil?
+      end
+
+      def links_journal
+        return @links_journal if defined?(@links_journal)
+
+        @links_journal =
+          if @links_journal_path && File.exist?(@links_journal_path)
+            Store::LinksJournal.connect("sqlite://#{@links_journal_path}", readonly: true)
+          end
+      rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
+        @links_journal = nil # hot-WAL/readonly failure — probe off, honestly
       end
 
       # {facet value => live-document count}, exactly the derive_stats!
