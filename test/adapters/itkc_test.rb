@@ -4,7 +4,7 @@ require "test_helper"
 
 # The itkc adapter (P78-7): 한국고전번역원 classical originals — the
 # OPEN-LICENSED slice of the 한국고전종합DB (the P78-7 scout's channel
-# map: 17 verified data.go.kr datasets, one complete work each; the
+# map: 26 verified data.go.kr datasets (17 + the P108-6 nine munjip), one complete work each; the
 # rest of the 257-work GO family needs a 공공데이터 제공신청 — the
 # owner letter path; the munjip stays parked per D47-c).
 class ItkcTest < Minitest::Test
@@ -16,6 +16,12 @@ class ItkcTest < Minitest::Test
 
   def conformance_adapter = adapter
   def conformance_workdir = FIXTURES
+
+  # Image-only records (text_state marker) honestly carry zero passages.
+  def conformance_metadata_only?(document)
+    document.metadata["text_state"] == "image-only"
+  end
+
   def conformance_expected_source_id = "itkc"
 
   # --- manifest -------------------------------------------------------------
@@ -30,7 +36,7 @@ class ItkcTest < Minitest::Test
   end
 
   def test_the_dataset_registry_carries_the_seventeen_scouted_works
-    assert_equal 17, Nabu::Adapters::Itkc::DATASETS.size
+    assert_equal 26, Nabu::Adapters::Itkc::DATASETS.size
     pks = Nabu::Adapters::Itkc::DATASETS.map { |dataset| dataset[:pk] }
     assert_equal pks.uniq, pks
     assert_includes pks, "15022432", "고운당필기 — the first-registered work"
@@ -40,8 +46,23 @@ class ItkcTest < Minitest::Test
 
   # --- discover → parse -----------------------------------------------------
 
+  # The P108-6 first sync's poison (the 대계집 errata table, real
+  # record): its 단락 paragraphs carry ONLY 삽화 illustrations — no
+  # text. Empty paragraphs skip, and an all-image record parses as a
+  # marker-driven METADATA-ONLY document (the local-library textless-
+  # scan posture) — never a bare validation abort, never quarantine
+  # noise for a real catalogued item.
+  def test_image_only_record_is_an_honest_metadata_only_document
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:itkc:mo-1256a-0020" }
+    document = adapter.parse(ref)
+    assert_empty document.passages
+    assert_equal "image-only", document.metadata["text_state"]
+    assert_includes document.title, "正誤表"
+  end
+
   def test_discover_yields_one_ref_per_fascicle_never_the_sidecar
-    assert_equal %w[urn:nabu:itkc:go-1295a-0010 urn:nabu:itkc:gp-1550a-0010],
+    assert_equal %w[urn:nabu:itkc:go-1295a-0010 urn:nabu:itkc:gp-1550a-0010
+                    urn:nabu:itkc:mo-1256a-0020],
                  adapter.discover(FIXTURES).map(&:id).sort,
                  "the suffix-less 서지 sidecars are metadata, not documents"
   end
@@ -115,7 +136,7 @@ class ItkcTest < Minitest::Test
       assert_instance_of Nabu::FetchReport, report
       resolves = rig.calls.count { |kind, _| kind == :resolve }
       fetches = rig.calls.count { |kind, _| kind == :fetch }
-      assert_equal [17, 17], [resolves, fetches]
+      assert_equal [26, 26], [resolves, fetches]
       assert_includes rig.calls, [:fetch, "15022432"], "each dataset owns its pk-named subdir"
     end
   end

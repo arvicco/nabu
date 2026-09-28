@@ -29,3 +29,10 @@ files:
     whole: false
     reason: 首卷 trimmed to its first two 레벨3 genre sections — the GO nesting
       (레벨4-deep 최종정보) witness
+  - path: ITKC_MO_1256A_0020.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the box's canonical 15096230 zip extraction — re-acquire via the data.go.kr resolver
+    copied: "2026-09-29"
+    whole: true
+    trim: none (the 대계집 errata-table record — every article image-only, the metadata-only exemplar)

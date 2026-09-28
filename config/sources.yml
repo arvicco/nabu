@@ -2209,11 +2209,16 @@ itkc:
   axes: [korean]
   wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —
-  # 17 complete works, one data.go.kr dataset each (제한 없음 → D47-a
-  # attribution; the itkc.or.kr site is ARR, ONLY the portal carries the
-  # grant). HONEST COVERAGE: ~17 of the GO family's 257 works; the rest
-  # ride the owner letter path (공공데이터 제공신청 — see the P78-7 scout
-  # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
+  # per-work data.go.kr datasets (제한 없음 → D47-a attribution; the
+  # itkc.or.kr site is ARR, ONLY the portal carries the grant).
+  # P108-6 (2026-09-29): the full portal keyword sweep (30 datasets,
+  # page 2 empty) grew DATASETS 17→26 with the NINE munjip text
+  # datasets (제한 없음 page-verbatim each) — D47-c's munjip parking
+  # superseded by the Q91 adoption. The 문집총간 pk 3074298 serves only
+  # the catalog LIST CSV (the munjip TEXT mass rides the held okhc klc
+  # slice); 서지정보/시의온도/장학사업정보 censused non-text. The rest
+  # of the GO family still rides the owner letter path (공공데이터
+  # 제공신청 — the P78-7 scout report).
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
 
