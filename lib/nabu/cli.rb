@@ -1551,6 +1551,9 @@ module Nabu
     option :disabled, type: :boolean, default: false,
                       desc: "The complement view: ONLY the rows nabu enable would add " \
                             "(shelves are always enabled and never appear)"
+    option :"by-adopted", type: :boolean, default: false,
+                          desc: "Census only: order by adoption date, newest first (the recentness " \
+                                "view the pre-sort file order used to give; each row shows its date)"
     def list(slug = nil)
       refuse_all_with_disabled!("list")
       slug = slug.to_s.strip
@@ -1598,7 +1601,11 @@ module Nabu
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
-        if view.disabled
+        if options[:"by-adopted"]
+          # Q93: adoption recency (the field the alphabetic reorder made
+          # explicit) — newest first, the date leading each row.
+          print_adopted_census(rows, registry)
+        elsif view.disabled
           print_disabled_census(view, rows)
         else
           print_census(rows, options[:long] ? query.descriptions : nil)
@@ -5400,6 +5407,16 @@ module Nabu
       # Census fragments where the catalog holds the slug; an honest
       # per-row "nothing held yet" where it does not. An empty complement
       # prints no table (the stderr footer carries the all-enabled state).
+      # Q93: the by-adopted census — newest adoptions first, dated rows.
+      def print_adopted_census(rows, registry)
+        dated = rows.map { |row| [registry[row.slug]&.adopted || "0000-00-00", row] }
+                    .sort_by { |date, row| [date, row.slug] }.reverse
+        width = rows.map { |r| r.slug.length }.max || 0
+        dated.each do |date, row|
+          say "#{date}  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}"
+        end
+      end
+
       def print_disabled_census(view, census_rows)
         slugs = view.registry.slugs
         return if slugs.empty?
