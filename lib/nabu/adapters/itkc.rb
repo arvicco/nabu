@@ -60,7 +60,23 @@ module Nabu
         { pk: "15141464", work: "국조인물고" },
         { pk: "15141467", work: "인물고" },
         { pk: "15141469", work: "영남인물고" },
-        { pk: "15141470", work: "동현주의" }
+        { pk: "15141470", work: "동현주의" },
+        # P108-6 (the portal census 2026-09-29, 30 listed datasets — the
+        # full ITKC keyword sweep, page 2 empty): the NINE munjip text
+        # datasets, each 이용허락범위 제한 없음 page-verbatim. The rest of
+        # the listing censused out: 3074298 = the munjip catalog LIST CSV
+        # (the munjip TEXT mass rides the held okhc klc slice), 15022432
+        # still serves the held 고운당필기 despite its aggregate title,
+        # 서지정보/시의온도/장학사업정보 are non-text.
+        { pk: "15095996", work: "총쇄" },
+        { pk: "15096001", work: "심석재집" },
+        { pk: "15096005", work: "노백헌집" },
+        { pk: "15096008", work: "사복재집" },
+        { pk: "15096009", work: "농산집" },
+        { pk: "15096230", work: "대계집" },
+        { pk: "15096232", work: "회당집" },
+        { pk: "15096234", work: "석릉집" },
+        { pk: "15096238", work: "소눌집" }
       ].freeze
 
       MANIFEST = Nabu::SourceManifest.new(
@@ -205,6 +221,14 @@ module Nabu
       end
 
       def build_document(document_ref, fascicle, work)
+        # An article can be IMAGE-ONLY (삽화 illustrations, no text — the
+        # 대계집 errata table, P108-6 first sync): empty text skips, and a
+        # record whose EVERY article is image-only is still a real
+        # catalogued item (the images live upstream) — the local-library
+        # textless-scan posture: a marker-driven metadata-only document,
+        # never quarantine noise. Metadata freezes at construction, so
+        # the census runs first.
+        textual = fascicle.articles.each_with_index.reject { |article, _| article.text.to_s.strip.empty? }
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
           title: fascicle.title || fascicle.id,
@@ -212,12 +236,11 @@ module Nabu
             "member" => fascicle.id,
             "work_title" => work&.title_hanja, "work_title_hangul" => work&.title_hangul,
             "author" => work&.author_hanja, "author_hangul" => work&.author_hangul,
-            "date" => date_envelope(work)
+            "date" => date_envelope(work),
+            "text_state" => (textual.empty? ? "image-only" : nil)
           }.compact
         )
-        fascicle.articles.each_with_index do |article, index|
-          document << build_passage(document_ref, article, index)
-        end
+        textual.each { |article, index| document << build_passage(document_ref, article, index) }
         document
       end
 
