@@ -518,6 +518,22 @@ sources:
         candidate (the ccmh overlay mold), declared not faked}
     places: {posture: unplaced, note: Naqsh-e Rostam — same curated-band candidate}
     script: {posture: implied}
+  atmo:   # P107-4
+    kind: {posture: unclassified, note: per-manuscript genres live in the index prose — a
+        follow-up}
+    lect: {posture: identity, note: chg declared honest-coarse ("Turki" = late Chagatai/early
+        modern Uyghur; a finer node is a future registry call)}
+    dating: {posture: undatable, note: per-ms dates in index prose only ("ca. 1930") — a small
+        extraction follow-up}
+    places: {posture: unplaced}
+    script: {posture: implied, note: Perso-Arabic lit + Latin translit layers per line}
+  altaica-shm:   # P107-7
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}
+    dating: {posture: undatable, note: the SHM's composition dating (~1228+) is a future
+        curated-band candidate, declared not faked}
+    places: {posture: unplaced}
+    script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old

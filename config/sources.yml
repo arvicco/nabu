@@ -4691,3 +4691,19 @@ atmo:   # P107-4
   # declared honest-coarse ("Turki" = late Chagatai / early modern
   # Uyghur; a finer node is a future registry call). CC BY-SA 4.0
   # verbatim on the project's licensing page.
+
+altaica-shm:   # P107-7
+  adapter: Nabu::Adapters::AltaicaShm
+  kind: source
+  axes: [mongolic]
+  wired: true   # first sync verified 2026-09-28 (1 doc / 3,523 Street lines)
+  sync_policy: manual
+  # P107-7: Street's Text of the Secret History of the Mongols v24
+  # (2013), hosted by Monumenta Altaica (altaica.ru) — the romanized
+  # Middle Mongol SHM at Street's own 4-digit line grain (1010-9492),
+  # section markers as annotations, his ASCII substitution scheme
+  # (6 = the velar nasal etc.) served verbatim with the note in
+  # metadata; the trailing apparatus censused out. USE GRANTED by the
+  # site's maintainer by email 2026-09-27; "Copyright John C. Street
+  # 1985-2013" carried verbatim. The Kozin transcription page is a JS
+  # shell today — recorded residue.

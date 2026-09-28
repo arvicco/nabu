@@ -124,6 +124,10 @@ turkic:   # P107 — minted with the Central Asia opener wave
   persona: "The Turkologist — the runiform steppe to the Chagatai chancery, one literary continuum."
   desc: "The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land."
 
+mongolic:   # P107 — minted with its first member (altaica-shm)
+  persona: "The Mongolist — the Secret History's empire in its own words, hanzi transcription beside romanization."
+  desc: "The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land."
+
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."
