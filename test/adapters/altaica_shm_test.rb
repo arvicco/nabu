@@ -13,7 +13,13 @@ module Adapters
 
     FIXTURES = Nabu::TestSupport.fixtures("altaica-shm")
 
-    def conformance_adapter = Nabu::Adapters::AltaicaShm.new
+    # The RECORDED text layer of the fixture PDF (mutool 1.26 on the
+    # cutting box, checked in beside it) — the suite never depends on
+    # mutool being installed (the local-library law); the guarded live
+    # test below pins agreement when mutool is present.
+    RECORDED = ->(_path) { File.read(File.join(FIXTURES, "SH-24UP.textlayer.txt")) }
+
+    def conformance_adapter = Nabu::Adapters::AltaicaShm.new(extract: RECORDED)
     def conformance_workdir = FIXTURES
     def conformance_expected_source_id = "altaica-shm"
 
@@ -53,6 +59,27 @@ module Adapters
     def test_copyright_and_grant_ride_the_metadata
       assert_includes document.metadata["copyright"], "Copyright John C. Street"
       assert_includes document.metadata["encoding_note"], "6"
+    end
+
+    # -- live mutool (present on the owner's box, absent in CI) ------------
+
+    def test_real_mutool_extraction_agrees_with_the_recorded_layer
+      skip "mutool not on PATH — the recorded-extraction tests carry the suite" unless mutool_available?
+
+      live = Nabu::Adapters::AltaicaShm.new
+                                       .send(:mutool_text, File.join(FIXTURES, "SH-24UP.pdf"))
+      assert_equal RECORDED.call(nil).split("\n").map(&:rstrip),
+                   live.split("\n").map(&:rstrip),
+                   "the checked-in text layer must stay what mutool extracts (line-grain, " \
+                   "trailing whitespace tolerated across mutool versions)"
+    end
+
+    private
+
+    def mutool_available?
+      ENV.fetch("PATH", "").split(File::PATH_SEPARATOR).any? do |dir|
+        File.executable?(File.join(dir, "mutool"))
+      end
     end
   end
 end

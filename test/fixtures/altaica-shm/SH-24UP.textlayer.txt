@@ -1,0 +1,147 @@
+PDF version: for searching purposes the symbol � has been changed to @, � to +,
+
+ � to ^, � to 6 (Alt+252); and both K and M to "
+
+To enable specifically upper- or lower-case searches, use Advanced Search and mark "Case sensitive".
+
+To search for one of the following characters, copy it into a search box. 
+
+ö    Ö    ü    Ü    š    Š    §    «    » 
+
+__________________
+
+STREET'S  TEXT  OF  THE  SECRET  HISTORY  OF  THE  MONGOLS
+
+Version 24 of 10 October 2013
+Copyright John C. Street 1985-2013
+
+1010 Mo6qol-un niuca tobcaan1  
+1011 (§1) Ci6gis qahan-u hujaur. 
+1012 Deere te6geri-ece jayaa-tu töre=gsen börte cino: a=juu.  
+1013 Gergey in-u qoay maral a=jiay.  Te6gis ketül=jü ire=BA.  
+1014 Onan müren-ü teriün-e Burqan_2 qaldun-a nuntuqla=ju 
+1015 töre=gsen Bataciqan a=juu.  
+1018 (§2) Bataciqan-u köün Tamaca; Tamaca-yin köün Qoricar_ mergen.  
+1019 Qoricar_ mergen-ü köün Aujam_ boroul.  Aujam_ boroul-un köün 
+1020 Sali_ qacau; Sali_ qacau-yin köün Yeke_ nidün; Yeke_ nidün-ü köün Sem_ soci; 
+1021 Sem_ soci-yin köün Qarcu.  
+1025 (§3) Qarcu-yin köün Borjigiday_ mergen.  Mo6qoljin_ qoa gergey-tü a=juu.  
+1026 Borjigiday_ mergen-ü köün Toroqoljin_ bayan; Boroqcin_ qoa gergey-tü 
+
+    1:  YCPS nyuca emended by all editors to niuca (i.e. n<yu>[iu]ca), and tocaan to tobcaan (i.e.
+to[b]caan).  This clumsy-looking means of showing emendations (and interpretations) through bracketing is
+intended to make possible computer-searches not only for the original and the altered forms, but also for
+particular segments which it is suggested be dropped or added.
+
+For compressed writings such as niuca for ni'uca (i.e. my nyuca for niuca) see deR4.615 and
+Most99.257-58 (who calls this "l'omission fautive de l'hiatus").  Related is the use of h or w "to `bridge' the
+hiatus created by the disappearance of the intervocalic velar stops �/g, hence qahan = qa'an...mawun =
+ma'u [etc.]" (deR4.222-23).  See also Most99.258.
+references there.
+
+In discussing SH emendations of the Chinese text (= YCPS) below, both the original and the
+suggested new form are normally presented in my own transcription systems (except, of course, in direct
+quotation marked by "...").  Thus, for example, the emendation of YCPS abua in line 8478 to abuad (i.e.
+abua[d]) by Haenisch (H62txt.69).  Haenisch actually emended his "abu'a" to "abu'a[t]".  Similarly,
+Haenisch's emendation of "Tünggeli" in 1202 to "Tünggelik" (H62.106 and 4) is referred to as a change of
+Tü�geli to Tü�gelig (i.e. Tü�geli[g]).
+
+    2:  Here, and usually below, the YCPS actually writes not Burqan (as 2474, Z033, for example) but
+Burhan; i.e. the diacritic character changing h to q is omitted.  Such omission in this word is not noted in the
+present text.
+
+
+1071 (§10) Alan_ qoa Dobun_ mergen-tür ire=jü qoyar köün töre=ül=bi;7 
+1072 Bügünütey Belgünütey nere-te+n bü=lee.  
+1074 (§11) Duwa_ soqor aqa in-u dörben köü-tü bü=lee.  Tedüy a=tala 
+1075 Duwa_ soqor aqa in-u ügey bol=BA8.  Duwa_ soqor ügey bol=uqsan-u9 
+1076 qoyina dörben köü+d in-u Dobun_ mergen abaqa-yu-an 
+1077 uruq-a ülü bol=qa=n doromjila=ju qaqaca=ju ge:=jü newü=BA.  
+1078 Dörben oboq-ta+n bol=ju Dörben irgen te+de bol=BA.  
+1081 (§12) Teün-ü qoyina niken üdür Dobun_ mergen Toqocaq Ündür deere 
+1082 göröele=re qar=BA.  Hoy dotora Urya6qa^day güün cöe buqu 
+1083 ala=ju qabirqa+s10 in-u abi+d in-u šira=ju bü=gü-yi jolqa=ju 
+1086 (§13) Dobun_ mergen ügüle=rün Nökör širolqa-da11 ke:=jüü.  
+1087 Ög=sü kee=jü aušgi-tu jildü arasun in-u ab=cu cöe~ buqu-yin 
+1088 miqa gübcin-i Dobun_ mergen-e ög=BA12.  
+1090 (§14) Dobun_ mergen tere cöe~ buqu-yi aci=ju ayis=urun jaura 
+1091 niken yada6gi güün köün-been kötöl=jü yabu=qu-yi jolqa=ju 
+1093 (§15) Dobun_ mergen Yaun güün ci kee=n asaq=uasu tere güün 
+1094 ügüle=rün Bi Maaliq_ bayaud-ay; yada=ju yabu=mu. Tere 
+10951 göröesün-ü miqan-aca na-da ög. Bi ene köün-been cima-da ög=sü 
+1096 ke:=jüü.  
+1099 (§16) Dobun_ mergen tere üge-tür cöe buqu-yin öröele quya in-u 
+1100 ququl=ju ög=cü13 tere köün-i in-u abcira=ju14 ger dotora 
+1101 jaru=ju a=qu bü=lee.  
+
+    7:  C has odd writings for töreülbi here and in 1104, 1126, 1244; in 1104 and 1126 both PP and C
+actually show the l placed after the bi!  In 1071 the bi is to the left of l.
+
+    8:  YCPS boluBA interpreted as bolBA (i.e. bol<u>BA), here and below (in lines 1171, 1240, 1246,
+1248, 1251, 1257(bis), 1253(bis), 1265, 1275, 1276, 1279, 1281, 1284, 1294, 1296, 1297, 1310, 2022.) 
+We find the bolBA form itself written five times in lines 1074-1495, and regularly thereafter.  Chinese
+sources of the 13th-14th centuries often used the Chinese syllable lu (written with various characters) to
+transcribe syllable-final -l- in foreign names and terms.  Such use of lu for syllable-final l is not uncommon
+in other SH forms as well, as noted below passim.
+
+    9:  The q (present in PP) is missing from C.
+
+    10:  YCPS qabirqar emended (by Pelliot 6; cf. T'oung Pao 37.102, note 1 [1944]) to qabirqas (i.e.
+qabirqa<r>[s]).
+
+    11:  Ligeti here writes two words širolqa da, rather than širolqa-da (as Pelliot).  Cf. deR4.256.
+
+    12:  The g (present in PP) is missing from C.
+
+    13:  C öjü, PP ögjü; emended (by H62dict.2, 105) to ögcü (i.e. ög<j>[c]ü).
+
+    14:  YCPS aciraju emended (H62txt.2, 105, Pelliot 6) to abciraju (i.e. a[b]ciraju).
+
+
+1103 (§17) Teyin a=tala Dobun_ mergen ügey bol=BA; Dobun_ mergen-i ügey 
+11042 bol=uqsan-u qoyina Alan_ qoa ere ügeüy15 bö=ed qurban köü+d töre=ül=bi; 
+1105 Buqu_ qadagi Buqatu_ salji Bodoncar_ mu6qaq nere-ten bü=lee.  
+1108 (§18) Urida Dobun_ mergen-ece töre=gsen Belgünütey Bügünütey qoyar köü+d 
+1109 in-u eke-yü-en Alan_ qoa-yin ecine ügüle=ldü=rün 
+1110 Ene eke bidan-u aqa deü üye~ qaya güün ügey ere ügeüy 
+1111 böe=tele e+de qurban köü+d töre=ül=bi. Ger dotora qaqca 
+1112 Maaliq_ bayaud-ay güün bu=yu. E+de qurban köü+d teün-ü-ey bu=y~ @je kee=n 
+1113 eke-yü-en ecine kele=ldü=küy-i eke an-u Alan_ qoa uqa=ju 
+1116 (§19) qabur niken üdür kö6šilemel qonin cina=ju Belgünütey 
+1117 Bügünütey Buqu_ qatagi Buqatu_ salji Bodoncar_ mu6qaq e+de tabun 
+1118 köü+d-iyen jergele=n sau=:l=ju16 nijiel müsü+d17 Ququl=udqun 
+1119 kee=jü ög=BA.  Nijiel-i yau bayi=ul=qu+n18 ququci=ju oor=BA.  
+1120 Basa tabun müsü+d qamtu cuqla=ju19 Ququl=udqun ke:=jü ög=BA.  
+1121 Tabuula tabun cuq-tay müsü+d güüle=ldü=n bari=ju bitü=ül=jü20 ququl=un 
+1122 yada=BA.  
+1125 (§20) Tende Alan_ qoa eke in-u ügüle=bi.  Ta~ Belgünütey Bügünütey 
+1126 qoyar köü+d min-u nama-yi21 `E+de qurban köü+d-i töre=ül=bi. 
+1127 Ken-ü yaun-u köü+d bu=yu' kee=n sere=ldü=n kele=ldü=müy; 
+1128 sere=küy @ber tan-u jöb. 
+1130 (§21) Söni+d büri cewgen šira güün ger-ün erüge dotoqa-yin gege:-er 
+1131 oro=ju keeli min-u bili=jü gegeen in-u keeli-tür min-u 
+1132 ši6ge=gü bü=lee. Qar=urun naran sara-yin kili-yer šira noqay metü 
+1133 šicabalja=ju qar=qu bü=lee. {22Deleme yeki=n ügüle=d23~ ta. 
+
+    15:  YCPS ügeyüy emended to ügeüy (i.e. üge<y>üy), here and throughout the text (but see note at line
+6095).  It was apparently Ligeti who first suggested this now generally accepted interpretation.  (But note
+note to 6095 below.)
+
+    16:  The l (present in PP) is missing from C.
+
+    17:  For this word, plural of an obsolete müsün `rod, [arrow-]shaft', see deR4.262.  The singular
+(transcribed mösun by Vietze92.4 line 168, etc.) occurs in the parallel passage in Altan Tobchi §6a.
+
+    18:  YCPS bayiunqun emended by Haenisch and Pelliot to bayiulqun (i.e. bayiu[l]qun); the small
+character changing a syllable closed by n to one with l was simply omitted..
+
+    19:  The q (present in PP) is missing from C.
+
+    20:  The l (present in PP) is missing from C.
+
+    21:  Note the referential object (Street13.12-15): `saying of me "She has..."'.
+
+    22:  Five of the primary sources for the present SH text attempt to distinguish poetry from prose.  Kozin
+and Ligeti do so in their romanized Mongolian texts, and Pelliot uses boldface type to show what he took to
+
+

@@ -50,6 +50,16 @@ module Nabu
 
       def self.manifest = MANIFEST
 
+      # +extract+ is the text-layer seam (a callable path → the raw
+      # mutool text), injectable so the suite never depends on mutool
+      # being installed (the local-library law): tests run against the
+      # RECORDED extraction, and a guarded live test exercises real
+      # mutool when present.
+      def initialize(extract: nil)
+        super()
+        @extract = extract || method(:mutool_text)
+      end
+
       # UrlDownload keeps no state file — the probe HEADs the stable
       # upstream URL for liveness only; drift honestly reads unknown.
       def self.remote_probe_strategy = :http_zip
@@ -131,10 +141,13 @@ module Nabu
         "#{candidate}b#{suffix}"
       end
 
-      # The PDF's text layer via mutool (the house shell boundary).
       def text_lines(path)
-        out = Nabu::Shell.run("mutool", "draw", "-F", "txt", "-o", "-", path)
-        out.split("\n").map(&:rstrip)
+        @extract.call(path).split("\n").map(&:rstrip)
+      end
+
+      # The PDF's text layer via mutool (the house shell boundary).
+      def mutool_text(path)
+        Nabu::Shell.run("mutool", "draw", "-F", "txt", "-o", "-", path)
       rescue Nabu::Error => e
         raise Nabu::ParseError, "#{path}: mutool text extraction failed — #{e.message}"
       end
