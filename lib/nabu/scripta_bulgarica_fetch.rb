@@ -247,7 +247,7 @@ module Nabu
       return [] unless Dir.exist?(dir)
 
       Dir.children(dir).sort.map { |name| "#{RECORD_DIR}/#{name}" }
-         .select { |rel| self.class.record?(rel) }
+                            .select { |rel| self.class.record?(rel) }
     end
 
     def doomed_relpaths

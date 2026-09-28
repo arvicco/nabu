@@ -491,6 +491,16 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+  iedc:   # P107-2
+    kind: {posture: unclassified, note: documentType rides the grade/doctype facets — a kind_map
+        rule is a natural follow-up, not silent}
+    lect: {posture: identity, note: eleven mapped ISO codes (kho/fa/pal/sog/ara/jpr/xbc/heb/san/
+        oui/zho); the Central Asia registry wave makes them real anchors at its merge}
+    dating: {posture: partial, note: the iso_prefix_key MetadataDates shape — 317 typed date
+        strings; prose-only dates honestly mint nothing}
+    places: {posture: named, note: toponym lists with lat/long fields ride metadata; a
+        place-lane projection is a recorded follow-up}
+    script: {posture: implied, note: script parentheticals recorded per doc as script_note}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old
