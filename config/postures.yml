@@ -534,6 +534,14 @@ sources:
         curated-band candidate, declared not faked}
     places: {posture: unplaced}
     script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
+  westoldturkic:   # P108-7
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: trk collective — WOT (r-Turkic/Bolgar, Glottocode
+        bolg1249) has no ISO code; a wot-shaped registry node is a future mint call}
+    dating: {posture: undatable, note: Hungarian first-attestation years ride entry
+        bodies — a dictionary shelf, no document timeline}
+    places: {posture: unplaced}
+    script: {posture: implied}
   honkoku:   # P108-5
     kind: {posture: unclassified, note: per-material genre lives in project labels/prose —
         a future facet look over the project taxonomy}

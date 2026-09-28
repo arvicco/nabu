@@ -4836,6 +4836,22 @@ vulgate:
   # occasionally updated: re-syncable, not on a live schedule.
   sync_policy: manual
 
+westoldturkic:   # P108-7
+  adapter: Nabu::Adapters::Westoldturkic
+  adopted: "2026-09-29"
+  axes: [turkic, etym]
+  wired: true    # first sync 2026-09-29: 480 WOT etyma, 1,275 reflex rows;
+                   # the ács card eyeballed (loan step marked, year 1222)
+  sync_policy: manual
+  # Róna-Tas & Berta 2011 West Old Turkic as CLDF (LoanpyDataHub;
+  # Zenodo 10.5281/zenodo.7893910 v2.0, cc-by-4.0 on the record;
+  # sha-pinned zip, the iecor rail). ONE dictionary, entry per WOT
+  # etymon (480), the Hungarian descent chain (EAH→LAH→OH→H) as
+  # reflex rows with the curated borrowing step marked; Hungarian
+  # first-attestation years mined into bodies. Dictionary language
+  # trk (the 639-5 collective — WOT itself has no ISO; Glottocode
+  # bolg1249, the r-Turkic/Bolgar branch).
+
 wiktionary-akk:
   adapter: Nabu::Adapters::WiktionaryAkk
   adopted: "2026-09-13"
