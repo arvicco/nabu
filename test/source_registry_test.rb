@@ -1025,7 +1025,7 @@ class SourceRegistryTest < Minitest::Test
 
     assert_equal %w[classical romance epigraphy slavic germanic celtic italic etym biblical hebrew
                     syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist tibetan
-                    korean sea sinitic japonic local],
+                    korean sea sinitic japonic turkic local],
                  registry.axes.names,
                  "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
                  "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
@@ -1074,7 +1074,7 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "iranian", "ORACC's ario = Old Persian Achaemenid trilinguals"
     assert_includes registry["cdli"].axes, "iranian", "CDLI catalogs Old Persian (peo) Achaemenid trilinguals"
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
-    assert_equal %w[oracc cdli perseus-farsilit], registry.public_axis_members("iranian"),
+    assert_equal %w[oracc cdli perseus-farsilit iedc skjaervo-khotanese shkz], registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
     assert_equal %w[titus-avestan], registry.blocked_axis_members("iranian"),
                  "the grant-gated Avesta rides iranian but is excluded from the public listing"

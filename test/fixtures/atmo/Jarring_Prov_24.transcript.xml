@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/xsl" href="../lib/atmo-p5-transcript.xsl"?>
+<?xml-model href="../lib/transcr-v1.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?siteroot ..?>
+<!--* <?xml-stylesheet type="text/xsl" href="../Turki-to-extended-Latin.xsl"?> *-->
+<tei:TEI xmlns:tei="http://www.tei-c.org/ns/1.0">
+   <tei:teiHeader>
+      <tei:fileDesc>
+         <tei:titleStmt>
+            <tei:title>Digital facsimile and transcription of manuscript Jarring Prov. 24</tei:title>
+            <tei:author>Annotated Turki Manuscripts from the Jarring Collection Online (ATMO)</tei:author>
+            <tei:principal xml:id="AMD">Arienne M. Dwyer</tei:principal>
+            <tei:principal>C. M. Sperberg-McQueen</tei:principal>
+            <tei:respStmt>
+               <tei:resp>Manuscript held and scanned by</tei:resp>
+               <tei:orgName>Lund University Library</tei:orgName>
+            </tei:respStmt>
+            <tei:respStmt>
+               <tei:resp>Manuscript transcribed by</tei:resp>
+               <tei:persName xml:id="GE">Gülnar Eziz</tei:persName>
+               <tei:persName xml:id="AM">Ali Mömin</tei:persName>
+            </tei:respStmt>
+            <tei:funder>Henry Luce Foundation</tei:funder>
+         </tei:titleStmt>
+         <tei:editionStmt>
+            <tei:edition>Test edition</tei:edition>
+            <tei:respStmt>
+               <tei:resp>Generated semi-automatically by</tei:resp>
+               <tei:name>msDesc.master-to-p5.xsl</tei:name>
+               <tei:name>digifacs-gen.xsl</tei:name>
+               <tei:persName xml:id="MSM">C. M. Sperberg-McQueen</tei:persName>
+            </tei:respStmt>
+         </tei:editionStmt>
+         <tei:publicationStmt>
+            <tei:pubPlace>Lawrence, Kansas</tei:pubPlace>
+            <tei:authority>Annotated Turki Manuscripts from the Jarring Collection Online</tei:authority>
+            <tei:date>2016-05-02</tei:date>
+         </tei:publicationStmt>
+         <tei:sourceDesc>
+            <tei:msDesc>
+               <tei:msIdentifier>
+                  <tei:country key="SE">Sweden</tei:country>
+                  <tei:settlement>Lund</tei:settlement>
+                  <tei:repository>Lund University Library</tei:repository>
+                  <tei:idno>Jarring Prov. 24</tei:idno>
+               </tei:msIdentifier>
+               <tei:msContents>
+                  <tei:msItemStruct>
+                     <tei:title>Collection of different works</tei:title>
+                     <tei:note>
+                        <tei:p>1) Dream book, ascribed to the prophet Yusuf</tei:p>
+                        <tei:p>2) On a physician's profession</tei:p>
+                        <tei:p>3) An explanation of nouruz and the meaning of the different days upon which it begins</tei:p>
+                        <tei:p>4) The victory book. According to f. 23a Khodja Buzudjum hur Dana compiled this book and gave it the name ... . The King Anushirvan Adil gave him a whole city in reward for this work of his. Cf. Muginov 258, 347</tei:p>
+                     </tei:note>
+                     <tei:textLang mainLang="UG">Uighur</tei:textLang>
+                  </tei:msItemStruct>
+               </tei:msContents>
+               <tei:physDesc>
+                  <tei:objectDesc>
+                     <tei:supportDesc>
+                        <tei:support>
+                           <tei:p>paper, white, with water mark "Extra Strong Mill 191"</tei:p>
+                        </tei:support>
+                        <tei:extent>ff. 40 <tei:dimensions>
+                              <tei:height>240</tei:height>
+                              <tei:width>150</tei:width>
+                           </tei:dimensions>mm.</tei:extent>
+                        <tei:foliation>
+                           <tei:p>The ms. is foliated by G. Jarring.</tei:p>
+                        </tei:foliation>
+                        <tei:condition>
+                           <tei:p>Fair</tei:p>
+                        </tei:condition>
+                     </tei:supportDesc>
+                  </tei:objectDesc>
+                  <tei:decoDesc>
+                     <tei:decoNote/>
+                  </tei:decoDesc>
+                  <tei:bindingDesc>
+                     <tei:binding>
+                        <tei:p>The ms. is not bound.</tei:p>
+                     </tei:binding>
+                  </tei:bindingDesc>
+               </tei:physDesc>
+               <tei:history>
+                  <tei:origin>
+                     <tei:p>Place of origin: <tei:origPlace>Eastern Turkestan (Yarkand)</tei:origPlace>
+                     </tei:p>
+                     <tei:p>Date of origin: <tei:origDate notBefore="1928" notAfter="1929" evidence="external">1347/1928-1929</tei:origDate>
+                     </tei:p>
+                     <tei:p>Copy made for the Swedish missionary Gunnar Hermansson, Yarkand. Date of the copy according to f. 28a 1347/1928-1929. Same date on f. 22b.</tei:p>
+                  </tei:origin>
+                  <tei:provenance/>
+                  <tei:acquisition>
+                     <tei:p>The ms. was part of the Jarring collection of Eastern Turkestan manuscripts donated to the Lund University Library in 1982.</tei:p>
+                  </tei:acquisition>
+               </tei:history>
+               <tei:additional>
+                  <tei:adminInfo>
+                     <tei:recordHist>
+                        <tei:source>
+                           <tei:p>This <tei:hi>msDesc</tei:hi> manuscript description was derived automatically
+      from the manuscript description prepared by the Lund University Library
+      conforming to the Master Project DTD.</tei:p>
+                           <tei:p>The manuscript description in the Master vocabulary was derived
+      from Gunnar Jarring's manuscript catalog of the collection, which read:
+      <tei:q type="original-record">
+                                 <tei:p/>
+                              </tei:q>
+                           </tei:p>
+                        </tei:source>
+                     </tei:recordHist>
+                  </tei:adminInfo>
+               </tei:additional>
+            </tei:msDesc>
+         </tei:sourceDesc>
+      </tei:fileDesc>
+      <tei:revisionDesc>
+         <tei:listChange>
+            <tei:change who="#MSM" when="2016-05-02">Generated raw digital facsimile using digifacs-gen.xsl</tei:change>
+            <tei:change who="#GE" when="2016-05-04">Transcribe Jarring_Prov_24_001_r-002_v</tei:change>
+            <tei:change who="#GE" when="2016-05-05">Transcribe Jarring_Prov_24_003_r-004_v</tei:change>
+            <tei:change who="#GE" when="2016-05-06">Transcribe Jarring_Prov_24_005_r-005_v</tei:change>
+            <tei:change who="#GE" when="2016-05-09">Transcribe Jarring_Prov_24_006_r-006_v</tei:change>
+            <tei:change who="#GE" when="2016-05-11">Transcribe Jarring_Prov_24_007_r-007_v</tei:change>
+            <tei:change who="#GE" when="2016-05-13">Transcribe Jarring_Prov_24_008_r-008_v</tei:change>
+            <tei:change who="#AM" when="2016-05-17">Transcribe Jarring_Prov_24_009_r_009_v</tei:change>
+            <tei:change who="#AM" when="2016-05-18">Transcribe Jarring_Prov_24_010_r_010_v</tei:change>
+            <tei:change who="#AM" when="2016-05-19">Transcribe Jarring_Prov_24_011_r_011_v</tei:change>
+            <tei:change who="#AM" when="2016-05-20">Transcribe Jarring_Prov_24_012_r_012_v</tei:change>
+            <tei:change who="#AM" when="2016-05-21">Transcribe Jarring_Prov_24_013_r_013_v</tei:change>
+            <tei:change who="#AM" when="2016-05-22">Transcribe Jarring_Prov_24_014_r_015_v</tei:change>
+            <tei:change who="#AM" when="2016-05-24">Transcribe Jarring_Prov_24_016_r_016_v</tei:change>
+            <tei:change who="#AM" when="2016-05-25">Transcribe Jarring_Prov_24_017_r_017_v</tei:change>
+            <tei:change who="#AM" when="2016-05-26">Transcribe Jarring_Prov_24_018_r_018_v</tei:change>
+            <tei:change who="#AM" when="2016-05-27">Transcribe Jarring_Prov_24_019_r_019_v</tei:change>
+            <tei:change who="#AM" when="2016-07-11">Transcribe Jarring_Prov_24_020_r_022_v</tei:change>
+            <tei:change who="#AM" when="2016-07-13">Transcribe Jarring_Prov_24_023_r_023_v</tei:change>
+            <tei:change who="#AM" when="2016-07-14">Transcribe Jarring_Prov_24_024_r_025_v</tei:change>
+            <tei:change who="#AM" when="2016-07-15">Transcribe Jarring_Prov_24_026_r_028_r</tei:change>
+            <tei:change who="#GE" when="2016-08-31">Compared with images file and checked missing folios.</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-05">Tandem proofread 001_r-005_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-10">Tandem proofread 006_r-009_r</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-11">Tandem proofread 009_r-012_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-12">Tandem proofread 012_r-016_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-13">Tandem proofread 016_v-020_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-15">Tandem proofread 021_v-040_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-10-16">Converted Latin</tei:change>
+            <tei:change who="#GE" when="2017-09-21">Annotated SEG and POS tiers for ff. 1r-4v/40</tei:change>
+            <tei:change who="#GE" when="2017-09-22">Annotated SEG and POS tiers for ff. 5r-8v/40</tei:change>
+            <tei:change who="#GE" when="2017-09-25">Annotated SEG tier for ff. 9r-15v/40</tei:change>
+            <tei:change who="#GE" when="2017-09-26">Annotated SEG tier for ff. 16r-20v/40</tei:change>
+            <tei:change who="#GE" when="2017-09-28">Annotated SEG tier for ff. 21r-40v/40</tei:change>
+            <tei:change who="#GE" when="2017-10-03">Annotated POS tier for ff. 9r-11v/40</tei:change>
+            <tei:change who="#GE" when="2017-10-04">Annotated POS tier for ff. 12r-14v/40</tei:change>
+            <tei:change who="#GE" when="2017-10-05">Annotated POS tier for ff. 15r-17v/40</tei:change>
+            <tei:change who="#GE" when="2017-10-06">Annotated POS tier for ff. 18r-20r/40</tei:change>
+            <tei:change who="#GE" when="2017-10-11">Annotated POS tier for ff. 21r-24r/40</tei:change>
+            <tei:change who="#GE" when="2017-10-12">Annotated POS tier for ff. 25r-28v/40</tei:change>
+            <tei:change who="#AA" when="2017-10-31">Annotated ILG tier for ff. 1r-3v/40</tei:change>
+            <tei:change who="#AA" when="2017-11-01">Annotated ILG tier for ff. 4r-8r/40</tei:change>
+            <tei:change who="#AA" when="2017-11-02">Annotated ILG tier for ff. 8v-12r/40</tei:change>
+            <tei:change who="#AA" when="2017-11-03">Annotated ILG tier for ff. 12v-16r/40</tei:change>
+         </tei:listChange>
+      </tei:revisionDesc>
+   </tei:teiHeader>
+   <tei:sourceDoc xmlns:bmt="http://blackmesatech.com/2015/nss/digifacs">
+      <tei:surface n="1a">
+         <tei:graphic n="1a" rend="thumbnail" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_24/Jarring_Prov_24_001_r.Lanczos.96.35.jpg"/>
+         <tei:graphic n="1a" rend="fullpage" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_24/Jarring_Prov_24_001_r.Lanczos.800.65.jpg"/>
+         <atmo:page xmlns:atmo="http://uyghur.linguistics.indiana.edu/2015/ns/0.1">
+	           <atmo:top>
+	              <atmo:folio-num>
+                  <atmo:lit> 1</atmo:lit>
+                  <atmo:lat> 1</atmo:lat>
+               </atmo:folio-num>
+	           </atmo:top>
+	           <atmo:main>
+               <atmo:empty/>
+	           </atmo:main>
+         </atmo:page>
+      </tei:surface>
+<tei:surface n="1b">
+         <tei:graphic n="1b" rend="thumbnail" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_24/Jarring_Prov_24_001_v.Lanczos.96.35.jpg"/>
+         <tei:graphic n="1b" rend="fullpage" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_24/Jarring_Prov_24_001_v.Lanczos.800.65.jpg"/>
+         <atmo:page xmlns:atmo="http://uyghur.linguistics.indiana.edu/2015/ns/0.1">
+            <atmo:empty/>
+         </atmo:page>
+      </tei:surface>
+<tei:surface n="2a">
+         <tei:graphic n="2a" rend="thumbnail" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_24/Jarring_Prov_24_002_r.Lanczos.96.35.jpg"/>
+         <tei:graphic n="2a" rend="fullpage" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_24/Jarring_Prov_24_002_r.Lanczos.800.65.jpg"/>
+         <atmo:page xmlns:atmo="http://uyghur.linguistics.indiana.edu/2015/ns/0.1">
+            <atmo:top>
+               <atmo:folio-num>
+                  <atmo:lit> 2</atmo:lit>
+                  <atmo:lat> 2</atmo:lat>
+               </atmo:folio-num>
+               <atmo:page-num>
+                  <atmo:lit> ۱</atmo:lit>
+                  <atmo:lat> ۱</atmo:lat>
+               </atmo:page-num>
+            </atmo:top>
+            <atmo:main>
+               <tei:line n="1">
+                  <atmo:lit>بسم اللّه الرّحمن الرّحیم</atmo:lit>
+                  <atmo:lat>bsm all~h alr~ḥmn alr~ḥym
+                     <!--
+<seg>bsm all~h alr~ḥmn alr~ḥym</seg>
+<pos>FOR FOR FOR FOR</pos>
+ <ilg>FOR FOR FOR FOR</ilg>
+ -->
+</atmo:lat>
+               </tei:line>
+               <tei:line n="2">
+                  <atmo:lit>بو تعبیر نامه نی حضرت یوسف علیه الصّلواة والسّلام</atmo:lit>
+                  <atmo:lat>bw tʾbyr namh ny ḥżrt ywsf ʾlyh alṣ~lwaṫ wals~lam
+                     <!--
+<seg>bw tʾbyrnamh-ny ḥżrt ywsf ʾlyh alṣ~lwaṫ wals~lam</seg>
+<pos>DEM N-ACC N Npr FOR FOR FOR</pos>
+ <ilg>this handbook.of.interpretation-ACC His.Holiness Joseph Peace be.Upon Him</ilg>
+ -->
+</atmo:lat>
+               </tei:line>
+               <tei:line n="3">
+                  <atmo:lit>.اون ایکی باب برله شرح قیلیب دورلار ایمدی بیان قیلینور</atmo:lit>
+                  <atmo:lat>.awn ayky bab brlh šrḥ qylyb dwrlar aymdy byan qylynwr
+                     <!--
+<seg>awnayky bab brlh šrḥ qyl-yb dwr-lar aymdy byan qyl-yn-wr-0</seg>
+<pos>NU N POST N LVN-CNV PRS-3p	 AV N LVN-PASSN-IPFV.DIR-3</pos>
+ <ilg>twelve chapter with interpretation LVN-CNV PRS-3p now narration LVN-PASSN-IPFV.DIR-3</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="4">
+                  <atmo:lit>انداغکیم اکر کیشی فرشته لارنی پیغمبرلارنی آی کون و یولدوز </atmo:lit>
+                  <atmo:lat>andaġkym akr kyšy fršth larny pyġmbrlarny āy kwn w ywldwz
+                     <!--
+<seg>andaġ=kym akr kyšy fršth-larny pyġmbr-lar-ny āy kwn w ywldwz</seg>
+<pos>DEM=CZR CONJ N N-PL-ACC N-PL-ACC N N CONJ N</pos>
+ <ilg>that=CZR if someone angel-PL-ACC prophet-PL-ACC moon sun and star</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="5">
+                  <atmo:lit>لارنی نماز آقامت لارنی پادشاه لارنی قرآن اوقوماق و اورکان</atmo:lit>
+                  <atmo:lat>larny nmaz āqamt larny padšah larny qrān awqwmaq w awrkan
+                     <!--
+<seg>-lar-ny nmaz āqamt-lar-ny padšah-lar-ny qrān awqw-maq w awrkan-</seg>
+<pos>-PL-ACC N N-PL-ACC N-PL-ACC N Vt-GER CONJ Vt-</pos>
+ <ilg>-PL-ACC prayer inhabitancy-PL-ACC king-PL-ACC Qur'an recite-GER and learn-</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="6">
+                  <atmo:lit>.ماکنی توشیده کورسه اوشبولارنینک بیانی</atmo:lit>
+                  <atmo:lat>.makny twšydh kwrsh awšbwlarnynk byany
+                     <!--
+<seg>-mak-ny twš-0-dh kwr-sh awšbw-lar-nynk byan-y</seg>
+<pos>-GER-ACC N-3POSS-LOC Vt-COND DEM-PL-GEN N-3POSS</pos>
+ <ilg>-GER-ACC dream-3POSS-LOC see-COND this-PL-GEN narration-3POSS</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="7">
+                  <atmo:lit>و هر کشی توشیده پیغمبرلارنی کورسه دوزخ اوتیدین خلاص بولغای</atmo:lit>
+                  <atmo:lat>w hr kšy twšydh pyġmbrlarny kwrsh dwzx awtydyn xlaṣ bwlġay
+                     <!--
+<seg>w hr kšy twš-y-dh pyġmbr-lar-ny kwr-sh dwzx awt-y-dyn xlaṣ bwl-ġay</seg>
+<pos>CONJ QNT N N-3POSS-LOC N-PL-ACC Vt-COND N N-3POSS-ABL N LVN-INVOC</pos>
+ <ilg>and each person dream-3POSS-LOC prophet-PL-ACC see-COND hell fire-3POSS-ABL free LVN-INVOC</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="8">
+                  <atmo:lit>هرکیم توشیده فرشته لارنی کورسه خدای تعالی نینک رحمتیکا مشرّف </atmo:lit>
+                  <atmo:lat>hrkym twšydh fršth larny kwrsh xday tʾaly nynk rḥmtyka mšr~f
+                     <!--
+<seg>hrkym twš-y-dh fršth-lar-ny kwr-sh xda-y tʾaly-nynk rḥmt-y-ka mšr~f</seg>
+<pos>QNT N-3POSS-LOC N-PL-ACC Vt-COND Npr-IZ N-GEN N-3POSS-DAT N</pos>
+ <ilg>everyone dream-3POSS-LOC angel-PL-ACC see-COND God-IZ Almighty-GEN mercy-3POSS-DAT honored</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="9">
+                  <atmo:lit>بولغای هرکیم توشیده اولیاءلارنی کورسه نظر تابغای هرکیم</atmo:lit>
+                  <atmo:lat>bwlġay hrkym twšydh awlyaʾlarny kwrsh nẓr tabġay hrkym
+                     <!--
+<seg>bwl-ġay hrkym twš-y-dh awlyaʾ-lar-ny kwr-sh nẓr tab-ġay hrkym</seg>
+<pos>LVN-INVOC QNT N-3POSS-LOC N-PL-ACC Vt-COND N LVN-INVOC QNT</pos>
+ <ilg>LVN-INVOC everyone dream-3POSS-LOC saint-PL-ACC see-COND vision LVN-INVOC everyone</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="10">
+                  <atmo:lit>توشیده عالم لارنی و درویش لارنی کورسه بلآ قضا و آفت</atmo:lit> 
+                  <atmo:lat>twšydh ʾalm larny w drwyš larny kwrsh blā qża w āft
+                     <!--
+<seg>twš-y-dh ʾalm-lar-ny w drwyš-lar-ny kwr-sh blā qża w āft</seg>
+<pos>N-3POSS-LOC N-PL-ACC CONJ N-PL-ACC Vt-COND N N CONJ N</pos>
+ <ilg>dream-3POSS-LOC scholar-PL-ACC and dervish-PL-ACC see-COND disaster mishap and plague</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="11">
+                  <atmo:lit>لاردین آمان ده بولور اول یل کسّل دین یراق بولور هرکیم</atmo:lit>
+                  <atmo:lat>lardyn āman dh bwlwr awl yl ks~l dyn yraq bwlwr hrkym
+                     <!--
+<seg>-lar-dyn āman-dh bwl-wr-0 awl yl ks~l-dyn yraq bwl-wr hrkym</seg>
+<pos>-PL-ABL N-LOC Vi-IPFV.DIR-3 AV N N-ABL AJ LVN-IPFV.DIR-3 QNT</pos>
+ <ilg>-PL-ABL mercy-LOC be-IPFV.DIR-3 first wind ailment-ABL far LVN-IPFV.DIR-3 everyone</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="12">
+                  <atmo:lit>توشیده علم اوقوسه عالم لارنینک یوزینی کورکای هرکیم توشیده</atmo:lit>
+                  <atmo:lat>twšydh ʾlm awqwsh ʾalm larnynk ywzyny kwrkay hrkym twšydh
+                     <!--
+<seg>twš-y-dh ʾlm awqw-sh ʾalm-lar-nynk ywz-y-ny kwr-kay hrkym twš-y-dh</seg>
+<pos>N-3POSS-LOC N Vt-COND N-PL-GEN N-3POSS-ACC Vt-INVOC QNT N-3POSS-LOC</pos>
+ <ilg>dream-3POSS-LOC knowledge study-COND scholar-PL-GEN face-3POSS-ACC see-INVOC everyone dream-3POSS-LOC</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+               <tei:line n="13">
+                  <atmo:lit>صلواة — اقامت ایتسه یا ایشتسه عاقبت حج طواف قیلغای</atmo:lit>
+                  <atmo:lat>ṣlwaṫ — aqamt aytsh ya ayštsh ʾaqbt ḥǰ ṭwaf qylġay
+                     <!--
+<seg>ṣlwaṫ aqamt ayt-sh ya ayšt-sh ʾaqbt ḥǰ ṭwaf qyl-ġay</seg>
+<pos>N N Vt-COND CONJ Vt-COND N N N LVN-INVOC</pos>
+ <ilg>rosary inhabitancy say-COND or listen-COND consequence pilgrimage circling LVN-INVOC</ilg>
+ -->
+                  </atmo:lat>
+               </tei:line>
+            </atmo:main>
+         </atmo:page>
+      </tei:surface>
+   </tei:sourceDoc>
+</tei:TEI>
+
