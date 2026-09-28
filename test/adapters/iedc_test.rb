@@ -71,14 +71,14 @@ module Adapters
       both = doc("iedc1266")
       assert_operator both.passages.size, :>=, 1
       assert_nil both.passages.first.annotations["layer"], "transcription wins"
-      layer, body = Nabu::Adapters::Iedc.new.send(:folio_text, fake_folio(tl: "only"))
+      layer, body = Nabu::Adapters::Iedc.new.send(:folio_text, fake_folio(translit: "only"))
       assert_equal "transliteration", layer
       assert_equal "only", body
     end
 
-    def fake_folio(tl:)
+    def fake_folio(translit:)
       Nokogiri::XML("<item><transcription> </transcription>" \
-                    "<transliteration>#{tl}</transliteration></item>").root
+                    "<transliteration>#{translit}</transliteration></item>").root
     end
 
     def test_typed_date_string_yields_the_iso_substring

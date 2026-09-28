@@ -224,7 +224,13 @@ class PosturesTest < Minitest::Test
                  "tail via date-band INFERENCE, the document grain — no facet rule, so the " \
                  "declaration stays): 84→85; P95 ADDS FOUR — prilit (dates, the goo300k/imp " \
                  "sl-bands mold), diccas (identity ara), perseus-anglit (identity ang, the aspr " \
-                 "mold), perseus-farsilit (identity fas, bare fa anchor): 85→89; scripta-bulgarica ADDED P107-8 — identity bul, declared whole-source coarse (the Old→Middle Bulgarian span; per-text chu-recension refinement a recorded future look): 89→90; iedc ADDED P107-2 — identity, eleven mapped ISO codes across the Islamicate-East belt: 90→91; P107-3 ADDS skjaervo-khotanese + shkz — identity: 91→93; P107-4/7 ADD atmo + altaica-shm — identity: 93→95"
+                 "mold), perseus-farsilit (identity fas, bare fa anchor): 85→89; " \
+                 "scripta-bulgarica ADDED P107-8 — identity bul, declared whole-source " \
+                 "coarse (the Old→Middle Bulgarian span; per-text chu-recension refinement " \
+                 "a recorded future look): 89→90; iedc ADDED P107-2 — identity, eleven " \
+                 "mapped ISO codes across the Islamicate-East belt: 90→91; P107-3 ADDS " \
+                 "skjaervo-khotanese + shkz — identity: 91→93; P107-4/7 ADD atmo + " \
+                 "altaica-shm — identity: 93→95"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending

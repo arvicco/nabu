@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# One documented trim of the 4.3 MB Zenodo TEI.2 XML. adapter_test
+# null: count assertions would false-fail against the full file.
+source: skjaervo-khotanese
+adapter_test:
+retrieved: "2026-09-28"
+files:
+  - path: "Skjaervo_2013_Khotanese Manuscripts_DRAFT.xml"
+    url: https://zenodo.org/api/records/3372682/files/Skjaervo_2013_Khotanese%20Manuscripts_DRAFT.xml/content
+    refetchable: true
+    whole: false
+    trim: >-
+      the real header + the first 3 of 2,357 msDescription records +
+      closing tags, verbatim — plus record ms1495 (the ~100-unclosed-
+      tags damage exemplar the fragment-isolation parse pins)

@@ -884,7 +884,7 @@ module Nabu
 
         @links_journal =
           if @links_journal_path && File.exist?(@links_journal_path)
-            Sequel.connect("sqlite://#{@links_journal_path}", readonly: true)
+            Store::LinksJournal.connect("sqlite://#{@links_journal_path}", readonly: true)
           end
       rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
         @links_journal = nil # hot-WAL/readonly failure — probe off, honestly
