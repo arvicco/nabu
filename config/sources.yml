@@ -4632,7 +4632,7 @@ iedc:   # P107-2
   adapter: Nabu::Adapters::Iedc
   kind: source
   axes: [iranian]
-  wired: false   # flips after the first-sync verification
+  wired: true   # first sync verified 2026-09-28 (1,316 docs / 5,493 passages; 155 timeline rows)
   sync_policy: manual
   # P107-2: the Invisible East Digital Corpus (invisible-east.org,
   # University of Oxford; Zenodo doi 10.5281/zenodo.20490276, ONE
@@ -4650,7 +4650,7 @@ skjaervo-khotanese:   # P107-3a
   adapter: Nabu::Adapters::SkjaervoKhotanese
   kind: source
   axes: [iranian]
-  wired: false
+  wired: true   # first sync verified 2026-09-28 (2,357 docs / 14,574 lines; damage-isolated)
   sync_policy: manual
   # P107-3a: Skjaervo's "Khotanese Manuscripts from Chinese Turkestan
   # in the British Library" — the revised 2014 online edition as ONE
@@ -4666,7 +4666,7 @@ shkz:   # P107-3b
   adapter: Nabu::Adapters::Shkz
   kind: source
   axes: [iranian]
-  wired: false
+  wired: true   # first sync verified 2026-09-28 (3 version docs / 153 aligned lines)
   sync_policy: manual
   # P107-3b: the trilingual Kaaba-ye Zartosht inscription of Shabuhr I
   # (Shamsian & Berti; Zenodo doi 10.5281/zenodo.15050878, CC BY 4.0):
@@ -4674,3 +4674,20 @@ shkz:   # P107-3b
   # citations — the first real Parthian document in the library. The
   # 1,012-word alignment-pairs table fetches into canonical as a
   # DECLARED v1 residue (the alignment-hub look is the future packet).
+
+atmo:   # P107-4
+  adapter: Nabu::Adapters::Atmo
+  kind: source
+  axes: [turkic]
+  wired: true   # first sync verified 2026-09-28 (15 published transcripts / 4,934 lines; commented-out index entries censused)
+  sync_policy: manual
+  # P107-4: ATMO — Annotated Turki Manuscripts from the Jarring
+  # Collection Online (uyghur.linguistics.indiana.edu; Kansas/Indiana +
+  # Lund UB): 18 line-by-line TEI P5 transcripts of 18th-20th c.
+  # Eastern Turki manuscripts — the Chagatai-lane opener. Per line:
+  # Perso-Arabic atmo:lit (served text) + atmo:lat transliteration
+  # (annotation); zones (main vs endorsement/marginalia) annotated per
+  # passage; facsimile-only XMLs stay upstream by design. Language chg,
+  # declared honest-coarse ("Turki" = late Chagatai / early modern
+  # Uyghur; a finer node is a future registry call). CC BY-SA 4.0
+  # verbatim on the project's licensing page.
