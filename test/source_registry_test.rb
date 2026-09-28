@@ -1020,12 +1020,35 @@ class SourceRegistryTest < Minitest::Test
     assert_equal %w[iswoc lexica proiel sblgnt], registry.quickstart_slugs.sort
   end
 
+  # Q93 (owner ruling 2026-09-27): the shipped registry stays in
+  # ALPHABETIC key order — every enumeration surface (rebuild replay,
+  # sync --all, listings) reads registry order, so the file order IS
+  # the processing order. Recentness moved to the per-entry adopted:
+  # field (validated required at load). A justified deviation joins
+  # ORDER_EXCEPTIONS with its reason — never a silent reorder.
+  ORDER_EXCEPTIONS = [].freeze
+
+  def test_shipped_registry_keys_are_alphabetic
+    keys = File.read(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))
+               .scan(/^([a-z0-9-]+):/).flatten
+    unruly = keys.each_cons(2).select { |a, b| (a <=> b) == 1 }
+                              .reject { |pair| ORDER_EXCEPTIONS.include?(pair) }
+    assert_empty unruly, "sources.yml keys out of alphabetic order (adopted: carries recentness)"
+  end
+
+  def test_every_shipped_entry_carries_its_adoption_date
+    registry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))
+    registry.each_source do |entry|
+      assert_match(/\A\d{4}-\d{2}-\d{2}\z/, entry.adopted, "#{entry.slug} lost its adopted date")
+    end
+  end
+
   def test_shipped_registry_mapping_is_valid_and_ratified
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
 
     assert_equal %w[classical romance epigraphy slavic germanic celtic italic etym biblical hebrew
                     syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist tibetan
-                    korean sea sinitic japonic local],
+                    korean sea sinitic japonic turkic mongolic local],
                  registry.axes.names,
                  "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
                  "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
@@ -1074,7 +1097,7 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "iranian", "ORACC's ario = Old Persian Achaemenid trilinguals"
     assert_includes registry["cdli"].axes, "iranian", "CDLI catalogs Old Persian (peo) Achaemenid trilinguals"
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
-    assert_equal %w[oracc cdli perseus-farsilit], registry.public_axis_members("iranian"),
+    assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese], registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
     assert_equal %w[titus-avestan], registry.blocked_axis_members("iranian"),
                  "the grant-gated Avesta rides iranian but is excluded from the public listing"

@@ -15,29 +15,29 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 354,100 entries |
-| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
-| `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
-| `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
-| `classical-modern` | texts | attribution | wired · manual | 14,608 docs / 1,944,934 passages |
-| `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
-| `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
-| `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |
-| `unihan` | dictionary | open | wired · manual | 102,998 entries |
-| `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
+| `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
+| `cbdb` | feature module | nc | wired · manual | nothing held yet |
 | `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
+| `chgis` | feature module | open | wired · manual | nothing held yet |
+| `classical-modern` | texts | attribution | wired · manual | 14,608 docs / 1,944,934 passages |
+| `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `kanripo` | texts | attribution | wired · manual | 5,122 docs / 4,571,394 passages |
 | `kr-gaiji` | feature module | attribution | wired · manual | nothing held yet |
+| `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
+| `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
+| `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `viet-wikisource` | texts | attribution | wired · manual | 32 docs / 7,674 passages |
-| `chgis` | feature module | open | wired · manual | nothing held yet |
-| `cbdb` | feature module | nc | wired · manual | nothing held yet |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
+| `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `zho` 539,840 · `lzh` 80,220 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,566 · `gem-pro` 5,717 · `gmw-pro` 5,551 … and 29 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `zho` 543,297 · `lzh` 80,220 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 35 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 
@@ -94,4 +94,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

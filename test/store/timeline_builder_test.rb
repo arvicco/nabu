@@ -365,6 +365,23 @@ module Store
       assert_nil row[:place_name]
     end
 
+    # P107-2: the iedc iso-prefix shape — date_iso "1183-10" -> the 1183
+    # one-year envelope, the prose date_text verbatim as raw; an item
+    # without the parenthetical ISO mints nothing.
+    def test_metadata_dates_iedc_iso_prefix_key
+      seed_metadata_doc("iedc", "urn:nabu:iedc:iedc0201",
+                        { "date_iso" => "1183-10",
+                          "date_text" => "The Gregorian calendar: October 1183 (1183-10)" })
+      seed_metadata_doc("iedc", "urn:nabu:iedc:iedc0002",
+                        { "date_text" => "The Gregorian calendar: Before c. 705" })
+      build!
+      row = timeline_for("urn:nabu:iedc:iedc0201")
+      assert_equal [1183, 1183], [row[:not_before], row[:not_after]]
+      assert_includes row[:date_raw], "October 1183"
+      assert_nil timeline_for("urn:nabu:iedc:iedc0002"),
+                 "prose-only dates mint nothing — declared, never guessed"
+    end
+
     # P47-r3: the per-source refresh seam SyncRunner calls post-load — the
     # lane never lags a sync again (the class this audit exists to kill).
     def test_metadata_dates_refresh_source_replaces_only_that_source

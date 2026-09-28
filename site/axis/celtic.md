@@ -15,18 +15,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 354,100 entries |
-| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
-| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
+| `gpc` | dictionary | attribution | wired · manual | 89,386 entries |
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
-| `gpc` | dictionary | attribution | wired · manual | 89,386 entries |
+| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
+| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `zho` 323,839 · `cy` 89,386 · `sga` 6,672 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 · `mga` 770 · `wlm` 766 … and 46 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `zho` 327,296 · `cy` 89,386 · `sga` 6,796 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 · `ine-pro` 1,928 · `wlm` 1,046 … and 52 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 
@@ -82,4 +82,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

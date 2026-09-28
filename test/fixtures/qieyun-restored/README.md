@@ -18,3 +18,16 @@ cells, zero empty 字頭/釋義, all rows 10 fields, UTF-8 NFC-stable
 The sibling 切韻 李永富復元.csv (Li Yongfu's restoration, 11,163 rows,
 97.4% byte-identical) is a censused witness lane, deliberately not
 fixtured — the adapter never parses it.
+
+- `to_tshet_uinh_data/small_rimes.csv` — the REAL first 35 lines
+  (`head -n 35`) of the 3,386-line file (header + 34 small rimes:
+  東's 32 + 冬's first two) **plus real line 225** (rime 224 猪, the
+  ordinal-miss case), cut 2026-09-28 from the box's canonical tree
+  (itself the upstream sparse clone, pushed 2025-03-02). Covers the
+  crosswalk's resolution span, the first non-identity join (qieyun
+  小韻 33 → guangyun 35), and the head-lane fallback (猪's pointer
+  1679 is a Li-side row; Fujita's head sits at 1680). Consumed by
+  Nabu::QieyunCrosswalk, never the adapter.
+- the main CSV additionally carries **real lines 978–983** (the 魚
+  rows 序数 1676–1683, appended 2026-09-28): the fallback's target
+  head 猪 29.56 with its rime-mates — 171 data rows total.

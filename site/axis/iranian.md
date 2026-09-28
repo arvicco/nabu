@@ -7,7 +7,7 @@ description: >-
 
 > The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 
-The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — and, since P95, classical Persian literature proper: Hafez's Divan with its aligned English (perseus-farsilit).
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and, since P107, the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
 The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
 PRIVATE research material — served locally under the owner's personal grant
@@ -22,17 +22,20 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
+| `iedc` | texts | open | wired · manual | 1,316 docs / 5,493 passages |
+| `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
 | `perseus-farsilit` | texts | attribution | wired · manual | 2 docs / 17,637 passages |
+| `shkz` | texts | open | wired · manual | 3 docs / 153 passages |
+| `skjaervo-khotanese` | texts | open | wired · manual | 2,357 docs / 14,574 passages |
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `sux` 264,506 · `akk` 153,945 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 · `xeb` 6,844 … and 32 more (`nabu axis iranian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `sux` 264,506 · `akk` 153,945 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 · `xeb` 6,844 … and 43 more (`nabu axis iranian` lists all).
 
 ## The desk's instruments
 
@@ -94,4 +97,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

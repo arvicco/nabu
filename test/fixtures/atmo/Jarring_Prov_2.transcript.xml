@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/xsl" href="../lib/atmo-p5-transcript.xsl"?>
+<?xml-model href="../lib/transcr-v1.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?siteroot ..?>
+<!--* <?xml-stylesheet type="text/xsl" href="../OneDrive/Documents/XML/Turki-to-extended-Latin.xsl"?> *-->
+<tei:TEI xmlns:tei="http://www.tei-c.org/ns/1.0">
+   <tei:teiHeader>
+      <tei:fileDesc>
+         <tei:titleStmt>
+            <tei:title>Digital facsimile and transcription of manuscript Jarring Prov. 2</tei:title>
+            <tei:author>Annotated Turki Manuscripts from the Jarring Collection Online (ATMO)</tei:author>
+            <tei:principal xml:id="AMD">Arienne M. Dwyer</tei:principal>
+            <tei:principal>C. M. Sperberg-McQueen</tei:principal>
+            <tei:respStmt>
+               <tei:resp>Manuscript held and scanned by</tei:resp>
+               <tei:orgName>Lund University Library</tei:orgName>
+            </tei:respStmt>
+            <tei:respStmt>
+               <tei:resp>Manuscript transcribed by</tei:resp>
+               <tei:persName xml:id="GE">Gülnar Eziz</tei:persName>
+               <tei:persName xml:id="AA">Akbar Amat</tei:persName>
+            </tei:respStmt>
+            <tei:funder>Henry Luce Foundation</tei:funder>
+         </tei:titleStmt>
+         <tei:editionStmt>
+            <tei:edition>Test edition</tei:edition>
+            <tei:respStmt>
+               <tei:resp>Generated semi-automatically by</tei:resp>
+               <tei:name>msDesc.master-to-p5.xsl</tei:name>
+               <tei:name>digifacs-gen.xsl</tei:name>
+               <tei:persName xml:id="MSM">C. M. Sperberg-McQueen</tei:persName>
+            </tei:respStmt>
+         </tei:editionStmt>
+         <tei:publicationStmt>
+            <tei:pubPlace>Lawrence, Kansas</tei:pubPlace>
+            <tei:authority>Annotated Turki Manuscripts from the Jarring Collection Online</tei:authority>
+            <tei:date>2016-06-27</tei:date>
+         </tei:publicationStmt>
+         <tei:sourceDesc>
+            <tei:msDesc>
+               <tei:msIdentifier>
+                  <tei:country key="SE">Sweden</tei:country>
+                  <tei:settlement>Lund</tei:settlement>
+                  <tei:repository>Lund University Library</tei:repository>
+                  <tei:idno>Jarring Prov. 2</tei:idno>
+               </tei:msIdentifier>
+               <tei:msContents>
+                  <tei:msItemStruct>
+                     <tei:title>Manual of artisans</tei:title>
+                     <tei:note>
+                        <tei:p>The manual contains three different risale</tei:p>
+                        <tei:p>1) The manual of the (vegetable) oil-makers, cf. Muginov 221</tei:p>
+                        <tei:p>2) The manual of the farmers, cf. Muginov 215; Prov. 396:4, 400:5, 406:2</tei:p>
+                        <tei:p>3) The manual of the weavers, cf. Muginov 202, 203; Prov. 396:5, 405:3</tei:p>
+                     </tei:note>
+                     <tei:textLang mainLang="UG">Uighur</tei:textLang>
+                  </tei:msItemStruct>
+               </tei:msContents>
+               <tei:physDesc>
+                  <tei:objectDesc>
+                     <tei:supportDesc>
+                        <tei:support>
+                           <tei:p>paper, white, Russian</tei:p>
+                        </tei:support>
+                        <tei:extent>ff. 48 <tei:dimensions>
+                              <tei:height>150</tei:height>
+                              <tei:width>120</tei:width>
+                           </tei:dimensions>mm.</tei:extent>
+                        <tei:foliation>
+                           <tei:p>The ms. is foliated by G. Jarring.</tei:p>
+                        </tei:foliation>
+                        <tei:condition>
+                           <tei:p>Good</tei:p>
+                        </tei:condition>
+                     </tei:supportDesc>
+                  </tei:objectDesc>
+                  <tei:decoDesc>
+                     <tei:decoNote/>
+                  </tei:decoDesc>
+                  <tei:bindingDesc>
+                     <tei:binding>
+                        <tei:p>The ms. is not bound.</tei:p>
+                     </tei:binding>
+                  </tei:bindingDesc>
+               </tei:physDesc>
+               <tei:history>
+                  <tei:origin>
+                     <tei:p>Place of origin: <tei:origPlace>Eastern Turkestan (Yarkand)</tei:origPlace>
+                     </tei:p>
+                     <tei:p>Date of origin: <tei:origDate notBefore="1929" notAfter="1929" evidence="external">1348/1929</tei:origDate>
+                     </tei:p>
+                     <tei:p>Copy made for the Swedish missionary Gunnar Hermansson, Yarkand. According to f. 45 this copy was completed on the Wednesday fourth of Moharrad 1348 = June 13th 1929, in Yarkand.</tei:p>
+                  </tei:origin>
+                  <tei:provenance/>
+                  <tei:acquisition>
+                     <tei:p>The ms. was part of the Jarring collection of Eastern Turkestan manuscripts donated to the Lund University Library in 1982.</tei:p>
+                  </tei:acquisition>
+               </tei:history>
+               <tei:additional>
+                  <tei:adminInfo>
+                     <tei:recordHist>
+                        <tei:source>
+                           <tei:p>This <tei:hi>msDesc</tei:hi> manuscript description was derived automatically
+      from the manuscript description prepared by the Lund University Library
+      conforming to the Master Project DTD.</tei:p>
+                           <tei:p>The manuscript description in the Master vocabulary was derived
+      from Gunnar Jarring's manuscript catalog of the collection, which read:
+      <tei:q type="original-record">
+                                 <tei:p/>
+                              </tei:q>
+                           </tei:p>
+                        </tei:source>
+                     </tei:recordHist>
+                  </tei:adminInfo>
+               </tei:additional>
+            </tei:msDesc>
+         </tei:sourceDesc>
+      </tei:fileDesc>
+      <tei:revisionDesc>
+         <tei:listChange>
+            <tei:change who="#MSM" when="2016-06-27">Generated skeleton transcription</tei:change>
+            <tei:change who="#MSM" when="2016-03-12">Generated raw digital facsimile using digifacs-gen.xsl</tei:change>
+            <tei:change who="#AM" when="2016-07-20">Transcribe Jarring_Prov_2_001_r-003_v</tei:change>
+            <tei:change who="#AM" when="2016-07-21">Transcribe Jarring_Prov_2_004_r-005_v</tei:change>
+            <tei:change who="#AM" when="2016-07-22">Transcribe Jarring_Prov_2_006_r-006_v</tei:change>
+            <tei:change who="#AM" when="2016-07-25">Transcribe Jarring_Prov_2_007_r-008_v</tei:change>
+            <tei:change who="#AM" when="2016-07-26">Transcribe Jarring_Prov_2_009_r-017_v</tei:change>
+            <tei:change who="#AM" when="2016-07-27">Transcribe Jarring_Prov_2_018_r-020_v</tei:change>
+            <tei:change who="#AM" when="2016-07-27">Transcribe Jarring_Prov_2_021_r-027_v</tei:change>
+            <tei:change who="#AM" when="2016-07-27">Transcribe Jarring_Prov_2_028_r-034_r</tei:change>
+            <tei:change who="#AM" when="2016-08-01">Transcribe Jarring_Prov_2_034_v-036_v</tei:change>
+            <tei:change who="#AM" when="2016-08-02">Transcribe Jarring_Prov_2_037_r-040_v</tei:change>
+            <tei:change who="#AM" when="2016-08-03">Transcribe Jarring_Prov_2_041_r-043_v</tei:change>
+            <tei:change who="#AM" when="2016-08-04">Transcribe Jarring_Prov_2_044_r-045_r</tei:change>
+            <tei:change who="#AA" when="2016-08-26">Checked and compared to the page images</tei:change>
+            <tei:change who="#AA, GE" when="2016-08-29">Tandem proofread 001_v-011_r</tei:change>
+            <tei:change who="#AA, GE" when="2016-09-04">Tandem proofread 011_v-016_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-09-05">Tandem proofread 016_v-024_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-09-10">Tandem proofread 025_r-032_v</tei:change>
+            <tei:change who="#AA, GE" when="2016-09-11">Tandem proofread 033_r-038_r</tei:change>
+            <tei:change who="#AA, GE" when="2016-09-17">Tandem proofread 038_v-045_r</tei:change>
+         </tei:listChange>
+      </tei:revisionDesc>
+   </tei:teiHeader>
+   <tei:sourceDoc xmlns:bmt="http://blackmesatech.com/2015/nss/digifacs">
+     <tei:surface n="1a">
+         <tei:graphic n="1a" rend="thumbnail" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_2/Jarring_Prov_2_001_r.Lanczos.96.35.jpg"/>
+         <tei:graphic n="1a" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_2/Jarring_Prov_2_001_r.Lanczos.800.65.jpg"/>
+         <atmo:page xmlns:atmo="http://uyghur.linguistics.indiana.edu/2015/ns/0.1">
+            <atmo:top>
+               <tei:zone type="endorsement">
+                  <tei:line n="1">
+                     <atmo:lit>PROV 2</atmo:lit>
+                     <atmo:lat>PROV 2</atmo:lat>
+                  </tei:line>
+               </tei:zone>
+               <atmo:folio-num>
+                  <atmo:lit>1</atmo:lit>
+                  <atmo:lat>1</atmo:lat>
+               </atmo:folio-num>
+            </atmo:top>
+            <atmo:main>
+               <tei:line n="1">
+               <atmo:lit>رسالۀ کاسیب</atmo:lit>
+               <atmo:lat>rsalhʾ kasyb</atmo:lat>
+            </tei:line>
+            </atmo:main>
+         </atmo:page>
+      </tei:surface>
+<tei:surface n="1b">
+         <tei:graphic n="1b" rend="thumbnail" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_2/Jarring_Prov_2_001_v.Lanczos.96.35.jpg"/>
+         <tei:graphic n="1b" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_2/Jarring_Prov_2_001_v.Lanczos.800.65.jpg"/>
+         <atmo:page xmlns:atmo="http://uyghur.linguistics.indiana.edu/2015/ns/0.1">
+            <atmo:empty/>
+         </atmo:page>
+      </tei:surface>
+<tei:surface n="2a">
+         <tei:graphic n="2a" rend="thumbnail" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_2/Jarring_Prov_2_002_r.Lanczos.96.35.jpg"/>
+         <tei:graphic n="2a" url="https://uyghur.linguistics.indiana.edu/2015/images/Jarring_Prov_2/Jarring_Prov_2_002_r.Lanczos.800.65.jpg"/>
+         <atmo:page xmlns:atmo="http://uyghur.linguistics.indiana.edu/2015/ns/0.1">
+	           <atmo:top>
+	              <atmo:folio-num>
+                  <atmo:lit>2</atmo:lit>
+                  <atmo:lat>2</atmo:lat>
+               </atmo:folio-num>
+	           </atmo:top>
+	           <atmo:main>
+               <atmo:empty/>
+	           </atmo:main>
+         </atmo:page>
+      </tei:surface>
+
+   </tei:sourceDoc>
+</tei:TEI>
+

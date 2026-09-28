@@ -15,23 +15,23 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 354,100 entries |
+| `burman-concordance` | feature module | open | wired · manual | nothing held yet |
+| `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
-| `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
-| `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
-| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
 | `larth-etp` | dictionary | attribution | wired · manual | 1,122 entries |
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
+| `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
-| `burman-concordance` | feature module | open | wired · manual | nothing held yet |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `zho` 323,839 · `ett` 7,874 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `ine-pro` 1,905 … and 25 more (`nabu axis italic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `zho` 327,296 · `ett` 7,872 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `mnc` 2,577 … and 31 more (`nabu axis italic` lists all).
 
 ## The desk's instruments
 
@@ -86,4 +86,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

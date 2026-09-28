@@ -23,22 +23,22 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
+| `actib` | feature module | attribution | wired · manual | nothing held yet |
+| `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
+| `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages / 56,794 entries |
+| `monlam-lexicon` | dictionary | attribution | wired · manual | 449,829 entries |
+| `mvp` | dictionary | open | wired · manual | 9,379 entries |
+| `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
+| `old-tibetan` | texts | attribution | wired · manual | 3 docs / 2,669 passages |
 | `otdo` | texts | attribution | wired · manual | 413 docs / 13,593 passages |
 | `soas-tibetan` | texts | attribution | wired · manual | 4 docs / 991 passages |
-| `old-tibetan` | texts | attribution | wired · manual | 3 docs / 2,669 passages |
-| `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
-| `actib` | feature module | attribution | wired · manual | nothing held yet |
-| `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
-| `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
-| `monlam-lexicon` | dictionary | attribution | wired · manual | 449,829 entries |
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
-| `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `bod` 455,971 · `xct` 61,358 · `san` 9,379 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `bod` 455,971 · `xct` 61,358 · `san` 9,379 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
 
 ## The desk's instruments
 
@@ -76,4 +76,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

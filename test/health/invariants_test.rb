@@ -454,6 +454,60 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:reversed_axis_bounds), "a repaired lane clears the finding"
   end
 
+  # P107 (Q83.3, the №R-70 mining law made self-enforcing): a source
+  # whose document metadata carries axis-SHAPED top-level keys — raw
+  # ore, not the structured shapes the drift twins watch — while its
+  # axes/facet lane holds zero rows is exactly "fetches axis-shaped
+  # fields and drops them", the declared defect. Declared coarseness
+  # exempts via MINING_EXEMPT, key by key, each with its reason.
+  def test_unmined_axis_metadata_fires_per_dark_lane_and_clears_with_rows
+    doc_id = seed_lane_doc("rawore", "urn:nabu:rawore:x1",
+                           '{"dating":"reign of Assurbanipal","findspot":"Nineveh"}')
+    finding = global_finding(:unmined_axis_metadata)
+    refute_nil finding, "raw date- and place-shaped keys with zero rows are unmined ore"
+    assert_match(/rawore/, finding.message)
+    assert_match(/dating/, finding.message)
+    assert_match(/findspot/, finding.message)
+    assert_match(/MINING_EXEMPT/, finding.message, "the remedy names the declared-coarseness ledger")
+
+    @db[:document_axes].insert(document_id: doc_id, not_before: -650, axis_source: "rawore")
+    dates_cleared = global_finding(:unmined_axis_metadata)
+    refute_match(/dating/, dates_cleared.message, "a mined dates lane clears its keys")
+    assert_match(/findspot/, dates_cleared.message, "the places lane stays dark")
+
+    @db[:document_axes].where(document_id: doc_id).update(place_name: "Nineveh")
+    assert_nil global_finding(:unmined_axis_metadata)
+  end
+
+  def test_unmined_axis_metadata_genre_lane_watches_document_facets
+    doc_id = seed_lane_doc("rawore2", "urn:nabu:rawore2:x1", '{"doctype":"letter"}')
+    finding = global_finding(:unmined_axis_metadata)
+    refute_nil finding
+    assert_match(/rawore2.*doctype/, finding.message)
+
+    @db[:document_facets].insert(document_id: doc_id, facet: "genre", value: "letter")
+    assert_nil global_finding(:unmined_axis_metadata), "one facet row clears the genre lane"
+  end
+
+  def test_unmined_axis_metadata_ignores_fetch_bookkeeping_keys
+    seed_lane_doc("rawore3", "urn:nabu:rawore3:x1",
+                  '{"file":"a.xml","fetched_at":"2026-09-28","url":"https://x","period_style":"x"}')
+    finding = global_finding(:unmined_axis_metadata)
+    return unless finding
+
+    refute_match(/rawore3.*(file|fetched_at|url)/, finding.message,
+                 "fetch bookkeeping is not axis ore")
+  end
+
+  def test_mining_exempt_entries_each_carry_a_reason
+    Nabu::Health::Invariants::MINING_EXEMPT.each do |slug, keys|
+      assert_kind_of Hash, keys, "#{slug}: exemptions are key => reason"
+      keys.each do |key, reason|
+        refute_empty reason.to_s.strip, "#{slug}/#{key}: declared coarseness must state its reason"
+      end
+    end
+  end
+
   # P61-4: the ~script claim is byte-checkable BY DESIGN (D60-b — the axis
   # claims the held surface) — this invariant is the P60-1 census made
   # permanent: sample the claimed slice's passages, classify by Unicode
@@ -550,6 +604,47 @@ class InvariantsTest < Minitest::Test
       assert_equal :soft, finding.severity
       refute_includes finding.message, "Girsu (mod. Tello)?", "the live string never fires"
       assert_includes finding.message, "cdli:"
+    end
+  end
+
+  # P107 (the R-health rider): a decision born of the MINED lane occurs
+  # in the links journal's 「name」 details, not document_axes — the
+  # 2026-09-28 live health run fired all 10 kanripo rows as "orphaned"
+  # against a lane they never lived in. Either surface now counts.
+  def test_mined_lane_decisions_are_not_orphans
+    Nabu::Store::Source.create(slug: "cdli", name: "CDLI", adapter_class: "T",
+                               license_class: "open")
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "nabu-places"))
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-places"), "names.yml"),
+                   File.join(root, "nabu-places"))
+      registry = Nabu::Places.load_default(canonical_dir: root)
+      mined_name = registry.decisions_for("cdli").keys.first
+      journal_path = File.join(root, "links.sqlite3")
+      journal = Nabu::Store::LinksJournal.migrate!(
+        Nabu::Store::LinksJournal.connect("sqlite://#{journal_path}")
+      )
+      run_id = Nabu::Store::LinksJournal.record_run!(journal, producer: "place-mine",
+                                                              scope: "cdli", params: {},
+                                                              code_version: "t/1")
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:nabu:cdli:x:1",
+                                                     to_urn: "urn:nabu:place:chgis:hvd_1",
+                                                     kind: "place-candidate", score: nil,
+                                                     run_id: run_id,
+                                                     detail: "mined 「#{mined_name}」 (chgis)")
+      journal.disconnect
+
+      count = lambda do |journal_arg|
+        checker = Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext,
+                                               ledger: @ledger, canonical_dir: root, now: @now,
+                                               links_journal_path: journal_arg)
+        finding = checker.global.find { |f| f.kind == :registry_orphan_names }
+        finding ? finding.message[/\A(\d+)/, 1].to_i : 0
+      end
+      without = count.call(nil)
+      with = count.call(journal_path)
+      assert_equal without - 1, with,
+                   "the mined name (#{mined_name}) stops firing once the journal carries its edge"
     end
   end
 

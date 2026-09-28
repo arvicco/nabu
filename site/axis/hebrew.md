@@ -15,20 +15,20 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 September 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
-| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
-| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
-| `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
+| `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
+| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
+| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
+| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
+| `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
+| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 September 2026)</span>: `hbo` 30,259 · `grc` 6,297 · `eng` 5,320 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 21 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 September 2026)</span>: `hbo` 30,259 · `grc` 6,297 · `eng` 5,320 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 22 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 
@@ -85,4 +85,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-five research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

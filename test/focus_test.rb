@@ -201,14 +201,23 @@ class FocusTest < Minitest::Test
   # P44-i2: a small gap is NAMED — a bare count is a guessing game (owner
   # report 2026-07-24), while the enabled rows are still never re-dumped.
   def test_footer_line_names_a_small_gap
-    assert_equal "enabled: 2 entries — not enabled: ccmh, lex (--all shows them)",
-                 Nabu::Focus.footer_line(%w[germanic rem], %w[ccmh lex])
+    assert_equal "enabled: 2 entries → 5 of 7 sources — not enabled: ccmh, lex (--all shows them)",
+                 Nabu::Focus.footer_line(%w[germanic rem], %w[ccmh lex], resolved_count: 5)
   end
 
   def test_footer_line_singular_and_zero_suppressed
-    assert_equal "enabled: 1 entry — not enabled: lila (--all shows it)",
-                 Nabu::Focus.footer_line(%w[germanic], %w[lila])
-    assert_equal "enabled: 1 entry (nabu enable <axis|source> to add)", Nabu::Focus.footer_line(%w[germanic], [])
+    assert_equal "enabled: 1 entry → 6 of 7 sources — not enabled: lila (--all shows it)",
+                 Nabu::Focus.footer_line(%w[germanic], %w[lila], resolved_count: 6)
+    assert_equal "enabled: 1 entry → 7 sources (all)",
+                 Nabu::Focus.footer_line(%w[germanic], [], resolved_count: 7)
+  end
+
+  # Q95 (owner confusion 2026-09-27: "enabled: 170 entries" under "187
+  # sources" read as a 17-source gap): the footer names its EXPANSION —
+  # entries are axes+slugs, and the arrow states what they resolve to.
+  def test_footer_line_without_a_resolved_count_keeps_the_old_shape
+    assert_equal "enabled: 1 entry (nabu enable <axis|source> to add)",
+                 Nabu::Focus.footer_line(%w[germanic], [])
   end
 
   # Beyond the name cap the count summary stands (a fresh box hides ~90

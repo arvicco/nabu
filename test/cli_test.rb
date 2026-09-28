@@ -2025,8 +2025,9 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out, "the focused source shows")
       assert_match(/^library\s/, out, "the owner's shelf always shows")
       refute_match(/^shelf\s/, out, "a non-enabled source is hidden")
-      assert_match(/enabled: 1 entry — not enabled: shelf \(--all shows it\)/, err,
-                   "a small gap is named, never a guessing-game count (P44-i2)")
+      assert_match(/enabled: 1 entry → 2 of 3 sources — not enabled: shelf \(--all shows it\)/, err,
+                   "a small gap is named, never a guessing-game count (P44-i2); " \
+                   "the Q95 arrow expands entries to resolved sources")
     end
   end
 
@@ -2167,8 +2168,9 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out)
       assert_match(/^library\s/, out)
       refute_match(/^shelf\s/, out)
-      assert_match(/enabled: 1 entry — not enabled: shelf \(--all shows it\)/, err,
-                   "the census footer names a small gap too (P44-i2)")
+      assert_match(/enabled: 1 entry → 2 of 3 sources — not enabled: shelf \(--all shows it\)/, err,
+                   "the census footer names a small gap too (P44-i2), " \
+                   "with the Q95 entry→source arrow")
     end
   end
 

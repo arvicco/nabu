@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# One documented trim of the 6.55 MB Zenodo dataset XML (v1.1) — four
+# representative <item> records extracted verbatim. adapter_test null:
+# count assertions would false-fail against the full file.
+source: iedc
+adapter_test:
+retrieved: "2026-09-28"
+files:
+  - path: iedc_2026-06-01_14-07.xml
+    url: https://zenodo.org/api/records/20490276/files/iedc_2026-06-01_14-07.xml/content
+    refetchable: true
+    whole: false
+    trim: >-
+      4 of 1,316 <item> records, verbatim (IEDC0382 metadata-only
+      Khotanese · IEDC0201 New Persian embedded-HTML folio + ISO date
+      · IEDC0002 Bactrian · IEDC1266 Middle Persian transcription+
+      transliteration), inside the real document envelope
