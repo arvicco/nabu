@@ -1,0 +1,11 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: nrct
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: nrct.csv
+    url: https://geoshape.ex.nii.ac.jp/nrct/dataset/nrct-20250719.csv
+    refetchable: true
+    whole: false
+    trim: the REAL first 30 of 80,503 lines (head -n 30), byte-verbatim

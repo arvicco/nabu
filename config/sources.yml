@@ -2813,6 +2813,22 @@ nabu-places:
   # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
   sync_policy: manual
 
+nrct:   # P108-2
+  adapter: Nabu::Adapters::Nrct
+  adopted: "2026-09-29"
+  kind: module   # machinery-only — a gazetteer instrument, zero document rows
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 80,502 places derived (2.1s)
+  sync_policy: manual
+  # NRCT — the 日本歴史地名大系 placename dataset (Heibonsha's historical
+  # gazetteer of Japan, machine-readable via ROIS-DS/NII geoshape; CC BY
+  # 4.0 stated on the dataset page, DOI 10.20676/00000448). ONE ~10.7 MB
+  # CSV (the 2025-07-19 cut; a new cut = a deliberate CSV_URL bump):
+  # 80,502 rows → the "nrct" place-index slice on the chgis mold — name
+  # keys are 名称 verbatim + 読み reading + the 歴史地名 historical form
+  # where it differs (20,099 rows), parent = 上位地名. The nabu-places
+  # namespace mint rides as a sister PR. Opens the Japanese places lane.
+
 obi-burmese:   # P92-3
   adapter: Nabu::Adapters::ObiBurmese
   adopted: "2026-09-01"

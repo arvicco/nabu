@@ -25,6 +25,8 @@ class PlaceRefsTest < Minitest::Test
                  "cigs mints parse despite having no URL spelling"
     assert_equal [%w[chgis hvd_167661]], Nabu::PlaceRefs.ids("chgis:hvd_167661"),
                  "chgis joined the mint namespaces when nabu-places minted it (2026-09-11)"
+    assert_equal [%w[nrct 010000040000]], Nabu::PlaceRefs.ids("nrct:010000040000"),
+                 "nrct joined the mint namespaces with its nabu-places mint (2026-09-29)"
   end
 
   def test_an_unknown_mint_namespace_yields_nothing_never_guessed
