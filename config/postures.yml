@@ -534,6 +534,17 @@ sources:
         curated-band candidate, declared not faked}
     places: {posture: unplaced}
     script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
+  honkoku:   # P108-5
+    kind: {posture: unclassified, note: per-material genre lives in project labels/prose —
+        a future facet look over the project taxonomy}
+    lect: {posture: identity, note: jpn declared honest-coarse — the mass is largely Edo
+        (jpn:emod once the p108-japonic-stages mint merges and a date/staging story exists);
+        kanbun materials ride jpn coarse too, declared}
+    dating: {posture: undatable, note: per-material dates live in free-prose labels only —
+        declared, not silent}
+    places: {posture: unplaced}
+    script: {posture: implied, note: kuzushiji-transcribed kanji-kana with the platform's
+        aozora-like notation verbatim}
   kokubunken:   # P108-4
     kind: {posture: unclassified, note: waka anthologies + the kana preface — a future
         kind facet could stamp anthology/preface}
