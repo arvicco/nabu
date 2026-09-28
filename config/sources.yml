@@ -4627,3 +4627,21 @@ scripta-bulgarica:   # P107-8
   # whole-source coarse (the span reaches Old Bulgarian; per-text lect
   # refinement is a recorded future look). CC BY-NC-SA 2.0 verbatim in
   # Bulgarian on the site's terms page -> class nc.
+
+iedc:   # P107-2
+  adapter: Nabu::Adapters::Iedc
+  kind: source
+  axes: [iranian]
+  wired: false   # flips after the first-sync verification
+  sync_policy: manual
+  # P107-2: the Invisible East Digital Corpus (invisible-east.org,
+  # University of Oxford; Zenodo doi 10.5281/zenodo.20490276, ONE
+  # versioned XML, CC BY 4.0) — 1,316 documentary items of the medieval
+  # Islamicate East: Khotanese 552 / New Persian 358 / Middle Persian
+  # 158 / Sogdian 111 / Arabic 63 / Judeo-Persian 27 / Bactrian 26 (+
+  # heb/san/oui/zho). 481 items carry folio transcriptions (embedded
+  # HTML line lists -> f<n>.l<n> passages); the rest are metadata-only
+  # catalog records (text_state facet-able), ingested for their typed
+  # dates (parenthesized ISO -> date_iso), toponym lists, editorial
+  # grades (Gold/Silver/Bronze facet) and shelfmarks. Folio TRANSLATIONS
+  # are a declared v1 residue. DH Awards 2025 winner.

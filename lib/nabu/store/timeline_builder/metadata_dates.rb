@@ -122,6 +122,10 @@ module Nabu
           #                          strings (Old Babylonian …, on ALL 408 docs) band via
           #                          the ruled table — the posture's own named candidate;
           #                          the Provenance field rides as place (PLACE_KEYS)
+          "iedc" => :iso_prefix_key, # P107-2: the parenthesized ISO substring the
+          #                              adapter extracts from the prose date string
+          #                              ("… (1183-10)" -> date_iso); year envelope,
+          #                              date_text verbatim as raw
           "cbeta" => :dynasty_band # P104-1 (№R-70 grade 2): the header byline's dynasty
           #                          seat bands via the ruled table as an ERA claim —
           #                          precision "era", verbatim byline in date_raw
@@ -377,6 +381,15 @@ module Nabu
           return [nil, nil, nil] unless date.is_a?(Hash)
 
           [date["not_before"], date["not_after"], date["raw"]]
+        end
+
+        # iedc (P107-2): date_iso is "YYYY", "YYYY-MM" or "YYYY-MM-DD" —
+        # the leading year is the one-year envelope; the prose date_text
+        # rides as raw.
+        def iso_prefix_key(meta)
+          match = meta["date_iso"].to_s.match(/\A(\d{3,4})/)
+          year = match && Integer(match[1], 10)
+          [year, year, meta["date_text"]]
         end
 
         def iso_keys(meta)
