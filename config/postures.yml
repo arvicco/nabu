@@ -421,6 +421,7 @@ sources:
     places: {posture: unplaced, note: "no place fields in the cone pages"}
     script: {posture: implied}
   hittite-glossed:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: hit only (per-token language tags do not exist in the CSV) — no minted stages}
     dating: {posture: undatable, note: no date fields in the asset — declared, the mining census agrees}
     places: {posture: unplaced, note: no place fields in the asset — declared}
