@@ -2917,7 +2917,11 @@ ndl-kotenseki:   # P109-2
   adopted: "2026-09-29"
   cjk_index: true
   axes: [japonic]
-  wired: false
+  wired: true    # first slice 2026-09-29: 398 books / 24,568 koma passages,
+                   # 0 errored, oldest PIDs first; 葬祭考/玉篇 cards eyeballed
+                   # (date envelopes + multi collection facets live). 400
+                   # newest PIDs 403-ledgered (no OCR served yet); the crawl
+                   # resumes per phase
   sync_policy: manual
   # The NDL 次世代デジタルライブラリー 古典籍 OCR mass over the bulk
   # route NDL Lab granted (by email, 2026-09-29): per-book
@@ -5071,7 +5075,12 @@ zh-wikisource:   # P109-1
   adopted: "2026-09-29"
   cjk_index: true
   axes: [sinitic]
-  wired: false
+  wired: true    # first sync 2026-09-29: 1,238 docs / 72,723 passages, 0
+                   # quarantined (全唐文 1,001 juan composed from their piece
+                   # pages · 續資治通鑑 221 · 元朝秘史 16); 卷0001 + 卷15 cards
+                   # eyeballed (唐 era band live). KNOWN BLEMISH: 全唐文 juan
+                   # lead with a __NOEDITSECTION__ magic-word passage — parser
+                   # fix + re-parse awaiting the owner's scheduling call
   sync_policy: manual
   # Censused works, prefix-expanded (№R-74; census in
   # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
