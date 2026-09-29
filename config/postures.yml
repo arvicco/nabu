@@ -210,7 +210,10 @@ sources:
     kind: {posture: unclassified}
     lect: {posture: identity, note: gmh IS Middle High German}
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: named, note: "P109-4 (the Q83 drain): the header's
+        orig_place scriptorium claims (Vorau, 'Siegburg (?)' — 79 of 406
+        docs, uncertainty markers verbatim) project via PLACE_KEYS; the
+        genre code projects as a labeled facet in the same packet"}
     script: {posture: implied}
   ren:
     kind: {posture: unclassified}
@@ -273,15 +276,20 @@ sources:
         files declare enm, 61 'eng', others list only their FOREIGN
         languages) and ride document metadata verbatim, never the claim"
     dating:
-      posture: undatable
-      note: "the files carry only MODERN dates (digital-edition year +
-        BIBLFULL print-edition year, censused ×297 — an 1886 edition of a
-        1200 text is not a composition claim; both ride metadata
-        verbatim). Real per-text composition/MS dates live in the MED
-        HyperBibliography stencils, not publicly downloadable — 'exceptions
-        ... on request' (an owner ask via the existing upstream contact,
-        a future instrument, deliberately NOT a pending commitment)"
-    places: {posture: unplaced}
+      posture: dated
+      note: "P109-4 (the Q83 drain): the SOURCE EDITION's print year(s)
+        project with date_class 'edition' — an 1886 edition of a 1200
+        text is still not a composition claim, and the class label says
+        exactly that; the e-text pub_date stays machinery (declared,
+        Invariants::MINING_EXEMPT). Real per-text composition/MS dates
+        live in the MED HyperBibliography stencils, not publicly
+        downloadable — 'exceptions ... on request' (an owner ask via the
+        existing upstream contact, a future instrument, deliberately NOT
+        a pending commitment)"
+    places: {posture: unplaced, note: "P109-4: both place keys are
+        edition/publisher lineage (Ann Arbor; mixed modern/early imprint
+        publishers), never the Middle English text's origin — declared,
+        Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   eebo-tcp:
     kind: {posture: unclassified}
@@ -308,9 +316,14 @@ sources:
         the 3,325-file sample; ?/ca. uncertainty stays raw-only, bounds
         never invented. The imprint is the PRINT year, an honest
         early-modern envelope (composition≈print for this corpus)"
-    places: {posture: unplaced, note: "imprint PUBPLACE rides metadata
-        verbatim (London etc. — publication, not provenance); no
-        place claim minted"}
+    places: {posture: named, note: "P109-4 (the Q83 drain, superseding
+        the P83-1 no-claim stance): the document IS the early-modern
+        print, so the imprint PUBPLACE is the artifact's own production
+        place — the same composition≈print logic the dating posture
+        already rides. Projected via PLACE_KEYS source_pub_place, ESTC
+        bracket/colon furniture stripped, s.l. sine-loco minting nothing
+        (59,805 axis rows live 2026-09-29); the TCP's own Ann Arbor
+        pub_place stays lineage (declared, Invariants::MINING_EXEMPT)"}
     script: {posture: implied}
   iswoc:
     kind: {posture: unclassified}
@@ -1005,8 +1018,12 @@ sources:
     script: {posture: implied}
   openmgh:
     kind: {posture: unclassified}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: dated, note: "P109-4 (the Q83 drain): the MGH
+        volume's print year projects with date_class 'edition' — never a
+        medieval composition claim, the class label says so"}
+    places: {posture: unplaced, note: "P109-4: printed_place is the
+        modern publisher's city (Hannover, Berlin …) — edition lineage,
+        declared in Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   papyri-ddbdp:
     dating: {posture: dated}
