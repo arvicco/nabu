@@ -7,6 +7,19 @@ class ShellTest < Minitest::Test
     assert_equal "hello\n", Nabu::Shell.run("/bin/echo", "hello")
   end
 
+  # Nabu runs unattended: git must never sit on an interactive
+  # credential prompt (the Kanripo phantom-repo report — a clone of a
+  # non-existent github repo prompts on a credential-less machine and
+  # halts the whole wave). The forced env suppresses the prompt so the
+  # clone fails fast into the recorded-absent path.
+  def test_git_runs_with_terminal_prompts_forced_off
+    assert_equal({ "GIT_TERMINAL_PROMPT" => "0" }, Nabu::Shell.forced_env(%w[git clone x]))
+    assert_equal({ "GIT_TERMINAL_PROMPT" => "0" }, Nabu::Shell.forced_env(["/usr/bin/git", "fetch"]))
+    assert_empty Nabu::Shell.forced_env(["/bin/echo", "hello"])
+    # The env must not break normal git invocations.
+    assert_match(/\Agit version /, Nabu::Shell.run("git", "--version"))
+  end
+
   def test_nonzero_exit_raises_with_status_and_stderr
     error = assert_raises(Nabu::Shell::Error) do
       Nabu::Shell.run("/usr/bin/false")

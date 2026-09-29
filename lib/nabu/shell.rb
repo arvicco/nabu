@@ -26,12 +26,30 @@ module Nabu
       end
     end
 
+    # Nabu runs unattended by design — no subprocess may ever sit on an
+    # interactive prompt (a batch sync hangs forever on one). git is the
+    # known offender: cloning a NON-EXISTENT github repo over https
+    # prompts for username/password on a credential-less machine instead
+    # of failing (the Kanripo phantom-id report, github.com issue #147 —
+    # KR1e0005 halted an Ubuntu user's whole wave). With the prompt
+    # suppressed, git fails fast with "could not read Username …", which
+    # the recorded-absent signatures already match.
+    NON_INTERACTIVE_ENV = {
+      "git" => { "GIT_TERMINAL_PROMPT" => "0" }.freeze
+    }.freeze
+
+    # The forced environment for +argv+'s program (empty for programs
+    # with no interactivity to suppress).
+    def self.forced_env(argv)
+      NON_INTERACTIVE_ENV.fetch(File.basename(argv.first.to_s), {})
+    end
+
     # Run +argv+ (program followed by its arguments). Returns captured stdout on
     # success; raises Nabu::Shell::Error on nonzero exit or spawn failure.
     def self.run(*argv)
       raise ArgumentError, "Shell.run requires a command" if argv.empty?
 
-      stdout, stderr, status = Open3.capture3(*argv)
+      stdout, stderr, status = Open3.capture3(forced_env(argv), *argv)
       return stdout if status.success?
 
       raise failure(argv, status.exitstatus, stderr)
@@ -53,7 +71,7 @@ module Nabu
       raise ArgumentError, "Shell.stream requires a command" if argv.empty?
 
       captured = +""
-      status = Open3.popen2e(*argv) do |stdin, out, wait_thread|
+      status = Open3.popen2e(forced_env(argv), *argv) do |stdin, out, wait_thread|
         stdin.close
         forward_lines(out, captured, &on_line)
         wait_thread.value
