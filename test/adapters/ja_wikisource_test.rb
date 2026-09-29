@@ -31,10 +31,12 @@ module Adapters
 
     def test_versions_and_pages_index_shells_skip_by_rule
       ids = conformance_adapter.discover(FIXTURES).map(&:id).sort
-      assert_equal %w[urn:nabu:ja-wikisource:11940 urn:nabu:ja-wikisource:7285], ids,
-                   "土佐日記 ({{versions}}) and 方丈記 (<pages index>) never become documents"
+      assert_equal %w[urn:nabu:ja-wikisource:11940 urn:nabu:ja-wikisource:12868
+                      urn:nabu:ja-wikisource:7285], ids,
+                   "土佐日記 ({{versions}}), 方丈記 (<pages index>) and the 北条五代記 " \
+                   "sibling-transclusion shell never become documents"
       skips = conformance_adapter.discovery_skips(FIXTURES)
-      assert_equal 2, skips.skipped_by_rule
+      assert_equal 3, skips.skipped_by_rule
     end
 
     def test_prose_page_parses_at_paragraph_grain_with_dan_sections
@@ -71,6 +73,13 @@ module Adapters
       assert first.annotations["kundoku"].start_with?("篭もよ み篭持ち")
       assert first.annotations["kana"].start_with?("こもよ みこもち")
       assert_includes first.annotations["heading"], "泊瀬朝倉宮御宇天皇代"
+    end
+
+    def test_manyo_variant_verse_keeps_the_corpus_own_suffix
+      d = doc(12_868)
+      assert_equal ["#{d.urn}:03/0235", "#{d.urn}:03/0235S"], d.passages.map(&:urn),
+                   "the 或本歌 variant's own letter suffix survives — stripping it " \
+                   "collided URNs on the live 第三巻 (first-sync lesson)"
     end
 
     def test_unstated_edition_recorded_honestly

@@ -2250,7 +2250,11 @@ ja-wikisource:   # P109-1
   adapter: Nabu::Adapters::JaWikisource
   adopted: "2026-09-29"
   axes: [japonic]
-  wired: false
+  wired: true    # first sync 2026-09-29: 530 docs / 52,408 passages, 0
+                   # quarantined; 337 shells skip by rule (107 versions/
+                   # pages-index + 230 sibling-transclusion, censused at
+                   # this sync); 万葉集/徒然草 cards eyeballed (ojp
+                   # man'yōgana + era bands live)
   sync_policy: manual
   # The Japanese Wikisource premodern era cone (№R-74 posture:
   # premodern cone, verbatim base-edition strings, census-first —

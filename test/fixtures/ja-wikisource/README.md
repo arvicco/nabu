@@ -11,6 +11,13 @@ censused page class:
 - `11940.json` — 万葉集/第一巻: the structured per-poem block grammar
   ([歌番号]/[題詞]/[原文]/[訓読]/[仮名]…). TRIMMED to the front matter
   + the first 3 poem blocks (40,627 → 2,295 bytes).
+- `12868.json` — 万葉集/第三巻: TRIMMED to the front matter + the
+  03/0235 / 03/0235S variant pair (the 或本歌 whose letter-suffixed
+  歌番号 collided URNs at the live first sync when stripped).
+- `46951.json` — 北条五代記/巻第二 (whole): a sibling-transclusion
+  shell — its whole content is `{{:北条五代記/巻第一|巻=二|…}}`, the
+  text rendered by another page's machinery (230 such pages at the
+  live first sync). The third skip-by-rule class.
 - `8082.json` — 方丈記 (國文大觀): a `<pages index>` ProofreadPage
   scan-transclusion shell (whole) with a real 底本 line. The declared
   residue class (78 in the live cone).
