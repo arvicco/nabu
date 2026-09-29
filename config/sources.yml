@@ -2214,6 +2214,9 @@ itkc:
   cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]
   wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
+                   # P108-6 expansion sync verified 2026-09-29: 10,572 docs /
+                   # 37,184 passages across the 26-dataset rail; 0 errors
+                   # (image-only records ride the metadata-only marker)
   # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —
   # per-work data.go.kr datasets (제한 없음 → D47-a attribution; the
   # itkc.or.kr site is ARR, ONLY the portal carries the grant).
