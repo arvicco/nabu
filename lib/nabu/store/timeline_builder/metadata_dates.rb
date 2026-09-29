@@ -95,6 +95,9 @@ module Nabu
           #                                      minted at parse but never projected (the
           #                                      health timeline-dark anomaly, cleared)
           "viet-wikisource" => :structured, # P96 hygiene: same shape, same clearing
+          "ndl-kotenseki" => :structured, # P109-2: the census W3CDTF year envelope the
+          #                                 adapter mints (sentinel "1000" excluded there);
+          #                                 raw = the prose 出版日 verbatim
           "corpus-gysseling" => :bounds_keys, # P96 hygiene: TOP-LEVEL integer not_before/
           #                                     not_after + date_raw (+ a string place —
           #                                     the croala mold); dark until now
