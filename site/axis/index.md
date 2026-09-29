@@ -218,7 +218,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 > The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition.
 
-The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
+The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 [Open the japonic desk]({{ '/axis/japonic/' | relative_url }})
 

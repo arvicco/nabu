@@ -1,0 +1,36 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# All entries are trims of files INSIDE the versioned Zenodo zip — the
+# zip is the fetchable unit, so per-file raw GETs do not exist.
+source: westoldturkic
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: cldf/languages.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.7893910 v2.0) — re-cut by unzipping a fresh download
+    copied: "2026-09-29"
+    whole: true
+    trim: none
+  - path: cldf/forms.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip — re-cut per README
+    copied: "2026-09-29"
+    whole: false
+    trim: header + the 8 rows of concepts 0_carpenter and 1_cannoncatapult
+  - path: cldf/parameters.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip — re-cut per README
+    copied: "2026-09-29"
+    whole: false
+    trim: head -3
+  - path: cldf/borrowings.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip — re-cut per README
+    copied: "2026-09-29"
+    whole: false
+    trim: head -3

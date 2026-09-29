@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (11): `cldf-spine`, `clics`, `derom`, `edl`, `iecor`, `liv`, `nabu-lects`, `sabellic-loans`, `starling`, `wiktionary-recon`, `wold`
+**Members** (12): `cldf-spine`, `clics`, `derom`, `edl`, `iecor`, `liv`, `nabu-lects`, `sabellic-loans`, `starling`, `westoldturkic`, `wiktionary-recon`, `wold`
 
 ### biblical
 
@@ -241,9 +241,9 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 > The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition.
 
-The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
+The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (8): `aozora`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
+**Members** (12): `aozora`, `edrdg`, `hdic`, `honkoku`, `kokubunken`, `kouigenji`, `kradfile`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
 
 ### turkic
 
@@ -251,7 +251,7 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
 
-**Members** (3): `atmo`, `ud`, `wiktionary-recon`
+**Members** (4): `atmo`, `ud`, `westoldturkic`, `wiktionary-recon`
 
 ### mongolic
 

@@ -1,0 +1,9 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile,CV_Segments,ProsodicStructure,FB_VowelHarmony,Year
+H-0_carpenter-1,,H,0_carpenter,ács,ács,aː t͡ʃ,,wot,1,true,^ á cs $,H,aː t͡ʃ,VC,True,1222
+EAH-0_carpenter-1,,EAH,0_carpenter,aγači,aγači,a ɣ a t͡ʃ i,,wot,1,true,^ a γ a č i $,EAH,a ɣ a t͡ʃ i,VCVCV,True,1222
+WOT-0_carpenter-1,,WOT,0_carpenter,aγaččï,aγaččï,a ɣ a t͡ʃː ɯ,,wot,1,false,^ a γ a čč ï $,WOT,a ɣ a t͡ʃː ɯ,VCVCV,True,1222
+H-1_cannoncatapult-1,,H,1_cannoncatapult,ágyú,ágyú,aː ɟ uː,,wot,2,true,^ á gy ú $,H,aː ɟ uː,VCV,True,1456
+OH-1_cannoncatapult-1,,OH,1_cannoncatapult,āldʹū,āldʹū,aː l ɟ uː,,wot,2,true,^ ā l dʹ ū $,OH,aː l.ɟ uː,VCCV,True,1456
+LAH-1_cannoncatapult-1,,LAH,1_cannoncatapult,aldau̯,aldau̯,a l d a w,,wot,2,true,^ a l d a u̯ $,LAH,a l.d a w,VCCVC,True,1456
+EAH-1_cannoncatapult-1,,EAH,1_cannoncatapult,aldaγ,aldaγ,a l d a ɣ,,wot,2,true,^ a l d a γ $,EAH,a l.d a ɣ,VCCVC,True,1456
+WOT-1_cannoncatapult-1,,WOT,1_cannoncatapult,aldaγ,aldaγ,a l d a ɣ,,wot,2,true,^ a l d a γ $,WOT,a l.d a ɣ,VCCVC,True,1456

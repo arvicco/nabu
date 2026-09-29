@@ -217,15 +217,18 @@ module Nabu
         meta["toponyms"] = topos unless topos.empty?
       end
 
-      # The FacetBuilder contract: metadata "facets" hash → facet rows.
-      # grade = the bare word (the full classification string stays in
-      # metadata); doctype = the upstream documentType verbatim.
+      # The FacetBuilder contract: metadata "facets" is facet =>
+      # {"value" => ...} — insert_facets SILENTLY drops flat strings
+      # (the P107 first refresh projected zero iedc rows before this
+      # took the real shape). grade = the bare word (the full
+      # classification string stays in metadata); doctype = the
+      # upstream documentType verbatim.
       def add_facets(meta)
         facets = {}
         if (grade = meta["classification"]&.slice(/\A(Gold|Silver|Bronze)/, 1))
-          facets["grade"] = grade
+          facets["grade"] = { "value" => grade }
         end
-        facets["doctype"] = meta["document_type"] if meta["document_type"]
+        facets["doctype"] = { "value" => meta["document_type"] } if meta["document_type"]
         meta["facets"] = facets unless facets.empty?
       end
 

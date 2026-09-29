@@ -71,3 +71,8 @@ the inline no-codepoint escape) — so the char corpus panel's tla-hf
 lane pins BOTH counting shapes (glyph runs and `<g>` codes). The
 matching U+13EC7 (N46) lines were appended verbatim to
 test/fixtures/unikemet/Unikemet.txt the same day.
+
+`earlier-egyptian-v18/train.jsonl` — the REAL first 4 records of
+tla-Earlier_Egyptian_original-v18-premium (added P108-7, retrieved
+2026-09-29): same premium shape, WITH the Unicode hieroglyphs field
+and the `<g>…</g>` gaiji notation in record 3.

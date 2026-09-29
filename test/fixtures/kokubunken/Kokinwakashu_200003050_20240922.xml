@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>古今和歌集</title>
+            <editor>紀友則</editor>
+            <editor>紀貫之</editor>
+            <editor>凡河内躬恒</editor>
+            <editor>壬生忠岑</editor>
+            <respStmt>
+               <resp>TEI Encoding</resp>
+               <name>幾浦裕之</name>
+            </respStmt>
+            <respStmt>
+               <resp>翻刻</resp>
+               <name>幾浦裕之</name>
+            </respStmt>
+            <respStmt>
+               <resp>翻刻</resp>
+               <name>金子佳央</name>
+            </respStmt>
+            <respStmt>
+               <resp>翻刻</resp>
+               <name>玉井楽乃</name>
+            </respStmt>
+            <respStmt>
+               <resp>翻刻</resp>
+               <name>越田健介</name>
+            </respStmt>
+            <respStmt>
+               <resp>翻刻校閲</resp>
+               <name>幾浦裕之</name>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>人間文化研究機構国文学研究資料館</publisher>
+            <authority>幾浦裕之</authority>
+            <pubPlace>
+               <address>
+                  <orgName>人間文化研究機構国文学研究資料館</orgName>
+                  <street>立川市緑町10-3</street>
+                  <settlement>東京都</settlement>
+                  <postCode>190-0014</postCode>
+               </address>
+            </pubPlace>
+            <availability><licence target=" https://creativecommons.org/licenses/by/4.0/">
+               クリエイティブ・コモンズ（表示 4.0 国際）（CC BY 4.0 DEED）</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <editor>紀友則</editor>
+               <editor>紀貫之</editor>
+               <editor>凡河内躬恒</editor>
+               <editor>壬生忠岑</editor>
+               <title>古今和歌集</title>
+            </bibl>
+            <msDesc>
+               <msIdentifier>
+                  <country>Japan</country>
+                  <region type="country"></region>
+                  <settlement>Tokyo</settlement>
+                  <institution>人間文化研究機構国文学研究資料館</institution>
+                  <repository ref="https://kokusho.nijl.ac.jp/">国書データベース</repository>
+                  <collection>国文学研究資料館，貴重書</collection>
+                  <idno>99-2-1～2</idno>
+                  <altIdentifier>
+                     <idno type="著作URL">https://kokusho.nijl.ac.jp/work/2664</idno>
+                  </altIdentifier>
+                  <altIdentifier>
+                     <idno type="著作ID">2664</idno>
+                  </altIdentifier>
+                  <altIdentifier><idno type="書誌ID">200003050</idno></altIdentifier>
+                  <altIdentifier>
+                     <idno type="URI">https://kokusho.nijl.ac.jp/biblio/200003050</idno>
+                  </altIdentifier>
+                  <altIdentifier><idno type="DOI">https://doi.org/10.20730/200003050</idno></altIdentifier>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     ［請求記号　99・2］
+                     永正16年4月写
+                     列帖装　2帖
+                     25・6×19・2センチ
+                     『古今和歌集』は、905年～に醍醐天皇の命によって編纂された最初の勅撰和歌集。画像2枚目は仮名序冒頭、「やまとうたは　人のこゝろをたねとして　よろづのことのはとぞなれりける　......」と、和歌の起源が語り起こされている。
+                     掲出本は、下帖末尾に、
+                     藤原定家のいわゆる嘉禄2年（1226）四月本の本奥書
+                     藤原為家の伝領奥書
+                     「宗清」すなわち上冷泉為広の加証奥書
+                     の３つの奥書を備える。
+                     これらによって、掲出本の『古今和歌集』は、正親町三条実望の懇望によって、永正16年（1519）4月、上冷泉為広が、冷泉家伝来の定家自筆嘉禄2年本を、息子為和に書写させたものであることが判明する。
+                     『冷泉家時雨亭叢書』第2巻（朝日新聞社）所収の定家自筆本『古今和歌集』と比較してみると、一行の字数と一面の行数をこそ違えるものの、本文・用字・筆蹟・声点・朱合点・傍書など、掲出本がかなり忠実に再現していることが知られる。冷泉家に秘蔵されていた定家自筆本の転写の事実とその事情を具体的に伝えており貴重。
+                     なお、各帖に「青谿書屋」（大島雅太郎）「月明荘」（反町茂雄）の朱方印あり。また古筆本家二代目了栄の極札・二代目畠山牛庵の折紙等が附属する。
+                     ※本図版と解題は、人間文化研究機構連携展示図録『うたのちから─古今集・新古今集の世界─』（国文学研究資料館・2005年）に収載されています。
+                  </summary>
+                  <msItemStruct></msItemStruct>
+                  <msItem>
+                     <title>古今和歌集</title>
+                     <title>Kokinwakashuu</title>
+                     <title type="cover">古今倭歌集上</title>
+                     <title type="cover">古今倭歌集下</title>
+                     <title type="caption">古今和歌集巻第一</title>
+                     <title type="box">古今和哥集</title>
+                     <title type="uniform">古今和歌集</title>
+                     <title type="other">古今集</title>
+                     <textLang mainLang="">日本語</textLang>
+                     <note></note>
+                     <colophon>
+                        <pb n="2-63r" facs="#p135"/>
+                        <lb/>此集家々所稱雖説々多且任<persName corresp="#藤原俊成">師</persName>説
+                        <lb/>又加了見為備後学之證本手自
+                        <lb/>書之近代僻案之輩以書生之失錯
+                        <lb/>稱有識之秘事可謂道之魔姓不可用
+                        <lb/>之但如此用捨只可随其身之所好不
+                        <lb/>可存自他之差別志同者可用之
+                        <lb/><date when="1226">嘉禄二年四月九日</date><persName corresp="#藤原定家">戸部尚書</persName>判
+                        <lb/><date when="1226">于時頽齢六十五</date>寧堪右筆哉
+                        <pb n="2-63v" facs="#p136"/>
+                        <lb/>此本付属<persName corresp="#藤原為相">大夫為相</persName>
+                        <lb/><date when="1265">于時頽齢六十八</date><persName corresp="#藤原為家">桑門融覚</persName>判
+                        <pb n="2-64r" facs="#p136"/>
+                        <lb/>右集依<persName>前内府實<ruby><rb>―</rb><rt>望</rt></ruby>公</persName>懇望以家
+                        <lb/>相傳<persName corresp="#藤原定家">京極中納言定家卿</persName>自筆本不改一
+                        <lb/>字愚息<persName corresp="#藤原為和">為和</persName>令書写之尤可為證
+                        <lb/>本者也
+                        <lb/>于時<date when="1519">永正第十六天初夏</date>上辨目
+                        <lb/><persName corresp="#藤原為広">桑門宗清</persName>（花押）
+                     </colophon>
+                  </msItem>
+               </msContents>
+               <physDesc>
+                  <objectDesc form="codex">
+                     <supportDesc material="paper"><support></support>
+                        <extent>上巻61丁，墨付59丁（下巻66丁，墨付64丁）
+                           <dimensions type="leaf" unit="cm"><height>25.6</height><width>19.2</width></dimensions>
+                        </extent>
+                        <collation>完存</collation>
+                        <condition>状態良</condition>
+                     </supportDesc>
+                     <layoutDesc><layout></layout><layout></layout></layoutDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <handNote scope="major"><p>書記言語和文</p><damage>虫損少し有</damage><ab>行草書</ab><ab>冷泉為和筆の定家様</ab></handNote>
+                  </handDesc>
+                  <additions>声点，朱合点あり</additions>
+                  <bindingDesc>
+                     <binding>
+                        <p>列帖装</p>
+                        <decoNote type="color">金茶色</decoNote>
+                        <decoNote type="pattern">鳥唐草文緞子表紙</decoNote>
+                     </binding>
+                  </bindingDesc>
+                  <sealDesc>
+                     <p>label"九四"漆塗箱右上蔵書票</p>
+                     <p>label"国文学研究資料館貴重書/99/2/1-2"漆塗箱右下蔵書票</p>
+                     <p>label"冷泉為和卿筆極紙あり"漆塗箱蓋裏貼紙</p>
+                     <p>label"国文学研究資料館貴重書/99/2/1-2"桐箱右下蔵書票</p>
+                     <p>collecter seal"青谿書屋""大島氏図書"桐箱蓋裏貼紙</p>
+                     <p>collecter seal"青谿書屋"59丁ウラ左下</p>
+                     <p>collecter seal"月明荘"59丁ウラ左下</p>
+                     <p>collecter seal"国文学研究資料館/3682/<date when="1974-02-12">昭和49年2月12日</date>"後ろ見返し</p>
+                  </sealDesc>
+               </physDesc>
+               <history>
+                  <origin>冷泉家時雨亭文庫所蔵定家筆嘉禄二年本『古今和歌集』</origin>
+                  <provenance>
+                     <p>上下冊に<name type="person">大島雅太郎</name>蔵書印</p>
+                     <p>上下冊に<name type="person">反町茂雄</name>蔵書印</p>
+                  </provenance>
+                  <acquisition>
+                     <p>Acquired from<name type="person">
+                        <persName>反町茂雄</persName>
+                     </name>
+                     </p>
+                     <p>Acquired from<name type="person">
+                        <persName>大島雅太郎</persName>
+                     </name>
+                     </p>
+                     <p>Acquired from<name type="person">
+                        <persName>正親町三条実望</persName>
+                     </name>
+                     </p>
+                  </acquisition>
+               </history>
+            </msDesc>
+            <listWit>
+               <witness xml:id="国">国文学研究資料館国書データベース公開国文学研究資料館所蔵嘉禄二年本『古今和歌集』</witness>
+               <witness xml:id="前">国立国会図書館デジタルコレクション公開前田育徳会尊経閣文庫所蔵保元二年清輔本『古今和歌集』（尊経閣叢刊　育徳財団　1928）</witness>
+            </listWit>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc><variantEncoding method="parallel-segmentation"
+         location="internal"/>
+            <editorialDecl>
+               <p><list>
+                  <item>1. 
+                     このTEI/XMLデータは，人間文化研究機構国文学研究資料館所蔵『古今和歌集』（コレクション貴重書，和古書請求記号99-2-1，99-2-2）の翻刻を，TEI古典籍ビューワで
+                     表示することを想定して，TEI Guidelinesに準拠してマークアップしたものである．<gi>teiHeader</gi>には，国書データベースの書誌情報と，画像から確認できる書誌
+                     情報等を「日本語古典籍TEIガイドライン」に沿って記述する．当該典籍は国文学研究資料館ウェブサイトの「名品ギャラリー」で紹介されており，同ページ掲載「解題」
+                     を<gi>msContents</gi>の<gi>summary</gi>に記述する．</item>
+                  <item>2. 
+                     登場する人名は，<gi>back</gi>の<gi>listPerson</gi>に，<gi>person</gi>としてリストし，それぞれにxml:idを付与して他の箇所から参照できるようにする．
+                     歌人の一覧は，作者については高田祐彦訳注『新版 古今和歌集 現代語訳付き』（角川ソフィア文庫　KADOKAWA，2009）に拠る．『和歌文学大辞典』（古典ライブラリー
+                     2014）に立項されている歌人については，同辞典を生没年情報の典拠とし，立項されていない歌人については，『国書人名辞典』記載の生没年を典拠とする．この両書の
+                     どちらにも立項されていない歌人については，生没年不明とする．VIAF（バーチャル国際典拠ファイル）に登録がある歌人については，VIAFのパーマリンクを記述する．
+                     各歌人の性別について，@sex="1"を男性（僧侶含む），@sex="2"を女性，@sex="3"を「よみ人知らず」として記述する．
+                     詞書や左注に登場する人名の一覧については，久保田淳監修・著，高野晴代・鈴木宏子・高木和子・高橋由記著『古今和歌集』（和歌文学大系　明治書院，2021年）の
+                     「詞書・左注等人名一覧」に拠る．</item>
+                  <item>3. 
+                     既存の研究成果や研究活動との親和性を確保するため，『新編国歌大観』の歌番号を@xml:idとして付与することで，参照をしやすいようにする．</item>
+                  <item>4. 
+                     当該典籍は複数ある『古今和歌集』の本文系統のうち，藤原定家（1162-1241）が書写した定家本と呼ばれる伝本系統の，冷泉家時雨亭文庫に所蔵される嘉禄二年本
+                     と呼ばれる写本を，室町時代に忠実に書写した模写本である．仮名序，20の部立（章），墨滅歌からなる．各区分を<gi>div</gi>に@type="部立"を付与して記述する．
+                     「古今和歌集巻第一」などの巻名は<gi>head</gi>に@type="巻名"を付与し，「春哥上」などの部立名は<gi>head</gi>に@type="部立名"を付与して記述する．</item>
+                  <item>5. 
+                     写本の丁（書籍の2ページ分に相当し，1丁を1オモテ，1ウラというように表裏で区別する）の別を<gi>pb</gi>で記述する．当該典籍は上帖（仮名序，巻1-10）と，
+                     下帖（巻11-12，墨滅歌，奥書等）に分かれるため，上帖を1-，下帖を2-として区別する．上帖の1丁目のオモテ面は<gi>pb</gi>に@n="1-1r"，ウラ面は@n="1-1v"のよう
+                     に記述する．
+                     行分けは<gi>lb</gi>で記述する．
+                     字下げは各エレメントに@styleを付与して記述し，margin-topというプレフィックスを値につけることで対応する．部立名は1em，詞書は2em，詞書に続けて書かれる作者
+                     名は5em，詞書がなく作者名だけが書かれる場合の作者名は12em，左注は3em，勘物は1emで記述する．</item>
+                  <item>6. 
+                     勅撰和歌集の和歌は縦書きで，右から詞書（ことばがき），作者名，和歌の順に和歌一首分の情報が示され，これが部立内で数十首分繰り返される．和歌によっては和歌
+                     の左側に「左注」が書かれている．詞書は通常和歌に対し約２字下げ，左注は和歌に対しそれ以上下げて書写される．作者名は詞書に続いて書写され，詞書とは数文字分
+                     あけて，或いは詞書から改行して書写される．和歌は必ず詞書と作者の行から改行して書写される．今回記述する定家本『古今集』は和歌一首一行書きである．
+                     詞書，作者名，和歌，（左注）のまとまりを<gi>div</gi>に@type="和歌"を付与し記述する．和歌が詠まれた状況を説明する詞書という散文部分は<gi>note</gi>に@type=
+                     "詞書"を付与して記述する．作者名の部分は<gi>note</gi>に@type="作者名"を付与して記述し，さらに<gi>persName</gi>に@type="作者"を付与し記述する．和歌一首は
+                     <gi>l</gi>で記述する．左注は<gi>note</gi>に@type="左注"を付与して記述する．</item>
+                  <item>7. 
+                     詞書がその左に書かれる和歌を説明していることを次のように示す．和歌を記述した各<gi>l</gi>に『新編国歌大観』の歌番号を@nで付与し，さらに<gi>l</gi>に@xml:idを
+                     nいくつ，という形で付与する．詞書を記述した<gi>note</gi>の@targetで当該和歌の@xml:idと対応させる．</item>
+                  <item>8. 
+                     作者名については，<gi>persName</gi>に付与した@correspで，<gi>listPerson</gi>の当該作者の@xml:idと対応させる．『古今集』は身分の高い作者は通常の作者名の表示
+                     位置に示されず，詞書中に作者が示される場合があり，その場合は詞書中の人名を<gi>persName</gi> @type="作者"で記述する．</item>
+                  <item>9. 
+                     勅撰和歌集の書式のルールでは，同一の詞書や作者名の和歌を二首以上連続して配列する際は，二首目以降の和歌には詞書と作者名の記載が省略される．そのため詞書がない
+                     場合は直前の詞書を参照し，直前の詞書の@targetで対応させる．作者名は書かれている直前の作者名を参照し，<gi>l</gi>の@respで当該歌人名の@xml:idと対応させる．</item>
+                  <item>10. 
+                     和歌については，<gi>l</gi>で記述し，@nで『新編国歌大観』歌番号を付与し，@xml:idを付与し，@respで作者の情報を記述する．各和歌に@n="2" @xml:id="n2" @resp=
+                     "#紀貫之"のように三点のアトリビュートを付与する．和歌一首の内部は五，七，五，七，七という音数の句の切れ目を<gi>seg</gi>で記述して示し，句の位置を指定して検索
+                     可能にする．</item>
+                  <item>11. 
+                     左注は，和歌の左側に書かれ，異文や作者に関する異伝の情報を補足的に説明する注記である．『新編国歌大観』では和歌より三字下げで示されているが，今回もこれに倣い，
+                     <gi>note</gi>に@type="左注" @style="margin-top: 3em" @target="#n7"のように付与し記述する．</item>
+                  <item>12. 
+                     『古今和歌集』冒頭には仮名序という約5000字分の仮名文の序があり，和歌の本質，和歌の起源，和歌の様式，万葉集の成立，六歌仙評，古今和歌集の撰進などについて述べ
+                     ている．仮名序を全7章185節に分節し，章，節番号を付与する．『新編国歌大観』の読点のあるところ，仮名序古注の開始部分で節を区切り，仮名序のなかに和歌が登場する
+                     場合も和歌一首を一節として区切る．各章段のまとまりは<gi>p</gi>で記述し，各節は<gi>phr</gi>で区切り，<gi>phr</gi>に@nで章節番号を付与する．さらに仮名序古注と
+                     対応させるため各節にkanaと章節番号からなる@xml:idを付与する． 仮名序の中に登場する和歌は<gi>phr</gi>で記述した上で，さらに<gi>l</gi>で記述し，@respで和歌の
+                     作者を示す．仮名序古注は<gi>phr</gi>で記述した部分をさらに<gi>note</gi>に @type="仮名序古注"と記述し，仮名序本文のどの文についての古注なのかを@targetで示す．</item>
+                  <item>13.
+                     定家本『古今和歌集』には巻末に「墨滅歌」という削除歌の一覧がある．これは定家が書写した藤原俊成書写の『古今和歌集』の巻10，11，13，14に削除記号を付された状態で
+                     書写されていた合計11首の和歌で，定家によって巻末に一括して掲載されたものである．
+                     「巻第十　　物名部」のような墨滅歌が本来あった部立を示す注記には，<gi>head</gi> に@type="部立名" @style="margin-top: 1em"を付与して記述する．
+                     「在郭公下空蝉上」のような墨滅歌が本来あった配列位置の注記は<gi>note</gi> に@type="墨滅歌所在"を付与し，@targetでどの墨滅歌についての注記かを対応させて示す．</item>
+                  <item>14. 
+                     当該典籍には冷泉家時雨亭文庫所蔵『古今和歌集』から書写された勘物と呼ばれる定家による細字の注釈が約90箇所にある．このような勘物は『新編国歌大観』では省略されて
+                     いるが，勘物は「家説」という和歌の流派の専門知の形成や，秘説の授受と関わり重視された．当該典籍の勘物を翻刻し，<gi>note</gi>に@type="勘物"を付与して記述する．
+                     定家による勅撰集への勘物は，和歌作者や詞書に現れる人名の伝記考証がほとんどであるため，勘物がある箇所では被注対象の詞書や作者名を記述した<gi>note</gi>に@xml:idを
+                     付与する．歌番号にはnを付けた@xml:idを付与したため，詞書（ことばがき）にはその頭文字をとりkいくつという@xml:idを付与し，作者にはsいくつという@xml:idを付与し，
+                     左注にはsaいくつという@xml:idを付与する．これらの@xmi:idを勘物を記述した<gi>note</gi>の@targetで対応させる．和歌についての異文を指摘する勘物では，和歌に付与した
+                     @xml:idと対応させる．これらの勘物が定家によるものであることを示すために@respで示す．このように勘物を記述しておくことで写本間の比較も容易になる．</item>
+                  <item>15. 
+                     当該典籍には声点（しょうてん）という定家によって同音異義語の確定のためにつけられたアクセント記号が朱筆で付されている．このような声点，また朱筆の合点について
+                     は，今回は記述の対象外とする．</item>
+                  <item>16. 
+                     IIIF Manifestとテキストデータの対応づけについては，<gi>facsimile</gi>内の<gi>surface</gi>内に，フルサイズ画像のIIIF Image API URIが
+                     <gi>graphic</gi>に対応するように，それぞれのURIを@urlで記述する．その上で，テキストの位置と画像コマの対応については，<gi>surface</gi>にxml:idを付与し，その
+                     値を<gi>pb</gi>から@facsで参照させて，各画像コマ中のテキストの始まりと<gi>pb</gi>が対応づけられるようにする． </item>
+                  <item>17.
+                     現存する『古今集』写本は定家本系統がほとんどであり，『新編国歌大観』も書籍の注釈書も定家本を底本としているため，現在の和歌文学研究では定家本『古今集』に
+                     拠らない『古今集』の本文や異本歌を十分に検索できる基盤がない．書籍としては西下経一, 滝沢貞夫編『古今集校本』（笠間書院，1977）や，久曽神昇『古今和歌集成立論』
+                     （風間書房，1960-1961）という校本や本文集成が参照できるが，ネットで見やすい校異情報を公開することで表現研究にも古筆切などの断簡を含めた文献学にも大きく貢献する
+                     ことが予想される．定家も意識していた代表的な異本である清輔本『古今和歌集』，具体的には昭和初期刊行の尊経閣叢刊という複製がNDLオンラインで公開されている前田育徳会
+                     尊経閣文庫所蔵の清輔本『古今和歌集』との校異をparallel-segmentaionで記述する． 清輔本は『古今和歌集』の三証本のうち，小野皇太后本である通宗本を底本として書写し，
+                     陽明門院御本，新院御本を校合したものである．清輔本の上欄下欄には清輔による勘物が書写されているが，今回はこれらの勘物は校異の対象外とする．
+                     <gi>sourceDesc</gi>の<gi>listWit</gi>で国文学研究資料館所蔵嘉禄二年本『古今和歌集』を@xml:id="国"，NDLデジタルコレクション公開の清輔本『古今和歌集』（尊経閣叢刊
+                     1928）から翻刻した本文を@xml:id="前"とする<gi>witness</gi>を記述する．本文中で異同が生じた箇所の本文を<gi>app</gi>で記述し，底本にあたる当該典籍の本文をlemに
+                     @wit="#国"を付与し記述，異本である清輔本の異文をrdgに@wit="#前"を付与して記述する．
+                     現在は仮名序，巻一春上の校異のみを記述しており，巻二春下以降の巻の校異についても記述と公開を予定している．</item>
+               </list></p>
+            </editorialDecl>
+      </encodingDesc>
+      <revisionDesc>
+         <change when="2024-10-14">
+            <p><persName>幾浦裕之</persName>
+            が，backにもteiHeaderのcolophonの奥書をabで記述し，
+            定家，為家の本奥書，為広の書写奥書の区別をsubtypeで記述した。</p>
+         </change>
+         <change when="2024-10-09">
+            <p><persName>幾浦裕之</persName>
+            が，仮名序のphr全てに@xml:idを付与した。</p>
+         </change>
+         <change when="2024-09-22">
+            <p><persName>幾浦裕之</persName>
+            が，teiHeaderのpublicationStmt，colophon，sealDesc，editorialDeclを修正し，bodyを校正した。</p>
+         </change>
+         <change when="2024-06-06">
+            <persName>幾浦裕之</persName>
+         </change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile>
+      <surface xml:id="p001">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/1"></graphic>
+      </surface>
+      <surface xml:id="p002">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/2"></graphic>
+      </surface>
+      <surface xml:id="p003">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/3"></graphic>
+      </surface>
+      <surface xml:id="p004">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/4"></graphic>
+      </surface>
+      <surface xml:id="p005">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/5"></graphic>
+      </surface>
+      <surface xml:id="p006">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/6"></graphic>
+      </surface>
+      <surface xml:id="p007">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/7"></graphic>
+      </surface>
+      <surface xml:id="p008">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/8"></graphic>
+      </surface>
+      <surface xml:id="p009">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/9"></graphic>
+      </surface>
+      <surface xml:id="p010">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/10"></graphic>
+      </surface>
+      <surface xml:id="p011">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/11"></graphic>
+      </surface>
+      <surface xml:id="p012">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/12"></graphic>
+      </surface>
+      <surface xml:id="p013">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/13"></graphic>
+      </surface>
+      <surface xml:id="p014">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/14"></graphic>
+      </surface>
+      <surface xml:id="p015">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/15"></graphic>
+      </surface>
+      <surface xml:id="p016">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/16"></graphic>
+      </surface>
+      <surface xml:id="p017">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/17"></graphic>
+      </surface>
+      <surface xml:id="p018">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/18"></graphic>
+      </surface>
+      <surface xml:id="p019">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/19"></graphic>
+      </surface>
+      <surface xml:id="p020">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/20"></graphic>
+      </surface>
+      <surface xml:id="p021">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/21"></graphic>
+      </surface>
+      <surface xml:id="p022">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/22"></graphic>
+      </surface>
+      <surface xml:id="p023">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/23"></graphic>
+      </surface>
+      <surface xml:id="p024">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/24"></graphic>
+      </surface>
+      <surface xml:id="p025">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/25"></graphic>
+      </surface>
+      <surface xml:id="p026">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/26"></graphic>
+      </surface>
+      <surface xml:id="p027">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/27"></graphic>
+      </surface>
+      <surface xml:id="p028">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/28"></graphic>
+      </surface>
+      <surface xml:id="p029">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/29"></graphic>
+      </surface>
+      <surface xml:id="p030">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/30"></graphic>
+      </surface>
+      <surface xml:id="p031">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/31"></graphic>
+      </surface>
+      <surface xml:id="p032">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/32"></graphic>
+      </surface>
+      <surface xml:id="p033">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/33"></graphic>
+      </surface>
+      <surface xml:id="p034">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/34"></graphic>
+      </surface>
+      <surface xml:id="p035">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/35"></graphic>
+      </surface>
+      <surface xml:id="p036">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/36"></graphic>
+      </surface>
+      <surface xml:id="p037">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/37"></graphic>
+      </surface>
+      <surface xml:id="p038">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/38"></graphic>
+      </surface>
+      <surface xml:id="p039">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/39"></graphic>
+      </surface>
+      <surface xml:id="p040">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/40"></graphic>
+      </surface>
+      <surface xml:id="p041">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/41"></graphic>
+      </surface>
+      <surface xml:id="p042">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/42"></graphic>
+      </surface>
+      <surface xml:id="p043">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/43"></graphic>
+      </surface>
+      <surface xml:id="p044">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/44"></graphic>
+      </surface>
+      <surface xml:id="p045">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/45"></graphic>
+      </surface>
+      <surface xml:id="p046">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/46"></graphic>
+      </surface>
+      <surface xml:id="p047">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/47"></graphic>
+      </surface>
+      <surface xml:id="p048">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/48"></graphic>
+      </surface>
+      <surface xml:id="p049">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/49"></graphic>
+      </surface>
+      <surface xml:id="p050">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/50"></graphic>
+      </surface>
+      <surface xml:id="p051">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/51"></graphic>
+      </surface>
+      <surface xml:id="p052">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/52"></graphic>
+      </surface>
+      <surface xml:id="p053">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/53"></graphic>
+      </surface>
+      <surface xml:id="p054">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/54"></graphic>
+      </surface>
+      <surface xml:id="p055">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/55"></graphic>
+      </surface>
+      <surface xml:id="p056">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/56"></graphic>
+      </surface>
+      <surface xml:id="p057">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/57"></graphic>
+      </surface>
+      <surface xml:id="p058">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/58"></graphic>
+      </surface>
+      <surface xml:id="p059">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/59"></graphic>
+      </surface>
+      <surface xml:id="p060">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/60"></graphic>
+      </surface>
+      <surface xml:id="p061">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/61"></graphic>
+      </surface>
+      <surface xml:id="p062">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/62"></graphic>
+      </surface>
+      <surface xml:id="p063">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/63"></graphic>
+      </surface>
+      <surface xml:id="p064">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/64"></graphic>
+      </surface>
+      <surface xml:id="p065">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/65"></graphic>
+      </surface>
+      <surface xml:id="p066">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/66"></graphic>
+      </surface>
+      <surface xml:id="p067">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/67"></graphic>
+      </surface>
+      <surface xml:id="p068">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/68"></graphic>
+      </surface>
+      <surface xml:id="p069">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/69"></graphic>
+      </surface>
+      <surface xml:id="p070">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/70"></graphic>
+      </surface>
+      <surface xml:id="p071">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/71"></graphic>
+      </surface>
+      <surface xml:id="p072">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/72"></graphic>
+      </surface>
+      <surface xml:id="p073">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/73"></graphic>
+      </surface>
+      <surface xml:id="p074">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/74"></graphic>
+      </surface>
+      <surface xml:id="p075">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/75"></graphic>
+      </surface>
+      <surface xml:id="p076">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/76"></graphic>
+      </surface>
+      <surface xml:id="p077">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/77"></graphic>
+      </surface>
+      <surface xml:id="p078">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/78"></graphic>
+      </surface>
+      <surface xml:id="p079">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/79"></graphic>
+      </surface>
+      <surface xml:id="p080">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/80"></graphic>
+      </surface>
+      <surface xml:id="p081">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/81"></graphic>
+      </surface>
+      <surface xml:id="p082">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/82"></graphic>
+      </surface>
+      <surface xml:id="p083">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/83"></graphic>
+      </surface>
+      <surface xml:id="p084">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/84"></graphic>
+      </surface>
+      <surface xml:id="p085">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/85"></graphic>
+      </surface>
+      <surface xml:id="p086">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/86"></graphic>
+      </surface>
+      <surface xml:id="p087">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/87"></graphic>
+      </surface>
+      <surface xml:id="p088">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/88"></graphic>
+      </surface>
+      <surface xml:id="p089">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/89"></graphic>
+      </surface>
+      <surface xml:id="p090">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/90"></graphic>
+      </surface>
+      <surface xml:id="p091">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/91"></graphic>
+      </surface>
+      <surface xml:id="p092">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/92"></graphic>
+      </surface>
+      <surface xml:id="p093">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/93"></graphic>
+      </surface>
+      <surface xml:id="p094">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/94"></graphic>
+      </surface>
+      <surface xml:id="p095">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/95"></graphic>
+      </surface>
+      <surface xml:id="p096">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/96"></graphic>
+      </surface>
+      <surface xml:id="p097">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/97"></graphic>
+      </surface>
+      <surface xml:id="p098">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/98"></graphic>
+      </surface>
+      <surface xml:id="p099">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/99"></graphic>
+      </surface>
+      <surface xml:id="p100">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/100"></graphic>
+      </surface>
+      <surface xml:id="p101">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/101"></graphic>
+      </surface>
+      <surface xml:id="p102">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/102"></graphic>
+      </surface>
+      <surface xml:id="p103">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/103"></graphic>
+      </surface>
+      <surface xml:id="p104">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/104"></graphic>
+      </surface>
+      <surface xml:id="p105">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/105"></graphic>
+      </surface>
+      <surface xml:id="p106">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/106"></graphic>
+      </surface>
+      <surface xml:id="p107">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/107"></graphic>
+      </surface>
+      <surface xml:id="p108">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/108"></graphic>
+      </surface>
+      <surface xml:id="p109">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/109"></graphic>
+      </surface>
+      <surface xml:id="p110">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/110"></graphic>
+      </surface>
+      <surface xml:id="p111">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/111"></graphic>
+      </surface>
+      <surface xml:id="p112">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/112"></graphic>
+      </surface>
+      <surface xml:id="p113">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/113"></graphic>
+      </surface>
+      <surface xml:id="p114">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/114"></graphic>
+      </surface>
+      <surface xml:id="p115">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/115"></graphic>
+      </surface>
+      <surface xml:id="p116">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/116"></graphic>
+      </surface>
+      <surface xml:id="p117">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/117"></graphic>
+      </surface>
+      <surface xml:id="p118">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/118"></graphic>
+      </surface>
+      <surface xml:id="p119">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/119"></graphic>
+      </surface>
+      <surface xml:id="p120">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/120"></graphic>
+      </surface>
+      <surface xml:id="p121">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/121"></graphic>
+      </surface>
+      <surface xml:id="p122">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/122"></graphic>
+      </surface>
+      <surface xml:id="p123">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/123"></graphic>
+      </surface>
+      <surface xml:id="p124">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/124"></graphic>
+      </surface>
+      <surface xml:id="p125">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/125"></graphic>
+      </surface>
+      <surface xml:id="p126">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/126"></graphic>
+      </surface>
+      <surface xml:id="p127">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/127"></graphic>
+      </surface>
+      <surface xml:id="p128">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/128"></graphic>
+      </surface>
+      <surface xml:id="p129">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/129"></graphic>
+      </surface>
+      <surface xml:id="p130">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/130"></graphic>
+      </surface>
+      <surface xml:id="p131">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/131"></graphic>
+      </surface>
+      <surface xml:id="p132">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/132"></graphic>
+      </surface>
+      <surface xml:id="p133">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/133"></graphic>
+      </surface>
+      <surface xml:id="p134">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/134"></graphic>
+      </surface>
+      <surface xml:id="p135">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/135"></graphic>
+      </surface>
+      <surface xml:id="p136">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/136"></graphic>
+      </surface>
+      <surface xml:id="p137">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/137"></graphic>
+      </surface>
+      <surface xml:id="p138">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/138"></graphic>
+      </surface>
+      <surface xml:id="p139">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/139"></graphic>
+      </surface>
+      <surface xml:id="p140">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/140"></graphic>
+      </surface>
+      <surface xml:id="p141">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/141"></graphic>
+      </surface>
+      <surface xml:id="p142">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/142"></graphic>
+      </surface>
+      <surface xml:id="p143">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/143"></graphic>
+      </surface>
+      <surface xml:id="p144">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/144"></graphic>
+      </surface>
+      <surface xml:id="p145">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/145"></graphic>
+      </surface>
+      <surface xml:id="p146">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/146"></graphic>
+      </surface>
+      <surface xml:id="p147">
+         <graphic url="https://kokusho.nijl.ac.jp/biblio/200003050/147"></graphic>
+      </surface>
+   </facsimile>
+  <text>
+      <body>
+            <pb n="1-1r" facs="#p009"/>
+               <lb/><div type="序" subtype="仮名序"><p n="1"><phr n="1-1" xml:id="kana1-1">やまとうたは人のこゝろをたねとしてよろつのことの
+               <lb/>はとそなれりける</phr><phr n="1-2" xml:id="kana1-2">世中にある人ことわさしけきも
+               <lb/>のなれは</phr><phr n="1-3" xml:id="kana1-3">心におもふことを見るものきくものにつけ
+               <lb/>ていひいたせるなり</phr><phr n="1-4" xml:id="kana1-4">花になくうくひす水にすむかは
+               <lb/>つのこゑをきけは</phr><phr n="1-5" xml:id="kana1-5">いきとしいけるものいつれかうた
+               <lb/>をよまさりける</phr><phr n="1-6" xml:id="kana1-6">ちからをもいれすしてあめつち
+               <lb/>をうこかし</phr><phr n="1-7" xml:id="kana1-7">めに見えぬ<app><lem wit="#国">おに神</lem><rdg wit="#前"><ruby><rb>おにかみ</rb><rt>鬼神</rt></ruby></rdg></app>をもあはれとおも
+               <lb/>はせ</phr><phr n="1-8" xml:id="kana1-8">おとこ<app><lem wit="#国">をむな</lem><rdg wit="#前">お<ruby><rb>む</rb><rt>う</rt></ruby>な</rdg></app>のなかをもやはらけ</phr><phr n="1-9" xml:id="kana1-9">たけきものゝ
+               <lb/>ふの心をもなくさむるはうたなり</phr></p><p n="2"><phr n="2-1" xml:id="kana2-1">このうたあめ
+               <lb/>つちのひらけはしまりける時よりいてきにけり</phr><note type="仮名序古注" target="#kana2-1"><phr n="2-2" xml:id="kana2-2">あまの
+               <lb/>うきは
+               <lb/>しのしたにて<persName corresp="#伊弉冉尊">め神</persName><persName corresp="#伊弉諾尊">を神</persName>となり
+               <lb/>たまへることをいへるうた也</phr></note>
+               <lb/><phr n="2-3" xml:id="kana2-3">しかあれとも世に<app><lem wit="#国">つたはる</lem><rdg wit="#前">つたはれる</rdg></app>
+               <lb/>ことはひさかたのあめにしては<persName corresp="#下照姫">したてるひめ</persName>にはしまり</phr>
+            <pb n="1-1v" facs="#p010"/>
+               <lb/><note type="仮名序古注" target="#kana2-3"><phr n="2-4" xml:id="kana2-4"><persName corresp="#下照姫">したてるひめ</persName>とは<persName corresp="#天稚彦">あめわかみこ</persName>のめなり</phr><phr n="2-5" xml:id="kana2-5">せうとの神のかたち<app><lem wit="#国">をかたにゝ</lem><rdg wit="#前">を<ruby><rb>かた</rb><rt>かみ</rt></ruby>に</rdg></app>うつりてかゝやくを
+               <lb/>よめるえひすうたなるへし</phr><phr n="2-6" xml:id="kana2-6">これらはもしのかすもさたまらす</phr><phr n="2-7" xml:id="kana2-7">哥のやうにも
+               <lb/>あらぬこと
+               <lb/>ともなり</phr></note>
+               <lb/><phr n="2-8" xml:id="kana2-8">あらかねのつちにしては<persName corresp="#素戔嗚尊">すさのをのみこと</persName>
+               <lb/>よりそおこりける</phr><phr n="2-9" xml:id="kana2-9">ちはやふる神世には<app><lem wit="#国">うたの</lem><rdg wit="#前">哥は</rdg></app>もし
+               <lb/>もさたまらすすなほにして事の心わきかたかりけら
+               <lb/>し</phr><phr n="2-10" xml:id="kana2-10">人の世と<app><lem wit="#国">なりて</lem><rdg wit="#前">なりてよりそ</rdg></app><persName corresp="#素戔嗚尊">すさのをのみこと</persName>よりそみそ
+               <lb/>もしあまりひともしはよみける</phr><note type="仮名序古注" target="#kana2-10"><phr n="2-11" xml:id="kana2-11"><persName corresp="#素戔嗚尊">すさのをのみこと</persName>は<persName corresp="#天照大神">あま
+               <lb/>てるおほむ神</persName>のこのかみなり</phr>
+               <lb/><phr n="2-12" xml:id="kana2-12">女とすみたまはむとていつものくにゝ宮つくりしたまふ時にその所にやい
+               <lb/>ろのくものたつを見てよみたまへる也</phr><l resp="#素戔嗚尊"><phr n="2-13" xml:id="kana2-13">やくも立いつもやへかきつまこめにやへかきつくるそのや
+               <lb/>へかき
+               <lb/>を</phr></l></note>
+               <lb/><phr n="2-14" xml:id="kana2-14">かくてそ花をめてとりをうらやみかすみをあはれ
+               <lb/>ひつゆをかなしふ心ことはおほくさま〳〵になりに
+               <lb/>ける</phr><phr n="2-15" xml:id="kana2-15">とをき所もいてたつあしもとよりはしま
+               <lb/>りて年月をわたりたかき山もふもとのちりひ
+            <pb n="1-2r" facs="#p010"/>
+               <lb/>ちよりなりてあまくもたなひくまておひのほれること
+               <lb/>くに</phr><phr n="2-16" xml:id="kana2-16">このうたもかくのことくなるへし</phr><phr n="2-17" xml:id="kana2-17">なにはつのうた
+               <lb/>はみかとのおほむはしめなり</phr>
+               <lb/><note type="仮名序古注" target="#kana2-17"><phr n="2-18" xml:id="kana2-18"><persName corresp="#仁徳天皇">おほさゝきのみかと</persName>のなにはつ
+               <lb/>にてみこときこえける時</phr><phr n="2-19" xml:id="kana2-19">東宮を
+               <lb/>たかひにゆつりてくらゐにつきたまはて三とせになりにけれは</phr><phr n="2-20" xml:id="kana2-20"><persName corresp="#王仁">王仁</persName>といふ人の
+               <lb/>いふかり思てよみてたてまつりけるうた也</phr><phr n="2-21" xml:id="kana2-21">この花は梅花をいふなるへし</phr></note>
+               <lb/><phr n="2-22" xml:id="kana2-22">あさか
+               <lb/>やまのことはゝ<persName corresp="#采女">うねめ</persName>のたはふれよりよみて</phr>
+               <lb/><note type="仮名序古注" target="#kana2-22"><phr n="2-23" xml:id="kana2-23"><persName corresp="#橘諸兄">かつらきの
+               <lb/>おほきみ</persName>を
+               <lb/>みちのおくへつかはしたりけるに</phr><phr n="2-24" xml:id="kana2-24">くにのつかさ事おろそか也とてまうけなとしたり
+               <lb/>けれとすさましかりけれは</phr><phr n="2-25" xml:id="kana2-25"><persName corresp="#采女">うねめなりける女</persName>のかはらけとりてよめるなり</phr><phr n="2-26" xml:id="kana2-26">これに
+               <lb/>そ<persName corresp="#橘諸兄">おほきみ</persName>の心とけにける</phr><l resp="#采女"><phr n="2-27" xml:id="kana2-27">あさか山かけさへ
+               <lb/>見ゆる山の井のあさくは人をおもふものかは</phr></l></note>
+               <lb/><phr n="2-28" xml:id="kana2-28">このふたうたは<app><lem wit="#国">うた</lem><rdg wit="#前"><ruby><rb>哥</rb><rt>ウタ</rt></ruby></rdg></app>
+               <lb/>のちゝはゝのやうにてそてならふ人のはしめにもしけ
+               <lb/>る</phr></p><p n="3"><phr n="3-1" xml:id="kana3-1">そも〳〵うたのさまむつなり</phr><phr n="3-2" xml:id="kana3-2">からのうたにもかく
+               <lb/>そあるへき</phr><phr n="3-3" xml:id="kana3-3">そのむくさのひとつにはそへうた</phr><phr n="3-4" xml:id="kana3-4"><persName corresp="#仁徳天皇">おほさゝき
+               <lb/>のみかと</persName>をそへたてまつれるうた</phr>
+               <lb/><l resp="#王仁"><phr n="3-5" xml:id="kana3-5">なにはつにさくやこの花ふゆこもりいまははる
+            <pb n="1-2v" facs="#p011"/>
+               <lb/>へとさくやこのはな</phr></l><phr n="3-6" xml:id="kana3-6">といへるなるへし</phr>
+               <lb/><phr n="3-7" xml:id="kana3-7">ふたつには<app><lem wit="#国">かそへうた</lem><rdg wit="#前">か<ruby><rb>そ</rb><rt>ス</rt></ruby>へうた</rdg></app></phr>
+               <lb/><l><phr n="3-8" xml:id="kana3-8">さく花に思ひつくみのあちきなさ身にいたつ
+               <lb/>きのいるもしらすて</phr></l><phr n="3-9" xml:id="kana3-9">といへるなるへし</phr>
+               <lb/><note type="仮名序古注" target="#kana3-8"><phr n="3-10" xml:id="kana3-10">これはたゝ事にい
+               <lb/>ひてものにたとへなとも
+               <lb/>せぬ<app><lem wit="#国">物也</lem><rdg wit="#前"><ruby><rb>事</rb><rt>モノ</rt></ruby>なり</rdg></app></phr><phr n="3-11" xml:id="kana3-11">このうたいかにいへるにかあらむ</phr><phr n="3-12" xml:id="kana3-12">その心えかたし</phr><phr n="3-13" xml:id="kana3-13">いつゝにたゝことうた
+               <lb/>といへるなむこれにはかなふへき</phr></note>
+               <lb/><phr n="3-14" xml:id="kana3-14">みつには<app><lem wit="#国">なすらへうた</lem><rdg wit="#前">な<ruby><rb>そ</rb><rt>ス</rt></ruby>らへうた</rdg></app></phr>
+               <lb/><l><phr n="3-15" xml:id="kana3-15">きみにけさあしたのしものおきていなはこひしき
+               <lb/>ことにきえやわたらむ</phr></l><phr n="3-16" xml:id="kana3-16">といへるなるへし</phr><note type="仮名序古注" target="#kana3-15"><phr n="3-17" xml:id="kana3-17">これはもの
+               <lb/>にもなす
+               <lb/>らへてそれかやうになむあるとやうにいふ也</phr><phr n="3-18" xml:id="kana3-18">このうたよくかなへりとも見
+               <lb/>えす</phr><l><phr n="3-19" xml:id="kana3-19">たらちめのおやのかふこのまゆこもりいふせくもあるかいもにあ
+               <lb/>はすて</phr></l><phr n="3-20" xml:id="kana3-20">かやうなるやこれには
+               <lb/>かなふへからむ</phr></note>
+               <lb/><phr n="3-21" xml:id="kana3-21">よつにはたとへうた</phr>
+               <lb/><l><phr n="3-22" xml:id="kana3-22">わかこひはよむともつきしありそ海のはまのま
+            <pb n="1-3r" facs="#p011"/>
+               <lb/>さこはよみつくすとも</phr></l><phr n="3-23" xml:id="kana3-23">といへるなるへし</phr>
+               <lb/><note type="仮名序古注" target="#kana3-22"><phr n="3-24" xml:id="kana3-24">これはよ
+               <lb/>ろつのくさ
+               <lb/>木とりけたものにつけて心を見する也</phr><phr n="3-25" xml:id="kana3-25">この哥はかくれたる所なむなき</phr>
+               <lb/><phr n="3-26" xml:id="kana3-26">されとはしめのそへうたとおなしやうなれはすこしさまをかへたるなるへし</phr>
+               <lb/><l><phr n="3-27" xml:id="kana3-27">すまのあまのしほやくけふり風をいたみおもはぬ
+               <lb/>方にたなひきにけり</phr></l><phr n="3-28" xml:id="kana3-28">このうたなとやかなふへからむ</phr></note>
+               <lb/><phr n="3-29" xml:id="kana3-29">いつゝにはたゝことうた</phr>
+               <lb/><l><phr n="3-30" xml:id="kana3-30">いつはりのなき世なりせはいかはかり人のこ
+               <lb/>とのはうれしからまし</phr></l><phr n="3-31" xml:id="kana3-31">といへるなるへし</phr>
+               <lb/><note type="仮名序古注" target="#kana3-30"><phr n="3-32" xml:id="kana3-32">これは事のとゝのほりたゝしきをいふ也</phr><phr n="3-33" xml:id="kana3-33">このうたの心さらにかなは
+               <lb/>す</phr><phr n="3-34" xml:id="kana3-34">とめうたとやいふへからむ</phr><l><phr n="3-35" xml:id="kana3-35">山さくらあくまていろを見つるか
+               <lb/>な花ちるへくも
+               <lb/>風ふかぬ世に</phr></l></note>
+               <lb/><phr n="3-36" xml:id="kana3-36">むつにはいはひうた</phr>
+               <lb/><l><phr n="3-37" xml:id="kana3-37">このとのはむへも<app><lem wit="#国">とみけり</lem><rdg wit="#前">と<ruby><rb>ひ</rb><rt>ミ</rt></ruby>けり</rdg></app>さきくさのみつはよつ
+               <lb/>はにとのつくり<app><lem wit="#国">せり</lem><rdg wit="#前"><ruby><rb>せ</rb><rt>け</rt></ruby>り</rdg></app></phr></l><phr n="3-38" xml:id="kana3-38"><app><lem wit="#国">といへる</lem><rdg wit="#前">いへることのたくひ</rdg></app>なるへし</phr>
+               <lb/><note type="仮名序古注" target="#kana3-37"><phr n="3-39" xml:id="kana3-39">これは世をほめて神につくる也</phr><phr n="3-40" xml:id="kana3-40">このうたいはひうたとは見え
+               <lb/>すなむある</phr><l><phr n="3-41" xml:id="kana3-41">かすかのにわかなつみつゝよろつ世をいはふ心は<app><lem wit="#国">神そ</lem><rdg wit="#前">かみや</rdg></app>
+            <pb n="1-3v" facs="#p012"/>
+               <lb/>しるらむ</phr></l><phr n="3-42" xml:id="kana3-42">これらやすこしかなふへからむ</phr><phr n="3-43">おほよそむくさにわかれ
+               <lb/>むことはえあるましき事になむ</phr></note></p>
+               <lb/><p n="4"><phr n="4-1" xml:id="kana4-1">今の<app><lem wit="#国">世中</lem><rdg wit="#前">よの中</rdg></app>いろにつき人の心花になりにけるより
+               <lb/>あたなるうたはかなきことのみいてくれは</phr><phr n="4-2" xml:id="kana4-2">いろこのみ
+               <lb/>の<app><lem wit="#国">いへに</lem><rdg wit="#前">いへにのみ</rdg></app>むもれ木の人しれぬことゝなりてまめな
+               <lb/>るところには花すゝきほにいたすへき事にもあ
+               <lb/>らすなりにたり</phr><phr n="4-3" xml:id="kana4-3">そのはしめをおもへはかゝるへく
+               <lb/>なむあらぬ</phr><phr n="4-4" xml:id="kana4-4">いにしへの<app><lem wit="#国">世々のみかと</lem><rdg wit="#前">よゝのかみかと</rdg></app>春の花のあし
+               <lb/>た秋の月の夜ことにさふらふ人〳〵をめして
+               <lb/>ことにつけつゝうたをたてまつらしめ給</phr><phr n="4-5" xml:id="kana4-5">あるは
+               <lb/>花をそふとてたよりなきところにまとひあるは月
+               <lb/>を思ふとてしるへなきやみにたとれる心々を見たま
+               <lb/>ひて</phr><phr n="4-6" xml:id="kana4-6">さかしをろかなりとしろしめしけむ</phr><phr n="4-7" xml:id="kana4-7">しかあるの
+            <pb n="1-4r" facs="#p012"/>
+               <lb/>みにあらす</phr><phr n="4-8" xml:id="kana4-8">さゝれいしにたとへつくは山にかけてき
+               <lb/>みをねかひ</phr><phr n="4-9" xml:id="kana4-9">よろこひ身にすきたのしひ心にあまり</phr>
+               <lb/><phr n="4-10" xml:id="kana4-10">ふしのけふりによそへて人をこひ松虫のねに友を
+               <lb/>しのひ</phr><phr n="4-11" xml:id="kana4-11">高砂すみの江のまつもあひをひのやうに
+               <lb/>おほえ</phr><phr n="4-12" xml:id="kana4-12">おとこ山のむかしを思いてゝをみなへしのひと
+               <lb/>ゝきをくねるにも哥をいひてそなくさめける</phr><phr n="4-13" xml:id="kana4-13">又は
+               <lb/>るのあしたに花のちるを見秋のゆふくれにこのは
+               <lb/>のおつるをきゝ</phr><phr n="4-14" xml:id="kana4-14">あるはとしことにかゝみのかけに見
+               <lb/>ゆる雪と浪とをなけき草のつゆ水のあわを
+               <lb/>見てわか身をおとろき</phr><phr n="4-15" xml:id="kana4-15">あるはきのふはさかえをこり
+               <lb/>て時をうしなひ<app><lem wit="#国">世にわひ</lem><rdg wit="#前">よに<ruby><rb>わひ</rb><rt>あひ歟</rt></ruby></rdg></app>したしかりしもう
+               <lb/>とくなり</phr><phr n="4-16" xml:id="kana4-16">あるは松山の浪をかけ野なかの<app><lem wit="#国">水</lem><rdg wit="#前">しみつ</rdg></app>をくみ
+            <pb n="1-4v" facs="#p013"/>
+               <lb/>秋はきのしたはをなかめあかつきのしきのはねかき
+               <lb/>をかそへ</phr><phr n="4-17" xml:id="kana4-17">あるはくれ竹のうきふしを人にいひよしの
+               <lb/>河をひきて<app><lem wit="#国">世中</lem><rdg wit="#前">よのなか</rdg></app>をうらみきつるに</phr><phr n="4-18" xml:id="kana4-18">今はふしの山も
+               <lb/>けふりたゝすなりなからのはしもつくるなりときく
+               <lb/>人は<app><lem wit="#国">うた</lem><rdg wit="#前"><ruby><rb>うた</rb><rt>歌</rt></ruby></rdg></app>にのみそ<app><lem wit="#国">心を</lem><rdg wit="#前">こゝろをは</rdg></app>なくさめける</phr></p><p n="5"><phr n="5-1" xml:id="kana5-1">いにしへよりか
+               <lb/>くつたはる<app><lem wit="#国">うちにも</lem><rdg wit="#前">うちに</rdg></app><persName corresp="#平城天皇"><app><lem wit="#国">ならの御時</lem><rdg wit="#前">ならの<ruby><rb>おほん</rb><rt>御</rt></ruby>時</rdg></app></persName><note type="勘物" style="margin-top: 1em" resp="#藤原定家" target="#kana5-1"><persName>文武天皇</persName></note>よりそひろまりに
+               <lb/>ける</phr><phr n="5-2" xml:id="kana5-2">かの<app><lem wit="#国">おほむ世</lem><rdg wit="#前"><ruby><rb>おほん</rb><rt>御</rt></ruby>よ</rdg></app>や哥の心をしろしめしたりけむ</phr>
+               <lb/><phr n="5-3" xml:id="kana5-3">かのおほむ時に<persName corresp="#柿本人麿">おほきみつのくらゐかきのもとの
+               <lb/>人まろ</persName>なむうたのひしりなりける</phr><phr n="5-4" xml:id="kana5-4">これはきみも
+               <lb/>人も身をあはせたりといふなるへし</phr><phr n="5-5" xml:id="kana5-5">秋のゆふへ龍田
+               <lb/>河になかるゝ<app><lem wit="#国">もみちをは</lem><rdg wit="#前">もみちは</rdg></app><persName corresp="#平城天皇">みかと</persName>の<app><lem wit="#国">おほむめ</lem><rdg wit="#前"><ruby><rb>御</rb><rt>オホン</rt></ruby>め</rdg></app>に錦と
+               <lb/><app><lem wit="#国">見たまひ</lem><rdg wit="#前">みえ</rdg></app></phr><phr n="5-6" xml:id="kana5-6">春のあした<app><lem wit="#国">よしのゝ山</lem><rdg wit="#前">よしの山</rdg></app>のさくらは<persName corresp="#柿本人麿">人ま
+            <pb n="1-5r" facs="#p013"/>
+               <lb/>ろ</persName>か<app><lem wit="#国">心には</lem><rdg wit="#前">めに</rdg></app>くも<app><lem wit="#国">かとのみなむ</lem><rdg wit="#前">かとそ</rdg></app>おほえける</phr><phr n="5-7" xml:id="kana5-7">又<persName corresp="#山辺赤人">山の邊
+               <lb/>のあか人</persName>といふ人ありけり</phr><phr n="5-8" xml:id="kana5-8">うたに<app><lem wit="#国">あやしく</lem><rdg wit="#前">あやし<ruby><rb>う</rb><rt>ク</rt></ruby></rdg></app>たへなりけり</phr>
+               <lb/><phr n="5-9" xml:id="kana5-9"><persName corresp="#柿本人麿">人まろ</persName>は<persName corresp="#山辺赤人">赤人</persName>かゝみにたゝむ事かたく<persName corresp="#山辺赤人">あか人</persName>は<persName corresp="#柿本人麿">人まろ</persName>
+               <lb/>かしもにたゝむことかたくなむありける</phr><note type="仮名序古注" target="#kana5-1"><phr n="5-10" xml:id="kana5-10"><persName corresp="#平城天皇">ならのみかと</persName>の御
+               <lb/>うた</phr><l resp="#平城天皇"><phr n="5-11" xml:id="kana5-11">龍田河もみ
+               <lb/>ちみたれて流めりわたらはにしきなかやたえなむ</phr></l></note><note type="仮名序古注" target="#kana5-3"><phr n="5-12" xml:id="kana5-12"><persName corresp="#柿本人麿">人まろ</persName></phr><l resp="#柿本人麿"><phr n="5-13" xml:id="kana5-13"><app><lem wit="#国">梅花</lem><rdg wit="#前">むめの花</rdg></app>それ
+               <lb/>とも見えす久方のあまきる雪のなへてふれゝは</phr></l><l resp="#柿本人麿"><phr n="5-14" xml:id="kana5-14">ほの〳〵とあかしのうらの
+               <lb/>あさきりにしまかくれ行舟をしそ思</phr></l></note><note type="仮名序古注" target="#kana5-7"><phr n="5-15" xml:id="kana5-15"><persName resp="#山部赤人">赤人</persName></phr><l resp="#山辺赤人"><phr n="5-16" xml:id="kana5-16">春のゝにすみれつみにとこ
+               <lb/>しわれそ野をなつかしみひと夜ねにける</phr></l><l resp="#山辺赤人"><phr n="5-17" xml:id="kana5-17">わかのうらにしほみちくれは
+               <lb/>かたをなみあしへをさして
+               <lb/>たつなきわたる</phr></l></note>
+               <lb/><phr n="5-18" xml:id="kana5-18">この人〳〵をゝきて又すくれたる人もくれ竹の<app><lem wit="#国">世々に</lem><rdg wit="#前">よに</rdg></app>
+               <lb/>きこえかたいとのより〳〵に<app><lem wit="#国">たえすそ</lem><rdg wit="#前">たえかたくなむ</rdg></app>ありける</phr><phr n="5-19" xml:id="kana5-19"><app><lem wit="#国">これよ
+               <lb/>り</lem><rdg wit="#前">かゝりける</rdg></app>さき<note type="勘物" style="margin-top: 1em" resp="#藤原定家" target="#kana5-19">さき不審未決</note>のうたを<app><lem wit="#国">あつめて</lem><rdg wit="#前">あはせて</rdg></app>なむ万えふしふとなつ
+               <lb/>けられたり<app><lem wit="#国">ける</lem><rdg wit="#前"><ruby><rb>た</rb><rt>ケ</rt></ruby>る</rdg></app></phr><phr n="5-20" xml:id="kana5-20">こゝにいにしへのことをもうたの心を
+               <lb/>もしれる人わつかにひとりふたり<app><lem wit="#国">なりき</lem><rdg wit="#前">なり</rdg></app></phr><phr n="5-21" xml:id="kana5-21"><app><lem wit="#国">しかあれと</lem><rdg wit="#前"></rdg></app>
+            <pb n="1-5v" facs="#p014"/>
+               <lb/>これかれえたる所えぬ所たかひになむある</phr><phr n="5-22" xml:id="kana5-22"><persName corresp="#平城天皇"><app><lem wit="#国">かの御時</lem><rdg wit="#前">かのとし</rdg></app></persName>
+               <lb/>より<persName corresp="#醍醐天皇">このかた</persName>としはもゝとせあまり世はとつきにな
+               <lb/>むなりにける</phr><phr n="5-23" xml:id="kana5-23">いにしへの事をもうたをもしれる
+               <lb/>人よむ人おほからす</phr><phr n="5-24" xml:id="kana5-24">いまこのことをいふに</phr><phr n="5-25" xml:id="kana5-25">つかさ
+               <lb/>くらゐたかき人をはたやすきやうなれはいれす</phr>
+               <lb/></p><p n="6"><phr n="6-1" xml:id="kana6-1">そのほかにちかき世にその名きこえたる人は</phr>
+               <lb/><phr n="6-2" xml:id="kana6-2">すなはち<persName corresp="#遍昭"><app><lem wit="#国">僧正遍昭</lem><rdg wit="#前">へせう</rdg></app></persName>は<app><lem wit="#国">うたのさま</lem><rdg wit="#前">哥のこゝろ</rdg></app>はえたれともま
+               <lb/>ことすくなし</phr><phr n="6-3" xml:id="kana6-3">たとへはゑにかけるをうなを<app><lem wit="#国">見て</lem><rdg wit="#前">おもひて</rdg></app>い
+               <lb/>たつらに心をうこかすかことし</phr>
+               <lb/><note type="仮名序古注" target="#kana6-2"><l resp="#遍昭"><phr n="6-4" xml:id="kana6-4">あさみとりいとよりかけてしらつゆ
+               <lb/>をたまにもぬける春のやなきか</phr></l>
+               <lb/><l resp="#遍昭"><phr n="6-5" xml:id="kana6-5">はちすはのにこりにしまぬ心もて<app><lem wit="#国">なにかは</lem><rdg wit="#前">なとかは</rdg></app>つゆをたまとあさむく</phr></l><phr n="6-6" xml:id="kana6-6">さかのにてむ
+               <lb/>まよりおちてよめる</phr><l resp="#遍昭"><phr n="6-7" xml:id="kana6-7">名にめてゝおれる許そをみなへし我おちにきと人に
+               <lb/>かた
+               <lb/>るな</phr></l></note>
+               <lb/><phr n="6-8" xml:id="kana6-8"><persName corresp="#在原業平">ありはらのなりひら</persName>はその心あまりてことは
+               <lb/>たらす</phr><phr n="6-9" xml:id="kana6-9">しほめる花のいろなくてにほひのこれるか
+            <pb n="1-6r" facs="#p014"/>
+               <lb/>ことし</phr><note type="仮名序古注" target="#kana6-8"><l resp="#在原業平"><phr n="6-10" xml:id="kana6-10">月やあらぬはるや昔の春ならぬわか身ひとつはもとの身にして</phr></l>
+               <lb/><l resp="#在原業平"><phr n="6-11" xml:id="kana6-11">おほかたは月をもめてしこれそこのつもれは人のおいとなる物</phr></l>
+               <lb/><l resp="#在原業平"><phr n="6-12" xml:id="kana6-12">ねぬる夜の夢をはかなみまとろめは
+               <lb/>いやはかなにもなりまさるかな</phr></l></note><phr n="6-13" xml:id="kana6-13"><persName corresp="#文屋康秀">ふんやのやすひて</persName>は
+               <lb/>ことはゝたくみにてそのさま身におはす</phr><phr n="6-14" xml:id="kana6-14">いはゝあき
+               <lb/>人のよきゝぬきたらむかことし</phr>
+               <lb/><note type="仮名序古注" target="#kana6-13"><l resp="#文屋康秀"><phr n="6-15" xml:id="kana6-15">吹からにのへのくさ木のしほ
+               <lb/>るれはむへ山かせをあらしとい
+               <lb/>ふらむ</phr></l><phr n="6-16" xml:id="kana6-16"><persName corresp="#仁明天皇">深草のみかと</persName>の御國忌に</phr><l resp="#文屋康秀"><phr n="6-17" xml:id="kana6-17">草深き霞の
+               <lb/>谷にかけかくしてる日のくれしけふにやはあらぬ</phr></l></note><phr n="6-18" xml:id="kana6-18"><persName corresp="#喜撰法師"><app><lem wit="#国">宇治山</lem><rdg wit="#前">うち</rdg></app>の僧<app><lem wit="#国">きせ
+               <lb/>ん</lem><rdg wit="#前"><ruby><rb>きせ</rb><rt>せき</rt></ruby></rdg></app></persName>はことはかすかにしてはしめをはりたしかな
+               <lb/>らす</phr><phr n="6-19" xml:id="kana6-19">いはゝ秋の月を見るにあかつきのくもにあ
+               <lb/>へるかことし</phr>
+               <lb/><note type="仮名序古注" target="#kana6-18"><l resp="#喜撰法師"><phr n="6-20" xml:id="kana6-20">わかいほはみやこのたつみしかそすむ
+               <lb/>よをうち山と人はいふなり</phr></l></note>
+               <lb/><phr n="6-21" xml:id="kana6-21">よめるうた
+               <lb/>おほくきこえねはかれこれをかよはしてよくし
+               <lb/>らす</phr><phr n="6-22" xml:id="kana6-22"><persName corresp="#小野小町">をのゝこまち</persName>はいにしへの<persName corresp="#衣通姫">そとほりひめ</persName>の流な
+               <lb/>り</phr><phr n="6-23" xml:id="kana6-23">あはれなるやうにてつよからす</phr><phr n="6-24" xml:id="kana6-24">いはゝよき<app><lem wit="#国">をう
+               <lb/>な</lem><rdg wit="#前">を<ruby><rb>む</rb><rt>ウ</rt></ruby>な</rdg></app>のなやめる所あるにゝたり</phr><phr n="6-25" xml:id="kana6-25">つよからぬはをうなの
+            <pb n="1-6v" facs="#p015"/>
+               <lb/>うたなれはなるへし</phr><note type="仮名序古注" target="#kana6-22"><l resp="#小野小町"><phr n="6-26" xml:id="kana6-26">思つゝぬれはや人の見えつらむゆめとし
+               <lb/>りせはさめさらましを</phr></l><l resp="#小野小町"><phr n="6-27" xml:id="kana6-27">いろ見えてうつろふ
+               <lb/>物は世中の人の心の花にそありける</phr></l><l resp="#小野小町"><phr n="6-28" xml:id="kana6-28">わひぬれは身をうき草のねをたえて
+               <lb/>さそふ水あらはいなむとそ思</phr></l><phr n="6-29" xml:id="kana6-29"><persName corresp="#衣通姫">そとほりひめ</persName>のうた</phr><l resp="#衣通姫"><phr n="6-30" xml:id="kana6-30">わかせこかくへきよひなり
+               <lb/>さゝかにのくものふるまひかね
+               <lb/>てしるしも</phr></l></note>
+               <lb/><phr n="6-31" xml:id="kana6-31"><persName corresp="#大友黒主">大伴のくろぬし</persName>はそのさ
+               <lb/>まいやし</phr><phr n="6-32" xml:id="kana6-32">いはゝたきゝおへる山人の花のかけにや
+               <lb/>すめるかことし</phr><note type="仮名序古注" target="#kana6-31"><l resp="#大友黒主"><phr n="6-33" xml:id="kana6-33">思いてゝこひしき時はゝつかりのなきてわたると人はしらすや</phr></l>
+               <lb/><l resp="#大友黒主"><phr n="6-34" xml:id="kana6-34">鏡山いさ立よりて見てゆかむ年へぬる身は老やしぬると</phr></l></note>
+               <lb/><phr n="6-35" xml:id="kana6-35">このほかの人〳〵その名きこゆる</phr><phr n="6-36" xml:id="kana6-36">のへにおふるかつら
+               <lb/>のはひゝろこりはやしにしけきこのはのことくに<app><lem wit="#国">お
+               <lb/>ほかれと</lem><rdg wit="#前">おほけれと</rdg></app></phr><phr n="6-37" xml:id="kana6-37">うたとのみ思ひてそのさま<app><lem wit="#国">しらぬなるへし</lem><rdg wit="#前">しら<ruby><rb>す</rb><rt>ぬ</rt></ruby>なるへし</rdg></app></phr></p>
+               <lb/><p n="7"><phr n="7-1" xml:id="kana7-1">かゝるにいま<persName corresp="#醍醐天皇"><app><lem wit="#国">すへらき</lem><rdg wit="#前">すへらきみ</rdg></app></persName>のあめの<app><lem wit="#国">した</lem><rdg wit="#前">したを</rdg></app>しろしめすこと
+               <lb/><date when="0905"><app><lem wit="#国">よつの時</lem><rdg wit="#前">よつの<ruby><rb>月</rb><rt>トキ</rt></ruby></rdg></app>こゝのかへり</date>になむなりぬる</phr><phr n="7-2" xml:id="kana7-2">あまねきお
+               <lb/>ほむうつくしみのなみやしまのほかまてなかれ</phr><phr n="7-3" xml:id="kana7-3">ひ
+               <lb/>ろきおほむめくみのかけつくは山のふもと<app><lem wit="#国">よりも</lem><rdg wit="#前">より</rdg></app>
+            <pb n="1-7r" facs="#p015"/>
+               <lb/>しけく<app><lem wit="#国">おはしまして</lem><rdg wit="#前">おまし〳〵て</rdg></app></phr><phr n="7-4" xml:id="kana7-4">よろつのまつりことをきこし
+               <lb/>めすいとまもろ〳〵のことをすてたまはぬあまりに</phr><phr n="7-5" xml:id="kana7-5">いに
+               <lb/>しへのことをもわすれしふりにし<app><lem wit="#国">ことをも</lem><rdg wit="#前">ことを</rdg></app>おこし
+               <lb/>たまふとて</phr><phr n="7-6" xml:id="kana7-6">今も見そなはしのちの世にもつたは
+               <lb/>れとて</phr><phr n="7-7" xml:id="kana7-7"><date when="0905">延喜五年四月十八日</date>に<persName corresp="#紀友則">大内記きのとものり</persName></phr>
+               <lb/><phr n="7-8" xml:id="kana7-8"><persName corresp="#紀貫之">御書のところのあつかりきのつらゆき</persName></phr><phr n="7-9" xml:id="kana7-9"><persName corresp="#凡河内躬恒">さきのかひの
+               <lb/><app><lem wit="#国">さう官</lem><rdg wit="#前">目</rdg></app><app><lem wit="#国">おふし</lem><rdg wit="#前"><ruby><rb>凡</rb><rt>オフシ</rt></ruby></rdg></app>かうちのみつね</persName></phr><phr n="7-10" xml:id="kana7-10"><persName corresp="#壬生忠岑"><app><lem wit="#国">右衛門の府生</lem><rdg wit="#前">衛門のふさう</rdg></app>みふ
+               <lb/>のたゝみね</persName>らにおほせられて</phr><phr n="7-11" xml:id="kana7-11">万えふしふに
+               <lb/>いらぬ<app><lem wit="#国">ふるきうたみつからのをも</lem><rdg wit="#前">うたともふるきみつからのをも</rdg></app><app><lem wit="#国">たてまつらしめ</lem><rdg wit="#前">たてまつらせ</rdg></app>
+               <lb/><app><lem wit="#国">たまひてなむ</lem><rdg wit="#前">たまひて</rdg></app></phr><phr n="7-12" xml:id="kana7-12">それかなかにむめをかさすよりはし
+               <lb/>めてほとゝきすをきゝもみちをおり雪を見るに
+               <lb/>いたるまて</phr><phr n="7-13" xml:id="kana7-13">又つるかめにつけて<app><lem wit="#国">きみをおもひ人を
+            <pb n="1-7v" facs="#p016"/>
+               <lb/>も</lem><rdg wit="#前">きみをおもひとんを</rdg></app>いはひ秋はき夏草を見てつまをこひあふさか
+               <lb/>山にいたりてたむけをいのり</phr><phr n="7-14" xml:id="kana7-14">あるは春夏秋冬
+               <lb/><app><lem wit="#国">にもいらぬ</lem><rdg wit="#前">ともいはぬ</rdg></app>くさ〳〵のうたをなむえらはせたまひけ
+               <lb/>る</phr><phr n="7-15" xml:id="kana7-15">すへて千うたはたまきなつけてこきむわかしふといふ</phr>
+               <lb/><phr n="7-16" xml:id="kana7-16">かくこのたひあつめえらはれて山した水のたえす
+               <lb/>はまのまさこの<app><lem wit="#国">かすおほく</lem><rdg wit="#前">おほく</rdg></app>つもりぬれは</phr><phr n="7-17" xml:id="kana7-17">いまはあ
+               <lb/>すかゝはの<app><lem wit="#国">せになる</lem><rdg wit="#前">せんなる</rdg></app>うらみもきこえすさゝれいしの
+               <lb/>いはほとなるよろこひのみそあるへき</phr><phr n="7-18" xml:id="kana7-18">それ<app><lem wit="#国">まくら
+               <lb/>ことは</lem><rdg wit="#前">まくらことはに</rdg></app>春の花にほひすくなくしてむなしき名のみ
+               <lb/>秋のよのなかきを<app><lem wit="#国">かこてれは</lem><rdg wit="#前">か<ruby><rb>こ</rb><rt>ク</rt></ruby>てれは</rdg></app></phr><phr n="7-19" xml:id="kana7-19">かつは人のみゝにおそり
+               <lb/>かつはうたの心にはちおもへと</phr><phr n="7-20" xml:id="kana7-20">たなひくゝものたちゐ
+               <lb/>なくしかのおきふしは</phr><phr n="7-21" xml:id="kana7-21"><persName corresp="#紀貫之">つらゆき</persName>らかこの世にお
+            <pb n="1-8r" facs="#p016"/>
+               <lb/>なしくむまれてこの事の時にあへるをなむよろ
+               <lb/>こひぬる</phr><phr n="7-22" xml:id="kana7-22"><persName corresp="#柿本人麿">人まろ</persName>なくなりにたれと<app><lem wit="#国">哥のこととゝまれ
+               <lb/>るかな</lem><rdg wit="#前">うたのことゝまれるかな</rdg></app></phr><phr n="7-23" xml:id="kana7-23">たとひ時うつり事さりたのしひかなしひ
+               <lb/>ゆきかふ<app><lem wit="#国">とも</lem><rdg wit="#前">とん</rdg></app>この哥のもしあるをや</phr><phr n="7-24" xml:id="kana7-24">あをやきのいと
+               <lb/>たえす松のはのちりうせすしてまさきのかつらなかく
+               <lb/>つたはりとりのあとひさしくとゝまれらは</phr><phr n="7-25" xml:id="kana7-25">哥のさま
+               <lb/>をしりことの心をえたらむ人はおほそらの月を見
+               <lb/>るかことくにいにしへをあふきて今をこひさらめ
+               <lb/>かも</phr></p></div>
+            <pb n="1-8v" facs="#p017"/>
+         <div type="部立">
+            <pb n="1-9r" facs="#p017"/>
+               <lb/><head type="巻名">古今和歌集巻第一</head>
+               <lb/><head type="部立名" style="margin-top: 1em">春哥上</head>
+               <lb/><div type="和歌"><note type="詞書" style="margin-top: 2em" target="#n1">ふるとしに<app><lem wit="#国">春</lem><rdg wit="#前">春の</rdg></app>たちける<app><lem wit="#国">日</lem><rdg wit="#前">日に</rdg></app>よめる</note>
+               <lb/><note type="作者名" style="margin-top: 12em"><persName type="作者" corresp="#在原元方">在原元方</persName></note>
+               <lb/><l n="1" xml:id="n1" resp="#在原元方"><seg>年の内に</seg><seg>春はきにけり</seg><seg>ひとゝせを</seg><seg>こそとやいはむ</seg><seg>ことしとやいはむ</seg></l></div>
+               <lb/><div type="和歌"><note type="詞書" style="margin-top: 2em" target="#n2"><app><lem wit="#国">はる</lem><rdg wit="#前">はるの</rdg></app>たちける日よめる</note>
+               <lb/><note type="作者名" style="margin-top: 12em"><persName type="作者" corresp="#紀貫之">紀貫之</persName></note>
+               <lb/><l n="2" xml:id="n2" resp="#紀貫之"><seg>袖ひちて</seg><seg>むすひし水の</seg><seg>こほれるを</seg><seg>春立けふの</seg><seg>風やとくらむ</seg></l></div></div></body></text></TEI>

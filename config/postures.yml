@@ -353,7 +353,8 @@ sources:
   soas-tibetan:
     kind: {posture: unclassified}
     lect: {posture: identity, note: xct IS Classical Tibetan}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P108-8: the period strings ('13th century, …') band via
+        the century-prose grammar — 4/4 docs"}
     places: {posture: unplaced}
     script: {posture: implied}
   derge-kangyur:
@@ -383,8 +384,9 @@ sources:
   rsti:
     kind: {posture: unclassified}
     lect: {posture: identity, note: catalog records across nine codes; uga has no stages}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: undatable, note: no typed date fields — declared, the mining census agrees}
+    places: {posture: named, note: "P108-8: the findspot field joins the place lane (4,662
+        rows; the source's own 'Not listed in TEO' sentinel stays out)"}
     script: {posture: implied}
   cuc:
     kind: {posture: unclassified}
@@ -419,7 +421,9 @@ sources:
   syriac-corpus:
     kind: {posture: unclassified}
     lect: {posture: identity, note: syc IS Classical Syriac}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P108-8 (the Q83 slice): orig_date.when years (24 docs) +
+        the century-prose grammar over orig_date.text — 627/632 banded, 574
+        composition-classed by the per-doc type field"}
     places: {posture: unplaced}
     script: {posture: implied}
   peshitta:
@@ -456,8 +460,9 @@ sources:
     script: {posture: qualified}
   ogham:
     lect: {posture: identity, note: pgl/sga/mga — the Irish ladder is already stage-coded}
-    dating: {posture: undatable, note: "upstream dates are free prose
-        ('Fifth century…') — honestly unparsed, never guessed"}
+    dating: {posture: partial, note: "P108-8 REVISES the unparsed posture: the century-prose
+        grammar bands 128 of the 132 date-bearing docs (halves, ranges, early/mid/late);
+        the 4 odd shapes ('1890s', a Neolithic span, bare 'A.D.') stay declared residue"}
     places: {posture: named, note: "P104-1: the stone-grain place hash
         (townland/county/country + WGS84 geo + logainm refs, ~500 of 873
         docs) projects via MetadataDates :place_only — coordinates ride
@@ -534,6 +539,46 @@ sources:
         curated-band candidate, declared not faked}
     places: {posture: unplaced}
     script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
+  westoldturkic:   # P108-7
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: trk collective — WOT (r-Turkic/Bolgar, Glottocode
+        bolg1249) has no ISO code; a wot-shaped registry node is a future mint call}
+    dating: {posture: undatable, note: Hungarian first-attestation years ride entry
+        bodies — a dictionary shelf, no document timeline}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  honkoku:   # P108-5
+    kind: {posture: unclassified, note: per-material genre lives in project labels/prose —
+        a future facet look over the project taxonomy}
+    lect: {posture: identity, note: jpn declared honest-coarse — the mass is largely Edo
+        (jpn:emod once the p108-japonic-stages mint merges and a date/staging story exists);
+        kanbun materials ride jpn coarse too, declared}
+    dating: {posture: undatable, note: per-material dates live in free-prose labels only —
+        declared, not silent}
+    places: {posture: unplaced}
+    script: {posture: implied, note: kuzushiji-transcribed kanji-kana with the platform's
+        aozora-like notation verbatim}
+  kokubunken:   # P108-4
+    kind: {posture: unclassified, note: waka anthologies + the kana preface — a future
+        kind facet could stamp anthology/preface}
+    lect: {posture: identity, note: kokin jpn (the emj stage claim rides the same
+        p108-japonic-stages mint as kouigenji — one flip at merge); manyo ojp (the
+        Man'yōshū text is Old Japanese whatever the ms copy date)}
+    dating: {posture: undatable, note: compilation dates (905, c.759) are future
+        curated-band candidates, declared not faked}
+    places: {posture: unplaced}
+    script: {posture: implied, note: man'yōgana base + katakana kun layers on the manyo
+        side; kana transcription on the kokin side}
+  kouigenji:   # P108-3
+    kind: {posture: unclassified, note: one work — monogatari; a kind facet would be a
+        single-value stamp, deferred}
+    lect: {posture: pending, note: jpn:emj is the candidate — the Heian classical stage rides
+        the p108-japonic-stages nabu-lects mint; identity jpn until it merges}
+    dating: {posture: undatable, note: Genji's composition dating (c. 1008) is a future
+        curated-band candidate, declared not faked}
+    places: {posture: unplaced}
+    script: {posture: implied, note: kana-heavy hentaigana-normalized transcription per the
+        project's own conventions}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old
@@ -612,7 +657,7 @@ sources:
   local-library:
     kind: {posture: unclassified}
     lect: {posture: identity, note: the owner's own shelf — codes as curated}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "P108-8: the shelf's own integer year field (62/62 docs)"}
     places: {posture: unplaced}
     script: {posture: implied}
 
@@ -680,9 +725,8 @@ sources:
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the
     # bare code needs no codemap row).
     lect: {posture: identity, note: "obr — the v1.6.0 anchor; the bare code is the claim"}
-    dating: {posture: pending, note: "candidate: the per-file DATE header field rides
-        document metadata verbatim (regnal/CE prose — '19 April 1173'); a ruled
-        extractor over the censused shapes is the future story"}
+    dating: {posture: dated, note: "P108-8 retires the pending: every CE year in the
+        CS=CE date strings joins the envelope (967 docs banded)"}
     places: {posture: pending, note: "candidate: PLACE OF ORIGIN / CURRENT LOCATION
         header fields ride document metadata verbatim where present"}
     script: {posture: qualified, note: "Myanmar-script Unicode surface (~mymr) with a

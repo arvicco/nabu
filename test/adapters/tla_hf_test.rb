@@ -27,10 +27,16 @@ class TlaHfTest < Minitest::Test
     "https://huggingface.co/datasets/thesaurus-linguae-aegyptiae/" \
     "tla-late_egyptian-v19-premium/resolve/main/train.jsonl"
 
+  EE_URL =
+    "https://huggingface.co/datasets/thesaurus-linguae-aegyptiae/" \
+    "tla-Earlier_Egyptian_original-v18-premium/resolve/main/train.jsonl"
+
   DEMOTIC_URN = "urn:nabu:tla-hf:demotic-v18"
   LATE_URN = "urn:nabu:tla-hf:late-egyptian-v19"
-  ORIGINAL_URNS = [DEMOTIC_URN, LATE_URN].freeze
-  ALL_URNS = [DEMOTIC_URN, "#{DEMOTIC_URN}-de", LATE_URN, "#{LATE_URN}-de"].freeze
+  EE_URN = "urn:nabu:tla-hf:earlier-egyptian-v18"
+  ORIGINAL_URNS = [DEMOTIC_URN, EE_URN, LATE_URN].freeze
+  ALL_URNS = [DEMOTIC_URN, "#{DEMOTIC_URN}-de", EE_URN, "#{EE_URN}-de",
+              LATE_URN, "#{LATE_URN}-de"].freeze
 
   def conformance_adapter
     Nabu::Adapters::TlaHf.new(translations: true)
@@ -218,6 +224,7 @@ class TlaHfTest < Minitest::Test
 
   def test_fetch_wraps_http_failure_in_fetch_error
     stub_request(:get, DEMOTIC_URL).to_return(status: 500)
+    stub_request(:get, EE_URL).to_return(status: 500)
     stub_request(:get, LATE_URL).to_return(status: 500)
     Dir.mktmpdir do |workdir|
       assert_raises(Nabu::FetchError) { Nabu::Adapters::TlaHf.new.fetch(workdir) }
@@ -229,8 +236,8 @@ class TlaHfTest < Minitest::Test
   def test_probe_heads_both_resolve_urls
     assert_equal :http_zip, Nabu::Adapters::TlaHf.remote_probe_strategy
     targets = Nabu::Adapters::TlaHf.http_probe_targets
-    assert_equal [DEMOTIC_URL, LATE_URL], targets.map(&:zip_url)
-    assert_equal %w[demotic-v18 late-egyptian-v19], targets.map(&:state_subdir)
+    assert_equal [DEMOTIC_URL, EE_URL, LATE_URL], targets.map(&:zip_url)
+    assert_equal %w[demotic-v18 earlier-egyptian-v18 late-egyptian-v19], targets.map(&:state_subdir)
     assert_equal [Nabu::FileFetch::STATE_FILE], targets.map(&:state_file).uniq
     assert(targets.all? { |t| t.metadata_url.nil? },
            "the license lives on the dataset cards, no probe-shaped endpoint")
@@ -244,17 +251,18 @@ class TlaHfTest < Minitest::Test
     adapter = Nabu::Adapters::TlaHf.new(translations: true)
     first = Nabu::Store::Loader.new(db: catalog, source: source)
                                .load_from(adapter, workdir: FIXTURES, full: true)
-    assert_equal 4, first.added
+    assert_equal 6, first.added
     assert_equal 0, first.errored
-    assert_equal 16, catalog[:passages].count,
-                 "(4 + 4) originals + (4 + 4) -de siblings (the late-egyptian fixture gained the Q68 <g>N46</g> row)"
+    assert_equal 24, catalog[:passages].count,
+                 "(4 + 4 + 4) originals + (4 + 4 + 4) -de siblings (the late-egyptian fixture " \
+                 "gained the Q68 <g>N46</g> row; earlier-egyptian joined P108-7)"
 
     second = Nabu::Store::Loader.new(db: catalog, source: source)
                                 .load_from(adapter, workdir: FIXTURES, full: true)
     assert_equal 0, second.errored
-    assert_equal 4, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 4, catalog[:documents].count
-    assert_equal 16, catalog[:passages].count
+    assert_equal 6, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 6, catalog[:documents].count
+    assert_equal 24, catalog[:passages].count
     assert_equal [1], catalog[:passages].distinct.select_map(:revision),
                  "a byte-identical reload bumps no revisions"
   end
@@ -320,7 +328,8 @@ class TlaHfTest < Minitest::Test
   end
 
   def stub_datasets
-    { DEMOTIC_URL => "demotic-v18", LATE_URL => "late-egyptian-v19" }.each do |url, subdir|
+    { DEMOTIC_URL => "demotic-v18", EE_URL => "earlier-egyptian-v18",
+      LATE_URL => "late-egyptian-v19" }.each do |url, subdir|
       stub_request(:get, url).to_return(
         status: 200, body: File.binread(File.join(FIXTURES, subdir, "train.jsonl")),
         headers: { "Content-Type" => "application/json",

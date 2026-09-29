@@ -17,3 +17,9 @@ files:
     url: https://huggingface.co/datasets/thesaurus-linguae-aegyptiae/tla-late_egyptian-v19-premium/resolve/main/train.jsonl
     whole: false
     trim: upstream lines 1, 2, 782 byte-verbatim (1,904,138 B / 3,606 lines -> 2,956 B / 3 lines)
+  - path: earlier-egyptian-v18/train.jsonl
+    url: https://huggingface.co/datasets/thesaurus-linguae-aegyptiae/tla-Earlier_Egyptian_original-v18-premium/resolve/main/train.jsonl
+    refetchable: true
+    whole: false
+    retrieved: "2026-09-29"
+    trim: the REAL first 4 records (head -4), byte-verbatim

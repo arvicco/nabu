@@ -85,9 +85,10 @@ module Query
       db = store_test_db
       load_tla_hf_fixture(db)
       corpus = card_for("N35", catalog: db).card.corpus
-      assert_equal 13, corpus["signs"],
-                   "𓈖 occurrences across the 4 fixture rows (counted from raw JSON 2026-09-11)"
-      assert_equal 4, corpus["passages"]
+      assert_equal 17, corpus["signs"],
+                   "𓈖 occurrences across the fixture rows (recounted 2026-09-29 — " \
+                   "the P108-7 earlier-egyptian fixture adds 4)"
+      assert_equal 6, corpus["passages"], "the earlier-egyptian fixture adds two 𓈖-bearing rows"
     ensure
       db&.disconnect
     end
@@ -130,7 +131,7 @@ module Query
       load_aes_fixture(db)
       load_tla_hf_fixture(db)
       corpus = card_for("N35", catalog: db).card.corpus
-      assert_equal 31, corpus["signs"], "18 aes hiero_inventar tokens + 13 tla-hf glyphs"
+      assert_equal 35, corpus["signs"], "18 aes hiero_inventar tokens + 17 tla-hf glyphs"
     ensure
       db&.disconnect
     end
