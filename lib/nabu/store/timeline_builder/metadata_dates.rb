@@ -143,9 +143,15 @@ module Nabu
           #                              (the e-text pub_date stays machinery)
           "openmgh" => :printed_year_text, # P109-4: the MGH volume's print year — the same
           #                                  honestly-labeled "edition" class
-          "rem" => :place_only # P109-4: the header's orig_place scriptorium claims
+          "rem" => :place_only, # P109-4: the header's orig_place scriptorium claims
           #                       (79 of 406 docs; PLACE_KEYS) — dating already rides
           #                       its own lane
+          "ja-wikisource" => :era_band_key, # P109-1 (№R-74): the era-category envelope
+          #                       the adapter mints ("era_band") — an ERA attribution,
+          #                       precision "era", never a typed date
+          "zh-wikisource" => :dynasty_band # P109-1: the work-level dynasty claim
+          #                       (全唐文 → 唐) through the ruled period table —
+          #                       the cbeta shape verbatim
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
@@ -593,6 +599,16 @@ module Nabu
           return [nil, nil, nil] if years.empty?
 
           [years.min, years.max, text.to_s.strip, nil, "edition"]
+        end
+
+        # ja-wikisource (P109-1): the adapter's era-category envelope —
+        # {"not_before", "not_after", "raw" => "平安時代"} — rides as an
+        # era attribution (precision "era", the cbeta dynasty precedent).
+        def era_band_key(meta)
+          band = meta["era_band"]
+          return [nil, nil, nil] unless band.is_a?(Hash) && band["not_before"] && band["not_after"]
+
+          [band["not_before"], band["not_after"], band["raw"], "era"]
         end
 
         # ogham (P104-1): no date lane at all — the "date" is free prose

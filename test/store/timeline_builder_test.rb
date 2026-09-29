@@ -498,6 +498,16 @@ module Store
                  "sine loco is the imprint world's unknown — never a place name"
     end
 
+    def test_metadata_dates_ja_wikisource_era_band
+      seed_metadata_doc("ja-wikisource", "urn:nabu:ja-wikisource:7285",
+                        { "era_band" => { "not_before" => 1185, "not_after" => 1392,
+                                          "raw" => "鎌倉時代・南北朝時代" } })
+      build!
+      row = timeline_for("urn:nabu:ja-wikisource:7285")
+      assert_equal [1185, 1392, "era"], row.values_at(:not_before, :not_after, :precision),
+                   "the era-category attribution wears the era precision label"
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

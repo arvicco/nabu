@@ -2231,6 +2231,20 @@ itkc:
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
 
+ja-wikisource:   # P109-1
+  adapter: Nabu::Adapters::JaWikisource
+  adopted: "2026-09-29"
+  axes: [japonic]
+  wired: false
+  sync_policy: manual
+  # The Japanese Wikisource premodern era cone (№R-74 posture:
+  # premodern cone, verbatim base-edition strings, census-first —
+  # .docs/p109-plan.md). Census 2026-09-29: 867 ns-0 pages across the
+  # eight era categories 飛鳥–江戸; 760 direct-text (6.6 MB) parse,
+  # 29 {{versions}} + 78 <pages index> scan shells skip by rule (the
+  # scan shells are the declared residue — a future Page:-expansion
+  # packet). Texts PD; transcription layer CC BY-SA 4.0.
+
 kanripo:
   adapter: Nabu::Adapters::Kanripo
   adopted: "2026-07-20"
@@ -4833,6 +4847,20 @@ unikemet:
   # (unicode.org/license.txt, MIT-style, quoted in the adapter manifest)
   # → class open, the Unihan class.
   sync_policy: manual
+
+zh-wikisource:   # P109-1
+  adapter: Nabu::Adapters::ZhWikisource
+  adopted: "2026-09-29"
+  cjk_index: true
+  axes: [sinitic]
+  wired: false
+  sync_policy: manual
+  # Censused works, prefix-expanded (№R-74; census in
+  # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
+  # fetch expands the ~20k piece pages offline into juan envelopes) ·
+  # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
+  # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編
+  # failed census (front matter only). Texts PD; layer CC BY-SA 4.0.
 
 viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
