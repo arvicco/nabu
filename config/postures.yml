@@ -376,6 +376,11 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   # Variety-less languages as held (no registry stages to refine into):
+  hittite-glossed:
+    lect: {posture: identity, note: hit only (per-token language tags do not exist in the CSV) — no minted stages}
+    dating: {posture: undatable, note: no date fields in the asset — declared, the mining census agrees}
+    places: {posture: unplaced, note: no place fields in the asset — declared}
+    script: {posture: implied}
   tlhdig:
     lect: {posture: identity, note: the cuneiform micro-shelves (hit/xhu/xlu…) — no minted stages}
     dating: {posture: undatable}
