@@ -145,7 +145,12 @@ module Nabu
         Nabu::Adapter::DiscoverySkips.new(
           skipped_by_rule: skipped,
           unrecognized: strays.size,
-          notes: (skipped.positive? ? ["#{skipped} {{versions}}/<pages index> shell page(s) (no hosted text)"] : []) +
+          notes: (if skipped.positive?
+                    ["#{skipped} shell page(s) — {{versions}}/<pages index>/" \
+                     "sibling-transclusion (no hosted text)"]
+                  else
+                    []
+                  end) +
                  strays.map { |rel| "non-corpus file: #{rel}" }
         )
       end
@@ -287,6 +292,13 @@ module Nabu
         wikitext = envelope.fetch("wikitext")
         return :versions if wikitext.match?(/\{\{\s*versions/i)
         return :pages_index if wikitext.match?(/<pages\s+index/i)
+        return :text if manyo_blocks?(wikitext)
+        # Sibling-transclusion shells (censused at the live first
+        # sync, 230 pages — 北条五代記/巻第二 is "{{:巻第一|巻=二|…}}"
+        # and nothing else): the content renders from ANOTHER page's
+        # machinery. Same residue class as <pages index> — skip by
+        # rule, never quarantine.
+        return :shell if prose_paragraphs(wikitext).empty?
 
         :text
       end
@@ -417,12 +429,20 @@ module Nabu
       def manyo_document(document_ref, envelope, wikitext)
         document = document_for(document_ref, envelope, language: MANYO_LANGUAGE)
         sequence = 0
+        seen = Hash.new(0)
         wikitext.split(/^(?=\[歌番号\])/).each do |block|
           fields = manyo_fields(block)
-          number = fields["歌番号"].to_s[%r{[\d/]+}]
+          # The corpus's own poem id VERBATIM — variant verses carry
+          # their own letter suffix ("03/0235S", the 或本歌 beside
+          # 03/0235; stripping it collides URNs, censused live on
+          # 万葉集/第三巻). Any residual repeat takes the house :b2
+          # positional disambiguator (the rem/ddbdp precedent).
+          number = fields["歌番号"].to_s[%r{[0-9A-Za-z/]+}]
           original = fields["原文"]
           next if number.nil? || original.nil? || original.empty?
 
+          seen[number] += 1
+          number = "#{number}:b#{seen[number]}" if seen[number] > 1
           sequence += 1
           document << manyo_passage(document_ref, number, original, fields, sequence)
         end
