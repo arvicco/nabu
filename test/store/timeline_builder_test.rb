@@ -400,6 +400,24 @@ module Store
                    "a translation-typed date is dated but NOT composition-classed"
     end
 
+    # The live census (2026-09-29): only 24 of 632 syriac docs carry a
+    # `when` attribute — 608 date in century PROSE. The shape falls back
+    # to the century grammar, and the grammar knows halves: "Second
+    # half of the fifth century" is 450-500, never the 2nd century.
+    def test_metadata_dates_syriac_prose_fallback_and_half_grammar
+      seed_metadata_doc("syriac-corpus", "urn:nabu:syriac-corpus:p1",
+                        { "orig_date" => { "text" => "Second half of the fifth century CE",
+                                           "type" => "composition" } })
+      seed_metadata_doc("syriac-corpus", "urn:nabu:syriac-corpus:p2",
+                        { "orig_date" => { "text" => "Late 5th/early 6th century CE",
+                                           "type" => "composition" } })
+      build!
+      p1 = timeline_for("urn:nabu:syriac-corpus:p1")
+      assert_equal [450, 500, "composition"], p1.values_at(:not_before, :not_after, :date_class)
+      p2 = timeline_for("urn:nabu:syriac-corpus:p2")
+      assert_equal [450, 550], [p2[:not_before], p2[:not_after]]
+    end
+
     def test_metadata_dates_obi_ce_year_text
       seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:v1",
                         { "date" => "CS 586(580) = CE 1224(1218) CS 580 = CE 1218; CS 586 = CE 1224" })
