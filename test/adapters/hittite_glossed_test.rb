@@ -67,9 +67,9 @@ module Adapters
       # ordinal urns stay unique, the line label and cth ride as
       # annotations.
       assert_equal 4, d.passages.size
-      assert_equal %w[615 615 670 670], d.passages.map { |p| p.annotations["cth"] }
-      assert_equal ["Vs.? 3", "Vs.? 4", "Vs.? 3", "Vs.? 4"],
-                   d.passages.map { |p| p.annotations["line"] }
+      assert_equal(%w[615 615 670 670], d.passages.map { |p| p.annotations["cth"] })
+      assert_equal(["Vs.? 3", "Vs.? 4", "Vs.? 3", "Vs.? 4"],
+                   d.passages.map { |p| p.annotations["line"] })
     end
 
     def test_single_cth_text_passages_carry_no_cth_annotation

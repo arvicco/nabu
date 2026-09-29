@@ -50,7 +50,8 @@ module Adapters
       assert_equal "https://dl.ndl.go.jp/pid/2532153", meta["permalink"],
                    "per-item NDL provenance, as promised in the grant thread"
       assert_equal "[慶長10(1605)]", meta["pub_date"], "the prose date rides verbatim"
-      assert_equal({ "value" => "古典籍資料（貴重書等）-その他" }, meta.dig("facets", "collection"))
+      assert_equal({ "values" => ["古典籍資料（貴重書等）-その他"] }, meta.dig("facets", "collection"),
+                   "collection is ||-multi like subject — the values shape")
       assert_equal({ "values" => %w[倭玉篇 辞書] }, meta.dig("facets", "subject"),
                    "the ||-separated 件名 values each facet")
     end
