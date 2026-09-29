@@ -32,3 +32,9 @@ files:
     url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/canons.json
     whole: true
     trim: none (upstream's canon registry, copied whole)
+  - path: K/K05/K05n0016.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/K/K05/K05n0016.xml
+    refetchable: true
+    whole: false
+    retrieved: "2026-09-29"
+    trim: real header + first 3 body paragraphs, balanced close
