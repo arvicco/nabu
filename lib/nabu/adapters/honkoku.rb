@@ -126,7 +126,7 @@ module Nabu
       def transcribed?(dir)
         return false unless File.directory?(dir)
 
-        Dir.children(dir).any? do |name|
+        Dir.children(dir).sort.any? do |name|
           path = File.join(dir, name)
           PAGE_TXT.match?(name) && File.size(path).positive? &&
             !File.read(path, encoding: "UTF-8").strip.empty?

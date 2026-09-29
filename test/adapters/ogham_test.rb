@@ -168,10 +168,11 @@ class OghamTest < Minitest::Test
     assert_nil sibling.metadata["related"]
   end
 
-  def test_ogham_is_registered_for_the_place_only_metadata_dates_shape
-    assert_equal :place_only, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["ogham"],
-                 "P104-1: the stone-grain place hash (county/geo/logainm) projects into " \
-                 "document_axes; the free-prose dates stay honestly unparsed"
+  def test_ogham_is_registered_for_the_century_prose_metadata_dates_shape
+    assert_equal :century_prose, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["ogham"],
+                 "P104-1 minted the place lane; P108-8 REVISES the date half — the " \
+                 "century-prose grammar bands the 'Fifth century…' texts (places keep " \
+                 "riding the place lane regardless of shape)"
   end
 
   # --- registry ---------------------------------------------------------------
