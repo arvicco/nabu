@@ -39,6 +39,30 @@ files:
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/README.org
     whole: true
     trim: none
+  - path: KR-Catalog/KR/KR1.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR1.txt
+    whole: true
+    trim: none (the small division index file, whole)
+  - path: KR-Catalog/KR/KR2.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR2.txt
+    whole: true
+    trim: none (the small division index file, whole)
+  - path: KR-Catalog/KR/KR3.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR3.txt
+    whole: true
+    trim: none (the small division index file, whole)
+  - path: KR-Catalog/KR/KR4.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR4.txt
+    whole: true
+    trim: none (the small division index file, whole)
+  - path: KR-Catalog/KR/KR5.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR5.txt
+    whole: true
+    trim: none (the small division index file, whole)
+  - path: KR-Catalog/KR/KR6.txt
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR6.txt
+    whole: true
+    trim: none (the small division index file, whole)
   - path: KR-Catalog/KR/KR1a.txt
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR1a.txt
     whole: false

@@ -36,7 +36,7 @@ module Nabu
     # the copyright page, IS the CATEGORY_B constant below; #discover
     # refuses LOUDLY (FetchError) if any of those canon dirs ever appears in
     # the workdir, and the fetch cone never asks for them. Other Category A
-    # canons beyond T/X (J, K, N, …) are out of THIS phase's scope: skipped
+    # canons beyond T/X/K (J, N, …) are out of scope so far: skipped
     # by rule, censused in discovery_skips, a future scope decision.
     #
     # == Identity (FROZEN minting)
@@ -83,7 +83,11 @@ module Nabu
       )
 
       # This phase's ingest scope: the two central canons (owner-widened).
-      CANONS = %w[T X].freeze
+      # P108-7 (the scope-widening remainder, ruled next-in-line): + K —
+      # the Tripiṭaka Koreana texts WITHOUT Taishō parallels (Category A
+      # like T/X; upstream holds just 6 volume dirs / 10 XMLs — the
+      # Koreana-only residue, everything else already reads through T).
+      CANONS = %w[T X K].freeze
 
       # Category B, verbatim from cbeta.org/copyright (類別 B：不屬於創用 CC
       # 條款授權之文獻 — read 2026-07-20): canon dir code → named corpus.
@@ -100,7 +104,7 @@ module Nabu
       # the canon registry + the RelaxNG schema. ≈1.43 GiB of working tree
       # at 2026.R1; everything else — including every Category B dir —
       # is never materialized.
-      SPARSE_CONE = ["T/", "X/", "canons.json", "schema/"].freeze
+      SPARSE_CONE = ["T/", "X/", "K/", "canons.json", "schema/"].freeze
 
       # Upstream's own filename grammar: <canon><vol>n<work>.xml
       # (T85n2884, X01n0001, T85n2917A). The stem IS the document id.

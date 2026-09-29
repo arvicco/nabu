@@ -90,6 +90,9 @@ class OtdoTest < Minitest::Test
     assert_equal "manuscript", metadata["category"]
     assert_includes metadata["note"], "Scroll. The end is missing. Recto, 536 lines."
     refute metadata.key?("references"), "bibliographic apparatus is dropped, not stored"
+    assert_equal({ "value" => "manuscript" }, metadata.dig("facets", "category"),
+                 "P109-4 (№R-70): the manuscript/inscription split reaches the facet " \
+                 "lane — under upstream's own name, never the KindBuilder-owned \"kind\"")
   end
 
   # --- the inscription (Zhol, south face of the Potala) ----------------------

@@ -67,6 +67,13 @@ class CorpusGysselingTest < Minitest::Test
     assert_includes ids, D0003, "0003.fromdb → docId 0003 → urn suffix"
   end
 
+  def test_genre_series_code_projects_as_a_labeled_facet
+    require_fixtures!
+    facets = parse_urn(D0003).metadata["facets"]
+    assert_equal({ "value" => "A", "raw" => "ambtelijke bescheiden" }, facets["genre"],
+                 "P109-4 (№R-70): the Corpus Gysseling series code reaches the facet lane")
+  end
+
   def test_a_line_becomes_a_passage_with_gold_lemma_pos_tokens
     require_fixtures!
     document = parse_urn(D0003)

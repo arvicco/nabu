@@ -2002,6 +2002,21 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+hittite-glossed:   # P109-3
+  adapter: Nabu::Adapters::HittiteGlossed
+  adopted: "2026-09-29"
+  axes: [hittite]
+  wired: true    # first sync 2026-09-29: 7,099 texts / 72,507 passages,
+                   # sha pin verified; IBoT 1.30+ card eyeballed (8 lines,
+                   # cth facet 821, aligned token layers)
+  sync_policy: manual
+  # "Glossed Hittite Texts with German Translation for Machine
+  # Learning" — Zenodo 10.5281/zenodo.14266302 v1.0, cc-by-4.0 on the
+  # record (read 2026-09-29). One sha-pinned CSV: 7,099 texts /
+  # 170,496 glossed word rows; document = text (txtid), passage =
+  # manuscript line, aligned translit/gloss/German token layers as
+  # annotations; the cth facet joins the TLHdig surface.
+
 honkoku:   # P108-5
   adapter: Nabu::Adapters::Honkoku
   adopted: "2026-09-29"
@@ -2230,6 +2245,24 @@ itkc:
   # 제공신청 — the P78-7 scout report).
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
+
+ja-wikisource:   # P109-1
+  adapter: Nabu::Adapters::JaWikisource
+  adopted: "2026-09-29"
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 530 docs / 52,408 passages, 0
+                   # quarantined; 337 shells skip by rule (107 versions/
+                   # pages-index + 230 sibling-transclusion, censused at
+                   # this sync); 万葉集/徒然草 cards eyeballed (ojp
+                   # man'yōgana + era bands live)
+  sync_policy: manual
+  # The Japanese Wikisource premodern era cone (№R-74 posture:
+  # premodern cone, verbatim base-edition strings, census-first —
+  # .docs/p109-plan.md). Census 2026-09-29: 867 ns-0 pages across the
+  # eight era categories 飛鳥–江戸; 760 direct-text (6.6 MB) parse,
+  # 29 {{versions}} + 78 <pages index> scan shells skip by rule (the
+  # scan shells are the declared residue — a future Page:-expansion
+  # packet). Texts PD; transcription layer CC BY-SA 4.0.
 
 kanripo:
   adapter: Nabu::Adapters::Kanripo
@@ -2878,6 +2911,26 @@ nabu-places:
   # arvicco/nabu-places + push ~/Dev/nabu-places, then bin/nabu enable
   # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
   sync_policy: manual
+
+ndl-kotenseki:   # P109-2
+  adapter: Nabu::Adapters::NdlKotenseki
+  adopted: "2026-09-29"
+  cjk_index: true
+  axes: [japonic]
+  wired: true    # first slice 2026-09-29: 398 books / 24,568 koma passages,
+                   # 0 errored, oldest PIDs first; 葬祭考/玉篇 cards eyeballed
+                   # (date envelopes + multi collection facets live). 400
+                   # newest PIDs 403-ledgered (no OCR served yet); the crawl
+                   # resumes per phase
+  sync_policy: manual
+  # The NDL 次世代デジタルライブラリー 古典籍 OCR mass over the bulk
+  # route NDL Lab granted (by email, 2026-09-29): per-book
+  # fulltext-json API + the open-dataset PID census (97,731 PD-expired
+  # PIDs at the 2026-02 snapshot). Resumable paced crawl at the
+  # COMMITTED ~1 req/s (never lower): SLICE books per sync, refused/
+  # empty PIDs ledgered, the mass continues across phases (Q108).
+  # OCR-nature label + per-item permalink on every document (both
+  # promised in the ask). Language jpn — deliberately coarse, declared.
 
 nrct:   # P108-2
   adapter: Nabu::Adapters::Nrct
@@ -5016,6 +5069,26 @@ wold:
   # Donor map keys on languoid NAMES — WOLD's own glottocodes are unreliable
   # (its "Old Norse" is noon1243 = Glottolog's Noone; see cldf-spine row).
   sync_policy: manual
+
+zh-wikisource:   # P109-1
+  adapter: Nabu::Adapters::ZhWikisource
+  adopted: "2026-09-29"
+  cjk_index: true
+  axes: [sinitic]
+  wired: true    # first sync 2026-09-29: 1,238 docs / 72,723 passages, 0
+                   # quarantined (全唐文 1,001 juan composed from their piece
+                   # pages · 續資治通鑑 221 · 元朝秘史 16); 卷0001 + 卷15 cards
+                   # eyeballed (唐 era band live). KNOWN BLEMISH: 全唐文 juan
+                   # lead with a __NOEDITSECTION__ magic-word passage — the
+                   # scrub + re-parse ride the next phase (owner-ruled
+                   # 2026-09-29)
+  sync_policy: manual
+  # Censused works, prefix-expanded (№R-74; census in
+  # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
+  # fetch expands the ~20k piece pages offline into juan envelopes) ·
+  # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
+  # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編
+  # failed census (front matter only). Texts PD; layer CC BY-SA 4.0.
 
 zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner GO 2026-08-29)
   adapter: Nabu::Adapters::Zhongyuan

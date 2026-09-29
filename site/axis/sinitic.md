@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 September 2026)</span> |
 |---|---|---|---|---|
@@ -35,9 +35,10 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `viet-wikisource` | texts | attribution | wired · manual | 32 docs / 7,674 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
+| `zh-wikisource` | texts | attribution | wired · manual | 1,238 docs / 72,723 passages |
 | `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 September 2026)</span>: `zho` 543,297 · `lzh` 80,230 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 35 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 September 2026)</span>: `zho` 543,313 · `lzh` 81,452 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 35 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 

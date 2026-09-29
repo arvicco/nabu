@@ -1051,7 +1051,10 @@ adapter comment, the posture note, or the health checker's declared
 exemption ledger (`Invariants::MINING_EXEMPT`, each entry with its
 reason) — never silent. Both dating grades count: typed upstream dates
 and attributed composition-era dates as their own labeled class
-(`date_class` on the axis row). The self-enforcing half is the
+(`date_class` on the axis row; P109-4 added `"edition"` — a source
+EDITION's print year, projected so it can never masquerade as
+composition or artifact dating; era attributions wear `precision`
+"era"). The self-enforcing half is the
 `unmined_axis_metadata` health invariant: axis-shaped metadata keys with
 zero corresponding facet/axis rows stay loud until extracted or
 declared.

@@ -147,6 +147,12 @@ module Nabu
           metadata[key] = value unless value.empty?
         end
         metadata["category"] = slug.start_with?(INSCRIPTION_PREFIX) ? "inscription" : "manuscript"
+        # P109-4 (№R-70): the manuscript/inscription split projected as
+        # a facet under upstream's own field name (the FacetBuilder
+        # {"value" =>} contract). NEVER "kind" — KindBuilder owns that
+        # facet name and drop-and-reprojects it from config/kind_map.yml
+        # rules on every sync, deleting any adapter-emitted row.
+        metadata["facets"] = { "category" => { "value" => metadata["category"] } }
         metadata["pressmark"] = slug.tr("_", " ") unless slug.start_with?(INSCRIPTION_PREFIX)
         metadata
       end

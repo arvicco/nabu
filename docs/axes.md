@@ -163,7 +163,7 @@ The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Qu
 
 The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank.
 
-**Members** (3): `tlhdig`, `ud`, `wiktionary-hit`
+**Members** (4): `hittite-glossed`, `tlhdig`, `ud`, `wiktionary-hit`
 
 ### cuneiform
 
@@ -235,7 +235,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (19): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `qieyun-restored`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zhongyuan`
+**Members** (20): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `qieyun-restored`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
 
 ### japonic
 
@@ -243,7 +243,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (12): `aozora`, `edrdg`, `hdic`, `honkoku`, `kokubunken`, `kouigenji`, `kradfile`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
+**Members** (14): `aozora`, `edrdg`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
 
 ### turkic
 

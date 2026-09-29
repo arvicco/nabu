@@ -183,7 +183,25 @@ module Nabu
                         "provenance_url" => "edition lineage URL, not a findspot" },
         "local-library" => { "provenance" => "ingest lineage (retrieval date + URL), not a findspot" },
         "e84000" => { "publication_date" => "the MODERN translation's release date (84000.co); " \
-                                            "composition dating rides the Kangyur lanes" }
+                                            "composition dating rides the Kangyur lanes" },
+        # P109-4, the Q83 drain: edition/publisher PLACES are lineage —
+        # the place lane carries a text's own origin or findspot, and an
+        # imprint place only qualifies where the document IS the printed
+        # artifact (eebo-tcp's source_pub_place, projected). Edition
+        # DATES project with date_class "edition" (cme/openmgh).
+        "cme" => { "pub_place" => "the U-M e-publisher's place (Ann Arbor), data lineage",
+                   "source_pub_place" => "the source edition's imprint place (mixed modern/early " \
+                                         "publishers) — edition lineage, not the Middle English " \
+                                         "text's origin",
+                   "pub_date" => "the U-M e-text release year, machinery — the source edition's " \
+                                 "year projects instead (date_class edition)" },
+        "eebo-tcp" => { "pub_place" => "the TCP project's own place, data lineage — the " \
+                                       "early-modern imprint place projects instead" },
+        "corpus-corporum" => { "pub_place" => "the Patrologia Latina imprint (Parisiis, on " \
+                                              "every doc) — edition lineage, not the patristic " \
+                                              "works' origin" },
+        "openmgh" => { "printed_place" => "the modern MGH volume's publisher city — edition " \
+                                          "lineage; the print year projects (date_class edition)" }
       }.freeze
 
       MINING_SAMPLE = 40

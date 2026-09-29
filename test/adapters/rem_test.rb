@@ -78,6 +78,12 @@ class RemTest < Minitest::Test
                  "the primary (ed=1) lb milestones are the corpus's own layout grain"
   end
 
+  def test_genre_code_projects_as_a_labeled_facet
+    facets = parse_urn("urn:nabu:rem:m058").metadata["facets"]
+    assert_equal({ "value" => "V", "raw" => "Vers" }, facets["genre"],
+                 "P109-4 (№R-70): the ReM genre code reaches the facet lane")
+  end
+
   def test_passage_text_is_the_diplomatic_layer_nfc_byte_pinned
     document = parse_urn("urn:nabu:rem:m058")
     line = document.find { |p| p.urn.end_with?(":100v.6") }

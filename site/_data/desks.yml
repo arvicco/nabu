@@ -56,7 +56,7 @@
 - slug: hittite
   persona: The Hittitologist
   blurb: Anatolia in cuneiform, KBo and KUB by tablet and line
-  members: 3
+  members: 4
 - slug: cuneiform
   persona: The Assyriologist
   blurb: 'Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire'
@@ -94,11 +94,11 @@
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past
-  members: 19
+  members: 20
 - slug: japonic
   persona: The Japanologist
   blurb: Old Japanese song to the Sino-Japanese dictionary tradition
-  members: 12
+  members: 14
 - slug: turkic
   persona: The Turkologist
   blurb: the runiform steppe to the Chagatai chancery, one literary continuum

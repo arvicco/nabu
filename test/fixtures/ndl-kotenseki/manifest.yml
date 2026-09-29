@@ -1,0 +1,21 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: ndl-kotenseki
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: books/2532153.json
+    url: https://lab.ndl.go.jp/dl/api/book/fulltext-json/2532153
+    refetchable: false
+    provenance: local-trim
+    reason: live API response trimmed to the first 6 of 58 koma — re-cut per README
+    copied: "2026-09-29"
+    whole: false
+    trim: list[0..5] kept, hit/from envelope kept
+  - path: census.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: the adapter's derived census shape, one row cut from the public-domain open-dataset xlsx — re-cut per README
+    copied: "2026-09-29"
+    whole: false
+    trim: header + the PID 2532153 row
