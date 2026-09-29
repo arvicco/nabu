@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: kokubunken
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: Kokinwakashu_200003050_20240922.xml
+    url: https://raw.githubusercontent.com/kokubunken/kokinwakashu/main/Kokinwakashu_200003050_20240922.xml
+    refetchable: true
+    whole: false
+    trim: real header + the 仮名序 + the first two 和歌 divs, balanced close
+  - path: "manyo_hirose_v06_0001-0234,3348-3577_202603.xml"
+    url: "https://raw.githubusercontent.com/kokubunken/nijl-manyoshuTEI/main/manyo_hirose_v06_0001-0234,3348-3577_202603.xml"
+    refetchable: true
+    whole: false
+    trim: real header + front matter + poems 1-4, balanced close

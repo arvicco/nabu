@@ -1040,6 +1040,22 @@ design — five dating sources measured, the schema priced (≤ ~100k rows,
 Part 1 (HGV papyri + Slovene goo300k/IMP, P15-2) and Part 2 (ORACC catalogue
 dates + TOROT chronicle annals, P16-3).
 
+**The aggressive-mining law (owner-ruled 2026-09-26) governs every axis
+lane in this section and §15's facet lanes alike: ALL fetched metadata
+and content is mined for the library axes — dates, places, genre, kind,
+lects — as a matter of course.** A posture of `undatable`/`unplaced` is
+honest only when the asset truly carries nothing; an adapter that
+fetches axis-shaped fields and drops them is a *defect*, not a scope
+choice. Deliberate coarseness is allowed but must be DECLARED — in the
+adapter comment, the posture note, or the health checker's declared
+exemption ledger (`Invariants::MINING_EXEMPT`, each entry with its
+reason) — never silent. Both dating grades count: typed upstream dates
+and attributed composition-era dates as their own labeled class
+(`date_class` on the axis row). The self-enforcing half is the
+`unmined_axis_metadata` health invariant: axis-shaped metadata keys with
+zero corresponding facet/axis rows stay loud until extracted or
+declared.
+
 **A catalog-side `document_axes` table (migration 008), NOT columns on
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)
 several timeline rows, and most of the corpus is *undated* — an absence, never a

@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: kouigenji
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: 01.xml
+    url: https://raw.githubusercontent.com/kouigenjimonogatari/kouigenjimonogatari.github.io/master/xml/master/01.xml
+    refetchable: true
+    whole: false
+    trim: real header + first 59 line-segs (through waka-001's seg) + closing tags
+  - path: 03.xml
+    url: https://raw.githubusercontent.com/kouigenjimonogatari/kouigenjimonogatari.github.io/master/xml/master/03.xml
+    refetchable: true
+    whole: false
+    trim: real header + first 6 line-segs + closing tags

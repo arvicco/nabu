@@ -1,0 +1,2669 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>萬葉集manyo_hirose_v06_0001-0234_amane202503</title>
+            <editor>合同会社AMANE</editor>
+            <funder from="2020-03" to="2020-09">関西大学</funder>
+            <funder from="2023-01" to="2026-03">国文学研究資料館</funder>
+            <principal>菊池信彦</principal>
+            <respStmt>
+               <resp from="2020-03" to="2026-03">TEI Encoding</resp>
+               <name xml:id="データ作成者001">合同会社AMANE</name>
+            </respStmt>
+            <respStmt>
+               <resp from="2020-03" to="2026-03">TEI Consulting</resp>
+               <name>Kiyonori Nagasaki</name>
+               <name from="2020-03" to="2020-09">KU-ORCASユニット４「古典籍資料の情報資源化」</name>
+               <name from="2023-01" to="2026-03">国文学研究資料館</name>
+            </respStmt>
+            <respStmt>
+               <resp from="2020-09" to="2025-03">廣瀬本万葉集監修</resp>
+               <name xml:id="監修001">乾善彦（関西大学）</name>
+               <name xml:id="監修002">茂野智大（筑波大学）</name>
+               <name xml:id="監修003">青山英正（東京大学）</name>
+               <name xml:id="監修004"
+                  >Dr. Malgorzata (Gosia)  Citko-Duplantis（University of Tennessee, Knoxville）</name>
+               <name from="2020-03" to="2020-09">KU-ORCASユニット４「古典籍資料の情報資源化」</name>
+               <name from="2023-01" to="2026-03">国文学研究資料館</name>
+            </respStmt>
+            <respStmt>
+               <resp>国歌大観番号85〜140のテキストデータ・TEIデータ化事業の推進</resp>
+               <name from="2020-03" to="2020-09">関西大学</name>
+            </respStmt>
+            <respStmt>
+               <resp>国歌大観番号1〜84・141〜234のテキストデータ・TEIデータ化事業の推進</resp>
+               <name from="2023-01" to="2024-03">国文学研究資料館</name>
+            </respStmt>
+            <respStmt>
+               <resp>『萬葉集』（国歌大観番号1～234）のTEIデータ可視化可能性についての調査研究、追加データ作成及びビューワ作成</resp>
+               <name from="2024-12" to="2025-03"/>
+            </respStmt>
+            <respStmt>
+               <resp>『萬葉集』（国歌大観番号3348～3423）の本⽂テキストデータおよびTEIデータ作成</resp>
+               <name from="2024-08" to="2025-03"/>
+            </respStmt>
+            <respStmt>
+               <resp>『萬葉集』（国歌大観番号3424～3577）の本⽂テキストデータおよびTEIデータ作成</resp>
+               <name from="2025-09" to="2026-03"/>
+            </respStmt>
+            <respStmt>
+               <resp>『萬葉集』（国歌大観番号1～234、3348～3423）のTEIデータ改修及びTEIビューワ改修</resp>
+               <name from="2025-12" to="2026-03"/>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>関西大学</publisher>
+            <publisher>国文学研究資料館</publisher>
+            <authority>国文学研究資料館</authority>
+            <availability>
+               <licence target="https://creativecommons.org/publicdomain/mark/1.0/"
+                  >クリエイティブ・コモンズ・ライセンス0（CC0）</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>
+                     <orgName>関西大学</orgName>
+                     <orgName>関西大学図書館</orgName>
+                     <settlement>大阪府吹田市</settlement>
+                  </institution>
+                  <repository>関西大学図書館</repository>
+                  <collection facs="https://www.iiif.ku-orcas.kansai-u.ac.jp/"
+                     >関西大学デジタルアーカイブ</collection>
+                  <collection facs="https://www.iiif.ku-orcas.kansai-u.ac.jp/books/about"
+                     >関西大学東アジアデジタルアーカイブ</collection>
+                  <idno type="資料ID">210464810</idno>
+                  <idno type="請求記号">CL25**1-1*1</idno>
+                  <idno type="URI">https://www.iiif.ku-orcas.kansai-u.ac.jp/books/210464810</idno>
+                  <msName>萬葉集 20巻</msName>
+                  <msName>萬葉集 第一二</msName>
+               </msIdentifier>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <editorialDecl>
+            <p><list>
+                  <item> 1.長歌・短歌・その他の本文という3種類のテキストを基本として構成されるものとして，それぞれ<gi>ab</gi>エレメント，<gi>lg</gi>エレメント，<gi>p</gi>エレメントでマークアップするとともに，長歌・短歌は@type属性で明示する．作者については@corresp属性でxml:id参照を付与する． </item>
+                  <item> 2.登場する人名は，<gi>back</gi>中の<gi>listPerson</gi>に<gi>person</gi>としてリストし，それぞれにxml:idを付与して他の箇所から参照できるようにする． </item>
+                  <item> 3.短歌の本文と訓の対応は，<gi>lg</gi>内でそれぞれ<gi>l</gi>でマークアップし，@xml:id/@correp属性で参照する．長歌の傍訓は，現在ルビのマークアップに際してよく用いられている<gi>seg</gi>タグと@type属性の長歌1行, 傍訓, 長歌本文を用いて，傍訓とその対象を記述する．位置情報は，@rendition属性で位置情報を記述する．また、短歌に傍訓がある場合は<gi>lg</gi>内で<gi>l</gi>のなかに<gi>seg</gi>タグと@type属性の短歌1行, 傍訓, 短歌本文を用いて，傍訓とその対象を記述する．位置情報は，@rendition属性で位置情報を記述する． </item>
+                  <item> 4.本文以外のテキスト（ここでは便宜上，これを「書き入れ」と称する）については，種類に応じて<gi>note</gi>，<gi>add</gi>，<gi>corr</gi>エレメントを用いてマークアップを行う．<gi>note</gi>には内容的にみていくつかのタイプがあるため，これを@type属性で区別する．また，位置情報が重要になる場合もあるため，可能な限り，@place属性で位置情報を記述する．位置情報の値は，TEIガイドラインで提供されている値を用いることを基本とするが，上下左右の余白に記述されている場合は，margin-*というプレフィックスを値につけることで対応する． </item>
+                  <item> 5. <gi>note</gi>の@typeは，本資料の書き入れの状況に鑑み，以下のように設定した．また，朱字については，今回は対象外とする．合点（異文，異訓，摘句），注，異文，異訓，訓，送り，割書，補読 　なお，合点についてはさらに3つに細分化されるが，これは@subtype属性を用いて記述する．それぞれの由来については@resp属性で示す． </item>
+                  <item> 6. 補入については，<gi>add</gi>エレメントを用い，@place属性をすべて付与する． </item>
+                  <item> 7.訂正については，ミセケチがある場合は<gi>del</gi>で削除を示して追記には<gi>add</gi>を付与し，全体を<gi>subst</gi>で囲んでいる．また，ミセケチがない場合は<gi>corr</gi>で訂正を示し，訂正の対象になっているものを<gi>sic</gi>，両者を<gi>choice</gi>で囲むことで訂正対象と訂正との関係を明示している．すなわち，以下のようになる．
+               ・ミセケチあり： <![CDATA[<subst><del>誤字</del><add>訂正文字</add></subst>]]>
+               ・ミセケチなし： <![CDATA[<choice><sic>誤字</sic><corr>訂正文字</corr></choice>]]>
+               としている．いずれも，その由来については@resp属性で示す． </item>
+                  <item> 8.書き入れは，本文の任意の箇所が対象になることが多い．それを機械的に確認できるのであれば，機械的な分析を通じた発見の可能性はより大きくなる．そこで，<gi>note</gi>の対象になるテキストを明示するようにマークアップすることとする．具体的には，本文中の対象の始点に<gi>note</gi>エレメントを挿入し，終点には，@type=”noteEnd”属性を持たせた空タグの<gi>anchor</gi>エレメントを入れる．また，始点と終点がわかりにくい場合には，<gi>anchor</gi>に@xml:id属性を付与し，<gi>note</gi>エレメントに用意されている@targetEndから参照することで，始点と終点の関係を明示できるようにする． </item>
+                  <item> 9.書き入れの中には，定家本を由来とするものと，そうでないものとの少なくとも2種類が存在することが想定される．それについては，@resp属性で示して機械的に区別できるようにする． </item>
+                  <item> 10.割書（割注）については，<gi>note</gi>タグでマークアップを行う．割書中の改行は，通常の改行<gi>lb</gi>と区別するために，<gi>milestone</gi>@unit="br" を用いる． </item>
+                  <item> 11. インデントの大きさの表現には@styleを用い，emを単位として位置を大まかに確認できるようにする． </item>
+                  <item> 12. 既存の研究成果や研究活動との親和性を少しでも確保するため，旧国歌大観番号をxml:idとして付与することで，参照をしやすいようにする． </item>
+                  <item> 13. <gi>pb</gi>エレメントは，頁ごとに対応させ，既存の頁の数え方にあわせた値を持たせることを基本とし，後述するように，頁画像段位で，IIIFに対応するための@source属性と@corresp属性を付与する． </item>
+                  <item> 14. IIIF Manifestとテキストデータの対応づけについては，まず，Manifest URIが<gi>facsimile</gi>に，Canvas URIが<gi>surface</gi>に，フルサイズ画像のIIIF Image API URIが<gi>graphic</gi>に対応するように，それぞれのURIを@source属性で記述する．その上で，テキストの位置と画像コマの対応については，<gi>surface</gi>にxml:id属性を付与し，その値を<gi>pb</gi>から@corresp属性で参照させて，各画像コマ中のテキストの始まりと<gi>pb</gi>タグが対応づけられるようにする． </item>
+                  <item> 15. 特殊な旧字や異体字が使われている場合は、<gi>choice</gi>エレメント内に原資料の文字を<gi>orig</gi>エレメント、新字などに直した字を<gi>reg</gi>エレメント内で示した。
+               ・<![CDATA[<choice><orig>原資料の文字</orig><reg>新字</reg></choice>]]></item>
+                  <item> 16. TEIデータ作業者による注釈については、<gi>note</gi>の@typeをデータ作成者による注釈とした．</item>
+                  <item> 17. 旧国歌大観番号48と49のように、傍訓を有する歌が行を区切らずに同じ行から別の歌が続く場合は、現状では連続した行としての表現を行わず、改行した状態で記述した。その際、xmlデータにおいてはコメントを付し、<gi>note</gi>によるTEIデータ作成者による注釈を付した。</item>
+               </list>
+            </p>
+         </editorialDecl>
+         <tagsDecl>
+            <rendition xml:id="pr">place: right</rendition>
+            <rendition xml:id="pl">place: left</rendition>
+            <rendition xml:id="pmt">place: margin-top</rendition>
+            <rendition xml:id="pmb">place: margin-bottom</rendition>
+            <rendition xml:id="cr">color: red</rendition>
+            <rendition xml:id="cc">color: copper</rendition>
+         </tagsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <creation><date when="1781-12-24">天明元年十二月二十四日</date></creation>
+         <handNotes>
+            <handNote>梨園春日昌預書写</handNote>
+         </handNotes>
+         <langUsage>
+            <language ident="jpn">日本語</language>
+         </langUsage>
+      </profileDesc>
+   </teiHeader>
+   <facsimile sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/books/210464810/manifest.json">
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0001"
+         xml:id="page0001" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0001.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0001.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="表紙01" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="表紙02" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0002"
+         xml:id="page0002" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0002.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0002.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="表紙裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0003"
+         xml:id="page0003" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0003.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0003.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0004"
+         xml:id="page0004" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0004.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0004.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0005"
+         xml:id="page0005" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0005.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0005.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0006"
+         xml:id="page0006" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0006.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0006.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0007"
+         xml:id="page0007" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0007.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0007.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0008"
+         xml:id="page0008" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0008.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0008.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0009-1"
+         xml:id="page0009-1" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0009.1.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0009.1.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七丁裏01" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八丁表01" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0009-2"
+         xml:id="page0009-2" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0009.2.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0009.2.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七丁裏02" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八丁表02" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0009"
+         xml:id="page0009" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0009.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0009.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0010-1"
+         xml:id="page0010-1" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0010.1.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0010.1.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八丁裏01" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九丁表01" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0010-2"
+         xml:id="page0010-2" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0010.2.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0010.2.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八丁裏02" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九丁表02" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0010"
+         xml:id="page0010" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0010.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0010.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0011"
+         xml:id="page0011" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0011.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0011.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0012"
+         xml:id="page0012" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0012.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0012.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0013"
+         xml:id="page0013" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0013.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0013.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0014"
+         xml:id="page0014" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0014.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0014.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0015"
+         xml:id="page0015" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0015.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0015.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0016"
+         xml:id="page0016" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0016.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0016.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0017"
+         xml:id="page0017" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0017.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0017.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0018"
+         xml:id="page0018" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0018.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0018.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0019"
+         xml:id="page0019" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0019.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0019.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0020"
+         xml:id="page0020" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0020.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0020.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0021"
+         xml:id="page0021" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0021.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0021.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0022"
+         xml:id="page0022" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0022.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0022.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0023"
+         xml:id="page0023" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0023.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0023.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0024"
+         xml:id="page0024" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0024.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0024.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0025"
+         xml:id="page0025" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0025.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0025.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0026"
+         xml:id="page0026" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0026.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0026.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0027"
+         xml:id="page0027" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0027.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0027.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0028"
+         xml:id="page0028" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0028.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0028.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0029"
+         xml:id="page0029" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0029.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0029.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0030"
+         xml:id="page0030" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0030.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0030.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0031"
+         xml:id="page0031" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0031.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0031.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0032"
+         xml:id="page0032" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0032.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0032.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0033"
+         xml:id="page0033" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0033.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0033.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0034"
+         xml:id="page0034" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0034.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0034.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0035"
+         xml:id="page0035" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0035.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0035.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0036"
+         xml:id="page0036" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0036.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0036.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0037"
+         xml:id="page0037" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0037.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0037.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0038"
+         xml:id="page0038" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0038.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0038.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0039"
+         xml:id="page0039" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0039.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0039.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0040"
+         xml:id="page0040" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0040.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0040.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0041"
+         xml:id="page0041" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0041.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0041.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0042"
+         xml:id="page0042" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0042.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0042.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0043"
+         xml:id="page0043" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0043.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0043.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0044"
+         xml:id="page0044" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0044.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0044.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0045"
+         xml:id="page0045" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0045.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0045.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0046"
+         xml:id="page0046" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0046.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0046.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0047"
+         xml:id="page0047" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0047.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0047.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0048"
+         xml:id="page0048" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0048.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0048.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0049"
+         xml:id="page0049" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0049.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0049.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0050"
+         xml:id="page0050" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0050.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0050.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0051"
+         xml:id="page0051" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0051.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0051.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0052"
+         xml:id="page0052" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0052.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0052.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0053"
+         xml:id="page0053" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0053.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0053.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0054"
+         xml:id="page0054" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0054.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0054.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0055"
+         xml:id="page0055" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0055.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0055.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0056"
+         xml:id="page0056" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0056.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0056.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0057"
+         xml:id="page0057" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0057.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0057.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0058"
+         xml:id="page0058" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0058.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0058.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0059"
+         xml:id="page0059" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0059.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0059.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0060"
+         xml:id="page0060" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0060.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0060.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0061"
+         xml:id="page0061" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0061.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0061.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0062"
+         xml:id="page0062" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0062.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0062.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0063"
+         xml:id="page0063" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0063.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0063.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0064"
+         xml:id="page0064" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0064.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0064.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0065"
+         xml:id="page0065" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0065.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0065.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0066"
+         xml:id="page0066" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0066.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0066.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0067"
+         xml:id="page0067" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0067.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0067.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0068"
+         xml:id="page0068" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0068.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0068.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0069"
+         xml:id="page0069" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0069.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0069.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0070"
+         xml:id="page0070" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0070.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0070.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0071"
+         xml:id="page0071" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0071.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0071.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0072"
+         xml:id="page0072" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0072.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0072.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0073"
+         xml:id="page0073" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0073.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0073.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0074"
+         xml:id="page0074" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0074.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0074.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0075"
+         xml:id="page0075" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0075.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0075.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0076"
+         xml:id="page0076" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0076.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0076.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0077"
+         xml:id="page0077" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0077.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0077.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0078"
+         xml:id="page0078" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0078.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0078.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0079"
+         xml:id="page0079" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0079.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0079.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七八丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0080"
+         xml:id="page0080" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0080.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0080.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七八丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七九丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0081"
+         xml:id="page0081" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0081.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0081.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七九丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八〇丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0082"
+         xml:id="page0082" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0082.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0082.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八〇丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八一丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0083-1"
+         xml:id="page0083-1" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0083.1.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0083.1.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八一丁裏01" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八二丁表01" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0083-2"
+         xml:id="page0083-2" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0083.2.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0083.2.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八一丁裏02" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八二丁表02" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0083"
+         xml:id="page0083" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0083.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0083.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八一丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八二丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0084"
+         xml:id="page0084" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0084.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0084.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八二丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八三丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0085"
+         xml:id="page0085" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0085.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0085.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八三丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八四丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0086"
+         xml:id="page0086" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0086.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0086.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八四丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八五丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0087"
+         xml:id="page0087" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0087.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0087.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八五丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八六丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0088"
+         xml:id="page0088" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0088.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0088.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八六丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八七丁表" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0089"
+         xml:id="page0089" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0089.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0089.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八七丁裏" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="裏表紙裏" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810/page0090"
+         xml:id="page0090" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0090.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464810%2F0090.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="裏表紙01" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="裏表紙02" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+   </facsimile>
+   <facsimile sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/books/210464879/manifest.json">
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0001"
+         xml:id="page0001_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0001.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0001.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="表紙01_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="表紙02_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0002"
+         xml:id="page0002_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0002.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0002.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="表紙裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0003"
+         xml:id="page0003_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0003.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0003.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0004"
+         xml:id="page0004_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0004.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0004.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0005"
+         xml:id="page0005_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0005.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0005.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0006"
+         xml:id="page0006_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0006.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0006.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0007"
+         xml:id="page0007_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0007.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0007.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0008"
+         xml:id="page0008_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0008.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0008.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0009"
+         xml:id="page0009_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0009.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0009.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0010"
+         xml:id="page0010_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0010.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0010.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0011"
+         xml:id="page0011_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0011.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0011.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0012"
+         xml:id="page0012_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0012.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0012.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0013"
+         xml:id="page0013_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0013.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0013.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0014"
+         xml:id="page0014_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0014.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0014.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0015"
+         xml:id="page0015_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0015.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0015.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0016"
+         xml:id="page0016_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0016.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0016.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0017"
+         xml:id="page0017_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0017.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0017.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0018"
+         xml:id="page0018_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0018.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0018.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0019"
+         xml:id="page0019_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0019.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0019.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0020"
+         xml:id="page0020_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0020.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0020.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="一九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0021"
+         xml:id="page0021_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0021.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0021.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="一九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0022"
+         xml:id="page0022_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0022.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0022.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0023"
+         xml:id="page0023_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0023.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0023.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0024"
+         xml:id="page0024_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0024.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0024.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0025"
+         xml:id="page0025_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0025.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0025.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0026"
+         xml:id="page0026_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0026.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0026.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0027"
+         xml:id="page0027_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0027.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0027.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0028"
+         xml:id="page0028_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0028.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0028.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0029"
+         xml:id="page0029_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0029.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0029.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0030"
+         xml:id="page0030_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0030.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0030.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="二九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0031"
+         xml:id="page0031_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0031.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0031.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="二九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0032"
+         xml:id="page0032_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0032.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0032.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0033"
+         xml:id="page0033_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0033.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0033.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0034"
+         xml:id="page0034_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0034.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0034.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0035"
+         xml:id="page0035_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0035.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0035.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0036"
+         xml:id="page0036_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0036.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0036.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0037"
+         xml:id="page0037_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0037.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0037.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0038"
+         xml:id="page0038_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0038.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0038.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0039"
+         xml:id="page0039_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0039.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0039.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0040"
+         xml:id="page0040_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0040.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0040.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="三九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0041"
+         xml:id="page0041_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0041.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0041.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="三九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0042"
+         xml:id="page0042_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0042.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0042.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0043"
+         xml:id="page0043_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0043.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0043.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0044"
+         xml:id="page0044_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0044.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0044.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0045"
+         xml:id="page0045_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0045.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0045.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0046"
+         xml:id="page0046_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0046.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0046.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0047"
+         xml:id="page0047_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0047.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0047.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0048"
+         xml:id="page0048_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0048.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0048.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0049"
+         xml:id="page0049_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0049.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0049.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0050"
+         xml:id="page0050_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0050.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0050.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="四九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0051"
+         xml:id="page0051_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0051.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0051.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="四九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0052"
+         xml:id="page0052_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0052.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0052.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0053"
+         xml:id="page0053_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0053.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0053.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0054"
+         xml:id="page0054_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0054.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0054.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0055"
+         xml:id="page0055_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0055.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0055.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0056"
+         xml:id="page0056_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0056.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0056.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0057"
+         xml:id="page0057_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0057.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0057.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0058"
+         xml:id="page0058_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0058.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0058.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0059-1"
+         xml:id="page0059-1_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0059.1.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0059.1.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五七丁裏01_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五八丁表01_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0059-2"
+         xml:id="page0059-2_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0059.2.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0059.2.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五七丁裏02_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五八丁表02_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0059"
+         xml:id="page0059_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0059.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0059.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0060"
+         xml:id="page0060_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0060.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0060.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="五九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0061"
+         xml:id="page0061_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0061.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0061.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="五九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0062"
+         xml:id="page0062_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0062.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0062.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0063"
+         xml:id="page0063_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0063.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0063.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0064"
+         xml:id="page0064_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0064.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0064.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0065"
+         xml:id="page0065_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0065.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0065.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0066"
+         xml:id="page0066_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0066.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0066.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0067"
+         xml:id="page0067_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0067.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0067.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0068"
+         xml:id="page0068_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0068.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0068.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0069"
+         xml:id="page0069_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0069.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0069.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0070"
+         xml:id="page0070_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0070.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0070.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="六九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0071"
+         xml:id="page0071_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0071.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0071.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="六九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0072"
+         xml:id="page0072_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0072.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0072.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0073"
+         xml:id="page0073_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0073.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0073.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0074"
+         xml:id="page0074_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0074.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0074.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0075"
+         xml:id="page0075_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0075.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0075.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0076"
+         xml:id="page0076_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0076.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0076.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0077"
+         xml:id="page0077_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0077.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0077.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0078"
+         xml:id="page0078_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0078.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0078.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0079"
+         xml:id="page0079_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0079.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0079.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0080"
+         xml:id="page0080_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0080.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0080.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="七九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0081"
+         xml:id="page0081_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0081.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0081.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="七九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0082"
+         xml:id="page0082_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0082.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0082.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0083"
+         xml:id="page0083_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0083.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0083.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0084"
+         xml:id="page0084_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0084.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0084.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0085"
+         xml:id="page0085_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0085.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0085.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0086"
+         xml:id="page0086_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0086.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0086.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八五丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0087"
+         xml:id="page0087_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0087.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0087.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八五丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八六丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0088"
+         xml:id="page0088_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0088.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0088.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八六丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八七丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0089"
+         xml:id="page0089_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0089.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0089.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八七丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八八丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0090"
+         xml:id="page0090_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0090.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0090.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八八丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="八九丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0091"
+         xml:id="page0091_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0091.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0091.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="八九丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九〇丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0092"
+         xml:id="page0092_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0092.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0092.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九〇丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九一丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0093"
+         xml:id="page0093_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0093.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0093.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九一丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九二丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0094"
+         xml:id="page0094_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0094.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0094.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九二丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九三丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0095"
+         xml:id="page0095_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0095.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0095.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九三丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="九四丁表_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0096"
+         xml:id="page0096_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0096.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0096.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="九四丁裏_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="裏表紙裏_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+      <surface sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879/page0097"
+         xml:id="page0097_1314" ulx="0" uly="0" lrx="2000" lry="1336">
+         <graphic
+            url="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0097.tif/full/full/0/default.jpg"
+            sameAs="https://www.iiif.ku-orcas.kansai-u.ac.jp/iiif/2/210464879%2F0097.tif"
+            width="2000px" height="1336px"/>
+         <zone xml:id="裏表紙01_1314" ulx="1000" uly="0" lrx="2000" lry="1336"/>
+         <zone xml:id="裏表紙02_1314" ulx="0" uly="0" lrx="1000" lry="1336"/>
+      </surface>
+   </facsimile>
+   <text>
+      <body style="writing-mode:vertical-rl">
+         <ab/>
+         <div n="萬葉集 20巻 萬葉集 巻一、二">
+            <div n="﻿廣瀬本万葉集巻一">
+               <pb facs="#表紙01"/>
+               <pb facs="#表紙02"/>
+               <pb facs="#表紙裏"/>
+               <pb facs="#一丁表"/>
+               <p><choice>
+                     <orig>萬</orig>
+                     <reg>万</reg>
+                  </choice>葉集巻第一　<note type="割書" resp="#廣瀬本" xml:id="mokujinote0100001" rend="red"
+                     >一</note></p>
+               <p style="text-indent:1em">雑歌</p>
+               <p>泊瀬朝倉宮御宇天皇代<note type="割書" resp="#定家本" xml:id="mokujinote0100002">雄<choice>
+                        <orig>畧</orig>
+                        <reg>略</reg>
+                     </choice></note></p>
+               <p style="text-indent:2em" n="目録題詞00001" corresp="#旧国歌大観番号00001">天皇御製歌</p>
+               <p><note type="訓" place="right" xml:id="mokujinote0100003" resp="#定家本">タケチ</note>
+                  <choice>
+                     <orig>髙</orig>
+                     <reg>高</reg>
+                  </choice>市<anchor type="noteEnd"/>岡本宮
+                  <note type="訓" place="right" xml:id="mokujinote0100004"
+                     resp="#定家本">アメノシタシロシメシヽ</note>御宇<anchor type="noteEnd"/>天皇
+                  <note type="訓" place="right" xml:id="mokujinote0100005"
+                     resp="#定家本">オホミヨ</note>代<anchor type="noteEnd"/>
+                  　<note type="割書" resp="#定家本" xml:id="mokujinote0100006"
+                     >舒明</note></p>
+               <p style="text-indent:2em" n="目録題詞00002" corresp="#旧国歌大観番号00002">天皇
+                  登<metamark function="kaeri" place="left" xml:id="mokujinote0100009" resp="#定家本"
+                     >㆓</metamark>香具
+                  山<metamark function="kaeri" place="left" xml:id="mokujinote0100010"
+                     resp="#定家本">一</metamark>望<choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>之時
+                  <note type="訓" place="right" xml:id="mokujinote0100007"
+                     resp="#定家本">ミツクリマセシ</note>御製<anchor type="noteEnd"/>
+                  <note type="訓" place="right" xml:id="mokujinote0100008" resp="#定家本"
+                     >ミウタ</note>歌<anchor type="noteEnd"/></p>
+               <p n="目録題詞00003" corresp="#旧国歌大観番号00003">同天皇遊
+                  <note type="注" resp="#定家本" place="right" xml:id="mokujinote0100011"
+                     >獦ニ</note>猟<anchor type="noteEnd"/>内野時中皇命使間人連老<choice>
+                     <orig>獻</orig>
+                     <reg>献</reg>
+                  </choice>歌
+                  <note type="割書" resp="#万葉集" xml:id="mokujinote0100012"
+                     >并短歌</note>
+                  <note type="割書" resp="#廣瀬本" xml:id="mokujinote0100013">返歌</note></p>
+               <pb facs="#一丁裏"/>
+               <p style="text-indent:2em" n="目録題詞00005" corresp="#旧国歌大観番号00005">幸讃岐<choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>安益郡之時軍王見山作歌
+                  <note type="割書" resp="#万葉集" xml:id="mokujinote0100014"
+                     >并短歌</note>
+                  <note type="割書" resp="#廣瀬本" xml:id="mokujinote0100015">返歌</note></p>
+               <p>明日香川原宮御宇天皇代<note type="割書" resp="#定家本" xml:id="mokujinote0100016">皇極</note></p>
+               <p style="text-indent:2em" n="目録題詞00007" corresp="#旧国歌大観番号00007">額田王歌<note type="割書"
+                     resp="#廣瀬本" xml:id="mokujinote0100017">未詳</note></p>
+               <p>後岡本宮御宇天皇代<note type="割書" resp="#定家本" xml:id="mokujinote0100018">斉明</note></p>
+               <p style="text-indent:2em" n="目録題詞00008" corresp="#旧国歌大観番号00008">額田王歌</p>
+               <p style="text-indent:2em" n="目録題詞00009" corresp="#旧国歌大観番号00009">同天皇幸于紀伊温泉之時額田王作歌</p>
+               <p style="text-indent:2em" n="目録題詞00010" corresp="#旧国歌大観番号00010">中皇命徃于紀伊或温泉之時御歌三首</p>
+               <pb facs="#二丁表"/>
+               <p style="text-indent:2em" n="目録題詞00013" corresp="#旧国歌大観番号00013">中大兄三山御歌二<add
+                     type="補入" place="right" xml:id="mokujinote0100019" resp="#定家本"
+                  >―〇并短歌二首</add>首</p>
+               <p>近江大津宮御宇天皇代<note type="割書" resp="#定家本" xml:id="mokujinote0100020">天智</note></p>
+               <p style="text-indent:2em" n="目録題詞00016" corresp="#旧国歌大観番号00016">天皇詔内大臣藤原朝臣競憐春山<choice>
+                     <orig>萬</orig>
+                     <reg>万</reg>
+                  </choice>花<milestone unit="br"/>之艶秋山千葉之彩時額田王以歌判之歌</p>
+               <p style="text-indent:2em" n="目録題詞00017" corresp="#旧国歌大観番号00017">額田王下近江<choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>時作歌即
+                  <note type="注" resp="#廣瀬本" place="margin-head"
+                     xml:id="mokujinote0100021">毎證本篇目<milestone unit="br"/>井戸主但作<milestone unit="br"
+                        />歌所者井戸<milestone unit="br"/>王王与主不<milestone unit="br"/>審</note>井戸主<anchor
+                     type="noteEnd"/>和歌</p>
+               <p style="text-indent:2em" n="目録題詞00020" corresp="#旧国歌大観番号00020">天皇遊<note type="異文"
+                     resp="#定家本" place="right" xml:id="mokujinote0100022">獦</note>猟<anchor
+                     type="noteEnd"/>蒲生野之時額田王作歌</p>
+               <p style="text-indent:2em" n="目録題詞000021" corresp="#旧国歌大観番号00021">皇太子答御歌</p>
+               <pb facs="#二丁裏"/>
+               <p>明日香清御原宮御宇天皇代<note type="割書" resp="#定家本" xml:id="mokujinote0100023"
+                  >謚天武天皇</note></p>
+               <p style="text-indent:2em" n="目録題詞00022" corresp="#旧国歌大観番号00022">十市皇女参赴於伊<choice>
+                     <orig>㔟</orig>
+                     <reg>勢</reg>
+                  </choice>大神宮時見波多<milestone unit="br"/>横山巌
+                  <note type="合点" subtype="異訓" resp="#廣瀬本" place="right"
+                     xml:id="mokujinote0100026" targetEnd="#mokujinote0100026e">〽フケイノトシ</note>吹
+                  <note type="合点" subtype="異文" resp="#定家本" place="right"
+                     xml:id="mokujinote0100024" targetEnd="#mokujinote0100024e">〽芡</note>黄<anchor
+                     type="noteEnd" xml:id="mokujinote0100024e"/>
+                  <subst>
+                     <del type="ミセケチ" resp="#廣瀬本" xml:id="mokujinote0100027">乃</del>
+                     <add type="訂正" place="right" resp="#廣瀬本" xml:id="mokujinote0100025">刀</add>
+                  </subst>自
+                  <anchor type="noteEnd" xml:id="mokujinote0100026e"/>作歌</p>
+               <p style="text-indent:2em" n="目録題詞000023" corresp="#旧国歌大観番号00023">麻續王流於伊<choice>
+                     <orig>㔟</orig>
+                     <reg>勢</reg>
+                  </choice><choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>伊良
+                  <subst>
+                     <del type="ミセケチ" resp="#廣瀬本" xml:id="mokujinote0100029">虞</del>
+                     <add type="異体確認" place="right" resp="#廣瀬本" xml:id="mokujinote0100028">虞</add>
+                  </subst><choice><orig>嶋</orig><reg>島</reg></choice>之時人<milestone unit="br"/>哀痛作歌</p>
+               <p style="text-indent:2em" n="目録題詞000024" corresp="#旧国歌大観番号00024">麻續王聞之感傷和歌</p>
+               <p style="text-indent:2em" n="目録題詞00025" corresp="#旧国歌大観番号00025">天皇御製歌</p>
+               <pb facs="#三丁表"/>
+               <p style="text-indent:2em" n="目録題詞00026" corresp="#旧国歌大観番号00026">或本歌</p>
+               <p style="text-indent:2em" n="目録題詞000027" corresp="#旧国歌大観番号00027">天皇幸吉野宮時御製歌</p>
+               <p>藤原宮御宇天皇代<note type="割書" resp="#定家本" xml:id="mokujinote0100030">持統</note></p>
+               <p style="text-indent:2em" n="目録題詞00028" corresp="#旧国歌大観番号00028">天皇御製歌</p>
+               <p style="text-indent:2em" n="目録題詞00029" corresp="#旧国歌大観番号00029">過近江莣都柿本朝臣人麿作歌一首<note
+                     type="割書" resp="#万葉集" xml:id="mokujinote0100031">并短歌</note></p>
+               <p style="text-indent:2em" n="目録題詞000032" corresp="#旧国歌大観番号00032">
+                  <choice>
+                     <orig>髙</orig>
+                     <reg>高</reg>
+                  </choice>
+                  市連<note type="合点" subtype="異文" resp="#定家本" place="right"
+                     xml:id="mokujinote0100032">〽古</note>里<anchor type="noteEnd"/>人感傷近江舊堵作歌<note
+                     type="割書" resp="#万葉集" xml:id="mokujinote0100033">或書
+                     <choice>
+                        <orig>髙</orig>
+                        <reg>高</reg>
+                     </choice>市<milestone unit="br"/>黒人</note></p>
+               <p style="text-indent:2em" n="目録題詞00034" corresp="#旧国歌大観番号00034">幸紀伊<choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>時川<choice><orig>嶋</orig><reg>島</reg></choice>皇子御作歌<note type="割書" resp="#定家本" xml:id="mokujinote0100034"
+                        >朱鳥五年九月<milestone unit="br"/>幸紀伊<choice>
+                        <orig>國</orig>
+                        <reg>国</reg>
+                     </choice></note></p>
+               <pb facs="#三丁裏"/>
+               <p style="text-indent:2em" n="目録題詞00035" corresp="#旧国歌大観番号00035">阿閇皇女越<choice>
+                     <orig>㔟</orig>
+                     <reg>勢</reg>
+                  </choice>能山<note type="注" resp="#定家本" place="right" xml:id="mokujinote0100035"
+                     >無作字</note>作<anchor type="noteEnd"/>時御歌</p>
+               <p style="text-indent:2em" n="目録題詞00036" corresp="#旧国歌大観番号00036"
+                     >幸吉野宮之時柿本朝臣人麿作歌二首<note type="割書" resp="#万葉集" xml:id="mokujinote0100036"
+                        >并短哥<milestone unit="br"/>二首</note></p>
+               <p style="text-indent:2em" n="目録題詞00040" corresp="#旧国歌大観番号00040">幸伊<choice>
+                     <orig>㔟</orig>
+                     <reg>勢</reg>
+                  </choice><choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>時畄<choice><orig>亰</orig><reg>京</reg></choice>柿本朝臣人麿作歌<add type="補入" place="left" xml:id="mokujinote0100038"
+                     resp="#廣瀬本">〇―三首</add><note type="割書" resp="#定家本" xml:id="mokujinote0100037"
+                        >同七年三月<milestone unit="br"/>幸伊<choice>
+                        <orig>㔟</orig>
+                        <reg>勢</reg>
+                     </choice></note></p>
+               <p style="text-indent:2em" n="目録題詞00043" corresp="#旧国歌大観番号00043"><note type="訓"
+                     place="right" xml:id="mokujinote0100039" resp="#定家本">タイマ</note><choice>
+                     <orig>當</orig>
+                     <reg>当</reg>
+                  </choice>麻<anchor type="noteEnd"/>真人麿妻作歌</p>
+               <p style="text-indent:2em" n="目録題詞00044" corresp="#旧国歌大観番号00044">石上大臣従駕作歌</p>
+               <p style="text-indent:2em" n="目録題詞00045" corresp="#旧国歌大観番号00045"
+                     >輕皇子宿于安騎野時柿本朝臣人麿作<milestone unit="br"/>歌一首<note type="割書" resp="#万葉集"
+                     xml:id="mokujinote0100040">并短歌四首</note></p>
+               <pb facs="#四丁表"/>
+               <p style="text-indent:2em" n="目録題詞00050" corresp="#旧国歌大観番号00050">藤原宮之伇民作歌</p>
+               <p style="text-indent:2em" n="目録題詞00051" corresp="#旧国歌大観番号00051">従明日香宮遷居藤原宮之後志貴皇</p>
+               <p style="text-indent:2em" n="目録題詞00052" corresp="#旧国歌大観番号00052">御作歌藤原宮御井歌一首<note
+                     type="割書" resp="#万葉集" xml:id="mokujinote0100041">并短歌</note></p>
+               <p style="text-indent:2em" n="目録題詞00054" corresp="#旧国歌大観番号00054">大<choice>
+                     <orig>寳</orig>
+                     <reg>宝</reg>
+                  </choice>元年辛丑秋九月大上天皇幸紀伊<milestone unit="br"/><choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>時歌二首
+                  <milestone unit="br"/><add type="補入" xml:id="mokujinote0100042"
+                     resp="#定家本">或本哥</add></p>
+               <p style="text-indent:2em">二年壬寅大上天皇幸参河<choice>
+                     <orig>國</orig>
+                     <reg>国</reg>
+                  </choice>時歌
+                  <milestone unit="br"/><add type="補入" xml:id="mokujinote0100043"
+                     resp="#定家本">長思寸奥麿一首</add>
+                  <milestone unit="br"/><add type="補入" xml:id="mokujinote0100044" resp="#定家本"
+                     >高市連黒人一首</add></p>
+               <p style="text-indent:2em" n="目録題詞00059" corresp="#旧国歌大観番号00059">
+                  <note type="注" resp="#廣瀬本" place="margin-head" xml:id="mokujinote0100045"
+                        >作歌所挙<milestone unit="br"/>字也</note>譽謝女王作歌<anchor type="noteEnd"/></p>
+               <pb facs="#四丁裏"/>
+               <p style="text-indent:2em" n="目録題詞00060" corresp="#旧国歌大観番号00060">長皇子御歌
+                  <subst>
+                     <del type="ミセケチ" resp="#廣瀬本" xml:id="mokujinote0100047">従</del>
+                     <add type="異体確認" place="right" resp="#廣瀬本" xml:id="mokujinote0100046">従</add>
+                  </subst>駕作哥</p>
+               <p style="text-indent:2em" n="目録題詞00061" corresp="#旧国歌大観番号00061">舎人娘子従駕作歌</p>
+               <p style="text-indent:2em" n="目録題詞00062" corresp="#旧国歌大観番号00062">三野連<note type="割書"
+                     resp="#万葉集" xml:id="mokujinote0100048">名<milestone unit="br"
+                  />闕</note>入唐時春日蔵首老作歌</p>
+               <p style="text-indent:2em" n="目録題詞00063" corresp="#旧国歌大観番号00063">山上臣憶良在大唐時憶本郷作歌</p>
+               <p>慶雲三年丙午幸難波宮時歌<note type="割書" resp="#万葉集" xml:id="mokujinote0100049">二首</note></p>
+               <p style="text-indent:2em" n="目録題詞00064" corresp="#旧国歌大観番号00064">志貴皇子御歌</p>
+               <p style="text-indent:2em" n="目録題詞00065" corresp="#旧国歌大観番号00065">長皇子御歌</p>
+               <pb facs="#五丁表"/>
+               <p>太上天皇幸難波宮時歌<note type="割書" resp="#万葉集" xml:id="mokujinote0100050">四首</note></p>
+               <p style="text-indent:2em" n="目録題詞00066" corresp="#旧国歌大観番号00066">置始東人作歌</p>
+               <p style="text-indent:2em" n="目録題詞00067" corresp="#旧国歌大観番号00067"><choice>
+                     <orig>髙</orig>
+                     <reg>高</reg>
+                  </choice>安大<choice><orig>嶋</orig><reg>島</reg></choice></p>
+               <p style="text-indent:2em" n="目録題詞00068" corresp="#旧国歌大観番号00068">身人部王</p>
+               <p style="text-indent:2em" n="目録題詞00069" corresp="#旧国歌大観番号00069">清江娘子進長皇子歌</p>
+               <p n="目録題詞00070" corresp="#旧国歌大観番号00070"><note type="注" resp="#定家本" place="right"
+                     xml:id="mokujinote0100051">毎本<choice>
+                        <orig>髙</orig>
+                        <reg>高</reg>
+                     </choice>才但作哥所<choice>
+                        <orig>髙</orig>
+                        <reg>高</reg>
+                     </choice>市也</note>太上天皇<anchor type="noteEnd"/>幸吉野宮時<choice>
+                     <orig>髙</orig>
+                     <reg>高</reg>
+                  </choice>才連黒人作歌</p>
+               <p n="目録題詞00071" corresp="#旧国歌大観番号00071">大行天皇幸難波宮時歌三首</p>
+               <pb facs="#五丁裏"/>
+               <p style="text-indent:2em">忍坂部乙麿</p>
+               <p style="text-indent:2em" n="目録題詞00072" corresp="#旧国歌大観番号00072">式部卿藤原
+                  <note type="訓" place="right" xml:id="mokujinote0100052" resp="#定家本"
+                     >ノキアヒ</note>宇合<anchor type="noteEnd"/></p>
+               <p style="text-indent:2em" n="目録題詞00073" corresp="#旧国歌大観番号00073">長皇子御歌</p>
+               <p n="目録題詞00074" corresp="#旧国歌大観番号00074">大行天皇幸吉野宮時歌二首</p>
+               <p style="text-indent:2em"><note type="注" resp="#定家本" place="right"
+                     xml:id="mokujinote0100053">或云無之</note>天皇御製歌<anchor type="noteEnd"/></p>
+               <p style="text-indent:2em" n="目録題詞00075" corresp="#旧国歌大観番号00075"><note type="注"
+                     resp="#定家本" xml:id="mokujinote0100055">伊本云或云天皇御製哥</note>長
+                  <subst>
+                     <del type="ミセケチ" resp="#廣瀬本" xml:id="mokujinote0100056">座</del>
+                     <add type="訂正" place="right" resp="#廣瀬本" xml:id="mokujinote0100054">屋</add>
+                  </subst>王歌<anchor type="noteEnd"/></p>
+               <p style="text-indent:2em">和銅元年<subst>
+                     <del type="ミセケチ" resp="#廣瀬本" xml:id="mokujinote0100057_01"><del type="削り消し"
+                           resp="#廣瀬本" xml:id="mokujinote0100059_01"><note type="ミセケチ" resp="#廣瀬本"
+                              place="left" xml:id="mokujinote0100059_02">（ミセケチ）</note></del>伐<anchor
+                           type="noteEnd"/></del>
+                     <add type="訂正" place="right" resp="#廣瀬本" xml:id="mokujinote0100058">戊</add>
+                  </subst>申</p>
+               <pb facs="#六丁表"/>
+               <p style="text-indent:2em" n="目録題詞00076" corresp="#旧国歌大観番号00076">天皇御製歌</p>
+               <p style="text-indent:2em" n="目録題詞00077" corresp="#旧国歌大観番号00077">御名部<add type="補入"
+                     place="right" xml:id="mokujinote0100060" resp="#定家本">即</add>皇女奉和御歌</p>
+               <p style="text-indent:2em" n="目録題詞00078" corresp="#旧国歌大観番号00078"
+                     >三年庚戌春二月従藤原宮遷于寧樂<milestone unit="br"/>宮時御輿停長
+                  <subst>
+                     <del type="ミセケチ" resp="#廣瀬本" xml:id="mokujinote0100062">屋</del>
+                     <add type="異体確認" place="right" resp="#廣瀬本" xml:id="mokujinote0100061">屋</add>
+                  </subst>屋原迥望古郷御作歌</p>
+               <p style="text-indent:2em">一書歌</p>
+               <p style="text-indent:2em" n="目録題詞00081" corresp="#旧国歌大観番号00081">五年壬子夏四月遣長田王伊<choice>
+                     <orig>㔟</orig>
+                     <reg>勢</reg>
+                  </choice><note type="異体確認" resp="#廣瀬本" place="right" xml:id="mokujinote0100063"
+                     ><choice><orig>斎</orig><reg>斉</reg></choice></note><choice><orig>斎</orig><reg>斉</reg></choice><anchor type="noteEnd"/>宮時山<milestone unit="br"/>邊御井作歌三首</p>
+               <pb facs="#六丁裏"/>
+               <p style="text-indent:2em" n="目録題詞00084" corresp="#旧国歌大観番号00084"
+                     >寧樂宮長皇子与志貴皇子宴於<milestone unit="br"/>佐紀歌</p>
+               <p style="text-indent:2em">長皇子御歌</p>
+               <p style="text-indent:2em">志貴皇子御歌</p>
+               <pb facs="#七丁表"/>
+               <pb facs="#七丁裏01"/>
+               <pb facs="#七丁裏02"/>
+               <pb facs="#七丁裏"/>
+               <p><choice>
+                     <orig>萬</orig>
+                     <reg>万</reg>
+                  </choice>葉集巻第一</p>
+               <div corresp="#雄略天皇">
+                  <div type="旧国歌大観番号" n="1" xml:id="旧国歌大観番号00001">
+                     <p style="text-indent:1em">雑歌</p>
+                     <p style="text-indent:2em"><note place="right" resp="#定家本" type="注"
+                           xml:id="note0100001" targetEnd="#note0100001e">雄略天皇</note>
+                        <note place="right" resp="#定家本" type="合点" subtype="訓" xml:id="note0100002"
+                           targetEnd="#note0100002e">〽ハツセアサクラ</note>泊瀬朝倉<anchor type="noteEnd"
+                           xml:id="note0100002e"/>宮<anchor type="noteEnd" xml:id="note0100001e"/>
+               御宇<del type="ミセケチ" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100001">天皇代</del><note resp="#万葉集" type="割書"
+                           xml:id="note0100004"><note type="訓" place="right" xml:id="note0100003"
+                              resp="#定家本">オホハツセワカタケ</note>大泊瀬稚武<anchor type="noteEnd"/>天皇</note></p>
+                     <p style="text-indent:2em" n="題詞00001" xml:id="題詞00001">天皇御製歌</p>
+                     <ab xml:id="manyo0001" type="長歌">
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100005" resp="#定家本" rend="right"><subst
+                                 xml:id="shu0100002">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">カタ</del>
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">マ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">コ</add>
+                           </subst>
+                              モヨミ<subst xml:id="shu0100003">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ガタ</del>
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">マ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">コ</add>
+                              </subst>モチ
+                              <note type="注" place="right" rend="red"
+                                 resp="#廣瀬本" xml:id="shu0100004">堀ノ約</note>フグシ<anchor type="noteEnd"
+                                 />モヨミフクシモチコノ</seg>
+                           <lb/><seg type="長歌本文">籠毛與美籠母乳布久思毛與美夫君志持此</seg></seg>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100008" resp="#定家本" rend="right"><note
+                                 place="right" resp="#定家本" type="合点" subtype="訓"
+                                 xml:id="note0100006">〽ヲ</note>ヲ<anchor type="noteEnd"/>カニナツ
+                     <subst xml:id="shu0100005">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ム</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">マ</add>
+                              </subst>
+                              <note type="異体確認" place="right" rend="red" resp="#廣瀬本"
+                                 xml:id="shu0100006">ス</note>ス<anchor type="noteEnd"/>
+                              <note place="right" resp="#定家本" type="合点" subtype="訓"
+                                 xml:id="note0100007">〽<del type="ミセケチ" rend="red" resp="#廣瀬本"
+                                    xml:id="shu0100013">コカ</del></note>
+                     コ<del type="ミセケチ" rend="red" resp="#廣瀬本"
+                                 xml:id="shu0100007">ノカ</del><anchor type="noteEnd"/>イヘ
+                     <subst xml:id="shu0100008">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">キカ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ノラ</add>
+                              </subst>ナ
+                     <subst xml:id="shu0100009">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ツケ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ノラ</add>
+                              </subst>
+                              <subst xml:id="shu0100010">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">サ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異体確認">サ</add>
+                              </subst>ネソラ
+                     <subst xml:id="shu0100011">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ミ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ミ</add>
+                              </subst>ツヤ
+                     <subst xml:id="shu0100012">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">マ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異体確認">マ</add>
+                     </subst></seg>
+                           <lb/><seg type="長歌本文">岳尓菜採須<choice>
+                           <orig>兒</orig>
+                           <reg>児</reg>
+                     </choice>家
+                        <note place="left" resp="#定家本" type="合点" subtype="訓"
+                           xml:id="note0100009" targetEnd="#note0100009e">〽<del type="ミセケチ"
+                              rend="red" resp="#廣瀬本" xml:id="shu0100014">キケナツケ</del></note>
+                        <note type="注" place="margin-head" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100015_01" targetEnd="#shu0100015e">吉閑ハ<milestone
+                              unit="br"/>
+                           <note type="訓" place="right" rend="red" resp="#廣瀬本"
+                              xml:id="shu0100015_02" targetEnd="#shu0100015_02e"
+                              >ノラヘ</note>告閉<anchor type="noteEnd" xml:id="shu0100015_02e"
+                              />ノ誤</note>
+                        吉閑<anchor type="noteEnd" xml:id="shu0100015e"
+                        />名告<anchor type="noteEnd" xml:id="note0100009e"/>紗根虚見津山</seg></seg>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100010" resp="#定家本" rend="right">トノクニハ
+                     <subst xml:id="shu0100016">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ヲ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="仮名遣訂正">オ</add>
+                              </subst>シナへテワレコソ
+                     <subst xml:id="shu0100017">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ヰ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ヲレ</add>
+                              </subst>シ
+                     <subst xml:id="shu0100018">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">カ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">キ</add>
+                     </subst>ナヘテ</seg>
+                           <lb/><seg type="長歌本文">跡乃<choice>
+                           <orig>國</orig>
+                           <reg>国</reg>
+                     </choice>者押奈戸手吾<note place="right" resp="#廣瀬本" type="異文"
+                        xml:id="note0100011">許</note>評<anchor type="noteEnd"/>
+                        曽<note place="right" resp="#定家本" type="異訓"
+                           xml:id="note0100012"><del type="ミセケチ" rend="red" resp="#廣瀬本"
+                              xml:id="shu0100019">ヲラシ</del></note>居師<anchor type="noteEnd"/>
+                        <note place="right" resp="#定家本" type="異訓" xml:id="note0100013"
+                           targetEnd="#note0100013e"><del type="ミセケチ" rend="red" resp="#廣瀬本"
+                              xml:id="shu0100020">ツケテ</del></note>
+                        <note type="注" place="margin-head" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100021_01" targetEnd="#shu0100021e">告ハ
+                           <note type="訓" place="right" rend="red"
+                              resp="#廣瀬本" xml:id="shu0100021_02" targetEnd="#shu0100021_02e"
+                              >キ</note>吉<anchor type="noteEnd" xml:id="shu0100021_02e"
+                              />ノ<milestone unit="br"/>誤</note>
+                        告<anchor type="noteEnd"
+                           xml:id="shu0100021e"/><anchor type="noteEnd" xml:id="note0100013e"
+                           />名倍手</seg></seg>
+                        <pb facs="#八丁表01"/>
+                        <pb facs="#八丁表02"/>
+                        <pb facs="#八丁表"/>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note01000014" resp="#定家本" rend="right">ワレコソマ
+                     <subst xml:id="shu0100023">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">シ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">セ</add>
+                              </subst>レコソハ
+                     <subst xml:id="shu0100024">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">セナ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ナレ</add>
+                              </subst>ニハ
+                     <subst xml:id="shu0100025">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ツケ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ノラ</add>
+                     </subst>メイヘヲモナヲモ</seg>
+                           <lb/><seg type="長歌本文">吾己曽<note place="right" resp="#定家本"
+                           type="合点" subtype="訓" xml:id="note0100015">〽ヲラシ</note>座<anchor
+                              type="noteEnd"/>我
+                        <note type="注" place="margin-head" rend="red"
+                           resp="#廣瀬本" xml:id="shu0100026_01" targetEnd="#shu0100026e">評ハ
+                           <note type="訓" place="right" rend="red"
+                              resp="#廣瀬本" xml:id="shu0100026_02" targetEnd="#shu0100026_02e"
+                              >コ</note>許<anchor type="noteEnd" xml:id="shu0100026_02e"/>
+                           ノ<milestone unit="br"/>誤</note>評<anchor
+                              type="noteEnd" xml:id="shu0100026e"/>
+                        <add type="補入" xml:id="shu0100022" place="right" rend="red"
+                           resp="#廣瀬本">○曽</add>者
+                        <note type="注" place="margin-head" rend="red"
+                           resp="#廣瀬本" xml:id="shu0100027_01" targetEnd="#shu0100027e">背ハ
+                           <note type="訓" place="right" rend="red"
+                              resp="#廣瀬本" xml:id="shu0100027_02" targetEnd="#shu0100027_02e"
+                              >ナレニ</note>汝丹<anchor type="noteEnd" xml:id="shu0100027_02e"/>
+                           ノ二字<milestone unit="br"
+                           />ヲ誤レリ</note>背<anchor type="noteEnd" xml:id="shu0100027e"/>
+                        齒告目家呼毛名雄母</seg></seg>
+                     </ab>
+                  </div>
+               </div>
+               <div corresp="#舒明天皇">
+                  <div type="旧国歌大観番号" n="2" xml:id="旧国歌大観番号00002">
+                     <p style="text-indent:2em"><note place="right" resp="#定家本" type="注"
+                           xml:id="note0100016" targetEnd="#note0100016e">舒明天皇</note>
+                        <note place="left" resp="#定家本" type="訓" xml:id="note0100019">タケ
+                  <del type="ミセケチ" rend="red" resp="#廣瀬本"
+                              xml:id="shu0100029">イ</del>チヲカモト</note>高市岡本<anchor type="noteEnd"
+                           xml:id="note0100019e"/>宮<anchor type="noteEnd" xml:id="note0100016e"/>
+               御宇<del type="ミセケチ" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100028">天皇代</del><note resp="#万葉集" type="割書"
+                           xml:id="note01000018"><note place="right" resp="#定家本" type="訓"
+                              xml:id="note0100017">オキナカタラシヒヒロヌカ</note>息長足日廣額<anchor type="noteEnd"
+                           />天皇</note></p>
+                     <p style="text-indent:2em" n="題詞00002" xml:id="題詞00002">天皇登香具山
+               <note type="訓" place="right" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100030">クニミシ玉フ</note>望<choice>
+                           <orig>國</orig>
+                           <reg>国</reg>
+                        </choice><anchor type="noteEnd"/>之
+               <note type="補読" place="right" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100031">ノ</note>時<anchor type="noteEnd"/>御製</p>
+                     <ab xml:id="manyo0002" type="長歌">
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100021" resp="#定家本" rend="right"
+                              >ヤマトニハムラヤマア
+                              <subst xml:id="shu0100032">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">リ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">レ</add>
+                              </subst>トトリヨロフア
+                              <subst xml:id="shu0100033">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">マ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">メ</add>
+                              </subst>ノ
+                              <note place="right" resp="#定家本" type="合点"
+                                 subtype="訓" xml:id="note0100020">〽<del type="ミセケチ" rend="red"
+                                    resp="#廣瀬本" xml:id="shu0100036">ク</del></note>カ<anchor
+                                       type="noteEnd"/>
+                              <subst xml:id="shu0100034">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">コ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ク</add>
+                              </subst>ヤ
+                              <note type="異体確認" place="right" rend="red"
+                                 resp="#廣瀬本" xml:id="shu0100035">マ</note>マ<anchor type="noteEnd"
+                                 />ノホリタチクニ</seg>
+                           <lb/><seg type="長歌本文">山常庭村山有等取與呂布天乃香具山騰立<choice>
+                                 <orig>國</orig>
+                                 <reg>国</reg>
+                              </choice></seg>
+                           </seg>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100022" resp="#定家本" rend="right">
+                              <subst xml:id="shu0100038">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ミ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ミ</add>
+                              </subst>ヲ
+                              <subst xml:id="shu0100039">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ス</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ス</add>
+                              </subst>レハクニ
+                              <del xml:id="shu0100040" type="ミセケチ" rend="red"
+                                 resp="#廣瀬本">ツ</del>ハラハケフリ
+                              <del xml:id="shu0100041" type="ミセケチ"
+                                 rend="red" resp="#廣瀬本">タツタツアマノハラナミ</del>カモメタ
+                              <subst xml:id="shu0100042">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">ツ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">チ</add>
+                              </subst>タ</seg>
+                           <lb/><seg type="長歌本文">見乎為者<choice>
+                                 <orig>國</orig>
+                                 <reg>国</reg>
+                              </choice>原波煙<note place="left" resp="#定家本" type="合点" subtype="訓"
+                                 xml:id="note0100023" targetEnd="#note0100023e">〽タチコメウナハラハカ
+                                 <note place="left" resp="#廣瀬本"
+                                    type="異訓" xml:id="note0100024" targetEnd="#note0100024e"
+                                    >マ</note>
+                                 <subst xml:id="shu0100043">
+                                    <del type="ミセケチ" rend="red" resp="#廣瀬本">マ</del>
+                                    <add place="left" rend="red" resp="#廣瀬本" type="異訓">モ</add>
+                                 </subst>
+                                 <anchor type="noteEnd" xml:id="note0100024e"/>メタチタ</note>
+                              <note place="margin-head" resp="#廣瀬本" type="注" xml:id="note0100025"
+                                 targetEnd="#note0100025e">龍ハ元暦本<milestone unit="br"/>ニ立龍<milestone
+                                    unit="br"/>たちたつ}トアリ</note>立
+                  <note type="注" place="margin-head" rend="red"
+                                 resp="#廣瀬本" xml:id="shu0100037" targetEnd="#shu0100037e"
+                                    >龍ハ籠ノ<milestone unit="br"/>誤リ</note>
+                  龍<anchor type="noteEnd" xml:id="shu0100037e"
+                                 /><anchor type="noteEnd" xml:id="note0100025e"/>海原波加<choice>
+                                 <orig>萬</orig>
+                                 <reg>万</reg>
+                              </choice>目立多<anchor type="noteEnd" xml:id="note0100023e"/></seg>
+                           </seg>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100026" resp="#定家本" rend="right">ツ
+                              <subst xml:id="shu0100044">
+                                 <del type="ミセケチ" rend="red" resp="#廣瀬本">アハレ</del>
+                                 <add place="right" rend="red" resp="#廣瀬本" type="異訓">ウマシ</add>
+                              </subst>クニソアキツシマヤマトノクニハ</seg>
+                           <lb/><seg type="長歌本文"><note place="left" resp="#定家本"
+                                 type="異訓" xml:id="note0100027">ツ</note>都<anchor type="noteEnd"/>
+                              <note place="margin-head" resp="#廣瀬本" type="注" xml:id="note0100030"
+                                    >怜□ハ<milestone unit="br"/>□怜ノ誤</note>
+                              <note place="right" resp="#定家本" type="合点" subtype="異訓"
+                                 xml:id="note0100028">〽<del type="ミセケチ" xml:id="shu00045" rend="red"
+                                    resp="#廣瀬本">オモシロキ</del></note>
+                  恰□<anchor type="noteEnd"/><anchor
+                                 type="noteEnd"/>
+                              <choice>
+                                 <orig>國</orig>
+                                 <reg>国</reg>
+                              </choice>曽
+                              
+                              <note resp="#定家本" type="挿紙" subtype="注"
+                                 xml:id="note0100041" targetEnd="#note0100041e">日本紀神武ノ巻饒速日命<note
+                                    place="right" resp="#定家本" type="補読" xml:id="note0100031"
+                                    >テ</note>乘<anchor type="noteEnd"/>
+                     天磐<choice>
+                                    <orig>舩</orig>
+                                    <reg>船</reg>
+                                 </choice>而<note place="right" resp="#定家本" type="訓"
+                                    xml:id="note0100032">ミソラカケリユクトキニ</note>翔行<anchor type="noteEnd"
+                                    />大虚也
+                     <note place="right" resp="#定家本" type="訓"
+                                    xml:id="note0100033">ミテ</note>睨<anchor type="noteEnd"/>
+                                 <note place="right" resp="#定家本" type="訓" xml:id="note0100034"
+                                    >コノ</note>是<anchor type="noteEnd"/>
+                                 <note place="right" resp="#定家本" type="訓" xml:id="note0100035"
+                                    >クニヲ</note>郷<anchor type="noteEnd"/>
+                     而<note place="right" resp="#定家本" type="訓"
+                                    xml:id="note0100036">アマクタリヌ</note>降之<anchor type="noteEnd"/>
+                     /<note place="right" resp="#定家本" type="訓"
+                                    xml:id="note0100037">カレ</note>故因<anchor type="noteEnd"/>
+                                 <note place="right" resp="#定家本" type="訓" xml:id="note0100038"
+                                    >ナツケタリ</note>目之<anchor type="noteEnd"/>日虚
+                     <note place="right" resp="#定家本" type="補読"
+                                    xml:id="note0100039">ツ</note>見<anchor type="noteEnd"/>日本
+                     <note place="right" resp="#定家本" type="補読"
+                                    xml:id="note0100040">ト</note>国<anchor type="noteEnd"/>矣</note>
+                  蜻<choice>
+                                 <orig>嶋</orig>
+                                 <reg>島</reg>
+                              </choice><anchor type="noteEnd" xml:id="note0100041e"/>八門跡<note
+                                 place="left" resp="#定家本" type="異訓" xml:id="note0100029">
+                                 <del xml:id="shu0100046" type="ミセケチ" rend="red" resp="#廣瀬本"
+                                    >タノウナ</del></note>能<choice>
+                                 <orig>國</orig>
+                                 <reg>国</reg>
+                              </choice><anchor type="noteEnd"/>者</seg>
+                           </seg>
+                     </ab>
+                  </div>
+               </div>
+               <div corresp="#中皇命">
+                  <div type="旧国歌大観番号" n="3" xml:id="旧国歌大観番号00003">
+                     <p style="text-indent:2em" n="題詞00003" xml:id="題詞00003">天皇
+               <note type="訓" place="right" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100047">ミカリシ玉フ</note>遊獦<anchor type="noteEnd"/>内
+               <note type="補読" place="right" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100048">ニ</note>野<anchor type="noteEnd"/>之時中
+                        皇<add type="補入" xml:id="shu0100049" place="right"
+                           rend="red" resp="#廣瀬本">女</add>命使
+               <note type="訓" place="right" rend="red" resp="#廣瀬本"
+                           xml:id="shu0100050">ハシヒト</note>間人<anchor type="noteEnd"/>連老<choice>
+                           <orig>獻</orig>
+                           <reg>献</reg>
+                        </choice>歌</p>
+                     <pb facs="#八丁裏01"/>
+                     <pb facs="#八丁裏02"/>
+                     <pb facs="#八丁裏"/>
+                     <ab xml:id="manyo0003" type="長歌">
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100042" resp="#定家本" rend="right">ヤ<subst
+                           xml:id="shu0100052">
+                           <del type="ミセケチ" rend="red" resp="#廣瀬本">スミ</del>
+                           <add place="right" rend="red" resp="#廣瀬本" type="異体確認">スミ</add>
+                        </subst>シ
+               <subst xml:id="shu0100053">
+                           <del type="ミセケチ" rend="red" resp="#廣瀬本">ル</del>
+                           <add place="below" rend="red" resp="#廣瀬本" type="異訓">シ</add>
+                        </subst>ワカオホキミノアシタニハトリナテタマヒユフヘニハイ　タ
+               <subst xml:id="shu0100054">
+                           <del type="ミセケチ" rend="red" resp="#廣瀬本">チノ</del>
+                           <del type="抹消" rend="red" resp="#廣瀬本"><add place="right" rend="red"
+                                 resp="#廣瀬本" type="異訓">タシヽ</add></del>
+                           <add place="right" rend="red" resp="#廣瀬本" type="異訓">テヽシ</add>
+                        </subst>
+                        <subst xml:id="shu0100055">
+                           <del type="ミセケチ" rend="red" resp="#廣瀬本">ミ</del>
+                           <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ミ</add>
+                        </subst></seg>
+                           <lb/><seg type="長歌本文">八隅<note place="left" resp="#定家本"
+                                 type="異訓" xml:id="note0100043">シヽ</note>知<anchor type="noteEnd"
+                                 />之我大王乃朝庭
+                  <note place="left" resp="#定家本" type="異訓"
+                                 xml:id="note0100044"><del xml:id="shu0100056" rend="red"
+                                    resp="#廣瀬本" type="抹消">タト</del></note>取<anchor type="noteEnd"/>
+                  撫賜夕庭<note place="left" resp="#定家本" type="異訓"
+                                 xml:id="note0100045">イ</note>伊<anchor type="noteEnd"/>
+                              <note place="left" resp="#定家本" type="異訓" xml:id="note0100046"
+                                 targetEnd="#note0100046e"><del xml:id="shu0100057" rend="red"
+                                    resp="#廣瀬本" type="ミセケチ">ヨリ</del></note>
+                              <note type="訓" place="right" rend="red" resp="#廣瀬本"
+                                 xml:id="shu0100051" targetEnd="#shu0100051e">ヨシ</note>縁<anchor
+                                 type="noteEnd" xml:id="note0100046e"/><anchor type="noteEnd"
+                                 xml:id="shu0100051e"/>
+                              <note place="left" resp="#定家本" type="異訓" xml:id="note0100047"
+                                 >タテリシ</note>立之<anchor type="noteEnd"/>御</seg>
+                           </seg>
+                        <lb/><seg type="長歌1行"><seg type="傍訓" xml:id="note0100048" resp="#定家本" rend="right">
+                           <subst xml:id="shu0100058">
+                              <del type="抹消" rend="red" resp="#廣瀬本">イキホイ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="異訓">トラシ</add>
+                           </subst>ノアツ
+               サ<add xml:id="shu0100059" place="right" rend="red"
+                              resp="#廣瀬本" type="異訓">ノ</add>ユミノナ
+               <subst xml:id="shu0100060">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">カ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="異訓">リ</add>
+                           </subst>ハ
+               <subst xml:id="shu0100061">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">ス</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ス</add>
+                           </subst>ノ
+               <subst xml:id="shu0100062">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">ヲ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="仮名遣訂正">オ</add>
+                           </subst>ヲト
+               <subst xml:id="shu0100063">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">ス</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ス</add>
+                           </subst>ナリア
+               <subst xml:id="shu0100064">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">サ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="異体確認">サ</add>
+                           </subst>カリニ
+               <del xml:id="shu0100065" type="抹消" rend="red"
+                              resp="#廣瀬本">イマソタツラシス</del></seg>
+                           <lb/><seg type="長歌本文"><note type="注" place="margin-head"
+                                 rend="red" resp="#廣瀬本" xml:id="shu0100066_01"
+                                 targetEnd="#shu0100066e">勢ハ
+                  <note type="訓" place="right" rend="red"
+                                    resp="#廣瀬本" xml:id="shu0100066_02" targetEnd="#shu0100066_02e"
+                                    >トラシ</note>執<anchor type="noteEnd" xml:id="shu0100066_02e"
+                                    />ノ<milestone unit="br"/>誤リ</note>勢<anchor type="noteEnd"
+                                 xml:id="shu0100066e"/>
+                  乃梓弓之奈
+                  <note type="注" place="margin-head" rend="red"
+                                 resp="#廣瀬本" xml:id="shu0100067_01" targetEnd="#shu0100067e">加ハ
+                     <note type="訓" place="right" rend="red"
+                                    resp="#廣瀬本" xml:id="shu0100067_02" targetEnd="#shu0100067_02e"
+                                    >リ</note>利<anchor type="noteEnd" xml:id="shu0100067_02e"
+                                    />ノ<milestone unit="br"/>誤</note>加<anchor type="noteEnd"
+                                 xml:id="shu0100067e"/>
+                  弭乃音為奈利朝獦尓
+                  <note place="left" resp="#定家本" type="異訓"
+                                 xml:id="note0100049">ヨリ</note>今<anchor type="noteEnd"/>
+                              <note place="left" resp="#定家本" type="異訓" xml:id="note0100050"
+                                 >タテリシ</note>立<anchor type="noteEnd"/>
+                              <note type="訓" place="left" rend="red" resp="#廣瀬本" xml:id="shu0100078"
+                                 >ス</note>須<anchor type="noteEnd"/></seg>
+                           </seg>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100051" resp="#定家本" rend="right">ラシユフカリニ
+                           <del xml:id="shu0100069" type="抹消" rend="red"
+                                          resp="#廣瀬本">タヲラノ</del>
+                                       <note type="異体確認" place="right" rend="red" resp="#廣瀬本"
+                                          xml:id="shu0100070">ミ</note>ミ<anchor type="noteEnd"/>　アツ
+                           サ<add xml:id="shu0100071" place="right"
+                                          rend="red" resp="#廣瀬本" type="異訓">ノ</add>ユ
+                           <subst xml:id="shu0100072">
+                                          <del type="ミセケチ" rend="red" resp="#廣瀬本">ミ</del>
+                                          <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ミ</add>
+                                       </subst>ノナ
+                           <subst xml:id="shu0100073">
+                                          <del type="ミセケチ" rend="red" resp="#廣瀬本">カ</del>
+                                          <add place="right" rend="red" resp="#廣瀬本" type="異訓">リ</add>
+                                       </subst>ハ
+                           <subst xml:id="shu0100074">
+                                          <del type="ミセケチ" rend="red" resp="#廣瀬本">ス</del>
+                                          <add place="right" rend="red" resp="#廣瀬本" type="異体確認">ス</add>
+                                       </subst>ノ
+                           <subst xml:id="shu0100075">
+                                          <del type="ミセケチ" rend="red" resp="#廣瀬本">ヲ</del>
+                                          <add place="left" rend="red" resp="#廣瀬本" type="仮名遣訂正">オ</add>
+                                       </subst>ト
+                           <subst xml:id="shu0100076">
+                                          <del type="ミセケチ" rend="red" resp="#廣瀬本">ス</del>
+                                          <add place="left" rend="red" resp="#廣瀬本" type="異体確認">ス</add>
+                                       </subst></seg>
+                           <lb/><seg type="長歌本文">良思暮獦<choice><orig>尒</orig><reg>尓</reg></choice>
+                  <note place="left" resp="#定家本" type="異訓"
+                                 xml:id="note0100052">イマタヽスラシ</note>今他田渚良之<anchor type="noteEnd"/>
+                              <note place="left" resp="#定家本" type="異訓" xml:id="note0100053"
+                                 targetEnd="#note0100053e"><del xml:id="shu0100077" type="抹消"
+                                    rend="red" resp="#廣瀬本">ミイキホヒノ</del></note>御
+                  <note type="訓" place="right" rend="red"
+                                 resp="#廣瀬本" xml:id="shu0100068" targetEnd="#shu0100068e"
+                                 >トラシノ</note>勢<anchor type="noteEnd" xml:id="note0100053e"/><anchor
+                                 type="noteEnd" xml:id="shu0100068e"/>
+                              <note place="left" resp="#定家本" type="注" xml:id="note0100054"
+                                    >◯能或有<milestone unit="br"/>無能字</note>梓弓<anchor type="noteEnd"
+                              />之奈加弭乃音為</seg>
+                           </seg>
+                        <lb/><seg type="長歌1行">
+                           <seg type="傍訓" xml:id="note0100055" resp="#定家本" rend="right"
+                              >ナリ</seg>
+                              <lb/><seg type="長歌本文">奈里</seg></seg>
+                     </ab>
+                  </div>
+                  <div type="旧国歌大観番号" n="4" xml:id="旧国歌大観番号00004">
+                     <p style="text-indent:2em" n="題詞00004" xml:id="題詞00004">反歌</p>
+                     <lg xml:id="manyo0004" type="短歌">
+                        <l xml:id="manyo0004_01"><lb/>玉剋春内乃大野尓馬数而朝布麻須等六其草深野</l>
+                        <l xml:id="kunmanyo0004_01" corresp="#manyo0004_01"><lb/>タ<note type="異体確認"
+                              place="right" rend="red" resp="#廣瀬本" xml:id="shu0100079"
+                              >マ</note>マ<anchor type="noteEnd"/>キ
+                  <subst xml:id="shu0100080">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">ワ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="仮名遣訂正">ハ</add>
+                           </subst>ルウチノオ
+                  <note type="異体確認" place="right" rend="red" resp="#廣瀬本"
+                              xml:id="shu0100081">ホ</note>ホ<anchor type="noteEnd"/>
+                           <subst xml:id="shu0100082">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">ノ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="仮名遣訂正">ヌ</add>
+                           </subst>ニコ
+                  <note type="異体確認" place="right" rend="red" resp="#廣瀬本"
+                              xml:id="shu0100083">マ</note>マ<anchor type="noteEnd"/>ナメテアサフ
+                  <note type="異体確認" place="right" rend="red"
+                              resp="#廣瀬本" xml:id="shu0100084">マ</note>マ<anchor type="noteEnd"
+                              />スラムソノクサフケ
+                  <subst xml:id="shu0100085">
+                              <del type="ミセケチ" rend="red" resp="#廣瀬本">ノ</del>
+                              <add place="right" rend="red" resp="#廣瀬本" type="仮名遣訂正">ヌ</add>
+                           </subst>
+                        </l>
+                     </lg></div></div></div></div></body></text></TEI>

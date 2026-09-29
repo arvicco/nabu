@@ -556,7 +556,13 @@ cbeta:
   cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [buddhist, sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
-                   # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
+                   # P108-7 (№R-72 next-in-line): + the K canon — the
+                   # Tripiṭaka Koreana's 10 Koreana-only XMLs (texts without
+                   # Taishō parallels; Category A like T/X). Sync verified
+                   # 2026-09-29: 10 K docs / 60,178 passages; the +7
+                   # quarantine delta is upstream T/X drift in the same pull
+                   # (509 files updated, 3 withdrawn), K contributed zero.
+                   # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at
                    # print-line grain (LARGE: T01n0001 alone is 13,072 lb
@@ -1996,6 +2002,24 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+honkoku:   # P108-5
+  adapter: Nabu::Adapters::Honkoku
+  adopted: "2026-09-29"
+  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 6,092 docs / 129,458 passages; 6,749
+                   # untranscribed materials skip by rule (dir-less or all-empty)
+  sync_policy: manual
+  # みんなで翻刻 citizen transcriptions (yuta1984/honkoku-data; README
+  # CC BY-SA 4.0 verbatim, read 2026-09-29): the v3 tree — project >
+  # material > page txts + info.tsv metadata (~46.9M chars per the
+  # README's 2025-11 census). Served HONESTLY as crowd transcription
+  # (upstream-measured ~1.5 err/100 chars) with the platform's
+  # aozora-like notation VERBATIM; a parsed ruby/gaiji layer and the
+  # v1 tree (2017 platform, ~5M chars, different layout) are DECLARED
+  # deferrals on the queue's japonic remainder. Per-material holding-
+  # institution attribution carried in document metadata.
+
 hypotactic:
   adapter: Nabu::Adapters::Hypotactic
   adopted: "2026-07-24"
@@ -2190,12 +2214,20 @@ itkc:
   cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]
   wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
+                   # P108-6 expansion sync verified 2026-09-29: 10,572 docs /
+                   # 37,184 passages across the 26-dataset rail; 0 errors
+                   # (image-only records ride the metadata-only marker)
   # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —
-  # 17 complete works, one data.go.kr dataset each (제한 없음 → D47-a
-  # attribution; the itkc.or.kr site is ARR, ONLY the portal carries the
-  # grant). HONEST COVERAGE: ~17 of the GO family's 257 works; the rest
-  # ride the owner letter path (공공데이터 제공신청 — see the P78-7 scout
-  # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
+  # per-work data.go.kr datasets (제한 없음 → D47-a attribution; the
+  # itkc.or.kr site is ARR, ONLY the portal carries the grant).
+  # P108-6 (2026-09-29): the full portal keyword sweep (30 datasets,
+  # page 2 empty) grew DATASETS 17→26 with the NINE munjip text
+  # datasets (제한 없음 page-verbatim each) — D47-c's munjip parking
+  # superseded by the Q91 adoption. The 문집총간 pk 3074298 serves only
+  # the catalog LIST CSV (the munjip TEXT mass rides the held okhc klc
+  # slice); 서지정보/시의온도/장학사업정보 censused non-text. The rest
+  # of the GO family still rides the owner letter path (공공데이터
+  # 제공신청 — the P78-7 scout report).
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
 
@@ -2312,6 +2344,40 @@ ko-wikisource-mk:
   # 월인천강지곡/석보상절 stay OUT until a completeness census passes
   # (scan transclusions / fragmentary — the P78-4 audit).
   license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
+
+kokubunken:   # P108-4
+  adapter: Nabu::Adapters::Kokubunken
+  adopted: "2026-09-29"
+  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 3 docs / 1,723 passages (kokin 1,230 ·
+                   # hirose 465 · genryaku 28); poem cards eyeballed
+  sync_policy: manual
+  # NIJL's own TEI lane on GitHub (both repo READMEs CC BY 4.0
+  # verbatim, read 2026-09-29): 嘉禄二年本古今和歌集 (poem-grain with
+  # 詞書/作者名 annotations; the apparatus reads lem, rdg annotated) +
+  # the Man'yōshū TEI pair — 廣瀬本 巻一 (the only complete
+  # non-Sengaku-line witness; a DIFFERENT ms line from held ONCOJ, the
+  # two-editions doctrine) and the 元暦校本 opening. Man'yōgana base
+  # text with the kun/傍訓 reading layer as annotations.
+
+kouigenji:   # P108-3
+  adapter: Nabu::Adapters::Kouigenji
+  adopted: "2026-09-29"
+  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 54/54 maki, 25,065 passages, 795 waka — the
+                   # project's own published counts exactly
+  sync_policy: manual
+  # 校異源氏物語テキストDB (kouigenjimonogatari.github.io; デジタル源氏
+  # 物語 — Nakamura/Nagasaki et al.; repo LICENSE CC BY 4.0, read
+  # 2026-09-29): Ikeda Kikan's 1942 critical edition of Genji, 54 maki
+  # as one TEI each (raw GETs). Passage per MANUSCRIPT LINE (seg),
+  # cited p<page>.l<line> from the seg's own corresp API id; waka
+  # (795 upstream-stated) ride nested in their seg → annotations
+  # (id + ／-joined lines); pb facs = NDL IIIF page images annotated
+  # on each page's first line. Language jpn; lect posture claims the
+  # Heian stage (jpn:emj) pending the registry mint.
 
 kr-gaiji:
   adapter: Nabu::Adapters::KrGaiji
@@ -2812,6 +2878,22 @@ nabu-places:
   # arvicco/nabu-places + push ~/Dev/nabu-places, then bin/nabu enable
   # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
   sync_policy: manual
+
+nrct:   # P108-2
+  adapter: Nabu::Adapters::Nrct
+  adopted: "2026-09-29"
+  kind: module   # machinery-only — a gazetteer instrument, zero document rows
+  axes: [japonic]
+  wired: true    # first sync 2026-09-29: 80,502 places derived (2.1s)
+  sync_policy: manual
+  # NRCT — the 日本歴史地名大系 placename dataset (Heibonsha's historical
+  # gazetteer of Japan, machine-readable via ROIS-DS/NII geoshape; CC BY
+  # 4.0 stated on the dataset page, DOI 10.20676/00000448). ONE ~10.7 MB
+  # CSV (the 2025-07-19 cut; a new cut = a deliberate CSV_URL bump):
+  # 80,502 rows → the "nrct" place-index slice on the chgis mold — name
+  # keys are 名称 verbatim + 読み reading + the 歴史地名 historical form
+  # where it differs (20,099 rows), parent = 上位地名. The nabu-places
+  # namespace mint rides as a sister PR. Opens the Japanese places lane.
 
 obi-burmese:   # P92-3
   adapter: Nabu::Adapters::ObiBurmese
@@ -4331,9 +4413,11 @@ tla-hf:
   # would be a NEW dataset name — re-fetch is an owner decision.
   # Listing census 2026-09-28 (HF api/datasets?author=…): NO v20 — the
   # org still lists exactly three datasets, unchanged since 2025-01-19.
-  # The unheld third, tla-Earlier_Egyptian_original-v18-premium
-  # (2024-06-22), is the fresher successor of the 2018 AES snapshot's
-  # ground — the standing remainder-ingest candidate.
+  # P108-7 (2026-09-29): the third dataset INGESTED —
+  # tla-Earlier_Egyptian_original-v18-premium, 12,773 sentences (+ the
+  # -de sibling), the fresher successor of the 2018 AES snapshot's
+  # ground; Unicode hieroglyphs ride annotations as on the siblings.
+  # Source total: 6 docs / 59,524 passages.
   sync_policy: manual
   translations: true
   # German translation coverage is 100% (translation is a required field,
@@ -4767,6 +4851,22 @@ vulgate:
   # works (nt + ot) list its books as witnesses. open-bibles is curated and
   # occasionally updated: re-syncable, not on a live schedule.
   sync_policy: manual
+
+westoldturkic:   # P108-7
+  adapter: Nabu::Adapters::Westoldturkic
+  adopted: "2026-09-29"
+  axes: [turkic, etym]
+  wired: true    # first sync 2026-09-29: 480 WOT etyma, 1,275 reflex rows;
+                   # the ács card eyeballed (loan step marked, year 1222)
+  sync_policy: manual
+  # Róna-Tas & Berta 2011 West Old Turkic as CLDF (LoanpyDataHub;
+  # Zenodo 10.5281/zenodo.7893910 v2.0, cc-by-4.0 on the record;
+  # sha-pinned zip, the iecor rail). ONE dictionary, entry per WOT
+  # etymon (480), the Hungarian descent chain (EAH→LAH→OH→H) as
+  # reflex rows with the curated borrowing step marked; Hungarian
+  # first-attestation years mined into bodies. Dictionary language
+  # trk (the 639-5 collective — WOT itself has no ISO; Glottocode
+  # bolg1249, the r-Turkic/Bolgar branch).
 
 wiktionary-akk:
   adapter: Nabu::Adapters::WiktionaryAkk
