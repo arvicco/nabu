@@ -556,7 +556,13 @@ cbeta:
   cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [buddhist, sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
-                   # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
+                   # P108-7 (№R-72 next-in-line): + the K canon — the
+                   # Tripiṭaka Koreana's 10 Koreana-only XMLs (texts without
+                   # Taishō parallels; Category A like T/X). Sync verified
+                   # 2026-09-29: 10 K docs / 60,178 passages; the +7
+                   # quarantine delta is upstream T/X drift in the same pull
+                   # (509 files updated, 3 withdrawn), K contributed zero.
+                   # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at
                    # print-line grain (LARGE: T01n0001 alone is 13,072 lb
