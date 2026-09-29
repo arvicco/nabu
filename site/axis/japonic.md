@@ -20,7 +20,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 September 2026)</span> |
 |---|---|---|---|---|
@@ -28,16 +28,18 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `honkoku` | texts | attribution | wired · manual | 6,092 docs / 129,458 passages |
+| `ja-wikisource` | texts | attribution | wired · manual | 530 docs / 52,408 passages |
 | `kokubunken` | texts | attribution | wired · manual | 3 docs / 1,723 passages |
 | `kouigenji` | texts | attribution | wired · manual | 54 docs / 25,065 passages |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
+| `ndl-kotenseki` | texts | open | wired · manual | 398 docs / 24,568 passages |
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 September 2026)</span>: `zho` 430,294 · `jpn` 293,552 · `lzh` 63,807 · `ojp` 11,394 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 12 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 September 2026)</span>: `zho` 430,294 · `jpn` 294,461 · `lzh` 63,807 · `ojp` 11,413 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 12 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 
