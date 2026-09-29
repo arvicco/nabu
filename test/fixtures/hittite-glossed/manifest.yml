@@ -1,0 +1,13 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: hittite-glossed
+adapter_test:
+retrieved: "2026-09-29"
+files:
+  - path: 7000_hitt_txts_wGloss.csv
+    refetchable: false
+    provenance: local-trim
+    reason: 61-row trim of the 170,497-line versioned Zenodo CSV (10.5281/zenodo.14266302 v1.0) — re-cut per README by filtering three txtids from a fresh download
+    copied: "2026-09-29"
+    whole: false
+    trim: header + all raw rows of IBoT 1.30+, KBo 35.261, Bo 8897

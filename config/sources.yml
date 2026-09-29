@@ -4425,6 +4425,21 @@ tla-hf:
   # `show --parallel --lang deu` renders them like the damaskini -en pairs.
   # Same CC BY-SA grant (same cards) — no license override.
 
+hittite-glossed:   # P109-3
+  adapter: Nabu::Adapters::HittiteGlossed
+  adopted: "2026-09-29"
+  axes: [hittite]
+  wired: true    # first sync 2026-09-29: 7,099 texts / 72,507 passages,
+                   # sha pin verified; IBoT 1.30+ card eyeballed (8 lines,
+                   # cth facet 821, aligned token layers)
+  sync_policy: manual
+  # "Glossed Hittite Texts with German Translation for Machine
+  # Learning" — Zenodo 10.5281/zenodo.14266302 v1.0, cc-by-4.0 on the
+  # record (read 2026-09-29). One sha-pinned CSV: 7,099 texts /
+  # 170,496 glossed word rows; document = text (txtid), passage =
+  # manuscript line, aligned translit/gloss/German token layers as
+  # annotations; the cth facet joins the TLHdig surface.
+
 tlhdig:
   adapter: Nabu::Adapters::Tlhdig
   adopted: "2026-07-19"
