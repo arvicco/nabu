@@ -159,6 +159,30 @@ module Nabu
       # A shell's piece transclusion: {{:題}}.
       TRANSCLUSION = /\{\{:([^{}|]+)\}\}/
 
+      # api.php batches are capped BOTH by the 50-title API limit and
+      # by encoded byte length: 全唐文 piece titles are whole memorial
+      # titles, and 50 of them percent-encoded blew the server's URL
+      # cap (HTTP 414, censused at the first sync). ~5,000 encoded
+      # bytes keeps the full query URL well under the ~8k limit.
+      BATCH_BYTE_CAP = 5_000
+
+      def title_batches(titles)
+        batches = [[]]
+        bytes = 0
+        titles.each do |title|
+          size = URI.encode_www_form_component(title).bytesize + 3
+          if !batches.last.empty? &&
+             (batches.last.size >= Nabu::WikiFetch::CONTENT_BATCH || bytes + size > BATCH_BYTE_CAP)
+            batches << []
+            bytes = 0
+          end
+          batches.last << title
+          bytes += size
+        end
+        batches.pop if batches.last.empty?
+        batches
+      end
+
       private
 
       def parser
@@ -183,7 +207,7 @@ module Nabu
       end
 
       def fetch_work!(workdir, work, titles, revids, progress)
-        titles.each_slice(Nabu::WikiFetch::CONTENT_BATCH).with_index do |batch, index|
+        title_batches(titles).each_with_index do |batch, index|
           progress&.call("#{work.prefix}: batch #{index + 1} (#{batch.size} page(s))…\n")
           pages_payload(batch).each do |page|
             revision = page.dig("revisions", 0) or next
@@ -200,7 +224,7 @@ module Nabu
       def fetch_transclusions!(page, revision, revids)
         titles = revision.dig("slots", "main", "*").to_s.scan(TRANSCLUSION).flatten.uniq
         pieces = {}
-        titles.each_slice(Nabu::WikiFetch::CONTENT_BATCH) do |batch|
+        title_batches(titles).each do |batch|
           pages_payload(batch).each do |piece|
             piece_revision = piece.dig("revisions", 0) or next
 

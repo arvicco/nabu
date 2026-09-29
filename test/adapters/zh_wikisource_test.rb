@@ -65,6 +65,21 @@ module Adapters
       assert_nil doc(109_484).metadata["dynasty"], "the Ming 總譯 layer claims nothing"
     end
 
+    def test_title_batches_cap_by_encoded_bytes_and_count
+      adapter = conformance_adapter
+      # 60 short titles: the 50-title API cap splits them 50/10.
+      short = (1..60).map { |n| "卷#{n}" }
+      assert_equal [50, 10], adapter.title_batches(short).map(&:size)
+      # Long memorial-style titles (~40 hanzi ≈ 360 encoded bytes each)
+      # must split by BYTE budget long before the count cap — 50 of
+      # them in one GET was the live HTTP 414.
+      long = (1..50).map { |n| "中書舍人王秀漏泄機密斷絞秀不伏款於掌事張會處傳得語秀合是從#{n}" }
+      batches = adapter.title_batches(long)
+      assert_operator batches.size, :>, 1, "one 50-title batch of long titles = HTTP 414"
+      assert(batches.all? { |b| b.sum { |t| URI.encode_www_form_component(t).bytesize + 3 } <= 5_000 })
+      assert_equal long, batches.flatten, "every title survives, in order"
+    end
+
     def test_edition_unstated_recorded_honestly
       assert(documents.all? { |d| d.metadata["base_edition"] == "unstated" },
              "№R-74: no censused zh page states a 底本")
