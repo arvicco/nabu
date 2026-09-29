@@ -38,3 +38,8 @@ Category B (類別 B：不屬於創用 CC 條款授權之文獻) — never inges
 fixture will ever exist for these: 《印順法師佛學著作集》（印順文教基金會 ©）,
 《呂澂佛學著作集》（呂應中等 ©）, 《太虛大師全書》（印順文教基金會 ©）,
 《演培法師全集》（演培法師全集出版委員會 ©）.
+
+`K/K05/K05n0016.xml` — the Tripiṭaka Koreana canon joins (P108-7):
+the REAL header + first 3 body paragraphs of K05n0016 (one of the
+10 Koreana-only XMLs upstream — texts without Taishō parallels),
+balanced closing tags, retrieved 2026-09-29.
