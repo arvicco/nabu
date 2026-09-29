@@ -389,6 +389,16 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   # Variety-less languages as held (no registry stages to refine into):
+  ndl-kotenseki:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "jpn — DELIBERATELY COARSE, declared: the 古典籍
+        mass mixes Japanese and kanbun and the bibliography carries no per-item
+        language field; a finer claim would be invented"}
+    dating: {posture: dated, note: "P109-2: the census 出版日（W3CDTF） year envelope
+        (||-multi values span; the bare '1000' unknown-date sentinel — 5,388 rows,
+        censused — mints nothing, declared); prose 出版日 rides as raw"}
+    places: {posture: unplaced, note: "no place fields in the bibliography"}
+    script: {posture: implied}
   ja-wikisource:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "jpn (prose/kundoku layers) + ojp (万葉集 原文

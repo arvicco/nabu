@@ -2893,6 +2893,22 @@ nabu-places:
   # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
   sync_policy: manual
 
+ndl-kotenseki:   # P109-2
+  adapter: Nabu::Adapters::NdlKotenseki
+  adopted: "2026-09-29"
+  cjk_index: true
+  axes: [japonic]
+  wired: false
+  sync_policy: manual
+  # The NDL 次世代デジタルライブラリー 古典籍 OCR mass over the bulk
+  # route NDL Lab granted (by email, 2026-09-29): per-book
+  # fulltext-json API + the open-dataset PID census (97,731 PD-expired
+  # PIDs at the 2026-02 snapshot). Resumable paced crawl at the
+  # COMMITTED ~1 req/s (never lower): SLICE books per sync, refused/
+  # empty PIDs ledgered, the mass continues across phases (Q108).
+  # OCR-nature label + per-item permalink on every document (both
+  # promised in the ask). Language jpn — deliberately coarse, declared.
+
 nrct:   # P108-2
   adapter: Nabu::Adapters::Nrct
   adopted: "2026-09-29"
