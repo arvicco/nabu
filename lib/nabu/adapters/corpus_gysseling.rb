@@ -123,6 +123,12 @@ module Nabu
         raise ParseError, "#{document_ref.path}: #{e.message}"
       end
 
+      # P109-4 (№R-70): the Corpus Gysseling series vocabulary the genre
+      # facet labels (A ambtelijke bescheiden / L literaire
+      # handschriften); an unlisted code (the lone W) rides value-only.
+      GENRE_LABELS = { "A" => "ambtelijke bescheiden",
+                       "L" => "literaire handschriften" }.freeze
+
       private
 
       def build_document(document_ref, doc)
@@ -147,9 +153,18 @@ module Nabu
         parts.empty? ? nil : parts.join(" — ")
       end
 
+      def genre_facet(genre)
+        return nil if genre.nil? || genre.empty?
+
+        facet = { "value" => genre }
+        facet["raw"] = GENRE_LABELS[genre] if GENRE_LABELS.key?(genre)
+        { "genre" => facet }
+      end
+
       def document_metadata(document_ref, doc)
         {
           "doc_id" => doc.doc_id, "genre" => doc.genre,
+          "facets" => genre_facet(doc.genre),
           "bron_afk" => doc.bron_afk, "bron_oms" => doc.bron_oms,
           "member" => document_ref.metadata.fetch("member"),
           "not_before" => doc.not_before, "not_after" => doc.not_after, "date_raw" => doc.date_raw,

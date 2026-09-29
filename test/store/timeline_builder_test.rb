@@ -462,6 +462,49 @@ module Store
                  "the source's own not-listed sentinel is noise, never a place name"
     end
 
+    # P109-4 (the Q83 drain): edition print years project with the
+    # honestly-labeled "edition" date class — never composition, never
+    # a bare typed date.
+    def test_metadata_dates_edition_year_class
+      seed_metadata_doc("cme", "urn:nabu:cme:c1", { "source_date" => "1904, 1905" })
+      seed_metadata_doc("cme", "urn:nabu:cme:c2", { "source_date" => "c.1976" })
+      seed_metadata_doc("cme", "urn:nabu:cme:c3", { "source_date" => "n.d." })
+      seed_metadata_doc("openmgh", "urn:nabu:openmgh:m1", { "printed_date" => "2001" })
+      build!
+      c1 = timeline_for("urn:nabu:cme:c1")
+      assert_equal [1904, 1905, "edition"], c1.values_at(:not_before, :not_after, :date_class)
+      c2 = timeline_for("urn:nabu:cme:c2")
+      assert_equal [1976, 1976, "edition"], c2.values_at(:not_before, :not_after, :date_class)
+      assert_nil timeline_for("urn:nabu:cme:c3"), "a yearless edition string mints nothing"
+      m1 = timeline_for("urn:nabu:openmgh:m1")
+      assert_equal [2001, 2001, "edition"], m1.values_at(:not_before, :not_after, :date_class)
+    end
+
+    # P109-4: the eebo imprint place — the document IS the early-modern
+    # print, so its imprint place is a real place claim, cleaned of the
+    # ESTC transcription furniture; sine-loco marks mint nothing.
+    def test_metadata_places_eebo_imprint_cleaning
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:a1",
+                        { "date" => { "not_before" => 1593, "raw" => "1593" },
+                          "source_pub_place" => "[Imprynted at London :" })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:a2", { "source_pub_place" => "London]" })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:a3", { "source_pub_place" => "[S.l. :" })
+      build!
+      assert_equal "Imprynted at London", timeline_for("urn:nabu:eebo-tcp:a1")[:place_name],
+                   "furniture stripped, the imprint statement verbatim"
+      assert_equal "London", timeline_for("urn:nabu:eebo-tcp:a2")[:place_name],
+                   "a place-only doc still rows (the HGV precedent)"
+      assert_nil timeline_for("urn:nabu:eebo-tcp:a3"),
+                 "sine loco is the imprint world's unknown — never a place name"
+    end
+
+    def test_metadata_places_rem_orig_place
+      seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
+      build!
+      assert_equal "Siegburg (?)", timeline_for("urn:nabu:rem:m1")[:place_name],
+                   "the scriptorium claim rides verbatim, uncertainty marker included"
+    end
+
     # P47-r3: the per-source refresh seam SyncRunner calls post-load — the
     # lane never lags a sync again (the class this audit exists to kill).
     def test_metadata_dates_refresh_source_replaces_only_that_source

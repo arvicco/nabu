@@ -85,7 +85,12 @@ module Nabu
         document = Document.new(
           urn: document_ref.id, language: LANGUAGE, title: book[:title],
           canonical_path: document_ref.path,
-          metadata: { "genre" => book[:genre], "book" => book[:n] }.compact
+          metadata: {
+            "genre" => book[:genre], "book" => book[:n],
+            # P109-4 (№R-70): the per-book genre word (religious/history/
+            # tafsir/adab) projected as a facet.
+            "facets" => (book[:genre] ? { "genre" => { "value" => book[:genre] } } : nil)
+          }.compact
         )
         book[:passages].each_with_index do |unit, sequence|
           document << Passage.new(
