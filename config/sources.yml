@@ -2002,6 +2002,21 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+hittite-glossed:   # P109-3
+  adapter: Nabu::Adapters::HittiteGlossed
+  adopted: "2026-09-29"
+  axes: [hittite]
+  wired: true    # first sync 2026-09-29: 7,099 texts / 72,507 passages,
+                   # sha pin verified; IBoT 1.30+ card eyeballed (8 lines,
+                   # cth facet 821, aligned token layers)
+  sync_policy: manual
+  # "Glossed Hittite Texts with German Translation for Machine
+  # Learning" — Zenodo 10.5281/zenodo.14266302 v1.0, cc-by-4.0 on the
+  # record (read 2026-09-29). One sha-pinned CSV: 7,099 texts /
+  # 170,496 glossed word rows; document = text (txtid), passage =
+  # manuscript line, aligned translit/gloss/German token layers as
+  # annotations; the cth facet joins the TLHdig surface.
+
 honkoku:   # P108-5
   adapter: Nabu::Adapters::Honkoku
   adopted: "2026-09-29"
@@ -4455,21 +4470,6 @@ tla-hf:
   # `show --parallel --lang deu` renders them like the damaskini -en pairs.
   # Same CC BY-SA grant (same cards) — no license override.
 
-hittite-glossed:   # P109-3
-  adapter: Nabu::Adapters::HittiteGlossed
-  adopted: "2026-09-29"
-  axes: [hittite]
-  wired: true    # first sync 2026-09-29: 7,099 texts / 72,507 passages,
-                   # sha pin verified; IBoT 1.30+ card eyeballed (8 lines,
-                   # cth facet 821, aligned token layers)
-  sync_policy: manual
-  # "Glossed Hittite Texts with German Translation for Machine
-  # Learning" — Zenodo 10.5281/zenodo.14266302 v1.0, cc-by-4.0 on the
-  # record (read 2026-09-29). One sha-pinned CSV: 7,099 texts /
-  # 170,496 glossed word rows; document = text (txtid), passage =
-  # manuscript line, aligned translit/gloss/German token layers as
-  # annotations; the cth facet joins the TLHdig surface.
-
 tlhdig:
   adapter: Nabu::Adapters::Tlhdig
   adopted: "2026-07-19"
@@ -4864,20 +4864,6 @@ unikemet:
   # → class open, the Unihan class.
   sync_policy: manual
 
-zh-wikisource:   # P109-1
-  adapter: Nabu::Adapters::ZhWikisource
-  adopted: "2026-09-29"
-  cjk_index: true
-  axes: [sinitic]
-  wired: false
-  sync_policy: manual
-  # Censused works, prefix-expanded (№R-74; census in
-  # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
-  # fetch expands the ~20k piece pages offline into juan envelopes) ·
-  # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
-  # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編
-  # failed census (front matter only). Texts PD; layer CC BY-SA 4.0.
-
 viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
   adopted: "2026-08-18"
@@ -5075,6 +5061,20 @@ wold:
   # Donor map keys on languoid NAMES — WOLD's own glottocodes are unreliable
   # (its "Old Norse" is noon1243 = Glottolog's Noone; see cldf-spine row).
   sync_policy: manual
+
+zh-wikisource:   # P109-1
+  adapter: Nabu::Adapters::ZhWikisource
+  adopted: "2026-09-29"
+  cjk_index: true
+  axes: [sinitic]
+  wired: false
+  sync_policy: manual
+  # Censused works, prefix-expanded (№R-74; census in
+  # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
+  # fetch expands the ~20k piece pages offline into juan envelopes) ·
+  # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
+  # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編
+  # failed census (front matter only). Texts PD; layer CC BY-SA 4.0.
 
 zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner GO 2026-08-29)
   adapter: Nabu::Adapters::Zhongyuan
