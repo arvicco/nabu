@@ -335,11 +335,14 @@ module Nabu
           date = meta["orig_date"]
           return [nil, nil, nil] unless date.is_a?(Hash)
 
-          year = date["when"].to_s[/\A0*(\d{3,4})\z/, 1]
-          return [nil, nil, nil] unless year
-
           klass = date["type"] == "composition" ? "composition" : nil
-          [Integer(year, 10), Integer(year, 10), date["text"] || date["when"], nil, klass]
+          year = date["when"].to_s[/\A0*(\d{3,4})\z/, 1]
+          return [Integer(year, 10), Integer(year, 10), date["text"] || date["when"], nil, klass] if year
+
+          # The live census (2026-09-29): 608 of 632 docs date in century
+          # PROSE only — the century grammar is the fallback lane.
+          nb, na, raw = century_prose({ "period" => date["text"] })
+          [nb, na, raw, nil, nb && klass]
         end
 
         # P108-8: obi-burmese "CS 586(580) = CE 1224(1218) …" — every CE
@@ -373,9 +376,20 @@ module Nabu
           [mentions.map(&:first).min, mentions.map(&:last).max, text.strip]
         end
 
+        # "first/second half of the Nth century" folds into the
+        # early/late vocabulary BEFORE scanning — otherwise "Second"
+        # would read as the 2nd century (the syriac-corpus prose,
+        # live-censused 2026-09-29).
+        def fold_half_phrases(text)
+          text.gsub(/first\s+half\s+of\s+(?:the\s+)?/i, "early ")
+              .gsub(/second\s+half\s+of\s+(?:the\s+)?/i, "late ")
+              .gsub(/middle\s+of\s+(?:the\s+)?/i, "mid ")
+        end
+
         def century_mentions(text)
+          text = fold_half_phrases(text)
           found = []
-          text.scan(/(?:(early|mid|late)[- ])?(?:(\d{1,2})(?:st|nd|rd|th)\b|\b([A-Za-z]+)\b)/) do |half, digit, word|
+          text.scan(/(?:(early|mid|late)[- ])?(?:(\d{1,2})(?:st|nd|rd|th)\b|\b([A-Za-z]+)\b)/i) do |half, digit, word|
             n = digit ? Integer(digit, 10) : ORDINAL_WORDS.index(word.to_s.downcase)
             next if n.nil? || n.zero?
 
