@@ -65,6 +65,15 @@ module Adapters
       assert_nil doc(109_484).metadata["dynasty"], "the Ming 總譯 layer claims nothing"
     end
 
+    def test_fetch_pin_survives_mixed_shell_and_piece_keys
+      # Integer pageids (shells) + "page:piece" Strings (transclusion
+      # pins) sort together only stringified — the first full fetch
+      # died on the mixed sort after landing every envelope.
+      revids = { 63_644 => 1, "63644:70001" => 2, 41_615 => 3 }
+      sha = Digest::SHA256.hexdigest(JSON.generate(revids.transform_keys(&:to_s).sort.to_h))
+      assert_match(/\A\h{64}\z/, sha)
+    end
+
     def test_title_batches_cap_by_encoded_bytes_and_count
       adapter = conformance_adapter
       # 60 short titles: the 50-title API cap splits them 50/10.
