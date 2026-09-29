@@ -1,0 +1,62 @@
+,txtid,lnr,cth_number,word,translit,gloss,trans_de
+0,IBoT 1.30+, Vs. 1,821,LUGALuš,⸢LUGAL⸣-uš,FNL(u).NOM.SG.C,König
+1,IBoT 1.30+, Vs. 1,821,kuapi,ku-wa-pí,CNJ,sobald als
+2,IBoT 1.30+, Vs. 1,821,DINGIRaš,DINGIR{MEŠ}-aš,D/L.PL,Gottheit
+3,IBoT 1.30+, Vs. 1,821,aruaizi,a-ru-wa-a-ez-zi,3SG.PRS,sich verneigen
+4,IBoT 1.30+, Vs. 1,821,GUDU₁₂,{LÚ}GUDU₁₂,NOM.SG(UNM),Gesalbter
+5,IBoT 1.30+, Vs. 1,821,kišan,kiš-an,DEMadv,in dieser Weise
+6,IBoT 1.30+, Vs. 1,821,malti,ma-al-di,3SG.PRS,äußern
+7,IBoT 1.30+, Vs. 2,821,taparnakan,[t]a-ba-ar-na-kán,NOM.SG(!),(Königstitel)
+8,IBoT 1.30+, Vs. 2,821,LUGALuš,LUGAL-uš,FNL(u).NOM.SG.C,König
+9,IBoT 1.30+, Vs. 2,821,DINGIRaš,DINGIR{MEŠ}-aš,D/L.PL,Gottheit
+10,IBoT 1.30+, Vs. 2,821,aššuš,a-aš-šu-uš,NOM.SG.C,gut
+11,IBoT 1.30+, Vs. 2,821,eštu,e-eš-du,3SG.IMP,sein
+12,IBoT 1.30+, Vs. 2,821,KURe,KUR-e,FNL(e).NOM.SG.N,Land
+13,IBoT 1.30+, Vs. 2,821,10ašpat,{D}10-aš-pát,DN.HITT.GEN.SG,Wettergott
+14,IBoT 1.30+, Vs. 3,821,nepeš,ne-pé-eš,NOM.SG.N,Himmel
+15,IBoT 1.30+, Vs. 3,821,tekanna,te-⸢kán⸣-na,NOM.SG.N,Erde
+16,IBoT 1.30+, Vs. 3,821,ÉRINaz,ÉRIN{MEŠ}-az,NOM.SG.C,Truppe
+17,IBoT 1.30+, Vs. 3,821,10ašpat,{D}10-aš-pát,DN.HITT.GEN.SG,Wettergott
+18,IBoT 1.30+, Vs. 3,821,nuza,nu-za,CONNn=REFL,'nu=z
+19,IBoT 1.30+, Vs. 3,821,laparnan,{LÚ}la-ba-ar-na-an,ACC.SG.C,(Königstitel)
+20,IBoT 1.30+, Vs. 3,821,LUGALun,LUGAL-un,FNL(u).ACC.SG.C,König
+21,IBoT 1.30+, Vs. 4,821,maniaḫḫatallan,{LÚ}ma-ni-ia-aḫ-ḫa-⸢tal⸣-la-an,ACC.SG.C,Verwalter
+22,IBoT 1.30+, Vs. 4,821,iat,i-ia-at,3SG.PST,machen
+23,IBoT 1.30+, Vs. 4,821,nušši,nu-uš-ši,CONNn=PPRO.3SG.D/L,'nu=šši
+24,IBoT 1.30+, Vs. 4,821,KÙ.BABBARaš,{URU}KÙ.BABBAR-aš,GN.GEN.SG,Ḫattuša
+25,IBoT 1.30+, Vs. 4,821,KURe,KUR-e,FNL(e).NOM.PL.N,Land
+26,IBoT 1.30+, Vs. 5,821,ḫuman,ḫu-u-ma-an,QUANall.ACC.SG.N,jeder; ganz
+27,IBoT 1.30+, Vs. 5,821,paiš,pa-iš,3SG.PST,geben
+28,IBoT 1.30+, Vs. 5,821,nuššan,nu-uš-⸢ša⸣-an,CONNn=OBPs,'nu=ššan
+29,IBoT 1.30+, Vs. 5,821,KURe,KUR-e,FNL(e).ACC.SG.N,Land
+30,IBoT 1.30+, Vs. 5,821,laparnaš,la-ba-ar-na-aš,NOM.SG.C,(Königstitel)
+31,IBoT 1.30+, Vs. 6,821,ŠUaz,ŠU-az,ABL,Hand
+32,IBoT 1.30+, Vs. 6,821,maniaḫḫiškettu,ma-ni-ia-aḫ-ḫi-⸢iš⸣-ke-ed-du,3SG.IMP.IMPF,zuteilen
+33,IBoT 1.30+, Vs. 6,821,kuiššan,ku-iš-ša-an,INDFevr.NOM.SG.C,jeder
+34,IBoT 1.30+, Vs. 7,821,laparnaš,la-ba-ar-⸢na⸣-aš,GEN.SG,(Königstitel)
+35,IBoT 1.30+, Vs. 7,821,LUGALuaš,LUGAL-w[a-a]š,FNL(u).GEN.SG,König
+36,IBoT 1.30+, Vs. 7,821,NÍ.TEaš,NÍ.TE-aš,GEN.SG,Körper
+37,IBoT 1.30+, Vs. 7,821,irḫašša,ir-ḫa-aš-ša,D/L.PL,Grenze
+38,IBoT 1.30+, Vs. 8,821,šalika,ša-li-ga,3SG.PRS.MP,berühren
+39,IBoT 1.30+, Vs. 8,821,10aš,{D}10-aš,DN.FNL(a).HITT.NOM.SG,Wettergott
+40,IBoT 1.30+, Vs. 8,821,ḫarniktu,⸢ḫar⸣-ni-ik-du,3SG.IMP,zerstören
+2292,KBo 35.261,2,628,1,1,QUANcar,ein
+2293,KBo 35.261,4,628,1,[1,QUANcar,ein
+2294,KBo 35.261,4,628,manuzuḫi,ma-nu-zu-ḫi],30.10.2.1,von Manuzi
+2295,KBo 35.261,5,628,1,1,QUANcar,ein
+2296,KBo 35.261,6,628,taipunna,da-i-pu-un-[na,,()
+2297,KBo 35.261,7,628,1,[1,QUANcar,ein
+2298,KBo 35.261,7,628,nenuar,ne-nu-wa-ar],HURR,()
+2299,KBo 35.261,8,628,1,1,QUANcar,ein
+2300,KBo 35.261,9,628,lankunne,[la-an-ku-u]n-⸢ne⸣,,()
+2301,KBo 35.261,9,628,1,1,QUANcar,ein
+2302,KBo 35.261,10,628,nu,[nu,CONNn,'nu
+2303,KBo 35.261,10,628,paršiannai,pár-ši-⸢ia⸣-[a]n-⸢na⸣-[i],3SG.PRS.IMPF,zerbrechen
+2304,KBo 35.261,11,628,zikkezi,⸢zi⸣-i[k-ke-ez-zi],3SG.PRS.IMPF,setzen
+2305,KBo 35.261,12,628,nu,[nu,CONNn,'nu
+2306,KBo 35.261,12,628,7,7],QUANcar,sieben
+2307,KBo 35.261,12,628,taruppantari,ta-ru-up-pa-an-ta-ri],3PL.PRS.MP,verflechten
+19760,Bo 8897,Vs.? 3,615,nu,~⸢~nu,CONNn,'① nu
+19761,Bo 8897,Vs.? 4,615,3,3{KAM},QUANcar,drei
+146567,Bo 8897,Vs.? 3,670,nu,~⸢~nu,CONNn,' nu
+146568,Bo 8897,Vs.? 4,670,3,3{KAM},QUANcar,drei

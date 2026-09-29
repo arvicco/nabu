@@ -16,11 +16,12 @@ class CbetaTest < Minitest::Test
 
   FIXTURES = Nabu::TestSupport.fixtures("cbeta")
 
+  K05 = "urn:nabu:cbeta:K05n0016"
   T01 = "urn:nabu:cbeta:T01n0001-xu"
   T85 = "urn:nabu:cbeta:T85n2884"
   X01 = "urn:nabu:cbeta:X01n0001"
   X55 = "urn:nabu:cbeta:X55n0899"
-  ALL_FIXTURES = [T01, T85, X01, X55].freeze # discover order (sorted by urn)
+  ALL_FIXTURES = [K05, T01, T85, X01, X55].freeze # discover order (sorted by urn)
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -106,7 +107,7 @@ class CbetaTest < Minitest::Test
   # drift apart.
   def test_sparse_cone_covers_scope_and_excludes_every_category_b_dir
     cone = Nabu::Adapters::Cbeta::SPARSE_CONE
-    assert_equal ["T/", "X/", "canons.json", "schema/"], cone
+    assert_equal ["T/", "X/", "K/", "canons.json", "schema/"], cone
     Nabu::Adapters::Cbeta::CATEGORY_B.each_key do |code|
       refute(cone.any? { |path| path.start_with?(code) }, "cone must not include #{code}")
     end
@@ -157,7 +158,7 @@ class CbetaTest < Minitest::Test
     source = cbeta_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 4, first.added
+    assert_equal 5, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]

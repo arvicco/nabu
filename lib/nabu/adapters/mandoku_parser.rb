@@ -203,7 +203,7 @@ module Nabu
       # Parse the text directory at +dir+ into one Document. +urn+ is the
       # document urn the adapter minted; +text_id+ the KR id (names the
       # per-juan files).
-      def parse(dir, urn:, text_id:)
+      def parse(dir, urn:, text_id:, facets: nil)
         files = juan_files(dir, text_id)
         raise ParseError, "#{dir}: no #{text_id}_*.txt juan files" if files.empty?
 
@@ -211,7 +211,8 @@ module Nabu
         state = collect_pages(files, urn: urn, text_id: text_id, witness: headers["witness"])
         document = Nabu::Document.new(
           urn: urn, language: LANGUAGE, canonical_path: File.expand_path(dir),
-          title: headers["title"], metadata: document_metadata(text_id, headers, state[:scheme])
+          title: headers["title"],
+          metadata: document_metadata(text_id, headers, state[:scheme], facets)
         )
         state[:passages].each { |passage| document << passage }
         document
@@ -246,13 +247,16 @@ module Nabu
         headers
       end
 
-      def document_metadata(text_id, headers, scheme)
+      def document_metadata(text_id, headers, scheme, facets = nil)
         metadata = { "class" => text_id[0, 3] }
         metadata["edition"] = headers["baseedition"] if headers["baseedition"]
         metadata["cat"] = headers["cat"] if headers["cat"]
         metadata["dzid"] = headers["dzid"] if headers["dzid"]
         metadata["witness"] = headers["witness"] if headers["witness"]
         metadata["page_scheme"] = "witness" if scheme == :witness
+        # P109-5: the adapter's KR-Catalog 部/類 lookup (already the
+        # FacetBuilder {"value" =>, "raw" =>} shape).
+        metadata["facets"] = facets if facets
         metadata
       end
 

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc" type="application/relax-ng-compact-syntax"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:id="K05n0016">
+<teiHeader>
+  <fileDesc>
+    <titleStmt>
+      <title level="s">Tripiṭaka Koreana (Shinwenfeng Edition)</title>
+      <title level="s" xml:lang="zh-Hant">高麗大藏經（新文豐版）</title>
+      <title level="m" xml:lang="zh-Hant">能斷金剛般若波羅蜜多經</title>
+      <title>Tripiṭaka Koreana (Shinwenfeng Edition), Electronic version, No. 16 能斷金剛般若波羅蜜多經</title>
+      <title xml:lang="zh-Hant">高麗大藏經（新文豐版）數位版, No. 16 能斷金剛般若波羅蜜多經</title>
+      <author>唐 玄奘譯</author>
+      <respStmt>
+        <resp>Electronic Version by</resp>
+        <name>CBETA</name>
+      </respStmt>
+    </titleStmt>
+    <editionStmt>
+      <edition>XML TEI P5</edition>
+      <respStmt xml:id="resp1"><resp>corrections</resp><name>orig</name></respStmt>
+      <respStmt xml:id="resp2"><resp>corrections</resp><name>CBETA</name></respStmt>
+      <respStmt xml:id="resp3"><resp>corrections</resp><name>CBETA.maha</name></respStmt>
+      <respStmt xml:id="resp4"><resp>corrections</resp><name>CBETA.sy</name></respStmt>
+    </editionStmt>
+    <extent>1卷</extent>
+    <publicationStmt>
+      <idno type="CBETA">
+        <idno type="canon">K</idno>.<idno type="vol">5</idno>.<idno type="no">16</idno>
+      </idno>
+      <distributor>
+        <name>財團法人佛教電子佛典基金會 (CBETA)</name>
+        <address>
+          <addrLine><email>service@cbeta.org</email></addrLine>
+        </address>
+      </distributor>
+      <availability>
+        <p>Available for non-commercial use when distributed with this header intact.</p>
+      </availability>
+      <date>2025-03-12 15:02:55 +0800</date>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl>高麗大藏經（新文豐版）</bibl>
+    </sourceDesc>
+  </fileDesc>
+  <encodingDesc>
+    <projectDesc>
+      <p xml:lang="en" cb:type="ly">Input by CBETA(first version), Input by CBETA(second version)</p>
+      <p xml:lang="zh-Hant" cb:type="ly">CBETA 人工輸入（版本一），CBETA 人工輸入（版本二）</p>
+    </projectDesc>
+    <editorialDecl>
+      <punctuation resp="#resp1"><p>原書標點</p></punctuation>
+    </editorialDecl>
+    <tagsDecl>
+      <namespace name="http://www.tei-c.org/ns/1.0">
+        <tagUsage gi="rdg">
+          <listWit>
+            <witness xml:id="wit.cbeta">【CB】</witness>
+            <witness xml:id="wit.orig">【麗】</witness>
+          </listWit>
+        </tagUsage>
+      </namespace>
+    </tagsDecl>
+    <charDecl>
+      <char xml:id="CB01057">
+        <charName>CBETA CHARACTER CB01057</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[邱-丘+冉]</value>
+        </charProp>
+        <charProp>
+          <localName>normalized form</localName>
+          <value>那</value>
+        </charProp>
+        <mapping type="unicode">U+28697</mapping>
+        <mapping cb:dec="984097" type="PUA">U+F0421</mapping>
+      </char>
+      <char xml:id="CB04447">
+        <charName>CBETA CHARACTER CB04447</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[月*互]</value>
+        </charProp>
+        <charProp>
+          <localName>normalized form</localName>
+          <value>胝</value>
+        </charProp>
+        <mapping type="unicode">U+26641</mapping>
+        <mapping cb:dec="987487" type="PUA">U+F115F</mapping>
+      </char>
+      <char xml:id="CB08764">
+        <charName>CBETA CHARACTER CB08764</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[宋-木+取]</value>
+        </charProp>
+        <mapping type="unicode">U+3761</mapping>
+        <mapping cb:dec="991804" type="PUA">U+F223C</mapping>
+      </char>
+      <char xml:id="CB12777">
+        <charName>CBETA CHARACTER CB12777</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[序-予+(更-一)]</value>
+        </charProp>
+        <charProp>
+          <localName>normalized form</localName>
+          <value>庾</value>
+        </charProp>
+        <mapping type="unicode">U+22214</mapping>
+        <mapping cb:dec="995817" type="PUA">U+F31E9</mapping>
+      </char>
+      <char xml:id="CB30072">
+        <charName>CBETA CHARACTER CB30072</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[(〦/米)*力]</value>
+        </charProp>
+        <charProp>
+          <localName>normalized form</localName>
+          <value>敕</value>
+        </charProp>
+        <mapping type="unicode">U+20860</mapping>
+        <mapping cb:dec="1013112" type="PUA">U+F7578</mapping>
+      </char>
+      <char xml:id="CB30776">
+        <charName>CBETA CHARACTER CB30776</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[崴-女+小]</value>
+        </charProp>
+        <charProp>
+          <localName>normalized form</localName>
+          <value>歲</value>
+        </charProp>
+        <mapping cb:dec="1013816" type="PUA">U+F7838</mapping>
+      </char>
+      <char xml:id="CB30904">
+        <charName>CBETA CHARACTER CB30904</charName>
+        <charProp>
+          <localName>composition</localName>
+          <value>[口/(十-〡+ㄅ)]</value>
+        </charProp>
+        <charProp>
+          <localName>normalized form</localName>
+          <value>號</value>
+        </charProp>
+        <mapping type="normal_unicode">U+53F7</mapping>
+        <mapping cb:dec="1013944" type="PUA">U+F78B8</mapping>
+      </char>
+    </charDecl>
+  </encodingDesc>
+  <profileDesc>
+    <langUsage>
+      <language ident="en">English</language>
+      <language ident="zh-Hant">Chinese (Traditional)</language>
+    </langUsage>
+  </profileDesc>
+  <revisionDesc>
+    <change when="2013-05-20">
+      <name>CW</name><name>Ray Chou 周邦信</name>P4 to P5 conversion by p4top5a.py, intended for publication
+    </change>
+    <change when="2010-09-15T16:30:46">
+      Zhou Bang-Xin (ed.) Created initial TEI XML version with BASICX.BAT
+    </change>
+  </revisionDesc>
+</teiHeader>
+<text><body>
+<milestone unit="juan" n="1"/>
+<pb ed="K" xml:id="K05.0016.1001a" n="1001a"/>
+<lb ed="K" n="1001a01"/><cb:mulu type="卷" n="1"></cb:mulu><cb:juan fun="open" n="1"><cb:jhead>能断金剛般若波羅蜜多經　　羽</cb:jhead></cb:juan>
+<lb ed="K" n="1001a02"/><byline cb:type="translator">唐三藏法師玄奘譯</byline>
+<lb ed="K" n="1001a03"/><cb:div><p xml:id="pK05p1001a0301">如是我聞一時薄伽梵在室羅筏住
+<lb ed="K" n="1001a04"/>誓多林給孤獨園與大苾蒭眾千二
+<lb ed="K" n="1001a05"/>百五十人俱尒時世尊於日初分整
+<lb ed="K" n="1001a06"/>理常服執持衣鉢入室羅筏大城乞
+<lb ed="K" n="1001a07"/>食時薄伽梵於其城中行乞食<anchor xml:id="nkr_note_add_1001a0701" n="1001a0701"/><anchor xml:id="beg1001a0701" n="1001a0701"/>已<anchor xml:id="end1001a0701"/>出
+<lb ed="K" n="1001a08"/>還本處飯食訖收衣鉢洗足<anchor xml:id="nkr_note_add_1001a0801" n="1001a0801"/><anchor xml:id="beg1001a0801" n="1001a0801"/>已<anchor xml:id="end1001a0801"/>於食
+<lb ed="K" n="1001a09"/>後時敷如常座結加趺坐端身正願
+<lb ed="K" n="1001a10"/>住對面念時諸苾蒭來詣佛所到<anchor xml:id="nkr_note_add_1001a1001" n="1001a1001"/><anchor xml:id="beg1001a1001" n="1001a1001"/>已<anchor xml:id="end1001a1001"/>
+<lb ed="K" n="1001a11"/>頂禮世尊雙足右遶三匝退坐一面
+<lb ed="K" n="1001a12"/>具壽善現亦於如是眾會中坐。</p>
+<lb ed="K" n="1001a13"/><p xml:id="pK05p1001a1301">尒時眾中具壽善現從座而起偏袒
+<lb ed="K" n="1001a14"/>一肩右膝著地合掌恭敬而白佛言
+<lb ed="K" n="1001a15"/>希有世尊乃至如來應正等覺能以
+<lb ed="K" n="1001a16"/><g ref="#CB08764">㝡</g>勝攝受攝受諸菩薩摩訶薩乃至
+<lb ed="K" n="1001a17"/>如來應正等覺能以<g ref="#CB08764">㝡</g>勝付囑付囑
+<lb ed="K" n="1001a18"/>諸菩薩摩訶薩世尊諸有發趣菩薩
+<lb ed="K" n="1001a19"/>乘者應云何住云何修行云何攝伏
+<lb ed="K" n="1001a20"/>其心作是語<anchor xml:id="nkr_note_add_1001a2001" n="1001a2001"/><anchor xml:id="beg1001a2001" n="1001a2001"/>已<anchor xml:id="end1001a2001"/>。</p>
+<lb ed="K" n="1001a21"/><p xml:id="pK05p1001a2101">尒時世尊告具壽善現曰善哉善哉
+<lb ed="K" n="1001a22"/>善現如是如是如汝所說乃至如來
+<pb ed="K" xml:id="K05.0016.1001b" n="1001b"/>
+<lb ed="K" n="1001b01"/>應正等覺能以<g ref="#CB08764">㝡</g>勝攝受攝受諸菩
+<lb ed="K" n="1001b02"/>薩摩訶薩乃至如來應正等覺能以
+<lb ed="K" n="1001b03"/><g ref="#CB08764">㝡</g>勝付囑付囑諸菩薩摩訶薩是故
+<lb ed="K" n="1001b04"/>善現汝應諦聽極善作意吾當為汝
+<lb ed="K" n="1001b05"/>分別解說諸有發趣菩薩乘者應如
+<lb ed="K" n="1001b06"/>是住如是修行如是攝伏其心具壽
+<lb ed="K" n="1001b07"/>善現白佛言如是世尊願樂欲聞。</p></cb:div></body></text></TEI>

@@ -95,6 +95,9 @@ module Nabu
           #                                      minted at parse but never projected (the
           #                                      health timeline-dark anomaly, cleared)
           "viet-wikisource" => :structured, # P96 hygiene: same shape, same clearing
+          "ndl-kotenseki" => :structured, # P109-2: the census W3CDTF year envelope the
+          #                                 adapter mints (sentinel "1000" excluded there);
+          #                                 raw = the prose 出版日 verbatim
           "corpus-gysseling" => :bounds_keys, # P96 hygiene: TOP-LEVEL integer not_before/
           #                                     not_after + date_raw (+ a string place —
           #                                     the croala mold); dark until now
@@ -135,9 +138,23 @@ module Nabu
           "soas-tibetan" => :century_prose, # P108-8: "13th century, …" period strings
           "local-library" => :year_key, # P108-8: the shelf's own integer year
           "rsti" => :place_only, # P108-8: the findspot lane (PLACE_KEYS); no typed dates
-          "cbeta" => :dynasty_band # P104-1 (№R-70 grade 2): the header byline's dynasty
+          "cbeta" => :dynasty_band, # P104-1 (№R-70 grade 2): the header byline's dynasty
           #                          seat bands via the ruled table as an ERA claim —
           #                          precision "era", verbatim byline in date_raw
+          "cme" => :edition_year_text, # P109-4 (the Q83 drain): the source EDITION's print
+          #                              year(s) — date_class "edition", never composition
+          #                              (the e-text pub_date stays machinery)
+          "openmgh" => :printed_year_text, # P109-4: the MGH volume's print year — the same
+          #                                  honestly-labeled "edition" class
+          "rem" => :place_only, # P109-4: the header's orig_place scriptorium claims
+          #                       (79 of 406 docs; PLACE_KEYS) — dating already rides
+          #                       its own lane
+          "ja-wikisource" => :era_band_key, # P109-1 (№R-74): the era-category envelope
+          #                       the adapter mints ("era_band") — an ERA attribution,
+          #                       precision "era", never a typed date
+          "zh-wikisource" => :dynasty_band # P109-1: the work-level dynasty claim
+          #                       (全唐文 → 唐) through the ruled period table —
+          #                       the cbeta shape verbatim
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
@@ -153,9 +170,21 @@ module Nabu
         # explicit unknown-class values ("Unknown"), which mint no place
         # — the coptic-lane NO_PLACE stance; the default "place" key's
         # behavior is untouched.
-        PLACE_KEYS = { "seal" => "provenance", "rsti" => "findspot" }.freeze
-        # "not listed in teo" — rsti's own absent-findspot sentinel.
-        NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo"].freeze
+        PLACE_KEYS = {
+          "seal" => "provenance", "rsti" => "findspot",
+          # P109-4: eebo-tcp documents ARE the early-modern prints — the
+          # imprint place is the artifact's own production place (39k+
+          # London), cleaned of the ESTC-style bracket/colon furniture.
+          # The TCP's own pub_place (Ann Arbor) is lineage, exempted.
+          "eebo-tcp" => "source_pub_place",
+          # P109-4: the ReM header's origin scriptorium ("Vorau",
+          # "Siegburg (?)") — uncertainty markers ride verbatim.
+          "rem" => "orig_place"
+        }.freeze
+        # "not listed in teo" — rsti's own absent-findspot sentinel;
+        # "s.l" — the imprint world's sine loco (eebo, 1,311 docs).
+        NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
+                    "s.l", "s.l."].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -270,8 +299,12 @@ module Nabu
           if key != "place"
             # An overridden place key is a findspot vocabulary with explicit
             # unknown-class values -- those mint no place (never a name).
-            return [nil, nil, nil, nil] if place.nil? ||
-                                           NO_PLACE.include?(place.to_s.strip.downcase)
+            # P109-4: imprint-catalog furniture (leading "[", trailing
+            # ":"/","/"."/brackets — the ESTC transcription style eebo
+            # carries) strips before the sentinel check and the mint.
+            place = place.to_s.strip.sub(/\A[\[\s]+/, "").sub(/[\s:,.;\[\]]+\z/, "") unless place.nil?
+            return [nil, nil, nil, nil] if place.nil? || place.empty? ||
+                                           NO_PLACE.include?(place.downcase)
 
             return [place, nil, nil, nil]
           end
@@ -553,6 +586,32 @@ module Nabu
         def century_int(value)
           match = /\A\d{1,2}\z/.match(value.to_s.strip)
           match && Integer(match[0], 10)
+        end
+
+        # P109-4 (the Q83 drain, №R-70): the source EDITION's print year —
+        # cme's source_date ("1988", "c.1976", "1904, 1905") and openmgh's
+        # printed_date. Every plausible 4-digit year in the string joins
+        # the envelope; the row carries date_class "edition" (the 5th
+        # tuple element) so an edition date NEVER masquerades as the
+        # text's composition or artifact dating on the timeline.
+        def edition_year_text(meta) = edition_years(meta["source_date"])
+        def printed_year_text(meta) = edition_years(meta["printed_date"])
+
+        def edition_years(text)
+          years = text.to_s.scan(/\b(1[4-9]\d\d|20\d\d)\b/).flatten.map { |y| Integer(y, 10) }
+          return [nil, nil, nil] if years.empty?
+
+          [years.min, years.max, text.to_s.strip, nil, "edition"]
+        end
+
+        # ja-wikisource (P109-1): the adapter's era-category envelope —
+        # {"not_before", "not_after", "raw" => "平安時代"} — rides as an
+        # era attribution (precision "era", the cbeta dynasty precedent).
+        def era_band_key(meta)
+          band = meta["era_band"]
+          return [nil, nil, nil] unless band.is_a?(Hash) && band["not_before"] && band["not_after"]
+
+          [band["not_before"], band["not_after"], band["raw"], "era"]
         end
 
         # ogham (P104-1): no date lane at all — the "date" is free prose

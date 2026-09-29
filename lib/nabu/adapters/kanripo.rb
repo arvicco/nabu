@@ -122,10 +122,12 @@ module Nabu
       end
 
       def parse(document_ref)
+        text_id = File.basename(document_ref.path)
         MandokuParser.new.parse(
           document_ref.path,
           urn: document_ref.id,
-          text_id: File.basename(document_ref.path)
+          text_id: text_id,
+          facets: catalog_facets(File.dirname(document_ref.path), text_id)
         )
       end
 
@@ -144,7 +146,48 @@ module Nabu
         raise Nabu::FetchError, "kanripo fetch failed into #{workdir}: #{e.message}"
       end
 
+      # The KR-Catalog index grammars (P109-5): division headings and
+      # subclass link lines in KR-Catalog/KR/KR<n>.txt.
+      DIVISION_HEADING = /\A\*\s+(KR\d)\s+(\S+)/
+      SUBCLASS_LINK = /\[\[file:KR\d[a-z]\.txt\]\[(KR\d[a-z])\s+([^\]]+)\]\]/
+
       private
+
+      # P109-5 (Q78, №R-70): the KR-Catalog 部/類 taxonomy as facets —
+      # division (部) and subclass (類) labels read from the six
+      # KR-Catalog/KR/KR<n>.txt index files ("* KR1 經部" headings; the
+      # "[[file:KR1a.txt][KR1a 易類]]" link lines), keyed by the text
+      # id's own prefix. Memoized per catalog dir; a tree without the
+      # catalog (or an unlisted prefix) claims nothing, honestly.
+
+      def catalog_facets(workdir, text_id)
+        labels = catalog_labels(File.join(workdir, "KR-Catalog", "KR"))
+        facets = {}
+        if (bu = labels[:divisions][text_id[0, 3]])
+          facets["bu"] = { "value" => bu, "raw" => text_id[0, 3] }
+        end
+        if (lei = labels[:subclasses][text_id[0, 4]])
+          facets["lei"] = { "value" => lei, "raw" => text_id[0, 4] }
+        end
+        facets.empty? ? nil : facets
+      end
+
+      def catalog_labels(catalog_dir)
+        @catalog_labels ||= {}
+        @catalog_labels[catalog_dir] ||= begin
+          labels = { divisions: {}, subclasses: {} }
+          Dir.glob(File.join(catalog_dir, "KR?.txt")).each do |path|
+            File.foreach(path, encoding: "UTF-8") do |line|
+              if (match = DIVISION_HEADING.match(line))
+                labels[:divisions][match[1]] = Normalize.nfc(match[2])
+              elsif (match = SUBCLASS_LINK.match(line))
+                labels[:subclasses][match[1]] = Normalize.nfc(match[2].strip)
+              end
+            end
+          end
+          labels
+        end
+      end
 
       # Test seams (the UD repo_url precedent): fetch tests point these at
       # local rigs. fetch_delay is the polite-pacing knob — override here if

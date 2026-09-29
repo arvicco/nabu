@@ -166,6 +166,12 @@ module Nabu
         raise Nabu::FetchError, "rem fetch failed into #{workdir}: #{e.message}"
       end
 
+      # P109-4 (№R-70): the ReM classification vocabulary the genre facet
+      # labels (P Prosa / V Vers / PV both / U Urkunde); an unlisted
+      # code rides value-only, never guessed.
+      GENRE_LABELS = { "P" => "Prosa", "V" => "Vers", "PV" => "Prosa und Vers",
+                       "U" => "Urkunde" }.freeze
+
       private
 
       def parser
@@ -214,8 +220,17 @@ module Nabu
           "repository" => header.repository, "ms_idno" => header.ms_idno,
           "orig_date" => header.orig_date, "orig_place" => header.orig_place,
           "derived_from" => header.derived_from, "token_count" => header.token_count,
-          "unrecognized_elements" => (body.unrecognized unless body.unrecognized.empty?)
+          "unrecognized_elements" => (body.unrecognized unless body.unrecognized.empty?),
+          "facets" => genre_facet(header.genre)
         }.compact
+      end
+
+      def genre_facet(genre)
+        return nil if genre.nil? || genre.empty?
+
+        facet = { "value" => genre }
+        facet["raw"] = GENRE_LABELS[genre] if GENRE_LABELS.key?(genre)
+        { "genre" => facet }
       end
 
       # Ref = <folio><column>.<line> (m242:5ra.1 — two-column codices restart
