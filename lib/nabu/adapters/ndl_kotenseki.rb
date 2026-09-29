@@ -216,9 +216,14 @@ module Nabu
           next if skip.include?(pid) || File.file?(book_path(workdir, pid))
 
           case fetch_book!(workdir, pid)
-          when :ok then crawled += 1
-          when :denied then denied += (ledger["denied"] << pid)
-          when :empty then denied += (ledger["empty"] << pid)
+          when :ok
+            crawled += 1
+          when :denied
+            ledger["denied"] << pid
+            denied += 1
+          when :empty
+            ledger["empty"] << pid
+            denied += 1
           end
           progress&.call("crawl: +#{crawled} book(s), #{denied} refused…\n") if ((crawled + denied) % 50).zero?
         end

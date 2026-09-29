@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "support/adapter_conformance"
+require "tmpdir"
 
 module Adapters
   # ndl-kotenseki (P109-2, Q108 phase-1): the NDL 次世代デジタルライブ
@@ -52,6 +53,21 @@ module Adapters
       assert_equal({ "value" => "古典籍資料（貴重書等）-その他" }, meta.dig("facets", "collection"))
       assert_equal({ "values" => %w[倭玉篇 辞書] }, meta.dig("facets", "subject"),
                    "the ||-separated 件名 values each facet")
+    end
+
+    def test_crawl_slice_tallies_denied_pids_into_the_ledger
+      adapter = conformance_adapter
+      def adapter.fetch_book!(_workdir, pid) = pid == "1" ? :denied : :empty
+      ledger = { "denied" => [], "empty" => [] }
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, "census.tsv"), "pid\ttitle\n")
+        crawled, denied = adapter.send(:crawl_slice!, dir, %w[1 2], ledger, nil)
+        assert_equal [0, 2], [crawled, denied],
+                     "each refusal counts ONCE (the first live slice died on a " \
+                     "denied-arm arithmetic bug)"
+        assert_equal ["1"], ledger["denied"]
+        assert_equal ["2"], ledger["empty"]
+      end
     end
 
     def test_w3cdtf_year_mints_the_date_envelope
