@@ -42,7 +42,7 @@ module Nabu
     # place fields exist in the asset — undatable/unplaced are honest.
     class HittiteGlossed < Nabu::Adapter
       FILE_NAME = "7000_hitt_txts_wGloss.csv"
-      FILE_URL = "https://zenodo.org/api/records/14266302/files/#{FILE_NAME}/content"
+      FILE_URL = "https://zenodo.org/api/records/14266302/files/#{FILE_NAME}/content".freeze
       RELEASE_SHA256 = "25fd1e44940f4327ce2448c7d25eb728f2ecb345bb76c94f05fed66cca0e0129"
       URN_PREFIX = "urn:nabu:hittite-glossed:"
       LANGUAGE = "hit"

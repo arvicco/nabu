@@ -384,12 +384,14 @@ module Nabu
           "raw" => raw.empty? ? value : Normalize.nfc(raw) }
       end
 
+      # Both 件名 and コレクション are ||-multi (the dataset's own
+      # separator — the first slice fused a two-collection value).
       def facets_for(bib)
         facets = {}
-        subjects = bib["subject"].to_s.split("||").map { |value| Normalize.nfc(value.strip) }.reject(&:empty?)
-        facets["subject"] = { "values" => subjects } unless subjects.empty?
-        collection = bib["collection"].to_s.strip
-        facets["collection"] = { "value" => Normalize.nfc(collection) } unless collection.empty?
+        %w[subject collection].each do |key|
+          values = bib[key].to_s.split("||").map { |value| Normalize.nfc(value.strip) }.reject(&:empty?)
+          facets[key] = { "values" => values } unless values.empty?
+        end
         facets
       end
 
