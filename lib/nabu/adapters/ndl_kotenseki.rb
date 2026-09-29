@@ -246,6 +246,14 @@ module Nabu
         :ok
       rescue JSON::ParserError
         :denied
+      rescue Nabu::FetchError => e
+        # A refused PID answers HTTP 403 "This PID is not allowed"
+        # (censused at the first crawl — the spec's own caveat);
+        # 404 is the same class. Ledgered, never retried. Anything
+        # else (5xx, network) stays fatal — the crawl is resumable.
+        raise unless e.message.match?(/HTTP 40[34]\b/)
+
+        :denied
       end
 
       def book_path(workdir, pid)
