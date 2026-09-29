@@ -203,8 +203,17 @@ module Nabu
         File.rename("#{tsv}.tmp", tsv)
       end
 
+      # OLDEST PID FIRST (ascending numeric): the dataset lists newest
+      # first, and the newest additions' OCR text is not served yet —
+      # the first live slice burned all 400 requests on a refusal
+      # desert at the head (every 144xxxxx PID 403'd, ledgered). The
+      # old PD scans are what the OCR corpus was built on; a future
+      # re-census may deliberately clear the denied ledger when
+      # upstream catches up (a phase decision, never automatic).
       def census_pids(workdir)
-        File.foreach(File.join(workdir, CENSUS_TSV)).drop(1).map { |line| line[/\A\d+/] }.compact
+        File.foreach(File.join(workdir, CENSUS_TSV)).drop(1)
+            .filter_map { |line| line[/\A\d+/] }
+            .sort_by { |pid| Integer(pid, 10) }
       end
 
       def crawl_slice!(workdir, pids, ledger, progress)
