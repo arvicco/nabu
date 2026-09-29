@@ -113,7 +113,11 @@ module Nabu
           progress&.call("#{work.prefix}: #{titles.size} subpage(s)\n")
           fetch_work!(workdir, work, titles, revids, progress)
         end
-        sha = Digest::SHA256.hexdigest(JSON.generate(revids.sort.to_h))
+        # Keys are Integer pageids (shells) AND "page:piece" Strings
+        # (transclusion pins) — stringify before sorting or the mixed
+        # sort raises (censused: the first full fetch died here AFTER
+        # landing all 1,238 envelopes).
+        sha = Digest::SHA256.hexdigest(JSON.generate(revids.transform_keys(&:to_s).sort.to_h))
         write_state!(workdir, sha)
         Nabu::FetchReport.new(sha: sha, fetched_at: Time.now,
                               notes: "pages: #{revids.size} envelope(s) across #{WORKS.size} works, revid-pinned")
