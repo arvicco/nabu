@@ -7,20 +7,19 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-09-26** — the v1.6.2 refresh (the elx Elamite
-  anchor; 143 anchors · 76 stages · 19 varieties · 2 orthographies ·
-  27 scripts · 82 codemap mappings, `bin/validate` green), from the
-  owner's live checkout (`~/Dev/nabu-lects`, clean at commit
-  `89efffafb58f5ace8aa777cffc9175240ec7bfce`, the repo's `main`,
-  tag v1.6.2).
+- **Retrieved 2026-09-30** — the P110 refresh (through the
+  p108-japonic-stages merge: the jpn stage grid incl. jpn:emj, whose
+  override targets the drift guard now validates), from the box's
+  `canonical/nabu-lects` (clean at commit
+  `299c1d09a3aa927c819d885ccce7d56bccdc49d2`, the repo's `main`).
   - `lects.yml` — the lect registry (anchors, stages, varieties,
     orthographies, the global scripts table, parent edges, Glottocode
-    crosswalks). Full file, 46,866 B, sha256
-    `97ec894561f3182a712faee5245323971c1195f286d8769899f38b0fb3dded8c`.
+    crosswalks). Full file, 70,399 B, sha256
+    `e3fbfaa3a5095c7a360dedc76977f36667c735423f782278a2345a0e3e06a2e9`.
   - `codemap.yml` — universal code → lect defaults (identity is the
     default rule; only non-identity mappings are listed). Full file,
-    4,420 B, sha256
-    `08ba8c397e3ed7f5fbb3e6254cb3c731762cfe1f28fb46de34c27aa25025cb4c`.
+    5,544 B, sha256
+    `176e30875a6ae42bac6ee053058a3dd955cbf981b853c51fd161dfbedd2552a6`.
 - **License:** CC BY 4.0 (repo `LICENSE`, verbatim: "This work — the
   lect registry (lects.yml), the code mapping (codemap.yml), the
   documentation, and the validation tooling in this repository — is

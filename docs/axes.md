@@ -161,9 +161,9 @@ The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Qu
 
 > The Hittitologist — Anatolia in cuneiform, KBo and KUB by tablet and line.
 
-The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank.
+The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian), the glossed Hittite texts, the UD Hittite treebank, and ACLT's Hieroglyphic Luwian inscriptions.
 
-**Members** (4): `hittite-glossed`, `tlhdig`, `ud`, `wiktionary-hit`
+**Members** (5): `aclt`, `hittite-glossed`, `tlhdig`, `ud`, `wiktionary-hit`
 
 ### cuneiform
 

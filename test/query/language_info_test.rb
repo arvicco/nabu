@@ -273,12 +273,13 @@ module Query
 
     def seed_dictionary_stats
       # Rows as Store::DictionaryStats would derive them: la-med resolves
-      # under lat (lat:med), lat is the anchor itself, akk-x-mbperi is a
-      # censused-unresolved code (NULL lect).
+      # under lat (lat:med), lat is the anchor itself, akk-x-unruled is a
+      # censused-unresolved code (NULL lect; akk-x-mbperi, the old example,
+      # resolves since the Oracc dialect-code codemap wave).
       lexica = @texts.id
       [{ slug: "ls", language: "la-med", lect: "lat:med", entries: 30 },
        { slug: "lewis", language: "lat", lect: "lat", entries: 20 },
-       { slug: "oracc-mb", language: "akk-x-mbperi", lect: nil, entries: 5 }].each do |row|
+       { slug: "oracc-mb", language: "akk-x-unruled", lect: nil, entries: 5 }].each do |row|
         dict_id = @catalog[:dictionaries].insert(source_id: lexica, slug: row[:slug],
                                                  title: row[:slug].upcase, language: row[:language])
         @catalog[:dictionary_stats].insert(dictionary_id: dict_id, slug: row[:slug],
@@ -298,7 +299,7 @@ module Query
 
     def test_dictionary_group_for_an_unresolved_code_groups_by_the_code_itself
       seed_dictionary_stats
-      group = info.dictionary_group("akk-x-mbperi", lects: lects_registry)
+      group = info.dictionary_group("akk-x-unruled", lects: lects_registry)
       assert_nil group.node
       assert_equal(%w[oracc-mb], group.rows.map { |row| row[:slug] })
       assert_equal 5, group.total

@@ -52,8 +52,8 @@ module Nabu
 
       def parse(wikitext, mode: :prose)
         text = strip_apparatus(wikitext.to_s)
-        header_block, body = split_leading_template(text)
-        header = parse_header(header_block)
+        header_blocks, body = split_leading_templates(text)
+        header = parse_header(header_blocks)
         if mode == :parallel_poem
           passages, unpaired = poem_passages(body)
           Result.new(header: header, passages: passages, unpaired_phien_am: unpaired)
@@ -68,10 +68,30 @@ module Nabu
 
       # Comments and <ref> footnotes go first: refs carry prose (and even
       # blank lines) that must never leak into text or stanza structure.
+      # MediaWiki behavior switches (__TOC__, __NOEDITSECTION__ …) are
+      # page-wide markup, never text — and one BEFORE the leading template
+      # would break the header split (P110-3).
       def strip_apparatus(text)
         text.gsub(/<!--.*?-->/m, "")
             .gsub(%r{<ref[^<>]*/>}, "")
             .gsub(%r{<ref[^<>]*>.*?</ref>}m, "")
+            .gsub(/__[A-Z]+__/, "")
+      end
+
+      # ALL consecutive leading "{{…}}" blocks (P110-3: 續資治通鑑 juan
+      # stack {{Textquality|25%}}{{header2 …}} — splitting only the first
+      # leaked "{{header2" into prose and lost the header params).
+      def split_leading_templates(text)
+        blocks = []
+        body = text
+        loop do
+          block, rest = split_leading_template(body)
+          break if block.nil?
+
+          blocks << block
+          body = rest
+        end
+        [blocks, body]
       end
 
       # The leading "{{…}}" block (header/header2/đầu đề/bản dịch — every
@@ -94,14 +114,22 @@ module Nabu
 
       # -- the header template ------------------------------------------------------
 
-      def parse_header(block)
-        return Header.new(author: nil, year: nil, textquality: nil) if block.nil?
-
-        params = template_params(block)
+      # +blocks+ is every leading template in page order; the first block
+      # to answer each field wins ({{Textquality}} answers only quality,
+      # the header/header2 sibling the rest).
+      def parse_header(blocks)
+        headers = Array(blocks).map do |block|
+          params = template_params(block)
+          Header.new(
+            author: header_author(params),
+            year: header_year(params),
+            textquality: block[/\{\{Textquality\|(\d+%)\}\}/, 1]
+          )
+        end
         Header.new(
-          author: header_author(params),
-          year: header_year(params),
-          textquality: block[/\{\{Textquality\|(\d+%)\}\}/, 1]
+          author: headers.filter_map(&:author).first,
+          year: headers.filter_map(&:year).first,
+          textquality: headers.filter_map(&:textquality).first
         )
       end
 

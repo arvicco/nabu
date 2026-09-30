@@ -12,7 +12,8 @@ module Nabu
     #
     # The repo ships 27 per-book plain-text files under data/sblgnt/text/
     # (verse-per-line TSV — the SblgntParser family; the word-level XML
-    # variant and the sblgntapp apparatus are deliberately not ingested).
+    # variant is deliberately not ingested; the sblgntapp apparatus joins
+    # as per-verse "apparatus" annotations since P110-4).
     # One file = one document: urn = urn:nabu:sblgnt:<file-stem-downcased>
     # (Mark.txt → urn:nabu:sblgnt:mark, 1Cor.txt → urn:nabu:sblgnt:1cor),
     # title = the file's first-line Greek title (ΚΑΤΑ ΜΑΡΚΟΝ), passage urns
@@ -43,6 +44,7 @@ module Nabu
       )
 
       TEXT_DIR = File.join("data", "sblgnt", "text")
+      APPARATUS_DIR = File.join("data", "sblgntapp", "xml")
 
       def self.manifest
         MANIFEST
@@ -62,7 +64,8 @@ module Nabu
           document_ref.path,
           urn: document_ref.id,
           language: "grc",
-          title: document_ref.metadata["title"]
+          title: document_ref.metadata["title"],
+          apparatus: apparatus_notes(document_ref.path)
         )
       end
 
@@ -76,6 +79,31 @@ module Nabu
       # (the house pattern), keeping fetch off the network.
       def repo_url
         manifest.upstream_url
+      end
+
+      # P110-4 (the sidecar harvest): the repo's own critical apparatus —
+      # per-book flat XML beside the text tree, <verse>Book C:V</verse>
+      # followed by its <note> lines (variant readings with witness sigla,
+      # kept verbatim). Keyed "C.V" to match passage urns; the verse ref's
+      # book prefix varies ("3 John" vs the 3John file stem), so only the
+      # trailing C:V is read. A book without an apparatus file (or an
+      # unfetched tree) contributes an empty map — the pre-P110 parse.
+      def apparatus_notes(text_path)
+        path = text_path.sub("#{File::SEPARATOR}#{TEXT_DIR}#{File::SEPARATOR}",
+                             "#{File::SEPARATOR}#{APPARATUS_DIR}#{File::SEPARATOR}")
+                        .sub(/\.txt\z/, ".xml")
+        return {} unless path != text_path && File.file?(path)
+
+        notes = Hash.new { |h, k| h[k] = [] }
+        verse = nil
+        File.readlines(path, encoding: "UTF-8").each do |line|
+          if (ref = line[%r{<verse>[^<]*?(\d+:\d+)\s*</verse>}, 1])
+            verse = ref.tr(":", ".")
+          elsif (note = line[%r{<note>(.*?)</note>}, 1])
+            notes[verse] << Normalize.nfc(note.strip) if verse
+          end
+        end
+        notes
       end
 
       def document_refs(workdir)

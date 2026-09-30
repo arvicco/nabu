@@ -25,7 +25,7 @@ module Store
                                          license_class: "nc")
       @ls = dictionary(@lexica, slug: "ls", language: "la-med", entries: 3)
       @vul = dictionary(@derom, slug: "derom-vul", language: "la-vul", entries: 2)
-      @oracc = dictionary(@lexica, slug: "oracc-mb", language: "akk-x-mbperi", entries: 1)
+      @oracc = dictionary(@lexica, slug: "oracc-mb", language: "akk-x-unruled", entries: 1)
     end
 
     def teardown

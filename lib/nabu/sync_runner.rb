@@ -232,7 +232,20 @@ module Nabu
       # only ITS slice via Indexer.refresh_source!, and +indexed+ is the
       # SOURCE's live passage count — never the corpus total. `nabu rebuild`
       # keeps the full Indexer.rebuild! as the from-scratch guarantee.
-      indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter, progress)
+      # P110-1 (the P109-5 FTS-storm root fix): a passages-grain sync whose
+      # load changed nothing passage-visible (metadata-only reconcile, pure
+      # idempotent re-parse) skips the slice rewrite too — announced, never
+      # silent. The whole-slice delete+reinsert is FTS5-pathological at big-
+      # source scale and re-derives nothing when no passage byte changed.
+      indexed =
+        if index_inert?(adapter)
+          nil
+        elsif skip_reindex?(adapter, load_report, lane_report)
+          progress&.stage("index slice: #{entry.slug} skipped — no passage content changed")
+          nil
+        else
+          reindex!(entry, adapter, progress)
+        end
       refresh_catalog_lanes(entry, load_report)
       refresh_dictionary_stats(entry, combined_report)
       refresh_derge_titles(entry)
@@ -448,6 +461,16 @@ module Nabu
 
     def index_inert?(adapter)
       INDEX_INERT_KINDS.include?(adapter.class.content_kind)
+    end
+
+    # P110-1: the reindex may be skipped only for the plain passages grain
+    # with no secondary dictionary lane (a lane load can move lemma/reflex
+    # state the slice rewrite re-derives), and only when the load moved
+    # nothing in or out of the live passage set (LoadReport#passages_changed?).
+    def skip_reindex?(adapter, load_report, lane_report)
+      adapter.class.content_kind == :passages &&
+        lane_report.nil? &&
+        !load_report.passages_changed?
     end
 
     # Incrementally refresh THIS source's slice of the fulltext index from

@@ -72,6 +72,39 @@ class SblgntTest < Minitest::Test
     refute_nil(document.find { |p| p.urn == "urn:nabu:sblgnt:mark:2.3" })
   end
 
+  # P110-4 (the Q78 sidecar harvest): the repo's own sblgntapp critical
+  # apparatus joins the held verses as passage annotations — variant
+  # readings with witness sigla (WH Treg NA27/NA28 RP), verbatim, keyed
+  # by the verse refs the apparatus itself states ("3 John 1:4" → :1.4).
+  # A book without an apparatus file (none exists for it in the fixture)
+  # parses exactly as before.
+  def test_apparatus_notes_ride_their_verses_as_annotations
+    adapter = Nabu::Adapters::Sblgnt.new
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:sblgnt:3john" }
+    document = adapter.parse(ref)
+
+    verse = document.find { |p| p.urn == "urn:nabu:sblgnt:3john:1.4" }
+    # Upstream sets NO-BREAK SPACES around the "]" bracket, after "•" and
+    # after the omission dash — kept verbatim, canonical means canonical.
+    assert_equal ["4 χαράν Treg NA28 RP ] χάριν WH",
+                  "• τῇ WH Treg NA27 ] – NA28 RP"].map { |n| Nabu::Normalize.nfc(n) },
+                 verse.annotations["apparatus"]
+    single = document.find { |p| p.urn == "urn:nabu:sblgnt:3john:1.5" }
+    assert_equal [Nabu::Normalize.nfc("5 τοῦτο WH Treg NA28 ] εἰς τοὺς RP")],
+                 single.annotations["apparatus"]
+    unnoted = document.find { |p| p.urn == "urn:nabu:sblgnt:3john:1.1" }
+    refute unnoted.annotations.key?("apparatus"), "verses without variants carry no apparatus key"
+    assert_equal 8, document.count { |p| p.annotations.key?("apparatus") },
+                 "the eight noted verses of 3 John all carry their apparatus"
+  end
+
+  def test_book_without_apparatus_file_parses_unannotated
+    adapter = Nabu::Adapters::Sblgnt.new
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:sblgnt:mark" }
+    document = adapter.parse(ref)
+    assert(document.none? { |p| p.annotations.key?("apparatus") })
+  end
+
   # --- fetch (local git only, no network) ---------------------------------------
 
   def test_fetch_clones_then_pulls_and_returns_report

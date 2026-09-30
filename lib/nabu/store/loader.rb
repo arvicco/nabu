@@ -23,10 +23,23 @@ module Nabu
     # legitimate across-run revision (a urn seen for the FIRST time this pass
     # whose stored row simply changed). Defaults to 0 so every existing
     # construction and stored count stays valid.
-    LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule, :collided) do
-      def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0, collided: 0)
+    # +revised+ (P110-1) counts the subset of +updated+ whose PASSAGE-VISIBLE
+    # state changed: content-sha revisions and restores. Metadata, license
+    # and retirement reconciles stay outside it — none of them move a row in
+    # or out of the live passage set the fulltext index serves. Defaults to 0
+    # so every existing construction and stored count stays valid.
+    LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule, :collided,
+                             :revised) do
+      def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0, collided: 0,
+                     revised: 0)
         super
       end
+
+      # Did this load change the LIVE PASSAGE SET at all? False for a load
+      # that only reconciled metadata/license/retirement flags (and for the
+      # pure idempotent no-op) — the P109-5 lesson: such a load must never
+      # trigger the whole-slice FTS delete+reinsert.
+      def passages_changed? = (added + revised + withdrawn).positive?
 
       # Field-wise sum (P104-4): a source with a secondary dictionary lane
       # records ONE run whose counts cover both loads — document- and
@@ -37,7 +50,7 @@ module Nabu
           added: added + other.added, updated: updated + other.updated,
           skipped: skipped + other.skipped, withdrawn: withdrawn + other.withdrawn,
           errored: errored + other.errored, skipped_by_rule: skipped_by_rule + other.skipped_by_rule,
-          collided: collided + other.collided
+          collided: collided + other.collided, revised: revised + other.revised
         )
       end
     end
@@ -268,7 +281,8 @@ module Nabu
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
           withdrawn: counts[:withdrawn], errored: counts[:errored],
-          skipped_by_rule: counts[:skipped_by_rule], collided: counts[:collided]
+          skipped_by_rule: counts[:skipped_by_rule], collided: counts[:collided],
+          revised: counts[:revised]
         )
       end
 
@@ -301,7 +315,14 @@ module Nabu
       def load_document(document, counts, retained = nil, pass_urns:, savepoint: false)
         txn = -> { @db.transaction(savepoint: savepoint) { upsert_document(document, retained, pass_urns) } }
         outcome = savepoint ? txn.call : time_insert(&txn)
-        counts[outcome] += 1
+        # Both update flavors count as :updated; only the content-bearing one
+        # also feeds the revised counter (see LoadReport#revised).
+        if %i[updated_content updated_metadata].include?(outcome)
+          counts[:updated] += 1
+          counts[:revised] += 1 if outcome == :updated_content
+        else
+          counts[outcome] += 1
+        end
       rescue Sequel::DatabaseError => e
         counts[:errored] += 1
         journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message })
@@ -340,16 +361,21 @@ module Nabu
           # individually idempotent.
           return :skipped unless reconcile_needed?(row, document, retained)
 
+          # A restore moves the row back into the live passage set, so it is
+          # content-bearing for the index even though the sha is unchanged;
+          # the pure reconciles are not (P110-1).
+          restored = row.withdrawn
           tracking_stats(row) do
             restore(row) if row.withdrawn
             reconcile_license_override?(row, document)
             reconcile_metadata?(row, document)
             reconcile_retirement?(row, retained)
           end
+          restored ? :updated_content : :updated_metadata
         else
           tracking_stats(row) { revise_document(row, document, passage_shas, doc_sha, retained) }
+          :updated_content
         end
-        :updated
       end
 
       # Read-only twin of the same-content reconcile block: does anything

@@ -104,6 +104,36 @@ achemenet:
   lemma_tier: silver
   sync_policy: manual
 
+aclt:   # P110-2
+  adapter: Nabu::Adapters::Aclt
+  adopted: "2026-09-30"
+  axes: [hittite]
+  wired: true    # first sync verified 2026-09-30: 266 docs / 2,682 clause
+                   # passages, 1 tombstone skip-by-rule — exactly at census;
+                   # 4 random cards eyeballed (gloss/lemmas/signs/line layers
+                   # all live, e.g. porsuk:s4)
+  sync_policy: manual
+  # The Annotated Corpus of Luwian Texts (Yakubovich's edition; the
+  # Tsakorpus per-inscription JSON, delivered by email — a ManualDrop
+  # source, docs/manual/aclt.md). 267 inscriptions / one tombstone
+  # skip-by-rule; language hlu (the hieroglyphic tradition only).
+  # research_private: a personal grant, not redistributable — excluded
+  # from every public surface like the class demands.
+  grant_required: true
+  grant:
+    grantor: I. Yakubovich (corpus delivery T. Arkhangelskiy)
+    date: "2026-09-28"
+    terms: >-
+      personal research use, by email 2026-09-28 ("we both agree to share
+      the source code with you"); corpus JSON delivered 2026-09-29. Credit
+      promised in return: the corpus + Yakubovich's editorship as
+      provenance on every text, the Tsakorpus platform named as the
+      technical channel. No redistribution.
+    thread: "by email, 2026-09-28/29"
+    request_hint: >-
+      Write to the ACLT team (luwian.web-corpora.net) for your own grant;
+      promise per-text corpus + editorship credit.
+
 actib:
   adapter: Nabu::Adapters::Actib
   adopted: "2026-07-31"
@@ -5075,13 +5105,14 @@ zh-wikisource:   # P109-1
   adopted: "2026-09-29"
   cjk_index: true
   axes: [sinitic]
-  wired: true    # first sync 2026-09-29: 1,238 docs / 72,723 passages, 0
-                   # quarantined (全唐文 1,001 juan composed from their piece
-                   # pages · 續資治通鑑 221 · 元朝秘史 16); 卷0001 + 卷15 cards
-                   # eyeballed (唐 era band live). KNOWN BLEMISH: 全唐文 juan
-                   # lead with a __NOEDITSECTION__ magic-word passage — the
-                   # scrub + re-parse ride the next phase (owner-ruled
-                   # 2026-09-29)
+  wired: true    # first sync 2026-09-29: 1,238 docs, 0 quarantined
+                   # (全唐文 1,001 juan composed from their piece pages ·
+                   # 續資治通鑑 221 · 元朝秘史 16); 卷0001 + 卷15 cards
+                   # eyeballed (唐 era band live). P110-3 scrub re-parse
+                   # 2026-09-30: 71,547 passages — magic-word junk gone
+                   # (958 __NOEDITSECTION__ + the __TOC__ shapes), stacked
+                   # leading templates split (the 續資治通鑑 header2 layer:
+                   # author 畢沅 now in metadata)
   sync_policy: manual
   # Censused works, prefix-expanded (№R-74; census in
   # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the

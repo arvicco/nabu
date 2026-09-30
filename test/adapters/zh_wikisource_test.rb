@@ -27,9 +27,29 @@ module Adapters
     def doc(pageid) = documents.find { |d| d.urn.end_with?(":#{pageid}") } || flunk("#{pageid} missing")
 
     def test_discovers_one_document_per_subpage_envelope
-      assert_equal %w[urn:nabu:zh-wikisource:109484 urn:nabu:zh-wikisource:41615
-                      urn:nabu:zh-wikisource:63644],
+      assert_equal %w[urn:nabu:zh-wikisource:109484 urn:nabu:zh-wikisource:27416
+                      urn:nabu:zh-wikisource:41615 urn:nabu:zh-wikisource:63644],
                    conformance_adapter.discover(FIXTURES).map(&:id).sort
+    end
+
+    # P110-3 (the owner-ruled magic-word scrub) — the two censused junk
+    # shapes, both on the real 卷097 fixture: MediaWiki behavior switches
+    # (`__TOC__`, `__NOEDITSECTION__`) must never mint passages, and
+    # STACKED leading templates ({{Textquality}}{{header2 …}}) must all
+    # split off — the header2 that used to leak "{{header2" into prose
+    # now parses, so the author claim lands too.
+    def test_magic_words_and_stacked_leading_templates_never_leak
+      documents.each do |d|
+        d.passages.each do |p|
+          refute_match(/__[A-Z]+__/, p.text, "#{d.urn}: magic word leaked")
+          refute_includes p.text, "{{header", "#{d.urn}: a stacked leading template leaked"
+        end
+      end
+      d = doc(27_416)
+      assert(d.passages.first.text.include?("秋，七月，乙丑朔"),
+             "the first passage is the first prose paragraph, not apparatus")
+      assert_equal "畢沅", d.metadata["author"],
+                   "the stacked header2's author parses out"
     end
 
     def test_direct_juan_parses_as_literary_chinese_prose

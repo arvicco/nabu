@@ -26,3 +26,10 @@ files:
     url: https://raw.githubusercontent.com/Faithlife/SBLGNT/c4d241a9c1c479a55b989ba35a4976c1d0b8052c/data/sblgnt/text/3John.txt
     whole: true
     trim: none (complete book, kept whole — the round-trip exemplar)
+  - path: data/sblgntapp/xml/3John.xml
+    url: https://raw.githubusercontent.com/Faithlife/SBLGNT/master/data/sblgntapp/xml/3John.xml
+    refetchable: true
+    whole: true
+    retrieved: "2026-09-30"
+    trim: none (complete apparatus for 3 John, copied whole from the box's canonical tree —
+      the P110-4 apparatus lane; NBSPs around the "]" brackets are upstream's own)
