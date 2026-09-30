@@ -104,6 +104,33 @@ achemenet:
   lemma_tier: silver
   sync_policy: manual
 
+aclt:   # P110-2
+  adapter: Nabu::Adapters::Aclt
+  adopted: "2026-09-30"
+  axes: [hittite]
+  wired: false
+  sync_policy: manual
+  # The Annotated Corpus of Luwian Texts (Yakubovich's edition; the
+  # Tsakorpus per-inscription JSON, delivered by email — a ManualDrop
+  # source, docs/manual/aclt.md). 267 inscriptions / one tombstone
+  # skip-by-rule; language hlu (the hieroglyphic tradition only).
+  # research_private: a personal grant, not redistributable — excluded
+  # from every public surface like the class demands.
+  grant_required: true
+  grant:
+    grantor: I. Yakubovich (corpus delivery T. Arkhangelskiy)
+    date: "2026-09-28"
+    terms: >-
+      personal research use, by email 2026-09-28 ("we both agree to share
+      the source code with you"); corpus JSON delivered 2026-09-29. Credit
+      promised in return: the corpus + Yakubovich's editorship as
+      provenance on every text, the Tsakorpus platform named as the
+      technical channel. No redistribution.
+    thread: "by email, 2026-09-28/29"
+    request_hint: >-
+      Write to the ACLT team (luwian.web-corpora.net) for your own grant;
+      promise per-text corpus + editorship credit.
+
 actib:
   adapter: Nabu::Adapters::Actib
   adopted: "2026-07-31"
