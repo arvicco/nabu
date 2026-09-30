@@ -337,6 +337,7 @@ module Nabu
             # №R-74: no censused page states a 底本 — recorded honestly.
             "base_edition" => "unstated",
             "dynasty" => work.dynasty,
+            "author" => result.header.author,
             "textquality" => result.header.textquality
           }.compact
         )
