@@ -154,6 +154,10 @@ module Nabu
           index = attrs[/index\s*=\s*"([^"]+)"/i, 1] || attrs[/index\s*=\s*(\S+)/i, 1]
           next [] unless index
 
+          # MediaWiki normalizes underscores to spaces in titles — the api
+          # returns (and the envelope stores) the normalized form, so the
+          # lookup must build it (the 芭蕉俳句全集 first-sync quarantine).
+          index = index.tr("_", " ")
           pages_tag_numbers(attrs).map { |n| "Page:#{index}/#{n}" }
         end
       end
