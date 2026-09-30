@@ -420,6 +420,18 @@ sources:
         about Song–Yuan) and 元朝秘史 deliberately claim nothing — declared"}
     places: {posture: unplaced, note: "no place fields in the cone pages"}
     script: {posture: implied}
+  aclt:   # P110-2
+    kind: {posture: unclassified, note: one class — HLuwian inscriptions; a single-value
+        kind stamp deferred (the kouigenji precedent)}
+    lect: {posture: identity, note: hlu — the hieroglyphic tradition only (the corpus is
+        luwian-hieroglyph-en; xlu never appears)}
+    dating: {posture: undatable, note: no per-text date fields in the JSON — the Iron Age
+        span is knowable scholarship, a future curated-band candidate, declared not faked}
+    places: {posture: unplaced, note: upstream's find-region labels (Karkamiš, Tabal …)
+        ride as the region facet + metadata — real geography, but labels not gazetteer
+        refs; resolution through nabu-places is a recorded future look}
+    script: {posture: implied, note: transliteration held (broad transcription text +
+        sign-by-sign layer), not the hieroglyphs themselves}
   hittite-glossed:
     kind: {posture: unclassified}
     lect: {posture: identity, note: hit only (per-token language tags do not exist in the CSV) — no minted stages}

@@ -1,0 +1,75 @@
+{
+ "meta": {
+  "filename": "corpus/yaml/luwian-hieroglyph-en.yaml",
+  "region": "Seals",
+  "title": "YALE seal"
+ },
+ "sentences": [
+  {
+   "lang": 0,
+   "last": true,
+   "meta": {
+    "line": "1",
+    "page": "YALE seal"
+   },
+   "para_alignment": [
+    {
+     "off_end": 11,
+     "off_start": 0,
+     "para_id": 11795
+    }
+   ],
+   "text": "Lawadas(sa)",
+   "words": [
+    {
+     "ana": [
+      {
+       "gr.case": "gen",
+       "gr.gender": "common",
+       "gr.pos": "N",
+       "lex": "Lawada-",
+       "trans_en": "Lawada (PN)"
+      }
+     ],
+     "next_word": 1,
+     "off_end": 11,
+     "off_start": 0,
+     "sentence_index": 0,
+     "wf": "Lawadas(sa)",
+     "wtype": "word"
+    }
+   ]
+  },
+  {
+   "lang": 1,
+   "last": true,
+   "meta": {
+    "line": "1",
+    "page": "YALE seal"
+   },
+   "para_alignment": [
+    {
+     "off_end": 13,
+     "off_start": 0,
+     "para_id": 11795
+    }
+   ],
+   "text": "la-wa/i-tà-sa",
+   "words": [
+    {
+     "ana": [
+      {
+       "transcription": "Lawadas(sa)"
+      }
+     ],
+     "next_word": 1,
+     "off_end": 13,
+     "off_start": 0,
+     "sentence_index": 0,
+     "wf": "la-wa/i-tà-sa",
+     "wtype": "word"
+    }
+   ]
+  }
+ ]
+}

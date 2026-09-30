@@ -112,6 +112,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/adapters/ja_wikisource.rb nabu/adapters/zh_wikisource.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
+    nabu/adapters/aclt.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
