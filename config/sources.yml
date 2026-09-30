@@ -108,7 +108,10 @@ aclt:   # P110-2
   adapter: Nabu::Adapters::Aclt
   adopted: "2026-09-30"
   axes: [hittite]
-  wired: false
+  wired: true    # first sync verified 2026-09-30: 266 docs / 2,682 clause
+                   # passages, 1 tombstone skip-by-rule — exactly at census;
+                   # 4 random cards eyeballed (gloss/lemmas/signs/line layers
+                   # all live, e.g. porsuk:s4)
   sync_policy: manual
   # The Annotated Corpus of Luwian Texts (Yakubovich's edition; the
   # Tsakorpus per-inscription JSON, delivered by email — a ManualDrop
