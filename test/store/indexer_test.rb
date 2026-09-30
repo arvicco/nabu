@@ -909,6 +909,123 @@ module Store
 
     def fts_rowids(db) = db[:passages_fts].select_map(Sequel.lit("rowid")).sort
 
+    # -- the bulk slice mode (P111-1, Q111) ----------------------------------
+    # A content-bearing re-parse of a big source rewrites millions of fts
+    # rows; under the default merge config the automerge/deletemerge
+    # machinery fires DURING the delete storm and the batched inserts (the
+    # kanripo 6h18m shape). At/above bulk_threshold the slice defers every
+    # merge (automerge 0, crisismerge high, deletemerge 0), ensure-restores
+    # the defaults, then consolidates in an announced bounded merge loop.
+    # The contract stays ROW IDENTITY.
+
+    BulkSpy = Struct.new(:stages) do
+      def stage(label, **) = (self.stages ||= []) << label
+      def load_tick(*); end
+    end
+
+    def merge_config(db, key) = db[:passages_fts_config].where(k: key).get(:v)
+
+    def test_bulk_refresh_is_row_identical_to_a_full_rebuild
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "outdated", sequence: 1)
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "王道", sequence: 2, language: "lzh")
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ", sequence: 0)
+      options = { cjk_slugs: ["s"] }
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, **options)
+
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "fresh", sequence: 3)
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised")
+      Nabu::Store::Passage.first(urn: "urn:d:s:1").update(withdrawn: true)
+      refresh!(bulk_threshold: 1, **options)
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
+                     "passages_fts must hold the identical rowid set through the bulk path"
+        assert_equal cjk_rowids(fresh), cjk_rowids(@fulltext),
+                     "the cjk lane must hold the identical rowid set through the bulk path"
+        assert_equal %w[urn:d:s:2], match_urns("revised"),
+                     "the bulk-refreshed slice answers MATCH after the merge loop"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def cjk_rowids(db) = db[Nabu::Store::Indexer::CJK_TABLE].select_map(Sequel.lit("rowid")).sort
+
+    def test_bulk_refresh_restores_the_merge_config
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      refresh!(bulk_threshold: 1)
+
+      Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.each do |key, value|
+        stored = merge_config(@fulltext, key)
+        assert(stored.nil? || stored.to_i == value,
+               "#{key} must read back at its default after a bulk refresh (got #{stored.inspect})")
+      end
+    end
+
+    def test_bulk_write_mode_restores_config_when_the_block_raises
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      assert_raises(RuntimeError) do
+        Nabu::Store::Indexer.with_bulk_write_mode(@fulltext, [:passages_fts]) { raise "boom" }
+      end
+      Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.each do |key, value|
+        stored = merge_config(@fulltext, key)
+        assert(stored.nil? || stored.to_i == value,
+               "#{key} must be restored even when the bulk block raises (got #{stored.inspect})")
+      end
+    end
+
+    def test_bulk_refresh_announces_and_small_slices_stay_quiet
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      spy = BulkSpy.new([])
+      refresh!(bulk_threshold: 1, progress: spy)
+      assert(spy.stages.any? { |label| label.include?("bulk mode") },
+             "an at-threshold slice announces bulk mode")
+      assert(spy.stages.any? { |label| label.include?("merge") },
+             "the consolidation merge stage announces itself")
+
+      spy = BulkSpy.new([])
+      refresh!(progress: spy)
+      refute(spy.stages.any? { |label| label.include?("bulk mode") },
+             "a below-threshold slice must keep the ordinary path")
+    end
+
+    # A LEGACY contentful passages_fts keeps the ordinary path even past the
+    # threshold — the bulk recipe is designed against the contentless shape,
+    # and legacy files upgrade at their next full rebuild anyway.
+    def test_bulk_mode_never_engages_on_a_legacy_contentful_table
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(<<~SQL)
+        CREATE VIRTUAL TABLE passages_fts USING fts5(
+          text_normalized, language, source, urn UNINDEXED, passage_id UNINDEXED,
+          tokenize = 'unicode61 remove_diacritics 2'
+        )
+      SQL
+
+      spy = BulkSpy.new([])
+      refresh!(bulk_threshold: 1, progress: spy)
+      refute(spy.stages.any? { |label| label.include?("bulk mode") },
+             "a legacy contentful table must not take the bulk recipe")
+    end
+
     # Bootstrap safety: against a fulltext db that has never been built (the
     # very first sync), refresh falls back to a FULL rebuild — every source
     # lands, and the return value is still the refreshed source's own count.
