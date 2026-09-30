@@ -94,10 +94,11 @@ module Store
     def beta = build_document("beta", [%w[1 ἄνδρα]])
 
     def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0,
-                      skipped_by_rule: 0, collided: 0)
+                      skipped_by_rule: 0, collided: 0, revised: 0)
       assert_equal(
         { added: added, updated: updated, skipped: skipped, withdrawn: withdrawn,
-          errored: errored, skipped_by_rule: skipped_by_rule, collided: collided },
+          errored: errored, skipped_by_rule: skipped_by_rule, collided: collided,
+          revised: revised },
         report.to_h
       )
     end
@@ -229,7 +230,7 @@ module Store
       # keeps the override.
       report = @loader.load([build_document("alpha", [%w[1 θεά]], license_override: "attribution")])
 
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       row = doc_row("alpha")
       assert_equal 2, row.revision
       assert_equal "attribution", row.license_override
@@ -271,6 +272,57 @@ module Store
       assert_equal sha_before, row.content_sha256, "metadata must never fake a content change"
     end
 
+    # -- the revised counter (P110-1, the P109-5 FTS-storm root fix) ---------
+
+    # `revised` counts only documents whose PASSAGE-VISIBLE state changed
+    # (content sha revisions and restores); metadata/license/retirement
+    # reconciles stay outside it, so a metadata-only re-parse of a big
+    # source can skip the whole-slice FTS rewrite (`passages_changed?`).
+
+    def test_metadata_only_update_implies_no_passage_change
+      @loader.load([alpha])
+
+      report = @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε]],
+                                            metadata: { "bu" => "史部" })])
+
+      assert_report report, updated: 1
+      refute report.passages_changed?, "a metadata-only reconcile must not demand a reindex"
+    end
+
+    def test_content_revision_counts_revised_and_passages_changed
+      @loader.load([alpha])
+
+      report = @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 θεά]])])
+
+      assert_report report, updated: 1, revised: 1
+      assert report.passages_changed?
+    end
+
+    def test_idempotent_reload_implies_no_passage_change
+      @loader.load([alpha])
+
+      report = @loader.load([alpha])
+
+      assert_report report, skipped: 1
+      refute report.passages_changed?
+    end
+
+    def test_withdrawal_implies_passages_changed
+      @loader.load([alpha, beta])
+
+      report = @loader.load([alpha], full: true)
+
+      assert_equal 1, report.withdrawn
+      assert report.passages_changed?, "a withdrawal removes rows from the live set"
+    end
+
+    def test_load_report_sum_carries_revised
+      a = Nabu::Store::LoadReport.new(added: 1, updated: 2, skipped: 0, withdrawn: 0, errored: 0, revised: 2)
+      b = Nabu::Store::LoadReport.new(added: 0, updated: 1, skipped: 3, withdrawn: 0, errored: 0, revised: 1)
+
+      assert_equal 3, (a + b).revised
+    end
+
     def test_reload_with_same_metadata_is_idempotent
       with_metadata = -> { build_document("alpha", [%w[1 μῆνιν]], metadata: { "tm_nr" => "9" }) }
       @loader.load([with_metadata.call])
@@ -287,7 +339,7 @@ module Store
 
       report = @loader.load([build_document("alpha", [%w[1 θεά]], metadata: { "tm_nr" => "10" })])
 
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       row = doc_row("alpha")
       assert_equal 2, row.revision
       assert_equal({ "tm_nr" => "10" }, JSON.parse(row.metadata_json))
@@ -312,7 +364,7 @@ module Store
       changed = build_document("alpha", [%w[1 μῆνιν], %w[2 θεά]])
       report = @loader.load([changed, beta])
 
-      assert_report report, updated: 1, skipped: 1
+      assert_report report, updated: 1, skipped: 1, revised: 1
 
       row = doc_row("alpha")
       assert_equal 2, row.revision
@@ -340,7 +392,7 @@ module Store
 
       report = @loader.load([alpha(title: "Document alpha, corrected")])
 
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       row = doc_row("alpha")
       assert_equal 2, row.revision
       assert_equal "Document alpha, corrected", row.title
@@ -353,7 +405,7 @@ module Store
       swapped = build_document("alpha", [%w[2 ἄειδε], %w[1 μῆνιν]])
       report = @loader.load([swapped])
 
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       assert_equal 0, passage_row("alpha", "2").sequence
       assert_equal 1, passage_row("alpha", "1").sequence
       assert_equal [2, 2], [passage_row("alpha", "1").revision, passage_row("alpha", "2").revision]
@@ -408,7 +460,7 @@ module Store
       @loader.load([alpha])
       report = @loader.load([collides_with_alpha])
 
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       assert_equal 2, doc_row("alpha").revision
       assert_equal "θεά", passage_row("alpha", "2").text
       assert_empty provenance_events(event: "collision")
@@ -471,7 +523,7 @@ module Store
 
       report = @loader.load([alpha, beta])
 
-      assert_report report, skipped: 1, updated: 1
+      assert_report report, skipped: 1, updated: 1, revised: 1
       row = doc_row("beta")
       refute row.withdrawn
       assert_nil row.withdrawn_reason, "a restore clears the reason (P93-2)"
@@ -488,7 +540,7 @@ module Store
       changed_beta = build_document("beta", [%w[1 πολύτροπον]])
       report = @loader.load([alpha, changed_beta])
 
-      assert_report report, skipped: 1, updated: 1
+      assert_report report, skipped: 1, updated: 1, revised: 1
       row = doc_row("beta")
       refute row.withdrawn
       assert_equal 2, row.revision
@@ -504,7 +556,7 @@ module Store
       narrow = build_document("alpha", [%w[1 μῆνιν], %w[3 θεά]])
       report = @loader.load([narrow])
 
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       vanished = passage_row("alpha", "2")
       assert vanished.withdrawn
       assert_equal 1, vanished.revision
@@ -520,9 +572,11 @@ module Store
       assert_report report, skipped: 1
       assert_equal 1, provenance_events(passage_id: vanished.id, event: "withdrawn").size
 
-      # The passage reappears with identical content: restored, no bump.
+      # The passage reappears with identical content: restored, no bump —
+      # but the DOCUMENT sha changes (its passage-hash sequence regrew), so
+      # the load is content-bearing for the index (revised).
       report = @loader.load([build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε], %w[3 θεά]])])
-      assert_report report, updated: 1
+      assert_report report, updated: 1, revised: 1
       restored = passage_row("alpha", "2")
       refute restored.withdrawn
       assert_equal 1, restored.revision
@@ -695,7 +749,7 @@ module Store
         report = @loader.load_from(TestAdapter.new, workdir: workdir, full: true)
 
         # canonical_path moved into the attic → a revision, plus retirement.
-        assert_report report, updated: 1, skipped: 1
+        assert_report report, updated: 1, skipped: 1, revised: 1
         row = ghost_row
         assert row.retired_upstream
         refute row.withdrawn
@@ -713,10 +767,12 @@ module Store
         assert ghost_row.retired_upstream
 
         # Upstream restores the document; the attic copy stays (first copy wins).
+        # The attic→live move changes canonical_path, which is in the doc sha,
+        # so the unretirement rides a content revision (revised: 1).
         write(workdir, "ghost.txt", "Ghost\nεἴδωλον\n")
         report = @loader.load_from(TestAdapter.new, workdir: workdir)
 
-        assert_report report, updated: 1, skipped: 1
+        assert_report report, updated: 1, skipped: 1, revised: 1
         row = ghost_row
         refute row.retired_upstream, "a urn discovered live again flips back"
         refute row.withdrawn
