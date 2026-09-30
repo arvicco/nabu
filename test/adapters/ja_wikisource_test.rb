@@ -72,6 +72,14 @@ module Adapters
       )
       assert_equal ["Page:Hōbun.pdf/1", "Page:Hōbun.pdf/2", "Page:Hōbun.pdf/3",
                     "Page:Hōbun.pdf/7"], include_form
+      underscored = Nabu::Adapters::JaWikisource.pages_tag_titles(
+        '<pages index="Basho_Haiku_Zenshu.djvu" from="2" to="3"/>'
+      )
+      assert_equal ["Page:Basho Haiku Zenshu.djvu/2", "Page:Basho Haiku Zenshu.djvu/3"],
+                   underscored,
+                   "MediaWiki normalizes underscores to spaces — the api returns (and the " \
+                   "envelope stores) the normalized titles, so the lookup must too (the " \
+                   "芭蕉俳句全集 first-sync quarantine)"
     end
 
     # -- the dispatcher-shell expansion (P111-2, Q109-1 mold B) --------------
