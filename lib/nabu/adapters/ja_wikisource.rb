@@ -579,6 +579,9 @@ module Nabu
                    .gsub(/__[A-Z]+__/, "")
                    .gsub(%r{<templatestyles[^>]*/?>}i, "")
                    .gsub(/<!--.*?-->/m, "")
+                   # 【…[https://dl.ndl.go.jp/… NDLJP:n]…】 scan-page markers
+                   # (the transcription's source-image anchors) are furniture
+                   .gsub(/【[^【】]*\[https?:[^\]]*\][^【】]*】/, "")
         body = remove_balanced_div(body, 'id="navigationHeader"')
         body = remove_balanced_div(body, 'id="navigationNotes"')
         body = body.gsub(%r{<indicator[^>]*>.*?</indicator>}mi, "")
@@ -631,7 +634,9 @@ module Nabu
       end
 
       def finish_expanded_paragraph(paragraph)
-        cleaned = paragraph.gsub(/\[\[([^\]|]*\|)?([^\]]*)\]\]/) { ::Regexp.last_match(2) }
+        cleaned = paragraph.gsub(/\[https?:[^\]\s]*\s+([^\]]*)\]/) { ::Regexp.last_match(1) }
+                           .gsub(/\[https?:[^\]\s]*\]/, "")
+                           .gsub(/\[\[([^\]|]*\|)?([^\]]*)\]\]/) { ::Regexp.last_match(2) }
                            .gsub(%r{</?[a-z][^>]*>}i, "")
                            .gsub("​", "")
                            .gsub(/\s*\n\s*/, "")

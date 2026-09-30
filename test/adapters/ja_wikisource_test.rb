@@ -100,6 +100,8 @@ module Adapters
       body = d.passages.find { |p| p.text.start_with?("聞しは昔") }
       assert_equal "一　北条氏綱と上杉朝定合戦の事", body.annotations["section"],
                    "the parent-page heading link becomes the section annotation"
+      refute(texts.any? { |t| t.include?("https://") || t.include?("NDLJP") },
+             "【…NDLJP:n】 scan-page markers and raw external-link markup never leak")
     end
 
     def test_prose_page_parses_at_paragraph_grain_with_dan_sections
