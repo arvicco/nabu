@@ -44,6 +44,7 @@ module Nabu
       )
 
       TEXT_DIR = File.join("data", "sblgnt", "text")
+      APPARATUS_DIR = File.join("data", "sblgntapp", "xml")
 
       def self.manifest
         MANIFEST
@@ -79,8 +80,6 @@ module Nabu
       def repo_url
         manifest.upstream_url
       end
-
-      APPARATUS_DIR = File.join("data", "sblgntapp", "xml")
 
       # P110-4 (the sidecar harvest): the repo's own critical apparatus —
       # per-book flat XML beside the text tree, <verse>Book C:V</verse>

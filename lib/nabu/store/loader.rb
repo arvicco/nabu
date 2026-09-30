@@ -317,7 +317,7 @@ module Nabu
         outcome = savepoint ? txn.call : time_insert(&txn)
         # Both update flavors count as :updated; only the content-bearing one
         # also feeds the revised counter (see LoadReport#revised).
-        if outcome == :updated_content || outcome == :updated_metadata
+        if %i[updated_content updated_metadata].include?(outcome)
           counts[:updated] += 1
           counts[:revised] += 1 if outcome == :updated_content
         else
