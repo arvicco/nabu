@@ -138,3 +138,16 @@ sources:
   # per-collection knowledge by definition.
   menota:
     onw: { lect: "no:old", tier: certain }
+  # P110 (the P108 add-then-retire completed; jpn:emj minted in the
+  # p108-japonic-stages nabu-lects release, in canonical since P108's
+  # sister sync): 校異源氏物語 IS the Heian classical stage — Genji,
+  # c. 1008, inside emj's [794, 1185] band; the whole 54-doc corpus is
+  # one work. A per-collection fact: upstream codes it bare jpn.
+  kouigenji:
+    jpn: { lect: "jpn:emj", tier: certain }
+  # Same flip for the kokubunken kokin side: the 古今和歌集 texts (kana
+  # preface included, compiled 905) are Heian classical — jpn:emj. The
+  # manyo docs ride ojp and stay identity (Old Japanese whatever the
+  # manuscript copy date — the P108-4 posture note).
+  kokubunken:
+    jpn: { lect: "jpn:emj", tier: certain }

@@ -32,6 +32,14 @@ files:
     url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/canons.json
     whole: true
     trim: none (upstream's canon registry, copied whole)
+  - path: T/T10/T10n0285.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T10/T10n0285.xml
+    refetchable: true
+    whole: false
+    retrieved: "2026-09-30"
+    trim: teiHeader + body lb 0458a13..0458a24 (through the first prose sentence), cut from
+      the box's canonical tree — carries the 0458a18 U+3000-only interlinear-note line
+      (the P110 quarantine-class regression shape); balanced close appended
   - path: K/K05/K05n0016.xml
     url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/K/K05/K05n0016.xml
     refetchable: true

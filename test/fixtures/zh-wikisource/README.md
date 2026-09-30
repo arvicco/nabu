@@ -13,6 +13,11 @@ transcluded works add a "transclusions" title → wikitext map):
   to the Collection header + front matter + the first 3 sections;
   the "transclusions" map carries those 3 piece pages' wikitext whole
   (授老人等官教 · 徒隸等準從本色授官教 · 授逸民道士等官教).
+- `27416.json` — 續資治通鑑/卷097, cut from the box's own
+  canonical/zh-wikisource envelope 2026-09-30 (revid 2309869) and
+  TRIMMED to the first ~7 paragraphs at a line boundary: the STACKED
+  leading templates ({{Textquality}}{{header2 …}}) + a `__TOC__`
+  magic-word line — the two P110-3 junk-passage shapes.
 
 Re-cut: fetch each title's (and piece title's) current revision via
 api.php and re-apply the stated trims.

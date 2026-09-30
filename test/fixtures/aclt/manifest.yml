@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# No per-file GET URL exists: the corpus was delivered by email (personal
+# grant — see config/sources.yml aclt) as one 7z archive; files are copied
+# whole from its luwian_aclt/json/ tree.
+source: aclt
+adapter_test: null
+retrieved: "2026-09-30"
+files:
+  - path: json/luwian-hieroglyph-en_244.json
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the emailed archive (YALE seal, one clause)
+    copied: "2026-09-30"
+    whole: true
+    trim: none
+  - path: json/luwian-hieroglyph-en_224.json
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the emailed archive (TRAGANA (LOCRIS) — the parenthetical title)
+    copied: "2026-09-30"
+    whole: true
+    trim: none
+  - path: json/luwian-hieroglyph-en_56.json
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the emailed archive (the KARKAMIŠ B39a upstream tombstone — skip-by-rule pin)
+    copied: "2026-09-30"
+    whole: true
+    trim: none
+  - path: mini-luwian_aclt.7z
+    refetchable: false
+    provenance: local-trim
+    reason: minimal REAL 7z (bsdtar --format 7zip) wrapping the YALE seal fixture — the fetch test's drop
+    copied: "2026-09-30"
+    whole: false
+    trim: one json file under the archive's own luwian_aclt/json/ layout

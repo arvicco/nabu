@@ -1,0 +1,59 @@
+{
+ "meta": {
+  "filename": "corpus/yaml/luwian-hieroglyph-en.yaml",
+  "region": "Karkamiš",
+  "title": "KARKAMIŠ B39a"
+ },
+ "sentences": [
+  {
+   "lang": 0,
+   "last": true,
+   "meta": {
+    "line": "",
+    "page": "KARKAMIŠ B39a - delete"
+   },
+   "para_alignment": [
+    {
+     "end_offset": 24,
+     "para_id": 2866,
+     "start_offset": 0
+    }
+   ],
+   "text": "[KARKAMIŠ B39a - delete]",
+   "words": [
+    {
+     "next_word": 1,
+     "off_end": 24,
+     "off_start": 0,
+     "wf": "[KARKAMIŠ B39a - delete]",
+     "wtype": "punct"
+    }
+   ]
+  },
+  {
+   "lang": 1,
+   "last": true,
+   "meta": {
+    "line": "",
+    "page": "KARKAMIŠ B39a - delete"
+   },
+   "para_alignment": [
+    {
+     "end_offset": 24,
+     "para_id": 2866,
+     "start_offset": 0
+    }
+   ],
+   "text": "[KARKAMIŠ B39a - delete]",
+   "words": [
+    {
+     "next_word": 1,
+     "off_end": 24,
+     "off_start": 0,
+     "wf": "[KARKAMIŠ B39a - delete]",
+     "wtype": "punct"
+    }
+   ]
+  }
+ ]
+}

@@ -58,6 +58,30 @@ map:
   ltc:     zho:mid
   lzh:     zho/lit
 
+  # The ORACC Akkadian dialect suite (2026-09-27): ORACC's published
+  # akk-x-* period/dialect codes onto the standing akk grid — universal
+  # statements (the codes are ORACC's documented conventions, meaningful
+  # to any consumer). ltebab folds into nb per the nb band's own recorded
+  # decision; stdbab and mbperi land on the registry's variety axis.
+  akk-x-earakk: akk:ear
+  akk-x-oldakk: akk:old
+  akk-x-oldbab: akk:ob
+  akk-x-oldass: akk:oa
+  akk-x-midbab: akk:mb
+  akk-x-midass: akk:ma
+  akk-x-neoass: akk:na
+  akk-x-neobab: akk:nb
+  akk-x-ltebab: akk:nb
+  akk-x-stdbab: akk/lit
+  akk-x-mbperi: akk:mb/peri
+
+  # Emesal (ORACC sux-x-emesal): the Sumerian cult-lament sociolect
+  sux-x-emesal: sux/es
+
+  # 639-3 Russian → the anchored 639-1 code (the №11 alias suite's shape,
+  # recorded when the first rus-coded shelf arrived)
+  rus:     ru
+
   # The Latin stage suite (Wiktionary etymology-only codes)
   la-vul:  lat/vul      # the ATTESTED register is the universal default reading
   la-lat:  lat:late
@@ -78,6 +102,17 @@ map:
   iir-pro:     iir:pro
   ine-bsl-pro: ine-bsl:pro
   cel-pro:     cel:pro
+  tut-pro:     tut:pro
+  jpx-pro:     jpx:pro
+  ccn-pro:     ccn:pro
+  ccs-pro:     ccs:pro
+  bat-pro:     bat:pro
+  sit-pro:     sit:pro
+  dra-pro:     dra:pro
+  qfa-cka-pro: qfa-cka:pro
+  qfa-chk-pro: qfa-chk:pro
+  itl-pro:     itl:pro
+  qfa-yen-pro: qfa-yen:pro
 
   # The script-suffix suite (P61): BCP-47-style tags whose script subtag
   # is used per the standard's own semantics -- it describes the CONTENT.
