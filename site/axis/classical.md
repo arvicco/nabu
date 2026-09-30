@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 September 2026)</span> |
 |---|---|---|---|---|
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
@@ -29,12 +29,12 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `pedecerto` | feature module | nc | wired · manual | nothing held yet |
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,705 passages |
-| `perseus-latin` | texts | attribution | wired · auto | 548 docs / 398,684 passages |
+| `perseus-latin` | texts | attribution | wired · auto | 554 docs / 401,207 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 September 2026)</span>: `grc` 120,553 · `lat` 58,424 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 13 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 September 2026)</span>: `grc` 120,553 · `lat` 58,430 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 13 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

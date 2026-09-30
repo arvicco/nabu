@@ -7,22 +7,23 @@ description: >-
 
 > The Hittitologist — Anatolia in cuneiform, KBo and KUB by tablet and line.
 
-The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank.
+The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian), the glossed Hittite texts, the UD Hittite treebank, and ACLT's Hieroglyphic Luwian inscriptions.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 September 2026)</span> |
 |---|---|---|---|---|
+| `aclt` | texts | research_private | wired · manual | 266 docs / 2,682 passages |
 | `hittite-glossed` | texts | open | wired · manual | 7,099 docs / 72,507 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 September 2026)</span>: `hit` 28,790 · `akk` 936 · `xhu` 698 · `xht` 326 · `xlu` 206 · `sux` 80 · `plq` 30 · `lat` 11 · `grc` 9 · `orv` 9 … and 16 more (`nabu axis hittite` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 September 2026)</span>: `hit` 28,790 · `akk` 936 · `xhu` 698 · `xht` 326 · `hlu` 266 · `xlu` 206 · `sux` 80 · `plq` 30 · `lat` 11 · `grc` 9 … and 17 more (`nabu axis hittite` lists all).
 
 ## The desk's instruments
 
