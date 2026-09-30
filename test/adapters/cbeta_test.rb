@@ -18,10 +18,11 @@ class CbetaTest < Minitest::Test
 
   K05 = "urn:nabu:cbeta:K05n0016"
   T01 = "urn:nabu:cbeta:T01n0001-xu"
+  T10 = "urn:nabu:cbeta:T10n0285"
   T85 = "urn:nabu:cbeta:T85n2884"
   X01 = "urn:nabu:cbeta:X01n0001"
   X55 = "urn:nabu:cbeta:X55n0899"
-  ALL_FIXTURES = [K05, T01, T85, X01, X55].freeze # discover order (sorted by urn)
+  ALL_FIXTURES = [K05, T01, T10, T85, X01, X55].freeze # discover order (sorted by urn)
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -121,7 +122,7 @@ class CbetaTest < Minitest::Test
       FileUtils.mkdir_p(File.join(root, "J", "J01"))
       File.write(File.join(root, "J", "J01", "J01nA042.xml"), "")
       adapter = Nabu::Adapters::Cbeta.new
-      assert_equal [T01, T85], adapter.discover(root).to_a.map(&:id)
+      assert_equal [T01, T10, T85], adapter.discover(root).to_a.map(&:id)
       skips = adapter.discovery_skips(root)
       assert_equal 1, skips.skipped_by_rule
       assert_predicate skips, :clean?
@@ -141,6 +142,27 @@ class CbetaTest < Minitest::Test
 
   # --- parse round-trip -------------------------------------------------------
 
+  # P110 (the Sep-29 quarantine class, 35 files): a print line whose text
+  # stream is ONLY ideographic layout space (U+3000) but which carries an
+  # interlinear note — T10n0285's 0458a18, the alternative-title gloss
+  # 一名十住，又名大慧光三昧 under the 卷第一 title line — used to mint an
+  # empty passage and quarantine the whole sutra (Ruby's ASCII strip let
+  # the line past the flush guard; the Unicode collapse then emptied it).
+  # The ruled shape: a layout-only line mints NO passage, and its note
+  # folds into the PRECEDING text line so the apparatus survives.
+  def test_layout_only_line_with_note_folds_into_the_preceding_line
+    adapter = Nabu::Adapters::Cbeta.new
+    ref = adapter.discover(FIXTURES).find { |r| r.id == T10 }
+    doc = adapter.parse(ref)
+
+    refute(doc.passages.any? { |p| p.urn.end_with?(":0458a18") },
+           "the U+3000-only layout line must not mint a passage")
+    title_line = doc.passages.find { |p| p.urn.end_with?(":0458a16") }
+    assert_includes title_line.annotations["notes"], "一名十住，又名大慧光三昧",
+                    "the layout line's interlinear note folds into the preceding line"
+    assert_equal "漸備一切智德經卷第一", title_line.text
+  end
+
   def test_parse_carries_the_nc_grant_and_witnesses_on_every_document
     adapter = Nabu::Adapters::Cbeta.new
     adapter.discover(FIXTURES).each do |ref|
@@ -158,7 +180,7 @@ class CbetaTest < Minitest::Test
     source = cbeta_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 5, first.added
+    assert_equal 6, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]

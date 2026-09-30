@@ -415,7 +415,24 @@ module Nabu
         def flush_line
           line = @line
           @line = nil
-          return if line.nil? || line[:citation].nil? || line[:text].strip.empty?
+          return if line.nil? || line[:citation].nil?
+
+          # Blankness must be judged with the same Unicode collapse the
+          # passage build applies: a line of ideographic layout space
+          # (U+3000) slips past an ASCII strip and then empties into a
+          # ValidationError that quarantines the whole file (the Sep-29
+          # 35-file class, T10n0285:0458a18). A layout-only line mints no
+          # passage; its interlinear notes fold into the preceding text
+          # line so the apparatus survives (a title gloss hangs under its
+          # title line in print). Gaiji cannot occur on a blank line (a
+          # gaiji ref IS text).
+          if line[:text].gsub(/[[:space:]]+/, "").empty?
+            unless line[:notes].empty? || @units.empty?
+              last = @units.last
+              @units[-1] = last.with(notes: last.notes + line[:notes])
+            end
+            return
+          end
 
           @units << Unit.new(citation: line[:citation], text: line[:text],
                              juan: @juan, gaiji: line[:gaiji], notes: line[:notes])
