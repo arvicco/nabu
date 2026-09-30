@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 1 October 2026)</span> |
 |---|---|---|---|---|
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
@@ -28,7 +28,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 September 2026)</span>: `hbo` 30,259 · `grc` 6,297 · `eng` 5,320 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 22 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 1 October 2026)</span>: `hbo` 30,259 · `grc` 6,297 · `eng` 5,320 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 22 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 
