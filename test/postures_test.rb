@@ -241,7 +241,8 @@ class PosturesTest < Minitest::Test
                  "the kanripo lzh precedent + bare zho for the Ming 總譯): 99→103; " \
                  "P110 completes the P108 add-then-retire — kouigenji (pending) and " \
                  "kokubunken (identity) RETIRED to the jpn → jpn:emj overrides " \
-                 "(the p108-japonic-stages mint merged; the shadowing rule) and ADDS aclt (identity hlu, the hieroglyphic tradition): 103→102"
+                 "(the p108-japonic-stages mint merged; the shadowing rule) and ADDS " \
+                 "aclt (identity hlu, the hieroglyphic tradition): 103→102"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending

@@ -177,6 +177,9 @@ module Nabu
       # — never a findspot; the remaining flagged sources are the real
       # Q83 alignment-sweep worklist and stay loud on purpose.
       MINING_EXEMPT = {
+        "aclt" => { "region" => "find-region LABEL (Karkamiš, Tabal …) mined as the region " \
+                                "facet; gazetteer resolution via nabu-places is a recorded " \
+                                "future look (the posture note)" },
         "aranese" => { "provenance" => "dataset-derivation lineage (Apertium/PILAR note), not a findspot" },
         "classical-modern" => { "provenance" => "reference-list lineage (source URLs), not a findspot" },
         "diorisis" => { "provenance" => "edition lineage (e.g. \"Perseus\"), not a findspot",
