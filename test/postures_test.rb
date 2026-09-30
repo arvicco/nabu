@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 103, lect.size,
+    assert_equal 101, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -238,7 +238,10 @@ class PosturesTest < Minitest::Test
                  "P109 ADDS FOUR — hittite-glossed (identity hit), ndl-kotenseki (identity " \
                  "jpn, declared coarse), ja-wikisource (identity jpn+ojp; the era-band jpn " \
                  "staging is a NAMED candidate awaiting a ruling), zh-wikisource (codemap, " \
-                 "the kanripo lzh precedent + bare zho for the Ming 總譯): 99→103"
+                 "the kanripo lzh precedent + bare zho for the Ming 總譯): 99→103; " \
+                 "P110 completes the P108 add-then-retire — kouigenji (pending) and " \
+                 "kokubunken (identity) RETIRED to the jpn → jpn:emj overrides " \
+                 "(the p108-japonic-stages mint merged; the shadowing rule): 103→101"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -300,6 +303,8 @@ class PosturesTest < Minitest::Test
     # Slovenian anchor, all on existing molds.
     # P109 ADDS hittite-glossed + ndl-kotenseki + ja-wikisource as
     # identity (74→77) and zh-wikisource as codemap (13→14).
-    assert_equal({ "identity" => 77, "dates" => 11, "codemap" => 14, "pending" => 1 }, by_posture)
+    # P110: the jpn:emj flips retire both declarations to the overrides
+    # file (the shadowing rule) — the last pending leaves the board.
+    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 76 }, by_posture)
   end
 end
