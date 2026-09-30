@@ -16,17 +16,19 @@ module Nabu
     #
     # The ref column is "Book C:V" (book token = the upstream file stem:
     # Matt, Mark, 1Cor, 3John, Phlm…). The ⸀⸂⸃ sigla embedded in the verse
-    # text are the upstream edition's apparatus cross-references (the
-    # sblgntapp variant files are not ingested) — kept verbatim, canonical
-    # means canonical. One verse = one passage, urn <doc-urn>:<C>.<V>.
+    # text are the upstream edition's apparatus cross-references — kept
+    # verbatim, canonical means canonical. One verse = one passage, urn
+    # <doc-urn>:<C>.<V>. Since P110-4 the sblgntapp variant notes those
+    # sigla point at ride in via +apparatus+ ("C.V" → note strings,
+    # verbatim with their witness sigla) as the "apparatus" annotation.
     class SblgntParser
       # "Mark 1:1<TAB>text" — the book token is [\w]+ (digits lead 1Cor/3John).
       LINE = /\A(?<book>\S+)\s(?<chapter>\d+):(?<verse>\d+)\t(?<text>.+?)\s*\z/
 
-      def parse(path, urn:, language:, title:)
+      def parse(path, urn:, language:, title:, apparatus: {})
         document = Nabu::Document.new(urn: urn, language: language, title: title,
                                       canonical_path: File.expand_path(path))
-        verse_lines(path).each { |match| append_verse(document, urn, language, match) }
+        verse_lines(path).each { |match| append_verse(document, urn, language, match, apparatus) }
         raise ParseError, "#{path}: no verse lines found" if document.empty?
 
         document
@@ -55,13 +57,17 @@ module Nabu
         end
       end
 
-      def append_verse(document, urn, language, match)
+      def append_verse(document, urn, language, match, apparatus)
+        key = "#{match[:chapter]}.#{match[:verse]}"
+        annotations = { "citation" => "#{match[:book]} #{match[:chapter]}:#{match[:verse]}" }
+        notes = apparatus[key]
+        annotations["apparatus"] = notes if notes && !notes.empty?
         document << Nabu::Passage.new(
-          urn: "#{urn}:#{match[:chapter]}.#{match[:verse]}",
+          urn: "#{urn}:#{key}",
           language: language,
           text: Normalize.nfc(match[:text]),
           sequence: document.size,
-          annotations: { "citation" => "#{match[:book]} #{match[:chapter]}:#{match[:verse]}" }
+          annotations: annotations
         )
       end
     end
