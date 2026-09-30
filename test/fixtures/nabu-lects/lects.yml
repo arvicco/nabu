@@ -602,6 +602,16 @@ anchors:
                          OB-convention band [-2000,-1600] when the 2026-08-09
                          ruling assigned MB/MA/NA/NB-period copies to this
                          stage — the LANGUAGE claim spans the whole tradition"}
+    varieties:
+      es: {name: Emesal, kind: sociolect,
+           note: "the 'fine tongue' beside main-dialect Emegir: the register
+                  of the cult laments (Balaĝ, Eršema) sung by gala priests
+                  and of female deities' direct speech, written syllabically
+                  because the standard logograms would read as Emegir by
+                  default; carried by the lament liturgy deep into the first
+                  millennium. ORACC codes it sux-x-emesal (inline es);
+                  consuming dictionaries: 9 oracc glossaries (censused
+                  2026-09-27)"}
 
   qpc:
     name: Proto-cuneiform
@@ -652,6 +662,14 @@ anchors:
     note: "East Semitic. The stage grid is dialect × period (Assyrian and Babylonian run in
            parallel), not a single ladder — ord orders display only"
     stages:
+      ear: {name: Early Akkadian,   band: [-2600, -2350], ord: 3,
+            band_note: "pre-Sargonic (ED IIIa-b) East Semitic, approximate —
+                        the earliest Akkadian-read record, before the
+                        Sargonic span old opens",
+            note: "ORACC's akk-x-earakk, glossed by ORACC itself 'For
+                   pre-Sargonic Akkadian' (ATF inline tutorial) — a distinct
+                   period code beside oldakk, so a distinct stage rather
+                   than a widened old band"}
       old: {name: Old Akkadian,     band: [-2340, -2200], ord: 5,
             band_note: "the Sargonic record, before the Assyrian/Babylonian
                         split; per the CDLI period convention"}
@@ -676,6 +694,31 @@ anchors:
     varieties:
       lit: {name: Standard Babylonian, kind: register,
             note: "the literary register of first-millennium scholarship"}
+      peri: {name: Peripheral Akkadian, kind: dialect,
+             note: "the western-periphery scribal Akkadian of the Late
+                    Bronze international age — Amarna, Nuzi, Emar, Ugarit,
+                    Ḫattuša (15th-12th c. BCE): Akkadian as written by
+                    non-native chanceries. ORACC codes it per period
+                    (akk-x-mbperi 'MB Peripheral', with an obperi sibling),
+                    so consumers reach it as the stage/variety compound
+                    akk:mb/peri"}
+
+  qca:
+    name: Canaano-Akkadian
+    parent: sem
+    band: [-1360, -1330]
+    band_note: "the Amarna archive's span, approximate — Amenhotep III
+                through early Tutankhamun"
+    note: "the mixed scribal language of the Canaanite Amarna letters:
+           mainly Akkadian lexicon on Canaanite (Northwest Semitic)
+           morphosyntax — an interlanguage of the Egyptian-vassal
+           chanceries, not a vernacular (Izre'el, Canaano-Akkadian).
+           Both components are Semitic, so the family edge is honest
+           while no single-branch descent is claimable — the mixed
+           nature stays this note. ORACC's registry names the code
+           'Canaanite' (qca — a q- local-use code, the qpc precedent);
+           consuming dictionary: the oracc aemw/amarna glossary
+           (censused 2026-09-27)"
 
   # ── The Anatolian flank (P81-r1: hit was the largest node-less language
   # in the first consuming collection — 35.9k docs, tlhdig + cdli; the
@@ -796,9 +839,98 @@ anchors:
     name: Middle Persian (Pahlavi)
     parent: peo
 
+  xpr:
+    name: Parthian
+    parent: iir:pro
+    band: [-250, 250]
+    band_note: "the Arsacid attestation core, approximate — ostraca and
+                inscriptions from the 3rd c. BCE (Nisa) through the
+                Sasanian trilinguals; the Manichaean Parthian literary
+                corpus carries the language to ~the 9th c. in Turfan
+                copies"
+    note: "Northwestern Middle Iranian, pal's northwestern counterpart —
+           parented to iir:pro like peo (no Proto-Iranian node is
+           minted; the NW/SW split stays this note). First consuming
+           document: the ŠKZ trilingual's Parthian version (word-
+           aligned with pal and grc)"
+
+  kho:
+    name: Khotanese
+    parent: iir:pro
+    band: [400, 1000]
+    band_note: "the Khotan and Dunhuang document horizon, approximate —
+                Old Khotanese (Book of Zambasta era) through Late
+                Khotanese business documents"
+    note: "Eastern Middle Iranian (Saka); the Buddhist literary and
+           documentary language of the Khotan oasis, written in Brahmi.
+           Tumshuqese, its poorly attested sibling, stays unminted (no
+           consumer). Consumers: 552 IEDC documents + the 2,357-record
+           British Library transliteration set (censused 2026-09-28)"
+
+  sog:
+    name: Sogdian
+    parent: iir:pro
+    band: [300, 1000]
+    band_note: "the Ancient Letters (early 4th c.) through the Mugh
+                archive and the Turfan/Dunhuang religious corpora,
+                approximate"
+    note: "Eastern Middle Iranian; the lingua franca of the Silk Road —
+           secular documents, Buddhist/Manichaean/Christian literatures,
+           each in its own script tradition. Yaghnobi, its living
+           descendant, stays unminted (no consumer). Consumers: 111
+           IEDC documents (censused 2026-09-28)"
+
+  xbc:
+    name: Bactrian
+    parent: iir:pro
+    band: [100, 850]
+    band_note: "the Kushan inscriptions (Rabatak) through the Islamic-era
+                economic documents, approximate"
+    note: "Eastern Middle Iranian, the one Iranian language regularly
+           written in GREEK script (the Kushan chancery's inheritance).
+           Consumers: 26 IEDC documents — the open rail into the
+           Bactrian economic-document corpus (censused 2026-09-28)"
+
   fa:
     name: Persian
     parent: pal
+
+  jpr:
+    name: Judeo-Persian
+    parent: fa
+    note: "New Persian written in Hebrew script — including some of the
+           EARLIEST New Persian documents of any kind (8th c. letters).
+           An ISO-coded script-community tradition minted as an anchor
+           on the jpa/tmr precedent. Consumers: 27 IEDC documents
+           (censused 2026-09-28)"
+
+  # ── Tocharian (the ine-ana sibling discipline: the branch carries no
+  # ISO 639-5 code, so the pair rides directly under ine) ───────────────────
+
+  xto:
+    name: Tocharian A
+    parent: ine
+    band: [400, 1000]
+    band_note: "the Tarim manuscript horizon, approximate — absolute
+                Tocharian chronology rests on palaeography and carbon
+                dates, both debated"
+    note: "Agnean; the eastern (Turfan/Shorchuk) member of the pair, a
+           liturgical/literary language possibly already dead in daily
+           use when copied. With txb the branch rides directly under
+           ine — no established family code, the hlu/xlu discipline.
+           Consumers: kaikki extract (581 senses) now; the manuscript
+           corpus is ask-gated (censused 2026-09-28)"
+
+  txb:
+    name: Tocharian B
+    parent: ine
+    band: [400, 1000]
+    band_note: "the Tarim manuscript horizon, approximate — see xto"
+    note: "Kuchean; the western and far better attested member —
+           thousands of fragments (monastic, economic, medical,
+           caravan passes) across three dialect areas. See xto on the
+           codeless branch. Consumers: kaikki extract (2,856 senses)
+           now; CEToM is ask-gated (censused 2026-09-28)"
 
   xcl:
     name: Classical Armenian
@@ -877,15 +1009,166 @@ anchors:
   jpx:
     name: Japonic
     kind: family
+    stages:
+      pro: {name: Proto-Japonic, mode: reconstructed, ord: 5, wikt: jpx-pro,
+            note: "internal reconstruction over Old Japanese + Ryukyuan (Martin
+                   1987; Starostin 1975 for accent); the AED files Japonic under
+                   Macro-Altaic — the registry keeps Japonic independent, the
+                   Moscow-school claim stays a note. Corpus: starling-japet
+                   (1,705 etymologies)"}
+
+  ojp:
+    name: Old Japanese
+    parent: jpx
+    band: [700, 800]
+    band_note: "the substantial corpus is Nara-period (8th c.); 7th-c.
+                attestation is marginal and epigraphic"
+    note: "the oldest attested Japonic stage: Kojiki (712), Nihon Shoki
+           (720), Man'yōshū (c. 759, 4,500+ poems), written in
+           man'yōgana (Chinese characters as syllabograms); preserves
+           the kō/otsu (A/B) vowel-type distinctions Early Middle
+           Japanese merged. Own-anchor rather than a jpn stage per the
+           ang/enm/non precedent (an ISO-coded historical stage is its
+           own anchor); jpn's descent re-reads through it. Consumers:
+           the oncoj-lexicon and wiktionary-ojp shelves (censused
+           2026-09-27) beside the held ONCOJ corpus"
 
   jpn:
     name: Japanese
-    parent: jpx
+    parent: ojp
     stages:
-      mod: {name: Modern Japanese, ord: 10}
+      emj:  {name: Early Middle (Classical) Japanese, band: [794, 1185], ord: 2,
+             note: "the Heian kana literature: Kokinshū (905), Genji
+                    Monogatari (c. 1008), the court diaries; the classical
+                    grammar (bungo) later stages keep as a written norm.
+                    Merges Old Japanese's kō/otsu vowel distinctions;
+                    hiragana/katakana replace man'yōgana as the vernacular
+                    scripts",
+             band_note: "the Heian period as the conventional envelope"}
+      lmj:  {name: Late Middle Japanese, band: [1185, 1600], ord: 4,
+             note: "Kamakura-Muromachi: the gunki monogatari (Heike),
+                    kyōgen, the Christian-mission romanizations (Nippo
+                    Jisho 1603 documents its close); onbin contractions
+                    and the shift toward the modern verb system",
+             band_note: "Kamakura through Momoyama; approximate convention"}
+      emod: {name: Early Modern Japanese (Edo), band: [1600, 1868], ord: 6,
+             note: "the Edo print and manuscript mass — kuzushiji
+                    documents, ukiyo-zōshi, kokugaku scholarship; the
+                    stage most crowd-transcription corpora inhabit",
+             band_note: "Tokugawa era by convention"}
+      mod:  {name: Modern Japanese, band: [1868, 2100], ord: 10,
+             band_note: "Meiji onward — banded so date staging covers the
+                         modern corpora beside the new premodern stages"}
     orthos:
       kyu: {name: Kyūjitai (pre-reform character forms), script: jpan,
             note: "pre-1946 printings"}
+
+  # ── The Turkic ladder (ISO 639-5 family + the literary-continuum
+  # chain: Old Turkic → Old Uyghur / Karakhanid → Chagatai) ─────────────────
+
+  trk:
+    name: Turkic
+    kind: family
+    note: "ISO 639-5. Family node only — modern Turkic languages stay
+           unminted until consumers arrive; the historical literary
+           ladder below is what the library holds"
+
+  otk:
+    name: Old Turkic
+    parent: trk
+    band: [700, 840]
+    band_note: "the runiform corpus, approximate — the Orkhon
+                inscriptions (Kül Tegin, Bilge Kagan, Tonyukuk,
+                720s–730s) and the Yenisei epitaphs, to the Uyghur
+                khaganate's fall"
+    note: "the earliest attested Turkic: the runiform ('Orkhon
+           script') inscriptional language. Consumers: kaikki extract
+           (505 senses) + a CC0 UD treebank seed; no open runiform
+           corpus exists yet (bitig.kz down at survey — censused
+           2026-09-28)"
+
+  oui:
+    name: Old Uyghur
+    parent: otk
+    band: [800, 1400]
+    band_note: "the Turfan/Dunhuang manuscript horizon, approximate —
+                Manichaean and Buddhist corpora through Yuan-era
+                prints and civil documents"
+    note: "the Old Turkic literary continuum in its Tarim-basin
+           continuation — Uyghur script (Sogdian-derived), plus
+           Manichaean, Brahmi and runiform strands. Descent edge otk
+           per the literary-continuum reading (the enm←ang shape).
+           Consumers: kaikki extract (632 senses) + the Wilkens
+           dictionary; the corpus (VATEC) is ask-gated (censused
+           2026-09-28)"
+
+  xqa:
+    name: Karakhanid
+    parent: otk
+    band: [1000, 1200]
+    band_note: "the Kutadgu Bilig (1069) and Dīwān Lughāt al-Turk
+                (1070s) era, approximate"
+    note: "the first ISLAMIC Turkic literary language (Arabic script),
+           continuing the Old Turkic literary tradition parallel to
+           oui — both carry parent otk, the na/nb-style parallel
+           branches. No open machine-readable corpus exists (censused
+           2026-09-28); minted now so the ladder reads whole and
+           kaikki's DLT-derived otk entries have their context"
+
+  chg:
+    name: Chagatai
+    parent: xqa
+    band: [1400, 1920]
+    band_note: "Nawāʾī's classical age through the late 'Turki' of
+                Central Asian chanceries and the Jarring-collection
+                manuscripts, approximate"
+    note: "the great Perso-Arabic-script literary language of Central
+           Asia, continuing the Karakhanid tradition. The consuming
+           ATMO manuscripts (18th–20th c. Eastern 'Turki') sit at its
+           late edge — the honest-coarse chg claim, with any finer
+           late-Turki node a future call. Consumers: ATMO TEI + kaikki
+           extract (813 senses) (censused 2026-09-28)"
+
+  # ── Mongolic and Tungusic (ISO 639-5 families, one anchor each) ───────────
+
+  xgn:
+    name: Mongolic
+    kind: family
+    note: "ISO 639-5. Family node; Classical Mongolian (cmg) stays
+           unminted — the survey found NO open machine-readable
+           corpus (censused 2026-09-28)"
+
+  xng:
+    name: Middle Mongol
+    parent: xgn
+    band: [1200, 1600]
+    band_note: "the Secret History era through the late
+                Sino-Mongolian glossaries, approximate"
+    note: "the language of the Mongol empire's records: the Secret
+           History (hanzi phonetic transcription), 'Phags-pa edicts,
+           Sino-Mongolian inscriptions and glossaries. Consumers: the
+           altaica.ru romanized Secret History (use granted by the
+           site's maintainer by email, 2026-09-27) + the zh.wikisource
+           transcription (queued) (censused 2026-09-28)"
+
+  tuw:
+    name: Tungusic
+    kind: family
+    note: "ISO 639-5 (code glossed 'Tungus languages'). Family node;
+           the modern members stay unminted until consumers arrive"
+
+  mnc:
+    name: Manchu
+    parent: tuw
+    band: [1600, 1950]
+    band_note: "the Old Manchu records (Fe Dangse era) through the
+                Qing chancery tradition's end, approximate"
+    note: "the Qing dynastic language — vertical script adapted from
+           Mongolian; the empire's bilingual chancery left an enormous
+           documentary corpus, almost all still image-only. Consumers:
+           kaikki extract (3,207 senses) now; the annotated 滿文老檔
+           and the curated e-text collections are ask-gated (censused
+           2026-09-28)"
 
   non:
     name: Old Norse
@@ -996,6 +1279,45 @@ anchors:
            Marsian, ...) ride the nearest lane unminted until a consumer
            distinguishes them"
 
+  sbv:
+    name: Sabine
+    parent: itc
+    note: "Osco-Umbrian (Sabellic), osc/xum's minor sibling — the
+           consumer that distinguishes it arrived (a curated
+           Sabine→Latin loan shelf, 26 entries, censused 2026-09-27),
+           closing xum's ride-the-nearest-lane note for this one
+           dialect. Attested almost entirely through Latin authors'
+           glosses (Varro, Festus), not a running-text corpus"
+
+  ett:
+    name: Etruscan
+    glottocode: etru1241
+    band: [-700, 50]
+    band_note: "conventional epigraphic span, approximate — the earliest
+                inscriptions to the language's extinction under Latin"
+    note: "Tyrsenian (with Raetic and Lemnian), pre-Indo-European; the
+           family carries no ISO 639-5 or Wiktionary code, so ett rides
+           as a bare anchor (the xhu/xur discipline). ~13,000
+           inscriptions, mostly short and funerary, in an
+           Euboean-Greek-derived alphabet written right-to-left.
+           Consumers: the wiktionary-ett and larth-etp shelves and 30
+           ett documents (censused 2026-09-27)"
+
+  xlp:
+    name: Lepontic
+    parent: cel
+    band: [-550, -100]
+    band_note: "conventional epigraphic span, approximate; the earliest
+                inscriptions may reach the 7th c. BCE"
+    note: "Continental Celtic of the Lugano/Como/Maggiore lake region —
+           the earliest attested Celtic of any kind; ~140 short
+           funerary and dedicatory inscriptions in the Lugano alphabet
+           (Etruscan-derived, no voice distinction). Whether a distinct
+           language or early Cisalpine Gaulish is debated (Schumacher:
+           possibly the first branch off Proto-Celtic) — the registry
+           claims only the cel edge. Consumer: the lexlep-words shelf
+           (Lexicon Leponticum, censused 2026-09-27)"
+
   xpi:
     name: Pictish
     note: "classification debated (commonly held Brittonic, a non-Celtic
@@ -1011,6 +1333,22 @@ anchors:
     name: Sicel
     note: "fragmentary; an Indo-European (possibly Italic) affiliation
            is argued but unsettled, so no parent edge is claimed"
+
+  uga:
+    name: Ugaritic
+    parent: sem
+    band: [-1350, -1190]
+    band_note: "the Ras Shamra archives to the destruction of Ugarit
+                (~1190 BCE), approximate"
+    note: "Northwest Semitic (its exact position beside Canaanite is
+           debated; the registry claims only the sem edge). Written in
+           its own alphabetic cuneiform (the 30-letter long alphabet,
+           left-to-right) and occasionally in Sumero-Akkadian cuneiform;
+           corpus ~1,800 inscriptions from Ras Shamra. Reference
+           dictionary: del Olmo Lete & Sanmartín, A Dictionary of the
+           Ugaritic Language in the Alphabetic Tradition (Brill 2003) —
+           ORACC's own uga reference. Consuming dictionaries: 3 oracc
+           glossaries (censused 2026-09-27)"
 
   phn:
     name: Phoenician
@@ -1029,6 +1367,13 @@ anchors:
   dra:
     name: Dravidian
     kind: family
+    stages:
+      pro: {name: Proto-Dravidian, mode: reconstructed, ord: 5, wikt: dra-pro,
+            note: "reconstructed over four branches (South, South-Central,
+                   Central, North); the DED (Burrow-Emeneau 1984) is the
+                   standard cognate corpus. Corpus: starling-dravet (2,171
+                   reconstructions, DED correspondences revised and
+                   significantly modified by G. Starostin)"}
 
   ta:
     name: Tamil
@@ -1152,6 +1497,12 @@ anchors:
   sit:
     name: Sino-Tibetan
     kind: family
+    stages:
+      pro: {name: Proto-Sino-Tibetan, mode: reconstructed, ord: 5, wikt: sit-pro,
+            note: "no consensus reconstruction (Benedict/Matisoff STEDT vs the
+                   Moscow school); this registry's corpus is starling-stibet
+                   (2,823 Peiros-Starostin 1996 etymologies, improved
+                   reconstructions)"}
 
   tbq:
     name: Tibeto-Burman
@@ -1178,6 +1529,132 @@ anchors:
            Burmese (mya). Attested from the Myazedi inscription (1112/1113
            CE) through the Bagan period. The Bagan stone inscriptions are
            the corpus, held in Myanmar-script Unicode with transliteration"
+
+  # ── The comparative-etymology wing ──────────────────────────────────
+  # Anchors forced by the StarLing etymological shelves (the Tower of
+  # Babel databases, standing grant 2026-07-15): each proto stage is a
+  # RECONSTRUCTED filing place for a named published corpus, and every
+  # contested macro-family claim stays a note, never a parent edge.
+  # Includes the bat/ccs backfill: starling-baltet and starling-kart
+  # shipped bat-pro/ccs-pro before the registry discipline; their
+  # anchors land here with the wave.
+
+  tut:
+    name: Altaic
+    kind: family
+    note: "ISO 639-5 tut. The Altaic/Transeurasian macro-family HYPOTHESIS
+           (Turkic + Mongolic + Tungusic; 'Macro-Altaic' adds Koreanic and
+           Japonic). Genealogical validity is widely doubted (Clauson's and
+           Doerfer's areal/loan reading is the mainstream position); the node
+           is the standard filing place for Moscow-school reconstructions,
+           expressly individual reconstructions under the grant's own caveat.
+           Corpus: starling-altet (2,805 Starostin-Dybo-Mudrak AED 2003
+           etymologies with five branch databases)."
+    stages:
+      pro: {name: Proto-Altaic, mode: reconstructed, ord: 5,
+            note: "tut-pro by the family-code + -pro convention (the
+                   bat-pro/ccs-pro precedent); Wiktionary does not admit
+                   Proto-Altaic reconstructions"}
+
+  ccn:
+    name: North Caucasian
+    kind: family
+    note: "ISO 639-5 ccn. The proposed union of Northeast (Nakh-Daghestanian)
+           and Northwest (Abkhazo-Adyghean) Caucasian — the Nikolayev-Starostin
+           NCED (Moscow 1994) hypothesis; the mainstream treats the two as
+           separate families, so the node exists as the filing place for NCED
+           reconstructions (often effectively Proto-East-Caucasian, the NCED's
+           own admission where West Caucasian reflexes are absent). Corpus:
+           starling-caucet (2,327 etymologies)."
+    stages:
+      pro: {name: Proto-North-Caucasian, mode: reconstructed, ord: 5,
+            note: "ccn-pro by the family-code + -pro convention (the ccs-pro
+                   sibling)"}
+
+  ccs:
+    name: Kartvelian
+    kind: family
+    note: "ISO 639-5 ccs (South Caucasian): Georgian, Mingrelian, Laz, Svan —
+           an uncontroversial family. Backfill anchor: starling-kart shipped
+           ccs-pro before the registry discipline. Corpus: starling-kart
+           (G. Klimov and Faehnrich-Sardshveladze etymological dictionaries,
+           with S. Starostin's notes)."
+    stages:
+      pro: {name: Proto-Kartvelian, mode: reconstructed, ord: 5, wikt: ccs-pro}
+
+  bat:
+    name: Baltic
+    kind: family
+    parent: ine-bsl
+    note: "ISO 639-5 bat: Lithuanian, Latvian, Old Prussian. Whether Baltic is
+           a clade or a paraphyletic remnant beside Slavic is itself debated
+           (Wiktionary reconstructs only at the Balto-Slavic level); the node
+           is the filing place for the StarLing Baltic etymology base.
+           Backfill anchor: starling-baltet shipped bat-pro before the
+           registry discipline."
+    stages:
+      pro: {name: Proto-Baltic, mode: reconstructed, ord: 5,
+            note: "bat-pro by the family-code + -pro convention; a
+                   Moscow-school reconstruction level mainstream scholarship
+                   folds into Balto-Slavic"}
+
+  qfa-cka:
+    name: Chukotko-Kamchatkan
+    kind: family
+    note: "no ISO 639-5 code; qfa-cka is Wiktionary's family code
+           (Reconstruction:Proto-Chukotko-Kamchatkan pages verified live
+           2026-09-26). Two branches: Chukotkan (Chukchi, Koryak, Alutor,
+           Kerek) and Kamchatkan (Itelmen + the extinct Kamchadal varieties).
+           Family-level unity is generally accepted (Glottolog chuk1271),
+           Itelmen's membership debated historically; O. Mudrak's comparative
+           work (1997/2000, the StarLing databases) supports it. Corpus:
+           starling-kamet (1,099 reconstructions, Russian glosses)."
+    stages:
+      pro: {name: Proto-Chukotko-Kamchatkan, mode: reconstructed, ord: 5,
+            wikt: qfa-cka-pro}
+
+  qfa-chk:
+    name: Chukotkan
+    kind: family
+    parent: qfa-cka
+    note: "the northern branch — Chukchi (ckt), Koryak (kpy), Alutor (alr),
+           Kerek; a shallow dialect-chain-like group. CODE COINED in
+           Wiktionary's qfa- style: neither ISO 639-5 nor Wiktionary names
+           the branch. Corpus: starling-chuket (O. Mudrak's 2,281
+           Chukchee-Koryak reconstructions, subordinate to the qfa-cka base)."
+    stages:
+      pro: {name: Proto-Chukotkan (Chukchee-Koryak), mode: reconstructed,
+            ord: 5}
+
+  itl:
+    name: Itelmen
+    parent: qfa-cka
+    note: "sole survivor of the Kamchatkan branch (Western Itelmen, moribund;
+           Eastern and Southern Kamchadal extinct by the 19th c. — recorded in
+           Krasheninnikov's and Dybowski's wordlists). Parent edge kept at the
+           family root: the Kamchatkan branch node is deliberately not minted,
+           Itelmen being its only coded member. Corpus: starling-itelet
+           (O. Mudrak's 1,673 Proto-Itelmen reconstructions carrying
+           Dybowski's W/S Kamchadal records)."
+    stages:
+      pro: {name: Proto-Itelmen, mode: reconstructed, ord: 5,
+            note: "the gmq:pro shape — a reconstructed stage on a language
+                   anchor, standing for the Kamchatkan branch proto"}
+
+  qfa-yen:
+    name: Yeniseian
+    kind: family
+    note: "no ISO 639-5 code; qfa-yen is Wiktionary's family code
+           (Reconstruction:Proto-Yeniseian pages verified live 2026-09-26).
+           Ket (ket, sole survivor) and Yugh (yug, extinct ~1970s) plus the
+           18th/19th-c.-recorded extinct Kott (zko), Arin (xrn), Pumpokol
+           (xpm), Assan. External proposals stay claims, no parent edge:
+           Starostin's Sino-Caucasian (with North Caucasian and Sino-Tibetan)
+           and Vajda's Dene-Yeniseian (2010). Corpus: starling-yenet (1,059
+           Starostin 1995 reconstructions, Russian glosses)."
+    stages:
+      pro: {name: Proto-Yeniseian, mode: reconstructed, ord: 5,
+            wikt: qfa-yen-pro}
 
 # ── Scripts (the ~ axis) ─────────────────────────────────────────────────────
 #
