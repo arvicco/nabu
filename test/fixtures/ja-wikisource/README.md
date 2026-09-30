@@ -14,13 +14,25 @@ censused page class:
 - `12868.json` — 万葉集/第三巻: TRIMMED to the front matter + the
   03/0235 / 03/0235S variant pair (the 或本歌 whose letter-suffixed
   歌番号 collided URNs at the live first sync when stripped).
-- `46951.json` — 北条五代記/巻第二 (whole): a sibling-transclusion
-  shell — its whole content is `{{:北条五代記/巻第一|巻=二|…}}`, the
-  text rendered by another page's machinery (230 such pages at the
-  live first sync). The third skip-by-rule class.
+- `46951.json` — 北条五代記/巻第二: a dispatcher shell
+  (`{{:北条五代記/巻第一|巻=二|…}}` — the text renders from another
+  page's template machinery). Shell wikitext whole; since P111-2 it
+  carries the real `action=expandtemplates` payload under "expanded"
+  (fetched 2026-09-30), TRIMMED 216,075 → 8,795 chars at a sentence
+  boundary inside section 一 — nav divs, TOC self-links, volume list,
+  inputbox and HTML ruby all inside the trim, so the furniture strip
+  is tested against reality.
 - `8082.json` — 方丈記 (國文大觀): a `<pages index>` ProofreadPage
-  scan-transclusion shell (whole) with a real 底本 line. The declared
-  residue class (78 in the live cone).
+  scan-transclusion shell with a real 底本 line. Shell wikitext
+  whole; since P111-2 it carries 2 of its 14 Page:-namespace
+  wikitexts under "pages" (Page:Kokubun taikan 09 part2.djvu/43-44,
+  each whole, fetched 2026-09-30 — page 44 starts mid-sentence, the
+  cross-page join case; page 43 carries a `{{*|やけイ}}` marginal
+  apparatus note).
+- `48325.json` — 東照宮御実紀附録/巻十九 (whole, from the box's own
+  canonical envelope): a dispatcher shell with deliberately NO
+  expansion payload — the payload-less skip-by-rule class (stale
+  trees, empty expansions).
 - `7285.json` — 徒然草 (校註日本文學大系): direct prose with 底本,
   ruby {{r|...}}, iteration-mark and {{smaller|〔…〕}} templates, dan
   numbers. TRIMMED to the header + the first two dan (101,091 → 3,456
