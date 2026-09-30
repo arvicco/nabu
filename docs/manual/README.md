@@ -56,6 +56,9 @@ this project has already observed such drift, the doc says so.
 
 Live sources whose acquisition is manual today:
 
+- [aclt.md](aclt.md) — the ACLT Luwian corpus: personal research
+  grant, delivered by email as one 7z of Tsakorpus JSON
+  (research_private).
 - [gpc.md](gpc.md) — the GPC open subset: supplied by the GPC editors
   by email (gpc@geiriadur.ac.uk); a site publication of the subset is
   upstream's announced future channel.
