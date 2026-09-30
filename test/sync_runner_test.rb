@@ -19,13 +19,14 @@ class SyncRunnerTest < Minitest::Test
   # no-arg construction can reach it.
   class BreakerAdapter < Nabu::Adapter
     class << self
-      attr_accessor :urns, :fetch_count, :fetch_sha, :fetch_error
+      attr_accessor :urns, :fetch_count, :fetch_sha, :fetch_error, :doc_metadata
 
-      def reset!(urns: [])
+      def reset!(urns: [], doc_metadata: {})
         self.urns = urns
         self.fetch_count = 0
         self.fetch_sha = "sha-1"
         self.fetch_error = false
+        self.doc_metadata = doc_metadata
       end
     end
 
@@ -51,7 +52,8 @@ class SyncRunnerTest < Minitest::Test
     end
 
     def parse(ref)
-      doc = Nabu::Document.new(urn: ref.id, language: "grc", title: "t", canonical_path: ref.path)
+      doc = Nabu::Document.new(urn: ref.id, language: "grc", title: "t", canonical_path: ref.path,
+                               metadata: self.class.doc_metadata || {})
       doc << Nabu::Passage.new(urn: "#{ref.id}:1", language: "grc", text: "α", text_normalized: "α", sequence: 0)
       doc
     end
@@ -62,8 +64,15 @@ class SyncRunnerTest < Minitest::Test
   class CountingSource < Nabu::Adapter
     def self.slug = raise(NotImplementedError)
     def self.fetches = @fetches ||= 0
-    def self.reset! = @fetches = 0
+    def self.reset! = (@fetches = 0).tap { @text = nil }
     def self.bump! = @fetches = fetches + 1
+    # Mutable passage text so a test can make a re-sync content-bearing
+    # (P110-1: an idempotent re-sync no longer reindexes).
+    def self.text = @text ||= "α"
+
+    class << self
+      attr_writer :text
+    end
 
     def self.manifest
       Nabu::SourceManifest.new(
@@ -85,8 +94,10 @@ class SyncRunnerTest < Minitest::Test
     end
 
     def parse(ref)
+      text = self.class.text
       doc = Nabu::Document.new(urn: ref.id, language: "grc", title: "t", canonical_path: ref.path)
-      doc << Nabu::Passage.new(urn: "#{ref.id}:1", language: "grc", text: "α", text_normalized: "α", sequence: 0)
+      doc << Nabu::Passage.new(urn: "#{ref.id}:1", language: "grc", text: text, text_normalized: text,
+                               sequence: 0)
       doc
     end
   end
@@ -613,6 +624,60 @@ class SyncRunnerTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # P110-1 (the P109-5 FTS-storm root fix): a sync whose load changed
+  # NOTHING passage-visible — a metadata-only reconcile, or a pure
+  # idempotent re-parse — must not rewrite the source's FTS slice at all.
+  # The Indexer spy proves no entry point fires; the facet/timeline lanes
+  # still refresh (metadata-only counts as updated, and those lanes read
+  # the metadata that just changed).
+  def test_metadata_only_sync_skips_the_reindex
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    BreakerAdapter.doc_metadata = { "bu" => "史部" }
+    outcome = forbidding_index_work { runner.sync("breaker") }
+
+    refute outcome.aborted?
+    assert_equal 1, outcome.load_report.updated
+    assert_equal 0, outcome.load_report.revised
+    assert_nil outcome.indexed, "a metadata-only sync carries no index count"
+
+    # The metadata landed even though the index was left alone.
+    row = Nabu::Store::Document.first(urn: "urn:cts:test:w1")
+    assert_equal({ "bu" => "史部" }, JSON.parse(row.metadata_json))
+    # The FTS slice from the first sync still serves.
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    assert_equal 1, fulltext[:passages_fts].count
+  ensure
+    fulltext&.disconnect
+  end
+
+  def test_idempotent_resync_skips_the_reindex
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    outcome = forbidding_index_work { runner.sync("breaker") }
+
+    refute outcome.aborted?
+    assert_equal 1, outcome.load_report.skipped
+    assert_nil outcome.indexed
+  end
+
+  # A content change keeps the reindex, of course — the skip gate must
+  # never eat a real revision.
+  def test_content_change_still_reindexes
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    BreakerAdapter.urns = %w[urn:cts:test:w1 urn:cts:test:w2]
+    outcome = runner.sync("breaker")
+
+    assert_equal 2, outcome.indexed
+  end
+
   # A tripped breaker loads nothing and its Outcome has no index count.
   def test_aborted_sync_reports_no_index_count
     urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
@@ -681,8 +746,11 @@ class SyncRunnerTest < Minitest::Test
                                 text: "β", text_normalized: "β", content_sha256: "x", revision: 1,
                                 withdrawn: false)
 
+    # A content-bearing re-sync (one urn added — P110-1: an idempotent one
+    # would skip the reindex outright): the count stays slice-scoped.
+    BreakerAdapter.urns = %w[urn:cts:test:w1 urn:cts:test:w2 urn:cts:test:w3]
     outcome = runner.sync("breaker")
-    assert_equal 2, outcome.indexed, "the count is breaker's own live passages, not the corpus total"
+    assert_equal 3, outcome.indexed, "the count is breaker's own live passages, not the corpus total"
   end
 
   # The withdrawn-document pin: a doc withdrawn upstream LEAVES the index at
@@ -964,6 +1032,9 @@ class SyncRunnerTest < Minitest::Test
     refute_nil Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "live-enabled",
                                                        stage: "fetch")
 
+    # Each re-sync changes the passage text so the load is content-bearing —
+    # an idempotent re-sync would skip the index slice entirely (P110-1).
+    LiveEnabled.text = "β"
     second_stages = []
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label, eta) { second_stages << [label, eta] })
     runner.sync("live-enabled", progress: reporter)
@@ -979,6 +1050,7 @@ class SyncRunnerTest < Minitest::Test
     slice_eta = second_stages.assoc("index slice: live-enabled (fts + lemma rows)").fetch(1)
     assert_predicate slice_eta, :none?, "the slice's own first pass — honest no-estimate"
 
+    LiveEnabled.text = "γ"
     third_stages = []
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label, eta) { third_stages << [label, eta] })
     runner.sync("live-enabled", progress: reporter)
