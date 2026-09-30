@@ -21,8 +21,9 @@ redistribution.
 3. Place it under `incoming/aclt/` in the library root.
 4. Run `bin/nabu sync aclt`. The drop is validated (7z magic bytes),
    moved into `canonical/aclt/`, sha-stamped in `.manual-fetch.json`,
-   and its `luwian_aclt/json/` tree extracted beside it (bsdtar; a
-   declared materialization). The parse then loads one document per
+   and its `luwian_aclt/json/` tree extracted beside it (bsdtar — on
+   macOS it ships with the OS; on Linux install `libarchive-tools`;
+   a declared materialization). The parse then loads one document per
    inscription — 266 at the 2026-09 delivery, with upstream's one
    tombstone file skipping by rule.
 
