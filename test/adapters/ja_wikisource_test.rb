@@ -29,14 +29,69 @@ module Adapters
 
     def doc(pageid) = documents.find { |d| d.urn.end_with?(":#{pageid}") } || flunk("#{pageid} missing")
 
-    def test_versions_and_pages_index_shells_skip_by_rule
+    def test_payload_less_shells_skip_by_rule
       ids = conformance_adapter.discover(FIXTURES).map(&:id).sort
       assert_equal %w[urn:nabu:ja-wikisource:11940 urn:nabu:ja-wikisource:12868
-                      urn:nabu:ja-wikisource:7285], ids,
-                   "土佐日記 ({{versions}}), 方丈記 (<pages index>) and the 北条五代記 " \
-                   "sibling-transclusion shell never become documents"
+                      urn:nabu:ja-wikisource:46951 urn:nabu:ja-wikisource:7285
+                      urn:nabu:ja-wikisource:8082], ids,
+                   "shells WITH expansion payloads (方丈記 pages, 北条五代記 expanded) are " \
+                   "documents; 土佐日記 ({{versions}}) and the payload-less 東照宮御実紀附録 " \
+                   "dispatcher shell stay skips"
       skips = conformance_adapter.discovery_skips(FIXTURES)
-      assert_equal 3, skips.skipped_by_rule
+      assert_equal 2, skips.skipped_by_rule
+    end
+
+    # -- the <pages index> expansion (P111-2, Q109-1 mold A) -----------------
+
+    def test_pages_index_shell_parses_from_its_page_payloads
+      d = doc(8082)
+      assert_equal "jpn", d.language
+      texts = d.passages.map(&:text)
+      assert(texts.any? { |t| t.start_with?("行く川のながれは絕えずして") },
+             "the Page:-namespace text is the document body")
+      assert(texts.any? { |t| t.include?("民部の省まで移りて、ひとよがほどに") },
+             "page 43→44 joins mid-sentence — the scan's own flow, one paragraph")
+      refute(texts.any? { |t| t.include?("pagequality") }, "noinclude furniture never leaks")
+      assert(texts.any? { |t| t.include?("或はこぞ破れてことしは造り") },
+             "the {{*|…}} marginal apparatus strips — modern-edition variant notes, not text")
+      assert_includes d.metadata["base_edition"], "国文大観", "the shell header's 底本 still rides"
+    end
+
+    def test_pages_tag_attribute_variants_enumerate_page_titles
+      quoted = Nabu::Adapters::JaWikisource.pages_tag_titles(
+        '<pages index="Kokubun taikan 09 part2.djvu" from="43" to="45"/>'
+      )
+      assert_equal ["Page:Kokubun taikan 09 part2.djvu/43", "Page:Kokubun taikan 09 part2.djvu/44",
+                    "Page:Kokubun taikan 09 part2.djvu/45"], quoted
+      bare = Nabu::Adapters::JaWikisource.pages_tag_titles(
+        "<pages index=NDL-DC.pdf from=3 to=4 />"
+      )
+      assert_equal ["Page:NDL-DC.pdf/3", "Page:NDL-DC.pdf/4"], bare
+      include_form = Nabu::Adapters::JaWikisource.pages_tag_titles(
+        '<pages index="Hōbun.pdf" include="1-3,7"/>'
+      )
+      assert_equal ["Page:Hōbun.pdf/1", "Page:Hōbun.pdf/2", "Page:Hōbun.pdf/3",
+                    "Page:Hōbun.pdf/7"], include_form
+    end
+
+    # -- the dispatcher-shell expansion (P111-2, Q109-1 mold B) --------------
+
+    def test_expanded_dispatcher_shell_parses_with_furniture_stripped
+      d = doc(46_951)
+      assert_equal "jpn", d.language
+      assert_equal "北条五代記/巻第二", d.title
+      texts = d.passages.map(&:text)
+      assert(texts.any? { |t| t.start_with?("聞しは昔。管領上杉修理") },
+             "ruby readings (<rt>) drop, base text (<rb>) stays")
+      refute(texts.any? { |t| t.include?("巻第一") && t.include?("巻第三") },
+             "the navigationHeader prev/next furniture never leaks")
+      refute(texts.any? { |t| t.include?("姉妹プロジェクト") || t.include?("仮名草子") },
+             "the navigationNotes editorial block never leaks")
+      refute(texts.any? { |t| t.include?("北条氏綱と上杉朝定合戦の事") },
+             "TOC self-links and heading links strip — headings ride as sections, not text")
+      body = d.passages.find { |p| p.text.start_with?("聞しは昔") }
+      assert_equal "一　北条氏綱と上杉朝定合戦の事", body.annotations["section"],
+                   "the parent-page heading link becomes the section annotation"
     end
 
     def test_prose_page_parses_at_paragraph_grain_with_dan_sections
