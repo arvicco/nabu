@@ -65,6 +65,18 @@ module Nabu
 
       def self.manifest = MANIFEST
 
+      # A ManualDrop source has no fetch URL to drift against; the probe
+      # HEADs the public search UI for liveness only (also the watch
+      # surface should a public export ever appear).
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "luwian.web-corpora.net", zip_url: MANIFEST.upstream_url, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       # The extracted json tree is the fetch's own artifact beside the
       # held archive (Q59-a): declared, hashed into the tree identity.
       def self.materialized_paths = ["luwian_aclt"]

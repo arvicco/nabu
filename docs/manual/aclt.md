@@ -1,8 +1,9 @@
 # ACLT — acquiring the Luwian corpus (manual drop)
 
-Where from: a personal research grant — the corpus arrives **by email**
-from the ACLT team. The public surface is the search UI at
-luwian.web-corpora.net (Tsakorpus); no download URL exists.
+Where from: personal grant — the corpus JSON arrives by email from the
+ACLT team (the public search UI is
+https://luwian.web-corpora.net/luwian_corpus/search); no download URL
+exists.
 
 The grant's terms, honored by the adapter: personal research use only
 (`license_class: research_private` — excluded from every public
