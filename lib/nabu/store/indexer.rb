@@ -211,6 +211,32 @@ module Nabu
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
 
+      # == The bulk slice mode (P111-1, Q111) — big content-bearing re-parses
+      #
+      # MEASURED problem: refresh_source!'s slice rewrite (delete + reinsert)
+      # is FTS5-pathological at millions of rows — automerge (default 4) and
+      # deletemerge (default 10%) fire DURING the delete storm and the
+      # batched inserts, spinning in fts5IndexMergeLevel/fts5DataDelete (the
+      # kanripo shape: 6h18m for an 8.75M-row slice; P110-1's skip only
+      # covers the nothing-changed case). The fix is SQLite's own documented
+      # bulk recipe: at/above BULK_SLICE_THRESHOLD ids, defer every merge
+      # (automerge 0, crisismerge raised out of reach, deletemerge 0 — the
+      # contentless_delete tombstones append without triggering b-tree
+      # rewrites), run the ordinary slice work, ENSURE-restore the defaults
+      # (they are PERSISTED index config — a crashed run must never leave a
+      # never-merging index), then consolidate in an announced bounded loop
+      # of positive ('merge', N) commands until the total_changes probe says
+      # no work was done (< 2 — the documented completion signal). Positive
+      # merges only touch levels at/above the usermerge threshold, so the
+      # loop is proportional to the segment storm THIS slice created, never
+      # an optimize-scale whole-index rewrite. Contentless shape only — a
+      # legacy contentful file keeps the old path until its next full
+      # rebuild, like every other shape arrival.
+      BULK_SLICE_THRESHOLD = 500_000
+      BULK_MERGE_SETTINGS = { "automerge" => 0, "crisismerge" => 100_000, "deletemerge" => 0 }.freeze
+      DEFAULT_MERGE_SETTINGS = { "automerge" => 4, "crisismerge" => 16, "deletemerge" => 10 }.freeze
+      MERGE_CHUNK_PAGES = 2_000
+
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
       # catalog (where the pristine text and annotations stay) without
@@ -487,7 +513,8 @@ module Nabu
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
                           cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
                           sign_list: nil, progress: nil,
-                          ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
+                          ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil,
+                          bulk_threshold: BULK_SLICE_THRESHOLD)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
@@ -513,72 +540,79 @@ module Nabu
         # each multi-second sub-step records its wall time to the ledger's
         # stage_timings under kind "sync" and announces with the estimate
         # the LAST sync of this source earned.
-        timed_sync_stage(ledger, slug, "index_slice",
-                         "index slice: #{slug} (fts + lemma rows)", progress) do
-          fulltext.transaction do
-            # P42-1: snapshot this source's lemma-frequency contribution BEFORE
-            # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
-            # freq table (same transaction). incremental_ready? guarantees the
-            # table exists here; both snapshots are urn-scoped and B-tree bounded.
-            before = LemmaFrequencies.snapshot(fulltext, urns)
-            deleted = delete_source_lemma_rows(fulltext, urns)
-            if fts_contentless?(fulltext)
-              delete_fts_rows_by_rowid(fulltext, TABLE, ids)
-            else
-              delete_fts_rows(fulltext, TABLE, ids)
-            end
-            count, inserted, chars = insert_passage_batches(
-              fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
-              source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress
-            )
-            # P84-1: re-apply the silver-lemma slice — the delete above
-            # stripped any shelf-projected rows for these urns, and the
-            # annotation re-derivation never re-mints them. Scoped to this
-            # source's urns; the frequency delta below counts the re-landed
-            # rows because the after-snapshot runs later in this txn.
-            # №R-51-B ARM-GATE: only when the owner has projected the shelf
-            # (any silver row standing) — an unarmed index stays
-            # silver-free through syncs.
-            if lemma_shelf && silver_armed?(fulltext)
-              silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
-                                                 urns: urns.to_set,
-                                                 dictionary_filter_slugs: Array(lemma_filter_slugs))
-              inserted += silver.rows_inserted
-            end
-            lemmas_changed = deleted.positive? || inserted.positive?
-            LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
-            refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
-            # P93-3: the CJK lane's slice — same drift-honest contract as
-            # the trigram slice; a fulltext file predating the lane skips
-            # here and bootstraps below (flagged sources only).
-            refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
-            # P65: swap this source's char-postings slice; a pre-P65 fulltext
-            # file (no table) gets the whole postings build below instead —
-            # NEVER a full FTS rebuild for a missing derived sub-table.
-            if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
-              fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
-              write_char_postings(fulltext, chars)
-            end
-            # P72-1: swap this source's coverage-index slice too (ranks from
-            # current postings — performance-only, the exact check verifies).
-            if fulltext.table_exists?(PASSAGE_CHARS_TABLE)
-              fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
-              write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
-            end
-            # P77-r16: swap this source's SIGN-coverage slice (SIGN_SOURCES
-            # only; ranks from the standing sign_postings — performance-only;
-            # a nil sign_list leaves the slice deleted, honest to the load).
-            if fulltext.table_exists?(PASSAGE_SIGNS_TABLE) && SIGN_SOURCES.include?(slug)
-              fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
-              if sign_list
-                progress&.stage("sign coverage: re-tokenizing the #{slug} slice")
-                write_passage_signs(fulltext,
-                                    passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id,
-                                                                                     progress: progress))
+        bulk_tables = bulk_slice_tables(fulltext, ids, bulk_threshold)
+        unless bulk_tables.empty?
+          progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred")
+        end
+        with_bulk_write_mode(fulltext, bulk_tables) do
+          timed_sync_stage(ledger, slug, "index_slice",
+                           "index slice: #{slug} (fts + lemma rows)", progress) do
+            fulltext.transaction do
+              # P42-1: snapshot this source's lemma-frequency contribution BEFORE
+              # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
+              # freq table (same transaction). incremental_ready? guarantees the
+              # table exists here; both snapshots are urn-scoped and B-tree bounded.
+              before = LemmaFrequencies.snapshot(fulltext, urns)
+              deleted = delete_source_lemma_rows(fulltext, urns)
+              if fts_contentless?(fulltext)
+                delete_fts_rows_by_rowid(fulltext, TABLE, ids)
+              else
+                delete_fts_rows(fulltext, TABLE, ids)
+              end
+              count, inserted, chars = insert_passage_batches(
+                fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
+                source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress
+              )
+              # P84-1: re-apply the silver-lemma slice — the delete above
+              # stripped any shelf-projected rows for these urns, and the
+              # annotation re-derivation never re-mints them. Scoped to this
+              # source's urns; the frequency delta below counts the re-landed
+              # rows because the after-snapshot runs later in this txn.
+              # №R-51-B ARM-GATE: only when the owner has projected the shelf
+              # (any silver row standing) — an unarmed index stays
+              # silver-free through syncs.
+              if lemma_shelf && silver_armed?(fulltext)
+                silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
+                                                   urns: urns.to_set,
+                                                   dictionary_filter_slugs: Array(lemma_filter_slugs))
+                inserted += silver.rows_inserted
+              end
+              lemmas_changed = deleted.positive? || inserted.positive?
+              LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
+              refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+              # P93-3: the CJK lane's slice — same drift-honest contract as
+              # the trigram slice; a fulltext file predating the lane skips
+              # here and bootstraps below (flagged sources only).
+              refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
+              # P65: swap this source's char-postings slice; a pre-P65 fulltext
+              # file (no table) gets the whole postings build below instead —
+              # NEVER a full FTS rebuild for a missing derived sub-table.
+              if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+                fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+                write_char_postings(fulltext, chars)
+              end
+              # P72-1: swap this source's coverage-index slice too (ranks from
+              # current postings — performance-only, the exact check verifies).
+              if fulltext.table_exists?(PASSAGE_CHARS_TABLE)
+                fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
+                write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
+              end
+              # P77-r16: swap this source's SIGN-coverage slice (SIGN_SOURCES
+              # only; ranks from the standing sign_postings — performance-only;
+              # a nil sign_list leaves the slice deleted, honest to the load).
+              if fulltext.table_exists?(PASSAGE_SIGNS_TABLE) && SIGN_SOURCES.include?(slug)
+                fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
+                if sign_list
+                  progress&.stage("sign coverage: re-tokenizing the #{slug} slice")
+                  write_passage_signs(fulltext,
+                                      passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id,
+                                                                                       progress: progress))
+                end
               end
             end
           end
         end
+        consolidate_after_bulk!(fulltext, bulk_tables, slug: slug, ledger: ledger, progress: progress)
         timed_sync_stage(ledger, slug, "postings_swaps",
                          "index slice: #{slug} — postings/coverage swaps", progress) do
           unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
@@ -679,6 +713,72 @@ module Nabu
           end
         end
         count
+      end
+
+      # -- the bulk slice mode internals (P111-1) ----------------------------
+
+      # The FTS5 tables the bulk recipe governs for this slice: engaged only
+      # at/above +threshold+ ids and only against the contentless shape (the
+      # constants' class note); the cjk lane joins whenever it exists — its
+      # slice shares the same delete+insert mechanics. The trigram lane
+      # stays out: contentful shape, and its scoped sources (documentary
+      # shelves) never reach bulk size.
+      def bulk_slice_tables(fulltext, ids, threshold)
+        return [] if ids.size < threshold || !fts_contentless?(fulltext)
+
+        [TABLE] + (fulltext.table_exists?(CJK_TABLE) ? [CJK_TABLE] : [])
+      end
+
+      # Apply the deferred-merge settings around the block and ALWAYS
+      # restore the defaults — the settings are persisted index config, so
+      # an exception must not leave a never-merging index behind.
+      def with_bulk_write_mode(fulltext, tables)
+        return yield if tables.empty?
+
+        begin
+          tables.each { |table| apply_merge_settings(fulltext, table, BULK_MERGE_SETTINGS) }
+          yield
+        ensure
+          tables.each { |table| apply_merge_settings(fulltext, table, DEFAULT_MERGE_SETTINGS) }
+        end
+      end
+
+      # FTS5 config commands ride the special INSERT form
+      # (`INSERT INTO t(t, rank) VALUES('automerge', 0)`) — expressed as a
+      # Sequel dataset insert, so the raw-DDL exception does not widen.
+      def apply_merge_settings(fulltext, table, settings)
+        settings.each { |key, value| fulltext[table].insert(table => key, :rank => value) }
+      end
+
+      # The deferred-merge consolidation after a bulk slice — its own
+      # announced stage, AFTER the defaults are restored (crash-safe order).
+      def consolidate_after_bulk!(fulltext, tables, slug:, ledger: nil, progress: nil)
+        return if tables.empty?
+
+        timed_sync_stage(ledger, slug, "fts_merge",
+                         "index slice: #{slug} — merge consolidation (deferred merges)", progress) do
+          tables.each { |table| consolidate_merges!(fulltext, table, progress: progress) }
+        end
+      end
+
+      # Positive incremental merges until the total_changes probe reports a
+      # no-op call (< 2 — the documented completion signal). Proportional to
+      # the segment storm the bulk writes created; ticks so an hours-scale
+      # consolidation is never silent.
+      def consolidate_merges!(fulltext, table, progress: nil)
+        chunks = 0
+        loop do
+          before = total_changes(fulltext)
+          fulltext[table].insert(table => "merge", :rank => MERGE_CHUNK_PAGES)
+          chunks += 1
+          progress&.stage("fts merge: #{table} — chunk #{chunks}") if (chunks % 25).zero?
+          break if total_changes(fulltext) - before < 2
+        end
+        chunks
+      end
+
+      def total_changes(fulltext)
+        fulltext.synchronize(&:total_changes)
       end
 
       # -- refresh_source! internals (P26-5) ---------------------------------
