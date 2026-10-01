@@ -116,13 +116,17 @@ class StarlingTest < Minitest::Test
                  license, "yenet credit: the yenet.inf DBINFO sentence")
   end
 
-  # P113-2: the IE package's LEXSTAT/ tables ride the license lane with
-  # the provenance the package itself states (their .inf files carry no
-  # DBINFO credit line).
+  # P113-2: the IE package's LEXSTAT/ tables ride the license lane under
+  # the package's compilers as the descrip.php roster names them (their
+  # .inf files carry no DBINFO credit line).
   def test_manifest_carries_the_lexstat_tables_credit
     manifest = adapter.manifest
     assert_match(/lexicostatistical wordlists/, manifest.name)
     assert_match(/LEXSTAT/, manifest.license, "the wordlist shelves' provenance rides every serving surface")
+    assert_includes manifest.license,
+                    "S. L. Nikolayev & S. A. Starostin — the StarLing Indo-European package " \
+                    "(Tower of Babel / StarLing project)",
+                    "the IE package's compilers (descrip.php roster) credit the 13 LEXSTAT shelves"
   end
 
   def test_content_kind_is_dictionary_and_the_source_promises_reflexes
@@ -1084,6 +1088,8 @@ class StarlingTest < Minitest::Test
     assert_equal "urn:nabu:dict:starling-lexstat-balt:58.let", result.urn
     assert_equal "neck", result.gloss
     assert_match(/properly acknowledged/, result.license, "the grant rides the result")
+    assert_match(/S\. L\. Nikolayev & S\. A\. Starostin — the StarLing Indo-European package/, result.license,
+                 "the package compilers' credit rides the result")
     assert_includes result.body, "Baltic etymology: #1634"
   end
 
