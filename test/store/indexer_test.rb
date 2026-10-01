@@ -1065,6 +1065,39 @@ module Store
       refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
     end
 
+    # P112-3 (Q114): a finished slice stamps the catalog state it serves.
+    def test_refresh_stamps_the_catalog_state_it_serves
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+      refresh!
+
+      stamp = Nabu::Store::Indexer.slice_stamps(@fulltext).fetch("s")
+
+      assert_equal 2, stamp[:live_rows]
+      assert_equal @catalog[:passages].max(:id), stamp[:max_passage_id]
+    end
+
+    # A P111-era slice_refreshes table (no stamp columns) upgrades in place
+    # at the next refresh instead of crashing on the unknown columns.
+    def test_refresh_upgrades_a_p111_era_marker_table
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      @fulltext.create_table(Nabu::Store::Indexer::SLICE_REFRESHES_TABLE) do
+        String :slug, primary_key: true
+        String :started_at, null: false
+        String :finished_at
+      end
+
+      refresh!
+
+      stamp = Nabu::Store::Indexer.slice_stamps(@fulltext).fetch("s")
+
+      assert_equal 1, stamp[:live_rows], "the upgraded table carries the fresh stamp"
+    end
+
     def test_rebuild_clears_pending_markers
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
@@ -1486,6 +1519,200 @@ module Store
       refresh!
       assert_equal 1, postings.where(char: "棄").get(:docs),
                    "a pre-P65 fulltext file gains the postings on its next sync"
+    end
+
+    # -- the text_search seam (P112-2, Q113) ---------------------------------
+    # A row whose stored text_normalized is the "" sentinel (identical to
+    # text — the loader's slimming) must index under its text: every
+    # indexer read goes through the text_search generated column.
+
+    def test_sentinel_normalized_rows_index_under_their_text
+      doc = make_document(urn: "urn:d:1")
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: "urn:d:1:1", sequence: 0, language: "lzh",
+        text: "王道蕩蕩", text_normalized: "", content_sha256: "x", revision: 1,
+        withdrawn: false, annotations_json: "{}"
+      )
+
+      assert_equal 1, rebuild!
+      assert_equal %w[urn:d:1:1], match_urns("王道蕩蕩"),
+                   "the sentinel row is searchable by its text"
+      assert_equal 3, postings.exclude(char: "").where(source_id: @source.id).count,
+                   "char postings read the coalesced form (王/道/蕩 distinct)"
+    end
+
+    # -- the delta grain (P112-1, Q112) --------------------------------------
+    # With the loader's IndexDelta on hand, refresh_source! refreshes exactly
+    # the changed rows instead of rewriting the source's whole slice (the
+    # measured pathology: an 8.9M-row cbeta rewrite serving a 35-document
+    # heal). The contract stays ROW IDENTITY against a from-scratch rebuild;
+    # the PROOF of the grain is that untouched rows are never rewritten.
+
+    # A delta whose sets are resolved from catalog urns, exactly as the
+    # loader would have minted it.
+    def delta_of(upserted: [], removed: [])
+      delta = Nabu::Store::IndexDelta.new
+      upserted.each { |urn| delta.upsert(passage_id_of(urn), urn) }
+      removed.each { |urn| delta.remove(passage_id_of(urn), urn) }
+      delta
+    end
+
+    def passage_id_of(urn) = @catalog[:passages].where(urn: urn).get(:id)
+
+    def test_delta_refresh_is_row_identical_to_a_full_rebuild
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "outdated", sequence: 1)
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "doomed 棄", sequence: 2, language: "lzh")
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ 棄", sequence: 0,
+                        annotations: token_annotations(%w[στρατηγός στρατηγοσ]))
+      options = { fuzzy_slugs: ["s"], cjk_slugs: ["s"], lemma_tiers: { "s" => "silver" } }
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, **options)
+
+      # add + revise (text and lemmas) + withdraw, exactly the slice test's
+      # mutation set — applied through a delta this time.
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "fresh 王道", sequence: 3,
+                        annotations: token_annotations(%w[φέρω φέρει]))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
+        text_normalized: "revised 国",
+        annotations_json: JSON.generate(token_annotations(%w[ὁράω ὁρᾷ]))
+      )
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
+      delta = delta_of(upserted: %w[urn:d:s:4 urn:d:s:2], removed: %w[urn:d:s:3])
+      refresh!(delta: delta, **options)
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
+                     "passages_fts must hold the identical rowid set at the delta grain"
+        assert_equal cjk_rowids(fresh), cjk_rowids(@fulltext),
+                     "the cjk lane must hold the identical rowid set at the delta grain"
+        %i[passage_lemmas passages_trigram passages_trigram_scope lemma_frequencies
+           char_postings passage_chars reflex_roots reflex_root_stats].each do |table|
+          assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
+                       "#{table} must be row-identical to a from-scratch rebuild"
+        end
+        assert_equal %w[urn:d:s:2], match_urns("revised"),
+                     "the delta-refreshed slice answers MATCH with the revised tokens"
+        assert_empty match_urns("doomed"), "the removed row stops matching"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    # THE GRAIN PROOF: a row outside the delta is never rewritten. A
+    # manually removed fts row of the same source stays missing after a
+    # delta refresh (the slice rewrite would heal it) — the refresh touched
+    # only the delta's rows.
+    def test_delta_refresh_leaves_rows_outside_the_delta_untouched
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised")
+      tampered = passage_id_of("urn:d:s:1")
+      @fulltext[:passages_fts].where(rowid: tampered).delete
+
+      refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
+
+      refute_includes fts_rowids(@fulltext), tampered,
+                      "the untouched row was not rewritten — the refresh worked the delta grain"
+      assert_equal %w[urn:d:s:2], match_urns("revised")
+    end
+
+    def test_overflowed_delta_falls_back_to_the_slice_rewrite
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+
+      # The tamper the delta grain would preserve (test above) must HEAL
+      # under the fallback: an overflowed delta carries no usable sets.
+      tampered = passage_id_of("urn:d:s:1")
+      @fulltext[:passages_fts].where(rowid: tampered).delete
+      overflowed = Nabu::Store::IndexDelta.new(cap: 0)
+      overflowed.upsert(passage_id_of("urn:d:s:2"), "urn:d:s:2")
+
+      assert_predicate overflowed, :overflowed?
+      refresh!(delta: overflowed)
+
+      assert_includes fts_rowids(@fulltext), tampered,
+                      "the overflow fallback rewrites the whole slice"
+    end
+
+    def test_healing_refresh_ignores_the_delta
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+      refresh!
+
+      # A crashed prior slice: pending marker + a half-written slice. The
+      # next refresh arrives with a (valid, small) delta — but the crashed
+      # run's work is NOT in it, so the heal must rewrite the whole slice.
+      slice_rows.where(slug: "s").update(finished_at: nil)
+      tampered = passage_id_of("urn:d:s:1")
+      @fulltext[:passages_fts].where(rowid: tampered).delete
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised")
+
+      refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
+
+      assert_includes fts_rowids(@fulltext), tampered,
+                      "a pending slice heals in full — the delta's baseline is lost"
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+    end
+
+    def test_empty_delta_still_marks_the_slice_finished
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      count = refresh!(delta: Nabu::Store::IndexDelta.new)
+
+      assert_equal 1, count, "the return stays the source's live count"
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+    end
+
+    def test_delta_refresh_returns_the_sources_live_count
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised")
+
+      assert_equal 2, refresh!(delta: delta_of(upserted: %w[urn:d:s:2])),
+                   "the count is the source's live total, not the delta size"
+    end
+
+    def test_delta_refresh_swaps_the_sign_coverage_rows_by_id
+      sign_source = Nabu::Store::Source.create(
+        slug: Nabu::Store::Indexer::SIGN_SOURCES.first, name: "Signs",
+        adapter_class: "TestAdapter", license_class: "open"
+      )
+      doc = make_document(urn: "urn:d:sign", source: sign_source)
+      make_passage(doc, urn: "urn:d:sign:1", text_normalized: "ak", sequence: 0, language: "akk")
+      make_passage(doc, urn: "urn:d:sign:2", text_normalized: "min", sequence: 1, language: "akk")
+      sign_list = Nabu::SignList.load(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"))
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, sign_list: sign_list)
+      table = @fulltext[Nabu::Store::Indexer::PASSAGE_SIGNS_TABLE]
+
+      assert_equal 2, table.count, "both sign passages carry coverage rows"
+      untouched = table.first(rowid: passage_id_of("urn:d:sign:1")).values
+
+      Nabu::Store::Passage.first(urn: "urn:d:sign:2").update(text_normalized: "min ak")
+      refresh!(slug: sign_source.slug, sign_list: sign_list,
+               delta: delta_of(upserted: %w[urn:d:sign:2]))
+
+      assert_equal 2, table.count
+      assert_equal untouched, table.first(rowid: passage_id_of("urn:d:sign:1")).values,
+                   "the unchanged passage's coverage row is untouched"
+      revised = table.first(rowid: passage_id_of("urn:d:sign:2"))
+
+      assert_equal 2, revised[:nsigns], "the revised passage's coverage re-tokenized (AK + MIN)"
     end
   end
 end
