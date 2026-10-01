@@ -5,9 +5,10 @@ require "test_helper"
 # CoraXmlParser tests (P80-5): the RAW CorA-XML family — the native export
 # of the CorA annotation tool used by the Bochum/Hamburg reference-corpus
 # projects. First registrant: ReF (Early New High German); the ReM/ReN
-# CorA-XML sibling zips (ReM's pos/msd gap, ReN's dating gap) are future
-# registrants. Fixtures are four structural trims of real ReF v1.0.2 texts
-# (test/fixtures/ref/README.md) — never hand-written.
+# CorA-XML sibling zips (ReM's pos/msd gap, ReN's dating gap) ride the
+# anno_tags / keyed-header seams. Fixtures are four structural trims of
+# real ReF v1.0.2 texts (test/fixtures/ref/README.md) plus whole ReM/ReN
+# sibling-zip members — never hand-written.
 class CoraXmlParserTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("ref")
 
@@ -190,5 +191,35 @@ class CoraXmlParserTest < Minitest::Test
       File.write(path, doc)
       assert_raises(Nabu::ParseError) { parser.body(path) }
     end
+  end
+
+  # --- the sibling-zip seams (ReM pos/msd, ReN dating) ----------------------
+  # Real CorA-XML members of the ReM v2.1 and ReN 1.1 sibling zips
+  # (test/fixtures/rem/README.md, test/fixtures/ren/README.md).
+
+  REM_CORA = File.join(Nabu::TestSupport.fixtures("rem"), "coraxml", "cora-xml", "M058.xml")
+  REN_CORA = File.join(Nabu::TestSupport.fixtures("ren"), "coraxml", "ReN_anno_2021-01-06",
+                       "Hamb._Uk._1301-1350.xml")
+
+  def test_anno_tags_map_every_tok_anno_id_to_the_requested_tags
+    tags = parser.anno_tags(REM_CORA, names: %w[pos infl])
+    assert_equal 23, tags.size,
+                 "one entry per tok_anno — 22 tokens, t9 split into t9_m1/t9_m2, punctuation included"
+    assert_equal({ "pos" => "NA", "infl" => "Dat.Sg" }, tags["t5_m1"])
+    assert_equal({ "pos" => "$_" }, tags["t7_m1"], "punctuation carries no infl element")
+    assert_equal({ "pos" => "PAVAP", "infl" => "--" }, tags["t9_m2"],
+                 "verbatim — the null policy is the adapter's, not the parser's")
+    assert_equal tags.keys, tags.keys.uniq
+  end
+
+  def test_header_takes_a_dialect_key_set
+    header = parser.header(REN_CORA, keys: Nabu::Adapters::Ren::CORA_HEADER_KEYS)
+    assert_equal "Hamb. Uk. 1301-1350", header.name
+    assert_equal "1329", header.fields["date_ReN"]
+    assert_equal "Hamburg", header.fields["place"]
+    assert_equal "nordniedersaechsisch", header.fields["language-area"]
+    assert_equal "14/1", header.fields["time"]
+    refute header.fields.key?("notes_transcription"), '"---" is upstream\'s null'
+    refute header.fields.key?("columns"), "an empty value is no value"
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "cora_xml_parser"
 require_relative "ren_tei_parser"
 
 module Nabu
@@ -43,9 +44,36 @@ module Nabu
     # dum split is invented; the 28 censused texts carry metadata
     # "upstream_language" => "niederrheinisch" (LOW_RHENISH_SLUGS below)
     # so nothing is silently mislabeled and a future re-classification has
-    # the data. Dating/localization (date_ReN, place, language-area) live
-    # ONLY in the CorA-XML sibling zip's headers — a documented follow-up,
-    # the inverse of ReM's pos/msd gap.
+    # the data.
+    #
+    # == Dating / localization (the CorA-XML sibling zip)
+    #
+    # The TEI carries no header, so dating (date_ReN, the century-half
+    # time grid), place and the language-area classification live ONLY in
+    # the deposit's CorAXML_1.1.zip — fetched as a second sha-pinned arm
+    # into the declared coraxml/ materialization (ReN_anno_2021-01-06/ +
+    # ReN_trans_2021-01-06/, one <Sigle>.xml per text — censused 1:1 with
+    # the 235 TEI sigla). Per document whose sibling exists:
+    #   cora_header — the free-text header's 43 censused keys (one fixed
+    #     order on all 235 files), verbatim, "-"/"---"/empty nulls dropped
+    #     (the aggressive-mining policy: every field rides);
+    #   date — the MetadataDates :structured envelope (the ReF mold): a
+    #     clean date_ReN ("1329", "1452-1500", "1464/65") rules; prose
+    #     datings ("[um 1300]", "Mitte 15. Jh.") are never number-scraped
+    #     and take upstream's own century-half grid (time "14/1",
+    #     "15/1-15/2" — on all 235), the raw naming both claims;
+    #   place — the header place verbatim (85 of 235 carry one); the
+    #     explicit "unbekannt" (5) is the absence of a claim and mints none
+    #     (it stays verbatim in cora_header);
+    #   dialects — the coarse-to-fine language-type → language-area chain;
+    #   facets — the genre code (P/V/U, ReM's vocabulary) as a labeled
+    #     facet row (the ReM P109-4 genre facet).
+    # The CorA token layer is NOT read: the TEI already carries the gold
+    # pos/msd/lemma (the inverse of ReM's gap). A tree without the sibling
+    # (every canonical tree fetched before the arm existed) parses exactly
+    # as before — test-pinned. The CorA header's own language line is the
+    # source of LOW_RHENISH_SLUGS below; the hardcoded list stays so the
+    # marker never depends on the sibling being present.
     #
     # == License
     #
@@ -58,14 +86,17 @@ module Nabu
     #
     # == fetch / sync policy
     #
-    # ONE versioned-immutable deposit artifact (tei_1.1.zip, 21,829,154 B)
-    # via ZipFetch with the phases hand-driven so the hard sha256 pin is
-    # checked BETWEEN download and any tree mutation (the rem/iecor mold).
-    # The record URL 302s to a short-lived signed S3 URL — ZipFetch's
-    # RedirectFollow handles it — and the zip's single top dir (tei_1.1/)
-    # strips, so canonical = anno/ + trans/ under the workdir. A future
-    # 1.2 is a new record version: the owner re-pins URL + sha and fires
-    # the re-sync. sync_policy: manual, wired: false until the owner-fired
+    # TWO versioned-immutable deposit artifacts — tei_1.1.zip (21,829,154
+    # B, the text) and CorAXML_1.1.zip (67,786,811 B, the dating headers)
+    # — via ZipFetch with the phases hand-driven so BOTH hard sha256 pins
+    # are checked BETWEEN download and any tree mutation (the openiti
+    # two-arm choreography over the rem/iecor mold). The record URLs 302
+    # to short-lived signed S3 URLs — ZipFetch's RedirectFollow handles
+    # it — and each zip's single top dir strips: canonical = anno/ +
+    # trans/ under the workdir (coraxml/ in the text arm's keep-list) and
+    # the CorA tree under coraxml/ (its own .zip-fetch.json state). A
+    # future 1.2 is a new record version: the owner re-pins URLs + shas
+    # and fires the re-sync. sync_policy: manual, wired: false until the owner-fired
     # first sync.
     class Ren < Nabu::Adapter
       RECORD_URL = "https://www.fdr.uni-hamburg.de/record/9195"
@@ -76,6 +107,46 @@ module Nabu
       # The 1.1 deposit is versioned-immutable: a mismatch is corruption or
       # an unannounced re-release, never a routine update.
       RELEASE_SHA256 = "b4cc9664268f760517b822c5d3965050ad15d31d712ba7907742c87808b7841e"
+
+      # The CorA-XML sibling (dating/localization headers): 67,786,811 B,
+      # sha256 pinned from the 2026-10-01 fixture snapshot download (md5
+      # 2bd9fc1ba540b9048b9c9586ed5a6736 cross-checked against the deposit
+      # bucket listing). Unpacks into the declared coraxml/ subtree.
+      CORAXML_URL = "https://www.fdr.uni-hamburg.de/record/9195/files/CorAXML_1.1.zip?download=1"
+      CORAXML_SHA256 = "118087efcf27a09d6268d95749f7dc87adbe18bcaa1d9186d5bcf3afe0c46049"
+      CORA_DIRNAME = "coraxml"
+
+      # The ReN CorA header's closed key set (censused 2026-10-01: all 235
+      # files carry exactly these 43, in this one order). A header line
+      # starting with anything else continues the previous value.
+      CORA_HEADER_KEYS = %w[
+        text_ReN abbr_ddd text-type reference reference_secondary edition
+        literature library library-shelfmark online scribe_or_printer place
+        extent extract columns style hands author drawer illustration date_ReN
+        online_file external_source notes_manuscript notes_language corpus
+        notes_transcription notes_annotation digitization_by collation_by
+        pre_editing_by annotation_by proofreading_by topic topic_ReN genre time
+        medium language-area base_for_transcription token language language-type
+      ].freeze
+
+      # The clean date_ReN parses (the ReF P81-1 grammar). Anything else —
+      # "[um 1300]", "Mitte 15. Jh.", multi-claim prose — is never
+      # number-scraped: it falls back to the century-half grid below.
+      DATE_EXACT = /\A(\d{4})\z/
+      # "1452-1500", "1464/65" — a 2-digit tail expands with the head's century.
+      DATE_SPAN = %r{\A(\d{4})\s*[-–/]\s*(\d{2}|\d{4})\z}
+      # Upstream's own century-half grid, on ALL 235 texts: "14/1" = 14th
+      # c., 1st half → [1300, 1350]; "15/1-15/2" spans → [1400, 1500].
+      TIME_GRID = %r{\A(\d{2})/([12])(?:-(\d{2})/([12]))?\z}
+
+      # The explicit no-place value (5 headers) — the absence of a claim.
+      UNKNOWN_PLACE = "unbekannt"
+
+      # The header genre code's vocabulary — ReM's (Rem::GENRE_LABELS),
+      # censused on ReN as P 111 / U 86 / V 38; an unlisted code rides
+      # value-only, never guessed.
+      GENRE_LABELS = { "P" => "Prosa", "V" => "Vers", "PV" => "Prosa und Vers",
+                       "U" => "Urkunde" }.freeze
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "ren",
@@ -121,16 +192,28 @@ module Nabu
       def self.remote_probe_strategy = :http_zip
 
       def self.http_probe_targets
-        [Nabu::Adapter::HttpProbeTarget.new(
-          label: "tei_1.1.zip", zip_url: ZIP_URL, metadata_url: nil,
-          state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
-        )]
+        [
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "tei_1.1.zip", zip_url: ZIP_URL, metadata_url: nil,
+            state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
+          ),
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "CorAXML_1.1.zip", zip_url: CORAXML_URL, metadata_url: nil,
+            state_subdir: CORA_DIRNAME, state_file: Nabu::ZipFetch::STATE_FILE
+          )
+        ]
       end
 
-      # +pin+ overrides the release sha (tests; a future owner re-pin drill).
-      def initialize(pin: RELEASE_SHA256)
+      # The CorA-XML sibling's unpack lands beside upstream's TEI tree
+      # (Q59-a): declared so the canonical identity stays strong.
+      def self.materialized_paths = [CORA_DIRNAME]
+
+      # +pin+ / +cora_pin+ override the release shas (tests; a future owner
+      # re-pin drill).
+      def initialize(pin: RELEASE_SHA256, cora_pin: CORAXML_SHA256)
         super()
         @pin = pin
+        @cora_pin = cora_pin
       end
 
       # One DocumentRef per anno/trans text file, sorted by urn; a workdir
@@ -147,10 +230,11 @@ module Nabu
       def parse(document_ref)
         body = parser.body(document_ref.path)
         sigle = sigle_for(document_ref.path)
+        metadata = document_metadata(body, document_ref, sigle)
+                   .merge(cora_metadata(document_ref.metadata["cora_path"]))
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: title_for(sigle),
-          canonical_path: document_ref.path,
-          metadata: document_metadata(body, document_ref, sigle)
+          canonical_path: document_ref.path, metadata: metadata
         )
         append_lines(document, body, document_ref)
         raise ParseError, "#{document_ref.path}: no manuscript lines in <body>" if document.empty?
@@ -160,22 +244,30 @@ module Nabu
         raise ParseError, "#{document_ref.path}: #{e.message}"
       end
 
-      # Download + verify the hard sha pin + unpack, phases hand-driven so
-      # the pin check runs BETWEEN download and any tree mutation (prepare →
-      # pin → mass-deletion breaker → complete); a 304 replays the stored
-      # pin and touches nothing. No network in tests: WebMock stubs.
+      # Download + verify BOTH hard sha pins + unpack, phases hand-driven
+      # so every pin check runs BETWEEN download and any tree mutation
+      # (prepare both → pins → mass-deletion breaker over both → complete
+      # both); a 304 replays the stored pin and touches nothing. No
+      # network in tests: WebMock stubs.
       def fetch(workdir, progress: nil, force: false)
-        fetch = Nabu::ZipFetch.new(url: ZIP_URL, dir: workdir,
-                                   attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress)
+        tei = Nabu::ZipFetch.new(url: ZIP_URL, dir: workdir, keep: [CORA_DIRNAME],
+                                 attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress)
+        cora = Nabu::ZipFetch.new(url: CORAXML_URL, dir: File.join(workdir, CORA_DIRNAME),
+                                  attic_dir: File.join(workdir, ATTIC_DIRNAME, CORA_DIRNAME),
+                                  progress: progress)
         begin
-          fetch.prepare!
-          verify_pin!(fetch)
-          guard_mass_deletion!(workdir, fetch.doomed_paths, force: force)
-          fetch.complete!
+          tei.prepare!
+          verify_pin!(tei)
+          cora.prepare!
+          verify_cora_pin!(cora)
+          guard_mass_deletion!(workdir, tei.doomed_paths + cora.doomed_paths, force: force)
+          tei.complete!
+          cora.complete!
         ensure
-          fetch.cleanup!
+          tei.cleanup!
+          cora.cleanup!
         end
-        Nabu::FetchReport.new(sha: fetch.sha, fetched_at: Time.now, notes: fetch_notes(fetch))
+        Nabu::FetchReport.new(sha: tei.sha, fetched_at: Time.now, notes: fetch_notes(tei, cora))
       rescue ZipFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "ren fetch failed into #{workdir}: #{e.message}"
       end
@@ -200,6 +292,7 @@ module Nabu
       end
 
       def document_refs(workdir)
+        siblings = cora_siblings(workdir)
         Dir.glob(File.join(workdir, "**", "{anno,trans}", "*.tei")).map do |path|
           sigle = sigle_for(path)
           Nabu::DocumentRef.new(
@@ -207,15 +300,88 @@ module Nabu
             id: "urn:nabu:ren:#{self.class.slug_for(sigle)}",
             path: File.expand_path(path),
             metadata: { "title" => title_for(sigle), "language" => LANGUAGE,
-                        "layer" => layer_for(path) }
+                        "layer" => layer_for(path), "cora_path" => siblings[sigle] }.compact
           )
         end.sort_by(&:id)
       end
 
+      # NFC sigle → absolute path of its CorA-XML sibling under coraxml/
+      # (empty when the sibling zip was never fetched — today's state).
+      def cora_siblings(workdir)
+        Dir.glob(File.join(workdir, CORA_DIRNAME, "*", "*.xml")).to_h do |path|
+          [sigle_for(path, ext: ".xml"), File.expand_path(path)]
+        end
+      end
+
+      # The sibling header's lanes (class note); {} when no sibling exists,
+      # so a sibling-less document's metadata is byte-identical to before.
+      def cora_metadata(cora_path)
+        return {} if cora_path.nil?
+
+        fields = CoraXmlParser.new.header(cora_path, keys: CORA_HEADER_KEYS)
+                              .fields.transform_values { |v| Normalize.nfc(v) }
+        place = fields["place"]
+        dialects = fields.values_at("language-type", "language-area").compact
+        {
+          "cora_header" => fields,
+          "date" => date_envelope(fields["date_ReN"], fields["time"]),
+          "place" => (place unless place.nil? || place == UNKNOWN_PLACE),
+          "dialects" => (dialects unless dialects.empty?),
+          "facets" => genre_facet(fields["genre"])
+        }.compact
+      end
+
+      def genre_facet(genre)
+        return nil if genre.nil?
+
+        facet = { "value" => genre }
+        facet["raw"] = GENRE_LABELS[genre] if GENRE_LABELS.key?(genre)
+        { "genre" => facet }
+      end
+
+      # The MetadataDates :structured envelope (the Ref#date_envelope
+      # mold): a clean date_ReN parse rules; prose datings take the
+      # century-half grid (raw then names both claims); neither clean →
+      # the raw string rides alone, minting nothing.
+      def date_envelope(date, time)
+        clean = parse_date_lane(date)
+        bounds = clean || parse_time_grid(time)
+        raw = [date, ("(time #{time})" if clean.nil? && time)].compact.join(" ")
+        return nil if raw.empty?
+        return { "raw" => raw } if bounds.nil?
+
+        { "not_before" => bounds[0], "not_after" => bounds[1], "raw" => raw }
+      end
+
+      def parse_date_lane(date)
+        text = date.to_s.strip
+        if (match = DATE_EXACT.match(text))
+          year = Integer(match[1], 10)
+          [year, year]
+        elsif (match = DATE_SPAN.match(text))
+          from = Integer(match[1], 10)
+          to = match[2].length == 2 ? Integer("#{match[1][0, 2]}#{match[2]}", 10) : Integer(match[2], 10)
+          from <= to ? [from, to] : nil # a descending pair is not a clean claim
+        end
+      end
+
+      def parse_time_grid(time)
+        match = TIME_GRID.match(time.to_s.strip) or return nil
+
+        first = half_bounds(match[1], match[2])
+        last = match[3] ? half_bounds(match[3], match[4]) : first
+        first[0] <= last[1] ? [first[0], last[1]] : nil
+      end
+
+      def half_bounds(century, half)
+        start = ((Integer(century, 10) - 1) * 100) + ((Integer(half, 10) - 1) * 50)
+        [start, start + 50]
+      end
+
       # The filename minus .tei IS the deposit's text sigle; NFC because
       # macOS filesystems hand globs NFD names (the umlaut sigla).
-      def sigle_for(path)
-        Normalize.nfc(File.basename(path, ".tei"))
+      def sigle_for(path, ext: ".tei")
+        Normalize.nfc(File.basename(path, ext))
       end
 
       # The human title: the sigle with its underscores read as spaces —
@@ -279,9 +445,22 @@ module Nabu
               "after reading the record"
       end
 
-      def fetch_notes(fetch)
-        base = fetch.not_modified? ? "not modified (304)" : "fdr 1.1 sha pin verified"
-        [base, attic_notes(fetch.atticked)].compact.join("; ")
+      def verify_cora_pin!(fetch)
+        return if fetch.not_modified? || fetch.sha == @cora_pin
+
+        raise Nabu::FetchError,
+              "ren: downloaded CorAXML_1.1.zip misses its sha256 pin (expected #{@cora_pin}, " \
+              "got #{fetch.sha}) — the 1.1 deposit is versioned-immutable, so this is " \
+              "corruption or an unannounced re-release; verify #{CORAXML_URL} and re-pin " \
+              "CORAXML_SHA256 only after reading the record"
+      end
+
+      def fetch_notes(tei, cora)
+        [
+          tei.not_modified? ? "not modified (304)" : "fdr 1.1 sha pin verified",
+          cora.not_modified? ? "CorAXML not modified (304)" : "CorAXML sha pin verified",
+          attic_notes(tei.atticked + cora.atticked)
+        ].compact.join("; ")
       end
     end
   end

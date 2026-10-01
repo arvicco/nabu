@@ -149,6 +149,9 @@ module Nabu
           "rem" => :place_only, # P109-4: the header's orig_place scriptorium claims
           #                       (79 of 406 docs; PLACE_KEYS) — dating already rides
           #                       its own lane
+          "ren" => :structured, # the CorA-XML sibling zip's date_ReN (clean parses) with
+          #                       the century-half time grid as the prose fallback (the
+          #                       ref mold); the header place rides the default key
           "ja-wikisource" => :era_band_key, # P109-1 (№R-74): the era-category envelope
           #                       the adapter mints ("era_band") — an ERA attribution,
           #                       precision "era", never a typed date
