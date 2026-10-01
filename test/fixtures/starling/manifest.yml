@@ -134,3 +134,20 @@ files:
     url: https://starlingdb.org/download/YENISEY.exe
     whole: false
     trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  # P113-2: IE.exe's LEXSTAT/ tables (README section "The LEXSTAT tables").
+  # Inline-only dBase III (no .var siblings upstream); same trim recipe minus
+  # the var-pointer rewrite — header + descriptors + kept records verbatim,
+  # only the record count rewritten, trailing 0x1A mirrored where upstream
+  # has one (balt/germ yes, iranet no).
+  - path: LEXSTAT/balt.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 8 of 118 records — file position 0 (the per-language date row), items 1 (all), 2 (ashes — the -666 form-less Yatvingian cell), 26 BOTH ROWS (fat n. — the synonym-slot pin → 26.lit/26.lit-b), 58 (neck — LIT/LET kãklas/kakls → baltet #1634, IN this fixture set), 64 (person — LET -1, JAT → #1065), 106 (snake — the -4/-5 non-positive cognation numbers); header + field descriptors verbatim
+  - path: LEXSTAT/germ.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 6 of 154 records — file position 0 (the date row — GOT 4, AIS 10, AEG 8, AHD 9), items 1 (all), 2 (ashes — RKS -1, AHD multiform "asca, asga"), 3 (bark — the -100 form-less Gothic cell), 58 BOTH ROWS (neck — GOT hals → germet #390, IN this fixture set; the synonym row's HOL nek / AEG swēora); header + field descriptors verbatim
+  - path: LEXSTAT/iranet.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 4 of 498 records — NUMBER 1 (*hama — form + etymon cells, the unaliased REF column, PRNUM → piet #3005), 3 (*pawasta), 127 (one of 25 headword-less records → the #127 placeholder), one of the 18 fully-empty NUMBER-0 blank slots (file position 293 — mints nothing); header + field descriptors verbatim
