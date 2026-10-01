@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 1 October 2026)</span> |
 |---|---|---|---|---|
 | `bibyeonsa` | texts | attribution | wired · manual | 273 docs / 93,528 passages |
 | `goryeosa` | texts | attribution | wired · manual | 138 docs / 31,207 passages |
@@ -26,7 +26,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `sillok` | texts | attribution | wired · manual | 743 docs / 414,321 passages |
 | `sjw` | texts | attribution | wired · manual | 297 docs / 1,896,858 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 September 2026)</span>: `lzh` 1,131,710 · `ko` 58,366 · `jpn` 17,997 · `en` 2,735 · `fra` 25 · `okm` 6.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 1 October 2026)</span>: `lzh` 1,131,710 · `ko` 58,366 · `jpn` 17,997 · `en` 2,735 · `fra` 25 · `okm` 6.
 
 ## The desk's instruments
 
