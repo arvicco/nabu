@@ -4228,6 +4228,15 @@ starling:
                    # ~9,584 reflex rows (dry-parsed at full scale). Eyeball
                    # `nabu define '*èbà'` (AED credit), `nabu etym 'aʔt'`
                    # (Ket → yenet walk).
+                   # P113-2: IE.exe's LEXSTAT/ tables (already on disk — a
+                   # `bin/nabu sync starling --parse-only` lands them, no
+                   # fetch) add thirteen shelves: ten lexicostatistical
+                   # wordlists starling-lexstat-* (23,096 form entries with
+                   # cognation numbers into baltet/germet/piet/the three
+                   # tables below) + starling-dardet 426 / -indet 520 /
+                   # -iranet 480 (dry-parsed at full scale). Eyeball
+                   # `nabu define kakls` (balt #58 → "Baltic etymology:
+                   # #1634") and `nabu define hals` (germ GOT → germet #390).
   # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
@@ -4242,7 +4251,9 @@ starling:
   # G. Klimov and Fähnrich–Sardshveladze (kartet.inf DBINFO + roster item
   # 6) — all carried verbatim in the adapter MANIFEST.license so every
   # serving surface renders them. Upstream is a hand-curated 2005-era
-  # package family: re-fetch is an owner decision.
+  # package family: re-fetch is an owner decision. EXTENSION (G. Starostin,
+  # e-mail 2026-10-01): all remaining DOWNLOADABLE databases, same
+  # conditions (any use, per-base attribution wherever displayed).
   sync_policy: manual
   # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
   # clone of nabu does NOT convey it — so `nabu sync starling` demands an
