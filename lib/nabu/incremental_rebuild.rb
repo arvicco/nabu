@@ -57,9 +57,10 @@ module Nabu
 
     # What `--dry-run --incremental` reports. +refusal+ (a message or nil)
     # preempts the verdicts. +builders_dirty+ (P89-1) announces a pending
-    # corpus-builders re-run — it is not a source verdict.
-    Plan = Data.define(:db_path, :db_exists, :refusal, :verdicts, :builders_dirty) do
-      def initialize(db_path:, db_exists:, refusal:, verdicts:, builders_dirty: false)
+    # corpus-builders re-run — it is not a source verdict. +index_dirty+
+    # (P112-4) likewise announces a pending full index re-derivation.
+    Plan = Data.define(:db_path, :db_exists, :refusal, :verdicts, :builders_dirty, :index_dirty) do
+      def initialize(db_path:, db_exists:, refusal:, verdicts:, builders_dirty: false, index_dirty: false)
         super
       end
     end
@@ -89,7 +90,7 @@ module Nabu
       with_readonly_catalog do |db|
         verdicts = @registry.each_source.map { |entry| verdict_for(db, entry) }
         Plan.new(db_path: db_path, db_exists: true, refusal: nil, verdicts: verdicts,
-                 builders_dirty: builders_dirty?(db))
+                 builders_dirty: builders_dirty?(db), index_dirty: index_core_dirty?(db))
       end
     end
 
@@ -142,6 +143,12 @@ module Nabu
       # depend on; sources whose closure moved after it simply replay
       # (over-rebuild-safe).
       trust_horizon = @trust_derivations ? Store::DerivationStamp.oldest_stamped_at(db) : nil
+      # P112-4 (Q115): a drifted index-core digest means EVERY index row
+      # may be shaped by changed code — the honest answer is one full
+      # index re-derivation at the end (per-source slice refreshes are
+      # skipped as subsumed work). Catalog stamps are untouched: the carve
+      # exists so an index-only edit never prices a catalog replay.
+      index_dirty = index_core_dirty?(db)
       @registry.each_source do |entry|
         unless replayable?(entry)
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
@@ -174,7 +181,9 @@ module Nabu
         )
         Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
         record_ingest_identity(db, entry, fingerprint)
-        indexed = (indexed || 0) + refresh_index(db, fulltext, entry, progress) unless index_inert?(entry)
+        unless index_inert?(entry) || index_dirty
+          indexed = (indexed || 0) + refresh_index(db, fulltext, entry, progress)
+        end
       end
       replay_enrichments(db)
       # P45-6: re-derive the place index only when its source was dirty (the
@@ -243,7 +252,18 @@ module Nabu
         progress&.stage("links")
         link_failures = rederive_links!(db, fulltext)
       end
-      indexed = heal_index(db, fulltext, progress) if outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
+      if index_dirty
+        # P112-4: the covering mechanism — index-core drift re-derives the
+        # fulltext index whole, then the sentinel records the code it ran as.
+        progress&.stage("fulltext index — index-core drift: full re-derivation")
+        indexed = heal_index(db, fulltext, progress)
+        Store::DerivationStamp.stamp_index!(
+          db, digest: DerivationFingerprint.index_core_digest,
+              migration_level: DerivationFingerprint.migration_level
+        )
+      elsif outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
+        indexed = heal_index(db, fulltext, progress)
+      end
       # P87-3 (Q52a): reconcile the fulltext STAGE stamps — a derivation
       # version bump (the P86-3 postings widening is the type specimen)
       # surgically re-derives exactly its own stage against the kept
@@ -326,6 +346,12 @@ module Nabu
 
     def builders_dirty?(db)
       Store::DerivationStamp.builders_digest(db) != DerivationFingerprint.builders_digest
+    end
+
+    # P112-4: an absent sentinel reads dirty (self-heals with one index
+    # rebuild — the safe direction).
+    def index_core_dirty?(db)
+      Store::DerivationStamp.index_digest(db) != DerivationFingerprint.index_core_digest
     end
 
     # May +entry+ be re-stamped without replay (P89-1, №R-54 (b))? Only
