@@ -1211,6 +1211,12 @@ indp
 1850421	cmn
 1850423	cmn
 art
+1868316	conj
+1868318	prep
+prep
+art
+cmn
+1868327	cmn
 2070096	prep
 card
 cmn

@@ -1365,6 +1365,19 @@ ptcl
 unknown
 unknown
 unknown
+1868315	unknown
+ptcl
+verb
+ptcl
+ptcl
+ptcl
+subs
+unknown
+unknown
+unknown
+unknown
+verb
+subs
 2070096	ptcl
 numr
 subs

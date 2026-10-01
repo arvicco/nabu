@@ -97,6 +97,52 @@ module Adapters
       assert_equal "impf", token["vt"]
     end
 
+    # -- the widened token lane: every word-grain scalar feature ------------
+
+    def test_tokens_carry_every_word_grain_scalar_feature_verbatim
+      passage = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.1")
+      verb = passage.annotations["tokens"].find { |t| t["n"] == 298_559 } # וַֽיְהִי — wayyiqtol of HJH
+      {
+        "g_word" => "J:HIJ03", "g_cons" => "JHJ", "g_cons_utf8" => "יהי", "g_lex" => "HIJ",
+        "g_lex_utf8" => "הִי", "g_pfm" => "!J:!", "g_pfm_utf8" => "יְ", "g_vbe" => "[",
+        "lex0" => "HJH", "lex_utf8" => "היה", "voc_lex" => "HJH", "voc_lex_utf8" => "היה",
+        "languageISO" => "hbo", "ls" => "vbcp", "pdp" => "verb", "pfm" => "J", "nme" => "absent",
+        "prs" => "absent", "prs_gn" => "NA", "prs_nu" => "NA", "prs_ps" => "NA", "st" => "NA",
+        "suffix_gender" => "NA", "suffix_number" => "NA", "suffix_person" => "NA",
+        "uvf" => "absent", "vbs" => "absent",
+        "freq_occ" => 866, "lexeme_count" => 3561, "rank_lex" => 15, "rank_occ" => 38, "number" => 2
+      }.each { |name, value| assert_equal value, verb[name], "#{name} rides verbatim under its upstream name" }
+      %w[g_nme g_prs g_vbe_utf8 nametype root vbe].each do |name|
+        refute verb.key?(name), "#{name} is absent upstream for this word — absent here, never filled"
+      end
+    end
+
+    def test_sparse_word_grain_features_ride_where_upstream_carries_them
+      tokens = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.1").annotations["tokens"]
+      yhwh = tokens.find { |t| t["n"] == 298_561 }
+      assert_equal "pers", yhwh["nametype"], "named-entity type rides the word"
+      assert_equal "HWH", yhwh["root"]
+      suffixed = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.2")
+                 .annotations["tokens"].find { |t| t["n"] == 298_578 } # עָלֶ֑יהָ
+      assert_equal({ "prs" => "H", "prs_gn" => "f", "prs_nu" => "sg", "prs_ps" => "p3",
+                     "g_prs" => "+H@", "g_prs_utf8" => "הָ" },
+                   suffixed.slice("prs", "prs_gn", "prs_nu", "prs_ps", "g_prs", "g_prs_utf8"))
+    end
+
+    def test_declined_features_never_ride_tokens
+      declined = Nabu::Adapters::Bhsa::DECLINED_TOKEN_FEATURES
+      assert_empty declined.keys & Nabu::Adapters::Bhsa::TOKEN_FEATURES, "a feature is ridden or declined, never both"
+      assert(declined.values.all? { |reason| reason.is_a?(String) && !reason.empty? },
+             "every decline carries its declared reason")
+      tokens = parse_urn("urn:nabu:bhsa:ruth").passages.flat_map { |p| p.annotations["tokens"] }
+      keys = tokens.flat_map(&:keys).uniq
+      %w[kind function rela typ det g_word_utf8 language].each do |name|
+        refute_includes keys, name, "#{name} is not a token key (non-word grain, or ridden under an alias)"
+      end
+      assert_kind_of Array, tokens.find { |t| t.key?("qere") }["qere"],
+                     "the transliterated qere twin never overwrites the P27 qere word-hash list"
+    end
+
     def test_ketiv_qere_agrees_with_the_oshb_shape_and_the_p27_contract
       passage = passage_at("urn:nabu:bhsa:ruth", "urn:nabu:bhsa:ruth:1.8")
       token = passage.annotations["tokens"].find { |t| t.key?("qere") }
