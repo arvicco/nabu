@@ -476,9 +476,13 @@ module Nabu
     # P111-1b: a slice refresh that crashed mid-way (disk full, power loss)
     # left the index behind the catalog while the next load changes nothing
     # — the fulltext file's own pending marker overrides the skip, and the
-    # refresh heals the partial slice (Indexer constants note).
+    # refresh heals the partial slice (Indexer constants note). A MISSING
+    # index file is pending by definition: the sanctioned recovery is
+    # "drop the file and re-run", and the skip must never eat the re-run
+    # (the fallback full rebuild lives behind reindex! — the live
+    # 2026-10-01 recovery no-op).
     def slice_pending?(entry)
-      return false unless File.exist?(@config.fulltext_path)
+      return true unless File.exist?(@config.fulltext_path)
 
       fulltext = Store.connect_fulltext(@config.fulltext_path)
       begin
