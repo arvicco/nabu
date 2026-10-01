@@ -196,7 +196,9 @@ module Nabu
     # 1,004 non-zero links resolve). Column labels are pi.inf's aliases
     # (the three .inf files carry none); iranet's REF column has no alias
     # anywhere and keeps its siglum. None of the 13 .inf files carries a
-    # DBINFO compiler credit — the license lane names the package.
+    # DBINFO compiler credit — the license lane names the IE package's
+    # compilers per the descrip.php roster (S. L. Nikolayev & S. A.
+    # Starostin), keeping the project mention.
     #
     # P22-0 promised the follow-up bases as CONFIGURATION, not code: BASES
     # rows name every per-base policy (dbf file, headword/gloss/body fields,
@@ -301,8 +303,13 @@ module Nabu
                  "(yenet.inf DBINFO); IE package lexicostatistical tables (IE.exe LEXSTAT/: ten " \
                  "110-item wordlists with per-form cognation numbers into the PIE, Germanic and " \
                  "Baltic databases, and three Indo-Iranian etymology tables dardet/indet/iranet; " \
-                 "their .inf files name no compiler — credited as the Tower of Babel project's " \
-                 "StarLing Indo-European package, starlingdb.org)",
+                 "their .inf files carry no DBINFO, so the credit is the package's — " \
+                 "S. L. Nikolayev & S. A. Starostin — the StarLing Indo-European package " \
+                 "(Tower of Babel / StarLing project), starlingdb.org; roster: \"Indo-European " \
+                 "etymology: Compiled by Sergei Nikolayev on the basis of A. Walde and J. Pokorny's " \
+                 "dictionary, with Anatolian (Hittite) and Tocharian material added in by S. Nikolayev " \
+                 "and S. Starostin. Subordinate databases include Germanic and Baltic (also compiled " \
+                 "by S. Nikolayev)\")",
         license_class: "attribution",
         upstream_url: "https://starlingdb.org/download/IE.exe",
         parser_family: "starling-dbf"
