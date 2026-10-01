@@ -957,6 +957,18 @@ module Store
 
     def cjk_rowids(db) = db[Nabu::Store::Indexer::CJK_TABLE].select_map(Sequel.lit("rowid")).sort
 
+    # The 2026-10-01 wedge pin: fts5 caps TOTAL segments at 2000
+    # (fts5AllocateSegid → SQLITE_FULL, reading as "disk full"), and
+    # crisismerge is clamped to 1999 per-level — so disabling automerge
+    # lets a big insert flood hit the cap and WEDGE the index (even merge
+    # commands need a segment allocation). Bulk mode must only ever touch
+    # deletemerge; the insert-side merge machinery stays on.
+    def test_bulk_mode_never_touches_automerge_or_crisismerge
+      assert_equal %w[deletemerge], Nabu::Store::Indexer::BULK_MERGE_SETTINGS.keys,
+                   "automerge/crisismerge must stay at their defaults during bulk writes"
+      assert_equal %w[deletemerge], Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.keys
+    end
+
     def test_bulk_refresh_restores_the_merge_config
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)

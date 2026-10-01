@@ -214,27 +214,37 @@ module Nabu
       # == The bulk slice mode (P111-1, Q111) — big content-bearing re-parses
       #
       # MEASURED problem: refresh_source!'s slice rewrite (delete + reinsert)
-      # is FTS5-pathological at millions of rows — automerge (default 4) and
-      # deletemerge (default 10%) fire DURING the delete storm and the
-      # batched inserts, spinning in fts5IndexMergeLevel/fts5DataDelete (the
-      # kanripo shape: 6h18m for an 8.75M-row slice; P110-1's skip only
-      # covers the nothing-changed case). The fix is SQLite's own documented
-      # bulk recipe: at/above BULK_SLICE_THRESHOLD ids, defer every merge
-      # (automerge 0, crisismerge raised out of reach, deletemerge 0 — the
-      # contentless_delete tombstones append without triggering b-tree
-      # rewrites), run the ordinary slice work, ENSURE-restore the defaults
-      # (they are PERSISTED index config — a crashed run must never leave a
-      # never-merging index), then consolidate in an announced bounded loop
-      # of positive ('merge', N) commands until the total_changes probe says
-      # no work was done (< 2 — the documented completion signal). Positive
-      # merges only touch levels at/above the usermerge threshold, so the
-      # loop is proportional to the segment storm THIS slice created, never
-      # an optimize-scale whole-index rewrite. Contentless shape only — a
-      # legacy contentful file keeps the old path until its next full
-      # rebuild, like every other shape arrival.
+      # is FTS5-pathological at millions of rows — the deletemerge machinery
+      # (default: a segment with 10% tombstones becomes merge-eligible)
+      # fires DURING the contentless_delete tombstone storm, repeatedly
+      # rewriting multi-GB segments as the ratio climbs (the kanripo shape:
+      # 6h18m for an 8.75M-row slice, spinning in fts5IndexMergeLevel/
+      # fts5DataDelete; P110-1's skip only covers the nothing-changed case).
+      # Bulk mode sets deletemerge=0 for the pass so tombstones append
+      # merge-free, ENSURE-restores the default (persisted index config — a
+      # crashed run must never leave tombstones uncompactable), then
+      # consolidates in an announced bounded loop of positive ('merge', N)
+      # commands until the total_changes probe reports no work (< 2).
+      #
+      # automerge and crisismerge are DELIBERATELY left alone — the live
+      # lesson (2026-10-01, fts5_index.c read at the crash): fts5 has a hard
+      # cap of FTS5_MAX_SEGMENT = 2000 TOTAL segments, and fts5AllocateSegid
+      # returns SQLITE_FULL ("database or disk is full") at the cap;
+      # crisismerge is silently clamped to 1999 and fires per LEVEL, so with
+      # automerge=0 a big insert flood accumulates level-0 segments until
+      # the TOTAL (higher levels included) hits 2000 — the allocation fails
+      # before crisis merge can ever trigger, and the index is left
+      # write-WEDGED (even the merge command needs a segment allocation).
+      # The first two cbeta runs died exactly there, deterministically, with
+      # half a terabyte of disk free. Insert-side automerge is the same
+      # amortized logarithmic cost every rebuild pays — it was never the
+      # pathology.
+      #
+      # Contentless shape only — a legacy contentful file keeps the old path
+      # until its next full rebuild, like every other shape arrival.
       BULK_SLICE_THRESHOLD = 500_000
-      BULK_MERGE_SETTINGS = { "automerge" => 0, "crisismerge" => 100_000, "deletemerge" => 0 }.freeze
-      DEFAULT_MERGE_SETTINGS = { "automerge" => 4, "crisismerge" => 16, "deletemerge" => 10 }.freeze
+      BULK_MERGE_SETTINGS = { "deletemerge" => 0 }.freeze
+      DEFAULT_MERGE_SETTINGS = { "deletemerge" => 10 }.freeze
       MERGE_CHUNK_PAGES = 2_000
 
       # == P111-1b — the transaction shape and the slice-pending marker
