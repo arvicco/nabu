@@ -546,11 +546,26 @@ module Nabu
       # Fallback: a fulltext db missing any table (first-ever sync) or whose
       # lemma table predates the tier column falls back to the full rebuild!.
       # Returns the SOURCE's live passage count — never the corpus total.
+      # +delta+ (P112-1, Q112) is the load's Store::IndexDelta or nil. With a
+      # usable delta the refresh works the DELTA GRAIN: it deletes exactly
+      # the changed rowids from the passage-keyed tables and re-derives
+      # exactly the upserted rows, so sync index cost is proportional to what
+      # the load actually changed — never the slice size (the measured
+      # pathology: an 8.9M-row cbeta rewrite serving a 35-document heal).
+      # The whole-slice rewrite remains the fallback for: no delta (callers
+      # predating the grain, dictionary-lane syncs), an OVERFLOWED delta
+      # (the sets were freed — at that volume the slice costs the same), and
+      # a HEALING refresh (pending marker at entry: the crashed run's work
+      # is not in this load's delta, so only the full rewrite is honest).
+      # The one deliberate delta-mode exception: char_postings is a
+      # per-source AGGREGATE whose decrements would need the replaced rows'
+      # OLD text (gone by refresh time), so it is recomputed from a lean
+      # source-scoped catalog scan — reads only, never an fts write.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
                           cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
                           sign_list: nil, progress: nil,
                           ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil,
-                          bulk_threshold: BULK_SLICE_THRESHOLD)
+                          bulk_threshold: BULK_SLICE_THRESHOLD, delta: nil)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
@@ -562,7 +577,18 @@ module Nabu
         source_id = catalog[:sources].where(slug: slug).get(:id)
         return 0 if source_id.nil?
 
-        ids, urns = source_passage_keys(catalog, source_id)
+        # P111-1b: a refresh entered over an unfinished marker is a HEAL —
+        # the prior run crashed mid-slice, so the lemma-frequency delta's
+        # baseline is lost (absolute re-census below instead of the delta)
+        # and a load delta cannot cover the crashed run's missing work.
+        healing = slice_pending?(fulltext, slug)
+        use_delta = !delta.nil? && !delta.overflowed? && !healing
+        ids, urns =
+          if use_delta
+            [delta.changed_ids, delta.changed_urns.to_a]
+          else
+            source_passage_keys(catalog, source_id)
+          end
         count = 0
         lemmas_changed = false
         # P77-r16d (owner ruling 2026-08-18, applied to the WHOLE sync
@@ -576,14 +602,18 @@ module Nabu
         # each multi-second sub-step records its wall time to the ledger's
         # stage_timings under kind "sync" and announces with the estimate
         # the LAST sync of this source earned.
+        # Bulk mode binds to the WRITE VOLUME: the slice size on the rewrite
+        # path, the changed-row count at the delta grain — small deltas on a
+        # huge source never enter bulk mode (P112-1: tombstone volume stays
+        # proportional to churn, retiring the segment-pressure class).
         bulk_tables = bulk_slice_tables(fulltext, ids, bulk_threshold)
         unless bulk_tables.empty?
           progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred")
         end
-        # P111-1b: a refresh entered over an unfinished marker is a HEAL —
-        # the prior run crashed mid-slice, so the lemma-frequency delta's
-        # baseline is lost (absolute re-census below instead of the delta).
-        healing = slice_pending?(fulltext, slug)
+        if use_delta
+          progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
+                          "#{delta.removed_ids.size} removed rows")
+        end
         mark_slice_pending!(fulltext, slug)
         with_bulk_write_mode(fulltext, bulk_tables) do
           timed_sync_stage(ledger, slug, "index_slice",
@@ -600,8 +630,14 @@ module Nabu
               else
                 delete_fts_rows(fulltext, TABLE, ids)
               end
+              insert_scope =
+                if use_delta
+                  ids_scoped(live_passages(catalog), delta.upserted_ids)
+                else
+                  live_passages(catalog).where(Sequel[:documents][:source_id] => source_id)
+                end
               count, inserted, chars = insert_passage_batches(
-                fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
+                fulltext, insert_scope,
                 source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress
               )
               # P84-1: re-apply the silver-lemma slice — the delete above
@@ -627,33 +663,59 @@ module Nabu
                 LemmaFrequencies.apply_delta(fulltext, before: before,
                                                        after: LemmaFrequencies.snapshot(fulltext, urns))
               end
-              refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
-              # P93-3: the CJK lane's slice — same drift-honest contract as
-              # the trigram slice; a fulltext file predating the lane skips
-              # here and bootstraps below (flagged sources only).
-              refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
+              if use_delta
+                refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
+                refresh_cjk_delta(catalog, fulltext, slug, Array(cjk_slugs), delta)
+              else
+                refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+                # P93-3: the CJK lane's slice — same drift-honest contract as
+                # the trigram slice; a fulltext file predating the lane skips
+                # here and bootstraps below (flagged sources only).
+                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
+              end
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
               # NEVER a full FTS rebuild for a missing derived sub-table.
+              # Delta mode recomputes the aggregate from a lean source-scoped
+              # catalog scan (method note: the replaced rows' old text is gone,
+              # so exact decrements are impossible — the scan stays exact and
+              # read-only).
               if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
                 fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+                chars = source_char_postings(catalog, source_id) if use_delta
                 write_char_postings(fulltext, chars)
               end
               # P72-1: swap this source's coverage-index slice too (ranks from
               # current postings — performance-only, the exact check verifies).
+              # Delta mode swaps by rowid: the changed rows' coverage goes, the
+              # upserted rows' coverage lands, untouched rows keep theirs.
               if fulltext.table_exists?(PASSAGE_CHARS_TABLE)
-                fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
-                write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
+                if use_delta
+                  delete_rowid_slices(fulltext, PASSAGE_CHARS_TABLE, delta.changed_ids)
+                  write_passage_chars(fulltext,
+                                      passage_chars_rows(catalog, fulltext, ids: delta.upserted_ids))
+                else
+                  fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
+                  write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
+                end
               end
               # P77-r16: swap this source's SIGN-coverage slice (SIGN_SOURCES
               # only; ranks from the standing sign_postings — performance-only;
               # a nil sign_list leaves the slice deleted, honest to the load).
+              # Delta mode re-tokenizes ONLY the upserted rows (the heavy part
+              # of this lane is tokenization — the whole point of the grain).
               if fulltext.table_exists?(PASSAGE_SIGNS_TABLE) && SIGN_SOURCES.include?(slug)
-                fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
+                if use_delta
+                  delete_rowid_slices(fulltext, PASSAGE_SIGNS_TABLE, delta.changed_ids)
+                else
+                  fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
+                end
                 if sign_list
-                  progress&.stage("sign coverage: re-tokenizing the #{slug} slice")
+                  progress&.stage("sign coverage: re-tokenizing the #{slug} #{use_delta ? 'delta' : 'slice'}")
+                  sign_ids = (delta.upserted_ids if use_delta)
                   write_passage_signs(fulltext,
                                       passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id,
+                                                                                       ids: sign_ids,
                                                                                        progress: progress))
                 end
               end
@@ -702,7 +764,10 @@ module Nabu
         # The bulk pass's final reclaim — AFTER the last write, so the WAL
         # file ends the refresh truncated, not holding the postings swaps.
         checkpoint_wal!(fulltext) unless bulk_tables.empty?
-        count
+        # The slice rewrite's insert count IS the source's live total; the
+        # delta grain inserts only the changed rows, so the honest
+        # "indexed N" is counted from the catalog instead.
+        use_delta ? source_live_count(catalog, slug) : count
       end
 
       # P78-r3: announce with the last sync's estimate, run, record the
@@ -1198,16 +1263,18 @@ module Nabu
         end
       end
 
-      # The row stream for the coverage index (whole corpus, or one source's
-      # slice). Rarity rank = ascending global docs total from the postings;
+      # The row stream for the coverage index (whole corpus, one source's
+      # slice, or — +ids:+ (P112-1) — exactly the delta's upserted rows).
+      # Rarity rank = ascending global docs total from the postings;
       # a char the postings have not seen ranks rarest of all.
-      def passage_chars_rows(catalog, fulltext, source_id: nil)
+      def passage_chars_rows(catalog, fulltext, source_id: nil, ids: nil)
         ranks = char_rarity_ranks(fulltext)
         scope = live_passages(catalog)
         scope = scope.where(Sequel[:documents][:source_id] => source_id) if source_id
         scope = scope.select(Sequel[:passages][:id].as(:passage_id),
                              Sequel[:passages][:text_normalized], Sequel[:passages][:language],
                              Sequel[:documents][:source_id].as(:source_id))
+        scope = ids_scoped(scope, ids) if ids
         Enumerator.new do |y|
           scope.each do |row|
             text = row.fetch(:text_normalized).to_s
@@ -1375,12 +1442,13 @@ module Nabu
       # slice). Rarity = ascending global passage total from the postings;
       # an unseen sign ranks rarest. Sign-less rows (all numbers, or all
       # strays) are not indexed — they can never be candidates.
-      def passage_signs_rows(catalog, fulltext, sign_list, source_id: nil, inventory: nil, progress: nil)
+      def passage_signs_rows(catalog, fulltext, sign_list, source_id: nil, inventory: nil, progress: nil,
+                             ids: nil)
         inventory ||= Nabu::SignInventory.new(sign_list)
         ranks = sign_rarity_ranks(fulltext)
         seen = 0
         Enumerator.new do |y|
-          each_sign_passage(catalog, source_id: source_id, inventory: inventory) do |row, line|
+          each_sign_passage(catalog, source_id: source_id, inventory: inventory, ids: ids) do |row, line|
             progress&.load_tick(seen, 0) if ((seen += 1) % TICK_EVERY).zero?
             next if line.signs.empty?
 
@@ -1412,23 +1480,30 @@ module Nabu
       end
 
       # Stream the LIVE passages of the sign-indexed sources (or one of
-      # them), yielding [row, SignInventory::Line] for each passage whose
+      # them; +ids:+ (P112-1) narrows to exactly those passage ids),
+      # yielding [row, SignInventory::Line] for each passage whose
       # text tokenizes at all.
-      def each_sign_passage(catalog, source_id: nil, inventory: nil)
-        ids = sign_source_ids(catalog)
-        ids &= [source_id] if source_id
-        return if ids.empty?
+      def each_sign_passage(catalog, source_id: nil, inventory: nil, ids: nil, &block)
+        source_ids = sign_source_ids(catalog)
+        source_ids &= [source_id] if source_id
+        return if source_ids.empty?
 
         scope = live_passages(catalog)
-                .where(Sequel[:documents][:source_id] => ids)
+                .where(Sequel[:documents][:source_id] => source_ids)
                 .select(Sequel[:passages][:id].as(:passage_id),
                         Sequel[:passages][:text_normalized], Sequel[:passages][:language],
                         Sequel[:documents][:source_id].as(:source_id))
                 .order(Sequel[:passages][:id])
-        scope.paged_each do |row|
-          line = inventory.scan(row.fetch(:text_normalized))
-          yield(row, line) if line
+        if ids
+          ids_scoped(scope, ids).each { |row| yield_sign_line(inventory, row, &block) }
+        else
+          scope.paged_each { |row| yield_sign_line(inventory, row, &block) }
         end
+      end
+
+      def yield_sign_line(inventory, row)
+        line = inventory.scan(row.fetch(:text_normalized))
+        yield(row, line) if line
       end
 
       def sign_source_ids(catalog)
@@ -1529,6 +1604,79 @@ module Nabu
         else
           fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
         end
+      end
+
+      # The trigram lane at the delta grain (P112-1): changed rowids out,
+      # upserted rows in — provided the flag and the scope row AGREE. On
+      # config drift (newly flagged / de-flagged since the last build) the
+      # lane's membership changes wholesale, so it delegates to the slice
+      # routine with the full key set — the rare path pays the full fetch.
+      def refresh_trigram_delta(catalog, fulltext, slug, fuzzy_slugs, delta)
+        fuzzy = fuzzy_slugs.include?(slug)
+        in_scope = !fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).empty?
+        return unless fuzzy || in_scope
+
+        unless fuzzy && in_scope
+          source_id = catalog[:sources].where(slug: slug).get(:id)
+          ids, = source_passage_keys(catalog, source_id)
+          return refresh_trigram_slice(catalog, fulltext, slug, fuzzy_slugs, ids)
+        end
+
+        delete_fts_rows(fulltext, TRIGRAM_TABLE, delta.changed_ids)
+        ids_scoped(trigram_passages(catalog, [slug]), delta.upserted_ids).each_slice(BATCH_SIZE) do |batch|
+          fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
+        end
+      end
+
+      # The CJK lane at the delta grain — the trigram contract, deletes by
+      # rowid (contentless). Same config-drift delegation.
+      def refresh_cjk_delta(catalog, fulltext, slug, cjk_slugs, delta)
+        return unless fulltext.table_exists?(CJK_TABLE)
+
+        flagged = cjk_slugs.include?(slug)
+        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
+        return unless flagged || in_scope
+
+        unless flagged && in_scope
+          source_id = catalog[:sources].where(slug: slug).get(:id)
+          ids, = source_passage_keys(catalog, source_id)
+          return refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
+        end
+
+        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, delta.changed_ids)
+        ids_scoped(cjk_passages(catalog, [slug]), delta.upserted_ids).each_slice(BATCH_SIZE) do |batch|
+          fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
+        end
+      end
+
+      # Chunked where-in over catalog passage ids: one IN list per
+      # BATCH_SIZE ids keeps every statement inside SQLite's bound-variable
+      # budget, streamed as one Enumerator so the insert pass consumes it
+      # like any dataset.
+      def ids_scoped(dataset, ids)
+        Enumerator.new do |y|
+          ids.to_a.each_slice(BATCH_SIZE) do |batch|
+            dataset.where(Sequel[:passages][:id] => batch).each { |row| y << row }
+          end
+        end
+      end
+
+      # Rowid-keyed delete in bound-variable-sized slices (the coverage
+      # tables' delta swap).
+      def delete_rowid_slices(fulltext, table, ids)
+        ids.to_a.each_slice(BATCH_SIZE) { |batch| fulltext[table].where(rowid: batch).delete }
+      end
+
+      # The char-postings aggregate for ONE source, recomputed from a lean
+      # three-column catalog scan (refresh_source! delta-mode note).
+      def source_char_postings(catalog, source_id)
+        chars = Hash.new(0)
+        live_passages(catalog)
+          .where(Sequel[:documents][:source_id] => source_id)
+          .select(Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+                  Sequel[:documents][:source_id].as(:source_id))
+          .each { |row| accumulate_char_postings(chars, row) }
+        chars
       end
 
       # The CJK pass's slice of live_passages: the trigram_passages shape

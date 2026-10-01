@@ -95,12 +95,22 @@ module Store
 
     def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0,
                       skipped_by_rule: 0, collided: 0, revised: 0)
+      # index_delta (P112-1) is a collection, not a count — asserted by the
+      # delta tests, excluded from the counts comparison.
       assert_equal(
         { added: added, updated: updated, skipped: skipped, withdrawn: withdrawn,
           errored: errored, skipped_by_rule: skipped_by_rule, collided: collided,
           revised: revised },
-        report.to_h
+        report.to_h.except(:index_delta)
       )
+    end
+
+    # The delta's id sets resolved to urn suffix labels ("alpha:1"), so
+    # assertions read as content, not row ids.
+    def delta_labels(ids)
+      ids.to_a.sort.map do |id|
+        Nabu::Store::Passage.with_pk!(id).urn.sub("urn:nabu:test:", "")
+      end
     end
 
     # -- insertion -----------------------------------------------------------
@@ -995,6 +1005,162 @@ module Store
                    on_document: ->(processed, errored) { ticks << [processed, errored] })
 
       assert_equal [[1, 0], [2, 0], [3, 0]], ticks
+    end
+
+    # -- the index delta (P112-1, Q112) --------------------------------------
+    # The loader emits the changed passage id/urn sets on the LoadReport so
+    # the indexer can refresh exactly what changed instead of the whole
+    # slice. The sets must cover every row that moved in or out of the LIVE
+    # passage set — and nothing else.
+
+    def test_first_load_delta_upserts_every_passage
+      report = @loader.load([alpha, beta])
+      delta = report.index_delta
+
+      refute_nil delta
+      refute_predicate delta, :overflowed?
+      assert_equal %w[alpha:1 alpha:2 beta:1], delta_labels(delta.upserted_ids)
+      assert_empty delta.removed_ids
+      assert_equal 3, delta.upserted_urns.size
+    end
+
+    def test_idempotent_reload_delta_is_empty
+      @loader.load([alpha, beta])
+      report = fresh_loader.load([alpha, beta])
+
+      assert_predicate report.index_delta, :empty?
+    end
+
+    def test_revision_delta_carries_only_the_changed_passage
+      @loader.load([alpha])
+      report = fresh_loader.load([collides_with_alpha]) # alpha with passage 2 reworded
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:2], delta_labels(delta.upserted_ids),
+                   "the unchanged sibling passage must stay out of the delta"
+      assert_empty delta.removed_ids
+    end
+
+    def test_passage_withdrawal_delta_reports_removed
+      @loader.load([alpha])
+      shrunk = build_document("alpha", [%w[1 μῆνιν]]) # passage 2 vanished
+      report = fresh_loader.load([shrunk])
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:2], delta_labels(delta.removed_ids)
+      assert_empty delta.upserted_ids, "passage 1 is byte-identical — not re-upserted"
+    end
+
+    def test_document_sweep_delta_removes_all_its_live_passages
+      @loader.load([alpha, beta])
+      report = fresh_loader.load([beta]) # full load: alpha swept withdrawn
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:1 alpha:2], delta_labels(delta.removed_ids)
+      assert_empty delta.upserted_ids
+    end
+
+    def test_same_content_document_restore_delta_upserts_its_passages
+      @loader.load([alpha, beta])
+      fresh_loader.load([beta]) # alpha withdrawn
+      report = fresh_loader.load([alpha, beta]) # alpha restored, byte-identical
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:1 alpha:2], delta_labels(delta.upserted_ids),
+                   "a restored document's passages re-enter the live set — all must re-index"
+      assert_empty delta.removed_ids
+    end
+
+    def test_withdrawn_document_revision_delta_upserts_all_live_passages
+      @loader.load([alpha, beta])
+      fresh_loader.load([beta]) # alpha withdrawn
+      # alpha returns REVISED: passage 2 reworded, passage 1 byte-identical.
+      # Both left the index at withdrawal, so both must come back — the
+      # unchanged-sibling rule yields to the re-entry rule here.
+      report = fresh_loader.load([collides_with_alpha, beta])
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:1 alpha:2], delta_labels(delta.upserted_ids)
+    end
+
+    def test_metadata_only_reconcile_delta_is_empty
+      @loader.load([alpha])
+      relabeled = build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε]], license_override: "open")
+      report = fresh_loader.load([relabeled])
+
+      assert_report report, updated: 1
+      assert_predicate report.index_delta, :empty?,
+                       "a metadata reconcile moves nothing in or out of the live set"
+    end
+
+    def test_constraint_violation_contributes_nothing_to_the_delta
+      clash = Nabu::Document.new(
+        urn: doc_urn("clash"), language: "grc", title: "Clash",
+        canonical_path: "/canonical/test_adapter/clash.txt"
+      )
+      clash << Nabu::Passage.new(
+        urn: "#{doc_urn('alpha')}:1", language: "grc",
+        text: "δόλος", text_normalized: "δόλος", sequence: 0
+      )
+
+      report = @loader.load([alpha, clash, beta])
+
+      assert_report report, added: 2, errored: 1
+      assert_equal %w[alpha:1 alpha:2 beta:1], delta_labels(report.index_delta.upserted_ids),
+                   "the rolled-back document's staged rows must be discarded"
+    end
+
+    def test_within_pass_collision_contributes_nothing_to_the_delta
+      report = @loader.load([alpha, collides_with_alpha])
+
+      assert_report report, added: 1, collided: 1
+      assert_equal %w[alpha:1 alpha:2], delta_labels(report.index_delta.upserted_ids),
+                   "the kept row was written once; the rejected duplicate adds nothing"
+    end
+
+    def test_delta_overflow_clears_the_sets_and_flags
+      capped = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger,
+                                       index_delta_cap: 2)
+      report = capped.load([alpha, beta]) # 3 passages > cap 2
+
+      delta = report.index_delta
+
+      assert_predicate delta, :overflowed?
+      assert_empty delta.upserted_ids, "an overflowed delta frees its sets — the fallback is the slice rewrite"
+      refute_predicate delta, :empty?, "overflowed is not empty — the caller must not skip"
+    end
+
+    def test_delta_rides_frozen_on_the_report
+      report = @loader.load([alpha])
+
+      assert_predicate report.index_delta, :frozen?
+      assert_raises(FrozenError) { report.index_delta.upserted_ids << 999 }
+    end
+
+    def test_tx_batch_mode_collects_the_same_delta
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 2)
+      report = batched.load([alpha, beta, build_document("gamma", [%w[1 πόλις]])])
+
+      assert_equal %w[alpha:1 alpha:2 beta:1 gamma:1],
+                   delta_labels(report.index_delta.upserted_ids)
+    end
+
+    # A second load on the SAME loader instance starts a fresh delta — the
+    # report's sets describe one load, never an accumulation.
+    def test_each_load_gets_a_fresh_delta
+      @loader.load([alpha, beta])
+      report = @loader.load([alpha, beta])
+
+      assert_predicate report.index_delta, :empty?
+    end
+
+    def fresh_loader
+      Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger)
     end
   end
 end
