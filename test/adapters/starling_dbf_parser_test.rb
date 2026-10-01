@@ -115,6 +115,21 @@ class StarlingDbfParserTest < Minitest::Test
     assert_equal "�", record.fetch("COMMENTS")
   end
 
+  # P113-2: IE.exe's LEXSTAT/ tables are inline-only (no V descriptors,
+  # no .var sibling upstream) — the reader never touches a .var it does
+  # not need, and inline cells decode through the same StarLing table.
+  def test_an_inline_only_lexstat_table_reads_without_a_var_sibling
+    path = File.join(FIXTURES, "LEXSTAT", "balt.dbf")
+    refute File.exist?(path.sub(/\.dbf\z/, ".var"))
+    reader = parser(path)
+    assert_equal %w[NUMBER WORD LIT LITNUM LET LETNUM JAT JATNUM], reader.fields.map(&:name)
+    refute(reader.fields.any?(&:var))
+    records = reader.each_record.to_a
+    assert_equal 8, records.size
+    assert_equal "kãklas", records.find { |r| r.fetch("WORD") == "neck" }.fetch("LIT"),
+                 "the inline cell decodes ã through the StarLing single-byte table"
+  end
+
   def test_a_non_dbase_file_raises_parse_error
     error = assert_raises(Nabu::ParseError) do
       # the .var file itself is real upstream bytes but no dBase table
