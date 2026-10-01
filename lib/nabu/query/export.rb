@@ -119,7 +119,7 @@ module Nabu
           Sequel[:passages][:urn],
           Sequel[:passages][:language],
           Sequel[:passages][:text],
-          Sequel[:passages][:text_normalized],
+          Sequel[:passages][:text_search].as(:text_normalized),
           Sequel[:passages][:annotations_json]
         ]
       end

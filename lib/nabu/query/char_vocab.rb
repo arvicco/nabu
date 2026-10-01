@@ -37,7 +37,7 @@ module Nabu
         counts = Hash.new(0)
         passages = 0
         @catalog[:passages].where(document_id: doc[:id], withdrawn: false)
-                           .select_map(:text_normalized).each do |text|
+                           .select_map(:text_search).each do |text|
           passages += 1
           text.to_s.scan(Nabu::Store::Indexer::HAN).each { |char| counts[char] += 1 }
         end

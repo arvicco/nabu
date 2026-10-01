@@ -278,6 +278,13 @@ module Nabu
                                         progress: progress,
                                         lemma_shelf: lemma_shelf,
                                         lemma_filter_slugs: @registry.lemma_filter_slugs)
+      # P112-4 (Q115): the index just rebuilt under the current index-core
+      # code — mint its sentinel so an incremental run can skip the whole
+      # index honestly until an index file actually changes.
+      Store::DerivationStamp.stamp_index!(
+        db, digest: DerivationFingerprint.index_core_digest,
+            migration_level: DerivationFingerprint.migration_level
+      )
       # P70-3b (the derivability contract): the links instrument is DERIVED —
       # drop and re-mine it wholesale: every slug-scoped reference producer
       # (the sync-time lane replayed over the re-minted catalog) plus every

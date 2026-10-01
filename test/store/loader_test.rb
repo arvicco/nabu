@@ -95,12 +95,22 @@ module Store
 
     def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0,
                       skipped_by_rule: 0, collided: 0, revised: 0)
+      # index_delta (P112-1) is a collection, not a count — asserted by the
+      # delta tests, excluded from the counts comparison.
       assert_equal(
         { added: added, updated: updated, skipped: skipped, withdrawn: withdrawn,
           errored: errored, skipped_by_rule: skipped_by_rule, collided: collided,
           revised: revised },
-        report.to_h
+        report.to_h.except(:index_delta)
       )
+    end
+
+    # The delta's id sets resolved to urn suffix labels ("alpha:1"), so
+    # assertions read as content, not row ids.
+    def delta_labels(ids)
+      ids.to_a.sort.map do |id|
+        Nabu::Store::Passage.with_pk!(id).urn.sub("urn:nabu:test:", "")
+      end
     end
 
     # -- insertion -----------------------------------------------------------
@@ -126,8 +136,11 @@ module Store
       assert_match(/\A\h{64}\z/, passage.content_sha256)
 
       assert_equal 1, provenance_events(document_id: row.id, event: "loaded").size
-      assert_equal 1, provenance_events(passage_id: passage.id, event: "loaded").size
-      assert_equal 5, Nabu::Store::Provenance.count # 2 documents + 3 passages
+      # P112-2 (Q113): no per-passage "loaded" breadcrumb — at corpus scale
+      # the constant row was 95% of the provenance table; the passage's
+      # existence is its own witness, and the document-grain event remains.
+      assert_empty provenance_events(passage_id: passage.id, event: "loaded")
+      assert_equal 2, Nabu::Store::Provenance.count # the 2 documents only
     end
 
     # -- idempotency ---------------------------------------------------------
@@ -925,8 +938,9 @@ module Store
       assert_equal 1, doc_row("alpha").revision
       assert_equal 1, doc_row("gamma").revision
       assert_equal "μῆνιν", passage_row("alpha", "1").text
-      # 3 documents + 4 passages journaled "loaded", exactly as per-document.
-      assert_equal 7, Nabu::Store::Provenance.count
+      # 3 documents journaled "loaded" (P112-2: passages never are), exactly
+      # as per-document.
+      assert_equal 3, Nabu::Store::Provenance.count
     end
 
     # A savepoint per document means a constraint violation still rolls back
@@ -982,8 +996,9 @@ module Store
       commits = io.string.lines.count { |line| line.include?("COMMIT") }
 
       assert_equal 3, commits
-      # Persisted result identical to any other grain: 4 docs + 8 passages.
-      assert_equal 12, Nabu::Store::Provenance.count
+      # Persisted result identical to any other grain: 4 docs journaled
+      # (P112-2: passages never are).
+      assert_equal 4, Nabu::Store::Provenance.count
     end
 
     # The P2-6 progress contract survives batching: one running-count tick per
@@ -995,6 +1010,215 @@ module Store
                    on_document: ->(processed, errored) { ticks << [processed, errored] })
 
       assert_equal [[1, 0], [2, 0], [3, 0]], ticks
+    end
+
+    # -- the index delta (P112-1, Q112) --------------------------------------
+    # The loader emits the changed passage id/urn sets on the LoadReport so
+    # the indexer can refresh exactly what changed instead of the whole
+    # slice. The sets must cover every row that moved in or out of the LIVE
+    # passage set — and nothing else.
+
+    def test_first_load_delta_upserts_every_passage
+      report = @loader.load([alpha, beta])
+      delta = report.index_delta
+
+      refute_nil delta
+      refute_predicate delta, :overflowed?
+      assert_equal %w[alpha:1 alpha:2 beta:1], delta_labels(delta.upserted_ids)
+      assert_empty delta.removed_ids
+      assert_equal 3, delta.upserted_urns.size
+    end
+
+    def test_idempotent_reload_delta_is_empty
+      @loader.load([alpha, beta])
+      report = fresh_loader.load([alpha, beta])
+
+      assert_predicate report.index_delta, :empty?
+    end
+
+    def test_revision_delta_carries_only_the_changed_passage
+      @loader.load([alpha])
+      report = fresh_loader.load([collides_with_alpha]) # alpha with passage 2 reworded
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:2], delta_labels(delta.upserted_ids),
+                   "the unchanged sibling passage must stay out of the delta"
+      assert_empty delta.removed_ids
+    end
+
+    def test_passage_withdrawal_delta_reports_removed
+      @loader.load([alpha])
+      shrunk = build_document("alpha", [%w[1 μῆνιν]]) # passage 2 vanished
+      report = fresh_loader.load([shrunk])
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:2], delta_labels(delta.removed_ids)
+      assert_empty delta.upserted_ids, "passage 1 is byte-identical — not re-upserted"
+    end
+
+    def test_document_sweep_delta_removes_all_its_live_passages
+      @loader.load([alpha, beta])
+      report = fresh_loader.load([beta]) # full load: alpha swept withdrawn
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:1 alpha:2], delta_labels(delta.removed_ids)
+      assert_empty delta.upserted_ids
+    end
+
+    def test_same_content_document_restore_delta_upserts_its_passages
+      @loader.load([alpha, beta])
+      fresh_loader.load([beta]) # alpha withdrawn
+      report = fresh_loader.load([alpha, beta]) # alpha restored, byte-identical
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:1 alpha:2], delta_labels(delta.upserted_ids),
+                   "a restored document's passages re-enter the live set — all must re-index"
+      assert_empty delta.removed_ids
+    end
+
+    def test_withdrawn_document_revision_delta_upserts_all_live_passages
+      @loader.load([alpha, beta])
+      fresh_loader.load([beta]) # alpha withdrawn
+      # alpha returns REVISED: passage 2 reworded, passage 1 byte-identical.
+      # Both left the index at withdrawal, so both must come back — the
+      # unchanged-sibling rule yields to the re-entry rule here.
+      report = fresh_loader.load([collides_with_alpha, beta])
+
+      delta = report.index_delta
+
+      assert_equal %w[alpha:1 alpha:2], delta_labels(delta.upserted_ids)
+    end
+
+    def test_metadata_only_reconcile_delta_is_empty
+      @loader.load([alpha])
+      relabeled = build_document("alpha", [%w[1 μῆνιν], %w[2 ἄειδε]], license_override: "open")
+      report = fresh_loader.load([relabeled])
+
+      assert_report report, updated: 1
+      assert_predicate report.index_delta, :empty?,
+                       "a metadata reconcile moves nothing in or out of the live set"
+    end
+
+    def test_constraint_violation_contributes_nothing_to_the_delta
+      clash = Nabu::Document.new(
+        urn: doc_urn("clash"), language: "grc", title: "Clash",
+        canonical_path: "/canonical/test_adapter/clash.txt"
+      )
+      clash << Nabu::Passage.new(
+        urn: "#{doc_urn('alpha')}:1", language: "grc",
+        text: "δόλος", text_normalized: "δόλος", sequence: 0
+      )
+
+      report = @loader.load([alpha, clash, beta])
+
+      assert_report report, added: 2, errored: 1
+      assert_equal %w[alpha:1 alpha:2 beta:1], delta_labels(report.index_delta.upserted_ids),
+                   "the rolled-back document's staged rows must be discarded"
+    end
+
+    def test_within_pass_collision_contributes_nothing_to_the_delta
+      report = @loader.load([alpha, collides_with_alpha])
+
+      assert_report report, added: 1, collided: 1
+      assert_equal %w[alpha:1 alpha:2], delta_labels(report.index_delta.upserted_ids),
+                   "the kept row was written once; the rejected duplicate adds nothing"
+    end
+
+    def test_delta_overflow_clears_the_sets_and_flags
+      capped = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger,
+                                       index_delta_cap: 2)
+      report = capped.load([alpha, beta]) # 3 passages > cap 2
+
+      delta = report.index_delta
+
+      assert_predicate delta, :overflowed?
+      assert_empty delta.upserted_ids, "an overflowed delta frees its sets — the fallback is the slice rewrite"
+      refute_predicate delta, :empty?, "overflowed is not empty — the caller must not skip"
+    end
+
+    def test_delta_rides_frozen_on_the_report
+      report = @loader.load([alpha])
+
+      assert_predicate report.index_delta, :frozen?
+      assert_raises(FrozenError) { report.index_delta.upserted_ids << 999 }
+    end
+
+    def test_tx_batch_mode_collects_the_same_delta
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 2)
+      report = batched.load([alpha, beta, build_document("gamma", [%w[1 πόλις]])])
+
+      assert_equal %w[alpha:1 alpha:2 beta:1 gamma:1],
+                   delta_labels(report.index_delta.upserted_ids)
+    end
+
+    # A second load on the SAME loader instance starts a fresh delta — the
+    # report's sets describe one load, never an accumulation.
+    def test_each_load_gets_a_fresh_delta
+      @loader.load([alpha, beta])
+      report = @loader.load([alpha, beta])
+
+      assert_predicate report.index_delta, :empty?
+    end
+
+    def fresh_loader
+      Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger)
+    end
+
+    # -- catalog slimming (P112-2, Q113) -------------------------------------
+    # text_normalized measured byte-identical to text on the vast majority
+    # of rows (the CJK-dominated corpus folds to itself): the loader stores
+    # "" when equal (the column is NOT NULL on the standing table
+    # generation), and every reader coalesces through the text_search
+    # generated column (migration 037).
+
+    # build_document derives text_normalized by downcasing, so Han text —
+    # caseless — exercises the identical path.
+    def han_document
+      build_document("han", [%w[1 王道蕩蕩], %w[2 不偏不黨]])
+    end
+
+    def test_identical_text_normalized_stores_the_empty_sentinel
+      @loader.load([han_document])
+      stored = @db[:passages].where(urn: "#{doc_urn('han')}:1").first
+
+      assert_equal "", stored[:text_normalized], "byte-identical search form stores the sentinel"
+      assert_equal "王道蕩蕩", stored[:text_search], "the generated column coalesces to text"
+    end
+
+    def test_distinct_text_normalized_still_stores
+      # Capitalized Greek: the downcased search form differs from the text.
+      @loader.load([build_document("caps", [%w[1 Μῆνιν]])])
+      stored = @db[:passages].where(urn: "#{doc_urn('caps')}:1").first
+
+      assert_equal "μῆνιν", stored[:text_normalized]
+      assert_equal "μῆνιν", stored[:text_search]
+      assert_equal "Μῆνιν", stored[:text], "the pristine text is untouched"
+    end
+
+    def test_revision_to_identical_form_stores_the_sentinel
+      @loader.load([han_document])
+      revised = build_document("han", [%w[1 王道蕩蕩], %w[2 大道甚夷]])
+      report = fresh_loader.load([revised])
+
+      assert_report report, updated: 1, revised: 1
+      stored = @db[:passages].where(urn: "#{doc_urn('han')}:2").first
+
+      assert_equal "", stored[:text_normalized]
+      assert_equal "大道甚夷", stored[:text_search]
+    end
+
+    def test_sentinel_rows_stay_idempotent
+      @loader.load([han_document])
+      passages_before = snapshot(Nabu::Store::Passage)
+
+      report = fresh_loader.load([han_document])
+
+      assert_report report, skipped: 1
+      assert_equal passages_before, snapshot(Nabu::Store::Passage)
     end
   end
 end

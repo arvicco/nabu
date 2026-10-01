@@ -408,6 +408,59 @@ class DerivationFingerprintTest < Minitest::Test
     end
   end
 
+  # -- P112-4 (Q115): the fulltext-index carve-out ---------------------------
+  # The P111 lesson: three index-side commits dirtied every source's parse
+  # stamp, pricing the next incremental as a full catalog replay for edits
+  # that cannot change one parsed row. Index-only files leave the shared
+  # core under the same sanctioned exit as the builders: a covering digest
+  # + sentinel stamp, and drift re-derives the INDEX, never the catalog.
+
+  def test_index_files_are_carved_out_of_the_shared_core
+    Nabu::DerivationFingerprint::INDEX_FILES.each do |rel|
+      assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, rel,
+                      "#{rel} must be excluded from the shared core (covered by the index digest)"
+    end
+    assert_includes Nabu::DerivationFingerprint::INDEX_FILES, "store/indexer.rb"
+  end
+
+  def test_the_index_core_digest_censuses_every_carved_file
+    files = Nabu::DerivationFingerprint.index_files
+    Nabu::DerivationFingerprint::INDEX_FILES.each do |rel|
+      assert files.any? { |file| file.end_with?(rel) },
+             "#{rel} is excluded from the core but not covered by the index digest"
+    end
+  end
+
+  def test_an_index_file_change_moves_the_index_digest_not_the_parser_digest
+    before_index = Nabu::DerivationFingerprint.index_core_digest
+    before_parser = computer.for_source(entry).parser_digest
+
+    with_changed_index_file("indexer.rb") do
+      refute_equal before_index, Nabu::DerivationFingerprint.index_core_digest,
+                   "the covering digest must see the change"
+      assert_equal before_parser, computer(fresh: true).for_source(entry).parser_digest,
+                   "an index-only edit must not dirty per-source parser digests (the P111 lesson)"
+    end
+  end
+
+  # Read-only gauge code (fts_structure.rb) derives nothing on either side
+  # — plain exclusion, no covering digest owed.
+  def test_the_structure_gauge_is_plainly_excluded
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "store/fts_structure.rb"
+    refute_includes Nabu::DerivationFingerprint::INDEX_FILES, "store/fts_structure.rb"
+  end
+
+  def with_changed_index_file(basename)
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:index_file_digest)
+    singleton.define_method(:index_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
+    yield
+  ensure
+    singleton.define_method(:index_file_digest, original)
+  end
+
   # -- P89-1c: nested helper classes never glue closures -------------------
 
   def test_nested_helper_classes_are_not_closure_definitions

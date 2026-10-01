@@ -233,7 +233,7 @@ module Nabu
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:urn].as(:urn),
             Sequel[:passages][:document_id].as(:document_id),
-            Sequel[:passages][:text_normalized].as(:text_normalized),
+            Sequel[:passages][:text_search].as(:text_normalized),
             Sequel[:documents][:title].as(:title)
           ).first
       end

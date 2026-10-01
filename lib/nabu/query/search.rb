@@ -1097,7 +1097,7 @@ module Nabu
                           { Sequel[:documents][:withdrawn] => true }))
           .select(
             Sequel[:passages][:urn], Sequel[:passages][:language],
-            Sequel[:passages][:text], Sequel[:passages][:text_normalized],
+            Sequel[:passages][:text], Sequel[:passages][:text_search].as(:text_normalized),
             Sequel[:passages][:withdrawn].as(:passage_withdrawn),
             Sequel[:documents][:title], Sequel[:documents][:withdrawn_reason],
             Sequel[:documents][:withdrawn_at]

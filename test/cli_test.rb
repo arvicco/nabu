@@ -5149,6 +5149,45 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- nabu index doctor (P112-3, Q114) --------------------------------------
+
+  def test_index_doctor_reports_gauges_and_freshness
+    with_fuzzy_corpus do |config|
+      # A refresh mints a freshness stamp for the doctor to report.
+      catalog = Nabu::Store.connect(config.catalog_path)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.refresh_source!(catalog: catalog, fulltext: fulltext, slug: "pap",
+                                           fuzzy_slugs: ["pap"])
+      fulltext.disconnect
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/passages_fts: \d+ segments/, out)
+      assert_match(/hard cap 2000/, out)
+      assert_match(/pap: 1 rows @ .* · fresh/, out)
+    end
+  end
+
+  def test_index_doctor_consolidate_runs_the_merge_loop
+    with_fuzzy_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[index doctor --consolidate]) }
+
+      assert_nil status
+      assert_match(/consolidated: \d+ merge chunks, WAL truncated/, out)
+    end
+  end
+
+  def test_index_doctor_without_an_index_says_so
+    with_empty_registry_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/no fulltext index/, out)
+    end
+  end
+
   def test_search_fuzzy_against_a_pre_trigram_index_hints_to_reindex
     with_fuzzy_corpus do |config|
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)

@@ -28,10 +28,14 @@ module Nabu
     # and retirement reconciles stay outside it — none of them move a row in
     # or out of the live passage set the fulltext index serves. Defaults to 0
     # so every existing construction and stored count stays valid.
+    # +index_delta+ (P112-1) carries the load's changed-passage id/urn sets
+    # (Store::IndexDelta, frozen) so the index refresh can work the delta
+    # grain; nil for constructions that never collected one (defaulted, so
+    # every existing construction stays valid).
     LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule, :collided,
-                             :revised) do
+                             :revised, :index_delta) do
       def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0, collided: 0,
-                     revised: 0)
+                     revised: 0, index_delta: nil)
         super
       end
 
@@ -46,6 +50,8 @@ module Nabu
       # entry-grained fates merge here for the run row, never for the
       # per-shape reports the Outcome keeps separate.
       def +(other)
+        # index_delta: nil on a merged report — the sum exists for run-row
+        # counts only; the per-shape reports keep their own deltas.
         self.class.new(
           added: added + other.added, updated: updated + other.updated,
           skipped: skipped + other.skipped, withdrawn: withdrawn + other.withdrawn,
@@ -60,10 +66,13 @@ module Nabu
     # rests on these rules:
     #
     # - Upsert on urn, for documents and passages alike. New urn → insert at
-    #   revision 1 + provenance "loaded". Same urn, same content_sha256 →
-    #   skipped entirely (no writes at all, so loading a corpus twice leaves
-    #   rows byte-identical). Same urn, different sha → fields updated,
-    #   revision += 1, provenance "revised" journaling {old_sha, new_sha}.
+    #   revision 1 (+ provenance "loaded" at DOCUMENT grain only — P112-2:
+    #   the per-passage breadcrumb was 95% of the provenance table and is
+    #   retired; a passage's existence is its own witness). Same urn, same
+    #   content_sha256 → skipped entirely (no writes at all, so loading a
+    #   corpus twice leaves rows byte-identical). Same urn, different sha →
+    #   fields updated, revision += 1, provenance "revised" journaling
+    #   {old_sha, new_sha}.
     # - Within-pass collision seam (P39-4): the "different sha → revise" rule
     #   above means a legitimate ACROSS-RUN update. When TWO files in a SINGLE
     #   load pass claim one urn with different content, revising would be
@@ -155,13 +164,18 @@ module Nabu
       #   a batch flushes when either bound fills, so mega-document sources
       #   cannot turn the document grain into a multi-GB transaction (see
       #   TX_BATCH_ROWS for the measured why).
-      def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil, tx_batch_rows: TX_BATCH_ROWS)
+      # index_delta_cap (P112-1): entries past which the load's IndexDelta
+      # overflows to the slice-rewrite fallback (tests shrink it; production
+      # keeps IndexDelta::CAP).
+      def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil, tx_batch_rows: TX_BATCH_ROWS,
+                     index_delta_cap: IndexDelta::CAP)
         @db = db
         @source = source
         @ledger = ledger
         @profile = profile
         @tx_batch = tx_batch
         @tx_batch_rows = tx_batch_rows
+        @index_delta_cap = index_delta_cap
         # P42-0: the write-time census. Each document mutation applies its
         # contribution delta to source_stats INSIDE the same transaction, so
         # the read surfaces stop aggregating the corpus per invocation. nil on
@@ -216,6 +230,9 @@ module Nabu
 
       def run(full:, on_document: nil)
         counts = Hash.new(0)
+        # P112-1: one fresh delta per load — the report describes this pass,
+        # never an accumulation across a reused loader.
+        @index_delta = IndexDelta.new(cap: @index_delta_cap)
         seen_urns = Set.new
         # P39-4: urns this pass has already PERSISTED a document for (insert,
         # revise or skip). A re-encounter of one is a within-pass collision, not
@@ -282,7 +299,7 @@ module Nabu
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
           withdrawn: counts[:withdrawn], errored: counts[:errored],
           skipped_by_rule: counts[:skipped_by_rule], collided: counts[:collided],
-          revised: counts[:revised]
+          revised: counts[:revised], index_delta: @index_delta.freeze
         )
       end
 
@@ -315,6 +332,9 @@ module Nabu
       def load_document(document, counts, retained = nil, pass_urns:, savepoint: false)
         txn = -> { @db.transaction(savepoint: savepoint) { upsert_document(document, retained, pass_urns) } }
         outcome = savepoint ? txn.call : time_insert(&txn)
+        # P112-1: the document landed (its transaction/savepoint committed or
+        # will commit with the batch) — its staged delta entries are real.
+        @index_delta.commit!
         # Both update flavors count as :updated; only the content-bearing one
         # also feeds the revised counter (see LoadReport#revised).
         if %i[updated_content updated_metadata].include?(outcome)
@@ -324,6 +344,8 @@ module Nabu
           counts[outcome] += 1
         end
       rescue Sequel::DatabaseError => e
+        # The rolled-back document's staged rows never happened (P112-1).
+        @index_delta.discard!
         counts[:errored] += 1
         journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message })
       end
@@ -469,6 +491,10 @@ module Nabu
         end
         journal_retirement_flip(row, was_retired, retained)
         upsert_passages(row, document, passage_shas)
+        # P112-1: a revision arriving over a WITHDRAWN document is a re-entry
+        # — its unchanged passages (untouched above) also return to the live
+        # set. Staged after the upserts so the passage states are final.
+        stage_document_reentry(row.id) if was_withdrawn
       end
 
       # -- retention (P5-2) ----------------------------------------------------
@@ -547,9 +573,10 @@ module Nabu
       def revise_passage(row, passage, sha)
         old_sha = row.content_sha256
         was_withdrawn = row.withdrawn
+        @index_delta.stage_upsert(row.id, row.urn)
         row.update(
           sequence: passage.sequence, language: passage.language,
-          text: passage.text, text_normalized: passage.text_normalized,
+          text: passage.text, text_normalized: stored_normalized(passage),
           annotations_json: ContentHash.canonical_json(passage.annotations),
           content_sha256: sha, revision: row.revision + 1, withdrawn: false
         )
@@ -576,6 +603,7 @@ module Nabu
           if row.withdrawn
             row.update(updates) unless updates.empty?
           else
+            @index_delta.stage_remove(row.id, row.urn)
             row.update(updates.merge(withdrawn: true))
             journal(event: "withdrawn", passage_id: row.id, params: { "reason" => REVISION_PRUNED })
             durable(event: "withdrawn", urn: row.urn, old_sha: row.content_sha256,
@@ -598,11 +626,30 @@ module Nabu
       def insert_passage(document_id, passage, sha)
         row = Passage.create(
           document_id: document_id, urn: passage.urn, sequence: passage.sequence,
-          language: passage.language, text: passage.text, text_normalized: passage.text_normalized,
+          language: passage.language, text: passage.text, text_normalized: stored_normalized(passage),
           annotations_json: ContentHash.canonical_json(passage.annotations),
           content_sha256: sha, revision: 1, withdrawn: false
         )
-        journal(event: "loaded", passage_id: row.id)
+        @index_delta.stage_upsert(row.id, row.urn)
+        # P112-2 (Q113): no per-passage "loaded" event — at 107.8M rows the
+        # constant breadcrumb was 95% of the provenance table (~11 GB with
+        # its indexes) duplicating what the row's existence already says.
+        # Document- and dictionary-entry-grain "loaded" stay: real lineage
+        # at a few hundred thousand rows, and the witness the health
+        # partial-load probe reads. Passage transitions (revised/withdrawn/
+        # restored) keep journaling exactly as before.
+      end
+
+      # P112-2 (Q113): text_normalized measured byte-identical to text on
+      # the vast majority of rows (the CJK-dominated corpus folds to
+      # itself) — store the EMPTY STRING when equal ("" because the column
+      # is NOT NULL on the standing table generation; same zero bytes) and
+      # let every reader coalesce through the passages.text_search
+      # generated column (migration 037, edge case documented there).
+      # ~12–18 GB reclaimed at the next rebuild; the in-memory Passage (and
+      # therefore every content sha) is untouched.
+      def stored_normalized(passage)
+        passage.text_normalized == passage.text ? "" : passage.text_normalized
       end
 
       # Withdrawn row present again with unchanged content: clear the flag,
@@ -615,9 +662,27 @@ module Nabu
         updates = { withdrawn: false }
         updates.merge!(withdrawn_reason: nil, withdrawn_at: nil) if row.is_a?(Document)
         row.update(updates)
+        if row.is_a?(Document)
+          # P112-1: the whole document re-enters the live set — every one of
+          # its live passages left the index at withdrawal and must return,
+          # byte-identical or not.
+          stage_document_reentry(row.id)
+        else
+          @index_delta.stage_upsert(row.id, row.urn)
+        end
         id_column = row.is_a?(Document) ? :document_id : :passage_id
         journal(event: "restored", id_column => row.id)
         durable(event: "restored", urn: row.urn, new_sha: row.content_sha256)
+      end
+
+      # Stage every live passage of a document moving back into the live set
+      # (restore, or a revision arriving over a withdrawn row): their index
+      # rows were removed with the document, so the unchanged-sibling rule
+      # yields to re-entry (P112-1). Individually-withdrawn passages stay out.
+      def stage_document_reentry(document_id)
+        Passage.where(document_id: document_id, withdrawn: false)
+               .select_map(%i[id urn])
+               .each { |id, urn| @index_delta.stage_upsert(id, urn) }
       end
 
       # Full loads assert completeness: this source's active documents whose
@@ -636,6 +701,13 @@ module Nabu
             # that survives rebuild).
             Document.where(id: id).update(withdrawn: true, withdrawn_reason: UPSTREAM_GONE,
                                           withdrawn_at: Time.now)
+            # P112-1: the document's live passages leave the live set with it
+            # (their own flags stay false — the document flag hides them).
+            # Direct, not staged: the sweep is one transaction, and a failure
+            # here aborts the load before any report escapes.
+            Passage.where(document_id: id, withdrawn: false)
+                   .select_map(%i[id urn])
+                   .each { |pid, purn| @index_delta.remove(pid, purn) }
             journal(event: "withdrawn", document_id: id, params: { "reason" => UPSTREAM_GONE })
             durable(event: "withdrawn", urn: urn, old_sha: sha, reason: UPSTREAM_GONE)
             # P42-0: the withdrawn doc's live contribution leaves the stats.

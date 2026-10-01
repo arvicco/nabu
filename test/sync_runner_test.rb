@@ -692,6 +692,42 @@ class SyncRunnerTest < Minitest::Test
                  "a pending (crashed) slice must refresh despite the no-op load"
   end
 
+  # P112-1 (Q112): a content-bearing resync refreshes at the DELTA grain —
+  # only the rows the load changed are rewritten. The proof is a tampered
+  # fts row of an UNCHANGED passage: the old slice rewrite would heal it
+  # (it rewrote everything); the delta refresh must leave it alone while
+  # the new passage lands and is searchable.
+  def test_resync_refreshes_at_the_delta_grain
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    tampered = Nabu::Store::Passage.first(urn: "urn:cts:test:w1:1").id
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      fulltext[:passages_fts].where(rowid: tampered).delete
+    ensure
+      fulltext.disconnect
+    end
+
+    BreakerAdapter.urns = %w[urn:cts:test:w1 urn:cts:test:w2 urn:cts:test:w3]
+    outcome = runner.sync("breaker")
+
+    assert_equal 3, outcome.indexed, "the count stays the source's live total"
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      rowids = fulltext[:passages_fts].select_map(Sequel.lit("rowid"))
+
+      refute_includes rowids, tampered,
+                      "the unchanged passage's row was not rewritten — the refresh worked the delta"
+      fresh = Nabu::Store::Passage.first(urn: "urn:cts:test:w3:1").id
+
+      assert_includes rowids, fresh, "the added passage landed"
+    ensure
+      fulltext.disconnect
+    end
+  end
+
   # A DELETED index file (the sanctioned "drop the file and re-run"
   # recovery) must never be skipped over: the no-op load would otherwise
   # win and the fallback full rebuild never fires (the live 2026-10-01
