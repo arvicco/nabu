@@ -244,7 +244,7 @@ module Nabu
           progress&.stage("index slice: #{entry.slug} skipped — no passage content changed")
           nil
         else
-          reindex!(entry, adapter, progress)
+          reindex!(entry, adapter, progress, delta: reindex_delta(load_report, lane_report))
         end
       refresh_catalog_lanes(entry, load_report)
       refresh_dictionary_stats(entry, combined_report)
@@ -473,6 +473,17 @@ module Nabu
         !load_report.passages_changed?
     end
 
+    # P112-1 (Q112): the load's IndexDelta, when the refresh may work the
+    # delta grain — a secondary dictionary lane moves lemma/reflex state
+    # the SLICE rewrite re-derives for unchanged passages too (the
+    # skip_reindex? rationale), so a lane-bearing sync keeps the slice.
+    # Overflow/healing fallbacks live in Indexer.refresh_source!.
+    def reindex_delta(load_report, lane_report)
+      return nil unless lane_report.nil?
+
+      load_report&.index_delta
+    end
+
     # P111-1b: a slice refresh that crashed mid-way (disk full, power loss)
     # left the index behind the catalog while the next load changes nothing
     # — the fulltext file's own pending marker overrides the skip, and the
@@ -499,11 +510,12 @@ module Nabu
     # for a dictionary sync — the crosswalk changed). Opens its own
     # short-lived connection to config.fulltext_path so callers need not
     # thread a handle through. Returns the source's live passage count.
-    def reindex!(entry, adapter, progress = nil)
+    def reindex!(entry, adapter, progress = nil, delta: nil)
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path)
       Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
+                                     delta: delta,
                                      alignments: AlignmentRegistry.load(@config.alignments_path),
                                      fuzzy_slugs: @registry.fuzzy_slugs,
                                      cjk_slugs: @registry.cjk_slugs,
