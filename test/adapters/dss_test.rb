@@ -76,6 +76,7 @@ module Adapters
     def test_discover_yields_one_ref_per_scroll_node_with_dup_names_suffixed
       refs = conformance_adapter.discover(FIXTURES).to_a
       assert_equal %w[
+        urn:nabu:dss:11q19
         urn:nabu:dss:3q15
         urn:nabu:dss:4q143
         urn:nabu:dss:4q156
@@ -83,7 +84,7 @@ module Adapters
         urn:nabu:dss:4q483-2
         urn:nabu:dss:4q567
       ], refs.map(&:id), "scroll names downcased verbatim; the second same-named node (in node order) gets -2"
-      assert_equal(%w[3Q15 4Q143 4Q156 4Q483 4Q483 4Q567], refs.map { |ref| ref.metadata["scroll"] })
+      assert_equal(%w[11Q19 3Q15 4Q143 4Q156 4Q483 4Q483 4Q567], refs.map { |ref| ref.metadata["scroll"] })
       four83 = refs.select { |ref| ref.metadata["scroll"] == "4Q483" }
       assert_equal four83.map { |ref| ref.metadata["node"] }.sort, four83.map { |ref| ref.metadata["node"] },
                    "the plain urn belongs to the FIRST node in node order — the pin the -2 suffix rests on"
@@ -102,6 +103,9 @@ module Adapters
       assert_equal 2, parse_urn("urn:nabu:dss:4q483-2").size
       assert_equal 3, parse_urn("urn:nabu:dss:4q567").size
       assert_equal 15, parse_urn("urn:nabu:dss:4q143").size
+      assert_equal %w[urn:nabu:dss:11q19:10.9 urn:nabu:dss:11q19:10.10],
+                   parse_urn("urn:nabu:dss:11q19").passages.map(&:urn),
+                   "the Temple Scroll slice is two lines (col. 10:9-10) — the hand-corrected etcbc lane"
     end
 
     def test_passage_urns_ride_the_line_nodes_own_fragment_and_line_labels
@@ -165,6 +169,71 @@ module Adapters
       assert_equal "numr", numeral["type"]
       assert_equal "א֜ק֜", numeral["form"], "paleo-Hebrew numeral glyphs, byte-verbatim"
       assert_equal "paleohebrew", numeral["script"]
+    end
+
+    # -- the ETCBC-harmonized layer (*_etcbc) ---------------------------------
+
+    def test_the_hand_corrected_etcbc_parsing_rides_11q19_tokens_verbatim
+      passage = passage_at("urn:nabu:dss:11q19", "urn:nabu:dss:11q19:10.9")
+      token = passage.annotations["tokens"].find { |t| t["n"] == 1_868_317 } # עשיתמה
+      assert_equal "עשיתמה", token["form"]
+      {
+        "lex_etcbc" => "<FH[", "lex_utf8_etcbc" => "עשׂה", "morph_etcbc" => "<F(H&J[TM&H",
+        "g_cons" => "<FJTMH", "g_lex_etcbc" => "<FJ", "g_vbe_etcbc" => "TMH",
+        "lang_etcbc" => "Hebrew", "vs_etcbc" => "qal", "vt_etcbc" => "perf",
+        "ps_etcbc" => "p2", "nu_etcbc" => "pl"
+      }.each { |name, value| assert_equal value, token[name], "#{name} rides verbatim under its upstream name" }
+      assert token["note_etcbc"].start_with?("Abegg maakt er een lang perfectum 2m plur van"),
+             "the annotator's parsing note rides verbatim (Dutch, as shipped)"
+      %w[sp_etcbc gn_etcbc book_etcbc g_prs_etcbc].each do |name|
+        refute token.key?(name), "#{name} is absent upstream for this word — absent here"
+      end
+    end
+
+    def test_the_ml_etcbc_features_ride_beside_abeggs_own_never_over_them
+      passage = passage_at("urn:nabu:dss:4q483", "urn:nabu:dss:4q483:f1.1")
+      token = passage.annotations["tokens"].find { |t| t["n"] == 1_802_285 }
+      assert_equal "Genesis", token["book_etcbc"], "the BHSA-named book beside Abegg's \"Gen\""
+      assert_equal "Gen", token["book"], "Abegg's own book reference is untouched"
+      assert_equal "prep", token["sp_etcbc"]
+      bet_dagesh_sheva = "\u05D1\u05BC\u05B0" # upstream ships dagesh before sheva (not NFC order)
+      assert_equal ["B", bet_dagesh_sheva, "Hebrew"], token.values_at("lex_etcbc", "lex_utf8_etcbc", "lang_etcbc"),
+                   "the crosswalk lexeme, its pointed form byte-verbatim, and the ETCBC language"
+      assert_equal %w[NA NA NA NA NA], token.values_at("gn_etcbc", "nu_etcbc", "ps_etcbc", "vs_etcbc", "vt_etcbc"),
+                   "upstream's honest NA rides verbatim"
+      deut = parse_urn("urn:nabu:dss:4q143").passages.flat_map { |p| p.annotations["tokens"] }
+      assert_equal "H", deut.find { |t| t["n"] == 2_070_101 }["uvf_etcbc"]
+      aramaic = passage_at("urn:nabu:dss:4q156", "urn:nabu:dss:4q156:f1.2")
+                .annotations["tokens"].find { |t| t["n"] == 1_657_371 }
+      assert_equal "Aramaic", aramaic["lang_etcbc"]
+      assert_equal "HJ", aramaic["g_prs_etcbc"]
+      assert_equal "חפן", aramaic["lex_utf8_etcbc"]
+      refute aramaic.key?("lex_etcbc"), "lex_etcbc is absent upstream for this word — never back-filled"
+    end
+
+    def test_lex_etcbc_is_the_crosswalk_onto_bhsa_lexemes
+      bhsa = Nabu::Adapters::Bhsa.new
+      bhsa_lexemes = bhsa.discover(Nabu::TestSupport.fixtures("bhsa"))
+                         .flat_map { |ref| bhsa.parse(ref).passages }
+                         .flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lex"] } }.uniq
+      token = passage_at("urn:nabu:dss:11q19", "urn:nabu:dss:11q19:10.9")
+              .annotations["tokens"].find { |t| t["n"] == 1_868_317 }
+      assert_includes bhsa_lexemes, token["lex_etcbc"],
+                      "DSS עשיתמה joins BHSA <FH[ (Ruth 1:8's qere word) by plain string equality"
+      adapter = conformance_adapter
+      passages = adapter.discover(FIXTURES).flat_map { |ref| adapter.parse(ref).passages }
+      dss_lexemes = passages.flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lex_etcbc"] } }
+      assert_operator (dss_lexemes.uniq & bhsa_lexemes).size, :>=, 50,
+                      "the crosswalk is in BHSA's own lexeme id space — the fixtures share dozens"
+    end
+
+    def test_declined_features_never_ride_tokens
+      declined = Nabu::Adapters::Dss::DECLINED_TOKEN_FEATURES
+      ridden = Nabu::Adapters::Dss::TOKEN_FEATURES + Nabu::Adapters::Dss::ETCBC_TOKEN_FEATURES
+      assert_empty declined.keys & ridden, "a feature is ridden or declined, never both"
+      assert(declined.values.all? { |reason| reason.is_a?(String) && !reason.empty? })
+      keys = parse_urn("urn:nabu:dss:11q19").passages.flat_map { |p| p.annotations["tokens"].flat_map(&:keys) }.uniq
+      assert_empty keys & declined.keys, "no declined feature leaks onto a token"
     end
 
     # -- languages ------------------------------------------------------------
@@ -258,7 +327,7 @@ module Adapters
       source = dss_source
       first = Nabu::Store::Loader.new(db: catalog, source: source)
                                  .load_from(conformance_adapter, workdir: FIXTURES, full: true)
-      assert_equal 6, first.added
+      assert_equal 7, first.added
       assert_equal 0, first.errored
 
       counts = [catalog[:documents].count, catalog[:passages].count]

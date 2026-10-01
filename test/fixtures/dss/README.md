@@ -50,7 +50,7 @@ and `docs/about.md` carries the human grant:
 
 MIT covers code only; the data grant is CC BY-NC → source class `nc`.
 
-## The six slices (5 scrolls, 6 scroll nodes)
+## The seven slices (6 scrolls, 7 scroll nodes)
 
 | slice | slots | lines | why |
 |---|---|---|---|
@@ -58,11 +58,13 @@ MIT covers code only; the data grant is CC BY-NC → source class `nc`.
 | 4Q156 (Targum of Leviticus, whole: 2 fragments, 14 lines, 166 words) | 146170–146597 | 14 | the Aramaic lane (154 `a` vs 12 punct-word Hebrew votes); rec clusters 1437217–19 in f1:2 with the flagged `full` bytes "ח##פנו?׳ה##[ י ]"; empty-transcription word 1657373 (glyph absent, `full`="ε", `lex`=" # ") |
 | 4Q483 node **1606388** (papGen?, 2 fragments, 5 lines) | 539876–540101 | 5 | first of the DUPLICATE-NAME pair → plain urn `dss:4q483`; biblical lane: Gen 1:27–28 word refs with `biblical=2` (three of the corpus's 14 both-files lines); ╱ end-of-line tokens |
 | 4Q567 (Aramaic, 1 fragment, 3 lines) | 663625–663666 | 3 | the fixture's only `alt` (alternative-reading) cluster 1491352 (f1:2) beside rec + vac; second Aramaic witness |
+| 11Q19 (Temple Scroll) col. 10, lines 9–10 — a PARTIAL scroll (added 2026-10-01) | 711677–711708 | 2 | the ONLY scroll carrying the hand-corrected ETCBC parse (`morph_etcbc`/`g_cons`/`g_lex_etcbc`, 12,808 words corpus-wide) and `note_etcbc`: word 1868317 עשיתמה carries the longest note (297 B) + `lex_etcbc` `<FH[` — the same BHSA lexeme as the bhsa fixture's Ruth 1:8 word, the crosswalk witness; three `rec` clusters, none straddling the slice edge |
 | 4Q143 (Deut 10:22–11:11, 2 fragments, 15 lines) | 1314784–1315365 | 15 | cluster 1525404 (`rem2`, slots 1314784–1314916) — one of the 6 corpus-wide LINE-CROSSING clusters, spanning f1R:1–3 → the clipped-`ranges` + `partial: true` witness; `cor2` cluster; mixed-case fragment label `f1R` (urns keep label case verbatim); biblical=1 Deut refs |
 | 4Q483 node **1606812** (2 lines) | 1320075–1320133 | 2 | second node of the duplicate name → urn `dss:4q483-2`; carries f1:4–5 (Gen 1:29), proving the two nodes are one physical scroll split by source file |
 
 Scroll nodes kept in scroll.tf: 1605955 (3Q15), 1605960 (4Q156),
-1606388 + 1606812 (4Q483), 1606476 (4Q567), 1606801 (4Q143).
+1606388 + 1606812 (4Q483), 1606476 (4Q567), 1606550 (11Q19 — its
+oslots spec clipped to the slice, as is fragment "10"'s), 1606801 (4Q143).
 
 Not attested in the slices (real upstream, documented here so their
 absence is honest): `unc2` clusters (906 corpus-wide), `halfverse`
@@ -87,8 +89,8 @@ is NOT built.
 Every data line kept is byte-verbatim upstream; the ONLY synthesized
 bytes are explicit `<node><TAB>` anchors at trim-gap starts and range
 specs clipped to the keep set (anchors and ranges are core .tf format).
-The keep set = the six slices' sign slots + every cluster/fragment/line/
-scroll/word node whose slots fall inside them. The lex-NODE block
+The keep set = the seven slices' sign slots + every cluster/fragment/line/
+scroll/word node whose slots intersect them (specs clipped). The lex-NODE block
 (1542523–1552972) and the clause/phrase nodes are dropped everywhere —
 the adapter reads lex word-grain and never touches the silver nodes.
 
@@ -102,13 +104,19 @@ the adapter reads lex word-grain and never touches the silver nodes.
 | `lex.tf`, `sp.tf`, `cl.tf`, `ps.tf`, `gn.tf`, `nu.tf`, `st.tf`, `vs.tf`, `vt.tf`, `md.tf`, `morpho.tf` | 26 KB–4.5 MB → 0.6–17 KB | slice word grain (lex-node block dropped) |
 | `cor.tf`, `rec.tf`, `rem.tf`, `alt.tf`, `unc.tf`, `vac.tf` | 4 KB–1.9 MB → 0.5–3.4 KB | slice sign grain (the per-sign flag projections of the clusters) |
 | `biblical.tf`, `book.tf`, `chapter.tf`, `verse.tf` | 0.5–0.9 MB → 1.0–1.9 KB | slice grains (biblical also covers clusters/fragments/lines/scrolls) |
+| the ETCBC-harmonized layer (20 files, added 2026-10-01): `lex_etcbc`, `lex_utf8_etcbc`, `g_lex_etcbc`, `book_etcbc`, `lang_etcbc`, `sp/gn/nu/ps/vs/vt_etcbc`, `g_nme/g_pfm/g_prs/g_vbe/g_vbs_etcbc`, `uvf_etcbc`, `morph_etcbc`, `g_cons`, `note_etcbc` | 2 KB–13.7 MB → 0.6–48 KB | slice word grain (`lang_etcbc` also sign grain, kept like `lang`); sparse files keep upstream's empty value lines verbatim |
 | `merr.tf`, `intl.tf`, `halfverse.tf` | 555 / 4,993 / 2,552 → 540 / 589 / 552 | header-only trims (zero in-slice rows — see above) |
 
-Features deliberately NOT fixtured (and not read by the adapter): the
-ML-derived `*_etcbc` lane + `morph_etcbc`/`note_etcbc` (silver — the
-goo300k/imp discipline), the transliteration/source variants (`*e`/`*o`,
-`g_cons`, `glyphe/glypho`, `fulle/fullo`, `punce/punco`, `lexe/lexo`,
-`glex*`), the second/third-morpheme features (`gn2/gn3`, `nu2/nu3`,
-`ps2/ps3`, `cl2` — the original tag rides tokens whole as `morpho`),
-`srcLn`/`nr`/`sim`/`occ` (source-file provenance, similarity and the
-lex-node occurrence edges), and `book_etcbc`/`lang_etcbc`/`uvf_etcbc`.
+Features deliberately NOT fixtured (and not read by the adapter — each
+named with its reason in `Dss::DECLINED_TOKEN_FEATURES`): the
+transliteration/source variants (`*e`/`*o`, `glyphe/glypho`,
+`fulle/fullo`, `punce/punco`, `lexe/lexo`, `glex*`), the
+second/third-morpheme features (`gn2/gn3`, `nu2/nu3`, `ps2/ps3`, `cl2` —
+the original tag rides tokens whole as `morpho`), and
+`srcLn`/`nr`/`sim`/`occ` (source-file provenance, the silver
+clause/phrase numbering, similarity and the lex-node occurrence edges).
+
+The 2026-10-01 regeneration ran the recipe as one script over all seven
+slices from the held canonical tree (same pinned commit `2403d166`); for
+the original six slices it reproduces every pre-existing fixture file
+byte-identically, and the 11Q19 slice only ADDS lines to them.
