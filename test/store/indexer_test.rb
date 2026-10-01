@@ -909,6 +909,274 @@ module Store
 
     def fts_rowids(db) = db[:passages_fts].select_map(Sequel.lit("rowid")).sort
 
+    # -- the bulk slice mode (P111-1, Q111) ----------------------------------
+    # A content-bearing re-parse of a big source rewrites millions of fts
+    # rows; under the default merge config the automerge/deletemerge
+    # machinery fires DURING the delete storm and the batched inserts (the
+    # kanripo 6h18m shape). At/above bulk_threshold the slice defers every
+    # merge (automerge 0, crisismerge high, deletemerge 0), ensure-restores
+    # the defaults, then consolidates in an announced bounded merge loop.
+    # The contract stays ROW IDENTITY.
+
+    BulkSpy = Struct.new(:stages) do
+      def stage(label, **) = (self.stages ||= []) << label
+      def load_tick(*); end
+    end
+
+    def merge_config(db, key) = db[:passages_fts_config].where(k: key).get(:v)
+
+    def test_bulk_refresh_is_row_identical_to_a_full_rebuild
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "outdated", sequence: 1)
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "王道", sequence: 2, language: "lzh")
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ", sequence: 0)
+      options = { cjk_slugs: ["s"] }
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, **options)
+
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "fresh", sequence: 3)
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised")
+      Nabu::Store::Passage.first(urn: "urn:d:s:1").update(withdrawn: true)
+      refresh!(bulk_threshold: 1, **options)
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
+                     "passages_fts must hold the identical rowid set through the bulk path"
+        assert_equal cjk_rowids(fresh), cjk_rowids(@fulltext),
+                     "the cjk lane must hold the identical rowid set through the bulk path"
+        assert_equal %w[urn:d:s:2], match_urns("revised"),
+                     "the bulk-refreshed slice answers MATCH after the merge loop"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def cjk_rowids(db) = db[Nabu::Store::Indexer::CJK_TABLE].select_map(Sequel.lit("rowid")).sort
+
+    # The 2026-10-01 wedge pin: fts5 caps TOTAL segments at 2000
+    # (fts5AllocateSegid → SQLITE_FULL, reading as "disk full"), and
+    # crisismerge is clamped to 1999 per-level — so disabling automerge
+    # lets a big insert flood hit the cap and WEDGE the index (even merge
+    # commands need a segment allocation). Bulk mode must only ever touch
+    # deletemerge; the insert-side merge machinery stays on.
+    def test_bulk_mode_never_touches_automerge_or_crisismerge
+      assert_equal %w[deletemerge], Nabu::Store::Indexer::BULK_MERGE_SETTINGS.keys,
+                   "automerge/crisismerge must stay at their defaults during bulk writes"
+      assert_equal %w[deletemerge], Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.keys
+    end
+
+    def test_bulk_refresh_restores_the_merge_config
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      refresh!(bulk_threshold: 1)
+
+      Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.each do |key, value|
+        stored = merge_config(@fulltext, key)
+        assert(stored.nil? || stored.to_i == value,
+               "#{key} must read back at its default after a bulk refresh (got #{stored.inspect})")
+      end
+    end
+
+    def test_bulk_write_mode_restores_config_when_the_block_raises
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      assert_raises(RuntimeError) do
+        Nabu::Store::Indexer.with_bulk_write_mode(@fulltext, [:passages_fts]) { raise "boom" }
+      end
+      Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.each do |key, value|
+        stored = merge_config(@fulltext, key)
+        assert(stored.nil? || stored.to_i == value,
+               "#{key} must be restored even when the bulk block raises (got #{stored.inspect})")
+      end
+    end
+
+    def test_bulk_refresh_announces_and_small_slices_stay_quiet
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      spy = BulkSpy.new([])
+      refresh!(bulk_threshold: 1, progress: spy)
+      assert(spy.stages.any? { |label| label.include?("bulk mode") },
+             "an at-threshold slice announces bulk mode")
+      assert(spy.stages.any? { |label| label.include?("merge") },
+             "the consolidation merge stage announces itself")
+
+      spy = BulkSpy.new([])
+      refresh!(progress: spy)
+      refute(spy.stages.any? { |label| label.include?("bulk mode") },
+             "a below-threshold slice must keep the ordinary path")
+    end
+
+    # -- the slice-pending marker + crash semantics (P111-1b) ----------------
+    # The live SQLITE_FULL crash (2026-10-01): a monolithic 8.9M-row slice
+    # transaction retained every written page version in the WAL and filled
+    # ~500 GB of free disk at 11% of the insert pass. Bulk mode therefore
+    # runs WITHOUT the wrapping transaction (short autocommitted batches,
+    # WAL checkpointed) — a mid-run failure leaves a PARTIAL slice — and the
+    # fulltext file itself records the unfinished slice so the next refresh
+    # heals it instead of being skipped over it.
+
+    def slice_rows = @fulltext[Nabu::Store::Indexer::SLICE_REFRESHES_TABLE]
+
+    def test_refresh_marks_its_slice_finished
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      refresh!
+
+      refute_nil slice_rows.first(slug: "s")[:finished_at]
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+    end
+
+    def test_a_crashed_slice_stays_pending_and_heals_on_the_next_refresh
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+      refresh!
+
+      # Simulate the crash: the marker never finished and the slice is half
+      # written (one of the source's rows missing).
+      slice_rows.where(slug: "s").update(finished_at: nil)
+      doomed = @catalog[:passages].where(urn: "urn:d:s:2").get(:id)
+      @fulltext[:passages_fts].where(rowid: doomed).delete
+
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+      refresh!
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
+                     "the heal re-refresh restores row identity"
+      ensure
+        fresh.disconnect
+      end
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+    end
+
+    def test_rebuild_clears_pending_markers
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      refresh!
+      slice_rows.where(slug: "s").update(finished_at: nil)
+
+      rebuild!
+
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s"),
+             "a full rebuild leaves nothing pending"
+    end
+
+    # The forbidding_index_work pattern: swap one Indexer entry point for a
+    # raiser, restore after — write_char_postings runs AFTER the fts inserts
+    # inside the stage body, so it simulates a mid-slice crash.
+    def raising_char_postings
+      mod = Nabu::Store::Indexer
+      original = mod.method(:write_char_postings)
+      mod.define_singleton_method(:write_char_postings) { |*, **| raise "boom" }
+      yield
+    ensure
+      mod.define_singleton_method(:write_char_postings, original)
+    end
+
+    def test_bulk_slice_failure_persists_partial_state_and_stays_pending
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
+
+      raising_char_postings do
+        assert_raises(RuntimeError) { refresh!(bulk_threshold: 1) }
+      end
+
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s"),
+             "the crashed bulk slice reads pending"
+      assert_equal 2, fts.count,
+                   "bulk mode holds no wrapping txn — the inserts before the crash persist"
+      Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.each do |key, value|
+        stored = merge_config(@fulltext, key)
+        assert(stored.nil? || stored.to_i == value,
+               "#{key} must be restored even through the crash")
+      end
+
+      refresh!(bulk_threshold: 1)
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext), "the re-refresh heals"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def test_ordinary_slice_failure_rolls_back_atomically
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
+
+      raising_char_postings do
+        assert_raises(RuntimeError) { refresh! }
+      end
+
+      assert_equal 1, fts.count,
+                   "the ordinary slice keeps its single-transaction atomic-swap contract"
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s"),
+             "even a rolled-back failure reads pending — the slice never refreshed"
+    end
+
+    def test_bulk_refresh_truncates_the_wal
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "ft.sqlite3")
+        disk = Nabu::Store.connect_fulltext(path)
+        begin
+          doc = make_document(urn: "urn:d:s")
+          make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+          Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: disk)
+          make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+          Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: disk, slug: "s",
+                                               bulk_threshold: 1)
+          wal = "#{path}-wal"
+          assert(!File.exist?(wal) || File.empty?(wal),
+                 "bulk mode checkpoints (TRUNCATE) — the WAL never accumulates the slice")
+        ensure
+          disk.disconnect
+        end
+      end
+    end
+
+    # A LEGACY contentful passages_fts keeps the ordinary path even past the
+    # threshold — the bulk recipe is designed against the contentless shape,
+    # and legacy files upgrade at their next full rebuild anyway.
+    def test_bulk_mode_never_engages_on_a_legacy_contentful_table
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(<<~SQL)
+        CREATE VIRTUAL TABLE passages_fts USING fts5(
+          text_normalized, language, source, urn UNINDEXED, passage_id UNINDEXED,
+          tokenize = 'unicode61 remove_diacritics 2'
+        )
+      SQL
+
+      spy = BulkSpy.new([])
+      refresh!(bulk_threshold: 1, progress: spy)
+      refute(spy.stages.any? { |label| label.include?("bulk mode") },
+             "a legacy contentful table must not take the bulk recipe")
+    end
+
     # Bootstrap safety: against a fulltext db that has never been built (the
     # very first sync), refresh falls back to a FULL rebuild — every source
     # lands, and the return value is still the refreshed source's own count.

@@ -32,9 +32,26 @@ module Nabu
     # - {{versions}} SHELLS (29): edition disambiguation pages — no
     #   text; skip-by-rule.
     # - <pages index> SHELLS (78): ProofreadPage scan transclusions
-    #   whose text lives in the Page: namespace — the DECLARED v1
-    #   residue (the ko-wikisource precedent: those ride when a
-    #   Page:-expansion packet lands); skip-by-rule.
+    #   whose text lives in the Page: namespace. Since P111-2 the
+    #   fetch EXPANDS them: the tag's from/to (or include=) range
+    #   enumerates Page:<index>/<n> titles, their wikitexts land in
+    #   the envelope's "pages" map (revid-pinned), and the parse
+    #   joins them offline with the <noinclude> furniture stripped.
+    #   A payload-less shell (stale tree) still skips by rule.
+    # - DISPATCHER SHELLS (232 censused): parameterized sibling
+    #   transclusions ({{:親|サブページ名={{SUBPAGENAME}}}},
+    #   {{:親|ボディー=1|巻=…}}) — the content renders from another
+    #   page's template machinery, so plain inlining (the zh piece
+    #   mold) cannot resolve them. Since P111-2 the fetch calls
+    #   action=expandtemplates (title = the shell's own title, so
+    #   BASEPAGENAME/SUBPAGENAME resolve) and stores the expanded
+    #   wikitext in the envelope ("expanded", content-sha-pinned —
+    #   no revid exists for a server-side expansion). The parse
+    #   strips the rendered furniture (nav divs, TOC self-links,
+    #   templatestyles, ruby readings) and keeps the text; heading
+    #   links back to the parent's TOC anchors become section
+    #   annotations. A shell whose expansion yields no prose still
+    #   skips by rule.
     #
     # == №R-74 (the ruled Wikisource posture)
     #
@@ -115,10 +132,46 @@ module Nabu
         eras_by_title = walk_categories(progress)
         progress&.call("Era cone: #{eras_by_title.size} page(s) across #{ERA_CATEGORIES.size} eras\n")
         revids = fetch_pages!(workdir, eras_by_title, progress)
-        sha = Digest::SHA256.hexdigest(JSON.generate(revids.sort.to_h))
+        expand_shells!(workdir, revids, progress)
+        # Keys are Integer pageids AND "pageid:…" expansion-pin Strings —
+        # stringify before sorting (the zh mixed-sort lesson).
+        sha = Digest::SHA256.hexdigest(JSON.generate(revids.transform_keys(&:to_s).sort.to_h))
         write_state!(workdir, sha)
         Nabu::FetchReport.new(sha: sha, fetched_at: Time.now,
                               notes: "pages: #{revids.size} of #{eras_by_title.size} cone titles, revid-pinned")
+      end
+
+      # -- the shell expansions (P111-2, Q109-1) -----------------------------
+
+      # A <pages index> tag's attribute region (quoted and bare attrs, with
+      # or without the self-closing slash).
+      PAGES_TAG = %r{<pages\s+([^>]*?)/?\s*>}i
+
+      # Every Page:-namespace title a shell's <pages> tag(s) transclude,
+      # in reading order: index + from/to range, or the include= list.
+      def self.pages_tag_titles(wikitext)
+        wikitext.scan(PAGES_TAG).flat_map do |(attrs)|
+          index = attrs[/index\s*=\s*"([^"]+)"/i, 1] || attrs[/index\s*=\s*(\S+)/i, 1]
+          next [] unless index
+
+          # MediaWiki normalizes underscores to spaces in titles — the api
+          # returns (and the envelope stores) the normalized form, so the
+          # lookup must build it (the 芭蕉俳句全集 first-sync quarantine).
+          index = index.tr("_", " ")
+          pages_tag_numbers(attrs).map { |n| "Page:#{index}/#{n}" }
+        end
+      end
+
+      def self.pages_tag_numbers(attrs)
+        from = attrs[/from\s*=\s*"?(\d+)"?/i, 1]
+        to = attrs[/to\s*=\s*"?(\d+)"?/i, 1]
+        return (from.to_i..to.to_i).to_a if from && to
+
+        spec = attrs[/include\s*=\s*"?([\d,-]+)"?/i, 1] or return []
+        spec.split(",").flat_map do |part|
+          first, last = part.split("-")
+          last ? (first.to_i..last.to_i).to_a : [first.to_i]
+        end
       end
 
       # -- discover ----------------------------------------------------------
@@ -163,12 +216,20 @@ module Nabu
         raise ParseError, "#{document_ref.id}: a shell page reached parse (stale ref?)" unless
           page_class(envelope) == :text
 
-        if manyo_blocks?(wikitext)
+        if page_payloads?(envelope)
+          pages_index_document(document_ref, envelope)
+        elsif envelope["expanded"].is_a?(String)
+          expanded_document(document_ref, envelope)
+        elsif manyo_blocks?(wikitext)
           manyo_document(document_ref, envelope, wikitext)
         else
           prose_document(document_ref, envelope, wikitext)
         end
       end
+
+      # The section-marker sentinel strip_expanded plants for heading links
+      # (mold B): ASCII, never occurs in hosted text.
+      SECTION_MARKER = "@@nabu-section@@"
 
       # The 万葉集 block grammar (P109-1 census: [歌番号] fields).
       MANYO_BLOCK = /^\[歌番号\]/
@@ -250,6 +311,65 @@ module Nabu
         envelope["revid"]
       end
 
+      # P111-2: the second fetch pass — every shell envelope gains its
+      # expansion payload (class note). Runs after fetch_pages! rewrote the
+      # envelopes, so payloads are always re-derived against the current
+      # revision; a shell that stops being a shell upstream simply takes
+      # the ordinary path next time.
+      def expand_shells!(workdir, revids, progress)
+        paged = 0
+        expanded = 0
+        envelope_paths(workdir).each do |path|
+          envelope = JSON.parse(File.read(path))
+          wikitext = envelope.fetch("wikitext")
+          next if wikitext.match?(/\{\{\s*versions/i) || manyo_blocks?(wikitext)
+
+          if wikitext.match?(/<pages\s+index/i)
+            paged += expand_pages_shell!(path, envelope, revids)
+          elsif prose_paragraphs(wikitext).empty?
+            expanded += expand_dispatcher_shell!(path, envelope, revids)
+          end
+        end
+        progress&.call("Shell expansion: #{paged} <pages index> + #{expanded} dispatcher shell(s)\n")
+      end
+
+      def expand_pages_shell!(path, envelope, revids)
+        titles = self.class.pages_tag_titles(envelope.fetch("wikitext"))
+        return 0 if titles.empty?
+
+        payloads = {}
+        titles.each_slice(Nabu::WikiFetch::CONTENT_BATCH) do |batch|
+          pages_payload(batch).each do |page|
+            revision = page.dig("revisions", 0) or next
+
+            revids["#{envelope.fetch('pageid')}:#{page.fetch('title')}"] = revision["revid"]
+            payloads[page.fetch("title")] = revision.dig("slots", "main", "*").to_s
+          end
+        end
+        return 0 if payloads.empty?
+
+        rewrite_envelope!(path, envelope.merge("pages" => payloads))
+        1
+      end
+
+      def expand_dispatcher_shell!(path, envelope, revids)
+        payload = get_json("action" => "expandtemplates", "format" => "json", "prop" => "wikitext",
+                           "title" => envelope.fetch("title"), "text" => envelope.fetch("wikitext"))
+        text = payload.dig("expandtemplates", "wikitext").to_s
+        return 0 if text.strip.empty?
+
+        # No revid exists for a server-side expansion — the pin is the
+        # expanded content itself, so a target-page edit re-syncs the shell.
+        revids["#{envelope.fetch('pageid')}:expanded"] = Digest::SHA256.hexdigest(text)[0, 16]
+        rewrite_envelope!(path, envelope.merge("expanded" => text))
+        1
+      end
+
+      def rewrite_envelope!(path, envelope)
+        File.binwrite("#{path}.tmp", "#{JSON.pretty_generate(envelope)}\n")
+        File.rename("#{path}.tmp", path)
+      end
+
       def write_state!(workdir, sha)
         FileUtils.mkdir_p(workdir)
         state = { "last_modified" => nil, "sha256" => sha, "url" => API_URL }
@@ -291,16 +411,23 @@ module Nabu
       def page_class(envelope)
         wikitext = envelope.fetch("wikitext")
         return :versions if wikitext.match?(/\{\{\s*versions/i)
-        return :pages_index if wikitext.match?(/<pages\s+index/i)
+        # P111-2: a shell whose fetch landed an expansion payload IS a text
+        # page now; a payload-less one (stale tree, empty expansion) keeps
+        # skipping by rule, never quarantines.
+        return page_payloads?(envelope) ? :text : :pages_index if wikitext.match?(/<pages\s+index/i)
         return :text if manyo_blocks?(wikitext)
-        # Sibling-transclusion shells (censused at the live first
-        # sync, 230 pages — 北条五代記/巻第二 is "{{:巻第一|巻=二|…}}"
-        # and nothing else): the content renders from ANOTHER page's
-        # machinery. Same residue class as <pages index> — skip by
-        # rule, never quarantine.
-        return :shell if prose_paragraphs(wikitext).empty?
+
+        if prose_paragraphs(wikitext).empty?
+          return :text unless expanded_paragraphs(envelope).empty?
+
+          return :shell
+        end
 
         :text
+      end
+
+      def page_payloads?(envelope)
+        envelope["pages"].is_a?(Hash) && !envelope["pages"].empty?
       end
 
       def stray_files(workdir)
@@ -362,9 +489,16 @@ module Nabu
 
       def prose_document(document_ref, envelope, wikitext)
         document = document_for(document_ref, envelope, language: LANGUAGE)
+        append_prose!(document, document_ref, prose_paragraphs(wikitext))
+        raise ParseError, "#{document_ref.id}: no prose extracted" if document.empty?
+
+        document
+      end
+
+      def append_prose!(document, document_ref, paragraphs)
         section = nil
         sequence = 0
-        prose_paragraphs(wikitext).each do |paragraph|
+        paragraphs.each do |paragraph|
           if paragraph.match?(/\A\d+\z/)
             section = paragraph
             next
@@ -377,9 +511,137 @@ module Nabu
             text: paragraph, sequence: sequence, annotations: annotations
           )
         end
-        raise ParseError, "#{document_ref.id}: no prose extracted" if document.empty?
+      end
+
+      # -- the <pages index> expansion (P111-2, mold A) ----------------------
+
+      # The shell's Page:-namespace payloads join in tag order with a SINGLE
+      # newline — MediaWiki's own transclusion seam, so a sentence wrapped
+      # across scan pages stays one paragraph (the prose pipeline collapses
+      # inner newlines) and real blank-line breaks still split. The Page-ns
+      # <noinclude> regions (pagequality headers, running footers) are
+      # furniture, never text.
+      def pages_index_document(document_ref, envelope)
+        document = document_for(document_ref, envelope, language: LANGUAGE)
+        pages = envelope.fetch("pages")
+        body = self.class.pages_tag_titles(envelope.fetch("wikitext"))
+                   .filter_map { |title| pages[title] }
+                   .map { |text| text.gsub(%r{<noinclude>.*?</noinclude>}m, "") }
+                   .join("\n")
+        append_prose!(document, document_ref, prose_paragraphs(body))
+        raise ParseError, "#{document_ref.id}: no prose extracted from the Page: payloads" if document.empty?
 
         document
+      end
+
+      # -- the dispatcher-shell expansion (P111-2, mold B) -------------------
+
+      def expanded_document(document_ref, envelope)
+        document = document_for(document_ref, envelope, language: LANGUAGE)
+        section = nil
+        sequence = 0
+        expanded_paragraphs(envelope).each do |paragraph|
+          if paragraph.start_with?(SECTION_MARKER)
+            section = paragraph.delete_prefix(SECTION_MARKER).strip
+            next
+          end
+
+          sequence += 1
+          annotations = section ? { "section" => section } : {}
+          document << Nabu::Passage.new(
+            urn: "#{document_ref.id}:#{sequence}", language: LANGUAGE,
+            text: paragraph, sequence: sequence, annotations: annotations
+          )
+        end
+        raise ParseError, "#{document_ref.id}: no prose extracted from the expansion" if document.empty?
+
+        document
+      end
+
+      def expanded_paragraphs(envelope)
+        text = envelope["expanded"]
+        return [] unless text.is_a?(String)
+
+        @expanded_paragraphs ||= {}
+        @expanded_paragraphs[envelope.fetch("pageid")] ||=
+          strip_expanded(text, envelope.fetch("title"))
+      end
+
+      # The rendered-furniture strip for expandtemplates output (censused
+      # over the live shells, 2026-09-30): nav divs by id, TOC self-links,
+      # heading links back to the parent's TOC anchors (→ section markers),
+      # templatestyles/indicator/inputbox machinery, ruby readings (<rt>/
+      # <rp> drop, base text stays), link-only furniture paragraphs (the
+      # volume lists). Div boundaries become paragraph breaks — the
+      # expansion carries no blank-line structure of its own.
+      def strip_expanded(text, title)
+        body = text.gsub("&#x23;", "#").gsub("&nbsp;", " ").gsub("&#32;", " ")
+                   .gsub(/__[A-Z]+__/, "")
+                   .gsub(%r{<templatestyles[^>]*/?>}i, "")
+                   .gsub(/<!--.*?-->/m, "")
+                   # 【…[https://dl.ndl.go.jp/… NDLJP:n]…】 scan-page markers
+                   # (the transcription's source-image anchors) are furniture
+                   .gsub(/【[^【】]*\[https?:[^\]]*\][^【】]*】/, "")
+        body = remove_balanced_div(body, 'id="navigationHeader"')
+        body = remove_balanced_div(body, 'id="navigationNotes"')
+        body = body.gsub(%r{<indicator[^>]*>.*?</indicator>}mi, "")
+                   .gsub(%r{<inputbox>.*?</inputbox>}mi, "")
+                   .gsub(%r{<r[tp][^>]*>.*?</r[tp]>}mi, "")
+        body = body.gsub(/\[\[[^\[\]|]*#目次-[^\[\]|]*\|([^\[\]]*)\]\]/) do
+          label = ::Regexp.last_match(1).gsub(%r{</?[a-z][^>]*>}i, "").strip
+          "\n\n#{SECTION_MARKER}#{label}\n\n"
+        end
+        body = body.gsub(/\[\[#{Regexp.escape(title)}#[^\[\]]*\]\]/, "")
+                   .gsub(/\[\[(?:category|file|image|special):[^\[\]]*\]\]/i, "")
+                   .gsub(%r{</?div[^>]*>}i, "\n\n")
+        body.split(/\n{2,}/)
+            .reject { |paragraph| link_only_paragraph?(paragraph) }
+            .map { |paragraph| finish_expanded_paragraph(paragraph) }
+            .reject(&:empty?)
+      end
+
+      # Remove the <div> region whose opening tag carries +needle+, div
+      # nesting respected (the navigationNotes block nests empty divs) —
+      # regexes cannot balance, so this walks tag by tag.
+      def remove_balanced_div(text, needle)
+        open_at = text.enum_for(:scan, /<div[^>]*>/i)
+                      .find { ::Regexp.last_match(0).include?(needle) } &&
+                  ::Regexp.last_match.begin(0)
+        return text if open_at.nil?
+
+        depth = 0
+        scanner = text[open_at..].enum_for(:scan, %r{<div[^>]*>|</div>}i)
+        scanner.each do
+          match = ::Regexp.last_match
+          depth += match[0].start_with?("</") ? -1 : 1
+          if depth.zero?
+            close_at = open_at + match.end(0)
+            return text[...open_at] + text[close_at..]
+          end
+        end
+        text # unbalanced markup: leave it, the tag strip degrades gracefully
+      end
+
+      # A paragraph that is nothing but links, punctuation and whitespace is
+      # navigation furniture (prev/next rows, volume lists), never text.
+      def link_only_paragraph?(paragraph)
+        return false unless paragraph.include?("[[")
+
+        paragraph.gsub(/\[\[[^\[\]]*\]\]/, "")
+                 .gsub(%r{</?[a-z][^>]*>}i, "")
+                 .gsub(/[[:punct:][:space:]←→・]/, "")
+                 .empty?
+      end
+
+      def finish_expanded_paragraph(paragraph)
+        cleaned = paragraph.gsub(/\[https?:[^\]\s]*\s+([^\]]*)\]/) { ::Regexp.last_match(1) }
+                           .gsub(/\[https?:[^\]\s]*\]/, "")
+                           .gsub(/\[\[([^\]|]*\|)?([^\]]*)\]\]/) { ::Regexp.last_match(2) }
+                           .gsub(%r{</?[a-z][^>]*>}i, "")
+                           .gsub("​", "")
+                           .gsub(/\s*\n\s*/, "")
+                           .strip
+        Nabu::Normalize.nfc(cleaned)
       end
 
       def prose_paragraphs(wikitext)
@@ -415,7 +677,9 @@ module Nabu
             name = name.to_s.strip
             case name
             when "r", "ruby", "ルビ" then args.first.to_s
-            when "smaller" then ""
+            # {{*|やけイ}} is a marginal variant note (校異 apparatus) on the
+            # Page:-namespace scans — modern-edition machinery, never text.
+            when "smaller", "*" then ""
             else
               name.match?(/\A[〱〲〳〴〵]\z/) ? name : args.last.to_s
             end

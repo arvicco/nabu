@@ -2280,19 +2280,22 @@ ja-wikisource:   # P109-1
   adapter: Nabu::Adapters::JaWikisource
   adopted: "2026-09-29"
   axes: [japonic]
-  wired: true    # first sync 2026-09-29: 530 docs / 52,408 passages, 0
-                   # quarantined; 337 shells skip by rule (107 versions/
-                   # pages-index + 230 sibling-transclusion, censused at
-                   # this sync); 万葉集/徒然草 cards eyeballed (ojp
-                   # man'yōgana + era bands live)
+  wired: true    # first sync 2026-09-29: 530 docs / 52,408 passages;
+                   # P111-2 shell expansion verified 2026-09-30: 838
+                   # docs / 89,076 passages, 0 quarantined (芭蕉俳句全集
+                   # 2,206-passage haiku corpus among the recovered);
+                   # 万葉集/徒然草 cards eyeballed (ojp man'yōgana +
+                   # era bands live)
   sync_policy: manual
   # The Japanese Wikisource premodern era cone (№R-74 posture:
   # premodern cone, verbatim base-edition strings, census-first —
-  # .docs/p109-plan.md). Census 2026-09-29: 867 ns-0 pages across the
-  # eight era categories 飛鳥–江戸; 760 direct-text (6.6 MB) parse,
-  # 29 {{versions}} + 78 <pages index> scan shells skip by rule (the
-  # scan shells are the declared residue — a future Page:-expansion
-  # packet). Texts PD; transcription layer CC BY-SA 4.0.
+  # .docs/p109-plan.md). Census: 867 ns-0 pages across the eight era
+  # categories 飛鳥–江戸. Since P111-2 the fetch expands BOTH shell
+  # residues — <pages index> scans (Page:-namespace payloads,
+  # revid-pinned) and parameterized dispatcher shells
+  # (action=expandtemplates, content-sha-pinned) — so only the 29
+  # {{versions}} disambiguation pages skip by rule. Texts PD;
+  # transcription layer CC BY-SA 4.0.
 
 kanripo:
   adapter: Nabu::Adapters::Kanripo
