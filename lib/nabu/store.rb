@@ -110,6 +110,34 @@ module Nabu
     # Negative cache_size is KiB of page cache; -262_144 → 256 MiB.
     REBUILD_CACHE_KIB = -262_144
 
+    # == Live-connection profile (P112-3, Q114 — the storage review R6)
+    #
+    # Measured 2026-10-01: live connections ran SQLite's defaults — a 2 MB
+    # page cache and no mmap — against a 124 GB catalog and a ~40 GB
+    # index. The live profile raises the per-connection page cache to
+    # 64 MiB and memory-maps up to 8 GiB of the file (reads come straight
+    # off the page cache via the mapping instead of read() copies; the OS
+    # evicts under pressure, so the number is a CEILING on address-space
+    # use, not an allocation). Applied to read-write AND read-only
+    # connects — both pragmas are per-connection and read-path knobs.
+    # The request is a ceiling twice over: the engine clamps it to its
+    # compile-time SQLITE_MAX_MMAP_SIZE (measured 2 GiB-epsilon on this
+    # build — the pragma reports what it actually granted).
+    LIVE_CACHE_KIB = -65_536
+    LIVE_MMAP_BYTES = 8 * (1024**3)
+
+    # == page_size 8192 at the NEXT from-scratch generation (P112-3)
+    #
+    # The standing files were created at SQLite's 4096 default. 8192
+    # halves the page count on the ~100M-row B-trees (shallower interior
+    # paths, fewer page headers, better sequential IO on the big scans)
+    # and is the standard choice for large scan-heavy databases. The
+    # pragma below only takes effect on a FRESH file (before its first
+    # write and before WAL mode engages); on an existing database it is a
+    # documented no-op — each file adopts 8192 at its next from-scratch
+    # rebuild (a one-way door per file generation, decided P112).
+    PAGE_SIZE = 8192
+
     # == Post-load ANALYZE (P42-4) — query-planner hygiene (ops §10)
     #
     # The live catalog had NEVER been ANALYZEd (measured 2026-07-20): SQLite's
@@ -146,11 +174,24 @@ module Nabu
       db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
       if db.database_type == :sqlite
         db.run("PRAGMA foreign_keys = ON")
+        live_pragmas!(db)
         unless readonly
+          db.run("PRAGMA page_size = #{PAGE_SIZE}") # fresh files only (class doc)
           write_ahead_log!(db)
           rebuild_pragmas!(db) if rebuild
         end
       end
+      db
+    end
+
+    # The live-connection profile (class doc above): read-path knobs, safe
+    # and worthwhile on every connect — the rebuild profile's larger cache
+    # (applied after) simply overrides the cache half.
+    def live_pragmas!(db)
+      return db unless db.database_type == :sqlite
+
+      db.run("PRAGMA cache_size = #{LIVE_CACHE_KIB}")
+      db.run("PRAGMA mmap_size = #{LIVE_MMAP_BYTES}")
       db
     end
 
@@ -209,9 +250,13 @@ module Nabu
     # derived-of-derived, so it is even more disposable.
     def connect_fulltext(url, readonly: false, rebuild: false)
       db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
-      if !readonly && db.database_type == :sqlite
-        write_ahead_log!(db)
-        rebuild_pragmas!(db) if rebuild
+      if db.database_type == :sqlite
+        live_pragmas!(db)
+        unless readonly
+          db.run("PRAGMA page_size = #{PAGE_SIZE}") # fresh files only (class doc)
+          write_ahead_log!(db)
+          rebuild_pragmas!(db) if rebuild
+        end
       end
       db
     end
@@ -371,6 +416,7 @@ require_relative "store/artifact_scripts"
 require_relative "store/source_stats"
 require_relative "store/place_index"
 require_relative "store/person_index"
+require_relative "store/fts_structure"
 require_relative "store/index_delta"
 require_relative "store/loader"
 require_relative "store/dictionary_loader"

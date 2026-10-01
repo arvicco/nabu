@@ -207,6 +207,100 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:fuzzy_unindexed, entry("perseus-greek"))
   end
 
+  # -- index freshness + segment pressure (P112-3, Q114) ---------------------
+
+  def refresh_slice(slug)
+    Nabu::Store::Indexer.refresh_source!(catalog: @db, fulltext: @fulltext, slug: slug)
+  end
+
+  def test_fresh_slice_stamp_is_silent
+    seed_indexed_source("perseus-greek")
+    refresh_slice("perseus-greek")
+
+    assert_nil find(:index_slice_stale, entry("perseus-greek"))
+    assert_nil find(:index_slice_pending, entry("perseus-greek"))
+  end
+
+  def test_pending_slice_is_loud
+    seed_indexed_source("perseus-greek")
+    refresh_slice("perseus-greek")
+    @fulltext[Nabu::Store::Indexer::SLICE_REFRESHES_TABLE]
+      .where(slug: "perseus-greek").update(finished_at: nil)
+
+    finding = find(:index_slice_pending, entry("perseus-greek"))
+
+    assert_predicate finding, :loud?
+    assert_match(/never finished/, finding.message)
+  end
+
+  def test_stale_slice_stamp_is_loud
+    source = seed_indexed_source("perseus-greek")
+    refresh_slice("perseus-greek")
+    # The catalog moves on while the index does not (a skip-gate hole's
+    # signature): a new live passage lands with no refresh.
+    doc = seed_docs(source, 1).first
+    @db[:passages].insert(document_id: doc[:id], urn: "urn:t:perseus-greek:p2", sequence: 0,
+                          language: "grc", text: "ἄνδρα μοι", text_normalized: "ανδρα μοι",
+                          content_sha256: "x", withdrawn: false)
+
+    finding = find(:index_slice_stale, entry("perseus-greek"))
+
+    assert_predicate finding, :loud?
+    assert_match(/catalog holds 2/, finding.message)
+  end
+
+  def test_no_stamp_row_is_fresh_by_construction
+    seed_indexed_source("perseus-greek") # rebuilt, slice_refreshes absent
+    assert_nil find(:index_slice_stale, entry("perseus-greek"))
+  end
+
+  def test_p111_era_stamp_without_columns_makes_no_claim
+    seed_indexed_source("perseus-greek")
+    refresh_slice("perseus-greek")
+    @fulltext[Nabu::Store::Indexer::SLICE_REFRESHES_TABLE]
+      .where(slug: "perseus-greek").update(live_rows: nil, max_passage_id: nil)
+
+    assert_nil find(:index_slice_stale, entry("perseus-greek"))
+  end
+
+  def test_segment_pressure_warns_then_anomalies
+    seed_indexed_source("perseus-greek")
+    gauges = { segments: Nabu::Store::FtsStructure::SEGMENT_WARN, pages: 10,
+               tombstone_pages: 0, tombstone_share: 0.0, levels: 1 }
+    checker = invariants
+    stub_gauges(gauges) do
+      finding = checker.global.find { |f| f.kind == :index_segment_pressure }
+
+      refute_nil finding
+      assert_equal :soft, finding.severity
+    end
+    stub_gauges(gauges.merge(segments: Nabu::Store::FtsStructure::SEGMENT_ANOMALY)) do
+      finding = checker.global.find { |f| f.kind == :index_segment_pressure }
+
+      assert_predicate finding, :loud?
+      assert_match(/hard cap 2000/, finding.message)
+    end
+  end
+
+  def test_quiet_segment_count_reports_nothing
+    seed_indexed_source("perseus-greek")
+    findings = invariants.global.select { |f| f.kind == :index_segment_pressure }
+
+    assert_empty findings, "a freshly built index sits far from the cap"
+  end
+
+  # The forbidding_index_work pattern: swap the module function, restore.
+  def stub_gauges(gauges)
+    mod = Nabu::Store::FtsStructure
+    original = mod.method(:gauges)
+    mod.define_singleton_method(:gauges) do |_fulltext, table|
+      table == Nabu::Store::Indexer::TABLE ? gauges : nil
+    end
+    yield
+  ensure
+    mod.define_singleton_method(:gauges, original)
+  end
+
   # -- flag-vs-artifact: timeline extractor families vs document_axes -------------
 
   def test_timeline_family_with_zero_rows_is_loud
