@@ -36,6 +36,43 @@ boundary with `</ab></body></text>` appended; every fixture is well-formed
 (fetched for URL-liveness only, never byte-compared); the `trim:` note records
 which members are themselves uncut. Re-extract from the zip after any refresh.
 
+## The CorA-XML sibling zip (dating / localization)
+
+Two whole members of the deposit's **CorA-XML** serialisation, at the
+canonical layout the adapter's second fetch arm materializes
+(`coraxml/ReN_{anno,trans}_2021-01-06/<Sigle>.xml` — the zip's single top dir
+strips):
+
+- **Retrieved:** 2026-10-01, from the same deposit record 9195.
+- **Upstream artifact:** `CorAXML_1.1.zip`,
+  `https://www.fdr.uni-hamburg.de/record/9195/files/CorAXML_1.1.zip?download=1`
+  (302 → signed S3 URL), 67,786,811 B, sha256
+  `118087efcf27a09d6268d95749f7dc87adbe18bcaa1d9186d5bcf3afe0c46049` (the
+  deposit bucket's md5 `2bd9fc1ba540b9048b9c9586ed5a6736` matches). Top dir
+  `CorAXML_1.1/` with `ReN_anno_2021-01-06/` (161) + `ReN_trans_2021-01-06/`
+  (74) — sigla censused 1:1 with the TEI zip's 235. The record also ships
+  `CorA-ReN-XML_1.1.zip` (78 MB, a project variant with `dipl`/`anno`
+  elements and the same header) — not used. Not committed.
+
+| File | Bytes | Kept |
+|---|---|---|
+| `coraxml/ReN_anno_2021-01-06/Hamb._Uk._1301-1350.xml` | 58,623 | **whole** — the Hamburg TEI fixture's sibling (date_ReN 1329, place Hamburg) |
+| `coraxml/ReN_trans_2021-01-06/Dub._Uk._1301-1350.xml` | 81,074 | **whole** — the Duisburg TEI fixture's sibling (date_ReN 1345, empty place, niederrheinisch) |
+
+The three TEI trims deliberately have **no** sibling fixture: they pin the
+per-document absent-sibling path (today's canonical state).
+
+Structure (no XML declaration; standard CorA-XML): `<text id>` →
+`<cora-header sigle name/>` → a **free-text** `<header>` of `key:value` lines
+→ `<layoutinfo>` → `<token><tok_dipl/><tok_anno>…`. The header's key set is
+closed — **43 keys, one fixed order on all 235 files** (censused 2026-10-01):
+`text_ReN abbr_ddd … place … date_ReN … topic topic_ReN genre time medium
+language-area base_for_transcription token language language-type`; empty
+values and `---` are nulls. `date_ReN` is prose-heavy (`1329`, `1452-1500`,
+`[um 1300]`, `Mitte 15. Jh.`, `REV3: 1453; …`); `time` is upstream's
+century-half grid on all 235 (`14/1`, `15/1-15/2`); `place` is filled on 85
+(5 of them the explicit `unbekannt`); `language-area` on all 235 (9 values).
+
 ## Structure notes (for the P46-5 parser — the ReN cora-tei dialect)
 
 - **No `teiHeader`**: files open at `<text><body><ab>`. No in-file licence,

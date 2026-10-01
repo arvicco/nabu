@@ -1,0 +1,2012 @@
+<text id="T25">
+  <cora-header sigle="T25" name="Dub. Uk. 1301-1350" />
+  <header>text_ReN:1 Duisburger digitalisierte Urkunde aus dem ASnA, 1301-1350
+abbr_ddd:Dub. Uk. 1301-1350
+text-type:
+reference:
+reference_secondary:
+edition:ASnA-Corpus (offline)
+literature:
+library:ASnA
+library-shelfmark:ASnA
+online:
+scribe_or_printer:
+place:
+extent:1 Urkunde
+extract:ASnA-Sigle: Dub 1345
+columns:
+style:
+hands:
+author:
+drawer:
+illustration:
+date_ReN:1345
+online_file:
+external_source:
+notes_manuscript:
+notes_language:
+corpus:
+notes_transcription:
+notes_annotation:
+digitization_by:ASnA
+collation_by:NNA (Münster)
+pre_editing_by:NNA (Münster)
+annotation_by:---
+proofreading_by:---
+topic:Recht
+topic_ReN:U
+genre:U
+time:14/1
+medium:Handschrift
+language-area:niederrheinisch
+base_for_transcription:Handschrift/Druck
+token:454
+language:niederrheinisch
+language-type:niederrheinisch</header>
+  <layoutinfo>
+    <page id="p1" side="r" no="1" range="c1" />
+    <column id="c1" range="l1..l19" />
+    <line id="l1" name="01" range="t1_d1..t24_d1" />
+    <line id="l2" name="02" range="t24_d2..t47_d1" />
+    <line id="l3" name="03" range="t48_d1..t71_d1" />
+    <line id="l4" name="04" range="t72_d1..t97_d1" />
+    <line id="l5" name="05" range="t98_d1..t126_d1" />
+    <line id="l6" name="06" range="t127_d1..t153_d1" />
+    <line id="l7" name="07" range="t154_d1..t180_d1" />
+    <line id="l8" name="08" range="t181_d1..t207_d1" />
+    <line id="l9" name="09" range="t207_d2..t231_d1" />
+    <line id="l10" name="10" range="t232_d1..t257_d1" />
+    <line id="l11" name="11" range="t258_d1..t285_d1" />
+    <line id="l12" name="12" range="t286_d1..t310_d1" />
+    <line id="l13" name="13" range="t311_d1..t333_d1" />
+    <line id="l14" name="14" range="t334_d1..t354_d1" />
+    <line id="l15" name="15" range="t354_d2..t377_d1" />
+    <line id="l16" name="16" range="t378_d1..t400_d1" />
+    <line id="l17" name="17" range="t401_d1..t423_d1" />
+    <line id="l18" name="18" range="t424_d1..t443_d1" />
+    <line id="l19" name="19" range="t444_d1..t451_d1" />
+  </layoutinfo>
+  <shifttags />
+  <comment type="K">ASnA Ortspunkt-Corpus Duisburg Dub 1345</comment>
+  <token id="t1" trans="Allen">
+    <dipl id="t1_d1" trans="Allen" utf="Allen" />
+    <mod id="t1_m1" trans="Allen" utf="Allen" ascii="Allen" checked="n">
+      </mod>
+  </token>
+  <token id="t2" trans="guden">
+    <dipl id="t2_d1" trans="guden" utf="guden" />
+    <mod id="t2_m1" trans="guden" utf="guden" ascii="guden" checked="n" />
+  </token>
+  <token id="t3" trans="luden">
+    <dipl id="t3_d1" trans="luden" utf="luden" />
+    <mod id="t3_m1" trans="luden" utf="luden" ascii="luden" checked="n" />
+  </token>
+  <token id="t4" trans=",">
+    <dipl id="t4_d1" trans="," utf="," />
+    <mod id="t4_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satzteil_I" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t5" trans="de">
+    <dipl id="t5_d1" trans="de" utf="de" />
+    <mod id="t5_m1" trans="de" utf="de" ascii="de" checked="n" />
+  </token>
+  <token id="t6" trans="desen">
+    <dipl id="t6_d1" trans="desen" utf="desen" />
+    <mod id="t6_m1" trans="desen" utf="desen" ascii="desen" checked="n" />
+  </token>
+  <token id="t7" trans="brif">
+    <dipl id="t7_d1" trans="brif" utf="brif" />
+    <mod id="t7_m1" trans="brif" utf="brif" ascii="brif" checked="n" />
+  </token>
+  <token id="t8" trans="solen">
+    <dipl id="t8_d1" trans="solen" utf="solen" />
+    <mod id="t8_m1" trans="solen" utf="solen" ascii="solen" checked="n" />
+  </token>
+  <token id="t9" trans="syen">
+    <dipl id="t9_d1" trans="syen" utf="syen" />
+    <mod id="t9_m1" trans="syen" utf="syen" ascii="syen" checked="n" />
+  </token>
+  <token id="t10" trans="of">
+    <dipl id="t10_d1" trans="of" utf="of" />
+    <mod id="t10_m1" trans="of" utf="of" ascii="of" checked="n" />
+  </token>
+  <token id="t11" trans="horen">
+    <dipl id="t11_d1" trans="horen" utf="horen" />
+    <mod id="t11_m1" trans="horen" utf="horen" ascii="horen" checked="n" />
+  </token>
+  <token id="t12" trans="lesen">
+    <dipl id="t12_d1" trans="lesen" utf="lesen" />
+    <mod id="t12_m1" trans="lesen" utf="lesen" ascii="lesen" checked="n" />
+  </token>
+  <token id="t13" trans=",">
+    <dipl id="t13_d1" trans="," utf="," />
+    <mod id="t13_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t14" trans="do">
+    <dipl id="t14_d1" trans="do" utf="do" />
+    <mod id="t14_m1" trans="do" utf="do" ascii="do" checked="n" />
+  </token>
+  <token id="t15" trans="ich">
+    <dipl id="t15_d1" trans="ich" utf="ich" />
+    <mod id="t15_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t16" trans="herman">
+    <dipl id="t16_d1" trans="herman" utf="herman" />
+    <mod id="t16_m1" trans="herman" utf="herman" ascii="herman" checked="n" />
+  </token>
+  <token id="t17" trans="dy">
+    <dipl id="t17_d1" trans="dy" utf="dy" />
+    <mod id="t17_m1" trans="dy" utf="dy" ascii="dy" checked="n" />
+  </token>
+  <token id="t18" trans="heked">
+    <dipl id="t18_d1" trans="heked" utf="heked" />
+    <mod id="t18_m1" trans="heked" utf="heked" ascii="heked" checked="n" />
+  </token>
+  <token id="t19" trans="kondich">
+    <dipl id="t19_d1" trans="kondich" utf="kondich" />
+    <mod id="t19_m1" trans="kondich" utf="kondich" ascii="kondich" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t20" trans="tughe">
+    <dipl id="t20_d1" trans="tughe" utf="tughe" />
+    <mod id="t20_m1" trans="tughe" utf="tughe" ascii="tughe" checked="n" />
+  </token>
+  <token id="t21" trans=",">
+    <dipl id="t21_d1" trans="," utf="," />
+    <mod id="t21_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t22" trans="end">
+    <dipl id="t22_d1" trans="end" utf="end" />
+    <mod id="t22_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t23" trans="bekenne">
+    <dipl id="t23_d1" trans="bekenne" utf="bekenne" />
+    <mod id="t23_m1" trans="bekenne" utf="bekenne" ascii="bekenne" checked="n" />
+  </token>
+  <token id="t24" trans="open-bare">
+    <dipl id="t24_d1" trans="open-" utf="open-" />
+    <dipl id="t24_d2" trans="bare" utf="bare" />
+    <mod id="t24_m1" trans="open-bare" utf="open-bare" ascii="openbare" checked="n" />
+  </token>
+  <token id="t25" trans="in">
+    <dipl id="t25_d1" trans="in" utf="in" />
+    <mod id="t25_m1" trans="in" utf="in" ascii="in" checked="n" />
+  </token>
+  <token id="t26" trans="desen">
+    <dipl id="t26_d1" trans="desen" utf="desen" />
+    <mod id="t26_m1" trans="desen" utf="desen" ascii="desen" checked="n" />
+  </token>
+  <token id="t27" trans="briue">
+    <dipl id="t27_d1" trans="briue" utf="briue" />
+    <mod id="t27_m1" trans="briue" utf="briue" ascii="briue" checked="n" />
+  </token>
+  <token id="t28" trans=",">
+    <dipl id="t28_d1" trans="," utf="," />
+    <mod id="t28_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satzteil_F" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t29" trans="dad">
+    <dipl id="t29_d1" trans="dad" utf="dad" />
+    <mod id="t29_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t30" trans="her">
+    <dipl id="t30_d1" trans="her" utf="her" />
+    <mod id="t30_m1" trans="her" utf="her" ascii="her" checked="n" />
+  </token>
+  <token id="t31" trans="alberd">
+    <dipl id="t31_d1" trans="alberd" utf="alberd" />
+    <mod id="t31_m1" trans="alberd" utf="alberd" ascii="alberd" checked="n" />
+  </token>
+  <token id="t32" trans="scakke">
+    <dipl id="t32_d1" trans="scakke" utf="scakke" />
+    <mod id="t32_m1" trans="scakke" utf="scakke" ascii="scakke" checked="n" />
+  </token>
+  <token id="t33" trans="min">
+    <dipl id="t33_d1" trans="min" utf="min" />
+    <mod id="t33_m1" trans="min" utf="min" ascii="min" checked="n" />
+  </token>
+  <token id="t34" trans="swagher">
+    <dipl id="t34_d1" trans="swagher" utf="swagher" />
+    <mod id="t34_m1" trans="swagher" utf="swagher" ascii="swagher" checked="n" />
+  </token>
+  <token id="t35" trans=",">
+    <dipl id="t35_d1" trans="," utf="," />
+    <mod id="t35_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satzteil_I" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t36" trans="di">
+    <dipl id="t36_d1" trans="di" utf="di" />
+    <mod id="t36_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t37" trans="nu">
+    <dipl id="t37_d1" trans="nu" utf="nu" />
+    <mod id="t37_m1" trans="nu" utf="nu" ascii="nu" checked="n" />
+  </token>
+  <token id="t38" trans="is">
+    <dipl id="t38_d1" trans="is" utf="is" />
+    <mod id="t38_m1" trans="is" utf="is" ascii="is" checked="n" />
+  </token>
+  <token id="t39" trans="en">
+    <dipl id="t39_d1" trans="en" utf="en" />
+    <mod id="t39_m1" trans="en" utf="en" ascii="en" checked="n" />
+  </token>
+  <token id="t40" trans="bruder">
+    <dipl id="t40_d1" trans="bruder" utf="bruder" />
+    <mod id="t40_m1" trans="bruder" utf="bruder" ascii="bruder" checked="n" />
+  </token>
+  <token id="t41" trans="des">
+    <dipl id="t41_d1" trans="des" utf="des" />
+    <mod id="t41_m1" trans="des" utf="des" ascii="des" checked="n" />
+  </token>
+  <token id="t42" trans="oerden">
+    <dipl id="t42_d1" trans="oerden" utf="oerden" />
+    <mod id="t42_m1" trans="oerden" utf="oerden" ascii="oerden" checked="n" />
+  </token>
+  <token id="t43" trans="van§me">
+    <dipl id="t43_d1" trans="van§me" utf="vanme" />
+    <mod id="t43_m1" trans="van§" utf="van" ascii="van" checked="n" />
+    <mod id="t43_m2" trans="me" utf="me" ascii="me" checked="n" />
+  </token>
+  <token id="t44" trans="duysschen">
+    <dipl id="t44_d1" trans="duysschen" utf="duysschen" />
+    <mod id="t44_m1" trans="duysschen" utf="duysschen" ascii="duysschen" checked="n" />
+  </token>
+  <token id="t45" trans="huͦs">
+    <dipl id="t45_d1" trans="huͦs" utf="huͦs" />
+    <mod id="t45_m1" trans="huͦs" utf="huͦs" ascii="huͦs" checked="n" />
+  </token>
+  <token id="t46" trans=",">
+    <dipl id="t46_d1" trans="," utf="," />
+    <mod id="t46_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t47" trans="dad">
+    <dipl id="t47_d1" trans="dad" utf="dad" />
+    <mod id="t47_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t48" trans="gud">
+    <dipl id="t48_d1" trans="gud" utf="gud" />
+    <mod id="t48_m1" trans="gud" utf="gud" ascii="gud" checked="n" />
+  </token>
+  <token id="t49" trans="genompd">
+    <dipl id="t49_d1" trans="genompd" utf="genompd" />
+    <mod id="t49_m1" trans="genompd" utf="genompd" ascii="genompd" checked="n" />
+  </token>
+  <token id="t50" trans="to">
+    <dipl id="t50_d1" trans="to" utf="to" />
+    <mod id="t50_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t51" trans="distelwich">
+    <dipl id="t51_d1" trans="distelwich" utf="distelwich" />
+    <mod id="t51_m1" trans="distelwich" utf="distelwich" ascii="distelwich" checked="n" />
+  </token>
+  <token id="t52" trans=",">
+    <dipl id="t52_d1" trans="," utf="," />
+    <mod id="t52_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t53" trans="mid">
+    <dipl id="t53_d1" trans="mid" utf="mid" />
+    <mod id="t53_m1" trans="mid" utf="mid" ascii="mid" checked="n" />
+  </token>
+  <token id="t54" trans="al">
+    <dipl id="t54_d1" trans="al" utf="al" />
+    <mod id="t54_m1" trans="al" utf="al" ascii="al" checked="n" />
+  </token>
+  <token id="t55" trans="siner">
+    <dipl id="t55_d1" trans="siner" utf="siner" />
+    <mod id="t55_m1" trans="siner" utf="siner" ascii="siner" checked="n" />
+  </token>
+  <token id="t56" trans="tobehoringhe">
+    <dipl id="t56_d1" trans="tobehoringhe" utf="tobehoringhe" />
+    <mod id="t56_m1" trans="tobehoringhe" utf="tobehoringhe" ascii="tobehoringhe" checked="n" />
+  </token>
+  <token id="t57" trans=",">
+    <dipl id="t57_d1" trans="," utf="," />
+    <mod id="t57_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satzteil_F" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t58" trans="mi">
+    <dipl id="t58_d1" trans="mi" utf="mi" />
+    <mod id="t58_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t59" trans="hadde">
+    <dipl id="t59_d1" trans="hadde" utf="hadde" />
+    <mod id="t59_m1" trans="hadde" utf="hadde" ascii="hadde" checked="n" />
+  </token>
+  <token id="t60" trans="opgedraghen">
+    <dipl id="t60_d1" trans="opgedraghen" utf="opgedraghen" />
+    <mod id="t60_m1" trans="opgedraghen" utf="opgedraghen" ascii="opgedraghen" checked="n" />
+  </token>
+  <token id="t61" trans=",">
+    <dipl id="t61_d1" trans="," utf="," />
+    <mod id="t61_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t62" trans="vor">
+    <dipl id="t62_d1" trans="vor" utf="vor" />
+    <mod id="t62_m1" trans="vor" utf="vor" ascii="vor" checked="n" />
+  </token>
+  <token id="t63" trans="den">
+    <dipl id="t63_d1" trans="den" utf="den" />
+    <mod id="t63_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t64" trans="gerichte">
+    <dipl id="t64_d1" trans="gerichte" utf="gerichte" />
+    <mod id="t64_m1" trans="gerichte" utf="gerichte" ascii="gerichte" checked="n" />
+  </token>
+  <token id="t65" trans="to">
+    <dipl id="t65_d1" trans="to" utf="to" />
+    <mod id="t65_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t66" trans="mederic">
+    <dipl id="t66_d1" trans="mederic" utf="mederic" />
+    <mod id="t66_m1" trans="mederic" utf="mederic" ascii="mederic" checked="n" />
+  </token>
+  <token id="t67" trans=",">
+    <dipl id="t67_d1" trans="," utf="," />
+    <mod id="t67_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t68" trans="ende">
+    <dipl id="t68_d1" trans="ende" utf="ende" />
+    <mod id="t68_m1" trans="ende" utf="ende" ascii="ende" checked="n" />
+  </token>
+  <token id="t69" trans="satte">
+    <dipl id="t69_d1" trans="satte" utf="satte" />
+    <mod id="t69_m1" trans="satte" utf="satte" ascii="satte" checked="n" />
+  </token>
+  <token id="t70" trans="mi">
+    <dipl id="t70_d1" trans="mi" utf="mi" />
+    <mod id="t70_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t71" trans="des">
+    <dipl id="t71_d1" trans="des" utf="des" />
+    <mod id="t71_m1" trans="des" utf="des" ascii="des" checked="n" />
+  </token>
+  <token id="t72" trans="gudes">
+    <dipl id="t72_d1" trans="gudes" utf="gudes" />
+    <mod id="t72_m1" trans="gudes" utf="gudes" ascii="gudes" checked="n" />
+  </token>
+  <token id="t73" trans="enen">
+    <dipl id="t73_d1" trans="enen" utf="enen" />
+    <mod id="t73_m1" trans="enen" utf="enen" ascii="enen" checked="n" />
+  </token>
+  <token id="t74" trans="vormonder">
+    <dipl id="t74_d1" trans="vormonder" utf="vormonder" />
+    <mod id="t74_m1" trans="vormonder" utf="vormonder" ascii="vormonder" checked="n" />
+  </token>
+  <token id="t75" trans="vm">
+    <dipl id="t75_d1" trans="vm" utf="vm" />
+    <mod id="t75_m1" trans="vm" utf="vm" ascii="vm" checked="n" />
+  </token>
+  <token id="t76" trans="sonderliken">
+    <dipl id="t76_d1" trans="sonderliken" utf="sonderliken" />
+    <mod id="t76_m1" trans="sonderliken" utf="sonderliken" ascii="sonderliken" checked="n" />
+  </token>
+  <token id="t77" trans="geloue">
+    <dipl id="t77_d1" trans="geloue" utf="geloue" />
+    <mod id="t77_m1" trans="geloue" utf="geloue" ascii="geloue" checked="n" />
+  </token>
+  <token id="t78" trans=",">
+    <dipl id="t78_d1" trans="," utf="," />
+    <mod id="t78_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t79" trans="den">
+    <dipl id="t79_d1" trans="den" utf="den" />
+    <mod id="t79_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t80" trans="he">
+    <dipl id="t80_d1" trans="he" utf="he" />
+    <mod id="t80_m1" trans="he" utf="he" ascii="he" checked="n" />
+  </token>
+  <token id="t81" trans="to">
+    <dipl id="t81_d1" trans="to" utf="to" />
+    <mod id="t81_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t82" trans="mi">
+    <dipl id="t82_d1" trans="mi" utf="mi" />
+    <mod id="t82_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t83" trans="hadde">
+    <dipl id="t83_d1" trans="hadde" utf="hadde" />
+    <mod id="t83_m1" trans="hadde" utf="hadde" ascii="hadde" checked="n" />
+  </token>
+  <token id="t84" trans=",">
+    <dipl id="t84_d1" trans="," utf="," />
+    <mod id="t84_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t85" trans="op">
+    <dipl id="t85_d1" trans="op" utf="op" />
+    <mod id="t85_m1" trans="op" utf="op" ascii="op" checked="n" />
+  </token>
+  <token id="t86" trans="dad">
+    <dipl id="t86_d1" trans="dad" utf="dad" />
+    <mod id="t86_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t87" trans="ich">
+    <dipl id="t87_d1" trans="ich" utf="ich" />
+    <mod id="t87_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t88" trans=",">
+    <dipl id="t88_d1" trans="," utf="," />
+    <mod id="t88_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t89" trans="dad">
+    <dipl id="t89_d1" trans="dad" utf="dad" />
+    <mod id="t89_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t90" trans="guͦd">
+    <dipl id="t90_d1" trans="guͦd" utf="guͦd" />
+    <mod id="t90_m1" trans="guͦd" utf="guͦd" ascii="guͦd" checked="n" />
+  </token>
+  <token id="t91" trans=",">
+    <dipl id="t91_d1" trans="," utf="," />
+    <mod id="t91_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t92" trans="verantwarde">
+    <dipl id="t92_d1" trans="verantwarde" utf="verantwarde" />
+    <mod id="t92_m1" trans="verantwarde" utf="verantwarde" ascii="verantwarde" checked="n" />
+  </token>
+  <token id="t93" trans="van">
+    <dipl id="t93_d1" trans="van" utf="van" />
+    <mod id="t93_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t94" trans="siner">
+    <dipl id="t94_d1" trans="siner" utf="siner" />
+    <mod id="t94_m1" trans="siner" utf="siner" ascii="siner" checked="n" />
+  </token>
+  <token id="t95" trans="wegen">
+    <dipl id="t95_d1" trans="wegen" utf="wegen" />
+    <mod id="t95_m1" trans="wegen" utf="wegen" ascii="wegen" checked="n" />
+  </token>
+  <token id="t96" trans=",">
+    <dipl id="t96_d1" trans="," utf="," />
+    <mod id="t96_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t97" trans="Dad">
+    <dipl id="t97_d1" trans="Dad" utf="Dad" />
+    <mod id="t97_m1" trans="Dad" utf="Dad" ascii="Dad" checked="n" />
+  </token>
+  <token id="t98" trans="guͦd">
+    <dipl id="t98_d1" trans="guͦd" utf="guͦd" />
+    <mod id="t98_m1" trans="guͦd" utf="guͦd" ascii="guͦd" checked="n" />
+  </token>
+  <token id="t99" trans="als">
+    <dipl id="t99_d1" trans="als" utf="als" />
+    <mod id="t99_m1" trans="als" utf="als" ascii="als" checked="n" />
+  </token>
+  <token id="t100" trans="he">
+    <dipl id="t100_d1" trans="he" utf="he" />
+    <mod id="t100_m1" trans="he" utf="he" ascii="he" checked="n" />
+  </token>
+  <token id="t101" trans="mi">
+    <dipl id="t101_d1" trans="mi" utf="mi" />
+    <mod id="t101_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t102" trans="dad">
+    <dipl id="t102_d1" trans="dad" utf="dad" />
+    <mod id="t102_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t103" trans="hadde">
+    <dipl id="t103_d1" trans="hadde" utf="hadde" />
+    <mod id="t103_m1" trans="hadde" utf="hadde" ascii="hadde" checked="n" />
+  </token>
+  <token id="t104" trans="opgedraghen">
+    <dipl id="t104_d1" trans="opgedraghen" utf="opgedraghen" />
+    <mod id="t104_m1" trans="opgedraghen" utf="opgedraghen" ascii="opgedraghen" checked="n" />
+  </token>
+  <token id="t105" trans=",">
+    <dipl id="t105_d1" trans="," utf="," />
+    <mod id="t105_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t106" trans="dad">
+    <dipl id="t106_d1" trans="dad" utf="dad" />
+    <mod id="t106_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t107" trans="drege">
+    <dipl id="t107_d1" trans="drege" utf="drege" />
+    <mod id="t107_m1" trans="drege" utf="drege" ascii="drege" checked="n" />
+  </token>
+  <token id="t108" trans="ich">
+    <dipl id="t108_d1" trans="ich" utf="ich" />
+    <mod id="t108_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t109" trans="om">
+    <dipl id="t109_d1" trans="om" utf="om" />
+    <mod id="t109_m1" trans="om" utf="om" ascii="om" checked="n" />
+  </token>
+  <token id="t110" trans=",">
+    <dipl id="t110_d1" trans="," utf="," />
+    <mod id="t110_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t111" trans="end">
+    <dipl id="t111_d1" trans="end" utf="end" />
+    <mod id="t111_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t112" trans="den">
+    <dipl id="t112_d1" trans="den" utf="den" />
+    <mod id="t112_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t113" trans="huͦs">
+    <dipl id="t113_d1" trans="huͦs" utf="huͦs" />
+    <mod id="t113_m1" trans="huͦs" utf="huͦs" ascii="huͦs" checked="n" />
+  </token>
+  <token id="t114" trans="to">
+    <dipl id="t114_d1" trans="to" utf="to" />
+    <mod id="t114_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t115" trans="welhem">
+    <dipl id="t115_d1" trans="welhem" utf="welhem" />
+    <mod id="t115_m1" trans="welhem" utf="welhem" ascii="welhem" checked="n" />
+  </token>
+  <token id="t116" trans="weder">
+    <dipl id="t116_d1" trans="weder" utf="weder" />
+    <mod id="t116_m1" trans="weder" utf="weder" ascii="weder" checked="n" />
+  </token>
+  <token id="t117" trans="op">
+    <dipl id="t117_d1" trans="op" utf="op" />
+    <mod id="t117_m1" trans="op" utf="op" ascii="op" checked="n" />
+  </token>
+  <token id="t118" trans=",">
+    <dipl id="t118_d1" trans="," utf="," />
+    <mod id="t118_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t119" trans="wand">
+    <dipl id="t119_d1" trans="wand" utf="wand" />
+    <mod id="t119_m1" trans="wand" utf="wand" ascii="wand" checked="n" />
+  </token>
+  <token id="t120" trans="he">
+    <dipl id="t120_d1" trans="he" utf="he" />
+    <mod id="t120_m1" trans="he" utf="he" ascii="he" checked="n" />
+  </token>
+  <token id="t121" trans="dar">
+    <dipl id="t121_d1" trans="dar" utf="dar" />
+    <mod id="t121_m1" trans="dar" utf="dar" ascii="dar" checked="n" />
+  </token>
+  <token id="t122" trans="en">
+    <dipl id="t122_d1" trans="en" utf="en" />
+    <mod id="t122_m1" trans="en" utf="en" ascii="en" checked="n" />
+  </token>
+  <token id="t123" trans="bruder">
+    <dipl id="t123_d1" trans="bruder" utf="bruder" />
+    <mod id="t123_m1" trans="bruder" utf="bruder" ascii="bruder" checked="n" />
+  </token>
+  <token id="t124" trans="is">
+    <dipl id="t124_d1" trans="is" utf="is" />
+    <mod id="t124_m1" trans="is" utf="is" ascii="is" checked="n" />
+  </token>
+  <token id="t125" trans=",">
+    <dipl id="t125_d1" trans="," utf="," />
+    <mod id="t125_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t126" trans="end">
+    <dipl id="t126_d1" trans="end" utf="end" />
+    <mod id="t126_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t127" trans="beken{R_n}e">
+    <dipl id="t127_d1" trans="beken{R_n}e" utf="bekenne" />
+    <mod id="t127_m1" trans="beken{R_n}e" utf="bekenne" ascii="bekenne" checked="n" />
+  </token>
+  <token id="t128" trans=",">
+    <dipl id="t128_d1" trans="," utf="," />
+    <mod id="t128_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t129" trans="dad">
+    <dipl id="t129_d1" trans="dad" utf="dad" />
+    <mod id="t129_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t130" trans="noch">
+    <dipl id="t130_d1" trans="noch" utf="noch" />
+    <mod id="t130_m1" trans="noch" utf="noch" ascii="noch" checked="n" />
+  </token>
+  <token id="t131" trans="ich">
+    <dipl id="t131_d1" trans="ich" utf="ich" />
+    <mod id="t131_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t132" trans=",">
+    <dipl id="t132_d1" trans="," utf="," />
+    <mod id="t132_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t133" trans="noch">
+    <dipl id="t133_d1" trans="noch" utf="noch" />
+    <mod id="t133_m1" trans="noch" utf="noch" ascii="noch" checked="n" />
+  </token>
+  <token id="t134" trans="mine">
+    <dipl id="t134_d1" trans="mine" utf="mine" />
+    <mod id="t134_m1" trans="mine" utf="mine" ascii="mine" checked="n" />
+  </token>
+  <token id="t135" trans="eruen">
+    <dipl id="t135_d1" trans="eruen" utf="eruen" />
+    <mod id="t135_m1" trans="eruen" utf="eruen" ascii="eruen" checked="n" />
+  </token>
+  <token id="t136" trans=",">
+    <dipl id="t136_d1" trans="," utf="," />
+    <mod id="t136_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t137" trans="noch">
+    <dipl id="t137_d1" trans="noch" utf="noch" />
+    <mod id="t137_m1" trans="noch" utf="noch" ascii="noch" checked="n" />
+  </token>
+  <token id="t138" trans="nimen">
+    <dipl id="t138_d1" trans="nimen" utf="nimen" />
+    <mod id="t138_m1" trans="nimen" utf="nimen" ascii="nimen" checked="n" />
+  </token>
+  <token id="t139" trans="van">
+    <dipl id="t139_d1" trans="van" utf="van" />
+    <mod id="t139_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t140" trans="miner">
+    <dipl id="t140_d1" trans="miner" utf="miner" />
+    <mod id="t140_m1" trans="miner" utf="miner" ascii="miner" checked="n" />
+  </token>
+  <token id="t141" trans="weghen">
+    <dipl id="t141_d1" trans="weghen" utf="weghen" />
+    <mod id="t141_m1" trans="weghen" utf="weghen" ascii="weghen" checked="n" />
+  </token>
+  <token id="t142" trans=",">
+    <dipl id="t142_d1" trans="," utf="," />
+    <mod id="t142_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t143" trans="an">
+    <dipl id="t143_d1" trans="an" utf="an" />
+    <mod id="t143_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t144" trans="den">
+    <dipl id="t144_d1" trans="den" utf="den" />
+    <mod id="t144_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t145" trans="gude">
+    <dipl id="t145_d1" trans="gude" utf="gude" />
+    <mod id="t145_m1" trans="gude" utf="gude" ascii="gude" checked="n" />
+  </token>
+  <token id="t146" trans="ne§gien">
+    <dipl id="t146_d1" trans="ne§gien" utf="negien" />
+    <mod id="t146_m1" trans="ne§" utf="ne" ascii="ne" checked="n" />
+    <mod id="t146_m2" trans="gien" utf="gien" ascii="gien" checked="n" />
+  </token>
+  <token id="t147" trans="recht">
+    <dipl id="t147_d1" trans="recht" utf="recht" />
+    <mod id="t147_m1" trans="recht" utf="recht" ascii="recht" checked="n" />
+  </token>
+  <token id="t148" trans="en">
+    <dipl id="t148_d1" trans="en" utf="en" />
+    <mod id="t148_m1" trans="en" utf="en" ascii="en" checked="n" />
+  </token>
+  <token id="t149" trans="hadden">
+    <dipl id="t149_d1" trans="hadden" utf="hadden" />
+    <mod id="t149_m1" trans="hadden" utf="hadden" ascii="hadden" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t150" trans="nogh">
+    <dipl id="t150_d1" trans="nogh" utf="nogh" />
+    <mod id="t150_m1" trans="nogh" utf="nogh" ascii="nogh" checked="n" />
+  </token>
+  <token id="t151" trans="en">
+    <dipl id="t151_d1" trans="en" utf="en" />
+    <mod id="t151_m1" trans="en" utf="en" ascii="en" checked="n" />
+  </token>
+  <token id="t152" trans="hebben">
+    <dipl id="t152_d1" trans="hebben" utf="hebben" />
+    <mod id="t152_m1" trans="hebben" utf="hebben" ascii="hebben" checked="n" />
+  </token>
+  <token id="t153" trans=",">
+    <dipl id="t153_d1" trans="," utf="," />
+    <mod id="t153_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t154" trans="dan">
+    <dipl id="t154_d1" trans="dan" utf="dan" />
+    <mod id="t154_m1" trans="dan" utf="dan" ascii="dan" checked="n" />
+  </token>
+  <token id="t155" trans="alleyne">
+    <dipl id="t155_d1" trans="alleyne" utf="alleyne" />
+    <mod id="t155_m1" trans="alleyne" utf="alleyne" ascii="alleyne" checked="n" />
+  </token>
+  <token id="t156" trans=",">
+    <dipl id="t156_d1" trans="," utf="," />
+    <mod id="t156_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t157" trans="dad">
+    <dipl id="t157_d1" trans="dad" utf="dad" />
+    <mod id="t157_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t158" trans="ich">
+    <dipl id="t158_d1" trans="ich" utf="ich" />
+    <mod id="t158_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t159" trans="des">
+    <dipl id="t159_d1" trans="des" utf="des" />
+    <mod id="t159_m1" trans="des" utf="des" ascii="des" checked="n" />
+  </token>
+  <token id="t160" trans="gudes">
+    <dipl id="t160_d1" trans="gudes" utf="gudes" />
+    <mod id="t160_m1" trans="gudes" utf="gudes" ascii="gudes" checked="n" />
+  </token>
+  <token id="t161" trans="en">
+    <dipl id="t161_d1" trans="en" utf="en" />
+    <mod id="t161_m1" trans="en" utf="en" ascii="en" checked="n" />
+  </token>
+  <token id="t162" trans="vormonder">
+    <dipl id="t162_d1" trans="vormonder" utf="vormonder" />
+    <mod id="t162_m1" trans="vormonder" utf="vormonder" ascii="vormonder" checked="n" />
+  </token>
+  <token id="t163" trans="was">
+    <dipl id="t163_d1" trans="was" utf="was" />
+    <mod id="t163_m1" trans="was" utf="was" ascii="was" checked="n" />
+  </token>
+  <token id="t164" trans=",">
+    <dipl id="t164_d1" trans="," utf="," />
+    <mod id="t164_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t165" trans="als">
+    <dipl id="t165_d1" trans="als" utf="als" />
+    <mod id="t165_m1" trans="als" utf="als" ascii="als" checked="n" />
+  </token>
+  <token id="t166" trans="vorsproken">
+    <dipl id="t166_d1" trans="vorsproken" utf="vorsproken" />
+    <mod id="t166_m1" trans="vorsproken" utf="vorsproken" ascii="vorsproken" checked="n" />
+  </token>
+  <token id="t167" trans="is">
+    <dipl id="t167_d1" trans="is" utf="is" />
+    <mod id="t167_m1" trans="is" utf="is" ascii="is" checked="n" />
+  </token>
+  <token id="t168" trans=",">
+    <dipl id="t168_d1" trans="," utf="," />
+    <mod id="t168_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t169" trans="Vordmer">
+    <dipl id="t169_d1" trans="Vordmer" utf="Vordmer" />
+    <mod id="t169_m1" trans="Vordmer" utf="Vordmer" ascii="Vordmer" checked="n" />
+  </token>
+  <token id="t170" trans="om">
+    <dipl id="t170_d1" trans="om" utf="om" />
+    <mod id="t170_m1" trans="om" utf="om" ascii="om" checked="n" />
+  </token>
+  <token id="t171" trans="minen">
+    <dipl id="t171_d1" trans="minen" utf="minen" />
+    <mod id="t171_m1" trans="minen" utf="minen" ascii="minen" checked="n" />
+  </token>
+  <token id="t172" trans="deinst">
+    <dipl id="t172_d1" trans="deinst" utf="deinst" />
+    <mod id="t172_m1" trans="deinst" utf="deinst" ascii="deinst" checked="n" />
+  </token>
+  <token id="t173" trans=",">
+    <dipl id="t173_d1" trans="," utf="," />
+    <mod id="t173_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t174" trans="end">
+    <dipl id="t174_d1" trans="end" utf="end" />
+    <mod id="t174_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t175" trans="mine">
+    <dipl id="t175_d1" trans="mine" utf="mine" />
+    <mod id="t175_m1" trans="mine" utf="mine" ascii="mine" checked="n" />
+  </token>
+  <token id="t176" trans="kost">
+    <dipl id="t176_d1" trans="kost" utf="kost" />
+    <mod id="t176_m1" trans="kost" utf="kost" ascii="kost" checked="n" />
+  </token>
+  <token id="t177" trans=",">
+    <dipl id="t177_d1" trans="," utf="," />
+    <mod id="t177_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t178" trans="end">
+    <dipl id="t178_d1" trans="end" utf="end" />
+    <mod id="t178_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t179" trans="arbeith">
+    <dipl id="t179_d1" trans="arbeith" utf="arbeith" />
+    <mod id="t179_m1" trans="arbeith" utf="arbeith" ascii="arbeith" checked="n" />
+  </token>
+  <token id="t180" trans=",">
+    <dipl id="t180_d1" trans="," utf="," />
+    <mod id="t180_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t181" trans="de">
+    <dipl id="t181_d1" trans="de" utf="de" />
+    <mod id="t181_m1" trans="de" utf="de" ascii="de" checked="n" />
+  </token>
+  <token id="t182" trans="ich">
+    <dipl id="t182_d1" trans="ich" utf="ich" />
+    <mod id="t182_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t183" trans="hebbe">
+    <dipl id="t183_d1" trans="hebbe" utf="hebbe" />
+    <mod id="t183_m1" trans="hebbe" utf="hebbe" ascii="hebbe" checked="n" />
+  </token>
+  <token id="t184" trans="an">
+    <dipl id="t184_d1" trans="an" utf="an" />
+    <mod id="t184_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t185" trans="dad">
+    <dipl id="t185_d1" trans="dad" utf="dad" />
+    <mod id="t185_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t186" trans="gud">
+    <dipl id="t186_d1" trans="gud" utf="gud" />
+    <mod id="t186_m1" trans="gud" utf="gud" ascii="gud" checked="n" />
+  </token>
+  <token id="t187" trans="geleeged">
+    <dipl id="t187_d1" trans="geleeged" utf="geleeged" />
+    <mod id="t187_m1" trans="geleeged" utf="geleeged" ascii="geleeged" checked="n" />
+  </token>
+  <token id="t188" trans=",">
+    <dipl id="t188_d1" trans="," utf="," />
+    <mod id="t188_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t189" trans="op">
+    <dipl id="t189_d1" trans="op" utf="op" />
+    <mod id="t189_m1" trans="op" utf="op" ascii="op" checked="n" />
+  </token>
+  <token id="t190" trans="dad">
+    <dipl id="t190_d1" trans="dad" utf="dad" />
+    <mod id="t190_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t191" trans="ich">
+    <dipl id="t191_d1" trans="ich" utf="ich" />
+    <mod id="t191_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t192" trans="dad">
+    <dipl id="t192_d1" trans="dad" utf="dad" />
+    <mod id="t192_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t193" trans="gud">
+    <dipl id="t193_d1" trans="gud" utf="gud" />
+    <mod id="t193_m1" trans="gud" utf="gud" ascii="gud" checked="n" />
+  </token>
+  <token id="t194" trans="verantwarde">
+    <dipl id="t194_d1" trans="verantwarde" utf="verantwarde" />
+    <mod id="t194_m1" trans="verantwarde" utf="verantwarde" ascii="verantwarde" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t195" trans="war">
+    <dipl id="t195_d1" trans="war" utf="war" />
+    <mod id="t195_m1" trans="war" utf="war" ascii="war" checked="n" />
+  </token>
+  <token id="t196" trans="des">
+    <dipl id="t196_d1" trans="des" utf="des" />
+    <mod id="t196_m1" trans="des" utf="des" ascii="des" checked="n" />
+  </token>
+  <token id="t197" trans="to">
+    <dipl id="t197_d1" trans="to" utf="to" />
+    <mod id="t197_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t198" trans="done">
+    <dipl id="t198_d1" trans="done" utf="done" />
+    <mod id="t198_m1" trans="done" utf="done" ascii="done" checked="n" />
+  </token>
+  <token id="t199" trans="was">
+    <dipl id="t199_d1" trans="was" utf="was" />
+    <mod id="t199_m1" trans="was" utf="was" ascii="was" checked="n" />
+  </token>
+  <token id="t200" trans=",">
+    <dipl id="t200_d1" trans="," utf="," />
+    <mod id="t200_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t201" trans="so">
+    <dipl id="t201_d1" trans="so" utf="so" />
+    <mod id="t201_m1" trans="so" utf="so" ascii="so" checked="n" />
+  </token>
+  <token id="t202" trans="heued">
+    <dipl id="t202_d1" trans="heued" utf="heued" />
+    <mod id="t202_m1" trans="heued" utf="heued" ascii="heued" checked="n" />
+  </token>
+  <token id="t203" trans="mi">
+    <dipl id="t203_d1" trans="mi" utf="mi" />
+    <mod id="t203_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t204" trans="her">
+    <dipl id="t204_d1" trans="her" utf="her" />
+    <mod id="t204_m1" trans="her" utf="her" ascii="her" checked="n" />
+  </token>
+  <token id="t205" trans="alberd">
+    <dipl id="t205_d1" trans="alberd" utf="alberd" />
+    <mod id="t205_m1" trans="alberd" utf="alberd" ascii="alberd" checked="n" />
+  </token>
+  <token id="t206" trans="schakke">
+    <dipl id="t206_d1" trans="schakke" utf="schakke" />
+    <mod id="t206_m1" trans="schakke" utf="schakke" ascii="schakke" checked="n" />
+  </token>
+  <token id="t207" trans="vor=genompd">
+    <dipl id="t207_d1" trans="vor=" utf="vor=" />
+    <dipl id="t207_d2" trans="genompd" utf="genompd" />
+    <mod id="t207_m1" trans="vor=genompd" utf="vor=genompd" ascii="vorgenompd" checked="n" />
+  </token>
+  <token id="t208" trans="eyne">
+    <dipl id="t208_d1" trans="eyne" utf="eyne" />
+    <mod id="t208_m1" trans="eyne" utf="eyne" ascii="eyne" checked="n" />
+  </token>
+  <token id="t209" trans="gonste">
+    <dipl id="t209_d1" trans="gonste" utf="gonste" />
+    <mod id="t209_m1" trans="gonste" utf="gonste" ascii="gonste" checked="n" />
+  </token>
+  <token id="t210" trans=",">
+    <dipl id="t210_d1" trans="," utf="," />
+    <mod id="t210_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t211" trans="ende">
+    <dipl id="t211_d1" trans="ende" utf="ende" />
+    <mod id="t211_m1" trans="ende" utf="ende" ascii="ende" checked="n" />
+  </token>
+  <token id="t212" trans="eyn">
+    <dipl id="t212_d1" trans="eyn" utf="eyn" />
+    <mod id="t212_m1" trans="eyn" utf="eyn" ascii="eyn" checked="n" />
+  </token>
+  <token id="t213" trans="[...]enscap">
+    <dipl id="t213_d1" trans="[...]enscap" utf="...enscap" />
+    <mod id="t213_m1" trans="[...]enscap" utf="...enscap" ascii="...enscap" checked="n" />
+  </token>
+  <token id="t214" trans="gedaen">
+    <dipl id="t214_d1" trans="gedaen" utf="gedaen" />
+    <mod id="t214_m1" trans="gedaen" utf="gedaen" ascii="gedaen" checked="n" />
+  </token>
+  <token id="t215" trans=",">
+    <dipl id="t215_d1" trans="," utf="," />
+    <mod id="t215_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t216" trans="an">
+    <dipl id="t216_d1" trans="an" utf="an" />
+    <mod id="t216_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t217" trans="den">
+    <dipl id="t217_d1" trans="den" utf="den" />
+    <mod id="t217_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t218" trans="gude">
+    <dipl id="t218_d1" trans="gude" utf="gude" />
+    <mod id="t218_m1" trans="gude" utf="gude" ascii="gude" checked="n" />
+  </token>
+  <token id="t219" trans="to">
+    <dipl id="t219_d1" trans="to" utf="to" />
+    <mod id="t219_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t220" trans="minen">
+    <dipl id="t220_d1" trans="minen" utf="minen" />
+    <mod id="t220_m1" trans="minen" utf="minen" ascii="minen" checked="n" />
+  </token>
+  <token id="t221" trans="liue">
+    <dipl id="t221_d1" trans="liue" utf="liue" />
+    <mod id="t221_m1" trans="liue" utf="liue" ascii="liue" checked="n" />
+  </token>
+  <token id="t222" trans=",">
+    <dipl id="t222_d1" trans="," utf="," />
+    <mod id="t222_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t223" trans="end">
+    <dipl id="t223_d1" trans="end" utf="end" />
+    <mod id="t223_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t224" trans="nid">
+    <dipl id="t224_d1" trans="nid" utf="nid" />
+    <mod id="t224_m1" trans="nid" utf="nid" ascii="nid" checked="n" />
+  </token>
+  <token id="t225" trans="langer">
+    <dipl id="t225_d1" trans="langer" utf="langer" />
+    <mod id="t225_m1" trans="langer" utf="langer" ascii="langer" checked="n" />
+  </token>
+  <token id="t226" trans=",">
+    <dipl id="t226_d1" trans="," utf="," />
+    <mod id="t226_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t227" trans="al#so">
+    <dipl id="t227_d1" trans="al#" utf="al" />
+    <dipl id="t227_d2" trans="so" utf="so" />
+    <mod id="t227_m1" trans="al#so" utf="also" ascii="also" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t228" trans="dad">
+    <dipl id="t228_d1" trans="dad" utf="dad" />
+    <mod id="t228_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t229" trans="ich">
+    <dipl id="t229_d1" trans="ich" utf="ich" />
+    <mod id="t229_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t230" trans="sal">
+    <dipl id="t230_d1" trans="sal" utf="sal" />
+    <mod id="t230_m1" trans="sal" utf="sal" ascii="sal" checked="n" />
+  </token>
+  <token id="t231" trans="obboren">
+    <dipl id="t231_d1" trans="obboren" utf="obboren" />
+    <mod id="t231_m1" trans="obboren" utf="obboren" ascii="obboren" checked="n" />
+  </token>
+  <token id="t232" trans="alle">
+    <dipl id="t232_d1" trans="alle" utf="alle" />
+    <mod id="t232_m1" trans="alle" utf="alle" ascii="alle" checked="n" />
+  </token>
+  <token id="t233" trans="mine">
+    <dipl id="t233_d1" trans="mine" utf="mine" />
+    <mod id="t233_m1" trans="mine" utf="mine" ascii="mine" checked="n" />
+  </token>
+  <token id="t234" trans="daghe">
+    <dipl id="t234_d1" trans="daghe" utf="daghe" />
+    <mod id="t234_m1" trans="daghe" utf="daghe" ascii="daghe" checked="n" />
+  </token>
+  <token id="t235" trans=",">
+    <dipl id="t235_d1" trans="," utf="," />
+    <mod id="t235_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t236" trans="ende">
+    <dipl id="t236_d1" trans="ende" utf="ende" />
+    <mod id="t236_m1" trans="ende" utf="ende" ascii="ende" checked="n" />
+  </token>
+  <token id="t237" trans="nid">
+    <dipl id="t237_d1" trans="nid" utf="nid" />
+    <mod id="t237_m1" trans="nid" utf="nid" ascii="nid" checked="n" />
+  </token>
+  <token id="t238" trans="langer">
+    <dipl id="t238_d1" trans="langer" utf="langer" />
+    <mod id="t238_m1" trans="langer" utf="langer" ascii="langer" checked="n" />
+  </token>
+  <token id="t239" trans="half">
+    <dipl id="t239_d1" trans="half" utf="half" />
+    <mod id="t239_m1" trans="half" utf="half" ascii="half" checked="n" />
+  </token>
+  <token id="t240" trans="di">
+    <dipl id="t240_d1" trans="di" utf="di" />
+    <mod id="t240_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t241" trans="rente">
+    <dipl id="t241_d1" trans="rente" utf="rente" />
+    <mod id="t241_m1" trans="rente" utf="rente" ascii="rente" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t242" trans="di">
+    <dipl id="t242_d1" trans="di" utf="di" />
+    <mod id="t242_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t243" trans="van">
+    <dipl id="t243_d1" trans="van" utf="van" />
+    <mod id="t243_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t244" trans="den">
+    <dipl id="t244_d1" trans="den" utf="den" />
+    <mod id="t244_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t245" trans="gude">
+    <dipl id="t245_d1" trans="gude" utf="gude" />
+    <mod id="t245_m1" trans="gude" utf="gude" ascii="gude" checked="n" />
+  </token>
+  <token id="t246" trans="jarlix">
+    <dipl id="t246_d1" trans="jarlix" utf="jarlix" />
+    <mod id="t246_m1" trans="jarlix" utf="jarlix" ascii="jarlix" checked="n" />
+  </token>
+  <token id="t247" trans="vallen">
+    <dipl id="t247_d1" trans="vallen" utf="vallen" />
+    <mod id="t247_m1" trans="vallen" utf="vallen" ascii="vallen" checked="n" />
+  </token>
+  <token id="t248" trans=".">
+    <dipl id="t248_d1" trans="." utf="." />
+    <mod id="t248_m1" trans="." utf="." ascii="." checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t249" trans="di">
+    <dipl id="t249_d1" trans="di" utf="di" />
+    <mod id="t249_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t250" trans="sal">
+    <dipl id="t250_d1" trans="sal" utf="sal" />
+    <mod id="t250_m1" trans="sal" utf="sal" ascii="sal" checked="n" />
+  </token>
+  <token id="t251" trans="ic">
+    <dipl id="t251_d1" trans="ic" utf="ic" />
+    <mod id="t251_m1" trans="ic" utf="ic" ascii="ic" checked="n" />
+  </token>
+  <token id="t252" trans="besitten">
+    <dipl id="t252_d1" trans="besitten" utf="besitten" />
+    <mod id="t252_m1" trans="besitten" utf="besitten" ascii="besitten" checked="n" />
+  </token>
+  <token id="t253" trans="mine">
+    <dipl id="t253_d1" trans="mine" utf="mine" />
+    <mod id="t253_m1" trans="mine" utf="mine" ascii="mine" checked="n" />
+  </token>
+  <token id="t254" trans="dage">
+    <dipl id="t254_d1" trans="dage" utf="dage" />
+    <mod id="t254_m1" trans="dage" utf="dage" ascii="dage" checked="n" />
+  </token>
+  <token id="t255" trans=",">
+    <dipl id="t255_d1" trans="," utf="," />
+    <mod id="t255_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t256" trans="end">
+    <dipl id="t256_d1" trans="end" utf="end" />
+    <mod id="t256_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t257" trans="nid">
+    <dipl id="t257_d1" trans="nid" utf="nid" />
+    <mod id="t257_m1" trans="nid" utf="nid" ascii="nid" checked="n" />
+  </token>
+  <token id="t258" trans="langher">
+    <dipl id="t258_d1" trans="langher" utf="langher" />
+    <mod id="t258_m1" trans="langher" utf="langher" ascii="langher" checked="n" />
+  </token>
+  <token id="t259" trans=",">
+    <dipl id="t259_d1" trans="," utf="," />
+    <mod id="t259_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t260" trans="als">
+    <dipl id="t260_d1" trans="als" utf="als" />
+    <mod id="t260_m1" trans="als" utf="als" ascii="als" checked="n" />
+  </token>
+  <token id="t261" trans="vorsproken">
+    <dipl id="t261_d1" trans="vorsproken" utf="vorsproken" />
+    <mod id="t261_m1" trans="vorsproken" utf="vorsproken" ascii="vorsproken" checked="n" />
+  </token>
+  <token id="t262" trans="is">
+    <dipl id="t262_d1" trans="is" utf="is" />
+    <mod id="t262_m1" trans="is" utf="is" ascii="is" checked="n" />
+  </token>
+  <token id="t263" trans=",">
+    <dipl id="t263_d1" trans="," utf="," />
+    <mod id="t263_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t264" trans="end">
+    <dipl id="t264_d1" trans="end" utf="end" />
+    <mod id="t264_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t265" trans="na">
+    <dipl id="t265_d1" trans="na" utf="na" />
+    <mod id="t265_m1" trans="na" utf="na" ascii="na" checked="n" />
+  </token>
+  <token id="t266" trans="minen">
+    <dipl id="t266_d1" trans="minen" utf="minen" />
+    <mod id="t266_m1" trans="minen" utf="minen" ascii="minen" checked="n" />
+  </token>
+  <token id="t267" trans="dagen">
+    <dipl id="t267_d1" trans="dagen" utf="dagen" />
+    <mod id="t267_m1" trans="dagen" utf="dagen" ascii="dagen" checked="n" />
+  </token>
+  <token id="t268" trans="velled">
+    <dipl id="t268_d1" trans="velled" utf="velled" />
+    <mod id="t268_m1" trans="velled" utf="velled" ascii="velled" checked="n" />
+  </token>
+  <token id="t269" trans="al">
+    <dipl id="t269_d1" trans="al" utf="al" />
+    <mod id="t269_m1" trans="al" utf="al" ascii="al" checked="n" />
+  </token>
+  <token id="t270" trans="di">
+    <dipl id="t270_d1" trans="di" utf="di" />
+    <mod id="t270_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t271" trans="gonst">
+    <dipl id="t271_d1" trans="gonst" utf="gonst" />
+    <mod id="t271_m1" trans="gonst" utf="gonst" ascii="gonst" checked="n" />
+  </token>
+  <token id="t272" trans=",">
+    <dipl id="t272_d1" trans="," utf="," />
+    <mod id="t272_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t273" trans="end">
+    <dipl id="t273_d1" trans="end" utf="end" />
+    <mod id="t273_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t274" trans="di">
+    <dipl id="t274_d1" trans="di" utf="di" />
+    <mod id="t274_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t275" trans="genade">
+    <dipl id="t275_d1" trans="genade" utf="genade" />
+    <mod id="t275_m1" trans="genade" utf="genade" ascii="genade" checked="n">
+      <boundary tag="Satzteil_I" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t276" trans="de">
+    <dipl id="t276_d1" trans="de" utf="de" />
+    <mod id="t276_m1" trans="de" utf="de" ascii="de" checked="n" />
+  </token>
+  <token id="t277" trans="he">
+    <dipl id="t277_d1" trans="he" utf="he" />
+    <mod id="t277_m1" trans="he" utf="he" ascii="he" checked="n" />
+  </token>
+  <token id="t278" trans="mi">
+    <dipl id="t278_d1" trans="mi" utf="mi" />
+    <mod id="t278_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t279" trans="dar">
+    <dipl id="t279_d1" trans="dar" utf="dar" />
+    <mod id="t279_m1" trans="dar" utf="dar" ascii="dar" checked="n" />
+  </token>
+  <token id="t280" trans="an">
+    <dipl id="t280_d1" trans="an" utf="an" />
+    <mod id="t280_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t281" trans="gedaen">
+    <dipl id="t281_d1" trans="gedaen" utf="gedaen" />
+    <mod id="t281_m1" trans="gedaen" utf="gedaen" ascii="gedaen" checked="n" />
+  </token>
+  <token id="t282" trans="heued">
+    <dipl id="t282_d1" trans="heued" utf="heued" />
+    <mod id="t282_m1" trans="heued" utf="heued" ascii="heued" checked="n" />
+  </token>
+  <token id="t283" trans=",">
+    <dipl id="t283_d1" trans="," utf="," />
+    <mod id="t283_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t284" trans="an">
+    <dipl id="t284_d1" trans="an" utf="an" />
+    <mod id="t284_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t285" trans="hern">
+    <dipl id="t285_d1" trans="hern" utf="hern" />
+    <mod id="t285_m1" trans="hern" utf="hern" ascii="hern" checked="n" />
+  </token>
+  <token id="t286" trans="alberd">
+    <dipl id="t286_d1" trans="alberd" utf="alberd" />
+    <mod id="t286_m1" trans="alberd" utf="alberd" ascii="alberd" checked="n" />
+  </token>
+  <token id="t287" trans=",">
+    <dipl id="t287_d1" trans="," utf="," />
+    <mod id="t287_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t288" trans="en{R_d}">
+    <dipl id="t288_d1" trans="en{R_d}" utf="end" />
+    <mod id="t288_m1" trans="en{R_d}" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t289" trans="an">
+    <dipl id="t289_d1" trans="an" utf="an" />
+    <mod id="t289_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t290" trans="dad">
+    <dipl id="t290_d1" trans="dad" utf="dad" />
+    <mod id="t290_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t291" trans="huͦs">
+    <dipl id="t291_d1" trans="huͦs" utf="huͦs" />
+    <mod id="t291_m1" trans="huͦs" utf="huͦs" ascii="huͦs" checked="n" />
+  </token>
+  <token id="t292" trans="to">
+    <dipl id="t292_d1" trans="to" utf="to" />
+    <mod id="t292_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t293" trans="welhem">
+    <dipl id="t293_d1" trans="welhem" utf="welhem" />
+    <mod id="t293_m1" trans="welhem" utf="welhem" ascii="welhem" checked="n">
+      <boundary tag="Satzteil_F" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t294" trans="als">
+    <dipl id="t294_d1" trans="als" utf="als" />
+    <mod id="t294_m1" trans="als" utf="als" ascii="als" checked="n" />
+  </token>
+  <token id="t295" trans="vorsproken">
+    <dipl id="t295_d1" trans="vorsproken" utf="vorsproken" />
+    <mod id="t295_m1" trans="vorsproken" utf="vorsproken" ascii="vorsproken" checked="n" />
+  </token>
+  <token id="t296" trans="is">
+    <dipl id="t296_d1" trans="is" utf="is" />
+    <mod id="t296_m1" trans="is" utf="is" ascii="is" checked="n" />
+  </token>
+  <token id="t297" trans=",">
+    <dipl id="t297_d1" trans="," utf="," />
+    <mod id="t297_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t298" trans="end">
+    <dipl id="t298_d1" trans="end" utf="end" />
+    <mod id="t298_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t299" trans="van">
+    <dipl id="t299_d1" trans="van" utf="van" />
+    <mod id="t299_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t300" trans="der">
+    <dipl id="t300_d1" trans="der" utf="der" />
+    <mod id="t300_m1" trans="der" utf="der" ascii="der" checked="n" />
+  </token>
+  <token id="t301" trans="rente">
+    <dipl id="t301_d1" trans="rente" utf="rente" />
+    <mod id="t301_m1" trans="rente" utf="rente" ascii="rente" checked="n">
+      <boundary tag="Satzteil_I" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t302" trans="di">
+    <dipl id="t302_d1" trans="di" utf="di" />
+    <mod id="t302_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t303" trans="mi">
+    <dipl id="t303_d1" trans="mi" utf="mi" />
+    <mod id="t303_m1" trans="mi" utf="mi" ascii="mi" checked="n" />
+  </token>
+  <token id="t304" trans="van">
+    <dipl id="t304_d1" trans="van" utf="van" />
+    <mod id="t304_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t305" trans="genaden">
+    <dipl id="t305_d1" trans="genaden" utf="genaden" />
+    <mod id="t305_m1" trans="genaden" utf="genaden" ascii="genaden" checked="n" />
+  </token>
+  <token id="t306" trans="gedaen">
+    <dipl id="t306_d1" trans="gedaen" utf="gedaen" />
+    <mod id="t306_m1" trans="gedaen" utf="gedaen" ascii="gedaen" checked="n" />
+  </token>
+  <token id="t307" trans="is">
+    <dipl id="t307_d1" trans="is" utf="is" />
+    <mod id="t307_m1" trans="is" utf="is" ascii="is" checked="n" />
+  </token>
+  <token id="t308" trans="to">
+    <dipl id="t308_d1" trans="to" utf="to" />
+    <mod id="t308_m1" trans="to" utf="to" ascii="to" checked="n" />
+  </token>
+  <token id="t309" trans="minen">
+    <dipl id="t309_d1" trans="minen" utf="minen" />
+    <mod id="t309_m1" trans="minen" utf="minen" ascii="minen" checked="n" />
+  </token>
+  <token id="t310" trans="daghen">
+    <dipl id="t310_d1" trans="daghen" utf="daghen" />
+    <mod id="t310_m1" trans="daghen" utf="daghen" ascii="daghen" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t311" trans="an§den">
+    <dipl id="t311_d1" trans="an§den" utf="anden" />
+    <mod id="t311_m1" trans="an§" utf="an" ascii="an" checked="n" />
+    <mod id="t311_m2" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t312" trans="gude">
+    <dipl id="t312_d1" trans="gude" utf="gude" />
+    <mod id="t312_m1" trans="gude" utf="gude" ascii="gude" checked="n" />
+  </token>
+  <token id="t313" trans="sal">
+    <dipl id="t313_d1" trans="sal" utf="sal" />
+    <mod id="t313_m1" trans="sal" utf="sal" ascii="sal" checked="n" />
+  </token>
+  <token id="t314" trans="ich">
+    <dipl id="t314_d1" trans="ich" utf="ich" />
+    <mod id="t314_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t315" trans="jarlix">
+    <dipl id="t315_d1" trans="jarlix" utf="jarlix" />
+    <mod id="t315_m1" trans="jarlix" utf="jarlix" ascii="jarlix" checked="n" />
+  </token>
+  <token id="t316" trans="betalen">
+    <dipl id="t316_d1" trans="betalen" utf="betalen" />
+    <mod id="t316_m1" trans="betalen" utf="betalen" ascii="betalen" checked="n" />
+  </token>
+  <token id="t317" trans=",">
+    <dipl id="t317_d1" trans="," utf="," />
+    <mod id="t317_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t318" trans="vijr">
+    <dipl id="t318_d1" trans="vijr" utf="vijr" />
+    <mod id="t318_m1" trans="vijr" utf="vijr" ascii="vijr" checked="n" />
+  </token>
+  <token id="t319" trans="malder">
+    <dipl id="t319_d1" trans="malder" utf="malder" />
+    <mod id="t319_m1" trans="malder" utf="malder" ascii="malder" checked="n" />
+  </token>
+  <token id="t320" trans="roggen">
+    <dipl id="t320_d1" trans="roggen" utf="roggen" />
+    <mod id="t320_m1" trans="roggen" utf="roggen" ascii="roggen" checked="n" />
+  </token>
+  <token id="t321" trans="tod">
+    <dipl id="t321_d1" trans="tod" utf="tod" />
+    <mod id="t321_m1" trans="tod" utf="tod" ascii="tod" checked="n" />
+  </token>
+  <token id="t322" trans="oren">
+    <dipl id="t322_d1" trans="oren" utf="oren" />
+    <mod id="t322_m1" trans="oren" utf="oren" ascii="oren" checked="n" />
+  </token>
+  <token id="t323" trans="liue">
+    <dipl id="t323_d1" trans="liue" utf="liue" />
+    <mod id="t323_m1" trans="liue" utf="liue" ascii="liue" checked="n" />
+  </token>
+  <token id="t324" trans=",">
+    <dipl id="t324_d1" trans="," utf="," />
+    <mod id="t324_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t325" trans="druden">
+    <dipl id="t325_d1" trans="druden" utf="druden" />
+    <mod id="t325_m1" trans="druden" utf="druden" ascii="druden" checked="n" />
+  </token>
+  <token id="t326" trans="van">
+    <dipl id="t326_d1" trans="van" utf="van" />
+    <mod id="t326_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t327" trans="den">
+    <dipl id="t327_d1" trans="den" utf="den" />
+    <mod id="t327_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t328" trans="wijngarden">
+    <dipl id="t328_d1" trans="wijngarden" utf="wijngarden" />
+    <mod id="t328_m1" trans="wijngarden" utf="wijngarden" ascii="wijngarden" checked="n" />
+  </token>
+  <token id="t329" trans=",">
+    <dipl id="t329_d1" trans="," utf="," />
+    <mod id="t329_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satzteil_F" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t330" trans="di">
+    <dipl id="t330_d1" trans="di" utf="di" />
+    <mod id="t330_m1" trans="di" utf="di" ascii="di" checked="n" />
+  </token>
+  <token id="t331" trans="wijle">
+    <dipl id="t331_d1" trans="wijle" utf="wijle" />
+    <mod id="t331_m1" trans="wijle" utf="wijle" ascii="wijle" checked="n" />
+  </token>
+  <token id="t332" trans="dad">
+    <dipl id="t332_d1" trans="dad" utf="dad" />
+    <mod id="t332_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t333" trans="se">
+    <dipl id="t333_d1" trans="se" utf="se" />
+    <mod id="t333_m1" trans="se" utf="se" ascii="se" checked="n" />
+  </token>
+  <token id="t334" trans="leued">
+    <dipl id="t334_d1" trans="leued" utf="leued" />
+    <mod id="t334_m1" trans="leued" utf="leued" ascii="leued" checked="n" />
+  </token>
+  <token id="t335" trans=",">
+    <dipl id="t335_d1" trans="," utf="," />
+    <mod id="t335_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t336" trans="na">
+    <dipl id="t336_d1" trans="na" utf="na" />
+    <mod id="t336_m1" trans="na" utf="na" ascii="na" checked="n" />
+  </token>
+  <token id="t337" trans="aller">
+    <dipl id="t337_d1" trans="aller" utf="aller" />
+    <mod id="t337_m1" trans="aller" utf="aller" ascii="aller" checked="n" />
+  </token>
+  <token id="t338" trans="manijr">
+    <dipl id="t338_d1" trans="manijr" utf="manijr" />
+    <mod id="t338_m1" trans="manijr" utf="manijr" ascii="manijr" checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t339" trans="dad">
+    <dipl id="t339_d1" trans="dad" utf="dad" />
+    <mod id="t339_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t340" trans="se">
+    <dipl id="t340_d1" trans="se" utf="se" />
+    <mod id="t340_m1" trans="se" utf="se" ascii="se" checked="n" />
+  </token>
+  <token id="t341" trans="drude">
+    <dipl id="t341_d1" trans="drude" utf="drude" />
+    <mod id="t341_m1" trans="drude" utf="drude" ascii="drude" checked="n" />
+  </token>
+  <token id="t342" trans="vorgenompd">
+    <dipl id="t342_d1" trans="vorgenompd" utf="vorgenompd" />
+    <mod id="t342_m1" trans="vorgenompd" utf="vorgenompd" ascii="vorgenompd" checked="n" />
+  </token>
+  <token id="t343" trans="Jarlix">
+    <dipl id="t343_d1" trans="Jarlix" utf="Jarlix" />
+    <mod id="t343_m1" trans="Jarlix" utf="Jarlix" ascii="Jarlix" checked="n" />
+  </token>
+  <token id="t344" trans="vijr">
+    <dipl id="t344_d1" trans="vijr" utf="vijr" />
+    <mod id="t344_m1" trans="vijr" utf="vijr" ascii="vijr" checked="n" />
+  </token>
+  <token id="t345" trans="malder">
+    <dipl id="t345_d1" trans="malder" utf="malder" />
+    <mod id="t345_m1" trans="malder" utf="malder" ascii="malder" checked="n" />
+  </token>
+  <token id="t346" trans="rogghen">
+    <dipl id="t346_d1" trans="rogghen" utf="rogghen" />
+    <mod id="t346_m1" trans="rogghen" utf="rogghen" ascii="rogghen" checked="n" />
+  </token>
+  <token id="t347" trans="tod">
+    <dipl id="t347_d1" trans="tod" utf="tod" />
+    <mod id="t347_m1" trans="tod" utf="tod" ascii="tod" checked="n" />
+  </token>
+  <token id="t348" trans="oren">
+    <dipl id="t348_d1" trans="oren" utf="oren" />
+    <mod id="t348_m1" trans="oren" utf="oren" ascii="oren" checked="n" />
+  </token>
+  <token id="t349" trans="liue">
+    <dipl id="t349_d1" trans="liue" utf="liue" />
+    <mod id="t349_m1" trans="liue" utf="liue" ascii="liue" checked="n" />
+  </token>
+  <token id="t350" trans="vt">
+    <dipl id="t350_d1" trans="vt" utf="vt" />
+    <mod id="t350_m1" trans="vt" utf="vt" ascii="vt" checked="n" />
+  </token>
+  <token id="t351" trans="ten">
+    <dipl id="t351_d1" trans="ten" utf="ten" />
+    <mod id="t351_m1" trans="ten" utf="ten" ascii="ten" checked="n" />
+  </token>
+  <token id="t352" trans="gude">
+    <dipl id="t352_d1" trans="gude" utf="gude" />
+    <mod id="t352_m1" trans="gude" utf="gude" ascii="gude" checked="n" />
+  </token>
+  <token id="t353" trans="gecocht">
+    <dipl id="t353_d1" trans="gecocht" utf="gecocht" />
+    <mod id="t353_m1" trans="gecocht" utf="gecocht" ascii="gecocht" checked="n" />
+  </token>
+  <token id="t354" trans="had=de">
+    <dipl id="t354_d1" trans="had=" utf="had=" />
+    <dipl id="t354_d2" trans="de" utf="de" />
+    <mod id="t354_m1" trans="had=de" utf="had=de" ascii="hadde" checked="n" />
+  </token>
+  <token id="t355" trans=",">
+    <dipl id="t355_d1" trans="," utf="," />
+    <mod id="t355_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t356" trans="Al">
+    <dipl id="t356_d1" trans="Al" utf="Al" />
+    <mod id="t356_m1" trans="Al" utf="Al" ascii="Al" checked="n" />
+  </token>
+  <token id="t357" trans="argelist">
+    <dipl id="t357_d1" trans="argelist" utf="argelist" />
+    <mod id="t357_m1" trans="argelist" utf="argelist" ascii="argelist" checked="n" />
+  </token>
+  <token id="t358" trans="vtgesad">
+    <dipl id="t358_d1" trans="vtgesad" utf="vtgesad" />
+    <mod id="t358_m1" trans="vtgesad" utf="vtgesad" ascii="vtgesad" checked="n" />
+  </token>
+  <token id="t359" trans=",">
+    <dipl id="t359_d1" trans="," utf="," />
+    <mod id="t359_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t360" trans="End">
+    <dipl id="t360_d1" trans="End" utf="End" />
+    <mod id="t360_m1" trans="End" utf="End" ascii="End" checked="n" />
+  </token>
+  <token id="t361" trans="om">
+    <dipl id="t361_d1" trans="om" utf="om" />
+    <mod id="t361_m1" trans="om" utf="om" ascii="om" checked="n" />
+  </token>
+  <token id="t362" trans="ein">
+    <dipl id="t362_d1" trans="ein" utf="ein" />
+    <mod id="t362_m1" trans="ein" utf="ein" ascii="ein" checked="n" />
+  </token>
+  <token id="t363" trans="getugh">
+    <dipl id="t363_d1" trans="getugh" utf="getugh" />
+    <mod id="t363_m1" trans="getugh" utf="getugh" ascii="getugh" checked="n" />
+  </token>
+  <token id="t364" trans="enre">
+    <dipl id="t364_d1" trans="enre" utf="enre" />
+    <mod id="t364_m1" trans="enre" utf="enre" ascii="enre" checked="n" />
+  </token>
+  <token id="t365" trans="warheid">
+    <dipl id="t365_d1" trans="warheid" utf="warheid" />
+    <mod id="t365_m1" trans="warheid" utf="warheid" ascii="warheid" checked="n" />
+  </token>
+  <token id="t366" trans="deser">
+    <dipl id="t366_d1" trans="deser" utf="deser" />
+    <mod id="t366_m1" trans="deser" utf="deser" ascii="deser" checked="n" />
+  </token>
+  <token id="t367" trans="dinghe">
+    <dipl id="t367_d1" trans="dinghe" utf="dinghe" />
+    <mod id="t367_m1" trans="dinghe" utf="dinghe" ascii="dinghe" checked="n" />
+  </token>
+  <token id="t368" trans="heb">
+    <dipl id="t368_d1" trans="heb" utf="heb" />
+    <mod id="t368_m1" trans="heb" utf="heb" ascii="heb" checked="n" />
+  </token>
+  <token id="t369" trans="ich">
+    <dipl id="t369_d1" trans="ich" utf="ich" />
+    <mod id="t369_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t370" trans="min">
+    <dipl id="t370_d1" trans="min" utf="min" />
+    <mod id="t370_m1" trans="min" utf="min" ascii="min" checked="n" />
+  </token>
+  <token id="t371" trans="segel">
+    <dipl id="t371_d1" trans="segel" utf="segel" />
+    <mod id="t371_m1" trans="segel" utf="segel" ascii="segel" checked="n" />
+  </token>
+  <token id="t372" trans="an">
+    <dipl id="t372_d1" trans="an" utf="an" />
+    <mod id="t372_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t373" trans="desen">
+    <dipl id="t373_d1" trans="desen" utf="desen" />
+    <mod id="t373_m1" trans="desen" utf="desen" ascii="desen" checked="n" />
+  </token>
+  <token id="t374" trans="brif">
+    <dipl id="t374_d1" trans="brif" utf="brif" />
+    <mod id="t374_m1" trans="brif" utf="brif" ascii="brif" checked="n" />
+  </token>
+  <token id="t375" trans="gehangen">
+    <dipl id="t375_d1" trans="gehangen" utf="gehangen" />
+    <mod id="t375_m1" trans="gehangen" utf="gehangen" ascii="gehangen" checked="n" />
+  </token>
+  <token id="t376" trans=",">
+    <dipl id="t376_d1" trans="," utf="," />
+    <mod id="t376_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t377" trans="vord">
+    <dipl id="t377_d1" trans="vord" utf="vord" />
+    <mod id="t377_m1" trans="vord" utf="vord" ascii="vord" checked="n" />
+  </token>
+  <token id="t378" trans="om">
+    <dipl id="t378_d1" trans="om" utf="om" />
+    <mod id="t378_m1" trans="om" utf="om" ascii="om" checked="n" />
+  </token>
+  <token id="t379" trans="ene">
+    <dipl id="t379_d1" trans="ene" utf="ene" />
+    <mod id="t379_m1" trans="ene" utf="ene" ascii="ene" checked="n" />
+  </token>
+  <token id="t380" trans="meerre">
+    <dipl id="t380_d1" trans="meerre" utf="meerre" />
+    <mod id="t380_m1" trans="meerre" utf="meerre" ascii="meerre" checked="n" />
+  </token>
+  <token id="t381" trans="sekerheid">
+    <dipl id="t381_d1" trans="sekerheid" utf="sekerheid" />
+    <mod id="t381_m1" trans="sekerheid" utf="sekerheid" ascii="sekerheid" checked="n" />
+  </token>
+  <token id="t382" trans="deser">
+    <dipl id="t382_d1" trans="deser" utf="deser" />
+    <mod id="t382_m1" trans="deser" utf="deser" ascii="deser" checked="n" />
+  </token>
+  <token id="t383" trans="dinch">
+    <dipl id="t383_d1" trans="dinch" utf="dinch" />
+    <mod id="t383_m1" trans="dinch" utf="dinch" ascii="dinch" checked="n" />
+  </token>
+  <token id="t384" trans="heb">
+    <dipl id="t384_d1" trans="heb" utf="heb" />
+    <mod id="t384_m1" trans="heb" utf="heb" ascii="heb" checked="n" />
+  </token>
+  <token id="t385" trans="ich">
+    <dipl id="t385_d1" trans="ich" utf="ich" />
+    <mod id="t385_m1" trans="ich" utf="ich" ascii="ich" checked="n" />
+  </token>
+  <token id="t386" trans="gebeden">
+    <dipl id="t386_d1" trans="gebeden" utf="gebeden" />
+    <mod id="t386_m1" trans="gebeden" utf="gebeden" ascii="gebeden" checked="n" />
+  </token>
+  <token id="t387" trans="Rutger">
+    <dipl id="t387_d1" trans="Rutger" utf="Rutger" />
+    <mod id="t387_m1" trans="Rutger" utf="Rutger" ascii="Rutger" checked="n" />
+  </token>
+  <token id="t388" trans="van">
+    <dipl id="t388_d1" trans="van" utf="van" />
+    <mod id="t388_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t389" trans="der">
+    <dipl id="t389_d1" trans="der" utf="der" />
+    <mod id="t389_m1" trans="der" utf="der" ascii="der" checked="n" />
+  </token>
+  <token id="t390" trans="knippenborgh">
+    <dipl id="t390_d1" trans="knippenborgh" utf="knippenborgh" />
+    <mod id="t390_m1" trans="knippenborgh" utf="knippenborgh" ascii="knippenborgh" checked="n" />
+  </token>
+  <token id="t391" trans=",">
+    <dipl id="t391_d1" trans="," utf="," />
+    <mod id="t391_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t392" trans="end">
+    <dipl id="t392_d1" trans="end" utf="end" />
+    <mod id="t392_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t393" trans="Gocen">
+    <dipl id="t393_d1" trans="Gocen" utf="Gocen" />
+    <mod id="t393_m1" trans="Gocen" utf="Gocen" ascii="Gocen" checked="n" />
+  </token>
+  <token id="t394" trans="Scakke">
+    <dipl id="t394_d1" trans="Scakke" utf="Scakke" />
+    <mod id="t394_m1" trans="Scakke" utf="Scakke" ascii="Scakke" checked="n" />
+  </token>
+  <token id="t395" trans=",">
+    <dipl id="t395_d1" trans="," utf="," />
+    <mod id="t395_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t396" trans="dad">
+    <dipl id="t396_d1" trans="dad" utf="dad" />
+    <mod id="t396_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t397" trans="se">
+    <dipl id="t397_d1" trans="se" utf="se" />
+    <mod id="t397_m1" trans="se" utf="se" ascii="se" checked="n" />
+  </token>
+  <token id="t398" trans="oyc">
+    <dipl id="t398_d1" trans="oyc" utf="oyc" />
+    <mod id="t398_m1" trans="oyc" utf="oyc" ascii="oyc" checked="n" />
+  </token>
+  <token id="t399" trans="or">
+    <dipl id="t399_d1" trans="or" utf="or" />
+    <mod id="t399_m1" trans="or" utf="or" ascii="or" checked="n" />
+  </token>
+  <token id="t400" trans="segele">
+    <dipl id="t400_d1" trans="segele" utf="segele" />
+    <mod id="t400_m1" trans="segele" utf="segele" ascii="segele" checked="n" />
+  </token>
+  <token id="t401" trans="hebben">
+    <dipl id="t401_d1" trans="hebben" utf="hebben" />
+    <mod id="t401_m1" trans="hebben" utf="hebben" ascii="hebben" checked="n" />
+  </token>
+  <token id="t402" trans="gehangen">
+    <dipl id="t402_d1" trans="gehangen" utf="gehangen" />
+    <mod id="t402_m1" trans="gehangen" utf="gehangen" ascii="gehangen" checked="n" />
+  </token>
+  <token id="t403" trans="an">
+    <dipl id="t403_d1" trans="an" utf="an" />
+    <mod id="t403_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t404" trans="desen">
+    <dipl id="t404_d1" trans="desen" utf="desen" />
+    <mod id="t404_m1" trans="desen" utf="desen" ascii="desen" checked="n" />
+  </token>
+  <token id="t405" trans="brif">
+    <dipl id="t405_d1" trans="brif" utf="brif" />
+    <mod id="t405_m1" trans="brif" utf="brif" ascii="brif" checked="n" />
+  </token>
+  <token id="t406" trans=",">
+    <dipl id="t406_d1" trans="," utf="," />
+    <mod id="t406_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t407" trans="En{R_d}">
+    <dipl id="t407_d1" trans="En{R_d}" utf="End" />
+    <mod id="t407_m1" trans="En{R_d}" utf="End" ascii="End" checked="n" />
+  </token>
+  <token id="t408" trans="wi">
+    <dipl id="t408_d1" trans="wi" utf="wi" />
+    <mod id="t408_m1" trans="wi" utf="wi" ascii="wi" checked="n" />
+  </token>
+  <token id="t409" trans="Rutger">
+    <dipl id="t409_d1" trans="Rutger" utf="Rutger" />
+    <mod id="t409_m1" trans="Rutger" utf="Rutger" ascii="Rutger" checked="n" />
+  </token>
+  <token id="t410" trans="van">
+    <dipl id="t410_d1" trans="van" utf="van" />
+    <mod id="t410_m1" trans="van" utf="van" ascii="van" checked="n" />
+  </token>
+  <token id="t411" trans="der">
+    <dipl id="t411_d1" trans="der" utf="der" />
+    <mod id="t411_m1" trans="der" utf="der" ascii="der" checked="n" />
+  </token>
+  <token id="t412" trans="knippenborgh">
+    <dipl id="t412_d1" trans="knippenborgh" utf="knippenborgh" />
+    <mod id="t412_m1" trans="knippenborgh" utf="knippenborgh" ascii="knippenborgh" checked="n" />
+  </token>
+  <token id="t413" trans=",">
+    <dipl id="t413_d1" trans="," utf="," />
+    <mod id="t413_m1" trans="," utf="," ascii="," checked="n" />
+  </token>
+  <token id="t414" trans="end">
+    <dipl id="t414_d1" trans="end" utf="end" />
+    <mod id="t414_m1" trans="end" utf="end" ascii="end" checked="n" />
+  </token>
+  <token id="t415" trans="Gocen">
+    <dipl id="t415_d1" trans="Gocen" utf="Gocen" />
+    <mod id="t415_m1" trans="Gocen" utf="Gocen" ascii="Gocen" checked="n" />
+  </token>
+  <token id="t416" trans="bekennen">
+    <dipl id="t416_d1" trans="bekennen" utf="bekennen" />
+    <mod id="t416_m1" trans="bekennen" utf="bekennen" ascii="bekennen" checked="n" />
+  </token>
+  <token id="t417" trans=",">
+    <dipl id="t417_d1" trans="," utf="," />
+    <mod id="t417_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t418" trans="dad">
+    <dipl id="t418_d1" trans="dad" utf="dad" />
+    <mod id="t418_m1" trans="dad" utf="dad" ascii="dad" checked="n" />
+  </token>
+  <token id="t419" trans="wi">
+    <dipl id="t419_d1" trans="wi" utf="wi" />
+    <mod id="t419_m1" trans="wi" utf="wi" ascii="wi" checked="n" />
+  </token>
+  <token id="t420" trans="om">
+    <dipl id="t420_d1" trans="om" utf="om" />
+    <mod id="t420_m1" trans="om" utf="om" ascii="om" checked="n" />
+  </token>
+  <token id="t421" trans="bede">
+    <dipl id="t421_d1" trans="bede" utf="bede" />
+    <mod id="t421_m1" trans="bede" utf="bede" ascii="bede" checked="n" />
+  </token>
+  <token id="t422" trans="hermans">
+    <dipl id="t422_d1" trans="hermans" utf="hermans" />
+    <mod id="t422_m1" trans="hermans" utf="hermans" ascii="hermans" checked="n" />
+  </token>
+  <token id="t423" trans="des">
+    <dipl id="t423_d1" trans="des" utf="des" />
+    <mod id="t423_m1" trans="des" utf="des" ascii="des" checked="n" />
+  </token>
+  <token id="t424" trans="heekeds">
+    <dipl id="t424_d1" trans="heekeds" utf="heekeds" />
+    <mod id="t424_m1" trans="heekeds" utf="heekeds" ascii="heekeds" checked="n" />
+  </token>
+  <token id="t425" trans="hebben">
+    <dipl id="t425_d1" trans="hebben" utf="hebben" />
+    <mod id="t425_m1" trans="hebben" utf="hebben" ascii="hebben" checked="n" />
+  </token>
+  <token id="t426" trans="onse">
+    <dipl id="t426_d1" trans="onse" utf="onse" />
+    <mod id="t426_m1" trans="onse" utf="onse" ascii="onse" checked="n" />
+  </token>
+  <token id="t427" trans="segel">
+    <dipl id="t427_d1" trans="segel" utf="segel" />
+    <mod id="t427_m1" trans="segel" utf="segel" ascii="segel" checked="n" />
+  </token>
+  <token id="t428" trans="an">
+    <dipl id="t428_d1" trans="an" utf="an" />
+    <mod id="t428_m1" trans="an" utf="an" ascii="an" checked="n" />
+  </token>
+  <token id="t429" trans="desen">
+    <dipl id="t429_d1" trans="desen" utf="desen" />
+    <mod id="t429_m1" trans="desen" utf="desen" ascii="desen" checked="n" />
+  </token>
+  <token id="t430" trans="brif">
+    <dipl id="t430_d1" trans="brif" utf="brif" />
+    <mod id="t430_m1" trans="brif" utf="brif" ascii="brif" checked="n" />
+  </token>
+  <token id="t431" trans="gehanghen">
+    <dipl id="t431_d1" trans="gehanghen" utf="gehanghen" />
+    <mod id="t431_m1" trans="gehanghen" utf="gehanghen" ascii="gehanghen" checked="n" />
+  </token>
+  <token id="t432" trans=",">
+    <dipl id="t432_d1" trans="," utf="," />
+    <mod id="t432_m1" trans="," utf="," ascii="," checked="n">
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t433" trans="Gegeuen">
+    <dipl id="t433_d1" trans="Gegeuen" utf="Gegeuen" />
+    <mod id="t433_m1" trans="Gegeuen" utf="Gegeuen" ascii="Gegeuen" checked="n" />
+  </token>
+  <token id="t434" trans="in">
+    <dipl id="t434_d1" trans="in" utf="in" />
+    <mod id="t434_m1" trans="in" utf="in" ascii="in" checked="n" />
+  </token>
+  <token id="t435" trans="den">
+    <dipl id="t435_d1" trans="den" utf="den" />
+    <mod id="t435_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t436" trans="Jare">
+    <dipl id="t436_d1" trans="Jare" utf="Jare" />
+    <mod id="t436_m1" trans="Jare" utf="Jare" ascii="Jare" checked="n" />
+  </token>
+  <token id="t437" trans="ons">
+    <dipl id="t437_d1" trans="ons" utf="ons" />
+    <mod id="t437_m1" trans="ons" utf="ons" ascii="ons" checked="n" />
+  </token>
+  <token id="t438" trans="heren">
+    <dipl id="t438_d1" trans="heren" utf="heren" />
+    <mod id="t438_m1" trans="heren" utf="heren" ascii="heren" checked="n" />
+  </token>
+  <token id="t439" trans="dusend">
+    <dipl id="t439_d1" trans="dusend" utf="dusend" />
+    <mod id="t439_m1" trans="dusend" utf="dusend" ascii="dusend" checked="n" />
+  </token>
+  <token id="t440" trans="drihonderd">
+    <dipl id="t440_d1" trans="drihonderd" utf="drihonderd" />
+    <mod id="t440_m1" trans="drihonderd" utf="drihonderd" ascii="drihonderd" checked="n" />
+  </token>
+  <token id="t441" trans="in">
+    <dipl id="t441_d1" trans="in" utf="in" />
+    <mod id="t441_m1" trans="in" utf="in" ascii="in" checked="n" />
+  </token>
+  <token id="t442" trans="den">
+    <dipl id="t442_d1" trans="den" utf="den" />
+    <mod id="t442_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t443" trans="vijfende">
+    <dipl id="t443_d1" trans="vijfende" utf="vijfende" />
+    <mod id="t443_m1" trans="vijfende" utf="vijfende" ascii="vijfende" checked="n" />
+  </token>
+  <token id="t444" trans="virtighten">
+    <dipl id="t444_d1" trans="virtighten" utf="virtighten" />
+    <mod id="t444_m1" trans="virtighten" utf="virtighten" ascii="virtighten" checked="n" />
+  </token>
+  <token id="t445" trans="Jare">
+    <dipl id="t445_d1" trans="Jare" utf="Jare" />
+    <mod id="t445_m1" trans="Jare" utf="Jare" ascii="Jare" checked="n" />
+  </token>
+  <token id="t446" trans="op">
+    <dipl id="t446_d1" trans="op" utf="op" />
+    <mod id="t446_m1" trans="op" utf="op" ascii="op" checked="n" />
+  </token>
+  <token id="t447" trans="den">
+    <dipl id="t447_d1" trans="den" utf="den" />
+    <mod id="t447_m1" trans="den" utf="den" ascii="den" checked="n" />
+  </token>
+  <token id="t448" trans="dach">
+    <dipl id="t448_d1" trans="dach" utf="dach" />
+    <mod id="t448_m1" trans="dach" utf="dach" ascii="dach" checked="n" />
+  </token>
+  <token id="t449" trans="der">
+    <dipl id="t449_d1" trans="der" utf="der" />
+    <mod id="t449_m1" trans="der" utf="der" ascii="der" checked="n" />
+  </token>
+  <token id="t450" trans="elfdusend">
+    <dipl id="t450_d1" trans="elfdusend" utf="elfdusend" />
+    <mod id="t450_m1" trans="elfdusend" utf="elfdusend" ascii="elfdusend" checked="n" />
+  </token>
+  <token id="t451" trans="megeden">
+    <dipl id="t451_d1" trans="megeden" utf="megeden" />
+    <mod id="t451_m1" trans="megeden" utf="megeden" ascii="megeden" checked="n" />
+  </token>
+</text>
