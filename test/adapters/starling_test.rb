@@ -46,7 +46,8 @@ class StarlingTest < Minitest::Test
                   "starling-caucet:caucet.dbf", "starling-stibet:stibet.dbf",
                   "starling-dravet:dravet.dbf", "starling-kamet:kamet.dbf",
                   "starling-chuket:chuket.dbf", "starling-itelet:itelet.dbf",
-                  "starling-yenet:yenet.dbf"].freeze
+                  "starling-yenet:yenet.dbf", "starling-iranet:iranet.dbf",
+                  "starling-lexstat-balt:balt.dbf", "starling-lexstat-germ:germ.dbf"].freeze
 
   def adapter = Nabu::Adapters::Starling.new
 
@@ -115,6 +116,15 @@ class StarlingTest < Minitest::Test
                  license, "yenet credit: the yenet.inf DBINFO sentence")
   end
 
+  # P113-2: the IE package's LEXSTAT/ tables ride the license lane with
+  # the provenance the package itself states (their .inf files carry no
+  # DBINFO credit line).
+  def test_manifest_carries_the_lexstat_tables_credit
+    manifest = adapter.manifest
+    assert_match(/lexicostatistical wordlists/, manifest.name)
+    assert_match(/LEXSTAT/, manifest.license, "the wordlist shelves' provenance rides every serving surface")
+  end
+
   def test_content_kind_is_dictionary_and_the_source_promises_reflexes
     assert_equal :dictionary, Nabu::Adapters::Starling.content_kind
     assert Nabu::Adapters::Starling.reflex_bearing?
@@ -125,7 +135,7 @@ class StarlingTest < Minitest::Test
   def test_discover_yields_one_ref_per_base_in_registry_order
     refs = adapter.discover(FIXTURES).to_a
     assert_equal ALL_BASE_IDS, refs.map(&:id)
-    assert_equal %w[starling] * 15, refs.map(&:source_id)
+    assert_equal %w[starling] * 18, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -755,7 +765,8 @@ class StarlingTest < Minitest::Test
   def test_entry_ids_are_unique_stable_and_output_is_nfc
     %w[starling-pokorny starling-piet starling-vasmer starling-germet starling-baltet
        starling-altet starling-japet starling-caucet starling-stibet starling-dravet
-       starling-kamet starling-chuket starling-itelet starling-yenet].each do |slug|
+       starling-kamet starling-chuket starling-itelet starling-yenet starling-iranet
+       starling-lexstat-balt starling-lexstat-germ].each do |slug|
       first = parse(slug).map(&:entry_id)
       assert_equal first.uniq, first
       assert_equal first, parse(slug).map(&:entry_id)
@@ -769,6 +780,8 @@ class StarlingTest < Minitest::Test
   # --- fetch (WebMock only) ---------------------------------------------------------
 
   BASE_FILES = %w[pokorny piet vasmer germet baltet].flat_map { |base| ["#{base}.dbf", "#{base}.var"] }.freeze
+  # P113-2: IE.exe's LEXSTAT/ subtree (inline-only tables, no .var siblings).
+  LEXSTAT_FILES = %w[LEXSTAT/balt.dbf LEXSTAT/germ.dbf LEXSTAT/iranet.dbf].freeze
   PACKAGE_FILES = {
     "kart" => %w[kartet],
     "altaic" => %w[altet japet],
@@ -781,7 +794,10 @@ class StarlingTest < Minitest::Test
 
   def zip_of(dir_files)
     Dir.mktmpdir do |dir|
-      dir_files.each { |src, name| FileUtils.cp(src, File.join(dir, name)) }
+      dir_files.each do |src, name|
+        FileUtils.mkdir_p(File.dirname(File.join(dir, name)))
+        FileUtils.cp(src, File.join(dir, name))
+      end
       zip = File.join(dir, "package.zip")
       Dir.chdir(dir) { Nabu::Shell.run("zip", "-q", zip, *dir_files.map(&:last)) }
       File.binread(zip)
@@ -789,7 +805,7 @@ class StarlingTest < Minitest::Test
   end
 
   def zip_body
-    @zip_body ||= zip_of(BASE_FILES.map { |name| [File.join(FIXTURES, name), name] })
+    @zip_body ||= zip_of((BASE_FILES + LEXSTAT_FILES).map { |name| [File.join(FIXTURES, name), name] })
   end
 
   def package_zip_body(subdir)
@@ -808,7 +824,7 @@ class StarlingTest < Minitest::Test
     end
   end
 
-  def test_fetch_unpacks_all_eight_packages_and_discovers_all_fifteen_bases
+  def test_fetch_unpacks_all_eight_packages_and_discovers_every_shelf
     stub_packages
     Dir.mktmpdir do |workdir|
       report = adapter.fetch(workdir)
@@ -819,6 +835,8 @@ class StarlingTest < Minitest::Test
              "each follow-up package lands in its own subdir with its own fetch state"
       assert File.file?(File.join(workdir, "altaic", "altet.dbf"))
       assert File.file?(File.join(workdir, "yenisey", "yenet.dbf"))
+      assert File.file?(File.join(workdir, "LEXSTAT", "balt.dbf")),
+             "IE.exe's LEXSTAT/ subtree lands with the root package"
       assert_equal 3, adapter.parse(refs.first).size
     end
   end
@@ -837,7 +855,7 @@ class StarlingTest < Minitest::Test
                "#{subdir} survives the IE re-fetch sweep"
         refute Dir.exist?(File.join(workdir, ".attic", subdir)), "nothing #{subdir}-shaped was atticked"
       end
-      assert_equal 15, adapter.discover(workdir).to_a.size
+      assert_equal 18, adapter.discover(workdir).to_a.size
     end
   end
 
@@ -874,14 +892,15 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 51, first.added,
+    assert_equal 119, first.added,
                  "3 records per IE base + 5 kart + 27 across the P104-3 bases (3 altet + 3 japet + " \
                  "3 caucet + 4 stibet + 3 dravet + 4 kamet + 2 chuket + 2 itelet + 3 yenet), " \
-                 "both halves of each fixture NUMBER collision and every placeholder pin included"
+                 "both halves of each fixture NUMBER collision and every placeholder pin included; " \
+                 "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ form cells"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 51, second.skipped
+    assert_equal 119, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)
@@ -889,12 +908,14 @@ class StarlingTest < Minitest::Test
                  db[:dictionary_entries].where(entry_id: "12561").get(:urn),
                  "piet #1501's `Vasmer: #12561` body line now names a live entry id"
     assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-kamet:689-b",
-                  "urn:nabu:dict:starling-kart:48-b", "urn:nabu:dict:starling-piet:574-b",
-                  "urn:nabu:dict:starling-yenet:904-b"],
+                  "urn:nabu:dict:starling-kart:48-b", "urn:nabu:dict:starling-lexstat-balt:26.lit-b",
+                  "urn:nabu:dict:starling-lexstat-germ:58.aeg-b", "urn:nabu:dict:starling-lexstat-germ:58.hol-b",
+                  "urn:nabu:dict:starling-piet:574-b", "urn:nabu:dict:starling-yenet:904-b"],
                  db[:dictionary_entries].where(Sequel.like(:entry_id, "%-b")).select_order_map(:urn),
-                 "the duplicate-NUMBER disambiguation is urn-stable"
+                 "the duplicate-NUMBER disambiguation (and the LEXSTAT synonym slots) are urn-stable"
     assert_equal 72, db[:dictionary_reflexes].count,
-                 "piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2) + kart 18 (4+3+4+3+4) " \
+                 "the LEXSTAT shelves mint none; piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2) + " \
+                 "kart 18 (4+3+4+3+4) " \
                  "+ japet 3 + caucet 2 + stibet 1 + dravet 1 + chuket 6 + itelet 1 + yenet 4"
     assert_equal ["Albanian", "Alutor", "Avestan", "Brahui", "Chukchee", "Danish", "Dutch",
                   "English", "Georgian", "German", "Gothic", "Itelmen (Napana)", "Ket",
@@ -965,8 +986,12 @@ class StarlingTest < Minitest::Test
       assert_match(/Chukchee-Koryak/, shelf.load("qfa-chk-pro").section("witness:starling").body)
       assert_match(/Itelmen/, shelf.load("itl-pro").section("witness:starling").body)
       assert_match(/Starostin 1995/, shelf.load("qfa-yen-pro").section("witness:starling").body)
+      # P113-2: the three LEXSTAT Indo-Iranian etymology tables
+      assert_match(/Indo-Aryan/, shelf.load("inc-pro").section("witness:starling").body)
+      assert_match(/Iranian/, shelf.load("ira-pro").section("witness:starling").body)
+      assert_match(/Dardic/, shelf.load("inc-dar-pro").section("witness:starling").body)
       codes = %w[ine-pro rus gem-pro bat-pro ccs-pro tut-pro jpx-pro ccn-pro sit-pro dra-pro
-                 qfa-cka-pro qfa-chk-pro itl-pro qfa-yen-pro]
+                 qfa-cka-pro qfa-chk-pro itl-pro qfa-yen-pro inc-pro ira-pro inc-dar-pro]
       before = codes.map { |code| File.read(shelf.path_for(code)) }
       loader.load_from(adapter, workdir: FIXTURES)
       assert_equal before, codes.map { |code| File.read(shelf.path_for(code)) },
@@ -1045,6 +1070,21 @@ class StarlingTest < Minitest::Test
     results = Nabu::Query::Etym.new(catalog: db).run("aʔt")
     assert_equal ["starling-yenet"], results.map(&:dictionary_slug).uniq
     assert(results.map(&:headword).any? { |headword| headword.include?("ʔaʔd") })
+  end
+
+  # P113-2 acceptance: a LEXSTAT form serves from its wordlist shelf with
+  # the grant on the license lane and its cognation line naming the baltet
+  # entry id (#1634 *kakla- is in this fixture set).
+  def test_define_a_lexstat_form_serves_the_wordlist_entry_with_the_grant
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    results = Nabu::Query::Define.new(catalog: db, lects: nil).run("kakls")
+    assert_equal ["starling-lexstat-balt"], results.map(&:dictionary_slug)
+    result = results.first
+    assert_equal "urn:nabu:dict:starling-lexstat-balt:58.let", result.urn
+    assert_equal "neck", result.gloss
+    assert_match(/properly acknowledged/, result.license, "the grant rides the result")
+    assert_includes result.body, "Baltic etymology: #1634"
   end
 
   # --- registry -----------------------------------------------------------------------

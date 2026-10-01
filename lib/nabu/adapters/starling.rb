@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "starling_dbf_parser"
+require_relative "starling_lexstat"
 
 module Nabu
   module Adapters
@@ -165,8 +166,37 @@ module Nabu
     # (bigchina.inf: "characters in Big5 encoding") — a per-field second
     # encoding lane the starling-dbf family does not have; landing it
     # would also clean stibet's CHIN leads. doc.dbf is a support table
-    # (per-character dialect readings), not an etymological base. LEXSTAT
-    # tables stay out (queued separately as Q78).
+    # (per-character dialect readings), not an etymological base. The
+    # follow-up packages' own LEXSTAT/ trees (51 wordlist tables + the
+    # sinocalc glottochronology result) stay out: their column sigla need
+    # their own language census (below covers IE.exe's LEXSTAT/ only).
+    #
+    # == The IE package's LEXSTAT/ tables (P113-2)
+    #
+    # IE.exe ships 13 lexicostatistical tables under LEXSTAT/ (inline-only
+    # dBase III — no var-pointers): TEN wide WORDLISTS (balt celt dard germ
+    # ind iran mix pi rom slav — one shelf each, one entry per form cell,
+    # cognation numbers into the base the .inf names; the shape, grain and
+    # language posture live in StarlingLexstat) and THREE Indo-Iranian
+    # ETYMOLOGY TABLES — the cognation targets of dard/ind/iran — which
+    # are the BASES shape and ride as BASES rows (dir: LEXSTAT):
+    #
+    #   starling-dardet (inc-dar-pro) — 426 Dardic etymologies (242
+    #                    headword-less form-only stubs → "#NUMBER").
+    #   starling-indet  (inc-pro)     — 520 Indo-Aryan etymologies.
+    #   starling-iranet (ira-pro)     — 498 Iranian etymologies; 18 fully
+    #                    empty NUMBER-0 slots mint nothing (the one blank-
+    #                    slot rule: NUMBER 0 is no addressable id, and every
+    #                    other base carries zero such records — measured).
+    #
+    # Their per-language cells pair the modern form with its etymon ("sab
+    # sarva", "pōst Av. pãsta") — a two-part shape no reflex-minting base
+    # has, so they stay body-only (no reflex verdict without a census).
+    # PRNUM → piet ("IE etymology", the germet label; censused: 1,004 of
+    # 1,004 non-zero links resolve). Column labels are pi.inf's aliases
+    # (the three .inf files carry none); iranet's REF column has no alias
+    # anywhere and keeps its siglum. None of the 13 .inf files carries a
+    # DBINFO compiler credit — the license lane names the package.
     #
     # P22-0 promised the follow-up bases as CONFIGURATION, not code: BASES
     # rows name every per-base policy (dbf file, headword/gloss/body fields,
@@ -235,7 +265,8 @@ module Nabu
         id: "starling",
         name: "StarLing / Tower of Babel — etymological databases " \
               "(Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian + Altaic + " \
-              "North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian)",
+              "North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian + " \
+              "IE lexicostatistical wordlists)",
         license: "Free for any use with acknowledgment (G. Starostin, e-mail 2026-07-15: \"all " \
                  "etymological data are free for anybody to use for any purposes as long as the " \
                  "source is properly acknowledged\"); required per-base credit — Pokorny base: " \
@@ -267,7 +298,11 @@ module Nabu
                  "Chukchee-Kamchatkan database\" with his subordinate Chukchee-Koryak and Itelmen " \
                  "databases (kamet/chuket/itelet.inf DBINFO); Yenisseian package: \"Comparative " \
                  "vocabulary of the Yenisseian languages, published as Starostin 1995\" " \
-                 "(yenet.inf DBINFO)",
+                 "(yenet.inf DBINFO); IE package lexicostatistical tables (IE.exe LEXSTAT/: ten " \
+                 "110-item wordlists with per-form cognation numbers into the PIE, Germanic and " \
+                 "Baltic databases, and three Indo-Iranian etymology tables dardet/indet/iranet; " \
+                 "their .inf files name no compiler — credited as the Tower of Babel project's " \
+                 "StarLing Indo-European package, starlingdb.org)",
         license_class: "attribution",
         upstream_url: "https://starlingdb.org/download/IE.exe",
         parser_family: "starling-dbf"
@@ -625,6 +660,38 @@ module Nabu
             "KOT" => %w[zko Kottish].freeze, "ARI" => %w[xrn Arin].freeze,
             "PUM" => %w[xpm Pumpokol].freeze
           }.freeze
+        }.freeze,
+        # P113-2 (IE.exe LEXSTAT/). The three Indo-Iranian etymology tables
+        # — the cognation targets of the dard/ind/iran wordlists. Labels:
+        # pi.inf's aliases (their own .inf files carry none); body-only
+        # (form + etymon cells); PRNUM → piet. inc-dar-pro follows the
+        # family-code + -pro convention on Wiktionary's inc-dar.
+        "starling-dardet" => {
+          dbf: "dardet.dbf", dir: StarlingLexstat::DIR, language: "inc-dar-pro",
+          title: "Dardic etymology (StarLing IE package LEXSTAT/dardet: the cognation base of " \
+                 "the Dardic wordlist)",
+          headword: "PROTO", gloss: "MEANING",
+          body: StarlingLexstat.labels(%w[KSM BSK TOR MAY SHN PHL SAV TIR GAW SHU WOT PSH KHO KAL]),
+          crosslinks: { "PRNUM" => "IE etymology" }.freeze,
+          reflexes: {}.freeze
+        }.freeze,
+        "starling-indet" => {
+          dbf: "indet.dbf", dir: StarlingLexstat::DIR, language: "inc-pro",
+          title: "Indo-Aryan etymology (StarLing IE package LEXSTAT/indet: the cognation base of " \
+                 "the Indo-Aryan wordlist)",
+          headword: "PROTO", gloss: "MEANING",
+          body: StarlingLexstat.labels(%w[HND PNJ LHD SND GUJ MAR BNG ASS NEP SNG WPH]),
+          crosslinks: { "PRNUM" => "IE etymology" }.freeze,
+          reflexes: {}.freeze
+        }.freeze,
+        "starling-iranet" => {
+          dbf: "iranet.dbf", dir: StarlingLexstat::DIR, language: "ira-pro",
+          title: "Iranian etymology (StarLing IE package LEXSTAT/iranet: the cognation base of " \
+                 "the Iranian wordlist)",
+          headword: "PROTO", gloss: "MEANING",
+          body: StarlingLexstat.labels(%w[CPE TAT KRD BAL TAL AFG MNJ SHG WKH ISH OSS]).merge("REF" => "REF").freeze,
+          crosslinks: { "PRNUM" => "IE etymology" }.freeze,
+          reflexes: {}.freeze
         }.freeze
       }.freeze
 
@@ -761,7 +828,27 @@ module Nabu
          "Ket/Yug/Kottish/Arin/Pumpokol columns (all five mint; Yug is treated \"as a separate " \
          "language rather than just a Ket dialect\", the .inf) and Sino-Caucasian links (unheld " \
          "base, body lines); Russian glosses. qfa-yen-pro is the Wiktionary Proto-Yeniseian " \
-         "code."].freeze
+         "code."].freeze,
+        # P113-2: the IE package's three LEXSTAT etymology tables.
+        ["inc-pro", "witness:starling",
+         "StarLing/Tower of Babel IE package, LEXSTAT/indet (same grant, P113-2): 520 Indo-Aryan " \
+         "etymologies — the cognation base of the package's Indo-Aryan lexicostatistical " \
+         "wordlist, each reconstruction with Hindi/Panjabi/Lahnda/Sindhi/Gujarati/Marathi/" \
+         "Bengali/Assamese/Nepali/Sinhalese/West Pahari forms paired with their Old Indian " \
+         "etymon, linked into the PIE database. inc-pro is the Wiktionary Proto-Indo-Aryan code."].freeze,
+        ["ira-pro", "witness:starling",
+         "StarLing/Tower of Babel IE package, LEXSTAT/iranet (same grant, P113-2): 480 Iranian " \
+         "etymologies — the cognation base of the package's Iranian lexicostatistical wordlist, " \
+         "with Persian/Tat/Kurdish/Baluchi/Talysh/Pashto/Munji/Shughni/Wakhi/Ishkashimi/Ossetic " \
+         "forms paired with their etymon, linked into the PIE database. ira-pro is the " \
+         "Wiktionary Proto-Iranian code."].freeze,
+        ["inc-dar-pro", "witness:starling",
+         "StarLing/Tower of Babel IE package, LEXSTAT/dardet (same grant, P113-2): 426 Dardic " \
+         "etymologies (242 of them form-only stubs without a reconstruction) — the cognation " \
+         "base of the package's Dardic lexicostatistical wordlist (Kashmiri, Bashkarik, Torwali, " \
+         "Maiya, Shina, Phalura, Savi, Tirahi, Gawar-Bati, Shumashti, Wotapuri, Pashai, Khowar, " \
+         "Kalasha), linked into the PIE database. inc-dar-pro follows the family-code + -pro " \
+         "convention on Wiktionary's inc-dar (the bat-pro precedent)."].freeze
       ].freeze
 
       def self.manifest
@@ -790,23 +877,28 @@ module Nabu
       # [lang_code, kind, body] rows for the language-notes rider.
       def self.language_notes = LANGUAGE_NOTES
 
-      # One DocumentRef per base, BASES order; a workdir without a base's
-      # .dbf simply yields fewer refs (the day-one pre-fetch state).
+      # One DocumentRef per base, BASES order, then one per IE LEXSTAT
+      # wordlist (StarlingLexstat::TABLES order); a workdir without a
+      # table's .dbf simply yields fewer refs (the day-one pre-fetch state).
+      # A row with a :dir (the IE package's LEXSTAT/ tables) resolves at
+      # exactly <workdir>/<dir>/<dbf> — the follow-up packages carry
+      # LEXSTAT/ trees of their own, never these.
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
         BASES.each do |slug, base|
-          Dir.glob(File.join(workdir, "**", base.fetch(:dbf))).first(1).each do |path|
-            yield Nabu::DocumentRef.new(
-              source_id: manifest.id, id: "#{slug}:#{base.fetch(:dbf)}",
-              path: File.expand_path(path), metadata: { "dictionary" => slug }
-            )
-          end
+          base_path(workdir, base).each { |path| yield ref_for(slug, base.fetch(:dbf), path) }
+        end
+        StarlingLexstat::TABLES.each do |slug, table|
+          path = File.join(workdir, StarlingLexstat::DIR, table.fetch(:dbf))
+          yield ref_for(slug, table.fetch(:dbf), path) if File.file?(path)
         end
       end
 
       def parse(document_ref)
         slug = document_ref.metadata.fetch("dictionary")
+        return StarlingLexstat.new.parse(slug: slug, path: document_ref.path) if StarlingLexstat::TABLES.key?(slug)
+
         base = BASES.fetch(slug)
         document = Nabu::DictionaryDocument.new(
           slug: slug, language: base.fetch(:language),
@@ -814,6 +906,8 @@ module Nabu
         )
         seen = Hash.new(0)
         StarlingDbfParser.new(dbf_path: document_ref.path).each_record do |record|
+          next if blank_zero_slot?(record)
+
           document << build_entry(base, record, seen)
         end
         document
@@ -850,6 +944,29 @@ module Nabu
       end
 
       private
+
+      def base_path(workdir, base)
+        return Dir.glob(File.join(workdir, "**", base.fetch(:dbf))).first(1) unless base[:dir]
+
+        path = File.join(workdir, base.fetch(:dir), base.fetch(:dbf))
+        File.file?(path) ? [path] : []
+      end
+
+      def ref_for(slug, dbf, path)
+        Nabu::DocumentRef.new(
+          source_id: manifest.id, id: "#{slug}:#{dbf}",
+          path: File.expand_path(path), metadata: { "dictionary" => slug }
+        )
+      end
+
+      # A fully-empty record under NUMBER 0 is a dBase blank slot, not an
+      # upstream entry: 0 is no addressable id (crosslink cells read 0 as
+      # absent), so it mints nothing (P113-2 census: iranet ×18; every
+      # other base ×0 — measured, zero drift).
+      def blank_zero_slot?(record)
+        record.fetch("NUMBER").to_s.strip == "0" &&
+          record.except("NUMBER").values.all? { |value| ["", "0"].include?(value.to_s.strip) }
+      end
 
       def fetch_notes(results_by_url)
         notes = results_by_url.filter_map do |url, result|

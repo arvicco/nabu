@@ -240,3 +240,51 @@ byte-verbatim** so the fixtures pin the parser's two P104-3 lanes.
 Decoded output of the kept records was verified against the live
 parse of the full upstream tables (the same decoder path end to end);
 the per-base field labels are the packages' own `.inf` aliases.
+
+## The LEXSTAT tables (P113-2 — inside IE.exe, same retrieval)
+
+`IE.exe` (above: retrieved 2026-07-15, sha256 `e2b1cbb3…`) also ships a
+`LEXSTAT/` subtree: 13 lexicostatistical `.dbf` tables with `.inf`
+siblings (+ five `.png/.jpg/.wmf` tree images) — 31 files. Census at
+fixture time (2026-10-01, read from the held package tree):
+
+- **Ten wordlists** — `balt` 118 records / `celt` 129 / `dard` 149 /
+  `germ` 154 / `ind` 198 / `iran` 172 / `mix` 141 / `pi` 223 / `rom` 146 /
+  `slav` 133. Shape: NUMBER (wordlist item 1..110) + WORD (English
+  meaning) + per-language FORM columns each followed by `<COL>NUM` (the
+  cognation number). File position 0 is the per-language date row
+  (century values). Positive cognation numbers are entry ids of the base
+  each `.inf` names (`proto = \data\ie\baltet.dbf` / germet / piet /
+  `lexstat\dardet` / `indet` / `iranet`) — every positive cell resolves
+  (mix: 858 of 861). 23,096 non-empty form cells in all.
+- **Three Indo-Iranian etymology tables** — `dardet` 426 / `indet` 520 /
+  `iranet` 498 (18 of them fully-empty NUMBER-0 blank slots): the
+  PROTO/PRNUM/MEANING etymology shape, PRNUM → piet (1,004 of 1,004
+  links resolve).
+- Inline character cells only — **no `.var` siblings** upstream, no V
+  descriptors. Column labels: `pi.inf`'s field aliases (the package's
+  one full alias set; `balt.inf`/`germ.inf` repeat it, the rest carry
+  none). No `.inf` carries a DBINFO credit.
+
+Same trim recipe minus the var rewrite (records byte-verbatim, header +
+descriptors verbatim, only the record count rewritten; the trailing
+`0x1A` mirrored — balt/germ have one, iranet does not):
+
+- `LEXSTAT/balt.dbf` — file position 0 (the date row: LIT 20 / LET 20 /
+  JAT 18), items **1** (all: vìsa- / viss / wisa → baltet #607), **2**
+  (ashes: the `-666` Yatvingian cell with no form — mints nothing),
+  **26 BOTH ROWS** (fat n.: riebalaĩ + the synonym row's taukaĩ →
+  `26.lit` / `26.lit-b`), **58** (neck: kãklas / kakls → baltet #1634
+  \*kakla-, IN this fixture set — the both-ways pin), **64** (person:
+  LET cilveks `-1`, JAT mard → #1065), **106** (snake: the `-4`/`-5`
+  non-positive numbers).
+- `LEXSTAT/germ.dbf` — file position 0 (the date row: GOT 4 / AIS 10 /
+  AEG 8 / AHD 9, modern 20), items **1** (all), **2** (ashes: RKS aske
+  `-1`, AHD "asca, asga"), **3** (bark: the `-100` Gothic cell with no
+  form), **58 BOTH ROWS** (neck: GOT hals → germet #390 \*xálsa-z, IN
+  this fixture set; the synonym row's HOL nek → #874 and AEG swēora).
+- `LEXSTAT/iranet.dbf` — NUMBER **1** (\*hama 'all': "hama hama" form +
+  etymon cells, OSS äppät, REF "\*hama-kaϑa всем домом Аб.", PRNUM →
+  piet #3005), **3** (\*pawasta 'bark'), **127** (headword-less: MEANING
+  nose + REF only → `#127`), and the first NUMBER-0 blank slot (file
+  position 293).
