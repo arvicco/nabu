@@ -760,14 +760,17 @@ module Nabu
             ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
           end
         end
-        mark_slice_finished!(fulltext, slug)
+        # P112-3: the finish stamp records the catalog state this slice now
+        # serves — health's freshness cross-check reads it back.
+        live_rows, max_id = source_live_stats(catalog, slug)
+        mark_slice_finished!(fulltext, slug, live_rows: live_rows, max_passage_id: max_id)
         # The bulk pass's final reclaim — AFTER the last write, so the WAL
         # file ends the refresh truncated, not holding the postings swaps.
         checkpoint_wal!(fulltext) unless bulk_tables.empty?
         # The slice rewrite's insert count IS the source's live total; the
         # delta grain inserts only the changed rows, so the honest
         # "indexed N" is counted from the catalog instead.
-        use_delta ? source_live_count(catalog, slug) : count
+        use_delta ? live_rows : count
       end
 
       # P78-r3: announce with the last sync's estimate, run, record the
@@ -846,13 +849,35 @@ module Nabu
         [TABLE] + (fulltext.table_exists?(CJK_TABLE) ? [CJK_TABLE] : [])
       end
 
-      # -- the slice-pending marker (P111-1b, constants note) ----------------
+      # -- the slice-pending marker + freshness stamp (P111-1b, P112-3) ------
+      # P112-3 (Q114) generalizes the pending marker into a FRESHNESS
+      # STAMP: a finished slice records the catalog state it serves (the
+      # source's live row count + max passage id at finish). Health
+      # cross-checks the stamp against the live catalog, so any skip-gate
+      # hole that leaves a slice behind the catalog is a VISIBLE finding
+      # instead of a silent staleness (the P111 lesson, generalized). An
+      # absent stamp is NOT stale — a full rebuild clears the table and
+      # makes everything fresh by construction.
 
       def create_slice_refreshes_table(fulltext)
         fulltext.create_table?(SLICE_REFRESHES_TABLE) do
           String :slug, primary_key: true
           String :started_at, null: false
           String :finished_at
+          Integer :live_rows
+          Integer :max_passage_id
+        end
+        ensure_slice_stamp_columns(fulltext)
+      end
+
+      # A slice_refreshes table minted by P111 code lacks the stamp
+      # columns — add them in place (additive, nullable: old rows simply
+      # carry no stamp until their next refresh).
+      def ensure_slice_stamp_columns(fulltext)
+        columns = fulltext[SLICE_REFRESHES_TABLE].columns
+        fulltext.alter_table(SLICE_REFRESHES_TABLE) do
+          add_column :live_rows, Integer unless columns.include?(:live_rows)
+          add_column :max_passage_id, Integer unless columns.include?(:max_passage_id)
         end
       end
 
@@ -860,13 +885,36 @@ module Nabu
         create_slice_refreshes_table(fulltext)
         fulltext[SLICE_REFRESHES_TABLE]
           .insert_conflict(target: :slug,
-                           update: { started_at: Time.now.utc.iso8601, finished_at: nil })
+                           update: { started_at: Time.now.utc.iso8601, finished_at: nil,
+                                     live_rows: nil, max_passage_id: nil })
           .insert(slug: slug, started_at: Time.now.utc.iso8601, finished_at: nil)
       end
 
-      def mark_slice_finished!(fulltext, slug)
+      def mark_slice_finished!(fulltext, slug, live_rows: nil, max_passage_id: nil)
         fulltext[SLICE_REFRESHES_TABLE].where(slug: slug)
-                                       .update(finished_at: Time.now.utc.iso8601)
+                                       .update(finished_at: Time.now.utc.iso8601,
+                                               live_rows: live_rows, max_passage_id: max_passage_id)
+      end
+
+      # The freshness stamps, slug-keyed — a P111-era table without the
+      # stamp columns reads back rows whose [:live_rows] is simply nil (no
+      # ALTER here: health reads through READ-ONLY handles). Empty hash
+      # when the table is absent.
+      def slice_stamps(fulltext)
+        return {} unless fulltext.table_exists?(SLICE_REFRESHES_TABLE)
+
+        fulltext[SLICE_REFRESHES_TABLE].all.to_h { |row| [row[:slug], row] }
+      end
+
+      # The catalog state a finished slice serves: [live row count, max
+      # live passage id]. Two bounded B-tree queries.
+      def source_live_stats(catalog, slug)
+        scope = catalog[:passages]
+                .join(:documents, id: Sequel[:passages][:document_id])
+                .join(:sources, id: Sequel[:documents][:source_id])
+                .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+                .where(Sequel[:sources][:slug] => slug)
+        [scope.count, scope.max(Sequel[:passages][:id])]
       end
 
       # Whether +slug+'s last slice refresh never finished (a crashed run —

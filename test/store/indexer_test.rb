@@ -1065,6 +1065,39 @@ module Store
       refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
     end
 
+    # P112-3 (Q114): a finished slice stamps the catalog state it serves.
+    def test_refresh_stamps_the_catalog_state_it_serves
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+      refresh!
+
+      stamp = Nabu::Store::Indexer.slice_stamps(@fulltext).fetch("s")
+
+      assert_equal 2, stamp[:live_rows]
+      assert_equal @catalog[:passages].max(:id), stamp[:max_passage_id]
+    end
+
+    # A P111-era slice_refreshes table (no stamp columns) upgrades in place
+    # at the next refresh instead of crashing on the unknown columns.
+    def test_refresh_upgrades_a_p111_era_marker_table
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      @fulltext.create_table(Nabu::Store::Indexer::SLICE_REFRESHES_TABLE) do
+        String :slug, primary_key: true
+        String :started_at, null: false
+        String :finished_at
+      end
+
+      refresh!
+
+      stamp = Nabu::Store::Indexer.slice_stamps(@fulltext).fetch("s")
+
+      assert_equal 1, stamp[:live_rows], "the upgraded table carries the fresh stamp"
+    end
+
     def test_rebuild_clears_pending_markers
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)

@@ -109,6 +109,7 @@ module Nabu
           partial_load(entry),
           synced_unpopulated(entry),
           fuzzy_vs_trigram(entry),
+          index_slice_freshness(entry),
           timeline_vs_rows(entry),
           reflex_vs_rows(entry),
           language_names_vs_reflexes(entry),
@@ -133,7 +134,8 @@ module Nabu
           reversed_axis_bounds,
           script_surface_mismatch,
           *place_ref_findings,
-          registry_orphan_names
+          registry_orphan_names,
+          *index_segment_pressure
         ].compact
       end
 
@@ -342,6 +344,59 @@ module Nabu
           kind: :fuzzy_unindexed, severity: :loud,
           message: "fuzzy_index flagged but #{problem} — reindex (any sync, or nabu rebuild)"
         )
+      end
+
+      # P112-3 (Q114): the index freshness cross-check. A finished slice
+      # stamps the catalog state it serves (live rows + max passage id);
+      # drift between stamp and live catalog is a skip-gate hole made
+      # VISIBLE (the P111 lesson, generalized). An unfinished stamp is a
+      # crashed refresh awaiting its heal. No stamp row = fresh by
+      # construction (a full rebuild clears the table); a P111-era row
+      # without stamp columns makes no claim.
+      def index_slice_freshness(entry)
+        return nil unless @catalog && @fulltext
+
+        stamp = Store::Indexer.slice_stamps(@fulltext)[entry.slug]
+        return nil if stamp.nil?
+
+        if stamp[:finished_at].nil?
+          return Finding.new(
+            kind: :index_slice_pending, severity: :loud,
+            message: "index slice pending: the last refresh never finished (crashed mid-slice) — " \
+                     "the next sync of this source heals it"
+          )
+        end
+        return nil if stamp[:live_rows].nil?
+
+        live, max_id = Store::Indexer.source_live_stats(@catalog, entry.slug)
+        return nil if live == stamp[:live_rows] && max_id == stamp[:max_passage_id]
+
+        Finding.new(
+          kind: :index_slice_stale, severity: :loud,
+          message: "index slice stale: serves #{stamp[:live_rows]} rows (max id #{stamp[:max_passage_id]}), " \
+                   "catalog holds #{live} (max id #{max_id}) — resync the source"
+        )
+      end
+
+      # P112-3 (Q114): segment-pressure gauges against the fts5 hard cap of
+      # 2000 total segments (the 2026-10-01 wedge: the failure renders as
+      # "database or disk is full" with no public gauge). Warn with ample
+      # runway; anomaly while an ordinary sync's merge loop can still
+      # consolidate.
+      def index_segment_pressure
+        return [] unless @fulltext
+
+        [Store::Indexer::TABLE, Store::Indexer::CJK_TABLE].filter_map do |table|
+          gauges = Store::FtsStructure.gauges(@fulltext, table)
+          next nil if gauges.nil? || gauges[:segments] < Store::FtsStructure::SEGMENT_WARN
+
+          severity = gauges[:segments] >= Store::FtsStructure::SEGMENT_ANOMALY ? :loud : :soft
+          Finding.new(
+            kind: :index_segment_pressure, severity: severity,
+            message: "#{table}: #{gauges[:segments]} fts5 segments (hard cap 2000 wedges writes) — " \
+                     "run nabu index doctor --consolidate"
+          )
+        end
       end
 
       def trigram_problem(slug)
