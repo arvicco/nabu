@@ -4054,6 +4054,38 @@ empty
 missing
 empty
 punct
+711677	empty
+missing
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+empty
+missing
+cons
+cons
+empty
+missing
+unc
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
+cons
 1314784	cons
 cons
 cons
@@ -4876,6 +4908,9 @@ rec
 alt
 rec
 vac
+rec
+1496652	rec
+rec
 rec
 1525404	rem2
 rec
@@ -6354,6 +6389,19 @@ glyph
 glyph
 glyph
 punct
+1868315	glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
+glyph
 2070096	glyph
 glyph
 glyph
