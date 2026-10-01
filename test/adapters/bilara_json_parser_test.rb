@@ -109,6 +109,52 @@ class BilaraJsonParserTest < Minitest::Test
     assert_equal "translation", document.metadata["kind"]
   end
 
+  # --- sidecar segment maps (variant / reference / comment) -------------------
+
+  SN_SIDECARS = {
+    "variants" => File.join(FIXTURES, "variant/pli/ms/sutta/sn/sn35/sn35.24_variant-pli-ms.json"),
+    "refs" => File.join(FIXTURES, "reference/pli/ms/sutta/sn/sn35/sn35.24_reference.json"),
+    "comments" => File.join(FIXTURES, "comment/en/sujato/sutta/sn/sn35/sn35.24_comment-en-sujato.json")
+  }.freeze
+
+  def test_sidecar_maps_join_into_passage_annotations_by_segment_id
+    document = parse(SN, stem: "sn35.24", sidecars: SN_SIDECARS)
+    annotated = document.reject { |p| p.annotations.empty? }
+    assert_equal ["urn:nabu:suttacentral:sn35.24:1.1"], annotated.map(&:urn),
+                 "variant + reference both key 1.1; the comment file's only key (1.4) is an empty string"
+    assert_equal({ "variants" => "Sabbappahānāya → sabbaṁ pahānāya (sya-all, km, mr)",
+                   "refs" => "dr18.18, ms13S4_65, msdiv24, pts-vp-pli4.16, sya18.20, vri26.15" },
+                 annotated.first.annotations)
+  end
+
+  def test_sidecar_data_on_a_skipped_blank_segment_has_no_passage_to_land_on
+    Dir.mktmpdir do |dir|
+      sidecar = File.join(dir, "sn35.24_variant-pli-ms.json")
+      File.write(sidecar, JSON.generate({ "sn35.24:1.5" => "x → y (bj)", "sn35.24:9.9" => "z" }))
+      document = parse(SN, stem: "sn35.24", sidecars: { "variants" => sidecar })
+      assert(document.all? { |p| p.annotations.empty? },
+             "1.5 is the blank root segment (skipped) and 9.9 does not exist — both drop")
+    end
+  end
+
+  def test_sidecar_text_is_normalized_to_nfc
+    Dir.mktmpdir do |dir|
+      sidecar = File.join(dir, "sn35.24_comment-en-sujato.json")
+      File.write(sidecar, JSON.generate({ "sn35.24:1.1" => "Sabbā " }))
+      passage = parse(SN, stem: "sn35.24", sidecars: { "comments" => sidecar }).first(4).last
+      assert_equal "Sabbā", passage.annotations["comments"]
+    end
+  end
+
+  def test_a_malformed_sidecar_raises_parse_error_naming_the_file
+    Dir.mktmpdir do |dir|
+      sidecar = File.join(dir, "sn35.24_reference.json")
+      File.write(sidecar, JSON.generate({ "sn35.24:1.1" => 7 }))
+      error = assert_raises(Nabu::ParseError) { parse(SN, stem: "sn35.24", sidecars: { "refs" => sidecar }) }
+      assert_includes error.message, sidecar
+    end
+  end
+
   # --- damage is loud ---------------------------------------------------------
 
   def test_malformed_json_raises_parse_error
