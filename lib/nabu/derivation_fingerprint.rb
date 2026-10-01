@@ -94,6 +94,26 @@ module Nabu
     BUILDER_DIRS = %w[store/timeline_builder].freeze
     BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb].freeze
 
+    # P112-4 (Q115): the fulltext-index core — files that shape ONLY
+    # fulltext.sqlite3 rows (read the catalog, write the index; never a
+    # catalog row). The third sanctioned exit from the asymmetry doctrine:
+    # carved out of the shared core because P111's three index-side
+    # commits dirtied every source's parse stamp, pricing the next
+    # incremental as a full CATALOG replay for edits that cannot change
+    # one parsed row. Covered by .index_core_digest, stamped as the
+    # Store::DerivationStamp::INDEX_SLUG sentinel both rebuild flavors
+    # mint; an incremental run re-derives the fulltext index whole
+    # whenever that digest drifts (the honest reference: changed index
+    # code may shape ANY index row) — even with zero dirty sources.
+    # Membership is conservative: a file that also writes catalog rows
+    # (hiero_postings_builder — its table is a catalog migration) stays
+    # IN the shared core; when in doubt, IN.
+    INDEX_FILES = %w[
+      store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
+      store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
+      store/cjk_bigrams.rb store/index_delta.rb
+    ].freeze
+
     # The shared derivation core is EVERYTHING under lib/nabu/ except
     # adapters/ (covered per-source by the closure), normalize.rb (input 3),
     # hani.rb/jpn.rb (the fold-table modules — covered per-source by the
@@ -111,7 +131,8 @@ module Nabu
     # stores — guarded by the purity test (no derivation code may reference
     # DataBuild; derivation_fingerprint_test).
     EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build] + BUILDER_DIRS).freeze
-    EXCLUDED_FILES = (BUILDER_FILES + %w[
+    EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
+      store/fts_structure.rb
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
       batch_cognates.rb batch_formulas.rb batch_parallels.rb
@@ -317,6 +338,27 @@ module Nabu
 
       # Seam (tests divert one file to simulate a builder change).
       def builder_file_digest(path)
+        Digest::SHA256.file(path).hexdigest
+      end
+
+      # Every file the index digest covers (P112-4) — test-pinned against
+      # INDEX_FILES so nothing carved can escape coverage.
+      def index_files
+        INDEX_FILES.map { |rel| File.join(LIB_DIR, rel) }
+      end
+
+      # The scoped identity of the fulltext-index code (P112-4, Q115) —
+      # stamped as the INDEX_SLUG sentinel; drift re-derives the index
+      # whole without dirtying any per-source catalog stamp.
+      def index_core_digest
+        tokens = index_files.sort.map do |file|
+          "#{file.delete_prefix("#{LIB_DIR}#{File::SEPARATOR}")}:#{index_file_digest(file)}"
+        end
+        Digest::SHA256.hexdigest(tokens.join("\n"))
+      end
+
+      # Seam (tests divert one file to simulate an index-code change).
+      def index_file_digest(path)
         Digest::SHA256.file(path).hexdigest
       end
 

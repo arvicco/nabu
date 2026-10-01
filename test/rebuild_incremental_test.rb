@@ -45,7 +45,7 @@ class RebuildIncrementalTest < Minitest::Test
     with_db do |db|
       # Per-source stamps; the __corpus-builders__ sentinel (P89-1) rides the
       # same table and has its own test below.
-      stamps = db[:derivation_stamps].exclude(slug: builders_slug).order(:slug).all
+      stamps = db[:derivation_stamps].exclude(slug: sentinel_slugs).order(:slug).all
       assert_equal(%w[alpha beta lexica], stamps.map { |row| row[:slug] })
       stamps.each do |row|
         assert_match(/\A\h{64}\z/, row[:fingerprint])
@@ -129,7 +129,7 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal %w[beta], result.outcomes.map(&:slug)
     assert_equal %w[alpha lexica], result.cleans.map(&:slug).sort
     with_db do |db|
-      assert_equal 3, db[:derivation_stamps].exclude(slug: builders_slug).count,
+      assert_equal 3, db[:derivation_stamps].exclude(slug: sentinel_slugs).count,
                    "the re-derive re-stamps"
     end
   end
@@ -218,6 +218,74 @@ class RebuildIncrementalTest < Minitest::Test
     assert plan.builders_dirty, "the dry run must announce the builders re-run honestly"
     assert(plan.verdicts.all? { |v| v.state == :clean }, "no source verdict may dirty")
     refute incremental_rebuilder.plan.builders_dirty, "clean when the digest matches the sentinel"
+  end
+
+  # -- P112-4 (Q115): the fulltext-index carve-out ---------------------------
+
+  def test_full_rebuild_mints_the_index_sentinel
+    full_rebuilder.run
+
+    with_db do |db|
+      row = db[:derivation_stamps].first(slug: index_slug)
+
+      refute_nil row, "the full rebuild must mint the __fulltext-index__ sentinel"
+      assert_equal Nabu::DerivationFingerprint.index_core_digest, row[:fingerprint]
+    end
+  end
+
+  def test_an_index_file_change_rederives_the_index_without_dirtying_sources
+    full_rebuilder.run
+    before_passages = raw_rows(:passages)
+    before_fts = fts_snapshot
+
+    result = with_changed_index_file("indexer.rb") { incremental_rebuilder.run }
+
+    assert_empty result.outcomes, "an index-only edit must not replay any source (the P111 lesson)"
+    assert_equal %w[alpha beta lexica], result.cleans.map(&:slug).sort
+    refute_nil result.indexed, "the covering mechanism: the index re-derives on its own digest drift"
+    assert_equal before_passages, raw_rows(:passages), "no catalog row may move"
+    assert_equal before_fts, fts_snapshot, "an unchanged catalog re-derives an identical index"
+
+    # The sentinel re-minted at the drifted digest: a second run inside the
+    # same diversion is fully clean, index included.
+    second = with_changed_index_file("indexer.rb") { incremental_rebuilder.run }
+
+    assert_empty second.outcomes
+    assert_nil second.indexed, "the index must not re-derive once its digest is stamped"
+  end
+
+  def test_a_missing_index_sentinel_self_heals
+    full_rebuilder.run
+    with_db(write: true) { |db| db[:derivation_stamps].where(slug: index_slug).delete }
+
+    result = incremental_rebuilder.run
+
+    assert_empty result.outcomes
+    refute_nil result.indexed, "an absent sentinel reads dirty — one index rebuild, then stamped"
+    with_db { |db| refute_nil db[:derivation_stamps].first(slug: index_slug) }
+  end
+
+  def test_dry_run_reports_index_drift
+    full_rebuilder.run
+
+    plan = with_changed_index_file("indexer.rb") { incremental_rebuilder.plan }
+
+    assert plan.index_dirty, "the dry run must announce the index re-derivation honestly"
+    assert(plan.verdicts.all? { |v| v.state == :clean }, "no source verdict may dirty")
+    refute incremental_rebuilder.plan.index_dirty, "clean when the digest matches the sentinel"
+  end
+
+  def index_slug = Nabu::Store::DerivationStamp::INDEX_SLUG
+
+  def with_changed_index_file(basename)
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:index_file_digest)
+    singleton.define_method(:index_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
+    yield
+  ensure
+    singleton.define_method(:index_file_digest, original)
   end
 
   # -- P89-1 (№R-54 (b)): the --trust-derivations bridge -------------------
@@ -455,6 +523,8 @@ class RebuildIncrementalTest < Minitest::Test
   end
 
   def builders_slug = Nabu::Store::DerivationStamp::BUILDERS_SLUG
+
+  def sentinel_slugs = Nabu::Store::DerivationStamp::SENTINEL_SLUGS
 
   # A CodeVoucher stand-in with a fixed verdict (the git-backed real one has
   # its own test file).

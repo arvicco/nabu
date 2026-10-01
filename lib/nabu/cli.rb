@@ -11470,6 +11470,7 @@ module Nabu
 
         say "Incremental rebuild against #{plan.db_path}:"
         say "  BUILDERS dirty — timeline/facets re-run (builder code changed)" if plan.builders_dirty
+        say "  INDEX dirty — full fulltext re-derivation (index code changed)" if plan.index_dirty
         plan.verdicts.each do |verdict|
           case verdict.state
           in :clean then say "  clean   #{verdict.slug} (stamp #{verdict.stamp_short})"
