@@ -109,3 +109,179 @@ files:
     url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/function.tf
     whole: false
     trim: the 2,046 intersecting phrase nodes (1,266,461 B -> 10,697 B)
+  - path: tf/2021/freq_occ.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/freq_occ.tf
+    whole: false
+    trim: slice slots, word grain only (1,832,636 B -> 12,877 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_cons.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_cons.tf
+    whole: false
+    trim: slice slots, word grain only (1,624,791 B -> 11,415 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_cons_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_cons_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (2,938,233 B -> 20,201 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_lex.tf
+    whole: false
+    trim: slice slots, word grain only (2,304,909 B -> 15,682 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_lex_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_lex_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (3,995,396 B -> 26,577 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_nme.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_nme.tf
+    whole: false
+    trim: slice slots, word grain only (749,784 B -> 5,162 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_nme_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_nme_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (1,072,485 B -> 6,941 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_pfm.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_pfm.tf
+    whole: false
+    trim: slice slots, word grain only (599,992 B -> 5,193 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_pfm_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_pfm_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (591,999 B -> 5,180 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_prs.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_prs.tf
+    whole: false
+    trim: slice slots, word grain only (575,982 B -> 4,517 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_prs_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_prs_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (634,263 B -> 4,982 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_uvf.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_uvf.tf
+    whole: false
+    trim: slice slots, word grain only (438,074 B -> 3,458 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_uvf_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_uvf_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (441,997 B -> 3,466 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_vbe.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_vbe.tf
+    whole: false
+    trim: slice slots, word grain only (556,386 B -> 4,509 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_vbe_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_vbe_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (538,280 B -> 4,365 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_vbs.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_vbs.tf
+    whole: false
+    trim: slice slots, word grain only (476,546 B -> 3,681 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_vbs_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_vbs_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (464,211 B -> 3,592 B; widened lane, added 2026-10-01)
+  - path: tf/2021/g_word.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/g_word.tf
+    whole: false
+    trim: slice slots, word grain only (3,295,014 B -> 22,764 B; widened lane, added 2026-10-01)
+  - path: tf/2021/languageISO.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/languageISO.tf
+    whole: false
+    trim: slice slots, word grain only (1,743,778 B -> 12,146 B; widened lane, added 2026-10-01)
+  - path: tf/2021/lex0.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/lex0.tf
+    whole: false
+    trim: slice slots, word grain only (1,521,996 B -> 10,451 B; widened lane, added 2026-10-01)
+  - path: tf/2021/lex_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/lex_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (2,741,098 B -> 18,173 B; widened lane, added 2026-10-01)
+  - path: tf/2021/lexeme_count.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/lexeme_count.tf
+    whole: false
+    trim: slice slots, word grain only (1,978,934 B -> 13,983 B; widened lane, added 2026-10-01)
+  - path: tf/2021/ls.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/ls.tf
+    whole: false
+    trim: slice slots, word grain only (2,137,616 B -> 15,080 B; widened lane, added 2026-10-01)
+  - path: tf/2021/nametype.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/nametype.tf
+    whole: false
+    trim: slice slots, word grain only (471,126 B -> 3,205 B; widened lane, added 2026-10-01)
+  - path: tf/2021/nme.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/nme.tf
+    whole: false
+    trim: slice slots, word grain only (1,420,242 B -> 11,129 B; widened lane, added 2026-10-01)
+  - path: tf/2021/number.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/number.tf
+    whole: false
+    trim: slice slots, word grain only (5,206,545 B -> 12,677 B; widened lane, added 2026-10-01)
+  - path: tf/2021/pdp.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/pdp.tf
+    whole: false
+    trim: slice slots, word grain only (2,104,316 B -> 14,813 B; widened lane, added 2026-10-01)
+  - path: tf/2021/pfm.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/pfm.tf
+    whole: false
+    trim: slice slots, word grain only (1,694,220 B -> 11,747 B; widened lane, added 2026-10-01)
+  - path: tf/2021/prs.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/prs.tf
+    whole: false
+    trim: slice slots, word grain only (2,336,858 B -> 16,062 B; widened lane, added 2026-10-01)
+  - path: tf/2021/prs_gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/prs_gn.tf
+    whole: false
+    trim: slice slots, word grain only (1,292,236 B -> 9,406 B; widened lane, added 2026-10-01)
+  - path: tf/2021/prs_nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/prs_nu.tf
+    whole: false
+    trim: slice slots, word grain only (1,280,208 B -> 9,187 B; widened lane, added 2026-10-01)
+  - path: tf/2021/prs_ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/prs_ps.tf
+    whole: false
+    trim: slice slots, word grain only (1,280,208 B -> 9,187 B; widened lane, added 2026-10-01)
+  - path: tf/2021/rank_lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/rank_lex.tf
+    whole: false
+    trim: slice slots, word grain only (1,348,743 B -> 9,324 B; widened lane, added 2026-10-01)
+  - path: tf/2021/rank_occ.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/rank_occ.tf
+    whole: false
+    trim: slice slots, word grain only (1,422,614 B -> 10,283 B; widened lane, added 2026-10-01)
+  - path: tf/2021/root.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/root.tf
+    whole: false
+    trim: slice slots, word grain only (730,267 B -> 4,511 B; widened lane, added 2026-10-01)
+  - path: tf/2021/st.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/st.tf
+    whole: false
+    trim: slice slots, word grain only (1,098,981 B -> 8,195 B; widened lane, added 2026-10-01)
+  - path: tf/2021/suffix_gender.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/suffix_gender.tf
+    whole: false
+    trim: slice slots, word grain only (1,292,173 B -> 9,343 B; widened lane, added 2026-10-01)
+  - path: tf/2021/suffix_number.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/suffix_number.tf
+    whole: false
+    trim: slice slots, word grain only (1,280,139 B -> 9,118 B; widened lane, added 2026-10-01)
+  - path: tf/2021/suffix_person.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/suffix_person.tf
+    whole: false
+    trim: slice slots, word grain only (1,280,139 B -> 9,118 B; widened lane, added 2026-10-01)
+  - path: tf/2021/uvf.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/uvf.tf
+    whole: false
+    trim: slice slots, word grain only (2,968,859 B -> 20,716 B; widened lane, added 2026-10-01)
+  - path: tf/2021/vbe.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/vbe.tf
+    whole: false
+    trim: slice slots, word grain only (1,514,995 B -> 10,487 B; widened lane, added 2026-10-01)
+  - path: tf/2021/vbs.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/vbs.tf
+    whole: false
+    trim: slice slots, word grain only (1,852,322 B -> 13,558 B; widened lane, added 2026-10-01)
+  - path: tf/2021/voc_lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/voc_lex.tf
+    whole: false
+    trim: slice slots, word grain only (2,201,635 B -> 14,358 B; widened lane, added 2026-10-01)
+  - path: tf/2021/voc_lex_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/voc_lex_utf8.tf
+    whole: false
+    trim: slice slots, word grain only (4,048,628 B -> 25,721 B; widened lane, added 2026-10-01)
