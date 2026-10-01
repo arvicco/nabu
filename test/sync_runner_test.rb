@@ -692,6 +692,28 @@ class SyncRunnerTest < Minitest::Test
                  "a pending (crashed) slice must refresh despite the no-op load"
   end
 
+  # A DELETED index file (the sanctioned "drop the file and re-run"
+  # recovery) must never be skipped over: the no-op load would otherwise
+  # win and the fallback full rebuild never fires (the live 2026-10-01
+  # recovery no-op).
+  def test_idempotent_resync_rebuilds_when_the_index_file_is_missing
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    File.delete(config.fulltext_path)
+    outcome = runner.sync("breaker")
+
+    assert_equal 1, outcome.load_report.skipped, "the load itself is still a no-op"
+    assert_equal 1, outcome.indexed, "a missing index serves nothing — never skip, rebuild"
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      assert_equal 1, fulltext[:passages_fts].count, "the fallback rebuild recreated the index"
+    ensure
+      fulltext.disconnect
+    end
+  end
+
   # A content change keeps the reindex, of course — the skip gate must
   # never eat a real revision.
   def test_content_change_still_reindexes
