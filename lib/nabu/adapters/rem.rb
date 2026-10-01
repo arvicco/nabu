@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "cora_date_lane"
 require_relative "cora_tei_parser"
+require_relative "cora_xml_parser"
 
 module Nabu
   module Adapters
@@ -39,7 +41,26 @@ module Nabu
     # sibling-document one: ReM's normalized layer is token-aligned attribute
     # data with no layout of its own, so it is annotation, not a parallel
     # rendering. The TEI export carries NO pos/msd (censused — those live in
-    # the CorA-XML sibling zips only): token records are honestly norm+lemma.
+    # the CorA-XML sibling zip only): without it token records are honestly
+    # norm+lemma.
+    #
+    # == pos/msd (the CorA-XML sibling zip)
+    #
+    # ReM-v2.1_coraxml.zip is fetched as a second sha-pinned arm into the
+    # declared coraxml/ materialization (coraxml/cora-xml/M<id>.xml — the
+    # zip's top dir strips). Its tok_anno ids ARE the TEI <w>/<pc> xml:ids
+    # (censused 2026-10-01 over all 406 texts: identical id sequences,
+    # 2,579,276 of 2,579,276 tokens), so the join is exact: each TEI token
+    # record gains "pos" (CorA <pos @tag>, on every token) and "msd" (CorA
+    # <infl @tag> — the morphological feature string, keyed "msd" like the
+    # ReN sibling's TEI lane), verbatim; CorA's "--" null never rides. A
+    # TEI token the sibling cannot answer is counted in metadata
+    # "coraxml_unmatched_tokens" (loud census, never a quarantine). The
+    # other CorA token lanes (pos_gen, lemma_gen, lemma_idmwb, inflClass…)
+    # are not read; the element header feeds the dating lane (below). A
+    # tree without the sibling
+    # (every canonical tree fetched before the arm existed) parses exactly
+    # as before — test-pinned.
     #
     # == Dating/localization (the timeline verdict)
     #
@@ -52,6 +73,18 @@ module Nabu
     # verbatim, so the timeline extractor can be built from real synced data
     # the day the filled format is censused.
     #
+    # The DATING lane comes from the CorA-XML sibling's ELEMENT header
+    # instead (censused 2026-10-01 over all 406): <time> — upstream's
+    # century-half grid, comma-spelled ("13,1", "12,2-13,1", bare-century
+    # "12") — is filled on 396; <date> on 225, mostly prose ("um 1140/50
+    # (?)", century claims "11"/"12,M"). Per document whose sibling
+    # exists: cora_header = the element header verbatim (nulls dropped),
+    # and date = the MetadataDates :structured envelope (CoraDateLane, the
+    # ReF mold): a clean date ("1172", "1342-43") sets the bounds, anything
+    # else falls back to the grid with the raw naming both claims, neither
+    # clean → raw only. The TEI orig_place scriptorium lane is untouched
+    # (PLACE_KEYS). No sibling → no date key (today's parse, test-pinned).
+    #
     # == License
     #
     # CC BY-SA 4.0, stated identically in the zip README, each file's
@@ -61,12 +94,15 @@ module Nabu
     #
     # == fetch / sync policy
     #
-    # ONE immutable Zenodo artifact (record 13982324, ReM-v2.1_tei.zip,
-    # 27,899,230 B) via ZipFetch with the phases hand-driven so the hard
-    # sha256 pin is checked BETWEEN download and any tree mutation (the
-    # iecor mold). Canonical = the extracted tree (README + tei/M*.xml) —
-    # how every ZipFetch source stores canonical. A future v2.2 is a new
-    # Zenodo version: the owner re-pins URL + sha and fires the re-sync.
+    # TWO immutable Zenodo artifacts (record 13982324): ReM-v2.1_tei.zip
+    # (27,899,230 B, the text) and ReM-v2.1_coraxml.zip (110,668,767 B,
+    # pos/msd) via ZipFetch with the phases hand-driven so BOTH hard
+    # sha256 pins are checked BETWEEN download and any tree mutation (the
+    # openiti two-arm choreography over the iecor mold). Canonical = the
+    # extracted trees (README + tei/M*.xml, coraxml/ in the text arm's
+    # keep-list; the CorA tree under coraxml/ with its own
+    # .zip-fetch.json state). A future v2.2 is a new Zenodo version: the
+    # owner re-pins URLs + shas and fires the re-sync.
     # sync_policy: manual, enabled: false until the owner-fired first sync.
     class Rem < Nabu::Adapter
       RECORD_URL = "https://zenodo.org/records/13982324"
@@ -77,6 +113,21 @@ module Nabu
       # Zenodo files are immutable: a mismatch is corruption or an
       # unannounced re-release, never a routine update.
       RELEASE_SHA256 = "a04e8ac60c87b24eadd7ff3155040c09fccbd359a229fec3fdebae53295351d1"
+
+      # The CorA-XML sibling (pos/msd): 110,668,767 B, sha256 pinned from
+      # the 2026-10-01 fixture snapshot download (Zenodo's published md5
+      # 1bb74c17a10c665fde98504bb8c858aa cross-checked). Unpacks into the
+      # declared coraxml/ subtree.
+      CORAXML_URL = "https://zenodo.org/api/records/13982324/files/ReM-v2.1_coraxml.zip/content"
+      CORAXML_SHA256 = "bfe5179db48c1d14d65c088939d7b09e266e1e60af0240090c5a1d779d01b291"
+      CORA_DIRNAME = "coraxml"
+
+      # CorA tok_anno children merged into the TEI token records (CorA
+      # element → record key).
+      CORA_TAGS = { "pos" => "pos", "infl" => "msd" }.freeze
+
+      # CorA's null placeholder ("--"), never a value.
+      CORA_NULL = /\A-+\z/
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "rem",
@@ -108,16 +159,28 @@ module Nabu
       def self.remote_probe_strategy = :http_zip
 
       def self.http_probe_targets
-        [Nabu::Adapter::HttpProbeTarget.new(
-          label: "ReM-v2.1_tei.zip", zip_url: ZIP_URL, metadata_url: nil,
-          state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
-        )]
+        [
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "ReM-v2.1_tei.zip", zip_url: ZIP_URL, metadata_url: nil,
+            state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
+          ),
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "ReM-v2.1_coraxml.zip", zip_url: CORAXML_URL, metadata_url: nil,
+            state_subdir: CORA_DIRNAME, state_file: Nabu::ZipFetch::STATE_FILE
+          )
+        ]
       end
 
-      # +pin+ overrides the release sha (tests; a future owner re-pin drill).
-      def initialize(pin: RELEASE_SHA256)
+      # The CorA-XML sibling's unpack lands beside upstream's TEI tree
+      # (Q59-a): declared so the canonical identity stays strong.
+      def self.materialized_paths = [CORA_DIRNAME]
+
+      # +pin+ / +cora_pin+ override the release shas (tests; a future owner
+      # re-pin drill).
+      def initialize(pin: RELEASE_SHA256, cora_pin: CORAXML_SHA256)
         super()
         @pin = pin
+        @cora_pin = cora_pin
       end
 
       # One DocumentRef per M*.xml text file, sorted by urn; a workdir
@@ -134,11 +197,16 @@ module Nabu
       def parse(document_ref)
         header = verified_header(document_ref)
         body = parser.body(document_ref.path)
+        tags = cora_tags(document_ref.metadata["cora_path"])
+        metadata = document_metadata(header, body, document_ref)
+                   .merge(cora_dating(document_ref.metadata["cora_path"]))
+        unmatched = tags && body.lines.sum { |line| line.tokens.count { |t| !tags.key?(t["id"]) } }
+        metadata["coraxml_unmatched_tokens"] = unmatched if unmatched&.positive?
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: header.title,
-          canonical_path: document_ref.path, metadata: document_metadata(header, body, document_ref)
+          canonical_path: document_ref.path, metadata: metadata
         )
-        append_lines(document, body, document_ref)
+        append_lines(document, body, document_ref, tags: tags)
         raise ParseError, "#{document_ref.path}: no manuscript lines in <body>" if document.empty?
 
         document
@@ -146,22 +214,30 @@ module Nabu
         raise ParseError, "#{document_ref.path}: #{e.message}"
       end
 
-      # Download + verify the hard sha pin + unpack, phases hand-driven so
-      # the pin check runs BETWEEN download and any tree mutation (prepare →
-      # pin → mass-deletion breaker → complete); a 304 replays the stored
-      # pin and touches nothing. No network in tests: WebMock stubs.
+      # Download + verify BOTH hard sha pins + unpack, phases hand-driven
+      # so every pin check runs BETWEEN download and any tree mutation
+      # (prepare both → pins → mass-deletion breaker over both → complete
+      # both); a 304 replays the stored pin and touches nothing. No
+      # network in tests: WebMock stubs.
       def fetch(workdir, progress: nil, force: false)
-        fetch = Nabu::ZipFetch.new(url: ZIP_URL, dir: workdir,
-                                   attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress)
+        tei = Nabu::ZipFetch.new(url: ZIP_URL, dir: workdir, keep: [CORA_DIRNAME],
+                                 attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress)
+        cora = Nabu::ZipFetch.new(url: CORAXML_URL, dir: File.join(workdir, CORA_DIRNAME),
+                                  attic_dir: File.join(workdir, ATTIC_DIRNAME, CORA_DIRNAME),
+                                  progress: progress)
         begin
-          fetch.prepare!
-          verify_pin!(fetch)
-          guard_mass_deletion!(workdir, fetch.doomed_paths, force: force)
-          fetch.complete!
+          tei.prepare!
+          verify_pin!(tei)
+          cora.prepare!
+          verify_cora_pin!(cora)
+          guard_mass_deletion!(workdir, tei.doomed_paths + cora.doomed_paths, force: force)
+          tei.complete!
+          cora.complete!
         ensure
-          fetch.cleanup!
+          tei.cleanup!
+          cora.cleanup!
         end
-        Nabu::FetchReport.new(sha: fetch.sha, fetched_at: Time.now, notes: fetch_notes(fetch))
+        Nabu::FetchReport.new(sha: tei.sha, fetched_at: Time.now, notes: fetch_notes(tei, cora))
       rescue ZipFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "rem fetch failed into #{workdir}: #{e.message}"
       end
@@ -178,20 +254,48 @@ module Nabu
         CoraTeiParser.new
       end
 
+      # The coraxml/ sibling tree carries M*.xml names too — it is never
+      # a text (the sibling joins by basename instead).
       def document_refs(workdir)
         reader = parser
+        cora_root = File.join(File.expand_path(workdir), CORA_DIRNAME, "")
         Dir.glob(File.join(workdir, "**", "M*.xml")).filter_map do |path|
           basename = File.basename(path)
           next unless FILE_PATTERN.match?(basename)
+          next if File.expand_path(path).start_with?(cora_root)
 
           header = reader.header(path)
+          sibling = File.join(cora_root, "cora-xml", basename)
           Nabu::DocumentRef.new(
             source_id: manifest.id,
             id: "urn:nabu:rem:#{basename.delete_suffix('.xml').downcase}",
             path: File.expand_path(path),
-            metadata: { "title" => header.title, "language" => LANGUAGE }.compact
+            metadata: { "title" => header.title, "language" => LANGUAGE,
+                        "cora_path" => (sibling if File.file?(sibling)) }.compact
           )
         end.sort_by(&:id)
+      end
+
+      # The sibling's element header + its date envelope (class note); {}
+      # when no sibling exists, so the metadata is byte-identical to before.
+      def cora_dating(cora_path)
+        return {} if cora_path.nil?
+
+        fields = CoraXmlParser.new.element_header(cora_path).transform_values { |v| Normalize.nfc(v) }
+        { "cora_header" => fields,
+          "date" => CoraDateLane.envelope(fields["date"], fields["time"], separator: ",") }.compact
+      end
+
+      # tok_anno id → { "pos" => …, "msd" => … } (nulls dropped, NFC), or
+      # nil when the document has no sibling (today's state).
+      def cora_tags(cora_path)
+        return nil if cora_path.nil?
+
+        CoraXmlParser.new.anno_tags(cora_path, names: CORA_TAGS.keys).transform_values do |found|
+          found.each_with_object({}) do |(element, tag), record|
+            record[CORA_TAGS.fetch(element)] = Normalize.nfc(tag) unless tag.nil? || tag.match?(CORA_NULL)
+          end
+        end
       end
 
       # The header, with the per-file licence and language idents held
@@ -242,10 +346,11 @@ module Nabu
       # P40-r1: the 46 first-sync quarantines were all one failure class,
       # duplicate folio.line refs; none of those documents ever loaded, so
       # no frozen minting is disturbed.
-      def append_lines(document, body, document_ref)
+      def append_lines(document, body, document_ref, tags: nil)
         seen = Hash.new(0)
         body.lines.each do |line|
-          annotations = { "tokens" => line.tokens }
+          tokens = tags ? line.tokens.map { |t| t.merge(tags.fetch(t["id"], {})) } : line.tokens
+          annotations = { "tokens" => tokens }
           annotations["edition_lines"] = line.edition_lines unless line.edition_lines.empty?
           document << Nabu::Passage.new(
             urn: "#{document_ref.id}:#{line_ref(line, seen)}",
@@ -272,9 +377,22 @@ module Nabu
               "reading the record"
       end
 
-      def fetch_notes(fetch)
-        base = fetch.not_modified? ? "not modified (304)" : "zenodo v2.1 sha pin verified"
-        [base, attic_notes(fetch.atticked)].compact.join("; ")
+      def verify_cora_pin!(fetch)
+        return if fetch.not_modified? || fetch.sha == @cora_pin
+
+        raise Nabu::FetchError,
+              "rem: downloaded ReM-v2.1_coraxml.zip misses its sha256 pin (expected #{@cora_pin}, " \
+              "got #{fetch.sha}) — Zenodo records are immutable, so this is corruption or an " \
+              "unannounced re-release; verify #{CORAXML_URL} and re-pin CORAXML_SHA256 only " \
+              "after reading the record"
+      end
+
+      def fetch_notes(tei, cora)
+        [
+          tei.not_modified? ? "not modified (304)" : "zenodo v2.1 sha pin verified",
+          cora.not_modified? ? "coraxml not modified (304)" : "coraxml sha pin verified",
+          attic_notes(tei.atticked + cora.atticked)
+        ].compact.join("; ")
       end
     end
   end

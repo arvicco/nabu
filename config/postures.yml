@@ -209,7 +209,10 @@ sources:
   rem:
     kind: {posture: unclassified}
     lect: {posture: identity, note: gmh IS Middle High German}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "the ReM-v2.1_coraxml.zip sibling's element
+        header: <date> (clean parses, 225 filled) with upstream's comma-spelled
+        century-half <time> grid (396 of 406) behind prose; MetadataDates
+        :structured"}
     places: {posture: named, note: "P109-4 (the Q83 drain): the header's
         orig_place scriptorium claims (Vorau, 'Siegburg (?)' — 79 of 406
         docs, uncertainty markers verbatim) project via PLACE_KEYS; the
@@ -218,8 +221,12 @@ sources:
   ren:
     kind: {posture: unclassified}
     lect: {posture: identity, note: gml IS Middle Low German}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: dated, note: "the CorAXML_1.1.zip sibling's date_ReN (clean
+        parses) with upstream's century-half time grid behind prose datings —
+        the grid is on all 235 headers; MetadataDates :structured"}
+    places: {posture: named, note: "the CorA header place (80 of 235 docs once
+        the explicit 'unbekannt' sentinel is excluded) rides the default
+        place key verbatim"}
     script: {posture: implied}
   bfm:
     kind: {posture: unclassified}
