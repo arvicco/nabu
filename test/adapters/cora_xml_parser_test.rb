@@ -212,6 +212,15 @@ class CoraXmlParserTest < Minitest::Test
     assert_equal tags.keys, tags.keys.uniq
   end
 
+  def test_element_header_reads_the_rem_element_dialect
+    fields = parser.element_header(REM_CORA)
+    assert_equal "13,1", fields["time"]
+    assert_equal "Sangspruchstrophe MF 'Namenlos IV'", fields["title"]
+    assert_equal "bairisch", fields["language-area"]
+    refute fields.key?("date"), '"-" is upstream\'s null'
+    refute fields.key?("place")
+  end
+
   def test_header_takes_a_dialect_key_set
     header = parser.header(REN_CORA, keys: Nabu::Adapters::Ren::CORA_HEADER_KEYS)
     assert_equal "Hamb. Uk. 1301-1350", header.name

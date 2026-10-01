@@ -146,9 +146,11 @@ module Nabu
           #                              (the e-text pub_date stays machinery)
           "openmgh" => :printed_year_text, # P109-4: the MGH volume's print year — the same
           #                                  honestly-labeled "edition" class
-          "rem" => :place_only, # P109-4: the header's orig_place scriptorium claims
-          #                       (79 of 406 docs; PLACE_KEYS) — dating already rides
-          #                       its own lane
+          "rem" => :structured, # the CorA-XML sibling's element header: <date> (clean
+          #                       parses) with the comma-spelled century-half <time>
+          #                       grid behind prose (396/406); the TEI orig_place
+          #                       scriptorium claims (P109-4, 79 of 406) still ride
+          #                       PLACE_KEYS
           "ren" => :structured, # the CorA-XML sibling zip's date_ReN (clean parses) with
           #                       the century-half time grid as the prose fallback (the
           #                       ref mold); the header place rides the default key

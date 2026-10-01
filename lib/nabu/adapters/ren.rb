@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "cora_date_lane"
 require_relative "cora_xml_parser"
 require_relative "ren_tei_parser"
 
@@ -57,7 +58,7 @@ module Nabu
     #   cora_header — the free-text header's 43 censused keys (one fixed
     #     order on all 235 files), verbatim, "-"/"---"/empty nulls dropped
     #     (the aggressive-mining policy: every field rides);
-    #   date — the MetadataDates :structured envelope (the ReF mold): a
+    #   date — the MetadataDates :structured envelope (CoraDateLane, the ReF mold): a
     #     clean date_ReN ("1329", "1452-1500", "1464/65") rules; prose
     #     datings ("[um 1300]", "Mitte 15. Jh.") are never number-scraped
     #     and take upstream's own century-half grid (time "14/1",
@@ -128,16 +129,6 @@ module Nabu
         pre_editing_by annotation_by proofreading_by topic topic_ReN genre time
         medium language-area base_for_transcription token language language-type
       ].freeze
-
-      # The clean date_ReN parses (the ReF P81-1 grammar). Anything else —
-      # "[um 1300]", "Mitte 15. Jh.", multi-claim prose — is never
-      # number-scraped: it falls back to the century-half grid below.
-      DATE_EXACT = /\A(\d{4})\z/
-      # "1452-1500", "1464/65" — a 2-digit tail expands with the head's century.
-      DATE_SPAN = %r{\A(\d{4})\s*[-–/]\s*(\d{2}|\d{4})\z}
-      # Upstream's own century-half grid, on ALL 235 texts: "14/1" = 14th
-      # c., 1st half → [1300, 1350]; "15/1-15/2" spans → [1400, 1500].
-      TIME_GRID = %r{\A(\d{2})/([12])(?:-(\d{2})/([12]))?\z}
 
       # The explicit no-place value (5 headers) — the absence of a claim.
       UNKNOWN_PLACE = "unbekannt"
@@ -324,7 +315,7 @@ module Nabu
         dialects = fields.values_at("language-type", "language-area").compact
         {
           "cora_header" => fields,
-          "date" => date_envelope(fields["date_ReN"], fields["time"]),
+          "date" => CoraDateLane.envelope(fields["date_ReN"], fields["time"], separator: "/"),
           "place" => (place unless place.nil? || place == UNKNOWN_PLACE),
           "dialects" => (dialects unless dialects.empty?),
           "facets" => genre_facet(fields["genre"])
@@ -337,45 +328,6 @@ module Nabu
         facet = { "value" => genre }
         facet["raw"] = GENRE_LABELS[genre] if GENRE_LABELS.key?(genre)
         { "genre" => facet }
-      end
-
-      # The MetadataDates :structured envelope (the Ref#date_envelope
-      # mold): a clean date_ReN parse rules; prose datings take the
-      # century-half grid (raw then names both claims); neither clean →
-      # the raw string rides alone, minting nothing.
-      def date_envelope(date, time)
-        clean = parse_date_lane(date)
-        bounds = clean || parse_time_grid(time)
-        raw = [date, ("(time #{time})" if clean.nil? && time)].compact.join(" ")
-        return nil if raw.empty?
-        return { "raw" => raw } if bounds.nil?
-
-        { "not_before" => bounds[0], "not_after" => bounds[1], "raw" => raw }
-      end
-
-      def parse_date_lane(date)
-        text = date.to_s.strip
-        if (match = DATE_EXACT.match(text))
-          year = Integer(match[1], 10)
-          [year, year]
-        elsif (match = DATE_SPAN.match(text))
-          from = Integer(match[1], 10)
-          to = match[2].length == 2 ? Integer("#{match[1][0, 2]}#{match[2]}", 10) : Integer(match[2], 10)
-          from <= to ? [from, to] : nil # a descending pair is not a clean claim
-        end
-      end
-
-      def parse_time_grid(time)
-        match = TIME_GRID.match(time.to_s.strip) or return nil
-
-        first = half_bounds(match[1], match[2])
-        last = match[3] ? half_bounds(match[3], match[4]) : first
-        first[0] <= last[1] ? [first[0], last[1]] : nil
-      end
-
-      def half_bounds(century, half)
-        start = ((Integer(century, 10) - 1) * 100) + ((Integer(half, 10) - 1) * 50)
-        [start, start + 50]
       end
 
       # The filename minus .tei IS the deposit's text sigle; NFC because

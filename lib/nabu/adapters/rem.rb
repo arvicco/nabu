@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "cora_date_lane"
 require_relative "cora_tei_parser"
 require_relative "cora_xml_parser"
 
@@ -55,8 +56,9 @@ module Nabu
     # ReN sibling's TEI lane), verbatim; CorA's "--" null never rides. A
     # TEI token the sibling cannot answer is counted in metadata
     # "coraxml_unmatched_tokens" (loud census, never a quarantine). The
-    # other CorA lanes (pos_gen, lemma_gen, lemma_idmwb, inflClass…) and
-    # its element header are not read here. A tree without the sibling
+    # other CorA token lanes (pos_gen, lemma_gen, lemma_idmwb, inflClass…)
+    # are not read; the element header feeds the dating lane (below). A
+    # tree without the sibling
     # (every canonical tree fetched before the arm existed) parses exactly
     # as before — test-pinned.
     #
@@ -70,6 +72,18 @@ module Nabu
     # and any non-placeholder origDate/origPlace ride document metadata
     # verbatim, so the timeline extractor can be built from real synced data
     # the day the filled format is censused.
+    #
+    # The DATING lane comes from the CorA-XML sibling's ELEMENT header
+    # instead (censused 2026-10-01 over all 406): <time> — upstream's
+    # century-half grid, comma-spelled ("13,1", "12,2-13,1", bare-century
+    # "12") — is filled on 396; <date> on 225, mostly prose ("um 1140/50
+    # (?)", century claims "11"/"12,M"). Per document whose sibling
+    # exists: cora_header = the element header verbatim (nulls dropped),
+    # and date = the MetadataDates :structured envelope (CoraDateLane, the
+    # ReF mold): a clean date ("1172", "1342-43") sets the bounds, anything
+    # else falls back to the grid with the raw naming both claims, neither
+    # clean → raw only. The TEI orig_place scriptorium lane is untouched
+    # (PLACE_KEYS). No sibling → no date key (today's parse, test-pinned).
     #
     # == License
     #
@@ -185,6 +199,7 @@ module Nabu
         body = parser.body(document_ref.path)
         tags = cora_tags(document_ref.metadata["cora_path"])
         metadata = document_metadata(header, body, document_ref)
+                   .merge(cora_dating(document_ref.metadata["cora_path"]))
         unmatched = tags && body.lines.sum { |line| line.tokens.count { |t| !tags.key?(t["id"]) } }
         metadata["coraxml_unmatched_tokens"] = unmatched if unmatched&.positive?
         document = Nabu::Document.new(
@@ -259,6 +274,16 @@ module Nabu
                         "cora_path" => (sibling if File.file?(sibling)) }.compact
           )
         end.sort_by(&:id)
+      end
+
+      # The sibling's element header + its date envelope (class note); {}
+      # when no sibling exists, so the metadata is byte-identical to before.
+      def cora_dating(cora_path)
+        return {} if cora_path.nil?
+
+        fields = CoraXmlParser.new.element_header(cora_path).transform_values { |v| Normalize.nfc(v) }
+        { "cora_header" => fields,
+          "date" => CoraDateLane.envelope(fields["date"], fields["time"], separator: ",") }.compact
       end
 
       # tok_anno id → { "pos" => …, "msd" => … } (nulls dropped, NFC), or

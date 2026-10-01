@@ -515,6 +515,17 @@ module Store
                    "the scriptorium claim rides verbatim, uncertainty marker included"
     end
 
+    def test_metadata_dates_rem_structured_envelope_beside_orig_place
+      seed_metadata_doc("rem", "urn:nabu:rem:m2",
+                        { "date" => { "not_before" => 1150, "not_after" => 1200, "raw" => "(time 12,2)" },
+                          "orig_place" => "Vorau" })
+      build!
+      row = timeline_for("urn:nabu:rem:m2")
+      assert_equal [1150, 1200, "(time 12,2)", "Vorau"],
+                   row.values_at(:not_before, :not_after, :date_raw, :place_name),
+                   "the CorA dating lane and the TEI scriptorium place share one row"
+    end
+
     # The ReN CorA-XML sibling: the ref-mold :structured envelope (a clean
     # date_ReN, or the century-half grid behind prose) + the header place.
     def test_metadata_dates_ren_structured_envelope_and_place

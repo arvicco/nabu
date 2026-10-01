@@ -158,6 +158,31 @@ module Nabu
         Header.new(sigle: walk[:sigle], name: walk[:name], fields: header_fields(walk[:buffer], keys))
       end
 
+      # The ELEMENT header dialect (the ReM sibling zip: <header><time>13,1
+      # </time><date>-</date>…</header> — one child element per field,
+      # unlike ReF/ReN's key:value lines): child name → stripped text,
+      # "-"/"--" nulls and empty values dropped; stops at </header>.
+      def element_header(path)
+        fields = {}
+        depth = nil
+        current = nil
+        each_node(path) do |node|
+          case node.node_type
+          when Nokogiri::XML::Reader::TYPE_ELEMENT
+            if node.name == "header" then depth = node.depth
+            elsif depth && node.depth == depth + 1 then current = node.name
+            end
+          when Nokogiri::XML::Reader::TYPE_END_ELEMENT
+            break if node.name == "header"
+
+            current = nil
+          when *TEXT_NODE_TYPES
+            (fields[current] ||= +"") << node.value if current
+          end
+        end
+        fields.transform_values(&:strip).reject { |_, v| v.empty? || NULL_PLACEHOLDER.match?(v) }
+      end
+
       # The sibling-zip join seam (the ReM pos/msd lane): tok_anno id →
       # { child element name → @tag } for the requested +names+, in
       # document order, values verbatim (null placeholders included — the
