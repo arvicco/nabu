@@ -27,6 +27,7 @@ class SuttacentralTest < Minitest::Test
     urn:nabu:suttacentral:pdhp1-13
     urn:nabu:suttacentral:sa158
     urn:nabu:suttacentral:sn35.24
+    urn:nabu:suttacentral:sn46.70
     urn:nabu:suttacentral:t1536.12
   ].freeze
 
@@ -261,6 +262,102 @@ class SuttacentralTest < Minitest::Test
     passage = translation.find { |p| p.urn.end_with?("dhp21:1") }
     assert_equal "Heedfulness is the state free of death;", passage.text,
                  "sujato's rendering (the priority pick), cited by the per-verse segment id"
+  end
+
+  # --- the sidecar trees: variant / reference / comment -----------------------
+
+  def test_a_segment_carrying_all_three_sidecars_joins_them_by_segment_id
+    passage = parse_urn("urn:nabu:suttacentral:sn46.70").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal({
+                   "variants" => "anabhiratisaññā → anabhiratasaññā (bj)",
+                   "refs" => "ms14S5_687, msdiv251, vri27.160",
+                   "comments" => "Defined at <a href='https://suttacentral.net/an10.60/en/sujato#11.1'>" \
+                                 "AN 10.60:11.1</a> as non-attachment."
+                 }, passage.annotations,
+                 "variant/, reference/ and comment/en/sujato/ all key sn46.70:1.1 — upstream strings, " \
+                 "edge whitespace stripped as on the segment text, inline markup verbatim")
+  end
+
+  def test_sidecars_land_only_on_segments_that_carry_data
+    document = parse_urn("urn:nabu:suttacentral:sn46.70")
+    by_citation = document.to_h { |p| [p.urn.delete_prefix("#{document.urn}:"), p.annotations] }
+    assert_equal({ "variants" => "Anabhiratisutta → sabbaloke anabhiratasuttāni (bj)" }, by_citation["0.3"],
+                 "the heading segment carries a variant but no ref/comment — only that key")
+    assert_equal({}, by_citation["0.1"])
+    assert_equal({}, by_citation["1.2"])
+  end
+
+  def test_pts_and_vri_concordance_rides_refs
+    passage = parse_urn("urn:nabu:suttacentral:sn35.24").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal "dr18.18, ms13S4_65, msdiv24, pts-vp-pli4.16, sya18.20, vri26.15", passage.annotations["refs"]
+    assert_equal "Sabbappahānāya → sabbaṁ pahānāya (sya-all, km, mr)", passage.annotations["variants"]
+  end
+
+  def test_a_blank_upstream_comment_mints_no_comments_key
+    passage = parse_urn("urn:nabu:suttacentral:sn35.24").find { |p| p.urn.end_with?(":1.4") }
+    assert_equal({}, passage.annotations,
+                 "sujato's sn35.24 comment file keys 1.4 with an EMPTY string (821 such corpus-wide) " \
+                 "— nothing to carry, so no key")
+  end
+
+  def test_range_stem_sidecars_join_on_the_full_per_verse_segment_id
+    document = parse_urn("urn:nabu:suttacentral:dhp21-32")
+    passage = document.find { |p| p.urn.end_with?(":dhp24:1") }
+    assert_equal "satīmato → satimato (bj, sya-all, mr)", passage.annotations["variants"]
+    assert_equal "vnp24, vns24, cck25.16, mc0.20, ms18Dh_26", passage.annotations["refs"]
+    assert_equal(6, document.count { |p| p.annotations.key?("variants") })
+    assert_equal(12, document.count { |p| p.annotations.key?("refs") })
+  end
+
+  def test_lzh_roots_join_their_taisho_references
+    document = parse_urn("urn:nabu:suttacentral:sa158")
+    assert_equal "t99.44b1, t99.44b2", document.find { |p| p.urn.end_with?(":2.2") }.annotations["refs"]
+    assert_equal(6, document.count { |p| p.annotations.key?("refs") })
+  end
+
+  def test_roots_without_sidecar_files_carry_no_sidecar_keys
+    %w[pdhp1-13 t1536.12].each do |stem|
+      document = parse_urn("urn:nabu:suttacentral:#{stem}")
+      assert(document.all? { |p| p.annotations.empty? }, "#{stem} has no sidecar files in the fixture tree")
+    end
+  end
+
+  def test_en_siblings_never_carry_sidecar_data
+    %w[sn46.70-en sn35.24-en dhp21-32-en sa158-en].each do |stem|
+      document = parse_urn("urn:nabu:suttacentral:#{stem}")
+      assert(document.all? { |p| p.annotations.empty? }, "#{stem}: sidecars join roots only")
+    end
+  end
+
+  def test_sidecar_join_is_idempotent
+    first = parse_urn("urn:nabu:suttacentral:sn46.70").map(&:to_h)
+    second = parse_urn("urn:nabu:suttacentral:sn46.70").map(&:to_h)
+    assert_equal first, second
+  end
+
+  def test_a_tree_without_sidecar_dirs_parses_with_zero_annotation_diff
+    with_fixture_copy do |dir|
+      %w[variant reference comment].each { |tree| FileUtils.rm_rf(File.join(dir, tree)) }
+      adapter = conformance_adapter
+      adapter.discover(dir).each do |ref|
+        document = adapter.parse(ref)
+        assert(document.all? { |p| p.annotations.empty? }, "#{ref.id}: no sidecar tree, no keys")
+        with_sidecars = parse_urn(ref.id)
+        assert_equal with_sidecars.map(&:text), document.map(&:text), "#{ref.id}: text untouched"
+        assert_equal with_sidecars.map(&:urn), document.map(&:urn)
+        assert_equal with_sidecars.metadata, document.metadata, "#{ref.id}: sidecar paths never leak"
+      end
+    end
+  end
+
+  def test_a_malformed_sidecar_quarantines_its_root
+    with_fixture_copy do |dir|
+      File.write(File.join(dir, "variant/pli/ms/sutta/sn/sn46/sn46.70_variant-pli-ms.json"), "[1, 2]")
+      adapter = conformance_adapter
+      ref = adapter.discover(dir).find { |r| r.id == "urn:nabu:suttacentral:sn46.70" }
+      error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
+      assert_match(/sn46\.70_variant-pli-ms\.json/, error.message)
+    end
   end
 
   # --- fetch (local fixture repo, branch `published`; no network) -------------

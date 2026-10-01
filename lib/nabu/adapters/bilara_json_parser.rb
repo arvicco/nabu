@@ -34,16 +34,33 @@ module Nabu
     #   file's FIRST item prefix, joined " — " ("Majjhima Nikāya 1 —
     #   Mūlapariyāyasutta"); stem when a file has no heading block.
     #
+    # == Sidecar segment maps (variant / reference / comment)
+    #
+    # bilara-data's sidecar trees are the SAME flat segment-map shape keyed
+    # by THE SAME segment ids: +sidecars+ maps an annotation key ("variants",
+    # "refs", "comments") to one such file, and each passage whose segment
+    # id the file keys with a non-blank string carries that string under the
+    # key — edge whitespace stripped (the segment-join artifact, as on the
+    # text) and NFC at this boundary, interior verbatim (inline <a href>
+    # markup in comments included). Blank values mint no key; data keyed to
+    # a skipped blank segment or to an id the root lacks has no passage to
+    # land on and drops (censused: 6 + 11 corpus-wide). No sidecars → the
+    # annotations stay {} exactly as before.
+    #
     # A malformed file, a non-map top level, a non-string segment, or a file
-    # with zero non-blank segments is damage → Nabu::ParseError (quarantine).
+    # with zero non-blank segments is damage → Nabu::ParseError (quarantine);
+    # the same holds for a malformed sidecar (its path named).
     class BilaraJsonParser
       # Same keyword family as ConlluParser#parse. +stem+ is the upstream
       # text uid (the filename stem before the first "_"); +license_override+
-      # is the P10-4 per-document class (the pdhp BY-SA translation).
-      def parse(path, urn:, stem:, language:, metadata: {}, license_override: nil)
+      # is the P10-4 per-document class (the pdhp BY-SA translation);
+      # +sidecars+ is { annotation key => sidecar segment-map path }.
+      def parse(path, urn:, stem:, language:, metadata: {}, license_override: nil, sidecars: {})
         segments = read_segments(path)
         kept = segments.reject { |_id, text| text.strip.empty? }
         raise ParseError, "#{path}: no non-blank segments" if kept.empty?
+
+        annotations = sidecar_annotations(sidecars)
 
         document = Nabu::Document.new(
           urn: urn, language: language, title: title(segments, stem),
@@ -52,7 +69,7 @@ module Nabu
         kept.each_with_index do |(id, text), sequence|
           document << Nabu::Passage.new(
             urn: "#{urn}:#{citation(id, stem)}", language: language,
-            text: Normalize.nfc(text.strip), sequence: sequence
+            text: Normalize.nfc(text.strip), sequence: sequence, annotations: annotations.fetch(id, {})
           )
         end
         document
@@ -61,6 +78,17 @@ module Nabu
       end
 
       private
+
+      # segment id → { annotation key => stripped NFC string }, over every
+      # sidecar file's non-blank values.
+      def sidecar_annotations(sidecars)
+        sidecars.each_with_object({}) do |(key, sidecar_path), by_segment|
+          read_segments(sidecar_path).each do |id, value|
+            stripped = value.strip
+            (by_segment[id] ||= {})[key] = Normalize.nfc(stripped) unless stripped.empty?
+          end
+        end
+      end
 
       def read_segments(path)
         parsed = JSON.parse(File.read(path))
