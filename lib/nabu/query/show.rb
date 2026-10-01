@@ -359,7 +359,7 @@ module Nabu
           withdrawn: truthy?(row.fetch(:withdrawn)), text: row.fetch(:text),
           document_urn: row.fetch(:document_urn), document_title: row.fetch(:document_title),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
-          provenance: provenance_events(row.fetch(:passage_id)),
+          provenance: provenance_events(row.fetch(:passage_id), document_id: row.fetch(:document_id)),
           timeline: timeline_for(row.fetch(:document_id)),
           annotations: parse_annotations(row),
           credit: row.fetch(:credit),
@@ -537,12 +537,29 @@ module Nabu
 
       # Chronological provenance for a passage: order by time, id as tiebreak
       # so events written in the same tick keep their insertion order.
-      def provenance_events(passage_id)
-        @catalog[:provenance]
-          .where(passage_id: passage_id)
-          .order(:at, :id)
-          .select(:event, :tool, :at)
-          .map { |r| ProvenanceEvent.new(event: r.fetch(:event), tool: r.fetch(:tool), at: r.fetch(:at)) }
+      # P112-2 (Q113): the per-passage "loaded" breadcrumb is retired (it was
+      # 95% of the provenance table), so a passage without one renders it
+      # IMPLICITLY — every passage was loaded; the document-grain event
+      # (kept) lends its timestamp. Rows from older catalogs still carry
+      # their own "loaded" and render unchanged.
+      def provenance_events(passage_id, document_id: nil)
+        events = @catalog[:provenance]
+                 .where(passage_id: passage_id)
+                 .order(:at, :id)
+                 .select(:event, :tool, :at)
+                 .map { |r| ProvenanceEvent.new(event: r.fetch(:event), tool: r.fetch(:tool), at: r.fetch(:at)) }
+        return events if events.any? { |e| e.event == "loaded" }
+
+        [implicit_loaded_event(document_id), *events]
+      end
+
+      def implicit_loaded_event(document_id)
+        at = nil
+        if document_id
+          at = @catalog[:provenance].where(document_id: document_id, event: "loaded")
+                                    .order(:at, :id).get(:at)
+        end
+        ProvenanceEvent.new(event: "loaded", tool: Store::Loader::TOOL, at: at)
       end
 
       def document_passages(document_id)

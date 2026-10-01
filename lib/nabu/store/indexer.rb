@@ -1231,7 +1231,7 @@ module Nabu
         create_char_postings_table(fulltext)
         chars = Hash.new(0)
         live_passages(catalog)
-          .select(Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+          .select(Sequel[:passages][:text_search].as(:text_normalized), Sequel[:passages][:language],
                   Sequel[:documents][:source_id].as(:source_id))
           .each { |row| accumulate_char_postings(chars, row) }
         fulltext.transaction { write_char_postings(fulltext, chars, stamp_class: true) }
@@ -1272,7 +1272,7 @@ module Nabu
         scope = live_passages(catalog)
         scope = scope.where(Sequel[:documents][:source_id] => source_id) if source_id
         scope = scope.select(Sequel[:passages][:id].as(:passage_id),
-                             Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+                             Sequel[:passages][:text_search].as(:text_normalized), Sequel[:passages][:language],
                              Sequel[:documents][:source_id].as(:source_id))
         scope = ids_scoped(scope, ids) if ids
         Enumerator.new do |y|
@@ -1491,7 +1491,7 @@ module Nabu
         scope = live_passages(catalog)
                 .where(Sequel[:documents][:source_id] => source_ids)
                 .select(Sequel[:passages][:id].as(:passage_id),
-                        Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+                        Sequel[:passages][:text_search].as(:text_normalized), Sequel[:passages][:language],
                         Sequel[:documents][:source_id].as(:source_id))
                 .order(Sequel[:passages][:id])
         if ids
@@ -1673,7 +1673,7 @@ module Nabu
         chars = Hash.new(0)
         live_passages(catalog)
           .where(Sequel[:documents][:source_id] => source_id)
-          .select(Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+          .select(Sequel[:passages][:text_search].as(:text_normalized), Sequel[:passages][:language],
                   Sequel[:documents][:source_id].as(:source_id))
           .each { |row| accumulate_char_postings(chars, row) }
         chars
@@ -1690,7 +1690,7 @@ module Nabu
           .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
           .where(Sequel[:sources][:slug] => slugs)
           .select(
-            Sequel[:passages][:text_normalized],
+            Sequel[:passages][:text_search].as(:text_normalized),
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:language],
             Sequel[:sources][:slug].as(:source_slug)
@@ -1798,7 +1798,7 @@ module Nabu
           .join(:documents, id: Sequel[:passages][:document_id])
           .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
           .select(
-            Sequel[:passages][:text_normalized],
+            Sequel[:passages][:text_search].as(:text_normalized),
             Sequel[:passages][:urn],
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:language],
@@ -1840,7 +1840,7 @@ module Nabu
           .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
           .where(Sequel[:sources][:slug] => slugs)
           .select(
-            Sequel[:passages][:text_normalized],
+            Sequel[:passages][:text_search].as(:text_normalized),
             Sequel[:passages][:urn],
             Sequel[:passages][:id].as(:passage_id)
           )

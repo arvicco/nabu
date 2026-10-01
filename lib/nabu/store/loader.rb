@@ -66,10 +66,13 @@ module Nabu
     # rests on these rules:
     #
     # - Upsert on urn, for documents and passages alike. New urn → insert at
-    #   revision 1 + provenance "loaded". Same urn, same content_sha256 →
-    #   skipped entirely (no writes at all, so loading a corpus twice leaves
-    #   rows byte-identical). Same urn, different sha → fields updated,
-    #   revision += 1, provenance "revised" journaling {old_sha, new_sha}.
+    #   revision 1 (+ provenance "loaded" at DOCUMENT grain only — P112-2:
+    #   the per-passage breadcrumb was 95% of the provenance table and is
+    #   retired; a passage's existence is its own witness). Same urn, same
+    #   content_sha256 → skipped entirely (no writes at all, so loading a
+    #   corpus twice leaves rows byte-identical). Same urn, different sha →
+    #   fields updated, revision += 1, provenance "revised" journaling
+    #   {old_sha, new_sha}.
     # - Within-pass collision seam (P39-4): the "different sha → revise" rule
     #   above means a legitimate ACROSS-RUN update. When TWO files in a SINGLE
     #   load pass claim one urn with different content, revising would be
@@ -573,7 +576,7 @@ module Nabu
         @index_delta.stage_upsert(row.id, row.urn)
         row.update(
           sequence: passage.sequence, language: passage.language,
-          text: passage.text, text_normalized: passage.text_normalized,
+          text: passage.text, text_normalized: stored_normalized(passage),
           annotations_json: ContentHash.canonical_json(passage.annotations),
           content_sha256: sha, revision: row.revision + 1, withdrawn: false
         )
@@ -623,12 +626,30 @@ module Nabu
       def insert_passage(document_id, passage, sha)
         row = Passage.create(
           document_id: document_id, urn: passage.urn, sequence: passage.sequence,
-          language: passage.language, text: passage.text, text_normalized: passage.text_normalized,
+          language: passage.language, text: passage.text, text_normalized: stored_normalized(passage),
           annotations_json: ContentHash.canonical_json(passage.annotations),
           content_sha256: sha, revision: 1, withdrawn: false
         )
         @index_delta.stage_upsert(row.id, row.urn)
-        journal(event: "loaded", passage_id: row.id)
+        # P112-2 (Q113): no per-passage "loaded" event — at 107.8M rows the
+        # constant breadcrumb was 95% of the provenance table (~11 GB with
+        # its indexes) duplicating what the row's existence already says.
+        # Document- and dictionary-entry-grain "loaded" stay: real lineage
+        # at a few hundred thousand rows, and the witness the health
+        # partial-load probe reads. Passage transitions (revised/withdrawn/
+        # restored) keep journaling exactly as before.
+      end
+
+      # P112-2 (Q113): text_normalized measured byte-identical to text on
+      # the vast majority of rows (the CJK-dominated corpus folds to
+      # itself) — store the EMPTY STRING when equal ("" because the column
+      # is NOT NULL on the standing table generation; same zero bytes) and
+      # let every reader coalesce through the passages.text_search
+      # generated column (migration 037, edge case documented there).
+      # ~12–18 GB reclaimed at the next rebuild; the in-memory Passage (and
+      # therefore every content sha) is untouched.
+      def stored_normalized(passage)
+        passage.text_normalized == passage.text ? "" : passage.text_normalized
       end
 
       # Withdrawn row present again with unchanged content: clear the flag,

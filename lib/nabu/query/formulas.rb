@@ -137,7 +137,7 @@ module Nabu
       def slice(scope, lang:)
         scoped_passages(scope, lang: lang)
           .select(Sequel[:passages][:urn].as(:urn),
-                  Sequel[:passages][:text_normalized].as(:text_normalized))
+                  Sequel[:passages][:text_search].as(:text_normalized))
       end
 
       # ONE streaming pass: tokenize each passage, shingle, count every gram, and

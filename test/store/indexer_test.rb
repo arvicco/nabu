@@ -1488,6 +1488,26 @@ module Store
                    "a pre-P65 fulltext file gains the postings on its next sync"
     end
 
+    # -- the text_search seam (P112-2, Q113) ---------------------------------
+    # A row whose stored text_normalized is the "" sentinel (identical to
+    # text — the loader's slimming) must index under its text: every
+    # indexer read goes through the text_search generated column.
+
+    def test_sentinel_normalized_rows_index_under_their_text
+      doc = make_document(urn: "urn:d:1")
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: "urn:d:1:1", sequence: 0, language: "lzh",
+        text: "王道蕩蕩", text_normalized: "", content_sha256: "x", revision: 1,
+        withdrawn: false, annotations_json: "{}"
+      )
+
+      assert_equal 1, rebuild!
+      assert_equal %w[urn:d:1:1], match_urns("王道蕩蕩"),
+                   "the sentinel row is searchable by its text"
+      assert_equal 3, postings.exclude(char: "").where(source_id: @source.id).count,
+                   "char postings read the coalesced form (王/道/蕩 distinct)"
+    end
+
     # -- the delta grain (P112-1, Q112) --------------------------------------
     # With the loader's IndexDelta on hand, refresh_source! refreshes exactly
     # the changed rows instead of rewriting the source's whole slice (the

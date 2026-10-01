@@ -136,8 +136,11 @@ module Store
       assert_match(/\A\h{64}\z/, passage.content_sha256)
 
       assert_equal 1, provenance_events(document_id: row.id, event: "loaded").size
-      assert_equal 1, provenance_events(passage_id: passage.id, event: "loaded").size
-      assert_equal 5, Nabu::Store::Provenance.count # 2 documents + 3 passages
+      # P112-2 (Q113): no per-passage "loaded" breadcrumb — at corpus scale
+      # the constant row was 95% of the provenance table; the passage's
+      # existence is its own witness, and the document-grain event remains.
+      assert_empty provenance_events(passage_id: passage.id, event: "loaded")
+      assert_equal 2, Nabu::Store::Provenance.count # the 2 documents only
     end
 
     # -- idempotency ---------------------------------------------------------
@@ -935,8 +938,9 @@ module Store
       assert_equal 1, doc_row("alpha").revision
       assert_equal 1, doc_row("gamma").revision
       assert_equal "μῆνιν", passage_row("alpha", "1").text
-      # 3 documents + 4 passages journaled "loaded", exactly as per-document.
-      assert_equal 7, Nabu::Store::Provenance.count
+      # 3 documents journaled "loaded" (P112-2: passages never are), exactly
+      # as per-document.
+      assert_equal 3, Nabu::Store::Provenance.count
     end
 
     # A savepoint per document means a constraint violation still rolls back
@@ -992,8 +996,9 @@ module Store
       commits = io.string.lines.count { |line| line.include?("COMMIT") }
 
       assert_equal 3, commits
-      # Persisted result identical to any other grain: 4 docs + 8 passages.
-      assert_equal 12, Nabu::Store::Provenance.count
+      # Persisted result identical to any other grain: 4 docs journaled
+      # (P112-2: passages never are).
+      assert_equal 4, Nabu::Store::Provenance.count
     end
 
     # The P2-6 progress contract survives batching: one running-count tick per
@@ -1161,6 +1166,59 @@ module Store
 
     def fresh_loader
       Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger)
+    end
+
+    # -- catalog slimming (P112-2, Q113) -------------------------------------
+    # text_normalized measured byte-identical to text on the vast majority
+    # of rows (the CJK-dominated corpus folds to itself): the loader stores
+    # "" when equal (the column is NOT NULL on the standing table
+    # generation), and every reader coalesces through the text_search
+    # generated column (migration 037).
+
+    # build_document derives text_normalized by downcasing, so Han text —
+    # caseless — exercises the identical path.
+    def han_document
+      build_document("han", [%w[1 王道蕩蕩], %w[2 不偏不黨]])
+    end
+
+    def test_identical_text_normalized_stores_the_empty_sentinel
+      @loader.load([han_document])
+      stored = @db[:passages].where(urn: "#{doc_urn('han')}:1").first
+
+      assert_equal "", stored[:text_normalized], "byte-identical search form stores the sentinel"
+      assert_equal "王道蕩蕩", stored[:text_search], "the generated column coalesces to text"
+    end
+
+    def test_distinct_text_normalized_still_stores
+      # Capitalized Greek: the downcased search form differs from the text.
+      @loader.load([build_document("caps", [%w[1 Μῆνιν]])])
+      stored = @db[:passages].where(urn: "#{doc_urn('caps')}:1").first
+
+      assert_equal "μῆνιν", stored[:text_normalized]
+      assert_equal "μῆνιν", stored[:text_search]
+      assert_equal "Μῆνιν", stored[:text], "the pristine text is untouched"
+    end
+
+    def test_revision_to_identical_form_stores_the_sentinel
+      @loader.load([han_document])
+      revised = build_document("han", [%w[1 王道蕩蕩], %w[2 大道甚夷]])
+      report = fresh_loader.load([revised])
+
+      assert_report report, updated: 1, revised: 1
+      stored = @db[:passages].where(urn: "#{doc_urn('han')}:2").first
+
+      assert_equal "", stored[:text_normalized]
+      assert_equal "大道甚夷", stored[:text_search]
+    end
+
+    def test_sentinel_rows_stay_idempotent
+      @loader.load([han_document])
+      passages_before = snapshot(Nabu::Store::Passage)
+
+      report = fresh_loader.load([han_document])
+
+      assert_report report, skipped: 1
+      assert_equal passages_before, snapshot(Nabu::Store::Passage)
     end
   end
 end

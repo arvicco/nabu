@@ -139,7 +139,7 @@ module Nabu
           .join(:documents, id: :document_id)
           .where(Sequel[:documents][:source_id] => source_id,
                  Sequel[:documents][:withdrawn] => false)
-          .select(Sequel[:passages][:document_id], Sequel[:passages][:text_normalized])
+          .select(Sequel[:passages][:document_id], Sequel[:passages][:text_search].as(:text_normalized))
           .order(Sequel[:passages][:document_id], Sequel[:passages][:sequence])
           .paged_each(&)
       end
