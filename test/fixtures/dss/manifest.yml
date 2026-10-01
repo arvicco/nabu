@@ -16,7 +16,7 @@ files:
   - path: tf/2.0/after.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/after.tf
     whole: false
-    trim: slice sign+word entries (5192280 B -> 17204 B)
+    trim: slice sign+word entries (5192280 B -> 17346 B)
   - path: tf/2.0/alt.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/alt.tf
     whole: false
@@ -36,7 +36,7 @@ files:
   - path: tf/2.0/cl.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/cl.tf
     whole: false
-    trim: slice word entries (2175309 B -> 8528 B)
+    trim: slice word entries (2175309 B -> 8579 B)
   - path: tf/2.0/cor.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/cor.tf
     whole: false
@@ -44,19 +44,19 @@ files:
   - path: tf/2.0/fragment.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/fragment.tf
     whole: false
-    trim: slice fragment+line entries (268441 B -> 1225 B)
+    trim: slice fragment+line entries (268441 B -> 1250 B)
   - path: tf/2.0/full.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/full.tf
     whole: false
-    trim: slice word entries (3586074 B -> 12448 B)
+    trim: slice word entries (3586074 B -> 12538 B)
   - path: tf/2.0/glyph.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/glyph.tf
     whole: false
-    trim: slice sign+word entries (7358405 B -> 26122 B)
+    trim: slice sign+word entries (7358405 B -> 26304 B)
   - path: tf/2.0/gn.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/gn.tf
     whole: false
-    trim: slice word entries (1451933 B -> 6101 B)
+    trim: slice word entries (1451933 B -> 6133 B)
   - path: tf/2.0/halfverse.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/halfverse.tf
     whole: false
@@ -72,11 +72,11 @@ files:
   - path: tf/2.0/lex.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/lex.tf
     whole: false
-    trim: slice word entries (lex-node block dropped) (4452296 B -> 16605 B)
+    trim: slice word entries (lex-node block dropped) (4452296 B -> 16715 B)
   - path: tf/2.0/line.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/line.tf
     whole: false
-    trim: slice line entries (119086 B -> 1106 B)
+    trim: slice line entries (119086 B -> 1119 B)
   - path: tf/2.0/md.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/md.tf
     whole: false
@@ -88,15 +88,15 @@ files:
   - path: tf/2.0/morpho.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/morpho.tf
     whole: false
-    trim: slice word entries (2369611 B -> 8879 B)
+    trim: slice word entries (2369611 B -> 8934 B)
   - path: tf/2.0/nu.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/nu.tf
     whole: false
-    trim: slice word entries (1451288 B -> 6098 B)
+    trim: slice word entries (1451288 B -> 6130 B)
   - path: tf/2.0/oslots.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/oslots.tf
     whole: false
-    trim: slice cluster/fragment/line/scroll/word nodes, gap-anchored (14394455 B -> 26748 B)
+    trim: slice cluster/fragment/line/scroll/word nodes, gap-anchored (14394455 B -> 27047 B)
   - path: tf/2.0/otext.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/otext.tf
     whole: true
@@ -108,7 +108,7 @@ files:
   - path: tf/2.0/ps.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/ps.tf
     whole: false
-    trim: slice word entries (481024 B -> 1034 B)
+    trim: slice word entries (481024 B -> 1044 B)
   - path: tf/2.0/punc.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/punc.tf
     whole: false
@@ -116,7 +116,7 @@ files:
   - path: tf/2.0/rec.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/rec.tf
     whole: false
-    trim: slice sign entries (1886681 B -> 3368 B)
+    trim: slice sign entries (1886681 B -> 3409 B)
   - path: tf/2.0/rem.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/rem.tf
     whole: false
@@ -128,23 +128,23 @@ files:
   - path: tf/2.0/scroll.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/scroll.tf
     whole: false
-    trim: slice scroll+fragment+line entries (378532 B -> 1949 B)
+    trim: slice scroll+fragment+line entries (378532 B -> 1997 B)
   - path: tf/2.0/sp.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/sp.tf
     whole: false
-    trim: slice word entries (2836506 B -> 9263 B)
+    trim: slice word entries (2836506 B -> 9351 B)
   - path: tf/2.0/st.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/st.tf
     whole: false
-    trim: slice word entries (871409 B -> 5483 B)
+    trim: slice word entries (871409 B -> 5503 B)
   - path: tf/2.0/type.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/type.tf
     whole: false
-    trim: slice sign+cluster+word entries (10781272 B -> 35049 B)
+    trim: slice sign+cluster+word entries (10781272 B -> 35333 B)
   - path: tf/2.0/unc.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/unc.tf
     whole: false
-    trim: slice sign entries (652154 B -> 1738 B)
+    trim: slice sign entries (652154 B -> 1749 B)
   - path: tf/2.0/vac.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vac.tf
     whole: false
@@ -156,8 +156,88 @@ files:
   - path: tf/2.0/vs.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vs.tf
     whole: false
-    trim: slice word entries (819020 B -> 2120 B)
+    trim: slice word entries (819020 B -> 2144 B)
   - path: tf/2.0/vt.tf
     url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vt.tf
     whole: false
-    trim: slice word entries (838258 B -> 1917 B)
+    trim: slice word entries (838258 B -> 1943 B)
+  - path: tf/2.0/book_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/book_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (3665019 B -> 10345 B)
+  - path: tf/2.0/g_cons.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_cons.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (56950 B -> 601 B)
+  - path: tf/2.0/g_lex_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_lex_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (49847 B -> 624 B)
+  - path: tf/2.0/g_nme_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_nme_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (560486 B -> 2332 B)
+  - path: tf/2.0/g_pfm_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_pfm_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (8050 B -> 556 B)
+  - path: tf/2.0/g_prs_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_prs_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1547824 B -> 5886 B)
+  - path: tf/2.0/g_vbe_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_vbe_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (6645 B -> 569 B)
+  - path: tf/2.0/g_vbs_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/g_vbs_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1982 B -> 558 B)
+  - path: tf/2.0/gn_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/gn_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (693422 B -> 1338 B)
+  - path: tf/2.0/lang_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/lang_etcbc.tf
+    whole: false
+    trim: slice sign+word entries, ETCBC-harmonized layer added 2026-10-01 (13704218 B -> 45756 B)
+  - path: tf/2.0/lex_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/lex_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1820101 B -> 6399 B)
+  - path: tf/2.0/lex_utf8_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/lex_utf8_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (3925646 B -> 16085 B)
+  - path: tf/2.0/morph_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/morph_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (79827 B -> 613 B)
+  - path: tf/2.0/note_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/note_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (2782 B -> 848 B)
+  - path: tf/2.0/nu_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/nu_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1508893 B -> 5692 B)
+  - path: tf/2.0/ps_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/ps_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1505988 B -> 5517 B)
+  - path: tf/2.0/sp_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/sp_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1285662 B -> 3231 B)
+  - path: tf/2.0/uvf_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/uvf_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (488901 B -> 2263 B)
+  - path: tf/2.0/vs_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vs_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1586041 B -> 5641 B)
+  - path: tf/2.0/vt_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/dss/master/tf/2.0/vt_etcbc.tf
+    whole: false
+    trim: slice word entries, ETCBC-harmonized layer added 2026-10-01 (1637168 B -> 5723 B)
