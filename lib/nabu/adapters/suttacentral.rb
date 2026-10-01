@@ -107,6 +107,33 @@ module Nabu
     # verbatim ("Creative Commons Zero" / "CC0"); scpub36 (ea19) and
     # scpub37 (da) cover trees the published branch does not yet carry.
     #
+    # == The sidecar trees (variant / reference / comment)
+    #
+    # bilara-data carries three sidecar trees keyed by THE SAME segment ids
+    # as the roots, and the ordinary full clone already lands them (no
+    # sparse cone — nothing to widen, nothing materialized beside upstream's
+    # tree). Censused against the synced tree (commit e0f20a02, 2026-10-01):
+    # variant/{pli/ms,lzh/sct} — 4,477 files / 19,873 apparatus readings
+    # ("amatapadaṁ → amataṁ padaṁ (sya-all, mr)"); reference/{pli/ms,pra/pts,
+    # lzh/sct} — 7,575 files / 142,865 concordance strings (PTS vol.page,
+    # VRI, Burmese/Thai/Sinhala print editions, Taishō lines "t99.44a28");
+    # comment/en/{sujato,brahmali} — 1,727 files / 11,646 translator notes,
+    # 863 of them blank. Each joins its root's passages at parse time, by
+    # STEM (the same uid space as the roots; one file per stem per tree,
+    # censused — 33 lzh reference files sit under abhidhamma/sab while their
+    # roots sit under abhidhamma/sag, so the join is never path-mirrored)
+    # into the annotation keys "variants" / "refs" / "comments" (see
+    # BilaraJsonParser). Roots only: -en siblings stay untouched — the
+    # translator notes ride the ROOT segment they annotate, so they survive
+    # a translator-priority pick and a root with no -en file alike. Comment
+    # files of a double-commented stem (none today) resolve by the same
+    # TRANSLATOR_PRIORITY. Deliberately out of scope, declared: the 399
+    # non-English comment files (the translations are en-only),
+    # reference/pli/vri (3 VRI-edition files, two of them second
+    # concordances of the pli-tv-b*-pm roots whose ms reference already
+    # cites vri) and reference/san (no san roots minted). A tree without
+    # the sidecar dirs parses exactly as before (annotations {}).
+    #
     # == fetch (the shared git path, pinned to `published`)
     #
     # One ordinary clone/pull of the bilara-data repo (~353 MB with .git at
@@ -144,6 +171,12 @@ module Nabu
       ].freeze
 
       PUBLICATION_FILE = "_publication.json"
+
+      # Annotation key → the sidecar tree it reads (class note). Variant and
+      # reference trees mirror the root tree's <lang>/<edition>; comments
+      # are per English translator.
+      SIDECAR_TREES = { "variants" => "variant", "refs" => "reference" }.freeze
+      COMMENT_TREE = "comment/en"
 
       URN_PREFIX = "urn:nabu:suttacentral:"
 
@@ -233,7 +266,8 @@ module Nabu
           stem: metadata.fetch("stem"),
           language: metadata.fetch("language"),
           metadata: document_metadata(metadata),
-          license_override: metadata["license_override"]
+          license_override: metadata["license_override"],
+          sidecars: metadata.fetch("sidecars", {})
         )
       end
 
@@ -299,23 +333,55 @@ module Nabu
       # stem → root DocumentRef for every in-scope root file (sandbox
       # skipped). Stems are unique across the trees (upstream uids).
       def root_stems(workdir)
+        sidecars = sidecar_index(workdir)
         ROOT_TREES.each_with_object({}) do |(tree, (language, edition)), map|
           root_files(workdir, tree).each do |path|
             stem = File.basename(path).split("_", 2).first
-            map[stem] = root_ref(workdir, tree, path, stem, language, edition)
+            map[stem] = root_ref(workdir, tree, path, stem,
+                                 language: language, edition: edition, sidecars: sidecars.fetch(stem, {}))
           end
         end
       end
 
-      def root_ref(workdir, tree, path, stem, language, edition)
+      def root_ref(workdir, tree, path, stem, language:, edition:, sidecars:)
         basket, collection = relative_parts(File.join(workdir, tree), path)
         Nabu::DocumentRef.new(
           source_id: manifest.id,
           id: "#{URN_PREFIX}#{stem}",
           path: File.expand_path(path),
           metadata: { "stem" => stem, "language" => language, "edition" => edition,
-                      "basket" => basket, "collection" => collection }.compact
+                      "basket" => basket, "collection" => collection,
+                      "sidecars" => (sidecars unless sidecars.empty?) }.compact
         )
+      end
+
+      # stem → { annotation key => absolute sidecar path } over the in-scope
+      # sidecar trees (class note). Globs sort, first file per stem wins —
+      # deterministic even if upstream ever duplicates a stem (censused: 0).
+      def sidecar_index(workdir)
+        index = {}
+        ROOT_TREES.each_key do |tree|
+          subtree = tree.delete_prefix("root/")
+          SIDECAR_TREES.each do |key, base|
+            index_sidecars(index, key, Dir.glob(File.join(workdir, base, subtree, "**", "*.json")))
+          end
+        end
+        comments = Dir.glob(File.join(workdir, COMMENT_TREE, "*", "**", "*_comment-en-*.json"))
+        index_sidecars(index, "comments", comments.sort_by { |path| [comment_rank(workdir, path), path] })
+        index
+      end
+
+      def index_sidecars(index, key, paths)
+        paths.each do |path|
+          stem = File.basename(path).split("_", 2).first
+          (index[stem] ||= {})[key] ||= File.expand_path(path)
+        end
+      end
+
+      # The translator is the path segment right under comment/en.
+      def comment_rank(workdir, path)
+        base = File.expand_path(File.join(workdir, COMMENT_TREE))
+        translator_rank(File.expand_path(path).delete_prefix("#{base}#{File::SEPARATOR}").split(File::SEPARATOR).first)
       end
 
       def root_files(workdir, tree)

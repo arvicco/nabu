@@ -20,6 +20,17 @@ files, `cp`) from the SYNCED canonical tree —
 `_publication.json` slice gained the two lzh-relevant entries
 (scpub39, scpub20) from the same tree, entry blocks byte-identical.
 
+**Sidecar additions (2026-10-01):** the variant / reference / comment
+files below plus the `sn46.70` root + sujato translation were fetched
+from raw URLs pinned to bilara-data commit
+`e0f20a02765cb75b304dcd037eb0778b22963d81` (branch `published`), e.g.
+
+    https://raw.githubusercontent.com/suttacentral/bilara-data/e0f20a02765cb75b304dcd037eb0778b22963d81/variant/pli/ms/sutta/sn/sn46/sn46.70_variant-pli-ms.json
+
+and each byte-compared identical (`cmp`) to the synced canonical tree at
+that same commit. Whole files, upstream-relative paths (exact URLs in
+`manifest.yml`).
+
 ## License chain (verified 2026-07-18, from the repo's own metadata)
 
 Per-publication licensing lives in `_publication.json` (140 publications
@@ -82,6 +93,17 @@ translations (CC0 + the one BY-SA) are ingested.
 | `root/lzh/sct/sutta/sa/sa101-200/sa158_root-lzh-sct.json` | whole | Literary Chinese Āgama root (P32-1): language `lzh`, edition `sct`, basket `sutta` / collection `sa`; 10 segments, heading block `0.1`–`0.2` → title "雜阿含經 — (一五八)"; trailing spaces on every segment (upstream reality) |
 | `translation/en/patton/sutta/sa/sa101-200/sa158_translation-en-patton.json` | whole | patton's `-en` sibling of an lzh root — an ex-orphan (paired the moment `root/lzh/sct` entered scope); SAME 10 segment ids as the root (exact 1:1 here); publication scpub20, CC0 → no override |
 | `root/lzh/sct/abhidhamma/sg/t1536.12_root-lzh-sct.json` | whole | lzh abhidhamma root with a Taisho-number stem (`t1536.12`); basket `abhidhamma` / collection `sg`; NO English file → honestly sibling-less |
+| `root/pli/ms/sutta/sn/sn46/sn46.70_root-pli-ms.json` | whole | 5-segment sutta whose `1.1` carries a variant, a reference AND a non-blank sujato comment (the smallest such sutta corpus-wide; added 2026-10-01 because no older fixture sutta has a non-blank English comment); heading `0.3` carries a variant only |
+| `translation/en/sujato/sutta/sn/sn46/sn46.70_translation-en-sujato.json` | whole | its `-en` sibling — pins that sidecars never touch translations |
+| `variant/pli/ms/sutta/sn/sn46/sn46.70_variant-pli-ms.json` | whole | 2 apparatus readings (`0.3`, `1.1`), "lemma → reading (witnesses)" with a trailing space |
+| `reference/pli/ms/sutta/sn/sn46/sn46.70_reference.json` | whole | `1.1` → "ms14S5_687, msdiv251, vri27.160" |
+| `comment/en/sujato/sutta/sn/sn46/sn46.70_comment-en-sujato.json` | whole | `1.1` → a note with inline `<a href>` markup (kept verbatim) |
+| `variant/pli/ms/sutta/sn/sn35/sn35.24_variant-pli-ms.json` | whole | `1.1` reading |
+| `reference/pli/ms/sutta/sn/sn35/sn35.24_reference.json` | whole | `1.1` → PTS (`pts-vp-pli4.16`) + VRI (`vri26.15`) + print-edition concordance |
+| `comment/en/sujato/sutta/sn/sn35/sn35.24_comment-en-sujato.json` | whole | its only key (`1.4`) is an EMPTY string (821 of sujato's 9,130 comment values are blank) → no key minted |
+| `variant/pli/ms/sutta/kn/dhp/dhp21-32_variant-pli-ms.json` | whole | RANGE-STEM sidecar: 6 readings keyed by per-verse ids (`dhp24:1`) |
+| `reference/pli/ms/sutta/kn/dhp/dhp21-32_reference.json` | whole | RANGE-STEM sidecar: 12 per-verse concordances |
+| `reference/lzh/sct/sutta/sa/sa101-200/sa158_reference.json` | whole | lzh Taishō line refs (`t99.44a28`); 6 of sa158's 10 segments |
 | `_publication.json` | SLICE | 8 of 140 publication entries (scpub1, scpub4, scpub7, scpub20, scpub39, scpub53, scpub64, scpub69), entry blocks byte-identical to upstream; drives the per-publication license gate + override |
 | `parallels/parallels.json` | SLICE | the sc-data parallels graph (P32-6): 10 of 8,221 relation entries, value-identical to upstream, at the adapter's fetch-target path (`parallels/`, not upstream's `relationship/`) — see below |
 
@@ -126,6 +148,16 @@ within the scope of copyright." — and all original SuttaCentral material
 is CC0 1.0.
 
 ## Format notes (upstream reality, do not "fix")
+
+- Sidecar trees (`variant/<lang>/<edition>/…/<stem>_variant-<lang>-<edition>.json`,
+  `reference/<lang>/<edition>/…/<stem>_reference.json`,
+  `comment/<lang>/<translator>/…/<stem>_comment-<lang>-<translator>.json`)
+  share the root's flat segment-map shape and segment ids; the adapter
+  joins them by STEM (33 lzh reference files live under
+  `abhidhamma/sab` while their roots live under `abhidhamma/sag`).
+  `pdhp1-13` and `t1536.12` DO have upstream reference files; they are
+  deliberately NOT snapshotted, so the fixture tree also pins roots that
+  carry no sidecar data.
 
 - One JSON object per file: a flat ordered map of `"<segment-id>":
   "text"`. Segment ids ARE SuttaCentral's citation scheme (`mn1:1.1`);
