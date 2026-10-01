@@ -65,6 +65,7 @@ nodes are skipped, e.g. qere_utf8). Per file:
 | `otype.tf`, `otext.tf` | 667 / 958 → same | WHOLE, byte-identical (otype is the census-of-record; otext documents the text formats, incl. `text-orig-full-ketiv` = the stored rendering) |
 | `g_word_utf8.tf`, `trailer_utf8.tf`, `vs/vt/gn/nu/ps.tf`, `kq_hybrid.tf`, `kq_hybrid_utf8.tf` | 0.4–5.4 MB → 3.5–37 KB | word-grain: the slice slots only |
 | `gloss.tf`, `language.tf`, `lex.tf`, `freq_lex.tf`, `sp.tf` | 1.8–3.1 MB → 12–21 KB | dual-grain upstream (words 1–426590 + lex nodes 1437602–1446831): the word-grain slice slots only; the lex-node block is dropped (the adapter reads these word-grain, as upstream duplicates them) |
+| the widened word-grain lane (44 files): `freq_occ`, `g_cons(_utf8)`, `g_lex(_utf8)`, `g_nme(_utf8)`, `g_pfm(_utf8)`, `g_prs(_utf8)`, `g_uvf(_utf8)`, `g_vbe(_utf8)`, `g_vbs(_utf8)`, `g_word`, `languageISO`, `lex0`, `lex_utf8`, `lexeme_count`, `ls`, `nametype`, `nme`, `number`, `pdp`, `pfm`, `prs`, `prs_gn/nu/ps`, `rank_lex`, `rank_occ`, `root`, `st`, `suffix_gender/number/person`, `uvf`, `vbe`, `vbs`, `voc_lex(_utf8)` | 0.4–5.2 MB → 1–27 KB | word-grain: the slice slots only (lex-node blocks of the dual-grain files and the clause/phrase/atom/sentence blocks of `number` dropped). Added 2026-10-01 from the same pinned commit `4db00e21` (the held canonical tree), with the same trimmer — which reproduces every pre-existing word-grain fixture file byte-identically |
 | `qere_utf8.tf`, `qere_trailer_utf8.tf` | 36,561 / 12,739 → 914 / 661 | the 22 in-slice K/Q entries (Ruth 18, Daniel 4) |
 | `book.tf` | 199,917 → 1,227 | the 4 book-node entries + the verse-grain entries for slice verses (chapter-grain entries dropped — unread) |
 | `chapter.tf`, `verse.tf` | 66,379 / 61,897 → 726 / 770 | verse-grain entries for slice verses (chapter-node entries dropped — unread) |
@@ -74,8 +75,12 @@ nodes are skipped, e.g. qere_utf8). Per file:
 kq_hybrid(.utf8) pins the empty-line quirk: word-grain files where most
 slots carry EMPTY values (empty data lines that advance the node cursor).
 
-Features deliberately NOT fixtured (and not read by the adapter): the
-transliteration lanes (g_word, g_cons, lex0, voc_lex, …), the *_atom /
-subphrase / sentence / half_verse structure, the omap@* version-map edges
-(@edgeValues — refused by the family), rank/dist statistics, and the
-book@<lang> translations.
+Features deliberately NOT fixtured (and not read by the adapter — each
+named with its reason in `Bhsa::DECLINED_TOKEN_FEATURES`): the
+transliterated twins whose token key the utf8 alias already owns
+(`trailer`, `qere`, `qere_trailer`, `kq_hybrid`), the clause/phrase/atom
+grain features beyond `kind`/`function` (`typ`, `rela`, `det`, `dist`,
+`domain`, `txt`, `code`, `tab`, `pargr`, …), the *_atom / subphrase /
+sentence / half_verse structure, the mother/functional_parent/
+distributional_parent edges, the omap@* version-map edges (@edgeValues —
+refused by the family), `label`, and the book@<lang> translations.
