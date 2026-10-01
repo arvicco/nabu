@@ -116,7 +116,7 @@ module Nabu
         return rows if variants.empty?
 
         containment = Sequel.|(*variants.map do |variant|
-          Sequel.like(Sequel[:passages][:text_normalized], "%#{escape_like(variant)}%")
+          Sequel.like(Sequel[:passages][:text_search], "%#{escape_like(variant)}%")
         end)
         ids = @catalog[:passages].where(id: rows.map { |row| row.fetch(:rowid) })
                                  .where(containment).select_map(:id).to_set

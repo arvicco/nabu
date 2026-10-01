@@ -6605,7 +6605,10 @@ module Nabu
 
         say "  provenance:"
         passage.provenance.each do |event|
-          say "    #{event.at}  #{event.event}#{"  #{event.tool}" if event.tool}"
+          # P112-2: an implicit "loaded" (no per-passage breadcrumb) may
+          # carry no timestamp at all — render the event without one.
+          stamp = event.at ? "#{event.at}  " : ""
+          say "    #{stamp}#{event.event}#{"  #{event.tool}" if event.tool}"
         end
       end
 
