@@ -174,7 +174,80 @@ class RemTest < Minitest::Test
     end
   end
 
-  def test_the_merge_adds_only_the_pos_and_msd_keys
+  # --- the CorA-XML sibling zip: dating ---------------------------------------
+
+  def test_the_coraxml_element_header_rides_document_metadata_verbatim
+    header = parse_urn("urn:nabu:rem:m058").metadata["cora_header"]
+    assert_equal "13,1", header["time"]
+    assert_equal "Cod. 160", header["library-shelfmark"]
+    refute header.key?("date"), '"-" is upstream\'s null — dropped'
+  end
+
+  def test_a_dateless_header_dates_from_the_century_half_grid
+    assert_equal({ "not_before" => 1200, "not_after" => 1250, "raw" => "(time 13,1)" },
+                 parse_urn("urn:nabu:rem:m058").metadata["date"],
+                 "time 13,1 = 13th c., 1st half")
+  end
+
+  def test_a_century_date_falls_back_to_the_grid_and_the_raw_names_both
+    assert_equal({ "not_before" => 1050, "not_after" => 1150, "raw" => "11 (time 11,2-12,1)" },
+                 parse_urn("urn:nabu:rem:m218b").metadata["date"],
+                 "date '11' is a century claim, never a year — the grid range bounds it")
+  end
+
+  def test_a_clean_date_sets_the_bounds
+    assert_equal({ "not_before" => 1172, "not_after" => 1172, "raw" => "1172" },
+                 doctored_m058_metadata("<date>-</date>", "<date>1172</date>")["date"])
+    assert_equal({ "not_before" => 1342, "not_after" => 1343, "raw" => "1342-43" },
+                 doctored_m058_metadata("<date>-</date>", "<date>1342-43</date>")["date"],
+                 "a 2-digit tail expands with the head's century")
+  end
+
+  def test_prose_dates_are_never_number_scraped
+    assert_equal({ "not_before" => 1100, "not_after" => 1200, "raw" => "um 1140/50 (?) (time 12)" },
+                 doctored_m058_metadata("<date>-</date>", "<date>um 1140/50 (?)</date>",
+                                        "<time>13,1</time>", "<time>12</time>")["date"],
+                 "a bare-century grid value spans the whole century")
+  end
+
+  def test_neither_lane_clean_rides_raw_only
+    assert_equal({ "raw" => "(time 12,2; um 1200 (VL 11,1683))" },
+                 doctored_m058_metadata("<time>13,1</time>",
+                                        "<time>12,2; um 1200 (VL 11,1683)</time>")["date"])
+  end
+
+  def test_documents_without_a_coraxml_sibling_carry_no_dating
+    metadata = parse_urn("urn:nabu:rem:m242").metadata
+    refute metadata.key?("date")
+    refute metadata.key?("cora_header")
+  end
+
+  def test_rem_is_registered_for_the_structured_metadata_dates_shape
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["rem"]
+    assert_equal "orig_place", Nabu::Store::TimelineBuilder::MetadataDates::PLACE_KEYS["rem"],
+                 "the TEI scriptorium place lane is untouched"
+  end
+
+  def test_the_dating_lane_projects_loaded_documents_onto_the_timeline
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "rem", name: "ReM", adapter_class: "Nabu::Adapters::Rem",
+                                        license_class: "attribution")
+    Nabu::Store::Loader.new(db: catalog, source: source)
+                       .load_from(Nabu::Adapters::Rem.new, workdir: FIXTURES, full: true)
+    rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "rem")
+    assert_equal 3, rows, "the two sibling-carrying documents date; M345 keeps its TEI place-only row"
+    row_for = lambda do |urn|
+      catalog[:document_axes].where(document_id: catalog[:documents].where(urn: urn).get(:id)).first
+    end
+    assert_equal [1050, 1150, "11 (time 11,2-12,1)"],
+                 row_for.call("urn:nabu:rem:m218b").values_at(:not_before, :not_after, :date_raw)
+    assert_equal [nil, nil, "Augsburg"],
+                 row_for.call("urn:nabu:rem:m345").values_at(:not_before, :not_after, :place_name),
+                 "no sibling — the P109-4 orig_place lane alone, unchanged"
+    assert_nil row_for.call("urn:nabu:rem:m242"), "no sibling, no place — no row"
+  end
+
+  def test_the_sibling_adds_only_pos_msd_and_the_dating_keys
     Dir.mktmpdir do |dir|
       copy_tree_without(FIXTURES, dir, excluded: "coraxml")
       adapter = Nabu::Adapters::Rem.new
@@ -182,7 +255,7 @@ class RemTest < Minitest::Test
       adapter.discover(FIXTURES).each do |ref|
         merged = adapter.parse(ref)
         before = bare.fetch(ref.id)
-        assert_equal before.metadata, merged.metadata, ref.id
+        assert_equal before.metadata, merged.metadata.except("cora_header", "date"), ref.id
         assert_equal before.map(&:text), merged.map(&:text), ref.id
         stripped = merged.map do |p|
           p.annotations.merge("tokens" => p.annotations["tokens"].map { |t| t.except("pos", "msd") })
@@ -408,6 +481,23 @@ class RemTest < Minitest::Test
     ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
     refute_nil ref, "expected discover to yield #{urn}"
     adapter.parse(ref)
+  end
+
+  # M058's metadata parsed from a doctored copy of the fixture tree:
+  # +pairs+ are (from, to) substitutions into its CorA-XML sibling.
+  def doctored_m058_metadata(*pairs)
+    Dir.mktmpdir do |dir|
+      copy_tree_without(FIXTURES, dir, excluded: "nothing")
+      path = File.join(dir, "coraxml", "cora-xml", "M058.xml")
+      text = File.read(path)
+      pairs.each_slice(2) do |from, to|
+        assert_includes text, from
+        text = text.sub(from, to)
+      end
+      File.write(path, text)
+      adapter = Nabu::Adapters::Rem.new
+      return adapter.parse(adapter.discover(dir).find { |r| r.id == "urn:nabu:rem:m058" }).metadata
+    end
   end
 
   def sha(body)
