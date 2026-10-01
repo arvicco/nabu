@@ -12,10 +12,17 @@ require "tmpdir"
 class RemTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
+  include ParseTreeDigest
 
   FIXTURES = Nabu::TestSupport.fixtures("rem")
 
   ZIP_URL = "https://zenodo.org/api/records/13982324/files/ReM-v2.1_tei.zip/content"
+  CORA_URL = "https://zenodo.org/api/records/13982324/files/ReM-v2.1_coraxml.zip/content"
+
+  # The whole-tree parse digest of the TEI-only fixture tree (no coraxml/),
+  # minted by the PRE-sibling adapter (commit f8466602) — the absent-zip
+  # parity pin: today's canonical state must parse byte-identically.
+  PRE_CORAXML_DIGEST = "3a6c589def3dbaf7893fd66f406360d0dcc2858c3a8a842a485ab8ebe5142bf6"
 
   DOC_URNS = %w[
     urn:nabu:rem:m058
@@ -103,10 +110,107 @@ class RemTest < Minitest::Test
   end
 
   def test_gold_norm_and_lemma_ride_in_token_annotations
+    Dir.mktmpdir do |dir|
+      copy_tree_without(FIXTURES, dir, excluded: "coraxml")
+      adapter = Nabu::Adapters::Rem.new
+      ref = adapter.discover(dir).find { |r| r.id == "urn:nabu:rem:m058" }
+      line = adapter.parse(ref).find { |p| p.urn.end_with?(":100v.5") }
+      grimme = line.annotations["tokens"].find { |t| t["lemma"] == "grimme" }
+      assert_equal({ "id" => "t5_m1", "form" => "grínme", "norm" => "grinme", "lemma" => "grimme" },
+                   grimme, "without the sibling zip the TEI export is honestly norm+lemma")
+    end
+  end
+
+  # --- the CorA-XML sibling zip: pos/msd --------------------------------------
+  # Two real ReM-v2.1_coraxml.zip members (M058, M218B) ride the fixture
+  # tree at the canonical layout (coraxml/cora-xml/M*.xml); the M242/M345
+  # trims have no sibling — exactly today's per-document absence.
+
+  def test_coraxml_pos_and_msd_merge_into_the_tei_token_records
     line = parse_urn("urn:nabu:rem:m058").find { |p| p.urn.end_with?(":100v.5") }
-    grimme = line.annotations["tokens"].find { |t| t["lemma"] == "grimme" }
-    assert_equal({ "id" => "t5_m1", "form" => "grínme", "norm" => "grinme", "lemma" => "grimme" },
-                 grimme)
+    grimme = line.annotations["tokens"].find { |t| t["id"] == "t5_m1" }
+    assert_equal({ "id" => "t5_m1", "form" => "grínme", "norm" => "grinme", "lemma" => "grimme",
+                   "pos" => "NA", "msd" => "Dat.Sg" }, grimme,
+                 "joined on the upstream token id; CorA's <pos> and <infl> tags verbatim " \
+                 "(infl rides as msd — the ReN sibling's key for the same lane)")
+  end
+
+  def test_coraxml_null_placeholders_never_ride
+    tokens = parse_urn("urn:nabu:rem:m058").flat_map { |p| p.annotations["tokens"] }
+    under = tokens.find { |t| t["id"] == "t9_m2" }
+    assert_equal "PAVAP", under["pos"]
+    refute under.key?("msd"), '"--" is CorA\'s null — dropped, never a value'
+    stop = tokens.find { |t| t["id"] == "t7_m1" }
+    assert_equal "$_", stop["pos"], "punctuation carries pos and no infl element at all"
+    refute stop.key?("msd")
+    assert(tokens.all? { |t| t.key?("pos") }, "every M058 token joins (censused: 2,579,276/2,579,276)")
+  end
+
+  def test_documents_without_a_coraxml_sibling_parse_unchanged
+    tokens = parse_urn("urn:nabu:rem:m242").flat_map { |p| p.annotations["tokens"] }
+    refute(tokens.any? { |t| t.key?("pos") || t.key?("msd") })
+  end
+
+  def test_unmatched_tei_tokens_are_censused_loudly
+    Dir.mktmpdir do |dir|
+      copy_tree_without(FIXTURES, dir, excluded: "nothing")
+      path = File.join(dir, "coraxml", "cora-xml", "M058.xml")
+      File.write(path, File.read(path).sub('<tok_anno id="t5_m1"', '<tok_anno id="t5_m9"'))
+      adapter = Nabu::Adapters::Rem.new
+      document = adapter.parse(adapter.discover(dir).find { |r| r.id == "urn:nabu:rem:m058" })
+      assert_equal 1, document.metadata["coraxml_unmatched_tokens"],
+                   "an id drift is a loud census, never a quarantine"
+      tokens = document.flat_map { |p| p.annotations["tokens"] }
+      refute tokens.find { |t| t["id"] == "t5_m1" }.key?("pos")
+    end
+  end
+
+  def test_a_tree_without_the_coraxml_zip_parses_exactly_as_before
+    Dir.mktmpdir do |dir|
+      copy_tree_without(FIXTURES, dir, excluded: "coraxml")
+      assert_equal PRE_CORAXML_DIGEST, tree_digest(Nabu::Adapters::Rem.new, dir),
+                   "today's canonical state (no sibling zip) — zero diff, pinned from the " \
+                   "pre-sibling adapter"
+    end
+  end
+
+  def test_the_merge_adds_only_the_pos_and_msd_keys
+    Dir.mktmpdir do |dir|
+      copy_tree_without(FIXTURES, dir, excluded: "coraxml")
+      adapter = Nabu::Adapters::Rem.new
+      bare = adapter.discover(dir).to_h { |r| [r.id, adapter.parse(r)] }
+      adapter.discover(FIXTURES).each do |ref|
+        merged = adapter.parse(ref)
+        before = bare.fetch(ref.id)
+        assert_equal before.metadata, merged.metadata, ref.id
+        assert_equal before.map(&:text), merged.map(&:text), ref.id
+        stripped = merged.map do |p|
+          p.annotations.merge("tokens" => p.annotations["tokens"].map { |t| t.except("pos", "msd") })
+        end
+        assert_equal before.map(&:annotations), stripped, ref.id
+      end
+    end
+  end
+
+  def test_the_coraxml_tree_never_mints_documents
+    assert_equal DOC_URNS, Nabu::Adapters::Rem.new.discover(FIXTURES).map(&:id),
+                 "coraxml/cora-xml/M058.xml matches the M*.xml name but is a sibling, not a text"
+  end
+
+  def test_coraxml_is_a_declared_materialization
+    assert_equal ["coraxml"], Nabu::Adapters::Rem.materialized_paths
+  end
+
+  def test_loading_twice_is_idempotent
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "rem", name: "ReM", adapter_class: "Nabu::Adapters::Rem",
+                                        license_class: "attribution")
+    loader = Nabu::Store::Loader.new(db: catalog, source: source)
+    loader.load_from(Nabu::Adapters::Rem.new, workdir: FIXTURES, full: true)
+    before = [catalog[:documents].select_map(%i[urn revision]).sort, catalog[:passages].count]
+    loader.load_from(Nabu::Adapters::Rem.new, workdir: FIXTURES, full: true)
+    assert_equal before, [catalog[:documents].select_map(%i[urn revision]).sort,
+                          catalog[:passages].count]
   end
 
   def test_column_broken_lines_cite_folio_column_line
@@ -212,26 +316,44 @@ class RemTest < Minitest::Test
   end
 
   # --- fetch (WebMock only, no network) ----------------------------------------
+  # Two immutable Zenodo artifacts: the TEI zip (the text) + the CorA-XML
+  # zip (pos/msd), both sha-pinned BEFORE any tree mutation (the openiti
+  # two-arm choreography).
 
-  def test_fetch_downloads_verifies_the_pin_and_unpacks
-    body = stub_zip_body
-    stub_request(:get, ZIP_URL).to_return(
-      status: 200, body: body,
-      headers: { "Content-Type" => "application/zip", "Last-Modified" => "Mon, 28 Oct 2024 12:00:00 GMT" }
-    )
+  def test_fetch_downloads_both_artifacts_verifies_both_pins_and_unpacks
+    tei = stub_zip_body
+    cora = stub_cora_zip_body
+    stub_artifacts(tei, cora)
     Dir.mktmpdir do |workdir|
-      adapter = Nabu::Adapters::Rem.new(pin: Digest::SHA256.hexdigest(body))
+      adapter = Nabu::Adapters::Rem.new(pin: sha(tei), cora_pin: sha(cora))
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
-      assert_equal Digest::SHA256.hexdigest(body), report.sha
+      assert_equal sha(tei), report.sha, "the text artifact's sha is the ledger pin"
+      assert_match(/coraxml sha pin verified/, report.notes)
+      assert File.file?(File.join(workdir, "coraxml", "cora-xml", "M058.xml")),
+             "the ReM-v2.1_coraxml/ top dir strips into the declared coraxml/ materialization"
       assert_equal DOC_URNS, adapter.discover(workdir).map(&:id),
-                   "the unpacked tei/ tree is discoverable in place"
+                   "the unpacked tei/ tree is discoverable in place; coraxml/ mints no documents"
+      m058 = adapter.parse(adapter.discover(workdir).first)
+      assert_equal "NA", m058.first.annotations["tokens"].find { |t| t["id"] == "t5_m1" }["pos"]
+    end
+  end
+
+  def test_a_refetch_keeps_the_sibling_tree_out_of_the_deletion_set
+    tei = stub_zip_body
+    cora = stub_cora_zip_body
+    stub_artifacts(tei, cora)
+    Dir.mktmpdir do |workdir|
+      adapter = Nabu::Adapters::Rem.new(pin: sha(tei), cora_pin: sha(cora))
+      adapter.fetch(workdir)
+      adapter.fetch(workdir)
+      refute Dir.exist?(File.join(workdir, Nabu::Adapter::ATTIC_DIRNAME)),
+             "neither arm's tree swap dooms the other's files"
     end
   end
 
   def test_fetch_aborts_on_a_sha_pin_mismatch_with_the_tree_untouched
-    body = stub_zip_body
-    stub_request(:get, ZIP_URL).to_return(status: 200, body: body)
+    stub_artifacts(stub_zip_body, stub_cora_zip_body)
     Dir.mktmpdir do |workdir|
       error = assert_raises(Nabu::FetchError) { Nabu::Adapters::Rem.new.fetch(workdir) }
       assert_match(/sha256 pin/, error.message)
@@ -239,8 +361,19 @@ class RemTest < Minitest::Test
     end
   end
 
+  def test_a_coraxml_pin_miss_aborts_with_the_tree_untouched
+    tei = stub_zip_body
+    stub_artifacts(tei, stub_cora_zip_body)
+    Dir.mktmpdir do |workdir|
+      error = assert_raises(Nabu::FetchError) { Nabu::Adapters::Rem.new(pin: sha(tei)).fetch(workdir) }
+      assert_match(/ReM-v2\.1_coraxml\.zip.*sha256 pin/, error.message)
+      assert_empty Dir.children(workdir), "both arms verify BEFORE either tree mutates"
+    end
+  end
+
   def test_fetch_wraps_http_failure_in_fetch_error
     stub_request(:get, ZIP_URL).to_return(status: 500)
+    stub_request(:get, CORA_URL).to_return(status: 500)
     Dir.mktmpdir do |workdir|
       assert_raises(Nabu::FetchError) { Nabu::Adapters::Rem.new.fetch(workdir) }
     end
@@ -248,13 +381,13 @@ class RemTest < Minitest::Test
 
   # --- remote-health probe shape ------------------------------------------------
 
-  def test_probe_heads_the_zenodo_artifact_with_no_metadata_endpoint
+  def test_probe_heads_both_zenodo_artifacts_with_no_metadata_endpoint
     assert_equal :http_zip, Nabu::Adapters::Rem.remote_probe_strategy
     targets = Nabu::Adapters::Rem.http_probe_targets
-    assert_equal 1, targets.size
-    assert_equal ZIP_URL, targets[0].zip_url
-    assert_nil targets[0].metadata_url, "the license lives in-file and on the record page"
-    assert_equal Nabu::ZipFetch::STATE_FILE, targets[0].state_file
+    assert_equal [ZIP_URL, CORA_URL], targets.map(&:zip_url)
+    assert(targets.all? { |t| t.metadata_url.nil? }, "the license lives in-file and on the record page")
+    assert_equal ["", "coraxml"], targets.map(&:state_subdir)
+    assert(targets.all? { |t| t.state_file == Nabu::ZipFetch::STATE_FILE })
   end
 
   # --- registry round-trip ------------------------------------------------------
@@ -275,6 +408,28 @@ class RemTest < Minitest::Test
     ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
     refute_nil ref, "expected discover to yield #{urn}"
     adapter.parse(ref)
+  end
+
+  def sha(body)
+    Digest::SHA256.hexdigest(body)
+  end
+
+  def stub_artifacts(tei, cora)
+    headers = { "Content-Type" => "application/zip", "Last-Modified" => "Mon, 28 Oct 2024 12:00:00 GMT" }
+    stub_request(:get, ZIP_URL).to_return(status: 200, body: tei, headers: headers)
+    stub_request(:get, CORA_URL).to_return(status: 200, body: cora, headers: headers)
+  end
+
+  # Zip the checked-in CorA-XML members under the upstream layout
+  # (ReM-v2.1_coraxml/cora-xml/M*.xml + README).
+  def stub_cora_zip_body
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(File.join(FIXTURES, "coraxml"), File.join(dir, "ReM-v2.1_coraxml"))
+      File.write(File.join(dir, "ReM-v2.1_coraxml", "README"), "Reference Corpus of Middle High German\n")
+      zip_path = File.join(dir, "cora.zip")
+      Nabu::Shell.run("zip", "-q", "-r", zip_path, "ReM-v2.1_coraxml", chdir: dir)
+      return File.binread(zip_path)
+    end
   end
 
   # Zip the checked-in fixtures under the upstream layout

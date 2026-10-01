@@ -42,6 +42,41 @@ verified):
 | `M242.xml` | 44,148 | *Wiener Notker* | **Two-column codex**: `<cb n="a"/"b" ed="1">` restarts line numbers per column (1,863 collisions in the full file) → the column joins the folio in the ref (`5ra.1`/`5rb.1`). Cut before the third primary `<pb>`. |
 | `M345.xml` | 51,528 | *Augsburger Urkunden* | **Entry-wise restarts**: `<lb n="1" ed="1">` recurs with NO container element (calendar-style entries) → residual collisions take the house `:b2` positional disambiguator. Cut before the third restart, keeping two colliding runs. |
 
+## The CorA-XML sibling zip (pos/msd)
+
+Two whole members of the record's **CorA-XML** serialisation, at the
+canonical layout the adapter's second fetch arm materializes
+(`coraxml/cora-xml/M*.xml` — the zip's single top dir strips):
+
+- **Retrieved:** 2026-10-01, from the same **Zenodo record 13982324**.
+- **Upstream artifact:** `ReM-v2.1_coraxml.zip`,
+  `https://zenodo.org/api/records/13982324/files/ReM-v2.1_coraxml.zip/content`,
+  110,668,767 B, sha256
+  `bfe5179db48c1d14d65c088939d7b09e266e1e60af0240090c5a1d779d01b291` (Zenodo
+  md5 `1bb74c17a10c665fde98504bb8c858aa` matches). Top dir
+  `ReM-v2.1_coraxml/` holding `README` (the same CC BY-SA 4.0 text as the
+  TEI zip's) + `cora-xml/` (406 `M*.xml` + `cora-xml.dtd`). The full zip was
+  fetched to a scratch dir and is **not** committed.
+
+| File | Bytes | Kept |
+|---|---|---|
+| `coraxml/cora-xml/M058.xml` | 11,678 | **whole** — the M058 TEI fixture's sibling (22 tokens, 23 tok_anno) |
+| `coraxml/cora-xml/M218B.xml` | 17,346 | **whole** — the M218B TEI fixture's sibling |
+
+M242/M345 deliberately have **no** sibling fixture: they pin the per-document
+absent-sibling path (today's canonical state).
+
+Structure (`<!DOCTYPE text SYSTEM "cora-xml.dtd">`, the standard CorA-XML
+export): `<text id>` → an **element** `<header>` (`<title>`, `<time>13,1</time>`,
+`<place>`, `<language-area>` … — unlike ReF/ReN's free-text header) →
+`<layoutinfo>` → `<token id="t5"><tok_dipl …/><tok_anno id="t5_m1" utf ascii>`
+with `@tag`-valued children `norm lemma lemma_gen lemma_idmwb pos pos_gen
+infl inflClass inflClass_gen punc token_type`. **The tok_anno ids are the TEI
+`<w>`/`<pc>` xml:ids** (censused over all 406 texts: identical sequences,
+2,579,276 of 2,579,276) — the adapter's join key. `pos` is on every tok_anno;
+`infl` (the morphological feature string, `"--"` = null) on every non-punctuation
+one.
+
 ## Structure notes (for the P40-5 parser)
 
 - TEI P5 `version="4.6.0"`, namespace `http://www.tei-c.org/ns/1.0`; a full

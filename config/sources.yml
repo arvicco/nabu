@@ -3702,8 +3702,9 @@ ref:
 # P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
 # ~2M word forms of manually annotated MHG — the first cora-tei registrant
 # (ReA/ReN ride the family when their license replies land, backlog
-# asked by email 2026-07-22). One immutable Zenodo artifact (record 13982324,
-# ReM-v2.1_tei.zip, hard sha256 pin — the iecor mold) → manual. CC BY-SA
+# asked by email 2026-07-22). Two immutable Zenodo artifacts (record 13982324,
+# ReM-v2.1_tei.zip + the ReM-v2.1_coraxml.zip pos/msd sibling, hard sha256
+# pins — the iecor mold) → manual. CC BY-SA
 # 4.0 (in-file <licence>, zip README and Zenodo record agree; parse
 # re-verifies per file and quarantines drift).
 rem:
@@ -3740,13 +3741,15 @@ ren:
   # CorA-XML headers class as niederrheinisch carry metadata
   # upstream_language (censused list in the adapter — upstream couples
   # the lanes, no dum split invented). Dating/localization live ONLY in
-  # the CorA-XML sibling's headers — documented follow-up, the inverse of
-  # ReM's pos/msd gap. LICENSE: CC BY 4.0 on the deposit record itself
-  # (verified 2026-07-25; no in-file licence exists) → attribution; cite
-  # record + DOI. Fetch: ONE versioned-immutable artifact via ZipFetch
-  # (302 → signed S3, RedirectFollow; single top dir strips), hard sha256
-  # pin checked between download and any tree mutation (the rem/iecor
-  # mold). A future 1.2 is a new record version: owner re-pins → manual.
+  # the CorA-XML sibling's headers — fetched as a second arm
+  # (CorAXML_1.1.zip → coraxml/), riding metadata date/place/cora_header
+  # (MetadataDates :structured). LICENSE: CC BY 4.0 on the deposit record
+  # itself (verified 2026-07-25; no in-file licence exists) → attribution;
+  # cite record + DOI. Fetch: TWO versioned-immutable artifacts via
+  # ZipFetch (302 → signed S3, RedirectFollow; single top dirs strip),
+  # both hard sha256 pins checked between download and any tree mutation
+  # (the rem/iecor mold). A future 1.2 is a new record version: owner
+  # re-pins → manual.
   sync_policy: manual
 
 riig:

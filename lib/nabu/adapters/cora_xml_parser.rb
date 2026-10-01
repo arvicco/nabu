@@ -7,9 +7,11 @@ module Nabu
     # Streaming parser for the cora-xml family (P80-5): the RAW CorA-XML
     # export of the CorA annotation tool (Bollmann et al.) used by the
     # Bochum/Halle reference-corpus projects. First registrant: ReF (Early
-    # New High German, ref-mlu + ref-rub subcorpora); the ReM/ReN CorA-XML
-    # sibling zips (ReM's pos/msd gap, ReN's dating gap — both documented
-    # at their adapters) are natural future registrants. Censused from the
+    # New High German, ref-mlu + ref-rub subcorpora). The ReM/ReN CorA-XML
+    # sibling zips ride two narrow seams instead of the full body walk:
+    # #anno_tags (ReM's pos/msd join onto its TEI tokens) and #header with
+    # a dialect key set (ReN's dating/localization header — documented at
+    # each adapter). Censused from the
     # WHOLE ReF v1.0.2 deposit (190 files, 3,107,196 tokens — never
     # invented); fixtures are four structural trims of real texts.
     #
@@ -133,7 +135,10 @@ module Nabu
                          Nokogiri::XML::Reader::TYPE_SIGNIFICANT_WHITESPACE].freeze
 
       # Peek one file's identity + header fields; stops at </header>.
-      def header(path)
+      # +keys+ is the dialect's closed header key set (ReF's by default;
+      # the ReN sibling zip carries its own censused 43 — Ren::
+      # CORA_HEADER_KEYS).
+      def header(path, keys: HEADER_KEYS)
         walk = { sigle: nil, name: nil, in_header: false, buffer: +"" }
         each_node(path) do |node|
           case node.node_type
@@ -150,7 +155,29 @@ module Nabu
             walk[:buffer] << node.value if walk[:in_header]
           end
         end
-        Header.new(sigle: walk[:sigle], name: walk[:name], fields: header_fields(walk[:buffer]))
+        Header.new(sigle: walk[:sigle], name: walk[:name], fields: header_fields(walk[:buffer], keys))
+      end
+
+      # The sibling-zip join seam (the ReM pos/msd lane): tok_anno id →
+      # { child element name → @tag } for the requested +names+, in
+      # document order, values verbatim (null placeholders included — the
+      # null policy is the caller's). A streaming pass with no layout
+      # resolution, so it costs one read of the file.
+      def anno_tags(path, names:)
+        tags = {}
+        current = nil
+        each_node(path) do |node|
+          next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
+
+          if node.name == "tok_anno"
+            current = tags[node.attribute("id")] = {}
+          elsif current && names.include?(node.name)
+            current[node.name] = node.attribute("tag")
+          elsif node.name == "token"
+            current = nil
+          end
+        end
+        tags
       end
 
       # Read one file's body into lines + the censuses.
@@ -174,12 +201,12 @@ module Nabu
       # — value text with a colon, a wrapped line — continues the current
       # field). Null placeholders drop; values stay verbatim otherwise
       # (inner colons, literal \n escapes).
-      def header_fields(text)
+      def header_fields(text, keys)
         fields = {}
         current = nil
         text.each_line(chomp: true) do |line|
           key, _, rest = line.partition(":")
-          if HEADER_KEYS.include?(key)
+          if keys.include?(key)
             current = key
             fields[current] = rest.strip
           elsif current && !line.strip.empty?

@@ -218,8 +218,12 @@ sources:
   ren:
     kind: {posture: unclassified}
     lect: {posture: identity, note: gml IS Middle Low German}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: dated, note: "the CorAXML_1.1.zip sibling's date_ReN (clean
+        parses) with upstream's century-half time grid behind prose datings —
+        the grid is on all 235 headers; MetadataDates :structured"}
+    places: {posture: named, note: "the CorA header place (80 of 235 docs once
+        the explicit 'unbekannt' sentinel is excluded) rides the default
+        place key verbatim"}
     script: {posture: implied}
   bfm:
     kind: {posture: unclassified}
