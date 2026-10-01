@@ -665,6 +665,33 @@ class SyncRunnerTest < Minitest::Test
     assert_nil outcome.indexed
   end
 
+  # P111-1b (the SQLITE_FULL crash): a slice refresh that died mid-way
+  # leaves the index behind the catalog, and the next idempotent re-sync's
+  # load changes nothing — the P110-1 skip would freeze the staleness in
+  # place. The fulltext file's own slice-pending marker overrides the skip,
+  # and the refresh heals the partial slice.
+  def test_idempotent_resync_reindexes_when_the_slice_is_pending
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+    BreakerAdapter.urns = %w[urn:cts:test:w1 urn:cts:test:w2]
+    runner.sync("breaker") # a real refresh — mints the slice marker
+
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      fulltext[Nabu::Store::Indexer::SLICE_REFRESHES_TABLE]
+        .where(slug: "breaker").update(finished_at: nil)
+    ensure
+      fulltext.disconnect
+    end
+
+    outcome = runner.sync("breaker")
+
+    assert_equal 2, outcome.load_report.skipped, "the load itself is still a no-op"
+    assert_equal 2, outcome.indexed,
+                 "a pending (crashed) slice must refresh despite the no-op load"
+  end
+
   # A content change keeps the reindex, of course — the skip gate must
   # never eat a real revision.
   def test_content_change_still_reindexes

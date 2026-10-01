@@ -240,7 +240,7 @@ module Nabu
       indexed =
         if index_inert?(adapter)
           nil
-        elsif skip_reindex?(adapter, load_report, lane_report)
+        elsif skip_reindex?(adapter, load_report, lane_report) && !slice_pending?(entry)
           progress&.stage("index slice: #{entry.slug} skipped — no passage content changed")
           nil
         else
@@ -471,6 +471,21 @@ module Nabu
       adapter.class.content_kind == :passages &&
         lane_report.nil? &&
         !load_report.passages_changed?
+    end
+
+    # P111-1b: a slice refresh that crashed mid-way (disk full, power loss)
+    # left the index behind the catalog while the next load changes nothing
+    # — the fulltext file's own pending marker overrides the skip, and the
+    # refresh heals the partial slice (Indexer constants note).
+    def slice_pending?(entry)
+      return false unless File.exist?(@config.fulltext_path)
+
+      fulltext = Store.connect_fulltext(@config.fulltext_path)
+      begin
+        Store::Indexer.slice_pending?(fulltext, entry.slug)
+      ensure
+        fulltext.disconnect
+      end
     end
 
     # Incrementally refresh THIS source's slice of the fulltext index from

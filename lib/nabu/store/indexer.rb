@@ -237,6 +237,29 @@ module Nabu
       DEFAULT_MERGE_SETTINGS = { "automerge" => 4, "crisismerge" => 16, "deletemerge" => 10 }.freeze
       MERGE_CHUNK_PAGES = 2_000
 
+      # == P111-1b — the transaction shape and the slice-pending marker
+      #
+      # MEASURED crash (2026-10-01, the first at-scale bulk run): the slice
+      # refresh historically wrapped ALL its work in ONE transaction, and
+      # SQLite's WAL retains every page version written inside an open
+      # transaction — the 8.9M-row cbeta slice filled ~500 GB of free disk
+      # at 11% of the insert pass (SQLITE_FULL), because a monolithic txn
+      # also blocks every auto-checkpoint. So BULK slices run with NO
+      # wrapping transaction: each statement batch autocommits (short txns
+      # let the auto-checkpoint reclaim WAL continuously) and the pass ends
+      # with an explicit TRUNCATE checkpoint. The price is atomicity — a
+      # mid-run failure leaves a PARTIAL slice — paid deliberately, because
+      # the refresh is re-entrant: delete + reinsert heals on the next run.
+      # The ordinary (small) slice keeps its single-txn atomic swap.
+      #
+      # Which is why the fulltext file itself must record an unfinished
+      # slice: a crashed refresh leaves the index behind the catalog while
+      # the next idempotent load changes NOTHING — the P110-1 skip would
+      # freeze the staleness in place. slice_refreshes marks a slug pending
+      # at refresh start and finished at the end; SyncRunner's skip gate
+      # defers to it, and a full rebuild clears it wholesale.
+      SLICE_REFRESHES_TABLE = :slice_refreshes
+
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
       # catalog (where the pristine text and annotations stay) without
@@ -401,6 +424,9 @@ module Nabu
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
+        # P111-1b: a full rebuild refreshes every slice by construction —
+        # nothing stays pending (absent table = nothing pending).
+        fulltext.drop_table?(SLICE_REFRESHES_TABLE)
         fulltext.run(CREATE_TABLE)
         create_lemma_table(fulltext)
         create_char_postings_table(fulltext)
@@ -544,10 +570,15 @@ module Nabu
         unless bulk_tables.empty?
           progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred")
         end
+        # P111-1b: a refresh entered over an unfinished marker is a HEAL —
+        # the prior run crashed mid-slice, so the lemma-frequency delta's
+        # baseline is lost (absolute re-census below instead of the delta).
+        healing = slice_pending?(fulltext, slug)
+        mark_slice_pending!(fulltext, slug)
         with_bulk_write_mode(fulltext, bulk_tables) do
           timed_sync_stage(ledger, slug, "index_slice",
                            "index slice: #{slug} (fts + lemma rows)", progress) do
-            fulltext.transaction do
+            slice_write_unit(fulltext, bulk: !bulk_tables.empty?) do
               # P42-1: snapshot this source's lemma-frequency contribution BEFORE
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
@@ -578,7 +609,14 @@ module Nabu
                 inserted += silver.rows_inserted
               end
               lemmas_changed = deleted.positive? || inserted.positive?
-              LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
+              if healing && lemmas_changed
+                # The crashed run's before-snapshot is lost — the delta would
+                # bake its drift in; re-census absolutely instead (rare path).
+                LemmaFrequencies.rebuild!(fulltext)
+              else
+                LemmaFrequencies.apply_delta(fulltext, before: before,
+                                                       after: LemmaFrequencies.snapshot(fulltext, urns))
+              end
               refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
               # P93-3: the CJK lane's slice — same drift-honest contract as
               # the trigram slice; a fulltext file predating the lane skips
@@ -650,6 +688,10 @@ module Nabu
             ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
           end
         end
+        mark_slice_finished!(fulltext, slug)
+        # The bulk pass's final reclaim — AFTER the last write, so the WAL
+        # file ends the refresh truncated, not holding the postings swaps.
+        checkpoint_wal!(fulltext) unless bulk_tables.empty?
         count
       end
 
@@ -729,6 +771,57 @@ module Nabu
         [TABLE] + (fulltext.table_exists?(CJK_TABLE) ? [CJK_TABLE] : [])
       end
 
+      # -- the slice-pending marker (P111-1b, constants note) ----------------
+
+      def create_slice_refreshes_table(fulltext)
+        fulltext.create_table?(SLICE_REFRESHES_TABLE) do
+          String :slug, primary_key: true
+          String :started_at, null: false
+          String :finished_at
+        end
+      end
+
+      def mark_slice_pending!(fulltext, slug)
+        create_slice_refreshes_table(fulltext)
+        fulltext[SLICE_REFRESHES_TABLE]
+          .insert_conflict(target: :slug,
+                           update: { started_at: Time.now.utc.iso8601, finished_at: nil })
+          .insert(slug: slug, started_at: Time.now.utc.iso8601, finished_at: nil)
+      end
+
+      def mark_slice_finished!(fulltext, slug)
+        fulltext[SLICE_REFRESHES_TABLE].where(slug: slug)
+                                       .update(finished_at: Time.now.utc.iso8601)
+      end
+
+      # Whether +slug+'s last slice refresh never finished (a crashed run —
+      # the index is behind the catalog). Absent table = nothing pending
+      # (fresh rebuild, or a pre-P111 file whose slices all completed under
+      # the old monolithic-transaction shape).
+      def slice_pending?(fulltext, slug)
+        return false unless fulltext.table_exists?(SLICE_REFRESHES_TABLE)
+
+        !fulltext[SLICE_REFRESHES_TABLE].where(slug: slug, finished_at: nil).empty?
+      end
+
+      # The slice body's transaction shape (constants note): the ordinary
+      # slice is one atomic swap; a bulk slice autocommits per statement
+      # batch (auto-checkpoint keeps the WAL bounded between batches) and
+      # TRUNCATE-checkpoints when the pass completes.
+      def slice_write_unit(fulltext, bulk:, &)
+        return fulltext.transaction(&) unless bulk
+
+        yield
+        checkpoint_wal!(fulltext)
+      end
+
+      # PRAGMA has no Sequel-dataset form — rides this file's documented
+      # raw-SQL exception (DDL/maintenance statements only). Harmless no-op
+      # on an in-memory db.
+      def checkpoint_wal!(fulltext)
+        fulltext.run("PRAGMA wal_checkpoint(TRUNCATE)")
+      end
+
       # Apply the deferred-merge settings around the block and ALWAYS
       # restore the defaults — the settings are persisted index config, so
       # an exception must not leave a never-merging index behind.
@@ -771,9 +864,13 @@ module Nabu
           before = total_changes(fulltext)
           fulltext[table].insert(table => "merge", :rank => MERGE_CHUNK_PAGES)
           chunks += 1
-          progress&.stage("fts merge: #{table} — chunk #{chunks}") if (chunks % 25).zero?
+          if (chunks % 25).zero?
+            progress&.stage("fts merge: #{table} — chunk #{chunks}")
+            checkpoint_wal!(fulltext) # merges rewrite pages too — keep the WAL bounded
+          end
           break if total_changes(fulltext) - before < 2
         end
+        checkpoint_wal!(fulltext)
         chunks
       end
 

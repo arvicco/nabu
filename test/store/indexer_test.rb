@@ -1005,6 +1005,145 @@ module Store
              "a below-threshold slice must keep the ordinary path")
     end
 
+    # -- the slice-pending marker + crash semantics (P111-1b) ----------------
+    # The live SQLITE_FULL crash (2026-10-01): a monolithic 8.9M-row slice
+    # transaction retained every written page version in the WAL and filled
+    # ~500 GB of free disk at 11% of the insert pass. Bulk mode therefore
+    # runs WITHOUT the wrapping transaction (short autocommitted batches,
+    # WAL checkpointed) — a mid-run failure leaves a PARTIAL slice — and the
+    # fulltext file itself records the unfinished slice so the next refresh
+    # heals it instead of being skipped over it.
+
+    def slice_rows = @fulltext[Nabu::Store::Indexer::SLICE_REFRESHES_TABLE]
+
+    def test_refresh_marks_its_slice_finished
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      refresh!
+
+      refute_nil slice_rows.first(slug: "s")[:finished_at]
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+    end
+
+    def test_a_crashed_slice_stays_pending_and_heals_on_the_next_refresh
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      rebuild!
+      refresh!
+
+      # Simulate the crash: the marker never finished and the slice is half
+      # written (one of the source's rows missing).
+      slice_rows.where(slug: "s").update(finished_at: nil)
+      doomed = @catalog[:passages].where(urn: "urn:d:s:2").get(:id)
+      @fulltext[:passages_fts].where(rowid: doomed).delete
+
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+      refresh!
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
+                     "the heal re-refresh restores row identity"
+      ensure
+        fresh.disconnect
+      end
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+    end
+
+    def test_rebuild_clears_pending_markers
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      refresh!
+      slice_rows.where(slug: "s").update(finished_at: nil)
+
+      rebuild!
+
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s"),
+             "a full rebuild leaves nothing pending"
+    end
+
+    # The forbidding_index_work pattern: swap one Indexer entry point for a
+    # raiser, restore after — write_char_postings runs AFTER the fts inserts
+    # inside the stage body, so it simulates a mid-slice crash.
+    def raising_char_postings
+      mod = Nabu::Store::Indexer
+      original = mod.method(:write_char_postings)
+      mod.define_singleton_method(:write_char_postings) { |*, **| raise "boom" }
+      yield
+    ensure
+      mod.define_singleton_method(:write_char_postings, original)
+    end
+
+    def test_bulk_slice_failure_persists_partial_state_and_stays_pending
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
+
+      raising_char_postings do
+        assert_raises(RuntimeError) { refresh!(bulk_threshold: 1) }
+      end
+
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s"),
+             "the crashed bulk slice reads pending"
+      assert_equal 2, fts.count,
+                   "bulk mode holds no wrapping txn — the inserts before the crash persist"
+      Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS.each do |key, value|
+        stored = merge_config(@fulltext, key)
+        assert(stored.nil? || stored.to_i == value,
+               "#{key} must be restored even through the crash")
+      end
+
+      refresh!(bulk_threshold: 1)
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext), "the re-refresh heals"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def test_ordinary_slice_failure_rolls_back_atomically
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
+
+      raising_char_postings do
+        assert_raises(RuntimeError) { refresh! }
+      end
+
+      assert_equal 1, fts.count,
+                   "the ordinary slice keeps its single-transaction atomic-swap contract"
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s"),
+             "even a rolled-back failure reads pending — the slice never refreshed"
+    end
+
+    def test_bulk_refresh_truncates_the_wal
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "ft.sqlite3")
+        disk = Nabu::Store.connect_fulltext(path)
+        begin
+          doc = make_document(urn: "urn:d:s")
+          make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+          Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: disk)
+          make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+          Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: disk, slug: "s",
+                                               bulk_threshold: 1)
+          wal = "#{path}-wal"
+          assert(!File.exist?(wal) || File.empty?(wal),
+                 "bulk mode checkpoints (TRUNCATE) — the WAL never accumulates the slice")
+        ensure
+          disk.disconnect
+        end
+      end
+    end
+
     # A LEGACY contentful passages_fts keeps the ordinary path even past the
     # threshold — the bulk recipe is designed against the contentless shape,
     # and legacy files upgrade at their next full rebuild anyway.
