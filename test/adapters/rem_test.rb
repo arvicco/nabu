@@ -130,9 +130,39 @@ class RemTest < Minitest::Test
     line = parse_urn("urn:nabu:rem:m058").find { |p| p.urn.end_with?(":100v.5") }
     grimme = line.annotations["tokens"].find { |t| t["id"] == "t5_m1" }
     assert_equal({ "id" => "t5_m1", "form" => "grínme", "norm" => "grinme", "lemma" => "grimme",
-                   "pos" => "NA", "msd" => "Dat.Sg" }, grimme,
+                   "lemma_idmwb" => "65079000", "pos" => "NA", "msd" => "Dat.Sg" }, grimme,
                  "joined on the upstream token id; CorA's <pos> and <infl> tags verbatim " \
                  "(infl rides as msd — the ReN sibling's key for the same lane)")
+  end
+
+  def test_the_lemma_lane_carries_the_coraxml_citation_form
+    tokens = parse_urn("urn:nabu:rem:m058").flat_map { |p| p.annotations["tokens"] }
+    welt = tokens.find { |t| t["id"] == "t3_m1" }
+    assert_equal({ "id" => "t3_m1", "form" => "welt", "norm" => "welt", "lemma" => "wër(e)lt",
+                   "lemma_idmwb" => "225300000", "pos" => "NA", "msd" => "Nom.Sg" }, welt,
+                 "the TEI @lemma is CorA's <norm> (\"werelt\"); the true citation form and its " \
+                 "MWB id come from the sibling")
+    diu = tokens.find { |t| t["id"] == "t2_m1" }
+    assert_equal %w[diu dër 29817000], diu.values_at("norm", "lemma", "lemma_idmwb"),
+                 "the TEI norm stays under its own key"
+    stop = tokens.find { |t| t["id"] == "t7_m1" }
+    refute stop.key?("lemma_idmwb"), "punctuation carries no lemma lane"
+  end
+
+  def test_the_citation_form_lemma_reaches_the_lemma_index
+    catalog = store_test_db
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    source = Nabu::Store::Source.create(slug: "rem", name: "ReM", adapter_class: "Nabu::Adapters::Rem",
+                                        license_class: "attribution")
+    Nabu::Store::Loader.new(db: catalog, source: source)
+                       .load_from(Nabu::Adapters::Rem.new, workdir: FIXTURES, full: true)
+    Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+    lemmas = fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
+             .where(Sequel.like(:urn, "urn:nabu:rem:m058:%")).select_map(:lemma_raw)
+    assert_includes lemmas, "wër(e)lt"
+    refute_includes lemmas, "werelt", "the normalized form no longer poses as the lemma"
+  ensure
+    fulltext&.disconnect
   end
 
   def test_coraxml_null_placeholders_never_ride
@@ -258,9 +288,16 @@ class RemTest < Minitest::Test
         assert_equal before.metadata, merged.metadata.except("cora_header", "date"), ref.id
         assert_equal before.map(&:text), merged.map(&:text), ref.id
         stripped = merged.map do |p|
-          p.annotations.merge("tokens" => p.annotations["tokens"].map { |t| t.except("pos", "msd") })
+          p.annotations.merge("tokens" => p.annotations["tokens"].map do |t|
+            t.except("pos", "msd", "lemma", "lemma_idmwb")
+          end)
         end
-        assert_equal before.map(&:annotations), stripped, ref.id
+        bare_lemmaless = before.map do |p|
+          p.annotations.merge("tokens" => p.annotations["tokens"].map { |t| t.except("lemma") })
+        end
+        assert_equal bare_lemmaless, stripped,
+                     "#{ref.id}: beyond the CorA lemma override (+ lemma_idmwb) and pos/msd, " \
+                     "every token key is the TEI's own"
       end
     end
   end
