@@ -44,7 +44,7 @@ module Nabu
     # the CorA-XML sibling zip only): without it token records are honestly
     # norm+lemma.
     #
-    # == pos/msd (the CorA-XML sibling zip)
+    # == pos/msd + the citation-form lemma (the CorA-XML sibling zip)
     #
     # ReM-v2.1_coraxml.zip is fetched as a second sha-pinned arm into the
     # declared coraxml/ materialization (coraxml/cora-xml/M<id>.xml — the
@@ -55,12 +55,21 @@ module Nabu
     # <infl @tag> — the morphological feature string, keyed "msd" like the
     # ReN sibling's TEI lane), verbatim; CorA's "--" null never rides. A
     # TEI token the sibling cannot answer is counted in metadata
-    # "coraxml_unmatched_tokens" (loud census, never a quarantine). The
-    # other CorA token lanes (pos_gen, lemma_gen, lemma_idmwb, inflClass…)
-    # are not read; the element header feeds the dating lane (below). A
-    # tree without the sibling
-    # (every canonical tree fetched before the arm existed) parses exactly
-    # as before — test-pinned.
+    # "coraxml_unmatched_tokens" (loud census, never a quarantine).
+    #
+    # The LEMMA lane switches to the sibling too (owner ruling 2026-10-06).
+    # The 2026-10-01 census found the TEI export's attributes shifted one
+    # layer: TEI @norm = CorA's ascii diplomatic form ("welt") and TEI
+    # @lemma = CorA's <norm> normalized form ("werelt") — so before the
+    # switch the gmh "gold lemma" pool held normalized word forms, not
+    # lemmas. With the sibling, "lemma" carries CorA's <lemma> citation
+    # form ("wër(e)lt", "dër") and "lemma_idmwb" its Mittelhochdeutsches
+    # Wörterbuch id ("225300000") verbatim; the TEI-derived "norm" stays
+    # under its own key. The other CorA token lanes (pos_gen, lemma_gen,
+    # inflClass…) are not read; the element header feeds the dating lane
+    # (below). A tree without the sibling (every canonical tree fetched
+    # before the arm existed) keeps the TEI fallback and parses exactly as
+    # before — test-pinned.
     #
     # == Dating/localization (the timeline verdict)
     #
@@ -123,8 +132,10 @@ module Nabu
       CORA_DIRNAME = "coraxml"
 
       # CorA tok_anno children merged into the TEI token records (CorA
-      # element → record key).
-      CORA_TAGS = { "pos" => "pos", "infl" => "msd" }.freeze
+      # element → record key); "lemma" OVERRIDES the TEI @lemma (the
+      # normalized form — class note).
+      CORA_TAGS = { "pos" => "pos", "infl" => "msd", "lemma" => "lemma",
+                    "lemma_idmwb" => "lemma_idmwb" }.freeze
 
       # CorA's null placeholder ("--"), never a value.
       CORA_NULL = /\A-+\z/
