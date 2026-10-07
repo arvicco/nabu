@@ -334,3 +334,25 @@ same records parsed from the full upstream tables.
   body), **460** (iNmaʔ, -iN- 'buy, purchase.': PRNUM=2 ⇄ kiret #2
   LIMNUM=460) — G. van Driem's Limbu dictionary in the original Leiden
   transcription.
+
+### The .var frame census (found at the first live parse-only sync)
+
+Every `.var` file is a heap of FRAMED payloads: uint32 owner NUMBER +
+the tag byte `0x12`, then the text (stale payloads of edited records
+stay in the heap). A live payload never contains a frame byte (`0x12`)
+or NUL — censused over all 47 var-backed tables of the eight packages,
+exactly THREE pointer cells break the frame, all in the Altaic branch
+bases, and all three are kept byte-verbatim here:
+
+- `altaic/tunget.dbf`/`.var` — record **42** (*xol-sa 'fish'): the SOL
+  pointer lands ON a frame tag and spans 37 bytes across two
+  neighbouring frames (a stale copy of the REFERENCE text, a stale
+  `*liamba-`, record 43's frame), NULs inside — the NULs reached the
+  catalog INSERT and quarantined the record at the live sync; record
+  **1821** (*kīran 'eagle'): the MAN pointer lands on the UDE payload's
+  frame tag and spans 1,816 bytes of following frames. Both cells read
+  as U+FFFD (no payload starts there); the records land whole and the
+  damaged Manchu cell mints no mnc row.
+- `altaic/monget.dbf`/`.var` — record **2161** (*čubali 'ant'): the MMO
+  pointer starts cleanly and runs one NUL past its payload — it ends at
+  the frame byte, `čubali (MA 136)`, and mints its xng row.
