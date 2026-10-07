@@ -10451,8 +10451,19 @@ module Nabu
         Nabu::ProgressReporter.new(
           on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
           on_load_tick: load_tick(tty, state),
-          on_stage: stage_tick(tty, state)
+          on_stage: stage_tick(tty, state),
+          on_note: progress_note(state)
         )
+      end
+
+      # A durable header/tally line (owner UX rule 2026-10-07 — the
+      # incremental verdict sweep's ETA header and closing tally): closes
+      # any open stage first, then prints on tty and non-tty alike.
+      def progress_note(state)
+        lambda do |line|
+          close_stage(state)
+          $stderr.tty? ? $stderr.print("\r\e[K  #{line}\n") : warn("  #{line}")
+        end
       end
 
       # Owner feedback (2026-07-18): a long rebuild must name the source it
@@ -11453,7 +11464,11 @@ module Nabu
         incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry,
                                                    trust_stages: options[:trust_stages],
                                                    trust_derivations: options[:trust_derivations])
-        return print_incremental_plan(incremental.plan) if options[:dry_run]
+        if options[:dry_run]
+          plan = incremental.plan(progress: progress_reporter)
+          finish_progress
+          return print_incremental_plan(plan)
+        end
 
         result = incremental.run(progress: progress_reporter)
         finish_progress

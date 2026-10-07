@@ -82,14 +82,28 @@ module Nabu
       def warnings = outcomes.select(&:warning?)
     end
 
+    # One swept source (owner UX rule 2026-10-07): its verdict plus the
+    # fingerprint/stamp a run acts on (both nil for a :skip).
+    Swept = Data.define(:entry, :verdict, :fingerprint, :stamp)
+
+    # The verdict sweep's ledger key — its wall time lands in stage_timings
+    # (Store::StageTimings) so the next sweep announces a Nabu::Eta. Corpus
+    # scope: one number for the whole pass, beside the rebuild's other
+    # corpus stages (timeline, facets, …).
+    SWEEP_TIMING = { kind: "rebuild", scope: "corpus", stage: "verdict_sweep" }.freeze
+
     # Describe the clean/dirty verdict per source without touching anything.
-    def plan
+    # +progress+ hears the same warm/sweep announcements a run does (the
+    # dry run pays the same sweep); the ledger is READ for the estimate but
+    # never written — a dry run records nothing.
+    def plan(progress: nil)
       refusal = refusal_reason
       return Plan.new(db_path: db_path, db_exists: File.exist?(db_path), refusal: refusal, verdicts: []) if refusal
 
       with_readonly_catalog do |db|
-        verdicts = @registry.each_source.map { |entry| verdict_for(db, entry) }
-        Plan.new(db_path: db_path, db_exists: true, refusal: nil, verdicts: verdicts,
+        warm_code_identities(progress)
+        swept = with_readonly_ledger { |ledger| sweep(db, progress, ledger: ledger) }
+        Plan.new(db_path: db_path, db_exists: true, refusal: nil, verdicts: swept.map(&:verdict),
                  builders_dirty: builders_dirty?(db), index_dirty: index_core_dirty?(db))
       end
     end
@@ -133,7 +147,7 @@ module Nabu
       indexed = nil
       # P89-1: pin code identities before any replay (see Rebuild#run) —
       # the last verdict of a long dirty run happens hours after load time.
-      @registry.each_source { |entry| fingerprints.warm(entry) }
+      warm_code_identities(progress)
       # The trust horizon (№R-54 (b)): the ELDEST per-source stamp, not each
       # stamp's own time. A long run stamps late from disk bytes while its
       # rows come from code loaded at start — a closure file committed
@@ -149,14 +163,22 @@ module Nabu
       # skipped as subsumed work). Catalog stamps are untouched: the carve
       # exists so an index-only edit never prices a catalog replay.
       index_dirty = index_core_dirty?(db)
-      @registry.each_source do |entry|
-        unless replayable?(entry)
+      # Owner UX rule 2026-10-07: every verdict is computed UP FRONT, each
+      # source announced as its tree is fingerprinted, the tally closing
+      # the sweep — the minutes of hashing are no longer silent, and the
+      # job's size is known before the first replay.
+      sweep(db, progress, ledger: ledger, record: true).each do |item|
+        entry = item.entry
+        if item.verdict.state == :skip
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
           next
         end
-        fingerprint = fingerprint_for(db, entry)
-        stamp = Store::DerivationStamp.fetch(db, entry.slug)
-        if fingerprint.drift_against(stamp).nil?
+        # A tree an earlier replay may have WRITTEN re-verifies at its turn —
+        # the verdict the pre-sweep interleaved loop computed.
+        item = swept_source(db, entry) if outcomes.any? && replay_written?(entry)
+        fingerprint = item.fingerprint
+        stamp = item.stamp
+        if item.verdict.state == :clean
           cleans << Clean.new(slug: entry.slug, stamp_short: fingerprint.short)
           next
         end
@@ -322,11 +344,68 @@ module Nabu
       end
     end
 
-    def verdict_for(db, entry)
-      return Verdict.new(slug: entry.slug, state: :skip, reason: :no_canonical) unless replayable?(entry)
+    # P89-1 + the owner UX rule (2026-10-07): pin every source's code
+    # identity, announced — the warm pass was a silent prelude.
+    def warm_code_identities(progress)
+      sources = @registry.each_source.to_a
+      progress&.stage("pinning code identities (#{sources.size} sources)")
+      sources.each { |entry| fingerprints.warm(entry) }
+    end
 
+    # The verdict sweep, announced (owner UX rule 2026-10-07): a header
+    # carrying the ETA (Nabu::Eta — the honest "first run — no estimate"
+    # until a run has recorded one), one stage per fingerprinted tree (a
+    # non-git tree is sha256-hashed file by file — the owner must see which
+    # tree the minutes go into; the CLI closes each with its elapsed), and
+    # a closing tally. +record+ appends the sweep's wall time to the
+    # ledger's stage_timings (a real run; a dry run only reads). Verdicts
+    # are exactly #verdict_from's — the announcing changes none.
+    def sweep(db, progress, ledger:, record: false)
+      entries = @registry.each_source.to_a
+      total = entries.count { |entry| replayable?(entry) }
+      progress&.note("verdict sweep: fingerprinting #{total} canonical trees — " \
+                     "#{Nabu::Eta.for(ledger, **SWEEP_TIMING).render}")
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      done = 0
+      swept = entries.map do |entry|
+        next skipped(entry) unless replayable?(entry)
+
+        done += 1
+        progress&.stage("verdict #{entry.slug} (#{done}/#{total})")
+        swept_source(db, entry)
+      end
+      seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+      Store::StageTimings.record!(ledger, **SWEEP_TIMING, seconds: seconds, rows: total) if record
+      progress&.note(tally(swept, seconds))
+      swept
+    end
+
+    def skipped(entry)
+      Swept.new(entry: entry, verdict: Verdict.new(slug: entry.slug, state: :skip, reason: :no_canonical),
+                fingerprint: nil, stamp: nil)
+    end
+
+    def swept_source(db, entry)
       fingerprint = fingerprint_for(db, entry)
       stamp = Store::DerivationStamp.fetch(db, entry.slug)
+      Swept.new(entry: entry, verdict: verdict_from(entry, fingerprint, stamp),
+                fingerprint: fingerprint, stamp: stamp)
+    end
+
+    # "verdicts: 150 clean · 40 dirty · 8 skipped (3m12s)"
+    def tally(swept, seconds)
+      counts = swept.map { |item| item.verdict.state }.tally
+      "verdicts: #{counts.fetch(:clean, 0)} clean · #{counts.fetch(:dirty, 0)} dirty · " \
+        "#{counts.fetch(:skip, 0)} skipped (#{Nabu::Eta.format_seconds(seconds)})"
+    end
+
+    # The one tree a replay may WRITE: a dictionary's language-notes
+    # accretion lands in the local-language shelf (Rebuild's sanctioned
+    # P19-1 exception). The sweep runs before any replay, so this shelf
+    # re-verifies once a replay has run (see #run).
+    def replay_written?(entry) = entry.slug == LanguageShelf::SLUG
+
+    def verdict_from(entry, fingerprint, stamp)
       drift = fingerprint.drift_against(stamp)
       return Verdict.new(slug: entry.slug, state: :clean, stamp_short: fingerprint.short) if drift.nil?
 
@@ -377,6 +456,17 @@ module Nabu
       yield db
     ensure
       db&.disconnect
+    end
+
+    # The ledger, read-only, for the dry run's estimate — nil when the file
+    # is absent (Eta reads nil as "first run — no estimate").
+    def with_readonly_ledger
+      return yield(nil) unless File.exist?(history_path)
+
+      ledger = Store.connect(history_path, readonly: true)
+      yield ledger
+    ensure
+      ledger&.disconnect
     end
 
     def applied_migration_level(db)

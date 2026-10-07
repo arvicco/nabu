@@ -17,11 +17,16 @@ module Nabu
   #   Q34) is a Nabu::Eta estimate (Estimate or Eta::NONE) when the caller
   #   consulted the stage_timings history, nil when it didn't — the CLI
   #   renders an estimate line only for a non-nil eta.
+  # - +on_note+: called with one finished line to print DURABLY (owner UX
+  #   rule 2026-10-07) — a header or tally that is not a unit of work and
+  #   so must not open a stage (a stage would close with a bogus elapsed
+  #   tail). The incremental rebuild's verdict-sweep header and closing
+  #   tally ride it; the CLI closes any open stage first.
   #
   # All fields are nil-safe: a reporter with nil callables is a no-op, so
   # callers can hand one down unconditionally.
-  ProgressReporter = Data.define(:on_fetch_line, :on_load_tick, :on_stage) do
-    def initialize(on_fetch_line: nil, on_load_tick: nil, on_stage: nil)
+  ProgressReporter = Data.define(:on_fetch_line, :on_load_tick, :on_stage, :on_note) do
+    def initialize(on_fetch_line: nil, on_load_tick: nil, on_stage: nil, on_note: nil)
       super
     end
 
@@ -30,5 +35,7 @@ module Nabu
     def load_tick(processed, errored) = on_load_tick&.call(processed, errored)
 
     def stage(label, eta: nil) = on_stage&.call(label, eta)
+
+    def note(line) = on_note&.call(line)
   end
 end
