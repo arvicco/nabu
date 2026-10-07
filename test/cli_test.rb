@@ -548,10 +548,10 @@ class CLITest < Minitest::Test
     with_starling_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[etym зззз]) }
       assert_nil status
-      assert_match(/the crosswalk covers bat-pro, ccn-pro, ccs-pro, dra-pro, gem-pro, ine-pro, /, out,
+      assert_match(/the crosswalk covers bat-pro, cau-lzg-pro, ccn-pro, ccs-pro, dra-pro, dra-sou-pro, /, out,
                    "db-derived enumeration — exactly the shelves with reflex rows")
-      assert_match(/itl-pro, jpx-pro, qfa-chk-pro, qfa-yen-pro, sit-pro\b/, out,
-                   "P104-3: the new minting shelves joined; tut-pro/qfa-cka-pro mint none and must not appear")
+      assert_match(/qfa-chk-pro, qfa-yen-pro, sit-kir-pro, sit-pro, trk-pro, tuw-pro, xgn-pro\b/, out,
+                   "P104-3/P114: the new minting shelves joined; tut-pro/qfa-cka-pro mint none and must not appear")
       refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, out, "the hardcoded enumeration is gone")
       assert_match(/'\*form'/, out, "the quoting hint stays")
     end
