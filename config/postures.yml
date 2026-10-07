@@ -834,6 +834,21 @@ sources:
     script: {posture: qualified, note: "per-passage `alphabet` annotation (italic/latin/greek)
         from the edition's original-script lanes; the text lane is the unified Latin
         transliteration (Latn)"}
+  titus-tocharian-a:
+    kind: {posture: unclassified}
+    # P114-1a: `xto` is a real nabu-lects anchor (the bare code is the
+    # claim). The bilinguals' Sanskrit sub-lines claim bare `san` per
+    # passage from their own lane — no stage refinement (Buddhist Hybrid
+    # vs Classical) is attempted.
+    lect: {posture: identity, note: xto whole-source; the bilingual pages' Sanskrit sub-lines
+        ride bare san per passage}
+    dating: {posture: undatable, note: "the pages carry no dating — the THT catalogue block names
+        signature/number/condition only; paleographic dating is a future overlay"}
+    places: {posture: named, note: "the Berlin find signature's site siglum → findspot (Š Šorčuq,
+        D Qočo) via the adapter's SITE_SIGLA, declared coarse — other sigla mint nothing, the raw
+        signature rides metadata; gazetteer linking via nabu-places is a future look"}
+    script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
+        transliteration rides the `syllabic` annotation"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
