@@ -344,9 +344,14 @@ distinguishes what a row IS: a corpus that mints catalog rows, an
 owner-authored local memory shelf, or machinery like `osl` (the Oracc
 Sign List behind `nabu signs`), `nabu-data` (Nabu's own published
 datasets, consumed back) and `pedecerto`/`bridging` that fetches
-reference data but mints no documents of its own). All 151 corpus
-sources are **wired** — adapter built and first sync verified
-(2026-09-02); the newest arrivals are the **Southeast Asia seven**
+reference data but mints no documents of its own). All corpus
+sources are **wired** — adapter built and first sync verified —
+except the two newest, the grant-gated **TITUS Tocharian A and
+Pahlavi books** (adapters READY, each awaiting its owner-fired
+one-time retrieval under a personal grant, 2026-10-06); recent
+arrivals before them include the 28 **StarLing branch etymology
+bases** (42k entries across the Altaic, North Caucasian, Dravidian
+and Sino-Tibetan comparative shelves) and the **Southeast Asia seven**
 (the five DHARMA corpora, the Bagan inscriptions, and the Old
 Javanese Wordnet — the desk opened whole in one phase), a day behind
 `okhc` — the historical slice of
