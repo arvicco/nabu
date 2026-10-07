@@ -101,18 +101,23 @@ module Nabu
     #
     # == What is deliberately NOT ingested (journaled, 02-sources row 88)
     #
-    # - The ML-derived ETCBC extras — every *_etcbc feature and the v2.0
-    #   clause/phrase nodes (125 clauses / 315 phrases, ALL in 1Qisaa) —
-    #   are SILVER (about.md: models "trained on BHSA... applied to the
-    #   DSS. This is experimental"): skipped entirely, the goo300k/imp
-    #   discipline (label or omit, never pass off as gold).
+    # The ETCBC-harmonized *_etcbc layer DOES ride tokens (verbatim, under
+    # upstream's own suffixed names — see ETCBC_TOKEN_FEATURES), including
+    # lex_etcbc, the DSS→BHSA lexeme crosswalk; its silver ML members are
+    # labeled by name and header, never merged into Abegg's gold features
+    # (the goo300k/imp discipline: label or omit, never pass off as gold).
+    # The full per-feature census of what does not ride is
+    # DECLINED_TOKEN_FEATURES; the headline skips:
+    #
+    # - The v2.0 clause/phrase nodes (125 clauses / 315 phrases, ALL in
+    #   1Qisaa, + their "nr" feature) — silver ML constituents, not spans.
     # - The lex-NODE lane (10,450 lexeme nodes + occ edges) — tokens carry
     #   the word-grain lex verbatim; a lexeme shelf is a future packet.
     #   OSHB join measured at fixture time by consonantal folding: 301 of
     #   372 foldable distinct fixture lexemes (80.9%) match an augmented-
     #   Strong headword — measured, reported, not wired.
-    # - The transliteration lanes (*e/*o variants, g_cons, srcLn, nr,
-    #   sim, note_etcbc) — the Unicode main variants are the surface.
+    # - The transliteration lanes (*e/*o variants, glex*, srcLn, sim) — the
+    #   Unicode main variants are the surface.
     # - No timeline: tf/2.0 carries NO period/dating feature (censused —
     #   "script" is paleohebrew/greekcapital, a script fact riding tokens,
     #   not a date). The isicily verdict: nothing structured to extract.
@@ -154,6 +159,72 @@ module Nabu
       # Word-grain features riding tokens verbatim, key = feature name.
       TOKEN_FEATURES = %w[type lex sp cl ps gn nu st vs vt md morpho script merr intl
                           biblical book chapter verse halfverse].freeze
+
+      # The ETCBC-harmonized layer, riding tokens verbatim under upstream's
+      # own names — the _etcbc suffix keeps every value distinguishable from
+      # Abegg's (sp_etcbc never overwrites sp). Two provenance tiers, both
+      # labeled by their .tf headers, neither passed off as Abegg's:
+      #   - BHSA-convention re-encodings of the data ("additions based on
+      #     BHSA"): lex_etcbc — the DSS→BHSA LEXEME CROSSWALK, in BHSA's own
+      #     lex id space ("<FH[", "B", "HLK["), so a DSS token joins bhsa
+      #     token "lex" by plain string equality — lex_utf8_etcbc, book_etcbc
+      #     (BHSA book names), lang_etcbc (Hebrew/Aramaic, every word), and
+      #     the g_*_etcbc / uvf_etcbc morpheme slots;
+      #   - SILVER machine-learning predictions ("additions based on BHSA
+      #     and machine learning" — about.md: "This is experimental"):
+      #     sp/gn/nu/ps/vs/vt_etcbc.
+      # 11Q19 alone (12,808 words) additionally carries morph_etcbc + g_cons
+      # (the full BHSA-convention parse, "Automatic generated morphological
+      # parsing corrected by Thijs Amersfoort") and note_etcbc — 37 short
+      # annotator working notes in Dutch (max 297 bytes; ~2 KB corpus-wide,
+      # sentence- not paragraph-scale, so it rides rather than being cut).
+      ETCBC_TOKEN_FEATURES = %w[
+        lex_etcbc lex_utf8_etcbc g_lex_etcbc book_etcbc lang_etcbc
+        sp_etcbc gn_etcbc nu_etcbc ps_etcbc vs_etcbc vt_etcbc
+        g_nme_etcbc g_pfm_etcbc g_prs_etcbc g_vbe_etcbc g_vbs_etcbc uvf_etcbc
+        morph_etcbc g_cons note_etcbc
+      ].freeze
+
+      # DECLARED COARSENESS — every tf/2.0 feature that does NOT ride a
+      # token under its own name, with why.
+      DECLINED_TOKEN_FEATURES = {
+        "glyph" => "rides as \"form\" (word grain); sign grain feeds the passage text",
+        "nr" => "clause/phrase grain — the v2.0 silver ML constituents (125/315, all 1Qisaa) are not " \
+                "ingested as spans",
+        "glyphe" => "transliteration variant of glyph — the Unicode main variant is the surface",
+        "glypho" => "source-transliteration variant of glyph",
+        "fulle" => "transliteration variant of full",
+        "fullo" => "source-transliteration variant of full",
+        "punce" => "transliteration variant of punc",
+        "punco" => "source-transliteration variant of punc",
+        "lexe" => "transliteration variant of lex",
+        "lexo" => "source-transliteration variant of lex",
+        "glex" => "lex with non-letters stripped — derivable from lex",
+        "glexe" => "transliteration variant of glex",
+        "glexo" => "source-transliteration variant of glex",
+        "cl2" => "second-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "gn2" => "second-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "gn3" => "third-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "nu2" => "second-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "nu3" => "third-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "ps2" => "second-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "ps3" => "third-morpheme decomposition — the whole Abegg tag rides as morpho",
+        "srcLn" => "source-file line number — conversion provenance, not text data",
+        "alt" => "sign grain — rides as the alt clusters + the token's full bytes",
+        "cor" => "sign grain — rides as the cor clusters + the token's full bytes",
+        "rec" => "sign grain — rides as the rec clusters + the token's full bytes",
+        "rem" => "sign grain — rides as the rem clusters + the token's full bytes",
+        "unc" => "sign grain — per-sign degree flags ride the token's full bytes",
+        "vac" => "sign grain — rides as the vac clusters",
+        "scroll" => "section grain — mints the document",
+        "fragment" => "section grain — mints the passage urn",
+        "line" => "section grain — mints the passage urn",
+        "occ" => "relational EDGE (lexeme → occurrences) — the lex-node lane is not ingested",
+        "sim" => "@edgeValues line-similarity EDGE — refused by the text-fabric family",
+        "oslots" => "structural EDGE — read for slot extents, never a token value",
+        "otype" => "structural — types every node, never a token value",
+        "otext" => "@config — documents the text formats and section types"
+      }.freeze
 
       def self.manifest
         MANIFEST
@@ -275,7 +346,7 @@ module Nabu
           token[name] = value if value
         end
         token["lang"] = corpus.language_of(word.node)
-        TOKEN_FEATURES.each do |name|
+        (TOKEN_FEATURES + ETCBC_TOKEN_FEATURES).each do |name|
           value = corpus.word_feature(name, word.node)
           token[name] = value unless value.nil?
         end

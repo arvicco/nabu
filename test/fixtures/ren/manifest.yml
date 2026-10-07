@@ -31,3 +31,11 @@ files:
     url: https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1
     whole: false
     trim: structural trim of tei_1.1/anno/Reval_Schragen_1351-1500.tei (the apparatus exemplar — join="both" multi-part tokens, add/del/gap/unclear, in-token notes with nested markup, a pb+lb pair inside a token; head byte-for-byte, body cut at the </s> before pb 26r, closing tags appended); P46-5
+  - path: coraxml/ReN_anno_2021-01-06/Hamb._Uk._1301-1350.xml
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/CorAXML_1.1.zip?download=1
+    whole: false
+    trim: whole zip member CorAXML_1.1/ReN_anno_2021-01-06/Hamb._Uk._1301-1350.xml (the Hamburg TEI fixture's CorA-XML sibling — date_ReN 1329, place Hamburg), kept byte-for-byte uncut; extracted from CorAXML_1.1.zip (67,786,811 B)
+  - path: coraxml/ReN_trans_2021-01-06/Dub._Uk._1301-1350.xml
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/CorAXML_1.1.zip?download=1
+    whole: false
+    trim: whole zip member CorAXML_1.1/ReN_trans_2021-01-06/Dub._Uk._1301-1350.xml (the Duisburg TEI fixture's CorA-XML sibling — date_ReN 1345, niederrheinisch), kept byte-for-byte uncut; extracted from CorAXML_1.1.zip (67,786,811 B)
