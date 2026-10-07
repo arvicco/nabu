@@ -36,6 +36,9 @@ module Nabu
       VAR_POINTER_LENGTH = 6
       EMPTY_CELL = " " * VAR_POINTER_LENGTH
       DBASE_III = 0x03
+      FRAME_TAG = 0x12 # the .var heap's per-payload frame tag (after the uint32 owner NUMBER)
+      FRAME_BYTES = /[\x00\x12]/n
+      REPLACEMENT = "�"
 
       # One column: +name+ (upstream, e.g. "ROOT"), +type+ ("C"/"N"),
       # +length+ in record bytes, +var+ true when the cell is a var-pointer.
@@ -151,7 +154,25 @@ module Nabu
           raise Nabu::ParseError,
                 "#{@var_path}: var pointer #{offset}+#{length} reaches past the end of the file"
         end
-        StarlingText.decode(payload)
+        return REPLACEMENT if payload.getbyte(0) == FRAME_TAG
+
+        StarlingText.decode(framed_payload(payload))
+      end
+
+      # The .var file is a heap of FRAMED payloads — uint32 owner NUMBER +
+      # the 0x12 tag, then the text (stale payloads of edited records stay
+      # in the heap) — and a live payload never carries a frame byte (0x12)
+      # or NUL. A pointer that breaks the frame is upstream damage (census,
+      # all 47 var-backed tables of the eight packages: three cells, tunget
+      # #42 SOL / #1821 MAN and monget #2161 MMO): one that starts ON a
+      # frame tag addresses no payload — the honest replacement character
+      # (the past-EOF lane's shape; the run it spans is neighbouring and
+      # stale payloads, never this cell's text); one that starts cleanly and
+      # overruns ends at its first frame byte. Without this, the NULs reached
+      # the catalog INSERT and quarantined the record.
+      def framed_payload(payload)
+        cut = payload.index(FRAME_BYTES)
+        cut ? payload.byteslice(0, cut) : payload
       end
 
       def var_data
