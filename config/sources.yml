@@ -4237,6 +4237,20 @@ starling:
                    # -iranet 480 (dry-parsed at full scale). Eyeball
                    # `nabu define kakls` (balt #58 → "Baltic etymology:
                    # #1634") and `nabu define hals` (germ GOT → germet #390).
+                   # Branch-bases wave (2026-10-01 extension grant): the 28
+                   # subordinate bases of ALTAIC/CAUC/DRAV/SINTIB (already on
+                   # disk — `bin/nabu sync starling --parse-only` lands them,
+                   # no fetch) add 28 shelves: turcet 2,017 / monget 2,174 /
+                   # tunget 2,435 / koret 1,206 / nakhet 970 / aandet 1,539 /
+                   # cezet 1,108 / laket 955 / darget 924 / lezget 1,569 /
+                   # khinet 349 / abadet 817 / sdret 4,692 / telet 2,774 /
+                   # kogaet 1,509 / gndet 1,428 / gonet 1,475 / kuiet 1,377 /
+                   # konet 961 / ktet 1,665 / ndret 989 / pemet 740 / braet
+                   # 269 / kiret 994 / dumet 1,517 / kulet 1,466 / limet
+                   # 2,354 / yamet 1,974 = 42,247 entries / 91,041 reflex rows
+                   # (dry-parsed at full scale). Eyeball `nabu define '*kül'`
+                   # (turcet credit + 27 Turkic reflex rows) and `nabu etym
+                   # zun` (Lezgian → lezget #1).
   # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of

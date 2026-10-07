@@ -288,3 +288,49 @@ descriptors verbatim, only the record count rewritten; the trailing
   piet #3005), **3** (\*pawasta 'bark'), **127** (headword-less: MEANING
   nose + REF only → `#127`), and the first NUMBER-0 blank slot (file
   position 293).
+
+## The branch-bases wave (the 2026-10-01 extension grant)
+
+The 28 subordinate bases of the ALTAIC / CAUC / DRAV / SINTIB packages
+(census above, "The P104-3 packages") ride as BASES rows from
+`StarlingBranchBases`. G. Starostin's e-mail of 2026-10-01 extends the
+2026-07-15 grant to every downloadable database under the same
+conditions (any use, per-base attribution wherever displayed); each
+base's credit is its own `.inf` DBINFO text (koret.inf has none — its
+credit is the Altaic package's AED). Samples were cut on 2026-10-07 from
+the held 2026-09-26 package trees (sha256 above) with the P104-3 recipe;
+the decoded records of every kept sample were verified identical to the
+same records parsed from the full upstream tables.
+
+- `altaic/turcet.dbf`/`.var` — records **2** (*kül 'ashes': all 29
+  language columns filled — the 27 minting columns plus Old Turkic
+  "kül (OUygh.)" and Middle Turkic, body-only by the mixed-source
+  verdict), **1931 BOTH TIMES** (the upstream duplicate-NUMBER pair: file
+  position 1922 = *bẹŕ- 'to shiver' keeps the plain id, position 1930 =
+  *jabĺan 'wormwood' mints `1931-b` + the body note), **2001** (*ab- 'to
+  crowd': PRNUM=1 ⇄ altet #1 TURCNUM=2001, the both-ways pair).
+- `cauc/lezget.dbf`/`.var` — records **1** (*zo-n 'I': all nine
+  Lezgic columns mint; the alias-less COMMENT column), **3** (*ḳʷir(a)
+  'hoof': PRNUM=1 ⇄ caucet #1 LEZGNUM=3), **11** (*ḳosʷɨ- 'to bite':
+  PRNUM=9 ⇄ caucet #9 LEZGNUM=11; Udi `k:aIšpsun` — the ":" tense mark
+  gates the lead, body only).
+- `drav/sdret.dbf`/`.var` — records **2** (*agasai 'common flax': KTNUM
+  0, the logical CHECKED flag riding nowhere), **42** (*ac- 'mould,
+  type': PRNUM=1 ⇄ dravet #1 SDRNUM=42; ta/ml/kn/kfa/tcy mint, the KT
+  Proto-Nilgiri protoform body-only, KTNUM=1157 → ktet), **384** (one of
+  sdret's 807 headword-less records → the `#384` placeholder, still
+  minting its Tamil/Malayalam/Kannada forms).
+- `drav/ktet.dbf`/`.var` — records **766** (the bare "?" protoform: its
+  fold is empty, so the entry folds under its NUMBER — THE regression pin
+  for the numeric-cell encoding defect found at the full-scale dry parse:
+  N cells were sliced binary and reached validation as ASCII-8BIT),
+  **1157** (*as (*-c) 'mould for casting iron': PRNUM=42 ⇄ sdret #42
+  KTNUM=1157).
+- `sintib/kiret.dbf`/`.var` — records **2** (*ʔìŋ 'buy': Khaling/Limbu/
+  Yamphu mint, LIMNUM=460 → limet #460 and YAMNUM=425; PRNUM 0), **645**
+  (*bhä́[p] 'broad, wide': PRNUM=2 ⇄ stibet #2 KIRNUM=645; the stress-led
+  Khaling lead `'bhäppä` is gated).
+- `sintib/limet.dbf`/`.var` — records **1** (a- 'my.': the grammar-only
+  body), **460** (iNmaʔ, -iN- 'buy, purchase.': PRNUM=2 ⇄ kiret #2
+  LIMNUM=460) — G. van Driem's Limbu dictionary in the original Leiden
+  transcription.
