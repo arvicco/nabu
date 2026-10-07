@@ -1099,8 +1099,8 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
     assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese], registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
-    assert_equal %w[titus-avestan], registry.blocked_axis_members("iranian"),
-                 "the grant-gated Avesta rides iranian but is excluded from the public listing"
+    assert_equal %w[titus-avestan titus-pahlavi], registry.blocked_axis_members("iranian"),
+                 "the grant-gated Avesta and Pahlavi books ride iranian but are excluded from the public listing"
   end
 
   # P43-2: the shipped TITUS Avestan row is fetch-gated on the personal grant, and
@@ -1151,7 +1151,8 @@ class SourceRegistryTest < Minitest::Test
                     "the full membership (CLI/sync scope) still carries it"
     refute_includes registry.public_axis_members("etym"), "titus-avestan",
                     "the PUBLIC etym membership drops the grant-gated row"
-    assert_equal %w[titus-avestan titus-osco-umbrian titus-tocharian-a], registry.blocked_axis_members("etym")
+    assert_equal %w[titus-avestan titus-osco-umbrian titus-pahlavi titus-tocharian-a],
+                 registry.blocked_axis_members("etym")
   end
 
   # The manifest's display posture: nc (servable + credited, not hidden) and a

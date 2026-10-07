@@ -4482,6 +4482,47 @@ titus-osco-umbrian:   # P90-2, 02-sources row 188
       non-commercial grant, and promise to credit TITUS and the editors
       (text entry J. Gippert / V. Slunečko) wherever any text is displayed.
 
+titus-pahlavi:
+  adapter: Nabu::Adapters::TitusPahlavi
+  adopted: "2026-10-07"
+  axes: [etym, iranian]  # the Middle Iranian stage of the iranian desk (Zoroastrian Middle
+                         # Persian, beside the Avestan anchor); etym because the Pahlavi forms
+                         # and the Zand's Avestan-to-Pahlavi glossing feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: false   # READY, awaiting the owner-fired first retrieval (one walk per edition,
+                 # 24 editions; flip after the first-sync census verifies counts).
+  # TITUS Middle Persian (Pahlavi) book editions (titus.uni-frankfurt.de/texte/etcs/iran/
+  # miran/mpers/): the Zoroastrian Book Pahlavi literature as TITUS's text index lists it
+  # (texte2.htm, censused 2026-10-07) — Ardā Wirāz, Andarz ī Ōšnar, the Bundahišn,
+  # Dādestān ī dēnīg, Dēnkard 4/5/6/7, Kārnāmag, Mēnōg ī xrad, the Mādayān, the Pahlavi
+  # Rivāyat, the Zand (Pahlavi versions of Yasna+Vispered, the Old and Young Avestan
+  # texts, the Pursišnīhā, Vidēvdād 1-3/10-15 and 19), Šāyast nē šāyast (transliteration
+  # AND transcription editions), Zādspram, Zand ī Wahman yasn, and the two minor-text
+  # corpora — 24 editions. Excluded: the Psalter (Christian, Psalter-Pahlavi script), the
+  # Manichaean corpora, the inscriptions ("under preparation"). One document per text page
+  # (canonical/titus-pahlavi/<edition>/<prefix>NNN.htm); passages at each edition's own
+  # deepest CITATION level (Sentence / Paragraph / Verse, keyed off the <!Level N> headers),
+  # the printed-edition page/line and manuscript locations riding as annotations.
+  # Language pal throughout (embedded Avestan quotations stay in the running text and are
+  # annotated). EXPECTED FIRST SYNC: page counts unknown until the walk (no page manifest
+  # upstream); the census samples run ~3-240 KB per page, one chapter per page.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (the
+      data-entry editors of each Pahlavi edition) wherever any text is displayed.
+
 titus-tocharian-a:   # P114-1a, 02-sources row 224
   adapter: Nabu::Adapters::TitusTocharianA
   adopted: "2026-10-07"
