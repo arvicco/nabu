@@ -2820,6 +2820,28 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Owner UX rule 2026-10-07: the warm pass and verdict sweep announce on
+  # stderr before the first replay — header with ETA, one closed line per
+  # fingerprinted tree, the tally — on the real run and the dry run alike.
+  def test_rebuild_incremental_announces_the_verdict_sweep_on_stderr
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+
+      [%w[rebuild --incremental --dry-run], %w[rebuild --incremental]].each do |argv|
+        _out, err, status = with_config(config) { run_cli(argv) }
+
+        assert_nil status
+        assert_match(/^  pinning code identities \(1 sources\)… /, err)
+        assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — first run — no estimate$/, err)
+        assert_match(%r{^  verdict corpus \(1/1\)… }, err)
+        assert_match(/^  verdicts: 1 clean · 0 dirty · 0 skipped \(\d+s\)$/, err)
+      end
+      _out, err, = with_config(config) { run_cli(%w[rebuild --incremental]) }
+      assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — ~\d+s \(last run \d+s over 1 rows\)$/,
+                   err, "the recorded sweep timing speaks on the next run")
+    end
+  end
+
   def test_rebuild_incremental_without_catalog_fails_loudly
     with_rebuild_env do |config|
       _out, err, status = with_config(config) { run_cli(%w[rebuild --incremental]) }

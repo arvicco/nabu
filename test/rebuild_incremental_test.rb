@@ -329,6 +329,139 @@ class RebuildIncrementalTest < Minitest::Test
     end
   end
 
+  # -- the pre-replay announcements (owner UX rule 2026-10-07) ------------
+  # The warm pass and the verdict sweep (a non-git tree is sha256-hashed
+  # file by file — ndl-kotenseki alone is 1.1 GB) ran in total silence for
+  # minutes. Each now speaks through the progress seam, the sweep carries
+  # its ledger ETA, and a closing tally names the job's size.
+
+  def test_run_announces_warm_per_source_verdicts_and_the_tally_in_order
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+    events = []
+
+    result = incremental_rebuilder.run(progress: spy(events))
+
+    assert_equal [:stage, "pinning code identities (3 sources)"], events[0].first(2)
+    assert_equal [:note, "verdict sweep: fingerprinting 3 canonical trees — first run — no estimate"],
+                 events[1]
+    assert_equal(["verdict alpha (1/3)", "verdict beta (2/3)", "verdict lexica (3/3)"],
+                 events[2, 3].map { |event| event[1] })
+    assert(events[2, 3].all? { |event| event.first == :stage })
+    assert_equal :note, events[5].first
+    assert_match(/\Averdicts: 2 clean · 1 dirty · 0 skipped \(\d+s\)\z/, events[5][1])
+    assert_equal [:stage, "beta"], events[6].first(2), "the replay stages follow the tally"
+    # The verdicts themselves are untouched by the announcing.
+    assert_equal %w[beta], result.outcomes.map(&:slug)
+    assert_equal %w[alpha lexica], result.cleans.map(&:slug).sort
+  end
+
+  def test_the_sweep_records_its_wall_time_and_the_next_run_speaks_the_estimate
+    full_rebuilder.run
+    incremental_rebuilder.run
+
+    row = with_ledger do |ledger|
+      Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus", stage: "verdict_sweep")
+    end
+    refute_nil row, "the sweep's wall time lands in the ledger's stage_timings"
+    assert_equal 3, row[:rows], "the denominator is the trees fingerprinted"
+    assert_operator row[:seconds], :>=, 0
+
+    events = []
+    incremental_rebuilder.run(progress: spy(events))
+    sweep = events.find { |event| event.first == :note && event[1].start_with?("verdict sweep") }
+    assert_match(/\Averdict sweep: fingerprinting 3 canonical trees — ~\d+s \(last run \d+s over 3 rows\)\z/,
+                 sweep[1])
+  end
+
+  def test_unreplayable_sources_count_as_skipped_and_are_not_fingerprinted
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+      beta:
+        adapter: TestAdapter
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+      ghost:
+        adapter: TestAdapter
+    YAML
+    full_rebuilder.run
+    events = []
+
+    incremental_rebuilder.run(progress: spy(events))
+
+    labels = events.map { |event| event[1] }
+    assert_includes labels, "pinning code identities (4 sources)"
+    refute(labels.any? { |label| label.include?("ghost") }, "an absent tree has nothing to fingerprint")
+    assert(labels.any? { |label| label.match?(/\Averdicts: 3 clean · 0 dirty · 1 skipped \(/) })
+  end
+
+  def test_dry_run_plan_announces_the_same_sweep_and_records_nothing
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+    events = []
+
+    plan = incremental_rebuilder.plan(progress: spy(events))
+
+    assert_equal [:stage, "pinning code identities (3 sources)"], events[0].first(2)
+    assert_match(/\Averdict sweep: fingerprinting 3 canonical trees — /, events[1][1])
+    assert_equal(["verdict alpha (1/3)", "verdict beta (2/3)", "verdict lexica (3/3)"],
+                 events[2, 3].map { |event| event[1] })
+    assert_match(/\Averdicts: 2 clean · 1 dirty · 0 skipped \(/, events[5][1])
+    assert_equal 6, events.size
+    assert_equal({ "alpha" => :clean, "beta" => :dirty, "lexica" => :clean },
+                 plan.verdicts.to_h { |verdict| [verdict.slug, verdict.state] })
+    row = with_ledger do |ledger|
+      Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus", stage: "verdict_sweep")
+    end
+    assert_nil row, "a dry run reads the ETA but never records a timing"
+  end
+
+  def test_bare_api_callers_stay_silent_and_unbroken
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+
+    assert_equal %w[beta], incremental_rebuilder.run.outcomes.map(&:slug)
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => "Odyssey\nchanged again\n")
+    assert_equal [:dirty], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "beta" }.map(&:state)
+    # A reporter without the note callable (every pre-existing caller) is a no-op.
+    Nabu::ProgressReporter.new.note("anything")
+    stages = []
+    incremental_rebuilder.plan(progress: Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label }))
+    assert_includes stages, "verdict beta (2/3)"
+  end
+
+  # The sweep runs BEFORE any replay, but one replay can write another
+  # source's tree: a dictionary's language-notes accretion lands in the
+  # local-language shelf (the sanctioned P19-1 exception). That shelf must
+  # be re-verified after the replays, exactly as the old interleaved loop
+  # fingerprinted it — never a stale sweep-time verdict.
+  def test_a_shelf_written_by_an_earlier_replay_is_reverified_before_its_turn
+    write_sources(<<~YAML)
+      liv:
+        adapter: Nabu::Adapters::Liv
+      local-language:
+        adapter: Nabu::Adapters::LocalLanguage
+    YAML
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("liv"), File.join(@canonical, "liv"))
+    full_rebuilder.run
+    shelf = File.join(config.shelves_dir, "local-language", "ine-pro.md")
+    accreted = File.read(shelf)
+    # The owner strips the witness section; a run stamps the shelf as edited.
+    File.write(shelf, accreted.sub(/^## .*witness:liv.*\z/m, ""))
+    refute_equal accreted, File.read(shelf), "precondition: the edit removed the accreted section"
+    assert_equal %w[local-language], incremental_rebuilder.run.outcomes.map(&:slug)
+
+    # Dirty liv: its replay re-accretes the section into the shelf mid-run.
+    write_canonical("liv", "touch.txt" => "dirty\n")
+    result = incremental_rebuilder.run
+
+    assert_equal accreted, File.read(shelf), "precondition: the replay re-accreted the section"
+    assert_equal %w[liv local-language], result.outcomes.map(&:slug),
+                 "the shelf a replay just wrote must replay in the same run"
+  end
+
   def test_trust_derivations_replays_when_the_voucher_cannot_vouch
     # The tshet-uinh shape: the source's OWN parser files changed after the
     # stamp — trust must fall through to an honest replay, never a re-stamp.
@@ -520,6 +653,20 @@ class RebuildIncrementalTest < Minitest::Test
   def incremental_rebuilder(trust_derivations: false, code_voucher: nil)
     Nabu::IncrementalRebuild.new(config: config, registry: registry,
                                  trust_derivations: trust_derivations, code_voucher: code_voucher)
+  end
+
+  # A progress spy recording stages ([:stage, label, eta]) and notes
+  # ([:note, line]) in one ordered stream.
+  def spy(events)
+    Nabu::ProgressReporter.new(on_stage: ->(label, eta) { events << [:stage, label, eta] },
+                               on_note: ->(line) { events << [:note, line] })
+  end
+
+  def with_ledger
+    ledger = Nabu::Store.connect(config.history_path, readonly: true)
+    yield ledger
+  ensure
+    ledger&.disconnect
   end
 
   def builders_slug = Nabu::Store::DerivationStamp::BUILDERS_SLUG
