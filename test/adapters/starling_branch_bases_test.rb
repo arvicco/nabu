@@ -165,6 +165,32 @@ class StarlingBranchBasesTest < Minitest::Test
     assert_equal [%w[xqa japčan], %w[tk jovšan], %w[tyv čašpan]], reflex_rows(list[2])
   end
 
+  # THE frame-breaking pointer pins (the live parse-only sync quarantined
+  # tunget #42 on the NULs its Solon cell leaked into the INSERT): the
+  # damaged cells read as U+FFFD and mint nothing; the record lands whole.
+  def test_tunget_records_with_damaged_var_pointers_land_whole
+    by_id = entries("starling-tunget")
+    assert_equal %w[42 1821], by_id.keys
+    fish = by_id["42"]
+    assert_equal "xol-sa", fish.headword
+    assert_includes fish.body, "Solon: �", "the damaged Solon cell renders as the replacement character"
+    refute_match(/[\x00\x12]/, fish.body)
+    assert_includes fish.body, "Comments: ТМС 2, 14."
+    assert_equal %w[evn eve neg ulc oaa gld oac ude], fish.reflexes.map(&:lang_code)
+    eagle = by_id["1821"]
+    assert_includes eagle.body, "Literary Manchu: �"
+    refute_match(/[\x00\x12]/, eagle.body)
+    assert_equal [%w[evn kīran], %w[ude käi]], reflex_rows(eagle),
+                 "the damaged Manchu cell (a misdirected copy of the Udihe form) mints no mnc row"
+  end
+
+  def test_monget_overrun_payload_ends_at_its_frame
+    entry = entries("starling-monget")["2161"]
+    assert_equal "čubali", entry.headword
+    assert_includes entry.body, "Middle Mongolian: čubali (MA 136)"
+    assert_equal [%w[xng čubali]], reflex_rows(entry)
+  end
+
   # --- lezget (CAUC) --------------------------------------------------------------------
 
   def test_parse_lezget_yields_the_lezgic_shelf_with_the_caucet_crosslinks_both_ways
@@ -311,7 +337,8 @@ class StarlingBranchBasesTest < Minitest::Test
   # --- stability, NFC, and the language-notes rider -----------------------------------
 
   def test_entry_ids_are_unique_stable_and_output_is_nfc
-    %w[starling-turcet starling-lezget starling-sdret starling-ktet starling-kiret starling-limet].each do |slug|
+    %w[starling-turcet starling-monget starling-tunget starling-lezget starling-sdret starling-ktet
+       starling-kiret starling-limet].each do |slug|
       first = parse(slug).map(&:entry_id)
       assert_equal first.uniq, first
       assert_equal first, parse(slug).map(&:entry_id)
