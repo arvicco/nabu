@@ -834,6 +834,25 @@ sources:
     script: {posture: qualified, note: "per-passage `alphabet` annotation (italic/latin/greek)
         from the edition's original-script lanes; the text lane is the unified Latin
         transliteration (Latn)"}
+  titus-pahlavi:
+    # The Zoroastrian Book Pahlavi editions (24, censused 2026-10-07).
+    # Kind stays unclassified (the titus family's posture): the edition
+    # table names each work, but a work→kind table (Zand = translation /
+    # commentary, andarz = wisdom, Dēnkard = encyclopaedic, …) is a ruled
+    # map, not a header field — a future kind_map candidate.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "pal — the bare Middle Persian (Pahlavi) anchor; deliberately
+        coarse (no Sasanian/post-Sasanian staging — the books are 9th-10th c. redactions of
+        older material, and no page states a date); embedded Avestan quotations ride in the
+        pal text with an `avestan` annotation"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates
+        (mined into document metadata as data_entry), never a composition or manuscript
+        date; manuscript sigla + folio,line (Bundahišn IBd/TD1/TD2/DH) ride as annotations"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "Latin-script renderings of Book Pahlavi — per-document
+        `representation` metadata: transcription (the miphts lanes) or transliteration
+        (miphtl — Aramaeograms in capitals; Šāyast nē šāyast ships both, the Mādayān
+        transliteration only)"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
