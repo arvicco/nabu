@@ -4482,6 +4482,52 @@ titus-osco-umbrian:   # P90-2, 02-sources row 188
       non-commercial grant, and promise to credit TITUS and the editors
       (text entry J. Gippert / V. Slunečko) wherever any text is displayed.
 
+titus-tocharian-a:   # P114-1a, 02-sources row 224
+  adapter: Nabu::Adapters::TitusTocharianA
+  adopted: "2026-10-07"
+  axes: [etym, buddhist]  # the Berlin THT corpus is Buddhist literature (the
+                          # Maitreyasamiti-Nāṭaka, Puṇyavanta-Jātaka, the
+                          # Sanskrit-Tocharian bilinguals …) and its forms feed
+                          # the comparative shelves; a dedicated Tocharian desk
+                          # is an owner call, not minted here.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
+                   # acknowledgment is an identity act): bin/nabu sync
+                   # titus-tocharian-a — 467 pages (HEAD-probed 2026-10-07),
+                   # crawl ≈ 16 min at the polite 2s pace; then eyeball
+                   # urn:nabu:titus-tocharian-a:tocha001:634.1a.1 and 5 random
+                   # lines before flipping.
+  # TITUS Tocharian A Corpus (titus.uni-frankfurt.de/texte/etcs/toch/tocha/):
+  # the East Tocharian manuscripts of the Berlin Turfan collection on the
+  # basis of Sieg & Siegling, Tocharische Sprachreste I (1921), data entry
+  # P. Olivier / T. Tamai (1996-98), collation T. Tamai, corrections
+  # K. Kupfer; TITUS version with the THT catalogue data (Gippert / Kupfer /
+  # Tamai). One document per text page (tocha001.htm … tocha467.htm — one
+  # page per Sieg & Siegling number, one THT manuscript each); manuscript
+  # LINES are the passages, keyed off the <A NAME="TochA_THT_<ms>_<part>_
+  # <line>"> anchors — the plain transcription as text, the syllabic
+  # transliteration riding as the "syllabic" annotation; the bilingual
+  # pages' Sanskrit sub-lines claim `san` per passage. The find signature's
+  # site siglum mines the findspot (Š Šorčuq, D Qočo — declared coarse).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      extends the 2026-07-23 Avestan terms to the Tocharian A and B texts of
+      the Berlin Turfan collection as TITUS presents them: one retrieval per
+      corpus, local personal research use only, no redistribution; TITUS and
+      the editors clearly indicated wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors
+      (Sieg & Siegling; data entry P. Olivier / T. Tamai; collation T. Tamai;
+      corrections K. Kupfer) wherever any text is displayed.
+
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
   adopted: "2026-07-18"
