@@ -205,3 +205,21 @@ files:
     url: https://starlingdb.org/download/SINTIB.exe
     whole: false
     trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  # The frame-breaking var pointers (README "The .var frame census"): the
+  # offending pointer cells and their overrun payload bytes are kept verbatim.
+  - path: altaic/tunget.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 2 of 2,435 records — NUMBER 42 (*xol-sa 'fish' — the SOL pointer lands on a frame tag and spans 37 bytes across two neighbouring frames, NULs inside — the record the live parse-only sync quarantined), 1821 (*kīran 'eagle' — the MAN pointer lands on the UDE payload's frame tag and spans 1,816 bytes); header + field descriptors verbatim, var-pointers rewritten
+  - path: altaic/tunget.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept records' payload byte runs (the two overrun runs included), verbatim, compacted behind the mirrored \x13 header byte
+  - path: altaic/monget.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 1 of 2,174 records — NUMBER 2161 (*čubali 'ant' — the MMO pointer runs one NUL past its payload); header + field descriptors verbatim, var-pointer rewritten
+  - path: altaic/monget.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept record's payload byte runs (the trailing NUL included), verbatim, compacted behind the mirrored \x13 header byte
