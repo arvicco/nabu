@@ -2459,10 +2459,10 @@ module MCP
       assert_empty result.fetch("entries")
       refute result.key?("dictionary_entries"), "nothing anywhere — no fallback block"
       note = result.fetch("note")
-      assert_match(/bat-pro, ccn-pro, ccs-pro, dra-pro, gem-pro, ine-pro, itl-pro, jpx-pro, /, note,
-                   "derived from the live catalog (P104-3: the new minting shelves joined)")
-      assert_match(/qfa-chk-pro, qfa-yen-pro, sit-pro\b/, note,
-                   "tut-pro/qfa-cka-pro mint no reflex rows and must not appear")
+      assert_match(/bat-pro, cau-lzg-pro, ccn-pro, ccs-pro, dra-pro, dra-sou-pro, dra-tkt-pro, gem-pro, /, note,
+                   "derived from the live catalog (P104-3/P114: the new minting shelves joined)")
+      assert_match(/qfa-chk-pro, qfa-yen-pro, sit-kir-pro, sit-pro, trk-pro, tuw-pro, xgn-pro\b/, note,
+                   "tut-pro/qfa-cka-pro mint no reflex rows and must not appear; the P114 branch protos do")
       refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, note, "the hardcoded enumeration is gone")
       assert_match(/'\*form'/, note, "the quoting hint stays")
     end
