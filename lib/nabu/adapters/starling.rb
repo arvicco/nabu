@@ -2,6 +2,7 @@
 
 require_relative "starling_dbf_parser"
 require_relative "starling_lexstat"
+require_relative "starling_branch_bases"
 
 module Nabu
   module Adapters
@@ -150,17 +151,20 @@ module Nabu
     #                    ket/yug/zko/xrn/xpm rows. One duplicate NUMBER
     #                    (904 ×2); two headword-less records.
     #
-    # DECLARED DEFERRED (deliberate coarseness, censused 2026-09-26 —
-    # each follows the head pattern and can ride as a later BASES row):
-    # ALTAIC's four branch bases (turcet 2,017 / monget 2,174 / tunget
-    # 2,435 / koret 1,206 — koret.inf carries no DBINFO credit, so its
-    # credit needs the roster); CAUC's eight branch bases (nakhet 970 /
-    # aandet 1,539 / cezet 1,108 / laket 955 / darget 924 / lezget 1,569 /
-    # khinet 349 / abadet 817); DRAV's eleven branch bases (sdret 4,692 /
-    # telet 2,774 / kogaet 1,509 / gndet 1,428 / gonet 1,475 / kuiet
-    # 1,377 / konet 961 / ktet 1,665 / ndret 989 / pemet 740 / braet 269);
-    # SINTIB's five Kiranti-lane bases (kiret 994 / dumet 1,517 / kulet
-    # 1,466 / limet 2,354 / yamet 1,974). bigchina (9,093 Old Chinese
+    # == The branch-bases wave (2026-10-01 extension grant)
+    #
+    # The 28 subordinate bases P104-3 declared deferred ride as BASES rows
+    # from StarlingBranchBases (its comment carries the shelf-language and
+    # reflex verdicts): ALTAIC's four (turcet 2,017 / monget 2,174 / tunget
+    # 2,435 / koret 1,206), CAUC's eight (nakhet 970 / aandet 1,539 / cezet
+    # 1,108 / laket 955 / darget 924 / lezget 1,569 / khinet 349 / abadet
+    # 817), DRAV's eleven (sdret 4,692 / telet 2,774 / kogaet 1,509 / gndet
+    # 1,428 / gonet 1,475 / kuiet 1,377 / konet 961 / ktet 1,665 / ndret 989
+    # / pemet 740 / braet 269) and SINTIB's five Kiranti-lane bases (kiret
+    # 994 / dumet 1,517 / kulet 1,466 / limet 2,354 / yamet 1,974) — the
+    # head bases' branch links now name live entry ids.
+    #
+    # STILL DEFERRED (deliberate coarseness): bigchina (9,093 Old Chinese
     # character entries, stibet's CHINNUM target) is deferred on a HARD
     # reason, not cost: its CHARACTER/FANQIE cells are Big5-encoded
     # (bigchina.inf: "characters in Big5 encoding") — a per-field second
@@ -268,7 +272,7 @@ module Nabu
         name: "StarLing / Tower of Babel — etymological databases " \
               "(Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian + Altaic + " \
               "North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian + " \
-              "IE lexicostatistical wordlists)",
+              "IE lexicostatistical wordlists + the Altaic/Caucasian/Dravidian/Kiranti branch bases)",
         license: "Free for any use with acknowledgment (G. Starostin, e-mail 2026-07-15: \"all " \
                  "etymological data are free for anybody to use for any purposes as long as the " \
                  "source is properly acknowledged\"); required per-base credit — Pokorny base: " \
@@ -309,7 +313,7 @@ module Nabu
                  "etymology: Compiled by Sergei Nikolayev on the basis of A. Walde and J. Pokorny's " \
                  "dictionary, with Anatolian (Hittite) and Tocharian material added in by S. Nikolayev " \
                  "and S. Starostin. Subordinate databases include Germanic and Baltic (also compiled " \
-                 "by S. Nikolayev)\")",
+                 "by S. Nikolayev)\"); #{StarlingBranchBases::CREDITS}",
         license_class: "attribution",
         upstream_url: "https://starlingdb.org/download/IE.exe",
         parser_family: "starling-dbf"
@@ -539,8 +543,8 @@ module Nabu
         # reconstruction led by a Big5 character, BURM/LUSH mix in
         # PLB/PKC protoforms, KACH carries tone-digit notation, KIR is a
         # branch protoform — body-only. The unaliased STLSNUM (lexstat
-        # link) rides nowhere; CHINNUM/KIRNUM point into the DEFERRED
-        # bigchina/kiret bases, PRNUM into the unheld sccet base.
+        # link) rides nowhere; CHINNUM points into the DEFERRED bigchina
+        # base, KIRNUM into kiret (branch wave), PRNUM into the unheld sccet base.
         "starling-stibet" => {
           dbf: "stibet.dbf", language: "sit-pro",
           title: "Sino-Tibetan etymology (Peiros-Starostin 1996 with improved reconstructions; " \
@@ -559,7 +563,7 @@ module Nabu
         # P104-3 (DRAV). Labels/credit: dravet.inf. Five branch protoform
         # columns body-only; BRA (Brahui, an actual language) mints brh.
         # PRNUM points into the unheld Nostratic base; the six branch
-        # links point into the DEFERRED branch bases.
+        # links point into the branch bases (the branch-bases wave).
         "starling-dravet" => {
           dbf: "dravet.dbf", language: "dra-pro",
           title: "Dravidian etymology (Burrow-Emeneau DED reconstructions, revised and " \
@@ -667,40 +671,46 @@ module Nabu
             "KOT" => %w[zko Kottish].freeze, "ARI" => %w[xrn Arin].freeze,
             "PUM" => %w[xpm Pumpokol].freeze
           }.freeze
-        }.freeze,
+        }.freeze
+      }.merge(
+        # The branch-bases wave: the 28 subordinate bases of the ALTAIC/
+        # CAUC/DRAV/SINTIB packages, after their heads (StarlingBranchBases).
+        StarlingBranchBases::BASES,
         # P113-2 (IE.exe LEXSTAT/). The three Indo-Iranian etymology tables
         # — the cognation targets of the dard/ind/iran wordlists. Labels:
         # pi.inf's aliases (their own .inf files carry none); body-only
         # (form + etymon cells); PRNUM → piet. inc-dar-pro follows the
         # family-code + -pro convention on Wiktionary's inc-dar.
-        "starling-dardet" => {
-          dbf: "dardet.dbf", dir: StarlingLexstat::DIR, language: "inc-dar-pro",
-          title: "Dardic etymology (StarLing IE package LEXSTAT/dardet: the cognation base of " \
-                 "the Dardic wordlist)",
-          headword: "PROTO", gloss: "MEANING",
-          body: StarlingLexstat.labels(%w[KSM BSK TOR MAY SHN PHL SAV TIR GAW SHU WOT PSH KHO KAL]),
-          crosslinks: { "PRNUM" => "IE etymology" }.freeze,
-          reflexes: {}.freeze
-        }.freeze,
-        "starling-indet" => {
-          dbf: "indet.dbf", dir: StarlingLexstat::DIR, language: "inc-pro",
-          title: "Indo-Aryan etymology (StarLing IE package LEXSTAT/indet: the cognation base of " \
-                 "the Indo-Aryan wordlist)",
-          headword: "PROTO", gloss: "MEANING",
-          body: StarlingLexstat.labels(%w[HND PNJ LHD SND GUJ MAR BNG ASS NEP SNG WPH]),
-          crosslinks: { "PRNUM" => "IE etymology" }.freeze,
-          reflexes: {}.freeze
-        }.freeze,
-        "starling-iranet" => {
-          dbf: "iranet.dbf", dir: StarlingLexstat::DIR, language: "ira-pro",
-          title: "Iranian etymology (StarLing IE package LEXSTAT/iranet: the cognation base of " \
-                 "the Iranian wordlist)",
-          headword: "PROTO", gloss: "MEANING",
-          body: StarlingLexstat.labels(%w[CPE TAT KRD BAL TAL AFG MNJ SHG WKH ISH OSS]).merge("REF" => "REF").freeze,
-          crosslinks: { "PRNUM" => "IE etymology" }.freeze,
-          reflexes: {}.freeze
-        }.freeze
-      }.freeze
+        {
+          "starling-dardet" => {
+            dbf: "dardet.dbf", dir: StarlingLexstat::DIR, language: "inc-dar-pro",
+            title: "Dardic etymology (StarLing IE package LEXSTAT/dardet: the cognation base of " \
+                   "the Dardic wordlist)",
+            headword: "PROTO", gloss: "MEANING",
+            body: StarlingLexstat.labels(%w[KSM BSK TOR MAY SHN PHL SAV TIR GAW SHU WOT PSH KHO KAL]),
+            crosslinks: { "PRNUM" => "IE etymology" }.freeze,
+            reflexes: {}.freeze
+          }.freeze,
+          "starling-indet" => {
+            dbf: "indet.dbf", dir: StarlingLexstat::DIR, language: "inc-pro",
+            title: "Indo-Aryan etymology (StarLing IE package LEXSTAT/indet: the cognation base of " \
+                   "the Indo-Aryan wordlist)",
+            headword: "PROTO", gloss: "MEANING",
+            body: StarlingLexstat.labels(%w[HND PNJ LHD SND GUJ MAR BNG ASS NEP SNG WPH]),
+            crosslinks: { "PRNUM" => "IE etymology" }.freeze,
+            reflexes: {}.freeze
+          }.freeze,
+          "starling-iranet" => {
+            dbf: "iranet.dbf", dir: StarlingLexstat::DIR, language: "ira-pro",
+            title: "Iranian etymology (StarLing IE package LEXSTAT/iranet: the cognation base of " \
+                   "the Iranian wordlist)",
+            headword: "PROTO", gloss: "MEANING",
+            body: StarlingLexstat.labels(%w[CPE TAT KRD BAL TAL AFG MNJ SHG WKH ISH OSS]).merge("REF" => "REF").freeze,
+            crosslinks: { "PRNUM" => "IE etymology" }.freeze,
+            reflexes: {}.freeze
+          }.freeze
+        }
+      ).freeze
 
       # A clean leading citation form: letters first, then letters/marks and
       # the notation the bases use inside forms (optional-segment parens,
@@ -855,7 +865,9 @@ module Nabu
          "base of the package's Dardic lexicostatistical wordlist (Kashmiri, Bashkarik, Torwali, " \
          "Maiya, Shina, Phalura, Savi, Tirahi, Gawar-Bati, Shumashti, Wotapuri, Pashai, Khowar, " \
          "Kalasha), linked into the PIE database. inc-dar-pro follows the family-code + -pro " \
-         "convention on Wiktionary's inc-dar (the bat-pro precedent)."].freeze
+         "convention on Wiktionary's inc-dar (the bat-pro precedent)."].freeze,
+        # The branch-bases wave: one note per new shelf language.
+        *StarlingBranchBases::LANGUAGE_NOTES
       ].freeze
 
       def self.manifest
