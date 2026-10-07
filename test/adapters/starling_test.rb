@@ -46,7 +46,9 @@ class StarlingTest < Minitest::Test
                   "starling-caucet:caucet.dbf", "starling-stibet:stibet.dbf",
                   "starling-dravet:dravet.dbf", "starling-kamet:kamet.dbf",
                   "starling-chuket:chuket.dbf", "starling-itelet:itelet.dbf",
-                  "starling-yenet:yenet.dbf", "starling-iranet:iranet.dbf",
+                  "starling-yenet:yenet.dbf", "starling-turcet:turcet.dbf",
+                  "starling-lezget:lezget.dbf", "starling-sdret:sdret.dbf", "starling-ktet:ktet.dbf",
+                  "starling-kiret:kiret.dbf", "starling-limet:limet.dbf", "starling-iranet:iranet.dbf",
                   "starling-lexstat-balt:balt.dbf", "starling-lexstat-germ:germ.dbf"].freeze
 
   def adapter = Nabu::Adapters::Starling.new
@@ -139,7 +141,7 @@ class StarlingTest < Minitest::Test
   def test_discover_yields_one_ref_per_base_in_registry_order
     refs = adapter.discover(FIXTURES).to_a
     assert_equal ALL_BASE_IDS, refs.map(&:id)
-    assert_equal %w[starling] * 18, refs.map(&:source_id)
+    assert_equal %w[starling] * 24, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -411,7 +413,7 @@ class StarlingTest < Minitest::Test
     assert_includes entry.body, "Turkic: *ab-", "branch protoform columns ride the body verbatim"
     assert_includes entry.body, "Tungus-Manchu: *ebu-re-"
     assert_includes entry.body, "Jpn.->Japet: #632", "the .inf link alias verbatim — japet #632 is IN this fixture set"
-    assert_includes entry.body, "Turk.->Turcet: #2001", "links into the DEFERRED branch bases still ride as body lines"
+    assert_includes entry.body, "Turk.->Turcet: #2001", "turcet #2001 is IN this fixture set (branch wave)"
     refute_includes entry.body, "Nostratic", "PRNUM=0 means no crosslink"
     assert_empty entry.reflexes, "every altet column is a branch protoform — body-only by verdict"
     assert_includes entries["2"].gloss, "{rage, anger}", "upstream's brace notation stays verbatim"
@@ -770,7 +772,8 @@ class StarlingTest < Minitest::Test
     %w[starling-pokorny starling-piet starling-vasmer starling-germet starling-baltet
        starling-altet starling-japet starling-caucet starling-stibet starling-dravet
        starling-kamet starling-chuket starling-itelet starling-yenet starling-iranet
-       starling-lexstat-balt starling-lexstat-germ].each do |slug|
+       starling-lexstat-balt starling-lexstat-germ starling-turcet starling-lezget starling-sdret
+       starling-ktet starling-kiret starling-limet].each do |slug|
       first = parse(slug).map(&:entry_id)
       assert_equal first.uniq, first
       assert_equal first, parse(slug).map(&:entry_id)
@@ -788,10 +791,10 @@ class StarlingTest < Minitest::Test
   LEXSTAT_FILES = %w[LEXSTAT/balt.dbf LEXSTAT/germ.dbf LEXSTAT/iranet.dbf].freeze
   PACKAGE_FILES = {
     "kart" => %w[kartet],
-    "altaic" => %w[altet japet],
-    "cauc" => %w[caucet],
-    "sintib" => %w[stibet],
-    "drav" => %w[dravet],
+    "altaic" => %w[altet japet turcet],
+    "cauc" => %w[caucet lezget],
+    "sintib" => %w[stibet kiret limet],
+    "drav" => %w[dravet sdret ktet],
     "chukchee" => %w[kamet chuket itelet],
     "yenisey" => %w[yenet]
   }.freeze
@@ -859,7 +862,7 @@ class StarlingTest < Minitest::Test
                "#{subdir} survives the IE re-fetch sweep"
         refute Dir.exist?(File.join(workdir, ".attic", subdir)), "nothing #{subdir}-shaped was atticked"
       end
-      assert_equal 18, adapter.discover(workdir).to_a.size
+      assert_equal 24, adapter.discover(workdir).to_a.size
     end
   end
 
@@ -896,15 +899,16 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 119, first.added,
+    assert_equal 135, first.added,
                  "3 records per IE base + 5 kart + 27 across the P104-3 bases (3 altet + 3 japet + " \
                  "3 caucet + 4 stibet + 3 dravet + 4 kamet + 2 chuket + 2 itelet + 3 yenet), " \
                  "both halves of each fixture NUMBER collision and every placeholder pin included; " \
-                 "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ form cells"
+                 "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ form cells; branch wave: " \
+                 "+ 4 turcet + 3 lezget + 3 sdret + 2 ktet + 2 kiret + 2 limet"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 119, second.skipped
+    assert_equal 135, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)
@@ -914,20 +918,27 @@ class StarlingTest < Minitest::Test
     assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-kamet:689-b",
                   "urn:nabu:dict:starling-kart:48-b", "urn:nabu:dict:starling-lexstat-balt:26.lit-b",
                   "urn:nabu:dict:starling-lexstat-germ:58.aeg-b", "urn:nabu:dict:starling-lexstat-germ:58.hol-b",
-                  "urn:nabu:dict:starling-piet:574-b", "urn:nabu:dict:starling-yenet:904-b"],
+                  "urn:nabu:dict:starling-piet:574-b", "urn:nabu:dict:starling-turcet:1931-b",
+                  "urn:nabu:dict:starling-yenet:904-b"],
                  db[:dictionary_entries].where(Sequel.like(:entry_id, "%-b")).select_order_map(:urn),
                  "the duplicate-NUMBER disambiguation (and the LEXSTAT synonym slots) are urn-stable"
-    assert_equal 72, db[:dictionary_reflexes].count,
+    assert_equal 154, db[:dictionary_reflexes].count,
                  "the LEXSTAT shelves mint none; piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2) + " \
                  "kart 18 (4+3+4+3+4) " \
-                 "+ japet 3 + caucet 2 + stibet 1 + dravet 1 + chuket 6 + itelet 1 + yenet 4"
-    assert_equal ["Albanian", "Alutor", "Avestan", "Brahui", "Chukchee", "Danish", "Dutch",
-                  "English", "Georgian", "German", "Gothic", "Itelmen (Napana)", "Ket",
-                  "Khinalug", "Koryak", "Kottish", "Lak", "Latin", "Laz", "Lepcha", "Lettish",
-                  "Lithuanian", "Megrel", "Middle Dutch", "Middle High German",
-                  "Middle Low German", "Norwegian", "Old English", "Old Frisian",
-                  "Old High German", "Old Indian", "Old Japanese", "Old Norse", "Old Prussian",
-                  "Old Saxon", "Svan", "Swedish", "Yug"],
+                 "+ japet 3 + caucet 2 + stibet 1 + dravet 1 + chuket 6 + itelet 1 + yenet 4; branch wave: " \
+                 "turcet 47 (27+16+3+1) + lezget 16 (9+4+3) + sdret 10 (2+5+3) + ktet 3 (2+1) + kiret 6 (3+3) + limet 0"
+    assert_equal ["Agul", "Albanian", "Alutor", "Archi", "Avestan", "Azerbaidzhan", "Balkar", "Bashkir",
+                  "Brahui", "Budukh", "Chukchee", "Chuvash", "Danish", "Dolgan", "Dutch", "English",
+                  "Gagauz", "Georgian", "German", "Gothic", "Halaj", "Itelmen (Napana)", "Kaling",
+                  "Kannada", "Karaim", "Karakalpak", "Karakhanid", "Kazakh", "Ket", "Khakassian",
+                  "Khinalug", "Kirghiz", "Kodagu", "Koryak", "Kota", "Kottish", "Kryz", "Kulung", "Kumyk",
+                  "Lak", "Latin", "Laz", "Lepcha", "Lettish", "Lezghian", "Limbu", "Lithuanian",
+                  "Malayalam", "Megrel", "Middle Dutch", "Middle High German", "Middle Low German",
+                  "Noghai", "Norwegian", "Old English", "Old Frisian", "Old High German", "Old Indian",
+                  "Old Japanese", "Old Norse", "Old Prussian", "Old Saxon", "Oyrat", "Rutul", "Salar",
+                  "Sary-Yughur", "Shor", "Svan", "Swedish", "Tabasaran", "Tamil", "Tatar", "Toda", "Tofalar",
+                  "Tsakhur", "Tulu", "Tulung", "Turkish", "Turkmen", "Tuva", "Udi", "Uighur", "Uzbek",
+                  "Yakut", "Yamphu", "Yug"],
                  db[:language_names].select_map(:name).sort.uniq,
                  "the .inf aliases feed the language census reflex_bearing health checks"
   end
@@ -995,7 +1006,8 @@ class StarlingTest < Minitest::Test
       assert_match(/Iranian/, shelf.load("ira-pro").section("witness:starling").body)
       assert_match(/Dardic/, shelf.load("inc-dar-pro").section("witness:starling").body)
       codes = %w[ine-pro rus gem-pro bat-pro ccs-pro tut-pro jpx-pro ccn-pro sit-pro dra-pro
-                 qfa-cka-pro qfa-chk-pro itl-pro qfa-yen-pro inc-pro ira-pro inc-dar-pro]
+                 qfa-cka-pro qfa-chk-pro itl-pro qfa-yen-pro inc-pro ira-pro inc-dar-pro] +
+              Nabu::Adapters::StarlingBranchBases::BASES.values.map { |base| base.fetch(:language) }
       before = codes.map { |code| File.read(shelf.path_for(code)) }
       loader.load_from(adapter, workdir: FIXTURES)
       assert_equal before, codes.map { |code| File.read(shelf.path_for(code)) },

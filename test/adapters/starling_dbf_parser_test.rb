@@ -49,6 +49,18 @@ class StarlingDbfParserTest < Minitest::Test
     assert material.unicode_normalized?(:nfc)
   end
 
+  # Numeric cells are ASCII digits sliced out of the binary record: they
+  # come back UTF-8 like every other value (found live at the branch-bases
+  # dry parse — ktet #766's "?" protoform folds to nothing, so the entry's
+  # fold falls back to its NUMBER, which reached validation as ASCII-8BIT).
+  def test_numeric_cells_come_back_utf8
+    ktet = File.join(FIXTURES, "drav", "ktet.dbf")
+    parser(ktet).each_record do |record|
+      assert_equal Encoding::UTF_8, record.fetch("NUMBER").encoding
+      assert_equal Encoding::UTF_8, record.fetch("PRNUM").encoding
+    end
+  end
+
   def test_numbers_and_crosslinks_across_all_fixture_records
     by_number = parser.each_record.to_h { |rec| [rec.fetch("NUMBER"), rec] }
     assert_equal %w[1 721 1089], by_number.keys
