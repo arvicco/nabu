@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 103, lect.size,
+    assert_equal 104, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -244,7 +244,9 @@ class PosturesTest < Minitest::Test
                  "(the p108-japonic-stages mint merged; the shadowing rule) and ADDS " \
                  "aclt (identity hlu, the hieroglyphic tradition): 103→102; " \
                  "titus-tocharian-a ADDED P114-1a — identity xto (a real anchor; " \
-                 "the bilinguals' Sanskrit sub-lines ride bare san): 102→103"
+                 "the bilinguals' Sanskrit sub-lines ride bare san) and " \
+                 "titus-pahlavi ADDED — identity pal, declared coarse (the titus " \
+                 "family's grant-gated Middle Persian books): 102→104"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -308,7 +310,8 @@ class PosturesTest < Minitest::Test
     # identity (74→77) and zh-wikisource as codemap (13→14).
     # P110: the jpn:emj flips retire both declarations to the overrides
     # file (the shadowing rule) — the last pending leaves the board.
-    # P114-1a ADDS titus-tocharian-a as identity xto: identity 77→78.
-    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 78 }, by_posture)
+    # P114 ADDS titus-tocharian-a (identity xto) and titus-pahlavi
+    # (identity pal, declared coarse): identity 77→79.
+    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 79 }, by_posture)
   end
 end
