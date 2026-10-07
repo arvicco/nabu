@@ -26,6 +26,8 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 
+Private research materials under personal grants are not listed.
+
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 October 2026)</span>: `xct` 61,355 · `san` 9,379 · `pli` 7,288 · `eng` 4,766 · `lzh` 3,989 · `san-Latn` 817 · `en` 389 · `san-Deva` 32 · `pra` 22 · `bra-Deva` 3 … and 3 more (`nabu axis buddhist` lists all).
 
 ## The desk's instruments
