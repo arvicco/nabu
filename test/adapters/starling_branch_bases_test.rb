@@ -75,11 +75,11 @@ class StarlingBranchBasesTest < Minitest::Test
                    "starling-cezet" => "cau-tsz-pro", "starling-laket" => "lbe",
                    "starling-darget" => "cau-drg-pro", "starling-lezget" => "cau-lzg-pro",
                    "starling-khinet" => "kjj", "starling-abadet" => "cau-nwc-pro",
-                   "starling-sdret" => "dra-sdr-pro", "starling-telet" => "te-pro",
-                   "starling-kogaet" => "dra-kog-pro", "starling-gndet" => "dra-gnd-pro",
-                   "starling-gonet" => "gon-pro", "starling-kuiet" => "dra-kui-pro",
-                   "starling-konet" => "kfc", "starling-ktet" => "dra-nil-pro",
-                   "starling-ndret" => "dra-ndr-pro", "starling-pemet" => "dra-pem-pro",
+                   "starling-sdret" => "dra-sou-pro", "starling-telet" => "dra-tel-pro",
+                   "starling-kogaet" => "dra-cen-pro", "starling-gndet" => "dra-gki-pro",
+                   "starling-gonet" => "dra-gon-pro", "starling-kuiet" => "dra-kui-pro",
+                   "starling-konet" => "kfc", "starling-ktet" => "dra-tkt-pro",
+                   "starling-ndret" => "dra-nor-pro", "starling-pemet" => "dra-pem-pro",
                    "starling-braet" => "brh", "starling-kiret" => "sit-kir-pro",
                    "starling-dumet" => "dus", "starling-kulet" => "kle", "starling-limet" => "lif",
                    "starling-yamet" => "ybi"
@@ -197,7 +197,7 @@ class StarlingBranchBasesTest < Minitest::Test
 
   def test_parse_sdret_yields_the_south_dravidian_shelf_with_the_dravet_crosslink_both_ways
     document = parse("starling-sdret")
-    assert_equal "dra-sdr-pro", document.language
+    assert_equal "dra-sou-pro", document.language
     by_id = entries("starling-sdret")
     assert_equal %w[2 42 384], by_id.keys
     entry = by_id["42"]
