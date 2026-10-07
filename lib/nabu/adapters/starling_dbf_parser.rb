@@ -113,7 +113,9 @@ module Nabu
 
       def cell_value(field, cell)
         case field.type
-        when "N" then cell.strip
+        # ASCII digits sliced from the binary record: tagged UTF-8 like every
+        # other value (ktet #766's NUMBER is its fold fallback).
+        when "N" then cell.strip.force_encoding(Encoding::UTF_8)
         when "C" then field.var ? var_text(cell) : inline_text(cell)
         else cell
         end
