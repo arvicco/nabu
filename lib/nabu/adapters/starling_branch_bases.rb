@@ -29,14 +29,17 @@ module Nabu
     # qfa-kor-pro / cau-nkh-pro / cau-nwc-pro / sit-kir (all attested in the
     # held Wiktionary extracts), cau-ava / cau-tsz / cau-drg / cau-lzg (the
     # Wiktionary Avar-Andic / Tsezic / Dargwa / Lezgic family codes, +pro);
-    # the itl-pro shape (a pro stage on a language anchor) for the
-    # provisional Proto-Telugu (te-pro) and Proto-Gondi (gon-pro, the ISO
-    # 639-3 Gondi macrolanguage); and — for the five Dravidian intermediate
-    # branches with no code anywhere — CODES COINED in Wiktionary's
-    # family-prefix style from dravet's own column sigla (dra-sdr / dra-kog /
-    # dra-gnd / dra-ndr) or the base name (dra-kui Kui-Kuwi, dra-nil
-    # Nilgiri, dra-pem Pengo-Manda), the qfa-chk precedent. Registry nodes
-    # for these codes are a nabu-lects matter, minted separately.
+    # the Wiktionary Dravidian family codes, +pro — dra-sou (South
+    # Dravidian, sdret), dra-cen (Central Dravidian: StarLing's
+    # "Kolami-Gadba", kogaet), dra-gki (Gondi-Kui, gndet), dra-nor (North
+    # Dravidian, ndret), dra-tkt (Toda-Kota: the KT/Nilgiri base, ktet),
+    # dra-tel (Teluguic, telet's provisional Proto-Telugu), dra-gon (Gondi,
+    # gonet) — all verified against Wiktionary's families module; and, for
+    # the two Dravidian intermediate branches with no code anywhere, CODES
+    # COINED in Wiktionary's family-prefix style: dra-kui (Kui-Kuwi) and
+    # dra-pem (Pengo-Manda), both under the Konda-Kui grouping (dra-kki) —
+    # the qfa-chk precedent. Registry nodes for these codes are a
+    # nabu-lects matter, minted separately.
     #
     # == The reflex verdict (the head bases' rule, censused per column)
     #
@@ -310,7 +313,7 @@ module Nabu
         # protoforms") keep their slots as "#NUMBER". KT is the
         # Proto-Nilgiri protoform (body-only) with KTNUM → ktet.
         "starling-sdret" => {
-          dbf: "sdret.dbf", language: "dra-sdr-pro",
+          dbf: "sdret.dbf", language: "dra-sou-pro",
           title: "South Dravidian etymology (subordinate to G. Starostin's Dravidian database; " \
                  "DED-based; StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -332,11 +335,11 @@ module Nabu
           }.freeze
         }.freeze,
         # telet.inf DBINFO: "A database for Telugu dialects" — "a
-        # provisional Proto-Telugu form" (te-pro, the itl-pro shape). Only
+        # provisional Proto-Telugu form" (dra-tel-pro, Teluguic). Only
         # the basic standard form (TEL_1) mints; the dialect, Krishnamurti,
         # inscriptional and Merolu columns are variety/source columns.
         "starling-telet" => {
-          dbf: "telet.dbf", language: "te-pro",
+          dbf: "telet.dbf", language: "dra-tel-pro",
           title: "Telugu etymology (a database for Telugu dialects, subordinate to " \
                  "G. Starostin's Dravidian database; StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -356,7 +359,7 @@ module Nabu
         # the Kolami columns (kfb/nit split unresolvable per column),
         # Naikri/Naiki and the Salur/Poya Gadba varieties are body-only.
         "starling-kogaet" => {
-          dbf: "kogaet.dbf", language: "dra-kog-pro",
+          dbf: "kogaet.dbf", language: "dra-cen-pro",
           title: "Kolami-Gadba etymology (subordinate to G. Starostin's Dravidian database; " \
                  "StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -380,7 +383,7 @@ module Nabu
         # dravet "<Branch> etymology" pattern (the DBINFO's own words: "a
         # link to the Gondi / Konda / Pengo-Manda / Kui-Kuwi database").
         "starling-gndet" => {
-          dbf: "gndet.dbf", language: "dra-gnd-pro",
+          dbf: "gndet.dbf", language: "dra-gki-pro",
           title: "Gondi-Kui (Gondwan) etymology (subordinate to G. Starostin's Dravidian " \
                  "database; StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -398,10 +401,10 @@ module Nabu
         # gonet.inf DBINFO: "The Gondi database, subordinate to the Gondwan
         # database" — seventeen dialect/source columns, none with a code of
         # its own (the ISO 639-3 Gondi split does not map per column):
-        # body-only. Proto-Gondi files as gon-pro (the itl-pro shape on the
-        # Gondi macrolanguage code).
+        # body-only. Proto-Gondi files under Wiktionary's Gondi family code
+        # (dra-gon-pro).
         "starling-gonet" => {
-          dbf: "gonet.dbf", language: "gon-pro",
+          dbf: "gonet.dbf", language: "dra-gon-pro",
           title: "Gondi etymology (subordinate to the Gondwan and Dravidian databases; " \
                  "StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -423,7 +426,9 @@ module Nabu
         # Gondwan database". KUI (kxu) and the first Kuwi source KUWI_F
         # (Fitzgerald, kxv) mint; Kuttia Kui and the eight further Kuwi
         # source/dialect columns ride the body (the itelet Kovran/Stebnitski
-        # precedent: one minting column per language).
+        # precedent: one minting column per language). DECLARED COARSENESS:
+        # dra-kui is a coined code (no Kui-Kuwi code exists); its parent
+        # grouping is Konda-Kui (dra-kki).
         "starling-kuiet" => {
           dbf: "kuiet.dbf", language: "dra-kui-pro",
           title: "Kui-Kuwi etymology (subordinate to the Gondwan and Dravidian databases; " \
@@ -460,7 +465,7 @@ module Nabu
         # the South Dravidian database". PRNUM → sdret (both ways: sdret
         # KTNUM). Its select-correspondence table rides the .inf only.
         "starling-ktet" => {
-          dbf: "ktet.dbf", language: "dra-nil-pro",
+          dbf: "ktet.dbf", language: "dra-tkt-pro",
           title: "Nilgiri (Kota-Toda) etymology (subordinate to the South Dravidian and " \
                  "Dravidian databases; StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -475,7 +480,7 @@ module Nabu
         # Common Dravidian database" (notes "occasionally in Russian"). MLT
         # is Malto (Sauria Paharia, mjt).
         "starling-ndret" => {
-          dbf: "ndret.dbf", language: "dra-ndr-pro",
+          dbf: "ndret.dbf", language: "dra-nor-pro",
           title: "North Dravidian etymology (subordinate to G. Starostin's Dravidian database; " \
                  "StarLing database)",
           headword: "PROTO", gloss: "MEANING",
@@ -487,7 +492,9 @@ module Nabu
           reflexes: { "KUR" => %w[kru Kurukh].freeze, "MLT" => %w[mjt Malto].freeze }.freeze
         }.freeze,
         # pemet.inf DBINFO: "The Pengo-Manda database, subordinate to the
-        # Gondwan database".
+        # Gondwan database". DECLARED COARSENESS: dra-pem is a coined code
+        # (no Pengo-Manda code exists); its parent grouping is Konda-Kui
+        # (dra-kki).
         "starling-pemet" => {
           dbf: "pemet.dbf", language: "dra-pem-pro",
           title: "Pengo-Manda etymology (subordinate to the Gondwan and Dravidian databases; " \
@@ -683,46 +690,48 @@ module Nabu
          "StarLing/Tower of Babel West Caucasian database (same grant): 817 Proto-West-Caucasian " \
          "forms in S. A. Starostin's reconstruction with Abkhaz, Abaza, Adyghe, Kabardian and Ubykh " \
          "columns; Proto-Abkhaz-Tapanta and Proto-Circassian forms ride the comments."].freeze,
-        ["dra-sdr-pro", WITNESS,
+        ["dra-sou-pro", WITNESS,
          "StarLing/Tower of Babel South Dravidian database (same grant): 4,692 DED-based entries " \
          "(807 still without a protoform) with Tamil, Malayalam, Kannada, Kodagu, Tulu, Irula and " \
-         "Kasaba form/meaning/derivate columns and Proto-Nilgiri links. dra-sdr-pro is a code coined " \
-         "from dravet's SDR siglum (Wiktionary family-prefix style)."].freeze,
-        ["te-pro", WITNESS,
+         "Kasaba form/meaning/derivate columns and Proto-Nilgiri links. dra-sou-pro is " \
+         "Wiktionary's South Dravidian family code, +pro."].freeze,
+        ["dra-tel-pro", WITNESS,
          "StarLing/Tower of Babel Telugu database (same grant): 2,774 entries of 'a database for " \
          "Telugu dialects' — provisional Proto-Telugu forms with standard, dialectal, Krishnamurti, " \
-         "inscriptional and Merolu Telugu columns, each with its DED number."].freeze,
-        ["dra-kog-pro", WITNESS,
+         "inscriptional and Merolu Telugu columns, each with its DED number; filed under Wiktionary's " \
+         "Teluguic family code dra-tel, +pro."].freeze,
+        ["dra-cen-pro", WITNESS,
          "StarLing/Tower of Babel Kolami-Gadba database (same grant): 1,509 Proto-Kolami-Gadba " \
          "reconstructions with Kolami, Naikri, Naiki, Parji and Gadba (Ollari, Salur, Poya, " \
-         "Kondekor) columns. dra-kog-pro is coined from dravet's KOGA siglum."].freeze,
-        ["dra-gnd-pro", WITNESS,
+         "Kondekor) columns — StarLing's Kolami-Gadba is Central Dravidian (Wiktionary dra-cen, +pro)."].freeze,
+        ["dra-gki-pro", WITNESS,
          "StarLing/Tower of Babel Gondwan (Gondi-Kui) database (same grant): 1,428 Proto-Gondwan " \
          "reconstructions with Proto-Gondi, Konda, Proto-Pengo-Manda and Proto-Kui-Kuwi columns, " \
-         "linked to the four sub-databases. dra-gnd-pro is coined from dravet's GND siglum."].freeze,
-        ["gon-pro", WITNESS,
+         "linked to the four sub-databases. dra-gki-pro is Wiktionary's Gondi-Kui code, +pro."].freeze,
+        ["dra-gon-pro", WITNESS,
          "StarLing/Tower of Babel Gondi database (same grant): 1,475 Proto-Gondi reconstructions with " \
          "seventeen Gondi dialect/source columns (Betul, Mandla, Muria, Maria, Koya, Adilabad …), " \
-         "DED and Gondi-vocabulary numbers."].freeze,
+         "DED and Gondi-vocabulary numbers; filed under Wiktionary's Gondi family code dra-gon, +pro."].freeze,
         ["dra-kui-pro", WITNESS,
          "StarLing/Tower of Babel Kui-Kuwi database (same grant): 1,377 Proto-Kui-Kuwi " \
          "reconstructions with Kui, Kuttia Kui and eight Kuwi source/dialect columns. dra-kui-pro " \
-         "is a coined branch code."].freeze,
+         "is a coined branch code (no code exists), under the Konda-Kui grouping dra-kki."].freeze,
         ["kfc", WITNESS,
          "StarLing/Tower of Babel Konda database (same grant): 961 Konda forms (a single language, no " \
          "reconstruction) with Bhattacharya's variants and DED numbers, linked up into the Gondwan " \
          "database."].freeze,
-        ["dra-nil-pro", WITNESS,
+        ["dra-tkt-pro", WITNESS,
          "StarLing/Tower of Babel Nilgiri (Kota-Toda) database (same grant): 1,665 Proto-Kota-Toda " \
          "reconstructions with Kota and Toda columns, subordinate to the South Dravidian database. " \
-         "dra-nil-pro is a coined branch code."].freeze,
-        ["dra-ndr-pro", WITNESS,
+         "dra-tkt-pro is Wiktionary's Toda-Kota family code, +pro."].freeze,
+        ["dra-nor-pro", WITNESS,
          "StarLing/Tower of Babel North Dravidian database (same grant): 989 Proto-North-Dravidian " \
          "reconstructions with Kurukh and Malto columns (notes occasionally in Russian). " \
-         "dra-ndr-pro is coined from dravet's NDR siglum."].freeze,
+         "dra-nor-pro is Wiktionary's North Dravidian family code, +pro."].freeze,
         ["dra-pem-pro", WITNESS,
          "StarLing/Tower of Babel Pengo-Manda database (same grant): 740 Proto-Pengo-Manda " \
-         "reconstructions with Pengo and Manda columns. dra-pem-pro is a coined branch code."].freeze,
+         "reconstructions with Pengo and Manda columns. dra-pem-pro is a coined branch code (no " \
+         "code exists), under the Konda-Kui grouping dra-kki."].freeze,
         ["brh", WITNESS,
          "StarLing/Tower of Babel Brahui database (same grant): 269 Brahui forms (a single language, " \
          "no reconstruction) with derivatives and DED numbers, linked up into the Dravidian " \
