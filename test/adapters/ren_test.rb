@@ -13,10 +13,17 @@ require "tmpdir"
 class RenTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
+  include ParseTreeDigest
 
   FIXTURES = Nabu::TestSupport.fixtures("ren")
 
   ZIP_URL = "https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1"
+  CORA_URL = "https://www.fdr.uni-hamburg.de/record/9195/files/CorAXML_1.1.zip?download=1"
+
+  # The whole-tree parse digest of the TEI-only fixture tree (no coraxml/),
+  # minted by the PRE-sibling adapter (commit f8466602) — the absent-zip
+  # parity pin: today's canonical state must parse byte-identically.
+  PRE_CORAXML_DIGEST = "70329583d163c0fb21b82ab6722acbc0552258fedef4320fe252cd9bb95ff19f"
 
   DOC_URNS = %w[
     urn:nabu:ren:brs-alt-degb-altst-i
@@ -157,6 +164,125 @@ class RenTest < Minitest::Test
     refute parse_urn("urn:nabu:ren:hamb-uk-1301-1350").metadata.key?("upstream_language")
   end
 
+  # --- the CorA-XML sibling zip: dating / localization -----------------------
+  # Two real CorAXML_1.1.zip members ride the fixture tree at the canonical
+  # layout (coraxml/ReN_{anno,trans}_2021-01-06/<Sigle>.xml); the three
+  # trims have no sibling — exactly today's per-document absence.
+
+  def test_the_coraxml_header_rides_document_metadata_verbatim
+    metadata = parse_urn("urn:nabu:ren:hamb-uk-1301-1350").metadata
+    header = metadata["cora_header"]
+    assert_equal "1329", header["date_ReN"]
+    assert_equal "Hamburg", header["place"]
+    assert_equal "nordniedersaechsisch", header["language-area"]
+    assert_equal "14/1", header["time"]
+    assert_equal "AsnA-Sigle: Hbg1329", header["extract"], "inner colons stay verbatim"
+    refute header.key?("notes_transcription"), '"---" is upstream\'s null — dropped'
+    assert_equal %w[niederdeutsch nordniedersaechsisch], metadata["dialects"],
+                 "the coarse-to-fine language-type → language-area chain (the ReF mold)"
+  end
+
+  def test_a_clean_date_ren_becomes_the_structured_envelope_and_the_place_rides
+    metadata = parse_urn("urn:nabu:ren:hamb-uk-1301-1350").metadata
+    assert_equal({ "not_before" => 1329, "not_after" => 1329, "raw" => "1329" }, metadata["date"])
+    assert_equal "Hamburg", metadata["place"]
+  end
+
+  def test_a_transcribed_text_dates_from_its_sibling_and_an_empty_place_mints_nothing
+    metadata = parse_urn("urn:nabu:ren:dub-uk-1301-1350").metadata
+    assert_equal({ "not_before" => 1345, "not_after" => 1345, "raw" => "1345" }, metadata["date"])
+    refute metadata.key?("place"), "an empty header place is no claim"
+    assert_equal "niederrheinisch", metadata["cora_header"]["language-area"]
+  end
+
+  def test_date_ren_spans_parse_cleanly
+    assert_equal({ "not_before" => 1452, "not_after" => 1500, "raw" => "1452-1500" },
+                 doctored_hamb_metadata("date_ReN:1329", "date_ReN:1452-1500")["date"])
+    assert_equal({ "not_before" => 1464, "not_after" => 1465, "raw" => "1464/65" },
+                 doctored_hamb_metadata("date_ReN:1329", "date_ReN:1464/65")["date"],
+                 "a 2-digit tail expands with the head's century")
+  end
+
+  def test_prose_date_ren_falls_back_to_the_century_half_grid
+    metadata = doctored_hamb_metadata("date_ReN:1329", "date_ReN:[um 1300]")
+    assert_equal({ "not_before" => 1300, "not_after" => 1350, "raw" => "[um 1300] (time 14/1)" },
+                 metadata["date"],
+                 "prose dating is never number-scraped — upstream's time grid bounds it, " \
+                 "and the raw names both claims")
+    spanning = doctored_hamb_metadata("date_ReN:1329", "date_ReN:Mitte 15. Jh.",
+                                      "time:14/1", "time:15/1-15/2")
+    assert_equal({ "not_before" => 1400, "not_after" => 1500,
+                   "raw" => "Mitte 15. Jh. (time 15/1-15/2)" }, spanning["date"],
+                 "a grid range spans first-half start to last-half end")
+  end
+
+  def test_the_header_genre_code_projects_as_a_labeled_facet
+    assert_equal({ "genre" => { "value" => "U", "raw" => "Urkunde" } },
+                 parse_urn("urn:nabu:ren:hamb-uk-1301-1350").metadata["facets"],
+                 "the ReM genre vocabulary (P/V/U — censused P 111, U 86, V 38) labels the code")
+    assert_equal({ "value" => "Q" }, doctored_hamb_metadata("genre:U", "genre:Q").dig("facets", "genre"),
+                 "an unlisted code rides value-only, never guessed")
+  end
+
+  def test_the_explicit_unknown_place_mints_no_place_claim
+    metadata = doctored_hamb_metadata("place:Hamburg", "place:unbekannt")
+    refute metadata.key?("place"), "upstream's \"unbekannt\" is the absence of a claim"
+    assert_equal "unbekannt", metadata["cora_header"]["place"], "…still verbatim in the header"
+  end
+
+  def test_documents_without_a_coraxml_sibling_carry_no_cora_keys
+    metadata = parse_urn("urn:nabu:ren:lub-uk-1351-1400").metadata
+    %w[cora_header date place dialects facets].each { |key| refute metadata.key?(key), key }
+  end
+
+  def test_a_tree_without_the_coraxml_zip_parses_exactly_as_before
+    Dir.mktmpdir do |dir|
+      copy_tei_only(dir)
+      assert_equal PRE_CORAXML_DIGEST, tree_digest(Nabu::Adapters::Ren.new, dir),
+                   "today's canonical state (no sibling zip) — zero diff, pinned from the " \
+                   "pre-sibling adapter"
+    end
+  end
+
+  def test_the_coraxml_tree_never_mints_documents
+    assert_equal DOC_URNS, Nabu::Adapters::Ren.new.discover(FIXTURES).map(&:id)
+  end
+
+  def test_coraxml_is_a_declared_materialization
+    assert_equal ["coraxml"], Nabu::Adapters::Ren.materialized_paths
+  end
+
+  def test_ren_is_registered_for_the_structured_metadata_dates_shape
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["ren"]
+  end
+
+  def test_the_dating_lane_projects_loaded_documents_onto_the_timeline
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "ren", name: "ReN", adapter_class: "Nabu::Adapters::Ren",
+                                        license_class: "attribution")
+    Nabu::Store::Loader.new(db: catalog, source: source)
+                       .load_from(Nabu::Adapters::Ren.new, workdir: FIXTURES, full: true)
+    rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "ren")
+    assert_equal 2, rows, "the two sibling-carrying documents row; the trims stay dark"
+    hamb = catalog[:documents].where(urn: "urn:nabu:ren:hamb-uk-1301-1350").get(:id)
+    row = catalog[:document_axes].where(document_id: hamb).first
+    assert_equal [1329, 1329, "1329", "Hamburg"],
+                 row.values_at(:not_before, :not_after, :date_raw, :place_name)
+  end
+
+  def test_loading_twice_is_idempotent
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "ren", name: "ReN", adapter_class: "Nabu::Adapters::Ren",
+                                        license_class: "attribution")
+    loader = Nabu::Store::Loader.new(db: catalog, source: source)
+    loader.load_from(Nabu::Adapters::Ren.new, workdir: FIXTURES, full: true)
+    before = [catalog[:documents].select_map(%i[urn revision]).sort,
+              catalog[:passages].count]
+    loader.load_from(Nabu::Adapters::Ren.new, workdir: FIXTURES, full: true)
+    assert_equal before, [catalog[:documents].select_map(%i[urn revision]).sort,
+                          catalog[:passages].count]
+  end
+
   def test_unrecognized_elements_ride_the_document_census
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, "anno"))
@@ -193,27 +319,45 @@ class RenTest < Minitest::Test
   end
 
   # --- fetch (WebMock only, no network) ----------------------------------------
+  # Two immutable deposit artifacts: tei_1.1.zip (the text) + CorAXML_1.1.zip
+  # (the dating/localization headers), both sha-pinned BEFORE any tree
+  # mutation (the openiti two-arm choreography).
 
-  def test_fetch_downloads_verifies_the_pin_and_unpacks
-    body = stub_zip_body
-    stub_request(:get, ZIP_URL).to_return(
-      status: 200, body: body,
-      headers: { "Content-Type" => "application/zip", "Last-Modified" => "Wed, 06 Jan 2021 12:00:00 GMT" }
-    )
+  def test_fetch_downloads_both_artifacts_verifies_both_pins_and_unpacks
+    tei = stub_zip_body
+    cora = stub_cora_zip_body
+    stub_artifacts(tei, cora)
     Dir.mktmpdir do |workdir|
-      adapter = Nabu::Adapters::Ren.new(pin: Digest::SHA256.hexdigest(body))
+      adapter = Nabu::Adapters::Ren.new(pin: sha(tei), cora_pin: sha(cora))
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
-      assert_equal Digest::SHA256.hexdigest(body), report.sha
+      assert_equal sha(tei), report.sha, "the text artifact's sha is the ledger pin"
+      assert_match(/CorAXML sha pin verified/, report.notes)
+      assert File.file?(File.join(workdir, "coraxml", "ReN_anno_2021-01-06", "Hamb._Uk._1301-1350.xml")),
+             "the CorAXML_1.1/ top dir strips into the declared coraxml/ materialization"
       assert_equal DOC_URNS, adapter.discover(workdir).map(&:id),
                    "the unpacked anno/ + trans/ tree is discoverable in place " \
-                   "(the tei_1.1/ top dir strips)"
+                   "(the tei_1.1/ top dir strips); coraxml/ mints no documents"
+      hamb = adapter.discover(workdir).find { |r| r.id == "urn:nabu:ren:hamb-uk-1301-1350" }
+      assert_equal "1329", adapter.parse(hamb).metadata.dig("cora_header", "date_ReN")
+    end
+  end
+
+  def test_a_refetch_keeps_the_sibling_tree_out_of_the_deletion_set
+    tei = stub_zip_body
+    cora = stub_cora_zip_body
+    stub_artifacts(tei, cora)
+    Dir.mktmpdir do |workdir|
+      adapter = Nabu::Adapters::Ren.new(pin: sha(tei), cora_pin: sha(cora))
+      adapter.fetch(workdir)
+      adapter.fetch(workdir)
+      refute Dir.exist?(File.join(workdir, Nabu::Adapter::ATTIC_DIRNAME)),
+             "neither arm's tree swap dooms the other's files"
     end
   end
 
   def test_fetch_aborts_on_a_sha_pin_mismatch_with_the_tree_untouched
-    body = stub_zip_body
-    stub_request(:get, ZIP_URL).to_return(status: 200, body: body)
+    stub_artifacts(stub_zip_body, stub_cora_zip_body)
     Dir.mktmpdir do |workdir|
       error = assert_raises(Nabu::FetchError) { Nabu::Adapters::Ren.new.fetch(workdir) }
       assert_match(/sha256 pin/, error.message)
@@ -221,8 +365,19 @@ class RenTest < Minitest::Test
     end
   end
 
+  def test_a_coraxml_pin_miss_aborts_with_the_tree_untouched
+    tei = stub_zip_body
+    stub_artifacts(tei, stub_cora_zip_body)
+    Dir.mktmpdir do |workdir|
+      error = assert_raises(Nabu::FetchError) { Nabu::Adapters::Ren.new(pin: sha(tei)).fetch(workdir) }
+      assert_match(/CorAXML_1\.1\.zip.*sha256 pin/, error.message)
+      assert_empty Dir.children(workdir), "both arms verify BEFORE either tree mutates"
+    end
+  end
+
   def test_fetch_wraps_http_failure_in_fetch_error
     stub_request(:get, ZIP_URL).to_return(status: 500)
+    stub_request(:get, CORA_URL).to_return(status: 500)
     Dir.mktmpdir do |workdir|
       assert_raises(Nabu::FetchError) { Nabu::Adapters::Ren.new.fetch(workdir) }
     end
@@ -230,14 +385,14 @@ class RenTest < Minitest::Test
 
   # --- remote-health probe shape ------------------------------------------------
 
-  def test_probe_heads_the_deposit_artifact_with_no_metadata_endpoint
+  def test_probe_heads_both_deposit_artifacts_with_no_metadata_endpoint
     assert_equal :http_zip, Nabu::Adapters::Ren.remote_probe_strategy
     targets = Nabu::Adapters::Ren.http_probe_targets
-    assert_equal 1, targets.size
-    assert_equal ZIP_URL, targets[0].zip_url
-    assert_nil targets[0].metadata_url,
-               "the license lives on the record page — license_watch in the registry row"
-    assert_equal Nabu::ZipFetch::STATE_FILE, targets[0].state_file
+    assert_equal [ZIP_URL, CORA_URL], targets.map(&:zip_url)
+    assert(targets.all? { |t| t.metadata_url.nil? },
+           "the license lives on the record page — license_watch in the registry row")
+    assert_equal ["", "coraxml"], targets.map(&:state_subdir)
+    assert(targets.all? { |t| t.state_file == Nabu::ZipFetch::STATE_FILE })
   end
 
   # --- registry round-trip ------------------------------------------------------
@@ -258,6 +413,50 @@ class RenTest < Minitest::Test
     ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
     refute_nil ref, "expected discover to yield #{urn}"
     adapter.parse(ref)
+  end
+
+  # The Hamburg charter's metadata parsed from a doctored copy of the
+  # fixture tree: +pairs+ are (from, to) substitutions into its CorA-XML
+  # sibling header.
+  def doctored_hamb_metadata(*pairs)
+    Dir.mktmpdir do |dir|
+      copy_tree_without(FIXTURES, dir, excluded: "nothing")
+      path = File.join(dir, "coraxml", "ReN_anno_2021-01-06", "Hamb._Uk._1301-1350.xml")
+      text = File.read(path)
+      pairs.each_slice(2) do |from, to|
+        assert_includes text, from
+        text = text.sub(from, to)
+      end
+      File.write(path, text)
+      adapter = Nabu::Adapters::Ren.new
+      ref = adapter.discover(dir).find { |r| r.id == "urn:nabu:ren:hamb-uk-1301-1350" }
+      return adapter.parse(ref).metadata
+    end
+  end
+
+  def copy_tei_only(dir)
+    copy_tree_without(FIXTURES, dir, excluded: "coraxml")
+  end
+
+  def sha(body)
+    Digest::SHA256.hexdigest(body)
+  end
+
+  def stub_artifacts(tei, cora)
+    headers = { "Content-Type" => "application/zip", "Last-Modified" => "Wed, 06 Jan 2021 12:00:00 GMT" }
+    stub_request(:get, ZIP_URL).to_return(status: 200, body: tei, headers: headers)
+    stub_request(:get, CORA_URL).to_return(status: 200, body: cora, headers: headers)
+  end
+
+  # Zip the checked-in CorA-XML members under the upstream layout
+  # (CorAXML_1.1/ReN_{anno,trans}_2021-01-06/*.xml).
+  def stub_cora_zip_body
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(File.join(FIXTURES, "coraxml"), File.join(dir, "CorAXML_1.1"))
+      zip_path = File.join(dir, "cora.zip")
+      Nabu::Shell.run("zip", "-q", "-r", zip_path, "CorAXML_1.1", chdir: dir)
+      return File.binread(zip_path)
+    end
   end
 
   # Zip the checked-in fixtures under the upstream layout

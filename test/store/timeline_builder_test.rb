@@ -515,6 +515,36 @@ module Store
                    "the scriptorium claim rides verbatim, uncertainty marker included"
     end
 
+    def test_metadata_dates_rem_structured_envelope_beside_orig_place
+      seed_metadata_doc("rem", "urn:nabu:rem:m2",
+                        { "date" => { "not_before" => 1150, "not_after" => 1200, "raw" => "(time 12,2)" },
+                          "orig_place" => "Vorau" })
+      build!
+      row = timeline_for("urn:nabu:rem:m2")
+      assert_equal [1150, 1200, "(time 12,2)", "Vorau"],
+                   row.values_at(:not_before, :not_after, :date_raw, :place_name),
+                   "the CorA dating lane and the TEI scriptorium place share one row"
+    end
+
+    # The ReN CorA-XML sibling: the ref-mold :structured envelope (a clean
+    # date_ReN, or the century-half grid behind prose) + the header place.
+    def test_metadata_dates_ren_structured_envelope_and_place
+      seed_metadata_doc("ren", "urn:nabu:ren:hamb-uk-1301-1350",
+                        { "date" => { "not_before" => 1329, "not_after" => 1329, "raw" => "1329" },
+                          "place" => "Hamburg" })
+      seed_metadata_doc("ren", "urn:nabu:ren:prose",
+                        { "date" => { "not_before" => 1300, "not_after" => 1350,
+                                      "raw" => "[um 1300] (time 14/1)" } })
+      seed_metadata_doc("ren", "urn:nabu:ren:sibling-less", { "sigle" => "Lüb._Uk._1351-1400" })
+      build!
+      row = timeline_for("urn:nabu:ren:hamb-uk-1301-1350")
+      assert_equal [1329, 1329, "1329", "Hamburg"],
+                   row.values_at(:not_before, :not_after, :date_raw, :place_name)
+      assert_nil row[:date_class], "an upstream-typed artifact dating — no composition class"
+      assert_equal [1300, 1350], timeline_for("urn:nabu:ren:prose").values_at(:not_before, :not_after)
+      assert_nil timeline_for("urn:nabu:ren:sibling-less"), "no sibling, no claim — no row"
+    end
+
     # P47-r3: the per-source refresh seam SyncRunner calls post-load — the
     # lane never lags a sync again (the class this audit exists to kill).
     def test_metadata_dates_refresh_source_replaces_only_that_source

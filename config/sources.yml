@@ -3702,8 +3702,9 @@ ref:
 # P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
 # ~2M word forms of manually annotated MHG — the first cora-tei registrant
 # (ReA/ReN ride the family when their license replies land, backlog
-# asked by email 2026-07-22). One immutable Zenodo artifact (record 13982324,
-# ReM-v2.1_tei.zip, hard sha256 pin — the iecor mold) → manual. CC BY-SA
+# asked by email 2026-07-22). Two immutable Zenodo artifacts (record 13982324,
+# ReM-v2.1_tei.zip + the ReM-v2.1_coraxml.zip pos/msd sibling, hard sha256
+# pins — the iecor mold) → manual. CC BY-SA
 # 4.0 (in-file <licence>, zip README and Zenodo record agree; parse
 # re-verifies per file and quarantines drift).
 rem:
@@ -3740,13 +3741,15 @@ ren:
   # CorA-XML headers class as niederrheinisch carry metadata
   # upstream_language (censused list in the adapter — upstream couples
   # the lanes, no dum split invented). Dating/localization live ONLY in
-  # the CorA-XML sibling's headers — documented follow-up, the inverse of
-  # ReM's pos/msd gap. LICENSE: CC BY 4.0 on the deposit record itself
-  # (verified 2026-07-25; no in-file licence exists) → attribution; cite
-  # record + DOI. Fetch: ONE versioned-immutable artifact via ZipFetch
-  # (302 → signed S3, RedirectFollow; single top dir strips), hard sha256
-  # pin checked between download and any tree mutation (the rem/iecor
-  # mold). A future 1.2 is a new record version: owner re-pins → manual.
+  # the CorA-XML sibling's headers — fetched as a second arm
+  # (CorAXML_1.1.zip → coraxml/), riding metadata date/place/cora_header
+  # (MetadataDates :structured). LICENSE: CC BY 4.0 on the deposit record
+  # itself (verified 2026-07-25; no in-file licence exists) → attribution;
+  # cite record + DOI. Fetch: TWO versioned-immutable artifacts via
+  # ZipFetch (302 → signed S3, RedirectFollow; single top dirs strip),
+  # both hard sha256 pins checked between download and any tree mutation
+  # (the rem/iecor mold). A future 1.2 is a new record version: owner
+  # re-pins → manual.
   sync_policy: manual
 
 riig:
@@ -4225,6 +4228,15 @@ starling:
                    # ~9,584 reflex rows (dry-parsed at full scale). Eyeball
                    # `nabu define '*èbà'` (AED credit), `nabu etym 'aʔt'`
                    # (Ket → yenet walk).
+                   # P113-2: IE.exe's LEXSTAT/ tables (already on disk — a
+                   # `bin/nabu sync starling --parse-only` lands them, no
+                   # fetch) add thirteen shelves: ten lexicostatistical
+                   # wordlists starling-lexstat-* (23,096 form entries with
+                   # cognation numbers into baltet/germet/piet/the three
+                   # tables below) + starling-dardet 426 / -indet 520 /
+                   # -iranet 480 (dry-parsed at full scale). Eyeball
+                   # `nabu define kakls` (balt #58 → "Baltic etymology:
+                   # #1634") and `nabu define hals` (germ GOT → germet #390).
   # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
@@ -4239,7 +4251,9 @@ starling:
   # G. Klimov and Fähnrich–Sardshveladze (kartet.inf DBINFO + roster item
   # 6) — all carried verbatim in the adapter MANIFEST.license so every
   # serving surface renders them. Upstream is a hand-curated 2005-era
-  # package family: re-fetch is an owner decision.
+  # package family: re-fetch is an owner decision. EXTENSION (G. Starostin,
+  # e-mail 2026-10-01): all remaining DOWNLOADABLE databases, same
+  # conditions (any use, per-base attribution wherever displayed).
   sync_policy: manual
   # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
   # clone of nabu does NOT convey it — so `nabu sync starling` demands an

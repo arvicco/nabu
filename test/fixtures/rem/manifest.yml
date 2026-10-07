@@ -26,3 +26,11 @@ files:
     url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_tei.zip/content
     whole: false
     trim: structural trim of zip member tei/M345.xml (Augsburger Urkunden — the entry-wise lb-restart exemplar with NO container element; header byte-for-byte, body cut before the third <lb n="1" ed="1"> restart keeping two colliding runs, closing tags appended); P40-r1
+  - path: coraxml/cora-xml/M058.xml
+    url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_coraxml.zip/content
+    whole: false
+    trim: whole zip member ReM-v2.1_coraxml/cora-xml/M058.xml (the M058 TEI fixture's CorA-XML sibling — the pos/msd join), kept byte-for-byte uncut; extracted from ReM-v2.1_coraxml.zip (110,668,767 B)
+  - path: coraxml/cora-xml/M218B.xml
+    url: https://zenodo.org/api/records/13982324/files/ReM-v2.1_coraxml.zip/content
+    whole: false
+    trim: whole zip member ReM-v2.1_coraxml/cora-xml/M218B.xml (the M218B TEI fixture's CorA-XML sibling), kept byte-for-byte uncut; extracted from ReM-v2.1_coraxml.zip (110,668,767 B)

@@ -62,11 +62,16 @@ module Nabu
     # English gloss and corpus frequency, word-grain as upstream ships
     # them), "lang" (language.tf Hebrew/Aramaic → hbo/arc — anything else
     # is a ParseError), and the six morphology features sp/vs/vt/gn/nu/ps
-    # verbatim (including upstream's honest "NA"/"unknown"). Empty forms
+    # verbatim (including upstream's honest "NA"/"unknown"). Widened
+    # to EVERY word-grain scalar feature tf/2021 ships — the transliteration
+    # and pointed-Hebrew morpheme lanes (g_word, g_lex, g_prs_utf8, …), the
+    # consonantal morpheme slots (pfm/vbs/vbe/nme/uvf/prs + prs_gn/nu/ps),
+    # lex0/lex_utf8/voc_lex(_utf8), ls/pdp/st/nametype/root, and the corpus
+    # statistics (freq_occ/rank_*/lexeme_count, the in-context "number") —
+    # each verbatim under its upstream name (TOKEN_FEATURES); everything
+    # else is DECLINED with its reason (DECLINED_TOKEN_FEATURES). Empty forms
     # are REAL (6,488 elided-article slots — בַּ = בְּ + a surfaceless הַ);
-    # the token keeps its place with no "form" key. The transliteration
-    # lanes (g_word, lex0, …) and the version-map omap@* edges are
-    # deliberately not ingested.
+    # the token keeps its place with no "form" key.
     #
     # == Constituency spans (THE DESIGN NOTE, implemented below)
     #
@@ -159,8 +164,69 @@ module Nabu
       # honestly, never guess per-verse.
       DEFAULT_LANGUAGE = "hbo"
 
-      # Word-grain features riding tokens verbatim, key = feature name.
-      TOKEN_FEATURES = %w[lex gloss freq_lex sp vs vt gn nu ps].freeze
+      # Word-grain SCALAR features riding tokens verbatim, key = upstream
+      # feature name — the full word-grain census of tf/2021 (the first nine
+      # are the P30-4 lane; the rest widen it to every word-grain node
+      # feature the dataset ships). Absent upstream = absent key, never
+      # filled; ints stay ints. Several are near-twins upstream ships
+      # separately (suffix_* vs prs_*, lexeme_count vs freq_lex) — each
+      # rides verbatim under its own name, no reconciling.
+      TOKEN_FEATURES = %w[
+        lex gloss freq_lex sp vs vt gn nu ps
+        freq_occ g_cons g_cons_utf8 g_lex g_lex_utf8 g_nme g_nme_utf8 g_pfm g_pfm_utf8
+        g_prs g_prs_utf8 g_uvf g_uvf_utf8 g_vbe g_vbe_utf8 g_vbs g_vbs_utf8 g_word
+        languageISO lex0 lex_utf8 lexeme_count ls nametype nme number pdp pfm prs
+        prs_gn prs_nu prs_ps rank_lex rank_occ root st suffix_gender suffix_number
+        suffix_person uvf vbe vbs voc_lex voc_lex_utf8
+      ].freeze
+
+      # DECLARED COARSENESS — every tf/2021 feature that does NOT ride a
+      # token under its own name, with why. Word-grain features ridden
+      # under an established alias, or whose upstream name is already
+      # taken by that alias, are listed first; then non-word grain (node
+      # features of clause/phrase/atom/sentence/section nodes — clause
+      # "kind" and phrase "function" ride the SPANS instead), then the
+      # edge and config files. book@<lang> (24 book-name translations,
+      # book-node grain) are declined as a family, not listed one by one.
+      DECLINED_TOKEN_FEATURES = {
+        "g_word_utf8" => "rides as \"form\" (the ketiv surface, P30-4)",
+        "trailer_utf8" => "rides as \"trailer\"",
+        "language" => "rides as \"lang\" (mapped Hebrew/Aramaic → hbo/arc); languageISO rides verbatim",
+        "qere_utf8" => "rides inside the P27 \"qere\" word-hash list (form)",
+        "qere_trailer_utf8" => "rides inside the P27 \"qere\" word-hash list (trailer)",
+        "kq_hybrid_utf8" => "rides as \"kq_hybrid\"",
+        "trailer" => "transliterated twin of trailer_utf8, whose alias already owns the key \"trailer\"",
+        "qere" => "transliterated twin of qere_utf8; the key \"qere\" is the P27 word-hash list contract",
+        "qere_trailer" => "transliterated twin of qere_trailer_utf8 (part of the qere apparatus, see qere)",
+        "kq_hybrid" => "transliterated twin of kq_hybrid_utf8, whose alias already owns the key \"kq_hybrid\"",
+        "book" => "section grain (book/chapter/verse nodes) — mints the document",
+        "chapter" => "section grain — mints the passage urn",
+        "verse" => "section grain — mints the passage urn",
+        "label" => "verse/half_verse grain (\"GEN 01,02\") — the urn already carries the citation",
+        "kind" => "clause grain — rides the clause SPANS",
+        "function" => "phrase grain — rides the phrase SPANS",
+        "domain" => "clause grain (text type) — span-feature widening is separate work",
+        "txt" => "clause grain (text type) — span-feature widening is separate work",
+        "typ" => "clause/phrase(_atom) grain — span-feature widening is separate work",
+        "rela" => "clause/phrase/subphrase grain — span-feature widening is separate work",
+        "det" => "phrase(_atom) grain — span-feature widening is separate work",
+        "dist" => "constituent grain (distance to mother) — span-feature widening is separate work",
+        "dist_unit" => "constituent grain — span-feature widening is separate work",
+        "mother_object_type" => "clause/subphrase grain — span-feature widening is separate work",
+        "code" => "clause_atom grain — atoms are not ingested as spans",
+        "instruction" => "clause_atom grain — atoms are not ingested as spans",
+        "is_root" => "clause_atom grain — atoms are not ingested as spans",
+        "pargr" => "clause_atom grain — atoms are not ingested as spans",
+        "tab" => "clause_atom grain — atoms are not ingested as spans",
+        "mother" => "relational EDGE (linguistic dependency) — not a scalar",
+        "functional_parent" => "relational EDGE — not a scalar",
+        "distributional_parent" => "relational EDGE — not a scalar",
+        "oslots" => "structural EDGE — read for slot extents, never a token value",
+        "omap@2017-2021" => "@edgeValues version map — refused by the text-fabric family",
+        "omap@c-2021" => "@edgeValues version map — refused by the text-fabric family",
+        "otype" => "structural — types every node, never a token value",
+        "otext" => "@config — documents the text formats (form/trailer follow text-orig-full-ketiv)"
+      }.freeze
 
       # Constituent types carried as spans, with their per-type feature.
       SPAN_FEATURES = { "clause" => "kind", "phrase" => "function" }.freeze

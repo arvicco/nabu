@@ -1,0 +1,1679 @@
+<text id="9">
+  <cora-header sigle="9" name="Hamb. Uk. 1301-1350" />
+  <header>text_ReN:1 digitalisierte Hamburger Urkunden aus dem ASnA, 1301 bis 1350
+abbr_ddd:Hamb. Uk. 1301-1350
+text-type:
+reference:Hs.: Blatt (r/v)
+reference_secondary:
+edition:digitization by ASnA
+literature:a) Bolland, Jürgen (Bearb.) (1960):; Hamburgische Burspraken 1346 bis 1594. Mit Nachträgen bis 1699. 2 Teile. Teil 1: Einleitung und Register. Teil 2: Bursprakentexte. (Veröffentlichungen aus dem Staatsarchiv der Freien Hansestadt Hamburg, VI/1 und VI/2). Hamburg.; b) Bolland, Jürgen (Hrsg.) (1968):; Die Bilderhandschrift des Hamburgischen Stadtrechtes von 1497. Erläutert von Heinrich Reincke. Neu herausgegeben von Jürgen Bolland, Hamburg.; c) Carstens, Werner (Bearb.) (1962-1971):; Schleswig-Holsteinische Regesten und Urkunden. Nach Vorarbeiten von Heinrich Kochendörffer bearb. von Werner Carstens und in Verbindung mit dem Schleswig-Holsteinischen Landesarchiv hrsg. von der Gesellschaft für Schleswig-Holsteinische Geschichte. Sechster Bd.: 1376-1400. Erster Teil: 1376-1388. Zweiter Teil: 1389-1400. Neumünster.; d) Lappenberg, Johann Martin (Hg.) (1966):; Die ältesten Stadt-, Schiff- und Landrechte Hamburgs. Neudruck der Ausgabe Hamburg 1845. Aalen.; e) Lappenberg, Johann Martin (Hg.) (1907):; Hamburgisches Urkundenbuch. 4 Bde. 1. Bd. Mit einer Karte und anderen Lithographien. Anastatische Reproduktion der Ausgabe vom Jahre 1842. Hamburg. [786-1300]. 2. Bd. 1. Abt. 1301-1310. [2. Abt. 1311-1336]. Hrsg. von Anton Hagedorn. Hamburg 1911. 3. Bd. Register zum zweiten Band [1301-1336] mit Vorwort, Nachträgen und Berichtigungen bearb. von Hans Nirrnheim. Hrsg. vom Staatsarchiv Hamburg. Hamburg 1953. 4. Bd. 1337-1350. Bearb. von Jürgen Reetz. Hrsg. vom Staatsarchiv der Freien und Hansestadt Hamburg. Hamburg 1967.; f) Loose, Hans-Dieter (Bearb.) (1970):; Hamburger Testamente 1351-1400. (Veröffentlichungen aus dem Staatsarchiv der Freien und Hansestadt Hamburg, XI). Hamburg.
+library:StA Hamburg
+library-shelfmark:digitization by ASnA
+online:
+scribe_or_printer:
+place:Hamburg
+extent:1 Urkunde
+extract:AsnA-Sigle: Hbg1329
+columns:
+style:
+hands:
+author:
+drawer:
+illustration:
+date_ReN:1329
+online_file:
+external_source:
+notes_manuscript:
+notes_language:
+corpus:
+notes_transcription:---
+notes_annotation:---
+digitization_by:ASnA
+collation_by:Anpassung durch KDR (Hamburg)
+pre_editing_by:Anpassung durch LDU (Hamburg)
+annotation_by:LDU (Hamburg)
+proofreading_by:SIH (Hamburg)
+topic:Recht
+topic_ReN:U
+genre:U
+time:14/1
+medium:Handschrift
+language-area:nordniedersaechsisch
+base_for_transcription:Edition
+token:202, davon 180 Mnd. (ohne FM, OA, XY, $;)
+language:mittelniederdeutsch
+language-type:niederdeutsch</header>
+  <layoutinfo>
+    <page id="p1" side="" no="1" range="c1" />
+    <column id="c1" range="l1..l15" />
+    <line id="l1" name="01" range="t1_d1..t18_d1" />
+    <line id="l2" name="02" range="t19_d1..t34_d1" />
+    <line id="l3" name="03" range="t34_d2..t43_d1" />
+    <line id="l4" name="04" range="t44_d1..t55_d1" />
+    <line id="l5" name="05" range="t56_d1..t70_d1" />
+    <line id="l6" name="06" range="t71_d1..t86_d1" />
+    <line id="l7" name="07" range="t86_d2..t99_d1" />
+    <line id="l8" name="08" range="t100_d1..t113_d1" />
+    <line id="l9" name="09" range="t113_d2..t127_d1" />
+    <line id="l10" name="10" range="t128_d1..t141_d1" />
+    <line id="l11" name="11" range="t142_d1..t153_d1" />
+    <line id="l12" name="12" range="t153_d2..t167_d1" />
+    <line id="l13" name="13" range="t168_d1..t182_d1" />
+    <line id="l14" name="14" range="t183_d1..t194_d1" />
+    <line id="l15" name="15" range="t195_d1..t200_d1" />
+  </layoutinfo>
+  <shifttags />
+  <comment type="K">HBG1</comment>
+  <comment type="K">Hbg 1329</comment>
+  <token id="t1" trans="Dit">
+    <dipl id="t1_d1" trans="Dit" utf="Dit" />
+    <mod id="t1_m1" trans="Dit" utf="Dit" ascii="Dit" checked="y">
+      <lemma tag="desse,desse,dit" />
+      <pos tag="DPDS" />
+      <morph tag="Neut.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t2" trans="se">
+    <dipl id="t2_d1" trans="se" utf="se" />
+    <mod id="t2_m1" trans="se" utf="se" ascii="se" checked="y">
+      <lemma tag="wēsen²" />
+      <pos tag="VVFIN" />
+      <morph tag="Irr.3.Sg.Pres.Konj" />
+    </mod>
+  </token>
+  <token id="t3" trans="witlic">
+    <dipl id="t3_d1" trans="witlic" utf="witlic" />
+    <mod id="t3_m1" trans="witlic" utf="witlic" ascii="witlic" checked="y">
+      <lemma tag="witlĩk" />
+      <pos tag="ADJD" />
+      <morph tag="Pos" />
+    </mod>
+  </token>
+  <token id="t4" trans="alle">
+    <dipl id="t4_d1" trans="alle" utf="alle" />
+    <mod id="t4_m1" trans="alle" utf="alle" ascii="alle" checked="y">
+      <lemma tag="al" />
+      <comment tag="keine Kongruenz" />
+      <pos tag="DIA" />
+      <morph tag="_.Dat.Pl" />
+    </mod>
+  </token>
+  <token id="t5" trans="den">
+    <dipl id="t5_d1" trans="den" utf="den" />
+    <mod id="t5_m1" trans="den" utf="den" ascii="den" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="_.Dat.Pl" />
+    </mod>
+  </token>
+  <token id="t6" trans="ghoͤnen">
+    <dipl id="t6_d1" trans="ghoͤnen" utf="ghoͤnen" />
+    <mod id="t6_m1" trans="ghoͤnen" utf="ghoͤnen" ascii="ghoͤnen" checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="gȫne" />
+      <pos tag="DPDS" />
+      <morph tag="_.Dat.Pl" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t7" trans="de">
+    <dipl id="t7_d1" trans="de" utf="de" />
+    <mod id="t7_m1" trans="de" utf="de" ascii="de" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DPRELS" />
+      <morph tag="_.Nom.Pl" />
+    </mod>
+  </token>
+  <token id="t8" trans="dessen">
+    <dipl id="t8_d1" trans="dessen" utf="dessen" />
+    <mod id="t8_m1" trans="dessen" utf="dessen" ascii="dessen" checked="y">
+      <lemma tag="desse,desse,dit" />
+      <pos tag="DDA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t9" trans="bref">
+    <dipl id="t9_d1" trans="bref" utf="bref" />
+    <mod id="t9_m1" trans="bref" utf="bref" ascii="bref" checked="y">
+      <lemma tag="brêf" />
+      <pos tag="NA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t10" trans="sen">
+    <dipl id="t10_d1" trans="sen" utf="sen" />
+    <mod id="t10_m1" trans="sen" utf="sen" ascii="sen" checked="y">
+      <lemma tag="sên" />
+      <pos tag="VVFIN" />
+      <morph tag="St.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t11" trans=".">
+    <dipl id="t11_d1" trans="." utf="." />
+    <mod id="t11_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t12" trans="vnde">
+    <dipl id="t12_d1" trans="vnde" utf="vnde" />
+    <mod id="t12_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+      </mod>
+  </token>
+  <token id="t13" trans="hoͤren">
+    <dipl id="t13_d1" trans="hoͤren" utf="hoͤren" />
+    <mod id="t13_m1" trans="hoͤren" utf="hoͤren" ascii="hoͤren" checked="y">
+      <lemma tag="hö̂ren²" />
+      <pos tag="VVFIN" />
+      <morph tag="Sw.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t14" trans="lesen">
+    <dipl id="t14_d1" trans="lesen" utf="lesen" />
+    <mod id="t14_m1" trans="lesen" utf="lesen" ascii="lesen" checked="y">
+      <lemma tag="lēsen¹" />
+      <pos tag="VVINF" />
+    </mod>
+  </token>
+  <token id="t15" trans=".">
+    <dipl id="t15_d1" trans="." utf="." />
+    <mod id="t15_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t16" trans="dat">
+    <dipl id="t16_d1" trans="dat" utf="dat" />
+    <mod id="t16_m1" trans="dat" utf="dat" ascii="dat" checked="y">
+      <lemma tag="dat²B" />
+      <pos tag="KOUS" />
+    </mod>
+  </token>
+  <token id="t17" trans="we">
+    <dipl id="t17_d1" trans="we" utf="we" />
+    <mod id="t17_m1" trans="we" utf="we" ascii="we" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PPER" />
+      <morph tag="1.Pl._.Nom" />
+    </mod>
+  </token>
+  <token id="t18" trans="her">
+    <dipl id="t18_d1" trans="her" utf="her" />
+    <mod id="t18_m1" trans="her" utf="her" ascii="her" checked="y">
+      <lemma tag="hêre⁴" />
+      <pos tag="NA" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t19" trans="willeken">
+    <dipl id="t19_d1" trans="willeken" utf="willeken" />
+    <mod id="t19_m1" trans="willeken" utf="willeken" ascii="willeken" checked="y">
+      <lemma tag="willeken°" />
+      <pos tag="NE" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t20" trans="de">
+    <dipl id="t20_d1" trans="de" utf="de" />
+    <mod id="t20_m1" trans="de" utf="de" ascii="de" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t21" trans="prouest">
+    <dipl id="t21_d1" trans="prouest" utf="prouest" />
+    <mod id="t21_m1" trans="prouest" utf="prouest" ascii="prouest" checked="y">
+      <lemma tag="prōvest" />
+      <pos tag="NA" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t22" trans=".">
+    <dipl id="t22_d1" trans="." utf="." />
+    <mod id="t22_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+    </mod>
+  </token>
+  <token id="t23" trans="ver">
+    <dipl id="t23_d1" trans="ver" utf="ver" />
+    <mod id="t23_m1" trans="ver" utf="ver" ascii="ver" checked="y">
+      <lemma tag="ver³" />
+      <pos tag="NA" />
+      <morph tag="Fem.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t24" trans="Mechtilt">
+    <dipl id="t24_d1" trans="Mechtilt" utf="Mechtilt" />
+    <mod id="t24_m1" trans="Mechtilt" utf="Mechtilt" ascii="Mechtilt" checked="y">
+      <lemma tag="Mechtilt°" />
+      <pos tag="NE" />
+      <morph tag="Fem.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t25" trans="de">
+    <dipl id="t25_d1" trans="de" utf="de" />
+    <mod id="t25_m1" trans="de" utf="de" ascii="de" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Fem.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t26" trans="ebbedische">
+    <dipl id="t26_d1" trans="ebbedische" utf="ebbedische" />
+    <mod id="t26_m1" trans="ebbedische" utf="ebbedische" ascii="ebbedische" checked="y">
+      <lemma tag="ebbedische" />
+      <pos tag="NA" />
+      <morph tag="Fem.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t27" trans=".">
+    <dipl id="t27_d1" trans="." utf="." />
+    <mod id="t27_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+    </mod>
+  </token>
+  <token id="t28" trans="vnde">
+    <dipl id="t28_d1" trans="vnde" utf="vnde" />
+    <mod id="t28_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t29" trans="de">
+    <dipl id="t29_d1" trans="de" utf="de" />
+    <mod id="t29_m1" trans="de" utf="de" ascii="de" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t30" trans="mene">
+    <dipl id="t30_d1" trans="mene" utf="mene" />
+    <mod id="t30_m1" trans="mene" utf="mene" ascii="mene" checked="y">
+      <lemma tag="gemêⁱne¹" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc.Nom.Sg.Sw" />
+    </mod>
+  </token>
+  <token id="t31" trans="conuent">
+    <dipl id="t31_d1" trans="conuent" utf="conuent" />
+    <mod id="t31_m1" trans="conuent" utf="conuent" ascii="conuent" checked="y">
+      <lemma tag="konvent¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t32" trans="tuͦ">
+    <dipl id="t32_d1" trans="tuͦ" utf="tuͦ" />
+    <mod id="t32_m1" trans="tuͦ" utf="tuͦ" ascii="tuͦ" checked="y">
+      <lemma tag="tô¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t33" trans="deme">
+    <dipl id="t33_d1" trans="deme" utf="deme" />
+    <mod id="t33_m1" trans="deme" utf="deme" ascii="deme" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc-Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t34" trans="Junc#vrowen#dale">
+    <dipl id="t34_d1" trans="Junc#" utf="Junc" />
+    <dipl id="t34_d2" trans="vrowen#" utf="vrowen" />
+    <dipl id="t34_d3" trans="dale" utf="dale" />
+    <mod id="t34_m1" trans="Junc#vrowen#dale" utf="Juncvrowendale" ascii="Juncvrowendale" checked="y">
+      <lemma tag="juncvrûwendā̆l" />
+      <pos tag="NE" />
+      <morph tag="Masc-Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t35" trans="hebbet">
+    <dipl id="t35_d1" trans="hebbet" utf="hebbet" />
+    <mod id="t35_m1" trans="hebbet" utf="hebbet" ascii="hebbet" checked="y">
+      <lemma tag="hebben" />
+      <pos tag="VAFIN" />
+      <morph tag="Sw.3.Pl.Pres.Ind" />
+    </mod>
+  </token>
+  <token id="t36" trans="ver#koft">
+    <dipl id="t36_d1" trans="ver#" utf="ver" />
+    <dipl id="t36_d2" trans="koft" utf="koft" />
+    <mod id="t36_m1" trans="ver#koft" utf="verkoft" ascii="verkoft" checked="y">
+      <lemma tag="vorkôpen²" />
+      <pos tag="VVPP" />
+    </mod>
+  </token>
+  <token id="t37" trans="deme">
+    <dipl id="t37_d1" trans="deme" utf="deme" />
+    <mod id="t37_m1" trans="deme" utf="deme" ascii="deme" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t38" trans="erliken">
+    <dipl id="t38_d1" trans="erliken" utf="erliken" />
+    <mod id="t38_m1" trans="erliken" utf="erliken" ascii="erliken" checked="y">
+      <lemma tag="êrlĩk¹" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t39" trans="manne">
+    <dipl id="t39_d1" trans="manne" utf="manne" />
+    <mod id="t39_m1" trans="manne" utf="manne" ascii="manne" checked="y">
+      <lemma tag="man¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t40" trans="woltere">
+    <dipl id="t40_d1" trans="woltere" utf="woltere" />
+    <mod id="t40_m1" trans="woltere" utf="woltere" ascii="woltere" checked="y">
+      <lemma tag="woltere°" />
+      <pos tag="NE" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t41" trans="van">
+    <dipl id="t41_d1" trans="van" utf="van" />
+    <mod id="t41_m1" trans="van" utf="van" ascii="van" checked="y">
+      <lemma tag="van¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t42" trans="bucstehude">
+    <dipl id="t42_d1" trans="bucstehude" utf="bucstehude" />
+    <mod id="t42_m1" trans="bucstehude" utf="bucstehude" ascii="bucstehude" checked="y">
+      <lemma tag="bucstehude°" />
+      <pos tag="NE" />
+      <morph tag="*.Dat-Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t43" trans="enen">
+    <dipl id="t43_d1" trans="enen" utf="enen" />
+    <mod id="t43_m1" trans="enen" utf="enen" ascii="enen" checked="y">
+      <lemma tag="êⁱn¹,êⁱne¹,êⁱn¹" />
+      <pos tag="DIARTA" />
+      <morph tag="Masc.Dat-Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t44" trans="eweghen">
+    <dipl id="t44_d1" trans="eweghen" utf="eweghen" />
+    <mod id="t44_m1" trans="eweghen" utf="eweghen" ascii="eweghen" checked="y">
+      <lemma tag="êwich¹" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc.Dat-Akk.Sg.*" />
+    </mod>
+  </token>
+  <token id="t45" trans="wischepel">
+    <dipl id="t45_d1" trans="wischepel" utf="wischepel" />
+    <mod id="t45_m1" trans="wischepel" utf="wischepel" ascii="wischepel" checked="y">
+      <lemma tag="wîkschēpel" />
+      <pos tag="NA" />
+      <morph tag="Masc.Dat-Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t46" trans="roken#gheldes">
+    <dipl id="t46_d1" trans="roken#" utf="roken" />
+    <dipl id="t46_d2" trans="gheldes" utf="gheldes" />
+    <mod id="t46_m1" trans="roken#gheldes" utf="rokengheldes" ascii="rokengheldes" checked="y">
+      <lemma tag="roggengelt" />
+      <pos tag="NA" />
+      <morph tag="Neut.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t47" trans="in">
+    <dipl id="t47_d1" trans="in" utf="in" />
+    <mod id="t47_m1" trans="in" utf="in" ascii="in" checked="y">
+      <lemma tag="in²" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t48" trans="der">
+    <dipl id="t48_d1" trans="der" utf="der" />
+    <mod id="t48_m1" trans="der" utf="der" ascii="der" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Fem.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t49" trans="moͤlen">
+    <dipl id="t49_d1" trans="moͤlen" utf="moͤlen" />
+    <mod id="t49_m1" trans="moͤlen" utf="moͤlen" ascii="moͤlen" checked="y">
+      <lemma tag="mȫle" />
+      <pos tag="NA" />
+      <morph tag="Fem.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t50" trans="toͧ">
+    <dipl id="t50_d1" trans="toͧ" utf="toͧ" />
+    <mod id="t50_m1" trans="toͧ" utf="toͧ" ascii="toͧ" checked="y">
+      <lemma tag="tô¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t51" trans="hamborch">
+    <dipl id="t51_d1" trans="hamborch" utf="hamborch" />
+    <mod id="t51_m1" trans="hamborch" utf="hamborch" ascii="hamborch" checked="y">
+      <lemma tag="Hamborch" />
+      <pos tag="NE" />
+      <morph tag="*.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t52" trans="in">
+    <dipl id="t52_d1" trans="in" utf="in" />
+    <mod id="t52_m1" trans="in" utf="in" ascii="in" checked="y">
+      <lemma tag="in²" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t53" trans="vseme">
+    <dipl id="t53_d1" trans="vseme" utf="vseme" />
+    <mod id="t53_m1" trans="vseme" utf="vseme" ascii="vseme" checked="y">
+      <lemma tag="unse¹" />
+      <pos tag="DPOSA" />
+      <morph tag="Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t54" trans="besten">
+    <dipl id="t54_d1" trans="besten" utf="besten" />
+    <mod id="t54_m1" trans="besten" utf="besten" ascii="besten" checked="y">
+      <lemma tag="gôt²" />
+      <pos tag="ADJA" />
+      <morph tag="Sup.Neut.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t55" trans="goͧde">
+    <dipl id="t55_d1" trans="goͧde" utf="goͧde" />
+    <mod id="t55_m1" trans="goͧde" utf="goͧde" ascii="goͧde" checked="y">
+      <lemma tag="gôt³" />
+      <pos tag="NA" />
+      <morph tag="Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t56" trans="vor">
+    <dipl id="t56_d1" trans="vor" utf="vor" />
+    <mod id="t56_m1" trans="vor" utf="vor" ascii="vor" checked="y">
+      <lemma tag="vȫr³" />
+      <pos tag="APPR" />
+      <morph tag="Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t57" trans="viue">
+    <dipl id="t57_d1" trans="viue" utf="viue" />
+    <mod id="t57_m1" trans="viue" utf="viue" ascii="viue" checked="y">
+      <lemma tag="vîf" />
+      <comment tag="%CARDA" />
+      <pos tag="CARDA" />
+      <morph tag="Fem.Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t58" trans="vnde">
+    <dipl id="t58_d1" trans="vnde" utf="vnde" />
+    <mod id="t58_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+      <comment tag="%" />
+    </mod>
+  </token>
+  <token id="t59" trans="sestech">
+    <dipl id="t59_d1" trans="sestech" utf="sestech" />
+    <mod id="t59_m1" trans="sestech" utf="sestech" ascii="sestech" checked="y">
+      <lemma tag="sestich" />
+      <pos tag="CARDA" />
+      <morph tag="Fem.Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t60" trans="mark">
+    <dipl id="t60_d1" trans="mark" utf="mark" />
+    <mod id="t60_m1" trans="mark" utf="mark" ascii="mark" checked="y">
+      <lemma tag="mark³" />
+      <pos tag="NA" />
+      <morph tag="Fem.Dat-Akk.Pl" />
+    </mod>
+  </token>
+  <token id="t61" trans="hamborgher">
+    <dipl id="t61_d1" trans="hamborgher" utf="hamborgher" />
+    <mod id="t61_m1" trans="hamborgher" utf="hamborgher" ascii="hamborgher" checked="y">
+      <lemma tag="hambörger" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc.Gen.Pl.St" />
+    </mod>
+  </token>
+  <token id="t62" trans="pennighe">
+    <dipl id="t62_d1" trans="pennighe" utf="pennighe" />
+    <mod id="t62_m1" trans="pennighe" utf="pennighe" ascii="pennighe" checked="y">
+      <lemma tag="penninc" />
+      <pos tag="NA" />
+      <morph tag="Masc.Gen.Pl" />
+    </mod>
+  </token>
+  <token id="t63" trans=".">
+    <dipl id="t63_d1" trans="." utf="." />
+    <mod id="t63_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t64" trans="de">
+    <dipl id="t64_d1" trans="de" utf="de" />
+    <mod id="t64_m1" trans="de" utf="de" ascii="de" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DPRELS" />
+      <comment tag="kann sich sowohl auf &quot;mark&quot; als auch auf &quot;pennige&quot; beziehen" />
+      <morph tag="Masc-Fem.Akk.Pl" />
+    </mod>
+  </token>
+  <token id="t65" trans="he">
+    <dipl id="t65_d1" trans="he" utf="he" />
+    <mod id="t65_m1" trans="he" utf="he" ascii="he" checked="y">
+      <lemma tag="hê¹,sê¹,et¹" />
+      <pos tag="PPER" />
+      <morph tag="3.Sg.Masc.Nom" />
+    </mod>
+  </token>
+  <token id="t66" trans="vs">
+    <dipl id="t66_d1" trans="vs" utf="vs" />
+    <mod id="t66_m1" trans="vs" utf="vs" ascii="vs" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PPER" />
+      <morph tag="1.Pl._.Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t67" trans="den">
+    <dipl id="t67_d1" trans="den" utf="den" />
+    <mod id="t67_m1" trans="den" utf="den" ascii="den" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t68" trans="ersten">
+    <dipl id="t68_d1" trans="ersten" utf="ersten" />
+    <mod id="t68_m1" trans="ersten" utf="ersten" ascii="ersten" checked="y">
+      <lemma tag="êrst¹" />
+      <pos tag="ADJA" />
+      <morph tag="Sup.Masc.Akk.Sg.*" />
+    </mod>
+  </token>
+  <token id="t69" trans="pennigh">
+    <dipl id="t69_d1" trans="pennigh" utf="pennigh" />
+    <mod id="t69_m1" trans="pennigh" utf="pennigh" ascii="pennigh" checked="y">
+      <lemma tag="penninc" />
+      <pos tag="NA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t70" trans="mit">
+    <dipl id="t70_d1" trans="mit" utf="mit" />
+    <mod id="t70_m1" trans="mit" utf="mit" ascii="mit" checked="y">
+      <lemma tag="mit" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t71" trans="deme">
+    <dipl id="t71_d1" trans="deme" utf="deme" />
+    <mod id="t71_m1" trans="deme" utf="deme" ascii="deme" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t72" trans="lesten">
+    <dipl id="t72_d1" trans="lesten" utf="lesten" />
+    <mod id="t72_m1" trans="lesten" utf="lesten" ascii="lesten" checked="y">
+      <lemma tag="lat³" />
+      <pos tag="ADJS" />
+      <morph tag="Sup.Masc.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t73" trans="betalet">
+    <dipl id="t73_d1" trans="betalet" utf="betalet" />
+    <mod id="t73_m1" trans="betalet" utf="betalet" ascii="betalet" checked="y">
+      <lemma tag="betālen" />
+      <pos tag="VVPP" />
+    </mod>
+  </token>
+  <token id="t74" trans="heft">
+    <dipl id="t74_d1" trans="heft" utf="heft" />
+    <mod id="t74_m1" trans="heft" utf="heft" ascii="heft" checked="y">
+      <lemma tag="hebben" />
+      <pos tag="VAFIN" />
+      <morph tag="Sw.3.Sg.Pres.Ind" />
+    </mod>
+  </token>
+  <token id="t75" trans=".">
+    <dipl id="t75_d1" trans="." utf="." />
+    <mod id="t75_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t76" trans="vnde">
+    <dipl id="t76_d1" trans="vnde" utf="vnde" />
+    <mod id="t76_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t77" trans="verbindet">
+    <dipl id="t77_d1" trans="verbindet" utf="verbindet" />
+    <mod id="t77_m1" trans="verbindet" utf="verbindet" ascii="verbindet" checked="y">
+      <lemma tag="vorbinden¹" />
+      <pos tag="VVFIN" />
+      <morph tag="St.3.Sg.Pres.Ind" />
+    </mod>
+  </token>
+  <token id="t78" trans="vsic">
+    <dipl id="t78_d1" trans="vsic" utf="vsic" />
+    <mod id="t78_m1" trans="vsic" utf="vsic" ascii="vsic" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PPER" />
+      <morph tag="1.Pl._.Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t79" trans="dar">
+    <dipl id="t79_d1" trans="dar" utf="dar" />
+    <mod id="t79_m1" trans="dar" utf="dar" ascii="dar" checked="y">
+      <lemma tag="dâr¹" />
+      <pos tag="PAVKO" />
+    </mod>
+  </token>
+  <token id="t80" trans="toͧ">
+    <dipl id="t80_d1" trans="toͧ" utf="toͧ" />
+    <mod id="t80_m1" trans="toͧ" utf="toͧ" ascii="toͧ" checked="y">
+      <lemma tag="tô¹" />
+      <pos tag="PAVAP" />
+    </mod>
+  </token>
+  <token id="t81" trans=".">
+    <dipl id="t81_d1" trans="." utf="." />
+    <mod id="t81_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t82" trans="dat">
+    <dipl id="t82_d1" trans="dat" utf="dat" />
+    <mod id="t82_m1" trans="dat" utf="dat" ascii="dat" checked="y">
+      <lemma tag="dat²B" />
+      <pos tag="KOUS" />
+    </mod>
+  </token>
+  <token id="t83" trans="we">
+    <dipl id="t83_d1" trans="we" utf="we" />
+    <mod id="t83_m1" trans="we" utf="we" ascii="we" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PPER" />
+      <morph tag="1.Pl._.Nom" />
+    </mod>
+  </token>
+  <token id="t84" trans="van">
+    <dipl id="t84_d1" trans="van" utf="van" />
+    <mod id="t84_m1" trans="van" utf="van" ascii="van" checked="y">
+      <lemma tag="van¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t85" trans="desseme">
+    <dipl id="t85_d1" trans="desseme" utf="desseme" />
+    <mod id="t85_m1" trans="desseme" utf="desseme" ascii="desseme" checked="y">
+      <lemma tag="desse,desse,dit" />
+      <pos tag="DDA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t86" trans="vorespro#kenen">
+    <dipl id="t86_d1" trans="vorespro#" utf="vorespro" />
+    <dipl id="t86_d2" trans="kenen" utf="kenen" />
+    <mod id="t86_m1" trans="vorespro#kenen" utf="voresprokenen" ascii="voresprokenen" checked="y">
+      <lemma tag="vȫrsprōken" />
+      <pos tag="ADJA&lt;VVPP" />
+      <morph tag="Pos.Masc.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t87" trans="wischepel">
+    <dipl id="t87_d1" trans="wischepel" utf="wischepel" />
+    <mod id="t87_m1" trans="wischepel" utf="wischepel" ascii="wischepel" checked="y">
+      <lemma tag="wîkschēpel" />
+      <pos tag="NA" />
+      <comment tag="Dativ-e fehlt" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t88" trans="roken">
+    <dipl id="t88_d1" trans="roken" utf="roken" />
+    <mod id="t88_m1" trans="roken" utf="roken" ascii="roken" checked="y">
+      <lemma tag="rogge¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Gen-Dat-Akk.*" />
+    </mod>
+  </token>
+  <token id="t89" trans="scoͤlen">
+    <dipl id="t89_d1" trans="scoͤlen" utf="scoͤlen" />
+    <mod id="t89_m1" trans="scoͤlen" utf="scoͤlen" ascii="scoͤlen" checked="y">
+      <lemma tag="schȫlen¹" />
+      <pos tag="VMFIN" />
+      <morph tag="Prpr.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t90" trans="koͤpen">
+    <dipl id="t90_d1" trans="koͤpen" utf="koͤpen" />
+    <mod id="t90_m1" trans="koͤpen" utf="koͤpen" ascii="koͤpen" checked="y">
+      <lemma tag="kö̂pen" />
+      <pos tag="VVINF" />
+    </mod>
+  </token>
+  <token id="t91" trans="ene">
+    <dipl id="t91_d1" trans="ene" utf="ene" />
+    <mod id="t91_m1" trans="ene" utf="ene" ascii="ene" checked="y">
+      <lemma tag="êⁱn¹,êⁱne¹,êⁱn¹" />
+      <pos tag="DIARTA" />
+      <morph tag="Fem.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t92" trans="tunnen">
+    <dipl id="t92_d1" trans="tunnen" utf="tunnen" />
+    <mod id="t92_m1" trans="tunnen" utf="tunnen" ascii="tunnen" checked="y">
+      <lemma tag="tunne" />
+      <pos tag="NA" />
+      <morph tag="Fem.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t93" trans="haringhes">
+    <dipl id="t93_d1" trans="haringhes" utf="haringhes" />
+    <mod id="t93_m1" trans="haringhes" utf="haringhes" ascii="haringhes" checked="y">
+      <lemma tag="hârinc" />
+      <pos tag="NA" />
+      <morph tag="Masc.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t94" trans=".">
+    <dipl id="t94_d1" trans="." utf="." />
+    <mod id="t94_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t95" trans="vnde">
+    <dipl id="t95_d1" trans="vnde" utf="vnde" />
+    <mod id="t95_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t96" trans="wot">
+    <dipl id="t96_d1" trans="wot" utf="wot" />
+    <mod id="t96_m1" trans="wot" utf="wot" ascii="wot" checked="y">
+      <lemma tag="wat(te)³" />
+      <pos tag="DPRELS" />
+      <morph tag="_.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t97" trans="van">
+    <dipl id="t97_d1" trans="van" utf="van" />
+    <mod id="t97_m1" trans="van" utf="van" ascii="van" checked="y">
+      <lemma tag="van¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t98" trans="roken">
+    <dipl id="t98_d1" trans="roken" utf="roken" />
+    <mod id="t98_m1" trans="roken" utf="roken" ascii="roken" checked="y">
+      <lemma tag="rogge¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Dat-Akk.*" />
+    </mod>
+  </token>
+  <token id="t99" trans="dar">
+    <dipl id="t99_d1" trans="dar" utf="dar" />
+    <mod id="t99_m1" trans="dar" utf="dar" ascii="dar" checked="y">
+      <lemma tag="dâr¹" />
+      <pos tag="PAVKO" />
+    </mod>
+  </token>
+  <token id="t100" trans="bouene">
+    <dipl id="t100_d1" trans="bouene" utf="bouene" />
+    <mod id="t100_m1" trans="bouene" utf="bouene" ascii="bouene" checked="y">
+      <lemma tag="bōven²" />
+      <pos tag="PAVAP" />
+    </mod>
+  </token>
+  <token id="t101" trans="blift">
+    <dipl id="t101_d1" trans="blift" utf="blift" />
+    <mod id="t101_m1" trans="blift" utf="blift" ascii="blift" checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="blîven" />
+      <pos tag="VVFIN" />
+      <morph tag="St.3.Sg.Pres.Ind" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t102" trans="scoͤlen">
+    <dipl id="t102_d1" trans="scoͤlen" utf="scoͤlen" />
+    <mod id="t102_m1" trans="scoͤlen" utf="scoͤlen" ascii="scoͤlen" checked="y">
+      <lemma tag="schȫlen¹" />
+      <pos tag="VMFIN" />
+      <morph tag="Prpr.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t103" trans="laten">
+    <dipl id="t103_d1" trans="laten" utf="laten" />
+    <mod id="t103_m1" trans="laten" utf="laten" ascii="laten" checked="y">
+      <lemma tag="lâten¹" />
+      <pos tag="VVINF" />
+    </mod>
+  </token>
+  <token id="t104" trans="backen">
+    <dipl id="t104_d1" trans="backen" utf="backen" />
+    <mod id="t104_m1" trans="backen" utf="backen" ascii="backen" checked="y">
+      <lemma tag="backen¹" />
+      <pos tag="VVINF" />
+    </mod>
+  </token>
+  <token id="t105" trans="brot">
+    <dipl id="t105_d1" trans="brot" utf="brot" />
+    <mod id="t105_m1" trans="brot" utf="brot" ascii="brot" checked="y">
+      <lemma tag="brôt¹" />
+      <pos tag="NA" />
+      <morph tag="Neut.Akk.*" />
+    </mod>
+  </token>
+  <token id="t106" trans=".">
+    <dipl id="t106_d1" trans="." utf="." />
+    <mod id="t106_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t107" trans="vnde">
+    <dipl id="t107_d1" trans="vnde" utf="vnde" />
+    <mod id="t107_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t108" trans="scoͤlen">
+    <dipl id="t108_d1" trans="scoͤlen" utf="scoͤlen" />
+    <mod id="t108_m1" trans="scoͤlen" utf="scoͤlen" ascii="scoͤlen" checked="y">
+      <lemma tag="schȫlen¹" />
+      <pos tag="VMFIN" />
+      <morph tag="Prpr.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t109" trans="gheuen">
+    <dipl id="t109_d1" trans="gheuen" utf="gheuen" />
+    <mod id="t109_m1" trans="gheuen" utf="gheuen" ascii="gheuen" checked="y">
+      <lemma tag="gēven" />
+      <pos tag="VVINF" />
+    </mod>
+  </token>
+  <token id="t110" trans="in">
+    <dipl id="t110_d1" trans="in" utf="in" />
+    <mod id="t110_m1" trans="in" utf="in" ascii="in" checked="y">
+      <lemma tag="in²" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t111" trans="deme">
+    <dipl id="t111_d1" trans="deme" utf="deme" />
+    <mod id="t111_m1" trans="deme" utf="deme" ascii="deme" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t112" trans="goͧden">
+    <dipl id="t112_d1" trans="goͧden" utf="goͧden" />
+    <mod id="t112_m1" trans="goͧden" utf="goͧden" ascii="goͧden" checked="y">
+      <lemma tag="gôt²" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t113" trans="donres#daghe">
+    <dipl id="t113_d1" trans="donres#" utf="donres" />
+    <dipl id="t113_d2" trans="daghe" utf="daghe" />
+    <mod id="t113_m1" trans="donres#daghe" utf="donresdaghe" ascii="donresdaghe" checked="y">
+      <lemma tag="dōnerdach" />
+      <pos tag="NA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t114" trans="giwelikeme">
+    <dipl id="t114_d1" trans="giwelikeme" utf="giwelikeme" />
+    <mod id="t114_m1" trans="giwelikeme" utf="giwelikeme" ascii="giwelikeme" checked="y">
+      <lemma tag="iewel(ĩ)k" />
+      <pos tag="DIA" />
+      <morph tag="Masc-Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t115" trans="armen">
+    <dipl id="t115_d1" trans="armen" utf="armen" />
+    <mod id="t115_m1" trans="armen" utf="armen" ascii="armen" checked="y">
+      <lemma tag="arm¹" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc-Neut.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t116" trans="mynschen">
+    <dipl id="t116_d1" trans="mynschen" utf="mynschen" />
+    <mod id="t116_m1" trans="mynschen" utf="mynschen" ascii="mynschen" checked="y">
+      <lemma tag="minsche" />
+      <pos tag="NA" />
+      <morph tag="Masc-Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t117" trans="dor">
+    <dipl id="t117_d1" trans="dor" utf="dor" />
+    <mod id="t117_m1" trans="dor" utf="dor" ascii="dor" checked="y">
+      <lemma tag="dȫr¹" />
+      <pos tag="APPR" />
+      <morph tag="Akk" />
+    </mod>
+  </token>
+  <token id="t118" trans="de">
+    <dipl id="t118_d1" trans="de" utf="de" />
+    <mod id="t118_m1" trans="de" utf="de" ascii="de" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Fem.Akk.*" />
+    </mod>
+  </token>
+  <token id="t119" trans="leue">
+    <dipl id="t119_d1" trans="leue" utf="leue" />
+    <mod id="t119_m1" trans="leue" utf="leue" ascii="leue" checked="y">
+      <lemma tag="lêve¹" />
+      <pos tag="NA" />
+      <morph tag="Fem.Akk.*" />
+    </mod>
+  </token>
+  <token id="t120" trans="godes">
+    <dipl id="t120_d1" trans="godes" utf="godes" />
+    <mod id="t120_m1" trans="godes" utf="godes" ascii="godes" checked="y">
+      <lemma tag="got¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t121" trans="en">
+    <dipl id="t121_d1" trans="en" utf="en" />
+    <mod id="t121_m1" trans="en" utf="en" ascii="en" checked="y">
+      <lemma tag="êⁱn¹,êⁱne¹,êⁱn¹" />
+      <pos tag="DIARTA" />
+      <morph tag="Neut.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t122" trans="brot">
+    <dipl id="t122_d1" trans="brot" utf="brot" />
+    <mod id="t122_m1" trans="brot" utf="brot" ascii="brot" checked="y">
+      <lemma tag="brôt¹" />
+      <pos tag="NA" />
+      <morph tag="Neut.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t123" trans="vnde">
+    <dipl id="t123_d1" trans="vnde" utf="vnde" />
+    <mod id="t123_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t124" trans="enen">
+    <dipl id="t124_d1" trans="enen" utf="enen" />
+    <mod id="t124_m1" trans="enen" utf="enen" ascii="enen" checked="y">
+      <lemma tag="êⁱn¹,êⁱne¹,êⁱn¹" />
+      <pos tag="DIARTA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t125" trans="haringh">
+    <dipl id="t125_d1" trans="haringh" utf="haringh" />
+    <mod id="t125_m1" trans="haringh" utf="haringh" ascii="haringh" checked="y">
+      <lemma tag="hârinc" />
+      <pos tag="NA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t126" trans=".">
+    <dipl id="t126_d1" trans="." utf="." />
+    <mod id="t126_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+    </mod>
+  </token>
+  <token id="t127" trans="toͧ">
+    <dipl id="t127_d1" trans="toͧ" utf="toͧ" />
+    <mod id="t127_m1" trans="toͧ" utf="toͧ" ascii="toͧ" checked="y">
+      <lemma tag="tô¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t128" trans="helpe">
+    <dipl id="t128_d1" trans="helpe" utf="helpe" />
+    <mod id="t128_m1" trans="helpe" utf="helpe" ascii="helpe" checked="y">
+      <lemma tag="hülpe¹" />
+      <pos tag="NA" />
+      <morph tag="Fem.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t129" trans="vnde">
+    <dipl id="t129_d1" trans="vnde" utf="vnde" />
+    <mod id="t129_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t130" trans="toͧ">
+    <dipl id="t130_d1" trans="toͧ" utf="toͧ" />
+    <mod id="t130_m1" trans="toͧ" utf="toͧ" ascii="toͧ" checked="y">
+      <lemma tag="tô¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t131" trans="troste">
+    <dipl id="t131_d1" trans="troste" utf="troste" />
+    <mod id="t131_m1" trans="troste" utf="troste" ascii="troste" checked="y">
+      <lemma tag="trôst" />
+      <pos tag="NA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t132" trans="siner">
+    <dipl id="t132_d1" trans="siner" utf="siner" />
+    <mod id="t132_m1" trans="siner" utf="siner" ascii="siner" checked="y">
+      <lemma tag="sîn⁴,ēr¹,sîn⁴" />
+      <pos tag="DPOSA" />
+      <morph tag="Fem.Gen-Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t133" trans="sele">
+    <dipl id="t133_d1" trans="sele" utf="sele" />
+    <mod id="t133_m1" trans="sele" utf="sele" ascii="sele" checked="y">
+      <lemma tag="sêle⁴" />
+      <pos tag="NA" />
+      <morph tag="Fem.Gen-Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t134" trans="des">
+    <dipl id="t134_d1" trans="des" utf="des" />
+    <mod id="t134_m1" trans="des" utf="des" ascii="des" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t135" trans="voresprokenen">
+    <dipl id="t135_d1" trans="voresprokenen" utf="voresprokenen" />
+    <mod id="t135_m1" trans="voresprokenen" utf="voresprokenen" ascii="voresprokenen" checked="y">
+      <lemma tag="vȫrsprōken" />
+      <pos tag="ADJA&lt;VVPP" />
+      <morph tag="Pos.Masc.Gen.Sg.*" />
+    </mod>
+  </token>
+  <token id="t136" trans="wolteres">
+    <dipl id="t136_d1" trans="wolteres" utf="wolteres" />
+    <mod id="t136_m1" trans="wolteres" utf="wolteres" ascii="wolteres" checked="y">
+      <lemma tag="wolteres°" />
+      <pos tag="NE" />
+      <morph tag="Masc.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t137" trans="van">
+    <dipl id="t137_d1" trans="van" utf="van" />
+    <mod id="t137_m1" trans="van" utf="van" ascii="van" checked="y">
+      <lemma tag="van¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t138" trans="bucstehude">
+    <dipl id="t138_d1" trans="bucstehude" utf="bucstehude" />
+    <mod id="t138_m1" trans="bucstehude" utf="bucstehude" ascii="bucstehude" checked="y">
+      <lemma tag="bucstehude°" />
+      <pos tag="NE" />
+      <morph tag="*.Dat-Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t139" trans=".">
+    <dipl id="t139_d1" trans="." utf="." />
+    <mod id="t139_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t140" trans="Dat">
+    <dipl id="t140_d1" trans="Dat" utf="Dat" />
+    <mod id="t140_m1" trans="Dat" utf="Dat" ascii="Dat" checked="y">
+      <lemma tag="dat²B" />
+      <pos tag="KOUS" />
+    </mod>
+  </token>
+  <token id="t141" trans="desse">
+    <dipl id="t141_d1" trans="desse" utf="desse" />
+    <mod id="t141_m1" trans="desse" utf="desse" ascii="desse" checked="y">
+      <lemma tag="desse,desse,dit" />
+      <pos tag="DDA" />
+      <morph tag="Neut.Nom.Pl" />
+    </mod>
+  </token>
+  <token id="t142" trans="voresprokenen">
+    <dipl id="t142_d1" trans="voresprokenen" utf="voresprokenen" />
+    <mod id="t142_m1" trans="voresprokenen" utf="voresprokenen" ascii="voresprokenen" checked="y">
+      <lemma tag="vȫrsprōken" />
+      <pos tag="ADJA&lt;VVPP" />
+      <morph tag="Pos.Neut.Nom.Pl.Sw" />
+    </mod>
+  </token>
+  <token id="t143" trans="dingh">
+    <dipl id="t143_d1" trans="dingh" utf="dingh" />
+    <mod id="t143_m1" trans="dingh" utf="dingh" ascii="dingh" checked="y">
+      <lemma tag="dinc" />
+      <pos tag="NA" />
+      <morph tag="Neut.Nom.Pl" />
+    </mod>
+  </token>
+  <token id="t144" trans="ewich">
+    <dipl id="t144_d1" trans="ewich" utf="ewich" />
+    <mod id="t144_m1" trans="ewich" utf="ewich" ascii="ewich" checked="y">
+      <lemma tag="êwich¹" />
+      <pos tag="ADJV" />
+      <morph tag="Pos" />
+    </mod>
+  </token>
+  <token id="t145" trans="vnde">
+    <dipl id="t145_d1" trans="vnde" utf="vnde" />
+    <mod id="t145_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t146" trans="iuͤmmer#mere">
+    <dipl id="t146_d1" trans="iuͤmmer#" utf="iuͤmmer" />
+    <dipl id="t146_d2" trans="mere" utf="mere" />
+    <mod id="t146_m1" trans="iuͤmmer#mere" utf="iuͤmmermere" ascii="iuͤmmermere" checked="y">
+      <lemma tag="iem(m)ermêr(e)" />
+      <pos tag="AVD" />
+    </mod>
+  </token>
+  <token id="t147" trans="bliuen">
+    <dipl id="t147_d1" trans="bliuen" utf="bliuen" />
+    <mod id="t147_m1" trans="bliuen" utf="bliuen" ascii="bliuen" checked="y">
+      <lemma tag="blîven" />
+      <pos tag="VVFIN" />
+      <morph tag="St.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t148" trans=".">
+    <dipl id="t148_d1" trans="." utf="." />
+    <mod id="t148_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t149" trans="vnde">
+    <dipl id="t149_d1" trans="vnde" utf="vnde" />
+    <mod id="t149_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t150" trans="van">
+    <dipl id="t150_d1" trans="van" utf="van" />
+    <mod id="t150_m1" trans="van" utf="van" ascii="van" checked="y">
+      <lemma tag="van¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t151" trans="vseme">
+    <dipl id="t151_d1" trans="vseme" utf="vseme" />
+    <mod id="t151_m1" trans="vseme" utf="vseme" ascii="vseme" checked="y">
+      <lemma tag="unse¹" />
+      <pos tag="DPOSA" />
+      <morph tag="Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t152" trans="klostere">
+    <dipl id="t152_d1" trans="klostere" utf="klostere" />
+    <mod id="t152_m1" trans="klostere" utf="klostere" ascii="klostere" checked="y">
+      <lemma tag="klôster" />
+      <pos tag="NA" />
+      <morph tag="Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t153" trans="ghe#holden">
+    <dipl id="t153_d1" trans="ghe#" utf="ghe" />
+    <dipl id="t153_d2" trans="holden" utf="holden" />
+    <mod id="t153_m1" trans="ghe#holden" utf="gheholden" ascii="gheholden" checked="y">
+      <lemma tag="hōlden" />
+      <pos tag="VVPP" />
+    </mod>
+  </token>
+  <token id="t154" trans="werden">
+    <dipl id="t154_d1" trans="werden" utf="werden" />
+    <mod id="t154_m1" trans="werden" utf="werden" ascii="werden" checked="y">
+      <lemma tag="wērden¹" />
+      <pos tag="VAFIN" />
+      <morph tag="St.3.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t155" trans=".">
+    <dipl id="t155_d1" trans="." utf="." />
+    <mod id="t155_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t156" trans="des">
+    <dipl id="t156_d1" trans="des" utf="des" />
+    <mod id="t156_m1" trans="des" utf="des" ascii="des" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DPDS" />
+      <comment tag="oder AVKO &quot;des&quot;" />
+      <morph tag="Neut.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t157" trans="verbinde">
+    <dipl id="t157_d1" trans="verbinde" utf="verbinde" />
+    <mod id="t157_m1" trans="verbinde" utf="verbinde" ascii="verbinde" checked="y">
+      <lemma tag="vorbinden¹" />
+      <pos tag="VVFIN" />
+      <morph tag="St.1.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t158" trans="we">
+    <dipl id="t158_d1" trans="we" utf="we" />
+    <mod id="t158_m1" trans="we" utf="we" ascii="we" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PPER" />
+      <morph tag="1.Pl._.Nom" />
+    </mod>
+  </token>
+  <token id="t159" trans="vsic">
+    <dipl id="t159_d1" trans="vsic" utf="vsic" />
+    <mod id="t159_m1" trans="vsic" utf="vsic" ascii="vsic" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PRF" />
+      <morph tag="1.Pl.Dat-Akk" />
+    </mod>
+  </token>
+  <token id="t160" trans=".">
+    <dipl id="t160_d1" trans="." utf="." />
+    <mod id="t160_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t161" trans="vnde">
+    <dipl id="t161_d1" trans="vnde" utf="vnde" />
+    <mod id="t161_m1" trans="vnde" utf="vnde" ascii="vnde" checked="y">
+      <lemma tag="unde²" />
+      <pos tag="KON" />
+    </mod>
+  </token>
+  <token id="t162" trans="toͧ">
+    <dipl id="t162_d1" trans="toͧ" utf="toͧ" />
+    <mod id="t162_m1" trans="toͧ" utf="toͧ" ascii="toͧ" checked="y">
+      <lemma tag="tô¹" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t163" trans="ener">
+    <dipl id="t163_d1" trans="ener" utf="ener" />
+    <mod id="t163_m1" trans="ener" utf="ener" ascii="ener" checked="y">
+      <lemma tag="êⁱn¹,êⁱne¹,êⁱn¹" />
+      <pos tag="DIARTA" />
+      <morph tag="Fem.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t164" trans="oppenbaren">
+    <dipl id="t164_d1" trans="oppenbaren" utf="oppenbaren" />
+    <mod id="t164_m1" trans="oppenbaren" utf="oppenbaren" ascii="oppenbaren" checked="y">
+      <lemma tag="ōpenbâr" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Fem.Dat.Sg.Sw" />
+    </mod>
+  </token>
+  <token id="t165" trans="betuͤghinghe">
+    <dipl id="t165_d1" trans="betuͤghinghe" utf="betuͤghinghe" />
+    <mod id="t165_m1" trans="betuͤghinghe" utf="betuͤghinghe" ascii="betuͤghinghe" checked="y">
+      <lemma tag="betü̂ginge" />
+      <pos tag="NA" />
+      <morph tag="Fem.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t166" trans="hebbe">
+    <dipl id="t166_d1" trans="hebbe" utf="hebbe" />
+    <mod id="t166_m1" trans="hebbe" utf="hebbe" ascii="hebbe" checked="y">
+      <lemma tag="hebben" />
+      <pos tag="VAFIN" />
+      <morph tag="Sw.1.Pl.Pres.*" />
+    </mod>
+  </token>
+  <token id="t167" trans="we">
+    <dipl id="t167_d1" trans="we" utf="we" />
+    <mod id="t167_m1" trans="we" utf="we" ascii="we" checked="y">
+      <lemma tag="wî¹" />
+      <pos tag="PPER" />
+      <morph tag="1.Pl._.Nom" />
+    </mod>
+  </token>
+  <token id="t168" trans="dessen">
+    <dipl id="t168_d1" trans="dessen" utf="dessen" />
+    <mod id="t168_m1" trans="dessen" utf="dessen" ascii="dessen" checked="y">
+      <lemma tag="desse,desse,dit" />
+      <pos tag="DDA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t169" trans="bref">
+    <dipl id="t169_d1" trans="bref" utf="bref" />
+    <mod id="t169_m1" trans="bref" utf="bref" ascii="bref" checked="y">
+      <lemma tag="brêf" />
+      <pos tag="NA" />
+      <morph tag="Masc.Akk.Sg" />
+    </mod>
+  </token>
+  <token id="t170" trans="mit">
+    <dipl id="t170_d1" trans="mit" utf="mit" />
+    <mod id="t170_m1" trans="mit" utf="mit" ascii="mit" checked="y">
+      <lemma tag="mit" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t171" trans="vsen">
+    <dipl id="t171_d1" trans="vsen" utf="vsen" />
+    <mod id="t171_m1" trans="vsen" utf="vsen" ascii="vsen" checked="y">
+      <lemma tag="unse¹" />
+      <pos tag="DPOSA" />
+      <morph tag="Masc-Neut.Dat.Pl" />
+    </mod>
+  </token>
+  <token id="t172" trans="ingheseghelen">
+    <dipl id="t172_d1" trans="ingheseghelen" utf="ingheseghelen" />
+    <mod id="t172_m1" trans="ingheseghelen" utf="ingheseghelen" ascii="ingheseghelen" checked="y">
+      <lemma tag="ingesēgel" />
+      <pos tag="NA" />
+      <morph tag="Masc-Neut.Dat.Pl" />
+    </mod>
+  </token>
+  <token id="t173" trans="beseghelet">
+    <dipl id="t173_d1" trans="beseghelet" utf="beseghelet" />
+    <mod id="t173_m1" trans="beseghelet" utf="beseghelet" ascii="beseghelet" checked="y">
+      <lemma tag="besēgelen²" />
+      <pos tag="VVPP" />
+    </mod>
+  </token>
+  <token id="t174" trans=".">
+    <dipl id="t174_d1" trans="." utf="." />
+    <mod id="t174_m1" trans="." utf="." ascii="." checked="y">
+      <boundary tag="Satz" />
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t175" trans="Dit">
+    <dipl id="t175_d1" trans="Dit" utf="Dit" />
+    <mod id="t175_m1" trans="Dit" utf="Dit" ascii="Dit" checked="y">
+      <lemma tag="desse,desse,dit" />
+      <pos tag="DPDS" />
+      <morph tag="Neut.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t176" trans="is">
+    <dipl id="t176_d1" trans="is" utf="is" />
+    <mod id="t176_m1" trans="is" utf="is" ascii="is" checked="y">
+      <lemma tag="wēsen²" />
+      <pos tag="VAFIN" />
+      <morph tag="Irr.3.Sg.Pres.Ind" />
+    </mod>
+  </token>
+  <token id="t177" trans="ghescen">
+    <dipl id="t177_d1" trans="ghescen" utf="ghescen" />
+    <mod id="t177_m1" trans="ghescen" utf="ghescen" ascii="ghescen" checked="y">
+      <lemma tag="schên" />
+      <pos tag="VVPP" />
+    </mod>
+  </token>
+  <token id="t178" trans="in">
+    <dipl id="t178_d1" trans="in" utf="in" />
+    <mod id="t178_m1" trans="in" utf="in" ascii="in" checked="y">
+      <lemma tag="in²" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t179" trans="deme">
+    <dipl id="t179_d1" trans="deme" utf="deme" />
+    <mod id="t179_m1" trans="deme" utf="deme" ascii="deme" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Neut.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t180" trans="yare">
+    <dipl id="t180_d1" trans="yare" utf="yare" />
+    <mod id="t180_m1" trans="yare" utf="yare" ascii="yare" checked="y">
+      <lemma tag="jâr" />
+      <pos tag="NA" />
+      <boundary tag="Satzteil_I" />
+      <morph tag="Neut.Dat.Sg" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t181" trans="dat">
+    <dipl id="t181_d1" trans="dat" utf="dat" />
+    <mod id="t181_m1" trans="dat" utf="dat" ascii="dat" checked="y">
+      <lemma tag="dat²B" />
+      <pos tag="KOUS" />
+    </mod>
+  </token>
+  <token id="t182" trans="god">
+    <dipl id="t182_d1" trans="god" utf="god" />
+    <mod id="t182_m1" trans="god" utf="god" ascii="god" checked="y">
+      <lemma tag="got¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Nom.Sg" />
+    </mod>
+  </token>
+  <token id="t183" trans="gheboren">
+    <dipl id="t183_d1" trans="gheboren" utf="gheboren" />
+    <mod id="t183_m1" trans="gheboren" utf="gheboren" ascii="gheboren" checked="y">
+      <lemma tag="(ge)bēren¹" />
+      <pos tag="VVPP" />
+    </mod>
+  </token>
+  <token id="t184" trans="wart">
+    <dipl id="t184_d1" trans="wart" utf="wart" />
+    <mod id="t184_m1" trans="wart" utf="wart" ascii="wart" checked="y">
+      <lemma tag="wērden¹" />
+      <pos tag="VAFIN" />
+      <morph tag="St.3.Sg.Past.Ind" />
+    </mod>
+  </token>
+  <token id="t185" trans=".">
+    <dipl id="t185_d1" trans="." utf="." />
+    <mod id="t185_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <boundary tag="Satz" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+  <token id="t186" trans="dusendesten">
+    <dipl id="t186_d1" trans="dusendesten" utf="dusendesten" />
+    <mod id="t186_m1" trans="dusendesten" utf="dusendesten" ascii="dusendesten" checked="y">
+      <lemma tag="dûsentst" />
+      <comment tag="%ADJN" />
+      <pos tag="ADJN" />
+      <morph tag="Pos.Neut.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t187" trans=".">
+    <dipl id="t187_d1" trans="." utf="." />
+    <mod id="t187_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <comment tag="%" />
+    </mod>
+  </token>
+  <token id="t188" trans="drehunderdesten">
+    <dipl id="t188_d1" trans="drehunderdesten" utf="drehunderdesten" />
+    <mod id="t188_m1" trans="drehunderdesten" utf="drehunderdesten" ascii="drehunderdesten" checked="y">
+      <lemma tag="drêhunderst*" />
+      <comment tag="%" />
+      <pos tag="ADJN" />
+      <morph tag="Pos.Neut.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t189" trans=".">
+    <dipl id="t189_d1" trans="." utf="." />
+    <mod id="t189_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <comment tag="%" />
+    </mod>
+  </token>
+  <token id="t190" trans="neghen§en§twinteghesten">
+    <dipl id="t190_d1" trans="neghen§en§twinteghesten" utf="neghenentwinteghesten" />
+    <mod id="t190_m1" trans="neghen§" utf="neghen" ascii="neghen" checked="y">
+      <lemma tag="nēgen³" />
+      <comment tag="%" />
+      <pos tag="CARDN" />
+      <morph tag="Neut.Dat" />
+    </mod>
+    <mod id="t190_m2" trans="en§" utf="en" ascii="en" checked="y">
+      <lemma tag="unde²" />
+      <comment tag="%" />
+      <pos tag="KON" />
+    </mod>
+    <mod id="t190_m3" trans="twinteghesten" utf="twinteghesten" ascii="twinteghesten" checked="y">
+      <lemma tag="twintigeste*" />
+      <comment tag="%" />
+      <pos tag="ADJN" />
+      <morph tag="Pos.Neut.Dat.Sg.*" />
+    </mod>
+  </token>
+  <token id="t191" trans=".">
+    <dipl id="t191_d1" trans="." utf="." />
+    <mod id="t191_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+    </mod>
+  </token>
+  <token id="t192" trans="in">
+    <dipl id="t192_d1" trans="in" utf="in" />
+    <mod id="t192_m1" trans="in" utf="in" ascii="in" checked="y">
+      <lemma tag="in²" />
+      <pos tag="APPR" />
+      <morph tag="Dat" />
+    </mod>
+  </token>
+  <token id="t193" trans="deme">
+    <dipl id="t193_d1" trans="deme" utf="deme" />
+    <mod id="t193_m1" trans="deme" utf="deme" ascii="deme" checked="y">
+      <lemma tag="dê¹,dê¹,dat²A" />
+      <pos tag="DDARTA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t194" trans="daghe">
+    <dipl id="t194_d1" trans="daghe" utf="daghe" />
+    <mod id="t194_m1" trans="daghe" utf="daghe" ascii="daghe" checked="y">
+      <lemma tag="dach" />
+      <pos tag="NA" />
+      <morph tag="Masc.Dat.Sg" />
+    </mod>
+  </token>
+  <token id="t195" trans="suͤnte">
+    <dipl id="t195_d1" trans="suͤnte" utf="suͤnte" />
+    <mod id="t195_m1" trans="suͤnte" utf="suͤnte" ascii="suͤnte" checked="y">
+      <lemma tag="sünte" />
+      <pos tag="ADJA" />
+      <morph tag="Pos.Masc.Gen.Sg.*" />
+    </mod>
+  </token>
+  <token id="t196" trans="matheus">
+    <dipl id="t196_d1" trans="matheus" utf="matheus" />
+    <mod id="t196_m1" trans="matheus" utf="matheus" ascii="matheus" checked="y">
+      <lemma tag="matheus°" />
+      <pos tag="NE" />
+      <morph tag="Masc.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t197" trans="aposteles">
+    <dipl id="t197_d1" trans="aposteles" utf="aposteles" />
+    <mod id="t197_m1" trans="aposteles" utf="aposteles" ascii="aposteles" checked="y">
+      <lemma tag="apostel¹" />
+      <pos tag="NA" />
+      <morph tag="Masc.Gen.Sg" />
+    </mod>
+  </token>
+  <token id="t198" trans=".">
+    <dipl id="t198_d1" trans="." utf="." />
+    <mod id="t198_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+    </mod>
+  </token>
+  <token id="t199" trans=".">
+    <dipl id="t199_d1" trans="." utf="." />
+    <mod id="t199_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+    </mod>
+  </token>
+  <token id="t200" trans=".">
+    <dipl id="t200_d1" trans="." utf="." />
+    <mod id="t200_m1" trans="." utf="." ascii="." checked="y">
+      <lemma tag="--" />
+      <pos tag="$;" />
+      <boundary tag="Satzteil_F" />
+      <cora-flag name="boundary" />
+    </mod>
+  </token>
+</text>
