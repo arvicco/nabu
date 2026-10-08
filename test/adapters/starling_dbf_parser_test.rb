@@ -49,6 +49,43 @@ class StarlingDbfParserTest < Minitest::Test
     assert material.unicode_normalized?(:nfc)
   end
 
+  # Numeric cells are ASCII digits sliced out of the binary record: they
+  # come back UTF-8 like every other value (found live at the branch-bases
+  # dry parse — ktet #766's "?" protoform folds to nothing, so the entry's
+  # fold falls back to its NUMBER, which reached validation as ASCII-8BIT).
+  def test_numeric_cells_come_back_utf8
+    ktet = File.join(FIXTURES, "drav", "ktet.dbf")
+    parser(ktet).each_record do |record|
+      assert_equal Encoding::UTF_8, record.fetch("NUMBER").encoding
+      assert_equal Encoding::UTF_8, record.fetch("PRNUM").encoding
+    end
+  end
+
+  # The .var heap frames every payload as uint32 owner NUMBER + 0x12 tag;
+  # a live payload never contains a frame byte (0x12) or NUL. Census over
+  # all 47 var-backed tables of the eight packages: exactly THREE pointers
+  # break the frame, all in the Altaic branch bases (the offending bytes
+  # are kept verbatim in these fixtures):
+  # - tunget #42 SOL and #1821 MAN start ON a frame tag (not a payload
+  #   start) and run across neighbouring frames (37 / 1,816 bytes, NULs
+  #   and stale heap payloads inside) — damaged pointers: the cell reads
+  #   as the honest replacement character (the truncated-var lane's shape);
+  # - monget #2161 MMO starts cleanly but runs one NUL past its payload —
+  #   the payload ends at the first frame byte.
+  def test_frame_breaking_var_pointers_never_leak_frame_bytes
+    tunget = parser(File.join(FIXTURES, "altaic", "tunget.dbf")).each_record.to_h { |r| [r["NUMBER"], r] }
+    assert_equal "�", tunget["42"]["SOL"], "a pointer landing on a frame tag is damaged"
+    assert_equal "�", tunget["1821"]["MAN"]
+    assert_equal "käi 'орлан-белохвост' (Корм. 246)", tunget["1821"]["UDE"], "intact cells untouched"
+    monget = parser(File.join(FIXTURES, "altaic", "monget.dbf")).each_record.first
+    assert_equal "čubali (MA 136)", monget["MMO"], "an overrun ends at the first frame byte"
+    [*tunget.values, monget].each do |record|
+      record.each_value do |value|
+        refute_match(/[\x00\x12]/, value.to_s, "no frame byte survives decoding")
+      end
+    end
+  end
+
   def test_numbers_and_crosslinks_across_all_fixture_records
     by_number = parser.each_record.to_h { |rec| [rec.fetch("NUMBER"), rec] }
     assert_equal %w[1 721 1089], by_number.keys

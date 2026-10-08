@@ -462,6 +462,22 @@ module Store
                  "the source's own not-listed sentinel is noise, never a place name"
     end
 
+    # P114-1a: the TITUS Tocharian A find-signature site siglum, mined
+    # into "findspot" at parse — a place-only lane (the pages carry no
+    # dating); a page whose siglum is uncensused carries no key at all.
+    def test_metadata_places_titus_tocharian_a_findspot
+      seed_metadata_doc("titus-tocharian-a", "urn:nabu:titus-tocharian-a:tocha001",
+                        { "signature" => "T_III_Š_72.1", "findspot" => "Šorčuq" })
+      seed_metadata_doc("titus-tocharian-a", "urn:nabu:titus-tocharian-a:tocha009",
+                        { "signature" => "T_II_X_5" })
+      build!
+      row = timeline_for("urn:nabu:titus-tocharian-a:tocha001")
+      assert_equal "Šorčuq", row[:place_name]
+      assert_nil row[:not_before], "place-only: no date is ever minted"
+      assert_nil timeline_for("urn:nabu:titus-tocharian-a:tocha009"),
+                 "an uncensused siglum mints no place"
+    end
+
     # P109-4 (the Q83 drain): edition print years project with the
     # honestly-labeled "edition" date class — never composition, never
     # a bare typed date.

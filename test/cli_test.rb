@@ -548,10 +548,10 @@ class CLITest < Minitest::Test
     with_starling_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[etym зззз]) }
       assert_nil status
-      assert_match(/the crosswalk covers bat-pro, ccn-pro, ccs-pro, dra-pro, gem-pro, ine-pro, /, out,
+      assert_match(/the crosswalk covers bat-pro, cau-lzg-pro, ccn-pro, ccs-pro, dra-pro, dra-sou-pro, /, out,
                    "db-derived enumeration — exactly the shelves with reflex rows")
-      assert_match(/itl-pro, jpx-pro, qfa-chk-pro, qfa-yen-pro, sit-pro\b/, out,
-                   "P104-3: the new minting shelves joined; tut-pro/qfa-cka-pro mint none and must not appear")
+      assert_match(/qfa-chk-pro, qfa-yen-pro, sit-kir-pro, sit-pro, trk-pro, tuw-pro, xgn-pro\b/, out,
+                   "P104-3/P114: the new minting shelves joined; tut-pro/qfa-cka-pro mint none and must not appear")
       refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, out, "the hardcoded enumeration is gone")
       assert_match(/'\*form'/, out, "the quoting hint stays")
     end
@@ -2817,6 +2817,28 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/corpus clean \(stamp \h{12}\)/, out)
       assert_match(/re-derived 0, clean 1, skipped 0/, out)
+    end
+  end
+
+  # Owner UX rule 2026-10-07: the warm pass and verdict sweep announce on
+  # stderr before the first replay — header with ETA, one closed line per
+  # fingerprinted tree, the tally — on the real run and the dry run alike.
+  def test_rebuild_incremental_announces_the_verdict_sweep_on_stderr
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+
+      [%w[rebuild --incremental --dry-run], %w[rebuild --incremental]].each do |argv|
+        _out, err, status = with_config(config) { run_cli(argv) }
+
+        assert_nil status
+        assert_match(/^  pinning code identities \(1 sources\)… /, err)
+        assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — first run — no estimate$/, err)
+        assert_match(%r{^  verdict corpus \(1/1\)… }, err)
+        assert_match(/^  verdicts: 1 clean · 0 dirty · 0 skipped \(\d+s\)$/, err)
+      end
+      _out, err, = with_config(config) { run_cli(%w[rebuild --incremental]) }
+      assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — ~\d+s \(last run \d+s over 1 rows\)$/,
+                   err, "the recorded sweep timing speaks on the next run")
     end
   end
 
