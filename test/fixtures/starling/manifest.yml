@@ -151,3 +151,75 @@ files:
     url: https://starlingdb.org/download/IE.exe
     whole: false
     trim: 4 of 498 records — NUMBER 1 (*hama — form + etymon cells, the unaliased REF column, PRNUM → piet #3005), 3 (*pawasta), 127 (one of 25 headword-less records → the #127 placeholder), one of the 18 fully-empty NUMBER-0 blank slots (file position 293 — mints nothing); header + field descriptors verbatim
+  # The branch-bases wave (README section "The branch-bases wave"): one
+  # subordinate base per package plus the Nilgiri base and a Leiden
+  # dictionary, cut from the held 2026-09-26 package trees with the P104-3
+  # recipe (records byte-verbatim, var-pointers rewritten against a
+  # compacted .var behind the mirrored \x13 byte, trailing 0x1A mirrored
+  # where upstream has one — lezget/sdret/ktet/limet yes, turcet/kiret no).
+  - path: altaic/turcet.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 4 of 2,017 records — NUMBER 2 (*kül 'ashes', all 29 language columns — the 27 minting columns + the body-only Old/Middle Turkic), 1931 BOTH TIMES (*bẹŕ- + *jabĺan, the upstream duplicate-NUMBER pair → entry ids 1931/1931-b), 2001 (*ab-, the altet-#1 TURCNUM pair); header + field descriptors verbatim, var-pointers rewritten
+  - path: altaic/turcet.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: cauc/lezget.dbf
+    url: https://starlingdb.org/download/CAUC.exe
+    whole: false
+    trim: 3 of 1,569 records — NUMBER 1 (*zo-n 'I', all nine language columns mint), 3 (*ḳʷir(a), the caucet-#1 LEZGNUM pair), 11 (*ḳosʷɨ-, the caucet-#9 pair; the Udi "k:" tense-mark lead gate); header + field descriptors verbatim, var-pointers rewritten
+  - path: cauc/lezget.var
+    url: https://starlingdb.org/download/CAUC.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: drav/sdret.dbf
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: 3 of 4,692 records — NUMBER 2 (*agasai, KTNUM 0), 42 (*ac-, the dravet-#1 SDRNUM pair; KT protoform body-only, KTNUM → ktet #1157), 384 (one of 807 headword-less records → the #384 placeholder, still minting); header + field descriptors verbatim, var-pointers rewritten
+  - path: drav/sdret.var
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: drav/ktet.dbf
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: 2 of 1,665 records — NUMBER 766 (the bare "?" protoform — the empty-fold NUMBER fallback, the numeric-cell UTF-8 regression pin), 1157 (*as (*-c), the sdret-#42 KTNUM pair); header + field descriptors verbatim, var-pointers rewritten
+  - path: drav/ktet.var
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: sintib/kiret.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 2 of 994 records — NUMBER 2 (*ʔìŋ 'buy', LIMNUM → limet #460, IN this fixture set), 645 (*bhä́[p], the stibet-#2 KIRNUM pair; the stress-led Kaling lead gate); header + field descriptors verbatim, var-pointers rewritten
+  - path: sintib/kiret.var
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: sintib/limet.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 2 of 2,354 records — NUMBER 1 (a- 'my.', grammar-only body), 460 (iNmaʔ 'buy, purchase.', the kiret-#2 pair); header + field descriptors verbatim, var-pointers rewritten
+  - path: sintib/limet.var
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  # The frame-breaking var pointers (README "The .var frame census"): the
+  # offending pointer cells and their overrun payload bytes are kept verbatim.
+  - path: altaic/tunget.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 2 of 2,435 records — NUMBER 42 (*xol-sa 'fish' — the SOL pointer lands on a frame tag and spans 37 bytes across two neighbouring frames, NULs inside — the record the live parse-only sync quarantined), 1821 (*kīran 'eagle' — the MAN pointer lands on the UDE payload's frame tag and spans 1,816 bytes); header + field descriptors verbatim, var-pointers rewritten
+  - path: altaic/tunget.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept records' payload byte runs (the two overrun runs included), verbatim, compacted behind the mirrored \x13 header byte
+  - path: altaic/monget.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 1 of 2,174 records — NUMBER 2161 (*čubali 'ant' — the MMO pointer runs one NUL past its payload); header + field descriptors verbatim, var-pointer rewritten
+  - path: altaic/monget.var
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: the kept record's payload byte runs (the trailing NUL included), verbatim, compacted behind the mirrored \x13 header byte

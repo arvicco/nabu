@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 October 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · manual | 15,741 docs / 753,093 passages |
@@ -26,7 +26,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 October 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 22 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 October 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 22 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

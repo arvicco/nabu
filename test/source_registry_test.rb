@@ -1099,8 +1099,8 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
     assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese], registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
-    assert_equal %w[titus-avestan], registry.blocked_axis_members("iranian"),
-                 "the grant-gated Avesta rides iranian but is excluded from the public listing"
+    assert_equal %w[titus-avestan titus-pahlavi], registry.blocked_axis_members("iranian"),
+                 "the grant-gated Avesta and Pahlavi books ride iranian but are excluded from the public listing"
   end
 
   # P43-2: the shipped TITUS Avestan row is fetch-gated on the personal grant, and
@@ -1121,6 +1121,23 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/Gippert/, notice)
   end
 
+  # P114-1a: the Tocharian A row rides the titus-avestan posture verbatim —
+  # grant-gated on the 2026-10-06 extension, blocked from public surfaces,
+  # and NOT wired until the owner-fired first retrieval is verified.
+  def test_shipped_titus_tocharian_a_is_grant_gated_blocked_and_unwired
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    entry = registry["titus-tocharian-a"]
+
+    assert_predicate entry, :grant_required?
+    assert_predicate entry, :blocked?
+    refute entry.wired, "wired flips only after the owner-fired first sync is verified"
+    assert_equal "2026-10-06", entry.grant.date
+    assert_match(/Gippert/, entry.grant.grantor)
+    assert_match(/one retrieval per corpus/, entry.grant.terms)
+    assert_match(/no redistribution/, entry.grant.terms)
+    assert_match(/titus-tocharian-a: fetch requires a GRANT/, Nabu::GrantGate.notice(entry))
+  end
+
   # P44-r3a: the fetch right is a PRIVATE personal grant, so the public repo
   # must not advertise the row as a library holding — availability: blocked
   # excludes it from public docs/site/census, and etym's public membership
@@ -1134,7 +1151,8 @@ class SourceRegistryTest < Minitest::Test
                     "the full membership (CLI/sync scope) still carries it"
     refute_includes registry.public_axis_members("etym"), "titus-avestan",
                     "the PUBLIC etym membership drops the grant-gated row"
-    assert_equal %w[titus-avestan titus-osco-umbrian], registry.blocked_axis_members("etym")
+    assert_equal %w[titus-avestan titus-osco-umbrian titus-pahlavi titus-tocharian-a],
+                 registry.blocked_axis_members("etym")
   end
 
   # The manifest's display posture: nc (servable + credited, not hidden) and a

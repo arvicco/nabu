@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 October 2026)</span> |
 |---|---|---|---|---|
 | `achemenet` | texts | attribution | wired · manual | 2,774 docs / 2,774 passages |
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
@@ -34,7 +34,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 | `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 October 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 49 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 October 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 49 more (`nabu axis cuneiform` lists all).
 
 ## The desk's instruments
 
