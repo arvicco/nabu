@@ -46,7 +46,7 @@ module Nabu
     #
     #   issg<script>l<flavor><size>   Sogdian transliteration — the TEXT.
     #       script: c Christian (Syriac script), mm Manichaean script,
-    #       t / sb / sm / i the Sogdian script (the corpus's own section
+    #       t / sb / sm / i / b the Sogdian script (the corpus's own section
     #       titles: "Documents in Ancient Sogdian script", "Sogdian Texts in
     #       Manichaean Script"); flavors x (a word split over two lines,
     #       "δc՚=" / "=pt") and r (a rubric) are running text.
@@ -56,6 +56,9 @@ module Nabu
     #   iosk<flavor><size>            Sanskrit — a title run continuing a
     #       subtitle ("Fragment of the Bhaiṣajyaguru…sūtra") is a HEADING
     #       (document metadata, never text); elsewhere Sanskrit text.
+    #   gr<size>                      Greek — a title run continuing a
+    #       subtitle ("E: Βαγίστανον ὄρος") is a HEADING; Greek anywhere
+    #       else is uncensused and quarantines.
     #
     # A run below body size (< 16) beside a `voc` editorial note is a form
     # the note quotes ("Or <issgtl12>δβz՚</…> (with all previous editors)")
@@ -89,10 +92,24 @@ module Nabu
       # Parthian (`iiptht16`, Morano's "pwr kr'm" formula inside a Sogdian
       # line): the script letter is not interpreted; no flavor censused.
       PARTHIAN_LANE = /\Aiipth(?<script>[a-z]*?)(?<flavor>)(?<size>\d+)\z/
+      # Greek (`gr22`, sogdn156: the title "Βαγίστανον ὄρος" continuing the
+      # Tales item-E subtitle — the corpus's ONE gr* span, 2026-10-10
+      # census). Only a heading role is censused; Greek anywhere else
+      # quarantines until classified.
+      GREEK_LANE = /\Agr(?<flavor>)(?<size>\d+)\z/
 
       # Sogdian lane script code → ISO 15924 (the census vocabulary).
+      # "b" (`issgbl16`, ONE fragment in the whole corpus: London Frg. 28,
+      # sogdn222, 4 lines) is the Sogdian script: its siblings in the
+      # "Sogdian Texts from London" Buddhist run (Frg. 26, 27, 29–31) are all
+      # `issgsbl16`, no section title names any other script, and the
+      # transliteration is consonantal with aleph (՚) — the Aramaic-derived
+      # alphabet's convention, not a vocalised Brāhmī transcription.
       SCRIPTS = { "c" => "Syrc", "mm" => "Mani", "t" => "Sogd", "sb" => "Sogd", "sm" => "Sogd",
-                  "i" => "Sogd" }.freeze
+                  "i" => "Sogd", "b" => "Sogd" }.freeze
+
+      # Lanes whose run beside a title/subtitle span is a HEADING.
+      HEADING_LANES = [SANSKRIT_LANE, GREEK_LANE].freeze
 
       # Flavor letters censused as running text.
       TEXT_FLAVORS = "xr"
@@ -146,7 +163,7 @@ module Nabu
       def self.heading_tail(span)
         tail = +""
         sibling = span.next_element
-        while sibling && SANSKRIT_LANE.match?(sibling["id"].to_s)
+        while sibling && HEADING_LANES.any? { |lane| lane.match?(sibling["id"].to_s) }
           tail << " " << sibling.text
           sibling = sibling.next_element
         end
@@ -239,6 +256,10 @@ module Nabu
           return [:heading] if heading?(holder)
 
           lane_role(holder, m, [:text, "san", nil])
+        elsif GREEK_LANE.match?(id)
+          return [:heading] if heading?(holder)
+
+          unknown!("Greek lane #{id.inspect} outside a heading")
         else
           unknown!("content lane #{id.inspect}")
         end
