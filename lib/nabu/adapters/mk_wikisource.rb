@@ -15,7 +15,7 @@ module Nabu
     #   речовска), Димитар и Константин Миладинов, Рајко Жинзифов, Кузман
     #   Шапкарев, Марко Цепенков · Слово заради страшниот суд
     #
-    # — ≈790 pages. OUT by rule: the broad Македонски народни песни
+    # — 851 pages (union, census). OUT by rule: the broad Македонски народни песни
     # category (733 — mixes 20th-century field recordings, partisan songs
     # (Од борбата, Македонски партизански песни) and modern reworkings
     # (Песни преработени од Леб и сол) with no page-level provenance to

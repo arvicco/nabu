@@ -2870,7 +2870,7 @@ mk-wikisource:   # P116-2, 02-sources row 236
   adapter: Nabu::Adapters::MkWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY: first sync pending (census 2026-10-10: ~790 cone pages)
+  wired: false   # READY: first sync pending (census 2026-10-10: 851 cone pages)
   sync_policy: manual
   # The Macedonian Wikisource 19th-century cone (№R-74): the Miladinov
   # collection (687), Шапкарев, Цепенков's tales and the pre-1900
