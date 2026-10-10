@@ -890,6 +890,28 @@ sources:
     script: {posture: implied, note: "Greek script (Grek) — the edition's Greek-letter
         transcription of the cursive Bactrian alphabet (ϸ for š), the language's own
         script tradition"}
+  titus-manichaica:
+    # The three TITUS Manichaean corpora (Reader / Corpus by editions /
+    # Sermon of the Soul; 587 pages, censused 2026-10-10). Kind stays
+    # unclassified (the titus family's posture — hymn / parable / sermon /
+    # letter is the editions' scholarship, not a header field).
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "the edition's own lane claims per passage — pal (Manichaean
+        Middle Persian), xpr (Parthian), sog (Sogdian), oui (the Sermon's Turkic appendix, P. Zieme's
+        Turfan fragments); all real anchors. Deliberately coarse: no Manichaean-script facet and no
+        stage split on pal (Manichaean MP is a script/community tradition of the same language),
+        and a mixed-lane passage claims its predominant lane, the rest riding a `languages`
+        annotation"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates (mined
+        into document metadata as data_entry), never a composition or manuscript date"}
+    places: {posture: named, note: "the Reader's Berlin Turfan find signatures (\"M_5794_I (=
+        T_II_D_126_I)\") → findspot via the titus-tocharian-a SITE_SIGLA (Š Šorčuq, D Qočo),
+        declared coarse — other sigla mint nothing, the raw signatures ride `find_signatures`;
+        the Corpus's and the Sermon's M-/So-/U-numbers carry no site"}
+    script: {posture: qualified, note: "Latin-script renderings — per-document `representation`
+        metadata: transliteration (the *l lanes; the Corpus and the Sermon) or transcription +
+        transliteration (the Reader's interlinear plain transcription; the Sermon's Turkic
+        appendix); Manichaean / Sogdian / Uyghur scripts are the artifact facts"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
