@@ -427,6 +427,23 @@ bfm:   # P45-4
   lemma_tier: silver
   sync_policy: manual
 
+bg-wikisource:   # P116-2, 02-sources row 237
+  adapter: Nabu::Adapters::BgWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY: first sync pending (census 2026-10-10: 29 cone pages →
+                   # 26 docs / ~220 passages, 3 rendering-only skips)
+  sync_policy: manual
+  # The Bulgarian Wikisource premodern cone (№R-74; census in the
+  # adapter header): the 19 medieval charters (Средновековни
+  # български/сръбски текстове) read through their ORIGINAL-script
+  # {{Script/Slavonic}} text only (chu, the wiki's grouping as
+  # "recension", the issuance year typed) — pages hosting only a
+  # modern rendering skip by rule — plus Paisiy's История
+  # славянобългарска (10 subpages), hosted as a modern-literary-
+  # Bulgarian rendering after Ivanov 1914 and DECLARED so (bul,
+  # metadata "rendering"). Texts PD; layer CC BY-SA 4.0.
+
 bhsa:
   adapter: Nabu::Adapters::Bhsa
   adopted: "2026-07-18"
@@ -2086,6 +2103,21 @@ honkoku:   # P108-5
   # deferrals on the queue's japonic remainder. Per-material holding-
   # institution attribution carried in document metadata.
 
+hr-wikisource:   # P116-2, 02-sources row 234
+  adapter: Nabu::Adapters::HrWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY: first sync pending (census 2026-10-10: 1,401 cone
+                   # pages / ~5.9 MB wikitext)
+  sync_policy: manual
+  # The Croatian Wikisource premodern CENTURY cone (№R-74): every page
+  # reachable (depth 2) from Hrvatski srednji vijek + Hrvatsko 15.–18.
+  # stoljeće — Marulić's Judita, Držić's plays, Vetranović, Bunić
+  # Vučić, Gundulić's Osman, Razgovor ugodni … The century categories
+  # band the grade-2 era envelope (era_band, precision era); 19th
+  # century onward and header-declared translations are out by rule.
+  # Texts PD; layer CC BY-SA 4.0.
+
 hypotactic:
   adapter: Nabu::Adapters::Hypotactic
   adopted: "2026-07-24"
@@ -2833,6 +2865,22 @@ menotec:
   # `bin/nabu sync menotec`, eyeball urn:nabu:menotec:non-pamphilus-dep +
   # urn:nabu:menotec:non-edda-regius-dep + 5 random passages, then flip wired.
   sync_policy: manual
+
+mk-wikisource:   # P116-2, 02-sources row 236
+  adapter: Nabu::Adapters::MkWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY: first sync pending (census 2026-10-10: ~790 cone pages)
+  sync_policy: manual
+  # The Macedonian Wikisource 19th-century cone (№R-74): the Miladinov
+  # collection (687), Шапкарев, Цепенков's tales and the pre-1900
+  # authors (Пејчиновиќ, Крчовски, Пулевски, the Miladinovs,
+  # Жинзифов). The Miladinov collection is hosted in MODERNIZED
+  # orthography ("на современ македонски правопис", the wiki's own
+  # note) — declared per page in metadata "orthography", never
+  # silent. Partisan/modern-reworked songs, Prličev (Greek originals)
+  # and modern-orthography duplicates are out by rule. Texts PD;
+  # layer CC BY-SA 4.0.
 
 monlam-lexicon:   # P88-A3, 02-sources row 183
   adapter: Nabu::Adapters::MonlamLexicon
@@ -4212,6 +4260,23 @@ sl-lexica:
   # live on the three record pages):
   # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1114
 
+sl-wikisource:   # P116-2, 02-sources row 235
+  adapter: Nabu::Adapters::SlWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY: first sync pending (census 2026-10-10: 1,673 pages in
+                   # the 86 year categories ≤ 1899 → 1,545 after the rules,
+                   # ~36 MB wikitext)
+  sync_policy: manual
+  # Wikivir (the Slovene Wikisource) through its "Dela leta N" year
+  # categories to 1899 (№R-74): the Hladnik-corrected 19th-century
+  # prose + the 1584 Dalmatin/Trubar pages; the year is a typed date.
+  # Translations, non-Slovene works and permission-licensed pages are
+  # out by rule. OVERLAP with the held imp/prilit (25 works censused):
+  # ingested WITH provenance — different editions; dedupe is a
+  # catalog-side concern (adapter header). Bohoričica declared in
+  # metadata "orthography". Texts PD; layer CC BY-SA 4.0.
+
 # P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
 # one row per upstream artifact/license/fetch posture), one new axis tag.
 # LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
@@ -4245,6 +4310,21 @@ soas-tibetan:
   # hard sha256 pin (RELEASE_SHA256, the wold/ren mold; md5 cross-checked
   # against Zenodo's). A future release is a NEW DOI the owner re-pins.
   sync_policy: manual
+
+sr-wikisource:   # P116-2, 02-sources row 233
+  adapter: Nabu::Adapters::SrWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY: first sync pending (census 2026-10-10: 4,930 cone
+                   # pages / ~43 MB wikitext; ~297 skip by rule)
+  sync_policy: manual
+  # The Serbian Wikisource oral-tradition cone (№R-74): the 2,505
+  # epic songs (+ their cycle subcategories), the Erlangen manuscript
+  # (216, in the Detelić/Samardžija/Delić rendering — its editorial
+  # interventions ride declared) and Vuk's collections. Bulgarian-
+  # source collections and the НОБ songs are out by rule; Latin-script
+  # (Croatian-collected) pages claim hrv. Verse at line grain. Texts
+  # PD; layer CC BY-SA 4.0.
 
 starling:
   adapter: Nabu::Adapters::Starling

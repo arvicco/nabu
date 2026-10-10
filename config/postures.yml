@@ -427,6 +427,61 @@ sources:
         about Song–Yuan) and 元朝秘史 deliberately claim nothing — declared"}
     places: {posture: unplaced, note: "no place fields in the cone pages"}
     script: {posture: implied}
+  # ── P116-2: the South Slavic wikisource cone (№R-74) ──────────────────
+  bg-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "chu (the 16 charters' original-script text, bare
+        anchor) + bul (Paisiy, hosted as a modern-literary rendering — declared). The
+        wiki's own grouping rides as metadata recension (serbian 10 / bulgarian 6): a
+        facet-rule candidate onto chu/srp (exists); a Bulgarian-recension chu node does
+        not exist — reported, never guessed"}
+    dating: {posture: partial, note: "the charters' issuance years (бележки, typed);
+        Paisiy's rendering carries none"}
+    places: {posture: unplaced, note: "no place fields; grantee places live in prose notes"}
+    script: {posture: implied}
+  hr-wikisource:
+    kind: {posture: unclassified, note: "genre categories ride verbatim in metadata
+        categories — a kind_map candidate"}
+    lect: {posture: identity, note: "hrv bare (no nabu-lects hrv node yet — reported).
+        Povaljska listina (1250) mixes Croatian and Church Slavonic in Croatian Cyrillic
+        — a chu/cro candidate, censused, not claimed"}
+    dating: {posture: dated, note: "P116-2: the century categories (srednji vijek, 15.–18.
+        stoljeće) band the era envelope (era_band → MetadataDates :era_band_key,
+        precision era — an attribution)"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}
+  mk-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "mkd bare (no nabu-lects mk node yet — reported); the
+        Miladinov collection is in MODERNIZED orthography (metadata orthography, per
+        page). Pejčinović/Krčovski's CS-tinged vernacular is the bul:emod/damaskini
+        neighbourhood — censused, not staged"}
+    dating: {posture: partial, note: "the забелешки print year where stated (Krčovski
+        1817 …); the collections carry none at page grain"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}
+  sl-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: dates, note: "as imp/prilit — the sl stage bands stage the typed
+        Dela-leta years (1584 Dalmatin → emod; the 19th-century mass → emod/mod)"}
+    dating: {posture: dated, note: "the Dela leta N year category, typed (MetadataDates
+        :structured)"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied, note: "Latin; bohoričica declared per page in metadata
+        orthography"}
+  sr-wikisource:
+    kind: {posture: unclassified, note: "song-type and collection categories ride verbatim
+        in metadata categories — a kind_map candidate"}
+    lect: {posture: identity, note: "srp (Cyrillic pages) + hrv (the Latin-script,
+        Croatian-collected pages, censused 136) — bare codes, neither has a nabu-lects
+        node yet (reported)"}
+    dating: {posture: pending, note: "no page-grain date exists; candidate: the Vuk
+        volume publication year inside the verbatim base_edition (Избор) line — an
+        edition-class envelope, the openmgh printed_year_text precedent — awaiting a
+        ruling (recording year ≠ composition)"}
+    places: {posture: unplaced, note: "provenance subtitles ((Из Црне Горе)) ride as
+        section annotations, not place claims"}
+    script: {posture: mixed, note: "Cyrillic + Latin pages; metadata script per page"}
   aclt:   # P110-2
     kind: {posture: unclassified, note: one class — HLuwian inscriptions; a single-value
         kind stamp deferred (the kouigenji precedent)}

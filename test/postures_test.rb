@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 110, lect.size,
+    assert_equal 115, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -328,6 +328,10 @@ class PosturesTest < Minitest::Test
     # aggregated Slavic mint (nothing Czech exists in nabu-lects): pending 0→1;
     # korba pends on the pl anchor + Middle Polish stage of the same mint
     # (pl:mid by date-band inference, the dta mold): pending 1→2.
-    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 83, "pending" => 2 }, by_posture)
+    # P116-2 ADDS the five South Slavic wikisource cones: hr joins dates
+    # (the century-category era band), sr/sl/mk/bg identity (srp+hrv /
+    # sl / mkd / chu+bul lanes, declared): 110→115, dates 11→12,
+    # identity 83→87.
+    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 87, "pending" => 2 }, by_posture)
   end
 end

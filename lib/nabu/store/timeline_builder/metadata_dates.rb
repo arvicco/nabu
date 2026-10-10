@@ -165,9 +165,14 @@ module Nabu
           "ja-wikisource" => :era_band_key, # P109-1 (№R-74): the era-category envelope
           #                       the adapter mints ("era_band") — an ERA attribution,
           #                       precision "era", never a typed date
-          "zh-wikisource" => :dynasty_band # P109-1: the work-level dynasty claim
+          "zh-wikisource" => :dynasty_band, # P109-1: the work-level dynasty claim
           #                       (全唐文 → 唐) through the ruled period table —
           #                       the cbeta shape verbatim
+          "hr-wikisource" => :era_band_key, # P116-2: the century-category envelope
+          #                       (Hrvatsko 16. stoljeće …) — the ja-wikisource shape
+          "sl-wikisource" => :structured, # P116-2: the Dela leta N year category, typed
+          "mk-wikisource" => :structured, # P116-2: the забелешки print year where stated
+          "bg-wikisource" => :structured # P116-2: the charters' issuance year (бележки)
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
