@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: althurayya
+adapter_test:
+retrieved: "2026-10-10"
+files:
+  - path: places_new_structure.geojson
+    url: https://raw.githubusercontent.com/althurayya/althurayya.github.io/master/master/places_new_structure.geojson
+    whole: false
+    trim: ten of 2,521 feature blocks line-sliced byte-verbatim (last kept block's trailing comma dropped)
+  - path: regions.json
+    url: https://raw.githubusercontent.com/althurayya/althurayya.github.io/master/master/regions.json
+    whole: true
+    trim: none
