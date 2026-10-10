@@ -912,6 +912,24 @@ sources:
         metadata: transliteration (the *l lanes; the Corpus and the Sermon) or transcription +
         transliteration (the Reader's interlinear plain transcription; the Sermon's Turkic
         appendix); Manichaean / Sogdian / Uyghur scripts are the artifact facts"}
+  titus-khotanese:
+    # The Corpus of Khotanese Saka Texts (7 books, 1,648 texts, censused
+    # 2026-10-10). Kind stays unclassified (the titus family's posture):
+    # the books mix Buddhist literature (Zambasta, KBT), the Siddhasāra
+    # (medicine) and documents (KT2-KT5) — a per-text kind table is a ruled
+    # map, not a header field.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "kho — the bare Khotanese anchor; deliberately coarse (no
+        Old/Late Khotanese staging: the registry mints no kho stages, and the pages state no
+        date — the Zambasta is Old, the KT documents mostly Late, a future stage-rule
+        candidate)"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates
+        (mined as data_entry) and the modern edition basis (edition_basis), never a
+        composition or manuscript date; documents' regnal-year datings sit inside the text"}
+    places: {posture: named, note: "a manuscript reference's leading site word → findspot via
+        the adapter's FINDSPOTS (Khadaliq, the only site the census saw), declared coarse —
+        other references ride the raw `manuscripts` metadata"}
+    script: {posture: implied, note: "Latin transliteration of Brāhmī manuscripts"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
