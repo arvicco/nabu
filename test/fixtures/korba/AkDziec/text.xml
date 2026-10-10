@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <xi:include href="../KorBa_manual_header.xml"/>
+  <TEI>
+    <xi:include href="header.xml"/>
+    <text>
+      <body>
+        <div xml:id="txt_1-div">
+          <ab n="txt_2.8.8.2-p" xml:id="txt_1.1-ab"><pb n="42"/>X. Ieżeli to iest, dam mu dobre napomnienie.
+                S. Suplikuię WX. Mci ażebyś mi kazał uczynić sprawiedliwość.
+                X. Będziesz WmP.
+                kontent ze mnie, ale niech ten przyidzie niecnota, umyię mu głowę.
+                S. WXca Mść raczysz mu darować.
+                X. Day mi WmP.
+                pokoy, lubię ia żyć spokoynie z memi sąsiadami.
+<pb n="43" xml:id="txt_1.1.1-pb"/>S. Niezmierne mam obligacye W.X Mci.
+                X. Nie frasuy się WmP.
+                każę W Panu uczynić sprawiedliwość.
+              </ab>
+          
+        </div>
+        
+        
+        
+        
+      </body>
+    </text>
+  </TEI>
+</teiCorpus>

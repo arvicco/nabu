@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_LubJMan">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Jawnej niewinności manifest"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="free">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Jawnej niewinności manifest</title>
+        <author>Jerzy Sebastian Lubomirski</author>
+        <pubPlace role="place">nieznane</pubPlace>
+        <pubPlace role="region">nieznane</pubPlace>
+        <date when="1666">1666</date>
+        <idno type="KORBA">KORBA_LubJMan</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#persw"/>
+      <catRef scheme="#kind" target="#polityczne"/>
+      <catRef scheme="#subject" target="#polityka"/>
+      <catRef scheme="#ironic" target="#nie"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>

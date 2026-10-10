@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <xi:include href="../KorBa_manual_header.xml"/>
+  <TEI>
+    <xi:include href="header.xml"/>
+    <text>
+      <body>
+        <div xml:id="txt_1-div">
+          <ab n="txt_17.2-p" xml:id="txt_1.1-ab"><pb n="36"/>B. O Bráćie. <foreign xml:lang="la" xml:id="txt_1.1.1-foreign">Quod mens sua sponte divinat, idem <uncertain reason="unreadable" xml:id="txt_17.2.16.1-uncertain">subiscit</uncertain> ratio baud fallax</foreign>, y ták, pśie złe w nagrodźie odnieśiesz, według mniemánia twoiego.</ab>
+          
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+      </body>
+    </text>
+  </TEI>
+</teiCorpus>

@@ -2448,6 +2448,20 @@ kokubunken:   # P108-4
   # two-editions doctrine) and the 元暦校本 opening. Man'yōgana base
   # text with the kun/傍訓 reading layer as annotations.
 
+korba:   # P116-1
+  adapter: Nabu::Adapters::Korba
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # KorBa — the manually annotated subcorpus 2.0 of the Electronic Corpus
+  # of 17th- and 18th-century Polish Texts (to 1772; IJP PAN). One zip
+  # from the project's download page, CC BY-SA 4.0 verbatim there →
+  # attribution. NKJP TEI P5 stand-off packages (nkjp-tei family):
+  # document = text, passage = <ab> block, the manual morphosyntax as
+  # gold token annotations (translit form, modernized orth, lemma, tag);
+  # header date/place/region/genre mined.
+
 kouigenji:   # P108-3
   adapter: Nabu::Adapters::Kouigenji
   adopted: "2026-09-29"

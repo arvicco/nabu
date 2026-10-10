@@ -654,6 +654,21 @@ sources:
     dating: {posture: undatable, note: dates live in free prose, no typed field — declared, not silent}
     places: {posture: unplaced, note: same — findspots in prose only}
     script: {posture: implied}
+  korba:   # P116-1
+    kind: {posture: pending, note: "candidate: a kind_map fold over the header's genre catRefs
+        (the facets genre/kind/subject carry KorBa's own codes verbatim — kanc, dydakt, …);
+        the fold is a ruled table, not a default"}
+    lect: {posture: pending, note: "candidate: pl:mid by date-band inference over the print-year
+        envelopes (the dta/de:early mold) — Middle Polish, the corpus's 1601–1772 span; BLOCKED
+        on the aggregated Slavic nabu-lects mint (no pl anchor and no Old/Middle Polish stage
+        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare pl is
+        minted meanwhile"}
+    dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
+        @notBefore/@notAfter with the prose kept raw)"}
+    places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
+        own region classification (role=region) as metadata"}
+    script: {posture: implied, note: "Latin script; the transcribed spelling is the text, the
+        modernized orth rides per token"}
   prague-bible-1488:   # P116-1
     # kind: machine-postured — kind_map.yml source_kind scripture (the
     # whole-source Bible precedent: vulgate/eng-web/sblgnt).

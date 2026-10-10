@@ -1,0 +1,149 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Members of the one korba_xml.zip (not individually GET-able); header.xml
+# files whole, the three layer files trimmed per README.
+source: korba
+adapter_test:
+retrieved: "2026-10-10"
+files:
+  - path: AkDziec/header.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkDziec/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: AkDziec/text.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkDziec/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AkDziec/ann_segmentation.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkDziec/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AkDziec/ann_morphosyntax.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkDziec/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AkZbrojGęb/header.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkZbrojGęb/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: AkZbrojGęb/text.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkZbrojGęb/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AkZbrojGęb/ann_segmentation.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkZbrojGęb/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AkZbrojGęb/ann_morphosyntax.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AkZbrojGęb/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AndPiekBoh/header.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AndPiekBoh/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: AndPiekBoh/text.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AndPiekBoh/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AndPiekBoh/ann_segmentation.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AndPiekBoh/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: AndPiekBoh/ann_morphosyntax.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/AndPiekBoh/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: HumListRzecz/header.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/HumListRzecz/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: HumListRzecz/text.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/HumListRzecz/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: HumListRzecz/ann_segmentation.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/HumListRzecz/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: HumListRzecz/ann_morphosyntax.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/HumListRzecz/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: LubJMan/header.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/LubJMan/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: LubJMan/text.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/LubJMan/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: LubJMan/ann_segmentation.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/LubJMan/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)
+  - path: LubJMan/ann_morphosyntax.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (korba_corpus/LubJMan/) — not individually fetchable; re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: first-block(s) trim, consistent across the layers (README)

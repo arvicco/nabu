@@ -22,6 +22,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `goo300k` | texts | attribution | wired · manual | 89 docs / 8,397 passages |
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
+| `korba` | texts | attribution | not yet wired | not synced yet |
 | `prague-bible-1488` | texts | attribution | not yet wired | not synced yet |
 | `prilit` | texts | attribution | wired · manual | 43 docs / 8,526 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
