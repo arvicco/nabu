@@ -4514,10 +4514,12 @@ titus-bactrian:   # 02-sources row 229
 titus-khotanese:   # 02-sources row 228
   adapter: Nabu::Adapters::TitusKhotanese
   adopted: "2026-10-10"
-  axes: [etym, iranian]  # the Eastern Middle Iranian (Saka) stage of the iranian desk, beside
-                         # the Skjærvø/IEDC Khotanese shelves; etym because the Khotanese forms
-                         # feed the comparative shelves. The corpus is largely Buddhist (the
-                         # Book of Zambasta, KBT), but buddhist-axis membership is an owner call.
+  axes: [etym, iranian, buddhist]  # the Eastern Middle Iranian (Saka) stage of the iranian
+                         # desk, beside the Skjærvø/IEDC Khotanese shelves; etym because the
+                         # Khotanese forms feed the comparative shelves; buddhist (owner ruling
+                         # 2026-10-10) because the Book of Zambasta and the KBT sūtras are
+                         # Buddhist scripture, the corpus's volume-majority — source-grain axis
+                         # membership on the dharma-* / titus-tocharian-a precedent.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
