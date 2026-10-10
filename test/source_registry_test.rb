@@ -1099,7 +1099,7 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
     assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese], registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
-    assert_equal %w[titus-avestan titus-bactrian titus-pahlavi], registry.blocked_axis_members("iranian"),
+    assert_equal %w[titus-avestan titus-bactrian titus-manichaica titus-pahlavi], registry.blocked_axis_members("iranian"),
                  "the grant-gated Avesta, Bactrian corpus and Pahlavi books ride iranian but are " \
                  "excluded from the public listing"
   end
@@ -1152,7 +1152,7 @@ class SourceRegistryTest < Minitest::Test
                     "the full membership (CLI/sync scope) still carries it"
     refute_includes registry.public_axis_members("etym"), "titus-avestan",
                     "the PUBLIC etym membership drops the grant-gated row"
-    assert_equal %w[titus-avestan titus-bactrian titus-osco-umbrian titus-pahlavi titus-tocharian-a],
+    assert_equal %w[titus-avestan titus-bactrian titus-manichaica titus-osco-umbrian titus-pahlavi titus-tocharian-a],
                  registry.blocked_axis_members("etym")
   end
 

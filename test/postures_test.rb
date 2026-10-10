@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 105, lect.size,
+    assert_equal 106, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -247,7 +247,8 @@ class PosturesTest < Minitest::Test
                  "the bilinguals' Sanskrit sub-lines ride bare san) and " \
                  "titus-pahlavi ADDED — identity pal, declared coarse (the titus " \
                  "family's grant-gated Middle Persian books): 102→104; " \
-                 "titus-bactrian ADDED — identity xbc (a real anchor, declared coarse): 104→105"
+                 "titus-bactrian ADDED — identity xbc (a real anchor, declared coarse): 104→105; " \
+                 "titus-manichaica ADDED — identity pal/xpr/sog/oui per lane (all real anchors): 105→106"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -313,7 +314,8 @@ class PosturesTest < Minitest::Test
     # file (the shadowing rule) — the last pending leaves the board.
     # P114 ADDS titus-tocharian-a (identity xto) and titus-pahlavi
     # (identity pal, declared coarse): identity 77→79. titus-bactrian
-    # joins as identity xbc (the iedc-minted anchor): 79→80.
-    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 80 }, by_posture)
+    # joins as identity xbc (the iedc-minted anchor): 79→80;
+    # titus-manichaica as identity pal/xpr/sog/oui per lane: 80→81.
+    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 81 }, by_posture)
   end
 end
