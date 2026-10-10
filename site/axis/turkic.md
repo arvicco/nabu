@@ -15,14 +15,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 10 October 2026)</span> |
 |---|---|---|---|---|
 | `atmo` | texts | attribution | wired · manual | 15 docs / 4,934 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 October 2026)</span>: `zho` 327,296 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 · `ine-pro` 1,928 · `wlm` 1,046 · `iir-pro` 800 … and 29 more (`nabu axis turkic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 10 October 2026)</span>: `zho` 327,296 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 · `ine-pro` 1,928 · `wlm` 1,046 · `iir-pro` 800 … and 29 more (`nabu axis turkic` lists all).
 
 ## The desk's instruments
 
