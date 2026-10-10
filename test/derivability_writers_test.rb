@@ -47,7 +47,9 @@ class DerivabilityWritersTest < Minitest::Test
   # folder (P77-r10/r14). The two P78 wikisource adapters
   # (ko_wikisource_mk, viet_wikisource) write their fetched page
   # envelopes into canonical/ inside Adapter#fetch — the sanctioned
-  # canonical gateway, the burman/wiki_fetch law kind.
+  # canonical gateway, the burman/wiki_fetch law kind. The P116-2
+  # South Slavic family writes through its one shared base
+  # (slavic_wikisource) inside Adapter#fetch — the same law kind.
   # corpus_corporum_fetch (P80-2) writes canonical/<slug>/texts/ +
   # attic + its state checkpoint inside Adapter#fetch — the
   # elephantine_fetch law kind. menota_fetch (P82-1) writes
@@ -115,6 +117,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/adapters/ja_wikisource.rb nabu/adapters/zh_wikisource.rb
+    nabu/adapters/slavic_wikisource.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb

@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Envelopes are the adapter's own on-disk shape around api.php captures —
+# no per-file raw GET URL exists for the envelope form.
+source: sl-wikisource
+adapter_test:
+retrieved: "2026-10-10"
+files:
+  - path: pages/18712.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: to the first 16 + last 5 lines
+  - path: pages/36499.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: pages/35136.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: to the first 24 + last 4 lines
+  - path: pages/22746.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: to the first 25 + last 8 lines
+  - path: pages/37864.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: to the first 15 + last 6 lines
