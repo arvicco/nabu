@@ -170,23 +170,26 @@ module Nabu
 
       # One DocumentRef per text page of every known edition (ref.id IS the
       # document urn). Framesets and unknown directories are not text.
+      # Apparatus-only pages — every content lane a variant reading (the
+      # Vidēvdād 19 critical apparatus, vd-19p/vd-19050: 1 of 1,573 pages at
+      # the first-sync census) — skip by rule, censused by discovery_skips.
       def discover(workdir)
-        @editions.flat_map do |id, edition|
-          Dir.glob(File.join(workdir, id, "#{edition.prefix}*.htm")).filter_map do |path|
-            name = File.basename(path)
-            next unless name.match?(edition.page_re)
-
-            stem = name.delete_suffix(".htm")
-            Nabu::DocumentRef.new(source_id: SLUG, id: document_urn(id, stem), path: path,
-                                  metadata: { "edition" => id, "page" => stem })
-          end
+        text_pages(workdir).reject { |_id, _stem, path| apparatus_only?(path) }.map do |id, stem, path|
+          Nabu::DocumentRef.new(source_id: SLUG, id: document_urn(id, stem), path: path,
+                                metadata: { "edition" => id, "page" => stem })
         end
+      end
+
+      def discovery_skips(workdir)
+        skipped = text_pages(workdir).count { |_id, _stem, path| apparatus_only?(path) }
+        notes = skipped.positive? ? ["#{skipped} apparatus-only page(s) skipped — variant readings, no text"] : []
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: 0, notes: notes)
       end
 
       # Parse one page into a Document of citation-grain Passages. A page
       # with no text-bearing section is a structural failure (ParseError).
       def parse(document_ref)
-        html = File.read(document_ref.path, encoding: "UTF-8")
+        html = TitusPahlaviParser.read_page(document_ref.path)
         sections = TitusPahlaviParser.parse(html)
         raise Nabu::ParseError, "titus-pahlavi: no text sections in #{document_ref.path}" if sections.empty?
 
@@ -235,6 +238,24 @@ module Nabu
 
       private
 
+      # [edition id, page stem, path] for every numbered text page.
+      def text_pages(workdir)
+        @editions.flat_map do |id, edition|
+          Dir.glob(File.join(workdir, id, "#{edition.prefix}*.htm")).filter_map do |path|
+            name = File.basename(path)
+            [id, name.delete_suffix(".htm"), path] if name.match?(edition.page_re)
+          end
+        end
+      end
+
+      # The cheap byte needle: the page names content lanes, and every one
+      # is a variant-reading lane.
+      def apparatus_only?(path)
+        ids = File.binread(path).scan(/<span id=([a-z0-9]+)>/i).flatten.uniq
+        lanes = ids.grep(TitusPahlaviParser::CONTENT_PREFIX)
+        !lanes.empty? && lanes.all? { |id| TitusPahlaviParser.variant_lane?(id) }
+      end
+
       # "<edition>.<page>" — the edition is needed: snstrl and snstrs share
       # the page prefix snstr.
       def document_urn(edition_id, stem)
@@ -262,6 +283,7 @@ module Nabu
         annotations = { "unit" => section.label }
         annotations.merge!(section.location)
         annotations["avestan"] = section.avestan if section.avestan
+        annotations["transliteration"] = section.transliteration if section.transliteration
         annotations["occurrence"] = occurrence if occurrence > 1
         annotations
       end
