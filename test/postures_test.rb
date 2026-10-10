@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 109, lect.size,
+    assert_equal 110, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -252,7 +252,8 @@ class PosturesTest < Minitest::Test
                  "titus-khotanese ADDED — identity kho (a real anchor, declared coarse): 106→107; " \
                  "titus-sogdian ADDED — identity sog per lane (script-coded lanes, declared coarse): 107→108; " \
                  "prague-bible-1488 ADDED P116-1 — pending on the cs:old mint (the aggregated " \
-                 "Slavic nabu-lects package; no cs node exists yet): 108→109"
+                 "Slavic nabu-lects package; no cs node exists yet): 108→109; korba ADDED " \
+                 "P116-1 — pending on pl:mid date-band staging (same mint; no pl node): 109→110"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -324,7 +325,9 @@ class PosturesTest < Minitest::Test
     # titus-sogdian as identity sog: 82→83.
     # P116-1 reopens the pending class honestly (the dacon shape):
     # prague-bible-1488 pends on the cs anchor + cs:old stage of the
-    # aggregated Slavic mint (nothing Czech exists in nabu-lects): pending 0→1.
-    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 83, "pending" => 1 }, by_posture)
+    # aggregated Slavic mint (nothing Czech exists in nabu-lects): pending 0→1;
+    # korba pends on the pl anchor + Middle Polish stage of the same mint
+    # (pl:mid by date-band inference, the dta mold): pending 1→2.
+    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 83, "pending" => 2 }, by_posture)
   end
 end

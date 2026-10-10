@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_HumListRzecz">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Z listów do J. Mniszcha"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="restricted">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Z listów do J. Mniszcha</title>
+        <author>Stefan Humiecki</author>
+        <pubPlace role="place">nieznane</pubPlace>
+        <pubPlace role="region">nieznane</pubPlace>
+        <date when="1734">1734</date>
+        <bibl type="modernized">
+          <note>Modernized publication</note>
+          <bibl type="monogr">
+            <title>Rzeczpospolita w dobie upadku 1700-1740. Wybór źródeł</title>
+          </bibl>
+          <editor role="editor">Józef Gierowski</editor>
+          <pubPlace role="place">Wrocław</pubPlace>
+          <publisher>Zakład Narodowy im. Ossolińskich</publisher>
+          <date when="1955">1955</date>
+        </bibl>
+        <idno type="KORBA">KORBA_HumListRzecz</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#list"/>
+      <catRef scheme="#subject" target="#historia #wojskowość"/>
+      <catRef scheme="#ironic" target="#nie"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>
