@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+require "tmpdir"
 require "test_helper"
 require "support/adapter_conformance"
 require "support/store_test_db"
@@ -22,6 +24,52 @@ module Adapters
     end
 
     def doc(pageid) = documents.find { |d| d.urn == "urn:nabu:mk-wikisource:#{pageid}" } || flunk("#{pageid} missing")
+
+    API = "https://mk.wikisource.org/w/api.php"
+
+    # The live-sync 414 (2026-10-10): 50 long Cyrillic titles in one GET
+    # percent-encode past the server's URI limit. Batches must bound by
+    # ENCODED URL length, and every cone page must still land.
+    def test_fetch_batches_long_cyrillic_titles_under_the_url_cap
+      titles = (1..60).map do |n|
+        "Зборник на Миладиновци/Марко Крале и Муса Кеседжија се бореле три дена и три ноќи бр. #{n}"
+      end
+      root = Nabu::Adapters::MkWikisource::CONE.first.category
+      stub_request(:get, /#{Regexp.escape(API)}.*list=categorymembers/).to_return do |request|
+        title = URI.decode_www_form(URI(request.uri.to_s).query).to_h.fetch("cmtitle")
+        members = title == root ? titles.map { |t| { "ns" => 0, "title" => t } } : []
+        { body: JSON.generate("query" => { "categorymembers" => members }) }
+      end
+      revision_urls = []
+      stub_request(:get, /#{Regexp.escape(API)}.*prop=revisions/).to_return do |request|
+        revision_urls << request.uri.to_s
+        batch = URI.decode_www_form(URI(request.uri.to_s).query).to_h.fetch("titles").split("|")
+        { body: JSON.generate("query" => { "pages" => batch.to_h { |t| revision_page(t, 10_000 + titles.index(t)) } }) }
+      end
+      Dir.mktmpdir do |workdir|
+        Nabu::Adapters::MkWikisource.new(delay: 0).fetch(workdir)
+        assert_equal 60, Dir.glob(File.join(workdir, "pages", "*.json")).size, "every cone page lands"
+      end
+      assert_operator revision_urls.size, :>, 2, "the long titles force several batches"
+      cap = Nabu::Adapters::SlavicWikisource::URL_BYTE_CAP
+      revision_urls.each do |url|
+        assert_operator url.bytesize, :<=, cap, "a batch URL exceeds the cap (#{url.bytesize} bytes)"
+      end
+    end
+
+    def test_a_414_still_aborts_the_fetch
+      stub_request(:get, /#{Regexp.escape(API)}.*list=categorymembers/).to_return(status: 414, body: "")
+      Dir.mktmpdir do |workdir|
+        error = assert_raises(Nabu::FetchError) { Nabu::Adapters::MkWikisource.new(delay: 0).fetch(workdir) }
+        assert_match(/HTTP 414/, error.message)
+      end
+    end
+
+    def revision_page(title, id)
+      [id.to_s, { "pageid" => id, "ns" => 0, "title" => title,
+                  "revisions" => [{ "revid" => id, "timestamp" => "2026-10-10T00:00:00Z",
+                                    "slots" => { "main" => { "*" => "текст" } } }] }]
+    end
 
     def test_author_pages_and_modern_duplicates_skip_by_rule
       ids = conformance_adapter.discover(FIXTURES).map(&:id).sort
