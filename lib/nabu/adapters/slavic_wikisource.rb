@@ -26,7 +26,8 @@ module Nabu
     #
     # Stage 1 walks every cone root (categorymembers, subcategories to the
     # root's depth) into a title → cone-label map; stage 2 fetches the
-    # titles in 50-title batches (prop=revisions|categories, continuation-
+    # titles in batches of at most 50 titles AND URL_BYTE_CAP encoded URL
+    # bytes (prop=revisions|categories, continuation-
     # merged) and writes one envelope per page: pages/<pageid>.json —
     # title/pageid/ns/revid/timestamp verbatim, "cone" (the roots that
     # reached the page), "categories" (every category the page carries,
@@ -62,6 +63,16 @@ module Nabu
         "Източници", "Бележки", "На съвременен български език", "Превод", "Външни препратки",
         "Поврзано"
       ].freeze
+
+      # The mk 414 (live first sync, 2026-10-10): a 50-title batch of long
+      # Cyrillic titles percent-encodes at ~6 bytes a letter and overran the
+      # server's URI limit. Batches bound by the ENCODED request URL as well
+      # as by title count: 6,000 bytes sits safely under the common 8 KiB
+      # request-line limits (Apache/nginx/varnish defaults), and the
+      # CONTINUE_RESERVE leaves room for the rvcontinue/clcontinue tokens
+      # a continuation request appends to the same query.
+      URL_BYTE_CAP = 6_000
+      CONTINUE_RESERVE = 1_000
 
       TRANSLATOR_PARAMS = %w[преводилац prevoditelj prevajalec преведувач преводач translator].freeze
 
@@ -329,7 +340,7 @@ module Nabu
 
       def fetch_pages!(workdir, labels_by_title, progress)
         revids = {}
-        labels_by_title.keys.sort.each_slice(Nabu::WikiFetch::CONTENT_BATCH).with_index do |batch, index|
+        title_batches(labels_by_title.keys.sort).each_with_index do |batch, index|
           progress&.call("Fetching batch #{index + 1} (#{batch.size} page(s))…\n")
           pages_payload(batch).each do |page|
             revision = page.dig("revisions", 0) or next
@@ -340,6 +351,31 @@ module Nabu
         revids
       end
 
+      # Slices +titles+ at CONTENT_BATCH titles or the URL_BYTE_CAP (less
+      # the CONTINUE_RESERVE) of the encoded first request, whichever binds
+      # first. A lone title past the cap still goes out alone — MediaWiki
+      # titles cap at 255 bytes, so that cannot reach the limit.
+      def title_batches(titles)
+        budget = URL_BYTE_CAP - CONTINUE_RESERVE
+        titles.each_with_object([[]]) do |title, batches|
+          candidate = batches.last + [title]
+          if !batches.last.empty? &&
+             (candidate.size > Nabu::WikiFetch::CONTENT_BATCH || api_url(pages_params(candidate)).bytesize > budget)
+            batches << [title]
+          else
+            batches.last << title
+          end
+        end.reject(&:empty?)
+      end
+
+      def pages_params(batch)
+        { "action" => "query", "format" => "json", "prop" => "revisions|categories",
+          "rvprop" => "content|ids|timestamp", "rvslots" => "main",
+          "cllimit" => "max", "titles" => batch.join("|") }
+      end
+
+      def api_url(params) = "#{self.class::API_URL}?#{URI.encode_www_form(params)}"
+
       # One batch, continuation-merged: big pages can push revision content
       # and the category lists across several responses (rvcontinue/
       # clcontinue); pages merge by pageid.
@@ -347,9 +383,7 @@ module Nabu
         pages = {}
         continue = {}
         loop do
-          payload = get_json("action" => "query", "format" => "json", "prop" => "revisions|categories",
-                             "rvprop" => "content|ids|timestamp", "rvslots" => "main",
-                             "cllimit" => "max", "titles" => batch.join("|"), **continue)
+          payload = get_json(**pages_params(batch), **continue)
           (payload.dig("query", "pages") || {}).each_value do |page|
             next if page.key?("missing")
 
@@ -386,7 +420,7 @@ module Nabu
       def get_json(params)
         sleep(@delay) if @delay.positive? && @requests.positive?
         @requests += 1
-        url = "#{self.class::API_URL}?#{URI.encode_www_form(params)}"
+        url = api_url(params)
         response, = Nabu::RedirectFollow.get(url, http: @http, error: Nabu::FetchError,
                                                   headers: { "User-Agent" => Nabu::WikiFetch::USER_AGENT })
         payload = JSON.parse(response.body.to_s)
