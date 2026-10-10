@@ -27,6 +27,8 @@ class PlaceRefsTest < Minitest::Test
                  "chgis joined the mint namespaces when nabu-places minted it (2026-09-11)"
     assert_equal [%w[nrct 010000040000]], Nabu::PlaceRefs.ids("nrct:010000040000"),
                  "nrct joined the mint namespaces with its nabu-places mint (2026-09-29)"
+    assert_equal [%w[thurayya BAGHDAD_443E333N_S]], Nabu::PlaceRefs.ids("thurayya:BAGHDAD_443E333N_S"),
+                 "thurayya joined with its nabu-places mint (2026-10-10)"
   end
 
   def test_an_unknown_mint_namespace_yields_nothing_never_guessed
