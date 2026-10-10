@@ -40,9 +40,10 @@ module Nabu
     #
     # == Places — declared coarse
     #
-    # A manuscript reference (`voc` lane, KBT's "Khadaliq 1.13") whose
-    # leading word is a SITE in FINDSPOTS mines the findspot; other
-    # references ride metadata raw (`manuscripts`), never guessed.
+    # A heading's manuscript siglum (KBT's "Khadaliq 1.13"; see Headings
+    # below) whose leading word is a SITE in FINDSPOTS mines the findspot;
+    # other sigla (Pelliot "P", Stein "CH"/"S" pressmarks) ride metadata raw
+    # (`manuscripts`), never guessed.
     class TitusKhotanese < Nabu::Adapter
       SLUG = "titus-khotanese"
       LANGUAGE = "kho" # Khotanese (Saka)
@@ -73,6 +74,24 @@ module Nabu
       # sampled pages (Khadaliq, khots001); deliberately coarse — any other
       # reference mints nothing.
       FINDSPOTS = { "Khadaliq" => "Khadaliq" }.freeze
+
+      # == Headings (census 2026-10-10, all 1,648 pages)
+      #
+      # A heading block (TitusKhotaneseParser: a centered DIV carrying lane
+      # runs) is Bailey's text heading: title runs in reading order
+      # (Sanskrit `iosk`, English `voc`, Khotanese names `isks`) closed by
+      # the manuscript siglum, the block's last run (`voc`: "P 2896",
+      # "CH c. 001, 199-754", "Khadaliq 1.13" — every one of the 36 censused
+      # blocks). TITUS cuts pages at the Text header, so the block BEFORE a
+      # text lands at the foot of the PREVIOUS page: KBT pages 1–35 close
+      # with the next text's heading, and only khots001 opens with its own.
+      # The census pins the attribution: khots024 closes with "CH c. 001,
+      # 199-754" and khots025 (text 24) ends at line 754; khots030 closes
+      # with "…, 852-1061" and khots031 (text 30) ends at line 1061.
+      Heading = Data.define(:title, :sanskrit, :siglum)
+
+      HEADING_LANE = /\A(?<kind>iosk|voc|isks)\d+\z/
+      SIGLUM = /\A(?:P|S|CH|Khadaliq)[\s.]/
 
       # The anchor components below the collection, by level.
       LEVEL_KEYS = { 2 => "book", 3 => "text", 4 => "paragraph", 5 => "line" }.freeze
@@ -141,6 +160,7 @@ module Nabu
 
         stem = document_ref.metadata.fetch("page")
         metadata = document_metadata(html, lines)
+        metadata.merge!(heading_metadata(own_headings(html, document_ref.path, stem)))
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
           title: title_for(stem, metadata), metadata: metadata
@@ -208,22 +228,79 @@ module Nabu
       end
 
       # Book (from the anchors — every page), the book table's name and
-      # edition basis, the text id(s), and the header matter mined verbatim:
-      # the data-entry statement, the Sanskrit title, the manuscript
-      # references (+ the findspot their site word names).
+      # edition basis, the text id(s), and the collection header's
+      # data-entry statement verbatim.
       def document_metadata(html, lines)
         books = lines.filter_map { |line| line.components[1] }.uniq
         texts = lines.filter_map { |line| line.components[2] }.uniq
         metadata = { "book" => books.join(", "), "text" => texts.join(", ") }
         book = BOOKS[books.first]
         metadata.merge!("book_name" => book.name, "edition_basis" => book.basis) if book && books.size == 1
-        doc = Nokogiri::HTML(html)
-        header_text(doc, "textdescr")&.then { |text| metadata["data_entry"] = text }
-        header_text(doc, "iosk")&.then { |text| metadata["sanskrit_title"] = text }
-        references = header_runs(doc, "voc")
-        unless references.empty?
-          metadata["manuscripts"] = references
-          findspot = references.filter_map { |ref| self.class.findspot_for(ref) }.first
+        header_text(Nokogiri::HTML(html), "textdescr")&.then { |text| metadata["data_entry"] = text }
+        metadata
+      end
+
+      # A page's headings (see Headings above): its own opening block plus
+      # the previous page's closing block — never its own closing one.
+      def own_headings(html, path, stem)
+        opening = headings_in(html[0, html.index(/<!Level [345]>/) || 0])
+        opening + previous_page_closing(path, stem)
+      end
+
+      # The previous page's closing heading blocks (none for the first page,
+      # or when that page is absent from the tree).
+      def previous_page_closing(path, stem)
+        number = stem[/\d+\z/].to_i - 1
+        return [] if number < 1
+
+        previous = File.join(File.dirname(path), "#{page_stem(number)}.htm")
+        return [] unless File.file?(previous)
+
+        html = TitusPahlaviParser.read_page(previous)
+        last = html.rindex("<!Level ")
+        last ? headings_in(html[last..]) : []
+      rescue Nabu::ParseError
+        [] # an unreadable previous page quarantines itself; this page parses without its heading
+      end
+
+      # The index frame's naming rule: khotsNNN below 1000, khotNNNN from on.
+      def page_stem(number)
+        number < 1000 ? format("khots%03d", number) : format("khot%04d", number)
+      end
+
+      def headings_in(fragment)
+        Nokogiri::HTML(fragment).css("div").filter_map do |div|
+          next unless TitusKhotaneseParser.heading_div?(div)
+
+          runs = div.css("span[id]").filter_map do |span|
+            kind = HEADING_LANE.match(span["id"])&.[](:kind)
+            text = kind && TitusPahlaviParser.clean(span.text)
+            [kind, text] unless text.nil? || text.empty?
+          end
+          heading_from(runs) unless runs.empty?
+        end
+      end
+
+      def heading_from(runs)
+        siglum = runs.last[1] if runs.last[0] == "voc" && runs.last[1].match?(SIGLUM)
+        title_runs = siglum ? runs[0...-1] : runs
+        Heading.new(title: title_runs.map(&:last).join(" "),
+                    sanskrit: title_runs.filter_map { |kind, text| text if kind == "iosk" }.join(" "),
+                    siglum: siglum)
+      end
+
+      # The heading title(s), the Sanskrit title, the manuscript sigla (+ the
+      # findspot their site word names).
+      def heading_metadata(headings)
+        metadata = {}
+        { "heading" => :title, "sanskrit_title" => :sanskrit }.each do |key, field|
+          values = headings.map(&field).reject(&:empty?)
+          metadata[key] = values.join(" … ") unless values.empty?
+        end
+        sigla = headings.filter_map(&:siglum)
+        unless sigla.empty?
+          metadata["manuscripts"] = sigla
+          findspot = sigla.filter_map { |siglum| self.class.findspot_for(siglum) }.first
           metadata["findspot"] = findspot if findspot
         end
         metadata
@@ -245,7 +322,9 @@ module Nabu
 
       def title_for(stem, metadata)
         label = [metadata["book_name"] || metadata["book"], metadata["text"]].reject { |v| v.nil? || v.empty? }
-        "Khotanese — #{label.join(' ')} (#{stem})"
+        label = label.join(" ")
+        label = "#{label}: #{metadata['heading']}" if metadata["heading"]
+        "Khotanese — #{label} (#{stem})"
       end
     end
   end

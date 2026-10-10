@@ -15,10 +15,12 @@ require "fileutils"
 # under the gitignored local/fixtures/titus-khotanese/ and every data-bearing
 # case SKIPs when absent. Ground truth (retrieved 2026-10-10, see that dir's
 # README): khots001 (KBT 1 — collection + book headers, Sanskrit title,
-# manuscript references, 141 lines, a re-anchored line), khots050 (KT2 3,
-# 48 lines), khots200 (KT3 53a, no Paragraph level, 5 lines), khot1000 (KT5
-# 360/11.6a, 1 line), khot1625 (Zambasta 1, 37 verses). No network: fetch is
-# owner-run only (WebMock below).
+# manuscript references, 141 lines, a re-anchored line), khots006/007 and
+# khots015/016 (KBT 6/7, 14/15 — each page's closing centered heading block
+# names the NEXT text), khots050 (KT2 3, 48 lines), khots200 (KT3 53a, no
+# Paragraph level, 5 lines), khot1000 (KT5 360/11.6a, 1 line), khot1625
+# (Zambasta 1, 37 verses). No network: fetch is owner-run only (WebMock
+# below).
 class TitusKhotaneseTest < Minitest::Test
   include AdapterConformance
 
@@ -92,7 +94,9 @@ class TitusKhotaneseTest < Minitest::Test
   def test_discover_yields_one_document_per_page
     ids = @adapter.discover(conformance_workdir).map(&:id).sort
     assert_equal %w[urn:nabu:titus-khotanese:khot1000 urn:nabu:titus-khotanese:khot1625
-                    urn:nabu:titus-khotanese:khots001 urn:nabu:titus-khotanese:khots050
+                    urn:nabu:titus-khotanese:khots001 urn:nabu:titus-khotanese:khots006
+                    urn:nabu:titus-khotanese:khots007 urn:nabu:titus-khotanese:khots015
+                    urn:nabu:titus-khotanese:khots016 urn:nabu:titus-khotanese:khots050
                     urn:nabu:titus-khotanese:khots200], ids
   end
 
@@ -143,11 +147,56 @@ class TitusKhotaneseTest < Minitest::Test
     assert_equal "H.W. Bailey, London 1951", metadata["edition_basis"]
     assert_equal "1", metadata["text"]
     assert_equal "Sūraṃgama-samādhi-sūtra", metadata["sanskrit_title"]
-    assert_equal ["Khadaliq 1.13", "Khadaliq 1. 306a"], metadata["manuscripts"]
+    assert_equal "Sūraṃgama-samādhi-sūtra", metadata["heading"]
+    # The page's closing block ("Khadaliq 1. 306a") heads KBT 2 — never KBT 1's.
+    assert_equal ["Khadaliq 1.13"], metadata["manuscripts"]
     assert_equal "Khadaliq", metadata["findspot"]
     assert_match(/Data entry by R\.E\. Emmerick/, metadata["data_entry"])
     assert_match(/corrections \(with some text improvements\) by H\. Kumamoto/, metadata["data_entry"])
-    assert_equal "Khotanese — Buddhist Khotanese Texts 1 (khots001)", document.title
+    assert_equal "Khotanese — Buddhist Khotanese Texts 1: Sūraṃgama-samādhi-sūtra (khots001)", document.title
+  end
+
+  # --- the KBT heading blocks: each page closes with the NEXT text's heading ---
+  #
+  # Census 2026-10-10 (all 1,648 pages): KBT pages 1–35 end with a centered
+  # block — the next text's title (Sanskrit `iosk22`, English `voc22`,
+  # Khotanese names `isks16`, in reading order) and its manuscript siglum
+  # (the block's last `voc22` run). khots001 alone also opens with its own.
+
+  def test_a_closing_sanskrit_heading_is_not_line_text
+    document = documents_by_page.fetch("khots006")
+    assert_equal 12, document.passages.size
+    last = document.passages.last
+    assert_equal "urn:nabu:titus-khotanese:khots006:KBT.6.v.6", last.urn
+    assert last.text.end_with?("aysmū śśūkä āgāśä"), last.text
+    refute_includes last.text, "Sudhana"
+    %w[heading sanskrit_title manuscripts].each do |key|
+      refute document.metadata.key?(key), "khots006's own heading sits on khots005 (not a fixture): #{key}"
+    end
+  end
+
+  def test_a_page_takes_its_heading_from_the_previous_pages_closing_block
+    document = documents_by_page.fetch("khots007")
+    assert_equal "Sudhana-Avadāna", document.metadata["heading"]
+    assert_equal "Sudhana-Avadāna", document.metadata["sanskrit_title"]
+    assert_equal ["P 2896"], document.metadata["manuscripts"], "khots006's siglum, not khots007's own P 2957"
+    refute document.metadata.key?("findspot"), "a Pelliot siglum names no findspot"
+    assert_equal "Khotanese — Buddhist Khotanese Texts 7: Sudhana-Avadāna (khots007)", document.title
+  end
+
+  def test_a_heading_joins_its_lanes_in_reading_order
+    document = documents_by_page.fetch("khots016")
+    assert_equal "Nanda the Merchant", document.metadata["heading"]
+    assert_equal "Nanda", document.metadata["sanskrit_title"]
+    assert_equal ["P 2834"], document.metadata["manuscripts"]
+  end
+
+  def test_a_khotanese_name_in_a_closing_heading_never_leaks_into_the_last_line
+    document = documents_by_page.fetch("khots016")
+    assert_equal 53, document.passages.size
+    last = document.passages.last
+    assert_equal "urn:nabu:titus-khotanese:khots016:KBT.15.58", last.urn
+    assert_equal "hūña sa ca ṣi' hamāte", last.text, "Tcūṃ-Ttehi belongs to KBT 16's heading"
   end
 
   # --- the other books --------------------------------------------------------
@@ -215,6 +264,26 @@ class TitusKhotaneseTest < Minitest::Test
   def test_a_sanskrit_lane_inside_a_line_quarantines_the_page
     error = assert_raises(Nabu::ParseError) { PARSER.parse(line_html("iosk16")) }
     assert_match(/Sanskrit lane "iosk16" inside a line/, error.message)
+  end
+
+  def closing_heading_html(lane)
+    line_html("isks16").sub("</body>", <<~HTML)
+      <BR><DIV Align=CENTER>
+      <BR></span><span id=#{lane}><a id=#{lane} href="x">Sudhana-Avadāna</a></span><span id=n16>
+      <BR></span><span id=voc22>P 2896</span><span id=n16>
+      </DIV></body>
+    HTML
+  end
+
+  def test_a_centered_heading_block_after_the_last_line_is_not_text
+    %w[iosk22 isks16].each do |lane|
+      assert_equal ["hvāñumä"], PARSER.parse(closing_heading_html(lane)).map(&:text), lane
+    end
+  end
+
+  def test_an_unknown_lane_inside_a_heading_block_still_quarantines
+    error = assert_raises(Nabu::ParseError) { PARSER.parse(closing_heading_html("iotoa16")) }
+    assert_match(/unknown content lane "iotoa16"/, error.message)
   end
 
   def test_lane_text_before_any_citation_header_quarantines_the_page

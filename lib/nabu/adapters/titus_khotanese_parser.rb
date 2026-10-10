@@ -39,18 +39,31 @@ module Nabu
     #
     #   isks<size>      Khotanese — the text (`isks16` on every censused
     #                   page; any flavor letter after `isks` is a new lane)
-    #   iosk<size>      Sanskrit — a work's Sanskrit title in the header
-    #                   matter (KBT 1 "Sūraṃgama-samādhi-sūtra", `iosk22`);
-    #                   collected as metadata by the adapter, never text.
-    #                   Inside a Line it would be Sanskrit TEXT, a lane this
-    #                   family has never seen — quarantine.
-    #   voc<size>       the manuscript reference ("Khadaliq 1.13") — header
-    #                   matter, mined by the adapter; outside the vocabulary
+    #   iosk<size>      Sanskrit — a work's Sanskrit title in a HEADING
+    #                   BLOCK (below; KBT 1 "Sūraṃgama-samādhi-sūtra",
+    #                   `iosk22`); mined as metadata by the adapter, never
+    #                   text. Outside a heading block, inside a Line, it
+    #                   would be Sanskrit TEXT, a lane this family has never
+    #                   seen — quarantine.
+    #   voc<size>       English title words and the manuscript siglum
+    #                   ("Khadaliq 1.13", "P 2896") — heading matter, mined
+    #                   by the adapter; outside the vocabulary
     #
     # Any other `i<letters><digits>` id is a TITUS script/language lane this
-    # family does not know — ParseError (quarantine), never a silent skip.
-    # `h*`, `n16`, `title`, `textdescr`, `titus` are layout and the
-    # editorial header.
+    # family does not know — ParseError (quarantine), never a silent skip,
+    # inside a heading block too. `h*`, `n16`, `title`, `textdescr`, `titus`
+    # are layout and the editorial header.
+    #
+    # == Heading blocks (census 2026-10-10, all 1,648 pages)
+    #
+    # A `<DIV Align=CENTER>` carrying lane runs is a text HEADING — Bailey's
+    # title + siglum: KBT pages 1–35 each CLOSE with the next text's heading
+    # (after the last Line; 22 of them with a Sanskrit `iosk22` title, four
+    # with Khotanese proper names in `isks16` — "Verses of Prince
+    # Tcūṃ-Ttehi"), and khots001 also OPENS with its own. Every lane run
+    # inside one (46 voc, 23 iosk, 4 isks — no other lane) is heading
+    # matter: never Line text (the isks names used to leak into the page's
+    # last Line). The adapter attributes each block to its text.
     #
     # Text is verbatim: punctuation (`//`, `,`, `.`, `:`), verse numbers
     # inside the lane, hyphenated compounds. A line break or any
@@ -114,12 +127,26 @@ module Nabu
       end
 
       # :khotanese / :sanskrit for a lane text node, nil for excluded
-      # markup; an unknown content-lane id raises. Cached per lane holder.
+      # markup and for any lane run inside a heading block (heading matter,
+      # mined by the adapter); an unknown content-lane id raises, heading
+      # block or not. Cached per lane holder.
       def self.lane_of(node, cache)
         holder = node.ancestors.find { |a| a.element? && a["id"] }
         return nil if holder.nil?
 
-        cache.fetch(holder.pointer_id) { cache[holder.pointer_id] = classify(holder["id"]) }
+        cache.fetch(holder.pointer_id) do
+          lane = classify(holder["id"])
+          cache[holder.pointer_id] = heading_block?(holder) ? nil : lane
+        end
+      end
+
+      def self.heading_block?(node)
+        node.ancestors.any? { |a| a.element? && heading_div?(a) }
+      end
+
+      # A centered DIV — the heading block's frame (also used by the adapter).
+      def self.heading_div?(element)
+        element.name == "div" && element["align"].to_s.casecmp?("center")
       end
 
       def self.classify(id)
@@ -136,8 +163,9 @@ module Nabu
         raise Nabu::ParseError, "titus-khotanese: unknown content lane #{id.inspect} — classify it before ingesting"
       end
 
-      # A Sanskrit run in the header matter is a title (the adapter mines
-      # it); inside a Line it would be text in an unseen lane.
+      # A Sanskrit run before the first Line is header matter (the adapter
+      # mines heading blocks); inside a Line, outside any heading block, it
+      # would be text in an unseen lane.
       def self.sanskrit_run!(state, node)
         current = state[:current]
         return if current.nil? || current[:level] < LINE_LEVEL || node.text.strip.empty?
