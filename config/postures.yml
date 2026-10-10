@@ -482,6 +482,50 @@ sources:
     places: {posture: unplaced, note: "provenance subtitles ((Из Црне Горе)) ride as
         section annotations, not place claims"}
     script: {posture: mixed, note: "Cyrillic + Latin pages; metadata script per page"}
+  # P116-3: the West/East Slavic wikisource family (№R-74 posture).
+  pl-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the pl anchor + its old/middle stages
+        (Old Polish to c.1500, Middle Polish to 1772) — nabu-lects carries no Polish
+        node yet (censused 2026-10-10); the cone's era bands then stage it by date.
+        Documents claim bare pol meanwhile"}
+    dating: {posture: dated, note: "P116-3 (№R-74): the cone category's
+        literary-period band (era_band → MetadataDates :era_band_key; medieval /
+        XV-century / Renaissance / Baroque, approximate conventions declared in
+        ERA_CATEGORIES), precision era — an attribution, never a typed date"}
+    places: {posture: unplaced, note: "the edition imprint place (miejsce wydania)
+        is the 19th–20th-c. edition's, not the text's — declared, never a text place"}
+    script: {posture: implied}
+  cs-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the cs anchor + its old/middle stages
+        (Dalimil's Old Czech; the 1613 Kralice / Komenský Middle Czech) — nabu-lects
+        carries no Czech node yet (censused 2026-10-10). Documents claim bare ces"}
+    dating: {posture: partial, note: "P116-3: the Textinfo VYDÁNO/ZDROJ edition
+        statement → MetadataDates :edition_year_text (date_class edition, never
+        composition); the 1613 print's Roman-numeral year (M.DC.XIII) mints nothing —
+        declared"}
+    places: {posture: unplaced, note: "edition imprint places only — declared"}
+    script: {posture: implied}
+  ru-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the cone
+        spans the 11th-c. Мономах to 17th-c. syllabic вирши; staging onto orv:mid via
+        the ДАТАСОЗДАНИЯ era bands is a NAMED candidate, not defaulted"}
+    dating: {posture: dated, note: "P116-3: the page's ДАТАСОЗДАНИЯ composition date
+        (years or a century) → era_band → MetadataDates :era_band_key, precision era;
+        pages stating none band nothing"}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  uk-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the
+        17th–18th-c. Cossack-era chronicles are the Ruthenian register; the orv:ruth
+        stage is the NAMED refinement candidate, not defaulted"}
+    dating: {posture: dated, note: "P116-3: the section's own year (рік_секції — the
+        chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   aclt:   # P110-2
     kind: {posture: unclassified, note: one class — HLuwian inscriptions; a single-value
         kind stamp deferred (the kouigenji precedent)}

@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 115, lect.size,
+    assert_equal 119, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -332,6 +332,9 @@ class PosturesTest < Minitest::Test
     # (the century-category era band), sr/sl/mk/bg identity (srp+hrv /
     # sl / mkd / chu+bul lanes, declared): 110→115, dates 11→12,
     # identity 83→87.
-    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 87, "pending" => 2 }, by_posture)
+    # P116-3 ADDS the four West/East Slavic cones: ru/uk identity orv
+    # (declared coarse), pl/cs PENDING on the Polish/Czech anchor mints
+    # (the add-then-retire shape): 115→119, identity 87→89, pending 2→4.
+    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 89, "pending" => 4 }, by_posture)
   end
 end

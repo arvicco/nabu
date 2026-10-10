@@ -13,12 +13,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 10 October 2026)</span> |
 |---|---|---|---|---|
 | `bg-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `ccmh` | texts | attribution | wired · manual | 19 docs / 28,786 passages |
+| `cs-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `goo300k` | texts | attribution | wired · manual | 89 docs / 8,397 passages |
@@ -26,15 +27,18 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
 | `korba` | texts | attribution | not yet wired | not synced yet |
 | `mk-wikisource` | texts | attribution | not yet wired | not synced yet |
+| `pl-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `prague-bible-1488` | texts | attribution | not yet wired | not synced yet |
 | `prilit` | texts | attribution | wired · manual | 43 docs / 8,526 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `ru-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `sl-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `sr-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `uk-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 10 October 2026)</span>: `sl` 140,207 · `chu` 4,644 · `bul` 144 · `orv` 43 · `eng` 26 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 17 more (`nabu axis slavic` lists all).
