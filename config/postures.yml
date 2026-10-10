@@ -872,11 +872,8 @@ sources:
     # The Corpus of Bactrian Texts (Sims-Williams; 126 pages, censused
     # 2026-10-10). The corpus's six genres ride the `genre` facet
     # verbatim (Dated documents / Letters / Lists and accounts / …); the
-    # fold onto the ruled kind classes is a kind_map row awaiting its ruling.
-    kind: {posture: pending, note: "candidate: a kind_map row over the `genre` facet —
-        the corpus's own six-genre CONTENTS list (Dated documents, Documents and fragments
-        of uncertain date, Lists and accounts, Letters, Fragments of documents of uncertain
-        type, Buddhist texts)"}
+    # kind declaration retired P116 (№R-78): the config/kind_map.yml
+    # genre-facet fold machine-postures the source (the shadowing rule).
     lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
         100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
     dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
