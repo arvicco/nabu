@@ -93,9 +93,67 @@ class TitusManichaicaTest < Minitest::Test
 
   def test_discover_yields_one_document_per_page_keyed_by_corpus_and_page
     ids = @adapter.discover(conformance_workdir).map(&:id).sort
-    assert_equal %w[manreadc.manre001 manreadc.manre090 mirmankb.mirma200 mirmankb.mirma398
+    assert_equal %w[manreadc.manre001 manreadc.manre090 mirmankb.mirma017 mirmankb.mirma200 mirmankb.mirma398
                     mirmankb.mirma424 sermseel.serms001 sermseel.serms013 sermseel.serms023]
-      .map { |tail| "urn:nabu:titus-manichaica:#{tail}" }, ids
+      .map { |tail| "urn:nabu:titus-manichaica:#{tail}" }, ids,
+                 "the four header-only Corpus pages (mirma016/040/052/328) are no documents"
+  end
+
+  # --- header-only pages: skipped by rule, counted (first-sync census) -------
+  #
+  # The first retrieval's 41 quarantines (2026-10-10) were all mirmankb item
+  # pages carrying NO content lane at all — only the item header block: 7
+  # openers of items whose text sits on the following sub-item pages
+  # (mirma016 "App. b" → b_I_A …), 8 non-Iranian testimonia cited by
+  # reference only (mirma040 "Giants, Text L (Coptic) Kephalaia 171"), 16
+  # concordance pointers to the text's home elsewhere (mirma052 "M_8280 >
+  # KPT 20"), 10 editorial notes on untranscribed items (mirma328
+  # "Huyadagmān Vc — Sogdian only").
+
+  def test_header_only_pages_skip_by_rule_and_are_counted
+    skips = @adapter.discovery_skips(conformance_workdir)
+    assert_equal 4, skips.skipped_by_rule, "mirma016 / mirma040 / mirma052 / mirma328"
+    assert_equal 0, skips.unrecognized
+    assert_match(/4 header-only page\(s\) skipped/, skips.notes.join)
+  end
+
+  def test_an_item_openers_header_block_rides_its_sub_item_pages
+    # mirma016 opens item "b" (subtitle "App. b" + its three manuscripts);
+    # the text is on mirma017 "b_I_A" — the opener's block rides it.
+    metadata = documents_by_page.fetch("mirma017").metadata
+    assert_equal "mirma016", metadata["item_page"]
+    assert_equal ["App. b", "M_131 (= I), M_395 and T_II_D_138 (= II)"], metadata["item_subtitles"]
+    assert_equal ["M_131 = App. b, Fragment I A"], metadata["subtitles"], "the page's own block stays its own"
+    refute metadata.key?("findspot"), "the opener's find signatures name the whole item — no page claim"
+    assert_equal ["urn:nabu:titus-manichaica:mirmankb.mirma017:BBB.b_I_A.43"],
+                 documents_by_page.fetch("mirma017").passages.map(&:urn)
+  end
+
+  def test_a_reference_only_items_header_rides_nothing
+    # mirma040 / mirma052 / mirma328 are self-contained items with no text;
+    # the next content page (mirma200, MKG item 8) is not inside any of them.
+    refute documents_by_page.fetch("mirma200").metadata.key?("item_page")
+  end
+
+  def test_header_only_rule_in_ci_counts_lane_less_pages_and_keeps_lane_pages
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "mirmankb"))
+      File.write(File.join(dir, "mirmankb", "mirma001.htm"),
+                 '<span id=h2><!Level 2>Item of Ed.: b<A NAME="BBB_b">&nbsp;</A></sPAN>' \
+                 "<span id=subtitle>App. b</span>")
+      File.write(File.join(dir, "mirmankb", "mirma002.htm"),
+                 '<span id=h2><!Level 2>Item of Ed.: b_I<A NAME="BBB_b_I">&nbsp;</A></sPAN>' \
+                 "<span id=issgtl16>rty</span>")
+      File.write(File.join(dir, "mirmankb", "mirma003.htm"),
+                 '<span id=h2><!Level 2>Item of Ed.: c<A NAME="BBB_c">&nbsp;</A></sPAN>' \
+                 "<span id=issgtl16>prw</span>")
+      refs = @adapter.discover(dir)
+      assert_equal(%w[mirma002 mirma003], refs.map { |r| r.metadata["page"] })
+      assert_equal %w[mirma001], refs.map { |r| r.metadata["item_page"] }.compact,
+                   "b_I sits inside opener b; c does not"
+      assert_equal 1, @adapter.discovery_skips(dir).skipped_by_rule
+      assert_equal ["App. b"], @adapter.parse(refs.first).metadata["item_subtitles"]
+    end
   end
 
   def test_discover_ignores_framesets_indexes_and_unknown_directories
@@ -365,12 +423,16 @@ class TitusManichaicaTest < Minitest::Test
     end
   end
 
-  def test_a_page_with_no_text_sections_quarantines
+  def test_a_content_page_with_no_text_sections_quarantines
+    # A page naming a lane is a content page (discovered); if every lane run
+    # is apparatus, no section survives — a structural failure, not a skip.
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, "sermseel"))
       File.write(File.join(dir, "sermseel", "serms996.htm"),
-                 "<span id=h3><!Level 3>Part: 1_n.1<A NAME=\"SS_1_n.1\">&nbsp;</A></sPAN><span id=nc12>Var.</span>")
-      assert_raises(Nabu::ParseError) { @adapter.parse(@adapter.discover(dir).first) }
+                 "<span id=h3><!Level 3>Part: 1_n.1<A NAME=\"SS_1_n.1\">&nbsp;</A></sPAN><span id=nc12>Var.</span>" \
+                 "<span id=mipttlv12>witness</span>")
+      error = assert_raises(Nabu::ParseError) { @adapter.parse(@adapter.discover(dir).first) }
+      assert_match(/no text sections in .*serms996\.htm/, error.message)
     end
   end
 
