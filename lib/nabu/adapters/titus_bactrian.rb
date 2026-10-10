@@ -45,6 +45,13 @@ module Nabu
     # no guessed identity), the passage carries no "text" annotation, and
     # the document records `unheaded_lines`.
     #
+    # == Illegible-text pages (skipped by rule)
+    #
+    # Three pages (baktc037 ae, baktc117 xt, baktc121 yd) carry only a text
+    # header and the editor's verdict ("illegible") — no Bactrian lane at
+    # all. They are skipped at discovery and counted in discovery_skips; a
+    # page with lanes but no minted line still quarantines.
+    #
     # == Dating mined, conversion pending
     #
     # Dated documents open with a Bactrian-era year formula — "χϸονο ρʹ ιʹ"
@@ -63,6 +70,7 @@ module Nabu
 
       PAGE_GLOB = "baktc*.htm"
       PAGE_RE = /\Abaktc\d+\.htm\z/
+      TEXT_HEADER = /<!Level 3>Text:\s*([^<\s&]+)/n
 
       LICENSE = "personal grant, Gippert (by email, 2026-10-06): one retrieval, local personal " \
                 "research use only, no redistribution; TITUS and the editors clearly indicated " \
@@ -143,16 +151,31 @@ module Nabu
       end
 
       # One DocumentRef per text page (ref.id IS the document urn); the
-      # frameset and index frames (baktc.htm, baktcx*.htm) are not text.
+      # frameset and index frames (baktc.htm, baktcx*.htm) are not text, and
+      # the ILLEGIBLE-TEXT pages are skipped by rule (see discovery_skips).
       def discover(workdir)
-        Dir.glob(File.join(workdir, PAGE_GLOB)).filter_map do |path|
-          name = File.basename(path)
-          next unless name.match?(PAGE_RE)
+        page_paths(workdir).filter_map do |path|
+          next if illegible_text_page?(path)
 
-          stem = name.delete_suffix(".htm")
+          stem = File.basename(path).delete_suffix(".htm")
           Nabu::DocumentRef.new(source_id: SLUG, id: "urn:nabu:#{SLUG}:#{stem}", path: path,
                                 metadata: { "page" => stem })
         end
+      end
+
+      # The skip-by-rule census: pages that carry NO Bactrian content lane
+      # at all — a text's Level-3 header and the editor's verdict only
+      # (first sync 2026-10-10: baktc037 ae "illegible", baktc117 xt
+      # "virtually nothing legible", baktc121 yd "Documents yd, ye
+      # illegible"). The text is indexed upstream but has no transcribed
+      # line, so there is nothing to mint; counted here, never silent.
+      def discovery_skips(workdir)
+        notes = page_paths(workdir).select { |path| illegible_text_page?(path) }.map do |path|
+          siglum = File.binread(path)[TEXT_HEADER, 1]&.force_encoding(Encoding::UTF_8)
+          "#{File.basename(path)}: text #{siglum || '?'}: no transcribed line " \
+            "(an illegible-text page — header and editorial note only)"
+        end
+        DiscoverySkips.new(skipped_by_rule: notes.size, unrecognized: 0, notes: notes)
       end
 
       # Parse one page into a Document of line Passages. A page with no
@@ -196,13 +219,25 @@ module Nabu
 
       private
 
+      def page_paths(workdir)
+        Dir.glob(File.join(workdir, PAGE_GLOB)).select { |path| File.basename(path).match?(PAGE_RE) }.sort
+      end
+
+      # A text header with no lane anywhere; an empty or header-less page is
+      # NOT this rule's — it is yielded and quarantines at parse.
+      def illegible_text_page?(path)
+        bytes = File.binread(path)
+        bytes.match?(TEXT_HEADER) && !TitusBactrianParser.lane_bearing?(bytes)
+      end
+
       def passage_urn(document_urn, citation, occurrence)
         tail = occurrence > 1 ? "#{citation}##{occurrence}" : citation
         "#{document_urn}:#{tail}"
       end
 
       def line_annotations(line, occurrence)
-        annotations = { "genre" => line.genre, "line" => line.line }
+        annotations = { "genre" => line.genre }
+        annotations["line"] = line.line unless line.line.empty? # a line-less text-level section
         annotations["text"] = line.text unless line.text.empty?
         annotations["copy"] = line.copy if line.copy
         annotations["line_end_word"] = line.line_end_word if line.line_end_word

@@ -20,7 +20,13 @@ require "fileutils"
 # primed and parenthesized line labels — 9 lines), baktc046 (am, a tally
 # list: 1A/5+6A/30+37 labels, "traces only" lines — 40 lines), baktc047
 # (22 HEADERLESS lines, then letter bb — 37 lines), baktc122 (Buddhist text
-# za — 20 lines). No network: fetch is owner-run only (WebMock below).
+# za — 20 lines). The first-sync regression pages (2026-10-10, copied from
+# the banked canonical tree): baktc030 (W — a label-less Line header nested
+# inside line (23)), baktc123 (zb — the page numeral "αʹ" at text level,
+# before line 1), baktc037 / baktc117 / baktc121 (ae / xt / yd — illegible
+# texts: a Level-3 header and an editorial verdict, no transcribed line;
+# skipped by rule at discovery). No network: fetch is owner-run only
+# (WebMock below).
 class TitusBactrianTest < Minitest::Test
   include AdapterConformance
 
@@ -107,7 +113,29 @@ class TitusBactrianTest < Minitest::Test
 
   def test_discover_yields_one_document_per_text_page
     ids = @adapter.discover(conformance_workdir).map(&:id).sort
-    assert_equal %w[baktc001 baktc002 baktc046 baktc047 baktc122].map { |s| "urn:nabu:titus-bactrian:#{s}" }, ids
+    assert_equal %w[baktc001 baktc002 baktc030 baktc046 baktc047 baktc122 baktc123]
+      .map { |s| "urn:nabu:titus-bactrian:#{s}" }, ids,
+                 "the illegible-text pages (baktc037/117/121) are skipped by rule, not yielded"
+  end
+
+  def test_discovery_skips_count_the_illegible_text_pages
+    skips = @adapter.discovery_skips(conformance_workdir)
+    assert_equal 3, skips.skipped_by_rule
+    assert_equal 0, skips.unrecognized
+    assert_equal(%w[baktc037.htm baktc117.htm baktc121.htm], skips.notes.map { |note| note.split(":").first })
+    assert_match(/text ae: no transcribed line/, skips.notes.first)
+  end
+
+  def test_a_page_without_any_bactrian_lane_is_skipped_by_rule
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "baktc001.htm"), line_page("<span id=gbbk16>αβο</span>"))
+      File.write(File.join(dir, "baktc002.htm"), <<~HTML)
+        <html><body><span id=h3><!Level 3>Text: ae<A NAME="Bactr.Corp._Doc.Fragm._ae">&nbsp;</A></sPAN>
+        <span id=nc16>illegible</span></body></html>
+      HTML
+      assert_equal ["urn:nabu:titus-bactrian:baktc001"], @adapter.discover(dir).map(&:id)
+      assert_equal 1, @adapter.discovery_skips(dir).skipped_by_rule
+    end
   end
 
   def test_discover_ignores_framesets_and_index_frames
@@ -121,8 +149,8 @@ class TitusBactrianTest < Minitest::Test
 
   def test_line_counts_per_page
     counts = documents_by_page.transform_values { |document| document.passages.size }
-    assert_equal({ "baktc001" => 36, "baktc002" => 9, "baktc046" => 40, "baktc047" => 37, "baktc122" => 20 },
-                 counts)
+    assert_equal({ "baktc001" => 36, "baktc002" => 9, "baktc030" => 188, "baktc046" => 40, "baktc047" => 37,
+                   "baktc122" => 20, "baktc123" => 17 }, counts)
   end
 
   def test_dated_document_a_opens_with_the_era_formula
@@ -196,6 +224,28 @@ class TitusBactrianTest < Minitest::Test
     assert_equal "Buddhist texts", documents_by_page.fetch("baktc122").metadata["genre_name"]
   end
 
+  def test_a_label_less_line_header_continues_the_open_line
+    # baktc030 (W), line (23): `<!Level 4>Line: ` with the TEXT's own anchor
+    # (Bactr.Corp._Dat.Doc._W) nested inside the line's span, before its "--".
+    urns = documents_by_page.fetch("baktc030").passages.map(&:urn)
+    refute_includes urns, "urn:nabu:titus-bactrian:baktc030:W", "the label-less header opens no line"
+    dash = documents_by_page.fetch("baktc030").passages.find { |p| p.text == "--" } || flunk("no '--' line")
+    assert_equal "(23)", dash.annotations["line"]
+    assert_equal "W", dash.annotations["text"]
+  end
+
+  def test_text_level_content_before_the_first_line_mints_under_the_text_anchor
+    # baktc123 (zb): the page numeral "αʹ" ("Top left hand corner of the
+    # page", note na) sits under the Level-3 anchor, before line 1.
+    document = documents_by_page.fetch("baktc123")
+    first = document.passages.first
+    assert_equal "urn:nabu:titus-bactrian:baktc123:zb", first.urn
+    assert_equal "αʹ", first.text
+    assert_equal({ "genre" => "Buddh.T.", "text" => "zb" }, first.annotations, "no line label is invented")
+    assert_equal "urn:nabu:titus-bactrian:baktc123:zb.1", document.passages[1].urn
+    assert_equal ["zb"], document.metadata["texts"]
+  end
+
   # --- lane families (synthetic, runs in CI) -----------------------------------
 
   def line_page(body)
@@ -230,12 +280,44 @@ class TitusBactrianTest < Minitest::Test
     assert_match(/outside any editorial note/, error.message)
   end
 
-  def test_lane_text_outside_a_line_quarantines_the_page
+  def test_lane_text_outside_any_text_quarantines_the_page
+    # Before any header, or after a genre (Level 2) header: no anchor to
+    # mint under. (Text-level content under a Level-3 anchor is baktc123's
+    # real shape — it mints; see above.)
+    assert_raises(Nabu::ParseError) { PARSER.parse("<html><body><span id=gbbk16>stray</span></body></html>") }
     html = <<~HTML
-      <html><body><span id=h3><!Level 3>Text: Z<A NAME="Bactr.Corp._Lett._Z">&nbsp;</A></sPAN>
+      <html><body><span id=h2><!Level 2>Genre: Lett.<A NAME="Bactr.Corp._Lett.">&nbsp;</A></sPAN>
       <span id=gbbk16>stray</span></body></html>
     HTML
-    assert_raises(Nabu::ParseError) { PARSER.parse(html) }
+    error = assert_raises(Nabu::ParseError) { PARSER.parse(html) }
+    assert_match(/outside any Line/, error.message)
+  end
+
+  def test_text_level_content_opens_a_line_less_section
+    html = <<~HTML
+      <html><body><span id=h3><!Level 3>Text: Z<A NAME="Bactr.Corp._Lett._Z">&nbsp;</A></sPAN>
+      <span id=gbbk16>αʹ</span>
+      <span id=h4><!Level 4>Line: 1<A NAME="Bactr.Corp._Lett._Z_1">&nbsp;</A></sPAN>
+      <span id=gbbk16>αβο</span></body></html>
+    HTML
+    lines = PARSER.parse(html)
+    assert_equal([["Z", "", "αʹ"], ["Z", "1", "αβο"]], lines.map { |l| [l.text, l.line, l.content] })
+  end
+
+  def test_a_label_less_header_naming_the_open_text_continues_its_line
+    html = line_page(<<~BODY)
+      <span id=gbbk16>αβο<span id=h4><!Level 4>Line: <A NAME="Bactr.Corp._Lett._Z">&nbsp;</A></sPAN></span>
+      <span id=gbbk16>--</span>
+    BODY
+    assert_equal "αβο --", only(PARSER.parse(html)).content
+  end
+
+  def test_a_label_less_header_naming_another_text_quarantines_the_page
+    html = line_page(<<~BODY)
+      <span id=gbbk16>αβο</span><span id=h4><!Level 4>Line: <A NAME="Bactr.Corp._Lett._Y">&nbsp;</A></sPAN>
+    BODY
+    error = assert_raises(Nabu::ParseError) { PARSER.parse(html) }
+    assert_match(/unexpected line anchor "Bactr.Corp._Lett._Y"/, error.message)
   end
 
   def test_a_foreign_line_anchor_quarantines_the_page
