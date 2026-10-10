@@ -228,6 +228,26 @@ altaica-shm:   # P107-7
   # 1985-2013" carried verbatim. The Kozin transcription page is a JS
   # shell today — recorded residue.
 
+althurayya:   # 02-sources row 230
+  adapter: Nabu::Adapters::Althurayya
+  adopted: "2026-10-10"
+  kind: module   # machinery-only — a gazetteer instrument, zero document rows
+  axes: [arabic]
+  wired: false   # READY — awaiting the first real sync
+  sync_policy: manual
+  # al-Ṯurayyā — the gazetteer of the early Islamic world (Romanov,
+  # Seydi et al., U Leipzig; georeferenced from Cornu's Atlas du monde
+  # arabo-islamique, IXe–Xe s.). Data CC BY 4.0 (DATA-LICENSE.md, added
+  # upstream 2026-09-22; the repo's Apache-2.0 covers the code) →
+  # attribution. Sparse GitFetch cone: master/places_new_structure.geojson
+  # (2,521 features, the file the live map loads) + master/regions.json.
+  # EXPECTED FIRST SYNC: 2,331 places derived into the "thurayya"
+  # place-index slice (2,521 − 189 anonymous xroads junctions − 1
+  # duplicate URI coalesced). Name keys: Arabic + ŧ-transliteration +
+  # simplified search forms incl. the ،/,-separated variant lists; parent
+  # = the region display label. The nabu-places thurayya: namespace mint
+  # rides as a sister PR.
+
 aozora:
   adapter: Nabu::Adapters::Aozora
   adopted: "2026-07-21"

@@ -19,10 +19,11 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 October 2026)</span> |
 |---|---|---|---|---|
+| `althurayya` | feature module | attribution | not yet wired | not synced yet |
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
 | `kitab` | feature module | nc | wired · manual | nothing held yet |
 | `kitab-reuse` | feature module | nc | wired · manual | nothing held yet |
