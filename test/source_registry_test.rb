@@ -1125,14 +1125,15 @@ class SourceRegistryTest < Minitest::Test
 
   # P114-1a: the Tocharian A row rides the titus-avestan posture verbatim —
   # grant-gated on the 2026-10-06 extension, blocked from public surfaces,
-  # and NOT wired until the owner-fired first retrieval is verified.
-  def test_shipped_titus_tocharian_a_is_grant_gated_blocked_and_unwired
+  # and wired since the verified 2026-10-10 first retrieval + recovery.
+  def test_shipped_titus_tocharian_a_is_grant_gated_blocked_and_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
     entry = registry["titus-tocharian-a"]
 
     assert_predicate entry, :grant_required?
     assert_predicate entry, :blocked?
-    refute entry.wired, "wired flips only after the owner-fired first sync is verified"
+    assert entry.wired, "wired: true — first retrieval + recovery verified 2026-10-10 " \
+                        "(466 docs / 5,779 passages / 0 quarantines)"
     assert_equal "2026-10-06", entry.grant.date
     assert_match(/Gippert/, entry.grant.grantor)
     assert_match(/one retrieval per corpus/, entry.grant.terms)

@@ -4485,13 +4485,7 @@ titus-bactrian:   # 02-sources row 229
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
-                 # acknowledgment is an identity act): bin/nabu sync
-                 # titus-bactrian — 126 pages (baktc001–baktc126, HEAD-probed
-                 # 2026-10-10: 126 answers 200, 127 answers 404), crawl ≈ 5 min
-                 # at the polite 2s pace; then eyeball
-                 # urn:nabu:titus-bactrian:baktc001:A.1 and 5 random lines
-                 # before flipping.
+  wired: true    # First retrieval + recovery verified 2026-10-10: 123 docs / 3,537 passages / 0 quarantines / 3 illegible-text skips.
   # TITUS Bactrian Corpus (titus.uni-frankfurt.de/texte/etcs/iran/miran/baktr/baktcorp/):
   # the Corpus of Bactrian Texts electronically prepared by N. Sims-Williams (Bactrian
   # Documents from Northern Afghanistan I-II, London 2000-2007, and other editions; TITUS
@@ -4527,12 +4521,7 @@ titus-khotanese:   # 02-sources row 228
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
-                 # acknowledgment is an identity act): bin/nabu sync titus-khotanese —
-                 # 1,648 pages (the index frames' census, 2026-10-10), crawl ≈ 55 min
-                 # at the polite 2s pace; then eyeball
-                 # urn:nabu:titus-khotanese:khots001:KBT.1.134r.1 and 5 random lines
-                 # before flipping.
+  wired: true    # First retrieval + recovery verified 2026-10-10: 1,648 docs / 20,279 passages / 0 quarantines.
   # TITUS Corpus of Khotanese Saka Texts (titus.uni-frankfurt.de/texte/etcs/iran/miran/
   # khot/khotsak/): data entry R.E. Emmerick, corrections (with some text improvements)
   # H. Kumamoto, TITUS version J. Gippert (1998-2000) — on the basis of H.W. Bailey's
@@ -4567,13 +4556,7 @@ titus-manichaica:   # 02-sources row 226
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
-                 # acknowledgment is an identity act): bin/nabu sync
-                 # titus-manichaica — 587 pages (HEAD-probed 2026-10-10:
-                 # manre 134, mirma 430, serms 23), crawl ≈ 20 min at the
-                 # polite 2s pace; then eyeball
-                 # urn:nabu:titus-manichaica:manreadc.manre001:Reader.a.1.1 and
-                 # 5 random passages before flipping.
+  wired: true    # First retrieval + recovery verified 2026-10-10: 542 docs / 3,089 passages / 0 quarantines / 41 header-page skips.
   # TITUS Manichaean Middle Iranian corpora (titus.uni-frankfurt.de/texte/etcs/iran/
   # miran/manich/, framesets probed 2026-10-10): the Manichaean Reader arranged by texts
   # (M. Boyce, A Reader in Manichaean Middle Persian and Parthian, Leiden 1975; entered
@@ -4700,13 +4683,7 @@ titus-sogdian:   # 02-sources row 227
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
-                 # acknowledgment is an identity act): bin/nabu sync titus-sogdian —
-                 # 393 pages (392 NSW per TITUS's own per-text index + the 1 reachable
-                 # Morano page, censused 2026-10-10), crawl ≈ 13 min at the polite 2s
-                 # pace; expect ~28 header-only text openers skipped by rule; then
-                 # eyeball urn:nabu:titus-sogdian:sogdnswc.sogdn003:1.1.T_II_B_30_.4.Vl.1
-                 # and 5 random lines before flipping.
+  wired: true    # First retrieval + recovery verified 2026-10-10: 364 docs / 21,354 passages / 0 quarantines / 29 declared skips.
   # TITUS Sogdian corpora (titus.uni-frankfurt.de/texte/etcs/iran/miran/sogd/): the
   # Sogdian Corpus "arranged by texts" (sogdnswc — N. Sims-Williams, data entry and the
   # 2005 text revision; 29 texts on 392 pages: the Christian texts in Syriac script, the
@@ -4745,7 +4722,7 @@ titus-tocharian-a:   # P114-1a, 02-sources row 224
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
+  wired: true    # First retrieval + recovery verified 2026-10-10: 466 docs / 5,779 passages / 0 quarantines / 1 catalogue-only skip.
                    # acknowledgment is an identity act): bin/nabu sync
                    # titus-tocharian-a — 467 pages (HEAD-probed 2026-10-07),
                    # crawl ≈ 16 min at the polite 2s pace; then eyeball
