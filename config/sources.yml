@@ -4455,6 +4455,47 @@ titus-avestan:
       (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
       Gippert et al.) wherever any Avestan text is displayed.
 
+titus-bactrian:   # 02-sources row 229
+  adapter: Nabu::Adapters::TitusBactrian
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian stage of the iranian desk (beside the
+                         # Avestan anchor and the Pahlavi books); etym because the Bactrian
+                         # forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
+                 # acknowledgment is an identity act): bin/nabu sync
+                 # titus-bactrian — 126 pages (baktc001–baktc126, HEAD-probed
+                 # 2026-10-10: 126 answers 200, 127 answers 404), crawl ≈ 5 min
+                 # at the polite 2s pace; then eyeball
+                 # urn:nabu:titus-bactrian:baktc001:A.1 and 5 random lines
+                 # before flipping.
+  # TITUS Bactrian Corpus (titus.uni-frankfurt.de/texte/etcs/iran/miran/baktr/baktcorp/):
+  # the Corpus of Bactrian Texts electronically prepared by N. Sims-Williams (Bactrian
+  # Documents from Northern Afghanistan I-II, London 2000-2007, and other editions; TITUS
+  # version J. Gippert 2010) — dated documents, documents of uncertain date, lists and
+  # accounts, letters, fragments, Buddhist texts, and the Tang-i Safedak inscription;
+  # 126 index entries (the six genre index frames, censused 2026-10-10). One document per
+  # text page (canonical/titus-bactrian/baktcNNN.htm); passages at the MANUSCRIPT LINE
+  # (the <!Level 4> "Line" headers), the edition's own labels verbatim (A.1, Aa.1',
+  # Aa.(2), am.5+6A). Language xbc throughout, in the edition's Greek-letter
+  # transcription; the dated documents' Bactrian-era year formula rides metadata.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (N.
+      Sims-Williams, who prepared the Bactrian corpus) wherever any text is displayed.
+
 titus-osco-umbrian:   # P90-2, 02-sources row 188
   adapter: Nabu::Adapters::TitusOscoUmbrian
   adopted: "2026-08-31"
