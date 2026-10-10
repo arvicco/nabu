@@ -345,7 +345,8 @@ class TitusKhotaneseTest < Minitest::Test
     entry = registry[SLUG]
     refute_nil entry, "titus-khotanese must be registered in config/sources.yml"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired: false until the owner-fired first retrieval is verified"
+    assert entry.wired, "wired: true — the first retrieval + recovery round verified 2026-10-10 " \
+                        "(1,648 docs / 20,279 passages / 0 quarantines)"
     assert_equal "manual", entry.sync_policy
     assert_predicate entry, :grant_required?
     assert_predicate entry, :blocked?
