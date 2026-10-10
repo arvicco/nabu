@@ -4505,8 +4505,10 @@ titus-pahlavi:
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # READY, awaiting the owner-fired first retrieval (one walk per edition,
-                 # 24 editions; flip after the first-sync census verifies counts).
+  wired: false   # First retrieval owner-fired (1,573 pages over 24 editions). Offline
+                 # parse after the first-sync census fixes (severed-UTF-8 repair, lane
+                 # families): 1,572 docs / 20,302 passages / 0 quarantines / 1
+                 # apparatus-only page skipped-by-rule. Flip after the verified sync.
   # TITUS Middle Persian (Pahlavi) book editions (titus.uni-frankfurt.de/texte/etcs/iran/
   # miran/mpers/): the Zoroastrian Book Pahlavi literature as TITUS's text index lists it
   # (texte2.htm, censused 2026-10-07) — Ardā Wirāz, Andarz ī Ōšnar, the Bundahišn,
@@ -4520,8 +4522,8 @@ titus-pahlavi:
   # deepest CITATION level (Sentence / Paragraph / Verse, keyed off the <!Level N> headers),
   # the printed-edition page/line and manuscript locations riding as annotations.
   # Language pal throughout (embedded Avestan quotations stay in the running text and are
-  # annotated). EXPECTED FIRST SYNC: page counts unknown until the walk (no page manifest
-  # upstream); the census samples run ~3-240 KB per page, one chapter per page.
+  # annotated); a section carrying both renderings keeps the transcription as text and
+  # the transliteration as an annotation.
   sync_policy: manual
   grant_required: true
   grant:
