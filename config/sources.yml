@@ -4516,6 +4516,47 @@ titus-bactrian:   # 02-sources row 229
       non-commercial grant, and promise to credit TITUS and the editors (N.
       Sims-Williams, who prepared the Bactrian corpus) wherever any text is displayed.
 
+titus-khotanese:   # 02-sources row 228
+  adapter: Nabu::Adapters::TitusKhotanese
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian (Saka) stage of the iranian desk, beside
+                         # the Skjærvø/IEDC Khotanese shelves; etym because the Khotanese forms
+                         # feed the comparative shelves. The corpus is largely Buddhist (the
+                         # Book of Zambasta, KBT), but buddhist-axis membership is an owner call.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
+                 # acknowledgment is an identity act): bin/nabu sync titus-khotanese —
+                 # 1,648 pages (the index frames' census, 2026-10-10), crawl ≈ 55 min
+                 # at the polite 2s pace; then eyeball
+                 # urn:nabu:titus-khotanese:khots001:KBT.1.134r.1 and 5 random lines
+                 # before flipping.
+  # TITUS Corpus of Khotanese Saka Texts (titus.uni-frankfurt.de/texte/etcs/iran/miran/
+  # khot/khotsak/): data entry R.E. Emmerick, corrections (with some text improvements)
+  # H. Kumamoto, TITUS version J. Gippert (1998-2000) — on the basis of H.W. Bailey's
+  # Buddhist Khotanese Texts (KBT) and Khotanese Texts I-V (KT1-KT5) and R.E. Emmerick's
+  # Book of Zambasta: seven books, 1,648 texts, one page per text (khotsNNN.htm,
+  # khotNNNN.htm from page 1000). One document per page; one passage per <!Level 5>
+  # Line (book.text.folio-side.line — the Zambasta verse joins its unnumbered second
+  # line). Language kho throughout; KBT's Sanskrit work titles and manuscript references
+  # ride document metadata (a reference's site word mines the findspot, declared coarse).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      R.E. Emmerick, corrections H. Kumamoto; the Bailey and Emmerick editions)
+      wherever any text is displayed.
+
 titus-manichaica:   # 02-sources row 226
   adapter: Nabu::Adapters::TitusManichaica
   adopted: "2026-10-10"
