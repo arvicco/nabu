@@ -431,8 +431,7 @@ bg-wikisource:   # P116-2, 02-sources row 237
   adapter: Nabu::Adapters::BgWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY: first sync pending (census 2026-10-10: 29 cone pages →
-                   # 26 docs / ~220 passages, 3 rendering-only skips)
+  wired: true    # First sync verified 2026-10-10: 26 docs / 220 passages / 3 declared skips.
   sync_policy: manual
   # The Bulgarian Wikisource premodern cone (№R-74; census in the
   # adapter header): the 19 medieval charters (Средновековни
@@ -1049,7 +1048,7 @@ cs-wikisource:   # P116-3, 02-sources row 239
   adapter: Nabu::Adapters::CsWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY — awaits the first real sync + eyeball
+  wired: true    # First sync verified 2026-10-10: 330 docs / 4,748 passages / 6 skips.
   sync_policy: manual
   # Censused premodern works, prefix-expanded (Wikizdroje has no epoch
   # category tree; census 2026-10-10, 336 cone pages): Dalimil (Jireček
@@ -2121,8 +2120,7 @@ hr-wikisource:   # P116-2, 02-sources row 234
   adapter: Nabu::Adapters::HrWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY: first sync pending (census 2026-10-10: 1,401 cone
-                   # pages / ~5.9 MB wikitext)
+  wired: true    # First sync verified 2026-10-10: 1,390 docs / 132,052 passages / 11 skips.
   sync_policy: manual
   # The Croatian Wikisource premodern CENTURY cone (№R-74): every page
   # reachable (depth 2) from Hrvatski srednji vijek + Hrvatsko 15.–18.
@@ -3696,7 +3694,7 @@ pl-wikisource:   # P116-3, 02-sources row 238
   adapter: Nabu::Adapters::PlWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY — awaits the first real sync + eyeball
+  wired: true    # First sync verified 2026-10-10: 1,228 docs / 15,823 passages + the Brueckner shelf (5,711 entries).
   sync_policy: manual
   # The premodern Polish-literature cone (census 2026-10-10): the four
   # Polish-literature categories of the epoch tree at depth 2 + the two
@@ -3729,7 +3727,7 @@ prague-bible-1488:   # P116-1
   adapter: Nabu::Adapters::PragueBible1488
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-10: 31 docs / 2,939 GT lines.
   sync_policy: manual
   # The HTR Winter School 2024 Medieval Czech ground truth over the
   # Prague Bible (1488; ÖNB Ink 13.C.5) — Zenodo 10.5281/zenodo.14524858,
@@ -3945,7 +3943,7 @@ ru-wikisource:   # P116-3, 02-sources row 240
   adapter: Nabu::Adapters::RuWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY — awaits the first real sync + eyeball
+  wired: true    # First sync verified 2026-10-10: 12 docs / 429 passages / 60 skips (31 edition-tainted).
   sync_policy: manual
   # The Old East Slavic cone (census 2026-10-10): direct ns-0 members of
   # eight categories, 72 pages. PER-PAGE EDITION FILTER — every page's
@@ -4314,9 +4312,7 @@ sl-wikisource:   # P116-2, 02-sources row 235
   adapter: Nabu::Adapters::SlWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY: first sync pending (census 2026-10-10: 1,673 pages in
-                   # the 86 year categories ≤ 1899 → 1,545 after the rules,
-                   # ~36 MB wikitext)
+  wired: true    # First sync verified 2026-10-10: 1,539 docs / 145,035 passages / 134 skips.
   sync_policy: manual
   # Wikivir (the Slovene Wikisource) through its "Dela leta N" year
   # categories to 1899 (№R-74): the Hladnik-corrected 19th-century
@@ -5318,7 +5314,7 @@ uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY — awaits the first real sync + eyeball
+  wired: true    # First sync verified 2026-10-10: 7 chronicles / 541 passages / 10 skips.
   sync_policy: manual
   # The chronicles of Категорія:Літописи (census 2026-10-10: 13 members,
   # the four {{версії}} shells followed one level → 17 envelopes): 7
