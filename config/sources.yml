@@ -233,7 +233,8 @@ althurayya:   # 02-sources row 230
   adopted: "2026-10-10"
   kind: module   # machinery-only — a gazetteer instrument, zero document rows
   axes: [arabic]
-  wired: false   # READY — awaiting the first real sync
+  wired: true    # First sync verified 2026-10-10: 2,331 places derived (sparse
+                 # clone @ f244e65d), Arabic+translit+ascii name keys spot-checked.
   sync_policy: manual
   # al-Ṯurayyā — the gazetteer of the early Islamic world (Romanov,
   # Seydi et al., U Leipzig; georeferenced from Cornu's Atlas du monde

@@ -26,13 +26,13 @@ class AlthurayyaTest < Minitest::Test
 
   def key(name) = Nabu::Pleiades.name_key(name)
 
-  def test_registry_carries_the_module_row_manual_and_unwired
+  def test_registry_carries_the_module_row_manual_and_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
     entry = registry["althurayya"]
     refute_nil entry
     assert_equal "module", entry.kind
     assert_equal "manual", entry.sync_policy
-    refute entry.wired, "wired flips only after the first real sync is verified"
+    assert entry.wired, "wired: true — first sync verified 2026-10-10 (2,331 places derived)"
   end
 
   def test_manifest_records_the_cc_by_data_license
