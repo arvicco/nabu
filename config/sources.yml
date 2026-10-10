@@ -3633,6 +3633,19 @@ pleiades:
   # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
+prague-bible-1488:   # P116-1
+  adapter: Nabu::Adapters::PragueBible1488
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # The HTR Winter School 2024 Medieval Czech ground truth over the
+  # Prague Bible (1488; ÖNB Ink 13.C.5) — Zenodo 10.5281/zenodo.14524858,
+  # cc-by-4.0 on the record (the deposited CITATION.cff says CC-BY-SA-4.0;
+  # both attribution-class). One zip: 31 PAGE-XML GT pages, Old Czech,
+  # semi-diplomatic; document = page, passage = TextLine (page-xml family),
+  # abbreviation expansions as annotations.
+
 prilit:   # P95-1
   adapter: Nabu::Adapters::Prilit
   adopted: "2026-09-03"

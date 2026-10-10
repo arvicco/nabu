@@ -654,6 +654,20 @@ sources:
     dating: {posture: undatable, note: dates live in free prose, no typed field — declared, not silent}
     places: {posture: unplaced, note: same — findspots in prose only}
     script: {posture: implied}
+  prague-bible-1488:   # P116-1
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/sblgnt).
+    lect: {posture: pending, note: "candidate: a cs → cs:old override (lect_overrides.yml) —
+        the 1488 print is Old Czech by every periodization (Old Czech to c. 1500); BLOCKED on
+        the aggregated Slavic nabu-lects mint (no cs anchor and no Old/Middle Czech stage
+        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare cs is
+        minted meanwhile"}
+    dating: {posture: dated, note: "every page carries the edition's 1488 (the record and the
+        htr-united yml: notBefore/notAfter 1488) — the artifact date, :structured lane"}
+    places: {posture: named, note: "Prague — the edition's own name (Bible pražská), the
+        imprint place; declared coarse"}
+    script: {posture: implied, note: "Latin script, semi-diplomatic (long s, ¬, superscript
+        marks verbatim)"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle

@@ -529,6 +529,8 @@ sources:
   # the source IS a canon or a dynastic record — one ruled line each) ---
   vulgate:
     source_kind: scripture
+  prague-bible-1488:
+    source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
   eng-web:
     source_kind: scripture
   sblgnt:
