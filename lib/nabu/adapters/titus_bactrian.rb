@@ -60,7 +60,15 @@ module Nabu
     # the summed Greek numeral, and an `uncertain` flag when the numeral
     # carries restoration brackets or subscript dots. The conversion to CE
     # (the era's epoch) is a ruled step, NOT taken here — the dating
-    # posture is pending on it (config/postures.yml).
+    # posture is pending on it (config/postures.yml). The epoch is
+    # contested (checked P116): N. Sims-Williams & F. de Blois, Studies
+    # in the Chronology of the Bactrian Documents from Northern
+    # Afghanistan (Vienna: ÖAW, 2018), pp. 9–11, reaffirm de Blois's
+    # era from Nawroz (2 October) 223 CE as "the latest possible date",
+    # against Schindel (2011; 227/228 CE) and de la Vaissière, and
+    # describe the starting point as controversial; the hypotheses
+    # differ by at most five years, and 219 CE is the agreed terminus
+    # post quem. No single epoch is assumed here.
     class TitusBactrian < Nabu::Adapter
       SLUG = "titus-bactrian"
       LANGUAGE = "xbc" # Bactrian

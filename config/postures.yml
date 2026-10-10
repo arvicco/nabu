@@ -879,8 +879,13 @@ sources:
     dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
         documents' year formulas (\"χϸονο ρʹ ιʹ\" = year 110) are mined into document
         metadata `era_dates` (raw formula, summed numeral, uncertain flag); turning era
-        years into CE envelopes needs a ruled era epoch (the Sims-Williams/de Blois
-        Bactrian calendar), never assumed here"}
+        years into CE envelopes needs a ruled era epoch, never assumed here. The epoch is
+        CONTESTED in the literature (P116 check): Sims-Williams & de Blois, Studies in
+        the Chronology of the Bactrian Documents (Vienna 2018) argue Nawroz 223 CE (de
+        Blois, CRAI 2006/2008) and call it controversial; Schindel 2011 and de la
+        Vaissière argue 227/228; Humbach/Harmatta 1966-71 had 232, Sims-Williams
+        1997/1999 233 (a working hypothesis since withdrawn). Terminus post quem 219 CE
+        is 'probably uncontroversial' (2018, p. 11)"}
     places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
         Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
         the Tang-i Safedak inscription (TiS) is named only by its siglum"}
