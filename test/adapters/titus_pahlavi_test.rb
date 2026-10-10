@@ -95,8 +95,91 @@ class TitusPahlaviTest < Minitest::Test
 
   def test_discover_yields_one_document_per_page_keyed_by_edition_and_page
     ids = @adapter.discover(conformance_workdir).map(&:id).sort
-    assert_equal %w[urn:nabu:titus-pahlavi:arda.arda001 urn:nabu:titus-pahlavi:bundahis.bunda001
+    assert_equal %w[urn:nabu:titus-pahlavi:andoshn.andos013 urn:nabu:titus-pahlavi:arda.arda001
+                    urn:nabu:titus-pahlavi:bundahis.bunda001 urn:nabu:titus-pahlavi:dk6.dk6003
                     urn:nabu:titus-pahlavi:mhd.mhd001], ids
+  end
+
+  # --- the first-sync census fixes (2026-10-10, all 1,573 real pages) ---------
+
+  def test_marked_x_flavor_words_are_running_text
+    # dk6: the miphtsx16 lane (331 pages) marks "a'ōn" INSIDE the sentence.
+    paragraph = passage("urn:nabu:titus-pahlavi:dk6.dk6003:Denk.VI.1A.a")
+    assert_equal "pōryōtkēšān ī dānāgān pēšēnīgān a'ōn dāšt ku mardomān andar ox menišn-ē, " \
+                 "ast yazd-ē gāh dārēd ud ast druz-ē rāh dārēd.", paragraph.text
+  end
+
+  def test_a_section_with_both_renderings_keeps_transcription_as_text
+    sentence = passage("urn:nabu:titus-pahlavi:andoshn.andos013:Hand.Oshn.Dan.[13].53")
+    assert sentence.text.start_with?("kē pad xrad kāmēd būdan, gōw kū: bunīg-menišn bawāy!"), sentence.text
+    transliteration = sentence.annotations["transliteration"]
+    assert transliteration.start_with?("MNW PWN hlt k՚myt bwtn' {YMRWN} +YMRRWN"), transliteration
+    assert_includes transliteration, "š՚dynšn YCBENyt",
+                    "the miphtlx16 marked word (with its <U> letter) is running text"
+    assert_equal "transcription+transliteration", documents_by_page.fetch("andos013").metadata["representation"]
+  end
+
+  def test_small_lanes_inside_an_editorial_note_are_apparatus
+    # andos013 closes sentence 53 with "[Anmerkung: <miphtlx12>YHWWN՚yh
+    # </…> ließe sich eigentlich auch <miphtlx12>YHWWN՚š</…> lesen:
+    # <miphtsx12>bāš</…> …]" — note-quoted forms, never text.
+    sentence = passage("urn:nabu:titus-pahlavi:andoshn.andos013:Hand.Oshn.Dan.[13].53")
+    refute_includes sentence.annotations["transliteration"], "YHWWN՚š"
+    refute sentence.text.end_with?("bāš"), sentence.text
+  end
+
+  def test_an_apparatus_only_page_skips_at_discovery_with_accounting
+    # The real vd-19p/vd-19050 shape: the Vidēvdād 19 critical apparatus —
+    # every content lane a variant reading (miphtlv12, miphtlvx12,
+    # miphtsv12, iijav12) among nc12 notes; no text to serve.
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "vd-19p"))
+      File.write(File.join(dir, "vd-19p", "vd-19050.htm"), <<~HTML)
+        <span id=h5><!Level 5>Verse: 1<A NAME="Avesta-PT_Vd_19_Not._1">&nbsp;</A></sPAN></span>
+        <span id=nc12>L4 </span><span id=miphtlv12>՚pt՚hlnymk</span><span id=iijav12>zaraϑušt </span>
+      HTML
+      File.write(File.join(dir, "vd-19p", "vd-19001.htm"), <<~HTML)
+        <span id=h5><!Level 5>Verse: a<A NAME="Avesta-PT_Vd_19_1_a">&nbsp;</A></sPAN></span>
+        <span id=miphts16>az abāxtar</span>
+      HTML
+      assert_equal(%w[vd-19001], @adapter.discover(dir).map { |ref| ref.metadata["page"] })
+      skips = @adapter.discovery_skips(dir)
+      assert_equal 1, skips.skipped_by_rule
+      assert_match(/apparatus-only/, skips.notes.join(" "))
+    end
+  end
+
+  def test_a_severed_utf8_sequence_is_rejoined_after_the_tag
+    # The real snstrl/snstr002 run: "LCḎr̄'\xCC</a>\xB1 bym" (U+0331).
+    bytes = File.binread(File.join(conformance_workdir, "severed", "snstr002-severed.bin"))
+    refute bytes.dup.force_encoding("UTF-8").valid_encoding?, "the fixture carries the upstream defect"
+    sections = PARSER.parse(PARSER.repair_severed(bytes))
+    paragraph = sections.find { |s| s.components == %w[Sns MT 2 89] }
+    assert_includes paragraph.text, "LCḎr̄'̱ bym BRA OZLWNt"
+  end
+
+  def test_a_severed_page_parses_whole_through_the_adapter
+    # The real zwy/zwy005 run ("štr\xCA</a>\xBC1", U+02BC) as a page.
+    bytes = File.binread(File.join(conformance_workdir, "severed", "zwy005-severed.bin"))
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "zwy"))
+      File.binwrite(File.join(dir, "zwy", "zwy005.htm"), bytes)
+      document = @adapter.parse(@adapter.discover(dir).first)
+      assert_equal ["urn:nabu:titus-pahlavi:zwy.zwy005:ZWY.4.8"], document.passages.map(&:urn)
+      assert_includes document.passages.first.text, "lwst՚k štrʼ1 W ZK"
+    end
+  end
+
+  def test_unrepairable_invalid_utf8_quarantines_never_aborts
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "zwy"))
+      File.binwrite(File.join(dir, "zwy", "zwy999.htm"),
+                    "<span id=h3><!Level 3>Sentence: 1<A NAME=\"ZWY_1_1\">&nbsp;</A></sPAN>" \
+                    "<span id=miphtl16>W \xFF\xFE ZK</span>".b)
+      error = assert_raises(Nabu::ParseError) { @adapter.parse(@adapter.discover(dir).first) }
+      assert_match(/zwy999\.htm is not valid UTF-8/, error.message)
+    end
+    assert_raises(Nabu::ParseError) { PARSER.parse("<span id=miphts16>\xFF</span>".dup.force_encoding("UTF-8")) }
   end
 
   def test_discover_ignores_framesets_and_unknown_directories
@@ -220,6 +303,24 @@ class TitusPahlaviTest < Minitest::Test
     assert_equal [%w[PT Ay.Zar.], %w[PT Ay.Zar. 1]], sections.map(&:components)
     assert_equal "ayādgār ī zarērān pad nām", sections.first.text
     assert_equal({ "page" => "200" }, sections.last.location)
+  end
+
+  def test_lanes_classify_by_family_at_any_size
+    html = <<~HTML
+      <html><body>
+      <span id=h3><!Level 3>Sentence: 1<A NAME="X_1_1">&nbsp;</A></sPAN>
+      <span id=miphts12>small gloss</span>
+      <span id=iiaa16>ašə̄m vohū</span>
+      <span id=miphts16>frawarane</span>
+      <span id=nc12>prp. </span><span id=miphtlc12>bndgyh</span><span id=nc12> für Ms. </span>
+      <span id=miphtsv12>frāz kart-nē.</span><span id=n16></span>
+      <span id=iija12>ašəm.</span>
+      </body></html>
+    HTML
+    section = PARSER.parse(html).first
+    assert_equal "small gloss ašə̄m vohū frawarane ašəm.", section.text,
+                 "small runs outside a note are text; a note-quoted form and a variant are not"
+    assert_equal "ašə̄m vohū ašəm.", section.avestan
   end
 
   def test_an_unknown_pahlavi_lane_quarantines_the_page
