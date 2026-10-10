@@ -868,6 +868,92 @@ sources:
         `representation` metadata: transcription (the miphts lanes) or transliteration
         (miphtl — Aramaeograms in capitals; Šāyast nē šāyast ships both, the Mādayān
         transliteration only)"}
+  titus-bactrian:
+    # The Corpus of Bactrian Texts (Sims-Williams; 126 pages, censused
+    # 2026-10-10). The corpus's six genres ride the `genre` facet
+    # verbatim (Dated documents / Letters / Lists and accounts / …); the
+    # fold onto the ruled kind classes is a kind_map row awaiting its ruling.
+    kind: {posture: pending, note: "candidate: a kind_map row over the `genre` facet —
+        the corpus's own six-genre CONTENTS list (Dated documents, Documents and fragments
+        of uncertain date, Lists and accounts, Letters, Fragments of documents of uncertain
+        type, Buddhist texts)"}
+    lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
+        100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
+    dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
+        documents' year formulas (\"χϸονο ρʹ ιʹ\" = year 110) are mined into document
+        metadata `era_dates` (raw formula, summed numeral, uncertain flag); turning era
+        years into CE envelopes needs a ruled era epoch (the Sims-Williams/de Blois
+        Bactrian calendar), never assumed here"}
+    places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
+        Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
+        the Tang-i Safedak inscription (TiS) is named only by its siglum"}
+    script: {posture: implied, note: "Greek script (Grek) — the edition's Greek-letter
+        transcription of the cursive Bactrian alphabet (ϸ for š), the language's own
+        script tradition"}
+  titus-manichaica:
+    # The three TITUS Manichaean corpora (Reader / Corpus by editions /
+    # Sermon of the Soul; 587 pages, censused 2026-10-10). Kind stays
+    # unclassified (the titus family's posture — hymn / parable / sermon /
+    # letter is the editions' scholarship, not a header field).
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "the edition's own lane claims per passage — pal (Manichaean
+        Middle Persian), xpr (Parthian), sog (Sogdian), oui (the Sermon's Turkic appendix, P. Zieme's
+        Turfan fragments); all real anchors. Deliberately coarse: no Manichaean-script facet and no
+        stage split on pal (Manichaean MP is a script/community tradition of the same language),
+        and a mixed-lane passage claims its predominant lane, the rest riding a `languages`
+        annotation"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates (mined
+        into document metadata as data_entry), never a composition or manuscript date"}
+    places: {posture: named, note: "the Reader's Berlin Turfan find signatures (\"M_5794_I (=
+        T_II_D_126_I)\") → findspot via the titus-tocharian-a SITE_SIGLA (Š Šorčuq, D Qočo),
+        declared coarse — other sigla mint nothing, the raw signatures ride `find_signatures`;
+        the Corpus's and the Sermon's M-/So-/U-numbers carry no site"}
+    script: {posture: qualified, note: "Latin-script renderings — per-document `representation`
+        metadata: transliteration (the *l lanes; the Corpus and the Sermon) or transcription +
+        transliteration (the Reader's interlinear plain transcription; the Sermon's Turkic
+        appendix); Manichaean / Sogdian / Uyghur scripts are the artifact facts"}
+  titus-khotanese:
+    # The Corpus of Khotanese Saka Texts (7 books, 1,648 texts, censused
+    # 2026-10-10). Kind stays unclassified (the titus family's posture):
+    # the books mix Buddhist literature (Zambasta, KBT), the Siddhasāra
+    # (medicine) and documents (KT2-KT5) — a per-text kind table is a ruled
+    # map, not a header field.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "kho — the bare Khotanese anchor; deliberately coarse (no
+        Old/Late Khotanese staging: the registry mints no kho stages, and the pages state no
+        date — the Zambasta is Old, the KT documents mostly Late, a future stage-rule
+        candidate)"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates
+        (mined as data_entry) and the modern edition basis (edition_basis), never a
+        composition or manuscript date; documents' regnal-year datings sit inside the text"}
+    places: {posture: named, note: "a manuscript reference's leading site word → findspot via
+        the adapter's FINDSPOTS (Khadaliq, the only site the census saw), declared coarse —
+        other references ride the raw `manuscripts` metadata"}
+    script: {posture: implied, note: "Latin transliteration of Brāhmī manuscripts"}
+  titus-sogdian:
+    # The two TITUS Sogdian corpora (NSW arranged by texts + Morano's
+    # Stellung-Jesu hymns; censused 2026-10-10). Kind stays unclassified
+    # (the titus family's posture): the text table names letters, sūtras,
+    # hymns, documents and inscriptions, but a text→kind map is a ruled
+    # table, not a header field — a future kind_map candidate.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "sog — the bare Sogdian anchor, deliberately coarse (no
+        Ancient-Letters vs Buddhist/Manichaean/Christian staging: no page states a date);
+        TITUS's own lane split mints the other claims — Turkic fragments (`mitk*` lanes,
+        \"Turkic fragment according to Wilkens\") claim bare oui per passage, and embedded
+        Parthian runs (`iipth*`) ride the Sogdian line as an `embedded_xpr` annotation"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates
+        (mined into document metadata as data_entry / text_data_entry), never a composition
+        or manuscript date"}
+    places: {posture: named, note: "per-passage `findspot` from the Berlin find-signature
+        site siglum (T_<exp>_D Qočo, T_<exp>_B Bulayïq — the titus-tocharian-a table) and the
+        Upp.Ind. text's chapter toponyms (Shatial, Ladakh, Bugut, …) — declared coarse: other
+        sigla/chapters (Or., P_, SDGM, 80TBI, DP) mint nothing, the raw manuscript value rides;
+        gazetteer linking via nabu-places is a future look"}
+    script: {posture: qualified, note: "Latin transliteration of four script traditions —
+        per-passage `script` annotation from the lane's script code: Syrc (the Christian
+        texts), Mani (Manichaean script), Sogd (the Sogdian script: Ancient Letters, Buddhist,
+        Mug, the Sogdian-script Manichaean texts); document `scripts` metadata"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic

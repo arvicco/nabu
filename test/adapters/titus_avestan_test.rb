@@ -7,11 +7,19 @@ require "tmpdir"
 # document per text page, verses as passages keyed off the machine-generated
 # <A NAME="Avest._book_chapter_paragraph_verse"> anchors. Includes the shared
 # conformance suite against a two-page fixture trim (Yasna 0 + the Yasna 1
-# continuation page). No network: fetch is owner-run only.
+# continuation page) + the whole Yasna 28 page. No network: fetch is
+# owner-run only.
+#
+# The fixture bytes are grant-gated (Gippert, 2026-07-23: a personal,
+# non-commercial grant — no redistribution), so they live under the
+# gitignored local/fixtures/titus-avestan/ (that dir's README carries the
+# re-cut recipe + sha256) and every data-bearing case SKIPs when absent —
+# the titus-pahlavi mold; on the owner's box StrictSkips makes a skip fail.
 class TitusAvestanTest < Minitest::Test
   include AdapterConformance
 
-  FIXTURES = Nabu::TestSupport.fixtures("titus-avestan")
+  SLUG = "titus-avestan"
+  FIXTURES = Nabu::TestSupport.local_fixtures(SLUG)
 
   # The frauuarāne creed line (Y 0.1 a) — a known snippet, apparatus-free.
   FRAUUARANE = "frauuarāne. mazdaiiasnō. zaraϑuštriš. vīdaēuuō. ahura.t̰kaēṣ̌ō::"
@@ -21,11 +29,12 @@ class TitusAvestanTest < Minitest::Test
   end
 
   def conformance_workdir
+    require_fixtures!
     FIXTURES
   end
 
   def conformance_expected_source_id
-    "titus-avestan"
+    SLUG
   end
 
   def setup
@@ -33,6 +42,7 @@ class TitusAvestanTest < Minitest::Test
   end
 
   def documents_by_page
+    require_fixtures!
     @adapter.discover(FIXTURES).to_h do |ref|
       [ref.metadata.fetch("page"), @adapter.parse(ref)]
     end
@@ -77,11 +87,13 @@ class TitusAvestanTest < Minitest::Test
   # --- discover ---------------------------------------------------------------
 
   def test_discover_yields_one_document_per_text_page_not_the_frameset
+    require_fixtures!
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }
     assert_equal %w[avest001 avest002 avest029], pages.sort
   end
 
   def test_discover_ref_id_is_the_page_document_urn
+    require_fixtures!
     ref = @adapter.discover(FIXTURES).find { |r| r.metadata["page"] == "avest001" }
     assert_equal "urn:nabu:titus-avestan:avest001", ref.id
   end
@@ -233,5 +245,14 @@ class TitusAvestanTest < Minitest::Test
   def test_a_non_yasna_book_is_young_avestan
     sections = [Nabu::Adapters::TitusAvestanParser::Section.new(components: %w[Yt 5 1 1], text: "x")]
     assert_equal "young-avestan", Nabu::Adapters::TitusAvestan.avestan_stage(sections)
+  end
+
+  private
+
+  def require_fixtures!
+    return if Nabu::TestSupport.local_fixtures?(SLUG)
+
+    skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+         "bytes live in local/fixtures/, never in git)"
   end
 end

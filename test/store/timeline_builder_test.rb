@@ -478,6 +478,20 @@ module Store
                  "an uncensused siglum mints no place"
     end
 
+    # titus-manichaica: the Reader's Berlin Turfan find signatures mine
+    # "findspot" at parse through the titus-tocharian-a site sigla — the
+    # same place-only lane (the pages carry no dating).
+    def test_metadata_places_titus_manichaica_findspot
+      seed_metadata_doc("titus-manichaica", "urn:nabu:titus-manichaica:manreadc.manre001",
+                        { "find_signatures" => ["T_II_D_126_I"], "findspot" => "Qočo" })
+      seed_metadata_doc("titus-manichaica", "urn:nabu:titus-manichaica:manreadc.manre090", {})
+      build!
+      row = timeline_for("urn:nabu:titus-manichaica:manreadc.manre001")
+      assert_equal "Qočo", row[:place_name]
+      assert_nil row[:not_before], "place-only: no date is ever minted"
+      assert_nil timeline_for("urn:nabu:titus-manichaica:manreadc.manre090")
+    end
+
     # P109-4 (the Q83 drain): edition print years project with the
     # honestly-labeled "edition" date class — never composition, never
     # a bare typed date.

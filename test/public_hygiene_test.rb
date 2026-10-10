@@ -33,19 +33,26 @@ class PublicHygieneTest < Minitest::Test
   # CLAUDE.md names this file.
   SELF = "test/public_hygiene_test.rb"
 
-  def test_tracked_files_carry_no_internal_workflow_markers
-    root = File.expand_path("..", __dir__)
-    listing = begin
-      Nabu::Shell.run("git", "-C", root, "ls-files")
-    rescue Nabu::Shell::Error
-      skip "no git checkout — the guard runs where the tree is tracked"
-    end
+  # Q119: a grant-gated source whose license class forbids redistribution
+  # (the personal TITUS / ACLT grants) must ship NO fixture bytes in the
+  # public tree — its samples live in the gitignored local/fixtures/<slug>/
+  # and its tests skip-when-absent. Grant-gated sources under an open class
+  # (starling: attribution, any use) may keep public fixtures.
+  RESTRICTED_GRANT_CLASSES = %w[nc research_private].freeze
 
+  # Pre-rule public fixture sets still awaiting the same migration — NOT
+  # license to add more. The guard asserts this list EXACTLY, so a
+  # migration must also strike its entry here.
+  LEGACY_PUBLIC_GRANT_FIXTURES = %w[aclt].freeze
+
+  ROOT = File.expand_path("..", __dir__)
+
+  def test_tracked_files_carry_no_internal_workflow_markers
     offenders = []
-    listing.split("\n").each do |rel|
+    tracked_files.each do |rel|
       next if rel == SELF || GRANDFATHERED.include?(rel)
 
-      path = File.join(root, rel)
+      path = File.join(ROOT, rel)
       next unless File.file?(path)
 
       content = File.read(path, encoding: Encoding::UTF_8)
@@ -60,5 +67,31 @@ class PublicHygieneTest < Minitest::Test
 
     assert_empty offenders,
                  "internal workflow leaked into the public tree:\n  #{offenders.join("\n  ")}"
+  end
+
+  def test_no_redistribution_grant_sources_ship_no_public_fixture_bytes
+    registry = Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    restricted = []
+    registry.each_source do |entry|
+      next unless entry.grant_required?
+      next unless RESTRICTED_GRANT_CLASSES.include?(entry.manifest&.license_class)
+
+      restricted << entry.slug
+    end
+    assert_includes restricted, "titus-pahlavi", "the guard must see the grant-gated nc sources"
+
+    fixture_slugs = tracked_files.filter_map { |rel| rel[%r{\Atest/fixtures/([^/]+)/}, 1] }.uniq
+    shipping = (restricted & fixture_slugs).sort
+    assert_equal LEGACY_PUBLIC_GRANT_FIXTURES.sort, shipping,
+                 "no-redistribution grant bytes belong in gitignored local/fixtures/<slug>/ " \
+                 "(README recipe + skip-when-absent tests), never in the public test/fixtures/"
+  end
+
+  private
+
+  def tracked_files
+    Nabu::Shell.run("git", "-C", ROOT, "ls-files").split("\n")
+  rescue Nabu::Shell::Error
+    skip "no git checkout — the guard runs where the tree is tracked"
   end
 end
