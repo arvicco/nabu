@@ -42,8 +42,10 @@ class PublicHygieneTest < Minitest::Test
 
   # Pre-rule public fixture sets still awaiting the same migration — NOT
   # license to add more. The guard asserts this list EXACTLY, so a
-  # migration must also strike its entry here.
-  LEGACY_PUBLIC_GRANT_FIXTURES = %w[aclt].freeze
+  # migration must also strike its entry here. Empty since 2026-10-10
+  # (aclt, the last pre-rule set, migrated): every restricted source now
+  # keeps its samples in local/fixtures/ only.
+  LEGACY_PUBLIC_GRANT_FIXTURES = %w[].freeze
 
   ROOT = File.expand_path("..", __dir__)
 
