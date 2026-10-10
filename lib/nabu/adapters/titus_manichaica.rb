@@ -51,6 +51,25 @@ module Nabu
     # `…:Sogd.Tales.Mag.T.40`, `…:SS.2.128`). Nothing is materialized beside
     # upstream's pages (TitusFetch's dot-state file aside, as in every titus
     # source), so no materialized_paths.
+    #
+    # == Header-only pages skip by rule (the titus-sogdian precedent)
+    #
+    # A page naming NO content lane (no `mi|is|ii…` span) carries only an
+    # item's header block. First-retrieval census (2026-10-10, 583 pages):
+    # 41, all in mirmankb — 7 openers of items whose text sits on the
+    # following sub-item pages ("b" → b_I_A, "Huy." → Huy._I, "G" → Ga), 8
+    # non-Iranian testimonia cited by reference only (Coptic Kephalaia,
+    # Uygur, Arabic), 16 concordance pointers to the text's home in another
+    # edition ("M_8280 > KPT 20", "WS 1.4, 82 > MKG 4a.1"), 10 editorial
+    # notes on items the edition does not transcribe ("Sogdian only",
+    # "fragments only", scraps "letters only"). They are no documents
+    # (counted in discovery_skips). An opener's block rides every following
+    # content page INSIDE it — each Level-2 value on the page extends the
+    # opener's own ("b_I_A" ⊃ "b"); a Level-1 header or any other item ends
+    # it — as `item_*` metadata. DELIBERATELY text-only: the opener's find
+    # signatures name the whole item, so no findspot is claimed from them.
+    # A self-contained reference item rides nothing (the next item is not
+    # inside it).
     class TitusManichaica < Nabu::Adapter
       SLUG = "titus-manichaica"
       PARSER_FAMILY = "titus_manichaica"
@@ -99,6 +118,12 @@ module Nabu
       # Header spans mined into document metadata (an item/fragment page
       # carries its own; continuation pages honestly carry none).
       HEADER_SPANS = { "title" => "page_title", "textdescr" => "data_entry", "bibliogr" => "bibliography" }.freeze
+
+      # A content lane span (the parser classifies or quarantines it); a
+      # page naming none is header-only.
+      LANE_NEEDLE = /<span\s+id=["']?(?:mi|is|ii)[a-z]/i
+      LEVEL_ONE = "<!Level 1>"
+      LEVEL_TWO_VALUE = /<!Level 2>[^:<]*:([^<]*)/
 
       # A Berlin Turfan find signature in a manuscript subtitle — the
       # Reader's "M_5794_I (= T_II_D_126_I)": expedition numeral, site
@@ -152,25 +177,34 @@ module Nabu
         @delay = delay
       end
 
-      # One DocumentRef per text page of every known corpus (ref.id IS the
-      # document urn). Framesets, index pages and unknown directories are not
-      # text.
+      # One DocumentRef per content page of every known corpus (ref.id IS the
+      # document urn), carrying the item opener it sits inside, if any.
+      # Framesets, index pages, unknown directories and header-only pages
+      # are not text.
       def discover(workdir)
-        @corpora.flat_map do |id, corpus|
-          Dir.glob(File.join(workdir, id, "#{corpus.prefix}*.htm")).filter_map do |path|
-            name = File.basename(path)
-            next unless name.match?(corpus.page_re)
-
-            stem = name.delete_suffix(".htm")
-            Nabu::DocumentRef.new(source_id: SLUG, id: "urn:nabu:#{SLUG}:#{id}.#{stem}", path: path,
-                                  metadata: { "corpus" => id, "page" => stem })
-          end
+        walk_pages(workdir).reject { |page| page[:header_only] }.map do |page|
+          metadata = { "corpus" => page[:corpus], "page" => page[:stem] }
+          metadata["item_page"] = page[:item_page] if page[:item_page]
+          Nabu::DocumentRef.new(source_id: SLUG, id: "urn:nabu:#{SLUG}:#{page[:corpus]}.#{page[:stem]}",
+                                path: page[:path], metadata: metadata)
         end
       end
 
+      def discovery_skips(workdir)
+        skipped = walk_pages(workdir).count { |page| page[:header_only] }
+        notes = if skipped.positive?
+                  ["#{skipped} header-only page(s) skipped — an item's header block with no content lane " \
+                   "(item openers, testimonia and concordance pointers cited by reference, editorial " \
+                   "notes; an opener's block rides its sub-item pages as item_* metadata)"]
+                else
+                  []
+                end
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: 0, notes: notes)
+      end
+
       # Parse one page into a Document of citation-grain Passages. Pages are
-      # read through the shared TITUS severed-UTF-8 repair; a page with no
-      # text-bearing section is a structural failure (ParseError).
+      # read through the shared TITUS severed-UTF-8 repair; a content page
+      # with no text-bearing section is a structural failure (ParseError).
       def parse(document_ref)
         html = TitusPahlaviParser.read_page(document_ref.path)
         sections = TitusManichaicaParser.parse(html)
@@ -181,7 +215,7 @@ module Nabu
         document = Nabu::Document.new(
           urn: document_ref.id, language: predominant_language(sections), canonical_path: document_ref.path,
           title: "#{corpus.name} (#{document_ref.metadata['page']})",
-          metadata: document_metadata(corpus_id, corpus, html, sections)
+          metadata: document_metadata(document_ref, corpus, html, sections)
         )
         seen = Hash.new(0)
         sections.each_with_index do |section, sequence|
@@ -221,6 +255,44 @@ module Nabu
 
       private
 
+      # Every numbered page of every corpus in page order, flagged
+      # header-only (a cheap byte needle) and tagged with the item opener it
+      # sits inside (see the class doc).
+      def walk_pages(workdir)
+        @corpora.flat_map do |id, corpus|
+          opener = nil
+          numbered_pages(workdir, id, corpus).map do |stem, path|
+            bytes = File.binread(path).force_encoding(Encoding::UTF_8).scrub
+            values = bytes.scan(LEVEL_TWO_VALUE).map { |(value)| level_value(value) }
+            opener = nil if bytes.include?(LEVEL_ONE) || !inside?(values, opener)
+            header_only = !LANE_NEEDLE.match?(bytes)
+            opener = { stem: stem, value: values.first } if header_only && opener.nil? && values.any?
+            { corpus: id, stem: stem, path: path, header_only: header_only,
+              item_page: header_only ? nil : opener&.fetch(:stem) }
+          end
+        end
+      end
+
+      def numbered_pages(workdir, id, corpus)
+        pages = Dir.glob(File.join(workdir, id, "#{corpus.prefix}*.htm")).filter_map do |path|
+          name = File.basename(path)
+          [name.delete_suffix(".htm"), path] if name.match?(corpus.page_re)
+        end
+        pages.sort_by { |stem, _path| stem[/\d+\z/].to_i }
+      end
+
+      # A Level-2 header value as the parser keys it (entity padding and
+      # whitespace trimmed, inner runs joined with "_").
+      def level_value(raw)
+        raw.gsub("&nbsp;", " ").gsub(/\A\p{Space}+|\p{Space}+\z/, "").gsub(/\p{Space}+/, "_")
+      end
+
+      # A page is inside the opener when every item it names extends the
+      # opener's value (a continuation page naming none stays inside).
+      def inside?(values, opener)
+        !opener.nil? && values.all? { |value| value.start_with?(opener[:value]) }
+      end
+
       # The page's language: the one carrying most passage text.
       def predominant_language(sections)
         sections.group_by(&:language)
@@ -253,22 +325,49 @@ module Nabu
 
       # Corpus identity + the page header's own statements (title, data
       # entry, edition basis, the subtitles that name the item's languages
-      # and manuscripts) + the lanes' representation and languages.
-      def document_metadata(corpus_id, corpus, html, sections)
-        metadata = { "corpus" => corpus_id, "corpus_name" => corpus.name, "editors" => corpus.editors }
+      # and manuscripts) + the skipped item opener's block as item_* + the
+      # lanes' representation and languages.
+      def document_metadata(document_ref, corpus, html, sections)
+        metadata = { "corpus" => document_ref.metadata.fetch("corpus"), "corpus_name" => corpus.name,
+                     "editors" => corpus.editors }
         doc = Nokogiri::HTML(html)
-        HEADER_SPANS.each do |span_id, key|
-          parts = doc.css(%(span[id="#{span_id}"])).map { |span| TitusPahlaviParser.clean(span.text) }
-          text = parts.reject(&:empty?).uniq.join(" … ")
-          metadata[key] = text unless text.empty?
-        end
+        metadata.merge!(header_block(doc))
         subtitles = doc.css('span[id="subtitle"]').map { |span| TitusPahlaviParser.clean(span.text) }
-        metadata["subtitles"] = subtitles.reject(&:empty?) unless subtitles.all?(&:empty?)
         metadata.merge!(self.class.find_metadata(subtitles))
+        if (item_page = document_ref.metadata["item_page"])
+          metadata["item_page"] = item_page
+          opener_block(document_ref.path, item_page).each { |key, value| metadata["item_#{key}"] = value }
+        end
         representation = sections.flat_map { |s| s.representation.split("+") }.uniq.sort
         metadata["representation"] = representation.join("+") unless representation.empty?
         metadata["languages"] = sections.flat_map(&:languages).uniq.sort
         metadata
+      end
+
+      # The header statements a page makes: title, data entry, edition
+      # basis, subtitles (empties dropped).
+      def header_block(doc)
+        block = {}
+        HEADER_SPANS.each do |span_id, key|
+          parts = doc.css(%(span[id="#{span_id}"])).map { |span| TitusPahlaviParser.clean(span.text) }
+          text = parts.reject(&:empty?).uniq.join(" … ")
+          block[key] = text unless text.empty?
+        end
+        subtitles = doc.css('span[id="subtitle"]').map { |span| TitusPahlaviParser.clean(span.text) }
+        block["subtitles"] = subtitles.reject(&:empty?) unless subtitles.all?(&:empty?)
+        block
+      end
+
+      # The header block of the item opener (a sibling page in the same
+      # corpus directory), read once per adapter; absent (a partial tree) →
+      # nothing.
+      def opener_block(path, stem)
+        sibling = File.join(File.dirname(path), "#{stem}.htm")
+        @opener_blocks ||= {}
+        @opener_blocks.fetch(sibling) do
+          @opener_blocks[sibling] =
+            File.file?(sibling) ? header_block(Nokogiri::HTML(TitusPahlaviParser.read_page(sibling))) : {}
+        end
       end
     end
   end
