@@ -13,16 +13,28 @@ module Adapters
   # YALE seal (one clause, both representations), TRAGANA (LOCRIS)
   # (the parenthetical-title slug case), and the KARKAMIŠ B39a
   # upstream tombstone (zero analyzed words — skip-by-rule).
+  #
+  # The fixture bytes are grant-gated (personal research grant, by email
+  # 2026-09-28/29 — no redistribution), so they live under the gitignored
+  # local/fixtures/aclt/ (that dir's README carries the re-cut recipe +
+  # sha256) and every data-bearing case SKIPs when absent — the
+  # titus-pahlavi mold; on the owner's box StrictSkips makes a skip fail.
   class AcltTest < Minitest::Test
     include AdapterConformance
 
-    FIXTURES = Nabu::TestSupport.fixtures("aclt")
+    SLUG = "aclt"
+    FIXTURES = Nabu::TestSupport.local_fixtures(SLUG)
 
     def conformance_adapter = Nabu::Adapters::Aclt.new
-    def conformance_workdir = FIXTURES
-    def conformance_expected_source_id = "aclt"
+    def conformance_expected_source_id = SLUG
+
+    def conformance_workdir
+      require_fixtures!
+      FIXTURES
+    end
 
     def documents
+      require_fixtures!
       @documents ||= conformance_adapter.discover(FIXTURES).filter_map do |ref|
         conformance_adapter.parse(ref)
       rescue Nabu::DocumentSkipped
@@ -33,6 +45,7 @@ module Adapters
     def doc(suffix) = documents.find { |d| d.urn.end_with?(":#{suffix}") } || flunk("#{suffix} missing")
 
     def test_discovers_one_document_per_inscription_titled_slug
+      require_fixtures!
       assert_equal %w[urn:nabu:aclt:karkamiš.b39a urn:nabu:aclt:tragana.(locris)
                       urn:nabu:aclt:yale.seal],
                    conformance_adapter.discover(FIXTURES).map(&:id).sort
@@ -60,6 +73,7 @@ module Adapters
     end
 
     def test_upstream_tombstone_skips_by_rule
+      require_fixtures!
       adapter = conformance_adapter
       ref = adapter.discover(FIXTURES).find { |r| r.id.end_with?("karkamiš.b39a") }
       error = assert_raises(Nabu::DocumentSkipped) { adapter.parse(ref) }
@@ -79,6 +93,7 @@ module Adapters
     end
 
     def test_drop_ingests_and_extracts_the_json_tree
+      require_fixtures!
       Dir.mktmpdir do |root|
         workdir = File.join(root, "canonical", "aclt")
         drop = File.join(root, "incoming", "aclt")
@@ -100,9 +115,16 @@ module Adapters
 
     private
 
+    def require_fixtures!
+      return if Nabu::TestSupport.local_fixtures?(SLUG)
+
+      skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+           "bytes live in local/fixtures/, never in git)"
+    end
+
     # A minimal REAL 7z (bsdtar --format 7zip over the YALE seal fixture,
-    # the archive's own luwian_aclt/json/ layout) ships as a fixture —
-    # the fetch test's drop.
+    # the archive's own luwian_aclt/json/ layout) sits beside the JSON
+    # fixtures in local/fixtures/aclt/ — the fetch test's drop.
     def build_7z(target)
       FileUtils.cp(File.join(FIXTURES, "mini-luwian_aclt.7z"), target)
     end
