@@ -4505,10 +4505,10 @@ titus-pahlavi:
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # First retrieval owner-fired (1,573 pages over 24 editions). Offline
-                 # parse after the first-sync census fixes (severed-UTF-8 repair, lane
-                 # families): 1,572 docs / 20,302 passages / 0 quarantines / 1
-                 # apparatus-only page skipped-by-rule. Flip after the verified sync.
+  wired: true    # First retrieval owner-fired 2026-10-10 (1,573 pages over 24
+                 # editions); sync verified live the same day after the first-sync
+                 # census fixes (severed-UTF-8 repair, lane families): 1,572 docs /
+                 # 20,302 passages / 0 quarantines / 1 apparatus-only page skipped.
   # TITUS Middle Persian (Pahlavi) book editions (titus.uni-frankfurt.de/texte/etcs/iran/
   # miran/mpers/): the Zoroastrian Book Pahlavi literature as TITUS's text index lists it
   # (texte2.htm, censused 2026-10-07) — Ardā Wirāz, Andarz ī Ōšnar, the Bundahišn,
