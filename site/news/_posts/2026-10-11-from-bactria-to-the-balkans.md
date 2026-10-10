@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "From Bactria to the Balkans"
-date: 2026-10-11
+date: 2026-10-11 00:30:00 +0200
 ---
 
 Two phases, two new wings. The library's Middle Iranian shelf is now
