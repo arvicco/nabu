@@ -868,6 +868,28 @@ sources:
         `representation` metadata: transcription (the miphts lanes) or transliteration
         (miphtl — Aramaeograms in capitals; Šāyast nē šāyast ships both, the Mādayān
         transliteration only)"}
+  titus-bactrian:
+    # The Corpus of Bactrian Texts (Sims-Williams; 126 pages, censused
+    # 2026-10-10). The corpus's six genres ride the `genre` facet
+    # verbatim (Dated documents / Letters / Lists and accounts / …); the
+    # fold onto the ruled kind classes is a kind_map row awaiting its ruling.
+    kind: {posture: pending, note: "candidate: a kind_map row over the `genre` facet —
+        the corpus's own six-genre CONTENTS list (Dated documents, Documents and fragments
+        of uncertain date, Lists and accounts, Letters, Fragments of documents of uncertain
+        type, Buddhist texts)"}
+    lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
+        100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
+    dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
+        documents' year formulas (\"χϸονο ρʹ ιʹ\" = year 110) are mined into document
+        metadata `era_dates` (raw formula, summed numeral, uncertain flag); turning era
+        years into CE envelopes needs a ruled era epoch (the Sims-Williams/de Blois
+        Bactrian calendar), never assumed here"}
+    places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
+        Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
+        the Tang-i Safedak inscription (TiS) is named only by its siglum"}
+    script: {posture: implied, note: "Greek script (Grek) — the edition's Greek-letter
+        transcription of the cursive Bactrian alphabet (ϸ for š), the language's own
+        script tradition"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
