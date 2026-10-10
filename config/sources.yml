@@ -2882,7 +2882,7 @@ mk-wikisource:   # P116-2, 02-sources row 236
   adapter: Nabu::Adapters::MkWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY: first sync pending (census 2026-10-10: 851 cone pages)
+  wired: true    # First sync verified 2026-10-11 (post the batch-length fix): 836 docs / 31,114 passages.
   sync_policy: manual
   # The Macedonian Wikisource 19th-century cone (№R-74): the Miladinov
   # collection (687), Шапкарев, Цепенков's tales and the pre-1900
@@ -4361,8 +4361,7 @@ sr-wikisource:   # P116-2, 02-sources row 233
   adapter: Nabu::Adapters::SrWikisource
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # READY: first sync pending (census 2026-10-10: 4,930 cone
-                   # pages / ~43 MB wikitext; ~297 skip by rule)
+  wired: true    # First sync verified 2026-10-11 (post the batch-length fix): 4,607 docs / 581,423 verse-line passages.
   sync_policy: manual
   # The Serbian Wikisource oral-tradition cone (№R-74): the 2,505
   # epic songs (+ their cycle subcategories), the Erlangen manuscript
