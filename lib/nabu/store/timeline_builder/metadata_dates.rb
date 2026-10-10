@@ -95,6 +95,8 @@ module Nabu
           #                                      minted at parse but never projected (the
           #                                      health timeline-dark anomaly, cleared)
           "viet-wikisource" => :structured, # P96 hygiene: same shape, same clearing
+          "prague-bible-1488" => :structured, # P116-1: the edition's 1488 on every page,
+          #                                     place = the imprint (Prague)
           "ndl-kotenseki" => :structured, # P109-2: the census W3CDTF year envelope the
           #                                 adapter mints (sentinel "1000" excluded there);
           #                                 raw = the prose 出版日 verbatim
