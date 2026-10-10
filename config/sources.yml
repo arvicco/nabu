@@ -228,6 +228,27 @@ altaica-shm:   # P107-7
   # 1985-2013" carried verbatim. The Kozin transcription page is a JS
   # shell today — recorded residue.
 
+althurayya:   # 02-sources row 230
+  adapter: Nabu::Adapters::Althurayya
+  adopted: "2026-10-10"
+  kind: module   # machinery-only — a gazetteer instrument, zero document rows
+  axes: [arabic]
+  wired: true    # First sync verified 2026-10-10: 2,331 places derived (sparse
+                 # clone @ f244e65d), Arabic+translit+ascii name keys spot-checked.
+  sync_policy: manual
+  # al-Ṯurayyā — the gazetteer of the early Islamic world (Romanov,
+  # Seydi et al., U Leipzig; georeferenced from Cornu's Atlas du monde
+  # arabo-islamique, IXe–Xe s.). Data CC BY 4.0 (DATA-LICENSE.md, added
+  # upstream 2026-09-22; the repo's Apache-2.0 covers the code) →
+  # attribution. Sparse GitFetch cone: master/places_new_structure.geojson
+  # (2,521 features, the file the live map loads) + master/regions.json.
+  # EXPECTED FIRST SYNC: 2,331 places derived into the "thurayya"
+  # place-index slice (2,521 − 189 anonymous xroads junctions − 1
+  # duplicate URI coalesced). Name keys: Arabic + ŧ-transliteration +
+  # simplified search forms incl. the ،/,-separated variant lists; parent
+  # = the region display label. The nabu-places thurayya: namespace mint
+  # rides as a sister PR.
+
 aozora:
   adapter: Nabu::Adapters::Aozora
   adopted: "2026-07-21"
@@ -4455,6 +4476,119 @@ titus-avestan:
       (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
       Gippert et al.) wherever any Avestan text is displayed.
 
+titus-bactrian:   # 02-sources row 229
+  adapter: Nabu::Adapters::TitusBactrian
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian stage of the iranian desk (beside the
+                         # Avestan anchor and the Pahlavi books); etym because the Bactrian
+                         # forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 123 docs / 3,537 passages / 0 quarantines / 3 illegible-text skips.
+  # TITUS Bactrian Corpus (titus.uni-frankfurt.de/texte/etcs/iran/miran/baktr/baktcorp/):
+  # the Corpus of Bactrian Texts electronically prepared by N. Sims-Williams (Bactrian
+  # Documents from Northern Afghanistan I-II, London 2000-2007, and other editions; TITUS
+  # version J. Gippert 2010) — dated documents, documents of uncertain date, lists and
+  # accounts, letters, fragments, Buddhist texts, and the Tang-i Safedak inscription;
+  # 126 index entries (the six genre index frames, censused 2026-10-10). One document per
+  # text page (canonical/titus-bactrian/baktcNNN.htm); passages at the MANUSCRIPT LINE
+  # (the <!Level 4> "Line" headers), the edition's own labels verbatim (A.1, Aa.1',
+  # Aa.(2), am.5+6A). Language xbc throughout, in the edition's Greek-letter
+  # transcription; the dated documents' Bactrian-era year formula rides metadata.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (N.
+      Sims-Williams, who prepared the Bactrian corpus) wherever any text is displayed.
+
+titus-khotanese:   # 02-sources row 228
+  adapter: Nabu::Adapters::TitusKhotanese
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian (Saka) stage of the iranian desk, beside
+                         # the Skjærvø/IEDC Khotanese shelves; etym because the Khotanese forms
+                         # feed the comparative shelves. The corpus is largely Buddhist (the
+                         # Book of Zambasta, KBT), but buddhist-axis membership is an owner call.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 1,648 docs / 20,279 passages / 0 quarantines.
+  # TITUS Corpus of Khotanese Saka Texts (titus.uni-frankfurt.de/texte/etcs/iran/miran/
+  # khot/khotsak/): data entry R.E. Emmerick, corrections (with some text improvements)
+  # H. Kumamoto, TITUS version J. Gippert (1998-2000) — on the basis of H.W. Bailey's
+  # Buddhist Khotanese Texts (KBT) and Khotanese Texts I-V (KT1-KT5) and R.E. Emmerick's
+  # Book of Zambasta: seven books, 1,648 texts, one page per text (khotsNNN.htm,
+  # khotNNNN.htm from page 1000). One document per page; one passage per <!Level 5>
+  # Line (book.text.folio-side.line — the Zambasta verse joins its unnumbered second
+  # line). Language kho throughout; KBT's Sanskrit work titles and manuscript references
+  # ride document metadata (a reference's site word mines the findspot, declared coarse).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      R.E. Emmerick, corrections H. Kumamoto; the Bailey and Emmerick editions)
+      wherever any text is displayed.
+
+titus-manichaica:   # 02-sources row 226
+  adapter: Nabu::Adapters::TitusManichaica
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Manichaean Middle Iranian literature (Middle Persian,
+                         # Parthian, Sogdian) beside the Pahlavi books on the iranian desk;
+                         # etym because the forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 542 docs / 3,089 passages / 0 quarantines / 41 header-page skips.
+  # TITUS Manichaean Middle Iranian corpora (titus.uni-frankfurt.de/texte/etcs/iran/
+  # miran/manich/, framesets probed 2026-10-10): the Manichaean Reader arranged by texts
+  # (M. Boyce, A Reader in Manichaean Middle Persian and Parthian, Leiden 1975; entered
+  # by J. Gippert 1989, corrections D.N. MacKenzie 1993, interlinear transcription
+  # J. Gippert), the Corpus of Manichaean Texts arranged by editions (22 editions,
+  # Mir.Man. … GL; prepared by D. Durkin-Meisterernst, D.N. MacKenzie, N. Sims-Williams,
+  # W. Sundermann and others), and the Sermon of the Soul (W. Sundermann 1988, Parthian
+  # and Sogdian, with P. Zieme's Turkish fragments). One document per text page
+  # (canonical/titus-manichaica/<corpus>/<prefix>NNN.htm); passages at the deepest
+  # CITATION level the page reaches (keyed by the <!Level N> header VALUES — the
+  # anchors' components carry underscores), the manuscript/page/line locations and the
+  # Corpus's Reader cross-references riding as annotations. Languages are the edition's
+  # own lane claims per passage: pal (Manichaean Middle Persian), xpr (Parthian), sog
+  # (Sogdian), oui (the Sermon's Turkic appendix); the Reader keeps the transcription as
+  # text and the transliteration as an annotation.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (M. Boyce,
+      J. Gippert, D.N. MacKenzie; D. Durkin-Meisterernst, N. Sims-Williams,
+      W. Sundermann and the Corpus's edition editors; P. Zieme) wherever any text is
+      displayed.
+
 titus-osco-umbrian:   # P90-2, 02-sources row 188
   adapter: Nabu::Adapters::TitusOscoUmbrian
   adopted: "2026-08-31"
@@ -4505,10 +4639,10 @@ titus-pahlavi:
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # First retrieval owner-fired (1,573 pages over 24 editions). Offline
-                 # parse after the first-sync census fixes (severed-UTF-8 repair, lane
-                 # families): 1,572 docs / 20,302 passages / 0 quarantines / 1
-                 # apparatus-only page skipped-by-rule. Flip after the verified sync.
+  wired: true    # First retrieval owner-fired 2026-10-10 (1,573 pages over 24
+                 # editions); sync verified live the same day after the first-sync
+                 # census fixes (severed-UTF-8 repair, lane families): 1,572 docs /
+                 # 20,302 passages / 0 quarantines / 1 apparatus-only page skipped.
   # TITUS Middle Persian (Pahlavi) book editions (titus.uni-frankfurt.de/texte/etcs/iran/
   # miran/mpers/): the Zoroastrian Book Pahlavi literature as TITUS's text index lists it
   # (texte2.htm, censused 2026-10-07) — Ardā Wirāz, Andarz ī Ōšnar, the Bundahišn,
@@ -4539,6 +4673,44 @@ titus-pahlavi:
       non-commercial grant, and promise to credit TITUS and the editors (the
       data-entry editors of each Pahlavi edition) wherever any text is displayed.
 
+titus-sogdian:   # 02-sources row 227
+  adapter: Nabu::Adapters::TitusSogdian
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian stage of the iranian desk (Sogdian, the
+                         # Silk Road lingua franca, beside the Avestan anchor and the Pahlavi
+                         # books); etym because the Sogdian forms feed the comparative shelves.
+                         # A buddhist/manichaean tag would be per-text, not whole-source.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 364 docs / 21,354 passages / 0 quarantines / 29 declared skips.
+  # TITUS Sogdian corpora (titus.uni-frankfurt.de/texte/etcs/iran/miran/sogd/): the
+  # Sogdian Corpus "arranged by texts" (sogdnswc — N. Sims-Williams, data entry and the
+  # 2005 text revision; 29 texts on 392 pages: the Christian texts in Syriac script, the
+  # Manichaean-script corpus, the Buddhist texts, the Mug documents, the Ancient Letters,
+  # the Upper Indus inscriptions) and Morano's Stellung-Jesu hymns (sogdmor — one page
+  # reachable from the frameset). Out of scope: the external Sogdian-letters page TITUS's
+  # index links on depts.washington.edu (not TITUS-hosted, not under the grant). One
+  # document per text page (canonical/titus-sogdian/<corpus>/<prefix>NNN.htm); passages
+  # are MANUSCRIPT LINES, keyed by the header values (chapter.paragraph.manuscript.page.
+  # line), every header value + the script + a declared-coarse findspot riding as
+  # annotations. Language sog (embedded Parthian runs annotated; Turkic fragments oui).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (N.
+      Sims-Williams for the Sogdian corpus, E. Morano for the Stellung-Jesu
+      hymns) wherever any text is displayed.
+
 titus-tocharian-a:   # P114-1a, 02-sources row 224
   adapter: Nabu::Adapters::TitusTocharianA
   adopted: "2026-10-07"
@@ -4550,7 +4722,7 @@ titus-tocharian-a:   # P114-1a, 02-sources row 224
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # awaiting the owner-fired first retrieval (the GrantGate
+  wired: true    # First retrieval + recovery verified 2026-10-10: 466 docs / 5,779 passages / 0 quarantines / 1 catalogue-only skip.
                    # acknowledgment is an identity act): bin/nabu sync
                    # titus-tocharian-a — 467 pages (HEAD-probed 2026-10-07),
                    # crawl ≈ 16 min at the polite 2s pace; then eyeball

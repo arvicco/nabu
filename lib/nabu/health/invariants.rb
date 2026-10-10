@@ -179,6 +179,11 @@ module Nabu
       # — never a findspot; the remaining flagged sources are the real
       # Q83 alignment-sweep worklist and stay loud on purpose.
       MINING_EXEMPT = {
+        "titus-bactrian" => { "era_dates" => "the dated documents' own Bactrian-era year formulas, " \
+                                             "mined RAW (formula + summed numeral + uncertain flag); " \
+                                             "projecting CE envelopes needs the ruled era epoch " \
+                                             "(the Sims-Williams/de Blois calendar) — a pending " \
+                                             "owner ruling, never an assumed constant" },
         "aclt" => { "region" => "find-region LABEL (Karkamiš, Tabal …) mined as the region " \
                                 "facet; gazetteer resolution via nabu-places is a recorded " \
                                 "future look (the posture note)" },

@@ -140,6 +140,8 @@ module Nabu
           "rsti" => :place_only, # P108-8: the findspot lane (PLACE_KEYS); no typed dates
           "titus-tocharian-a" => :place_only, # P114-1a: the find-signature site siglum,
           #                                     mined at parse (PLACE_KEYS); no dating
+          "titus-manichaica" => :place_only, # the Reader's Berlin Turfan find signatures,
+          #                                    the same site sigla (PLACE_KEYS); no dating
           "cbeta" => :dynasty_band, # P104-1 (№R-70 grade 2): the header byline's dynasty
           #                          seat bands via the ruled table as an ERA claim —
           #                          precision "era", verbatim byline in date_raw
@@ -179,6 +181,7 @@ module Nabu
         # behavior is untouched.
         PLACE_KEYS = {
           "seal" => "provenance", "rsti" => "findspot", "titus-tocharian-a" => "findspot",
+          "titus-manichaica" => "findspot",
           # P109-4: eebo-tcp documents ARE the early-modern prints — the
           # imprint place is the artifact's own production place (39k+
           # London), cleaned of the ESTC-style bracket/colon furniture.

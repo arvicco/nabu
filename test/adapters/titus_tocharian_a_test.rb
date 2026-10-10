@@ -65,7 +65,17 @@ class TitusTocharianATest < Minitest::Test
   def test_discover_yields_one_document_per_text_page_and_skips_the_frameset
     require_fixtures!
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }.sort
-    assert_equal %w[tocha001 tocha234 tocha466], pages
+    assert_equal %w[tocha001 tocha026 tocha119 tocha234 tocha304 tocha314 tocha348 tocha364 tocha365
+                    tocha373 tocha414 tocha453 tocha466], pages
+  end
+
+  def test_a_catalogue_only_page_skips_by_rule_and_is_censused
+    require_fixtures!
+    refute(@adapter.discover(FIXTURES).any? { |ref| ref.metadata["page"] == "tocha227" },
+           "A 227 = THT 860 carries the catalogue entry alone — no part, no line")
+    skips = @adapter.discovery_skips(FIXTURES)
+    assert_equal 1, skips.skipped_by_rule
+    assert_predicate skips, :clean?
   end
 
   def test_page_pattern_excludes_the_frameset_and_index_frames
@@ -139,6 +149,78 @@ class TitusTocharianATest < Minitest::Test
     assert_nil page.lines.first.syllabic
   end
 
+  # --- the first-sync census shapes (2026-10-10, all 467 pages) -------------
+
+  def test_the_preservation_remark_lane_rides_document_metadata_never_text
+    document = documents_by_page.fetch("tocha026")
+    citations = document.passages.map { |p| p.urn.split(":").last }
+    assert_equal %w[659.26.1 659.26.2 659.26.3], citations
+    assert_equal [{ "line" => "659.26.4-6", "note" => "nicht erhalten" }], document.metadata["preservation"]
+    refute(document.passages.any? { |p| p.text.include?("erhalten") })
+  end
+
+  def test_a_lane_quoted_inside_the_catalogue_prose_folds_into_the_note
+    quoted = documents_by_page.fetch("tocha026").metadata["catalogue"].join
+    assert_match(/die Silbe po \(oder ṣo\?\) undeutlich/, quoted)
+    catalogue = documents_by_page.fetch("tocha373").metadata["catalogue"].join
+    assert_includes catalogue, "die akṣara: rmeṣṣe kartse tāko zu lesen sind."
+  end
+
+  def test_the_plain_sanskrit_lanes_are_the_same_family_as_the_c_variants
+    line = passage("urn:nabu:titus-tocharian-a:tocha365:998.364.2b")
+    assert_equal "san", line.language, "iosbpl16 / iosbplx16"
+    assert_equal "sujātaṃ yad bravīṣi me |Tn16", line.text, "the generator's '|Tn16' residue rides verbatim"
+  end
+
+  def test_an_off_language_syllabic_run_rides_inline_not_as_the_claim
+    line = passage("urn:nabu:titus-tocharian-a:tocha348:981.347b.3")
+    assert_equal "xto", line.language
+    assert_equal({ "san" => "hā hā hā - - -" }, line.annotations["inline_syllabic"])
+    refute_includes line.annotations["syllabic"], "hā"
+  end
+
+  def test_a_mislabelled_syllabic_mirror_is_the_lines_own_notation
+    line = passage("urn:nabu:titus-tocharian-a:tocha453:1087.453a.2b")
+    assert_equal "xto", line.language, "the Tocharian transcription decides; the syllabic lane does not vote"
+    assert_equal "rapurñe ////", line.text
+    assert_equal "rapurñe ////", line.annotations["syllabic"]
+    assert_nil line.annotations["inline_syllabic"]
+  end
+
+  def test_leaked_whitespace_never_votes_a_language
+    line = passage("urn:nabu:titus-tocharian-a:tocha364:997.363.2b")
+    assert_equal "san", line.language
+    assert_equal "dʰarmaṃ deśaya ////", line.text
+  end
+
+  def test_an_interleaved_bilingual_line_claims_tocharian_with_sanskrit_inline
+    line = passage("urn:nabu:titus-tocharian-a:tocha414:1048.414a.2")
+    assert_equal "xto", line.language
+    assert_equal "vāckāñce tRAṅKAL\\ ; |", line.text
+    assert_equal({ "san" => "anāgatānām āyuṣmant yaccʰandaṃ pāriśuddʰiṃ cārocayata ārocitañ ca" },
+                 line.annotations["inline"])
+    assert_match(/\Aʽa-nā-ga-tā/, line.annotations["inline_syllabic"]["san"])
+  end
+
+  def test_the_facsimile_link_label_and_leaked_headings_are_never_text
+    document = documents_by_page.fetch("tocha119")
+    assert_equal 12, document.passages.size
+    all = documents_by_page.values.flat_map(&:passages)
+    texts = all.flat_map { |p| [p.text, p.annotations["syllabic"].to_s] }
+    refute(texts.any? { |t| t.include?("Line:") }, "an unclosed lane span must not swallow the next h5 heading")
+    refute(texts.any? { |t| t.match?(/\b(recto|verso)\b/) }, "the image-link label is layout")
+    assert_equal 16, documents_by_page.fetch("tocha304").passages.size
+  end
+
+  def test_a_severed_utf8_sequence_is_rejoined
+    path = File.join(FIXTURES, "tocha314.htm")
+    require_fixtures!
+    refute_predicate File.binread(path).force_encoding(Encoding::UTF_8), :valid_encoding?
+    assert_predicate Parser.read_page(path), :valid_encoding?
+    line = documents_by_page.fetch("tocha314").passages.find { |p| p.text.include?("yśe") }
+    assert_includes line.text, "yśe k..Ä\\ _ _ _"
+  end
+
   # --- document metadata: the catalogue block, mined -------------------------
 
   def test_document_metadata_carries_the_catalogue_block
@@ -194,6 +276,27 @@ class TitusTocharianATest < Minitest::Test
   def test_lane_text_before_any_line_anchor_quarantines_the_page
     html = "<html><body><span id=iotoa16>stray words</span></body></html>"
     assert_raises(Nabu::ParseError) { Parser.parse(html) }
+  end
+
+  def test_blank_lane_text_before_any_line_anchor_carries_nothing
+    html = <<~HTML
+      <html><body><span id=iotoaxc16>
+      <A NAME="TochA_THT_9_1a_1">&nbsp;</A><span id=iotoa16>kus</span></span></body></html>
+    HTML
+    assert_equal "kus", Parser.parse(html).lines.first.text
+  end
+
+  def test_the_note_lane_never_votes_and_never_becomes_text
+    html = <<~HTML
+      <html><body>
+      <A NAME="TochA_THT_9_1a_1">&nbsp;</A><span id=iotoa16>kus</span><span id=iocd16>(unsicher)</span>
+      <A NAME="TochA_THT_9_1a_2-3">&nbsp;</A><span id=iocd16>(nicht erhalten)</span>
+      </body></html>
+    HTML
+    page = Parser.parse(html)
+    assert_equal ["kus"], page.lines.map(&:text)
+    assert_equal "(unsicher)", page.lines.first.note
+    assert_equal [%w[9 1a 2-3]], page.notes.map(&:components)
   end
 
   def test_an_over_deep_anchor_quarantines_the_page

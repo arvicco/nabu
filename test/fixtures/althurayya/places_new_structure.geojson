@@ -1,0 +1,522 @@
+{
+    "features": [
+     {
+            "archive": {
+                "maximromanov": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    31.2357,
+                    30.0444
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "QAHIRA_312E300N_S",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "القاهرة",
+                            "common_other": "القاهرة",
+                            "search": "",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "Cairo",
+                            "common_other": "Cairo",
+                            "search": "Qahira, Cairo",
+                            "translit": "al-Qāhiraŧ",
+                            "translit_other": "al-Madīnaŧ al-Qāhiraŧ"
+                        }
+                    },
+                    "region_URI": "Misr_RE",
+                    "source": "maximromanov",
+                    "top_type": "metropoles"
+                },
+                "references": {
+                    "primary": {},
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+     {
+            "archive": {
+                "cornuData": {
+                    "status": "not in Cornu"
+                },
+                "maximromanov": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    44.009085,
+                    36.191231
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "IRBIL_440E361N_S",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "إربيل",
+                            "common_other": "إربيل",
+                            "search": "",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "Irbil",
+                            "common_other": "Erbil",
+                            "search": "Irbil, Erbil",
+                            "translit": "Irbīl",
+                            "translit_other": "Irbīl"
+                        }
+                    },
+                    "region_URI": "Aqur_RE",
+                    "source": "maximromanov",
+                    "top_type": "towns"
+                },
+                "references": {
+                    "primary": {},
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    -0.9292,
+                    41.63368
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "SARAQUSA_009W416N_R",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "سرقوسة",
+                            "common_other": "سرقوسة، سرقوسطة",
+                            "search": "سرقوسة",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "Saraqusa, Saraqusta",
+                            "translit": "Saraqūsaŧ",
+                            "translit_other": "Saraqūsaŧ, Saraqūsṭaŧ"
+                        }
+                    },
+                    "region_URI": "Andalus_RE",
+                    "source": "cornuData",
+                    "top_type": "regions"
+                },
+                "references": {
+                    "primary": {
+                        "0900AbuCabdAllahHimyari.RawdMictar.Shamela0001043-ara1.000804-000.json": {
+                            "language_manifestation": "",
+                            "language_orig": "Arabic",
+                            "match_rate": 92,
+                            "match_status": "y",
+                            "title": "سرقسطه"
+                        },
+                        "0900AbuCabdAllahHimyari.RawdMictar.Shamela0001043-ara1.000805-000.json": {
+                            "language_manifestation": "",
+                            "language_orig": "Arabic",
+                            "match_rate": 100,
+                            "match_status": "na",
+                            "title": "سرقوسه"
+                        }
+                    },
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    -0.9292,
+                    41.63368
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "SARAQUSA_009W416N_S",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "سرقوسة",
+                            "common_other": "سرقوسة، سرقوسطة",
+                            "search": "سرقوسة",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "Saraqusa, Saraqusta",
+                            "translit": "Saraqūsaŧ",
+                            "translit_other": "Saraqūsaŧ, Saraqūsṭaŧ"
+                        }
+                    },
+                    "region_URI": "Andalus_RE",
+                    "source": "cornuData",
+                    "top_type": "towns"
+                },
+                "references": {
+                    "primary": {
+                        "0900AbuCabdAllahHimyari.RawdMictar.Shamela0001043-ara1.000805-000.json": {
+                            "language_manifestation": "",
+                            "language_orig": "Arabic",
+                            "match_rate": 100,
+                            "match_status": "true",
+                            "title": "سرقوسه"
+                        }
+                    },
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    38.4104,
+                    35.8566
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "SIFFIN_384E358N_O",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "صفين",
+                            "common_other": "صفين",
+                            "search": "صفين",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "Siffin",
+                            "translit": "Ṣiffīn",
+                            "translit_other": "Ṣiffīn"
+                        }
+                    },
+                    "region_URI": "Aqur_RE",
+                    "source": "cornuData",
+                    "top_type": "sites"
+                },
+                "references": {
+                    "primary": {
+                        "0900AbuCabdAllahHimyari.RawdMictar.Shamela0001043-ara1.000935-000.json": {
+                            "language_manifestation": "",
+                            "language_orig": "Arabic",
+                            "match_rate": 100,
+                            "match_status": "na",
+                            "title": "صفين"
+                        }
+                    },
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    43.60422,
+                    34.69499
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "NAHRDIJLA_436E346N_W",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "نهر دجلة",
+                            "common_other": "نهر دجلة",
+                            "search": "نهر دجلة",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "Nahr Dijla",
+                            "translit": "Nahr Diǧlaŧ",
+                            "translit_other": "Nahr Diǧlaŧ"
+                        }
+                    },
+                    "region_URI": "Aqur_RE",
+                    "source": "cornuData",
+                    "top_type": "waters"
+                },
+                "references": {
+                    "primary": {},
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    31.24168,
+                    30.05778
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "QAHIRA_312E300N_S",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "القاهرة",
+                            "common_other": "القاهرة",
+                            "search": "القاهرة",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "al-Qahira",
+                            "translit": "al-Qāhiraŧ",
+                            "translit_other": "al-Qāhiraŧ"
+                        }
+                    },
+                    "region_URI": "Misr_RE",
+                    "source": "cornuData",
+                    "top_type": "quarters"
+                },
+                "references": {
+                    "primary": {
+                        "0900AbuCabdAllahHimyari.RawdMictar.Shamela0001043-ara1.001165-000.json": {
+                            "language_manifestation": "",
+                            "language_orig": "Arabic",
+                            "match_rate": 100,
+                            "match_status": "na",
+                            "title": "القاهره"
+                        }
+                    },
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    44.35693,
+                    33.35932
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "BAGHDAD_443E333N_S",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "بغداد",
+                            "common_other": "بغداد",
+                            "search": "بغداد",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "Baghdad",
+                            "translit": "Baġdād",
+                            "translit_other": "Baġdād"
+                        }
+                    },
+                    "region_URI": "Iraq_RE",
+                    "source": "cornuData",
+                    "top_type": "metropoles"
+                },
+                "references": {
+                    "primary": {
+                        "0900AbuCabdAllahHimyari.RawdMictar.Shamela0001043-ara1.000285-000.json": {
+                            "language_manifestation": "",
+                            "language_orig": "Arabic",
+                            "match_rate": 100,
+                            "match_status": "na",
+                            "title": "بغداد"
+                        }
+                    },
+                    "secondary": {
+                        "ei2_COM_0084.json": {
+                            "language_manifestation": "",
+                            "language_orig": "English",
+                            "match_rate": "",
+                            "match_status": ""
+                        }
+                    }
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    50.95356,
+                    33.08994
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "MARJWA-ZAHR_509E330N_S",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "مرج وزهر",
+                            "common_other": "مرج وزهر",
+                            "search": "مرج وزهر",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "Marj wa-Zahr",
+                            "translit": "Marǧ wa-Zahr",
+                            "translit_other": "Marǧ wa-Zahr"
+                        }
+                    },
+                    "region_URI": "Jibal_RE",
+                    "source": "cornuData",
+                    "top_type": "waystations"
+                },
+                "references": {
+                    "primary": {},
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        },
+        {
+            "archive": {
+                "cornuData": {}
+            },
+            "geometry": {
+                "coordinates": [
+                    35.43461,
+                    31.80247
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "althurayyaData": {
+                    "URI": "ROUTPOINT0107_354E318N_O",
+                    "coord_certainty": "certain",
+                    "language": [
+                        "ara",
+                        "eng"
+                    ],
+                    "names": {
+                        "ara": {
+                            "common": "RoutPoint0107",
+                            "common_other": "RoutPoint0107",
+                            "search": "RoutPoint0107",
+                            "translit": "",
+                            "translit_other": ""
+                        },
+                        "eng": {
+                            "common": "",
+                            "common_other": "",
+                            "search": "RoutPoint0107",
+                            "translit": "RoutPoint0107",
+                            "translit_other": "RoutPoint0107"
+                        }
+                    },
+                    "region_URI": "Sham_RE",
+                    "source": "cornuData",
+                    "top_type": "xroads"
+                },
+                "references": {
+                    "primary": {},
+                    "secondary": {}
+                }
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}
