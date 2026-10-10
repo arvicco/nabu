@@ -4741,7 +4741,7 @@ titus-tocharian-a:   # P114-1a, 02-sources row 224
   # <line>"> anchors — the plain transcription as text, the syllabic
   # transliteration riding as the "syllabic" annotation; the bilingual
   # pages' Sanskrit sub-lines claim `san` per passage. The find signature's
-  # site siglum mines the findspot (Š Šorčuq, D Qočo — declared coarse).
+  # site siglum mines the findspot (Š/S Šorčuq, D Qočo — declared coarse).
   sync_policy: manual
   grant_required: true
   grant:

@@ -844,7 +844,7 @@ sources:
         ride bare san per passage}
     dating: {posture: undatable, note: "the pages carry no dating — the THT catalogue block names
         signature/number/condition only; paleographic dating is a future overlay"}
-    places: {posture: named, note: "the Berlin find signature's site siglum → findspot (Š Šorčuq,
+    places: {posture: named, note: "the Berlin find signature's site siglum → findspot (Š/S Šorčuq,
         D Qočo) via the adapter's SITE_SIGLA, declared coarse — other sigla mint nothing, the raw
         signature rides metadata; gazetteer linking via nabu-places is a future look"}
     script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
@@ -907,7 +907,7 @@ sources:
     dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates (mined
         into document metadata as data_entry), never a composition or manuscript date"}
     places: {posture: named, note: "the Reader's Berlin Turfan find signatures (\"M_5794_I (=
-        T_II_D_126_I)\") → findspot via the titus-tocharian-a SITE_SIGLA (Š Šorčuq, D Qočo),
+        T_II_D_126_I)\") → findspot via the titus-tocharian-a SITE_SIGLA (Š/S Šorčuq, D Qočo),
         declared coarse — other sigla mint nothing, the raw signatures ride `find_signatures`;
         the Corpus's and the Sermon's M-/So-/U-numbers carry no site"}
     script: {posture: qualified, note: "Latin-script renderings — per-document `representation`
