@@ -1045,6 +1045,20 @@ croala:
   # Living edition (509 → 569 already) → sync_policy manual.
   sync_policy: manual
 
+cs-wikisource:   # P116-3, 02-sources row 239
+  adapter: Nabu::Adapters::CsWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY — awaits the first real sync + eyeball
+  sync_policy: manual
+  # Censused premodern works, prefix-expanded (Wikizdroje has no epoch
+  # category tree; census 2026-10-10, 336 cone pages): Dalimil (Jireček
+  # 1877, 112) · Bible kralická 1613 (10, the print's own orthography) +
+  # 1918 (66, modernized) + the 1613 deuterocanon in modern spelling (3)
+  # · Komenský, Labyrint světa (1663, 57) · Harant, Cesta (80).
+  # Hospodine, pomiluj ny! keys to the 1959 kancionál → excluded by
+  # EDITION_TAINT_POST_1930. Texts PD; transcription layer CC BY-SA 4.0.
+
 # P80-8
 ctilc:
   adapter: Nabu::Adapters::Ctilc
@@ -3678,6 +3692,22 @@ peshitta:
   # archived/unsupported (repostatus badge) → effectively frozen.
   sync_policy: manual
 
+pl-wikisource:   # P116-3, 02-sources row 238
+  adapter: Nabu::Adapters::PlWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY — awaits the first real sync + eyeball
+  sync_policy: manual
+  # The premodern Polish-literature cone (census 2026-10-10): the four
+  # Polish-literature categories of the epoch tree at depth 2 + the two
+  # Old Polish sermon collections — 1,295 cone pages, 1,167 of them
+  # ProofreadPage transclusions (rendered via action=parse at fetch).
+  # Rules: 25 całość aggregates, 33 apparatus pages, 7 pages of the 1932
+  # Apologeticus edition (EDITION_TAINT_POST_1930). Brückner's Słownik
+  # etymologiczny (1927) rides the declared dictionary lane: 5,715 entry
+  # stubs over 828 proofread scan pages → shelf "bruckner". Texts PD;
+  # transcription layer CC BY-SA 4.0.
+
 pleiades:
   adapter: Nabu::Adapters::Pleiades
   adopted: "2026-07-24"
@@ -3910,6 +3940,26 @@ rsti:
   # collection, with attribution") → class nc, MCP-excluded; the Bordreuil &
   # Pardee (1989) TEO credit rides the manifest verbatim.
   sync_policy: manual
+
+ru-wikisource:   # P116-3, 02-sources row 240
+  adapter: Nabu::Adapters::RuWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY — awaits the first real sync + eyeball
+  sync_policy: manual
+  # The Old East Slavic cone (census 2026-10-10): direct ns-0 members of
+  # eight categories, 72 pages. PER-PAGE EDITION FILTER — every page's
+  # ИСТОЧНИК/ДАТАПУБЛИКАЦИИ statement AND body-head imprint is censused;
+  # EDITION_TAINT_POST_1930 excludes 31: by header 8 (the ПВЛ 1997 page,
+  # Изборник 1969 ×3, Робинсон 1963, Виршевая поэзия 1989, BLDR by
+  # series name ×2), by body head 23 (the az.lib.ru imports of the 1989
+  # «Виршевая поэзия» ×20, Полоцкий 1990, Котов 1938, a BLDR «Подготовка
+  # текста» credit). Translations (10), 13 censused exclusions,
+  # encyclopedia articles (2), modern-orthography duplicates (2),
+  # apparatus (1) skip too → 12 admitted (the 1800 Слово, Костомаров
+  # 1862, Бычков 1897, the 1893 Мономах text, Кожанчиков 1861/1862, and
+  # web-sourced pages whose statement names no edition — verbatim).
+  # Texts PD; transcription layer CC BY-SA 4.0.
 
 rundata:
   adapter: Nabu::Adapters::Rundata
@@ -5263,6 +5313,19 @@ ud:
   # (UD_Old_Turkish-Tonqq, CC0): Old Turkic clausal examples, test split
   # only upstream; sync-verified 1 doc / 20 sentences, language otk (the
   # first Turkic treebank; the seed grows as upstream releases splits).
+
+uk-wikisource:   # P116-3, 02-sources row 241
+  adapter: Nabu::Adapters::UkWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: false   # READY — awaits the first real sync + eyeball
+  sync_policy: manual
+  # The chronicles of Категорія:Літописи (census 2026-10-10: 13 members,
+  # the four {{версії}} shells followed one level → 17 envelopes): 7
+  # admitted (Сборник летописей 1888 ×4, Лѣтопись Самовидца 1878 ×2,
+  # Кіевская старина 1890); Бевзо's 1971 Львівський/Острозький edition
+  # excluded by EDITION_TAINT_POST_1930; four modern-Ukrainian
+  # retellings excluded (censused). Texts PD; layer CC BY-SA 4.0.
 
 unihan:
   adapter: Nabu::Adapters::Unihan
