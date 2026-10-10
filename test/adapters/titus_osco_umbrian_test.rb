@@ -9,21 +9,30 @@ require "tmpdir"
 # with the original-script lane riding as annotation. Fixtures are four FULL
 # real pages (one per lane class) + the frameset. No network: fetch is
 # owner-run only.
+#
+# The fixture bytes are grant-gated (Gippert, by email 2026-08-31: one-time
+# download, local non-commercial use, NO redistribution), so they live under
+# the gitignored local/fixtures/titus-osco-umbrian/ (that dir's README
+# carries the re-cut recipe + sha256) and every data-bearing case SKIPs when
+# absent — the titus-pahlavi mold; on the owner's box StrictSkips makes a
+# skip fail.
 class TitusOscoUmbrianTest < Minitest::Test
   include AdapterConformance
 
-  FIXTURES = Nabu::TestSupport.fixtures("titus-osco-umbrian")
+  SLUG = "titus-osco-umbrian"
+  FIXTURES = Nabu::TestSupport.local_fixtures(SLUG)
 
   def conformance_adapter
     Nabu::Adapters::TitusOscoUmbrian.new
   end
 
   def conformance_workdir
+    require_fixtures!
     FIXTURES
   end
 
   def conformance_expected_source_id
-    "titus-osco-umbrian"
+    SLUG
   end
 
   def setup
@@ -31,6 +40,7 @@ class TitusOscoUmbrianTest < Minitest::Test
   end
 
   def documents_by_page
+    require_fixtures!
     @documents_by_page ||= @adapter.discover(FIXTURES).to_h do |ref|
       [ref.metadata.fetch("page"), @adapter.parse(ref)]
     end
@@ -54,6 +64,7 @@ class TitusOscoUmbrianTest < Minitest::Test
   # --- discovery ------------------------------------------------------------
 
   def test_discover_yields_one_document_per_text_page_and_skips_the_frameset
+    require_fixtures!
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }.sort
     assert_equal %w[oskum001 oskum012 oskum014 oskum043 oskum150 oskum377], pages
   end
@@ -61,6 +72,7 @@ class TitusOscoUmbrianTest < Minitest::Test
   # --- the first-sync census fixes (2026-08-31, all 390 real pages) ---------
 
   def test_photo_stub_pages_skip_at_discovery_with_accounting
+    require_fixtures!
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }
     refute_includes pages, "oskum069", "a page with no content lanes is a photograph pointer, not text"
     skips = @adapter.discovery_skips(FIXTURES)
@@ -195,5 +207,14 @@ class TitusOscoUmbrianTest < Minitest::Test
       error = assert_raises(Nabu::ParseError) { @adapter.parse(ref) }
       assert_match(/mixes language lanes/, error.message)
     end
+  end
+
+  private
+
+  def require_fixtures!
+    return if Nabu::TestSupport.local_fixtures?(SLUG)
+
+    skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+         "bytes live in local/fixtures/, never in git)"
   end
 end
