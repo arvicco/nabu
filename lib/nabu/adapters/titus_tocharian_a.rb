@@ -99,22 +99,33 @@ module Nabu
         SITE_SIGLA[siglum]
       end
 
-      # One DocumentRef per fetched text page (ref.id IS the document urn).
-      def discover(workdir)
-        Dir.glob(File.join(workdir, PAGE_GLOB)).filter_map do |path|
-          name = File.basename(path)
-          next unless name.match?(PAGE_RE)
+      # A manuscript anchor with no part/line anchor below it: the page is
+      # the catalogue entry alone (tocha227 = A 227, THT 860: the find
+      # signature and the THT number, no text — 1 of 467 at the first-sync
+      # census, 2026-10-10).
+      MANUSCRIPT_ANCHOR = /NAME="TochA_THT_[^_"]+"/
+      DEEPER_ANCHOR = /NAME="TochA_THT_[^_"]+_[^"]+"/
 
-          stem = name.delete_suffix(".htm")
+      # One DocumentRef per fetched text page (ref.id IS the document urn).
+      # Catalogue-only pages skip by rule, censused by discovery_skips.
+      def discover(workdir)
+        text_pages(workdir).reject { |path| catalogue_only?(path) }.map do |path|
+          stem = File.basename(path).delete_suffix(".htm")
           Nabu::DocumentRef.new(source_id: SLUG, id: document_urn(stem), path: path,
                                 metadata: { "page" => stem })
         end
       end
 
+      def discovery_skips(workdir)
+        skipped = text_pages(workdir).count { |path| catalogue_only?(path) }
+        notes = skipped.positive? ? ["#{skipped} catalogue-only page(s) skipped — THT catalogue entry, no text"] : []
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: 0, notes: notes)
+      end
+
       # Parse one page into a Document of line Passages. A page with no
       # keyable lines quarantines whole (ParseError) — never served empty.
       def parse(document_ref)
-        html = File.read(document_ref.path, encoding: "UTF-8")
+        html = TitusTocharianParser.read_page(document_ref.path)
         page = TitusTocharianParser.parse(html)
         raise Nabu::ParseError, "#{SLUG}: no text lines in #{document_ref.path}" if page.lines.empty?
 
@@ -153,6 +164,15 @@ module Nabu
 
       private
 
+      def text_pages(workdir)
+        Dir.glob(File.join(workdir, PAGE_GLOB)).select { |path| File.basename(path).match?(PAGE_RE) }
+      end
+
+      def catalogue_only?(path)
+        html = File.binread(path)
+        html.match?(MANUSCRIPT_ANCHOR) && !html.match?(DEEPER_ANCHOR)
+      end
+
       def document_urn(stem)
         "urn:nabu:#{SLUG}:#{stem}"
       end
@@ -178,6 +198,8 @@ module Nabu
         end
         prose = catalogue.reject { |note| note == number_line || note.match?(/\ATHT \d+\z/) }
         metadata["catalogue"] = prose unless prose.empty?
+        preservation = page.notes.map { |line| { "line" => line.components.join("."), "note" => line.note } }
+        metadata["preservation"] = preservation unless preservation.empty?
         metadata
       end
 
@@ -187,6 +209,9 @@ module Nabu
         annotations["syllabic"] = line.syllabic if line.syllabic
         annotations["side"] = line.side if line.side
         annotations["footnotes"] = line.footnotes unless line.footnotes.empty?
+        annotations["note"] = line.note if line.note
+        annotations["inline"] = line.inline unless line.inline.empty?
+        annotations["inline_syllabic"] = line.inline_syllabic unless line.inline_syllabic.empty?
         annotations["repetition"] = occurrence if occurrence > 1
         annotations
       end
