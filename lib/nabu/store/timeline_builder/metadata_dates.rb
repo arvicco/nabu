@@ -71,108 +71,62 @@ module Nabu
         # registers here and the health lane-drift check flags it if it
         # doesn't).
         SHAPES = {
-          "edr" => :structured,
-          "elephantine" => :structured,
-          "itant" => :structured,
-          "sillok" => :structured, # P78-1: the volume's 서기 year, one-year envelope
-          "sjw" => :structured,    # P78-2: same shape, per reign-year member
-          "itkc" => :structured,   # P78-7: the 원문간행년 original print year, per work
-          "bdcamoes" => :structured, # P80-7: the header's YY: publication year, per work;
-          #                            unresolved "18??" marks carry raw only and mint nothing
-          "ctilc" => :structured, # P80-8: the ANY publication year, one-year envelope
-          "ref" => :structured, # P81-1: the header date lane (clean parses) with the
-          #                       century-half time grid as the prose fallback
-          "corpus-corporum" => :structured, # P81-1: work_composition / author life band
-          #                                   (fetch checkpoint) / teiHeader author_date
-          "menota" => :structured, # P82-1: the msDesc origDate's own notBefore/notAfter
-          #                          attrs, raw text preserved; attr-less dates ride raw only
-          "eebo-tcp" => :structured, # P83-1: the BIBLFULL imprint year through the censused
-          #                            molds (85.7% dated on the 3,325-file sample); ?/ca.
-          #                            uncertainty stays raw-only — no bounds invented
-          "dacon" => :structured, # P88-A4: the deposit's own century attributions
-          #                         (cnew<cc> stems) as per-document envelopes
-          "ko-wikisource-mk" => :structured, # P96 hygiene: the per-work year envelope was
-          #                                      minted at parse but never projected (the
-          #                                      health timeline-dark anomaly, cleared)
-          "viet-wikisource" => :structured, # P96 hygiene: same shape, same clearing
-          "korba" => :structured, # P116-1: the header's original-bibl date (@when or
-          #                         @notBefore/@notAfter, prose raw); place = pubPlace
-          "prague-bible-1488" => :structured, # P116-1: the edition's 1488 on every page,
-          #                                     place = the imprint (Prague)
-          "ndl-kotenseki" => :structured, # P109-2: the census W3CDTF year envelope the
-          #                                 adapter mints (sentinel "1000" excluded there);
-          #                                 raw = the prose 出版日 verbatim
-          "corpus-gysseling" => :bounds_keys, # P96 hygiene: TOP-LEVEL integer not_before/
-          #                                     not_after + date_raw (+ a string place —
-          #                                     the croala mold); dark until now
-          "corpus-oudnederlands" => :bounds_keys, # P96 hygiene: same top-level bounds shape
-          "ccmh" => :bounds_keys, # P105-5c: the curated witness-dating overlay (the five
-          #                         codices' paleographic century bands; Adapters::Ccmh::
-          #                         DATING) — the vitae stay declared-undated
-          "okhc" => :year_key, # P92-6 (Q64): the per-record integer year — projected
-          #                      from the CATALOG's stored metadata, no re-parse of the
-          #                      1.2M documents (the whole point of the lane)
+          "bdcamoes" => :structured,
           "bfm" => :iso_keys,
+          "bg-wikisource" => :structured,
+          "cbeta" => :dynasty_band,
+          "ccmh" => :bounds_keys,
+          "cme" => :edition_year_text,
+          "corpus-corporum" => :structured,
+          "corpus-gysseling" => :bounds_keys,
+          "corpus-oudnederlands" => :bounds_keys,
           "croala" => :year_range,
-          "prilit" => :year_range, # P95-1: the printSource date @when, clean "1696" strings
-          "dta" => :year_range, # P94 (№R-59): the sourceDesc print year, clean "1784"
-          #                       strings on every document; the de:early staging rides
-          #                       LectDates date-band inference off these envelopes
+          "cs-wikisource" => :edition_year_text,
+          "ctilc" => :structured,
+          "dacon" => :structured,
+          "diorisis" => :signed_year_key,
+          "disco" => :author_century_band,
+          "dta" => :year_range,
           "ebl" => :period_label,
-          "fornsvenska" => :compact_date_keys, # P104-1: upstream's own per-text
-          #                                      datefrom/dateto, the pending posture served
-          "diorisis" => :signed_year_key, # P104-1: creation_date — composition class
-          "glaux" => :signed_bounds_keys, # P104-1: start_date/end_date — composition class
-          "disco" => :author_century_band, # P104-1: author life band — composition class
-          "ogham" => :century_prose, # P104-1 places; P108-8: the century-prose date
-          #                              grammar bands the "Fifth century …" texts too
-          "seal" => :period_label, # P104-1 (Q77 under №R-70): the Texts Hierarchy period
-          #                          strings (Old Babylonian …, on ALL 408 docs) band via
-          #                          the ruled table — the posture's own named candidate;
-          #                          the Provenance field rides as place (PLACE_KEYS)
-          "iedc" => :iso_prefix_key, # P107-2: the parenthesized ISO substring the
-          #                              adapter extracts from the prose date string
-          #                              ("… (1183-10)" -> date_iso); year envelope,
-          #                              date_text verbatim as raw
-          "syriac-corpus" => :when_key, # P108-8 (the Q83 slice): orig_date.when zero-padded
-          #                                 year; the per-doc type field classes composition
-          #                                 rows itself (translations dated, class-less)
-          "obi-burmese" => :ce_year_text, # P108-8: every CE year in the CS=CE date string
-          #                                 joins the envelope (typed upstream dates)
-          "soas-tibetan" => :century_prose, # P108-8: "13th century, …" period strings
-          "local-library" => :year_key, # P108-8: the shelf's own integer year
-          "rsti" => :place_only, # P108-8: the findspot lane (PLACE_KEYS); no typed dates
-          "titus-tocharian-a" => :place_only, # P114-1a: the find-signature site siglum,
-          #                                     mined at parse (PLACE_KEYS); no dating
-          "titus-manichaica" => :place_only, # the Reader's Berlin Turfan find signatures,
-          #                                    the same site sigla (PLACE_KEYS); no dating
-          "cbeta" => :dynasty_band, # P104-1 (№R-70 grade 2): the header byline's dynasty
-          #                          seat bands via the ruled table as an ERA claim —
-          #                          precision "era", verbatim byline in date_raw
-          "cme" => :edition_year_text, # P109-4 (the Q83 drain): the source EDITION's print
-          #                              year(s) — date_class "edition", never composition
-          #                              (the e-text pub_date stays machinery)
-          "openmgh" => :printed_year_text, # P109-4: the MGH volume's print year — the same
-          #                                  honestly-labeled "edition" class
-          "rem" => :structured, # the CorA-XML sibling's element header: <date> (clean
-          #                       parses) with the comma-spelled century-half <time>
-          #                       grid behind prose (396/406); the TEI orig_place
-          #                       scriptorium claims (P109-4, 79 of 406) still ride
-          #                       PLACE_KEYS
-          "ren" => :structured, # the CorA-XML sibling zip's date_ReN (clean parses) with
-          #                       the century-half time grid as the prose fallback (the
-          #                       ref mold); the header place rides the default key
-          "ja-wikisource" => :era_band_key, # P109-1 (№R-74): the era-category envelope
-          #                       the adapter mints ("era_band") — an ERA attribution,
-          #                       precision "era", never a typed date
-          "zh-wikisource" => :dynasty_band, # P109-1: the work-level dynasty claim
-          #                       (全唐文 → 唐) through the ruled period table —
-          #                       the cbeta shape verbatim
-          "hr-wikisource" => :era_band_key, # P116-2: the century-category envelope
-          #                       (Hrvatsko 16. stoljeće …) — the ja-wikisource shape
-          "sl-wikisource" => :structured, # P116-2: the Dela leta N year category, typed
-          "mk-wikisource" => :structured, # P116-2: the забелешки print year where stated
-          "bg-wikisource" => :structured # P116-2: the charters' issuance year (бележки)
+          "edr" => :structured,
+          "eebo-tcp" => :structured,
+          "elephantine" => :structured,
+          "fornsvenska" => :compact_date_keys,
+          "glaux" => :signed_bounds_keys,
+          "hr-wikisource" => :era_band_key,
+          "iedc" => :iso_prefix_key,
+          "itant" => :structured,
+          "itkc" => :structured,
+          "ja-wikisource" => :era_band_key,
+          "ko-wikisource-mk" => :structured,
+          "korba" => :structured,
+          "local-library" => :year_key,
+          "menota" => :structured,
+          "mk-wikisource" => :structured,
+          "ndl-kotenseki" => :structured,
+          "obi-burmese" => :ce_year_text,
+          "ogham" => :century_prose,
+          "okhc" => :year_key,
+          "openmgh" => :printed_year_text,
+          "pl-wikisource" => :era_band_key,
+          "prague-bible-1488" => :structured,
+          "prilit" => :year_range,
+          "ref" => :structured,
+          "rem" => :structured,
+          "ren" => :structured,
+          "rsti" => :place_only,
+          "ru-wikisource" => :era_band_key,
+          "seal" => :period_label,
+          "sillok" => :structured,
+          "sjw" => :structured,
+          "sl-wikisource" => :structured,
+          "soas-tibetan" => :century_prose,
+          "syriac-corpus" => :when_key,
+          "titus-manichaica" => :place_only,
+          "titus-tocharian-a" => :place_only,
+          "uk-wikisource" => :era_band_key,
+          "viet-wikisource" => :structured,
+          "zh-wikisource" => :dynasty_band
         }.freeze
 
         SLUGS = SHAPES.keys.freeze

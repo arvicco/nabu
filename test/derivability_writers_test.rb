@@ -92,6 +92,12 @@ class DerivabilityWritersTest < Minitest::Test
   # db/canonical_identities.json (tmp+rename): the census-keyed memo of
   # plain-tree canonical identities — the DERIVED law kind (a pure
   # function of canonical/ + code; deletable at any time, a miss re-hashes).
+  # same way — the burman_concordance law kind. The P116-3 Slavic
+  # wikisource family base (slavic_wikisource) writes page envelopes
+  # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
+  # inside Adapter#fetch, and the pl Brückner lane writes its stub index
+  # + scan envelopes under canonical/pl-wikisource/bruckner/ from that
+  # same fetch — the ja/zh-wikisource law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -118,6 +124,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/adapters/ja_wikisource.rb nabu/adapters/zh_wikisource.rb
     nabu/adapters/slavic_wikisource.rb
+    nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
