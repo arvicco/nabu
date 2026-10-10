@@ -417,6 +417,63 @@ class RebuildIncrementalTest < Minitest::Test
     assert_nil row, "a dry run reads the ETA but never records a timing"
   end
 
+  # -- the plain-tree identity memo (CanonicalIdentityCache) ---------------
+  # The sweep re-hashed every byte of every non-git tree on every run. The
+  # memo must change the COST only: verdicts cold ≡ verdicts warm, and a
+  # same-size edit with its mtime restored still reads dirty.
+
+  def test_verdicts_are_identical_with_the_memo_cold_and_warm
+    past_the_racy_window do
+      full_rebuilder.run
+      assert_equal 3, identity_memo_trees.size, "the full rebuild (refresh mode) warms the memo"
+
+      warm = plan_states
+      File.delete(identity_memo_path)
+      cold = plan_states
+      assert_equal({ "alpha" => :clean, "beta" => :clean, "lexica" => :clean }, warm)
+      assert_equal cold, warm
+
+      # The hazard edit: same size, in place, mtime restored — only ctime moves.
+      file = File.join(@canonical, "beta", "b.txt")
+      mtime = File.stat(file).mtime
+      File.open(file, "r+") { |io| io.write("X") }
+      File.utime(mtime, mtime, file)
+      warm = plan_states
+      File.delete(identity_memo_path)
+      cold = plan_states
+      assert_equal({ "alpha" => :clean, "beta" => :dirty, "lexica" => :clean }, warm)
+      assert_equal cold, warm
+
+      result = incremental_rebuilder.run
+      assert_equal %w[beta], result.outcomes.map(&:slug)
+      assert_incremental_state_equals_fresh_full_rebuild
+    end
+  end
+
+  def test_a_warm_sweep_hashes_no_plain_tree_and_still_announces_its_eta
+    past_the_racy_window do
+      full_rebuilder.run
+      incremental_rebuilder.run # records the sweep's first timing
+
+      events = []
+      hashed = counting_content_hashes { incremental_rebuilder.run(progress: spy(events)) }
+
+      assert_equal 0, hashed, "every untouched plain tree answers from the memo"
+      header = events.find { |event| event.first == :note && event[1].start_with?("verdict sweep") }
+      assert_match(/\Averdict sweep: fingerprinting 3 canonical trees — ~\d+s \(last run \d+s over 3 rows\)\z/,
+                   header[1])
+      assert(events.any? { |event| event.first == :note && event[1].start_with?("verdicts: 3 clean") })
+      rows = with_ledger do |ledger|
+        ledger[:stage_timings].where(kind: "rebuild", scope: "corpus", stage: "verdict_sweep").count
+      end
+      assert_equal 2, rows, "each real sweep records its (now cheaper) wall time for the next ETA"
+
+      write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+      hashed = counting_content_hashes { incremental_rebuilder.plan }
+      assert_equal 1, hashed, "only the drifted tree is re-hashed"
+    end
+  end
+
   def test_bare_api_callers_stay_silent_and_unbroken
     full_rebuilder.run
     write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
@@ -667,6 +724,38 @@ class RebuildIncrementalTest < Minitest::Test
     yield ledger
   ensure
     ledger&.disconnect
+  end
+
+  def identity_memo_path = File.join(@db_dir, Nabu::CanonicalIdentityCache::FILENAME)
+
+  def identity_memo_trees = JSON.parse(File.read(identity_memo_path)).fetch("trees")
+
+  def plan_states = incremental_rebuilder.plan.verdicts.to_h { |verdict| [verdict.slug, verdict.state] }
+
+  # Step the memo's census clock 60 s ahead: freshly written fixture files
+  # sit outside the racy window (ctime cannot be backdated).
+  def past_the_racy_window
+    singleton = Nabu::CanonicalIdentityCache.singleton_class
+    original = Nabu::CanonicalIdentityCache.method(:now)
+    singleton.define_method(:now) { Time.now + 60 }
+    yield
+  ensure
+    singleton.define_method(:now, original)
+  end
+
+  # How many plain-file content hashes the block paid.
+  def counting_content_hashes
+    count = 0
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:content_file_digest)
+    singleton.define_method(:content_file_digest) do |path|
+      count += 1
+      original.call(path)
+    end
+    yield
+    count
+  ensure
+    singleton.define_method(:content_file_digest, original)
   end
 
   def builders_slug = Nabu::Store::DerivationStamp::BUILDERS_SLUG

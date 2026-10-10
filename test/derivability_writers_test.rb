@@ -86,6 +86,10 @@ class DerivabilityWritersTest < Minitest::Test
   # the P108 trio (kouigenji's 54 maki, kokubunken's three TEIs,
   # nrct's one CSV) move UrlDownload fetches to house names the
   # same way — the burman_concordance law kind.
+  # canonical_identity_cache (P116) writes ONE derived file,
+  # db/canonical_identities.json (tmp+rename): the census-keyed memo of
+  # plain-tree canonical identities — the DERIVED law kind (a pure
+  # function of canonical/ + code; deletable at any time, a miss re-hashes).
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -124,6 +128,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
+    nabu/canonical_identity_cache.rb
   ].freeze
 
   def test_file_writers_are_allowlisted
