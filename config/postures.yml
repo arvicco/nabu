@@ -930,6 +930,30 @@ sources:
         the adapter's FINDSPOTS (Khadaliq, the only site the census saw), declared coarse —
         other references ride the raw `manuscripts` metadata"}
     script: {posture: implied, note: "Latin transliteration of Brāhmī manuscripts"}
+  titus-sogdian:
+    # The two TITUS Sogdian corpora (NSW arranged by texts + Morano's
+    # Stellung-Jesu hymns; censused 2026-10-10). Kind stays unclassified
+    # (the titus family's posture): the text table names letters, sūtras,
+    # hymns, documents and inscriptions, but a text→kind map is a ruled
+    # table, not a header field — a future kind_map candidate.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "sog — the bare Sogdian anchor, deliberately coarse (no
+        Ancient-Letters vs Buddhist/Manichaean/Christian staging: no page states a date);
+        TITUS's own lane split mints the other claims — Turkic fragments (`mitk*` lanes,
+        \"Turkic fragment according to Wilkens\") claim bare oui per passage, and embedded
+        Parthian runs (`iipth*`) ride the Sogdian line as an `embedded_xpr` annotation"}
+    dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates
+        (mined into document metadata as data_entry / text_data_entry), never a composition
+        or manuscript date"}
+    places: {posture: named, note: "per-passage `findspot` from the Berlin find-signature
+        site siglum (T_<exp>_D Qočo, T_<exp>_B Bulayïq — the titus-tocharian-a table) and the
+        Upp.Ind. text's chapter toponyms (Shatial, Ladakh, Bugut, …) — declared coarse: other
+        sigla/chapters (Or., P_, SDGM, 80TBI, DP) mint nothing, the raw manuscript value rides;
+        gazetteer linking via nabu-places is a future look"}
+    script: {posture: qualified, note: "Latin transliteration of four script traditions —
+        per-passage `script` annotation from the lane's script code: Syrc (the Christian
+        texts), Mani (Manichaean script), Sogd (the Sogdian script: Ancient Letters, Buddhist,
+        Mug, the Sogdian-script Manichaean texts); document `scripts` metadata"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
