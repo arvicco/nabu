@@ -46,7 +46,8 @@ module Nabu
     # HEADER-ONLY pages skip by rule (censused in discovery_skips), and
     # their header block rides every following page of that text as
     # `text_*` metadata (discover walks the pages in order; the text
-    # context is the latest Level-1 page).
+    # context is the latest Level-1 page). UNREAD manuscript entries (every
+    # lane run blank, the editor's "not yet read") skip by a second rule.
     #
     # == Mined metadata (the №R-70 aggressive-mining law)
     #
@@ -111,6 +112,21 @@ module Nabu
       # quarantines it) is a content page; the rest are header-only.
       LANE_NEEDLE = /<span id=(?!(?:h|n|nc|voc)\d+>)[a-z]+\d+>/i
 
+      # A lane run holding nothing but (non-breaking) space. A page whose
+      # EVERY lane run is blank is an UNREAD manuscript entry (sogdn380 /
+      # sogdn381, Anc.Scr. L.A.II.v.028 and L.L.018: a manuscript header,
+      # the note "not yet read: NSW", one "Line of Manuscript: _" and an
+      # empty issgtl16 lane) — no text row, skipped by rule like an opener.
+      BLANK_LANE_RUN = %r{<span id=(?!(?:h|n|nc|voc)\d+>)[a-z]+\d+>(?:&nbsp;|\s)*</span>}i
+
+      # The discovery_skips accounting, one note per skip rule.
+      SKIP_NOTES = {
+        header_only: "header-only page(s) skipped — a text's title/edition block, no text row " \
+                     "(carried into its pages' text_* metadata)",
+        unread: "unread page(s) skipped — a manuscript entry whose only line row is blank " \
+                "(the editor's \"not yet read\")"
+      }.freeze
+
       def self.manifest
         Nabu::SourceManifest.new(
           id: SLUG,
@@ -158,7 +174,7 @@ module Nabu
       # One DocumentRef per content page (ref.id IS the document urn), each
       # carrying its text context (the latest Level-1 page before it).
       def discover(workdir)
-        walk_pages(workdir).reject { |page| page[:header_only] }.map do |page|
+        walk_pages(workdir).select { |page| page[:skip].nil? }.map do |page|
           metadata = { "edition" => page[:edition], "page" => page[:stem] }
           metadata["text"] = page[:text] if page[:text]
           metadata["text_page"] = page[:text_page] if page[:text_page]
@@ -168,14 +184,9 @@ module Nabu
       end
 
       def discovery_skips(workdir)
-        skipped = walk_pages(workdir).count { |page| page[:header_only] }
-        notes = if skipped.positive?
-                  ["#{skipped} header-only page(s) skipped — a text's title/edition block, no text row " \
-                   "(carried into its pages' text_* metadata)"]
-                else
-                  []
-                end
-        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: 0, notes: notes)
+        counts = walk_pages(workdir).filter_map { |page| page[:skip] }.tally
+        notes = SKIP_NOTES.filter_map { |rule, note| "#{counts[rule]} #{note}" if counts[rule] }
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: counts.values.sum, unrecognized: 0, notes: notes)
       end
 
       # Parse one page into a Document of manuscript-line Passages. A
@@ -241,10 +252,18 @@ module Nabu
               text = level_one
               text_page = stem
             end
-            { edition: id, stem: stem, path: path, text: text, text_page: text_page,
-              header_only: !LANE_NEEDLE.match?(bytes) }
+            { edition: id, stem: stem, path: path, text: text, text_page: text_page, skip: skip_rule(bytes) }
           end
         end
+      end
+
+      # :header_only (no lane span at all), :unread (every lane run blank),
+      # or nil for a content page.
+      def skip_rule(bytes)
+        lanes = bytes.scan(LANE_NEEDLE).size
+        return :header_only if lanes.zero?
+
+        :unread if bytes.scan(BLANK_LANE_RUN).size == lanes
       end
 
       def numbered_pages(workdir, id, edition)

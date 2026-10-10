@@ -15,10 +15,12 @@ require "fileutils"
 # under the gitignored local/fixtures/titus-sogdian/ and every data-bearing
 # case SKIPs when absent. Ground truth (retrieved 2026-10-10, see that dir's
 # README): sogdm001 (Morano — the whole reachable corpus), and from the NSW
-# corpus the header-only text openers 001/002/224/254/376 plus the content
-# pages 003 (Christian, Syriac script), 119 (BBB, Manichaean script), 165
-# (Magi — heading/rubric lanes), 230 (Paris Buddhist — a Sanskrit heading
-# run), 255 (Mug documents) and 377 (Ancient Letters — note-quoted forms).
+# corpus the header-only text openers 001/002/150/214/224/254/376, the unread
+# entries 380/381, plus the content pages 003 (Christian, Syriac script), 119
+# (BBB, Manichaean script), 156 (Tales — a Greek heading run), 165 (Magi —
+# heading/rubric lanes), 222 (London — the lone "b" script code), 230 (Paris
+# Buddhist — a Sanskrit heading run), 255 (Mug documents) and 377 (Ancient
+# Letters — note-quoted forms).
 # No network: fetch is owner-run only (WebMock below).
 class TitusSogdianTest < Minitest::Test
   include AdapterConformance
@@ -97,15 +99,28 @@ class TitusSogdianTest < Minitest::Test
   def test_discover_yields_one_document_per_content_page
     ids = @adapter.discover(conformance_workdir).map(&:id).sort
     assert_equal %W[#{DOC}:sogdmor.sogdm001 #{DOC}:sogdnswc.sogdn003 #{DOC}:sogdnswc.sogdn119
-                    #{DOC}:sogdnswc.sogdn165 #{DOC}:sogdnswc.sogdn230 #{DOC}:sogdnswc.sogdn255
-                    #{DOC}:sogdnswc.sogdn377], ids
+                    #{DOC}:sogdnswc.sogdn156 #{DOC}:sogdnswc.sogdn165 #{DOC}:sogdnswc.sogdn222
+                    #{DOC}:sogdnswc.sogdn230 #{DOC}:sogdnswc.sogdn255 #{DOC}:sogdnswc.sogdn377], ids
   end
 
   def test_header_only_text_openers_skip_by_rule_with_accounting
     skips = @adapter.discovery_skips(conformance_workdir)
-    assert_equal 5, skips.skipped_by_rule, "sogdn001/002/224/254/376 carry a title block and no text row"
+    assert_equal 9, skips.skipped_by_rule,
+                 "sogdn001/002/150/214/224/254/376 carry a title block and no text row; " \
+                 "sogdn380/381 are unread manuscript entries"
     assert_equal 0, skips.unrecognized
-    assert_match(/header-only/, skips.notes.join(" "))
+    notes = skips.notes.join(" ")
+    assert_match(/7 header-only page/, notes)
+    assert_match(/2 unread page/, notes)
+  end
+
+  def test_an_unread_manuscript_entry_with_only_a_blank_line_skips_by_rule
+    # sogdn380 / sogdn381 (Anc.Scr. L.A.II.v.028, L.L.018): a manuscript
+    # header, the note "not yet read: NSW", one "Line of Manuscript: _" and
+    # an issgtl16 lane holding only &nbsp; — no text, never a quarantine.
+    pages = @adapter.discover(conformance_workdir).map { |ref| ref.metadata["page"] }
+    refute_includes pages, "sogdn380"
+    refute_includes pages, "sogdn381"
   end
 
   def test_a_page_inherits_its_text_from_the_latest_level_one_page
@@ -134,6 +149,38 @@ class TitusSogdianTest < Minitest::Test
                     "Fragment of the Bhaiṣajyaguruvaiḍūryaprabhātatathāgatasūtra"
     refute(document.passages.any? { |p| p.text.include?("Bhaiṣajya") })
     assert(document.passages.all? { |p| p.language == "sog" })
+  end
+
+  def test_a_greek_heading_run_completes_its_subtitle_and_is_never_text
+    # sogdn156 (Tales, item E): <subtitle>E: </subtitle><gr22>Βαγίστανον ὄρος</gr22>
+    # — the Greek name of the tale's mountain, the corpus's only gr* span.
+    document = documents_by_page.fetch("sogdn156")
+    assert_includes document.metadata["subtitles"], "E: Βαγίστανον ὄρος"
+    refute(document.passages.any? { |p| p.text.include?("Βαγίστανον") })
+    assert(document.passages.all? { |p| p.language == "sog" })
+    assert_equal "Tales", document.metadata["text"]
+  end
+
+  def test_a_greek_lane_outside_a_heading_quarantines
+    html = <<~HTML
+      <html><body>
+      <span id=h7><!XLevel 7>Line of Manuscript: 1<A NAME="X_1">&nbsp;</A></sPAN>&nbsp;
+      </span><span id=gr22>ὄρος</span>
+      </body></html>
+    HTML
+    error = assert_raises(Nabu::ParseError) { PARSER.parse(html) }
+    assert_match(/unknown Greek lane "gr22" outside a heading/, error.message)
+  end
+
+  def test_the_lone_b_script_code_is_the_sogdian_script
+    # sogdn222, London Frg. 28 (ed. S-W 1978): issgbl16 amid issgsbl16
+    # siblings, transliterated consonantally with aleph — Sogdian script.
+    document = documents_by_page.fetch("sogdn222")
+    line = passage("#{DOC}:sogdnswc.sogdn222:Frg.28.Frg28.1")
+    assert_equal "[ ՚](p)try", line.text
+    assert_equal "Sogd", line.annotations["script"]
+    assert_equal "Lond.", document.metadata["text"]
+    assert_equal ["Sogd"], document.metadata["scripts"]
   end
 
   def test_the_page_footer_never_leaks_into_header_metadata
