@@ -112,7 +112,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["prague-bible-1488"]
       refute_nil entry
-      refute entry.wired, "wired flips only after the orchestrator's first sync"
+      assert entry.wired, "wired: true — first sync verified 2026-10-10 (31 docs / 2,939 passages)"
       assert_equal "manual", entry.sync_policy
     end
 
