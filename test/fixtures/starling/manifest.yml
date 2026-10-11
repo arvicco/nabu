@@ -223,3 +223,57 @@ files:
     url: https://starlingdb.org/download/ALTAIC.exe
     whole: false
     trim: the kept record's payload byte runs (the trailing NUL included), verbatim, compacted behind the mirrored \x13 header byte
+  # P118: the follow-up packages' LEXSTAT/ wordlists (README "The follow-up
+  # packages' LEXSTAT wordlists"), cut 2026-10-11 from the held 2026-09-26 trees.
+  - path: altaic/LEXSTAT/alt.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 4 of 169 records — file positions 0 (date row), 1 + 2 (#1 all — the synonym row first), 3 (#2 ashes, all 53 columns; MAN/PHN/AZB branch-.inf-wins pins); header + field descriptors verbatim
+  - path: altaic/LEXSTAT/tung.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 2 of 140 records — file positions 0 (date row), 38 (#29 fish — NEG/EVK → tunget #42, MAN Spoken Manchu); header + field descriptors verbatim
+  - path: altaic/LEXSTAT/turc.dbf
+    url: https://starlingdb.org/download/ALTAIC.exe
+    whole: false
+    trim: 3 of 141 records — file positions 0 (date row), 3 (#2 ashes → turcet #2), 45 (#35 green — CHV #3334, unresolved upstream); header + field descriptors verbatim
+  - path: cauc/LEXSTAT/lezg.dbf
+    url: https://starlingdb.org/download/CAUC.exe
+    whole: false
+    trim: 3 of 121 records — file positions 0 (date row), 7 (#7 bite → lezget #11), 46 (#42 I → lezget #1); header + field descriptors verbatim
+  - path: yenisey/LEXSTAT/yen.dbf
+    url: https://starlingdb.org/download/YENISEY.exe
+    whole: false
+    trim: 3 of 122 records — file positions 0 (date row), 10 (#10 bone → yenet #1), 48 (#44 knee, KOT → yenet #1); header + field descriptors verbatim, var-pointers rewritten
+  - path: yenisey/LEXSTAT/yen.var
+    url: https://starlingdb.org/download/YENISEY.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: sintib/LEXSTAT/kir.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 3 of 123 records — file positions 0 (date row), 6 (#5 big — YAM → kiret #645), 9 (#8 black — KUL #4425 unresolved upstream); header + field descriptors verbatim
+  - path: sintib/LEXSTAT/man.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 2 of 117 records — file positions 0 (date row, junk WORD "20"), 5 (#5 big — #4010 unresolved upstream); header + field descriptors verbatim
+  - path: sintib/LEXSTAT/syc.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 2 of 139 records — file positions 0 (date row), 1 (#1 all — PUM Pumi1, ZHB #4006 unresolved upstream); header + field descriptors verbatim
+  - path: sintib/LEXSTAT/tani.dbf
+    url: https://starlingdb.org/download/SINTIB.exe
+    whole: false
+    trim: 2 of 137 records — file positions 0 (date row), 7 (#5 big — MIL/PAD/BOK → stibet #2); header + field descriptors verbatim
+  - path: drav/LEXSTAT/drav.dbf
+    url: https://starlingdb.org/download/DRAV.exe
+    whole: false
+    trim: 3 of 118 records — file positions 0 (date row), 3 (#3 bark), 39 (#37 hand) — all 25 columns incl. the eleven inferred readings; header + field descriptors verbatim
+  - path: chukchee/LEXSTAT/kam.dbf
+    url: https://starlingdb.org/download/CHUKCHEE.exe
+    whole: false
+    trim: 3 of 173 records — file positions 0 (date row with KAR 17.5), 10 (#7 bite — #2001 unresolved upstream), 18 (#11 breast → kamet #1); header + field descriptors verbatim
+  - path: kart/LEXSTAT/kart.dbf
+    url: https://starlingdb.org/download/KART.exe
+    whole: false
+    trim: 3 of 111 records — file positions 0 (date row), 1 (#1 all), 2 (#2 ashes) — proto = NONE, every number verbatim; header + field descriptors verbatim
