@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (12): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `mw`, `nabu-data`, `sarit`, `siddham`, `suttacentral`, `ud`
+**Members** (14): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `kannada-texts`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `siddham`, `suttacentral`, `ud`
 
 ### buddhist
 
