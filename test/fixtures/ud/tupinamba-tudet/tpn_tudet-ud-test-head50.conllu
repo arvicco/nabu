@@ -1,0 +1,652 @@
+# document_authorship = Annotated by Fabricio Ferraz Gerardi
+# document_reference = Araujo_1618[1952] [begin 0011.book.sentence]
+# document_reference = Teatro_2006 [begin 0044.-]
+# document_reference = Poemas () [begin 0099.-]
+# document_reference = Figueira () [begin 0022.-]
+# document_reference = Anchieta (Arte, ) [begin 0033.-]
+# document_reference = Bettendorf () [begin 0088.-]
+# document_reference = Camarões_letters_1645 () [begin 0055.-]
+# sent_id = 0011.01
+# text = Mokõj ojoirunɨk , oito , ʔara sɨkeme , Tupã taʔɨra osɨ swi iʔarire , judeus ekomojaŋaβo iʔapira monoki
+# text_eng = Having arrived the eighth day, after the son of God was born from his mother, they cut his foreskin according to the law of the jews January 1
+# text_por = 
+1	Mokõj	mokõj	NUM	num	NumType=Card	2	nmod	_	_
+2	ojoirunɨk	ojoirunɨk	NUM	num	_	6	nummod	_	_
+3	,	,	PUNCT	punct	_	2	punct	_	_
+4	oito	oito	NUM	num	_	2	appos	_	_
+5	,	,	PUNCT	punct	_	2	punct	_	_
+6	ʔara	ʔar	NOUN	n	Case=Ref	7	nmod	_	_
+7	sɨkeme	sɨk	NOUN	n	Mood=Sub	19	advcl	_	_
+8	,	,	PUNCT	punct	_	7	punct	_	_
+9	Tupã	Tupã	PROPN	propn	_	10	nmod	_	_
+10	taʔɨra	aʔɨr	NOUN	n	Case=Ref|Rel=NCont	13	nmod	_	_
+11	osɨ	sɨ	NOUN	n	Reflex=Yes	10	obl	_	_
+12	swi	swi	ADP	posp	_	11	case	_	_
+13-14	iʔarire	_	_	_	_	_	_	_	_
+13	iʔar	ʔar	NOUN	n	_	19	advcl	_	_
+14	ire	ire	ADP	posp	_	13	case	_	_
+15	,	,	PUNCT	punct	_	13	punct	_	_
+16	judeus	judeu	NOUN	n	_	17	nmod	_	_
+17	ekomojaŋaβo	ekomojaŋ	NOUN	n	_	19	obl	_	_
+18	iʔapira	ʔapir	NOUN	n	Case=Ref|Rel=NCont	19	obj	_	_
+19	monoki	monok	NOUN	n	NonFoc=Yes	0	root	_	_
+
+# sent_id = 0011.02
+# text = Ã teko aʔereme moreroka kwe βɨa Iesus noŋi seramo
+# text_eng = Eis que era lei, então, batizar: puseram como nome dele aquele de JESUS  Catalogo January 1
+# text_por = 
+1	Ã	ã	PART	pcl	_	2	discourse	_	_
+2	teko	eko	NOUN	n	Rel=Hum	0	root	_	_
+3	aʔereme	aʔereme	ADV	adv	AdvType=Temp	2	advmod	_	_
+4	moreroka	erok	NOUN	n	Case=Ref|Voice=Cau	2	xcomp	_	_
+5	kwe	kwe	DET	dem	_	7	nmod	_	_
+6	βɨa	βɨa	PART	_	_	8	nsubj	_	_
+7	Iesus	Iesus	PROPN	propn	_	8	obj	_	_
+8	noŋi	noŋ	NOUN	n	NonFoc=Yes	2	parataxis	_	_
+9	seramo	er	NOUN	n	Case=Tra|Rel=NCont	8	obl	_	_
+
+# sent_id = 0011.03
+# text = Opa ko mo mosapɨr mɨsã ʔara sɨkeme , apɨaβamo osɨ rɨge swi Tupã taʔɨra ʔarʔire , mosapɨr moruβisaβa , Reis ʔiaβa , kwarasɨ semaβa kotɨ swi ourɨβaʔe , jasɨtata serekoarama rese , Tupã remimojaŋa pɨsasu pe jaramo isupe ogueru jetanoŋaβamo itajuβa , ɨsɨkatã sɨapwanɨβaʔe , mirra , mosaŋa toʔo swi
+# text_eng = Three chiefs, said to be king, who came from the orient through the guardian star that god had made new as indicator of the path, brought him as offering: gold, incense and myhrr, after god's son was born from his mother's womb, when the thirteenth day came  Catalogo January 6
+# text_por = 
+1	Opa	opa	PRON	pro	_	3	nmod	_	_
+2	ko	ko	DET	dem	_	3	nmod	_	_
+3	mo	po	NOUN	n	_	6	nummod	_	_
+4	mosapɨr	mosapɨr	NUM	num	NumType=Card	5	nummod	_	_
+5	mɨsã	pɨsã	NOUN	n	_	3	dep	_	_
+6	ʔara	ʔar	NOUN	n	Case=Ref	7	nmod	_	_
+7	sɨkeme	sɨk	NOUN	n	Mood=Sub	39	advcl	_	_
+8	,	,	PUNCT	punct	_	7	punct	_	_
+9	apɨaβamo	apɨaβ	NOUN	n	Case=Tra	14	obl	_	_
+10	osɨ	sɨ	NOUN	n	Reflex=Yes	11	nmod	_	_
+11	rɨge	rɨge	NOUN	n	Rel=Cont	14	nmod	_	_
+12	swi	swi	ADP	posp	_	11	case	_	_
+13	Tupã	Tupã	NOUN	n	_	14	nmod	_	_
+14	taʔɨra	aʔɨr	NOUN	n	Case=Ref|Rel=NCont	15	nmod	_	_
+15	ʔarʔire	ʔar	NOUN	n	_	39	advcl	_	_
+16	,	,	PUNCT	punct	_	15	punct	_	_
+17	mosapɨr	mosapɨr	NUM	num	NumType=Card	18	nummod	_	_
+18	moruβisaβa	moruβisaβ	NOUN	n	Case=Ref	39	obl	_	_
+19	,	,	PUNCT	punct	_	18	punct	_	_
+20	Reis	rei	NOUN	n	_	18	appos	_	_
+21	ʔiaβa	ʔiaβa	ADV	adv	_	20	amod	_	_
+22	,	,	PUNCT	punct	_	20	punct	_	_
+23	kwarasɨ	kwarasɨ	NOUN	n	_	24	nmod	_	_
+24	semaβa	sem	NOUN	n	Nomzr=Circ	25	nmod	_	_
+25	kotɨ	kotɨ	NOUN	n	_	27	obl	_	_
+26	swi	swi	ADP	pos	_	25	case	_	_
+27	ourɨβaʔe	ur	NOUN	n	Nomzr=Rel|Person=3	18	acl	_	_
+28	,	,	PUNCT	punct	_	27	punct	_	_
+29	jasɨtata	jasɨtata	NOUN	n	_	27	obl	_	_
+30	serekoarama	ereko	NOUN	n	Rel=NCont|Tense=Fut	29	nmod	_	_
+31	rese	ese	ADP	posp	Rel=Cont	30	case	_	_
+32	,	,	PUNCT	punct	_	31	punct	_	_
+33	Tupã	Tupã	NOUN	n	_	34	nmod	_	_
+34	remimojaŋa	mojaŋ	NOUN	n	Case=Ref|Nomzr=Pas|Rel=Cont	29	appos	_	_
+35	pɨsasu	pɨsasu	NOUN	n	_	34	obl	_	_
+36	pe	pe	NOUN	n	_	37	nmod	_	_
+37	jaramo	jar	NOUN	n	Case=Tra	34	obl	_	_
+38	isupe	supe	ADP	posp	Rel=NCont	34	obl	_	_
+39	ogueru	ur	VERB	v	Person=3|Voice=SCau	0	root	_	_
+40	jetanoŋaβamo	jetanoŋ	NOUN	n	Case=Tra|Nomzr=Circ	39	obl	_	_
+41	itajuβa	itajuβ	NOUN	n	Case=Ref	39	obj	_	_
+42	,	,	PUNCT	punct	_	41	punct	_	_
+43	ɨsɨkatã	ɨsɨkatã	NOUN	n	_	41	conj	_	_
+44	sɨapwanɨβaʔe	ɨapwan	NOUN	n	Nomzr=Rel|Rel=NCont	43	nmod	_	_
+45	,	,	PUNCT	punct	_	43	punct	_	_
+46	mirra	mirra	NOUN	n	_	43	conj	_	_
+47	,	,	PUNCT	punct	_	46	punct	_	_
+48	mosaŋa	posaŋ	NOUN	n	Case=Ref|Rel=Hum	46	appos	_	_
+49	toʔo	oʔo	NOUN	n	Rel=Hum	48	nmod	_	_
+50	swi	swi	ADP	posp	_	49	case	_	_
+
+# sent_id = 0011.04
+# text = Itajuβa moruβisaβa Rejamo seko momewaβa , ɨsɨkatãsɨapwana Tupanamo seko kwapaβa , toʔo swi mirra moroese seʔõawama momewaβa
+# text_eng = Gold was a way of announcing his being a chief as a king, the incense was a way of recogninzing him to be god, the pulp myrrh was a way of announcing he would die for the people.  Catalogo January 6
+# text_por = 
+1	Itajuβa	itajuβ	NOUN	n	Case=Ref	5	nsubj	_	_
+2	moruβisaβa	moruβisaβ	NOUN	n	Case=Ref	4	nmod	_	_
+3	Rejamo	rei	NOUN	n	Case=Tra	2	obl	_	_
+4	seko	eko	NOUN	n	Rel=NCont	5	nmod	_	_
+5	momewaβa	momeʔu	NOUN	n	Case=Ref|Nomzr=Circ	0	root	_	_
+6	,	,	PUNCT	punct	_	5	punct	_	_
+7	ɨsɨkatãsɨapwana	_	NOUN	_	Case=Ref	10	nsubj	_	_
+8	Tupanamo	Tupã	NOUN	n	Case=Tra	10	obl	_	_
+9	seko	eko	NOUN	n	Rel=NCont	10	nmod	_	_
+10	kwapaβa	kwaβ	NOUN	n	Case=Ref|Nomzr=Circ	5	parataxis	_	_
+11	,	,	PUNCT	punct	_	10	punct	_	_
+12	toʔo	oʔo	NOUN	n	Rel=Hum	14	nmod	_	_
+13	swi	swi	ADP	posp	_	12	case	_	_
+14	mirra	mirra	NOUN	n	_	17	nsubj	_	_
+15	moroese	moroese	NOUN	n	Rel=Hum	16	obj	_	_
+16	seʔõawama	eʔõ	NOUN	n	Case=Ref|Rel=NCont|Tense=Past	17	nmod	_	_
+17	momewaβa	momeʔu	NOUN	n	Case=Ref|Nomzr=Circ	10	parataxis	_	_
+
+# sent_id = 0011.55
+# text = SãoSebastião ʔara , seʔõawera , Cristãos ojmoete ojemotupana
+# text_eng = The christians honour Saint Sebastian's day, of his death, making it (a) holy(day)     Catalogo January 20
+# text_por = 
+1	SãoSebastião	SãoSebastião	PROPN	propn	_	2	nmod	_	_
+2	ʔara	ʔar	NOUN	n	Case=Ref	7	obj	_	_
+3	,	,	PUNCT	punct	_	2	punct	_	_
+4	seʔõawera	eʔõ	NOUN	n	Case=Ref|Rel=NCont|Tense=Past	2	appos	_	_
+5	,	,	PUNCT	punct	_	4	punct	_	_
+6	Cristãos	cristão	NOUN	n	Number=Plur	7	nsubj	_	_
+7	ojmoete	ete	VERB	v	Person[obj]=3|Person[subj]=3|Voice=Cau	0	root	_	_
+8	ojemotupana	tupa	VERB	v	Person=3|Reflex=Yes|VerbForm=Ger|Voice=Cau	7	xcomp	_	tupã-ʔar-a
+
+# sent_id = 66666666
+# text = Janejara momeʔureme , serobβjasareʔɨma potɨrõw ijɨβõijjɨβõmo , ijukaβo
+# text_eng = Those who did not believe him worked together shooting arrows at him, killing him, for announcing our lord   Catalogo 20 January
+# text_por = 
+1	Janejara	jar	NOUN	n	Case=Ref|Clusivity=In|Number=Plur|Person=1	2	nmod	_	_
+2	momeʔureme	momeʔu	NOUN	n	Mood=Sub	5	advcl	_	_
+3	,	,	PUNCT	punct	_	2	punct	_	_
+4	serobβjasareʔɨma	erobβja	NOUN	n	Case=Ref|Nomzr=Ag|Polarity=Neg|Rel=NCont	5	nsubj	_	_
+5	potɨrõw	potɨr	NOUN	n	NonFoc=Yes	0	root	_	_
+6	ijɨβõijjɨβõmo	ɨβõ	VERB	v	_	5	advcl	_	_
+7	,	,	PUNCT	punct	_	6	punct	_	_
+8	ijukaβo	juka	VERB	vt	Rel=NCont|VerbForm=Ger	6	conj	_	_
+
+# sent_id = 777777
+# text = Tupã momeʔu sɨkɨijeʔɨma , sauwsuβa rese seʔõuw
+# text_eng =    Catalogo 20 January
+# text_por = 
+1	Tupã	Tupã	PROPN	propn	_	2	nmod	_	_
+2	momeʔu	mombeʔu	NOUN	n	_	3	nsubj	_	_
+3	sɨkɨijeʔɨma	sɨkɨije	NOUN	n	Case=Ref|Priv=Yes	7	xcomp	_	_
+4	,	,	PUNCT	punct	_	7	punct	_	_
+5	sauwsuβa	auwsuβ	NOUN	n	Case=Ref|Rel=NCont	7	obl	_	_
+6	rese	ese	ADP	posp	Rel=Cont	5	case	_	_
+7	seʔõuw	eʔõ	NOUN	n	NonFoc=Yes|Rel=NCont	0	root	_	_
+
+# sent_id = 888888
+# text = ʃepo ʃepɨ aβa po ipɨ ʔara omemɨrawera kwaβire , SantaMaria omemɨra Iesus rerasow Tupã okɨpe , Tupã tuβape ikwaβeʔeŋa judeus rekomojaŋaβa rupi
+# text_eng = Saint Mary took her son to the house of god, after forty days had passed form his birth, in order to present him to god the father, according to the law of the jews. Catalogo 2 February
+# text_por = 
+1	ʃepo	po	NOUN	n	Number=Sing|Person=1	6	nummod	_	_
+2	ʃepɨ	pɨ	NOUN	n	Number=Sing|Person=1	1	conj	_	_
+3	aβa	aβa	NOUN	n	_	4	nummod	_	_
+4	po	po	NOUN	n	_	1	conj	_	_
+5	ipɨ	pɨ	NOUN	n	Rel=NCont	1	conj	_	_
+6	ʔara	ʔar	NOUN	n	Case=Ref	14	advcl	_	_
+7	omemɨrawera	memɨrar	NOUN	n	Reflex=Yes|Tense=Past	6	dep	_	_
+8-9	kwaβire	_	_	_	_	_	_	_	_
+8	kwaβ	kwaβ	NOUN	n	_	6	obl	_	_
+9	ire	ire	ADP	posp	_	8	case	_	_
+10	,	,	PUNCT	punct	_	6	punct	_	_
+11	SantaMaria	SantaMaria	PROPN	_	_	14	nsubj	_	_
+12	omemɨra	omemɨr	NOUN	n	Case=Ref|Reflex=Yes	14	obj	_	_
+13	Iesus	Iesus	PROPN	propn	_	12	appos	_	_
+14	rerasow	so	NOUN	n	NonFoc=Yes|Rel=NCont|Voice=SCau	0	root	_	_
+15	Tupã	Tupã	NOUN	n	_	16	nmod	_	_
+16	okɨpe	ok	NOUN	n	_	14	obl	_	_
+17	,	,	PUNCT	punct	_	14	punct	_	_
+18	Tupã	Tupã	PROPN	propn	_	19	nmod	_	_
+19	tuβape	uβ	NOUN	n	Case=Dat|Rel=NCont	20	obl	_	_
+20	ikwaβeʔeŋa	kwaβeʔeŋ	VERB	v	Rel=NCont|VerbForm=Ger	14	advcl	_	_
+21	judeus	judeu	NOUN	n	_	22	nmod	_	_
+22	rekomojaŋaβa	ekomojaŋ	NOUN	n	Case=Ref|Nomzr=Circ|Rel=Cont	20	advcl	_	_
+23	rupi	upi	ADP	posp	Rel=Cont	22	case	_	_
+
+# sent_id = 999999
+# text = Mokõj pɨkasuaʔɨra isɨ oweraso jetanoŋaβamo
+# text_eng = His mother brought two small pigeons as offering. Catalogo 2 February
+# text_por = 
+1	Mokõj	mokõj	NUM	num	NumType=Card	2	nummod	_	_
+2	pɨkasuaʔɨra	pɨkasuaʔɨr	NOUN	n	Case=Ref	4	obl	_	_
+3	isɨ	sɨ	NOUN	n	Number[psor]=Sing|Person[psor]=1|Rel=NCont	4	obl	_	_
+4	oweraso	so	VERB	v	Person=3|Voice=SCau	0	root	_	_
+5	jetanoŋaβamo	jetanoŋ	NOUN	n	Case=Tra|Nomzr=Circ	4	obl	_	_
+
+# sent_id = 101010101010
+# text = oporomoʔeβo ã sekow
+# text_eng = She was actually teaching people. Catalogo 2 February
+# text_por = 
+1	oporomoʔeβo	moʔe	VERB	v	Animacy=Hum|Incorp=Yes|Person=3|VerbForm=Ger	3	advcl	_	3:advcl
+2	ã	ã	PART	pcl	_	3	discourse	_	_
+3	sekow	eko	NOUN	n	NonFoc=Yes|Rel=NCont	0	root	_	_
+
+# sent_id = 1
+# text = maʔepe cristãos jekwapaβa ?
+# text_eng = What is the sign of the christians? Book 1 chap 2
+# text_por = 
+1	maʔepe	maʔe	PRON	pro	Int=Yes	3	nsubj	_	_
+2	cristãos	cristão	NOUN	n	Number=Plur	3	nmod	_	_
+3	jekwapaβa	kwaβ	NOUN	n	Case=Ref|Nomzr=Circ	0	root	_	_
+4	?	?	PUNCT	punct	_	3	punct	_	_
+
+# sent_id = 2
+# text = Santa Cruz .
+# text_eng = The holy cross. book 1 chap 2
+# text_por = 
+1	Santa	santa	NOUN	n	_	2	nmod	_	_
+2	Cruz	cruz	NOUN	n	_	0	root	_	_
+3	.	.	PUNCT	punct	_	2	punct	_	_
+
+# sent_id = 3
+# text = Marãnamope ?
+# text_eng = Why? Book 1 chap 2
+# text_por = 
+1	Marãnamope	Marãnamo	ADV	adv	Int=Yes	0	root	_	_
+2	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 4
+# text = iʔarɨβo omanõmo janejara janerepɨmeʔeŋawera rese , Ajaŋa rata swi janepɨsɨrõ rese βe
+# text_eng = By dying on it our lord for our rescue, for our liberation from the fire of the devil also. (Book 1 chap 2)
+# text_por = 
+1	iʔarɨβo	ʔar	ADP	posp	Case=Per|Rel=NCont	2	case	_	_
+2	omanõmo	manõ	VERB	V	Person=3|VerbForm=Ger	0	root	_	_
+3	janejara	jar	NOUN	n	Case=Ref|Clusivity=In|Number=Plur|Person=1|Rel=Cont	2	nsubj	_	_
+4	janerepɨmeʔeŋawera	ram	NOUN	n	Case=Ref|Clusivity=In|Number=Sing|Person=1|Rel=Cont|Tense=Past	2	obl	_	_
+5	rese	ese	ADP	posp	Rel=Cont	4	case	_	_
+6	,	,	PUNCT	punct	_	2	punct	_	_
+7	Ajaŋa	Ajaŋa	PROPN	propn	_	8	nmod	_	_
+8	rata	ata	NOUN	n	Rel=Cont	10	obl	_	_
+9	swi	swi	ADP	posp	Rel=Cont	8	case	_	_
+10	janepɨsɨrõ	pɨsɨrõ	NOUN	n	Clusivity=In|Number=Plur|Person=1	2	obl	_	_
+11	rese	ese	ADP	posp	Rel=Cont	10	case	_	_
+12	βe	βe	ADV	adv	_	10	advmod	_	_
+
+# sent_id = 5
+# text = Marã eʔipe ase ojoβasapa ?
+# text_eng = What do people say crossoŋ the face? Book 1 chap 2
+# text_por = 
+1	Marã	marã	PRON	pron	PronType=Int	2	obj	_	_
+2	eʔipe	ʔi	VERB	v	Int=Yes|Person=3	0	root	_	_
+3	ase	ase	PRON	pro	PronType=Prs	2	nsubj	_	_
+4	ojoβasapa	joβasaβ	VERB	vi	Person=3|Reflex=Yes|VerbForm=Ger	2	advcl	_	_
+5	?	?	PUNCT	punct	_	2	punct	_	_
+
+# sent_id = 6
+# text = SantaCruz raʔaŋaβa rese , orepɨsɨrõ jepe , Tupã orejar , oreamotareʔɨmara swi . Tuβa , Taʔɨra , EspiritoSanto rera pupe eʔi
+# text_eng = They say, by the sign of the holy cross, free us, God, our lord, from our lord. In the name of the father, of the son, of the holy ghost. Book 1 chap 2
+# text_por = 
+1	SantaCruz	cruz	NOUN	n	_	2	nmod	_	_
+2	raʔaŋaβa	aʔaŋ	NOUN	n	Case=Ref|Nomzr=Circ	5	obl	_	_
+3	rese	ese	ADP	posp	Rel=Cont	2	case	_	_
+4	,	,	PUNCT	punct	_	5	punct	_	_
+5	orepɨsɨrõ	pɨsɨrõ	NOUN	n	Clusivity=Ex|Number=Plur|Person=1	0	root	_	_
+6	jepe	jepe	PRON	_	_	5	obl	_	_
+7	,	,	PUNCT	punct	_	5	punct	_	_
+8	Tupã	Tupã	PROPN	propn	_	5	vocative	_	_
+9	orejar	jar	NOUN	n	Clusivity=Ex|Number=Plur|Person=1|Rel=Cont	8	appos	_	_
+10	,	,	PUNCT	punct	_	9	punct	_	_
+11	oreamotareʔɨmara	_	NOUN	n	Case=Ref|Clusivity=Ex|Nomzr=Ag|Number=Plur|Person=1|Polarity=Neg	5	obl	_	_
+12	swi	swi	ADP	posp	Rel=Cont	11	case	_	_
+13	.	.	PUNCT	punct	_	12	punct	_	_
+14	Tuβa	uβa	NOUN	n	Rel=NCont	19	nmod	_	_
+15	,	,	PUNCT	punct	_	14	punct	_	_
+16	Taʔɨra	aʔɨr	NOUN	n	Case=Ref|Rel=NCont	19	nmod	_	_
+17	,	,	PUNCT	punct	_	16	punct	_	_
+18	EspiritoSanto	EspiritoSanto	PROPN	_	_	19	nmod	_	_
+19	rera	er	NOUN	n	Rel=Cont	5	obl	_	_
+20	pupe	pupe	ADP	posp	Rel=Cont	19	case	_	_
+21	eʔi	ʔi	VERB	v	Person=3	5	parataxis	_	_
+
+# sent_id = 7
+# text = Marãnamope ase osɨβape joβasaβa moini ?
+# text_eng = Why do we put the crosSing of the face on the forehead? Book 1 chap 2
+# text_por = 
+1	Marãnamope	Marãnamo	ADV	adv	Int=Yes	5	advmod	_	_
+2	ase	ase	PRON	pro	PronType=Prs	5	nsubj	_	_
+3	osɨβape	sɨβa	NOUN	n	Case=Loc|Int=Yes	4	obl	_	_
+4	joβasaβa	joβasaβ	NOUN	n	Case=Ref|Nomzr=Circ	5	nmod	_	_
+5	moini	moin	NOUN	n	NonFoc=Yes|Voice=Cau	0	root	_	_
+6	?	?	PUNCT	punct	_	5	punct	_	_
+
+# sent_id = 812347
+# text = Taʃepɨsɨrõ Tupã , maʔenwasaβaiβa swi  ojaβo
+# text_eng = (By) saying, may god save me from bad memories
+# text_por = 
+1	Taʃepɨsɨrõ	pɨsɨrõ	NOUN	n	Mood=Per|Number=Sing|Person=1	2	obj	_	_
+2	Tupã	Tupã	PROPN	propn	_	6	ccomp	_	_
+3	,	,	PUNCT	punct	_	2	punct	_	_
+4	maʔenwasaβaiβa	maʔenwar	NOUN	n	Nomzr=Circ	2	obl	_	_
+5	swi	swi	ADP	posp	Rel=Cont	4	case	_	_
+6	ojaβo	ʔi	VERB	v	Person=3|VerbForm=Ger	0	root	_	_
+
+# sent_id = 9
+# text = Marãnamope ase ojurupe saʔãŋino ?
+# text_eng = Why do we also make the sign on our mouths? Book 1 chap 2
+# text_por = 
+1	Marãnamope	marãnamo	ADV	adv	Int=Yes	4	advmod	_	_
+2	ase	ase	PRON	pro	PronType=Prs	4	nsubj	_	_
+3	ojurupe	juru	NOUN	n	Case=Loc|Reflex=Yes	4	obl	_	_
+4	saʔãŋino	aʔãŋ	NOUN	n	NonFoc=Yes|Rel=NCont	0	root	_	_
+5	?	?	PUNCT	punct	_	4	punct	_	_
+
+# sent_id = 1034634563
+# text = tojpeʔa Tupã jeʔẽmemwã ʃejuru swi ojaβo
+# text_eng = (By) saying may god remove evil words away from my mouth. Book 1 chap 2
+# text_por = 
+1	tojpeʔa	peʔa	VERB	v	Mood=Per|Person[obj]=3|Person[subj]=3	6	ccomp	_	_
+2	Tupã	Tupã	PROPN	propn	_	1	nsubj	_	_
+3	jeʔẽmemwã	jeʔẽmemwã	NOUN	n	_	1	obj	_	_
+4	ʃejuru	juru	NOUN	n	Number=Sing|Person=1|Rel=Cont	1	obl	_	_
+5	swi	swi	ADP	posp	Rel=Cont	4	case	_	_
+6	ojaβo	ʔi	VERB	v	Person=3|VerbForm=Ger	0	root	_	_
+
+# sent_id = 113456
+# text = Marãnamope ase opotiʔape imoini ?
+# text_eng = Why do they put it on their chests? Book 1 chap 2
+# text_por = 
+1	Marãnamope	marãnamo	ADV	adv	Int=Yes	4	advmod	_	_
+2	ase	ase	PRON	pro	PronType=Prs	4	nsubj	_	_
+3	opotiʔape	potiʔ	NOUN	n	Case=Loc|Reflex=Yes	4	obl	_	_
+4	imoini	moin	NOUN	n	NonFoc=Yes|Rel=NCont	0	root	_	_
+5	?	?	PUNCT	punct	_	4	punct	_	_
+
+# sent_id = 1235234535
+# text = Taʃepeʔa Tupã tekoaŋajpaβa swi , ase jɨʔã swi osemaʔe  ojaβo
+# text_eng = (by) saying, may god keep me apart from the evil acting, which comes from people's hearts. Book 1 chap 2
+# text_por = 
+1	Taʃepeʔa	peʔa	NOUN	n	Mood=Per|Number=Sing|Person=1	10	ccomp	_	_
+2	Tupã	Tupã	PROPN	propn	_	1	nsubj	_	_
+3	tekoaŋajpaβa	ekoaŋajpaβ	NOUN	n	Case=Ref|Nomzr=Circ|Rel=Hum	1	obl	_	_
+4	swi	swi	ADP	posp	Rel=Cont	3	case	_	_
+5	,	,	PUNCT	punct	_	3	punct	_	_
+6	ase	ase	PRON	pro	PronType=Prs	7	nmod	_	_
+7	jɨʔã	jɨʔã	NOUN	n	_	9	nmod	_	_
+8	swi	swi	ADP	posp	Rel=Cont	7	case	_	_
+9	osemaʔe	sem	NOUN	n	Nomzr=Rel|Person=3	3	appos	_	_
+10	ojaβo	ʔi	VERB	v	Person=3|VerbForm=Ger	0	root	_	_
+
+# sent_id = 130987
+# text = Marãnamo βepe ase joβasaβi ?
+# text_eng = Why do we also cross our faces? Book 1 chap 2
+# text_por = 
+1	Marãnamo	marãnamo	ADV	adv	_	4	advmod	_	_
+2	βepe	βe	ADV	adv	Int=Yes	4	advmod	_	_
+3	ase	ase	PRON	pro	PronType=Prs	4	nsubj	_	_
+4	joβasaβi	joβasaβ	NOUN	n	NonFoc=Yes	0	root	_	_
+5	?	?	PUNCT	punct	_	4	punct	_	_
+
+# sent_id = 14765
+# text = SantissimaTrinade Tuβa , Taʔɨra , EspiritoSanto mosapɨr aβa , ojepe Tupã momewaβo jẽ
+# text_eng = Proclaiming in fact the holy trinity, father, son, holy ghost, three persons, one god. Book 1 chap 2
+# text_por = 
+1	SantissimaTrinade	SantissimaTrinade	PROPN	propn	_	12	obj	_	_
+2	Tuβa	uβa	NOUN	n	Case=Ref|Rel=NCont	1	appos	_	_
+3	,	,	PUNCT	punct	_	2	punct	_	_
+4	Taʔɨra	aʔɨr	NOUN	n	Case=Ref|Rel=NCont	1	appos	_	_
+5	,	,	PUNCT	punct	_	4	punct	_	_
+6	EspiritoSanto	EspiritoSanto	PROPN	_	_	1	appos	_	_
+7	mosapɨr	mosapɨr	NUM	num	NumType=Card	8	nummod	_	_
+8	aβa	aβa	NOUN	n	_	1	appos	_	_
+9	,	,	PUNCT	punct	_	8	punct	_	_
+10	ojepe	ojepe	NUM	num	NumType=Card	11	nummod	_	_
+11	Tupã	Tupã	PROPN	propn	_	1	appos	_	_
+12	momewaβo	momeʔu	VERB	v	VerbForm=Ger	0	root	_	_
+13	jẽ	jẽ	PART	pcl	_	12	discourse	_	_
+
+# sent_id = 15
+# text = Marãnemetepe ase joβasaβine ?
+# text_eng = When do poeple make the sign of the cross? Book 1 chap 2
+# text_por = 
+1	Marãnemetepe	Marãneme	ADV	adv	Int=Yes	3	advmod	_	_
+2	ase	ase	PRON	pro	PronType=Prs	3	nsubj	_	_
+3	joβasaβine	joβasaβ	NOUN	n	Emph=Yes|NonFoc=Yes	0	root	_	_
+4	?	?	PUNCT	punct	_	3	punct	_	_
+
+# sent_id = 163964
+# text = maʔe ɨpɨruŋa jaβiʔõ , kwepe marãteko omoʔaŋekoaime
+# text_eng = Each time something begins somewhere, whenever the word upsets 
+# text_por = 
+1	maʔe	maʔe	NOUN	n	_	2	nmod	_	_
+2	ɨpɨruŋa	ɨpɨruŋ	NOUN	n	Case=Ref	0	root	_	_
+3	jaβiʔõ	jaβiʔõ	DET	_	_	2	nmod	_	_
+4	,	,	PUNCT	punct	_	2	punct	_	_
+5	kwepe	kwepe	ADV	adv	_	7	advmod	_	_
+6	marãteko	marãteko	NOUN	n	_	7	nmod	_	_
+7	omoʔaŋekoaime	_	NOUN	n	Mood=Sub|Reflex=Yes|Voice=Cau	2	parataxis	_	_
+
+# sent_id = 1719728
+# text = Marãneme βepe ?
+# text_eng = When else?
+# text_por = 
+1	Marãneme	Marãneme	ADV	adv	_	0	root	_	_
+2	βepe	βe	ADV	adv	Int=Yes	1	discourse	_	_
+3	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 18999990
+# text = Oker janone , opakawerɨpe , oka swi osema βe
+# text_eng = Before sleeping, in waking up, also when leaving the house. Book 1 chap 2  
+# text_por = 
+1	Oker	ker	NOUN	n	Reflex=Yes	0	root	_	_
+2	janone	janone	ADP	posp	_	1	case	_	_
+3	,	,	PUNCT	punct	_	1	punct	_	_
+4	opakawerɨpe	ok	NOUN	n	Case=Loc|Reflex=Yes|Tense=Past	1	conj	_	_
+5	,	,	PUNCT	punct	_	4	punct	_	_
+6	oka	oka	NOUN	n	Case=Ref	8	obl	_	_
+7	swi	swi	ADP	posp	Rel=Cont	6	case	_	_
+8	osema	sem	NOUN	n	Case=Ref|Reflex=Yes	1	conj	_	_
+9	βe	βe	ADV	adv	_	1	advmod	_	_
+
+# sent_id = 19437563
+# text = Osoβasape ase oemiʔurama ?
+# text_eng = Do we bless what we are going to eat?
+# text_por = 
+1	Osoβasape	oβasa	VERB	vt	Int=Yes|Person[obj]=3|Person[subj]=3	0	root	_	_
+2	ase	ase	PRON	pro	PronType=Prs	1	nsubj	_	_
+3	oemiʔurama	emiʔu	NOUN	n	Case=Ref|Nomzr=DevPass|Reflex=Yes|Tense=Fut	1	obl	_	_
+4	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 20735
+# text = Osoβasaβ
+# text_eng = The do make the sign of the cross
+# text_por = 
+1	Osoβasaβ	Osoβasaβ	VERB	vt	Person[obj]=3|Person[subj]=3	0	root	_	_
+
+# sent_id = 213134
+# text = Marãnamope ?
+# text_eng = Why? Book 1 chap 2
+# text_por = 
+1	Marãnamope	marãnamo	ADV	adv	Int=Yes	0	root	_	_
+2	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 22
+# text = Taʃemaran umẽ iʔwaβo ojaβo
+# text_eng = (By) saying may I not fall ill eating it. Book 1 chap 2
+# text_por = 
+1	Taʃemaran	maran	NOUN	n	Mood=Per|Number=Sing|Person=1|Rel=Cont	4	ccomp	_	_
+2	umẽ	umẽ	PART	pcl	Polarity=Neg	1	discourse	_	_
+3	iʔwaβo	ʔu	VERB	v	Rel=NCont|VerbForm=Ger	1	advcl	_	_
+4	ojaβo	ʔi	VERB	v	Rel=NCont|VerbForm=Ger	0	root	_	_
+
+# sent_id = 23
+# text = Marãnamope ase joβasaβetaetawne ?
+# text_eng = Why will we make the cign of the cross more and more? Book 1 chap 2
+# text_por = 
+1	Marãnamope	Marãnamo	ADV	adv	Int=Yes	3	advmod	_	_
+2	ase	ase	PRON	pro	PronType=Prs	3	nsubj	_	_
+3	joβasaβetaetawne	joβasaβ	NOUN	vt	Emph=Yes|NonFoc=Yes|Red=Di|Tense=Fut	0	root	_	_
+4	?	?	PUNCT	punct	_	3	punct	_	_
+
+# sent_id = 24
+# text = Taʃepɨsɨrõ Tupã ʃesumarã swi , kwepe marã ʃerekoape , ojaβo
+# text_eng = Que me livre Deus de meus inimigos, em toda parte, em minhas dificuldades. Book 1 chap 2
+# text_por = 
+1	Taʃepɨsɨrõ	pɨsɨrõ	NOUN	n	Mood=Per|Number=Sing|Person=1	10	ccomp	_	_
+2	Tupã	Tupã	PROPN	propn	_	1	nsubj	_	_
+3	ʃesumarã	marã	PRON	pron	PronType=Int	1	obl	_	_
+4	swi	swi	ADP	posp	Rel=Cont	3	case	_	_
+5	,	,	PUNCT	punct	_	1	punct	_	_
+6	kwepe	kwepe	ADV	adv	_	8	advmod	_	_
+7	marã	marã	PRON	pron	PronType=Int	8	nmod	_	_
+8	ʃerekoape	eko	NOUN	n	Case=Loc|Nomzr=Circ|Number=Sing|Person=1|Rel=Cont	1	advcl	_	_
+9	,	,	PUNCT	punct	_	8	punct	_	_
+10	ojaβo	ʔi	VERB	v	Person=3|VerbForm=Ger	0	root	_	_
+
+# sent_id = 25
+# text = Aβape ase sumarã ?
+# text_eng = Who is our enemy? Book 1 chap 2
+# text_por = 
+1	Aβape	aβa	NOUN	n	Int=Yes	0	root	_	_
+2	ase	ase	PRON	pro	PronType=Prs	3	nmod	_	_
+3	sumarã	sumarã	PRON	pron	PronType=Int	1	nsubj	_	_
+4	?	?	PUNCT	punct	_	3	punct	_	_
+
+# sent_id = 26
+# text = Ajaŋa .
+# text_eng = The Devil. Book 1 chap 2
+# text_por = 
+1	Ajaŋa	Ajaŋa	PROPN	propn	_	0	root	_	_
+2	.	.	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 27
+# text = Ojerokɨpe ase Cruz supe ?
+# text_eng = Do we bow to the cross? Book 1 chap 2
+# text_por = 
+1	Ojerokɨpe	_	VERB	vt	Person[obj]=3|Person[subj]=3|Reflex=Yes|VerbForm=Ger	0	root	_	_
+2	ase	ase	PRON	pro	PronType=Prs	1	nsubj	_	_
+3	Cruz	cruz	NOUN	n	_	1	obl	_	_
+4	supe	supe	ADP	posp	Rel=Cont	3	case	_	_
+5	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 28
+# text = Ojerokɨ .
+# text_eng = We bow ourselves.
+# text_por = 
+1	Ojerokɨ	jerokɨ	VERB	vt	Person[obj]=3|Person[subj]=3|Reflex=Yes|VerbForm=Ger	0	root	_	_
+2	.	.	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 29
+# text = Marã ɨβɨra supe jẽpe ase jerokɨw ?
+# text_eng = How is it to wood then that we bow? Book1 chap 2 
+# text_por = 
+1	Marã	marã	ADV	pron	Int=Yes	6	advmod	_	_
+2	ɨβɨra	ɨβɨra	NOUN	n	_	6	obl	_	_
+3	supe	supe	ADP	posp	Rel=NCont	2	case	_	_
+4	jẽpe	jẽ	PART	pcl	Int=Yes	2	discourse	_	_
+5	ase	ase	PRON	pro	PronType=Prs	6	nsubj	_	_
+6	jerokɨw	jerokɨ	NOUN	n	NonFoc=Yes|Reflex=Yes	0	root	_	_
+7	?	?	PUNCT	punct	_	6	punct	_	_
+
+# sent_id = 30
+# text = Aʔãni , saʔaŋaβɨjara supe e sese omaʔenwaramo
+# text_eng = No, only to the meaning of the symbol, remembering him. Book 1 chap 2
+# text_por = 
+1	Aʔãni	aʔãni	INTJ	intj	Polarity=Neg	3	discourse	_	_
+2	,	,	PUNCT	punct	_	1	punct	_	_
+3	saʔaŋaβɨjara	aʔaŋ	NOUN	n	Nomzr=Circ|Rel=NCont	0	root	_	_
+4	supe	supe	ADP	posp	Rel=Cont	3	case	_	_
+5	e	e	PART	pcl	_	3	discourse	_	_
+6	sese	ese	ADP	posp	Rel=NCont	7	case	_	_
+7	omaʔenwaramo	maʔenwar	NOUN	n	Case=Tra|Reflex=Yes	3	advcl	_	_
+
+# sent_id = 31
+# text = Aβape Cruz raʔaŋaβɨjara ?
+# text_eng = Who is the meaning of the symbol? Book 1 chap 2
+# text_por = 
+1	Aβape	aβa	NOUN	n	Int=Yes	0	root	_	_
+2	Cruz	cruz	NOUN	n	_	3	nmod	_	_
+3	raʔaŋaβɨjara	aʔaŋa	NOUN	n	Nomzr=Circ|Rel=Cont	1	nsubj	_	_
+4	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 32
+# text = janejara JesusCristo .
+# text_eng = Our lord Jesus Christ. Book 1 chap 2
+# text_por = 
+1	janejara	jar	NOUN	n	Case=Ref|Clusivity=In|Number=Plur|Person=1|Rel=Cont	0	root	_	_
+2	JesusCristo	JesusCristo	PROPN	propn	_	1	appos	_	_
+3	.	.	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 33
+# text = Marãnamope ?
+# text_eng = Why? Book 1 chap 2
+# text_por = 
+1	Marãnamope	marãnamo	ADV	adv	Int=Yes	0	root	_	_
+2	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 34
+# text = Sese imojarɨpɨ́ramo omanõmo ojemoatãawera rese .
+# text_eng = Because he was laid on the cross, dying as a crucified on it. Book 1 chap 2
+# text_por = 
+1	Sese	ese	ADP	posp	Rel=NCont	2	case	_	_
+2	imojarɨpɨ́ramo	_	NOUN	n	Case=Tra|Nomzr=DevPass|Rel=NCont	3	advcl	_	_
+3	omanõmo	manõ	VERB	V	Person=3|VerbForm=Ger	4	advcl	_	_
+4	ojemoatãawera	ram	NOUN	n	Case=Ref|Reflex=Yes|Tense=Past	0	root	_	_
+5	rese	ese	ADP	posp	Rel=Cont	4	case	_	_
+6	.	.	PUNCT	punct	_	4	punct	_	_
+
+# sent_id = 35
+# text = Ojerokɨpe ase janejara raʔaŋaβa supe , SantaMaria raʔaŋaβa supe , santos ɨβakɨpenwara raʔaŋaβa supe βe ?
+# text_eng = Do we bow to the image of our lord, to the image of holy Mary, also to the image of the saints that are in heaven? Book 1 chap 2
+# text_por = 
+1	Ojerokɨpe	jerokɨ	VERB	vt	Int=Yes|Person[obj]=3|Person[subj]=3|Voice=Mid	0	root	_	_
+2	ase	ase	PRON	pro	PronType=Prs	1	nsubj	_	_
+3	janejara	jar	NOUN	n	Case=Ref|Clusivity=In|Number=Plur|Person=1|Rel=Cont	4	nmod	_	_
+4	raʔaŋaβa	aʔaŋ	NOUN	n	Case=Ref|Nomzr=Circ	1	obl	_	_
+5	supe	supe	ADP	posp	_	4	case	_	_
+6	,	,	PUNCT	punct	_	1	punct	_	_
+7	SantaMaria	SantaMaria	PROPN	propn	_	8	nmod	_	_
+8	raʔaŋaβa	aʔaŋ	NOUN	n	Case=Ref|Nomzr=Circ	1	obl	_	_
+9	supe	supe	ADP	posp	Rel=Cont	8	case	_	_
+10	,	,	PUNCT	punct	_	1	punct	_	_
+11	santos	santo	NOUN	n	_	13	nmod	_	_
+12	ɨβakɨpenwara	ɨβak	NOUN	n	Case=Loc|Nomzr=CCirc	11	acl	_	_
+13	raʔaŋaβa	aʔaŋ	NOUN	n	Case=Ref|Nomzr=Circ	1	obl	_	_
+14	supe	supe	ADP	posp	Rel=Cont	13	case	_	_
+15	βe	βe	ADV	adv	_	1	advmod	_	_
+16	?	?	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 36
+# text = Ojerokɨ .
+# text_eng = We bow! Book 1 chap 2
+# text_por = 
+1	Ojerokɨ	jerokɨ	VERB	vt	Person[obj]=3|Person[subj]=3|VerbForm=Ger	0	root	_	_
+2	.	.	PUNCT	punct	_	1	punct	_	_
+
+# sent_id = 37
+# text = ɨβakɨpe ojkoβaʔe moete jaβepe ase saʔaŋaβa moetew ?
+# text_eng = Do people honour their images the same way they honour those who are in heaven? Book 1 chap 2
+# text_por = 
+1	ɨβakɨpe	ok	NOUN	n	Case=Loc|Int=Yes	2	obl	_	_
+2	ojkoβaʔe	iko	NOUN	n	Nomzr=Rel|Person=3	3	acl	_	_
+3	moete	ete	VERB	v	Voice=Cau	4	obl	_	_
+4	jaβepe	jaβe	SCONJ	sconj	Int=Yes	7	advcl	_	_
+5	ase	ase	PRON	pro	PronType=Prs	7	nsubj	_	_
+6	saʔaŋaβa	aʔaŋ	NOUN	n	Case=Ref|Nomzr=Circ	7	obj	_	_
+7	moetew	ete	NOUN	n	NonFoc=Yes|Voice=Cau	0	root	_	_
+8	?	?	PUNCT	punct	_	7	punct	_	_
+
+# sent_id = 38
+# text = ijaβe
+# text_eng = in the same way! Book 1 chap 2 (fix sentence 37 based on 38)
+# text_por = 
+1	ijaβe	jaβe	SCONJ	sconj	Rel=NCont	0	root	_	_
+
+# sent_id = 39
+# text = Marã ita jẽpe , kojpo ɨβɨra , jauʔuma imojaŋɨmɨra jẽpe ase ojmoete ?
+# text_eng = How do people in fact honor metal or wood, something made of clay?  Book 1 chap 2 (why marã at the beginning?)
+# text_por = 
+1	Marã	marã	ADV	adv	Int=Yes	12	advmod	_	_
+2	ita	ita	NOUN	n	_	12	obj	_	_
+3	jẽpe	jẽ	PART	pcl	Int=Yes	2	discourse	_	_
+4	,	,	PUNCT	punct	_	2	punct	_	_
+5	kojpo	kojpo	CCONJ	cc	ConjType=Disj	2	cc	_	_
+6	ɨβɨra	ɨβɨra	NOUN	n	_	2	conj	_	_
+7	,	,	PUNCT	punct	_	6	punct	_	_
+8	jauʔuma	jauʔum	NOUN	n	Case=Ref	2	conj	_	_
+9	imojaŋɨmɨra	mojaŋ	NOUN	n	Rel=NCont	8	appos	_	_
+10	jẽpe	jẽ	PART	pcl	Int=Yes	8	discourse	_	_
+11	ase	ase	PRON	pro	PronType=Prs	12	nsubj	_	_
+12	ojmoete	ete	VERB	vt	Person[obj]=3|Person[subj]=3|Voice=Cau	0	root	_	_
+13	?	?	PUNCT	punct	_	12	punct	_	_
+
+# sent_id = 40
+# text = Aʔãni , saʔaŋaβɨjara e . Saʔaŋaβamo sekoreme , sese omaʔenwaramo
+# text_eng = No, actually the meaning of the symbol (they honour)! When being as image of something, as a remimder of it. Book 1 chap 2
+# text_por = 
+1	Aʔãni	aʔãni	INTJ	intj	Polarity=Neg	3	discourse	_	_
+2	,	,	PUNCT	punct	_	1	punct	_	_
+3	saʔaŋaβɨjara	aʔaŋ	NOUN	n	Nomzr=Circ|Rel=NCont	0	root	_	_
+4	e	e	PART	pcl	_	3	discourse	_	_
+5	.	.	PUNCT	punct	_	3	punct	_	_
+6	Saʔaŋaβamo	aʔaŋ	NOUN	n	Case=Tra|Nomzr=Circ|Rel=NCont	7	obl	_	_
+7	sekoreme	eko	NOUN	n	Mood=Sub|Rel=NCont	10	advcl	_	_
+8	,	,	PUNCT	punct	_	7	punct	_	_
+9	sese	ese	ADP	posp	Rel=NCont	10	obl	_	_
+10	omaʔenwaramo	maʔenwar	NOUN	n	Case=Tra|Reflex=Yes	3	parataxis	_	_
+

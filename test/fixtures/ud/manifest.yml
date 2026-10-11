@@ -156,3 +156,11 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Italian-Old/master/it_old-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of it_old-ud-test.conllu (the Commedia, Petrocchi 1994 via DanteSearch; opens mid-Inferno at sent OldItalian_Dante_Inferno-1110; MISC carries Canto=/Verso=/UniqueTokenId per token; no MWT/empty-node lines in the head; Old Italian under UD's one `it` tag, P77-3)
+  - path: tupinamba-tudet/tpn_tudet-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tupinamba-TuDeT/master/tpn_tudet-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of tpn_tudet-ud-test.conllu (581 blocks upstream, 324,653 B -> 28,128 B; 2 MWT range lines inside the head; Tupinambá, Gerardi's phonemic normalization, P117-5)
+  - path: guarani-oldtudet/gn_oldtudet-ud-test.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Guarani-OldTuDeT/master/gn_oldtudet-ud-test.conllu
+    whole: true
+    trim: none

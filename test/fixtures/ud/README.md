@@ -526,3 +526,33 @@ conversion). Opens mid-Inferno (sent_id OldItalian_Dante_Inferno-1110,
 "Non ci fare ire a Tizio né a Tifo…"); MISC carries Canto=/Verso= and
 per-token UniqueTokenId. License: CC BY-SA 4.0 (LICENSE.txt + README
 metadata agree, read 2026-08-13).
+
+## tupinamba-tudet + guarani-oldtudet (P117-5, retrieved 2026-10-11)
+
+The colonial Tupí-Guaraní pair of TuLaR (Tupían Language Resources;
+Fabrício Ferraz Gerardi, Lorena Martín Rodríguez et al., Tübingen),
+from `master` of each repo (clone HEADs b32173b5 and f508184c, both
+2026-05-06). Both treebanks are test-split only.
+
+- `tupinamba-tudet/tpn_tudet-ud-test-head50.conllu` — the first 50
+  complete sentence blocks of `tpn_tudet-ud-test.conllu` (581 blocks,
+  324,653 B upstream, sha256 `9357cf53…c692`; 103 MWT range lines
+  file-wide, 2 inside the head, no empty nodes). The file opens with the
+  treebank's `# document_authorship` / `# document_reference` lines (the
+  sources: Araújo's Catecismo 1618, Anchieta's Teatro, Poemas and Arte,
+  Figueira, Bettendorf, the Camarão letters 1645) attached to the first
+  block; per-sentence `# text_eng` / `# text_por`. The forms are
+  Gerardi's phonemic normalization (ʔ, ɨ, β), not the colonial spelling.
+  Language `tpn`.
+- `guarani-oldtudet/gn_oldtudet-ud-test.conllu` — the WHOLE upstream file
+  (59 blocks, 19,384 B, sha256 `eb34d782…6345`; 5 MWT range lines, no
+  empty nodes): Restivo's 1724 Arte (Montoya), Montoya's Tesoro (1639),
+  Arte, Catecismo and Silex (1640); per-sentence `# text_eng` /
+  `# text_spa`. Language `gn` as UD files it (glottolog oldp1258).
+
+Licenses (read verbatim 2026-10-11): each LICENSE.txt — "The treebank is
+licensed under the Creative Commons License Attribution-ShareAlike 4.0
+International. The complete license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode"; each README's
+machine-readable metadata — "License: CC BY-SA 4.0", "Includes text:
+yes" → the per-document attribution override.
