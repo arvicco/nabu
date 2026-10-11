@@ -117,7 +117,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["guaman-poma"]
       refute_nil entry
-      refute entry.wired
+      assert entry.wired, "wired: true — first sync verified 2026-10-11 (1,189 docs / 5,911 passages)"
       assert_equal "manual", entry.sync_policy
       assert_equal ["americas"], entry.axes
     end

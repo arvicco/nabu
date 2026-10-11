@@ -128,7 +128,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["slavistics-pd"]
       refute_nil entry
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired: true — first sync verified 2026-10-11 (21 docs / 5,833 passages, 2 mirror stragglers)"
       assert_equal "manual", entry.sync_policy
     end
 

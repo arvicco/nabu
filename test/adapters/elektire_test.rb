@@ -97,7 +97,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["elektire"]
       refute_nil entry
-      refute entry.wired
+      assert entry.wired, "wired: true — first sync verified 2026-10-11 (205 docs / 375,300 passages)"
       assert_equal "manual", entry.sync_policy
     end
 
