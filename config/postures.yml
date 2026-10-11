@@ -757,11 +757,12 @@ sources:
     kind: {posture: pending, note: "candidate: a kind_map fold over the header's genre catRefs
         (the facets genre/kind/subject carry KorBa's own codes verbatim — kanc, dydakt, …);
         the fold is a ruled table, not a default"}
-    lect: {posture: pending, note: "candidate: pl:mid by date-band inference over the print-year
-        envelopes (the dta/de:early mold) — Middle Polish, the corpus's 1601–1772 span; BLOCKED
-        on the aggregated Slavic nabu-lects mint (no pl anchor and no Old/Middle Polish stage
-        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare pl is
-        minted meanwhile"}
+    lect: {posture: identity, note: "pl IS Polish — the P116-1 pending retired 2026-10-11:
+        the Slavic nabu-lects package minted pl with pl:old [1136, 1500] and pl:mid
+        [1500, 1780], and the standing date-band inference (lect infer-dates over the
+        print-year envelopes — the dta/de:early mold) stages every closed interval of the
+        corpus's 1601–1775 span onto pl:mid at document grain; open intervals stay
+        honestly bare. No facet rule, so the declaration stays (the dta precedent)"}
     dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
         @notBefore/@notAfter with the prose kept raw)"}
     places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
@@ -771,11 +772,10 @@ sources:
   prague-bible-1488:   # P116-1
     # kind: machine-postured — kind_map.yml source_kind scripture (the
     # whole-source Bible precedent: vulgate/eng-web/sblgnt).
-    lect: {posture: pending, note: "candidate: a cs → cs:old override (lect_overrides.yml) —
-        the 1488 print is Old Czech by every periodization (Old Czech to c. 1500); BLOCKED on
-        the aggregated Slavic nabu-lects mint (no cs anchor and no Old/Middle Czech stage
-        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare cs is
-        minted meanwhile"}
+    # lect: machine-postured since 2026-10-11 — the whole-source cs → cs:old
+    # override in config/lect_overrides.yml (the Slavic nabu-lects package
+    # minted cs:old [1100, 1500]; the P116-1 pending retired at the flip,
+    # the shadowing rule).
     dating: {posture: dated, note: "every page carries the edition's 1488 (the record and the
         htr-united yml: notBefore/notAfter 1488) — the artifact date, :structured lane"}
     places: {posture: named, note: "Prague — the edition's own name (Bible pražská), the

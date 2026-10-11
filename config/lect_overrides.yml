@@ -151,3 +151,11 @@ sources:
   # manuscript copy date — the P108-4 posture note).
   kokubunken:
     jpn: { lect: "jpn:emj", tier: certain }
+  # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
+  # package minted cs with cs:old [1100, 1500], in canonical): the Prague
+  # Bible of 1488 IS Old Czech by every periodization (staročeština to
+  # c. 1500; the registry's own cs:old note names it the first complete
+  # printed Old Czech Bible). A per-collection fact: upstream codes the
+  # whole edition bare cs. Tier certain: one dated print, inside the band.
+  prague-bible-1488:
+    cs: { lect: "cs:old", tier: certain }
