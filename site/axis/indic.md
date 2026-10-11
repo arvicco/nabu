@@ -14,17 +14,20 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 ## The shelves
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 October 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · manual | 15,741 docs / 753,093 passages |
 | `dharma-deccan` | texts | attribution | not yet wired | nothing held yet |
+| `dharma-mdt` | texts | attribution | not yet wired | not synced yet |
 | `dharma-tamil` | texts | attribution | not yet wired | nothing held yet |
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
+| `siddham` | texts | attribution | not yet wired | not synced yet |
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 

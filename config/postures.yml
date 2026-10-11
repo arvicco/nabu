@@ -1085,6 +1085,45 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (kaw-Latn/osn-Latn/san-Latn); Kawi and
         Old Sundanese scripts are the artifact facts"}
+  dharma-mdt:
+    # P118-4: the DHARMA metadata-row sidecar (zero-passage documents).
+    kind: {posture: unclassified, note: "the row's own text typology rides metadata
+        text_types verbatim (donative-religious_land_grant, commemorative-memorial-
+        hero_memorial …); a kind_map fold over it is a recorded future look after the
+        first live census"}
+    lect: {posture: pending, note: "candidate: the tel + tam anchors of the aggregated
+        Indic nabu-lects mint (P118-7) — Telugu 97 rows and Pallava's one Tamil row name
+        languages with no registry node yet; Sanskrit rows resolve on bare san, rows
+        naming no language carry und"}
+    dating: {posture: partial, note: "the rows' own CE dating: Date CE / Date range CE
+        (61 of 734 documents — Telugu 60, Pallava 1; census 2026-10-11) with certainty and
+        evidence (reign / palaeography / internal date) riding the envelope; all CE
+        already — no era-typed years, config/eras.yml unconsumed; rows via MetadataDates
+        :structured"}
+    places: {posture: unplaced, note: "no findspot column: the 'Location on the artefact
+        /conglomerate artefact/monument' cell (96 rows) is free prose ('On a stone lying
+        in a field at Addanki'), recorded verbatim as artefact_location, never a place
+        claim"}
+    script: {posture: qualified, note: "no text surface — the rows' script classification
+        and maturity ride metadata verbatim"}
+  siddham:
+    # P118-4: the Siddham EpiDoc archive (427 editions, blank TEI headers —
+    # the English title is the only metadata the asset carries).
+    kind: {posture: unclassified, note: "the titles name the object (Charter / Pillar
+        Inscription / Seal Legend / Graffito …) in free English prose — no typed genre
+        field; a title-vocabulary fold is a recorded future look"}
+    lect: {posture: identity, note: "san-Latn on all 427 editions (census 2026-10-11) — the
+        bare san anchor is the claim; deliberately coarse (no epigraphic-Sanskrit stage)"}
+    dating: {posture: partial, note: "title-mined only (headers blank): 9 era-typed 'GE N'
+        years via config/eras.yml (Gupta–Valabhī, GE Y → CE [Y+319, Y+320]) + 4 century
+        attributions (401–500 / 501–600); 88 untyped 'year N' titles ride raw as
+        title_year, never converted (the title names no era); the editions' own dating
+        formulae are a future extractor story — rows via MetadataDates :structured"}
+    places: {posture: unplaced, note: "no origPlace (headers blank); the findspot leads
+        the English title in prose (Eran / Gadhwa / Khoh …) but no structured field
+        carries it — the offline metadata spreadsheets are not in the deposit"}
+    script: {posture: qualified, note: "romanized (san-Latn IAST); the Brāhmī-derived
+        scripts of the objects are the artifact facts"}
   ojw:
     lect: {posture: identity, note: "kaw — the v1.6.0 anchor, shared with the kakawin
         corpora (pending retired at the P92 gate)"}
