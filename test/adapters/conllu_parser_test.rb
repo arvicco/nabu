@@ -59,6 +59,48 @@ class ConlluParserTest < Minitest::Test
     assert_equal "The Gothic Bible, Matthew 7", first.annotations["source"]
   end
 
+  # --- sentence translations + references (P118-R4 S6) -------------------
+  # The held-but-dark audit: UD sentence-level translation comments
+  # (text_en, translation, translated_text, sent_transl_*, transl_*) and
+  # the reference comment were read past. One whitelist now carries them.
+
+  def test_text_en_translation_rides_annotations
+    path = File.join(FIXTURES, "coptic-bohairic", "cop_bohairic-ud-test-head50.conllu")
+    first = parse_whitelisted(path, language: "cop").first
+    assert_equal({ "text_en" => "The beginning of the Good News of Jesus Christ, the Son of God." },
+                 first.annotations["translations"])
+  end
+
+  def test_translation_comment_rides_annotations
+    path = File.join(FIXTURES, "hittite-hittb", "hit_hittb-ud-test-head50.conllu")
+    first = parse_whitelisted(path, language: "hit").first
+    assert_equal "If someone injures a person and makes him ill, he will heal that person.",
+                 first.annotations.dig("translations", "translation")
+  end
+
+  def test_reference_comment_rides_annotations
+    first = parse_whitelisted(LATIN, language: "lat").first
+    assert_equal "ittb-scg-s2102", first.annotations["reference"]
+    refute first.annotations.key?("translations"), "no translation comment, no key"
+  end
+
+  def test_empty_translation_comments_mint_nothing
+    io = StringIO.new("# sent_id = 1\n# text = a\n# sent_transl_en = \n" \
+                      "1\ta\ta\tX\t_\t_\t0\troot\t_\t_\n\n")
+    refute parse_whitelisted(io, language: "orv").first.annotations.key?("translations")
+  end
+
+  def test_sentence_comment_whitelist_is_opt_in
+    path = File.join(FIXTURES, "coptic-bohairic", "cop_bohairic-ud-test-head50.conllu")
+    annotations = parse(path, urn: "urn:x", language: "cop").first.annotations
+    refute annotations.key?("translations"),
+           "callers serving translations as sibling documents (old-tibetan) keep them out"
+  end
+
+  def parse_whitelisted(source, language:)
+    Nabu::Adapters::ConlluParser.new.parse(source, urn: "urn:x", language: language, sentence_comments: true)
+  end
+
   # --- multiword tokens: latin-ittb --------------------------------------
 
   def test_latin_mwt_range_line_present_in_annotations

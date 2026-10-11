@@ -169,13 +169,29 @@ class GlauxTest < Minitest::Test
   end
 
   # P104-1 (Q77): the metadata.txt GENRE_STANDARD column projects as a
-  # facet. DIALECT deliberately does NOT facet here: a Greek-dialect lect
-  # story needs a lects-registry ruling (registry notes carry philology)
-  # — it stays metadata-only until that decision lands.
+  # facet. The ADAPTER emits no DIALECT facet: a Greek-dialect lect story
+  # needs a lects-registry ruling (registry notes carry philology); the
+  # plain "dialect" filter facet is facet_map's projection (P118-R4).
   def test_genre_rides_as_a_facet_and_dialect_stays_metadata
     facets = adapter.parse(ref_for(EPIGRAM_URN)).metadata["facets"]
     assert_equal({ "value" => "Lyric poetry" }, facets["genre"])
     refute facets.key?("dialect")
+  end
+
+  # P118-R4 S6 (the held-but-dark audit): the verse "line" citation and
+  # the pre-normalization "form_original" (editorial brackets: "<οἱ>")
+  # ride the tokens; metadata.txt's TM_TEXT (the Trismegistos text id)
+  # rides the document metadata.
+  def test_line_and_form_original_ride_the_tokens
+    tokens = adapter.parse(ref_for(WORK_URN)).flat_map { |passage| passage.annotations["tokens"] }
+    token = tokens.find { |candidate| candidate["id"] == "122737810" }
+    assert_equal "7.118.3", token["line"]
+    assert_equal "<οἱ>", token["form_original"]
+    assert_equal "οἱ", token["form"], "the reading form is unchanged"
+  end
+
+  def test_tm_text_rides_the_document_metadata
+    assert_equal "12631", adapter.parse(ref_for(EPIGRAM_URN)).metadata["tm_text"]
   end
 
   def test_glaux_is_registered_for_the_composition_class_signed_bounds_shape

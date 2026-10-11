@@ -106,6 +106,24 @@ class TcpXmlParserTest < Minitest::Test
            "German foot-notes never leak into passages")
   end
 
+  # P118-R4 S6 (the held-but-dark audit): EEBO-TCP's NOTEs are the PRINTS'
+  # own marginalia (scripture references, glosses — 457k PLACE="marg" in
+  # one phase-1 shelf), so the eebo adapter arms notes: true and they ride
+  # the unit's "notes" annotation. The reading text is unchanged either way;
+  # CME (editor's apparatus) keeps dropping them.
+  def test_notes_ride_the_unit_annotation_when_armed
+    line = parse("tenwives.xml", notes: true).to_a.find { |p| p.text.include?("herkenes to my songe") }
+    assert_equal "And herkenes to my songe;", line.text, "the note never enters the reading text"
+    assert_equal [{ "place" => "marg", "n" => "1",
+                    "text" => "Every final d, g, m, n, has a curl to it, which in some cases umst meane." }],
+                 line.annotations["notes"]
+  end
+
+  def test_notes_stay_out_by_default
+    line = tenwives.to_a.find { |p| p.text.include?("herkenes to my songe") }
+    refute line.annotations.key?("notes"), "CME's notes are the editor's apparatus"
+  end
+
   def test_choice_takes_corr_and_drops_sic
     passage = hematoscopy.to_a.find { |p| p.text.include?("Blod þat is þynne") }
     assert_includes passage.text, "þouȝ",
