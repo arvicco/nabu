@@ -1,6 +1,7 @@
 # config/postures.yml — per-source CORE-LAYER posture declarations
 # (P61-0 consolidation of the P59-4 config/lect_posture.yml; the D59-f
-# wave-1 frame, .docs/core-layers-architecture.md).
+# wave-1 frame of the ratified core-layers design; usage in
+# docs/operating-library.md §2).
 #
 # One row per source, one key per layer (lect / dating / places /
 # script), each holding what pure JUDGMENT can state — machine-knowable

@@ -18,7 +18,7 @@ Census facts the tests pin (2026-08-29, over the whole files): lex-1
 real entries — the README's "367,011" counts raw lines, because the file
 carries ONE contiguous 24,295-line blank run (raw lines 224,165–248,459:
 the late-འ…ཡ alphabetical band is absent upstream —
-`.docs/upstream-reports.md`), plus 377 duplicate headwords (max ×2), 70
+reported upstream), plus 377 duplicate headwords (max ×2), 70
 trailing-tab lines, and 520 NFC-unstable lines (composition-excluded
 Tibetan vowels: U+0F75 decomposes to U+0F71+U+0F74 under NFC — boundary
 NFC applies, bod is not exempt). The censused dirt shapes are tested via

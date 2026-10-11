@@ -12,7 +12,7 @@ removed, structure intact; the trim recipe is in the manifest).
   (교육부 국사편찬위원회_승정원일기 정보_20221103): one zip, 298
   members / 2.44 GB unpacked, members 0.5–19 MB, `history.dtd`
   shipped in the zip. Download via the `Nabu::DataGoKrFetch`
-  three-step resolution (see `.docs/p78-plan.md` §Acquisition).
+  three-step resolution (documented in `lib/nabu/data_go_kr_fetch.rb`).
 - **Retrieved:** 2026-08-18 (whole zip; members below extracted and
   trimmed). In-zip file dates 2022-10-27.
 - **License:** 이용허락범위 제한 없음 (useScopeCode COEX07 in the

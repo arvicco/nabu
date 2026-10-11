@@ -13,7 +13,7 @@ files:
   - path: edh.md
     whole: true
     refetchable: false
-    reason: local shelf — no upstream; body distilled from docs/library.md §8g + docs/edh-survey.md
+    reason: local shelf — no upstream; body distilled from docs/library.md §8g + the P17-2 EDH survey
   - path: lexica.md
     whole: true
     refetchable: false

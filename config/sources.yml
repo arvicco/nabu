@@ -2451,7 +2451,7 @@ ja-wikisource:   # P109-1
   sync_policy: manual
   # The Japanese Wikisource premodern era cone (№R-74 posture:
   # premodern cone, verbatim base-edition strings, census-first —
-  # .docs/p109-plan.md). Census: 867 ns-0 pages across the eight era
+  # the P109 phase plan). Census: 867 ns-0 pages across the eight era
   # categories 飛鳥–江戸. Since P111-2 the fetch expands BOTH shell
   # residues — <pages index> scans (Page:-namespace payloads,
   # revid-pinned) and parameterized dispatcher shells
@@ -3053,7 +3053,7 @@ monlam-lexicon:   # P88-A3, 02-sources row 183
   # found is UNLICENSED and parked (the app SQLite, the scraped CSVs) —
   # definitions need an upstream ask, never the scrape. The Grand list's
   # file carries a censused 24,295-line blank hole (the late-འ…ཡ band;
-  # .docs/upstream-reports.md) — README's 367,011 counts raw lines.
+  # reported upstream) — README's 367,011 counts raw lines.
   # EXPECTED FIRST SYNC (~29 MB clone): 449,829 bod entries — monlam
   # 107,113 + grand 342,716 — the desk's largest lexical shelf by two
   # orders of magnitude, glossless, complementary to wiktionary-bo.
@@ -4400,8 +4400,8 @@ sillok:
   # 15053646 Gojong/Sunjong; 제한 없음 → D47-a attribution). Hanmun only —
   # the modern Korean translation layer is NOT in the dumps, never fetched.
   # Fetch resolves the CURRENT atchFileId per dataset (DataGoKrFetch —
-  # the id bumps on upstream file replacement; .docs/p78-plan.md
-  # §Acquisition), then normal ZipFetch per dataset subdir.
+  # the id bumps on upstream file replacement; resolved by the P78
+  # acquisition round), then normal ZipFetch per dataset subdir.
   license_watch: https://www.data.go.kr/data/15053647/fileData.do
   sync_policy: manual
 
@@ -5792,7 +5792,7 @@ zh-wikisource:   # P109-1
                    # author 畢沅 now in metadata)
   sync_policy: manual
   # Censused works, prefix-expanded (№R-74; census in
-  # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
+  # the P109 phase plan): 全唐文 1,001 juan (transclusion shells — the
   # fetch expands the ~20k piece pages offline into juan envelopes) ·
   # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
   # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編
