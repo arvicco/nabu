@@ -893,6 +893,18 @@ sources:
         metadata 'imprint' — the printing place, not a text place (the dta stance)"}
     script: {posture: implied, note: "Latin script prose (Antiqua/Fraktur); the Cyrillic and
         Glagolitic-in-Cyrillic object text is uncorrected OCR, frequently mis-read as Latin"}
+  archiv-slav-phil:   # Q105
+    # kind: machine-postured — kind_map.yml source_kind scholarly.
+    lect: {posture: identity, note: "the reference-shelf posture (slavistics-pd, the
+        local-library precedent): deu, the journal's language — Russian, Serbo-Croatian and
+        other Slavic-language articles ride inside the German volumes uncoded (coarse,
+        declared); scholarship ABOUT Slavic, never a Slavic lect claim"}
+    dating: {posture: dated, note: "each volume's title-page year (a 1964-reprint scan keeps the
+        original's) — :structured lane"}
+    places: {posture: unplaced, note: "the imprint (Berlin: Weidmann) rides metadata 'imprint'
+        — the printing place, not a text place"}
+    script: {posture: implied, note: "Latin script prose; Cyrillic quotations are uncorrected
+        OCR"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle

@@ -534,6 +534,8 @@ sources:
   slavistics-pd:
     source_kind: scholarly   # Q105: the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
+  archiv-slav-phil:
+    source_kind: scholarly   # Q105: Jagić's Archiv für slavische Philologie volumes
   eng-web:
     source_kind: scripture
   vuk-danicic:

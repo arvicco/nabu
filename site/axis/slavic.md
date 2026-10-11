@@ -17,6 +17,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 October 2026)</span> |
 |---|---|---|---|---|
+| `archiv-slav-phil` | texts | open | not yet wired | nothing held yet |
 | `bg-wikisource` | texts | attribution | wired · manual | 26 docs / 220 passages |
 | `ccmh` | texts | attribution | wired · manual | 19 docs / 28,786 passages |
 | `cs-wikisource` | texts | attribution | wired · manual | 330 docs / 4,748 passages |
