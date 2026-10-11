@@ -25,14 +25,14 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
-| `starling` | etymological bases | attribution | wired · manual | 113,419 entries |
+| `starling` | etymological bases | attribution | wired · manual | 146,798 entries |
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `zho` 327,296 · `rus` 18,239 · `ine` 17,427 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `dra-sou-pro` 4,692 · `sit-pro` 2,823 … and 108 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `zho` 327,296 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 125 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 
