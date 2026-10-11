@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Every file is a documented TRIM (whole: false) — fetched for URL-liveness
+# only; adapter_test is null (trimmed counts would false-fail on full files).
+source: kannada-texts
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: tei/Pampa/pampa-ādipurāṇaṁ-a1.xml
+    url: https://raw.githubusercontent.com/aso2101/kannada_texts/main/tei/Pampa/pampa-%C4%81dipur%C4%81%E1%B9%87a%E1%B9%81.xml
+    whole: false
+    trim: "teiHeader + body opening + āśvāsa 1 stanzas 1-3, 42-43 with the first prose p, 84 + the āśvāsa trailer + the closing trailer (upstream lines 1-107, 339-355, 660-672, 13442-13445)"
+  - path: tei/Janna/janna-anantanāthapurāṇaṁ-a1.xml
+    url: https://raw.githubusercontent.com/aso2101/kannada_texts/main/tei/Janna/janna-anantan%C4%81thapur%C4%81%E1%B9%87a%E1%B9%81.xml
+    whole: false
+    trim: "teiHeader + āśvāsa 1 stanzas 1-4 (footnotes) and 16-27 (the tripadi metrical label, the va. prose label) + its trailer (upstream lines 1-119, 187-261, 859-866, 10743-10745)"
+  - path: tei/Honnamma/honnamma-hadibadeyadharma-iso-s1-9.xml
+    url: https://raw.githubusercontent.com/aso2101/kannada_texts/main/tei/Honnamma/honnamma-hadibadeyadharma-iso.xml
+    whole: false
+    trim: "teiHeader (text xml:lang san-Latn, commented-out sourceDesc) + sandhi 1 stanzas 1-3 + sandhi 9 stanzas 1-7 with the cited Gītā śloka + the closing trailer (upstream lines 1-112, 467, 2625-2683, 3113-3120)"
+  - path: tei/Nāgavarma II/nāgavarma-karṇāṭakabhāṣābhūṣaṇam-s1-4.xml
+    url: https://raw.githubusercontent.com/aso2101/kannada_texts/main/tei/N%C4%81gavarma%20II/n%C4%81gavarma-kar%E1%B9%87%C4%81%E1%B9%ADakabh%C4%81%E1%B9%A3%C4%81bh%C5%AB%E1%B9%A3a%E1%B9%87am.xml
+    whole: false
+    trim: "teiHeader + the opening anuṣṭubh + section 1 sūtras 1-4 with the kan-Latn example lists (upstream lines 1-130, 4790-4793)"

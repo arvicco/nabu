@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI xml:space="preserve" 
+     n="Nijjutti-Ayara"
+     xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+	<title xml:lang="pra-Latn">Āyāranijjuttī</title>
+	<author xml:lang="pra-Latn">Bhaddabāhū</author>
+	<author xml:lang="san-Latn">Bhadrabāhu</author>
+	<principal>
+	  <persName ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+      </titleStmt>
+
+      <publicationStmt>
+        <authority>Prakrit Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2025</date>
+      </publicationStmt>
+
+      <sourceDesc>
+	<listBibl>
+	  <head>This edition is based on the edition of the <title>Ācārāṅganiryukti</title> prepared by Willem Bollée. I (AO) received Professor Bollée’s files from Professor Thomas Oberlies, and I reformatted the text files and converted the encoding to Unicode (ISO-15919).</head>
+	  <!-- Full bibligraphic entry !-->
+	</listBibl>
+      </sourceDesc>
+    </fileDesc>
+
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="pra-Latn">Prakrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+
+    <encodingDesc>
+      <p>This file contains the Prakrit text of the <title xml:lang="pra-Latn">Āyāranijjuttī</title>, which is written in 356 <foreign xml:lang="pra-Latn">gāhā</foreign>s numbered continuously.</p>
+      <p>I have left Professor Bollée’s capitalization and marking of sandhi. However, I have introduced the following changes:</p>
+      <list>
+	<item><foreign xml:lang="pra-Latn">c'eva</foreign> is changed systematically to <foreign xml:lang="pra-Latn">cēva</foreign>.</item>
+	<item><foreign xml:lang="pra-Latn">ng(h) and nk(h)</foreign> are changed systematically to <foreign xml:lang="pra-Latn">ṅg(h) ṅk(h)</foreign>.</item>
+      </list>
+    </encodingDesc>
+
+    <revisionDesc>
+      <change when="2025-09-15" who="#aso">Initial commit.</change>
+    </revisionDesc>
+  </teiHeader>
+
+  <text xml:lang="pra-Latn">
+    <body>
+      <lg n="1">
+	<l>vandittu savva-siddhē Jiṇē ya aṇuōga-dāyaē savvē</l>
+	<l>āyārassa bhagavaō nijjuttiṁ kittaïssāmi</l>
+      </lg>
+      <lg n="65">
+	<l>ittha ya saha saṁmaïē jam ēyaṁ tattha jāṇaṇā hōī</l>
+	<l>ōhī-maṇa-pajjava-nāṇa-kēvalē jāi-saraṇē ya</l>
+      </lg>
+      <lg n="66"
+	  <l>para<|vaï|>-vāgaraṇaṁ puṇa
+	  Jiṇa-vāgaraṇa5 Jiṇā paraṁ n'atthi</l>
+	  <l>annēsiṁ sōccanti ya Jiṇēhĩ savvō parō annō</l>
+      </lg>
+    </body>
+  </text>
+</TEI>
+

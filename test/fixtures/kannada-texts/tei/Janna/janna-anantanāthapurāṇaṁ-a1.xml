@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" version="5.0" n="Ananta">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="kan-Latn">Anantanāthapurāṇaṁ</title>
+	<title xml:lang="kan-Knda">ಅನಂತನಾಥಪುರಾಣಂ</title>
+	<author xml:lang="kan-Latn">Janna</author>
+	<principal>
+	  <persName xml:id="AO" ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>OCR with Gemini 3.0 Model and revisions</resp>
+	  <persName ref="#AO">Andrew Ollett</persName>
+	</respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Kannada Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2065</date>
+      </publicationStmt>
+      <sourceDesc>
+	<listBibl>
+	  <biblStruct xml:id="ed">
+	    <monogr>
+	      <title level="m" xml:lang="eng">Anantanathapuranam by Janna</title>
+	      <title level="m" xml:lang="kan-Knda">ಅನಂತನಾಥ ಪುರಾಣಂ ಜನ್ನಕವಿ ಕೃತಂ</title>
+	      <editor>
+		<persName>
+		  <forename>D.</forename>
+		  <surname>Srinivasachar</surname>
+		</persName>
+	      </editor>
+	      <editor>
+		<persName>
+		  <forename>H. R.</forename>
+		  <surname>Rangaswamy Iyengar</surname>
+		</persName>
+	      </editor>
+	      <imprint>
+		<publisher xml:lang="eng">Government Branch Press</publisher>
+		<pubPlace xml:lang="eng">Mysore</pubPlace>
+		<date when="1930">1930</date>
+	      </imprint>
+	    </monogr>
+	    <series>
+	      <title level="s">Oriental Library Publications Kannada Series</title>
+	      <biblScope unit="volume">18</biblScope>
+	    </series>
+	  </biblStruct>
+	</listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="kan-Latn">Kannada in Roman transliteration (ISO-15919)</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+      </editorialDecl>
+      <refsDecl>
+	<cRefPattern matchPattern="Ananda.([0-9]+).([0-9]+)" replacementPattern="#xpath(//tei:div[@type='āśvāsaṁ'][@n='$1']/tei:lg[@n='$2'])"/>
+      </refsDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2026-02-13" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text xml:lang="kan-Latn">
+    <body>
+      <div type="āśvāsaṁ" n="1">
+	<pb n="1"/>
+	<head>prathamāśvāsaṁ</head>
+	<lg n="1">
+          <l>śrīmadanantabōdhadinanantavilōkanadindanantasau</l>
+          <l>khyāmr̥tadindanantabaladiṁ tanagādudanantanāmamu</l>
+          <l>ddāmadanantakarmajayadiṁ dorevettudu mattanantaji</l>
+          <l>nnā manenippa nīge maganantajinēndrananantasaukhyamaṁ</l>
+	</lg>
+	<lg n="2">
+          <l>siddhar niṣpanna saukhyōdayada mahimeyiṁ sanda nityatvadindaṁ</l>
+          <l>siddhar lōkāgradoḷ niścaḷa nivasanarāgirda vikhyātiyindaṁ</l>
+          <l>siddhar tāmādamūrtar caramatanusamar nirguṇar sadguṇar saṁ</l>
+          <l>śuddhar siddhar nitāntaṁ nilisuge nijaniḥśrēyasayoḷemmaṁ</l>
+	</lg>
+	<lg n="3">
+          <l>rōcarmāḷegaḷante taḷeseye ṣaṭtriṁśadguṇaṁ kūḍe paṁ</l>
+          <l>cācārācaraṇaṁ digambaraviḷāsōdyāsamambhōda la</l>
+          <l>kṣmīcāturmukhabimbadiṁ paramadharmāmbhōjinīsūryarā</l>
+          <l>dācāryar dayeyiṁ kalbuge madīyassvāntadiṁ dhvāntamaṁ</l>
+	</lg>
+	<lg n="4">
+          <l>nyāyajyōtiyanikki meṭṭi kumatathyāntaṅgaḷaṁ muktipā</l>
+          <l>thēyaṁ nirmaḷadharmavemba nuḍi bhavyargappinaṁ tōrpupā</l>
+          <l>dhyāyargānatanappe nīgenagupādēyaṁ para<note place="bottom" n="1">ka. bare.</note> brahmamiṁ</l>
+          <l>hēyaṁ kāyasamētavastuvenipīniḥśrēyasōpāyamaṁ</l>
+	</lg>
+	<pb n="2"/>
+	<lg n="16">
+          <l>vikaḷaspaṣṭapakṣamenisidu</l>
+          <l>dakaḷaṅkana vākyavajrahatiyiṁ naiyā</l>
+          <l>yika pāramarṣa<note place="bottom" n="2">ga. pāravarṣa.</note> mimāṁ</l>
+          <l>saka bārhaspatya bauddha kuḷa kudharakuḷaṁ</l>
+	</lg>
+	<pb n="4"/>
+	<label type="metrical">tripadi</label>
+	<lg n="17">
+          <l>vandyarjaṭāsiṁhaṇandyacāryādhīndra</l>
+          <l>ṇandyacāryādimuniparākārga</l>
+          <l>ṇandyarpr̥thiviyoḷagellaṁ</l>
+	</lg>
+	<lg n="18">
+          <l>guṇacandraṁ taividyā</l>
+          <l>graṇi ghōratapaḥkr̥śānutanuguṇiyādaṁ</l>
+          <l>gaṇitanabhōmaṇi jinamuni</l>
+          <l>gaṇacūḍāmaṇi suśīlaguṇagaṇi negaḻdaṁ</l>
+	</lg>
+	<lg n="19">
+          <l>āmunipatigaṁ śīlama</l>
+          <l>hāmahimōnnategamogedaramaḷenipamaḷa</l>
+          <l>rtāmalla kanakacandrama</l>
+          <l>hāmuniyuṁ mādhavēnduyatipuṅgavanuṁ</l>
+	</lg>
+	<lg n="20">
+          <l>yatirūpacandrasūry</l>
+          <l>dvitayamidene kanakacandra mādhavacandra</l>
+          <l>vratigaḷ sadharmarudyō</l>
+          <l>titasiddhāntōtpaḷāmbujākararesedar</l>
+	</lg>
+	<lg n="21">
+          <l>jayakēśikṣitipālanāne visaṭambāybindu beḷḷāve<note place="bottom" n="1">ga. vēḷāve.</note>yoḷ</l>
+          <l>layakālāntakanante bandoḍacaḷarnindirpuduṁ moḍḍa pā</l>
+          <l>dayugaṅgaḷu paśāntiyinde balavandācāramaṁ tāḷi śā</l>
+          <l>leyoḷirdudu mādhavēndramuni[sāmarthyaṁ]<note place="bottom" n="2">ka. pārmathyaṁ ; ga. pāmarthyaṁ.</note> jagadvanditaṁ</l>
+	</lg>
+	<lg n="22">
+          <l>śrīmaddhaṇḍavimuktati</l>
+          <l>khāmaṇigaḷ rāmacandradēvamunīndrar</l>
+          <l>prēmada śiṣyāgrēsara</l>
+          <l>rāmādhavacandradēvasaiddhāntikarā</l>
+	</lg>
+	<pb n="5"/>
+	<lg n="23">
+          <l>neneyalbāradu suṭṭi tōṟalaridārgaṁ rāmacandravratīṁ</l>
+          <l>drana durvāranighōravīratapamēnaṁ pēḷvepeṁ dūrada</l>
+          <l>rśana dūraśravaṇaṁ prasidda<note place="bottom" n="1">ga. prasiddi.</note> maladhāriprābhavaṁ kukkuṭā</l>
+          <l>sanavāgaṇḍavimuktavartane puradvāraṁ sadaikāntaraṁ</l>
+	</lg>
+	<lg n="24">
+          <l>madanana keydu keyda karaśākhe muruṇṭidudeyē goṭṭuga</l>
+          <l>ṭṭidudu sarale bīgi nanedōruva pūguḍi billa karvu nāṁ</l>
+          <l>ṭadenasidattu nāriyeḷadumbiyamāleyakoṅke sī</l>
+          <l>dudirdudu rāmacandramunināthana śāntirasātirēkadiṁ</l>
+	</lg>
+	<lg n="25">
+          <l><note place="bottom" n="2">yaśōdharacarite-padya 22.</note>śrīmatkāṇūrgaṇaciṁ</l>
+          <l>tāmaṇigaḷ rāmacandradēvamunīndrar</l>
+          <l>tāme gaḍa gurugaḷenipa ma</l>
+          <l>hāmahimege jannanante nōntavanāvaṁ</l>
+	</lg>
+	<lg n="26">
+          <l>lakumādēvi suśīle suvratanidhānaṁ rāyadaṇḍādhinā</l>
+          <l>thakr̥tāntaṁ pesarvetta cākaṇanapatyaṁ rēcayaṁ petta pu</l>
+          <l>tri kulastrī gaḍa bhāḷalōcanana bhavyācāragārhasthyamēṁ</l>
+          <l>sakalaiśvaryagabhīramēṁ satatadānādhāramēṁ sāramō</l>
+	</lg>
+	<p><label type="metrical">va.</label>āsamyaktvacūḍāmaṇibhūṣaṇeya gurukuḷaprasiddācāryaroḷage</p>
+	<lg n="27">
+          <l>jāvaḷigeya municandra</l>
+          <l>traividyara viśrutaśrutapratibōdhaṁ</l>
+          <l>dēvaradēvana jinapana</l>
+          <l>kēvaḷalōcanada nuḍida nālageyembeṁ</l>
+	</lg>
+	<trailer>idu paramajinasamayavanavasantasantānārāma rāmacandra<lb/>
+	munīndraprasādāsādita ratnatrayābharaṇakiraṇaprasa<lb/>
+	nnāntaḥkaraṇa kavicakravartibiruda kavibhāḷa<lb/>
+	lōcana janārdanadēva viracitamappa<lb/>
+	anantanātha purāṇadoḷ<lb/>
+	pīṭhikāprakaraṇavarṇanaṁ<lb/>
+	prathamāśvāsaṁ.</trailer>
+      </div>
+  </body>
+  </text>
+</TEI>

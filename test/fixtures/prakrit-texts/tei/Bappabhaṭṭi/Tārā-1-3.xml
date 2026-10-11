@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI n="Tārā" xmlns="http://www.tei-c.org/ns/1.0" version="5.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="pra-Latn">Tārāyaṇō</title>
+        <title type="main" xml:lang="san-Latn">Tārāgaṇaḥ</title>
+        <author xml:lang="pra-Latn">Bappahaṭṭī</author>
+        <author xml:lang="san-Latn">Bappabhaṭṭiḥ</author>
+	<principal>
+	  <persName ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>OCR and correction by</resp>
+	  <name>Andrew Ollett</name>
+	</respStmt>
+      </titleStmt>
+
+      <publicationStmt>
+        <authority>Prakrit Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2022</date>
+      </publicationStmt>
+
+      <sourceDesc>
+        <biblStruct>
+	  <monogr>
+            <title type="main" level="m" xml:lang="eng">Tārāyaṇa (Tārāgaṇa)</title>
+            <title type="sub" level="m" xml:lang="eng">An Anthology of Bappabhaṭṭī’s Prakrit Gāthās Compiled by Śāṅkuka with an Anonymous Sanskrit Commentary</title>
+	    <idno type="oclc">475143600</idno>
+            <editor>
+	      <persName ref="https://viaf.org/viaf/37078794/">
+		<forename>H. C.</forename>
+		<surname>Bhayani</surname>
+	      </persName>
+	    </editor>
+	    <imprint>
+              <publisher>Prakrit Text Society</publisher>
+              <pubPlace>
+		<placeName xml:lang="eng">Ahmedabad</placeName>
+	      </pubPlace>
+              <date>1987</date>
+	    </imprint>
+	  </monogr>
+	  <series>
+	    <title level="s">Prakrit Text Series</title>
+	    <biblScope unit="number">24</biblScope>
+	    <editor>
+	      <persName ref="https://viaf.org/viaf/37078794/">
+		<forename>H. C.</forename>
+		<surname>Bhayani</surname>
+	      </persName>
+	    </editor>
+	    <editor>
+	      <persName ref="https://viaf.org/viaf/24820644/">
+		<forename>D. D.</forename>
+		<surname>Malvania</surname>
+	      </persName>
+	    </editor>
+	  </series>
+	</biblStruct>
+	<listWit>
+	  <witness xml:id="b">Jinacāritrasūri MSS. Collection, Bikaner, no. 3584; 20 folios (folios 14, 15 and 16 are missing)</witness>
+	</listWit>
+      </sourceDesc>
+    </fileDesc>
+
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="pra-Latn">Prakrit in Roman transliteration (ISO-15919)</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+
+
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+      </editorialDecl>
+      <refsDecl>
+	<cRefPattern matchPattern="Tārā.([0-9]+)" replacementPattern="#xpath(//tei:lg[@n='$1'])"/>
+      </refsDecl>
+    </encodingDesc>
+
+    <revisionDesc>
+      <change when="2022-04-02" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text xml:lang="pra-Latn">
+    <body>
+      <pb n="1"/>
+      <head type="main">tārāyaṇō</head><lb ed="bh"/>
+      <head type="sub">kaï-bappabhaṭṭi-viraïya-gāhoccaya-rūvō gāhākōsō</head><lb ed="bh"/>
+
+      <div type="section">
+	<lg xml:lang="san-Latn"><lb ed="bh"/>
+          <l><pb n="1A" ed="b"/><note n="1-1"><p><foreign xml:lang="eng">Begins:</foreign> ॥ 50 ॥ arhaṁ ॥</p></note>natvā sarvavidaṁ viracyata iyaṁ ṭīkēti tārāgaṇaḥ</l><lb ed="bh"/>
+	  <l>kōśō ’yaṁ parayā pradōṣa-virahē ’pyābhāti kāntyā yathā</l><lb ed="bh"/>
+	  <l>asmābhiḥ suvivikta-vākya-pavanairutsārayadbhirmahā-</l><lb ed="bh"/>
+	  <l>mōhāmbhōda-tatīrjanasya manasi vyōmnīva nītē mr̥jām</l>
+        </lg><lb ed="bh"/>
+      </div>
+
+      <div type="section">
+        <head xml:lang="eng">Anthologist's homage to the poet's Muse</head><lb ed="bh"/>
+        <lg n="1">
+ 	  <l>nandaü sacchanda-gaī nimmala-paya-pūra-gārava-mahagghō</l><lb ed="bh"/>
+	  <l>jalahi-paḍiruddha-pasarō sukaīṇa sarassaī-pavahō</l>
+        </lg><lb ed="bh"/>
+        <p xml:lang="san-Latn">
+          <s>sukavīnāṁ sarasvatīpravāhō nandatu</s>
+          <s>sarasvatī vāk, tasyāḥ pravaha<lb ed="bh"/> ōghaḥ, sa nandatu</s>
+          <s>kīdr̥g asau</s>
+          <s>svacchandagatiḥ</s>
+          <s>sukavitvādēva svādhīna<lb break="no" ed="bh"/>śabdārthatayā svacchandā aparāyattā gatiḥ pravr̥ttiryasya sa tathā</s>
+          <s>saha<lb ed="bh"/> chandasā gāthādirūpēṇa vartatē iti sacchandā sā tādr̥ggatiḥ pravr̥ttiryasya<lb ed="bh"/> sa tathaiti</s>
+          <s>punaḥ kīdr̥k</s>
+          <s>nirmalapadapūragauravamahārvaḥ</s>
+          <s>nirmalairapaśabdarahitaiḥ<lb ed="bh"/> padaiḥ suptiṅntaiḥ</s>
+          <s>pūraḥ pūrṇatā tadgauravēṇa mahārghaḥ śrēṣṭhaḥ</s>
+          <s>punaḥ jaḍadhī<lb break="no" ed="bh"/>pratiṣiddhaprasaraḥ</s>
+          <s>jaḍadhībhiḥ pratiruddhō nivāritaḥ prasārō ’syēti</s><lb ed="bh"/>
+          <s>sa hi yadi paraṁ jaḍadhiyō mūrkhān prāpya praskhalati, yadi vā prastāra<lb break="no" ed="bh"/>sthāpanāpēkṣayā jaladhinaiva pratiṣiddhaprasaraḥ</s>
+          <s>ityēkō ’rthaḥ</s>
+          <s>anyatra<lb ed="bh"/> sarasvatī nāma nadī tasyāḥ pravahastēna saha ślēṣō ’yaṁ vākpravahasya</s><lb ed="bh"/>
+          <s>svacchandagatiḥ sō ’pītyarthaślēṣaḥ</s>
+          <s>śēṣaḥ śabdaślēṣaḥ</s>
+          <s>tathā hi</s>
+          <s>nirmalasya<lb ed="bh"/> payasō jalasya pūragauravēṇa mahārghaḥ pūjyaḥ</s>
+          <s>punaḥ jaladhinā pratiṣiddha<pb break="no" ed="bh" n="2"/>prasaraḥ</s>
+          <s>nadyō hi samudramavāpya viramanti</s>
+          <s>ētaduktaṁ bhavati</s>
+          <s>sukavīnāṁ<lb ed="bh"/> vākpravahaḥ sarasvatīsaritpravaha iva nandatviti antarbhāvitaślēṣō ’<lb ed="bh"/> yamiti</s>
+	</p><lb ed="bh"/>
+	<note type="translation" xml:lang="eng">
+        <p>
+          <s>May the stream of the Divine Poetic Speech <foreign xml:lang="pra-Latn" rend="parens">sarassaī</foreign> of good<lb ed="bh"/> poets flourish—the stream which operates according to its own will<lb ed="bh"/> and with choice metres <foreign xml:lang="pra-Latn" rend="parens">chanda</foreign>, which is precious <foreign xml:lang="pra-Latn" rend="parens">mahaggha</foreign><lb ed="bh"/> due to the dignity imparted by the wealth of flawless diction<lb ed="bh"/> <foreign xml:lang="pra-Latn" rend="parens">paya</foreign>, and the flow whereof is blocked only by the blockheads<lb ed="bh"/> <foreign xml:lang="pra-Latn" rend="parens">jalahi</foreign>; and which thereby resembles the stream of the river<lb ed="bh"/> Sarasvatī <foreign xml:lang="pra-Latn" rend="parens">sarassaī</foreign>, which moves according to its own liking<lb ed="bh"/> <foreign xml:lang="pra-Latn" rend="parens">chanda</foreign>, which commands reverence <foreign xml:lang="pra-Latn" rend="parens">mahaggha</foreign> due to its mass<lb ed="bh"/> of overflowing limpid water <foreign xml:lang="pra-Latn" rend="parens">paya</foreign>, and the onward flow whereof<lb ed="bh"/> is blocked only by the sea <foreign xml:lang="pra-Latn" rend="parens">jalahi</foreign>. </s>
+          <label rend="parens">1</label>
+          </p><lb ed="bh"/>
+	</note>
+      </div>
+
+      <div type="section">
+	<head xml:lang="eng">Anthologist's homage to poets</head><lb ed="bh"/>
+	<lg n="2">
+	  <l>hiyayāĩ sajjaṇāṇaṁ rañjaï kasiṇēi khalayaṇa-muhāiṁ</l><lb ed="bh"/>
+	  <l>savvaṁ suhāsiyaṁ pi hu jāṇa namō tāṇa sukaīṇaṁ</l>
+	</lg><lb ed="bh"/>
+	<p xml:lang="san-Latn">
+          <s>sudhāsitam iti</s>
+          <s>sudhā prāsādadhavalanadravyaṁ tadvat sitamapi<lb ed="bh"/> śuddhamapi yēṣāṁ kāvyaṁ sajjanahr̥dayāni rañjayati, khalamukhāni kr̥ṣṇayati,<lb ed="bh"/> tēbhyaḥ sukavibhyō namaḥ</s>
+          <s>sitasya hi rañjanakr̥ṣṇīkaraṇē virudhyētē</s><lb ed="bh"/>
+          <s>virōdhaścāyaṁ śabdatō nārthataḥ, <q type="pratīka" xml:lang="pra-Latn">suhāsiyaṁ</q> iti pada yataḥ subhāṣitaśabdā<lb break="no" ed="bh"/>dapi bhavati</s>
+          <s>tēna yat subhāṣitaṁ kāvyaṁ tasya sajjanahr̥dayādirañjanā<lb break="no" ed="bh"/>dikamaviruddhamēvēti</s>
+        </p><lb ed="bh"/>
+	<note type="translation" xml:lang="eng">
+          <p>
+            <s>Salutations to the good poets: <seg rend="parens">it is a wonder that</seg> all of<lb ed="bh"/> their <seg rend="parens">creations</seg>, eventhough they are <foreign xml:lang="pra-Latn">suhāsiya</foreign> <seg rend="parens">1. chunam—white,<lb ed="bh"/> 2, pure and excellent works of verbal art</seg> dye <seg rend="parens">2. give joy to, <foreign xml:lang="pra-Latn">rañjaï</foreign></seg><lb ed="bh"/> the hearts of the good, and blacken the faces of the wicked. </s>
+            <label rend="parens">2</label>
+          </p><pb n="3"/>
+	</note>
+      </div><!-- section !-->
+    </body>    
+  </text>
+</TEI>

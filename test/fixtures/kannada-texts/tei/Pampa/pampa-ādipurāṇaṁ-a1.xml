@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" version="5.0" n="Ādi">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+	<title type="main" xml:lang="kan-Latn">Ādipurāṇaṁ</title>
+        <author xml:lang="kan-Latn">Pampa</author>
+	<principal>
+	  <persName xml:id="AO" ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>Typing and proofreading</resp>
+	  <orgName>Adishila Publications</orgName>
+	  <persName>Krishnaprasada G.</persName>
+	</respStmt>
+	<respStmt>
+	  <resp>TEI structuration</resp>
+	  <persName ref="#AO">Andrew Ollett</persName>
+	</respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Kannada Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2025</date>
+      </publicationStmt>
+      <sourceDesc>
+	<listBibl>
+	  <biblStruct xml:id="ed">
+	    <monogr>
+	      <title level="m" xml:lang="kan-Latn">Pampasampuṭa – Ādipurāṇaṁ Vikramārjunavijayamuṁ</title>
+	      <editor role="general">
+		<persName>
+		  <forename>Ṭi. Vi.</forename>
+		  <surname>Veṅkaṭācalaśāstrī</surname>
+		</persName>
+	      </editor>
+	      <imprint>
+		<publisher xml:lang="eng">Kannada University</publisher>
+		<pubPlace xml:lang="kan-Latn">Hampi</pubPlace>
+		<date when="2006">2006</date>
+	      </imprint>
+	    </monogr>
+	  </biblStruct>
+	</listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="kan-Latn">Kannada in Roman transliteration (ISO-15919)</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+      </editorialDecl>
+      <refsDecl>
+	<cRefPattern matchPattern="Ādi.([0-9]+).([0-9]+)" replacementPattern="#xpath(//tei:div[@type='āśvāsaṁ'][@n='$1']/tei:lg[@n='$2'])"/>
+      </refsDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2025-01-19" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <head>pampamahākaviviracitaṁ<lb/>
+      ādipurāṇaṁ</head>
+      <pb n="3"/>
+    <div n="1" type="āśvāsaṁ">
+      <head>prathamāśvāsaṁ</head>
+      <lg n="1" met="śārdūlavikrīḍitaṁ">
+	<l>śrīdēvēndramunīndravanditaguṇavrātaṁ jagatsvāmi saṁ</l>
+	<l>dādibrahmanagādhabōdhaniḷayaṁ durvārasaṁsāravi</l>
+	<l>cchēdōpāyaniyuktasūktivr̥ṣamārgāgrēsaraṁ pāpahr̥</l>
+	<l>tpādābjaṁ dayegeyvanakkemage muktiśrīsukhāvāptiyaṁ</l>
+      </lg>
+      <lg n="2" met="mahāsragdhare">
+	<l>peṇedeṇṭuṁ kilbiṣaṅgaḷkiḍe kiḍada guṇaṁ porde band’ eṇṭum ādaṁ</l>
+	<l>taṇivaṁ kaikoṇḍamūrtarcaramatanusamākāraruddhūtalēpar</l>
+	<l>praṇutarnityarjaganmaṅgaḷaniḷayaranantartrilōkaikacūḍā</l>
+	<l>maṇigaḷsiddhar svakīyaprabhuteyanemagaṁ māḻkatiprītiyindaṁ</l>
+      </lg>
+      <lg n="3" met="sragdhare">
+	<l>mūvattāṟuṁ guṇaṅgaḷtamagamardire sandaidumācāradoḷsa</l>
+	<l>dbhāvaṁ kaigaṇme śiṣyācaraṇavidhigaḷaṁ tirdi kāruṇyadindaṁ</l>
+	<l>sāvadyaṁ sāradantāgire niyamisuvācāryarinnemmanēnō</l>
+	<l>dāvaṁ taḷtaḻvadant’ ōsarisi kaḷege saṁsārakāntāradindaṁ</l>
+      </lg>
+      <pb n="9"/>
+      <lg n="42" met="kandaṁ">
+	<l>prāṇihitamaṁ vinēya</l>
+	<l>prīṇanakaramaṁ jagattrayaprakaṭitaka</l>
+	<l>lyāṇamanī negaḻdādipu</l>
+	<l>rāṇamanaparimitabhaktiyiṁ viracisuveṁ</l>
+      </lg>
+      <p>ā purāṇakkaṁ lōkākārakathanamuṁ dēśanivēśōpadēśamuṁ<lb/>
+      nagarasampatparivarṇanamuṁ rājyaramaṇīyatākhyānamuṁ tīrthamahima<lb break="no"/>
+      samarthanamuṁ caturgatisvarūpanirūpaṇamuṁ tapōdānavidhānavarṇanamuṁ<lb/>
+      tatphaḷaprāptiprakaṭanamum end’ int’ avayavaṅgaḷ’ eṇṭ’ akkuṁ</p>
+      <lg n="43" met="mattēbhavikrīḍitaṁ">
+	<l>avaṟoḷ lōkam adentuṭendoḍe samantāvaṅgamettetta nō</l>
+	<l>ḍuvoḍaṁ nōḍalanantam appa vibhuvappākāśapadmakke tā</l>
+	<l>ne valaṁ karṇikeyandamāyt ene viyanmadhyasthamantassthaka</l>
+	<l>rmavaśabhrāmyadanēkajīvanivahakrōḍīkr̥tābhyantaraṁ</l>
+      </lg>
+      <pb n="17"/>
+      <lg n="84" met="mattēbhavikrīḍitaṁ">
+	<l>laḷitāḷaṅkaraṇaprasannarasavadgēyaṅgaḷoḷ mūḍutuṁ</l>
+	<l>muḻuguttuṁ khacarījanānananavāmbhōjaṅgaḷoḷ kampanī</l>
+	<l>ḻkoḷutuṁ nandanarājiyoḷnaliyutuṁ tadrājahaṁsaṁ nirā</l>
+	<l>kuḷamī māḻkegaḷinde poḻtugaḷevaṁ saṁsārasārōdayaṁ</l>
+      </lg>
+      <trailer>idu dēvēndramunīndravandyaparamajinēndramukhacandra<lb break="no"/>
+      vākcandrikāprasaraprasādōdīrṇasūktikallōlamālākīrṇa<lb break="no"/>
+      kavitāguṇārṇavapraṇītamappādipurāṇadoḷ<lb/>
+      mahābaḷakumārōdayavarṇanaṁ<lb/>
+      prathamāśvāsaṁ</trailer>
+    </div>
+    <trailer>ādipurāṇaṁ sampūrṇaṁ</trailer>
+    </body>
+  </text>
+</TEI>

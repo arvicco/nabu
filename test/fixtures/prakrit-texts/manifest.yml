@@ -1,0 +1,36 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Every file is a documented TRIM (whole: false) — fetched for URL-liveness
+# only; adapter_test is null (trimmed counts would false-fail on full files).
+source: prakrit-texts
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: tei/Vākpatirāja/GaüḍVa-1-3.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/V%C4%81kpatir%C4%81ja/Ga%C3%BC%E1%B8%8DVa.xml
+    whole: false
+    trim: "teiHeader + body opening (heads, maṅgalācaraṇa label) + gāthās 1-3 and 108-109 with their chāyā notes and app + the closing trailer (upstream lines 1-130, 1398-1425, 13118-13125)"
+  - path: tei/Hēmacandra/DēNāMā-1-2.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/H%C4%93macandra/D%C4%93N%C4%81M%C4%81.xml
+    whole: false
+    trim: "teiHeader + adhyāya 1 gāthās 1-2 + its trailer + adhyāya 2 gāthā 1 (base-text lg n=1 and example lg n=1 → :b2) + the final trailer (upstream lines 1-131, 3757-3785, 16668-16672)"
+  - path: tei/Bappabhaṭṭi/Tārā-1-3.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/Bappabha%E1%B9%AD%E1%B9%ADi/T%C4%81r%C4%81.xml
+    whole: false
+    trim: "teiHeader + the first three n-less sections (the ṭīkā's opening stanza, gāthās 1-2 with the Sanskrit commentary, ed-keyed page breaks) (upstream lines 1-180, 3020-3022)"
+  - path: tei/Śvētāmbarāgama/Agam_44_Chuliyaa_01_Moolam_Nandisuyam_003787-s1-3.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/%C5%9Av%C4%93t%C4%81mbar%C4%81gama/Agam_44_Chuliyaa_01_Moolam_Nandisuyam_003787.xml
+    whole: false
+    trim: "teiHeader (pka-Latn) + sections 1-3 + section 163 + <back> appendix 1 head and section 2 (upstream lines 1-82, 1086-1094, 1152-1157, 1170, 1201-1203)"
+  - path: tei/Śvētāmbarāgama/Agam_01_Angsuttam_01_Moolam_Aayaro_003701-s1-2.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/%C5%9Av%C4%93t%C4%81mbar%C4%81gama/Agam_01_Angsuttam_01_Moolam_Aayaro_003701.xml
+    whole: false
+    trim: "EXCLUDED case: teiHeader (the template-comment availability) + sections 1.1.1.1-2, closed with upstream's own closing-tag lines (upstream lines 1-114, 491, 437, 2033, 4233-4235)"
+  - path: tei/Pravarasēna/Sētu.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/Pravaras%C4%93na/S%C4%93tu.xml
+    whole: false
+    trim: "OVERLAP case (path kept verbatim — the exclusion keys on it): teiHeader (SARIT authority, CC BY-SA 3.0) + canto 1's first kulaka (stanzas 1-4) + the canto trailer (upstream lines 1-202, 459-460, 5843-5845)"
+  - path: quarantine/ācāraniryukti-1-66.xml
+    url: https://raw.githubusercontent.com/aso2101/prakrit_texts/master/tei/Niryukti-Bh%C4%81%E1%B9%A3ya/%C4%80c%C4%81ra/%C4%81c%C4%81raniryukti.xml
+    whole: false
+    trim: "QUARANTINE case, outside tei/ so discovery never sees it: teiHeader + gāthā 1 + gāthās 65-66 (66's unclosed start tag and <|vaï|> marker, verbatim — not well-formed) (upstream lines 1-67, 320-328, 1501-1504)"

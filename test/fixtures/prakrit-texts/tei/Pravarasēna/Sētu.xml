@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI n="Sētu" xmlns="http://www.tei-c.org/ns/1.0" version="5.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="pra-Latn">Rāvaṇavahō</title>
+	<title type="sub" xml:lang="san-Latn">Sētubandhaḥ</title>
+	<author xml:lang="pra-Latn">Pavarasēṇō</author>
+        <author xml:lang="san-Latn">Pravarasenaḥ</author>
+	<funder>The Leverhulme Trust</funder>
+	<principal>Michael Willis</principal>
+        <respStmt>
+          <persName key="name person eb">Eszter Berki</persName>
+          <resp>Creation of machine-readable text up to verse 4.10</resp>
+        </respStmt>
+        <respStmt>
+          <persName key="name person db">Dániel Balogh</persName>
+          <resp>Creation of machine-readable from verse 4.11, proofreading, markup</resp>
+        </respStmt>
+      </titleStmt>
+
+      <publicationStmt>
+        <authority>SARIT: Search and Retrieval of Indic Texts</authority>
+        <availability status="restricted">
+          <p>Copyright Notice</p>
+          <p>Copyright (C) <persName>Eszter Berki</persName>, <persName>Dániel Balogh</persName>,
+            and <orgName>SARIT</orgName>. </p>
+          <p>
+            <ref target="http://creativecommons.org/licenses/by-sa/3.0/" type="licence">Distributed
+              by <ref target="http://sarit.indology.info" type="url">SARIT</ref> under a Creative
+              Commons Attribution-ShareAlike 3.0 Unported License. </ref>
+          </p>
+          <p>Under this licence, you are free <list>
+              <item>to Share — to copy, distribute and transmit the work</item>
+              <item>to Remix — to adapt the work </item>
+            </list></p>
+          <p>Under the following conditions:</p>
+          <p>
+            <list>
+              <item>Attribution — You must attribute the work in the manner specified by the author
+                or licensor (but not in any way that suggests that they endorse you or your use of
+                the work).</item>
+              <item>Share Alike — If you alter, transform, or build upon this work, you may
+                distribute the resulting work only under the same or similar license to this
+                one.</item>
+            </list>
+          </p>
+          <p>More information and fuller details of this license are given on the Creative Commons
+            website.</p>
+          <p>SARIT assumes no responsibility for unauthorised use that infringes the rights of any
+            copyright owners, known or unknown.</p>
+        </availability>
+        <date>2013</date>
+	<idno>2013-09-25</idno>
+      </publicationStmt>
+
+      <notesStmt>
+        <note>The <title>Setubandha</title> by <persName>Pravarasena</persName> transcribed by
+            <persName>Eszter Berki</persName> and <persName>Dániel Balogh</persName> from the
+            <date>1880</date> edition of <persName>Siegfried Goldschmidt</persName>.</note>
+      </notesStmt>
+
+      <sourceDesc>
+        <bibl>
+          <title>Râvaṇavaha oder Setubandha</title>
+          <editor>Siegfried Goldschmidt</editor>
+          <publisher>Karl J. Trübner / Trübner &amp; Co.</publisher>
+          <pubPlace>Strassburg / London</pubPlace>
+          <date>1880</date>
+          <note>Digital copy available via <ptr target="http://openlibrary.org/books/OL13505410M/"/></note>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+
+    <encodingDesc>
+      <editorialDecl>
+        <p>The published edition from which this e-text was transcribed is printed in the Devanāgarī
+          script. The electronic text below is in a lossless transliteration using the Latin
+          alphabet. The transliteration scheme used is the IAST 
+	  (<ref target="http://en.wikipedia.org/wiki/International_Alphabet_of_Sanskrit_Transliteration">The 
+	  International Alphabet of Sanskrit Transliteration</ref>), which is preferred by most
+	  Sanskrit scholars to ISO 15919.</p>
+	<p>Diaereses are used to differentiate disyllabic aï and aü from monosyllabic ai and au.</p>
+	<p>In all other respects this document follows the 
+	  <ref target="http://sarit.indology.info/exist/apps/sarit/docs/encoding-guidelines.html">SARIT 
+	  Encoding Guidelines</ref>. Note that the skandhaka meter in which this text is 
+	  written has two varieties: most lines will have a caesura after the third gaṇa 
+	  (pathyā), which is encoded here, but a few lines will not (vipulā).</p>
+      </editorialDecl>
+    </encodingDesc>
+
+    <revisionDesc>
+      <change when="2013-06-01" who="Eszter Berki">
+        <list>
+          <item>Completed input up to 4.10</item>
+        </list>
+      </change>
+      <change when="2013-08-19" who="Dániel Balogh">
+        <list>
+          <item>Version 0.1 beta</item>
+          <item>Completed input from 4.10 to end</item>
+          <item>Completed markup for verse structure</item>
+          <item>Added TEI encoding.</item>
+        </list>
+      </change>
+      <change when="2013-08-29" who="Dániel Balogh">
+        <list>
+          <item>Version 0.9 beta</item>
+          <item>Merged and homogenised the two text sections</item>
+          <item>Completed proofreading and tagging Eszter's section</item>
+        </list>
+      </change>
+      <change when="2013-09-12" who="Dániel Balogh">
+        <list>
+          <item>Version 1.0</item>
+          <item>Completed full proofreading</item>
+          <item>Incorporated Goldschmidt's corrigenda</item>
+          <item>Checked kulakas and a few suspect typos against other editions</item>
+        </list>
+      </change>
+      <change when="2013-09-16" who="Andrew Ollett">
+        <list>
+          <item>Modified TEI encoding for validation with tei_all.dtd.</item>
+          <item>Moved Dániel's corrections into the main text and Goldschmidt's readings to
+            comments.</item>
+        </list>
+      </change>
+      <change when="2013-09-18" who="Dániel Balogh">
+        <list>
+          <item>Version 1.1</item>
+          <item>Collated the two pages missing from the archive.org scan of Goldschmidt</item>
+        </list>
+      </change>
+
+      <change when="2013-09-24" who="Dominik Wujastyk">
+        <list>
+          <item>Edited the TEI header to conform more closely to the present SARIT header
+            template.</item>
+          <item>Added a pointer to the digitized text.</item>
+        </list>
+      </change>
+
+      <change when="2015-01-08" who="Andrew Ollett">
+	<list>
+	  <item>Minor changes to the text (when Goldschmidt has
+	    printed it incorrectly: see 4.24, 6.12, 8.32). 
+	    Notes in comments.
+	  </item>
+	</list>
+      </change>
+
+      <change when="2015-01-22" who="Andrew Ollett">
+	<list>
+	  <item>Corrected about 60 typos submitted by Paul Dundas.</item>
+	</list>
+      </change>
+
+      <change when="2015-05-29" who="Andrew Ollett">
+	<list>
+	  <item>Converted the @xml:ids of the SARIT version to 
+	     @n values (in accordance with the new guidelines).
+	  </item>
+	  <item>Converted the older encoding with &lt;seg&gt;
+	     to &lt;caesura&gt; (also in accordance with the
+	     new guidelines).
+	  </item>
+	</list>
+      </change>
+
+      <change when="2020-08-10" who="Andrew Ollett">
+	<list>
+	  <item>Converted the file to ISO-15919 encoding.</item>
+	</list>
+      </change>
+    </revisionDesc>
+
+  </teiHeader>
+
+  <text xml:lang="pra-Latn">
+    <body>
+      <pb n="1"/>
+      <div type="canto" n="1">
+        <head>paḍhumō āsāsaō</head>
+        <lg type="kulaka">
+          <label>āikulaaṁ</label>
+          <lg type="stanza" n="1">
+            <l>ṇamaha avaḍḍhia-tuṅgaṁ <caesura/>avasāriavitthaaṁ aṇōṇaa-gahiraṁ</l>
+            <l>appalahua-parisaṇhaṁ<caesura/> aṇāa-paramattha-pāaḍaṁ mahumahaṇaṁ</l>
+          </lg>
+          <lg type="stanza" n="2">
+            <l>daṇuinda-ruhira-laggē<caesura/> jassa phurantē ṇaha-ppahā-vicchaḍḍē</l>
+            <l>guppantī vivalāā<caesura/> galia vva thaṇaṁsuē mahāsura-lacchī</l>
+          </lg>
+          <lg type="stanza" n="3">
+            <l>pīṇattaṇa-duggējjhaṁ<caesura/> jassa bhuā-anta-ṇiṭṭhura-pariggahiaṁ</l>
+            <l>riṭṭhassa visama-valiaṁ<caesura/> kaṇṭhaṁ dukkhēṇa jīviaṁ bōlīṇaṁ</l>
+          </lg>
+          <lg type="stanza" n="4">
+            <l>ōāhia-mahi-vēḍhō<caesura/> jēṇa parūḍha-guṇa-mūla-laddha-tthāmō</l>
+            <l>ummūlantēṇa dumaṁ<caesura/> pārōhō vva khuḍiō mahēndassa jasō</l>
+          </lg>
+        </lg>
+        <trailer>ia siri-pavarasēṇa-viraïē dahamuhavahē mahākavvē paḍhumō āsāsaō samattō</trailer>
+      </div>
+    </body>
+  </text>
+</TEI>
