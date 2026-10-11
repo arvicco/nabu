@@ -8,7 +8,7 @@ module Nabu
     # Slovenian historical dictionary shelf — three ZRC SAZU dictionary
     # deposits on CLARIN.SI, ingested as ONE source with three dictionaries
     # (the lexica LSJ/L&S precedent; census verdict journaled in
-    # docs/backlog.md P23-2 — identical verbatim license, same publisher
+    # docs/history/backlog.md P23-2 — identical verbatim license, same publisher
     # conventions, same fetch shape, so no per-artifact split):
     #
     #   pletersnik (sl) — Pleteršnik, Slovenian–German dictionary 1894–95:

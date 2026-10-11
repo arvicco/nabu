@@ -2,7 +2,7 @@
 
 Real upstream sample from the **official Bosworth-Toller data dump** at
 LINDAT/CLARIAH-CZ (CLAUDE.md fixture rules; plan owner-approved 2026-07-10,
-docs/backlog.md P12-3). Every kept row is **byte-verbatim** upstream data —
+docs/history/backlog.md P12-3). Every kept row is **byte-verbatim** upstream data —
 the extraction recipe re-emits parsed rows through the same CSV semantics the
 adapter reads with and asserts each emitted row appears verbatim in the raw
 bytes; only the record SET was trimmed.

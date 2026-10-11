@@ -1,7 +1,7 @@
 # EDRDG fixtures (P32-4 — KANJIDIC2 + JMdict)
 
 Real upstream samples of the two EDRDG dictionary files (CLAUDE.md fixture
-rules; docs/backlog.md P32-4). Both are documented TRIMS: the full XML
+rules; docs/history/backlog.md P32-4). Both are documented TRIMS: the full XML
 prolog/DTD (JMdict's internal entity definitions are load-bearing — the
 parser expands them) plus a small set of verbatim elements re-wrapped in
 the root tag. **Upstream builds BOTH files NIGHTLY** — the build stamps

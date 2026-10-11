@@ -34,7 +34,7 @@ module Nabu
     # Middle Irish → Old Irish, and the DIL-derived sga etymology text
     # (Proto-Celtic/PIE chains) is KEPT verbatim in entry bodies.
     #
-    # == Upstream (verified page-level + ranged reads, docs/backlog.md P14-1
+    # == Upstream (verified page-level + ranged reads, docs/history/backlog.md P14-1
     # Phase A, 2026-07-12; P17-3 survey .docs/surveys/recon2-survey.md, 2026-07-13;
     # P25-2 Celtic survey .docs/surveys/celtic-survey.md, 2026-07-16;
     # full downloads at fixture builds)

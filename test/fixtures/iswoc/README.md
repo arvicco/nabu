@@ -12,7 +12,7 @@ is tested against a real non-`ang` file, owner-approved 2026-07-10).
   via `raw.githubusercontent.com`, base
   `https://raw.githubusercontent.com/iswoc/iswoc-treebank/574c81cd9dbf8124290e869bc65078c303a36911/`.
 - **Acquisition plan** approved by owner 2026-07-10 ("Approved as is, including
-  the third fixture"; docs/backlog.md P12-1 plan block).
+  the third fixture"; docs/history/backlog.md P12-1 plan block).
 
 ## Files
 

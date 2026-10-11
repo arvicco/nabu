@@ -6,7 +6,7 @@ require "faraday"
 require_relative "../zip_fetch"
 
 module Nabu
-  # Source-health probes (docs/backlog.md Phase 5). The remote probe here is
+  # Source-health probes (docs/history/backlog.md Phase 5). The remote probe here is
   # the network-facing half; the local, run-history half arrives with P5-5.
   module Health
     # `nabu health --remote` — a no-clone, no-corpus-fetch upstream probe run

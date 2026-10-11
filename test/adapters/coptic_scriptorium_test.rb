@@ -125,7 +125,7 @@ class CopticScriptoriumTest < Minitest::Test
   # the standalone bohairic-habakkuk corpus (v6.2.0, gold) AND the
   # bohairic.ot_TT.zip members (v6.0.0, automatic). Everywhere else the
   # standalone editions carry distinct `_ed` urns (nt.mark.sahidica_ed vs
-  # nt.mark.sahidica). The census (docs/backlog.md P17-10) found the two
+  # nt.mark.sahidica). The census (docs/history/backlog.md P17-10) found the two
   # origins byte-DIFFERENT — different releases of the same edition — so the
   # standalone corpus wins by precedence and the zip members are skipped by
   # rule, never doubled into one document.
