@@ -2238,6 +2238,251 @@ anchors:
       pro: {name: Proto-Yeniseian, mode: reconstructed, ord: 5,
             wikt: qfa-yen-pro}
 
+  # ── The Americas (2026-10-11) ─────────────────────────────────────────
+  # The registry's first American nodes, forced by the consuming
+  # library's americas wave: the Ticha colonial Valley Zapotec corpus and
+  # the two colonial UD treebanks (TuDeT Tupinambá, OldTuDeT Guaraní).
+  # Families are minted on standard codes only (ISO 639-5 omq/tup, the
+  # Wiktionary Module:families codes omq-zap/tup-gua, verified
+  # 2026-10-11) and only where a real anchor hangs from them; the deeper
+  # Glottolog-only intermediates (Eastern Otomanguean, Popoloca-Zapotecan,
+  # Eastern Tupian, Maweti-Guarani, the Tupi-Guarani subgroups) carry no
+  # standard code and stay prose with their glottocodes. Glottocodes and
+  # Glottolog classifications verified against glottolog.org 2026-10-11;
+  # ISO 639-3 facts against the SIL code tables of the same day.
+
+  omq:
+    name: Oto-Manguean
+    kind: family
+    glottocode: otom1299
+    note: "ISO 639-5 omq (the LoC hierarchy files it under cai, Central
+           American Indian); Wiktionary omq. The most internally diverse
+           family of Mesoamerica — every member tonal — spoken from
+           Hidalgo and Querétaro to Oaxaca and Guerrero, historically to
+           Nicaragua (Mangue, Subtiaba). Kaufman's (1983, 1988) split,
+           followed by Campbell (1997) and Glottolog: an EASTERN branch
+           (east2557: Popoloca-Zapotecan popo1292 — Popolocan +
+           Zapotecan — and Amuzgo-Mixtecan) against a WESTERN one
+           (Oto-Pamean–Chinantecan, Tlapanec–Manguean). Both branch nodes
+           and Popoloca-Zapotecan carry no ISO or Wiktionary code and are
+           not minted: the chain omq > east2557 > popo1292 > zapo1436 is
+           recorded here, and Zapotecan (omq-zap, which Wiktionary hangs
+           directly on omq) is the first coded node below. Proto-
+           Oto-Manguean (Rensch 1976, Kaufman 1983) carries no pro stage
+           here — no reconstruction corpus is held. Attestation: the
+           Zapotec glyphic inscriptions of the Oaxaca valley (from the
+           mid-1st millennium BCE; only partially deciphered — the
+           language ISO codes xzp, see zap) and the Mixtec pictographic
+           codices are the earliest records; alphabetic writing begins
+           with the mendicant grammars and catechisms of the 1560s–1590s
+           (Feria's Zapotec Doctrina 1567, Córdova's Zapotec Arte and
+           Vocabulario 1578, Reyes's and Alvarado's Mixtec Arte and
+           Vocabulario 1593). Members here: omq-zap"
+
+  omq-zap:
+    name: Zapotecan
+    kind: family
+    parent: omq
+    glottocode: zapo1436
+    note: "Wiktionary family code (Module:families, parent omq, verified
+           2026-10-11); no ISO 639-5 code. Two groups: Zapotec (the zap
+           macrolanguage; Wiktionary's own sub-family omq-zpc) and Chatino
+           (ctp, cya, ctz, …), on the southern Oaxaca coast. Glottolog
+           nests it as Otomanguean > Eastern Otomanguean (east2557) >
+           Popoloca-Zapotecan (popo1292) > Zapotecan; the two intermediate
+           nodes have no standard code and stay this prose (see omq) —
+           the edge to omq is the most specific CODED ancestor, not a
+           claim that Zapotecan is a primary branch. Proto-Zapotec is
+           reconstructed in Kaufman's unpublished drafts (1990s–2000s); no pro stage is
+           minted without a held corpus. Members here: zap"
+
+  zap:
+    name: Zapotec
+    parent: omq-zap
+    glottocode: zapo1437
+    note: "ISO 639-2/3 zap, a MACROLANGUAGE of 58 active individual
+           languages (SIL macrolanguage table, 2026-10-11) — Valley,
+           Sierra Norte, Sierra Sur and Isthmus groups, many mutually
+           unintelligible; Glottolog's crosswalk for zap is the family
+           node zapo1437 'Zapotec' under Zapotecan. Wiktionary keeps zap
+           as a language under omq-zap beside its family omq-zpc
+           'Zapotec' (parent of the individual codes zab, zai, …); no
+           codemap row folds omq-zpc here — a family code is not a
+           macrolanguage spelling, and no consumer holds it. The bare
+           anchor names the whole Zapotec complex across time, the
+           shape the no anchor takes for a macrolanguage; the individual
+           modern languages stay unminted until a consumer holds modern
+           text. The colonial written record is one stage, zap:col.
+           ANCIENT ZAPOTEC (ISO 639-3 xzp) IS DELIBERATELY NOT FOLDED
+           HERE: xzp is an active individual historical code (change
+           request 2006-065, Linguist List, adopted 2007-07-18; not a
+           member of the zap macrolanguage) whose request defines it as
+           'the language of possibly the earliest Mesoamerican script',
+           the pre-Hispanic glyphic inscriptions (Monte Albán, San José
+           Mogote), 'a very early precursor of the modern Zapotec
+           languages'. That is not the colonial alphabetic language, so a
+           universal codemap row xzp → zap:col would misread every
+           glyphic-epigraphy collection; identity leaves xzp bare (no
+           Glottolog languoid carries xzp; Wiktionary lists it
+           unaffiliated). A collection whose encoders spell 16th-c.
+           Valley Zapotec xzp (Córdova's TEI header in the Ticha corpus
+           does) folds it onto zap:col in its own per-collection
+           override — collection knowledge, never this file's"
+    stages:
+      col: {name: Colonial Valley Zapotec, band: [1550, 1850], ord: 10,
+            band_note: "the alphabetic colonial record of the Valley of
+                        Oaxaca as the Ticha project and its scholarship
+                        (Lillehaugen, Broadwell, Oudijk, Smith Stark)
+                        delimit it — from the mendicant grammars and the
+                        first native-hand documents of the mid-16th c. to
+                        the last Zapotec-language notarial papers of the
+                        early national period (the colonial era closes
+                        1821 by name; the writing tradition does not);
+                        approximate",
+            note: "the term (CVZ) is the field's own for the Valley
+                   Zapotec written in Latin script under Spanish rule —
+                   a set of closely related Valley varieties written in
+                   a shared mendicant orthography, not one dialect.
+                   Printed works: Pedro de Feria's Doctrina cristiana
+                   (México 1567), Juan de Córdova's Arte en lengua
+                   zapoteca and Vocabulario en lengua çapoteca (México
+                   1578), Cristóbal de Agüero's Miscelaneo espiritual
+                   (México 1666), Leonardo Levanto's Cathecismo (Puebla
+                   1766). Manuscripts: the testaments, bills of sale and
+                   cabildo papers of the Valley towns written by native
+                   notaries. Corpus: ticha (93 documents — the printed
+                   works plus the Valley manuscripts, dated 1633–1832 in
+                   the consuming lane's census)"}
+
+  tup:
+    name: Tupian
+    kind: family
+    glottocode: tupi1275
+    note: "ISO 639-5 tup; Wiktionary tup (alias Tupi). Some seventy
+           languages in ten branches after Rodrigues (1958, 1986):
+           Tupi-Guarani, Arikem, Aweti, Juruna, Mawe, Monde, Munduruku,
+           Purubora, Ramarama, Tupari — the non-Tupi-Guarani branches
+           clustered in Rondônia, the Madeira–Guaporé region taken as the
+           family homeland. Glottolog groups Tupi-Guarani with Aweti
+           (Aweti-Guarani awet1245), then Mawe (Maweti-Guarani
+           mawe1252), inside Eastern Tupian (east2909); none of those
+           three carries a standard code, so they stay prose and
+           tup-gua hangs on tup directly. Proto-Tupian (Rodrigues &
+           Cabral, Galucio et al. 2015) carries no pro stage — no
+           reconstruction corpus is held. Attestation begins with the
+           16th-c. European records of the coastal Tupinambá (Staden
+           1557, Léry 1578) and the Jesuit grammars. Members here:
+           tup-gua"
+
+  tup-gua:
+    name: Tupi-Guarani
+    kind: family
+    parent: tup
+    glottocode: tupi1276
+    note: "Wiktionary family code (Module:families, parent tup, alias
+           Tupí-Guaraní; verified 2026-10-11); no ISO 639-5 code. The
+           largest Tupian branch, some fifty languages from the Atlantic
+           coast to the Andean foothills and the Amazon, in eight
+           subgroups after Rodrigues & Cabral (2002): Guarani is
+           subgroup I, Tupinambá subgroup III (Glottolog: Southern
+           Tupi-Guarani sout3271 > Tupi-Guarani Subgroup I tupi1277 /
+           III tupi1287 — subgroups unminted, no standard codes).
+           Proto-Tupi-Guarani is a well-founded reconstruction (Lemle
+           1971, Jensen 1998, Schleicher 1998) but no pro stage is minted
+           without a held corpus. The two colonial lingue franche of the
+           Jesuit enterprise both belong here — the coastal Tupi of
+           Brazil (tpn) and the Guarani of the Paraguay province (gn) —
+           sister lineages, never one another's ancestor. Members here:
+           tpn, gn"
+
+  tpn:
+    name: Tupinambá
+    parent: tup-gua
+    glottocode: tupi1273
+    band: [1549, 1760]
+    band_note: "the European-record span of the coastal language,
+                approximate — from the Jesuits' arrival at Bahia (1549)
+                and the first travellers' records (Staden 1557) to the
+                Pombaline Diretório (1757, applied from 1758), which
+                banned the Língua Geral in favour of Portuguese; the
+                coastal Tupinambá themselves were extinct as a speech
+                community well before"
+    note: "ISO 639-3 tpn, individual, extinct (SIL 2026-10-11); Glottolog
+           tupi1273 (Tupi-Guarani Subgroup III). The language the
+           Jesuits called the língua mais usada na costa do Brasil —
+           Old Tupi (tupi antigo) in Brazilian scholarship (Rodrigues;
+           Navarro's Dicionário de tupi antigo 2013), spoken in close
+           dialects from São Paulo to Maranhão (Tupinambá, Tupiniquim,
+           Potiguara, Tamoio). ISO RETIRED tpw 'Tupí' as a duplicate of
+           tpn (change request 2022-012, effective 2023-01-20), and
+           Wiktionary still files the same language as tpw 'Old Tupi' —
+           both readings converge here, hence the codemap row tpw →
+           tpn. Tupinikin (tpk) stays a separate ISO code, unfolded.
+           Its colonial descendants, the Língua Geral Paulista (extinct;
+           Glottolog files tpw as its dialect node tupi1274) and the
+           Língua Geral Amazônica, whose modern continuation is
+           Nheengatu (yrl), stay unminted until a consumer holds them;
+           that descent is a koiné story, recorded here, not an edge
+           yet. Attestation: José de Anchieta's Arte de grammatica da
+           lingoa mais usada na costa do Brasil (Coimbra 1595); Antônio
+           de Araújo's Catecismo na lingoa brasilica (Lisbon 1618); Luís
+           Figueira's Arte da lingua brasilica (Lisbon 1621); the Tupi
+           letters of the Potiguara leaders (the Camarão letters, 1645,
+           from the Dutch war in Pernambuco); Bettendorf's Compendio da
+           doutrina christãa (Lisbon 1687, Amazonian). Corpus: the UD
+           Tupinambá-TuDeT treebank (581 sentences in the consuming
+           library's census)"
+
+  gn:
+    name: Guarani
+    parent: tup-gua
+    note: "ISO 639-1 gn / 639-2/3 grn, a MACROLANGUAGE of five active
+           individual languages (SIL 2026-10-11): Paraguayan Guaraní
+           (gug), Mbyá (gun), Chiripá/Ava (nhd), Eastern and Western
+           Bolivian Guaraní (gui, gnw). Wiktionary instead treats gn as a
+           FAMILY code (Guarani, parent tup-gua) holding gn-cls
+           'Classical Guarani' and gug (ancestor gn-cls). The registry
+           anchors gn as the macrolanguage, the shape of the no anchor —
+           the UD treebanks spell it gn, and grn aliases onto it. No
+           glottocode: Glottolog has no languoid for the macrolanguage
+           (its nearest node, Paraguay-Brazil Guarani para1319, excludes
+           the Bolivian members). gug gets NO alias row: Paraguayan
+           Guaraní is one member, and folding it onto the macrolanguage
+           would blur a living standard the registry may later anchor;
+           identity leaves gug bare until a modern-Guarani consumer
+           arrives (it would then hang from gn and descend through
+           gn:old — see the stage's note). Subgrouping: Tupi-Guarani
+           subgroup I (Rodrigues & Cabral 2002)"
+    stages:
+      old: {name: Old (Classical) Guaraní, band: [1600, 1800], ord: 10,
+            wikt: gn-cls,
+            band_note: "the Jesuit-province convention (guaraní
+                        jesuítico), approximate — from the catechism of
+                        Luis de Bolaños approved by the Asunción synod
+                        (1603) and the Province of Paraguay's first
+                        reductions (1609–10) through the mission presses
+                        and the Jesuit expulsion (1767–68) to the
+                        post-expulsion cabildo papers of the late 18th c.",
+            note: "the missionary standard written on the Guarani of the
+                   Paraná–Paraguay reductions. DESCENT NUANCE, kept as
+                   prose: Glottolog files Old Guarani (oldp1258) as a
+                   DIALECT under Paraguayan Guaraní (para1311), i.e. the
+                   ancestor of the gug lineage specifically, while the
+                   other macrolanguage members (Mbyá, Chiripá, the
+                   Bolivian Chiriguano varieties) continue the precontact
+                   continuum, not the mission norm. As a stage of the
+                   macrolanguage anchor it is the time-slice of the
+                   lineage the written record follows; a future gug
+                   anchor declares its parent as gn:old (the
+                   most-specific rule), the other members gn bare.
+                   Witnesses: Antonio Ruiz de Montoya's Tesoro de la
+                   lengua guaraní (Madrid 1639), Arte y bocabulario and
+                   Catecismo de la lengua guaraní (Madrid 1640); Paulo
+                   Restivo's mission-press revisions of Montoya, the
+                   Vocabulario (1722) and the Arte (1724). Corpus: the UD Guarani-OldTuDeT
+                   treebank (59 sentences from Montoya and Restivo in
+                   the consuming library's census)"}
+
 # ── Scripts (the ~ axis) ─────────────────────────────────────────────────────
 #
 # A GLOBAL table, deliberately not per-anchor: digraphia is open-ended, and

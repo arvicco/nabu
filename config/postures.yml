@@ -190,10 +190,10 @@ sources:
     script: {posture: implied}
   ud:
     kind: {posture: unclassified}
-    lect:
-      posture: codemap
-      note: the lzh treebanks → zho/lit; the rest ruled DELIBERATELY
-        unstaged (D57-f — a mixed-treebank collection is not one stage).
+    # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
+    # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
+    # stage witness and the only gn-claiming document); the lzh treebanks →
+    # zho/lit via codemap; the rest stays DELIBERATELY unstaged (D57-f).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -803,14 +803,10 @@ sources:
         (arte → scholarly; catecismo/miscelaneo → hymn-prayer or ritual; manuscript →
         legal — testaments and bills of sale) — the manuscripts' own document types
         live on the Ticha website, not in the repo; the fold is a ruled table"}
-    lect: {posture: pending, note: "candidate: zap → a Colonial Valley Zapotec stage of a
-        zap anchor (Oto-Manguean, omq) by date band, plus a codemap row xzp → that stage
-        (Córdova's header declares ISO 639-3 xzp 'Ancient Zapotec'; the encoders' own
-        'cvz' label is folded to zap at parse) — BLOCKED on the americas nabu-lects
-        mint (no zap, omq or Zapotec stage exists in canonical/nabu-lects or the working
-        copy, censused 2026-10-11); bare zap is minted meanwhile on the 2 Zapotec
-        documents and 416 Zapotec-majority pages, and the 91 Spanish documents ride bare
-        spa (→ es by the codemap alias; early-modern colonial Spanish, unstaged)"}
+    # lect machine-postured since 2026-10-11 — the per-collection zap/xzp →
+    # zap:col overrides (the americas registry package merged; xzp stays
+    # universally unmapped: SIL's Monte Albán glyphic reading), the
+    # shadowing rule.
     dating: {posture: partial, note: "84 of 93 documents: the Ticha manuscript id's year
         (the ORIGINAL document's year — a translation is dated by its original) and the
         printed works' title-page years (1578, 1666, 1766) on the :structured lane;
