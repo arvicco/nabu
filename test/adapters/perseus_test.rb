@@ -61,6 +61,19 @@ class PerseusTest < Minitest::Test
     assert_equal [ILIAD_URN, HH13_URN, HH14_URN, JOHN2_URN], refs.map(&:id)
   end
 
+  # P118-R4 S7 (the held-but-dark audit): tlg4036.tlg023 (Proclus' Cypria
+  # summary) ships ONLY a "cypria-grc1" edition — the one original-language
+  # work outside the perseus-grc slug family (2026-10-11 census; opp-* is
+  # First1K's family) — so it never ingested.
+  def test_the_cypria_stray_edition_is_discovered_and_parses
+    strays = File.join(FIXTURES, "strays")
+    refs = Nabu::Adapters::Perseus.new.discover(strays).to_a
+    assert_equal ["urn:cts:greekLit:tlg4036.tlg023.cypria-grc1"], refs.map(&:id)
+    document = Nabu::Adapters::Perseus.new.parse(refs.first)
+    assert_equal "grc", document.language
+    refute_empty document.to_a
+  end
+
   def test_discover_sets_source_id_language_and_absolute_path
     refs = Nabu::Adapters::Perseus.new.discover(GREEK_WORKDIR).to_a
     refs.each do |ref|

@@ -155,7 +155,10 @@ module Nabu
     #   "front_matter", no "anchor". Unrecognized anchors and missing juan
     #   files keep raising exactly as before (out of the D42-c scope).
     class MandokuParser
-      TEXT_FILE = /\A(?<id>KR\d[a-z]\d{4})_(?<nnn>\d+)\.txt\z/
+      # P118-R4: an optional trailing letter (KR5c0312_000a.txt — the
+      # corpus's single letter-suffixed juan file, 2026-10-11 census) is
+      # part of the file key; the `_ext`/other non-juan files still never match.
+      TEXT_FILE = /\A(?<id>KR\d[a-z]\d{4})_(?<nnn>\d+[a-z]?)\.txt\z/
       HEADER_LINE = /\A#(?:\+|\s|-|\z)/
       PROPERTY = /\A#\+PROPERTY:\s+(?<key>\S+)\s+(?<value>.*)\z/
       # KR5i repos ship `#+TITLE:唱道真言 Changdao Zhenyan` — no space after
