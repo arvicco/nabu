@@ -31,25 +31,32 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 688,562 dated and
-placed documents as of 4 August 2026 — the CDLI tablets, Italy's EDR
-(115,590), the Heidelberg inscriptions and the papyri foremost among
-them. On the faceted shelves
-(currently the inscriptions), genre facets compose with the same filters:
+and third centuries. The chronological axis covers
+{{ site.data.dates.dated_documents_display }} dated documents as of
+{{ site.data.dates.as_of }} — the Korean historical records, the CDLI and
+ORACC tablets, the inscription databases and the papyri foremost among
+them; the
+century-by-century census is on [Layers]({{ '/layers/' | relative_url }}).
+On the epigraphic shelves, genre facets compose with the same filters:
 
 ```
 $ bin/nabu search manibus --type epitaph --province Britannia
 ```
 
-draws on 256,518 facet rows recording inscription genre, province,
+draws on the facet rows recording inscription genre, province,
 material, and object type, with uncertain upstream attributions preserved
-as such.
+as such. Across every shelf, the **document-kind axis** (`search --kind
+CLASS`) cuts by what a document *is* — funerary, legal, literary/narrative/epic —
+over the ruled cross-corpus classes that upstream genre vocabularies fold
+onto ({{ site.data.census.kind_documents_display }} documents classified
+as of {{ site.data.census.as_of }}; `nabu kind census` prints the class
+board).
 
 **Chinese, Japanese and Korean text** searches first-class (September
 2026): the classical Sinitic shelves — the Chinese canons, the Korean
 state records, the Japanese library — write without word boundaries, so
 the library maintains a dedicated character-pair index over those
-shelves (fifteen sources). A query in Han characters or kana
+shelves (twenty sources as of October 2026). A query in Han characters or kana
 (`nabu search 六龍`) matches exact character sequences at full speed,
 composing with every filter below; no segmentation is guessed, ever.
 
@@ -140,9 +147,10 @@ fuzzy index covers: oracc, papyri-ddbdp
 the opening line of the *Odyssey*. The character-trigram index behind this
 is scoped to the documentary shelves, where fragment search earns its
 cost; the scope has grown in waves — the Heidelberg inscriptions joined
-13 July 2026, Italy's EDR and the Elephantine archives 28 July 2026 —
-and the production index covers 3,801,508 passages across the papyri,
-cuneiform, and inscription shelves as of 28 July 2026.
+13 July 2026, Italy's EDR and the Elephantine archives 28 July 2026, the
+Etruscan inscriptions after them — and the production index covers
+3,985,264 passages across the papyri, cuneiform, and inscription shelves
+as of 11 October 2026.
 
 **Concordance** (`nabu concord QUERY`) prints classic keyword-in-context
 lines, column-aligned in the pristine (accented) text and in corpus order —
@@ -302,13 +310,14 @@ Wiktionary-derived chains: the IE-CoR cognacy database (4,981 cognate
 sets), the LIV verbal roots, and de Vaan's Latin etymological dictionary —
 so the same walk can be checked against independently curated scholarship.
 The StarLing bases joined on 17 July 2026 (Pokorny, Nikolayev's PIE
-database, Vasmer, Common Germanic, Baltic), and where the crosswalk has
+database, Vasmer, Common Germanic, Baltic) and have since grown to dozens
+of databases, Altaic and North Caucasian to Yenisseian, and where the crosswalk has
 no reconstruction path for a form, `etym` now falls back to the plain
 dictionary lookup rather than missing what `define` would find.
 
 **Language cards** (`nabu language CODE`) explain any language code the
-library surfaces — the corpus languages and the 803 Wiktionary etymology
-codes that appear in `etym` cognate lists — on one card: name, family,
+library surfaces — the corpus languages and the {{ census.etym_codes }}
+etymology codes that appear in `etym` cognate lists — on one card: name, family,
 curated historical context, and the code's live holdings in the catalog.
 Where the code is a registered anchor in the
 [nabu-lects](https://arvicco.github.io/nabu-lects) registry, the card
@@ -319,6 +328,25 @@ An unknown code is reported honestly, with a family hint;
 
 ```
 $ bin/nabu language gkm
+```
+
+**One front door** (`nabu info QUERY`) answers "what is this?" across
+the three desk namespaces — a single character or sign code goes to the
+sign card, a language code or lect id to the language card, a script tag
+or name (`nabu info glag`) to the curated script card — dispatching to
+the existing cards unchanged and missing honestly when nothing matches.
+
+**Person cards** (`nabu person NAME|REF`) look a historical person up in
+the derived person index — the China Biographical Database slice, some
+660,000 persons of Chinese history (September 2026). A name in hanzi or
+pinyin, a courtesy or studio name, or an authority ref keys the same
+card; matching is exact under the shared fold, never fuzzy, and homonyms
+print every card:
+
+```
+$ bin/nabu person 王安石
+王安石 · Wang Anshi  cbdb:1762
+  1021–1086 · 宋 Song
 ```
 
 **Sign cards** (`nabu char CHAR`) put one glyph on the desk, dispatched
@@ -365,7 +393,9 @@ listed as a separate, honestly labelled tail. When a shown inscription
 carries such an id and the dump is on disk, `nabu show` adds a one-line
 findspot resolution too. Since the places program (August 2026) the
 holdings side reads a **multi-gazetteer index** (Pleiades, Trismegistos
-Geo, CIGS) and `nabu place apply` projects the
+Geo, CIGS — joined since by the China Historical GIS, the historical
+placenames of Japan, and the al-Ṯurayyā gazetteer of the early Islamic
+world) and `nabu place apply` projects the
 [nabu-places](https://arvicco.github.io/nabu-places/) registry's matching
 decisions into the catalog — see [Places]({{ '/layers/' | relative_url }}#places)
 for the system and the coverage census.

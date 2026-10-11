@@ -57,7 +57,8 @@ twelfth-century charters alike, and one Wiktionary code (`la-vul`) names
 both an attested register and a comparative-method reconstruction. Since
 August 2026 the library resolves its codes through
 **[nabu-lects](https://arvicco.github.io/nabu-lects)** — a sister project
-([repository](https://github.com/arvicco/nabu-lects), CC BY 4.0, pre-1.0):
+([repository](https://github.com/arvicco/nabu-lects), CC BY 4.0, versioned
+releases since v1.0):
 a small curated registry of *lects*, language varieties identified as
 
 ```
@@ -114,7 +115,8 @@ EDH stone whose dating interval sits inside exactly one stage's band
 carries that stage; one dated across a boundary stays honestly in
 `unstaged`, which is what most of that line is (band-spanning or undated
 inscriptions, never a guess). The same machinery gives Sumerian a
-five-stage ladder topped by Neo-Sumerian (Ur III) at 111,871 documents,
+five-stage ladder topped by Neo-Sumerian (Ur III) at 191,325 documents
+(as of 11 October 2026),
 and Akkadian the field's own six-way Assyrian/Babylonian grid
 (`nabu language sux`, `nabu language akk`).
 
@@ -148,16 +150,23 @@ inventory is maintained in
 
 Beyond these: the epigraphic mass (Latin and Greek inscriptions, the
 Sabellic and Alpine corpora, pre-Greek Sicily), the cuneiform state
-languages (Hittite, Elamite, Old Persian, Urartian, Hurrian, Eblaite),
-the Semitic shelves (Biblical Hebrew, Aramaic and Targumic, Classical
-Syriac, Ugaritic, Geʿez), Coptic and Egyptian across their whole span,
-Old Church Slavonic and Old East Slavic, the Celtic and Germanic
-medieval corpora (with the German print era whole since the Deutsches
-Textarchiv landed), Old Galician-Portuguese lyric, the Southeast
+languages (Hittite, Elamite, Old Persian, Urartian, Hurrian, Eblaite)
+and Hieroglyphic Luwian, the Semitic shelves (Biblical Hebrew, Aramaic
+and Targumic, Classical Syriac, Ugaritic, Geʿez), Coptic and Egyptian
+across their whole span, Old Church Slavonic and Old East Slavic with
+the South and West Slavic literatures down to the nineteenth century,
+the Celtic and Germanic medieval corpora (Old Dutch, Old Swedish and
+the Old Norse manuscripts among them, with the German print era whole
+since the Deutsches Textarchiv landed), Old Galician-Portuguese lyric
+and the Ibero-Romance and Occitan shelves, the Middle Iranian languages
+(Khotanese, Parthian, Bactrian, with the documentary New Persian of the
+Islamicate East), Chagatai Turki and the Middle Mongol of the Secret
+History, the Korean record in hanmun and early hangul, the Southeast
 Asian family (Old Khmer, Old Mon, Old Malay, Old Javanese, Pyu, Old
 Burmese — most in their only machine-readable form), Classical Newar,
-and the honest `und` rows where an upstream record could not
-determine a language.
+colonial Valley Zapotec, Quechua and Aymara passages in Guaman Poma's
+chronicle, Tupinambá and Old Guaraní, and the honest `und` rows where
+an upstream record could not determine a language.
 
 ## Reference-shelf languages (dictionaries)
 
@@ -173,14 +182,18 @@ corpora. The reconstruction shelves (Proto-Indo-European through
 Proto-Slavic, Proto-Germanic, Proto-Italic and their intermediates) carry
 multi-hop etymological chains with per-edge loan flags, joined by
 independent witnesses: IE-CoR's expert-curated cognate sets, LIV-LOD,
-de Vaan's *Etymological Dictionary of Latin*, the fifteen StarLing /
-Tower of Babel bases (under a written grant — the Moscow-school
-apparatus from Pokorny and Vasmer to the Altaic, North Caucasian,
-Sino-Tibetan, Dravidian, Chukchee-Kamchatkan and Yenisseian
-proto-databases), and — since August 2026 — DÉRom's Proto-Romance
-etymons, displaying under their honest `roa:pro` lect. The Slovenian
-historical shelf (139,405 entries), the Celtic Wiktionary extracts, and
-the Tibetan lexica round out the reference floor.
+de Vaan's *Etymological Dictionary of Latin*, the StarLing / Tower of
+Babel databases (under a written grant — the Moscow-school apparatus
+from Pokorny and Vasmer to the Altaic, North Caucasian, Sino-Tibetan,
+Dravidian, Chukchee-Kamchatkan and Yenisseian proto-databases, with the
+lexicostatistical wordlists that shipped beside them), and — since
+August 2026 — DÉRom's Proto-Romance etymons, displaying under their
+honest `roa:pro` lect. The Slovenian historical shelf (139,405
+entries), Brückner's etymological dictionary of Polish and Nasovič's
+Belarusian dictionary, the Welsh GPC, the Celtic Wiktionary extracts,
+the Chinese rime books from the *Qieyun* to the *Zhongyuan yinyun*, the
+Old Javanese Wordnet, and the Tibetan lexica round out the reference
+floor.
 
 ## Gold-lemma languages
 

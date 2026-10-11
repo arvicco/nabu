@@ -4,7 +4,8 @@ permalink: /examples/
 description: >-
   Worked examples of the Nabu library in use, by discipline: classics,
   papyrology, Slavic philology, comparative linguistics, Assyriology,
-  sinology, medieval Latin, Old English, and biblical studies.
+  Hittitology, Egyptology, sinology, medieval Latin, Old English,
+  Hebrew and biblical studies, and Southeast Asian epigraphy.
 ---
 
 {% assign census = site.data.census -%}
@@ -85,8 +86,8 @@ urn:nabu:corpus-corporum:9349:d142.p1 [lat]
 
 *The [Epigraphy desk]({{ '/axis/epigraphy/' | relative_url }}) — papyri, stones and sherds.*
 
-The library holds 61,414 documents of the Duke Databank of Documentary
-Papyri, with the Leiden editorial conventions preserved. Fragment search is
+The library holds 63,659 documents of the Duke Databank of Documentary
+Papyri (as of 11 October 2026), with the Leiden editorial conventions preserved. Fragment search is
 built for damaged texts: type the line as the edition prints it, brackets
 and all, and the trigram index matches it inside words:
 
@@ -180,6 +181,16 @@ marianus — Codex Marianus [chu]   license: nc
 …
 ```
 
+Since the autumn 2026 waves the desk reaches past the canon on every side: nine
+Wikisource cones from Serbian epic song to the Old East Slavic chronicles,
+the complete Ipatiev chronicle, the 1488 Prague Bible, the long
+Slovenian prose of KDSP, Slovene and Croatian Protestant prints,
+the Croatian school canon and the Serbian novel, Scripta Bulgarica's
+medieval monuments, Brückner's etymological dictionary of Polish and
+Nasovič's Belarusian dictionary on the reference shelf, and the German
+Slavistics canon — Miklosich to Jagić's *Archiv* — as a reference shelf
+of its own.
+
 ## For the comparativist
 
 *The [Etymology desk]({{ '/axis/etym/' | relative_url }}).*
@@ -237,17 +248,19 @@ formulas in aspr — 30550 passages / 175736 tokens
 *Saga hwæt ic hatte* — "say what I am called" — is the Exeter Book
 riddles' closing refrain, surfacing here with the exact riddles that use
 it; the speech formulas (*ond þæt word acwæð*) rank right beside it. The
-Germanic ladder is also growing downward in time: the Deutsches
-Textarchiv adapter (the German print corpus, 1473–1969) is built and
-awaiting its first sync.
+Germanic ladder also runs downward in time: the Corpus of Middle English
+Prose and Verse, the EEBO-TCP transcriptions of the first printed books in
+English, and the Deutsches Textarchiv's German print corpus (1473–1969)
+are all on the shelves.
 
 ## For the assyriologist
 
 *The [Cuneiform desk]({{ '/axis/cuneiform/' | relative_url }}).*
 
-The cuneiform shelf now holds 104,722 ORACC documents (CC0) across 38
-projects — the complete State Archives of Assyria, the ePSD2 corpora with
-the Ur III administrative mass, the Achaemenid trilinguals — with upstream
+The cuneiform shelf now holds 118,367 ORACC documents (CC0, as of 11
+October 2026) across more than a hundred projects — the complete State
+Archives of Assyria, the ePSD2 corpora with the Ur III administrative
+mass, the Achaemenid trilinguals, and the Oracc CC0 project pack — with upstream
 gold lemmatization feeding `search --lemma` for Akkadian and Sumerian.
 Beside it sit the CDLI's 353,156 catalogued artifacts (135,201 of them
 transliterated: proto-cuneiform and proto-Elamite's only machine-readable
@@ -287,8 +300,12 @@ carrying transliteration, Unicode cuneiform, and upstream's candidate
 morphological analyses — served at an honest silver tier (only
 upstream-disambiguated analyses mint searchable lemmas; the rest ride as
 annotations). The UD HitTB treebank adds 1,309 gold-lemmatized words from
-Hoffner & Melchert's grammar, and the Anatolian reflex columns of the
-comparative shelf light against the corpus:
+Hoffner & Melchert's grammar; a Zenodo corpus of glossed Hittite texts
+with German translations rides beside it, and the Annotated Corpus of
+Luwian Texts (held under the editor's personal grant) brings the
+Hieroglyphic Luwian inscriptions of Iron Age Anatolia, each clause with
+full morphology and a sign-by-sign transliteration. The Anatolian reflex
+columns of the comparative shelf light against the corpus:
 
 ```
 $ bin/nabu search --lemma ḫūmant --lang hit     # "all/every" across the corpus
@@ -325,7 +342,8 @@ MARK 2.3 — New Testament (parallel witnesses)
 The Old Testament axis grew its Hebrew legs on 18 July 2026: `align
 "GEN 1.1"` now renders the Masoretic text (byte-verbatim Leningrad Codex,
 twice — OSHB and the ETCBC's BHSA) beside the Septuagint, the Vulgate,
-the English, and Targum Onkelos's Aramaic — six witnesses per verse, with
+the English, and Targum Onkelos's Aramaic — six witnesses per verse, seven
+since the Peshitta joined as the Syriac leg — with
 the Greek/Hebrew Psalm numbering divergence mapped rather than hidden:
 `align "PSA 22.1"` shows the Hebrew witnesses' 23.1, labelled as such.
 Dictionary lookups close the loop — the LSJ entry for μῆνις resolves its
@@ -395,8 +413,8 @@ dictionary scans are its first bridgeheads.
 
 ## For the southeast asianist
 
-*The [Southeast Asia desk]({{ '/axis/sea/' | relative_url }}) — the
-newest desk (September 2026); live run of 3 September 2026.*
+*The [Southeast Asia desk]({{ '/axis/sea/' | relative_url }}) — opened
+September 2026; live run of 3 September 2026.*
 
 The Indic cosmopolis at its eastern edge: the DHARMA project's Old Khmer,
 Cham, Old Javanese, Pyu and Nusantara epigraphy, the Bagan inscriptions
@@ -421,10 +439,9 @@ horse thieves, and those who show contempt for brahmins and pandits.
 
 ## Searching by meaning
 
-*Built September 2026; the vector store's first overnight build is
-scheduled.*
+*Built September 2026; live run of 11 October 2026.*
 
-The newest search layer answers a question no word index can: *where
+The semantic search layer answers a question no word index can: *where
 else does the library say this?* — same thought, different words.
 `search --similar <urn>` anchors on any passage of the literary core and
 returns its nearest same-language neighbors — another edition's copy of
@@ -434,10 +451,27 @@ page so a statistical match is never mistaken for a curated alignment.
 The same lane serves AI conversation through the MCP server's
 `similar_to` parameter. It runs on a local vector store the owner builds
 once with `nabu embed` and tops up incrementally after every sync; no
-text ever leaves the machine. The plain-language write-up is
-[embed.md](https://github.com/arvicco/nabu/blob/main/docs/embed.md) — and
-this page will gain the live walk-through once the first build lands
-(nothing here is ever pasted from imagination).
+text ever leaves the machine. Anchor on the first line of the *Aeneid*:
+
+```
+$ bin/nabu search --similar urn:cts:latinLit:phi0690.phi003.perseus-lat2:1.1 --limit 5
+similar to urn:cts:latinLit:phi0690.phi003.perseus-lat2:1.1 [lat] — model multilingual-e5-base, same-language only (…)
+urn:nabu:croala:marul-mar-dante:C190.l75  (close)  — Principium operis Dantis Aligerii de Fluentino sermone in Latinum conuersum, versio electronica
+  Arma, uirum cecini Troię qui primus ab oris
+urn:nabu:digiliblt:dlt000423:1  (close)  — Priscianus — Partitiones
+  ‛Arma uirumque cano Troiae qui primus ab oris '
+urn:nabu:digiliblt:dlt000083:234  (close)  — Censorinus (ps.) — Fragmentum Censorini(epitoma disciplinarum)
+  Arma virumque cano Troiae qui primus ab oris:
+…
+5 neighbors (banded semantic similarity — never a curated alignment; nabu align serves those)
+```
+
+The first neighbor is the find: a Croatian humanist's Latin version of
+Dante, on the CroALa shelf, quoting Vergil's opening with *cecini* for
+*cano* — a quotation drifted by memory that no exact-phrase search would
+catch — and the late-antique grammarians follow, Priscian parsing the line
+word by word. The plain-language write-up is
+[embed.md](https://github.com/arvicco/nabu/blob/main/docs/embed.md).
 
 ## Composing the layers
 
@@ -494,6 +528,7 @@ license classes, and lect filters above.
 
 These walk-throughs sample the disciplines the library serves; they are not
 the whole of it. The desk index at [Research axes]({{ '/axis/' | relative_url }})
-covers all {{ census.desks }} — the Indologist, the Koreanist and the
-Tibetologist among those with no walk-through above — each with its own
+covers all {{ census.desks }} — the Indologist, the Koreanist, the
+Tibetologist, the Iranologist, the Turkologist, the Mongolist and the
+Americanist among those with no walk-through above — each with its own
 member shelves, instruments and CLI recipes.
