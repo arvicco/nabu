@@ -1383,6 +1383,19 @@ sources:
         personography and taxonomies censused) — declared"}
     script: {posture: implied, note: "Latin (gajica) as the digital sources transcribe
         it; no bohoričica censused"}
+  mdz-protestant:   # Q102, row 243
+    kind: {posture: unclassified, note: "MDZ manifests carry no genre field (catechism,
+        hymnal, prayer book, grammar, confession, sapiential book live in the titles only)"}
+    lect: {posture: dates, note: "the five Slovene prints (1562–1584) stage onto sl:emod
+        through the sl bands via their print years; the Latin-script Croatian Spovid
+        (Tübingen 1564) rides bare hrv (codemap → hr; the hr anchor mints no stages by
+        design). Bohoričica declared per seed in metadata orthography"}
+    dating: {posture: dated, note: "the manifest Date (every 4-digit year; brackets kept raw),
+        MetadataDates :structured"}
+    places: {posture: named, note: "the imprint place in the print's own spelling (V Tibingi,
+        Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
+    script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
+        machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
   openiti:
     # kind declaration retired P104-1: the subject-facet regex rule in
     # kind_map.yml machine-postures it now (the shadowing rule).

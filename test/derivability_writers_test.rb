@@ -101,10 +101,17 @@ class DerivabilityWritersTest < Minitest::Test
   # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
   # inside Adapter#fetch, and the pl Brückner lane writes its stub index
   # + scan envelopes under canonical/pl-wikisource/bruckner/ from that
+<<<<<<< HEAD
   # same fetch — the ja/zh-wikisource law kind. P117's litopys_fetch
   # writes the censused Izbornyk pages (verbatim windows-1251, tmp+rename,
   # site paths) + its .litopys-fetch.json pin into canonical/litopys/
   # inside Adapter#fetch — the titus_fetch law kind.
+=======
+  # same fetch — the ja/zh-wikisource law kind. mdz-protestant (Q102)
+  # writes IIIF manifests + per-page hOCR (tmp+rename) and its
+  # .mdz-crawl.json ledger into canonical/mdz-protestant/ inside
+  # Adapter#fetch — the ndl-kotenseki crawl law kind.
+>>>>>>> 2c6d0dd7 (Add mdz-protestant: MDZ page OCR of the Slovene Protestant prints, ready)
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -136,6 +143,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
+    nabu/adapters/mdz_protestant.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb

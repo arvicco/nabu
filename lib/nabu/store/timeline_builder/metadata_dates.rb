@@ -104,6 +104,7 @@ module Nabu
           "korba" => :structured,
           "litopys" => :era_band_key,
           "local-library" => :year_key,
+          "mdz-protestant" => :structured,
           "menota" => :structured,
           "mk-wikisource" => :structured,
           "ndl-kotenseki" => :structured,
