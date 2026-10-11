@@ -29,6 +29,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
     "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50",
     "urn:nabu:ud:greek-ptnk:grc_ptnk-ud-test-head50",
+    "urn:nabu:ud:guarani-oldtudet:gn_oldtudet-ud-test",
     "urn:nabu:ud:hebrew-ptnk:hbo_ptnk-ud-test-head50",
     "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
     "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50",
@@ -47,7 +48,8 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50",
     "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50",
     "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50",
-    "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50"
+    "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50",
+    "urn:nabu:ud:tupinamba-tudet:tpn_tudet-ud-test-head50"
   ].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
@@ -385,6 +387,31 @@ class UniversalDependenciesTest < Minitest::Test
     assert_includes opening.text, "Tizio"
   end
 
+  # P117-5 (the americas axis): the two colonial Tupí-Guaraní treebanks of
+  # TuLaR — Tupinambá (Jesuit catechisms, Anchieta, the Camarão letters;
+  # Gerardi's phonemic normalization) and Old Guaraní (Montoya, Restivo).
+  # LICENSE.txt verbatim BY-SA 4.0 for both (read 2026-10-11) →
+  # attribution; languages as UD files them (tpn, gn).
+  def test_p117_colonial_tupi_guarani_pair_registers_and_round_trips
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    {
+      "tupinamba-tudet" => ["https://github.com/UniversalDependencies/UD_Tupinamba-TuDeT", "tpn", 50],
+      "guarani-oldtudet" => ["https://github.com/UniversalDependencies/UD_Guarani-OldTuDeT", "gn", 59]
+    }.each do |slug, (repo, language, sentences)|
+      assert_equal [repo, language, "CC BY-SA 4.0", "attribution"],
+                   treebanks.fetch(slug).values_at(:repo, :language, :license, :license_class)
+      ref = adapter.discover(FIXTURES).find { |r| r.metadata["treebank"] == slug } || flunk("#{slug} fixture")
+      document = adapter.parse(ref)
+      assert_equal sentences, document.size, "#{slug}: sentence blocks"
+      assert_equal language, document.language
+      assert_equal "attribution", document.license_override
+    end
+    tpn = adapter.parse(adapter.discover(FIXTURES).find { |r| r.metadata["treebank"] == "tupinamba-tudet" })
+    assert_equal "urn:nabu:ud:tupinamba-tudet:tpn_tudet-ud-test-head50:0011.01", tpn.passages.first.urn
+    assert tpn.passages.first.text.start_with?("Mokõj ojoirunɨk , oito , ʔara sɨkeme")
+  end
+
   # The Romance pack flows through the same unchanged annotation→index
   # plumbing: the two Latin treebanks contribute rows to the ALREADY
   # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
@@ -465,7 +492,8 @@ class UniversalDependenciesTest < Minitest::Test
   OVERRIDE_SLUGS = %w[classical-chinese-kyoto classical-chinese-tuecl hittite-hittb
                       icelandic-icepahc
                       old-east-slavic-birchbark old-east-slavic-rnc
-                      old-east-slavic-ruthenian old-irish-dipwbg].freeze
+                      old-east-slavic-ruthenian old-irish-dipwbg
+                      tupinamba-tudet guarani-oldtudet].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
                   sanskrit-vedic old-irish-dipsgg].freeze
 
@@ -510,7 +538,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_thirty_one_files_sorted_by_urn
+  def test_discover_finds_exactly_thirty_three_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
