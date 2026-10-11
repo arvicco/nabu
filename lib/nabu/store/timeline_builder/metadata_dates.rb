@@ -92,6 +92,7 @@ module Nabu
           "eebo-tcp" => :structured,
           "elephantine" => :structured,
           "fornsvenska" => :compact_date_keys,
+          "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
           "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,

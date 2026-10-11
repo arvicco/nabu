@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: gams-zrcalo
+adapter_test:
+retrieved: "2026-10-11"
+files:
+  - path: speculum.01.xml
+    url: https://gams.uni-graz.at/o:speculum.01/TEI_SOURCE
+    whole: false
+    trim: header whole; body cut to the foreword + chapters 1, 8, 14, 24, 35 (removed chapters leave their last pb/cb)

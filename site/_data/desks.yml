@@ -15,11 +15,10 @@
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-<<<<<<< HEAD
   members: 28
 =======
-  members: 25
->>>>>>> 2c6d0dd7 (Add mdz-protestant: MDZ page OCR of the Slovene Protestant prints, ready)
+  members: 26
+>>>>>>> dcfac2d6 (Add gams-zrcalo: the 1445 Croatian Glagolitic Zrcalo, ready)
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard

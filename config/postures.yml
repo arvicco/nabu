@@ -1396,6 +1396,19 @@ sources:
         Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
     script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
+  gams-zrcalo:   # Q102, row 244
+    kind: {posture: unclassified, note: "one devotional work (the Speculum humanae
+        salvationis); no class field in the TEI"}
+    lect: {posture: identity, note: "hrv bare (codemap → hr) — textLang mainLang hr,
+        otherLangs chu (Old Croatian with Croatian-recension Church Slavonic elements,
+        traces of Old Czech): recorded in metadata text_languages, never split; hr mints
+        no Old Croatian stage by design (the registry's hr note)"}
+    dating: {posture: dated, note: "origDate 1445 (the colophon's own date)"}
+    places: {posture: unplaced, note: "upstream origPlace reads 'place of origin unknown' —
+        the colophon's Vrbnik is the commissioning priest's seat, not inferred as the
+        writing place; declared"}
+    script: {posture: qualified, note: "Latin-script semi-diplomatic transliteration of a
+        GLAGOLITIC codex (metadata script_original) — the Glagolitic is not carried"}
   openiti:
     # kind declaration retired P104-1: the subject-facet regex rule in
     # kind_map.yml machine-postures it now (the shadowing rule).
