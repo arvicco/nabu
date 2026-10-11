@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a documented TRIM of the real level-1 file (header and front
+# verbatim, the first divs/blocks kept): fetched for URL-liveness only.
+source: eltec-srp
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: level1/SRP18520_BogobojA_DvaIdola.xml
+    url: https://raw.githubusercontent.com/COST-ELTeC/ELTeC-srp/355cea8f2e9f47e16b207d8fae1a6a22409231a4/level1/SRP18520_BogobojA_DvaIdola.xml
+    whole: false
+    trim: teiHeader + front verbatim; the first body divs and their first blocks (README)
+  - path: level1/SRP18590_JakovI_DjuradjB.xml
+    url: https://raw.githubusercontent.com/COST-ELTeC/ELTeC-srp/355cea8f2e9f47e16b207d8fae1a6a22409231a4/level1/SRP18590_JakovI_DjuradjB.xml
+    whole: false
+    trim: teiHeader + front verbatim; the first body divs and their first blocks (README)
+  - path: level1/SRP19180_MilicaJ_PreSrece.xml
+    url: https://raw.githubusercontent.com/COST-ELTeC/ELTeC-srp/355cea8f2e9f47e16b207d8fae1a6a22409231a4/level1/SRP19180_MilicaJ_PreSrece.xml
+    whole: false
+    trim: teiHeader + front verbatim; the first body divs and their first blocks (README)
+  - path: level1/SRP19190_IsidoraS_Djakon.xml
+    url: https://raw.githubusercontent.com/COST-ELTeC/ELTeC-srp/355cea8f2e9f47e16b207d8fae1a6a22409231a4/level1/SRP19190_IsidoraS_Djakon.xml
+    whole: false
+    trim: teiHeader + front verbatim; the first body divs and their first blocks (README)

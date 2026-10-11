@@ -1,0 +1,18 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: vuk-danicic
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: 31-OBA.usfm
+    url: https://raw.githubusercontent.com/spthmpsn/Rs1Bible/a51bd9fc9922c8fcffce381e95fcc4c7fe9f0230/31-OBA.usfm
+    whole: true
+    trim: none
+  - path: 44-JHN.usfm
+    url: https://raw.githubusercontent.com/spthmpsn/Rs1Bible/a51bd9fc9922c8fcffce381e95fcc4c7fe9f0230/44-JHN.usfm
+    whole: false
+    trim: the header and chapter 1 (lines 1-87 of the real file)
+  - path: 64-2JN.usfm
+    url: https://raw.githubusercontent.com/spthmpsn/Rs1Bible/a51bd9fc9922c8fcffce381e95fcc4c7fe9f0230/64-2JN.usfm
+    whole: true
+    trim: none
