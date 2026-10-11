@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" version="5.0" n="KaBhāBhū">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="san-Latn">Karṇāṭakabhāṣābhūṣaṇam</title>
+        <author xml:lang="san-Latn">Nāgavarma</author>
+	<principal>
+	  <persName xml:id="AO" ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>Typing and TEI structuration</resp>
+	  <persName ref="#AO">Andrew Ollett</persName>
+	</respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Kannada Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2022</date>
+      </publicationStmt>
+      <sourceDesc>
+	<listBibl>
+	  <bibl xml:id="a">
+	    <title xml:lang="eng">Nāgavarmma’s Kāvyāvalōkanam: A standard Kannaḍa work on Poetics, of the 12th century: and the same author’s Karṇāṭaka Bhāshā-bhūshaṇam (Revised Edition): A Kannaḍa Grammar in Sanskrit Sûtras, expanding Śabdasmṛiti, the first chapter of Kâvyâvalôkanam.</title>
+	    <editor xml:lang="eng">
+	      <persName ref="https://viaf.org/viaf/289376294">
+		<forename>R.</forename>
+		<surname>Narasimhachar</surname>
+	      </persName>
+	    </editor>
+	    <publisher>Mysore Government Central Press</publisher>
+	    <pubPlace>Bangalore</pubPlace>
+	    <date when="1903">1903</date>
+	  </bibl>
+	</listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+	<language ident="kan-Latn">Kannada in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+      </editorialDecl>
+      <refsDecl>
+	<cRefPattern matchPattern="KāBhāBhū.([0-9]+)" replacementPattern="#xpath(//tei:div[@type='sūtra'][@n='$1'])"/>
+	<cRefPattern matchPattern="KāBhāBhū.([0-9]+).([0-9]+)" replacementPattern="#xpath(//tei:div[@type='section'][@n='$1']/tei:div[@type='sūtra'][@n='$2'])"/>
+      </refsDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2022-08-23" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text xml:lang="san-Latn">
+    <body>
+      <head>karṇāṭakabhāṣābhūṣaṇaṁ</head>
+      <lg met="anuṣṭubh">
+	<l>sarvajñaṁ tad ahaṁ vandē parajyōtis tamōpaham</l>
+	<l>pravr̥ttā yanmukhād dēvī sarvabhāṣāsarasvatī</l>
+      </lg>
+      <div type="section" n="1">
+	<head>saṁjñāvidhānaṁ</head>
+        <div type="sūtra" n="1">
+          <ab type="sūtra">atha karṇāṭaka-śabda-siddhiḥ</ab>
+          <p>
+            <s>atha śabdō ’yam ādau māṅgalyārthaḥ.</s>
+            <s>māṅgalyādīni śāstrāṇi pradanta iti prasiddhēḥ.</s>
+            <s>adhikārārthō vā.</s>
+            <s>mayā karṇāṭa-viṣaya-śabda-siddhir adhikriyata ity arthaḥ.</s>
+          </p>
+        </div>
+        <div type="sūtra" n="2">
+          <ab type="sūtra">akārādayaḥ prasiddhā varṇāḥ.</ab>
+          <p>
+            <s>akārādayō varṇā hakāra-paryavasānāḥ prasiddhā eva vēditavyāḥ.</s>
+            <s>tēṣām anādi-kāla-prasiddhatvād anyathā nōpadēṣṭavyāḥ.</s>
+          </p>
+        </div>
+        <div type="sūtra" n="3">
+          <ab type="sūtra">tēṣv ādau caturdaśa svarāḥ.</ab>
+          <p>
+            <s>tēṣv akārādiṣu varṇēṣv ādau caturdaśa-vyavasthitāś caturdaśa-varṇās svara-saṁjñā bhavanti.</s>
+            <s>tē kē?</s>
+            <s>a ā, i ī, u ū, r̥ r̥ r̥̄, l̥ l̥ l̥̄, ē, ai, ō, au.</s>
+          </p>
+        </div>
+        <div type="sūtra" n="4">
+          <ab type="sūtra">ēkadvitrimātrās tē hrasvadīrghaplutāḥ.</ab>
+          <p>
+            <s>tē iti tacchabdōpādānaṁ vyaktyarthaṁ.</s>
+            <s>akārādisvaravyaktyau yē varṇā ēkadvitrimātrāḥ tē khalu yathāsaṅkhyaṁ hrasvadīrghaplutā bhavanti.</s>
+          </p>
+          <list type="examples" xml:lang="kan-Latn">
+            <item>a</item>
+            <item>ā</item>
+            <item>ā3</item>
+          </list>
+          <list type="examples" xml:lang="kan-Latn">
+            <item>i</item>
+            <item>ī</item>
+            <item>ī3</item>
+          </list>
+	  <p>
+	    <s>ity ādi.</s>
+	  </p>
+	  <p>
+	    <s>sāmānyāpēkṣayā saṅkhyāpi na virudhyatē.</s>
+	  </p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>
