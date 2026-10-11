@@ -36,7 +36,7 @@ module Nabu
   # nothing is dirty they do not run at all — the write-through CLIs keep
   # both journals live, so only a hand-edited config file awaits the next
   # full rebuild or dirty incremental. The enrichment replay hook mirrors
-  # Rebuild (no-op today).
+  # Rebuild (replaying the registered producers — the meter lanes et al.).
   class IncrementalRebuild < Rebuild
     # A source skipped because its fingerprint matched its stamp.
     Clean = Data.define(:slug, :stamp_short)
