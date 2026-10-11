@@ -564,13 +564,63 @@ class InvariantsTest < Minitest::Test
     assert_match(/findspot/, finding.message)
     assert_match(/MINING_EXEMPT/, finding.message, "the remedy names the declared-coarseness ledger")
 
-    @db[:document_axes].insert(document_id: doc_id, not_before: -650, axis_source: "rawore")
+    # P118-R4 S4: per-KEY — the row must carry the key's own value (here
+    # date_raw), not merely exist in the lane.
+    @db[:document_axes].insert(document_id: doc_id, not_before: -650, axis_source: "rawore",
+                               date_raw: "reign of Assurbanipal")
     dates_cleared = global_finding(:unmined_axis_metadata)
-    refute_match(/dating/, dates_cleared.message, "a mined dates lane clears its keys")
+    refute_match(/dating/, dates_cleared.message, "a mined key clears")
     assert_match(/findspot/, dates_cleared.message, "the places lane stays dark")
 
     @db[:document_axes].where(document_id: doc_id).update(place_name: "Nineveh")
     assert_nil global_finding(:unmined_axis_metadata)
+  end
+
+  # P118-R4 S4 (the held-but-dark audit's tripwire blind spots): the
+  # census was lane-grained (one row anywhere in the lane cleared every
+  # key) and whole-token (iedc "toponyms" missed "toponym").
+  def test_unmined_axis_metadata_is_per_key_inside_a_dated_source
+    doc_id = seed_lane_doc("rawore4", "urn:nabu:rawore4:x1",
+                           '{"date":"1450","dynasty":"Joseon"}')
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1450, not_after: 1450,
+                               date_raw: "1450", axis_source: "rawore4")
+    finding = global_finding(:unmined_axis_metadata)
+    refute_nil finding, "a dated source still carrying an unprojected dynasty key is ore"
+    assert_match(/rawore4 \(dates: dynasty\)/, finding.message, "only the dark key is named")
+
+    @db[:document_facets].insert(document_id: doc_id, facet: "dynasty", value: "Joseon")
+    assert_nil global_finding(:unmined_axis_metadata), "a key traced into ANY lane is mined"
+  end
+
+  def test_unmined_axis_metadata_matches_plurals_compounds_and_the_wider_vocabulary
+    seed_lane_doc("rawore5", "urn:nabu:rawore5:x1",
+                  '{"toponyms":[{"name":"Saint-Denis","lat":48.9}],"dcs_time_slot":"epic",' \
+                  '"ndc":"913","topic":"Recht","material":"stone","settlement":"Bergen",' \
+                  '"datefrom":"12800101"}')
+    message = global_finding(:unmined_axis_metadata).message
+    %w[toponyms dcs_time_slot ndc topic material settlement datefrom].each do |key|
+      assert_match(/rawore5 \(.*\b#{key}\b/, message, "#{key} is axis ore")
+    end
+  end
+
+  def test_unmined_axis_metadata_skips_false_friend_compounds
+    seed_lane_doc("rawore6", "urn:nabu:rawore6:x1",
+                  '{"website":"https://x","timestamp":"2026","original_title":"T"}')
+    assert_nil global_finding(:unmined_axis_metadata),
+               "website/timestamp/original_* are machinery and titles, not axis ore"
+  end
+
+  def test_unmined_axis_metadata_traces_transformed_values
+    doc_id = seed_lane_doc("rawore7", "urn:nabu:rawore7:x1",
+                           '{"datefrom":"12800101","year_to":1290,' \
+                           '"origplace":"[Imprynted at London :"}')
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1280, not_after: 1290,
+                               place_name: "Imprynted at London", axis_source: "rawore7")
+    bce_id = seed_lane_doc("rawore7", "urn:nabu:rawore7:x2", '{"year_from":650.0}')
+    @db[:document_axes].insert(document_id: bce_id, not_before: -650, axis_source: "rawore7")
+    assert_nil global_finding(:unmined_axis_metadata),
+               "compact dates, integer and float-typed BCE years and cleaned imprint places " \
+               "all trace to their rows"
   end
 
   def test_unmined_axis_metadata_genre_lane_watches_document_facets
