@@ -374,6 +374,7 @@ module Nabu
       progress&.note("verdict sweep: fingerprinting #{total} canonical trees — " \
                      "#{Nabu::Eta.for(ledger, **SWEEP_TIMING).render}")
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      memo_before = fingerprints.identity_cache_stats
       done = 0
       swept = entries.map do |entry|
         next skipped(entry) unless replayable?(entry)
@@ -384,7 +385,7 @@ module Nabu
       end
       seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
       Store::StageTimings.record!(ledger, **SWEEP_TIMING, seconds: seconds, rows: total) if record
-      progress&.note(tally(swept, seconds))
+      progress&.note(tally(swept, seconds, memo_before))
       swept
     end
 
@@ -400,11 +401,26 @@ module Nabu
                 fingerprint: fingerprint, stamp: stamp)
     end
 
-    # "verdicts: 150 clean · 40 dirty · 8 skipped (3m12s)"
-    def tally(swept, seconds)
+    # "verdicts: 150 clean · 40 dirty · 8 skipped (3m12s) ·
+    #  memo: trees 140 hit 3 miss, repos 5160 hit 2 miss" — the memo
+    # counts are THIS sweep's (deltas over +memo_before+): plain trees
+    # answered by CanonicalIdentityCache, embedded git repos by
+    # GitIdentityCache. A miss paid the full hash / full git call (racy
+    # censuses included); bypasses (git-bearing trees at the plain memo,
+    # uncensusable repos) are neither.
+    def tally(swept, seconds, memo_before)
       counts = swept.map { |item| item.verdict.state }.tally
       "verdicts: #{counts.fetch(:clean, 0)} clean · #{counts.fetch(:dirty, 0)} dirty · " \
-        "#{counts.fetch(:skip, 0)} skipped (#{Nabu::Eta.format_seconds(seconds)})"
+        "#{counts.fetch(:skip, 0)} skipped (#{Nabu::Eta.format_seconds(seconds)}) · " \
+        "memo: #{memo_tally(memo_before)}"
+    end
+
+    def memo_tally(before)
+      after = fingerprints.identity_cache_stats
+      %i[trees repos].map do |memo|
+        hit, miss = %i[hit miss].map { |key| after[memo].fetch(key, 0) - before[memo].fetch(key, 0) }
+        "#{memo} #{hit} hit #{miss} miss"
+      end.join(", ")
     end
 
     # The one tree a replay may WRITE: a dictionary's language-notes

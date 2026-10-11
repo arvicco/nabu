@@ -92,6 +92,10 @@ class DerivabilityWritersTest < Minitest::Test
   # db/canonical_identities.json (tmp+rename): the census-keyed memo of
   # plain-tree canonical identities — the DERIVED law kind (a pure
   # function of canonical/ + code; deletable at any time, a miss re-hashes).
+  # Its sibling git_identity_cache (Q124) writes ONE derived file,
+  # db/git_identities.json (tmp+rename): the census-keyed memo of embedded
+  # git repos' identity tokens — the same DERIVED law kind (a miss pays the
+  # full git call).
   # same way — the burman_concordance law kind. The P116-3 Slavic
   # wikisource family base (slavic_wikisource) writes page envelopes
   # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
@@ -138,7 +142,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
-    nabu/canonical_identity_cache.rb
+    nabu/canonical_identity_cache.rb nabu/git_identity_cache.rb
   ].freeze
 
   def test_file_writers_are_allowlisted

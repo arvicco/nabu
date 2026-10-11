@@ -5,6 +5,7 @@ require "json"
 
 require_relative "normalize"
 require_relative "canonical_identity_cache"
+require_relative "git_identity_cache"
 
 module Nabu
   # Per-source derivation fingerprint (P36-1): the honest identity behind
@@ -202,10 +203,14 @@ module Nabu
 
     # +identity_cache+ (a CanonicalIdentityCache, or nil — the default: no
     # memo) serves PLAIN-tree canonical identities whose file census proves
-    # them unchanged; see that class for the key and its safety argument.
-    def initialize(config:, identity_cache: nil)
+    # them unchanged; +repo_cache+ (a GitIdentityCache, or nil) serves an
+    # embedded git repo's tokens whose working-tree + git-metadata census
+    # proves git's past clean vouch still holds. See those classes for the
+    # keys and their safety arguments.
+    def initialize(config:, identity_cache: nil, repo_cache: nil)
       @config = config
       @identity_cache = identity_cache
+      @repo_cache = repo_cache
       @file_tokens = {}
       @references = {}
     end
@@ -233,13 +238,19 @@ module Nabu
         canonical_identity: self.class.canonical_identity(
           @config.source_workdir(entry.slug),
           materialized: self.class.adapter_materialized_paths(entry),
-          cache: @identity_cache
+          cache: @identity_cache, repo_cache: @repo_cache
         ),
         parser_digest: parser_digest(entry),
         fold_digest: self.class.fold_digest(languages),
         migration_level: self.class.migration_level,
         config_json: self.class.config_json(entry)
       )
+    end
+
+    # Snapshot of the identity memos' counters (hit/miss/racy/bypass) —
+    # what the sweep's closing tally reports. Empty hashes without memos.
+    def identity_cache_stats
+      { trees: (@identity_cache&.stats || {}).dup, repos: (@repo_cache&.stats || {}).dup }
     end
 
     # The adapter's code closure within lib/nabu/adapters/: starting from the
@@ -278,12 +289,17 @@ module Nabu
       # +cache:+ (a CanonicalIdentityCache) may answer a PLAIN tree's
       # identity from its census-keyed memo instead of re-hashing every
       # byte; a git-bearing tree, a racy census, or any census drift
-      # computes honestly below. The answer is identical either way.
-      def canonical_identity(dir, materialized: [], cache: nil)
+      # computes honestly below. +repo_cache:+ (a GitIdentityCache) may
+      # answer each embedded repo's tokens without the git calls when its
+      # census proves the repo untouched since git vouched for it; any
+      # doubt pays the full call. The answer is identical either way.
+      def canonical_identity(dir, materialized: [], cache: nil, repo_cache: nil)
         return nil unless Dir.exist?(dir)
-        return cache.fetch(dir) { computed_identity(dir, materialized) } if cache
+        return cache.fetch(dir) { computed_identity(dir, materialized, repo_cache) } if cache
 
-        computed_identity(dir, materialized)
+        computed_identity(dir, materialized, repo_cache)
+      ensure
+        repo_cache&.flush
       end
 
       # The adapter's declared canonical materializations for a registry
@@ -401,8 +417,8 @@ module Nabu
 
       private
 
-      def computed_identity(dir, materialized)
-        tokens = identity_tokens(dir, dir, materialized: materialized)
+      def computed_identity(dir, materialized, repo_cache = nil)
+        tokens = identity_tokens(dir, dir, materialized: materialized, repo_cache: repo_cache)
         tokens && Digest::SHA256.hexdigest(tokens.sort.join("\n"))
       end
 
@@ -412,16 +428,16 @@ module Nabu
       # whole walk (weak identity). +materialized+ paths are root-relative
       # (class note on canonical_identity); a plain-tree walk hashes
       # everything anyway, so declarations only act inside git repos.
-      def identity_tokens(dir, root, materialized: [])
+      def identity_tokens(dir, root, materialized: [], repo_cache: nil)
         if File.directory?(File.join(dir, ".git"))
-          return repo_tokens(dir, root, materialized: repo_materialized(dir, root, materialized))
+          return cached_repo_tokens(dir, root, repo_materialized(dir, root, materialized), repo_cache)
         end
 
         tokens = []
         Dir.children(dir).sort.each do |name|
           full = File.join(dir, name)
           sub = if File.directory?(full)
-                  identity_tokens(full, root, materialized: materialized)
+                  identity_tokens(full, root, materialized: materialized, repo_cache: repo_cache)
                 else
                   ["file:#{relative(full, root)}:#{content_file_digest(full)}"]
                 end
@@ -438,6 +454,15 @@ module Nabu
 
         prefix = "#{relative(dir, root)}/"
         materialized.filter_map { |path| path.delete_prefix(prefix) if path.start_with?(prefix) }
+      end
+
+      # One repo's tokens, through the GitIdentityCache when given. The
+      # salt names everything besides the census that shapes the tokens.
+      def cached_repo_tokens(dir, root, materialized, repo_cache)
+        return repo_tokens(dir, root, materialized: materialized) unless repo_cache
+
+        salt = JSON.generate([relative(dir, root), materialized.sort])
+        repo_cache.fetch(dir, salt: salt) { repo_tokens(dir, root, materialized: materialized) }
       end
 
       def repo_tokens(dir, root, materialized: [])
@@ -477,9 +502,11 @@ module Nabu
       # materialization (Q59-a) is the second vouched shape: tolerated here,
       # and its bytes hashed by repo_tokens so the identity never trusts it
       # blind. Every porcelain line must be one of the two vouched shapes;
-      # any other dirt poisons the whole.
+      # any other dirt poisons the whole. --no-optional-locks: the identity
+      # pass never refreshes .git/index — a pure reader of canonical/ (and
+      # GitIdentityCache keys on the index's stat).
       def porcelain_clean?(dir, materialized: [])
-        lines = Shell.run("git", "-C", dir, "status", "--porcelain")
+        lines = Shell.run("git", "--no-optional-locks", "-C", dir, "status", "--porcelain")
                      .lines.map(&:chomp).reject(&:empty?)
         lines.all? do |line|
           (line.start_with?(" M ") && lfs_materialized?(dir, line[3..])) ||

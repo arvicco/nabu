@@ -2835,7 +2835,10 @@ class CLITest < Minitest::Test
         assert_match(/^  pinning code identities \(1 sources\)… /, err)
         assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — first run — no estimate$/, err)
         assert_match(%r{^  verdict corpus \(1/1\)… }, err)
-        assert_match(/^  verdicts: 1 clean · 0 dirty · 0 skipped \(\d+s\)$/, err)
+        # The tally closes with the identity memos' per-sweep counts (the
+        # fixture tree may sit in the racy window, so tree counts vary).
+        memo = /memo: trees \d+ hit \d+ miss, repos 0 hit 0 miss/
+        assert_match(/^  verdicts: 1 clean · 0 dirty · 0 skipped \(\d+s\) · #{memo}$/, err)
       end
       _out, err, = with_config(config) { run_cli(%w[rebuild --incremental]) }
       assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — ~\d+s \(last run \d+s over 1 rows\)$/,
