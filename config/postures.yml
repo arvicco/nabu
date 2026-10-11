@@ -485,10 +485,10 @@ sources:
   # P116-3: the West/East Slavic wikisource family (№R-74 posture).
   pl-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the pl anchor + its old/middle stages
-        (Old Polish to c.1500, Middle Polish to 1772) — nabu-lects carries no Polish
-        node yet (censused 2026-10-10); the cone's era bands then stage it by date.
-        Documents claim bare pol meanwhile"}
+    lect: {posture: identity, note: "pl — the anchor minted 2026-10-11 (the Slavic
+        package); documents claim bare pol → pl via codemap. Deliberately coarse at
+        source grain: the cone spans pl:old and pl:mid, and the era-band categories
+        are attributions, not typed dates — staging stays a recorded future look"}
     dating: {posture: dated, note: "P116-3 (№R-74): the cone category's
         literary-period band (era_band → MetadataDates :era_band_key; medieval /
         XV-century / Renaissance / Baroque, approximate conventions declared in
@@ -498,9 +498,10 @@ sources:
     script: {posture: implied}
   cs-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the cs anchor + its old/middle stages
-        (Dalimil's Old Czech; the 1613 Kralice / Komenský Middle Czech) — nabu-lects
-        carries no Czech node yet (censused 2026-10-10). Documents claim bare ces"}
+    lect: {posture: identity, note: "cs — the anchor minted 2026-10-11 (the Slavic
+        package); documents claim bare ces → cs via codemap. Deliberately coarse:
+        the cone mixes Dalimil's Old Czech with Kralice/Komenský Middle Czech and
+        per-work edition layers — per-work staging a recorded future look"}
     dating: {posture: partial, note: "P116-3: the Textinfo VYDÁNO/ZDROJ edition
         statement → MetadataDates :edition_year_text (date_class edition, never
         composition); the 1613 print's Roman-numeral year (M.DC.XIII) mints nothing —
