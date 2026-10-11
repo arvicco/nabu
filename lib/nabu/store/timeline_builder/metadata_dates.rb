@@ -90,6 +90,8 @@ module Nabu
           "ebl" => :period_label,
           "edr" => :structured,
           "eebo-tcp" => :structured,
+          "elektire" => :structured, # P117-2: the portal's century of origin as an
+          #                            envelope (composition class)
           "elephantine" => :structured,
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
@@ -146,7 +148,7 @@ module Nabu
         # composition era (author-era), not an object — their rows carry
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
-        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic].freeze
+        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic elektire].freeze
 
         # P104-1: sources whose place claim rides a differently-named
         # metadata field. An override key is a findspot vocabulary with

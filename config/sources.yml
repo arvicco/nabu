@@ -1776,6 +1776,24 @@ eebo-tcp:
   # files. Median text 35 KB, max 17.6 MB — Reader streaming throughout.
   sync_policy: manual
 
+elektire:   # P117-2, 02-sources row 247
+  adapter: Nabu::Adapters::Elektire
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # eLektire (lektire.skole.hr — CARNET's school reading portal, books by
+  # Bulaja naklada): the Croatian canon, Marulić's Judita to the moderns.
+  # WP-JSON crawl (works listing + taxonomies + per-work attachments) of
+  # the Croatian-literature term, EPUBs as served → the new elektire-epub
+  # family (work text only; the publisher's reserved apparatus — glossary,
+  # notes, author note, didactic pages — never ingested). PER-WORK rights
+  # from each impressum; admitted only with a public-domain statement, no
+  # reserved translation, and an author dead by 1955 (life + 70) or
+  # anonymous → open. The printed base edition is not stated in the asset
+  # and is recorded as such. Expected first sync 205 docs / 375,300
+  # passages, 26 skipped by rule (census 2026-10-11; ~12 min crawl, 250 MB).
+
 elephantine:   # P47-1, 02-sources row 131
   adapter: Nabu::Adapters::Elephantine
   adopted: "2026-07-26"
