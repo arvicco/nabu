@@ -29,12 +29,12 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
 | `seal` | texts | research_private | wired · manual | 408 docs / 14,953 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 | `wiktionary-akk` | dictionary | attribution | wired · manual | 1,348 entries |
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 | `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 49 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 51 more (`nabu axis cuneiform` lists all).
 
 ## The desk's instruments
 

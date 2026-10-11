@@ -48,9 +48,9 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 43 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 45 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
