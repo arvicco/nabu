@@ -107,7 +107,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["eltec-srp"]
       refute_nil entry
-      refute entry.wired, "ready, not wired — the first sync waits for the owner"
+      assert entry.wired, "wired: true — first sync verified 2026-10-11 (96 docs / 150,794 passages)"
       assert_equal "manual", entry.sync_policy
     end
 

@@ -286,7 +286,7 @@ archiv-slav-phil:   # Q105, 02-sources row 251
   adapter: Nabu::Adapters::ArchivSlavPhil
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # until the first real sync is verified
+  wired: true    # First sync verified 2026-10-11: 33 docs / 22,348 passages.
   sync_policy: manual
   # Jagić's Archiv für slavische Philologie as the archive.org scan run —
   # 33 volumes keyed by their own title pages: Bd. 1, 3–12, 14–35
@@ -1796,7 +1796,7 @@ elektire:   # P117-2, 02-sources row 247
   adapter: Nabu::Adapters::Elektire
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 205 docs / 375,300 passages.
   sync_policy: manual
   # eLektire (lektire.skole.hr — CARNET's school reading portal, books by
   # Bulaja naklada): the Croatian canon, Marulić's Judita to the moderns.
@@ -1875,7 +1875,7 @@ eltec-srp:   # P117-2, 02-sources row 246
   adapter: Nabu::Adapters::EltecSrp
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 96 docs / 150,794 passages / 4 rule-skips.
   sync_policy: manual
   # ELTeC-srp (COST Action CA16204; ed. Cvetana Krstev, JeRTeH):
   # Serbian novels, first editions 1852–1920, level-1 TEI (the eltec-tei
@@ -1965,7 +1965,7 @@ gams-zrcalo:   # Q102, 02-sources row 244
   adapter: Nabu::Adapters::GamsZrcalo
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 1 doc / 199 passages.
   sync_policy: manual
   # Zrcalo člověčaskago spasenja (1445) — the Croatian Glagolitic
   # Speculum humanae salvationis of the deacon Luka (Vatican, Borg.
@@ -2083,7 +2083,7 @@ guaman-poma:   # P117-5, 02-sources row 255
   adapter: Nabu::Adapters::GuamanPoma
   adopted: "2026-10-11"
   axes: [americas]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 1,189 docs / 5,911 passages.
   sync_policy: manual
   # Guaman Poma, El primer nueva corónica y buen gobierno (1615; Royal
   # Danish Library GKS 2232 4º) — the KB's digital edition (Murra/Adorno/
@@ -2500,7 +2500,7 @@ kdsp:   # Q102, 02-sources row 242
   adapter: Nabu::Adapters::Kdsp
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 262 docs / 290,394 passages.
   sync_policy: manual
   # KDSP 1.0 — the corpus of longer narrative Slovenian prose 1836–1918
   # (ZRC SAZU; CLARIN.SI hdl 11356/1823, CC BY 4.0 → attribution): 262
@@ -2758,7 +2758,7 @@ litopys:   # P117 (Q106), 02-sources row 252
   adapter: Nabu::Adapters::Litopys
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # READY; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 41 docs / 964 passages + 3 glossaries / 923 entries.
   sync_policy: manual
   # Izbornyk (litopys.org.ua), the PD-EDITION SUBSET — the packet is the
   # per-text edition triage (Litopys::TRIAGE): the Ipatiev chronicle
@@ -2920,7 +2920,7 @@ mdz-protestant:   # Q102, 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # Both crawl passes verified 2026-10-11: 6 docs complete / 1,54x page passages.
   sync_policy: manual
   # MDZ (Bayerische Staatsbibliothek) page OCR of six 16th-century
   # Slovene/Croatian Protestant prints — Trubar 1562, Dalmatin 1575,
@@ -4452,7 +4452,7 @@ slavistics-pd:   # Q105, 02-sources row 250
   adapter: Nabu::Adapters::SlavisticsPd
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # until the first real sync is verified
+  wired: true    # First sync verified 2026-10-11: 21/23 docs / 5,833 passages (2 items on archive.org mirror retries — they land on a later sync).
   sync_policy: manual
   # The PD German-Slavistics reference canon as archive.org scans — 23
   # census items: Miklosich (Etym. Wb. 1886, Vergl. Grammatik I–IV),
@@ -4476,7 +4476,7 @@ slouniki-nasovic:   # P117 (Q106), 02-sources row 253
   adapter: Nabu::Adapters::SlounikiNasovic
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # READY; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 35,159 entries.
   sync_policy: manual
   # Насовіч, Словарь бѣлорусскаго нарѣчія (СПб., 1870) — the library's
   # FIRST Belarusian (be) shelf, dictionary-shaped: one SlounikPlus XML
@@ -4720,7 +4720,7 @@ ticha:   # P117-5, 02-sources row 254
   adapter: Nabu::Adapters::Ticha
   adopted: "2026-10-11"
   axes: [americas]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 93 docs / 1,103 passages / 4 rule-skips.
   sync_policy: manual
   # Ticha — colonial Valley Zapotec texts in TEI (Haverford College;
   # github.com/HCDigitalScholarship/ticha-xml-tei, CC BY-SA 4.0 by the
@@ -5554,7 +5554,7 @@ vuk-danicic:   # P117-2, 02-sources row 248
   adapter: Nabu::Adapters::VukDanicic
   adopted: "2026-10-11"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # First sync verified 2026-10-11: 66 docs / 31,102 passages.
   sync_policy: manual
   # The Vuk (NT 1847) / Daničić (OT 1865) Serbian Bible, IJEKAVIAN, in
   # Latin transliteration: spthmpsn/Rs1Bible (66 USFM books converted
