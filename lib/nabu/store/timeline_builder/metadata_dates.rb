@@ -71,6 +71,7 @@ module Nabu
         # registers here and the health lane-drift check flags it if it
         # doesn't).
         SHAPES = {
+          "archiv-slav-phil" => :structured, # Q105: each volume's title-page year
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,

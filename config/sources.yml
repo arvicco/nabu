@@ -282,6 +282,22 @@ aranese:
   # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
   sync_policy: manual
 
+archiv-slav-phil:   # Q105, 02-sources row 251
+  adapter: Nabu::Adapters::ArchivSlavPhil
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # Jagić's Archiv für slavische Philologie as the archive.org scan run —
+  # 33 volumes keyed by their own title pages: Bd. 1, 3–12, 14–35
+  # (1876–1914; Toronto Bd. 16–35, user uploads Bd. 1/7–9, Google scans
+  # filling Bd. 3–6/10–12/14–15). One document per volume, page grain
+  # over the hOCR derivative pair (the slavistics-pd mechanics,
+  # IaScanShelf). UNCORRECTED OCR declared on every document. Language
+  # deu (the journal's; Slavic-language articles mixed in — coarse,
+  # declared). US public domain (pre-1931); the EU per-article term is
+  # not audited — declared in the manifest.
+
 aspr:
   adapter: Nabu::Adapters::Aspr
   adopted: "2026-07-10"
