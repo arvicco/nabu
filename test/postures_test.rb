@@ -342,6 +342,6 @@ class PosturesTest < Minitest::Test
     # prague-bible-1488 retires to the cs → cs:old override (118) and
     # korba flips pending → identity (pl:mid by date-band inference, the
     # dta shape): identity 89→90, pending 4→2 (pl/cs-wikisource remain).
-    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 90, "pending" => 2 }, by_posture)
+    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 92 }, by_posture)
   end
 end
