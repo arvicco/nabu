@@ -2504,6 +2504,24 @@ ja-wikisource:   # P109-1
   # {{versions}} disambiguation pages skip by rule. Texts PD;
   # transcription layer CC BY-SA 4.0.
 
+kannada-texts:   # P118-3
+  adapter: Nabu::Adapters::KannadaTexts
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # Kannada Digital Texts Project (Andrew Ollett; text entry Krishnaprasada
+  # G. / Adishila Publications; github.com/aso2101/kannada_texts): 16 TEI
+  # editions, ISO-15919 romanized — Pampa (941), Ponna (953), Ranna,
+  # Nagavarma II (ca. 1042), Janna, Harihara, Raghavanka, Kanakadasa,
+  # Ratnakaravarni, Honnamma. Sparse GitFetch of tei/ + README.md
+  # (~5 MB). `ollett-tei` family: passage = stanza (lg, @met carried) /
+  # prose block / colophon, cited <div n>.<lg n>. License: every file
+  # "Distributed under a Creative Commons Attribution-ShareAlike 4.0
+  # license." (the in-file grant governs over the README's CC-BY 4.0
+  # default) -> attribution. Census 2026-10-11: 16 docs / 16,151
+  # passages, 0 quarantines.
+
 kanripo:
   adapter: Nabu::Adapters::Kanripo
   adopted: "2026-07-20"
@@ -3926,6 +3944,23 @@ prague-bible-1488:   # P116-1
   # both attribution-class). One zip: 31 PAGE-XML GT pages, Old Czech,
   # semi-diplomatic; document = page, passage = TextLine (page-xml family),
   # abbreviation expansions as annotations.
+
+prakrit-texts:   # P118-3
+  adapter: Nabu::Adapters::PrakritTexts
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # Prakrit Digital Texts Project (Andrew Ollett; github.com/aso2101/
+  # prakrit_texts): 33 TEI files, ISO-15919 romanized. Ingests ONLY the
+  # 23 files whose availability reads "Prakrit Digital Texts Project.
+  # Distributed under a Creative Commons Attribution-ShareAlike 4.0
+  # license." -> attribution; the 9 Svetambara Agama files with the
+  # template comment "add whatever license you like" are skipped by rule
+  # (no grant), and the Setubandha is SARIT's edition, already held via
+  # sarit (declared overlap). Sparse GitFetch of tei/ + README.md.
+  # `ollett-tei` family. Census 2026-10-11: 22 docs / 27,124 passages;
+  # 1 quarantine (acaraniryukti.xml is not well-formed upstream).
 
 prilit:   # P95-1
   adapter: Nabu::Adapters::Prilit

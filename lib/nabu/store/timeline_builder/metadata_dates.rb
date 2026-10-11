@@ -110,6 +110,8 @@ module Nabu
           "itkc" => :structured,
           "ja-wikisource" => :era_band_key,
           "ko-wikisource-mk" => :structured,
+          "kannada-texts" => :structured, # P118-3: the repo README's work dates
+          #                                 (941, 953, ca. 1042), composition class
           "kdsp" => :structured,
           "korba" => :structured,
           "litopys" => :era_band_key,
@@ -158,7 +160,7 @@ module Nabu
         # composition era (author-era), not an object — their rows carry
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
-        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic elektire].freeze
+        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic elektire kannada-texts].freeze
 
         # P104-1: sources whose place claim rides a differently-named
         # metadata field. An override key is a findspot vocabulary with

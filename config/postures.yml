@@ -669,6 +669,37 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  kannada-texts:   # P118-3
+    kind: {posture: unclassified, note: "no class field in the TEI (campū purāṇas, śatakas,
+        a sāṅgatya, a nighaṇṭu, a poetics and a grammar) — a kind_map fold would be a ruled
+        table"}
+    lect: {posture: pending, note: "candidate: a kan (Kannada) anchor with Old (Halegannaḍa:
+        Pampa–Janna) and Middle (Naḍugannaḍa: Harihara, Rāghavāṅka, Kanakadāsa,
+        Ratnākaravarṇi, Honnamma) stages — the hub-side nabu-lects mint; no kan node exists
+        in canonical/nabu-lects (checked 2026-10-11), so kan-Latn rides bare until it
+        merges; san-Latn (the Karṇāṭakabhāṣābhūṣaṇaṁ, Sanskrit stanzas) resolves"}
+    dating: {posture: partial, note: "6 of 16 works dated by the repository README (941 ×2,
+        953, ca. 1042 ×3) — attributed COMPOSITION class on the :structured lane; the TEI
+        headers carry only edition years; the other ten works stay undated, declared"}
+    places: {posture: unplaced, note: "the headers name only the modern editions' imprint
+        places (Hampi, Mysore, Bengaluru) — never the works'"}
+    script: {posture: qualified, note: "ISO-15919 romanization of Kannada-script editions;
+        the Kannada script itself is not carried"}
+  prakrit-texts:   # P118-3
+    kind: {posture: unclassified, note: "no class field in the TEI (kāvya, kathā, gāhā
+        anthologies, lexica, grammars, a metrics, canonical Āgamas) — a kind_map fold would
+        be a ruled table"}
+    lect: {posture: pending, note: "candidate: pka (Ardhamāgadhī — the Nandī and
+        Aṇuōgaddārāiṁ, 2 docs / 764 passages tag pka-Latn) has no registry node: a pka member
+        under pra (pra's own note keeps the member codes unminted until a consumer
+        distinguishes them — this one does) or a codemap pka-Latn → pra coarse, the
+        hub-side mint; pra-Latn and san-Latn resolve"}
+    dating: {posture: undatable, note: "the headers carry modern edition years only
+        (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
+        dates nothing — no composition date is minted, declared"}
+    places: {posture: unplaced, note: "only the editions' imprint places are named"}
+    script: {posture: qualified, note: "ISO-15919 romanization (Dēvanāgarī-printed
+        editions); the source script is not carried"}
   sarit:
     kind: {posture: unclassified}
     lect: {posture: identity, note: classical Sanskrit editions; no school tags like DCS's}
