@@ -122,6 +122,9 @@ module Nabu
           "sl-wikisource" => :structured,
           "soas-tibetan" => :century_prose,
           "syriac-corpus" => :when_key,
+          # The ruled Bactrian-era envelope (2026-10-11): era year Y →
+          # [Y+222, Y+228], computed in the adapter (TitusBactrian).
+          "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
           "titus-tocharian-a" => :place_only,
           "uk-wikisource" => :era_band_key,

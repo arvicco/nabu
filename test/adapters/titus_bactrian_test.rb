@@ -94,19 +94,93 @@ class TitusBactrianTest < Minitest::Test
 
   # --- the era formula (runs in CI, no bytes) ---------------------------------
 
-  def test_era_formula_sums_the_greek_numerals
-    assert_equal({ "formula" => "χϸονο ρʹ ιʹ", "era_year" => 110, "uncertain" => false },
+  # The ruled envelope (2026-10-11): era year Y → CE [Y+222, Y+228].
+  def test_era_formula_sums_the_greek_numerals_into_the_ruled_envelope
+    assert_equal({ "formula" => "χϸονο ρʹ ιʹ", "era_year" => 110, "uncertain" => false,
+                   "not_before" => 332, "not_after" => 338 },
                  ADAPTER.era_formula("χϸονο ρʹ ιʹ Αυρηζνο μα̅ο̅"))
   end
 
-  def test_era_formula_keeps_restorations_and_flags_them_uncertain
-    assert_equal({ "formula" => "[χ]ϸονο ρʹ λ̣ʹ δʹ", "era_year" => 134, "uncertain" => true },
+  # Aa: the tens letter λ̣ carries the subscript dot — it widens one step
+  # of its own rank (κ…μ, 20–40): era years 124–144.
+  def test_a_dotted_numeral_widens_by_one_step_of_its_rank
+    assert_equal({ "formula" => "[χ]ϸονο ρʹ λ̣ʹ δʹ", "era_year" => 134, "uncertain" => true,
+                   "not_before" => 346, "not_after" => 372 },
                  ADAPTER.era_formula("[χ]ϸονο ρʹ λ̣ʹ δʹ δηματριγανο"))
+  end
+
+  # B (year 137): the dot sits in the WORD for "year", never in the numeral —
+  # the reading of the year is clean.
+  def test_damage_in_the_word_for_year_never_flags_the_numeral
+    formula = ADAPTER.era_formula("χϸ̣ονο ρʹ λʹ ζʹ μαο")
+    assert_equal 137, formula["era_year"]
+    refute formula["uncertain"], "the numeral ρʹ λʹ ζʹ is clean"
+    assert_equal [359, 365], formula.values_at("not_before", "not_after")
+    refute ADAPTER.era_formula("[]χ̣ϸονο σʹ νʹ")["uncertain"], "H: a dotted χ is the word, not the year"
+  end
+
+  # TiS: the hundreds letter υ̣ is dotted (300–500); the dot before χ belongs
+  # to the preceding α̣ and never leads the formula.
+  def test_the_tang_i_safedak_formula_reads_its_year
+    assert_equal({ "formula" => "χϸον̣ο υ̣ʹ ϙʹ βʹ", "era_year" => 492, "uncertain" => true,
+                   "not_before" => 614, "not_after" => 820 },
+                 ADAPTER.era_formula("α̣χϸον̣ο υ̣ʹ ϙʹ βʹ μ̣αυ̣ο σβωλο"))
+  end
+
+  # L / Q / Y write the units nine as ϑ (the theta symbol).
+  def test_the_theta_symbol_is_nine
+    assert_equal 379, ADAPTER.era_formula("αχϸονο τʹ οʹ ϑʹ μαυο αββο")["era_year"]
+  end
+
+  # aa: a lacuna directly after the numeral may hide lower-rank letters —
+  # the upper bound opens by the lowest rank present minus one.
+  def test_a_lacuna_after_the_numeral_opens_the_upper_bound
+    formula = ADAPTER.era_formula("χϸον̣[ο ]ρ̣ʹ [ ]μ̣αο")
+    assert_equal 100, formula["era_year"]
+    assert formula["uncertain"]
+    assert_equal [100 + 222, 299 + 228], formula.values_at("not_before", "not_after")
+  end
+
+  def test_a_restored_numeral_spans_its_whole_rank
+    formula = ADAPTER.era_formula("χϸονο ρʹ [λʹ] δʹ")
+    assert formula["uncertain"]
+    assert_equal [114 + 222, 194 + 228], formula.values_at("not_before", "not_after")
   end
 
   def test_era_formula_needs_numerals
     assert_nil ADAPTER.era_formula("χϸονο Αυρηζνο")
     assert_nil ADAPTER.era_formula("αβο μο ρωβαγγο")
+  end
+
+  def test_the_envelope_projects_through_the_structured_timeline_shape
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES[SLUG]
+    refute Nabu::Health::Invariants::MINING_EXEMPT.key?(SLUG), "era_dates is mined now — the exemption retired"
+  end
+
+  def bactrian_line(text, line, content, genre: "Lett.")
+    PARSER::Line.new(genre: genre, text: text, line: line, label: line, content: content,
+                     copy: nil, line_end_word: nil)
+  end
+
+  # Any page whose text carries the formula is mined — the TiS inscription
+  # (a Buddhist-text page) and the dated letters included.
+  def test_era_dates_mine_any_genre
+    lines = [bactrian_line("TiS", "1", "α̣χϸον̣ο υ̣ʹ ϙʹ βʹ μ̣αυ̣ο σβωλο", genre: "Buddh.T."),
+             bactrian_line("TiS", "2", "βογγο ιμο στοπο̣", genre: "Buddh.T.")]
+    assert_equal [{ "text" => "TiS", "formula" => "χϸον̣ο υ̣ʹ ϙʹ βʹ", "era_year" => 492, "uncertain" => true,
+                    "not_before" => 614, "not_after" => 820 }], ADAPTER.era_dates(lines)
+  end
+
+  # dd: the units letter wraps to the next line (198, not 190); de: the word
+  # for "year" breaks at the line end ("χ̣-" / "ϸονο").
+  def test_era_dates_follow_the_formula_across_the_line_end
+    dd = [bactrian_line("dd", "7", "πανδαγο οτο οιζαγγοδαρο μακιρηδο χϸονο ρʹ ϙʹ"),
+          bactrian_line("dd", "8", "ηʹ μα̅ο̅ ̅δαδο")]
+    assert_equal 198, ADAPTER.era_dates(dd).first["era_year"]
+    de = [bactrian_line("de", "11", "ϸ̣ο οτο οιζαγγο μ̣α̣κ̣ι̣ρηδο̣ χ̣-"),
+          bactrian_line("de", "12", "ϸονο ρʹ ϙʹ ϑʹ μα̣ο̣")]
+    assert_equal({ "text" => "de", "formula" => "χ̣ϸονο ρʹ ϙʹ ϑʹ", "era_year" => 199, "uncertain" => false,
+                   "not_before" => 421, "not_after" => 427 }, ADAPTER.era_dates(de).first)
   end
 
   # --- discovery -------------------------------------------------------------
@@ -172,8 +246,10 @@ class TitusBactrianTest < Minitest::Test
     assert_equal "Corpus of Bactrian Texts", metadata["page_title"]
     assert_match(/Nicholas Sims-Williams/, metadata["data_entry"])
     assert_match(/Bactrian Documents from Northern Afghanistan/, metadata["bibliography"])
-    assert_equal [{ "text" => "A", "formula" => "χϸονο ρʹ ιʹ", "era_year" => 110, "uncertain" => false }],
-                 metadata["era_dates"]
+    assert_equal [{ "text" => "A", "formula" => "χϸονο ρʹ ιʹ", "era_year" => 110, "uncertain" => false,
+                    "not_before" => 332, "not_after" => 338 }], metadata["era_dates"]
+    assert_equal({ "not_before" => 332, "not_after" => 338, "raw" => "χϸονο ρʹ ιʹ" }, metadata["date"],
+                 "the page's envelope rides the :structured timeline shape")
     assert_equal "Bactrian — A (baktc001)", documents_by_page.fetch("baktc001").title
   end
 
@@ -193,8 +269,8 @@ class TitusBactrianTest < Minitest::Test
     assert_equal "second", second.annotations["copy"]
     assert_equal "[. . . δ]η̣[μα]τρ[ι]\\[γανο", second.text
     assert_nil passage("urn:nabu:titus-bactrian:baktc002:Aa.1").annotations["copy"]
-    assert_equal [{ "text" => "Aa", "formula" => "[χ]ϸονο ρʹ λ̣ʹ δʹ", "era_year" => 134, "uncertain" => true }],
-                 document.metadata["era_dates"]
+    assert_equal [{ "text" => "Aa", "formula" => "[χ]ϸονο ρʹ λ̣ʹ δʹ", "era_year" => 134, "uncertain" => true,
+                    "not_before" => 346, "not_after" => 372 }], document.metadata["era_dates"]
   end
 
   def test_tally_list_labels_ride_verbatim_and_traces_only_lines_mint_nothing
@@ -203,6 +279,7 @@ class TitusBactrianTest < Minitest::Test
     assert_includes tails, "am.30+37"
     refute_includes tails, "am.5+6B", "a line carrying only the editorial 'traces only' is not text"
     assert_nil documents_by_page.fetch("baktc046").metadata["era_dates"], "lists carry no era formula"
+    assert_nil documents_by_page.fetch("baktc046").metadata["date"]
     assert_equal "Lists and accounts", documents_by_page.fetch("baktc046").metadata["genre_name"]
   end
 
