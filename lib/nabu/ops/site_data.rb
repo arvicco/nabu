@@ -136,7 +136,11 @@ module Nabu
           "kind_class_count" => kind[:classes],
           "kind_documents" => kind[:documents],
           "kind_documents_display" => self.class.commas(kind[:documents]),
-          "kind_coverage_pct" => kind[:coverage]
+          "kind_coverage_pct" => kind[:coverage],
+          # P118-R5: the licensing prose's "roughly N% of documents are
+          # public-domain or attribution-class" (index, faq, sources) — it
+          # had rotted from 99% to 96% as nc-class growth landed.
+          "redistributable_pct" => self.class.redistributable_pct(catalog)
         }
       ensure
         catalog&.disconnect
@@ -155,13 +159,36 @@ module Nabu
         yield catalog[:dictionary_stats]
       end
 
+      #
+      # The rows split counts every registry row (the registry's SHAPE); the
+      # live-source figure — the "N sources live" holdings claim — counts
+      # only PUBLIC wired sources: grant-gated blocked holdings are never
+      # advertised and public census surfaces never count them (the
+      # SourceRegistry availability contract, owner ruling 2026-07-24;
+      # P118-R5 closed the gap where they had been counted).
       def registry_breakdown
         entries = @registry.each_source.to_a
         { rows: entries.size,
           sources: entries.count(&:source?),
           shelves: entries.count(&:shelf?),
           modules: entries.count(&:feature_module?),
-          live_sources: entries.count { |entry| entry.source? && entry.wired } }
+          live_sources: entries.count { |entry| entry.source? && entry.wired && entry.public? } }
+      end
+
+      # The share (integer percent, rounded) of live documents whose
+      # EFFECTIVE license class — the per-document override where one
+      # exists, else the source's class — is open or attribution: the
+      # freely redistributable part of the library. 0 on an empty catalog.
+      def self.redistributable_pct(catalog)
+        live = catalog[:documents].join(:sources, id: :source_id)
+                                  .where(Sequel[:documents][:withdrawn] => false)
+        total = live.count
+        return 0 unless total.positive?
+
+        effective = Sequel.function(:coalesce, Sequel[:documents][:license_override],
+                                    Sequel[:sources][:license_class])
+        free = live.where(effective => %w[open attribution]).count
+        ((free * 100.0) / total).round
       end
 
       # The dates page's data (P81-1, C-6): the chronological census as

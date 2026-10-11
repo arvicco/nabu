@@ -8,7 +8,7 @@ passages_display: '110,331,584'
 language_codes: 188
 registry_rows: 233
 corpus_sources: 203
-live_sources: 202
+live_sources: 194
 local_shelves: 5
 feature_modules: 25
 top_languages:
@@ -79,3 +79,4 @@ kind_class_count: 21
 kind_documents: 1916554
 kind_documents_display: '1,916,554'
 kind_coverage_pct: 81
+redistributable_pct: 96
