@@ -114,6 +114,11 @@ class DerivabilityWritersTest < Minitest::Test
   # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
   # .elektire-fetch.json pin) inside Adapter#fetch — the cantigas_fetch
   # law kind, its sixth crawl sibling.
+  # same fetch — the ja/zh-wikisource law kind. The Q105 archive.org
+  # scan-shelf base (ia_scan_shelf) writes each census item's hOCR
+  # derivative pair (.part + rename, whole item or nothing) under
+  # canonical/<slug>/<identifier>/ inside Adapter#fetch — the same
+  # canonical-gateway law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -146,6 +151,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/adapters/mdz_protestant.rb
+    nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb

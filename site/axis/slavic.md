@@ -41,6 +41,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 | `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `sl-wikisource` | texts | attribution | wired · manual | 1,539 docs / 145,035 passages |
+| `slavistics-pd` | texts | open | not yet wired | nothing held yet |
 | `slouniki-nasovic` | dictionary | open | not yet wired | nothing held yet |
 | `sr-wikisource` | texts | attribution | wired · manual | 4,607 docs / 581,423 passages |
 | `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |

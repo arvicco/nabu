@@ -880,6 +880,19 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  slavistics-pd:   # Q105
+    # kind: machine-postured — kind_map.yml source_kind scholarly (the
+    # whole source IS scholarship; per-work genre rides the genre facet).
+    lect: {posture: identity, note: "the reference-shelf posture (the local-library precedent):
+        each work claims the language of its PROSE — deu (lat for Kopitar's Clozianus, ces for
+        Vondrák's two Czech works) — scholarship ABOUT Slavic, never a Slavic lect claim; the
+        object-language forms are uncorrected OCR (declared per document)"}
+    dating: {posture: dated, note: "every work carries its text's edition year(s) — a facsimile
+        reprint keeps its first edition's date, the print riding the note — :structured lane"}
+    places: {posture: unplaced, note: "imprint places (Wien, Berlin, Heidelberg, Praha) ride
+        metadata 'imprint' — the printing place, not a text place (the dta stance)"}
+    script: {posture: implied, note: "Latin script prose (Antiqua/Fraktur); the Cyrillic and
+        Glagolitic-in-Cyrillic object text is uncorrected OCR, frequently mis-read as Latin"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle

@@ -83,10 +83,10 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (30): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
+**Members** (31): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
 =======
-**Members** (26): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `korba`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
->>>>>>> c57b8188 (Add elektire: the Croatian school canon from lektire.skole.hr, ready)
+**Members** (24): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `korba`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
+>>>>>>> 2ad80707 (Add slavistics-pd: the PD Slavistics reference shelf from archive.org)
 
 ### germanic
 

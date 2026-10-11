@@ -1,0 +1,34 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two items are documented prefix trims (whole: false), so adapter_test
+# stays null (a count-based re-run against the full upstream would
+# false-fail); the Imperfect pair is byte-whole.
+source: slavistics-pd
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: dasimperfectinde00mikl/dasimperfectinde00mikl_hocr_searchtext.txt.gz
+    url: https://archive.org/download/dasimperfectinde00mikl/dasimperfectinde00mikl_hocr_searchtext.txt.gz
+    whole: true
+    trim: none
+  - path: dasimperfectinde00mikl/dasimperfectinde00mikl_hocr_pageindex.json.gz
+    url: https://archive.org/download/dasimperfectinde00mikl/dasimperfectinde00mikl_hocr_pageindex.json.gz
+    whole: true
+    trim: none
+  - path: glagolitaclozia00chrygoog/glagolitaclozia00chrygoog_hocr_searchtext.txt.gz
+    url: https://archive.org/download/glagolitaclozia00chrygoog/glagolitaclozia00chrygoog_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 10 hOCR pages (8,786 of 761,431 characters), re-gzipped — README recipe
+  - path: glagolitaclozia00chrygoog/glagolitaclozia00chrygoog_hocr_pageindex.json.gz
+    url: https://archive.org/download/glagolitaclozia00chrygoog/glagolitaclozia00chrygoog_hocr_pageindex.json.gz
+    whole: false
+    trim: first 10 of 177 rows, re-gzipped — README recipe
+  - path: miklosich-vergleichende-grammatik/4. Vergleichende Syntax (1926)_hocr_searchtext.txt.gz
+    url: https://archive.org/download/miklosich-vergleichende-grammatik/4.%20Vergleichende%20Syntax%20%281926%29_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 13 hOCR pages (17,530 of 2,444,690 characters), re-gzipped — README recipe
+  - path: miklosich-vergleichende-grammatik/4. Vergleichende Syntax (1926)_hocr_pageindex.json.gz
+    url: https://archive.org/download/miklosich-vergleichende-grammatik/4.%20Vergleichende%20Syntax%20%281926%29_hocr_pageindex.json.gz
+    whole: false
+    trim: first 13 of 907 rows, re-gzipped — README recipe
