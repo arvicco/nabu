@@ -106,6 +106,21 @@ map:
   mkd:     mk
   mac:     mk
 
+  # The americas package (2026-10-11). grn is the 639-2/3 spelling of the
+  # Guarani macrolanguage the registry anchors as gn (the nor precedent).
+  # gn-cls is Wiktionary's Classical Guarani (exceptional-language code,
+  # verified 2026-10-11), the Jesuit-era stage. tpw 'Tupí' was RETIRED by
+  # ISO 639-3 as a duplicate of tpn (CR 2022-012, effective 2023-01-20)
+  # and Wiktionary still spells the same language tpw 'Old Tupi' — both
+  # readings name Tupinambá. NO gug row (one member of the macrolanguage;
+  # identity leaves it bare — see gn's note). NO xzp row: ISO's Ancient
+  # Zapotec is the pre-Hispanic glyphic language by its CR 2006-065, not
+  # the colonial alphabetic stage; a collection spelling Córdova's
+  # Zapotec xzp folds it in its own override (see zap's note).
+  grn:     gn
+  gn-cls:  gn:old
+  tpw:     tpn
+
   # The Latin stage suite (Wiktionary etymology-only codes)
   la-vul:  lat/vul      # the ATTESTED register is the universal default reading
   la-lat:  lat:late
