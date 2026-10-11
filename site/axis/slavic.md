@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 October 2026)</span> |
 |---|---|---|---|---|
@@ -36,6 +36,7 @@ A source wears every desk it serves — these twenty-four answer this desk. Hold
 | `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `sl-wikisource` | texts | attribution | wired · manual | 1,539 docs / 145,035 passages |
+| `slouniki-nasovic` | dictionary | open | not yet wired | nothing held yet |
 | `sr-wikisource` | texts | attribution | wired · manual | 4,607 docs / 581,423 passages |
 | `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
