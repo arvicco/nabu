@@ -533,6 +533,8 @@ sources:
     source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
   eng-web:
     source_kind: scripture
+  vuk-danicic:
+    source_kind: scripture   # P117-2: the Vuk–Daničić Serbian Bible
   sblgnt:
     source_kind: scripture
   oshb:

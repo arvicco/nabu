@@ -45,6 +45,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 | `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
 | `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
 | `uk-wikisource` | texts | attribution | wired · manual | 7 docs / 541 passages |
+| `vuk-danicic` | texts | open | not yet wired | nothing held yet |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `sl` 141,746 · `pol` 6,942 · `chu` 4,660 · `srp` 4,474 · `hrv` 1,523 · `mkd` 836 · `ces` 330 · `bul` 154 · `orv` 62 · `cs` 31 … and 22 more (`nabu axis slavic` lists all).
