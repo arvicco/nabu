@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Ālūr, Vīrabhadradēva Temple, time of Tribhuvanamalladēva (Vikramāditya VI), Cāḷukya-Vikrama 49 (1124 CE).
+                </title>
+                <respStmt>
+                    <resp key="contributor">EpiDoc Encoding</resp>
+                    <persName ref="part:ants">
+                        <forename>Antonella</forename>
+                        <surname>Santoro</surname>
+                    </persName>
+                </respStmt>
+                <respStmt>
+                    <resp key="creator">intellectual authorship of edition</resp>
+                    <!-- Rao Bahadur C.R.Krishnamacharlu the general editor of the catalogue SII that I am working on -->
+                    <persName ref="part:ants">
+                        <forename>Antonella</forename>
+                        <surname>Santoro</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Napoli</pubPlace>
+                <idno type="filename">DHARMA_INSKalyanaCalukya01004.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>as per external metadata</repository>
+                        <idno/>
+                    </msIdentifier>
+                    <msContents>
+                        <summary>Damaged inscription belongs to the reign of Tribhuvanamalladēva (Vikramāditya VI) and records the gift of land and money made by the officer Mahāmātya Antaḥpurādhyakṣa Surigeya Permmāḍiyarasa to the Two-Hundred Mahājanas of the place for the worship of a goddess and the maintenance of the school for teaching r̥gvēda.</summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p>...</p>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change who="part:ants" when="2024-03-13">Creation of the file.</change>
+            
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+      
+<body>
+         
+<div type="edition" xml:lang="kan-Latn" rendition="class:kannada maturity:83215">
+	
+	<lg n="1" met="anuṣṭubh" xml:lang="san-Latn" rendition="class:kannada maturity:83215">
+	   <l n="ab">namas tasmai varāhāya līlaya carate mahīṁ</l>
+	   <l n="cd">khurāntara-gatō yasya mēruḥ khaṇa-khaṇāyatē <g ref="sym:doubleBar" type="punctuation">.</g></l></lg>
+    <p>
+        <lb n="1"/>svasti samasta-bhuvanāśrayaṁ śrī-pr̥ṭhvīvallabha-mahārājādhirāja-para
+        <lb break="no" n="2"/>mēśaraṁ paramabhaṭṭarakaṁ satyāśraya-kuḷa-tiḷakaṁ cāḷukyābharaṇaṁ śrīma<supplied reason="omitted">t</supplied>tribhuvanamalla-dēvara vijaya-rājyam uttarōttarābhivr̥ddhi-pravarddhamānam ā-ccaṁdrārkka-tāraṁ salutta
+        <lb break="no" n="3"/>m ire <g ref="sym:bar" type="punctuation">.</g> tat-vāda-padmōpajīvi <g ref="sym:doubleBar" type="punctuation">.</g> ene negarddā tribhuvanamalla-narēśvaranoḷ pasāyitaṁ sakaḷa-jagaj-jana-nutar deceyabheṭṭara tanayaṁ vāśiṣṭa-kuḷa-viyat-taḷa-candra <g ref="sym:doubleBar" type="punctuation">.</g> kuntaḷa vikramaṭaka <g ref="sym:bar" type="punctuation">.</g>
+       <lb break="no" n="4"/>ya santōśamegaṁḍagāyāyitunipaṁ niści<supplied reason="omitted">ṁ</supplied>ntamahāpasāyita nāntaribiḷavidayanaṁ mahādēvabudha <g ref="sym:doubleBar" type="punctuation">.</g> narapati-cāḷukya-kuḷāṁbara-maṇi-permmāḍidēvan ati-vīra-nirantara-dhyāni tanna kaṭṭu
+       <lb break="no" n="5"/>va surigeya nesa-v-eseye piḍisuvaṁ jaga-v-aṟiyalu<g ref="sym:doubleBar" type="punctuation">.</g>mādige budha-jana-hr̥dayāhlādige karppura-caṁdana-agaru-khuśriṇāvōdige nuta-sakaḷa-kaḷā-vēdige sama noḷa
+        <lb break="no" n="6"/>re sakaḷa-viśvaṁbharayoḷu <g ref="sym:doubleBar" type="punctuation">.</g> ā daṇḍēśana sati munnādiyarundhuti dharitri jānake sāvitradēvi satyabhāmā śrīdeviye muddiyakke neṁbudu lōka <g ref="sym:doubleBar" type="punctuation">.</g>
+     </p>  
+        <ab>vr̥<g ref="sym:doubleBar" type="punctuation">.</g></ab>
+        <lg n="2" xml:lang="kan-Latn">
+          <l n="a">giriśaṁgaṁ gaurigaṁ śaṅmukhan asura-kuḷa-dhvaṁśigaṁ rukmiṇīsu ndarigaṁ pradyumnan iṁdraṁ gagaṇita-guṇa-paulōmigaṁ śrījayantaṁ suravaryar ppaṭṭuvant-uttaman enise mahādēva-daṇḍādhipaṁgaṁ carita-śrī-muddiyukkaṁ gagaṇita-vibhavaṁ puṭṭe permmāḍidēva</l>
+        </lg>
+    <p>
+        <lb n="8"/>sādhita-vibhavaṁ surigeya mādhavan eṁb udaya-kudharadind udiyisidaṁ bādhita-ripu-timiraṁ sū<supplied reason="lost">rigeya </supplied> budha-kaṁja
+        <lb n="9"/>permmadin eṁbāditya <g ref="sym:doubleBar" type="punctuation">.</g>
+    </p>
+    
+    <ab>vr̥<g ref="sym:doubleBar" type="punctuation">.</g></ab>
+        <lg n="3" xml:lang="kan-Latn">
+        <l n="a">sthiranē mēru-dharādharaṁ śuciye gaṁgā-śaṁbhavaṁ dharma-tattvaranē pāṁdu-sutāgrajaṁ kaliye kālēyārjjunaṁ satya-nirbhbheranēr kaṇnan udāranē sura-kujaṁ
+        tāneṁba sat-kīrttita vistarisal parmmege nermma-vādana-tuḷaṁ permmāḍi bhūpōttama<g ref="sym:doubleBar" type="punctuation">.</g></l> 
+    </lg>
+     <lg n="4" xml:lang="kan-Latn">
+     <l n="a">siri-śiṣṭēṣṭādigē hāmara-giri-caritaṁ vēda-śāstrōkti māḷābharitaṁ rūpajagan mōhanamadanajayat vupratāpaṁ svaśauryyaṁ dhuradurddāntāryyavārya<choice><sic>n</sic><corr>ṁ</corr></choice>tanagasadire cāḷukya-cakrēśa-kāruṇnya-rasakkādhāranādaṁ kali surigeya permmāḍi kīrtti-prasaṁgaṁ</l>     
+     </lg>
+<p>śukla-pratipad-viḷasac-candra-vada-ditī-ditādhikārassan patyuḥ prasāda-nityō-jīvatu permmāḍir iha mudārkkēndu<surplus>ḥ</surplus></p>
+    
+</div>
+    
+    <div type="translation" resp="part:ants">
+        <p rend="stanza" n="1">Salutation to the Varāha, who with <supplied reason="subaudible">his</supplied> play moves the earth, the Meru mountain cracks under his hooves.</p>
+        <p n="1-3">Hail! May the victorious reign of the glorious Tribhuvanamalladēva, the shelter of the world, who was the beloved of the glorious earth, the great king among kings, the supreme Lord, paramabhaṭṭaraka, the distinctive mark of Satyāśrayakuḷa, who was the ornament of the Cāḷukya lineage, keep increasing its prosperity further and further as long as the moon, the sun, and stars keep shedding their light.</p>
+        <p n="3-4">Thus, at the time of the well known king Tribhuvanamalla, the worshipped son of Deceyabheṭṭa, praised by the people of the entire earth, the moon of the sky of/which is the Vāśiṣṭa family;</p>
+        <p n="4-5">a very brave and constantly meditative man, built this temple of the deity with devotion and faith, for the world to know.</p>
+        <p n="5-6">For the joy of heart of learned men, for the fragrance of camphor, sandalwood and <foreign>agaru</foreign>, for knowing of all praised arts, equally shining in the entire world.</p>
+    </div>
+ </body>
+  </text>
+</TEI>
+	    

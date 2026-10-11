@@ -1,0 +1,35 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Whole real DHARMA Task Force B files, one repo per top-level dir, plus
+# the Vengī metadata TSV trimmed to its header and two rows (so
+# adapter_test stays null — see the schema note on trims).
+source: dharma-deccan
+adapter_test: null
+retrieved: 2026-10-11
+files:
+  - path: tfb-eiad-epigraphy/texts/xml/DHARMA_INSEIAD00001.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-eiad-epigraphy/master/texts/xml/DHARMA_INSEIAD00001.xml
+    whole: true
+  - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/Am499.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/Am499.xml
+    whole: true
+  - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/N10.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/N10.xml
+    whole: true
+  - path: tfb-satavahana-epigraphy/LICENCE.txt
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/LICENCE.txt
+    whole: true
+  - path: tfb-telugu-epigraphy/texts/DHARMA_INSTelugu00048.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-telugu-epigraphy/master/texts/DHARMA_INSTelugu00048.xml
+    whole: true
+  - path: tfb-kalyanacalukya-epigraphy/xml-provisional/DHARMA_INSKalyanaCalukya01004.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-kalyanacalukya-epigraphy/master/xml-provisional/DHARMA_INSKalyanaCalukya01004.xml
+    whole: true
+  - path: tfb-vengicalukya-epigraphy/xml/DHARMA_INSVengiCalukya00099.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-vengicalukya-epigraphy/master/xml/DHARMA_INSVengiCalukya00099.xml
+    whole: true
+  - path: "tfb-vengicalukya-epigraphy/DHARMA_mdt_VengiCalukya_v01 - Text.tsv"
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-vengicalukya-epigraphy/master/DHARMA_mdt_VengiCalukya_v01%20-%20Text.tsv
+    whole: false
+    trim: the four header rows + the INSVengiCalukya00001 and 00099 data rows (README recipe)

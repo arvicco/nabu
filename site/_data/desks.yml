@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 26
+  members: 27
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -73,7 +73,7 @@
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 8
+  members: 9
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons

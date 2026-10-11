@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:space="preserve" xml:lang="eng" xml:id="N10">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+	<title>Nasik No. 10 (of Uṣavadāta, time of Nahapāna)</title>
+      </titleStmt>
+      <publicationStmt>
+	<authority>Sātavāhana Inscriptions</authority>
+	<idno>N10</idno><!-- ID follows Senart. !-->
+	<availability>
+	  <licence target="http://creativecommons.org/licenses/by/3.0/">Licensed under a Creative Commons-Attribution 
+	       3.0 licence.</licence>
+	</availability>
+      </publicationStmt>
+      <sourceDesc>
+	<msDesc>
+	  <msIdentifier/>
+	  <physDesc/>
+	  <history>
+	    <origin>
+	      <origPlace>
+		<placeName type="modern" key="pl:Nāsikya">Nasik</placeName>,
+		on the back wall of the veranda in Cave No. 10, under
+		the ceiling.
+	      </origPlace>
+	      <origDate notBefore-custom="0060" notAfter-custom="0084" precision="medium" datingMethod="cal:gregorian">ca. 60–84 CE</origDate>
+	    </origin>
+	  </history>
+	</msDesc>
+      </sourceDesc>
+      <profileDesc>
+      </profileDesc>
+    </fileDesc>
+  </teiHeader>
+  <facsimile>
+  </facsimile>
+  <text>
+    <body>
+      <div type="bibliography" xml:lang="eng">
+	<listBibl>
+	  <bibl>
+	    <ptr target="bibl:N"/>:
+	    <citedRange>No. 10, p. 78</citedRange>
+	  </bibl>
+	  <bibl>
+	    <ptr target="bibl:LL"/>:
+	    <citedRange>No. 1131</citedRange>
+	  </bibl>
+	  <bibl>
+	    <ptr target="bibl:Tsu"/>:
+	    <citedRange>No. 10, p. 498</citedRange>
+	  </bibl>
+	</listBibl>
+      </div>
+      <div type="edition" xml:lang="san-Latn">
+	<div type="commentary" xml:lang="eng">
+	  <p>This edition is based on <ref target="bibl:N">Senart 1905-1906</ref>.</p>
+	</div>
+	<p>
+	  <lb n="1"/>
+	  siddhaṃ rājñaḥ kṣaharātasya kṣatrapasya 
+	  <persName key="pers:Nahapāna">nahapānasya</persName>
+	  <app>
+	    <lem source="#N">jāmātrā</lem>
+	    <note xml:lang="eng"><p>Senart: The reading <foreign xml:lang="san-Latn">trā</foreign> is very distinct; the right side of the t however bears a slight trace of the vowel u, as if the form <foreign xml:lang="san-Latn">jāmātu</foreign> had been present, along with the form <foreign xml:lang="san-Latn">jāmātrā</foreign>, in the mind of the writer.</p></note>
+	  </app>
+	  <persName key="pers:Dīnīka">dīnīka</persName>putreṇa 
+	  <persName key="pers:Uṣavadāta">uṣavadātena</persName>
+	  trigośatashasradena nadyā 
+	  <placeName key="pl:Bārṇāsā">bārṇāsāyāṃ</placeName>
+	  survarṇadānatīrthakareṇa devatābhyaḥ brāhmaṇebhyaśca
+	  ṣoḍaśagrāmadena anu<app><lem source="#N">varṣaṃ</lem>
+	        <rdg source="#AS">varṣa</rdg>
+          </app> brāhmaṇaśatasāhasrībhojāpayitrā
+	  <lb n="2"/>
+	  <placeName key="pl:Prabhāsa">prabhāse</placeName> puṇyatīrthe
+	  brāhmaṇebhyaḥ aṣṭabhāryāpradena
+	  <placeName key="pl:Bharukaccha">bharukacche</placeName>
+	  <placeName key="pl:Daśapura">daśapure</placeName>
+	  <placeName key="pl:Govardhana">govardhane</placeName>
+	  <placeName key="pl:Śūrpāraka">śorpārage</placeName> ca
+	  catuśālāvasadhapratiśrayapradena 
+	  ārāma<app><lem source="#N">taḍāga</lem>
+	        <rdg source="#AS">tadāga</rdg>
+          </app> udapānakareṇa 
+	  <placeName key="pl:Ibā">ibā</placeName>-<placeName key="pl:Pārādā">pārādā</placeName>-<placeName key="pl:Damaṇa">damaṇa</placeName>-<placeName key="pl:Tāpī">tāpī</placeName>-<placeName key="pl:Karabena">karabena</placeName>-<placeName key="pl:Dāhanukā">dāhanukā</placeName>-nāvāpuṇyatarakareṇa
+	  etāsāṃ ca nadīnāṃ ubhatotīram 
+	  sabhā<lb n="2" break="no"/>prapākareṇa
+	  <placeName key="pl:Piṃḍitakā"><app>
+	    <lem source="#N">piṃḍi</lem>
+	    <rdg source="#G">piṃdī</rdg></app>takā</placeName>vaḍe
+	  <placeName key="pl:Govardhana">govardhane</placeName>
+	  <placeName key="pl:Survarṇamukha">suvarṇamukhe</placeName>
+	  <placeName key="pl:Śūrpāraka">śorpārage</placeName> ca
+	  <placeName key="pl:Rāmatīrtha">rāmatīrthe</placeName>
+	  carakaparṣabhyaḥ 
+	  <app>
+	    <lem source="#N">grāme</lem>
+	    <rdg source="#AS">grāma</rdg>
+	  </app> <placeName key="pl:Nānaṃgola">nānaṃgole</placeName>
+	  dvātrīśatanāḷiḡeramūla<app><lem source="#N">sahasrapradena</lem>
+	        <rdg source="#AS">sahasradena</rdg>
+	  </app> <placeName key="pl:Govardhana">govardhane</placeName>
+	  <placeName key="pl:Tiraṇhu">triraśmiṣu</placeName>
+	  parvateṣu dharmātmanā idaṃ
+	  <app>
+	    <lem source="#N">leṇaṃ</lem>
+	    <rdg source="#G #AS">leṇa</rdg>
+	  </app> kāritaṃ imā ca 
+	  <app>
+	    <lem source="#N">poḍhiyo</lem>
+	    <rdg source="#AS">podhiyo</rdg>
+	  </app> <supplied>||</supplied>
+	  bhaṭārakā 
+	  <app>
+	    <lem source="#N">aṃñātiyā</lem>
+	    <note xml:lang="eng"><p>The syllable <foreign xml:lang="san-Latn">aṃ</foreign>
+	    (for the <foreign xml:lang="san-Latn">anusvāra</foreign> 
+	    is qutie visible) has been added between 
+	    <foreign xml:lang="san-Latn">kā</foreign> and 
+	    <foreign xml:lang="san-Latn">ñā</foreign>, probably in 
+	    order to point out that the initial
+	    <foreign xml:lang="san-Latn">a</foreign> has been 
+	    absorbed into the <foreign xml:lang="san-Latn">ā</foreign>
+	    of <foreign xml:lang="san-Latn">kā</foreign>. The
+	    <foreign xml:lang="san-Latn">ā</foreign> of 
+	    <foreign xml:lang="san-Latn">ñā</foreign> is doubtful;
+	    the vowel-mark is not ordinarily, as would here be the
+	    case, placed at the top of the vertical line.</p></note>
+	  </app>
+	  ca gato <app><lem source="#N">smiṃ</lem><rdg source="#AS">smi</rdg></app>
+	  <app>
+	    <lem source="#N">varṣāratuṃ</lem>
+	    <note xml:lang="eng"><p>The <foreign xml:lang="san-Latn">u</foreign>
+	    is subscribed in two ways, the one very similar to 
+	    <foreign xml:lang="san-Latn">r</foreign>, as here and in
+	    <foreign xml:lang="san-Latn">putrasa</foreign> in the next
+	    line, the other in the shape of a small horizontal stroke,
+	    as in <foreign xml:lang="san-Latn">mocayituṃ</foreign>,
+	    <foreign xml:lang="san-Latn">pitu</foreign>.</p></note>
+	  </app>
+	  <app>
+	    <lem source="#N">mālehi</lem>
+	    <note xml:lang="eng"><p>Between 
+	    <foreign xml:lang="san-Latn">ye</foreign> and 
+	    <foreign xml:lang="san-Latn">hi</foreign> there is a blank,
+	    which seems to have been filled up by two or three characters
+	    that would have been effaced.</p></note>
+	  </app> rudhaṃ 
+	  utama<app>
+	    <lem source="#N">bhādraṃ</lem>
+	    <rdg source="#AS">bhadraṃ</rdg>
+	  </app> mocayituṃ
+	  <lb n="4"/>
+	  te ca <placeName key="pl:Mālaya">mālaya</placeName> pranādeneva
+	  apayātā utamabhadra<app>
+	    <lem source="#N">kānaṃ</lem>
+	    <rdg source="#AS">kānāṃ</rdg>
+	  </app> ca kṣatriyānaṃ sarve parigrahā kṛtā
+	  tato <app><lem source="#N">smiṃ</lem><rdg source="#AS">smi</rdg></app>
+	  gato <placeName key="pl:Pokṣara">pokṣarāni</placeName> tatra
+	  ca mayā abhiseko kṛto 
+	  <app>
+	    <lem source="#N">trīṇi ca</lem>
+	    <rdg source="#AS">tīṇi</rdg>
+	  </app> gosahasrāni datāni 
+	  <app>
+	    <lem source="#N">grāmo</lem>
+	    <rdg source="#AS">gāmo</rdg>
+	  </app> ca <supplied>||</supplied> data
+	  <app>
+	    <lem source="#N">cānena</lem>
+	    <rdg source="#G">ca nena</rdg>
+	  </app> <app>
+	    <lem source="#N">kṣetraṃ</lem>
+	    <rdg source="#AS">kṣstra</rdg>
+	  </app> brāhmaṇasa 
+	  <persName key="pers:Vārāhi">vārāhi</persName>putrasa
+	  <persName key="pers:Aśvibhūti">aśvibhūtisa</persName>
+	  hathe kīṇitā 
+	  <app>
+	    <lem source="#N">mulena</lem>
+	    <rdg source="#G #AS">mūlena</rdg>
+	  </app> kāhāpaṇasahasrehi catuhi 4000 ya sapitusataka
+	  nagarasīmāya utarāparāya 
+	  <app>
+	    <lem source="#N">dīsāya</lem>
+	    <rdg source="#G">disāya</rdg>
+	  </app> eto mama leṇe vasa<lb n="5" break="no"/><app><lem source="#N">tānaṃ</lem>
+	       <rdg source="#G #AS">tāna</rdg>
+          </app> cātu<app><lem source="#N">dī</lem>
+	       <rdg source="#G">di</rdg>
+	  </app>sasa bhikhusaghasa mukhāhāro bhavisatī
+	</p> 
+      </div>
+      <div type="translation">
+	<p/>
+      </div>
+    </body>
+  </text>
+</TEI>

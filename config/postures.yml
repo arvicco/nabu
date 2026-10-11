@@ -1019,6 +1019,17 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (ocm-Latn/san-Latn); the Cham script is
         the artifact fact"}
+  dharma-deccan:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: a nabu-lects mint of the tel + kan anchors
+        (Dravidian, under dra-sou) with tel-Latn/kan-Latn codemap rows; pra/san -Latn
+        already resolve on canonical rows"}
+    dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
+        Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
+    places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
+        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined"}
+    script: {posture: qualified, note: "romanized editions (pra/san/tel/kan -Latn); Brāhmī
+        and its southern descendants are the artifact facts"}
   dharma-nusantara:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "kaw/omy/osn/san -Latn — all resolve on the
