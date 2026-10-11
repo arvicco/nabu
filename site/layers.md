@@ -78,10 +78,15 @@ namespaced place index:
 
 | Namespace | What | Held rows | License |
 |---|---|---:|---|
-| `pleiades:` | [Pleiades](https://pleiades.stoa.org/) — THE ancient-world gazetteer | 42,284 | CC BY 3.0 |
+| `pleiades:` | [Pleiades](https://pleiades.stoa.org/) — THE ancient-world gazetteer | 42,379 | CC BY 3.0 |
 | `tm:` | [Trismegistos Geo](https://www.trismegistos.org/geo/) — finest grain for Greco-Roman Egypt | 64,857 | CC BY-SA 4.0 |
 | `cigs:` | [CIGS](https://zenodo.org/records/14568765) — the cuneiform world's site index | 598 | CC BY 4.0 |
+| `chgis:` | [CHGIS](https://doi.org/10.7910/DVN/H3OB28) — the China Historical GIS temporal gazetteer | 81,292 | CC0 1.0 |
+| `nrct:` | [NRCT](https://geoshape.ex.nii.ac.jp/nrct/) — the historical placenames of Japan (日本歴史地名大系) | 80,502 | CC BY 4.0 |
+| `thurayya:` | [al-Ṯurayyā](https://althurayya.github.io/) — the early Islamic world | 2,331 | CC BY 4.0 |
 | `np:` | [nabu-places](https://arvicco.github.io/nabu-places/) native records (minted by scholarship, evidence required) | 0 — the lane is new | CC BY 4.0 |
+
+Held rows as of 11 October 2026.
 
 Namespaces are parallel claims; equivalences between them are
 **crosswalk data with provenance** (3,438 rows: CIGS's own columns + a

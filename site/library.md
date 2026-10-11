@@ -4,8 +4,10 @@ permalink: /library/
 description: >-
   The collections of the Nabu library: classical Greek and Latin, papyri,
   Sanskrit and the Indic canons, cuneiform, Arabic and Persian, the Chinese
-  and Tibetan canons, Japanese, Egyptian, Hebrew, Ethiopic, Romance,
-  Germanic, Slavic, and Celtic — with the reference shelf of dictionaries.
+  and Tibetan canons, Korean, Japanese, Southeast Asian epigraphy,
+  Egyptian, Hebrew, Ethiopic, the Middle Iranian and Turkic east, Romance,
+  Germanic, English, Slavic, Celtic, and the colonial Americas — with the
+  reference shelf of dictionaries.
 ---
 
 {% assign census = site.data.census -%}
@@ -17,19 +19,32 @@ feature modules), plus **{{ census.dictionary_entries_display }} dictionary entr
 reference shelf and **{{ census.gold_lemmas_m }} million gold lemma annotations in
 {{ census.gold_languages }} languages** (a further {{ census.silver_lemmas_display }} lemma
 rows in {{ census.silver_languages }} languages ride an honestly labelled silver tier —
-machine-suggested or upstream-undisambiguated, excluded from gold-only search). Classical
-Arabic is the largest language in the catalog at {{ census.top_languages[0].millions }} million
-passages, ahead of early-modern English ({{ census.top_languages[1].millions }} million — the
-EEBO-TCP corpus) and Literary Chinese ({{ census.top_languages[2].millions }} million), with
-Latin, Sumerian and Ancient Greek next (about 3 million each); {{ census.language_codes }}
+machine-suggested or upstream-undisambiguated, excluded from gold-only search).
+{%- assign t0 = census.top_languages[0] %}
+{%- assign t1 = census.top_languages[1] %}
+{%- assign t2 = census.top_languages[2] %}
+{%- assign t3 = census.top_languages[3] %}
+{%- assign t4 = census.top_languages[4] %}
+{%- assign t5 = census.top_languages[5] %}
+{%- assign n0 = site.data.language_notes[t0.code] | split: " — " | first %}
+{%- assign n1 = site.data.language_notes[t1.code] | split: " — " | first %}
+{%- assign n2 = site.data.language_notes[t2.code] | split: " — " | first %}
+{%- assign n3 = site.data.language_notes[t3.code] | split: " — " | first %}
+{%- assign n4 = site.data.language_notes[t4.code] | split: " — " | first %}
+{%- assign n5 = site.data.language_notes[t5.code] | split: " — " | first %}
+{{ n0 }} is the largest language in the catalog at {{ t0.millions }} million
+passages, ahead of {{ n1 }} ({{ t1.millions }} million) and {{ n2 }}
+({{ t2.millions }} million), with {{ n3 }}, {{ n4 }} and {{ n5 }} next;
+{{ census.language_codes }}
 language codes appear in all, and since August 2026 stored codes also resolve through the lect
 layer — historical-stage ladders on the language cards and stage-scoped
 search, described on the [Languages]({{ '/languages/' | relative_url }})
 page. The authoritative shelf map, refreshed at every
 development gate, is
 [docs/library.md](https://github.com/arvicco/nabu/blob/main/docs/library.md)
-in the repository; the numbers below are taken from it, and were read from
-the live catalog, not estimated.
+in the repository. The collection sizes in the table below were read from
+the live catalog on 11 October 2026, not estimated; the per-shelf figures
+in the sections after it are dated where they appear.
 
 The same shelves, grouped by the owner's research desks rather than by
 collection — each with its instruments, CLI recipes and terminal setup — are
@@ -37,36 +52,42 @@ the [research axes]({{ '/axis/' | relative_url }}).
 
 | Collection | Contents | Period | Size | License class |
 |---|---|---|---|---|
-| Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen, with 650 aligned English translations | 8th c. BCE – 3rd c. CE | 1,418 docs / 394,706 passages | CC BY-SA |
+| Classical Greek | Perseus: Homer, the tragedians, Herodotus, Plato, Galen, with 650 aligned English translations | 8th c. BCE – 3rd c. CE | 1,418 docs / 394,705 passages | CC BY-SA |
 | Post-classical Greek | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 3rd c. BCE – 6th c. CE | 1,129 / 256,480 | CC BY-SA |
-| Greek silver layer | Diorisis and GLAUx: machine-lemmatized second editions of the Greek canon, honestly labelled | Homer – early Byzantium | 2,185 / 1,471,443 | CC BY-SA / mixed per document |
-| Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with 181 English translations | 3rd c. BCE – Late Antiquity | 534 / 391,799 | CC BY-SA |
-| Romance | digilibLT late-antique Latin, openMGH, CroALa Croatian Latinity, BFM Old French, the Galician-Portuguese cantigas | 2nd c. CE – early modern | 2,894 / 1,146,102 | CC BY / CC BY-SA / written grant |
-| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 61,414 / 921,611 | CC BY |
+| Greek silver layer | Diorisis and GLAUx: machine-lemmatized second editions of the Greek canon, honestly labelled | Homer – early Byzantium | 2,188 / 1,485,083 | CC BY-SA / mixed per document |
+| Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with 181 English translations | 3rd c. BCE – Late Antiquity | 554 / 401,207 | CC BY-SA |
+| Latin–Romance continuum | digilibLT late-antique Latin, openMGH, CroALa, Corpus Córporum's Patrologia; BFM Old French, the Galician-Portuguese cantigas, Old Spanish, Portuguese, Catalan, Occitan, Sardinian and Judeo-Spanish shelves | 2nd c. CE – early modern | 11,309 / 3,271,768 | CC BY / CC BY-SA / NC / written grant |
+| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 63,659 / 1,105,279 | CC BY |
 | Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | 81,881 / 406,306 | CC BY-SA |
 | Inscriptions of Italy | Epigraphic Database Roma: the peninsula itself, the geographic complement of Heidelberg's provinces — dated and faceted end to end | Republic – Late Antiquity | 115,590 / 596,064 | CC BY |
-| Celtic | CorPH Early Irish (gold-lemmatized), the RIIG Gaulish inscriptions, the Ogham in 3D stones | c. 2nd c. BCE – 10th c. CE | 1,387 / 20,318 | CC BY / MIT (ogham held `nc` pending clarification) |
+| Celtic | CorPH Early Irish (gold-lemmatized), the RIIG Gaulish inscriptions, the Ogham in 3D stones | c. 2nd c. BCE – 10th c. CE | 1,444 / 20,352 | CC BY / MIT (ogham held `nc` pending clarification) |
 | Coptic | Coptic Scriptorium: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, gold-lemmatized | c. 3rd – 10th c. CE | 482 / 74,169 | CC BY per document (source class `nc`) |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, the Ṛgveda with Vedic accents | c. 1200 BCE – 18th c. CE | 780 / 703,068 | CC BY-NC-SA |
-| Indic expansion | SARIT, SuttaCentral (the segmented Pali canon with aligned English), the gold-lemmatized DCS | Veda – early modern | 28,167 / 1,796,344 | CC BY / CC BY-SA / NC per source |
-| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma, morphology, and syntax | 5th c. BCE – 17th c. CE | 80 / 178,278 | mostly CC BY-NC-SA |
-| Cuneiform | ORACC, 38 projects: the complete State Archives of Assyria, the Achaemenid trilinguals, the ePSD2 corpora, with aligned English translations | late 4th mill. – 4th c. BCE | 104,722 / 1,588,133 | CC0 |
-| Ancient Near East | TLHdig Hittite, the CDLI catalog, eBL Fragmentarium, Ugaritic (CUC), Peshitta and the Syriac corpus, ETCSL Sumerian literature | late 4th mill. BCE – 13th c. CE | 401,681 / 3,131,072 | CC BY / CC0 / NC per source |
+| Indic expansion | SARIT, SuttaCentral (the segmented Pali canon with aligned English and its variant apparatus), the gold-lemmatized DCS, Classical Newar (DACON) | Veda – early modern | 28,171 / 1,797,358 | CC BY / CC BY-SA / NC per source |
+| Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma, morphology, and syntax | 5th c. BCE – 18th c. CE | 136 / 413,135 | mostly CC BY-NC-SA |
+| Cuneiform | ORACC, over a hundred projects: the complete State Archives of Assyria, the Achaemenid trilinguals, the ePSD2 corpora, the CC0 project pack, with aligned English translations | late 4th mill. – 4th c. BCE | 118,367 / 1,800,218 | CC0 |
+| Ancient Near East | TLHdig Hittite and the glossed Hittite texts, the Luwian corpus, the CDLI catalog, eBL Fragmentarium, Achemenet Babylonian, SEAL, Ugaritic (CUC), Peshitta and the Syriac corpus, ETCSL Sumerian literature | late 4th mill. BCE – 13th c. CE | 412,228 / 3,223,988 | CC BY / CC0 / NC / personal grants per source |
 | Ugarit (Ras Shamra) | The RSTI tablet inventory: RS↔KTU concordances, findspots, published editions at line grain | Late Bronze Age | 5,075 / 740 | CC BY-NC-SA (written grant) |
-| Hebrew &amp; Aramaic | OSHB and BHSA Masoretic text, the Dead Sea Scrolls, the Sefaria Targums | c. 1000 BCE – 10th c. CE | 1,182 / 156,416 | CC BY / NC per source |
+| Hebrew &amp; Aramaic | OSHB and BHSA Masoretic text, the Dead Sea Scrolls, the Sefaria Targums, the inscriptions of Israel/Palestine | c. 1000 BCE – 10th c. CE | 7,499 / 591,787 | CC BY / NC per source |
 | Elephantine | The island's multilingual documentary record: Aramaic, Greek, Demotic, Egyptian, Coptic, with English translation siblings | 3rd mill. BCE – Islamic Egypt | 15,539 / 69,350 | CC BY-SA |
-| Arabic &amp; Persian | OpenITI: Quran and hadith, history and biography, fiqh, kalām and falsafa, the dīwāns and adab; the Persian classics | 7th c. – early modern | 9,079 / 34,631,499 | CC BY-NC-SA |
-| Egyptian | The TLA sentence corpora (AES + Late Egyptian/Demotic), gold-lemmatized | late 4th mill. – 1st c. BCE | 26,015 / 236,404 | CC BY-SA |
-| Ethiopic (Gǝʿǝz) | Beta maṣāḥǝft works incl. the Gǝʿǝz Bible; the TraCES gold-analyzed corpus with the Aksumite royal inscriptions | Aksumite – the manuscript tradition | 3,811 / 141,952 | CC BY-SA / NC |
-| Pre-Roman Italy &amp; Sicily | CEIPoM, ItAnt, the Etruscan editions, TIR, Lexicon Leponticum, I.Sicily | 7th c. BCE – Roman | 20,625 / 32,633 | CC BY per source |
+| Arabic &amp; Persian | OpenITI: Quran and hadith, history and biography, fiqh, kalām and falsafa, the dīwāns and adab; the Persian classics; the DiCCAS disaster corpus | 7th c. – early modern | 9,089 / 34,632,378 | CC BY-NC-SA |
+| Iranian &amp; the Silk Road | The Invisible East documents, Skjærvø's Khotanese manuscripts, the trilingual Kaʿba-ye Zartošt inscription, Hafez in Perseus | 3rd – 14th c. CE | 3,678 / 37,857 | CC BY / CC BY-SA |
+| Turkic &amp; Mongolic | ATMO's Eastern Turki manuscripts, Street's *Secret History of the Mongols* | 13th – 20th c. | 16 / 8,457 | CC BY-SA / use grant |
+| Egyptian | The TLA sentence corpora (AES + Late Egyptian/Demotic), gold-lemmatized | late 4th mill. – 1st c. BCE | 26,017 / 261,950 | CC BY-SA |
+| Ethiopic (Gǝʿǝz) | Beta maṣāḥǝft works incl. the Gǝʿǝz Bible; the TraCES gold-analyzed corpus with the Aksumite royal inscriptions | Aksumite – the manuscript tradition | 3,825 / 142,352 | CC BY-SA / NC |
+| Pre-Roman Italy &amp; Sicily | CEIPoM, ItAnt, the Etruscan editions, TIR, Lexicon Leponticum, I.Sicily | 7th c. BCE – Roman | 20,684 / 33,558 | CC BY per source |
 | Biblical editions | Clementine Vulgate (73 books), SBL Greek New Testament, World English Bible | — | 184 / 81,372 | PD / CC BY |
-| Old English poetry | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | 349 / 30,550 | CC BY-SA |
-| Slavic &amp; Slovenian | CCMH OCS gospel codices, the Freising Manuscripts, goo300k and IMP Early Modern Slovenian, the damaskini Balkan Slavic witnesses | c. 1000 – 1899 | 839 / 456,189 | CC BY (Freising BY-ND) |
-| Chinese libraries | Kanripo (KR1 classics – KR5 Daoist canon) and the CBETA Buddhist canon (Taishō + Xuzangjing) — Literary Chinese, the corpus's second-largest language | Zhou – Qing | 8,707 / 13,185,500 | CC BY-SA / CC BY-NC-SA |
-| Tibetan | The Derge Kangyur and Tengyur complete, the 84000 English translations, the Old Tibetan documents (OTDO), the SOAS gold-POS corpus | 8th c. – the 18th-c. Derge woodblocks | 5,370 / 1,499,922 | PD / CC BY / CC BY-NC-ND (84000) |
-| Japanese | Aozora Bunko, the public-domain library (ruby-annotated; kyūjitai reachable through the reform fold), beside ONCOJ's gold-morphology Old Japanese (4,991 / 33,192) | 7th c. – 20th c. CE | 17,195 / 2,991,807 | open (PD grant) / CC BY |
-| Germanic | Menotec Old Norwegian treebanks + the Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German, ReN Middle Low German, the Rundata runic corpus in five text lanes | c. 200 – 1650 CE | 31,292 / 707,451 | nc / CC BY / CC BY-SA / ODbL |
-| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the fifteen StarLing bases, three Slovenian historical dictionaries, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Guangyun), the Tibetan rack (Mahāvyutpatti, the Verbs Database), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
+| Old English poetry | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | 351 / 30,636 | CC BY-SA |
+| Middle and Early Modern English | The Corpus of Middle English Prose and Verse; EEBO-TCP, the first printed books in English | c. 1100 – 1700 | 60,622 / 26,421,200 | PD / CC0 |
+| Slavic | CCMH OCS gospel codices, the Freising Manuscripts, Early Modern Slovenian, the damaskini, Scripta Bulgarica, nine Wikisource cones, the Ipatiev chronicle, the 1488 Prague Bible, Protestant prints, the Croatian school canon, the Serbian novel and Bible, the German Slavistics canon | c. 1000 – early 20th c. | 11,743 / 2,261,982 | CC BY / CC BY-SA / PD / NC (Freising BY-ND) |
+| Chinese libraries | Kanripo (KR1 classics – KR5 Daoist canon), the CBETA Buddhist canon (Taishō + Xuzangjing), Chinese Wikisource's censused works, the Classical↔Modern parallel corpus, the Đại Việt classical shelf | Zhou – Qing | 24,717 / 15,497,485 | CC BY-SA / CC BY-NC-SA / MIT |
+| Korean | The Joseon Veritable Records and the Royal Secretariat diaries, the Goryeo histories, the Border Defense Command register, the ITKC classical originals, the Open Korean Historical Corpus, the *Yongbi eocheon ga* | Goryeo – late Joseon | 1,210,839 / 6,027,145 | KOGL open / CC BY-NC |
+| Tibetan | The Derge Kangyur and Tengyur complete, the 84000 English translations, the Old Tibetan documents (OTDO), the SOAS gold-POS corpus | 8th c. – the 18th-c. Derge woodblocks | 5,368 / 1,497,590 | PD / CC BY / CC BY-NC-ND (84000) |
+| Japanese | Aozora Bunko, the National Diet Library's classical OCR stacks, Minna de Honkoku, Japanese Wikisource, the NIJL and Genji TEI editions, ONCOJ's gold-morphology Old Japanese | 7th c. – 20th c. CE | 55,959 / 4,094,528 | open / CC BY / CC BY-SA |
+| Southeast Asia | The DHARMA epigraphy of Old Khmer, Cham, Pyu and the Nusantara charters, the Old Javanese kakawin library, the Old Burmese inscriptions of Bagan | c. 5th – 15th c. CE | 2,989 / 131,135 | CC BY / CC BY-SA |
+| Germanic | Menotec and Menota Old Norse, Old Swedish, the Old Saxon *Heliand*, ReM, ReN and ReF (Middle High, Middle Low and Early New High German), the Deutsches Textarchiv, Old and Middle Dutch, the Rundata runic corpus | c. 200 – 1969 CE | 39,525 / 2,497,571 | nc / CC BY / CC BY-SA / ODbL / `research_private` |
+| The Americas | Ticha's colonial Valley Zapotec, Guaman Poma's *Nueva corónica* | 16th – 18th c. CE | 1,282 / 7,014 | PD / CC BY-SA |
+| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the StarLing / Tower of Babel databases, three Slovenian historical dictionaries, Brückner and Nasovič, the Welsh GPC, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Chinese rime books), the Tibetan rack (Mahāvyutpatti, the Verbs Database, the Monlam headwords), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
 
 ## Classical Greek literature
 
@@ -120,9 +141,10 @@ tardoantichi, Vercelli, CC BY-SA) covers late-antique *secular* Latin
 prose of the second through seventh centuries — Ammianus, the
 grammarians, the agrimensores, the jurists — in 372 documents / 459,451
 passages. openMGH (the digital Monumenta Germaniae Historica, CC BY)
-brings the medieval-Latin backbone: all 57 volumes of the SS rer. Germ.
-series — Einhard, Widukind, Liudprand, Regino, Adam of Bremen, Otto of
-Freising — with more volumes published upstream successively. CroALa
+brings the medieval-Latin backbone: the SS rer. Germ. series — Einhard,
+Widukind, Liudprand, Regino, Adam of Bremen, Otto of Freising — and the
+critical editions published upstream since, 153 volumes as of October
+2026. CroALa
 (Croatiae auctores Latini, CC BY) adds 570 documents / 309,180 passages
 of Croatian Latinity across a near-millennium, 454 of them dated
 (999–1984). On the vernacular side, the Base de français médiéval (ENS
@@ -138,12 +160,23 @@ metadata. On the reference shelf, DÉRom — the Dictionnaire Étymologique
 Roman — reconstructs the Proto-Romance side of the same band (see
 below).
 
+The August 2026 waves filled out both ends of the band. Corpus Córporum
+(University of Zurich, non-commercial) brings Migne's Patrologia Latina
+and the wider Latin library — 5,248 texts / 896,770 passages — and the
+vernacular side gained the Old Spanish Textual Archive, DISCO's
+diachronic Spanish sonnets, BDCamões's Portuguese literary works, the
+public-domain works of the Catalan CTILC, and smaller shelves of
+Occitan (six dialects, French-aligned), Aranese, Sardinian, and
+Judeo-Spanish — the last three modern, held for the continuum's living
+end and labelled honestly where an upstream says its text is
+synthetic.
+
 ## Documentary papyri
 
 The everyday written record of a millennium of Egypt, from the Duke Databank
 of Documentary Papyri via papyri.info: contracts, tax receipts, petitions,
-private letters, census returns, leases, and court records — 61,414
-documents from Ptolemaic to early Islamic Egypt, chiefly Greek with Coptic,
+private letters, census returns, leases, and court records — 63,659
+documents (October 2026) from Ptolemaic to early Islamic Egypt, chiefly Greek with Coptic,
 Latin, Arabic, and Demotic minorities. Leiden-convention editorial markup
 (restorations, cancellations) is preserved, and the fragment-search index
 (see [Tools]({{ '/tools/' | relative_url }})) is built over this shelf.
@@ -225,7 +258,11 @@ identifiers, so a sutta reads with facing translation. Together with
 GRETIL these put the Sanskrit shelf past 1.8 million passages in three
 independent witnesses of the tradition — a breadth corpus, a
 gold-annotation corpus, and critical editions — with the canon of a
-second Indic language beside them.
+second Indic language beside them. Since October 2026 every root passage
+of the Tipiṭaka also carries what SuttaCentral's sidecar trees attest:
+variant readings with their witness sigla, the concordances to the PTS
+and other print editions, and the translators' notes. DACON (Zenodo,
+CC BY) adds Classical Newar manuscripts, morphosyntactically annotated.
 
 ## Morphosyntactic treebanks
 
@@ -237,7 +274,8 @@ birchbark letters to Avvakum), ISWOC (Old English prose and the West-Saxon
 Gospels), and the ancient-language treebanks of Universal Dependencies —
 Thomas Aquinas, Vedic Sanskrit, Ruthenian, the two Old Irish glosses
 treebanks, Hittite (HitTB), Classical Chinese (Kyoto), Old Icelandic
-(IcePaHC), and the two Perseus conversions for Ancient Greek and Latin.
+(IcePaHC), Old Turkic, the Jesuit-era Tupinambá and Old Guaraní, and the
+two Perseus conversions for Ancient Greek and Latin.
 Together with the gold layers of ORACC, DCS, AES, Coptic Scriptorium,
 CorPH, ReM, ReN, IcePaHC, goo300k, damaskini, TraCES, and ETCSL these
 feed a gold lemma index of **{{ census.gold_lemmas_m }} million rows in
@@ -245,11 +283,12 @@ feed a gold lemma index of **{{ census.gold_lemmas_m }} million rows in
 
 ## Cuneiform and the Ancient Near East
 
-The Open Richly Annotated Cuneiform Corpus (ORACC), 38 projects: 104,722
-documents and 1,588,133 passages, including the **complete State Archives
-of Assyria**, the Achaemenid royal trilinguals (Old Persian and Elamite
-enter the library here), and the four ePSD2 corpora with the Ur III
-administrative mass — with upstream gold lemmatization for Akkadian and
+The Open Richly Annotated Cuneiform Corpus (ORACC), over a hundred
+projects: 118,367 documents and 1,800,218 passages (October 2026),
+including the **complete State Archives of Assyria**, the Achaemenid
+royal trilinguals (Old Persian and Elamite enter the library here), the
+four ePSD2 corpora with the Ur III administrative mass, and the Oracc
+CC0 project pack (Urartian among it) — with upstream gold lemmatization for Akkadian and
 Sumerian, so a tablet displays transliteration beside running English,
 line by line. Released by ORACC under CC0.
 
@@ -266,6 +305,17 @@ Sumerian Literature** (394 hand-lemmatized composites with English prose
 siblings, deliberately unmerged from ePSD2's editions of the same
 poems); and the **Copenhagen Ugaritic Corpus** (279 KTU tablets with
 per-sign cuneiform and damage flags).
+
+Later waves widened both ends. Achemenet's annotated Babylonian texts of
+the Achaemenid period (Helsinki, CC BY) and SEAL — the Sources of Early
+Akkadian Literature, held under its editors' scholarly-use grant — sit
+on the Akkadian side. Anatolia gained a glossed Hittite corpus with
+German translations (Zenodo, CC BY, 7,099 texts) and, by the editor's
+personal grant, the **Annotated Corpus of Luwian Texts**: 266
+Hieroglyphic Luwian inscriptions of the Iron Age, each clause paired in
+a morphologically analyzed transcription and a sign-by-sign
+transliteration — the Hittite desk now spans Old Hittite to the Luwian
+monuments.
 
 The **Ras Shamra Tablet Inventory** (University of Chicago, OCHRE;
 joined 31 July 2026 under a written grant) adds the inventory spine of
@@ -296,7 +346,10 @@ Targums; the **Peshitta Old Testament** as the alignment hub's Syriac
 leg; the **Digital Syriac Corpus** (632 documents — a millennium of
 classical Syriac, CC BY); the augmented-Strong's lexicon that resolves
 every OSHB lemma to its BDB entry; the UBS Semantic Dictionary; and the
-epigraphy of Israel/Palestine (5,499 inscriptions).
+epigraphy of Israel/Palestine (5,499 inscriptions). Since October 2026
+the BHSA rides every word-level feature its dataset publishes, and the
+Scrolls carry the ETCBC's lexeme crosswalk: virtually every scroll word
+resolves to its Hebrew Bible lexeme.
 
 ## Elephantine
 
@@ -324,7 +377,40 @@ and adab. The Persian shelf (1,337,472 passages) rides the same release —
 paragraph; the Arabic-script search fold strips tashkeel and bridges the
 Persian keyboard (ی/ي, ک/ك), so Arabic-typed queries find Ḥāfiẓ and vice
 versa. Licensed CC BY-NC-SA — non-commercial research use, never
-redistributed.
+redistributed. Beside it sit the KITAB text-reuse alignments over the
+same library, the DiCCAS corpus of disaster accounts in Classical Arabic
+sources, and the al-Ṯurayyā gazetteer of the early Islamic world as the
+desk's place instrument.
+
+## Iranian and the Silk Road
+
+The corridor between Iran and China opened in September 2026. Oxford's
+**Invisible East Digital Corpus** (CC BY) brings 1,316 documents of the
+medieval Islamicate East — New Persian, Sogdian, Bactrian,
+Judeo-Persian, Middle Persian, Arabic — with typed dates and located
+toponyms; Prods Oktor Skjærvø's catalogue of the **Khotanese manuscripts**
+in the British Library (CC BY) contributes 2,357 manuscript records with
+14,574 transliterated lines, parsed record by record so the upstream
+draft's damage stays local; and the **Kaʿba-ye Zartošt inscription**
+arrives sentence-aligned in all three of its versions — Middle Persian,
+Parthian, Greek — the library's first Parthian. Ḥāfeẓ's *Dīwān* rides
+the Perseus Persian shelf beside the OpenITI Persian classics, and the
+CDLI and ORACC Old Persian royal inscriptions serve the same desk.
+
+## Turkic and Mongolic
+
+Two desks opened together in September 2026. The Turkologist's starts
+with **ATMO** — Annotated Turki Manuscripts from the Jarring Collection
+Online (Indiana University and Lund University Library, CC BY-SA):
+Eastern Turki manuscripts of the eighteenth to twentieth centuries,
+Perso-Arabic text with a full Latin transliteration on every line,
+marginalia served with their provenance marked — beside the Old Turkic
+treebank, Wiktionary extracts for Old Turkic, Old Uyghur and Chagatai,
+and the West Old Turkic loanword dictionary. The Mongolist's opens on
+John C. Street's romanized text of the *Secret History of the Mongols*
+(Monumenta Altaica, by the maintainer's grant, Street's own copyright
+notice carried verbatim): 3,523 lines at Street's own numbering, beside
+the Ming Chinese transcription on the Chinese Wikisource shelf.
 
 ## Ethiopic (Gǝʿǝz)
 
@@ -373,7 +459,7 @@ ISWOC treebank (Ælfric, Apollonius, the Chronicles, Orosius, and the
 West-Saxon Gospels, gold-annotated) and the Bosworth-Toller dictionary on
 the reference shelf, with æ/þ/ð-tolerant lookup.
 
-## Slavic and Slovenian
+## Slavic
 
 The Old Church Slavonic canon: four gospel codices in the Helsinki CCMH
 transliteration (Zographensis, Marianus, Assemanianus, Savvina kniga),
@@ -392,6 +478,24 @@ St. Petka* — each paired with a full English sibling translation, with
 the corpus's own norm and origin classifications carried as document
 facets.
 
+October 2026 opened the shelves end to end. Nine Wikisource cones —
+Serbian epic song and Vuk's collections, the Croatian premodern
+centuries, Macedonian nineteenth-century letters, Slovene to 1899,
+Czech from Dalimil to Comenius, the Polish premodern canon, Bulgarian
+charters, and the Old East Slavic chronicles in Russian and Ukrainian
+— were each censused category by category under written exclusion
+rules (texts keyed to in-copyright editions are turned away). Beside
+them: Scripta Bulgarica's 124 medieval Bulgarian monuments (CC
+BY-NC-SA), the complete Ipatiev chronicle from the 1908 Petersburg
+edition, the 1488 Prague Bible as a medieval Czech ground truth, the
+Slavonic *Zrcalo* of 1445, the Slovene and Croatian Protestant prints
+of Trubar and Bohorič in page OCR, the long Slovenian prose of KDSP and
+PriLit, the Croatian school canon, the Serbian ELTeC novels and the
+ijekavian Vuk–Daničić Bible — each work admitted on its own
+public-domain record — and the German Slavistics canon, Miklosich to
+Jagić's *Archiv*, as a reference shelf with its OCR quality measured per
+volume.
+
 ## The Chinese libraries
 
 The step change of 20 July 2026: the Kanseki Repository (Kyoto's
@@ -407,6 +511,31 @@ character answered across four millennia of structure, sound, and
 attestation. Traditional, simplified, and z-variant spellings fold to
 one search skeleton, so a modern-script query reaches the
 traditional-script corpus.
+
+Since late August 2026 the Sinitic desk has grown around that core: the
+NiuTrans Classical↔Modern parallel corpus (1.9 million sentence pairs —
+its modern side web-crawled, as its README says, and labelled so),
+Chinese Wikisource's censused works (the complete 全唐文, the 續資治通鑑,
+and the Ming Chinese 元朝秘史), the Đại Việt classical shelf, the rime
+books from the restored *Qieyun* through the 'Phags-pa *Menggu ziyun*
+to the *Zhongyuan yinyun* (the *Qieyun* and *Guangyun* cross-linked rime
+by rime), and two instruments of Chinese history — the China
+Biographical Database behind `nabu person` and the China Historical GIS
+gazetteer.
+
+## Korean
+
+The Koreanist's desk opened in August 2026 on the open datasets of the
+National Institute of Korean History and the Institute for the
+Translation of Korean Classics (KOGL, unrestricted use with credit):
+the **Veritable Records of the Joseon Dynasty** (414,321 entries), the
+**Daily Records of the Royal Secretariat** (1.9 million entries), the
+two Goryeo histories, the Border Defense Command register, and the
+ITKC's classical originals in hanmun — beside the Open Korean Historical
+Corpus's historical slice (1.2 million records, CC BY-NC), whose dated
+records make Korea the largest single block on the library's
+chronological axis. The *Yongbi eocheon ga* of 1447, from Korean
+Wikisource, opens the Middle Korean vernacular shelf.
 
 ## The Tibetan canon
 
@@ -437,7 +566,7 @@ lexicon.
 ## The Japanese reading desk
 
 Aozora Bunko — the volunteer-transcribed Japanese public-domain library —
-joined on 21 July 2026: **2,991,807 passages** of Meiji-and-later
+joined on 21 July 2026: **2,983,332 passages** (October 2026) of Meiji-and-later
 literature with a thin classical tail, ruby readings preserved as
 annotations rather than flattened into the text, and the ~2,285 works in
 kyūjitai orthography reachable from modern-form queries through the
@@ -445,6 +574,30 @@ kanji reform fold (国 finds 國). Only copyright-expired works are
 ingested — the in-copyright remainder is excluded before a single file
 is opened. Beside it sit ONCOJ's gold-morphology Old Japanese
 (the Man'yōshū-era corpus) and the EDRDG dictionaries.
+
+The classical side arrived in late September 2026. The National Diet
+Library's next-generation digital library serves machine-OCR full text
+for its copyright-expired classical books, and a resumable crawl walks
+them at a deliberately gentle pace — 26,860 documents so far, each
+labelled as machine OCR and carrying its permalink to the NDL viewer.
+Beside it: Minna de Honkoku's citizen transcriptions of premodern
+documents (CC BY-SA), Japanese Wikisource's era cone from Asuka to Edo
+with the *Man'yōshū* cited by poem number, the National Institute of
+Japanese Literature's TEI *Kokinshū* and *Man'yōshū* witnesses, and
+Ikeda Kikan's critical *Genji* — the Heian texts staged onto Early
+Middle Japanese in the lect layer. The NRCT historical placenames serve
+the desk's place lane.
+
+## Southeast Asia
+
+The Indic cosmopolis at its eastern edge, opened in September 2026: the
+ERC DHARMA project's epigraphy of Old Khmer (1,219 inscriptions under
+their Cœdès K-numbers), Champa, the Pyu city-states and the Nusantara
+charters in Old Javanese, Old Malay and Old Sundanese, with its
+philology repository's Old Javanese kakawin library; the Old Burmese
+stone inscriptions of Bagan (OBI); and the Old Javanese Wordnet as the
+desk's glossary — most of these languages in their only
+machine-readable form.
 
 ## The Germanic shelves
 
@@ -467,7 +620,44 @@ entered among the largest lemma pools. The Hanseatic rung followed on
 Niederrheinisch 1200–1650 (CC BY), with 235 documents / 297,504
 passages — 161 of them gold-annotated, about 1.49 million tokens with
 lemma, part of speech, and morphology — between ReM's Middle High
-German and the Norse and Old English shelves.
+German and the Norse and Old English shelves. Since October 2026 both
+reference corpora also ride their CorA layer: full morphology,
+dictionary-form lemmas, and real dates.
+
+The August 2026 waves completed the ladder. **Menota**, the Medieval
+Nordic Text Archive (CC BY-SA), adds 91 Old Icelandic, Old Norwegian,
+Old Swedish and Old Danish manuscripts in multi-level transcription;
+Språkbanken's **Fornsvenska textbanken** the Old Swedish laws, prose and
+verse; **ReF** carries Early New High German 1350–1650; and the
+**Deutsches Textarchiv** (BBAW, CC BY-SA) the German print corpus from
+1473 to 1969 — 5,478 works. Dutch joined from both ends: the Old Dutch
+word material of the Corpus Oudnederlands and the thirteenth-century
+Early Middle Dutch of the Corpus Gysseling, lemmatized — both held for
+private research, as their non-commercial terms grant no
+redistribution.
+
+## Middle and Early Modern English
+
+The **Corpus of Middle English Prose and Verse** (Middle English
+Compendium, University of Michigan; public domain) holds 297 texts —
+1,355,279 passages from Chaucer to the mystery plays — and the
+**EEBO-TCP** transcriptions of Early English Books Online (Text
+Creation Partnership, CC0) hold 60,325 printed books from 1473 to 1700:
+25 million passages that make early modern English the library's
+second-largest language. The transcriptions are the TCP's own; the page
+images were never fetched.
+
+## The Americas
+
+The library's first American wing opened in October 2026, colonial era
+first. **Ticha** (Haverford College, CC BY-SA) brings colonial Valley
+Zapotec in TEI — Córdova's 1578 *Arte*, Agüero's 1666 *Miscelaneo*, and
+two centuries of notarial testaments, each postured honestly as original
+or period translation. The Royal Danish Library's public-domain edition
+of **Guaman Poma's *Nueva corónica y buen gobierno*** arrives entire, page
+by page, Spanish with its Quechua and Aymara passages. And the Jesuit-era
+**Tupinambá and Old Guaraní** treebanks ride the Universal Dependencies
+shelf.
 
 ## Reference shelf
 
@@ -491,10 +681,10 @@ linked-data edition) — independent, expert-curated chains beside the
 Wiktionary-derived ones.
 
 Two further shelves arrived with the 17 July 2026 synchronizations. The
-StarLing / Tower of Babel etymological databases (fifteen bases, 46,650
-entries since the September 2026 expansion, held under a written grant
-from their maintainer with per-compiler credit rendered on every
-surface) carry the Moscow-school apparatus: Pokorny's
+StarLing / Tower of Babel etymological databases (56 shelves and 113,419
+entries as of October 2026, held under a written grant from their
+maintainer with per-compiler credit rendered on every surface) carry
+the Moscow-school apparatus: Pokorny's
 complete <em>Indogermanisches Etymologisches Wörterbuch</em> (2,222
 roots), Nikolayev's Walde-Pokorny-based PIE database (3,291 etymologies
 with per-branch reflex columns), Vasmer's etymological dictionary of
@@ -502,7 +692,10 @@ Russian in the Trubachev edition (18,239 entries), the Common
 Germanic, Baltic and Kartvelian databases, and — since the September
 2026 wave — the Altaic dictionary (Starostin-Dybo-Mudrak) with its
 Japanese companion, North Caucasian, Sino-Tibetan, Dravidian, the
-Chukchee-Kamchatkan family trio, and Yenisseian. The Slovenian historical dictionary shelf
+Chukchee-Kamchatkan family trio, and Yenisseian — and, since October
+2026, the thirteen lexicostatistical tables that shipped inside the
+Indo-European package, Swadesh-grain wordlists whose every form carries
+a cognation number. The Slovenian historical dictionary shelf
 (ZRC SAZU via CLARIN.SI, CC BY, 139,405 entries) unites Pleteršnik's
 Slovene-German dictionary of 1894–95, the lexicon of Janez Svetokriški's
 Baroque sermons, and the complete word inventory of sixteenth-century
@@ -530,6 +723,14 @@ curated borrowed status per word). And — 2 August 2026 — DÉRom, the
 etymon articles with per-language reflex sections across the whole
 Romance family, the comparative-method bridge between Latin and its
 daughters (CC BY-NC-SA).
+
+The shelf has kept growing with the desks. Since late August 2026: the
+Monlam Tibetan headword lists (449,829 headwords), the open subset of
+the Welsh *Geiriadur Prifysgol Cymru* (89,386 entries), the Chinese
+rime books, Wiktionary's Chinese, Sumerian, Akkadian and Hittite
+lexica, the West Old Turkic loanword dictionary, the Old Javanese
+Wordnet, and — October 2026 — Brückner's 1927 etymological dictionary
+of Polish and Nasovič's 1870 dictionary of Belarusian.
 Dictionary
 citations are resolved to live passages where the cited work is held: the
 LSJ entry for μῆνις points at *Iliad* 1.1 as a resolvable URN, not a
@@ -537,8 +738,8 @@ printed abbreviation.
 
 ## The local shelves
 
-Four shelves hold material that is authored or acquired rather than
-downloaded. A language-dossier shelf carries the library's per-language
+The library's {{ census.local_shelves }} local shelves hold material that is authored, acquired, or computed
+rather than downloaded. A language-dossier shelf carries the library's per-language
 curation — one plain Markdown file per language code, feeding the
 `nabu language` reference cards. A local-library
 shelf files the owner's own PDFs, scans, and offprints as catalogued,
@@ -552,5 +753,7 @@ every registered source, served on the `nabu list` census and checked
 against the shelf map at every development gate. And a notes shelf
 records the owner's own annotations on any citable URN through
 `nabu note` — scholia of one's own, rendered wherever the target is
-shown. What these shelves hold is the owner's private business: their
+shown. A lemma shelf keeps the raw output of the local lemmatization
+campaigns (`nabu lemma-enrich`) — computation too costly to re-derive
+for free — from which the silver lemma tier is projected. What these shelves hold is the owner's private business: their
 contents and counts are deliberately absent from this site.
