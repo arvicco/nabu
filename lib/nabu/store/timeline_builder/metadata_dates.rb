@@ -100,6 +100,7 @@ module Nabu
           "itkc" => :structured,
           "ja-wikisource" => :era_band_key,
           "ko-wikisource-mk" => :structured,
+          "kdsp" => :structured,
           "korba" => :structured,
           "litopys" => :era_band_key,
           "local-library" => :year_key,

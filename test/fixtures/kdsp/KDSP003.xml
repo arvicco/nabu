@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="KDSP003" xml:lang="sl">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Deteljica ali življenje treh kranjskih bratov francoskih soldatov [KDSP]</title>
+        <author>Cigler, Janez (1792-1867)</author>
+      </titleStmt>
+      <editionStmt>
+        <edition>1.0</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName><ref target="https://isllv.zrc-sazu.si/sl/predstavitev#v">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</ref></orgName>
+        </publisher>
+        <distributor>CLARIN.SI</distributor>
+        <idno type="URI" subtype="handle">http://hdl.handle.net/11356/1823</idno>
+        <date when="2023-07-07"> 7. julij 2023</date>
+        <availability status="free">
+          <licence>http://creativecommons.org/licenses/by/4.0/</licence>
+          <p>To delo je ponujeno pod <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Priznanje avtorstva 4.0 mednarodna licenca</ref>.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+	<bibl source="#Wikivir">
+          <title type="main">Deteljica ali življenje treh kranjskih bratov francoskih soldatov</title>
+          <author corresp="#CiglerJanez">Cigler, Janez</author>
+	  <date when="1863">1863</date>
+          <idno type="URI" subtype="Wikimedia">https://sl.wikisource.org/wiki/Deteljica_ali_%C5%BEivljenje_treh_kranjskih_bratov_francoskih_soldatov</idno>
+	</bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <textClass>
+        <catRef scheme="#textTimeSlot" target="#D4"/> <!-- (obdobje) -->
+        <catRef scheme="#textSize" target="#kratka"/> <!-- (obseg) -->
+        <catRef scheme="#textType" target="#povest"/> <!-- (zvrst) -->
+        <catRef scheme="#textSubType" target="#poučno_vzgojna"/> <!-- (podzvrst) -->
+        <catRef scheme="#textTheme" target="#družinska"/> <!--(tematika) -->
+        <catRef scheme="#textCanonicity" target="#visoka"/> <!-- (kanoničnost) -->
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+   <div xml:id="KDSP003.d1">
+      <head xml:id="KDSP003.d1.h1">Vvod</head>
+      <p xml:id="KDSP003.d1.p1">Krajnska dežela je bila od leta 1809 do leta 1813 pod francosko oblastjo. Gospodoval je v tistih letih slavni francoski cesar Napoleon. S silno vojsko pridere Napoleon leta 1809 v avstrijansko cesarstvo, vzame veliko zemlje avstrijanskemu cesarju, in tudi poglavitno mesto Dunaj ali Beč v svojo oblast dobi. Potem je bil med francoskim in avstrijanskim cesarjem mir narejen; in po pogojih tega primirja je prišla krajnska dežela cela, en kos hrovaške in en kos koroške Francozom v roke. Vse te tri dežele je ukazal Napoleon imenovati Ilirija.</p>
+      <p xml:id="KDSP003.d1.p2">Napoleon je bil v vednih vojskah, zato je potreboval veliko soldatov. Tudi Ilirijani so mógli fante v soldate dajati. Leta 1812 je napravil vojsko z Rusom; v ta namen je brez števila soldatov vkup nagnal iz vsih dežel svojega cesarstva. Strašne trume soldatov vsake baže so se valile v poljsko deželo, iz poljske pa v rusovsko proti Moškavi, poglavitnemu mestu rusovskega cesarstva. K tej vojski je bilo tudi vzetih veliko Ilirijanov, ki so mógli iti z Rusom se vojskovat, pa malo jih je prišlo srečno nazaj. Nekteri so bili ubiti, večina njih je pa zmerznila v hudi rusovski zimi.</p>
+   </div>
+   <div xml:id="KDSP003.d2">
+      <head xml:id="KDSP003.d2.h1">Pervi del.</head>
+      <div xml:id="KDSP003.d2.d1">
+         <head xml:id="KDSP003.d2.d1.h1">I. Oče Jožef da tri sine v soldate</head>
+         <p xml:id="KDSP003.d2.d1.p1">Prav blizo Ljubljane je bil pošten mož v očitni službi, spoštovan od gosposkih in kmetiških ljudi, Jožef P. po imenu.</p>
+      </div>
+   </div>
+</body>
+  </text>
+</TEI>

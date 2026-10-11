@@ -1371,6 +1371,18 @@ sources:
         every work, cert carried"}
     places: {posture: unplaced}
     script: {posture: implied}
+  kdsp:   # Q102, row 242
+    kind: {posture: pending, note: "candidate: a kind_map fold over the textType facet
+        genre (povest / roman / novela / črtica / drugo — all narrative prose); the fold
+        is a ruled table, not a default"}
+    lect: {posture: dates, note: "as prilit/imp — the sl stage bands stage the
+        print year on every text (1836–1849 → sl:emod, 1850–1918 → sl:mod)"}
+    dating: {posture: dated, note: "the sourceDesc bibl's publication year (@when on
+        all 262), a one-year envelope (MetadataDates :structured)"}
+    places: {posture: unplaced, note: "the deposit carries no place field (bibl,
+        personography and taxonomies censused) — declared"}
+    script: {posture: implied, note: "Latin (gajica) as the digital sources transcribe
+        it; no bohoričica censused"}
   openiti:
     # kind declaration retired P104-1: the subject-facet regex rule in
     # kind_map.yml machine-postures it now (the shadowing rule).

@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (25): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `korba`, `litopys`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
+**Members** (26): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
 
 ### germanic
 

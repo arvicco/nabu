@@ -1,0 +1,5 @@
+ID	Leto	Naslov	Avtor	Spol	Rojstvo	Smrt	Poklic	Besed	Obseg	Zvrst	Podzvrst	Tematika	Kanoničnost	Vir	URL_vira
+KDSP001	1836	Sreča v nesreči	Cigler, Janez	M	1792	1867	duhovnik	33819	D1	kratka	povest	poučno-vzgojna	družinska	visoka	ELTeC	https://github.com/COST-ELTeC/ELTeC-slv/blob/v0.7.1/level1/SLV10003.xml
+KDSP003	1863	Deteljica ali življenje treh kranjskih bratov francoskih soldatov	Cigler, Janez	M	1792	1867	duhovnik	34616	D4	kratka	povest	poučno-vzgojna	družinska	visoka	Wikivir	https://sl.wikisource.org/wiki/Deteljica_ali_%C5%BEivljenje_treh_kranjskih_bratov_francoskih_soldatov
+KDSP010	1870	Žalost in veselje	Podmilšak, Josip	M	1845	1974	uradnik	76914	D5	srednja	povest		pustolovska	nizka	ELTeC	https://github.com/COST-ELTeC/ELTeC-slv/blob/v0.7.1/level1/SLV00122.xml
+KDSP020	1876	Idealist	Holc, Vatroslav	M	1844	1914	uradnik	19286	D5	kratka	povest	v pismih	idejna	nizka	dLib	https://www.dlib.si/details/URN:NBN:SI:DOC-R7R8ADI9

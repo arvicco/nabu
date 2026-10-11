@@ -1,0 +1,58 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Members of the one KDSP.TEI.zip (not individually GET-able); the corpus
+# header and README whole, the four works trimmed per README.
+source: kdsp
+adapter_test:
+retrieved: "2026-10-11"
+files:
+  - path: KDSP.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: true
+    trim: none
+  - path: 00README.txt
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: true
+    trim: none
+  - path: KDSP-meta.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: false
+    trim: header + the four fixture works' rows
+  - path: KDSP001.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: false
+    trim: header whole; body to its first 8 head/p blocks (empty divs dropped)
+  - path: KDSP003.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: false
+    trim: header whole; body to its first 6 head/p blocks (empty divs dropped)
+  - path: KDSP010.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: false
+    trim: header whole; body to its first 2 blocks + the 2 blocks either side of the first milestone (with its div's head)
+  - path: KDSP020.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of KDSP.TEI.zip (KDSP.TEI/) — not individually fetchable; re-cut per README
+    copied: "2026-10-11"
+    whole: false
+    trim: header whole; body to its first 9 head/p/lg blocks
