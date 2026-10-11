@@ -476,12 +476,14 @@ module Nabu
 
     # Shared with IncrementalRebuild (subclass): one computer per run so the
     # code/fold digests are hashed once, not per source. The plain-tree
-    # identity memo (CanonicalIdentityCache, db/ — derived) rides along in
+    # identity memo (CanonicalIdentityCache) and the git-repo identity memo
+    # (GitIdentityCache) — both db/, both derived — ride along in
     # #identity_cache_mode.
     def fingerprints
       @fingerprints ||= DerivationFingerprint.new(
         config: @config,
-        identity_cache: CanonicalIdentityCache.for_config(@config, mode: identity_cache_mode)
+        identity_cache: CanonicalIdentityCache.for_config(@config, mode: identity_cache_mode),
+        repo_cache: GitIdentityCache.for_config(@config, mode: identity_cache_mode)
       )
     end
 
