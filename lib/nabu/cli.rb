@@ -822,7 +822,8 @@ module Nabu
 
       catalog = Nabu::Store.connect(config.catalog_path)
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: slug)
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: slug,
+                                                                         canonical_dir: config.canonical_dir)
       say "metadata-dates lane (#{slug}): #{rows} rows projected " \
           "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
     ensure

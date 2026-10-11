@@ -2,6 +2,8 @@
 
 require "test_helper"
 require "json"
+require "tmpdir"
+require "fileutils"
 
 module Store
   # Nabu::Store::TimelineBuilder (P15-2): the date/place extractors over trimmed-real
@@ -526,6 +528,64 @@ module Store
                    "a place-only doc still rows (the HGV precedent)"
       assert_nil timeline_for("urn:nabu:eebo-tcp:a3"),
                  "sine loco is the imprint world's unknown — never a place name"
+    end
+
+    # P118-R4 S3: ~10.3k eebo docs whose header imprint date the parser
+    # could not bound ("1700?]", "[between 1670-1696]") — the TCP's own
+    # per-id date lists (the fetched sidecars, real trimmed copies under
+    # test/fixtures/eebo-tcp/fetch/) date them by a builder-side JOIN.
+    def eebo_canonical
+      dir = Dir.mktmpdir
+      FileUtils.mkdir_p(File.join(dir, "eebo-tcp"))
+      fixture = File.expand_path("../fixtures/eebo-tcp/fetch", __dir__)
+      %w[eebo_phase1_IDs_and_dates.txt EEBO_Phase2_IDs_and_dates.txt].each do |name|
+        FileUtils.cp(File.join(fixture, name), File.join(dir, "eebo-tcp", name))
+      end
+      dir
+    end
+
+    def test_eebo_sidecar_dates_fill_undated_documents_only
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A57617",
+                        { "idno" => "A57617", "date" => { "raw" => "1644?]" },
+                          "source_pub_place" => "London" })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A90004",
+                        { "idno" => "A90004", "date" => { "not_before" => 1640, "not_after" => 1641,
+                                                          "raw" => "1640-41" } })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A00002", { "idno" => "A00002" })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A99999", { "idno" => "A99999" })
+      canonical = eebo_canonical
+      Nabu::Store::TimelineBuilder.rebuild!(catalog: @db, canonical_dir: canonical)
+
+      row = timeline_for("urn:nabu:eebo-tcp:A57617")
+      assert_equal [1644, 1644, "1644", "London"], row.values_at(:not_before, :not_after, :date_raw, :place_name),
+                   "the TCP list dates the place-only row; date_raw names the claim used"
+      assert_equal [1640, 1641], timeline_for("urn:nabu:eebo-tcp:A90004").values_at(:not_before, :not_after),
+                   "a header-dated doc keeps its own bounds — the list is a fallback"
+      assert_equal [1625, 1625], timeline_for("urn:nabu:eebo-tcp:A00002").values_at(:not_before, :not_after),
+                   "an otherwise row-less doc gains a dated row"
+      assert_nil timeline_for("urn:nabu:eebo-tcp:A99999"), "absent from the lists — nothing invented"
+
+      @db[:document_axes].delete
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "eebo-tcp",
+                                                                         canonical_dir: canonical)
+      assert_equal 3, rows, "the per-source seam joins the lists too"
+    ensure
+      FileUtils.rm_rf(canonical) if canonical
+    end
+
+    def test_eebo_sidecar_date_grammar
+      parse = ->(raw) { Nabu::Store::TimelineBuilder::MetadataDates.tcp_list_years(raw) }
+      assert_equal [1625, 1625], parse.call("1625")
+      assert_equal [1670, 1696], parse.call("1670-1696?")
+      assert_equal [1697, 1712], parse.call("1697?-1712?")
+      assert_equal [1680, 1680], parse.call("1680?")
+      assert_equal [1600, 1699], parse.call("16uu"), "unknown digits widen to the envelope"
+      assert_equal [1690, 1699], parse.call("169u")
+      assert_equal [1690, 1999], parse.call("1690-1uuu?")
+      assert_equal [1688, nil], parse.call("1688-9999?"), "9999 is the open-ended sentinel"
+      assert_equal [1660, nil], parse.call("1660-uuuu?")
+      assert_nil parse.call("n.d.")
+      assert_nil parse.call("")
     end
 
     def test_metadata_dates_ja_wikisource_era_band
