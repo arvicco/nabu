@@ -1051,6 +1051,20 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
         artifact fact"}
+  dharma-tamil:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: identity once nabu-lects carries tam-Latn and
+        tel-Latn (san/pra/pli/fra -Latn resolve today) — the lect mint rides hub-side"}
+    dating: {posture: pending, note: "no origDate in any header; candidate: the titles'
+        attributed statements ride metadata title_dating verbatim on ~960 docs ('time of
+        Rājakesarivarman, year 9', 'Śaka year 1589') — conversion needs a ruled South-Indian
+        regnal table and a Śaka epoch ruling"}
+    places: {posture: pending, note: "no origPlace in any header (findspots live in DHARMA's
+        separate metadata repos); candidate: that join, or the house-style titles' leading
+        toponym once a gazetteer match is ruled"}
+    script: {posture: qualified, note: "romanized (tam-Latn/san-Latn); Tamil, Grantha and
+        Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
+        script_rendition verbatim"}
   obi-burmese:
     kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the
