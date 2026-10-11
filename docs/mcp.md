@@ -44,7 +44,8 @@ Every passage in every response carries **urn**, **language**, and
 
 ### `nabu_search`
 
-Full-text or exact-lemma search over the whole corpus. Give **exactly one** of:
+Full-text, exact-lemma, or semantic-neighbour search over the whole corpus.
+Give **exactly one** of:
 
 - `query` — FTS5 full text. Words are AND by default; `"quoted phrase"` for
   adjacency; `prefix*`. Diacritics optional: `μηνιν` finds `μῆνιν`.
@@ -58,6 +59,14 @@ Full-text or exact-lemma search over the whole corpus. Give **exactly one** of:
   PROIEL/TOROT are decoded from their positional tag into the same names; ORACC
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
+- `similar_to` — a passage urn: its **semantic** neighbours instead of a text
+  search (P93-5), read from the local vector store that `nabu embed` builds
+  ([embed.md](embed.md)) — other witnesses of a verse, passages saying the
+  same thing. Same-language only (cross-language retrieval measured
+  unreliable and is not served), banded `close`/`near`/`loose` rather than
+  raw scores, the model named in the payload; composes with `limit` only.
+  Before the store is built, or for a passage outside the embedded scope,
+  the response is an honest build hint, never a silent empty list.
 
 An optional `near` turns either mode into **proximity search**: keep only hits
 where `near`'s term occurs within `window` words (default 10, `0` = adjacent) of
@@ -436,11 +445,14 @@ never enabled do not appear. This is a visibility default, not a data gate:
 
 License classes `research_private` and `restricted` are **excluded by default**
 from every tool — they never appear in search results, `nabu_show` withholds
-them, and `nabu_status` counts them only under `excluded_by_default`. The
-Freising Manuscripts shelf carries `research_private` today (BY-ND posture),
-and the coming local-library shelf will default to it — so the exclusion is
-live, not theoretical: a conversational surface never leaks restricted
-material casually. A caller who understands and will honor the restriction can opt in
+them, and `nabu_status` counts them only under `excluded_by_default`. As of
+October 2026 six sources carry `research_private` — the Freising Manuscripts
+(BY-ND posture), the owner's acquired library (`local-library`, private by
+default), the personally granted ACLT Luwian corpus, the two IvdNT
+historical-Dutch corpora (Gysseling, Oudnederlands), and SEAL (early
+Akkadian literature, by grant) — so the
+exclusion is live, not theoretical: a conversational surface never leaks
+restricted material casually. A caller who understands and will honor the restriction can opt in
 per call with `include_restricted: true`.
 
 ---

@@ -23,7 +23,7 @@ module Nabu
     # the flip re-mints revisions at the next owner-fired parse-only resync
     # (`bin/nabu sync wiktionary-cu --parse-only`) — the recovery path.
     #
-    # == Upstream (verified page-level + ranged reads, docs/backlog.md P13-10 Phase A)
+    # == Upstream (verified page-level + ranged reads, docs/history/backlog.md P13-10 Phase A)
     #
     # https://kaikki.org/dictionary/Old%20Church%20Slavonic/ — "4548
     # distinct words", built from the enwiktionary dump dated 2026-07-06

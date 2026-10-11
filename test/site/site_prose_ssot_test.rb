@@ -52,7 +52,19 @@ module Site
       "the five StarLing bases",        # 15 bases since the September expansion
       "Six etymological databases",     # the starling row's old scope line
       "28,707",                         # old starling entry total
-      "27,397"                          # old starling entry total (library.md variant)
+      "27,397",                         # old starling entry total (library.md variant)
+      # The 2026-10-11 prose-staleness audit (P118-R5): literals that had
+      # outlived three growth waves. The 803-codes line had slipped the
+      # guard above by breaking across two lines.
+      "the 803 Wiktionary",             # → census.etym_codes
+      "fifteen StarLing",               # 56 StarLing shelves by October 2026
+      "fifteen bases",                  # the starling scope line, library.md variant
+      "Roughly 99%",                    # → census.redistributable_pct (96% at retirement)
+      "roughly 99%",
+      "45 GB canonical",                # the July 2026 full-library size
+      "eldest of four siblings",        # five with Edubba
+      "Eighteen further registry rows", # → census.feature_modules
+      "Four further registered sources" # → census.local_shelves
     ].freeze
 
     # Pure-headline pages whose only million-scale totals ARE the SSOT

@@ -631,7 +631,7 @@ On this box run them as `bundle exec rake …` (§2).
 | `rake site:data` | Regenerate `site/_data/` (desks + census) from the registries and the live catalog. | Run where the catalog exists. |
 | `rake site:refresh` | The one gate refresh: `site:data` + `site:axes`. | The standard pre-release step (§12). |
 | `rake site:preview` | Serve the site locally for staged-change review (port 4747). | Read-only. |
-| `rake site:axes` | Regenerate the per-axis site pages (one per registry axis — 24 as of P78) + index from registry, fragments, and LIVE catalog counts. | Run only where the catalog exists (main checkout) — a catalog-less run degrades holdings. |
+| `rake site:axes` | Regenerate the per-axis site pages (one per registry axis — 28 as of October 2026) + index from registry, fragments, and LIVE catalog counts. | Run only where the catalog exists (main checkout) — a catalog-less run degrades holdings. |
 | `rake site:check` | Drift check: source-dossier descriptions vs docs/library.md. | Exit 1 on drift; never generates. |
 | `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
 | `rake "bless[<attestation>]"` (alias: `stamps:rebless`) | Rewrite EVERY source's derivation stamp to assert current code — WITHOUT re-deriving. Escape hatch for fingerprint-formula or output-identical code changes, so a multi-hour rebuild isn't triggered by bookkeeping. | **Owner-only, dangerous.** Valid ONLY when the catalog's derived rows already match what current code would produce: right after a verified full rebuild, or after individually re-syncing every source whose output actually changed. Misuse = stamps that lie = silent under-derivation. The attestation argument (`i-verified-current-full-rebuild`) is the claim you must be able to make truthfully; the task refuses anything else. |
@@ -1055,17 +1055,22 @@ automatically; no per-release action.
 **Per release, in order (the gate checklist):**
 
 1. **Green gate first.** `rake test && rake lint` exit 0 on the release
-   commit; the phase's worklog gate line is written (it is the release-notes
-   source of record).
+   commit; the phase-gate pull request body is written (it is the
+   release-notes source of record — until 2026-08-02 the gate's worklog
+   line served, see docs/history/).
 2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
    today; bump `Nabu::VERSION` (lib/nabu/version.rb) to the same string —
    it feeds provenance `code_version` stamps and fetch User-Agents;
-   commit both with the release.
-3. **Tag**: `git tag -a vX.Y.Z -m "vX.Y.Z — <one-line theme>"` on main;
-   `git push origin vX.Y.Z`.
-4. **GitHub release**: `gh release create vX.Y.Z --title "vX.Y.Z — <theme>"
-   --notes-file <notes.md>` — the notes are the gate's worklog line
-   distilled to prose: what shipped, honest numbers with as-of dates, the
+   commit both on the phase branch, so the bumps ride the gate PR the
+   owner merges (the loop never pushes to `main`).
+3. **Tag** — only after the owner has merged the PR carrying the bumps:
+   the tag is minted by the GitHub release itself, pointed at the merge
+   commit by its full sha (`--target <sha>` in step 4), so no tag or
+   commit is ever pushed to `main` directly. (v1.6.0, for example, tags
+   the phase-102 merge commit.)
+4. **GitHub release**: `gh release create vX.Y.Z --target <merge-sha>
+   --title "vX.Y.Z — <theme>" --notes-file <notes.md>` — the notes are
+   the gate PR's record distilled to prose: what shipped, honest numbers with as-of dates, the
    owner-queue caveats. (This is the step that triggers the Zenodo DOI once
    the repo is linked.)
 5. **News entry — OBLIGATORY, and verified live** (owner ruling

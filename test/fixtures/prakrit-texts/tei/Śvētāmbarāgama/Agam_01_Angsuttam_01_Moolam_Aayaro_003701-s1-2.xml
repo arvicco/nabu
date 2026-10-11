@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Āyār" n="Āyār">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+	<title xml:lang="pka-Latn">Āyāraṅgasuttaṁ</title>
+	<title xml:lang="san-Latn">Ācārāṅgasūtraṁ</title>
+      	<principal><persName ref="http://viaf.org/viaf/372149294434280521495">Andrew Ollett</persName></principal>
+      	<respStmt>
+      	  <persName xml:id="AO">Andrew Ollett</persName> 
+      	  <resp>Processed the text data from Muni Deepratnasagar Ji's DOCX files into romanized TEI.</resp>
+      	</respStmt>
+	<respStmt>
+	  <persName xml:id="IR">Itamar Ramot</persName> 
+	  <resp>Bibliographic and text-processing assistance.</resp>
+	</respStmt>
+      </titleStmt>
+      <publicationStmt>
+      	<authority/>
+	<availability status="restricted">
+	  <p><!-- add whatever license you like: --></p>
+	</availability>
+	<date>2020</date>
+	<publisher><!-- EFEO/EPHE (Université of PSL) --></publisher>
+	<pubPlace><!-- Paris --></pubPlace>
+      </publicationStmt>
+      <sourceDesc>
+	<p>This electronic text is based on the DOCX files of the entire Śvētāmbara canon provided by Muni Deepratnasagar and made available through Jain e-Library. The ID of the DOCX file for this text is 003701. The source of Muni Deepratnasagar's edition, in turn, is the “Āgama Mañjūṣā” series (ID 003251).</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <p>The Ācārāṅgasūtra is divided into two books (śrutaskandhas or suyakkhandhas). Scholars since Jacobi, or rather since Śīlāṅka, have regarded the first book as older than the second. The first book is divided into chapters (ajjhayaṇas), and these chapters are divided into lessons (uddēsas). Sections are numbered continuously from the beginning of the text.</p>
+      <p>The second book is divided into appendices (cūlās), and these, in turn, are divided into chapters (ajjhayaṇas), which are numbered continuously from the beginning of the second book. Starting from the second appendix, each chapter (ajjhayaṇa) is also called a sattikkaya, which are then numbered continuously from the beginning of the second chapter. Sections in the second book, like the first, are numbered continously from the beginning of the text.</p>
+      <refsDecl n="CTS">
+	<cRefPattern 
+	    n="level4"
+	    matchPattern="s.(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body//tei:div[@type='section'][@n='$1']">
+	  <p>This pointer pattern extracts sections, numbered continuously from the beginning of the text.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level1"
+	    matchPattern="(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='$1']">
+	  <p>This pointer pattern extracts śrutaskandhas/suyakkhandhas.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level2"
+	    matchPattern="1.(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='1']/tei:div[@n='$1'])">
+	  <p>This pointer pattern extracts ajjhayaṇas of the first śrutaskandha.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level2"
+	    matchPattern="2.(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='2']/tei:div[@n='$1'])">
+	  <p>This pointer pattern extracts cūlās of the second śrutaskandha.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level3"
+	    matchPattern="1.(\d+).(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='1']/tei:div[@n='$1']/tei:div[@n='$2'])">
+	  <p>This pointer pattern extracts uddēsas of the first śrutaskandha.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level3"
+	    matchPattern="2.(\d+).(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='2']/tei:div[@n='$1']/tei:div[@n='$2'])">
+	  <p>This pointer pattern extracts ajjhayaṇas of the second śrutaskandha.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level4"
+	    matchPattern="1.(\d+).(\d+).(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='1']/tei:div[@n='$1']/tei:div[@n='$2']/tei:div[@n='$3'])">
+	  <p>This pointer pattern extracts sections of the first śrutaskandha.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level4"
+	    matchPattern="2.(\d+).(\d+).(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='2']/tei:div[@n='$1']/tei:div[@n='$2']/tei:div[@n='$3'])">
+	  <p>This pointer pattern extracts sattikkayas of the second śrutaskandha.</p>
+	</cRefPattern>
+	<cRefPattern 
+	    n="level4"
+	    matchPattern="2.(\d+).(\d+).(\d+).(\d+)"
+	    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@n='2']/tei:div[@n='$1']/tei:div[@n='$2']/tei:div[@n='$3']/tei:div[@n='$4'])">
+	  <p>This pointer pattern extracts sections of the second śrutaskandha.</p>
+	</cRefPattern>
+      </refsDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+      	<language ident="pka-Latn">Ardhamāgadhī, romanized in ISO-15919</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2020-08-15" who="AO">Conversion of text to TEI</change>
+    </revisionDesc>
+  </teiHeader>
+  <text xml:lang="pka-Latn">
+    <body>
+      <div type="suyakkhandha" n="1">
+	<div type="ajjhayaṇa" n="1">
+	  <div type="uddēsa" n="1">
+	    <div type="section" n="1">
+	      <p>
+                <s>suyaṁ mē āusaṁ! tēṇaṁ bhagavayā ēvamakkhāyaṁ ihamēgēsiṁ nō saṇṇā bhavaï.</s>
+              </p>
+	    </div>
+	    <div type="section" n="2">
+	      <p>
+                <s>taṁ jahā — puratthimāō vā disāō āgaō ahamaṁsi, dāhiṇāō vā disāō āgaō ahamaṁsi, paccatthimāō vā disāō āgaō ahamaṁsi, uttarāō vā disāō āgaō ahamaṁsi, uḍḍhāō vā disāō āgaō ahamaṁsi , ahē vā disāō āgaō ahamaṁsi, annayarīō vā disāō anudisāō vā āgaō ahamaṁsi, ēvamēgēsiṁ nō nātaṁ bhavati.</s>
+              </p>
+	    </div>
+	  </div><!-- uddēsa 1 !-->
+	</div><!-- ajjhayaṇa 1 !-->
+      </div><!-- suyakkhandha 1 !-->
+    </body>
+  </text>
+</TEI>

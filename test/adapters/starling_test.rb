@@ -50,7 +50,11 @@ class StarlingTest < Minitest::Test
                   "starling-monget:monget.dbf", "starling-tunget:tunget.dbf",
                   "starling-lezget:lezget.dbf", "starling-sdret:sdret.dbf", "starling-ktet:ktet.dbf",
                   "starling-kiret:kiret.dbf", "starling-limet:limet.dbf", "starling-iranet:iranet.dbf",
-                  "starling-lexstat-balt:balt.dbf", "starling-lexstat-germ:germ.dbf"].freeze
+                  "starling-lexstat-balt:balt.dbf", "starling-lexstat-germ:germ.dbf",
+                  # Q116: the follow-up packages' LEXSTAT/ wordlists (fixture tables)
+                  *%w[alt tung turc lezg yen kir man syc tani drav kam kart].map do |stem|
+                    "starling-lexstat-#{stem}:#{stem}.dbf"
+                  end].freeze
 
   def adapter = Nabu::Adapters::Starling.new
 
@@ -142,7 +146,7 @@ class StarlingTest < Minitest::Test
   def test_discover_yields_one_ref_per_base_in_registry_order
     refs = adapter.discover(FIXTURES).to_a
     assert_equal ALL_BASE_IDS, refs.map(&:id)
-    assert_equal %w[starling] * 26, refs.map(&:source_id)
+    assert_equal %w[starling] * 38, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -698,7 +702,7 @@ class StarlingTest < Minitest::Test
     assert_empty entries[2].reflexes, "qɔ: carries the length colon — not a clean citation form"
   end
 
-  # --- the reflex verdict (journaled in docs/backlog.md P22-0) ---------------------
+  # --- the reflex verdict (journaled in docs/history/backlog.md P22-0) ---------------------
 
   def test_single_language_attested_columns_mint_reflex_rows
     reflexes = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }["562"].reflexes
@@ -821,6 +825,10 @@ class StarlingTest < Minitest::Test
     @package_zip_bodies[subdir] ||= zip_of(
       PACKAGE_FILES.fetch(subdir).flat_map do |base|
         ["#{base}.dbf", "#{base}.var"].map { |name| [File.join(FIXTURES, subdir, name), name] }
+      end +
+      # Q116: each package's LEXSTAT/ subtree rides inside its own zip.
+      Dir[File.join(FIXTURES, subdir, "LEXSTAT", "*")].map do |src|
+        [src, File.join("LEXSTAT", File.basename(src))]
       end
     )
   end
@@ -863,7 +871,7 @@ class StarlingTest < Minitest::Test
                "#{subdir} survives the IE re-fetch sweep"
         refute Dir.exist?(File.join(workdir, ".attic", subdir)), "nothing #{subdir}-shaped was atticked"
       end
-      assert_equal 26, adapter.discover(workdir).to_a.size
+      assert_equal 38, adapter.discover(workdir).to_a.size
     end
   end
 
@@ -900,16 +908,18 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 138, first.added,
+    assert_equal 427, first.added,
                  "3 records per IE base + 5 kart + 27 across the P104-3 bases (3 altet + 3 japet + " \
                  "3 caucet + 4 stibet + 3 dravet + 4 kamet + 2 chuket + 2 itelet + 3 yenet), " \
                  "both halves of each fixture NUMBER collision and every placeholder pin included; " \
                  "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ form cells; branch wave: " \
-                 "+ 4 turcet + 1 monget + 2 tunget + 3 lezget + 3 sdret + 2 ktet + 2 kiret + 2 limet"
+                 "+ 4 turcet + 1 monget + 2 tunget + 3 lezget + 3 sdret + 2 ktet + 2 kiret + 2 limet; " \
+                 "Q116 package wordlists: + 107 alt + 8 tung + 39 turc + 18 lezg + 7 yen + 12 kir + 1 man + " \
+                 "13 syc + 9 tani + 47 drav + 16 kam + 12 kart form cells"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 138, second.skipped
+    assert_equal 427, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)
@@ -917,7 +927,9 @@ class StarlingTest < Minitest::Test
                  db[:dictionary_entries].where(entry_id: "12561").get(:urn),
                  "piet #1501's `Vasmer: #12561` body line now names a live entry id"
     assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-kamet:689-b",
-                  "urn:nabu:dict:starling-kart:48-b", "urn:nabu:dict:starling-lexstat-balt:26.lit-b",
+                  "urn:nabu:dict:starling-kart:48-b",
+                  *%w[atu blk chv evk neg tat].map { |col| "urn:nabu:dict:starling-lexstat-alt:1.#{col}-b" },
+                  "urn:nabu:dict:starling-lexstat-balt:26.lit-b",
                   "urn:nabu:dict:starling-lexstat-germ:58.aeg-b", "urn:nabu:dict:starling-lexstat-germ:58.hol-b",
                   "urn:nabu:dict:starling-piet:574-b", "urn:nabu:dict:starling-turcet:1931-b",
                   "urn:nabu:dict:starling-yenet:904-b"],

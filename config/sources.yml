@@ -1330,6 +1330,27 @@ dharma-campa:   # P92-2
   # recorded verbatim; class attribution. The xml/ dir also carries
   # upstream's BROUILLON-LISTE.xml worklist — censused, never parsed.
 
+dharma-deccan:   # P118-2
+  adapter: Nabu::Adapters::DharmaDeccan
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: true    # first sync verified 2026-10-11: 1,694 docs / 27,929 passages, 29 honest quarantines (the lane census exactly)
+  sync_policy: manual
+  # DHARMA Task Force B — the South Asian inscription estate: the 20
+  # edition-bearing tfb-* repos on github.com/erc-dharma (live census
+  # 2026-10-11) composed into one source, each repo a sparse GitFetch
+  # into canonical/dharma-deccan/<repo>/ (root-layout repos clone
+  # whole). EIAD, Kanaganahalli, Early Western Deccan, Ollett's
+  # Sātavāhana data, Telugu, Kalyāṇa + Vengī Cālukya, Maitraka, Bengal,
+  # Dakṣiṇa Kosala, Somavaṁśin, Bādāmi and the dynastic smalls — 1,723
+  # editions, pra/san/tel/kan -Latn. OUT: tfb-ec-epigraphy (Epigraphia
+  # Carnatica, another parser shape) and the four edition-less repos.
+  # In-file <licence> governs verbatim (CC BY-SA 4.0 / CC BY 4.0 /
+  # CC BY 3.0); Ollett's licence-less files fall back on the repo's
+  # LICENCE.txt CC BY 4.0, recorded per document; class attribution.
+  # EXPECTED FIRST SYNC (scratch census): 1,694 docs / 27,929 passages,
+  # 29 honest quarantines (text-less stubs, lang-less/und editions).
+
 dharma-javanese-texts:   # P92-4
   adapter: Nabu::Adapters::DharmaJavaneseTexts
   adopted: "2026-09-01"
@@ -1365,6 +1386,23 @@ dharma-khmer:   # P92-1, the SEA desk anchor
   # unknown-language net quarantines new codes loudly. First sync
   # owner-fired; ~150 MB repo, texts/xml cone far smaller.
 
+dharma-mdt:   # P118-4, 02-sources row 257
+  adapter: Nabu::Adapters::DharmaMdt
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-11: 734 metadata-row docs, 0 quarantined
+                 # verified 2026-10-11: 734 metadata docs, 94 placeholder rows skipped)
+  sync_policy: manual
+  # DHARMA text metadata (github.com/erc-dharma/mdt-texts): four per-corpus
+  # CSVs (DaksinaKosala / Pallava / Somavamsin / Telugu, header at row 3) as
+  # a METADATA-ROW source — one zero-passage document per INS<Corpus>NNNNN
+  # row (text_layer none, the rsti precedent), carrying Date CE / range /
+  # certainty / evidence, typology, languages and scripts, physical form,
+  # bibliography and location prose. dharma_text_id is the explicit join
+  # key onto the DHARMA edition urns (urn:nabu:dharma-*:<INS id>). Rows
+  # declare CC0 for the metadata (verbatim per document); repo LICENCE CC BY
+  # 4.0 → class attribution. Sparse GitFetch on csv/.
+
 dharma-nusantara:   # P92-2
   adapter: Nabu::Adapters::DharmaNusantara
   adopted: "2026-09-01"
@@ -1389,6 +1427,34 @@ dharma-pyu:   # P92-2
   # romanized (pyx-Latn), flat repo layout. No repo-level LICENSE: the
   # per-file <licence> CC BY-SA 4.0 is the whole grant, recorded
   # verbatim; class attribution.
+
+dharma-tamil:   # P118-1
+  adapter: Nabu::Adapters::DharmaTamil
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: true    # first sync verified 2026-10-11: 1,267 docs / 17,993 passages, 32 honest quarantines (the lane census exactly)
+  sync_policy: manual
+  # DHARMA Tamil-country epigraphy (Task Force A; EFEO/CNRS/CEIAS, ERC
+  # no. 809994): the eleven tfa-* INSCRIPTION edition repos on
+  # github.com/erc-dharma — 1,301 DHARMA_ edition files (live census
+  # 2026-10-11): pallava 482 · tamilnadu 335 · sii 176 · tiruvavatuturai
+  # 80 · cirkali 55 · pandya 54 · kotumpalur 41 · uttiramerur 26 ·
+  # melappaluvur-kilappaluvur 20 · tamil-outside-TN 20 · cempiyan-
+  # mahadevi 12. Romanized Tamil above all: minted document codes
+  # tam-Latn 1,145 · san-Latn 116 · pra-Latn 4 · pli-Latn 1 · fra-Latn 1,
+  # plus 13 tel-Latn passages; bare "tam" (5 files) aliased to tam-Latn.
+  # License: the in-file <licence> governs, recorded verbatim — CC BY-SA
+  # 4.0 on 1,227 files ("CC BY-SA 4.0"); 71 files carry none and fall
+  # back on the repo LICENCE.txt (CC BY 4.0 legal code, README badge
+  # "licence-CC-BY"), recorded as "repo-level CC BY 4.0 (no in-file
+  # grant)"; class attribution. FETCH: one sparse GitFetch per repo into
+  # canonical/dharma-tamil/<repo>/ (root-anchored cone /DHARMA_*.xml +
+  # README.md + LICENCE.txt — upstream's ~DHARMA_ drafts, tfa-sii's OCR'd
+  # sii-corpus/ volumes and HTML renderings stay out), one breaker over
+  # all repos, per-repo ledger pins. EXPECTED FIRST SYNC: 1,299
+  # discovered (2 encoding templates skipped by rule) → 1,267 docs /
+  # 17,993 passages; 32 honest quarantines (29 text-less stubs, 1
+  # edition-less, 2 lang-less TamilNadu plates).
 
 diccas:   # P95-4
   adapter: Nabu::Adapters::Diccas
@@ -2430,13 +2496,31 @@ ja-wikisource:   # P109-1
   sync_policy: manual
   # The Japanese Wikisource premodern era cone (№R-74 posture:
   # premodern cone, verbatim base-edition strings, census-first —
-  # .docs/p109-plan.md). Census: 867 ns-0 pages across the eight era
+  # the P109 phase plan). Census: 867 ns-0 pages across the eight era
   # categories 飛鳥–江戸. Since P111-2 the fetch expands BOTH shell
   # residues — <pages index> scans (Page:-namespace payloads,
   # revid-pinned) and parameterized dispatcher shells
   # (action=expandtemplates, content-sha-pinned) — so only the 29
   # {{versions}} disambiguation pages skip by rule. Texts PD;
   # transcription layer CC BY-SA 4.0.
+
+kannada-texts:   # P118-3
+  adapter: Nabu::Adapters::KannadaTexts
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-11: 16 docs / 16,151 passages, 0 quarantined
+  sync_policy: manual
+  # Kannada Digital Texts Project (Andrew Ollett; text entry Krishnaprasada
+  # G. / Adishila Publications; github.com/aso2101/kannada_texts): 16 TEI
+  # editions, ISO-15919 romanized — Pampa (941), Ponna (953), Ranna,
+  # Nagavarma II (ca. 1042), Janna, Harihara, Raghavanka, Kanakadasa,
+  # Ratnakaravarni, Honnamma. Sparse GitFetch of tei/ + README.md
+  # (~5 MB). `ollett-tei` family: passage = stanza (lg, @met carried) /
+  # prose block / colophon, cited <div n>.<lg n>. License: every file
+  # "Distributed under a Creative Commons Attribution-ShareAlike 4.0
+  # license." (the in-file grant governs over the README's CC-BY 4.0
+  # default) -> attribution. Census 2026-10-11: 16 docs / 16,151
+  # passages, 0 quarantines.
 
 kanripo:
   adapter: Nabu::Adapters::Kanripo
@@ -3032,7 +3116,7 @@ monlam-lexicon:   # P88-A3, 02-sources row 183
   # found is UNLICENSED and parked (the app SQLite, the scraped CSVs) —
   # definitions need an upstream ask, never the scrape. The Grand list's
   # file carries a censused 24,295-line blank hole (the late-འ…ཡ band;
-  # .docs/upstream-reports.md) — README's 367,011 counts raw lines.
+  # reported upstream) — README's 367,011 counts raw lines.
   # EXPECTED FIRST SYNC (~29 MB clone): 449,829 bod entries — monlam
   # 107,113 + grand 342,716 — the desk's largest lexical shelf by two
   # orders of magnitude, glossless, complementary to wiktionary-bo.
@@ -3861,6 +3945,23 @@ prague-bible-1488:   # P116-1
   # semi-diplomatic; document = page, passage = TextLine (page-xml family),
   # abbreviation expansions as annotations.
 
+prakrit-texts:   # P118-3
+  adapter: Nabu::Adapters::PrakritTexts
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-11: 22 docs / 27,124 passages, 1 honest quarantine (malformed upstream)
+  sync_policy: manual
+  # Prakrit Digital Texts Project (Andrew Ollett; github.com/aso2101/
+  # prakrit_texts): 33 TEI files, ISO-15919 romanized. Ingests ONLY the
+  # 23 files whose availability reads "Prakrit Digital Texts Project.
+  # Distributed under a Creative Commons Attribution-ShareAlike 4.0
+  # license." -> attribution; the 9 Svetambara Agama files with the
+  # template comment "add whatever license you like" are skipped by rule
+  # (no grant), and the Setubandha is SARIT's edition, already held via
+  # sarit (declared overlap). Sparse GitFetch of tei/ + README.md.
+  # `ollett-tei` family. Census 2026-10-11: 22 docs / 27,124 passages;
+  # 1 quarantine (acaraniryukti.xml is not well-formed upstream).
+
 prilit:   # P95-1
   adapter: Nabu::Adapters::Prilit
   adopted: "2026-09-03"
@@ -4369,6 +4470,22 @@ shkz:   # P107-3b
   # 1,012-word alignment-pairs table fetches into canonical as a
   # DECLARED v1 residue (the alignment-hub look is the future packet).
 
+siddham:   # P118-4, 02-sources row 256
+  adapter: Nabu::Adapters::Siddham
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: true    # first sync verified 2026-10-11: 427 docs / 6,334 passages, 0 quarantined; GE-era dates live (417-418 CE eyeballed)
+                 # verified 2026-10-11: sha pin holds, 427 docs / 6,334 line passages)
+  sync_policy: manual
+  # The Siddham Epigraphic Archive texts (Dániel Balogh; Zenodo 2574901, the
+  # 2019-02-21 EpiDoc deposit, one sha-pinned zip): 427 editions of Gupta-age
+  # Sanskrit epigraphy, san-Latn at physical-line grain (siddham-epidoc). The
+  # TEI headers are deliberately blank — the RECORD's CC BY-SA 4.0 is the
+  # grant, recorded at source level and per document; class attribution.
+  # Dating mines the English titles only: 9 era-typed "GE N" years via
+  # config/eras.yml (Gupta–Valabhī envelope) + 4 century attributions;
+  # 88 untyped "year N" titles ride raw, never converted.
+
 sillok:
   adapter: Nabu::Adapters::Sillok
   adopted: "2026-08-18"
@@ -4379,8 +4496,8 @@ sillok:
   # 15053646 Gojong/Sunjong; 제한 없음 → D47-a attribution). Hanmun only —
   # the modern Korean translation layer is NOT in the dumps, never fetched.
   # Fetch resolves the CURRENT atchFileId per dataset (DataGoKrFetch —
-  # the id bumps on upstream file replacement; .docs/p78-plan.md
-  # §Acquisition), then normal ZipFetch per dataset subdir.
+  # the id bumps on upstream file replacement; resolved by the P78
+  # acquisition round), then normal ZipFetch per dataset subdir.
   license_watch: https://www.data.go.kr/data/15053647/fileData.do
   sync_policy: manual
 
@@ -4581,6 +4698,15 @@ starling:
                    # (dry-parsed at full scale). Eyeball `nabu define '*kül'`
                    # (turcet credit + 27 Turkic reflex rows) and `nabu etym
                    # zun` (Lezgian → lezget #1).
+                   # P118: the follow-up packages' LEXSTAT/ wordlists
+                   # (already on disk — `bin/nabu sync starling --parse-only`
+                   # lands them, no fetch) add 48 shelves
+                   # starling-lexstat-<stem>: altaic 11,512 / cauc 3,727 /
+                   # yenisey 475 / sintib 13,586 / drav 2,328 / kam 1,162 /
+                   # kart 589 = 33,379 form entries (dry-parsed at full
+                   # scale). Eyeball `nabu define kül` (turc → "Turkic
+                   # etymology: #2") and a drav entry's "inferred, not
+                   # documented upstream" Language line.
   # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
@@ -5762,7 +5888,7 @@ zh-wikisource:   # P109-1
                    # author 畢沅 now in metadata)
   sync_policy: manual
   # Censused works, prefix-expanded (№R-74; census in
-  # .docs/p109-plan.md): 全唐文 1,001 juan (transclusion shells — the
+  # the P109 phase plan): 全唐文 1,001 juan (transclusion shells — the
   # fetch expands the ~20k piece pages offline into juan envelopes) ·
   # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
   # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編

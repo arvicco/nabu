@@ -27,7 +27,7 @@ class PublicHygieneTest < Minitest::Test
   # call (scrub-in-place vs untrack) — grandfathered, NOT license to add
   # more. №R-n ruling ids in code comments are tolerated decision
   # provenance (dated), deliberately not matched above.
-  GRANDFATHERED = %w[docs/worklog.md docs/backlog.md].freeze
+  GRANDFATHERED = %w[docs/history/worklog.md docs/history/backlog.md].freeze
 
   # This guard names its own patterns; the untracked-import pointer in
   # CLAUDE.md names this file.

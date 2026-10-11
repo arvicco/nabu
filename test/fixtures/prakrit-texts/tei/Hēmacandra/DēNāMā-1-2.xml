@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI n="DēNāMā" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="san-Latn">Dēśīnāmamālā</title>
+        <author xml:lang="san-Latn">Hēmacandraḥ</author>
+	<principal>
+	  <persName ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>data entry by</resp>
+	  <name>SWIFT Information Technologies, Mumbai</name>
+	</respStmt>
+      </titleStmt>
+
+      <publicationStmt>
+        <authority>Prakrit Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2020</date>
+      </publicationStmt>
+
+      <sourceDesc>
+        <bibl>
+          <title>The Deśînâmamâlâ of Hemachandra: Part I: Text and Critical Notes</title>
+          <editor>
+	    <persName>
+	      <surname>Pischel</surname>
+	      <forename>Richard</forename>
+	    </persName>
+	  </editor>
+          <publisher>Government Central Book Depôt</publisher>
+          <pubPlace>Bombay</pubPlace>
+          <date>1880</date>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+
+    <encodingDesc>
+      <p>This source edition was printed in the Dēvanāgarī script. This electronic text was initially input in the Dēvanāgarī script as well, and subsequently converted automatically to the ISO-15919 (uniform vowels) standard. Following conversion to ISO-15919, I have inserted spaces between words (e.g. "ity ēvam") when I have come across them.</p>
+      <p>Hēmacandra’s Dēśīnāmamālā consists of a number of different components. There are the Prakrit gāthās, which constitute the base text, and which provide Prakrit synonyms to Prakrit words. Then there is Hēmacandra’s Sanskrit commentary, in prose, which provides Sanskrit synonyms to the Prakrit words in each gāthā. Hēmacandra will then include a Prakrit verse of his own creation that employs the words listed in the gāthā.</p>
+      <p>Thus I have treated the individual gāthā as the “section” (tagged with <tag>div type="gāthā"</tag>), which includes the Prakrit gāthā (<tag>quote type="base-text"</tag>) and the Sanskrit commentary in prose paragraphs (<tag>p</tag>), with sentences separated into <tag>s</tag> elements. At the end of each section there are usually one or two example verses (<tag>lg type="example"</tag>).</p>
+      <p>Note that in Pischel’s edition, the gāthās are numbered (both in the verses themselves, and at the end of the section headed by each verse) as well as the example verses. The numbering is reflected in the @n element for the gāthās (<tag>lg</tag> within <tag>quote type="base-text"</tag>, as well as <tag>div type="gāthā"</tag>) and for the examples (<tag>lg type="example"</tag>).</p>
+      <p>The Dēśīnāmamālā is divided into eight adhyāyas, which are separated in this text into eight divisions (<tag>div type="adhyāya"</tag> with the appropriate @n attribute). The words are arranged first alphabetically and then in terms of number of syllables (hence three-syllabled words beginning with "a" follow two-syllabled words beginning with "a"). The transitions between alphabetico-syllabic sections are reflected in <tag>milestone</tag> elements. The end of an alphabetico-syllabic section is explicitly marked in the text; I have encoded it as a <tag>label</tag> element.</p>
+    </encodingDesc>
+
+    <profileDesc>
+      <langUsage>
+	<language ident="pra-Latn">Prakrit in Roman transliteration</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration</language>
+      </langUsage>
+    </profileDesc>
+
+    <revisionDesc>
+      <change when="2019-06-07" who="Andrew Ollett">
+        <list>
+          <item>Initial commit to the Git Repository (<ref target="https://github.com/aso2101/prakrit_lexicons"></ref>).</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+
+  <text xml:lang="pra-Latn" xml:id="DēNā">
+    <body>
+      <div type="adhyāya" n="1">
+	<div type="gāthā" n="1">
+	  <lg>
+	    <l>dēśī duḥsandarbhā prāyaḥ sandarbhitāpi durbōdhā |</l>
+	    <l>ācāryahēmacandras tat tāṁ sandr̥bhati vibhajati ca ||</l>
+	  </lg>
+	  <p>
+            <s>samagraśabdānāmanuśāsanē cikīrṣitē saṁskr̥tādibhāṣāṇāṁ ṣaṇṇāṁ śabdānuśāsanē siddhahēmacandranāmni siddhirūpanibaddhā.</s>
+            <s>idānīṁ lōpāgamavarṇavikārādinā kramēṇa pūrvairasādhitapūrvā dēśyāḥ śabdā avaśiṣyantē.</s>
+            <s>tatsaṅgrahārthamayam ārambhaḥ.</s>
+            <s>tatrādau śiṣṭa-samaya ity adhikr̥ta-dēvatā namaskriyatē.</s>
+          </p>
+	  <quote type="base-text">
+	    <lg n="1">
+	      <l>gamaṇayapamāṇagahirā sahiayahiayahiayaṅgamarahassā |</l>
+	      <l>jayaï jiṇindāṇa asēsabhāsapariṇāmiṇī vāṇī || 1 ||</l>
+	    </lg>
+	  </quote>
+	  <p>
+            <s>gamāstātparyabhēdinaḥ sadr̥śapāṭhāḥ.</s>
+            <s>nayā vastvēkadēśagrāhiṇaḥ syādvādāvirōdhinō 'bhiprāyaviśēṣāḥ.</s>
+            <s>naigamasaṅgrahavyavahārarjūsūtraśabdasamabhirūḍhaivambhūtābhidhānāḥ.</s>
+            <s>sapta pramāṇāni syādvādagōcarāṇi pratyakṣādīni.</s>
+            <s>tairgambhīrā mandabuddhīnāmastāghāḥ.</s>
+            <s>atha ca sahr̥dayaṁ sacētanaṁ hr̥dayaṁ yēṣāṁ tēṣāṁ hr̥dayaṅgamarahasyā.</s>
+            <s>ata ēva jayati niḥśēṣatīrthikabhāṣōtkarṣēṇa vartatē.</s>
+            <s>jayantarthēna ca namaskāra ākṣipyatē.</s>
+            <s>ayamapara utkarṣō yadaśēṣabhāṣārūpatvēna pariṇamatē.</s>
+            <s>yad āha—
+	    <quote>
+	      <lg>
+		<l>dēvā daivīṁ narā nārīṁ śabarāścāpi śābarīm |</l>
+		<l>tiryañcō ’pi hi tairaścīṁ mēnirē bhagavadgiram ||</l>
+	      </lg>
+	    </quote>
+	    </s>
+            <s>saivambhūtā jinēndrāṇām arhatāṁ vāṇī jayatīti sambandhaḥ || [1]</s>
+          </p>
+	</div>
+	<div type="gāthā" n="2">
+	  <p>
+            <s>vyutpitsu-pravr̥ttayē ’bhidhēyaprayōjanē āha.</s>
+          </p>
+	  <quote type="base-text">
+	    <lg n="2">
+	      <l>ṇīsēsadēsiparimalapallaviakuūhalāulattēṇa |</l>
+	      <l>viraïjjaï dēsīsaddasaṅgahō vaṇṇakamasuhaō || 2 ||</l>
+	    </lg>
+	  </quote>
+	  <p>
+            <s>dēśīśabdēna dēśīśāstrāṇyucyantē.</s>
+            <s>niḥśēṣadēśīśāstrāṇāṁ parimalēna pariśīlanēna pallavitaṁ prādurbhūtaṁ kvacidarthāsamarpakatvēna kvacidvarṇānupūrvīniścayābhāvēna kvacitpūrvadēśīvisaṁvādēna kvacidgatānugatikatānibaddhaśabdārthatayā yatkutūhalaṁ tēna yadākulatvamāḥ kathamayamapabhraṣṭaśabdapaṅkamagrō janaḥ samuddharaṇīya iti parōpacikīrṣārabhasastēna hatēunā dēśīrūpāṇāṁ śabdānāṁ saṅgrahō viracyatē.</s>
+            <s>asmābhir iti śēṣaḥ.</s>
+            <s><persName ref="pers:Pādalipta">pādaliptācāryā</persName>diviracitadēśīśāstrēṣu satsvapyasyārambhē prayōjanaṁ viśēṣaṇadvārēṇāha vaṇṇēti.</s>
+            <s>varṇā akārādayō hakārāvasānāḥ prākr̥taprayōgayōgyāḥ.</s>
+            <s>tēṣāṁ padādibhūtānāṁ sukhagrahaṇadhāraṇanimittaṁ kramaḥ paripāṭiḥ.</s>
+            <s>tēna varṇakramēṇa dvyakṣaratryakṣaracaturakṣarādipadakramēṇa ca sukhadaḥ subhagō vā.</s>
+            <s>varṇakramēṇa hi nirdiṣṭāḥ śabdā arthaviśēṣasaṁśayē sati sukhēnaiva smaryantē 'vadhāryantē ca.</s>
+            <s>varṇakramātikramēṇa ca nirdiśyamānā na sukhēnāvadhārayituṁ śakyanta ity arthavān varṇakramanirdēśaḥ || [2]</s>
+          </p>
+	</div><!-- gāthā !-->
+	<trailer>||ity ācāryaśrīhēmacandraviracitāyāṁ svōpajñadēśīnāmamālāyāṁ prathamō vargaḥ ||</trailer>
+      </div> <!-- adhyāya !-->
+      <div type="adhyāya" n="2">
+	<div type="gāthā" n="1">
+	  <pb n="69"/>
+	  <p>
+            <s>saṅgr̥hītāḥ svarādayaḥ śabdāḥ.</s>
+            <s>idānīṁ vyañcanādayaḥ saṅgr̥hyantē.</s>
+            <s>tē ’pi vargakra<lb break="no"/>mēṇēti kavargādayō dvyakṣarādikramēṇa svarakramēṇa ca prastūyantē.</s>
+          </p>
+	  <milestone unit="syllables" n="k"/>
+	  <quote type="base-text">
+	    <lg n="1">
+	      <l>andhiakavaḍḍiāsuṁ kattāō mūlaē kandī |</l><lb/>
+	      <l>kantū kāmē kañcī musalāṇaṇalōhavalayammi || 1 || </l><lb/>
+	    </lg>
+	  </quote>
+	  <p>
+            <s>kattā andhikādyūtakapardikā.</s>
+            <s>kandī mūlakaśākam.</s>
+            <s>kantū kāmaḥ.</s>
+            <s>kañcī musalamukhē lōhavalayam.</s>
+            <s>yathā–</s>
+          </p>
+	  <lg type="example" n="1">
+	    <l>musalamuhaṁ kañcīē kacchapaēsō a kandīhiṁ |</l><lb/>
+	    <l>kattāhi vaḍḍajūaṁ raīi kantū a sōhanti || 1 || [1]</l><lb/>
+	  </lg><!-- example !-->
+	</div><!-- gāthā !-->
+	<trailer>|| ity ācāryaśrīhēmacandraviracitāyāṁ dēśīnāmamālāyām aṣṭamō vargaḥ ||</trailer>
+      </div><!-- adhyāya !-->
+    </body>
+  </text>
+</TEI>

@@ -91,7 +91,8 @@ module Nabu
     #   {"facets" => {"genre" (textClass term)/"region" (origPlace
     #                 placeName type="provinceItalicRegion" — Italy's
     #                 regiones, EDH's province analog)/"material"/
-    #                 "object_type" => {"value" => the element's own text,
+    #                 "object_type"/"decoration"/"condition"/"execution"
+    #                 (the <rs> terms, P118-R4) => {"value" => the element's own text,
     #                 "ref" => its EAGLE LOD URI when present}},
     #    "place" => {"ancient" (origPlace untyped placeName)},
     #    "findspot" (provenance placeName type="locus"),
@@ -140,7 +141,15 @@ module Nabu
         "genre" => "//profileDesc//textClass//term",
         "region" => "//origPlace/placeName[@type='provinceItalicRegion']",
         "material" => "//physDesc//material",
-        "object_type" => "//physDesc//objectType"
+        "object_type" => "//physDesc//objectType",
+        # P118-R4 S6 (the held-but-dark audit): the EAGLE <rs> terms every
+        # record carries (7,352 of 7,352 in a censused shard, each type) —
+        # decoration, state of preservation (EDH's "condition" facet name)
+        # and execution (the writing technique: scalpro, litterae
+        # incisae…), each with its EAGLE LOD ref.
+        "decoration" => "//physDesc//rs[@type='decoration']",
+        "condition" => "//physDesc//rs[@type='statPreserv']",
+        "execution" => "//layoutDesc//rs[@type='execution']"
       }.freeze
 
       # One extracted line: the citation suffix parts, the folded text,

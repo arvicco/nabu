@@ -175,3 +175,20 @@ files:
       translation, kept whole; copied from the local canonical snapshot,
       P9-2 — legacy TEI P4 with a bare <p> body, no citation apparatus at
       all: the P4 ladder's p-ordinal rung)
+  - path: strays/data/tlg4036/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg4036/__cts__.xml
+    whole: true
+    trim: none (P118-R4 — copied from the local canonical snapshot 2026-10-11)
+  - path: strays/data/tlg4036/tlg023/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg4036/tlg023/__cts__.xml
+    whole: true
+    trim: none (P118-R4 — copied from the local canonical snapshot 2026-10-11)
+  - path: strays/data/tlg4036/tlg023/tlg4036.tlg023.cypria-grc1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg4036/tlg023/tlg4036.tlg023.cypria-grc1.xml
+    whole: true
+    trim: >-
+      none (P118-R4 — Proclus' Chrestomathy summary of the Cypria, the Homer
+      Multitext edition: the corpus's ONLY original-language work whose sole
+      edition sits outside the perseus-grc slug family; under strays/ so the
+      main greekLit discover is untouched; copied from the local canonical
+      snapshot 2026-10-11)

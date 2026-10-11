@@ -7,7 +7,11 @@ review became Phases 7–8 and the 07-08 plate became Phase 9. Each entry
 carries enough context to decide with, honestly including the case against.
 Status legend: **candidate** (nobody picked it), **queued** (owner-picked,
 awaiting a phase), **gated** (needs an owner decision or hardware),
-**register-only** (small known debt, batched opportunistically).*
+**register-only** (small known debt, batched opportunistically); **SHIPPED** /
+**PARTIAL** annotations name the phase that landed the work. Every open
+status was re-verified on 2026-10-11 against the code, `bin/nabu --help`,
+the registry and the live derived databases; dated notes record what
+changed, and the original reasoning is kept as written.*
 
 ---
 
@@ -171,7 +175,7 @@ log" direction drifts toward reader-app territory the concept explicitly
 excludes — keep it to frequency data and a plain file, no app.
 **Effort.** opus; small packet, could ride along with 1.6.
 
-### 1.8 The citation graph  [SHIPPED — Phase 16 P16-1/P16-2: the `links` journal (db/links.sqlite3, its own rebuild-surviving database — architecture §15) + `nabu links URN` + MCP `nabu_links`; the `parallels/formulas/cognates --batch` producers populate it with run provenance (seeded live: 5,089 parallel + 395 formula + 360 cognate edges), and P19-4 added a fourth producer — local-library `related:` manifest lines as `kind=reference` edges (shipped, zero edges until the owner's first ingest). Still conceptual: scholia and dictionary-citation edges have no batch producers yet — those cross-references remain in their own tables]
+### 1.8 The citation graph  [SHIPPED — Phase 16 P16-1/P16-2: the `links` journal (db/links.sqlite3, its own rebuild-surviving database — architecture §15) + `nabu links URN` + MCP `nabu_links`; the `parallels/formulas/cognates --batch` producers populate it with run provenance (seeded live: 5,089 parallel + 395 formula + 360 cognate edges), and P19-4 added a fourth producer — local-library `related:` manifest lines as `kind=reference` edges (shipped, zero edges until the owner's first ingest). Still conceptual: scholia and dictionary-citation edges have no batch producers yet — those cross-references remain in their own tables. 2026-10-11 re-check: the journal has grown into the library's edge spine — ~4.39M edges from 29 producer runs, the kinds widened to source-asserted `reference` edges (concordance ids, Trismegistos ids, dictionary-to-dictionary cross-references, ~472k), text `reuse` (the KITAB passim alignments, ~932k), `translation`, `etymology` and the text-mined `place-candidate` edges (~2.98M, the Han place-mine lane); scholia and dictionary-citation → passage edges still have no producer]
 
 **What.** The unifying long-game frame: every cross-reference in the system
 (intertext hits, dictionary citations, scholia references, alignment
@@ -184,7 +188,7 @@ exists so each feature lands its edges in ONE shared shape instead of three
 private ones. Design the table when the first edge-producer (probably 1.3
 or 1.1) is elaborated.
 
-### 1.9 Edition collation — textual criticism support  [PARTIAL — Phase 15 P15-4 shipped `align REF --collate [--base LABEL]`: a witness apparatus per (language, script) group over the alignment hub (the four CCMH codices collated, cross-script witnesses honestly undiffed). Edition-vs-edition `collate <urn1> <urn2>` within one source remains unbuilt]
+### 1.9 Edition collation — textual criticism support  [PARTIAL — Phase 15 P15-4 shipped `align REF --collate [--base LABEL]`: a witness apparatus per (language, script) group over the alignment hub (the four CCMH codices collated, cross-script witnesses honestly undiffed). Edition-vs-edition `collate <urn1> <urn2>` within one source remains unbuilt — re-checked 2026-10-11: still PARTIAL, no `collate` command exists; the nearest neighbor since P93-5 is `search --similar`, which surfaces cross-edition neighbors of one passage but diffs nothing]
 
 **What.** We deliberately ingest the highest edition per work; the other
 editions sit on disk. `nabu collate <urn1> <urn2>` — word-level diff of two
@@ -197,7 +201,7 @@ does textual criticism; the honest v1 is a folded-word diff, which may
 underwhelm. Park until a concrete use case appears.
 **Effort.** fable design if ever; defer.
 
-### 1.10 Stylometry  [candidate — lowest priority]
+### 1.10 Stylometry  [candidate — lowest priority; re-checked 2026-10-11: unchanged, nothing built, still no stated use case]
 
 **What.** Burrows' Delta / function-word profiles per document; authorship
 and register clustering, locally computable.
@@ -205,7 +209,7 @@ and register clustering, locally computable.
 mean anything, and no stated owner use case. Register it, revisit only on
 demand.
 
-### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (.docs/surveys/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family. ALL THREE SYNCED LIVE 2026-07-14 (owner-fired): iecor 4,981 entries / 26,325 reflex edges (2,308 loan-flagged) + 143 language notes accreted into the local-language dossiers; liv 305 entries / 374 edges; edl 2,860 entries across two shelves / 2,653 edges — the crosswalk stands at 1,036,224 edges across thirteen shelves. Starling/UT-LRC remain honestly blocked with mail-unblock paths]
+### 1.11 The reconstruction/etymology shelf — PIE and comparativistics  [SHIPPED — Phase 14 P14-1: `wiktionary-recon` source (all THREE extracts: sla-pro/ine-pro/gem-pro), `dictionary_reflexes` crosswalk (migration 007), `define *bogъ` + `nabu etym` + MCP `nabu_etym`; architecture §12. Deferred riders: wiktionary-cu descendants backfill (SHIPPED — P16-5: census 589/4,615 OCS entries → 2,210 crosswalk edges; live at the next owner-fired parse-only resync), PIE ASCII fold (conventions §9 note). Scout-measured value: 64.5%/64.2%/54.7% of sampled proto headwords naming a held language link to ≥1 attested gold lemma; the roman field rescues got/san/xcl from 0%. Part 2 SHIPPED — Phase 17 P17-3: four more extracts (ine-bsl-pro/itc-pro/iir-pro/gmw-pro), MULTI-HOP reflex closure (PIE \*per- → PBS \*pírštan → \*pьrstъ → chu/orv), migration 010 `borrowed` flag with per-edge "(loan)" rendering in etym/cognates — ALL LIVE since the 2026-07-13 owner resync + rebuild: seven proto shelves (gmw-pro 5,551 / ine-bsl-pro 491 / itc-pro 745 / iir-pro 799 entries), the crosswalk at 1,006,872 edges incl. wiktionary-cu's 2,210 and MW's 3,250. Part 3, the THIRD-WITNESS tier — Phase 18 P18-5/P18-6 per the P17-8 PIE survey (.docs/surveys/pie-survey.md): `iecor` (IE-CoR v1.2, CC BY, sha-pinned Zenodo DOI — the cognacy matrix as a dictionary shelf: 4,981 cognate-set entries / 26,325 reflex rows / 2,308 loan-flagged / 1,799 held-gold edges / ~144 ledger language notes projected), `liv` (LIV-LOD, CC BY-SA with publisher permission: 305 PIE verbal etymons with stem types / ~385 lat edges projected) and `edl` (de Vaan EDL LiLa skeleton, `nc`: 2,860 etymons / ~2,653 edges projected, the lat → PIt → PIE Leiden chains), riding the new lila-ttl Turtle parser family. ALL THREE SYNCED LIVE 2026-07-14 (owner-fired): iecor 4,981 entries / 26,325 reflex edges (2,308 loan-flagged) + 143 language notes accreted into the local-language dossiers; liv 305 entries / 374 edges; edl 2,860 entries across two shelves / 2,653 edges — the crosswalk stands at 1,036,224 edges across thirteen shelves. Starling/UT-LRC remain honestly blocked with mail-unblock paths. Correction 2026-10-11: Starling UNBLOCKED — G. Starostin's grant of 2026-07-15 (any use, the compilers of each base credited wherever displayed; `attribution`), extended 2026-10-01 to all remaining downloadable databases; `starling` wired 2026-07-16 (Pokorny, PIET, Vasmer, the Germanic/Baltic bases, then Kartvelian, the Altaic/Caucasian/Sino-Tibetan/Dravidian/Chukchee/Yeniseian families and their branch bases). UT-LRC: still no source]
 
 **What.** A shelf whose headwords are *reconstructed* forms (Proto-Slavic
 \*bogъ, PIE \*h₃ebʰi) linked to the attested lemmas the library already
@@ -266,6 +270,11 @@ approved fixture plan; UD Birchbark + RNC Middle Russian and CCMH ranked
 #1/#2 by the P9-6 survey and queued for Phase 10 consideration. Below:
 the rest of the map.)*
 
+*(2026-10-11: every source named in that preamble shipped long ago; the
+library now spans 203 corpus sources, and `docs/02-sources.md` — not this
+section — is the live source map. The entries below stay as the record of
+how each candidate was weighed.)*
+
 ### 2.1 The biblical alignment trio: Vulgate, LXX, Greek NT  [SHIPPED — Phase 11 P11-5: vulgate + sblgnt sources, LXX via in-catalog Swete; Rahlfs blocked on CATSS terms]
 
 **What.** Clementine Vulgate (public domain, multiple clean digital
@@ -321,7 +330,7 @@ downstream; and honestly: no stated owner research axis in Arabic yet.
 Park until the axis exists; the corpus can absorb it whenever.
 **Effort.** scout + fable family, when wanted.
 
-### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [gated — see .docs/surveys/slavic-survey.md; TITUS partially UNBLOCKED]
+### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [PARTIAL — TITUS largely UNBLOCKED through personal research grants (eight corpora wired by 2026-10-10); manuscripts.ru still blocked; Sreznevsky still scans-only]
 
 Surveyed and honestly BLOCKED (license/no-export/scans-only) — except that
 the TITUS grant path WORKED for the Avesta: `titus-avestan` shipped P45 on a
@@ -332,6 +341,28 @@ ingestion — the license class exists for exactly this), or HTR for the
 scan-only dictionaries once the cluster lands (§3.4). Owner-initiated
 correspondence, not loop work.
 
+*Status note (2026-10-11):* the TITUS grant path widened well beyond the
+Avesta. Prof. Jost Gippert extended the 2026-07-23 terms (non-commercial,
+local research use, no redistribution, TITUS and the editors credited
+wherever displayed) to the **Osco-Umbrian** corpus (2026-08-31,
+`titus-osco-umbrian`, the complete Iguvine Tables) and on 2026-10-06 to
+**Tocharian** and the **Middle Iranian** families — wired 2026-10-10 as
+`titus-tocharian-a`, `titus-pahlavi`, `titus-manichaica`, `titus-sogdian`,
+`titus-khotanese` and `titus-bactrian`, each on its own parser family over
+the shared `Nabu::TitusFetch` page-walk. All eight TITUS sources keep the
+`titus-avestan` posture: `grant_required: true` (a public clone does not
+carry the grant), `license_class` **nc** with a per-display credit line,
+local-only fixtures, and `availability: blocked`, so they stay off the
+public census and axis pages. Still out of reach: **Tocharian B** (served
+to TITUS members only — the directory answers HTTP 401, so no adapter is
+built) and the Slavic-side TITUS texts (the OCS canon is covered more
+cleanly by CCMH and the treebanks). **manuscripts.ru** remains blocked —
+no public bulk export or data license; the unblock path is a structured
+(TEI) export or data grant from the Izhevsk team. **Sreznevsky** remains a
+scans-only OCR/HTR-structuring candidate (§3.4): no machine-readable
+edition has appeared. `docs/02-sources.md` rows 13, 32–33, 116, 188 and
+224–229 carry the per-source detail.
+
 ---
 
 ## 3. Enrichment & the inference-cluster queue
@@ -340,7 +371,17 @@ correspondence, not loop work.
 built. Recorded here with the recommended ORDER, which differs from the
 original plan.)*
 
-### 3.1 Lemmatize everything — the 13× multiplier  [gated: cluster (or CPU-only earlier)]
+*(Correction, 2026-10-11: the cluster never became the gate. The
+"CPU-only earlier" escape in 3.1 is what happened — the machine lanes run
+locally on the owner's box, each external tool installed by ONE tracked,
+idempotent `rake tools:*` bootstrap (`tools:stanza[la]`, `tools:embed`,
+`tools:status`; `Nabu::ToolBootstrap`, since 2026-09-03, companion docs
+in `docs/manual/`). Model output that costs compute to regenerate lands
+in a local shelf through a sanctioned gateway, never in `db/` (the
+derivability law). 3.1 and 3.2 shipped on that footing; 3.3–3.5 keep
+their original gates, restated below.)*
+
+### 3.1 Lemmatize everything — the 13× multiplier  [SHIPPED (Latin wave) — Phase 84 P84-1 `nabu lemma-enrich LANGUAGE`: a local CPU Stanza lemmatizer (`la:ittb`, `rake tools:stanza[la]`) over every live passage with NO lemma coverage, output to the `local-lemmas` shelf (`Nabu::LemmaShelf`, sharded JSONL, resumable); projected into `passage_lemmas` as tier **silver** only on the owner's word (`--index` / `--index-only`, P87-1 — a full rebuild never projects it); `--spot-check N` scores the model against gold (measured ~99% on classical-like text, 75–89% on medieval/neo-Latin). The gold/silver contract shipped with it: every silver count and hit labeled, `search --lemma … --gold-only`. Live tiers as of 2026-10-11: **21.9M gold lemma rows across 47 languages, 31.0M silver across 15** — the silver tier today also carries corpora whose upstream shipped automatic annotation (`lemma_tier: silver` in the registry: Diorisis, GLAUx and others). Still open: Greek is measured but parked for its own wave; no other language has a local model wave]
 
 **What.** Run Stanza/CLTK (grc, lat models; others as available) over the
 ~1.96M passages without gold annotations; store as enrichments
@@ -362,21 +403,21 @@ at 2M passages is real but one-off + incremental.
 **Effort.** fable (enrichment model + gold/machine display contract) +
 opus (sidecar + runner); the concept's Python-sidecar design (§6) stands.
 
-### 3.2 Embeddings + semantic search  [gated: cluster + owner menu (P8-4 preserved)]
+### 3.2 Embeddings + semantic search  [SHIPPED — Phase 93 P93-4/P93-5 (after the P79-5 trial): `nabu embed` builds `db/vectors.sqlite3` with `multilingual-e5-base` run locally (`rake tools:embed`: venv + model + the pinned sqlite-vec scan extension), rows keyed on (model, urn, text sha) so every run is a delta and a rebuild invalidates nothing; scope is the registry's `embed_index: true` literary core (18 sources — the whole-library build was priced and declined); `search --similar URN` + MCP `nabu_search` `similar_to` render same-language neighbors in close/near/loose bands, model named. Live 2026-10-11: ~4.94M passage vectors (grc 2.04M, lat 2.01M, eng, arc, hbo, chu, orv, got, xcl). The cross-language hope below did NOT survive measurement — Greek→Latin found the right passage first only about a third of the time — so retrieval is pinned to the anchor's language (docs/embed.md)]
 
 The original P8-4 decision menu stands (model on Sparks vs API; sqlite-vec
 vs brute-force; literary-first scope). One addition from the 07-08 review:
 embeddings also enable *cross-language* intertext candidates (§1.1's v2),
 which pure n-grams cannot — worth weighing when scoping.
 
-### 3.3 Lazy glossing  [gated: owner API key (P8-5 preserved)]
+### 3.3 Lazy glossing  [gated: owner API key (P8-5 preserved); re-checked 2026-10-11: unchanged — no glossing command or model-gloss rows exist; when built, paid output is an acquisition and homes in a local shelf, not `enrichments` in `db/`]
 
 Unchanged: gloss at the point of reading, cache in enrichments, never
 batch. The dictionary shelf (§1.3) *reduces* its surface further — human
 lexica beat machine glosses for single words; glossing earns its keep at
 the passage level.
 
-### 3.4 HTR / ad-hoc pipeline  [gated: cluster + demand — intake half SHIPPED Phase 19]
+### 3.4 HTR / ad-hoc pipeline  [gated: demand — intake half SHIPPED Phase 19; re-checked 2026-10-11: no local HTR/OCR lane exists (architecture §4 still design-stage). What did arrive is ingestion of UPSTREAM-produced transcription layers — the PAGE-XML parser family (the HTR-United Prague Bible 1488 ground truth) and archive.org's own OCR read back through its hOCR derivative (the ia-hocr-text family) — which needs no model on this box]
 
 The concept's original dream (camera → searchable passage), explicitly
 demand-driven. The *intake* half shipped in Phase 19: `nabu ingest` +
@@ -388,7 +429,7 @@ candidates already identified: the Sreznevsky scans (§2.5), any
 manuscript facsimiles the owner works with. Wake this when a real stack
 of text-less images exists.
 
-### 3.5 NER / prosopography over the papyri  [gated: cluster — candidate]
+### 3.5 NER / prosopography over the papyri  [PARTIAL — the index shape exists, the papyri lane does not. Phase 97 P97-2 shipped `person_index` + `nabu person NAME|REF` (the person desk card), fed so far by ONE authority — CBDB, ~661k persons of Chinese history, ~1.73M name keys — plus `nabu person mine SOURCE`, a census-only name scan that writes nothing. The place half runs ahead: `place_index` (Pleiades and the derived tm/cigs slices) and the Han place-mine lane (~2.98M `place-candidate` link edges against CHGIS). Trismegistos joined as a links instrument (TM-id `reference` edges) and a gazetteer (`trismegistos-geo`), not yet as a people source; EDH persons ride document metadata. Greek-name attestation indexing over the papyri — this entry's actual ask — remains unbuilt (re-checked 2026-10-11)]
 
 **What.** Person/place/date extraction across 921k documentary passages →
 a queryable index of names ("every attestation of a Ζήνων in the Fayum").
@@ -405,7 +446,7 @@ grants **CC BY-SA 4.0** (quoted), superseding the earlier "restrictive"
 reading. Any build here should start from the TM open data services,
 not from scratch.
 
-### 3.6 ORACC English translations from ATF  [candidate — post-Phase-10]
+### 3.6 ORACC English translations from ATF  [SHIPPED — Phase 13 P13-4 (hardened P14-9): ORACC running translations ingested as `-en` sibling documents in the P7-4 parallel shape, aligned to the tablet's own line labels — but NOT from ATF: no public bulk artifact carries `#tr.en`, so `OraccTranslationParser` reads the official per-text HTML fragments (the acquisition record lives in the parser's header). Live 2026-10-11: 15,417 English documents beside the oracc tablets]
 
 The P9-5a finding: ORACC's running English lives in the ATF `#tr.en:`
 source layer, not the JSON. Once the Phase 10 adapter lands (JSON), a
@@ -418,7 +459,7 @@ bounded.
 
 ## 4. Platform & infrastructure
 
-### 4.1 Real backup hardware  [gated: owner hardware — standing reminder]
+### 4.1 Real backup hardware  [gated: owner hardware — standing reminder; re-checked 2026-10-11: the hardware gate is unchanged as far as the tree can show, but the backup CONTRACT moved — since 2026-08-16 `nabu backup` copies only the three permanent folders (`canonical/` with every `.attic/`, `config/`, `local/`) and never `db/` (derived; restore = clone, rsync back, `nabu rebuild`), which shrinks what a real external disk must hold]
 
 The NabuBackup sparsebundle simulates the external volume **on the same
 physical SSD**: it protects against deletion and corruption, not disk
@@ -427,7 +468,7 @@ zero config) and `nabu backup`. Consider a second, off-site/remote target
 (the concept's nero/nexo mirror idea) once the first exists. The nightly
 launchd template ships ready.
 
-### 4.2 Incremental FTS/lemma indexing  [register-only until it hurts]
+### 4.2 Incremental FTS/lemma indexing  [SHIPPED — it hurt. Per-source index refresh (`Store::Indexer.refresh_source!`, delete + reinsert one source's FTS/lemma/trigram rows, row-identical to a full build — P26-5, 2026-07-18: a sync no longer re-indexes the whole library); `rebuild --incremental` (Phase 36 P36-1): per-source derivation fingerprints stamped against canonical, parser, config and migration, clean sources skipped, dirty ones replayed through the same seam, the full rebuild kept as the test-pinned reference; delta-grain index maintenance (P112-1, 2026-10-01: refresh what changed, not the whole slice) with derivation-fingerprint layering (P112-4: index-only edits stop costing catalog replays); and identity caches that make the clean/dirty verdict sweep cheap at ~200 sources (`CanonicalIdentityCache` for plain trees, `GitIdentityCache` for git repos, 2026-10-10/11). Sizing a rebuild is `rebuild --incremental --dry-run`]
 
 Every sync currently rebuilds the whole fulltext index (~2.1M passages,
 minutes) — noted as "the future optimization" in SyncRunner since P4. With
@@ -436,7 +477,7 @@ source's rows, reinsert) would cut sync tail latency ~10×. Do it when the
 wait annoys, not before; correctness beats speed and the full rebuild is
 provably correct.
 
-### 4.3 nabu.ac — the public read-only endpoint  [gated: owner intent — distant]
+### 4.3 nabu.ac — the public read-only endpoint  [gated: owner intent — distant; re-checked 2026-10-11: unchanged — no network server exists in the tree; the only query surface beyond the CLI is still the stdio MCP server (`nabu mcp`, now thirteen read-only tools), and the permission ledger below has only grown with the grant-gated sources]
 
 The MCP surface (P8) deliberately rehearses it: same tools, same license
 discipline. Going public changes the legal posture (serving `nc` content
@@ -464,14 +505,14 @@ entry before launch):
    permission first (contact: Matija Ogrin / Tomaž Erjavec, ZRC SAZU — both
    active CLARIN.SI depositors; a targeted re-license request is plausible).
 
-### 4.4 Enrichment replay wiring  [queued-by-design: lands with 3.1]
+### 4.4 Enrichment replay wiring  [SHIPPED — not with 3.1 but ahead of it: Phase 44 P44-7 made `Rebuild#replay_enrichments` real for sync-driven enrichment producers (the pedecerto + hypotactic meter scansions, re-derived at every load and rebuild — fully derived, so no journal needed). The model-output case went the other way: 3.1's silver lemmas are a non-derivable acquisition, so they live on the `local-lemmas` shelf and re-enter through the fulltext projection (`Store::SilverLemmaIndexer`, owner-fired), never through `enrichments` (re-checked 2026-10-11)]
 
 `Rebuild#replay_enrichments` has been a documented no-op hook since P1-5;
 the P7-1 ledger defined the identity scheme. The first real enricher (3.1
 or 3.3) must implement replay — flagged here so it is costed into that
 packet, not discovered during it.
 
-### 4.5 Small parser-debt register  [register-only — batch opportunistically]
+### 4.5 Small parser-debt register  [register-only — batch opportunistically; re-checked 2026-10-11: no commit resolves any item below, so all six stand as written. Parser debt found since Phase 19 is recorded per source in `docs/02-sources.md` rather than here]
 
 - **Union-xpath refsDecls** (7 perseus-latin files, P9-2 census): extend
   the P6-1 structural retry's step grammar with `*[self::tei:l or tei:p]`
@@ -503,25 +544,17 @@ rather than a decision to make.
 
 ---
 
-## Proposed graduation order (updated 2026-07-10)
+## Where this register stands (2026-10-11)
 
-1. ~~**Phase 10**: ORACC adapter + UD Slavic expansion~~ **SHIPPED** (PR #11).
-2. ~~**Phase 11 — "the philology workbench"**: alignment hub (1.2) +
-   dictionary shelf (1.3) + biblical trio (2.1)~~ **SHIPPED** (PR #12, incl.
-   align ranges + WEB English witness); morph facets + vocab (1.6/1.7) were
-   NOT taken (phase ran full) — still open, small, cluster-independent.
-3. **Phase 12 candidates** (owner picks the headline):
-   a. **The OE axis lands**: ISWOC adapter (PROIEL family, near-config-only;
-      brings the West-Saxon Mark into the hub as witness #8) + ASPR poetry
-      (small new TEI family — Beowulf, Exeter Book, fully open) +
-      Bosworth-Toller onto the reference shelf (CC BY 4.0 CSV). All three
-      pre-scouted in .docs/surveys/oe-survey.md.
-   b. **"The corpus reads itself"**: intertext engine (1.1) + time/place
-      axes (1.4) + fragment search (1.5); links table (1.8) lands with
-      whichever edge-producer ships first.
-   c. Riders for either: morph facets (1.6), vocab profiling (1.7), CCMH
-      (2.2-adjacent, Slavic pick #2).
-4. **Cluster arrival** (whenever): lemmatize-all (3.1) FIRST, then
-   embeddings (3.2), glossing (3.3), HTR (3.4), NER (3.5).
-5. Continuous: sources 2.2/2.3 slot into any phase as capacity allows;
-   4.5 debt batches into whichever phase touches the relevant parser.
+The graduation order that used to close this file (last updated
+2026-07-10, ahead of Phase 12) is obsolete and has been retired: everything
+it proposed for Phases 10–12 shipped (the OE axis, the intertext/timeline
+/fragment-search trio, morph facets, vocab profiling, CCMH), and the
+"cluster arrival" it waited on was overtaken by local CPU lanes (§3). Phases now run through a work queue
+and a gate — packets are formulated, adopted into a phase, built
+test-first, and merged at the phase gate. This register remains the
+capability map beside that process: an entry graduates when a phase
+picks it up, and its status line records where it landed. The library
+it maps now holds 2,348,948 documents and 110,331,584 passages across
+203 corpus sources and 188 language codes (`site/_data/census.yml`,
+11 October 2026).

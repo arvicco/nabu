@@ -132,15 +132,16 @@ Each lane has its own explainer; all install their tooling through
 installed where:
 
 - **Semantic search**: [embed.md](embed.md) — `rake tools:embed`,
-  then `nabu embed` (delta-only after the first build; overnight at
-  full-library scale), `nabu search --similar`.
+  then `nabu embed` (delta-only after the first build; the first build
+  of the literary core — ~4.9M passages — runs about a day),
+  `nabu search --similar`.
 - **Silver lemmas**: [lemma-enrichment.md](lemma-enrichment.md) —
   `rake tools:stanza[<lang>]`, then `nabu lemma-enrich <language>`.
 - **Place mining**: [places.md](places.md) §"The mining loop" — the
   numbered census → mine → report → rule → re-mine script, with
   measured costs.
 - **Person census** (the prosopography lane, deliberately gated):
-  `nabu sync cbdb` derives the person index (~660k persons);
+  `nabu sync cbdb` derives the person index (~660k persons of Chinese history);
   `nabu person <name|cbdb:ID>` serves the card in either script;
   `nabu person mine <source>` runs the census-only name scan — it
   writes nothing by design, and stays census-only until the numbers

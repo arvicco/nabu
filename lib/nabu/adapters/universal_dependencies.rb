@@ -488,7 +488,8 @@ module Nabu
           urn: document_ref.id,
           language: document_ref.metadata["language"],
           title: document_ref.metadata["title"],
-          license_override: document_ref.metadata["license_class"]
+          license_override: document_ref.metadata["license_class"],
+          sentence_comments: true
         )
       end
 

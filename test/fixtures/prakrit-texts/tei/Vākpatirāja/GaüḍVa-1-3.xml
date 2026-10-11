@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" version="5.0" n="GaüḍVa">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="pra-Latn">Gaüḍavahaṁ</title>
+        <author xml:lang="pra-Latn">Bappaïrāō</author>
+	<principal>
+	  <persName ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>Checking and TEI encoding by</resp>
+	  <name>Andrew Ollett</name>
+	</respStmt>
+	<respStmt>
+	  <resp>Typed in by</resp>
+	  <name>SWIFT Technologies, Mumbai</name>
+	</respStmt>
+      </titleStmt>
+
+      <publicationStmt>
+        <authority>Prakrit Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2020</date>
+      </publicationStmt>
+
+      <sourceDesc>
+        <biblStruct>
+	  <monogr>
+            <title level="m" xml:lang="pra-Latn">Gaüḍavahō by Vākpatirāja</title>
+	    <idno type="oclc">24153300</idno>
+            <editor>
+	      <persName ref="http://viaf.org/viaf/75444251">
+		<forename>N. G.</forename>
+	        <surname>Suru</surname>
+	      </persName>
+	    </editor>
+	    <imprint>
+              <publisher>Prakrit Text Society</publisher>
+              <pubPlace>
+		<placeName xml:lang="eng">Ahmedabad</placeName>
+	      </pubPlace>
+              <date>1975</date>
+	    </imprint>
+	  </monogr>
+	  <series>
+	    <title level="s">Prakrit Text Series</title>
+	    <biblScope unit="number">18</biblScope>
+	  </series>
+	</biblStruct>
+      </sourceDesc>
+    </fileDesc>
+
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="pra-Latn">Prakrit in Roman transliteration (ISO-15919)</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+
+
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+      </editorialDecl>
+      <refsDecl>
+	<cRefPattern matchPattern="GaüḍVa.([0-9]+)" replacementPattern="#xpath(//tei:lg[@n='$1'])"/>
+      </refsDecl>
+    </encodingDesc>
+
+    <revisionDesc>
+      <change when="2021-08-06" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text xml:lang="pra-Latn">
+    <body>
+      <pb n="1"/>
+      <head xml:lang="pra-Latn">kaïrāa-bappaïrāassa</head>
+      <head xml:lang="san-Latn">kavirāja-vākpatirājasya</head>
+      <head xml:lang="pra-Latn">gauḍavahō</head>
+      <head xml:lang="san-Latn">gauḍavadham</head>
+      <label xml:lang="san-Latn">maṅgalācaraṇam</label>
+      <lg met="āryā" n="1">
+        <l>paḍhamaṁ cia dhavala-kaōvavīamamburuha-gōaraṁ ṇamaha</l>
+	<l>hari-jaḍhara-ṇiggamukkhitta-ṇāla-suttaṁ piva sayambhuṁ</l>
+        <note type="chāyā">
+	  <lg xml:lang="san-Latn" n="1">
+	    <l>prathamamēva dhavalakr̥tōpavītamamburuhagōcaraṁ namata</l>
+	    <l>harijaṭharanirgamōtkṣiptanālasūtramiva svayaṁbhuvam</l>
+	  </lg>
+	</note>
+      </lg>
+      <lg met="āryā" n="2">
+        <l>sō jaaï kaṇṇiā-valaa-gabbha-parigūḍha-viaḍa-bīammi</l>
+	<l>jō vasaï ṇihāṇīkaa-bahu-bambhaṇḍe vva kamalammi</l>
+        <note type="chāyā">
+	  <lg xml:lang="san-Latn" n="2">
+	    <l>sa jayati karṇikāvalayagarbhaparigūḍhavikaṭabījē</l>
+	    <l>yō vasati nidhānīkr̥tabahubrahmāṇḍa iva kamalē</l>
+	  </lg>
+	</note>
+      </lg>
+      <lg met="āryā" n="3">
+        <l>taṁ paṇamaha tiṅgicchi-cchalēṇa ṇivasaï ṇivēsa-kamalammi</l>
+	<l>jassa paramāṇu-ṇivaho vva bhuvaṇa-ṇimmāṇa-paḍivaṇṇō</l>
+        <note type="chāyā">
+	  <lg xml:lang="san-Latn" n="3">
+	    <l>taṁ praṇamata padmarajaśchalēna nivasati nivēśakamalē</l>
+	    <l>yasya paramāṇunivaha iva bhuvananirmāṇapratipannaḥ</l>
+	  </lg>
+	</note>
+      </lg>
+      <lg met="āryā" n="108">
+	<l>jassa a valanta-jaa-gaa-sīara-dhārā-sahassa-luliāō</l>
+	<l>sambhama-sañcāria-cāmarāo dhāvanti va disāō</l>
+        <note type="chāyā">
+          <lg xml:lang="san-Latn" n="108">
+	    <l>yasya ca valamānajayagajaśīkaradhārāsahasralulitāḥ</l>
+	    <l>saṁbhramasaṁcāritacāmarā dhāvantīva diśaḥ</l>
+	  </lg>
+	</note>
+      </lg>
+      <p>
+	<s>avi a—</s>
+	<note type="chāyā">
+	  <p xml:lang="san-Latn">
+	    <s>api ca—</s>
+	  </p>
+	</note>
+      </p>
+      <lg met="āryā" n="109">
+	<l>sōhaï viṇivēsia-pasiḍhilaṅgulī-kōḍi-<app><lem>kaṭṭha</lem><rdg>ghaṭṭa</rdg></app>ṇutthallō</l>
+	<l>pāaḍiabbhantara-vaṇa-ṇivēsa-dara-danturō aharō</l>
+        <note type="chāyā">
+          <lg xml:lang="san-Latn" n="109">
+	    <l>śōbhatē vinivēśitapraśithilāṅgulīkōṭikarṣaṇōcchalitaḥ</l>
+	    <l>prakaṭitābhyantaravraṇanivēśēṣaddaṁturō ’dharaḥ</l>
+	  </lg>
+	</note>
+      </lg>
+      <trailer>
+	kaïrāa-lañchaṇassa vappaïrāassa gauḍavahē gāhāvīḍhaṁ samattaṁ<note type="chāyā">
+	  <ab xml:lang="san-Latn">kavirājalāñchanasya vākpatirājasya gauḍavadhē gāthāpīṭhaṁ samāptam</ab>
+	</note>
+      </trailer>
+    </body>
+  </text>
+</TEI>

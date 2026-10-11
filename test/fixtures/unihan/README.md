@@ -1,7 +1,7 @@
 # Unihan fixtures (P32-4 — the Sinoxenic character bridge)
 
 Real upstream sample of the **Unicode Han Database** (CLAUDE.md fixture
-rules; docs/backlog.md P32-4). Every kept line is **byte-verbatim** upstream
+rules; docs/history/backlog.md P32-4). Every kept line is **byte-verbatim** upstream
 data; only the codepoint SET was trimmed.
 
 - **Upstream:** `https://www.unicode.org/Public/UCD/latest/ucd/Unihan.zip`

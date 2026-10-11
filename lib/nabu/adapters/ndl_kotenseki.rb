@@ -33,6 +33,12 @@ module Nabu
     # PID the API refuses ("This PID is not allowed" — the spec's own
     # caveat that not every census PID has downloadable text) or
     # answers empty is ledgered in .ndl-crawl.json and never retried.
+    # A book that HANGS (Net::ReadTimeout, №I-9: two PIDs wedged the
+    # crawl at 26,860 — every resumed slice re-hit them and died) is
+    # retried in-slice TIMEOUT_ATTEMPTS times with backoff, then
+    # ledgered under its own reason ("timeout-stuck" — distinct from a
+    # 403 denial, so a later phase can deliberately revisit the class)
+    # and the slice advances; the sync notes name the stuck PIDs.
     # The full mass is a multi-phase paced crawl by design (Q108 keeps
     # the remainder); each sync's report shows the crawl position.
     #
@@ -71,6 +77,20 @@ module Nabu
       # paced requests + the census download on the first run).
       SLICE = 400
 
+      # №I-9: attempts on ONE book whose GET times out, before it is
+      # ledgered "timeout-stuck" and the slice moves on; the backoff
+      # (seconds) doubles between attempts (5 s, then 10 s). The
+      # transport's own read timeout (Net::HTTP's 60 s default) is kept:
+      # both wedging PIDs answered in under 2 s when re-probed
+      # 2026-10-11 — the hang was transient upstream, not a slow book.
+      TIMEOUT_ATTEMPTS = 3
+      TIMEOUT_BACKOFF = 5.0
+      STUCK = "timeout-stuck"
+      LEDGER_CLASSES = ["denied", "empty", STUCK].freeze
+      # A transport failure that is a timeout (Faraday::TimeoutError /
+      # Net::ReadTimeout / Net::OpenTimeout, wrapped by RedirectFollow).
+      TIMEOUT_PATTERN = /transport error for .*(timeout|timed out|execution expired)/i
+
       # The dataset's unknown-date placeholder (censused 2026-09-29:
       # 5,388 rows carry the bare "1000") — mints no envelope.
       DATE_SENTINEL = "1000"
@@ -101,10 +121,12 @@ module Nabu
       # census.tsv is derived beside the upstream xlsx at fetch (Q59-a).
       def self.materialized_paths = [CENSUS_TSV]
 
-      def initialize(delay: DELAY, slice: SLICE, http: Nabu::ZipFetch.default_http)
+      def initialize(delay: DELAY, slice: SLICE, http: Nabu::ZipFetch.default_http,
+                     timeout_backoff: TIMEOUT_BACKOFF)
         super()
         @delay = delay
         @slice = slice
+        @timeout_backoff = timeout_backoff
         @http = http
         @requests = 0
       end
@@ -118,11 +140,13 @@ module Nabu
         ensure_census!(workdir, progress)
         pids = census_pids(workdir)
         ledger = read_ledger(workdir)
-        crawled, denied = crawl_slice!(workdir, pids, ledger, progress)
+        crawled, denied, stuck = crawl_slice!(workdir, pids, ledger, progress)
         held = held_pids(workdir)
+        stuck_list = stuck.empty? ? "" : " (#{stuck.join(', ')})"
         notes = "crawl at #{held.size}/#{pids.size} book(s) " \
                 "(+#{crawled} this sync, #{denied} newly refused, " \
-                "#{ledger['denied'].size + ledger['empty'].size} ledgered)"
+                "#{stuck.size} stuck on timeout#{stuck_list}, " \
+                "#{LEDGER_CLASSES.sum { |key| ledger[key].size }} ledgered)"
         progress&.call("#{notes}\n")
         Nabu::FetchReport.new(sha: crawl_sha(workdir, held, ledger), fetched_at: Time.now, notes: notes)
       end
@@ -216,15 +240,17 @@ module Nabu
             .sort_by { |pid| Integer(pid, 10) }
       end
 
+      # Returns [crawled, denied, stuck_pids].
       def crawl_slice!(workdir, pids, ledger, progress)
-        skip = ledger["denied"].to_set | ledger["empty"].to_set
+        skip = LEDGER_CLASSES.flat_map { |key| ledger.fetch(key, []) }.to_set
         crawled = 0
         denied = 0
+        stuck = []
         pids.each do |pid|
-          break if crawled + denied >= @slice
+          break if crawled + denied + stuck.size >= @slice
           next if skip.include?(pid) || File.file?(book_path(workdir, pid))
 
-          case fetch_book!(workdir, pid)
+          case fetch_with_retries!(workdir, pid, progress)
           when :ok
             crawled += 1
           when :denied
@@ -233,11 +259,31 @@ module Nabu
           when :empty
             ledger["empty"] << pid
             denied += 1
+          when :timeout
+            (ledger[STUCK] ||= []) << pid
+            stuck << pid
           end
           progress&.call("crawl: +#{crawled} book(s), #{denied} refused…\n") if ((crawled + denied) % 50).zero?
         end
         write_ledger!(workdir, ledger)
-        [crawled, denied]
+        [crawled, denied, stuck]
+      end
+
+      # №I-9: a timeout is retried in-slice with doubling backoff; only
+      # TIMEOUT_ATTEMPTS consecutive timeouts give up (:timeout — the
+      # caller ledgers the book "timeout-stuck").
+      def fetch_with_retries!(workdir, pid, progress)
+        TIMEOUT_ATTEMPTS.times do |attempt|
+          outcome = fetch_book!(workdir, pid)
+          return outcome unless outcome == :timeout
+          break if attempt == TIMEOUT_ATTEMPTS - 1
+
+          progress&.call("crawl: #{pid} timed out (attempt #{attempt + 1}/#{TIMEOUT_ATTEMPTS}), retrying…\n")
+          backoff = @timeout_backoff * (2**attempt)
+          sleep(backoff) if backoff.positive?
+        end
+        progress&.call("crawl: #{pid} timed out #{TIMEOUT_ATTEMPTS}× — ledgered #{STUCK}, moving on\n")
+        :timeout
       end
 
       def fetch_book!(workdir, pid)
@@ -264,7 +310,9 @@ module Nabu
         # A refused PID answers HTTP 403 "This PID is not allowed"
         # (censused at the first crawl — the spec's own caveat);
         # 404 is the same class. Ledgered, never retried. Anything
-        # else (5xx, network) stays fatal — the crawl is resumable.
+        # else (5xx, network) stays fatal — the crawl is resumable —
+        # except a TIMEOUT, which the caller retries then ledgers (№I-9).
+        return :timeout if e.message.match?(TIMEOUT_PATTERN)
         raise unless e.message.match?(/HTTP 40[34]\b/)
 
         :denied
@@ -278,19 +326,21 @@ module Nabu
         Dir.glob(File.join(workdir, BOOKS_DIRNAME, "*.json")).map { |path| File.basename(path, ".json") }.sort
       end
 
+      # A pre-№I-9 ledger has no "timeout-stuck" class — every class
+      # defaults to empty.
       def read_ledger(workdir)
+        blank = LEDGER_CLASSES.to_h { |key| [key, []] }
         path = File.join(workdir, LEDGER_FILE)
-        return { "denied" => [], "empty" => [] } unless File.file?(path)
+        return blank unless File.file?(path)
 
-        JSON.parse(File.read(path))
+        blank.merge(JSON.parse(File.read(path)))
       rescue JSON::ParserError
-        { "denied" => [], "empty" => [] }
+        blank
       end
 
       def write_ledger!(workdir, ledger)
         File.write(File.join(workdir, LEDGER_FILE),
-                   JSON.pretty_generate({ "denied" => ledger["denied"].uniq.sort,
-                                          "empty" => ledger["empty"].uniq.sort }))
+                   JSON.pretty_generate(LEDGER_CLASSES.to_h { |key| [key, ledger.fetch(key, []).uniq.sort] }))
       end
 
       def crawl_sha(workdir, held, ledger)
@@ -300,7 +350,12 @@ module Nabu
                  else
                    ""
                  end
-        Digest::SHA256.hexdigest(JSON.generate([census, held, ledger["denied"].sort, ledger["empty"].sort]))
+        # The stuck class joins the identity only when non-empty, so a
+        # pre-№I-9 crawl state keeps its sha (no re-parse churn).
+        stuck = ledger.fetch(STUCK, []).sort
+        parts = [census, held, ledger["denied"].sort, ledger["empty"].sort]
+        parts << stuck unless stuck.empty?
+        Digest::SHA256.hexdigest(JSON.generate(parts))
       end
 
       # -- discovery/parse internals -----------------------------------------

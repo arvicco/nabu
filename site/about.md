@@ -27,7 +27,7 @@ a project whose founding dream included holding the tablets themselves
 
 ## The project family
 
-Nabu is the eldest of four siblings, each with one job; where a sibling
+Nabu is the eldest of five siblings, each with one job; where a sibling
 produces something the library can use, Nabu consumes it back as an
 ordinary optional module — the same ingestion door every external source
 walks through.
@@ -35,25 +35,29 @@ walks through.
 - **[Nabu](https://github.com/arvicco/nabu)** — the library itself: the
   canonical texts, the catalog, the query tools, this site.
 - **[nabu-data](https://github.com/arvicco/nabu-data)** (the **Data ↗**
-  link above) — the publishing arm: **twenty-one datasets** as of August
-  2026, from form-to-lemma tables and orthography folds to metrical
+  link above) — the publishing arm: **twenty-five datasets** as of its
+  v1.3.0 release (September 2026), from form-to-lemma tables and
+  orthography folds to metrical
   scansions, a Tibetan segmentation layer, the cuneiform value-to-sign
   table, the re-publications (stable anchors for ACTib's segmented
   Tibetan canon; the first machine-readable edition of the complete
   secular Galician-Portuguese lyric), and the whole-catalog corpus
-  layers: per-document historical-stage assignments, normalized datings,
-  gazetteer-ready place references with a Linked Places Format export,
-  the Han character frequency census, compiled cuneiform sign cards with
-  real attestation counts, and the Egyptian hieroglyph spine. Plain CSV
+  layers: per-document historical-stage assignments and document-kind
+  classifications, normalized datings, gazetteer-ready place references
+  with a Linked Places Format export, the character frequency census,
+  compiled cuneiform sign cards with real attestation counts and their
+  sense glosses, the Egyptian hieroglyph spine with its frequency
+  census, and the curated language and script dossiers. Plain CSV
   with Frictionless Data Package manifests carrying full derivation
   provenance and measured quality in-band; CC BY 4.0 with stated
   share-alike carve-outs; archived with a version DOI under concept
   [10.5281/zenodo.21757475](https://doi.org/10.5281/zenodo.21757475).
-  Three of the datasets feed the library's own query surfaces back from
-  the published files.
+  Several of the datasets — the Sanskrit form-to-lemma table, the
+  Tibetan verb and segmentation layers, the language dossiers — feed the
+  library's own query surfaces back from the published files.
 - **[nabu-lects](https://arvicco.github.io/nabu-lects)** (the **Lects ↗**
-  link above) — the youngest sibling (August 2026, CC BY 4.0, pre-1.0):
-  a curated registry of *lects* — language varieties as genealogical
+  link above) — the first registry sibling (August 2026, CC BY 4.0,
+  versioned releases since v1.0): a curated registry of *lects* — language varieties as genealogical
   anchor × historical stage × variety × script × orthography — with a
   universal
   mapping from standard language codes onto them. Born from this
@@ -61,9 +65,10 @@ walks through.
   the stage ladders, stage-aware search, and reconstruction honesty
   described on the [Languages]({{ '/languages/' | relative_url }}) page.
 - **[nabu-places](https://arvicco.github.io/nabu-places)** (the
-  **Places ↗** link above) — the third registry sibling (August 2026,
+  **Places ↗** link above) — the second registry sibling (August 2026,
   CC BY 4.0): a curated registry of *place-matching decisions* — which
-  gazetteer identity (Pleiades, Trismegistos Geo, CIGS, GeoNames) each
+  gazetteer identity (Pleiades, Trismegistos Geo, CIGS, GeoNames, and
+  since autumn 2026 CHGIS, NRCT and al-Ṯurayyā) each
   source's verbatim place-name string denotes, with *unlocatable* and
   *region* as first-class answers — plus a native lane for minting
   evidence-backed place records where scholarship establishes a place no
@@ -72,7 +77,8 @@ walks through.
 - **[Edubba](https://arvicco.github.io/nabu-edubba)** (the **School ↗**
   link above) — the scribal school: where Nabu curates the texts, Edubba
   teaches the scripts, consuming the library's sign-resolution contract
-  for its reading panels.
+  for its reading panels — and its curated course overlay rides back
+  onto the library's hieroglyph cards.
 
 ## Why it exists
 
@@ -86,7 +92,8 @@ Three convictions, stated plainly:
 2. **Citations are the unit of scholarship.** A search result that cannot
    be cited to a verse, a folio line, or a tablet surface is a curiosity.
    Everything in Nabu resolves to a stable URN.
-3. **License terms are data.** Aggregating more than a hundred sources under a dozen
+3. **License terms are data.** Aggregating
+   {{ census.live_sources }} sources under dozens of
    different licenses is workable only if every text's terms are recorded
    per document and consulted mechanically — especially once AI tools can
    quote from the collection.
@@ -123,12 +130,15 @@ refreshed at every gate to reflect what actually works.
 
 ## What is deliberately out of scope, for now
 
-The original concept includes an enrichment layer — projecting lemmas onto
-the ninety percent of the corpus without gold annotation, embeddings and
-semantic search, on-demand glossing — that is designed but not built; it
-waits on local inference hardware and demand. (Ingestion of one's own
-PDFs and scans, once on this list, shipped in July 2026 as `nabu ingest`;
-what still waits on hardware is text recognition for image-only scans.)
+The original concept's enrichment layer has been landing piece by piece,
+always on-box: ingestion of one's own PDFs and scans shipped in July 2026
+(`nabu ingest`), and September 2026 brought semantic search over a local
+vector store (`nabu embed`, `search --similar`) and local lemmatization
+campaigns that project machine-suggested lemmas, honestly labelled
+*silver*, onto passages without gold annotation (`nabu lemma-enrich`).
+What still waits — on local inference hardware and on demand — is
+on-demand glossing and text recognition for image-only scans; no paid
+cloud service is ever a runtime requirement.
 A public read-only query endpoint is a distant possibility for which the
 MCP server is the rehearsal: the tool contract that would face outward
 runs locally first, against the real corpus, under the same license gates.
@@ -169,7 +179,7 @@ Anything else fits a
 [new issue](https://github.com/arvicco/nabu/issues/new/choose) of any
 shape.
 
-**Cite it:** DOI [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957) (v1.0.0); see the FAQ for the full citation form.
+**Cite it:** concept DOI [10.5281/zenodo.21361956](https://doi.org/10.5281/zenodo.21361956), which always resolves to the latest release (v1.6.0, September 2026, as of this writing; v1.0.0 is [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957)); see the FAQ for the full citation form.
 
 ## Contact
 

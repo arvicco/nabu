@@ -356,3 +356,53 @@ bases, and all three are kept byte-verbatim here:
 - `altaic/monget.dbf`/`.var` — record **2161** (*čubali 'ant'): the MMO
   pointer starts cleanly and runs one NUL past its payload — it ends at
   the frame byte, `čubali (MA 136)`, and mints its xng row.
+
+## The follow-up packages' LEXSTAT wordlists (P118, same grant)
+
+The ALTAIC / CAUC / YENISEY / SINTIB / DRAV / CHUKCHEE / KART packages
+(retrievals and sha256 above) each ship a `LEXSTAT/` subtree of 100-item
+wordlists in the IE.exe wordlist shape (NUMBER / WORD / `<COL>` +
+`<COL>NUM`, file position 0 the per-language date row). 48 of their 51
+tables ride as shelves (sino, stls and sinocalc are held). Samples were cut
+on 2026-10-11 from the held 2026-09-26 package trees with the trim recipe
+above (header + descriptors verbatim with the record count rewritten,
+records byte-verbatim, the trailing `0x1A` mirrored where upstream has one —
+all but tung.dbf; yen.dbf is the one var-backed table: its pointers were
+rewritten against a compacted `yen.var`, payloads verbatim). Every kept
+record decodes identically to the same record parsed from the full table.
+Positions are file positions (0 = the date row):
+
+- `altaic/LEXSTAT/alt.dbf` — 0, 1, 2, 3 (#1 'all' twice: the sparse
+  synonym row comes FIRST in file order, so `1.tat` is barčɨ and
+  `1.tat-b` böten; #2 'ashes' fills all 53 columns; MAN/PHN/AZB pin the
+  branch-.inf-wins reading).
+- `altaic/LEXSTAT/tung.dbf` — 0, 38 (#29 'fish': NEG/EVK → tunget #42,
+  IN the fixture base; MAN "Spoken Manchu" beside LMA). No `0x1A` upstream.
+- `altaic/LEXSTAT/turc.dbf` — 0, 3, 45 (#2 'ashes' → turcet #2, IN the
+  fixture base; #35 'green': CHV → #3334, past turcet's last record
+  upstream — the resolve-or-verbatim pin for wave A).
+- `cauc/LEXSTAT/lezg.dbf` — 0, 7, 46 (#7 'bite' → lezget #11, #42 'I' →
+  lezget #1, both IN the fixture base).
+- `yenisey/LEXSTAT/yen.dbf`/`.var` — 0, 10, 48 (#10 'bone' and #44 'knee'
+  → yenet #1; yen.inf carries no aliases, yenet.inf's apply).
+- `sintib/LEXSTAT/kir.dbf` — 0, 6, 9 (#5 'big': YAM → kiret #645, IN the
+  fixture base, labelled from kiret.inf; #8 'black': KUL → #4425, past
+  kiret's last record upstream).
+- `sintib/LEXSTAT/syc.dbf` — 0, 1 (#1 'all': PUM "Pumi1"; ZHB/ERG/GUI →
+  #4006, past stibet's 2,823 records upstream; DAO "thəm tćɛ TIB" -1).
+- `sintib/LEXSTAT/man.dbf` — 0, 5 (Manipuri; the date row's WORD cell is
+  the junk "20"; #5 'big' → #4010, unresolved upstream).
+- `sintib/LEXSTAT/tani.dbf` — 0, 7 (#5 'big': MIL/PAD/BOK → stibet #2, IN
+  the fixture base; GAL Gallong).
+- `drav/LEXSTAT/drav.dbf` — 0, 3, 39 (#3 'bark', #37 'hand': all 25
+  columns incl. the eleven inferred readings; YER #5001 and BRA #2300
+  unresolved upstream).
+- `chukchee/LEXSTAT/kam.dbf` — 0, 10, 18 (the date row's KAR "17.5";
+  #7 'bite' → #2001, past kamet's records upstream, PLQ "?" -666; #11
+  'breast' → kamet #1, IN the fixture base, KAR vašá-tꭓaš`).
+- `kart/LEXSTAT/kart.dbf` — 0, 1, 2 (`proto = NONE`: GEO/MEG/LAZ/UBA/LSH/LEN
+  numbers are table-internal classes and ride verbatim).
+
+Resolution runs against the trimmed fixture BASES, so a number that is
+live upstream but whose target record is not kept here reads verbatim in
+the suite (the tests say which is which).

@@ -70,8 +70,10 @@ module Nabu
     #                  "head_id","relation","citation_part","information_status",
     #                  "empty_token_sort"}, … ],   # nil attrs dropped, keys lean
     #   "citation" => <first token's citation-part, when derivable>,
-    #   "status"   => <sentence/@status, when present>
+    #   "status"   => <sentence/@status, when present>,
+    #   "div_title" => <the enclosing div's <title>, when present (P118-R4)>
     # }
+    # Tokens also carry "antecedent_id" (the coreference edge) when present.
     # <slash> secondary-edge children of a token are ignored (secondary
     # dependencies are not carried downstream; the basic tree lives in
     # head-id/relation).
@@ -98,7 +100,7 @@ module Nabu
     class ProielParser
       # A finished sentence awaiting Passage construction: its upstream id, the
       # sentence status, the reconstructed surface text, and the token hashes.
-      Sentence = Data.define(:id, :status, :text, :tokens)
+      Sentence = Data.define(:id, :status, :text, :tokens, :div_title)
       private_constant :Sentence
 
       # PROIEL token attribute → annotation key, in the order the store keeps
@@ -113,6 +115,9 @@ module Nabu
         "relation" => "relation",
         "citation-part" => "citation_part",
         "information-status" => "information_status",
+        # P118-R4 S6: the coreference edge (PROIEL/ISWOC/TOROT anaphora
+        # annotation — the antecedent token's id, beside information_status).
+        "antecedent-id" => "antecedent_id",
         "empty-token-sort" => "empty_token_sort"
       }.freeze
       private_constant :TOKEN_ATTRIBUTES
@@ -174,6 +179,7 @@ module Nabu
         citation = sentence.tokens.filter_map { |token| token["citation_part"] }.first
         result["citation"] = citation if citation
         result["status"] = sentence.status if sentence.status
+        result["div_title"] = sentence.div_title if sentence.div_title
         result
       end
 
@@ -198,6 +204,8 @@ module Nabu
           @sentence_ordinal = 0
           @current = nil # {id:, status:, text: +"", tokens: []}
           @source_seen = false
+          @div_depth = 0
+          @div_title = nil # the enclosing <div>'s <title> (P118-R4 S6)
         end
 
         def call
@@ -221,11 +229,35 @@ module Nabu
           when "source" then start_source(node)
           when "sentence" then start_sentence(node)
           when "token" then add_token(node)
+          when "div" then start_div(node)
+          when "title" then read_div_title(node)
           end
         end
 
         def end_element(node)
           finish_sentence if node.name == "sentence" && @current
+          return unless node.name == "div"
+
+          @div_depth -= 1
+          @div_title = nil
+        end
+
+        # P118-R4 S6: a <div>'s own <title> ("Book 1, section 1", "Matthew
+        # 7") rides each of its sentences as "div_title". The <source>
+        # header's <title> sits outside every div and is never read here.
+        def start_div(node)
+          @div_depth += 1
+          @div_title = nil
+          @div_depth -= 1 if node.empty_element?
+        end
+
+        def read_div_title(node)
+          return if @div_depth.zero? || @current || node.empty_element?
+
+          # The title alone, as a tiny fragment (entities decoded) — never
+          # a DOM of the file.
+          title = Normalize.nfc(Nokogiri::XML.fragment(node.inner_xml.to_s).text.strip.gsub(/\s+/, " "))
+          @div_title = title unless title.empty?
         end
 
         # <source> carries the cross-check attributes. Reject a file whose source
@@ -290,7 +322,8 @@ module Nabu
             id: current[:id],
             status: current[:status],
             text: Normalize.nfc(current[:text].strip),
-            tokens: current[:tokens]
+            tokens: current[:tokens],
+            div_title: @div_title
           )
         end
       end

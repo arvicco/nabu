@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" version="5.0" n="Nandī">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="san-Latn">Nāndīsūtram</title>
+	<title xml:lang="pka-Latn">Nandīsuttaṁ</title>
+        <author xml:lang="san-Latn">Dēvavācakaḥ</author>
+	<principal>
+	  <persName ref="http://viaf.org/viaf/372149294434280521495">
+	    <forename>Andrew</forename>
+	    <surname>Ollett</surname>
+	  </persName>
+	</principal>
+      </titleStmt>
+
+      <publicationStmt>
+        <authority>Prakrit Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2020</date>
+      </publicationStmt>
+
+      <sourceDesc>
+	<p>The source of this digital text is the .docx file of the Nāndīsūtra prepared by <persName>Muni Shree Deepratnasagar</persName> and posted to the Jain e-Library website with the ID number 003787.</p>
+      </sourceDesc>
+    </fileDesc>
+
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="pka-Latn">Ardhamāgadhī in Roman transliteration (ISO-15919)</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+
+
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+	<p>Expanded abbreviations: none.</p>
+      </editorialDecl>
+    </encodingDesc>
+
+    <revisionDesc>
+      <change when="2020-08-10" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+
+  <text xml:lang="pka-Latn">
+    <body>
+      <div type="section" n="1">
+	<lg n="1">
+	  <l>jayaï jagajīvajōṇī-viyāṇaō jagagurū jagāṇandō</l>
+	  <l>jaganāhō jagabandhū jayaï jagappiyāmahō bhayavaṁ</l>
+	</lg>
+      </div>
+      <div type="section" n="2">
+	<lg n="2">
+	  <l>jayaï suyāṇaṁ pabhavō titthayarāṇaṁ apacchimō jayaï</l>
+	  <l>jayaï gurū lōgāṇaṁ jayaï mahappā mahāvīrō</l>
+	</lg>
+      </div>
+      <div type="section" n="3">
+	<lg n="3">
+	  <l>bhaddaṁ savvajagujjōyagassa bhaddaṁ jiṇassa vīrassa</l>
+	  <l>bhaddaṁ surāsuraṇamaṁsiyassa bhaddaṁ dhuyarayassa</l>
+	</lg>
+      </div>
+      <div type="section" n="163">
+	<p>
+	  <s>sē ttaṁ aṅgapaviṭṭhaṁ, sē ttaṁ suyanāṇaṁ sē ttaṁ parōkkhaṁ, sē ttaṁ nandī.</s>
+	</p>
+      </div>
+    </body>
+    <back>
+      <div type="appendix">
+	<head>parisiṭṭhaṁ-1-aṇunnānandī</head>
+	<div type="section" n="2">
+	  <lg n="2">
+	    <l>kimaṇunnā kassa'ṇunnā kēvatikālaṁ pavattiyā'ṇunnā</l>
+	    <l>ādikara purimatālē pavattiyā usabhasēnassa</l>
+	  </lg>
+	</div>
+      </div>
+    </back>
+  </text>
+</TEI>

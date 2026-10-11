@@ -38,3 +38,11 @@ files:
     url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
     whole: false
     trim: "byte-verbatim WHOLE of in-zip CTH 222_XML_TLH/304_e.xml (1,004 B) — the LINE-LESS quarantine exemplar, moved under quarantine/ so discover never yields it"
+  - path: "edits/CTH 832_XML_TLH/KUB 31.116"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip EXTENSIONLESS file (2,643 B) — the 2025-06-10 re-annotation of KUB 31.116, under edits/ so the main discover never yields it (P118-R4)"
+  - path: "edits/CTH 832_XML_TLH/KUB 31.116.xml"
+    url: https://zenodo.org/records/20328284/files/TLHbasisONLINE25_1_ZENODO_Beta_03.zip
+    whole: false
+    trim: "byte-verbatim WHOLE of the in-zip file (2,431 B) — the superseded .xml twin (P118-R4)"

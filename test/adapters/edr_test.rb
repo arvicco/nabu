@@ -121,6 +121,13 @@ class EdrTest < Minitest::Test
                  facets["material"])
     assert_equal({ "value" => "cippus", "ref" => "http://www.eagle-network.eu/voc/objtyp/lod/85" },
                  facets["object_type"])
+    # P118-R4 S6: the EAGLE <rs> terms (on every record) were read past.
+    assert_equal({ "value" => "no decoration", "ref" => "http://www.eagle-network.eu/voc/decor/lod/1000" },
+                 facets["decoration"])
+    assert_equal({ "value" => "tit. integer", "ref" => "http://www.eagle-network.eu/voc/statepreserv/lod/13" },
+                 facets["condition"])
+    assert_equal({ "value" => "scalpro", "ref" => "http://www.eagle-network.eu/voc/writing/lod/1" },
+                 facets["execution"])
     assert_equal({ "ancient" => "Roma" }, metadata["place"])
     assert_equal "Roma, via Livenza (sepolcreto Salario)", metadata["findspot"]
     assert_equal "Roma, Antiquarium Comunale del Celio, senza inv.", metadata["repository"]

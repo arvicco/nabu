@@ -263,6 +263,14 @@ files:
     url: https://raw.githubusercontent.com/kanripo/KR5c0091/master/KR5c0091_001.txt
     whole: true
     trim: none
+  - path: KR5c0312/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR5c0312/master/Readme.org
+    whole: true
+    trim: none
+  - path: KR5c0312/KR5c0312_000a.txt
+    url: https://raw.githubusercontent.com/kanripo/KR5c0312/master/KR5c0312_000a.txt
+    whole: true
+    trim: none (the letter-suffixed juan file, P118-R4; copied from the canonical snapshot 2026-10-11)
   - path: KR5g0001/Readme.org
     url: https://raw.githubusercontent.com/kanripo/KR5g0001/master/Readme.org
     whole: true

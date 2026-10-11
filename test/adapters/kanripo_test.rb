@@ -19,7 +19,7 @@ class KanripoTest < Minitest::Test
 
   TEXT_IDS = %w[KR1a0149 KR1a0170 KR1h0004 KR2a0001 KR2a0038 KR2f0037
                 KR2g0007 KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026
-                KR5a0001 KR5a0004 KR5c0091 KR5g0001 KR5i0030].freeze
+                KR5a0001 KR5a0004 KR5c0091 KR5c0312 KR5g0001 KR5i0030].freeze
 
   def conformance_adapter
     Nabu::Adapters::Kanripo.new
@@ -56,7 +56,7 @@ class KanripoTest < Minitest::Test
 
     classes = refs.map { |ref| ref.metadata["class"] }
     assert_equal TEXT_IDS.map { |id| "urn:nabu:kanripo:#{id}" }, refs.map(&:id)
-    assert_equal %w[KR1 KR1 KR1 KR2 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4 KR5 KR5 KR5 KR5 KR5], classes
+    assert_equal %w[KR1 KR1 KR1 KR2 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4 KR5 KR5 KR5 KR5 KR5 KR5], classes
     refs.each { |ref| assert File.directory?(ref.path), "ref path must be the text dir" }
   end
 
@@ -113,8 +113,9 @@ class KanripoTest < Minitest::Test
     total = adapter.discover(FIXTURES).sum { |ref| adapter.parse(ref).size }
 
     # census: 253 (waves 1–2) + 177 KR5 (109 + 1 + 42 + 16 + 9 — P37-1) +
-    # 129 P43-r2 recovery exemplars (53 KR2f0037 + 76 KR1a0149).
-    assert_equal 559, total
+    # 129 P43-r2 recovery exemplars (53 KR2f0037 + 76 KR1a0149) +
+    # 9 P118-R4 KR5c0312 (the letter-suffixed juan file).
+    assert_equal 568, total
   end
 
   # -- P43-r2 quarantine recovery (D42-c census: 75 duplicate-anchor + 26

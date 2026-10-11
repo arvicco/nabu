@@ -65,6 +65,18 @@ hand-built refs). `unzip` the artifact and `cp` the six paths below.
   impression stub: gap only, zero `<lb>`). One of **226** zero-line
   files — ParseError quarantine, pinned.
 
+## The extensionless re-annotation (P118-R4 — under `edits/`, NOT discoverable from the root)
+
+- `edits/CTH 832_XML_TLH/KUB 31.116` (2,643 B, sha256 `4e706ee2…`) and
+  `edits/CTH 832_XML_TLH/KUB 31.116.xml` (2,431 B, sha256 `8b1ff013…`),
+  both byte-verbatim from the Beta 0.3 deposit (copied from the canonical
+  snapshot 2026-10-11). The deposit ships the SAME manuscript twice: the
+  `.xml` validated 2025-05-13 and an extensionless file whose header adds
+  the 2025-06-10 re-annotation (and corrected lines). The only
+  extensionless AOxml file in the deposit (2026-10-11 census: the other
+  760 extensionless files are CSS/webarchive junk). Discover now yields
+  the later-dated edit and skips the older twin by rule.
+
 ## Corpus censuses behind the numbers in tests and docs (2026-07-19)
 
 Measured over the whole unpacked Beta 0.3 deposit:

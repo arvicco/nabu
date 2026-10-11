@@ -42,7 +42,7 @@ module Nabu
     #   later occurrences of a key mint with a deterministic "+2"/"+3"
     #   occurrence suffix (document order — the DDbDP implicit-block
     #   idiom) — never a silent overwrite, never a lost flagship edition;
-    #   the dups ride .docs/upstream-reports.md.
+    #   the dups are reported upstream.
     # - A <pb> carrying @edRef is a WITNESS's pagination (the critical
     #   editions cite their manuscripts' page turns) and never sets a
     #   section — only the edition's own pb / pagelike milestones do,

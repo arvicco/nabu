@@ -20,8 +20,9 @@ papyri, cuneiform, Sanskrit, Old English, the Slavic canon, and more —
 built for scholars who want to hold their sources rather than query a
 service. It is a command-line pipeline and database, not a website or a
 reading application. What it is and why it exists is set out on
-[About]({{ '/about/' | relative_url }}); worked walk-throughs for ten
-scholarly personas are on [Examples]({{ '/examples/' | relative_url }}), and
+[About]({{ '/about/' | relative_url }}); worked walk-throughs for scholarly
+personas from the classicist to the southeast asianist are on
+[Examples]({{ '/examples/' | relative_url }}), and
 the full set of {{ census.desks }} [research desks]({{ '/axis/' | relative_url }}) —
 one scholarly hat per field, each with its own shelves and recipes — is the
 reader's-eye map of the whole collection.
@@ -38,9 +39,9 @@ walkthrough is [Quickstart]({{ '/quickstart/' | relative_url }}).
 ### What does it need?
 
 Ruby 3.3 or newer, git, and disk space: about 1 GB covers the starter
-shelf (canonical files plus derived databases), while a full library
-build occupied roughly 45 GB canonical plus 43 GB derived SQLite on the
-reference machine as of 2026-07-22 — growth is entirely at your
+shelf (canonical files plus derived databases), while the full library
+occupies roughly 117 GB canonical plus 159 GB of derived databases on the
+reference machine (measured 2026-10-11) — growth is entirely at your
 discretion, shelf by shelf. There are no cloud requirements at runtime
 and the dependency set is deliberately small. Details and per-shelf
 sizes are on [Quickstart]({{ '/quickstart/' | relative_url }}).
@@ -80,8 +81,8 @@ what the terminal must do, and a per-script table — is
 
 It complements rather than competes: Perseus and the Scaife Viewer are
 reading environments served from institutional infrastructure, while
-Nabu ingests Perseus's openly licensed editions (among some two dozen
-other corpora) into a library on your own disk, under one query surface,
+Nabu ingests Perseus's openly licensed editions (beside
+{{ census.live_sources }} live sources in all) into a library on your own disk, under one query surface,
 one citation scheme, and one license model. If Perseus restructures or
 goes offline, a Nabu library keeps working. The shelf survey is on
 [The Library]({{ '/library/' | relative_url }}).
@@ -94,14 +95,20 @@ As of {{ census.as_of }}: {{ census.documents_display }} documents and {{ census
 registered, synced sources, plus {{ census.dictionary_entries_display }} dictionary entries and
 {{ census.gold_lemmas_m }} million gold
 lemma annotations in {{ census.gold_languages }} languages — the Islamicate library
-(OpenITI, the corpus's largest holding — Classical Arabic and Persian,
-added 22 July 2026), the classical Chinese library and the Buddhist
-canon, classical
-Greek and Latin, papyri, Latin inscriptions, cuneiform and the Ancient
-Near East, Sanskrit and the Pali canon, Hebrew and Aramaic, Egyptian,
-Coptic, Japanese, Old English and the wider Germanic wave (Old Norse,
-Old Saxon, Middle High German, and the runestones, added 22 July 2026),
-Slavic, Celtic, biblical editions, and a reference shelf of {{ census.dictionary_shelves }}
+(OpenITI, the corpus's largest holding — Classical Arabic and Persian),
+the first printed books in English (EEBO-TCP) and Middle English, the
+classical Chinese library and the Buddhist canon, the Korean dynastic
+records, classical Greek and Latin and the Latin–Romance continuum,
+papyri, Latin inscriptions, cuneiform and the Ancient Near East with the
+Hittite and Luwian corpora, Sanskrit and the Pali canon, Hebrew and
+Aramaic, Egyptian, Coptic, Ethiopic, Japanese from the Man'yōshū to the
+National Diet Library's classical stacks, Tibetan, the inscriptions of
+Southeast Asia, Old English and the wider Germanic shelves (Old Norse,
+Old Saxon, Middle High German, Old Dutch, Old Swedish, the runestones,
+and German print), the Slavic shelves from Old Church Slavonic to the
+Balkan oral epic, Celtic, the Middle Iranian, Turkic and Mongolic
+manuscripts of the Silk Road, the colonial record of the indigenous
+Americas, biblical editions, and a reference shelf of {{ census.dictionary_shelves }}
 dictionary shelves. The
 full survey is [The Library]({{ '/library/' | relative_url }}); the
 authoritative living inventory is
@@ -175,15 +182,19 @@ database from canonical data.
 
 ### What do the license classes mean?
 
-Every document carries one of four classes, recorded at ingestion and
+Every document carries one of six classes, recorded at ingestion and
 shown on every surface. `open` is public domain or CC0 — no
 restrictions; `attribution` is the CC BY / CC BY-SA family —
-redistributable with credit (together with `open`, roughly 99% of
-documents); `nc` is the CC BY-NC-SA family — licensed for
-non-commercial research use and never redistributed by the tooling;
-`research_private` covers terms stricter than all of these (CC BY-ND,
-scholarly-use grants without a redistribution clause) — held for
-personal research only. The full model is on
+redistributable with credit (together with `open`, roughly
+{{ census.redistributable_pct }}% of documents); `odbl` is open data under
+the Open Database License, whose attribution and share-alike duties
+attach to the database (the runic corpus); `nc` is the CC BY-NC-SA
+family — licensed for non-commercial research use and never
+redistributed by the tooling; `research_private` covers terms stricter
+than all of these (CC BY-ND, scholarly-use grants without a
+redistribution clause) — held for personal research only; and
+`restricted` marks a document whose upstream statement is unfamiliar,
+withheld from AI clients until a human has read it. The full model is on
 [Sources]({{ '/sources/' | relative_url }}).
 
 ### Can I redistribute texts I got through Nabu?
@@ -192,8 +203,10 @@ It depends on the passage's class, which is labelled on every search
 hit, alignment row, and export precisely so this is never guesswork.
 `open` texts: yes, freely; `attribution` texts: yes, crediting the
 upstream edition per its terms (share-alike where the license says so);
-`nc` and `research_private` texts: no — they are for your own research,
-and the tooling itself never redistributes anything. Per-source terms
+`odbl` data: yes, naming and linking the database, with derived
+databases shared alike; `nc`, `research_private` and `restricted`
+texts: no — they are for your own research, and the tooling itself
+never redistributes anything. Per-source terms
 are on [Sources]({{ '/sources/' | relative_url }}) and in
 [docs/02-sources.md](https://github.com/arvicco/nabu/blob/main/docs/02-sources.md).
 
@@ -276,8 +289,12 @@ version you used, or the site and repository with your access date:
 *Nabu: a local library of the ancient world*,
 https://arvicco.github.io/nabu (repository:
 [github.com/arvicco/nabu](https://github.com/arvicco/nabu)), adding the
-version tag or commit hash where precision matters. Each release carries a DOI —
-v1.0.0: [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957). Texts you quote *from* the library should be
+version tag or commit hash where precision matters. Each release carries a
+version DOI on Zenodo, and the concept DOI
+[10.5281/zenodo.21361956](https://doi.org/10.5281/zenodo.21361956) always
+resolves to the latest (v1.6.0, September 2026, as of this writing; v1.0.0
+is [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957)).
+Texts you quote *from* the library should be
 cited to their upstream editions, which every passage's URN and license
 label identify — see
 [Sources]({{ '/sources/' | relative_url }}).

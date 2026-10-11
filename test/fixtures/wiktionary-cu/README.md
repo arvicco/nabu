@@ -63,7 +63,7 @@ trimmed (278 of 4,615 lines; +1 P17-3 golden, §below — 279 total).
 
 Result: 278 records — 124 noun / 54 verb / 18 adj / 15 pron / 10 character
 / …; 177 etymology-bearing (39 PIE); 72 multi-sense; all strata of
-docs/backlog.md P13-10 (owner-approved 2026-07-11).
+docs/history/backlog.md P13-10 (owner-approved 2026-07-11).
 
 ## Extraction recipe (one-shot, run 2026-07-11)
 

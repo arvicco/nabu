@@ -15,10 +15,15 @@ with its Targums and Peshitta, the Hittite tablet corpus, the universal
 CDLI catalog of cuneiform, the Ugaritic tablets, a millennium of Syriac,
 the inscriptions of pre-Roman Italy and Sicily, the New
 Testament in up to fifteen parallel witnesses, the
-complete corpus of Old English poetry, the classical Chinese library with
-the Buddhist canon, the Islamicate library in Arabic and Persian, the
-Tibetan Buddhist canon, the medieval lyric of Galicia, the Japanese
-public-domain library, and the runestones of Scandinavia — into a single library on the
+complete corpus of Old English poetry and the first printed books in
+English, the classical Chinese library with
+the Buddhist canon, the Korean dynastic records, the Islamicate library
+in Arabic and Persian, the Tibetan Buddhist canon, the inscriptions of
+Southeast Asia, the Middle Iranian and Turkic manuscripts of the Silk
+Road, the medieval lyric of Galicia, the Japanese classical and
+public-domain libraries, the Slavic shelves from Old Church Slavonic to
+the Balkan oral epic, the runestones of Scandinavia, and the colonial
+record of the indigenous Americas — into a single library on the
 scholar's own disk. Everything is stored as plain files plus SQLite: it is
 searchable by word or by dictionary lemma, citable to the exact verse or
 tablet line, explicit about every text's license, and rebuildable from its
@@ -52,21 +57,28 @@ with every desk's member shelves and recipes, is
 {% assign census = site.data.census %}
 {%- assign top1 = census.top_languages[0] %}
 {%- assign top2 = census.top_languages[1] %}
+{%- assign top3 = census.top_languages[2] %}
+{%- assign name1 = site.data.language_notes[top1.code] | split: " — " | first %}
+{%- assign name2 = site.data.language_notes[top2.code] | split: " — " | first %}
+{%- assign name3 = site.data.language_notes[top3.code] | split: " — " | first %}
 As of **{{ census.as_of }}**, the catalog records
 **{{ census.documents_display }} documents** comprising
 **{{ census.passages_display }} passages** in
-{{ census.language_codes }} language codes — from proto-cuneiform
+{{ census.language_codes }} language codes across
+{{ census.live_sources }} live sources — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese.
-**Classical Arabic is the largest language on the shelves
-({{ top1.millions }} million passages)**, ahead of Literary Chinese
-({{ top2.millions }} million). The newest
-additions are the granted sources — the complete secular
-Galician-Portuguese lyric under a written grant, and the Ras Shamra
-Tablet Inventory with the concordances Ugaritologists cite — beside the
-complete openMGH critical editions (153 volumes of medieval Latin),
-DÉRom's Proto-Romance etymons, and the **lect layer**: historical-stage
-ladders, stage-aware search, and honest reconstruction display through
-the [nabu-lects](https://arvicco.github.io/nabu-lects) registry.
+**{{ name1 }} is the largest language on the shelves
+({{ top1.millions }} million passages)**, ahead of {{ name2 }}
+({{ top2.millions }} million) and {{ name3 }} ({{ top3.millions }}
+million). The newest wings are the Slavic shelves opened end to end,
+the Middle Iranian and Turkic manuscripts of the Silk Road, and the
+library's first American shelf — colonial Zapotec testaments, Guaman
+Poma's chronicle, and the Jesuit-era Tupinambá and Old Guaraní
+treebanks; each wave is told, dated, on the
+[News]({{ '/news/' | relative_url }}) page. Beneath every shelf runs the
+**lect layer**: historical-stage ladders, stage-aware search, and honest
+reconstruction display through the
+[nabu-lects](https://arvicco.github.io/nabu-lects) registry.
 Together with **{{ census.dictionary_entries_display }} dictionary
 entries** across {{ census.dictionary_shelves }} reference shelves and
 **{{ census.gold_lemmas_m }} million gold-standard lemma annotations in
@@ -130,8 +142,9 @@ surface carries its license class.
 ## Principles
 
 - **License honesty.** Every ingested text keeps its upstream license,
-  recorded per document and displayed on every surface. Roughly 99% of
-  documents are public-domain or attribution-class; non-commercial and
+  recorded per document and displayed on every surface. Roughly
+  {{ site.data.census.redistributable_pct }}% of documents are
+  public-domain or attribution-class; non-commercial and
   no-derivatives materials are handled under correspondingly stricter rules.
   See [Sources]({{ '/sources/' | relative_url }}).
 - **Longevity over convenience.** Upstream projects restructure, lose
@@ -152,7 +165,9 @@ surface carries its license class.
 - [Tools]({{ '/tools/' | relative_url }}) — the command-line instruments,
   organized by scholarly task.
 - [Examples]({{ '/examples/' | relative_url }}) — worked walk-throughs for a
-  classicist, a papyrologist, a slavist, a comparativist, an assyriologist,
-  a hittitologist, and a biblical scholar.
+  classicist, a Latinist, a papyrologist, a sinologist, a slavist, a
+  comparativist, an Old English scholar, an assyriologist, a
+  hittitologist, a biblical scholar, an egyptologist, a student of
+  pre-Roman Italy, a Hebraist, and a southeast asianist.
 - [About]({{ '/about/' | relative_url }}) — what this project is, who it is
   for, and how it is built.

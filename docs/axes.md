@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (26): `ceipom`, `dharma-campa`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `edh`, `edr`, `elephantine`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `nabu-places`, `obi-burmese`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (29): `ceipom`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `nabu-places`, `obi-burmese`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `siddham`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (8): `dacon`, `dcs`, `gretil`, `mw`, `nabu-data`, `sarit`, `suttacentral`, `ud`
+**Members** (14): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `kannada-texts`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `siddham`, `suttacentral`, `ud`
 
 ### buddhist
 
@@ -316,10 +316,12 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
 
   **The asymmetry to know:** an axis expansion is *not* an explicit
   per-source request, so **unwired members are skipped** — reported by name
-  on one `skipped (unwired): …` line, never silently — and feature modules
-  are skipped under their own honest label, `skipped (module — sync
-  directly): …` (P46-r1: a module is permanently `wired: false` by
-  invariant; its sync is an explicit owner act). An explicit
+  on one `skipped (unwired): …` line, never silently. Feature modules
+  follow the same rule: since the 2026-08-18 semantics ruling `wired` is
+  a channel-verification fact for every kind, so a wired module (every
+  module in the registry as of October 2026) syncs with its desk like any
+  member, and an unwired one is skipped under its own honest label,
+  `skipped (module — sync directly): …`. An explicit
   `sync <unwired-slug>` syncs that source anyway, with a note. The desk is
   a convenience over the wired shelf; the slug is a direct order.
 

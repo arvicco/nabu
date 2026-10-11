@@ -85,6 +85,10 @@ module Nabu
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
           "dacon" => :structured,
+          "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
+          #                                 place = the origPlace placeName (findspot)
+          "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
+          #                              (certainty + evidence ride the date hash)
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
@@ -106,6 +110,8 @@ module Nabu
           "itkc" => :structured,
           "ja-wikisource" => :era_band_key,
           "ko-wikisource-mk" => :structured,
+          "kannada-texts" => :structured, # P118-3: the repo README's work dates
+          #                                 (941, 953, ca. 1042), composition class
           "kdsp" => :structured,
           "korba" => :structured,
           "litopys" => :era_band_key,
@@ -127,6 +133,8 @@ module Nabu
           "rsti" => :place_only,
           "ru-wikisource" => :era_band_key,
           "seal" => :period_label,
+          "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
+          #                           or century attribution
           "sillok" => :structured,
           "sjw" => :structured,
           "sl-wikisource" => :structured,
@@ -152,7 +160,7 @@ module Nabu
         # composition era (author-era), not an object — their rows carry
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
-        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic elektire].freeze
+        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic elektire kannada-texts].freeze
 
         # P104-1: sources whose place claim rides a differently-named
         # metadata field. An override key is a findspot vocabulary with
@@ -169,7 +177,10 @@ module Nabu
           "eebo-tcp" => "source_pub_place",
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
-          "rem" => "orig_place"
+          "rem" => "orig_place",
+          # P118-R4 S5: the IEDC record's toponym LIST (143 of 1,316 docs,
+          # censused 2026-10-11) — see #toponym_claim.
+          "iedc" => "toponyms"
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs).
@@ -194,27 +205,80 @@ module Nabu
 
         BATCH = 2_000
 
+        # P118-R4 S3 (the held-but-dark audit): per-id date LISTS a source
+        # ships beside its texts (canonical/<slug>/<file>, "ID<TAB>date"
+        # lines) — a builder-side JOIN on the metadata "idno" that dates
+        # documents the header date left unbounded. A FALLBACK only: a
+        # header-bounded document keeps its own envelope. eebo-tcp: the
+        # TCP's per-phase lists (fetched by EeboTcpFetch since P109; ~10.3k
+        # of the 60,325 docs carried only an unparseable imprint date such
+        # as "1700?]" or "[between 1670-1696]").
+        SIDECAR_DATES = {
+          "eebo-tcp" => %w[eebo_phase1_IDs_and_dates.txt EEBO_Phase2_IDs_and_dates.txt].freeze
+        }.freeze
+
+        # One side of a TCP list date: four characters, digits or "u"
+        # (unknown digit — widened to 0 on the lower side, 9 on the upper),
+        # an optional "?" (the list's own uncertainty mark; the bounds stay
+        # the claim). "9999" and "uuuu" are the open-ended sentinels.
+        TCP_SIDE = /\A(\d[\du]{3}|uuuu)\??\z/
+
         module_function
 
         # Returns {slug => rows} for every registered source.
-        def build(catalog:, canonical_dir: nil) # rubocop:disable Lint/UnusedMethodArgument
-          SLUGS.to_h { |slug| [slug, build_source(catalog, slug)] }
+        def build(catalog:, canonical_dir: nil)
+          SLUGS.to_h { |slug| [slug, build_source(catalog, slug, canonical_dir: canonical_dir)] }
         end
 
         # The per-source seam (P47-r3): drop this source's rows, re-project
         # — SyncRunner calls it post-load so the lane never lags a sync.
-        def refresh_source!(catalog:, slug:)
+        # +canonical_dir+ arms the SIDECAR_DATES join (absent = header
+        # dates only, the pre-P118 projection).
+        def refresh_source!(catalog:, slug:, canonical_dir: nil)
           return 0 unless SHAPES.key?(slug)
 
           catalog[:document_axes].where(axis_source: slug).delete
-          build_source(catalog, slug)
+          build_source(catalog, slug, canonical_dir: canonical_dir)
         end
 
-        def build_source(catalog, slug)
+        # {id => raw date} from the source's declared list files (absent
+        # files or directory → empty: lane off, never an error).
+        def sidecar_dates(slug, canonical_dir)
+          files = SIDECAR_DATES[slug]
+          return {} if files.nil? || canonical_dir.nil?
+
+          files.each_with_object({}) do |name, dates|
+            path = File.join(canonical_dir, slug, name)
+            next unless File.file?(path)
+
+            File.foreach(path, chomp: true) do |line|
+              id, raw = line.delete("\r").split("\t", 2)
+              dates[id.strip] = raw.strip unless id.nil? || raw.nil? || id.strip.empty?
+            end
+          end
+        end
+
+        # A TCP list date ("1625", "1670-1696?", "16uu", "1688-9999?") →
+        # [not_before, not_after], or nil when it does not parse.
+        def tcp_list_years(raw)
+          sides = raw.to_s.strip.split("-", 2)
+          return nil if sides.empty? || sides.any? { |side| !side.match?(TCP_SIDE) }
+
+          low = sides.first.delete("?")
+          high = (sides[1] || sides.first).delete("?")
+          lower = low == "uuuu" ? nil : Integer(low.tr("u", "0"), 10)
+          upper = %w[uuuu 9999].include?(high) ? nil : Integer(high.tr("u", "9"), 10)
+          return nil if lower.nil? && upper.nil?
+
+          [lower, upper]
+        end
+
+        def build_source(catalog, slug, canonical_dir: nil)
           shape = SHAPES.fetch(slug)
           source_id = catalog[:sources].where(slug: slug).get(:id)
           return 0 if source_id.nil?
 
+          listed = sidecar_dates(slug, canonical_dir)
           inserted = 0
           buffer = []
           catalog[:documents]
@@ -225,7 +289,8 @@ module Nabu
             .paged_each do |doc|
               row = axis_row(doc, shape, reorder: REORDER.include?(slug),
                                          composition: COMPOSITION.include?(slug),
-                                         place_key: PLACE_KEYS.fetch(slug, "place"))
+                                         place_key: PLACE_KEYS.fetch(slug, "place"),
+                                         listed: listed)
               next if row.nil?
 
               buffer << row.merge(axis_source: slug)
@@ -241,9 +306,14 @@ module Nabu
 
         # One document's axis row, or nil when it carries neither a date
         # bound nor a place claim (name, ref or coordinates).
-        def axis_row(doc, shape, reorder: false, composition: false, place_key: "place")
+        def axis_row(doc, shape, reorder: false, composition: false, place_key: "place", listed: {})
           meta = JSON.parse(doc[:metadata_json].to_s)
           not_before, not_after, raw, precision, own_class = send(shape, meta)
+          if not_before.nil? && not_after.nil? && (list_raw = listed[meta["idno"].to_s]) &&
+             (years = tcp_list_years(list_raw))
+            not_before, not_after = years
+            raw = list_raw
+          end
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
           place, place_ref, lat, lon = place_claim(meta, key: place_key)
           # A ref IS placement (P73-2): a doc carrying only a parseable
@@ -286,6 +356,8 @@ module Nabu
         # metadata-only, the rundata origin-axis stance.
         def place_claim(meta, key: "place")
           place = meta[key]
+          return toponym_claim(place) if place.is_a?(Array)
+
           if key != "place"
             # An overridden place key is a findspot vocabulary with explicit
             # unknown-class values -- those mint no place (never a name).
@@ -311,6 +383,23 @@ module Nabu
                    ladder.empty? ? nil : ladder.join(", ")
                  end
           [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # P118-R4 S5: a toponym list [{"name", "latitude", "longitude", …}]
+        # (iedc). Every name joins the claim ("; ", the multi-place
+        # convention); coordinates mint ONLY when exactly one toponym
+        # carries a full pair — with two, which is THE document's point
+        # is never guessed. Alternative readings stay metadata.
+        def toponym_claim(list)
+          topos = list.select { |topo| topo.is_a?(Hash) && !topo["name"].to_s.strip.empty? }
+          return [nil, nil, nil, nil] if topos.empty?
+
+          points = topos.filter_map do |topo|
+            pair = coordinates("#{topo['latitude']}, #{topo['longitude']}")
+            pair unless pair.include?(nil)
+          end
+          lat, lon = points.size == 1 ? points.first : [nil, nil]
+          [topos.map { |topo| topo["name"].strip }.uniq.join("; "), nil, lat, lon]
         end
 
         # A WGS84 "lat, lon" string → [lat, lon] floats, both-or-nothing

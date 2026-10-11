@@ -1,5 +1,20 @@
 # Intertext design — the corpus reads itself (P14-7)
 
+> **Status note (2026-10-11).** This is a design record, kept as written
+> on 2026-07-12; its measurements describe a corpus of 3.8 million
+> passages, about one thirtieth of today's. Everything in its
+> recommendation menu has since shipped: `nabu parallels` (§1, MCP
+> `nabu_parallels`), `align --collate` (§2), the timeline and the
+> `--from/--to/--century/--place` filters (§3, architecture §14),
+> `search --fuzzy` (§4), `nabu formulas` (§5), `nabu cognates` (§6), and
+> the links journal with `nabu links` (§7, architecture §15). Of the
+> "waits for the cluster" line, same-language semantic retrieval shipped
+> locally as `nabu embed` + `search --similar` ([embed.md](embed.md));
+> cross-language retrieval was measured with that model class and judged
+> too weak to offer, so tier-3 cross-language allusion remains open. The
+> current behaviour of each surface is documented in `bin/nabu help
+> <command>` and in [architecture.md](architecture.md).
+
 The Phase 15 planning input. This document re-founds four engine-shaped
 register entries (improvements §1.1 intertext, §1.4 time/place, §1.5
 fragment search, §1.8 links) under the owner-endorsed persona frame of

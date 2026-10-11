@@ -1,35 +1,35 @@
 # The Library — content review
 
-**As of 2026-08-27** (post the P83 EEBO wave — the library's
-first million: EEBO-TCP Phase I, 25,368 early-modern English
-texts).
-Live totals: **1,014,312 documents / 89,934,635 passages and
-1,410,205 dictionary entries** across the **156 registry rows** —
-133 corpus sources + 4 local shelves + 19 feature modules, every
-corpus source
-wired (the P80 Latin–Romance wave, §8ai, verified its first syncs and
-flipped 2026-08-21). **Classical Arabic (`ara`, §8x) is the largest
-language at 33.3M passages**, ahead of Literary Chinese (15.9M),
-Latin (3.1M — the Patrologia Latina now aboard), Sumerian and Ancient
-Greek (3.0M each), and Japanese (2.98M); the catalog spans **134
-document language codes**. The reference shelf spans the dictionary
-shelves of §8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t and §8ae —
-**105 dictionary shelves / 1,410,205 entries** (2026-08-21 census).
-The gold-lemma layer stands at **19,319,627 gold rows in 38
-languages** (2026-08-21 census) plus the honest silver tier
+**As of 2026-10-11** (the P117 gate). Live totals: **2,348,948
+documents / 110,331,584 passages and 2,728,360 dictionary entries**
+across the **233 registry rows** — 203 corpus sources (202 wired) + 5
+local shelves + 25 feature modules. **Classical Arabic (`ara`, §8x)
+is the largest language at 33.3M passages**, ahead of Early Modern
+English (24.3M, §8ak), Literary Chinese (19.0M), Japanese (4.2M),
+Latin (3.5M — the Patrologia Latina aboard), Ancient Greek (3.2M) and
+Sumerian (3.0M); the catalog spans **188 document language codes**.
+The reference shelf spans the dictionary shelves of §8c, §8h, §8j,
+§8k, §8m, §8o, §8q, §8s, §8t, §8ae and §8al — **518 dictionary
+shelves / 2,728,360 entries**. The gold-lemma layer stands at
+**21,898,832 gold rows in 47 languages** plus the honest silver tier
 (machine-suggested or upstream-undisambiguated, always labelled —
-30,999,504 rows, chiefly GLAUx and Diorisis Greek, now with the ReF
-German aboard, §8n/§8z). Since August 2026 stored codes also resolve through the
-**lect layer** (languages.md, "The lect layer"): historical-stage
-ladders on language cards, `search --lect`, and registry-keyed
-reconstruction display. The four canonical-memory shelves (§8i) hold
-the owner's private curation and acquisitions — their counts and
-contents stay out of public documentation by rule. The code-per-language map lives in [languages.md](languages.md).
+30,999,504 rows in 15 codes, chiefly GLAUx and Diorisis Greek, with
+the ReF German aboard, §8n/§8z). Since August 2026 stored codes also
+resolve through the **lect layer** (languages.md, "The lect layer"):
+historical-stage ladders on language cards, `search --lect`, and
+registry-keyed reconstruction display. The five canonical-memory
+shelves (§8i) hold the owner's private curation, acquisitions, and
+model output — their counts and contents stay out of public
+documentation by rule. The code-per-language map lives in
+[languages.md](languages.md). Sections §1–§8ak review the shelves
+through the EEBO wave (2026-08-27) with figures as of their own
+dates; §8al registers every shelf added since.
 
 This is a living document. Numbers are read from the live catalog, not
 estimated — via a `readonly: true` Sequel/sqlite3 session (the WAL-safe
-read-only convention, ops §10; the `sqlite3` CLI now fails to open the
-27 GB catalog, so the Ruby gem is the read path). See §10 for the review
+read-only convention, ops §10; the catalog is past 100 GB, so the
+`sqlite3` CLI reads it only through an `?immutable=1` URI and the Ruby
+gem stays the usual read path). See §10 for the review
 cadence that keeps it truthful.
 
 ---
@@ -939,12 +939,135 @@ at every rung (ang → enm → en:early); imprint-dated at scale for
 the /dates/ timeline; the germanic desk's English line five sources
 strong.
 
+## 8al. Since the EEBO wave — the September–October 2026 shelves (P84–P117)
+
+Seventy-odd registrations landed between the EEBO gate and this
+refresh, most of them through the per-phase waves listed here by desk.
+Unlike the sections above, this one is a **register, not a review**:
+one line per shelf with its live holdings (documents / passages, or
+entries for a dictionary; read from the catalog's `source_stats`
+2026-10-11) and license class, so every live source is on the map.
+Fuller per-shelf sections are written as each wave is reviewed (§10);
+meanwhile `nabu list <slug>` prints the shelf card, and
+[02-sources.md](02-sources.md) carries each source's access path and
+license verbatim. All are wired unless noted.
+
+**Germanic and Dutch.** `corpus-gysseling` — the Corpus Gysseling,
+13th-century Early Middle Dutch originals, gold lemma+POS (2,226 /
+207,793; `research_private`) · `corpus-oudnederlands` — all surviving
+Old Dutch word material 475–1200, gold (89 / 5,745; `research_private`)
+· `dta` — the Deutsches Textarchiv, prints of 1473–1969 at page grain
+(5,478 / 729,090; attribution) · `perseus-anglit` — Klaeber's Beowulf
+with its aligned English (2 / 86; attribution).
+
+**Slavic.** The Slovenian line: `kdsp` — longer narrative prose
+1836–1918 (262 / 290,394), `prilit` — the oldest narrative prose
+(43 / 8,526), `sl-wikisource` — the Slovene Wikisource's year-dated
+works to 1899 (1,539 / 145,035), `mdz-protestant` — 16th-century
+Slovene and Croatian Protestant prints, page OCR (6 / 1,518; open).
+Croatian and Serbian: `hr-wikisource` — the premodern Croatian cone
+(1,390 / 132,052), `elektire` — the Croatian school canon (205 /
+375,300; open), `gams-zrcalo` — the 1445 *Zrcalo člověčaskago
+spasenja* digital edition (1 / 199), `sr-wikisource` — the Serbian
+oral-tradition cone, epic songs and Vuk (4,607 / 581,423),
+`vuk-danicic` — the Vuk–Daničić Bible (66 / 31,102; open), `eltec-srp`
+— the ELTeC Serbian novels (96 / 150,794). The other Wikisources:
+`bg-wikisource` (26 / 220), `cs-wikisource` (330 / 4,748),
+`mk-wikisource` — the 19th-century Macedonian cone (836 / 31,114),
+`pl-wikisource` — premodern Polish plus Brückner's etymological
+dictionary (1,228 / 15,823; 5,711 entries), `ru-wikisource` and
+`uk-wikisource` — the edition-filtered Old East Slavic chronicles
+(12 / 429 and 7 / 541). Further: `scripta-bulgarica` — Old and
+Middle Bulgarian monuments (124 / 4,491; nc), `prague-bible-1488` —
+Medieval Czech ground truth from the 1488 Prague Bible (31 / 2,939),
+`litopys` — the Ipatiev chronicle and glossaries from Izbornyk
+(41 / 964; 923 entries; open), `slouniki-nasovic` — Nasovič's 1870
+Belarusian dictionary (35,159 entries; open), and two public-domain
+scholarship shelves of uncorrected OCR, `slavistics-pd` — Miklosich,
+Berneker, Leskien, Vondrák, Jagić (21 / 5,833) and `archiv-slav-phil`
+— the *Archiv für slavische Philologie* vols. 1–35 (33 / 22,348).
+`korba` — the KorBa 17th–18th-century Polish subcorpus — is registered
+but not yet wired.
+
+**Sinitic.** `classical-modern` — the classical↔modern Chinese parallel
+corpus (14,608 / 1,944,934; the `cmn` lane of languages.md),
+`zh-wikisource` — censused works, the 全唐文 among them (1,238 / 71,547),
+and three rhyme-book shelves from the nk2028 project: `qieyun-restored`
+(11,158 entries), `zhongyuan` (5,877; open), `menggu-ziyun` — the
+ʼPhags-pa rhyme book (9,446). Instruments: `chgis` (the China
+Historical GIS gazetteer — places.md) and `cbdb` (the China
+Biographical Database person index behind `nabu person`; nc).
+
+**Japonic.** `ndl-kotenseki` — the National Diet Library's classical-book
+OCR, crawled in slices (26,860 / 833,013; open), `honkoku` — citizen
+transcriptions of premodern documents (6,092 / 129,458), `ja-wikisource`
+— the premodern era cone (838 / 88,745), `kouigenji` — Ikeda's critical
+Genji text (54 / 25,065), `kokubunken` — NIJL TEI editions of the
+Kokinshū and Man'yōshū witnesses (3 / 1,723); the `nrct` gazetteer
+instrument (places.md).
+
+**Korean.** `okhc` — the Open Korean Historical Corpus historical slice,
+now the registry's largest by documents (1,198,779 / 3,542,662; nc;
+`lzh`, `ko`, `jpn` lanes).
+
+**Southeast Asia** (the `sea` desk, all attribution): the DHARMA
+corpora — `dharma-khmer` (1,219 / 50,165), `dharma-campa` (121 / 2,728),
+`dharma-nusantara` (291 / 5,893), `dharma-javanese-texts` — the kakawin
+library and Old Sundanese texts (92 / 46,482), `dharma-pyu` (145 / 629)
+— plus `obi-burmese` — the Old Burmese stone inscriptions (1,121 /
+25,238) and `ojw` — the Old Javanese Wordnet (3,632 entries).
+
+**Indic and Tibetan.** `dacon` — the Diachronic Annotated Corpus of Newar
+(4 / 977); `monlam-lexicon` — the Monlam Tibetan headword lists
+(449,829 entries).
+
+**Iranian, Indo-European, and the TITUS grants.** The personally
+granted TITUS corpora (all nc, grant-gated — 03-unlockable-sources.md
+§2): `titus-osco-umbrian` (386 / 1,697), `titus-pahlavi` (1,572 /
+20,302), `titus-khotanese` (1,648 / 20,279), `titus-sogdian` (364 /
+21,354), `titus-manichaica` (542 / 3,089), `titus-bactrian` (123 /
+3,537), `titus-tocharian-a` (466 / 5,779). Beside them:
+`skjaervo-khotanese` — Skjærvø's catalogue of the British Library
+Khotanese manuscripts (2,357 / 14,574; open), `shkz` — the trilingual
+Kaʿba-ye Zartošt inscription, aligned (3 / 153; open), `iedc` — the
+Invisible East documentary corpus (1,316 / 5,493; open),
+`perseus-farsilit` — Hafez's Divan with its aligned English (2 /
+17,637).
+
+**Anatolian and cuneiform.** `hittite-glossed` — glossed Hittite texts
+with German translation (7,099 / 72,507; open), `aclt` — the Annotated
+Corpus of Luwian Texts, by personal grant (266 / 2,682;
+`research_private`), `seal` — Sources of Early Akkadian Literature, by
+grant (408 / 14,953; `research_private`), and two Wiktionary extracts,
+`wiktionary-hit` (481 entries) and `wiktionary-akk` (1,348).
+
+**Turkic and Mongolic.** `atmo` — annotated Turki manuscripts from the
+Jarring collection (15 / 4,934), `westoldturkic` — the West Old Turkic
+loanwords in Hungarian (480 entries), `altaica-shm` — Street's text of
+the Secret History of the Mongols (1 / 3,523).
+
+**Arabic.** `diccas` — the Disaster Corpus in Classical Arabic Sources
+(10 / 879; nc); instruments `kitab-reuse` (the KITAB text-reuse
+statistics; nc) and `althurayya` (the al-Ṯurayyā gazetteer — places.md).
+
+**Celtic.** `gpc` — the open subset of Geiriadur Prifysgol Cymru
+(89,386 entries).
+
+**The Americas** (the `americas` desk): `guaman-poma` — the Royal Danish
+Library's edition of the *Nueva corónica y buen gobierno* (1,189 /
+5,911; open) and `ticha` — colonial Valley Zapotec texts in TEI (93 /
+1,103).
+
+**Character identity.** `ucd` — the Unicode Character Database core, the
+universal character-identity instrument behind `nabu char`.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
 or acquired, not downloaded** — local shelves with `sync_policy: local`
 (no upstream, no network — `sync --all` never touches them), written only
-through their sanctioned gateways. Phases 20–24 grew the family to four:
+through their sanctioned gateways. Phases 20–24 grew the family to four,
+and P84 added a fifth:
 
 - **`local-language`** — the language-dossier shelf, **live**: one
   Markdown file per code under `local/shelves/local-language/` (YAML front
@@ -986,6 +1109,13 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   on planned material). Notes render on `show`/`define`/`links` footers
   and are MCP-served by default, withheld wherever their target document
   is withheld.
+- **`local-lemmas`** — the silver-lemma shelf (P84-1): the raw output
+  of `nabu lemma-enrich` campaigns as JSONL shards under
+  `local/shelves/local-lemmas/<language>/`, written only through
+  `Nabu::LemmaShelf`. Model output costs hours to regenerate, so it lives
+  on a permanent shelf rather than in `db/`; it reaches search only when
+  projected on request (`lemma-enrich --index-only`) and is always
+  labelled silver ([lemma-enrichment.md](lemma-enrichment.md)).
 
 ## 9. Library-wide capabilities
 
@@ -995,10 +1125,10 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   `bin/nabu search`, FTS5 under the hood.
 - **Lemma search** (`search --lemma`) over the treebank shelf (§6), the
   ORACC gold layer (§8), goo300k (§8e), damaskini (§8e), Coptic
-  Scriptorium (§8f), CorPH (§8l), and every gold shelf since — **38
-  gold languages / 19,319,627 rows** (2026-08-19 census; §6 lists the
-  pools), plus the always-labelled silver tier (28,451,399 rows in 14
-  codes, `--gold-only` to exclude);
+  Scriptorium (§8f), CorPH (§8l), and every gold shelf since — **47
+  gold languages / 21,898,832 rows** (2026-10-11 census; §6 and
+  languages.md list the pools), plus the always-labelled silver tier
+  (30,999,504 rows in 15 codes, `--gold-only` to exclude);
   ranking-independent `urn:` filtering; hits carry dictionary glosses where
   the reference shelf (§8c) knows the lemma. **Morphology facets**
   (`--morph case=dat,number=pl`, P13-6) filter by gold morphology — one UD
@@ -1026,7 +1156,8 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   `search --from/--to/--century/--place` scope by signed historical year
   (negative = BCE, no year 0) and provenance; `show` prints the timeline line
   ("date: 292 CE · Oxyrhynchos"); `--century -7` reaches the Assyrian
-  letters.
+  letters. By 2026-10-11 the lane holds 1,469,660 records over 1,430,111
+  documents, 1,344,411 of them dated.
 - **Document facets** (P17-2, migration 009): `document_facets`
   (genre/province/material/object_type, `?`-certainty preserved in `raw`)
   with `search --type/--province/--material` composing with the date/place
@@ -1211,7 +1342,8 @@ This document goes stale the moment a sync or a phase lands. Standing plan:
    Zenodo DOI).
 2. **After every owner-fired real sync**: re-read `bin/nabu status` and the
    per-source counts; update sizes if drift >1%. Cheap — one query per table.
-3. **Quarterly full review** (next due **2026-10-08**): re-verify every
+3. **Quarterly full review** (next due **2027-01-11**; the 2026-10-11
+   refresh rewrote the header and added the §8al register): re-verify every
    number from the live db, re-examine the "research uses" claims against
    what actually got used (MCP query logs are a signal once they exist),
    prune sections describing capabilities that changed, cross-check against

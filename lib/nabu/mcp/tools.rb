@@ -31,7 +31,7 @@ module Nabu
     # in the Query classes; this layer only validates arguments, applies the
     # conversational-surface contract, and shapes JSON for a model to read.
     #
-    # == The contract (fixed points, docs/backlog.md P8-1)
+    # == The contract (fixed points, docs/history/backlog.md P8-1)
     #
     # - Every passage in every response carries urn + language + license_class
     #   (+ source slug — attribution is one cheap join away). The descriptions

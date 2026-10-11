@@ -115,7 +115,7 @@ module Nabu
       # <msDescription>…</msDescription> spans are regex-exact (2,357,
       # verified) — and each fragment recovers as its OWN mini-DOM:
       # damage stays inside its record, neighbours parse clean.
-      # (Defect reported upstream — .docs/upstream-reports.md.)
+      # (Defect reported upstream.)
       def fragments(path)
         key = [path, File.mtime(path)]
         return @fragments_cache if defined?(@fragments_key) && @fragments_key == key

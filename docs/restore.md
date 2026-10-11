@@ -23,7 +23,7 @@ the fulltext/derived indexes, the lect journal (re-derived from the
 rulings + rules + date inference), the links instrument.
 
 One non-contract extra rides in `nabu backup` by default: **`.docs/`**
-— the steering record (decision register, plan docs, surveys; №R-22,
+— the steering record (decision register, plan docs, surveys;
 owner-ruled 2026-08-11). It is owner input the rebuild can never
 regenerate, but it is working material, not part of the three-folder
 contract — a fresh box works without it.

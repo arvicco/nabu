@@ -14,7 +14,7 @@ module Nabu
     # cites OE works by short title without urns — the ISWOC/ASPR crosswalk
     # is future work, the resolution layer needs nothing new).
     #
-    # == Upstream (verified page-level, docs/backlog.md P12-3 Phase A)
+    # == Upstream (verified page-level, docs/history/backlog.md P12-3 Phase A)
     #
     # LINDAT hdl 11234/1-3532 ("Bosworth-Toller's Anglo-Saxon Dictionary
     # online", data dump v0.1, 2021; Ondřej Tichý, Charles University — the
