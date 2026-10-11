@@ -27,7 +27,11 @@ A source wears every desk it serves — these twenty-five answer this desk. Hold
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
 | `kdsp` | texts | attribution | not yet wired | nothing held yet |
 | `korba` | texts | attribution | not yet wired | nothing held yet |
+<<<<<<< HEAD
 | `litopys` | texts | open | not yet wired | nothing held yet |
+=======
+| `mdz-protestant` | texts | open | not yet wired | nothing held yet |
+>>>>>>> 2c6d0dd7 (Add mdz-protestant: MDZ page OCR of the Slovene Protestant prints, ready)
 | `mk-wikisource` | texts | attribution | wired · manual | 836 docs / 31,114 passages |
 | `pl-wikisource` | texts | attribution | wired · manual | 1,228 docs / 15,823 passages / 5,711 entries |
 | `prague-bible-1488` | texts | attribution | wired · manual | 31 docs / 2,939 passages |

@@ -2854,6 +2854,22 @@ local-source:
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
 
+mdz-protestant:   # Q102, 02-sources row 243
+  adapter: Nabu::Adapters::MdzProtestant
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # MDZ (Bayerische Staatsbibliothek) page OCR of six 16th-century
+  # Slovene/Croatian Protestant prints — Trubar 1562, Dalmatin 1575,
+  # the 1584 Wittenberg catechism/hymnal + prayer book, Bohorič 1584,
+  # the Croatian Spovid 1564: IIIF manifests + per-page hOCR, a paced
+  # resumable crawl (the API is rate limited; 1,551 pages = two syncs).
+  # Public Domain Mark → open; the two NoC-NC Google copies ride as
+  # per-document nc. OCR LAYER, NOT AN EDITION (text_nature
+  # machine-ocr). The Urach Glagolitic/Cyrillic prints are out (OCR
+  # noise), Megiser 1592 out (a four-language dictionary), declared.
+
 menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
   adapter: Nabu::Adapters::MengguZiyun
   adopted: "2026-08-29"
