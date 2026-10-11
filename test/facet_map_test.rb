@@ -62,6 +62,26 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "languages" => "language" }, Nabu::FacetMap.load(path).fields_for("local-library"))
   end
 
+  # P118-R4 S2 (the held-but-dark audit's facet_map wave): axis-shaped
+  # fields already stored verbatim on ~450k documents that fed no facet.
+  def test_shipped_config_projects_the_dark_audit_facet_wave
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    map = Nabu::FacetMap.load(path)
+    expected = {
+      "cdli" => { "material" => "material", "object_type" => "object_type", "museum_no" => "museum" },
+      "rundata" => { "material_type" => "material", "material" => "material",
+                     "objectInfo" => "object_type", "style" => "style" },
+      "glaux" => { "dialect" => "dialect" },
+      "kdsp" => { "canonicity" => "canonicity", "period_slot" => "period" },
+      "ref" => { "medium" => "medium", "text-type" => "text_type" },
+      "rem" => { "topic" => "topic", "text_type" => "text_type" },
+      "edr" => { "repository" => "museum" },
+      "edh" => { "repository" => "museum" },
+      "oncoj" => { "corpus" => "collection" }
+    }
+    expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)
