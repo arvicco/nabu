@@ -4341,6 +4341,20 @@ sl-wikisource:   # P116-2, 02-sources row 235
   # catalog-side concern (adapter header). Bohoričica declared in
   # metadata "orthography". Texts PD; layer CC BY-SA 4.0.
 
+slouniki-nasovic:   # P117 (Q106), 02-sources row 253
+  adapter: Nabu::Adapters::SlounikiNasovic
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # READY; flips after the first sync is verified
+  sync_policy: manual
+  # Насовіч, Словарь бѣлорусскаго нарѣчія (СПб., 1870) — the library's
+  # FIRST Belarusian (be) shelf, dictionary-shaped: one SlounikPlus XML
+  # article per file from github.com/Belarus/Slouniki-Nasovic (declared
+  # "Public domain."; last push 2026-02-16 → manual). Sparse GitFetch of
+  # data/*.xml (~155 MB working tree — the per-file rtf blobs). EXPECTED
+  # FIRST SYNC: 35,159 entries, 0 parse errors (census run 2026-10-11),
+  # 2,967 gloss-less (cross-references).
+
 # P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
 # one row per upstream artifact/license/fetch posture), one new axis tag.
 # LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
