@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every fixture is a whole, uncut member of "Siddham Texts Archive
+# 20190221.zip" (Zenodo 2574901). A raw GET of the url returns the ZIP,
+# not the member, so whole: false — fetched for URL-liveness only.
+source: siddham
+adapter_test: test/adapters/siddham_test.rb
+retrieved: 2026-10-11
+files:
+  - path: IN00002_TEI.xml
+    url: https://zenodo.org/api/records/2574901/files/Siddham%20Texts%20Archive%2020190221.zip/content
+    whole: false
+    trim: whole zip member IN00002_TEI.xml (Eran Stone Inscription of Samudragupta — nested half-verse lg, duplicated lb 27), byte-for-byte uncut
+  - path: IN00021_TEI.xml
+    url: https://zenodo.org/api/records/2574901/files/Siddham%20Texts%20Archive%2020190221.zip/content
+    whole: false
+    trim: whole zip member IN00021_TEI.xml (Gadhwa Donation 3, GE 98 — the era-typed title year), byte-for-byte uncut
+  - path: IN00077_TEI.xml
+    url: https://zenodo.org/api/records/2574901/files/Siddham%20Texts%20Archive%2020190221.zip/content
+    whole: false
+    trim: whole zip member IN00077_TEI.xml (Khoh Charter 1 of Hastin, year 156 — seal/body textparts, plate pb, standalone sic), byte-for-byte uncut
+  - path: IN00121_TEI.xml
+    url: https://zenodo.org/api/records/2574901/files/Siddham%20Texts%20Archive%2020190221.zip/content
+    whole: false
+    trim: whole zip member IN00121_TEI.xml (Sanchi Pillar Inscription of the 5th Century — century attribution), byte-for-byte uncut
