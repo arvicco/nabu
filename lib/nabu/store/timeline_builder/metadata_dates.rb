@@ -171,7 +171,10 @@ module Nabu
           "eebo-tcp" => "source_pub_place",
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
-          "rem" => "orig_place"
+          "rem" => "orig_place",
+          # P118-R4 S5: the IEDC record's toponym LIST (143 of 1,316 docs,
+          # censused 2026-10-11) — see #toponym_claim.
+          "iedc" => "toponyms"
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs).
@@ -347,6 +350,8 @@ module Nabu
         # metadata-only, the rundata origin-axis stance.
         def place_claim(meta, key: "place")
           place = meta[key]
+          return toponym_claim(place) if place.is_a?(Array)
+
           if key != "place"
             # An overridden place key is a findspot vocabulary with explicit
             # unknown-class values -- those mint no place (never a name).
@@ -372,6 +377,23 @@ module Nabu
                    ladder.empty? ? nil : ladder.join(", ")
                  end
           [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # P118-R4 S5: a toponym list [{"name", "latitude", "longitude", …}]
+        # (iedc). Every name joins the claim ("; ", the multi-place
+        # convention); coordinates mint ONLY when exactly one toponym
+        # carries a full pair — with two, which is THE document's point
+        # is never guessed. Alternative readings stay metadata.
+        def toponym_claim(list)
+          topos = list.select { |topo| topo.is_a?(Hash) && !topo["name"].to_s.strip.empty? }
+          return [nil, nil, nil, nil] if topos.empty?
+
+          points = topos.filter_map do |topo|
+            pair = coordinates("#{topo['latitude']}, #{topo['longitude']}")
+            pair unless pair.include?(nil)
+          end
+          lat, lon = points.size == 1 ? points.first : [nil, nil]
+          [topos.map { |topo| topo["name"].strip }.uniq.join("; "), nil, lat, lon]
         end
 
         # A WGS84 "lat, lon" string → [lat, lon] floats, both-or-nothing

@@ -687,8 +687,8 @@ sources:
         oui/zho); the Central Asia registry wave makes them real anchors at its merge}
     dating: {posture: partial, note: the iso_prefix_key MetadataDates shape — 317 typed date
         strings; prose-only dates honestly mint nothing}
-    places: {posture: named, note: toponym lists with lat/long fields ride metadata; a
-        place-lane projection is a recorded follow-up}
+    places: {posture: named, note: the toponym lists project through MetadataDates (P118-R4)
+        — every name joins the claim, coordinates only when exactly one toponym carries them}
     script: {posture: implied, note: script parentheticals recorded per doc as script_note}
   skjaervo-khotanese:   # P107-3a
     kind: {posture: unclassified, note: msItem @type (Doc./lit. classes) is a natural kind_map
