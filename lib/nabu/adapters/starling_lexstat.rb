@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "starling_dbf_parser"
+require_relative "starling_lexstat_packages"
 
 module Nabu
   module Adapters
@@ -136,7 +137,7 @@ module Nabu
       # Per-table policy (registry order = discover order). +cognation+ is
       # the body label of a positive cognation number, naming the base the
       # table's .inf `proto =` line points at.
-      TABLES = {
+      IE_TABLES = {
         "starling-lexstat-balt" => {
           dbf: "balt.dbf", language: "bat", cognation: "Baltic etymology",
           title: "Baltic lexicostatistical wordlist (StarLing IE package LEXSTAT/balt; " \
@@ -190,30 +191,50 @@ module Nabu
         }.freeze
       }.freeze
 
-      INTEGER = /\A-?\d+\z/
-      private_constant :INTEGER
+      # Every wordlist shelf, discover order: IE.exe's ten, then the
+      # follow-up packages' 48 (Q116 — StarlingLexstatPackages: per-package
+      # language maps, resolve-or-verbatim cognation, inferred readings).
+      TABLES = IE_TABLES.merge(StarlingLexstatPackages::TABLES).freeze
+
+      # A date-row cell: centuries, signed, and decimal where upstream
+      # dates a column mid-century (kam KAR "17.5" — Krasheninnikov's era).
+      CENTURY = /\A-?\d+(?:\.\d+)?\z/
+      private_constant :CENTURY
 
       # { siglum => label } for the BASES rows whose per-language columns
       # share these sigla (the three LEXSTAT etymology tables).
-      def self.labels(sigla) = sigla.to_h { |siglum| [siglum, LANGUAGES.fetch(siglum).last] }.freeze
+      def self.labels(sigla) = sigla.to_h { |siglum| [siglum, LANGUAGES.fetch(siglum)[1]] }.freeze
+
+      # The table's language map: IE.exe's LANGUAGES, or its package's own
+      # (a siglum is local to its package — StarlingLexstatPackages).
+      def self.languages_for(table)
+        package = table[:package]
+        package ? StarlingLexstatPackages::LANGUAGES.fetch(package) : LANGUAGES
+      end
+
+      # Where a table sits under the workdir: IE.exe's at LEXSTAT/, each
+      # follow-up package's under its own subdir (<package>/LEXSTAT/).
+      def self.relative_path(table) = File.join(*[table[:package], DIR, table.fetch(:dbf)].compact)
 
       # One wordlist table → one DictionaryDocument (+languages+ is a test
       # seam: the census guard must quarantine an unknown siglum).
-      def parse(slug:, path:, languages: LANGUAGES)
+      def parse(slug:, path:, languages: nil)
         table = TABLES.fetch(slug)
+        languages ||= self.class.languages_for(table)
         parser = StarlingDbfParser.new(dbf_path: path)
         columns = form_columns(parser.fields, table, languages)
         document = Nabu::DictionaryDocument.new(
-          slug: slug, language: table.fetch(:language), title: table.fetch(:title), canonical_path: path
+          slug: slug, language: table.fetch(:language), title: title(table, columns, languages),
+          canonical_path: path
         )
-        seen = Hash.new(0)
+        context = { table: table, languages: languages, targets: target_numbers(table, path), seen: Hash.new(0) }
         dates = {}
         parser.each_record.with_index do |record, index|
           if index.zero? && date_row?(record, columns)
             dates = columns.to_h { |column| [column, presence(record[column])] }
             next
           end
-          entries(table, record, columns, dates, seen, languages).each { |entry| document << entry }
+          entries(context, record, columns, dates).each { |entry| document << entry }
         end
         document
       rescue Nabu::ValidationError => e
@@ -235,12 +256,36 @@ module Nabu
         columns
       end
 
-      def date_row?(record, columns)
-        values = columns.filter_map { |column| presence(record[column]) }
-        !values.empty? && values.all? { |value| value.match?(INTEGER) }
+      # The shelf title, plus — where the table holds ruled readings — the
+      # declaration of every inferred column (the 2026-10-11 ruling: the
+      # standard reading is adopted, never silently).
+      def title(table, columns, languages)
+        inferred = columns.select { |column| languages.fetch(column)[2] }
+        return table.fetch(:title) if inferred.empty?
+
+        readings = inferred.map { |column| "#{column} #{languages.fetch(column)[1]}" }.join(", ")
+        "#{table.fetch(:title)}; column readings #{StarlingLexstatPackages::INFERRED}: #{readings}"
       end
 
-      def entries(table, record, columns, dates, seen, languages)
+      # The NUMBER set of the table's cognation target (resolve-or-verbatim);
+      # nil for an IE.exe table (no :target — censused 100% resolving, the
+      # P113-2 posture). The target sits in the package dir beside LEXSTAT/;
+      # a tree without it resolves nothing, so every number rides verbatim.
+      def target_numbers(table, path)
+        target = table[:target] or return nil
+        target_path = File.join(File.dirname(path, 2), target)
+        return Set.new unless File.file?(target_path)
+
+        StarlingDbfParser.new(dbf_path: target_path).each_record.to_set { |record| record["NUMBER"].to_s }
+      end
+
+      def date_row?(record, columns)
+        values = columns.filter_map { |column| presence(record[column]) }
+        !values.empty? && values.all? { |value| value.match?(CENTURY) }
+      end
+
+      def entries(context, record, columns, dates)
+        table = context.fetch(:table)
         number = record.fetch("NUMBER").to_s.strip
         unless number.match?(/\A\d+\z/)
           raise Nabu::ParseError, "starling: #{DIR}/#{table.fetch(:dbf)}: wordlist row without an item NUMBER"
@@ -253,16 +298,17 @@ module Nabu
         meaning = presence(record["WORD"])
         columns.filter_map do |column|
           form = presence(record[column]) or next
-          code, name = languages.fetch(column)
+          code, name, inferred = context.fetch(:languages).fetch(column)
+          name = "#{name} (#{column} — #{StarlingLexstatPackages::INFERRED})" if inferred
           language = code || table.fetch(:language)
-          entry_id = entry_id_for(table, "#{number}.#{column.downcase}", seen)
+          entry_id = entry_id_for(table, "#{number}.#{column.downcase}", context.fetch(:seen))
           Nabu::DictionaryEntry.new(
             entry_id: entry_id, key_raw: form, language: language,
             headword: Nabu::Normalize.nfc(form),
             headword_folded: fold(form, language) || entry_id,
             gloss: meaning && Nabu::Normalize.nfc(meaning),
-            body: body(table, number: number, meaning: meaning, name: name,
-                              cognation: record["#{column}NUM"].to_s.strip, date: dates[column])
+            body: body(context, number: number, meaning: meaning, name: name,
+                                cognation: record["#{column}NUM"].to_s.strip, date: dates[column])
           )
         end
       end
@@ -279,15 +325,29 @@ module Nabu
         "#{base_id}-#{('a'.ord + occurrence - 1).chr}"
       end
 
-      def body(table, number:, meaning:, name:, cognation:, date:)
+      def body(context, number:, meaning:, name:, cognation:, date:)
         lines = ["Language: #{name}", ["Wordlist item: ##{number}", meaning].compact.join(" ")]
-        if cognation.match?(/\A\d+\z/) && cognation.to_i.positive?
-          lines << "#{table.fetch(:cognation)}: ##{cognation}"
+        if (link = cognation_link(context, cognation))
+          lines << link
         elsif !cognation.empty?
           lines << "Cognation number: #{cognation}"
         end
         lines << "Century (header row): #{date}" if date
         Nabu::Normalize.nfc(lines.join("\n"))
+      end
+
+      # "<label>: #N" only for a positive number naming a live entry: IE.exe
+      # tables link unconditionally (censused, P113-2), package tables only
+      # when the target base holds that NUMBER, kart (no target) never — an
+      # unresolved number rides verbatim, never as a dead link.
+      def cognation_link(context, cognation)
+        return nil unless cognation.match?(/\A\d+\z/) && cognation.to_i.positive?
+
+        table = context.fetch(:table)
+        label = table[:cognation] or return nil
+        return nil if table[:package] && !context.fetch(:targets)&.include?(cognation)
+
+        "#{label}: ##{cognation}"
       end
 
       # The lookup key: the FIRST form token, leading doubt/asterisk and

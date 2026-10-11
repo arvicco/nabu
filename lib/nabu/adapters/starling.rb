@@ -170,10 +170,15 @@ module Nabu
     # (bigchina.inf: "characters in Big5 encoding") — a per-field second
     # encoding lane the starling-dbf family does not have; landing it
     # would also clean stibet's CHIN leads. doc.dbf is a support table
-    # (per-character dialect readings), not an etymological base. The
-    # follow-up packages' own LEXSTAT/ trees (51 wordlist tables + the
-    # sinocalc glottochronology result) stay out: their column sigla need
-    # their own language census (below covers IE.exe's LEXSTAT/ only).
+    # (per-character dialect readings), not an etymological base.
+    #
+    # The follow-up packages' own LEXSTAT/ trees (Q116): 48 of their 51
+    # wordlist tables ride as shelves starling-lexstat-<stem> since P118 —
+    # per-package language maps, resolve-or-verbatim cognation numbers and
+    # the ruled inferred readings live in StarlingLexstatPackages. Held:
+    # sino (Big5 character cells — the bigchina lane), stls (a same-depth
+    # union of the SINTIB branch tables, declined as a duplicate) and the
+    # sinocalc glottochronology result (not lexical).
     #
     # == The IE package's LEXSTAT/ tables (P113-2)
     #
@@ -313,7 +318,12 @@ module Nabu
                  "etymology: Compiled by Sergei Nikolayev on the basis of A. Walde and J. Pokorny's " \
                  "dictionary, with Anatolian (Hittite) and Tocharian material added in by S. Nikolayev " \
                  "and S. Starostin. Subordinate databases include Germanic and Baltic (also compiled " \
-                 "by S. Nikolayev)\"); #{StarlingBranchBases::CREDITS}",
+                 "by S. Nikolayev)\"); #{StarlingBranchBases::CREDITS}; the follow-up packages' " \
+                 "LEXSTAT/ lexicostatistical wordlists (Altaic, North Caucasian, Yenisseian, " \
+                 "Sino-Tibetan, Dravidian, Chukchee-Kamchatkan and Kartvelian 100-item lists, cognation " \
+                 "numbers into each package's databases) carry their package's credit above — the " \
+                 "Japanese, Avaro-Andian, Tsezian, Dargwa, Khinalug, Lezghian and Nakh lists' own " \
+                 ".inf DBINFO adds \"Compiled by S. Starostin\"",
         license_class: "attribution",
         upstream_url: "https://starlingdb.org/download/IE.exe",
         parser_family: "starling-dbf"
@@ -332,8 +342,7 @@ module Nabu
       # name, fetched into its own subdir with its own ZipFetch state and
       # attic; the root IE.exe fetch declares keep: on all of them so a
       # re-fetch of one package never attics another. LEXSTAT/ trees ride
-      # along inside each zip (out of scope here; their tables are a
-      # separate lane).
+      # along inside each zip (their wordlists: StarlingLexstatPackages).
       FOLLOW_UP_PACKAGES = {
         KART_SUBDIR => KART_URL,
         "altaic" => "https://starlingdb.org/download/ALTAIC.exe",
@@ -896,12 +905,14 @@ module Nabu
       # [lang_code, kind, body] rows for the language-notes rider.
       def self.language_notes = LANGUAGE_NOTES
 
-      # One DocumentRef per base, BASES order, then one per IE LEXSTAT
-      # wordlist (StarlingLexstat::TABLES order); a workdir without a
-      # table's .dbf simply yields fewer refs (the day-one pre-fetch state).
-      # A row with a :dir (the IE package's LEXSTAT/ tables) resolves at
-      # exactly <workdir>/<dir>/<dbf> — the follow-up packages carry
-      # LEXSTAT/ trees of their own, never these.
+      # One DocumentRef per base, BASES order, then one per LEXSTAT
+      # wordlist (StarlingLexstat::TABLES order: IE.exe's ten, then the
+      # follow-up packages' 48); a workdir without a table's .dbf simply
+      # yields fewer refs (the day-one pre-fetch state). A BASES row with a
+      # :dir (the IE package's LEXSTAT/ etymology tables) resolves at
+      # exactly <workdir>/<dir>/<dbf>; a wordlist at
+      # StarlingLexstat.relative_path — LEXSTAT/ for IE.exe's, the
+      # package's own <subdir>/LEXSTAT/ for the rest.
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
@@ -909,7 +920,7 @@ module Nabu
           base_path(workdir, base).each { |path| yield ref_for(slug, base.fetch(:dbf), path) }
         end
         StarlingLexstat::TABLES.each do |slug, table|
-          path = File.join(workdir, StarlingLexstat::DIR, table.fetch(:dbf))
+          path = File.join(workdir, StarlingLexstat.relative_path(table))
           yield ref_for(slug, table.fetch(:dbf), path) if File.file?(path)
         end
       end
