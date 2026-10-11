@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Peruṅkāṭṭu grant, Śaka year 1589</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:matr">
+                        <forename>Margherita</forename>
+                        <surname>Trento</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Aubervilliers</pubPlace>
+                <idno type="filename">DHARMA_INSTiruvavatuturai00018.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <!-- only the handDesc can be filled in at this stage -->
+                <msDesc>
+                    <!-- //// NB: the msIdentifier had to be added for validation purposes ///. It will be edited later with the metadata spreadsheet -->
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <!-- describe the intellectual content of an inscription -->
+                        <summary>This plate records an endowment made by Cuppiramaṇiya Tirumalai Cētupati Rakunāta to Ampalattāṭum paṇṭāram for performing pūja in Avudaiyarkoil to honor his ancestors and Tirumalai Nāyakkar.</summary>
+                        <!-- offers the possibility to give a summary of the inscription's content -->
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p><!--<foreign>ka</foreign> and <foreign>ta</foreign> are very similar.--></p>
+                            
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change who="part:matr" when="2024-03-21">Creation of the file</change>
+        </revisionDesc>
+    </teiHeader>
+    
+    <text xml:space="preserve">
+        
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" n="1" rendition="class:tamil maturity:83215">		
+                
+                
+                <pb n="1r"/>
+                <p>
+                    <lb n="1r=1"/><hi rend="bold">svasti śrī śali</hi>va<hi rend="bold">hana</hi> śakabdam· <num value="1589"><g type="numeral">1000</g> 5
+                        <lb n="2r=2"/> <g type="numeral">100</g> 8 <g type="numeral">10</g> 9 </num> itaṉ mēl cellā niṉṟa
+                    <lb n="3r=3"/>kīlaka <g ref="sym:tam-varusam"/> taiy mātamum pavuṟaṉai
+                    <lb n="4r=4" break="no"/>maiyum pūca-naṭcettiramum cupa-yō
+                    <lb n="5r=5"/>ka-cupa-karaṇamum kūṭiya puṇṇiya tiṉa
+                    <lb n="6r=6" break="no"/>ttil 
+                </p>
+                <p>
+                    tēvai nakarā<surplus>pa</surplus>tīpaṉ cētu-mū<supplied reason="lost">la</supplied>-
+                    <lb n="7r=7"/>re<hi rend="grantha">kṣā</hi> turantaraṉ rāmaṉāta cuv<add place="below">ā</add>mi-pa
+                    <lb n="8r=8"/>rata cēkaraṉ corimuttu vaṉṉiyaṉ
+                    <lb n="9r=9"/>cāmi-t-turōkikaḷ miṇṭaṉ Aṭiy
+                    <lb n="10r=10" break="no"/>ār vēḷaikkāṟaṉ Araca-rāvaṇa0rāma
+                    <lb n="11r=11" break="no"/>ṉ pañcattu māri paṭṭamāṉaṅ kāttāṉ
+                    <lb n="12r=12"/>tālikku vēli taḷañ ciṅkam vai <!-- how to mark here that there is no break but not with the following lines, in telugu, but in line 15? -->
+                </p>
+                
+                <ab xml:lang="tel-Latn" rendition="class:telugu maturity:vernacular">
+                    <lb n="13r=13"/>śrī subhramaṇya tirumalai
+                    <lb n="14r=14"/>ya sētupati raghunātha 
+                </ab>
+                <p>
+                    <lb n="15r=15"/>ykai-vaḷa-nāṭaṉ para-taḷa-vipāṭaṉ
+                    <lb n="16r=16"/>vētiyar kāvalaṉ vīrai-vaḷa-nāṭa
+                    <lb n="17r=17" break="no"/>ṉ toṇṭiyan tuṟaivaṉ aṭaikka
+                    <lb n="18r=18" break="no"/>laṅ kāttāṉ turai-rāyaṉ ceyatu
+                    <lb n="19r=19" break="no"/>ṅka-rāyaṉ vaṅkicātipaṉ tukavūr-k-
+                    <lb n="20r=20"/>kūṟṟattu kāttūrāṉa kulottuṅ
+                    <lb n="21r=21" break="no"/>ka-coḻava-nallūr kīḻ pāl viraiy
+                    <lb n="22r=22" break="no"/>āta kaṇṭaṉil irukkum taḷavāy ce
+                    <lb n="23r=23" break="no"/>tupati puttiraṉ tirumalaiy cētu
+                    <lb n="24r=24" break="no"/>pati rekuṉāta-t-tēvar avarkaḷ tirup
+                    <lb n="25r=25" break="no"/>peruntuṟai Avuṭaiya parama-cuvāmiy
+                    <lb n="26r=26" break="no"/>ārkku Uṣā-kāla-p-pūcai naṭattum pa
+                    <lb n="27r=27" break="no"/>ratēci-muttirai Ampalattāṭum paṇ
+                    <lb n="28r=28" break="no"/>ṭārattiṉ kaṭṭaḷai-p pāricam-āka-c cō
+                    <lb n="29r=29" break="no"/>ttu-k kalaiyūr cellappaṉ taṟmattuk
+                    <lb n="30r=30" break="no"/>ku peruṅkāṭu kaṭṭaḷaiyiṭṭut taṟma-c-cā
+                    <lb n="31r=31" break="no"/>taṉa-p paṭṭayaṅ koṭuttōm ...
+                    
+                    
+                </p>
+                <p>
+                    
+                    antappe
+                    <lb n="32r=32"/>ruṅ kāṭṭukku Ellai purav' āvatu 
+                   <list><item>kīḻ-pāṟ
+                    <lb n="33r=33" break="no"/>k-ellai Iṭaiyaṉ kōṭṭaikkuḷ ve
+                    <lb n="32r=34" break="no"/>ḷikkum mēṉ-maṅkalattukkuḷ veḷik
+                    <lb n="32r=35" break="no"/>ku mēṟku-t</item> 
+                    <item>teṉ-pāṟk-ellai vēṅkū
+                    <lb n="32r=36" break="no"/>r ellaikku vaṭakku</item> 
+                    <item>mēl-pāṟk-ellai
+                    <lb n="32r=37"/>kīḻ-<surplus>vayal-</surplus>vayalukkuk kiḻakku</item> 
+                    <item>vaṭa-pāṟ
+                    <lb n="32r=38" break="no"/>k-ellai kōyiṟ kāṭṭukkum nāka-ma
+                 <pb n="1v"/>   
+                    <lb n="1v=39" break="no"/>ṅkalattukkuḷ veḷikkun teṟkku</item></list>
+                    Ā
+                    <lb n="2v=40" break="no"/>ka Icainta peru-nāṉk-ellaikkuḷ pa
+                    <lb n="3v=41" break="no"/>ṭṭa puñc<add place="below">ai</add> Uḷpaṭa c-cakala-camutāya-
+                    <lb n="4v=42"/>p-pirāttikaḷum cantirātittavaraiyum
+                    <lb n="5v=43"/>Āvuṭaiya-parama-cuvāmiyār U<hi rend="grantha">ṣ</hi>ā-kā
+                    <lb n="6v=44" break="no"/>la-Api<hi rend="grantha">ṣ</hi>ēka-kaṭṭaḷaikku Āṇṭum aṉupa
+                    <lb n="7v=45" break="no"/>vittum koḷḷa-k kaṭavār-ākavum
+                    <lb n="8v=46"/>Inta-p-paṭikku tirumalaiya cētupati kāt
+                    <lb n="9v=47" break="no"/>ta tēvar avarkaḷ peruṅ<unclear>k</unclear>āṭṭukku-t taṟmacā
+                    <lb n="10v=48" break="no"/>taṉa-p-paṭṭayaṅ koṭuttō<add place="below">m</add> 
+                </p>
+                <p>
+                    Inta-t taṟma
+                    <lb n="11v=49" break="no"/>ttai yātām oruvar paripālaṉam paṇ
+                    <lb n="12v=50" break="no"/>ṇiṉa pērkaḷ cētu-k-karaiyilum keṅkai
+                    <lb n="13v=51"/>k-karaiyilum  Āneka civaliṅka-p-piṟatiṭṭai
+                    <lb n="14v=52" break="no"/>yum kō-tāṉa-pū-tāṉaṅkaḷaiyum paṇṇiṉa 
+                    <lb n="15v=53"/>puṇṇiyattai yaṭaiya-k kaṭavār ākavum
+                    <lb n="16v=54"/>Inta taṟmattukku Akitam paṇṇiṉa pēr 
+                    <lb n="17v=55" break="no"/>kaḷ mātā-pitāvaiyum kuruvaiyum kārā 
+                    <lb n="18v=56" break="no"/>m pacuvaiyum koṉṟatu tō<hi rend="grantha">ṣa</hi>ttilē pō 
+                    <lb n="19v=57" break="no"/>ka-k kaṭavār ākavum <g ref="sym:tam-pillaiyarCuli" type="ideogram">@</g>
+                </p>
+                
+                <lg n="1" met="anuṣṭubh" xml:lang="san-Latn" rendition="class:grantha maturity:83215">
+                    <l n="a"><lb n="20v=58"/>dānapālanayōr mmaddhyē</l> 
+                    <l n="b">dānā<lb n="21v=59" break="no"/>t cchreyo ’nupālanam· <g ref="sym:bar" type="punctuation">.</g></l>
+                    <l n="c">dānāt· sva<lb n="22v=60" break="no"/>rgam avāpnōti</l> 
+                    <l n="d">pālanād acyuta<lb n="22v=61" break="no"/>m· padam· <g ref="sym:doubleBar" type="punctuation">.</g> <g ref="sym:tam-pillaiyarCuli" type="ideogram">@</g></l>
+                </lg>  
+                
+                
+                
+                <!--   
+                    <lg n="2" met="anuṣṭubh" xml:lang="san-Latn" rendition="class:grantha maturity:83215">
+                    <l n="a">svadattāt· dviguṇam · puṇyam ·</l> 
+                    <l n="b">paradattānupā<add place="below" rend="mark">la</add>nam· <g type="danda">.</g></l> 
+                    <l n="c"><lb n="1v12=25"/>paradattāpahārēṇa</l> 
+                    <l n="d">svadattan niṣphalam · bhavēt·<g type="ddanda">.</g></l> 
+                    </lg>
+                    
+                    <lg n="3" met="anuṣṭubh" xml:lang="san-Latn" rendition="class:grantha maturity:83215">
+                    <l n="a">svadattām· paradattāṁ vā</l> 
+                    <l n="b">yo haret<choice><sic>i</sic><corr>a</corr></choice> vas<choice><sic>va</sic><corr>u</corr></choice>n <lb n="1v13=26" break="no"/>dharām <g type="danda">.</g></l> 
+                    <l n="c">ṣaṣṭi<surplus>r</surplus>-varṣa-sahasrāṇi</l> 
+                    <l n="d"> viṣṭhāyāñ jāyate kr̥miḥ <g type="ddanda">.</g></l> 
+                    </lg>
+                    
+                    <lg n="4" met="anuṣṭubh" xml:lang="san-Latn" rendition="class:grantha maturity:83215">
+                    <l n="a">Ekaika bhaginī loke</l> 
+                    <l n="b"><lb n="1v14=27"/>sarvveṣām eva bhūbhujāḥ<g type="danda">.</g></l> 
+                    <l n="c">nā bhōjyā na k<unclear>a</unclear>ragrāhyā</l> 
+                    <l n="d">vipradattā vasundharāḥ<g type="ddanda">.</g></l> 
+                    </lg>
+                    
+                    <lg n="5" met="anuṣṭubh" xml:lang="san-Latn" rendition="class:grantha maturity:83215">
+                    <l n="a">sā<lb n="1v15=28"/>māṉyo yan dharmma-setu<unclear>r</unclear> nr̥pāṇāṁ</l>
+                    <l n="b">kāle kāle pālanīyo bhavat·bhi<supplied reason="omitted">ḥ</supplied> <g type="danda">.</g></l>
+                    <l n="c">sarvān etā<unclear>nn</unclear> <pb n="2r"/><lb n="2r1=29"/>bhāvinaḥ pā<supplied reason="omitted">r</supplied>tthivendr<choice><sic>a</sic><corr>ā</corr></choice>n ·</l>
+                    <l n="d">bhūyo bhūyo yācate rām acandraḥ <g type="ddanda">.</g></l>
+                    </lg>-->
+                
+            </div>
+            
+            
+            <!--<div type="apparatus">
+                <!-\-apparatus encoded as per EGD §9.1, basic elements for apparatus below-\->
+                
+                <listApp><!-\- one <app> for each apparatus entry -\->
+                
+                <app loc="line"><!-\- update the value of @loc. (this always refers to line beginning)-\->
+                <lem><!-\- fill in a lemma here (as I read it)-\-></lem>
+                <rdg source="bib:Kirusnamurtti2000_01"><!-\- update the @source value, fill in variant reading here -\-></rdg>
+                <note>...</note>
+                </app>
+                
+                </listApp>
+                </div>-->
+            
+            <div type="translation" resp="part:matr">
+                
+                <p n="1-2">....</p>
+                
+                
+                <!--specify the lines inside the <p> tag, as <p n="1">...</p>  ; when it's the translation of a stanza, <p rend="stanza" n="1"> </p> and the number is in this second type of translation tag is taken from the <lg> number-->
+                
+                
+            </div>
+            
+            <!--<div type="commentary">
+                </div>-->
+            
+            <div type="bibliography">
+                
+                <p>Reported in <bibl><ptr target="bib:ARIE1986-1987"/></bibl> (ARIE/1986-1987/A/1986-1987/29).</p>
+                
+                <p>Edited in <bibl><ptr target="bib:Kirusnamurtti2000_01"/></bibl> (no. 20). This edition is not taken systematically into account since the editor regularly adapts Sanskrit words to Tamil spelling.</p>
+                
+                <p>This edition is by Margherita Trento, based on EFEO photographs (2015).
+                </p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="K">
+                        <ptr target="bib:Kirusnamurtti2000_01"/>
+                        <citedRange unit="page">89-91</citedRange>
+                        <citedRange unit="item">20</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    <bibl>
+                        <ptr target="bib:ARIE1986-1987"/>
+                        <citedRange unit="page">21</citedRange>
+                        <citedRange unit="item">29</citedRange>
+                    </bibl>
+                </listBibl>	    
+                
+            </div>
+        </body>
+    </text>
+    
+</TEI>

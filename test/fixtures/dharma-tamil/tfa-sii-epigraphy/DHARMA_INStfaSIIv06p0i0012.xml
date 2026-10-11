@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Centalai, Sundareśvara temple, time of Rājakesarivarman, year 9</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INStfaSIIv06p0i0012.xml</idno>
+            <date from="2019" to="2026">2019-2026</date></publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary><p>West wall of the central shrine in the Sundareśvara temple.</p></summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2026-08-17" status="draft">creation of file</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam" rendition="class:tamil maturity:vernacular">
+                
+                <p>
+                    <lb n="1"/>kō-rā<hi rend="grantha">ja</hi>ke<hi rend="grantha">sa</hi>riva<hi rend="grantha">nma</hi>kku yāṇṭu 9 <unclear>Āva</unclear>tu
+                </p>
+                
+                <p>
+                    Ār<supplied reason="omitted">k</supplied>kāṭṭu-k-kūṟṟattu <hi rend="grantha">brahmade</hi>yam
+                    <lb n="2"/><hi rend="grantha">cantralekhai</hi>-catu<hi rend="grantha">rvve</hi>ti-maṅkalattu peruṅ-kuṟi <hi rend="grantha">sabhai</hi>yōm Ivv-ūr Ai
+                    <lb n="3" break="no"/>mpattu mu<choice><orig>n</orig><reg>ṉ</reg></choice>ṟāṅ kuṭumpil <hi rend="grantha">bhā</hi>rata-paṅku kōyilā<choice><orig>n</orig><reg>ṉ</reg></choice> nāka-ṉan=ti viṟṟa paṅku 1
+                </p>
+                
+                <p>
+                    I
+                    <lb n="4" break="no"/>vv-oru paṅkum Ivv-ūr <hi rend="grantha">brahmasthā</hi>nattu miyceṅkiḷi-nāṭṭu veṇṇāyil-uṭai
+                    <lb n="5" break="no"/>yāṉ vayira-<choice><orig>mm</orig><reg>m</reg></choice>ēka<surplus>m</surplus>-paṭāraṉ Eṭuppitta Ampalattu Iruntu nicatiyum <hi rend="grantha">śrī</hi>
+                    <lb n="6" break="no"/>-<hi rend="grantha">bhā</hi>ratam vācikka perum-puliyūr Ā<hi rend="grantha">trai</hi>ya-<hi rend="grantha">gottra</hi>ttu vai<hi rend="grantha">khānasa-sūtra</hi>ttu <hi rend="grantha">śi</hi><unclear>ṅki</unclear>
+                    <lb n="7" break="no"/><unclear>nan=til</unclear> <hi rend="grantha">śva-rū</hi>pa-<hi rend="grantha">bhaṭṭa</hi>nukku Iṟai-I<choice><orig>ll</orig><reg>l</reg></choice>i-y-āka kuṭuttōm <hi rend="grantha">sabhai</hi>yōm
+                </p>
+                
+                <p>
+                    Ivanil-p pi
+                    <lb n="8" break="no"/>ṉpu Ip-paṅk’ uṇpār Ivv-ūr <hi rend="grantha">brahmasthā</hi>nattē Iruntu nicatiyum <hi rend="grantha">śrī-bhā</hi>ratam vāci
+                    <lb n="9" break="no"/>tt’ uṇpat’ āka Ip-paṅk’ oṉṟum <hi rend="grantha">candrādi</hi>t=tavat Iṟai-Ili-y-āka paṇittu kal mēl
+                    
+                    <lb n="10"/>veṭṭi kuṭuttō<unclear>m</unclear> peruṅ-kuṟi <hi rend="grantha">sabhai</hi>yōm
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+                <listApp>
+                    <app loc="1">
+                        <lem><hi rend="grantha">brahmade</hi>yam</lem>
+                        <rdg source="bib:SubrahmanyaAiyer1928_01"><hi rend="grantha">brahade</hi>yam</rdg>
+                    </app>
+                    <app loc="3">
+                        <lem>kōyilā<choice><orig>n</orig><reg>ṉ</reg></choice></lem>
+                        <rdg source="bib:SubrahmanyaAiyer1928_01">koyilān</rdg>
+                    </app>
+                </listApp>
+            </div>
+            
+            <div type="commentary"/>            
+            
+            <div type="bibliography">
+                
+                <p>Reported in <bibl><ptr target="bib:ARIE1896-1897"/></bibl> (ARIE/1896-1897/B/1897/63).</p>
+                <p>Edited in <bibl><ptr target="bib:SubrahmanyaAiyer1928_01"/></bibl> (<ref target="DHARMA_INSSIIv06p0i0012.xml">SII 6.12</ref>).</p>
+                <p>This revised edition by Emmanuel Francis based on <bibl><ptr target="bib:SubrahmanyaAiyer1928_01"/></bibl> and photos (E. Francis, 2025).</p>
+                
+                <listBibl type="primary">
+                    <bibl n="SII">
+                        <ptr target="bib:SubrahmanyaAiyer1928_01"/>
+                        <citedRange unit="page">4-5</citedRange>
+                        <citedRange unit="item">12</citedRange>
+                    </bibl>
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    <bibl n="ARIE">
+                        <ptr target="bib:ARIE1896-1897"/>
+                        <citedRange unit="page">8</citedRange>
+                        <citedRange unit="appendix">B/1897</citedRange>
+                        <citedRange unit="item">63</citedRange>
+                    </bibl>
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>
