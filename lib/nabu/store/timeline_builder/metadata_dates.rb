@@ -91,6 +91,8 @@ module Nabu
           "edr" => :structured,
           "eebo-tcp" => :structured,
           "elephantine" => :structured,
+          "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
+          #                             = its pubPlace (publication place)
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,

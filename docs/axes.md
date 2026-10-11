@@ -83,10 +83,10 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (27): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
+**Members** (28): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
 =======
-**Members** (26): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
->>>>>>> dcfac2d6 (Add gams-zrcalo: the 1445 Croatian Glagolitic Zrcalo, ready)
+**Members** (24): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `eltec-srp`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `korba`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
+>>>>>>> 55b38f39 (Add eltec-srp: the Serbian ELTeC novel collection, ready)
 
 ### germanic
 
