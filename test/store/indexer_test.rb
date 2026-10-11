@@ -421,6 +421,70 @@ module Store
       assert_equal 1, lemmas.count, "drop+recreate leaves no duplicate lemma rows"
     end
 
+    # -- the per-source lemma-key registry (P118-R4 S1) ----------------------
+    # bhsa/dss carry their gold lexemes under their OWN token keys (bhsa
+    # lex_utf8; dss Abegg's lex + the BHSA crosswalk lex_utf8_etcbc) — never
+    # "lemma" — so before the registry ~0.9M tokens never reached --lemma.
+
+    def make_slug_source(slug)
+      Nabu::Store::Source.create(slug: slug, name: slug, adapter_class: "TestAdapter",
+                                 license_class: "open")
+    end
+
+    def test_bhsa_lexemes_mint_lemma_rows_from_lex_utf8
+      doc = make_document(urn: "urn:d:bhsa", source: make_slug_source("bhsa"))
+      make_passage(doc, urn: "urn:d:bhsa:1", text_normalized: "x", sequence: 0, language: "hbo",
+                        annotations: { "tokens" => [
+                          { "form" => "אָדָ֥ם", "lex" => ">DM/", "lex_utf8" => "אדם" },
+                          { "form" => "שֵׁ֖ת", "lex" => "CT/", "lex_utf8" => "שׁת" }
+                        ] })
+      rebuild!
+
+      assert_equal 2, lemmas.count
+      row = lemmas.where(lemma_raw: "אדם").first
+      refute_nil row, "the consonantal lexeme (lex_utf8) is the key, not the ETCBC transliteration"
+      assert_equal "אדם", row.fetch(:lemma_folded)
+      assert_equal "אָדָ֥ם", row.fetch(:surface_forms)
+      assert_equal "gold", row.fetch(:tier)
+      assert_equal "שת", lemmas.where(lemma_raw: "שׁת").get(:lemma_folded), "the shin dot folds away"
+    end
+
+    def test_dss_lexemes_strip_homograph_suffixes_and_reject_placeholders
+      doc = make_document(urn: "urn:d:dss", source: make_slug_source("dss"))
+      make_passage(doc, urn: "urn:d:dss:1", text_normalized: "x", sequence: 0, language: "hbo",
+                        annotations: { "tokens" => [
+                          { "form" => "את", "lex" => "אֵת_1", "lex_utf8_etcbc" => "אֵת" },
+                          { "form" => "ול", "lex" => " # ל # " },
+                          { "full" => "ε", "lex" => " # " },
+                          { "form" => "ו", "lex_utf8_etcbc" => "וְ" }
+                        ] })
+      rebuild!
+
+      assert_equal %w[את ו], lemmas.order(:lemma_folded).select_map(:lemma_folded),
+                   "Abegg's lex (homograph suffix stripped) and the crosswalk fold together; " \
+                   "'#'-placeholder lexemes mint nothing"
+      assert_equal "אֵת", lemmas.where(lemma_folded: "את").get(:lemma_raw)
+    end
+
+    def test_registered_sources_never_read_the_default_lemma_key
+      doc = make_document(urn: "urn:d:bhsa", source: make_slug_source("bhsa"))
+      make_passage(doc, urn: "urn:d:bhsa:1", text_normalized: "x", sequence: 0, language: "hbo",
+                        annotations: { "tokens" => [{ "form" => "x", "lemma" => "stray" }] })
+      rebuild!
+
+      assert_equal 0, lemmas.count
+    end
+
+    def test_lemma_key_registry_rows_survive_the_incremental_slice
+      doc = make_document(urn: "urn:d:bhsa", source: make_slug_source("bhsa"))
+      make_passage(doc, urn: "urn:d:bhsa:1", text_normalized: "x", sequence: 0, language: "hbo",
+                        annotations: { "tokens" => [{ "form" => "אָדָ֥ם", "lex_utf8" => "אדם" }] })
+      rebuild!
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "bhsa")
+
+      assert_equal ["אדם"], lemmas.select_map(:lemma_folded)
+    end
+
     # -- the lemma tier column (P26-0) ---------------------------------------
     # The tier lives on the FULLTEXT-side passage_lemmas rows (no catalog
     # migration — drop-and-rebuild), declared per SOURCE via the registry's
