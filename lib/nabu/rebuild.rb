@@ -475,10 +475,20 @@ module Nabu
     end
 
     # Shared with IncrementalRebuild (subclass): one computer per run so the
-    # code/fold digests are hashed once, not per source.
+    # code/fold digests are hashed once, not per source. The plain-tree
+    # identity memo (CanonicalIdentityCache, db/ — derived) rides along in
+    # #identity_cache_mode.
     def fingerprints
-      @fingerprints ||= DerivationFingerprint.new(config: @config)
+      @fingerprints ||= DerivationFingerprint.new(
+        config: @config,
+        identity_cache: CanonicalIdentityCache.for_config(@config, mode: identity_cache_mode)
+      )
     end
+
+    # The full rebuild is the uncached REFERENCE: it never reads the memo,
+    # but stores every identity it computes, so the next incremental sweep
+    # starts warm. IncrementalRebuild overrides with :use.
+    def identity_cache_mode = :refresh
 
     # Re-derive every enrichment_producer? source's layer into the fresh
     # catalog (P44-7 — the first enricher to land here). The enrichments table

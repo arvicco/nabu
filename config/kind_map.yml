@@ -529,6 +529,8 @@ sources:
   # the source IS a canon or a dynastic record — one ruled line each) ---
   vulgate:
     source_kind: scripture
+  prague-bible-1488:
+    source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
   eng-web:
     source_kind: scripture
   sblgnt:
@@ -671,3 +673,19 @@ sources:
       "Wisdom Literature": literary/wisdom
       "Lamentations": hymn-prayer/lament
       "Literary Letters": letter/literary
+  titus-bactrian:     # census: 123 docs, one genre each, 2026-10-10 (P116 R4, №R-78)
+    facet: genre      # the corpus's own six-genre CONTENTS list (baktc001), verbatim
+    map:
+      "Letters": letter                          # 70
+      "Dated documents": legal                   # 32 — contracts, deeds, the legal
+      #   instruments dated in the Bactrian era
+      "Documents and fragments of uncertain date": legal   # 5 — the same documentary class,
+      #   date lost
+      "Lists and accounts": administrative       # 8 (the am tally slips among them)
+      "Buddhist texts": hymn-prayer              # 5 — za/zb/zc/zd + the TiS inscription:
+      #   homage formulas (ναμωο βοδδο …), confession and merit-dedication prayers.
+      #   №R-78 ruled "religious"; the ruled class list carries no such head, so the
+      #   fold takes the religion family's head that the texts themselves fit —
+      #   non-canonical (not scripture), addressed to the Buddhas
+      "Fragments of documents of uncertain type": unknown  # 3 — upstream's own
+      #   "cannot determine" (№R-78 "unclassified": the honest class)

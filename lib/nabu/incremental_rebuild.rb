@@ -352,11 +352,19 @@ module Nabu
       sources.each { |entry| fingerprints.warm(entry) }
     end
 
+    # The sweep reads AND writes the plain-tree identity memo
+    # (CanonicalIdentityCache, db/canonical_identities.json): an untouched
+    # non-git tree answers from its census-keyed memo instead of being
+    # re-hashed byte by byte; any census drift re-hashes it honestly. The
+    # dry run warms the memo too — derived data, never a ledger record.
+    def identity_cache_mode = :use
+
     # The verdict sweep, announced (owner UX rule 2026-10-07): a header
     # carrying the ETA (Nabu::Eta — the honest "first run — no estimate"
     # until a run has recorded one), one stage per fingerprinted tree (a
-    # non-git tree is sha256-hashed file by file — the owner must see which
-    # tree the minutes go into; the CLI closes each with its elapsed), and
+    # non-git tree is hashed file by file unless its identity memo is
+    # census-fresh — the owner must see which tree the minutes go into;
+    # the CLI closes each with its elapsed), and
     # a closing tally. +record+ appends the sweep's wall time to the
     # ledger's stage_timings (a real run; a dry run only reads). Verdicts
     # are exactly #verdict_from's — the announcing changes none.

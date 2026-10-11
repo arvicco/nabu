@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_AkZbrojGęb">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Inwentarz akcesyjny zbrojowni zamku Żółkiewskiego"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="restricted">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Inwentarz akcesyjny zbrojowni zamku Żółkiewskiego</title>
+        <author>Anonim</author>
+        <pubPlace role="place">Żółkiew</pubPlace>
+        <pubPlace role="region">Ziemie Ruskie</pubPlace>
+        <date notAfter="1693" notBefore="1690">między 1690 a 1693</date>
+        <bibl type="modernized">
+          <note>Modernized publication</note>
+          <bibl type="monogr">
+            <title>Materiały źródłowe do dziejów kultury i sztuki XVI-XVIII w.</title>
+          </bibl>
+          <editor role="editor">Mieczysław Gębarowicz</editor>
+          <pubPlace role="place">Wrocław</pubPlace>
+          <publisher>Zakład Narodowy im. Ossolińskich</publisher>
+          <date when="1973">1973</date>
+        </bibl>
+        <idno type="KORBA">KORBA_AkZbrojGęb</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#kanc"/>
+      <catRef scheme="#kind" target="#inwentarze"/>
+      <catRef scheme="#subject" target="#wojskowość"/>
+      <catRef scheme="#ironic" target="#nie"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>

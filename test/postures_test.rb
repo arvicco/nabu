@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 108, lect.size,
+    assert_equal 119, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -250,7 +250,10 @@ class PosturesTest < Minitest::Test
                  "titus-bactrian ADDED — identity xbc (a real anchor, declared coarse): 104→105; " \
                  "titus-manichaica ADDED — identity pal/xpr/sog/oui per lane (all real anchors): 105→106; " \
                  "titus-khotanese ADDED — identity kho (a real anchor, declared coarse): 106→107; " \
-                 "titus-sogdian ADDED — identity sog per lane (script-coded lanes, declared coarse): 107→108"
+                 "titus-sogdian ADDED — identity sog per lane (script-coded lanes, declared coarse): 107→108; " \
+                 "prague-bible-1488 ADDED P116-1 — pending on the cs:old mint (the aggregated " \
+                 "Slavic nabu-lects package; no cs node exists yet): 108→109; korba ADDED " \
+                 "P116-1 — pending on pl:mid date-band staging (same mint; no pl node): 109→110"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -320,6 +323,18 @@ class PosturesTest < Minitest::Test
     # titus-manichaica as identity pal/xpr/sog/oui per lane: 80→81;
     # titus-khotanese as identity kho: 81→82;
     # titus-sogdian as identity sog: 82→83.
-    assert_equal({ "dates" => 11, "codemap" => 14, "identity" => 83 }, by_posture)
+    # P116-1 reopens the pending class honestly (the dacon shape):
+    # prague-bible-1488 pends on the cs anchor + cs:old stage of the
+    # aggregated Slavic mint (nothing Czech exists in nabu-lects): pending 0→1;
+    # korba pends on the pl anchor + Middle Polish stage of the same mint
+    # (pl:mid by date-band inference, the dta mold): pending 1→2.
+    # P116-2 ADDS the five South Slavic wikisource cones: hr joins dates
+    # (the century-category era band), sr/sl/mk/bg identity (srp+hrv /
+    # sl / mkd / chu+bul lanes, declared): 110→115, dates 11→12,
+    # identity 83→87.
+    # P116-3 ADDS the four West/East Slavic cones: ru/uk identity orv
+    # (declared coarse), pl/cs PENDING on the Polish/Czech anchor mints
+    # (the add-then-retire shape): 115→119, identity 87→89, pending 2→4.
+    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 89, "pending" => 4 }, by_posture)
   end
 end

@@ -47,7 +47,9 @@ class DerivabilityWritersTest < Minitest::Test
   # folder (P77-r10/r14). The two P78 wikisource adapters
   # (ko_wikisource_mk, viet_wikisource) write their fetched page
   # envelopes into canonical/ inside Adapter#fetch — the sanctioned
-  # canonical gateway, the burman/wiki_fetch law kind.
+  # canonical gateway, the burman/wiki_fetch law kind. The P116-2
+  # South Slavic family writes through its one shared base
+  # (slavic_wikisource) inside Adapter#fetch — the same law kind.
   # corpus_corporum_fetch (P80-2) writes canonical/<slug>/texts/ +
   # attic + its state checkpoint inside Adapter#fetch — the
   # elephantine_fetch law kind. menota_fetch (P82-1) writes
@@ -86,6 +88,16 @@ class DerivabilityWritersTest < Minitest::Test
   # the P108 trio (kouigenji's 54 maki, kokubunken's three TEIs,
   # nrct's one CSV) move UrlDownload fetches to house names the
   # same way — the burman_concordance law kind.
+  # canonical_identity_cache (P116) writes ONE derived file,
+  # db/canonical_identities.json (tmp+rename): the census-keyed memo of
+  # plain-tree canonical identities — the DERIVED law kind (a pure
+  # function of canonical/ + code; deletable at any time, a miss re-hashes).
+  # same way — the burman_concordance law kind. The P116-3 Slavic
+  # wikisource family base (slavic_wikisource) writes page envelopes
+  # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
+  # inside Adapter#fetch, and the pl Brückner lane writes its stub index
+  # + scan envelopes under canonical/pl-wikisource/bruckner/ from that
+  # same fetch — the ja/zh-wikisource law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -111,6 +123,8 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/adapters/ja_wikisource.rb nabu/adapters/zh_wikisource.rb
+    nabu/adapters/slavic_wikisource.rb
+    nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
@@ -124,6 +138,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
+    nabu/canonical_identity_cache.rb
   ].freeze
 
   def test_file_writers_are_allowlisted

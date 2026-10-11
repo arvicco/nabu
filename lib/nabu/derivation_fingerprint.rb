@@ -4,6 +4,7 @@ require "digest"
 require "json"
 
 require_relative "normalize"
+require_relative "canonical_identity_cache"
 
 module Nabu
   # Per-source derivation fingerprint (P36-1): the honest identity behind
@@ -199,8 +200,12 @@ module Nabu
       end
     end
 
-    def initialize(config:)
+    # +identity_cache+ (a CanonicalIdentityCache, or nil — the default: no
+    # memo) serves PLAIN-tree canonical identities whose file census proves
+    # them unchanged; see that class for the key and its safety argument.
+    def initialize(config:, identity_cache: nil)
       @config = config
+      @identity_cache = identity_cache
       @file_tokens = {}
       @references = {}
     end
@@ -227,7 +232,8 @@ module Nabu
       Fingerprint.new(
         canonical_identity: self.class.canonical_identity(
           @config.source_workdir(entry.slug),
-          materialized: self.class.adapter_materialized_paths(entry)
+          materialized: self.class.adapter_materialized_paths(entry),
+          cache: @identity_cache
         ),
         parser_digest: parser_digest(entry),
         fold_digest: self.class.fold_digest(languages),
@@ -268,11 +274,16 @@ module Nabu
       # discipline: never trusted blind) — so the tree stays strong and a
       # changed materialization still moves the fingerprint. Undeclared
       # dirt keeps poisoning: weak is the honest default.
-      def canonical_identity(dir, materialized: [])
+      #
+      # +cache:+ (a CanonicalIdentityCache) may answer a PLAIN tree's
+      # identity from its census-keyed memo instead of re-hashing every
+      # byte; a git-bearing tree, a racy census, or any census drift
+      # computes honestly below. The answer is identical either way.
+      def canonical_identity(dir, materialized: [], cache: nil)
         return nil unless Dir.exist?(dir)
+        return cache.fetch(dir) { computed_identity(dir, materialized) } if cache
 
-        tokens = identity_tokens(dir, dir, materialized: materialized)
-        tokens && Digest::SHA256.hexdigest(tokens.sort.join("\n"))
+        computed_identity(dir, materialized)
       end
 
       # The adapter's declared canonical materializations for a registry
@@ -383,7 +394,17 @@ module Nabu
         )
       end
 
+      # Seam (tests count plain-file content hashes — the sweep's cost).
+      def content_file_digest(path)
+        Digest::SHA256.file(path).hexdigest
+      end
+
       private
+
+      def computed_identity(dir, materialized)
+        tokens = identity_tokens(dir, dir, materialized: materialized)
+        tokens && Digest::SHA256.hexdigest(tokens.sort.join("\n"))
+      end
 
       # Walk +dir+: each embedded git repo contributes its HEAD (O(1) for
       # arbitrarily large corpora) plus its attic's file contents; every
@@ -402,7 +423,7 @@ module Nabu
           sub = if File.directory?(full)
                   identity_tokens(full, root, materialized: materialized)
                 else
-                  ["file:#{relative(full, root)}:#{Digest::SHA256.file(full).hexdigest}"]
+                  ["file:#{relative(full, root)}:#{content_file_digest(full)}"]
                 end
           return nil if sub.nil?
 

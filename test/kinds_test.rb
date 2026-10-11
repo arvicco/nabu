@@ -415,6 +415,23 @@ class KindsTest < Minitest::Test
                  "an object description is a reviewed non-claim"
   end
 
+  # P116 R4 (№R-78, ruled 2026-10-10): the Bactrian corpus's own
+  # six-genre CONTENTS list folds onto the ruled heads through the genre
+  # facet (census 2026-10-10, 123 docs: 70 letters / 32 dated / 8
+  # lists / 5 uncertain-date / 5 Buddhist / 3 uncertain-type).
+  def test_shipped_titus_bactrian_folds_the_corpus_genres
+    shipped = shipped_kinds
+    assert_equal "genre", shipped.facet_for("titus-bactrian")
+    { "Letters" => ["letter"],
+      "Lists and accounts" => ["administrative"],
+      "Dated documents" => ["legal"],
+      "Documents and fragments of uncertain date" => ["legal"],
+      "Buddhist texts" => ["hymn-prayer"],
+      "Fragments of documents of uncertain type" => ["unknown"] }.each do |genre, want|
+      assert_equal want, shipped.normalize("titus-bactrian", genre), genre
+    end
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),

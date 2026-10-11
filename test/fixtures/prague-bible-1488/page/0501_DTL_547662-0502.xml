@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PcGts xmlns="http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd">
+    <Metadata>
+        <Creator>prov=READ-COOP:name=PyLaia@TranskribusPlatform:version=2.20.0:model_id=239049:lm=none:date=11_12_2024_11:16</Creator>
+        <Created>2024-11-22T17:31:52.485+01:00</Created>
+        <LastChange>2024-12-12T22:33:18.740+01:00</LastChange>
+        <TranskribusMetadata docId="5363448" pageId="84625906" pageNr="501" tsid="212140543" status="GT" userId="100969" imgUrl="https://files.transkribus.eu/Get?id=KRNVTFFEFFAGQBGNZCLJDTRH&amp;fileType=view" xmlUrl="https://files.transkribus.eu/Get?id=QMMAZPVVERRNRFVBSABFENOV" imageId="69897998"/>
+    </Metadata>
+    <Page imageFilename="0501_DTL_547662-0502.jpeg" imageWidth="2530" imageHeight="3955">
+        <ReadingOrder>
+            <OrderedGroup id="ro_1734604438668" caption="Regions reading order">
+                <RegionRefIndexed index="0" regionRef="r_4"/>
+                <RegionRefIndexed index="1" regionRef="r_5"/>
+                <RegionRefIndexed index="2" regionRef="r_29"/>
+            </OrderedGroup>
+        </ReadingOrder>
+        <TextRegion id="r_4" custom="readingOrder {index:0;}">
+            <Coords points="1402,125 1615,125 1615,227 1402,227"/>
+            <TextLine id="l" custom="readingOrder {index:0;}">
+                <Coords points="1399,220 1431,222 1465,209 1483,223 1553,239 1570,228 1612,228 1613,138 1553,136 1528,122 1486,140 1466,122 1423,125 1400,115"/>
+                <Baseline points="1405,209 1611,207 1609,204 1606,202"/>
+                <TextEquiv>
+                    <Unicode>Knihy</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextEquiv>
+                <Unicode></Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r_5" custom="readingOrder {index:1;}">
+            <Coords points="489,296 1432,296 1432,3244 489,3244"/>
+            <TextLine id="l_126" custom="readingOrder {index:0;}">
+                <Coords points="520,380 1355,380 1415,369 1417,289 1331,316 940,286 521,311"/>
+                <Baseline points="527,376 1418,371"/>
+                <TextEquiv>
+                    <Unicode>napomenuti · modlecze ſe bohu trwali</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_133" custom="readingOrder {index:1;}">
+                <Coords points="520,452 1415,438 1404,367 520,378"/>
+                <Baseline points="527,434 1418,436"/>
+                <TextEquiv>
+                    <Unicode>przed twarzi panie · tak że take ti kterziż</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_140" custom="readingOrder {index:2;}">
+                <Coords points="518,503 1419,501 1419,445 1381,435 518,452"/>
+                <Baseline points="525,494 1422,492"/>
+                <TextEquiv>
+                    <Unicode>obieti zapalne obietowachu panu bohu</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_147" custom="readingOrder {index:3;}">
+                <Coords points="523,565 1400,572 1420,505 521,506"/>
+                <Baseline points="529,560 1424,565"/>
+                <TextEquiv>
+                    <Unicode>przepaſawſſe ſe žiniemi obietowali ſu o¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_154" custom="readingOrder {index:4;}">
+                <Coords points="523,622 1420,618 1420,569 1379,565 1064,588 1030,562 523,565"/>
+                <Baseline points="529,616 1422,618"/>
+                <TextEquiv>
+                    <Unicode>bieti hoſpodinu : a na hlawy ſwe pope¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_161" custom="readingOrder {index:5;}">
+                <Coords points="523,682 903,680 944,712 979,682 1423,693 1421,634 1342,618 523,623"/>
+                <Baseline points="529,678 1424,685"/>
+                <TextEquiv>
+                    <Unicode>lu naſypali A wſſiczkni z czeleho ſrdcze</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_168" custom="readingOrder {index:6;} abbrev {offset:0; length:4;expansion:ſveho;} textStyle {offset:3; length:1;superscript:true;} abbrev {offset:16; length:4;expansion:panv;} textStyle {offset:19; length:1;superscript:true;}">
+                <Coords points="518,749 1394,759 1420,699 980,681 918,734 662,737 609,686 519,681"/>
+                <Baseline points="525,745 1422,738"/>
+                <TextEquiv>
+                    <Unicode>ſweo modlili ſe panv bohu aby nawſſtie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_175" custom="readingOrder {index:7;}">
+                <Coords points="523,812 591,829 647,805 707,824 765,797 921,797 971,823 1069,802 1110,823 1110,753 1070,741 523,754"/>
+                <Baseline points="529,796 1113,796"/>
+                <TextEquiv>
+                    <Unicode>wil lid ſwuoy Izrahelſky</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_202" custom="readingOrder {index:8;}">
+                <Coords points="730,885 784,863 828,872 847,856 912,874 941,861 1010,873 1119,864 1119,827 1071,803 973,823 922,798 817,811 765,797 730,816"/>
+                <Baseline points="736,853 1121,855 1106,855"/>
+                <TextEquiv>
+                    <Unicode>Capitola · V ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_224" custom="readingOrder {index:9;}">
+                <Coords points="682,931 1418,940 1410,867 683,861"/>
+                <Baseline points="689,930 1421,928"/>
+                <TextEquiv>
+                    <Unicode>Zwieſtowano geſt Olofernowi</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_15" custom="readingOrder {index:10;}">
+                <Coords points="656,1003 1430,993 1428,934 1382,927 655,942"/>
+                <Baseline points="662,985 1431,992"/>
+                <TextEquiv>
+                    <Unicode>haytmanu woyſka Aſyrſkeho</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_29" custom="readingOrder {index:11;}">
+                <Coords points="594,1067 1418,1052 1418,1009 1358,991 1081,1009 1029,986 745,984 594,1043"/>
+                <Baseline points="600,1057 1421,1051 1421,1051"/>
+                <TextEquiv>
+                    <Unicode>že by ſynowe Yzrahelſſti chyſta¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_36" custom="readingOrder {index:12;}">
+                <Coords points="505,1117 1423,1113 1421,1067 1363,1052 676,1073 504,1041"/>
+                <Baseline points="512,1106 1425,1108"/>
+                <TextEquiv>
+                    <Unicode>li ſe aby ſe gemu branili · a že by wrchy</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_43" custom="readingOrder {index:13;}">
+                <Coords points="510,1178 1425,1198 1417,1114 510,1117"/>
+                <Baseline points="516,1176 1427,1180"/>
+                <TextEquiv>
+                    <Unicode>hor oſadili · a neb klauzy zawrzeli Teh¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_50" custom="readingOrder {index:14;} abbrev {offset:15; length:6;expansion:naramnu;} textStyle {offset:20; length:1;superscript:true;}">
+                <Coords points="518,1245 633,1245 687,1290 782,1289 836,1245 1428,1248 1428,1201 1327,1179 1075,1182 1011,1237 518,1237"/>
+                <Baseline points="524,1245 1431,1245"/>
+                <TextEquiv>
+                    <Unicode>dy prchliwoſti naramv rozpalil ſe hne¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_57" custom="readingOrder {index:15;}">
+                <Coords points="510,1297 1414,1316 1423,1248 1099,1270 508,1239"/>
+                <Baseline points="516,1294 1425,1304"/>
+                <TextEquiv>
+                    <Unicode>wem welikym · a ſwolal wſſeczka knie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_141" custom="readingOrder {index:16;}">
+                <Coords points="510,1366 1426,1365 1426,1326 1307,1302 510,1317"/>
+                <Baseline points="516,1361 1429,1364"/>
+                <TextEquiv>
+                    <Unicode>žata moabſka y wywody amonytſke · a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_165" custom="readingOrder {index:17;}">
+                <Coords points="516,1417 1406,1441 1430,1376 514,1365"/>
+                <Baseline points="522,1414 1433,1423"/>
+                <TextEquiv>
+                    <Unicode>rzekl gim Powiezte mi ktery ge toto lid</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_199" custom="readingOrder {index:18;}">
+                <Coords points="516,1484 1423,1490 1423,1439 1373,1427 516,1425"/>
+                <Baseline points="522,1476 1425,1484"/>
+                <TextEquiv>
+                    <Unicode>kteryż horami wladne · aneb ktera a ia¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_241" custom="readingOrder {index:19;}">
+                <Coords points="512,1555 1203,1570 1418,1553 1427,1509 1362,1483 1309,1509 511,1482"/>
+                <Baseline points="518,1541 1429,1548"/>
+                <TextEquiv>
+                    <Unicode>ka a kterak pewna gſu Mieſta gich a kte¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_248" custom="readingOrder {index:20;}">
+                <Coords points="512,1611 1423,1618 1421,1553 1391,1549 511,1555"/>
+                <Baseline points="518,1603 1425,1611"/>
+                <TextEquiv>
+                    <Unicode>ra by take byla mocz gich · a mnoholi</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_255" custom="readingOrder {index:21;}">
+                <Coords points="504,1716 659,1722 707,1677 1426,1684 1426,1625 1385,1612 504,1621"/>
+                <Baseline points="510,1677 1429,1676"/>
+                <TextEquiv>
+                    <Unicode>gich · nebo ktery kral rytierzſtwa gich</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_262" custom="readingOrder {index:22;}">
+                <Coords points="505,1738 1426,1736 1426,1693 1378,1677 505,1683"/>
+                <Baseline points="512,1727 1429,1736"/>
+                <TextEquiv>
+                    <Unicode>aneb haytman woyſka gich · Procż ſu</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_269" custom="readingOrder {index:23;}">
+                <Coords points="507,1793 1426,1796 1426,1757 1361,1738 507,1745"/>
+                <Baseline points="514,1787 1429,1795"/>
+                <TextEquiv>
+                    <Unicode>tito nade wſſeczky gine · kterziž bydlee</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_280" custom="readingOrder {index:24;}">
+                <Coords points="500,1853 1427,1860 1427,1829 1354,1799 500,1788"/>
+                <Baseline points="507,1852 1429,1858 1423,1858"/>
+                <TextEquiv>
+                    <Unicode>na wychod ſlunce pohrdali nami · a ne¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_287" custom="readingOrder {index:25;}">
+                <Coords points="505,1919 711,1918 798,1974 961,1974 1069,1920 1414,1931 1424,1883 504,1857"/>
+                <Baseline points="512,1915 1427,1924"/>
+                <TextEquiv>
+                    <Unicode>wyſſli w czeſtu nam aby nas przyiali</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_294" custom="readingOrder {index:26;}">
+                <Coords points="503,1983 1391,1995 1430,1991 1430,1930 876,1918 793,1970 711,1917 501,1929"/>
+                <Baseline points="509,1977 1432,1982"/>
+                <TextEquiv>
+                    <Unicode>pokogem : Tehdy Achyor wywoda</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_301" custom="readingOrder {index:27;}">
+                <Coords points="505,2047 1423,2048 1423,1990 1213,1981 915,1988 837,2032 505,2032"/>
+                <Baseline points="511,2041 1425,2042"/>
+                <TextEquiv>
+                    <Unicode>wſſech ſynow Amonowych odpowie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_308" custom="readingOrder {index:28;}">
+                <Coords points="500,2102 1425,2107 1415,2055 1179,2042 877,2042 786,2094 500,2091"/>
+                <Baseline points="507,2099 1428,2105"/>
+                <TextEquiv>
+                    <Unicode>diew wecze : Racżi ſſli ſlyſſeti muoy pa¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_315" custom="readingOrder {index:29;}">
+                <Coords points="500,2217 824,2218 889,2171 1423,2177 1423,2128 1300,2106 500,2104"/>
+                <Baseline points="507,2170 1425,2172"/>
+                <TextEquiv>
+                    <Unicode>nepowiemt prawdu przed twarzi twu</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_322" custom="readingOrder {index:30;}">
+                <Coords points="500,2231 1425,2249 1424,2190 1329,2171 500,2172"/>
+                <Baseline points="507,2222 1427,2225"/>
+                <TextEquiv>
+                    <Unicode>o tomto lidu kteryž bydlij na horach • a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_329" custom="readingOrder {index:31;}">
+                <Coords points="499,2288 1426,2292 1426,2256 1302,2224 499,2228"/>
+                <Baseline points="505,2284 1428,2289"/>
+                <TextEquiv>
+                    <Unicode>newygdet ſlowo lžiwe z vſt mych Lid</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_336" custom="readingOrder {index:32;}">
+                <Coords points="493,2350 1423,2361 1393,2292 492,2286"/>
+                <Baseline points="500,2349 1425,2355"/>
+                <TextEquiv>
+                    <Unicode>tento geſtit z pokolenie Kaldeyſkeho · ti</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_343" custom="readingOrder {index:33;}">
+                <Coords points="492,2449 693,2464 779,2413 1425,2431 1425,2361 1356,2354 945,2354 866,2405 492,2404"/>
+                <Baseline points="499,2412 1427,2418"/>
+                <TextEquiv>
+                    <Unicode>nayprw bydleli w Mezopotany · nebo</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_350" custom="readingOrder {index:34;}">
+                <Coords points="498,2471 1311,2492 1425,2477 1425,2447 1367,2421 497,2415"/>
+                <Baseline points="504,2467 1428,2475"/>
+                <TextEquiv>
+                    <Unicode>nechtieli ſu naſledowati bohuow otcow</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_369" custom="readingOrder {index:35;}">
+                <Coords points="498,2542 1381,2548 1427,2545 1426,2483 497,2481"/>
+                <Baseline points="504,2525 1430,2541"/>
+                <TextEquiv>
+                    <Unicode>ſwych kteṙiż byli w zemi kaldeyſke a tak</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_376" custom="readingOrder {index:36;}">
+                <Coords points="495,2605 1424,2617 1423,2559 1361,2539 494,2541"/>
+                <Baseline points="502,2598 1427,2608"/>
+                <TextEquiv>
+                    <Unicode>puſtiwſſe poklony otczuow ſwych · kte¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_383" custom="readingOrder {index:37;}">
+                <Coords points="495,2659 1424,2683 1424,2619 494,2605"/>
+                <Baseline points="502,2655 1427,2667"/>
+                <TextEquiv>
+                    <Unicode>rež pṙimnozſtwi bohuow modlaṙſkych</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_390" custom="readingOrder {index:38;}">
+                <Coords points="493,2764 887,2785 948,2723 1426,2741 1424,2683 1362,2664 491,2657"/>
+                <Baseline points="499,2713 1428,2734"/>
+                <TextEquiv>
+                    <Unicode>biechu · gednomu bohu nebeſkemu kla¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_397" custom="readingOrder {index:39;}">
+                <Coords points="498,2791 1389,2811 1424,2749 879,2722 802,2778 497,2762"/>
+                <Baseline points="504,2782 1427,2796"/>
+                <TextEquiv>
+                    <Unicode>nieli ſe · kteryžto y przikazal gim aby</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_404" custom="readingOrder {index:40;}">
+                <Coords points="493,2883 815,2902 895,2845 1253,2866 1425,2860 1425,2830 1323,2794 491,2791"/>
+                <Baseline points="499,2839 1428,2853"/>
+                <TextEquiv>
+                    <Unicode>wyſſli odtud a przebywali w Carran</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_411" custom="readingOrder {index:41;}">
+                <Coords points="494,2960 614,2965 723,2904 1398,2928 1427,2881 1374,2851 492,2847"/>
+                <Baseline points="500,2901 1430,2915"/>
+                <TextEquiv>
+                    <Unicode>A když byl hlad po wſſie zemi tee brali</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_418" custom="readingOrder {index:42;}">
+                <Coords points="497,3028 1042,3034 1130,2978 1425,2993 1424,2921 495,2920"/>
+                <Baseline points="502,2967 1428,2983"/>
+                <TextEquiv>
+                    <Unicode>ſe do Egiptu · a tam we cżtyrzech ſtech</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_425" custom="readingOrder {index:43;}">
+                <Coords points="497,3079 1127,3095 1218,3043 1425,3035 495,3025"/>
+                <Baseline points="502,3034 1428,3046"/>
+                <TextEquiv>
+                    <Unicode>letech tak ſu ſe rozplodili · že mnozſtwie</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_432" custom="readingOrder {index:44;}">
+                <Coords points="492,3138 1023,3158 1135,3102 1431,3121 1431,3067 1235,3041 1096,3092 492,3083"/>
+                <Baseline points="499,3091 1433,3106"/>
+                <TextEquiv>
+                    <Unicode>gich nemohlo zeċteno byti : A když ge</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_460" custom="readingOrder {index:45;}">
+                <Coords points="493,3220 1214,3223 1290,3175 1430,3180 1017,3155 957,3097 812,3150 706,3097 491,3095"/>
+                <Baseline points="499,3150 1431,3173"/>
+                <TextEquiv>
+                    <Unicode>obtiežowal kral egipſsky a w ſlužbu ge</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_27" custom="readingOrder {index:46;}">
+                <Coords points="502,3220 1434,3238 1435,3208 503,3190"/>
+                <Baseline points="502,3220 1434,3238"/>
+                <TextEquiv>
+                    <Unicode>podrobil · aby gemu ſtawieli Miesta</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextEquiv>
+                <Unicode></Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r_29" custom="readingOrder {index:2;}">
+            <Coords points="1470,284 2414,284 2414,3255 1470,3255"/>
+            <TextLine id="l_467" custom="readingOrder {index:0;}">
+                <Coords points="1467,341 1730,391 1789,364 2409,376 2409,338 2286,300 2191,320 1993,284 1867,319 1716,280 1467,317"/>
+                <Baseline points="1474,372 2412,376"/>
+                <TextEquiv>
+                    <Unicode>a czyhly dielali · wolali ſu ku panu bohu</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_474" custom="readingOrder {index:1;}">
+                <Coords points="1463,439 1932,441 2015,494 2084,494 2132,448 2409,448 2392,385 2146,364 1721,395 1534,359 1463,396"/>
+                <Baseline points="1469,436 2412,446"/>
+                <TextEquiv>
+                    <Unicode>ſwemu · a trapil geſt weſſkeren egipt</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_481" custom="readingOrder {index:2;}">
+                <Coords points="1463,493 2409,511 2408,452 2268,443 2145,494 2013,492 1909,440 1516,443 1463,484"/>
+                <Baseline points="1469,493 2412,507"/>
+                <TextEquiv>
+                    <Unicode>ranami rozlicżnymi : A kdyż ſu ge wy¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_502" custom="readingOrder {index:3;}">
+                <Coords points="1463,566 2403,584 2391,506 1463,510"/>
+                <Baseline points="1469,560 2406,564"/>
+                <TextEquiv>
+                    <Unicode>hnali Egipſſtii od ſebe : a przeſtala ra¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_509" custom="readingOrder {index:4;}">
+                <Coords points="1486,628 2411,644 2410,590 2305,563 1485,561"/>
+                <Baseline points="1493,611 2414,632"/>
+                <TextEquiv>
+                    <Unicode>na nad nimi · opiet ge zaſe chtieli z gima¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_529" custom="readingOrder {index:5;}">
+                <Coords points="1490,733 2182,743 2235,692 2412,701 2411,644 2311,629 1489,633"/>
+                <Baseline points="1495,681 2414,694 2414,694"/>
+                <TextEquiv>
+                    <Unicode>ti a k ſwe ſlużbie podrobiti · a oni když</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_540" custom="readingOrder {index:6;}">
+                <Coords points="1497,747 2411,757 2395,696 2220,692 2134,744 2017,687 1496,688"/>
+                <Baseline points="1503,738 2414,757 2414,757"/>
+                <TextEquiv>
+                    <Unicode>vtiekali · buoh nebeſky rozdielil morze ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_547" custom="readingOrder {index:7;}">
+                <Coords points="1498,811 2124,832 2413,822 2413,791 2295,753 1497,746"/>
+                <Baseline points="1505,803 2416,816"/>
+                <TextEquiv>
+                    <Unicode>tak že na obie ſtranie wody yako zdi pe¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_554" custom="readingOrder {index:8;}">
+                <Coords points="1495,876 1802,867 1881,926 1948,929 2015,873 2383,887 2402,832 1493,812"/>
+                <Baseline points="1501,860 2406,882"/>
+                <TextEquiv>
+                    <Unicode>wnie ſtaly · a oni ſuchu nohu preſtrzed¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_561" custom="readingOrder {index:9;}">
+                <Coords points="1495,932 2317,939 2383,970 2405,888 1493,876"/>
+                <Baseline points="1501,924 2408,939"/>
+                <TextEquiv>
+                    <Unicode>kem morze pṙeſſli ſu : na kteremżto mie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_568" custom="readingOrder {index:10;}">
+                <Coords points="1495,1000 1640,994 1674,1025 1801,994 2404,1004 2404,964 2345,941 1495,932"/>
+                <Baseline points="1501,992 2406,1002"/>
+                <TextEquiv>
+                    <Unicode>ſtie když ſtihali ge egipſſtii woyſko gich</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_575" custom="readingOrder {index:11;}">
+                <Coords points="1490,1058 2385,1080 2408,1016 1489,1005"/>
+                <Baseline points="1497,1049 2412,1063"/>
+                <TextEquiv>
+                    <Unicode>bez cżiſla tak ge woda przikwacżila • že</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_582" custom="readingOrder {index:12;} abbrev {offset:30; length:7;expansion:potomnim;}">
+                <Coords points="1490,1117 2047,1122 2128,1175 2230,1125 2406,1130 2338,1064 1490,1069"/>
+                <Baseline points="1497,1116 2408,1127"/>
+                <TextEquiv>
+                    <Unicode>nezuoſtal ani geden kteryž by potomnī</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_589" custom="readingOrder {index:13;}">
+                <Coords points="1489,1178 2363,1198 2410,1186 2409,1132 2183,1123 2112,1162 2020,1121 1488,1126"/>
+                <Baseline points="1495,1175 2412,1184"/>
+                <TextEquiv>
+                    <Unicode>ten ſkutek wyprawowal : A když pṙe¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_617" custom="readingOrder {index:14;}">
+                <Coords points="1490,1251 2400,1258 2400,1187 1490,1182"/>
+                <Baseline points="1497,1245 2404,1247"/>
+                <TextEquiv>
+                    <Unicode>ſſli morze cżerwene weſſli do puſtin ho¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_633" custom="readingOrder {index:15;}">
+                <Coords points="1486,1310 1635,1308 1678,1340 1786,1307 2402,1320 2373,1248 1486,1251"/>
+                <Baseline points="1493,1309 2404,1302 2402,1304 2398,1302"/>
+                <TextEquiv>
+                    <Unicode>ry ſyna: w kterychžto puſſinach nikda</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_640" custom="readingOrder {index:16;}">
+                <Coords points="1484,1368 2393,1365 2393,1322 2327,1303 1484,1323"/>
+                <Baseline points="1491,1364 2395,1364"/>
+                <TextEquiv>
+                    <Unicode>nemohl cżlowiek bydleti · ani ſyn cżlo¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_647" custom="readingOrder {index:17;}">
+                <Coords points="1489,1433 2400,1443 2370,1369 1488,1365"/>
+                <Baseline points="1495,1421 2404,1433"/>
+                <TextEquiv>
+                    <Unicode>wieka kdy otpocżinul : Tu gſu ſtudni¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_654" custom="readingOrder {index:18;}">
+                <Coords points="1482,1489 2105,1515 2405,1503 2404,1460 2133,1427 1480,1437"/>
+                <Baseline points="1488,1488 2408,1493"/>
+                <TextEquiv>
+                    <Unicode>cze horzke oſladcżeny gim kupiti · a za</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_661" custom="readingOrder {index:19;}">
+                <Coords points="1485,1605 1898,1609 2015,1557 2321,1577 2399,1561 2399,1531 2312,1492 1484,1497"/>
+                <Baseline points="1491,1552 2402,1560"/>
+                <TextEquiv>
+                    <Unicode>cżtyrzidczeti let pokrm z nebe mieli gſu ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_677" custom="readingOrder {index:20;}">
+                <Coords points="1480,1672 1652,1676 1749,1618 2404,1647 2403,1607 1479,1606"/>
+                <Baseline points="1486,1615 2406,1624 2404,1622 2400,1624"/>
+                <TextEquiv>
+                    <Unicode>kamž koli przitahli ſu · bez lucżiſſtie bez</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_684" custom="readingOrder {index:21;}">
+                <Coords points="1482,1682 1885,1684 1932,1711 2403,1684 1482,1658"/>
+                <Baseline points="1488,1679 2406,1685"/>
+                <TextEquiv>
+                    <Unicode>ſtrzely · bez tercże · a bez mecże · Buoh</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_691" custom="readingOrder {index:22;}">
+                <Coords points="1479,1791 1709,1795 1786,1741 2403,1745 2402,1704 2341,1685 2233,1710 2188,1683 1478,1696"/>
+                <Baseline points="1486,1736 2406,1744"/>
+                <TextEquiv>
+                    <Unicode>gich za nie boiowal a przemohl · a ne¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_698" custom="readingOrder {index:23;}">
+                <Coords points="1479,1853 2204,1858 2283,1809 2408,1822 2408,1775 2337,1749 2260,1801 1479,1793"/>
+                <Baseline points="1486,1801 2410,1810"/>
+                <TextEquiv>
+                    <Unicode>byl kto by ſe zprotiwil lidu tomuto : ge¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_705" custom="readingOrder {index:24;}">
+                <Coords points="1473,1873 1786,1864 1930,1922 2222,1916 2289,1872 2408,1873 2406,1847 1472,1852"/>
+                <Baseline points="1480,1860 2410,1871"/>
+                <TextEquiv>
+                    <Unicode>dine tehdaž když odſtupil od ſlużby pa¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_712" custom="readingOrder {index:25;}">
+                <Coords points="1477,1923 2408,1943 2408,1911 2171,1919 2097,1866 1948,1866 1883,1904 1813,1862 1476,1874"/>
+                <Baseline points="1484,1916 2410,1930"/>
+                <TextEquiv>
+                    <Unicode>na boha ſweho A kolikrat koli · krom</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_719" custom="readingOrder {index:26;}">
+                <Coords points="1476,2028 1685,2040 1773,1991 2405,1994 2405,1938 2356,1927 1476,1922"/>
+                <Baseline points="1482,1989 2408,1992"/>
+                <TextEquiv>
+                    <Unicode>boha gich klanieli ſe bohuom czyzym ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_726" custom="readingOrder {index:27;}">
+                <Coords points="1473,2048 2409,2054 2346,1990 1473,2002"/>
+                <Baseline points="1480,2044 2412,2055"/>
+                <TextEquiv>
+                    <Unicode>dani ſu w lupež · w mecż a w pohanienie</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_733" custom="readingOrder {index:28;}">
+                <Coords points="1471,2102 2405,2118 2405,2081 2298,2054 1471,2052"/>
+                <Baseline points="1478,2101 2408,2111"/>
+                <TextEquiv>
+                    <Unicode>Kolikrat pak zaſe żeleli toho že ſu odſtu¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_740" custom="readingOrder {index:29;}">
+                <Coords points="1476,2182 2403,2178 2403,2117 2357,2111 1476,2119"/>
+                <Baseline points="1482,2172 2406,2174"/>
+                <TextEquiv>
+                    <Unicode>pili od ſlužby pana boha ſweho · Dal</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_747" custom="readingOrder {index:30;}">
+                <Coords points="1471,2236 2356,2247 2410,2238 2411,2207 2339,2172 1472,2183"/>
+                <Baseline points="1477,2236 2412,2232"/>
+                <TextEquiv>
+                    <Unicode>geſt gim buoh nebeſky ſylu že ſu odola¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_754" custom="readingOrder {index:31;}">
+                <Coords points="1471,2292 2321,2312 2408,2276 2266,2231 1470,2242"/>
+                <Baseline points="1478,2291 2410,2294"/>
+                <TextEquiv>
+                    <Unicode>wali : Potom krale Kananeyſkeho · a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_761" custom="readingOrder {index:32;} unclear {offset:0; length:1;}">
+                <Coords points="1471,2357 2410,2359 2410,2300 1471,2306"/>
+                <Baseline points="1477,2356 2412,2358"/>
+                <TextEquiv>
+                    <Unicode>Gebuzeyſkeho · a Ammoreyſkeho · a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_768" custom="readingOrder {index:33;}">
+                <Coords points="1465,2418 2411,2434 2352,2364 2276,2358 2139,2384 2098,2357 1697,2357 1465,2398"/>
+                <Baseline points="1472,2414 2412,2423"/>
+                <TextEquiv>
+                    <Unicode>Ferezeyſkeho · Etheyſkeho · y wſſecz¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_775" custom="readingOrder {index:34;}">
+                <Coords points="1473,2483 2250,2508 2403,2490 2403,2461 2309,2425 1472,2422"/>
+                <Baseline points="1480,2480 2406,2488"/>
+                <TextEquiv>
+                    <Unicode>ky moczne a ſylne w zemi Ezebon pora¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_782" custom="readingOrder {index:35;}">
+                <Coords points="1473,2553 2218,2547 2314,2603 2406,2564 2406,2521 2343,2493 1473,2487"/>
+                <Baseline points="1480,2552 2408,2545"/>
+                <TextEquiv>
+                    <Unicode>zyli ſu : za zemie gich y Mieſta gich oni o¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_789" custom="readingOrder {index:36;}">
+                <Coords points="1471,2622 2404,2606 2340,2546 1471,2553"/>
+                <Baseline points="1478,2605 2406,2607"/>
+                <TextEquiv>
+                    <Unicode>panowali ſu · a dokowadż ſu neſhṙeſſili</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_796" custom="readingOrder {index:37;} abbrev {offset:5; length:9;expansion:oblicżegem;} abbrev {offset:20; length:4;expansion:ſweho;} textStyle {offset:23; length:1;superscript:true;}">
+                <Coords points="1473,2720 2033,2726 2087,2674 2406,2664 2305,2606 1472,2619"/>
+                <Baseline points="1480,2668 2408,2677"/>
+                <TextEquiv>
+                    <Unicode>pṙed oblicżegē boha ſweo byly ſu ſ nim</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_803" custom="readingOrder {index:38;}">
+                <Coords points="1471,2745 1912,2733 1956,2771 2043,2733 2400,2747 2400,2701 2334,2675 2087,2674 2033,2724 1834,2724 1722,2671 1471,2676"/>
+                <Baseline points="1478,2732 2404,2734"/>
+                <TextEquiv>
+                    <Unicode>dobre wieczy · Neb buoh gich ma w ne¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_810" custom="readingOrder {index:39;}">
+                <Coords points="1471,2792 2405,2793 2405,2748 2357,2734 2043,2733 1957,2772 1911,2733 1471,2745"/>
+                <Baseline points="1478,2791 2408,2791"/>
+                <TextEquiv>
+                    <Unicode>nawiſti neprawoſt · Neb y przed tiemi¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_817" custom="readingOrder {index:40;}">
+                <Coords points="1467,2914 2043,2911 2102,2862 2397,2863 2380,2821 2246,2792 1466,2805"/>
+                <Baseline points="1474,2852 2400,2863"/>
+                <TextEquiv>
+                    <Unicode>to lety když ſu byli ſeſſli s czeſty kteruż</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_824" custom="readingOrder {index:41;}">
+                <Coords points="1467,2918 2406,2930 2406,2905 2029,2911 1935,2858 1467,2851"/>
+                <Baseline points="1474,2915 2408,2922"/>
+                <TextEquiv>
+                    <Unicode>dal gim buoh aby chodili po nie · zkaže¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_831" custom="readingOrder {index:42;}">
+                <Coords points="1464,2993 2400,2992 2330,2922 1465,2926"/>
+                <Baseline points="1471,2985 2404,2979"/>
+                <TextEquiv>
+                    <Unicode>ni gſu walkami od mnohych narodow</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_838" custom="readingOrder {index:43;}">
+                <Coords points="1465,3046 2404,3037 2325,2979 1465,2993"/>
+                <Baseline points="1472,3042 2406,3036"/>
+                <TextEquiv>
+                    <Unicode>a mnozy z nich wiezniowe zawedeni ſu</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_845" custom="readingOrder {index:44;}">
+                <Coords points="1460,3103 2409,3105 2409,3057 2319,3034 1460,3053"/>
+                <Baseline points="1467,3093 2412,3095"/>
+                <TextEquiv>
+                    <Unicode>do zemie neſwe • A nynie nawratiwſſe</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_852" custom="readingOrder {index:45;}">
+                <Coords points="1464,3168 2400,3161 2400,3117 2344,3095 1464,3106"/>
+                <Baseline points="1471,3157 2404,3157"/>
+                <TextEquiv>
+                    <Unicode>ſe ku panu bohu z rozptylenie · kterymž</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="l_859" custom="readingOrder {index:46;}">
+                <Coords points="1469,3251 1841,3232 1965,3272 2387,3235 2387,3187 2314,3157 1470,3163"/>
+                <Baseline points="1476,3231 2391,3224"/>
+                <TextEquiv>
+                    <Unicode>byli rozehnani · opiet ſhromaždieni ſu</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextEquiv>
+                <Unicode></Unicode>
+            </TextEquiv>
+        </TextRegion>
+    </Page>
+</PcGts>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_AndPiekBoh">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Bohatyr straszny"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="free">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Bohatyr straszny</title>
+        <author>Francesco Andreini</author>
+        <editor role="translator">Krzysztof Piekarski</editor>
+        <publisher>Mikołaj Aleksander Schedel</publisher>
+        <pubPlace role="place">Kraków</pubPlace>
+        <pubPlace role="region">Małopolska</pubPlace>
+        <date when="1695">1695</date>
+        <idno type="KORBA">KORBA_AndPiekBoh</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#dramat"/>
+      <catRef scheme="#kind" target="#dialogi"/>
+      <catRef scheme="#ironic" target="#tak"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>
