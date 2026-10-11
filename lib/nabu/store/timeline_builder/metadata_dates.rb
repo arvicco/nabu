@@ -129,6 +129,9 @@ module Nabu
           "sillok" => :structured,
           "sjw" => :structured,
           "sl-wikisource" => :structured,
+          "slavistics-pd" => :structured, # Q105: the text's own edition year (a facsimile
+          #                                 reprint keeps its first edition's); the imprint
+          #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
           "syriac-corpus" => :when_key,
           "ticha" => :structured,

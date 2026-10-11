@@ -4445,6 +4445,24 @@ slouniki-nasovic:   # P117 (Q106), 02-sources row 253
   # data/*.xml (~155 MB working tree — the per-file rtf blobs). EXPECTED
   # FIRST SYNC: 35,159 entries, 0 parse errors (census run 2026-10-11),
   # 2,967 gloss-less (cross-references).
+slavistics-pd:   # Q105, 02-sources row 250
+  adapter: Nabu::Adapters::SlavisticsPd
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # The PD German-Slavistics reference canon as archive.org scans — 23
+  # census items: Miklosich (Etym. Wb. 1886, Vergl. Grammatik I–IV),
+  # Berneker SEW I, Leskien's Handbuch (1905), Vondrák (AKSl. Grammatik
+  # 1900, Frisinské památky 1896), the Glagolita Clozianus in Kopitar's
+  # (1836) and Vondrák's (1893) editions, and 12 Vienna Academy
+  # Sitzungsberichte/Denkschriften Slavistics monographs. Page grain over
+  # each item's hOCR derivative pair (_hocr_searchtext + _hocr_pageindex,
+  # ~1 MB per volume). UNCORRECTED OCR — the archive's machine text,
+  # never proofread; Cyrillic/Glagolitic portions are garbled — declared
+  # on every document (text_nature + ocr_note + a measured wordlike
+  # share). Language = the prose's (deu; lat/ces for three items):
+  # scholarship ABOUT Slavic. Public domain (authors †1844–1952).
 
 # P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
 # one row per upstream artifact/license/fetch posture), one new axis tag.

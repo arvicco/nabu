@@ -531,6 +531,9 @@ sources:
     source_kind: scripture
   prague-bible-1488:
     source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
+  slavistics-pd:
+    source_kind: scholarly   # Q105: the PD Slavistics reference shelf — grammars,
+    #                          etymological dictionaries, Academy monographs
   eng-web:
     source_kind: scripture
   vuk-danicic:
