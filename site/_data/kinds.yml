@@ -7,25 +7,25 @@ classes:
   documents_display: '683,358'
   sources: 15
 - head: administrative
-  documents: 482378
-  documents_display: '482,378'
-  sources: 12
+  documents: 482386
+  documents_display: '482,386'
+  sources: 13
 - head: historiography
-  documents: 347393
-  documents_display: '347,393'
-  sources: 16
+  documents: 348623
+  documents_display: '348,623'
+  sources: 18
 - head: funerary
   documents: 114778
   documents_display: '114,778'
   sources: 9
 - head: legal
-  documents: 35750
-  documents_display: '35,750'
-  sources: 11
+  documents: 35787
+  documents_display: '35,787'
+  sources: 12
 - head: letter
-  documents: 33698
-  documents_display: '33,698'
-  sources: 9
+  documents: 33768
+  documents_display: '33,768'
+  sources: 10
 - head: royal
   documents: 30134
   documents_display: '30,134'
@@ -35,9 +35,9 @@ classes:
   documents_display: '22,915'
   sources: 7
 - head: scripture
-  documents: 20517
-  documents_display: '20,517'
-  sources: 16
+  documents: 20583
+  documents_display: '20,583'
+  sources: 17
 - head: lexical
   documents: 15453
   documents_display: '15,453'
@@ -59,9 +59,9 @@ classes:
   documents_display: '10,493'
   sources: 6
 - head: scholarly
-  documents: 8891
-  documents_display: '8,891'
-  sources: 8
+  documents: 8945
+  documents_display: '8,945'
+  sources: 10
 - head: building
   documents: 8016
   documents_display: '8,016'
@@ -75,9 +75,9 @@ classes:
   documents_display: '3,327'
   sources: 8
 - head: hymn-prayer
-  documents: 3004
-  documents_display: '3,004'
-  sources: 8
+  documents: 3009
+  documents_display: '3,009'
+  sources: 9
 - head: boundary
   documents: 2963
   documents_display: '2,963'
@@ -86,10 +86,10 @@ classes:
   documents: 616
   documents_display: '616'
   sources: 2
-unclassified_sources: 107
-unknown_documents: 46964
-unknown_documents_display: '46,964'
+unclassified_sources: 112
+unknown_documents: 46967
+unknown_documents_display: '46,967'
 unmapped_documents: 11491
 unmapped_documents_display: '11,491'
-unclassified_documents: 426678
-unclassified_documents_display: '426,678'
+unclassified_documents: 432394
+unclassified_documents_display: '432,394'

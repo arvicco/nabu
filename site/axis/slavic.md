@@ -13,26 +13,26 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-
+A source wears every desk it serves — these 33 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 October 2026)</span> |
 |---|---|---|---|---|
-| `archiv-slav-phil` | texts | open | not yet wired | nothing held yet |
+| `archiv-slav-phil` | texts | open | wired · manual | 33 docs / 22,348 passages |
 | `bg-wikisource` | texts | attribution | wired · manual | 26 docs / 220 passages |
 | `ccmh` | texts | attribution | wired · manual | 19 docs / 28,786 passages |
 | `cs-wikisource` | texts | attribution | wired · manual | 330 docs / 4,748 passages |
 | `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
-| `elektire` | texts | open | not yet wired | nothing held yet |
-| `eltec-srp` | texts | attribution | not yet wired | nothing held yet |
+| `elektire` | texts | open | wired · manual | 205 docs / 375,300 passages |
+| `eltec-srp` | texts | attribution | wired · manual | 96 docs / 150,794 passages |
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
-| `gams-zrcalo` | texts | attribution | not yet wired | nothing held yet |
+| `gams-zrcalo` | texts | attribution | wired · manual | 1 docs / 199 passages |
 | `goo300k` | texts | attribution | wired · manual | 89 docs / 8,397 passages |
 | `hr-wikisource` | texts | attribution | wired · manual | 1,390 docs / 132,052 passages |
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
-| `kdsp` | texts | attribution | not yet wired | nothing held yet |
+| `kdsp` | texts | attribution | wired · manual | 262 docs / 290,394 passages |
 | `korba` | texts | attribution | not yet wired | nothing held yet |
-| `litopys` | texts | open | not yet wired | nothing held yet |
-| `mdz-protestant` | texts | open | not yet wired | nothing held yet |
+| `litopys` | texts | open | wired · manual | 41 docs / 964 passages / 923 entries |
+| `mdz-protestant` | texts | open | wired · manual | 6 docs / 1,518 passages |
 | `mk-wikisource` | texts | attribution | wired · manual | 836 docs / 31,114 passages |
 | `pl-wikisource` | texts | attribution | wired · manual | 1,228 docs / 15,823 passages / 5,711 entries |
 | `prague-bible-1488` | texts | attribution | wired · manual | 31 docs / 2,939 passages |
@@ -42,16 +42,16 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 | `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `sl-wikisource` | texts | attribution | wired · manual | 1,539 docs / 145,035 passages |
-| `slavistics-pd` | texts | open | not yet wired | nothing held yet |
-| `slouniki-nasovic` | dictionary | open | not yet wired | nothing held yet |
+| `slavistics-pd` | texts | open | wired · manual | 21 docs / 5,833 passages |
+| `slouniki-nasovic` | dictionary | open | wired · manual | 35,159 entries |
 | `sr-wikisource` | texts | attribution | wired · manual | 4,607 docs / 581,423 passages |
 | `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 | `uk-wikisource` | texts | attribution | wired · manual | 7 docs / 541 passages |
-| `vuk-danicic` | texts | open | not yet wired | nothing held yet |
+| `vuk-danicic` | texts | open | wired · manual | 66 docs / 31,102 passages |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `sl` 141,746 · `pol` 6,942 · `chu` 4,660 · `srp` 4,474 · `hrv` 1,523 · `mkd` 836 · `ces` 330 · `bul` 154 · `orv` 62 · `cs` 31 … and 22 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,660 · `srp` 4,636 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 · `bul` 154 … and 26 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 
