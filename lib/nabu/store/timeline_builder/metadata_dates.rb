@@ -93,6 +93,7 @@ module Nabu
           "elephantine" => :structured,
           "fornsvenska" => :compact_date_keys,
           "glaux" => :signed_bounds_keys,
+          "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
           "itant" => :structured,
@@ -123,8 +124,7 @@ module Nabu
           "sl-wikisource" => :structured,
           "soas-tibetan" => :century_prose,
           "syriac-corpus" => :when_key,
-          # The ruled Bactrian-era envelope (2026-10-11): era year Y →
-          # [Y+222, Y+228], computed in the adapter (TitusBactrian).
+          "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
           "titus-tocharian-a" => :place_only,

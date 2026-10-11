@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to a dozen desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-seven desks
+Everything below documents **shipped behaviour** — the twenty-eight desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-seven desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-eight desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -260,6 +260,14 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
 **Members** (2): `altaica-shm`, `wiktionary-recon`
+
+### americas
+
+> The Americanist — the colonial record of the indigenous Americas, Zapotec testaments to the Andean chronicle.
+
+The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (Córdova's 1578 Arte, Agüero's 1666 Miscelaneo, the testaments and their period Spanish translations), the Royal Danish Library's Guaman Poma Nueva corónica (Spanish with Quechua and Aymara passages), and the UD Tupinambá and Old Guaraní treebanks of the Jesuit grammars and catechisms — the modern UD treebanks of American languages deliberately out.
+
+**Members** (3): `guaman-poma`, `ticha`, `ud`
 
 ### local
 

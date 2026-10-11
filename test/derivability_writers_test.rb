@@ -119,6 +119,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
+    nabu/poma_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/litopys_fetch.rb

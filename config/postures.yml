@@ -798,6 +798,48 @@ sources:
         imprint place; declared coarse"}
     script: {posture: implied, note: "Latin script, semi-diplomatic (long s, ¬, superscript
         marks verbatim)"}
+  ticha:   # P117-5
+    kind: {posture: pending, note: "candidate: a kind_map fold over the work_type facet
+        (arte → scholarly; catecismo/miscelaneo → hymn-prayer or ritual; manuscript →
+        legal — testaments and bills of sale) — the manuscripts' own document types
+        live on the Ticha website, not in the repo; the fold is a ruled table"}
+    lect: {posture: pending, note: "candidate: zap → a Colonial Valley Zapotec stage of a
+        zap anchor (Oto-Manguean, omq) by date band, plus a codemap row xzp → that stage
+        (Córdova's header declares ISO 639-3 xzp 'Ancient Zapotec'; the encoders' own
+        'cvz' label is folded to zap at parse) — BLOCKED on the americas nabu-lects
+        mint (no zap, omq or Zapotec stage exists in canonical/nabu-lects or the working
+        copy, censused 2026-10-11); bare zap is minted meanwhile on the 2 Zapotec
+        documents and 416 Zapotec-majority pages, and the 91 Spanish documents ride bare
+        spa (→ es by the codemap alias; early-modern colonial Spanish, unstaged)"}
+    dating: {posture: partial, note: "84 of 93 documents: the Ticha manuscript id's year
+        (the ORIGINAL document's year — a translation is dated by its original) and the
+        printed works' title-page years (1578, 1666, 1766) on the :structured lane;
+        levanto-arte and the eight AGEO files carry no date"}
+    places: {posture: named, note: "80 of 93: the town of the manuscript id's code
+        (Ticha's own town pages; names verbatim from the repo's places.json) or the
+        works' imprint (México, Puebla de los Ángeles; place_role imprint); places.json
+        coordinates ride metadata-only — 3 of its 22 points fall far outside the
+        Valley of Oaxaca, so none are projected"}
+    script: {posture: implied, note: "Latin script; the original reading (long s, tildes,
+        abbreviations) is the text, upstream's modern-Spanish regularization rides per
+        page"}
+  guaman-poma:   # P117-5
+    # kind: machine-postured — kind_map.yml source_kind historiography/
+    # chronicle (one work, the whole-source declaration precedent).
+    lect: {posture: identity, note: "bare spa is the honest one-tag claim — the edition tags
+        NO language: its Quechua, Aymara and Latin passages are italicized alike, so a qwc
+        (Classical Quechua) or aym lane would need a per-run language decision the markup
+        cannot carry (declared coarse; the italic runs and the edition's normalized
+        Andean-terms lines ride as annotations/metadata). Early-17th-c. colonial Spanish
+        is unstaged (es has no early-modern stage)"}
+    dating: {posture: dated, note: "the autograph's 1615 (the edition's own title) on every
+        page — the artifact date, :structured lane"}
+    places: {posture: unplaced, note: "the chronicle names its Andean places in prose only;
+        the edition's onomastic index is a separate site section (not crawled) — a future
+        place-mining pass, not a field"}
+    script: {posture: implied, note: "Latin script, the 1987 transcription's conventions
+        (in-word editorial brackets S[EÑ]OR kept, the editors' bracketed glosses moved to
+        annotations)"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle

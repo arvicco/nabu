@@ -1,0 +1,656 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--comment-->
+<?xml-model href="../schema/TEISchema_Ticha.rnc" type="application/relax-ng-compact-syntax"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve">
+   <teiHeader type="text">
+      <fileDesc>
+         <titleStmt>
+            <title>Title</title>
+         </titleStmt>
+         <publicationStmt>
+            <p part="N">Publication Information</p>
+         </publicationStmt>
+         <sourceDesc default="false">
+            <p part="N">Information about the source</p>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="es" usage="60">Spanish</language>
+            <language ident="xzp" usage="20">Ancient Zapotec</language> <!-- note we have been using CVZ in the encoding. BDL -->
+            <language ident="nah" usage="01">Nahuatl</language>
+            <language ident="lat" usage="15">Latin</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc default="false">
+            <p part="N"> Encoding as a primary source, especially for language.
+               <!-- insert project description -->
+            </p>
+         </projectDesc>
+         <editorialDecl default="false">
+            <correction default="false" status="unknown" method="silent">
+               <p part="N"> Corrections to errors observed in the text are given within choice elements
+                  alongside their original forms. </p>
+            </correction>
+            <normalization default="false" method="silent">
+               <p part="N"> Ligatures are silently ignored. Long s (ſ) is transcribed. </p>
+            </normalization>
+            <hyphenation default="false" eol="some">
+               <p part="N"> End of line hyphenation has been retained when present, but it has variable usage
+                  throughout the text. Representation used is en dash. </p>
+            </hyphenation>
+            <segmentation default="false">
+               <p part="N"> Structure of the Arte has been broken down according to a five-tiered outline
+                     <ptr target="https://dl.dropboxusercontent.com/sh/ezp6qtliojs6d3v/gI6xD05lRx/Outline of the Arte.docx?token_hash=AAHiDHuIP0Pc4__AJYuPS7dG-c5iK2ynU1hsX1p_OtizEA&amp;dl=1"/>. Further divison occurs based on principles of FLEX
+                  <!-- describe breakdown by FLEX -->.</p>
+            </segmentation>
+            <interpretation default="false">
+               <p part="N"><!-- insertion of linguistic analysis from FLEX --></p>
+            </interpretation>
+         </editorialDecl>
+         <refsDecl xml:id="ArteRefsDecl" default="false">
+            <p part="N"> References for divs start with the word 'arte' followed by the section id. When there is a zapotec term, its id
+            starts with the section id, which is followed by an underscore and then the number of the zapotec block that has been
+            identified for analysis by the linguist</p>
+         </refsDecl>
+
+         <refsDecl default="false">
+            <!-- Confirm the refsdecl -->
+            <cRefPattern matchPattern="([A-Za-z0-9]+) ([0-9]+):([0-9]+)" replacementPattern="#xpath(//body/div[@n='$1']/div[$2]/div3[$3])"/>
+         </refsDecl>
+         <charDecl>
+            <glyph xml:id="fancy-c"><glyphName>Latin large letter C with an elephant and some birds</glyphName>
+               <figure><graphic url="fancy-c.png"/></figure></glyph>
+            <glyph xml:id="little-c"><glyphName>Small flowery woodcut C</glyphName>
+               <figure><graphic url="little-c.png"/></figure></glyph>
+            <glyph xml:id="crest"><glyphName>Dominican Crest</glyphName>
+               <figure><graphic url="crest.png"/></figure></glyph>
+            <glyph xml:id="cherub-d"><glyphName>Large letter D with cherub holding scroll</glyphName>
+               <figure><graphic url="fancy-d"/></figure></glyph>
+            <glyph xml:id="flower-n"><glyphName>Large letter N with flowers</glyphName>
+               <figure><graphic url="flower-n"/></figure></glyph>
+            <glyph xml:id="virgin-y"><glyphName>Large letter Y with Virgin Mary</glyphName>
+               <figure><graphic url="fancy-y"/></figure></glyph>
+            <glyph xml:id="swirls-n"><glyphName>Large le4tter N with swirls</glyphName>
+               <figure><graphic url="swirls-n"/></figure></glyph>
+            <glyph xml:id="flower-c"><glyphName>Large letter C with flower and bulb</glyphName>
+               <figure><graphic url="flower-c"/></figure></glyph>
+            <glyph xml:id="bird-d"><glyphName>Large letter D with bird</glyphName>
+               <figure><graphic url="bird-d"/></figure></glyph>
+            <glyph xml:id="leaves-p"><glyphName>Large letter P with leaves</glyphName>
+               <figure><graphic url="leaves-p"/></figure></glyph>
+            <glyph xml:id="swirls-a"><glyphName>Large letter A with swirls</glyphName>
+               <figure><graphic url="swirls-a"/></figure></glyph>
+            <glyph xml:id="leaves-t"><glyphName>Large letter T with leaves</glyphName>
+               <figure><graphic url="leaves-t"/></figure></glyph>
+            <glyph xml:id="angel-a"><glyphName>Large letter T with leaves</glyphName>
+               <figure><graphic url="leaves-t"/></figure></glyph>
+            <glyph xml:id="birdman-a"><glyphName>Large letter A with man/God with wings</glyphName>
+               <figure><graphic url="birdman-a"/></figure></glyph>
+         </charDecl>
+      </encodingDesc>
+   </teiHeader>
+   <text>
+      <front>
+         <div xml:id="cordova-arte1">
+            <head type="outline">[Front matter]</head>
+            <div xml:id="cordova-arte1.1">
+               <head type="outline">[Cover of book and preliminary pages]</head>
+             <pb break="yes" type="arte" n="4"/>
+             <pb break="yes" type="pdf" facs="http://archive.org/stream/arteenlenguazapo00juan#page/n4/mode/1up"/>
+            </div>
+              <div xml:id="cordova-arte1.2" part="N" org="uniform" sample="complete">
+              <head type="outline">[Title Page]</head>
+              <head type="cordova"><choice><orig>A R T E</orig><reg type="spacing">ARTE</reg></choice>
+                 <choice><orig>E N</orig>
+                    <reg type="spacing">EN</reg>
+                 </choice>
+                 <choice><orig>L E N<lb break="no"/>G V A</orig>
+                    <reg type="spacing">LEN<lb break="no"/>GVA</reg>
+                    <reg type="spanish">LEN<lb break="no"/>GUA</reg>
+                 </choice>
+                 <choice><orig>Z A P O T E C A</orig><reg type="spacing">ZAPOTECA</reg></choice>,
+                 <choice><orig>C O M<lb break="no"/>pueſto</orig>
+                    <reg type="spacing">COM<lb break="no"/>pueſto</reg>
+                    <reg type="spanish">Com<lb break="no"/>puesto</reg>
+                 </choice>
+                    por el muy
+                    <choice><orig>reuerendo</orig>
+                       <reg type="spanish">reverendo</reg>
+                    </choice> padre
+                <lb/>Fray
+                     <choice><orig>Iuan</orig>
+                        <reg type="spanish">Juan</reg></choice>
+                     de
+                     <choice><orig>Cordoua</orig>
+                        <reg type="spanish">Córdoba</reg></choice>,
+                     de la
+                 <lb/>orden de los Predica<pc type="hyphen">-</pc><lb break="no"/>dores
+                    <choice><orig>deſta</orig>
+                       <reg type="spanish">de esta</reg></choice>
+                    <choice><orig>nue<pc type="hyphen">-</pc><lb break="no"/>ua</orig>
+                       <reg type="spanish">nue<pc type="hyphen">-</pc><lb break="no"/>va</reg>
+                    </choice>
+                    <choice><orig>Eſpaña</orig>
+                       <reg type="spanish">España</reg>
+                    </choice>.
+
+              </head>
+                 <!-- woodcut-->
+                 <head type="cordova">
+                 <lb/><choice><orig>E N</orig><reg type="spacing">EN</reg></choice>
+                    <choice><orig>M E X I C O</orig><reg type="spacing">MEXICO</reg><reg type="spanish">MÉXICO</reg></choice>.
+                   <lb/><pc>¶</pc>En
+                 <choice><orig>caſa</orig><reg type="spanish">casa</reg></choice> de Pedro Balli.
+                   <lb/>Año de. <choice><orig>1 5 7 8</orig><reg type="spacing">1578</reg></choice>.
+                </head>
+              </div>
+             <pb break="yes" type="arte" n="6"/>
+             <pb break="yes" type="pdf" facs="http://archive.org/stream/arteenlenguazapo00juan#page/n6/mode/1up"/>
+             <div xml:id="cordova-arte1.3">
+            <head type="outline">[Licencias]</head>
+            <div xml:id="cordova-arte1.3.1" part="N" org="uniform" sample="complete">
+             <head type="outline">Licencia del muy excelente señor Virrey [Don Martín Enriquez].</head>
+             <head type="cordova"><choice><orig>L I C E N C I A</orig><reg type="spacing">LICENCIA</reg></choice>
+                <choice><orig>D E L</orig><reg type="spacing">DEL</reg></choice>
+             <lb/>muy
+                <choice><orig>excellente</orig>
+                <reg type="spanish">excelente</reg></choice>
+                <choice><orig>ſeñor</orig>
+                   <reg type="spanish">señor</reg></choice>
+             <lb/><choice><orig>Viſorey</orig>
+                <reg type="spanish">Virrey</reg></choice>.</head>
+            <p>
+               <lb/><choice><orig><g ref="#cherub-d">D</g> O N</orig>
+                  <reg type="spacing"><g ref="#cherub-d">D</g>ON</reg></choice>
+               <choice><orig>M A R T I N</orig>
+                  <reg type="spacing">MARTIN</reg>
+                  <reg type="spanish">MARTÍN</reg></choice>
+               <choice><orig>E N R I<pc type="hyphen">-</pc><lb break="no"/>quez</orig>
+                  <reg type="spacing">ENRI<pc type="hyphen">-</pc><lb break="no"/>quez</reg>
+               <reg type="spanish">Enri<pc type="hyphen">-</pc><lb break="no"/>quez</reg></choice>,
+               <choice><orig>Viſorey</orig>
+                  <reg type="spanish">Virrey</reg></choice>,
+               <choice><orig>Gouernador</orig>
+                  <reg type="spanish">Governador</reg></choice>
+               y
+               <choice><orig>Ca<lb break="no"/>pitan</orig>
+                  <reg type="spanish">Ca<lb break="no"/>pitán</reg></choice>
+               General por
+               <choice><orig>ſu</orig>
+                  <reg type="spanish">su</reg></choice>
+               <choice><orig>Mageſtad</orig>
+                  <reg type="spanish">Majestad</reg></choice>
+               <lb/>en
+               <choice><orig>eſta</orig>
+                  <reg type="spanish">esta</reg></choice>
+               <choice><orig>nueua</orig>
+                  <reg type="spanish">nueva</reg></choice>
+               <choice><orig>Eſpaña</orig>
+                  <reg type="spanish">España</reg></choice>,
+               y
+               <choice><orig>preſiden<lb break="no"/>te</orig>
+                  <reg type="spanish">presiden<lb break="no"/>te</reg></choice>
+               de la
+               <choice><orig>audiẽcia</orig>
+                  <reg type="spanish">audiencia</reg></choice>
+               real que en ella
+               <lb/><choice><orig>reſide</orig>
+                  <reg type="spanish">reside</reg></choice>.
+               &amp;c. Por
+               <choice><orig>quanto</orig>
+                  <reg type="spanish">cuanto</reg></choice>
+               por
+               par<pc type="hyphen">-</pc><lb break="no"/>te del
+               <choice><orig>reuerendo</orig>
+                  <reg type="spanish">reverendo</reg></choice>
+               padre fray
+               <choice><orig>Iuã</orig>
+                  <reg type="spanish">Juan</reg></choice>
+               <lb/>de
+               <choice><orig>Cordoua</orig>
+                  <reg type="spanish">Córdoba</reg></choice>,
+               de la orden de los
+               <lb/>predicadores, me
+               <choice><orig>a</orig>
+                  <reg type="spanish">ha</reg></choice>
+               <choice><orig>ſido</orig>
+                  <reg type="spanish">sido</reg></choice>
+               <choice><orig>fecha</orig>
+                  <reg type="spanish">hecha</reg></choice>
+               <choice><orig>relacion</orig>
+                  <reg type="spanish">relación</reg></choice>,
+               <choice><orig>q̃cõmucho</orig>
+                  <reg type="spanish">que con mucho</reg></choice>
+               <lb/>trabajo de
+               <choice><orig>ſ pũ</orig><reg type="spanish">su puño</reg></choice>,
+               y con
+               <choice><orig>deſſeo</orig>
+                  <reg type="spanish">deseo</reg></choice>
+               de
+               <choice><orig>aprouechar</orig>
+                  <reg type="spanish">aprovechar</reg></choice>
+               a los
+               na<lb break="no"/>turales, de la
+               <choice><orig>nacion</orig>
+                  <reg type="spanish">nación</reg></choice>
+               <choice><orig>Zapoteca</orig>
+                  <reg type="spanish">zapoteca</reg></choice>,
+               y que los
+               <choice><orig>religioſos</orig>
+                  <reg type="spanish">religiosos</reg></choice>
+               <lb/>que
+               <choice><orig>ſe</orig>
+                  <reg type="spanish">se</reg></choice>
+               <choice><orig>puſieren</orig>
+                  <reg type="spanish">pusieren</reg></choice>
+               <choice><orig>a deprender</orig>
+                  <reg type="spanish">a aprender</reg></choice>
+               la dicha lengua en
+               <choice><orig>ſu</orig>
+                  <reg type="spanish">su</reg></choice>
+               <lb/>modo de hablar, tengan la
+               <choice><orig>pulicia</orig><reg type="spanish">pudicia</reg></choice>
+               que
+               <choice><orig>conuiene</orig>
+                  <reg type="spanish">conviene</reg></choice>.
+               <choice><orig>A</orig>
+                  <reg type="spanish">Ha</reg></choice>
+               <lb/><choice><orig>compueſto</orig>
+                  <reg type="spanish">compuesto</reg></choice>
+               en la dicha lengua
+               <choice><orig>vn</orig>
+                  <reg type="spanish">un</reg></choice>
+               Arte para bien ha<lb break="no"/>blar. El
+               <choice><orig>qual</orig>
+                  <reg type="spanish">cual</reg></choice>
+               para
+               <choice><orig>conſeguyr</orig>
+                  <reg type="spanish">conseguir</reg></choice>
+               el
+               <choice><orig>fructo</orig>
+                  <reg type="spanish">fruto</reg></choice>
+               de
+               <choice><orig>ſu</orig>
+                  <reg type="spanish">su</reg></choice>
+               <choice><orig>deſſeo</orig>
+                  <reg type="spanish">deseo</reg></choice>,
+               <lb/><choice><orig>querriaſe</orig>
+                  <reg type="spanish">quería se</reg></choice>
+               <choice><orig>imprimieſſe</orig>
+                  <reg type="spanish">imprimiese</reg></choice>,
+               <choice><orig>yme</orig>
+                  <reg type="spanish">y me</reg></choice>
+               <choice><orig>pidio</orig>
+                  <reg type="spanish">pidió</reg></choice>
+               le
+               <choice><orig>diſſe</orig>
+                  <reg type="spanish">diese</reg></choice>
+               <choice><orig>licẽcia</orig>
+                  <reg type="spanish">licencia</reg></choice>
+               pa<lb break="no"/>ra ello. Y por mi
+               <choice><orig>viſto</orig>
+                  <reg type="spanish">visto</reg></choice>
+               y atento que
+               <choice><orig>eſta</orig>
+                  <reg type="spanish">esta</reg></choice>
+               <choice><orig>viſto</orig>
+                  <reg type="spanish">visto</reg></choice> y
+               exa<pc type="hyphen">-</pc><lb break="no"/>minado, por
+               <choice><orig>perſonas</orig>
+                  <reg type="spanish">personas</reg></choice>
+               doctas
+               <choice><orig>aquien</orig> <!-- XMFM, this word should be 'a quienes', in order to agree with the plurar 'doctas'  -->
+                  <reg type="spanish">a quien</reg></choice>
+               lo
+               <choice><orig>cometio</orig>
+                  <reg type="spanish">cometió</reg></choice>
+               el
+               <lb/><choice><orig>prouincial</orig>
+                  <reg type="spanish">provincial</reg></choice>
+               de la dicha orden, y lo
+               <choice><orig>aprueuan</orig>
+                  <reg type="spanish">aprueban</reg></choice>
+               por
+               bue<lb break="no"/>no. Y que el
+               <choice><orig>reuerendiſsimo</orig>
+                  <reg type="spanish">reverendísimo</reg></choice>
+               <choice><orig>obiſpo</orig><reg type="spanish">obispo</reg></choice>
+               de la ciudad de
+               <lb/>Antequera
+               <choice><orig>eſta</orig>
+                  <reg type="spanish">está</reg></choice>
+               de
+               <choice><orig>parecerſe</orig>
+                  <reg type="spanish">parecer se</reg></choice>
+               imprima. Por la
+               <choice><orig>pre<pc type="hyphen">-</pc><lb break="no"/>ſente</orig>
+                  <reg type="spanish">pre<pc type="hyphen">-</pc><lb break="no"/>sente</reg></choice>
+               doy licencia, a
+               <choice><orig>qualquier</orig>
+                  <reg type="spanish">cualquier</reg></choice>
+               <choice><orig>impreſſor</orig>
+                  <reg type="spanish">impresor</reg></choice>
+               que el
+               di<pc type="hyphen">-</pc><lb break="no"/>cho fray
+               <choice><orig>Iuan</orig>
+                  <reg type="spanish">Juan</reg></choice> de
+               <choice><orig>Cordoua</orig>
+                  <reg type="spanish">Córdoba</reg></choice>
+               <choice><orig>ſeñalare</orig>
+                  <reg type="spanish">señalare</reg></choice>,
+               para que
+               libre<lb break="no"/>mente pueda imprimir
+               <choice><orig>eldicho</orig>
+                  <reg type="spanish">el dicho</reg></choice>
+               Arte, de lengua za<lb break="no"/>poteca,
+               <fw type="catchword" place="bottom-right">
+                 <hi rend="bold"> † 2 poteca,</hi>
+               </fw>
+</p>
+</div>
+</div>
+</div>
+</front>
+<body>
+<div xml:id="cordova-arte2">
+<div xml:id="cordova-arte2.1">
+<p>
+                  <pb break="yes" type="arte" n="1v"/>
+                  <pb break="yes" type="pdf" facs="http://archive.org/stream/arteenlenguazapo00juan#page/n19/mode/1up"/>
+                  <fw type="head" place="top-center">
+                     <hi rend="bold">ARTE</hi>
+                  </fw>
+
+                  <lb/>ni tienen terminaciones ni
+                  <choice><orig>articulos</orig><reg type="spanish">artículos</reg></choice>
+                  como los del
+                  <lb/><choice><orig>Latin</orig><reg type="spanish">Latín</reg></choice>,
+                  ni tampoco directamente tienen
+                  <choice><orig>caſos</orig><reg type="spanish">casos</reg></choice>
+                  co<pc type="hyphen">-</pc><lb break="no"/>mo los
+                  <choice><orig>nueſtros</orig><reg type="spanish">nuestros</reg></choice>.
+                  Sino <choice><orig>añadiendoles</orig><reg type="spanish">añadiéndoles</reg></choice>
+                  algunas <choice><orig>parti<pc type="hyphen">-</pc>
+                  <lb break="no"/>culas</orig><reg type="spanish">partículas</reg></choice>,
+                  o anteponiendo o
+                  <choice><orig>poſtponiendo</orig>
+                     <reg type="spanish">posponiendo</reg></choice>
+                  el
+                  <choice><orig>nõbre</orig>
+                     <reg type="spanish">nombre</reg></choice> o
+                  <lb/>por circunloquios
+                  <choice><orig>paſſan</orig>
+                     <reg type="spanish">pasan</reg></choice>
+                  con ellos por los
+                  <choice><orig>caſos</orig>
+                     <reg type="spanish">casos</reg></choice>.
+                  <lb/>Para cuyo
+                  <choice><orig>exēplo</orig>
+                     <reg type="spanish">ejemplo</reg></choice>
+                  nos
+                  <choice><orig>parecio</orig>
+                     <reg type="spanish">pareció</reg></choice>
+                  declinar
+                  <choice><orig>aqui</orig>
+                     <reg type="spanish">aquí</reg></choice>
+                  <choice><orig>vn</orig>
+                     <reg type="spanish">un</reg></choice>
+                  <choice><orig>nõ
+                  <lb break="no"/>bre</orig><reg type="spanish">nombre</reg></choice>, como para modelo de los
+                  <choice><orig>demas</orig><reg type="spanish">demás</reg></choice>,
+                  porque todos
+                  <lb/>van por aquel camino.
+               </p>
+               <p>
+                  <hi rend="bold">REGLA.</hi>
+                  <pc>¶</pc><choice><orig>Dezimos</orig><reg type="spanish">Decimos</reg></choice>
+                  que no tienen
+                  <choice><orig>articulos</orig><reg type="spanish">artículos</reg></choice>,
+                  <lb/>y es, que para ninguna
+                  <choice><orig>coſa</orig><reg type="spanish">cosa</reg></choice> inanimada le
+                  <choice><orig>ay</orig><reg type="spanish">hay</reg></choice>. Y pa<pc type="hyphen">-</pc><lb break="no"/>ra las criaturas animadas no tienen
+                  <choice><orig>mas</orig><reg type="spanish">más</reg></choice>
+                  que
+                  <choice><orig>eſte</orig><reg type="spanish">este</reg></choice>.
+                  <lb/><foreign xml:lang="lat"><choice><abbr>V.g.</abbr><expan>verbi gratia</expan></choice></foreign>
+                  <foreign xml:lang="cvz" xml:id="arte2.01_01">gönná</foreign>,
+                  <choice><orig>poſtpueſto</orig><reg type="spanish">pospuesto</reg></choice>
+                  para todas las hembras, y
+                  <lb/><foreign xml:lang="cvz" xml:id="arte2.01_02">niguijo</foreign>,
+                  para todos los machos.
+                  <foreign xml:lang="lat">Vt</foreign>
+                  <foreign xml:lang="cvz" xml:id="arte2.01_03">pénigönná</foreign>
+                  <choice><orig>mu<pc type="hypehn">-</pc><lb break="no"/>ger</orig>
+                     <reg type="spanish">mu<pc type="hyphen">-</pc><lb break="no"/>jer</reg></choice>,
+                  <foreign xml:lang="cvz" xml:id="arte2.01_04">péniniguijo</foreign>,
+                  <choice><orig>hõbre</orig><reg type="spanish">hombre</reg></choice>,
+                  <foreign xml:lang="cvz" xml:id="arte2.01_05">mänigónná</foreign>,
+                  animal hem<pc type="hyphen">-</pc><lb break="no"/>bra,
+                  <foreign xml:lang="cvz" xml:id="arte2.01_06">maniniguijo</foreign>,
+                  animal macho.
+               </p>
+            </div>
+            <div xml:id="cordova-arte2.2" part="N" org="uniform" sample="complete">
+               <head type="cordova"><hi rend="bold"><choice><orig>DECLINACION</orig><reg type="spanish">DECLINACIÓN</reg></choice>.</hi></head>
+               <head type="outline">Declinación</head>
+               <div xml:id="cordova-arte2.2.1">
+                  <head type="outline">[Nominativo]</head>
+                  <p><c rend="large">D</c>Eclinemos
+                     <choice><orig>agora</orig>
+                        <reg type="spanish">ahora</reg></choice>
+                     <choice><orig>eſte</orig>
+                        <reg type="spanish">este</reg></choice> nombre,
+                     <foreign xml:lang="cvz" xml:id="arte2.2.1_1">pichína</foreign>
+                     <choice><orig>q̃</orig>
+                        <reg type="spanish">que</reg></choice>
+                     quie<lb break="no"/>re
+                     <choice><orig>dezir</orig>
+                        <reg type="spanish">decir</reg></choice>
+                     Venado o
+                     <choice><orig>Cieruo</orig>
+                        <reg type="spanish">Ciervo</reg></choice>,
+                     pues
+                     <choice><orig>dize</orig>
+                        <reg type="spanish">dice</reg></choice>
+                     <choice><orig>aſsi</orig><reg type="spanish">así</reg></choice>.
+                     <choice><orig>No<pc type="hyphen">-</pc><lb break="no"/>minatiuo</orig><reg type="spanish">Nominativo</reg></choice>
+                     <foreign xml:lang="cvz" xml:id="arte2.2.1_2">pichina</foreign>,
+                     en <choice><orig>eſte</orig>
+                        <reg type="spanish">este</reg></choice>
+                     <choice><orig>caſo</orig>
+                        <reg type="spanish">caso</reg></choice> no
+                     <choice><orig>ay</orig>
+                        <reg type="spanish">hay</reg></choice>
+                     <choice><orig>difficul<pc type="hyphen">-</pc><lb break="no"/>tad</orig><reg type="spanish">dificul<pc type="hyphen">-</pc><lb break="no"/>tad</reg></choice>,
+                     <choice><orig>porq̃</orig><reg type="spanish">porque</reg></choice> es regular y va
+                     <choice><orig>aſsi</orig><reg type="spanish">así</reg></choice> en todos los nombres.
+                  </p>
+               </div>
+               <div xml:id="cordova-arte2.2.2" part="N" org="uniform" sample="complete">
+                  <head type="cordova"><hi rend="bold">GENITIVO</hi>.</head>
+                  <head type="outline">Genitivo</head>
+                  <p>
+                     <lb/><pc>¶</pc><choice><orig>Genitiuo</orig><reg type="spanish">Genitivo</reg></choice> del
+                     <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>.
+                     A <choice><orig>eſte</orig><reg type="spanish">este</reg></choice> le
+                     <choice><orig>anteponē</orig><reg type="spanish">anteponen</reg></choice>
+                     <choice><orig>vn</orig><reg type="spanish">un</reg></choice>
+                     pro<lb break="no"/>nombre para le
+                     <choice><orig>hazer</orig><reg type="spanish">hacer</reg></choice>
+                     <choice><orig>genitiuo</orig><reg type="spanish">genitivo</reg></choice>.
+                     Que es,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_09">xi</foreign>.
+                     <foreign xml:lang="lat" ana="vel"><choice><abbr>l</abbr><expan>vel</expan></choice></foreign>.
+                     <foreign xml:lang="cvz" xml:id="arte2.01_010">xiténi</foreign>.
+                     <lb/><foreign xml:lang="lat" ana="vel"><choice><abbr>l</abbr><expan>vel</expan></choice></foreign>.
+                     <foreign xml:lang="cvz" xml:id="arte2.01_011">xitíni</foreign>,
+                     que quiere
+                     <choice><orig>dezir</orig><reg type="spanish">decir</reg></choice>,
+                     la parte o lo que pertene<pc type="hyphen">-</pc><lb break="no"/>ce, y
+                     <choice><orig>aſsi</orig><reg type="spanish">así</reg></choice>
+                     <choice><orig>dizen</orig><reg type="spanish">dicen</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_012">xiténi</foreign>
+                     <foreign xml:lang="lat" ana="vel"><choice><abbr>l</abbr><expan>vel</expan></choice></foreign>.
+                      <foreign xml:lang="cvz" xml:id="arte2.01_013">xitínipichina</foreign>
+                      <foreign xml:lang="lat" ana="vel"><choice><abbr>l</abbr><expan>vel</expan></choice></foreign>.
+                      <foreign xml:lang="cvz" xml:id="arte2.01_014">xiquítipi<pc type="hyphen">-</pc><lb break="no"/>china</foreign>,
+                     el cuero de venado.
+                     <choice><orig>Dizē</orig><reg type="spanish">Dicen</reg></choice>
+                     <choice><orig>tãbien</orig><reg type="spanish">también</reg></choice>
+                     <foreign xml:lang="cvz" xml:id="arte2.01_015">xäbaya</foreign>.
+                     <foreign xml:lang="lat" ana="vel"><choice><abbr>l</abbr><expan>vel</expan></choice></foreign>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_016">xi<lb break="no"/>xabaya</foreign>, mi
+                     <choice><orig>māta</orig><reg type="spanish">manta</reg></choice>, <!-- orig mata is obscured, need to encode that later. bdl -->
+                     <foreign xml:lang="cvz" xml:id="arte2.01_017">xabalo</foreign>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_018">xábani</foreign>,
+                     tu <choice><orig>māta</orig><reg type="spanish">manta</reg></choice>, la de
+                     <choice><orig>aq̃l</orig><reg type="spanish">aquel</reg></choice>.
+                     <fw type="catchword">
+                        <choice><orig>Tambien</orig><reg type="spanish">También</reg></choice>
+                     </fw>
+
+                     <pb break="yes" type="arte" n="2r"/>
+                     <pb break="yes" type="pdf" facs="http://archive.org/stream/arteenlenguazapo00juan#page/2/mode/1up"/>
+                     <fw type="head" place="top-center"><hi rend="bold"> ZAPOTECA</hi></fw>
+                     <fw type="pageNum" place="top-right">2</fw>
+                     <lb/><choice><orig>Tambien</orig><reg type="spanish">También</reg></choice>
+                     <choice><orig>dizen</orig><reg type="spanish">dicen</reg></choice>,
+                     <foreign xml:lang="cvz">pénihuaxábanj</foreign>,
+                     el hombre cuya es
+                     <lb/>la manta, todos
+                     <choice><orig>ſon</orig><reg type="spanish">son</reg></choice> romances de
+                     <choice><orig>genitiuo</orig><reg type="spanish">genitivo</reg></choice>.
+                     <choice><orig>Tābien</orig><reg type="spanish">También</reg></choice>
+                     <lb/><choice><orig>eſte</orig><reg type="spanish">este</reg></choice>
+                     <foreign xml:lang="cvz">xábaya</foreign>,
+                     <foreign xml:lang="cvz">xábalo</foreign>,
+                     es nombre
+                     <choice><orig>poſeſiuo</orig><reg type="spanish">posesivo</reg></choice>,
+                     <foreign xml:lang="lat">vide</foreign> los
+                     <lb/>nombres <choice><orig>poſeſsiuos</orig><reg type="spanish">posesivos</reg></choice>. <!-- Future CF bdl -->
+                  </p>
+               </div>
+               <div xml:id="cordova-arte2.2.3">
+                  <head type="cordova">DATIVO.</head>
+                  <head type="outline">Dativo</head>
+                  <p><pc>¶</pc><choice><orig>Datiuo</orig><reg type="spanish">Dativo</reg></choice> al
+                     <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>, para
+                     <choice><orig>vſar</orig><reg type="spanish">usar</reg></choice>
+                     <choice><orig>deſte</orig>
+                        <reg type="spanish">este</reg></choice> no
+                     <choice><orig>hazen</orig><reg type="spanish">hacen</reg></choice> <choice><orig>mas</orig>
+                   <reg type="spanish">más</reg></choice>
+                     <lb/>que <choice><orig>poſtponer</orig><reg type="spanish">posponer</reg></choice> el
+                     <choice><orig>datiuo</orig><reg type="spanish">dativo</reg></choice>.
+                     <foreign xml:lang="lat" ana="vt">vt</foreign>.
+                     Dile a Pedro los tomi<pc type="hyphen">-</pc><lb break="no"/>nes,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_019">péea tomines Pedro</foreign>,
+                     dile del pan al <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>,<lb break="no"/> <foreign xml:lang="cvz" xml:id="arte2.01_020">péeaqueta pichína</foreign>.
+                     <choice><orig>Dizen</orig><reg type="spanish">Dicen</reg></choice>
+                     <choice><orig>tambien</orig><reg type="spanish">también</reg></choice>,
+                     <choice><orig>apiadate</orig><reg type="spanish">apiádate</reg></choice> de
+                     <lb/><choice><orig>mi</orig><reg type="spanish">mí</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_021">pechijcícaláchinaa</foreign>,
+                     <choice><orig>oſey</orig><reg type="spanish">o sé</reg></choice> <choice><orig>manſo</orig><reg type="spanish">manso</reg></choice> para
+                     <choice><orig>comigo</orig><reg type="spanish">conmigo</reg></choice>.
+                  </p>
+               </div>
+               <div xml:id="cordova-arte2.2.4">
+                  <head type="cordova"><choice><orig>ACVSATIVO</orig><reg type="spanish">ACUSATIVO</reg></choice>.</head>
+                  <head type="outline">Acusativo</head>
+                  <p><pc>¶</pc><choice><orig>Acuſatiuo</orig><reg type="spanish">Acusativo</reg></choice>,
+                     al <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>.
+                     A <choice><orig>eſte</orig><reg type="spanish">este</reg></choice>
+                     <choice><orig>quando</orig><reg type="spanish">cuando</reg></choice>
+                     es la <choice><orig>per<pc type="hyphen">-</pc><lb break="no"/>ſona</orig>
+                        <reg type="spanish">per<pc type="hyphen">-</pc><lb break="no"/>sona</reg></choice>
+                     que padece, no <choice><orig>hazen</orig><reg type="spanish">hacen</reg></choice>
+                     <choice><orig>mas</orig><reg type="spanish">más</reg></choice> que
+                     <choice><orig>poſtponer</orig><reg type="spanish">posponer</reg></choice><pc type="hyphen">-</pc><lb break="no"/>la,
+                     <foreign xml:lang="lat" ana="vt">vt</foreign>
+                     para <choice><orig>dezir</orig><reg type="spanish">decir</reg></choice>
+                     <choice><orig>mate</orig><reg type="spanish">maté</reg></choice> el <choice><orig>Cieruo</orig><reg type="spanish">Ciervo</reg></choice>
+                     <choice><orig>dizen</orig><reg type="spanish">dicen</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_022">pétiapi<pc type="hyphen">-</pc><lb break="no"/>china</foreign>.
+                     Y <choice><orig>quando</orig><reg type="spanish">cuando</reg></choice>
+                     <choice><orig>ſignifica</orig><reg type="spanish">significa</reg></choice>
+                     <foreign xml:lang="lat" ana="none">locum adquem</foreign>
+                     <choice><orig>tambien</orig><reg type="spanish">también</reg></choice>
+                     <lb/>le <choice><orig>poſtponen</orig><reg type="spanish">posponen</reg></choice>
+                     <choice><orig>anteponiendole</orig><reg type="spanish">anteponiéndole</reg></choice>
+                     <choice><orig>vna</orig><reg type="spanish">una</reg></choice>
+                     <choice><orig>prespoſicion</orig><reg type="spanish">preposición</reg></choice>.
+                     <foreign xml:lang="lat" ana="scilicet">ſ</foreign>.
+                     <lb/><foreign xml:lang="cvz" xml:id="arte2.01_023">Láo</foreign>,
+                     <foreign xml:lang="lat" ana="vt">vt</foreign> vamos al <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_024">cháonoláopichína</foreign>.
+                     <choice><orig>Tam<lb break="no"/>bien</orig><reg type="spanish">Tam<lb break="no"/>bién</reg></choice> otras
+                     <choice><orig>vezes</orig>
+                        <reg type="spanish">veces</reg></choice>
+                     <choice><orig>ſe</orig>
+                        <reg type="spanish">se</reg></choice>
+                     <choice><orig>dize</orig>
+                        <reg type="spanish">dice</reg></choice>
+                     <choice><orig>ſin</orig>
+                        <reg type="spanish">sin</reg></choice>
+                     <choice><orig>prepoſicion</orig>
+                        <reg type="spanish">preposición</reg></choice>.
+                     <foreign xml:lang="lat" ana="vt">vt</foreign>
+                     vamos
+                     <lb/>a la
+                     <choice><orig>ygleſia</orig>
+                        <reg type="spanish">iglesia</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_025">cháonoyóhotáo</foreign>,
+                     vamos al <choice><orig>rio</orig><reg type="spanish">río</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_026">cháo<pc type="hyphen">-</pc><lb break="no"/>noquígo</foreign>.
+                  </p>
+               </div>
+               <div xml:id="cordova-arte2.2.5">
+                  <head type="cordova">VOCATIVO</head>
+                  <head type="outline">Vocativo</head>
+                  <p><pc>¶</pc><choice><orig>Vocatiuo</orig><reg type="spanish">Vocativo</reg></choice> o
+                     <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>.
+                     <choice><orig>Eſte</orig><reg type="spanish">Este</reg></choice> es el
+                     <choice><orig>nominatiuo</orig><reg type="spanish">nominativo</reg></choice>
+                     <choice><orig>ante<lb break="no"/>pueſto</orig><reg type="spanish">antepuesto</reg></choice>.
+                     <foreign xml:lang="cvz" xml:id="arte2.01_027">ha</foreign>,
+                     <foreign xml:lang="lat" ana="vt">vt</foreign>
+                     <foreign xml:lang="cvz" xml:id="arte2.01_028">ha, pichína</foreign>,
+                     o <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>,
+                     o <choice><orig>poſtpueſto</orig><reg type="spanish">pospuesto</reg></choice>,
+                     <foreign xml:lang="cvz" xml:id="arte2.01_029">he</foreign>.
+                     <lb/><foreign xml:lang="lat" ana="vt">vt</foreign>
+                     <foreign xml:lang="cvz" xml:id="arte2.01_030">pichínahe</foreign>.
+                  </p>
+               </div>
+               <div xml:id="cordova-arte2.2.6">
+                  <head type="cordova">ABLATIVO.</head>
+                  <head type="outline">Ablativo</head>
+                  <p><pc>¶</pc><choice><orig>Ablatiuo</orig><reg type="spanish">Ablativo</reg></choice> del
+                     <choice><orig>cieruo</orig><reg type="spanish">ciervo</reg></choice>.
+                     <choice><orig>Tambien</orig><reg type="spanish">También</reg></choice> carece
+                     <choice><orig>eſta</orig><reg type="spanish">esta</reg></choice> len<lb break="no"/>gua
+                     <choice><orig>deſte</orig>
+                        <reg type="spanish">de este</reg></choice>
+                     <choice><orig>caſo</orig>
+                        <reg type="spanish">caso</reg></choice>,
+                     pero <choice><orig>ſiruenſe</orig>
+                        <reg type="spanish">sirvense</reg></choice> los
+                     <choice><orig>yndios</orig><reg type="spanish">indios</reg></choice>
+                     <choice><orig>del</orig><reg type="spanish">de él</reg></choice>,
+                     <choice><orig>deſta</orig><reg type="spanish">de esta</reg></choice>
+                     <lb/>manera. O
+                     <choice><orig>poſtponiendole</orig><reg type="spanish">posponiéndole</reg></choice> a la
+                     <choice><orig>oracion</orig><reg type="spanish">oración</reg></choice> como el
+
+                     <fw type="sig" place="bottom-left">A2</fw>
+                     <fw type="catchword" place="bottom-right">acuſatino</fw>
+</p>
+</div>
+</div>
+</div>
+</body>
+</text>
+</TEI>

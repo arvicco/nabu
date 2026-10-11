@@ -561,6 +561,8 @@ sources:
     source_kind: historiography
   goryeosa-jeoryo:
     source_kind: historiography/chronicle
+  guaman-poma:               # P117-5: one work — the Nueva corónica, an illustrated chronicle
+    source_kind: historiography/chronicle
   aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:

@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The 27 research desks of the Nabu library — tags over the
+  The 28 research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The 27 desks
+## The 28 desks
 
 ### classical
 
@@ -237,6 +237,14 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
 [Open the mongolic desk]({{ '/axis/mongolic/' | relative_url }})
+
+### americas
+
+> The Americanist — the colonial record of the indigenous Americas, Zapotec testaments to the Andean chronicle.
+
+The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (Córdova's 1578 Arte, Agüero's 1666 Miscelaneo, the testaments and their period Spanish translations), the Royal Danish Library's Guaman Poma Nueva corónica (Spanish with Quechua and Aymara passages), and the UD Tupinambá and Old Guaraní treebanks of the Jesuit grammars and catechisms — the modern UD treebanks of American languages deliberately out.
+
+[Open the americas desk]({{ '/axis/americas/' | relative_url }})
 
 ### local
 
