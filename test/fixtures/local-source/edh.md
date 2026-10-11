@@ -18,5 +18,5 @@ Britannia --material marble`).
 
 ## witness:survey (edh-survey, 2026-07-13)
 
-Survey: docs/edh-survey.md — the 27-quarantine triage (26 lb-less
+Survey: the P17-2 EDH survey — the 27-quarantine triage (26 lb-less
 inscriptions carried to P19, 1 malformed upstream XML) is baseline-anchored.

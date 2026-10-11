@@ -14,7 +14,7 @@ module Nabu
   module Adapters
     # ja-wikisource (P109-1, Q90 under №R-74): the Japanese Wikisource
     # premodern shelf — the ERA CATEGORY CONE (census 2026-09-29, in
-    # .docs/p109-plan.md): every ns-0 page reachable from the eight era
+    # the P109 phase plan): every ns-0 page reachable from the eight era
     # categories 飛鳥…江戸 within CATEGORY_DEPTH, 867 pages at census.
     # Hosted texts are PD; the transcription layer is CC BY-SA 4.0
     # (wiki footer verbatim) → attribution, credit the contributors.

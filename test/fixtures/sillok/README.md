@@ -10,8 +10,8 @@ only the member SET was selected — no trimming inside files.
   **15053646** (Gojong/Sunjong, 9.1 MB / 66 MB unpacked). Download is
   the three-step resolution `Nabu::DataGoKrFetch` implements
   (page → JSON → `/cmm/cmm/fileDownload.do?atchFileId=…` — the
-  atchFileId bumps on upstream file replacement; see
-  `.docs/p78-plan.md` §Acquisition for the 2026-08-18 resolved keys).
+  atchFileId bumps on upstream file replacement; `Nabu::DataGoKrFetch`
+  resolves the current keys — first resolved 2026-08-18).
 - **Retrieved:** 2026-08-18 (both whole zips; members below unpacked
   unmodified). In-zip file dates 2022-10-27/31.
 - **License:** 이용허락범위 제한 없음 per both dataset pages
