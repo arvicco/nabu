@@ -23,6 +23,7 @@ A source wears every desk it serves — these 27 answer this desk. Holdings are 
 | `dharma-khmer` | texts | attribution | wired · manual | 1,219 docs / 50,165 passages |
 | `dharma-nusantara` | texts | attribution | wired · manual | 291 docs / 5,893 passages |
 | `dharma-pyu` | texts | attribution | wired · manual | 145 docs / 629 passages |
+| `dharma-tamil` | texts | attribution | not yet wired | not synced yet |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |

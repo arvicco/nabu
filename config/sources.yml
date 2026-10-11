@@ -1411,6 +1411,34 @@ dharma-pyu:   # P92-2
   # per-file <licence> CC BY-SA 4.0 is the whole grant, recorded
   # verbatim; class attribution.
 
+dharma-tamil:   # P118-1
+  adapter: Nabu::Adapters::DharmaTamil
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: false   # awaiting the first real sync
+  sync_policy: manual
+  # DHARMA Tamil-country epigraphy (Task Force A; EFEO/CNRS/CEIAS, ERC
+  # no. 809994): the eleven tfa-* INSCRIPTION edition repos on
+  # github.com/erc-dharma — 1,301 DHARMA_ edition files (live census
+  # 2026-10-11): pallava 482 · tamilnadu 335 · sii 176 · tiruvavatuturai
+  # 80 · cirkali 55 · pandya 54 · kotumpalur 41 · uttiramerur 26 ·
+  # melappaluvur-kilappaluvur 20 · tamil-outside-TN 20 · cempiyan-
+  # mahadevi 12. Romanized Tamil above all: minted document codes
+  # tam-Latn 1,145 · san-Latn 116 · pra-Latn 4 · pli-Latn 1 · fra-Latn 1,
+  # plus 13 tel-Latn passages; bare "tam" (5 files) aliased to tam-Latn.
+  # License: the in-file <licence> governs, recorded verbatim — CC BY-SA
+  # 4.0 on 1,227 files ("CC BY-SA 4.0"); 71 files carry none and fall
+  # back on the repo LICENCE.txt (CC BY 4.0 legal code, README badge
+  # "licence-CC-BY"), recorded as "repo-level CC BY 4.0 (no in-file
+  # grant)"; class attribution. FETCH: one sparse GitFetch per repo into
+  # canonical/dharma-tamil/<repo>/ (root-anchored cone /DHARMA_*.xml +
+  # README.md + LICENCE.txt — upstream's ~DHARMA_ drafts, tfa-sii's OCR'd
+  # sii-corpus/ volumes and HTML renderings stay out), one breaker over
+  # all repos, per-repo ledger pins. EXPECTED FIRST SYNC: 1,299
+  # discovered (2 encoding templates skipped by rule) → 1,267 docs /
+  # 17,993 passages; 32 honest quarantines (29 text-less stubs, 1
+  # edition-less, 2 lang-less TamilNadu plates).
+
 diccas:   # P95-4
   adapter: Nabu::Adapters::Diccas
   adopted: "2026-09-03"
