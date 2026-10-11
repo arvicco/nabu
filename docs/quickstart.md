@@ -14,8 +14,9 @@ re-run. The same walkthrough is published on the project site:
 - **Ruby 3.3+** and **git**. macOS (Apple Silicon) is the development
   platform; nothing in the core is known to be Mac-specific.
 - Disk: a single small source is a few MB; the full library as of
-  2026-08-19 is **87 GB canonical + 125 GB derived SQLite** (the Arabic
-  OpenITI, ORACC, and Chinese shelves dominate). Start small — the
+  October 2026 — over 2.3 million documents — is roughly **120 GB
+  canonical + 160 GB derived SQLite** (the Arabic OpenITI, ORACC, and
+  Chinese shelves dominate). Start small — the
   starter shelf below is ~690 MB, and every shelf is an independent
   opt-in.
 

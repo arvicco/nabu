@@ -20,7 +20,7 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 └─────────────────────────────────────────────────────────────┘
 ```
 
-(Diagram partly aspirational: `nabu adhoc`/`nabu enrich`, AdhocPipeline/EnrichmentRunner, and the enricher column are design-stage — not yet built; §4 and §6 mark what shipped instead.)
+(Diagram partly aspirational: `nabu adhoc`/`nabu enrich`, AdhocPipeline/EnrichmentRunner, and the gloss/HTR half of the enricher column are design-stage — not yet built; the lemma and embed lanes shipped as `nabu lemma-enrich` and `nabu embed`. §4 and §6 mark what shipped.)
 
 **Invariant:** data flows one way. Adapters produce canonical files; the loader derives SQLite from canonical files; enrichment producers write only to derived tables. db/ = f(canonical, config, local) — the three permanent folders: `nabu rebuild` proves it by regenerating every derived store from them byte-for-byte-equivalently. **local/history.sqlite3 is an operational LOG** (P7-1, reclassified P70): an append-only ledger (run history, per-repo sync pins, license baselines, durable revision events) that is *never* derived and *never* dropped by rebuild. Every owner DECISION it once held now lives in local/config/ (grants.yml, creep_acceptances.yml; lect rulings in lect_rulings.yml with the journal re-derived at rebuild). It is keyed by durable identity (source slug, repo url, passage/document urn), never by catalog row ids, which every rebuild re-mints.
 
@@ -33,7 +33,7 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 ```
 nabu/
 ├── CLAUDE.md
-├── docs/                        # this doc set
+├── docs/                        # this doc set (index: docs/README.md; frozen early record: docs/history/)
 ├── bin/nabu                   # Thor entrypoint
 ├── lib/nabu/
 │   ├── adapter.rb               # base class + contract
@@ -62,12 +62,14 @@ nabu/
 │   │                            #   link_scopes.yml, lect_rulings.yml (see lib/nabu/config.rb)
 │   ├── shelves/<slug>/          # the owner shelves (§16)
 │   └── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
-├── db/                          # DERIVED — all of it; `nabu rebuild` re-mints every file
+├── db/                          # DERIVED — all of it; `nabu rebuild` re-mints every file but vectors
 │   ├── catalog.sqlite3          # sources, documents, passages, provenance, licenses
 │   ├── fulltext.sqlite3         # FTS5 + passage_lemmas + trigram index (all keyed by passage id)
 │   ├── links.sqlite3            # (P16-1/P70-3b, §15): batch-mined edges — rebuild's links stage re-mints it
 │   ├── lects.sqlite3            # (P58-1, §15a): per-document lect rulings — DERIVED since P70-2,
 │   │                            #   re-derived wholesale from local/config/lect_rulings.yml + rules; needs no backup
+│   ├── vectors.sqlite3          # (P93-4, §5/§6): semantic vectors — EXPENSIVE-derived: `nabu embed` alone
+│   │                            #   maintains it, rebuild never drops it (rows keyed by model+urn+text sha)
 │   ├── migrate/                 # catalog migration track (forward-only)
 │   ├── ledger_migrate/          # ledger migration track (own schema_info per file)
 │   ├── links_migrate/           # links journal migration track
@@ -339,10 +341,13 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 
 **The shipped lane: sync-driven enrichment producers (P44-7).** An adapter may declare `Adapter.enrichment_producer?`; after every load (and every rebuild replay) of such a source, SyncRunner/Rebuild run its declared producer to re-derive enrichment rows from the just-loaded catalog — today the pedecerto and hypotactic meter scansions filling the `enrichments` table, served by `search --meter`. Fully derived, zero cost to regenerate, so the derivability law holds with no journal: the producer replays at rebuild like any other derivation stage. (The same producer shape drives the place index, §5.)
 
-**The rest of this section is design-stage — not yet built** (no `nabu enrich`, no `EnrichmentRunner`; model-driven output, when it lands, is an ACQUISITION under the derivability law — a local shelf through a sanctioned gateway, §5's Phase-8 note):
+**The shipped model-driven lanes (P84-1, P93-4).** Two local-model lanes landed after this section was first designed, and both settled the bridge question the same way: ONE Python subprocess per campaign inside an owner-bootstrapped venv (`rake tools:stanza[<lang>]` / `rake tools:embed`), spoken to over a line protocol through `Shell.duplex` — no HTTP sidecar, no per-call spawning, Ruby stays the orchestrator, and the suite drives a fake worker over the identical protocol.
 
-- **Lemmatization:** CLTK/Stanza are Python; bridge via a small persistent Python sidecar exposing HTTP on localhost (started by `nabu enrich`), not per-call subprocess spawning. Ruby stays the orchestrator.
-- **Embeddings:** pluggable `Embedder` interface — Anthropic-adjacent APIs, or local model on the Sparks. Embed `text` and, when available, the English gloss; store both vectors.
+- **Silver lemmatization** (`nabu lemma-enrich`, P84-1; [lemma-enrichment.md](lemma-enrichment.md)): a Stanza tagger fills the passages no gold annotation covers, wave 1 Latin only. Its output is an ACQUISITION — JSONL shards on the `local-lemmas` shelf through `Nabu::LemmaShelf` (§16) — projected into `passage_lemmas` as tier `silver` only on request (`--index`/`--index-only`), never by a rebuild.
+- **Semantic embeddings** (`nabu embed`, P93-4; [embed.md](embed.md)): `multilingual-e5-base` run locally over the `embed_index: true` literary core into `db/vectors.sqlite3` — the expensive-derived store whose lifecycle §5 describes (keyed `(model, urn)` + text sha, rebuild-proof, delta-only). Same-language retrieval only; the gloss-vector half of the original design was not built.
+
+**Still design-stage — not yet built** (no `nabu enrich`, no `EnrichmentRunner`; paid model output, when it lands, is an ACQUISITION under the derivability law — a local shelf through a sanctioned gateway, §5's Phase-8 note):
+
 - **Glossing:** Claude API, batched, always stored as `enrichments(kind: 'machine_gloss')`, never presented as translation without the flag.
 - All paid enrichment is journaled and replayable: `nabu rebuild` restores derived text tables, then a replay stage re-applies from the acquisition shelf.
 
