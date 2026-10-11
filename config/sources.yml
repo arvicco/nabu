@@ -2663,6 +2663,24 @@ lila:
   # owner decision (the clone is large + version-pinned).
   sync_policy: manual
 
+litopys:   # P117 (Q106), 02-sources row 252
+  adapter: Nabu::Adapters::Litopys
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # READY; flips after the first sync is verified
+  sync_policy: manual
+  # Izbornyk (litopys.org.ua), the PD-EDITION SUBSET — the packet is the
+  # per-text edition triage (Litopys::TRIAGE): the Ipatiev chronicle
+  # COMPLETE (ipatlet/ipat01–41, stlb. 1–938, ПСРЛ т. 2, СПб. 1908 —
+  # both layers PD) + three glossaries of the «Лексикони» shelf after
+  # 19th-c. publications (the dictionary lane). The rest of the shelf
+  # rides Soviet-era editions (Німчук 1961/1964, Наукова думка 1970–80,
+  # Soviet facsimiles) → excluded by EDITION_TAINT_POST_1930, never
+  # fetched. Plain HTTP (the HTTPS cert is broken upstream), the
+  # izbornyk.org.ua mirror per page as fallback; 44 GETs at 1 s.
+  # EXPECTED FIRST SYNC: 41 docs / 964 passages (938 columns, 26 split
+  # across pages) + 3 dictionaries / 923 entries (688 + 174 + 61).
+
 liv:
   adapter: Nabu::Adapters::Liv
   adopted: "2026-07-14"

@@ -549,6 +549,8 @@ sources:
     source_kind: scripture
   derge-tengyur:
     source_kind: scripture
+  litopys:
+    source_kind: historiography/chronicle   # P117: the passage shelf IS the Ipatiev chronicle
   sillok:                    # the okhc dynastic-record family
     source_kind: historiography/annals
   sjw:

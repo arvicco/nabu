@@ -1,0 +1,40 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Real windows-1251 pages of the Izbornyk site (plain http — the https
+# certificate is broken upstream). The chronicle pages ipat01/05/36 and the
+# glossary zyz100 are line-boundary trims (whole column blocks cut at the
+# apparatus-div boundaries, the page frame kept); ipat40, zyz101 and zyz102
+# are whole. adapter_test is null (trimmed files would false-fail counts).
+source: litopys
+adapter_test:
+retrieved: 2026-10-11
+files:
+  - path: ipatlet/ipat01.htm
+    url: http://litopys.org.ua/ipatlet/ipat01.htm
+    whole: false
+    trim: columns 3–18 cut (source lines 219–1109; 95,013 → 25,295 bytes) — keeps cols 1–2 + 19–21
+  - path: ipatlet/ipat05.htm
+    url: http://litopys.org.ua/ipatlet/ipat05.htm
+    whole: false
+    trim: columns 95–112 cut (source lines 422–1372; 103,751 → 33,761 bytes) — keeps cols 89–94
+  - path: ipatlet/ipat36.htm
+    url: http://litopys.org.ua/ipatlet/ipat36.htm
+    whole: false
+    trim: columns 813–840 cut (source lines 310–1898; 136,641 → 22,293 bytes) — keeps cols 810–812
+  - path: ipatlet/ipat40.htm
+    url: http://litopys.org.ua/ipatlet/ipat40.htm
+    whole: true
+    trim: none
+  - path: zyzlex/zyz100.htm
+    url: http://litopys.org.ua/zyzlex/zyz100.htm
+    whole: false
+    trim: letters Б–Щ cut (source lines 307–2904; 72,642 → 15,330 bytes) — keeps А + Ю
+  - path: zyzlex/zyz101.htm
+    url: http://litopys.org.ua/zyzlex/zyz101.htm
+    whole: true
+    trim: none
+  - path: zyzlex/zyz102.htm
+    url: http://litopys.org.ua/zyzlex/zyz102.htm
+    whole: true
+    trim: none

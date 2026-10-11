@@ -101,7 +101,10 @@ class DerivabilityWritersTest < Minitest::Test
   # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
   # inside Adapter#fetch, and the pl Brückner lane writes its stub index
   # + scan envelopes under canonical/pl-wikisource/bruckner/ from that
-  # same fetch — the ja/zh-wikisource law kind.
+  # same fetch — the ja/zh-wikisource law kind. P117's litopys_fetch
+  # writes the censused Izbornyk pages (verbatim windows-1251, tmp+rename,
+  # site paths) + its .litopys-fetch.json pin into canonical/litopys/
+  # inside Adapter#fetch — the titus_fetch law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -118,6 +121,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
+    nabu/litopys_fetch.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
     nabu/adapters/altaica_shm.rb nabu/adapters/atmo.rb
     nabu/adapters/iedc.rb nabu/adapters/shkz.rb
