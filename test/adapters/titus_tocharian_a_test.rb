@@ -236,9 +236,23 @@ class TitusTocharianATest < Minitest::Test
     assert_equal "Qočo", documents_by_page.fetch("tocha466").metadata["findspot"], "T I D"
   end
 
+  # Owner ruling 2026-10-10: the undiacriticked S is Šorčuq — tocha373's own
+  # catalogue prose places its T_III_S_75.1 leaf "aus der 'Stadthöhle' in Šorčuq".
+  def test_the_plain_s_siglum_is_sorcuq
+    meta = documents_by_page.fetch("tocha373").metadata
+    assert_equal "T_III_S_75.1", meta["signature"]
+    assert_match(/Šorčuq/, meta["catalogue"].join(" "), "the page's own evidence for the ruling")
+    assert_equal "Šorčuq", meta["findspot"], "T III S"
+    assert_equal "Šorčuq", documents_by_page.fetch("tocha414").metadata["findspot"], "T II S"
+  end
+
   def test_an_unknown_site_siglum_mints_no_findspot
     assert_nil Nabu::Adapters::TitusTocharianA.findspot_for("T_II_X_5"),
                "only the censused sigla resolve — never a guessed place"
+    assert_nil Nabu::Adapters::TitusTocharianA.findspot_for("T_III_M_1"),
+               "M stays unmapped — no censused evidence"
+    assert_nil Nabu::Adapters::TitusTocharianA.findspot_for("T_III_N_1"),
+               "N stays unmapped — no censused evidence"
     assert_nil Nabu::Adapters::TitusTocharianA.findspot_for(nil)
   end
 

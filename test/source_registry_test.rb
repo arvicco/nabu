@@ -1103,6 +1103,15 @@ class SourceRegistryTest < Minitest::Test
                     titus-sogdian], registry.blocked_axis_members("iranian"),
                  "the grant-gated TITUS Iranian corpora (Avestan through Sogdian) ride iranian " \
                  "but are excluded from the public listing"
+
+    # Owner ruling 2026-10-10: Khotanese joins buddhist at source grain (Zambasta +
+    # the KBT sutras are the volume-majority) beside the Tocharian A precedent; both
+    # are grant-gated, so the PUBLIC buddhist shelves are unchanged.
+    assert_equal %w[etym iranian buddhist], registry["titus-khotanese"].axes
+    assert_equal %w[titus-khotanese titus-tocharian-a], registry.blocked_axis_members("buddhist"),
+                 "the grant-gated TITUS Buddhist corpora ride buddhist, excluded from the public listing"
+    assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil mvp sarit suttacentral],
+                 registry.public_axis_members("buddhist").sort
   end
 
   # P43-2: the shipped TITUS Avestan row is fetch-gated on the personal grant, and

@@ -128,7 +128,7 @@ module Nabu
       # A Berlin Turfan find signature in a manuscript subtitle — the
       # Reader's "M_5794_I (= T_II_D_126_I)": expedition numeral, site
       # siglum, number. Its siglum resolves through the titus-tocharian-a
-      # SITE_SIGLA (Š Šorčuq, D Qočo) — DELIBERATELY coarse and declared:
+      # SITE_SIGLA (Š/S Šorčuq, D Qočo) — DELIBERATELY coarse and declared:
       # an uncensused siglum mints no place, the raw signature still rides.
       FIND_SIGNATURE = /\bT_[IV0]+_[^_\s()]+_[^\s()]+/
 

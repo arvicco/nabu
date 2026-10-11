@@ -354,7 +354,7 @@ class TitusKhotaneseTest < Minitest::Test
     assert_match(/Gippert/, entry.grant.grantor)
     assert_match(/one retrieval/i, entry.grant.terms)
     assert_match(/no redistribution/i, entry.grant.terms)
-    assert_includes entry.axes, "iranian"
+    assert_equal %w[etym iranian buddhist], entry.axes
     assert_equal ADAPTER.manifest, entry.manifest
   end
 

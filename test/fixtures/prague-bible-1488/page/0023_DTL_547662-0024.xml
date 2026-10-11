@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PcGts xmlns="http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd">
+    <Metadata>
+        <Creator>prov=READ-COOP:name=PyLaia@TranskribusPlatform:version=2.20.0:model_id=58856:lm=none:date=05_12_2024_19:03</Creator>
+        <Created>2024-11-22T17:31:47.474+01:00</Created>
+        <LastChange>2024-12-10T14:58:20.964+01:00</LastChange>
+        <TranskribusMetadata docId="5363448" pageId="84612207" pageNr="23" tsid="211429807" status="GT" userId="100969" imgUrl="https://files.transkribus.eu/Get?id=DQIAPFJCCCRXHWAJMXCEAHJK&amp;fileType=view" xmlUrl="https://files.transkribus.eu/Get?id=ADONVXSEAOINYGLIYIZNNZGO" imageId="69884222"/>
+    </Metadata>
+    <Page imageFilename="0023_DTL_547662-0024.jpeg" imageWidth="2530" imageHeight="3955">
+        <ReadingOrder>
+            <OrderedGroup id="ro_1734604435751" caption="Regions reading order">
+                <RegionRefIndexed index="0" regionRef="tr_1"/>
+                <RegionRefIndexed index="1" regionRef="r"/>
+            </OrderedGroup>
+        </ReadingOrder>
+        <TextRegion orientation="0.0" id="tr_1" custom="readingOrder {index:0;}">
+            <Coords points="432,368 435,3267 1319,3261 1384,365"/>
+            <TextLine id="tr_1_tl_1" custom="readingOrder {index:0;}">
+                <Coords points="1163,288 1271,273 1324,289 1394,282 1432,304 1504,284 1564,298 1564,200 1452,193 1379,215 1313,187 1280,205 1162,183"/>
+                <Baseline points="1170,250 1196,254 1222,256 1249,256 1275,256 1302,256 1328,256 1355,256 1381,256 1408,257 1434,259 1461,257 1487,256 1514,258 1540,258 1567,256"/>
+                <TextEquiv>
+                    <Unicode>Prwnie knihy</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_2" custom="readingOrder {index:1;}">
+                <Coords points="465,468 1343,456 1342,390 1265,381 695,390 519,354 464,379"/>
+                <Baseline points="471,441 514,438 558,435 602,438 646,435 689,438 733,438 777,438 821,440 864,441 908,441 952,441 996,441 1039,441 1083,441 1127,441 1171,441 1214,441 1258,441 1302,441 1346,441"/>
+                <TextEquiv>
+                    <Unicode>ſtawil ho w ragi rozkoſſij · aby dielal a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_4" custom="readingOrder {index:2;}">
+                <Coords points="465,513 1325,535 1348,468 464,466"/>
+                <Baseline points="471,498 515,501 559,501 603,501 647,501 691,504 735,504 779,504 823,504 867,504 911,504 955,506 999,507 1043,507 1087,505 1131,504 1175,506 1219,507 1263,507 1307,507 1352,507"/>
+                <TextEquiv>
+                    <Unicode>oſtrziehal ho : y przikazal gemu rzka :</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_6" custom="readingOrder {index:3;}">
+                <Coords points="459,587 1341,598 1341,535 458,525"/>
+                <Baseline points="465,567 508,564 552,564 596,564 640,564 684,567 728,567 772,567 816,567 860,567 904,567 947,567 991,567 1035,567 1079,567 1123,569 1167,568 1211,567 1255,569 1299,570 1343,570"/>
+                <TextEquiv>
+                    <Unicode>z každeho drzewa rayſkeho gez ale z</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_8" custom="readingOrder {index:4;}">
+                <Coords points="456,640 1340,648 1340,595 1271,584 456,588"/>
+                <Baseline points="462,620 506,623 550,626 594,623 638,623 682,623 726,626 770,626 814,626 858,626 902,626 946,628 990,627 1034,626 1078,628 1122,629 1166,629 1210,629 1254,629 1298,631 1343,629"/>
+                <TextEquiv>
+                    <Unicode>drzewa vmienie dobreho a zleho negez :</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_10" custom="readingOrder {index:5;}">
+                <Coords points="453,708 1340,707 1340,654 1301,647 453,649"/>
+                <Baseline points="459,686 503,686 547,686 591,686 635,689 680,689 724,689 768,689 812,689 856,689 901,689 945,689 989,689 1033,691 1077,690 1122,689 1166,691 1210,692 1254,692 1298,692 1343,695"/>
+                <TextEquiv>
+                    <Unicode>nebo w ktery by koliwiek · den gedl z nie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_12" custom="readingOrder {index:6;}">
+                <Coords points="447,759 1340,769 1340,715 1218,701 447,714"/>
+                <Baseline points="453,746 497,749 542,746 586,749 631,749 675,749 720,749 764,749 809,749 853,749 898,749 942,754 987,752 1031,752 1076,749 1120,752 1165,752 1209,752 1254,752 1298,755 1343,755"/>
+                <TextEquiv>
+                    <Unicode>ho ſmrti vmrzeſs · Rzekl ge take pan</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_14" custom="readingOrder {index:7;}">
+                <Coords points="454,828 1278,846 1338,837 1337,770 453,763"/>
+                <Baseline points="459,808 503,811 547,811 591,811 635,811 679,811 723,811 767,811 811,811 855,811 899,813 943,814 987,814 1031,814 1075,814 1119,814 1163,816 1207,817 1251,817 1295,817 1340,817"/>
+                <TextEquiv>
+                    <Unicode>buoh : neniet dobre cżlowieku byti ſa¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_16" custom="readingOrder {index:8;}">
+                <Coords points="450,881 1021,914 1338,884 1337,847 1262,833 449,840"/>
+                <Baseline points="456,874 500,871 544,871 588,871 632,871 677,871 721,871 765,871 809,874 853,874 898,874 942,877 986,877 1030,875 1074,874 1119,876 1163,877 1207,877 1251,877 1295,875 1340,874"/>
+                <TextEquiv>
+                    <Unicode>motnemu · vcżinmež mu pomocz podo¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_18" custom="readingOrder {index:9;}">
+                <Coords points="447,947 1341,958 1340,883 1021,914 447,881"/>
+                <Baseline points="453,934 497,934 542,931 586,931 631,934 675,934 720,934 764,934 809,937 853,937 898,940 942,940 987,940 1031,940 1076,940 1120,940 1165,940 1209,940 1254,940 1298,943 1343,940"/>
+                <TextEquiv>
+                    <Unicode>bnu gemu · Protož když ge zpuoſobil</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_20" custom="readingOrder {index:10;}">
+                <Coords points="457,1026 694,1001 1325,1023 1324,955 456,954"/>
+                <Baseline points="462,996 505,996 548,996 591,996 635,996 678,996 721,998 765,999 808,999 851,999 895,1001 938,1002 981,1002 1024,1002 1068,1000 1111,1000 1154,1002 1198,1002 1241,1003 1284,1005 1328,1008"/>
+                <TextEquiv>
+                    <Unicode>pan buoh z zemie wſſeczky žiwocżichy</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_22" custom="readingOrder {index:11;} abbrev {offset:0; length:5;expansion:zemſke;}">
+                <Coords points="450,1077 1332,1073 1332,1020 1192,1011 450,1021"/>
+                <Baseline points="456,1056 499,1059 543,1059 587,1059 631,1059 675,1062 719,1059 763,1062 807,1062 851,1064 895,1063 938,1062 982,1062 1026,1062 1070,1062 1114,1064 1158,1063 1202,1064 1246,1065 1290,1065 1334,1065"/>
+                <TextEquiv>
+                    <Unicode>zēſke · a wſſeczko ptaczſtwo nebeſke przi¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_24" custom="readingOrder {index:12;}">
+                <Coords points="450,1138 1334,1145 1334,1078 450,1078"/>
+                <Baseline points="456,1113 500,1119 544,1122 588,1122 632,1122 676,1122 720,1125 764,1125 808,1125 852,1125 896,1125 940,1125 984,1125 1028,1125 1072,1125 1116,1125 1160,1125 1204,1125 1248,1127 1292,1128 1337,1125"/>
+                <TextEquiv>
+                    <Unicode>wedl geſt ge k Adamowi · aby vzrzel</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_26" custom="readingOrder {index:13;}">
+                <Coords points="456,1214 1326,1208 1314,1141 456,1145"/>
+                <Baseline points="462,1182 505,1182 548,1182 591,1182 635,1185 678,1185 721,1187 765,1185 808,1186 851,1187 895,1187 938,1186 981,1186 1024,1187 1068,1186 1111,1186 1154,1187 1198,1187 1241,1187 1284,1187 1328,1187"/>
+                <TextEquiv>
+                    <Unicode>czo sy nazwal ge : wſſeczko giſtie cżimz</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_28" custom="readingOrder {index:14;}">
+                <Coords points="445,1275 1178,1259 1321,1284 1329,1205 444,1219"/>
+                <Baseline points="450,1244 494,1247 538,1244 582,1244 626,1244 670,1247 714,1247 758,1250 802,1250 846,1247 890,1247 934,1249 978,1250 1022,1248 1066,1249 1110,1248 1154,1247 1198,1247 1242,1249 1286,1250 1331,1250"/>
+                <TextEquiv>
+                    <Unicode>ge nazywal · Adam žiwocżichy · tot geſt</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_30" custom="readingOrder {index:15;} abbrev {offset:29; length:3;expansion:Adama;}">
+                <Coords points="443,1330 1330,1340 1329,1282 441,1282"/>
+                <Baseline points="447,1304 491,1304 535,1307 579,1307 623,1307 668,1310 712,1310 756,1313 800,1313 844,1310 889,1313 933,1313 977,1313 1021,1311 1065,1310 1110,1312 1154,1313 1198,1313 1242,1313 1286,1313 1331,1310"/>
+                <TextEquiv>
+                    <Unicode>gmeno gych : y gmenowal geſt Adā</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_32" custom="readingOrder {index:16;}">
+                <Coords points="441,1394 802,1373 891,1409 1282,1380 1329,1404 1329,1340 1199,1321 441,1341"/>
+                <Baseline points="447,1367 491,1367 535,1370 579,1370 623,1370 668,1370 712,1370 756,1373 800,1373 844,1373 889,1373 933,1373 977,1373 1021,1373 1065,1373 1110,1373 1154,1373 1198,1375 1242,1374 1286,1375 1331,1376"/>
+                <TextEquiv>
+                    <Unicode>gmeny ſwymi · wſſeczky żiwocżichy a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_34" custom="readingOrder {index:17;}">
+                <Coords points="453,1440 1189,1468 1323,1462 1322,1402 451,1395"/>
+                <Baseline points="459,1432 502,1432 545,1432 588,1432 632,1435 675,1433 718,1434 762,1435 805,1435 848,1435 892,1435 935,1435 978,1435 1021,1435 1065,1435 1108,1435 1151,1436 1195,1438 1238,1438 1281,1437 1325,1432"/>
+                <TextEquiv>
+                    <Unicode>wſſeckno ptaczſtwo nebeſke : y wſſecky</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_36" custom="readingOrder {index:18;}">
+                <Coords points="447,1522 1325,1511 1325,1462 1284,1447 820,1445 757,1472 447,1447"/>
+                <Baseline points="453,1495 496,1492 540,1495 584,1495 628,1495 671,1495 715,1495 759,1495 803,1495 846,1495 890,1495 934,1497 978,1498 1021,1498 1065,1496 1109,1497 1153,1498 1196,1498 1240,1498 1284,1498 1328,1501"/>
+                <TextEquiv>
+                    <Unicode>ſſelmy zemie · Adamowi pak nenale¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_38" custom="readingOrder {index:19;}">
+                <Coords points="444,1587 1247,1571 1326,1595 1319,1516 444,1521"/>
+                <Baseline points="450,1555 493,1558 537,1558 581,1558 625,1558 669,1558 713,1558 757,1558 801,1558 845,1560 889,1559 932,1560 976,1561 1020,1561 1064,1559 1108,1558 1152,1560 1196,1561 1240,1561 1284,1561 1328,1555"/>
+                <TextEquiv>
+                    <Unicode>zaſſe ſe pomocznik podobny gemu · y</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_40" custom="readingOrder {index:20;}">
+                <Coords points="441,1630 1242,1646 1323,1640 1323,1592 440,1589"/>
+                <Baseline points="447,1617 490,1617 534,1617 578,1620 622,1620 666,1620 710,1620 754,1620 798,1620 842,1620 886,1620 929,1620 973,1618 1017,1621 1061,1621 1105,1620 1149,1620 1193,1622 1237,1621 1281,1622 1325,1620"/>
+                <TextEquiv>
+                    <Unicode>wpuſtil geſt pan buoh · drziemotu na</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_42" custom="readingOrder {index:21;}">
+                <Coords points="447,1690 1323,1705 1323,1645 1212,1635 447,1635"/>
+                <Baseline points="453,1683 496,1680 540,1680 583,1683 627,1683 671,1683 714,1683 758,1683 801,1681 845,1682 889,1683 932,1683 976,1683 1019,1683 1063,1683 1107,1683 1150,1683 1194,1683 1237,1683 1281,1683 1325,1683"/>
+                <TextEquiv>
+                    <Unicode>Adama · a když ge vſnul wynial ge¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_44" custom="readingOrder {index:22;}">
+                <Coords points="438,1752 1322,1772 1296,1700 438,1696"/>
+                <Baseline points="444,1737 488,1740 532,1740 576,1743 620,1743 664,1743 708,1743 752,1746 796,1746 840,1746 884,1744 928,1743 972,1745 1016,1744 1060,1745 1104,1744 1148,1743 1192,1745 1236,1746 1280,1746 1325,1743"/>
+                <TextEquiv>
+                    <Unicode>dnu žebru geho a naplnil tielem mieſto</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_46" custom="readingOrder {index:23;}">
+                <Coords points="447,1806 1318,1830 1318,1771 1247,1759 447,1771"/>
+                <Baseline points="453,1805 496,1802 539,1805 582,1805 626,1805 669,1807 712,1806 756,1805 799,1807 842,1808 886,1808 929,1806 972,1807 1015,1806 1059,1807 1102,1808 1145,1808 1189,1808 1232,1808 1275,1808 1319,1811"/>
+                <TextEquiv>
+                    <Unicode>gegie · y wzdielal ge pan buoh žebru</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_48" custom="readingOrder {index:24;}">
+                <Coords points="435,1880 1316,1891 1316,1832 1258,1826 515,1839 435,1804"/>
+                <Baseline points="441,1871 484,1871 528,1868 572,1868 616,1868 660,1868 704,1868 748,1868 792,1868 836,1868 880,1868 923,1868 967,1868 1011,1868 1055,1868 1099,1870 1143,1871 1187,1871 1231,1871 1275,1871 1319,1874"/>
+                <TextEquiv>
+                    <Unicode>kteruž wynial z Adama w ženu a przi¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_50" custom="readingOrder {index:25;}">
+                <Coords points="444,1942 1316,1944 1316,1891 1261,1886 444,1892"/>
+                <Baseline points="450,1931 493,1931 536,1929 580,1928 623,1929 667,1931 710,1931 754,1931 797,1931 841,1931 884,1931 927,1931 971,1930 1014,1929 1058,1931 1101,1931 1145,1931 1188,1931 1232,1931 1275,1931 1319,1928"/>
+                <TextEquiv>
+                    <Unicode>wedl gi k Adamowi · y rzekl ge adam</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_52" custom="readingOrder {index:26;}">
+                <Coords points="459,2005 1325,2015 1324,1960 1245,1941 458,1944"/>
+                <Baseline points="465,1993 508,1993 551,1990 594,1990 637,1990 680,1990 723,1990 767,1990 810,1990 853,1990 896,1990 939,1990 982,1992 1025,1993 1069,1993 1112,1992 1155,1990 1198,1991 1241,1993 1284,1993 1328,1993"/>
+                <TextEquiv>
+                    <Unicode>Tato koſt nynie z koſtij mych · a tielo</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_54" custom="readingOrder {index:27;}">
+                <Coords points="441,2081 1318,2067 1318,2012 1207,2001 741,2028 441,2007"/>
+                <Baseline points="447,2059 490,2058 534,2055 577,2053 621,2053 665,2053 708,2053 752,2053 795,2053 839,2052 883,2051 926,2053 970,2053 1013,2053 1057,2053 1101,2053 1144,2053 1188,2053 1231,2053 1275,2056 1319,2053"/>
+                <TextEquiv>
+                    <Unicode>z tiela meho · tato bude ſluti mužatka</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_56" custom="readingOrder {index:28;}">
+                <Coords points="431,2132 1307,2136 1307,2071 431,2085"/>
+                <Baseline points="438,2119 481,2119 525,2118 568,2116 612,2116 656,2116 699,2116 743,2116 786,2116 830,2116 874,2116 917,2116 961,2115 1004,2113 1048,2113 1092,2116 1135,2116 1179,2116 1222,2116 1266,2116 1310,2116"/>
+                <TextEquiv>
+                    <Unicode>nebo z muže wyniata geſt · Protož opu¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_58" custom="readingOrder {index:29;}">
+                <Coords points="438,2209 1310,2199 1310,2144 1266,2133 438,2141"/>
+                <Baseline points="444,2184 487,2181 530,2179 574,2178 617,2178 661,2178 704,2178 748,2177 791,2175 835,2175 878,2176 921,2178 965,2178 1008,2178 1052,2178 1095,2178 1139,2178 1182,2178 1226,2178 1269,2178 1313,2175"/>
+                <TextEquiv>
+                    <Unicode>ſti cżlowiek otcze ſweho y matku · a bu¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_60" custom="readingOrder {index:30;}">
+                <Coords points="435,2263 1307,2260 1307,2203 1264,2195 435,2209"/>
+                <Baseline points="441,2241 484,2244 527,2242 571,2241 614,2240 658,2239 701,2241 745,2241 788,2241 832,2241 875,2240 918,2238 962,2238 1005,2238 1049,2239 1092,2241 1136,2241 1179,2241 1223,2241 1266,2238 1310,2238"/>
+                <TextEquiv>
+                    <Unicode>de ſe przidrżeti ženy ſwe · y budut dwa</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_62" custom="readingOrder {index:31;}">
+                <Coords points="444,2329 1310,2327 1310,2265 1248,2256 444,2269"/>
+                <Baseline points="450,2298 493,2304 536,2304 579,2301 622,2301 665,2301 708,2301 752,2301 795,2301 838,2301 881,2301 924,2301 967,2301 1010,2301 1054,2301 1097,2301 1140,2301 1183,2301 1226,2301 1269,2301 1313,2298"/>
+                <TextEquiv>
+                    <Unicode>w tieſe gednom · Biechu pak oba dwa</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_64" custom="readingOrder {index:32;}">
+                <Coords points="429,2385 1301,2383 1301,2337 1256,2322 429,2324"/>
+                <Baseline points="435,2367 478,2368 521,2365 565,2364 608,2364 652,2364 695,2364 739,2364 782,2364 826,2364 869,2364 912,2364 956,2365 999,2366 1043,2364 1086,2364 1130,2364 1173,2364 1217,2364 1260,2364 1304,2364"/>
+                <TextEquiv>
+                    <Unicode>naha · totiž. Adam y žena geho · a ne¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_66" custom="readingOrder {index:33;}">
+                <Coords points="446,2462 482,2476 582,2434 736,2455 773,2437 816,2447 814,2386 721,2374 678,2391 643,2375 584,2388 540,2380 513,2395 449,2383"/>
+                <Baseline points="453,2429 479,2431 505,2429 531,2429 557,2429 584,2429 610,2428 636,2426 662,2425 688,2423 715,2421 741,2419 767,2418 793,2417 820,2417"/>
+                <TextEquiv>
+                    <Unicode>ſtydiala ſta ſe ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_67" custom="readingOrder {index:34;}">
+                <Coords points="928,2426 964,2440 1035,2437 1054,2456 1076,2441 1110,2451 1178,2436 1291,2451 1281,2381 1215,2379 1182,2394 1148,2376 1123,2393 1100,2380 1049,2390 979,2375 928,2400"/>
+                <Baseline points="934,2423 959,2425 985,2426 1011,2426 1036,2426 1062,2426 1088,2426 1114,2426 1139,2426 1165,2426 1191,2426 1216,2426 1242,2426 1268,2424 1294,2421"/>
+                <TextEquiv>
+                    <Unicode>Capitola · III ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_69" custom="readingOrder {index:35;}">
+                <Coords points="611,2504 874,2500 921,2526 971,2502 1063,2526 1105,2501 1304,2508 1304,2442 1053,2456 871,2427 701,2462 611,2442"/>
+                <Baseline points="617,2489 651,2489 686,2489 720,2489 755,2489 789,2489 824,2489 858,2489 893,2489 927,2489 962,2489 996,2489 1031,2489 1065,2489 1100,2489 1134,2489 1169,2489 1203,2489 1238,2486 1272,2482 1307,2477"/>
+                <TextEquiv>
+                    <Unicode>Ale y had bieſſe chytrzeyſſy ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_71" custom="readingOrder {index:36;}">
+                <Coords points="558,2568 1311,2572 1311,2507 1167,2523 1104,2501 1062,2524 970,2503 924,2528 872,2501 558,2503"/>
+                <Baseline points="598,2549 601,2549 638,2552 676,2552 713,2552 751,2551 788,2549 826,2549 863,2549 901,2549 938,2551 975,2552 1013,2552 1050,2552 1088,2552 1125,2550 1163,2549 1200,2550 1238,2551 1275,2549 1313,2546"/>
+                <TextEquiv>
+                    <Unicode>nade wſſeczky žiwocżichy zemie</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_73" custom="readingOrder {index:37;}">
+                <Coords points="572,2648 733,2625 817,2647 1016,2623 1057,2651 1110,2626 1299,2631 1299,2574 1246,2562 573,2580"/>
+                <Baseline points="579,2617 615,2616 651,2616 687,2614 723,2614 759,2614 795,2614 831,2612 867,2612 903,2614 940,2611 976,2613 1012,2612 1048,2611 1084,2611 1120,2611 1156,2611 1192,2613 1228,2614 1264,2612 1301,2602"/>
+                <TextEquiv>
+                    <Unicode>kterež bieſſe vcżinil pan buoh ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_75" custom="readingOrder {index:38;}">
+                <Coords points="429,2699 1305,2691 1305,2635 1273,2626 1057,2650 429,2621"/>
+                <Baseline points="435,2674 478,2677 522,2677 565,2677 609,2677 653,2677 696,2677 740,2677 783,2676 827,2675 871,2676 914,2674 958,2674 1001,2675 1045,2677 1089,2674 1132,2677 1176,2677 1219,2674 1263,2674 1307,2671"/>
+                <TextEquiv>
+                    <Unicode>kteryžto rzekl k ženie · procż ge przika¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_77" custom="readingOrder {index:39;}">
+                <Coords points="438,2757 1310,2757 1310,2698 1271,2683 438,2699"/>
+                <Baseline points="444,2740 487,2737 530,2737 574,2737 617,2737 661,2737 704,2737 748,2737 791,2737 835,2737 878,2737 921,2737 965,2737 1008,2736 1052,2735 1095,2737 1139,2737 1182,2737 1226,2740 1269,2740 1313,2734"/>
+                <TextEquiv>
+                    <Unicode>zal wam buoh abyſſte negedli · z wſſe¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_79" custom="readingOrder {index:40;}">
+                <Coords points="429,2828 1080,2807 1141,2836 1176,2805 1235,2831 1301,2808 1301,2765 1210,2749 429,2757"/>
+                <Baseline points="435,2799 478,2799 521,2799 565,2799 608,2799 652,2799 695,2799 739,2799 782,2799 826,2799 869,2799 912,2799 956,2798 999,2796 1043,2796 1086,2796 1130,2796 1173,2799 1217,2799 1260,2799 1304,2796"/>
+                <TextEquiv>
+                    <Unicode>likeho drzewa rayſkeho · gemuž odpo¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_81" custom="readingOrder {index:41;}">
+                <Coords points="438,2873 1304,2889 1304,2804 1141,2836 1046,2811 438,2822"/>
+                <Baseline points="444,2859 487,2862 530,2862 573,2859 616,2859 659,2859 702,2861 746,2860 789,2861 832,2862 875,2860 918,2859 961,2859 1004,2859 1048,2859 1091,2859 1134,2859 1177,2859 1220,2859 1263,2860 1307,2859"/>
+                <TextEquiv>
+                    <Unicode>wiediela žena · z owocze drziewij · kteraż</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_83" custom="readingOrder {index:42;}">
+                <Coords points="448,2946 929,2950 1001,2924 1310,2951 1310,2885 448,2884"/>
+                <Baseline points="454,2929 499,2925 544,2925 589,2925 634,2925 680,2922 725,2925 770,2922 815,2922 860,2922 906,2922 951,2922 996,2919 1041,2922 1086,2922 1132,2922 1177,2922 1222,2922 1267,2922 1313,2922"/>
+                <TextEquiv>
+                    <Unicode>gſu w ragi krmime ſe · Než z owocze</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_85" custom="readingOrder {index:43;}">
+                <Coords points="438,2993 1309,3006 1309,2952 1215,2932 438,2943"/>
+                <Baseline points="444,2984 487,2987 530,2987 573,2987 617,2987 660,2987 703,2987 747,2986 790,2984 833,2984 877,2985 920,2986 963,2984 1006,2984 1050,2984 1093,2984 1136,2984 1180,2984 1223,2981 1266,2978 1310,2975"/>
+                <TextEquiv>
+                    <Unicode>drzewa kterež geſt v proſtrzed rage ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_87" custom="readingOrder {index:44;}">
+                <Coords points="444,3071 1234,3076 1301,3045 1301,3011 1256,2999 444,3016"/>
+                <Baseline points="450,3056 492,3050 535,3048 578,3049 620,3050 663,3048 706,3047 748,3047 791,3047 834,3047 877,3047 919,3047 962,3047 1005,3046 1047,3044 1090,3044 1133,3044 1175,3044 1218,3044 1261,3044 1304,3041"/>
+                <TextEquiv>
+                    <Unicode>przykazal nam buoh · abychom nege¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_89" custom="readingOrder {index:45;} abbrev {offset:8; length:6;expansion:abychom;} abbrev {offset:34; length:6;expansion:abychom;}">
+                <Coords points="429,3122 1295,3140 1295,3052 1224,3082 1174,3057 429,3070"/>
+                <Baseline points="435,3110 478,3112 521,3113 564,3113 607,3111 650,3112 693,3112 737,3110 780,3110 823,3110 866,3110 909,3109 952,3108 995,3109 1039,3107 1082,3107 1125,3107 1168,3107 1211,3107 1254,3110 1298,3107"/>
+                <TextEquiv>
+                    <Unicode>dli : a abychō ſe nedotykali ho · abychō</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_91" custom="readingOrder {index:46;}">
+                <Coords points="429,3205 1301,3183 1301,3137 1237,3121 429,3130"/>
+                <Baseline points="435,3172 478,3172 521,3172 565,3175 608,3175 652,3172 695,3172 739,3172 782,3172 826,3172 869,3172 912,3172 956,3172 999,3172 1043,3172 1086,3172 1130,3172 1173,3172 1217,3172 1260,3172 1304,3172"/>
+                <TextEquiv>
+                    <Unicode>ſnad nezemrzeli Tehdy rzekl had k že¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_93" custom="readingOrder {index:47;}">
+                <Coords points="431,3256 1302,3274 1303,3184 431,3202"/>
+                <Baseline points="438,3238 481,3238 524,3238 567,3238 611,3238 654,3238 697,3238 741,3238 784,3238 827,3238 871,3238 914,3238 957,3237 1000,3235 1044,3234 1087,3232 1130,3232 1174,3235 1217,3232 1260,3232 1304,3232"/>
+                <TextEquiv>
+                    <Unicode>nie nikoſi ſmrtij nezemrzete · Wiet gi¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextEquiv>
+                <Unicode></Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r" custom="readingOrder {index:1;}">
+            <Coords points="1419,392 2360,392 2360,3310 1419,3310"/>
+            <TextLine id="tr_1_tl_3" custom="readingOrder {index:0;}">
+                <Coords points="1449,464 2308,473 2313,371 2053,407 1996,373 1841,406 1684,368 1448,379"/>
+                <Baseline points="1456,444 1499,444 1542,444 1585,447 1628,447 1671,447 1714,447 1757,447 1800,447 1843,447 1886,447 1929,449 1972,448 2015,448 2058,450 2101,450 2144,451 2187,453 2230,453 2273,453 2316,450"/>
+                <TextEquiv>
+                    <Unicode>ſtie buoh že w kteryž koli den gieſti bu¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_5" custom="readingOrder {index:1;}">
+                <Coords points="1444,524 2171,546 2317,536 2317,482 1443,465"/>
+                <Baseline points="1450,507 1493,507 1536,507 1580,510 1623,510 1667,507 1710,509 1754,510 1797,512 1841,511 1884,512 1927,513 1971,515 2014,514 2058,515 2101,516 2145,516 2188,516 2232,516 2275,517 2319,516"/>
+                <TextEquiv>
+                    <Unicode>dete z nieho · otewraut ſe ocży waſſe a bu¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_7" custom="readingOrder {index:2;}">
+                <Coords points="1445,579 2208,608 2313,597 2312,539 1444,523"/>
+                <Baseline points="1450,567 1493,570 1536,570 1579,570 1623,570 1666,570 1709,572 1753,573 1796,573 1839,573 1883,573 1926,573 1969,573 2012,575 2056,576 2099,577 2142,579 2186,579 2229,578 2272,576 2316,573"/>
+                <TextEquiv>
+                    <Unicode>dete yako bohowe · znagicze dobre y zle</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_9" custom="readingOrder {index:3;}">
+                <Coords points="1456,656 2286,669 2319,666 2319,603 1455,579"/>
+                <Baseline points="1462,632 1505,632 1548,632 1591,632 1634,632 1677,632 1720,632 1763,634 1806,635 1849,635 1892,635 1935,635 1978,637 2021,637 2064,638 2107,641 2150,641 2193,641 2236,641 2279,641 2322,641"/>
+                <TextEquiv>
+                    <Unicode>Protož widiela žena že by dobre bylo</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_11" custom="readingOrder {index:4;}">
+                <Coords points="1440,707 2235,733 2311,720 2310,665 1439,655"/>
+                <Baseline points="1447,692 1490,695 1533,695 1576,695 1620,695 1663,695 1706,695 1750,697 1793,698 1836,698 1880,698 1923,700 1966,701 2009,701 2053,701 2096,701 2139,701 2183,701 2226,701 2269,701 2313,701"/>
+                <TextEquiv>
+                    <Unicode>drzewo k wokuſſenij a k uocżyma pie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_13" custom="readingOrder {index:5;}">
+                <Coords points="1438,769 1979,770 2042,799 2314,776 2314,723 2286,721 1438,717"/>
+                <Baseline points="1444,758 1487,758 1531,755 1574,758 1618,755 1662,755 1705,757 1749,758 1792,758 1836,760 1880,761 1923,763 1967,764 2010,764 2054,762 2098,763 2141,764 2185,762 2228,763 2272,764 2316,761"/>
+                <TextEquiv>
+                    <Unicode>knee · a napohledienij rozkoſſnee · y wza¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_15" custom="readingOrder {index:6;}">
+                <Coords points="1426,834 2322,839 2321,774 2043,799 1979,770 1828,793 1425,765"/>
+                <Baseline points="1432,817 1476,817 1521,817 1565,817 1610,817 1655,817 1699,817 1744,817 1789,820 1833,820 1878,820 1923,823 1967,823 2012,823 2057,823 2101,823 2146,823 2191,826 2235,826 2280,826 2325,829"/>
+                <TextEquiv>
+                    <Unicode>la z owocze geho · a gedla · a dala mużi</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_17" custom="readingOrder {index:7;}">
+                <Coords points="1435,904 2264,915 2313,904 2313,855 1434,831"/>
+                <Baseline points="1441,880 1484,880 1528,880 1572,880 1616,880 1659,880 1703,880 1747,880 1791,885 1834,884 1878,885 1922,886 1966,886 2009,884 2053,887 2097,889 2141,887 2184,886 2228,888 2272,889 2316,886"/>
+                <TextEquiv>
+                    <Unicode>ſwemu · kteryžto gedl ge · A otewrzie¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_19" custom="readingOrder {index:8;}">
+                <Coords points="1429,949 1941,980 2317,959 2294,904 1428,911"/>
+                <Baseline points="1435,940 1479,943 1523,943 1567,943 1611,943 1656,943 1700,943 1744,946 1788,946 1832,946 1877,949 1921,949 1965,949 2009,949 2053,947 2098,948 2142,949 2186,951 2230,952 2274,952 2319,949"/>
+                <TextEquiv>
+                    <Unicode>ny gſu ocżi obu dwu : y kdyż poznala ſe</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_21" custom="readingOrder {index:9;}">
+                <Coords points="1435,1027 2176,1020 2312,1047 2311,961 1435,954"/>
+                <Baseline points="1441,1005 1484,1005 1528,1002 1571,1005 1615,1002 1659,1005 1702,1005 1746,1005 1789,1005 1833,1007 1877,1008 1920,1010 1964,1011 2007,1013 2051,1010 2095,1010 2138,1011 2182,1011 2225,1013 2269,1014 2313,1008"/>
+                <TextEquiv>
+                    <Unicode>že by byla naha · nawazali gſu liſtij fi¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_23" custom="readingOrder {index:10;}">
+                <Coords points="1429,1081 2197,1105 2311,1093 2311,1046 2176,1020 1428,1028"/>
+                <Baseline points="1435,1065 1478,1065 1522,1065 1566,1065 1610,1065 1654,1065 1698,1068 1742,1068 1786,1068 1830,1070 1874,1071 1917,1071 1961,1073 2005,1074 2049,1074 2093,1074 2137,1074 2181,1074 2225,1072 2269,1069 2313,1065"/>
+                <TextEquiv>
+                    <Unicode>koweho y nadielali ſobie wienikuow ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_25" custom="readingOrder {index:11;}">
+                <Coords points="1444,1142 2299,1148 2292,1085 1444,1077"/>
+                <Baseline points="1450,1128 1492,1128 1535,1128 1577,1128 1620,1128 1662,1128 1705,1130 1747,1131 1790,1131 1832,1131 1875,1132 1918,1134 1960,1134 2003,1134 2045,1134 2088,1134 2130,1134 2173,1134 2215,1134 2258,1137 2301,1131"/>
+                <TextEquiv>
+                    <Unicode>A kdyż zaſlechli · hlas pana boha · pro¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_27" custom="readingOrder {index:12;}">
+                <Coords points="1436,1215 2285,1229 2298,1149 1874,1169 1435,1143"/>
+                <Baseline points="1441,1193 1484,1190 1527,1187 1570,1190 1613,1190 1656,1192 1699,1193 1742,1193 1785,1193 1828,1193 1871,1193 1914,1193 1957,1195 2000,1196 2043,1196 2086,1196 2129,1196 2172,1197 2215,1199 2258,1200 2301,1202"/>
+                <TextEquiv>
+                    <Unicode>chazegiczieho ſe po ragi · ku powietrzij</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_29" custom="readingOrder {index:13;}">
+                <Coords points="1427,1275 2309,1282 2308,1233 2214,1212 1426,1216"/>
+                <Baseline points="1432,1256 1475,1253 1519,1253 1563,1253 1607,1253 1651,1253 1695,1253 1739,1256 1783,1256 1827,1256 1871,1256 1914,1258 1958,1259 2002,1259 2046,1259 2090,1259 2134,1259 2178,1259 2222,1259 2266,1261 2310,1262"/>
+                <TextEquiv>
+                    <Unicode>po poledni · vkryl ſe geſt Adam y żena</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_31" custom="readingOrder {index:14;}">
+                <Coords points="1432,1334 2236,1352 2308,1339 2308,1283 1430,1278"/>
+                <Baseline points="1438,1313 1481,1316 1525,1313 1568,1316 1612,1316 1656,1316 1699,1316 1743,1318 1786,1317 1830,1318 1874,1319 1917,1319 1961,1319 2004,1319 2048,1319 2092,1321 2135,1322 2179,1322 2222,1322 2266,1323 2310,1319"/>
+                <TextEquiv>
+                    <Unicode>geho · od twarzi pana boha · vproſtrzed</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_33" custom="readingOrder {index:15;} abbrev {offset:8; length:8;expansion:rayſkeho;} textStyle {offset:14; length:1;superscript:true;}">
+                <Coords points="1426,1387 2303,1419 2293,1334 1426,1339"/>
+                <Baseline points="1432,1376 1475,1376 1519,1376 1562,1376 1606,1379 1650,1379 1693,1379 1737,1381 1780,1380 1824,1379 1868,1381 1911,1382 1955,1382 1998,1382 2042,1382 2086,1382 2129,1382 2173,1383 2216,1384 2260,1384 2304,1382"/>
+                <TextEquiv>
+                    <Unicode>drziewi rayſkeo · y powolal pan buoh</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_35" custom="readingOrder {index:16;}">
+                <Coords points="1435,1459 2137,1453 2302,1480 2301,1418 2260,1402 1435,1391"/>
+                <Baseline points="1441,1441 1484,1438 1527,1438 1570,1438 1613,1438 1656,1438 1699,1440 1743,1441 1786,1441 1829,1441 1872,1443 1915,1444 1958,1444 2001,1444 2045,1444 2088,1444 2131,1445 2174,1448 2217,1450 2260,1450 2304,1447"/>
+                <TextEquiv>
+                    <Unicode>Adama · a rzekl gemu · kde gſy : kteryż</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_37" custom="readingOrder {index:17;}">
+                <Coords points="1421,1514 2304,1528 2303,1478 2233,1459 1420,1459"/>
+                <Baseline points="1426,1501 1470,1498 1514,1498 1558,1498 1602,1498 1646,1501 1690,1501 1734,1501 1778,1504 1822,1504 1866,1504 1910,1504 1954,1506 1998,1507 2042,1507 2086,1507 2130,1507 2174,1509 2218,1508 2262,1509 2307,1510"/>
+                <TextEquiv>
+                    <Unicode>to wecze · hlas twuoy pane ſlyſſal ſem</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_39" custom="readingOrder {index:18;}">
+                <Coords points="1420,1577 2302,1600 2301,1519 2140,1543 1419,1523"/>
+                <Baseline points="1426,1558 1469,1558 1513,1564 1557,1561 1601,1561 1645,1561 1689,1564 1733,1564 1777,1564 1821,1566 1865,1567 1908,1567 1952,1567 1996,1567 2040,1569 2084,1570 2128,1570 2172,1572 2216,1573 2260,1573 2304,1570"/>
+                <TextEquiv>
+                    <Unicode>w Ragi · a bal ſem ſe · proto že bych</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_41" custom="readingOrder {index:19;}">
+                <Coords points="1420,1638 2304,1654 2304,1602 1419,1579"/>
+                <Baseline points="1426,1623 1470,1623 1514,1623 1558,1626 1602,1626 1646,1623 1690,1626 1734,1626 1778,1629 1822,1629 1866,1629 1910,1631 1954,1630 1998,1631 2042,1630 2086,1631 2130,1632 2174,1632 2218,1634 2262,1635 2307,1635"/>
+                <TextEquiv>
+                    <Unicode>byl nah · gemuž ge rzekl pan · a ktot</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_43" custom="readingOrder {index:20;}">
+                <Coords points="1423,1716 2284,1718 2299,1659 1421,1639"/>
+                <Baseline points="1429,1695 1472,1689 1516,1689 1559,1689 1603,1689 1647,1689 1690,1689 1734,1689 1777,1689 1821,1691 1865,1692 1908,1692 1952,1692 1995,1692 2039,1692 2083,1694 2126,1695 2170,1695 2213,1697 2257,1698 2301,1695"/>
+                <TextEquiv>
+                    <Unicode>ge tobie okazal že by naah byl · gedine</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_45" custom="readingOrder {index:21;}">
+                <Coords points="1424,1775 2305,1769 2304,1714 2252,1710 1423,1716"/>
+                <Baseline points="1429,1755 1472,1749 1516,1749 1560,1749 1604,1749 1648,1752 1692,1752 1736,1752 1780,1752 1824,1752 1868,1752 1911,1752 1955,1754 1999,1755 2043,1757 2087,1758 2131,1758 2175,1758 2219,1758 2263,1760 2307,1758"/>
+                <TextEquiv>
+                    <Unicode>ze ſy z drzewa gedl · o niemż gſem tobie</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_47" custom="readingOrder {index:22;} abbrev {offset:37; length:3;expansion:Adam;}">
+                <Coords points="1414,1843 1550,1818 2007,1845 2104,1817 2295,1848 2294,1773 1413,1781"/>
+                <Baseline points="1420,1814 1463,1811 1507,1811 1551,1811 1595,1811 1639,1811 1683,1811 1727,1811 1771,1813 1815,1814 1859,1814 1902,1816 1946,1817 1990,1817 2034,1817 2078,1817 2122,1819 2166,1820 2210,1820 2254,1820 2298,1817"/>
+                <TextEquiv>
+                    <Unicode>przikazal · aby negedl : y rzekl ge. Adā</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_49" custom="readingOrder {index:23;}">
+                <Coords points="1414,1896 2295,1895 2271,1835 1550,1819 1414,1843"/>
+                <Baseline points="1420,1871 1463,1874 1507,1874 1551,1874 1595,1874 1639,1874 1683,1874 1727,1877 1771,1877 1815,1877 1859,1877 1902,1877 1946,1877 1990,1877 2034,1879 2078,1880 2122,1880 2166,1880 2210,1880 2254,1882 2298,1883"/>
+                <TextEquiv>
+                    <Unicode>žena kteruż ſy mi dal towarziſſku · dala</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_51" custom="readingOrder {index:24;}">
+                <Coords points="1408,1949 2300,1972 2299,1901 2189,1887 1408,1895"/>
+                <Baseline points="1414,1931 1458,1934 1502,1931 1547,1934 1591,1934 1635,1934 1680,1937 1724,1937 1768,1940 1813,1940 1857,1940 1901,1940 1946,1937 1990,1940 2034,1940 2079,1940 2123,1942 2167,1943 2212,1943 2256,1945 2301,1943"/>
+                <TextEquiv>
+                    <Unicode>mi z dṙewa a gedl ſem y rzekl pan buoh</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_53" custom="readingOrder {index:25;}">
+                <Coords points="1418,2016 2300,2015 2299,1972 2182,1956 1734,1976 1417,1949"/>
+                <Baseline points="1423,1999 1466,1996 1510,1996 1554,1996 1598,1996 1642,1999 1686,1999 1730,1999 1774,1999 1818,1999 1862,1999 1905,1999 1949,2001 1993,2002 2037,2002 2081,2004 2125,2003 2169,2004 2213,2005 2257,2007 2301,2005"/>
+                <TextEquiv>
+                    <Unicode>k ženie · procżes to vcżinila · kterażto od¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_55" custom="readingOrder {index:26;}">
+                <Coords points="1423,2082 2264,2090 2295,2037 1421,2014"/>
+                <Baseline points="1429,2062 1472,2059 1515,2056 1559,2059 1602,2059 1646,2059 1689,2059 1733,2059 1776,2061 1820,2062 1863,2062 1906,2062 1950,2062 1993,2064 2037,2065 2080,2067 2124,2065 2167,2063 2211,2066 2254,2068 2298,2065"/>
+                <TextEquiv>
+                    <Unicode>powiediela had ge mie zklamal · y gedla</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_57" custom="readingOrder {index:27;}">
+                <Coords points="1421,2147 2290,2148 2298,2080 1420,2083"/>
+                <Baseline points="1426,2122 1469,2119 1513,2116 1557,2119 1601,2119 1644,2119 1688,2119 1732,2121 1776,2122 1819,2122 1863,2122 1907,2124 1951,2125 1994,2125 2038,2125 2082,2127 2126,2128 2169,2128 2213,2130 2257,2131 2301,2131"/>
+                <TextEquiv>
+                    <Unicode>sem . y wecze pan k hadu że gſy vcżinil</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_59" custom="readingOrder {index:28;}">
+                <Coords points="1411,2191 1752,2216 2283,2197 2283,2138 1411,2144"/>
+                <Baseline points="1417,2181 1460,2178 1503,2181 1547,2181 1590,2178 1634,2181 1677,2183 1721,2184 1764,2184 1808,2186 1851,2185 1894,2186 1938,2185 1981,2184 2025,2186 2068,2189 2112,2188 2155,2188 2199,2189 2242,2187 2286,2187"/>
+                <TextEquiv>
+                    <Unicode>to · zlorzecżeny gſy · mezy wſſemi ži¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_61" custom="readingOrder {index:29;}">
+                <Coords points="1414,2253 2292,2285 2276,2197 2184,2224 2067,2197 1414,2200"/>
+                <Baseline points="1420,2241 1463,2238 1507,2241 1551,2244 1595,2239 1638,2241 1682,2244 1726,2244 1770,2246 1813,2247 1857,2247 1901,2247 1945,2247 1988,2249 2032,2250 2076,2250 2120,2252 2163,2253 2207,2253 2251,2255 2295,2253"/>
+                <TextEquiv>
+                    <Unicode>wocżichy · ya howady zemie . Na prſech</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_63" custom="readingOrder {index:30;}">
+                <Coords points="1414,2328 2286,2341 2285,2283 2172,2262 1914,2284 1413,2254"/>
+                <Baseline points="1420,2304 1463,2301 1506,2304 1550,2307 1593,2304 1637,2307 1680,2307 1724,2307 1767,2307 1811,2309 1854,2308 1897,2307 1941,2309 1984,2310 2028,2312 2071,2313 2115,2313 2158,2314 2202,2316 2245,2316 2289,2319"/>
+                <TextEquiv>
+                    <Unicode>ſwych choditi budeſs · a zemi gieſti bu¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_65" custom="readingOrder {index:31;}">
+                <Coords points="1411,2379 2214,2404 2277,2397 2277,2348 1695,2311 1618,2338 1410,2327"/>
+                <Baseline points="1417,2364 1460,2367 1503,2364 1546,2367 1589,2367 1632,2369 1675,2368 1719,2369 1762,2370 1805,2370 1848,2372 1891,2371 1934,2372 1977,2373 2021,2374 2064,2375 2107,2375 2150,2376 2193,2377 2236,2374 2280,2370"/>
+                <TextEquiv>
+                    <Unicode>deſs · po wſſeczky dni żiwota ſweho ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_68" custom="readingOrder {index:32;}">
+                <Coords points="1405,2450 2277,2463 2264,2391 2123,2413 2043,2387 1404,2383"/>
+                <Baseline points="1411,2426 1454,2426 1497,2426 1541,2426 1584,2429 1628,2429 1671,2429 1715,2429 1758,2431 1802,2432 1845,2432 1888,2432 1932,2432 1975,2434 2019,2437 2062,2438 2106,2438 2149,2438 2193,2438 2236,2438 2280,2435"/>
+                <TextEquiv>
+                    <Unicode>neprzieznie vlożym mezy tebu · a żenu ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_70" custom="readingOrder {index:33;}">
+                <Coords points="1396,2496 1913,2527 2283,2509 2262,2455 1464,2441 1396,2476"/>
+                <Baseline points="1402,2486 1446,2489 1490,2489 1534,2489 1578,2492 1623,2489 1667,2492 1711,2492 1755,2492 1799,2492 1844,2492 1888,2495 1932,2495 1976,2497 2020,2498 2065,2498 2109,2500 2153,2499 2197,2500 2241,2501 2286,2501"/>
+                <TextEquiv>
+                    <Unicode>a ſemenem twym y ſemenem gegiem</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_72" custom="readingOrder {index:34;}">
+                <Coords points="1401,2570 2204,2589 2277,2581 2276,2514 1400,2514"/>
+                <Baseline points="1408,2549 1451,2552 1495,2552 1538,2552 1582,2552 1626,2552 1669,2554 1713,2555 1756,2555 1800,2555 1844,2555 1887,2557 1931,2558 1974,2560 2018,2559 2062,2560 2105,2563 2149,2564 2192,2564 2236,2565 2280,2561"/>
+                <TextEquiv>
+                    <Unicode>onat ſetrze hlawu twu · a ty vklady cżi¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_74" custom="readingOrder {index:35;}">
+                <Coords points="1396,2625 2279,2640 2277,2583 2246,2577 1396,2571"/>
+                <Baseline points="1402,2614 1445,2614 1489,2614 1533,2614 1577,2614 1621,2611 1665,2614 1709,2614 1753,2616 1797,2617 1841,2617 1884,2617 1928,2617 1972,2619 2016,2622 2060,2623 2104,2625 2148,2626 2192,2626 2236,2628 2280,2626"/>
+                <TextEquiv>
+                    <Unicode>niti budeſs noham gegim : żenie take</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_76" custom="readingOrder {index:36;}">
+                <Coords points="1401,2688 1925,2716 2114,2692 2207,2719 2274,2713 2273,2642 1400,2631"/>
+                <Baseline points="1408,2677 1451,2674 1494,2677 1538,2674 1581,2674 1625,2677 1668,2677 1712,2677 1755,2677 1799,2679 1842,2682 1885,2681 1929,2682 1972,2683 2016,2683 2059,2685 2103,2686 2146,2687 2190,2688 2233,2685 2277,2683"/>
+                <TextEquiv>
+                    <Unicode>rzekl ge · rozmnożimt pſoty twe · a po¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_78" custom="readingOrder {index:37;}">
+                <Coords points="1405,2748 2236,2780 2282,2775 2281,2714 1404,2704"/>
+                <Baseline points="1411,2737 1454,2737 1498,2737 1541,2737 1585,2737 1629,2740 1672,2738 1716,2737 1759,2739 1803,2742 1847,2743 1890,2745 1934,2746 1977,2746 2021,2748 2065,2749 2108,2751 2152,2752 2195,2752 2239,2752 2283,2749"/>
+                <TextEquiv>
+                    <Unicode>cżinanie twa · w boleſtech roditi budeſs</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_80" custom="readingOrder {index:38;}">
+                <Coords points="1401,2818 2279,2843 2267,2771 1400,2751"/>
+                <Baseline points="1408,2799 1451,2799 1495,2796 1538,2799 1582,2799 1626,2799 1669,2799 1713,2801 1756,2802 1800,2802 1844,2804 1887,2805 1931,2805 1974,2807 2018,2808 2062,2810 2105,2811 2149,2811 2192,2811 2236,2812 2280,2811"/>
+                <TextEquiv>
+                    <Unicode>ſyny · a pod moczy muże budeſs a ont</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_82" custom="readingOrder {index:39;}">
+                <Coords points="1401,2882 2256,2898 2274,2847 1400,2818"/>
+                <Baseline points="1408,2859 1451,2862 1494,2862 1538,2859 1581,2859 1625,2862 1668,2864 1712,2865 1755,2865 1799,2867 1842,2868 1885,2868 1929,2870 1972,2869 2016,2870 2059,2871 2103,2871 2146,2871 2190,2871 2233,2870 2277,2868"/>
+                <TextEquiv>
+                    <Unicode>bude panowati nad tebu : Adamo¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_84" custom="readingOrder {index:40;}">
+                <Coords points="1401,2940 2267,2962 2265,2894 2169,2884 1400,2883"/>
+                <Baseline points="1408,2922 1451,2922 1494,2922 1537,2922 1580,2925 1623,2925 1666,2925 1709,2927 1752,2930 1795,2931 1838,2931 1881,2931 1924,2933 1967,2934 2010,2934 2053,2934 2096,2934 2139,2934 2182,2935 2225,2937 2268,2937"/>
+                <TextEquiv>
+                    <Unicode>wi pak rzekl że ſy vpoſlechl hlaſu že¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_86" custom="readingOrder {index:41;}">
+                <Coords points="1402,3006 2155,3021 2267,3013 2266,2962 1400,2940"/>
+                <Baseline points="1408,2987 1451,2981 1494,2981 1537,2984 1580,2984 1623,2986 1666,2985 1709,2988 1752,2992 1795,2993 1838,2995 1881,2994 1924,2995 1967,2995 2010,2994 2053,2996 2096,2996 2139,2996 2182,2997 2225,2998 2268,2993"/>
+                <TextEquiv>
+                    <Unicode>ny ſwe · a gedl gſy z drzewa · z kte¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_88" custom="readingOrder {index:42;}">
+                <Coords points="1396,3060 2161,3088 2274,3073 2274,3017 1395,3012"/>
+                <Baseline points="1402,3047 1445,3047 1489,3050 1533,3047 1577,3047 1620,3047 1664,3050 1708,3050 1752,3052 1795,3053 1839,3053 1883,3055 1927,3056 1970,3056 2014,3056 2058,3056 2102,3058 2145,3059 2189,3061 2233,3059 2277,3056"/>
+                <TextEquiv>
+                    <Unicode>rehož gſem rozkazal tobie aby negedl ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_90" custom="readingOrder {index:43;}">
+                <Coords points="1396,3131 2262,3138 2261,3078 2223,3073 1395,3064"/>
+                <Baseline points="1402,3110 1445,3110 1488,3110 1531,3110 1574,3110 1617,3110 1660,3110 1704,3112 1747,3113 1790,3113 1833,3115 1876,3116 1919,3118 1962,3119 2006,3119 2049,3119 2092,3120 2135,3123 2178,3124 2221,3121 2265,3119"/>
+                <TextEquiv>
+                    <Unicode>zlorzecżena zemie pro twuoy ſkutek ·</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_92" custom="readingOrder {index:44;}">
+                <Coords points="1401,3189 1871,3212 2120,3189 2170,3218 2252,3204 2251,3144 1400,3133"/>
+                <Baseline points="1408,3169 1450,3169 1492,3169 1534,3169 1577,3169 1619,3171 1661,3172 1703,3172 1746,3174 1788,3175 1830,3176 1872,3179 1915,3181 1957,3181 1999,3181 2041,3181 2084,3184 2126,3181 2168,3184 2210,3184 2253,3178"/>
+                <TextEquiv>
+                    <Unicode>w robotach budeſs gieſti z nij · po¬</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextLine id="tr_1_tl_94" custom="readingOrder {index:45;}">
+                <Coords points="1397,3249 2080,3260 2235,3298 2266,3280 2264,3213 1395,3187"/>
+                <Baseline points="1402,3232 1445,3232 1488,3235 1531,3235 1575,3235 1618,3237 1661,3238 1705,3238 1748,3238 1791,3240 1835,3241 1878,3243 1921,3244 1964,3244 2008,3246 2051,3246 2094,3247 2138,3250 2181,3251 2224,3253 2268,3250"/>
+                <TextEquiv>
+                    <Unicode>wſſeczky dni žiwota ſweho · Trnij a</Unicode>
+                </TextEquiv>
+            </TextLine>
+            <TextEquiv>
+                <Unicode>ſtie buoh że w kteryz koli den gieſti bu¬
+dete z nieho.otewraut ſe oczy waſſe a bu¬
+dete yako bohowe. znagicze dobre y zle
+Protož widiela żena zeb y dobre bylo
+drzewo k wokuſſenh a kaoczyma pie¬
+knee.a na pohledienh rozkoſſnee. y w za¬
+la z owocze geho a gedla a dala mużi
+ſwemu kteryzto gedl ge.A otewrzie¬
+ny gſu oczi obu dwu y kdyż poznala ſe
+że by byla naha.nawazali gſu liſtij fi¬
+koweho y nadielali ſobie wienikuow ¬
+A kdyz zaſlechli. hlas pana boha.pro¬
+chazegiczíeho ſe po ragi.ku powietrzij
+po poledni.vkryl ſe geſt A dam y żena
+geho od twarzi pana boha.vproſtrzed
+drziewi rayſkee Y powolal pan buoh 
+Adama.a rzekl gemu. kde gſy? kteryż
+to wecze. hlas twuo y pane ſlyſſal ſem
+w Kagi. a bal ſem ſe  proto zeb ych¬
+byl nah gemuz ge rzekl pan a ktot
+ge tobie okazal zeb y naah byl gedine
+ze ſy z drzewa gedl o niemż gſem tobie
+przikazal. ab y negedl y rzekl ge. A d 
+zena kterúż ſy mi daltowarziſſku.dala
+mi z dṙewa a gedl ſem y rzekl pan buoh
+s ženíe ? procżeṡ to vcżinila.kterażto od
+powiediela had cze mie zklamal.y gedla
+sem.y wcze pan k hadu że gſy vcżinil
+to zlorzeczeny gſy mezy wſſemi zi¬
+woczich ya howady zemie.Na prſech
+ſwych choditi budeſs. a zeni gieſti bu¬
+deſs. po wſſeczky dni żiwota ſweho.
+neprzieznie vlozyn mez y tobu a żenu
+a ſemenem twym y ſemenem gegiem
+onat ſetrze hlawu twu a ty vklady cżi¬
+niti budeſs nohan gegim żenie take
+rzekl ge rozmnozimt pſoty twe.a po¬
+czinanie twa.w boleſiech roditi bude ſs
+ſyny. a pod moczy muze budeſs a out
+bude panowati nad tebu Adamo¬
+wi pak rzekl ze ſy vpoſlechl hlaſu ze
+ny ſwe a gedl gſy z drzewa z kte¬
+rehoz gſem rozkazal tobie ab y negedl
+zlorzeczena zemie pro twuoy ſkutek
+w robotach budeſs gieſti z na po¬
+wſſeczky dni ziwota ſw ho. Trnij a</Unicode>
+            </TextEquiv>
+        </TextRegion>
+    </Page>
+</PcGts>

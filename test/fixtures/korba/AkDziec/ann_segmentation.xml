@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <xi:include href="NKJP_1M_header.xml"/>
+  <TEI>
+    <xi:include href="header.xml"/>
+    <text xml:id="segm_text" xml:lang="pl">
+      <body xml:id="segm_body">
+        <p xml:id="segm_1-p" corresp="text.xml#txt_1-div">
+          <s xml:id="segm_1.11-s">
+            <seg xml:id="segm_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,0,1)">
+              <w>X</w>
+            </seg>
+            <seg xml:id="segm_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,1,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,3,6)">
+              <w>Ieżeli</w>
+            </seg>
+            <seg xml:id="segm_1.4-seg" corresp="text.xml#string-range(txt_1.1-ab,10,2)">
+              <w>to</w>
+            </seg>
+            <seg xml:id="segm_1.5-seg" corresp="text.xml#string-range(txt_1.1-ab,13,4)">
+              <w>iest</w>
+            </seg>
+            <seg xml:id="segm_1.6-seg" corresp="text.xml#string-range(txt_1.1-ab,17,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.7-seg" corresp="text.xml#string-range(txt_1.1-ab,19,3)">
+              <w>dam</w>
+            </seg>
+            <seg xml:id="segm_1.8-seg" corresp="text.xml#string-range(txt_1.1-ab,23,2)">
+              <w>mu</w>
+            </seg>
+            <seg xml:id="segm_1.9-seg" corresp="text.xml#string-range(txt_1.1-ab,26,5)">
+              <w>dobre</w>
+            </seg>
+            <seg xml:id="segm_1.10-seg" corresp="text.xml#string-range(txt_1.1-ab,32,11)">
+              <w>napomnienie</w>
+            </seg>
+            <seg xml:id="segm_1.11-seg" corresp="text.xml#string-range(txt_1.1-ab,43,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.24-s">
+            <seg xml:id="segm_1.12-seg" corresp="text.xml#string-range(txt_1.1-ab,61,1)">
+              <w>S</w>
+            </seg>
+            <seg xml:id="segm_1.13-seg" corresp="text.xml#string-range(txt_1.1-ab,62,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.14-seg" corresp="text.xml#string-range(txt_1.1-ab,64,9)">
+              <w>Suplikuię</w>
+            </seg>
+            <seg xml:id="segm_1.15-seg" corresp="text.xml#string-range(txt_1.1-ab,74,2)">
+              <w>WX</w>
+            </seg>
+            <seg xml:id="segm_1.16-seg" corresp="text.xml#string-range(txt_1.1-ab,76,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.17-seg" corresp="text.xml#string-range(txt_1.1-ab,78,3)">
+              <w>Mci</w>
+            </seg>
+            <seg xml:id="segm_1.18-seg" corresp="text.xml#string-range(txt_1.1-ab,82,5)">
+              <w>ażeby</w>
+            </seg>
+            <seg xml:id="segm_1.19-seg" corresp="text.xml#string-range(txt_1.1-ab,87,1)" nkjp:nps="true">
+              <w>ś</w>
+            </seg>
+            <seg xml:id="segm_1.20-seg" corresp="text.xml#string-range(txt_1.1-ab,89,2)">
+              <w>mi</w>
+            </seg>
+            <seg xml:id="segm_1.21-seg" corresp="text.xml#string-range(txt_1.1-ab,92,5)">
+              <w>kazał</w>
+            </seg>
+            <choice>
+              <nkjp:paren>
+                <seg xml:id="segm_1620296698_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,98,6)" nkjp:rejected="true">
+                  <w>uczyni</w>
+                </seg>
+                <seg xml:id="segm_1620296698_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,104,1)" nkjp:nps="true" nkjp:rejected="true">
+                  <w>ć</w>
+                </seg>
+              </nkjp:paren>
+              <seg xml:id="segm_1.22-seg" corresp="text.xml#string-range(txt_1.1-ab,98,7)">
+                <w>uczynić</w>
+              </seg>
+            </choice>
+            <seg xml:id="segm_1.23-seg" corresp="text.xml#string-range(txt_1.1-ab,106,14)">
+              <w>sprawiedliwość</w>
+            </seg>
+            <seg xml:id="segm_1.24-seg" corresp="text.xml#string-range(txt_1.1-ab,120,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.47-s">
+            <seg xml:id="segm_1.25-seg" corresp="text.xml#string-range(txt_1.1-ab,138,1)">
+              <w>X</w>
+            </seg>
+            <seg xml:id="segm_1.26-seg" corresp="text.xml#string-range(txt_1.1-ab,139,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.27-seg" corresp="text.xml#string-range(txt_1.1-ab,141,8)">
+              <w>Będziesz</w>
+            </seg>
+            <seg xml:id="segm_1.30-seg" corresp="text.xml#string-range(txt_1.1-ab,150,3)">
+              <w>WmP</w>
+            </seg>
+            <seg xml:id="segm_1.31-seg" corresp="text.xml#string-range(txt_1.1-ab,153,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.32-seg" corresp="text.xml#string-range(txt_1.1-ab,171,7)">
+              <w>kontent</w>
+            </seg>
+            <seg xml:id="segm_1.33-seg" corresp="text.xml#string-range(txt_1.1-ab,179,2)">
+              <w>ze</w>
+            </seg>
+            <seg xml:id="segm_1.34-seg" corresp="text.xml#string-range(txt_1.1-ab,182,4)">
+              <w>mnie</w>
+            </seg>
+            <seg xml:id="segm_1.35-seg" corresp="text.xml#string-range(txt_1.1-ab,186,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.36-seg" corresp="text.xml#string-range(txt_1.1-ab,188,3)">
+              <w>ale</w>
+            </seg>
+            <seg xml:id="segm_1.37-seg" corresp="text.xml#string-range(txt_1.1-ab,192,5)">
+              <w>niech</w>
+            </seg>
+            <seg xml:id="segm_1.38-seg" corresp="text.xml#string-range(txt_1.1-ab,198,3)">
+              <w>ten</w>
+            </seg>
+            <seg xml:id="segm_1.41-seg" corresp="text.xml#string-range(txt_1.1-ab,202,9)">
+              <w>przyidzie</w>
+            </seg>
+            <seg xml:id="segm_1.42-seg" corresp="text.xml#string-range(txt_1.1-ab,212,8)">
+              <w>niecnota</w>
+            </seg>
+            <seg xml:id="segm_1.43-seg" corresp="text.xml#string-range(txt_1.1-ab,220,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.44-seg" corresp="text.xml#string-range(txt_1.1-ab,222,5)">
+              <w>umyię</w>
+            </seg>
+            <seg xml:id="segm_1.45-seg" corresp="text.xml#string-range(txt_1.1-ab,228,2)">
+              <w>mu</w>
+            </seg>
+            <seg xml:id="segm_1.46-seg" corresp="text.xml#string-range(txt_1.1-ab,231,5)">
+              <w>głowę</w>
+            </seg>
+            <seg xml:id="segm_1.47-seg" corresp="text.xml#string-range(txt_1.1-ab,236,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.56-s">
+            <seg xml:id="segm_1.48-seg" corresp="text.xml#string-range(txt_1.1-ab,254,1)">
+              <w>S</w>
+            </seg>
+            <seg xml:id="segm_1.49-seg" corresp="text.xml#string-range(txt_1.1-ab,255,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.51-seg" corresp="text.xml#string-range(txt_1.1-ab,257,4)">
+              <w>WXca</w>
+            </seg>
+            <seg xml:id="segm_1.52-seg" corresp="text.xml#string-range(txt_1.1-ab,262,3)">
+              <w>Mść</w>
+            </seg>
+            <seg xml:id="segm_1.53-seg" corresp="text.xml#string-range(txt_1.1-ab,266,7)">
+              <w>raczysz</w>
+            </seg>
+            <seg xml:id="segm_1.54-seg" corresp="text.xml#string-range(txt_1.1-ab,274,2)">
+              <w>mu</w>
+            </seg>
+            <seg xml:id="segm_1.55-seg" corresp="text.xml#string-range(txt_1.1-ab,277,7)">
+              <w>darować</w>
+            </seg>
+            <seg xml:id="segm_1.56-seg" corresp="text.xml#string-range(txt_1.1-ab,284,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.76-s">
+            <seg xml:id="segm_1.57-seg" corresp="text.xml#string-range(txt_1.1-ab,302,1)">
+              <w>X</w>
+            </seg>
+            <seg xml:id="segm_1.58-seg" corresp="text.xml#string-range(txt_1.1-ab,303,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.59-seg" corresp="text.xml#string-range(txt_1.1-ab,305,3)">
+              <w>Day</w>
+            </seg>
+            <seg xml:id="segm_1.60-seg" corresp="text.xml#string-range(txt_1.1-ab,309,2)">
+              <w>mi</w>
+            </seg>
+            <seg xml:id="segm_1.63-seg" corresp="text.xml#string-range(txt_1.1-ab,312,3)">
+              <w>WmP</w>
+            </seg>
+            <seg xml:id="segm_1.64-seg" corresp="text.xml#string-range(txt_1.1-ab,315,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.67-seg" corresp="text.xml#string-range(txt_1.1-ab,333,5)">
+              <w>pokoy</w>
+            </seg>
+            <seg xml:id="segm_1.68-seg" corresp="text.xml#string-range(txt_1.1-ab,338,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.69-seg" corresp="text.xml#string-range(txt_1.1-ab,340,5)">
+              <w>lubię</w>
+            </seg>
+            <seg xml:id="segm_1.70-seg" corresp="text.xml#string-range(txt_1.1-ab,346,2)">
+              <w>ia</w>
+            </seg>
+            <seg xml:id="segm_1.71-seg" corresp="text.xml#string-range(txt_1.1-ab,349,3)">
+              <w>żyć</w>
+            </seg>
+            <seg xml:id="segm_1.72-seg" corresp="text.xml#string-range(txt_1.1-ab,353,9)">
+              <w>spokoynie</w>
+            </seg>
+            <seg xml:id="segm_1.73-seg" corresp="text.xml#string-range(txt_1.1-ab,363,1)">
+              <w>z</w>
+            </seg>
+            <seg xml:id="segm_1.74-seg" corresp="text.xml#string-range(txt_1.1-ab,365,4)">
+              <w>memi</w>
+            </seg>
+            <seg xml:id="segm_1.75-seg" corresp="text.xml#string-range(txt_1.1-ab,370,9)">
+              <w>sąsiadami</w>
+            </seg>
+            <seg xml:id="segm_1.76-seg" corresp="text.xml#string-range(txt_1.1-ab,379,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.86-s">
+            <seg xml:id="segm_1.77-seg" corresp="text.xml#string-range(txt_1.1-ab,762,1)">
+              <w>S</w>
+            </seg>
+            <seg xml:id="segm_1.78-seg" corresp="text.xml#string-range(txt_1.1-ab,763,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.79-seg" corresp="text.xml#string-range(txt_1.1-ab,765,10)">
+              <w>Niezmierne</w>
+            </seg>
+            <seg xml:id="segm_1.80-seg" corresp="text.xml#string-range(txt_1.1-ab,776,3)">
+              <w>mam</w>
+            </seg>
+            <seg xml:id="segm_1.81-seg" corresp="text.xml#string-range(txt_1.1-ab,780,9)">
+              <w>obligacye</w>
+            </seg>
+            <seg xml:id="segm_1.82-seg" corresp="text.xml#string-range(txt_1.1-ab,790,1)">
+              <w>W</w>
+            </seg>
+            <seg xml:id="segm_1.83-seg" corresp="text.xml#string-range(txt_1.1-ab,791,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.84-seg" corresp="text.xml#string-range(txt_1.1-ab,792,1)" nkjp:nps="true">
+              <w>X</w>
+            </seg>
+            <seg xml:id="segm_1.85-seg" corresp="text.xml#string-range(txt_1.1-ab,794,3)">
+              <w>Mci</w>
+            </seg>
+            <seg xml:id="segm_1.86-seg" corresp="text.xml#string-range(txt_1.1-ab,797,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.95-s">
+            <seg xml:id="segm_1.87-seg" corresp="text.xml#string-range(txt_1.1-ab,815,1)">
+              <w>X</w>
+            </seg>
+            <seg xml:id="segm_1.88-seg" corresp="text.xml#string-range(txt_1.1-ab,816,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.89-seg" corresp="text.xml#string-range(txt_1.1-ab,818,3)">
+              <w>Nie</w>
+            </seg>
+            <seg xml:id="segm_1.90-seg" corresp="text.xml#string-range(txt_1.1-ab,822,6)">
+              <w>frasuy</w>
+            </seg>
+            <seg xml:id="segm_1.91-seg" corresp="text.xml#string-range(txt_1.1-ab,829,3)">
+              <w>się</w>
+            </seg>
+            <seg xml:id="segm_1.94-seg" corresp="text.xml#string-range(txt_1.1-ab,833,3)">
+              <w>WmP</w>
+            </seg>
+            <seg xml:id="segm_1.95-seg" corresp="text.xml#string-range(txt_1.1-ab,836,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          <s xml:id="segm_1.101-s">
+            <seg xml:id="segm_1.96-seg" corresp="text.xml#string-range(txt_1.1-ab,854,4)">
+              <w>każę</w>
+            </seg>
+            <seg xml:id="segm_1.97-seg" corresp="text.xml#string-range(txt_1.1-ab,859,1)">
+              <w>W</w>
+            </seg>
+            <seg xml:id="segm_1.98-seg" corresp="text.xml#string-range(txt_1.1-ab,861,4)">
+              <w>Panu</w>
+            </seg>
+            <choice>
+              <nkjp:paren>
+                <seg xml:id="segm_1620296698_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,866,6)" nkjp:rejected="true">
+                  <w>uczyni</w>
+                </seg>
+                <seg xml:id="segm_1620296698_1.4-seg" corresp="text.xml#string-range(txt_1.1-ab,872,1)" nkjp:nps="true" nkjp:rejected="true">
+                  <w>ć</w>
+                </seg>
+              </nkjp:paren>
+              <seg xml:id="segm_1.99-seg" corresp="text.xml#string-range(txt_1.1-ab,866,7)">
+                <w>uczynić</w>
+              </seg>
+            </choice>
+            <seg xml:id="segm_1.100-seg" corresp="text.xml#string-range(txt_1.1-ab,874,14)">
+              <w>sprawiedliwość</w>
+            </seg>
+            <seg xml:id="segm_1.101-seg" corresp="text.xml#string-range(txt_1.1-ab,888,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          
+          
+          
+          
+          
+          
+          
+          
+        </p>
+        
+        
+        
+        
+      </body>
+    </text>
+  </TEI>
+</teiCorpus>

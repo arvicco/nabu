@@ -427,6 +427,105 @@ sources:
         about Song–Yuan) and 元朝秘史 deliberately claim nothing — declared"}
     places: {posture: unplaced, note: "no place fields in the cone pages"}
     script: {posture: implied}
+  # ── P116-2: the South Slavic wikisource cone (№R-74) ──────────────────
+  bg-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "chu (the 16 charters' original-script text, bare
+        anchor) + bul (Paisiy, hosted as a modern-literary rendering — declared). The
+        wiki's own grouping rides as metadata recension (serbian 10 / bulgarian 6): a
+        facet-rule candidate onto chu/srp (exists); a Bulgarian-recension chu node does
+        not exist — reported, never guessed"}
+    dating: {posture: partial, note: "the charters' issuance years (бележки, typed);
+        Paisiy's rendering carries none"}
+    places: {posture: unplaced, note: "no place fields; grantee places live in prose notes"}
+    script: {posture: implied}
+  hr-wikisource:
+    kind: {posture: unclassified, note: "genre categories ride verbatim in metadata
+        categories — a kind_map candidate"}
+    lect: {posture: identity, note: "hrv bare (no nabu-lects hrv node yet — reported).
+        Povaljska listina (1250) mixes Croatian and Church Slavonic in Croatian Cyrillic
+        — a chu/cro candidate, censused, not claimed"}
+    dating: {posture: dated, note: "P116-2: the century categories (srednji vijek, 15.–18.
+        stoljeće) band the era envelope (era_band → MetadataDates :era_band_key,
+        precision era — an attribution)"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}
+  mk-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "mkd bare (no nabu-lects mk node yet — reported); the
+        Miladinov collection is in MODERNIZED orthography (metadata orthography, per
+        page). Pejčinović/Krčovski's CS-tinged vernacular is the bul:emod/damaskini
+        neighbourhood — censused, not staged"}
+    dating: {posture: partial, note: "the забелешки print year where stated (Krčovski
+        1817 …); the collections carry none at page grain"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}
+  sl-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: dates, note: "as imp/prilit — the sl stage bands stage the typed
+        Dela-leta years (1584 Dalmatin → emod; the 19th-century mass → emod/mod)"}
+    dating: {posture: dated, note: "the Dela leta N year category, typed (MetadataDates
+        :structured)"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied, note: "Latin; bohoričica declared per page in metadata
+        orthography"}
+  sr-wikisource:
+    kind: {posture: unclassified, note: "song-type and collection categories ride verbatim
+        in metadata categories — a kind_map candidate"}
+    lect: {posture: identity, note: "srp (Cyrillic pages) + hrv (the Latin-script,
+        Croatian-collected pages, censused 136) — bare codes, neither has a nabu-lects
+        node yet (reported)"}
+    dating: {posture: pending, note: "no page-grain date exists; candidate: the Vuk
+        volume publication year inside the verbatim base_edition (Избор) line — an
+        edition-class envelope, the openmgh printed_year_text precedent — awaiting a
+        ruling (recording year ≠ composition)"}
+    places: {posture: unplaced, note: "provenance subtitles ((Из Црне Горе)) ride as
+        section annotations, not place claims"}
+    script: {posture: mixed, note: "Cyrillic + Latin pages; metadata script per page"}
+  # P116-3: the West/East Slavic wikisource family (№R-74 posture).
+  pl-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the pl anchor + its old/middle stages
+        (Old Polish to c.1500, Middle Polish to 1772) — nabu-lects carries no Polish
+        node yet (censused 2026-10-10); the cone's era bands then stage it by date.
+        Documents claim bare pol meanwhile"}
+    dating: {posture: dated, note: "P116-3 (№R-74): the cone category's
+        literary-period band (era_band → MetadataDates :era_band_key; medieval /
+        XV-century / Renaissance / Baroque, approximate conventions declared in
+        ERA_CATEGORIES), precision era — an attribution, never a typed date"}
+    places: {posture: unplaced, note: "the edition imprint place (miejsce wydania)
+        is the 19th–20th-c. edition's, not the text's — declared, never a text place"}
+    script: {posture: implied}
+  cs-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the cs anchor + its old/middle stages
+        (Dalimil's Old Czech; the 1613 Kralice / Komenský Middle Czech) — nabu-lects
+        carries no Czech node yet (censused 2026-10-10). Documents claim bare ces"}
+    dating: {posture: partial, note: "P116-3: the Textinfo VYDÁNO/ZDROJ edition
+        statement → MetadataDates :edition_year_text (date_class edition, never
+        composition); the 1613 print's Roman-numeral year (M.DC.XIII) mints nothing —
+        declared"}
+    places: {posture: unplaced, note: "edition imprint places only — declared"}
+    script: {posture: implied}
+  ru-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the cone
+        spans the 11th-c. Мономах to 17th-c. syllabic вирши; staging onto orv:mid via
+        the ДАТАСОЗДАНИЯ era bands is a NAMED candidate, not defaulted"}
+    dating: {posture: dated, note: "P116-3: the page's ДАТАСОЗДАНИЯ composition date
+        (years or a century) → era_band → MetadataDates :era_band_key, precision era;
+        pages stating none band nothing"}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  uk-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the
+        17th–18th-c. Cossack-era chronicles are the Ruthenian register; the orv:ruth
+        stage is the NAMED refinement candidate, not defaulted"}
+    dating: {posture: dated, note: "P116-3: the section's own year (рік_секції — the
+        chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   aclt:   # P110-2
     kind: {posture: unclassified, note: one class — HLuwian inscriptions; a single-value
         kind stamp deferred (the kouigenji precedent)}
@@ -654,6 +753,35 @@ sources:
     dating: {posture: undatable, note: dates live in free prose, no typed field — declared, not silent}
     places: {posture: unplaced, note: same — findspots in prose only}
     script: {posture: implied}
+  korba:   # P116-1
+    kind: {posture: pending, note: "candidate: a kind_map fold over the header's genre catRefs
+        (the facets genre/kind/subject carry KorBa's own codes verbatim — kanc, dydakt, …);
+        the fold is a ruled table, not a default"}
+    lect: {posture: pending, note: "candidate: pl:mid by date-band inference over the print-year
+        envelopes (the dta/de:early mold) — Middle Polish, the corpus's 1601–1772 span; BLOCKED
+        on the aggregated Slavic nabu-lects mint (no pl anchor and no Old/Middle Polish stage
+        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare pl is
+        minted meanwhile"}
+    dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
+        @notBefore/@notAfter with the prose kept raw)"}
+    places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
+        own region classification (role=region) as metadata"}
+    script: {posture: implied, note: "Latin script; the transcribed spelling is the text, the
+        modernized orth rides per token"}
+  prague-bible-1488:   # P116-1
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/sblgnt).
+    lect: {posture: pending, note: "candidate: a cs → cs:old override (lect_overrides.yml) —
+        the 1488 print is Old Czech by every periodization (Old Czech to c. 1500); BLOCKED on
+        the aggregated Slavic nabu-lects mint (no cs anchor and no Old/Middle Czech stage
+        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare cs is
+        minted meanwhile"}
+    dating: {posture: dated, note: "every page carries the edition's 1488 (the record and the
+        htr-united yml: notBefore/notAfter 1488) — the artifact date, :structured lane"}
+    places: {posture: named, note: "Prague — the edition's own name (Bible pražská), the
+        imprint place; declared coarse"}
+    script: {posture: implied, note: "Latin script, semi-diplomatic (long s, ¬, superscript
+        marks verbatim)"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
@@ -844,7 +972,7 @@ sources:
         ride bare san per passage}
     dating: {posture: undatable, note: "the pages carry no dating — the THT catalogue block names
         signature/number/condition only; paleographic dating is a future overlay"}
-    places: {posture: named, note: "the Berlin find signature's site siglum → findspot (Š Šorčuq,
+    places: {posture: named, note: "the Berlin find signature's site siglum → findspot (Š/S Šorčuq,
         D Qočo) via the adapter's SITE_SIGLA, declared coarse — other sigla mint nothing, the raw
         signature rides metadata; gazetteer linking via nabu-places is a future look"}
     script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
@@ -872,18 +1000,20 @@ sources:
     # The Corpus of Bactrian Texts (Sims-Williams; 126 pages, censused
     # 2026-10-10). The corpus's six genres ride the `genre` facet
     # verbatim (Dated documents / Letters / Lists and accounts / …); the
-    # fold onto the ruled kind classes is a kind_map row awaiting its ruling.
-    kind: {posture: pending, note: "candidate: a kind_map row over the `genre` facet —
-        the corpus's own six-genre CONTENTS list (Dated documents, Documents and fragments
-        of uncertain date, Lists and accounts, Letters, Fragments of documents of uncertain
-        type, Buddhist texts)"}
+    # kind declaration retired P116 (№R-78): the config/kind_map.yml
+    # genre-facet fold machine-postures the source (the shadowing rule).
     lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
         100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
     dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
         documents' year formulas (\"χϸονο ρʹ ιʹ\" = year 110) are mined into document
         metadata `era_dates` (raw formula, summed numeral, uncertain flag); turning era
-        years into CE envelopes needs a ruled era epoch (the Sims-Williams/de Blois
-        Bactrian calendar), never assumed here"}
+        years into CE envelopes needs a ruled era epoch, never assumed here. The epoch is
+        CONTESTED in the literature (P116 check): Sims-Williams & de Blois, Studies in
+        the Chronology of the Bactrian Documents (Vienna 2018) argue Nawroz 223 CE (de
+        Blois, CRAI 2006/2008) and call it controversial; Schindel 2011 and de la
+        Vaissière argue 227/228; Humbach/Harmatta 1966-71 had 232, Sims-Williams
+        1997/1999 233 (a working hypothesis since withdrawn). Terminus post quem 219 CE
+        is 'probably uncontroversial' (2018, p. 11)"}
     places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
         Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
         the Tang-i Safedak inscription (TiS) is named only by its siglum"}
@@ -905,7 +1035,7 @@ sources:
     dating: {posture: undatable, note: "the pages carry only TITUS data-entry/version dates (mined
         into document metadata as data_entry), never a composition or manuscript date"}
     places: {posture: named, note: "the Reader's Berlin Turfan find signatures (\"M_5794_I (=
-        T_II_D_126_I)\") → findspot via the titus-tocharian-a SITE_SIGLA (Š Šorčuq, D Qočo),
+        T_II_D_126_I)\") → findspot via the titus-tocharian-a SITE_SIGLA (Š/S Šorčuq, D Qočo),
         declared coarse — other sigla mint nothing, the raw signatures ride `find_signatures`;
         the Corpus's and the Sermon's M-/So-/U-numbers carry no site"}
     script: {posture: qualified, note: "Latin-script renderings — per-document `representation`

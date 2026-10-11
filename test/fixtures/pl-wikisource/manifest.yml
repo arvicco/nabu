@@ -1,0 +1,57 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Envelopes are the adapter's own on-disk shape around api.php captures —
+# no per-file raw GET URL exists for the envelope form.
+source: pl-wikisource
+adapter_test:
+retrieved: "2026-10-10"
+files:
+  - path: pages/1481.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + action=parse) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: pages/25521.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + action=parse) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: pages/11208.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + action=parse) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: pages/1387443.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: bruckner/entries.json
+    refetchable: false
+    provenance: local-trim
+    reason: five {{Bruckner}} stubs reduced to the lane's stub record — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: five of the 5,715 stubs (cmentarz, co, cuch, córa, gospoda)
+  - path: bruckner/scans/191732.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the lane's scan envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none (scan page 084)
+  - path: bruckner/scans/191923.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the lane's scan envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none (scan page 085)

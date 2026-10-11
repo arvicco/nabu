@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <xi:include href="../KorBa_manual_header.xml"/>
+  <TEI>
+    <xi:include href="header.xml"/>
+    <text>
+      <body>
+        <div xml:id="txt_1-div">
+          <ab n="txt_2.1.22.4-p" xml:id="txt_1.1-ab"><pb n="132"/>1692, d. 24 Januarii <foreign xml:lang="la" xml:id="txt_1.1.1-foreign">accessit</foreign> z Jaworowa działo spiżowe, wielkie, 36-funtowe, gładkie, bez napisu i lawetu. Długie na łokci.</ab>
+          <ab n="txt_2.1.22.5-p" xml:id="txt_1.2-ab">Działo spiżowe, 8 funtowe, z Jaworowa, długie, bez napisu i lawetu.</ab>
+          <ab n="txt_2.1.22.6-p" xml:id="txt_1.3-ab">Działo spiżowe, 6-funtowe, z Jaworowa, trochę krótsze, na którym wyryty herb, to jest orzeł z dwiema głowami, i z napisem Mathias etc. Bez lawetu.</ab>
+          
+          
+          
+          
+          
+          
+          
+        </div>
+      </body>
+    </text>
+  </TEI>
+</teiCorpus>

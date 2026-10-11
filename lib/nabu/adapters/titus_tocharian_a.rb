@@ -35,7 +35,7 @@ module Nabu
     # the Berlin find signature verbatim ("T_III_Š_72.1"), the THT
     # number(s), the German catalogue note. The signature's SITE siglum
     # mines the findspot through SITE_SIGLA — DELIBERATELY coarse and
-    # declared: only the sigla censused on the live pages resolve (Š, D);
+    # declared: only the sigla censused on the live pages resolve (Š, S, D);
     # any other siglum mints no place (the raw signature still rides), and
     # the first-sync census extends the table. The expedition numeral is
     # not mined (the catalogue prose and the numeral disagree on page 467 —
@@ -65,8 +65,12 @@ module Nabu
       # Berlin Turfan find-signature SITE sigla → findspot. Census-complete
       # for the 13 live pages sampled 2026-10-07 (Š on the Šorčuq pages, D
       # on the Qočo pages — the catalogue's own prose names "Chotscho" for
-      # a T I D fragment, tocha467). Unknown sigla mint nothing.
-      SITE_SIGLA = { "Š" => "Šorčuq", "D" => "Qočo" }.freeze
+      # a T I D fragment, tocha467). The undiacriticked S is Šorčuq too
+      # (owner ruling 2026-10-10): tocha373's own catalogue prose places its
+      # T_III_S_75.1 leaf "aus der 'Stadthöhle' in Šorčuq" — 67 pages at the
+      # first-sync census. M and N stay unmapped (no censused evidence);
+      # unknown sigla mint nothing.
+      SITE_SIGLA = { "Š" => "Šorčuq", "S" => "Šorčuq", "D" => "Qočo" }.freeze
 
       # "No._1 = T_III_Š_72.1" — the edition number and the find signature.
       NUMBER_LINE = /\ANo\._(\d+)\s*=\s*(\S+)\z/

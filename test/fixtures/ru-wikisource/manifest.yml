@@ -1,0 +1,57 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Envelopes are the adapter's own on-disk shape around api.php captures —
+# no per-file raw GET URL exists for the envelope form.
+source: ru-wikisource
+adapter_test:
+retrieved: "2026-10-10"
+files:
+  - path: pages/433334.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: wikitext header + opening lines (627,072 → 4,158 bytes, line boundary)
+  - path: pages/54545.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: pages/1101386.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: wikitext header + body head (56,345 → 3,158 bytes, line boundary)
+  - path: pages/34445.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: wikitext header + opening (44,988 → 3,964 bytes, line boundary)
+  - path: pages/473330.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none
+  - path: pages/34424.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + action=parse) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: false
+    trim: wikitext 33,399 → 2,704 bytes (line boundary); rendering 48,976 → 18,408 (first </p> under 22,000)
+  - path: pages/293263.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + action=parse) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-10"
+    whole: true
+    trim: none

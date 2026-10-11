@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_AkDziec">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Akademia dziecinna albo zbiór nauk różnych"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="free">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Akademia dziecinna albo zbiór nauk różnych</title>
+        <author>Anonim</author>
+        <publisher>Drukarnia JKM i Rzeczypospolitej Scholarum Piarum</publisher>
+        <pubPlace role="place">Wilno</pubPlace>
+        <pubPlace role="region">Ziemie W. Ks. Lit.</pubPlace>
+        <date when="1761">1761</date>
+        <idno type="KORBA">KORBA_AkDziec</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#dydakt"/>
+      <catRef scheme="#ironic" target="#nie"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>
