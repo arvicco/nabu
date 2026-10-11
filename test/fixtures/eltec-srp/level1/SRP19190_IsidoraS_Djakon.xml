@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml-model href="https://distantreading.github.io/Schema/eltec-1.rng" ?> -->
+<?xml-model href="../Schemas/eltec-1.rng" type="application/xml" 
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../Schemas/eltec-1.rng" type="application/xml" 
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="SRP19190" xml:lang="sr">
+
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title ref="wikidata:Q109336075">Ђакон Богородичине цркве : ELTeC издање</title>
+        <title xml:lang="en">Deacon of the Church of the Mother of God : ELTeC edition</title>
+        <author ref="viaf:4943681 wikidata:Q1279865">Секулић, Исидора (1877-1958)</author>
+        <respStmt>
+          <resp>Сканирање</resp>
+          <name>Универзитетска библиотека "Светозар Марковић"</name>
+        </respStmt>
+        <respStmt>
+          <resp>OCR и корекција текста</resp>
+          <name>Ранка Станковић</name>
+          <name>Цветана Крстев</name>
+        </respStmt>
+        <respStmt>
+          <resp>Кодирање за ELTeC</resp>
+          <name>Цветана Крстев</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="words">51973</measure>
+        <measure unit="pages">256</measure>
+      </extent>
+      <publicationStmt>
+<publisher ref="https://distant-reading.net">COST Action "Distant Reading for European Literary History" (CA16204)</publisher>
+<distributor ref="https://zenodo.org/communities/eltec/">Zenodo.org</distributor><date when="2021-04-09"/>
+<availability><licence target="https://creativecommons.org/licenses/by/4.0/"/></availability>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.3462435">ELTeC</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.4662444">ELTeC release 1.1.0</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.3524056">ELTeC-srp</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.4662604">ELTeC-srp release 0.9.0</ref>
+</publicationStmt>
+      <sourceDesc><bibl type="firstEdition">
+          <author>Секулић, Исидора</author>
+          <title>Ђакон Богородичине цркве</title>
+          <pubPlace>Загреб</pubPlace>
+          <publisher>Књижара З. и В. Васића</publisher>
+          <date>1919</date>
+          <!-- <idno type="wiki">https://sr.wikipedia.org/wiki/Исидора_Секулић</idno> -->
+          <!-- <idno type="wiki">https://sr.wikipedia.org/wiki/Ђакон_богородичине_цркве</idno> -->
+          <idno type="COBISS-SR.ID">28509191</idno>
+        </bibl></sourceDesc>
+    </fileDesc>
+    <encodingDesc n="eltec-1">
+      <p/>
+    </encodingDesc>
+    
+    <profileDesc>
+      <langUsage>
+        <language ident="sr-Cyrl" usage="100">српски</language>
+      </langUsage>
+      <textDesc>
+        <authorGender xmlns="http://distantreading.net/eltec/ns" key="F"/>
+        <size xmlns="http://distantreading.net/eltec/ns" key="medium"/>
+        <reprintCount xmlns="http://distantreading.net/eltec/ns" key="high"/>
+        <!-- izdanja: 1919, 1997, 1999, 2001, 2002, 2008, 2013, 2016 [5 у периоду 1970-2010] -->
+        <timeSlot xmlns="http://distantreading.net/eltec/ns" key="T4"/>
+      </textDesc>
+    </profileDesc>
+    <revisionDesc>
+<change when="2021-04-09">Converted by checkUp script for new release</change>
+<change when="2020-11-14">Converted by checkUp script for new release</change><change when="2019-10-30">Checked by releaseChecker script</change>
+      <change when="20190110"/>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+
+  <front>
+    <div type="titlepage" xml:id="SRP19190_F1">
+      <p>Исидора Секулић</p>
+      <p>Ђакон Богородичине</p>
+      <p>Цркве</p>
+      <p>Књижара З. и В. Васића Загреб</p>
+    </div>
+  </front>
+  <body>
+    <div type="chapter" xml:id="SRP19190_C1">
+      <head>I.</head>
+      <p> На углу, преко пута Велике Каване, стојао је доктор Пашковић, а одгоре, из Дома  Певача , долазила је госпођица Ана Недићева. Под мишком је носила повелику, али врло елегантну кожну  сервиету, угасито мрку, са лепо израђеним сребрним оквиром и са  тешком  сребрном копчом.</p>
+      <p>— Пази, молим те, Пашковића! — смејао се неко у друштву крај прозора Каване. — Пази, молим те, маторог  маџионичара. Зар не изгледа као какав велики кључ, који, по вољи, сваког  мимопролазећег човека може  откључати  и широм отворити. И посматрајте само. Не гледа у њу, него право у њену кожну торбу. Тачно зна кључ где су тајни врата.</p>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </body>
+  
+  </text>
+</TEI>

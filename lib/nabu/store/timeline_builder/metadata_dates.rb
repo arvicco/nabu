@@ -71,6 +71,7 @@ module Nabu
         # registers here and the health lane-drift check flags it if it
         # doesn't).
         SHAPES = {
+          "archiv-slav-phil" => :structured, # Q105: each volume's title-page year
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,
@@ -90,17 +91,26 @@ module Nabu
           "ebl" => :period_label,
           "edr" => :structured,
           "eebo-tcp" => :structured,
+          "elektire" => :structured, # P117-2: the portal's century of origin as an
+          #                            envelope (composition class)
           "elephantine" => :structured,
+          "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
+          #                             = its pubPlace (publication place)
           "fornsvenska" => :compact_date_keys,
+          "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
+          "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
           "itant" => :structured,
           "itkc" => :structured,
           "ja-wikisource" => :era_band_key,
           "ko-wikisource-mk" => :structured,
+          "kdsp" => :structured,
           "korba" => :structured,
+          "litopys" => :era_band_key,
           "local-library" => :year_key,
+          "mdz-protestant" => :structured,
           "menota" => :structured,
           "mk-wikisource" => :structured,
           "ndl-kotenseki" => :structured,
@@ -120,12 +130,19 @@ module Nabu
           "sillok" => :structured,
           "sjw" => :structured,
           "sl-wikisource" => :structured,
+          "slavistics-pd" => :structured, # Q105: the text's own edition year (a facsimile
+          #                                 reprint keeps its first edition's); the imprint
+          #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
           "syriac-corpus" => :when_key,
+          "ticha" => :structured,
+          "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
           "titus-tocharian-a" => :place_only,
           "uk-wikisource" => :era_band_key,
           "viet-wikisource" => :structured,
+          "vuk-danicic" => :structured, # P117-2: the translation era per testament
+          #                               (NT 1847, OT 1865–1868), composition class
           "zh-wikisource" => :dynasty_band
         }.freeze
 
@@ -135,7 +152,7 @@ module Nabu
         # composition era (author-era), not an object — their rows carry
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
-        COMPOSITION = %w[croala diorisis glaux disco].freeze
+        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic elektire].freeze
 
         # P104-1: sources whose place claim rides a differently-named
         # metadata field. An override key is a findspot vocabulary with

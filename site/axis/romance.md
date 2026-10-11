@@ -41,9 +41,9 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `osta` | texts | nc | wired · manual | 740 docs / 5,177 passages |
 | `salom` | texts | attribution | wired · manual | 1 docs / 10,685 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `lat` 6,343 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `gmh` 11 … and 23 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `lat` 6,343 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `gmh` 11 … and 25 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 
@@ -79,4 +79,4 @@ With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, 
 
 ---
 
-One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [28 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

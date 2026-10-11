@@ -49,6 +49,17 @@ map:
   roa-oit: it:old
   gmq-oda: da:old
 
+  # Old/Middle Polish, Old/Middle Czech, Middle Bulgarian (Wiktionary
+  # codes verified 2026-10-10: zlw-opl and zlw-ocs full languages,
+  # zlw-mpl / cs-ear / cu-bgm etymology-only varieties). cu-bgm lands on
+  # the Church Slavonic recension convention (chu's note): the
+  # post-canonical stage with the Bulgarian recension variety.
+  zlw-opl: pl:old
+  zlw-mpl: pl:mid
+  zlw-ocs: cs:old
+  cs-ear:  cs:mid
+  cu-bgm:  chu:csl/bul
+
   # Greek stages that outgrew their codes
   gkm:     grc:byz
   grc-koi: grc:koi
@@ -82,6 +93,34 @@ map:
   # recorded when the first rus-coded shelf arrived)
   rus:     ru
 
+  # The Slavic package (2026-10-10): the same alias suite for the newly
+  # anchored two-letter codes. cze and mac are the 639-2/B bibliographic
+  # spellings (the ger precedent). No hbs/sh row: an alias from the
+  # Serbo-Croatian macrolanguage onto either standard would claim the
+  # other's texts (see sr's note) — identity leaves the code bare.
+  pol:     pl
+  ces:     cs
+  cze:     cs
+  srp:     sr
+  hrv:     hr
+  mkd:     mk
+  mac:     mk
+
+  # The americas package (2026-10-11). grn is the 639-2/3 spelling of the
+  # Guarani macrolanguage the registry anchors as gn (the nor precedent).
+  # gn-cls is Wiktionary's Classical Guarani (exceptional-language code,
+  # verified 2026-10-11), the Jesuit-era stage. tpw 'Tupí' was RETIRED by
+  # ISO 639-3 as a duplicate of tpn (CR 2022-012, effective 2023-01-20)
+  # and Wiktionary still spells the same language tpw 'Old Tupi' — both
+  # readings name Tupinambá. NO gug row (one member of the macrolanguage;
+  # identity leaves it bare — see gn's note). NO xzp row: ISO's Ancient
+  # Zapotec is the pre-Hispanic glyphic language by its CR 2006-065, not
+  # the colonial alphabetic stage; a collection spelling Córdova's
+  # Zapotec xzp folds it in its own override (see zap's note).
+  grn:     gn
+  gn-cls:  gn:old
+  tpw:     tpn
+
   # The Latin stage suite (Wiktionary etymology-only codes)
   la-vul:  lat/vul      # the ATTESTED register is the universal default reading
   la-lat:  lat:late
@@ -104,6 +143,30 @@ map:
   cel-pro:     cel:pro
   tut-pro:     tut:pro
   jpx-pro:     jpx:pro
+  inc-pro:     inc:pro
+  ira-pro:     ira:pro
+  inc-dar-pro: inc-dar:pro
+  trk-pro:     trk:pro
+  xgn-pro:     xgn:pro
+  tuw-pro:     tuw:pro
+  qfa-kor-pro: qfa-kor:pro
+  cau-nec-pro: cau-nec:pro
+  cau-nkh-pro: cau-nkh:pro
+  cau-ava-pro: cau-ava:pro
+  cau-tsz-pro: cau-tsz:pro
+  cau-drg-pro: cau-drg:pro
+  cau-lzg-pro: cau-lzg:pro
+  cau-nwc-pro: cau-nwc:pro
+  sit-kir-pro: sit-kir:pro
+  dra-sou-pro: dra-sou:pro
+  dra-tkt-pro: dra-tkt:pro
+  dra-tel-pro: dra-tel:pro
+  dra-cen-pro: dra-cen:pro
+  dra-nor-pro: dra-nor:pro
+  dra-gki-pro: dra-gki:pro
+  dra-gon-pro: dra-gon:pro
+  dra-kui-pro: dra-kui:pro
+  dra-pem-pro: dra-pem:pro
   ccn-pro:     ccn:pro
   ccs-pro:     ccs:pro
   bat-pro:     bat:pro

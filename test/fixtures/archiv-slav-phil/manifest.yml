@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both pairs are documented prefix trims (whole: false) — adapter_test null.
+source: archiv-slav-phil
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: archiv-fur-slavische-philologie-v-1-1876/Archiv fur slavische Philologie v 1 1876_hocr_searchtext.txt.gz
+    url: https://archive.org/download/archiv-fur-slavische-philologie-v-1-1876/Archiv%20fur%20slavische%20Philologie%20v%201%201876_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 10 hOCR pages (10,721 of 1,525,437 characters), re-gzipped — README recipe
+  - path: archiv-fur-slavische-philologie-v-1-1876/Archiv fur slavische Philologie v 1 1876_hocr_pageindex.json.gz
+    url: https://archive.org/download/archiv-fur-slavische-philologie-v-1-1876/Archiv%20fur%20slavische%20Philologie%20v%201%201876_hocr_pageindex.json.gz
+    whole: false
+    trim: first 10 of 653 rows, re-gzipped — README recipe
+  - path: archivfrslavis16berluoft/archivfrslavis16berluoft_hocr_searchtext.txt.gz
+    url: https://archive.org/download/archivfrslavis16berluoft/archivfrslavis16berluoft_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 14 hOCR pages (8,730 of 1,861,974 characters), re-gzipped — README recipe
+  - path: archivfrslavis16berluoft/archivfrslavis16berluoft_hocr_pageindex.json.gz
+    url: https://archive.org/download/archivfrslavis16berluoft/archivfrslavis16berluoft_hocr_pageindex.json.gz
+    whole: false
+    trim: first 14 of 664 rows, re-gzipped — README recipe

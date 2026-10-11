@@ -92,12 +92,33 @@ class DerivabilityWritersTest < Minitest::Test
   # db/canonical_identities.json (tmp+rename): the census-keyed memo of
   # plain-tree canonical identities — the DERIVED law kind (a pure
   # function of canonical/ + code; deletable at any time, a miss re-hashes).
+  # Its sibling git_identity_cache (Q124) writes ONE derived file,
+  # db/git_identities.json (tmp+rename): the census-keyed memo of embedded
+  # git repos' identity tokens — the same DERIVED law kind (a miss pays the
+  # full git call).
   # same way — the burman_concordance law kind. The P116-3 Slavic
   # wikisource family base (slavic_wikisource) writes page envelopes
   # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
   # inside Adapter#fetch, and the pl Brückner lane writes its stub index
   # + scan envelopes under canonical/pl-wikisource/bruckner/ from that
-  # same fetch — the ja/zh-wikisource law kind.
+  # same fetch — the ja/zh-wikisource law kind. P117's litopys_fetch
+  # writes the censused Izbornyk pages (verbatim windows-1251, tmp+rename,
+  # site paths) + its .litopys-fetch.json pin into canonical/litopys/
+  # inside Adapter#fetch — the titus_fetch law kind.
+  # same fetch — the ja/zh-wikisource law kind. mdz-protestant (Q102)
+  # writes IIIF manifests + per-page hOCR (tmp+rename) and its
+  # .mdz-crawl.json ledger into canonical/mdz-protestant/ inside
+  # Adapter#fetch — the ndl-kotenseki crawl law kind.
+  # same fetch — the ja/zh-wikisource law kind. The P117-2
+  # elektire_fetch writes canonical/elektire/ (the WP-JSON listing
+  # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
+  # .elektire-fetch.json pin) inside Adapter#fetch — the cantigas_fetch
+  # law kind, its sixth crawl sibling.
+  # same fetch — the ja/zh-wikisource law kind. The Q105 archive.org
+  # scan-shelf base (ia_scan_shelf) writes each census item's hOCR
+  # derivative pair (.part + rename, whole item or nothing) under
+  # canonical/<slug>/<identifier>/ inside Adapter#fetch — the same
+  # canonical-gateway law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -112,12 +133,14 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
+    nabu/poma_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
+    nabu/litopys_fetch.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
     nabu/adapters/altaica_shm.rb nabu/adapters/atmo.rb
     nabu/adapters/iedc.rb nabu/adapters/shkz.rb
-    nabu/scripta_bulgarica_fetch.rb
+    nabu/scripta_bulgarica_fetch.rb nabu/elektire_fetch.rb
     nabu/adapters/kouigenji.rb nabu/adapters/kokubunken.rb
     nabu/adapters/nrct.rb
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
@@ -127,6 +150,8 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
+    nabu/adapters/mdz_protestant.rb
+    nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
@@ -138,7 +163,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
-    nabu/canonical_identity_cache.rb
+    nabu/canonical_identity_cache.rb nabu/git_identity_cache.rb
   ].freeze
 
   def test_file_writers_are_allowlisted

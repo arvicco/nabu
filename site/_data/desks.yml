@@ -15,7 +15,7 @@
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 23
+  members: 33
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard
@@ -108,6 +108,11 @@
   blurb: the Secret History's empire in its own words, hanzi transcription beside
     romanization
   members: 2
+- slug: americas
+  persona: The Americanist
+  blurb: the colonial record of the indigenous Americas, Zapotec testaments to the
+    Andean chronicle
+  members: 3
 - slug: local
   persona: The Librarian
   blurb: 'the owner''s own shelves: dossiers, library, notes, and the sources'' own

@@ -128,6 +128,10 @@ mongolic:   # P107 — minted with its first member (altaica-shm)
   persona: "The Mongolist — the Secret History's empire in its own words, hanzi transcription beside romanization."
   desc: "The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land."
 
+americas:   # P117-5 — minted with its first members (ticha, guaman-poma, the colonial UD treebanks)
+  persona: "The Americanist — the colonial record of the indigenous Americas, Zapotec testaments to the Andean chronicle."
+  desc: "The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (Córdova's 1578 Arte, Agüero's 1666 Miscelaneo, the testaments and their period Spanish translations), the Royal Danish Library's Guaman Poma Nueva corónica (Spanish with Quechua and Aymara passages), and the UD Tupinambá and Old Guaraní treebanks of the Jesuit grammars and catechisms — the modern UD treebanks of American languages deliberately out."
+
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."

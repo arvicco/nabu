@@ -8,9 +8,9 @@ module Nabu
   # A memo of PLAIN-TREE canonical identities (DerivationFingerprint
   # .canonical_identity) so the incremental rebuild's verdict sweep stops
   # re-hashing every byte of every non-git tree on every run (124 of ~210
-  # trees; ndl-kotenseki alone is 1.1 GB). Git-bearing trees are never
-  # cached: their identity is already cheap (HEAD + porcelain), and git —
-  # not this memo — is what vouches for them.
+  # trees; ndl-kotenseki alone is 1.1 GB). Git-bearing trees bypass this
+  # memo: git vouches for them, and their per-repo cost (HEAD + porcelain)
+  # is memoized by the sibling GitIdentityCache under the same law.
   #
   # THE LAW: over-rebuilding is always safe; UNDER-REBUILDING IS THE SIN. A
   # stale hit — a cached identity returned for bytes it does not describe —

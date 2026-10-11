@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Belarus/Slouniki-Nasovic ships one SlounikPlus XML article per file under
+# data/. All four fixtures are WHOLE byte-identical upstream copies at commit
+# 0970671c7a64cb2c5a31ee9d62eacd5873defc24. adapter_test is null — upstream
+# is a live proofreading repo; a corrected article would false-fail the pins.
+source: slouniki-nasovic
+adapter_test:
+retrieved: 2026-10-11
+files:
+  - path: data/00007.xml
+    url: https://raw.githubusercontent.com/Belarus/Slouniki-Nasovic/master/data/00007.xml
+    whole: true
+    trim: none
+  - path: data/00014.xml
+    url: https://raw.githubusercontent.com/Belarus/Slouniki-Nasovic/master/data/00014.xml
+    whole: true
+    trim: none
+  - path: data/00873.xml
+    url: https://raw.githubusercontent.com/Belarus/Slouniki-Nasovic/master/data/00873.xml
+    whole: true
+    trim: none
+  - path: data/01256.xml
+    url: https://raw.githubusercontent.com/Belarus/Slouniki-Nasovic/master/data/01256.xml
+    whole: true
+    trim: none

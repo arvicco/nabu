@@ -402,6 +402,38 @@ module Nabu
         "italian-old" => {
           repo: "https://github.com/UniversalDependencies/UD_Italian-Old",
           language: "it", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P117-5 (the americas axis): the two COLONIAL-era Tupí-Guaraní
+        # treebanks of TuLaR (Tupían Language Resources; Fabrício Ferraz
+        # Gerardi et al., Tübingen) — the Jesuit-era grammars, catechisms,
+        # letters and Anchieta's poems and plays. Both test-split only.
+        # Tupinambá TuDeT (UD v2.7): 581 sentences — Araújo's Catecismo
+        # (1618), Anchieta's Teatro/Poemas/Doutrina, Figueira's and
+        # Anchieta's Artes, Bettendorf (1687), the Camarão letters (1645);
+        # the forms are Gerardi's PHONEMIC normalization (ʔ, ɨ, β), not the
+        # colonial spelling. Old Guaraní OldTuDeT (UD v2.10): 59 sentences
+        # — Montoya's Tesoro (1639), Arte and Catecismo (1640), Restivo's
+        # 1724 edition of the Arte, Blas Petronio (1696). Languages as UD
+        # files them: tpn (ISO 639-3 Tupinambá) and gn (the 639-1
+        # Guarani macrolanguage; glottolog oldp1258 Old Guaraní) — the
+        # UD-tag-verbatim practice (italian-old under `it`). LICENSE.txt of
+        # each verbatim CC BY-SA 4.0 ("Creative Commons License
+        # Attribution-ShareAlike 4.0 International"), README metadata
+        # agrees → attribution. The other American-language UD repos
+        # (org listing 2026-10-11: Akuntsu, Apurinã, Bororo, Guajajara,
+        # Kaapor, Karo, Makurap, Mundurukú, Teko, the two Mbyá Guaraní,
+        # Cusco and Puno Quechua, K'iche', Uspanteko, the two Puebla
+        # Nahuatl, Nheengatu, Shipibo-Konibo, Xavante, Yupik) are
+        # modern-language corpora — deliberately out. UD_Classical_Nahuatl-
+        # FloCo is colonial (the Florentine Codex) but ships no data (README
+        # + LICENSE only, master and dev).
+        "tupinamba-tudet" => {
+          repo: "https://github.com/UniversalDependencies/UD_Tupinamba-TuDeT",
+          language: "tpn", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        "guarani-oldtudet" => {
+          repo: "https://github.com/UniversalDependencies/UD_Guarani-OldTuDeT",
+          language: "gn", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

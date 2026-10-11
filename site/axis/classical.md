@@ -31,10 +31,10 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,705 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 554 docs / 401,207 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `grc` 120,553 · `lat` 58,430 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 13 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `grc` 120,553 · `lat` 58,430 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 15 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
@@ -99,4 +99,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [28 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

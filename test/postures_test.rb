@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 119, lect.size,
+    assert_equal 127, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -253,7 +253,10 @@ class PosturesTest < Minitest::Test
                  "titus-sogdian ADDED — identity sog per lane (script-coded lanes, declared coarse): 107→108; " \
                  "prague-bible-1488 ADDED P116-1 — pending on the cs:old mint (the aggregated " \
                  "Slavic nabu-lects package; no cs node exists yet): 108→109; korba ADDED " \
-                 "P116-1 — pending on pl:mid date-band staging (same mint; no pl node): 109→110"
+                 "P116-1 — pending on pl:mid date-band staging (same mint; no pl node): 109→110; " \
+                 "the Slavic mint landing (2026-10-11) RETIRES prague-bible-1488 to the cs → cs:old " \
+                 "override (the shadowing rule) and flips korba to identity (date-band inference " \
+                 "stages it onto pl:mid, the dta shape — the declaration stays): 119→118"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -335,6 +338,10 @@ class PosturesTest < Minitest::Test
     # P116-3 ADDS the four West/East Slavic cones: ru/uk identity orv
     # (declared coarse), pl/cs PENDING on the Polish/Czech anchor mints
     # (the add-then-retire shape): 115→119, identity 87→89, pending 2→4.
-    assert_equal({ "dates" => 12, "codemap" => 14, "identity" => 89, "pending" => 4 }, by_posture)
+    # 2026-10-11: the Slavic nabu-lects package reached canonical —
+    # prague-bible-1488 retires to the cs → cs:old override (118) and
+    # korba flips pending → identity (pl:mid by date-band inference, the
+    # dta shape): identity 89→90, pending 4→2 (pl/cs-wikisource remain).
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 100 }, by_posture)
   end
 end

@@ -531,8 +531,15 @@ sources:
     source_kind: scripture
   prague-bible-1488:
     source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
+  slavistics-pd:
+    source_kind: scholarly   # Q105: the PD Slavistics reference shelf — grammars,
+    #                          etymological dictionaries, Academy monographs
+  archiv-slav-phil:
+    source_kind: scholarly   # Q105: Jagić's Archiv für slavische Philologie volumes
   eng-web:
     source_kind: scripture
+  vuk-danicic:
+    source_kind: scripture   # P117-2: the Vuk–Daničić Serbian Bible
   sblgnt:
     source_kind: scripture
   oshb:
@@ -549,6 +556,8 @@ sources:
     source_kind: scripture
   derge-tengyur:
     source_kind: scripture
+  litopys:
+    source_kind: historiography/chronicle   # P117: the passage shelf IS the Ipatiev chronicle
   sillok:                    # the okhc dynastic-record family
     source_kind: historiography/annals
   sjw:
@@ -558,6 +567,8 @@ sources:
   goryeosa:
     source_kind: historiography
   goryeosa-jeoryo:
+    source_kind: historiography/chronicle
+  guaman-poma:               # P117-5: one work — the Nueva corónica, an illustrated chronicle
     source_kind: historiography/chronicle
   aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc

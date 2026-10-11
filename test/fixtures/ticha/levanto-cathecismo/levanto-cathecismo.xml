@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="TEISchema_current.rnc" type="application/relax-ng-compact-syntax"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <text>
+    <div xml:lang="esp" xml:id="levanto-cathecismo1">
+      <head type="outline">[Front matter]</head>
+      <!-- frontmatter -->
+      <div xml:id="levanto-cathecismo1.1">
+        <head type="outline">[Cover of book and preliminary pages]</head>
+        <pb n="1"/>
+        <!-- cover -->
+        <pb n="2"/>
+        <!-- blank -->
+        <pb n="3"/>
+        <!-- blank -->
+        <pb n="4"/>
+      </div>
+      <!-- levanto1.1 -->
+      <div xml:id="levanto-cathecismo1.2">
+        <head type="outline">[Title page]</head>
+        <div xml:id="levanto-cathecismo1.2.1">
+          <head type="outline">[Title]</head>
+          <head rend="center">
+            <choice><orig>C A T H E C I S M O</orig><reg type="spanish">C A T E C I S M O</reg></choice>
+            <lb/>
+              <!-- this next line is either regularlizing word boundaries, which is spanish norm, or is regularlzing formatting.  not sure if I chose right type of regularlization -BDL -->
+            <choice><orig>D E L A L E N G U A</orig><reg type="spanish">D E  L A  L E N G U A</reg></choice>
+            <lb/>
+            <choice><orig>ZAAPOTECA</orig><reg type="spanish">ZAPOTECA</reg></choice>.
+            <lb/>
+            DISPUESTO
+          </head>
+        </div>
+        <div xml:id="levanto-cathecismo1.2.2">
+          <head type="outline">[Author]</head>
+          <p rend="center">
+            <i>
+              Por el M. R. P. <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice> Fray Leonard Levanto.
+              <lb/>
+              Prior Provincial de la Provincia de San Miguel,
+              <lb/>
+              y Santos <choice><orig>Angeles</orig><reg type="spanish">Ángeles</reg></choice>
+              de la Puebla, del Orden de Predicadores.
+            </i>
+          </p>
+        </div>
+        <!-- woodcut -->
+        <div xml:id="levanto-cathecismo1.2.3">
+          <head type="outline">[Printing information]</head>
+          <p rend="center">
+            <choice><orig>Reimpreffo</orig><reg type="spanish">Reimpreso</reg></choice> en la Imprenta del Colegio Real de San
+            <lb/>
+            Ignacio de la Puebla de los Angeles. Año de 1766.
+          </p>
+        </div>
+        <pb n="5"/>
+        <!-- blank -->
+        <pb n="6"/>
+      </div>
+</div>
+<div xml:id="levanto-cathecismo3">
+<div xml:id="levanto-cathecismo3.1">
+      <pb n="33"/>
+      <cb n="1"/>
+      <foreign xml:lang="esp" rend="italics">
+        tro Señor <choice><orig>Jeſu-Chriſto</orig><reg type="spanish">Jesucristo</reg></choice>.
+        <lb/>
+        P. <choice><orig>Que</orig><reg type="spanish">¿Qué</reg></choice> <choice><orig>quicre</orig><reg type="spanish">quiere</reg></choice> decir <choice><orig>Chriſ</orig><reg type="spanish">Cris</reg></choice>
+        <pc type="hyphen">-</pc>
+        <lb/>
+        tiano?
+        <lb/>
+        R. Hombre, que tiene la <choice><orig>Fee</orig><reg type="spanish">Fe</reg></choice>
+        <lb/>
+        de <choice><orig>Nueſtro</orig><reg type="spanish">Nuestro</reg></choice> Señor <choice><orig>Jeſu</orig><reg type="spanish">Jesu</reg></choice>
+        <pc type="hyphen">-</pc>
+        <lb/>
+        <choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice>, que <choice><orig>profeſſo</orig><reg type="spanish">profeso</reg></choice>, y con
+        <pc type="hyphen">-</pc>
+        <lb/>
+        <choice><orig>feſſo</orig><reg type="spanish">fieso</reg></choice>, <choice><orig>quando</orig><reg type="spanish">cuando</reg></choice> <choice><orig>recibio</orig><reg type="spanish">recibió</reg></choice> el San
+        <pc type="hyphen">-</pc>
+        <lb/>
+        to <choice><orig>Bautiſmo</orig><reg type="spanish">Bautismo</reg></choice>.
+        <lb/>
+        P. <choice><orig>Quien</orig><reg type="spanish">¿Quién</reg></choice> es <choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice>?
+        <lb/>
+        R. Es Dios, y Hombre ver
+        <pc type="hyphen">-</pc>
+        <lb/>
+        dadero.
+        <lb/>
+        P. <choice><orig>Como</orig><reg type="spanish">¿Cómo</reg></choice> es Dios?
+        <lb/>
+        R. Porque es Hijo natural de
+        <lb/>
+        Dios vivo.
+        <lb/>
+        P. Como es hombre <choice><orig>Nueſtro</orig><reg type="spanish">Nuestro</reg></choice>
+        <lb/>
+        Señor <choice><orig>Jeſu-Chriſto</orig><reg type="spanish">Jesucristo</reg></choice>?
+        <lb/>
+        R. Porque <choice><orig>tambien</orig><reg type="spanish">también</reg></choice> es hijo de
+        <lb/>
+        la Virgen Santa <choice><orig>Maria</orig><reg type="spanish">María</reg></choice>.
+        <lb/>
+        P. <choice><orig>Porquè</orig><reg type="spanish">Porque</reg></choice> <choice><orig>ſe</orig><reg type="spanish">se</reg></choice> llama <choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice>?
+        <lb/>
+        R. Por la grande abundancia,
+        <lb/>
+        y plenitud de gracia, que tiene <choice><orig>ſobre</orig><reg type="spanish">sobre</reg></choice> todos.
+        <lb/>
+        P. <choice><orig>Eſte</orig><reg type="spanish">Este</reg></choice> <choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice> es el verdade
+        <pc type="hyphen">-</pc>
+        <lb/>
+        ro Redemptor?
+        <lb/>
+        R. Si: es el verdadero <choice><orig>Redẽp</orig><reg type="spanish">Redemp</reg></choice>
+        <pc type="hyphen">-</pc>
+        <lb/>
+        tor de todos los hombres.
+        <lb/>
+        P. Que oficios <choice><orig>executò</orig><reg type="spanish">ejecutó</reg></choice> en <choice><orig>eſte</orig><reg type="spanish">este</reg></choice>
+        <lb/>
+        mundo?
+        <lb/>
+        R. Hizo oficio de Redemp
+        <pc type="hyphen">-</pc>
+        <lb/>
+        tor, y juntamente el oficio
+        <lb/>
+        de <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice> de la verdad.
+      </foreign>
+      <lb/>
+      <cb n="2"/>
+      <foreign xml:lang="zap">lla gracia xtenni Bejuanna</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      na
+      <foreign xml:lang="esp"><choice><orig>Jeſu-Chriſto</orig><reg type="spanish">Jesucristo</reg></choice></foreign>
+      .
+      <lb/>
+      <foreign xml:lang="zap">Xii zeeloo ticha quella</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <choice><orig>chriſtiano</orig><reg type="spanish">cristiano</reg></choice>?
+      <lb/>
+      <foreign xml:lang="zap">Benniaati, ni rapani quella</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">riieliilachi xtenni Bejuanna</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      na
+      <foreign xml:lang="esp"><choice><orig>Jeſu-Chriſto</orig><reg type="spanish">Jesucristo</reg></choice></foreign>
+      <foreign xml:lang="zap">, ni colla</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">pilii, ni cocaabiniani, chii</foreign>
+      <lb/>
+      <foreign xml:lang="zap">coccaa quellahueroobani</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">zaquiqueni</foreign>.
+      <lb/>
+      <foreign xml:lang="zap">Tuxa naca</foreign>
+      <foreign xml:lang="esp"><choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice></foreign>
+      ?
+      <lb/>
+      <foreign xml:lang="zap">Huanacani Biitoo, huañee</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Benniati nallii.</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Xanacaxá naca Bitoo?</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Niíaxtenni naca Xinni Pio</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">obi yoobi Biitoo nabaani.</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Xanacaxà naca Benniaati</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Bejuannana</foreign>
+      <foreign xml:lang="esp"><choice><orig>Jeſu-Chriſto</orig><reg type="spanish">Jesucristo</reg></choice></foreign>
+      ?
+      <lb/>
+      <foreign xml:lang="zap">Niiaxtenni huañee naca Xi</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">ni gaana xtenni</foreign>
+      <foreign xml:lang="esp">
+        Santa Ma
+        <pc type="hyphen">-</pc>
+        <lb/>
+        <choice><orig>ria</orig><reg type="spanish">ría</reg></choice>
+      </foreign>
+      <foreign xml:lang="zap">Cocooni yoona.</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Xii niia laani</foreign>
+      <foreign xml:lang="esp"><choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice></foreign>
+      ?
+      <lb/>
+      <foreign xml:lang="zap">Laani loo quella ciroo, ci</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">xeenne</foreign>
+      <foreign xml:lang="esp">gracia</foreign>
+      , <foreign xml:lang="zap">ni rapaniloo</foreign>
+      <lb/>
+      <foreign xml:lang="zap">quiraaliicaxeeni</foreign>.
+      <lb/>
+      <foreign xml:lang="esp"><choice><orig>Chriſto</orig><reg type="spanish">Cristo</reg></choice></foreign>
+      <foreign xml:lang="zap">nirii huanaca hue</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">ziillaa nallii?</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Huanaca hueziillaa nallii</foreign>
+      <lb/>
+      <foreign xml:lang="zap">xtenni quiraalii benniati.</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Connaxa chijña, ni pennini</foreign>
+      <lb/>
+      <foreign xml:lang="zap">ruarii guechelayoo?</foreign>
+      <lb/>
+      <foreign xml:lang="zap">Pennini chiiña quellahue</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">ziillaa, huañee quellahue</foreign>
+      <pc type="hyphen">-</pc>
+      <lb/>
+      <foreign xml:lang="zap">llee nallii.</foreign>
+      <lb/>
+      <cb n=""/>
+      <fw type="catchword" place="bottom-right">
+        <foreign xml:lang="esp" rend="italics">Que</foreign>
+      </fw>
+</div>
+</div>
+</text>
+</TEI>

@@ -52,23 +52,43 @@ module Nabu
     # all. They are skipped at discovery and counted in discovery_skips; a
     # page with lanes but no minted line still quarantines.
     #
-    # == Dating mined, conversion pending
+    # == Dating: the Bactrian era, as a RULED envelope
     #
-    # Dated documents open with a Bactrian-era year formula — "χϸονο ρʹ ιʹ"
-    # (year 110), "[χ]ϸονο ρʹ λ̣ʹ δʹ" (134). The formula is mined from the
-    # FIRST line of each dated-document text that carries one: raw text,
-    # the summed Greek numeral, and an `uncertain` flag when the numeral
-    # carries restoration brackets or subscript dots. The conversion to CE
-    # (the era's epoch) is a ruled step, NOT taken here — the dating
-    # posture is pending on it (config/postures.yml). The epoch is
-    # contested (checked P116): N. Sims-Williams & F. de Blois, Studies
-    # in the Chronology of the Bactrian Documents from Northern
-    # Afghanistan (Vienna: ÖAW, 2018), pp. 9–11, reaffirm de Blois's
-    # era from Nawroz (2 October) 223 CE as "the latest possible date",
-    # against Schindel (2011; 227/228 CE) and de la Vaissière, and
-    # describe the starting point as controversial; the hypotheses
-    # differ by at most five years, and 219 CE is the agreed terminus
-    # post quem. No single epoch is assumed here.
+    # Dated texts carry a Bactrian-era year formula — "χϸονο ρʹ ιʹ" (year
+    # 110), "[χ]ϸονο ρʹ λ̣ʹ δʹ" (134). It is mined from ANY page whose text
+    # carries it (the dated documents, the dated letters' sealing clause
+    # "… μακιρηδο χϸονο …", the Tang-i Safedak inscription TiS, year 492),
+    # reading each text's lines as one stream: a numeral that wraps onto
+    # the next line (dd: "ρʹ ϙʹ" / "ηʹ" = 198) or a word for "year" broken
+    # at the line end (de: "χ̣-" / "ϸονο") is followed across.
+    #
+    # The conversion (owner ruling 2026-10-11, the ENVELOPE option): era
+    # year Y → CE [Y+222, Y+228]. The epoch is contested — N.
+    # Sims-Williams & F. de Blois, Studies in the Chronology of the
+    # Bactrian Documents from Northern Afghanistan (Vienna: ÖAW, 2018),
+    # pp. 9–11, reaffirm de Blois's era from Nawroz (2 October) 223 CE as
+    # "the latest possible date" and call the starting point
+    # controversial, against Schindel (2011) and de la Vaissière
+    # (227/228 CE); 219 CE is the agreed terminus post quem. Each era
+    # year runs Nawroz to Nawroz, so it straddles two CE years: Y+222/223
+    # under 223, up to Y+227/228 under 228. The envelope covers the live
+    # hypotheses — a ruled range, never a picked epoch.
+    #
+    # The width rule (formula-driven, from the censused damage — units
+    # D ε̣, tens Aa λ̣ / I ξ̣, hundreds TiS υ̣, a lacuna after aa's ρ̣):
+    # each numeral letter reads by its OWN rank (units 1–9, tens 10–90,
+    # hundreds 100–900) —
+    #   clean letter      its value exactly;
+    #   dotted (̣) letter  ± one step of its rank, inside the rank (λ̣ →
+    #                     κ…μ, 20–40): the editor read a letter of that
+    #                     place, its neighbour is the honest doubt;
+    #   restored ([ ])    any letter of its rank (λ → 10–90);
+    #   lacuna right      the upper bound opens by the lowest rank present
+    #   after the numeral minus one (ρ̣ʹ [ ] → +0…99: lost lower letters).
+    # `uncertain` fires on damage IN THE NUMERAL only — brackets or dots
+    # in the word for "year" (B "χϸ̣ονο", year 137) never flag a clean
+    # numeral. The page's union envelope rides "date" (the :structured
+    # timeline shape, MetadataDates).
     class TitusBactrian < Nabu::Adapter
       SLUG = "titus-bactrian"
       LANGUAGE = "xbc" # Bactrian
@@ -98,7 +118,6 @@ module Nabu
         "Fragm.Doc.Unc." => "Fragments of documents of uncertain type",
         "Buddh.T." => "Buddhist texts"
       }.freeze
-      DATED_GENRE = "Dat.Doc."
 
       HEADER_SPANS = TitusPahlavi::HEADER_SPANS
 
@@ -107,13 +126,17 @@ module Nabu
       NUMERALS = {
         "α" => 1, "β" => 2, "γ" => 3, "δ" => 4, "ε" => 5, "ϛ" => 6, "ϝ" => 6, "ζ" => 7, "η" => 8,
         "θ" => 9, "ι" => 10, "κ" => 20, "λ" => 30, "μ" => 40, "ν" => 50, "ξ" => 60, "ο" => 70,
-        "π" => 80, "ϙ" => 90, "ϟ" => 90, "ρ" => 100, "σ" => 200, "τ" => 300, "υ" => 400,
+        "π" => 80, "ϙ" => 90, "ϟ" => 90, "ϑ" => 9, "ρ" => 100, "σ" => 200, "τ" => 300, "υ" => 400,
         "φ" => 500, "ϕ" => 500, "χ" => 600, "ψ" => 700, "ω" => 800, "ϡ" => 900
       }.freeze
       KERAIA = "ʹ" # ʹ, the numeral sign
+      DOT = "̣" # the combining subscript dot: an uncertain reading
       MARKS = "[\\[\\]̣]*"
+      # The ruled envelope offsets (2026-10-11): era year Y → [Y+222, Y+228].
+      ERA_OFFSETS = [222, 228].freeze
       # "χϸονο" (year) with restoration brackets / uncertainty dots anywhere
-      # in it, then one or more single-letter numerals.
+      # in it, then one or more single-letter numerals (ϑ — the theta
+      # symbol — is the units nine of L/Q/Y "τʹ οʹ ϑʹ").
       ERA_FORMULA = /#{MARKS}#{'χϸονο'.chars.map { |c| Regexp.escape(c) }.join(MARKS)}#{MARKS}
                      (?<numerals>(?:\s+#{MARKS}\p{Greek}#{MARKS}#{KERAIA}#{MARKS})+)/x
 
@@ -140,17 +163,65 @@ module Nabu
         )]
       end
 
-      # The era formula of one line's text: { "formula", "era_year",
-      # "uncertain" } or nil.
+      # The era formula in a text: { "formula", "era_year", "uncertain",
+      # "not_before", "not_after" } (the CE envelope under the width rule
+      # above) or nil.
       def self.era_formula(text)
         m = ERA_FORMULA.match(text)
         return nil if m.nil?
 
-        tokens = m[:numerals].split
-        values = tokens.map { |token| NUMERALS[token.delete("[]̣").delete_suffix(KERAIA)] }
-        return nil if values.any?(&:nil?)
+        prefix = m[0][0, m.begin(:numerals) - m.begin(0)]
+        readings = numeral_readings(m[:numerals], open: prefix.rindex("[").to_i > prefix.rindex("]").to_i)
+        return nil if readings.nil?
 
-        { "formula" => m[0].strip, "era_year" => values.sum, "uncertain" => m[0].match?(/[\[\]̣]/) }
+        lacuna = m[:numerals].end_with?("[") || m.post_match.match?(/\A\s*[\[•]/)
+        high = readings.sum { |r| r[:high] }
+        high += readings.map { |r| r[:rank] }.min - 1 if lacuna
+        { "formula" => m[0].strip.delete_prefix(DOT), "era_year" => readings.sum { |r| r[:value] },
+          "uncertain" => lacuna || readings.any? { |r| r[:damaged] },
+          "not_before" => readings.sum { |r| r[:low] } + ERA_OFFSETS[0], "not_after" => high + ERA_OFFSETS[1] }
+      end
+
+      # Per numeral letter: value, rank and the [low, high] its marks
+      # allow; nil when a letter is no numeral. `open` = a restoration
+      # bracket still open from the word for "year".
+      def self.numeral_readings(numerals, open:)
+        letters = []
+        numerals.each_char do |char|
+          case char
+          when "[" then open = true
+          when "]" then open = false
+          when DOT then letters.last&.store(:dotted, true)
+          when KERAIA, /\s/ then next
+          else
+            value = NUMERALS[char] or return nil
+            letters << { value: value, restored: open, dotted: false }
+          end
+        end
+        letters.map { |letter| numeral_bounds(**letter) }
+      end
+
+      def self.numeral_bounds(value:, restored:, dotted:)
+        rank = 10**Math.log10(value).floor.clamp(0, 2)
+        low, high = if restored then [rank, 9 * rank]
+                    elsif dotted then [[value - rank, rank].max, [value + rank, 9 * rank].min]
+                    else [value, value]
+                    end
+        { value: value, rank: rank, low: low, high: high, damaged: restored || dotted }
+      end
+
+      # One entry per text carrying a formula: { "text" => siglum } merged
+      # with its era_formula. A text's lines read as ONE stream — a
+      # line-final hyphen joins the broken word, any other line end is a
+      # space — so a formula wrapping onto the next line is followed.
+      def self.era_dates(lines)
+        lines.group_by(&:text).filter_map do |text, text_lines|
+          stream = text_lines.map(&:content).reduce do |joined, content|
+            joined.match?(/-\s*\z/) ? joined.sub(/-\s*\z/, "") + content : "#{joined} #{content}"
+          end
+          formula = era_formula(stream)
+          formula && { "text" => text }.merge(formula)
+        end
       end
 
       def initialize(delay: Nabu::TitusFetch::DELAY)
@@ -265,16 +336,18 @@ module Nabu
         metadata["facets"] = { "genre" => { "value" => names.first } } if names.size == 1
         unheaded = lines.count { |line| line.text.empty? }
         metadata["unheaded_lines"] = unheaded if unheaded.positive?
-        dates = era_dates(lines)
-        metadata["era_dates"] = dates unless dates.empty?
-        metadata.merge(header_statements(html))
+        metadata.merge(era_metadata(lines)).merge(header_statements(html))
       end
 
-      def era_dates(lines)
-        lines.select { |line| line.genre == DATED_GENRE }.group_by(&:text).filter_map do |text, text_lines|
-          formula = text_lines.lazy.filter_map { |line| self.class.era_formula(line.content) }.first
-          formula && { "text" => text }.merge(formula)
-        end
+      # The mined formulas, and the page's union envelope as "date".
+      def era_metadata(lines)
+        dates = self.class.era_dates(lines)
+        return {} if dates.empty?
+
+        { "era_dates" => dates,
+          "date" => { "not_before" => dates.map { |d| d["not_before"] }.min,
+                      "not_after" => dates.map { |d| d["not_after"] }.max,
+                      "raw" => dates.map { |d| d["formula"] }.join("; ") } }
       end
 
       def header_statements(html)

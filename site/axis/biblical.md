@@ -30,10 +30,10 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `hbo` 30,259 · `gez` 3,788 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 15 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `hbo` 30,259 · `gez` 3,788 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 17 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 
@@ -95,4 +95,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [28 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

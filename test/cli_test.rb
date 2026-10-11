@@ -660,17 +660,18 @@ class CLITest < Minitest::Test
   end
 
   # P67-2 (№11): the descent line — the registry's parent arc rendered on
-  # the card, code → root, each ancestor named. chu's parent is the STAGED
-  # sla:pro (the walk crosses stage → anchor-parent correctly).
+  # the card, code → root, each ancestor named. The Slavic nabu-lects
+  # package (2026-10-10) re-wired chu from the staged sla:pro onto the new
+  # South Slavic family zls, so the walk now runs anchor → family → family
+  # (the stage-edge crossing stays pinned in lects_test: lat → itc:pro).
   def test_language_card_descent_line_walks_the_registry_parent_arc
     with_recon_shelf_and_lects do |config|
       with_config(config) do
         out, _err, status = run_cli(%w[language chu])
         assert_nil status
-        assert_match(
-          /descent \(nabu-lects\): chu ← sla:pro \(Proto-Slavic\) ← ine-bsl \(Balto-Slavic\) ← ine \(Indo-European\)/,
-          out
-        )
+        assert_includes out,
+                        "  descent (nabu-lects): chu ← zls (South Slavic) ← sla (Slavic) " \
+                        "← ine-bsl (Balto-Slavic) ← ine (Indo-European)\n"
       end
     end
   end
@@ -2834,7 +2835,10 @@ class CLITest < Minitest::Test
         assert_match(/^  pinning code identities \(1 sources\)… /, err)
         assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — first run — no estimate$/, err)
         assert_match(%r{^  verdict corpus \(1/1\)… }, err)
-        assert_match(/^  verdicts: 1 clean · 0 dirty · 0 skipped \(\d+s\)$/, err)
+        # The tally closes with the identity memos' per-sweep counts (the
+        # fixture tree may sit in the racy window, so tree counts vary).
+        memo = /memo: trees \d+ hit \d+ miss, repos 0 hit 0 miss/
+        assert_match(/^  verdicts: 1 clean · 0 dirty · 0 skipped \(\d+s\) · #{memo}$/, err)
       end
       _out, err, = with_config(config) { run_cli(%w[rebuild --incremental]) }
       assert_match(/^  verdict sweep: fingerprinting 1 canonical trees — ~\d+s \(last run \d+s over 1 rows\)$/,
