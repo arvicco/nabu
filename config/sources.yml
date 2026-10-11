@@ -2017,6 +2017,20 @@ gretil:
   # decision, not a scheduled one — and the corpus has been stable since 2021.
   sync_policy: manual
 
+guaman-poma:   # P117-5, 02-sources row 255
+  adapter: Nabu::Adapters::GuamanPoma
+  adopted: "2026-10-11"
+  axes: [americas]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # Guaman Poma, El primer nueva corónica y buen gobierno (1615; Royal
+  # Danish Library GKS 2232 4º) — the KB's digital edition (Murra/Adorno/
+  # Urioste 1987 transcription, corrected by Adorno and Boserup), one
+  # static XHTML page per manuscript page at poma.kb.dk permalinks.
+  # Public Domain Mark per the KB's project page → open. Paced crawl
+  # (1 s), resumable at the page grain. Document = page, passage =
+  # paragraph; Spanish with Quechua and Aymara passages (italic, untagged).
+
 hdic:
   adapter: Nabu::Adapters::Hdic
   adopted: "2026-07-19"
@@ -4591,6 +4605,22 @@ tibetan-verbs:
   # class open. Small and occasionally edited: re-syncs are an owner call.
   sync_policy: manual
 
+ticha:   # P117-5, 02-sources row 254
+  adapter: Nabu::Adapters::Ticha
+  adopted: "2026-10-11"
+  axes: [americas]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # Ticha — colonial Valley Zapotec texts in TEI (Haverford College;
+  # github.com/HCDigitalScholarship/ticha-xml-tei, CC BY-SA 4.0 by the
+  # repo's license.txt → attribution). One git repo; the ticha-tei family
+  # repairs the hand-encoded files (unclosed <br>, truncation, stray end
+  # tags — counted per document). Document = file, passage = page.
+  # Córdova's Arte (1578), Agüero's Miscelaneo (1666, Zapotec), Levanto's
+  # Arte and Cathecismo, the 1744 Teitipac testament, and the manuscript
+  # transcriptions — mostly the period Spanish translations (Ticha's *T
+  # ids) of Zapotec testaments and bills of sale; text_role per document.
+
 tir:
   adapter: Nabu::Adapters::Tir
   adopted: "2026-07-18"
@@ -5200,7 +5230,7 @@ ud:
   # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
   # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
   # ride axis-less (minting new axes is an owner decision, not this packet's).
-  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical, turkic]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French); turkic: P107-6 (Tonqq)
+  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical, turkic, americas]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French); turkic: P107-6 (Tonqq); americas: P117-5 (Tupinamba-TuDeT, Guarani-OldTuDeT)
   # P49-r4 audit: THE archetype pack — ~40 treebanks in 18+ languages serving
   # twelve desks, and upstream adds treebanks in any language at all. Whole-
   # grain attribution made `nabu language hbo` claim all twelve desks off

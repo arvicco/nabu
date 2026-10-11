@@ -1,0 +1,64 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Three entries are documented trims (whole: false), so adapter_test stays
+# null — the adapter test pins counts an untrimmed upstream file would break.
+source: ticha
+adapter_test:
+retrieved: "2026-10-11"
+files:
+  - path: Te744/Te744.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/Te744/Te744.xml
+    whole: true
+    trim: none
+  - path: Te744T/Te744T.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/Te744T/Te744T.xml
+    whole: true
+    trim: none
+  - path: manuscripts/encoded/Te744T.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/manuscripts/encoded/Te744T.xml
+    whole: true
+    trim: none
+  - path: manuscripts/encoded/Al642T.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/manuscripts/encoded/Al642T.xml
+    whole: true
+    trim: none
+  - path: manuscripts/encoded/Al698T.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/manuscripts/encoded/Al698T.xml
+    whole: true
+    trim: none
+  - path: manuscripts/encoded/Fr720T.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/manuscripts/encoded/Fr720T.xml
+    whole: true
+    trim: none
+  - path: manuscripts/encoded/AGEO_Testaments_AGEO42.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/manuscripts/encoded/AGEO_Testaments_AGEO42.xml
+    whole: true
+    trim: none
+  - path: "manuscripts/encoded/Tl675T_example doc.xml"
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/manuscripts/encoded/Tl675T_example%20doc.xml
+    whole: true
+    trim: none
+  - path: schema/TEISchema_Ticha.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/schema/TEISchema_Ticha.xml
+    whole: true
+    trim: none
+  - path: places.json
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/places.json
+    whole: true
+    trim: none
+  - path: license.txt
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/license.txt
+    whole: true
+    trim: none
+  - path: cordova-arte/cordova-arte.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/cordova-arte/cordova-arte.xml
+    whole: false
+    trim: structural trim — lines 1-350 + 1956-2245, ancestors re-opened and closed (README) (2,405,203 B -> 40,448 B)
+  - path: levanto-cathecismo/levanto-cathecismo.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/levanto-cathecismo/levanto-cathecismo.xml
+    whole: false
+    trim: structural trim — lines 1-59 + 3264-3438, ancestors re-opened and closed (README) (258,975 B -> 10,188 B)
+  - path: aguero-miscelaneo/aguero-miscelaneo.xml
+    url: https://raw.githubusercontent.com/HCDigitalScholarship/ticha-xml-tei/master/aguero-miscelaneo/aguero-miscelaneo.xml
+    whole: false
+    trim: verbatim line-range cut, not re-balanced — lines 1-73, 21916-21990, 23155-23294, 25494-25638, 28866-28867 (README) (1,377,045 B -> 18,097 B)

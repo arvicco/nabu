@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: guaman-poma
+adapter_test: test/adapters/guaman_poma_test.rb
+retrieved: "2026-10-11"
+files:
+  - path: titlepage.html
+    url: https://poma.kb.dk/permalink/2006/poma/titlepage/es/text/
+    whole: true
+    trim: none
+  - path: 5.html
+    url: https://poma.kb.dk/permalink/2006/poma/5/es/text/
+    whole: true
+    trim: none
+  - path: 319.html
+    url: https://poma.kb.dk/permalink/2006/poma/319/es/text/
+    whole: true
+    trim: none
+  - path: 1189.html
+    url: https://poma.kb.dk/permalink/2006/poma/1189/es/text/
+    whole: true
+    trim: none
