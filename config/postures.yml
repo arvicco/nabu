@@ -1004,16 +1004,19 @@ sources:
     # genre-facet fold machine-postures the source (the shadowing rule).
     lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
         100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
-    dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
-        documents' year formulas (\"χϸονο ρʹ ιʹ\" = year 110) are mined into document
-        metadata `era_dates` (raw formula, summed numeral, uncertain flag); turning era
-        years into CE envelopes needs a ruled era epoch, never assumed here. The epoch is
-        CONTESTED in the literature (P116 check): Sims-Williams & de Blois, Studies in
-        the Chronology of the Bactrian Documents (Vienna 2018) argue Nawroz 223 CE (de
-        Blois, CRAI 2006/2008) and call it controversial; Schindel 2011 and de la
-        Vaissière argue 227/228; Humbach/Harmatta 1966-71 had 232, Sims-Williams
-        1997/1999 233 (a working hypothesis since withdrawn). Terminus post quem 219 CE
-        is 'probably uncontroversial' (2018, p. 11)"}
+    dating: {posture: partial, note: "the ruled Bactrian-era ENVELOPE (owner ruling
+        2026-10-11): era year Y → CE [Y+222, Y+228], covering de Blois's Nawroz 223
+        epoch and Schindel / de la Vaissière's 227/228, each era year straddling two CE
+        years (Sims-Williams & de Blois, Studies in the Chronology of the Bactrian
+        Documents, Vienna: ÖAW 2018, pp. 9-11) — a ruled range, never a picked epoch.
+        Mined from every text carrying the year formula (\"χϸονο ρʹ ιʹ\" = year 110):
+        39 of 123 pages (re-parse 2026-10-11) — 31 of the 32 dated documents A–Y (m's
+        page transcribes no formula), the dated
+        letters' sealing clause (cr da dd de ea ed), fragment aa and the Tang-i
+        Safedak inscription (TiS, year 492); damaged numerals widen by the adapter's
+        rank rule. The rest carry no era formula (undated letters, lists, fragments,
+        Buddhist texts) — partial is the honest class, rows via MetadataDates
+        :structured"}
     places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
         Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
         the Tang-i Safedak inscription (TiS) is named only by its siglum"}
