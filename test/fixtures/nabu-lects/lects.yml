@@ -946,17 +946,125 @@ anchors:
 
   # ── Slavic lects ───────────────────────────────────────────────────────────
 
+  # The Slavic branch families (2026-10-10). Wiktionary's Module:families
+  # carries zls / zlw / zlw-lch (all verified 2026-10-10, parents sla /
+  # sla / zlw); none carries a -pro reconstruction there, so none is
+  # minted here. East Slavic (zle) stays unminted: orv already roots the
+  # East Slavic ladder on sla:pro and no consumer has asked for the clade.
+
+  zls:
+    name: South Slavic
+    kind: family
+    parent: sla
+    note: "ISO 639-5 zls. The Slavic dialect continuum south of the
+           Pannonian–Romanian wedge, separated from West and East Slavic
+           by the Magyar and Vlach settlement of the 9th–10th c.
+           Conventionally split into a WESTERN group (Slovene and the
+           Serbo-Croatian complex: Kajkavian, Čakavian, Štokavian) and an
+           EASTERN group (Bulgarian, Macedonian) — the split is a
+           bundle of isoglosses across a continuum (Torlak transitional),
+           kept as prose, not as zls-sub nodes (no standard code exists
+           for either half). Old Church Slavonic is codified on an
+           Eastern South Slavic base (the Thessaloniki dialect of Cyril
+           and Methodius, 863). Attestation: the canonical OCS
+           manuscripts (10th–11th c.), the Freising Fragments (~972–1039,
+           Slovene), the Baška tablet (~1100, Croatian glagolitic), the
+           Miroslav Gospel (c. 1186, Serbian recension). Members: chu,
+           sl, sr, hr, bul, mk"
+
+  zlw:
+    name: West Slavic
+    kind: family
+    parent: sla
+    note: "ISO 639-5 zlw. Three subgroups: Lechitic (zlw-lch: Polish,
+           Kashubian, extinct Polabian and Slovincian), Czech–Slovak, and
+           Sorbian (Upper/Lower). Diagnostics against the rest of Slavic:
+           *tl/*dl kept (Cz. šídlo, Pl. mydło vs South/East Slavic loss),
+           *kv-/*gv- kept before front vowels from the second
+           palatalization (Pl. kwiat, Cz. květ vs Ru. cvet). The Czech–
+           Slovak subgroup carries no standard code and is not minted —
+           cs hangs directly on zlw. Attestation: Czech glosses and names
+           from the 11th c., Polish names in the Bull of Gniezno (1136);
+           Polabian only in 17th–18th-c. word lists. Corpus: korba
+           (Middle Polish), prague-bible-1488 (Old Czech), the
+           pl-wikisource and cs-wikisource premodern cones"
+
+  zlw-lch:
+    name: Lechitic
+    kind: family
+    parent: zlw
+    note: "Wiktionary family code (Module:families, parent zlw, verified
+           2026-10-10); no ISO 639-5 code. Polish, Kashubian (csb), the
+           extinct Slovincian and Polabian (pox — the Drawehn Wendish of
+           the Lüneburg Wendland, recorded c. 1700 in Hennig von Jessen's
+           Vocabularium Venedicum, extinct by the mid-18th c.). Defining
+           innovation: the Lechitic ablaut (przegłos lechicki: *e > 'o,
+           *ě > 'a before hard dentals — Pl. niosę/niesie, las/lesie).
+           Wiktionary further nests a Pomeranian node (zlw-pom: Kashubian,
+           Slovincian) — unminted until a Kashubian consumer exists"
+
   chu:
     name: Church Slavonic
-    parent: sla:pro
-    note: "the bare anchor names the canonical Old Church Slavonic corpus"
+    parent: zls
+    note: "the bare anchor names the canonical Old Church Slavonic corpus
+           (the 10th–11th-c. glagolitic and early cyrillic codices:
+           Zographensis, Marianus, Assemanianus, Suprasliensis, Savvina
+           kniga, the Kiev Missal). Parent zls (re-wired 2026-10-10 from
+           sla:pro when the South Slavic family was minted): OCS is the
+           literary norm Cyril and Methodius codified (863) on the
+           Eastern South Slavic speech of Thessaloniki, developed in the
+           Ohrid and Preslav schools after 886 — Wiktionary files cu
+           under zls likewise. It stands so close to Late Common Slavic
+           that it served as its proxy for a century of comparative work;
+           that closeness is the note's to state, not an edge.
+           RECENSION CONVENTION (documented 2026-10-10): after the
+           canonical period the language is written everywhere with the
+           local vernacular bleeding into its phonology and orthography —
+           a recension is that regional written tradition, an axis
+           orthogonal to time, so it rides the VARIETY slot with kind
+           recension, never a stage. Recensions are by construction
+           post-canonical, so the honest lect id combines both axes:
+           chu:csl/<recension> (chu:csl/bul, chu:csl/srp). Bare
+           chu/<recension> stays grammatical for a consumer that cannot
+           date its witness, but no codemap row targets it. The tag set
+           follows the ISO 639-2 spelling of the recension's community
+           (rus, srp, bul; cro for the glagolitic Croatian tradition).
+           Macedonian (Ohrid) and Moldo-Wallachian recensions are
+           recognized in the literature and deliberately unminted until
+           a consumer holds them. Recorded future rules (censused
+           2026-10-10, not forced): the consuming library's
+           bg-wikisource charters carry the wiki's own recension
+           grouping — 10 Serbian (Dušan, Milutin, Vukašin, Vuk Branković)
+           → chu:csl/srp, 6 Bulgarian (Rila 1378, Zograf, Mrachka,
+           Vatopedi, Dubrovnik, Brashov) → chu:csl/bul; the Povaljska
+           listina (Brač, 1250, Croatian cyrillic, a Croatian/Church
+           Slavonic mix) in hr-wikisource is a chu:csl/cro candidate.
+           Those assignments are the consumer's facet rules — this file
+           only guarantees the targets"
     stages:
       csl: {name: Church Slavonic (post-canonical), ord: 10}
     varieties:
       rus: {name: Russian recension, kind: recension}
-      srp: {name: Serbian recension, kind: recension}
+      srp: {name: Serbian recension, kind: recension,
+            note: "Raška-school Serbian Church Slavonic from the Miroslav
+                   Gospel (c. 1186) and the Nemanjić charters (Milutin,
+                   Dušan) to its 18th-c. displacement by Russian Church
+                   Slavonic"}
       cro: {name: Croatian recension, kind: recension,
             note: "the glagolitic Croatian Church Slavonic tradition"}
+      bul: {name: Bulgarian recension (Middle Bulgarian), kind: recension,
+            wikt: cu-bgm,
+            note: "the written language of the Second Bulgarian Empire,
+                   12th–14th c., culminating in Patriarch Euthymius's
+                   Tărnovo orthographic reform (late 14th c.); Wiktionary's
+                   cu-bgm 'Middle Bulgarian' (an etymology variety of cu,
+                   verified 2026-10-10). Hallmarks: the yus confusion
+                   (ѫ/ѧ mixing), ъ/ь merger tendencies, and the
+                   Euthymian archaizing spellings. Witnesses: the royal
+                   charters — Vatopedi and Dubrovnik (Ivan Asen II,
+                   c. 1230), Zograf and Mrachka (Ivan Alexander, 1340s),
+                   Brashov (Ivan Sratsimir), Rila (Ivan Shishman, 1378).
+                   Corpus: bg-wikisource's six Bulgarian-group charters"}
 
   orv:
     name: Old East Slavic
@@ -980,7 +1088,11 @@ anchors:
 
   sl:
     name: Slovene
-    parent: sla
+    parent: zls
+    note: "Western South Slavic; parent re-wired 2026-10-10 from sla to
+           the newly minted zls (the most-specific-ancestor rule).
+           Kajkavian's many Slovene-shared features are continuum
+           prose, not an edge"
     stages:
       old:  {name: Old Slovene, band: [950, 1550], ord: 10,
              note: "the Freising Fragments era",
@@ -998,11 +1110,168 @@ anchors:
 
   bul:
     name: Bulgarian
-    parent: sla
+    parent: zls
+    note: "Eastern South Slavic; parent re-wired 2026-10-10 from sla to
+           the newly minted zls. The Old Bulgarian literary stage IS
+           canonical OCS in Bulgarian scholarship's naming, and the
+           12th–14th-c. written language is chu:csl/bul (Wiktionary's
+           cu-bgm, which Wiktionary lists as bg's ancestor) — that
+           literary descent stays prose: the vernacular ancestry runs
+           through the Eastern South Slavic dialects, of which the
+           Thessaloniki base of OCS was one, and the edge would also
+           claim Macedonian's ancestry by implication. Corpus: Paisiy's
+           История славянобългарска (1762) in bg-wikisource, hosted in a
+           modern literary rendering"
     stages:
       emod: {name: Early Modern Bulgarian, ord: 10}
     varieties:
       dam: {name: Damaskini vernacular, kind: sociolect}
+
+  mk:
+    name: Macedonian
+    parent: zls
+    note: "Eastern South Slavic, Bulgarian's closest relative; the
+           standard was codified in 1944–45 on the West-Central dialects
+           (Prilep–Bitola–Veles). The Ohrid region is one of the two
+           cradles of the Slavonic literary tradition — the Ohrid school
+           of Clement and Naum (from 886) — but the registry draws no edge
+           from chu: OCS is a literary norm, and the mk/bul naming and
+           descent dispute (Bulgarian scholarship treats the dialects as
+           West Bulgarian; Macedonian scholarship as a distinct language
+           since the 19th-c. awakening) is recorded here as prose, per
+           the contact doctrine. The pre-standard 19th-c. record is
+           written in Church-Slavonic-tinged vernacular and in competing
+           local orthographies: Joakim Krčovski and Kiril Pejčinović
+           (1810s), the Miladinov brothers' folk-song collection (Zagreb
+           1861, printed under the title Български народни песни — a
+           corpus both traditions claim), Kuzman Šapkarev, Marko
+           Cepenkov, and Gjorgjija Pulevski (Речник од три јазика 1875,
+           Слогница речовска 1880) — the first explicit Macedonian-
+           language programme. No stages minted: the 19th-c. corpus sits
+           before the standard and a pre-standard rung needs a consumer
+           that can date it. Corpus: mk-wikisource's 19th-c. cone (851
+           pages; the Miladinov and Cepenkov texts hosted in MODERNIZED
+           orthography, Pulevski in the original)"
+
+  sr:
+    name: Serbian
+    parent: zls
+    note: "Western South Slavic; one of the standard varieties of the
+           Serbo-Croatian complex (ISO 639-3 macrolanguage hbs;
+           Wiktionary treats it as ONE language, sh, with Wikimedia codes
+           sr/hr/bs). The pluricentric shape follows the registry's
+           own 'no' precedent read from the other side: there the
+           consumers hold the macrolanguage code and the standards stay
+           unminted; here they hold the standard codes (srp, hrv), so the
+           standards are the anchors and hbs/sh stays unminted — no
+           Serbo-Croatian node, because the premodern record is not one
+           lineage: Serbian writing runs through Serbian-recension Church
+           Slavonic (chu:csl/srp, the Miroslav Gospel c. 1186, the
+           Nemanjić charters, Dušan's Code 1349), then Russian Church
+           Slavonic and the 18th-c. Slavenoserbian mix, to Vuk
+           Karadžić's Neo-Štokavian vernacular standard (Srpski rječnik
+           1818; the 1847 victory with Daničić) — while Croatian's
+           tri-dialectal literature (see hr) is a different history over
+           the same continuum. Sharing Neo-Štokavian is continuum fact,
+           recorded as prose. Bosnian (bs/bos) and Montenegrin (cnr)
+           stay unminted. Corpus: sr-wikisource's oral-tradition cone —
+           the Erlangen manuscript (c. 1720, the oldest large collection
+           of South Slavic epic and lyric song, edited by Gesemann 1925)
+           and Vuk's collections (Leipzig 1823–24, Vienna 1841–62, the
+           SANU volumes)"
+
+  hr:
+    name: Croatian
+    parent: zls
+    note: "Western South Slavic; a standard variety of the Serbo-Croatian
+           complex — see sr for the pluricentric shape (hbs/sh
+           unminted, the standards anchored). The premodern literature is
+           tri-dialectal and tri-scriptal: Čakavian (the Split and
+           Dalmatian-island writers — Marko Marulić's Judita, written
+           1501, printed Venice 1521, the founding epic), Štokavian of
+           Dubrovnik (Vetranović, Držić, Gundulić's Osman, Đurđević) and
+           Kajkavian (the northern, Zagreb tradition); written in
+           glagolitic, Croatian cyrillic (bosančica) and Latin. The
+           glagolitic Church Slavonic tradition is chu:csl/cro (Baška
+           tablet ~1100). The modern standard settled on Neo-Štokavian
+           Ijekavian in the 19th-c. Illyrian movement; Kačić Miošić's
+           Razgovor ugodni naroda slovinskoga (1756) is its popular
+           forerunner. No stages minted: an Old Croatian rung would need
+           a periodization that ranges across three dialect bases, and
+           the consumer's era bands (medieval, 15th–18th c.) date the
+           texts without one. Corpus: hr-wikisource's premodern century
+           cone (1,401 pages)"
+
+  # The West Slavic pair (2026-10-10): Polish and Czech with their
+  # historical ladders, on the Wiktionary codes verified that day
+  # (zlw-opl, zlw-mpl, zlw-ocs, cs-ear).
+
+  pl:
+    name: Polish
+    parent: zlw-lch
+    note: "Lechitic. Periodization after Zenon Klemensiewicz, Historia
+           języka polskiego (1961–72): przedpiśmienny (before 1136),
+           staropolski (1136 – turn of the 16th c.), średniopolski (16th c.
+           – the 2nd half of the 18th), nowopolski (to 1939), najnowszy.
+           The two premodern rungs are minted as stages; Modern Polish is
+           the bare anchor's open end (the da precedent). Wiktionary's
+           pl lists zlw-mpl as ancestor and nests zlw-opl as a separate
+           language; here both are stages of one lineage (stages are
+           time-slices, the codemap carries the crosswalk)"
+    stages:
+      old: {name: Old Polish, band: [1136, 1500], ord: 10, wikt: zlw-opl,
+            band_note: "Klemensiewicz's staropolski — from the Bull of
+                        Gniezno (1136, some 410 Polish names in a Latin
+                        papal bull) to the turn of the 16th c.;
+                        approximate",
+            note: "witnesses: the Book of Henryków (first Polish sentence,
+                   1270), Bogurodzica, the Holy Cross Sermons (c. 1300),
+                   the Florian Psalter, Queen Sophia's Bible (1455)"}
+      mid: {name: Middle Polish, band: [1500, 1780], ord: 20, wikt: zlw-mpl,
+            band_note: "Klemensiewicz's średniopolski — the print era
+                        (the first Polish books c. 1513) through the
+                        Golden Age to the Enlightenment's reforms (the
+                        Collegium Nobilium, the first partition 1772);
+                        approximate. The KorBa corpus closes at 1772 by
+                        its own definition",
+            note: "Rej, Kochanowski, the Jakub Wujek Bible (1599), the
+                   Baroque. Corpus: korba (850 texts, 1601–1775, the
+                   IJP PAN Baroque corpus) and pl-wikisource's
+                   Renaissance/Baroque cone"}
+
+  cs:
+    name: Czech
+    parent: zlw
+    note: "West Slavic, Czech–Slovak subgroup (unminted — see zlw).
+           Periodization after Lamprecht, Šlosar & Bauer, Historická
+           mluvnice češtiny (1986): pre-literary Czech before c. 1100;
+           staročeština to c. 1500; střední čeština 1500–1775 (humanist to
+           1620, baroque to 1775); nová čeština from the National Revival
+           (Dobrovský). Modern Czech is the bare anchor's open end.
+           Jan Hus's diacritic orthography (De orthographia bohemica,
+           c. 1406–12) falls inside cs:old and rides no orthography tag
+           until a consumer distinguishes the digraphic witnesses"
+    stages:
+      old: {name: Old Czech, band: [1100, 1500], ord: 10, wikt: zlw-ocs,
+            band_note: "Lamprecht/Šlosar/Bauer's staročeština — the first
+                        Czech sentence in the Litoměřice foundation deed
+                        (c. 1200 addition; Czech glosses from the 11th c.)
+                        to c. 1500; approximate",
+            note: "witnesses: Hospodine, pomiluj ny; the Alexandreis
+                   (c. 1300); the Dalimil chronicle (c. 1314); the Old
+                   Czech Bible redactions, of which the Prague Bible
+                   (1488) is the first complete printed one. Corpus:
+                   prague-bible-1488 (31 pages of HTR ground truth),
+                   cs-wikisource's medieval texts"}
+      mid: {name: Middle Czech, band: [1500, 1775], ord: 20, wikt: cs-ear,
+            band_note: "Lamprecht/Šlosar/Bauer's střední čeština (humanist
+                        + baroque), to the Revival's 1775 conventional
+                        start; approximate. Wiktionary's cs-ear 'Early
+                        Modern Czech' names the same rung (ancestor
+                        zlw-ocs, descendant cs)",
+            note: "the Kralice Bible (1579–93; one-volume 1613), Veleslavín,
+                   Komenský. Corpus: cs-wikisource's 1613 Kralice print
+                   and Komenský"}
 
   # ── Others forced by holdings ──────────────────────────────────────────────
 
@@ -1069,6 +1338,11 @@ anchors:
   trk:
     name: Turkic
     kind: family
+    stages:
+      pro: {name: Proto-Turkic, mode: reconstructed, ord: 5, wikt: trk-pro,
+            note: "Common Turkic + Oghur/Bulgar reconstructions. Corpus:
+                   starling-turcet (2,017 etymologies, EDAL's Turkic branch
+                   base)"}
     note: "ISO 639-5. Family node only — modern Turkic languages stay
            unminted until consumers arrive; the historical literary
            ladder below is what the library holds"
@@ -1134,6 +1408,10 @@ anchors:
   xgn:
     name: Mongolic
     kind: family
+    stages:
+      pro: {name: Proto-Mongolic, mode: reconstructed, ord: 5, wikt: xgn-pro,
+            note: "Corpus: starling-monget (2,174 etymologies, EDAL's
+                   Mongolic branch base)"}
     note: "ISO 639-5. Family node; Classical Mongolian (cmg) stays
            unminted — the survey found NO open machine-readable
            corpus (censused 2026-09-28)"
@@ -1154,6 +1432,10 @@ anchors:
   tuw:
     name: Tungusic
     kind: family
+    stages:
+      pro: {name: Proto-Tungusic, mode: reconstructed, ord: 5, wikt: tuw-pro,
+            note: "Corpus: starling-tunget (2,435 etymologies, EDAL's
+                   Tungusic branch base)"}
     note: "ISO 639-5 (code glossed 'Tungus languages'). Family node;
            the modern members stay unminted until consumers arrive"
 
@@ -1386,6 +1668,41 @@ anchors:
     name: Indo-Aryan
     kind: family
     parent: iir
+    stages:
+      pro: {name: Proto-Indo-Aryan, mode: reconstructed, ord: 5, wikt: inc-pro}
+
+  # ── The Indo-Iranian comparative wing (StarLing LEXSTAT, 2026-10-01) ──
+  # The IE package's dardet/indet/iranet etymology shelves key their
+  # proto-entries to inc-dar-pro / inc-pro / ira-pro; the ira and
+  # inc-dar nodes (and the three pro stages) are minted with them.
+
+  ira:
+    name: Iranian
+    kind: family
+    parent: iir
+    stages:
+      pro: {name: Proto-Iranian, mode: reconstructed, ord: 5, wikt: ira-pro}
+    note: "Indo-European > Indo-Iranian; the sister branch to Indo-Aryan.
+           Attested from the Avesta (Old Avestan, oral composition
+           ~2nd-1st mill. BCE) and the Old Persian cuneiform inscriptions
+           (6th c. BCE); the held corpora reach it through Avestan,
+           Middle Persian and the StarLing Iranian comparative material
+           (iran wordlist + iranet etymology shelves)"
+
+  inc-dar:
+    name: Dardic
+    kind: family
+    parent: inc
+    stages:
+      pro: {name: Proto-Dardic, mode: reconstructed, ord: 5, wikt: inc-dar-pro}
+    note: "The northwestern Indo-Aryan mountain languages (Kashmiri,
+           Shina, Khowar, Kalasha, Indus Kohistani, Bashkarik/Kalami,
+           Pashai...). CAVEAT, recorded deliberately: modern scholarship
+           (Strand, Bashir) treats Dardic as an AREAL/geographic grouping
+           within Indo-Aryan, not a proven genetic clade — this node (and
+           its reconstructed pro stage) exists to carry the StarLing
+           dardet database's claims, which assume a Proto-Dardic level;
+           the registry records the claim without endorsing the clade"
 
   bra:
     name: Braj
@@ -1581,6 +1898,271 @@ anchors:
            with S. Starostin's notes)."
     stages:
       pro: {name: Proto-Kartvelian, mode: reconstructed, ord: 5, wikt: ccs-pro}
+
+  # ── The StarLing branch-base wing (2026-10-07) ────────────────────────
+  # The ALTAIC/CAUC/DRAV/SINTIB packages' 28 branch etymology bases
+  # (consuming project's P114) key their shelves to the nodes below;
+  # Wiktionary family codes used wherever they exist (verified against
+  # Module:families 2026-10-07); dra-kui and dra-pem are coined (no
+  # Wiktionary code; Konda-Kui subgrouping per Krishnamurti 2003).
+
+  cau-nec:
+    name: Northeast Caucasian
+    kind: family
+    parent: ccn
+    note: "Nakh-Daghestanian — the uncontroversial eastern family.
+           Parent edge ccn records the NCED's own North Caucasian
+           hypothesis (see ccn's caveat); mainstream treats NEC as a
+           top-level family. The six branch nodes below carry the
+           CAUC package's branch reconstructions"
+    stages:
+      pro: {name: Proto-Northeast-Caucasian, mode: reconstructed, ord: 5,
+            wikt: cau-nec-pro}
+
+  cau-nkh:
+    name: Nakh
+    kind: family
+    parent: cau-nec
+    note: "Chechen, Ingush, Bats. Corpus: starling-nakhet (970
+           etymologies)"
+    stages:
+      pro: {name: Proto-Nakh, mode: reconstructed, ord: 5, wikt: cau-nkh-pro}
+
+  cau-ava:
+    name: Avaro-Andian
+    kind: family
+    parent: cau-nec
+    note: "Avar + the Andian languages of Daghestan. Corpus:
+           starling-aandet (1,539 etymologies)"
+    stages:
+      pro: {name: Proto-Avaro-Andian, mode: reconstructed, ord: 5,
+            wikt: cau-ava-pro}
+
+  cau-tsz:
+    name: Tsezian
+    kind: family
+    parent: cau-nec
+    note: "the Tsez (Didoic) languages of highland Daghestan. Corpus:
+           starling-cezet (1,108 etymologies)"
+    stages:
+      pro: {name: Proto-Tsezian, mode: reconstructed, ord: 5, wikt: cau-tsz-pro}
+
+  cau-drg:
+    name: Dargwa
+    kind: family
+    parent: cau-nec
+    note: "the Dargin varieties, a dialect continuum treated as a family.
+           Corpus: starling-darget (924 etymologies)"
+    stages:
+      pro: {name: Proto-Dargwa, mode: reconstructed, ord: 5, wikt: cau-drg-pro}
+
+  cau-lzg:
+    name: Lezghian
+    kind: family
+    parent: cau-nec
+    note: "Lezgi, Tabasaran, Agul, Rutul, Tsakhur, Budukh, Kryts, Archi,
+           Udi — southern Daghestan. Corpus: starling-lezget (1,569
+           etymologies)"
+    stages:
+      pro: {name: Proto-Lezghian, mode: reconstructed, ord: 5, wikt: cau-lzg-pro}
+
+  lbe:
+    name: Lak
+    parent: cau-nec
+    note: "a single-language branch of Northeast Caucasian (its exact
+           position — Lak-Dargwa vs standalone — is debated). Corpus:
+           starling-laket (955 entries)"
+
+  kjj:
+    name: Khinalug
+    parent: cau-nec
+    note: "a one-village isolate within Northeast Caucasian (Khinalug,
+           Azerbaijan); sometimes grouped with Lezghian, here a direct
+           NEC child per the NCED's own treatment. Corpus:
+           starling-khinet (349 entries)"
+
+  cau-nwc:
+    name: Northwest Caucasian
+    kind: family
+    parent: ccn
+    note: "Abkhazo-Adyghean: Abkhaz-Abaza, Circassian, Ubykh. Parent
+           edge ccn records the NCED hypothesis (ccn's caveat applies);
+           mainstream treats NWC as a top-level family. Corpus:
+           starling-abadet (817 etymologies)"
+    stages:
+      pro: {name: Proto-Northwest-Caucasian, mode: reconstructed, ord: 5,
+            wikt: cau-nwc-pro}
+
+  qfa-kor:
+    name: Koreanic
+    kind: family
+    note: "Korean + Jeju + the fragmentary ancient peninsular varieties.
+           NO parent edge: the Altaic affiliation (the EDAL's premise) is
+           contested and not recorded as descent — the koret base's
+           crosslinks into altet carry the claim at the data layer.
+           Corpus: starling-koret (1,206 entries)"
+    stages:
+      pro: {name: Proto-Koreanic, mode: reconstructed, ord: 5,
+            wikt: qfa-kor-pro,
+            note: "the koret base's reconstructions lean on Middle Korean
+                   — the EDAL school's 'Proto-Korean'; recorded as the
+                   Koreanic proto stage, school noted"}
+
+  sit-kir:
+    name: Kiranti
+    kind: family
+    parent: sit
+    note: "the Kiranti languages of eastern Nepal (Sino-Tibetan >
+           Trans-Himalayan; subgrouping within ST left coarse — parent
+           sit directly). Corpus: starling-kiret (994 etymologies) + the
+           four Leiden dictionary shelves below"
+    stages:
+      pro: {name: Proto-Kiranti, mode: reconstructed, ord: 5,
+            wikt: sit-kir-pro}
+
+  dus:
+    name: Dumi
+    parent: sit-kir
+    note: "Kiranti; G. van Driem's 1993 grammar-dictionary is the shelf
+           (starling-dumet, 1,517 entries)"
+
+  kle:
+    name: Kulung
+    parent: sit-kir
+    note: "Kiranti; G. Tolsma's dictionary is the shelf
+           (starling-kulet, 1,466 entries)"
+
+  lif:
+    name: Limbu
+    parent: sit-kir
+    note: "the largest Kiranti language, with its own script tradition
+           (Sirijanga); van Driem's 1987 grammar's lexicon is the shelf
+           (starling-limet, 2,354 entries)"
+
+  ybi:
+    name: Yamphu
+    parent: sit-kir
+    note: "Kiranti; R. Rutgers's 1998 grammar-dictionary is the shelf
+           (starling-yamet, 1,974 entries)"
+
+  dra-sou:
+    name: South Dravidian
+    kind: family
+    parent: dra
+    note: "the SD-I branch (Tamil-Malayalam-Kannada-Tulu-Nilgiri axis),
+           per Krishnamurti 2003; StarLing's sdret follows the DED's
+           South Dravidian scope. Corpus: starling-sdret (4,692
+           etymologies)"
+    stages:
+      pro: {name: Proto-South-Dravidian, mode: reconstructed, ord: 5,
+            wikt: dra-sou-pro}
+
+  dra-tkt:
+    name: Toda-Kota
+    kind: family
+    parent: dra-sou
+    note: "the Nilgiri pair; StarLing's ktet ('KT') base. Corpus:
+           starling-ktet (1,665 etymologies)"
+    stages:
+      pro: {name: Proto-Toda-Kota, mode: reconstructed, ord: 5,
+            wikt: dra-tkt-pro}
+
+  dra-tel:
+    name: Teluguic
+    kind: family
+    parent: dra
+    note: "Telugu and its closest relatives (SD-II's Telugu side).
+           Parent kept coarse at dra: Krishnamurti groups Telugu with
+           Gondi-Kui as South-Central; StarLing chains telet directly
+           under dravet — the coarse edge records neither subgrouping
+           as settled. Corpus: starling-telet (2,774 etymologies)"
+    stages:
+      pro: {name: Proto-Telugu, mode: reconstructed, ord: 5,
+            wikt: dra-tel-pro,
+            note: "Wiktionary's Teluguic proto is Old Telugu (dra-ote);
+                   the StarLing reconstructions sit above the attested
+                   stage, so the generic pro stage carries them"}
+
+  dra-cen:
+    name: Central Dravidian
+    kind: family
+    parent: dra
+    note: "Kolami-Naiki + Parji-Gadaba; StarLing's kogaet
+           ('Kolami-Gadaba') base IS this branch. Corpus:
+           starling-kogaet (1,509 etymologies)"
+    stages:
+      pro: {name: Proto-Central-Dravidian, mode: reconstructed, ord: 5,
+            wikt: dra-cen-pro}
+
+  dra-nor:
+    name: North Dravidian
+    kind: family
+    parent: dra
+    note: "Kurux, Malto, Brahui. Corpus: starling-ndret (989
+           etymologies)"
+    stages:
+      pro: {name: Proto-North-Dravidian, mode: reconstructed, ord: 5,
+            wikt: dra-nor-pro}
+
+  brh:
+    name: Brahui
+    parent: dra-nor
+    note: "the Dravidian outlier of Balochistan; North Dravidian per
+           Krishnamurti. Corpus: starling-braet (269 entries)"
+
+  dra-gki:
+    name: Gondi-Kui
+    kind: family
+    parent: dra
+    note: "the SD-II/South-Central core minus Telugu (see dra-tel's
+           coarseness note): Gondi + Konda-Kui. StarLing's gndet
+           ('Gondwan') base. Corpus: starling-gndet (1,428 etymologies)"
+    stages:
+      pro: {name: Proto-Gondi-Kui, mode: reconstructed, ord: 5,
+            wikt: dra-gki-pro}
+
+  dra-gon:
+    name: Gondi
+    kind: family
+    parent: dra-gki
+    note: "the Gondi dialect continuum. Corpus: starling-gonet (1,475
+           etymologies, 17 dialect/source columns)"
+    stages:
+      pro: {name: Proto-Gondi, mode: reconstructed, ord: 5,
+            wikt: dra-gon-pro}
+
+  dra-kki:
+    name: Konda-Kui
+    kind: family
+    parent: dra-gki
+    note: "Konda + Pengo-Manda + Kui-Kuwi, per Krishnamurti 2003 —
+           the structural parent of the three nodes below"
+
+  kfc:
+    name: Konda
+    parent: dra-kki
+    note: "Konda (Kubi); single-language shelf. Corpus: starling-konet
+           (961 entries)"
+
+  dra-kui:
+    name: Kui-Kuwi
+    kind: family
+    parent: dra-kki
+    note: "COINED CODE (no Wiktionary family code exists): the Kui +
+           Kuwi pair within Konda-Kui. Exists to carry StarLing's kuiet
+           base (1,377 etymologies)"
+    stages:
+      pro: {name: Proto-Kui-Kuwi, mode: reconstructed, ord: 5}
+
+  dra-pem:
+    name: Pengo-Manda
+    kind: family
+    parent: dra-kki
+    note: "COINED CODE (no Wiktionary family code exists): the Pengo +
+           Manda pair within Konda-Kui. Exists to carry StarLing's
+           pemet base (740 etymologies)"
+    stages:
+      pro: {name: Proto-Pengo-Manda, mode: reconstructed, ord: 5}
 
   bat:
     name: Baltic

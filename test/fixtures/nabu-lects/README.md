@@ -7,19 +7,20 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-09-30** — the P110 refresh (through the
-  p108-japonic-stages merge: the jpn stage grid incl. jpn:emj, whose
-  override targets the drift guard now validates), from the box's
-  `canonical/nabu-lects` (clean at commit
-  `299c1d09a3aa927c819d885ccce7d56bccdc49d2`, the repo's `main`).
+- **Retrieved 2026-10-11** — the Slavic-package refresh (the zlw /
+  zlw-lch / zls families with chu, sl and bul re-wired onto zls; the
+  pl and cs anchors with their old/mid stages, whose cs:old override
+  target the drift guard now validates; sr, hr, mk; the chu recension
+  varieties), from the box's `canonical/nabu-lects` (commit
+  `665bcf40535264f7b690514b0de7ef5518e9aacb`, the repo's `main`).
   - `lects.yml` — the lect registry (anchors, stages, varieties,
     orthographies, the global scripts table, parent edges, Glottocode
-    crosswalks). Full file, 70,399 B, sha256
-    `e3fbfaa3a5095c7a360dedc76977f36667c735423f782278a2345a0e3e06a2e9`.
+    crosswalks). Full file, 98,155 B, sha256
+    `9e3d163b61d220ac3b6390be1dc365df46c52cbfb9fb3f1ba5a5f97d8b270dad`.
   - `codemap.yml` — universal code → lect defaults (identity is the
     default rule; only non-identity mappings are listed). Full file,
-    5,544 B, sha256
-    `176e30875a6ae42bac6ee053058a3dd955cbf981b853c51fd161dfbedd2552a6`.
+    7,055 B, sha256
+    `34cedb9126390892e7825858ac2d67fc900081e6da3b427dbe1405c9d1b09950`.
 - **License:** CC BY 4.0 (repo `LICENSE`, verbatim: "This work — the
   lect registry (lects.yml), the code mapping (codemap.yml), the
   documentation, and the validation tooling in this repository — is
