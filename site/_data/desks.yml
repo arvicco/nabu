@@ -15,10 +15,10 @@
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 28
+  members: 31
 =======
-  members: 26
->>>>>>> dcfac2d6 (Add gams-zrcalo: the 1445 Croatian Glagolitic Zrcalo, ready)
+  members: 24
+>>>>>>> 55b38f39 (Add eltec-srp: the Serbian ELTeC novel collection, ready)
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard

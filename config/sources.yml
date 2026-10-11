@@ -1837,6 +1837,20 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+eltec-srp:   # P117-2, 02-sources row 246
+  adapter: Nabu::Adapters::EltecSrp
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # ELTeC-srp (COST Action CA16204; ed. Cvetana Krstev, JeRTeH):
+  # Serbian novels, first editions 1852–1920, level-1 TEI (the eltec-tei
+  # family). Texts PD, markup CC BY 4.0 (README verbatim) → attribution.
+  # Sparse cone level1 + README (the 519 MB level2 annotated twin stays
+  # out). 100 files; 4 excluded by the life+70 rule (authors d. 1956–1987)
+  # → expected first sync 96 docs / 150,794 passages (census 2026-10-11).
+  # srpELTeC-ijk is NOT fetched: no license statement anywhere upstream.
+
 eng-web:
   adapter: Nabu::Adapters::EngWeb
   adopted: "2026-07-10"
@@ -5483,6 +5497,7 @@ viet-wikisource:
   # (PAGES is the naming authority), 2 batched api.php requests; PD texts
   # + CC BY-SA 4.0 transcription → attribution. All lzh.
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
+
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate

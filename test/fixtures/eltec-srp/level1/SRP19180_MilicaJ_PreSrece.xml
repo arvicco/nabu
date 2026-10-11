@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml-model href="https://distantreading.github.io/Schema/eltec-1.rng" ?> -->
+<?xml-model href="../Schemas/eltec-1.rng" type="application/xml" 
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../Schemas/eltec-1.rng" type="application/xml" 
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="SRP19180" xml:lang="sr-Latn">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title ref="wikidata:Q109336226">Пре среће : ELTeC издање</title>
+                <title xml:lang="en">Before happiness : ELTeC edition</title>
+                <author ref="viaf:41876311 wikidata:Q292905">Јанковић, Милица (1881-1939)</author>
+                <respStmt>
+                    <resp>Сканирање</resp>
+                    <name>Библиотека Српске академије наука и уметности</name>
+                </respStmt>
+                <respStmt>
+                    <resp>OCR и корекција текста</resp>
+                    <name>Цветана Крстев</name>
+                </respStmt>
+                <respStmt>
+                    <resp>Кодирање за ELTeC</resp>
+                    <name>Цветана Крстев</name>
+                </respStmt>
+            </titleStmt>
+            <extent>
+                <measure unit="words">32555</measure>
+                <measure unit="pages">144</measure>
+            </extent>
+            <publicationStmt>
+<publisher ref="https://distant-reading.net">COST Action "Distant Reading for European Literary History" (CA16204)</publisher>
+<distributor ref="https://zenodo.org/communities/eltec/">Zenodo.org</distributor><date when="2021-04-09"/>
+<availability><licence target="https://creativecommons.org/licenses/by/4.0/"/></availability>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.3462435">ELTeC</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.4662444">ELTeC release 1.1.0</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.3524056">ELTeC-srp</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.4662604">ELTeC-srp release 0.9.0</ref>
+</publicationStmt>
+            <sourceDesc><bibl type="firstEdition">
+                    <author>Janković, Milica</author>
+                    <title>Pre sreće</title>
+                    <publisher>Književni jug</publisher>
+                    <date>1918</date>
+                    <pubPlace>Zagreb</pubPlace>
+                    <idno type="wiki">https://sr.wikipedia.org/sr-ec/Милица_Јанковић</idno>
+                <idno type="COBISS-SR.ID">518100317</idno>
+                </bibl></sourceDesc>
+        </fileDesc>
+        <encodingDesc n="eltec-1">
+            <p/>
+        </encodingDesc>
+
+        <profileDesc>
+            <langUsage>
+                <language ident="sr-Latn" usage="100">српски</language>
+            </langUsage>
+            <textDesc>
+                <authorGender xmlns="http://distantreading.net/eltec/ns" key="F"/>
+                <size xmlns="http://distantreading.net/eltec/ns" key="short"/>
+                <reprintCount xmlns="http://distantreading.net/eltec/ns" key="low"/>
+                <!-- izdanja: 1918, 2018 -->
+                <timeSlot xmlns="http://distantreading.net/eltec/ns" key="T4"/>
+            </textDesc>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2021-09-17">IDs added to front and end matter</change>
+<change when="2021-04-09">Converted by checkUp script for new release</change>
+<change when="2020-11-14">Converted by checkUp script for new release</change>
+            <change when="2019-10-30">Checked by releaseChecker script</change>
+            <change when="20190916"/>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <front>
+            <div type="titlepage" xml:id="SRP19180_F1">
+                <p>MILICA JANKOVIĆ</p>
+                <p>PRE SREĆE</p>
+                <p>ZAGREB</p>
+                <p>IZDANJE „KNJIŽEVNOG JUGA“.</p>
+            </div>
+            <div type="titlepage" xml:id="SRP19180_F2">
+                <p>TISAK NADBISKUPSKE TISKARE.</p>
+            </div>
+            <gap unit="preface"/>
+            <!-- <div type="preface">
+<pb n="5"/>
+<p>Knjiga, koju napiše ženska ruka, nesumnjivo je za nas — knjiga iz drugog sveta. U njih značenje reči ima drugi smisao, drugi poredak; frazeologija im je mekša, jednostavnija, savitljivija; rečenice su im običnije, kratke ali ne zbijene, i tako nalik jedne na druge; pa čak i u interpunkciji otkriva se njihova ženskost. Čuvena pisma Mme de Sévigné za nas su samo zato od tolikog zanimanja, što ona ni u jednom redku ne odstupa od tih svojih ženskih osobina. Sve su to reči, reči, reči; ali satkane na tako jedan nama drag način, da ih mi isto tako sa strašću i bez predrasuda čitamo kao što slušamo njihov razgovor. Još kad im uspe da tim svojim zamamljivim obiljem reči izazovu u nama iluzije izvesnih osećanja, koja ćemo mi uzalud tražiti u našem muškom srcu, onda je to najviše što mi očekujemo od jedne žene.</p>
+<p>S druge strane opet: neizrecivo su nam hladne, poistovetujemo ih sebi, i ljutimo se pomalo na sve one spisateljice koje se upinju da pišu kao muški. Svojom veštinom, obrazovanjem ili ukusom, one mogu da steknu mnogo priznanja i poštovanja među nama, ali da im se obradujemo, da se zanesemo njihovim delima, i zavolimo ih — to ne možemo <pb n="6"/> nikako. I zbog toga jedna od najzanimljivijih literatkinja, George Sand, kraj sveg svog duha, pismenosti i nastojanja ne samo da zadobije muškarački stil i ton, nego i muško posmatranje i naziranje na svet, osvaja nas ipak samo onim svojim delima (<title>Lelia</title>, <title>Indiana</title>, itd.) u kojima nema toliko one zazorne naučenosti i izvitoperenosti, već gde je sve devojački čisto, prirodno, toplo, neposredno. Ili kad u svojim pismima od srca ženski piše: „Mozak je mehanizam koji treba uvek držati u zaposlenosti. Kad ja svršim jednu knjigu, kažem zbogom mojim junacima i zbog njihova odlaska utešim se tako, da stvaram nove prijatelje“, onda se i nehotice oseća ona ženska lakoća, prostosrdačna plitkost i nameštena važnost, kojom žene vole da govore o ozbiljnim stvarima.</p>
+<p>Pa i naša književnica, Isidora Sekulić, mnogo gubi na tome što, kanda po navici ili hotice, ubacuje u svoja izvrsna opažanja i rafinirana, čisto ženska osećanja — i tuđe probavljene duhovitosti, refleksije, paradokse ili igre reči. Ali zato kad je ponese goli elemenat njenog spola, u stanju je da nam da stranica i pasusa od kojih, zbog bleska slika, izoštrenih psiholoških opažanja i odlične nađenosti izraza, ne možemo oka da otkinemo.</p>
+<p>Kraj svega toga, njezina drugarica na peru, <hi>Milica Janković</hi>, ipak nam je mnogo bliža i simpatičnija. Već ranijim svojim radovima (u <title>Književnom Glasniku</title>, <title>Bosanskoj Vili</title>, <title>Delu</title> i dr.) u kojima ima toliko tople iskrenosti, provejavane bezgraničnom nekom tugom i progutanim suzama (<title>Bolničarka</title>, <title>Malo srce</title>), ona je odmah osvojila čitav srpski deo našeg naroda, A kad joj 1913. iziđe prva knjiga <title>„Ispovesti“</title>, ne pade ni od koje <pb n="7"/> strane ružna reč, i sva je ktritika pozdravi sa oduševljenjem. Tako ona neobično brzo zauze stalno i vidno mesto u srpskoj književnosti.</p>
+<p>Najnovijim svojim delom „<title>Pre sreće</title>“, Milica Janković, digla se u red onih tihih i solidnih književnika, čija slava ne grmi toliko svetom, ali zato čije knjige doživljavaju mnogo izdanja i čiji blagorodni uticaj prelazi sa generacije na generaciju. To je davno očekivana knjiga, pisana u prvom redu za mlade devojke, kao što je kod Francuza pisao Géorge Ohnet. A onda je možete dati svakom starcu, zrelom čoveku ili detetu od dvanaest godina, i oni će je s istim zanimanjem i zadovoljstvom pročitati.</p>
+<p>Štaviše, usuđujem se reći da, u svom genru, ovoj knjizi, po čistoj ženskoj osobenosti jezika, po toplini izražavanja i mekoći utisaka, po iskrenosti osećanja i čestitosti tendencije, a naročito po visokom moralu i tonu koji se nigde ne spušta — nema ravne u celokupnoj našoj književnosti.</p>
+<p>U ovim danima surovosti i pokore kad, zbog korice hleba ili da se spasi goli život, tako silno odskaču negativne osobine ljudske; u ovim danima svakog zla i napasti kad ljudi, otrovani zlobom, gramženjem i bezobzirnošću, izgledaju kao moralne nakaze, kao gomile pasa koji se kolju i otimlju nad bačenom kosti; u ovim danima kad niko nikom ne veruje, kad se iskrenost i čestitost naziva glupavošću, kad se požrtvovnost i samilost dočekuju cinizmom i porugom; u ovim danima kad se vera poljuljala u širokim masama koje prete da će podivljati, kad srednje klase ne veruju ni u šta i misle da je sve dozvoljeno, a ruku o ruku kad porok, glad i nesreća u punom zamahu udaraju o temelje onih koji se održaše na visini, u veri, pregaranju, <pb n="8"/> samoodricanju — kako je velika radost i uteha pročitati ovaku jednu dobru knjigu, u kojoj je sve tako svetlo, čisto, istinito, u kojoj nema ni jedne jedine ružne ili čak zazorne reči, u kojoj su svi ljudi i žene tako dobri, čestiti i pažljivi jedni prema drugima, da čovek i nehotice uzdahne: „A zar tako nešto ne bi moglo i u životu biti?“</p>
+<p>Razume se, baš zbog toga, što Milica Janković slika ljude samo sa njihovih dobrih strana, što njezini junaci i suviše izlaze iz njenog srca, i što ona uopće ne ume ili neće da vidi zle osobine ljudske, čitava radnja izlazi odviše jednostrana, površna, pa donekle i neverovatna. To joj se čak može i u greh upisati, ako hoćete. Tu ne može stoga biti ni govora o širokom i svestranom poznavanju i skidanju tipova i ljudskog društva, o složenoj konstrukciji, motivaciji i peripetijama romana, ni o dubokoumnim idejama i rešavanjima ljudskih problema. To ovde nije ni potrebno; jer ona i sama veli: „.Ja ništa ne znam, što znam, već znam što osetim“. A mnogo osećati, kako reče Stendhal, znači više nego živeti obično. I on sam blagosiljaše nebo što mu je dalo dušu koja mnogo oseća; a kad bi ga mučila muka zbog strasti, on se radovaše što je živeo više u jednom danu.</p>
+<p>I baš u tom uskom krugu srca i osećanja, dubeći i razvijajući se, gđici Janković je, kao nikom kod nas, uspelo, da sa tako neverovatno malo veštine i sredstava izazove tako snažne i tople utiske.</p>
+<p>Čitav ovaj roman, pisan u jedva primetljivoj formi dnevnika, u mnogo čemu podseća ua „<title>Bolesnu ljubav</title>“ Matilde Serao. Samo dok tamo protagonistkinja, Beatrica Revertera, poučena patnjama <pb n="9"/> svoje matere koju rano udari kap zbog izdaje čoveka kog je mnogo volela, polazi hladna i ravnodušna u brak u kom ipak nakon duge drame nalazi sreću ali je ne izdrža jer je stiže sudbina materina — dotle nam gđica Janković iznosi istoriju svih onih nemira, kidanja i buđenja neodređenih i potajnih sila kod devojke koja počinje da zre. U to prvo doba kod gospođice Jele sve je nekako drhtavo, nervozno, nejasno, jer „ona još ni sama ne zna šta hoće“. Prijatno nas tu dira nevina stidljivost i naivna pobuna devojačke čestitosti protiv neumoljivih nagonskih težnja krvi koja se budi u njoj. Nikad ženska duša nije „bolesnija“, osetljivija, uznemirenija i neshvatljivija kao u to doba mladosti. I, eto, baš tada pada joj slučajno u ruke najnesrećnija Tolstojeva knjiga „Kreuzerova sonata“. Kad se tome još doda njezina nesrećna ljubav prema Nikoli, onda je to dovoljno da u takoj osetljivoj, „bolesnoj“ ženskoj duši započne vrlo zanimiva drama koja, kao i kod signorine Beatrice, svršava sasvim slučajnim i manje više ravnodušnim brakom. I tu istom: u realnom životu, gde se moralo mnogo toga pregoreti, i mnogo odstupiti od negdašnjih devojačkih iluzija, tu se ipak lagano i neočekivano počinje da zameće u njoj najprvo dužnost pa poštovanje prema svom mužu, a onda kad je dublje zavirila u život, koji nije ni prema kome ravnodušan, i kad je valjada u njihovoj udruženoj krvi osetila nešto živo pod srcem, javlja se i sama ljubav t. j. naša obična zemaljska sreća, kojom svršava roman.</p>
+<p>Kad se prvi put prelista ova knjiga, možda se, zbog stalnog ponavljanja izvesnih stilističkih gestova, zbog neživosti dialoga ili zbog starinskog <pb n="10"/> okvira: forme dnevnika, i nehotice dobija utisak sentimentalnog ili bolećivog načina pisanja romana. U ostalom i ljudi i prilike u kojima se radnja događa pomalo su starinski, neobični, bolećivi. Ali kad se uđe dublje u stvar dolaze nam pred oči slike i sećanja, koje smo mi svi videli ili doživeli u mladosti, i čitava ova radnja izlazi kao vrlo tačna i istinita istorija hiljada ljubavi naših malovaroških devojaka, hiljada, veridba i brakova naših majka i dedova, sve sitne gospode. Nema tu devojaka sa zlatnim kosama, bledim licem i prstima kao u madone; te naše devojke ne kreću se kao gazele, nemaju sanjalačkih očiju i ne prate ih paževi. Tu nema očajnih uzdisanja, izjavljivanja ljubavi na kolenima, strašnih zapreka roditeljskih, ni „tužnih i samotnih“ ribnjaka, u kojima bi se ljubavnici „večno združili“. Naprotiv u ovoj istinitoj i našoj knjizi, kao što Jela veli posle svoje svadbe „sve je bilo prosto i svečano“. Pa čak ni njoj samoj, koja je pokušala da se školovanjem i boravljenjem u Beogradu odaleči od tog patriarhalnog života, ne polazi za rukom: već da svrši kao obična žena sreskog lekara, „doktorčića“, udovca sa devojčicom od pet godina.</p>
+<p>Osim toga u ovoj knjizi ima nekih izvanrednih mesta, koja se moraju naročito istaći.</p>
+<p>Pre svega odmah udara u oči velik razvoj i napredak autora. Dok u ranijim njezinim radovima gotovo da nije bilo sadržaja (cveće, čekanja ili reminiscencije): i dok je čak pretila opasnost da svojim načinom pisanja pređe u maniru — dotle ovim najnovijim svojim delom gđica Janković pokazuje da je izišla iz same sebe, da ume krupnim potezima bacati slike i karakteristike na hartiju, <pb n="11"/> da ima ukusa pri odabiranju materijala, smisla za sadržaj i fabulu, a oka za kompoziciju i simetriju romana. I tako je, zajedno sa ranijim svojim kvalitetima: dobrim posmatranjem i toplim lirskim raspoloženjima, potpuno uspela da nam da jedno snažno i zaokruženo delo, koje će zauzeti dostojno mesto u našoj književnosti.</p>
+<p>Sudeći još po nekim vrlo dobro skinutim realističkim detajima, kao dolazak i nastup doktora S., koji je došao da gospođicu Jelu leči od nesrećne ljubavi.</p>
+<p>„Pogleda me u oči, kao da baca udicu u vodu, a moji uplašeni pogledi se kriju, da ne uhvati kakvu tajnu u njima.</p>
+<p>— Mala lepotica je zaljubljena — kaže on u isto vreme 1 drsko i nežno — ali ona je luda ako se kida i troši zbog ljubavi, jer se ljubav obnavlja kao proleće, a njen bol se brže leči nego malarija.</p>
+<p>— Ah, doktore, — prekidam ga ja i pokušavam da se smejem — kakve veze imaju angina i ljubav?</p>
+<p>On me gleda u oči, gleda me zapovednički, gotovo drsko, ali ja se ne bunim i ne ljutim; osećam kako je on silan u poznavanju života i ljudske prirode i čini mi se da može da vidi kroz moju dušu i kroz moje telo kao kroz staklo. I osećam da se podčinjavam njegovoj volji i gledam ga u oči sa sve više poverenja. Sad samo da zahte, sve bih mu ispričala. Ali njemu je dosta, i sad on počinje da izigrava.</p>
+<p>— Dobro, mala, volim više što niste zaljubljeni, inače ova angina bi vam mogla učiniti rđavu uslugu. Čuvajte se vatre. Može doći zanos, buncanje, a to nije prijatno za one koji čuvaju tajnu.</p>
+<p>On prestaje, osmehne se na moje uplašene, razrogačene oči, i počne da govori o drugome. Moja je odluka već gotova: svim silama hoću da se lečim i ja to kažem doktoru“.</p>
+<p>Ili onaj vanredni opis prvog poljupca:</p>
+<p>„Ja nisam videla njegove oči, ne znam da li je i to bila igra ili je on bio izgubio glavu toga trenutka. Nisam imala vremena da mislim. Poslednje reči izgovorio je brzo, duboko prigušeno i onda samo videh jedan pokret <pb n="12"/> ruke, prosto kao da me uzabra, uhvati me naglo i lako za vrat ispod brade, zavali mi glavu na svoje grudi, naže se kao da primiriše i njegove usne pritiskoše moje. Miris od duvana, nešto zlo što opija i nešto snažno što uliva strah. Meni se čini da sam za sve to vreme od nekoliko sekundi izgubila svest, i ako sam svakog sekunda znala da je to rđavo i grešno.“</p>
+<p>Za ovu knjigu možemo ne samo ponoviti Skerlićeve reči nakon izlaska <title>Ispovesti</title>: „Pročitavši je, razneženi čitalac oseti se boljim no što je bio kad ju je uzeo u ruke“, nego možemo još dodati: da pored te topline i dobrote ona ipak uspeva da, usprkos stalnoj našoj neraspoloženosti i rđavim iskustvima, probudi u nama nešto od one velike i svetle nade: da ipak iznad svih tih prekomernih ženskih osećanja i zlih živaca lebdi tračak sunca: — našeg ljudskog razuma; i sva ona provikana inferiornost ženskog spola počinje da se razilazi ispred nas kao magla. Dirljivo posmrtno pismo Jelinog strica to potvrđuje. Inače, kad ga je već ženska ruka napisala, šteta da nije dato u usta ženskoj ličnosti. Ali i pored toga prve stranice tog testamenta podsećaju nas na potresno pismo Pulherine Raskoljnikove „svom milom Rodi.“ A već ono krepko crtanje i dublje obrazlaganje Jelinog položaja i ljubavi nakon udaje, sa setnom nekom primesom samoodricanja i žalbe nad životom, čija polumračna senka prekrasno pada i na čestita joj muža i siroče pastorče — svakako su najlepše stranice ovog romana. A lepe su zato, što se u njima ogledava pritajana radost krvi i asketski zanos svesti— pre sreće.</p>
+<p>Zagreb, avgusta 1918.</p>
+<p>B. Mašić</p>
+</div> -->
+        </front>
+        <body>
+            <pb n="13"/>
+            <!-- <div type="novel"> -->
+            <head>PRE SREĆE</head>
+            <pb n="14"/>
+            <pb n="15"/>
+            <div type="group" xml:id="SRP19180_P1">
+                <head>PRVI DEO</head>
+                <pb n="16"/>
+                <pb n="17"/>
+                <div type="chapter">
+                    <head>BUĐENJE</head>
+                    <p>Rešila sam da od danas pišem dnevnik, ne dnevnik svakidašnjeg rada i dangube
+                        i sitnih misli, već dnevnik onih dana u koje mi se desilo nešto važno,
+                        razume se, samo za mene važno. Od drugih ću da krijem i da držim pod ključem
+                        svesku i ako moja sestra nije radoznala, a mojih se roditelja ne tiče šta ja
+                        pišem. Oni misle da sve što ja činim mora biti ljupko i naivno. Ali treba
+                        biti obazriv; i slučaj može ponekad sasvim naivno da se umeša i da načini
+                        nesreću, kao što je na primer učinio meni. Osim mene ovu svesku niko ne sme
+                        čitati, zato ne sme niko ni da je vidi.</p>
+                    <p>Meni je bilo smešno što Ana koja voli N. piše svako veče u dnevnik. Izgledalo
+                        mi je glupo beležiti sve sitnice i svoja mala osećanja. Zašto? Da se nekada
+                        potseti da je u sedmom razredu gimnazije volela N. Bolje bi bilo da nauči
+                        fiziku, nego što dangubi oko dnevnika. Tu je jedno veče svakako bilo
+                        zapisano: danas smo se posvađali; a sutradan: danas smo se pomirili i tako
+                        dalje. Razume <pb n="18"/> se, ljudi koji imaju nečega jačeg u svojoj duši
+                        imaju šta i da pišu. A zar sam ja živela ? Ne, baš naprotiv, ja sam živela,
+                        jer ništa nisam znala. Bila sam srećna, znači živela sam. Sad sam nesrećna
+                        pa zar sad ne živim? Živim sad još jače. Ja ne umem da uhvatim logiku
+                        života: da li živeti znači biti srećan, ili biti nesrećan, ili samo ne biti
+                        mrtav. Znam samo da više nikad neću biti srećna.</p>
+                    <p>Da li sam ja pametna? Nisam mnogo. Ali sam mnogo pametnija nego pre kad sam
+                        bila uverena da sam pametna. Sa saznanjem stoji ovako: ko malo pomalo
+                        saznaje, jednog dana zna sve strašne stvari, a nije ga stalo nikakvih
+                        bolova; a ko ništa ne zna, pa odjednom kao neko strašno otkrovenje sazna sve
+                        muke života, to ga toliko potrese da se iz temelja promeni. I od toga bude
+                        nesrećan i pametan. Upravo pametan znači biti nesrećan. Istina, moj čika
+                        sasvim obrnuto tvrdi, ali ja mu ne verujem, jer i on je svakako gadan kao i
+                        svi ljudi. Meni se desila strašna i značajna stvar i ona je sasvim prevrnula
+                        moj život. Uostalom možda je ovako bolje. Volim više da propatim, nego da
+                        sam glupo indiferentna. Inače bih morala prezirati sebe kao što prezirem
+                        njih.</p>
+                    <p>Dakle, u dnevnik ću beležiti sve važnije događaje i misli. Da vidim šta će mi
+                        još život doneti. Jer ako ne budem imala kakvog zadovoljstva od posmatranja
+                        razvoja svoga duševnog života, <pb n="19"/> onda znam da više uopšte
+                        nikakvog zadovoljstva neću imati. Meni je sedamnaest godina i ja sam se
+                        probudila iz obmane. Moje je detinjstvo bilo lepo i dugo je trajalo, do pre
+                        nekoliko dana. Ili bolje: moje je neznanje bilo lepo i dugo. Ne znam da li
+                        da žalim ili da volim. Sad mi se čini da ništa nisam znala osim da se
+                        godišnja vremena menjaju: da čoveku ne bude dosadno; da nas sneg uteši za
+                        cveće; da je prijatno kad te svi vole i kad sve voliš; da je poneki predmet
+                        neprijatno učiti, ali da je veliko zadovoljstvo znati da su tata i profesori
+                        „oduševljeni“ mojom inteligencijom. Moj je otac sujetan: on hoće, zato što
+                        je on prvi u varoši, da i ja budem prva u školi. Ja sam se smejala i živela
+                        polusvesno kao u snu, u kome verujem neverovatne stvari. Jeste, ja sam
+                        spavala, spavala. I razbudila sam se na svoj rođendan kad mi je bilo
+                        sedamnaest godina. Strašno probuđenje. To je prvi važan događaj. Te još kako
+                        važan! Treba da ga zabeležim.</p>
+                    <p>Nekoliko dana pre toga došao je čika da nam kaže zbogom. Odlazio je u
+                        Beograd. Čika je mene uvek mnogo voleo i toliko puta je kazao ocu i majci:
+                        vi ne znate da je ona pametnija od ono dvoje starijih. Ili: dajte mi na
+                        zajam ovo dete za četiri godine, pa da vidite kakvu ću devojku da vam
+                        vratim. Jeste, čika je vrlo pametan, pametniji od tate i ako se to ocu ne
+                        sme reći. I ja sam <pb n="20"/> njega mnogo volela, ali sad i njega mrzim.
+                        Da li ga mrzim? Zašto mi bar on nije jednom kazao: dete, svet nije tako lep;
+                        već baš sve obrnuto. Ne, ne mrzim čiku, to je suviše oštra reč, a ja sam
+                        zapovedila sebi da ne lažem i da ne preterujem nikad, jer iz ovog drugog
+                        nastaje ono prvo. Za toliko toga mnogo sam mu zahvalna da ne mogu da ga
+                        mrzim. Samo ga ne volim više. Dakle, on je došao, poljubio me, uhvatio za
+                        oba uva i kazao: Za rođendan neću biti ovde, ali sam mojoj pametnici kupio
+                        nekoliko knjiga. Otidi, strina će ti ih dati ako dotle ne ozdravi i ne đođe.
+                        Ja sam poljubila čiku i zahvalila mu što mi nije kupio lutku i što me on
+                        jedini smatra za čoveka. On se nasmeja i ode. Kad se vrati, neće me naći
+                        više. Njegova je filozofija sasvim različita od moje. Ona je obratna: on zna
+                        sve i opet kaže da je svet i život prekrasan. Da se čovek zgadi!</p>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+            <div type="group" xml:id="SRP19180_P2">
+                <pb n="69"/>
+                <head>DRUGI DEO.</head>
+                <pb n="70"/>
+                <pb n="71"/>
+                <div type="chapter" xml:id="SRP19180_C2.1">
+                    <head>BORBA: POBEDA ILI PAD?</head>
+                    <p>Ljudi tako neprirodno govore, čitaju, smeju se, tako neprirodno se ponašaju,
+                        igraju u pozorištu, recituju stihove i svađaju se, da ja počinjem da sumnjam
+                        da nije možda baš neprirodno prirodno, a prirodno da je veština, vaspitanje
+                        ili talenat. Kudgod odem, da pobegnem od svoga doma, svuda nađem samo
+                        dosadu. U društvu neizdrživa dosada, u samoći nesavladljiv bol. Šta ja hoću?
+                        Da me ravnodušni ljudi zabave i uteše kad me je ostavio bez žalosti i
+                        milosrđa onaj koji me je voleo. Ja hoću da ga zaboravim! Hoću da se izlečim!
+                        Neću više da patim zbog njega. Znam da vremenom sve prolazi. Ali zašto to
+                        vreme prolazi tako polagano? Pristajem da odmah za deset godina ostarim,
+                        samo da dođem do onog vremena kad neću patiti što me je on tako bez reči
+                        ostavio. Ali on me je bez reči i voleo, Nikola, ljubavi moja, zašto mi
+                        nekako ne saopštiš, kako je u tvojoj duši? Da li si ti vrlo jak ili vrlo
+                        slab čovek? Htela bih da znam da li je tvoja bračna <pb n="72"/> sreća u
+                        crnini kao tvoje vereničko doba? Kad bih znala da ponekad tajno uzdahneš za
+                        mnom i za našim šetnjama po polju ... Prokleti dnevnik! Pet meseca nisam
+                        mogla da ga pogledam. Ne znam, otkuda mi ta glupa odluka: da večeras smem
+                        pročitati samo ono što večeras napišem, a ceo dnevnik da smem čitati samo u
+                        razmacima od pola godine. Da sam ga čitala češće, bolje bih razumela sebe.
+                        Kako tamo sve stoji jasno napisano. Meni je dvadeseta godina i moj je život
+                        svršen. Moja je mladost već prošla. Zašto si ti, Nikola, ušao u moj život?
+                        Zašto sam te srela? Da mi daš malo radosti i da mi uzmeš mir? Da poznam
+                        sreću i da je izgubim? Moja je mladost prošla lepa i nesvesna kao san, pa
+                        ipak mislim da ne grešim što je nazivam buđenjem. Java me je ošinula bolom i
+                        razdražila. Sad nastaje stvarnost i borba. Živote, ja ću pobediti!</p>
+                    <milestone unit="subSection"/>
+                    <p>Moje dve drugarice su se zaljubile, obe u isto vreme u profesora . Dabogne,
+                        on bi se mogao voleti, ali to su ludorije. On tako daleko stoji nad nama.
+                        One jedna drugoj ispovedaju šta osećaju i uzdižu do sunca njegove vrline. A
+                        ja im se smejem. One su još mlade. A ja više neću mašte, neću detinjarije i
+                        zanose koji donose samo prazninu i bol; ja hoću čoveka srednjega koji može
+                        mene da voli, hoću život, realnost, hoću da <pb n="73"/> uhvatim ljubav i da
+                        joj ne dam da odleti kao pre što sam je upustila, hoću jednog drugog Nikolu,
+                        pa da onaj prvi vidi šta ja mogu dati i da mu pozavidi. Kako sam postala
+                        glupa: kako sama sebe varam. Nikad ja neću njega zaboraviti. Bol ću možda
+                        preboleti — ali kad? Kad budem već stara i kad bude već dockan da se počinje
+                        nanovo.</p>
+                    <p>Kako sam bila slepa, kako nisam znala da me voli. Sećam se kad me on samo
+                        pogleda, ja sam, kao što znam kad munja sevne da će posle doći grmljavina,
+                        gotovo uvek unapred znala šta će da mi kaže. On je mene voleo. Još onda kad
+                        me je nešto uzrujalo kad je kazao „što ne sme da bude“ i pocrveneo, još tada
+                        je to bilo, bilo je to što ne sme da bude i on se uplašio i ja sam osetila i
+                        nisam razumela. Ali šta ja hoću? Zar da sam bila svesna, da sam znala, zar
+                        bih smela da tražim kakvo pravo, zar bih pokvarila veridbu, zar bih mogla da
+                        unesrećim Natu? Ah, pa eto rešenja: on je rekao to ne sme da bude i nije
+                        bilo. On je zavoleo drugu, ali nije popustio u svojoj odluci. Eto ti, sad
+                        razumem. Nije, nije tako. On se borio, on je mene voleo, on je želeo da
+                        pobedi sebe, a želeo je i da ja njega volim. Sad mi se čini, da sam ga onda
+                        posle pratnje poljubila, sve bi bilo drukčije: on je jedva čekao reč od
+                        mene, reč koju on nije smeo da kaže prvi, jer je bio vezan. On <pb n="74"/>
+                        je čekao da ga ja oslobodim. Kako je život strašno, neverovatno lud: dešava
+                        se s tobom nešto najsilnije, najsudbonosnije, a ti ne znaš i ne razumeš šta
+                        je to. A kad je već dockan, onda znaš. On mene voli, Nato, on ne voli tebe!
+                        Prava ljubav je meni poklonjena. Kakva uobraženost: mene voli kad se s njom
+                        venčao, kad je s njom pobegao od mene, on koji zna šta je dužnost i obaveza,
+                        mene voli on koji ovog časa možda grli nju koja je njegova žena, mene voli,
+                        mene, koja mu nisam ništa i koju je možda i zaboravio. Zabavljao se malo
+                        holandskom glavom i dušom, koja na licu cveta.</p>
+                    <p>Je li, Nikola, a kad smo išli njoj u posetu, pa si zaboravio da joj poneseš
+                        cveća, zar nisi onda mene voleo? A ja sam svoje cveće njoj dala. To je cveće
+                        tvoja ljubav. Ti si pristao da ga zadržim sebi, da ne budem pažljiva, a ja
+                        nisam mogla.</p>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+            <pb n="130"/>
+            
+            <!-- </div> -->
+        </body>
+        <back>
+            <div type="liminal" xml:id="SRP19180_B1">
+                <p>ZA PRETPLATNIKE „KNJIŽEV. JUGA“ 5K.</p>
+                <p>KNJIŽARSKA CENA 6K.</p>
+                <p>NADBISKUPSKA TISKARA</p>
+                <p>ZAGREB - GOD. 1918.</p>
+            </div>
+        </back>
+    </text>
+</TEI>
