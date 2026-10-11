@@ -71,17 +71,13 @@ bytes:
   isolates; `reading`'s counterpart — today it renders identically to
   `full`, named so the reading/diplomatic pair speaks the editorial
   vocabulary).
-
-The mode set is a registry — `translit` and `mono` modes are planned on the
-same seam, and this table will grow with them.
-
 - `translit` (P27-2) — romanized rendering through the language's registered
   transcoder; see §1a below.
 - `mono` (P27-2) — exactly `default`, minus per-token language coloring;
   see §1b below.
 
-The mode set is a registry — the `reading` mode is a future sibling on the
-same seam.
+The mode set is a registry: all six modes above ship today, and a new mode
+is one more entry on the same seam.
 
 **Grapheme spacing (`spacing:`, P27-2).** A per-language boolean in
 `display.yml`; when true, the render inserts a separator between grapheme
@@ -213,7 +209,8 @@ The rules are census-first over the **stored** passage bytes, and the stored
 surface is much leaner than raw Leiden: the parsers already read through
 supplements `[abc]`, editorial additions `<abc>`, expansions `(abc)` and
 unclear-underdots at parse time (all censused ×0 in stored text — no rules
-exist for them; per-shelf counts in the backlog, P27-1). What the shelves
+exist for them; per-shelf counts in the frozen backlog,
+[history/backlog.md](history/backlog.md), P27-1). What the shelves
 actually carry, and what `reading` does about it:
 
 | Rule | Marks | Settings | Shipped |
@@ -316,7 +313,7 @@ Three shelves deliberately have **no** entry:
   classifiers that keep-text-drop-marker would fuse into the word as a
   misreading; the standalone `x` marks are illegible-sign placeholders and
   the rare parentheses are metrological notation (`2(BARIG)`). All content
-  — all kept, journaled in the backlog.
+  — all kept, journaled in the frozen backlog (history/backlog.md).
 - **cbeta** — its gaiji `<g>` fallback *text* is resolved at parse time and
   is already the stored reading surface (P33-2), so there is no `&KR;`-style
   ref to display-transform. A documented non-entry, exactly the ogham logic.
@@ -509,6 +506,7 @@ default is right.
 | Old Italic (osc/xum) | nothing (inscription text is stored in Latin transliteration; the U+10300 block appears in the sabellic-loans etymon headwords) | `font-noto-sans-old-italic` | `bin/nabu etym rufus` (after the sabellic-loans sync) |
 | Han (lzh, kanripo) | measures CJK cells (§2); `reading` runs the four-rung gaiji ladder (§1a) — faithful glyph → IDS → `⌈substitute⌉` → ⬚ (P38-2), refs kept under `diplomatic` | any font with CJK Ext-B+ coverage — Jigmo / Plangothic / BabelStone Han (§2); resolved glyphs reach plane 2 (𫠦 U+2B826) | `bin/nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading` |
 | Kana/kanji (ojp) | oncoj romanization/original layers per its own design; man'yōgana rides the annotations, not the romanized KWIC | Noto CJK + Jigmo/Plangothic/BabelStone Han (same cascade) | `bin/nabu char 天` · an oncoj urn |
+| Tibetan, Hangul, Ethiopic, the Southeast Asian scripts (shelves added from late July 2026) | nothing — no `display.yml` policy, the stored text renders as is; CJK cell-width measurement covers hangul (§2) | a font covering the block in the fallback cascade (the per-script Noto families); complex-script shaping degrades in a cell grid exactly as Arabic does (§2) | `bin/nabu search རྒྱ་གར --lang xct` |
 
 Every transform in column two is display-time and announced; `--display
 full` always shows the stored bytes, and the MCP surface never applies any

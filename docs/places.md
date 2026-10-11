@@ -1,8 +1,14 @@
 # Places of the library
 
-The third dimension, after language and time. As of **2026-08-09**:
-**585,682 documents carry a machine place reference** (708,905 name a
-place; ~977,000 documents total as of the P77 census) — 151,157 before the places program.
+The third dimension, after language and time. As of **2026-10-11**:
+**585,928 documents carry a machine place reference** (781,900 name a
+place; over 2.3 million documents in the library) — 151,157 before the
+places program. The referenced set is concentrated where the upstream
+or a registry decision supplies a findspot (the cuneiform, epigraphic,
+and papyrological shelves); for metadata-less corpora the place lane
+is the text-mining loop below, which writes review candidates, never
+refs.
+
 The public summary of this page is site/places.md; this is the
 maintained original, in the docs/languages.md mold.
 
@@ -11,7 +17,9 @@ maintained original, in the docs/languages.md mold.
 1. **Gazetteers are held, never queried live.** Each is a canonical
    asset with provenance (Pleiades — quarterly/daily dump, CC BY 3.0;
    Trismegistos Geo — a Manual Adapter acquisition, CC BY-SA 4.0; CIGS —
-   one Zenodo-pinned CSV, CC BY 4.0), derived wholesale into the
+   one Zenodo-pinned CSV, CC BY 4.0; CHGIS — the Harvard–Fudan
+   temporal gazetteer dump, CC0; NRCT — one pinned CSV cut, CC BY 4.0;
+   al-Ṯurayyā — a repository clone, data CC BY 4.0), derived wholesale into the
    namespaced place index (`place_index`, keyed `(gazetteer, place_id)`;
    migration 025). Deriving one gazetteer's slice never touches
    another's.
@@ -49,23 +57,29 @@ dropped** — the three-tier vocabulary and the render axiom live in
 
 ## The namespaces held
 
+Row counts as of 2026-10-11:
+
 | Namespace | Rows | Asset |
 |---|---:|---|
-| `pleiades:` | 42,284 | canonical/pleiades (dump refreshed 2026-08-09) |
+| `pleiades:` | 42,379 | canonical/pleiades (the held dump) |
 | `tm:` | 64,857 | canonical/trismegistos-geo (owner-acquired 2026-08-08) |
 | `cigs:` | 598 | canonical/cigs (Zenodo v1.7) |
-| `np:` | 0 | the native minting lane (new) |
+| `chgis:` | 81,292 | canonical/chgis — the China Historical GIS, the Han lane's gazetteer |
+| `nrct:` | 80,502 | canonical/nrct — Heibonsha's historical gazetteer of Japan (via ROIS-DS/NII) |
+| `thurayya:` | 2,331 | canonical/althurayya — the al-Ṯurayyā gazetteer of the early Islamic world |
+| `np:` | 0 | the native minting lane (no minted places yet) |
 | crosswalk | 3,438 | cigs 1,330 + wikidata 2,108 |
 
-## Coverage after the P63/P64 waves
+## Coverage
 
-registry 550 decision rows / 7 sources. Axis rows with refs: cdli
-250,484/337,572 (from zero) · oracc 101,983/117,419 · edr
-99,249/115,590 (144 unique matches + 28 homonym rulings; Atina, Forum
-Novum and Potentia honestly rejected — multiple Italian homonyms inside
-corpus scope) · edh 73,507 (upstream) · papyri-ddbdp 49,030 (upstream +
-German-exonym aliases) · elephantine 3,690/7,973 · iip 1,828/5,499 ·
-ceipom 1,036 (float-mangled TM GeoIDs restored to `tm:` at the axis).
+As of 2026-10-11 the registry holds 560 decision rows across 8 source
+sections. Documents with refs, per source: cdli 250,484 (from zero) ·
+oracc 101,983 · edr 99,249 (144 unique matches + 28 homonym rulings;
+Atina, Forum Novum and Potentia honestly rejected — multiple Italian
+homonyms inside corpus scope) · edh 73,507 (upstream) · papyri-ddbdp
+47,947 (upstream + German-exonym aliases) · isicily 5,040 (upstream) ·
+elephantine 3,690 · iip 1,828 · ceipom 1,036 (float-mangled TM GeoIDs
+restored to `tm:` at the axis) · itant 502 · riig 421 · ogham 241.
 
 Postures (config/postures.yml, places layer): linked with measured
 notes for the applied sources; named where only strings exist; region
@@ -81,7 +95,7 @@ off the same `document_axes` row. The health invariants hold the layer:
 and `registry_orphan_names` (era-bound census discipline on the
 registry itself).
 
-## The mining loop (Q9 v0, P96–P97) — the documented script
+## The mining loop (P96–P97) — the documented script
 
 Text-mined place candidates for metadata-less corpora, the Han lane
 first (kanripo × chgis is the flagship). Candidates are **review
