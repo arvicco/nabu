@@ -1,0 +1,63 @@
+# config/eras.yml — the shared Indian-calendar era table (P118-5).
+#
+# Converts an ERA-TYPED year (an upstream field or title that names its
+# era: "GE 98", "Śaka 1208") to a CE envelope [not_before, not_after].
+# The generalization of the titus-bactrian in-adapter ERA_OFFSETS: one
+# table, one helper (Nabu::Eras), consumed by any adapter whose data
+# carries era-typed years. An UNTYPED year ("year 156", a regnal year)
+# is never converted here — the era is a claim the data must make.
+#
+# SOURCE (every row): R. Sewell & Ś. B. Dīkshit, The Indian Calendar,
+# with tables for the conversion of Hindu and Muhammadan into A.D. dates
+# (London: Swan Sonnenschein, 1896; public domain), Part I, the account
+# of the eras in use. Their conversions state each era year as an
+# offset PAIR because an Indian year (luni-solar or solar, beginning in
+# Caitra / Kārttika / Siṃha …) straddles two Julian years.
+#
+# CONVENTIONS (declared, never silent):
+# - offset: CE = era year + offset (signed-year catalog convention: a
+#   non-positive astronomical result is BCE with no year zero, so
+#   VS 1 → -57, i.e. 57 BCE).
+# - width: the explicit uncertainty in years ABOVE the offset; the
+#   conversion is the envelope [Y + offset, Y + offset + width] — a
+#   ruled range, never a picked epoch (the titus-bactrian envelope
+#   ruling, 2026-10-11).
+# - Śaka and Vikrama are ruled SINGLE-VALUED (width 0, the P118-5
+#   brief): +78 / −57 are the conversions for the bulk of the year
+#   (from the year's opening month to December); the January–March tail
+#   falling in the next Julian year is the residual those conventions
+#   accept. A consumer needing the full straddle widens deliberately.
+# - Kollam (Kollavarṣam, the Malayāḷam era, solar year opening in
+#   Siṃha/Ciṅṅam, Aug–Sep): +824 for Ciṅṅam–December, +825 for
+#   January–Karkkaṭakam → the envelope [Y+824, Y+825], width 1.
+# - Gupta–Valabhī (the Gupta era, continued in Valabhī/Saurāṣṭra;
+#   epoch 319–320 CE): Sewell & Dīkshit's +319/320 → the envelope
+#   [Y+319, Y+320], width 1.
+#
+# aliases: the spellings an upstream may use to type a year, matched
+# case-, dot- and whitespace-insensitively after NFC (Nabu::Eras.resolve).
+eras:
+  saka:
+    label: Śaka
+    offset: 78
+    width: 0
+    aliases: [Śaka, Saka, Shaka, ŚS, Śaka-saṃvat]
+    source: Sewell & Dikshit 1896, The Indian Calendar, Part I (the Śaka era; +78/79, ruled single +78)
+  vikrama:
+    label: Vikrama
+    offset: -57
+    width: 0
+    aliases: [Vikrama, Vikrama-saṃvat, VS, Vikram Samvat]
+    source: Sewell & Dikshit 1896, The Indian Calendar, Part I (the Vikrama era; −57/56, ruled single −57)
+  kollam:
+    label: Kollam (Kollavarṣam)
+    offset: 824
+    width: 1
+    aliases: [Kollam, Kollavarṣam, Kollavarsham, Malayalam era, ME]
+    source: Sewell & Dikshit 1896, The Indian Calendar, Part I (the Kollam era; +824/825)
+  gupta_valabhi:
+    label: Gupta–Valabhī
+    offset: 319
+    width: 1
+    aliases: [Gupta, Gupta era, GE, Gupta-Valabhī, Valabhī, GS, Gupta-saṃvat]
+    source: Sewell & Dikshit 1896, The Indian Calendar, Part I (the Gupta–Valabhī era; +319/320)
