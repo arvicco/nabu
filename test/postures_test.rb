@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 129, lect.size,
+    assert_equal 131, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -260,7 +260,9 @@ class PosturesTest < Minitest::Test
                  "dharma-deccan ADDED P118-2 — pending on the tel/kan anchor mint (nothing " \
                  "Telugu or Kannada exists in nabu-lects; the dacon shape) and dharma-tamil " \
                  "ADDED P118-1 — pending on the same mint's tam node (the dharma-khmer " \
-                 "shape): 127→129"
+                 "shape): 127→129; " \
+                 "P118-4 ADDS siddham (identity san, declared coarse) and dharma-mdt (PENDING " \
+                 "on the tel/tam anchors of the aggregated Indic nabu-lects mint): 129→131"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -348,8 +350,10 @@ class PosturesTest < Minitest::Test
     # dta shape): identity 89→90, pending 4→2 (pl/cs-wikisource remain).
     # P118-2 ADDS dharma-deccan PENDING on the tel + kan anchor mint (the
     # dacon shape — pra/san already resolve) and P118-1 dharma-tamil PENDING
-    # on the same mint's tam node (the dharma-khmer shape): 127→129,
-    # pending 0→2.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 100, "pending" => 2 }, by_posture)
+    # on the same mint's tam node (the dharma-khmer shape): pending 0→2.
+    # P118-4 ADDS siddham as identity (san-Latn throughout, bare san) and
+    # dharma-mdt PENDING on the same Indic mint's tel/tam anchors (the
+    # add-then-retire shape): identity 100→101, pending 2→3.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 101, "pending" => 3 }, by_posture)
   end
 end

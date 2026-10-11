@@ -1386,6 +1386,23 @@ dharma-khmer:   # P92-1, the SEA desk anchor
   # unknown-language net quarantines new codes loudly. First sync
   # owner-fired; ~150 MB repo, texts/xml cone far smaller.
 
+dharma-mdt:   # P118-4, 02-sources row 257
+  adapter: Nabu::Adapters::DharmaMdt
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: false   # adapter + fixtures landed; first real sync pending (scratch fetch
+                 # verified 2026-10-11: 734 metadata docs, 94 placeholder rows skipped)
+  sync_policy: manual
+  # DHARMA text metadata (github.com/erc-dharma/mdt-texts): four per-corpus
+  # CSVs (DaksinaKosala / Pallava / Somavamsin / Telugu, header at row 3) as
+  # a METADATA-ROW source — one zero-passage document per INS<Corpus>NNNNN
+  # row (text_layer none, the rsti precedent), carrying Date CE / range /
+  # certainty / evidence, typology, languages and scripts, physical form,
+  # bibliography and location prose. dharma_text_id is the explicit join
+  # key onto the DHARMA edition urns (urn:nabu:dharma-*:<INS id>). Rows
+  # declare CC0 for the metadata (verbatim per document); repo LICENCE CC BY
+  # 4.0 → class attribution. Sparse GitFetch on csv/.
+
 dharma-nusantara:   # P92-2
   adapter: Nabu::Adapters::DharmaNusantara
   adopted: "2026-09-01"
@@ -4417,6 +4434,22 @@ shkz:   # P107-3b
   # citations — the first real Parthian document in the library. The
   # 1,012-word alignment-pairs table fetches into canonical as a
   # DECLARED v1 residue (the alignment-hub look is the future packet).
+
+siddham:   # P118-4, 02-sources row 256
+  adapter: Nabu::Adapters::Siddham
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: false   # adapter + fixtures landed; first real sync pending (scratch fetch
+                 # verified 2026-10-11: sha pin holds, 427 docs / 6,334 line passages)
+  sync_policy: manual
+  # The Siddham Epigraphic Archive texts (Dániel Balogh; Zenodo 2574901, the
+  # 2019-02-21 EpiDoc deposit, one sha-pinned zip): 427 editions of Gupta-age
+  # Sanskrit epigraphy, san-Latn at physical-line grain (siddham-epidoc). The
+  # TEI headers are deliberately blank — the RECORD's CC BY-SA 4.0 is the
+  # grant, recorded at source level and per document; class attribution.
+  # Dating mines the English titles only: 9 era-typed "GE N" years via
+  # config/eras.yml (Gupta–Valabhī envelope) + 4 century attributions;
+  # 88 untyped "year N" titles ride raw, never converted.
 
 sillok:
   adapter: Nabu::Adapters::Sillok

@@ -40,6 +40,7 @@ A source wears every desk it serves — these 27 answer this desk. Holdings are 
 | `pleiades` | feature module | attribution | wired · manual | nothing held yet |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
+| `siddham` | texts | attribution | not yet wired | not synced yet |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `trismegistos` | feature module | attribution | wired · manual | nothing held yet |

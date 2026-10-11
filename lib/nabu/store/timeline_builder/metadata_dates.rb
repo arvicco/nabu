@@ -87,6 +87,8 @@ module Nabu
           "dacon" => :structured,
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)
+          "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
+          #                              (certainty + evidence ride the date hash)
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
@@ -129,6 +131,8 @@ module Nabu
           "rsti" => :place_only,
           "ru-wikisource" => :era_band_key,
           "seal" => :period_label,
+          "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
+          #                           or century attribution
           "sillok" => :structured,
           "sjw" => :structured,
           "sl-wikisource" => :structured,
