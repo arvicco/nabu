@@ -109,6 +109,11 @@ class DerivabilityWritersTest < Minitest::Test
   # writes IIIF manifests + per-page hOCR (tmp+rename) and its
   # .mdz-crawl.json ledger into canonical/mdz-protestant/ inside
   # Adapter#fetch — the ndl-kotenseki crawl law kind.
+  # same fetch — the ja/zh-wikisource law kind. The P117-2
+  # elektire_fetch writes canonical/elektire/ (the WP-JSON listing
+  # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
+  # .elektire-fetch.json pin) inside Adapter#fetch — the cantigas_fetch
+  # law kind, its sixth crawl sibling.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -130,7 +135,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
     nabu/adapters/altaica_shm.rb nabu/adapters/atmo.rb
     nabu/adapters/iedc.rb nabu/adapters/shkz.rb
-    nabu/scripta_bulgarica_fetch.rb
+    nabu/scripta_bulgarica_fetch.rb nabu/elektire_fetch.rb
     nabu/adapters/kouigenji.rb nabu/adapters/kokubunken.rb
     nabu/adapters/nrct.rb
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
