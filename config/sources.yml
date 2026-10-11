@@ -5498,6 +5498,20 @@ viet-wikisource:
   # + CC BY-SA 4.0 transcription → attribution. All lzh.
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
 
+vuk-danicic:   # P117-2, 02-sources row 248
+  adapter: Nabu::Adapters::VukDanicic
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # The Vuk (NT 1847) / Daničić (OT 1865) Serbian Bible, IJEKAVIAN, in
+  # Latin transliteration: spthmpsn/Rs1Bible (66 USFM books converted
+  # from THE UNBOUND BIBLE's "Serbian: Danicic Karadzic Latin"; ~4 MB
+  # repo, untouched since 2016) → the new usfm family. eBible.org's PD
+  # srp1868/srp1865 were refused: their own title page declares an
+  # ekavized, modernized text. Text PD by age; no LICENSE upstream;
+  # mechanical conversion → open. Expected first sync 66 docs / 31,102
+  # passages (census 2026-10-11).
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate

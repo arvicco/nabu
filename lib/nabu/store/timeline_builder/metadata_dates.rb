@@ -135,6 +135,8 @@ module Nabu
           "titus-tocharian-a" => :place_only,
           "uk-wikisource" => :era_band_key,
           "viet-wikisource" => :structured,
+          "vuk-danicic" => :structured, # P117-2: the translation era per testament
+          #                               (NT 1847, OT 1865–1868), composition class
           "zh-wikisource" => :dynasty_band
         }.freeze
 
@@ -144,7 +146,7 @@ module Nabu
         # composition era (author-era), not an object — their rows carry
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
-        COMPOSITION = %w[croala diorisis glaux disco].freeze
+        COMPOSITION = %w[croala diorisis glaux disco vuk-danicic].freeze
 
         # P104-1: sources whose place claim rides a differently-named
         # metadata field. An override key is a findspot vocabulary with
