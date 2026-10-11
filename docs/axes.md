@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (26): `ceipom`, `dharma-campa`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `edh`, `edr`, `elephantine`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `nabu-places`, `obi-burmese`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (27): `ceipom`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `edh`, `edr`, `elephantine`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `nabu-places`, `obi-burmese`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (8): `dacon`, `dcs`, `gretil`, `mw`, `nabu-data`, `sarit`, `suttacentral`, `ud`
+**Members** (9): `dacon`, `dcs`, `dharma-deccan`, `gretil`, `mw`, `nabu-data`, `sarit`, `suttacentral`, `ud`
 
 ### buddhist
 

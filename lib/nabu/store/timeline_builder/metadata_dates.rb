@@ -85,6 +85,8 @@ module Nabu
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
           "dacon" => :structured,
+          "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
+          #                                 place = the origPlace placeName (findspot)
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,

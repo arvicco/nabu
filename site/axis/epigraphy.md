@@ -13,12 +13,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 26 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 27 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 October 2026)</span> |
 |---|---|---|---|---|
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `dharma-campa` | texts | attribution | wired · manual | 121 docs / 2,728 passages |
+| `dharma-deccan` | texts | attribution | not yet wired | nothing held yet |
 | `dharma-khmer` | texts | attribution | wired · manual | 1,219 docs / 50,165 passages |
 | `dharma-nusantara` | texts | attribution | wired · manual | 291 docs / 5,893 passages |
 | `dharma-pyu` | texts | attribution | wired · manual | 145 docs / 629 passages |

@@ -1330,6 +1330,27 @@ dharma-campa:   # P92-2
   # recorded verbatim; class attribution. The xml/ dir also carries
   # upstream's BROUILLON-LISTE.xml worklist — censused, never parsed.
 
+dharma-deccan:   # P118-2
+  adapter: Nabu::Adapters::DharmaDeccan
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: false   # built P118-2; awaiting the first sync
+  sync_policy: manual
+  # DHARMA Task Force B — the South Asian inscription estate: the 20
+  # edition-bearing tfb-* repos on github.com/erc-dharma (live census
+  # 2026-10-11) composed into one source, each repo a sparse GitFetch
+  # into canonical/dharma-deccan/<repo>/ (root-layout repos clone
+  # whole). EIAD, Kanaganahalli, Early Western Deccan, Ollett's
+  # Sātavāhana data, Telugu, Kalyāṇa + Vengī Cālukya, Maitraka, Bengal,
+  # Dakṣiṇa Kosala, Somavaṁśin, Bādāmi and the dynastic smalls — 1,723
+  # editions, pra/san/tel/kan -Latn. OUT: tfb-ec-epigraphy (Epigraphia
+  # Carnatica, another parser shape) and the four edition-less repos.
+  # In-file <licence> governs verbatim (CC BY-SA 4.0 / CC BY 4.0 /
+  # CC BY 3.0); Ollett's licence-less files fall back on the repo's
+  # LICENCE.txt CC BY 4.0, recorded per document; class attribution.
+  # EXPECTED FIRST SYNC (scratch census): 1,694 docs / 27,929 passages,
+  # 29 honest quarantines (text-less stubs, lang-less/und editions).
+
 dharma-javanese-texts:   # P92-4
   adapter: Nabu::Adapters::DharmaJavaneseTexts
   adopted: "2026-09-01"
