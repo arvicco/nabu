@@ -527,6 +527,21 @@ sources:
         chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
     places: {posture: unplaced}
     script: {posture: implied}
+  litopys:   # P117 (Q106)
+    # kind: machine-postured — kind_map.yml source_kind historiography/chronicle
+    # (the whole passage shelf IS the Ipatiev chronicle; the glossaries ride
+    # the dictionary lane).
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the
+        codex spans the PVL's 11th–12th-c. language to the 13th-c. Galician-Volhynian
+        narrative; the orv:early stage is the NAMED refinement candidate, not defaulted"}
+    dating: {posture: dated, note: "P117: an ATTRIBUTED composition-era band per svod
+        section (PVL 1110s, Kievan svod 1198–1200, Galician-Volhynian 1260s–1290s) →
+        era_band → MetadataDates :era_band_key; the site's annal-year keys (AM/AD)
+        ride every passage as annal_years annotations"}
+    places: {posture: named, note: "P117: the attributed compilation locus per svod
+        (Kyiv / Galicia-Volhynia) as the document place name; in-text toponyms await
+        a Cyrillic place-mine lane"}
+    script: {posture: implied}
   aclt:   # P110-2
     kind: {posture: unclassified, note: one class — HLuwian inscriptions; a single-value
         kind stamp deferred (the kouigenji precedent)}
