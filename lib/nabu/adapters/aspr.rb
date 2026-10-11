@@ -25,7 +25,7 @@ module Nabu
     # urn:nabu:aspr:A4.1:1 = "Hwæt! We Gardena in geardagum," — which equals
     # the printed ASPR line number (the divs carry rend="linenumber" and
     # Beowulf's holds exactly 3,182 <l>; Phase A verification in
-    # docs/backlog.md P12-2). Minting is frozen once used (standing rule).
+    # docs/history/backlog.md P12-2). Minting is frozen once used (standing rule).
     #
     # == License
     #

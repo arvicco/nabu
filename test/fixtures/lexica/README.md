@@ -1,7 +1,7 @@
 # Lexica fixtures (P11-4 — dictionary shelf)
 
 Real upstream samples from **PerseusDL/lexica** (CLAUDE.md fixture rules;
-plan owner-approved 2026-07-09, docs/backlog.md P11-4). Every kept element is
+plan owner-approved 2026-07-09, docs/history/backlog.md P11-4). Every kept element is
 a byte-identical slice of the upstream file; the trims are documented below.
 
 - **Retrieved:** 2026-07-09, via raw.githubusercontent.com **pinned at commit

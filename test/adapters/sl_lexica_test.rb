@@ -7,7 +7,7 @@ require "tmpdir"
 # Pleteršnik 1894–95 + Slovar jezika Janeza Svetokriškega + Besedje 16
 # (three ZRC SAZU deposits on CLARIN.SI, one identical verbatim CC BY 4.0
 # grant → ONE source, three dictionaries; census journaled in
-# docs/backlog.md P23-2). Dictionary-shaped, so like StarlingTest/MwTest it
+# docs/history/backlog.md P23-2). Dictionary-shaped, so like StarlingTest/MwTest it
 # MIRRORS the passage-shaped conformance suite (manifest validity,
 # discover→parse round-trip, id uniqueness/stability, NFC, license class)
 # and adds the packet pins: the toneme fold (abecę̑da typed as abeceda),
