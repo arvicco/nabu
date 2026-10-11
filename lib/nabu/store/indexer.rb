@@ -207,6 +207,7 @@ module Nabu
       EQUIVALENCE_TIER = "equivalence"
       EQUIVALENCE_KEY = "latin_equivalent"
       EQUIVALENCE_LANGUAGE = "lat"
+      EQUIVALENCE_SPEC = LemmaKeys::Spec.new(keys: [EQUIVALENCE_KEY].freeze, reject: nil, strip: nil)
 
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
@@ -1090,7 +1091,7 @@ module Nabu
                            contentless: contentless)
             end
           )
-          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
+          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
@@ -1932,17 +1933,21 @@ module Nabu
       # false positive just parses and finds no token lemmas. annotations_json
       # is our own canonical_json output, so a parse failure is real corruption
       # and honestly raises.
-      def lemma_rows(row, tiers: {})
+      # +slugs+ (source_id → slug) selects the source's LemmaKeys spec
+      # (P118-R4 S1): bhsa/dss read their own lexeme keys, everyone else
+      # "lemma". Absent map (a caller predating the registry) = default.
+      def lemma_rows(row, tiers: {}, slugs: nil)
         tier = tiers.fetch(row[:source_id], GOLD_TIER)
         return equivalence_rows(row) if tier == EQUIVALENCE_TIER
 
+        spec = LemmaKeys.spec_for(slugs&.[](row[:source_id]))
         json = row.fetch(:annotations_json)
-        return [] if json.nil? || !json.include?('"lemma"')
+        return [] if json.nil? || !LemmaKeys.probe?(json, spec)
 
         tokens = JSON.parse(json)["tokens"]
         return [] unless tokens.is_a?(Array)
 
-        group_lemmas(tokens, language: row.fetch(:language)).map do |folded, entry|
+        group_lemmas(tokens, language: row.fetch(:language), spec: spec).map do |folded, entry|
           {
             lemma_folded: folded, lemma_raw: entry[:raw],
             passage_id: row.fetch(:passage_id), urn: row.fetch(:urn),
@@ -1967,7 +1972,7 @@ module Nabu
         tokens = JSON.parse(json)["tokens"]
         return [] unless tokens.is_a?(Array)
 
-        group_lemmas(tokens, language: EQUIVALENCE_LANGUAGE, key: EQUIVALENCE_KEY)
+        group_lemmas(tokens, language: EQUIVALENCE_LANGUAGE, spec: EQUIVALENCE_SPEC)
           .map do |folded, entry|
             {
               lemma_folded: folded, lemma_raw: entry[:raw],
@@ -1981,17 +1986,18 @@ module Nabu
       # { folded lemma => { raw:, forms: [] } } over the passage's tokens.
       # forms stays empty for a lemma attested only by form-less tokens
       # (PROIEL empty tokens carry no lemma in practice, but stay tolerated).
-      # +key+ is the token field the dictionary form is read from — "lemma"
-      # for the treebank families, EQUIVALENCE_KEY for the equivalence tier.
-      def group_lemmas(tokens, language:, key: "lemma")
+      # +spec+ (a LemmaKeys::Spec) names the token field(s) the dictionary
+      # form is read from — "lemma" for the treebank families, a source's
+      # registered lexeme keys (P118-R4 S1), EQUIVALENCE_KEY for the
+      # equivalence tier. A token minting two keys that fold alike counts once.
+      def group_lemmas(tokens, language:, spec: LemmaKeys::DEFAULT)
         tokens.each_with_object({}) do |token, grouped|
-          lemma = token[key] if token.is_a?(Hash)
-          next if lemma.nil? || lemma.empty?
-
-          folded = Normalize.search_form(lemma, language: language)
-          entry = grouped[folded] ||= { raw: lemma, forms: [] }
-          form = token["form"]
-          entry[:forms] << form if form && !form.empty? && !entry[:forms].include?(form)
+          LemmaKeys.lemmas(token, spec).each do |lemma|
+            folded = Normalize.search_form(lemma, language: language)
+            entry = grouped[folded] ||= { raw: lemma, forms: [] }
+            form = token["form"]
+            entry[:forms] << form if form && !form.empty? && !entry[:forms].include?(form)
+          end
         end
       end
     end
