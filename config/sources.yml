@@ -4602,6 +4602,15 @@ starling:
                    # (dry-parsed at full scale). Eyeball `nabu define '*kül'`
                    # (turcet credit + 27 Turkic reflex rows) and `nabu etym
                    # zun` (Lezgian → lezget #1).
+                   # P118: the follow-up packages' LEXSTAT/ wordlists
+                   # (already on disk — `bin/nabu sync starling --parse-only`
+                   # lands them, no fetch) add 48 shelves
+                   # starling-lexstat-<stem>: altaic 11,512 / cauc 3,727 /
+                   # yenisey 475 / sintib 13,586 / drav 2,328 / kam 1,162 /
+                   # kart 589 = 33,379 form entries (dry-parsed at full
+                   # scale). Eyeball `nabu define kül` (turc → "Turkic
+                   # etymology: #2") and a drav entry's "inferred, not
+                   # documented upstream" Language line.
   # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
