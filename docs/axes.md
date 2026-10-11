@@ -83,10 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (32): `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
-=======
-**Members** (25): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `freising`, `goo300k`, `hr-wikisource`, `imp`, `korba`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `wiktionary-cu`
->>>>>>> a7171b14 (Add archiv-slav-phil: Jagic's Archiv fuer slavische Philologie run)
+**Members** (33): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
 
 ### germanic
 
