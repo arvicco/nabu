@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="KDSP010" xml:lang="sl">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Žalost in veselje [KDSP]</title>
+        <author>Podmilšak, Josip (1845-1874)</author>
+      </titleStmt>
+      <editionStmt>
+        <edition>1.0</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName><ref target="https://isllv.zrc-sazu.si/sl/predstavitev#v">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</ref></orgName>
+        </publisher>
+        <distributor>CLARIN.SI</distributor>
+        <idno type="URI" subtype="handle">http://hdl.handle.net/11356/1823</idno>
+        <date when="2023-07-07"> 7. julij 2023</date>
+        <availability status="free">
+          <licence>http://creativecommons.org/licenses/by/4.0/</licence>
+          <p>To delo je ponujeno pod <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Priznanje avtorstva 4.0 mednarodna licenca</ref>.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+	<bibl source="#ELTeC">
+          <title type="main">Žalost in veselje</title>
+          <author corresp="#PodmilšakJosip">Podmilšak, Josip</author>
+	  <date when="1870">1870</date>
+          <idno type="URI" subtype="GitHub">https://github.com/COST-ELTeC/ELTeC-slv/blob/v0.7.1/level1/SLV00122.xml</idno>
+	</bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <textClass>
+        <catRef scheme="#textTimeSlot" target="#D5"/> <!-- (obdobje) -->
+        <catRef scheme="#textSize" target="#srednja"/> <!-- (obseg) -->
+        <catRef scheme="#textType" target="#povest"/> <!-- (zvrst) -->
+        <catRef scheme="#textTheme" target="#pustolovska"/> <!--(tematika) -->
+        <catRef scheme="#textCanonicity" target="#nizka"/> <!-- (kanoničnost) -->
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+   <div xml:id="KDSP010.d1">
+      <head xml:id="KDSP010.d1.h1">I.</head>
+      <p xml:id="KDSP010.d1.p1">Peter Germar je živel že precej let v samotnej koči ob Savi, in vendar se ga ni še misel polotila, da bi zapustil svoje gnjezdišče in se preselil v vas med svoje sosede. — Stariši so mu umerli ravno tisto nesrečno leto, ko so pervikrat rohnele francoske čete po naših krajih, in tudi Petra je zadela nemila osoda, da je moral zadeti puško na ramo ter iti borit se zoper sovražnika, ki je grozil pogin vsem evropejskim deržavam. Svoja najboljša leta je preživel v mnogoterih bojih po ptujih deželah. Ko je slednjič otresel vojaško butaro raz sebe ter se povernil v svojo domovino, bil je že tako sit svetnega hrupa in njegovih homatij, da si ni nič druzega želel, nego poiskati si samotnega bivališča in ondi uživati blagi mir, kterega že od svojih mladenških let ni imel.</p>
+   </div>
+   <div xml:id="KDSP010.d16">
+      <head xml:id="KDSP010.d16.h1">XVI.</head>
+      <p xml:id="KDSP010.d16.p44">„O Paolo, Paolo, o draga žena Angela,“ vzdihne Lavrencij, „vidva toraj še živeta in jaz vaju sem menil že zdavnej mertva.“ Pri tej priči oklene se Alfonza in dve svitli solzici zaigrate mu v očeh. „Moj sin Paolo,“ nadaljuje potem, „tu te objema tvoj oče; oni nesrečni Lavrencij Saturni sem jaz; poznaš li to-le podobico?“ Pri tej priči privleče iz nedrija žensko sliko ter jo podá Alfonzu.</p>
+      <p xml:id="KDSP010.d16.p45">„To je slika moje matere. O ravno taka je bila, ko sem bil jaz še otrok, sedaj pa jej je upadel obraz žalosti in terpkosti.“ Alfonza so premagala čutila, oklenil se je očetu krog vrata in šepetal: „Oče, oče, vi ste zopet pri meni, ko sva vas že z materjo objokovala mertve, o mati, zakaj niste tukaj, da bi skupaj uživali to veselje! Potem sta si Alfonzo in Lavrencij razodela vsa hudobna djanja njunih sovražnikov, ki so se ženi nalegali, da je Lavrencij že mertev, njemu pa, da njegove žene ni več na svetu, da je umerla žalosti.</p>
+      <milestone type="subChapter" rend="asteriskes" unit="asterisk"/>
+      <p xml:id="KDSP010.d16.p46">Naša povest se bliža koncu. Le nekaj potrebnih reči imamo še omeniti.</p>
+      <p xml:id="KDSP010.d16.p47">Poglejmo v novojorško barkostajo. Ondi si ravno podajajo nekteri prijatelji roke, gotovo so se zeló ljubili, kajti solzé jih oblivajo in videti je, da je ločitev grozno težka. Še enkrat se poljubijo in si sežejo v roke, častitljiv mož v černej halji, dá jim blagoslov, potem pa jih odnese čoln na pripravljeno ladijo. — Topovi zagermé — ptuja ladija je zapustila novojorško luko. Na bregu še stojé nektere osebe ter mahajo z belimi robci in na ladiji jim odzdravljajo. Ladija prihaja manjša in manjša, slednjič je znati samo mala pičica, dokler se popolnoma ne skrije. „Lastavica“ je, ki odnaša v domovino Tomaževo družino; jako urno plava, kot vedela, kakó hrepené ti ljudje po svojej domovini. Tudi Polde ni hotel ostati v Ameriki, kajti Gorenska stran mu je bila ljubša, nego daljna dežela, kjer človek nikdar ne vidi domačih ljudi in tudi ne čuje domačega jezika. Odpeljal se je s Tomaževimivredv Evropo.</p>
+   </div>
+</body>
+  </text>
+</TEI>

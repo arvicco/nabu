@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="KDSP001" xml:lang="sl">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Sreča v nesreči [KDSP]</title>
+        <author>Cigler, Janez (1792-1867)</author>
+      </titleStmt>
+      <editionStmt>
+        <edition>1.0</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName><ref target="https://isllv.zrc-sazu.si/sl/predstavitev#v">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</ref></orgName>
+        </publisher>
+        <distributor>CLARIN.SI</distributor>
+        <idno type="URI" subtype="handle">http://hdl.handle.net/11356/1823</idno>
+        <date when="2023-07-07"> 7. julij 2023</date>
+        <availability status="free">
+          <licence>http://creativecommons.org/licenses/by/4.0/</licence>
+          <p>To delo je ponujeno pod <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Priznanje avtorstva 4.0 mednarodna licenca</ref>.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+	<bibl source="#ELTeC">
+          <title type="main">Sreča v nesreči</title>
+          <author corresp="#CiglerJanez">Cigler, Janez</author>
+	  <date when="1836">1836</date>
+          <idno type="URI" subtype="GitHub">https://github.com/COST-ELTeC/ELTeC-slv/blob/v0.7.1/level1/SLV10003.xml</idno>
+	</bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <textClass>
+        <catRef scheme="#textTimeSlot" target="#D1"/> <!-- (obdobje) -->
+        <catRef scheme="#textSize" target="#kratka"/> <!-- (obseg) -->
+        <catRef scheme="#textType" target="#povest"/> <!-- (zvrst) -->
+        <catRef scheme="#textSubType" target="#poučno_vzgojna"/> <!-- (podzvrst) -->
+        <catRef scheme="#textTheme" target="#družinska"/> <!--(tematika) -->
+        <catRef scheme="#textCanonicity" target="#visoka"/> <!-- (kanoničnost) -->
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+   <div xml:id="KDSP001.d1">
+      <head xml:id="KDSP001.d1.h1">UVOD</head>
+      <p xml:id="KDSP001.d1.p1">Blizu mesta L., v vasi, kjer je bila nekdaj imenitna, daleč sloveča suknarija ali tovarna, kjer so žlahtno sukno tkali in ga daleč po svetu razprodajali, je pred nekaj leti živel dober, pošten pa tudi pobožen junak. Franc Svetin mu je bilo ime. Starši so mu zgodaj pomrli, torej ni imel nikogar, da bi bil zanj skrbel. Lastnik suknarije ga je iz dobrote v šolo pošiljal, toliko da se je Svetin brati in pisati navadil; potem je v suknariji delal in se vseh suknarskih del naučil. Zraven navadnega suknarskega dela je moral Svetin tudi vrt obdelovati. Svetin je bil priden in prebrisane glave. Poleti je ves dan vrt obdeloval, ponoči pa v suknariji delal.</p>
+      <p xml:id="KDSP001.d1.p2">Pri vseh svojih delih Svetin nikoli ni molitve opustil, ampak pred vsakim delom in po vsakem delu je pokleknil in ponižno molil; zato mu je Bog tudi srečo dal. V malo letih je Svetin toliko prislužil in privaroval, da si je selišče kupil, hišo naredil in nekaj njiv prikupil. Gospodar suknarije ga je zato zelo cenil, pa mu nekega dne reče: "France, všeč mi je, da si tako priden; vidim, da si pomagaš. Najbolj všeč pa mi je, ko vidim, da nikoli s hudobnimi tovariši ne potegneš, se le svojega dela držiš, rad moliš in v cerkev hodiš; ako si pri volji, vzemi mojo kuharico Nežo za ženo, ki je tudi poštena in pobožna. Nima veliko denarjev, pa je pridna in jaz ji bom tudi nekaj dal in pomagal."</p>
+      <p xml:id="KDSP001.d1.p3">Svetin je v to hitro dovolil. Pokličejo Nežo, ki se je po svojih starših pisala Neža Trpinc, in jo vprašajo, ali bi bila voljna poročiti se s Francetom. Neža je v to tudi rada dovolila in v štirih tednih so naredili ženitnino. K ženitovanju je prišel tudi gospodar suknarije s svojo gospo, dasi je bil žlahtnega rodu. Svetina so vsi radi imeli.</p>
+      <p xml:id="KDSP001.d1.p4">Vesel je živel Svetin s svojo ženo Nežo. Očitno se je nad njima kazala zakonska sreča. Nikoli ni bilo med njima krega ali prepira. Ne po posvetnih navadah in mestnih željah, ampak po krščanskih in božjih zapovedih sta živela. On je podnevi vrt obdeloval, ona je domača dela opravljala. Vsak večer sta pokleknila in glasno večerno molitevco opravila, ko bi bila še tako trudna. Vse svoje zaupanje sta le v Boga imela; torej jima je šlo vse po sreči.</p>
+      <p xml:id="KDSP001.d1.p5">Dve leti je minilo, kar sta bila poročena, in Svetinka je bila zdaj v drugem stanu. Tedaj sta neke noči dobila dva lepa, zdrava fantiča dvojčka. Pri svetem krstu so prvemu dali ime Janez, drugemu Pavel. Gospod in gospa suknarije sta bila botra. Vesela sta bila, da jima je Bog tako dober, spoznala sta božje dobrote in vedno sta ga hvalila. Sklenila sta tudi fantiča, če ju Bog pri življenju ohrani, v pobožnosti in svetosti zrediti in varovati pred zapeljivimi tovarišijami, da bi v starih letih čisto veselje nad njima imela.</p>
+   </div>
+   <div xml:id="KDSP001.d2">
+      <head xml:id="KDSP001.d2.h1">PRVI DEL</head>
+      <div xml:id="KDSP001.d2.d1">
+         <head xml:id="KDSP001.d2.d1.h1">I FRANCE SVETIN GRE NA FRANCOSKO VOJSKO</head>
+      </div>
+   </div>
+</body>
+  </text>
+</TEI>

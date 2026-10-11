@@ -25,6 +25,7 @@ A source wears every desk it serves — these twenty-five answer this desk. Hold
 | `goo300k` | texts | attribution | wired · manual | 89 docs / 8,397 passages |
 | `hr-wikisource` | texts | attribution | wired · manual | 1,390 docs / 132,052 passages |
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
+| `kdsp` | texts | attribution | not yet wired | nothing held yet |
 | `korba` | texts | attribution | not yet wired | nothing held yet |
 | `litopys` | texts | open | not yet wired | nothing held yet |
 | `mk-wikisource` | texts | attribution | wired · manual | 836 docs / 31,114 passages |

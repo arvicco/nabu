@@ -2434,6 +2434,21 @@ kanripo:
   # future catalog/fetch seam candidate, next Sino phase survey).
   classes: [KR1, KR2, KR3, KR4, KR5]
 
+kdsp:   # Q102, 02-sources row 242
+  adapter: Nabu::Adapters::Kdsp
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: false   # ready; flips after the first sync is verified
+  sync_policy: manual
+  # KDSP 1.0 — the corpus of longer narrative Slovenian prose 1836–1918
+  # (ZRC SAZU; CLARIN.SI hdl 11356/1823, CC BY 4.0 → attribution): 262
+  # texts, one 29 MB plain-TEI zip. Passage per head/p/lg (upstream ids);
+  # print year, author + personography, type/subtype/theme facets mined.
+  # OVERLAP with the held prilit (2 works in the 1836–66 window),
+  # sl-wikisource and imp (KDSP aggregates Wikivir/ELTeC/dLib texts):
+  # ingested WITH provenance (digital source + URL per document), dedupe
+  # is catalog-side (adapter header).
+
 kitab:
   adapter: Nabu::Adapters::Kitab
   adopted: "2026-07-24"
