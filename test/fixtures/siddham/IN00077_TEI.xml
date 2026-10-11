@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title xml:lang="eng-Latn">Khoh Charter 1 of Hastin, year 156</title>
+			</titleStmt>
+			<publicationStmt>
+				<authority/>
+				<idno type="filename">IN00077</idno>
+			</publicationStmt>
+			<sourceDesc>
+				<msDesc><msIdentifier><repository>empty</repository></msIdentifier></msDesc>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text>
+		<body>
+			<div type="edition" xml:lang="san-Latn">
+				<!-- Encoded for Siddham by Dániel Balogh. Version of January 2019. Comments below are offered "as is" and do not represent a thoroughly researched or considered opinion. -->
+				<div type="textpart" subtype="seal">
+					<ab>
+						<lb n="seal.1"/>śrī-mahārāja-hastinaḥ
+						<!-- Note that this is only reported text. The only seal of Hastin of which we have at least a copy if not the seal itself (IN00079) has śrīr mmahārāja-hastinaḥ. (And a seal impression in IN00091, which reads śrī-hasti-rājñaḥ.) -->
+					</ab>
+				</div>
+				<div type="textpart" subtype="body">
+					<p>
+						<pb n="1verso"/><!-- This is not explicitly stated anywhere I've read, but I assume that these double plates, each inscribed on one face only, use 1verso and 2 recto, with the blank side of each plate facing outward. --><lb n="1"/>namo mahādevāya|| svasti<supplied reason="omitted">|</supplied> ṣaṭpañcāśottare bda-śate gupta-nṛpa-<lb n="2"/>rājya-bhuktau mahā-vaiśākha-sāmbatsare<surplus>|</surplus> kārttika-māsa-śukla-pakṣa-tṛtīyā<lb break="no" n="3"/>yām<supplied reason="omitted">|</supplied> asyā<sic>n</sic> divasa-pūrvvāyāṃ nṛpati-parivrājaka-kulotpannena<surplus>|</surplus> mahā<lb break="no" n="4"/>rāja-devāḍhya-pranaptrā m<sic>ā</sic>hārāja-dāmodara-sutena
+						<!-- Fleet (1888:97n4) notes that F. E. Hall (JBAS,v.XXX,p.6,and p.8,note) read the name as Dēvāhya and rejected H. H. Wilson's reading Dwrhya (which is obviously misprint from Dēvārhya, i.e. Dēvāḍhya). Fleet then asserts that the reading is clear in all inscriptions of Hastin and Saṃkṣobha and rather petulantly announces, "and Prof H. H. Wilson was right, and Dr. FitzEdward Hall was wrong." -->
+						<lb n="5"/>go-sahasra-hasty-aśva-hiraṇyāneka-bhūmi-pradena guru-pitṛ-mātṛ-pūjā-tatpare<lb break="no" n="6"/>ṇātyanta-deva-brāhmaṇa-bhaktena<surplus>||</surplus> naika-samara-śata<surplus>ta</surplus>-vijayinā sva-va<sic>n</sic>śā<lb break="no" n="7"/>moda-kareṇa mahārāja-śrī-hastinā sva-puṇyāpyāyanārtham ātmānaṃ sva<lb break="no" n="8"/>rgga-sopāna-paṅktibhir āro<sic>h</sic>ayatā brāhmaṇa-vāj<sic>isi</sic>neya-mādhya<lb break="no" n="9"/>ndina-kautsa-sagottra gopasvāmī bhavasvāmī| sandhyāputtra| divākara<lb break="no" n="10"/>dattaḥ bhāskaradatta| sūryyadattasya vasuntaraṣaṇḍika-grāmo <lb n="11"/>tisṛṣṭaḥ||
+					</p>
+					<p>samantād garttā<supplied reason="omitted">|</supplied> uttare paścim<choice><sic>o</sic><corr>e</corr></choice>na
+						<pb n="2recto"/><lb n="12"/>pūrvva-bh<sic>u</sic>ktā m<sic>ā</sic>ryyādāḥ<supplied reason="omitted">||</supplied> sa<sic>ṃn</sic>dhyāputtra-pramukhānāṃ sodraṅgaḥ soparikaraḥ <lb n="13"/>a-cāṭa-bhaṭa-prāveśyaḥ cora-varjjaM<supplied reason="omitted">||</supplied>
+						<!-- For cora-varjjam, compare cora-daṇḍa-varjyam in l14 of the Khoh Plate of Jayanātha GE 177 (IN00083), so this may mean in pursuit of thieves. According to Fleet_1888:98n3, it's "with the exception of fines (imposed) on thieves", which is perfectly fine for IN00083, but the context is quite different there. Also compare IN00082 l9 where (again in a different context) it's explicitly the village that is free from bandits (cora-varjjito). So perhaps this cora-varjja thing is something that was copied mindlessly from older records and various composers tried to make sense of it in various ways? Anyway, the most likely solution is that it is not directly related to the cāṭas and bhaṭas, so however enticing the idea of "except in hot pursuit" sounds, this must be rejected. Instead, the donee is entitled to all sorts of taxes from the land, but the penalty to be paid by any thieves there goes to the royal treasury, not to him. -->
+					</p>
+					<p>tad asmat-kulotthaiḥ mat-pāda-piṇḍopajī<lb break="no" n="14"/>vibhir vvā kālāntareṣv api na vyāghātaḥ kāryaḥ<supplied reason="omitted">|</supplied> evam <choice><sic>ājñāpta</sic><corr>ājñapte</corr></choice> yo nyathā ku<lb break="no" n="15"/>ryāt tam ahaṃ dehāntara-gato pi mahatāvaddhyānena <choice><sic>nirddahed</sic><corr>nirddaheyam</corr></choice><supplied reason="omitted">|</supplied> uktaṃ ca bhagavatā pa<lb break="no" n="16"/>ramarṣiṇā veda-vyāsena|
+						<!-- No image of the plates is available and Fleet transcribes the text thus, but there ought to be another vyāsena here. Line 16 seems to contain 4 akṣaras fewer than line 15, so this is one more indication that a word may be missing from Fleet's transcription. -->
+					</p>
+					<lg n="1" met="anuṣṭubh">
+						<lg type="halfverse" n="ab">
+							<l>pūrvva-dattāṃ dvijātibhyo</l><l>yatnād rakṣ<surplus>y</surplus>a yudhiṣṭhira<surplus>ḥ</surplus></l>
+						</lg><lg type="halfverse" n="cd"><l><lb n="17"/>mah<sic>i</sic>ṃ mahimatāṃ śreṣṭha</l><l>dānāc chreyo nupālana<sic>ṃm</sic></l>
+						</lg></lg>
+					<lg n="2" met="anuṣṭubh">
+						<lg type="halfverse" n="ab">
+							<l>bahubhir vvasudhā bhuktā</l><l>rā<lb break="no" n="18"/>jabhiḥ sagarādibhiḥ</l>
+						</lg><lg type="halfverse" n="cd"><l>yasya yasya yadā bhūmis</l><l>tasya tasya tadā phalaṃ</l>
+						</lg></lg>
+					<lg n="3" met="anuṣṭubh">
+						<lg type="halfverse" n="ab">
+							<l><lb n="19"/>ṣaṣṭiṃ <sic>b</sic>arṣa-sahasrāṇi</l><l>svargge modati bhūmidaḥ</l>
+						</lg><lg type="halfverse" n="cd"><l>ācchettā cānuma<lb break="no" n="20"/>ntā ca</l><l>tāny eva narake vased iti||</l>
+						</lg></lg>
+					<p>likhitañ ca vakkrāmātya-<lb n="21"/><supplied reason="lost">pra</supplied>naptrā bhogikāmātya-naradatta-naptrā bhogika-ravidatta-puttr<supplied reason="lost">eṇa</supplied> sūryya<lb break="no" n="22"/>datteneti<supplied reason="omitted">|</supplied> dūtako bhāgrahaḥ<supplied reason="omitted">||</supplied>
+					</p>
+				</div>
+			</div>
+		</body>
+	</text>
+</TEI>

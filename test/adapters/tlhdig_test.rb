@@ -109,6 +109,19 @@ class TlhdigTest < Minitest::Test
     end
   end
 
+  # P118-R4 S7 (the held-but-dark audit): Beta 0.3 ships KUB 31.116 twice —
+  # the .xml and an EXTENSIONLESS later re-annotation the *.xml walk never
+  # saw. The later-dated header wins; the older twin skips by rule.
+  def test_an_extensionless_later_edit_supersedes_its_xml_twin
+    edits = File.join(conformance_workdir, "edits")
+    refs = adapter.discover(edits).to_a
+    assert_equal ["urn:nabu:tlhdig:832:tlh:kub.31.116"], refs.map(&:id)
+    assert refs.first.path.end_with?("CTH 832_XML_TLH/KUB 31.116"), "the 2025-06-10 edit is parsed"
+    assert_equal 1, adapter.discovery_skips(edits).skipped_by_rule
+    document = adapter.parse(refs.first)
+    assert_equal 5, document.count, "the edit parses whole (5 tablet lines)"
+  end
+
   def test_a_diverging_urn_collision_raises_instead_of_hiding_damage
     Dir.mktmpdir do |work|
       seed_twin(work, second: fixture_bytes("CTH 314_XML_TLH/KUB 4.8.xml"))

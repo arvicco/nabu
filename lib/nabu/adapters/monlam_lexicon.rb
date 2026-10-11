@@ -26,7 +26,7 @@ module Nabu
     # MonlamIT/TibetWord, MonlamAI's bo_en json. Definitions need an
     # upstream ask (the correspondence lane), never the scrape.
     #
-    # == The lexicon-2 hole (censused 2026-08-29; .docs/upstream-reports.md)
+    # == The lexicon-2 hole (censused 2026-08-29; reported upstream)
     #
     # The Grand list's file has ONE contiguous 24,295-line blank run
     # (raw lines 224,165–248,459): the late-འ…ཡ alphabetical band is

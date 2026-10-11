@@ -1,6 +1,6 @@
 # Potentially Unlockable Sources
 
-Sources not readily ingestible today, with concrete unlock paths. Ordered by expected payoff × plausibility. General rule for all of these: the *ancient text itself* is public domain; restrictions attach to modern editorial work, databases, and access terms. Unlock strategies must respect the terms actually in force — the goal is legitimate access, and several of these are genuinely achievable with an email or a modest fee.
+Sources not readily ingestible today, with concrete unlock paths. Ordered by expected payoff × plausibility. *Status refreshed 2026-10-11: several entries below have since been unlocked — each section says so where it applies, and [02-sources.md](02-sources.md) is the authoritative status table.* General rule for all of these: the *ancient text itself* is public domain; restrictions attach to modern editorial work, databases, and access terms. Unlock strategies must respect the terms actually in force — the goal is legitimate access, and several of these are genuinely achievable with an email or a modest fee.
 
 ## 1. TLG (Thesaurus Linguae Graecae) — the big one
 
@@ -13,13 +13,19 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **Verdict:** subscribe for reading access if needed; systematically reconstruct priority authors via HTR. Do not attempt to extract from the platform.
 
-## 2. TITUS full access
+## 2. TITUS full access — largely unlocked
 
-**What's locked:** parts of TITUS require registration/permission per agreement with original editors; the public HTML is scrapeable but encoding-hostile.
+**What was locked:** parts of TITUS require registration/permission per agreement with original editors; the public HTML is scrapeable but encoding-hostile.
 
-**Unlocked — the precedent (2026-07-23):** the Avestan corpus is in. `titus-avestan` is wired and synced under a personal research grant from Prof. Jost Gippert (by email, 2026-07-23): non-commercial use, TITUS and the editors credited wherever the text is displayed. The letter described the specific texts and the private comparative-IE use; writing it was the entire cost — exactly as this page predicted. The grant is personal, so the source is grant-gated: every box records its own acknowledgment of the terms before its first fetch.
+**Unlocked, in three grants from Prof. Jost Gippert (TITUS, Frankfurt), all by email:**
 
-**Remaining ask:** Tocharian and the long tail (Hittite is meanwhile served by the tlhdig shelf). Same scoped-letter route, now with a working precedent to cite. Worst case, the public HTML remains available for careful per-text scraping.
+- **2026-07-23 — Avestan** (`titus-avestan`): non-commercial use, TITUS and the editors credited wherever the text is displayed. The letter described the specific texts and the private comparative-IE use; writing it was the entire cost — exactly as this page predicted.
+- **2026-08-31 — Oscan-Umbrian** (`titus-osco-umbrian`), extending the Avestan terms: one-time download, local non-commercial use, no redistribution.
+- **2026-10-06 — Tocharian and the Middle Iranian families** (the terms cover the Tocharian A and B texts of the Berlin Turfan collection; `titus-tocharian-a` holds the Tocharian A corpus today; `titus-pahlavi`, `titus-sogdian`, `titus-khotanese`, `titus-bactrian`, `titus-manichaica`): one retrieval per corpus, local personal research use only, no redistribution, TITUS and the editors credited wherever displayed.
+
+All eight sources are wired. The grants are personal, so every one is grant-gated: each box records its own acknowledgment of the terms before its first fetch, and none of the texts ships in any public artifact.
+
+**Remaining long tail:** Tocharian B (already covered by the 2026-10-06 terms, not yet ingested) and other TITUS corpora as concrete needs arise — the same scoped-letter route, now with three precedents to cite. Hittite is served independently (the tlhdig and hittite-glossed shelves), and the hieroglyphic Luwian corpus arrived by a separate personal grant (ACLT, I. Yakubovich, 2026-09-28).
 
 ## 3. IIIF manuscript universe (Vatican, BnF, British Library, Bodleian, Munich…)
 
@@ -39,7 +45,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** commercial databases of Latin texts and reference works.
 
-**Unlock paths:** no legitimate bulk path for individuals. Substitutes: Corpus Corporum (Zurich — actually *open*, huge Latin aggregation including Patrologia Latina; promote to the main source list and verify current dump availability), plus PD editions via HTR. Loeb's facing translations are copyrighted; originals are PD elsewhere. Treat these as reading subscriptions, not corpus sources.
+**Unlock paths:** no legitimate bulk path for individuals. Substitutes: Corpus Corporum (Zurich — actually *open*, huge Latin aggregation including Patrologia Latina; **ingested since 2026-08-19** as `corpus-corporum`, and in the embedded literary core), plus PD editions via HTR. Loeb's facing translations are copyrighted; originals are PD elsewhere. Treat these as reading subscriptions, not corpus sources.
 
 ## 6. CAL (Comprehensive Aramaic Lexicon)
 
@@ -49,7 +55,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** terms prohibit systematic downloading; no bulk offer.
 
-**Unlock paths:** for Latin literature, Corpus Corporum + Perseus + DigilibLT (open, late-antique Latin — registered and ingested since P45-3) substantially overlap PHI's canon. For epigraphy, the **EDH (Epigraphic Database Heidelberg)** offers open data dumps (CC — ingested; upstream no longer actively maintained per PI correspondence 2026-08-11, dumps remain) and **EDCS** has relaunched at UZH with a search API + CSV export but no license grant (last checked 2026-08: interactive use only; recheck due 2026-11) — EDH plus EDR/I.Sicily/IIP effectively unlock the inscription space PHI covers. PHI itself: use interactively, don't ingest.
+**Unlock paths:** for Latin literature, Corpus Corporum + Perseus + DigilibLT (open, late-antique Latin — both ingested since summer 2026) substantially overlap PHI's canon. For epigraphy, the **EDH (Epigraphic Database Heidelberg)** offers open data dumps (CC — ingested; upstream no longer actively maintained per PI correspondence 2026-08-11, dumps remain) and **EDCS** has relaunched at UZH with a search API + CSV export but no license grant (last checked 2026-08: interactive use only; recheck due 2026-11) — EDH plus EDR/I.Sicily/IIP effectively unlock the inscription space PHI covers. PHI itself: use interactively, don't ingest.
 
 ## 8. Slovenian/South Slavic archival material
 
@@ -65,6 +71,6 @@ A standing option worth naming: many "locked" resources (TLG, Brepols, ProQuest 
 
 1. **The IIIF adapter** (unlocks #3 and feeds #8) — parked until HTR hardware exists (see §3's verdict); pure engineering once reopened.
 2. **Register:** HathiTrust, HMML, Manuscriptorium — free, immediate.
-3. **Email TITUS** — done: the Avestan grant landed 2026-07-23 (§2); the Tocharian follow-up rides the same precedent.
-4. **Promote the open "unlockables"** — DigilibLT and EDH are already registered and ingested; Corpus Corporum is the one genuinely outstanding (verify current dump availability, then promote).
+3. **Email TITUS** — done: Avestan (2026-07-23), Oscan-Umbrian (2026-08-31), Tocharian and the Middle Iranian families (2026-10-06) are all in (§2).
+4. **Promote the open "unlockables"** — done: DigilibLT, EDH, and Corpus Corporum are all registered and ingested.
 5. **Decide on TLG individual subscription** only when a concrete research need hits the gap.

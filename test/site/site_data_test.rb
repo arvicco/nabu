@@ -38,7 +38,7 @@ module Site
          gold_lemmas gold_lemmas_display gold_lemmas_m gold_languages
          silver_lemmas silver_lemmas_display silver_lemmas_m silver_languages
          desks kind_class_count kind_documents kind_documents_display
-         kind_coverage_pct].each do |key|
+         kind_coverage_pct redistributable_pct].each do |key|
         assert census.key?(key), "census.yml lost the #{key} key the site prose cites"
       end
       assert_operator census.fetch("kind_class_count"), :>, 0,
@@ -48,6 +48,8 @@ module Site
                       "the live catalog groups dictionaries by lect node (P106-3) — a zero means " \
                       "the census read a catalog whose dictionary_stats was never derived"
       assert_includes 0..100, census.fetch("kind_coverage_pct")
+      assert_includes 1..100, census.fetch("redistributable_pct"),
+                      "the open+attribution share the licensing prose cites (P118-R5)"
       assert_match(/\A\d{1,2} \w+ \d{4}\z/, census.fetch("as_of"), "as_of must be a dated stamp")
       assert_operator census.fetch("top_languages").size, :>=, 10,
                       "the headline languages table (languages.md) reads up to 16 rows from the SSOT"
@@ -213,6 +215,58 @@ module Site
       assert_includes index, "site.data.census", "the holdings numbers must come from site.data.census"
       refute_match(/^- \*\*\[The Classicist\]/, index,
                    "no hand-maintained desk list may return to index.md")
+    end
+
+    # -- the licensing share + the public source count (P118-R5) ---------------
+
+    # The licensing prose ("roughly N% of documents are public-domain or
+    # attribution-class") rotted from 99% to 96% as nc-class growth landed
+    # (OKHC, OpenITI) — it now reads the census. The effective class is the
+    # per-document override where one exists, else the source's class; only
+    # live documents count.
+    def test_redistributable_share_reads_effective_classes_of_live_documents
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "catalog.sqlite3")
+        catalog = Nabu::Store.connect("sqlite://#{path}")
+        Nabu::Store.migrate!(catalog)
+        open = catalog[:sources].insert(slug: "o", name: "O", adapter_class: "X", license_class: "open")
+        nc = catalog[:sources].insert(slug: "n", name: "N", adapter_class: "X", license_class: "nc")
+        catalog[:documents].insert(source_id: open, urn: "u1", content_sha256: "x")
+        catalog[:documents].insert(source_id: open, urn: "u2", content_sha256: "x",
+                                   license_override: "restricted")
+        catalog[:documents].insert(source_id: nc, urn: "u3", content_sha256: "x",
+                                   license_override: "attribution")
+        catalog[:documents].insert(source_id: nc, urn: "u4", content_sha256: "x")
+        catalog[:documents].insert(source_id: open, urn: "u5", content_sha256: "x", withdrawn: true)
+
+        assert_equal 50, Nabu::Ops::SiteData.redistributable_pct(catalog) # 2 of 4 live
+      ensure
+        catalog&.disconnect
+      end
+    end
+
+    def test_redistributable_share_of_an_empty_catalog_is_zero
+      catalog = Nabu::Store.connect("sqlite::memory:")
+      Nabu::Store.migrate!(catalog)
+      assert_equal 0, Nabu::Ops::SiteData.redistributable_pct(catalog)
+    ensure
+      catalog&.disconnect
+    end
+
+    # Grant-gated private holdings (availability: blocked) are never
+    # advertised and "public census surfaces never count it" (the
+    # SourceRegistry contract, owner ruling 2026-07-24): the live-source
+    # figure the site prints must leave them out, so the Sources page's
+    # "all N sources below" matches the rows it may publicly list.
+    def test_live_sources_leave_out_the_blocked_holdings
+      entries = registry.each_source.to_a
+      blocked = entries.select { |entry| entry.source? && entry.wired && entry.blocked? }
+      refute_empty blocked, "the registry carries grant-gated blocked sources (titus-*)"
+      breakdown = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).registry_breakdown
+      assert_equal entries.count { |entry| entry.source? && entry.wired && entry.public? },
+                   breakdown[:live_sources]
+      assert_equal entries.count(&:source?), breakdown[:sources],
+                   "the registry SHAPE (rows by kind) still counts every row"
     end
 
     # -- the formatting helpers ------------------------------------------------

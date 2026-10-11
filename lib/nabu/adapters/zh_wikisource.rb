@@ -15,7 +15,7 @@ module Nabu
   module Adapters
     # zh-wikisource (P109-1, Q90 under №R-74): the Chinese Wikisource
     # shelf — CENSUSED WORKS, prefix-expanded (the census, 2026-09-29,
-    # in .docs/p109-plan.md):
+    # recorded in the P109 phase plan):
     #
     # - 全唐文 (1,001 juan subpages) — the complete Qing-compiled Tang
     #   prose canon, THE verified delta over the held Kanripo mass.

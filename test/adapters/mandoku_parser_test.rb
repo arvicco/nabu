@@ -29,6 +29,17 @@ class MandokuParserTest < Minitest::Test
     Nabu::Adapters::MandokuParser.new.parse(File.join(FIXTURES, text_id), urn: urn, text_id: text_id)
   end
 
+  # P118-R4 S7 (the held-but-dark audit): KR5c0312's ONLY file is named
+  # `KR5c0312_000a.txt` (a letter-suffixed juan file — the corpus's single
+  # instance, censused 2026-10-11); the digits-only file grammar matched
+  # nothing and the text never parsed.
+  def test_a_letter_suffixed_juan_file_parses
+    document = parse("KR5c0312")
+    assert_equal "金華冲碧丹經祕旨傳", document.title
+    assert_equal "urn:nabu:kanripo:KR5c0312:000:001a", document.first.urn
+    assert_includes document.first.text, "金華冲碧丹經祕旨傳斯一"
+  end
+
   # -- document identity + headers -----------------------------------------
 
   def test_document_carries_urn_title_language_and_first_wins_headers

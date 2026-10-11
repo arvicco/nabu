@@ -37,6 +37,7 @@ dirs named by KR id.
 | KR5a0001 | 元始無量度人上品妙經 | KR5 | HFL + witness CK-KZ | Readme + juan 000–003 of 62 | repo-trim: 58 juan files omitted | 76ae4bb351cbf1beb0f44b60bd7f587123322352 |
 | KR5a0004 | 元始天尊説無上内祕眞藏經 | KR5 | HFL + witness CK-KZ | Readme + juan 006 + 007 of 11 | repo-trim: 9 juan files omitted (incl. the stray-text `_000`, below) | 487e4634f9d812fbfaf4adf5541d3d3adb86297c |
 | KR5c0091 | 道德眞經註 | KR5 | HFL + witness CK-KZ | Readme + juan 001 of 5 | repo-trim: 4 juan files omitted | eea2723ca2d4b35730021de0ab84ed3f47b1c5b7 |
+| KR5c0312 | 金華冲碧丹經祕旨傳 | KR5 | HFL | whole repo (single `_000a` file) | none | 83e1a62fca3697535620a86761eb00de6e177b37 (canonical HEAD) |
 | KR5g0001 | 大慧靜慈妙樂天尊說福德五聖經 | KR5 | HFL (plain) | whole repo (single 000 file) | none | 1b2c20b7e0b23cd6a444f79f2608d10311b2e75e |
 | KR5i0030 | 唱道真言 | KR5 | CK-KZ (= witness) | Readme + juan 001 + 002 of 4 | repo-trim: 2 juan files omitted | d0d59038dee74e517bf9ac5735766cd3858156b7 |
 

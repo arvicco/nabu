@@ -64,7 +64,7 @@ Desk examples of the kind of question this answers:
   its Dead Sea Scrolls counterpart, wording drift and all.
 
 The same lane is available to an AI assistant over MCP (the
-`similar_to` tool), so a research conversation can ask "what else in
+`nabu_search` tool's `similar_to` parameter — [mcp.md](mcp.md)), so a research conversation can ask "what else in
 the library resembles this passage?" mid-discussion.
 
 ## What `bin/nabu embed` actually does when it runs

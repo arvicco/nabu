@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" version="5.0" n="HaDha">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+	<title type="main" xml:lang="kan-Latn">Hadibadeya Dharma</title>
+        <author xml:lang="kan-Latn">Saṁciya Honnamma</author>
+	<principal>
+	  <persName xml:id="GBH">
+	    <forename>Gil</forename>
+	    <surname>Ben-Herut</surname>
+	  </persName>
+	</principal>
+	<respStmt>
+	  <resp>Typing and proofreading</resp>
+	  <!--
+	      <orgName>Adishila Publications</orgName>
+	      <persName>Krishnaprasada G.</persName>
+	      !-->
+	</respStmt>
+	<respStmt>
+	  <resp>TEI structuration</resp>
+	  <persName ref="#AO">Andrew Ollett</persName>
+	</respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Kannada Digital Texts Project</authority>
+        <availability status="restricted">
+          <p>Distributed under a <ref target="https://creativecommons.org/licenses/by-sa/4.0/" type="url">Creative Commons Attribution-ShareAlike 4.0</ref> license.</p>
+	  <!-- further information here? !-->
+        </availability>
+        <date>2025</date>
+      </publicationStmt>
+      <sourceDesc>
+	<!--
+	    <listBibl>
+	    <biblStruct xml:id="ed">
+	    <monogr>
+	    <title level="m" type="main" xml:lang="kan-Latn">Ponna-Kamalabhava Sampuṭa</title>
+	    <title level="m" type="sub" xml:lang="kan-Latn">Śāntipurāṇaṁ, Śāntīśvara purāṇaṁ</title>
+	    <editor>
+	    <persName xml:lang="kan-Latn">
+	    <forename>Hampa</forename>
+	    <surname>Nāgarājayya</surname>
+	    </persName>
+	    </editor>
+	    <imprint>
+	    <publisher xml:lang="eng">Kannaḍa Viśvavidyālaya</publisher>
+	    <pubPlace xml:lang="kan-Latn">Hampi</pubPlace>
+	    <date when="2006">2006</date>
+	    </imprint>
+	    </monogr>
+	    </biblStruct>
+	    </listBibl>
+	    !-->
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+	<language ident="eng">English</language>
+	<language ident="kan-Latn">Kannada in Roman transliteration (ISO-15919)</language>
+	<language ident="san-Latn">Sanskrit in Roman transliteration (ISO-15919)</language>
+      </langUsage>
+      <textClass>
+	<keywords>
+	  <term><!--each keyword in a <term/> element --></term>
+	</keywords>
+      </textClass>
+    </profileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p><!-- romanization !-->
+          <!-- orthography !-->
+        <!-- encoding !--></p>
+      </editorialDecl>
+      <refsDecl>
+	<cRefPattern matchPattern="HaDha.([0-9]+).([0-9]+)" replacementPattern="#xpath(//tei:div[@type='sandhi'][@n='$1']/tei:lg[@n='$2'])"/>
+      </refsDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2025-06-19" who="Andrew Ollett">
+	<list>
+	  <item>Initial version.</item>
+	</list>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text xml:lang="san-Latn">>
+    <body>
+      <head>saṁciya honnamma viracita<lb/>
+      hadibadeya dharma<lb/>
+      sāṁgatya</head>
+      <div type="sandhi" n="1">
+	<head>modalaneya saṁdhi</head>
+	<lg n="1">
+	  <l>śrīmadamalaguṇanidhige nityanige ni</l>
+	  <l>ssīma kr̥pāvāridhige</l>
+	  <l>rāmaṇīyakarāśige paścima raṁga</l>
+	  <l>dhāmanigāneraguvenu</l>
+	</lg>
+	<lg n="2">
+	  <l>raṁgadhāmana divyāṁga saṁgatiyiṁ</l>
+	  <l>maṁgaḷadēvateyenipā</l>
+	  <l>raṁgamaṁdira maṁgaḷavaijayaṁtige</l>
+	  <l>raṁganāyakigeraguvenu</l>
+	</lg>
+	<lg n="3">
+	  <l>ādinārāyaṇanā śēṣanoḍagūḍi</l>
+	  <l>yādaradiṁdavatarise</l>
+	  <l>yādavakulavēḷigevetti‍rpudu</l>
+	  <l>mēdiniyoḷu maimevaḍedu</l>
+	</lg>
+      </div>
+      <div type="sandhi" n="9">
+	<head>oṁbattaneya saṁdhi</head>
+	<lg n="1">
+	  <l>āvanāṇatiyūḷiga karmayōga ma</l>
+	  <l>ttāvana nenahu vijñāna</l>
+	  <l>āvanoḷeraka bhakutiyā paravāsu</l>
+	  <l>dēvanigāneraguvenu</l>
+	</lg>
+	<lg n="2">
+	  <l>jñāna vairāgya śrīharibhakti satkarma</l>
+	  <l>hīnaranemmanāraidu</l>
+	  <l>ā nārāyaṇanaḍigeragipa siri</l>
+	  <l>gānatigaidu bāḷuvenu</l>
+	</lg>
+	<lg n="3">
+	  <l>patipādabhakteyarenipa satiyaru tā</l>
+	  <l>vatiśaya gatigeḷasidoḍe</l>
+	  <l>itara ciṁteyanuḷidēkacittadoḷu śrī</l>
+	  <l>patipādavane bhajisuvudu</l>
+	</lg>
+	<lg n="4">
+	  <l>āva dēvaranāvaru bhajisuvarā</l>
+	  <l>dēvaranavaru sēruvaru</l>
+	  <l>āva bhōgadoḷā dēvarirparu tā</l>
+	  <l>vā vidhadoḷu bāḷuvaru</l>
+	</lg>
+	<lg n="5">
+	  <l>śrīvaranaḍiya sēridaranuḷida mikka</l>
+	  <l>dēvalōkavanēridavaru</l>
+	  <l>dēvaroḍane tāvumaḷivareṁbudanu gī</l>
+	  <l>tāvacanadoḷu tiḷivudu</l>
+	</lg>
+	<p>
+	  <s>adeṁtene:</s>
+	</p>
+	<cit>
+	  <quote>
+	    <lg xml:lang="san-Latn">
+	      <label>ślōka</label>
+	      <l>ābrahmabhuvanāllōkāḥ</l>
+	      <l>punarāvartinō ’rjuna</l>
+	      <l>māmupētya tu kauṁtēya</l>
+	      <l>punarjanma na vidyatē</l>
+	    </lg>
+	    <bibl>bhagavadgītā : adhyāya 8, ślōka 16</bibl>
+	  </quote>
+	</cit>
+	<lg n="6">
+	  <l>parahiṁseyesagade paradhanakaḷupade</l>
+	  <l>parapuraṣaṁgāsevaḍade</l>
+	  <l>siriyarasana pādasēvegaidavarā</l>
+	  <l>paramapadavanu sēruvaru</l>
+	</lg>
+	<lg n="7">
+	  <l>cāḍivēḷade caṁḍitanavesagade cunna</l>
+	  <l>vāḍade jaridu nuḍiyade</l>
+	  <l>kēḍeṇisade kelarige haripadasēve</l>
+	  <l>gīḍāgi gatiya paḍevudu</l>
+	</lg>
+      </div>
+      <trailer>
+	hadibadeya dharma
+	saṁpūrṇaṁ
+      </trailer>
+    </body>
+  </text>
+</TEI>

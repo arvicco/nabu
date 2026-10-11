@@ -162,11 +162,21 @@ module Nabu
       # P107 (Q83.3): the unmined-ore census's lane vocabularies —
       # axis-shaped key tokens per lane (keys token-split on
       # non-alphanumerics; one shared token flags the key).
+      # P118-R4 S4 (the held-but-dark audit) widened the vocabulary
+      # (time · class/ndc/topic/material · settlement) and made matching
+      # prefix/suffix-aware (see #ore_token?): "toponyms", "datefrom",
+      # "origplace", "subgenre" all hit now.
       MINING_TOKENS = {
-        dates: %w[date dates dated dating year years century period era dynasty reign],
-        places: %w[place places findspot provenance origin region site toponym],
-        genre: %w[genre genres doctype category subject]
+        dates: %w[date dates dated dating year years century period era dynasty reign time],
+        places: %w[place places findspot provenance origin region site toponym settlement],
+        genre: %w[genre genres doctype category subject class ndc topic material]
       }.freeze
+
+      # Compound tokens the prefix/suffix rule would mis-hit — machinery
+      # (timestamps, web addresses) and the "original_*" title/text family
+      # ("origin" is a place word; "original" is not).
+      MINING_FALSE_FRIENDS = %w[timestamp timestamps timezone website websites original originals
+                                classname].freeze
 
       # Fetch bookkeeping — keys whose FIRST token marks them as
       # machinery, never ore.
@@ -200,13 +210,40 @@ module Nabu
                                          "text's origin",
                    "pub_date" => "the U-M e-text release year, machinery — the source edition's " \
                                  "year projects instead (date_class edition)" },
+        "openmgh" => { "printed_place" => "the modern MGH volume's publisher city — edition " \
+                                          "lineage; the print year projects (date_class edition)" },
+        # P118-R4 S4: the per-key, prefix-aware census surfaced these;
+        # each is lineage, machinery or a holding location (live values
+        # sampled 2026-10-11). Everything else it surfaced is real ore
+        # and stays loud.
+        "coptic-scriptorium" => { "version_date" => "the annotated release's version date — " \
+                                                    "corpus machinery, not the text's date" },
+        "croala" => { "date_period" => "a coarser restatement (\"16xx_2_third\") of the date the " \
+                                       "lane already projects",
+                      "date_precision" => "a certainty qualifier on the projected date, not a date" },
+        "disco" => { "birth_century" => "consumed: the :author_century_band shape bands it (a " \
+                                        "two-digit century cannot trace by value)",
+                     "death_century" => "consumed: the :author_century_band shape bands it",
+                     "birthplace" => "the AUTHOR's birthplace — a person fact, not the text's origin" },
+        "edh" => { "find_year" => "the modern discovery year (incl. negative upstream sentinels), " \
+                                  "not the inscription's date" },
         "eebo-tcp" => { "pub_place" => "the TCP project's own place, data lineage — the " \
-                                       "early-modern imprint place projects instead" },
+                                       "early-modern imprint place projects instead",
+                        "pub_date" => "the TCP e-text release (\"2014-11 (EEBO-TCP Phase 2).\"), " \
+                                      "machinery — the imprint date projects instead" },
         "corpus-corporum" => { "pub_place" => "the Patrologia Latina imprint (Parisiis, on " \
                                               "every doc) — edition lineage, not the patristic " \
-                                              "works' origin" },
-        "openmgh" => { "printed_place" => "the modern MGH volume's publisher city — edition " \
-                                          "lineage; the print year projects (date_class edition)" }
+                                              "works' origin",
+                               "pub_date" => "the Patrologia Latina volume's printing year " \
+                                             "(1844–1855) — edition lineage" },
+        "gams-zrcalo" => { "edition_date" => "the modern digital edition's year — lineage",
+                           "settlement" => "the holding library's city (a PRESENT location)" },
+        "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
+                                      "MetadataDates menota note)" },
+        "prilit" => { "date_cert" => "a certainty qualifier on the projected date, not a date" },
+        "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
+                                                  "doc — a PRESENT location)" },
+        "ticha" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }
       }.freeze
 
       MINING_SAMPLE = 40
@@ -610,10 +647,13 @@ module Nabu
         return nil unless table?(@catalog, :document_axes) && table?(@catalog, :document_facets)
 
         dark = @catalog[:sources].order(:slug).select_map(%i[id slug]).filter_map do |id, slug|
-          ore = ore_keys_by_lane(id, slug)
+          sample = sampled_metadata(id)
+          ore = ore_keys_by_lane(sample.flat_map { |_, meta| meta.keys }.uniq, slug)
           next nil if ore.empty?
 
-          lanes = ore.reject { |lane, _| lane_mined?(lane, id) }
+          projected = projected_strings(sample.map(&:first))
+          lanes = ore.transform_values { |keys| keys.reject { |key| key_traced?(key, sample, projected) } }
+                     .reject { |_, keys| keys.empty? }
           next nil if lanes.empty?
 
           "#{slug} (#{lanes.map { |lane, keys| "#{lane}: #{keys.sort.join('/')}" }.join('; ')})"
@@ -628,44 +668,90 @@ module Nabu
         )
       end
 
-      def ore_keys_by_lane(source_id, slug)
+      def ore_keys_by_lane(keys, slug)
         exempt = MINING_EXEMPT.fetch(slug, {})
-        keys = sampled_metadata_keys(source_id).reject do |key|
+        keys = keys.reject do |key|
           exempt.key?(key) || MINING_META_TOKENS.include?(key_tokens(key).first)
         end
         MINING_TOKENS.each_with_object({}) do |(lane, vocab), ore|
-          hits = keys.select { |key| key_tokens(key).intersect?(vocab) }
+          hits = keys.select { |key| key_tokens(key).any? { |token| vocab.any? { |word| ore_token?(token, word) } } }
           ore[lane] = hits unless hits.empty?
         end
       end
 
-      def sampled_metadata_keys(source_id)
+      # P118-R4 S4: whole-token matching missed plurals and compounds.
+      # A token hits a vocabulary word when equal, a plain plural, or —
+      # for words long enough not to hit by accident — a compound that
+      # starts (≥4 letters: "datefrom", "toponyms") or ends (≥5:
+      # "origplace", "subgenre") with it. MINING_FALSE_FRIENDS vetoes.
+      def ore_token?(token, word)
+        return false if MINING_FALSE_FRIENDS.include?(token)
+
+        token == word || token == "#{word}s" || token == "#{word}es" ||
+          (word.size >= 4 && token.start_with?(word)) || (word.size >= 5 && token.end_with?(word))
+      end
+
+      # [[document_id, metadata Hash], …] for the source's first sampled
+      # documents (unparseable metadata contributes nothing).
+      def sampled_metadata(source_id)
         @catalog[:documents]
           .where(source_id: source_id, withdrawn: false)
           .exclude(metadata_json: nil).exclude(metadata_json: "{}")
-          .limit(MINING_SAMPLE).select_map(:metadata_json)
-          .flat_map { |json| JSON.parse(json).keys rescue [] } # rubocop:disable Style/RescueModifier
-          .uniq
+          .limit(MINING_SAMPLE).select_map(%i[id metadata_json])
+          .filter_map do |id, json|
+            meta = JSON.parse(json) rescue nil # rubocop:disable Style/RescueModifier
+            [id, meta] if meta.is_a?(Hash)
+          end
       end
 
       def key_tokens(key)
         key.to_s.downcase.split(/[^a-z0-9]+/)
       end
 
-      def lane_mined?(lane, source_id)
-        docs = @catalog[:documents].where(source_id: source_id).select(:id)
-        case lane
-        when :dates
-          @catalog[:document_axes].where(document_id: docs)
-                                  .where(Sequel.|(Sequel.~(not_before: nil), Sequel.~(date_raw: nil)))
-                                  .limit(1).any?
-        when :places
-          @catalog[:document_axes].where(document_id: docs)
-                                  .where(Sequel.|(Sequel.~(place_name: nil), Sequel.~(place_ref: nil)))
-                                  .limit(1).any?
-        else
-          @catalog[:document_facets].where(document_id: docs).limit(1).any?
+      # P118-R4 S4 — per-KEY granularity: the lane-grained check let one
+      # row anywhere clear every axis-shaped key of a source, so ore
+      # inside an already-dated source (a second date key, a dynasty, a
+      # material) never fired. Each sampled document's projected strings
+      # (its axes date_raw/place_name/place_ref/bounds and its facet
+      # values) — a key is MINED when any sampled document's own value
+      # for it traces into its own rows, in any lane.
+      def projected_strings(doc_ids)
+        projected = Hash.new { |hash, key| hash[key] = [] }
+        @catalog[:document_axes].where(document_id: doc_ids)
+                                .select_map(%i[document_id date_raw place_name place_ref not_before not_after])
+                                .each { |id, *values| projected[id].concat(values.compact.map(&:to_s)) }
+        @catalog[:document_facets].where(document_id: doc_ids).select_map(%i[document_id value raw])
+                                  .each { |id, *values| projected[id].concat(values.compact.map(&:to_s)) }
+        projected
+      end
+
+      def key_traced?(key, sample, projected)
+        sample.any? do |id, meta|
+          next false unless meta.key?(key)
+
+          rows = projected[id].map(&:strip).reject(&:empty?)
+          metadata_leaves(meta[key]).any? { |leaf| rows.any? { |row| value_traces?(leaf, row) } }
         end
+      end
+
+      # The scalar leaves of a metadata value (hash values and array
+      # elements recursively; booleans and nulls carry no claim).
+      def metadata_leaves(value)
+        case value
+        when Hash then value.values.flat_map { |inner| metadata_leaves(inner) }
+        when Array then value.flat_map { |inner| metadata_leaves(inner) }
+        # "650.0" (a float-typed year) traces as "650" — the containment
+        # rule then reaches a signed bound ("-650").
+        when String, Numeric then [value.to_s.strip.sub(/\A(-?\d+)\.0+\z/, '\1')].reject(&:empty?)
+        else []
+        end
+      end
+
+      # Equality, or containment either way past 3 characters — the
+      # projections clean ("[London :" → "London") and parse
+      # ("12800101" → 1280) but keep the claim's substance.
+      def value_traces?(leaf, row)
+        leaf == row || (row.size >= 3 && leaf.include?(row)) || (leaf.size >= 3 && row.include?(leaf))
       end
 
       # P59-0: no dating interval runs backwards. The 82-row reversed-bounds

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+           <title>Pithapuram plates (set 2) of Jayasiṁha I</title>
+            <respStmt>
+               <resp key="creator"/>
+               <persName ref="part:daba">
+                  <forename>Dániel</forename>
+                  <surname>Balogh</surname>
+               </persName>
+            </respStmt>
+         <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+         <publicationStmt>
+            <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+            <pubPlace>Berlin</pubPlace>
+           <idno type="filename">DHARMA_INSVengiCalukya00099.xml</idno>
+            <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+            <date from="2019" to="2026">2019-2026</date>
+         </publicationStmt>
+         <sourceDesc><!-- only the handDesc can be filled in at this stage -->
+            <msDesc><!-- //// NB: the msIdentifier had to be added for validation purposes ///. It will be edited later with the metadata spreadsheet -->
+               <msIdentifier>
+                  <repository>as per external metadata</repository>
+                  <idno/>
+                  <!-- don't modify this -->
+                  <!--<altIdentifier type="PEM"><idno type="corpus">CalE14</idno></altIdentifier>-->
+               </msIdentifier>
+               <msContents><!-- describe the intellectual content of an inscription -->
+                  <summary><!-- //// NOT MANDATORY  ////--></summary>
+                  <!-- offers the possibility to give a summary of the inscription's content -->
+               </msContents>
+               <physDesc>
+                  <handDesc>
+                     <p>The writing is reported to be not very neat, but legible.
+                <!-- The script name(s) will be inserted here at a later stage from the metadata spreasheet. At this stage, you can mention here in a free-text paragraph any characteristics of the writing observed more than once in this inscription that seem unusual/uncommon or otherwise noteworthy given the general characteristics of the script in question. See EG 11.2. --></p>
+                     <!-- If you need to identify individual hands (EG §7.5/) in addition to one or more paragraphs of general palaeographic description, wrap <summary> around the <p> or <p>s above, and, outside <summary>, create <handNote> elements for each hand as follows:
+                <summary><p><p/></summary>
+                <handNote xml:id="Pallava00001_hand1"></handNote>
+                <handNote xml:id="Pallava00001_hand2"></handNote>
+              -->
+                  </handDesc>
+               </physDesc>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+      <revisionDesc>
+        <change who="part:daba" when="2024-01-11" status="published">Initial encoding of the file</change>
+         <!-- Add a <change> entry for each significant change to the file. -->
+      </revisionDesc>
+   </teiHeader>
+   <text xml:space="preserve">
+    <body>
+      
+      
+      
+<div type="edition" xml:lang="san-Latn" rendition="class:83225 maturity:83213">
+<div type="textpart" n="A"><head xml:lang="eng">Seal</head>
+  <ab><lb 
+n="1"/>śrī-sarvvasiddhi</ab>
+</div>
+<div type="textpart" n="B"><head xml:lang="eng">Plates</head>
+<pb 
+
+n="1r"/>
+<p><pb 
+
+n="1v"/><lb 
+n="1"/>svasti śrī-vijaya-skandhāvārāT<supplied reason="subaudible">.</supplied> hāriti-putrāṇāṁ mānavya-sagotrāṇāṁ<lb 
+n="2"/>Aśvamedhāvabhr̥tha-snāna-vidhvasta-jagat-kalmaṣāṇāṁ <lb 
+n="3"/>cālukyānāṁ kula-jalanidhi-samudbhūta-rāja-ratnasya <lb 
+n="4"/>śrī-kīrtivarmaṇaḥ pautraḥ Aneka-samara-saṅghaṭṭa-vija<pb 
+
+n="2r" break="no"/><lb 
+n="5" break="no"/>yinaḥ śrī-viṣṇuvarddhana-mahārājasya priya-tanayaḥ pravarddha<lb 
+n="6" break="no"/>māna-pratāpāvanamita-para-narapati-maku<lb 
+n="7" break="no"/>ṭa-maṇi-marīci-mañjarī-puñja-piñjarita-caraṇa-yugalaḥ <lb 
+n="8"/>cālukyāryārṇṇava-vaṁśa-dvayālayaikaḥ parama-brahmaṇyo <pb 
+
+n="2v"/><lb 
+n="9"/>mātā-pitr̥-pādānudhyātaḥ śrī-prithivī-jayasiṅgha-vallabha-mahā<lb 
+n="10" break="no"/>rājaḥ piṣṭapura-nagara-kuṭumbinaḥ viṣayādhi<lb 
+n="11" break="no"/>kāriṇaś ca samājñāpayati</p>
+<p>viditam astu vo yathāsmābhi<lb 
+n="12" break="no"/>r asmin nagara-sīmni veda-vedāṅga-vidaḥ kumāraśarmaṇaḥ pautrāya <pb 
+
+n="3r"/><lb 
+n="13"/><unclear>pitur a</unclear>dhika-guṇa-viśiṣṭasya bh<choice><sic>o</sic><corr>a</corr></choice>vaśarmaṇaḥ putrāya gautama-sa<lb 
+n="14" break="no"/>gotrāya kaṭha-sabrahmacāriṇe sva-karmma-niratāya sāmiśarmaṇe <lb 
+n="15"/><unclear>piṣṭapu</unclear>ra-paścima-digbhāge tombodiyan nāma kṣetraṁ sarvva-kara-<unclear>pari</unclear><lb 
+n="16" break="no"/>hāreṇāgrahārīkr̥tya samprattaṁ</p>
+<p>tathā bhavadbhir anyaiś ca paripālanī<lb 
+n="17" break="no"/>yaḥ<supplied reason="subaudible">.</supplied> na kaiścid bādhā karaṇīyā<supplied reason="subaudible">.</supplied> Atra nyāsa <gap reason="undefined" extent="unknown" unit="character"/> śreyase <gap reason="undefined" quantity="1" unit="character" precision="low"/></p>
+<lg n="1" met="anuṣṭubh">
+<l n="a"><pb 
+
+n="3v"/><lb 
+n="18"/>bahubhir vasudhā dattā</l>
+<l n="b">bahubhiś cānupālitā</l>
+<l n="c">yasya yasya yadā bhūmis</l>
+<l n="d">tasya tasya tadā phalaM</l>
+</lg>
+<pb 
+
+n="3v"/>
+</div>
+</div>
+        
+        
+        
+        
+        
+<div type="apparatus">
+  <div type="textpart" n="A"><head xml:lang="eng">Seal</head>
+  </div>
+  <div type="textpart" n="B"><head xml:lang="eng">Plates</head>
+    <listApp>
+      <app loc="5">
+        <lem>pravarddha<lb 
+n="6" break="no"/>māna-</lem>
+        <rdg source="bib:Jogarao1963_01">pravarddha<lb 
+n="6" break="no"/>mānḥ</rdg>
+      </app>
+      <app loc="8">
+        <lem>cālukyāryārṇṇava-vaṁśa-dvayālayaikaḥ</lem>
+        <note>See the commentary.</note>
+      </app>
+      <app loc="13">
+        <lem>-brahmaṇyo</lem>
+        <rdg source="bib:Jogarao1963_01">-brahmaṇo</rdg>
+      </app>
+      <app loc="14">
+        <lem source="bib:Jogarao1963_01">sāmiśarmaṇe</lem>
+        <note>Or possibly <foreign>svāmiśarmaṇe</foreign>.</note>
+      </app>
+      <app loc="17">
+        <lem source="bib:Jogarao1963_01">Atra nyāsa</lem>
+        <note>I wonder if the correct reading is <foreign>Atrājñaptiḥ</foreign>.</note>
+      </app>
+      
+      
+      
+      
+    </listApp>
+  </div>
+  
+</div>
+
+
+
+
+<div type="translation" resp="part:daba">
+  <div type="textpart" n="A"><head xml:lang="eng">Seal</head>
+  </div>
+  <div type="textpart" n="B"><head xml:lang="eng">Plates</head>
+    <p n="1-11">Greetings from the victorious army camp. The grandson of His Majesty Kīrtivarman, a jewel of a king arisen from the ocean that is the family of the Calukyas—who are the sons of Hāriti, who are of the Mānavya <foreign>gotra</foreign>, and who have dispelled the world’s sin by bathing in the purificatory ablutions <supplied reason="explanation"><foreign>avabhr̥tha</foreign></supplied> of the Aśvamedha sacrifice—; the dear son of King <supplied reason="explanation"><foreign>mahārāja</foreign></supplied> Viṣṇuvardhana, who was victorious in the clash of many a battle; <supplied reason="subaudible">namely</supplied> His Majesty the supremely pious King <supplied reason="explanation"><foreign>mahārāja</foreign></supplied> Pr̥thivī-Jayasiṁha Vallabha, who was deliberately appointed <supplied reason="subaudible">as heir</supplied> by his mother and father,
+whose pair of feet are engilded by a mass of beam clusters from gems on the crowns of enemy kings forced to bow by his ever-increasing valour, <seg cert="low">who as a singleton is a receptacle for two oceanlike dynasties, the Cālukya and the Ārya</seg>,<note>I translate tentatively. See the apparatus to line 8 and the commentary about this interesting, but probably incorrectly read passage.</note> commands the householders <supplied reason="explanation"><foreign>kuṭumbin</foreign></supplied> and district officials <supplied reason="explanation"><foreign>viṣayādhikārin</foreign></supplied> of the city of Piṣṭapura <supplied reason="subaudible">as follows</supplied>.</p>
+<p n="11-16">Let it be known to you that we have given the field named Tombodiya on the outskirts of this city, <supplied reason="subaudible">specifically</supplied> in the western direction of Piṣṭapura, converted into a rent-free holding <supplied reason="explanation"><foreign>agrahāra</foreign></supplied> by a remission of all taxes, to the grandson of Kumāraśarman, a knower of the Vedas and Vedāṅgas, the son of Bhavaśarman, who was distinguished by qualities superseding <supplied reason="subaudible">even</supplied> those of his father, <supplied reason="subaudible">namely</supplied> to Sāmiśarman of the Gautama <foreign>gotra</foreign> and the Kaṭha school, devoted to his duties. Therefore, <supplied reason="subaudible">this ruling</supplied> shall be observed by you sirs and by others. No one shall pose an obstacle. <seg cert="low">In this <supplied reason="subaudible">matter</supplied></seg>, <gap reason="lost"/> <seg cert="low">for excellence</seg>.</p>
+<p rend="stanza" n="1">Many <supplied reason="explanation">kings</supplied> have granted land, and many have preserved it <supplied reason="explanation">as formerly granted</supplied>. Whosoever at any time owns the land, the fruit <seg rend="pun">reward <supplied reason="explanation">accrued of granting it</supplied></seg> belongs to him at that time.</p>
+  </div>
+</div>
+
+
+
+<div type="commentary">
+<p>The expression <foreign>cālukyāryārṇṇava-vaṁśa-dvayālayaikaḥ</foreign> In line 8 may have great historical importance, but I wonder how accurately it has been read. It is known from the <ref target="DHARMA_INSVengiCalukya00080.xml">Musinikuṇḍa grant of Viṣṇuvardhana III</ref> that Kubja Viṣṇuvardhana had a queen named Ayyaṇa Mahādevī. It seems more than likely that Jayasiṁha I is here said to be the son of that queen, and that her family had great enough local importance to be mentioned on a par with the Cālukya line in Jayasiṁha’s ancestry (reminiscent of how the Viṣṇukuṇḍi Vikramendravarman II’s Vākāṭaka descent is highlighted). I wonder if the actual text here may begin with <foreign>cālukyāyyaṇa-vaṁśa-</foreign>. It is also entirely possible that the name Ayyaṇa had a Sanskritic variant Ārya (or Āryaṇa or even Āryārṇava), and if so, then it may be linked to the family recorded as Āryāhva or Āryāhū in the <ref target="DHARMA_INSVengiCalukya00053.xml">Koṇḍaṇagūru grant of Indra Bhaṭṭāraka</ref>, issued at the instance of the <foreign>mahārāja</foreign> Koṇḍivarman (or perhaps Roṇḍivarman) of that family.</p>
+</div>
+
+
+
+<div type="bibliography">
+  <p>Reported and edited with summary of the contents (in Telugu) by S. V. Jogarao (<bibl><ptr target="bib:Jogarao1963_01"/><citedRange unit="item">2</citedRange></bibl>). No facsimiles have been published. This is a preliminary edition by Dániel Balogh based on the text as transcribed by Jogarao, with conjectural alterations. Differences from Jogarao's text are only shown in the apparatus where they can potentially affect the meaning. Line beginnings are estimated on 1v and 2r (printed by Jogarao as continuous text). Metadata associated with this edition have been published separately in <bibl><ptr target="bib:Balogh2026_02"/></bibl>, available on <ref target="https://zenodo.org/records/22827003">Zenodo</ref>.</p>
+  <listBibl type="primary">
+    <bibl n="SVJ"><ptr target="bib:Jogarao1963_01"/><citedRange unit="item">2</citedRange></bibl>
+<!-- one <bibl/> per item of primary bibliography -->
+  </listBibl>
+  <listBibl type="secondary">
+    <bibl><ptr target="bib:Balogh2026_02"/></bibl>
+    <!-- one <bibl/> per item of secondary bibliography -->
+  </listBibl>
+</div>
+
+      
+      
+    </body>
+  </text>
+</TEI>

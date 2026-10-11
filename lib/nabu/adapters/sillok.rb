@@ -88,7 +88,7 @@ module Nabu
 
       # Per dataset: resolve the CURRENT download URL (the atchFileId
       # bumps on every upstream replacement — resolution is the
-      # contract, .docs/p78-plan.md §Acquisition), then the full ZipFetch
+      # contract — Nabu::DataGoKrFetch), then the full ZipFetch
       # choreography into the dataset's own subdir.
       def fetch(workdir, progress: nil, force: false)
         shas = DATASETS.map do |dataset|

@@ -1,6 +1,7 @@
 # config/postures.yml — per-source CORE-LAYER posture declarations
 # (P61-0 consolidation of the P59-4 config/lect_posture.yml; the D59-f
-# wave-1 frame, .docs/core-layers-architecture.md).
+# wave-1 frame of the ratified core-layers design; usage in
+# docs/operating-library.md §2).
 #
 # One row per source, one key per layer (lect / dating / places /
 # script), each holding what pure JUDGMENT can state — machine-knowable
@@ -668,6 +669,37 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  kannada-texts:   # P118-3
+    kind: {posture: unclassified, note: "no class field in the TEI (campū purāṇas, śatakas,
+        a sāṅgatya, a nighaṇṭu, a poetics and a grammar) — a kind_map fold would be a ruled
+        table"}
+    lect: {posture: pending, note: "candidate: a kan (Kannada) anchor with Old (Halegannaḍa:
+        Pampa–Janna) and Middle (Naḍugannaḍa: Harihara, Rāghavāṅka, Kanakadāsa,
+        Ratnākaravarṇi, Honnamma) stages — the hub-side nabu-lects mint; no kan node exists
+        in canonical/nabu-lects (checked 2026-10-11), so kan-Latn rides bare until it
+        merges; san-Latn (the Karṇāṭakabhāṣābhūṣaṇaṁ, Sanskrit stanzas) resolves"}
+    dating: {posture: partial, note: "6 of 16 works dated by the repository README (941 ×2,
+        953, ca. 1042 ×3) — attributed COMPOSITION class on the :structured lane; the TEI
+        headers carry only edition years; the other ten works stay undated, declared"}
+    places: {posture: unplaced, note: "the headers name only the modern editions' imprint
+        places (Hampi, Mysore, Bengaluru) — never the works'"}
+    script: {posture: qualified, note: "ISO-15919 romanization of Kannada-script editions;
+        the Kannada script itself is not carried"}
+  prakrit-texts:   # P118-3
+    kind: {posture: unclassified, note: "no class field in the TEI (kāvya, kathā, gāhā
+        anthologies, lexica, grammars, a metrics, canonical Āgamas) — a kind_map fold would
+        be a ruled table"}
+    lect: {posture: pending, note: "candidate: pka (Ardhamāgadhī — the Nandī and
+        Aṇuōgaddārāiṁ, 2 docs / 764 passages tag pka-Latn) has no registry node: a pka member
+        under pra (pra's own note keeps the member codes unminted until a consumer
+        distinguishes them — this one does) or a codemap pka-Latn → pra coarse, the
+        hub-side mint; pra-Latn and san-Latn resolve"}
+    dating: {posture: undatable, note: "the headers carry modern edition years only
+        (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
+        dates nothing — no composition date is minted, declared"}
+    places: {posture: unplaced, note: "only the editions' imprint places are named"}
+    script: {posture: qualified, note: "ISO-15919 romanization (Dēvanāgarī-printed
+        editions); the source script is not carried"}
   sarit:
     kind: {posture: unclassified}
     lect: {posture: identity, note: classical Sanskrit editions; no school tags like DCS's}
@@ -687,8 +719,8 @@ sources:
         oui/zho); the Central Asia registry wave makes them real anchors at its merge}
     dating: {posture: partial, note: the iso_prefix_key MetadataDates shape — 317 typed date
         strings; prose-only dates honestly mint nothing}
-    places: {posture: named, note: toponym lists with lat/long fields ride metadata; a
-        place-lane projection is a recorded follow-up}
+    places: {posture: named, note: the toponym lists project through MetadataDates (P118-R4)
+        — every name joins the claim, coordinates only when exactly one toponym carries them}
     script: {posture: implied, note: script parentheticals recorded per doc as script_note}
   skjaervo-khotanese:   # P107-3a
     kind: {posture: unclassified, note: msItem @type (Doc./lit. classes) is a natural kind_map
@@ -1019,6 +1051,17 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (ocm-Latn/san-Latn); the Cham script is
         the artifact fact"}
+  dharma-deccan:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: a nabu-lects mint of the tel + kan anchors
+        (Dravidian, under dra-sou) with tel-Latn/kan-Latn codemap rows; pra/san -Latn
+        already resolve on canonical rows"}
+    dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
+        Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
+    places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
+        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined"}
+    script: {posture: qualified, note: "romanized editions (pra/san/tel/kan -Latn); Brāhmī
+        and its southern descendants are the artifact facts"}
   dharma-nusantara:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "kaw/omy/osn/san -Latn — all resolve on the
@@ -1039,6 +1082,20 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
         artifact fact"}
+  dharma-tamil:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: identity once nabu-lects carries tam-Latn and
+        tel-Latn (san/pra/pli/fra -Latn resolve today) — the lect mint rides hub-side"}
+    dating: {posture: pending, note: "no origDate in any header; candidate: the titles'
+        attributed statements ride metadata title_dating verbatim on ~960 docs ('time of
+        Rājakesarivarman, year 9', 'Śaka year 1589') — conversion needs a ruled South-Indian
+        regnal table and a Śaka epoch ruling"}
+    places: {posture: pending, note: "no origPlace in any header (findspots live in DHARMA's
+        separate metadata repos); candidate: that join, or the house-style titles' leading
+        toponym once a gazetteer match is ruled"}
+    script: {posture: qualified, note: "romanized (tam-Latn/san-Latn); Tamil, Grantha and
+        Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
+        script_rendition verbatim"}
   obi-burmese:
     kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the
@@ -1059,6 +1116,45 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (kaw-Latn/osn-Latn/san-Latn); Kawi and
         Old Sundanese scripts are the artifact facts"}
+  dharma-mdt:
+    # P118-4: the DHARMA metadata-row sidecar (zero-passage documents).
+    kind: {posture: unclassified, note: "the row's own text typology rides metadata
+        text_types verbatim (donative-religious_land_grant, commemorative-memorial-
+        hero_memorial …); a kind_map fold over it is a recorded future look after the
+        first live census"}
+    lect: {posture: pending, note: "candidate: the tel + tam anchors of the aggregated
+        Indic nabu-lects mint (P118-7) — Telugu 97 rows and Pallava's one Tamil row name
+        languages with no registry node yet; Sanskrit rows resolve on bare san, rows
+        naming no language carry und"}
+    dating: {posture: partial, note: "the rows' own CE dating: Date CE / Date range CE
+        (61 of 734 documents — Telugu 60, Pallava 1; census 2026-10-11) with certainty and
+        evidence (reign / palaeography / internal date) riding the envelope; all CE
+        already — no era-typed years, config/eras.yml unconsumed; rows via MetadataDates
+        :structured"}
+    places: {posture: unplaced, note: "no findspot column: the 'Location on the artefact
+        /conglomerate artefact/monument' cell (96 rows) is free prose ('On a stone lying
+        in a field at Addanki'), recorded verbatim as artefact_location, never a place
+        claim"}
+    script: {posture: qualified, note: "no text surface — the rows' script classification
+        and maturity ride metadata verbatim"}
+  siddham:
+    # P118-4: the Siddham EpiDoc archive (427 editions, blank TEI headers —
+    # the English title is the only metadata the asset carries).
+    kind: {posture: unclassified, note: "the titles name the object (Charter / Pillar
+        Inscription / Seal Legend / Graffito …) in free English prose — no typed genre
+        field; a title-vocabulary fold is a recorded future look"}
+    lect: {posture: identity, note: "san-Latn on all 427 editions (census 2026-10-11) — the
+        bare san anchor is the claim; deliberately coarse (no epigraphic-Sanskrit stage)"}
+    dating: {posture: partial, note: "title-mined only (headers blank): 9 era-typed 'GE N'
+        years via config/eras.yml (Gupta–Valabhī, GE Y → CE [Y+319, Y+320]) + 4 century
+        attributions (401–500 / 501–600); 88 untyped 'year N' titles ride raw as
+        title_year, never converted (the title names no era); the editions' own dating
+        formulae are a future extractor story — rows via MetadataDates :structured"}
+    places: {posture: unplaced, note: "no origPlace (headers blank); the findspot leads
+        the English title in prose (Eran / Gadhwa / Khoh …) but no structured field
+        carries it — the offline metadata spreadsheets are not in the deposit"}
+    script: {posture: qualified, note: "romanized (san-Latn IAST); the Brāhmī-derived
+        scripts of the objects are the artifact facts"}
   ojw:
     lect: {posture: identity, note: "kaw — the v1.6.0 anchor, shared with the kakawin
         corpora (pending retired at the P92 gate)"}

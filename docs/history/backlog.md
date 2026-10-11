@@ -1,5 +1,13 @@
 # Backlog
 
+> **Frozen historical record (frozen 2026-07-23).** This file is the flat packet backlog that coordinated the loop from Phase 0 through P43. It is
+> kept verbatim as the project's early record and is no longer updated: its
+> paths, figures, and statuses are as of the day each line was written, and
+> its references to `docs/backlog.md` / `docs/worklog.md` mean this folder.
+> The current process — phases, packets, gates — is described in
+> [`docs/dev-loop.md`](../dev-loop.md); see [`README.md`](README.md) for why
+> these records were frozen.
+
 Work packets for the dev loop (see `docs/dev-loop.md`). Statuses: `ready` → `in-progress` → `done` | `blocked: <reason>`. The executing session updates its packet's status and appends one line to `docs/worklog.md`.
 
 ---

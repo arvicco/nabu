@@ -1,5 +1,13 @@
 # Worklog
 
+> **Frozen historical record (frozen 2026-08-02).** This file is the one-line-per-packet completion journal kept from Phase 0 through the P55 release gate. It is
+> kept verbatim as the project's early record and is no longer updated: its
+> paths, figures, and statuses are as of the day each line was written, and
+> its references to `docs/backlog.md` / `docs/worklog.md` mean this folder.
+> The current process — phases, packets, gates — is described in
+> [`docs/dev-loop.md`](../dev-loop.md); see [`README.md`](README.md) for why
+> these records were frozen.
+
 One line per completed packet: date · packet · commit · notes.
 
 ---

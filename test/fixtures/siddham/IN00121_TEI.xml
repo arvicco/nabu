@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title xml:lang="eng-Latn">Sanchi Pillar Inscription of the 5th Century</title>
+			</titleStmt>
+			<publicationStmt>
+				<authority/>
+				<idno type="filename">IN00121</idno>
+			</publicationStmt>
+			<sourceDesc>
+				<msDesc><msIdentifier><repository>empty</repository></msIdentifier></msDesc>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text>
+		<body>
+			<div type="edition" xml:lang="san-Latn">
+				<!-- Encoded for Siddham by Dániel Balogh. Version of January 2019. Comments below are offered "as is" and do not represent a thoroughly researched or considered opinion. -->
+				<!-- first fragment ends at rudra, second fragment edited from photos. Compare this with Inscriptions of Sanchi and if it has any history for the second fragment, add it to the metadata. -->
+				<ab>
+					<lb n="1"/><unclear cert="low">aka</unclear><gap reason="illegible" quantity="1" unit="character"/> vihārasvāmi-gośūra-siṃhabala-puttra-rudra <gap reason="lost" precision="low" quantity="2" unit="character"/> <unclear>s</unclear>ya vajrapāṇi-stambhaḥ toraṇa-stambha-dvayaṃ vih<unclear>ā</unclear>re maṇḍapaḥ pratolī ca<supplied reason="omitted">||</supplied>
+					<!-- Is this gośūra a personal name, or can it be a title? It is placed like a title, and see Falk_2010 (Names and Titles) p75, who says there is a title meaning "prince, son of family", Iranian viśpuhr, Indianised as guśūraka, gaśūra and gośūra. -->
+					<!-- Majumdar in Marshall_Foucher_1947: a[raka?]-vihārasvāmi-gośūra-Siṃhabala-puttra-Rudra(siṃha)sya Vajrapāṇi-stambhaḥ toraṇa-stambha-dvayaṃ vihāra-maṇḍapaḥ pratolī ceti. -->
+				</ab>
+			</div>
+		</body>
+	</text>
+</TEI>

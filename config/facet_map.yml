@@ -41,3 +41,46 @@ sources:
       objectType: object_type # codex · papyrus …
       repository: repository  # holding libraries (BN Napoli, BL, Morgan …)
       corpus: corpus          # upstream corpus ids (besa.letters, shenoute.a22 …)
+  # -- P118-R4 S2: the held-but-dark audit's facet wave. Censuses: live
+  #    catalog 2026-10-11. Every field below already rode metadata_json
+  #    verbatim and fed no facet; projecting it needs no re-parse.
+  cdli:                       # census: 353,138 docs
+    fields:
+      material: material      # 348,407 docs, 294 values (clay 323,177 · stone 7,918 ·
+      #                         "stone ?" 6,604 · composite 3,595 …; upstream case kept)
+      object_type: object_type  # 349,252 docs, 29 values (tablet 296,840 · seal (not
+      #                         impression) 15,518 · tablet & envelope 7,183 · cone · brick …)
+      museum_no: museum       # 340,616 docs, 263,099 values — incl. upstream's own
+      #                         number-withheld forms ("BM —" 27,272) and "unknown" (claims)
+  rundata:                    # census: 6,815 inscription records
+    fields:
+      material_type: material # 7 classes (stone 4,204 · wood 1,279 · metal 646 …)
+      material: material      # 5,459 docs, 437 fine values (granite · Gävle sandstone …) —
+      #                         both grains under one facet so either filters
+      objectInfo: object_type # 6,807 docs (runestone 1,963 · fragment of runestone 696 …)
+      style: style            # 2,669 docs, 88 ornament styles (Pr 1–5, Rak, Fp …; "?" a claim)
+      # carver (1,080 docs) is a PERSON field — the person lane, not a facet (later)
+  glaux:                      # census: 1,421 works
+    fields:
+      dialect: dialect        # 1,176 docs, 7 values (Attic/Koine 416 · Attic 322 · Koine 214 …)
+  kdsp:                       # census: 262 Slovene novels (ELTeC)
+    fields:
+      canonicity: canonicity  # nizka 182 · visoka 80
+      period_slot: period     # ELTeC time slots D1–D9 (the date itself is on the timeline)
+  ref:                        # census: 190 Early New High German texts
+    fields:
+      medium: medium          # Handschrift 97 · Druck 93
+      text-type: text_type    # 185 docs, 140 upstream text-type labels verbatim
+  rem:                        # census: 406 Middle High German texts
+    fields:
+      topic: topic            # 406 docs (Religion 278 · Poesie 47 · Wissen(-schaft) 41 …)
+      text_type: text_type    # 388 docs, 105 values (Predigt · Segen · Bibeldichtung …)
+  edr:                        # census: 115,590 docs
+    fields:
+      repository: museum      # holding museum incl. "ignoratur"/"periit" (lost — a claim)
+  edh:                        # census: 81,881 docs, 42,238 with a repository
+    fields:
+      repository: museum      # "verschollen" 5,482 (lost — a claim); 5 bare "-" ride verbatim
+  oncoj:                      # census: 4,991 poems
+    fields:
+      corpus: collection      # MYS 4,693 · NSK 133 · KK 112 · BS · FK · SNK …

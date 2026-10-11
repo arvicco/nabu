@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Tirukkaḷar plate, time of Rājādhirāja, year 31</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>	
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris</pubPlace>
+                <idno type="filename">DHARMA_INSTamilNadu01015.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary>A single copper plate found in a group of five copper plates of the Parijātavaneśvara temple of Tirukkaḷar, found altogether strung on a copper ring. Records a donation of land for the expenses of two officiating Brahmins. Time of Rājādhirāja I Cōḻa.</summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p>
+                                No distinction between <foreign>e</foreign> and <foreign>ē</foreign>,
+                                nor between <foreign>o</foreign> and <foreign>ō</foreign>.
+                                Medial <foreign>i</foreign> and <foreign>ī</foreign> interchangeable.
+                                <foreign>n</foreign> and <foreign>ñ</foreign> interchangeable.
+                            </p>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2026-02-13" status="draft">Creation of the file on the repository</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        
+        <body>
+            
+            <div type="edition">
+                
+                <!--Text after SII. Cleaned. Check against facsimile-->
+                
+                <p>
+                    <pb n="1r"/>
+                    <lb n="1"/>v<choice><orig>i</orig><reg>ī</reg></choice>ra-pāṇṭi<supplied reason="omitted">ya</supplied>ṉ ṟalaiyum cerala<supplied reason="omitted">ṉ</supplied> cālaiyu<supplied reason="omitted">m</supplied> Ilaṅk<hi rend="grantha">ai</hi>yum taṇṭāṟ koṇṭa kō-Irā<hi rend="grantha">ja</hi>-<unclear>kē</unclear>
+                    <lb n="2" break="no"/>cari-pa<hi rend="grantha"><unclear>n</unclear>ma</hi>r-ā<choice><orig>n</orig><reg>ṉ</reg></choice>a Uṭ<hi rend="grantha">ai</hi>yār <hi rend="grantha">śrī</hi>-rā<hi rend="grantha">jādhi</hi>rā<hi rend="grantha">ja-de</hi>va<supplied reason="omitted">r</supplied>kku yāṇṭu <num value="31">3 <g type="numeral">10</g> 1</num> Āvatu
+                </p>
+                <p>
+                    Ar<hi rend="grantha">ai</hi>ya<unclear>ṉ</unclear> nākar<hi rend="grantha">ai</hi>yaṉ-ā<choice><orig>n</orig><reg>ṉ</reg></choice>a
+                    <lb n="3"/>ma<hi rend="grantha">hi</hi>pāla-kula-kāla-p-per<hi rend="grantha">ai</hi>ya<unclear>ṉ-ā</unclear><choice><orig>n</orig><reg>ṉ</reg></choice>a tiru-maṇa<surplus>p</surplus>-p-piccaṉ Uṭ<hi rend="grantha">ai</hi>yārkku muṉpu tiru-v-ār<choice><sic>a</sic><corr>a</corr></choice>t<choice><sic>i</sic><corr>a</corr></choice>ṉai ce
+                    <lb n="4" break="no"/>yum pirāmaṇa<choice><orig>n</orig><reg>ṉ</reg></choice> Oruvaṉum tiru-maṇa<surplus>ṭa</surplus>-p-piccaṉ c<choice><orig>ē</orig><reg>ey</reg></choice>ta <choice><orig>ṉ</orig><reg>n</reg></choice>ivan=taṅ koṇṭu ceyum pirāma
+                    <lb n="5" break="no"/>ṇaṉ Oruvaṉum āka Iruvark=ku <g ref="sym:tam-nal"/> 1<g ref="sym:dash" type="punctuation">.</g>k=ku <g ref="sym:tam-tuni"/> <g ref="sym:tam-kuruni"/> Āka <g ref="sym:tam-nal"/> <num value="360">3 <g type="numeral">100</g> 6 <g type="numeral">10</g></num>k=ku <hi rend="check"><g ref="sym:tam-kalam"/> <num value="150"><g type="numeral">100</g> 5 <g type="numeral">10</g></num> <unclear>7</unclear> </hi>k=kuviṭṭani 1 1/4
+                </p>
+                <p>
+                    Itu
+                    <lb n="6"/>Aḻipp<choice><sic>a</sic><corr>ā</corr></choice>r tiruvāṇai <g ref="sym:doubleBar" type="punctuation">.</g><g ref="sym:polygon-triangle" type="punctuation">.</g>
+                </p>
+                <pb n="2r"/>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+                <listApp>
+                    <app loc="3">
+                        <lem>tiruvār<choice><sic>a</sic><corr>a</corr></choice>t<choice><sic>i</sic><corr>a</corr></choice>ṉai</lem>
+                        <rdg source="bib:KrishnaSastri1929_01">tiruva<supplied reason="omitted">r</supplied>rātiṉai</rdg>                        
+                    </app>
+                    <app loc="5">
+                        <lem><num value="360">3 <g type="numeral">100</g> 6 <g type="numeral">10</g></num>k=ku</lem>
+                        <note>The numbers 100 and 6 are quite similar.</note>
+                    </app>
+                    <app loc="5">
+                        <lem><g ref="sym:tam-kalam"/> <num value="150"><g type="numeral">100</g> 5 <g type="numeral">10</g></num> <unclear>7</unclear>k=kuviṭṭani</lem>
+                        <rdg source="bib:KrishnaSastri1929_01"><hi rend="grantha">I</hi> <num value="157"><g type="numeral">100</g> 5 <g type="numeral">10</g></num> Eḷak=kuviṭṭani</rdg> 
+                    </app>
+                </listApp>
+                
+            </div>
+            
+            <div type="translation">
+                
+            </div>
+            
+            <div type="commentary">
+                
+            </div>
+            
+            <div type="bibliography">                
+                
+                <p>Edited and translated in <bibl><ptr target="bib:KrishnaSastri1929_01"/></bibl> (<ref target="DHARMA_INSSIIv03p0i0208">SII 3.208</ref>), with visual documentation.</p>
+                <p>This revised edition by Emmanuel Francis based on <bibl><ptr target="bib:KrishnaSastri1929_01"/></bibl> and therein published visual documentation.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:KrishnaSastri1929_01"/>
+                        <citedRange unit="page">465-469</citedRange>
+                        <citedRange unit="item">207</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    
+                    <bibl>
+                        
+                    </bibl>
+                    
+                </listBibl>
+                
+            </div>
+        </body>
+    </text>
+</TEI>

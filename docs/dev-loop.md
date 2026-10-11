@@ -28,12 +28,14 @@ The loop's job is therefore mostly *dispatch and verify*, not *judge* — which 
 
 ## 3. Work packets and the backlog
 
-The backlog lives at `docs/backlog.md` — a flat, human-editable list of packets
-(HISTORICAL through ~P52: since then the live coordination state moved to the
+The backlog lived at `docs/history/backlog.md` — a flat, human-editable list of packets
+(HISTORICAL through P43: since then the live coordination state moved to the
 gitignored `.docs/` — the per-phase plan doc `.docs/p<N>-plan.md`, the work
 queue `.docs/work-queue.md`, and the decision register
-`.docs/decision-register.md`; docs/backlog.md and docs/worklog.md stand as
-the early record):
+`.docs/decision-register.md`; `docs/history/backlog.md` (frozen 2026-07-23)
+and `docs/history/worklog.md` (frozen 2026-08-02) stand as the early record —
+see `docs/history/README.md`). The original packet shape, still the shape a
+phase plan's packets take:
 
 ```markdown
 ## P1-04 · Loader: upsert, content hashing, revisions  [tier: fable] [status: ready] [deps: P1-03]
@@ -43,7 +45,7 @@ Acceptance: idempotency test (load fixture twice, counts/revisions unchanged);
             revision-bump test; withdrawal test; rake test + rake lint green.
 ```
 
-Statuses: `ready` → `in-progress` → `done` | `blocked` (with a reason line). The executing session updates its own packet's status and appends one line to `docs/worklog.md` (date, packet, commit SHA, notes). The backlog is the loop's entire coordination state — no external tracker, survives any session dying.
+Statuses: `ready` → `in-progress` → `done` | `blocked` (with a reason line). In the backlog era the executing session updated its own packet's status and appended one line to the worklog (date, packet, commit SHA, notes); today the phase plan doc carries packet status and the phase-gate PR body carries the record. Either way the board is the loop's entire coordination state — no external tracker, survives any session dying.
 
 ## 4. Loop mechanics
 
@@ -81,12 +83,12 @@ Each iteration, regardless of execution vehicle (§5):
      working documents, not publications. Publishing anything into `docs/`
      is the owner's explicit decision, packet by packet. Dispatch mechanics:
      survey/scout agents run in the MAIN tree (gitignored files never cross
-     a worktree merge); worktree agents deliver code + backlog/worklog only,
+     a worktree merge); worktree agents deliver code and tracked docs only,
      and route any consideration material through their final report for the
      orchestrator to file under `.docs/`. Loop docs that ARE the public
-     record (backlog, worklog, architecture, shipped-feature docs) stay in
-     `docs/` as before.
-5. **Commit** on the current phase branch (`phase-N`), imperative message referencing the packet ID. Update backlog + worklog.
+     record (architecture, shipped-feature docs, and the frozen early
+     backlog/worklog under `docs/history/`) stay in `docs/`.
+5. **Commit** on the current phase branch (`phase-N`), imperative message referencing the packet ID. Update the packet's status on the board.
 6. **Escalate on failure**: two failed attempts at a packet → mark `blocked` with a diagnosis, move to the next packet. Never thrash. `blocked` packets are adjudicated by Fable at the next gate (or sooner if everything else is blocked → stop and notify the owner).
 7. **Phase gate** (all phase packets done/blocked): Fable reviews the *entire phase diff* against `docs/architecture.md`, checks the doc is still truthful (updates it if implementation deviated — per CLAUDE.md), resolves blocked packets, **updates `README.md`** — the user-facing document describing the capabilities and commands implemented up to this point (honest about what doesn't work yet; a newcomer reading only the README should know exactly what `bin/nabu` can do today) — then opens a PR `phase-N → main`. **The owner reviews and merges the PR — this is the standing human approval gate.** The gate turn ends by arming the owner's attention alarm (sticky mode — see the global convention in `~/.claude/CLAUDE.md`), as does any blocked state needing guidance. The next phase's packets are elaborated in detail only after the merge.
 
@@ -223,7 +225,7 @@ Tests need real trimmed upstream samples. Acquisition is automated but plan-gate
 - The loop then executes the fetches itself, trims, writes the fixture READMEs (retrieval date + URL per CLAUDE.md), and commits — staying strictly within the approved list; anything unexpected (moved URLs, format surprises) goes back on the plan for re-approval rather than being improvised.
 - A phase never starts with an unapproved fixture plan; the gate is where approval happens, so fixtures never block mid-loop.
 
-Real full syncs (`bin/nabu sync <source>` against complete upstream corpora) remain human-initiated per CLAUDE.md — they're bulk downloads and eyeball-verification events, not test infrastructure.
+Real full syncs (`bin/nabu sync <source>` against complete upstream corpora) are not test infrastructure — they're bulk downloads and eyeball-verification events. Originally human-initiated, they have been **loop-executed since 2026-09-14** (owner rule): adopting a phase authorizes its network operations, and the loop runs them announced, ticked, and verified. The one standing exception is `nabu rebuild` in any flavor — an owner-fired, inter-phase step (owner rule 2026-09-26), because a derivation-core edit dirties every stamp and turns an "incremental" into a full replay; a phase's live passes are the enumerated targeted set (`sync <slug> --parse-only` per changed adapter plus builder refreshes).
 
 ## 8b. Releases (owner ruling 2026-07-22)
 
@@ -243,7 +245,7 @@ is the division of labor.
 1. **Plan approved** with amendments incorporated (§2 only Fable/Opus write code; §6 sandbox-freedom guardrails; §8 plan-gated automated fixture acquisition).
 2. **Push policy:** the loop pushes `phase-N` branches and opens PRs on `arvicco/nabu`; `main` stays owner-merged.
 3. **Stage A attendance:** Phase 0 runs interactively (Fable orchestrating, Opus implementing); `/loop` from Phase 1 onward.
-4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (docs/backlog.md carried them through ~P52), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
+4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (`docs/history/backlog.md` carried them through P43), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
 
 ### §4 addendum — gate waits don't block the loop (owner, 2026-07-11)
 

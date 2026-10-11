@@ -295,7 +295,8 @@ module Nabu
       Store::KindBuilder.refresh_source!(catalog: @db, slug: entry.slug,
                                          kinds: Nabu::Kinds.load_default(config: @config),
                                          canonical_dir: @config.canonical_dir)
-      Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
+      Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug,
+                                                            canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
     end
 

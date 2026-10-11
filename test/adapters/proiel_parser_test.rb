@@ -156,6 +156,24 @@ class ProielParserTest < Minitest::Test
     end
   end
 
+  # --- P118-R4 S6: coreference + div titles (the held-but-dark audit) ----
+
+  def test_sentences_carry_their_div_title
+    passages = parse.to_a
+    assert_equal "Book 1, section 1", passages.first.annotations["div_title"]
+    assert_equal "Book 1, section 4", passages.last.annotations["div_title"],
+                 "the title follows the enclosing div, never the <source> title"
+  end
+
+  def test_antecedent_id_rides_tokens_as_coreference
+    iswoc = File.expand_path("../fixtures/iswoc/wscp-mark.xml", __dir__)
+    document = parser.parse(iswoc, urn: "urn:nabu:iswoc:wscp", language: "ang")
+    token = document.flat_map { |passage| passage.annotations["tokens"] }
+                    .find { |candidate| candidate["id"] == "1438809" }
+    assert_equal "1438807", token["antecedent_id"], "minne → its antecedent token"
+    assert_equal "old", token["information_status"]
+  end
+
   def test_zero_sentences_raises_parse_error
     xml = File.read(FIXTURE).gsub(%r{<sentence\b.*?</sentence>}m, "")
     with_tempfile(xml) do |path|

@@ -47,7 +47,7 @@ class StarlingLexstatTest < Minitest::Test
   LEXSTAT_SHELVES = 13
 
   def test_the_lexstat_shelf_census_is_pinned
-    wordlists = Nabu::Adapters::StarlingLexstat::TABLES.keys
+    wordlists = Nabu::Adapters::StarlingLexstat::IE_TABLES.keys
     etymology = Nabu::Adapters::Starling::BASES.select { |_, base| base[:dir] == "LEXSTAT" }.keys
     assert_equal LEXSTAT_SHELVES, wordlists.size + etymology.size
     assert_equal %w[starling-lexstat-balt starling-lexstat-celt starling-lexstat-dard

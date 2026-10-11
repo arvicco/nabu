@@ -17,7 +17,7 @@ module Nabu
     # Trailing tabs/spaces strip (70 lines); truly empty lines skip —
     # including the upstream 24,295-line BLANK HOLE in lexicon-2 (one
     # contiguous run: the late-འ…ཡ alphabetical band is absent upstream;
-    # .docs/upstream-reports.md). Everything else is a headword VERBATIM
+    # reported upstream). Everything else is a headword VERBATIM
     # (the ~10 stray Tai Tham codepoints are upstream typos we keep —
     # canonical means canonical), NFC at the boundary: bod is not
     # NFC-exempt, so the 520 composition-excluded-vowel lines (U+0F75 →

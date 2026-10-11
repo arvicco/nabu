@@ -822,7 +822,8 @@ module Nabu
 
       catalog = Nabu::Store.connect(config.catalog_path)
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: slug)
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: slug,
+                                                                         canonical_dir: config.canonical_dir)
       say "metadata-dates lane (#{slug}): #{rows} rows projected " \
           "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
     ensure
@@ -4541,12 +4542,12 @@ module Nabu
     desc "mcp", "Serve the corpus to an AI client over MCP (stdio, read-only) — see docs/mcp.md"
     long_desc <<~HELP, wrap: false
       Run the Model Context Protocol server on stdin/stdout: a READ-ONLY
-      conversational surface over the local nabu corpus, exposing seven tools —
-      nabu_search (full-text + exact-lemma), nabu_show (read by urn, ranges,
-      parallel translations), nabu_concord (KWIC), nabu_align (cross-source
-      citation alignment), nabu_define (the dictionary shelf: LSJ + Lewis &
-      Short), nabu_etym (the reconstruction crosswalk), and nabu_status
-      (coverage) — to any MCP client (Claude Code, Claude Desktop). The catalog and index are opened
+      conversational surface over the local nabu corpus, exposing thirteen
+      tools — nabu_search (full-text, lemma, morph, similar), nabu_show,
+      nabu_concord (KWIC), nabu_align, nabu_parallels, nabu_links,
+      nabu_define (the dictionary shelves), nabu_etym, nabu_cognates,
+      nabu_char, nabu_signs, nabu_place, and nabu_status (coverage) — to
+      any MCP client (Claude Code, Claude Desktop). The catalog and index are opened
       SQLITE_OPEN_READONLY: this process is POSITIVELY unable to write to db/.
 
       This is a plumbing command, not an interactive one. STDOUT IS THE PROTOCOL
