@@ -136,12 +136,12 @@ class KannadaTextsTest < Minitest::Test
     end
   end
 
-  def test_registered_unwired
+  def test_registered_and_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["kannada-texts"]
     refute_nil entry
     assert_equal Nabu::Adapters::KannadaTexts, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "flipped wired after the verified 2026-10-11 first sync (counts in sources.yml)"
   end
 
   private
