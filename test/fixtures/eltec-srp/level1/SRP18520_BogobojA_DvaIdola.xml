@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml-model href="https://distantreading.github.io/Schema/eltec-1.rng" ?> -->
+<?xml-model href="../Schemas/eltec-1.rng" type="application/xml" 
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="../Schemas/eltec-1.rng" type="application/xml" 
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="SRP18520" xml:lang="sr">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title ref="wikidata:Q109336066">Два идола : ELTeC издање</title>
+                <title xml:lang="en">Two idols : ELTeC edition</title>
+                <author ref="viaf:8970679 wikidata:Q833421">Атанацковић, Богобој (1826-1858)</author>
+                <respStmt>
+                    <resp>Сканирање</resp>
+                    <name>Универзитетска библиотека "Светозар Марковић"</name>
+                </respStmt>
+                <respStmt>
+                    <resp>OCR и корекција текста</resp>
+                    <name>Цветана Крстев</name>
+                </respStmt>
+                <respStmt>
+                    <resp>Кодирање за ELTeC</resp>
+                    <name>Цветана Крстев</name>
+                </respStmt>
+            </titleStmt>
+            <extent>
+                <measure unit="words">44207</measure>
+                <measure unit="pages">204</measure>
+            </extent>
+            <publicationStmt>
+<publisher ref="https://distant-reading.net">COST Action "Distant Reading for European Literary History" (CA16204)</publisher>
+<distributor ref="https://zenodo.org/communities/eltec/">Zenodo.org</distributor><date when="2021-04-09"/>
+<availability><licence target="https://creativecommons.org/licenses/by/4.0/"/></availability>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.3462435">ELTeC</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.4662444">ELTeC release 1.1.0</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.3524056">ELTeC-srp</ref>
+<ref type="doi" target="https://doi.org/10.5281/zenodo.4662604">ELTeC-srp release 0.9.0</ref>
+</publicationStmt>
+            <sourceDesc><bibl type="printSource">
+                    <author>Атанацковић, Богобој</author>
+                    <title>Два идола</title>
+                    <pubPlace>Београд</pubPlace>
+                    <publisher>Српска књижевна задруга</publisher>
+                    <date>1893</date>
+                    <idno type="COBISS-SR.ID">9389063</idno>
+                </bibl><bibl type="firstEdition">
+                    <author>Атанацковић, Богобој</author>
+                    <title>Пупољци : романи, новеле, приповетке, драме и друге забавне ствари. Св. 1, Два идола. Део 1</title>
+                    <publisher>У Бечу : у Штампарији Јерменскога намастира, 1851</publisher>
+                    <idno type="COBISS-SR.ID">120013831</idno> 
+                    <title>Пупољци : романи, новеле, приповетке, драме и друге забавне ствари. Св. 2, Два идола. Део 2</title>
+                    <publisher>У Новом Саду : Нар. књигопечатња Дан. Медаковића, 1852</publisher>
+                    <date>1852</date>
+                    <idno type="COBISS-SR.ID">120175879</idno> 
+                </bibl></sourceDesc>
+        </fileDesc>
+        <encodingDesc n="eltec-1">
+            <p/>
+        </encodingDesc>
+        
+        <profileDesc>
+            <langUsage>
+                <language ident="sr-Cyrl" usage="100">српски</language>
+            </langUsage>
+            <textDesc>
+                <authorGender xmlns="http://distantreading.net/eltec/ns" key="M"/>
+                <size xmlns="http://distantreading.net/eltec/ns" key="short"/>
+                <reprintCount xmlns="http://distantreading.net/eltec/ns" key="high"/>
+                <!-- izdanja: 1851/52, 1893, 1928, 1967, 1982, 2017 [1 у периоду 1970-2010] -->
+                <timeSlot xmlns="http://distantreading.net/eltec/ns" key="T1"/>
+            </textDesc>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2021-09-17">IDs added to front and back matter</change>
+<change when="2021-04-09">Converted by checkUp script for new release</change>
+            <change when="2021-03-02">Change reprint count from "unspecidfied" to "low"</change>
+            <change when="2020-11-14">Converted by checkUp script for new release</change>
+            <change when="20200416"/>
+        </revisionDesc>
+    </teiHeader>
+<text>
+<front>
+<div type="titlepage" xml:id="SRP18520_F1">
+<p>10 СРПСКА КЊИЖЕВНА ЗАДРУГА 10</p>
+<p>ДВА ИДОЛА</p>
+<p>НАПИСАО</p>
+<p>БОГОБОЈ АТАНАЦКОВИЋ</p>
+<p>У БЕОГРАДУ</p>
+<p>ШТАМПАНО У ДРЖ. ШТАМПАРИЈИ КРАЉЕВИНЕ СРБИЈЕ</p>
+<p>1893</p>
+</div>
+<gap unit="TOC"/>
+<gap unit="preface"/>
+<gap unit="erratum"/>
+</front>
+<body>
+<!-- dodato iz prvog izdanja, nedostajalo u izdanju iz 1893 -->
+<pb n="3"/>
+<div type="chapter" xml:id="SRP18520_C1">
+<head>Родољубац и издајица</head>
+<head>I.</head>
+<quote>
+<l>Тко ће народу помоћи?</l>
+<l>Живили! живили!</l>
+</quote>
+<p>Ала је лепа земља то Српско Војводство, - право да је Српска земља, ал и јесте гнездо соколова - баш је Бог красну земљу створио за красан народ! -</p>
+<p>Лепо је то Српско Војводство, у њему је Бачка и Банат, пространа равница, или боље рећи голема башча од сваког биља, а особито од шенице и друге ране, са ливадама, пашама и пољанама, које око не може прегледати, по којима се одрањују силне ергеле коња и чопорови друге стоке, којој броја нема. У њему је Срем са својим горама и долинама, брдима и планинама, са својим лепим воћњацима и виноградима, са шумама које су непроходне.</p>
+<p>Плахо Дунаво, плава Тиса и друге поносите реке јесу богаштина Војводства, какве нема свака земља.</p>
+<pb n="4"/>
+<p>У Војводству има белих градова, лепих и убавих села.</p>
+<p>У Војводству има сваке природне красоте.</p>
+<p>Каквих предела? Око их се од милине не може да нагледа, — тако су дивни и красни.</p>
+<p>Карловци - Карловци са својом околином - Божја дивота.</p>
+<p>Је ли мајка родила Србина који не зна за Сремске Карловце — српски Јерусалим, — у ком се родила наша слава, од куд нам је синуло јарко сунце, те нам се родио красни данак, ускрс наше старе самосталности — 1 мај 1848 године.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div type="chapter" xml:id="SRP18520_C2">
+<head>II. РАЊЕНО СРЦЕ</head>
+<quote>
+<l>Да каква л’ је код тебе мађија, </l>
+<l>Да ти једна код толики лепи </l>
+<l>Мене одма за себе прилепи?</l>
+<p>П. П. Ш.</p>
+</quote>
+<p>Неће бити сувишно ако вам што више рекнем за ова два млада човека, који су се нашли међу простотом један из родољубиве, а други из опаке намере.</p>
+<p>Једно пет година пре овога догађаја један беше добро, разумно, весело и убаво момче.</p>
+<p>Због доброте, разумности и веселости мио беше својима друговима.</p>
+<p>Због убавости мио беше у женским круговима.</p>
+<p>А он цењаше и једне и друге, за њега није било живота ни без једних ни других, али да му је било да се морао којега год одрећи, избор би му био тежак, али би прегорео <pb n="38"/> био женске кругове ради своје дружине и својих пријатеља.</p>
+<p>Но Бог њему даде па није морао ни једно ни друго прегорети, но живео је срећно и весело у круговима од лепотица и младића.</p>
+<p>А кад није био с њима, онда се давао на науке, свом душом и свом вољом.</p>
+<p>Наука беше његова главна тежња, али не због тога да се, кад је присвоји, од ње као од каквог заната храни, већ да може својој народности користити својом науком: главни знак у његовом карактеру било је родољубље... красан знак у човечјем карактеру.</p>
+<p>Овај знак, природна његова доброта, пламенити његов дух, оштар ум и здраво расуђење у свакој ствари, угледна спољашњост, и чудновата хладнокрвност у његовом младом добу, чињаше да су га свуда разликовали, и лепе наде зидали о његовој будућности.</p>
+<p>Ал’ се он није много тро за своју будућност, — будућност његове народности му је једино бреме на срцу било — а прошлости још није имао; он је живео садашњости и уживао сласти, које садашњост пружа.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<pb n="47"/>
+
+
+
+
+
+
+
+
+<pb n="110"/>
+
+<pb n="115"/>
+
+
+
+<pb n="167"/>
+
+
+<pb n="177"/>
+
+
+
+<pb n="201"/>
+
+</body>
+</text>
+</TEI>

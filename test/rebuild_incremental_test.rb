@@ -13,6 +13,9 @@ require "fileutils"
 class RebuildIncrementalTest < Minitest::Test
   ILIAD = "Iliad\nμῆνιν\nἄειδε\n"
   ODYSSEY = "Odyssey\nἄνδρα\n"
+  # The tally's memo clause when fresh fixture files may sit in the racy
+  # window (tree counts vary with the clock; no git trees in the fixture).
+  MEMO_ANY_TREES = /memo: trees \d+ hit \d+ miss, repos 0 hit 0 miss/
   THEOGONY = "Theogony\nμουσάων\n"
 
   def setup
@@ -349,7 +352,10 @@ class RebuildIncrementalTest < Minitest::Test
                  events[2, 3].map { |event| event[1] })
     assert(events[2, 3].all? { |event| event.first == :stage })
     assert_equal :note, events[5].first
-    assert_match(/\Averdicts: 2 clean · 1 dirty · 0 skipped \(\d+s\)\z/, events[5][1])
+    # Fresh fixture files sit inside the racy window, so the memo counts
+    # vary with the clock — the shape is pinned here, exact counts below.
+    assert_match(/\Averdicts: 2 clean · 1 dirty · 0 skipped \(\d+s\) · #{MEMO_ANY_TREES}\z/,
+                 events[5][1])
     assert_equal [:stage, "beta"], events[6].first(2), "the replay stages follow the tally"
     # The verdicts themselves are untouched by the announcing.
     assert_equal %w[beta], result.outcomes.map(&:slug)
@@ -393,7 +399,7 @@ class RebuildIncrementalTest < Minitest::Test
     labels = events.map { |event| event[1] }
     assert_includes labels, "pinning code identities (4 sources)"
     refute(labels.any? { |label| label.include?("ghost") }, "an absent tree has nothing to fingerprint")
-    assert(labels.any? { |label| label.match?(/\Averdicts: 3 clean · 0 dirty · 1 skipped \(/) })
+    assert(labels.any? { |label| label.match?(/\Averdicts: 3 clean · 0 dirty · 1 skipped \(\d+s\) · memo: /) })
   end
 
   def test_dry_run_plan_announces_the_same_sweep_and_records_nothing
@@ -407,7 +413,8 @@ class RebuildIncrementalTest < Minitest::Test
     assert_match(/\Averdict sweep: fingerprinting 3 canonical trees — /, events[1][1])
     assert_equal(["verdict alpha (1/3)", "verdict beta (2/3)", "verdict lexica (3/3)"],
                  events[2, 3].map { |event| event[1] })
-    assert_match(/\Averdicts: 2 clean · 1 dirty · 0 skipped \(/, events[5][1])
+    assert_match(/\Averdicts: 2 clean · 1 dirty · 0 skipped \(\d+s\) · #{MEMO_ANY_TREES}\z/,
+                 events[5][1])
     assert_equal 6, events.size
     assert_equal({ "alpha" => :clean, "beta" => :dirty, "lexica" => :clean },
                  plan.verdicts.to_h { |verdict| [verdict.slug, verdict.state] })
@@ -462,7 +469,10 @@ class RebuildIncrementalTest < Minitest::Test
       header = events.find { |event| event.first == :note && event[1].start_with?("verdict sweep") }
       assert_match(/\Averdict sweep: fingerprinting 3 canonical trees — ~\d+s \(last run \d+s over 3 rows\)\z/,
                    header[1])
-      assert(events.any? { |event| event.first == :note && event[1].start_with?("verdicts: 3 clean") })
+      tally = events.find { |event| event.first == :note && event[1].start_with?("verdicts: ") }
+      all_hit = /memo: trees 3 hit 0 miss, repos 0 hit 0 miss/
+      assert_match(/\Averdicts: 3 clean · 0 dirty · 0 skipped \(\d+s\) · #{all_hit}\z/,
+                   tally[1], "a warm sweep says the memo answered every tree")
       rows = with_ledger do |ledger|
         ledger[:stage_timings].where(kind: "rebuild", scope: "corpus", stage: "verdict_sweep").count
       end
@@ -471,6 +481,51 @@ class RebuildIncrementalTest < Minitest::Test
       write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
       hashed = counting_content_hashes { incremental_rebuilder.plan }
       assert_equal 1, hashed, "only the drifted tree is re-hashed"
+    end
+  end
+
+  # -- the git-repo identity memo (GitIdentityCache, Q124) -----------------
+  # kanripo's 5,162 embedded repos paid `git status` + `rev-parse` each on
+  # every sweep. The memo must change the COST only: verdicts cold ≡ warm
+  # across the git drift matrix, and a warm sweep pays no git call.
+
+  def test_git_tree_verdicts_are_identical_with_the_repo_memo_cold_and_warm
+    alpha = File.join(@canonical, "alpha")
+    git_init(alpha)
+    past_the_racy_window do
+      full_rebuilder.run
+      assert_equal 1, JSON.parse(File.read(repo_memo_path)).fetch("repos").size,
+                   "the full rebuild (refresh mode) warms the repo memo"
+
+      events = []
+      calls = counting_git_calls { incremental_rebuilder.plan(progress: spy(events)) }
+      assert_equal 0, calls, "an untouched repo answers without a single git call"
+      tally = events.find { |event| event.first == :note && event[1].start_with?("verdicts: ") }
+      assert_match(/ · memo: trees 2 hit 0 miss, repos 1 hit 0 miss\z/, tally[1])
+
+      assert_cold_equals_warm("alpha" => :clean)
+    end
+
+    # The drift matrix: each step is old news to a clock past the window.
+    File.write(File.join(alpha, "a.txt"), "Iliad\ntampered\nἄειδε\n") # a dirty tracked file
+    past_the_racy_window { assert_cold_equals_warm("alpha" => :dirty) }
+
+    git(alpha, "checkout", "--quiet", "--", "a.txt")
+    File.write(File.join(alpha, "stray.txt"), "untracked\nline\n") # an untracked file
+    past_the_racy_window { assert_cold_equals_warm("alpha" => :dirty) }
+
+    File.delete(File.join(alpha, "stray.txt"))
+    FileUtils.touch(File.join(alpha, ".git", "index")) # an index touch: same bytes, same verdict
+    past_the_racy_window { assert_cold_equals_warm("alpha" => :clean) }
+
+    File.write(File.join(alpha, "a.txt"), "Iliad\nrevised upstream\nἄειδε\n") # a new commit
+    git(alpha, "add", ".")
+    git(alpha, "-c", "user.email=test@nabu", "-c", "user.name=test", "commit", "--quiet", "-m", "revise")
+    past_the_racy_window do
+      assert_cold_equals_warm("alpha" => :dirty)
+      result = incremental_rebuilder.run
+      assert_equal %w[alpha], result.outcomes.map(&:slug)
+      assert_incremental_state_equals_fresh_full_rebuild
     end
   end
 
@@ -732,15 +787,51 @@ class RebuildIncrementalTest < Minitest::Test
 
   def plan_states = incremental_rebuilder.plan.verdicts.to_h { |verdict| [verdict.slug, verdict.state] }
 
-  # Step the memo's census clock 60 s ahead: freshly written fixture files
-  # sit outside the racy window (ctime cannot be backdated).
+  def repo_memo_path = File.join(@db_dir, Nabu::GitIdentityCache::FILENAME)
+
+  # Plan verdicts with both memos warm, then cold (deleted), asserting the
+  # two agree and match +expected+ (the other two sources stay clean).
+  def assert_cold_equals_warm(expected)
+    expected = { "alpha" => :clean, "beta" => :clean, "lexica" => :clean }.merge(expected)
+    warm = plan_states
+    [identity_memo_path, repo_memo_path].each { |path| FileUtils.rm_f(path) }
+    cold = plan_states
+    assert_equal expected, warm
+    assert_equal cold, warm, "the memo may change the cost, never a verdict"
+  end
+
+  def git_init(dir)
+    git(dir, "init", "--quiet")
+    git(dir, "add", ".")
+    git(dir, "-c", "user.email=test@nabu", "-c", "user.name=test", "commit", "--quiet", "-m", "seed")
+  end
+
+  def git(dir, *) = Nabu::Shell.run("git", "-C", dir, *)
+
+  # How many git subprocesses the block spawned.
+  def counting_git_calls
+    count = 0
+    singleton = Nabu::Shell.singleton_class
+    original = Nabu::Shell.method(:run)
+    singleton.define_method(:run) do |*argv|
+      count += 1 if argv.first == "git"
+      original.call(*argv)
+    end
+    yield
+    count
+  ensure
+    singleton.define_method(:run, original)
+  end
+
+  # Step both memos' census clocks 60 s ahead: freshly written fixture
+  # files sit outside the racy window (ctime cannot be backdated).
   def past_the_racy_window
-    singleton = Nabu::CanonicalIdentityCache.singleton_class
-    original = Nabu::CanonicalIdentityCache.method(:now)
-    singleton.define_method(:now) { Time.now + 60 }
+    memos = [Nabu::CanonicalIdentityCache, Nabu::GitIdentityCache]
+    originals = memos.map { |memo| memo.method(:now) }
+    memos.each { |memo| memo.singleton_class.define_method(:now) { Time.now + 60 } }
     yield
   ensure
-    singleton.define_method(:now, original)
+    memos.zip(originals).each { |memo, original| memo.singleton_class.define_method(:now, original) }
   end
 
   # How many plain-file content hashes the block paid.

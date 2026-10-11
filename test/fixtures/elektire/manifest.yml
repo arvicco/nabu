@@ -1,0 +1,94 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The index pages are live WP-JSON responses (they change whenever the
+# portal edits a work), and the books are re-packed without fonts and
+# images — so nothing here is byte-comparable: index pages are fetched for
+# liveness only, the books are local trims.
+source: elektire
+adapter_test: null
+retrieved: "2026-10-11"
+files:
+  - path: index/djela-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/djela?include=95721,96280,94839,97544,94858&per_page=100&orderby=include&_fields=id,slug,link,title,modified,stoljece_nastanka,autor,knjizevna_vrsta,knjizevni_zanr,knjizevnost,epohe,lektira
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/epohe-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/epohe?per_page=100&page=1&_fields=id,slug,name
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/knjizevna_vrsta-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/knjizevna_vrsta?per_page=100&page=1&_fields=id,slug,name
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/knjizevni_zanr-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/knjizevni_zanr?per_page=100&page=1&_fields=id,slug,name
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/knjizevnost-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/knjizevnost?per_page=100&page=1&_fields=id,slug,name
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/lektira-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/lektira?per_page=100&page=1&_fields=id,slug,name
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/media-94839.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/media?parent=94839&per_page=100&_fields=id,source_url,modified,mime_type
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/media-94858.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/media?parent=94858&per_page=100&_fields=id,source_url,modified,mime_type
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/media-95721.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/media?parent=95721&per_page=100&_fields=id,source_url,modified,mime_type
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/media-96280.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/media?parent=96280&per_page=100&_fields=id,source_url,modified,mime_type
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/media-97544.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/media?parent=97544&per_page=100&_fields=id,source_url,modified,mime_type
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: index/stoljece_nastanka-1.json
+    url: https://lektire.skole.hr/wp-json/wp/v2/stoljece_nastanka?per_page=100&page=1&_fields=id,slug,name
+    whole: false
+    trim: none — a live listing; drift is expected and not byte-compared
+  - path: epub/duga.epub
+    refetchable: false
+    provenance: local-trim
+    reason: the served EPUB re-packed without fonts, images and scripts (README) — a raw GET returns the full book
+    copied: "2026-10-11"
+    whole: false
+    trim: fonts/images/scripts removed; every XHTML/OPF/NCX/CSS entry byte-identical
+  - path: epub/izabrane-pjesme-16.epub
+    refetchable: false
+    provenance: local-trim
+    reason: the served EPUB re-packed without fonts, images and scripts (README) — a raw GET returns the full book
+    copied: "2026-10-11"
+    whole: false
+    trim: fonts/images/scripts removed; every XHTML/OPF/NCX/CSS entry byte-identical
+  - path: epub/jedupka.epub
+    refetchable: false
+    provenance: local-trim
+    reason: the served EPUB re-packed without fonts, images and scripts (README) — a raw GET returns the full book
+    copied: "2026-10-11"
+    whole: false
+    trim: fonts/images/scripts removed; every XHTML/OPF/NCX/CSS entry byte-identical
+  - path: epub/mali-od-foguna.epub
+    refetchable: false
+    provenance: local-trim
+    reason: the served EPUB re-packed without fonts, images and scripts (README) — a raw GET returns the full book
+    copied: "2026-10-11"
+    whole: false
+    trim: fonts/images/scripts removed; every XHTML/OPF/NCX/CSS entry byte-identical
+  - path: epub/pjesme-8.epub
+    refetchable: false
+    provenance: local-trim
+    reason: the served EPUB re-packed without fonts, images and scripts (README) — a raw GET returns the full book
+    copied: "2026-10-11"
+    whole: false
+    trim: fonts/images/scripts removed; every XHTML/OPF/NCX/CSS entry byte-identical

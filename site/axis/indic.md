@@ -24,9 +24,9 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
-| `ud` | treebank | nc | wired · manual | 77 docs / 325,553 passages |
+| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 22 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 24 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
@@ -79,4 +79,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [27 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [28 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

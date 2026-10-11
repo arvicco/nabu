@@ -1,0 +1,45 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# hOCR pages are whole raw GETs; the IIIF manifests are trimmed to the
+# checked-in canvases (README).
+source: mdz-protestant
+adapter_test:
+retrieved: "2026-10-11"
+files:
+  - path: bsb00078189/manifest.json
+    url: https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb00078189/manifest
+    whole: false
+    trim: sequences[0].canvases kept to canvases 1, 79, 80 (of 237)
+  - path: bsb00078189/hocr/00001.hocr
+    url: https://api.digitale-sammlungen.de/ocr/bsb00078189/1
+    whole: true
+    trim: none
+  - path: bsb00078189/hocr/00079.hocr
+    url: https://api.digitale-sammlungen.de/ocr/bsb00078189/79
+    whole: true
+    trim: none
+  - path: bsb00078189/hocr/00080.hocr
+    url: https://api.digitale-sammlungen.de/ocr/bsb00078189/80
+    whole: true
+    trim: none
+  - path: bsb11302253/manifest.json
+    url: https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11302253/manifest
+    whole: false
+    trim: sequences[0].canvases kept to canvases 76, 77 (of 228)
+  - path: bsb11302253/hocr/00076.hocr
+    url: https://api.digitale-sammlungen.de/ocr/bsb11302253/76
+    whole: true
+    trim: none
+  - path: bsb11302253/hocr/00077.hocr
+    url: https://api.digitale-sammlungen.de/ocr/bsb11302253/77
+    whole: true
+    trim: none
+  - path: bsb10206655/manifest.json
+    url: https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10206655/manifest
+    whole: false
+    trim: sequences[0].canvases kept to canvas 72 (of 216)
+  - path: bsb10206655/hocr/00072.hocr
+    url: https://api.digitale-sammlungen.de/ocr/bsb10206655/72
+    whole: true
+    trim: none

@@ -1,0 +1,1273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0" xml:id="KDSP" xml:lang="sl">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Korpus daljše slovenske pripovedne proze KDSP</title>
+        <respStmt>
+          <name>Lucija Mandić</name>
+          <resp>Izbira in priprava besedil</resp>
+        </respStmt>
+        <respStmt>
+          <name ref="https://orcid.org/0000-0002-1560-4099">Tomaž Erjavec</name>
+          <resp>Kodiranje TEI</resp>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition>1.0</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="texts" quantity="262">262 besedil</measure>
+        <measure unit="words" quantity="11454627">11454627 besed</measure>
+      </extent>
+      <publicationStmt>
+        <publisher><ref target="https://isllv.zrc-sazu.si/sl/predstavitev#v">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</ref></publisher>
+        <distributor>CLARIN.SI</distributor>
+        <idno type="URI" subtype="handle">http://hdl.handle.net/11356/1823</idno>
+        <date when="2023-07-07"> 7. julij 2023</date>
+        <availability status="free">
+          <licence>http://creativecommons.org/licenses/by/4.0/</licence>
+          <p>To delo je ponujeno pod <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Priznanje avtorstva 4.0 mednarodna licenca</ref>.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Knjige v digitalni obliki, ki sestavljajo ta korpus, so bile nabrane iz raznih virov (dLib, ELTeC, Wikivir), kjer je bilo potrebno, so bili OCR tudi ročno popravljeni. Točen vir je podan v kolofonu vsakega posameznega besedila korpusa.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Namen doktorske disertacije Oddaljeno branje slovenske pripovedne proze dolgega 19. stoletja v kontekstu družbeno-kulturnih procesov je preučevanje razvoja daljše slovenske pripovedne proze med letoma 1836 in 1918 s pomočjo računalniško podprtih metod za raziskovanje literature. V ta namen je pripravljen korpus 262 proznih del, ki so izšla v izbranem časovnem obdobju.</p>
+      </projectDesc>
+      <classDecl>
+	<taxonomy xml:id="textSource">
+          <desc>
+            <term>Vir digitalnega besedila</term>
+          </desc>
+          <category xml:id="dLib">
+            <catDesc><term>dLib</term>: <ref target="https://www.dlib.si/">https://www.dlib.si</ref></catDesc>
+          </category>
+          <category xml:id="Wikivir">
+            <catDesc><term>Wikivir</term>: <ref target="https://sl.wikisource.org/">https://sl.wikisource.org</ref></catDesc>
+          </category>
+          <category xml:id="ELTeC">
+            <catDesc><term>ELTeC</term>: <ref target="https://github.com/COST-ELTeC/ELTeC-slv/">https://github.com/COST-ELTeC/ELTeC-slv</ref></catDesc>
+          </category>
+	</taxonomy>
+        <taxonomy xml:id="textTimeSlot">
+          <desc>
+            <term>Obdobje</term>
+          </desc>
+          <category xml:id="D1">
+            <catDesc><term>D1</term></catDesc>
+          </category>
+          <category xml:id="D2">
+            <catDesc><term>D2</term></catDesc>
+          </category>
+          <category xml:id="D3">
+            <catDesc><term>D3</term></catDesc>
+          </category>
+          <category xml:id="D4">
+            <catDesc><term>D4</term></catDesc>
+          </category>
+          <category xml:id="D5">
+            <catDesc><term>D5</term></catDesc>
+          </category>
+          <category xml:id="D6">
+            <catDesc><term>D6</term></catDesc>
+          </category>
+          <category xml:id="D7">
+            <catDesc><term>D7</term></catDesc>
+          </category>
+          <category xml:id="D8">
+            <catDesc><term>D8</term></catDesc>
+          </category>
+          <category xml:id="D9">
+            <catDesc><term>D9</term></catDesc>
+          </category>
+        </taxonomy>
+        <taxonomy xml:id="textCanonicity">
+          <desc>
+            <term>Kanoničnost</term>
+          </desc>
+          <category xml:id="visoka">
+            <catDesc><term>visoka</term></catDesc>
+          </category>
+          <category xml:id="nizka">
+            <catDesc><term>nizka</term></catDesc>
+          </category>
+        </taxonomy>
+        <taxonomy xml:id="textSize">
+          <desc>
+            <term>Obseg</term>
+          </desc>
+          <category xml:id="kratka">
+            <catDesc><term>kratka</term></catDesc>
+          </category>
+          <category xml:id="srednja">
+            <catDesc><term>srednja</term></catDesc>
+          </category>
+          <category xml:id="dolga">
+            <catDesc><term>dolga</term></catDesc>
+          </category>
+        </taxonomy>
+        <taxonomy xml:id="textType">
+          <desc>
+            <term>Zvrst</term>
+          </desc>
+          <category xml:id="črtica">
+            <catDesc><term>črtica</term></catDesc>
+          </category>
+          <category xml:id="novela">
+            <catDesc><term>novela</term></catDesc>
+          </category>
+          <category xml:id="povest">
+            <catDesc><term>povest</term></catDesc>
+          </category>
+          <category xml:id="roman">
+            <catDesc><term>roman</term></catDesc>
+          </category>
+          <category xml:id="drugo">
+            <catDesc><term>drugo</term></catDesc>
+          </category>
+        </taxonomy>
+        <taxonomy xml:id="textSubType">
+          <desc>
+            <term>Podzvrst</term>
+          </desc>
+          <category xml:id="antiutopija">
+            <catDesc><term>antiutopija</term></catDesc>
+          </category>
+          <category xml:id="dnevnik">
+            <catDesc><term>dnevnik</term></catDesc>
+          </category>
+          <category xml:id="humoreska">
+            <catDesc><term>humoreska</term></catDesc>
+          </category>
+          <category xml:id="poučno_vzgojna">
+            <catDesc><term>poučno-vzgojna</term></catDesc>
+          </category>
+          <category xml:id="satira">
+            <catDesc><term>satira</term></catDesc>
+          </category>
+          <category xml:id="v_pismih">
+            <catDesc><term>v pismih</term></catDesc>
+          </category>
+        </taxonomy>
+        <taxonomy xml:id="textTheme">
+          <desc>
+            <term>Tematika</term>
+          </desc>
+          <category xml:id="divjezahodna">
+            <catDesc><term>divjezahodna</term></catDesc>
+          </category>
+          <category xml:id="družinska">
+            <catDesc><term>družinska</term></catDesc>
+          </category>
+          <category xml:id="erotična">
+            <catDesc><term>erotična</term></catDesc>
+          </category>
+          <category xml:id="idejna">
+            <catDesc><term>idejna</term></catDesc>
+          </category>
+          <category xml:id="izseljenska">
+            <catDesc><term>izseljenska</term></catDesc>
+          </category>
+          <category xml:id="kmečka">
+            <catDesc><term>kmečka</term></catDesc>
+          </category>
+          <category xml:id="kriminalna">
+            <catDesc><term>kriminalna</term></catDesc>
+          </category>
+          <category xml:id="ljubezenska">
+            <catDesc><term>ljubezenska</term></catDesc>
+          </category>
+          <category xml:id="meščanska">
+            <catDesc><term>meščanska</term></catDesc>
+          </category>
+          <category xml:id="planinska">
+            <catDesc><term>planinska</term></catDesc>
+          </category>
+          <category xml:id="politična">
+            <catDesc><term>politična</term></catDesc>
+          </category>
+          <category xml:id="potopisna">
+            <catDesc><term>potopisna</term></catDesc>
+          </category>
+          <category xml:id="proletarski">
+            <catDesc><term>proletarski</term></catDesc>
+          </category>
+          <category xml:id="pustolovska">
+            <catDesc><term>pustolovska</term></catDesc>
+          </category>
+          <category xml:id="razvojna">
+            <catDesc><term>razvojna</term></catDesc>
+          </category>
+          <category xml:id="socialna">
+            <catDesc><term>socialna</term></catDesc>
+          </category>
+          <category xml:id="vojna">
+            <catDesc><term>vojna</term></catDesc>
+          </category>
+          <category xml:id="ženska">
+            <catDesc><term>ženska</term></catDesc>
+          </category>
+          <category xml:id="zgodovinska">
+            <catDesc><term>zgodovinska</term></catDesc>
+          </category>
+          <category xml:id="znanstvenofantastična">
+            <catDesc><term>znanstvenofantastična</term></catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <profileDesc>
+      <particDesc>
+        <listPerson>
+          <head>Seznam avtorjev</head>
+          <person xml:id="AlešovecJakob">
+            <persName>
+              <forename>Jakob</forename>
+              <surname>Alešovec</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1842">1842</birth>
+            <death when="1901">1901</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="AmbrožičJože">
+            <persName>
+              <forename>Jože</forename>
+              <surname>Ambrožič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1884">1884</birth>
+            <death when="1923">1923</death>
+            <occupation>kemik</occupation>
+          </person>
+          <person xml:id="BartelAnton">
+            <persName>
+              <forename>Anton</forename>
+              <surname>Bartel</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1853">1853</birth>
+            <death when="1938">1938</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="BedenekJakob">
+            <persName>
+              <forename>Jakob</forename>
+              <surname>Bedenek</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1850">1850</birth>
+            <death when="1916">1916</death>
+            <occupation>priložnostna dela</occupation>
+          </person>
+          <person xml:id="BernikValentin">
+            <persName>
+              <forename>Valentin</forename>
+              <surname>Bernik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1861">1861</birth>
+            <death when="1927">1927</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="BohinjecPeter">
+            <persName>
+              <forename>Peter</forename>
+              <surname>Bohinjec</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1864">1864</birth>
+            <death when="1919">1919</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="BudalAndrej">
+            <persName>
+              <forename>Andrej</forename>
+              <surname>Budal</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1889">1889</birth>
+            <death when="1972">1972</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="CankarIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Cankar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1876">1876</birth>
+            <death when="1918">1918</death>
+            <occupation>pisatelj</occupation>
+          </person>
+          <person xml:id="CankarIzidor">
+            <persName>
+              <forename>Izidor</forename>
+              <surname>Cankar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1886">1886</birth>
+            <death when="1958">1958</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="CarliLukovičAlojz">
+            <persName>
+              <forename>Alojz</forename>
+              <surname>Carli Lukovič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1846">1846</birth>
+            <death when="1891">1891</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="CiglerJanez">
+            <persName>
+              <forename>Janez</forename>
+              <surname>Cigler</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1792">1792</birth>
+            <death when="1867">1867</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="DetelaFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Detela</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1850">1850</birth>
+            <death when="1926">1926</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="DolžanJernej">
+            <persName>
+              <forename>Jernej</forename>
+              <surname>Dolžan</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1815">1815</birth>
+            <death when="1808">1808</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="FajdigaIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Fajdiga</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1854">1854</birth>
+            <death when="1935">1935</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="FaturLea">
+            <persName>
+              <forename>Lea</forename>
+              <surname>Fatur</surname>
+            </persName>
+            <sex value="Ž"/>
+            <birth when="1865">1865</birth>
+            <death when="1943">1943</death>
+            <occupation>šivilja</occupation>
+          </person>
+          <person xml:id="FinžgarFranSaleški">
+            <persName>
+              <forename>Fran Saleški</forename>
+              <surname>Finžgar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1871">1871</birth>
+            <death when="1962">1962</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="FuntekAnton">
+            <persName>
+              <forename>Anton</forename>
+              <surname>Funtek</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1862">1862</birth>
+            <death when="1932">1932</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="GanglEngelbert">
+            <persName>
+              <forename>Engelbert</forename>
+              <surname>Gangl</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1873">1873</birth>
+            <death when="1950">1950</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="GestrinFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Gestrin</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1865">1865</birth>
+            <death when="1893">1893</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="GovekarFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Govekar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1871">1871</birth>
+            <death when="1949">1949</death>
+            <occupation>uradnik</occupation>
+          </person>
+          <person xml:id="GradišnikFedor">
+            <persName>
+              <forename>Fedor</forename>
+              <surname>Gradišnik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1890">1890</birth>
+            <death when="1972">1972</death>
+            <occupation>lekarnar</occupation>
+          </person>
+          <person xml:id="GrudenJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Gruden</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1869">1869</birth>
+            <death when="1922">1922</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="HolcVatroslav">
+            <persName>
+              <forename>Vatroslav</forename>
+              <surname>Holc</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1844">1844</birth>
+            <death when="1914">1914</death>
+            <occupation>uradnik</occupation>
+          </person>
+          <person xml:id="JakličFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Jaklič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1868">1868</birth>
+            <death when="1937">1937</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="JanežičKraljevIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Janežič-Kraljev</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1855">1855</birth>
+            <death when="1922">1922</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="JelencVitomirFedor">
+            <persName>
+              <forename>Vitomir Fedor</forename>
+              <surname>Jelenc</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1885">1885</birth>
+            <death when="1922">1922</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="JurčičJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Jurčič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1844">1844</birth>
+            <death when="1881">1881</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="KersnikJanko">
+            <persName>
+              <forename>Janko</forename>
+              <surname>Kersnik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1852">1852</birth>
+            <death when="1897">1897</death>
+            <occupation>pravnik</occupation>
+          </person>
+          <person xml:id="KnafličFranJosip">
+            <persName>
+              <forename>Fran Josip</forename>
+              <surname>Knaflič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1880">1880</birth>
+            <death when="1949">1949</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="KočevarFerdo">
+            <persName>
+              <forename>Ferdo</forename>
+              <surname>Kočevar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1822">1822</birth>
+            <death when="1878">1878</death>
+            <occupation>računovodja</occupation>
+          </person>
+          <person xml:id="KoderAnton">
+            <persName>
+              <forename>Anton</forename>
+              <surname>Koder</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1851">1851</birth>
+            <death when="1918">1918</death>
+            <occupation>uradnik</occupation>
+          </person>
+          <person xml:id="KokaljAlojzij">
+            <persName>
+              <forename>Alojzij</forename>
+              <surname>Kokalj</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1869">1869</birth>
+            <death when="1931">1931</death>
+            <occupation>pravnik</occupation>
+          </person>
+          <person xml:id="KostanjevecJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Kostanjevec</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1864">1864</birth>
+            <death when="1962">1962</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="KošutnikSilvester">
+            <persName>
+              <forename>Silvester</forename>
+              <surname>Košutnik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1874">1874</birth>
+            <death when="1944">1944</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="KovačičIvo">
+            <persName>
+              <forename>Ivo</forename>
+              <surname>Kovačič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1873">1873</birth>
+            <death when="1936">1936</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="KraigherAlojz">
+            <persName>
+              <forename>Alojz</forename>
+              <surname>Kraigher</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1877">1877</birth>
+            <death when="1959">1959</death>
+            <occupation>zdravnik</occupation>
+          </person>
+          <person xml:id="KristanEtbin">
+            <persName>
+              <forename>Etbin</forename>
+              <surname>Kristan</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1867">1867</birth>
+            <death when="1953">1953</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="KvederZofka">
+            <persName>
+              <forename>Zofka</forename>
+              <surname>Kveder</surname>
+            </persName>
+            <sex value="Ž"/>
+            <birth when="1878">1878</birth>
+            <death when="1926">1926</death>
+            <occupation>publicistka</occupation>
+          </person>
+          <person xml:id="LahIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Lah</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1881">1881</birth>
+            <death when="1938">1938</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="LenardLeopold">
+            <persName>
+              <forename>Leopold</forename>
+              <surname>Lenard</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1876">1876</birth>
+            <death when="1962">1962</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="LevstikVladimir">
+            <persName>
+              <forename>Vladimir</forename>
+              <surname>Levstik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1886">1886</birth>
+            <death when="1957">1957</death>
+            <occupation>pisatelj</occupation>
+          </person>
+          <person xml:id="MahničAnton">
+            <persName>
+              <forename>Anton</forename>
+              <surname>Mahnič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1850">1850</birth>
+            <death when="1920">1920</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="MalovrhMiroslav">
+            <persName>
+              <forename>Miroslav</forename>
+              <surname>Malovrh</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1861">1861</birth>
+            <death when="1922">1922</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="MaseljPodlimbarskiFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Maselj Podlimbarski</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1852">1852</birth>
+            <death when="1917">1917</death>
+            <occupation>vojak</occupation>
+          </person>
+          <person xml:id="MencingerJanez">
+            <persName>
+              <forename>Janez</forename>
+              <surname>Mencinger</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1838">1838</birth>
+            <death when="1912">1912</death>
+            <occupation>odvetnik</occupation>
+          </person>
+          <person xml:id="MeškoFrancKsaver">
+            <persName>
+              <forename>Franc Ksaver</forename>
+              <surname>Meško</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1874">1874</birth>
+            <death when="1964">1964</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="MilčinskiFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Milčinski</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1867">1867</birth>
+            <death when="1932">1932</death>
+            <occupation>pravnik</occupation>
+          </person>
+          <person xml:id="MurnikRado">
+            <persName>
+              <forename>Rado</forename>
+              <surname>Murnik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1870">1870</birth>
+            <death when="1932">1932</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="NadlišekMarica">
+            <persName>
+              <forename>Marica</forename>
+              <surname>Nadlišek</surname>
+            </persName>
+            <sex value="Ž"/>
+            <birth when="1867">1867</birth>
+            <death when="1940">1940</death>
+            <occupation>učiteljica</occupation>
+          </person>
+          <person xml:id="OgrinecJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Ogrinec</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1844">1844</birth>
+            <death when="1879">1879</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="PajkPavlina">
+            <persName>
+              <forename>Pavlina</forename>
+              <surname>Pajk</surname>
+            </persName>
+            <sex value="Ž"/>
+            <birth when="1854">1854</birth>
+            <death when="1901">1901</death>
+            <occupation>brez poklica</occupation>
+          </person>
+          <person xml:id="PerkoPavel">
+            <persName>
+              <forename>Pavel</forename>
+              <surname>Perko</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1877">1877</birth>
+            <death when="1970">1970</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="PerušekRajko">
+            <persName>
+              <forename>Rajko</forename>
+              <surname>Perušek</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1854">1854</birth>
+            <death when="1917">1917</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="PesjakLuiza">
+            <persName>
+              <forename>Luiza</forename>
+              <surname>Pesjak</surname>
+            </persName>
+            <sex value="Ž"/>
+            <birth when="1828">1828</birth>
+            <death when="1898">1898</death>
+            <occupation>brez poklica</occupation>
+          </person>
+          <person xml:id="PodmilšakJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Podmilšak</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1845">1845</birth>
+            <death when="1974">1974</death>
+            <occupation>uradnik</occupation>
+          </person>
+          <person xml:id="PregeljIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Pregelj</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1883">1883</birth>
+            <death when="1958">1958</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="PrelesnikMatija">
+            <persName>
+              <forename>Matija</forename>
+              <surname>Prelesnik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1872">1872</birth>
+            <death when="1905">1905</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="PremkJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Premk</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1889">1889</birth>
+            <death when="1913">1913</death>
+            <occupation>pisatelj</occupation>
+          </person>
+          <person xml:id="PrepeluhAlbin">
+            <persName>
+              <forename>Albin</forename>
+              <surname>Prepeluh</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1881">1881</birth>
+            <death when="1937">1937</death>
+            <occupation>uradnik</occupation>
+          </person>
+          <person xml:id="PugeljIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Pugelj</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1883">1883</birth>
+            <death when="1929">1929</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="RantFranc">
+            <persName>
+              <forename>Franc</forename>
+              <surname>Rant</surname>
+            </persName>
+            <sex value="M"/>
+          </person>
+          <person xml:id="RemecAlojzij">
+            <persName>
+              <forename>Alojzij</forename>
+              <surname>Remec</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1886">1886</birth>
+            <death when="1952">1952</death>
+            <occupation>pravnik</occupation>
+          </person>
+          <person xml:id="RodeMatija">
+            <persName>
+              <forename>Matija</forename>
+              <surname>Rode</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1879">1879</birth>
+            <death when="1961">1961</death>
+            <occupation>knjižničar</occupation>
+          </person>
+          <person xml:id="SketJakob">
+            <persName>
+              <forename>Jakob</forename>
+              <surname>Sket</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1852">1852</birth>
+            <death when="1912">1912</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="SlemenikFrancValentin">
+            <persName>
+              <forename>Franc Valentin</forename>
+              <surname>Slemenik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1843">1843</birth>
+            <death when="1871">1871</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="StareJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Stare</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1842">1842</birth>
+            <death when="1907">1907</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="StritarJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Stritar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1836">1836</birth>
+            <death when="1923">1923</death>
+            <occupation>profesor</occupation>
+          </person>
+          <person xml:id="ŠorliIvo">
+            <persName>
+              <forename>Ivo</forename>
+              <surname>Šorli</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1877">1877</birth>
+            <death when="1958">1958</death>
+            <occupation>pravnik</occupation>
+          </person>
+          <person xml:id="ŠtrukeljIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Štrukelj</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1869">1869</birth>
+            <death when="1948">1948</death>
+            <occupation>duhovnik</occupation>
+          </person>
+          <person xml:id="TaucharFrankS">
+            <persName>
+              <forename>Frank S.</forename>
+              <surname>Tauchar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1886">1886</birth>
+            <death when="1945">1945</death>
+            <occupation>priložnostna dela</occupation>
+          </person>
+          <person xml:id="TavčarIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Tavčar</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1851">1851</birth>
+            <death when="1923">1923</death>
+            <occupation>pravnik</occupation>
+          </person>
+          <person xml:id="TroštIvo">
+            <persName>
+              <forename>Ivo</forename>
+              <surname>Trošt</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1865">1865</birth>
+            <death when="1937">1937</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="VandotJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Vandot</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1884">1884</birth>
+            <death when="1944">1944</death>
+            <occupation>uradnik</occupation>
+          </person>
+          <person xml:id="VodebEmil">
+            <persName>
+              <forename>Emil</forename>
+              <surname>Vodeb</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1880">1880</birth>
+            <death when="1921">1921</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="VošnjakJosip">
+            <persName>
+              <forename>Josip</forename>
+              <surname>Vošnjak</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1834">1834</birth>
+            <death when="1911">1911</death>
+            <occupation>zdravnik</occupation>
+          </person>
+          <person xml:id="VraničJurij">
+            <persName>
+              <forename>Jurij</forename>
+              <surname>Vranič</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1853">1853</birth>
+            <death when="1903">1903</death>
+            <occupation>učitelj</occupation>
+          </person>
+          <person xml:id="VukIvan">
+            <persName>
+              <forename>Ivan</forename>
+              <surname>Vuk</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1882">1882</birth>
+            <death when="1939">1939</death>
+            <occupation>publicist</occupation>
+          </person>
+          <person xml:id="ZbašnikFran">
+            <persName>
+              <forename>Fran</forename>
+              <surname>Zbašnik</surname>
+            </persName>
+            <sex value="M"/>
+            <birth when="1855">1855</birth>
+            <death when="1935">1935</death>
+            <occupation>pravnik</occupation>
+          </person>
+        </listPerson>
+      </particDesc>
+      <langUsage>
+        <language ident="sl">Slovenščina</language>
+      </langUsage>
+    </profileDesc>
+  </teiHeader>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP001.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP002.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP003.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP004.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP005.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP006.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP007.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP008.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP009.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP010.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP011.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP012.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP013.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP014.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP015.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP016.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP017.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP018.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP019.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP020.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP021.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP022.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP023.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP024.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP025.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP026.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP027.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP028.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP029.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP030.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP031.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP032.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP033.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP034.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP035.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP036.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP037.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP038.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP039.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP040.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP041.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP042.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP043.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP044.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP045.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP046.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP047.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP048.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP049.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP050.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP051.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP052.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP053.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP054.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP055.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP056.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP057.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP058.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP059.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP060.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP061.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP062.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP063.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP064.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP065.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP066.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP067.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP068.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP069.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP070.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP071.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP072.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP073.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP074.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP075.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP076.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP077.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP078.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP079.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP080.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP081.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP082.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP083.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP084.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP085.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP086.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP087.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP088.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP089.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP090.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP091.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP092.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP093.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP094.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP095.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP096.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP097.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP098.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP099.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP100.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP101.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP102.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP103.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP104.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP105.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP106.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP107.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP108.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP109.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP110.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP111.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP112.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP113.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP114.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP115.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP116.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP117.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP118.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP119.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP120.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP121.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP122.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP123.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP124.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP125.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP126.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP127.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP128.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP129.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP130.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP131.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP132.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP133.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP134.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP135.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP136.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP137.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP138.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP139.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP140.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP141.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP142.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP143.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP144.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP145.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP146.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP147.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP148.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP149.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP150.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP151.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP152.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP153.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP154.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP155.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP156.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP157.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP158.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP159.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP160.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP161.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP162.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP163.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP164.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP165.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP166.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP167.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP168.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP169.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP170.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP171.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP172.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP173.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP174.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP175.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP176.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP177.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP178.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP179.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP180.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP181.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP182.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP183.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP184.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP185.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP186.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP187.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP188.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP189.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP190.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP191.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP192.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP193.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP194.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP195.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP196.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP197.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP198.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP199.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP200.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP201.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP202.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP203.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP204.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP205.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP206.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP207.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP208.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP209.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP210.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP211.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP212.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP213.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP214.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP215.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP216.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP217.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP218.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP219.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP220.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP221.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP222.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP223.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP224.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP225.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP226.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP227.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP228.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP229.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP230.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP231.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP232.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP233.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP234.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP235.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP236.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP237.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP238.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP239.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP240.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP241.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP242.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP243.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP244.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP245.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP246.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP247.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP248.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP249.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP250.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP251.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP252.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP253.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP254.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP255.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP256.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP257.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP258.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP259.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP260.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP261.xml"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="KDSP262.xml"/>
+</teiCorpus>

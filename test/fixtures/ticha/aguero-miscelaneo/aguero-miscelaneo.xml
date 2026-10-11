@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/TEISchema_Ticha.rnc" type="application/relax-ng-compact-syntax"?>
+<!--encode the main language of this document-->
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <text>
+
+    <!-- Encoded text goes here -->
+	<pb n="cover"/>
+	<pb n="cover-inside"/>
+	<pb n="1"/>
+  EX HOC. CO LLIGO
+  <lb/>
+  EX-LIBRIS
+  <lb/>
+  DOCTORIS.
+  <lb/>
+  N. LEON.
+  <lb/>
+  John Carter Brown
+<lb/>
+  Library
+<lb/>
+  Brown University
+	<pb n="2"/>
+	<pb n="3"/>
+  [Venga?] [7?] 2[;?]00
+	<pb n="4"/>
+<add place="top">Buleus 113.6  63 Confirmasion<lb/>fel 101 platica <choice><orig>ſa</orig><reg type="spanish">sa</reg></choice>. Conte[?]r</add>
+  MISCELANEO<add place="margin right">che[?][snier?]<lb/>j[?][as?] [es]?]  a fo1<lb/>[?]tora</add>
+<lb/>
+  ESPIRITVAL,<add>[?] q<lb/>69</add> <add place="margin right">no[?]dejastes</add>
+<lb/>
+  EN EL IDIOMA ZAPOTECO,
+<lb/>
+  QVE ADMINISTRA LA PROVINCIA DE OAXAC,
+<lb/>
+  de la Orden de Predicadores.
+<lb/>
+  EN QVE SE CONTIENEN LOS QVINZE MISTERIOS
+<lb/>
+  del <choice><orig>Santiſsimo</orig><reg type="spanish">Santissimo</reg></choice> ROSARIO, con <choice><orig>ſus</orig><reg type="spanish">sus</reg></choice> Ofrecimientos en cada <choice><orig>vno</orig><reg type="spanish">uno</reg></choice>. Las mas
+<lb/>
+  principales INDVLGENCIAS, que ganan <choice><orig>ſus</orig><reg type="spanish">sus</reg></choice> Cofrades. Con diez y <choice><orig>ſeis</orig><reg type="spanish">seis</reg></choice>
+<lb/>
+  EXEMPLOS de lo <choice><orig>miſmo</orig><reg type="spanish">mismo</reg></choice>. Algunas ORACIONES deuotas, para la
+<lb/>
+  Uida, y para la Muerte. El CATHECISMO de toda la
+<lb/>
+  DOCTRINA <choice><orig>Chriſtiana</orig><reg type="spanish">Christiana</reg></choice>, Con un CONFESSIONARIO
+<lb/>
+  para los que empiecan a aprender el
+<lb/>
+  dicho Idioma.
+<lb/>
+  DEDICADO,
+<lb/>
+  A LA PEINCESA DEL CIELO, Y SIEMPRE VIRGEN
+<lb/>
+  MARIA Madre de Dios, y Señora <choice><orig>Nueſtra</orig><reg type="spanish">Nuestra</reg></choice>.
+<lb/>
+  POR
+<lb/>
+  El P. M. Fr. <choice><orig>Chriſtoual</orig><reg type="spanish">Christoual</reg></choice> de Aguero, Cathedratico, y Predicador
+<lb/>
+  General, que fue del dicho Ydioma, en <choice><orig>ſu</orig><reg type="spanish">su</reg></choice> <choice><orig>illuſtre</orig><reg type="spanish">illustre</reg></choice> Conuento de
+<lb/>
+  Oaxac, y Uicario actual del Pueblo de Theozapotlan.
+<lb/>
+  Año de 1666.
+<lb/>
+  CON LICENCIA. EN MEXICO.
+<lb/>
+  Por la Viuda de Bernardo Calderon,<add place="below">109 Perficionar</add> en la calle de San <choice><orig>Auguſtin</orig><reg type="spanish">Augustin</reg></choice>.
+    <pb n="345"/>
+    yapiguijte lachini nijaxtenni quela pixij niza cani, ya coxij gue-
+<lb/>
+    latini ticha quela cobeexe, ni connij xcallani, hualijca yaca na-
+<lb/>
+    cati tolla zaabeeca pixij niza rinni xtennini, toobica naca tebela
+<lb/>
+    huarebaa rezaaca lachini, huariguijte lachitooni, huarizijguela-
+<lb/>
+    ni ticha aguizaaca canî quelani hualijca loo chicani tollaroo na-
+<lb/>
+    ca quela pichabaani loo niza rinni xtennini, loo ticharij huano-
+<lb/>
+    zaabi tete benniaatiquee, zooba zijña, zooba nahaní cozaabí
+<lb/>
+    quique ñaani loo B. Dios, nijani zoaaca cuee tijpa, cue xooni,
+<lb/>
+    loo lezijguela lachi xtenini quiraa ticha nachaaba caní ni naca
+<lb/>
+    loo nija quela pixij nizapinnij xtennini.
+<lb/>
+    <add place="margin left"> 9 </add> <choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo</reg></choice>. Channahe, tebela xillaacica loo quela huellaaba <add place="above"> Pensamientos </add>
+<lb/>
+    lachi ticha rijni, quebaa quezaaca lachi xijhui benniaati,
+<lb/>
+    <add place="margin left"> 1 Toda e- <lb/> ſta mate- <lb/>ria de pen <lb/> ſamiētos, <lb/> es muydi- <lb/> fi culto ſa <lb/>
+    de decla- <lb/> rar, aun à <lb/> los Eſpa-<lb/> ñoles, y <lb/> aſsies me <lb/> neſter mu <lb/> cho tiento <lb/> prudēcia, <lb/>
+    y maña pa <lb/> ra darla á <lb/> entender <lb/> à los Indios.</note>
+    chela acanaatini, coxijhuiñeeni gonnaa, huaronnini loo chii
+<lb/>
+    quee tolla roo tennaani pecado mortal?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Pijña chahui xinni, hualijca tebela chij rollaaba
+<lb/>
+    lachi benniaati tichaquee, chelani huarizaabiyaani xijhui
+<lb/>
+    lachini, conini tolla loo bennigonnaa hualij tete tolla cirooba
+<lb/>
+    naca quela huellaaba lachi cani, 1 laanicica tebela chij cioo-
+<lb/>
+    llaabaca lachini ticha nachaaba quee xtenni benni gonnaa, ya-
+<lb/>
+    connaati lachini connini tolla, laa coxiihuiñeeni gonna cani, ca-
+<lb/>
+    ni xillaacica pebaa pezaaca, peguije peguijte lachini, chij pita
+<lb/>
+    guenna lachini chijpizaa xijhui lachitooni ticha quela cobeexe
+<lb/>
+    ni ronni benni aguijzaaca, chij roxijhuinî zaabeeca yaconnaati
+<lb/>
+    yobini cicaquee connini hualijca cirooo tete pexijhuini nijax-
+<lb/>
+    tenni xillaa laca quela pezaacabaa lachini, chij hueyoollaaba
+<lb/>
+    lachitooni tichaquee. Tobica naca chij aca rebaa rezaaca lachi-
+<lb/>
+    ni, chela aca rennaati lazi lachitooni, connini tolla, cica ni pe-
+<lb/>
+    zaani pellaaba lachini, quelani loo chicatiní acanacatí tolla que
+<lb/>
+    la huellaaba lachi ticha canì cani rizaacani, cica rizaaca toobi
+<lb/>
+    benniaati chij rieeguenna lachini toobi benabi, toobi ticha pi-
+<lb/>
+    quite, ni connij, ni penni toobi * pecuaana, benni ronnini pi-
+<lb/>
+    guije loo lezaani cijcani lazi huazaaca gaaca tebela acaxi col-
+<lb/>
+    <add place="margin left"> Truan.</add> laabati lachini ticha cani, nijaxtenni huazaañee gaani leaache
+<lb/>
+    legaana quela lizijguela tolla quela lennijti lexijñe lachi ben-
+<lb/>
+    niaati.
+<lb/>
+    <fw type="catchword" place="bottom-right">Coo-</fw>
+    <pb n="362"/>
+    libaana bijtoo laacani zoogoozeeteni, zoogoo zoozijña lachi-
+<lb/>
+    ni lohuy quizaaloo ticha cicato naquijña zaalij zaachahuilo
+<lb/>
+    loo neza quela nalij. <add> cah[izer?] [de?] la [venrice?]</add>
+<lb/>
+    <choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo</reg></choice>. Channahe, zooaaca <add place="above">pousa</add> zoochij zonni <add place="above">montia</add> lachi tutila
+<lb/>
+    benniaatizooaaca ziguijeni lezaani nijaxtenni toobi ticha
+<lb/>
+    roo, ticha xenne guechelayoo?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Agaaca xinni, acazootichij acazaabiti guela na-
+<lb/>
+    zaaca nacalaa naxoohui nallaabi naca loo Dios quela huen
+<lb/>
+    ni lachi, quela cozijguije benniaati. Cijcani zooaaca zoochij,
+<lb/>
+    tebela quiquijñe xoo quicaabi benniaati toobi t􏰀ć ha ni naca qui
+<lb/>
+    roopa looni, ni narij toopa lienni toba lachi xtennini. Canî tebe-
+<lb/>
+    la zaaca lezaani xiitila quela quijaa, nijaxtenni ricaabini ticha
+<lb/>
+    nacco xaabani, ni naca quiroopa looni huanozaabi teteni quin-
+<lb/>
+    nij lijni quichiiba ruaniticha cica noo liioo lachitooni.
+<lb/>
+    COGAA XIIBAA <add place="above" M[?] [Agra[?]bol?]llo f J. de sto Thomas</add>
+<lb/>
+    Yaca zaabiti lachilo lecheela zeetoobila benni. Cochij xijbaa
+<lb/>
+    yaca zaabiti lachilo xiquichaa zeechaacuee benniaati lezaalo.
+<lb/>
+    <add place="margin left">1</add> <choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo</reg></choice>. Channa <choice><orig>Maeſtrohe</orig><reg type="spanish">Maestrohe</reg></choice>, xii zooba loo nija ticha ro- <add place="margin right"> [ep[?]i[?]?] [duis?]</add>
+<lb/>
+    zoo B. Dios, quiroopa Mandamiento rijni, rua late rocaa
+<lb/>
+    roziaanini quela rizaabiyaani xijhuilachi benniaati, lecheela
+<lb/>
+    zetoobila benni, huañee xiquichaa lezaani?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Hualiica xinni. Cicarij ronni B. Dios, nijaxten-
+<lb/>
+    <add place="margin left">+<lb/>Dei</add> ni cazooba liaaza, rizaabiyaani xiihui lachi benniaati coxii-
+<lb/>
+    hui ñeeni gonnaa, chela quicaani <add place="above">+</add> xiquichaa benni lezaani, zaa-
+<lb/>
+    beeca queaani coxiihuini huenni <add place="above"> publico. </add> loo chela zaabeeca queaani
+<lb/>
+    cuaanani queaani <add place="above">dexe</add> quicaani xiquichaa lezaani, hualiica ciroo te-
+<lb/>
+    te roxiihuini, xillaacica niiaxtenni huaracape <add place="above"> hara </add> xiihui <add place="above">vnas </add> lijoo lachi
+<lb/>
+    tooni coxiihuini, connini tollaquee.
+<lb/>
+    <add place="margin left">2</add><choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo</reg></choice>. Channahe, xijxa <add place="above"> [?] </add> quela rizaabi <add place="above"> [deseos?] ò pensamientos </add> lachi benniaati,
+<lb/>
+    rocaa roziani Mandamiento rijni?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Hualiica xinni, rocaa Mandamiento rijni, toobi
+<lb/>
+    quela rizaabi yaani tete xiihui lachi <note place="below">Aa</note> benniaati, quela ren-
+<lb/>
+    <fw type="catchword" place="bottom-right">naa</fw>
+<lb/>
+    <pb n="363"/>
+    naa tete lijoo lachitooni zooxijhuini <add place="above">poace   pecar</add> zoogaallani <add palce="above">poder [juntanie?] </add> gonnaa, zaa- <add place="above">b</add>
+<lb/>
+    <add palce="margin left"> [odeshuntar?]</add> baani xiquichaa lezaani zaqueaani <add place="above"> aun de [?] [da?] </add> zooba <add palce="above"> ha[?]ple</add> xtichani. <add> [descurar?] [ejar?] de to</add>
+<lb/>
+    <add palce="margin left">3</add> choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo</reg></choice> Copaallaxa quela rizaabi lachi benniaati narij,
+<lb/>
+    ni naca tolla roo quela huexijhui roo, ni rixijñe Mandamiē-
+<lb/>
+    nto rijni?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Hualijca toopa loo quela nazaabi <add place="above">deseo</add> lachi narii, ni ca-
+<lb/>
+    ca tolla roo loo B. Dios, rinnijo tonoo pecado mortal. Co-
+<lb/>
+    <add palce="margin left"> [10]?</add> toobi naca yoobi quela rizaabi yaani tete lachini, quela rennaa
+<lb/>
+    tete lachini zooxiihuini, zoogallani huenni loo, loo tolla quee,
+<lb/>
+    <note palce="margin left"> 1 Que a-<lb/>petece, y <lb/>deſſa.</note>
+    ni 1 rillaa tete lachini.
+<lb/>
+    Coroopa naca yoobi quela huebaa quela huezaaca <add palce="above"> [deuesasica?] ò [comp acrncia?]</add>  lachi, ni
+<lb/>
+    rebaa rezaaca lachitoo yoobi benniaati, nijaxtenni rizaa xiihui
+<lb/>
+    lachini rollaaba xiihui lachitooni quela aguijzaaca quela xoola
+<lb/>
+    <add palce="margin left"> [deleibes?] </add> baatola guechelayoo, hualiica yoobi quela huezaaca lachi rijni
+<lb/>
+    tollarootenaca, zaabeeca yacanaati lachi benniquee zooxij-
+<lb/>
+    huini huenniloo, xillaacica nijaxtenni, rizijguela quitoobi la-
+<lb/>
+    chini huarennaa lachitooni cooxe quizzaaxiihui lachini ticha
+<lb/>
+    aguiizaaca quee, chela huarezaacabaa lachini, nijaxtenní naa-
+<lb/>
+    yoo ticha quee lachitooni.
+<lb/>
+    Hualiica quiroopa loo ticharij tolla roo tete naca. Cotoobi,
+<lb/>
+    nijaxtenni, cooxe rennaa lachi benni zoo xijhuini, zoogalla co-
+<lb/>
+    zooni tolla, zaaquita xaacani, zaayaaca benni gonnaa, zaa qui-
+<lb/>
+    cheela quichaa lezaani, ni cuaanani, zaayaaca. Coroopa nijax-
+<lb/>
+    tenni rebaa rezaaca xiihui lachini, quizaa tete, collaaba tete xij-
+<lb/>
+    hui lachitooni ticha aguijzaaca can􏰀,́ zaabeeca acanaatini zoo-
+<lb/>
+    xiihuini, zoonini quela tolla quela tee.
+<lb/>
+    <add place="margin left"> 4</add> <choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo</reg></choice>. Channahe, yapaxa zaaniona <add place="above"> coo podiemos conocer </add>, toobi benni coo-
+<lb/>
+    xe coxiiguela xijhui lachini, ticha quela huenni tolla, ni co-
+<lb/>
+    zaabiyaani lachi yoobini?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Pijña xinni, hualiica chijhuenni <add place="above">[patentemte?]</add> loo coxíjguela
+<lb/>
+    benniaatiquee quitachoo, quita chaazi lijoo lachitooni ti-
+<lb/>
+    cha quela aguiizaaca, ni pitaguecaa tee tiaaga beezelo yoobi-
+<lb/>
+    ni chela ciroo tete rebaa rezaaca lachini, chij rizaa lachitooni
+<lb/>
+    tichaquee, hualiica chijcatini tolla roo pennini quelani coxij-
+<lb/>
+    guela tetelachini zooba xticha bezeeloo. Cijcani zaabeeca yaca
+<lb/>
+    <fw type="catchword" place="bottom-right">zij-</fw>
+    <pb n="394"/>
+    anima caní loo quela huenni xonnii xtennini loo B. Dios,
+<lb/>
+    xii zooba loo, nija ticha cicarii ronnini, cicarii riñaabani loo <note place="margin right">obſer[v?u?]a<lb/>cion.</note> <add>obsecas<lb/>sion</add>
+<lb/>
+    ni, quelani acalaati nijaxtenni quela nazaaca nachonno yo-
+<lb/>
+    bini, acalaati nijaxtenni xiitila quela chijña, naxoohui nal-
+<lb/>
+    laabi, ni pennini looni, riguijñe riñaaba xillaani quela coca-
+<lb/>
+    ñee, quela huezii huellaa, quela huezaaca lachi roo xtenni-
+<lb/>
+    ni yaca, yacaliica, cani xillaacica, cicaquee riñaabani, chela
+<lb/>
+    ronni looni zooeebij letoobi lezaaca, legaa leroopa quela
+<lb/>
+    huenni xonnij xtennini looni, nijaxtenni yoobi bijtoo, B.
+<lb/>
+    Dios curùbi cirootete nazaaca cirootete nachonno, ciroo-
+<lb/>
+    xoo tete huechii huezaalachi roo nacani, chela nijaxtenni
+<lb/>
+    quiraaloo quela nazaaca, quiraa chijña nataa nabaana, ni
+<lb/>
+    pennini xihueziillaa liina <choice><orig>Jeſu</orig><reg type="spanish">Jesu</reg></choice> <choice><orig>Chriſto</orig><reg type="spanish">Christo</reg></choice> collaala coca benniaa
+<lb/>
+    tini, coca niguiioni liio lanni nachonno celii Cocooni yoo-
+<lb/>
+    na Sancta Maria xiñaani callo cootihuaa cootihuaaxeni lan-
+<lb/>
+    ni yaaga Cruz, chela nijaxtenni quela huezaabi quiqueñaa
+<lb/>
+    yoobi Xonaaxi too Sancta Maria loo taa, loo becoogo xten-
+<lb/>
+    nini, chela niiaxtenni quelanazaaca quela huenni chiiña na-
+<lb/>
+    yoona, ni penni quiraalii Sāc̄tos, petoobi zoonaha corii na-
+<lb/>
+    baani liini lanni guechelayoo riini.
+<lb/>
+    Cotaapa naca, quela riziibaaneza, quela raha yoo lachi
+<lb/>
+    nalii anima canì, loo B. Dios, quelani huanozaabi teteni hua- <note place="margin right">Hazimiē-<lb/>to de gra-<lb/>cias.<note>
+<lb/>
+    naha huanachi coobaa, collaache lannani, collaache tichani,
+<lb/>
+    collaache coopa pinnini, quinnij ciroo cixenneni B. Dios,
+<lb/>
+    huanazoopea looni qullaapizaabini quela baa quela lanna,
+<lb/>
+    quela guezaguela xtennini, niiaxtenni quiraa xillaabaane-
+<lb/>
+    zaroo, baaneza xenne, niiaxtenni quiraa xillaa xillaahuiroo
+<lb/>
+    nijaxtenni quiraa quela baa, nichahui, baa ninazaaca, baa ni
+<lb/>
+    guiie, niguiite, ni chiichi, ni cachi xtennini, ni pennijche cica
+<lb/>
+    xillaa biitoo B. Dios yoobini, zaabenni huexiihui, zaa co-
+<lb/>
+    guiiche gueza huezaaniguela zaayaca xilezaaca tete nacani
+<lb/>
+    chela loochiicatini huanozaabi teteni zoohaayooteteni loo
+<lb/>
+    biitoo, zooni guiixi quillooba yoobigaani looni, zooeechij
+<lb/>
+    tete quitoobi liica lachini, baabii, baazaaca quela connachij
+<lb/>
+    xtennini looyoobi Dios <note place="below">Ee2</note> niiaxtenni quizaa looquichiiño loo
+<lb/>
+    <fw type="catchword" place="bottom-right">q ela</fw>
+<lb/>
+    <pb n="395"/>
+    quela huenni baaneza xtennini, ni pezaa lachini loo yoobini,
+<lb/>
+    quiiaa quijebaala, quete layoola, loo animala loo pellalatila x-
+<lb/>
+    tennini.
+<lb/>
+    Quitaapa londi, hua naquijña lenne tete xinni nachija, nija-
+<lb/>
+    ni gaaca nazaaca gaacanalij, gaacanaxoohui nallaabi lootaa,
+<lb/>
+    loo becoogo B. Dios, quela huenni xonni, quela huenni Ora-
+<lb/>
+    cion, ni conni benniaati cazooba liaaza zaabiyaani lachini, caca
+<lb/>
+    yaate xillaabaaneza quela gracia, quela pechaa pianij bijtoo,
+<lb/>
+    chela quela cocañee xtennini loo quela zij rizaacani lannigue-
+<lb/>
+    chelayoorijni.
+<lb/>
+    <add place="margin left">3</add><choice><orig>Diſcipulo</orig><reg type="spanish">Discipulo/reg></choice>. Channahe, xij zooba loonija ticha, yaca rollaa-
+<lb/>
+    baneelo loo quitaapa quela nazaaca rij, ni naquijña quela
+<lb/>
+    huenni xonnij nalij loo B. Dios, zetoobi quela nazaaca nachon-
+<lb/>
+    no tete, rennaani quela connachij, ni zeeta bijga zeetagalla, zee-
+<lb/>
+    ta chaaga, zeeta lijbi anima loo Dios, chij ronni xonnijni looni,
+<lb/>
+    xanacaxa gaaca naxohui nallaabi quela Oracion xtennini, tebe-
+<lb/>
+    la yaca noo lachini quela connachij canî ni cannachij quitoobi
+<lb/>
+    quique lachini xi cooquijni xibijtoolijni Dios, nizooba collo-
+<lb/>
+    huijchani loo chijca gaani?
+<lb/>
+    <choice><orig>Maeſtro</orig><reg type="spanish">Maestro</reg></choice>. Pijña xinni, hualiica zaayaca pellaabatia quela
+<lb/>
+    connachij bijtoo loo quitaapa loo quela nazaaca cani, aca-
+<lb/>
+    xi nacati, quelani hualijca chij cioonì<add place="margin left">+</add> xonnij anima benniaati
+<lb/>
+    <add place="margin left">[Rc?][R?]onia<lb/>dezaj[?]a</add>loo B. Dios, cicato nozaabini, chij ciaa<add place="above">+</add>pachahuicani loo quela
+<lb/>
+    huenni Oracion xtennini quitaapa loo quela nazaacaquee, ci-
+<lb/>
+    cani pezoo xcuaaya quijaa quela lenne, catitoozigaa raca, hua
+<lb/>
+    raaqui riaanij anima can􏰀,̂ huayoopagaa riyo riyaazi xichaa xi-
+<lb/>
+    aanij Dios <choice><orig>Eſpiritu</orig><reg type="spanish">Espiritu</reg></choice> lijoo lachitooni, nijani queooni peachahui-
+<lb/>
+    ni xquela raca ciroo cixenne B. Dios, ni zooba canna, zooba co-
+<lb/>
+    huijani quelazij zuelachijbaa xtennini, chela nizoo, conna
+<lb/>
+    tiaagani ticha xonnij ticha quelahuezaabi quique ñaani ni ro-
+<lb/>
+    chijga, ribaaquini looni chela nijaxtenni hua ronni loo, huari-
+<lb/>
+    beezaguela anima can􏰀,́ zoaaca yaate xillaabaanezani, zaazij-
+<lb/>
+    lijca xillaani lachiñaa yoobi bijtoo xilebij lezaaca, xi legaa le-
+<lb/>
+    roopa quela coguijñe xillaa, quela cozaabi lachi xtennini, hua-
+<lb/>
+    <note palce="margin left">[?]Eſtima</note> lijca chijcatini ciroo xootete nachij lij lachini, 1 nohui tete loo
+<lb/>
+    <fw type="catchword" place="bottom-right">qui-</fw>
+  </text>
+</TEI>

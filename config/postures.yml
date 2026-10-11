@@ -190,10 +190,10 @@ sources:
     script: {posture: implied}
   ud:
     kind: {posture: unclassified}
-    lect:
-      posture: codemap
-      note: the lzh treebanks → zho/lit; the rest ruled DELIBERATELY
-        unstaged (D57-f — a mixed-treebank collection is not one stage).
+    # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
+    # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
+    # stage witness and the only gn-claiming document); the lzh treebanks →
+    # zho/lit via codemap; the rest stays DELIBERATELY unstaged (D57-f).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -485,10 +485,10 @@ sources:
   # P116-3: the West/East Slavic wikisource family (№R-74 posture).
   pl-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the pl anchor + its old/middle stages
-        (Old Polish to c.1500, Middle Polish to 1772) — nabu-lects carries no Polish
-        node yet (censused 2026-10-10); the cone's era bands then stage it by date.
-        Documents claim bare pol meanwhile"}
+    lect: {posture: identity, note: "pl — the anchor minted 2026-10-11 (the Slavic
+        package); documents claim bare pol → pl via codemap. Deliberately coarse at
+        source grain: the cone spans pl:old and pl:mid, and the era-band categories
+        are attributions, not typed dates — staging stays a recorded future look"}
     dating: {posture: dated, note: "P116-3 (№R-74): the cone category's
         literary-period band (era_band → MetadataDates :era_band_key; medieval /
         XV-century / Renaissance / Baroque, approximate conventions declared in
@@ -498,9 +498,10 @@ sources:
     script: {posture: implied}
   cs-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the cs anchor + its old/middle stages
-        (Dalimil's Old Czech; the 1613 Kralice / Komenský Middle Czech) — nabu-lects
-        carries no Czech node yet (censused 2026-10-10). Documents claim bare ces"}
+    lect: {posture: identity, note: "cs — the anchor minted 2026-10-11 (the Slavic
+        package); documents claim bare ces → cs via codemap. Deliberately coarse:
+        the cone mixes Dalimil's Old Czech with Kralice/Komenský Middle Czech and
+        per-work edition layers — per-work staging a recorded future look"}
     dating: {posture: partial, note: "P116-3: the Textinfo VYDÁNO/ZDROJ edition
         statement → MetadataDates :edition_year_text (date_class edition, never
         composition); the 1613 print's Roman-numeral year (M.DC.XIII) mints nothing —
@@ -525,6 +526,21 @@ sources:
     dating: {posture: dated, note: "P116-3: the section's own year (рік_секції — the
         chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
     places: {posture: unplaced}
+    script: {posture: implied}
+  litopys:   # P117 (Q106)
+    # kind: machine-postured — kind_map.yml source_kind historiography/chronicle
+    # (the whole passage shelf IS the Ipatiev chronicle; the glossaries ride
+    # the dictionary lane).
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the
+        codex spans the PVL's 11th–12th-c. language to the 13th-c. Galician-Volhynian
+        narrative; the orv:early stage is the NAMED refinement candidate, not defaulted"}
+    dating: {posture: dated, note: "P117: an ATTRIBUTED composition-era band per svod
+        section (PVL 1110s, Kievan svod 1198–1200, Galician-Volhynian 1260s–1290s) →
+        era_band → MetadataDates :era_band_key; the site's annal-year keys (AM/AD)
+        ride every passage as annal_years annotations"}
+    places: {posture: named, note: "P117: the attributed compilation locus per svod
+        (Kyiv / Galicia-Volhynia) as the document place name; in-text toponyms await
+        a Cyrillic place-mine lane"}
     script: {posture: implied}
   aclt:   # P110-2
     kind: {posture: unclassified, note: one class — HLuwian inscriptions; a single-value
@@ -757,11 +773,12 @@ sources:
     kind: {posture: pending, note: "candidate: a kind_map fold over the header's genre catRefs
         (the facets genre/kind/subject carry KorBa's own codes verbatim — kanc, dydakt, …);
         the fold is a ruled table, not a default"}
-    lect: {posture: pending, note: "candidate: pl:mid by date-band inference over the print-year
-        envelopes (the dta/de:early mold) — Middle Polish, the corpus's 1601–1772 span; BLOCKED
-        on the aggregated Slavic nabu-lects mint (no pl anchor and no Old/Middle Polish stage
-        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare pl is
-        minted meanwhile"}
+    lect: {posture: identity, note: "pl IS Polish — the P116-1 pending retired 2026-10-11:
+        the Slavic nabu-lects package minted pl with pl:old [1136, 1500] and pl:mid
+        [1500, 1780], and the standing date-band inference (lect infer-dates over the
+        print-year envelopes — the dta/de:early mold) stages every closed interval of the
+        corpus's 1601–1775 span onto pl:mid at document grain; open intervals stay
+        honestly bare. No facet rule, so the declaration stays (the dta precedent)"}
     dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
         @notBefore/@notAfter with the prose kept raw)"}
     places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
@@ -771,17 +788,123 @@ sources:
   prague-bible-1488:   # P116-1
     # kind: machine-postured — kind_map.yml source_kind scripture (the
     # whole-source Bible precedent: vulgate/eng-web/sblgnt).
-    lect: {posture: pending, note: "candidate: a cs → cs:old override (lect_overrides.yml) —
-        the 1488 print is Old Czech by every periodization (Old Czech to c. 1500); BLOCKED on
-        the aggregated Slavic nabu-lects mint (no cs anchor and no Old/Middle Czech stage
-        exist in canonical/nabu-lects or the working copy, censused 2026-10-10); bare cs is
-        minted meanwhile"}
+    # lect: machine-postured since 2026-10-11 — the whole-source cs → cs:old
+    # override in config/lect_overrides.yml (the Slavic nabu-lects package
+    # minted cs:old [1100, 1500]; the P116-1 pending retired at the flip,
+    # the shadowing rule).
     dating: {posture: dated, note: "every page carries the edition's 1488 (the record and the
         htr-united yml: notBefore/notAfter 1488) — the artifact date, :structured lane"}
     places: {posture: named, note: "Prague — the edition's own name (Bible pražská), the
         imprint place; declared coarse"}
     script: {posture: implied, note: "Latin script, semi-diplomatic (long s, ¬, superscript
         marks verbatim)"}
+  ticha:   # P117-5
+    kind: {posture: pending, note: "candidate: a kind_map fold over the work_type facet
+        (arte → scholarly; catecismo/miscelaneo → hymn-prayer or ritual; manuscript →
+        legal — testaments and bills of sale) — the manuscripts' own document types
+        live on the Ticha website, not in the repo; the fold is a ruled table"}
+    # lect machine-postured since 2026-10-11 — the per-collection zap/xzp →
+    # zap:col overrides (the americas registry package merged; xzp stays
+    # universally unmapped: SIL's Monte Albán glyphic reading), the
+    # shadowing rule.
+    dating: {posture: partial, note: "84 of 93 documents: the Ticha manuscript id's year
+        (the ORIGINAL document's year — a translation is dated by its original) and the
+        printed works' title-page years (1578, 1666, 1766) on the :structured lane;
+        levanto-arte and the eight AGEO files carry no date"}
+    places: {posture: named, note: "80 of 93: the town of the manuscript id's code
+        (Ticha's own town pages; names verbatim from the repo's places.json) or the
+        works' imprint (México, Puebla de los Ángeles; place_role imprint); places.json
+        coordinates ride metadata-only — 3 of its 22 points fall far outside the
+        Valley of Oaxaca, so none are projected"}
+    script: {posture: implied, note: "Latin script; the original reading (long s, tildes,
+        abbreviations) is the text, upstream's modern-Spanish regularization rides per
+        page"}
+  guaman-poma:   # P117-5
+    # kind: machine-postured — kind_map.yml source_kind historiography/
+    # chronicle (one work, the whole-source declaration precedent).
+    lect: {posture: identity, note: "bare spa is the honest one-tag claim — the edition tags
+        NO language: its Quechua, Aymara and Latin passages are italicized alike, so a qwc
+        (Classical Quechua) or aym lane would need a per-run language decision the markup
+        cannot carry (declared coarse; the italic runs and the edition's normalized
+        Andean-terms lines ride as annotations/metadata). Early-17th-c. colonial Spanish
+        is unstaged (es has no early-modern stage)"}
+    dating: {posture: dated, note: "the autograph's 1615 (the edition's own title) on every
+        page — the artifact date, :structured lane"}
+    places: {posture: unplaced, note: "the chronicle names its Andean places in prose only;
+        the edition's onomastic index is a separate site section (not crawled) — a future
+        place-mining pass, not a field"}
+    script: {posture: implied, note: "Latin script, the 1987 transcription's conventions
+        (in-word editorial brackets S[EÑ]OR kept, the editors' bracketed glosses moved to
+        annotations)"}
+  eltec-srp:   # P117-2
+    kind: {posture: pending, note: "candidate: a kind_map source_kind literary/narrative/novel —
+        ELTeC is a novel collection by construction (its sampling frame is the novel); a
+        whole-source fold, awaiting a ruling (no literary source_kind precedent yet)"}
+    lect: {posture: identity, note: "srp → the sr anchor (nabu-lects 2026-10-10), declared
+        coarse: first editions 1852–1920 straddle Vuk's 1868 orthographic victory — the
+        1850s texts keep pre-reform/Slavenoserbian traces (Игњатовић 1859 'историческиј
+        роман'); sr carries no stages and none is claimed here"}
+    dating: {posture: dated, note: "the firstEdition bibl's typed dates (envelope); one text
+        without one falls back to ELTeC's reference year from its id — :structured lane"}
+    places: {posture: named, note: "the firstEdition pubPlace (publication place: Београд,
+        Нови Сад, Беч, Пешта, Zagreb …) on 85/96 texts; declared coarse"}
+    script: {posture: mixed, note: "Cyrillic (94) + Latin (2: Јанковић 1918, Ћоровић 1919) —
+        metadata script per document from the root xml:lang"}
+  elektire:   # P117-2
+    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet (the
+        portal's knjizevna_vrsta terms verbatim — ep, spjev, komedija, pastorala, roman,
+        pripovijest, zbirka pjesama …) onto literary/*; a ruled table, not a default"}
+    lect: {posture: identity, note: "hrv → the hr anchor (nabu-lects 2026-10-10), declared
+        coarse: the cone spans Marulić's Čakavian (Judita, written 1501), Dubrovnik
+        Štokavian (Držić, Gundulić), Kajkavian (Brezovački, Domjanić, Galović) and the
+        modern Neo-Štokavian standard; hr deliberately mints no stages (its own note) and
+        none is claimed — a dialect-base or Old Croatian rung would be a registry ruling"}
+    dating: {posture: dated, note: "the portal's century-of-origin terms (stoljece_nastanka)
+        as a century envelope — attributed composition era, COMPOSITION class; declared
+        coarse (a century, not a year); the three anonymous folk anthologies carry the
+        portal's 21st century — the anthology's, declared"}
+    places: {posture: unplaced, note: "the works carry no place field; the author note's
+        birth/death places are the author's, not the work's"}
+    script: {posture: implied, note: "Latin script throughout (modern Croatian orthography
+        of the e-editions, the base edition's bracketed restorations kept)"}
+  vuk-danicic:   # P117-2
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/prague-bible-1488).
+    lect: {posture: identity, note: "srp → the sr anchor — Vuk's Neo-Štokavian ijekavian
+        reform standard is the anchor's own founding text (its note: 'the 1847 victory with
+        Daničić'); no stage claimed"}
+    dating: {posture: dated, note: "the translation era per testament, attributed — NT 1847
+        (Vuk), OT 1865–1868 (Daničić; finished 1865, printed 1868); composition class
+        (MetadataDates COMPOSITION), not an artifact date"}
+    places: {posture: unplaced, note: "the asset carries no imprint (a USFM conversion of an
+        Unbound Bible text) — nothing to mine"}
+    script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
+        (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  slavistics-pd:   # Q105
+    # kind: machine-postured — kind_map.yml source_kind scholarly (the
+    # whole source IS scholarship; per-work genre rides the genre facet).
+    lect: {posture: identity, note: "the reference-shelf posture (the local-library precedent):
+        each work claims the language of its PROSE — deu (lat for Kopitar's Clozianus, ces for
+        Vondrák's two Czech works) — scholarship ABOUT Slavic, never a Slavic lect claim; the
+        object-language forms are uncorrected OCR (declared per document)"}
+    dating: {posture: dated, note: "every work carries its text's edition year(s) — a facsimile
+        reprint keeps its first edition's date, the print riding the note — :structured lane"}
+    places: {posture: unplaced, note: "imprint places (Wien, Berlin, Heidelberg, Praha) ride
+        metadata 'imprint' — the printing place, not a text place (the dta stance)"}
+    script: {posture: implied, note: "Latin script prose (Antiqua/Fraktur); the Cyrillic and
+        Glagolitic-in-Cyrillic object text is uncorrected OCR, frequently mis-read as Latin"}
+  archiv-slav-phil:   # Q105
+    # kind: machine-postured — kind_map.yml source_kind scholarly.
+    lect: {posture: identity, note: "the reference-shelf posture (slavistics-pd, the
+        local-library precedent): deu, the journal's language — Russian, Serbo-Croatian and
+        other Slavic-language articles ride inside the German volumes uncoded (coarse,
+        declared); scholarship ABOUT Slavic, never a Slavic lect claim"}
+    dating: {posture: dated, note: "each volume's title-page year (a 1964-reprint scan keeps the
+        original's) — :structured lane"}
+    places: {posture: unplaced, note: "the imprint (Berlin: Weidmann) rides metadata 'imprint'
+        — the printing place, not a text place"}
+    script: {posture: implied, note: "Latin script prose; Cyrillic quotations are uncorrected
+        OCR"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
@@ -1004,16 +1127,19 @@ sources:
     # genre-facet fold machine-postures the source (the shadowing rule).
     lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
         100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
-    dating: {posture: pending, note: "candidate: the Bactrian-era conversion — dated
-        documents' year formulas (\"χϸονο ρʹ ιʹ\" = year 110) are mined into document
-        metadata `era_dates` (raw formula, summed numeral, uncertain flag); turning era
-        years into CE envelopes needs a ruled era epoch, never assumed here. The epoch is
-        CONTESTED in the literature (P116 check): Sims-Williams & de Blois, Studies in
-        the Chronology of the Bactrian Documents (Vienna 2018) argue Nawroz 223 CE (de
-        Blois, CRAI 2006/2008) and call it controversial; Schindel 2011 and de la
-        Vaissière argue 227/228; Humbach/Harmatta 1966-71 had 232, Sims-Williams
-        1997/1999 233 (a working hypothesis since withdrawn). Terminus post quem 219 CE
-        is 'probably uncontroversial' (2018, p. 11)"}
+    dating: {posture: partial, note: "the ruled Bactrian-era ENVELOPE (owner ruling
+        2026-10-11): era year Y → CE [Y+222, Y+228], covering de Blois's Nawroz 223
+        epoch and Schindel / de la Vaissière's 227/228, each era year straddling two CE
+        years (Sims-Williams & de Blois, Studies in the Chronology of the Bactrian
+        Documents, Vienna: ÖAW 2018, pp. 9-11) — a ruled range, never a picked epoch.
+        Mined from every text carrying the year formula (\"χϸονο ρʹ ιʹ\" = year 110):
+        39 of 123 pages (re-parse 2026-10-11) — 31 of the 32 dated documents A–Y (m's
+        page transcribes no formula), the dated
+        letters' sealing clause (cr da dd de ea ed), fragment aa and the Tang-i
+        Safedak inscription (TiS, year 492); damaged numerals widen by the adapter's
+        rank rule. The rest carry no era formula (undated letters, lists, fragments,
+        Buddhist texts) — partial is the honest class, rows via MetadataDates
+        :structured"}
     places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
         Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
         the Tang-i Safedak inscription (TiS) is named only by its siglum"}
@@ -1310,6 +1436,44 @@ sources:
         every work, cert carried"}
     places: {posture: unplaced}
     script: {posture: implied}
+  kdsp:   # Q102, row 242
+    kind: {posture: pending, note: "candidate: a kind_map fold over the textType facet
+        genre (povest / roman / novela / črtica / drugo — all narrative prose); the fold
+        is a ruled table, not a default"}
+    lect: {posture: dates, note: "as prilit/imp — the sl stage bands stage the
+        print year on every text (1836–1849 → sl:emod, 1850–1918 → sl:mod)"}
+    dating: {posture: dated, note: "the sourceDesc bibl's publication year (@when on
+        all 262), a one-year envelope (MetadataDates :structured)"}
+    places: {posture: unplaced, note: "the deposit carries no place field (bibl,
+        personography and taxonomies censused) — declared"}
+    script: {posture: implied, note: "Latin (gajica) as the digital sources transcribe
+        it; no bohoričica censused"}
+  mdz-protestant:   # Q102, row 243
+    kind: {posture: unclassified, note: "MDZ manifests carry no genre field (catechism,
+        hymnal, prayer book, grammar, confession, sapiential book live in the titles only)"}
+    lect: {posture: dates, note: "the five Slovene prints (1562–1584) stage onto sl:emod
+        through the sl bands via their print years; the Latin-script Croatian Spovid
+        (Tübingen 1564) rides bare hrv (codemap → hr; the hr anchor mints no stages by
+        design). Bohoričica declared per seed in metadata orthography"}
+    dating: {posture: dated, note: "the manifest Date (every 4-digit year; brackets kept raw),
+        MetadataDates :structured"}
+    places: {posture: named, note: "the imprint place in the print's own spelling (V Tibingi,
+        Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
+    script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
+        machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
+  gams-zrcalo:   # Q102, row 244
+    kind: {posture: unclassified, note: "one devotional work (the Speculum humanae
+        salvationis); no class field in the TEI"}
+    lect: {posture: identity, note: "hrv bare (codemap → hr) — textLang mainLang hr,
+        otherLangs chu (Old Croatian with Croatian-recension Church Slavonic elements,
+        traces of Old Czech): recorded in metadata text_languages, never split; hr mints
+        no Old Croatian stage by design (the registry's hr note)"}
+    dating: {posture: dated, note: "origDate 1445 (the colophon's own date)"}
+    places: {posture: unplaced, note: "upstream origPlace reads 'place of origin unknown' —
+        the colophon's Vrbnik is the commissioning priest's seat, not inferred as the
+        writing place; declared"}
+    script: {posture: qualified, note: "Latin-script semi-diplomatic transliteration of a
+        GLAGOLITIC codex (metadata script_original) — the Glagolitic is not carried"}
   openiti:
     # kind declaration retired P104-1: the subject-facet regex rule in
     # kind_map.yml machine-postures it now (the shadowing rule).

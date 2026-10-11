@@ -282,6 +282,22 @@ aranese:
   # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
   sync_policy: manual
 
+archiv-slav-phil:   # Q105, 02-sources row 251
+  adapter: Nabu::Adapters::ArchivSlavPhil
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 33 docs / 22,348 passages.
+  sync_policy: manual
+  # Jagić's Archiv für slavische Philologie as the archive.org scan run —
+  # 33 volumes keyed by their own title pages: Bd. 1, 3–12, 14–35
+  # (1876–1914; Toronto Bd. 16–35, user uploads Bd. 1/7–9, Google scans
+  # filling Bd. 3–6/10–12/14–15). One document per volume, page grain
+  # over the hOCR derivative pair (the slavistics-pd mechanics,
+  # IaScanShelf). UNCORRECTED OCR declared on every document. Language
+  # deu (the journal's; Slavic-language articles mixed in — coarse,
+  # declared). US public domain (pre-1931); the EU per-article term is
+  # not audited — declared in the manifest.
+
 aspr:
   adapter: Nabu::Adapters::Aspr
   adopted: "2026-07-10"
@@ -1776,6 +1792,24 @@ eebo-tcp:
   # files. Median text 35 KB, max 17.6 MB — Reader streaming throughout.
   sync_policy: manual
 
+elektire:   # P117-2, 02-sources row 247
+  adapter: Nabu::Adapters::Elektire
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 205 docs / 375,300 passages.
+  sync_policy: manual
+  # eLektire (lektire.skole.hr — CARNET's school reading portal, books by
+  # Bulaja naklada): the Croatian canon, Marulić's Judita to the moderns.
+  # WP-JSON crawl (works listing + taxonomies + per-work attachments) of
+  # the Croatian-literature term, EPUBs as served → the new elektire-epub
+  # family (work text only; the publisher's reserved apparatus — glossary,
+  # notes, author note, didactic pages — never ingested). PER-WORK rights
+  # from each impressum; admitted only with a public-domain statement, no
+  # reserved translation, and an author dead by 1955 (life + 70) or
+  # anonymous → open. The printed base edition is not stated in the asset
+  # and is recorded as such. Expected first sync 205 docs / 375,300
+  # passages, 26 skipped by rule (census 2026-10-11; ~12 min crawl, 250 MB).
+
 elephantine:   # P47-1, 02-sources row 131
   adapter: Nabu::Adapters::Elephantine
   adopted: "2026-07-26"
@@ -1836,6 +1870,20 @@ elephantine:   # P47-1, 02-sources row 131
   # translation siblings; Trismegistos ids ride document metadata (a
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
+
+eltec-srp:   # P117-2, 02-sources row 246
+  adapter: Nabu::Adapters::EltecSrp
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 96 docs / 150,794 passages / 4 rule-skips.
+  sync_policy: manual
+  # ELTeC-srp (COST Action CA16204; ed. Cvetana Krstev, JeRTeH):
+  # Serbian novels, first editions 1852–1920, level-1 TEI (the eltec-tei
+  # family). Texts PD, markup CC BY 4.0 (README verbatim) → attribution.
+  # Sparse cone level1 + README (the 519 MB level2 annotated twin stays
+  # out). 100 files; 4 excluded by the life+70 rule (authors d. 1956–1987)
+  # → expected first sync 96 docs / 150,794 passages (census 2026-10-11).
+  # srpELTeC-ijk is NOT fetched: no license statement anywhere upstream.
 
 eng-web:
   adapter: Nabu::Adapters::EngWeb
@@ -1912,6 +1960,20 @@ freising:
   # watchable page is the e-ZRC edition landing page — verify it carries
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
+
+gams-zrcalo:   # Q102, 02-sources row 244
+  adapter: Nabu::Adapters::GamsZrcalo
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 1 doc / 199 passages.
+  sync_policy: manual
+  # Zrcalo člověčaskago spasenja (1445) — the Croatian Glagolitic
+  # Speculum humanae salvationis of the deacon Luka (Vatican, Borg.
+  # illirico 9), in the GAMS digital edition (Kramarić & Schneider,
+  # Graz 2022; CC BY 4.0 in the TEI availability → attribution). One
+  # TEI datastream (509 KB), one document; passage per chapter head/p;
+  # the witness reading (sic kept, corrections/notes as annotations).
+  # Latin-script transliteration of the Glagolitic, declared.
 
 glaux:
   adapter: Nabu::Adapters::Glaux
@@ -2016,6 +2078,20 @@ gretil:
   # nc Sanskrit TEI corpus (~784 texts / ~240 MB); a full clone is an owner
   # decision, not a scheduled one — and the corpus has been stable since 2021.
   sync_policy: manual
+
+guaman-poma:   # P117-5, 02-sources row 255
+  adapter: Nabu::Adapters::GuamanPoma
+  adopted: "2026-10-11"
+  axes: [americas]
+  wired: true    # First sync verified 2026-10-11: 1,189 docs / 5,911 passages.
+  sync_policy: manual
+  # Guaman Poma, El primer nueva corónica y buen gobierno (1615; Royal
+  # Danish Library GKS 2232 4º) — the KB's digital edition (Murra/Adorno/
+  # Urioste 1987 transcription, corrected by Adorno and Boserup), one
+  # static XHTML page per manuscript page at poma.kb.dk permalinks.
+  # Public Domain Mark per the KB's project page → open. Paced crawl
+  # (1 s), resumable at the page grain. Document = page, passage =
+  # paragraph; Spanish with Quechua and Aymara passages (italic, untagged).
 
 hdic:
   adapter: Nabu::Adapters::Hdic
@@ -2420,6 +2496,21 @@ kanripo:
   # future catalog/fetch seam candidate, next Sino phase survey).
   classes: [KR1, KR2, KR3, KR4, KR5]
 
+kdsp:   # Q102, 02-sources row 242
+  adapter: Nabu::Adapters::Kdsp
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 262 docs / 290,394 passages.
+  sync_policy: manual
+  # KDSP 1.0 — the corpus of longer narrative Slovenian prose 1836–1918
+  # (ZRC SAZU; CLARIN.SI hdl 11356/1823, CC BY 4.0 → attribution): 262
+  # texts, one 29 MB plain-TEI zip. Passage per head/p/lg (upstream ids);
+  # print year, author + personography, type/subtype/theme facets mined.
+  # OVERLAP with the held prilit (2 works in the 1836–66 window),
+  # sl-wikisource and imp (KDSP aggregates Wikivir/ELTeC/dLib texts):
+  # ingested WITH provenance (digital source + URL per document), dedupe
+  # is catalog-side (adapter header).
+
 kitab:
   adapter: Nabu::Adapters::Kitab
   adopted: "2026-07-24"
@@ -2663,6 +2754,24 @@ lila:
   # owner decision (the clone is large + version-pinned).
   sync_policy: manual
 
+litopys:   # P117 (Q106), 02-sources row 252
+  adapter: Nabu::Adapters::Litopys
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 41 docs / 964 passages + 3 glossaries / 923 entries.
+  sync_policy: manual
+  # Izbornyk (litopys.org.ua), the PD-EDITION SUBSET — the packet is the
+  # per-text edition triage (Litopys::TRIAGE): the Ipatiev chronicle
+  # COMPLETE (ipatlet/ipat01–41, stlb. 1–938, ПСРЛ т. 2, СПб. 1908 —
+  # both layers PD) + three glossaries of the «Лексикони» shelf after
+  # 19th-c. publications (the dictionary lane). The rest of the shelf
+  # rides Soviet-era editions (Німчук 1961/1964, Наукова думка 1970–80,
+  # Soviet facsimiles) → excluded by EDITION_TAINT_POST_1930, never
+  # fetched. Plain HTTP (the HTTPS cert is broken upstream), the
+  # izbornyk.org.ua mirror per page as fallback; 44 GETs at 1 s.
+  # EXPECTED FIRST SYNC: 41 docs / 964 passages (938 columns, 26 split
+  # across pages) + 3 dictionaries / 923 entries (688 + 174 + 61).
+
 liv:
   adapter: Nabu::Adapters::Liv
   adopted: "2026-07-14"
@@ -2806,6 +2915,22 @@ local-source:
   # no upstream, no network; sync re-scans the tree (LocalFetch, per-file
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
+
+mdz-protestant:   # Q102, 02-sources row 243
+  adapter: Nabu::Adapters::MdzProtestant
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # Both crawl passes verified 2026-10-11: 6 docs complete / 1,54x page passages.
+  sync_policy: manual
+  # MDZ (Bayerische Staatsbibliothek) page OCR of six 16th-century
+  # Slovene/Croatian Protestant prints — Trubar 1562, Dalmatin 1575,
+  # the 1584 Wittenberg catechism/hymnal + prayer book, Bohorič 1584,
+  # the Croatian Spovid 1564: IIIF manifests + per-page hOCR, a paced
+  # resumable crawl (the API is rate limited; 1,551 pages = two syncs).
+  # Public Domain Mark → open; the two NoC-NC Google copies ride as
+  # per-document nc. OCR LAYER, NOT AN EDITION (text_nature
+  # machine-ocr). The Urach Glagolitic/Cyrillic prints are out (OCR
+  # noise), Megiser 1592 out (a four-language dictionary), declared.
 
 menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
   adapter: Nabu::Adapters::MengguZiyun
@@ -4323,11 +4448,43 @@ sl-wikisource:   # P116-2, 02-sources row 235
   # catalog-side concern (adapter header). Bohoričica declared in
   # metadata "orthography". Texts PD; layer CC BY-SA 4.0.
 
+slavistics-pd:   # Q105, 02-sources row 250
+  adapter: Nabu::Adapters::SlavisticsPd
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 21/23 docs / 5,833 passages (2 items on archive.org mirror retries — they land on a later sync).
+  sync_policy: manual
+  # The PD German-Slavistics reference canon as archive.org scans — 23
+  # census items: Miklosich (Etym. Wb. 1886, Vergl. Grammatik I–IV),
+  # Berneker SEW I, Leskien's Handbuch (1905), Vondrák (AKSl. Grammatik
+  # 1900, Frisinské památky 1896), the Glagolita Clozianus in Kopitar's
+  # (1836) and Vondrák's (1893) editions, and 12 Vienna Academy
+  # Sitzungsberichte/Denkschriften Slavistics monographs. Page grain over
+  # each item's hOCR derivative pair (_hocr_searchtext + _hocr_pageindex,
+  # ~1 MB per volume). UNCORRECTED OCR — the archive's machine text,
+  # never proofread; Cyrillic/Glagolitic portions are garbled — declared
+  # on every document (text_nature + ocr_note + a measured wordlike
+  # share). Language = the prose's (deu; lat/ces for three items):
+  # scholarship ABOUT Slavic. Public domain (authors †1844–1952).
+
 # P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
 # one row per upstream artifact/license/fetch posture), one new axis tag.
 # LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
 # xct_ precedent), Old Tibetan is `otb`; `bo` stays kaikki's modern
 # dictionary shelf. The codes become held-language cards after first sync.
+slouniki-nasovic:   # P117 (Q106), 02-sources row 253
+  adapter: Nabu::Adapters::SlounikiNasovic
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 35,159 entries.
+  sync_policy: manual
+  # Насовіч, Словарь бѣлорусскаго нарѣчія (СПб., 1870) — the library's
+  # FIRST Belarusian (be) shelf, dictionary-shaped: one SlounikPlus XML
+  # article per file from github.com/Belarus/Slouniki-Nasovic (declared
+  # "Public domain."; last push 2026-02-16 → manual). Sparse GitFetch of
+  # data/*.xml (~155 MB working tree — the per-file rtf blobs). EXPECTED
+  # FIRST SYNC: 35,159 entries, 0 parse errors (census run 2026-10-11),
+  # 2,967 gloss-less (cross-references).
 soas-tibetan:
   adapter: Nabu::Adapters::SoasTibetan
   adopted: "2026-07-28"
@@ -4558,6 +4715,22 @@ tibetan-verbs:
   # honest. LICENSE: CC0-1.0 (repo LICENSE file, verified 2026-07-28) →
   # class open. Small and occasionally edited: re-syncs are an owner call.
   sync_policy: manual
+
+ticha:   # P117-5, 02-sources row 254
+  adapter: Nabu::Adapters::Ticha
+  adopted: "2026-10-11"
+  axes: [americas]
+  wired: true    # First sync verified 2026-10-11: 93 docs / 1,103 passages / 4 rule-skips.
+  sync_policy: manual
+  # Ticha — colonial Valley Zapotec texts in TEI (Haverford College;
+  # github.com/HCDigitalScholarship/ticha-xml-tei, CC BY-SA 4.0 by the
+  # repo's license.txt → attribution). One git repo; the ticha-tei family
+  # repairs the hand-encoded files (unclosed <br>, truncation, stray end
+  # tags — counted per document). Document = file, passage = page.
+  # Córdova's Arte (1578), Agüero's Miscelaneo (1666, Zapotec), Levanto's
+  # Arte and Cathecismo, the 1744 Teitipac testament, and the manuscript
+  # transcriptions — mostly the period Spanish translations (Ticha's *T
+  # ids) of Zapotec testaments and bills of sale; text_role per document.
 
 tir:
   adapter: Nabu::Adapters::Tir
@@ -5168,7 +5341,7 @@ ud:
   # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
   # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
   # ride axis-less (minting new axes is an owner decision, not this packet's).
-  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical, turkic]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French); turkic: P107-6 (Tonqq)
+  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical, turkic, americas]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French); turkic: P107-6 (Tonqq); americas: P117-5 (Tupinamba-TuDeT, Guarani-OldTuDeT)
   # P49-r4 audit: THE archetype pack — ~40 treebanks in 18+ languages serving
   # twelve desks, and upstream adds treebanks in any language at all. Whole-
   # grain attribution made `nabu language hbo` claim all twelve desks off
@@ -5376,6 +5549,21 @@ viet-wikisource:
   # (PAGES is the naming authority), 2 batched api.php requests; PD texts
   # + CC BY-SA 4.0 transcription → attribution. All lzh.
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
+
+vuk-danicic:   # P117-2, 02-sources row 248
+  adapter: Nabu::Adapters::VukDanicic
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 66 docs / 31,102 passages.
+  sync_policy: manual
+  # The Vuk (NT 1847) / Daničić (OT 1865) Serbian Bible, IJEKAVIAN, in
+  # Latin transliteration: spthmpsn/Rs1Bible (66 USFM books converted
+  # from THE UNBOUND BIBLE's "Serbian: Danicic Karadzic Latin"; ~4 MB
+  # repo, untouched since 2016) → the new usfm family. eBible.org's PD
+  # srp1868/srp1865 were refused: their own title page declares an
+  # ekavized, modernized text. Text PD by age; no LICENSE upstream;
+  # mechanical conversion → open. Expected first sync 66 docs / 31,102
+  # passages (census 2026-10-11).
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate

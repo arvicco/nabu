@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="KDSP020" xml:lang="sl">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Idealist [KDSP]</title>
+        <author>Holc, Vatroslav (1844-1914)</author>
+      </titleStmt>
+      <editionStmt>
+        <edition>1.0</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName><ref target="https://isllv.zrc-sazu.si/sl/predstavitev#v">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</ref></orgName>
+        </publisher>
+        <distributor>CLARIN.SI</distributor>
+        <idno type="URI" subtype="handle">http://hdl.handle.net/11356/1823</idno>
+        <date when="2023-07-07"> 7. julij 2023</date>
+        <availability status="free">
+          <licence>http://creativecommons.org/licenses/by/4.0/</licence>
+          <p>To delo je ponujeno pod <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Priznanje avtorstva 4.0 mednarodna licenca</ref>.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+	<bibl source="#dLib">
+          <title type="main">Idealist</title>
+          <author corresp="#HolcVatroslav">Holc, Vatroslav</author>
+	  <date when="1876">1876</date>
+          <idno type="URI" subtype="URN">https://www.dlib.si/details/URN:NBN:SI:DOC-R7R8ADI9</idno>
+	</bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <textClass>
+        <catRef scheme="#textTimeSlot" target="#D5"/> <!-- (obdobje) -->
+        <catRef scheme="#textSize" target="#kratka"/> <!-- (obseg) -->
+        <catRef scheme="#textType" target="#povest"/> <!-- (zvrst) -->
+        <catRef scheme="#textSubType" target="#v_pismih"/> <!-- (podzvrst) -->
+        <catRef scheme="#textTheme" target="#idejna"/> <!--(tematika) -->
+        <catRef scheme="#textCanonicity" target="#nizka"/> <!-- (kanoničnost) -->
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+   <div xml:id="KDSP020.d1">
+      <head xml:id="KDSP020.d1.h1">I.</head>
+      <p xml:id="KDSP020.d1.p1">V Pulju 1. marca 1870.</p>
+      <p xml:id="KDSP020.d1.p2">Gotovo me uže mrtvim prištevaš, ker Ti čez dve leti nijsem bil poslal nikakšnega znaka o svojem živobitju; a mili Božidar! bivam še vedno med živimi in sicer – čvrst in zdrav; toda pisati med tem časom Ti nijsem mogel, kajti bil sem »danes tukaj, jutri tam«, in stoprv zdaj sem se povrnol iz daljne pomorske vožnje nazaj sim v varno pristanišče avstrijskega pomorstva. –</p>
+      <p xml:id="KDSP020.d1.p3">Ne bom Ti pripovedoval, koder in kako smo brodarili, niti razkladal, kaj in koliko sem pri tem dvoletnem blodjenju po neizmernem morskem vôdovju pretrpel, – v to svrho Ti pošljem svoj potni dnevnik, – nego pokazati hočem Ti samo blagotvorni učinek tega dolgotrajnega brodarjenja, kolikor na razvedrenje otožne moje čudi, toliko na razvoj mladega mi duha.</p>
+      <p xml:id="KDSP020.d1.p4">Znano Ti je, da sem se pridružil tej ekspediciji iz obupnosti, katera se me je vsled izneverjenja moje – Josipine polastila, in da sem odplul z bolečim, globôko ranjenim in popolno potrtim srcem, kakor Preširnov »mornar« žalomilo pojoč:</p>
+      <lg xml:id="KDSP020.d1.lg1">
+         <l xml:id="KDSP020.d1.lg1.l1">»Moj up je šel po vodi.</l>
+         <l xml:id="KDSP020.d1.lg1.l2">Le jadrajmo za njim!«</l>
+      </lg>
+      <p xml:id="KDSP020.d1.p5">Ljut vihar divjih strastij razsajal je v mojih razburjenih nedrih in otožen mrak bridke beztolažnosti ležal je na razjarjenej moji čudi, ko me je ponesla veličastna fregata iz preloke ven po neskončnej vodenej planoti v daljne tuje kraje; a z umirjenim srcem in z utešenimi občutki priplaval sem nazaj v zatišje varne ladjestaje: pod mogočnim uplivom mnogovrstnih popotnih utisov in čudovitih inostranskih prikazov se je strasten prepir razburjenih čutljajev v mojih prsih ulegel in krvaveča, globôko v srce usekana rana se mi je v teku časa zacelila:</p>
+      <lg xml:id="KDSP020.d1.lg2">
+         <l xml:id="KDSP020.d1.lg2.l1">Srce spet je ozdravelo,</l>
+         <l xml:id="KDSP020.d1.lg2.l2">Polje v prsih zdaj veselo:</l>
+         <l xml:id="KDSP020.d1.lg2.l3">Nehal strastij je prepir,</l>
+         <l xml:id="KDSP020.d1.lg2.l4">Sladek v nedrih vlada mir.</l>
+      </lg>
+      <p xml:id="KDSP020.d1.p6">Nasprotno pak, čem mirneje ko mi je postalo srcé, tem bolj se je prodramil mládi moj, v otročjo nezavest prej zamotani duh. Meju tem, ko so potne slike moje srčne živce omamile, vzbudile so v meni doslej speče duševne sile, in od mnogovrstnih, dvoletnih izkušenj oživljeni duh nadvladal je zdaj od počutnih utisov utešeno srcé. Pri svojem odplavu bil sem jako sentimentalen in rahločuteč mehkužnež; a pri povratku iz tujine sim na jadransko obalo bivam čvrst in vedrogibčen korenjak. Odrinol sem kot črnogleden in s celim svetom razprt melanholik; a domov dohajam kot dobrovoljen in veseločuten lahkoživec. Takrat gojil sem v svojih nedrih trpko mržnjo do vseh ljudij in hrepenel po izhodu iz mračne zemske ječe ter podal se na morje edino s to nadejo, da se mi v naročju šumečih valov ohladi od bridke bolesti razvneto srcé; toda zdaj bi objel celi svet in visim z duhom in telesom o življenju.</p>
+   </div>
+</body>
+  </text>
+</TEI>

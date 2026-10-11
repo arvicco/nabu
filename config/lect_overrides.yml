@@ -151,3 +151,30 @@ sources:
   # manuscript copy date — the P108-4 posture note).
   kokubunken:
     jpn: { lect: "jpn:emj", tier: certain }
+  # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
+  # package minted cs with cs:old [1100, 1500], in canonical): the Prague
+  # Bible of 1488 IS Old Czech by every periodization (staročeština to
+  # c. 1500; the registry's own cs:old note names it the first complete
+  # printed Old Czech Bible). A per-collection fact: upstream codes the
+  # whole edition bare cs. Tier certain: one dated print, inside the band.
+  prague-bible-1488:
+    cs: { lect: "cs:old", tier: certain }
+  ticha:
+    # The colonial Valley Zapotec corpus (Córdova 1578 through the Valley
+    # notarial record to 1832): every holding falls inside the zap:col band
+    # by the corpus's own construction. The parser folds the encoders' own
+    # "cvz" label to zap; Córdova's TEI header declares ISO xzp, which SIL
+    # defines as the PRE-HISPANIC Monte Albán glyphic language (CR 2006-065)
+    # — a universal codemap row would misread glyphic collections, so the
+    # americas registry package deliberately left it unmapped and THIS
+    # per-collection row carries the fold (owner adoption 2026-10-11, the
+    # americas package merged the same day).
+    zap: { lect: "zap:col", tier: certain }
+    xzp: { lect: "zap:col", tier: certain }
+  ud:
+    # The ruled exception to D57-f (ud deliberately unstaged): the Old
+    # Guaraní treebank (Montoya/Restivo, 1639-1724) is precisely a stage
+    # witness, and it is the ONLY ud document claiming bare gn (gug and the
+    # modern treebanks claim their own codes). Ruled 2026-10-11; revisit if
+    # a modern gn-coded treebank ever registers.
+    gn: { lect: "gn:old", tier: certain }
