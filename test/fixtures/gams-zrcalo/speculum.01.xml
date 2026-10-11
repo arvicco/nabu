@@ -1,0 +1,1299 @@
+<?xml version="1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Digital edition of Zrcalo &#x10D;lov&#x11B;&#x10D;askogo spasenja</title>
+      </titleStmt>
+      <editionStmt>
+        <edition>digital edition</edition>
+        <editor>
+          <forename>Martina</forename>
+          <surname>Kramari&#x107;</surname>
+        </editor>
+        <editor>
+          <forename>Gerlinde</forename>
+          <surname>Schneider</surname>
+        </editor>
+        <respStmt>
+          <resp>transcriber</resp>
+          <name>Martina Kramari&#x107;</name>
+        </respStmt>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <ref target="https://informationsmodellierung.uni-graz.at"/>
+          <orgName ref="http://d-nb.info/gnd/1137284463">ZIM-ACDH, Universit&#xE4;t Graz</orgName>
+        </publisher>
+        <authority>
+          <ref target="https://informationsmodellierung.uni-graz.at"/>
+          <orgName ref="http://d-nb.info/gnd/1137284463">Zentrum f&#xFC;r Informationsmodellierung -
+            Austrian Centre for Digital Humanities, Karl-Franzens-Universit&#xE4;t Graz</orgName>
+        </authority>
+        <distributor>
+          <ref target="https://gams.uni-graz.at"/>
+          <orgName>GAMS - Geisteswissenschaftliches Asset Management System</orgName>
+        </distributor>
+        <availability>
+          <licence n="text" target="https://creativecommons.org/licenses/by/4.0">Creative Commons BY
+            4.0</licence>
+        </availability>
+        <date when="2022"/>
+        <pubPlace>Graz</pubPlace>
+        <idno type="PID">o:speculum.01</idno>
+        <ref target="info:fedora/context:speculum" type="context"/>
+      </publicationStmt>
+      <sourceDesc>
+        <msDesc status="draft">
+          <msIdentifier>
+            <country>Vatican</country>
+            <settlement>Citt&#xE0; del Vaticano</settlement>
+            <institution ref="https://https://www.vaticanlibrary.va//">Biblioteca Apostolica
+              Vaticana</institution>
+            <repository>Manuscripts</repository>
+            <idno>Borg. L. VII. 9, illirico 9</idno>
+          </msIdentifier>
+          <msContents>
+            <msItem>
+              <title type="main" xml:lang="en">Manuscript of Deacon Luka</title>
+              <title type="alt" xml:lang="en">Vatican manuscript</title>
+              <textLang mainLang="hr" otherLangs="chu">Mostly Old Croatian with some elements of Old
+                Church Slavonic Croatian redaction, and traces of Old Czech language</textLang>
+            </msItem>
+            <msItem n="1">
+              <locus from="1r" to="81vr">ff. 1-81v</locus>
+              <title xml:lang="hr">Zrcalo &#x10D;lov&#x11B;&#x10D;askago spasenja</title>
+              <title xml:lang="en">Mirror of the human salvation</title>
+              <note type="description">The translation of the Old Czech text Zrcadlo &#x10D;love&#x10D;ieho
+                spasenie The Czech text was translated from Latin Speculum humanae
+                salvationis</note>
+              <incipit>V ime B(o)&#x17E;je i D(&#x11B;)vi Marije. Am(e)n. 1445. m(&#x11B;)s(e)ca maja na 19. d(a)n. Ja
+                &#x17E;ak(a)n Luka po&#x10D;eh pisati sije k&#x144;igi popu Grguru v(a) Vrbnici, ke se k&#x144;ige zovu
+                Zrcalo.</incipit>
+            </msItem>
+            <msItem n="2">
+              <locus from="81v" to="85r">ff. 81v-85r</locus>
+              <title xml:lang="hr">N(a) rojstvo H(rstovo) ili Govor za Bo&#x17E;i&#x107;</title>
+              <title xml:lang="en">On the occasion of the Christ' birth or Christmass homily</title>
+              <note type="description">sermon of the unknown author</note>
+              <incipit>N(a) rojstvo Hr(sto)vo. Otro&#x10D;e rodi se n(a)m i s(i)n dan n(a)m
+                je(st).</incipit>
+            </msItem>
+            <msItem n="3">
+              <locus from="85r" to="86r">ff. 85r-86r</locus>
+              <title xml:lang="hr">O Svetoj Trojici</title>
+              <title xml:lang="en">On the Holy Trinity</title>
+              <note type="description">sermon of the unknown author</note>
+              <incipit>B(og) je(st) mo&#x107;ni, mudri i dobrotivi. T(a)ko da zvla&#x161;&#x107;e B(o)gu O(t)cu
+                pristoji mo&#x107;.</incipit>
+            </msItem>
+            <msItem n="4">
+              <locus from="86r" to="91r">ff. 86r-91r</locus>
+              <title type="main" xml:lang="hr">Govor na 13. nedjelju po sv. Trojici o milosrdnom
+                Samaraninu</title>
+              <title type="alt" xml:lang="hr">Homilija na 13. nedjelju po Duhovima</title>
+              <title type="main" xml:lang="en">The sermon on the 13th Sunday about the merciful
+                Samaritan</title>
+              <title type="alt" xml:lang="en">Homily of the 13th Sunday after Pentecost</title>
+              <note type="description">the translation of the Jan Hus's sermon</note>
+              <incipit>&#x10C;(lov&#x11B;)k jedan ishaja&#x161;e ot Jer(u)slma v Jerihu.</incipit>
+            </msItem>
+            <msItem n="5">
+              <locus from="91r" to="95v">ff. 91r-95v</locus>
+              <title xml:lang="hr">&#x10C;itanje na 3. korizmeni utorak</title>
+              <title xml:lang="en">The reading on the 3th Lent Thuesday</title>
+              <note type="description">the translation of sermon from Old Czech Quadragesimale
+                (translated from Latin written by Jacobus de Voragine</note>
+              <incipit>Na Mojs&#x11B;ovi sedali&#x107;i sedo&#x161;e kni&#x17E;nici i pariseji.</incipit>
+            </msItem>
+          </msContents>
+          <physDesc>
+            <objectDesc form="composite-Manuscript">
+              <supportDesc>
+                <extent>
+                  <measure type="leavesCount" unit="leaf">95</measure>
+                  <dimensions type="block" unit="mm">
+                    <height>192.5</height>
+                    <width>13.1</width>
+                  </dimensions>
+                </extent>
+                <foliation>
+                  <ab type="completeness"> incomplete foliation<lb/> 6 uncounted sheets in advance,
+                    95 counted sheets </ab>
+                </foliation>
+                <foliation xml:id="original">
+                  <p>Original foliation in black roman numerals in the top right/left corner of each
+                    recto/verso page.</p>
+                </foliation>
+                <foliation xml:id="modern">
+                  <p>Foliated in black roman numerals in the bottom of the outer margin of each
+                    recto.</p>
+                </foliation>
+                <condition>
+                  <material xml:lang="en">parchment</material>
+                </condition>
+              </supportDesc>
+              <layoutDesc>
+                <layout columns="2">
+                  <p>In double columns.</p>
+                </layout>
+              </layoutDesc>
+            </objectDesc>
+            <scriptDesc facs="fol. 1r-95v">
+              <scriptNote>
+                <desc>type of the script</desc>
+                <p>Glagolitic script</p>
+              </scriptNote>
+            </scriptDesc>
+            <bindingDesc>
+              <binding>
+                <condition>All parts are banded together.</condition>
+                <decoNote type="bindingMaterial">Leather</decoNote>
+              </binding>
+            </bindingDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origDate>
+                <date when="1445" xml:lang="en">1445</date>
+              </origDate>
+              <origPlace>
+                <placeName xml:lang="en">place of origin unknown</placeName>
+              </origPlace>
+            </origin>
+            <provenance> Pre-owned: Frano Depope (17st ct);<lb/> Osor, Krk; Matej Savi&#x107; (from
+              1772);<lb/> Rome, Library Congregatio de propaganda fide<lb/> Vatican Apostolic
+              Library </provenance>
+          </history>
+        </msDesc>
+        <listBibl type="catalogues">
+          <biblStruct status="draft" xml:lang="it">
+            <analytic>
+              <title level="a">I codici slavi della Biblioteca Vaticana. Fondo
+                Borgiano-Illirico</title>
+              <author>
+                <forename>Marko</forename>
+                <surname>Japund&#x17E;i&#x107;</surname>
+              </author>
+            </analytic>
+            <monogr>
+              <title level="j">Ricerche slavistiche</title>
+              <imprint>
+                <biblScope unit="volume">16(1968-69)</biblScope>
+                <biblScope unit="page">102-110</biblScope>
+                <date>1968-69</date>
+              </imprint>
+            </monogr>
+            <note type="display"> Japund&#x17E;i&#x107;, Marko (1968-69) &#x2018;I codici slavi della Biblioteca
+              Vaticana. Fondo Borgiano-Illirico&#x2019;, <hi rend="italic">Ricerche slavistiche</hi>16, pp.
+              102-110. </note>
+          </biblStruct>
+          <biblStruct status="draft" xml:lang="hr">
+            <analytic>
+              <title level="a">Glagoljski rukopisi otoka Krka</title>
+              <author>
+                <forename>Vlatko</forename>
+                <surname>&#x160;tefani&#x107;</surname>
+              </author>
+            </analytic>
+            <monogr>
+              <title level="m">Djela JAZU</title>
+              <imprint>
+                <biblScope unit="volume">51</biblScope>
+                <biblScope unit="page">431</biblScope>
+                <date>1960</date>
+              </imprint>
+            </monogr>
+            <note type="display"> &#x160;tefani&#x107;, Vjekoslav (1960) &#x2018;Glagoljski rukopisi otoka Krka&#x2019;, <hi rend="italic">Djela JAZU</hi>51, p. 431. </note>
+          </biblStruct>
+        </listBibl>
+        <listBibl type="transcription">
+          <biblStruct status="draft" xml:lang="hr">
+            <monogr>
+              <title level="m">Zrcalo &#x10D;lov&#x11B;&#x10D;askago spasenja (1445.). Transkripcija, kontekst
+                nastanka i jezi&#x10D;nopovijesna analiza.</title>
+              <idno type="ISBN">978-953-7967-24-6</idno>
+              <author>
+                <forename>Martina</forename>
+                <surname>Kramari&#x107;</surname>
+              </author>
+              <imprint>
+                <pubPlace>Zagreb</pubPlace>
+                <publisher>Institut za hrvatski jezik i jezikoslovlje</publisher>
+                <date>2019</date>
+              </imprint>
+            </monogr>
+            <note type="display"> Kramari&#x107;, Martina (2019) <hi rend="italic">&#x2018;Zrcalo &#x10D;lov&#x11B;&#x10D;askago
+                spasenja (1445.). Transkripcija, kontekst nastanka i jezi&#x10D;nopovijesna
+              analiza.&#x2019;</hi>, Zagreb: Institut za hrvatski jezik i jezikoslovlje. </note>
+          </biblStruct>
+        </listBibl>
+        <listBibl type="transcription">
+          <biblStruct corresp="https://urn.nsk.hr/urn:nbn:hr:186:889391" status="draft" type="thesis" xml:lang="hr">
+            <monogr>
+              <title level="m">Bohemizmi u Zrcalu &#x10D;lov&#x11B;&#x10D;askago spasenja(1445.) u kontekstu
+                starohrvatskih prijevoda sa staro&#x10D;e&#x161;koga jezika.</title>
+              <idno type="callNumber">urn:nbn:hr:186:889391</idno>
+              <author>
+                <forename>Martina</forename>
+                <surname>Kramari&#x107;</surname>
+              </author>
+              <imprint>
+                <pubPlace>Rijeka</pubPlace>
+                <publisher>University of Rijeka</publisher>
+                <date>2015</date>
+                <note type="thesisType">Doctoral disertation, unpublished, University of Rijeka.
+                  Rijeka</note>
+              </imprint>
+            </monogr>
+            <note type="display"> Kramari&#x107;, Martina (2015) <hi rend="italic">Bohemizmi u Zrcalu
+                &#x10D;lov&#x11B;&#x10D;askago spasenja (1445.) u kontekstu starohrvatskih prijevoda sa staro&#x10D;e&#x161;koga
+                jezika</hi>, Doctoral disertation, unpublished, University of Rijeka. Rijeka</note>
+          </biblStruct>
+        </listBibl>
+        <listBibl type="catalogues">
+          <biblStruct status="draft" xml:lang="en">
+            <analytic>
+              <title level="a">Translation techniques and an error analysis on the example of the
+                Old Croatian translation Zrcalo &#x10D;lov&#x11B;&#x10D;askago spasenja (1445) from the Old
+                Czech</title>
+              <author>
+                <forename>Martina</forename>
+                <surname>Kramari&#x107;</surname>
+              </author>
+            </analytic>
+            <monogr>
+              <title level="j">Zeitschrift f&#xFC;r Slawistik</title>
+              <imprint>
+                <biblScope unit="volume">61(2)</biblScope>
+                <biblScope unit="page">322-352</biblScope>
+                <date>2016</date>
+              </imprint>
+            </monogr>
+            <note type="display">Kramari&#x107;, Martina (2016) &#x2018;Translation techniques and an error
+              analysis on the example of the Old Croatian translation Zrcalo &#x10D;lov&#x11B;&#x10D;askago spasenja
+              (1445) from the Old Czech&#x2019;, <hi rend="italic">Zeitschrift f&#xFC;r Slawistik</hi>61(2), pp.
+              322-352. </note>
+          </biblStruct>
+        </listBibl>
+        <listBibl type="catalogues">
+          <biblStruct status="draft" xml:lang="cz">
+            <analytic>
+              <title level="a">Starochorvatsk&#xE9; st&#x159;edov&#x11B;k&#xE9; p&#x159;eklady ze staro&#x10D;e&#x161;tiny a jejich
+                staro&#x10D;esk&#xE9; p&#x159;edlohy</title>
+              <author>
+                <forename>Martina</forename>
+                <surname>Kramari&#x107;</surname>
+              </author>
+            </analytic>
+            <monogr>
+              <title level="m"> Cesta k rozmanitosti aneb Kav&#xE1;rensk&#xFD; povale&#x10D; digit&#xE1;ln&#xED;m historikem
+                st&#x159;edov&#x11B;ku. Sborn&#xED;k p&#x159;&#xED;sp&#x11B;vk&#x16F; k &#x17E;ivotn&#xED;mu jubileu PhDr. Zd&#x11B;nka Uhl&#xED;&#x159;e.</title>
+              <idno type="ISBN">788070506707 8070506709</idno>
+              <editor>
+                <forename>Rena&#x301;ta&#x30C;</forename>
+                <surname>Modra&#x301;kova&#x301;</surname>
+              </editor>
+              <editor>
+                <forename>Toma&#x301;s&#x30C;</forename>
+                <surname>Klimek</surname>
+              </editor>
+              <imprint>
+                <pubPlace>Praha</pubPlace>
+                <publisher>N&#xE1;rodn&#xED; knihovna &#x10C;esk&#xE9; republiky</publisher>
+                <biblScope unit="page">155-167</biblScope>
+                <date>2016</date>
+              </imprint>
+            </monogr>
+            <note type="display">Kramari&#x107;, Martina (2016) &#x2018;Starochorvatsk&#xE9; st&#x159;edov&#x11B;k&#xE9; p&#x159;eklady ze
+              staro&#x10D;e&#x161;tiny a jejich staro&#x10D;esk&#xE9; p&#x159;edlohy&#x2019;, <hi rend="italic"> Cesta k rozmanitosti
+                aneb Kav&#xE1;rensk&#xFD; povale&#x10D; digit&#xE1;ln&#xED;m historikem st&#x159;edov&#x11B;ku. Sborn&#xED;k p&#x159;&#xED;sp&#x11B;vk&#x16F; k
+                &#x17E;ivotn&#xED;mu jubileu PhDr. Zd&#x11B;nka Uhl&#xED;&#x159;e.</hi> Modra&#x301;kova,&#x301;R. and Klimek, T. (eds.),
+              Praha: N&#xE1;rodn&#xED; knihovna &#x10C;esk&#xE9; republiky, pp. 322-352. </note>
+          </biblStruct>
+        </listBibl>
+        <listBibl type="catalogues">
+          <biblStruct status="draft" xml:lang="cz">
+            <analytic>
+              <title level="a">Staro&#x10D;esk&#xE9; Zrcadlo &#x10D;lov&#x11B;&#x10D;ieho spasenie ve starochorvatsk&#xE9; literatu&#x159;e
+                15. stolet&#xED;. </title>
+              <author>
+                <forename>Martina</forename>
+                <surname>Kramari&#x107;</surname>
+              </author>
+            </analytic>
+            <monogr>
+              <title level="m">Karel IV. a Emauzy. Liturgie - text - obraz.</title>
+              <idno type="ISBN">9788086890920 8086890929</idno>
+              <editor>
+                <forename>Kate&#x159;ina&#x30C;</forename>
+                <surname>Kub&#xED;nov&#xE1;</surname>
+              </editor>
+              <editor>
+                <forename>V&#xE1;clav</forename>
+                <surname>&#x10C;erm&#xE1;k</surname>
+              </editor>
+              <imprint>
+                <pubPlace>Praha</pubPlace>
+                <publisher>&#xDA;stav d&#x11B;jin um&#x11B;n&#xED; Akademie v&#x11B;d &#x10C;R</publisher>
+                <biblScope unit="page">41-53</biblScope>
+                <date>2017</date>
+              </imprint>
+            </monogr>
+            <note type="display">Kramari&#x107;, Martina (2017) &#x2018;Staro&#x10D;esk&#xE9; Zrcadlo &#x10D;lov&#x11B;&#x10D;ieho spasenie ve
+              starochorvatsk&#xE9; literatu&#x159;e 15. stolet&#xED;&#x2019;, <hi rend="italic"> Karel IV. a Emauzy.
+                Liturgie - text - obraz.</hi> Kub&#xED;nov&#xE1;, K. and &#x10C;erm&#xE1;k, V. (eds.), Praha: &#xDA;stav d&#x11B;jin
+              um&#x11B;n&#xED; Akademie v&#x11B;d &#x10C;R, pp. 41-53. </note>
+          </biblStruct>
+        </listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="hr">Croatian</language>
+      </langUsage>
+    </profileDesc>
+  </teiHeader>
+  <facsimile>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0017" start="#p0017">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0017_fa_0001r.jp2/info.json" mimeType="image/jpeg" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0017_fa_0001r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0018" start="#p0018">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0018_fa_0001v.jp2/info.json" mimeType="image/jpeg" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0018_fa_0001v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0019" start="#p0019">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0019_fa_0002r.jp2/info.json" mimeType="image/jpeg" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0019_fa_0002r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0020" start="#p0020">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0020_fa_0002v.jp2/info.json" mimeType="image/jpeg" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0020_fa_0002v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0021" start="#p0021">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0021_fa_0003r.jp2/info.json" mimeType="image/jpeg" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0021_fa_0003r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0022" start="#p0022">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0022_fa_0003v.jp2/info.json" mimeType="image/jpeg" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0022_fa_0003v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0023" start="#p0023">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0023_fa_0004r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0023_fa_0004r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0024" start="#p0024">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0024_fa_0004v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0024_fa_0004v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0025" start="#p0025">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0025_fa_0005r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0025_fa_0005r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0026" start="#p0026">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0026_fa_0005v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0026_fa_0005v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0027" start="#p0027">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0027_fa_0006r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0027_fa_0006r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0028" start="#p0028">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0028_fa_0006v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0028_fa_0006v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0029" start="#p0029">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0029_fa_0007r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0029_fa_0007r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0030" start="#p0030">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0030_fa_0007v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0030_fa_0007v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0031" start="#p0031">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0031_fa_0008r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0031_fa_0008r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0032" start="#p0032">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0032_fa_0008v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0032_fa_0008v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0033" start="#p0033">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0033_fa_0009r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0033_fa_0009r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0034" start="#p0034">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0034_fa_0009v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0034_fa_0009v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0035" start="#p0035">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0035_fa_0010r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0035_fa_0010r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0036" start="#p0036">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0036_fa_0010v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0036_fa_0010v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0037" start="#p0037">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0037_fa_0011r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0037_fa_0011r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0038" start="#p0038">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0038_fa_0011v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0038_fa_0011v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0039" start="#p0039">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0039_fa_0012r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0039_fa_0012r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0040" start="#p0040">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0040_fa_0012v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0040_fa_0012v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0041" start="#p0041">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0041_fa_0013r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0041_fa_0013r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0042" start="#p0042">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0042_fa_0013v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0042_fa_0013v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0043" start="#p0043">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0043_fa_0014r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0043_fa_0014r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0044" start="#p0044">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0044_fa_0014v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0044_fa_0014v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0045" start="#p0045">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0045_fa_0015r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0045_fa_0015r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0046" start="#p0046">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0046_fa_0015v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0046_fa_0015v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0047" start="#p0047">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0047_fa_0016r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0047_fa_0016r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0048" start="#p0048">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0048_fa_0016v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0048_fa_0016v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0049" start="#p0049">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0049_fa_0017r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0049_fa_0017r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0050" start="#p0050">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0050_fa_0017v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0050_fa_0017v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0051" start="#p0051">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0051_fa_0018r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0051_fa_0018r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0052" start="#p0052">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0052_fa_0018v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0052_fa_0018v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0053" start="#p0053">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0053_fa_0019r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0053_fa_0019r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0054" start="#p0054">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0054_fa_0019v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0054_fa_0019v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0055" start="#p0055">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0055_fa_0020r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0055_fa_0020r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0056" start="#p0056">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0056_fa_0020v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0056_fa_0020v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0057" start="#p0057">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0057_fa_0021r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0057_fa_0021r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0058" start="#p0058">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0058_fa_0021v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0058_fa_0021v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0059" start="#p0059">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0059_fa_0022r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0059_fa_0022r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0060" start="#p0060">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0060_fa_0022v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0060_fa_0022v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0061" start="#p0061">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0061_fa_0023r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0061_fa_0023r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0062" start="#p0062">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0062_fa_0023v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0062_fa_0023v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0063" start="#p0063">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0063_fa_0024r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0063_fa_0024r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0064" start="#p0064">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0064_fa_0024v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0064_fa_0024v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0065" start="#p0065">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0065_fa_0025r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0065_fa_0025r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0066" start="#p0066">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0066_fa_0025v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0066_fa_0025v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0067" start="#p0067">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0067_fa_0026r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0067_fa_0026r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0068" start="#p0068">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0068_fa_0026v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0068_fa_0026v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0069" start="#p0069">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0069_fa_0027r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0069_fa_0027r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0070" start="#p0070">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0070_fa_0027v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0070_fa_0027v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0071" start="#p0071">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0071_fa_0028r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0071_fa_0028r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0072" start="#p0072">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0072_fa_0028v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0072_fa_0028v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0073" start="#p0073">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0073_fa_0029r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0073_fa_0029r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0074" start="#p0074">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0074_fa_0029v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0074_fa_0029v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0075" start="#p0075">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0075_fa_0030r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0075_fa_0030r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0076" start="#p0076">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0076_fa_0030v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0076_fa_0030v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0077" start="#p0077">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0077_fa_0031r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0077_fa_0031r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0078" start="#p0078">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0078_fa_0031v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0078_fa_0031v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0079" start="#p0079">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0079_fa_0032r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0079_fa_0032r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0080" start="#p0080">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0080_fa_0032v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0080_fa_0032v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0081" start="#p0081">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0081_fa_0033r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0081_fa_0033r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0082" start="#p0082">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0082_fa_0033v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0082_fa_0033v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0083" start="#p0083">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0083_fa_0034r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0083_fa_0034r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0084" start="#p0084">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0084_fa_0034v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0084_fa_0034v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0085" start="#p0085">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0085_fa_0035r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0085_fa_0035r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0086" start="#p0086">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0086_fa_0035v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0086_fa_0035v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0087" start="#p0087">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0087_fa_0036r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0087_fa_0036r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0088" start="#p0088">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0088_fa_0036v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0088_fa_0036v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0089" start="#p0089">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0089_fa_0037r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0089_fa_0037r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0090" start="#p0090">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0090_fa_0037v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0090_fa_0037v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0091" start="#p0091">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0091_fa_0038r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0091_fa_0038r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0092" start="#p0092">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0092_fa_0038v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0092_fa_0038v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0093" start="#p0093">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0093_fa_0039r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0093_fa_0039r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0094" start="#p0094">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0094_fa_0039v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0094_fa_0039v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0095" start="#p0095">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0095_fa_0040r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0095_fa_0040r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0096" start="#p0096">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0096_fa_0040v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0096_fa_0040v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0097" start="#p0097">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0097_fa_0041r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0097_fa_0041r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0098" start="#p0098">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0098_fa_0041v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0098_fa_0041v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0099" start="#p0099">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0099_fa_0042r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0099_fa_0042r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0100" start="#p0100">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0100_fa_0042v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0100_fa_0042v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0101" start="#p0101">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0101_fa_0043r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0101_fa_0043r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0102" start="#p0102">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0102_fa_0043v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0102_fa_0043v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0103" start="#p0103">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0103_fa_0044r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0103_fa_0044r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0104" start="#p0104">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0104_fa_0044v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0104_fa_0044v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0105" start="#p0105">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0105_fa_0045r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0105_fa_0045r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0106" start="#p0106">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0106_fa_0045v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0106_fa_0045v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0107" start="#p0107">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0107_fa_0046r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0107_fa_0046r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0108" start="#p0108">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0108_fa_0046v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0108_fa_0046v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0109" start="#p0109">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0109_fa_0047r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0109_fa_0047r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0110" start="#p0110">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0110_fa_0047v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0110_fa_0047v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0111" start="#p0111">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0111_fa_0048r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0111_fa_0048r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0112" start="#p0112">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0112_fa_0048v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0112_fa_0048v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0113" start="#p0113">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0113_fa_0049r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0113_fa_0049r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0114" start="#p0114">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0114_fa_0049v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0114_fa_0049v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0115" start="#p0115">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0115_fa_0050r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0115_fa_0050r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0116" start="#p0116">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0116_fa_0050v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0116_fa_0050v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0117" start="#p0117">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0117_fa_0051r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0117_fa_0051r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0118" start="#p0118">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0118_fa_0051v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0118_fa_0051v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0119" start="#p0119">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0119_fa_0052r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0119_fa_0052r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0120" start="#p0120">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0120_fa_0052v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0120_fa_0052v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0121" start="#p0121">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0121_fa_0053r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0121_fa_0053r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0122" start="#p0122">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0122_fa_0053v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0122_fa_0053v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0123" start="#p0123">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0123_fa_0054r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0123_fa_0054r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0124" start="#p0124">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0124_fa_0054v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0124_fa_0054v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0125" start="#p0125">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0125_fa_0055r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0125_fa_0055r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0126" start="#p0126">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0126_fa_0055v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0126_fa_0055v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0127" start="#p0127">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0127_fa_0056r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0127_fa_0056r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0128" start="#p0128">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0128_fa_0056v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0128_fa_0056v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0129" start="#p0129">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0129_fa_0057r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0129_fa_0057r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0130" start="#p0130">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0130_fa_0057v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0130_fa_0057v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0131" start="#p0131">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0131_fa_0058r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0131_fa_0058r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0132" start="#p0132">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0132_fa_0058v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0132_fa_0058v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0133" start="#p0133">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0133_fa_0059r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0133_fa_0059r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0134" start="#p0134">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0134_fa_0059v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0134_fa_0059v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0135" start="#p0135">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0135_fa_0060r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0135_fa_0060r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0136" start="#p0136">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0136_fa_0060v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0136_fa_0060v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0137" start="#p0137">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0137_fa_0061r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0137_fa_0061r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0138" start="#p0138">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0138_fa_0061v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0138_fa_0061v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0139" start="#p0139">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0139_fa_0062r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0139_fa_0062r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0140" start="#p0140">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0140_fa_0062v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0140_fa_0062v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0141" start="#p0141">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0141_fa_0063r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0141_fa_0063r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0142" start="#p0142">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0142_fa_0063v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0142_fa_0063v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0143" start="#p0143">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0143_fa_0064r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0143_fa_0064r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0144" start="#p0144">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0144_fa_0064v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0144_fa_0064v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0145" start="#p0145">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0145_fa_0065r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0145_fa_0065r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0146" start="#p0146">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0146_fa_0065v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0146_fa_0065v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0147" start="#p0147">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0147_fa_0066r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0147_fa_0066r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0148" start="#p0148">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0148_fa_0066v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0148_fa_0066v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0149" start="#p0149">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0149_fa_0067r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0149_fa_0067r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0150" start="#p0150">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0150_fa_0067v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0150_fa_0067v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0151" start="#p0151">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0151_fa_0068r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0151_fa_0068r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0152" start="#p0152">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0152_fa_0068v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0152_fa_0068v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0153" start="#p0153">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0153_fa_0069r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0153_fa_0069r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0154" start="#p0154">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0154_fa_0069v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0154_fa_0069v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0155" start="#p0155">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0155_fa_0070r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0155_fa_0070r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0156" start="#p0156">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0156_fa_0070v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0156_fa_0070v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0157" start="#p0157">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0157_fa_0071r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0157_fa_0071r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0158" start="#p0158">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0158_fa_0071v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0158_fa_0071v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0159" start="#p0159">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0159_fa_0072r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0159_fa_0072r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0160" start="#p0160">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0160_fa_0072v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0160_fa_0072v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0161" start="#p0161">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0161_fa_0073r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0161_fa_0073r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0162" start="#p0162">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0162_fa_0073v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0162_fa_0073v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0163" start="#p0163">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0163_fa_0074r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0163_fa_0074r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0164" start="#p0164">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0164_fa_0074v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0164_fa_0074v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0165" start="#p0165">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0165_fa_0075r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0165_fa_0075r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0166" start="#p0166">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0166_fa_0075v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0166_fa_0075v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0167" start="#p0167">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0167_fa_0076r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0167_fa_0076r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0168" start="#p0168">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0168_fa_0076v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0168_fa_0076v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0169" start="#p0169">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0169_fa_0077r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0169_fa_0077r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0170" start="#p0170">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0170_fa_0077v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0170_fa_0077v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0171" start="#p0171">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0171_fa_0078r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0171_fa_0078r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0172" start="#p0172">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0172_fa_0078v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0172_fa_0078v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0173" start="#p0173">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0173_fa_0079r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0173_fa_0079r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0174" start="#p0174">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0174_fa_0079v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0174_fa_0079v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0175" start="#p0175">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0175_fa_0080r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0175_fa_0080r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0176" start="#p0176">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0176_fa_0080v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0176_fa_0080v.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0177" start="#p0177">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0177_fa_0081r.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0177_fa_0081r.jp2/full/full/0/default.jpg"/>
+    </surface>
+    <surface corresp="https://digi.vatlib.it/iiif/MSS_Borg.ill.9/canvas/0178" start="#p0178">
+      <graphic corresp="https://digi.vatlib.it/iiifimage/MSS_Borg.ill.9/Borg.ill.9_0178_fa_0081v.jp2/info.json" url="https://digi.vatlib.it/pub/digit/MSS_Borg.ill.9/iiif/Borg.ill.9_0178_fa_0081v.jp2/full/full/0/default.jpg"/>
+    </surface>
+  </facsimile>
+  <text>
+    <body>
+      <div>
+        <head n="Supplied title">
+          <supplied>Zrcalo &#x10D;lov&#x11B;&#x10D;askogo spasenja</supplied>
+        </head>
+        <div n="Foreword">
+          <head n="Supplied title">
+            <supplied>Predgovor</supplied>
+          </head>
+          <p n="1">
+            <pb n="1r" xml:id="p0017"/>
+            <cb n="a"/>
+            <lb/>
+            <hi rend="red">V ime Bo&#x17E;je i D&#x11B;vi Marije.</hi>
+            <lb/> Amen. 1445. m&#x11B;seca m<lb break="no"/>aja na 19. dan. Ja &#x17E;akan<lb/>Luka po&#x10D;eh
+            pisati<lb/>sije k&#x144;igi popu Grgu<lb break="no"/>ru va Vrbnici ke se k&#x144;ige<lb/>zovu
+            Zrcalo.<lb/>Bog sidi na svojem pre<lb break="no"/>stoli. Po&#x10D;e&#x144;u se k&#x144;i<lb break="no"/>gi
+            ke se zovu Zrcalo &#x10D;lov&#x11B;&#x10D;as<lb break="no"/>kogo spasenja, v kih pravi <lb/>padenje
+            &#x10D;lov&#x11B;&#x10D;asko. I v stanj<lb break="no"/>e k spasenju i va to zrcalo,<lb/>ki ravno gleda
+            o&#x10D;ima, mo<lb/>re viditi za&#x10D; Stvo<lb break="no"/>rite&#x13C; vsih ri&#x10D;i ra&#x10D;<lb break="no"/>il
+            jest &#x10D;lov&#x11B;ka u&#x10D;initi i tko<lb/>je more poznati. Kako je &#x10D;lov&#x11B;k dja<lb break="no"/>valsku
+            lukavostju prehi&#x144;en <lb/>i pak kako je skozi utrpenje B<lb break="no"/>o&#x17E;je k milosti
+            vra&#x107;en.</p>
+        </div>
+        <div n="Chapter 1">
+          <head n="Heading 1">
+            <supplied>1.</supplied> Lucifer svr&#x17E;en s neba </head>
+          <p n="1">
+            <lb/>Lucifer bi&#x161;e se dvi<lb break="no"/>gal proti Bogu, svojemu <cb n="b"/>
+            <lb/>Stvorite&#x13C;u. I zato v magn<lb break="no"/>ovenji oka s visoti neb<lb break="no"/>eske do propasti paklene<lb/>svr&#x17E;en je. I zato Bog ra&#x10D;il <lb/>je rod &#x10D;lov&#x11B;&#x10D;aski
+            stvoriti d<lb break="no"/>a bi naplnil Lucifero<lb break="no"/>vo spadenje i &#x161;
+            &#x144;ega<lb/>anjeli. I zato djaval &#x10D;lov&#x11B;ku za <lb break="no"/>vide&#x107; i jega nenavidil<lb/>i
+            nudil ga je da bi prest <lb break="no"/>upil zapov&#x11B;d Bo&#x17E;ju. I podobstvo<lb/>ka&#x10D;ke djaval
+            k sebi je bil i<lb break="no"/>zbral jere ka&#x10D;ka v ono vri<lb break="no"/>me &#x17E;ensku glavu
+            je imela<lb/>i vzdvignuta jest hodi<lb break="no"/>la. I va tu ka&#x10D;ku budu&#x107;
+            djaval<lb/>v&#x161;al i va ka&#x10D;kem obr<lb break="no"/>az<supplied>u</supplied> lastivu ri&#x10D; k
+              &#x17E;e<lb break="no"/>ni jest progovoril na isku&#x161;enje<lb/>k &#x17E;eni za&#x10D; jest ma&#x144;e nere
+            mu&#x17E;<lb/>tvrda. I iskusila jest takoje<lb/>i Adama tvrdoga i modro<lb break="no"/>ga mu&#x17E;a
+            &#x17E;ena jego. Na pris<lb break="no"/>tupil jest bil k &#x17E;eni ka <pb n="1v" xml:id="p0018"/>
+            <cb n="a"/>
+            <lb break="no"/>da je sama bez mu&#x17E;a b<lb break="no"/>ila za&#x10D; ju je br&#x17E;e dja <lb break="no"/>val prelastil nere<lb/>pri mu&#x17E;i. Takoje tada <lb/>djaval
+            prelastil<lb/>Eugu, na&#x161;u mater<lb/>privajaju&#x107;i na vas r<lb break="no"/>od &#x10D;lov&#x11B;&#x10D;aski
+            te&#x17E;ku sem<lb break="no"/>rt. Znamenati nam <lb/>jest da mu&#x17E; stvoren jest<lb/>v Damasci
+            velikom<lb/>i od Boga jest v raj rask<lb break="no"/>o&#x161;ni prinesen.</p>
+          <p n="2">
+            <lb/>
+            <label>St<lb break="no"/>vorenje Adama i Euge </label>
+            <lb/>
+            <supplied>A</supplied>l&#x11B; &#x17E;ena v raj jest s<lb break="no"/>tvorena ot rebra mu<lb break="no"/>&#x17E;askago kada je spal.<lb/>Bog ju je zvla&#x161;&#x107;e po&#x10D;til b<lb break="no"/>il da
+            ju je v rasko&#x161;nom<lb/>mesti stvoril. Ni ju je <lb/>u&#x10D;inil kako mu&#x17E;a ot il<lb break="no"/>a zema&#x13C;skoga, na iz re<lb break="no"/>bra &#x10D;istoga mu&#x17E;a A<lb break="no"/>dama &#x17E; &#x144;ega
+            tela. Nije <cb n="b"/>
+            <lb/>u&#x10D;i&#x144;ena z noge da bi<lb/>&#x144;u mu&#x17E; ne vzgrdal.<lb/>Ani z glave da bi
+              na<supplied>d</supplied>
+            <lb/>mu&#x17E;em ne gospodovala,<lb/>na stvorena je z boka m<lb break="no"/>al&#x17E;ena svoga i
+              da<lb break="no"/>na je mu&#x17E;u za man&#x17E;elku<lb/>i za tovari&#x161;icu k boku pr<lb break="no"/>ijedinanu. I da bi bila<lb/>v &#x10D;asti sebe dane i ti<lb break="no"/>ho prebivala, ne bi
+              nijed<lb break="no"/>ne nuje ot mu&#x17E;a imela<lb/>ni trpela. Na da je d<lb break="no"/>javlu veruju&#x107; i Bogu s<lb break="no"/>e vravnati jest hotela<lb/>i zato je zaslu&#x17E;il<lb break="no"/>a da ju mu&#x17E; ka&#x161;ti<lb break="no"/>ga i smu&#x107;uje. Jere je &#x17E;ena <lb/>verovala
+            djavlu al<lb break="no"/>&#x11B; ne mu&#x17E;, da mu&#x17E; je<lb/>stvoril povolstvo &#x17E;eni,<lb/>ako si i
+            nerad. J<lb break="no"/>ere &#x17E;ena nastoja&#x161;e mu <lb break="no"/>&#x17E;u da bi &#x161; &#x144;u ot onoga pl
+              <pb n="2r" xml:id="p0019"/>
+            <cb n="a"/>
+            <lb break="no"/>oda jil, a on ju tol<lb break="no"/>iko &#x13C;ub&#x13C;a&#x161;e da ga je <lb/>za vo&#x13C;u &#x144;e
+            jil da<lb/>bi je ne smutil. A Sol<lb break="no"/>omun za &#x13C;ubav &#x17E;ensku<lb/>je se idolom
+            kla&#x144;al<lb/>a dobro vide&#x107;i da ni<lb break="no"/>su idoli bogi. Jako&#x17E;e A<lb break="no"/>dam za &#x13C;ubav &#x17E;ensku <lb/>jest jil, a dobro vide&#x107;<lb break="no"/>i da ne more Bogu
+            ravan bi<lb break="no"/>ti. Tagda je ve&#x107;e &#x17E;ena<lb/>nere mu&#x17E; sagr&#x11B;&#x161;ila<lb/>da je mnela
+            biti ravn<lb break="no"/>a Bogu. Inni grih vel<lb break="no"/>iki jo&#x161;&#x107;e jest nad to
+              pri&#x10D;i<lb break="no"/>nila da je mu&#x17E;a z g<lb break="no"/>ri&#x161;enju krhosti prinu<lb break="no"/>dila. Ako si v Bibl<lb break="no"/>iji otkriveno pismo ot to<lb break="no"/>ga ne nahaja, ali je is<lb break="no"/>to da je mu&#x17E;a k tom<lb break="no"/>u
+            prikla&#x144;ala. O, mu&#x17E;i, <lb/>znamenaj kakova jest <cb n="b"/>
+            <lb/>milo&#x107;a &#x17E;enska! &#x10C;uv<lb break="no"/>aj se &#x17E;ene krhke i ne pre<lb break="no"/>la&#x161;&#x107;en
+            bude&#x161;! Pogle<lb break="no"/>daj na Adama, Bogom stv <lb break="no"/>orenago, i na
+            premo&#x107;noga S<lb break="no"/>amsona ili na David<lb break="no"/>a mu&#x17E;a po vo&#x13C;i Bo&#x17E;jej
+              su<lb break="no"/>&#x107;i premudroga Solo<lb break="no"/>muna.</p>
+          <p n="3">
+            <lb/>
+            <label>O otrovanji A<lb break="no"/>dama ot Euge</label>
+            <lb/>A da je take i toli<lb break="no"/>ke &#x13C;udi prelast<lb break="no"/>ila hitrost
+              &#x17E;en<lb break="no"/>ska a kak i pak ti mu&#x17E;<lb break="no"/>i ne budu&#x107; taki ni<lb/>toliki
+            i pred &#x17E;enu<lb/>ho&#x107;e&#x161; biti bespe&#x10D;a<lb break="no"/>lan? Mu&#x17E;a Adama ko<lb break="no"/>ga
+            djaval ni smel isku<lb break="no"/>&#x161;ati, tog je &#x17E;ena ot d<lb break="no"/>javla mo&#x107;n&#x11B;j&#x161;a
+              smel<lb break="no"/>a prelastiti. Djav<lb break="no"/>al je &#x17E;enu prelasti<lb break="no"/>l, a &#x17E;ena mu&#x17E;a i vas <pb n="2v" xml:id="p0020"/>
+            <cb n="a"/>
+            <lb/>odulak &#x144;ega jest<lb/>semrti poddala. Da bi bil<lb/>&#x10D;lov&#x11B;k v Bo&#x17E;jem ukazanji s<lb break="no"/>tal, ne bi bil nigdare<lb/>semrti ni muke okusil <lb/>i nijedne bi
+              mlednost<lb break="no"/>i ne trpel ani usta<lb break="no"/>vanja. Nijedne bi
+            nemo&#x107;i<lb/>ne trpel ani bi nigda<lb break="no"/>re usahal, bez lakanja,<lb/>bez bol&#x11B;zni
+            i bez t<lb break="no"/>uhlosti bil bi no&#x161;e<lb break="no"/>n, bez pla&#x10D;a, bez te<lb break="no"/>&#x17E;ke muke bil bi rojen.<lb/>Ne bi bil poznal c<lb break="no"/>vilenja ani
+            koga smu<lb break="no"/>&#x107;evanja, ani bi ke sramo<lb break="no"/>te trpel, ani nijed<lb break="no"/>noga posram&#x13C;enja.</p>
+          <p n="4">
+            <lb/>
+            <label>Prela&#x161;&#x107;enje Jeu&#x17E;ino</label>
+            <lb/>U&#x161;i bi &#x144;ega nigdar ne<lb/>oglahl&#x11B; i zubi ne<lb break="no"/>gdar oskomin ne trpe<lb break="no"/>li. O&#x10D;i bi ne potam&#x144;eli <cb n="b"/>
+            <lb/>a noge bi ne &#x161;ebetale a<lb break="no"/>ni riba bi je mogla pot<lb break="no"/>opiti
+            ani studen n<lb break="no"/>a&#x161;koditi. Ani oga&#x144; ni s<lb break="no"/>lnce bi je moglo
+              spal<lb break="no"/>iti. A nijedan zvir ani <lb/>ptica mogla bi mu pakos<lb break="no"/>titi, ni vetar ni aje<lb break="no"/>r ga smutiti i nigda<lb break="no"/>r se &#x13C;udi
+            meju sobu ne bi<lb/>srdili, da kako bratja<lb/>bi se meju sobu vazda<lb/>&#x13C;ubili.</p>
+          <p n="5">
+            <lb/>
+            <label>Prestup&#x13C;e<lb break="no"/>nje na&#x161;ih starijih</label>
+            <lb/>
+            <supplied>B</supplied>ilo bi poddano &#x10D;<lb break="no"/>lov&#x11B;ku zema&#x13C;sko
+            stvorenje,<lb/>vazda bi v radost<lb break="no"/>i &#x17E;iv bil beza v<lb break="no"/>sake
+            skrbi. Ali bil b<lb break="no"/>i se Bogu, svojemu stvori<lb break="no"/>t<supplied>e</supplied>&#x13C;u, vz&#x13C;ubil i bil b<lb break="no"/>i ga Bog s telom i z d<lb break="no"/>u&#x161;u v nebesa vzel. <lb/>Ne smi toga nijedan &#x10D;lov&#x11B;k <pb n="3r" xml:id="p0021"/>
+            <cb n="a"/>
+            <lb/> smislom dose&#x107;i z<lb break="no"/>a&#x10D; je Bog &#x10D;lov&#x11B;ka stvoril, a<lb/>vide&#x107;i da ima
+              pas<lb break="no"/>ti. &#x17D;a&#x10D; li je anjeli ho<lb break="no"/>tel stvoriti, kih je p<lb break="no"/>adenje prija videl?<lb/>A za&#x10D; je srdce kra&#x13C;a pa<lb break="no"/>raona hotel
+              zatvor<lb break="no"/>iti, a srce Marije Mand<lb break="no"/>al&#x11B;ni k pokajanju hote<lb break="no"/>l obmek&#x10D;iti? A za&#x10D;<lb/>Petru, koga je trikrat <lb/>zatajil, skru&#x161;enje
+            mu<lb/>dal a Ijudi v &#x144;ega g<lb break="no"/>r&#x11B;s&#x11B; zupvati pripu<lb break="no"/>stil? Za&#x10D;
+            jednomu lotru<lb/>vdahnul mil<lb break="no"/>ost ka obra&#x107;enju, a &#x144;e<lb break="no"/>ga
+            tovari&#x161;u takoje <lb/>milosti ni marel da<lb break="no"/>ti? Za&#x10D; jednoga gr&#x11B;<lb break="no"/>&#x161;nika pritegne k sebi<lb/>a drugoga ne pritegn<lb break="no"/>e? I nijedan
+            kako godje mud <cb n="b"/>
+            <lb break="no"/>ar ne smi toga smi<lb break="no"/>slom dose&#x107;i, za&#x10D; t<lb break="no"/>a
+            dela Bo&#x17E;ja i &#x144;im ra<lb break="no"/>vni &#x10D;lov&#x11B;&#x10D;koj mudrost<lb break="no"/>i jesu skriti?
+            Tu ri&#x10D; <lb/>sveti Paval na kratc<lb break="no"/>i rasprav&#x13C;a reki: Koga<lb/>Bog ho&#x107;e za
+            pakli i nad<lb/>kim ra&#x10D;i, smiluje se.</p>
+        </div>
+        <pb n="5v" xml:id="p0026"/><cb n="a"/>
+        <pb n="7r" xml:id="p0029"/><cb n="b"/>
+        <pb n="9r" xml:id="p0033"/><cb n="b"/>
+        <pb n="11v" xml:id="p0038"/><cb n="a"/>
+        <pb n="13v" xml:id="p0042"/><cb n="a"/>
+        <pb n="14r" xml:id="p0043"/><cb n="a"/>
+        <div n="Chapter 8.">
+          <head n="Heading 8.">
+            <supplied>8.</supplied>
+            <note type="footnote">Izgubljen je naslov i ve&#x107;i dio 8. poglavlja. // The title and the
+              bigger part of the 8th chapter are lost.</note>
+          </head>
+          <p n="1">
+            <lb/>to smo sli&#x161;ali u&#x17E;i<lb break="no"/>tak Bo&#x17E;jega rojenja. Sada <lb/>sli&#x161;imo obi&#x10D;aja i
+            kako bi<lb/>Bo&#x17E;je rojenje.</p>
+          <p n="2">
+            <lb/>
+            <label>Prut Jar<lb break="no"/>unov jest vznikal </label>
+            <lb/>Obi&#x10D;aj sna Bo&#x17E;ja roje<lb break="no"/>nja znamenalo se je n<lb break="no"/>a
+            mandulovem prutu<lb/>i Jarunovi, ki je procval <lb/>i plod dal proti nat<lb break="no"/>uri Bo&#x17E;ju mo&#x107;ju. I kako je ta <lb/>prut &#x10D;udno proti nat<lb break="no"/>uri bil
+            plodovit, a<lb/>tako je D&#x11B;va Marija nad<lb/>naturni red &#x10D;udno je<lb/>sina po<hi rend="superscript">ro</hi>dila. Prut Ja<lb break="no"/>runov dal je plod b<lb break="no"/>ez ciplenja , a Marija je po<lb break="no"/>rodila sina bez mu<lb break="no"/>&#x17E;skoga sm&#x11B;&#x161;enja. Cva<lb break="no"/>tu&#x107;i prut Jarunov j<lb break="no"/>e
+            ga u&#x10D;inil i ukazal<lb/>dostojnoga jerija, a Marija <lb/>porodiv&#x161;i nam i veli<lb break="no"/>koga jereja nosila. V ko&#x161;ni<lb break="no"/>ci mandulovi slad<lb break="no"/>ko jadrko taja&#x161;e se, a va <lb/>teli Isushrstovi slatko<lb/>bo&#x17E;astvo bi&#x161;e shra&#x144;e<cb n="b"/>
+            <lb break="no"/>no. Na pruti Jarunovi na<lb break="no"/>hajamo letorasli z<lb break="no"/>elenost, cvete cel<lb break="no"/>ost i plo<choice>
+              <corr>d</corr>
+              <sic>p</sic>
+            </choice> zrelost<lb break="no"/>i. Takoje je Marija imela<lb/>zelenost
+            d&#x11B;vstva,<lb/>celost milosti i z<lb break="no"/>relost v&#x11B;&#x10D;ne sito<lb break="no"/>sti. I
+            ne toliko da bi I<lb break="no"/>sushrst ploda sebi vze<lb break="no"/>tja li &#x17D;idovom
+              ukaz<lb break="no"/>al, naj poganom odkri<lb break="no"/>ti ni odpovidal. Z<lb break="no"/>a&#x10D; ni li za &#x17D;idove b<lb break="no"/>il pri&#x161;al na si sv&#x11B;t,<lb/>naj vse &#x13C;udi
+            spasene ho<lb break="no"/>tel jest u&#x10D;initi.</p>
+          <p n="3">
+            <lb/>
+            <label>Okt<lb break="no"/>ivijan car i &#x160;ibilije<lb/>prorokovanje </label>
+            <lb/>Va to vrime Okti<lb break="no"/>vijan car vs&#x11B;m<lb/>sv&#x11B;tom gospodova&#x161;e i za<lb break="no"/>to ot Rim&#x13C;an bil je kako<lb/>Bog mnen. I on se je rodil <lb/>po
+            proro&#x10D;astvu &#x160;ibilije<lb break="no"/>da ih je malo ki bi imel<lb break="no"/>i biti ve&#x107;i
+            ot &#x144;ega. I va<lb/>ta dan, kada se Isushrst<lb break="no"/>v &#x17E;idovstvi rodi<pb n="14v" xml:id="p0044"/>
+            <cb n="a"/>
+            <lb break="no"/>l, tada je videla &#x160;ibil<lb break="no"/>ija va Rimi jedan zlat, ve<lb break="no"/>lik kolobar. I v tom ko<lb break="no"/>lobari prekrasna d&#x11B;va s&#x11B;<lb break="no"/>d&#x11B;&#x161;e i dite presve<choice>
+              <corr>t</corr>
+              <sic>l</sic>
+            </choice>o<lb break="no"/>na krili dr&#x17E;a&#x161;e. I to o<lb break="no"/>na caru Oktivijanu
+              poka<lb break="no"/>za reku&#x107;: Ta je tebe mo&#x107;n<lb break="no"/>&#x11B;j&#x161;i kra&#x13C;. O, kako mo&#x107;ni
+            jest<lb/>ta kra&#x13C; nad kra&#x13C;i i G<lb break="no"/>ospodin nad gospodi, ki je &#x10D;lov&#x11B;&#x10D;aski
+              ro<lb break="no"/>d oslobodil ot svez<lb break="no"/>anja djavalskoga!
+              Koga<lb/>mo&#x107;<supplied>n</supplied>i kra&#x13C; Oktivijan<lb/>ustidil se je i ni se da<lb break="no"/>l &#x13C;udem nazivati Bogo<lb break="no"/>m, ni se sum&#x144;iti da bi<lb/>on Bog
+            bil. O, dobri Isushrste,<lb/>daj nam tako &#x10D;astit<lb break="no"/>i tvoje presvetoje
+            rojstvo<lb/>da bismo vaspet ne v<lb break="no"/>pali va mo&#x107; djavalsku!</p>
+        </div>
+        <pb n="16v" xml:id="p0048"/><cb n="a"/>
+        <pb n="18v" xml:id="p0052"/><cb n="b"/>
+        <pb n="20v" xml:id="p0056"/><cb n="b"/>
+        <pb n="23r" xml:id="p0061"/><cb n="a"/>
+        <pb n="25r" xml:id="p0065"/><cb n="b"/>
+        <div n="Chapter 14.">
+          <head n="Heading 14.">
+            <supplied>14.</supplied> Kako je<lb/>Marija Magdal&#x11B;na &#x10D;<lb break="no"/>inila pokajanje.
+            Kapitul</head>
+          <p n="1">
+            <lb/>
+            <hi rend="red">V</hi> prvom razdel<lb break="no"/>u sli&#x161;asmo<lb/>kako je djaval Hrsta
+              isk<lb break="no"/>u&#x161;al, a pot<lb break="no"/>om sli&#x161;imo kako je <lb/>Isushrst Mariju
+              Magda<lb break="no"/>l&#x11B;nu spasenu u&#x10D;inil.<lb/>Kada Isushrst 30 jure let<lb/>svr&#x161;eva&#x161;e,
+            tada ot Iv<lb break="no"/>ana jest kr&#x161;&#x107;enje prijal<lb/>i ot &#x144;ego kr&#x161;&#x107;en. I tudje<lb/>po
+            krsti jest ot djavla <lb/>bil jest isku&#x161;evan.<lb/>I kada je krstil Isushrsta i<lb/>inih
+            &#x13C;udi i u<lb break="no"/>&#x10D;enjem put s<lb break="no"/>pasenja ukazovati. I n<lb break="no"/>a po&#x10D;etki svojego u&#x10D;en<lb break="no"/>ja ispustil jest ta <lb/>slatki glas govore<lb break="no"/>&#x107;i: <said>&#x10C;inite pokajanja<lb/>za&#x10D; se pribli&#x17E;uje v<lb break="no"/>am
+              carstvo nebesko.</said> Po<lb break="no"/>kajanja ih u&#x10D;il i skozi,<lb/>to jest
+            ukazoval <pb n="25v" xml:id="p0066"/>
+            <cb n="a"/>
+            <lb/>nebeskago carstva o&#x10D;ito<lb/>otkrvenje. I prija jego pri&#x161;<lb break="no"/>astva
+            nigdare ni toga<lb/>sli&#x161;al nijedan &#x10D;lov&#x11B;k t<lb break="no"/>aka prav&#x13C;enja. O,
+            vernaja<lb/>ri&#x10D;i i vsakoje hvali dos<lb break="no"/>tojna, da je zaslu&#x17E;il<lb/>gri&#x161;nik
+            pokajanjem cars<lb break="no"/>tvo nebesko imiti! A to<lb/>je po<add place="left margin">ka</add>zalo se na gri&#x161;n<lb break="no"/>ici Mariji Magdalini,<lb/>ka je plna bila 7
+              djava<lb break="no"/>l, to reku&#x107; 7 semrt<lb break="no"/>nih grihov, ki jesu iz<lb break="no"/>vr&#x17E;eni van i&#x17E; &#x144;e <supplied>skozi</supplied> skr<lb break="no"/>u&#x161;enje i
+            pokajanja i d<lb break="no"/>a je milosrdno na&#x161;l<lb break="no"/>a Bo&#x17E;ju milost. Nije<lb break="no"/>dan gri&#x161;nik nima z<lb break="no"/>upvati ot milosti Bo&#x17E;<lb break="no"/>je
+            za&#x10D; Bog gotov jest<lb/>otpustiti vsim kaju<lb break="no"/>&#x107;im se. I zato kaju&#x107;ih<lb/>se
+            zove v carstvo nebes<lb break="no"/>ko, ko ni moglo biti pri<lb break="no"/>ja pri&#x161;a<hi rend="superscript">s</hi>tja Hrstova nijed<lb break="no"/>nomu gri&#x161;niku. A to b<lb break="no"/>i&#x161;e sjedinal jedan<lb/>trat skozi Manas<cb n="b"/>
+            <lb break="no"/>iju, koga za &#x144;ega pokoru<lb/>z jetja sprostil. I va<lb break="no"/>spet
+            ga v kra&#x13C;estvo <lb/>vratil. Manasija <del rend="overstrike">b&#x11B;&#x161;<lb break="no"/>e</del>
+            Boga razgniva<lb break="no"/>l bez&#x10D;islnimi gresi,<lb/>proroki jego ubijaje i ne z<lb break="no"/>naja&#x161;e, &#x10D;a bi Bog bil. I t<lb break="no"/>oliko prorok jego jest zm<lb break="no"/>u&#x10D;il ki su jego karal<lb break="no"/>i ot griha i mnogo uli<lb break="no"/>c skrval krvju proro&#x10D;a<lb break="no"/>skuju. Svetago Isaija pro<lb break="no"/>roka,
+            ki ga je ot griha kar<lb break="no"/>al, toga je zapovida<lb break="no"/>l drivenu pilu
+            na po<lb break="no"/>l pretrti. I paki poto<lb break="no"/>m po mnogom zgri&#x161;en<lb break="no"/>ju jet ot svojih ne<lb break="no"/>prijate&#x13C; i ispelav&#x161;<lb break="no"/>i ga
+            van i v uzu bil<lb/>polo&#x17E;en. I budu&#x107;i jure<lb/>va uzi, po&#x10D;e pokajanje <lb/>&#x10D;initi i vsim
+            srdcem<lb/>svojih grihov u&#x10D;i&#x144;<lb break="no"/>enih po&#x10D;e &#x17E;alovat<lb break="no"/>i. I
+            mo&#x13C;a&#x161;e se ka Gospodinu<lb/>Bogu sa slzami: <said>Gle, s<lb break="no"/>gr&#x11B;&#x161;ih, Gospodi,
+              i pa&#x10D;e pe<pb n="26r" xml:id="p0067"/>
+              <cb n="a"/>
+              <lb break="no"/>ska morskoga umno&#x17E;en<lb break="no"/>i sut gr&#x11B;si moji i jure n<lb break="no"/>isam dostojan gledati<lb/>na visotu nebesku za m<lb break="no"/>no&#x17E;stvo
+              bezakoni mojih.<lb/>Za&#x10D; sam razsrdil<lb/>srd tvoj, premilosti<lb break="no"/>vi Bo&#x17E;e,
+              i zlo sam stvori<lb break="no"/>l pred toboju i v beza<lb break="no"/>koni sam se
+              veli&#x10D;il.</said>
+            <lb/>A Gospodin se na &#x144; sm<lb break="no"/>iloval tre mu je uka<lb break="no"/>zal svoju
+            milost.<lb/>I milosrdno je prijal<lb/>jego pokorenje za&#x10D; ga je <lb/>is pr&#x17E;una i is
+              tamni<lb break="no"/>ce ispe&#x13C;al i vrat<lb break="no"/>il ga je v &#x144;ega kra&#x13C;es<lb break="no"/>tvo va Jerusolim. I sko<lb break="no"/>zi toga Manasiju z<lb break="no"/>namena se gri&#x161;nik pro<lb break="no"/>kleti, ki je kada grih<lb/>&#x10D;inil bez straha, u<lb break="no"/>kazuje da na Boga ne ma<lb break="no"/>ri, a proroki mu&#x10D;iv Bo&#x17E;<lb break="no"/>je, ki su ga karali ot gr<lb break="no"/>iha a to je kada je u&#x10D;e<lb break="no"/>nikov i kazate&#x13C; u&#x10D;e<lb break="no"/>nja poslu&#x161;ati ni hot<cb n="b"/>
+            <lb break="no"/>el. I koliko godi ta g<lb break="no"/>ri&#x161;nik dlgo prebiv<lb break="no"/>a v semrtnom grihi,<lb/>v istinu jest toliko<lb/>dlgo v djav&#x13C;em pr&#x17E;u<lb break="no"/>ni
+            i v tamnici jego pre<lb break="no"/>biva. Ako pak u&#x10D;i<lb break="no"/>ni pokajanje ot
+            vsega<lb/>srdca svojego, a<lb/>Gospodin je <lb/>gotov tudje smilo<lb break="no"/>vati se
+            i pomo&#x107;i jem<lb break="no"/>u svoju milostju.</p>
+          <p n="2">
+            <lb/>
+            <label>Ka<lb break="no"/>ko otac &#x10D;eladni milo<lb break="no"/>stivo pr<surplus reason="surplus">v</surplus>ima sina svojego </label>
+            <lb/>A to je takoje Gospodin prit&#x10D;u<lb/>klade ot dviju sinu ot o<lb break="no"/>noga
+            sina svojevo&#x13C;noga<lb/>po i&#x161;toriji Pisma s<lb break="no"/>vetago Luke. Ki je za&#x161;a<lb break="no"/>l ot otca svojego i bil<lb/>je pri&#x161;al v dale&#x10D;nu<lb/>zem&#x13C;u. I tamo je vse
+              b<lb break="no"/>lago stratil &#x17E;iv<lb break="no"/>e&#x107;i bludno z b&#x13C;ud<lb break="no"/>icami. I slu&#x17E;iti po<lb break="no"/>&#x10D;e v jednoj vasi st<lb break="no"/>oje&#x107;i u jednoga
+              grajan<lb break="no"/>ina i &#x144;ega svi&#x144;e pas<lb break="no"/>i&#x161;e. Svojevo&#x13C;noga sina <pb n="26v" xml:id="p0068"/>
+            <cb n="a"/>
+            <lb/>toga vsakoga gri&#x161;nika<lb/>znamenava, ki Otca<lb/>svojego nebeskago z<lb break="no"/>ajde, a to je kada sem<lb break="no"/>rtno sgri&#x161;i. I tada<lb/>ta zli sin v dale<lb break="no"/>&#x10D;noj zem&#x13C;i jest jer<lb break="no"/>e po proroci se pi&#x161;e<lb/>da je dale&#x10D;e
+              o<supplied>t</supplied> gr&#x11B;&#x161;<lb break="no"/>nih spasenje. I ta<lb break="no"/>ko
+            &#x13C;ubodjejivi st<lb break="no"/>rati svoje blago k<lb break="no"/>ada svoje smisli<lb/>i
+            svoje sili obra<lb break="no"/>ti ka zlu. I tad<lb break="no"/>a se pridr&#x17E;i jedno<lb break="no"/>ga kmeta ili gra<lb break="no"/>janina, to reku&#x107; Loc<lb break="no"/>ifera,
+            i tako pase<lb/>svi&#x144;e za&#x10D; grihi s<lb break="no"/>vojimi te&#x161;kimi krm<lb break="no"/>ili
+            pita djavle. I<lb/>potom sin svojevo&#x13C;<lb break="no"/>ni pri&#x161;ad je taku<lb/>nuju i
+            te&#x161;ko&#x107;u glad<lb break="no"/>nuju i &#x17E;elel se na<lb break="no"/>sititi ot ro&#x17E;ac. T<lb break="no"/>ada se v sebi sra<lb break="no"/>zum<surplus reason="surplus">o</surplus>iv i po&#x10D;e pok<cb n="b"/>
+            <lb break="no"/>ajanje &#x10D;initi za&#x10D;<lb/>ubo&#x17E;astvo i potrib<lb break="no"/>ovanje nija&#x161;e
+            ga. A na<lb/>tom moremo znamena<lb break="no"/>ti spasite&#x13C;nu milo<lb break="no"/>st da
+            tako ho&#x107;e da b<lb break="no"/>i gri&#x161;nici &#x10D;inili p<lb break="no"/>okajanje. Jere tako
+              vel<lb break="no"/>mi <del rend="overstrike">tako</del> na&#x161;ego spasen<lb break="no"/>ja i&#x161;&#x107;e i &#x13C;ubi da vsim<lb break="no"/>i obi&#x10D;aji kimi more, ti<lb break="no"/>mi nas k
+            sebi nakla<lb break="no"/>&#x144;a. Za&#x10D; nike protezu<lb break="no"/>je skozi vnutr&#x144;e vda<lb break="no"/>hnutje, a nike prikla&#x144;a<lb/>skozi spasite&#x13C;no <lb/>nau&#x10D;enje, a nike
+            takoje<lb/>privezuje skozi svet<lb/>milosrdivi i dariv<lb break="no"/>i, a nikih prim&#x13C;e
+              s<lb break="no"/>kozi posram&#x13C;enje tr<lb break="no"/>penja ne krivi budu&#x107;e.<lb/>I tim
+            obi&#x10D;ajem se je t<lb break="no"/>a sin sebevo&#x13C;ni bil<lb/>prignul se ili prig<lb break="no"/>nut bil i zato se<lb/>je pokajanjem priklonil<lb/>ka otcu svojemu i
+              vrat<lb break="no"/>il se je tada. Uzri<pb n="27r" xml:id="p0069"/>
+            <cb n="a"/>
+            <lb break="no"/>v ga izdaleka, otac<lb/>v sr&#x11B;tenje jemu i ka ob<lb break="no"/>jemanju
+            jego i k celi<lb break="no"/>vanju jego v &#x13C;ubav<lb/>jego vpad. <choice>
+              <corr>Takoje</corr>
+              <sic>Aktoje</sic>
+            </choice> Bog<lb/>izide priti kaju&#x107;u<lb break="no"/>mu se v sr&#x11B;tenje s<lb break="no"/>kozi predidu&#x107;eju m<lb break="no"/>ilost i prime ga sko<lb break="no"/>zi svoju milost
+            i vse<lb/>mu grihi otpusti.</p>
+          <p n="3">
+            <lb/>
+            <label>Kako je<lb/>David &#x10D;inil pokoru z<lb break="no"/>a grehi </label>
+            <lb/>To je takoje znamena<lb break="no"/>no bilo nigda na kr<lb break="no"/>a&#x13C;i Davidi,
+            ki b&#x11B;&#x161;e u&#x10D;in<lb break="no"/>il &#x13C;ubod&#x11B;jstvo i ubi<lb break="no"/>jstvo. I kada bi
+            karan<lb/>ot Natana proroka, tada<lb/>re&#x10D;e: <said>Oh, sagr&#x11B;&#x161;il sa<lb break="no"/>m</said>, a tada je tudje Bog m<lb break="no"/>ilostivi bil goto<lb break="no"/>v da
+            bi jemu otpustil. Na<lb/>za&#x10D; kada je rekal: <said>Oh, sa<lb break="no"/>gr&#x11B;&#x161;ih</said>, a
+            tada je jemu Na<lb break="no"/>tan prorok tudje odgovor<lb break="no"/>il:
+              <said>Gospodin Bog otpustil je<lb break="no"/>st tebe tvoj grih i<lb break="no"/>li
+              zgladil jest tv<cb n="b"/>
+              <lb break="no"/>oj grih.</said> O, kako jest veli<lb break="no"/>ka milost tvoja,
+            Gospodine!<lb/>I kako jest neizre&#x10D;ena<lb/>za&#x10D; nijednoga kaju&#x107;ag<lb break="no"/>o se i
+            pokoru <surplus reason="double writing">i pokoru</surplus> tv<lb break="no"/>ore&#x107;ago
+            dojstojno ju<lb/>n&#x11B;si. Kako jesu m<lb break="no"/>nozi ki jure jesu sveti ot S<lb break="no"/>tarago i Novago zako<lb break="no"/>na n&#x11B;si vzal: na Pe<lb break="no"/>tra, ni Pavla, ni na<lb/>Tomu, ni na Mat&#x11B;ja, ni <lb/>na Davida, ni na Aheb&#x11B;<lb break="no"/>ja, ni na Manasiju, ni na <lb/>razbojnika, ni na Ahi<lb break="no"/>ora,
+            ni na Zaheja, ni na <lb/>N&#x11B;vji&#x107;ami, ni na Sama<lb break="no"/>ritanu, ni na
+            Jaajabu,<lb/>ni na Rut jednu, takoje &#x13C;<lb break="no"/>ubojnicu, ni na Teofila,<lb/>ni na
+            Vilberta, ni na<lb/>Tanaiolom, ni Mariju E<lb break="no"/>juptajsku, ni na Emnuha,
+            ni<lb/>Simuna, ni na Kornela, n<lb break="no"/>i na Ezekiju, ni na Manda<lb break="no"/>l&#x11B;nu, ni na Lonjina, ni<lb/>Mojsejevu Mariju. A tada<lb break="no"/>je i mi ne zupvamo
+            za<lb/>mnoga na&#x161;a p<choice>
+              <corr>o</corr>
+              <sic>re</sic>
+            </choice>gre&#x161;en<pb n="27v" xml:id="p0070"/>
+            <cb n="a"/>
+            <lb break="no"/>ja za&#x10D; razli&#x10D;ne sve<lb break="no"/>doki imamo Bo&#x17E;jego mi<lb break="no"/>losrdja. O, dobrotivi Isus<lb break="no"/>hrste, posudi nam pravoga<lb/>svr&#x161;enja,
+            posluh, skozi<lb/>ki bismo zaslu&#x17E;ili<lb/>priti k tvojemu domu sla<lb break="no"/>tkomu
+            prebivanju! Amen!</p>
+        </div>
+        <pb n="29v" xml:id="p0074"/><cb n="b"/>
+        <pb n="31v" xml:id="p0078"/><cb n="b"/>
+        <pb n="34r" xml:id="p0083"/><cb n="a"/>
+        <pb n="36r" xml:id="p0087"/><cb n="a"/>
+        <pb n="38r" xml:id="p0091"/><cb n="b"/>
+        <pb n="40v" xml:id="p0096"/><cb n="a"/>
+        <pb n="42v" xml:id="p0100"/><cb n="b"/>
+        <pb n="45r" xml:id="p0105"/><cb n="b"/>
+        <pb n="47v" xml:id="p0110"/><cb n="a"/>
+        <div n="Chapter 24.">
+          <head n="Heading 24.">
+            <supplied>24.</supplied> Kako Sin Bo&#x17E;ji sje<lb break="no"/>dinano semrt svoju u<lb break="no"/>kazal kada je vid<lb break="no"/>el Navhodonosor<lb/>drivo veliko. Kapitul
+            <lb/>4 K&#x144;ige Danijela</head>
+          <p n="1">
+            <lb/>V prvom razdelu sl<lb break="no"/>i&#x161;ali smo kako se je Hrst na <lb/>kri&#x17E;i molil, a
+              po<lb break="no"/>tom sli&#x161;imo kak<lb break="no"/>ovim sjedinanjem jest <cb n="b"/>
+            <lb/>semrt svoju ukazal.<lb/>Kra&#x13C; Navhodonosor v<lb break="no"/>idel jest va sni dri<lb break="no"/>vo veliko. To drivo je<lb break="no"/>st menil Navhodo<lb break="no"/>nosor k mislu napis<lb break="no"/>anu, <hi rend="superscript">k</hi>i dari do neba
+              d<lb break="no"/>otika&#x161;e, a l&#x11B;to<lb break="no"/>rasli b&#x11B;&#x161;e po vsem sv&#x11B;<lb break="no"/>tu razlo&#x17E;il. Na<lb/>duhovno znamena&#x161;e Hrsta, cesa<lb break="no"/>ra i sa sv&#x11B;t
+            budu&#x107;i<lb/>koga je mo&#x107; zvi&#x161;en<lb break="no"/>a na vsa nebesa i p<lb break="no"/>o vsem
+            sv&#x11B;tu nada vs<lb break="no"/>u mo&#x107; sega sv&#x11B;ta ra<lb break="no"/>z&#x161;irena. Vsi skoti<lb/>i
+            goveda bihu pod <lb/>&#x144;im, a ptice v &#x144;em pr<lb break="no"/>ebivahu i vsi &#x144;ega<lb/>ploda
+            u&#x17E;ivahu i &#x144;<lb break="no"/>im se <hi rend="superscript">k</hi>rm&#x13C;ahu. I tim <lb/>se
+            zadovo&#x13C;e pod<lb break="no"/>obno menilo da se<lb/>dr&#x17E;i vse stvorenje<lb/>na milosti
+            Hrstovi. I pr<lb break="no"/>i&#x161;ad anjel jest z<lb break="no"/>apovidal to dr<lb break="no"/>ivo podsi&#x107;i, a to <surplus reason="double writing">
+              <add place="bottom margin">znamenava&#x161;e</add>
+            </surplus>
+            <pb n="48r" xml:id="p0111"/>
+            <cb n="a"/>
+            <lb/> znamenava&#x161;e da je im<lb break="no"/>el Hrst <surplus reason="double writing">raspet</surplus> rasp<lb break="no"/>et biti. I rekal je da<lb/>bi vse kite toga d<lb break="no"/>riva otse&#x10D;ene bile. A t<lb break="no"/>im je meneno da su ime<lb break="no"/>li vsi u&#x10D;enici ot &#x144;ega<lb/>pobegnuti. I pri&#x10D;il je <lb/>da bi vse listvje
+              jeg<lb break="no"/>o otepeno bilo, a tim<lb/>je menil da budu vsa<lb/>u&#x10D;enja jego ot
+            &#x17E;idov<lb/>ogrena i potla&#x10D;ena. <lb/>Priminil je takoje da<lb/>vas plod toga d<lb break="no"/>riva imel se je razp<lb break="no"/>linuti, a to je menil<lb/>da vsa
+            Hrstova dela i<lb break="no"/>mela su &#x17E;idovom m<lb break="no"/>rziti. Opet je rekal
+            <lb/>da vsaka zvir i ptic<lb break="no"/>a pobe&#x17E;e ot &#x144;ega jere<lb/>ni ot &#x13C;udi ani ot
+            anjela<lb/>Hrst ni imel pomo&#x107;i. T<lb break="no"/>akoje jest rekal d<lb break="no"/>a
+              a<surplus reason="surplus">o</surplus>oko to drivo li<lb/>imat podrezano bi<lb break="no"/>ti, da zato li ima<lb/>koren jego ostati v <cb n="b"/>
+            <lb/>zem&#x13C;i k plodu. A tim je<lb/>meneno da ako li ima Hrst<lb/>umriti, da v
+            semrti<lb/>ni imel ostav&#x13C;en bi<lb break="no"/>ti, da pa&#x10D;e ot mrtvih<lb/>vstati. Premenil
+            je<lb/>Navhodosor, koga je <lb/>napisanje to drivo<lb/>menilo da ima va oko<lb break="no"/>vah &#x17E;eleznih i mi<lb break="no"/>denih zakovan bit<lb break="no"/>i, a tim
+            se je znaminal<lb break="no"/>o da Isushrst ima privez<lb break="no"/>an biti i &#x10D;avli
+              &#x17E;el<lb break="no"/>eznimi ka kri&#x17E;u prib<lb break="no"/>jen biti. I takoje
+            jest<lb/>bilo re&#x10D;eno da ta k<lb break="no"/>ra&#x13C; ima pokrop&#x13C;en <lb/>biti rosu nebesku
+              m<lb break="no"/>ine&#x107;i po pisanju jego<lb/>naga krom&#x11B; &#x13C;udi z<lb break="no"/>van
+            prebivati. A<lb/>tim se je znamenalo <lb/>da Isushrst zvan grad<lb break="no"/>a ima
+            raspet biti<lb/>i rosu nebesku skrop<lb break="no"/>&#x13C;en biti, reku&#x107; sv<lb break="no"/>oju vla&#x161;&#x107;u krvju obl<lb break="no"/>it biti. Takoje jest <pb n="48v" xml:id="p0112"/>
+            <cb n="a"/>
+            <lb/>rekal da ta kra&#x13C;<lb/>ima pi&#x107;u imiti kako<lb/>zver mine&#x107;i da Isushrst<lb/>ima
+            napojen biti &#x17E;<lb break="no"/>l&#x10D;i i octa. Pri&#x10D;ini<lb break="no"/>l takoje da srdce
+              jeg<lb break="no"/>o s &#x10D;lov&#x11B;&#x10D;askim rodom ne<lb/>imat ob&#x107;iti i bu<lb break="no"/>de mu
+            dano srdce zv<lb break="no"/>ire&#x107;e mesto srdca &#x10D;l<lb break="no"/>ov&#x11B;&#x10D;askoga. To se je
+            tim<lb/>menilo da su &#x17E;id<lb break="no"/>ove Hrsta ka&#x161;tiga<lb break="no"/>li ne kako
+            &#x10D;lov&#x11B;ka, na ka<lb break="no"/>ko govedo, ali kako<lb/>&#x10D;rva jesu ga op&#x13C;u<lb break="no"/>vali i umu&#x10D;ili.<lb/>Ili da su &#x17E;idov<lb break="no"/>e ne kako &#x17E;idove s Hrstom<lb/>bili
+            ili prebivali<lb/>ili se dr&#x17E;ali, da<lb/>kako goveda ili psi<lb/>jesu proti jemu zu<lb break="no"/>bi &#x161;kr&#x161;tali. Tu je<lb/>pri&#x10D;inil takoje d<lb break="no"/>a ob re&#x10D;enom kra&#x13C;i
+              b<lb break="no"/>ilo bi 7 vr&#x11B;men<lb/>zato da je muka Hrstova<lb/>za 7 vr&#x11B;men kano<cb n="b"/>
+            <lb break="no"/>ni&#x10D;askih bil pro<lb break="no"/>da&#x13C;ena. Takoje jest<lb/>prem&#x11B;neno da je
+            to b<lb break="no"/>ilo osujeno sudom<lb/>danjem glasa, reku&#x107; a<lb break="no"/>njela. I
+            takoje bila <lb/>takova ri&#x10D; i proz<lb break="no"/>ba svetih. I skozi to<lb break="no"/>ga m&#x11B;nilo jest da se<lb break="no"/>mrt Hrstova tako anjel<lb break="no"/>om kako
+            svetim bila je p<lb break="no"/>otribna jere skozi &#x144;u<lb/>anjel napl&#x144;en je kor,
+            a<lb/>svetih oslobojenje ime<lb break="no"/>lo jest biti. Jo&#x161;&#x107;e je pr<lb break="no"/>i&#x10D;inil da je skozi t<lb break="no"/>oga kra&#x13C;a pri&#x161;lo<lb/>ogla&#x161;enje vsakomu<lb/>da Bog
+            previ&#x161;&#x144;i gospoduje<lb/>nada vsimi cesarstvi<lb/>sega sv&#x11B;ta, a tim se<lb/>je m&#x11B;nilo da
+            skozi u<lb break="no"/>&#x10D;enje Hrstovo i sluh jego<lb/>pozna sa sv&#x11B;t Boga pr<lb break="no"/>avoga vsih v&#x11B;kov.<lb/>Vrhu toga jo&#x161;&#x107;e da Bog<lb/>more dati to vsako<lb break="no"/>mu
+            &#x10D;lov&#x11B;ku ho&#x107;e, a<lb/>ot toga tihoga ism&#x11B;<pb n="49r" xml:id="p0113"/>
+            <cb n="a"/>
+            <lb break="no"/>jenji Hrstove mnozi jesu vero<lb break="no"/>vali jemu. </p>
+          <note type="footnote">Nedostaje ve&#x107;i dio teksta s obzirom na &#x10D;e&#x161;ki predlo&#x17E;ak, ostatak 24.
+            poglavlja, 25., 26. i ve&#x107;i dio 27. poglavlja. // The rest of the 24th, 25th, 26th and
+            the bigger part of the 27th chapter are missing.</note>
+        </div>
+        <cb n="b"/>
+        <pb n="51v" xml:id="p0118"/><cb n="a"/>
+        <pb n="53v" xml:id="p0122"/><cb n="a"/>
+        <pb n="55v" xml:id="p0126"/><cb n="a"/>
+        <pb n="57v" xml:id="p0130"/><cb n="b"/>
+        <pb n="60r" xml:id="p0135"/><cb n="a"/>
+        <pb n="62r" xml:id="p0139"/><cb n="b"/>
+        <pb n="64v" xml:id="p0144"/><cb n="a"/>
+        <div n="35.">
+          <head n="Heading 35.">
+            <supplied>35.</supplied> Kako je prebivanje b<lb break="no"/>ilo Matere Bo&#x17E;je<lb/>po
+            vznesenju Sina Bo&#x17E;<lb break="no"/>ja na nebesa</head>
+          <p n="1">V prvom razdelu s<lb break="no"/>li&#x161;asmo o posl<lb break="no"/>anji Duha Svetago.
+            A<lb/>posl&#x11B;je potl&#x11B; sl<lb break="no"/>i&#x161;imo o Bla&#x17E;enoj D&#x11B;vi <lb/>i &#x144;e svetom prebivan<lb break="no"/>ju po vznesenju Sina<lb/>Bo&#x17E;ja. Bla&#x17E;ena D&#x11B;va v<lb/>&#x17E;idostvi jest preb<lb break="no"/>ivala i na vsaka <lb/>mesta sina svoga<lb/>kak im je dojti mogla u<lb break="no"/>mi&#x13C;eno i pokorno, je je po<lb break="no"/>hajala i za sladko<lb break="no"/>st &#x13C;ub&#x13C;enja vsako m<lb break="no"/>esto celivaju&#x107;i i kla<lb break="no"/>
+            <supplied>&#x144;a</supplied>ju&#x107;i se s preklo&#x144;enim<lb break="no"/>i koleni i mole&#x107;i se jes<cb n="b"/>
+            <lb break="no"/>t &#x10D;astila. I mnogo sl<lb break="no"/>z izlivaju&#x107;i mesta o<lb break="no"/>na vsa ob&#x17E;alovaju&#x107;i. <lb/>I gda se je vspominala<lb/>na ono preslatko prebiv<lb break="no"/>anje sina svojego, najprija<lb/>je hodila v Nazara<lb break="no"/>t, na to
+            mesto gdi ga<lb/>je po&#x10D;ela, paki va<lb/>V<supplied>i</supplied>tl&#x11B;om , gdi ga je
+              rodil<lb break="no"/>a, i kra&#x13C;i se jemu kla&#x144;a<lb break="no"/>li, paki na mesto, na
+              go<lb break="no"/>ru Tabor, gdi se je bil<lb/>preobrazil, paki va Jerusoli<lb break="no"/>m na vsako mesto kadi<lb/>mu je ko protivanstvo u<lb break="no"/>&#x10D;i&#x144;eno i
+            gdi je ku muku tr<lb break="no"/>pel. I takoje na Goru sio<lb break="no"/>nsku i gdi je
+            u&#x10D;enikom no<lb break="no"/>ge umival i svetos<lb break="no"/>t svojego tela im jest <lb/>
+            <supplied>j</supplied>avil. I takoje va vas Ets<lb break="no"/>timaniju va vrti, gdi je
+            &#x17E; &#x144;e<lb break="no"/>ga krvav pot &#x161;al, g<lb break="no"/>di ga je Ijuda predal i<lb/>gdi
+            ga je narod &#x17E;idovs<lb break="no"/>ki jel. I takoje k domu An<lb break="no"/>inu, gdi je
+            najprija bil pr<lb break="no"/>iveden ka je ot &#x144;ih slu<pb n="65r" xml:id="p0145"/>
+            <cb n="a"/>
+            <lb break="no"/>g poli&#x10D;nicu prijal i m<lb break="no"/>nogimi besedami okle<lb break="no"/>vetan. I takoje do dom<lb break="no"/>u Kajapovu, gdi je bil<lb/>op&#x13C;uvan i o&#x10D;i mu
+              zav<lb break="no"/>ezani i trpel tepenje<lb/>po licu i po vratu. A t<lb break="no"/>akoje do doma Irudov<lb break="no"/>a, kadi je bil obl&#x10D;en v <lb/>bele svite na &#x161;pot
+              &#x13C;<lb break="no"/>udem i bil omra&#x17E;en i bil <lb/>po&#x161;potan ot Iruda i ot jego<lb/>zbora.
+            I paki do vi&#x107;<lb break="no"/>nice i hrama Pilatova,<lb/>gdi su na &#x144; falso gov<lb break="no"/>orili i bi&#x10D;i ga poli<lb/>stlpa fru&#x161;tali i g<lb break="no"/>di je trnovu
+            korunu kor<lb break="no"/>unovan. I takoje k mest<lb break="no"/>u ko je Golgota, komu
+              s<lb break="no"/>e takoje govori Lekostr<lb break="no"/>at, kadi je Pilat bud<lb break="no"/>u&#x107; na sudi tre je Isushrsta n<lb break="no"/>a semrt osudil. I t<lb break="no"/>akoje po tom putu s p<lb break="no"/>la&#x10D;em gredu&#x107;i, po ko<lb break="no"/>m
+            je &#x161;al Isushrst nesu&#x107;i na<lb/>sebi kri&#x17E; kada je bil<lb/>na raspetje pe&#x13C;an. A <cb n="b"/>
+            <lb/> takoje na mesto ko je K<lb break="no"/>alvarija, kadi je bil<lb/>raspet i napajan
+              &#x17E;<lb break="no"/>l&#x10D;i i octa. I takoje<lb/>ko gradi Osipovi, k<lb break="no"/>o je ot
+            Tramotije, gdi je b<lb break="no"/>il pogreben. I na go<lb break="no"/>ru Maslinsku, s
+            ke je n<lb break="no"/>a nebo vza&#x161;al. I t<lb break="no"/>akoje v crikav i na in<lb break="no"/>a mesta na kih je prod<lb break="no"/>ikoval i u&#x10D;il i na<lb/>ona <surplus reason="double writing">ona</surplus> mesta na kih se ja<lb break="no"/>v&#x13C;al po svojem
+              vs<lb break="no"/>kr&#x11B;&#x161;enju. Vsa ta me<lb break="no"/>sta i ina mnoga sa<lb/>slzami i s
+            pla&#x10D;em<lb/>jest je pohajala. I o z<lb break="no"/>ov&#x11B;nju sina svojego<lb/>jest takoje
+              &#x17E;alost<lb break="no"/>no plakala i ve&#x107;e se je<lb break="no"/>st jej &#x13C;ubilo plak<lb break="no"/>ati i cviliti nere se<lb/>veseliti dokl&#x11B; god&#x11B;<lb/>ni imela prebivan<lb break="no"/>ja sa svojim slatkim<lb/>sinom.</p>
+          <p>
+            <lb/>
+            <label>Anna, &#x17E;ena<lb/>Tobijina, ka je imela s<lb break="no"/>mu&#x107;enje da ni sa
+              sinom.</label>
+            <pb n="65v" xml:id="p0146"/>
+            <cb n="a"/>
+            <lb/>To plakanje i narikov<lb break="no"/>anje slavne D&#x11B;vi<lb/>Marije bilo je nigda
+              znam<lb break="no"/>enano na Ani , &#x17E;eni Tobi<lb break="no"/>jini, ka je vazda
+              plakal<lb break="no"/>a sina svojego, ki je ot &#x144;e<lb/>je bil ot&#x161;al, i nigda<lb break="no"/>re se ni mogla ut&#x11B;&#x161;<lb break="no"/>iti dokl&#x11B; se ni k &#x144;e<lb break="no"/>j
+            vratil. I na vse pu<lb break="no"/>ti ot kuda se je nadela<lb/>jego pri&#x161;astja jest iz<lb break="no"/>gledala i vshajala <lb/>je proti jemu na goru izg<lb break="no"/>ledaju&#x107;i
+            ga. I v &#x144;em je vs<lb break="no"/>e blago svoje imela. A<lb/>kada je k &#x144;ej vaspet v<lb break="no"/>ratil se, tada se je u<lb break="no"/>bo&#x17E;astva izbila i b<lb break="no"/>laga veliko mno&#x17E;a<lb break="no"/>stvo imela. A takoje <lb/>Marija bez sina
+            svojego<lb/>vazda v pla&#x10D;i prebi<lb break="no"/>vala i vse puti sin<lb break="no"/>a
+            svojego kako god je<lb/>mogla, takoje je pohaja<lb break="no"/>la i v svojem sini je<lb break="no"/>st vse svoje blago<lb/>imela. I kada je on k &#x144;ej <cb n="b"/>
+            <lb/>
+            <lb/>pre&#x161;al, tada se je vse &#x144;e u<lb break="no"/>bo&#x17E;astvo obratilo va<lb/>veliko
+            bogatastvo.</p>
+          <p>
+            <lb/>
+            <label>&#x17D;ena ka je pogubila 10 d<lb break="no"/>ragam srebra iskala
+                g<supplied>a</supplied> je prile&#x17E;no</label>
+            <lb/>Ta &#x17E;alost Marijina<lb/>znamenava se v onoj<lb/>prit&#x10D;i, gdi govori ot one &#x17E;<lb break="no"/>ene ka je iskala 10go pi<lb break="no"/>neza ka imaju&#x107;i 10 pinez<lb/>ili
+            srebrniki. I jedan ot &#x144;i<lb break="no"/>h pogubiv&#x161;i i va&#x17E;g<lb break="no"/>av&#x161;i sv&#x11B;&#x107;u i
+              prile&#x17E;n<lb break="no"/>o ga iskala. I kada je n<lb break="no"/>a&#x161;la ta srebrnik, t<lb break="no"/>ada <choice>
+              <corr>s</corr>
+              <sic>j</sic>
+            </choice>e vzveselila i ra<lb break="no"/>dovala i pozvala je s<lb break="no"/>voje
+            sus&#x11B;di na v<lb break="no"/>eselje. Skozi tu &#x17E;enu <lb/>znamenava se D&#x11B;va Ma<lb break="no"/>rija, ka je na tom sv&#x11B;t&#x11B; de<lb break="no"/>setero &#x10D;islo imela ot<lb/>kih kako jedno
+            pogubila <lb/>b&#x11B;&#x161;e, a drugo ko jest<lb/>9, te je vazda hranil<lb break="no"/>a i vazda
+            je pri sebi ime<lb break="no"/>la ili dr&#x17E;ala. Dev<lb break="no"/>etero &#x10D;islo jest
+              prebi<lb break="no"/>vanje bla&#x17E;enih duh, ki su <pb n="66r" xml:id="p0147"/>
+            <cb n="a"/>
+            <lb/>vazda k &#x144;ej prihajali ot<lb/>9 kori anjelskih. Deset<lb break="no"/>i pinez &#x10D;isla
+            jest pre<lb break="no"/>bivanje &#x10D;love&#x10D;astva Spa<lb break="no"/>site&#x13C;a, ko b&#x11B;&#x161;e nikako
+            kako <lb/>pogubila kada b&#x11B;&#x161;e<lb/>na nebesa vza&#x161;al.<lb/>Koga je prile&#x17E;no let <lb/>is<hi rend="on the left m,argine">ka</hi>la kada vsa mesta s<lb break="no"/>ina svojego s
+            pla&#x10D;em pohaj<lb break="no"/>ala, a potom ga je jala,<lb/>a to jest o svojem vzne<lb break="no"/>senji na nebesa kada je darov<lb break="no"/>ana v&#x11B;&#x10D;nim Hrstovim
+              iskanje<lb break="no"/>m. Sv&#x11B;tlnik jest takoje va<lb break="no"/>&#x17E;gala gda je iskala,
+            a<lb/>to jest dobri priklad<lb/>ili obraz koga je vsim<lb/>ukazovala. Za&#x10D; vsi<lb break="no"/>m svetim prebivanjem sv&#x11B;tl<lb break="no"/>ila se je kako sv&#x11B;tli sv&#x11B;tln<lb break="no"/>ik vsim priklad i put<lb/>&#x17E;ivotni ukazuju&#x107;i. M<lb break="no"/>i imamo
+            takoje na ta re&#x10D;<lb break="no"/>ena mesta hoditi i mu<lb break="no"/>ku Hrstovu
+            vspominaju&#x107;e i &#x144;i<lb break="no"/>h umi&#x13C;eno plakati. I ako<lb/>ih ne moremo telesno
+              poh<lb break="no"/>ajati, ali je pohajajmo d<cb n="b"/>
+            <lb break="no"/>uhovno umi&#x13C;enim srdcem.</p>
+          <p>
+            <lb/>
+            <label> Nikol, &#x17E;ena Davido<lb break="no"/>va ka je otdana bila za <lb/>drugoga mu&#x17E;a i
+                va<lb break="no"/>zda je v pla&#x10D;i prebiv<lb break="no"/>ala. Kapitul 29 Prve k&#x144;ig
+              cesarske</label>
+            <lb/>&#x17D;alost Bla&#x17E;ene D&#x11B;vi<lb/>Marije, ka je nigda bila<lb/>m&#x11B;nena na Miholi, nev<lb break="no"/>&#x11B;stice Davidove, k<lb break="no"/>u je Saul otac jeje bil otd<lb break="no"/>al inomu mu&#x17E;u po im<lb break="no"/>eni Falatijelu, vza<lb break="no"/>m ju
+            ot Davida. Na dobr<lb break="no"/>i mu&#x17E; jeje Falatijel<lb/>i pravadni i ni je
+            poznal<lb/>telesno za&#x10D; jest v<lb break="no"/>idel da je prava &#x17E;en<lb break="no"/>a
+            Davidova. I ona je <lb/>vazda prebivala v<lb/>pla&#x10D;i i v &#x17E;alosti do<lb/>tih dob dokl&#x11B; je
+            <lb/>vaspet vzeta k pr<lb break="no"/>avomu svojemu mu<lb break="no"/>&#x17E;u Davidu. A to
+            se<lb/>more prilo&#x17E;iti o B<lb break="no"/>la&#x17E;enoj D&#x11B;vi Mariji, ko je<lb break="no"/>st
+            bil vz&#x13C;ub&#x13C;en<lb break="no"/>ik sam Sin Bo&#x17E;ji, ki je pr<pb n="66v" xml:id="p0148"/>
+            <cb n="a"/>
+            <lb break="no"/>ava mudrost, ko<lb break="no"/>ga otdilenja ona jest<lb/>tako vele
+              &#x17E;alov<lb break="no"/>ala da je v pla&#x10D;i v<lb break="no"/>azda prebivala, i v
+            <lb/>te&#x161;ko&#x107;i. I taku mil<lb break="no"/>o&#x107;u &#x13C;ubila ga je Ma<lb break="no"/>rija, to jest
+            svojego<lb/>iz&#x13C;ub&#x13C;enika i ot prev<lb break="no"/>eliku milo&#x161;&#x107;u i &#x13C;ub<lb break="no"/>ve
+            jest pre<add place="left margin">ne</add>mogla. A<lb/>to jest ono &#x10D;a govo<lb break="no"/>ri ona v p&#x11B;sneh Sol<lb break="no"/>omunih ukazuju&#x107; &#x13C;<lb break="no"/>ubav svojego
+              &#x17E;el<lb break="no"/>&#x11B;nja: <quote>H&#x107;ere jerusolimskije,<lb/>pov&#x11B;jte momu &#x13C;ub<lb break="no"/>&#x13C;eniku da jego &#x13C;ubv<lb break="no"/>iju i znemagaju ku k &#x144;e<lb break="no"/>mu imam.</quote> O velika je<lb break="no"/>st &#x17E;alost mate<lb break="no"/>ri bez
+            sina biti, a i<lb/>vek&#x161;a jest &#x17E;alost <lb/>nev&#x11B;stici bez &#x17E;eni<lb break="no"/>ha biti. Na
+            Marijina &#x17E;<lb break="no"/>alost nada vse jest<lb/>za vo&#x13C;u da ne prebi<lb break="no"/>va&#x161;e s Hrstom, ki je bil<lb/>&#x144;e dragi vz&#x13C;ub&#x13C;enik <cb n="b"/>
+            <lb/>i &#x144;e vz&#x13C;ub&#x13C;eni sin. O, pre<lb break="no"/>krasni Isushrste, sjedinaj nas<lb/>k tomu
+            tako da bismo t<lb break="no"/>o tako vspominali, d<lb break="no"/>a bismo s tobu i &#x161; &#x144;u
+              v<lb break="no"/>&#x11B;&#x10D;no prebivali po na&#x161;em<lb/>zaslu&#x17E;enju! Amen!</p>
+        </div>
+        <pb n="69r" xml:id="p0153"/><cb n="a"/>
+        <pb n="71r" xml:id="p0157"/><cb n="b"/>
+        <pb n="73v" xml:id="p0162"/><cb n="a"/>
+        <pb n="75v" xml:id="p0166"/><cb n="a"/>
+        <pb n="77v" xml:id="p0170"/><cb n="b"/>
+        <pb n="79v" xml:id="p0174"/><cb n="a"/>
+        <pb n="81v" xml:id="p0178"/><cb n="a"/>
+      </div>
+    </body>
+  </text>
+</TEI>
+<?xml-model type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="Speculum_tei_minimal.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
