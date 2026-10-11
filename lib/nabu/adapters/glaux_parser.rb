@@ -98,9 +98,19 @@ module Nabu
         "relation" => "relation",
         "animacy" => "animacy",
         "sense" => "sense",
-        "artificial" => "artificial"
+        "artificial" => "artificial",
+        # P118-R4 S6 (the held-but-dark audit): the verse line citation
+        # ("7.118.3" — it changes mid-sentence, so it rides the word) and
+        # the pre-normalization form with its editorial brackets ("<οἱ>",
+        # "{ἐμοῦ}"; NFC like form/lemma).
+        "line" => "line",
+        "form_original" => "form_original"
       }.freeze
       private_constant :TOKEN_ATTRIBUTES
+
+      # Token keys NFC-normalized at the boundary (form is NFC'd on read).
+      NORMALIZED_KEYS = %w[lemma form_original].freeze
+      private_constant :NORMALIZED_KEYS
 
       # Same signature family as the other parser families. +license_override+
       # (P10-4) rides to the Document unchanged; +language+ is the caller's
@@ -262,7 +272,7 @@ module Nabu
             value = attribute == "form" ? form : node.attribute(attribute)
             next if value.nil?
 
-            hash[key] = key == "lemma" ? normalize(value) : value
+            hash[key] = NORMALIZED_KEYS.include?(key) ? normalize(value) : value
           end
           hash
         end

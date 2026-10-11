@@ -148,6 +148,7 @@ module Nabu
           urn: document_ref.id, language: LANGUAGE,
           language_mapper: ->(header) { langusage_claim(header) },
           license_mapper: ->(availability) { license_class(availability) },
+          notes: true, # P118-R4 S6: the prints' own marginalia ride "notes"
           metadata_mapper: lambda { |header|
             { "phase" => phase, "date" => self.class.imprint_envelope(header["source_date"]) }.compact
           }

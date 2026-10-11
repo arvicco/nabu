@@ -52,7 +52,9 @@ module Nabu
     # <HEAD> is a reading unit here — CME heads are transcribed medieval
     # rubrics, NOT the editorial captions the croala/epidoc families drop.
     # <NOTE>/<TAILNOTE> (marg/foot glosses and end-notes) and <FIGDESC> drop
-    # their subtrees; <SPEAKER> drops from text but labels its <SP>'s
+    # their subtrees from the reading text (a <NOTE> rides the unit's
+    # "notes" annotation when the caller arms notes: — P118-R4, EEBO-TCP);
+    # <SPEAKER> drops from text but labels its <SP>'s
     # passages via the "speaker" annotation. <PB>, <MILESTONE>, <LB>, <GAP>
     # read as one space (<PB N> additionally tracks the page cite in force —
     # the Migne-column mold). <ADD> and <DEL> both stay transparent (a
@@ -83,10 +85,15 @@ module Nabu
       Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
 
+      # +notes+ (P118-R4 S6): true carries each body <NOTE> (place/n/text)
+      # onto its unit's "notes" annotation instead of dropping it whole —
+      # EEBO-TCP's notes are the prints' own marginalia; CME's are the
+      # modern editor's apparatus (default off). The reading text never
+      # changes either way.
       def parse(source, urn:, language:, title: nil, canonical_path: nil,
-                license_mapper: nil, metadata_mapper: nil, language_mapper: nil)
+                license_mapper: nil, metadata_mapper: nil, language_mapper: nil, notes: false)
         path = resolve_canonical_path(source, canonical_path)
-        extraction = extract(source, path: path)
+        extraction = extract(source, path: path, notes: notes)
         units = disambiguate_collisions(extraction.units)
         metadata = (metadata_mapper&.call(extraction.metadata) || {}).merge(extraction.metadata)
         # The P83-1 seam (the license/metadata mold): the adapter judges the
@@ -110,9 +117,9 @@ module Nabu
         raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
       end
 
-      def extract(source, path:)
+      def extract(source, path:, notes: false)
         with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path).call
+          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, notes: notes).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
@@ -184,9 +191,12 @@ module Nabu
 
         Result = Data.define(:units, :title, :metadata)
 
-        def initialize(reader:, path:)
+        def initialize(reader:, path:, notes: false)
           @reader = reader
           @path = path
+          @keep_notes = notes
+          @note = nil # the open body <NOTE> capture (P118-R4 S6)
+          @pending_notes = [] # notes met between units ride the next unit
           @in_eebo = false
           @seen_text = false
           @drop_depth = nil
@@ -233,7 +243,10 @@ module Nabu
           return if dropping?
 
           if DROPPED_ELEMENTS.include?(name)
-            @drop_depth = node.depth unless node.empty_element?
+            return if node.empty_element?
+
+            @drop_depth = node.depth
+            open_note(node) if name == "NOTE" && @keep_notes
             return
           end
 
@@ -256,7 +269,10 @@ module Nabu
           return header_end(name) unless @in_eebo
 
           if dropping?
-            @drop_depth = nil if node.depth == @drop_depth
+            if node.depth == @drop_depth
+              @drop_depth = nil
+              close_note
+            end
             return
           end
 
@@ -275,7 +291,7 @@ module Nabu
           if !@in_eebo
             @capture << value if @capture
           elsif dropping?
-            nil
+            @note["text"] << value if @note
           elsif @speaker_capture
             @speaker_capture << value
           elsif @unit
@@ -343,7 +359,30 @@ module Nabu
 
           @unit = { tag: name, depth: node.depth, n: presence(node.attribute("N")),
                     text: +"", page: @page, speaker: presence(@speakers.last),
-                    division: @divisions.last }
+                    division: @divisions.last, notes: @pending_notes }
+          @pending_notes = []
+        end
+
+        # -- body notes (P118-R4 S6, armed by notes: true) -------------------
+
+        def open_note(node)
+          @note = { "place" => presence(node.attribute("PLACE")), "n" => presence(node.attribute("N")),
+                    "text" => +"" }
+        end
+
+        # A note inside an open unit rides that unit; one met between units
+        # rides the next unit opened (a marginal gloss beside a paragraph
+        # start). Blank notes mint nothing.
+        def close_note
+          note = @note
+          @note = nil
+          return if note.nil?
+
+          text = Normalize.nfc(note["text"].gsub(/[[:space:]]+/, " ").strip)
+          return if text.empty?
+
+          entry = note.merge("text" => text).compact
+          @unit ? @unit[:notes] << entry : @pending_notes << entry
         end
 
         def close_unit(node, name)
@@ -382,7 +421,8 @@ module Nabu
             "n" => unit[:n],
             "page" => unit[:page],
             "speaker" => flatten(unit[:speaker]),
-            "division" => unit[:division]&.downcase
+            "division" => unit[:division]&.downcase,
+            "notes" => (unit[:notes].empty? ? nil : unit[:notes])
           }.compact
         end
 

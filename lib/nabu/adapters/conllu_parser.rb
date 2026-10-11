@@ -78,6 +78,20 @@ module Nabu
       MWT_ID = /\A\d+-\d+\z/
       private_constant :MWT_ID
 
+      # P118-R4 S6 (the held-but-dark audit): the ONE sentence-comment
+      # whitelist beyond sent_id/text/source. Translation comments, under
+      # their upstream key names verbatim (live census of canonical/ud,
+      # 2026-10-11: reference 39,512 · translated_text 4,781 [caval] ·
+      # translation 3,601 [hittb, dipsgg] · sent_transl_en/ru ~3,170
+      # [birchbark, many empty] · transl_en_1/2, transl_ru [birchbark] ·
+      # text_en 1,072 [pisandub, bohairic, tonqq]) ride annotations
+      # "translations" => {key => text}; the reference comment (ittb/llct/
+      # dipwbg "reference", egyptian-pc "ref") rides "reference". Empty
+      # values mint nothing.
+      TRANSLATION_COMMENTS = %w[text_en translation translated_text sent_transl_en sent_transl_ru
+                                transl_en_1 transl_en_2 transl_ru].freeze
+      REFERENCE_COMMENTS = %w[reference ref].freeze
+
       # Same signature family as EpidocParser#parse. +license_override+ (P10-4)
       # rides through to the Document unchanged (nil default); the parser stays
       # license-agnostic — the caller decides the per-document class.
@@ -92,8 +106,11 @@ module Nabu
       # +metadata+ (P23-1): document-level metadata rides through to the
       # Document unchanged (default {}) — the caller extracted it (TSV headers,
       # catalogue rows); the parser neither reads nor invents any.
+      #
+      # +sentence_comments+ (P118-R4): true arms the TRANSLATION_COMMENTS /
+      # REFERENCE_COMMENTS whitelist (the UD adapter); default off.
       def parse(source, urn:, language:, title: nil, canonical_path: nil, license_override: nil,
-                citation: nil, metadata: {})
+                citation: nil, metadata: {}, sentence_comments: false)
         document = Nabu::Document.new(
           urn: urn, language: language, title: title, metadata: metadata,
           canonical_path: canonical_path || source.to_s, license_override: license_override
@@ -101,7 +118,8 @@ module Nabu
 
         each_block(source) do |block, sequence|
           document << build_passage(block, document_urn: urn, language: language,
-                                           sequence: sequence, citation: citation)
+                                           sequence: sequence, citation: citation,
+                                           sentence_comments: sentence_comments)
         end
 
         raise Nabu::ParseError, "#{source}: no sentence blocks found" if document.empty?
@@ -168,7 +186,7 @@ module Nabu
         columns
       end
 
-      def build_passage(block, document_urn:, language:, sequence:, citation: nil)
+      def build_passage(block, document_urn:, language:, sequence:, citation: nil, sentence_comments: false)
         sent_id = comment_value(block, "sent_id")
         if sent_id.nil? || sent_id.empty?
           raise Nabu::ParseError,
@@ -187,7 +205,7 @@ module Nabu
           urn: "#{document_urn}:#{cite}",
           language: language,
           text: text,
-          annotations: annotations(block),
+          annotations: annotations(block, sentence_comments: sentence_comments),
           sequence: sequence
         )
       end
@@ -199,10 +217,26 @@ module Nabu
         Nabu::Normalize.nfc(raw)
       end
 
-      def annotations(block)
+      def annotations(block, sentence_comments: false)
         result = { "tokens" => block.tokens.map { |columns| token_hash(columns) } }
         source = comment_value(block, "source")
         result["source"] = source if source && !source.empty?
+        sentence_comments ? result.merge(sentence_comment_annotations(block)) : result
+      end
+
+      # The whitelist's annotations (opt-in: callers whose translations
+      # already ride a sibling document — old-tibetan's -en Dotson lane —
+      # keep them out of the original's passages).
+      def sentence_comment_annotations(block)
+        result = {}
+        translations = TRANSLATION_COMMENTS.filter_map do |key|
+          value = comment_value(block, key).to_s.strip
+          [key, Nabu::Normalize.nfc(value)] unless value.empty?
+        end
+        result["translations"] = translations.to_h unless translations.empty?
+        reference = REFERENCE_COMMENTS.lazy.map { |key| comment_value(block, key).to_s.strip }
+                                           .find { |value| !value.empty? }
+        result["reference"] = reference if reference
         result
       end
 

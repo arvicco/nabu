@@ -88,9 +88,10 @@ module Nabu
       COL_END = 3            # ENDDATE
       COL_SOURCE = 8         # SOURCE
       COL_LICENSE = 9        # SOURCE_LICENSE
+      COL_TM_TEXT = 12       # TM_TEXT — the Trismegistos text id (P118-R4 S6)
       COL_ANNOTATION = 13    # TREEBANK_ANNOTATIONS
       private_constant :COL_TEXT_ID, :COL_AUTHOR, :COL_TITLE, :COL_GENRE, :COL_DIALECT,
-                       :COL_START, :COL_END, :COL_SOURCE, :COL_LICENSE, :COL_ANNOTATION
+                       :COL_START, :COL_END, :COL_SOURCE, :COL_LICENSE, :COL_TM_TEXT, :COL_ANNOTATION
 
       # The NC-licensed manual-annotation projects (README, verbatim licenses):
       # PROIEL (CC BY-NC-SA 3.0) and Vanessa Gorman's trees (CC BY-NC-SA 4.0).
@@ -215,9 +216,10 @@ module Nabu
       # The document-level metadata journaled from the metadata.txt row (the
       # SOURCE_LICENSE rides verbatim — the per-text license record).
       # P104-1 (Q77): GENRE_STANDARD also projects as a facet. DIALECT
-      # deliberately does NOT — a Greek-dialect lect story needs a
-      # lects-registry ruling (registry notes carry philology), so it
-      # stays metadata-only until that decision lands; start/end_date ride
+      # makes no LECT claim here — a Greek-dialect lect story needs a
+      # lects-registry ruling (registry notes carry philology); since
+      # P118-R4 config/facet_map.yml projects it as a plain "dialect"
+      # filter facet (no lect rule reads it); start/end_date ride
       # the timeline separately (MetadataDates :signed_bounds_keys,
       # composition class).
       def document_metadata(ref_metadata)
@@ -233,6 +235,7 @@ module Nabu
           "source" => presence(row[COL_SOURCE]),
           "source_license" => na_or(row[COL_LICENSE]),
           "treebank_annotations" => na_or(row[COL_ANNOTATION]),
+          "tm_text" => na_or(row[COL_TM_TEXT]),
           "facets" => (genre ? { "genre" => { "value" => genre } } : nil)
         }.compact
       end
