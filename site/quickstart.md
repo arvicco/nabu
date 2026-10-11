@@ -19,10 +19,11 @@ library takes five steps; the starter shelf below was measured at about
   development platform; nothing in the core is known to be Mac-specific,
   but no other platform is exercised.
 - **Disk**: about 1 GB for the starter shelf (canonical files plus the
-  derived databases). A full library build currently occupies roughly
-  45 GB canonical + 43 GB derived SQLite on the reference machine
-  (2026-07-22; the Chinese, Japanese, and Germanic libraries dominate) —
-  growth is entirely at your discretion, shelf by shelf.
+  derived databases). The full library currently occupies roughly
+  117 GB canonical + 159 GB of derived databases on the reference
+  machine (measured 2026-10-11; OpenITI, ORACC and EEBO-TCP dominate the
+  canonical side) — growth is entirely at your discretion, shelf by
+  shelf.
 
 ## 1. Clone
 
@@ -135,16 +136,16 @@ clients, the tool reference, and the quoting etiquette are in
 Each further shelf is one `nabu enable <source>` (or `enable <axis>` for a whole desk) followed by its `sync`; `bin/nabu sync --all` re-syncs
 every enabled live-policy source in one pass. The full menu is
 `config/sources.yml`; real on-disk sizes for the larger shelves, measured
-2026-07-26:
+2026-10-11:
 
 | Sync | Unlocks | Canonical size |
 |---|---|---|
 | `bin/nabu sync vulgate` + `sync eng-web` | the Clementine Latin and English witnesses for `align`, Old Testament included | 357 MB each |
-| `bin/nabu sync perseus-greek` | the Greek canon with aligned English translations | 921 MB |
-| `bin/nabu sync perseus-latin` | the Latin classics | 224 MB |
+| `bin/nabu sync perseus-greek` | the Greek canon with aligned English translations | 919 MB |
+| `bin/nabu sync perseus-latin` | the Latin classics | 280 MB |
 | `bin/nabu sync gretil` | 780 Sanskrit editions | 303 MB |
-| `bin/nabu sync papyri-ddbdp` | 61k documentary papyri | 4.8 GB |
-| `bin/nabu sync oracc` | 105k cuneiform documents, translations and the Oracc CC0 project pack (Urartian among them) included | 16 GB |
+| `bin/nabu sync papyri-ddbdp` | 64k documentary papyri | 4.8 GB |
+| `bin/nabu sync oracc` | 118k cuneiform documents, translations and the Oracc CC0 project pack (Urartian among them) included | 16 GB |
 
 What each shelf is good for is surveyed on [The Library]({{ '/library/' | relative_url }});
 every text keeps its upstream license, recorded per document — the classes
