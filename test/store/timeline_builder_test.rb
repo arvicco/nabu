@@ -573,6 +573,31 @@ module Store
       FileUtils.rm_rf(canonical) if canonical
     end
 
+    # P118-R4 S5: iedc's toponym lists (names + optional WGS84 strings,
+    # real values from the live catalog) were held but placed nothing —
+    # the tripwire's "toponyms" blind spot.
+    def test_iedc_toponyms_place_documents
+      seed_metadata_doc("iedc", "urn:nabu:iedc:a",
+                        { "date_iso" => "1183-10", "date_text" => "(1183-10)",
+                          "toponyms" => [{ "latitude" => "34.82156", "longitude" => "67.82734",
+                                           "name" => "Bāmiyān" }, { "name" => "Shūya Wak" }] })
+      seed_metadata_doc("iedc", "urn:nabu:iedc:b",
+                        { "toponyms" => [{ "alternativeReadings" => "Ribāṭ Shār", "name" => "Rubāṭiyān" }] })
+      seed_metadata_doc("iedc", "urn:nabu:iedc:c",
+                        { "toponyms" => [{ "latitude" => "34.8", "longitude" => "67.8", "name" => "A" },
+                                         { "latitude" => "38.39", "longitude" => "77.22", "name" => "B" }] })
+      build!
+
+      a = timeline_for("urn:nabu:iedc:a")
+      assert_equal [1183, "Bāmiyān; Shūya Wak", 34.82156, 67.82734],
+                   a.values_at(:not_before, :place_name, :place_lat, :place_lon),
+                   "every toponym names the claim; the one coordinated toponym places it"
+      assert_equal "Rubāṭiyān", timeline_for("urn:nabu:iedc:b")[:place_name], "a place-only row (HGV precedent)"
+      c = timeline_for("urn:nabu:iedc:c")
+      assert_equal ["A; B", nil, nil], c.values_at(:place_name, :place_lat, :place_lon),
+                   "two coordinated toponyms: which one is THE point is never guessed"
+    end
+
     def test_eebo_sidecar_date_grammar
       parse = ->(raw) { Nabu::Store::TimelineBuilder::MetadataDates.tcp_list_years(raw) }
       assert_equal [1625, 1625], parse.call("1625")
