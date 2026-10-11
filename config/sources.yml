@@ -1334,7 +1334,7 @@ dharma-deccan:   # P118-2
   adapter: Nabu::Adapters::DharmaDeccan
   adopted: "2026-10-11"
   axes: [indic, epigraphy]
-  wired: false   # built P118-2; awaiting the first sync
+  wired: true    # first sync verified 2026-10-11: 1,694 docs / 27,929 passages, 29 honest quarantines (the lane census exactly)
   sync_policy: manual
   # DHARMA Task Force B — the South Asian inscription estate: the 20
   # edition-bearing tfb-* repos on github.com/erc-dharma (live census
@@ -1390,7 +1390,7 @@ dharma-mdt:   # P118-4, 02-sources row 257
   adapter: Nabu::Adapters::DharmaMdt
   adopted: "2026-10-11"
   axes: [indic]
-  wired: false   # adapter + fixtures landed; first real sync pending (scratch fetch
+  wired: true    # first sync verified 2026-10-11: 734 metadata-row docs, 0 quarantined
                  # verified 2026-10-11: 734 metadata docs, 94 placeholder rows skipped)
   sync_policy: manual
   # DHARMA text metadata (github.com/erc-dharma/mdt-texts): four per-corpus
@@ -1432,7 +1432,7 @@ dharma-tamil:   # P118-1
   adapter: Nabu::Adapters::DharmaTamil
   adopted: "2026-10-11"
   axes: [indic, epigraphy]
-  wired: false   # awaiting the first real sync
+  wired: true    # first sync verified 2026-10-11: 1,267 docs / 17,993 passages, 32 honest quarantines (the lane census exactly)
   sync_policy: manual
   # DHARMA Tamil-country epigraphy (Task Force A; EFEO/CNRS/CEIAS, ERC
   # no. 809994): the eleven tfa-* INSCRIPTION edition repos on
@@ -2508,7 +2508,7 @@ kannada-texts:   # P118-3
   adapter: Nabu::Adapters::KannadaTexts
   adopted: "2026-10-11"
   axes: [indic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # first sync verified 2026-10-11: 16 docs / 16,151 passages, 0 quarantined
   sync_policy: manual
   # Kannada Digital Texts Project (Andrew Ollett; text entry Krishnaprasada
   # G. / Adishila Publications; github.com/aso2101/kannada_texts): 16 TEI
@@ -3949,7 +3949,7 @@ prakrit-texts:   # P118-3
   adapter: Nabu::Adapters::PrakritTexts
   adopted: "2026-10-11"
   axes: [indic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # first sync verified 2026-10-11: 22 docs / 27,124 passages, 1 honest quarantine (malformed upstream)
   sync_policy: manual
   # Prakrit Digital Texts Project (Andrew Ollett; github.com/aso2101/
   # prakrit_texts): 33 TEI files, ISO-15919 romanized. Ingests ONLY the
@@ -4474,7 +4474,7 @@ siddham:   # P118-4, 02-sources row 256
   adapter: Nabu::Adapters::Siddham
   adopted: "2026-10-11"
   axes: [indic, epigraphy]
-  wired: false   # adapter + fixtures landed; first real sync pending (scratch fetch
+  wired: true    # first sync verified 2026-10-11: 427 docs / 6,334 passages, 0 quarantined; GE-era dates live (417-418 CE eyeballed)
                  # verified 2026-10-11: sha pin holds, 427 docs / 6,334 line passages)
   sync_policy: manual
   # The Siddham Epigraphic Archive texts (Dániel Balogh; Zenodo 2574901, the
