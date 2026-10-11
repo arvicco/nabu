@@ -211,7 +211,9 @@ module Nabu
       end
 
       def folder_refs(folder, match, seen)
-        Dir.glob(File.join(folder, "**", "*.xml")).each do |path|
+        Dir.glob(File.join(folder, "**", "*.xml")).each do |xml_path|
+          path = later_edit(xml_path)
+          yield :duplicate, xml_path unless path == xml_path
           id = urn_for(match[:cth], match[:project], path)
           if (first = seen[id])
             require_identical_twin!(first, path, id)
@@ -221,6 +223,32 @@ module Nabu
           seen[id] = path
           yield :ref, document_ref(id, path, match)
         end
+      end
+
+      # P118-R4 (the held-but-dark audit): Beta 0.3 ships ONE manuscript
+      # twice — "KUB 31.116.xml" and an EXTENSIONLESS "KUB 31.116" whose
+      # AOxml header adds the 2025-06-10 re-annotation (the only
+      # extensionless AOxml in the deposit, 2026-10-11 census; the other
+      # extensionless files are CSS/webarchive junk). The *.xml walk never
+      # saw the later edit. Rule: an extensionless AOxml sibling whose
+      # header's latest date is LATER wins; the older twin skips by rule
+      # (censused with the duplicates). A tie keeps the .xml.
+      def later_edit(xml_path)
+        sibling = xml_path.delete_suffix(".xml")
+        return xml_path unless File.file?(sibling) && aoxml?(sibling)
+
+        latest_header_date(sibling) > latest_header_date(xml_path) ? sibling : xml_path
+      end
+
+      def aoxml?(path) = File.open(path, "rb") { |io| io.read(64).to_s }.lstrip.start_with?("<AOxml")
+
+      HEADER_DATE = /\bdate="(\d{4}-\d\d-\d\d[^"]*)"/
+      private_constant :HEADER_DATE
+
+      def latest_header_date(path)
+        header = File.open(path, "rb") { |io| io.read(8192).to_s }.force_encoding(Encoding::UTF_8)
+        header = header[%r{<AOHeader>.*?</AOHeader>}m] || ""
+        header.scan(HEADER_DATE).flatten.max.to_s
       end
 
       def document_ref(id, path, match)

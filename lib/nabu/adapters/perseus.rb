@@ -271,8 +271,18 @@ module Nabu
       # over other slug families (First1K) override this alone.
       def edition_slug_pattern
         lang = LANGUAGES.fetch(@namespace)
-        /\Aperseus-#{lang}(?<version>\d+)\z/
+        families = ["perseus", *STRAY_EDITION_FAMILIES.fetch(@namespace, [])].join("|")
+        /\A(?:#{families})-#{lang}(?<version>\d+)\z/
       end
+
+      # P118-R4 (the held-but-dark audit): original-language edition slug
+      # families outside perseus-<lang> that this repo ships as a work's
+      # ONLY edition — censused 2026-10-11: greekLit "cypria" (Proclus'
+      # Cypria summary, tlg4036.tlg023, the Homer Multitext edition). opp-*
+      # is First1K's family and stays out. Subclasses that override
+      # #edition_slug_pattern never see these.
+      STRAY_EDITION_FAMILIES = { "greekLit" => %w[cypria].freeze }.freeze
+      private_constant :STRAY_EDITION_FAMILIES
 
       # Which slugs count as ingestible translations when the flag is on:
       # exactly perseus-eng<n> (all 786 upstream eng version tokens are pure
