@@ -180,6 +180,19 @@ module Nabu
       LemmaShelf.new(dir: dir)
     end
 
+    # The stored Credentials::Entry an entry declares, nil when it declares
+    # none; raises Credentials::Missing when the declared name has nothing
+    # stored on this box.
+    def credentials_for(entry)
+      return nil if entry.credentials.nil?
+
+      path = @config&.credentials_path
+      stored = path && Credentials.new(path: path)[entry.credentials]
+      raise Credentials::Missing, entry.credentials if stored.nil?
+
+      stored
+    end
+
     def live_enabled
       # `sync --all` sweeps only kind: source rows on the `auto` cadence
       # (P39-0): shelves are local (no network) and modules mint no catalog
@@ -189,8 +202,13 @@ module Nabu
     end
 
     def sync_entry(entry, parse_only:, force:, progress:)
+      # The credentials seam: a gated upstream's stored credential resolves
+      # BEFORE anything else — an absent one refuses with the gateway
+      # command, before any network and before any run row.
+      credentials = parse_only ? nil : credentials_for(entry)
       source = entry.sync_source!(@db)
       adapter = entry.build_adapter
+      adapter.credentials = credentials if credentials
       workdir = workdir_for(entry.slug)
       fetch_report = nil
       load_report = nil
