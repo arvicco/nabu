@@ -29,6 +29,25 @@ module Nabu
     #
     # Deeper anchors are a structural surprise — ParseError.
     #
+    # == Levels come from the headings (census 2026-10-12, Tocharian B)
+    #
+    # The B corpus's later collections mint labels that themselves carry
+    # underscores (London "TochB_BLK-IOL_Toch._2_r_1", Paris
+    # "TochB_PK_NS_38_+_37._a__1", Berlin SHT "TochB_SHT_VI_1457a_…"), so an
+    # anchor's level cannot be read by splitting it. The generator states
+    # it instead: the anchor sits in an `h3` (manuscript), `h4` (page) or
+    # `h5` (line) heading span, and each level's name extends its parent's
+    # by "_<label>". A line straight under its manuscript (no page heading)
+    # extends the manuscript by "__<label>" — an EMPTY page component, kept
+    # empty. A second anchor in the same heading is an ALTERNATE numbering
+    # (London's Hoernle "H.149…" numbers, Paris's "PK_…" sigla): on a line
+    # it rides as the "alternate" annotation; the `h6` "Alternate page"
+    # headings and the manuscript/page aliases restate that same numbering
+    # and open nothing. An anchor outside a heading, or one whose name does
+    # not extend its parent's, falls back to the underscore split (every
+    # Tocharian A anchor and all but two Berlin B ones extend their parent
+    # cleanly, so the split never decides a level there).
+    #
     # == Lanes (`<span id=…16>`, all content lanes carry the 16 suffix)
     #
     # A FAMILY, not a list (LANE_FAMILY): io + language stem + optional x
@@ -91,11 +110,17 @@ module Nabu
     #
     # == Profiles (the family's per-corpus constants)
     #
-    # The anchor prefix, the content-lane family, its stem → language map
-    # and the corpus language are a PROFILE (TOCHARIAN_A is the censused
-    # default; the Tocharian B adapter declares its own). Everything else —
-    # the catalogue/note lanes, the line discipline, the language claims —
-    # is the family's.
+    # The anchor prefix(es — one per collection), the content-lane family,
+    # its stem → language map and the corpus language are a PROFILE
+    # (TOCHARIAN_A is the censused default; the Tocharian B adapter
+    # declares its own). Everything else — the catalogue/note lanes, the
+    # line discipline, the language claims — is the family's.
+    #
+    # A lane family may also admit a `v` notation (Tocharian B, Paris
+    # collection: `iotobv16`, a second rendering of the line that repeats
+    # the transcription in every censused case). The edition does not say
+    # what it marks; it rides verbatim as the "variant" annotation, never
+    # as text.
     module TitusTocharianParser
       # One keyed line: +components+ the anchor tail after the collection
       # prefix ([ms, part, line]); +text+ the NFC transcription ("" for a
@@ -105,23 +130,36 @@ module Nabu
       # label (Vorderseite/Rückseite, "?" verbatim) or nil; +note+ the
       # iocd16 preservation remark or nil; +inline+ / +inline_syllabic+ the
       # off-language transcription / syllabic runs keyed by language
-      # ({ "san" => "hā hā hā - - -" }), empty when none.
+      # ({ "san" => "hā hā hā - - -" }), empty when none; +variant+ the `v`
+      # notation lane or nil; +alternate+ the line's alternate-numbering
+      # anchor tail (see Levels) or nil.
       Line = Data.define(:components, :text, :syllabic, :language, :footnotes, :side, :note, :inline,
-                         :inline_syllabic) do
+                         :inline_syllabic, :variant, :alternate) do
         def note_only? = text.empty?
       end
 
-      # One manuscript block's catalogue: +number+ the THT number (anchor),
-      # +catalogue+ the manuscript-level iocd12 lines in order.
-      Manuscript = Data.define(:number, :catalogue)
+      # One manuscript block's catalogue: +number+ the manuscript label
+      # (anchor; the THT number in Berlin), +collection+ the anchor's
+      # collection ("THT", "BLK-IOL", "PK", "SHT"), +catalogue+ the
+      # manuscript-level iocd12 lines in order.
+      Manuscript = Data.define(:number, :collection, :catalogue)
 
       # The parsed page: its manuscripts (in order), its text lines, and its
       # note-only lines (a line or line range carrying only a preservation
       # remark — no passage, the remark rides document metadata).
       Page = Data.define(:manuscripts, :lines, :notes)
 
-      # A corpus's anchor/lane constants (see Profiles above).
-      Profile = Data.define(:anchor_prefix, :lane_family, :lane_languages, :primary_language)
+      # A corpus's anchor/lane constants (see Profiles above). +anchor_prefix+
+      # is one collection prefix or a list of them.
+      Profile = Data.define(:anchor_prefix, :lane_family, :lane_languages, :primary_language) do
+        def anchor_prefixes = Array(anchor_prefix)
+      end
+
+      # The heading span ids that carry a structural anchor, by level.
+      HEADING_LEVELS = { "h3" => 1, "h4" => 2, "h5" => 3 }.freeze
+
+      # The lane-family notation letter → the line role it fills.
+      NOTATION_ROLES = { "" => :text, "x" => :syllabic, "v" => :variant }.freeze
 
       # The structural anchor prefix every section carries; the bare
       # language/collection anchors open nothing.
@@ -183,13 +221,16 @@ module Nabu
       def self.parse(html, profile: TOCHARIAN_A)
         raise Nabu::ParseError, "titus-tocharian: page is not valid UTF-8" unless html.valid_encoding?
 
-        state = { manuscripts: [], lines: [], current: nil, part_side: nil, part_open: false, profile: profile }
+        state = { manuscripts: [], lines: [], current: nil, part_side: nil, part_open: false, profile: profile,
+                  manuscript_anchor: nil, part_anchor: nil, part_label: nil }
         doc = Nokogiri::HTML(html)
         fold_quoted_lanes(doc)
         TitusAvestanParser.walk(doc) { |node| visit(node, state) }
         finished = state[:lines].filter_map { |line| finish(line, profile) }
         Page.new(
-          manuscripts: state[:manuscripts].map { |m| Manuscript.new(number: m[:number], catalogue: m[:catalogue]) },
+          manuscripts: state[:manuscripts].map do |m|
+            Manuscript.new(number: m[:number], collection: m[:collection], catalogue: m[:catalogue])
+          end,
           lines: finished.reject(&:note_only?),
           notes: finished.select(&:note_only?)
         )
@@ -220,8 +261,8 @@ module Nabu
 
       def self.visit(node, state)
         profile = state[:profile]
-        if (comps = section_components(node, profile))
-          open_section(comps, state)
+        if (anchor = structural_anchor(node, profile))
+          open_anchor(node, *anchor, state)
         elsif catalogue_span?(node)
           note = clean(node.text)
           record_catalogue(note, state) unless note.empty?
@@ -233,21 +274,105 @@ module Nabu
         end
       end
 
-      def self.open_section(comps, state)
+      # Open the section a structural anchor names (see Levels): its level
+      # from the heading, its components from the parent chain — or, off
+      # the chain, from the underscore split. Alternate-numbering anchors
+      # open nothing; a line's alias rides as its +alternate+.
+      def self.open_anchor(node, name, prefix, state)
+        heading = node.parent&.[]("id")
+        return if heading == ALTERNATE_HEADING
+
+        level = HEADING_LEVELS[heading]
+        if level && alias_anchor?(node)
+          record_alternate(name, state) if level == MAX_LEVELS
+          return
+        end
+
+        comps = (level && chained_components(name, prefix, level, state)) || split_components(name, prefix)
+        open_section(comps, name, collection_of(prefix), state)
+      end
+
+      # The `h6` "Alternate page" heading (see Levels).
+      ALTERNATE_HEADING = "h6"
+
+      # A second anchor in the same heading: the alternate numbering.
+      def self.alias_anchor?(node)
+        previous = node.previous_element
+        !previous.nil? && previous.name == "a" && !previous["name"].nil?
+      end
+
+      def self.record_alternate(name, state)
+        line = state[:current]
+        return unless line && name.start_with?("#{line[:anchor]}_")
+
+        line[:alternate] = name.delete_prefix("#{line[:anchor]}_")
+      end
+
+      # The components when +name+ extends its parent's anchor at +level+,
+      # else nil (the caller falls back to the split).
+      def self.chained_components(name, prefix, level, state)
+        return nonempty([name.delete_prefix(prefix)]) if level == 1
+
+        manuscript = state[:manuscript_anchor]
+        return nil if manuscript.nil?
+
+        number = state[:manuscripts].last[:number]
+        if level == 2
+          rest = tail_after(name, "#{manuscript}_")
+          return rest && nonempty([number, rest])
+        end
+
+        part = state[:part_anchor]
+        if part && (rest = tail_after(name, "#{part}_"))
+          nonempty([number, state[:part_label], rest])
+        elsif (rest = tail_after(name, "#{manuscript}__"))
+          # A line straight under its manuscript: the page stays EMPTY.
+          nonempty([number, rest]) && [number, "", rest]
+        end
+      end
+
+      def self.nonempty(comps)
+        comps.none?(&:empty?) ? comps : nil
+      end
+
+      def self.tail_after(name, head)
+        name.start_with?(head) ? name.delete_prefix(head) : nil
+      end
+
+      # The underscore split (off the chain): 1..MAX_LEVELS non-empty
+      # components, else a structural surprise.
+      def self.split_components(name, prefix)
+        comps = TitusAvestanParser.split_components(name.delete_prefix(prefix))
+        return comps if (1..MAX_LEVELS).cover?(comps.size) && comps.none?(&:empty?)
+
+        raise Nabu::ParseError,
+              "titus-tocharian: anchor #{name.inspect} has #{comps.size} components (expected 1..#{MAX_LEVELS})"
+      end
+
+      # "TochB_BLK-IOL_" → "BLK-IOL".
+      def self.collection_of(prefix)
+        prefix.delete_suffix("_").split("_", 2).last
+      end
+
+      def self.open_section(comps, name, collection, state)
         case comps.size
         when 1
-          state[:manuscripts] << { number: comps[0], catalogue: [] }
+          state[:manuscripts] << { number: comps[0], collection: collection, catalogue: [] }
+          state[:manuscript_anchor] = name
+          state[:part_anchor] = nil
           state[:current] = nil
           state[:part_side] = nil
           state[:part_open] = false
         when 2
+          state[:part_anchor] = name
+          state[:part_label] = comps[1]
           state[:current] = nil
           state[:part_side] = nil
           state[:part_open] = true
         else
           state[:part_open] = false
-          state[:current] = { comps: comps, text: [], syllabic: [], note: +"", footnotes: [],
-                              side: state[:part_side] }
+          state[:current] = { comps: comps, anchor: name, text: [], syllabic: [], variant: [], note: +"",
+                              footnotes: [], side: state[:part_side], alternate: nil }
           state[:lines] << state[:current]
         end
       end
@@ -262,20 +387,18 @@ module Nabu
         end
       end
 
-      # The anchor-tail components when +node+ is a structural anchor under
-      # the collection prefix, else nil (bare language/collection included).
-      def self.section_components(node, profile = TOCHARIAN_A)
+      # [name, prefix] when +node+ is an anchor under one of the profile's
+      # collection prefixes, else nil (bare language/collection included —
+      # and the `h2` collection anchors, which only ever name the bare
+      # prefix or an alternate of it, carry no level).
+      def self.structural_anchor(node, profile)
         return nil unless node.element? && node.name == "a"
 
         name = node["name"]
-        prefix = "#{profile.anchor_prefix}_"
-        return nil unless name&.start_with?(prefix)
+        return nil if name.nil? || node.parent&.[]("id") == "h2"
 
-        comps = TitusAvestanParser.split_components(name.delete_prefix(prefix))
-        return comps if (1..MAX_LEVELS).cover?(comps.size) && comps.none?(&:empty?)
-
-        raise Nabu::ParseError,
-              "titus-tocharian: anchor #{name.inspect} has #{comps.size} components (expected 1..#{MAX_LEVELS})"
+        prefix = profile.anchor_prefixes.map { |p| "#{p}_" }.find { |p| name.start_with?(p) }
+        prefix && [name, prefix]
       end
 
       # The outermost catalogue span (its link children are walked past by
@@ -307,7 +430,7 @@ module Nabu
         return nil if id.nil?
 
         if (match = profile.lane_family.match(id))
-          return [match[:syllabic].empty? ? :text : :syllabic, profile.lane_languages.fetch(match[:stem])]
+          return [NOTATION_ROLES.fetch(match[:syllabic]), profile.lane_languages.fetch(match[:stem])]
         end
         return [:note, nil] if id == NOTE_LANE
         return nil unless LANE_SHAPE.match?(id)
@@ -346,6 +469,7 @@ module Nabu
       def self.finish(line, profile = TOCHARIAN_A)
         text_runs = clean_runs(line[:text])
         syllabic_runs = clean_runs(line[:syllabic])
+        variant = clean_runs(line[:variant]).map(&:last).join(" ")
         note = clean(line[:note])
         return nil if text_runs.empty? && syllabic_runs.empty? && note.empty?
         return note_only(line, note) if text_runs.empty? && syllabic_runs.empty?
@@ -358,7 +482,8 @@ module Nabu
         text = syllabic if text.empty?
         Line.new(components: line[:comps], text: text, syllabic: syllabic.empty? ? nil : syllabic,
                  language: language.to_s, footnotes: line[:footnotes], side: line[:side],
-                 note: note.empty? ? nil : note, inline: inline, inline_syllabic: inline_syllabic)
+                 note: note.empty? ? nil : note, inline: inline, inline_syllabic: inline_syllabic,
+                 variant: variant.empty? ? nil : variant, alternate: line[:alternate])
       end
 
       def self.clean_runs(runs)
@@ -367,7 +492,8 @@ module Nabu
 
       def self.note_only(line, note)
         Line.new(components: line[:comps], text: "", syllabic: nil, language: nil, footnotes: line[:footnotes],
-                 side: line[:side], note: note, inline: {}, inline_syllabic: {})
+                 side: line[:side], note: note, inline: {}, inline_syllabic: {}, variant: nil,
+                 alternate: line[:alternate])
       end
 
       # The deciding runs' language (the transcription's; the syllabic
