@@ -51,7 +51,7 @@ class StarlingTest < Minitest::Test
                   "starling-lezget:lezget.dbf", "starling-sdret:sdret.dbf", "starling-ktet:ktet.dbf",
                   "starling-kiret:kiret.dbf", "starling-limet:limet.dbf", "starling-iranet:iranet.dbf",
                   "starling-lexstat-balt:balt.dbf", "starling-lexstat-germ:germ.dbf",
-                  # Q116: the follow-up packages' LEXSTAT/ wordlists (fixture tables)
+                  # P118: the follow-up packages' LEXSTAT/ wordlists (fixture tables)
                   *%w[alt tung turc lezg yen kir man syc tani drav kam kart].map do |stem|
                     "starling-lexstat-#{stem}:#{stem}.dbf"
                   end].freeze
@@ -826,7 +826,7 @@ class StarlingTest < Minitest::Test
       PACKAGE_FILES.fetch(subdir).flat_map do |base|
         ["#{base}.dbf", "#{base}.var"].map { |name| [File.join(FIXTURES, subdir, name), name] }
       end +
-      # Q116: each package's LEXSTAT/ subtree rides inside its own zip.
+      # P118: each package's LEXSTAT/ subtree rides inside its own zip.
       Dir[File.join(FIXTURES, subdir, "LEXSTAT", "*")].map do |src|
         [src, File.join("LEXSTAT", File.basename(src))]
       end
@@ -914,7 +914,7 @@ class StarlingTest < Minitest::Test
                  "both halves of each fixture NUMBER collision and every placeholder pin included; " \
                  "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ form cells; branch wave: " \
                  "+ 4 turcet + 1 monget + 2 tunget + 3 lezget + 3 sdret + 2 ktet + 2 kiret + 2 limet; " \
-                 "Q116 package wordlists: + 107 alt + 8 tung + 39 turc + 18 lezg + 7 yen + 12 kir + 1 man + " \
+                 "P118 package wordlists: + 107 alt + 8 tung + 39 turc + 18 lezg + 7 yen + 12 kir + 1 man + " \
                  "13 syc + 9 tani + 47 drav + 16 kam + 12 kart form cells"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
