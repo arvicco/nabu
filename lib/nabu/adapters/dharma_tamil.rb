@@ -3,6 +3,7 @@
 require "nokogiri"
 
 require_relative "dharma_base"
+require_relative "../eras"
 
 module Nabu
   module Adapters
@@ -72,13 +73,21 @@ module Nabu
     # DHARMA script classification "class:… maturity:…") verbatim →
     # "script_rendition" (the family's numeric "maturity" still rides
     # too); the revisionDesc's first @status → "revision_status"; the
-    # repo → "corpus". DELIBERATE COARSENESS: the house-style titles carry
-    # an attributed dating statement on ~979 files ("time of
-    # Rājakesarivarman, year 9", "Śaka year 1589") — recorded VERBATIM as
-    # "title_dating", never converted: regnal years need a ruled
-    # South-Indian regnal table (the regnal_years.yml shape) and Śaka →
-    # CE an epoch ruling; and the title's leading toponym is NOT minted
-    # as a place (it is sometimes a monument — "Utayēntiram plates").
+    # repo → "corpus". The house-style titles carry an attributed dating
+    # statement on 979 of 1,299 files (965 of the 1,267 parsed docs) —
+    # every one recorded VERBATIM as "title_dating". ERA-TYPED years
+    # convert (P120): a phrase naming an era the shared table resolves
+    # (config/eras.yml via Nabu::Eras; title census 2026-10-12: 113 Śaka
+    # in five spellings — "Śaka year N" 108, "Śaka N" 2, "Śaka era, year
+    # N" 1, "year N of the Śaka era" 1, lowercase "śaka N" 1 — plus 3
+    # "Kollam year N") mints the "date" envelope (Śaka Y → Y+78, Kollam
+    # Y → [Y+824, Y+825]; raw/era/era_year/basis riding, the siddham
+    # shape) — 112 parsed docs dated. DELIBERATE COARSENESS that remains:
+    # REGNAL years ("time of Rājakesarivarman, year 9" — 853 parsed docs
+    # carry only those) stay verbatim-only, never converted — that needs
+    # a ruled South-Indian regnal table (the regnal_years.yml shape); and
+    # the title's leading toponym is NOT minted as a place (it is
+    # sometimes a monument — "Utayēntiram plates").
     class DharmaTamil < DharmaBase
       SLUG = "dharma-tamil"
       NAME = "DHARMA Tamil-country epigraphy (Task Force A)"
@@ -115,8 +124,38 @@ module Nabu
       # DHARMA_INSTiruvavatuturai00000_template) wear the edition prefix.
       TEMPLATE_SUFFIX = "_template"
 
-      # The attributed dating statements of the house-style titles.
-      TITLE_DATING = /\b(?:time of [^,]+(?:, year [^,]+)?|Śaka(?: year)? [\d?]+(?:[–-]\d+)?)/
+      # The attributed dating statements of the house-style titles: the
+      # regnal "time of X[, year N]" and the era-typed spellings censused
+      # (class note), all recorded verbatim.
+      REGNAL_PHRASE = /time of [^,]+(?:, year [^,]+)?/
+      ERA_PHRASE = /year \d+ of the Śaka era|(?:[Śś]aka|Kollam)(?: era,)?(?: year)? [\d?]+(?:[–-]\d+)?/
+      TITLE_DATING = /\b(?:#{REGNAL_PHRASE}|#{ERA_PHRASE})/
+
+      # An era-typed phrase, read for conversion: "<era>[ era,][ year] N"
+      # or "year N of the <era> era"; kept only when the era table
+      # resolves the token (never a guess).
+      ERA_LEADING = /\A(\p{L}+)(?: era,)?(?: year)? (\d+)\z/
+      ERA_TRAILING = /\Ayear (\d+) of the (\p{L}+) era\z/
+
+      # The first era-typed phrase among +phrases+ (the title_dating
+      # strings) → the MetadataDates :structured "date" hash, or nil.
+      def self.era_date(phrases, eras: Nabu::Eras.default)
+        phrases.each do |phrase|
+          parts = era_parts(phrase) or next
+          key = eras&.resolve(parts.first) or next
+          conversion = eras.to_ce(key, Integer(parts.last, 10))
+          return conversion.to_date_bounds.merge(
+            "raw" => phrase, "era" => key, "era_year" => conversion.year, "basis" => "title"
+          )
+        end
+        nil
+      end
+
+      def self.era_parts(phrase)
+        if (match = ERA_LEADING.match(phrase)) then [match[1], match[2]]
+        elsif (match = ERA_TRAILING.match(phrase)) then [match[2], match[1]]
+        end
+      end
 
       def self.manifest
         Nabu::SourceManifest.new(
@@ -229,7 +268,8 @@ module Nabu
           "editors" => editors(doc),
           "script_rendition" => doc.at_xpath('//body//div[@type="edition"]/@rendition')&.value,
           "revision_status" => doc.at_xpath("//revisionDesc/change[@status][1]/@status")&.value,
-          "title_dating" => title.scan(TITLE_DATING)
+          "title_dating" => (dating = title.scan(TITLE_DATING)),
+          "date" => self.class.era_date(dating)
         }.reject { |_, value| value.nil? || value.empty? }
       end
 

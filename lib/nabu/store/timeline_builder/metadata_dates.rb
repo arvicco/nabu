@@ -89,6 +89,8 @@ module Nabu
           #                                 place = the origPlace placeName (findspot)
           "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
           #                              (certainty + evidence ride the date hash)
+          "dharma-tamil" => :structured, # P120: the title's era-typed year (Śaka, Kollam —
+          #                                config/eras.yml); regnal years stay verbatim
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
