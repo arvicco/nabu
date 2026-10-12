@@ -23,7 +23,8 @@ module Nabu
     # - The cognation number: a POSITIVE value is an entry id in the
     #   etymology table the table's .inf names (`proto = \data\ie\baltet.dbf`
     #   …) — censused: every positive cell of balt/celt/dard/germ/ind/iran/
-    #   pi/rom/slav resolves into its target (mix: 858 of 861), so the body
+    #   pi/rom/slav resolves into its target (mix: 858 of 861 — its three
+    #   misses ride verbatim, see IE_TABLES), so the body
     #   line "<target label>: #N" names a live entry of the target shelf
     #   (starling-baltet / -germet / -piet, and the three LEXSTAT etymology
     #   tables landed beside these as BASES rows). Zero and negative values
@@ -168,8 +169,11 @@ module Nabu
           title: "Iranian lexicostatistical wordlist (StarLing IE package LEXSTAT/iran; " \
                  "cognation numbers into the LEXSTAT Iranian etymology table)"
         }.freeze,
+        # The one IE.exe table whose positive numbers do not all resolve
+        # (858 of 861 — LUV 5000/5001/5002 have no piet record): it names
+        # its target, so those three ride verbatim (resolve-or-verbatim).
         "starling-lexstat-mix" => {
-          dbf: "mix.dbf", language: "ine", cognation: "IE etymology",
+          dbf: "mix.dbf", language: "ine", target: "piet.dbf", cognation: "IE etymology",
           title: "Indo-European isolates lexicostatistical wordlist — Prussian, Tocharian, Albanian, " \
                  "Greek, Hittite, Armenian, Luwian (StarLing IE package LEXSTAT/mix; cognation numbers " \
                  "into the PIE database)"
@@ -268,9 +272,10 @@ module Nabu
       end
 
       # The NUMBER set of the table's cognation target (resolve-or-verbatim);
-      # nil for an IE.exe table (no :target — censused 100% resolving, the
-      # P113-2 posture). The target sits in the package dir beside LEXSTAT/;
-      # a tree without it resolves nothing, so every number rides verbatim.
+      # nil for a table with no :target (the IE.exe tables censused 100%
+      # resolving — every one but mix — and kart). The target sits in the
+      # package dir beside LEXSTAT/ (IE.exe's: the workdir root); a tree
+      # without it resolves nothing, so every number rides verbatim.
       def target_numbers(table, path)
         target = table[:target] or return nil
         target_path = File.join(File.dirname(path, 2), target)
@@ -336,16 +341,18 @@ module Nabu
         Nabu::Normalize.nfc(lines.join("\n"))
       end
 
-      # "<label>: #N" only for a positive number naming a live entry: IE.exe
-      # tables link unconditionally (censused, P113-2), package tables only
-      # when the target base holds that NUMBER, kart (no target) never — an
-      # unresolved number rides verbatim, never as a dead link.
+      # "<label>: #N" only for a positive number naming a live entry: a
+      # table with a :target links only when the target base holds that
+      # NUMBER (every package table, and IE.exe's mix); the other IE.exe
+      # tables link unconditionally (censused 100%, P113-2); kart (no
+      # label) never — an unresolved number rides verbatim, never as a
+      # dead link.
       def cognation_link(context, cognation)
         return nil unless cognation.match?(/\A\d+\z/) && cognation.to_i.positive?
 
         table = context.fetch(:table)
         label = table[:cognation] or return nil
-        return nil if table[:package] && !context.fetch(:targets)&.include?(cognation)
+        return nil if table[:target] && !context.fetch(:targets).include?(cognation)
 
         "#{label}: ##{cognation}"
       end

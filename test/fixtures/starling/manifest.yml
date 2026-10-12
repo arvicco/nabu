@@ -147,6 +147,10 @@ files:
     url: https://starlingdb.org/download/IE.exe
     whole: false
     trim: 6 of 154 records — file position 0 (the date row — GOT 4, AIS 10, AEG 8, AHD 9), items 1 (all), 2 (ashes — RKS -1, AHD multiform "asca, asga"), 3 (bark — the -100 form-less Gothic cell), 58 BOTH ROWS (neck — GOT hals → germet #390, IN this fixture set; the synonym row's HOL nek / AEG swēora); header + field descriptors verbatim
+  - path: LEXSTAT/mix.dbf
+    url: https://starlingdb.org/download/IE.exe
+    whole: false
+    trim: 3 of 141 records — file position 0 (the date row — HIT -15, LUV -5), items 36 (hair — LUV tappāni- numbered 5000, no piet record → rides verbatim), 58 (neck — ALB qafɛ → piet #562, IN this fixture set); header + field descriptors verbatim, trailing 0x1A mirrored
   - path: LEXSTAT/iranet.dbf
     url: https://starlingdb.org/download/IE.exe
     whole: false
