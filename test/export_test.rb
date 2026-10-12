@@ -6,15 +6,16 @@ require "test_helper"
 # map, so a further table (lemmas) registers with one file and one line.
 class ExportTest < Minitest::Test
   def test_registry_names_the_shipped_tables
-    assert_equal %w[documents links], Nabu::Export.names
+    assert_equal %w[documents links lemmas], Nabu::Export.names
     assert_equal Nabu::Export::Documents, Nabu::Export.table("documents")
     assert_equal Nabu::Export::Links, Nabu::Export.table("links")
+    assert_equal Nabu::Export::Lemmas, Nabu::Export.table("lemmas")
   end
 
   def test_unknown_table_is_refused_naming_the_known_set
-    error = assert_raises(Nabu::Export::Error) { Nabu::Export.table("lemmas") }
-    assert_match(/unknown export table "lemmas"/, error.message)
-    assert_match(/documents, links/, error.message)
+    error = assert_raises(Nabu::Export::Error) { Nabu::Export.table("collation") }
+    assert_match(/unknown export table "collation"/, error.message)
+    assert_match(/documents, links, lemmas/, error.message)
   end
 
   # The registry contract every table honors — the frame relies on it.

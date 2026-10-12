@@ -130,17 +130,6 @@ sources:
   # definitionally Aranese (the card's own description).
   aranese:
     oci: { lect: "oc/aranes", tier: certain }
-  # Owner ruling 2026-10-12: the UD estate stays deliberately unstaged
-  # as a whole (mixed modern treebanks), but the Guarani-OldTuDeT
-  # treebank is precisely a stage witness — 59 sentences drawn from
-  # Montoya's Tesoro/Arte (1639-40) and Restivo's mission-press
-  # revisions (1722-24), the written norm of the Jesuit reductions.
-  # The registry's gn:old stage ([1600, 1800], the guaraní jesuítico
-  # convention) is its home; gn occurs in no other held treebank
-  # (census 2026-10-12: one document), so the per-source row IS the
-  # per-treebank ruling in effect.
-  ud:
-    gn: { lect: "gn:old", tier: certain }
   # Owner ruling 2026-08-24: Menota's onw is the Handbook's own
   # DEPRECATED legacy code for Old Norwegian (ch. 14 prescribes nor +
   # dating instead); the one file carrying it glosses itself "Old
@@ -186,6 +175,8 @@ sources:
     # The ruled exception to D57-f (ud deliberately unstaged): the Old
     # Guaraní treebank (Montoya/Restivo, 1639-1724) is precisely a stage
     # witness, and it is the ONLY ud document claiming bare gn (gug and the
-    # modern treebanks claim their own codes). Ruled 2026-10-11; revisit if
+    # modern treebanks claim their own codes). Ruled 2026-10-11 and
+    # re-confirmed by the 2026-10-12 posture-folds ruling (the gn:old
+    # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }
