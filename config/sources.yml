@@ -87,7 +87,7 @@
 #       grantor: ...                     #   required, non-empty strings; QUOTE the
 #       date: "2026-07-15"               #   date so YAML keeps it a String, not a
 #       terms: ...                       #   parsed Date). terms = a short verbatim
-#       thread: "№1"                     #   quote; request_hint = whom a new user
+#       thread: "by email, 2026-07-15"   #   quote; request_hint = whom a new user
 #       request_hint: ...                #   should ask + what to promise.
 #
 # Registered sources follow. `wired: false` until a first real sync is
@@ -4737,7 +4737,7 @@ starling:
     grantor: G. Starostin
     date: "2026-07-15"
     terms: any use, per-base attribution required (credit each base's compilers)
-    thread: "№1"
+    thread: "by email, 2026-07-15"
     request_hint: >-
       Write to George Starostin (starlingdb.org) for your own use grant, and
       promise to credit each base's compilers per

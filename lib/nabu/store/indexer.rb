@@ -431,7 +431,7 @@ module Nabu
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, cjk_slugs: nil,
                    lemma_tiers: nil, profile: nil, sign_list: nil, progress: nil, lemma_shelf: nil,
-                   lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- №R-51-B: the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
+                   lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- since 2026-08-29 the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
@@ -464,7 +464,7 @@ module Nabu
           # stays, ARM-GATED, so an owner-projected index survives routine
           # syncs but silver never sneaks back into a clean one.
           if lemma_shelf
-            progress&.stage("silver lemmas: shelf present, NOT projected (№R-51-B) — " \
+            progress&.stage("silver lemmas: shelf present, NOT projected (owner-ruled 2026-08-29) — " \
                             "nabu lemma-enrich <lang> --index-only applies it")
           end
           # P42-1: the corpus lemma-frequency census, one grouped INSERT-SELECT

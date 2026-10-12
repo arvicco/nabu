@@ -1797,7 +1797,7 @@ module Nabu
     option :trust_derivations, type: :boolean, default: false,
                                desc: "--incremental only (P89-1): re-stamp parser-drift-only sources " \
                                      "without replay when git vouches their own parser files predate " \
-                                     "the stamp — the №R-54 bridge for a catalog built by current code"
+                                     "the stamp — the bridge for a catalog built by current code"
     def rebuild
       config = Nabu::Config.load
       # P62 rider: rebuild DROPS the catalog — doing that under a live
@@ -1859,7 +1859,7 @@ module Nabu
                                 "(quiets the creep alarm; it re-arms past the accepted level)"
     option :accept_shed, type: :string, banner: "SLUG",
                          desc: "Record owner acceptance of SLUG's current withdrawal shed " \
-                               "(quiets the creep alarm; it re-arms past the accepted level — Q74)"
+                               "(quiets the creep alarm; it re-arms past the accepted level)"
     option :note, type: :string,
                   desc: "Optional rationale recorded with --accept-creep / --accept-shed"
     def health
@@ -2162,7 +2162,7 @@ module Nabu
                              "folded text, each hit labeled with its reason; composes with " \
                              "--limit only"
     option :similar, type: :string, banner: "URN",
-                     desc: "Semantic neighbors of one embedded passage (P93-5, №R-36): " \
+                     desc: "Semantic neighbors of one embedded passage (P93-5): " \
                            "same-language cross-edition retrieval over the nabu-embed vectors, " \
                            "rendered in bands (close/near/loose), model named in the header — " \
                            "IS the query (give no term); composes with --limit only"
@@ -2961,7 +2961,7 @@ module Nabu
       raise Thor::Error, e.message
     end
 
-    desc "lemma-enrich LANGUAGE", "Run the silver-lemma enricher over the uncovered slice (P84-1, №R-35)"
+    desc "lemma-enrich LANGUAGE", "Run the silver-lemma enricher over the uncovered slice (P84-1)"
     long_desc <<~HELP, wrap: false
       The silver-lemma lane (P84-1): a local CPU lemmatizer (venv-managed
       Stanza; la:ittb for the Latin wave) runs over every live passage of
@@ -2970,7 +2970,7 @@ module Nabu
       through the Nabu::LemmaShelf gateway — model output costs hours of
       compute, so the derivability law homes it in a shelf, never db/).
       The shelf projects into passage_lemmas as tier-silver rows ONLY on
-      the owner's word (№R-51-B, 2026-08-29): --index after a campaign, or
+      the owner's word (owner-ruled 2026-08-29): --index after a campaign, or
       --index-only any time. A full rebuild never projects it (it announces
       the shelf and names this command); routine source syncs maintain
       already-projected slices but never arm a clean index. Gold rows are
@@ -3056,9 +3056,9 @@ module Nabu
       raise Thor::Error, e.message
     end
 
-    desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4, №R-36)"
+    desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4)"
     long_desc <<~HELP, wrap: false
-      The semantic-vector build lane (№R-36, P79-5 trial): encodes every
+      The semantic-vector build lane (owner-ruled after the P79-5 trial): encodes every
       live passage of the embed-flagged sources (registry
       `embed_index: true` — the literary core; the trial priced the full
       library as a measured NO) with the trial's model
@@ -3712,7 +3712,7 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "kind census", "The document-kind axis: cross-corpus class counts (№R-63)"
+    desc "kind census", "The document-kind axis: cross-corpus class counts"
     option :unmapped, type: :boolean, default: false,
                       desc: "List the unmapped raw values by count per source — the curation worklist"
     long_desc <<~HELP, wrap: false
@@ -3753,7 +3753,7 @@ module Nabu
 
     desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB v1)"
     long_desc <<~HELP, wrap: false
-      Look a person up in the derived person index (P97-2 — №R-62 option b:
+      Look a person up in the derived person index (P97-2 — the owner-ruled scope:
       the CBDB thin slice, ~658k persons of Chinese history). Input is an
       authority ref (cbdb:1762) or a name in either script — hanzi, pinyin,
       courtesy/studio names all key through the shared fold; matching is
@@ -3761,7 +3761,7 @@ module Nabu
 
       `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
       source's passages (the PlaceMine Han-lane shape). It writes nothing —
-      №R-62 keeps the apply gate closed until the owner reads the census.
+      The apply gate stays closed until an owner ruling on the census.
 
       Examples:
         nabu person 王安石          # by name
@@ -3898,7 +3898,7 @@ module Nabu
         census.names_stopped.each do |name, count|
           say "  STOPPED #{name} — #{count} passages (above the derived ceiling)"
         end
-        say "  census only — №R-62 keeps the person apply gate closed until the owner rules on these numbers"
+        say "  census only — the person apply gate stays closed until an owner ruling on these numbers"
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
       ensure
@@ -4066,7 +4066,7 @@ module Nabu
         census.names_stopped.each do |name, count|
           say "  STOPPED #{name} — #{count} passages (above the derived ceiling; " \
               "a genuinely geographic name lost here is an allow_names: ruling " \
-              "in config/place_stop_names.yml — №R-67)"
+              "in config/place_stop_names.yml)"
         end
         census.names_allowed.each do |name, count|
           say "  ALLOWED #{name} — #{count} passages (over the ceiling, mined anyway " \

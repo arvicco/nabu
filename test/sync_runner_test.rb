@@ -1170,7 +1170,7 @@ class SyncRunnerTest < Minitest::Test
   def sample_grant
     Nabu::SourceRegistry::Grant.new(
       grantor: "G. Starostin", date: "2026-07-15", terms: "any use, per-base attribution required",
-      thread: "№1", request_hint: "ask George Starostin"
+      thread: "by email, 2026-07-15", request_hint: "ask George Starostin"
     )
   end
 

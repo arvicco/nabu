@@ -2201,7 +2201,7 @@ class CLITest < Minitest::Test
           grantor: G. Starostin
           date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "№1"
+          thread: "by email, 2026-07-15"
           request_hint: write to George Starostin for your own grant
     YAML
   end
@@ -9585,7 +9585,7 @@ class CLITest < Minitest::Test
           grantor: G. Starostin
           date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "№1"
+          thread: "by email, 2026-07-15"
           request_hint: write to George Starostin for your own grant
     YAML
   end

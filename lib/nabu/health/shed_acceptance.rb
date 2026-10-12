@@ -40,7 +40,7 @@ module Nabu
         FileUtils.mkdir_p(File.dirname(path))
         File.write(path,
                    "# local/config/shed_acceptances.yml — the owner's --accept-shed rulings\n" \
-                   "# (Q74/P102: the durable record; withdrawal-creep alarms re-arm past the\n" \
+                   "# (P102: the durable record; withdrawal-creep alarms re-arm past the\n" \
                    "# accepted level and go dormant below it).\n" +
                    YAML.dump("acceptances" => rows))
         shed

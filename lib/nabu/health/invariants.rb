@@ -663,7 +663,8 @@ module Nabu
         Finding.new(
           kind: :unmined_axis_metadata, severity: :loud,
           message: "unmined axis ore in #{dark.join(' · ')} — metadata carries axis-shaped keys " \
-                   "the lane never projects (the №R-70 mining law): extract them, or declare " \
+                   "the lane never projects (the aggressive-mining law, owner-ruled 2026-09-26): " \
+                   "extract them, or declare " \
                    "the coarseness in Invariants::MINING_EXEMPT with its reason"
         )
       end
