@@ -172,7 +172,7 @@ module Nabu
     # would also clean stibet's CHIN leads. doc.dbf is a support table
     # (per-character dialect readings), not an etymological base.
     #
-    # The follow-up packages' own LEXSTAT/ trees (Q116): 48 of their 51
+    # The follow-up packages' own LEXSTAT/ trees (P118): 48 of their 51
     # wordlist tables ride as shelves starling-lexstat-<stem> since P118 —
     # per-package language maps, resolve-or-verbatim cognation numbers and
     # the ruled inferred readings live in StarlingLexstatPackages. Held:

@@ -77,7 +77,7 @@ module Nabu
       # paced requests + the census download on the first run).
       SLICE = 400
 
-      # №I-9: attempts on ONE book whose GET times out, before it is
+      # Timeout-wedge fix (2026-10-11): attempts on ONE book whose GET times out, before it is
       # ledgered "timeout-stuck" and the slice moves on; the backoff
       # (seconds) doubles between attempts (5 s, then 10 s). The
       # transport's own read timeout (Net::HTTP's 60 s default) is kept:
@@ -269,7 +269,7 @@ module Nabu
         [crawled, denied, stuck]
       end
 
-      # №I-9: a timeout is retried in-slice with doubling backoff; only
+      # The timeout-wedge fix: a timeout is retried in-slice with doubling backoff; only
       # TIMEOUT_ATTEMPTS consecutive timeouts give up (:timeout — the
       # caller ledgers the book "timeout-stuck").
       def fetch_with_retries!(workdir, pid, progress)
@@ -311,7 +311,7 @@ module Nabu
         # (censused at the first crawl — the spec's own caveat);
         # 404 is the same class. Ledgered, never retried. Anything
         # else (5xx, network) stays fatal — the crawl is resumable —
-        # except a TIMEOUT, which the caller retries then ledgers (№I-9).
+        # except a TIMEOUT, which the caller retries then ledgers (the timeout-wedge fix).
         return :timeout if e.message.match?(TIMEOUT_PATTERN)
         raise unless e.message.match?(/HTTP 40[34]\b/)
 
@@ -326,7 +326,7 @@ module Nabu
         Dir.glob(File.join(workdir, BOOKS_DIRNAME, "*.json")).map { |path| File.basename(path, ".json") }.sort
       end
 
-      # A pre-№I-9 ledger has no "timeout-stuck" class — every class
+      # A ledger from before the timeout-wedge fix has no "timeout-stuck" class — every class
       # defaults to empty.
       def read_ledger(workdir)
         blank = LEDGER_CLASSES.to_h { |key| [key, []] }
@@ -351,7 +351,7 @@ module Nabu
                    ""
                  end
         # The stuck class joins the identity only when non-empty, so a
-        # pre-№I-9 crawl state keeps its sha (no re-parse churn).
+        # pre-fix crawl state keeps its sha (no re-parse churn).
         stuck = ledger.fetch(STUCK, []).sort
         parts = [census, held, ledger["denied"].sort, ledger["empty"].sort]
         parts << stuck unless stuck.empty?

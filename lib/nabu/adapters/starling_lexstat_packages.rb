@@ -2,7 +2,7 @@
 
 module Nabu
   module Adapters
-    # The follow-up packages' LEXSTAT/ wordlists (Q116, P118): the 48
+    # The follow-up packages' LEXSTAT/ wordlists (P118): the 48
     # lexicostatistical tables shipped inside ALTAIC / CAUC / YENISEY /
     # SINTIB / DRAV / CHUKCHEE / KART.exe beside the etymological bases —
     # the same NUMBER / WORD / <COL> + <COL>NUM shape StarlingLexstat reads
