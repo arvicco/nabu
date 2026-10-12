@@ -31,24 +31,21 @@ module Nabu
     # Berlin Turfan collection as TITUS presents them" — the titus-avestan
     # mechanisms verbatim (grant_required, availability blocked, license
     # class nc + the manifest credit). The frameset ALSO carries the
-    # London/Paris parts; whether those pages ride the same chain, and
-    # whether the grant's Berlin wording covers them, is for the first
-    # authenticated sync's census to put before the owner — nothing here
-    # assumes either way.
+    # London/Paris parts on the same page chain; the scope ruling of
+    # 2026-10-12 reads the grant corpus-level, so they parse in as txb
+    # under the same terms.
     #
-    # == PROVISIONAL constants (no B page has been seen)
+    # == The page chain (census 2026-10-12, all 4,349 pages)
     #
-    # Every page-shape constant below is the Tocharian A census carried
-    # over by analogy, NOT a B observation: the page pattern (tochbNNN.htm),
-    # the anchor prefix (TochB_THT), the lane stem (`tob` → txb, with the
-    # bilinguals' `sbpl` → san) and the catalogue-only anchors. The first
-    # authenticated sync verifies them: it must census the page names the
-    # chain actually reaches, the <A NAME> anchor prefix(es) — the London/
-    # Paris parts will not be THT numbers — and every `io…16` lane id. A
-    # wrong guess fails LOUD, never silently: an unknown content lane or a
-    # page with no keyable line quarantines (ParseError), and a page name
-    # outside PAGE_RE is never discovered. No parse fixtures exist until
-    # those real pages are cut (local/fixtures/titus-tocharian-b/).
+    # ONE "Next part" chain: Part No. 1–999 are tochbNNN.htm, 1000–4349
+    # toch1000.htm … toch4349.htm. By collection — Berlin THT (parts
+    # 1–3549; the four-digit pages continue the THT numbers, no overlap),
+    # Berlin SHT (3550–3559, Tamai), London British Library IOL Toch.
+    # (3560–4340), Paris Pelliot Koutchéen (4341–4349). The later labels
+    # carry underscores, so the family reads anchor levels from the
+    # headings (TitusTocharianParser, "Levels"). An unknown content lane or
+    # a page with no keyable line still quarantines (ParseError) — loud,
+    # never silent.
     class TitusTocharianB < TitusTocharianA
       SLUG = "titus-tocharian-b"
       LANGUAGE = "txb"
@@ -66,23 +63,36 @@ module Nabu
                "collection, data entry P. Olivier, Chr. Schaefer, T. Tamai, K. Kupfer (preliminary " \
                "edition); London and Paris collections, data entry P. Widmer, K. Kupfer, M. Peyrot."
 
-      # PROVISIONAL (see the class note): the A family's page naming.
-      PAGE_GLOB = "tochb*.htm"
-      PAGE_RE = /\Atochb\d+\.htm\z/
+      # The chain's page naming: "Part No." 1–999 are tochbNNN.htm, from
+      # 1000 on the generator drops the "b" — toch1000.htm … toch4349.htm
+      # (census 2026-10-12). One chain, one numbering; the frameset
+      # (tochb.htm) never matches.
+      PAGE_GLOB = "toch*.htm"
+      PAGE_RE = /\Atoch(?:b\d+|\d{4,})\.htm\z/
 
-      # PROVISIONAL (see the class note): the A profile's shape with the B
-      # stem; the first authenticated sync's lane census replaces it.
+      # The collections the chain walks, in order (census 2026-10-12 over
+      # all 4,349 pages): Berlin THT (parts 1–3549), Berlin SHT (3550–3559),
+      # London IOL (3560–4340), Paris PK (4341–4349).
+      COLLECTIONS = %w[THT SHT BLK-IOL PK].freeze
+
+      # The lane census (2026-10-12): `tob` the B transcription/syllabic
+      # (c and the Paris `v` notation variants), `sbpl` the Sanskrit of the
+      # bilinguals, `toa` the Tocharian A lines of five London manuscripts
+      # (claimed xto, line by line). Still unclassified, so quarantining:
+      # `iotk16` (one Berlin page) and the `ts` stem (two London pages).
       PARSER_PROFILE = TitusTocharianParser::Profile.new(
-        anchor_prefix: "TochB_THT",
-        lane_family: /\Aio(?<stem>tob|sbpl)(?<syllabic>x?)c?16\z/,
-        lane_languages: { "tob" => :txb, "sbpl" => :san }.freeze,
+        anchor_prefix: COLLECTIONS.map { |c| "TochB_#{c}" }.freeze,
+        lane_family: /\Aio(?<stem>tob|toa|sbpl)(?<syllabic>[xv]?)c?16\z/,
+        lane_languages: { "tob" => :txb, "toa" => :xto, "sbpl" => :san }.freeze,
         primary_language: :txb
       )
       CORPUS_TITLE = "Tocharian B Corpus"
 
-      # PROVISIONAL: the catalogue-only rule under the B anchor prefix.
-      MANUSCRIPT_ANCHOR = /NAME="TochB_THT_[^_"]+"/
-      DEEPER_ANCHOR = /NAME="TochB_THT_[^_"]+_[^"]+"/
+      # The catalogue-only rule: a manuscript heading with no page or line
+      # heading below it (the labels carry underscores, so the A rule's
+      # anchor-depth test cannot apply).
+      MANUSCRIPT_ANCHOR = /NAME="TochB_(?:#{COLLECTIONS.map { |c| Regexp.escape(c) }.join('|')})_/
+      DEEPER_ANCHOR = /<!Level [45]>/
 
       def self.manifest
         Nabu::SourceManifest.new(

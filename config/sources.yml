@@ -5365,12 +5365,12 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin series; 133 baseline quarantines recorded); THT 1 eyeballed, txb; the London/Paris pages (3,350) await the scope ruling
-                 # (bin/nabu creds set titus), then bin/nabu sync
-                 # titus-tocharian-b — page count unknown until the first
-                 # authenticated walk (2s polite pace); census the page names,
-                 # anchors and lanes against the adapter's PROVISIONAL
-                 # constants before flipping.
+  wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin tochbNNN series only; 133 baseline quarantines recorded); THT 1 eyeballed, txb
+                 # Scope widened 2026-10-12 (the grant read corpus-level): the
+                 # whole 4,349-page chain parses — the toch1000-toch4349 pages
+                 # continue Berlin THT, then Berlin SHT, London IOL Toch. and
+                 # Paris PK (census in the adapter note). Counts re-parse
+                 # pending (bin/nabu sync titus-tocharian-b --parse-only).
   # TITUS Tocharian B Corpus (members area,
   # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
   # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
