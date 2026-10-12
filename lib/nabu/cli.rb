@@ -10069,11 +10069,14 @@ module Nabu
         # the registry names it and its descent line renders even with zero
         # holdings (the Aramaic-fan anchors are exactly this case).
         registry_record = lects&.lect(code)
-        unless name || context || held || extras.any? || stages.any? || registry_record || overlay || notes.any?
+        override_readings = lects&.override_sources(code) || {}
+        unless name || context || held || extras.any? || stages.any? || registry_record || overlay ||
+               notes.any? || override_readings.any?
           return print_language_miss(code, fallback)
         end
 
         say "#{code} — #{name || registry_record&.name || '(no name in the held kaikki extracts)'}"
+        print_language_override_readings(code, override_readings, lects)
         print_language_family(code, languages, fallback, overlay_family: overlay&.family)
         print_language_descent(code, lects)
         print_language_context(context, fallback)
@@ -10088,6 +10091,22 @@ module Nabu
         print_language_dictionary_group(code, info, lects) if info
         print_language_axes(code, info, registry)
         print_language_stage_ladder(code, stages, lects, info)
+      end
+
+      # The claim gloss for per-source override codes (owner ruling
+      # 2026-10-12): where a collection's legacy code is overridden onto a
+      # registered lect, the card states that reading in words — the bare
+      # code's ISO assignment may name a different language entirely, and
+      # a count surface listing the raw code must never leave that
+      # unglossed.
+      def print_language_override_readings(code, readings, lects)
+        readings.each do |source, lect_id|
+          record = lects.lect(lect_id)
+          named = record ? "#{record.name} (#{lect_id})" : lect_id
+          say_wrapped("collection override: #{source} reads #{code} as #{named} — " \
+                      "the collection's own usage, not the code's ISO assignment",
+                      indent: 2)
+        end
       end
 
       # P67-2: the descent line — the registry's parent arc, code →
