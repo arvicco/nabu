@@ -348,7 +348,7 @@ ban-wikisource:   # P120-2, 02-sources row 262
   adapter: Nabu::Adapters::BanWikisource
   adopted: "2026-10-12"
   axes: [sea]
-  wired: false
+  wired: true    # first sync verified 2026-10-12: 1,252 docs / 21,491 passages, 0 quarantined (the lane census exactly); gaguritan eyeballed with lontar provenance
   sync_policy: manual
   # Balinese Wikisource — the lontar (palm-leaf manuscript) corpus,
   # MANUSCRIPT-DIRECT: ProofreadPage leaf-by-leaf transcription in
@@ -2184,7 +2184,7 @@ gu-wikisource:   # P120-3, 02-sources row 262
   adapter: Nabu::Adapters::GuWikisource
   adopted: "2026-10-12"
   axes: [indic]
-  wired: false   # awaiting the first real sync
+  wired: true    # first sync verified 2026-10-12: 207 docs / 1,462 passages, 0 quarantined (the lane census exactly)
   sync_policy: manual
   # The Gujarati bhakti cone (the owner-ruled wikisource posture), census
   # 2026-10-12 — 466 cone pages (union):
@@ -3188,7 +3188,7 @@ ms-wikisource:   # P120-3, 02-sources row 263
   adapter: Nabu::Adapters::MsWikisource
   adopted: "2026-10-12"
   axes: [sea]
-  wired: false   # awaiting the first real sync
+  wired: true    # first sync verified 2026-10-12: 64 docs / 5,081 passages, 0 quarantined; Jawi + 1823 date eyeballed
   sync_policy: manual
   # The Jawi manuscript cone (the owner-ruled wikisource posture), census
   # 2026-10-12: 74 MANUSCRIPT Index pages (shelfmarked names — Leiden
@@ -4912,7 +4912,7 @@ th-wikisource:   # P120-3, 02-sources row 264
   adapter: Nabu::Adapters::ThWikisource
   adopted: "2026-10-12"
   axes: [sea]
-  wired: false   # awaiting the first real sync
+  wired: true    # first sync verified 2026-10-12: 92 docs / 11,006 passages, 0 quarantined; 1914 chronicle part eyeballed
   sync_policy: manual
   # The ประชุมพงศาวดาร cone (the owner-ruled wikisource posture), census
   # 2026-10-12 — the three work trees, 267 cone pages:
