@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 137, lect.size,
+    assert_equal 138, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -278,7 +278,9 @@ class PosturesTest < Minitest::Test
                  "RETIRES all four P120 pendings to identity — the add-then-retire shape " \
                  "at family scale, count unchanged at 138; the same sitting's ruling lands " \
                  "the bg-charter-recension facet rule, so bg-wikisource's lect declaration " \
-                 "retires under the shadowing rule: 138→137"
+                 "retires under the shadowing rule: 138→137; " \
+                 "tamilex ADDED P121-3 — identity ta (tam-Latn through the held codemap row; " \
+                 "no Tamil stage exists, declared coarse): 137→138"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -384,6 +386,8 @@ class PosturesTest < Minitest::Test
     # pending 4→0. The same sitting's recension ruling retires
     # bg-wikisource's identity declaration to the bg-charter-recension
     # facet rule (the shadowing rule): identity 111→110. Zero pendings.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 110 }, by_posture)
+    # P121-3 ADDS tamilex as identity (tam-Latn → ta, declared coarse — no
+    # Tamil stage in the registry): identity 110→111.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 111 }, by_posture)
   end
 end
