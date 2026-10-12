@@ -5210,6 +5210,47 @@ titus-tocharian-a:   # P114-1a, 02-sources row 224
       (Sieg & Siegling; data entry P. Olivier / T. Tamai; collation T. Tamai;
       corrections K. Kupfer) wherever any text is displayed.
 
+titus-tocharian-b:   # 02-sources row 224 (the B half)
+  adapter: Nabu::Adapters::TitusTocharianB
+  adopted: "2026-10-12"
+  axes: [etym, buddhist]  # the titus-tocharian-a axes: the West Tocharian
+                          # manuscripts are Buddhist literature and feed the
+                          # comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: false   # members-only upstream: set the TITUS member credential
+                 # (bin/nabu creds set titus), then bin/nabu sync
+                 # titus-tocharian-b — page count unknown until the first
+                 # authenticated walk (2s polite pace); census the page names,
+                 # anchors and lanes against the adapter's PROVISIONAL
+                 # constants before flipping.
+  # TITUS Tocharian B Corpus (members area,
+  # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
+  # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
+  # Olivier, Chr. Schaefer, T. Tamai, K. Kupfer) and the London / partial
+  # Paris collections (P. Widmer, K. Kupfer, M. Peyrot) behind one frameset.
+  # The titus-tocharian-a family with its own constants; the stored
+  # credential rides the fetch as Basic auth (the credentials seam).
+  credentials: titus
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-10-06"
+    terms: >-
+      extends the 2026-07-23 Avestan terms to the Tocharian A and B texts of
+      the Berlin Turfan collection as TITUS presents them: one retrieval per
+      corpus, local personal research use only, no redistribution; TITUS and
+      the editors clearly indicated wherever displayed
+    thread: "personal research grant of 2026-10-06"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant and TITUS membership (the Tocharian B texts are
+      members-only), and promise to credit TITUS and the editors (data entry
+      P. Olivier, Chr. Schaefer, T. Tamai, K. Kupfer; P. Widmer, M. Peyrot)
+      wherever any text is displayed.
+
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
   adopted: "2026-07-18"

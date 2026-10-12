@@ -1108,7 +1108,7 @@ class SourceRegistryTest < Minitest::Test
     # the KBT sutras are the volume-majority) beside the Tocharian A precedent; both
     # are grant-gated, so the PUBLIC buddhist shelves are unchanged.
     assert_equal %w[etym iranian buddhist], registry["titus-khotanese"].axes
-    assert_equal %w[titus-khotanese titus-tocharian-a], registry.blocked_axis_members("buddhist"),
+    assert_equal %w[titus-khotanese titus-tocharian-a titus-tocharian-b], registry.blocked_axis_members("buddhist"),
                  "the grant-gated TITUS Buddhist corpora ride buddhist, excluded from the public listing"
     assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil mvp sarit suttacentral],
                  registry.public_axis_members("buddhist").sort
@@ -1164,7 +1164,8 @@ class SourceRegistryTest < Minitest::Test
     refute_includes registry.public_axis_members("etym"), "titus-avestan",
                     "the PUBLIC etym membership drops the grant-gated row"
     assert_equal %w[titus-avestan titus-bactrian titus-khotanese titus-manichaica
-                    titus-osco-umbrian titus-pahlavi titus-sogdian titus-tocharian-a],
+                    titus-osco-umbrian titus-pahlavi titus-sogdian titus-tocharian-a
+                    titus-tocharian-b],
                  registry.blocked_axis_members("etym")
   end
 
