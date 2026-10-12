@@ -1,0 +1,352 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# A trimmed real tree of the Shabad OS database collections (see README.md):
+# source/section lists cut, non-primary content dropped from the line records.
+source: shabados
+adapter_test: null
+retrieved: 2026-10-12
+files:
+  - path: database/collections/assets/DDTK.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/assets/DDTK.toml
+    whole: true
+  - path: database/collections/assets/DGDG.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/assets/DGDG.toml
+    whole: true
+  - path: database/collections/assets/NTHB.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/assets/NTHB.toml
+    whole: true
+  - path: database/collections/assets/SSA2.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/assets/SSA2.toml
+    whole: true
+  - path: database/collections/authors/GGSN.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/authors/GGSN.toml
+    whole: true
+  - path: database/collections/authors/NANK.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/authors/NANK.toml
+    whole: true
+  - path: database/collections/authors/SGPC.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/authors/SGPC.toml
+    whole: true
+  - path: database/collections/line-groups/0/08P.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/0/08P.toml
+    whole: true
+  - path: database/collections/line-groups/3/35M.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/3/35M.toml
+    whole: true
+  - path: database/collections/line-groups/8/83K.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/8/83K.toml
+    whole: true
+  - path: database/collections/line-groups/8/843.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/8/843.toml
+    whole: true
+  - path: database/collections/line-groups/A/ANX.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/A/ANX.toml
+    whole: true
+  - path: database/collections/line-groups/B/BG6.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/B/BG6.toml
+    whole: true
+  - path: database/collections/line-groups/C/CSQ.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/C/CSQ.toml
+    whole: true
+  - path: database/collections/line-groups/D/DMP.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/D/DMP.toml
+    whole: true
+  - path: database/collections/line-groups/H/HY2.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/H/HY2.toml
+    whole: true
+  - path: database/collections/line-groups/K/KKH.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/K/KKH.toml
+    whole: true
+  - path: database/collections/line-groups/M/MTS.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/M/MTS.toml
+    whole: true
+  - path: database/collections/line-groups/S/SGB.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/line-groups/S/SGB.toml
+    whole: true
+  - path: database/collections/lines/0/0N/0NVY.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/0/0N/0NVY.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/2/21/21Z1.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/2/21/21Z1.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/2/23/23VT.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/2/23/23VT.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/2/27/2735.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/2/27/2735.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/2/2F/2F55.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/2/2F/2F55.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/2/2H/2HY4.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/2/2H/2HY4.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/2/2V/2V4Z.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/2/2V/2V4Z.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/3/31/31GY.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/3/31/31GY.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/4/4U/4UZA.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/4/4U/4UZA.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/4/4V/4VAR.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/4/4V/4VAR.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/5/5G/5G3X.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/5/5G/5G3X.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/5/5U/5UFT.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/5/5U/5UFT.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/5/5W/5WUU.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/5/5W/5WUU.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/6/6V/6VRM.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/6/6V/6VRM.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/7/7J/7J58.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/7/7J/7J58.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/8/81/817H.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/8/81/817H.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/8/8E/8EEH.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/8/8E/8EEH.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/9/90/90AZ.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/9/90/90AZ.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/9/9F/9FJB.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/9/9F/9FJB.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/9/9M/9MN2.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/9/9M/9MN2.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/9/9R/9RBQ.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/9/9R/9RBQ.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/A/AR/ARN7.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/A/AR/ARN7.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/A/AX/AX8H.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/A/AX/AX8H.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/B/BL/BL70.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/B/BL/BL70.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/B/BX/BX4G.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/B/BX/BX4G.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/C/CT/CTRB.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/C/CT/CTRB.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/E/EU/EUMU.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/E/EU/EUMU.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/F/F1/F1YX.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/F/F1/F1YX.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/F/FG/FGHS.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/F/FG/FGHS.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/F/FR/FRME.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/F/FR/FRME.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/G/GJ/GJW9.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/G/GJ/GJW9.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/H/H0/H0PC.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/H/H0/H0PC.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/H/HL/HLFD.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/H/HL/HLFD.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/H/HW/HWUS.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/H/HW/HWUS.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/J/J5/J5L4.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/J/J5/J5L4.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/J/J9/J92N.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/J/J9/J92N.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/K/K0/K0U6.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/K/K0/K0U6.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/L/LC/LCHA.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/L/LC/LCHA.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/L/LP/LP62.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/L/LP/LP62.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/M/M4/M4M7.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/M/M4/M4M7.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/M/MB/MB4N.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/M/MB/MB4N.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/M/MK/MK1Q.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/M/MK/MK1Q.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/M/MK/MK9D.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/M/MK/MK9D.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/N/NV/NVNP.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/N/NV/NVNP.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/P/P8/P8FV.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/P/P8/P8FV.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/P/PX/PXES.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/P/PX/PXES.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/R/RB/RBP6.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/R/RB/RBP6.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/R/RZ/RZCQ.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/R/RZ/RZCQ.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/S/S1/S13B.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/S/S1/S13B.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/S/ST/ST9X.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/S/ST/ST9X.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/T/TK/TKW7.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/T/TK/TKW7.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/T/TQ/TQAC.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/T/TQ/TQAC.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/U/UJ/UJKD.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/U/UJ/UJKD.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/V/V2/V26Z.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/V/V2/V26Z.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/V/V8/V8SQ.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/V/V8/V8SQ.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/V/VV/VVYJ.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/V/VV/VVYJ.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/W/WN/WNV4.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/W/WN/WNV4.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/W/WT/WT83.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/W/WT/WT83.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/X/X2/X2UW.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/X/X2/X2UW.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/X/XF/XFD8.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/X/XF/XFD8.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/Y/YJ/YJWS.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/Y/YJ/YJWS.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/Z/Z4/Z4ZP.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/Z/Z4/Z4ZP.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/Z/ZE/ZE9C.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/Z/ZE/ZE9C.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/Z/ZE/ZERL.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/Z/ZE/ZERL.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/lines/Z/ZG/ZG4Y.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/lines/Z/ZG/ZG4Y.toml
+    whole: false
+    trim: "primary [[content]] entries only (translations/notes dropped)"
+  - path: database/collections/sections/1DSA.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sections/1DSA.toml
+    whole: false
+    trim: "lineGroups cut to the first group"
+  - path: database/collections/sections/3HWM.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sections/3HWM.toml
+    whole: false
+    trim: "lineGroups cut to the first group"
+  - path: database/collections/sections/546R.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sections/546R.toml
+    whole: false
+    trim: "lineGroups cut to the first group"
+  - path: database/collections/sections/TVPK.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sections/TVPK.toml
+    whole: true
+  - path: database/collections/sources/ARDS.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sources/ARDS.toml
+    whole: true
+  - path: database/collections/sources/SDGR.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sources/SDGR.toml
+    whole: false
+    trim: "sections list cut to 3HWM, 546R"
+  - path: database/collections/sources/SGGS.toml
+    url: https://raw.githubusercontent.com/shabados/shabados/307ed9d1a451561378c16beca6604d6fea523e6e/database/collections/sources/SGGS.toml
+    whole: false
+    trim: "sections list cut to 1DSA"

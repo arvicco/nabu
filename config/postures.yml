@@ -1205,6 +1205,24 @@ sources:
     places: {posture: unplaced, note: "no place field anywhere in the asset"}
     script: {posture: implied, note: "Tamil script, the native surface (Unicode HTML);
         lines without Tamil script are counted (non_tamil_lines), never minted"}
+  shabados:
+    # P122-3: Shabad OS — the Gurmukhī primary text (type = primary only).
+    kind: {posture: unclassified, note: "scripture and the Panthic canon; the source/
+        section names ride metadata (source_name, section_name, section_description)"}
+    lect: {posture: pending, note: "candidate: the aggregated nabu-lects mint — a pa
+        (Punjabi) anchor under inc with the pan → pa codemap alias, the guru (Gurmukhī)
+        script row, and the bra-Guru → bra~guru and fas-Guru → fa~guru codemap rows (bra
+        and fa are held anchors); a pa:old stage for the Granth's Old Punjabi / Sant
+        Bhāṣā is the refinement candidate. The per-source/section language table in the
+        adapter is declared coarse"}
+    dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
+        database's author records (the Gurus, the bhagats, Bhāī Gurdās, Bhāī Nand Lāl —
+        each line group names its author) as the composition class; the records carry no
+        date field of their own"}
+    places: {posture: unplaced, note: "no place field in any record"}
+    script: {posture: mixed, note: "Gurmukhī throughout: native for the Punjabi lanes
+        (pan, implied) and a transliteration surface for Braj and Persian (bra-Guru,
+        fas-Guru, qualified)"}
   obi-burmese:
     kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the
