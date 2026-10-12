@@ -3965,6 +3965,151 @@ module Nabu
             "try nabu char CHAR, nabu language --list, or a script tag from config/script_dossiers.yml"
     end
 
+    desc "lemma FORM", "A lemma's attestation profile: first/last century, the gold/silver curve, sources"
+    long_desc <<~HELP, wrap: false
+      Reads the precompiled lemma rollup (built at rebuild and by
+      `rake builders:refresh`, refreshed per source after every sync) — never
+      the passages themselves, so the card is instant at any corpus size.
+
+      - FIRST / LAST attested century, each with its date basis: "artifact"
+        (the object/witness date the source asserts) or "composition"
+        (author-era dating). A document's century is the MIDPOINT of its
+        date envelope (300–30 BCE buckets as 2nd c. BCE).
+      - The per-century curve, gold (verified annotation) and silver
+        (automatic lemmatization) kept apart: attestations / documents per
+        century, then one sparkline row per grade on a shared scale.
+        Undated attestations close the table.
+      - The top sources, and the dictionary shelves carrying the form.
+
+      An attestation is one passage attesting the lemma (the lemma-index
+      grain). FORM folds like `search --lemma`; --lang scopes to one
+      language (every stored spelling of the code).
+
+        nabu lemma hostis --lang lat
+        nabu lemma λόγος --lang grc
+    HELP
+    option :lang, type: :string, aliases: ["--language"], banner: "CODE",
+                  desc: "Scope to one language (lat, grc…; --language is an alias)"
+    def lemma(form)
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "lemma: no catalog — run nabu sync or nabu rebuild" if catalog.nil?
+
+      result = Nabu::Query::LemmaProfile.new(catalog: catalog).run(form, language: options[:lang])
+      print_lemma_profile(result)
+    ensure
+      catalog&.disconnect
+    end
+
+    SPARK_LEVELS = %w[▁ ▂ ▃ ▄ ▅ ▆ ▇ █].freeze
+    ROLLUP_REFRESH_HINT = "run `bundle exec rake builders:refresh` (or the next nabu rebuild)"
+    ROLLUP_MIGRATION_HINT = "this catalog predates the lemma rollups (migration 038) — " \
+                            "the next nabu rebuild builds them"
+    CURVE_BAR_WIDTH = 30
+
+    no_commands do
+      # The honest hints of the absent/unbuilt rollup (the desk law: a hint,
+      # never a scan).
+      def rollup_status_error(command, status)
+        case status
+        when :absent then raise Thor::Error, "#{command}: #{ROLLUP_MIGRATION_HINT}"
+        when :unbuilt then raise Thor::Error, "#{command}: the rollup is not built yet — #{ROLLUP_REFRESH_HINT}"
+        end
+      end
+
+      def print_lemma_profile(result)
+        rollup_status_error("lemma", result.status)
+        scope = result.language ? " [#{result.language}]" : ""
+        if result.status == :unattested
+          say "lemma #{result.form}#{scope}: not attested in the lemma rollup (gold or silver)"
+          print_lemma_dictionary(result.dictionary)
+          return say("lemma: 0 attestations (#{format_duration(result.seconds)})")
+        end
+
+        say "lemma #{result.form}#{scope_label(result)} — #{lemma_span(result)}"
+        print_lemma_curve(result.curve)
+        print_lemma_sources(result.sources)
+        print_lemma_dictionary(result.dictionary)
+        total = result.curve.sum { |point| point.gold[:occurrences] + point.silver[:occurrences] }
+        say "lemma: #{commafy(total)} attestations · " \
+            "#{dated_centuries(result.curve.count(&:century))} " \
+            "(#{format_duration(result.seconds)})"
+      end
+
+      def dated_centuries(count) = "#{count} dated #{count == 1 ? 'century' : 'centuries'}"
+
+      def scope_label(result)
+        result.language ? " [#{result.language}]" : " [#{result.languages.join(', ')}]"
+      end
+
+      def lemma_span(result)
+        return "no dated attestation (every attestation is undated)" unless result.first
+
+        edge = ->(point) { "#{point.label}#{" (#{point.bases.join(', ')})" if point.bases.any?}" }
+        return "attested in #{edge.call(result.first)} only" if result.first.century == result.last.century
+
+        "first attested #{edge.call(result.first)} · last #{edge.call(result.last)}"
+      end
+
+      def print_lemma_curve(curve)
+        width = (curve.map { |point| point.label.length } + [7]).max
+        say "  #{'century'.ljust(width)}  #{'gold att/docs'.rjust(16)}  #{'silver att/docs'.rjust(16)}"
+        curve.each do |point|
+          say "  #{point.label.ljust(width)}  #{grade_cell(point.gold).rjust(16)}  " \
+              "#{grade_cell(point.silver).rjust(16)}"
+        end
+        dated = curve.reject { |point| point.century.nil? }
+        return if dated.empty?
+
+        peak = dated.flat_map { |point| [point.gold[:occurrences], point.silver[:occurrences]] }.max
+        %i[gold silver].each do |grade|
+          next if dated.all? { |point| point.public_send(grade)[:occurrences].zero? }
+
+          say "  #{grade.to_s.ljust(6)} #{sparkline(dated, grade, peak)}  " \
+              "(#{dated.first.label} → #{dated.last.label}, one cell per century)"
+        end
+      end
+
+      def grade_cell(tally)
+        tally[:occurrences].zero? ? "—" : "#{commafy(tally[:occurrences])} / #{commafy(tally[:documents])}"
+      end
+
+      # One cell per century across the contiguous dated span (no century
+      # 0 — the signed index skips it), on a scale shared by both grades so
+      # the rows compare; "·" = no attestation that century.
+      def sparkline(dated, grade, peak)
+        by_century = dated.to_h { |point| [point.century, point.public_send(grade)[:occurrences]] }
+        (dated.first.century..dated.last.century).reject(&:zero?).map do |century|
+          count = by_century.fetch(century, 0)
+          next "·" if count.zero?
+
+          SPARK_LEVELS[((count.to_f / peak) * (SPARK_LEVELS.size - 1)).round]
+        end.join
+      end
+
+      def print_lemma_sources(sources)
+        return if sources.empty?
+
+        cells = sources.map do |share|
+          grades = []
+          grades << "#{commafy(share.gold)} gold" if share.gold.positive?
+          grades << "#{commafy(share.silver)} silver" if share.silver.positive?
+          "#{share.slug} #{grades.join(' + ')}"
+        end
+        say "  top sources: #{cells.join(' · ')}"
+      end
+
+      def print_lemma_dictionary(links)
+        return if links.empty?
+
+        say "  dictionaries (nabu define for the full entry):"
+        links.each do |link|
+          gloss = link.gloss ? " — #{truncate_line(link.gloss, 70)}" : ""
+          say "    #{link.slug}: #{link.headword}#{gloss}  #{link.urn}"
+        end
+      end
+    end
+
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
     long_desc <<~HELP, wrap: false
       Explains any language code the library surfaces — the corpus tags
@@ -3995,6 +4140,13 @@ module Nabu
       the upstream-code split of the etymology edges (chu's edges arrive
       as Wiktionary's "cu"). --list shows the held languages only — the
       ~800-code etymology tail is what `language CODE` is for.
+      --curve draws the code's documents + passages per century (each
+      document at its date-envelope midpoint; undated last). --mixing (no
+      CODE) is the multilingualism census: documents by how many passage
+      languages they hold, the commonest mixed inventories, and per source
+      how the mixing runs — "block" (each language one contiguous run) or
+      "interleaved" (switching back and forth). Both read the precompiled
+      rollups only.
       --export-dossiers is THE one-shot canonical-memory migration
       (owner-fired): it writes the ledger's language notes out as dossier
       files, absence-filling only, idempotent; --dry-run previews it.
@@ -4003,6 +4155,8 @@ module Nabu
         nabu language zle-ort      # the code from an etym cognate list
         nabu language chu --long   # a held language, full holdings
         nabu language --list       # every held language
+        nabu lang lat --curve      # Latin documents/passages by century
+        nabu lang --mixing         # the multilingualism census
         nabu language --export-dossiers --dry-run   # preview the migration
     HELP
     option :list, type: :boolean, default: false,
@@ -4014,9 +4168,14 @@ module Nabu
                        desc: "With --export-dossiers: report what would be written, touch nothing"
     option :long, type: :boolean, default: false,
                   desc: "Add per-source document counts and the upstream-code edge split"
+    option :curve, type: :boolean, default: false,
+                   desc: "Documents + passages per century for CODE (precompiled curve)"
+    option :mixing, type: :boolean, default: false,
+                    desc: "The multilingualism census: inventory sizes, mixed inventories, switch grain"
     def language(code = nil)
       config = Nabu::Config.load
       return export_language_dossiers(config) if options[:"export-dossiers"]
+      return language_census(config, code) if options[:curve] || options[:mixing]
 
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -4038,6 +4197,82 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+    end
+
+    no_commands do
+      # P121-2: the two rollup-backed language desks (--curve / --mixing).
+      def language_census(config, code)
+        catalog = open_catalog(config)
+        raise Thor::Error, "language: no catalog — run nabu sync or nabu rebuild" if catalog.nil?
+
+        census = Nabu::Query::LanguageCensus.new(catalog: catalog)
+        if options[:mixing]
+          print_language_mixing(census.mixing)
+        else
+          term = code.to_s.strip
+          raise Thor::Error, "language --curve: give a code (lat, grc…)" if term.empty?
+
+          print_language_curve(census.curve(term))
+        end
+      ensure
+        catalog&.disconnect
+      end
+
+      def print_language_curve(result)
+        rollup_status_error("language --curve", result.status)
+        if result.points.empty?
+          return say("language --curve #{result.code}: no documents hold this code " \
+                     "(#{format_duration(result.seconds)})")
+        end
+
+        say "#{result.code} — documents and passages per century (each document at its date-envelope midpoint)"
+        width = (result.points.map { |point| point.label.length } + [7]).max
+        peak = result.points.map(&:passages).max
+        result.points.each do |point|
+          bar = "█" * [(CURVE_BAR_WIDTH * point.passages.to_f / peak).round, 1].max
+          bases = point.bases.any? ? "  (#{point.bases.join(', ')})" : ""
+          say "  #{point.label.ljust(width)}  #{commafy(point.documents).rjust(9)} docs · " \
+              "#{commafy(point.passages).rjust(11)} passages  #{bar}#{bases}"
+        end
+        say "curve: #{commafy(result.documents)} docs · #{commafy(result.passages)} passages over " \
+            "#{dated_centuries(result.points.count(&:century))} " \
+            "(#{format_duration(result.seconds)})"
+      end
+
+      def print_language_mixing(result)
+        rollup_status_error("language --mixing", result.status)
+        say "language mixing — #{commafy(result.documents)} documents by passage-language inventory size"
+        result.by_size.each do |size, count|
+          share = (100.0 * count / result.documents).round(1)
+          say "  #{pluralize(size, 'language').ljust(12)}  #{commafy(count).rjust(11)} docs (#{share}%)"
+        end
+        print_mixing_inventories(result.inventories)
+        print_mixing_sources(result.sources)
+        mixed = result.by_size.sum { |size, count| size > 1 ? count : 0 }
+        share = result.documents.zero? ? 0 : (100.0 * mixed / result.documents).round(1)
+        say "mixing: #{commafy(mixed)} mixed of #{commafy(result.documents)} documents (#{share}%) " \
+            "(#{format_duration(result.seconds)})"
+      end
+
+      def print_mixing_inventories(inventories)
+        return if inventories.empty?
+
+        say "top mixed inventories:"
+        width = inventories.map { |languages, _| languages.length }.max
+        inventories.each { |languages, count| say "  #{languages.ljust(width)}  #{commafy(count).rjust(9)} docs" }
+      end
+
+      def print_mixing_sources(sources)
+        return if sources.empty?
+
+        say "switch grain by source (mixed docs · block / interleaved · total switches):"
+        width = sources.map { |grain| grain.slug.length }.max
+        sources.each do |grain|
+          say "  #{grain.slug.ljust(width)}  #{commafy(grain.mixed).rjust(9)} mixed · " \
+              "#{commafy(grain.block)} block / #{commafy(grain.interleaved)} interleaved · " \
+              "#{commafy(grain.switches)} switches"
+        end
+      end
     end
 
     desc "kind census", "The document-kind axis: cross-corpus class counts"
@@ -8298,6 +8533,18 @@ module Nabu
           catalog.disconnect
           fulltext.disconnect
         end
+        refresh_lemma_rollup(config)
+      end
+
+      # P121-2: the projection just moved silver passage_lemmas rows, so
+      # the lemma attestation rollup re-derives in the same breath — the
+      # `lemma` desk never serves a pre-projection silver curve.
+      def refresh_lemma_rollup(config)
+        catalog = Nabu::Store.connect(config.catalog_path)
+        rows = Nabu::Store::LemmaRollup.refresh_lemmas!(catalog: catalog, fulltext_path: config.fulltext_path)
+        say "lemma rollup re-derived: #{commas(rows)} rows"
+      ensure
+        catalog&.disconnect
       end
 
       def lemma_spot_check(enricher)
