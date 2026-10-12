@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "io/console"
 require "thor"
 require_relative "version"
 require_relative "display"
@@ -1029,10 +1030,18 @@ module Nabu
                            "lines with --stdin"
       end
 
-      user = ask("#{name} user:")
-      password = ask("#{name} password (hidden):", echo: false)
-      say "" # the hidden read leaves the cursor on the prompt line
-      [user.to_s.chomp, password.to_s.chomp]
+      # Both reads go straight to $stdin: Thor's ask buffers differently
+      # under a pseudo-TTY (observed on the CI runner — the user ask
+      # consumed nothing and the hidden read took the user line), and a
+      # credential prompt must be deterministic everywhere.
+      $stdout.print "#{name} user: "
+      $stdout.flush
+      user = $stdin.gets.to_s.chomp
+      $stdout.print "#{name} password (hidden): "
+      $stdout.flush
+      password = $stdin.noecho(&:gets).to_s.chomp
+      $stdout.puts # the hidden read leaves the cursor on the prompt line
+      [user, password]
     end
 
     def age_line(updated_at)
