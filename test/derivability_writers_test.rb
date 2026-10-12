@@ -119,6 +119,10 @@ class DerivabilityWritersTest < Minitest::Test
   # derivative pair (.part + rename, whole item or nothing) under
   # canonical/<slug>/<identifier>/ inside Adapter#fetch — the same
   # canonical-gateway law kind.
+  # credentials (the credentials seam) writes ONE instance file,
+  # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
+  # driven only by the `nabu creds set` gateway — the local/config
+  # write-through law kind (grant_gate's grants.yml sibling); never db/.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -155,7 +159,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/language_shelf.rb nabu/lemma_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
-    nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb
+    nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb nabu/credentials.rb
     nabu/health/quarantine_baseline.rb nabu/profile.rb
     nabu/health/shed_acceptance.rb
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb

@@ -1288,6 +1288,39 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/your own grant/, entry.grant.request_hint)
   end
 
+  # The credentials seam: `credentials: <name>` names the stored credential
+  # (local/config/credentials.yml) a gated upstream's fetch needs.
+  def test_credentials_absent_by_default
+    entry = load_registry(<<~YAML)["src"]
+      src:
+        adapter: FakeAdapter
+        wired: true
+    YAML
+    assert_nil entry.credentials
+  end
+
+  def test_parses_a_credentials_name
+    entry = load_registry(<<~YAML)["src"]
+      src:
+        adapter: FakeAdapter
+        wired: true
+        credentials: titus
+    YAML
+    assert_equal "titus", entry.credentials
+  end
+
+  def test_a_malformed_credentials_name_is_an_error
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          wired: true
+          credentials: "Not A Name"
+      YAML
+    end
+    assert_match(/"src": credentials must be a credential name/, error.message)
+  end
+
   def test_grant_required_without_a_block_is_an_error
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
