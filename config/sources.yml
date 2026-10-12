@@ -5369,8 +5369,14 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
                  # Scope widened 2026-10-12 (the grant read corpus-level): the
                  # whole 4,349-page chain parses — the toch1000-toch4349 pages
                  # continue Berlin THT, then Berlin SHT, London IOL Toch. and
-                 # Paris PK (census in the adapter note). Counts re-parse
-                 # pending (bin/nabu sync titus-tocharian-b --parse-only).
+                 # Paris PK (census in the adapter note). Re-parse verified
+                 # same day: 4,138 docs / 42,243 passages (+3,272 docs; THT
+                 # continued 2,469, SHT 10, London 778 incl. 28 xto passages,
+                 # Paris 9; 6 old Berlin quarantines recovered), 2 pages
+                 # catalogue-only by rule, quarantine baseline re-recorded at
+                 # 209 (127 Berlin pre-anchor-note cases + 80 nothing-legible
+                 # note-only pages + 2 unclassified ts-lane pages); Paris
+                 # NS 38+37 and PK NF cards eyeballed.
   # TITUS Tocharian B Corpus (members area,
   # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
   # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
