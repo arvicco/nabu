@@ -4,7 +4,7 @@ require "test_helper"
 
 module Adapters
   # westoldturkic — the Róna-Tas & Berta 2011 West Old Turkic loanword
-  # database as CLDF (P108-7, the Q107 half; Zenodo 10.5281/zenodo.
+  # database as CLDF (P108-7; Zenodo 10.5281/zenodo.
   # 7893910 v2.0, CC BY 4.0): one dictionary, entry per WOT etymon,
   # the Hungarian descent chain (EAH → LAH → OH → H) as reflex rows
   # with the curated borrowing pairs marking the loan step.

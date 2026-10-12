@@ -12,7 +12,7 @@ require_relative "version"
 
 module Nabu
   # The WP-JSON crawl for eLektire (lektire.skole.hr — CARNET's school
-  # reading portal, books produced by Bulaja naklada; P117-2, Q104;
+  # reading portal, books produced by Bulaja naklada; P117-2;
   # architecture §8). A crawl sibling of ScriptaBulgaricaFetch, deliberately
   # mirrored rather than extracted.
   #

@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # kokubunken — NIJL's own TEI lane (P108-4, Q89.3): the 嘉禄二年本
+  # kokubunken — NIJL's own TEI lane (P108-4): the 嘉禄二年本
   # 古今和歌集 transcription and the 廣瀬本/元暦校本 Man'yōshū TEI
   # (a DIFFERENT manuscript line from held ONCOJ's base — the
   # two-editions doctrine), both CC BY 4.0 README-verbatim. One

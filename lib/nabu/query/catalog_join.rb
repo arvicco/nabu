@@ -195,7 +195,7 @@ module Nabu
         end)
       end
 
-      # The geo-radius filter (P75 C-9, №R-5): a correlated EXISTS over the
+      # The geo-radius filter (P75 C-9): a correlated EXISTS over the
       # COORDINATES lane (document_axes.place_lat/lon — source-asserted
       # find-locations, P69-1). Distance is equirectangular in pure SQL
       # arithmetic — per-degree km scales with the longitude scale computed
@@ -256,8 +256,8 @@ module Nabu
           .exists
       end
 
-      # The kind facet's family semantics (P99-3 — №R-63; deepened P101
-      # under №R-66's tree): any path PREFIX matches itself AND every
+      # The kind facet's family semantics (P99-3, owner-ruled 2026-09-13; deepened P101
+      # under the 2026-09-18 literary-family tree): any path PREFIX matches itself AND every
       # sub under it (`--kind literary` ⊇ literary/poetry;
       # `--kind literary/narrative` ⊇ literary/narrative/epic); an
       # explicit % or _ pattern matches as given. Identity semantics:

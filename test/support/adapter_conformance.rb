@@ -202,7 +202,7 @@ module AdapterConformance
                  "or shared state makes rebuilds nondeterministic"
   end
 
-  # P104-4 (Q81): an adapter that declares a secondary dictionary lane
+  # P104-4: an adapter that declares a secondary dictionary lane
   # (Adapter.dictionary_lane) is conformance-checked for BOTH shapes — the
   # passage checks above stay untouched, and the lane's dictionary output
   # is held to the DictionaryLoader's contract here: refs of this source,

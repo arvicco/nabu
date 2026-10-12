@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Nabu::RegnalYears (№R-28, the P73-6 scout ratified): the ruled
+# Nabu::RegnalYears (owner-ruled 2026-08-11, the P73-6 scout ratified): the ruled
 # regnal-year table — cdli ruler spellings → absolute spans under the
 # stated chronology commitment; unruled/out-of-range answers are typed,
 # never guessed.

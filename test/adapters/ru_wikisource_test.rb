@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # ru-wikisource (P116-3, Q103 under №R-74): the Old East Slavic cone with
+  # ru-wikisource (P116-3, under the base-edition rule): the Old East Slavic cone with
   # the PER-PAGE EDITION FILTER. Fixture envelopes are real api.php
   # captures (2026-10-10), chosen for the filter's real cases:
   #

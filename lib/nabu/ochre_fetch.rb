@@ -86,7 +86,7 @@ module Nabu
     MISSING_CAP_FLOOR = 20
 
     USER_AGENT = "nabu/#{Nabu::VERSION} (personal research corpus; RSTI data under grant " \
-                 "№23, M. Prosser / U. Chicago CORPUS-OCHRE, 2026-07-27; " \
+                 "by email, M. Prosser / U. Chicago CORPUS-OCHRE, 2026-07-27; " \
                  "+https://github.com/arvicco/nabu; contact: arvicco@nabu.ac)".freeze
 
     Result = Data.define(:sha, :sets, :texts_fetched, :texts_cached, :missing)

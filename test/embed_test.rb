@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::Embed (P93-4, №R-36) — the semantic-vector build lane, exercised
+# Nabu::Embed (P93-4) — the semantic-vector build lane, exercised
 # against the fake worker (test/fixtures/embed/fake_worker.rb) over the
 # real Shell.duplex plumbing: no Python, no venv, no model, no network.
 class EmbedTest < Minitest::Test

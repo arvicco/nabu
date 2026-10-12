@@ -329,7 +329,7 @@ module Nabu
       # +script+ (P75 C-2) keeps only documents whose resolved lect id
       # claims the held-surface script (~code) or whose artifact-script
       # axis claims the artifact's system (CatalogJoin#script_exists).
-      # +within+ (P75 C-9, №R-5): [lat, lon, km] — only documents whose
+      # +within+ (P75 C-9): [lat, lon, km] — only documents whose
       # coordinates-lane find-location falls in the radius
       # (CatalogJoin#within_exists; coordinate-less documents fall out,
       # like undated ones under a date filter).
@@ -374,7 +374,7 @@ module Nabu
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
 
-      # One attic hit (P93-2, №R-16 half 1): the withdrawn passage, its
+      # One attic hit (P93-2): the withdrawn passage, its
       # stored-text snippet, and WHY it left — the loader-stamped reason
       # for a swept document, "revision-pruned" definitionally for a
       # passage-grain withdrawal, nil (rendered "unrecorded") for rows
@@ -1036,7 +1036,7 @@ module Nabu
           .all
       end
 
-      # -- the CJK bigram lane (P93-3, №R-39 b) ------------------------------
+      # -- the CJK bigram lane (P93-3) ------------------------------
       # A ranked pure-CJK query consults the bigram lane FIRST: its hits
       # are true substring matches over the cjk-flagged sources — the
       # thing unicode61's one-token-per-run treatment can never answer.

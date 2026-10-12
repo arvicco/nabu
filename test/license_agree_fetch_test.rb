@@ -6,7 +6,7 @@ require "test_helper"
 # download arm — PORTULAN CLARIN gates its zips behind a Django form
 # (GET the download URL → HTML with a CSRF token + a licence-agree
 # checkbox → POST the agreement → the SAME URL streams the zip).
-# Owner ruling №R-37 (2026-08-19) sanctions representing the owner's
+# Owner ruling (2026-08-19) sanctions representing the owner's
 # licence acceptance; the mechanism's guardrail is that the caller
 # DECLARES the licence being accepted, and the form's own hidden
 # licence field must match it verbatim — portal drift means the grant
@@ -80,7 +80,7 @@ class LicenseAgreeFetchTest < Minitest::Test
     assert_equal 200, response.status
   end
 
-  # -- the №R-37 guardrail ----------------------------------------------------
+  # -- the licence-agreement guardrail -----------------------------------------
 
   def test_a_licence_mismatch_refuses_to_agree_before_any_post
     stub_agree_page

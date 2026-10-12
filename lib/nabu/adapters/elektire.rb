@@ -10,7 +10,7 @@ module Nabu
   module Adapters
     # elektire — eLektire (lektire.skole.hr), CARNET's school reading
     # portal of the Croatian literary canon, its books produced by Bulaja
-    # naklada (P117-2, Q104): the Croatian canon from Marulić's Judita
+    # naklada (P117-2): the Croatian canon from Marulić's Judita
     # (written 1501) and the Dubrovnik Renaissance (Držić, Vetranović,
     # Nalješković, Hektorović, Zoranić) through Gundulić and the Baroque,
     # Kačić, Relković and the Illyrians, to Šenoa, Kovačić, Matoš, Kamov

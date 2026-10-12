@@ -192,7 +192,7 @@ module Nabu
       }.freeze
 
       # Every wordlist shelf, discover order: IE.exe's ten, then the
-      # follow-up packages' 48 (Q116 — StarlingLexstatPackages: per-package
+      # follow-up packages' 48 (P118 — StarlingLexstatPackages: per-package
       # language maps, resolve-or-verbatim cognation, inferred readings).
       TABLES = IE_TABLES.merge(StarlingLexstatPackages::TABLES).freeze
 

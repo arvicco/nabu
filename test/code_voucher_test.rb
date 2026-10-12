@@ -5,7 +5,7 @@ require "tmpdir"
 require "fileutils"
 require "time"
 
-# Nabu::CodeVoucher (P89-1, №R-54 (b)): can git vouch that a set of code
+# Nabu::CodeVoucher (P89-1, owner ruling, option b): can git vouch that a set of code
 # files carries the same bytes it did at a given moment? The trust bridge
 # re-stamps a source WITHOUT replay only on a yes — so every refusal path
 # here is an under-rebuild guard. The cardinal rule: when git cannot vouch

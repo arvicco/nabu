@@ -35,7 +35,7 @@ module Nabu
     #    International (CC BY-NC-SA 4.0)."
     # The Zenodo record's own license field: cc-by-4.0.
     # The claims conflict; the class stays nc (the conservative reading)
-    # until owner email №24 resolves it — photographs need per-institution
+    # until a licensing clarification by email resolves it — photographs need per-institution
     # consent and are entirely out of scope (never fetched).
     #
     # == Identity and grain
@@ -98,7 +98,7 @@ module Nabu
         license: "CONFLICTING upstream claims, both verbatim: the JOHD data paper " \
                  "(10.5334/johd.148) License section says \"#{LICENSE_JOHD}\" while the " \
                  "Zenodo record 10018951 license field says cc-by-4.0 — held at nc until " \
-                 "email №24 resolves it; photographs out of scope entirely",
+                 "the maintainers clarify which claim governs; photographs out of scope entirely",
         license_class: "nc",
         upstream_url: "https://doi.org/10.5281/zenodo.10018951",
         parser_family: "atf"

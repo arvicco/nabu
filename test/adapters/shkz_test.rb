@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # ŠKZ — the trilingual Kaʿba-ye Zartošt inscription (P107-3b, Q96.3):
+  # ŠKZ — the trilingual Kaʿba-ye Zartošt inscription (P107-3b):
   # three version documents (grc / xpr / pal) over 50 SHARED line
   # citations — the shared :l<n> citation IS the alignment; the word-
   # pair layer stays a declared residue in canonical.

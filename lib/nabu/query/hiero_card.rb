@@ -22,7 +22,7 @@ module Nabu
       # Gardiner-style code shape (kEH_JSesh: A1, G43, Aa27D, P8h, O29v…).
       CODE = /\A[A-Z][A-Za-z]?\d{1,3}[A-Za-z]{0,2}\z/
 
-      # census: P96 assumption audit (Q68, generalized P97-4) — each
+      # census: P96 assumption audit (generalized P97-4) — each
       # hiero-annotated shelf carries its OWN annotation key and counting
       # shape; a new shelf adds a row here. The scan stays scoped to these
       # sources' documents so a desk card never walks the whole passages

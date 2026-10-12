@@ -88,7 +88,7 @@ class DataBuildRunnerTest < Minitest::Test
     end
   end
 
-  # №R-24 (P73-0): a BY-SA dataset ships its own LICENSE file — the repo's
+  # The share-alike carve-out (owner ruling 2026-08-11, P73-0): a BY-SA dataset ships its own LICENSE file — the repo's
   # top-level LICENSE is CC BY, so the carve-out must be visible in the
   # dataset directory itself, not only in manifest/README prose. CC BY
   # datasets ship none: the repository default already covers them.

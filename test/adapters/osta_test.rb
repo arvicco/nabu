@@ -133,7 +133,7 @@ module Adapters
                    "Digital 7) is automatic — silver, the GLAUx precedent"
     end
 
-    # -- the works-table lane (P77-r6, №R-30) ----------------------------------
+    # -- the works-table lane (P77-r6) ----------------------------------
 
     def test_documents_carry_their_works_table_rows_verbatim
       document = parse_urn("urn:nabu:osta:rhj")

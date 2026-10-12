@@ -57,7 +57,7 @@ module Nabu
     # ZipFetch, phases hand-driven so the hard sha256 pin verifies BETWEEN
     # download and any tree mutation (the rem choreography); the flat zip
     # unpacks onto the workdir root as upstream's own tree (a plain tree
-    # hashes whole — no materialized_paths needed, Q59-a acts only inside
+    # hashes whole — no materialized_paths needed — the declared-artifact rule acts only inside
     # git repos). Zenodo files are immutable: a pin miss is corruption or
     # a re-release — an owner re-pin decision.
     class Siddham < Nabu::Adapter

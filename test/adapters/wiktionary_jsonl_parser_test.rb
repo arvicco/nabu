@@ -322,7 +322,7 @@ class WiktionaryJsonlParserTest < Minitest::Test
     end
   end
 
-  # P104-2 (Q79, poison shape 2): the positional suffix and the
+  # P104-2 (poison shape 2): the positional suffix and the
   # etymology_number suffix share one id shape (word:pos:<n>), so an
   # ety-less homograph run's ":3" can equal a sibling's ety-3 base (the
   # zh 夆/芘 quartets — fixture-pinned at the adapter level). The minter
@@ -348,7 +348,7 @@ class WiktionaryJsonlParserTest < Minitest::Test
     end
   end
 
-  # P104-2 (Q79) REVISES the original expectation here (was: raise
+  # P104-2 REVISES the original expectation here (was: raise
   # ParseError): a record without a usable headword is SKIPPED, not
   # quarantined. The old posture let ONE wiktextract "Unsupported
   # titles/…" record (word=" ", a single U+0020 — Wiktionary's page for

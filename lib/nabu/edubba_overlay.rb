@@ -30,7 +30,7 @@ module Nabu
     ].freeze
     SIGNS_DIR = File.join("site", "hieroglyphs", "addenda", "signs").freeze
 
-    # The cuneiform lanes (P77-8, Q25 — the school's FIRST subject):
+    # The cuneiform lanes (P77-8 — the school's FIRST subject):
     # Cuneiform 101 = site/_data/sign_teaching.yml (the richest record —
     # iconicity, tier, taught_in), 102/103 = the curated course pools
     # (Sumerian / Akkadian; chapter-pinned, CDLI-ATF values). Later

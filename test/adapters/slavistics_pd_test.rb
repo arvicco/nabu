@@ -6,7 +6,7 @@ require "fileutils"
 require "support/adapter_conformance"
 
 module Adapters
-  # slavistics-pd (Q105) — the PD German-Slavistics reference canon as
+  # slavistics-pd — the PD German-Slavistics reference canon as
   # archive.org scans, page grain over the hOCR derivative pair, UNCORRECTED
   # OCR declared. Fixture: three census items laid out as canonical/ holds
   # them (<identifier>/<file stem>_hocr_*): Miklosich's Das Imperfect (1874,

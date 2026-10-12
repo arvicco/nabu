@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Query
-  # Nabu::Query::KindCensus (P99-3 — №R-63): the kind axis' browse view,
+  # Nabu::Query::KindCensus (P99-3 — owner-ruled 2026-09-13): the kind axis' browse view,
   # read from PRECOMPILED data only — kind_stats (per-source per-head
   # counts, KindBuilder-written) + source_stats (library totals). The
   # one live query is the --unmapped worklist over the bucket subset.

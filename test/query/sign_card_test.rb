@@ -84,7 +84,7 @@ module Query
       assert_equal "|ŠEŠ.KI|", form_result.card.parent, "a form card names its owning sign"
     end
 
-    # -- the list-number lane (P65 gate feedback №1) -------------------------
+    # -- the list-number lane (P65 gate feedback, item 1) ------------------------
 
     def test_a_qualified_list_number_is_a_deterministic_card
       assert_equal "ŠEŠ", card_for("MZL535").card.name
@@ -111,7 +111,7 @@ module Query
       refute ambiguous["candidates"].first.key?("via"), "via is present-only — value lanes have none"
     end
 
-    # -- the ASCII-x subscript fold (P65 gate feedback №2) -------------------
+    # -- the ASCII-x subscript fold (P65 gate feedback, item 2) ------------------
 
     def test_a_trailing_ascii_x_folds_to_the_subscript_on_miss
       result = card_for("idx")
@@ -192,7 +192,7 @@ module Query
       assert_equal ["|A.BARA₂|", "|UD.ŠEŠ.KI|"], names
     end
 
-    # -- the Edubba didactic panel (P77-8, Q25 — the hiero-card mold) --------
+    # -- the Edubba didactic panel (P77-8 — the hiero-card mold) --------
 
     OVERLAY = Nabu::EdubbaOverlay.new(Nabu::TestSupport.fixtures("edubba-overlay"))
 

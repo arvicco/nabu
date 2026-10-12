@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Nabu::Health::ShedAcceptance (P102-1 — Q74): the quarantine-acceptance
+# Nabu::Health::ShedAcceptance (P102-1): the quarantine-acceptance
 # mold for withdrawal creep. Config-file only (the P70 posture: the
 # instance config IS the durable record; shed itself is measured live
 # from the catalog, so no baseline machinery is needed): the owner

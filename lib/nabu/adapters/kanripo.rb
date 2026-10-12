@@ -51,8 +51,8 @@ module Nabu
     # carry NO per-repo LICENSE file (github license field null).
     # Corroboration: ytenx's DATA_LICENSE.md ("Kanseki Repository material
     # marked as CC BY-SA must be used under the applicable Creative Commons
-    # Attribution-ShareAlike terms"). A belt-and-braces confirmation email
-    # to Christian Wittern is SENT and NON-BLOCKING (№25, 2026-07-20) →
+    # Attribution-ShareAlike terms"). The maintainer, Christian Wittern,
+    # confirmed it in writing by email (2026-07-20) →
     # license_class attribution on the org-level grant.
     #
     # Gaiji: `&KR0809;`-style refs stay verbatim in text + annotations; the
@@ -153,7 +153,7 @@ module Nabu
 
       private
 
-      # P109-5 (Q78, №R-70): the KR-Catalog 部/類 taxonomy as facets —
+      # P109-5 (the aggressive-mining law): the KR-Catalog 部/類 taxonomy as facets —
       # division (部) and subclass (類) labels read from the six
       # KR-Catalog/KR/KR<n>.txt index files ("* KR1 經部" headings; the
       # "[[file:KR1a.txt][KR1a 易類]]" link lines), keyed by the text

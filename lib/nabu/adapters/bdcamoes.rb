@@ -16,7 +16,7 @@ module Nabu
     # 2.0) and is deliberately not ingested.
     #
     # The download is gated by a licence-agree click-through (a Django CSRF
-    # form) — accepted on owner ruling №R-37 (2026-08-19) and implemented
+    # form) — accepted on owner ruling (2026-08-19) and implemented
     # by Nabu::LicenseAgreeFetch, which refuses to agree if the form's
     # licence field drifts from the recorded DECLARED_LICENCE. The zip
     # itself then rides the whole non-destructive ZipFetch choreography.
@@ -58,7 +58,7 @@ module Nabu
                    "digital-library-of-camoes-ip-part-i/" \
                    "52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/"
 
-      # The agree form's hidden licence value at grant time (№R-37) — the
+      # The agree form's hidden licence value at grant time (owner ruling 2026-08-19) — the
       # exact string LicenseAgreeFetch holds the live page against.
       DECLARED_LICENCE = "CC-BY"
 
@@ -66,7 +66,7 @@ module Nabu
         id: "bdcamoes",
         name: "BDCamões — Corpus of Portuguese Literary Documents, Part I (PORTULAN CLARIN)",
         license: "CC - BY (the PORTULAN CLARIN record's licence field verbatim, read 2026-08-19; " \
-                 "download click-through accepted on owner ruling №R-37, 2026-08-19). Part I only " \
+                 "download click-through accepted on owner ruling, 2026-08-19). Part I only " \
                  "— Part II is a different grant (MS NC-NoReD-ND 2.0) and is NOT ingested",
         license_class: "attribution",
         upstream_url: RECORD_URL,
@@ -150,7 +150,8 @@ module Nabu
           fetch.cleanup!
         end
         Nabu::FetchReport.new(sha: fetch.sha, fetched_at: Time.now,
-                              notes: ["BDCamões Part I archive.zip (licence-agree click-through, №R-37)"])
+                              notes: ["BDCamões Part I archive.zip " \
+                                      "(licence-agree click-through, owner ruling 2026-08-19)"])
       rescue ZipFetch::Error, LicenseAgreeFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "bdcamoes fetch failed into #{workdir}: #{e.message}"
       end

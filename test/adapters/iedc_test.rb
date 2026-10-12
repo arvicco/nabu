@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # IEDC — the Invisible East Digital Corpus (P107-2, Q96.1): ONE
+  # IEDC — the Invisible East Digital Corpus (P107-2): ONE
   # versioned Zenodo XML → 1,316 documentary items from the medieval
   # Islamicate East (CC BY 4.0). The honest text census drives the
   # design: 481 items carry folio transcriptions (embedded-HTML <ol><li>

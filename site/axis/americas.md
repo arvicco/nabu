@@ -15,13 +15,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 October 2026)</span> |
 |---|---|---|---|---|
 | `guaman-poma` | texts | open | wired · manual | 1,189 docs / 5,911 passages |
 | `ticha` | texts | attribution | wired · manual | 93 docs / 1,103 passages |
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 October 2026)</span>: `spa` 1,280 · `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 · `fro` 3 … and 14 more (`nabu axis americas` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 October 2026)</span>: `spa` 1,280 · `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 · `fro` 3 … and 14 more (`nabu axis americas` lists all).
 
 ## The desk's instruments
 

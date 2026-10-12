@@ -4,7 +4,7 @@ require_relative "wiktionary_kaikki"
 
 module Nabu
   module Adapters
-    # Wiktionary-Akkadian (P99-7, the Q72-3 deferral): English
+    # Wiktionary-Akkadian (P99-7, a deferred item): English
     # Wiktionary's Akkadian entries via the kaikki.org wiktextract
     # extraction — the wiktionary-sux mold, first occupant of the shared
     # WiktionaryKaikki base. What it adds to the library: sense glosses

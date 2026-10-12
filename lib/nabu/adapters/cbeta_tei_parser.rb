@@ -191,7 +191,7 @@ module Nabu
         metadata
       end
 
-      # The header byline harvest (P104-1, №R-70 grade 2): the teiHeader
+      # The header byline harvest (P104-1; attributed-era dating, its own labeled class): the teiHeader
       # <author> carries CBETA's own attribution ("後秦 佛陀耶舍共竺佛念譯")
       # — verbatim in "author", the structural split in "dynasty"/
       # "translator" plus matching facets (raw = the whole byline). The

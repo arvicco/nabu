@@ -1,4 +1,4 @@
-# The metadata-field → facet projections (P104-1, under №R-70's
+# The metadata-field → facet projections (P104-1, under the
 # aggressive-mining ruling 2026-09-26): per-source declarations of which
 # documents.metadata_json fields project into document_facets rows —
 # Nabu::FacetMap / Store::FacetBuilder. Values project VERBATIM (the

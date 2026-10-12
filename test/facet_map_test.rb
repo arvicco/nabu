@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Nabu::FacetMap (P104-1, under №R-70's aggressive-mining policy): the
+# Nabu::FacetMap (P104-1, under the aggressive-mining policy, 2026-09-26): the
 # metadata-field → facet projection config — per-source declarations of
 # which documents.metadata_json fields project into document_facets rows,
 # so a source whose axis-shaped fields already ride the catalog gets its
@@ -53,7 +53,7 @@ class FacetMapTest < Minitest::Test
 
   # The shipped config/facet_map.yml must load and target only real
   # sources (the kind_map hygiene stance).
-  # P105-5b (Q87): every local-library doc carries a multi-language
+  # P105-5b: every local-library doc carries a multi-language
   # manifest but only the first code becomes documents.language — the
   # trailing claims (ett under eng facsimiles, xum…) must stay visible
   # through the facet lane.

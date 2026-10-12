@@ -64,7 +64,7 @@ transliteration. Nabu ingests both as `egy` with the stage as a document
 facet (`stage: demotic` / `late-egyptian`) — the damaskini Norm
 precedent; no invented subtags.
 
-2026-09-11 (Q68/P97-4): ONE real row appended to
+2026-09-11 (P97-4): ONE real row appended to
 late-egyptian-v19/train.jsonl — the first upstream row whose
 `hieroglyphs` run carries `<g>N46</g>` (a standard Gardiner code in
 the inline no-codepoint escape) — so the char corpus panel's tla-hf

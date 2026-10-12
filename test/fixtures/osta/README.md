@@ -20,7 +20,7 @@ data — the license anchor: CC BY-NC-SA 4.0, per the record and the
   contraction composites (`del•de·el•SPS00·DA0MS0`).
 
 - `tables/tabla-obras.xlsx` + `tables/tabla-codices.xlsx` (P77-r6,
-  №R-30) — the real works/codices tables TRIMMED to six sigla
+  owner ruling 2026-08-13) — the real works/codices tables TRIMMED to six sigla
   (RHJ, DAC, AC2, FNG, FJZ, PN2): kept row XML verbatim, sharedStrings
   and all structure byte-identical, non-data sheets cut to their header
   rows, re-zipped with Info-ZIP. FNG carries the castellano/aragonés/

@@ -49,7 +49,7 @@ module Nabu
     # context is the latest Level-1 page). UNREAD manuscript entries (every
     # lane run blank, the editor's "not yet read") skip by a second rule.
     #
-    # == Mined metadata (the №R-70 aggressive-mining law)
+    # == Mined metadata (the aggressive-mining law, owner-ruled 2026-09-26)
     #
     # Per passage: every header value in force (text / chapter / paragraph,
     # manuscript, new_manuscript, page_of_manuscript, line_of_manuscript,

@@ -15,7 +15,8 @@ module Nabu
     # pages are journaled v2, a `tir-words` sibling of lexlep-words).
     #
     # == License (both layers verbatim; class nc, relabel-on-reply — the
-    # ogham precedent, licensing email №17 queued)
+    # ogham precedent; nc confirmed by the maintainer's reply by email,
+    # C. Salomon, 2026-07-20)
     #
     # - Project:Terms of Use (api.php, 2026-07-18): "Thesaurus
     #   Inscriptionum Raeticarum (TIR) is an interactive online lexicon
@@ -55,7 +56,7 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "tir",
         name: "Thesaurus Inscriptionum Raeticarum (TIR) — Raetic corpus of record (Univ. Vienna)",
-        license: "MAINTAINER-RESOLVED CC BY-NC-SA 4.0 (№17 reply, C. Salomon, 2026-07-20, verbatim: " \
+        license: "MAINTAINER-RESOLVED CC BY-NC-SA 4.0 (maintainer reply by email, C. Salomon, 2026-07-20, verbatim: " \
                  "\"the information provided is indeed contradictory and outdated … I will … go with " \
                  "CC BY-NC-SA 4.0. I would therefore ask you to also use NC for the LexLep and TIR data " \
                  "in your library.\") — the conservative nc hold CONFIRMED, no reclass. Historical " \

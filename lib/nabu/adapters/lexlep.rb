@@ -15,7 +15,8 @@ module Nabu
     # `lexlep-words` dictionary source).
     #
     # == License — the CONFLICT, all three layers verbatim (class nc,
-    # relabel-on-reply; the ogham precedent, licensing email №17 queued)
+    # the ogham precedent; nc confirmed by the maintainer's reply by email,
+    # C. Salomon, 2026-07-20)
     #
     # - Project:Terms of use (api.php, 2026-07-18): "Lexicon Leponticum
     #   (LexLep) is an interactive online dictionary and lexicon created
@@ -60,7 +61,7 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "lexlep",
         name: "Lexicon Leponticum (LexLep) — Cisalpine Celtic inscriptions (Univ. Vienna)",
-        license: "MAINTAINER-RESOLVED CC BY-NC-SA 4.0 (№17 reply, C. Salomon, 2026-07-20, verbatim: " \
+        license: "MAINTAINER-RESOLVED CC BY-NC-SA 4.0 (maintainer reply by email, C. Salomon, 2026-07-20, verbatim: " \
                  "\"the information provided is indeed contradictory and outdated … I will … go with " \
                  "CC BY-NC-SA 4.0. I would therefore ask you to also use NC for the LexLep and TIR data " \
                  "in your library.\") — the conservative nc hold CONFIRMED, no reclass. Historical " \

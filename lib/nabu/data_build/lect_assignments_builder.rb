@@ -20,7 +20,7 @@ module Nabu
     # repo practices, because rule-derived and date-inferred rows differ in
     # kind and the consumer must see which is which.
     #
-    # == The license slice (owner ruling №R-24, 2026-08-11)
+    # == The license slice (owner ruling 2026-08-11)
     #
     # The dataset publishes CC BY-SA 4.0 (one carve-out dataset — BY-SA
     # lanes like edh/aes ride inside it). Only documents from open- and

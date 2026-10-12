@@ -90,7 +90,7 @@ module Nabu
         MANIFEST
       end
 
-      # Q59-a: fetch extracts the tracked conllu tarballs into texts/ —
+      # The declared-materializations rule (2026-09-03): fetch extracts the tracked conllu tarballs into texts/ —
       # declared so the identity walker hashes it instead of reading the
       # tree as weak (which cost a full re-parse every incremental rebuild).
       def self.materialized_paths = [TEXTS_DIR]

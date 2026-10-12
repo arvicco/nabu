@@ -62,7 +62,7 @@ module Nabu
 
       STATE_FILE = ".cbdb-fetch.json"
 
-      # P97-2 (№R-62 option b): the acquisition-only module grows its
+      # P97-2 (owner-ruled 2026-09-11, option b): the acquisition-only module grows its
       # first derived surface — the "cbdb" person-index slice.
       def self.person_index_producer? = true
 

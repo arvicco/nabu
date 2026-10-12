@@ -719,7 +719,7 @@ module MCP
       assert_equal %w[urn:k:epitaph:1], urns
     end
 
-    # №R-66's deeper tree (P101): family matching is any-prefix, not
+    # The owner-ruled (2026-09-18) deeper tree (P101): family matching is any-prefix, not
     # head-only — `literary/narrative` must find `literary/narrative/epic`.
     def test_search_kind_mid_level_prefix_matches_deeper_subs
       seed_kind_corpus!

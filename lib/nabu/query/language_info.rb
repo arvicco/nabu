@@ -28,7 +28,7 @@ module Nabu
       include LectFilter
 
       Shelf = Data.define(:slug, :title, :entries)
-      # P106-3 (№R-69 generalization 2): the dictionary GROUP — every shelf
+      # P106-3 (the multi-shelf dictionary ruling, generalization 2): the dictionary GROUP — every shelf
       # whose resolved lect node is +node+ or under it, from the
       # dictionary_stats census. +node+ nil = the code resolves to no
       # registry node (or no registry): the group is the code's own shelves.
@@ -85,7 +85,7 @@ module Nabu
         end
       end
 
-      # The dictionary group (P106-3 — №R-69 generalization 2): every
+      # The dictionary group (P106-3 — the multi-shelf dictionary ruling, generalization 2): every
       # dictionary-shaped request answers from the GROUP, read off the
       # dictionary_stats census (the desk-commands law — never an entries
       # scan). The code resolves through the registry (codemap tier —

@@ -224,7 +224,7 @@ module Nabu
           language: "ojp",
           title: "Wiktionary — Old Japanese (kaikki.org extract)"
         },
-        # -- P107-6 (the Central Asia seed basket; Q98) -- six ATTESTED
+        # -- P107-6 (the Central Asia seed basket) -- six ATTESTED
         # extracts on the P25-2 pattern (real ISO codes, no display
         # asterisk); kaikki index censuses 2026-09-28: otk 505 senses /
         # 396 words · oui 632 · chg 813 · mnc 3,207 · txb 2,856 · xto

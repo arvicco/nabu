@@ -31,8 +31,8 @@ module Nabu
     # == Language and dating
     #
     # `sv` for every document — Old Swedish has NO ISO 639-3 code (the
-    # IcePaHC-under-`is` precedent); the sv:old stage rule is №R-32
-    # (register), the lect posture pending on it. Each text carries
+    # IcePaHC-under-`is` precedent); the sv:old stage rule is
+    # owner-ruled (2026-08-13), the lect posture pending on it. Each text carries
     # upstream's own dating attrs (date/datefrom/dateto — "1280–1290",
     # YYYYMMDD bounds) verbatim in document metadata: the dating
     # posture's named candidate.
@@ -167,7 +167,7 @@ module Nabu
 
       def metadata(document_ref, text)
         part = document_ref.metadata.fetch("part")
-        # The part rides as a facet too — the №R-32 whole-source sv:old
+        # The part rides as a facet too — the owner-ruled whole-source sv:old
         # rule matches on it once nabu-lects mints the sv anchor.
         meta = { "part" => part, "facets" => { "part" => { "value" => part } } }
         meta["date"] = text.date if text.date

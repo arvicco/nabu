@@ -36,7 +36,7 @@ module Nabu
     # not — reported), line grain (the charter's own lines). The issuance
     # year stated in бележки ("Издадена на 21 септември 1378 г.") is a
     # typed date: metadata "date" (MetadataDates :structured). Base
-    # edition (№R-74): the original section's own edition footnote
+    # edition (owner ruling): the original section's own edition footnote
     # ("По редакция и издание на …") verbatim, else "unstated".
     class BgWikisource < SlavicWikisource
       API_URL = "https://bg.wikisource.org/w/api.php"

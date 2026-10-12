@@ -383,7 +383,7 @@ module Query
       assert result.withdrawn, "withdrawn passage is shown, flagged withdrawn"
     end
 
-    # P93-2 (№R-16): a swept document's card carries WHY and WHEN it left;
+    # P93-2: a swept document's card carries WHY and WHEN it left;
     # a pre-P93 withdrawal honestly carries nil.
     def test_withdrawn_document_card_carries_the_reason
       at = Time.utc(2026, 9, 1)

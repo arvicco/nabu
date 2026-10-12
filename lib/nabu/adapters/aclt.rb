@@ -4,7 +4,7 @@ require "json"
 
 module Nabu
   module Adapters
-    # ACLT — the Annotated Corpus of Luwian Texts (P110-2, Q110):
+    # ACLT — the Annotated Corpus of Luwian Texts (P110-2):
     # Yakubovich's annotated edition of the Hieroglyphic Luwian
     # inscriptions, served at luwian.web-corpora.net on Arkhangelskiy's
     # Tsakorpus platform and delivered for this library as the platform's
@@ -17,7 +17,7 @@ module Nabu
     # incoming/aclt/; sync validates (7z magic), moves it into
     # canonical/aclt/ with `.manual-fetch.json` provenance, and extracts
     # the archive's own `luwian_aclt/json/` tree beside it (declared via
-    # materialized_paths — the Q59-a rule). A refreshed corpus drops the
+    # materialized_paths — the declared-materializations rule). A refreshed corpus drops the
     # same way; the sha pin makes an identical re-drop a no-op.
     #
     # == The format and identity (FROZEN minting)
@@ -78,7 +78,7 @@ module Nabu
       end
 
       # The extracted json tree is the fetch's own artifact beside the
-      # held archive (Q59-a): declared, hashed into the tree identity.
+      # held archive (the declared-materializations rule, 2026-09-03): declared, hashed into the tree identity.
       def self.materialized_paths = ["luwian_aclt"]
 
       def self.drop_dir(workdir)

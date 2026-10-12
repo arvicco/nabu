@@ -153,7 +153,7 @@ class InvariantsTest < Minitest::Test
     def self.content_kind = :notes
   end
 
-  # P24-1 grain + the P98-1 shelf stance (Q71 item 4, owner-directed): an
+  # P24-1 grain + the P98-1 shelf stance (owner-directed): an
   # owner shelf may be legitimately empty — zero rows after a succeeded
   # local fetch is a state, not the half-loaded signature. It downgrades to
   # an :info note (kind-gated on shelf?, so a plain source's hollow
@@ -207,7 +207,7 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:fuzzy_unindexed, entry("perseus-greek"))
   end
 
-  # -- index freshness + segment pressure (P112-3, Q114) ---------------------
+  # -- index freshness + segment pressure (P112-3) ---------------------
 
   def refresh_slice(slug)
     Nabu::Store::Indexer.refresh_source!(catalog: @db, fulltext: @fulltext, slug: slug)
@@ -548,7 +548,7 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:reversed_axis_bounds), "a repaired lane clears the finding"
   end
 
-  # P107 (Q83.3, the №R-70 mining law made self-enforcing): a source
+  # P107 (the aggressive-mining law, 2026-09-26, made self-enforcing): a source
   # whose document metadata carries axis-SHAPED top-level keys — raw
   # ore, not the structured shapes the drift twins watch — while its
   # axes/facet lane holds zero rows is exactly "fetches axis-shaped
@@ -695,7 +695,7 @@ class InvariantsTest < Minitest::Test
                  "doc_a resolves, doc_c is out of pleiades scope — exactly one defect")
   end
 
-  # P98-2 (Q71 triage): a REVIEWED dangling ref — recorded in
+  # P98-2 (the health-check triage): a REVIEWED dangling ref — recorded in
   # config/place_ref_errata.yml after verification against live Pleiades
   # (nonexistent id, superseded/erratum tombstone) — folds into one info
   # rollup; an UNREVIEWED dangling ref still alarms loud, so the errata
@@ -888,7 +888,7 @@ class InvariantsTest < Minitest::Test
     assert_empty(findings.select { |f| %i[dossiers_vanished dossiers_stale dossiers_unindexed].include?(f.kind) })
   end
 
-  # -- the lect stats↔facet invariant (P106-7, Q88.3 — the 2026-09-26
+  # -- the lect stats↔facet invariant (P106-7 — the 2026-09-26
   # incident: the killed rebuild committed LectFacets' wholesale DELETE,
   # the axis went dark corpus-wide while lect_stats kept its stale rows,
   # and nothing went red for a day) --------------------------------------

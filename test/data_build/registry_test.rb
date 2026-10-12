@@ -348,7 +348,7 @@ class DataBuildRegistryTest < Minitest::Test
                  [roa_opt.name, roa_opt.glottocode, roa_opt.iso639p3]
     assert_equal Nabu::Adapters::CantigasHtmlParser::LANGUAGE, roa_opt.id
 
-    # Checked 2026-08-11 (P73-0, №R-25): mul is ISO 639-3's SPECIAL code
+    # Checked 2026-08-11 (P73-0): mul is ISO 639-3's SPECIAL code
     # "Multiple languages" (scope S) — it names content, not a languoid, so
     # Glottolog carries no row for it (verified: no languages.csv row in the
     # cldf-spine cone has ISO639P3code mul) and the glottocode is honestly
@@ -358,7 +358,7 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal ["Multiple languages", nil, "mul"], [mul.name, mul.glottocode, mul.iso639p3]
   end
 
-  # №R-25: the mul/ namespace is real plumbing — a mul-led slug must
+  # Owner ruling: the mul/ namespace is real plumbing — a mul-led slug must
   # construct through the same Feature validation every language uses.
   def test_a_mul_slugged_feature_validates
     feature = valid_feature(slug: "mul/test-refs", language: Nabu::DataBuild::LANGUAGES.fetch("mul"))
@@ -402,7 +402,7 @@ class DataBuildRegistryTest < Minitest::Test
       "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
       "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0",
       "roa-opt/cantigas" => "CC-BY-4.0",
-      # P73-3/P73-4: the №R-24 one-carve-out ruling — the share-alike
+      # P73-3/P73-4: the one-carve-out ruling (2026-08-11) — the share-alike
       # lanes (edh, aes, ...) ride inside one BY-SA dataset each.
       "mul/lect-assignments" => "CC-BY-SA-4.0",
       # P102-2: the kind axis' share-alike lanes (edh, aes, elephantine, ...).
@@ -417,7 +417,7 @@ class DataBuildRegistryTest < Minitest::Test
       # P73-8: the kanripo lane's share-alike grant.
       "mul/char-postings" => "CC-BY-SA-4.0",
       # P85-A: ~71% Wikipedia-derived context prose — the whole overlay
-      # inherits share-alike (№R-48).
+      # inherits share-alike (owner ruling 2026-08-28).
       "mul/language-dossiers" => "CC-BY-SA-4.0",
       # P86-4c: own authorship throughout (no Wikipedia text) — plain BY.
       "mul/script-dossiers" => "CC-BY-4.0",
@@ -425,7 +425,7 @@ class DataBuildRegistryTest < Minitest::Test
       # lanes are deferred to a later sidecar so the core stays BY).
       "sux/sign-table" => "CC-BY-4.0",
       "egy/unikemet-signs" => "CC-BY-4.0",
-      # P77-r17: derived from AES's share-alike grant (the №R-24/D51-a
+      # P77-r17: derived from AES's share-alike grant (the share-alike/D51-a
       # carve-out, the char-postings precedent).
       "egy/hiero-frequency" => "CC-BY-SA-4.0"
     }

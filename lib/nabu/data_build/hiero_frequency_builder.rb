@@ -23,7 +23,7 @@ module Nabu
     # column keys against egy/unikemet-signs.
     #
     # License: CC BY-SA 4.0 — derived from AES (CC BY-SA 4.0, class
-    # `attribution`), riding the №R-24/D51-a share-alike carve-out exactly
+    # `attribution`), riding the D51-a share-alike carve-out (owner ruling 2026-08-11) exactly
     # like mul/char-postings' kanripo lane. The builder refuses to publish
     # if the aes row's license class is not in the publishable set.
     class HieroFrequencyBuilder

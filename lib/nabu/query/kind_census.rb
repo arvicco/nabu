@@ -2,7 +2,7 @@
 
 module Nabu
   module Query
-    # The kind axis' browse view (P99-3 — №R-63): head-grain class
+    # The kind axis' browse view (P99-3, owner-ruled 2026-09-13): head-grain class
     # counts, the honesty buckets (unmapped / unknown) counted beside —
     # never inside — the classes, and the unclassified remainder
     # announced (sources carrying nothing genre-shaped speak through
@@ -24,7 +24,7 @@ module Nabu
                            :unclassified_sources, :seconds)
 
       # const: the two honesty buckets are STRUCTURAL, not a census —
-      # "unknown" is the one ruled non-class claim (№R-63), "unmapped"
+      # "unknown" is the one ruled non-class claim (owner ruling 2026-09-13), "unmapped"
       # the machine bucket; a third bucket would be a scheme change.
       BUCKETS = %w[unmapped unknown].freeze
       FACET = Store::KindBuilder::FACET

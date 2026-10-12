@@ -7,7 +7,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # The ia-hocr-text parser family (Q105) — archive.org's hOCR derivative
+    # The ia-hocr-text parser family — archive.org's hOCR derivative
     # PAIR read back into pages, the cheap page-grain route over an item's
     # OCR (the full _hocr.html runs ~50 MB per volume; this pair ~1 MB):
     #
@@ -17,7 +17,7 @@ module Nabu
     #                                  hocr_start, hocr_end] row per hOCR
     #                                  page, in page order
     #
-    # Censused 2026-10-11 over 77 items (every Q105 adoption among them):
+    # Censused 2026-10-11 over 77 items (every archive.org scan-shelf adoption among them):
     # the text offsets count CHARACTERS (code points), not bytes — the
     # last row's text_end equals the text's character length on every
     # item — and rows are contiguous (a blank leaf is an empty [n, n]

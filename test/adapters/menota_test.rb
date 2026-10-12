@@ -44,12 +44,12 @@ class MenotaTest < Minitest::Test
   ELIS = "urn:nabu:menota:dg-4at7-elis"                 # single-level bare tokens, note-in-w
   PAMPH = "urn:nabu:menota:dg-4at7-pamph"               # single-level bare tokens, sic/corr
 
-  # The Q45 mixed-level trims (bare tokens + edition milestones):
+  # The mixed-level trims (bare tokens + edition milestones):
   STRENG = "urn:nabu:menota:dg-4at7-streng"      # Unger milestones interleaved, bare me:punct
   FRAG243 = "urn:nabu:menota:am-243-b-alfa-fol"  # bare <pc xml:id>, <supplied> bare words, 3 edition layouts
   FRAG55B = "urn:nabu:menota:nra-norrfragm-55-b" # three-level fragment, bare <pc> throughout (whole)
 
-  # P88-B1: +AM36 (the apparatus fixture — №R-45 flaw 1).
+  # P88-B1: +AM36 (the apparatus fixture — flaw 1 of the 2026-08-30 owner review).
   AM36 = "urn:nabu:menota:am-36-fol"
   ALL_URNS = [KONUNGS, LAXDAELA, WORMIANUS, HOMILIES, ELIS, PAMPH, BONBOK, STJORN,
               STRENG, FRAG243, FRAG55B, AM36].sort.freeze
@@ -352,7 +352,7 @@ class MenotaTest < Minitest::Test
     end
   end
 
-  # -- Q45: mixed-level bare tokens + edition milestones ----------------------
+  # -- mixed-level bare tokens + edition milestones ---------------------------
   #
   # The 2026-08-27 census over the 91 canonical documents: 30 mixed-level
   # documents leave 98,575 tokens level-LESS — 98,496 punctuation (<pc>,
@@ -427,7 +427,7 @@ class MenotaTest < Minitest::Test
   end
 
   def test_marks_only_bare_tokens_stay_blank
-    # The P83 gate (Q47, the A15970 lesson): a token of bare combining
+    # The P83 gate (the A15970 lesson): a token of bare combining
     # marks has no base characters — restoring it would fake reading text.
     Dir.mktmpdir("menota-marks-only") do |dir|
       texts = File.join(dir, "texts")
@@ -517,8 +517,8 @@ class MenotaTest < Minitest::Test
     assert_equal 0, first.errored
     assert_equal 239, db[:passages].count,
                  "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8) " \
-                 "+ the Q45 trims (7 + 39 + 53); +1 at P91-2 — the page-cited AM-36 " \
-                 "auto-numbers its two lem lines (№R-45 A)"
+                 "+ the mixed-level trims (7 + 39 + 53); +1 at P91-2 — the page-cited AM-36 " \
+                 "auto-numbers its two lem lines (owner-ruled 2026-08-30, option A)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
@@ -529,7 +529,7 @@ class MenotaTest < Minitest::Test
     db&.disconnect
   end
 
-  # P88-B1 (№R-45 flaw 1): AM-36-fol interleaves parallel witnesses in a
+  # P88-B1 (flaw 1 of the 2026-08-30 owner review): AM-36-fol interleaves parallel witnesses in a
   # critical apparatus — <app><lem>the manuscript's OWN reading</lem>
   # <rdg wit="…">another manuscript's words</rdg></app>. Witness readings
   # must never enter the searchable text (they tripled phrases); they ride
@@ -537,7 +537,7 @@ class MenotaTest < Minitest::Test
   # no-parallel witnesses (comment-only rdg) contribute nothing.
   def test_apparatus_witness_readings_annotate_and_never_enter_the_text
     document = adapter.parse(ref_for(AM36))
-    # P91-2 (№R-45 A): AM-36 is PAGE-CITED (n-less ms lbs, no numbered
+    # P91-2 (owner-ruled 2026-08-30, option A): AM-36 is PAGE-CITED (n-less ms lbs, no numbered
     # line anywhere), so its own lem lines auto-number within the folio.
     assert_equal %w[1.1 1.2], document.passages.map { |p| p.urn.split(":").last },
                  "the two lem lines number 1.1/1.2 — page-wide refs retired"
@@ -557,7 +557,7 @@ class MenotaTest < Minitest::Test
     assert_match(/Sogu hins helga Olafs/, am70.fetch("text"))
   end
 
-  # -- P91-2 (Q58, №R-45 A): page-cite auto-numbering -------------------------
+  # -- P91-2 (owner-ruled 2026-08-30, option A): page-cite auto-numbering -----
 
   def test_line_cited_manuscripts_keep_their_refs_byte_identical
     # Streng mixes numbered ms lbs with edition milestones — the

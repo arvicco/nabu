@@ -191,7 +191,7 @@ practice: a passage's `text` is what a print edition's main text would
 read. Keep `<lem>`, `<reg>`, `<add>`, `<supplied>`, `<unclear>` and
 `<expan>` (including its `<ex>` expansions); drop `<rdg>` and `<orig>`
 (apparatus, not reading text); render `<del>` inside `⟦…⟧` (reading text
-in Leiden — №R-17, ruled below; originally dropped, migrated at P79-3);
+in Leiden — ruled 2026-08-10, below; originally dropped, migrated at P79-3);
 every `<gap>` becomes the single
 marker `[…]` so a search hit can never match across a lacuna as if the
 text were contiguous. Certainty data (gap extents, supplied/unclear letter
@@ -227,7 +227,7 @@ the old policy erased, and provably never for a document that already
 loaded (a loaded document has at least one passage, so the retry never
 runs and its frozen urns/text stay byte-identical).
 
-**RULED 2026-08-10 (№R-17, decision delegated to and made by the loop):**
+**RULED 2026-08-10 (decision delegated to and made by the loop):**
 `<del>` ALWAYS renders in `⟦…⟧`, partial cancellations included — the
 faithful Leiden reading (⟦⟧ is reading text, not apparatus), recovering
 text the blanket drop silently lost, and retiring DDbDP's outlier status
@@ -342,7 +342,7 @@ photographs of manuscripts. Hence:
 - **License is data, recorded per document** (`license_class`: open /
   attribution / nc / odbl / research_private / restricted), so queries and
   exports can answer "only material I may republish" mechanically.
-  **`open` covers the public domain** (№R-20, owner-ruled 2026-08-10):
+  **`open` covers the public domain** (owner-ruled 2026-08-10):
   no distinct `public_domain` class — PD and CC0-equivalent dedications
   both class `open`; the legal distinction carries no reuse consequence,
   and the source manifest's verbatim license line preserves the exact
@@ -650,7 +650,7 @@ Consequences that hold everywhere dates are handled:
   carries no doubt; a genuine doubt word (HGV `low`) maps to the house
   uncertainty tier and renders as a gloss — see §12.
 
-## 12. Uncertainty — three tiers, rendered, never stored (P76, №R-6)
+## 12. Uncertainty — three tiers, rendered, never stored (P76)
 
 Upstream corpora say doubt in a dozen vocabularies — HGV's precision
 `low`, the cataloguer's trailing `?`, nabu-places `certainty: low`,

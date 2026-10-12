@@ -5,7 +5,7 @@ require "support/adapter_conformance"
 require "tmpdir"
 
 module Adapters
-  # ndl-kotenseki (P109-2, Q108 phase-1): the NDL 次世代デジタルライブ
+  # ndl-kotenseki (P109-2, phase 1): the NDL 次世代デジタルライブ
   # ラリー classical-materials OCR mass, crawled over the granted bulk
   # route. Fixture: a real fulltext-json capture for PID 2532153
   # (玉篇 巻中 — a 1605 Yupian print's classical OCR), trimmed to its
@@ -71,7 +71,7 @@ module Adapters
       end
     end
 
-    # -- №I-9: a book that hangs on Net::ReadTimeout wedged the resumable
+    # -- The timeout-wedge fix (2026-10-11): a book that hangs on Net::ReadTimeout wedged the resumable
     # crawl (every resumed slice re-hit the same two PIDs and died). A
     # book timing out TIMEOUT_ATTEMPTS times in one slice is ledgered
     # under its own reason and the slice moves on.

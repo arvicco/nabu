@@ -620,7 +620,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P85-A (№R-48-2): `nabu note <code> "…"` writes a PRIVATE language note
+  # P85-A (owner-ruled 2026-08-28): `nabu note <code> "…"` writes a PRIVATE language note
   # (urn:nabu:lang:<code>), and the language card composes it as the fourth
   # layer beneath the overlay. A note on a code the library does not know
   # refuses, like a note on a typo'd corpus URN.
@@ -659,7 +659,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P67-2 (№11): the descent line — the registry's parent arc rendered on
+  # P67-2 (owner ruling): the descent line — the registry's parent arc rendered on
   # the card, code → root, each ancestor named. The Slavic nabu-lects
   # package (2026-10-10) re-wired chu from the staged sla:pro onto the new
   # South Slavic family zls, so the walk now runs anchor → family → family
@@ -683,7 +683,7 @@ class CLITest < Minitest::Test
         assert_nil status, "a registered anchor is never an unknown code"
         assert_match(/^jpa — Jewish Palestinian Aramaic$/, out, "the registry names it")
         assert_match(/descent \(nabu-lects\): jpa ← arc \(Aramaic\)/, out,
-                     "the №8 Aramaic-fan parent arc is exactly what this line displays")
+                     "the owner-ruled Aramaic-fan parent arc is exactly what this line displays")
       end
     end
   end
@@ -728,7 +728,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- P90-5 (Q61): the registry extension on --list + the info front door --
+  # -- P90-5: the registry extension on --list + the info front door --
 
   def test_language_list_carries_the_registry_extension
     with_recon_shelf_and_lects do |config|
@@ -1967,7 +1967,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P90-3 (Q57 lane 4a): the deprecation stopped naming a release that
+  # P90-3 (CLI-consistency lane 4a): the deprecation stopped naming a release that
   # already shipped — the pointer promises "a future release", honestly.
   def test_focus_pointer_no_longer_promises_next_release
     with_axis_corpus do |config|
@@ -2028,7 +2028,7 @@ class CLITest < Minitest::Test
       refute_match(/^shelf\s/, out, "a non-enabled source is hidden")
       assert_match(/enabled: 1 entry → 2 of 3 sources — not enabled: shelf \(--all shows it\)/, err,
                    "a small gap is named, never a guessing-game count (P44-i2); " \
-                   "the Q95 arrow expands entries to resolved sources")
+                   "the entry→source arrow expands entries to resolved sources")
     end
   end
 
@@ -2171,7 +2171,7 @@ class CLITest < Minitest::Test
       refute_match(/^shelf\s/, out)
       assert_match(/enabled: 1 entry → 2 of 3 sources — not enabled: shelf \(--all shows it\)/, err,
                    "the census footer names a small gap too (P44-i2), " \
-                   "with the Q95 entry→source arrow")
+                   "with the entry→source arrow")
     end
   end
 
@@ -2201,7 +2201,7 @@ class CLITest < Minitest::Test
           grantor: G. Starostin
           date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "№1"
+          thread: "by email, 2026-07-15"
           request_hint: write to George Starostin for your own grant
     YAML
   end
@@ -2957,7 +2957,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- P90-3 (Q57): variadic sync ------------------------------------------
+  # -- P90-3: variadic sync ------------------------------------------
 
   def test_sync_two_sources_runs_in_argument_order_with_a_summary
     with_two_source_sync_env do |config|
@@ -2995,7 +2995,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- P90-3 (Q57): variadic status ----------------------------------------
+  # -- P90-3: variadic status ----------------------------------------
 
   def test_status_two_sources_renders_detail_blocks_in_argument_order
     with_two_source_sync_env do |config|
@@ -4106,7 +4106,7 @@ class CLITest < Minitest::Test
   # the ok row folds into the rollup line, golden queries all skipped (the
   # TestAdapter corpus holds none of the golden urns), exit 0; `--all`
   # restores the per-source row.
-  # -- kind (P99-3 — №R-63): the fourth axis' CLI surfaces -------------------
+  # -- kind (P99-3 — owner-ruled 2026-09-13): the fourth axis' CLI surfaces -------------------
 
   # Seed kind rows the way KindBuilder writes them, straight into the
   # synced catalog — the census, the search filter, and the card line
@@ -4151,13 +4151,13 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[kind census --unmapped]) }
       assert_nil status
       assert_match(/upstream value with no fold rule/, out,
-                   "the worklist LEADS with what the list is (P101/Q75)")
+                   "the worklist LEADS with what the list is (P101)")
       assert_match(/"cetera"\s+×1/, out)
       assert_match(%r{candidate config/kind_map\.yml entry}, out)
     end
   end
 
-  # The deliberate: section (P101/Q75): reviewed not-genre values render
+  # The deliberate: section (P101): reviewed not-genre values render
   # as their own labelled block with reasons, apart from the TODO tail.
   def test_kind_census_unmapped_renders_the_deliberate_section
     with_indexed_corpus do |config|
@@ -4349,7 +4349,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P102-1 (Q74): `health --accept-shed SLUG` books the source's CURRENT
+  # P102-1: `health --accept-shed SLUG` books the source's CURRENT
   # withdrawal-shed count as owner-accepted — the anomaly quiets to an
   # info note, and GROWTH past the accepted level re-arms it.
   def test_health_accept_shed_records_quiets_and_re_arms_on_growth
@@ -4695,7 +4695,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P75 C-9 (№R-5): --within LAT,LON,KM cuts by the coordinates lane and
+  # P75 C-9 (owner ruling): --within LAT,LON,KM cuts by the coordinates lane and
   # legalizes a term-less browse; a malformed spec is refused with the shape.
   def test_search_within_filters_by_radius
     with_dated_corpus do |config|
@@ -5175,7 +5175,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # -- nabu index doctor (P112-3, Q114) --------------------------------------
+  # -- nabu index doctor (P112-3) --------------------------------------
 
   def test_index_doctor_reports_gauges_and_freshness
     with_fuzzy_corpus do |config|
@@ -7525,7 +7525,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P90-3 (Q57 lane 4b): lect suggest points at the generalized front door.
+  # P90-3 (CLI-consistency lane 4b): lect suggest points at the generalized front door.
   def test_lect_suggest_points_at_layer_suggest
     with_lects_cli_env(with_document: "urn:nabu:x:1") do |config|
       out, _err, status = with_config(config) { run_cli(%w[lect suggest fixture]) }
@@ -7535,7 +7535,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P90-3 (Q57 standing rule ①): --lang is the one language-filter spelling;
+  # P90-3 (CLI-consistency standing rule ①): --lang is the one language-filter spelling;
   # cognates' --langs stays as a quiet alias.
   def test_cognates_lang_is_an_alias_for_langs
     with_cognates_corpus do |config|
@@ -7547,7 +7547,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P90-3 (Q57 standing rule ①): ingest's --languages gains the --lang alias.
+  # P90-3 (CLI-consistency standing rule ①): ingest's --languages gains the --lang alias.
   def test_ingest_lang_is_an_alias_for_languages
     with_ingest_env do |config, root|
       source = write_note(root)
@@ -7559,7 +7559,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P90-3 (Q57 lane 3): the one destructive command gains a preview — the
+  # P90-3 (CLI-consistency lane 3): the one destructive command gains a preview — the
   # victim rows print, nothing is touched (journal AND rulings file).
   def test_lect_withdraw_dry_run_previews_the_victims_and_writes_nothing
     with_lects_cli_env do |config|
@@ -9504,7 +9504,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P90-3 (Q57): two wired sources for the variadic sync/status lanes.
+  # P90-3: two wired sources for the variadic sync/status lanes.
   def with_two_source_sync_env
     Dir.mktmpdir("nabu-cli-multi") do |root|
       %w[corpus-a corpus-b].each do |slug|
@@ -9585,7 +9585,7 @@ class CLITest < Minitest::Test
           grantor: G. Starostin
           date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "№1"
+          thread: "by email, 2026-07-15"
           request_hint: write to George Starostin for your own grant
     YAML
   end

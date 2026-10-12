@@ -5,7 +5,7 @@ require_relative "../scripta_bulgarica_fetch"
 
 module Nabu
   module Adapters
-    # Scripta Bulgarica (P107-8 — Q100): the BAS Institute for
+    # Scripta Bulgarica (P107-8): the BAS Institute for
     # Literature's portal of Old and Middle Bulgarian written monuments —
     # ~125 full source texts (inscriptions, charters, chronicles,
     # homiletic and hagiographic literature, 11th–18th c.) in Unicode

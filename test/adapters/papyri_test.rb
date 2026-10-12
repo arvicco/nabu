@@ -178,7 +178,7 @@ class PapyriTest < Minitest::Test
     assert_equal "bgu.1.100", document.title
   end
 
-  # P104-1 (Q77 under №R-70): the HGV/TM idnos were peeked at discover
+  # P104-1 (the aggressive-mining law, owner-ruled 2026-09-26): the HGV/TM idnos were peeked at discover
   # but never persisted — document metadata_json was {} on all 61,414
   # docs. They now ride as tm_nr/hgv verbatim plus a "tm:<n>" related
   # edge per numeric TM token (the P25-1 scheme rule; HGV has no ruled

@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Store
-  # Nabu::Store::TimelineBuilder::KanripoDates (P104-1, №R-70 grade 2):
+  # Nabu::Store::TimelineBuilder::KanripoDates (P104-1, attributed-era dating):
   # the KR-Catalog attribution-era lane. Each catalog entry's FIRST 人物
   # person block is the primary attribution (the byline order — the
   # author leads, commentators follow); explicit :DATES: mint an

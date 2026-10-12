@@ -91,7 +91,7 @@ class CcmhTest < Minitest::Test
     end
   end
 
-  # --- the curated dating overlay (P105-5c — Q87) ----------------------------
+  # --- the curated dating overlay (P105-5c) ----------------------------
 
   def test_parse_carries_the_curated_witness_dating_band
     document = parse_urn("urn:nabu:ccmh:assemanianus:mat")

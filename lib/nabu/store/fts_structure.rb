@@ -2,7 +2,7 @@
 
 module Nabu
   module Store
-    # The fts5 structure-record reader (P112-3, Q114) — the gauge behind
+    # The fts5 structure-record reader (P112-3) — the gauge behind
     # the index health probes and `nabu index doctor`.
     #
     # Why it exists (the 2026-10-01 wedge, P111-1c): fts5 hard-caps TOTAL

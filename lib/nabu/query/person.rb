@@ -2,7 +2,7 @@
 
 module Nabu
   module Query
-    # The person desk card (P97-2 — №R-62 option b): look a person up in
+    # The person desk card (P97-2 — owner ruling 2026-09-11, option b): look a person up in
     # the derived person index by authority ref ("cbdb:1762") or by name
     # in either script (the shared fold; exact key equality, never
     # fuzzy — homonyms yield several cards, the place-desk shape).

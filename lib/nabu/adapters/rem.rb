@@ -183,7 +183,7 @@ module Nabu
       end
 
       # The CorA-XML sibling's unpack lands beside upstream's TEI tree
-      # (Q59-a): declared so the canonical identity stays strong.
+      # (the declared-materializations rule, 2026-09-03): declared so the canonical identity stays strong.
       def self.materialized_paths = [CORA_DIRNAME]
 
       # +pin+ / +cora_pin+ override the release shas (tests; a future owner
@@ -253,7 +253,7 @@ module Nabu
         raise Nabu::FetchError, "rem fetch failed into #{workdir}: #{e.message}"
       end
 
-      # P109-4 (№R-70): the ReM classification vocabulary the genre facet
+      # P109-4: the ReM classification vocabulary the genre facet
       # labels (P Prosa / V Vers / PV both / U Urkunde); an unlisted
       # code rides value-only, never guessed.
       GENRE_LABELS = { "P" => "Prosa", "V" => "Vers", "PV" => "Prosa und Vers",

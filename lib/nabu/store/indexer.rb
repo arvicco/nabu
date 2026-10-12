@@ -110,7 +110,7 @@ module Nabu
       LEMMA_TABLE = :passage_lemmas
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
-      # P93-3 (№R-39 b): the CJK bigram lane — a CONTENTLESS second lane
+      # P93-3: the CJK bigram lane — a CONTENTLESS second lane
       # over the cjk-flagged sources (sources.yml `cjk_index: true`,
       # threaded in as +cjk_slugs+ — the fuzzy_index pattern). Each
       # Han/kana run of the folded text indexes as its overlapping
@@ -145,7 +145,7 @@ module Nabu
       PASSAGE_CHARS_TABLE = :passage_chars
       RAREST_SLOTS = 4
 
-      # P86-3 (№R-49, B3): the postings' character class widens from Han-only
+      # P86-3 (owner-ruled 2026-08-28, B3): the postings' character class widens from Han-only
       # to EVERY character outside plain ASCII — the universal char card's
       # corpus panel ("where does ᚠ / α / ௐ actually occur") for any writing
       # system. Row count stays bounded by sources × alphabet × languages
@@ -212,7 +212,7 @@ module Nabu
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
 
-      # == The bulk slice mode (P111-1, Q111) — big content-bearing re-parses
+      # == The bulk slice mode (P111-1) — big content-bearing re-parses
       #
       # MEASURED problem: refresh_source!'s slice rewrite (delete + reinsert)
       # is FTS5-pathological at millions of rows — the deletemerge machinery
@@ -327,7 +327,7 @@ module Nabu
       # until then, and Query::Search serves the old catalog-side path
       # against it.
       #
-      # == The contentless shape (P93-1, №R-16) — the text lives ONCE
+      # == The contentless shape (P93-1) — the text lives ONCE
       #
       # MEASURED problem (2026-09-02): fulltext.sqlite3 stood at 87 GB
       # beside a 118 GB catalog — passages_fts stored a full second copy of
@@ -431,7 +431,7 @@ module Nabu
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, cjk_slugs: nil,
                    lemma_tiers: nil, profile: nil, sign_list: nil, progress: nil, lemma_shelf: nil,
-                   lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- №R-51-B: the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
+                   lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- since 2026-08-29 the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
@@ -456,7 +456,7 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
-          # №R-51-B (2026-08-29): the silver projection LEFT the rebuild
+          # Owner-ruled 2026-08-29: the silver projection LEFT the rebuild
           # path — a full rebuild never pays the whole-shelf replay again
           # (the 2026-08-29 profile: 99m39s). The shelf is announced
           # honestly; `nabu lemma-enrich <lang> --index-only` projects it
@@ -464,7 +464,7 @@ module Nabu
           # stays, ARM-GATED, so an owner-projected index survives routine
           # syncs but silver never sneaks back into a clean one.
           if lemma_shelf
-            progress&.stage("silver lemmas: shelf present, NOT projected (№R-51-B) — " \
+            progress&.stage("silver lemmas: shelf present, NOT projected (owner-ruled 2026-08-29) — " \
                             "nabu lemma-enrich <lang> --index-only applies it")
           end
           # P42-1: the corpus lemma-frequency census, one grouped INSERT-SELECT
@@ -547,7 +547,7 @@ module Nabu
       # Fallback: a fulltext db missing any table (first-ever sync) or whose
       # lemma table predates the tier column falls back to the full rebuild!.
       # Returns the SOURCE's live passage count — never the corpus total.
-      # +delta+ (P112-1, Q112) is the load's Store::IndexDelta or nil. With a
+      # +delta+ (P112-1) is the load's Store::IndexDelta or nil. With a
       # usable delta the refresh works the DELTA GRAIN: it deletes exactly
       # the changed rowids from the passage-keyed tables and re-derives
       # exactly the upserted rows, so sync index cost is proportional to what
@@ -646,7 +646,7 @@ module Nabu
               # annotation re-derivation never re-mints them. Scoped to this
               # source's urns; the frequency delta below counts the re-landed
               # rows because the after-snapshot runs later in this txn.
-              # №R-51-B ARM-GATE: only when the owner has projected the shelf
+              # ARM-GATE (owner-ruled 2026-08-29): only when the owner has projected the shelf
               # (any silver row standing) — an unarmed index stays
               # silver-free through syncs.
               if lemma_shelf && silver_armed?(fulltext)
@@ -851,7 +851,7 @@ module Nabu
       end
 
       # -- the slice-pending marker + freshness stamp (P111-1b, P112-3) ------
-      # P112-3 (Q114) generalizes the pending marker into a FRESHNESS
+      # P112-3 generalizes the pending marker into a FRESHNESS
       # STAMP: a finished slice records the catalog state it serves (the
       # source's live row count + max passage id at finish). Health
       # cross-checks the stamp against the live catalog, so any skip-gate
@@ -1070,7 +1070,7 @@ module Nabu
       # pre-P81-3 one source-less rows. +slugs+ maps source_id → slug (the
       # source_slugs map) for the source token; nil suppresses the column
       # even against a source-bearing table (no caller does today).
-      # P105-5d (Q87): the loop ticks per FULL batch — cbeta's slice
+      # P105-5d: the loop ticks per FULL batch — cbeta's slice
       # walked 8.75M passages for ~55 minutes reading as a hang (openiti
       # ~2h); a silent pass is a defect, not a style choice. Partial
       # (final) batches deliberately do not tick: a small corpus stays
@@ -1231,7 +1231,7 @@ module Nabu
         [stale, nil, nil]
       end
 
-      # №R-51-B: is silver ARMED — has the owner projected the shelf into
+      # Is silver ARMED — has the owner projected the shelf into
       # this index? Read from lemma_frequencies (small, tier-keyed — the
       # projection always maintains it) rather than scanning the 100M-row
       # lemma table for a tier value.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nabu
-  # The lazy, memoizing, read-only connection opener (P8-2 origin, Q65
+  # The lazy, memoizing, read-only connection opener (P8-2 origin, P94
   # extraction): resolves one database slot per call for long-lived
   # servers (`nabu mcp`). On every call: absent file → nil (the caller
   # renders its "no corpus" state); present file → an open handle,
@@ -9,7 +9,7 @@ module Nabu
   # identity change (a rebuild deletes + recreates the file → new
   # inode) → the stale handle is disconnected and a fresh one opened.
   #
-  # == The idle gap (Q65 — the P93 first-rebuild disk incident)
+  # == The idle gap (the P93 first-rebuild disk incident)
   #
   # Per-call re-stat is enough for DATA freshness, but an IDLE session
   # makes no calls — its cached handle held the deleted pre-rebuild

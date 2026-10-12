@@ -49,7 +49,7 @@ module Nabu
     # the owner hand-edits the dossier.
     CURATED_KEYS = %w[description themes key_works group].freeze
 
-    # The scaffolder's unwritten-description marker (P66-4/Q3): a dossier
+    # The scaffolder's unwritten-description marker (P66-4): a dossier
     # whose description starts with this is honestly UNWRITTEN — the export
     # seeds it instead of recycling registry comments (the openmgh
     # loop-speak complaint, 2026-08-02), and site:check flags it loudly

@@ -250,7 +250,7 @@ module Nabu
       end
 
       # Everything discover peeked, minus the raw title/author pair that
-      # became the document title. P104-1 (Q77): the xenoData genre/
+      # became the document title. P104-1: the xenoData genre/
       # subgenre also project as facets (all 767 docs carry both);
       # creation_date rides the timeline separately (MetadataDates
       # :signed_year_key, composition class).

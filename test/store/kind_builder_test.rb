@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 
 module Store
-  # Nabu::Store::KindBuilder (P99-2 — №R-63): the derived pass that
+  # Nabu::Store::KindBuilder (P99-2 — owner-ruled 2026-09-13): the derived pass that
   # projects the kind axis into document_facets — reads each ruled
   # source's mapped facet rows (or applies its source_kind declaration),
   # normalizes through Nabu::Kinds, writes facet="kind" rows

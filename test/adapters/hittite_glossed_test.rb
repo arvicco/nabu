@@ -5,7 +5,7 @@ require "support/adapter_conformance"
 
 module Adapters
   # hittite-glossed — the Zenodo "Glossed Hittite Texts with German
-  # Translation" corpus (P109-3, Q80's strongest line): ONE CSV
+  # Translation" corpus (P109-3, the strongest line): ONE CSV
   # (7000_hitt_txts_wGloss.csv, DOI 10.5281/zenodo.14266302 v1.0,
   # CC BY 4.0), 7,099 texts / 170,496 word rows. Grain: document = one
   # text (txtid, the tablet publication id — the same id family

@@ -4,8 +4,8 @@ Real Word pages for the `lexlep-words` dictionary adapter
 (`Nabu::Adapters::LexlepWords`). Retrieved **2026-07-18** from
 `https://lexlep.univie.ac.at/api.php` in the fetcher's own batch shape —
 see `test/fixtures/lexlep/README.md` for the family, the envelope note
-and ALL license layers verbatim (one wiki, one `nc` posture, email №17
-queued, relabel-on-reply).
+and ALL license layers verbatim (one wiki, one `nc` posture, confirmed by
+the maintainer's reply by email, C. Salomon, 2026-07-20).
 
 - Layout: `pages/Word/<percent-encoded title>.json` + `map/Word.json`
   (trimmed to the checked-in pages).

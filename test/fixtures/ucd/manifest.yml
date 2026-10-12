@@ -15,7 +15,7 @@ files:
     url: https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt
     whole: false
     trim: 21 of 40,575 lines — representative code points across scripts (Latin, Greek, Hebrew, Runic, Old Italic, Egyptian), a control, combining mark, canonical/compat/fraction decompositions, numeric values, and the CJK/Hangul First/Last range pairs; recipe in README.md
-  # P86-1 (№R-49a): the member-context tier. All members ride the ONE
+  # P86-1 (owner ruling 2026-08-28): the member-context tier. All members ride the ONE
   # UCD.zip artifact (the adapter's actual fetch); per-member URLs below
   # name the same content's standalone form for reference. confusables.txt
   # is the exception — the security tree, its own version line (16.0.0).

@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
-# The ORACC glossary lane (P104-4, Q81 — the №R-69a secondary-lane pilot):
+# The ORACC glossary lane (P104-4, the secondary-lane pilot):
 # per-project gloss-<lang>.json → one dictionary per (project, language),
 # streamed (the instances/summaries mass after the entries array is never
 # read). Runs against the REAL checked-in gloss fixtures: rimanum's whole

@@ -4,7 +4,7 @@ require "nokogiri"
 require_relative "adapters/e84000"
 
 module Nabu
-  # The 84000 → Derge title crosswalk (P106-5 — the Q78 e84000 lode 2):
+  # The 84000 → Derge title crosswalk (P106-5 — the e84000 sidecar lode 2):
   # the derge shelves mint their ~4.5k documents from {D…} markers alone,
   # title-less; every 84000 header — placeholder stubs (3,926: the titles
   # of every UNTRANSLATED text) and published translations alike — carries

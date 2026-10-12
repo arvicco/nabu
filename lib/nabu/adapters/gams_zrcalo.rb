@@ -6,7 +6,7 @@ require_relative "../file_fetch"
 
 module Nabu
   module Adapters
-    # gams-zrcalo (Q102, 02-sources row 244): the GAMS digital edition of
+    # gams-zrcalo (02-sources row 244): the GAMS digital edition of
     # *Zrcalo člověčaskago spasenja* — the Croatian Glagolitic Speculum
     # humanae salvationis written in 1445 by the deacon Luka (Vatican,
     # Borg. illirico 9), translated from the Old Czech *Zrcadlo človečieho

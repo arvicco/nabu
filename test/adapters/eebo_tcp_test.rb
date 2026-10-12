@@ -9,7 +9,7 @@ require "fileutils"
 # <ETS> schema, riding the tcp-xml family CME proved (P82-2). Fetched from
 # the TCP's own Box folder (28 P4 zips across two phases, uniformly CC0 —
 # channel verified 2026-08-26); wave scope is the `classes:` phase list
-# (№R-43 ruled 2026-08-26: wave 1 = Phase I whole, both phases the
+# (owner-ruled 2026-08-26: wave 1 = Phase I whole, both phases the
 # stated follow-on).
 #
 # Fixtures: four REAL corpus files (test/fixtures/eebo-tcp/texts/,
@@ -76,7 +76,7 @@ class EeboTcpTest < Minitest::Test
   def test_the_default_wave_scope_is_phase_one_per_r43
     refs = Nabu::Adapters::EeboTcp.new.discover(workdir).to_a
     assert_equal [RALEIGH, PETITION], refs.map(&:id),
-                 "№R-43 (ruled 2026-08-26): wave 1 = Phase I whole; the both-phases " \
+                 "owner-ruled 2026-08-26: wave 1 = Phase I whole; the both-phases " \
                  "follow-on is a sources.yml classes: edit"
   end
 

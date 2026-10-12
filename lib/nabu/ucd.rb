@@ -3,7 +3,7 @@
 module Nabu
   # A pure READ seam over the Unicode Character Database core (UnicodeData.txt),
   # landed by `nabu sync ucd` under canonical/ucd/. The universal
-  # character-identity FLOOR of the `nabu char` redesign (№R-44 = Shape C): the
+  # character-identity FLOOR of the `nabu char` redesign (owner-ruled Shape C): the
   # NAME, general category, canonical/compatibility decomposition and numeric
   # value of EVERY code point — the properties Ruby's own Unicode tables do not
   # expose (Ruby gives script membership and case, but not names or numeric
@@ -79,7 +79,7 @@ module Nabu
     # field row every interior point inherits.
     RangeBlock = Data.define(:range, :label, :fields)
 
-    # -- member-context records (P86-1, №R-49a) -----------------------------
+    # -- member-context records (P86-1) -----------------------------
     # The context tier over the sibling UCD member files the UCD.zip fetch
     # lands next to UnicodeData.txt. Each lookup feature-detects its OWN
     # member file — a partial canonical answers what it holds and nothing

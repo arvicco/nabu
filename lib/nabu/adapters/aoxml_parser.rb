@@ -234,7 +234,7 @@ module Nabu
       # sub-project — TLH/HFR/BESRIT/…; genre BANDS are deliberately not
       # derived: no in-data genre field exists, and inventing a CTH-range
       # table is not this parser's call) plus the per-document language
-      # facet (P104-1, Q77 under №R-70): the distinct MAPPED line
+      # facet (P104-1, the aggressive-mining law): the distinct MAPPED line
       # languages in attestation order, multi-valued where a tablet mixes
       # (Hattic ritual with Hittite rubrics) — the per-line lg tags were
       # parsed since P31-1 but never faceted. Unmapped/"und" lines never

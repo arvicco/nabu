@@ -110,7 +110,7 @@ module Nabu
           end,
           "dictionary_entries" => entries, "dictionary_entries_display" => self.class.commas(entries),
           "dictionary_shelves" => catalog[:dictionaries].count,
-          # P106-3 (№R-69 g2): the dictionary-group census — shelves
+          # P106-3 (the multi-shelf dictionary ruling, generalization 2): the dictionary-group census — shelves
           # grouped by resolved lect node (dictionary_stats, migration
           # 036), plus the honestly-censused count of language codes the
           # registry cannot yet place. Zero on a pre-036/underived

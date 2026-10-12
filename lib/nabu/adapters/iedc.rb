@@ -7,7 +7,7 @@ require_relative "../url_download"
 
 module Nabu
   module Adapters
-    # IEDC — the Invisible East Digital Corpus (P107-2, Q96.1): 1,316
+    # IEDC — the Invisible East Digital Corpus (P107-2): 1,316
     # documentary items of the medieval Islamicate East (Bamiyan and
     # Firuzkuh papers, Khotan documents, Bactrian economic documents …)
     # from ONE versioned Zenodo XML (doi 10.5281/zenodo.20490276,

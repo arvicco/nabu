@@ -185,7 +185,7 @@ module Nabu
     # (the P35 honesty rule); zero-suppressed with the grow-the-set on-ramp.
     def footer_line(entries, hidden_slugs, resolved_count: nil)
       head = "enabled: #{entries.size} #{entries.size == 1 ? 'entry' : 'entries'}"
-      # Q95 (owner confusion 2026-09-27): entries ≠ sources — an entry can
+      # After an owner confusion (2026-09-27): entries ≠ sources — an entry can
       # be an AXIS. The arrow names the expansion, so "170 entries" under
       # "187 sources" can never again read as a 17-source gap.
       if resolved_count

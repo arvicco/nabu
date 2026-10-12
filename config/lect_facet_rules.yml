@@ -58,10 +58,10 @@ rules:
   # the sux-coded archaic corpus (the qpc-coded ED I-II documents are a
   # separately ratifiable claim — registry qpc note). Old Akkadian-period
   # and Lagash II Sumerian → sarg; Early OB and OB → post (the literary/
-  # liturgical corpus). №10 (owner ruling 2026-08-09): the first-millennium
+  # liturgical corpus). Owner ruling 2026-08-09: the first-millennium
   # copies join post — MB/MA/NA/NB-period Sumerian is the same
   # post-vernacular literary/liturgical corpus in later library copies
-  # (the №1 etcsl claim at period grain; 4,400 docs measured at ruling).
+  # (the ruled etcsl claim at period grain; 4,400 docs measured at ruling).
   - id: sux-period
     tier: certain
     # oracc joined P62-2 (Ur III alone ≈ 80k sux docs once re-parsed).
@@ -83,7 +83,7 @@ rules:
       "Neo-Babylonian": "sux:post"
 
   # ── The Elamite period grid (nabu-lects v1.6.2 elx anchor, ruled via
-  # №R-65(b) + the merged mint 2026-09-26; the same CDLI vocabulary as
+  # owner ruling (option b) + the merged mint 2026-09-26; the same CDLI vocabulary as
   # D58-a — parentheticals strip at match time, so "Achaemenid
   # (547-331 BC)" folds like bare "Achaemenid"). Census 2026-09-25:
   # Achaemenid 2,139 · Neo-Elamite 300 · Middle Elamite 277 · Old
@@ -106,7 +106,7 @@ rules:
   # (2026-08-06): nk → egy:nk — the whole New Kingdom slice onto the stage
   # minted for exactly this straddle (band [-1550,-1070] overlaps mid and
   # late deliberately; the owner's no-excessive-complexity call — no
-  # per-subcorpus splitting). №9 (owner ruling 2026-08-09): tip-roman →
+  # per-subcorpus splitting). Owner ruling 2026-08-09: tip-roman →
   # egy/trad — the registry's égyptien-de-tradition REGISTER variety,
   # minted for exactly this material (Middle Egyptian register in late
   # copies; a dating-grain stage would be linguistically wrong, which is
@@ -122,7 +122,7 @@ rules:
       "nk": "egy:nk"
       "tip-roman": "egy/trad"
 
-  # ── №2 (owner ruling 2026-08-09): the Coptic Scriptorium corpus tags its
+  # ── Owner ruling 2026-08-09: the Coptic Scriptorium corpus tags its
   # dialect per document ("Sahidic Coptic" 417 · "Bohairic Coptic" 62,
   # censused at ruling); the adapter surfaces it as the `dialect` facet.
   # Lycopolitan (1 doc) and the two mixed-feature values stay honestly
@@ -136,7 +136,7 @@ rules:
       "Sahidic Coptic": "cop/sah"
       "Bohairic Coptic": "cop/boh"
 
-  # ── №3 (ruled 2026-08-09) + P66-1: the Avestan stage split. The adapter
+  # ── Owner-ruled 2026-08-09 + P66-1: the Avestan stage split. The adapter
   # derives avestan-stage per page from its verse anchors (the Gathic
   # chapter set Y 28-41, 43-51, 53 = the Gathas + Yasna Haptaŋhāiti — the
   # standard scholarly division; every other book is Young Avestan; a page
@@ -190,7 +190,7 @@ rules:
       "targum-jerusalem": "arc:mid/jud"
       "aramaic-targum": "arc:mid/jud"
 
-  # ── №R-32 (owner-ruled 2026-08-13, option a): the whole-source Old
+  # ── Owner-ruled 2026-08-13 (option a): the whole-source Old
   # Swedish claim — every fornsvenska part IS fornsvenska (the adapter's
   # scope cut is exact: the Early Modern fsv-nysvensk* siblings are
   # deliberately not ingested). Tier certain: the corpus's own division.
@@ -234,7 +234,7 @@ rules:
       "navarro-aragonés": "an:old"
       "navarro": "an:old"
 
-  # ── Q39 (owner-ruled 2026-08-19 by merging nabu-lects PR #5 whose body
+  # ── Owner-ruled 2026-08-19 (by merging nabu-lects PR #5 whose body
   # states this exact consequence): the ref blanket — the whole corpus is
   # Early New High German (upstream's own `language: fnhd` tag, censused
   # 190/190 and parse-verified per file; the deposit's 1350–1650 frame is
@@ -252,7 +252,7 @@ rules:
       "ref-mlu": "de:early"
       "ref-rub": "de:early"
 
-  # ── №R-34 (2026-08-18, ruled as recommended): the achemenet blanket —
+  # ── Owner-ruled 2026-08-18 (as recommended): the achemenet blanket —
   # the whole corpus is Achaemenid-period Babylonian (550–330 BCE), and
   # the registry's akk:nb band DELIBERATELY folds the Late Babylonian/
   # Achaemenid record ("rather than minting stages the period labels cut
@@ -272,7 +272,7 @@ rules:
       "Strassmaier": "akk:nb"
       "YOS7": "akk:nb"
 
-  # ── №R-41 (owner-ruled 2026-08-21, option A of the dialect-placement
+  # ── Owner-ruled 2026-08-21 (option A of the dialect-placement
   # doc; targets minted by nabu-lects PR #6): the lo-congres dialect
   # facet — upstream's own six-way division, letter-for-letter the
   # 2018-registered IANA Occitan variant subtags, mapped onto the
@@ -295,7 +295,7 @@ rules:
       "lemosin": "oc/lemosin"
       "vivaraup": "oc/vivaraup"
 
-  # ── №R-42 (owner-ruled 2026-08-24 as surveyed; targets minted by
+  # ── Owner-ruled 2026-08-24 (as surveyed; targets minted by
   # nabu-lects v1.1.0): the two Menota dan docs — Codex Runicus and
   # Mariaklagen, both c. 1300 Scanian, comfortably inside every
   # convention's Old Danish — carry raw "c. 1300" origDates with NO

@@ -19,7 +19,7 @@ module Nabu
   #   lect rulings, grants, creep acceptances, the box profile.
   #
   # NOTHING UNDER db/ SHIPS, EVER (owner ruling 2026-08-16, closing
-  # №R-21's convenience tier): everything under db/ regenerates via
+  # the db/ convenience tier): everything under db/ regenerates via
   # `nabu rebuild` from the permanent folders — restore is
   # clone-the-repo, rsync the folders back, rebuild. The tier existed as
   # a restore-time shortcut ("a file copy beats hours of rebuild") and
@@ -161,7 +161,7 @@ module Nabu
         Section.new(name: "canonical", source: @config.canonical_dir, dest: File.join(@target, "canonical")),
         Section.new(name: "config", source: @config.config_dir, dest: File.join(@target, "config")),
         Section.new(name: "local", source: @config.local_dir, dest: File.join(@target, "local")),
-        # №R-22 (owner-ruled 2026-08-11): .docs/ — the steering record
+        # Owner-ruled 2026-08-11: .docs/ — the steering record
         # (decision register, plan docs, surveys) — is owner input with no
         # other copy anywhere. Non-contract (db/ derives from the three
         # folders alone) but backed up by default; absent dir = clean skip.

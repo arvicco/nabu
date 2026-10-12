@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# The follow-up packages' LEXSTAT/ wordlists (Q116): 48 lexicostatistical
+# The follow-up packages' LEXSTAT/ wordlists (P118): 48 lexicostatistical
 # tables inside ALTAIC / CAUC / YENISEY / SINTIB / DRAV / CHUKCHEE / KART.exe,
 # the IE.exe wordlist shape (one entry per form cell, file position 0 the
 # date row) read through PER-PACKAGE language maps — the same siglum names

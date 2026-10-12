@@ -5,7 +5,7 @@ require "support/adapter_conformance"
 require "tmpdir"
 
 module Adapters
-  # uk-wikisource (P116-3, Q103 under №R-74): the chronicles of
+  # uk-wikisource (P116-3, under the base-edition rule): the chronicles of
   # Категорія:Літописи. Fixture envelopes are real api.php captures
   # (2026-10-10): Сборникъ лѣтописей/Добромильская лѣтопись (the 1888
   # Kyiv edition, a ProofreadPage transclusion — ADMITTED), Львівський

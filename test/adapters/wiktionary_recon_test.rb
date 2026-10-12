@@ -142,7 +142,7 @@ class WiktionaryReconTest < Minitest::Test
            "romanization stubs mint as entries")
   end
 
-  # P104-2 (Q79 — the silent-failure defect, poison shape 1 of 2):
+  # P104-2 (the silent-failure defect, poison shape 1 of 2):
   # Wiktionary titles MediaWiki cannot represent live under "Unsupported
   # titles/…", and wiktextract emits them with the RAW character as
   # `word` — the zh extract's "Unsupported titles/Space" record
@@ -165,7 +165,7 @@ class WiktionaryReconTest < Minitest::Test
            "the MC/OC golden still parses beside the skipped record")
   end
 
-  # P104-2 (Q79, poison shape 2 of 2): the positional homograph suffix
+  # P104-2 (poison shape 2 of 2): the positional homograph suffix
   # could mint an id EQUAL to a sibling record's etymology_number-bearing
   # base — upstream 夆 (lines 5047-5050, fixture-pinned byte-verbatim)
   # ships THREE etymology-less character records (→ 夆:character, :2, :3

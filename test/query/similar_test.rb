@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Query
-  # Nabu::Query::Similar (P93-5, №R-36) — the URN-anchored semantic page
+  # Nabu::Query::Similar (P93-5) — the URN-anchored semantic page
   # over hand-planted int8 vectors, scanned by the REAL sqlite-vec
   # extension. The extension is an owner-installed tool
   # (docs/manual/embed-venv.md): when absent on a box, the scan tests

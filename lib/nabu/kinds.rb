@@ -3,10 +3,10 @@
 require "yaml"
 
 module Nabu
-  # The kind axis' config seam (P99-1 — №R-63, ruled 2026-09-13): the
+  # The kind axis' config seam (P99-1, owner-ruled 2026-09-13): the
   # fourth document axis, "what KIND of document is this?", as one
   # multi-label facet over a RULED class list (21 heads + unknown since
-  # №R-66's literary-family restructure, 2026-09-18). Two files:
+  # the literary-family restructure, owner-ruled 2026-09-18). Two files:
   #
   # - config/kind_classes.yml — the ruled heads (+ `unknown`, upstream's
   #   own "cannot determine" as a claim, not a gap), each with a one-line
@@ -16,7 +16,7 @@ module Nabu
   #   verified no external standard spans cuneiform, papyri, stone,
   #   scripture, and novels at once. A slash-keyed entry
   #   (`literary/poetry`) is a named SUB-CLASS carrying its own desc and
-  #   crosswalks under a declared head (№R-66, owner 2026-09-18: the
+  #   crosswalks under a declared head (owner-ruled 2026-09-18: the
   #   literature families live under the `literary` head; the bare head
   #   is upstream's own "literary, unspecified").
   # - config/kind_map.yml — per-source folds, owner-ruled like lect
@@ -28,7 +28,7 @@ module Nabu
   #   not to be genre claims at all (physical layout, cult context, a
   #   bare copy marker), each with its one-line reason. A deliberate
   #   fragment folds to nothing: it is a reviewed non-claim, rendered as
-  #   its own census section, never `unmapped` noise (P101, Q75).
+  #   its own census section, never `unmapped` noise (P101).
   #
   # Normalization (survey §4b): strip trailing uncertainty markers →
   # split composites → per-fragment lookup → 0..n class paths; a fragment

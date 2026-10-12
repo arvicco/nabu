@@ -47,7 +47,7 @@ files:
     copied: 2026-08-13
     whole: false
     trim: sheet "tabla obras" cut to the 27 rows of sigla RHJ/DAC/AC2/FNG/FJZ/PN2 (row XML verbatim; sharedStrings and every other part byte-identical; the two non-data sheets keep header rows only); re-zipped with Info-ZIP
-    reason: the works-table lane (P77-r6, №R-30) — per-work lengua/author/title/OPDT/BETA columns; FNG pins the mixed-language tie, FJZ the leonés minority, PN2 the 17-work cancionero shape
+    reason: the works-table lane (P77-r6, owner ruling 2026-08-13) — per-work lengua/author/title/OPDT/BETA columns; FNG pins the mixed-language tie, FJZ the leonés minority, PN2 the 17-work cancionero shape
   - path: tables/tabla-codices.xlsx
     refetchable: false
     provenance: local-trim

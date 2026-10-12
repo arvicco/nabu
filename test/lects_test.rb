@@ -305,7 +305,7 @@ class LectsTest < Minitest::Test
 
   def test_the_live_overrides_file_carries_the_promoted_tiers
     assert_equal "approximation", lects.override_tier("etcsl", "sux"),
-                 "№1's stated source-grain tier, machine-readable since P81 U-5"
+                 "the first owner ruling's stated source-grain tier, machine-readable since P81 U-5"
     assert_equal "certain", lects.override_tier("elephantine", "arc"), "D58-d's certain row"
   end
 
@@ -485,7 +485,7 @@ class LectsTest < Minitest::Test
   def test_variety_tags_admit_up_to_eight_chars
     match = Nabu::Lects.parse_id("oc/lengadoc")
     assert_equal "lengadoc", match[:variety],
-                 "№R-41 grammar widening: IANA-verbatim dialect subtags (2-8 chars)"
+                 "the 2026-08-21 grammar widening: IANA-verbatim dialect subtags (2-8 chars)"
     assert_equal "vivaraup", Nabu::Lects.parse_id("oc/vivaraup")[:variety]
     assert_nil Nabu::Lects.parse_id("oc/ninecharsx"), "nine chars stays out"
     assert_nil Nabu::Lects.parse_id("oc:lengadoc"),

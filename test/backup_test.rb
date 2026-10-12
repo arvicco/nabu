@@ -33,12 +33,12 @@ class BackupTest < Minitest::Test
     assert_path_exists File.join(@target, "local", "history.sqlite3")
     assert_path_exists File.join(@target, "config", "sources.yml")
     # NOTHING under db/ ships, ever (owner ruling 2026-08-16, closing the
-    # №R-21 convenience tier): db/ re-derives via `nabu rebuild` on
+    # convenience tier): db/ re-derives via `nabu rebuild` on
     # restore. The tier hauled 118 GB of derived db into every drill
     # workspace — the 2026-08-15 boot-disk drain.
     refute_path_exists File.join(@target, "db")
 
-    # P71: local/ + the №R-22 .docs section complete the permanent tier
+    # P71: local/ + the .docs section (owner ruling 2026-08-11) complete the permanent tier
     # (both skip cleanly when absent). Four directory sections, no file
     # sections — the backup set IS the folder set.
     assert_equal %w[canonical config local docs], result.sections.map(&:name)
