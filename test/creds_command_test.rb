@@ -58,9 +58,9 @@ class CredsCommandTest < Minitest::Test
       end
       out, err, status = with_stdin_io(stdin) { with_config(config) { run_cli(%w[creds set titus]) } }
       assert_nil status, err
-      # The user-prompt ECHO is environment-dependent (Thor's ask writes
-      # it locally but not under a CI pseudo-stdin) — the test pins what
-      # matters: the hidden read, the redaction, and the stored result.
+      # The gateway reads $stdin directly (deterministic under any
+      # stdin — Thor's ask misaligned the two reads on the CI runner).
+      assert_match(/user/i, out)
       assert_match(/password.*hidden/i, out)
       assert_equal 1, noecho_calls.size, "the secret is read with echo off"
       refute_includes out, SECRET
