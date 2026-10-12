@@ -76,5 +76,21 @@ module Adapters
       refute_includes verse, "Hľad Elimelecha z wľaſti geho wypudiľ.",
                       "the print's marginal summary (poznamkapostrane) is not verse text"
     end
+
+    # P120-3: a <pages> range running past the transcribed scan pages
+    # renders one red link per missing page ("Laman:….pdf/9") — the
+    # renderer's placeholder, never text (ms Hikayat Aceh: 1 of 142 pages).
+    def test_missing_scan_page_placeholders_strip
+      texts = parser.parse(html("ms-wikisource", 1928)).map(&:text)
+      assert_equal 1, texts.size
+      assert texts.first.start_with?("اين حكايت راج آچه")
+      refute(texts.any? { |t| t.include?("Laman:") || t.include?(".pdf/") })
+    end
+
+    def test_an_authored_red_link_keeps_its_label
+      html = '<div class="mw-parser-output"><p>Raja <a href="/w/index.php?title=Aceh&amp;action=edit&amp;' \
+             'redlink=1" class="new" title="Aceh (laman tidak wujud)">Aceh</a> berangkat</p></div>'
+      assert_equal ["Raja Aceh berangkat"], parser.parse(html).map(&:text)
+    end
   end
 end

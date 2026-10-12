@@ -528,6 +528,64 @@ sources:
         chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
     places: {posture: unplaced}
     script: {posture: implied}
+  ban-wikisource:   # P120-2
+    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet (the
+        wiki's Usada/Geguritan/Tatwa/Babad/Wariga/Kakawin categories) and the Gedong
+        Kirtya classification facet (Agama/Itihasa/Wéda/Babad …) — both ride verbatim"}
+    lect: {posture: pending, note: "kaw resolves on the held registry node (the Lontar Basa
+        Kawi works); candidate: the ban (Balinese) and sas (Sasak, 4 lontars) nodes in the
+        nabu-lects mint — the bare codes are the claim until it merges"}
+    dating: {posture: pending, note: "no typed date: the Index Year= is the photography
+        campaign year (2017–2021), the works carry the wiki's own Undated works category;
+        candidate: the colophon Saka-year statements in the leaf text (a text-mining
+        lane)"}
+    places: {posture: pending, note: "candidate: the holding collection (the Lontar
+        Sukawati/Wanagiri/Sawan/… categories, Index Address=) — a holding place, not an
+        origin; rides verbatim as the collection facet"}
+    script: {posture: mixed, note: "measured per document over the held text: -Bali for
+        the lontar transcriptions, -Latn for the romanized Leiden copies"}
+  # P120-3: the scan-indexed wikisource cones (the owner-ruled wikisource posture).
+  gu-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: a gu (Gujarati) anchor under inc in
+        nabu-lects + a guj → gu codemap row — no Gujarati node exists (census
+        2026-10-12); documents claim bare guj meanwhile. Deliberately coarse at source
+        grain: the cone spans Narsinh Mehta (15th c.) to Dayaram (19th c.) — staging
+        Old/Middle Gujarati is a recorded future look"}
+    dating: {posture: dated, note: "P120-3: the scan Index's verbatim વર્ષ= print year
+        (source_date → MetadataDates :edition_year_text, date_class edition — never the
+        poets' composition era); every admitted page carries one (REQUIRE_EDITION_YEAR)"}
+    places: {posture: unplaced, note: "the Index place field (સરનામું) is empty on the
+        cone's Indexes and would be the edition's imprint — never a text place"}
+    script: {posture: implied}
+  ms-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: an ms (Malay) anchor in nabu-lects + an
+        msa → ms codemap row — no Malay node exists (census 2026-10-12; the Old Malay
+        DHARMA lane claims omy); Classical Malay (a stage under ms) is the named
+        refinement. Documents claim bare msa / msa-Arab meanwhile"}
+    dating: {posture: partial, note: "P120-3: the manuscript's stated date — the page
+        header year= (a year, a span, or 'abad ke-N' → the century) else the Index
+        Year= → MetadataDates :structured; Hijri-marked years mint nothing (never
+        converted by guess); the Index Year= mixes copy dates and attributed composition
+        dates as upstream states them"}
+    places: {posture: unplaced, note: "no place fields on the manuscript pages (Index
+        Address= empty across the cone)"}
+    script: {posture: mixed, note: "Jawi (Arabic script → msa-Arab) and Rumi pages,
+        MEASURED per page from the text (metadata script Arab/Latn/mixed), the Index
+        Language= riding verbatim as index_language"}
+  th-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: a th (Thai) anchor in nabu-lects + a
+        tha → th codemap row — no Tai node exists (census 2026-10-12); documents claim
+        bare tha meanwhile. The chronicles' Ayutthaya/early-Bangkok register is the
+        named refinement (an early-Thai stage), never defaulted"}
+    dating: {posture: dated, note: "P120-3: the Index ปี= print year, Buddhist Era
+        converted −543 to CE (source_date → MetadataDates :edition_year_text, date_class
+        edition — never the chronicles' composition); every admitted page carries one"}
+    places: {posture: unplaced, note: "the Index สถานที่= (พระนคร) is the print's imprint
+        place — declared, never a text place"}
+    script: {posture: implied}
   litopys:   # P117
     # kind: machine-postured — kind_map.yml source_kind historiography/chronicle
     # (the whole passage shelf IS the Ipatiev chronicle; the glossaries ride
@@ -1090,10 +1148,12 @@ sources:
         and minted te for the tel-Latn passages, so every claimed code resolves;
         Tamil stages stay unminted — the epigraphic corpus claims the bare anchor,
         declared coarse"}
-    dating: {posture: pending, note: "no origDate in any header; candidate: the titles'
-        attributed statements ride metadata title_dating verbatim on ~960 docs ('time of
-        Rājakesarivarman, year 9', 'Śaka year 1589') — conversion needs a ruled South-Indian
-        regnal table and a Śaka epoch ruling"}
+    dating: {posture: partial, note: "no origDate in any header; title-mined: the titles'
+        attributed statements ride metadata title_dating verbatim on 965 of the 1,267 parsed
+        docs, and the 112 ERA-TYPED ones convert via config/eras.yml (109 Śaka Y → Y+78, 3
+        Kollam Y → [Y+824, Y+825]; census 2026-10-12) — rows via MetadataDates :structured;
+        the 853 regnal-only titles ('time of Rājakesarivarman, year 9') stay verbatim-only
+        pending a ruled South-Indian regnal table"}
     places: {posture: pending, note: "no origPlace in any header (findspots live in DHARMA's
         separate metadata repos); candidate: that join, or the house-style titles' leading
         toponym once a gazetteer match is ruled"}
@@ -1198,6 +1258,21 @@ sources:
     places: {posture: named, note: "the Berlin find signature's site siglum → findspot (Š/S Šorčuq,
         D Qočo) via the adapter's SITE_SIGLA, declared coarse — other sigla mint nothing, the raw
         signature rides metadata; gazetteer linking via nabu-places is a future look"}
+    script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
+        transliteration rides the `syllabic` annotation"}
+  titus-tocharian-b:
+    kind: {posture: unclassified}
+    # `txb` is a real nabu-lects anchor (the bare code is the claim). The
+    # adapter's page-shape constants are PROVISIONAL until the first
+    # authenticated sync (members-only upstream) — the postures below are
+    # the titus-tocharian-a family's, re-censused at that sync.
+    lect: {posture: identity, note: txb whole-source; bilingual Sanskrit sub-lines (if the B pages carry
+        them) ride bare san per passage}
+    dating: {posture: undatable, note: "the family's pages carry no dating — the THT catalogue block names
+        signature/number/condition only; re-censused at the first authenticated sync"}
+    places: {posture: named, note: "the Berlin find signature's site siglum → findspot via the family's
+        SITE_SIGLA (Š/S Šorčuq, D Qočo), declared coarse — London/Paris shelf marks and other sigla
+        mint nothing; re-censused at the first authenticated sync"}
     script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
         transliteration rides the `syllabic` annotation"}
   titus-pahlavi:

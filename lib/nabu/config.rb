@@ -242,6 +242,14 @@ module Nabu
       instance_path("grants.yml")
     end
 
+    # Stored upstream credentials (Nabu::Credentials): the one home of a
+    # gated member area's user + password/token, written only by
+    # `nabu creds set` (mode 600). Home-only — never a config/ fallback:
+    # a secret never had a legacy location in the tracked tree.
+    def credentials_path
+      File.join(local_config_dir, "credentials.yml")
+    end
+
     # Quarantine-creep acceptances (P70; local since P71): the owner's
     # --accept-creep rulings; the ledger table is historical.
     def creep_acceptances_path

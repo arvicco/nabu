@@ -229,6 +229,13 @@ module Nabu
 
     def self.person_index_producer(catalog:) = nil # rubocop:disable Lint/UnusedMethodArgument
 
+    # The credentials seam (Nabu::Credentials): a source whose registry
+    # entry declares `credentials: <name>` gets its stored Entry here from
+    # SyncRunner before #fetch; its fetch arm injects it (TitusFetch: Basic
+    # auth). nil for every ordinary source. The Entry redacts its secret on
+    # inspect, so an adapter's own inspect stays safe to print.
+    attr_accessor :credentials
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to

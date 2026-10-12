@@ -62,6 +62,17 @@ module Nabu
     # - lb/pb/milestone with break="no" contribute nothing inline;
     #   whitespace collapses; NFC at the boundary.
     #
+    # == Editorial divs (P120-R1)
+    #
+    # The editorial divs — commentary, translation, apparatus,
+    # bibliography — are normally SIBLINGS of the edition div, but some
+    # editors NEST them inside it (census 2026-10-12 over the hub's
+    # canonical: 24 Khmer editions, e.g. K. 207/K. 814-2, and 5 Nusantara
+    # labels; Ollett's Sātavāhana data nests commentary in 26). Walked, their
+    # English/French prose glued onto the last edition line as source
+    # text — or quarantined the file on the translation's "fra". They are
+    # pruned from the edition before the walk (EDITORIAL_DIVS).
+    #
     # == Languages (validated AT MINT, not during the walk)
     #
     # Only text that actually mints validates its language — an eng
@@ -85,6 +96,7 @@ module Nabu
       Unit = Data.define(:key, :text, :language, :met)
 
       DROP = %w[note bibl figure desc certainty ref rdg sic orig abbr head label fw].freeze
+      EDITORIAL_DIVS = %w[commentary translation apparatus bibliography].freeze
       GAP_MARKER = "[…]"
 
       module_function
@@ -95,9 +107,17 @@ module Nabu
       def parse(path, allowed_languages:, aliases: {}, default_language: nil)
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
+        parse_doc(doc, path: path, allowed_languages: allowed_languages, aliases: aliases,
+                       default_language: default_language)
+      end
 
+      # #parse on an already-loaded, namespace-stripped DOM (an adapter
+      # that also mines the header — dharma-deccan — loads once). PRUNES
+      # the edition's nested editorial divs from +doc+ in place.
+      def parse_doc(doc, path:, allowed_languages:, aliases: {}, default_language: nil)
         edition = doc.at_xpath('//body//div[@type="edition"]') or
           raise Nabu::ParseError, "#{File.basename(path)}: no edition div"
+        prune_editorial!(edition)
 
         checker = language_checker(allowed_languages, aliases, path)
         state = WalkState.new(checker: checker,
@@ -118,6 +138,15 @@ module Nabu
           maturity: edition["rendition"]&.[](/maturity:(\d+)/, 1),
           passages: units
         )
+      end
+
+      # Editorial divs NESTED inside the edition div (the sibling position
+      # is the norm) are removed before anything reads the edition — the
+      # walk, paragraph-mode detection, and the inner-div language
+      # fallback all see only edition text (class note, "Editorial divs").
+      def prune_editorial!(edition)
+        predicate = EDITORIAL_DIVS.map { |type| "@type='#{type}'" }.join(" or ")
+        edition.xpath(".//div[#{predicate}]").each(&:remove)
       end
 
       # The walk's inherited (immutable) state: language, the @n path of

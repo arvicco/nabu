@@ -40,6 +40,14 @@ module Nabu
     # the first-sync census extends the table. The expedition numeral is
     # not mined (the catalogue prose and the numeral disagree on page 467 —
     # never guessed). The pages carry no dating — undatable is honest.
+    #
+    # == The family seam
+    #
+    # Nabu::Adapters::TitusTocharianB (the members-only West Tocharian
+    # corpus) subclasses this adapter: every instance method reads its
+    # corpus constants through self.class (SLUG, LANGUAGE, ENTRY_URL, the
+    # page pattern, the catalogue anchors, PARSER_PROFILE, CORPUS_TITLE),
+    # so a subclass redeclares constants, never behavior.
     class TitusTocharianA < Nabu::Adapter
       SLUG = "titus-tocharian-a"
       PARSER_FAMILY = "titus_tocharian"
@@ -61,6 +69,10 @@ module Nabu
       # are not.
       PAGE_GLOB = "tocha*.htm"
       PAGE_RE = /\Atocha\d+\.htm\z/
+
+      # The shared parser's anchor/lane profile and the document-title head.
+      PARSER_PROFILE = TitusTocharianParser::TOCHARIAN_A
+      CORPUS_TITLE = "Tocharian A Corpus"
 
       # Berlin Turfan find-signature SITE sigla → findspot. Census-complete
       # for the 13 live pages sampled 2026-10-07 (Š on the Šorčuq pages, D
@@ -110,12 +122,18 @@ module Nabu
       MANUSCRIPT_ANCHOR = /NAME="TochA_THT_[^_"]+"/
       DEEPER_ANCHOR = /NAME="TochA_THT_[^_"]+_[^"]+"/
 
+      # +delay+ is TitusFetch's polite pause between requests (tests pass 0).
+      def initialize(delay: Nabu::TitusFetch::DELAY)
+        super()
+        @delay = delay
+      end
+
       # One DocumentRef per fetched text page (ref.id IS the document urn).
       # Catalogue-only pages skip by rule, censused by discovery_skips.
       def discover(workdir)
         text_pages(workdir).reject { |path| catalogue_only?(path) }.map do |path|
           stem = File.basename(path).delete_suffix(".htm")
-          Nabu::DocumentRef.new(source_id: SLUG, id: document_urn(stem), path: path,
+          Nabu::DocumentRef.new(source_id: self.class::SLUG, id: document_urn(stem), path: path,
                                 metadata: { "page" => stem })
         end
       end
@@ -130,13 +148,13 @@ module Nabu
       # keyable lines quarantines whole (ParseError) — never served empty.
       def parse(document_ref)
         html = TitusTocharianParser.read_page(document_ref.path)
-        page = TitusTocharianParser.parse(html)
-        raise Nabu::ParseError, "#{SLUG}: no text lines in #{document_ref.path}" if page.lines.empty?
+        page = TitusTocharianParser.parse(html, profile: self.class::PARSER_PROFILE)
+        raise Nabu::ParseError, "#{self.class::SLUG}: no text lines in #{document_ref.path}" if page.lines.empty?
 
         stem = document_ref.metadata["page"]
         metadata = page_metadata(page)
         document = Nabu::Document.new(
-          urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
+          urn: document_ref.id, language: self.class::LANGUAGE, canonical_path: document_ref.path,
           title: title_for(stem, page, metadata), metadata: metadata
         )
         seen = Hash.new(0)
@@ -154,31 +172,37 @@ module Nabu
 
       # Polite sequential page walk from the frameset (owner-run; never in
       # tests) — the same TitusFetch machinery as the Avestan and
-      # Osco-Umbrian corpora, steered by this corpus's page pattern.
+      # Osco-Umbrian corpora, steered by this corpus's page pattern. A
+      # members-only corpus's stored credential (the credentials seam —
+      # SyncRunner sets #credentials) rides as Basic auth; a rejected one
+      # raises Credentials::Rejected unwrapped, so its message stays the
+      # gateway command.
       def fetch(workdir, progress: nil, force: false)
         result = Nabu::TitusFetch.sync!(
-          entry_url: ENTRY_URL, dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME),
-          page_re: PAGE_RE, progress: progress,
+          entry_url: self.class::ENTRY_URL, dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME),
+          page_re: self.class::PAGE_RE, delay: @delay, progress: progress, auth: credentials,
           guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
         )
         FetchReport.new(sha: result.sha, fetched_at: Time.now, notes: attic_notes(result.atticked))
       rescue Nabu::TitusFetch::Error => e
-        raise Nabu::FetchError, "#{SLUG} fetch failed into #{workdir}: #{e.message}"
+        raise Nabu::FetchError, "#{self.class::SLUG} fetch failed into #{workdir}: #{e.message}"
       end
 
       private
 
       def text_pages(workdir)
-        Dir.glob(File.join(workdir, PAGE_GLOB)).select { |path| File.basename(path).match?(PAGE_RE) }
+        Dir.glob(File.join(workdir, self.class::PAGE_GLOB)).select do |path|
+          File.basename(path).match?(self.class::PAGE_RE)
+        end
       end
 
       def catalogue_only?(path)
         html = File.binread(path)
-        html.match?(MANUSCRIPT_ANCHOR) && !html.match?(DEEPER_ANCHOR)
+        html.match?(self.class::MANUSCRIPT_ANCHOR) && !html.match?(self.class::DEEPER_ANCHOR)
       end
 
       def document_urn(stem)
-        "urn:nabu:#{SLUG}:#{stem}"
+        "urn:nabu:#{self.class::SLUG}:#{stem}"
       end
 
       def passage_urn(document_urn, citation, occurrence)
@@ -223,7 +247,7 @@ module Nabu
       def title_for(stem, page, metadata)
         manuscripts = page.manuscripts.map { |m| "THT #{m.number}" }.join(", ")
         label = [metadata["edition_number"]&.then { |n| "A #{n}" }, manuscripts].compact.reject(&:empty?)
-        "Tocharian A Corpus — #{label.join(', ')} (#{stem})"
+        "#{self.class::CORPUS_TITLE} — #{label.join(', ')} (#{stem})"
       end
     end
   end

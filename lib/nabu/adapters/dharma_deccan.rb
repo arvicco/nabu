@@ -37,13 +37,12 @@ module Nabu
     #
     # == Parse (the dharma-epidoc family)
     #
-    # The family's walk (DharmaEpidocParser) over a pre-pruned DOM: Ollett
-    # nests <div type="commentary"> INSIDE 26 editions, and the walk would
-    # mint its English prose as Sanskrit text — editorial divs
-    # (commentary/translation/apparatus/bibliography) are removed from the
-    # edition before the walk. That orchestration is the parser's own
-    # #parse, re-composed here on a DOM; the five SEA siblings keep calling
-    # the parser unchanged.
+    # The family's DharmaEpidocParser.parse_doc on the DOM this adapter also
+    # mines for header metadata (one load). Ollett nests <div
+    # type="commentary"> INSIDE 26 editions; the shared parser prunes such
+    # nested editorial divs (commentary/translation/apparatus/bibliography)
+    # before the walk for every DHARMA source (P120-R1 — this adapter's
+    # P118 local pruning, moved into the family).
     #
     # Languages: per-repo measured allowlists (REPOS[:languages], the
     # full-estate census of every minted xml:lang) plus censused tag dirt
@@ -128,7 +127,6 @@ module Nabu
       # Ollett's data dir also holds an editor (nXML) locating-rules file.
       OLLETT_NON_EDITIONS = %w[schemas.xml].freeze
       DHARMA_EDITION = /\ADHARMA_INS[A-Za-z]+\d+(?:-[A-Za-z0-9]+)?\z/
-      EDITORIAL_DIVS = %w[commentary translation apparatus bibliography].freeze
       REPO_LICENCE = "https://creativecommons.org/licenses/by/4.0/"
       REPO_LICENCE_BASIS = "repo LICENCE.txt (CC BY 4.0; no in-file <licence>)"
       TSV_YEAR_RANGE = /\A(\d{1,4})-(\d{1,4})\z/
@@ -173,14 +171,15 @@ module Nabu
         config = repos.fetch(repo)
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
-        result = walk(doc, path, config)
+        result = DharmaEpidocParser.parse_doc(doc, path: path, allowed_languages: config[:languages],
+                                                   aliases: config.fetch(:aliases, {}))
         metadata = header_metadata(doc, path, repo, config, document_ref.metadata["stem"])
-        metadata["maturity"] = result[:maturity] if result[:maturity]
+        metadata["maturity"] = result.maturity if result.maturity
         document = Nabu::Document.new(
-          urn: document_ref.id, language: result.fetch(:language), canonical_path: path,
-          title: result[:title] || document_ref.metadata["stem"], metadata: metadata
+          urn: document_ref.id, language: result.language, canonical_path: path,
+          title: result.title || document_ref.metadata["stem"], metadata: metadata
         )
-        result.fetch(:units).each_with_index do |unit, index|
+        result.passages.each_with_index do |unit, index|
           document << Nabu::Passage.new(
             urn: "#{document_ref.id}:#{unit.key}", language: unit.language, text: unit.text,
             sequence: index, annotations: unit.met ? { "met" => unit.met } : {}
@@ -263,27 +262,6 @@ module Nabu
         return !OLLETT_NON_EDITIONS.include?(name) if config[:ollett]
 
         File.basename(name, ".xml").match?(DHARMA_EDITION) && !name.end_with?("-test.xml")
-      end
-
-      # DharmaEpidocParser#parse's orchestration on a pruned DOM (class note).
-      def walk(doc, path, config)
-        parser = DharmaEpidocParser
-        edition = doc.at_xpath('//body//div[@type="edition"]') or
-          raise Nabu::ParseError, "#{File.basename(path)}: no edition div"
-        edition.xpath(".//div[#{EDITORIAL_DIVS.map { |t| "@type='#{t}'" }.join(' or ')}]").each(&:remove)
-
-        checker = parser.language_checker(config[:languages], config.fetch(:aliases, {}), path)
-        state = parser::WalkState.new(checker: checker,
-                                      paragraph_mode: !edition.at_xpath(".//lb[not(ancestor::lg)]"))
-        edition_lang = parser.lang_of(edition) || edition.xpath(".//div").filter_map { |d| parser.lang_of(d) }.first
-        parser.walk_edition(edition, state, parser::Walkctx.new(edition_lang, [], nil))
-        state.flush!
-        units = state.units
-        raise Nabu::ParseError, "#{File.basename(path)}: edition has no citable text" if units.empty?
-
-        { language: checker.call(edition_lang || units.first.language), units: units,
-          title: parser.presence(parser.text_of(doc.at_xpath("//teiHeader//titleStmt/title"))),
-          maturity: edition["rendition"]&.[](/maturity:(\d+)/, 1) }
       end
 
       def header_metadata(doc, path, repo, config, stem)

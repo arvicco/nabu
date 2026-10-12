@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 October 2026)</span> |
 |---|---|---|---|---|
@@ -23,6 +23,7 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `dharma-mdt` | texts | attribution | wired · manual | 734 docs |
 | `dharma-tamil` | texts | attribution | wired · manual | 1,267 docs / 17,993 passages |
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · manual | 16 docs / 16,151 passages |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
@@ -32,7 +33,7 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 October 2026)</span>: `san` 209,688 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 1,789 · `tam-Latn` 1,145 · `pra-Latn` 1,131 · `und` 583 · `lzh` 276 · `tel-Latn` 101 · `tel` 97 … and 33 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 October 2026)</span>: `san` 209,688 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 1,789 · `tam-Latn` 1,145 · `pra-Latn` 1,131 · `und` 583 · `lzh` 276 · `guj` 207 · `tel-Latn` 101 … and 34 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

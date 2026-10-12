@@ -20,7 +20,7 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `dharma-campa` | texts | attribution | wired · manual | 121 docs / 2,728 passages |
 | `dharma-deccan` | texts | attribution | wired · manual | 1,694 docs / 27,929 passages |
-| `dharma-khmer` | texts | attribution | wired · manual | 1,219 docs / 50,165 passages |
+| `dharma-khmer` | texts | attribution | wired · manual | 1,221 docs / 50,245 passages |
 | `dharma-nusantara` | texts | attribution | wired · manual | 291 docs / 5,893 passages |
 | `dharma-pyu` | texts | attribution | wired · manual | 145 docs / 629 passages |
 | `dharma-tamil` | texts | attribution | wired · manual | 1,267 docs / 17,993 passages |

@@ -6,6 +6,7 @@ require "json"
 require "uri"
 require "nokogiri"
 
+require_relative "credentials"
 require_relative "redirect_follow"
 require_relative "zip_fetch"
 require_relative "version"
@@ -39,6 +40,16 @@ module Nabu
   #
   # The fetch pin is the sha256 of the reachable page set (name → body sha256,
   # sorted) — a stable identity for "what the edition currently is."
+  #
+  # == The members area (+auth+)
+  #
+  #   A gated corpus (Tocharian B: TITUS members only, HTTP Basic auth)
+  #   passes its stored Nabu::Credentials::Entry as +auth+: every request
+  #   carries the Authorization header. A 401 to SENT credentials raises
+  #   Credentials::Rejected (the rotation signal — the message names the
+  #   gateway command). Credentials are never forwarded across a redirect:
+  #   with +auth+ a 3xx aborts the walk naming its target (point the entry
+  #   URL at the final host). Nothing here prints the secret.
   class TitusFetch
     class Error < Nabu::Error; end
 
@@ -61,9 +72,9 @@ module Nabu
     # One-shot choreography. +guard+ receives the absolute doomed paths between
     # prepare! and complete!.
     def self.sync!(entry_url:, dir:, attic_dir:, http: ZipFetch.default_http,
-                   delay: DELAY, progress: nil, guard: nil, page_re: nil)
+                   delay: DELAY, progress: nil, guard: nil, page_re: nil, auth: nil)
       fetch = new(entry_url: entry_url, dir: dir, attic_dir: attic_dir,
-                  http: http, delay: delay, progress: progress, page_re: page_re)
+                  http: http, delay: delay, progress: progress, page_re: page_re, auth: auth)
       fetch.prepare!
       guard&.call(fetch.doomed_paths)
       fetch.complete!
@@ -72,8 +83,9 @@ module Nabu
     end
 
     def initialize(entry_url:, dir:, attic_dir:, http: ZipFetch.default_http,
-                   delay: DELAY, progress: nil, page_re: nil)
+                   delay: DELAY, progress: nil, page_re: nil, auth: nil)
       @entry_url = entry_url
+      @auth = auth
       @dir = dir
       @attic_dir = attic_dir
       @http = http
@@ -89,6 +101,9 @@ module Nabu
     end
 
     attr_reader :atticked, :sha
+
+    # Never the pages, never the credential — only what is being walked.
+    def inspect = "#<Nabu::TitusFetch entry_url=#{@entry_url.inspect} auth=#{@auth ? @auth.name : 'none'}>"
 
     def page_count = @pages.size
     def fetched = @pages.count { |_name, page| !page[:on_disk] }
@@ -106,6 +121,7 @@ module Nabu
         html = page_html(name, url)
         sha = Digest::SHA256.hexdigest(html.b)
         @pages[name] = { body: html, sha: sha, on_disk: File.file?(page_path(name)) }
+        stage_partial!(name, html) unless @pages[name][:on_disk]
         url = next_part_url(html, url)
       end
       raise Error, "no text pages reached from #{@entry_url}" if @pages.empty?
@@ -131,6 +147,7 @@ module Nabu
         File.binwrite("#{target}.tmp", page[:body].b)
         File.rename("#{target}.tmp", target)
       end
+      FileUtils.rm_rf(partial_dir)
       write_state!
     end
 
@@ -146,12 +163,32 @@ module Nabu
       URI.join(@entry_url, frame["src"]).to_s
     end
 
-    # A page's html — from disk when present (no re-fetch), else GET.
+    # A page's html — from disk when present (no re-fetch), else from the
+    # partial stage of an interrupted earlier walk, else GET.
     def page_html(name, url)
       path = page_path(name)
       return File.read(path, encoding: "UTF-8") if File.file?(path)
 
+      partial = File.join(partial_dir, name)
+      return File.read(partial, encoding: "UTF-8") if File.file?(partial)
+
       get(url)
+    end
+
+    # A multi-hour first walk (Tocharian B at the polite pace) must survive
+    # being killed: every newly fetched page is staged here at once, and a
+    # re-run reads the stage instead of re-requesting. complete! consumes
+    # and removes the directory; a killed run leaves it for the next run.
+    # The dot-name keeps it outside @page_re, the attic and discovery.
+    def partial_dir
+      File.join(@dir, ".fetch-partial")
+    end
+
+    def stage_partial!(name, html)
+      FileUtils.mkdir_p(partial_dir)
+      staged = File.join(partial_dir, name)
+      File.binwrite("#{staged}.tmp", html.b)
+      File.rename("#{staged}.tmp", staged)
     end
 
     # The absolute URL of the "Next part" arrow, or nil at the end of the chain.
@@ -216,9 +253,27 @@ module Nabu
       sleep(@delay) if @delay.positive? && @requests.positive?
       @requests += 1
       @progress&.call("Fetching #{url}…\n")
-      response, = RedirectFollow.get(url, http: @http, error: Error,
-                                          headers: { "User-Agent" => USER_AGENT })
+      response = @auth ? authenticated_get(url) : plain_get(url)
       response.body.to_s.dup.force_encoding(Encoding::UTF_8)
+    end
+
+    def plain_get(url)
+      response, = RedirectFollow.get(url, http: @http, error: Error, headers: { "User-Agent" => USER_AGENT })
+      response
+    end
+
+    # The members-area GET: Basic auth on THIS request only — a redirect is
+    # returned (never followed) and aborts, so the header cannot reach
+    # another host; a 401 is the rejected (rotated) credential.
+    def authenticated_get(url)
+      headers = { "User-Agent" => USER_AGENT, "Authorization" => @auth.basic_auth_header }
+      response, = RedirectFollow.get(url, http: @http, error: Error, headers: headers,
+                                          accept: [200, 401, *RedirectFollow::REDIRECT_STATUSES])
+      raise Credentials::Rejected, @auth.name if response.status == 401
+      return response if response.status == 200
+
+      raise Error, "#{url} redirected (HTTP #{response.status}) to #{response.headers['location'].inspect} — " \
+                   "credentials are never forwarded across a redirect; point the entry URL at the final host"
     end
   end
 end
