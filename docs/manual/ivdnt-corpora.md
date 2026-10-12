@@ -54,7 +54,7 @@ at acquisition time.
 
 ## Where it goes
 
-The adapters do not exist yet (work-queue Q48 — they build after the
+The adapters are not yet built (they build after the
 first acquisition, in the manual-drop class): until they land, the
 archives go to the repo's gitignored intake folder (`.docs/inbox/`)
 untouched. Once the adapters exist, drops go to
