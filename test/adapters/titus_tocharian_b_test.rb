@@ -102,12 +102,12 @@ class TitusTocharianBTest < Minitest::Test
 
   # --- registry round-trip -----------------------------------------------------
 
-  def test_registry_row_is_grant_gated_credentialed_blocked_and_unwired
+  def test_registry_row_is_grant_gated_credentialed_blocked_and_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry[SLUG]
     refute_nil entry, "#{SLUG} must be registered in config/sources.yml"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired: false until the first authenticated sync is verified"
+    assert entry.wired, "flipped after the verified 2026-10-12 first authenticated sync (counts in sources.yml)"
     assert_equal "manual", entry.sync_policy
     assert_equal "titus", entry.credentials
     assert_predicate entry, :grant_required?
