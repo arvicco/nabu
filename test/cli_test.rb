@@ -4802,6 +4802,65 @@ class CLITest < Minitest::Test
     assert_match(/text search only/i, err)
   end
 
+  # -- search --date-basis (P122-1) -----------------------------------------
+
+  # The dated corpus with doc c's row re-classed as author-era composition
+  # dating: a and b keep the NULL (artifact) class.
+  def with_classed_corpus
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc_id = catalog[:documents].where(urn: "urn:nabu:ddbdp:c").get(:id)
+      catalog[:document_axes].where(document_id: doc_id).update(date_class: "composition")
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def test_search_date_basis_keeps_the_named_class
+    with_classed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --date-basis composition]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:c:1", out)
+      refute_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+    end
+  end
+
+  def test_search_date_basis_takes_a_comma_list_and_composes_with_the_window
+    with_classed_corpus do |config|
+      out, _err, status = with_config(config) do
+        run_cli(%w[search στρατηγος --date-basis artifact,composition --from -300 --to -30])
+      end
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      assert_match("urn:nabu:ddbdp:c:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+    end
+  end
+
+  def test_search_date_basis_alone_is_a_legal_browse
+    with_classed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --date-basis artifact]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      assert_match("urn:nabu:ddbdp:b:1", out)
+      refute_match("urn:nabu:ddbdp:c:1", out)
+    end
+  end
+
+  def test_search_unknown_date_basis_exits_one_naming_the_known_set
+    _out, err, status = run_cli(%w[search foo --date-basis bogus])
+    assert_equal 1, status
+    assert_match(/unknown date basis "bogus"/, err)
+    assert_match(/artifact, composition, edition/, err)
+  end
+
+  def test_search_date_basis_does_not_compose_with_lemma
+    _out, err, status = run_cli(%w[search --lemma λέγω --date-basis artifact])
+    assert_equal 1, status
+    assert_match(/text search only/i, err)
+  end
+
   # -- search facets (P17-2, document_facets) -------------------------------
 
   def test_search_type_filters_by_genre_facet_and_names_the_filter

@@ -2272,7 +2272,7 @@ module Nabu
 
       BROWSE (term-less): run search with NO query to LIST the corpus, but only
       when at least one CONTENT-NARROWING filter is present — a date window
-      (--from/--to/--century), --place, a genre facet (--type/--province/
+      (--from/--to/--century), --date-basis, --place, a genre facet (--type/--province/
       --material), or --loans. The page is served in corpus order (no ranking),
       the standard hit rendering with a stored-text window per passage, --limit
       honored. --lang/--license/--source/--axis select whole shelves and are NOT
@@ -2361,6 +2361,15 @@ module Nabu
       replaces the FTS query syntax: the fragment is matched literally
       (no AND/phrase/prefix operators) and does not combine with
       --lemma/--near/--morph.
+
+      DATE BASIS (--date-basis CLASS[,CLASS...]): keep only documents whose
+      PRIMARY date — the one `nabu show` renders — is of the named class:
+      artifact (the source's own typed date of the object or witness),
+      composition (attributed author-era dating) or edition (a print year).
+      With --from/--to/--century the window then reads that same primary
+      date, so `--date-basis artifact --century 2` holds out author-era
+      datings instead of mixing them in. An unknown class is refused naming
+      the known set. Text search, --fuzzy, --scan and a term-less browse.
 
       FACETS (--type / --province / --material): document-grained categorical
       filters over the facet table (P17-2 — EDH inscriptions seed it: 22
@@ -2461,6 +2470,10 @@ module Nabu
                 desc: "Latest date: signed historical year (14 = 14 CE); composes with --from"
     option :century, type: :numeric, banner: "N",
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
+    option :date_basis, type: :string, banner: "CLASS[,CLASS...]",
+                        desc: "Date-basis filter: keep documents whose primary date is of this class " \
+                              "(artifact, composition, edition); with --from/--to the window reads " \
+                              "that same date"
     option :place, type: :string, banner: "NAME|ns:id",
                    desc: "Provenance filter: a namespaced ref (tm:2810, cigs:GIR), a name resolved " \
                          "to its identities + name match, or a LIKE pattern (oxyrhynch%)"
@@ -2561,10 +2574,12 @@ module Nabu
     def search(query = nil)
       query = query.to_s.strip
       display_mode
-      if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters) &&
+      date_basis_filter
+      if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
+          options[:date_basis]) &&
          (options[:near] || options[:lemma])
-        raise Thor::Error, "search: --from/--to/--century/--place/--type/--province/--material compose " \
-                           "with text search only, not --lemma/--near (the dated/faceted corpus — " \
+        raise Thor::Error, "search: --from/--to/--century/--date-basis/--place/--type/--province/--material " \
+                           "compose with text search only, not --lemma/--near (the dated/faceted corpus — " \
                            "papyri, inscriptions — is not lemmatized)"
       end
       if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
@@ -2678,7 +2693,7 @@ module Nabu
       # built/indexed; a search cannot run.
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-      require_timeline!(catalog) if from || to || place
+      require_timeline!(catalog) if from || to || place || options[:date_basis]
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
       axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -2688,6 +2703,7 @@ module Nabu
                                          places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
+                                    date_basis: date_basis_filter,
                                     facets: facets, source: options[:source], sources: axis_slugs,
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
@@ -5651,6 +5667,15 @@ module Nabu
         [from, to]
       end
 
+      # The parsed --date-basis class list (P122-1, Nabu::Query::DateBasis), or
+      # nil. Validated up front — before any db opens — so an unknown class
+      # exits 1 naming the known set, the validate_license! stance.
+      def date_basis_filter
+        Nabu::Query::DateBasis.parse(options[:date_basis])
+      rescue Nabu::Error => e
+        raise Thor::Error, "search: #{e.message}"
+      end
+
       def coerce_year(value, flag)
         return nil if value.nil?
 
@@ -5706,7 +5731,7 @@ module Nabu
       # or axis) is a corpus DUMP, not a browse. The character-structure filters
       # are already a legal term-less path and return earlier (char_structured_search).
       def content_narrowing_filters?
-        options[:from] || options[:to] || options[:century] || options[:place] ||
+        options[:from] || options[:to] || options[:century] || options[:date_basis] || options[:place] ||
           facet_filters || loans_filter || options[:meter] || options[:meter_pattern] ||
           options[:lect] || options[:script] || options[:within]
       end
@@ -5732,7 +5757,7 @@ module Nabu
       # what WOULD make a term-less browse legal, and why the shelf-selectors do not.
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
-          "term-less: a date window (--from/--to/--century), --place, a genre facet " \
+          "term-less: a date window (--from/--to/--century), --date-basis, --place, a genre facet " \
           "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, --script, " \
           "or --within. " \
           "--lang/--license/--source/--axis " \
@@ -5763,7 +5788,7 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-        require_timeline!(catalog) if from || to || place
+        require_timeline!(catalog) if from || to || place || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -5773,6 +5798,7 @@ module Nabu
                                            places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.browse(lang: options[:lang], license: options[:license],
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
+                                  date_basis: date_basis_filter,
                                   facets: facets, source: options[:source], sources: axis_slugs,
                                   loans: loans, meter: options[:meter],
                                   meter_pattern: options[:meter_pattern], lect: options[:lect],
@@ -5823,7 +5849,7 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-        require_timeline!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place] || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -5833,6 +5859,7 @@ module Nabu
                                            places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.run_sign(values, lang: options[:lang], license: options[:license],
                                             limit: options[:limit].to_i, from: from, to: to,
+                                            date_basis: date_basis_filter,
                                             place: options[:place], facets: facets,
                                             source: options[:source], sources: axis_slugs,
                                             loans: loans, lect: options[:lect], script: options[:script])
@@ -5877,7 +5904,7 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-        require_timeline!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place] || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -5887,6 +5914,7 @@ module Nabu
                                            places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.run_scan(query, lang: options[:lang], license: options[:license],
                                            limit: options[:limit].to_i, from: from, to: to,
+                                           date_basis: date_basis_filter,
                                            place: options[:place], facets: facets,
                                            source: options[:source], sources: axis_slugs,
                                            loans: loans, meter: options[:meter],
@@ -9011,13 +9039,14 @@ module Nabu
                              "run nabu sync or nabu rebuild"
         end
 
-        require_timeline!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place] || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
+                                   date_basis: date_basis_filter,
                                    facets: facets, source: options[:source], sources: axis_slugs,
                                    loans: loans_filter)
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,

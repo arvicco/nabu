@@ -333,9 +333,14 @@ module Nabu
       # coordinates-lane find-location falls in the radius
       # (CatalogJoin#within_exists; coordinate-less documents fall out,
       # like undated ones under a date filter).
+      # +date_basis+ (P122-1): a Nabu::Query::DateBasis class list (Array or comma
+      # String) — only documents whose PRIMARY dated row carries one of the
+      # classes (CatalogJoin#primary_date_exists); an unknown class raises
+      # Nabu::Error naming the known set.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
               exact: false, word: false, words: false, lect: nil, script: nil, within: nil,
+              date_basis: nil,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
@@ -351,7 +356,8 @@ module Nabu
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
                     meter: meter, meter_pattern: meter_pattern,
-                    script: script_code(script), within: within_spec(within) }.merge(lect_filter(lect))
+                    script: script_code(script), within: within_spec(within),
+                    date_basis: Nabu::Query::DateBasis.parse(date_basis) }.merge(lect_filter(lect))
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
@@ -427,7 +433,7 @@ module Nabu
       # exactly as visible_passages composes them for ranked search.
       def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
                  facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-                 lect: nil, script: nil, within: nil)
+                 lect: nil, script: nil, within: nil, date_basis: nil)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
@@ -437,6 +443,7 @@ module Nabu
                                 facets: facets, source: source, sources: sources, loans: loans,
                                 meter: meter, meter_pattern: meter_pattern,
                                 script: script_code(script), within: within_spec(within),
+                                date_basis: Nabu::Query::DateBasis.parse(date_basis),
                                 **lect_filter(lect))
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
@@ -460,7 +467,7 @@ module Nabu
       # truncation is announced via #incomplete_hint, never silent.
       def run_scan(query, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
                    facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-                   lect: nil, script: nil, within: nil,
+                   lect: nil, script: nil, within: nil, date_basis: nil,
                    scan_page: SCAN_MODE_PAGE, scan_ceiling: SCAN_MODE_CEILING)
         @incomplete_hint = nil
         @meter_note = nil
@@ -474,7 +481,8 @@ module Nabu
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
                     meter: meter, meter_pattern: meter_pattern, script: script_code(script),
-                    within: within_spec(within) }.merge(lect_filter(lect))
+                    within: within_spec(within),
+                    date_basis: Nabu::Query::DateBasis.parse(date_basis) }.merge(lect_filter(lect))
         index_match = index_match_filter(filters)
         filters = catalog_side_filters(filters)
 
@@ -496,7 +504,7 @@ module Nabu
       # honest corpus-order sample, rank_note armed.
       def run_sign(values, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
                    facets: nil, source: nil, sources: nil, loans: nil, lect: nil, script: nil,
-                   ubiquity_threshold: self.class.ubiquity_threshold)
+                   date_basis: nil, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
@@ -509,7 +517,8 @@ module Nabu
 
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
-                    script: script_code(script) }.merge(lect_filter(lect))
+                    script: script_code(script),
+                    date_basis: Nabu::Query::DateBasis.parse(date_basis) }.merge(lect_filter(lect))
         page = folded_page(variants, filters, limit: limit, urn: nil, ubiquity_threshold: ubiquity_threshold)
         page.map { |row| build_result(row, matched_value(row, values), exact: false, word: false) }
       end
@@ -819,7 +828,7 @@ module Nabu
 
       def filters_active?(filters)
         %i[lang license from to place source loans meter meter_pattern lect_pairs
-           script within].any? { |key| filters[key] } ||
+           script within date_basis].any? { |key| filters[key] } ||
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
       end
 
