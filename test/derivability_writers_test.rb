@@ -101,7 +101,9 @@ class DerivabilityWritersTest < Minitest::Test
   # (tmp+rename) + its .<slug>-fetch.json pin into canonical/<slug>/
   # inside Adapter#fetch, and the pl Brückner lane writes its stub index
   # + scan envelopes under canonical/pl-wikisource/bruckner/ from that
-  # same fetch — the ja/zh-wikisource law kind. P117's litopys_fetch
+  # same fetch — the ja/zh-wikisource law kind. P120-2's ban_wikisource
+  # (that base's ProofreadPage sibling) writes one Index envelope per
+  # manuscript (tmp+rename) + the same pin, likewise inside its fetch. P117's litopys_fetch
   # writes the censused Izbornyk pages (verbatim windows-1251, tmp+rename,
   # site paths) + its .litopys-fetch.json pin into canonical/litopys/
   # inside Adapter#fetch — the titus_fetch law kind.
@@ -150,7 +152,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/adapters/ja_wikisource.rb nabu/adapters/zh_wikisource.rb
-    nabu/adapters/slavic_wikisource.rb
+    nabu/adapters/slavic_wikisource.rb nabu/adapters/ban_wikisource.rb
     nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb

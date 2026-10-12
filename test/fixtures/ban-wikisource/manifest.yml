@@ -1,0 +1,65 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Envelopes are the adapter's own on-disk shape around live api.php captures
+# (ban.wikisource.org + commons.wikimedia.org) — no per-file raw GET URL exists
+# for the envelope form, and living wikis serve current revids.
+source: ban-wikisource
+adapter_test:
+retrieved: "2026-10-12"
+files:
+  - path: pages/568.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none
+  - path: pages/24142.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: false
+    trim: Page-ns pages 1, 56, 57 of 58 kept
+  - path: pages/1985.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none
+  - path: pages/28568.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: false
+    trim: Page-ns page 10 of 101 kept
+  - path: pages/28212.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: false
+    trim: Page-ns pages 1-2 of 4 kept
+  - path: pages/32600.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none (Index only by rule)
+  - path: pages/37583.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none (Index only by rule)
+  - path: pages/37558.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none (Index only by rule)

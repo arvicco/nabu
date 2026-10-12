@@ -528,6 +528,22 @@ sources:
         chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
     places: {posture: unplaced}
     script: {posture: implied}
+  ban-wikisource:   # P120-2
+    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet (the
+        wiki's Usada/Geguritan/Tatwa/Babad/Wariga/Kakawin categories) and the Gedong
+        Kirtya classification facet (Agama/Itihasa/Wéda/Babad …) — both ride verbatim"}
+    lect: {posture: pending, note: "kaw resolves on the held registry node (the Lontar Basa
+        Kawi works); candidate: the ban (Balinese) and sas (Sasak, 4 lontars) nodes in the
+        nabu-lects mint — the bare codes are the claim until it merges"}
+    dating: {posture: pending, note: "no typed date: the Index Year= is the photography
+        campaign year (2017–2021), the works carry the wiki's own Undated works category;
+        candidate: the colophon Saka-year statements in the leaf text (a text-mining
+        lane)"}
+    places: {posture: pending, note: "candidate: the holding collection (the Lontar
+        Sukawati/Wanagiri/Sawan/… categories, Index Address=) — a holding place, not an
+        origin; rides verbatim as the collection facet"}
+    script: {posture: mixed, note: "measured per document over the held text: -Bali for
+        the lontar transcriptions, -Latn for the romanized Leiden copies"}
   litopys:   # P117
     # kind: machine-postured — kind_map.yml source_kind historiography/chronicle
     # (the whole passage shelf IS the Ipatiev chronicle; the glossaries ride
