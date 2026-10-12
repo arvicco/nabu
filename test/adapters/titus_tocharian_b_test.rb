@@ -118,4 +118,38 @@ class TitusTocharianBTest < Minitest::Test
     assert_equal %w[etym buddhist], entry.axes
     assert_equal ADAPTER.manifest, entry.manifest
   end
+  # Parse coverage on real member-area pages (cut 2026-10-12 after the
+  # first authenticated sync; restricted — local/fixtures only).
+  B_FIXTURES = Nabu::TestSupport.local_fixtures("titus-tocharian-b")
+
+  def require_b_fixtures!
+    return if Nabu::TestSupport.local_fixtures?("titus-tocharian-b")
+
+    skip "titus-tocharian-b local fixtures absent (the TITUS grant forbids " \
+         "redistribution — bytes live in local/fixtures/, never in git)"
+  end
+
+  def test_real_page_parses_to_txb_passages
+    require_b_fixtures!
+    adapter = Nabu::Adapters::TitusTocharianB.new
+    ref = adapter.discover(B_FIXTURES).find { |r| r.id.end_with?("tochb001") }
+    refute_nil ref, "THT 1 discovered from the fixture dir"
+    doc = adapter.parse(ref)
+    assert_equal "txb", doc.language
+    assert_equal 16, doc.passages.size
+    assert doc.passages.any? { |p| p.text.include?("pelaikne") },
+           "a known THT 1 reading survives verbatim"
+    assert doc.passages.all? { |p| p.text.unicode_normalized?(:nfc) }
+  end
+
+  def test_real_pages_parse_stably_twice
+    require_b_fixtures!
+    adapter = Nabu::Adapters::TitusTocharianB.new
+    refs = adapter.discover(B_FIXTURES).to_a
+    assert_equal 2, refs.size
+    first = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
+    second = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
+    assert_equal first, second, "URNs stable across two parses"
+  end
+
 end
