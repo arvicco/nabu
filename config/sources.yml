@@ -3062,6 +3062,32 @@ local-source:
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
 
+madurai:   # P122-3, 02-sources row 268
+  adapter: Nabu::Adapters::Madurai
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: false
+  sync_policy: manual
+  # Project Madurai (www.projectmadurai.org; K. Kalyanasundaram and
+  # volunteers): 1,090 works in 1,367 Unicode HTML e-texts (works list
+  # census 2026-10-12), classics and modern authors interleaved. THE CONE:
+  # the works list's own Genre column — a file is in scope when every
+  # catalog row naming it carries a pre-modern genre (Caṅkam, the didactic
+  # canon, Śaiva/Vaiṣṇava/Islamic devotional, epics/purāṇas, prabandha,
+  # grammar/lexicon) and no row's genre or title names a modern apparatus
+  # (translation, English, research, essays): 760 files. License: each
+  # file's header page — "freely distribute this file, provided this header
+  # page is kept intact" — class attribution, the header riding every
+  # document verbatim (pm_header). Tamil script, bare tam (→ ta); physical
+  # line grain (madurai-html). FETCH: the works list, then the cone over
+  # HTTPS (MaduraiFetch on the LitopysFetch contract, 1 s apart, ~760
+  # GETs; the census download ran ~40 min at the server's pace — over
+  # the 30-min loop limit, see the 02-sources row).
+  # EXPECTED FIRST SYNC: 760 in the cone, 5 of them dead catalog links (404:
+  # pmuni073, 0850, 0861-0863 — named in the fetch notes, censused as missing)
+  # → 755 docs / 1,214,683 line passages, 0 quarantined; 10,294 non-Tamil
+  # lines counted, not minted (parse census ~70 s).
+
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"
