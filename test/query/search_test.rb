@@ -958,6 +958,106 @@ module Query
       assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
     end
 
+    # -- the --date-basis filter (P122-1) ------------------------------------
+
+    # One document with one passage and the given axis rows:
+    # [not_before, not_after, date_class, extra columns].
+    def classed(urn, rows, text: "στρατηγος")
+      doc = make_document(source: @open, urn: urn)
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
+      rows.each do |not_before, not_after, klass, extra|
+        @catalog[:document_axes].insert({ document_id: doc.id, not_before: not_before, not_after: not_after,
+                                          precision: "x", axis_source: "t", date_class: klass }
+                                        .merge(extra || {}))
+      end
+    end
+
+    def test_date_basis_keeps_documents_whose_primary_row_carries_the_class
+      classed("urn:art", [[-113, -113, nil]])
+      classed("urn:comp", [[-400, -300, "composition"]])
+      classed("urn:ed", [[1890, 1890, "edition"]])
+      make_passage(make_document(source: @open, urn: "urn:undated"),
+                   urn: "urn:undated:1", text: "στρατηγος", sequence: 1)
+      rebuild!
+      assert_equal %w[urn:art:1], search("στρατηγος", date_basis: %w[artifact]).map(&:urn),
+                   "a NULL class is the source's own artifact date"
+      assert_equal %w[urn:comp:1 urn:ed:1],
+                   search("στρατηγος", date_basis: %w[composition edition]).map(&:urn).sort
+      assert_equal %w[urn:comp:1], search("στρατηγος", date_basis: "composition").map(&:urn),
+                   "a comma-list string parses like the CLI flag"
+      assert_equal 4, search("στρατηγος").size, "no basis, no filter"
+    end
+
+    def test_date_basis_reads_the_primary_row_not_any_row
+      classed("urn:mixed", [[900, 950, nil], [-400, -300, "composition"]])
+      rebuild!
+      assert_equal %w[urn:mixed:1], search("στρατηγος", date_basis: %w[composition]).map(&:urn),
+                   "the earliest dated row is primary"
+      assert_empty search("στρατηγος", date_basis: %w[artifact]),
+                   "a later artifact row is not the document's primary date"
+    end
+
+    def test_date_basis_ties_break_on_row_id
+      classed("urn:tie", [[100, 200, "edition"], [100, 300, "composition"]])
+      rebuild!
+      assert_equal %w[urn:tie:1], search("στρατηγος", date_basis: %w[edition]).map(&:urn)
+      assert_empty search("στρατηγος", date_basis: %w[composition])
+    end
+
+    def test_date_basis_composes_with_the_window_on_the_primary_row
+      classed("urn:mixed", [[900, 950, nil], [-400, -300, "composition"]])
+      classed("urn:late", [[100, 200, "composition"]])
+      rebuild!
+      assert_equal %w[urn:mixed:1],
+                   search("στρατηγος", date_basis: %w[composition], from: -500, to: -200).map(&:urn)
+      assert_empty search("στρατηγος", date_basis: %w[composition], from: 900, to: 950),
+                   "under a basis the window reads the primary row — the artifact row's overlap does not count"
+      assert_equal %w[urn:mixed:1], search("στρατηγος", from: 900, to: 950).map(&:urn),
+                   "without a basis the window keeps its any-row semantics"
+    end
+
+    def test_date_basis_skips_undated_and_passage_grain_rows_when_choosing_the_primary
+      classed("urn:x", [[nil, nil, nil, { place_name: "Oxyrhynchus" }],
+                        [-50, -40, nil, { passage_seq_from: 1, passage_seq_to: 2 }],
+                        [100, 120, "composition"]])
+      rebuild!
+      assert_equal %w[urn:x:1], search("στρατηγος", date_basis: %w[composition]).map(&:urn),
+                   "a place-only row and a passage-grain annal row are never the primary date"
+      assert_empty search("στρατηγος", date_basis: %w[artifact])
+    end
+
+    def test_date_basis_composes_with_place
+      classed("urn:a", [[-113, -113, nil, { place_name: "Oxyrhynchus" }]])
+      classed("urn:b", [[-113, -113, nil, { place_name: "Arsinoites" }]])
+      rebuild!
+      assert_equal %w[urn:a:1], search("στρατηγος", date_basis: %w[artifact], place: "oxyrhynch%").map(&:urn)
+    end
+
+    def test_date_basis_drives_a_term_less_browse
+      classed("urn:art", [[-113, -113, nil]])
+      classed("urn:comp", [[-400, -300, "composition"]])
+      rebuild!
+      rows = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext).browse(date_basis: %w[composition])
+      assert_equal %w[urn:comp:1], rows.map(&:urn)
+    end
+
+    def test_date_basis_threads_through_scan_mode
+      classed("urn:art", [[-113, -113, nil]])
+      classed("urn:comp", [[-400, -300, "composition"]])
+      rebuild!
+      rows = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+                                .run_scan("στρατηγος", date_basis: %w[artifact])
+      assert_equal %w[urn:art:1], rows.map(&:urn)
+    end
+
+    def test_unknown_date_basis_is_refused_naming_the_known_set
+      classed("urn:art", [[-113, -113, nil]])
+      rebuild!
+      error = assert_raises(Nabu::Error) { search("στρατηγος", date_basis: %w[bogus]) }
+      assert_match(/unknown date basis "bogus"/, error.message)
+      assert_match(/artifact, composition, edition/, error.message)
+    end
+
     # -- the --script filter (P75 C-2) ---------------------------------------
 
     def scripted(urn, text, lect: nil, artifact: nil)

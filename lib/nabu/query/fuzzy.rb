@@ -105,11 +105,13 @@ module Nabu
       # document timeline, +facets+ (P17-2) on the document facet rows
       # — a fragmentary formula scoped `--type epitaph` is the designed use —
       # plus +source+ (P22-1) on the source slug and +loans+ (P34-2) on the
-      # passage's stored loan-code counts. Raises QueryTooShort below the
-      # trigram floor.
+      # passage's stored loan-code counts, and +date_basis+ (P122-1) on the
+      # class of the document's primary dated row. Raises QueryTooShort
+      # below the trigram floor.
       def run(fragment, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil, facets: nil,
-              source: nil, sources: nil, loans: nil)
+              source: nil, sources: nil, loans: nil, date_basis: nil)
         @incomplete_hint = nil
+        date_basis = Nabu::Query::DateBasis.parse(date_basis)
         variants = query_variants(fragment)
         inner_limit = limit * INNER_LIMIT_FACTOR
         hits = candidates(variants, inner_limit: inner_limit)
@@ -120,13 +122,14 @@ module Nabu
 
         rows = catalog_rows(verified.map(&:first), lang: lang, license: license,
                                                    from: from, to: to, place: place, facets: facets,
-                                                   source: source, sources: sources, loans: loans)
+                                                   source: source, sources: sources, loans: loans,
+                                                   date_basis: date_basis)
                .to_h { |row| [row.fetch(:passage_id), row] }
         page = verified.filter_map { |id, folded, match| [rows[id], folded, match] if rows[id] }
                        .first(limit)
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
-          filters_active: [lang, license, from, to, place, source, loans].compact.any? ||
+          filters_active: [lang, license, from, to, place, source, loans, date_basis].compact.any? ||
             (facets || {}).any? || Array(sources).any?,
           page_size: page.size, limit: limit
         )
