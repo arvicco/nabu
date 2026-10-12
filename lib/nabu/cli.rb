@@ -1095,6 +1095,8 @@ module Nabu
                     date envelope, place, genre, kind)
         links       the links journal's edges with run provenance and each
                     endpoint's source + license (--dated: endpoint dates)
+        lemmas      the lemma × language × century × grade × source
+                    attestation matrix, from the precompiled lemma rollup
 
       The passage stream (stdout, no manifest) is the default command:
         passages    --format plain | jsonl — jsonl lines carry the parsed
@@ -1255,6 +1257,43 @@ module Nabu
           ensure
             journal.disconnect
           end
+        end
+      end
+    end
+
+    desc "lemmas", "The lemma attestation matrix — lemma × language × century × grade × source counts"
+    long_desc <<~HELP, wrap: false
+      Writes exports/lemmas.csv (or .jsonl) and lemmas.manifest.yml from
+      the precompiled lemma rollup — the same rows the `nabu lemma` desk
+      reads, never a live scan. One row per cell:
+
+        lemma, language, century, basis, grade, source,
+        occurrences, documents, license_class
+
+      lemma is the folded key; century the signed century index of the
+      document envelope's midpoint (NULL = undated) with basis its date
+      class; grade separates gold (upstream annotation) from silver
+      (machine lemmas); occurrences counts passage attestations.
+
+      A catalog without the rollup tables refuses with the migration
+      hint; an empty rollup exports honestly and the manifest names
+      `bundle exec rake builders:refresh`.
+
+      Examples:
+        nabu export lemmas --lang lat
+        nabu export lemmas --lang grc,lat --grade gold --format jsonl
+        nabu export lemmas --license-class open,attribution
+    HELP
+    table_options
+    option :lang, type: :string, banner: "CODE[,CODE...]", aliases: ["--language"],
+                  desc: "Restrict to these passage-language codes (as stored)"
+    option :grade, type: :string, banner: "gold|silver", desc: "Restrict to one or both grades"
+    def lemmas
+      with_writer("lemmas") do |writer, config|
+        with_catalog(config) do |catalog|
+          table = Nabu::Export::Lemmas.new(catalog: catalog, langs: list(options[:lang]),
+                                           grades: list(options[:grade]))
+          report(writer.write(table))
         end
       end
     end
