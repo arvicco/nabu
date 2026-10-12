@@ -149,6 +149,7 @@ module Nabu
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
           "titus-tocharian-a" => :place_only,
+          "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
           "viet-wikisource" => :structured,
           "vuk-danicic" => :structured, # P117-2: the translation era per testament
@@ -172,6 +173,7 @@ module Nabu
         PLACE_KEYS = {
           "seal" => "provenance", "rsti" => "findspot", "titus-tocharian-a" => "findspot",
           "titus-manichaica" => "findspot",
+          "titus-tocharian-b" => "findspot",
           # P109-4: eebo-tcp documents ARE the early-modern prints — the
           # imprint place is the artifact's own production place (39k+
           # London), cleaned of the ESTC-style bracket/colon furniture.

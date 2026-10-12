@@ -1202,6 +1202,21 @@ sources:
         signature rides metadata; gazetteer linking via nabu-places is a future look"}
     script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
         transliteration rides the `syllabic` annotation"}
+  titus-tocharian-b:
+    kind: {posture: unclassified}
+    # `txb` is a real nabu-lects anchor (the bare code is the claim). The
+    # adapter's page-shape constants are PROVISIONAL until the first
+    # authenticated sync (members-only upstream) — the postures below are
+    # the titus-tocharian-a family's, re-censused at that sync.
+    lect: {posture: identity, note: txb whole-source; bilingual Sanskrit sub-lines (if the B pages carry
+        them) ride bare san per passage}
+    dating: {posture: undatable, note: "the family's pages carry no dating — the THT catalogue block names
+        signature/number/condition only; re-censused at the first authenticated sync"}
+    places: {posture: named, note: "the Berlin find signature's site siglum → findspot via the family's
+        SITE_SIGLA (Š/S Šorčuq, D Qočo), declared coarse — London/Paris shelf marks and other sigla
+        mint nothing; re-censused at the first authenticated sync"}
+    script: {posture: implied, note: "Latin transcription of Brāhmī manuscripts; the syllabic
+        transliteration rides the `syllabic` annotation"}
   titus-pahlavi:
     # The Zoroastrian Book Pahlavi editions (24, censused 2026-10-07).
     # Kind stays unclassified (the titus family's posture): the edition
