@@ -83,6 +83,27 @@ class LinkScopeReplayTest < Minitest::Test
     assert_match(/nabu-places registry/, error.message)
   end
 
+  # P122-2: a recorded parallels scope carries its profile NAME and chunk
+  # size; the replay re-resolves the profile from config/ and chunks again,
+  # recording the same effective parameters a live run would.
+  def test_a_recorded_parallels_scope_replays_its_profile_and_chunking
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["kanripo"])
+    Nabu::LinkScopeReplay.replay!(
+      { "producer" => "parallels", "scope" => "kanripo",
+        "params" => { "profile" => "chinese", "chunk_size" => 1, "min_score" => 0.5 } },
+      db: @catalog, fulltext: fulltext, journal: @journal, config: nil
+    )
+    run = @journal[:link_runs].first
+    params = JSON.parse(run[:params_json])
+    assert_equal ["chinese", "lzh", 4, 10, 0.5, 1],
+                 params.values_at("profile", "lang", "gram_size", "per_anchor", "min_score", "chunk_size"),
+                 "the profile resolves from config; the recorded flag still overrides it"
+    assert_equal ["complete", 1], run.values_at(:status, :chunks_done)
+  ensure
+    fulltext&.disconnect
+  end
+
   def test_unknown_producer_still_raises
     error = assert_raises(Nabu::Error) do
       Nabu::LinkScopeReplay.replay!({ "producer" => "nope", "scope" => "x" },

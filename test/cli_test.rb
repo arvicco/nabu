@@ -5776,6 +5776,56 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- parallels --batch: profiles + chunks (P122-2) ---------------------------
+
+  def test_parallels_batch_profile_loads_and_flags_override_it
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) do
+        run_cli(%w[parallels --batch urn:h:od --profile latin --lang grc])
+      end
+      assert_nil status
+      assert_match(/· run 1 · profile latin/, out, "the summary names the profile")
+      assert_match(/score ≥ 0\.1 · 3-grams/, out, "the profile's floor and gram size are in force")
+      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+      params = JSON.parse(journal[:link_runs].first[:params_json])
+      journal.disconnect
+      assert_equal %w[latin grc], params.values_at("profile", "lang"), "--lang overrides the profile's lat"
+      assert_includes params["stop_tokens"], "et", "every effective parameter is provenance"
+      scopes = Nabu::LinkScopes.load(config.link_scopes_path)
+      assert_equal({ "lang" => "grc", "profile" => "latin" }, scopes.first["params"],
+                   "the replay record keeps the profile NAME and the explicit flags")
+    end
+  end
+
+  def test_parallels_batch_chunk_size_prints_one_progress_line_per_chunk
+    with_parallels_corpus do |config|
+      out, err, status = with_config(config) { run_cli(%w[parallels --batch h --chunk-size 1]) }
+      assert_nil status
+      assert_match(%r{^  chunk 1/2 · 1 anchors · \d+ candidates · 1 edges minted · 0 refreshed · \S+ · run \S+$}, err)
+      assert_match(%r{^  chunk 2/2 · 1 anchors · }, err)
+      assert_match(/2 of 2 chunks mined this run/, out)
+      assert_equal 1, Nabu::LinkScopes.load(config.link_scopes_path).first["params"]["chunk_size"]
+    end
+  end
+
+  def test_parallels_batch_unknown_profile_names_the_declared_ones
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --profile greek]) }
+      assert_equal 1, status
+      assert_match(/unknown reuse profile "greek" — declared: chinese, latin/, err)
+    end
+  end
+
+  def test_parallels_batch_only_flags_are_refused_interactively
+    with_parallels_corpus do |config|
+      %w[--profile=latin --chunk-size=5 --gram-size=3 --restart].each do |flag|
+        _out, err, status = with_config(config) { run_cli(["parallels", "urn:h:od:1.1", flag]) }
+        assert_equal 1, status, flag
+        assert_match(/only applies with --batch/, err)
+      end
+    end
+  end
+
   def test_links_reads_both_directions_with_resolution_and_provenance
     with_parallels_corpus do |config|
       with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
@@ -5785,8 +5835,9 @@ class CLITest < Minitest::Test
       assert_match(/parallel \(1\):/, out, "edges group by kind")
       assert_match(/← urn:h:od:1\.1 — urn:h:od \[grc\]  score \d/, out,
                    "the incoming edge resolves its counterpart to title\\/language")
-      assert_match(/1 edge · run 1: parallels over urn:h:od \(min_score 0.05, per_anchor 5\)/, out,
-                   "the provenance footer cites the producer run and its params")
+      footer = "1 edge · run 1: parallels over urn:h:od " \
+               "(min_score 0.05, per_anchor 5, gram_size 4, candidate_pool 300)"
+      assert_includes out, footer, "the provenance footer cites the producer run and its EFFECTIVE params"
 
       anchor_side, = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
       assert_match(/→ urn:q:full:1/, anchor_side, "the same edge reads outgoing from its anchor")
