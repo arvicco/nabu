@@ -1,0 +1,27 @@
+{
+  "title": "Tafsir Yā Ayyuha an-Nâs/10",
+  "pageid": 6918,
+  "ns": 0,
+  "revid": 19227,
+  "timestamp": "2025-06-21T07:22:24Z",
+  "cone": [
+    "index:WM ID 010 0014 (Kitab Tafsir).pdf"
+  ],
+  "wikitext": "{{header\n | title      = Tafsir Yā Ayyuha an-Nâs\n | author     = Syekh Abdul Lathif Syakur\n | translator = \n | section    = ﴿ما يأتينكم رسل منكم يقصون عليكم﴾\n | previous   = [[../9a/|9]]\n | next       = [[../6a/|6]]\n | year       = \n | notes      = \n}}\n<div lang=\"ar\" dir=\"rtl\"> \n<pages index=\"WM ID 010 0014 (Kitab Tafsir).pdf\" from=21 to=22/>\n</div>",
+  "indexes": [
+    {
+      "name": "WM ID 010 0014 (Kitab Tafsir).pdf",
+      "title": "Indeks:WM ID 010 0014 (Kitab Tafsir).pdf",
+      "pageid": 5694,
+      "revid": 22717,
+      "fields": {
+        "Title": "Tafsir Yā Ayyuha an-Nâs",
+        "Author": "Syekh Abdul Lathif Syakur",
+        "Source": "pdf",
+        "Progress": "X",
+        "Language": "ms-arab",
+        "Remarks": "‌"
+      }
+    }
+  ]
+}

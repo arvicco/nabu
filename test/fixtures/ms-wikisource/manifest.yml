@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Envelopes are the adapter's own on-disk shape around api.php captures —
+# no per-file raw GET URL exists for the envelope form.
+source: ms-wikisource
+adapter_test:
+retrieved: "2026-10-12"
+files:
+  - path: pages/1928.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + Index + action=parse + proofread) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none
+  - path: pages/4196.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + Index + action=parse + proofread) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none
+  - path: pages/6478.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + Index + action=parse + proofread) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none
+  - path: pages/6916.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-12"
+    whole: true
+    trim: none
+  - path: pages/6918.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-12"
+    whole: false
+    trim: html + page_quality dropped (the capture predates the exclusion)
