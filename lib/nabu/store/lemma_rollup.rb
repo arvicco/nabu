@@ -47,8 +47,11 @@ module Nabu
     # set-based over millions of rows. basis is the envelope's date class
     # (document_axes.date_class): "composition" for author-era dating,
     # "artifact" for the object/witness dates the NULL class means; a
-    # document mixing both reads as artifact (MIN). Undated documents keep
-    # century AND basis NULL — one honest undated row per remaining key.
+    # document mixing both reads as artifact (MIN). P122-1: silver
+    # estimates (Store::SilverDates) date ONLY documents no upstream row
+    # dates, and then under basis "silver" — an estimate never widens or
+    # relabels an upstream envelope. Undated documents keep century AND
+    # basis NULL — one honest undated row per remaining key.
     #
     # == Placement and the cross-file join
     #
@@ -148,8 +151,11 @@ module Nabu
       def document_dates(catalog)
         dated = Sequel.|(Sequel.~(not_before: nil), Sequel.~(not_after: nil))
         dated_basis = Sequel.case([[dated, Sequel.function(:coalesce, :date_class, ARTIFACT_BASIS)]], nil)
-        envelope = catalog[:document_axes]
-                   .where(passage_seq_from: nil)
+        document_grain = catalog[:document_axes].where(passage_seq_from: nil)
+        upstream_dated = SilverDates.upstream(document_grain).where(dated).select(:document_id)
+        envelope = document_grain
+                   .where(Sequel.|(Sequel.~(axis_source: SilverDates::AXIS_SOURCE),
+                                   Sequel.~(document_id: upstream_dated)))
                    .group(:document_id)
                    .select(:document_id,
                            Sequel.function(:min, :not_before).as(:nb),

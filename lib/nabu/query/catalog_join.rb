@@ -2,6 +2,7 @@
 
 require_relative "place_filter"
 require_relative "date_basis"
+require_relative "../store/silver_dates"
 
 module Nabu
   module Query
@@ -180,9 +181,13 @@ module Nabu
       # name-LIKE lane, byte-identical pre-P75 behavior): the conjunct is
       # name-ILIKE OR identity-claims — a resolved name keeps its name
       # recall, a mint is identity-only (PlaceFilter class note).
+      # P122-1: the any-row filter promises UPSTREAM dates, so the silver
+      # estimate lane (Store::SilverDates) never answers it — estimates are
+      # reached only by naming them (`--date-basis silver`).
       def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
-        sub = @catalog[:document_axes].where(axes[:document_id] => Sequel[:documents][:id])
+        sub = Store::SilverDates.upstream(@catalog[:document_axes], axes: axes)
+                                .where(axes[:document_id] => Sequel[:documents][:id])
         sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
         sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
         if (resolution = PlaceFilter.coerce(place))
@@ -197,7 +202,8 @@ module Nabu
       # The --date-basis filter (P122-1): a correlated EXISTS over the
       # document's PRIMARY dated row — document grain (passage_seq_from
       # NULL), at least one bound, and no other such row of the document
-      # preceding it in the (coalesce(not_before, not_after), id) order —
+      # preceding it in the (silver rank, coalesce(not_before, not_after),
+      # id) order, so any upstream date outranks every silver estimate —
       # whose class (NULL reads "artifact", Nabu::Query::DateBasis) is one of
       # +bases+. The rule is the documents export's and `nabu show`'s, so a filtered
       # page never disagrees with the card. +from+/+to+ apply the
@@ -222,7 +228,8 @@ module Nabu
         @catalog.from(Sequel.as(:document_axes, :rival_axes))
                 .where(rival[:document_id] => primary[:document_id])
                 .where(dated_document_grain(rival))
-                .where(sorts_before([[date_key(rival), date_key(primary)], [rival[:id], primary[:id]]]))
+                .where(sorts_before([[Store::SilverDates.rank_expr(rival), Store::SilverDates.rank_expr(primary)],
+                                     [date_key(rival), date_key(primary)], [rival[:id], primary[:id]]]))
       end
 
       def dated_document_grain(axes)

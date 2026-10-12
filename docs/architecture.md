@@ -269,7 +269,8 @@ language_mix(document_id, source_id, urn, languages, language_count, switches)
    -- signed century index of the document's date-envelope MIDPOINT
    -- (astronomical-year arithmetic, so the missing year 0 cannot skew a
    -- BCE/CE straddle), NULL when undated; basis = the envelope's
-   -- date_class (artifact | composition). The lemma rows join the
+   -- date_class (artifact | composition | edition | silver — a silver
+   -- estimate dates only documents no upstream row dates). The lemma rows join the
    -- fulltext file's passage_lemmas to the catalog through a scoped
    -- ATTACH — one grouped INSERT-SELECT, no per-row Ruby. Built
    -- wholesale behind the index in both rebuild flavors and last in
@@ -1093,7 +1094,10 @@ and attributed composition-era dates as their own labeled class
 (`date_class` on the axis row; P109-4 added `"edition"` — a source
 EDITION's print year, projected so it can never masquerade as
 composition or artifact dating; era attributions wear `precision`
-"era"). The self-enforcing half is the
+"era"; P122-1 added `"silver"` — a model/tool estimate from the
+local-dates shelf, §16, never an upstream claim). `search --date-basis
+CLASS[,CLASS...]` filters on the class of a document's PRIMARY dated row,
+the holdout discipline as a flag. The self-enforcing half is the
 `unmined_axis_metadata` health invariant: axis-shaped metadata keys with
 zero corresponding facet/axis rows stay loud until extracted or
 declared.
@@ -1443,8 +1447,9 @@ move — plus the mechanical, append-only manifest append) and for the
 local-source shelf `Nabu::SourceShelf` (P24-0) — all driven by `nabu
 ingest`; for the local-notes shelf it is `Nabu::NoteShelf` (P24-1),
 driven by `nabu note`; for the local-lemmas shelf it is
-`Nabu::LemmaShelf` (P84-1), driven by `nabu lemma-enrich`. Everything
-else stays read-only on the shelves.
+`Nabu::LemmaShelf` (P84-1), driven by `nabu lemma-enrich`; for the
+local-dates shelf it is `Nabu::DateShelf` (P122-1), driven by `nabu
+silver-dates --import`. Everything else stays read-only on the shelves.
 
 **Shelf one: `local/shelves/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
@@ -1624,8 +1629,10 @@ own urns are the fine grain, a checkpoint state file written at every
 shard flush the coarse one). The derived product is — uniquely among the
 shelves — FULLTEXT-side: `Store::SilverLemmaIndexer` projects shards into
 `passage_lemmas` as tier-`silver` rows (the P26-0 tier machinery
-unchanged) at every rebuild and source refresh, and immediately on
-`lemma-enrich --index`. The projection is insert-if-absent at passage
+unchanged) only on the owner's word — `lemma-enrich --index`/`--index-only`
+(owner-ruled 2026-08-29: a full rebuild announces the shelf and never
+replays it; source refreshes maintain an already-armed index). The
+projection is insert-if-absent at passage
 grain: a urn with ANY existing lemma rows is skipped whole — the
 never-overwrite-gold guarantee, the idempotency proof, and the ordering
 contract with the annotation pass in one rule. Index-time POLICY stays
@@ -1639,6 +1646,40 @@ quarantines loudly at sync/rebuild — and the gold spot-check
 (`lemma-enrich --spot-check N`, the P79-4 protocol: LCS token alignment on
 folded surface forms, folded-lemma agreement per source) guards the model
 against drift.
+
+**Shelf six: `local/shelves/local-dates/` (P122-1)** — the silver-lemma
+mold at DOCUMENT grain: model- or tool-emitted date ESTIMATES, which cost
+money or compute to regenerate and so are homed on a shelf, never db/.
+`nabu silver-dates --import FILE` lands one JSONL batch through the
+`Nabu::DateShelf` gateway as the next numbered shard
+(`shard-NNNNNN.jsonl`, tmp+validate+rename): one record per document —
+urn, `not_before`/`not_after` (signed historical years, the `Nabu::Timeline`
+model), the basis label the estimator claims (`model`, …), estimator name
+and version, optional confidence in [0, 1] and note. Every urn must name a
+live document (`--force` shelves estimates for material not yet held); a
+later estimate for the same urn supersedes the earlier one. The derived
+product is CATALOG-side: `Store::SilverDates` projects the latest estimate
+per live document into `document_axes` under the dedicated `axis_source`
+`silver-dates` with `date_class` `silver` and precision `estimate`, the
+estimator named in `date_raw` — wholesale supersede, so projecting twice is
+the same rows. The projection is the OWNER's gate: `silver-dates --project`
+records the ruling as shelf furniture (`.projection-armed.json`) and
+projects; from then on the lane replays behind the timeline builder (which
+drops every axis row) at every full and incremental rebuild,
+`builders:refresh` and sync — so it survives `nabu rebuild` as a pure
+function of `local/` — and `--retract` disarms and drops it, keeping the
+shelf. Unlike silver lemmas the replay rides the rebuild: the lane is
+shelf-sized (thousands of rows, seconds), not corpus-sized. Honesty is
+structural: every upstream-promising consumer (the any-row
+`--from`/`--to` window, `vocab --by-century`, source date coverage, lect
+date inference, the published nabu-data document dates, the lane health
+checks) excludes the lane; every primary-date pick (`nabu show`, the
+documents export, `search --date-basis`, the lemma rollups' bucket) ranks
+an upstream row above any estimate, so silver dates a document only where
+nothing upstream does — and then always renders labeled. The shelf is not
+(yet) a registered `kind: shelf` source: its integrity rides the gateway's
+validate-on-read (a malformed shard fails the projection loudly, naming
+file:line), not LocalFetch pins.
 
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is
@@ -1726,8 +1767,10 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   bounds, never a fabricated hull: the primary dated document-grain
   timeline row (earliest, the row `nabu show` renders), with its precision,
   minting lane, verbatim upstream string, and date class — `artifact`
-  (migration 034's NULL: the source's own date of the object) or
-  `composition`. `--source`, `--lang`, and `--from`/`--to` (CatalogJoin's
+  (migration 034's NULL: the source's own date of the object),
+  `composition`, `edition`, or `silver` (a §16 estimate, the envelope only
+  where no upstream row dates the document). `--source`, `--lang`, and
+  `--from`/`--to` (CatalogJoin's
   NULL-aware overlap, so export and search agree on a window) filter.
 - `links` — the §15 journal's edges in id order: kind, endpoints, score,
   detail, the run provenance (run id, producer, scope, code version), and

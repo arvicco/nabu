@@ -6,7 +6,9 @@ require "test_helper"
 # `search --date-basis` — parse, normalize, refuse unknowns naming the set.
 class QueryDateBasisTest < Minitest::Test
   def test_known_set_is_the_stored_vocabulary
-    assert_equal %w[artifact composition edition], Nabu::Query::DateBasis::KNOWN
+    assert_equal %w[artifact composition edition silver], Nabu::Query::DateBasis::KNOWN
+    assert_equal Nabu::Store::SilverDates::DATE_CLASS, Nabu::Query::DateBasis::SILVER,
+                 "the projection mints exactly the class the filter names"
   end
 
   def test_absent_value_is_no_filter
@@ -21,7 +23,7 @@ class QueryDateBasisTest < Minitest::Test
   def test_unknown_class_is_refused_naming_the_known_set
     error = assert_raises(Nabu::Error) { Nabu::Query::DateBasis.parse("artifact,model") }
     assert_match(/unknown date basis "model"/, error.message)
-    assert_match(/choose from artifact, composition, edition/, error.message)
+    assert_match(/choose from artifact, composition, edition, silver/, error.message)
   end
 
   def test_empty_list_is_refused

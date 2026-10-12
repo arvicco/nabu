@@ -166,7 +166,8 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "place apply", "facets", "kind axis", "hiero postings", "lect journal",
+    assert_equal ["corpus", "timeline", "silver dates", "place apply", "facets", "kind axis", "hiero postings",
+                  "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
@@ -331,6 +332,35 @@ class RebuildTest < Minitest::Test
     assert_equal 0, db[:document_axes].count
   ensure
     db&.disconnect
+  end
+
+  # P122-1: the silver-date lane survives `nabu rebuild` — an armed
+  # local-dates shelf (local/, permanent) re-projects into the fresh
+  # catalog behind the timeline; an unarmed one never reaches db/.
+  def test_rebuild_replays_the_armed_silver_date_shelf
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+    shelf = Nabu::DateShelf.new(dir: Nabu::DateShelf.dir(config))
+    shelf.append_batch!(records: [Nabu::DateShelf::Record.new(
+      urn: "urn:nabu:test_adapter:one", not_before: -750, not_after: -650, basis: "model",
+      estimator: "chronos", estimator_version: "0.3", confidence: 0.6, note: nil, generated_at: nil
+    )])
+
+    rebuilder.run
+    with_db { |db| assert_equal 0, db[:document_axes].where(date_class: "silver").count }
+
+    shelf.arm!
+    rebuilder.run
+    with_db do |db|
+      row = db[:document_axes].where(date_class: "silver").first
+      refute_nil row, "the armed shelf re-projects into the rebuilt catalog"
+      assert_equal [-750, -650], [row[:not_before], row[:not_after]]
+      assert_equal "urn:nabu:test_adapter:one", db[:documents].where(id: row[:document_id]).get(:urn)
+    end
   end
 
   # -- facets are rebuilt from the replayed documents (P17-2) ----------------

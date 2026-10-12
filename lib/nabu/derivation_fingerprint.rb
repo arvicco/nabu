@@ -96,8 +96,13 @@ module Nabu
     BUILDER_DIRS = %w[store/timeline_builder].freeze
     # P121-2: the lemma rollup builder joins them — whole-table projections
     # too (wholesale at both rebuild flavors; the incremental runs it
-    # whenever the builders digest drifts).
-    BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb].freeze
+    # whenever the builders digest drifts). P122-1: so does the silver-date
+    # projection (re-run behind the timeline in every builder pass) with
+    # the shelf reader whose parse rules shape its rows.
+    BUILDER_FILES = %w[
+      store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb
+      store/silver_dates.rb date_shelf.rb
+    ].freeze
 
     # P112-4: the fulltext-index core — files that shape ONLY
     # fulltext.sqlite3 rows (read the catalog, write the index; never a

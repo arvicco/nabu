@@ -54,6 +54,19 @@ module Query
       assert_equal 2, result.multi_century # b (591–602) and c (-30–14) each span two centuries
     end
 
+    # P122-1: the diachrony is upstream dates only — a silver estimate
+    # never adds a bucket or a document.
+    def test_silver_estimates_never_enter_the_histogram
+      seed("urn:a", "στρατηγος", -113, -113)
+      seed("urn:b", "στρατηγος", 591, 602)
+      @catalog[:document_axes].where(document_id: @catalog[:documents].where(urn: "urn:b").get(:id))
+                              .update(axis_source: Nabu::Store::SilverDates::AXIS_SOURCE,
+                                      date_class: Nabu::Store::SilverDates::DATE_CLASS)
+      result = run_century
+      assert_equal ["2nd c. BCE"], result.buckets.map(&:label)
+      assert_equal 1, result.total_documents
+    end
+
     def test_text_query_plots_a_word_across_centuries
       seed("urn:a", "στρατηγος αγαθος", -113, -113)
       seed("urn:b", "νομαρχης", 591, 602)

@@ -179,8 +179,10 @@ module Nabu
         end
     end
 
+    # Upstream dates only (P122-1): an estimate is not a dating posture.
     def bounded_doc_ids(source_id)
-      @catalog[:document_axes]
+      upstream = Store::SilverDates.upstream(@catalog[:document_axes])
+      upstream
         .where(document_id: live_docs(source_id).select(:id))
         .where(Sequel.~(not_before: nil) | Sequel.~(not_after: nil))
         .select(:document_id)

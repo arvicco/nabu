@@ -105,10 +105,13 @@ module Nabu
 
     # Yields one row per dated document: urn, source slug, language, and the
     # closed-hull bounds (MIN not_before, MAX not_after over its axes rows).
+    # Upstream dates only (P122-1): a silver estimate never feeds a lect
+    # ruling.
     def each_dated_document(catalog, source:, lang:, &)
       scope = catalog[:documents]
               .join(:sources, id: :source_id)
               .join(:document_axes, document_id: Sequel[:documents][:id])
+              .exclude(Sequel[:document_axes][:axis_source] => Store::SilverDates::AXIS_SOURCE)
               .where(Sequel[:documents][:withdrawn] => false)
               .exclude(Sequel[:documents][:language] => nil)
       scope = scope.where(Sequel[:sources][:slug] => source) if source
@@ -166,7 +169,8 @@ module Nabu
       document = catalog[:documents].first(urn: urn)
       return nil unless document
 
-      row = catalog[:document_axes]
+      upstream = Store::SilverDates.upstream(catalog[:document_axes]) # P122-1: no estimates
+      row = upstream
             .where(document_id: document[:id])
             .select { [min(:not_before).as(:not_before), max(:not_after).as(:not_after)] }
             .first

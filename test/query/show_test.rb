@@ -425,6 +425,24 @@ module Query
       assert_equal(-113, show("urn:d:1:1").timeline.not_before)
     end
 
+    # P122-1: an upstream row outranks a silver estimate however early the
+    # estimate; an estimate alone renders, carrying its class.
+    def test_upstream_dates_outrank_silver_estimates_and_estimates_carry_their_class
+      load_document("1", [%w[1 μῆνιν]])
+      load_document("2", [%w[1 ἄειδε]])
+      first, second = %w[urn:d:1 urn:d:2].map { |urn| @catalog[:documents].where(urn: urn).get(:id) }
+      silver = { precision: "estimate", axis_source: Nabu::Store::SilverDates::AXIS_SOURCE,
+                 date_class: Nabu::Store::SilverDates::DATE_CLASS, date_raw: "model estimate — chronos 0.3" }
+      @catalog[:document_axes].insert(document_id: first, not_before: -900, not_after: -800, **silver)
+      @catalog[:document_axes].insert(document_id: first, not_before: -113, not_after: -113, axis_source: "hgv")
+      @catalog[:document_axes].insert(document_id: second, not_before: -300, not_after: -200, **silver)
+
+      upstream = show("urn:d:1").timeline
+      assert_equal [-113, "hgv", nil], [upstream.not_before, upstream.axis_source, upstream.date_class]
+      estimate = show("urn:d:2").timeline
+      assert_equal [-300, "silver"], [estimate.not_before, estimate.date_class]
+    end
+
     def test_undated_document_has_nil_timeline
       load_document("2", [%w[1 ἄειδε]])
       assert_nil show("urn:d:2").timeline

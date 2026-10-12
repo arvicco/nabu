@@ -52,10 +52,10 @@ module Nabu
       DATED_COLUMNS = [
         Column.new(name: "from_not_before", description: "from endpoint document's envelope lower bound"),
         Column.new(name: "from_not_after", description: "from endpoint document's envelope upper bound"),
-        Column.new(name: "from_date_class", description: "artifact or composition"),
+        Column.new(name: "from_date_class", description: "artifact, composition, edition or silver"),
         Column.new(name: "to_not_before", description: "to endpoint document's envelope lower bound"),
         Column.new(name: "to_not_after", description: "to endpoint document's envelope upper bound"),
-        Column.new(name: "to_date_class", description: "artifact or composition")
+        Column.new(name: "to_date_class", description: "artifact, composition, edition or silver")
       ].freeze
 
       Endpoint = Data.define(:source, :license_class, :document_id)
