@@ -75,3 +75,50 @@ class TitusFetchTest < Minitest::Test
                            delay: 0, auth: auth, page_re: /\Atochb\d+\.htm\z/)
   end
 end
+
+# The partial stage: a killed first walk resumes without re-requesting.
+def test_interrupted_walk_resumes_from_the_partial_stage
+  Dir.mktmpdir do |root|
+    dir = File.join(root, "pages")
+    requests = Hash.new(0)
+    frameset = '<frameset><frame name="etatext" src="aves001.htm"></frameset>'
+    page1 = '<html><a href="aves002.htm"><img alt="Next part"></a>one</html>'
+    page2 = "<html>two</html>"
+    stub_request(:get, "https://example.org/entry.htm")
+      .to_return do
+      requests["entry"] += 1
+      { body: frameset, status: 200 }
+    end
+    stub_request(:get, "https://example.org/aves001.htm")
+      .to_return do
+      requests["p1"] += 1
+      { body: page1, status: 200 }
+    end
+    stub_request(:get, "https://example.org/aves002.htm")
+      .to_return do
+      requests["p2"] += 1
+      { body: page2, status: 200 }
+    end
+
+    # First walk dies after staging page 1 (simulated by raising from the
+    # page-2 request).
+    stub_request(:get, "https://example.org/aves002.htm").to_timeout.then
+                                                         .to_return do
+      requests["p2"] += 1
+      { body: page2, status: 200 }
+    end
+    fetch = Nabu::TitusFetch.new(entry_url: "https://example.org/entry.htm",
+                                 dir: dir, attic_dir: File.join(dir, ".attic"), delay: 0)
+    assert_raises(Nabu::TitusFetch::Error) { fetch.prepare! }
+    assert File.file?(File.join(dir, ".fetch-partial", "aves001.htm")),
+           "the fetched page is staged before the walk dies"
+
+    # The re-run reads page 1 from the stage: no second request for it.
+    result = Nabu::TitusFetch.sync!(entry_url: "https://example.org/entry.htm",
+                                    dir: dir, attic_dir: File.join(dir, ".attic"), delay: 0)
+    assert_equal 2, result.page_count
+    assert_equal 1, requests["p1"], "the staged page is never re-requested"
+    assert File.file?(File.join(dir, "aves001.htm"))
+    refute Dir.exist?(File.join(dir, ".fetch-partial")), "complete! consumes the stage"
+  end
+end
