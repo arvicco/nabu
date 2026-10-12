@@ -4912,7 +4912,13 @@ tamilex:   # P121-3, 02-sources row 266
   adapter: Nabu::Adapters::Tamilex
   adopted: "2026-10-12"
   axes: [indic]
-  wired: false   # awaiting the first real sync
+  wired: true    # first real sync 2026-10-12: 7,830 docs / 14,972 passages /
+                 # 262,093 gold wordsplit lemma rows from 7,849 root XML
+                 # (17 rule-skips exactly as censused, 2 quarantined —
+                 # baseline recorded); 4 random cards eyeballed (anthology
+                 # verse, devotional antāti, Nammāḻvār, a 25-passage
+                 # Tolkāppiyam commentary chain) — romanization, work
+                 # facets and commentary layers all sound
   sync_policy: auto   # upstream edits the editions practically daily — swept by
                       # sync --all like the other continuously-updated git
                       # sources (perseus-greek/latin, first1k-greek)
