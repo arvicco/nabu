@@ -5377,6 +5377,17 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
                  # 209 (127 Berlin pre-anchor-note cases + 80 nothing-legible
                  # note-only pages + 2 unclassified ts-lane pages); Paris
                  # NS 38+37 and PK NF cards eyeballed.
+                 # Post-widening tidy (P122-4, ruled 2026-10-12; re-parse
+                 # pending — the hub trues the exact counts): a pre-anchor
+                 # catalogue note now lands in the manuscript catalogue / part
+                 # label (worktree census: +112 docs / +1,237 passages,
+                 # all txb); note-only pages skip by rule "nothing legible
+                 # (note-only page)" (79); the five London Tocharian A
+                 # manuscripts (toch3846/3847/3855/3856/3857) are xto
+                 # documents. Expected quarantines ~18: the 2 ts-lane pages
+                 # and the 1 iotk16 page (unclassified, ruled to stay), 14
+                 # pages with B-lane TEXT (not a note) before a line anchor,
+                 # and the London collection header page toch3560.
   # TITUS Tocharian B Corpus (members area,
   # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
   # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
