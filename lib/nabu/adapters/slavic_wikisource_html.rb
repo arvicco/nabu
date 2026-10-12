@@ -13,7 +13,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # The Slavic wikisource family base (P116-3; the №R-74 ruled posture —
+    # The Slavic wikisource family base (P116-3; the owner-ruled Wikisource posture —
     # premodern cone, census-first, verbatim edition strings — the
     # ja/zh-wikisource precedent carried to pl/cs/ru/uk). Subclasses are
     # pure configuration: the API endpoint, the censused CONE, the header
@@ -141,7 +141,7 @@ module Nabu
         nil
       end
 
-      # The verbatim edition statement (№R-74): the EDITION_FIELDS values
+      # The verbatim edition statement (owner ruling): the EDITION_FIELDS values
       # as stated, the <pages index> scan names, and the title's edition
       # parenthetical — joined " · ", markup reduced to its display text.
       # "unstated" when the page states nothing.

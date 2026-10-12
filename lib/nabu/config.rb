@@ -248,7 +248,7 @@ module Nabu
       instance_path("creep_acceptances.yml")
     end
 
-    # Withdrawal-shed acceptances (P102-1 — Q74): the owner's
+    # Withdrawal-shed acceptances (P102-1): the owner's
     # --accept-shed rulings; config-file only (shed is measured live
     # from the catalog, no ledger mirror needed).
     def shed_acceptances_path
@@ -282,7 +282,7 @@ module Nabu
       File.join(db_dir, FULLTEXT_DB_FILENAME)
     end
 
-    # The semantic-vector store (P93-4, №R-36; architecture's named home).
+    # The semantic-vector store (P93-4; architecture's named home).
     # Lives in db/ but is EXPENSIVE-derived (~22h to regenerate): rebuild
     # deletes the catalog/fulltext files by name and never this one —
     # `nabu embed` maintains it incrementally, keyed (model, urn, text

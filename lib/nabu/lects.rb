@@ -95,7 +95,7 @@ module Nabu
     # ine-bsl). stage: 2-5 lowercase alphanumerics starting with a letter
     # (digits admitted P58-5 for the field's own periodization names —
     # sux:ur3 is Ur III; pure-letter tags stay the norm). variety: 2-8,
-    # widened from 2-5 by №R-41 so IANA variant subtags fit verbatim
+    # widened from 2-5 (owner-ruled 2026-08-21) so IANA variant subtags fit verbatim
     # (oc/lengadoc, oc/vivaraup). script: exactly 4 lowercase letters — a
     # lowercased ISO 15924 code (P60-0). ortho: 2-8 lowercase alphanumerics
     # starting with a letter. Axes strictly ordered (":" before "/" before

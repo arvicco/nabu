@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Adapters
-  # P79-2 (Q35): every non-git source must declare an HONEST remote-probe
+  # P79-2: every non-git source must declare an HONEST remote-probe
   # posture — the :git default ls-remotes the upstream URL, which reads a
   # permanent false "gone" for zip/file/crawl sources (the P78 Korean
   # family + achemenet shipped wired with exactly that gap, and the sweep

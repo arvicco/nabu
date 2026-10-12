@@ -13,8 +13,8 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # The South Slavic wikisource family base (P116-2, Q103 part 1, under
-    # the ruled wikisource posture №R-74: premodern category cone, census-
+    # The South Slavic wikisource family base (P116-2, part 1, under
+    # the owner-ruled wikisource posture: premodern category cone, census-
     # first, verbatim edition strings as provenance, category-derived
     # dating where the wiki has it). The ja-wikisource fetch mold,
     # generalized: each concrete adapter (sr/hr/sl/mk/bg) declares its
@@ -210,7 +210,7 @@ module Nabu
         end
       end
 
-      # The shared provenance block (№R-74): the cone roots, every category
+      # The shared provenance block (owner ruling): the cone roots, every category
       # verbatim, the header's author/notes, the base edition, the verse/
       # prose grain, the wiki's own quality stamp.
       def document_metadata(envelope, result)
@@ -232,7 +232,7 @@ module Nabu
         key ? header[key] : nil
       end
 
-      # №R-74: the page's stated source edition verbatim — the wiki's own
+      # The Wikisource posture: the page's stated source edition verbatim — the wiki's own
       # source section (Извор/Избор/Izvor…), else the header's publication
       # fields, else the honest "unstated". Concrete adapters refine.
       def base_edition(_envelope, result)

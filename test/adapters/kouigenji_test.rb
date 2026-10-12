@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # kouigenji — the 校異源氏物語 TEI (P108-3, Q89.2): Ikeda Kikan's
+  # kouigenji — the 校異源氏物語 TEI (P108-3): Ikeda Kikan's
   # 1942 critical edition of Genji, 54 maki as TEI files, CC BY 4.0.
   # Passage per MANUSCRIPT LINE (`seg`), cited p<page>.l<line> from
   # the seg's own corresp API id; waka ride nested inside their seg

@@ -136,7 +136,7 @@ module Nabu
 
     # The paths (workdir-relative) this adapter's #fetch DELIBERATELY
     # creates inside canonical/<slug>/ beside upstream's tree — tarball
-    # extractions, pinned sidecar files (Q59-a, ruled 2026-09-03). The
+    # extractions, pinned sidecar files (the declared-materializations rule, 2026-09-03). The
     # incremental rebuild's identity walker tolerates a declared path as
     # untracked and hashes its bytes into the canonical identity (the
     # .attic discipline — vouched, never trusted blind); an UNDECLARED
@@ -146,8 +146,8 @@ module Nabu
     # replay tax, not a default.
     def self.materialized_paths = []
 
-    # The declared SECONDARY dictionary lane (P104-4, Q81 — the №R-69a
-    # multi-shelf seam): content_kind stays the PRIMARY routing, and a
+    # The declared SECONDARY dictionary lane (P104-4 — the
+    # multi-shelf dictionary seam): content_kind stays the PRIMARY routing, and a
     # source whose canonical tree ALSO carries dictionary-shaped content
     # (oracc's per-project gloss-*.json) declares it here instead of
     # overloading the closed content_kind enum. The lane is a

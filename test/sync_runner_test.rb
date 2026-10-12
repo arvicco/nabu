@@ -692,7 +692,7 @@ class SyncRunnerTest < Minitest::Test
                  "a pending (crashed) slice must refresh despite the no-op load"
   end
 
-  # P112-1 (Q112): a content-bearing resync refreshes at the DELTA grain —
+  # P112-1: a content-bearing resync refreshes at the DELTA grain —
   # only the rows the load changed are rewritten. The proof is a tampered
   # fts row of an UNCHANGED passage: the old slice rewrite would heal it
   # (it rewrote everything); the delta refresh must leave it alone while
@@ -950,7 +950,7 @@ class SyncRunnerTest < Minitest::Test
                  "a dictionary source indexes no passages (its index work is the reflex closure)"
   end
 
-  # --- the secondary dictionary lane (P104-4, Q81) --------------------------
+  # --- the secondary dictionary lane (P104-4) --------------------------
 
   # A passages source with a declared dictionary lane loads BOTH shapes
   # under ONE run: the primary report stays document-grained, the lane
@@ -1170,7 +1170,7 @@ class SyncRunnerTest < Minitest::Test
   def sample_grant
     Nabu::SourceRegistry::Grant.new(
       grantor: "G. Starostin", date: "2026-07-15", terms: "any use, per-base attribution required",
-      thread: "№1", request_hint: "ask George Starostin"
+      thread: "by email, 2026-07-15", request_hint: "ask George Starostin"
     )
   end
 

@@ -13,7 +13,7 @@ require_relative "git_fetch"
 require_relative "version"
 
 module Nabu
-  # Polite session-based crawl for the Menota archive (P82-1, queue Q42 /
+  # Polite session-based crawl for the Menota archive (P82-1,
   # grant of 2026-08-20) — the CorpusCorporumFetch sibling for the Corpuscle
   # (korpuskel) REST API behind the catalogue SPA at
   # clarino.uib.no/menota/catalogue/menota (all endpoints verified live

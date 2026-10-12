@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::Eta (P78-r2, Q34): the estimate a stage announcement carries —
+# Nabu::Eta (P78-r2): the estimate a stage announcement carries —
 # read from the P78-r1 stage_timings history (latest row governs),
 # scaled by row-count drift when the caller has a cheap current
 # denominator, and honest ("first run — no estimate") when there is no

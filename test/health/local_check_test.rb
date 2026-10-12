@@ -76,7 +76,7 @@ class LocalCheckTest < Minitest::Test
     assert_operator report.soft_count, :>=, 1
   end
 
-  # P98-1 (Q71 item 3): 0-added is the HEALTHY steady state for a frozen or
+  # P98-1: 0-added is the HEALTHY steady state for a frozen or
   # manual upstream, a shelf, or a feature module — collapse fires only on
   # the live-cadence population (wired, auto, kind: source), exactly the
   # stale rule's. The live specimens: proiel (frozen), unihan (module),

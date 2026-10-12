@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P76 U-6 (№R-6, survey E1): kaikki descendant nodes carry an `uncertain`
+# P76 U-6 (the uncertainty doctrine, survey E1): kaikki descendant nodes carry an `uncertain`
 # raw_tag the parser used to drop — the only lexical-doubt carrier that
 # never reached disk. Mirrors migration 010's borrowed flag exactly:
 # parser-minted rows are true/false, NULL means "row predates the

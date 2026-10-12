@@ -19,7 +19,7 @@ module Nabu
     # drop-and-rebuild lifecycle of the derived indexes. Withdrawn documents
     # contribute no rows (facets feed corpus-facing filters, which never see
     # withdrawn documents anyway).
-    # P104-1 (№R-70) adds a SECOND projection lane beside the adapter-
+    # P104-1 adds a SECOND projection lane beside the adapter-
     # emitted "facets" key: Nabu::FacetMap's per-source metadata-field →
     # facet declarations, projected from the same catalog scan discipline
     # (values verbatim, arrays one row per element, absence mints

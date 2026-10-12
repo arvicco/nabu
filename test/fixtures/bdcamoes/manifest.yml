@@ -4,7 +4,7 @@
 # BDCamões Part I (P80-7): real trimmed slices of the PORTULAN CLARIN
 # Part I archive (sha256 c0511fbf5ece31eb7f03e012edc30e13f02df60dc3207
 # 24a3036f9061806b9f7, retrieved 2026-08-19). The upstream is ONE zip
-# behind a licence-agree click-through (owner ruling №R-37) — per-file
+# behind a licence-agree click-through (owner ruling 2026-08-19) — per-file
 # URLs do not exist; all three works are hand-trimmed from the zip's
 # own members, byte-verbatim up to the cut.
 source: bdcamoes

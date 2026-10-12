@@ -8,7 +8,7 @@ require "test_helper"
 # stages in the registry) still resolve to bare identity (no lect facet
 # row — the LectFacets "no row means identity" invariant). Languages
 # with no stages defined never count: 0-unstaged there is the healthy
-# steady state, not a gap (the Q71 lesson).
+# steady state, not a gap (the health-check triage lesson).
 class LectStagingTest < Minitest::Test
   include StoreTestDB
 

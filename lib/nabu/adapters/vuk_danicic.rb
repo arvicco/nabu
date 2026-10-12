@@ -6,7 +6,7 @@ module Nabu
   module Adapters
     # vuk-danicic — the Serbian Bible of Vuk Stefanović Karadžić (New
     # Testament, Vienna 1847) and Đura Daničić (Old Testament, completed
-    # 1865, printed in the 1868 whole Bible) — P117-2, Q104. The founding
+    # 1865, printed in the 1868 whole Bible) — P117-2. The founding
     # text of Vuk's Neo-Štokavian ijekavian literary standard, in the
     # language of the reform itself.
     #

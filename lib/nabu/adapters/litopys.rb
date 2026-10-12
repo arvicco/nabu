@@ -6,7 +6,7 @@ require_relative "litopys_glossary_lane"
 
 module Nabu
   module Adapters
-    # Izbornyk (litopys.org.ua) — the PD-EDITION SUBSET (P117 / Q106, 02-
+    # Izbornyk (litopys.org.ua) — the PD-EDITION SUBSET (P117, 02-
     # sources row 252). The site is a large hand-keyed library of East
     # Slavic sources, but most of it is keyed from SOVIET-ERA editions
     # whose editorial layer (text preparation, normalization, apparatus) is

@@ -388,7 +388,7 @@ module Nabu
       "otb" => Xct.method(:to_ewts_with_map)
     }.freeze
 
-    # == Query-side neutralization scopes (P81-2 / Q40) — the P79-1 discipline
+    # == Query-side neutralization scopes (P81-2) — the P79-1 discipline
     #    extended to SCRIPT_NEUTRALIZATIONS
     #
     # P79-1 left neutralizations unscoped on the assumption they are

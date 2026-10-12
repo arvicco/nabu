@@ -99,7 +99,7 @@ class CroalaTest < Minitest::Test
                  adapter.parse(ref_for(DONATIO)).title
   end
 
-  # P104-1 (Q77): upstream's own two-level genre taxonomy (keywords
+  # P104-1: upstream's own two-level genre taxonomy (keywords
   # scheme="genre") projects as a facet — one row per term, the IIP
   # plural-values shape.
   def test_genre_terms_ride_as_a_plural_facet

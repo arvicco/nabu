@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # honkoku — みんなで翻刻 crowd transcriptions (P108-5, Q89.1): the
+  # honkoku — みんなで翻刻 crowd transcriptions (P108-5): the
   # v3 tree (project > material > page txts), CC BY-SA 4.0
   # README-verbatim, served HONESTLY as crowd transcription with the
   # platform's aozora-like notation VERBATIM (an upstream-measured

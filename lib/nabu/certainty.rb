@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nabu
-  # The uncertainty doctrine core (P76 U-1, №R-6 — survey §4): three house
+  # The uncertainty doctrine core (P76 U-1 — survey §4): three house
   # tiers **certain · probable · uncertain** (the Pleiades/LPF lineage),
   # mapped from each carrier's own vocabulary at RENDER TIME only — never a
   # storage substitution. The axioms every consumer composes:

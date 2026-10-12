@@ -12,7 +12,7 @@ referential-integrity gaps the drift guard exists to catch).
   pl and cs anchors with their old/mid stages, whose cs:old override
   target the drift guard now validates; sr, hr, mk; the chu recension
   varieties), from the box's `canonical/nabu-lects` (commit
-  `67841fe87dec8fc2214f9e42698c092514b3e04e`, the repo's `main`).
+  `25ff8313eecf`, the repo's `main`).
   - `lects.yml` — the lect registry (anchors, stages, varieties,
     orthographies, the global scripts table, parent edges, Glottocode
     crosswalks). Full file, 98,155 B, sha256

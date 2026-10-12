@@ -9,7 +9,7 @@ module Adapters
   # title's ASCII slug; passage = one sentence at <paragraph>.<sentence>;
   # upstream's per-text dating attrs ride metadata verbatim. Language sv
   # (no ISO code for Old Swedish — the IcePaHC-under-`is` precedent; the
-  # sv:old stage rule is №R-32). The automatic fsvm lemma candidate sets
+  # sv:old stage rule was owner-ruled 2026-08-13). The automatic fsvm lemma candidate sets
   # are deliberately NOT ingested. Fixtures: two parts trimmed to their
   # first two texts (content verbatim, re-bzipped).
   class FornsvenskaTest < Minitest::Test
@@ -76,7 +76,7 @@ module Adapters
       assert_equal "Äldre Västgötalagen", document.title
       assert_equal "fsv-aldrelagar", document.metadata["part"]
       assert_equal({ "part" => { "value" => "fsv-aldrelagar" } }, document.metadata["facets"],
-                   "the part rides as a facet — the №R-32 sv:old rule's hook (rule lands with " \
+                   "the part rides as a facet — the sv:old rule's hook (owner-ruled 2026-08-13) (rule lands with " \
                    "the nabu-lects sv mint)")
       assert_equal "1280–1290", document.metadata["date"], "upstream's own band, verbatim"
       assert_equal "12800101", document.metadata["datefrom"]

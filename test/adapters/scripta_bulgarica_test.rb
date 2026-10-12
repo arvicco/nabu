@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # Scripta Bulgarica (P107-8 — Q100): 125 Old/Middle Bulgarian source
+  # Scripta Bulgarica (P107-8): 125 Old/Middle Bulgarian source
   # texts from the BAS Institute for Literature's portal, mirrored
   # snapshot-first (fragile PHP 5.5 upstream). The Drupal field shape is
   # the parse contract: field-name-body = the FULL source text,

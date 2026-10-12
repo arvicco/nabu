@@ -69,7 +69,7 @@ Trimmed line-verbatim slice of ORAEC's Coptic-etymologies crosswalk.
   TEI — exercises the unused-row path), C9 (demotic-only), C74 (negative
   demotic id), C1494 and C1495 (both ancestors — the ⲕⲁϩ cluster).
 
-## kellia/egyptian_etymologies.tab (P89-2, №R-52 (c))
+## kellia/egyptian_etymologies.tab (P89-2, owner ruling 2026-08-30, option c)
 
 Trimmed line-verbatim slice of the **KELLIA etymologies tab** —
 `data/egyptian_etymologies.tab` in github.com/KELLIA/dictionary, the

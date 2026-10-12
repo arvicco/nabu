@@ -262,7 +262,7 @@ module Query
                    "the pre-019 fallback must produce the identical (language, source) pair counts"
     end
 
-    # -- P106-3 (№R-69 g2): the dictionary GROUP — answers from dictionary_stats --
+    # -- P106-3 (generalization 2): the dictionary GROUP — answers from dictionary_stats --
 
     LECTS_FIXTURES = Nabu::TestSupport.fixtures("nabu-lects")
     LECT_OVERRIDES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml")

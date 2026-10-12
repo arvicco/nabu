@@ -88,7 +88,7 @@ sources:
     # ko-wikisource-mk precedent if Middle Korean rows surface at sync.
     lect: {posture: codemap, note: "lzh → zho/lit (the sillok mold); ko/okm identity;
         Korean stage refinement deferred to a ruled year-band table"}
-    dating: {posture: dated, note: "P92-6 (Q64): the per-record integer year projects
+    dating: {posture: dated, note: "P92-6: the per-record integer year projects
         through MetadataDates :year_key — 490,014 of 1,198,779 records carry one
         (censused 2026-09-01, range 695–1995); year-less records honestly mint nothing"}
     places: {posture: unplaced, note: "archive/corpus provenance rides document metadata"}
@@ -169,7 +169,7 @@ sources:
         re-encoding of classical text, never traditional-script witness"}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
-    dating: {posture: dated, note: "P104-1 (№R-70): KanripoDates ladders the KR-Catalog —
+    dating: {posture: dated, note: "P104-1: KanripoDates ladders the KR-Catalog —
         the entry's own clean :DATE: year (typed, precision year), else the first 人物
         person's :DATES: life/floruit span, else the :DYNASTY: attribution banded via
         period_bands.yml sinological rows (both precision `era`, the grade-2 class);
@@ -178,7 +178,7 @@ sources:
     script: {posture: mixed, note: "gaiji variant characters ride annotations"}
   cbeta:
     lect: {posture: codemap, note: lzh → zho/lit}
-    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the header byline's dynasty seat
+    dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the header byline's dynasty seat
         (3,163 of 3,707 headers censused 2026-09-26) bands via period_bands.yml through
         MetadataDates :dynasty_band — precision `era`, an attributed translation-era claim,
         never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing"}
@@ -214,7 +214,7 @@ sources:
         header: <date> (clean parses, 225 filled) with upstream's comma-spelled
         century-half <time> grid (396 of 406) behind prose; MetadataDates
         :structured"}
-    places: {posture: named, note: "P109-4 (the Q83 drain): the header's
+    places: {posture: named, note: "P109-4 (the unmined-metadata drain): the header's
         orig_place scriptorium claims (Vorau, 'Siegburg (?)' — 79 of 406
         docs, uncertainty markers verbatim) project via PLACE_KEYS; the
         genre code projects as a labeled facet in the same packet"}
@@ -249,7 +249,7 @@ sources:
     script: {posture: implied}
   menota:
     kind: {posture: unclassified}
-    # lect: machine-postured (№R-42 ruled 2026-08-24, nabu-lects v1.1.0
+    # lect: machine-postured (owner-ruled 2026-08-24, nabu-lects v1.1.0
     # minted no/no:old + da/da:old + the nor/dan/gmq-oda codemap rows) —
     # the pending row retired, the ref add-then-retire shape. Coverage:
     # nor/dan/swe ride the universal codemap; isl/non are identity
@@ -285,7 +285,7 @@ sources:
         languages) and ride document metadata verbatim, never the claim"
     dating:
       posture: dated
-      note: "P109-4 (the Q83 drain): the SOURCE EDITION's print year(s)
+      note: "P109-4 (the unmined-metadata drain): the SOURCE EDITION's print year(s)
         project with date_class 'edition' — an 1886 edition of a 1200
         text is still not a composition claim, and the class label says
         exactly that; the e-text pub_date stays machinery (declared,
@@ -306,7 +306,7 @@ sources:
       note: "en IS the claim and it is TRUE today (P83-1): 97.6% of the
         corpus declares LANGUSAGE eng (censused ×3,325), mapped through
         the codemap's eng→en alias; the registry anchor is en (parent
-        enm). The en:early stage mint is APPROVED (№R-43 rider,
+        enm). The en:early stage mint is APPROVED (owner ruling 2026-08-26,
         nabu-lects PR #9: en:early [1500, 1700] — the de:early shape,
         pending owner merge); once the v1.2.0 mint reaches
         canonical/nabu-lects the en:early staging rides DATE-BAND
@@ -324,7 +324,7 @@ sources:
         the 3,325-file sample; ?/ca. uncertainty stays raw-only, bounds
         never invented. The imprint is the PRINT year, an honest
         early-modern envelope (composition≈print for this corpus)"
-    places: {posture: named, note: "P109-4 (the Q83 drain, superseding
+    places: {posture: named, note: "P109-4 (the unmined-metadata drain, superseding
         the P83-1 no-claim stance): the document IS the early-modern
         print, so the imprint PUBPLACE is the artifact's own production
         place — the same composition≈print logic the dating posture
@@ -413,7 +413,7 @@ sources:
         man'yōgana) — both honest bare codes. Staging jpn docs onto the minted
         emj/lmj/emod stages via the era_band envelopes (the dta de:early date-band
         precedent) is a NAMED candidate awaiting an owner ruling — not defaulted"}
-    dating: {posture: dated, note: "P109-1 (№R-74): the era-category envelope
+    dating: {posture: dated, note: "P109-1: the era-category envelope
         (era_band → MetadataDates :era_band_key), precision era — an attribution,
         never a typed date"}
     places: {posture: unplaced, note: "no place fields in the cone pages"}
@@ -428,7 +428,7 @@ sources:
         about Song–Yuan) and 元朝秘史 deliberately claim nothing — declared"}
     places: {posture: unplaced, note: "no place fields in the cone pages"}
     script: {posture: implied}
-  # ── P116-2: the South Slavic wikisource cone (№R-74) ──────────────────
+  # ── P116-2: the South Slavic wikisource cone (owner ruling) ──────────────────
   bg-wikisource:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "chu (the 16 charters' original-script text, bare
@@ -483,14 +483,14 @@ sources:
     places: {posture: unplaced, note: "provenance subtitles ((Из Црне Горе)) ride as
         section annotations, not place claims"}
     script: {posture: mixed, note: "Cyrillic + Latin pages; metadata script per page"}
-  # P116-3: the West/East Slavic wikisource family (№R-74 posture).
+  # P116-3: the West/East Slavic wikisource family (the owner-ruled wikisource posture).
   pl-wikisource:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "pl — the anchor minted 2026-10-11 (the Slavic
         package); documents claim bare pol → pl via codemap. Deliberately coarse at
         source grain: the cone spans pl:old and pl:mid, and the era-band categories
         are attributions, not typed dates — staging stays a recorded future look"}
-    dating: {posture: dated, note: "P116-3 (№R-74): the cone category's
+    dating: {posture: dated, note: "P116-3: the cone category's
         literary-period band (era_band → MetadataDates :era_band_key; medieval /
         XV-century / Renaissance / Baroque, approximate conventions declared in
         ERA_CATEGORIES), precision era — an attribution, never a typed date"}
@@ -528,7 +528,7 @@ sources:
         chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
     places: {posture: unplaced}
     script: {posture: implied}
-  litopys:   # P117 (Q106)
+  litopys:   # P117
     # kind: machine-postured — kind_map.yml source_kind historiography/chronicle
     # (the whole passage shelf IS the Ipatiev chronicle; the glossaries ride
     # the dictionary lane).
@@ -606,7 +606,7 @@ sources:
   syriac-corpus:
     kind: {posture: unclassified}
     lect: {posture: identity, note: syc IS Classical Syriac}
-    dating: {posture: dated, note: "P108-8 (the Q83 slice): orig_date.when years (24 docs) +
+    dating: {posture: dated, note: "P108-8 (the unmined-metadata slice): orig_date.when years (24 docs) +
         the century-prose grammar over orig_date.text — 627/632 banded, 574
         composition-classed by the per-doc type field"}
     places: {posture: unplaced}
@@ -673,11 +673,11 @@ sources:
     kind: {posture: unclassified, note: "no class field in the TEI (campū purāṇas, śatakas,
         a sāṅgatya, a nighaṇṭu, a poetics and a grammar) — a kind_map fold would be a ruled
         table"}
-    lect: {posture: pending, note: "candidate: a kan (Kannada) anchor with Old (Halegannaḍa:
-        Pampa–Janna) and Middle (Naḍugannaḍa: Harihara, Rāghavāṅka, Kanakadāsa,
-        Ratnākaravarṇi, Honnamma) stages — the hub-side nabu-lects mint; no kan node exists
-        in canonical/nabu-lects (checked 2026-10-11), so kan-Latn rides bare until it
-        merges; san-Latn (the Karṇāṭakabhāṣābhūṣaṇaṁ, Sanskrit stanzas) resolves"}
+    lect: {posture: identity, note: "kan IS Kannada — the P118-3 pending retired
+        2026-10-12: the Indic registry package (merged 2026-10-11) minted the kn anchor
+        with kn:old/kn:mid stages and the kan → kn codemap row, so kan-Latn resolves;
+        per-work staging onto the Old/Middle bands is a future facet-rule look (the
+        corpus spans Pampa 941 to Honnamma); san-Latn resolves as before"}
     dating: {posture: partial, note: "6 of 16 works dated by the repository README (941 ×2,
         953, ca. 1042 ×3) — attributed COMPOSITION class on the :structured lane; the TEI
         headers carry only edition years; the other ten works stay undated, declared"}
@@ -689,11 +689,11 @@ sources:
     kind: {posture: unclassified, note: "no class field in the TEI (kāvya, kathā, gāhā
         anthologies, lexica, grammars, a metrics, canonical Āgamas) — a kind_map fold would
         be a ruled table"}
-    lect: {posture: pending, note: "candidate: pka (Ardhamāgadhī — the Nandī and
-        Aṇuōgaddārāiṁ, 2 docs / 764 passages tag pka-Latn) has no registry node: a pka member
-        under pra (pra's own note keeps the member codes unminted until a consumer
-        distinguishes them — this one does) or a codemap pka-Latn → pra coarse, the
-        hub-side mint; pra-Latn and san-Latn resolve"}
+    lect: {posture: identity, note: "the P118-3 pending retired 2026-10-12: the Indic
+        registry package minted pka (Ardhamāgadhī) under pra — the first individual
+        Prakrit a consumer distinguishes — so pka-Latn resolves on its own node;
+        pra-Latn stays deliberately coarse on the collective anchor, san-Latn as
+        before"}
     dating: {posture: undatable, note: "the headers carry modern edition years only
         (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
         dates nothing — no composition date is minted, declared"}
@@ -912,7 +912,7 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
-  slavistics-pd:   # Q105
+  slavistics-pd:
     # kind: machine-postured — kind_map.yml source_kind scholarly (the
     # whole source IS scholarship; per-work genre rides the genre facet).
     lect: {posture: identity, note: "the reference-shelf posture (the local-library precedent):
@@ -925,7 +925,7 @@ sources:
         metadata 'imprint' — the printing place, not a text place (the dta stance)"}
     script: {posture: implied, note: "Latin script prose (Antiqua/Fraktur); the Cyrillic and
         Glagolitic-in-Cyrillic object text is uncorrected OCR, frequently mis-read as Latin"}
-  archiv-slav-phil:   # Q105
+  archiv-slav-phil:
     # kind: machine-postured — kind_map.yml source_kind scholarly.
     lect: {posture: identity, note: "the reference-shelf posture (slavistics-pd, the
         local-library precedent): deu, the journal's language — Russian, Serbo-Croatian and
@@ -948,7 +948,7 @@ sources:
     script: {posture: implied}
   dta:   # P94-2
     lect: {posture: identity, note: "de IS German — the print era, 1473–1969
-        as printed; №R-59 (ruled 2026-09-03) stages the pre-1650 tail into
+        as printed; an owner ruling (2026-09-03) stages the pre-1650 tail into
         de:early via the standing date-band inference (lect infer-dates over
         the print-year envelopes), post-1650 stays honestly bare"}
     dating: {posture: dated, note: "every document carries its print year
@@ -966,7 +966,7 @@ sources:
   diorisis:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
-    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the per-work
+    dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the per-work
         creation_date signed year (all 767 docs) via MetadataDates
         :signed_year_key — composition-class rows (date_class 'composition')"}
     places: {posture: unplaced}
@@ -974,7 +974,7 @@ sources:
   glaux:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
-    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the per-work
+    dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the per-work
         start_date/end_date signed bounds (all 1,421 docs) via MetadataDates
         :signed_bounds_keys — composition-class rows (date_class
         'composition')"}
@@ -1016,14 +1016,14 @@ sources:
   etcsl:
     # kind declaration retired P104-1: the composition-number prefix map
     # in kind_map.yml machine-postures it now (the shadowing rule).
-    # lect declaration retired P64-6 (№1 ruled): the etcsl sux→sux:post
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): the etcsl sux→sux:post
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   coptic-scriptorium:
     kind: {posture: unclassified}
-    # lect declaration retired P64-6 (№2 ruled): cop/sah+boh minted and the
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): cop/sah+boh minted and the
     # cop-dialect rule machine-postures it now (the shadowing rule).
     dating: {posture: partial}
     places: {posture: named}
@@ -1053,9 +1053,10 @@ sources:
         the artifact fact"}
   dharma-deccan:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: a nabu-lects mint of the tel + kan anchors
-        (Dravidian, under dra-sou) with tel-Latn/kan-Latn codemap rows; pra/san -Latn
-        already resolve on canonical rows"}
+    lect: {posture: identity, note: "the P118-2 pending retired 2026-10-12: the Indic
+        registry package minted te (under dra-tel) and kn (under dra-sou) with the
+        tel → te / kan → kn codemap rows, so tel-Latn and kan-Latn resolve; pra/san
+        -Latn as before — the estate's four codes all land on registry nodes"}
     dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
         Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
     places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
@@ -1084,8 +1085,11 @@ sources:
         artifact fact"}
   dharma-tamil:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: identity once nabu-lects carries tam-Latn and
-        tel-Latn (san/pra/pli/fra -Latn resolve today) — the lect mint rides hub-side"}
+    lect: {posture: identity, note: "the P118-1 pending retired 2026-10-12: the Indic
+        registry package added the tam → ta codemap row (ta re-parented onto dra-sou)
+        and minted te for the tel-Latn passages, so every claimed code resolves;
+        Tamil stages stay unminted — the epigraphic corpus claims the bare anchor,
+        declared coarse"}
     dating: {posture: pending, note: "no origDate in any header; candidate: the titles'
         attributed statements ride metadata title_dating verbatim on ~960 docs ('time of
         Rājakesarivarman, year 9', 'Śaka year 1589') — conversion needs a ruled South-Indian
@@ -1122,10 +1126,10 @@ sources:
         text_types verbatim (donative-religious_land_grant, commemorative-memorial-
         hero_memorial …); a kind_map fold over it is a recorded future look after the
         first live census"}
-    lect: {posture: pending, note: "candidate: the tel + tam anchors of the aggregated
-        Indic nabu-lects mint (P118-7) — Telugu 97 rows and Pallava's one Tamil row name
-        languages with no registry node yet; Sanskrit rows resolve on bare san, rows
-        naming no language carry und"}
+    lect: {posture: identity, note: "the P118-4 pending retired 2026-10-12: the Indic
+        registry package minted te and the tam → ta row, so the Telugu 97 and the one
+        Tamil row resolve; Sanskrit rows on bare san as before, no-language rows carry
+        und honestly"}
     dating: {posture: partial, note: "the rows' own CE dating: Date CE / Date range CE
         (61 of 734 documents — Telugu 60, Pallava 1; census 2026-10-11) with certainty and
         evidence (reign / palaeography / internal date) riding the envelope; all CE
@@ -1219,7 +1223,7 @@ sources:
     # The Corpus of Bactrian Texts (Sims-Williams; 126 pages, censused
     # 2026-10-10). The corpus's six genres ride the `genre` facet
     # verbatim (Dated documents / Letters / Lists and accounts / …); the
-    # kind declaration retired P116 (№R-78): the config/kind_map.yml
+    # kind declaration retired P116: the config/kind_map.yml
     # genre-facet fold machine-postures the source (the shadowing rule).
     lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
         100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
@@ -1317,7 +1321,7 @@ sources:
     script: {posture: implied}
   torot:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: "№4 ruled 2026-08-09: all six chu mss
+    lect: {posture: identity, note: "owner-ruled 2026-08-09: all six chu mss
         (Kiev Missal, Psalterium Sinaiticum, Suprasliensis, both Vitae,
         Zographensis) ARE the canonical corpus the registry's bare anchor
         names — identity, no journal rows needed"}
@@ -1326,7 +1330,7 @@ sources:
     script: {posture: implied}
   ccmh:
     kind: {posture: unclassified}
-    # lect declaration retired P64-6 (№4 ruled): the ccmh chu→chu/cro
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): the ccmh chu→chu/cro
     # override machine-postures it now (the shadowing rule).
     # P105-5c: the curated witness-dating overlay (Adapters::Ccmh::DATING,
     # the five codices' paleographic century bands via :bounds_keys) covers
@@ -1337,28 +1341,28 @@ sources:
     script: {posture: implied}
   imp:
     kind: {posture: unclassified}
-    lect: {posture: dates, note: "№5 ruled 2026-08-09: sl stage bands minted
+    lect: {posture: dates, note: "owner-ruled 2026-08-09: sl stage bands minted
         (old/emod/mod) — infer-dates stages the 100%-dated corpus"}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   goo300k:
     kind: {posture: unclassified}
-    lect: {posture: dates, note: "№5 ruled 2026-08-09: as imp — the sl bands
+    lect: {posture: dates, note: "owner-ruled 2026-08-09: as imp — the sl bands
         stage the dated corpus"}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   freising:
     kind: {posture: unclassified}
-    # lect declaration retired P64-6 (№5 ruled): the freising sl→sl:old
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): the freising sl→sl:old
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   corpus-oudnederlands:
     kind: {posture: unclassified}
-    # P84-7 (Q48): odt is a real nabu-lects anchor (Old Dutch), so identity is
+    # P84-7: odt is a real nabu-lects anchor (Old Dutch), so identity is
     # the honest claim — no machine rule/override covers odt, no shadowing.
     lect: {posture: identity, note: "odt — Old Dutch anchor (nabu-lects); bare code is the claim"}
     dating: {posture: dated, note: "every TEI work carries a witness-year <date> (e.g. 701-800)"}
@@ -1373,21 +1377,21 @@ sources:
     script: {posture: implied}
   gretil:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: "№6 ruled 2026-08-09: the census found NO
+    lect: {posture: identity, note: "owner-ruled 2026-08-09: the census found NO
         content facets (nothing DCS-veda-like) — bare san~latn stands"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: qualified}
   tla-hf:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: "№7 ruled 2026-08-09: 4 docs total — the
+    lect: {posture: identity, note: "owner-ruled 2026-08-09: 4 docs total — the
         pending cost more than the corpus; bare egy/deu are the honest claim"}
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
   fornsvenska:
     kind: {posture: unclassified}
-    # lect declaration retired P77-r8: the fsv-old rule (№R-32, the sv:old
+    # lect declaration retired P77-r8: the fsv-old rule (owner-ruled 2026-08-13, the sv:old
     # whole-source claim) machine-postures fornsvenska now (the shadowing
     # rule; nabu-lects PR #4 minted the target).
     dating: {posture: dated, note: "P104-1: upstream's own per-text
@@ -1397,7 +1401,7 @@ sources:
     script: {posture: implied}
   ref:
     kind: {posture: unclassified}
-    # lect: machine-postured by the ref-enhg rule (Q39, nabu-lects PR #5
+    # lect: machine-postured by the ref-enhg rule (nabu-lects PR #5
     # merged 2026-08-19) — the pending row retired, the fornsvenska
     # add-then-retire shape.
     dating: {posture: dated, note: "P81-1: the header date lane parsed clean
@@ -1414,7 +1418,7 @@ sources:
     lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
         across the 15th-20th c. span — the period band rides document metadata;
         a stage split (Golden Age Spanish) would need a ruled rule"}
-    dating: {posture: dated, note: "P104-1 (№R-70 grade 2): the author's own
+    dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the author's own
         birth/death centuries band every doc via MetadataDates
         :author_century_band — composition-class rows (date_class
         'composition'), never passed off as artifact dates"}
@@ -1441,7 +1445,7 @@ sources:
     # rules machine-posture osta now (the shadowing rule; nabu-lects PR #3
     # minted ast:old/an:old). The castellano/gallego/latín majority rides
     # bare-anchor identity codes (osp/roa-opt/lat) from the works table
-    # (P77-r6, №R-30 — OstaTables::LENGUA_CODES, majority per codex).
+    # (P77-r6, owner-ruled 2026-08-13 — OstaTables::LENGUA_CODES, majority per codex).
     dating: {posture: pending, note: "candidate: the works-table OPDT (per work)
         and codex SPDT (per copy) date texts, riding metadata verbatim since
         P77-r6 ('1252 a quo', '1510 ca. ad quem' — upstream text); the
@@ -1457,14 +1461,14 @@ sources:
   # sweep of 2026-08-07). ────────────────────────────────────────────
   achemenet:
     kind: {posture: unclassified}
-    # lect row RETIRED 2026-08-18: №R-34 ruled the blanket akk:nb rule
+    # lect row RETIRED 2026-08-18: an owner ruling chose the blanket akk:nb rule
     # (achemenet-nb, the archive-facet total map) — the machine grain
     # machine-postures achemenet now (the shadowing rule; same-phase
     # add-then-retire, the osta/fornsvenska shape).
     dating:
       posture: pending
       note: "candidate: the corpus band 550–330 BCE + the reign-dated
-        designations (Camb/Cyr/Dar) via the №R-28 regnal table —
+        designations (Camb/Cyr/Dar) via the ruled regnal-precision table (2026-08-11) —
         extractor over real synced data"
     places:
       posture: pending
@@ -1532,7 +1536,7 @@ sources:
         every work, cert carried"}
     places: {posture: unplaced}
     script: {posture: implied}
-  kdsp:   # Q102, row 242
+  kdsp:   # 02-sources row 242
     kind: {posture: pending, note: "candidate: a kind_map fold over the textType facet
         genre (povest / roman / novela / črtica / drugo — all narrative prose); the fold
         is a ruled table, not a default"}
@@ -1544,7 +1548,7 @@ sources:
         personography and taxonomies censused) — declared"}
     script: {posture: implied, note: "Latin (gajica) as the digital sources transcribe
         it; no bohoričica censused"}
-  mdz-protestant:   # Q102, row 243
+  mdz-protestant:   # 02-sources row 243
     kind: {posture: unclassified, note: "MDZ manifests carry no genre field (catechism,
         hymnal, prayer book, grammar, confession, sapiential book live in the titles only)"}
     lect: {posture: dates, note: "the five Slovene prints (1562–1584) stage onto sl:emod
@@ -1557,7 +1561,7 @@ sources:
         Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
     script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
-  gams-zrcalo:   # Q102, row 244
+  gams-zrcalo:   # 02-sources row 244
     kind: {posture: unclassified, note: "one devotional work (the Speculum humanae
         salvationis); no class field in the TEI"}
     lect: {posture: identity, note: "hrv bare (codemap → hr) — textLang mainLang hr,
@@ -1578,7 +1582,7 @@ sources:
     script: {posture: implied}
   openmgh:
     kind: {posture: unclassified}
-    dating: {posture: dated, note: "P109-4 (the Q83 drain): the MGH
+    dating: {posture: dated, note: "P109-4 (the unmined-metadata drain): the MGH
         volume's print year projects with date_class 'edition' — never a
         medieval composition claim, the class label says so"}
     places: {posture: unplaced, note: "P109-4: printed_place is the
@@ -1637,7 +1641,7 @@ sources:
   # ── P80-6: the small-languages pack (modern-text corpora) ──────────────
   lo-congres:
     kind: {posture: unclassified}
-    # lect: machine-postured by the oci-dialect rule (№R-41 ruled
+    # lect: machine-postured by the oci-dialect rule (owner-ruled
     # 2026-08-21, nabu-lects PR #6 minted the oc dialect varieties +
     # the oci→oc alias) — the identity row retired, the ref
     # add-then-retire shape. "DELIBERATELY COARSE" was forced, not
@@ -1663,7 +1667,7 @@ sources:
   aranese:
     kind: {posture: unclassified}
     # lect: machine-postured by the aranese override (oci → oc/aranes,
-    # №R-41 ruled 2026-08-21, nabu-lects PR #6 minted oc/aranes) — the
+    # owner-ruled 2026-08-21, nabu-lects PR #6 minted oc/aranes) — the
     # identity row retired. The synthetic-corpus caveat stays on the
     # card and the spa siblings stay bare (the override keys oci only).
     dating: {posture: undatable, note: modern MT-oriented sentence pairs, no dates upstream}

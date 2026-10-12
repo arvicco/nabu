@@ -41,13 +41,13 @@
 #                                        #   documentary sources only, index
 #                                        #   economics; default false)
 #     cjk_index: true                    # include in the CJK bigram substring
-#                                        #   lane (P93-3, №R-39 b — the
+#                                        #   lane (P93-3, owner ruling, option b — the
 #                                        #   Han/kana-run sources; measured
 #                                        #   ~22M CJK passages 2026-09-02;
 #                                        #   default false)
 #     embed_index: true                  # include in the semantic-vector scope
 #                                        #   (nabu embed / search --similar;
-#                                        #   P93-4, №R-36 — the literary core:
+#                                        #   P93-4, owner ruling — the literary core:
 #                                        #   17 slugs / 4.94M passages measured
 #                                        #   2026-09-02; full library was a
 #                                        #   measured NO; default false)
@@ -87,7 +87,7 @@
 #       grantor: ...                     #   required, non-empty strings; QUOTE the
 #       date: "2026-07-15"               #   date so YAML keeps it a String, not a
 #       terms: ...                       #   parsed Date). terms = a short verbatim
-#       thread: "№1"                     #   quote; request_hint = whom a new user
+#       thread: "by email, 2026-07-15"   #   quote; request_hint = whom a new user
 #       request_hint: ...                #   should ask + what to promise.
 #
 # Registered sources follow. `wired: false` until a first real sync is
@@ -252,7 +252,7 @@ althurayya:   # 02-sources row 230
 aozora:
   adapter: Nabu::Adapters::Aozora
   adopted: "2026-07-21"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [japonic]
   wired: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
@@ -282,7 +282,7 @@ aranese:
   # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
   sync_policy: manual
 
-archiv-slav-phil:   # Q105, 02-sources row 251
+archiv-slav-phil:   # 02-sources row 251
   adapter: Nabu::Adapters::ArchivSlavPhil
   adopted: "2026-10-11"
   axes: [slavic]
@@ -373,7 +373,7 @@ bdcamoes:
   wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
   # BDCamões Part I (PORTULAN CLARIN): 127 Portuguese literary works,
   # ~3.1 M words, 15th–20th c. — CC-BY per the record page; the download
-  # click-through is accepted by LicenseAgreeFetch on owner ruling №R-37
+  # click-through is accepted by LicenseAgreeFetch on owner ruling
   # (2026-08-19), and the fetch REFUSES if the form's licence field
   # drifts from CC-BY. Part II is a different grant (MS NC-NoReD-ND
   # 2.0) and is deliberately NOT ingested.
@@ -449,7 +449,7 @@ bg-wikisource:   # P116-2, 02-sources row 237
   axes: [slavic]
   wired: true    # First sync verified 2026-10-10: 26 docs / 220 passages / 3 declared skips.
   sync_policy: manual
-  # The Bulgarian Wikisource premodern cone (№R-74; census in the
+  # The Bulgarian Wikisource premodern cone (owner-ruled posture; census in the
   # adapter header): the 19 medieval charters (Средновековни
   # български/сръбски текстове) read through their ORIGINAL-script
   # {{Script/Slavonic}} text only (chu, the wiki's grouping as
@@ -496,7 +496,7 @@ bhsa:
 bibyeonsa:
   adapter: Nabu::Adapters::Bibyeonsa
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]   # P78-3: the goryeosa family — the state council's daily register
   wired: true     # P78-3 first sync owner-verified (273 docs / 93,528 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 비변사등록 원문 (NIKH via data.go.kr 15053636; 제한 없음 → D47-a
@@ -556,7 +556,7 @@ burman-concordance:
                    # participation is governed by kind + sync_policy, NEVER by wired
                    # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
                    # wired = the sync link is tested and declared working).
-  # P77-r19 (№R-33 PKG-1): Annie Burman's Digital Concordance of
+  # P77-r19 (owner-ruled 2026-08-17, package 1): Annie Burman's Digital Concordance of
   # Etruscan, Faliscan and Early Latin Inscriptions from Etruria
   # (Uppsala; Zenodo 7801485 v1.0.0, PUBLIC DOMAIN/CC0) — 14,986 rows
   # crosswalking TM, CIE, Rix ET1, Meiser ET2, TLE, Bakkum, CIL and
@@ -631,15 +631,15 @@ cbdb:   # P96-4
   # (the page 403s non-browsers); the HF dataset card concurs; the
   # JOHD 2022 paper's BY-NC-ND is the outlier. Mainland commercial
   # rights carved out to ChineseAll. v1 = acquisition + verification
-  # only; the persons-layer scout's №R decides any derived surface.
+  # only; an owner ruling on the persons-layer scout decides any derived surface.
 
 cbeta:
   adapter: Nabu::Adapters::Cbeta
   adopted: "2026-07-20"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [buddhist, sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
-                   # P108-7 (№R-72 next-in-line): + the K canon — the
+                   # P108-7 (owner-ruled 2026-09-26, next-in-line): + the K canon — the
                    # Tripiṭaka Koreana's 10 Koreana-only XMLs (texts without
                    # Taishō parallels; Category A like T/X). Sync verified
                    # 2026-09-29: 10 K docs / 60,178 passages; the +7
@@ -675,7 +675,7 @@ cbeta:
 # Refubium fub188/27813, CC BY-SA 4.0 in-file) + ORAEC's CC0 egy↔cop
 # crosswalk riding as the second fetched artifact (crosswalk/ subdir; the
 # kind=etymology producer Nabu::CclEtymologies refreshes the links journal
-# after every sync). P89-2 (№R-52 ruled (a)+(c) 2026-08-30): the KELLIA
+# after every sync). P89-2 (owner-ruled (a)+(c) 2026-08-30): the KELLIA
 # etymologies tab (CC BY-SA 4.0) rides as the THIRD artifact (kellia/
 # subdir), fetched PINNED at release tag v3.0.0 — a strict superset of the
 # ORAEC crosswalk (+134 C-ids, 127 blank-fills, transcriptions + EN/DE
@@ -695,7 +695,7 @@ ccl:
 ccmh:
   adapter: Nabu::Adapters::Ccmh
   adopted: "2026-07-11"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [slavic]
   wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
                    # verses, Assemanianus Mt 1:1 eyeballed.
@@ -827,7 +827,7 @@ cigs:
 classical-modern:   # P88-A2, 02-sources row 184
   adapter: Nabu::Adapters::ClassicalModern
   adopted: "2026-08-29"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [sinitic]
   wired: true   # first real sync verified + owner sign-off 2026-08-30: 14,608 docs / 1,944,934 passages
   translations: true  # the modern side IS the point of a parallel corpus
@@ -909,7 +909,7 @@ cme:
   # automation bar — the autoindex serves the identical files from stable
   # public URLs). NEW `tcp-xml` streaming family (TcpXmlParser) — the
   # EEBO-TCP/ECCO-TCP/Evans-TCP schema, built for the ~60k-text EEBO wave
-  # Q33 holds; CME is its first rider. Grain: verse <L> lines / prose
+  # to come; CME is its first rider. Grain: verse <L> lines / prose
   # blocks / <HEAD> rubrics (transcribed medieval rubrics ARE reading
   # text). Identity = upstream filename verbatim (the <IDG> id is a
   # placeholder shared across files, censused). Language bare enm — the
@@ -964,7 +964,7 @@ corph:
 corpus-corporum:
   adapter: Nabu::Adapters::CorpusCorporum
   adopted: "2026-08-19"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical, romance]  # the croala/digiliblt precedent: the continuum's Latin side
   wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                  # owner-fired (a multi-hour polite crawl: ~6,700 catalog GETs
@@ -998,7 +998,7 @@ corpus-gysseling:
                    # no citable lines), eyeballed (0016 mint ordinance, dum),
                    # flipped.
   sync_policy: manual
-  # P84-7 (Q48): the INT/IvdNT Corpus Gysseling — the 13th-c. originals that
+  # P84-7: the INT/IvdNT Corpus Gysseling — the 13th-c. originals that
   # sourced the Vroegmiddelnederlands Woordenboek, ~2,228 .fromdb documents of
   # Early Middle Dutch (dum), GOLD lemma+POS. LICENSE + posture identical to
   # corpus-oudnederlands (INT-NC, no redistribution grant → research_private,
@@ -1016,7 +1016,7 @@ corpus-oudnederlands:
                    # xml:id upstream), eyeballed (Kam van Toornwerd → "kobu"),
                    # flipped.
   sync_policy: manual
-  # P84-7 (Q48): the INT/IvdNT Corpus Oudnederlands — all surviving Old-Dutch
+  # P84-7: the INT/IvdNT Corpus Oudnederlands — all surviving Old-Dutch
   # (odt) word material 475–1200, 90 TEI works, GOLD lemma+POS. LICENSE: INT
   # "Niet-commercieel (non-commercial)" with NO explicit redistribution grant
   # → the owner's strictest reading: research_private (never served to third
@@ -1032,7 +1032,7 @@ corpus-oudnederlands:
 croala:
   adapter: Nabu::Adapters::Croala
   adopted: "2026-07-24"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical, romance]  # D45-a (owner 2026-07-25): the continuum's Latin side
   wired: true    # Owner flip 2026-07-25 (first sync 2026-07-24: 570 docs /
                    # 309,180 passages; eyeballed via
@@ -1474,7 +1474,7 @@ diccas:   # P95-4
 digiliblt:   # P45-3
   adapter: Nabu::Adapters::Digiliblt
   adopted: "2026-07-25"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical, romance]   # late-antique Latin: the classical desk's 2nd–7th c.
                                # band AND the romance desk's ancestor shelf (dual-tag,
                                # never folding — the D35 rule)
@@ -1526,7 +1526,7 @@ dillmann:   # P46-2, 02-sources row 124
 diorisis:
   adapter: Nabu::Adapters::Diorisis
   adopted: "2026-07-18"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical]
   wired: true    # flipped 2026-07-18 (owner sign-off: synced via P26-6 live proof — 764 docs / 502,865 passages, 53 Rahlfs files excluded by rule, eyeballed)
                    # the frozen figshare v1 zip — 194,443,428 bytes, md5
@@ -1573,7 +1573,7 @@ disco:
 dss:
   adapter: Nabu::Adapters::Dss
   adopted: "2026-07-18"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [biblical, hebrew]
   wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync dss — sparse GitFetch cone
@@ -1612,7 +1612,7 @@ dta:   # P94-1
   axes: [germanic]
   wired: true    # P94 gate: first sync owner-verified 2026-09-03 (5,478 docs /
                  # 729,090 passages, 3 quarantined — announced, within tolerance;
-                 # №R-59 staging applied: 562 pre-1650 docs → de:early), owner-flipped
+                 # owner-ruled staging applied: 562 pre-1650 docs → de:early), owner-flipped
   sync_policy: manual
   # Deutsches Textarchiv (BBAW) — the reference corpus of German print:
   # 5,481 TEI/P5 (DTA-Basisformat) texts, 1473–1969 (Kernkorpus 1,478
@@ -1694,7 +1694,7 @@ ebl:
   # verbatim in the manifest: JOHD 10.5334/johd.148 License section says
   # CC BY-NC-SA 4.0 for fragments.json, the Zenodo field says cc-by-4.0 —
   # class held at nc (MCP-excluded per standing nc discipline) until
-  # email №24 resolves it. The eBL Corpus side (Gilgameš chapter
+  # a licensing clarification by email resolves it. The eBL Corpus side (Gilgameš chapter
   # editions) is OUT: no packaged dump, the grant covers fragments only.
   # #tr.en/#tr.ar/#tr.de per-line translations ride as tr annotations
   # (the P31-2 carry, extents verbatim); cdliNumber (79.9%) →
@@ -1811,7 +1811,7 @@ edubba-overlay:
                    # join the OSL sign card by name/osl_name instead — OSL is
                    # a signs-group sibling, not a requires edge (the card
                    # exists without the overlay and vice versa at load).
-  axes: [egyptian, cuneiform]   # P77-8 (Q25): the cuneiform didactic lanes
+  axes: [egyptian, cuneiform]   # P77-8: the cuneiform didactic lanes
                    # (sign_teaching.yml + pool-102/103 + both addenda codex
                    # dirs) now extract and render on the OSL sign card —
                    # axes follow capability.
@@ -1832,10 +1832,10 @@ eebo-tcp:
   classes: [phase1, phase2]  # P84-2 (owner cut 2026-08-27): the stated follow-on
                      # lands — both phases, all 60,326 texts. Phase I zips skip
                      # free at the sync; Phase II ≈1.57 GB / ≈35k docs. Wave 1
-                     # was №R-43's option (b), Phase I, synced 2026-08-27.
+                     # was the owner ruling's option (b), Phase I, synced 2026-08-27.
   wired: true        # flipped 2026-08-27 (owner: "wire on eebo"; the verification
                      # sync landed 25,367 docs / 14,702,780 passages 2026-08-27,
-                     # +A15970's 13,948 after the Q47 recovery)
+                     # +A15970's 13,948 after its recovery)
   # EEBO-TCP (P83-1): Early English Books Online, Text Creation Partnership
   # — 60,326 hand-keyed early-modern English texts (Phase I 25,368 /
   # Phase II 34,958; census 2026-08-26), THE wave the tcp-xml family
@@ -1954,7 +1954,7 @@ eltec-srp:   # P117-2, 02-sources row 246
 eng-web:
   adapter: Nabu::Adapters::EngWeb
   adopted: "2026-07-10"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [biblical]
   wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 84 books / 37,624 verses,
                    # FRT/GLO skip-by-rule; trilingual JON 1 eyeballed.
@@ -1993,7 +1993,7 @@ etcsl:
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
   adopted: "2026-07-03"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (the -eng<n> editions, P9-1)
   wired: true   # first real sync verified + owner sign-off 2026-07-04
@@ -2027,7 +2027,7 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
-gams-zrcalo:   # Q102, 02-sources row 244
+gams-zrcalo:   # 02-sources row 244
   adapter: Nabu::Adapters::GamsZrcalo
   adopted: "2026-10-11"
   axes: [slavic]
@@ -2044,7 +2044,7 @@ gams-zrcalo:   # Q102, 02-sources row 244
 glaux:
   adapter: Nabu::Adapters::Glaux
   adopted: "2026-07-24"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical]
   wired: true    # Owner flip 2026-07-25. First-sync proof 2026-07-24 (the
                    # from-scratch `sync glaux --redownload`: wipe → staged
@@ -2091,7 +2091,7 @@ goo300k:
 goryeosa:
   adapter: Nabu::Adapters::Goryeosa
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]   # P78-3: the goryeosa family — the pre-Joseon dynastic history
   wired: true     # P78-3 first sync owner-verified (138 docs / 31,207 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 고려사 원문 (NIKH via data.go.kr 15053637; 제한 없음 → D47-a
@@ -2105,7 +2105,7 @@ goryeosa:
 goryeosa-jeoryo:
   adapter: Nabu::Adapters::GoryeosaJeoryo
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]   # P78-3: the goryeosa family — the chronological digest sibling
   wired: true     # P78-3 first sync owner-verified (36 docs / 11,226 passages; the junk-named .jpg salvage-skipped, P78-r4); flipped 2026-08-19 (owner: 'wire everything on')
   # 고려사절요 원문 (NIKH via data.go.kr 15115521; 제한 없음 → D47-a
@@ -2243,7 +2243,7 @@ hittite-glossed:   # P109-3
 honkoku:   # P108-5
   adapter: Nabu::Adapters::Honkoku
   adopted: "2026-09-29"
-  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  cjk_index: true   # the CJK bigram substring lane (owner ruling)
   axes: [japonic]
   wired: true    # first sync 2026-09-29: 6,092 docs / 129,458 passages; 6,749
                    # untranscribed materials skip by rule (dir-less or all-empty)
@@ -2264,7 +2264,7 @@ hr-wikisource:   # P116-2, 02-sources row 234
   axes: [slavic]
   wired: true    # First sync verified 2026-10-10: 1,390 docs / 132,052 passages / 11 skips.
   sync_policy: manual
-  # The Croatian Wikisource premodern CENTURY cone (№R-74): every page
+  # The Croatian Wikisource premodern CENTURY cone (owner ruling): every page
   # reachable (depth 2) from Hrvatski srednji vijek + Hrvatsko 15.–18.
   # stoljeće — Marulić's Judita, Držić's plays, Vetranović, Bunić
   # Vučić, Gundulić's Osman, Razgovor ugodni … The century categories
@@ -2276,7 +2276,7 @@ hypotactic:
   adapter: Nabu::Adapters::Hypotactic
   adopted: "2026-07-24"
   kind: module   # P44-6: machinery-only — a METER enrichment instrument, zero catalog rows, up=module
-  requires: [perseus-greek, first1k-greek]   # №R-31 RULED 2026-08-13 (option a,
+  requires: [perseus-greek, first1k-greek]   # owner-ruled 2026-08-13 (option a,
                    # as recommended): the instrument joins urn:cts:greekLit:*
                    # documents both sources hold; the true relation is "any
                    # greekLit holder" but requires: is conjunctive — declaring
@@ -2463,7 +2463,7 @@ itant:
 itkc:
   adapter: Nabu::Adapters::Itkc
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]
   wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
                    # P108-6 expansion sync verified 2026-09-29: 10,572 docs /
@@ -2475,7 +2475,7 @@ itkc:
   # P108-6 (2026-09-29): the full portal keyword sweep (30 datasets,
   # page 2 empty) grew DATASETS 17→26 with the NINE munjip text
   # datasets (제한 없음 page-verbatim each) — D47-c's munjip parking
-  # superseded by the Q91 adoption. The 문집총간 pk 3074298 serves only
+  # superseded by the munjip-datasets adoption. The 문집총간 pk 3074298 serves only
   # the catalog LIST CSV (the munjip TEXT mass rides the held okhc klc
   # slice); 서지정보/시의온도/장학사업정보 censused non-text. The rest
   # of the GO family still rides the owner letter path (공공데이터
@@ -2494,7 +2494,7 @@ ja-wikisource:   # P109-1
                    # 万葉集/徒然草 cards eyeballed (ojp man'yōgana +
                    # era bands live)
   sync_policy: manual
-  # The Japanese Wikisource premodern era cone (№R-74 posture:
+  # The Japanese Wikisource premodern era cone (owner-ruled posture:
   # premodern cone, verbatim base-edition strings, census-first —
   # the P109 phase plan). Census: 867 ns-0 pages across the eight era
   # categories 飛鳥–江戸. Since P111-2 the fetch expands BOTH shell
@@ -2525,7 +2525,7 @@ kannada-texts:   # P118-3
 kanripo:
   adapter: Nabu::Adapters::Kanripo
   adopted: "2026-07-20"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # first many-repo wave (KanripoFetch, architecture §8):
@@ -2571,7 +2571,7 @@ kanripo:
   # conservative; the adapter's fetch_delay seam is the override point).
   # License: org-level grant verbatim "Comprehensive collection of
   # premodern Chinese texts. Licensed as CC BY SA 4.0." + ytenx
-  # DATA_LICENSE.md corroboration; №25 CONFIRMED by the maintainer in
+  # DATA_LICENSE.md corroboration; CONFIRMED by the maintainer in
   # writing 2026-07-20 (C. Wittern: "Yes the idea is to license
   # everything that needs a license as CC BY SA 4.0 … these should
   # inherit the license of the org.") → attribution, SA rider.
@@ -2580,7 +2580,7 @@ kanripo:
   # future catalog/fetch seam candidate, next Sino phase survey).
   classes: [KR1, KR2, KR3, KR4, KR5]
 
-kdsp:   # Q102, 02-sources row 242
+kdsp:   # 02-sources row 242
   adapter: Nabu::Adapters::Kdsp
   adopted: "2026-10-11"
   axes: [slavic]
@@ -2639,7 +2639,7 @@ kitab-reuse:   # P96-5
 ko-wikisource-mk:
   adapter: Nabu::Adapters::KoWikisourceMk
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]   # P78-4: the korean axis's vernacular leg — the first hangul print
   wired: true     # P78-4 first sync owner-verified (1 work doc / 159 passages, okm 125); flipped 2026-08-19 (owner: 'wire everything on')
   # 용비어천가 (1447) from Korean Wikisource — curated title list, ONE page
@@ -2654,7 +2654,7 @@ ko-wikisource-mk:
 kokubunken:   # P108-4
   adapter: Nabu::Adapters::Kokubunken
   adopted: "2026-09-29"
-  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  cjk_index: true   # the CJK bigram substring lane (owner ruling)
   axes: [japonic]
   wired: true    # first sync 2026-09-29: 3 docs / 1,723 passages (kokin 1,230 ·
                    # hirose 465 · genryaku 28); poem cards eyeballed
@@ -2684,7 +2684,7 @@ korba:   # P116-1
 kouigenji:   # P108-3
   adapter: Nabu::Adapters::Kouigenji
   adopted: "2026-09-29"
-  cjk_index: true   # the CJK bigram substring lane (№R-39 b)
+  cjk_index: true   # the CJK bigram substring lane (owner ruling)
   axes: [japonic]
   wired: true    # first sync 2026-09-29: 54/54 maki, 25,065 passages, 795 waka — the
                    # project's own published counts exactly
@@ -2798,8 +2798,8 @@ lexlep:
   # revid-driven, UA-identified, throttled). LICENSE CONFLICT held at the
   # restrictive reading: Project:Terms of use grants CC BY-SA 3.0 + GFDL
   # but scopes "for scientific use only", and the wiki's own rightsinfo
-  # footer says CC BY-NC-SA 4.0 → class nc PENDING licensing email №17
-  # (queued, owner sends); relabel-on-reply, the P10-4 override mechanics.
+  # footer says CC BY-NC-SA 4.0 → class nc, confirmed by the maintainer's
+  # reply by email (C. Salomon, 2026-07-20); P10-4 override mechanics.
   # A living wiki → re-syncs are owner-fired.
   sync_policy: manual
 
@@ -2838,7 +2838,7 @@ lila:
   # owner decision (the clone is large + version-pinned).
   sync_policy: manual
 
-litopys:   # P117 (Q106), 02-sources row 252
+litopys:   # P117, 02-sources row 252
   adapter: Nabu::Adapters::Litopys
   adopted: "2026-10-11"
   axes: [slavic]
@@ -2921,7 +2921,7 @@ local-lemmas:
                  # `bin/nabu lemma-enrich <language>` (the sanctioned front
                  # door: Nabu::LemmaShelf gateway). Empty until the owner
                  # fires the first campaign — an absent tree loads nothing.
-  # The FIFTH canonical-memory shelf (P84-1, №R-35, architecture §16): the
+  # The FIFTH canonical-memory shelf (P84-1, owner ruling, architecture §16): the
   # silver-lemma enricher's raw model output (venv-managed Stanza; la:ittb
   # for the Latin wave), JSONL shards per language lane. NON-DERIVABLE
   # (hours of CPU), hence a shelf, never db/. UNLIKE the other shelves its
@@ -3000,7 +3000,7 @@ local-source:
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
 
-mdz-protestant:   # Q102, 02-sources row 243
+mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"
   axes: [slavic]
@@ -3026,7 +3026,7 @@ menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zh
   # verified 2026-08-29; 沈鍾偉 2015 collation + unt 2023 reconstructions
   # + ccamc.org variants). Dictionary slug `menggu-ziyun`, language
   # HONEST-COARSE zho — no ISO code exists for Old Mandarin; the
-  # registry's zho:oman stage (№R-53 / nabu-lects PR #11) refines, the
+  # registry's zho:oman stage (owner-ruled 2026-08-29 / nabu-lects PR #11) refines, the
   # en:early pattern. Body carries the 'Phags-pa spelling, tone, rhyme
   # class, unt reconstruction, variants, editorial verdicts (此字當刪
   # rows still mint — the guangyun 應刪字 stance) AND the
@@ -3045,7 +3045,7 @@ menota:
                  # owner-fired 2026-08-24, 91/91 after the P82-r1 recovery
                  # re-parse — 241,628 passages; e.g.
                  # nabu show urn:nabu:menota:am-1056-ix-4to:1rB.1)
-  # Menota — the Medieval Nordic Text Archive (P82-1, Q42 / granted by email 2026-08-20):
+  # Menota — the Medieval Nordic Text Archive (P82-1, granted by email 2026-08-20):
   # 91 manuscripts / ~2.1M words in Menota-TEI (multi-level facs/dipl/norm
   # word markup, MUFI entities), served through the Corpuscle (korpuskel)
   # REST API behind clarino.uib.no/menota/catalogue/menota (get-session →
@@ -3093,7 +3093,7 @@ mk-wikisource:   # P116-2, 02-sources row 236
   axes: [slavic]
   wired: true    # First sync verified 2026-10-11 (post the batch-length fix): 836 docs / 31,114 passages.
   sync_policy: manual
-  # The Macedonian Wikisource 19th-century cone (№R-74): the Miladinov
+  # The Macedonian Wikisource 19th-century cone (owner ruling): the Miladinov
   # collection (687), Шапкарев, Цепенков's tales and the pre-1900
   # authors (Пејчиновиќ, Крчовски, Пулевски, the Miladinovs,
   # Жинзифов). The Miladinov collection is hosted in MODERNIZED
@@ -3265,7 +3265,7 @@ ndl-kotenseki:   # P109-2
   # fulltext-json API + the open-dataset PID census (97,731 PD-expired
   # PIDs at the 2026-02 snapshot). Resumable paced crawl at the
   # COMMITTED ~1 req/s (never lower): SLICE books per sync, refused/
-  # empty PIDs ledgered, the mass continues across phases (Q108).
+  # empty PIDs ledgered, the mass continues across phases.
   # OCR-nature label + per-item permalink on every document (both
   # promised in the ask). Language jpn — deliberately coarse, declared.
 
@@ -3340,7 +3340,7 @@ ojw:   # P92-5
 okhc:   # P91-1, 02-sources row 189
   adapter: Nabu::Adapters::Okhc
   adopted: "2026-09-01"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]
   wired: true    # first sync + recovery re-parse verified 2026-09-01: 1,198,779 docs / 3,542,662 passages
   sync_policy: manual
@@ -3661,7 +3661,7 @@ oracc:
 oshb:
   adapter: Nabu::Adapters::Oshb
   adopted: "2026-07-18"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [biblical, hebrew]
   wired: true    # flipped 2026-07-18 (owner sign-off: synced, three-legged align eyeballed)
                    # clone of openscriptures/morphhb; wlc/ itself ~27 MB —
@@ -3844,7 +3844,7 @@ perseus-farsilit:   # P95-4
 perseus-greek:
   adapter: Nabu::Adapters::Perseus
   adopted: "2026-07-03"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (perseus-eng<n> editions of one work)
   wired: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
@@ -3857,7 +3857,7 @@ perseus-greek:
 perseus-latin:
   adapter: Nabu::Adapters::PerseusLatin
   adopted: "2026-07-07"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (same mechanism as perseus-greek)
   wired: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
@@ -3968,7 +3968,7 @@ prilit:   # P95-1
   axes: [slavic]
   wired: true    # P95 gate: first sync owner-verified 2026-09-04 (43 docs /
                  # 8,526 passages, 0 quarantined after the schema-dir discover
-                 # fix; №5-mold staging applied: 29 → sl:emod + 8 → sl:mod),
+                 # fix; sl-stage-band staging applied (the 2026-08-09 ruling's mold): 29 → sl:emod + 8 → sl:mod),
                  # owner-flipped
   sync_policy: manual
   # PriLit — older Slovenian narrative prose (ZRC SAZU/JSI; CLARIN.SI
@@ -3983,7 +3983,7 @@ prilit:   # P95-1
 proiel:
   adapter: Nabu::Adapters::Proiel
   adopted: "2026-07-04"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [classical, slavic, germanic]
   wired: true   # first real sync verified + owner sign-off 2026-07-04
@@ -4292,7 +4292,7 @@ sarit:
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
   adopted: "2026-07-09"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [biblical]
   wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
@@ -4387,7 +4387,7 @@ seal:
 sefaria:
   adapter: Nabu::Adapters::Sefaria
   adopted: "2026-07-18"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [biblical, hebrew]
   wired: true # flipped 2026-07-19 (Targum shelf synced, owner sign-off);
                    # P46-1 adds the Rabbinic wave-1 shelves to the SAME wired
@@ -4489,7 +4489,7 @@ siddham:   # P118-4, 02-sources row 256
 sillok:
   adapter: Nabu::Adapters::Sillok
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]   # P78-1: MINTS the korean axis — the hanmun state record's anchor
   wired: true     # P78-1 first sync owner-verified (743 docs / 414,321 passages, both datasets); flipped 2026-08-19 (owner: 'wire everything on')
   # 조선왕조실록 원문 (NIKH via data.go.kr 15053647 Taejo–Cheoljong +
@@ -4504,7 +4504,7 @@ sillok:
 sjw:
   adapter: Nabu::Adapters::Sjw
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [korean]
   wired: true     # P78-2 first sync owner-verified (297 docs / 1,896,858 passages; re-synced 2026-08-19 with the ETA lane narrating); flipped 2026-08-19 (owner: 'wire everything on')
   # 승정원일기 (NIKH via data.go.kr 15064218; 제한 없음 → D47-a attribution).
@@ -4557,7 +4557,7 @@ sl-wikisource:   # P116-2, 02-sources row 235
   wired: true    # First sync verified 2026-10-10: 1,539 docs / 145,035 passages / 134 skips.
   sync_policy: manual
   # Wikivir (the Slovene Wikisource) through its "Dela leta N" year
-  # categories to 1899 (№R-74): the Hladnik-corrected 19th-century
+  # categories to 1899 (owner ruling): the Hladnik-corrected 19th-century
   # prose + the 1584 Dalmatin/Trubar pages; the year is a typed date.
   # Translations, non-Slovene works and permission-licensed pages are
   # out by rule. OVERLAP with the held imp/prilit (25 works censused):
@@ -4565,7 +4565,7 @@ sl-wikisource:   # P116-2, 02-sources row 235
   # catalog-side concern (adapter header). Bohoričica declared in
   # metadata "orthography". Texts PD; layer CC BY-SA 4.0.
 
-slavistics-pd:   # Q105, 02-sources row 250
+slavistics-pd:   # 02-sources row 250
   adapter: Nabu::Adapters::SlavisticsPd
   adopted: "2026-10-11"
   axes: [slavic]
@@ -4589,7 +4589,7 @@ slavistics-pd:   # Q105, 02-sources row 250
 # LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
 # xct_ precedent), Old Tibetan is `otb`; `bo` stays kaikki's modern
 # dictionary shelf. The codes become held-language cards after first sync.
-slouniki-nasovic:   # P117 (Q106), 02-sources row 253
+slouniki-nasovic:   # P117, 02-sources row 253
   adapter: Nabu::Adapters::SlounikiNasovic
   adopted: "2026-10-11"
   axes: [slavic]
@@ -4637,7 +4637,7 @@ sr-wikisource:   # P116-2, 02-sources row 233
   axes: [slavic]
   wired: true    # First sync verified 2026-10-11 (post the batch-length fix): 4,607 docs / 581,423 verse-line passages.
   sync_policy: manual
-  # The Serbian Wikisource oral-tradition cone (№R-74): the 2,505
+  # The Serbian Wikisource oral-tradition cone (owner ruling): the 2,505
   # epic songs (+ their cycle subcategories), the Erlangen manuscript
   # (216, in the Detelić/Samardžija/Delić rendering — its editorial
   # interventions ride declared) and Vuk's collections. Bulgarian-
@@ -4664,7 +4664,7 @@ starling:
                    # etymologies, ccs-pro) lands at the NEXT owner-fired
                    # `bin/nabu sync starling`; eyeball `nabu define '*abed-'`
                    # (Klimov credit + GRU/MEG/SVA/LAZ reflex rows).
-                   # P104-3 (Q84) QUEUE: six further packages (ALTAIC/CAUC/
+                   # P104-3 QUEUE: six further packages (ALTAIC/CAUC/
                    # SINTIB/DRAV/CHUKCHEE/YENISEY.exe → altaic/ cauc/ sintib/
                    # drav/ chukchee/ yenisey/ subdirs, ~8.7 MB total) add nine
                    # shelves at the NEXT owner-fired sync: altet 2,805 (tut-pro)
@@ -4737,7 +4737,7 @@ starling:
     grantor: G. Starostin
     date: "2026-07-15"
     terms: any use, per-base attribution required (credit each base's compilers)
-    thread: "№1"
+    thread: "by email, 2026-07-15"
     request_hint: >-
       Write to George Starostin (starlingdb.org) for your own use grant, and
       promise to credit each base's compilers per
@@ -4747,7 +4747,7 @@ starling:
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
   adopted: "2026-07-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   # P35-0 vs the D35 draft: +sinitic — the P32-1 lzh Agamas ride this same row (whole-source tagging)
   axes: [indic, buddhist, sinitic]
   siblings: ["-en"]  # P34-0 (was P26-1 frozen): literal tail — stems like dhp21-32 are hyphen-rich, none ends in -en
@@ -4873,8 +4873,8 @@ tir:
   # census 2026-07-18 — the brief's "155" was the Word category, journaled
   # v2 as a tir-words sibling). Same wiki-template family and fetch path
   # as lexlep. "Scientific use only" scoping over the CC BY-SA 3.0 + GFDL
-  # Terms-of-Use grant, empty rightsinfo footer → class nc PENDING
-  # licensing email №17; relabel-on-reply. Trismegistos sigla → tm:
+  # Terms-of-Use grant, empty rightsinfo footer → class nc, confirmed
+  # by the maintainer's reply by email (C. Salomon, 2026-07-20). Trismegistos sigla → tm:
   # reference edges.
   sync_policy: manual
 
@@ -5332,7 +5332,7 @@ tls:
 torot:
   adapter: Nabu::Adapters::Torot
   adopted: "2026-07-04"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [slavic]
   wired: true   # first real sync verified + owner sign-off 2026-07-04
   # TOROT (Tromsø Old Russian + OCS) is the same PROIEL 2.1 XML as proiel, but
@@ -5446,10 +5446,10 @@ ucd:
                    # participation is governed by kind + sync_policy, NEVER by
                    # wired (owner semantics ruling 2026-08-18)
   sync_policy: manual
-  # P85 (№R-44 = Shape C): UCD core — the universal character-identity
+  # P85 (owner ruling: Shape C): UCD core — the universal character-identity
   # backbone of `nabu char`: name, general category, numeric value and
   # canonical decomposition for EVERY Unicode code point, the "any character,
-  # any writing system" floor. P86-1 (№R-49a/b) widened the ingest to the
+  # any writing system" floor. P86-1 (owner-ruled 2026-08-28, a/b) widened the ingest to the
   # useful-context member set: ONE ZipFetch of UCD.zip on the versioned
   # immutable pin (17.0.0 — Blocks/Scripts/NameAliases/DerivedAge/Jamo/
   # NamesList/radicals/Tangut-Nushu sources ride the same artifact), plus
@@ -5460,7 +5460,7 @@ ucd:
 ud:
   adapter: Nabu::Adapters::UniversalDependencies
   adopted: "2026-07-04"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   # P35-0 vs the D35 draft: +celtic (two sga treebanks) +sinitic (two lzh treebanks) — TREEBANKS-verified
   # P43-1: +cuneiform (akk RIAO/PISANDUB) +egyptian (cop Bohairic, egy PC)
   # +hebrew (hbo PTNK) +biblical (Septuagint grc-ptnk, Masoretic hbo-ptnk,
@@ -5525,7 +5525,7 @@ ud:
   # README, no .conllu. Old Japanese arrives via ONCOJ instead (P32-2,
   # 02-sources row 97). Watch upstream: if LMJ's master ever gains data,
   # it is a NEW license-gate decision, not a config flip.
-  # №26 REPLY (2026-07-20, GitHub issue, mr-martian/UD): release is
+  # Maintainer reply (2026-07-20, GitHub issue, mr-martian/UD): release is
   # BLOCKED on validator errors (the quest.ms.mff.cuni.cz validation
   # report is the readiness signal to watch) and the ojp label STAYS —
   # ISO 639 has no Late-Middle-Japanese code. At the future gate nabu
@@ -5663,7 +5663,7 @@ unikemet:
 viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
   adopted: "2026-08-18"
-  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
+  cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [sinitic]  # P78-5: the Vietnamese classical shelf — deliberately NO
                    # vietnamese axis (P47-s4 survey ruling: a shelf, not a desk)
   wired: true     # P78-5 first sync verified (32 docs / 7,674 passages); flipped 2026-08-19 (owner: 'wire everything on')
@@ -5694,7 +5694,7 @@ vuk-danicic:   # P117-2, 02-sources row 248
 vulgate:
   adapter: Nabu::Adapters::Vulgate
   adopted: "2026-07-09"
-  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
+  embed_index: true   # P93-4: the semantic-vector literary core
   axes: [classical, biblical]
   wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 73 books / 35,809 verses
                    # (complete Clementine canon), align OT witness eyeballed
@@ -5887,7 +5887,7 @@ zh-wikisource:   # P109-1
                    # leading templates split (the 續資治通鑑 header2 layer:
                    # author 畢沅 now in metadata)
   sync_policy: manual
-  # Censused works, prefix-expanded (№R-74; census in
+  # Censused works, prefix-expanded (owner-ruled posture; census in
   # the P109 phase plan): 全唐文 1,001 juan (transclusion shells — the
   # fetch expands the ~20k piece pages offline into juan envelopes) ·
   # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
@@ -5904,7 +5904,7 @@ zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner 
   # 2026-08-29). 5,877 character rows, each with 聲母/韻母/聲調 and FOUR
   # parallel reconstructions (楊耐思 1981 · 寧繼福 1985 · 薛鳳生 1990 ·
   # unt 2021); 校註 editorial notes ×94 ride verbatim. Journaled since
-  # P32-3 over the no-ISO-code question; the zho:oman stage (№R-53 /
+  # P32-3 over the no-ISO-code question; the zho:oman stage (owner-ruled 2026-08-29 /
   # nabu-lects v1.4.0) + the owner's P88-R3 GO close it: language
   # HONEST-COARSE zho, the stage row refines (the menggu-ziyun pattern).
   # Dictionary slug `zhongyuan`. EXPECTED FIRST SYNC (~350 KB clone):

@@ -11,7 +11,7 @@ require_relative "csv_writer"
 
 module Nabu
   module DataBuild
-    # The mul/language-dossiers builder (P85-A, №R-47/48) — the curated
+    # The mul/language-dossiers builder (P85-A, owner-ruled 2026-08-28) — the curated
     # language dossiers, PUBLISHED so a fresh install gets the same
     # hand-written context the originating curator wrote instead of a bare
     # language code. The overlay layer of the composition model: canonical
@@ -39,7 +39,7 @@ module Nabu
     # form uses only CLDF terms and stays open to new lanes without a schema
     # change. The consumer groups by Language_ID.
     #
-    # == License (№R-48, 2026-08-28)
+    # == License (owner-ruled 2026-08-28)
     #
     # CC BY-SA 4.0 for the whole dataset: ~71% of the context prose is
     # Wikipedia-derived (share-alike), so the whole set inherits it rather
@@ -141,7 +141,7 @@ module Nabu
       end
 
       # A dossier whose curated prose is Wikipedia-derived — the share-alike
-      # majority (№R-48). Detected from the provenance block and context prose.
+      # majority (owner ruling 2026-08-28). Detected from the provenance block and context prose.
       def wikipedia_derived?(dossier)
         haystack = [provenance_text(dossier.provenance), dossier.context].join(" ")
         haystack.match?(/wikipedia/i)

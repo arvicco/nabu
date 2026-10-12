@@ -10,7 +10,7 @@ require_relative "csv_writer"
 
 module Nabu
   module DataBuild
-    # The mul/script-dossiers builder (P86-4c, №R-49) — the curated
+    # The mul/script-dossiers builder (P86-4c) — the curated
     # per-script context layer, published. The wylie-fold pattern, not the
     # language-dossiers one: the source of truth is a CONFIG fact file
     # (config/script_dossiers.yml, git-shared, present in every install), so

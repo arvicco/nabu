@@ -78,7 +78,7 @@ module Query
       db&.disconnect
     end
 
-    # Q68 (P97-4): tla-hf's hieroglyph annotations ride a DIFFERENT key
+    # P97-4: tla-hf's hieroglyph annotations ride a DIFFERENT key
     # ("hieroglyphs": glyph runs + inline <g>CODE</g> escapes) than
     # aes's semicolon-bounded hiero_inventar — the panel counts both.
     def test_the_corpus_panel_counts_tla_hf_glyph_runs

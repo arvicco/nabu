@@ -216,7 +216,7 @@ module Nabu
       # code/term verbatim (`?` certainty survives). A facet with neither is
       # absent — honest sparsity, never a blank row.
       #
-      # P104-1 (Q77, №R-70): the CSV-only thematic columns join — social
+      # P104-1 (the aggressive-mining law): the CSV-only thematic columns join — social
       # context (soziales, 8,958 rows), religion (15,612), military
       # (8,958) and preservation condition (erhaltung, 2,432), censused
       # 2026-09-26. They exist only in the CSV (nil header key), and EDH

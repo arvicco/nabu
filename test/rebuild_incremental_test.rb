@@ -182,7 +182,7 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal [:clean, nil], verdicts.fetch("alpha")
   end
 
-  # -- P89-1 (№R-54 (c)): the corpus-builder carve-out ---------------------
+  # -- P89-1 (owner ruling, option c): the corpus-builder carve-out --------
 
   def test_full_rebuild_mints_the_builders_sentinel
     full_rebuilder.run
@@ -200,7 +200,7 @@ class RebuildIncrementalTest < Minitest::Test
 
     result = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.run }
 
-    assert_empty result.outcomes, "a builder-only edit must not replay any source (№R-54)"
+    assert_empty result.outcomes, "a builder-only edit must not replay any source (owner ruling)"
     assert_equal %w[alpha beta lexica], result.cleans.map(&:slug).sort
     refute_nil result.axes, "the covering mechanism: builders re-run on their own digest drift"
     refute_nil result.facets
@@ -223,7 +223,7 @@ class RebuildIncrementalTest < Minitest::Test
     refute incremental_rebuilder.plan.builders_dirty, "clean when the digest matches the sentinel"
   end
 
-  # -- P112-4 (Q115): the fulltext-index carve-out ---------------------------
+  # -- P112-4: the fulltext-index carve-out ---------------------------
 
   def test_full_rebuild_mints_the_index_sentinel
     full_rebuilder.run
@@ -291,7 +291,7 @@ class RebuildIncrementalTest < Minitest::Test
     singleton.define_method(:index_file_digest, original)
   end
 
-  # -- P89-1 (№R-54 (b)): the --trust-derivations bridge -------------------
+  # -- P89-1 (owner ruling, option b): the --trust-derivations bridge ------
 
   def test_trust_derivations_restamps_shared_core_drift_without_replay
     full_rebuilder.run
@@ -484,7 +484,7 @@ class RebuildIncrementalTest < Minitest::Test
     end
   end
 
-  # -- the git-repo identity memo (GitIdentityCache, Q124) -----------------
+  # -- the git-repo identity memo (GitIdentityCache) -----------------------
   # kanripo's 5,162 embedded repos paid `git status` + `rev-parse` each on
   # every sweep. The memo must change the COST only: verdicts cold ≡ warm
   # across the git drift matrix, and a warm sweep pays no git call.
@@ -861,7 +861,7 @@ class RebuildIncrementalTest < Minitest::Test
     end
   end
 
-  # Simulate a shared-core code change (the №R-54 type specimen: a store/
+  # Simulate a shared-core code change (the stale-stamp type specimen: a store/
   # file edited mid-flight) by diverting the private instance digest.
   def with_changed_shared_core
     original = Nabu::DerivationFingerprint.instance_method(:shared_core_digest)

@@ -94,7 +94,7 @@ module Nabu
         # orv-be` is a finer BCP-47 regional subtag, not the treebank tag). Same
         # CC BY-SA 4.0 → attribution override as birchbark/rnc (LICENSE.txt +
         # README metadata verbatim, verified 2026-07-11 at fixture time).
-        # P107-6 (Q98): the CC0 Old Turkic seed treebank — 20 sentences /
+        # P107-6: the CC0 Old Turkic seed treebank — 20 sentences /
         # 158 tokens in Old Turkic script, test split only.
         "old-turkish-tonqq" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_Turkish-Tonqq",

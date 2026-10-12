@@ -4,7 +4,7 @@ require_relative "wiktionary_kaikki"
 
 module Nabu
   module Adapters
-    # Wiktionary-Hittite (P99-7, the Q72-3 deferral): English
+    # Wiktionary-Hittite (P99-7, a deferred item): English
     # Wiktionary's Hittite entries via the kaikki.org wiktextract
     # extraction — the wiktionary-sux mold, second occupant of the shared
     # WiktionaryKaikki base. What it adds to the library: sense glosses

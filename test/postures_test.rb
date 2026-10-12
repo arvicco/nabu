@@ -107,7 +107,7 @@ class PosturesTest < Minitest::Test
     end
   end
 
-  # P100-4 (№R-63): the kind axis joins the armed sweep — every
+  # P100-4: the kind axis joins the armed sweep — every
   # passage-serving source is either kind_map-ruled (machine
   # "classified") or declares its judgment (unclassified is an honest
   # answer; pending names its candidate).
@@ -183,7 +183,7 @@ class PosturesTest < Minitest::Test
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
-                 "added-then-retired P77-r18→№R-34 — each when a machine grain took over: " \
+                 "added-then-retired P77-r18→owner ruling 2026-08-18 — each when a machine grain took over: " \
                  "the shadowing rule, working; disco ADDED P77-4; P78 ADDED SEVEN — sillok+sjw+" \
                  "the goryeosa family three+viet-wikisource all codemap on the kanripo lzh " \
                  "precedent, ko-wikisource-mk identity okm; itkc ADDED P78-7 — codemap; " \
@@ -193,11 +193,11 @@ class PosturesTest < Minitest::Test
                  "the ref-enhg rule machine-postures it; P80-6 ADDS the small-languages pack as identity — " \
                  "lo-congres/aranese bare oci, cv-sardinian bare srd, salom bare lad; " \
                  "bdcamoes ADDED P80-7 — identity por; ctilc ADDED P80-8 — identity cat; " \
-                 "P81-r2 (№R-41, nabu-lects PR #6) RETIRES lo-congres (oci-dialect rule) and " \
+                 "P81-r2 (owner-ruled 2026-08-21, nabu-lects PR #6) RETIRES lo-congres (oci-dialect rule) and " \
                  "aranese (oc/aranes override) — the add-then-retire shape again, 70→68; " \
                  "menota ADDED P82-1 — pending on the language-facet rule (nor/dan need " \
                  "registry decisions) — and cme ADDED P82-2 — identity enm (the aspr/iswoc " \
-                 "germanic mold): 68→70; №R-42 RETIRES menota (nabu-lects v1.1.0 minted " \
+                 "germanic mold): 68→70; the 2026-08-24 ruling RETIRES menota (nabu-lects v1.1.0 minted " \
                  "no/da, the menota-dan rule + onw override machine-posture it): 70→69; " \
                  "eebo-tcp ADDED P83-1 — identity en, TRUE today; the en:early mint is " \
                  "APPROVED (nabu-lects PR #9, [1500, 1700]) and its date-band staging " \
@@ -220,7 +220,7 @@ class PosturesTest < Minitest::Test
                  "83→84; the P92 GATE retires ALL SEVEN pendings to identity — v1.6.0 and the " \
                  "v1.6.1 first-sync census mint both merged and reached canonical 2026-09-02 " \
                  "(the xum add-then-retire shape at family scale, twice in one gate); " \
-                 "dta ADDED P94-2 — identity de (the print corpus; №R-59 stages its pre-1650 " \
+                 "dta ADDED P94-2 — identity de (the print corpus; date-band inference stages its pre-1650 " \
                  "tail via date-band INFERENCE, the document grain — no facet rule, so the " \
                  "declaration stays): 84→85; P95 ADDS FOUR — prilit (dates, the goo300k/imp " \
                  "sl-bands mold), diccas (identity ara), perseus-anglit (identity ang, the aspr " \
@@ -264,31 +264,35 @@ class PosturesTest < Minitest::Test
                  "P118-4 ADDS siddham (identity san, declared coarse) and dharma-mdt (PENDING " \
                  "on the tel/tam anchors of the aggregated Indic nabu-lects mint): 129→131; " \
                  "P118-3 ADDS kannada-texts + prakrit-texts as PENDING on the hub-side kan / " \
-                 "pka mints (no node exists in nabu-lects): 131→133"
-    # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
+                 "pka mints (no node exists in nabu-lects): 131→133; " \
+                 "the Indic registry package landing (merged 2026-10-11, canonical-synced " \
+                 "2026-10-12) RETIRES all five P118 pendings to identity — te/kn/pka minted, " \
+                 "ta re-parented, the tam/tel/kan codemap rows live (the add-then-retire " \
+                 "shape, five at once)"
+    # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
-    # class (fornsvenska → sv:old awaiting №R-32); P77-r8 retired it the
+    # class (fornsvenska → sv:old awaiting an owner ruling); P77-r8 retired it the
     # same phase — the ruling landed, nabu-lects PR #4 minted sv:old, and
     # the fsv-old rule (plus osta's lengua pair over the PR #3 ast/an
     # mints) machine-postures both sources. Zero pendings again; disco
     # joined as identity (the one-tag practice).
-    # №R-34 (2026-08-18) retired achemenet's pending row into the
+    # An owner ruling (2026-08-18) retired achemenet's pending row into the
     # achemenet-nb machine rule — the pending class was back to zero.
     # P80-5 reopened it honestly: ref pends on the de:early nabu-lects
     # mint (ENHG has no ISO code; the mint aggregates into the next
     # lect-package PR, then a ruled whole-source rule retires the row —
     # the fornsvenska add-then-retire shape).
-    # Q39 (same day): PR #5 merged, the ref-enhg rule landed, the pending
+    # Same day: PR #5 merged, the ref-enhg rule landed, the pending
     # row retired — zero pendings again, the add-then-retire shape complete.
-    # P82-1 reopened the pending class honestly (the ref shape); №R-42
+    # P82-1 reopened the pending class honestly (the ref shape); an owner ruling
     # closed it the next day — nabu-lects v1.1.0 minted no/da and the
     # menota-dan rule + onw override machine-posture the source. Zero
     # pendings again. cme stays plain identity (P82-2); eebo-tcp joins as
     # identity (P83-1 — identity is true today; the approved en:early
     # mint (nabu-lects PR #9) refines by date-band inference at the
     # merge sweep, never a pending here).
-    # P84-7 (Q48) ADDS TWO as identity: corpus-oudnederlands (odt) and
+    # P84-7 ADDS TWO as identity: corpus-oudnederlands (odt) and
     # corpus-gysseling (dum) — both real nabu-lects anchors, so identity is the
     # honest claim (no machine rule/override covers odt/dum, no shadowing):
     # 70→72, identity 49→51.
@@ -318,7 +322,7 @@ class PosturesTest < Minitest::Test
     # pending 6; P92-5 ojw: 84, pending 7. The P92 gate retires all
     # SEVEN to identity (v1.6.0 + v1.6.1 both on canonical): pending 0,
     # identity 54→61.
-    # P94-2 ADDS dta as identity (de, the print corpus; №R-59's pre-1650
+    # P94-2 ADDS dta as identity (de, the print corpus; the pre-1650
     # staging is date-band inference at document grain — the declaration
     # stays, unlike a facet-rule retirement): identity 61→62.
     # P95 ADDS diccas + perseus-anglit + perseus-farsilit as identity
@@ -355,7 +359,10 @@ class PosturesTest < Minitest::Test
     # on the same mint's tam node (the dharma-khmer shape): pending 0→2.
     # P118-4 ADDS siddham as identity (san-Latn throughout, bare san) and
     # dharma-mdt PENDING on the same Indic mint's tel/tam anchors (the
-    # add-then-retire shape): identity 100→101, pending 2→3.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 101, "pending" => 5 }, by_posture)
+    # add-then-retire shape): identity 100→101, pending 2→3; P118-3 made it
+    # 5. P119: the merged Indic registry package retires all five at once
+    # (te/kn/pka minted, ta re-parented, tam/tel/kan codemap rows) —
+    # identity 101→106, pending 5→0. Zero pendings again.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 106 }, by_posture)
   end
 end

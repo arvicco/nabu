@@ -205,7 +205,7 @@ class EdhEpidocParserTest < Minitest::Test
     assert_equal "epitaph", facets.dig("genre", "value")
   end
 
-  # P104-1 (Q77): the CSV-only thematic columns — soziales/religion/
+  # P104-1: the CSV-only thematic columns — soziales/religion/
   # militaer/erhaltung, upstream's own letter codes verbatim (values from
   # the 2026-09-26 canonical census; EDH publishes no decode table with
   # the dumps, so the codes ARE the honest facet values).

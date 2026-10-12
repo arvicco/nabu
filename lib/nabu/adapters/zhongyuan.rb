@@ -20,7 +20,7 @@ module Nabu
     #
     # This source sat journaled since P32-3 over "no honest ISO 639-3 tag
     # for Old Mandarin (cmn would misfile a 1324 rhyme book)". nabu-lects
-    # v1.4.0 (№R-53 / PR #11) minted the zho:oman stage: entries tag
+    # v1.4.0 (owner-ruled 2026-08-29 / PR #11) minted the zho:oman stage: entries tag
     # HONEST-COARSE `zho` and the stage row refines — the menggu-ziyun
     # pattern exactly. The owner's "let's do 1-3" (2026-08-29) is the
     # un-park ruling.

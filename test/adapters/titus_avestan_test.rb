@@ -218,7 +218,7 @@ class TitusAvestanTest < Minitest::Test
   # --- the avestan-stage facet (P66-1: the last lect pending closes) --------
   #
   # Sigla live in the anchors, not in any corpus metadata field — the
-  # adapter derives the ONE fact the №3 rule needs: whether a page's verses
+  # adapter derives the ONE fact the avestan-stage rule needs: whether a page's verses
   # sit in the Gathic chapter set (Y 28-41, 43-51, 53 — the Gathas + the
   # Yasna Haptaŋhāiti) or outside it. A page mixing both emits NO facet
   # (honest absence → the document stays a bare ave anchor).

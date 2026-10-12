@@ -45,7 +45,7 @@ class CbetaTeiParserTest < Minitest::Test
     assert_equal %w[T 85 2884], document.metadata.values_at("canon", "vol", "no")
   end
 
-  # --- the header byline harvest (P104-1, №R-70 grade 2) ---------------------
+  # --- the header byline harvest (P104-1, attributed-era dating) --------------
   #
   # The teiHeader <author> carries CBETA's own attribution byline —
   # "<dynasty seat> <person(s)><role char>" ("後秦 佛陀耶舍共竺佛念譯",

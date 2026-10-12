@@ -71,7 +71,7 @@ module Nabu
 
       private
 
-      # №R-24 (2026-08-11): a dataset whose license differs from the repo
+      # Owner-ruled 2026-08-11: a dataset whose license differs from the repo
       # default ships its own LICENSE file (the canonical CC plaintext) — the
       # top-level LICENSE is CC BY, so the share-alike carve-out must be
       # visible in the dataset directory itself, not only in manifest/README

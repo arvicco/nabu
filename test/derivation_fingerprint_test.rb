@@ -76,7 +76,7 @@ class DerivationFingerprintTest < Minitest::Test
     assert_nil identity(dir)
   end
 
-  # -- canonical identity: git-LFS materialization (P90-4, Q59) ------------
+  # -- canonical identity: git-LFS materialization (P90-4) ------------
 
   def test_lfs_materialized_payload_is_vouched_not_weak
     payload = "REAL PAYLOAD BYTES\n" * 3
@@ -123,7 +123,7 @@ class DerivationFingerprintTest < Minitest::Test
     refute_equal with_attic, identity(dir)
   end
 
-  # -- canonical identity: declared materializations (Q59-a, ruled 2026-09-03) --
+  # -- canonical identity: declared materializations (the declared-materializations rule, 2026-09-03) --
 
   def test_declared_materialization_is_hashed_not_weak
     dir = git_tree("corpus", "conllu.tar.gz" => "tracked archive bytes\n")
@@ -371,7 +371,7 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal :unstamped, after.drift_against(nil)
   end
 
-  # -- P89-1 (№R-54 (c)): the corpus-builder carve-out ---------------------
+  # -- P89-1 (owner ruling, option c): the corpus-builder carve-out --------
 
   def test_builder_files_are_carved_out_of_the_shared_core
     # The asymmetry doctrine's sanctioned exit: a file may leave the global
@@ -404,11 +404,11 @@ class DerivationFingerprintTest < Minitest::Test
       refute_equal before_builders, Nabu::DerivationFingerprint.builders_digest,
                    "the covering digest must see the change"
       assert_equal before_parser, computer(fresh: true).for_source(entry).parser_digest,
-                   "a builder-only edit must not dirty per-source parser digests (№R-54)"
+                   "a builder-only edit must not dirty per-source parser digests (owner ruling)"
     end
   end
 
-  # -- P112-4 (Q115): the fulltext-index carve-out ---------------------------
+  # -- P112-4: the fulltext-index carve-out ---------------------------
   # The P111 lesson: three index-side commits dirtied every source's parse
   # stamp, pricing the next incremental as a full catalog replay for edits
   # that cannot change one parsed row. Index-only files leave the shared

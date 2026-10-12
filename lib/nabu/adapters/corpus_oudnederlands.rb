@@ -6,7 +6,7 @@ require_relative "onw_tei_parser"
 
 module Nabu
   module Adapters
-    # Corpus Oudnederlands (P84-7, work-queue Q48): the Old-Dutch (odt) corpus
+    # Corpus Oudnederlands (P84-7): the Old-Dutch (odt) corpus
     # — all surviving Dutch word material 475–1200, INT/IvdNT v1.0 (2026),
     # 90 TEI works. Parser family onw-tei.
     #

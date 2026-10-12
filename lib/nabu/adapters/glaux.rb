@@ -215,7 +215,7 @@ module Nabu
 
       # The document-level metadata journaled from the metadata.txt row (the
       # SOURCE_LICENSE rides verbatim — the per-text license record).
-      # P104-1 (Q77): GENRE_STANDARD also projects as a facet. DIALECT
+      # P104-1: GENRE_STANDARD also projects as a facet. DIALECT
       # makes no LECT claim here — a Greek-dialect lect story needs a
       # lects-registry ruling (registry notes carry philology); since
       # P118-R4 config/facet_map.yml projects it as a plain "dialect"

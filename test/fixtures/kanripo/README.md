@@ -145,5 +145,5 @@ catalog-driven wave scope.
 Sampled repos carry no LICENSE file (github license field null).
 Corroboration, ytenx `DATA_LICENSE.md`: "Kanseki Repository material
 marked as CC BY-SA must be used under the applicable Creative Commons
-Attribution-ShareAlike terms". Confirmation email to Christian Wittern
-(№25) sent, non-blocking → `attribution`.
+Attribution-ShareAlike terms" — on that corroboration (non-blocking)
+→ `attribution`.

@@ -70,7 +70,7 @@ module Nabu
     #                    ccs-pro is minted by the family-code + -pro
     #                    convention (ISO 639-5 ccs; the bat-pro precedent).
     #
-    # == The P104-3 packages (Q84: six further downloads, same shelf, same grant)
+    # == The P104-3 packages (six further downloads, same shelf, same grant)
     #
     # ALTAIC / CAUC / SINTIB / DRAV / CHUKCHEE / YENISEY .exe — plain zips
     # like IE.exe/KART.exe, each fetched into its own subdir with its own
@@ -172,7 +172,7 @@ module Nabu
     # would also clean stibet's CHIN leads. doc.dbf is a support table
     # (per-character dialect readings), not an etymological base.
     #
-    # The follow-up packages' own LEXSTAT/ trees (Q116): 48 of their 51
+    # The follow-up packages' own LEXSTAT/ trees (P118): 48 of their 51
     # wordlist tables ride as shelves starling-lexstat-<stem> since P118 —
     # per-package language maps, resolve-or-verbatim cognation numbers and
     # the ruled inferred readings live in StarlingLexstatPackages. Held:

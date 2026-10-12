@@ -72,7 +72,7 @@ class EdhTest < Minitest::Test
     assert_equal "Latium et Campania (Regio I)", metadata.dig("facets", "province", "value")
   end
 
-  # P104-1 (Q77): the thematic CSV columns join the facet join — HD000001's
+  # P104-1: the thematic CSV columns join the facet join — HD000001's
   # real row carries erhaltung "V" (the letter codes ride verbatim; EDH
   # ships no decode table with the dumps).
   def test_thematic_csv_columns_ride_the_discover_join_into_facets

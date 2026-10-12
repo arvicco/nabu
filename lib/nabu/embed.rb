@@ -7,7 +7,7 @@ require_relative "errors"
 require_relative "shell"
 
 module Nabu
-  # P93-4 — the semantic-vector build lane (№R-36, ruled "build"
+  # P93-4 — the semantic-vector build lane (owner-ruled "build"
   # 2026-09-02 with the incremental-first constraint). Embeds the
   # embed-flagged sources' live passages (registry `embed_index: true` —
   # the literary core; the P79-5 trial's full-library extrapolation was a

@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # cs-wikisource (P116-3, Q103 under №R-74): censused premodern works.
+  # cs-wikisource (P116-3, under the base-edition rule): censused premodern works.
   # Fixture envelopes are real api.php captures (2026-10-10): Dalimil
   # chapter V (Jireček 1877, verse), Bible kralická (1613)/Rut (the 1613
   # Brethren orthography, whole rendering), Hospodine, pomiluj ny! (keys to

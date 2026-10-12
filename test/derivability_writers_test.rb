@@ -92,7 +92,7 @@ class DerivabilityWritersTest < Minitest::Test
   # db/canonical_identities.json (tmp+rename): the census-keyed memo of
   # plain-tree canonical identities — the DERIVED law kind (a pure
   # function of canonical/ + code; deletable at any time, a miss re-hashes).
-  # Its sibling git_identity_cache (Q124) writes ONE derived file,
+  # Its sibling git_identity_cache writes ONE derived file,
   # db/git_identities.json (tmp+rename): the census-keyed memo of embedded
   # git repos' identity tokens — the same DERIVED law kind (a miss pays the
   # full git call).
@@ -105,7 +105,7 @@ class DerivabilityWritersTest < Minitest::Test
   # writes the censused Izbornyk pages (verbatim windows-1251, tmp+rename,
   # site paths) + its .litopys-fetch.json pin into canonical/litopys/
   # inside Adapter#fetch — the titus_fetch law kind.
-  # same fetch — the ja/zh-wikisource law kind. mdz-protestant (Q102)
+  # same fetch — the ja/zh-wikisource law kind. mdz-protestant
   # writes IIIF manifests + per-page hOCR (tmp+rename) and its
   # .mdz-crawl.json ledger into canonical/mdz-protestant/ inside
   # Adapter#fetch — the ndl-kotenseki crawl law kind.
@@ -114,7 +114,7 @@ class DerivabilityWritersTest < Minitest::Test
   # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
   # .elektire-fetch.json pin) inside Adapter#fetch — the cantigas_fetch
   # law kind, its sixth crawl sibling.
-  # same fetch — the ja/zh-wikisource law kind. The Q105 archive.org
+  # same fetch — the ja/zh-wikisource law kind. The archive.org
   # scan-shelf base (ia_scan_shelf) writes each census item's hOCR
   # derivative pair (.part + rename, whole item or nothing) under
   # canonical/<slug>/<identifier>/ inside Adapter#fetch — the same

@@ -4,7 +4,7 @@ require_relative "slavic_wikisource_html"
 
 module Nabu
   module Adapters
-    # cs-wikisource (P116-3, Q103 under №R-74): the premodern Czech shelf of
+    # cs-wikisource (P116-3, under the owner-ruled Wikisource posture): the premodern Czech shelf of
     # the Czech Wikisource (Wikizdroje). The wiki has NO epoch category
     # tree (censused 2026-10-10: no century/period categories exist), so
     # the cone is CENSUSED WORKS, prefix-expanded — the zh-wikisource

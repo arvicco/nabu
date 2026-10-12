@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 
 module Adapters
-  # Nabu::Adapters::Achemenet (P77-r18, №R-33 PKG-1) — the Helsinki
+  # Nabu::Adapters::Achemenet (P77-r18, owner-ruled 2026-08-17, package 1) — the Helsinki
   # Achemenet Babylonian corpus over the NEW baby-conllu family:
   # 17-column BabyLemmatizer CoNLL-U-Plus, documents delimited only by
   # `# <id> = <designation>` lines, urn = the id lowercased (the cdli

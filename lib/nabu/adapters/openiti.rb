@@ -377,7 +377,7 @@ module Nabu
                     ).compact
       end
 
-      # P104-1 (Q77 under №R-70): the #META# block's 021.BookSUBJ value,
+      # P104-1 (the aggressive-mining law): the #META# block's 021.BookSUBJ value,
       # verbatim ("جاهلي :: دواوين الشعر العربي" — the "::" hierarchy is
       # upstream's, kept whole); NODATA-class fillers are absence, never
       # a value. Feeds the "subject" facet, which the kind_map openiti

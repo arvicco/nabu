@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Nabu::Xlsx (P77-r6, №R-30) — the minimal in-house xlsx sheet reader:
+# Nabu::Xlsx (P77-r6) — the minimal in-house xlsx sheet reader:
 # zip + XML, shared strings resolved, sparse rows padded with nils by
 # column position. Deliberately dumb: strings out, no types, no styles,
 # no formulas — exactly what reading a works TABLE needs and nothing

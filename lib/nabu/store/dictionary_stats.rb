@@ -2,7 +2,7 @@
 
 module Nabu
   module Store
-    # The dictionary-group census (P106-1 — №R-69 generalization 2): one
+    # The dictionary-group census (P106-1 — owner ruling, generalization 2): one
     # precompiled row per dictionary in dictionary_stats (migration 036) —
     # shipped language code, resolved lect node, live entry count — so
     # every dictionary-shaped surface (`define`'s header, the language
@@ -20,7 +20,7 @@ module Nabu
     # Derived by construction: f(dictionaries + dictionary_entries +
     # registry) — drop-and-reproject wholesale in both rebuild flavors,
     # per source after any dictionary-bearing sync (the P47-r3 lesson:
-    # no lane may lag a sync). Recorded v1 limit (№R-69): a dictionary
+    # no lane may lag a sync). Recorded v1 limit (owner ruling): a dictionary
     # carries ONE language code; mixed dictionaries group under their
     # primary — entry-grain language is a recorded future step.
     module DictionaryStats

@@ -5,7 +5,7 @@ require "support/adapter_conformance"
 
 module Adapters
   # ATMO — Annotated Turki Manuscripts from the Jarring Collection
-  # (P107-4, Q97.1): 18 line-by-line TEI P5 transcripts of 18th–20th c.
+  # (P107-4): 18 line-by-line TEI P5 transcripts of 18th–20th c.
   # Eastern Turki manuscripts, CC BY-SA 4.0 verbatim. The Perso-Arabic
   # atmo:lit layer is the served text; atmo:lat transliteration rides
   # annotations; zone provenance (main vs top/endorsement) is per

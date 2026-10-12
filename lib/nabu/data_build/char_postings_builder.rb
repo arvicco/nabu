@@ -27,7 +27,7 @@ module Nabu
     # an input here — the census derives from Nabu's ingested corpora
     # only.
     #
-    # License (owner ruling №R-24): CC BY-SA 4.0 — the kanripo lane's
+    # License (owner ruling 2026-08-11): CC BY-SA 4.0 — the kanripo lane's
     # share-alike grant. Only open/attribution sources publish; the nc
     # slices (cbeta, ud, e84000, openiti) are excluded row-by-row and
     # censused in nabu.eval — character frequencies are fact-like, but

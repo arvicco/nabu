@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P97-2 (№R-62 option b): the derived person index — CBDB's persons
+# P97-2 (owner-ruled 2026-09-11, option b): the derived person index — CBDB's persons
 # projected into catalog tables at sync time, the place_index mold
 # (021/026): keyed (authority, person_id), wholesale per-authority
 # derivation, name keys folded in Ruby. No backfill: empty means "not

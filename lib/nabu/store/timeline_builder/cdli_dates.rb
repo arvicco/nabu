@@ -26,7 +26,7 @@ module Nabu
       # rides date_raw verbatim.
       #
       # dates_referenced regnal values ("Šulgi.32.09.03") resolve through
-      # the RULED reign table (config/regnal_years.yml — №R-28, 2026-08-11,
+      # the RULED reign table (config/regnal_years.yml — owner-ruled 2026-08-11,
       # the P73-6 scout ratified; NOT invented: middle chronology / Parker
       # & Dubberstein, stated per entry). FINER WINS: a ruled ruler's
       # numbered year replaces the period band with its one conventional
@@ -106,7 +106,7 @@ module Nabu
           )
         end
 
-        # The RULED regnal conversion (№R-28), or nil for anything the
+        # The RULED regnal conversion (owner ruling 2026-08-11), or nil for anything the
         # table does not answer — the period band is always the fallback.
         def extract_regnal(value, counts)
           return nil if value.empty?

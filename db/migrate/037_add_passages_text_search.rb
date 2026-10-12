@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P112-2 (Q113): the search-form read seam. text_normalized measured
+# P112-2: the search-form read seam. text_normalized measured
 # byte-identical to text on the vast majority of rows (ø191.8 B vs
 # 191.6 B — the CJK-majority corpus folds to itself), so the loader now
 # stores the EMPTY STRING when the two are equal (~12–18 GB reclaimed at

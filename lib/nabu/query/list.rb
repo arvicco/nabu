@@ -44,7 +44,7 @@ module Nabu
       # One census row (`nabu list`). +languages+ is the sorted union of live
       # passage languages and dictionary languages; +license_classes+ the
       # sorted effective-class mix.
-      # P105-5a (Q87): +notes+ (urn_notes rows, the owner-notes shelf) and
+      # P105-5a: +notes+ (urn_notes rows, the owner-notes shelf) and
       # +lemma_rows+ (tier-silver passage_lemmas, the lemma shelf) keep the
       # two non-document local shelves from censusing as "empty".
       CensusRow = Data.define(:slug, :docs, :passages, :entries, :languages,

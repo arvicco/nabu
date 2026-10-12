@@ -5,7 +5,7 @@ require "tmpdir"
 require "support/adapter_conformance"
 
 module Adapters
-  # archiv-slav-phil (Q105) — Jagić's Archiv für slavische Philologie as the
+  # archiv-slav-phil — Jagić's Archiv für slavische Philologie as the
   # archive.org scan run, one document per volume, page grain over the hOCR
   # derivative pair (the IaScanShelf mechanics, tested in full by
   # slavistics_pd_test.rb). Fixture: the first hOCR pages of Bd. 1 (1876,

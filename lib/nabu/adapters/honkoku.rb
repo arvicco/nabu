@@ -4,7 +4,7 @@ require "csv"
 
 module Nabu
   module Adapters
-    # honkoku — みんなで翻刻 (P108-5, Q89.1; github.com/yuta1984/
+    # honkoku — みんなで翻刻 (P108-5; github.com/yuta1984/
     # honkoku-data, README license verbatim CC BY-SA 4.0): the
     # citizen-transcription platform's published text data. Served
     # HONESTLY as crowd transcription: the README's own quality

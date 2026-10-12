@@ -131,14 +131,14 @@ class CharCommandTest < Minitest::Test
     end
   end
 
-  # --- the reduced non-Han card (P84-5, the Q46 mechanical half) ---
+  # --- the reduced non-Han card (P84-5, the mechanical half) ---
 
   # The 2026-08-26 defect: a single non-Han char rode the FULL Han card
   # path, whose define pipeline's Sanskrit stem expansion turned "a" into
   # "as" and matched the TLS concept headword "AS" — nonsense rendered
   # with a straight face. A non-Han glyph now gets a reduced honest card:
   # glyph, codepoint, script probe, search hint — never a define call.
-  # (The Latin-letter reading-lane question is №R-44's — single Latin
+  # (The Latin-letter reading-lane question awaits an owner ruling — single Latin
   # stays on the reduced card for now.)
   def test_char_of_a_latin_letter_renders_the_reduced_card_never_tls
     with_char_catalog do |config|
@@ -235,7 +235,7 @@ class CharCommandTest < Minitest::Test
     end
   end
 
-  # --- the member-context tier (P86-1, №R-49a) ------------------------------
+  # --- the member-context tier (P86-1, owner-ruled 2026-08-28) ------------------------------
 
   def test_universal_card_carries_block_script_and_age
     with_char_catalog do |config|
@@ -267,14 +267,14 @@ class CharCommandTest < Minitest::Test
     end
   end
 
-  # --- the ambiguity layer (P86-5 + Q50) ------------------------------------
+  # --- the ambiguity layer (P86-5) ------------------------------------
 
   def test_single_kana_gets_its_identity_card_with_a_capped_reading_panel
     with_char_catalog do |config|
       seed_ucd(config)
       out, _err, status = with_config(config) { run_cli(%w[char ア]) }
       assert_nil status
-      assert_match(/KATAKANA LETTER A — Other Letter/, out, "Q50: the identity card renders FIRST")
+      assert_match(/KATAKANA LETTER A — Other Letter/, out, "the identity card renders FIRST")
       assert_match(/also a Japanese reading — 2 Han character/, out)
       assert_match(/亜 ア \(on\)/, out)
       refute_match(/not a Han character/, out)
@@ -346,7 +346,7 @@ class CharCommandTest < Minitest::Test
     end
   end
 
-  # 88-B2: the №R-49(a) ruled set completes END-TO-END — the last three
+  # 88-B2: the owner-ruled (2026-08-28) member set completes END-TO-END — the last three
   # members render, and the Tangut/Nushu source lookups reach their cards.
   def test_universal_card_renders_variants_sequences_and_discouraged
     with_char_catalog do |config|
@@ -376,7 +376,7 @@ class CharCommandTest < Minitest::Test
 
       kana, = with_config(config) { run_cli(%w[char と]) }
       assert_match(/corpus attestation: jpn 1/, kana,
-                   "B3: the widened postings attest the rig's jpn kana — Q50's own char")
+                   "B3: the widened postings attest the rig's jpn kana — the ambiguity layer's own char")
     end
   end
 
@@ -453,7 +453,7 @@ class CharCommandTest < Minitest::Test
 
   # --- the reading→character lane (P65 gate feedback: `nabu char wen`) ---
 
-  # P77-r15 (№R-33 PKG-1): the reading lane joins the frozen --json
+  # P77-r15 (owner-ruled 2026-08-17, package 1): the reading lane joins the frozen --json
   # family — it was the LAST char lane that refused JSON. Contract:
   # input echoed, matches as flat {glyph, reading, kind} maps.
   def test_reading_lane_json_emits_the_frozen_contract

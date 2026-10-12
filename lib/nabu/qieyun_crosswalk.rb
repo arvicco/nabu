@@ -5,7 +5,7 @@ require_relative "store/links_journal"
 require_relative "version"
 
 module Nabu
-  # The Qieyun–Guangyun small-rime crosswalk producer (P107, the Q78
+  # The Qieyun–Guangyun small-rime crosswalk producer (P107, the
   # sidecar harvest; the Burman/KyotoKanripo mold): re-derives
   # kind=reference edges from the qieyun-restored repo's
   # to_tshet_uinh_data/small_rimes.csv after every sync — 3,385 small

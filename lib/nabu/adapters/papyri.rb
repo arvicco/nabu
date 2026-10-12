@@ -137,7 +137,7 @@ module Nabu
         )
       end
 
-      # P104-1 (Q77 under №R-70): the HGV/TM idnos, peeked at discover
+      # P104-1 (the aggressive-mining law): the HGV/TM idnos, peeked at discover
       # since day one, now PERSIST — tm_nr/hgv verbatim plus a "tm:<n>"
       # related edge per numeric TM token (the P25-1 scheme rule; a
       # multi-text papyrus lists several, space-separated). HGV has no

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nabu
-  # The place-mine review surface (P97-1 — Q70): aggregate the journal's
+  # The place-mine review surface (P97-1): aggregate the journal's
   # kind=place-candidate edges into reviewable rows — one row per PLACE,
   # ranked by document spread (how many distinct held documents attest
   # the place: spread separates real geography from one chatty text),
@@ -40,7 +40,7 @@ module Nabu
     Report = Data.define(:rows, :total_places, :edges, :source, :gazetteer,
                          :prerank_window, :seconds)
 
-    # The board (P105-1 — Q86): the name-grouped VERDICT surface. A
+    # The board (P105-1): the name-grouped VERDICT surface. A
     # matching decision is made per verbatim NAME (names.yml keys are
     # names), so the board's grain is the mined name — its candidate
     # places listed under it with the discriminators that separate

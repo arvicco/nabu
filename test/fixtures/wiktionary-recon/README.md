@@ -340,7 +340,7 @@ Full-download census (2026-07-19; upstream Last-Modified 2026-07-16):
     `["borrowed"]`; the ja/ko codes pass through unmapped (display-only
     until a CJK gold shelf lands — the P32-4 bridge's future join).
 
-## P104-2 addition (Q79 regression lines; cut 2026-09-26)
+## P104-2 addition (Wiktionary-title regression lines; cut 2026-09-26)
 
 Five lines appended to `kaikki.org-dictionary-Chinese.jsonl` (now 11
 lines, 10 entries) — the two poison shapes that quarantined the live

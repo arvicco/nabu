@@ -13,8 +13,8 @@ module Nabu
   # - +on_stage+: called with (label, eta) when a new unit of work begins
   #   (owner feedback 2026-07-18: a long rebuild must say which source it is
   #   on) — Rebuild announces each replayed slug and the trailing
-  #   timeline/facet/index phases; the CLI adds the timing. +eta+ (P78-r2,
-  #   Q34) is a Nabu::Eta estimate (Estimate or Eta::NONE) when the caller
+  #   timeline/facet/index phases; the CLI adds the timing. +eta+ (P78-r2)
+  #   is a Nabu::Eta estimate (Estimate or Eta::NONE) when the caller
   #   consulted the stage_timings history, nil when it didn't — the CLI
   #   renders an estimate line only for a non-nil eta.
   # - +on_note+: called with one finished line to print DURABLY (owner UX

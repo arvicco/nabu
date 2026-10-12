@@ -42,7 +42,7 @@ module Adapters
 
     def test_base_edition_prefers_the_publication_line
       assert_equal "Amerikanski Slovenec 11. marec 1892 (1/12), 3", doc(22_746).metadata["base_edition"],
-                   "№R-74: izdano verbatim (templates flattened to their display text)"
+                   "the base-edition rule: izdano verbatim (templates flattened to their display text)"
       assert_equal "Vaje 1855", doc(18_712).metadata["base_edition"], "no izdano: the spisano line"
       assert_match(/Jenko_Vaje_2|60, 61/, doc(18_712).metadata["source"])
     end

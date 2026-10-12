@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Store::SilverLemmaCache (P87-2, Q51 under №R-51-B) — the projection
+# Store::SilverLemmaCache (P87-2, owner-ruled 2026-08-29) — the projection
 # cache: the deterministic per-record work (JSON parse, fold, group) runs
 # ONCE per shelf state; the cache is derived and disposable, keyed by
 # shelf fingerprint + PROJECTION_VERSION. Rebuildable ≠ recomputed.

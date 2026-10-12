@@ -42,7 +42,7 @@ module Nabu
     Clean = Data.define(:slug, :stamp_short)
 
     # A source RE-STAMPED without replay under --trust-derivations (P89-1,
-    # №R-54 (b)): parser-only drift + the code voucher's yes.
+    # owner ruling option b): parser-only drift + the code voucher's yes.
     Trusted = Data.define(:slug, :stamp_short)
 
     # One source's dry-run verdict: state :clean | :dirty | :skip, +reason+
@@ -114,7 +114,7 @@ module Nabu
     # versions WITHOUT re-deriving — the documented bridge for an index
     # known to have been built by the current code (e.g. the full rebuild
     # that shipped just before the stamps machinery landed).
-    # +trust_derivations+ (P89-1, №R-54 (b)): the derivation-stamp
+    # +trust_derivations+ (P89-1, owner ruling option b): the derivation-stamp
     # counterpart — a source whose ONLY drift is the parser digest, and
     # whose own parser closure +code_voucher+ can vouch predates its stamp,
     # is re-stamped at its current fingerprint WITHOUT replay (the drift
@@ -148,7 +148,7 @@ module Nabu
       # P89-1: pin code identities before any replay (see Rebuild#run) —
       # the last verdict of a long dirty run happens hours after load time.
       warm_code_identities(progress)
-      # The trust horizon (№R-54 (b)): the ELDEST per-source stamp, not each
+      # The trust horizon (owner ruling option b): the ELDEST per-source stamp, not each
       # stamp's own time. A long run stamps late from disk bytes while its
       # rows come from code loaded at start — a closure file committed
       # mid-run beats the source's own stamped_at and would be wrongly
@@ -157,7 +157,7 @@ module Nabu
       # depend on; sources whose closure moved after it simply replay
       # (over-rebuild-safe).
       trust_horizon = @trust_derivations ? Store::DerivationStamp.oldest_stamped_at(db) : nil
-      # P112-4 (Q115): a drifted index-core digest means EVERY index row
+      # P112-4: a drifted index-core digest means EVERY index row
       # may be shaped by changed code — the honest answer is one full
       # index re-derivation at the end (per-source slice refreshes are
       # skipped as subsumed work). Catalog stamps are untouched: the carve
@@ -224,7 +224,7 @@ module Nabu
         progress&.stage("source stats")
         Store::SourceStats.derive!(db, note: "derived (incremental rebuild)")
       end
-      # P89-1 (№R-54 (c)): the builders' own covering mechanism — a drifted
+      # P89-1 (owner ruling option c): the builders' own covering mechanism — a drifted
       # builders digest re-runs the corpus builders even when every source
       # is clean; the sentinel then records the code they just ran as.
       builders_ran = outcomes.any? || builders_dirty?(db)
@@ -457,7 +457,7 @@ module Nabu
       Store::DerivationStamp.index_digest(db) != DerivationFingerprint.index_core_digest
     end
 
-    # May +entry+ be re-stamped without replay (P89-1, №R-54 (b))? Only
+    # May +entry+ be re-stamped without replay (P89-1, owner ruling option b)? Only
     # when every NON-parser component matches its stamp DIRECTLY (the
     # drift_against blame order reports the first drift only — a parser
     # drift could mask a fold or config one) AND the code voucher confirms

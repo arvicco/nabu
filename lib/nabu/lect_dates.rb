@@ -12,7 +12,7 @@ module Nabu
   #   3. the interval is CONTAINED IN EXACTLY ONE of the anchor's attested,
   #      banded stages — containment, never overlap: a date spanning two
   #      bands stays honestly bare. Open-ended bands are real bands
-  #      (P84-3, the Q44 gap): [a, null] contains [x, y] iff a <= x, and
+  #      (P84-3): [a, null] contains [x, y] iff a <= x, and
   #      symmetrically [null, b] iff y <= b — the registry's live open
   #      bands are lat:new and isl:mod, both [1550, null].
   #

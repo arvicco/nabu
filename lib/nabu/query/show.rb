@@ -108,7 +108,7 @@ module Nabu
         :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit, :findspot,
         :artifact, :withdrawn_reason, :withdrawn_at
       ) do
-        # withdrawn_reason/withdrawn_at (P93-2, №R-16): WHY and WHEN a
+        # withdrawn_reason/withdrawn_at (P93-2): WHY and WHEN a
         # withdrawn document left — nil on live rows, on pre-P93
         # withdrawals (honest absence), and on a catalog predating
         # migration 030.
@@ -537,7 +537,7 @@ module Nabu
 
       # Chronological provenance for a passage: order by time, id as tiebreak
       # so events written in the same tick keep their insertion order.
-      # P112-2 (Q113): the per-passage "loaded" breadcrumb is retired (it was
+      # P112-2: the per-passage "loaded" breadcrumb is retired (it was
       # 95% of the provenance table), so a passage without one renders it
       # IMPLICITLY — every passage was loaded; the document-grain event
       # (kept) lends its timestamp. Rows from older catalogs still carry

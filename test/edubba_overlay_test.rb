@@ -50,7 +50,7 @@ class EdubbaOverlayTest < Minitest::Test
     assert_nil overlay["Z99"]
   end
 
-  # -- the cuneiform lanes (P77-8, Q25): the school's FIRST subject joins --
+  # -- the cuneiform lanes (P77-8): the school's FIRST subject joins --
 
   def test_c101_sign_teaching_entries_carry_the_richest_record
     entry = overlay.cuneiform("AŠ")

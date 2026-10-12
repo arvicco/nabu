@@ -5,7 +5,7 @@ require "fileutils"
 
 module Nabu
   module Health
-    # The withdrawal-shed acceptance (P102-1 — Q74): the
+    # The withdrawal-shed acceptance (P102-1): the
     # quarantine-acceptance mold applied to TrendRules.withdrawal_creep.
     # A one-time reviewed upstream curation event (the specimen:
     # PerseusDL's 2026-09 Cicero cleanup, 104/549 shed on
@@ -40,7 +40,7 @@ module Nabu
         FileUtils.mkdir_p(File.dirname(path))
         File.write(path,
                    "# local/config/shed_acceptances.yml — the owner's --accept-shed rulings\n" \
-                   "# (Q74/P102: the durable record; withdrawal-creep alarms re-arm past the\n" \
+                   "# (P102: the durable record; withdrawal-creep alarms re-arm past the\n" \
                    "# accepted level and go dormant below it).\n" +
                    YAML.dump("acceptances" => rows))
         shed

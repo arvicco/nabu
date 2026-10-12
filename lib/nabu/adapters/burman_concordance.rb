@@ -6,7 +6,7 @@ require_relative "../burman_crosswalk"
 
 module Nabu
   module Adapters
-    # The Burman concordance (P77-r19, №R-33 PKG-1): Annie Burman's
+    # The Burman concordance (P77-r19, owner-ruled 2026-08-17, package 1): Annie Burman's
     # "Digital Concordance of Etruscan, Faliscan and Early Latin
     # Inscriptions from Etruria" (Uppsala; Zenodo 7801485 v1.0.0,
     # PUBLIC DOMAIN per the deposit — legalcode.txt is CC0) — 14,986

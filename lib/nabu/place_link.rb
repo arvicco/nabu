@@ -3,7 +3,7 @@
 require_relative "places"
 
 module Nabu
-  # The place-link promotion (P105-4 — Q86's apply lane): project the
+  # The place-link promotion (P105-4 — the place-candidate apply lane): project the
   # nabu-places registry's MATCHED kanripo-style decisions onto the mined
   # candidate edges — for each matched name, the place-candidate edges
   # citing the RULED identity promote to kind "place" attestation edges

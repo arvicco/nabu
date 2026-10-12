@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P105-1 (Q86): the parent administrative unit reaches the derived place
+# P105-1: the parent administrative unit reaches the derived place
 # index — the CHGIS discriminator the review board needs to tell homonym
 # candidates apart (two 清水 rows separate instantly once one says
 # "under 秦州" and the other "under 汀州"). A DISPLAY string verbatim

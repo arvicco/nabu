@@ -37,7 +37,7 @@ module Nabu
   # bounded page loop vs 23 letter GETs). Extraction stays flagged for its
   # own packet, never smuggled into a new-source change.
   #
-  # == The grant (thread №21, N. Wasserman email 2026-08-30)
+  # == The grant (by email, N. Wasserman, 2026-08-30)
   #
   # Local personal research only — no redistribution. TEXT ONLY: the crawl
   # touches search pages and node pages, NEVER image/copy-photo assets

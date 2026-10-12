@@ -90,7 +90,7 @@ module Query
       assert_equal 1, search("mann", lang: "deu").size
     end
 
-    # -- query-side neutralization scoping (P81-2 / Q40) ---------------------
+    # -- query-side neutralization scoping (P81-2) ---------------------
 
     # OWNER REPRO (2026-08-20): `search houlá` (bdcamoes, Portuguese) served
     # Romanian "hulă" passages — the Slavonic neutralizer's Latin ou→u arm
@@ -1042,7 +1042,7 @@ module Query
                    "a guarded page thinned below limit by filters teaches the mode")
     end
 
-    # -- the --within geo-radius filter (P75 C-9, №R-5) ----------------------
+    # -- the --within geo-radius filter (P75 C-9, owner ruling) ----------------------
 
     def located(urn, text, lat, lon)
       doc = make_document(source: @open, urn: urn)
@@ -1138,7 +1138,7 @@ module Query
       assert_equal %w[urn:e:2:1], search("manibus", facets: { "genre" => "votive%" }).map(&:urn)
     end
 
-    # P99-3 (№R-63): the kind facet filters by FAMILY — a head matches
+    # P99-3: the kind facet filters by FAMILY — a head matches
     # itself and every sub under it (funerary ⊇ funerary/epitaph), a
     # head/sub narrows exactly, and the honesty buckets (unmapped,
     # unknown) are first-class filters. Identity semantics: kind
@@ -1650,7 +1650,7 @@ module Query
                    "--scan walks only the scoped source's postings on the new index"
     end
 
-    # -- the CJK bigram lane (P93-3, №R-39 b) --------------------------------
+    # -- the CJK bigram lane (P93-3) --------------------------------
     # A pure-CJK query rides the contentless bigram lane over the
     # cjk-flagged sources, so a substring INSIDE an unbroken Han run —
     # which unicode61's one-token-per-run treatment can never match —
@@ -1668,7 +1668,7 @@ module Query
       cjk_seed!
 
       assert_equal %w[urn:d:han:1], search("六龍").map(&:urn),
-                   "the №R-39 case: 六龍 sits mid-run and must match through the bigram lane"
+                   "the mid-run case: 六龍 sits mid-run and must match through the bigram lane"
       assert_equal %w[urn:d:han:1], search("乘六龍以").map(&:urn),
                    "longer substrings phrase across consecutive bigrams"
     end
@@ -1731,7 +1731,7 @@ module Query
                    "a pre-P93 fulltext file serves main-lane semantics without erroring"
     end
 
-    # -- the attic search (P93-2, №R-16 half 1) ------------------------------
+    # -- the attic search (P93-2, owner ruling half 1) ------------------------------
     # --withdrawn scans the withdrawn set — passages themselves withdrawn
     # (revision-pruned) or under a swept document — as an on-request attic
     # inspection: substring match over the folded text, every hit labeled

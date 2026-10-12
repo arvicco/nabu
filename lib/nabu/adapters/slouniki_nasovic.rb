@@ -5,7 +5,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # Насовіч's dictionary (P117 / Q106, 02-sources row 253): I. I. Nosovič
+    # Насовіч's dictionary (P117, 02-sources row 253): I. I. Nosovič
     # (Іван Насовіч, 1788–1877), «Словарь бѣлорусскаго нарѣчія» (СПб.:
     # Imperial Academy of Sciences, 1870) — the founding dictionary of
     # Belarusian, ~35k entries of the 19th-c. vernacular glossed in

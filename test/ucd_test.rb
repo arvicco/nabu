@@ -121,7 +121,7 @@ class UcdTest < Minitest::Test
     assert_nil @ucd.lookup(0x1FFFF), "beyond the fixture's ranges → nil"
   end
 
-  # -- member context (P86-1, №R-49a: the useful-context tier) ---------------
+  # -- member context (P86-1, the useful-context tier) ---------------------
   # The seam widens over the sibling member files landed by the UCD.zip fetch;
   # every lookup degrades to nil/[] when its member file is absent — feature
   # detection at MEMBER grain, so a partial canonical stays honest.

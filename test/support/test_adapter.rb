@@ -91,7 +91,7 @@ class JpnTestAdapter < TestAdapter
   def language = "jpn"
 end
 
-# The multi-shelf sibling of the rig (P104-4, Q81): a PASSAGES source that
+# The multi-shelf sibling of the rig (P104-4): a PASSAGES source that
 # also declares a secondary dictionary lane, for the sync/rebuild routing
 # tests. The lane reads glossary.tsv beside the *.txt corpus — one
 # "id<TAB>headword<TAB>gloss" line per entry — into one "test-lexicon"

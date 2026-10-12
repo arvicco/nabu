@@ -2,7 +2,7 @@
 
 module Nabu
   module Store
-    # The per-load index delta (P112-1, Q112). The loader already decides
+    # The per-load index delta (P112-1). The loader already decides
     # every passage's fate by content sha; this collector captures those
     # fates as id/urn sets so the indexer can refresh exactly what changed
     # instead of rewriting the source's whole slice (the measured

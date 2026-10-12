@@ -171,7 +171,7 @@ class TlhdigTest < Minitest::Test
     assert_equal({ "value" => "hfr", "raw" => "HFR" }, document.metadata.dig("facets", "project"))
   end
 
-  # P104-1 (Q77 under №R-70): the per-line lg tags were parsed since
+  # P104-1 (the aggressive-mining law, owner-ruled 2026-09-26): the per-line lg tags were parsed since
   # P31-1 but never faceted — a mixed-language tablet (Hattic ritual
   # with Hittite rubrics, Akkadian beside Hittite) was invisible to any
   # language filter. One multi-valued "language" facet per document:

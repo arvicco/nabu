@@ -58,7 +58,7 @@ module Nabu
       # define join, TLS, Unihan…) never run for a non-Han glyph: the
       # define pipeline's Sanskrit stem expansion turned "a" into "as" and
       # matched the TLS concept headword "AS" (the 2026-08-26 defect).
-      # Any richer non-Han design is №R-44's gated question.
+      # Any richer non-Han design awaits an owner ruling.
       Reduced = Data.define(:glyph, :codepoint, :script)
 
       # The best-effort script probe for the reduced card, in order; a glyph
@@ -89,14 +89,14 @@ module Nabu
         { "glyph" => glyph, "card" => nil, "reduced" => serialize(reduced) }
       end
 
-      # The UNIVERSAL card (P85-B2, №R-44 = Shape C): the reduced card lifted
+      # The UNIVERSAL card (P85-B2, owner-ruled Shape C): the reduced card lifted
       # by the UCD identity layer — the character's NAME, general category,
       # numeric value and decomposition, for any writing system, not just Han.
       # Composed only when `nabu sync ucd` has landed the identity floor; when
       # absent the caller renders the reduced card, byte-identical (the
       # feature-module law). Corpus attestation and the curated overlay layer
       # onto this next; this is the canonical-reference layer alone.
-      # P86-1 (№R-49a) widens the identity layer with the member-context tier:
+      # P86-1 widens the identity layer with the member-context tier:
       # +block+ ("Runic (U+16A0–U+16FF)"), +script_code+ (ISO 15924 "Runr" —
       # +script+ upgrades from the probe list to the Scripts.txt name when the
       # member is held), +age+ ("3.0"), +aliases+ (formal NameAliases rows),

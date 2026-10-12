@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P76 U-4 (№R-6, the uncertainty doctrine's one place-index storage
+# P76 U-4 (the uncertainty doctrine's one place-index storage
 # change): the CIGS accuracy grade finally reaches disk. CONFIRMED
 # semantics (full-CSV census 2026-08-12, correcting the survey's
 # [claimed] guess): a 0–3 COORDINATE-accuracy scale, higher = more

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::LanguageNote — the language-note addressing (P85-A, №R-48-2): a bare
+# Nabu::LanguageNote — the language-note addressing (P85-A, owner-ruled 2026-08-28): a bare
 # language code maps to a canonical pseudo-URN so the ordinary note pipeline
 # carries private per-language notes; a colon-bearing target stays a URN note.
 class LanguageNoteTest < Minitest::Test

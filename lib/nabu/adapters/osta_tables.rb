@@ -4,7 +4,7 @@ require_relative "../xlsx"
 
 module Nabu
   module Adapters
-    # The OSTA works/codices tables (P77-r6, №R-30): tables/
+    # The OSTA works/codices tables (P77-r6): tables/
     # tabla-obras.xlsx (2,204 work rows — the per-work language split,
     # author/title/folio, OPDT dating, the BETA cnum crosswalk) and
     # tables/tabla-codices.xlsx (594 codex rows — holding library,

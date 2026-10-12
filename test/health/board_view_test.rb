@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Health
-  # Nabu::Health::BoardView (P98-1 — Q71): the board's signal/noise policy.
+  # Nabu::Health::BoardView (P98-1): the board's signal/noise policy.
   # Default view = findings only (ok rows + by-design notes fold into one
   # rollup line); `--all` restores every row; the verdict is one line with
   # elapsed. The suppression is a VIEW policy — the underlying report keeps

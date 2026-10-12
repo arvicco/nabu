@@ -81,7 +81,7 @@ module Nabu
         # The law oracles (P71-8) — asserted on EVERY drill since P77-r12.
         def law_ok? = lects_match && links_match && grants_quiet && creep_quiet
 
-        # The printable report (Q21/P74: rendering lives ON the report so
+        # The printable report (P74: rendering lives ON the report so
         # the forensic sections are testable; the Rakefile just prints).
         # +capped: false+ is the persisted report.txt form (P77-r10): the
         # terminal stays capped-and-announced, the evidence file names
@@ -120,7 +120,7 @@ module Nabu
 
         private
 
-        # The Q21 evidence sections: each failing document named with its
+        # The evidence sections: each failing document named with its
         # kind and detail; each differing source named with both counts.
         def verify_issue_lines(capped)
           return [] if verify_issues.empty?
@@ -254,7 +254,7 @@ module Nabu
                        store_count(restored.links_path, :links),
           grants_quiet: grants_quiet?(restored),
           creep_quiet: creep_quiet?(restored),
-          # Q21 (P74) — the evidence a failing drill hands over:
+          # P74 — the evidence a failing drill hands over:
           verify_issues: verify.issues,
           source_deltas: source_deltas(source_counts, restored_counts, restored)
         )
@@ -381,7 +381,7 @@ module Nabu
           end
       end
 
-      # Q21: when the counts oracle mismatches, name the differing
+      # When the counts oracle mismatches, name the differing
       # source(s) — [slug, live Counts, restored Counts] per divergence,
       # union of both catalogs' slugs (a source absent on one side counts
       # 0/0 there, so a wholly lost source is named too).

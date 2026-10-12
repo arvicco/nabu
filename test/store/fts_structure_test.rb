@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Store
-  # Nabu::Store::FtsStructure (P112-3, Q114): the fts5 structure-record
+  # Nabu::Store::FtsStructure (P112-3): the fts5 structure-record
   # parser behind the segment gauges. The 2026-10-01 wedge taught that
   # fts5 caps TOTAL segments at 2000 and that nothing surfaces the count
   # before the cap kills writes ("database or disk is full") — these

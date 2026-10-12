@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Wiktionary-Hittite (P99-7, the Q72-3 deferral): the kaikki.org
+# Wiktionary-Hittite (P99-7, a deferred lane): the kaikki.org
 # per-language JSONL on the wiktionary-sux mold — parser family
 # wiktionary-jsonl, dictionary shelf, FileFetch, deprecation caveat,
 # CC BY-SA dual — the second subclass of the shared WiktionaryKaikki

@@ -7,7 +7,7 @@ require_relative "shell"
 require_relative "lemma_shelf"
 
 module Nabu
-  # P84-1 — the silver-lemma enricher runner (Q38, №R-35): runs a local
+  # P84-1 — the silver-lemma enricher runner: runs a local
   # CPU lemmatizer (venv-managed Stanza, la:ittb for the Latin wave) over
   # the lemma-UNCOVERED slice of one language and lands the raw model
   # output on the local-lemmas shelf through Nabu::LemmaShelf — the model

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nabu
-  # Producer #9 for the links journal (P96-3 — Q9, text-mined places v0;
-  # №R-15 decoupled it from ML in 2026-08): match the derived place
+  # Producer #9 for the links journal (P96-3, text-mined places v0;
+  # an owner ruling decoupled it from ML in 2026-08): match the derived place
   # index's NAME KEYS against the PASSAGE TEXT of the metadata-less
   # corpora, emitting journaled CANDIDATE attestations — kind=
   # place-candidate edges from the passage urn to a stable place claim
@@ -33,7 +33,7 @@ module Nabu
   #    common word wearing a place's clothes (州, 東… would flood) —
   #    excluded from apply, reported with its count. A genuinely
   #    geographic name lost to the ceiling gets an `allow_names:`
-  #    ruling (№R-67, 2026-09-18 — the 吐蕃/Tibet case): allow exempts
+  #    ruling (owner-ruled 2026-09-18 — the 吐蕃/Tibet case): allow exempts
   #    the DERIVED stop only, is itself censused, and never overrides
   #    the floor, the cap, or the hand stop list.
   # 4. The hand stop list (config/place_stop_names.yml) always applies.
@@ -84,7 +84,7 @@ module Nabu
       Array(hand_rulings["stop_names"]).map(&:to_s)
     end
 
-    # The ceiling exemptions (№R-67): ruled genuinely-geographic names
+    # The ceiling exemptions (owner ruling 2026-09-18): ruled genuinely-geographic names
     # the derived stop must not swallow.
     def self.hand_allow_names
       Array(hand_rulings["allow_names"]).map(&:to_s)

@@ -3,7 +3,7 @@
 require "time"
 
 module Nabu
-  # P89-1 (№R-54 (b)): can git vouch that a set of code files carries the
+  # P89-1 (owner ruling option b): can git vouch that a set of code files carries the
   # same bytes it did at a given moment? The `--trust-derivations` bridge
   # asks this per source before re-stamping WITHOUT replay: a yes means the
   # source's parser closure provably predates its stamp, so the only thing

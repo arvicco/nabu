@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P93-2 (№R-16, half 1): record WHY a document left. The loader has
+# P93-2 (owner ruling, half 1): record WHY a document left. The loader has
 # withdrawn documents since P1 (never hard-deleted — architecture §3)
 # but the row never said why, so the attic answered "gone" without
 # "gone how". Two mints only, both loader-stamped at the withdrawal

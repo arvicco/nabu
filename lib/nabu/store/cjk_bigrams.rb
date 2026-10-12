@@ -2,7 +2,7 @@
 
 module Nabu
   module Store
-    # The CJK character-pair mint (P93-3, №R-39 option b).
+    # The CJK character-pair mint (P93-3, owner ruling option b).
     #
     # The problem, measured at the 2026-08-21 census (~18.5M CJK passages;
     # ~22M by 2026-09-02): unicode61 tokenizes an unbroken Han/kana run as
