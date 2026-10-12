@@ -48,9 +48,10 @@ class DharmaNusantaraTest < Minitest::Test
   N7 = "urn:nabu:dharma-nusantara:INSIDENK00007"
   N24 = "urn:nabu:dharma-nusantara:INSIDENK00024"
   N50 = "urn:nabu:dharma-nusantara:INSIDENK00050"
+  PASRUJAMBE28 = "urn:nabu:dharma-nusantara:INSIDENKPasrujambe28"
 
   # The languageb-Latn file quarantines by design, so the conformance
-  # sweep runs over the two clean fixtures; the bug file is asserted
+  # sweep runs over the three clean fixtures; the bug file is asserted
   # separately below.
   def conformance_adapter
     adapter = Nabu::Adapters::DharmaNusantara.new
@@ -86,6 +87,17 @@ class DharmaNusantaraTest < Minitest::Test
     assert_equal "omy-Latn", adapter.parse(ref).language
   end
 
+  def test_a_nested_translation_div_never_mints
+    adapter = Nabu::Adapters::DharmaNusantara.new
+    ref = adapter.discover(conformance_workdir).find { |r| r.id == PASRUJAMBE28 }
+    document = adapter.parse(ref)
+    assert_equal "kaw-Latn", document.language
+    assert_equal [["1", "baṭa"], ["2", "ra hi"], ["3", "n·dra"]],
+                 document.passages.map { |p| [p.urn.delete_prefix("#{PASRUJAMBE28}:"), p.text] },
+                 "the three Old Javanese lines exactly — the edition div's nested English " \
+                 "<div type=\"translation\"> (\"Lord Indra\") is editorial and never mints"
+  end
+
   def test_the_upstream_languageb_bug_quarantines
     adapter = Nabu::Adapters::DharmaNusantara.new
     ref = adapter.discover(conformance_workdir).find { |r| r.id == N50 }
@@ -97,9 +109,9 @@ class DharmaNusantaraTest < Minitest::Test
 
   private
 
-  # Scope discover to the two clean fixtures for the conformance sweep.
+  # Scope discover to the three clean fixtures for the conformance sweep.
   def conformance_scope(adapter)
-    clean = [N7, N24]
+    clean = [N7, N24, PASRUJAMBE28]
     original = adapter.method(:discover)
     adapter.define_singleton_method(:discover) do |workdir, &block|
       return enum_for(:discover, workdir) unless block
