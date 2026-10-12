@@ -5,6 +5,7 @@ require_relative "export/axes"
 require_relative "export/writer"
 require_relative "export/documents"
 require_relative "export/links"
+require_relative "export/lemmas"
 
 module Nabu
   # The research exporter (P121-1, architecture §18): `nabu export <table>`
@@ -46,7 +47,8 @@ module Nabu
     # under export/ plus one line here and one CLI command.
     TABLES = {
       Documents::NAME => Documents,
-      Links::NAME => Links
+      Links::NAME => Links,
+      Lemmas::NAME => Lemmas
     }.freeze
 
     module_function
