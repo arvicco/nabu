@@ -264,7 +264,11 @@ class PosturesTest < Minitest::Test
                  "P118-4 ADDS siddham (identity san, declared coarse) and dharma-mdt (PENDING " \
                  "on the tel/tam anchors of the aggregated Indic nabu-lects mint): 129→131; " \
                  "P118-3 ADDS kannada-texts + prakrit-texts as PENDING on the hub-side kan / " \
-                 "pka mints (no node exists in nabu-lects): 131→133"
+                 "pka mints (no node exists in nabu-lects): 131→133; " \
+                 "the Indic registry package landing (merged 2026-10-11, canonical-synced " \
+                 "2026-10-12) RETIRES all five P118 pendings to identity — te/kn/pka minted, " \
+                 "ta re-parented, the tam/tel/kan codemap rows live (the add-then-retire " \
+                 "shape, five at once)"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -355,7 +359,10 @@ class PosturesTest < Minitest::Test
     # on the same mint's tam node (the dharma-khmer shape): pending 0→2.
     # P118-4 ADDS siddham as identity (san-Latn throughout, bare san) and
     # dharma-mdt PENDING on the same Indic mint's tel/tam anchors (the
-    # add-then-retire shape): identity 100→101, pending 2→3.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 101, "pending" => 5 }, by_posture)
+    # add-then-retire shape): identity 100→101, pending 2→3; P118-3 made it
+    # 5. P119: the merged Indic registry package retires all five at once
+    # (te/kn/pka minted, ta re-parented, tam/tel/kan codemap rows) —
+    # identity 101→106, pending 5→0. Zero pendings again.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 106 }, by_posture)
   end
 end

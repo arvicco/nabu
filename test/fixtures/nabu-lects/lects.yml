@@ -812,7 +812,22 @@ anchors:
            unminted until a consumer distinguishes them. The descent
            edge reads the lineage — Middle Indo-Aryan continues from
            Old Indo-Aryan (san); the literary-register nuance stays
-           here as prose"
+           here as prose. 2026-10-11: pka minted below — the first
+           member a consumer distinguishes; pmh/psu/pgd stay unminted"
+
+  pka:
+    name: Ardhamāgadhī
+    parent: pra
+    note: "ISO 639-3 pka; the canonical Middle Indo-Aryan of the
+           Śvētāmbara Jain Āgamas — Pischel's 'half-Māgadhī' (Grammatik
+           §17), sharing features with Māgadhī and Māhārāṣṭrī. The
+           canon's language layer reaches back toward the late
+           centuries BCE; the received redaction was fixed at the
+           Valabhī council (traditionally 453 or 466 CE). Corpus:
+           prakrit-texts' Nandī and Anuogaddārāiṃ (pka-Latn, 764
+           passages; the Āgamas proper stay excluded upstream — no
+           grant on their files). Descent reads through pra (Middle ←
+           Old Indo-Aryan); the dialect-geography nuance stays prose"
 
   # ── Iranian and Armenian (the ISO-parentage wave) ──────────────────────────
 
@@ -1659,10 +1674,65 @@ anchors:
 
   ta:
     name: Tamil
-    parent: dra
-    note: "ISO 639-1; South Dravidian. The Sangam corpus (~1st c. BCE
-           onward) opens its literature; the consuming collections hold
-           classical and modern Tamil under the one code"
+    parent: dra-sou
+    glottocode: tami1289
+    note: "ISO 639-1; SD-I per Krishnamurti 2003. The Sangam corpus
+           (~1st c. BCE onward) opens its literature; the consuming
+           collections hold classical and modern Tamil under the one
+           code. RE-PARENTED dra → dra-sou 2026-10-11: the family node
+           arrived with the StarLing sdret mint, and the anchor now
+           reads the Tamil–Malayalam–Kannada axis it belongs to. Corpus:
+           the DHARMA Tamil-country estate (dharma-tamil, 1,267 editions
+           tam-Latn — Pallava to Pāṇḍya epigraphy and the SII
+           selections) joins GRETIL's single document; stages stay
+           unminted — the epigraphic consumer claims the bare anchor,
+           declared coarse (Old/Middle Tamil are named candidates for a
+           later wikisource wave)"
+
+  te:
+    name: Telugu
+    parent: dra-tel
+    glottocode: telu1262
+    note: "ISO 639-1 (639-3 tel aliases here, the №11 suite).
+           South-Central Dravidian: Krishnamurti 2003 groups Telugu with
+           Gondi-Kui; the dra-tel parent deliberately records only the
+           Teluguic side (its note keeps the subgrouping unsettled, the
+           StarLing-vs-Krishnamurti divergence). Attestation: Telugu
+           names ride the Prakrit epigraphy of the Amarāvatī region from
+           ~2nd c. CE; the first full Telugu inscription is the Renati
+           Chola grant of Erragudipadu/Kalamalla (~575 CE); continuous
+           epigraphy thereafter; literature opens with Nannaya's
+           Āndhramahābhāratamu (11th c.). Corpus: dharma-deccan
+           (tfb-telugu 101 editions tel-Latn; Vengī Cālukya bilinguals,
+           31 tel-Latn textparts), dharma-mdt (98 Telugu metadata rows
+           with the estate's richest dating), dharma-tamil (13 tel-Latn
+           passages). Stages unminted: the consumers are epigraphic and
+           date at the document grain"
+
+  kn:
+    name: Kannada
+    parent: dra-sou
+    glottocode: kann1255
+    note: "ISO 639-1 (639-3 kan aliases here). SD-I, Tamil–Kannada
+           branch (Krishnamurti 2003). Attestation: the Halmidi
+           inscription (conventionally ~450 CE) opens the record; Bādāmi
+           Cālukya and Rāṣṭrakūṭa epigraphy carry it on; literature
+           opens with the Kavirājamārga (~850, the Rāṣṭrakūṭa court) and
+           flowers in the campū classics. Corpus: kannada-texts (Ollett
+           TEI, 16 classics kan-Latn — Pampa 941 to Kanakadāsa) and
+           dharma-deccan (Kalyāṇa Cālukya, 62 editions kan-Latn)"
+    stages:
+      old: {name: Old Kannada, band: [450, 1200], ord: 10,
+            band_note: "Haḷegannaḍa — Halmidi (~450) through the
+                        inscriptional record and the campū poets (Pampa
+                        941, Ponna 953, Ranna 993, Nāgavarma II ~1042);
+                        the 12th–13th c. transition is gradual;
+                        approximate"}
+      mid: {name: Middle Kannada, band: [1200, 1800], ord: 20,
+            band_note: "Naḍugannaḍa — Harihara and Rāghavāṅka's ragaḷe
+                        (~1200) through Kumāravyāsa (~1430), the dāsa
+                        corpus (Purandara, Kanakadāsa, 16th c.) and the
+                        Keḷadi-era prose; approximate"}
 
   inc:
     name: Indo-Aryan

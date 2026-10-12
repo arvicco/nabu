@@ -673,11 +673,11 @@ sources:
     kind: {posture: unclassified, note: "no class field in the TEI (campū purāṇas, śatakas,
         a sāṅgatya, a nighaṇṭu, a poetics and a grammar) — a kind_map fold would be a ruled
         table"}
-    lect: {posture: pending, note: "candidate: a kan (Kannada) anchor with Old (Halegannaḍa:
-        Pampa–Janna) and Middle (Naḍugannaḍa: Harihara, Rāghavāṅka, Kanakadāsa,
-        Ratnākaravarṇi, Honnamma) stages — the hub-side nabu-lects mint; no kan node exists
-        in canonical/nabu-lects (checked 2026-10-11), so kan-Latn rides bare until it
-        merges; san-Latn (the Karṇāṭakabhāṣābhūṣaṇaṁ, Sanskrit stanzas) resolves"}
+    lect: {posture: identity, note: "kan IS Kannada — the P118-3 pending retired
+        2026-10-12: the Indic registry package (merged 2026-10-11) minted the kn anchor
+        with kn:old/kn:mid stages and the kan → kn codemap row, so kan-Latn resolves;
+        per-work staging onto the Old/Middle bands is a future facet-rule look (the
+        corpus spans Pampa 941 to Honnamma); san-Latn resolves as before"}
     dating: {posture: partial, note: "6 of 16 works dated by the repository README (941 ×2,
         953, ca. 1042 ×3) — attributed COMPOSITION class on the :structured lane; the TEI
         headers carry only edition years; the other ten works stay undated, declared"}
@@ -689,11 +689,11 @@ sources:
     kind: {posture: unclassified, note: "no class field in the TEI (kāvya, kathā, gāhā
         anthologies, lexica, grammars, a metrics, canonical Āgamas) — a kind_map fold would
         be a ruled table"}
-    lect: {posture: pending, note: "candidate: pka (Ardhamāgadhī — the Nandī and
-        Aṇuōgaddārāiṁ, 2 docs / 764 passages tag pka-Latn) has no registry node: a pka member
-        under pra (pra's own note keeps the member codes unminted until a consumer
-        distinguishes them — this one does) or a codemap pka-Latn → pra coarse, the
-        hub-side mint; pra-Latn and san-Latn resolve"}
+    lect: {posture: identity, note: "the P118-3 pending retired 2026-10-12: the Indic
+        registry package minted pka (Ardhamāgadhī) under pra — the first individual
+        Prakrit a consumer distinguishes — so pka-Latn resolves on its own node;
+        pra-Latn stays deliberately coarse on the collective anchor, san-Latn as
+        before"}
     dating: {posture: undatable, note: "the headers carry modern edition years only
         (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
         dates nothing — no composition date is minted, declared"}
@@ -1053,9 +1053,10 @@ sources:
         the artifact fact"}
   dharma-deccan:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: a nabu-lects mint of the tel + kan anchors
-        (Dravidian, under dra-sou) with tel-Latn/kan-Latn codemap rows; pra/san -Latn
-        already resolve on canonical rows"}
+    lect: {posture: identity, note: "the P118-2 pending retired 2026-10-12: the Indic
+        registry package minted te (under dra-tel) and kn (under dra-sou) with the
+        tel → te / kan → kn codemap rows, so tel-Latn and kan-Latn resolve; pra/san
+        -Latn as before — the estate's four codes all land on registry nodes"}
     dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
         Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
     places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
@@ -1084,8 +1085,11 @@ sources:
         artifact fact"}
   dharma-tamil:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: identity once nabu-lects carries tam-Latn and
-        tel-Latn (san/pra/pli/fra -Latn resolve today) — the lect mint rides hub-side"}
+    lect: {posture: identity, note: "the P118-1 pending retired 2026-10-12: the Indic
+        registry package added the tam → ta codemap row (ta re-parented onto dra-sou)
+        and minted te for the tel-Latn passages, so every claimed code resolves;
+        Tamil stages stay unminted — the epigraphic corpus claims the bare anchor,
+        declared coarse"}
     dating: {posture: pending, note: "no origDate in any header; candidate: the titles'
         attributed statements ride metadata title_dating verbatim on ~960 docs ('time of
         Rājakesarivarman, year 9', 'Śaka year 1589') — conversion needs a ruled South-Indian
@@ -1122,10 +1126,10 @@ sources:
         text_types verbatim (donative-religious_land_grant, commemorative-memorial-
         hero_memorial …); a kind_map fold over it is a recorded future look after the
         first live census"}
-    lect: {posture: pending, note: "candidate: the tel + tam anchors of the aggregated
-        Indic nabu-lects mint (P118-7) — Telugu 97 rows and Pallava's one Tamil row name
-        languages with no registry node yet; Sanskrit rows resolve on bare san, rows
-        naming no language carry und"}
+    lect: {posture: identity, note: "the P118-4 pending retired 2026-10-12: the Indic
+        registry package minted te and the tam → ta row, so the Telugu 97 and the one
+        Tamil row resolve; Sanskrit rows on bare san as before, no-language rows carry
+        und honestly"}
     dating: {posture: partial, note: "the rows' own CE dating: Date CE / Date range CE
         (61 of 734 documents — Telugu 60, Pallava 1; census 2026-10-11) with certainty and
         evidence (reign / palaeography / internal date) riding the envelope; all CE
