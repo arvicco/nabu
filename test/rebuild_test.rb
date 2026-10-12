@@ -418,12 +418,12 @@ class RebuildTest < Minitest::Test
     with_db { assert_equal %w[corpus], Nabu::Store::Source.select_order_map(:slug) }
   end
 
-  # -- stage timings persist to the ledger (P78-r1, Q34) ---------------------
+  # -- stage timings persist to the ledger (P78-r1) ---------------------
 
   # The P36-0 profiler measured and DISCARDED; now every rebuild appends its
   # per-source :load roll-ups and corpus stages to the ledger's stage_timings
   # so the NEXT run can render an ETA. Rebuild-surviving by construction
-  # (№R-21: the ledger is never touched by the db drop).
+  # (the ledger is never touched by the db drop).
   def test_rebuild_persists_stage_timings_to_the_ledger
     # Slug deliberately NOT "corpus": the (kind, scope, stage) key reserves
     # scope="corpus" for corpus-wide stages; per-source rows carry the slug
@@ -595,7 +595,7 @@ class RebuildTest < Minitest::Test
     with_db { assert(Nabu::Store::DictionaryEntry.all.all? { |row| row.revision == 1 }) }
   end
 
-  # -- the secondary dictionary lane replays too (P104-4, Q81) --------------
+  # -- the secondary dictionary lane replays too (P104-4) --------------
 
   # A passages source with a declared dictionary lane replays BOTH shapes
   # under the same rebuild run — db/ stays f(canonical) with the glossary

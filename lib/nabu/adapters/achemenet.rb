@@ -5,7 +5,7 @@ require_relative "../zip_fetch"
 
 module Nabu
   module Adapters
-    # Achemenet Babylonian (P77-r18, №R-33 PKG-1): the Helsinki
+    # Achemenet Babylonian (P77-r18, owner-ruled 2026-08-17, package 1): the Helsinki
     # "Linguistically Annotated Achemenet Babylonian Texts" — 2,830
     # Achaemenid-period (550–330 BCE) legal/administrative texts and
     # letters (the CT55, Bēl-rēmanni, Murašû, Strassmaier and YOS7

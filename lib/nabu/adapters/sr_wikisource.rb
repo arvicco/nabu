@@ -39,7 +39,7 @@ module Nabu
     # Hrvati u Mađarskoj): Cyrillic pages claim srp, Latin-script pages
     # hrv; metadata "script" names the basis. Verse is line grain (one
     # passage per verse line); the edition's verse numbering ({{стих|N}},
-    # the Erlangen "0001" prefixes) is apparatus. Base edition (№R-74):
+    # the Erlangen "0001" prefixes) is apparatus. Base edition (owner ruling):
     # the page's Извор/Избор source line verbatim (the Vuk Sabrana dela
     # volume), else the header's белешке (the Erlangen edition statement),
     # else "unstated". Undated at page grain (no date field exists);

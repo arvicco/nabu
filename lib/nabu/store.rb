@@ -110,7 +110,7 @@ module Nabu
     # Negative cache_size is KiB of page cache; -262_144 → 256 MiB.
     REBUILD_CACHE_KIB = -262_144
 
-    # == Live-connection profile (P112-3, Q114 — the storage review R6)
+    # == Live-connection profile (P112-3 — the storage review R6)
     #
     # Measured 2026-10-01: live connections ran SQLite's defaults — a 2 MB
     # page cache and no mmap — against a 124 GB catalog and a ~40 GB

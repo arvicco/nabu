@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::E84000DergeTitles (P106-5 — the Q78 e84000 lode 2): every 84000
+# Nabu::E84000DergeTitles (P106-5 — the e84000 sidecar lode 2): every 84000
 # header — the 3,926 placeholder stubs AND the published translations —
 # carries the Tibetan (Wylie) and English titles of its Toh text, and the
 # derge shelves mint those texts title-less. The pass reads the headers

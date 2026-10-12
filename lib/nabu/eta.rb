@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nabu
-  # The estimate a stage announcement carries (P78-r2, Q34: every long pass
+  # The estimate a stage announcement carries (P78-r2: every long pass
   # should say how long it expects to run). Reads the P78-r1 stage_timings
   # history (Store::StageTimings — latest row governs), scales by row-count
   # drift when the caller has a cheap current denominator (the era-bound-

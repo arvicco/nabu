@@ -4,7 +4,7 @@ require_relative "slavic_wikisource_html"
 
 module Nabu
   module Adapters
-    # ru-wikisource (P116-3, Q103 under №R-74): the Old East Slavic shelf
+    # ru-wikisource (P116-3, under the owner-ruled Wikisource posture): the Old East Slavic shelf
     # of the Russian Wikisource — the DIRECT ns-0 members of the eight
     # censused categories (census 2026-10-10: 72 cone pages). The wiki's
     # premodern strength is thin and EDITION-TAINTED inside the wiki: the

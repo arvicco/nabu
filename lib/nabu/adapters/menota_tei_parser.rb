@@ -30,7 +30,7 @@ module Nabu
     # NORMALIZED — so dipl-bearing documents read diplomatically and the
     # facs-only five read at their only attested level. A token with NO
     # level children (bare <pc> punctuation, fully <supplied> words —
-    # level-invariant text the encoders write once, unwrapped; Q45) reads
+    # level-invariant text the encoders write once, unwrapped) reads
     # at the level the document's stored text reads at, or at the
     # header's declared me:level when the document carries no level
     # markup at all. Every attested level rides annotations["tokens"]
@@ -43,7 +43,7 @@ module Nabu
     # Passage = one manuscript LINE (the corpus's own layout grain, the
     # ReF rule): <page><column>.<line> — 1rB.1, 2v.24. Only the
     # manuscript's OWN layout mints refs: pb/cb/lb with ed="ms" or no ed
-    # (Q45) — milestones carrying any other ed replay a printed edition,
+    # — milestones carrying any other ed replay a printed edition,
     # another hand, or a parallel manuscript and never advance the
     # position. Duplicate refs take the house :b<n> positional
     # disambiguator; a token stream with no milestones at all falls back
@@ -257,7 +257,7 @@ module Nabu
         Result = Data.define(:lines, :title, :main_lang, :lang_usage, :metadata)
 
         # An n-less ms <lb/>'s placeholder position until assembly decides
-        # its fate (№R-45 A): ordinals in a page-cited manuscript, nil in
+        # its fate (owner-ruled 2026-08-30, option A): ordinals in a page-cited manuscript, nil in
         # a line-cited one. Value-compared, one per break.
         AutoLine = Data.define(:seq)
 
@@ -313,7 +313,7 @@ module Nabu
           return header_start(node, name) unless @seen_body
           return unless @in_body
 
-          # P88-B1 (№R-45 flaw 1): a critical apparatus interleaves OTHER
+          # P88-B1 (flaw 1 of the 2026-08-30 owner ruling): a critical apparatus interleaves OTHER
           # manuscripts' readings — <app><lem>own text</lem><rdg wit="…">
           # witness text</rdg></app> (AM 36 fol: 4,241 apps). <app>/<lem>
           # are transparent (the lem IS the manuscript's reading); a <rdg>
@@ -490,7 +490,7 @@ module Nabu
         # Milestones advance position wherever they occur — INCLUDING
         # inside an open token's levels (þur<lb/>fu): the token keeps the
         # position it OPENED at, the next token starts on the new line.
-        # But ONLY the manuscript's own layout counts (Q45): ed="ms" or
+        # But ONLY the manuscript's own layout counts: ed="ms" or
         # no ed at all (AM 36's main text numbers its lines with ed-less
         # <lb n="06"/>). Any other ed names ANOTHER source's layout —
         # a printed edition (<pb ed="Unger" n="0001"/> interleaves with
@@ -507,7 +507,7 @@ module Nabu
             when "pb" then @page = value
             when "cb" then @column = value
             when "lb"
-              # №R-45 A (Q58): an n-less ms line break plants an AUTO
+              # Owner ruling 2026-08-30 (option A): an n-less ms line break plants an AUTO
               # marker instead of erasing the line. Whether markers render
               # as running ordinals (a PAGE-CITED manuscript) or normalize
               # back to nil (any manuscript with a real numbered line —
@@ -624,7 +624,7 @@ module Nabu
         # level-bearing document it stays dropped (the status quo for the
         # loaded corpus). The verdict falls at line-assembly time.
         # Whitespace-only stays dropped via flatten; marks-only likewise
-        # (the P83/Q47 A15970 lesson): a token of bare combining marks
+        # (the P83 A15970 lesson): a token of bare combining marks
         # has no base characters — blank, never reading text.
         def queue_bare_token(token)
           text = flatten(token[:bare])
@@ -663,7 +663,7 @@ module Nabu
         end
 
         # Bare tokens are reading text at the level the encoder left
-        # implicit (Q45 census 2026-08-27: 30 of 91 documents leave
+        # implicit (census 2026-08-27: 30 of 91 documents leave
         # 98,575 tokens bare — 99.9% punctuation, plus fully <supplied>
         # words; level-invariant text is written ONCE, unwrapped). In a
         # document with me: levels they read at the level the document's
@@ -703,7 +703,7 @@ module Nabu
                             "level honestly"
         end
 
-        # №R-45 A (Q58): decide every AutoLine marker's fate in one pass.
+        # Owner ruling 2026-08-30 (option A): decide every AutoLine marker's fate in one pass.
         # A manuscript with ANY real numbered ms line keeps today's refs
         # byte-identical — markers normalize back to nil. A PAGE-CITED
         # manuscript (n-less ms lbs, zero numbered ones) numbers its own

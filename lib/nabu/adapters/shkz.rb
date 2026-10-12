@@ -8,7 +8,7 @@ require_relative "../url_download"
 module Nabu
   module Adapters
     # ŠKZ — the trilingual inscription of Šābuhr I at the Kaʿba-ye
-    # Zartošt (P107-3b, Q96.3): Shamsian & Berti's sentence- and
+    # Zartošt (P107-3b): Shamsian & Berti's sentence- and
     # word-aligned dataset (Zenodo doi 10.5281/zenodo.15050878, CC BY
     # 4.0). THE first real Parthian document in the library, aligned
     # word-for-word with its Middle Persian and Greek versions.

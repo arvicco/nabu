@@ -92,7 +92,7 @@ module Store
                  "a REGISTER label misfiled as a period mints no date claim"
     end
 
-    # P104-1 (Q77 under №R-70): the seal shape — the Texts Hierarchy
+    # P104-1 (the aggressive-mining law, owner-ruled 2026-09-26): the seal shape — the Texts Hierarchy
     # period strings banded through the ruled table (the posture's own
     # named candidate, served), with the Provenance field riding as the
     # place name (the HGV place-only precedent; upstream's explicit
@@ -124,7 +124,7 @@ module Store
       assert_equal 75, later[:not_after], "first millennium through the last dated cuneiform text"
     end
 
-    # P104-1 (№R-70 grade 2): the cbeta shape — the header byline's
+    # P104-1 (attributed-era dating, its own labeled class): the cbeta shape — the header byline's
     # dynasty seat banded through the ruled table as an ERA claim
     # (precision "era", the distinct honestly-labeled date class; the
     # verbatim byline rides date_raw). No dynasty in the ruled table
@@ -142,7 +142,7 @@ module Store
       row = timeline_for("urn:nabu:cbeta:T01n0001")
       assert_equal 384, row[:not_before]
       assert_equal 417, row[:not_after]
-      assert_equal "era", row[:precision], "№R-70 grade 2: attributed-era dating wears its own label"
+      assert_equal "era", row[:precision], "attributed-era dating wears its own label"
       assert_equal "後秦 佛陀耶舍共竺佛念譯", row[:date_raw]
 
       tang = timeline_for("urn:nabu:cbeta:T30n1579")
@@ -281,7 +281,7 @@ module Store
                         { "date" => "saec. XVI" })
       seed_metadata_doc("croala", "urn:nabu:croala:split-doc",
                         { "date" => "1490", "place" => "Split" })
-      # P94 (№R-59): dta rides the same :year_range shape — the sourceDesc
+      # P94: dta rides the same :year_range shape — the sourceDesc
       # print year is a clean "1784" string on every document, and the
       # de:early staging depends on these envelopes existing.
       seed_metadata_doc("dta", "urn:nabu:dta:kant_aufklaerung_1784",
@@ -318,7 +318,7 @@ module Store
       assert_equal 2, summary.metadata_dates.fetch("croala")
       kant = timeline_for("urn:nabu:dta:kant_aufklaerung_1784")
       assert_equal([1784, 1784], [kant[:not_before], kant[:not_after]],
-                   "dta's print year mints a one-year envelope (№R-59's inference substrate)")
+                   "dta's print year mints a one-year envelope (the date-band inference substrate)")
       gys = timeline_for("urn:nabu:corpus-gysseling:0001")
       assert_equal([1210, 1240, "Gent"], [gys[:not_before], gys[:not_after], gys[:place_name]],
                    "the top-level-bounds shape lights the dark Dutch lane, place riding like croala")
@@ -327,7 +327,7 @@ module Store
                    "corpus-corporum's reversed composition envelopes normalize (the health anomaly)")
     end
 
-    # P73-2 (the itant TM lift, ex-Q20): the geonames-labeled findspot lane
+    # P73-2 (the itant TM lift): the geonames-labeled findspot lane
     # measured 2026-08-10 — 508 real GeoNames URLs, 1 mislabeled
     # Trismegistos URL, 13 doubled-URL strays. Everything the ONE ref
     # reader honestly parses mints namespaced; malformed remainders mint
@@ -384,7 +384,7 @@ module Store
                  "prose-only dates mint nothing — declared, never guessed"
     end
 
-    # P108-8 (the Q83 dates/places slice) — four new shapes + the rsti
+    # P108-8 (the unmined-metadata dates/places slice) — four new shapes + the rsti
     # place lane, each against its live-censused metadata verbatim.
 
     def test_metadata_dates_syriac_when_key_with_per_doc_class
@@ -494,7 +494,7 @@ module Store
       assert_nil timeline_for("urn:nabu:titus-manichaica:manreadc.manre090")
     end
 
-    # P109-4 (the Q83 drain): edition print years project with the
+    # P109-4 (the unmined-metadata drain): edition print years project with the
     # honestly-labeled "edition" date class — never composition, never
     # a bare typed date.
     def test_metadata_dates_edition_year_class
@@ -678,8 +678,8 @@ module Store
                    "an unregistered slug is a no-op"
     end
 
-    # -- P104-1 (Q77, №R-70): the metadata-drain shapes -----------------------
-    # Values verbatim from the 2026-09-26 live-catalog census. №R-70 rules
+    # -- P104-1 (the aggressive-mining law): the metadata-drain shapes --------
+    # Values verbatim from the 2026-09-26 live-catalog census. The aggressive-mining law (owner-ruled 2026-09-26) rules
     # ALL metadata mined for the axes, and grades composition-era
     # (author-era) dating as its OWN honestly-labeled class: those rows
     # carry date_class "composition"; artifact/typed dates keep NULL.
@@ -710,7 +710,7 @@ module Store
       assert_equal [1601, 1700], [row[:not_before], row[:not_after]],
                    "the author's own century pair bounds the band — never a midpoint"
       assert_equal "composition", row[:date_class],
-                   "author-era dating is №R-70 grade 2 — labeled, never passed off as an artifact date"
+                   "author-era dating is attributed-era dating — labeled, never passed off as an artifact date"
       span = timeline_for("urn:nabu:disco:disco0002")
       assert_equal [1801, 2000], [span[:not_before], span[:not_after]]
     end

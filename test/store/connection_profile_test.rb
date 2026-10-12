@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 
 module Store
-  # The live-connection profile + page-size generation door (P112-3, Q114).
+  # The live-connection profile + page-size generation door (P112-3).
   # Measured problem: live connections ran SQLite's defaults — 2 MB page
   # cache, no mmap — against a 124 GB catalog; and both files were created
   # at page_size 4096. The profile applies on every connect; 8192 takes

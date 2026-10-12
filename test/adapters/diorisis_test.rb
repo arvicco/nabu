@@ -156,7 +156,7 @@ class DiorisisTest < Minitest::Test
     assert_match(%r{github\.com/PerseusDL}, metadata.fetch("provenance_url"))
   end
 
-  # P104-1 (Q77): the xenoData genre/subgenre project as facets (all 767
+  # P104-1: the xenoData genre/subgenre project as facets (all 767
   # docs carry both at the 2026-09-26 census).
   def test_genre_and_subgenre_ride_as_facets
     facets = adapter.parse(ref_for(HYMN_URN)).metadata["facets"]
@@ -167,7 +167,7 @@ class DiorisisTest < Minitest::Test
   def test_diorisis_is_registered_for_the_composition_class_signed_year_shape
     assert_equal :signed_year_key,
                  Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["diorisis"],
-                 "P104-1 (№R-70 grade 2): creation_date projects as composition-class rows"
+                 "P104-1 (the attributed-era class): creation_date projects as composition-class rows"
     assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "diorisis"
   end
 

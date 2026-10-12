@@ -93,7 +93,7 @@ module Nabu
         @creep_acceptances_path = creep_acceptances_path
         # P98-2: config/place_ref_errata.yml — reviewed dangling refs.
         @place_ref_errata_path = place_ref_errata_path
-        # P106-7 (Q88.3): the nabu-lects registry for the override-staging
+        # P106-7: the nabu-lects registry for the override-staging
         # check; nil (module absent, bare callers) skips it honestly.
         @lects = lects
         # P107 (the R-health rider): the links journal path for the
@@ -159,7 +159,7 @@ module Nabu
       # check subsecond).
       SCRIPT_CHECK_SAMPLE = 12
 
-      # P107 (Q83.3): the unmined-ore census's lane vocabularies —
+      # P107: the unmined-ore census's lane vocabularies —
       # axis-shaped key tokens per lane (keys token-split on
       # non-alphanumerics; one shared token flags the key).
       # P118-R4 S4 (the held-but-dark audit) widened the vocabulary
@@ -187,7 +187,7 @@ module Nabu
       # 2026-09-28 live census (values sampled per source): these
       # "provenance" keys carry DATA LINEAGE — where the file came from
       # — never a findspot; the remaining flagged sources are the real
-      # Q83 alignment-sweep worklist and stay loud on purpose.
+      # alignment-sweep worklist and stay loud on purpose.
       MINING_EXEMPT = {
         "aclt" => { "region" => "find-region LABEL (Karkamiš, Tabal …) mined as the region " \
                                 "facet; gazetteer resolution via nabu-places is a recorded " \
@@ -199,7 +199,7 @@ module Nabu
         "local-library" => { "provenance" => "ingest lineage (retrieval date + URL), not a findspot" },
         "e84000" => { "publication_date" => "the MODERN translation's release date (84000.co); " \
                                             "composition dating rides the Kangyur lanes" },
-        # P109-4, the Q83 drain: edition/publisher PLACES are lineage —
+        # P109-4, the unmined-metadata drain: edition/publisher PLACES are lineage —
         # the place lane carries a text's own origin or findspot, and an
         # imprint place only qualifies where the document IS the printed
         # artifact (eebo-tcp's source_pub_place, projected). Edition
@@ -347,7 +347,7 @@ module Nabu
         )
       end
 
-      # The empty-shelf note (P98-1 — Q71 item 4, owner-directed): an owner
+      # The empty-shelf note (P98-1, owner-directed): an owner
       # shelf may be legitimately empty — zero rows after a succeeded local
       # fetch is a state, not the half-loaded signature. Informational,
       # never affects exit; rows arriving retire it via populated?.
@@ -383,7 +383,7 @@ module Nabu
         )
       end
 
-      # P112-3 (Q114): the index freshness cross-check. A finished slice
+      # P112-3: the index freshness cross-check. A finished slice
       # stamps the catalog state it serves (live rows + max passage id);
       # drift between stamp and live catalog is a skip-gate hole made
       # VISIBLE (the P111 lesson, generalized). An unfinished stamp is a
@@ -415,7 +415,7 @@ module Nabu
         )
       end
 
-      # P112-3 (Q114): segment-pressure gauges against the fts5 hard cap of
+      # P112-3: segment-pressure gauges against the fts5 hard cap of
       # 2000 total segments (the 2026-10-01 wedge: the failure renders as
       # "database or disk is full" with no public gauge). Warn with ample
       # runway; anomaly while an ordinary sync's merge loop can still
@@ -632,7 +632,7 @@ module Nabu
         )
       end
 
-      # P107 (Q83.3): the №R-70 aggressive-mining law made
+      # P107: the aggressive-mining law (owner-ruled 2026-09-26) made
       # self-enforcing. The drift twins above watch the STRUCTURED
       # shapes ("facets", "not_before"); this census watches the RAW
       # ore — a source whose sampled document metadata carries
@@ -823,7 +823,7 @@ module Nabu
       # place, or the ref was minted defective). Non-pleiades refs
       # (trismegistos, geonames) are outside the local index's scope by
       # design; an EMPTY index is the feature-off posture, never a flood.
-      # P98-2 (Q71 triage): dangling refs partition into REVIEWED — recorded
+      # P98-2 (the health triage): dangling refs partition into REVIEWED — recorded
       # in config/place_ref_errata.yml after verification against live
       # Pleiades (nonexistent ids, superseded/erratum tombstones) — and NEW.
       # New ones keep the loud alarm; reviewed ones fold into one info
@@ -965,7 +965,7 @@ module Nabu
         drift
       end
 
-      # -- the lect stats↔facet invariant (P106-7, Q88.3) ----------------------
+      # -- the lect stats↔facet invariant (P106-7) ----------------------
       #
       # The 2026-09-26 incident: a killed rebuild committed LectFacets'
       # wholesale DELETE but died before the rewrite — the materialized

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::Certainty (P76 U-1, the №R-6 doctrine core): the three house tiers
+# Nabu::Certainty (P76 U-1, the certainty doctrine core): the three house tiers
 # and the survey §4.2 carrier mapping, applied at RENDER TIME only.
 # Axioms pinned here: certain is SILENT (nil gloss); precision is width,
 # not doubt (no tier); absence stays absence (unknown upstream words map

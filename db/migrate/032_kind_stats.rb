@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P99-3 (№R-63): the kind axis' precompiled census — per (source, head)
+# P99-3: the kind axis' precompiled census — per (source, head)
 # distinct-document counts written by Store::KindBuilder in the same
 # pass that mints the kind facet rows, so `nabu kind census` reads a
 # few hundred rows instead of grouping millions (the desk-commands

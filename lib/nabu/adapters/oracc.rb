@@ -270,7 +270,7 @@ module Nabu
         @crawl_delay = crawl_delay
       end
 
-      # P104-4 (Q81, the №R-69a pilot): the per-project glossaries
+      # P104-4 (the secondary-dictionary-lane pilot): the per-project glossaries
       # (<project>/gloss-<lang>.json — one per project×language, already
       # inside the fetched zips) are dictionary-shaped content on the
       # SAME canonical tree, loaded through the secondary dictionary

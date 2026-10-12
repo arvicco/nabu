@@ -50,7 +50,7 @@ module Nabu
     #               read expanded ("plur(imam)" reads "plurimam")
     #   <num>       the numeral's text content (@value is metadata)
     #
-    # KEEP, RENDERED IN LEIDEN DOUBLE BRACKETS ⟦…⟧ (№R-17; see below):
+    # KEEP, RENDERED IN LEIDEN DOUBLE BRACKETS ⟦…⟧ (owner-ruled 2026-08-10; see below):
     #   <del>       text deleted in antiquity but legible — reading text in
     #               Leiden, printed inside ⟦…⟧; nesting nests the brackets
     #
@@ -148,7 +148,7 @@ module Nabu
     # inside <ab> before the first <lb> is not citable (upstream puts only
     # whitespace there) and is discarded.
     #
-    # == <del> renders ALWAYS in ⟦…⟧ (P6-2 → №R-17; conventions.md §5)
+    # == <del> renders ALWAYS in ⟦…⟧ (P6-2 → owner ruling 2026-08-10; conventions.md §5)
     #
     # In Leiden double brackets ⟦…⟧ mean *deleted in antiquity but legible*:
     # the scribe crossed the text out (cross-strokes, slashes, wash-out), yet
@@ -158,7 +158,7 @@ module Nabu
     # erased the ~40 documents that are cancellations end to end
     # (o.claud.3.457, cpr.6.3, bgu.1.179, apf.59.139 — zero citable lines,
     # quarantined); P6-2 recovered exactly that class via a document-scoped
-    # fallback pass; №R-17 (owner-delegated ruling, 2026-08-10) adopted the
+    # fallback pass; an owner-delegated ruling (2026-08-10) adopted the
     # faithful general rule — <del> ALWAYS renders in ⟦…⟧, partial
     # cancellations included — retiring both the blanket drop and the
     # fallback machinery (single standard pass again). The corpus-wide
@@ -224,7 +224,7 @@ module Nabu
       GAP_MARKER = "[…]"
 
       # Leiden double brackets — ancient cancellation, legible text. Emitted
-      # around every <del>'s kept content (№R-17; see file header).
+      # around every <del>'s kept content (owner-ruled 2026-08-10; see file header).
       CANCELLATION_OPEN = "⟦"
       CANCELLATION_CLOSE = "⟧"
 
@@ -329,7 +329,7 @@ module Nabu
         ].freeze
         # Subtrees that are never reading text (see file header). <gap> is
         # handled separately: marker first, then its children drop too;
-        # <del> is handled separately too — kept, rendered in ⟦…⟧ (№R-17).
+        # <del> is handled separately too — kept, rendered in ⟦…⟧ (owner ruling 2026-08-10).
         DROPPED_ELEMENTS = %w[rdg orig note figure].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
@@ -341,7 +341,7 @@ module Nabu
           @language = language
           @idno_type = idno_type
           @urn_namespace = urn_namespace
-          @del_depths = [] # open <del> depths (rendered in ⟦…⟧, №R-17)
+          @del_depths = [] # open <del> depths (rendered in ⟦…⟧, ruled 2026-08-10)
           @subst_depths = [] # open <subst> depths (duplicate-lb suppression)
           @hybrid = nil
           @capture_idno = false
@@ -548,7 +548,7 @@ module Nabu
           result
         end
 
-        # -- <del> rendering (P6-2 → №R-17; see file header) ---------------------
+        # -- <del> rendering (P6-2 → the 2026-08-10 ruling; see file header) ---------
 
         # An <lb> inside a subst's <del> branch is upstream's DUPLICATE copy
         # of the line break (when a correction spans a line break, both

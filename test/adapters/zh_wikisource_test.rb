@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # zh-wikisource (P109-1, Q90 under №R-74): the censused-works shelf.
+  # zh-wikisource (P109-1, under the base-edition rule): the censused-works shelf.
   # Fixture envelopes are real api.php captures (2026-09-29): 元朝秘史/
   # 卷15 (direct, whole — the Ming 總譯 layer, language zho), 續資治通鑑/
   # 卷001 (direct, trimmed), 全唐文/卷0001 (the transclusion-shell
@@ -111,7 +111,7 @@ module Adapters
 
     def test_edition_unstated_recorded_honestly
       assert(documents.all? { |d| d.metadata["base_edition"] == "unstated" },
-             "№R-74: no censused zh page states a 底本")
+             "the base-edition rule: no censused zh page states a 底本")
     end
   end
 end

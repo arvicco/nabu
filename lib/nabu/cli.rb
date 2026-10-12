@@ -479,7 +479,7 @@ module Nabu
       journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
       raise Thor::Error, "lect withdraw: no journal at #{config.lects_journal_path}" unless journal
 
-      # P90-3 (Q57 lane 3): the one destructive lect command gains a
+      # P90-3 (lane 3): the one destructive lect command gains a
       # preview — the victim rows in the `lect list` shape, nothing touched
       # (neither the journal nor the rulings config).
       if options[:dry_run]
@@ -603,7 +603,7 @@ module Nabu
       # LectSuggest::TOP_VALUES with the cap announced.
       def render_suggest_report(report)
         say "lect suggest #{report.slug} — report only; apply via rules/overrides/posture"
-        # P90-3 (Q57 lane 4b): the generalized front door covers all four
+        # P90-3 (lane 4b): the generalized front door covers all four
         # core layers; this lect-only view stays for depth.
         say "  (the all-layers census is `nabu layer suggest #{report.slug}` — lect, dating, places, script)"
         say "  codes:"
@@ -858,7 +858,7 @@ module Nabu
     end
   end
 
-  # `nabu index` (P112-3, Q114): the fulltext-index operations surface.
+  # `nabu index` (P112-3): the fulltext-index operations surface.
   class IndexCLI < Thor
     include DurationFormat
 
@@ -1041,7 +1041,7 @@ module Nabu
     desc "layer SUBCOMMAND ...ARGS", "Core-layer postures: the generalized suggest front door"
     subcommand "layer", LayerCLI
 
-    # P112-3 (Q114): the fulltext-index operations surface — gauges,
+    # P112-3: the fulltext-index operations surface — gauges,
     # freshness stamps, and the standalone merge consolidation.
     desc "index SUBCOMMAND ...ARGS", "Fulltext-index operations: doctor (gauges + freshness)"
     subcommand "index", IndexCLI
@@ -1121,7 +1121,7 @@ module Nabu
         raise Thor::Error, "sync: --redownload contradicts --parse-only" if options[:parse_only]
         raise Thor::Error, "sync: --redownload is per-source — name one slug" if options[:all] || options[:axis]
       end
-      # P90-3 (Q57 lane 1): an explicit multi-slug list is its own batch
+      # P90-3 (lane 1): an explicit multi-slug list is its own batch
       # shape — the selector flags name a DIFFERENT batch, so combining is
       # ambiguous intent and refuses loudly. The per-source flags
       # (--parse-only/--force/--redownload) apply to every member; the
@@ -1470,7 +1470,7 @@ module Nabu
       # explicit intent; any source, focused or not). The bare/--long/--axis
       # tables scope to the focus profile (P40-f).
       view = focus_view(config, registry, catalog: db)
-      # P90-3 (Q57 lane 2): several names render their detail blocks in
+      # P90-3 (lane 2): several names render their detail blocks in
       # ARGUMENT order; an unknown member is reported after the known ones
       # print, and the batch exits non-zero naming the unknowns.
       unless slugs.size <= 1
@@ -1716,7 +1716,7 @@ module Nabu
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
         if options[:"by-adopted"]
-          # Q93: adoption recency (the field the alphabetic reorder made
+          # Adoption recency (the field the alphabetic reorder made
           # explicit) — newest first, the date leading each row.
           print_adopted_census(rows, registry)
         elsif view.disabled
@@ -3872,8 +3872,8 @@ module Nabu
         say "  #{details.join(' · ')}" unless details.empty?
       end
 
-      # `nabu person mine SOURCE` (P97-2): the census-only scan; №R-62
-      # keeps the apply gate closed, so there is no --dry-run — dry is
+      # `nabu person mine SOURCE` (P97-2): the census-only scan; the
+      # apply gate stays closed until an owner ruling, so there is no --dry-run — dry is
       # the only mode.
       def run_person_mine(args)
         source = Array(args).first
@@ -3942,7 +3942,7 @@ module Nabu
           print_mine_census(miner.census(source: source), applied: false)
         else
           result = miner.apply!(source: source)
-          # Q94 (the 2026-09-27 rebuild dropped the mine run): the scope
+          # Since the 2026-09-27 rebuild dropped the mine run, the scope
           # joins the P70 derivability record so the rebuild links stage
           # re-mints it — the batch-CLI contract, closed for this producer.
           Nabu::LinkScopes.record!(config.link_scopes_path, producer: "place-mine",
@@ -3959,8 +3959,8 @@ module Nabu
         catalog&.disconnect
       end
 
-      # `nabu place mine report [SOURCE] [GAZETTEER] [--limit N]` (P97-1 —
-      # Q70): the aggregate review surface — mined candidates grouped by
+      # `nabu place mine report [SOURCE] [GAZETTEER] [--limit N]` (P97-1):
+      # the aggregate review surface — mined candidates grouped by
       # place, ranked by document spread, each row carrying its evidence
       # and the two exits (stop-list line, place card).
       def run_place_mine_report(args)
@@ -4077,7 +4077,7 @@ module Nabu
             "(census pass: #{format_duration(census.seconds)})"
       end
 
-      # `nabu place link SOURCE [GAZETTEER]` (P105-4 — Q86's apply lane):
+      # `nabu place link SOURCE [GAZETTEER]` (P105-4 — the place-mine apply lane):
       # promote the registry's MATCHED mined names to ruled attestation
       # edges (kind "place") in the links journal. Passage-grain by
       # design — never document_axes.place_ref.
@@ -4100,7 +4100,7 @@ module Nabu
         result = Nabu::PlaceLink.new(catalog: catalog, journal: journal, registry: registry,
                                      gazetteer: gazetteer, progress: progress_reporter)
                                 .apply!(source: source)
-        # Q94: recorded like every batch scope — the replay runs it AFTER
+        # Recorded like every batch scope — the replay runs it AFTER
         # place-mine (LinkScopeReplay.order), promotion needs candidates.
         Nabu::LinkScopes.record!(config.link_scopes_path, producer: "place-link",
                                                           scope: source, params: { "gazetteer" => gazetteer })
@@ -4572,8 +4572,8 @@ module Nabu
       config = Nabu::Config.load
       log = mcp_log(options[:log])
       registry = Nabu::SourceRegistry.load(config.sources_path)
-      # Lazy, memoizing, read-only openers (Nabu::ReadonlyOpener — Q65
-      # extracted the P8-2 plumbing): resolved on every tool call, so a
+      # Lazy, memoizing, read-only openers (Nabu::ReadonlyOpener — a
+      # later sweep extracted the P8-2 plumbing): resolved on every tool call, so a
       # corpus that appears or is rebuilt mid-session is picked up without
       # a restart; nil when the file is absent (Tools renders the graceful
       # "no corpus" / "rebuilding" states). The watchdog below vacates
@@ -5521,7 +5521,7 @@ module Nabu
       # Census fragments where the catalog holds the slug; an honest
       # per-row "nothing held yet" where it does not. An empty complement
       # prints no table (the stderr footer carries the all-enabled state).
-      # Q93: the by-adopted census — newest adoptions first, dated rows.
+      # The by-adopted census — newest adoptions first, dated rows.
       def print_adopted_census(rows, registry)
         dated = rows.map { |row| [registry[row.slug]&.adopted || "0000-00-00", row] }
                     .sort_by { |date, row| [date, row.slug] }.reverse
@@ -6935,7 +6935,7 @@ module Nabu
             "(#{format_duration(report.seconds)})"
       end
 
-      # The curation worklist (reworked P101/Q75 after the owner read the
+      # The curation worklist (reworked P101 after the owner read the
       # bare dump and could not tell what it was saying): LEAD with what
       # the list is and what to do with a line, list the TODO tail, then
       # the reviewed not-genre declarations as their own section.
@@ -6974,7 +6974,7 @@ module Nabu
         end
       end
 
-      # The kind axis' card line (P99-3 — №R-63): every class the
+      # The kind axis' card line (P99-3, owner-ruled 2026-09-13): every class the
       # document carries on ONE line, multi-label joined with " + ",
       # the upstream claim(s) visible verbatim. A declaration-born row
       # (raw nil — okhc's source_kind) shows no upstream tail.
@@ -7957,7 +7957,7 @@ module Nabu
         catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
         fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
         begin
-          # P87-2 (№R-51-B): the apply rides the projection cache — the
+          # P87-2: the apply rides the projection cache — the
           # fold/group work runs once per shelf state; a valid cache makes
           # this pass resolution+insert only. An UNARMED index (no silver
           # anywhere — the post-rebuild case) gets the bare-table window:
@@ -8346,7 +8346,7 @@ module Nabu
         say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
       end
 
-      # The semantic-neighbors page (P93-5, №R-36): URN-anchored, no model
+      # The semantic-neighbors page (P93-5): URN-anchored, no model
       # at query time — one sqlite-vec scan of the same-language subpool.
       # Every absent-machinery case surfaces as the query layer's honest
       # hint (store not built / anchor unembedded / extension missing).
@@ -8376,7 +8376,7 @@ module Nabu
         vectors&.disconnect
       end
 
-      # The attic search (P93-2, №R-16 half 1): scan the withdrawn set,
+      # The attic search (P93-2, first half of an owner ruling): scan the withdrawn set,
       # substring over folded text, reasons labeled. No fulltext file
       # needed — the scan is catalog-side by design (Search#run_withdrawn's
       # class note carries the measured argument).
@@ -8774,7 +8774,7 @@ module Nabu
         end
       end
 
-      # Q66 (P96 rider — the owner's 2026-09-04 challenge): the entry
+      # P96 rider (the owner's 2026-09-04 challenge): the entry
       # crosswalk's value surfaces ON the card, not behind `nabu links`.
       # Per entry: a "first attested" line whenever a reference edge
       # carries one, and a "=" crosslink ONLY when the counterpart's
@@ -8956,7 +8956,7 @@ module Nabu
       end
 
       # The non-Han card. With the UCD identity floor synced (P85-B2) this is
-      # the UNIVERSAL card (№R-44 = Shape C): name, category, numeric value and
+      # the UNIVERSAL card (owner ruling: Shape C): name, category, numeric value and
       # decomposition for any writing system. Without it, the P84-5 reduced
       # card — glyph, codepoint, script probe — byte-identical (the feature-
       # module law). Pure Unicode either way, so no catalog is opened.
@@ -8988,7 +8988,7 @@ module Nabu
         say "search: nabu search #{reduced.glyph}"
       end
 
-      # -- the ambiguity layer (P86-5 + Q50) ---------------------------------
+      # -- the ambiguity layer (P86-5) ---------------------------------------
       # A single glyph can carry several identities at once: `a` is a Latin
       # letter AND a pinyin/romaji reading; `と` is a hiragana letter AND a
       # kun reading; `α` looks like `a` and `а`. The card leads with the
@@ -9083,7 +9083,7 @@ module Nabu
         print_corpus_panel(panels[:corpus])
       end
 
-      # 88-B2: the last №R-49(a) members render — encoded variants, named
+      # 88-B2: the last option-(a) members (owner-ruled 2026-08-28) render — encoded variants, named
       # sequences (capped, truncation announced), discouraged-sequence
       # warnings, Tangut/Nushu source fields. Absent = absent.
       def print_universal_extras(card)
@@ -9965,7 +9965,7 @@ module Nabu
         relevance = info&.relevance(code)
         held = relevance && !relevance.empty?
         stages = lects&.stages_of(code) || []
-        # P67-2 (№11): a registered lect anchor is never an unknown code —
+        # P67-2: a registered lect anchor is never an unknown code —
         # the registry names it and its descent line renders even with zero
         # holdings (the Aramaic-fan anchors are exactly this case).
         registry_record = lects&.lect(code)
@@ -9990,7 +9990,7 @@ module Nabu
         print_language_stage_ladder(code, stages, lects, info)
       end
 
-      # P67-2 (№11): the descent line — the registry's parent arc, code →
+      # P67-2: the descent line — the registry's parent arc, code →
       # root (jpa ← arc ← …), each ancestor named through the same
       # stage-aware walk `parent_of` defines (chu ← sla:pro ← ine-bsl ←
       # ine). Absent registry or a rootless code: no line. A cycle guard
@@ -10175,7 +10175,7 @@ module Nabu
         end
       end
 
-      # P85-A (№R-48-2): the private language-note layer — the owner's own
+      # P85-A (owner-ruled 2026-08-28): the private language-note layer — the owner's own
       # per-language notes (`nabu note <code> "…"`), kept local/ and never
       # published, composed beneath the universal overlay. Absent = nothing
       # printed (binding honesty).
@@ -10212,7 +10212,7 @@ module Nabu
         print_language_long(code, rel) if options[:long]
       end
 
-      # P106-3 (№R-69 g2): the dictionary GROUP — every shelf whose lect
+      # P106-3 (owner ruling, generalization 2): the dictionary GROUP — every shelf whose lect
       # resolution lands at or under this code's node, off the
       # dictionary_stats census. Renders only when the group is WIDER than
       # the code's own shelves (the relevance block above already lists
@@ -10265,7 +10265,7 @@ module Nabu
         say "etymology tail: ~800 more codes appear in reflex edges — nabu language CODE explains any"
       end
 
-      # P90-5 (Q61 lane 3): is +term+ a language the desks know — a lect id
+      # P90-5 (lane 3): is +term+ a language the desks know — a lect id
       # the registry parses, or a code the names census can name? (The
       # membership test the front door needs; the language command itself
       # renders unknown codes as honest misses, which would swallow every
@@ -10290,7 +10290,7 @@ module Nabu
         Nabu::ScriptDossiers.table.find { |_t, row| row["name"].to_s.casecmp?(term) }&.first
       end
 
-      # P90-5 (Q61 lane 2): the script dossier card — the curated context
+      # P90-5 (lane 2): the script dossier card — the curated context
       # config/script_dossiers.yml holds (published as nabu-data
       # mul/script-dossiers) finally readable from the CLI.
       def print_script_card(tag, lects)
@@ -10310,7 +10310,7 @@ module Nabu
         end
       end
 
-      # P90-5 (Q61 lane 1): the nabu-lects layer the listing was missing —
+      # P90-5 (lane 1): the nabu-lects layer the listing was missing —
       # every anchor with minted stages/varieties, i.e. the lect ids the
       # cards, `search --lect` and the postures accept beyond bare codes.
       def print_registry_extension(lects)
@@ -10471,7 +10471,7 @@ module Nabu
       # is on and how long each stage took. A stage closes when the next one
       # opens (or at finish_progress), its line ending in final counts +
       # elapsed; sync paths never call stage, so they keep the bare counter.
-      # +eta+ (P78-r2, Q34): when the runner consulted the stage_timings
+      # +eta+ (P78-r2): when the runner consulted the stage_timings
       # history, the open line SPEAKS the estimate — including the honest
       # "first run — no estimate" — and non-tty (the caffeinate/drill logs,
       # where every owner-perceived "hang" of P77 was read) gets the open
@@ -10566,7 +10566,7 @@ module Nabu
       # name that is not a slug but is an axis is unambiguous; a name that is
       # neither is the unknown-target error (naming BOTH namespaces). A nil
       # name falls to sync_one's own "slug or --all" guard, unchanged.
-      # P90-3 (Q57 lane 1): the explicit multi-slug batch. Each argument
+      # P90-3 (lane 1): the explicit multi-slug batch. Each argument
       # resolves EXACTLY as a lone argument would (group, slug, axis — the
       # ordinary run_sync dispatch), in ARGUMENT order, each with its own
       # report block. One member's failure is contained and reported —
@@ -10776,7 +10776,7 @@ module Nabu
         # the explicit path; the batch paths pre-skip blocked sources).
         enforce_grant!(entry, ledger)
         redownload_wipe!(config_for_runner(runner), slug) if options[:redownload]
-        # P78-r2 (Q34): the runs history already answers "how long does this
+        # P78-r2: the runs history already answers "how long does this
         # usually take" — say it up front, before the wait begins. Coarse on
         # purpose (fetch variance, parse-only runs); silent for a first sync.
         if (eta = Nabu::Eta.last_sync(ledger, slug: slug))
@@ -11719,7 +11719,7 @@ module Nabu
         ledger&.disconnect
       end
 
-      # --accept-shed (P102-1 — Q74): the owner reviewed a withdrawal-creep
+      # --accept-shed (P102-1): the owner reviewed a withdrawal-creep
       # anomaly (a one-time upstream curation event) and accepts the source's
       # CURRENT shed count. Durable in local/config/shed_acceptances.yml (the
       # P70 posture — config only; shed is measured live from the catalog).
@@ -11788,7 +11788,7 @@ module Nabu
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         print_local_health(report, all: options[:all], seconds: seconds)
         print_focus_note(view, view.registry_hidden_slugs)
-        # The ONE loud summary (P98-1 — Q71 item 5): the quiet path said its
+        # The ONE loud summary (P98-1): the quiet path said its
         # verdict inside print_local_health; the loud path raises it instead,
         # so exactly one summary line prints either way.
         raise Thor::Error, Nabu::Health::BoardView.verdict(report, seconds: seconds) if report.any_loud?

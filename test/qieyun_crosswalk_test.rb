@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
-# Nabu::QieyunCrosswalk (P107, the Q78 sidecar harvest): the
+# Nabu::QieyunCrosswalk (P107, the sidecar harvest): the
 # qieyun-restored repo's to_tshet_uinh_data/small_rimes.csv — 3,385
 # small rimes with the 對應廣韻小韻號 join key — becomes kind=reference
 # edges between the qieyun shelf's representative entries (頁.行,

@@ -34,7 +34,7 @@ class CclTest < Minitest::Test
     assert_equal "ccl", manifest.id
     assert_match(/CC BY-SA 4\.0/, manifest.license)
     assert_match(/CC ?0/, manifest.license, "the crosswalk's CC0 grant is documented beside BY-SA")
-    assert_match(/KELLIA/, manifest.license, "the KELLIA tab's grant is documented too (№R-52 (c))")
+    assert_match(/KELLIA/, manifest.license, "the KELLIA tab's grant is documented too (ruled 2026-08-30, (c))")
     assert_equal "attribution", manifest.license_class
     assert_equal LEXICON_URL, manifest.upstream_url
     assert_equal "ccl-tei", manifest.parser_family
@@ -89,7 +89,7 @@ class CclTest < Minitest::Test
     assert by_id.fetch("C1").citations.empty?, "no crosswalk row, no citations"
   end
 
-  # --- the KELLIA etymologies tab (P89-2, №R-52 (a)+(c)) -------------------------
+  # --- the KELLIA etymologies tab (P89-2, owner ruling 2026-08-30, options a+c) ----------
 
   def test_parse_joins_the_kellia_tab_beside_the_oraec_crosswalk
     by_id = adapter.parse(adapter.discover(FIXTURES).first).to_h { |e| [e.entry_id, e] }
@@ -110,7 +110,7 @@ class CclTest < Minitest::Test
     end
 
     # C5: the KELLIA transcription + EN/DE glosses (which ORAEC never had)
-    # land in the entry body — the №R-52 (c) enrichment.
+    # land in the entry body — the option-c enrichment (owner ruling 2026-08-30).
     assert_match(/ꜥ\.t/, by_id.fetch("C5").body)
     assert_match(/part \(of something\)/, by_id.fetch("C5").body)
     assert_match(/Teil \(von etwas\)/, by_id.fetch("C5").body)

@@ -86,11 +86,11 @@ class PlaceRefsBuilderTest < Minitest::Test
       assert_equal "Pompeii", table[1]["Place_Name"], "the verbatim upstream name rides every claim"
       assert_equal 3, result.resources.first.rows
       assert_equal ["place-refs/part-001.csv"], result.resources.first.path,
-                   "one multi-path resource — the №R-29 shard lane"
+                   "one multi-path resource — the shard lane"
     end
   end
 
-  # №R-29 (ruled 2026-08-11, sharding): the export splits into fixed-size
+  # Owner-ruled 2026-08-11 (sharding): the export splits into fixed-size
   # shards so no single file can cross GitHub's 100 MB hard limit — one
   # multi-path Frictionless resource, every shard with its own header,
   # claim order continuous across the boundary.

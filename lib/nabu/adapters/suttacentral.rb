@@ -203,7 +203,7 @@ module Nabu
         MANIFEST
       end
 
-      # Q59-a: fetch stage 2 lands the sha-pinned parallels graph at
+      # The declared-materializations rule (2026-09-03): fetch stage 2 lands the sha-pinned parallels graph at
       # parallels/parallels.json beside the git tree — declared so the
       # identity walker hashes it instead of reading the tree as weak.
       def self.materialized_paths = ["parallels"]

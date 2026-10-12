@@ -27,7 +27,7 @@ module Nabu
       "dating" => %w[dated partial undatable pending],
       "places" => %w[linked named unplaced pending],
       "script" => %w[implied qualified mixed],
-      # P100-4 (№R-63): the kind axis joins the core layers.
+      # P100-4: the kind axis joins the core layers.
       # `unclassified` = honest nothing-genre-shaped-upstream;
       # `pending` names its ingestion candidate. `classified` is
       # NEVER declared — a config/kind_map.yml rule or source_kind IS

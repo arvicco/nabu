@@ -837,7 +837,7 @@ class SourceRegistryTest < Minitest::Test
     assert_equal %w[unikemet], registry["edubba-overlay"].requires,
                  "the didactic overlay joins onto Unikemet sign entries"
     assert_equal %w[perseus-greek first1k-greek], registry["hypotactic"].requires,
-                 "№R-31 ruled 2026-08-13: conjunctive over any_of machinery"
+                 "owner-ruled 2026-08-13: conjunctive over any_of machinery"
     assert_equal %w[perseus-latin], registry["pedecerto"].requires
     assert_equal %w[bridging], registry["bhsa"].requires,
                  "the one parse-time cross-source canonical read (P77-r4)"
@@ -1020,7 +1020,7 @@ class SourceRegistryTest < Minitest::Test
     assert_equal %w[iswoc lexica proiel sblgnt], registry.quickstart_slugs.sort
   end
 
-  # Q93 (owner ruling 2026-09-27): the shipped registry stays in
+  # Owner ruling 2026-09-27: the shipped registry stays in
   # ALPHABETIC key order — every enumeration surface (rebuild replay,
   # sync --all, listings) reads registry order, so the file order IS
   # the processing order. Recentness moved to the per-entry adopted:
@@ -1058,7 +1058,7 @@ class SourceRegistryTest < Minitest::Test
                  "neighborhood + tibetan minted P48-1 with the Derge canon rows, per the " \
                  "owner-ordered P47-s2 survey, after buddhist — its nearest neighbor + korean " \
                  "minted P78-1 with sillok, per the owner-adopted P47-s4 survey, before sinitic " \
-                 "— the sinoverse neighborhood + sea minted P92-1 with dharma-khmer, №R-58 " \
+                 "— the sinoverse neighborhood + sea minted P92-1 with dharma-khmer, owner-" \
                  "ruled (a) 2026-09-01 per the P47-s3 survey, after korean — the Indic " \
                  "cosmopolis's eastern edge beside the sinoverse)"
 

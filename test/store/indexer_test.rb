@@ -117,7 +117,7 @@ module Store
       assert_equal 2, fts.count, "drop+recreate leaves no duplicate rows"
     end
 
-    # P93-1 (№R-16): a fresh build mints a CONTENTLESS table — the folded
+    # P93-1: a fresh build mints a CONTENTLESS table — the folded
     # text lives ONCE, in the catalog; the index stores only its inverted
     # index. No urn/passage_id payload columns exist, and reads of the
     # declared columns return NULL (contentless semantics) — MATCH is the
@@ -132,7 +132,7 @@ module Store
       refute_includes fts.columns, :urn, "no payload columns in the contentless shape"
       refute_includes fts.columns, :passage_id
       assert_nil fts.first.fetch(:text_normalized),
-                 "contentless — the text is never stored a second time (the №R-16 point)"
+                 "contentless — the text is never stored a second time (the contentless-index point)"
       assert_equal 1, match("μηνιν").size, "…but the inverted index still answers MATCH"
     end
 
@@ -267,7 +267,7 @@ module Store
                    "the language token still writes into a language-bearing table"
     end
 
-    # -- the contentless shape (P93-1, №R-16) --------------------------------
+    # -- the contentless shape (P93-1) --------------------------------
     # A fresh build mints passages_fts contentless (rowid = passages.id, no
     # payload columns); a legacy CONTENTFUL file — the owner's live fulltext
     # until the next full rebuild — keeps taking syncs in its own shape,
@@ -375,7 +375,7 @@ module Store
       assert_equal 0, lemmas.count
     end
 
-    # P105-5d (Q87): the fts+lemma slice walked cbeta's 8.75M passages for
+    # P105-5d: the fts+lemma slice walked cbeta's 8.75M passages for
     # ~55 minutes with ZERO ticks — the no-silent-passes class. The batch
     # loop ticks per batch now, on both the rebuild and refresh paths.
     TickSpy = Struct.new(:ticks) do
@@ -732,7 +732,7 @@ module Store
       end
     end
 
-    # -- the CJK bigram lane (P93-3, №R-39 b) --------------------------------
+    # -- the CJK bigram lane (P93-3) --------------------------------
     # A CONTENTLESS second lane over the cjk-flagged sources: each Han/kana
     # run indexed as overlapping character pairs (+ trailing unigram), so
     # mid-run substrings match as bigram phrases. Same scope-table honesty
@@ -782,7 +782,7 @@ module Store
       cjk_rebuild!
 
       assert_equal %w[urn:d:s:1], cjk_match_urns('"六龍"'),
-                   "the №R-39 case: the pair sits mid-run and must match"
+                   "the mid-run case: the pair sits mid-run and must match"
       assert_equal %w[urn:d:s:1], cjk_match_urns('"六龍 龍以"'),
                    "longer substrings are phrases of consecutive bigrams"
       assert_equal %w[urn:d:s:1], cjk_match_urns('"御" *'),
@@ -973,7 +973,7 @@ module Store
 
     def fts_rowids(db) = db[:passages_fts].select_map(Sequel.lit("rowid")).sort
 
-    # -- the bulk slice mode (P111-1, Q111) ----------------------------------
+    # -- the bulk slice mode (P111-1) ----------------------------------
     # A content-bearing re-parse of a big source rewrites millions of fts
     # rows; under the default merge config the automerge/deletemerge
     # machinery fires DURING the delete storm and the batched inserts (the
@@ -1129,7 +1129,7 @@ module Store
       refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
     end
 
-    # P112-3 (Q114): a finished slice stamps the catalog state it serves.
+    # P112-3: a finished slice stamps the catalog state it serves.
     def test_refresh_stamps_the_catalog_state_it_serves
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
@@ -1585,7 +1585,7 @@ module Store
                    "a pre-P65 fulltext file gains the postings on its next sync"
     end
 
-    # -- the text_search seam (P112-2, Q113) ---------------------------------
+    # -- the text_search seam (P112-2) ---------------------------------
     # A row whose stored text_normalized is the "" sentinel (identical to
     # text — the loader's slimming) must index under its text: every
     # indexer read goes through the text_search generated column.
@@ -1605,7 +1605,7 @@ module Store
                    "char postings read the coalesced form (王/道/蕩 distinct)"
     end
 
-    # -- the delta grain (P112-1, Q112) --------------------------------------
+    # -- the delta grain (P112-1) --------------------------------------
     # With the loader's IndexDelta on hand, refresh_source! refreshes exactly
     # the changed rows instead of rewriting the source's whole slice (the
     # measured pathology: an 8.9M-row cbeta rewrite serving a 35-document

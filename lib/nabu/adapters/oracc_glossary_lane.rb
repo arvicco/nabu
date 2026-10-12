@@ -4,7 +4,7 @@ require "json"
 
 module Nabu
   module Adapters
-    # The ORACC glossary lane (P104-4, Q81 — the №R-69a pilot of the
+    # The ORACC glossary lane (P104-4 — the owner-ruled pilot of the
     # secondary dictionary lane, Adapter.dictionary_lane): each in-scope
     # project's per-language glossary (<project>/gloss-<lang>.json — the
     # signature-indexed lemma list the corpusjson l-nodes reference) is

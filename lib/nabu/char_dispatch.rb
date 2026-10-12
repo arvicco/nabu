@@ -29,7 +29,7 @@ module Nabu
 
     # Kana input of length ≥ 2 is a reading query for the :name lane (no
     # single identity exists for ひと). A SINGLE kana routes to the
-    # single-char lane instead (P86-5/Q50, deliberately flipping the P65-3
+    # single-char lane instead (P86-5, deliberately flipping the P65-3
     # "one-kana is a reading query" pin): its card renders the kana IDENTITY
     # first and composes the reading matches as a labeled panel beside it —
     # `--as reading` keeps the pure query.

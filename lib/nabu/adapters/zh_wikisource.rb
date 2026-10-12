@@ -13,7 +13,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # zh-wikisource (P109-1, Q90 under №R-74): the Chinese Wikisource
+    # zh-wikisource (P109-1, under the owner-ruled Wikisource posture): the Chinese Wikisource
     # shelf — CENSUSED WORKS, prefix-expanded (the census, 2026-09-29,
     # recorded in the P109 phase plan):
     #
@@ -35,7 +35,7 @@ module Nabu
     # - 皇朝經世文編 FAILED census (4 front-matter subpages, no text)
     #   and is not in the cone.
     #
-    # №R-74: base editions are unstated on every censused page —
+    # The Wikisource posture: base editions are unstated on every censused page —
     # metadata "base_edition" records the honest "unstated". Adding a
     # work = one WORKS row + its census in the PR (the viet-wikisource
     # pattern, prefix-expanded).
@@ -334,7 +334,7 @@ module Nabu
           canonical_path: document_ref.path,
           metadata: {
             "work" => envelope.fetch("work"), "part" => envelope.fetch("part"),
-            # №R-74: no censused page states a 底本 — recorded honestly.
+            # The Wikisource posture: no censused page states a 底本 — recorded honestly.
             "base_edition" => "unstated",
             "dynasty" => work.dynasty,
             "author" => result.header.author,

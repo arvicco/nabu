@@ -16,7 +16,7 @@ module Nabu
     # 2.0) and is deliberately not ingested.
     #
     # The download is gated by a licence-agree click-through (a Django CSRF
-    # form) — accepted on owner ruling №R-37 (2026-08-19) and implemented
+    # form) — accepted on owner ruling (2026-08-19) and implemented
     # by Nabu::LicenseAgreeFetch, which refuses to agree if the form's
     # licence field drifts from the recorded DECLARED_LICENCE. The zip
     # itself then rides the whole non-destructive ZipFetch choreography.

@@ -5,7 +5,7 @@ module Nabu
     # UCD — the Unicode Character Database core (UnicodeData.txt), registered
     # as a FEATURE MODULE (the unikemet/unihan shape): discover mints NO
     # documents, parse is unreachable, no catalog table. P85: the universal
-    # identity backbone of the `nabu char` redesign (№R-44 = Shape C) — a
+    # identity backbone of the `nabu char` redesign (owner-ruled: Shape C) — a
     # character's NAME, general category, numeric value and canonical
     # decomposition for EVERY code point at once, the "any character, any
     # writing system" floor. Ruby gives script membership and normalization
@@ -16,11 +16,11 @@ module Nabu
     #
     # The unikemet/cigs posture, not /latest/: /Public/17.0.0/ is immutable, so
     # the pin never drifts under us. A new Unicode release (annual cadence) is a
-    # NEW pin the owner re-points — sync_policy manual. №R-49(a) widened the
+    # NEW pin the owner re-points — sync_policy manual. An owner ruling (2026-08-28, part a) widened the
     # ingest from UnicodeData.txt alone to the useful-context member set
     # (Blocks, Scripts, NameAliases, DerivedAge, Jamo, NamesList, radicals,
     # Tangut/Nushu sources…), and they all ride UCD.zip — one artifact, one
-    # pin, the Unihan.zip ZipFetch mechanics exactly. №R-49(b) adds
+    # pin, the Unihan.zip ZipFetch mechanics exactly. Its part (b) adds
     # confusables.txt, which lives in the SEPARATE /Public/security/ tree with
     # its OWN version cadence (16.0.0 current while the UCD is at 17.0.0 —
     # UTS #39 data lags the main release); it lands under canonical/ucd/

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::PlaceLink (P105-4 — Q86's apply lane): registry-MATCHED mined
+# Nabu::PlaceLink (P105-4 — the place-matching apply lane): registry-MATCHED mined
 # names promote their place-candidate edges to ruled attestation edges —
 # kind "place", producer "place-link", the ruled identity ONLY (a
 # homonym candidate the decision does not cite gets nothing). The

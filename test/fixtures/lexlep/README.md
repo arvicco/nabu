@@ -41,8 +41,8 @@ over `generator=categorymembers`.
   `https://creativecommons.org/licenses/by-nc-sa/4.0/` — *"Creative
   Commons Attribution-NonCommercial-ShareAlike"*.
 - The grants contradict and the preamble scopes to scientific use →
-  class `nc` pending the licensing clarification (email №17, queued);
-  relabel-on-reply.
+  class `nc`; the maintainer's reply by email (C. Salomon, 2026-07-20)
+  confirmed CC BY-NC-SA 4.0 for the LexLep and TIR data.
 
 Envelope note: the JSON envelope is the fetch layer's own on-disk shape
 (there is no upstream per-page file to mirror); the `wikitext` string

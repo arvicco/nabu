@@ -55,7 +55,7 @@ module Nabu
     # names content, not a languoid, so Glottolog carries no row for it
     # (checked 2026-08-11 against the same cone: no languages.csv row has
     # ISO639P3code mul) and the glottocode is honestly nil. The
-    # cross-language corpus-layer datasets file under mul/ (№R-25, P73-0).
+    # cross-language corpus-layer datasets file under mul/ (owner ruling, P73-0).
     LANGUAGES = {
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
@@ -333,7 +333,7 @@ module Nabu
         title: "Per-document kind classifications (the fourth axis) across the multilingual catalog",
         # gold-DERIVED about the fold; the verbatim upstream label per
         # row IS the tier honesty — every fold is checkable against the
-        # genre claim it was made from (№R-63's preservation invariant).
+        # genre claim it was made from (the kind ruling's preservation invariant, 2026-09-13).
         status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
         anchoring: "document-urn",
         # The catalog kind projection is the source of truth at URN grain
@@ -442,7 +442,7 @@ module Nabu
         anchoring: "document-urn",
         # The catalog dating projection is the source of truth at URN grain
         # (the lect-assignments posture); the recipe embeds the
-        # published-slice sha256. №R-28 (regnal precision) re-derives in.
+        # published-slice sha256. The regnal-precision table (owner-ruled 2026-08-11) re-derives in.
         inputs: [], canonical_cones: [], builder: DocumentDatesBuilder,
         rationale: "Publishes the dating layer behind Nabu's timeline — ~700K dated documents " \
                    "as normalized signed year spans (negative = BCE) with the VERBATIM upstream " \
@@ -482,7 +482,7 @@ module Nabu
         slug: "mul/language-dossiers", language: LANGUAGES.fetch("mul"),
         title: "Curated language dossiers — the human-written name/family/context per language",
         # CURATED: hand-authored prose, not a mechanical derivation — the
-        # honest tier for the overlay layer (№R-47/48).
+        # honest tier for the overlay layer (owner-ruled 2026-08-28).
         status: :available, tier: "curated", license: "CC-BY-SA-4.0",
         anchoring: "language-code",
         # The local dossier files are the source of truth (own authorship, no

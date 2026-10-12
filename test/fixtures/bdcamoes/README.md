@@ -8,7 +8,7 @@ https://portulanclarin.net/repository/download/52f2b16412c411ea8a1302420a0000054
 (archive sha256
 c0511fbf5ece31eb7f03e012edc30e13f02df60dc320724a3036f9061806b9f7).
 License: **"CC - BY"** verbatim on the record page (read 2026-08-19);
-the download click-through was accepted on owner ruling №R-37
+the download click-through was accepted on owner ruling
 (2026-08-19). Part II is a DIFFERENT grant (MS NC-NoReD-ND 2.0) and is
 not ingested.
 

@@ -13,7 +13,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # ndl-kotenseki (P109-2, Q108 phase-1): the NDL 次世代デジタルライブ
+    # ndl-kotenseki (P109-2, phase 1): the NDL 次世代デジタルライブ
     # ラリー classical-materials (古典籍) OCR full-text mass, over the
     # bulk route NDL Lab granted (by email, 2026-09-29): the Bulk
     # Download API for Full-Text Data (JSON) — per-book
@@ -33,14 +33,14 @@ module Nabu
     # PID the API refuses ("This PID is not allowed" — the spec's own
     # caveat that not every census PID has downloadable text) or
     # answers empty is ledgered in .ndl-crawl.json and never retried.
-    # A book that HANGS (Net::ReadTimeout, №I-9: two PIDs wedged the
-    # crawl at 26,860 — every resumed slice re-hit them and died) is
+    # A book that HANGS (Net::ReadTimeout — two PIDs once wedged the
+    # crawl at 26,860: every resumed slice re-hit them and died) is
     # retried in-slice TIMEOUT_ATTEMPTS times with backoff, then
     # ledgered under its own reason ("timeout-stuck" — distinct from a
     # 403 denial, so a later phase can deliberately revisit the class)
     # and the slice advances; the sync notes name the stuck PIDs.
-    # The full mass is a multi-phase paced crawl by design (Q108 keeps
-    # the remainder); each sync's report shows the crawl position.
+    # The full mass is a multi-phase paced crawl by design (the
+    # remainder stays queued); each sync's report shows the crawl position.
     #
     # == Documents
     #
@@ -52,7 +52,7 @@ module Nabu
     # COARSE (declared): the mass mixes Japanese and kanbun; no
     # per-item language field exists in the bibliography.
     #
-    # == Axes (№R-70)
+    # == Axes (owner ruling 2026-09-26)
     #
     # 出版日（W3CDTF） mints the date envelope (every 4-digit year in
     # the ||-separated value; the bare sentinel "1000" — 5,388 rows,
@@ -118,7 +118,7 @@ module Nabu
         )]
       end
 
-      # census.tsv is derived beside the upstream xlsx at fetch (Q59-a).
+      # census.tsv is derived beside the upstream xlsx at fetch (the declared-materializations rule, 2026-09-03).
       def self.materialized_paths = [CENSUS_TSV]
 
       def initialize(delay: DELAY, slice: SLICE, http: Nabu::ZipFetch.default_http,

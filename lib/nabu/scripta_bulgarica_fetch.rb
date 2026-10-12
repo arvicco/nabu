@@ -11,7 +11,7 @@ require_relative "git_fetch"
 require_relative "version"
 
 module Nabu
-  # Polite pager crawl for Scripta Bulgarica (P107-8 — Q100; architecture
+  # Polite pager crawl for Scripta Bulgarica (P107-8; architecture
   # §8): the «Писмени документи» listing at /bg/manuscript?page=0..N
   # enumerates ~125 source-text pages at /bg/sources/<slug>. The FOURTH
   # HTML-crawl sibling (OtdoFetch / ElephantineFetch / CantigasFetch) —

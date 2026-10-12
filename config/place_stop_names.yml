@@ -34,10 +34,10 @@ stop_names:
   - "下安"   # compound crossing
   - "平安"   # peace, safety
   # kanripo × chgis review round 3 (report 2026-09-14, top-30 sweep;
-  # owner-ratified 2026-09-18, №R-67). Same class: generic classical-
+  # owner-ratified 2026-09-18). Same class: generic classical-
   # Chinese words/phrases that happen to be CHGIS place names. 文昌
   # rides from the possible-real quartet — the literature-god reading
-  # dominates the corpus (№R-67 ruling); 江北/中都/西江 stay linkable.
+  # dominates the corpus (the 2026-09-18 ruling); 江北/中都/西江 stay linkable.
   - "成章"   # "complete a composition"
   - "石室"   # stone chamber
   - "文中"   # "in the text"
@@ -127,9 +127,9 @@ stop_names:
   - "康王"   # King Kang of Zhou — a person, not a place
   - "晏子"   # Master Yan — a person, not a place
 
-# Ceiling exemptions (№R-67, owner 2026-09-18): ruled genuinely-
+# Ceiling exemptions (owner-ruled 2026-09-18): ruled genuinely-
 # geographic names the derived frequency ceiling must not swallow.
 # Allow exempts the DERIVED stop only — floor, ambiguity cap and the
 # stop list above still apply. Every addition is an owner ruling.
 allow_names:
-  - "吐蕃"   # Tibet — 9,870 kanripo passages, real geography (№R-67)
+  - "吐蕃"   # Tibet — 9,870 kanripo passages, real geography (owner ruling 2026-09-18)

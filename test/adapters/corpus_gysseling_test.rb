@@ -71,7 +71,7 @@ class CorpusGysselingTest < Minitest::Test
     require_fixtures!
     facets = parse_urn(D0003).metadata["facets"]
     assert_equal({ "value" => "A", "raw" => "ambtelijke bescheiden" }, facets["genre"],
-                 "P109-4 (№R-70): the Corpus Gysseling series code reaches the facet lane")
+                 "P109-4: the Corpus Gysseling series code reaches the facet lane")
   end
 
   def test_a_line_becomes_a_passage_with_gold_lemma_pos_tokens

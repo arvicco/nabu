@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Store
-  # Store::DictionaryStats (P106-1 — №R-69 generalization 2): the
+  # Store::DictionaryStats (P106-1 — owner ruling, generalization 2): the
   # dictionary-group census — one precompiled row per dictionary carrying
   # its shipped language code, its resolved lect node (through the
   # nabu-lects codemap, per-source overrides included; NULL = the registry

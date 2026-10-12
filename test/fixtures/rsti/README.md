@@ -1,7 +1,7 @@
 # RSTI fixtures — Ras Shamra Tablet Inventory (U. Chicago OCHRE/CORPUS)
 
 Trimmed real API responses, retrieved **2026-07-31** during the P55-2 scout
-(20 bounded probes against the granted resolver; grant №23, Miller Prosser,
+(20 bounded probes against the granted resolver; grant by email, Miller Prosser,
 U. Chicago CORPUS/OCHRE, 2026-07-27). Resolver URL shape — note the literal
 `&format=json` with NO `?`, the granted, working form:
 
@@ -49,4 +49,4 @@ the wire format. Raw scout snapshots (full seasons 01/19/24/35-48 + Ras Ibn
 Hani, ~1.4 MB) stayed outside the repo.
 
 License: CC BY-NC-SA 4.0 (the API's own `availability.license` on season
-sets and text items), fetched under grant №23 with attribution.
+sets and text items), fetched under that grant (by email, 2026-07-27) with attribution.

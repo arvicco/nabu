@@ -5,7 +5,7 @@ require_relative "pl_wikisource_bruckner_lane"
 
 module Nabu
   module Adapters
-    # pl-wikisource (P116-3, Q103 under №R-74): the Polish Wikisource's
+    # pl-wikisource (P116-3, under the owner-ruled Wikisource posture): the Polish Wikisource's
     # premodern Polish-literature cone — the four Polish-literature
     # categories under the epoch tree (Średniowiecze/Renesans/Barok hold
     # mostly 19th–20th-c. TRANSLATIONS of foreign classics, so the cone is

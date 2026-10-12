@@ -6,7 +6,7 @@ require "fileutils"
 require "tmpdir"
 
 module Adapters
-  # mdz-protestant (Q102, 02-sources row 243): the MDZ page-OCR layer of
+  # mdz-protestant (02-sources row 243): the MDZ page-OCR layer of
   # the 16th-century Slovene/Croatian Protestant prints. Fixtures: three
   # real objects, their IIIF manifests trimmed to the canvases whose hOCR
   # is checked in — Trubar's 1562 Articuli (PDM; the cover + two text

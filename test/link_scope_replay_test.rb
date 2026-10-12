@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::LinkScopeReplay (P106-6 — Q94): the links-stage dispatch of
+# Nabu::LinkScopeReplay (P106-6): the links-stage dispatch of
 # recorded scopes, now covering the place pair. The 2026-09-27 rebuild
 # silently dropped a 3.25M-edge place-mine run because the place CLIs
 # never recorded scopes and the replay knew only the three original

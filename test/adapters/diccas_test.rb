@@ -38,7 +38,7 @@ class DiccasTest < Minitest::Test
     assert_equal "Rasāʾil al-Jāḥiẓ", documents.fetch(JAHIZ).title
     assert_equal "religious", documents.fetch(QURAN).metadata["genre"]
     assert_equal({ "value" => "religious" }, documents.fetch(QURAN).metadata.dig("facets", "genre"),
-                 "P109-4 (№R-70): the genre word reaches the facet lane")
+                 "P109-4: the genre word reaches the facet lane")
   end
 
   def test_passages_are_arabic_with_the_english_gloss_as_annotation

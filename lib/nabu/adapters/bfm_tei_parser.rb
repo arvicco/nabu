@@ -181,7 +181,7 @@ module Nabu
         PUNCTUATION_POS = /\APON/
         NO_LEMMA = "no_lem"
         LANGUAGE_SHAPE = /\A[a-z]{2,3}(-[A-Za-z0-9]{1,8})*\z/
-        # P104-1 (Q77): upstream's explicit unknown dialect — honest
+        # P104-1: upstream's explicit unknown dialect — honest
         # absence at facet time, never a facet value.
         UNDEFINED_DIALECT = "non défini"
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS,
@@ -374,7 +374,7 @@ module Nabu
           }.compact
         end
 
-        # P104-1 (Q77): the header keywords as facets — French values
+        # P104-1: the header keywords as facets — French values
         # verbatim (upstream's own vocabulary) under the library's shared
         # English facet keys. The dialect lane is the recorded evidence
         # base for a future fr:old lect-stage refinement (a mint decision,

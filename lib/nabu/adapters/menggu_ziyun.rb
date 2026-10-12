@@ -12,7 +12,7 @@ module Nabu
     # variant forms from ccamc.org. 9,446 character rows across 853 small
     # rhymes (censused 2026-08-29).
     #
-    # == The language ruling (№R-53 / nabu-lects PR #11)
+    # == The language ruling (owner-ruled 2026-08-29 / nabu-lects PR #11)
     #
     # No ISO code exists for Old Mandarin — the question that parked the
     # sibling zhongyuan-data (02-sources row 99). The v1.4.0 registry

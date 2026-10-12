@@ -4,7 +4,7 @@ require "json"
 
 module Nabu
   module Store
-    # The kind-axis projection (P99-2 — №R-63): a derived pass beside
+    # The kind-axis projection (P99-2, owner-ruled 2026-09-13): a derived pass beside
     # FacetBuilder that reads each ruled source's mapped facet rows (or
     # applies its whole-source source_kind declaration), normalizes them
     # through Nabu::Kinds (§4b: strip, split, exact → prefix → range),

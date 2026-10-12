@@ -155,7 +155,7 @@ module Nabu
         ].compact
       end
 
-      # The live-cadence population (P98-1 — Q71 item 3): only a wired,
+      # The live-cadence population (P98-1): only a wired,
       # auto-cadence, kind: source row is EXPECTED to keep adding. A frozen
       # or manual upstream, an owner shelf, or a feature module reads
       # 0-added as its healthy steady state — collapse and stale (which
@@ -166,7 +166,7 @@ module Nabu
 
       # Cumulative shed needs the catalog's document counts; without a catalog
       # (or before this source's first load) there is nothing to measure.
-      # Acceptance-aware (P102-1 — Q74): a reviewed shed level quiets to
+      # Acceptance-aware (P102-1): a reviewed shed level quiets to
       # an info note, re-arms past it, goes dormant below it.
       def creep_finding(entry)
         source = @catalog && Store::Source.first(slug: entry.slug)

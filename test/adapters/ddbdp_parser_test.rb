@@ -10,7 +10,7 @@ require "digest"
 # Every expected string below is derived from the fixture bytes under the
 # Leiden text-extraction policy documented in the parser header (keep
 # lem/reg/add/supplied/unclear/expan+ex/num, drop rdg/orig/note/figure,
-# render del in Leiden double brackets ⟦…⟧ — №R-17, conventions.md §5 —
+# render del in Leiden double brackets ⟦…⟧ — owner-ruled 2026-08-10, conventions.md §5 —
 # gap → "[…]" marker, line = passage).
 class DdbdpParserTest < Minitest::Test
   FIXTURES = File.expand_path("../fixtures/ddbdp/DDB_EpiDoc_XML", __dir__)
@@ -38,7 +38,7 @@ class DdbdpParserTest < Minitest::Test
   # the cancelled-but-legible exemplar — every line of the edition sits
   # inside <del rend="erasure">. Under the original blanket drop-<del>
   # policy it quarantined; P6-2 recovered it via a document-scoped
-  # fallback; №R-17 (2026-08-10) made the ⟦…⟧ rendering unconditional.
+  # fallback; the owner ruling of 2026-08-10 made the ⟦…⟧ rendering unconditional.
   OC457 = File.join(PAPYRI_FIXTURES, "o.claud", "o.claud.3", "o.claud.3.457.xml")
   OC457_URN = "urn:nabu:ddbdp:o.claud:3:457"
 
@@ -165,7 +165,7 @@ class DdbdpParserTest < Minitest::Test
     #   <subst><add place="inline"><choice><reg>πε<lb n="3" break="no"/>πρακέναι</reg>
     #     <orig>πε<lb n="3" break="no"/>πρακέν<add place="above">ε</add></orig></choice></add>
     #   <del rend="corrected">πε<lb n="3" break="no"/>πρακεν<del rend="erasure">αι</del></del></subst>
-    # №R-17 (conventions.md §5): the <add> (final intent) is kept and its
+    # The del ruling (conventions.md §5): the <add> (final intent) is kept and its
     # <reg> read; the <del> now renders too, in Leiden double brackets —
     # its NESTED del nests its own pair (the two-stage correction: first
     # ⟦αι⟧ erased, then the whole word corrected). Upstream duplicates the
@@ -223,7 +223,7 @@ class DdbdpParserTest < Minitest::Test
 
   def test_standalone_del_renders_in_brackets_with_its_gap_marking
     # Recto line 9: <del rend="erasure">fidem … <gap reason="illegible" …/>
-    # ista …</del> — №R-17 (conventions.md §5): erased-but-legible text IS
+    # ista …</del> — the del ruling (conventions.md §5): erased-but-legible text IS
     # reading text, printed inside Leiden double brackets ⟦…⟧; the gap
     # INSIDE the kept del marks the text ("[…]ista", fused where the lost
     # letter sat) and lands in annotations like any other gap.
@@ -305,7 +305,7 @@ class DdbdpParserTest < Minitest::Test
                  "c.epist.lat.10 (textpart divs) urns must be unchanged by restart-aware minting"
   end
 
-  # --- cancelled documents (P6-2 → №R-17): whole-document <del> in ⟦⟧ --------
+  # --- cancelled documents (P6-2 → the del ruling): whole-document <del> in ⟦⟧ --
 
   def parse_oc457
     parser.parse(OC457, urn: OC457_URN, language: "grc", title: "o.claud.3.457")
@@ -314,7 +314,7 @@ class DdbdpParserTest < Minitest::Test
   def test_cancelled_document_reads_in_leiden_double_brackets
     # o.claud.3.457: both lines sit inside per-line <del rend="erasure"> —
     # the whole document is an ancient cancellation, fully legible, and
-    # print editions read it inside Leiden double brackets ⟦…⟧. Under №R-17
+    # print editions read it inside Leiden double brackets ⟦…⟧. Under the del ruling
     # every <del> renders that way in the single standard pass (the P6-2
     # document-scoped fallback is retired; its output for this class is
     # UNCHANGED — same urns, same text, same annotations). The keep/drop
@@ -341,7 +341,7 @@ class DdbdpParserTest < Minitest::Test
   end
 
   def test_cancelled_document_parses_from_an_open_io
-    # Single standard pass under №R-17 — no rewind, no retry — so an open
+    # Single standard pass under the del ruling — no rewind, no retry — so an open
     # IO source works exactly as for any other document.
     document = File.open(OC457, "r") do |io|
       parser.parse(io, urn: OC457_URN, language: "grc", canonical_path: OC457)
@@ -350,11 +350,11 @@ class DdbdpParserTest < Minitest::Test
     assert_equal "⟦Κύνων Ζήνωνος Εἰσίω-⟧", document.first.text
   end
 
-  # --- golden text regression (recaptured at №R-17, P79-3a) ------------------
+  # --- golden text regression (recaptured at the del ruling, P79-3a) ---------
   #
   # These sha256s (over the parsed passage texts joined with "\n") pin the
   # fixture output against accidental drift. bgu.1.100 and c.epist.lat.10
-  # were deliberately re-captured for the №R-17 del→⟦…⟧ migration (their
+  # were deliberately re-captured for the 2026-08-10 del→⟦…⟧ migration (their
   # dels now render — THE ruled corpus revision, conventions.md §5);
   # bgu.1.102 and aegyptus.89.240 contain no <del> and remain byte-identical
   # to the pre-P6-2 capture, proving the migration touches only del-bearing
@@ -405,7 +405,7 @@ class DdbdpParserTest < Minitest::Test
   # --- lines that extract empty are skipped ----------------------------------
 
   def test_del_only_lines_are_citable_under_always_render
-    # Before №R-17 a line whose only content sat in a <del> extracted empty
+    # Before the del ruling a line whose only content sat in a <del> extracted empty
     # and was skipped; now the del renders, the line is citable — this is
     # the resurrection class the migration recovers (79-3b must expect NEW
     # passage urns, not just revised text, and sequence shifts after them).

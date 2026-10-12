@@ -39,7 +39,7 @@ module Nabu
   # downloads ride the box_v2_download_shared_file endpoint (verified live
   # 2026-08-26: byte counts exactly match the listing's itemSize claims).
   #
-  # == Wave scoping (№R-43, ruled 2026-08-26: wave 1 = Phase I whole)
+  # == Wave scoping (owner-ruled 2026-08-26: wave 1 = Phase I whole)
   #
   # +phases+ scopes the acquisition (the kanripo `classes:` mold): the
   # ruled wave — and the stated both-phases follow-on — land as

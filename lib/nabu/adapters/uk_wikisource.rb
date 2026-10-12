@@ -4,7 +4,7 @@ require_relative "slavic_wikisource_html"
 
 module Nabu
   module Adapters
-    # uk-wikisource (P116-3, Q103 under №R-74): the chronicle shelf of the
+    # uk-wikisource (P116-3, under the owner-ruled Wikisource posture): the chronicle shelf of the
     # Ukrainian Wikisource — the 13 ns-0 members of Категорія:Літописи
     # (census 2026-10-10), with the four {{версії}} shells followed one
     # level to the edition pages they list. The admitted texts are the

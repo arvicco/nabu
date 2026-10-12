@@ -101,7 +101,7 @@ class CantigasTest < Minitest::Test
                  "the Fontes manuscritas sigla, nbsp folded to plain space"
   end
 
-  # P104-1 (Q77): genre + formal features project as facets. Manuscript
+  # P104-1: genre + formal features project as facets. Manuscript
   # sigla stay metadata-only — near-unique per song, they are future
   # witness/collation links, not a facet.
   def test_cantiga_1_genre_and_form_ride_as_facets

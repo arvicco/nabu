@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nabu
-  # The CBDB person read seam (P97-2 — №R-62 option b, the thin slice):
+  # The CBDB person read seam (P97-2 — owner ruling 2026-09-11, option b, the thin slice):
   # BIOG_MAIN + ALTNAME_DATA + DYNASTIES from the held sqlite artifact
   # projected into the "cbdb" person-index slice. Read-only on
   # canonical; the sqlite is opened read-only and closed after the walk.

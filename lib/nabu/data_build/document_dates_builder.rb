@@ -18,7 +18,7 @@ module Nabu
     # consumer see what the normalization was made from. An open-ended
     # bound stays empty; nothing is ever invented.
     #
-    # == The license slice (owner ruling №R-24, 2026-08-11)
+    # == The license slice (owner ruling 2026-08-11)
     #
     # CC BY-SA 4.0, one carve-out dataset (the share-alike lanes — edh,
     # tla-hf, aes, elephantine, ceipom, imp — ride inside it). Only open-
@@ -32,7 +32,7 @@ module Nabu
     # The catalog's dating projection is the source of truth at URN grain
     # (the mul/lect-assignments posture — no cone shas are load-bearing);
     # the recipe embeds the published-slice sha256. The regnal-year
-    # precision upgrade (№R-28, the P73-6 scout) lands here automatically
+    # precision upgrade (owner-ruled 2026-08-11, the P73-6 scout) lands here automatically
     # on a re-derive once ruled.
     class DocumentDatesBuilder
       FILENAME = "document-dates.csv"

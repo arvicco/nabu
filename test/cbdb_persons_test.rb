@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::CbdbPersons + Store::PersonIndex (P97-2 — №R-62 option b): the
+# Nabu::CbdbPersons + Store::PersonIndex (P97-2 — owner-ruled 2026-09-11, option b): the
 # CBDB thin slice — BIOG_MAIN + ALTNAME_DATA + DYNASTIES from the held
 # sqlite artifact derived into the "cbdb" person-index slice, resolvable
 # in either script through the shared fold. Fixture: real rows

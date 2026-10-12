@@ -12,7 +12,7 @@ module Nabu
   # answers an HTML page carrying a CSRF token and a licence-agree
   # checkbox; POSTing the agreement back to the SAME URL streams the zip.
   # No account, no credential — the gate is consent, and consent is the
-  # owner's standing grant (owner ruling №R-37, 2026-08-19: "I DO agree to
+  # owner's standing grant (owner ruling 2026-08-19: "I DO agree to
   # a license as requested by the sources, and you as an agent faithfully
   # implement it"), represented faithfully by this mechanism.
   #
@@ -75,7 +75,7 @@ module Nabu
         raise Error, "no csrfmiddlewaretoken on the licence-agree page at #{url} (portal shape drift)"
     end
 
-    # The №R-37 guardrail: the form's own licence field must repeat the
+    # The standing-grant guardrail: the form's own licence field must repeat the
     # declared grant verbatim, or nothing is agreed to.
     def verify_licence!(body, url)
       offered = body[LICENCE_RE, 1] or

@@ -81,7 +81,7 @@ module Nabu
       "otb" => %w[xct.rb]
     }.freeze
 
-    # P89-1 (№R-54 (c)): the corpus-wide builders — timeline + facets — are
+    # P89-1 (owner ruling option c): the corpus-wide builders — timeline + facets — are
     # carved OUT of the shared derivation core (the P39-1 pattern's second
     # application; the type specimen was P88's two-line metadata_dates.rb
     # edit landing mid-rebuild and staling all 157 stamps). The sanctioned
@@ -96,7 +96,7 @@ module Nabu
     BUILDER_DIRS = %w[store/timeline_builder].freeze
     BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb].freeze
 
-    # P112-4 (Q115): the fulltext-index core — files that shape ONLY
+    # P112-4: the fulltext-index core — files that shape ONLY
     # fulltext.sqlite3 rows (read the catalog, write the index; never a
     # catalog row). The third sanctioned exit from the asymmetry doctrine:
     # carved out of the shared core because P111's three index-side
@@ -277,7 +277,7 @@ module Nabu
       # The canonical-bytes identity of +dir+, or nil (WEAK — never skip)
       # when the tree cannot honestly be named: missing dir, a git repo with
       # non-attic local modifications, or a git failure. +materialized:+ is
-      # the adapter's DECLARED canonical materializations (Q59-a, ruled
+      # the adapter's DECLARED canonical materializations (owner-ruled
       # 2026-09-03) — workdir-relative paths the fetch deliberately creates
       # beside upstream's tree (digiliblt's tarball extraction, sutta-
       # central's pinned parallels graph). Declared paths are tolerated as
@@ -353,7 +353,7 @@ module Nabu
           BUILDER_DIRS.flat_map { |rel| Dir[File.join(LIB_DIR, rel, "**", "*.rb")] }
       end
 
-      # The scoped identity of the corpus-builder code (P89-1, №R-54 (c)) —
+      # The scoped identity of the corpus-builder code (P89-1, owner ruling option c) —
       # stamped as the sentinel row; drift re-runs the builders without
       # dirtying any per-source stamp.
       def builders_digest
@@ -374,7 +374,7 @@ module Nabu
         INDEX_FILES.map { |rel| File.join(LIB_DIR, rel) }
       end
 
-      # The scoped identity of the fulltext-index code (P112-4, Q115) —
+      # The scoped identity of the fulltext-index code (P112-4) —
       # stamped as the INDEX_SLUG sentinel; drift re-derives the index
       # whole without dirtying any per-source catalog stamp.
       def index_core_digest
@@ -474,7 +474,7 @@ module Nabu
         # excludes it via .git/info/exclude) — hash its bytes explicitly.
         attic = File.join(dir, ".attic")
         tokens.concat(identity_tokens(attic, root)) if File.directory?(attic)
-        # Declared materializations (Q59-a): the same discipline — the
+        # Declared materializations (the declared-materializations rule, 2026-09-03): the same discipline — the
         # bytes the fetch deliberately created participate in the identity.
         materialized.sort.each do |path|
           full = File.join(dir, path)
@@ -494,12 +494,12 @@ module Nabu
 
       # Clean = git can vouch that HEAD names the working tree. The attic is
       # excluded by GitFetch; anything else (edits, untracked files) means
-      # HEAD is not the bytes we would parse — with ONE carve-out (P90-4,
-      # Q59): a ` M <path>` whose HEAD blob is a git-LFS POINTER naming
+      # HEAD is not the bytes we would parse — with ONE carve-out (P90-4):
+      # a ` M <path>` whose HEAD blob is a git-LFS POINTER naming
       # exactly the working file's sha256 and size is an LfsFetch
       # materialization — the bytes ARE what HEAD says, just smudged in
       # place — so HEAD still names the tree. A `?? <path>` under a DECLARED
-      # materialization (Q59-a) is the second vouched shape: tolerated here,
+      # materialization (the declared-materializations rule, 2026-09-03) is the second vouched shape: tolerated here,
       # and its bytes hashed by repo_tokens so the identity never trusts it
       # blind. Every porcelain line must be one of the two vouched shapes;
       # any other dirt poisons the whole. --no-optional-locks: the identity

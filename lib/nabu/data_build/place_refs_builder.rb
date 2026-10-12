@@ -24,7 +24,7 @@ module Nabu
     # otherwise (adapter-asserted refs always win at apply time, so the
     # two labels converge exactly where the distinction is immaterial).
     #
-    # == The license slice (owner ruling №R-24, 2026-08-11)
+    # == The license slice (owner ruling 2026-08-11)
     #
     # CC BY-SA 4.0, one carve-out dataset (the share-alike lanes — edh,
     # aes, elephantine, ceipom, tla-hf, and the tm: index inheritance —
@@ -40,7 +40,7 @@ module Nabu
     # registry cone — the decisions the basis column cites derive from it,
     # so its sha rides the manifest and the stale-ingest guard covers it.
     class PlaceRefsBuilder
-      # №R-29 (ruled 2026-08-11, sharding): the export splits into
+      # Owner-ruled 2026-08-11 (sharding): the export splits into
       # fixed-size shards under place-refs/ — one multi-path Frictionless
       # resource — so no single file can cross GitHub's 100 MB hard limit
       # (the unsharded CSV measured 105 MB). 250K rows ≈ 27 MB/shard.

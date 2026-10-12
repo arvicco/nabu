@@ -121,7 +121,7 @@ module Nabu
     class Loader
       TOOL = "nabu-loader"
 
-      # P93-2 (№R-16): the two withdrawal reasons the loader can mint —
+      # P93-2: the two withdrawal reasons the loader can mint —
       # the full-load completeness sweep (document grain: the urn vanished
       # from upstream's output) and revision pruning (passage grain: the
       # document was revised and the passage vanished from the new parse).
@@ -631,7 +631,7 @@ module Nabu
           content_sha256: sha, revision: 1, withdrawn: false
         )
         @index_delta.stage_upsert(row.id, row.urn)
-        # P112-2 (Q113): no per-passage "loaded" event — at 107.8M rows the
+        # P112-2: no per-passage "loaded" event — at 107.8M rows the
         # constant breadcrumb was 95% of the provenance table (~11 GB with
         # its indexes) duplicating what the row's existence already says.
         # Document- and dictionary-entry-grain "loaded" stay: real lineage
@@ -640,7 +640,7 @@ module Nabu
         # restored) keep journaling exactly as before.
       end
 
-      # P112-2 (Q113): text_normalized measured byte-identical to text on
+      # P112-2: text_normalized measured byte-identical to text on
       # the vast majority of rows (the CJK-dominated corpus folds to
       # itself) — store the EMPTY STRING when equal ("" because the column
       # is NOT NULL on the standing table generation; same zero bytes) and
@@ -695,7 +695,7 @@ module Nabu
                   .each do |id, urn, sha, language, license_override, retired|
             next if seen_urns.include?(urn)
 
-            # P93-2 (№R-16): the sweep is the "upstream-gone" reason — the
+            # P93-2: the sweep is the "upstream-gone" reason — the
             # urn vanished from a FULL load's output. Stamped on the row
             # (queryable projection) and the durable event (the record
             # that survives rebuild).

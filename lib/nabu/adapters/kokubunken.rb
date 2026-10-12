@@ -7,7 +7,7 @@ require_relative "../url_download"
 
 module Nabu
   module Adapters
-    # kokubunken — NIJL's own TEI lane on GitHub (P108-4, Q89.3): the
+    # kokubunken — NIJL's own TEI lane on GitHub (P108-4): the
     # 嘉禄二年本『古今和歌集』 transcription (kokubunken/kokinwakashu)
     # and the Man'yōshū TEI project (kokubunken/nijl-manyoshuTEI: the
     # 廣瀬本 — the only complete NON-Sengaku-line witness — plus the

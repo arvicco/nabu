@@ -1,4 +1,4 @@
-# P93-4: the semantic-vector worker (№R-36) — a thin line-oriented JSONL
+# P93-4: the semantic-vector worker (owner ruling) — a thin line-oriented JSONL
 # server over sentence-transformers (intfloat/multilingual-e5-base, the
 # P79-5 trial model), MPS/CPU. Vectors ship INT8-quantized (the trial's
 # 6 GB tier): embeddings are unit-normalized, so round(v*127) preserves

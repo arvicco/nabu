@@ -48,7 +48,7 @@ module Nabu
     #   the 220 negative demotic word numbers), the label crediting the
     #   attesting witness(es), cts_work/citation nil (these resolve through
     #   the links journal, never the CTS citation path). KELLIA's
-    #   transcriptions and EN/DE glosses (№R-52 (c)) ride as a `tla:` body
+    #   transcriptions and EN/DE glosses (owner ruling 2026-08-30, option c) ride as a `tla:` body
     #   line.
     class CclTeiParser
       TEI_NS = { "tei" => "http://www.tei-c.org/ns/1.0" }.freeze
@@ -140,7 +140,7 @@ module Nabu
 
       # "tla: egy ꜥ.t · dem ꜥrwe.t — en (lotus) stalk; stem | de Stängel
       # (Lotos, Schilf) [KELLIA etymologies]" — the transcriptions and
-      # glosses only the KELLIA tab carries (№R-52 (c)); nil when the tab
+      # glosses only the KELLIA tab carries (owner ruling 2026-08-30, option c); nil when the tab
       # is absent or contributed nothing for this entry.
       def tla_line(etymology)
         return nil if etymology.nil?

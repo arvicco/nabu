@@ -3,7 +3,7 @@
 require "yaml"
 
 module Nabu
-  # The letter-numeral fact tables (config/char_numerals.yml, P86-4b/№R-49):
+  # The letter-numeral fact tables (config/char_numerals.yml, P86-4b):
   # the alphabetic numeral conventions — Greek isopsephy, Hebrew gematria,
   # Arabic abjad, Cyrillic titlo numerals, Gothic letter numerals — that
   # Unicode's own numeric property deliberately does not carry (α has no

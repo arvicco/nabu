@@ -1,4 +1,4 @@
-# Letter-numeral value tables (P86-4b, №R-49) — the alphabetic numeral
+# Letter-numeral value tables (P86-4b) — the alphabetic numeral
 # conventions our corpora actually use, as FACT TABLES (the ewts/starling
 # precedent: objective, tiny, config-not-overlay). The char card renders a
 # "numeric (<scheme>)" line for any glyph a table carries; Unicode's own

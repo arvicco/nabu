@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P106-1 (№R-69 generalization 2): the dictionary-group census — one row
+# P106-1 (owner ruling, generalization 2): the dictionary-group census — one row
 # per dictionary written by Store::DictionaryStats: the shipped language
 # code, the lect node it resolves to through the nabu-lects codemap
 # (per-source overrides included; NULL when the registry knows no such

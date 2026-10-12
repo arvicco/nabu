@@ -6,7 +6,7 @@ require "fileutils"
 require "json"
 
 # Nabu::GitIdentityCache: the per-repo memo of git-tree identity tokens
-# behind the incremental verdict sweep (Q124 — kanripo's 5,162 embedded
+# behind the incremental verdict sweep (kanripo's 5,162 embedded
 # repos cost ~100 s of `git status` + `rev-parse` per warm sweep). THE LAW
 # under test: a stale hit is impossible — a new commit, a dirty file, an
 # untracked file, an index touch, a moved ref, a same-size rewrite with its

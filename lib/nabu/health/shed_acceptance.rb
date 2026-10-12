@@ -5,7 +5,7 @@ require "fileutils"
 
 module Nabu
   module Health
-    # The withdrawal-shed acceptance (P102-1 — Q74): the
+    # The withdrawal-shed acceptance (P102-1): the
     # quarantine-acceptance mold applied to TrendRules.withdrawal_creep.
     # A one-time reviewed upstream curation event (the specimen:
     # PerseusDL's 2026-09 Cicero cleanup, 104/549 shed on

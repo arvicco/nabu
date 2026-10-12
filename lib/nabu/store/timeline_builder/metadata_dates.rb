@@ -27,7 +27,7 @@ module Nabu
       #   :year_range — "date" => "1565-1650" | "1565" strings (CroALa
       #     P44): both bounds from a clean YYYY[-YYYY] parse; anything
       #     else (ca., floruit prose) is skipped honestly.
-      #   :year_key — a top-level integer "year" (okhc P92-6/Q64: the
+      #   :year_key — a top-level integer "year" (okhc P92-6: the
       #     deposit's own per-record year, 490,014 of 1,198,779 rows
       #     censused 2026-09-01, range 695–1995, every value an integer
       #     — a one-year envelope; year-less records mint nothing).
@@ -50,7 +50,7 @@ module Nabu
       #     honestly unparsed, but the place hash carries townland/county/
       #     country + WGS84 "geo" + logainm refs).
       #
-      # == The composition class (№R-70 grade 2, ruled 2026-09-26)
+      # == The composition class (aggressive-mining law grade 2, ruled 2026-09-26)
       #
       # Author-era composition dating — the work's era, not an object's —
       # is ruled IN as its OWN honestly-labeled class: rows from the
@@ -71,7 +71,7 @@ module Nabu
         # registers here and the health lane-drift check flags it if it
         # doesn't).
         SHAPES = {
-          "archiv-slav-phil" => :structured, # Q105: each volume's title-page year
+          "archiv-slav-phil" => :structured, # each volume's title-page year
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,
@@ -138,7 +138,7 @@ module Nabu
           "sillok" => :structured,
           "sjw" => :structured,
           "sl-wikisource" => :structured,
-          "slavistics-pd" => :structured, # Q105: the text's own edition year (a facsimile
+          "slavistics-pd" => :structured, # the text's own edition year (a facsimile
           #                                 reprint keeps its first edition's); the imprint
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
@@ -156,7 +156,7 @@ module Nabu
 
         SLUGS = SHAPES.keys.freeze
 
-        # №R-70 grade 2 (P104-1): sources whose envelopes date the WORK's
+        # Attributed-era dating, its own labeled class (P104-1): sources whose envelopes date the WORK's
         # composition era (author-era), not an object — their rows carry
         # date_class "composition". croala's year ranges were the class's
         # precedent (its lect=dates posture rides exactly these bands).
@@ -339,7 +339,7 @@ module Nabu
         # measured 2026-08-08, ALL joining the held index) lifts it into
         # place_ref, namespaced per Dp-b (a derivation mint, never a
         # verbatim upstream URL). Non-numeric values never mint.
-        # P73-2 (ex-Q20): the "geonames" findspot ref (a verbatim URL —
+        # P73-2: the "geonames" findspot ref (a verbatim URL —
         # 508 real GeoNames, 1 mislabeled Trismegistos URL, 13 doubled-URL
         # strays, measured 2026-08-10) lifts through the ONE ref reader:
         # whatever PlaceRefs honestly parses mints in its true namespace,
@@ -415,7 +415,7 @@ module Nabu
           seleucid_era(meta["date"]) || king_reign(meta["date"]) || period_band(meta)
         end
 
-        # P104-1 (№R-70 grade 2): the cbeta header byline's dynasty seat
+        # P104-1 (attributed-era dating, its own labeled class): the cbeta header byline's dynasty seat
         # (metadata "dynasty", minted by CbetaTeiParser from the
         # teiHeader <author> — "後秦 佛陀耶舍共竺佛念譯") bands through the
         # ruled table's sinological rows. The claim is an ATTRIBUTED
@@ -667,7 +667,7 @@ module Nabu
           match && Integer(match[0], 10)
         end
 
-        # P109-4 (the Q83 drain, №R-70): the source EDITION's print year —
+        # P109-4 (the unmined-metadata drain, aggressive-mining law): the source EDITION's print year —
         # cme's source_date ("1988", "c.1976", "1904, 1905") and openmgh's
         # printed_date. Every plausible 4-digit year in the string joins
         # the envelope; the row carries date_class "edition" (the 5th

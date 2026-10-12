@@ -87,7 +87,7 @@ module Nabu
           canonical_path: document_ref.path,
           metadata: {
             "genre" => book[:genre], "book" => book[:n],
-            # P109-4 (№R-70): the per-book genre word (religious/history/
+            # P109-4: the per-book genre word (religious/history/
             # tafsir/adab) projected as a facet.
             "facets" => (book[:genre] ? { "genre" => { "value" => book[:genre] } } : nil)
           }.compact

@@ -12,7 +12,7 @@ module Nabu
   # bytes) so the incremental rebuild's verdict sweep stops paying
   # `git status --porcelain` + `git rev-parse HEAD` for every embedded repo
   # on every run — kanripo alone carries 5,162 repos, ~80 s of the warm
-  # sweep (Q124). The sibling of CanonicalIdentityCache (plain trees): the
+  # sweep. The sibling of CanonicalIdentityCache (plain trees): the
   # same law, the same census discipline, the same racy guard.
   #
   # THE LAW: over-rebuilding is always safe; UNDER-REBUILDING IS THE SIN. A

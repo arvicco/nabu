@@ -6,7 +6,7 @@ require "tmpdir"
 module Adapters
   # Nabu::Adapters::BdCamoes (P80-7): BDCamões Part I — the Corpus of
   # Portuguese Literary Documents (PORTULAN CLARIN, CC-BY; the download
-  # click-through accepted on owner ruling №R-37, 2026-08-19). 127
+  # click-through accepted on owner ruling, 2026-08-19). 127
   # one-work XML wrappers; document = one work (urn from a transliterated
   # slug of the upstream basename), passage = one paragraph/stanza (blank
   # -line blocks, then the newline+single-tab paragraph convention);

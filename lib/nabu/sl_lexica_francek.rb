@@ -4,7 +4,7 @@ require "nokogiri"
 
 module Nabu
   # Producer #8 for the links journal (P95-2 — the Franček crosswalk
-  # rider the P17-6 survey sketched and Q33 carried): the Franček
+  # rider the P17-6 survey sketched): the Franček
   # portal's historical module (CLARIN.SI hdl 11356/1472, CC BY 4.0,
   # ZRC SAZU) keys 41,886 portal entries into the id spaces of the HELD
   # sl-lexica dictionaries — Pleteršnik (rc/@geslo-id) and the Svetokriški

@@ -85,7 +85,7 @@ module Ops
       with_rig(registry: registry, dossiers: dossiers) do |check|
         findings = check.findings
         assert(findings.any? { |f| f.slug == "edh" && f.message.include?("placeholder") },
-               "a scaffolded placeholder is an unwritten dossier — site:check says so (P66-4/Q3)")
+               "a scaffolded placeholder is an unwritten dossier — site:check says so (P66-4)")
       end
     end
 

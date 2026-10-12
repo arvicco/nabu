@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 require "csv"
 
-# The mul/language-dossiers builder (P85-A, №R-47/48): publish the curated
+# The mul/language-dossiers builder (P85-A, owner-ruled 2026-08-28): publish the curated
 # dossier layer (name/family/context/extras/provenance) as a CLDF ValueTable,
 # so a fresh install gets the same human-written context. Section accretions
 # (iecor/witness/lect-ladder) are deliberately excluded — each install rebuilds

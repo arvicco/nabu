@@ -15,7 +15,8 @@ module Nabu
     # `lexlep-words` dictionary source).
     #
     # == License — the CONFLICT, all three layers verbatim (class nc,
-    # relabel-on-reply; the ogham precedent, licensing email №17 queued)
+    # the ogham precedent; nc confirmed by the maintainer's reply by email,
+    # C. Salomon, 2026-07-20)
     #
     # - Project:Terms of use (api.php, 2026-07-18): "Lexicon Leponticum
     #   (LexLep) is an interactive online dictionary and lexicon created

@@ -11,7 +11,7 @@ require_relative "csv_writer"
 module Nabu
   module DataBuild
     # The mul/kind-classifications builder (P102-2) — the kind axis
-    # (№R-63/№R-66), published. One row per (document, class) pair:
+    # (owner-ruled 2026-09-13 and 2026-09-18), published. One row per (document, class) pair:
     # the ruled cross-corpus class path (multi-label documents export
     # one row per label) with the VERBATIM upstream genre label beside
     # it — the honesty column that lets a consumer see what each fold
@@ -19,11 +19,11 @@ module Nabu
     # carries no upstream label, honestly empty.
     #
     # The honesty buckets split: `unknown` (upstream's own "cannot
-    # determine" — a ruled claim, №R-63) PUBLISHES; `unmapped` (our
+    # determine" — a ruled claim, 2026-09-13) PUBLISHES; `unmapped` (our
     # curation lag, a TODO marker, not a classification) is excluded
     # and censused. The document-dates license slice applies: open-
     # and attribution-class documents only, nc excluded row-by-row and
-    # censused in nabu.eval; CC BY-SA 4.0 under the №R-24 carve-out.
+    # censused in nabu.eval; CC BY-SA 4.0 under the share-alike carve-out (owner ruling 2026-08-11).
     #
     # Provenance: the catalog's kind projection is the source of truth
     # at URN grain (the lect-assignments posture — no cone shas are

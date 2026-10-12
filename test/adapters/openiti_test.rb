@@ -275,7 +275,7 @@ class OpenitiTest < Minitest::Test
                  "the opaque #META# block rides verbatim as provenance"
   end
 
-  # P104-1 (Q77 under №R-70): the #META# block's 021.BookSUBJ and the
+  # P104-1 (the aggressive-mining law, owner-ruled 2026-09-26): the #META# block's 021.BookSUBJ and the
   # TSV death year graduate to facets — subject verbatim (the kind rule
   # folds it), period as the AH death century (an honest era label; the
   # CE conversion already rides document_axes via OpenitiDates).

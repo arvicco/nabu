@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Nabu
-  # PersonMine (P97-2 — №R-62 option b): the CENSUS-ONLY person-name
+  # PersonMine (P97-2 — owner ruling 2026-09-11, option b): the CENSUS-ONLY person-name
   # scan — the PlaceMine Han-lane scan shape over the person index's
   # name keys, tallying attestations per name so the owner can read the
-  # numbers before ANY apply gate opens. №R-62's own condition: this
+  # numbers before ANY apply gate opens. The ruling's own condition: this
   # class deliberately has no write path — personal names are far more
   # ambiguous than placenames (homonymy at 600k-key scale), and edges
   # only exist after a ruling on what the census shows.

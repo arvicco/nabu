@@ -4,7 +4,7 @@ require_relative "ia_scan_shelf"
 
 module Nabu
   module Adapters
-    # slavistics-pd (Q105) — the public-domain German-Slavistics reference
+    # slavistics-pd — the public-domain German-Slavistics reference
     # canon as archive.org scans: Miklosich's Etymologisches Wörterbuch and
     # Vergleichende Grammatik, Berneker's Slavisches etymologisches
     # Wörterbuch I, Leskien's Handbuch (its back matter: OCS text editions

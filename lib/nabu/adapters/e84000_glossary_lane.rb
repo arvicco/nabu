@@ -16,7 +16,7 @@ module Nabu
     # Headword ladder: the Tibetan-script term (trailing shad stripped so
     # the folded form meets EWTS-typed queries — the verbatim string keeps
     # its shad in key_raw), else the Wylie, else the English rendering.
-    # Language is xct throughout (the derge shelves' code; the №R-69 v1
+    # Language is xct throughout (the derge shelves' code; the dictionary-lane v1
     # limit — one code per dictionary — is a ruled posture, and the
     # Sanskrit/English lanes ride the body). Two upstream gloss shapes are
     # both real and both parsed: bare <term> + <term type="definition">

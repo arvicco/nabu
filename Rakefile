@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# P105-5d (Q87): rake tasks announce progress through stage/tick lines;
+# P105-5d: rake tasks announce progress through stage/tick lines;
 # when their stdout is a pipe (a background log) Ruby's default block
 # buffering held those lines back for the length of a multi-hour pass —
 # the no-silent-passes class. Flush as written, always.
@@ -84,7 +84,7 @@ end
 #   REMOVES the workspace — aborted runs prove nothing and keep nothing
 #   (owner ruling 2026-08-16); the log is the evidence;
 # - a COMPLETED failing drill keeps its workspace (report.txt,
-#   verify-issues.tsv, the restored machine/ — the Q21/P77-r10 autopsy);
+#   verify-issues.tsv, the restored machine/ — the P77-r10 autopsy);
 #   KEEP_WORKSPACE=1 additionally keeps it on success.
 def run_drill
   $LOAD_PATH.unshift(File.expand_path("lib", __dir__))

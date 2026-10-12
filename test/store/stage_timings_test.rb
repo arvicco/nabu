@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Store::StageTimings (P78-r1, Q34): the durable per-stage wall-time
+# Store::StageTimings (P78-r1): the durable per-stage wall-time
 # record under the history ledger — what the ETA line reads. Append-only
 # history keyed (kind, scope, stage); the LATEST row governs; +rows+
 # carries the run's work size so the estimate can scale by drift.

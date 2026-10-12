@@ -114,7 +114,7 @@ class RefTest < Minitest::Test
     assert_equal "F011", md["sigle"]
     assert_equal "ref-mlu", md["subcorpus"], "the deposit directory is the subcorpus"
     assert_equal({ "subcorpus" => { "value" => "ref-mlu" } }, md["facets"],
-                 "the subcorpus rides as a facet — the ref-enhg lect rule's key (Q39)")
+                 "the subcorpus rides as a facet — the ref-enhg lect rule's key")
     assert_equal "ReF.MLU", md["corpus"], "the header's own corpus line, verbatim"
     assert_equal "Regensburg", md["place"]
     assert_equal %w[oberdeutsch ostoberdeutsch nordbairisch], md["dialects"],

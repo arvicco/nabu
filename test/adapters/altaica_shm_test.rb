@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # altaica-shm — Street's Secret History of the Mongols (P107-7, Q99):
+  # altaica-shm — Street's Secret History of the Mongols (P107-7):
   # the romanized Middle Mongol text, one document at Street's own line
   # grain, use granted by the hosting site's maintainer (by email,
   # 2026-09-27; Street's copyright line carried verbatim).

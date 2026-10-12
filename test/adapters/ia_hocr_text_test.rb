@@ -6,7 +6,7 @@ require "zlib"
 require "json"
 
 module Adapters
-  # The ia-hocr-text parser family (Q105): an archive.org item's hOCR
+  # The ia-hocr-text parser family: an archive.org item's hOCR
   # derivative PAIR — <stem>_hocr_searchtext.txt.gz (the OCR text, one line
   # per hOCR paragraph) + <stem>_hocr_pageindex.json.gz (per hOCR page
   # [text_start, text_end, hocr_start, hocr_end], text offsets in

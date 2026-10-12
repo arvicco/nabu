@@ -136,7 +136,7 @@ module Store
       assert_match(/\A\h{64}\z/, passage.content_sha256)
 
       assert_equal 1, provenance_events(document_id: row.id, event: "loaded").size
-      # P112-2 (Q113): no per-passage "loaded" breadcrumb — at corpus scale
+      # P112-2: no per-passage "loaded" breadcrumb — at corpus scale
       # the constant row was 95% of the provenance table; the passage's
       # existence is its own witness, and the document-grain event remains.
       assert_empty provenance_events(passage_id: passage.id, event: "loaded")
@@ -503,7 +503,7 @@ module Store
       row = doc_row("beta")
       assert row.withdrawn
       assert_equal beta_revision, row.revision # withdrawal is not a revision
-      # P93-2 (№R-16): the sweep stamps WHY and WHEN — both on the catalog
+      # P93-2: the sweep stamps WHY and WHEN — both on the catalog
       # row and on the durable ledger event (the record that survives
       # rebuild).
       assert_equal "upstream-gone", row.withdrawn_reason
@@ -1012,7 +1012,7 @@ module Store
       assert_equal [[1, 0], [2, 0], [3, 0]], ticks
     end
 
-    # -- the index delta (P112-1, Q112) --------------------------------------
+    # -- the index delta (P112-1) --------------------------------------
     # The loader emits the changed passage id/urn sets on the LoadReport so
     # the indexer can refresh exactly what changed instead of the whole
     # slice. The sets must cover every row that moved in or out of the LIVE
@@ -1168,7 +1168,7 @@ module Store
       Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger)
     end
 
-    # -- catalog slimming (P112-2, Q113) -------------------------------------
+    # -- catalog slimming (P112-2) -------------------------------------
     # text_normalized measured byte-identical to text on the vast majority
     # of rows (the CJK-dominated corpus folds to itself): the loader stores
     # "" when equal (the column is NOT NULL on the standing table

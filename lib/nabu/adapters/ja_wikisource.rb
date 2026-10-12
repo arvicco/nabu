@@ -12,7 +12,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # ja-wikisource (P109-1, Q90 under №R-74): the Japanese Wikisource
+    # ja-wikisource (P109-1, under the owner-ruled Wikisource posture): the Japanese Wikisource
     # premodern shelf — the ERA CATEGORY CONE (census 2026-09-29, in
     # the P109 phase plan): every ns-0 page reachable from the eight era
     # categories 飛鳥…江戸 within CATEGORY_DEPTH, 867 pages at census.
@@ -53,7 +53,7 @@ module Nabu
     #   annotations. A shell whose expansion yields no prose still
     #   skips by rule.
     #
-    # == №R-74 (the ruled Wikisource posture)
+    # == The owner-ruled Wikisource posture
     #
     # Premodern-cone ingest, any transcription status; each page's
     # stated base edition rides verbatim in metadata "base_edition"
@@ -141,7 +141,7 @@ module Nabu
                               notes: "pages: #{revids.size} of #{eras_by_title.size} cone titles, revid-pinned")
       end
 
-      # -- the shell expansions (P111-2, Q109-1) -----------------------------
+      # -- the shell expansions (P111-2) -----------------------------
 
       # A <pages index> tag's attribute region (quoted and bare attrs, with
       # or without the self-closing slash).
@@ -475,7 +475,7 @@ module Nabu
           "raw" => eras.join("・") }
       end
 
-      # №R-74: the stated base edition, verbatim — the 底本 line, else
+      # The Wikisource posture: the stated base edition, verbatim — the 底本 line, else
       # the title's edition parenthetical, else the honest "unstated".
       def base_edition(envelope)
         line = envelope.fetch("wikitext")[/底本[:：]\s*(.+)/, 1]

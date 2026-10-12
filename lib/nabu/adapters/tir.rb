@@ -15,7 +15,8 @@ module Nabu
     # pages are journaled v2, a `tir-words` sibling of lexlep-words).
     #
     # == License (both layers verbatim; class nc, relabel-on-reply — the
-    # ogham precedent, licensing email №17 queued)
+    # ogham precedent; nc confirmed by the maintainer's reply by email,
+    # C. Salomon, 2026-07-20)
     #
     # - Project:Terms of Use (api.php, 2026-07-18): "Thesaurus
     #   Inscriptionum Raeticarum (TIR) is an interactive online lexicon

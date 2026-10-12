@@ -2,7 +2,7 @@
 
 module Nabu
   module Store
-    # The derived person index (P97-2, migration 031 — №R-62 option b):
+    # The derived person index (P97-2, migration 031 — owner-ruled 2026-09-11, option b):
     # a prosopography authority's persons projected into catalog tables
     # at sync time, the PlaceIndex mold exactly — keyed (authority,
     # person_id) so CBDB is one authority among future several, derived

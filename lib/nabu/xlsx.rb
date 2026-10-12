@@ -5,7 +5,7 @@ require_relative "errors"
 require_relative "zip_reader"
 
 module Nabu
-  # Minimal in-house xlsx SHEET reader (P77-r6, №R-30): an .xlsx is a ZIP
+  # Minimal in-house xlsx SHEET reader (P77-r6): an .xlsx is a ZIP
   # of XML parts, so this is Nabu::ZipReader (P39-3 — the ruling's "no gem
   # in the budget reads zip" premise was stale) + Nokogiri, nothing new in
   # the dependency budget.
