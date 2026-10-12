@@ -439,7 +439,7 @@ end
 # changes refresh projections through this task, never via a rebuild).
 namespace :builders do
   desc "Re-project timeline + places + facets + kind axis + lect facets + " \
-       "dictionary stats + derge titles over the live catalog"
+       "dictionary stats + derge titles + lemma rollups over the live catalog"
   task :refresh do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
@@ -453,7 +453,9 @@ namespace :builders do
                                             progress: progress)
     puts "builders:refresh done — facets #{summary.facets.rows} rows · " \
          "lect #{summary.lect_rows} rows · dictionaries #{summary.dictionary_stats} · " \
-         "derge titles #{summary.derge_titles.titled}"
+         "derge titles #{summary.derge_titles.titled} · " \
+         "lemma rollup #{summary.lemma_rollups.lemma_rows} rows · " \
+         "language mix #{summary.lemma_rollups.mix_rows} docs"
   ensure
     catalog&.disconnect
   end

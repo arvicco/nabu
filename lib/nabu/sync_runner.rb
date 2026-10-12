@@ -267,6 +267,7 @@ module Nabu
       refresh_catalog_lanes(entry, load_report)
       refresh_dictionary_stats(entry, combined_report)
       refresh_derge_titles(entry)
+      refresh_lemma_rollups(entry, adapter, combined_report, indexed)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
@@ -332,6 +333,21 @@ module Nabu
 
       Store::DictionaryStats.refresh_source!(catalog: @db, slug: entry.slug,
                                              lects: Nabu::Lects.load_default(config: @config))
+    end
+
+    # P121-2: the lemma attestation rollups follow every sync that moved
+    # the source's slice — a reindex (lemma rows) or any load change
+    # (dates, passages, languages) — so the lemma/curve/mixing desks never
+    # lag a sync (the P47-r3 lesson). Per-source drop-and-reproject, run
+    # after the catalog lanes re-projected this source's timeline rows.
+    def refresh_lemma_rollups(entry, adapter, combined_report, indexed)
+      return if index_inert?(adapter)
+
+      changed = combined_report && (combined_report.added + combined_report.updated +
+                                    combined_report.withdrawn).positive?
+      return unless indexed || changed
+
+      Store::LemmaRollup.refresh_source!(catalog: @db, fulltext_path: @config.fulltext_path, slug: entry.slug)
     end
 
     # P106-5: the 84000→Derge title crosswalk re-fills after any sync of

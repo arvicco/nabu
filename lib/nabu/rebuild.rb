@@ -285,6 +285,14 @@ module Nabu
         db, digest: DerivationFingerprint.index_core_digest,
             migration_level: DerivationFingerprint.migration_level
       )
+      # P121-2: the lemma attestation rollups join the fresh passage_lemmas
+      # (fulltext) to the fresh timeline (catalog), so they ride directly
+      # behind the index — wholesale drop-and-reproject, the desk surfaces
+      # of `lemma` and `language --curve/--mixing`.
+      progress&.stage("lemma rollups")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :lemma_rollups) do
+        Store::LemmaRollup.rebuild!(catalog: db, fulltext_path: fulltext_path)
+      end
       # P70-3b (the derivability contract): the links instrument is DERIVED —
       # drop and re-mine it wholesale: every slug-scoped reference producer
       # (the sync-time lane replayed over the re-minted catalog) plus every
