@@ -121,6 +121,7 @@ module Nabu
         html = page_html(name, url)
         sha = Digest::SHA256.hexdigest(html.b)
         @pages[name] = { body: html, sha: sha, on_disk: File.file?(page_path(name)) }
+        stage_partial!(name, html) unless @pages[name][:on_disk]
         url = next_part_url(html, url)
       end
       raise Error, "no text pages reached from #{@entry_url}" if @pages.empty?
@@ -146,6 +147,7 @@ module Nabu
         File.binwrite("#{target}.tmp", page[:body].b)
         File.rename("#{target}.tmp", target)
       end
+      FileUtils.rm_rf(partial_dir)
       write_state!
     end
 
@@ -161,12 +163,32 @@ module Nabu
       URI.join(@entry_url, frame["src"]).to_s
     end
 
-    # A page's html — from disk when present (no re-fetch), else GET.
+    # A page's html — from disk when present (no re-fetch), else from the
+    # partial stage of an interrupted earlier walk, else GET.
     def page_html(name, url)
       path = page_path(name)
       return File.read(path, encoding: "UTF-8") if File.file?(path)
 
+      partial = File.join(partial_dir, name)
+      return File.read(partial, encoding: "UTF-8") if File.file?(partial)
+
       get(url)
+    end
+
+    # A multi-hour first walk (Tocharian B at the polite pace) must survive
+    # being killed: every newly fetched page is staged here at once, and a
+    # re-run reads the stage instead of re-requesting. complete! consumes
+    # and removes the directory; a killed run leaves it for the next run.
+    # The dot-name keeps it outside @page_re, the attic and discovery.
+    def partial_dir
+      File.join(@dir, ".fetch-partial")
+    end
+
+    def stage_partial!(name, html)
+      FileUtils.mkdir_p(partial_dir)
+      staged = File.join(partial_dir, name)
+      File.binwrite("#{staged}.tmp", html.b)
+      File.rename("#{staged}.tmp", staged)
     end
 
     # The absolute URL of the "Next part" arrow, or nil at the end of the chain.
