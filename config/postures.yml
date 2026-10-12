@@ -1139,6 +1139,22 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
         artifact fact"}
+  tamilex:
+    kind: {posture: pending, note: "candidate: a kind_map fold over the work facet (the
+        title's own work name, 21 works) — anthology poetry, the grammars and poetics, the
+        Tivākaram lexicon, the narrative poems, the devotional canons; one ruling"}
+    lect: {posture: identity, note: "tam-Latn → ta (the codemap tam row); nabu-lects mints
+        no Tamil stage, so the classical corpus (the Caṅkam anthologies to the medieval
+        devotional canons) claims the bare anchor, declared coarse — an Old Tamil stage is
+        the named mint candidate"}
+    dating: {posture: undatable, note: "no origDate or composition date in any header
+        (census 2026-10-12); the years inside the listWit witness descriptions date
+        manuscripts and printed editions, ride metadata verbatim, and are never the
+        work's date"}
+    places: {posture: unplaced, note: "no origPlace or place field in any header; places
+        live only in the poems and commentaries as prose"}
+    script: {posture: qualified, note: "romanized (ISO 15919 transliteration, tam-Latn);
+        the Tamil script of the manuscripts is the artifact fact"}
   dharma-tamil:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "the P118-1 pending retired 2026-10-12: the Indic
