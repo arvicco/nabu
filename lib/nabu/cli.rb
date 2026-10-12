@@ -2869,6 +2869,18 @@ module Nabu
       scratch run). Interactive output is NEVER persisted — recomputing costs
       milliseconds; a stored copy would only go stale.
 
+      PROFILES AND CHUNKS (P122-2): --profile NAME loads a declared tuning
+      profile from config/reuse_profiles.yml (latin: trigrams, a 0.1 floor,
+      a function-word drop; chinese: character 4-grams on the CJK lane, a 0.1
+      floor, 10 hits per anchor) — explicit flags (--lang, --min-score,
+      --per-anchor, --gram-size) still override it, and the run records the
+      profile plus every effective parameter. --chunk-size N mines N anchors
+      per committed chunk and prints one progress line per chunk (chunk N/M ·
+      anchors · candidates · edges minted · elapsed) on stderr; a killed run
+      resumes at its cursor when the same command is rerun (finished chunks
+      are never re-mined, no edge is duplicated); --restart discards an
+      unfinished run instead.
+
       Examples:
         nabu parallels urn:nabu:sblgnt:john:1.1          # John 1:1 across the Fathers
         nabu parallels urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -2878,6 +2890,8 @@ module Nabu
         nabu parallels --batch urn:nabu:sblgnt:matt --lang grc
                                                          # mine Matthew's parallels into the journal
         nabu parallels --batch sblgnt --min-score 0.1    # a whole source, stricter floor
+        nabu parallels --batch corpus-corporum --profile latin --chunk-size 5000 2> pl.log
+                                                         # Patrologia, resumable, logged
 
       Use cases: trace a verse's reception; find the source a Father is quoting;
       seed the citation graph one batch scope at a time.
@@ -2898,6 +2912,17 @@ module Nabu
                               "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    option :profile, type: :string, banner: "NAME",
+                     desc: "With --batch: load a tuning profile from config/reuse_profiles.yml " \
+                           "(latin, chinese); explicit flags override it"
+    option :gram_size, type: :numeric, banner: "N",
+                       desc: "With --batch: shingle width in gram tokens " \
+                             "(default #{Nabu::Query::Parallels::GRAM_SIZE}, or the profile's)"
+    option :chunk_size, type: :numeric, banner: "N",
+                        desc: "With --batch: mine N anchors per committed chunk — a killed run " \
+                              "resumes at its cursor when rerun with the same flags"
+    option :restart, type: :boolean, default: false,
+                     desc: "With --batch: supersede an unfinished chunked run instead of resuming it"
     option :lect, type: :string, banner: "LECT-ID",
                   desc: "Restrict candidates to a lect (P59-3, nabu-lects module): keep only hits " \
                         "whose resolution is this lect id or a more specific one under it — the " \
@@ -2912,7 +2937,7 @@ module Nabu
       end
       return batch_parallels(urn) if options[:batch]
 
-      %i[min_score per_anchor db].each do |flag|
+      %i[min_score per_anchor db profile gram_size chunk_size restart].each do |flag|
         next unless options[flag]
 
         raise Thor::Error, "parallels: --#{flag.to_s.tr('_', '-')} only applies with --batch " \
@@ -8321,19 +8346,35 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
+        profile = batch_profile
+        chunk_size = batch_chunk_size
         journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
         result = Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
-                                     .run(scope, lang: options[:lang], license: options[:license],
-                                                 progress: batch_progress,
+                                     .run(scope, profile: profile, lang: options[:lang], license: options[:license],
+                                                 chunk_size: chunk_size, restart: options[:restart],
+                                                 progress: chunk_size ? nil : batch_progress,
+                                                 on_chunk: chunk_size ? batch_chunk_progress : nil,
                                                  **batch_thresholds)
-        # P70-3b: the batch scope is config-durable — rebuild replays it.
+        # P70-3b: the batch scope is config-durable — rebuild replays it
+        # (P122-2: the profile NAME and chunk size ride along; the replay
+        # re-resolves the profile from config/, the project definition).
         unless options[:db]
-          params = { "lang" => options[:lang], "license" => options[:license] }
+          params = { "lang" => options[:lang], "license" => options[:license],
+                     "profile" => options[:profile], "chunk_size" => chunk_size }
                    .merge(batch_thresholds.transform_keys(&:to_s)).compact
           Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels",
                                                             scope: scope, params: params)
         end
         print_batch_parallels(result)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      rescue Interrupt
+        raise unless chunk_size
+
+        # A chunked run's committed chunks are durable (their edges and the
+        # cursor landed together); only the chunk in flight rolled back.
+        warn "\ninterrupted — every committed chunk is kept; rerun the same command to resume at the cursor."
+        exit 130
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -8344,7 +8385,31 @@ module Nabu
         thresholds = {}
         thresholds[:min_score] = options[:min_score].to_f if options[:min_score]
         thresholds[:per_anchor] = options[:per_anchor].to_i if options[:per_anchor]
+        thresholds[:gram_size] = options[:gram_size].to_i if options[:gram_size]
         thresholds
+      end
+
+      # The --profile lookup (P122-2): a ReuseProfiles::Profile, nil when
+      # the flag is absent; an undeclared name names the declared ones.
+      def batch_profile
+        return nil unless options[:profile]
+
+        Nabu::ReuseProfiles.default.fetch(options[:profile])
+      end
+
+      # One stderr line per committed chunk (P122-2) — log-friendly, so a
+      # `2> mine.log` run is readable while it is live.
+      def batch_chunk_progress
+        ->(report) { warn "  #{Nabu::BatchParallels.chunk_line(report)}" }
+      end
+
+      def batch_chunk_size
+        return nil unless options[:chunk_size]
+
+        size = options[:chunk_size].to_i
+        raise Thor::Error, "parallels --batch: --chunk-size must be a positive integer" unless size.positive?
+
+        size
       end
 
       # A stderr tick every BATCH_PROGRESS_EVERY anchors (and at the end), so a
@@ -8359,9 +8424,15 @@ module Nabu
 
       def print_batch_parallels(result)
         say "batch parallels over #{result.scope}#{" [#{result.lang}]" if result.lang}: " \
-            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}" \
+            "#{" · profile #{result.profile}" if result.profile}"
         say "  #{plural(result.anchor_count, 'anchor')} · kept top #{result.per_anchor}/anchor " \
-            "at score ≥ #{result.min_score}#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+            "at score ≥ #{result.min_score} · #{result.gram_size}-grams#{batch_superseded(result)} · " \
+            "#{format('%.1f', result.elapsed)} s"
+        return unless result.chunks > 1 || result.resumed
+
+        say "  #{result.chunks_mined} of #{plural(result.chunks, 'chunk')} mined this run" \
+            "#{' (resumed at the cursor)' if result.resumed}"
       end
 
       # `formulas --batch SCOPE` (P16-2): sweep the whole tradition once and
@@ -8519,7 +8590,14 @@ module Nabu
       # Ruby arrays — compact house style.
       def format_link_params(params)
         pairs = params.except("kind").map do |key, value|
-          "#{key} #{value.is_a?(Array) ? value.join(',') : value}"
+          # A long list (a profile's stop tokens) is provenance, not footer
+          # reading — counted here; params_json keeps it whole.
+          shown = if value.is_a?(Array)
+                    value.size > 5 ? "#{value.size} tokens" : value.join(",")
+                  else
+                    value
+                  end
+          "#{key} #{shown}"
         end
         pairs.empty? ? "" : "(#{pairs.join(', ')}) "
       end

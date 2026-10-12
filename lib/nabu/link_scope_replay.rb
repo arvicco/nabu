@@ -27,10 +27,16 @@ module Nabu
       params = scope["params"] || {}
       case scope["producer"]
       when "parallels"
+        # P122-2: a recorded profile NAME re-resolves from
+        # config/reuse_profiles.yml (the project definition — retuning a
+        # profile retunes its replay); recorded flags still override it.
+        profile = params["profile"] && ReuseProfiles.default.fetch(params["profile"])
         BatchParallels.new(catalog: db, fulltext: fulltext, journal: journal)
-                      .run(scope["scope"],
-                           **{ lang: params["lang"], license: params["license"],
-                               min_score: params["min_score"], per_anchor: params["per_anchor"] }.compact)
+                      .run(scope["scope"], profile: profile,
+                                           **{ lang: params["lang"], license: params["license"],
+                                               min_score: params["min_score"], per_anchor: params["per_anchor"],
+                                               gram_size: params["gram_size"],
+                                               chunk_size: params["chunk_size"] }.compact)
       when "cognates"
         BatchCognates.new(catalog: db, fulltext: fulltext, journal: journal,
                           registry: AlignmentRegistry.load(config.alignments_path))
