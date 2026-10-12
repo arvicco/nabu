@@ -688,6 +688,23 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The raw-code claim gloss (owner ruling 2026-10-12): a code held only
+  # through a per-source override renders the collection's reading on its
+  # card — a legacy code whose bare ISO assignment names a DIFFERENT
+  # language (onw: Old Nubian to ISO, Old Norwegian in the one menota
+  # file carrying it) must never stand unglossed on a count surface.
+  def test_language_card_glosses_a_per_source_override_reading
+    with_lect_ladder_corpus do |config, db|
+      db.disconnect
+      with_config(config) do
+        out, _err, status = run_cli(%w[language onw])
+        assert_nil status, "an override-glossed code is never an unknown-code miss"
+        assert_match(/collection override: menota reads onw as Old Norwegian \(no:old\)/, out)
+        assert_match(/not the code's ISO assignment/, out)
+      end
+    end
+  end
+
   def test_language_card_long_shows_the_upstream_code_split
     with_recon_shelf do |config|
       with_config(config) do

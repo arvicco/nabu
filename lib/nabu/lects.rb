@@ -290,6 +290,17 @@ module Nabu
       @override_tiers.dig(source.to_s, code.to_s)
     end
 
+    # Every per-source override reading of a BARE code — {source slug =>
+    # lect id}. The language card's claim gloss (owner ruling 2026-10-12):
+    # a legacy/collection code whose bare ISO assignment names a different
+    # language must carry the collection's own reading wherever the raw
+    # code is listed, so the override is surfaced, never just applied.
+    def override_sources(code)
+      @overrides.each_with_object({}) do |(source, rows), acc|
+        acc[source] = rows[code.to_s] if rows.key?(code.to_s)
+      end
+    end
+
     # The descent edge for +id+ (class doc, "the parent walk"): a staged
     # lect inherits its anchor's `parent:` unless the registry declares one
     # on the lect itself (reserved for a future per-stage override). Returns
