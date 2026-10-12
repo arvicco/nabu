@@ -159,7 +159,7 @@ module Nabu
         )
         seen = Hash.new(0)
         page.lines.each_with_index do |line, sequence|
-          citation = line.components.join(".")
+          citation = citation_of(line)
           occurrence = (seen[citation] += 1)
           document << Nabu::Passage.new(
             urn: passage_urn(document_ref.id, citation, occurrence),
@@ -226,26 +226,35 @@ module Nabu
         end
         prose = catalogue.reject { |note| note == number_line || note.match?(/\ATHT \d+\z/) }
         metadata["catalogue"] = prose unless prose.empty?
-        preservation = page.notes.map { |line| { "line" => line.components.join("."), "note" => line.note } }
+        preservation = page.notes.map { |line| { "line" => citation_of(line), "note" => line.note } }
         metadata["preservation"] = preservation unless preservation.empty?
         metadata
+      end
+
+      # The line's citation: its components, an empty page (a line straight
+      # under its manuscript) dropped.
+      def citation_of(line)
+        line.components.reject(&:empty?).join(".")
       end
 
       def line_annotations(line, occurrence)
         manuscript, part, number = line.components
         annotations = { "manuscript" => manuscript, "part" => part, "line" => number }
+        annotations.delete("part") if part.empty?
         annotations["syllabic"] = line.syllabic if line.syllabic
         annotations["side"] = line.side if line.side
         annotations["footnotes"] = line.footnotes unless line.footnotes.empty?
         annotations["note"] = line.note if line.note
         annotations["inline"] = line.inline unless line.inline.empty?
         annotations["inline_syllabic"] = line.inline_syllabic unless line.inline_syllabic.empty?
+        annotations["variant"] = line.variant if line.variant
+        annotations["alternate"] = line.alternate if line.alternate
         annotations["repetition"] = occurrence if occurrence > 1
         annotations
       end
 
       def title_for(stem, page, metadata)
-        manuscripts = page.manuscripts.map { |m| "THT #{m.number}" }.join(", ")
+        manuscripts = page.manuscripts.map { |m| "#{m.collection} #{m.number}" }.join(", ")
         label = [metadata["edition_number"]&.then { |n| "A #{n}" }, manuscripts].compact.reject(&:empty?)
         "#{self.class::CORPUS_TITLE} — #{label.join(', ')} (#{stem})"
       end

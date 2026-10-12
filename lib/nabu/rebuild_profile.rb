@@ -71,6 +71,7 @@ module Nabu
       passage_signs: "sign index",        # P77-r16: the OSL sign postings
       alignment: "alignment refs",
       reflex: "reflex roots",
+      lemma_rollups: "lemma rollups",     # P121-2: lemma/curve/mix rollups
       links: "links re-mine",             # P70-3b: the re-derived links instrument
       analyze: "analyze" # P42-4: the bounded post-rebuild ANALYZE (catalog + index)
     }.freeze

@@ -51,6 +51,7 @@ class StarlingTest < Minitest::Test
                   "starling-lezget:lezget.dbf", "starling-sdret:sdret.dbf", "starling-ktet:ktet.dbf",
                   "starling-kiret:kiret.dbf", "starling-limet:limet.dbf", "starling-iranet:iranet.dbf",
                   "starling-lexstat-balt:balt.dbf", "starling-lexstat-germ:germ.dbf",
+                  "starling-lexstat-mix:mix.dbf",
                   # P118: the follow-up packages' LEXSTAT/ wordlists (fixture tables)
                   *%w[alt tung turc lezg yen kir man syc tani drav kam kart].map do |stem|
                     "starling-lexstat-#{stem}:#{stem}.dbf"
@@ -146,7 +147,7 @@ class StarlingTest < Minitest::Test
   def test_discover_yields_one_ref_per_base_in_registry_order
     refs = adapter.discover(FIXTURES).to_a
     assert_equal ALL_BASE_IDS, refs.map(&:id)
-    assert_equal %w[starling] * 38, refs.map(&:source_id)
+    assert_equal %w[starling] * 39, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -793,7 +794,7 @@ class StarlingTest < Minitest::Test
 
   BASE_FILES = %w[pokorny piet vasmer germet baltet].flat_map { |base| ["#{base}.dbf", "#{base}.var"] }.freeze
   # P113-2: IE.exe's LEXSTAT/ subtree (inline-only tables, no .var siblings).
-  LEXSTAT_FILES = %w[LEXSTAT/balt.dbf LEXSTAT/germ.dbf LEXSTAT/iranet.dbf].freeze
+  LEXSTAT_FILES = %w[LEXSTAT/balt.dbf LEXSTAT/germ.dbf LEXSTAT/mix.dbf LEXSTAT/iranet.dbf].freeze
   PACKAGE_FILES = {
     "kart" => %w[kartet],
     "altaic" => %w[altet japet turcet monget tunget],
@@ -871,7 +872,7 @@ class StarlingTest < Minitest::Test
                "#{subdir} survives the IE re-fetch sweep"
         refute Dir.exist?(File.join(workdir, ".attic", subdir)), "nothing #{subdir}-shaped was atticked"
       end
-      assert_equal 38, adapter.discover(workdir).to_a.size
+      assert_equal 39, adapter.discover(workdir).to_a.size
     end
   end
 
@@ -908,18 +909,18 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 427, first.added,
+    assert_equal 442, first.added,
                  "3 records per IE base + 5 kart + 27 across the P104-3 bases (3 altet + 3 japet + " \
                  "3 caucet + 4 stibet + 3 dravet + 4 kamet + 2 chuket + 2 itelet + 3 yenet), " \
                  "both halves of each fixture NUMBER collision and every placeholder pin included; " \
-                 "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ form cells; branch wave: " \
+                 "P113-2: + 3 iranet + 16 lexstat-balt + 49 lexstat-germ + 15 lexstat-mix form cells; branch wave: " \
                  "+ 4 turcet + 1 monget + 2 tunget + 3 lezget + 3 sdret + 2 ktet + 2 kiret + 2 limet; " \
                  "P118 package wordlists: + 107 alt + 8 tung + 39 turc + 18 lezg + 7 yen + 12 kir + 1 man + " \
                  "13 syc + 9 tani + 47 drav + 16 kam + 12 kart form cells"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 427, second.skipped
+    assert_equal 442, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)

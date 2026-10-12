@@ -328,7 +328,7 @@ class StarlingLexstatPackagesTest < Minitest::Test
     loader.load_from(adapter, workdir: FIXTURES)
     lexstat = db[:dictionary_entries].where(Sequel.like(:urn, "urn:nabu:dict:starling-lexstat-%"))
     count = lexstat.count
-    assert_equal 289 + 65, count, "289 package form cells + IE.exe's 16 balt + 49 germ"
+    assert_equal 289 + 80, count, "289 package form cells + IE.exe's 16 balt + 49 germ + 15 mix"
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
     assert_equal count, lexstat.count

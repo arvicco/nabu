@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Five whole real TAMILEX files from four UHH-Tamilex repos (see README.md).
+# adapter_test stays null: upstream edits these editions almost daily, so a
+# count-pinned re-run against a fresh copy would false-fail on routine
+# editorial work; the drift signal is the byte-diff itself.
+source: tamilex
+adapter_test: null
+retrieved: 2026-10-12
+files:
+  - path: NalayiratTivviyapPirapantam/TVM1.8.2.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/NalayiratTivviyapPirapantam/main/TVM1.8.2.xml
+    whole: true
+  - path: Kuruntokai/KT1.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/Kuruntokai/main/KT1.xml
+    whole: true
+  - path: Kuruntokai/_KTSAMPLE.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/Kuruntokai/main/_KTSAMPLE.xml
+    whole: true
+  - path: Tirukkural/TK1.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/Tirukkural/main/TK1.xml
+    whole: true
+  - path: Tolkappiyam/TolC273.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/Tolkappiyam/main/TolC273.xml
+    whole: true

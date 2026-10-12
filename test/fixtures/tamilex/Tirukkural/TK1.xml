@@ -1,0 +1,196 @@
+<?xml-stylesheet type="text/xsl" href="edition.xsl" ?><?xml-model href="tei_all.dtd" type="application/xml-dtd"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title><title xml:lang="ta">Tirukkuṟaḷ</title> 1. <term xml:lang="ta">kaṭavuḷ vāḻttu</term>.</title>
+        <editor role="translator">Jason Cannon-Silber</editor>
+      </titleStmt>
+      <publicationStmt><p/></publicationStmt>
+      <sourceDesc>
+        <msDesc xml:lang="en">
+          <msIdentifier>
+          </msIdentifier>
+           <msContents>
+            <summary><p/>
+            </summary>
+          </msContents>    
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <revisionDesc><change/></revisionDesc>
+  </teiHeader>
+  <text xml:lang="ta" type="edition">
+    <body>
+        <div rend="parallel">
+            <lg xml:id="TK1">
+<l>akara mutala veḻuttellā māti</l>
+<l>pakavaṉ mutaṟṟē yulaku</l>            
+            </lg>
+            <lg xml:lang="en">
+<l>"A" is the first of all letters; the primordial</l>
+<l>Lord is the first in the world.</l>
+            </lg>
+        </div>
+      </body>
+  </text>
+  <text xml:lang="ta" type="edition">
+      <body>
+        <head>Parimēlaḻakar</head>
+        <div rend="parallel">
+          <p xml:id="TK1-Pari_paayiram">
+            [kaṭavuḷ vāḻttu] aḵtāvatu kavi tāṉ vaḻipaṭu kaṭavuḷaiyātal eṭuttukkoṇṭa poruṭ kēṟpuṭaik
+            kaṭavuḷai yātal vāḻttutal. avaṟṟuḷ, ivvāḻt tēṟpuṭaik kaṭavuḷai yeṉavaṟika; eṉṉai?
+            cattuvamutaliya kuṇaṅkaḷāṉ mūṉṟākiya uṟutipporuṭ kavaṟṟāṉ mūvarākiya mutaṟ kaṭavuḷō
+            ṭiyaipuṇṭākalāṉ, ammūṉṟu poruḷaiyuṅ kūṟaluṟṟārk kammūvaraiyum vāḻttutal 
+            mu<choice><sic>ṟa</sic><corr>ṟai</corr></choice>maiyākaliṉ,
+            ivvāḻttam mūvarkkum potuppaṭak kūṟiṉāreṉa vuṇarka.
+          </p>
+          <p xml:lang="en">
+          [This section is called "Praise of the Deity"]—that is, the poet's praising either the
+          deity whom he himself follows or the deity appropriate to the subject he has taken up. One
+          should know that, between these [two], this praise is of(?) the deity
+          appropriate [to the subject matter]. Why? Understand that, for the sake of the goals of
+          man—which, by [virtue of the three] guṇas beginning with sattva, are [likewise] three—the
+          primordial divinity becomes the Three [Forms] through those [same guṇas; therefore,] because there is
+          a (logical?) connection with [that primordial deity,] the praising of those three goals and of those
+          Three [Forms] for the sake of the audience(? more lit. "for those who have experienced the
+          speaking") will [follow] in due course; hence, he has spoken in such a way that this
+          [initial] Praise applies equally (more lit. "is/becomes in common") to all the Three.
+          </p>
+        </div>
+        <div rend="parallel">
+          <p xml:id="TK1-Pari1">
+                     (itaṉporuḷ) akaramākiya mutalaiyuṭaiyaṉa eḻuttukkaḷellām; atupōla, ātipakavaṉākiya mutalaiyuṭait tulaku.—(eṉṟa vāṟu).
+            </p>
+          <p xml:lang="en">
+          The meaning of this [Kuṟaḷ] is as follows: all the characters have a first member that is
+          the letter A; likewise (lit. "like that"), the world has a first member that is the
+          primordial Lord. 
+          </p>
+        </div>
+        <div rend="parallel">
+          <p xml:id="TK1-Pari2">
+          itu talaimaipaṟṟivanta eṭuttukkoṭṭuvamai.
+          akarattiṟkuttalaimai vikārattāṉaṉṟi nātamāttiraiyākiya viyalpāṟ piṟattalāṉum,
+          ātipakavaṟkut talaimai ceyaṟkai yuṇarvāṉaṉṟi iyaṟkai yuṇarvāṉ muṟṟu muṇartalāṉuṅ koḷka.
+          tamiḻeḻuttiṟkēyaṉṟi vaṭaveḻuttiṟku mutalātaṉōkki ‘eḻut tellām’ eṉṟār.
+          āti pakavaṉeṉṉumirupeyaroṭṭuppaṇputtokai vaṭanūṉmuṭipu. ulakeṉṟa tīṇ ṭuyirkaṇmēṉiṉṟatu.
+          kāṇappaṭṭa vulakattāṟ kāṇap paṭāta kaṭavuṭ kuṇmai kūṟavēṇṭutaliṉ,
+          ‘ātipakavaṉ mutaṟṟē yulaku’ eṉa vulakiṉmēl vaittuk kūṟiṉār; kūṟiṉārēṉum, ulakiṟku muta
+          lātipakava ṉeṉpatu karuttākakkoḷka. ēkāran tēṟṟattiṉkaṇ vantatu. ippāṭṭāṉ mutaṟkaṭavuḷa
+          tuṇmai kūṟappaṭṭatu.
+          </p>
+          <p xml:lang="en">
+          This is a comparison of the [subject] taken up concerning its superiority [and that of the
+          thing to which it is compared]. One must grasp that the superiority of the letter A [comes
+          about] through its being produced in the form of Pure Sound (nādamātra) without
+          modifcation [through the organs of speech, etc.], and that the superiority of the Lord
+          [comes about] through His understanding everything/completely through natural
+          understanding, without artificial understanding. The sage has said "all characters" with a
+          view to the fact that, apart from just the Tamil script, [the letter A] is also first in
+          the northern [i.e. Sanskrit] script. "Primordial Lord" is a compound [showing?]
+          qualification [composed of?] a combination(?) of two nouns[—in other words, ātipakavaṉ is
+          what would be called a karmadhāraya in Sanskrit—"the Lord Who is the Origin"]; an ending
+          in northern [i.e. Sanskrit] treatises(???). The [term] "world" here stands in [the sense of]
+          "living [beings]"(?). Because it is necessary to state the existence of the deity, Who is
+          invisible to a world that is visible, he has said "the world is in fact something with the
+          primordial Lord as its beginning, "placing" ["the primordial Lord" as a qualifier?] upon
+          the world; even if he has spoken [thus], one must grasp "The primordial Lord is the
+          beginning to/of the world" as the intention. The letter "ē" [here] occurs in [the sense
+          of expressing] certainty. In this manner, the Lord's existence has been expressed.
+          </p>
+        </div>
+        <div>
+        </div>
+    </body>
+  </text>
+  <text xml:lang="ta" type="edition">
+    <body>
+      <head>Maṇakkuṭavar</head>
+      <div rend="parallel">
+        <p xml:id="TK1-M1">
+          (itaṉ poruḷ.) eḻuttukkaḷellām akaramākiya veḻuttait tamakku mutalāka
+          vuṭaiyaṉa; avvaṇṇamē, ulakam ātiyākiya pakavaṉait taṉakku
+          mutalāka vuṭaittu, (eṉṟavāṟu)
+        </p>
+        <p xml:lang="en">
+          The meaning of this [is as follows]: all the characters have the character that is the
+          letter A as their own first member; in just the same way, the world has the Lord, Who is
+          the Origin, as its own first member.
+        </p>
+      </div>
+      <div rend="parallel">
+        <p xml:id="TK1-M2">
+          ulakakāraṇaṉ ātipakava ṉeṉṟār.
+        </p>
+        <p xml:lang="en">
+          [Tiruvaḷḷuvar] has said that the primordial Lord is He who is the cause(?) of the world.
+        </p>
+      </div>
+    </body>
+  </text>
+<standOff corresp="#TK1" type="wordsplit">
+<interp type="alignment" select="0">6ML11MG21M2G7M,49M</interp>
+<entry>
+<form>akaram</form>
+<def>the syllable a</def>
+<gramGrp>
+  <gram type="role">noun</gram>
+</gramGrp>
+</entry>
+<entry>
+<form>mutala</form>
+<def>beginning they</def>
+<gramGrp>
+  <gram type="role">pronominalised noun</gram>
+  <gram type="role">neuter plural</gram>
+</gramGrp>
+</entry>
+<entry>
+<form><c type="glide">v</c>eḻutt<c type="elided">u</c></form>
+<def>written character</def>
+<form type="sandhi"><c type="glide">v</c>eḻutt</form>
+<gramGrp>
+  <gram type="role">noun</gram>
+</gramGrp>
+</entry>
+<entry>
+<form>ellām</form>
+<def>all</def>
+<gramGrp>
+  <gram type="role">pronoun</gram>
+</gramGrp>
+</entry>
+<entry>
+<form>āti</form>
+<def>origin</def>
+<gramGrp>
+  <gram type="role">noun</gram>
+</gramGrp>
+</entry>
+<entry>
+<form>pakavaṉ</form>
+<def>Lord</def>
+<gramGrp>
+  <gram type="role">noun</gram>
+</gramGrp>
+</entry>
+<entry>
+<form>mutaṟṟ<c type="elided">u</c>-ē</form>
+<def>beginning it</def>
+<form type="simple">mutaṟṟu</form>
+<form type="sandhi">mutaṟṟ</form>
+<gramGrp>
+  <gram type="role">pronominalised noun</gram>
+  <gram type="role">neuter singular</gram>
+</gramGrp>
+<gramGrp type="particle"><m type="enclitic">ē</m></gramGrp>
+</entry>
+<entry>
+<form><c type="glide">y</c>ulaku</form>
+<def>world</def>
+<gramGrp>
+  <gram type="role">noun</gram>
+</gramGrp>
+</entry>
+</standOff></TEI>

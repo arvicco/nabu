@@ -596,8 +596,12 @@ sources:
       #   (451 meteorology ×40, 401 ×31, 460, 481 …; the dta Physik/Biologie shape)
       '\bK?388\b': literary/narrative/tale       # 388 ×32 — legends and folktales: the
       #   texts themselves, not folklore studies
-      '\bK?38[26]\b': scholarly                  # 382/386 ×~57 — ethnography of manners
-      #   and festivals (the dta Gesellschaftswissenschaften precedent)
+      '\bK?38[02467]\b': scholarly               # 380/382/384/386/387 — folklore and
+      #   ethnography of manners, festivals and beliefs (the dta
+      #   Gesellschaftswissenschaften precedent; 384 ×14 + 387 ×14 + 380 ×19
+      #   joined 2026-10-12 under the same ruled shape)
+      '\bK?917\b': literary                      # 917 ×12 — humor and satire: a form
+      #   class (the 2026-10-12 fold round), literature not further classified
       # remaining non-9xx compounds and singletons stay worklist-visible.
     deliberate:
       # Ruled 2026-09-26 (P103 gate, as recommended): the bare modern
@@ -614,6 +618,45 @@ sources:
       "NDC 774": "modern NDC subject shelving (kabuki), not genre"
       "NDC 751": "modern NDC subject shelving (ceramics), not genre"
       "NDC 728": "modern NDC subject shelving (calligraphy), not genre"
+      # Ruled 2026-10-12 (the fold round re-confirmed the standing stance:
+      # the library's own heads, subject shelving never a genre claim) —
+      # the recurring unmapped tail above ~15 docs, same wording:
+      "NDC 361": "modern NDC subject shelving (sociology), not genre"
+      "NDC 370": "modern NDC subject shelving (education), not genre"
+      "NDC 377": "modern NDC subject shelving (universities), not genre"
+      "NDC 304": "modern NDC subject shelving (social commentary), not genre"
+      "NDC 309": "modern NDC subject shelving (social thought), not genre"
+      "NDC 312": "modern NDC subject shelving (politics), not genre"
+      "NDC 319": "modern NDC subject shelving (diplomacy), not genre"
+      "NDC 019": "modern NDC subject shelving (reading), not genre"
+      "NDC 147": "modern NDC subject shelving (psychic research), not genre"
+      "NDC 701": "modern NDC subject shelving (art theory), not genre"
+      "NDC 723": "modern NDC subject shelving (Western painting), not genre"
+      "NDC 750": "modern NDC subject shelving (crafts), not genre"
+      "NDC 779": "modern NDC subject shelving (vaudeville), not genre"
+      "NDC 786": "modern NDC subject shelving (outdoor pursuits), not genre"
+      "NDC 787": "modern NDC subject shelving (fishing), not genre"
+  ticha:              # census: 93 docs, 2026-10-12 — the colonial Zapotec corpus's
+    facet: work_type  # own four-value vocabulary, ruled the same day
+    map:
+      "manuscript": legal                        # 89 — the hand-written estate:
+      #   testaments, bills of sale, land papers (the Bactrian-archive
+      #   precedent: written instruments fold to legal)
+      "arte": lexical/grammar                    # 2 — Córdova's Arte and its kin:
+      #   colonial grammars of Zapotec (the grammar sub minted with this fold)
+      "catecismo": exegesis                      # 1 — doctrinal exposition for
+      #   teaching; the nearest ruled head (a religious-instruction sub is a
+      #   future class-list call if the family ever grows)
+      "miscelaneo": unknown                      # 1 — upstream's own miscellany
+  kdsp:               # census: 262 Slovene ELTeC novels, 2026-10-12 — the deposit's
+    facet: genre      # own genre vocabulary, ruled the same day
+    map:
+      "roman": literary/narrative/novel          # 84
+      "povest": literary/narrative/tale          # 156 — the Slovene tale/novella label
+      "novela": literary/narrative/tale          # 10 — short prose; tale is the
+      #   nearest ruled sub (novella grain)
+      "črtica": literary/narrative               # 2 — the sketch; no finer ruled sub
+      "drugo": unknown                           # 10 — upstream's own "other"
   dta:                # the subgenre carries the signal; genre alone is too coarse
     metadata: subgenre
     map:

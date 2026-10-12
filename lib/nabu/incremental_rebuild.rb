@@ -302,6 +302,15 @@ module Nabu
 
       progress&.stage(stage_note) if stage_note
       indexed = (indexed || 0) + 1 if redone_stages.any? && indexed.nil?
+      # P121-2: the lemma attestation rollups read the index AND the
+      # timeline, so they re-derive (wholesale, after both settled) whenever
+      # either could have moved: a dirty replay, a builders-digest drift
+      # (the rollup builder is a carved builder file), or an index
+      # re-derivation.
+      if builders_ran || index_dirty || redone_stages.any?
+        progress&.stage("lemma rollups")
+        Store::LemmaRollup.rebuild!(catalog: db, fulltext_path: fulltext_path)
+      end
       # P42-4: refresh the planner stats when dirty sources re-derived — their
       # replays revised the catalog and (per source) the index, so the
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run

@@ -432,6 +432,31 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # Ruled 2026-10-12: the ticha work_type and kdsp genre vocabularies fold
+  # onto the ruled heads (census the same day — ticha 93 docs over four
+  # values, kdsp 262 ELTeC novels over five), and the same sitting's aozora
+  # tail round (917 humor/satire → literary; the folklore trio joins the
+  # 382/386 ethnography shape; the recurring subject shelves join the
+  # deliberate block).
+  def test_shipped_ticha_kdsp_and_the_aozora_tail_round
+    shipped = shipped_kinds
+    assert_equal "work_type", shipped.facet_for("ticha")
+    { "manuscript" => ["legal"], "arte" => ["lexical/grammar"],
+      "catecismo" => ["exegesis"], "miscelaneo" => ["unknown"] }.each do |value, want|
+      assert_equal want, shipped.normalize("ticha", value), value
+    end
+    assert_equal "genre", shipped.facet_for("kdsp")
+    { "roman" => ["literary/narrative/novel"], "povest" => ["literary/narrative/tale"],
+      "novela" => ["literary/narrative/tale"], "črtica" => ["literary/narrative"],
+      "drugo" => ["unknown"] }.each do |value, want|
+      assert_equal want, shipped.normalize("kdsp", value), value
+    end
+    assert_equal ["literary"], shipped.normalize("aozora", "NDC 917")
+    assert_equal ["scholarly"], shipped.normalize("aozora", "NDC 384")
+    assert_empty shipped.normalize("aozora", "NDC 361"),
+                 "sociology shelving is a reviewed non-claim"
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),

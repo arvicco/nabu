@@ -94,7 +94,10 @@ module Nabu
     # whole-table projections re-minted per builder run, never per-source
     # rows — per-source stamps owe them nothing.
     BUILDER_DIRS = %w[store/timeline_builder].freeze
-    BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb].freeze
+    # P121-2: the lemma rollup builder joins them — whole-table projections
+    # too (wholesale at both rebuild flavors; the incremental runs it
+    # whenever the builders digest drifts).
+    BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb].freeze
 
     # P112-4: the fulltext-index core — files that shape ONLY
     # fulltext.sqlite3 rows (read the catalog, write the index; never a
@@ -131,8 +134,11 @@ module Nabu
     # ruling D50-b: producer-only code — reads the catalog, writes CSV
     # datasets to the external nabu-data clone, influences nothing Nabu
     # stores — guarded by the purity test (no derivation code may reference
-    # DataBuild; derivation_fingerprint_test).
-    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build] + BUILDER_DIRS).freeze
+    # DataBuild; derivation_fingerprint_test). The research exporter (export
+    # dir + export.rb, P121-1) is out on the same footing: it reads the
+    # catalog and links journal and writes files under exports/, with its
+    # own purity scan in the same test.
+    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export] + BUILDER_DIRS).freeze
     EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
       store/fts_structure.rb
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
@@ -146,7 +152,7 @@ module Nabu
       sync_runner.rb source_registry.rb axis_registry.rb config.rb
       ingest.rb language_shelf.rb library_shelf.rb source_shelf.rb
       note_shelf.rb
-      data_build.rb
+      data_build.rb export.rb
       normalize.rb
       hani.rb jpn.rb xct.rb
     ]).freeze

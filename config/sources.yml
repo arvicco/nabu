@@ -4908,6 +4908,46 @@ syriac-corpus:
   # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
   sync_policy: manual
 
+tamilex:   # P121-3, 02-sources row 266
+  adapter: Nabu::Adapters::Tamilex
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: true    # first real sync 2026-10-12: 7,830 docs / 14,972 passages /
+                 # 262,093 gold wordsplit lemma rows from 7,849 root XML
+                 # (17 rule-skips exactly as censused, 2 quarantined —
+                 # baseline recorded); 4 random cards eyeballed (anthology
+                 # verse, devotional antāti, Nammāḻvār, a 25-passage
+                 # Tolkāppiyam commentary chain) — romanization, work
+                 # facets and commentary layers all sound
+  sync_policy: auto   # upstream edits the editions practically daily — swept by
+                      # sync --all like the other continuously-updated git
+                      # sources (perseus-greek/latin, first1k-greek)
+  # TAMILEX (Universität Hamburg; Prof. Eva Wilden, Jean-Luc Chevillard;
+  # an Academies' Programme project): critical TEI editions of the
+  # classical Tamil corpus, one repo per work on github.com/UHH-Tamilex —
+  # 21 text-edition repos, 7,849 root XML files (live census
+  # 2026-10-12): NalayiratTivviyapPirapantam 3,232 · Tirukkural 1,331 ·
+  # Tolkappiyam 620 · Ainkurunuru 498 · Nannul 423 · Kuruntokai 405 ·
+  # Narrinai 403 · PatinoranTirumurai 243 · Purananuru 200 · Akananuru
+  # 178 · Kalittokai 151 · Patirruppattu 91 · TamilneriVilakkam 26 ·
+  # Cilappatikaram 23 · Paripatal 6 · Manimekalai 5 · Pattuppattu 5 ·
+  # perunkatai 4 · Tivakaram 3 · PurapporulVenpamalai 1 · Tantiyalankaram
+  # 1. ISO 15919 romanized Tamil (tam-Latn) with parallel English; the
+  # per-word wordsplit standOff loads as GOLD tokens (lemma = upstream's
+  # simple/cleaned form, gloss, roles, clitics). Out of the roster:
+  # tooling/study repos, `lexicon` (the dictionary in progress) and the
+  # empty Cirupanarruppatai scaffold. FETCH: one sparse GitFetch per repo
+  # into canonical/tamilex/<repo>/ (root-anchored cone /*.xml + readme —
+  # the wordindex builds, .docx drafts, lib submodule and the mss/,
+  # witnesses/, alignments/ subtrees stay out), one breaker over all
+  # repos, per-repo ledger pins. License: CC BY-NC-SA 4.0, stated by the
+  # TAMILEX maintainers by email, 2026-10-12 (no license file in the
+  # repositories yet; one is pending upstream) → nc. EXPECTED FIRST
+  # SYNC: 7,849 root XML → 17 skipped by rule (templates/scratch,
+  # witnesses/wordindex aggregates, TamilneriVilakkam/Ed.xml — the base
+  # text the per-verse files duplicate) → ~7,832 docs; empty editions
+  # (unfilled poem skeletons) quarantine as "no edition text".
+
 th-wikisource:   # P120-3, 02-sources row 264
   adapter: Nabu::Adapters::ThWikisource
   adopted: "2026-10-12"
@@ -5325,12 +5365,18 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin series; 133 baseline quarantines recorded); THT 1 eyeballed, txb; the London/Paris pages (3,350) await the scope ruling
-                 # (bin/nabu creds set titus), then bin/nabu sync
-                 # titus-tocharian-b — page count unknown until the first
-                 # authenticated walk (2s polite pace); census the page names,
-                 # anchors and lanes against the adapter's PROVISIONAL
-                 # constants before flipping.
+  wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin tochbNNN series only; 133 baseline quarantines recorded); THT 1 eyeballed, txb
+                 # Scope widened 2026-10-12 (the grant read corpus-level): the
+                 # whole 4,349-page chain parses — the toch1000-toch4349 pages
+                 # continue Berlin THT, then Berlin SHT, London IOL Toch. and
+                 # Paris PK (census in the adapter note). Re-parse verified
+                 # same day: 4,138 docs / 42,243 passages (+3,272 docs; THT
+                 # continued 2,469, SHT 10, London 778 incl. 28 xto passages,
+                 # Paris 9; 6 old Berlin quarantines recovered), 2 pages
+                 # catalogue-only by rule, quarantine baseline re-recorded at
+                 # 209 (127 Berlin pre-anchor-note cases + 80 nothing-legible
+                 # note-only pages + 2 unclassified ts-lane pages); Paris
+                 # NS 38+37 and PK NF cards eyeballed.
   # TITUS Tocharian B Corpus (members area,
   # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
   # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
