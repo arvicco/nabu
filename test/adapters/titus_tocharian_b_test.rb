@@ -139,7 +139,7 @@ class TitusTocharianBTest < Minitest::Test
     assert_equal 16, doc.passages.size
     assert doc.passages.any? { |p| p.text.include?("pelaikne") },
            "a known THT 1 reading survives verbatim"
-    assert doc.passages.all? { |p| p.text.unicode_normalized?(:nfc) }
+    assert(doc.passages.all? { |p| p.text.unicode_normalized?(:nfc) })
   end
 
   def test_real_pages_parse_stably_twice
@@ -151,5 +151,4 @@ class TitusTocharianBTest < Minitest::Test
     second = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
     assert_equal first, second, "URNs stable across two parses"
   end
-
 end
