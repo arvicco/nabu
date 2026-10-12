@@ -1,7 +1,7 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# Four whole real DHARMA Task Force A edition files from four repos (see README.md).
+# Five whole real DHARMA Task Force A edition files from four repos (see README.md).
 source: dharma-tamil
 adapter_test: null
 retrieved: 2026-10-11
@@ -14,6 +14,9 @@ files:
     whole: true
   - path: tfa-tiruvavatuturai-epigraphy/DHARMA_INSTiruvavatuturai00018.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfa-tiruvavatuturai-epigraphy/master/DHARMA_INSTiruvavatuturai00018.xml
+    whole: true
+  - path: tfa-tamilnadu-epigraphy/DHARMA_INSTamilNadu00011.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfa-tamilnadu-epigraphy/master/DHARMA_INSTamilNadu00011.xml
     whole: true
   - path: tfa-tamilnadu-epigraphy/DHARMA_INSTamilNadu01015.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfa-tamilnadu-epigraphy/master/DHARMA_INSTamilNadu01015.xml
