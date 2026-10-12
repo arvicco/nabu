@@ -1191,6 +1191,20 @@ sources:
     script: {posture: qualified, note: "romanized (tam/san/tel/kan -Latn); Tamil, Grantha,
         Telugu and Kannada scripts are the artifact facts — the edition rendition rides
         metadata script_rendition verbatim"}
+  madurai:
+    # P122-3: Project Madurai's classical-Tamil cone (the works list's genre rule).
+    kind: {posture: pending, note: "candidate: a kind_map fold over the works list's own
+        Genre column (riding metadata genres verbatim — சங்ககாலம், நீதிநெறி, சமயம் - சைவம்,
+        பிரபந்தம் - …, புராணம், காப்பியம், இலக்கணம் …); one ruling"}
+    lect: {posture: identity, note: "tam (Tamil script) → ta through the held codemap row;
+        no Tamil stage in nabu-lects — the Caṅkam-to-prabandha span claims the bare anchor,
+        declared coarse (the tamilex shape; an Old Tamil stage is the named mint candidate)"}
+    dating: {posture: undatable, note: "the works list carries no date column and the
+        e-texts no composition date; the footers' first-put-up / revised dates date the
+        e-text, never the work — they ride metadata pm_footer verbatim"}
+    places: {posture: unplaced, note: "no place field anywhere in the asset"}
+    script: {posture: implied, note: "Tamil script, the native surface (Unicode HTML);
+        lines without Tamil script are counted (non_tamil_lines), never minted"}
   obi-burmese:
     kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the

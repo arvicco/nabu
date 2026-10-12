@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 139, lect.size,
+    assert_equal 140, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -282,7 +282,9 @@ class PosturesTest < Minitest::Test
                  "tamilex ADDED P121-3 — identity ta (tam-Latn through the held codemap row; " \
                  "no Tamil stage exists, declared coarse): 137→138; " \
                  "sii-clean ADDED P122-3 — identity (tam/san/tel/kan -Latn on the held " \
-                 "dharma-family codemap rows): 138→139"
+                 "dharma-family codemap rows): 138→139; " \
+                 "madurai ADDED P122-3 — identity ta (Tamil-script tam through the held " \
+                 "codemap row, declared coarse — the tamilex shape): 139→140"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -391,7 +393,7 @@ class PosturesTest < Minitest::Test
     # P121-3 ADDS tamilex as identity (tam-Latn → ta, declared coarse — no
     # Tamil stage in the registry): identity 110→111.
     # P122-3 ADDS sii-clean as identity (the dharma-family -Latn codes):
-    # identity 111→112.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 112 }, by_posture)
+    # identity 111→112; madurai as identity (tam → ta): 112→113.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 113 }, by_posture)
   end
 end

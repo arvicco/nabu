@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eighteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 October 2026)</span> |
 |---|---|---|---|---|
@@ -25,6 +25,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · manual | 16 docs / 16,151 passages |
+| `madurai` | texts | attribution | not yet wired | not synced yet |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 | `prakrit-texts` | texts | attribution | wired · manual | 22 docs / 27,124 passages |
