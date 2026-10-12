@@ -317,6 +317,10 @@ module Nabu
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug,
                                                             canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
+      # P122-1: a load may have minted documents an armed shelf estimates
+      # (or withdrawn some) — re-project the silver-date lane wholesale (a
+      # shelf-sized pass; an unarmed or absent shelf touches nothing).
+      Store::SilverDates.replay!(catalog: @db, shelf: DateShelf.present(@config))
     end
 
     # P106-1: the dictionary-group census follows every dictionary-bearing

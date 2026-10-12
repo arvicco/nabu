@@ -21,6 +21,9 @@ module Nabu
         canonical_dir = config.canonical_dir
         progress&.stage("timeline")
         timeline = Store::TimelineBuilder.rebuild!(catalog: catalog, canonical_dir: canonical_dir)
+        # P122-1: the armed silver-date lane re-projects behind the timeline.
+        progress&.stage("silver dates")
+        Store::SilverDates.replay!(catalog: catalog, shelf: DateShelf.present(config))
         progress&.stage("place apply")
         PlaceApply.run(catalog: catalog, canonical_dir: canonical_dir)
         progress&.stage("facets")

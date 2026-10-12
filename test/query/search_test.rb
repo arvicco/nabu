@@ -1050,12 +1050,48 @@ module Query
       assert_equal %w[urn:art:1], rows.map(&:urn)
     end
 
+    # -- silver estimates on the timeline (P122-1) --------------------------
+
+    def silver(urn, not_before, not_after)
+      doc_id = @catalog[:documents].where(urn: urn).get(:id)
+      @catalog[:document_axes].insert(document_id: doc_id, not_before: not_before, not_after: not_after,
+                                      precision: "estimate", axis_source: Nabu::Store::SilverDates::AXIS_SOURCE,
+                                      date_class: Nabu::Store::SilverDates::DATE_CLASS)
+    end
+
+    def test_the_any_row_window_never_reads_silver_estimates
+      classed("urn:upstream", [[-113, -113, nil]])
+      classed("urn:estimated", [])
+      silver("urn:estimated", -150, -100)
+      silver("urn:upstream", 500, 600)
+      rebuild!
+      assert_equal %w[urn:upstream:1], search("στρατηγος", from: -300, to: -30).map(&:urn),
+                   "an estimate never answers a filter that promises upstream dates"
+      assert_empty search("στρατηγος", from: 500, to: 600), "nor does an estimate beside an upstream date"
+    end
+
+    def test_date_basis_silver_finds_exactly_the_documents_only_an_estimate_dates
+      classed("urn:upstream", [[-113, -113, nil]])
+      classed("urn:estimated", [])
+      silver("urn:estimated", -150, -100)
+      silver("urn:upstream", -900, -800) # earlier than the upstream date — still outranked
+      rebuild!
+      assert_equal %w[urn:estimated:1], search("στρατηγος", date_basis: %w[silver]).map(&:urn)
+      assert_equal %w[urn:upstream:1], search("στρατηγος", date_basis: %w[artifact]).map(&:urn),
+                   "an upstream date stays primary however early the estimate"
+      assert_equal %w[urn:estimated:1],
+                   search("στρατηγος", date_basis: %w[silver], from: -200, to: -120).map(&:urn),
+                   "the window reads the estimate when silver is named"
+      assert_empty search("στρατηγος", date_basis: %w[artifact], from: -1000, to: -700),
+                   "the outranked estimate's span is not the document's date"
+    end
+
     def test_unknown_date_basis_is_refused_naming_the_known_set
       classed("urn:art", [[-113, -113, nil]])
       rebuild!
       error = assert_raises(Nabu::Error) { search("στρατηγος", date_basis: %w[bogus]) }
       assert_match(/unknown date basis "bogus"/, error.message)
-      assert_match(/artifact, composition, edition/, error.message)
+      assert_match(/artifact, composition, edition, silver/, error.message)
     end
 
     # -- the --script filter (P75 C-2) ---------------------------------------

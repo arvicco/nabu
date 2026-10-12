@@ -1185,7 +1185,9 @@ module Nabu
         artifact_script       the artifact's own script where it differs
         not_before, not_after the date envelope: signed historical years,
                               BCE negative, no year 0; NULL = open/undated
-        date_precision, date_class (artifact | composition), date_basis
+        date_precision, date_class (artifact | composition | edition | silver
+                              — a model/tool estimate, only where no
+                              upstream date exists), date_basis
                               (the minting lane), date_raw (upstream string)
         place_name, place_ref, place_lat, place_lon
         genre, kind           facet values, sorted and |-joined
@@ -2365,11 +2367,15 @@ module Nabu
       DATE BASIS (--date-basis CLASS[,CLASS...]): keep only documents whose
       PRIMARY date — the one `nabu show` renders — is of the named class:
       artifact (the source's own typed date of the object or witness),
-      composition (attributed author-era dating) or edition (a print year).
-      With --from/--to/--century the window then reads that same primary
-      date, so `--date-basis artifact --century 2` holds out author-era
-      datings instead of mixing them in. An unknown class is refused naming
-      the known set. Text search, --fuzzy, --scan and a term-less browse.
+      composition (attributed author-era dating), edition (a print year) or
+      silver (a model/tool ESTIMATE from the local-dates shelf, projected by
+      `nabu silver-dates --project`; any upstream date outranks it). With
+      --from/--to/--century the window then reads that same primary date,
+      so `--date-basis artifact --century 2` holds out author-era datings
+      instead of mixing them in. Without --date-basis the date window reads
+      upstream dates only — silver estimates answer only when named. An
+      unknown class is refused naming the known set. Text search, --fuzzy,
+      --scan and a term-less browse.
 
       FACETS (--type / --province / --material): document-grained categorical
       filters over the facet table (P17-2 — EDH inscriptions seed it: 22
@@ -2472,8 +2478,8 @@ module Nabu
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
     option :date_basis, type: :string, banner: "CLASS[,CLASS...]",
                         desc: "Date-basis filter: keep documents whose primary date is of this class " \
-                              "(artifact, composition, edition); with --from/--to the window reads " \
-                              "that same date"
+                              "(artifact, composition, edition, silver); with --from/--to the window " \
+                              "reads that same date"
     option :place, type: :string, banner: "NAME|ns:id",
                    desc: "Provenance filter: a namespaced ref (tm:2810, cigs:GIR), a name resolved " \
                          "to its identities + name match, or a LIKE pattern (oxyrhynch%)"
@@ -3437,6 +3443,70 @@ module Nabu
       lemma_index_only(config, shelf) if options[:index]
     rescue Nabu::Error => e
       raise Thor::Error, e.message
+    end
+
+    desc "silver-dates", "The local-dates shelf: import date estimates, project them as silver dates (P122-1)"
+    long_desc <<~HELP, wrap: false
+      The silver-date lane (P122-1, the silver-lemma mold at document
+      grain): model- or tool-emitted date ESTIMATES are non-derivable
+      output, so they live on the local-dates shelf
+      (local/shelves/local-dates/, JSONL shards written only through the
+      Nabu::DateShelf gateway) — never in db/.
+
+      --import FILE shelves one batch: a JSONL file, one estimate per line —
+        {"urn": "urn:…", "not_before": -300, "not_after": -200,
+         "basis": "model", "estimator": "chronos", "estimator_version": "0.3",
+         "confidence": 0.8, "note": "…"}
+      Signed historical years (BCE negative, no year 0; either bound may be
+      null = open). Every urn must name a live document the catalog holds
+      (--force shelves estimates for material not yet held). A later
+      estimate for the same urn supersedes the earlier one.
+
+      --project is the OWNER's gate: it arms the shelf and projects the
+      latest estimate per live document into the timeline as SILVER rows
+      (date_class "silver", precision "estimate", the estimator named in
+      the date string). Once armed, every rebuild flavor, builders:refresh
+      and sync re-projects behind the timeline — the lane survives `nabu
+      rebuild`. --retract disarms the shelf and drops the projected rows
+      (the shelf itself is untouched). Both re-derive the lemma/curve
+      rollups, which bucket by date.
+
+      Honesty: a silver date never answers a filter that promises
+      upstream dates (`search --from/--to`, `vocab --by-century`, source
+      date coverage, lect date inference, published nabu-data dates). It
+      is the primary date only where no upstream date exists, and then
+      renders labeled ("[silver — model estimate …]" on the card,
+      date_class silver in exports); `search --date-basis silver` finds
+      exactly those documents.
+
+      Examples:
+        nabu silver-dates                          census: shelf, arm state, projected rows
+        nabu silver-dates --import estimates.jsonl
+        nabu silver-dates --project
+        nabu silver-dates --retract
+    HELP
+    option :import, type: :string, banner: "FILE", desc: "Shelve a JSONL batch of date estimates"
+    option :force, type: :boolean, default: false,
+                   desc: "With --import: shelve estimates for urns the catalog does not hold"
+    option :project, type: :boolean, default: false,
+                     desc: "Arm the shelf and project it into the timeline as silver dates (owner's gate)"
+    option :retract, type: :boolean, default: false,
+                     desc: "Disarm the shelf and drop the projected silver dates"
+    def silver_dates
+      modes = %i[import project retract].select { |mode| options[mode] }
+      raise Thor::Error, "silver-dates: one of --import/--project/--retract at a time" if modes.size > 1
+      raise Thor::Error, "silver-dates: --force only accompanies --import" if options[:force] && !options[:import]
+
+      config = Nabu::Config.load
+      shelf = Nabu::DateShelf.new(dir: Nabu::DateShelf.dir(config))
+      case modes.first
+      when :import then silver_dates_import(config, shelf)
+      when :project then silver_dates_project(config, shelf)
+      when :retract then silver_dates_retract(config, shelf)
+      else silver_dates_census(config, shelf)
+      end
+    rescue Nabu::Error => e
+      raise Thor::Error, "silver-dates: #{e.message}"
     end
 
     desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4)"
@@ -7466,7 +7536,10 @@ module Nabu
 
         span = Nabu::Timeline.format_span(timeline.not_before, timeline.not_after)
         place = timeline.place_name ? " · #{timeline.place_name}#{place_query_gloss(timeline.place_name)}" : ""
-        if span
+        if span && timeline.date_class == Nabu::Store::SilverDates::DATE_CLASS
+          # P122-1: an estimate is never dressed as an upstream date.
+          say "  date: #{span} [silver — #{timeline.date_raw}]#{place}"
+        elsif span
           say "  date: #{span}#{precision_note(timeline.precision)}#{place}"
         elsif timeline.place_name
           say "  place: #{timeline.place_name}#{place_query_gloss(timeline.place_name)}"
@@ -8612,6 +8685,77 @@ module Nabu
         say "lemma rollup re-derived: #{commas(rows)} rows"
       ensure
         catalog&.disconnect
+      end
+
+      # -- silver-dates (P122-1) --------------------------------------------
+
+      def silver_dates_import(config, shelf)
+        records = Nabu::DateShelf.read_import(options[:import])
+        catalog = open_catalog(config) unless options[:force]
+        raise Thor::Error, "silver-dates: no catalog to resolve urns against — run nabu sync, or --force" \
+          if catalog.nil? && !options[:force]
+
+        resolver = catalog && ->(urn) { !catalog[:documents].where(urn: urn, withdrawn: false).empty? }
+        path = Nabu::DateShelf.new(dir: shelf.dir, resolver: resolver)
+                              .append_batch!(records: records, force: options[:force])
+        say "shelved #{commas(records.size)} estimate(s) → #{path}"
+        say "  not yet on the timeline — `nabu silver-dates --project` projects the shelf" unless shelf.armed?
+        say "  the shelf is armed — re-project now with `nabu silver-dates --project`" if shelf.armed?
+      ensure
+        catalog&.disconnect
+      end
+
+      def silver_dates_project(config, shelf)
+        raise Thor::Error, "silver-dates: the local-dates shelf at #{shelf.dir} is empty — --import first" \
+          if shelf.shard_paths.empty?
+
+        catalog = open_or_create_catalog(config)
+        shelf.arm!
+        report = Nabu::Store::SilverDates.project!(catalog: catalog, shelf: shelf)
+        say "projected #{commas(report.projected)} silver date(s) — " \
+            "#{commas(report.unresolved)} estimate(s) name no live document, " \
+            "#{commas(report.superseded)} superseded by a later estimate"
+        say "  armed: every rebuild, builders:refresh and sync now re-projects the shelf"
+        refresh_date_rollups(config, catalog)
+      ensure
+        catalog&.disconnect
+      end
+
+      def silver_dates_retract(config, shelf)
+        shelf.disarm!
+        catalog = open_catalog(config)
+        removed = catalog ? Nabu::Store::SilverDates.retract!(catalog: catalog) : 0
+        say "retracted #{commas(removed)} silver date(s); the shelf is disarmed (its estimates stay shelved)"
+        refresh_date_rollups(config, catalog) if catalog
+      ensure
+        catalog&.disconnect
+      end
+
+      def silver_dates_census(config, shelf)
+        records = 0
+        shelf.each_record { records += 1 }
+        say "local-dates shelf: #{shelf.dir}"
+        say "  #{commas(records)} estimate(s) in #{commas(shelf.shard_paths.size)} shard(s), " \
+            "#{commas(shelf.latest_by_urn.size)} document urn(s)"
+        say "  #{shelf.armed? ? 'ARMED — projected at every rebuild/refresh/sync' : 'not armed — never projected'}"
+        catalog = open_catalog(config)
+        return unless catalog&.table_exists?(:document_axes)
+
+        rows = catalog[:document_axes].where(axis_source: Nabu::Store::SilverDates::AXIS_SOURCE).count
+        say "  #{commas(rows)} silver date row(s) on the timeline"
+      ensure
+        catalog&.disconnect
+      end
+
+      # The lemma/curve rollups bucket documents by date, so a moved
+      # silver lane re-derives them in the same breath (the desks never
+      # lag a projection — the lemma-enrich --index-only precedent).
+      def refresh_date_rollups(config, catalog)
+        return say("  lemma rollups: not in this catalog (migrate, then rake builders:refresh)") \
+          unless Nabu::Store::LemmaRollup.available?(catalog)
+
+        summary = Nabu::Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
+        say "  lemma rollups re-derived: #{commas(summary.lemma_rows)} lemma, #{commas(summary.curve_rows)} curve rows"
       end
 
       def lemma_spot_check(enricher)

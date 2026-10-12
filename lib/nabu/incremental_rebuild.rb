@@ -542,6 +542,9 @@ module Nabu
     def corpus_builders(db, progress)
       progress&.stage("timeline")
       axes = Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      # P122-1: the armed silver-date lane re-projects behind the timeline.
+      progress&.stage("silver dates")
+      Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
       progress&.stage("facets")
       facets = Store::FacetBuilder.rebuild!(catalog: db,
                                             facet_map: Nabu::FacetMap.load_default(config: @config))

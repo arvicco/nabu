@@ -88,8 +88,10 @@ module Nabu
         [state[:rows], census, state[:slugs].keys.sort, state[:sha].hexdigest]
       end
 
+      # Upstream dates only (P122-1): a silver estimate is never published.
       def each_dated_row(catalog, &)
-        catalog[:document_axes]
+        upstream = Store::SilverDates.upstream(catalog[:document_axes])
+        upstream
           .where(Sequel.~(not_before: nil) | Sequel.~(not_after: nil))
           .join(:documents, id: :document_id)
           .where(withdrawn: false)

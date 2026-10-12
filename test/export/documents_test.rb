@@ -107,6 +107,26 @@ module Export
       assert_equal "documentary/epistolary|documentary/legal", row["kind"], "multi-valued facets join sorted"
     end
 
+    # P122-1: an estimate is the envelope only where no upstream date
+    # exists — and then it ships labeled silver.
+    def test_silver_estimates_ship_only_where_no_upstream_date_exists
+      silver = { axis_source: Nabu::Store::SilverDates::AXIS_SOURCE, date_class: "silver", precision: "estimate" }
+      upstream = document(@alpha, "urn:a:upstream")
+      @catalog[:document_axes].insert(document_id: upstream.id, not_before: -900, not_after: -800, **silver)
+      axis(upstream, not_before: 100, not_after: 200)
+      estimated = document(@alpha, "urn:a:estimated")
+      @catalog[:document_axes].insert(document_id: estimated.id, not_before: -300, not_after: -200, **silver)
+
+      by_urn = rows(with_axes: true).to_h { |row| [row["urn"], row] }
+      assert_equal [100, "artifact", "test"],
+                   by_urn["urn:a:upstream"].values_at("not_before", "date_class", "date_basis")
+      assert_equal [-300, "silver", "silver-dates"],
+                   by_urn["urn:a:estimated"].values_at("not_before", "date_class", "date_basis")
+      assert_empty rows(with_axes: true, from: -1000, to: -200),
+                   "the year window reads upstream dates only (search's semantics) — no estimate answers it"
+      assert_equal(%w[urn:a:upstream], rows(with_axes: true, from: 100, to: 200).map { |row| row["urn"] })
+    end
+
     def test_absent_axes_are_null_and_a_bare_code_resolves_to_itself
       materialized = document(@alpha, "urn:a:0", language: "grc")
       facet(materialized, "lect", "grc:anc")

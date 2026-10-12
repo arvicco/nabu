@@ -177,6 +177,12 @@ module Nabu
       axes = profile.measure(scope: RebuildProfile::CORPUS, stage: :timeline) do
         Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       end
+      # P122-1: the silver-date lane rides directly behind the timeline
+      # (which just dropped every axis row) — re-projected from the
+      # local-dates shelf only when the owner armed it (`nabu silver-dates
+      # --project`); db/ stays f(canonical, config, local).
+      progress&.stage("silver dates")
+      Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
       # P63-7: the nabu-places registry projection re-runs AFTER the lanes
       # rebuilt document_axes (NULL-only, adapter-asserted wins) — db/ stays
       # a pure function of canonical/ incl. the registry under it. A missing
