@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>SII 22.252: original edition by G.V. Srinivasa Rao</title>
+                <title type="alt">No. 252. (A.R. No. 252 of 1906) NORTH ARCOT DISTRICT, CHEYYAR TALUK, TIRUPPANAṄGĀḌU. ŚIVA TEMPLE—ON THE SAME WALL. ACHYUTADĒVA-MAHĀRĀYA—Śaka 1460.</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+                <funder>European Research Council (ERC), grant agreement no 809994</funder>
+            </titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INSSIIv22p0i0252.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                
+                <date from="2019" to="2026">2019-2026</date></publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary>
+                            
+                            <p>The details of the date are given as Viḷambi, Mēsha, śu. 11, Monday corresponding to A.D. 1538, April 8. The <hi rend="italic">tithi</hi> was śu. 10. This records an endowment made by the king of half of the village Vanpākkam with its annual income of 40 <hi rend="italic">poṉ</hi> left as <hi rend="italic">poliyūṭṭu-ubayam</hi> with one Muḍumbai Veṅkappar of Īchchambāḍi for meeting the daily expenses of an offering to god Tiruppanaṅgāvuḍaiya-Nāyanār Anbuḍaiya-Nāyanār.</p>						
+                            
+                        </summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+        </encodingDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2026-07-27" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+            <change who="part:mime" when="2026-07-21" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:vernacular">
+                
+                <p>
+                    <lb n="1"/><hi rend="grantha">śvasti śrīmaN</hi> makāmaṇṭale<hi rend="grantha">śvara</hi> Irācāti Irāca Irācaparame<hi rend="grantha">śva</hi>ra
+                    <lb n="2"/>pūṟuva te<hi rend="grantha">kṣa</hi>ṇa paccima Uttiracamuttirātipati <hi rend="grantha">śrī</hi>virappiṟatāpa
+                    <lb n="3"/><hi rend="grantha">śrī</hi>vira Accutaiya teva<hi rend="grantha">ma</hi>kārāyar piṟutivi rācciyam paṇṇiyaruḷāni
+                    <lb n="4" break="no"/>ṉṟa cakāṟtta<hi rend="grantha">M</hi> <num value="1460"><g type="numeral">1000</g> 4 <g type="numeral">100</g> 6 <g type="numeral">10</g></num>-<hi rend="grantha">N</hi> mel cellāniṉṟa viḷa<hi rend="grantha">M</hi>pi <hi rend="grantha">saṁva</hi>ṟcarattu <hi rend="grantha">meṣa</hi>
+                    <lb n="5" break="no"/>nāyaṟṟu pūṟuvapa<hi rend="grantha">kṣa</hi>ttu Ekāteciyum <hi rend="grantha">soma</hi>vāramum peṟṟa Iṟṟaināḷ ceya 
+                    <lb n="6" break="no"/>ṅkoṇṭa coḻamaṇṭalattuk kāliyūṟ koṭṭattu kaḻumalavaḷanāṭṭu piramateca
+                    <lb n="7" break="no"/>ppaṟṟu tiruppaṉaiṅkāṭu Uṭaiyār tiruppaṉaiṅkāvuṭaiya nayiṉār Aṉpuṭaiya nayiṉār tampirā
+                    <lb n="8" break="no"/>ṉāṟku Accutaiyateva <hi rend="grantha">mahā</hi>rāyaṟku puṇṇiyamāka Īccampāṭiyil muṭumpai Aracappar pu<hi rend="grantha">traN</hi>
+                    <lb n="9"/>veṅkappar vaṉmākka<hi rend="grantha">M</hi> melpāti kiṟāma<hi rend="grantha">M</hi> Araiyum Iṉnayiṉāṟku poli yūṭṭu Upaiyamāka viṭṭa
+                    <lb n="10"/>kiṟāma<hi rend="grantha">M</hi> Araikku varu<hi rend="grantha">ṣaM</hi> Oṉṟukku rekai <hi rend="check"><g ref="sym:tam-pon"/></hi> <num value="40">4 <g type="numeral">10</g></num> kku Iṉnayiṉāṟku Amutu
+                    <lb n="11"/>ceytaruḷa nāḷ 1-kku Amutukku <hi rend="check">� ci ta � ṅa<!--fractions--></hi> kku taḷikai 6-kku<hi rend="grantha">Mm</hi> paṭi veñ caṉattukkum Erikaru
+                    <lb n="12" break="no"/>mpukkum paricārakattukkum cilavu poṉṉāṟpatu Inta Āṟu taḷikai Amutum mel vecca
+                    <lb n="13" break="no"/>mum cantirātittavaraiyu<hi rend="grantha">M</hi> naṭattakkaṭavarkaḷākavum viṭṭavaṉ viḻukkāṭu nālattoṉṟu karip
+                    <lb n="14" break="no"/>piṟa<hi rend="grantha">sā</hi>ta<hi rend="grantha"><supplied reason="omitted">M</supplied></hi> <hi rend="check">ṅa ca la</hi>-yum veṅkappar piḷḷaikku puttira pavuttira paramparaiyāka cantirātitta
+                    <lb n="15" break="no"/>varaiyum naṭattakkaṭaivomākavum Ippaṭikku Eḻutiṉamaik=ku koyil kaṇak=ku
+                    <lb n="16"/>teṉṉava taraiyar camaiya mutaliyār Eḻuttu <g ref="sym:tam-pillaiyarCuli" type="punctuation">.</g>
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+            </div>
+            
+            <div type="commentary">
+                
+            </div>
+            
+            <div type="bibliography">
+                
+                <p>Digital edition of SII 22.252 by <bibl><ptr target="bib:SrinivasaRao1983_01"/></bibl> converted to DHARMA conventions by Emmanuel Francis.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:SrinivasaRao1983_01"/>
+                        <citedRange unit="page">198-199</citedRange>
+                        <citedRange unit="item">252</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    
+                    <bibl/>
+                    
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>

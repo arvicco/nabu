@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>SII 17.656: original edition by K. G. Krishnan</title>
+                <title type="alt">No. 656. (A.R. No. 605 of 1904.) ŚRĪNIVĀSANALLŪR, MUSIRI TALUK, TIRUCHIRAPPALLI DISTRICT.</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INSSIIv17p0i0656.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+            <date from="2019" to="2026">2019-2026</date></publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary>
+                            
+                            <!--On page 300:
+                            <p>On the east base of the Lakshmīnārāyaṇa Perumāḷ temple.</p>						
+                            <p>Parakēsarivarman. Year 38. See Appendix</p>-->	
+                            
+                            <p>ON THE EAST BASE OF THE LAKSHMĪNĀRĀYAṆA PERUMĀḶ TEMPLE.</p>						
+                            <p>Parāntaka I. Year 38. 944-45 A.D.</p>						
+                            
+                            <p>This inscription is dated in the 38th regnal year of <hi rend="bold">Parakēsarivarman who conquered Madurai and Īḻam</hi> i.e., Parāntaka I.</p>						
+                            
+                            <p>This records the sale of land by the <hi rend="italic">Mūlaparaḍai (Mūlaparishad)</hi> of Mahēndramaṅgalam to Kāppiyaṉ Eḻuvaṉ-Gaṅgādharaṉ who endowed the same as <hi rend="italic">tiruviḷakkuppuṟam</hi> to god Tiruvagnīśvarattu-pperumāṉaḍigaḷ. The land was made tax-free by the <hi rend="italic">Mūlaparaḍai.</hi> The donor figures also in some more inscriptions from the place (vide Nos. <ref target="DHARMA_INSSIIv17p0i0600">639</ref> above, <ref target="DHARMA_INSSIIv13p0i0002"><hi rend="italic">S.I.I.</hi> XIII, No. 2</ref>, No. <ref target="DHARMA_INSSIIv17p0i0656A">656-A</ref>, below).</p>						
+                            
+                        </summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+        </encodingDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2025-05-04" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+            <change who="part:mime" when="2026-03-17" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:vernacular">
+                
+                <p>
+                    <lb n="1"/><unclear>matiraiyum Īḻamuṅ</unclear>koṇṭa <hi rend="grantha">śrī</hi>ci kopparakecaripaṉmaṟkku yāṇṭu <num value="38"><unclear>3 <g type="numeral">10</g></unclear> 8</num> Āvatu <hi rend="grantha"><unclear>bra</unclear>hmade</hi>ya<hi rend="grantha"> mahentra</hi>maṅkalattu mūlaparaṭaiyom Ivvūr <unclear>kāppiyaṉ</unclear> Eḻuvaṅkaṅkātiraṉ <gap reason="lost" quantity="10" unit="character"/> 
+                    <lb n="2"/> <gap reason="lost" quantity="2" unit="character"/> y <gap reason="lost" quantity="2" unit="character"/> kaikkoṇṭu Ippoṉṉukku tiruva<hi rend="grantha">gnīśvara</hi>ttup perumāṉaṭikaḷukku tiruviḷakku Oṉṟiṉukku viḷakkuppuṟamāka paraṭaiyom viṟṟukkuṭutta nilamāvatu <gap reason="lost" quantity="3" unit="character"/> pāl <gap reason="lost" quantity="7" unit="character"/> Eṉṟum <gap reason="lost" quantity="1" unit="character"/> yñca <gap reason="lost" quantity="6" unit="character"/> 
+                    <lb n="3"/>lamuta <gap reason="lost" quantity="1" unit="character"/> peṟpaṭṭa nilam viṟṟukkuṭuttaṟkicaitta vellai kiḻpāṟkellai vañcivāykkālukku mekkum teṉpāṟkellai vañci vāykkālukku vaṭakkum melpāṟkellai toṭṭiyattu <unclear>p</unclear>erunilattukku kiḻakkum vaṭapāṟkellai toṭṭiyattu
+                    <lb n="4"/><gap reason="lost" quantity="1" unit="character"/> lai <gap reason="lost" quantity="6" unit="character"/> lukku teṟkum Ivvicaitta perunāṉkellaiyuḷ Akappaṭṭa nilattukku <unclear>Uṇṇila moḻi</unclear>viṉṟi Iṟaiyili tiruviḷakkuppuṟamāka viṟṟu vilaiyāvaṇañceytu kuṭuttom mūlaparuṭaiyom tiru<hi rend="grantha">Agnīśvara</hi>ttup perumāṉaṭikaḷukku Innilat
+                    <lb n="5" break="no"/>tināl vanta Iṟaiyum Eccoṟum veṭṭi vetiṉaiyum Eppeṟpaṭṭa Iṟaiyum paraṭaiyom viṟkiṉṟa nilattiṉ meleṟṟikkoṇṭu Iṟuppatāka Iṟaiyiḻittu Eḻuvaṅkaṅkātiraṉukkuṉṟum <hi rend="grantha">cantrāditya</hi>val Erivatāka vilaiyāvaṇañ ceytu
+                    <lb n="6"/>kuṭuttom paraṭaiyom perumāṉaṭikaḷukku<hi rend="check">[*]</hi> vilaipporuḷ Aiṅkaḻañcum Eḻuvaṅkātiraṉiṭai Āvaṇakkaḷiye poruḷaṟakkoṇṭu Innilam viḷakkuppuṟamāka viṟṟuk kuṭuttu poruḷ māvaṟutip poruṭ celavolaiyumituveyāka poruḷmāvaṟu
+                    <lb n="7"/>tip poruṭ cilavu <unclear>A</unclear>ṟṟu <gap reason="lost" quantity="5" unit="character"/> lai <gap reason="lost" quantity="4" unit="character"/> kuṭuttom mūlaparaṭaiyom tiru<hi rend="grantha">Agnīśvara</hi>ttup perumāṉaṭikaḷukku <gap reason="lost" quantity="8" unit="character"/> 
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+            </div>
+            
+            <div type="commentary">
+                
+            </div>
+            
+            <div type="bibliography">
+                
+                <p>Digital edition of SII 17.656 by <bibl><ptr target="bib:Krishnan1964_01"/></bibl> converted to DHARMA conventions by Emmanuel Francis.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:Krishnan1964_01"/>
+                        <citedRange unit="page">300</citedRange>
+                        <citedRange unit="item">656</citedRange>
+                        <note>See Appendix.</note>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    
+                    <bibl/>
+                    
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>

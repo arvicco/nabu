@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>SII 22.349: original edition by G.V. Srinivasa Rao</title>
+                <title type="alt">No. 349. (A.R. No. 349 of 1906) CHINGLEPUT DISTRICT, KANCHIPURAM TALUK, ŪTTUKKĀḌU. ON THE RIGHT SIDE OF THE STEPS LEADING TO THE TANK</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+                <funder>European Research Council (ERC), grant agreement no 809994</funder>
+            </titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INSSIIv22p0i0349.xml</idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence>
+                </availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>as per external metadata</repository>
+                    </msIdentifier>
+                    <msContents>
+                        <summary>
+                            
+                            <p>This is dated in Śaka 1598, Nala and is in Telugu script.</p>						
+                            
+                        </summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+        </encodingDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2026-10-01" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+            <change who="part:mime" when="2026-09-29" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tel-Latn" rendition="class:telugu maturity:undetermined">
+                
+                <p>
+                    <lb n="1"/>śrī rāma svasti śrī vijay-ābhyudaya śālivāhana śaka-varṣaṁbulu 1598 Agu nēṭi naḷanāma saṁvatsara phālguna śuddha 15 śukravāraṁ nāḍu tirumala tōḷa 
+                    <lb n="2" break="no"/>ppācāryulayyavāri priya śiṣyulaina paṁtta-vaṁśa pāvamulaina madhurāṁtaka gōtrajulaina śrī pēṭanārā-reḍḍi komāruṁḍu yallāreḍḍikinni liṁggamakkakunnu janmiṁccina 
+                    <lb n="3"/>kr̥ṣṇā-reḍḍi Ā kr̥ṣṇā-reḍḍiki yimmaḍakkaku janmiṁccina yellāreḍḍi Ā yallā-reḍḍiki yīśvaravāka-gōtraṁ dēvā-reḍḍi nāgā-reḍḍi komārtte Akkamaku janmiṁccina Ayyapa-reḍḍi kr̥ṣṇā-reḍḍi 
+                    <lb n="4"/>perā-reḍḍi nāgā-reḍḍi gaṁggā-reḍḍi raṁgappa reḍḍi yī Ārugurilō śrīmad-anaṁtta-kalyāṇa paripūrṇulaina rāja-śrī pēṭa gaṁggāreḍḍigāru goṁdurupāla gōtraṁ duharikāḷā-reḍḍi ko 
+                    <lb n="5" break="no"/>mārtte tana priya bhārya tulaśammatō kūḍa kāṁcci-nagarānnaku tūrpuna Uṁḍḍē Ūṭukōṭalō manutīrthānaku pratināmamaina bhairava-koḷaṁ jīrṇṇōddhāraṇaṁ cēśi cuṭṭu rātikaṭṭa<supplied reason="omitted">ḍa</supplied>mu 
+                    <lb n="6"/>tūrpu dakṣiṇāla saupānamulunnu kaṭṭiṁccina taṭāka pratiṣṭha dharmamu Ācaṁdrārka sthāyigā neravērccina pēṭa gaṁggāreḍḍigāru Annalu tammulu Ārgurunnu yiśvaravāka-gōtrajuḍaina dēvā-reḍḍi 
+                    <lb n="7"/>nāgā-reḍḍikini pēṭa yallā-reḍḍi komārtte Akkamaku janmiṁccina tama mēnamāmalu peda Ayyapa-reḍḍi reḍḍipa-reḍḍi cannā-reḍḍi pōlā-reḍḍi cina Ayyapa-reḍḍi gaṁggā-reḍḍigāru Ārgurunnu kū 
+                    <lb n="8" break="no"/>ḍā dēsūri-sthalāna nūtanaṁggā kōṭa peṭṭiṁcci dēsūrivāru Anēṭaṭṭugā prasiddhik-ekki sapta-saṁttān-ādi dharmamulunnu neravērcci nānā-dikkula yaṁddu kīrti pratāpaṁ kaluga naḍicināru yī 
+                    <lb n="9" break="no"/>taṭāka pratiṣṭha cēśina pēṭa gaṁggā-reḍḍigāru tama komāḷḷu rāmāreḍḍi Acārla-reḍḍi nāgā-reḍḍi kr̥ṣṇā-reḍḍigāritō kūḍā śrī rāma kr̥pā kaṭākṣaṁvalla sakala bhāgyamulu dhīrghāyussu kaligē sukhāna vaṁdduru gāka śrī śrī
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+            </div>
+            
+            <div type="commentary">
+                
+            </div>
+            
+            <div type="bibliography">
+                
+                <p>Digital edition of SII 22.349 by <bibl><ptr target="bib:SrinivasaRao1997_01"/></bibl> converted to DHARMA conventions by Emmanuel Francis.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:SrinivasaRao1997_01"/>
+                        <citedRange unit="page">281</citedRange>
+                        <citedRange unit="item">349</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    
+                    <bibl/>
+                    
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>

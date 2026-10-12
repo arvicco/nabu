@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 29 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 October 2026)</span> |
 |---|---|---|---|---|
@@ -41,6 +41,7 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
+| `sii-clean` | texts | attribution | not yet wired | not synced yet |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `trismegistos` | feature module | attribution | wired · manual | nothing held yet |
