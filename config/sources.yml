@@ -5325,7 +5325,7 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # members-only upstream: set the TITUS member credential
+  wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin series; 133 baseline quarantines recorded); THT 1 eyeballed, txb; the London/Paris pages (3,350) await the scope ruling
                  # (bin/nabu creds set titus), then bin/nabu sync
                  # titus-tocharian-b — page count unknown until the first
                  # authenticated walk (2s polite pace); census the page names,
