@@ -344,6 +344,41 @@ babelstone-ids:
   # FileFetch from babelstone.co.uk; actively maintained, low cadence.
   sync_policy: manual
 
+ban-wikisource:   # P120-2, 02-sources row 262
+  adapter: Nabu::Adapters::BanWikisource
+  adopted: "2026-10-12"
+  axes: [sea]
+  wired: false
+  sync_policy: manual
+  # Balinese Wikisource — the lontar (palm-leaf manuscript) corpus,
+  # MANUSCRIPT-DIRECT: ProofreadPage leaf-by-leaf transcription in
+  # Balinese script from the leaf photographs (Internet Archive Balinese
+  # Digital Library scans + village-collection campaign photographs +
+  # Leiden Or. manuscripts). Document = one Index (manuscript scan),
+  # passage = one Page-ns page (manuscript lines kept, leaf markers as
+  # the "leaves" annotation, ProofreadPage quality 0–4 per page).
+  # Provenance: the Palmleaf Bot imports (19,998 pages carry its quality
+  # stamp) are palmleaf.org (PanLex / Internet Archive) content moved
+  # under the Wikimedia project grant; palmleaf.org's own terms are
+  # "Creative Commons Attribution-ShareAlike" — no conflict. Site licence
+  # "Creative Commons Attribution-Share Alike 4.0" (rightsinfo verbatim,
+  # verified 2026-10-12) → attribution.
+  # LIVE CENSUS 2026-10-12: 3,879 Index pages, 1,348 own Page-ns pages
+  # (29,733 pages); 21,690 pages under the manuscript-scan families.
+  # Written rules: 64 printed editions by the year rule (Index Year=
+  # 1918–2013 outside the families) + 2 undated printings + 2 redirect
+  # Indexes + 28 untranscribed manuscripts. Languages (Index Language=
+  # ban/ban-bali/ban-Bali, refined by the works' Lontar Basa * category):
+  # kaw 702 · ban 547 · sas 3 (7 Bali+Kawi conflicts fall back to ban,
+  # declared); scripts Bali 1,246 · Latn 6 (romanized Leiden copies).
+  # Quality: 20,428 proofread · 627 validated · 407 not proofread ·
+  # 27 problematic · 2 without text. Gedong Kirtya classes Agama 492 ·
+  # Itihasa 121 · Wéda 68 · Babad 17.
+  # EXPECTED FIRST SYNC (scratch run of this adapter over the census
+  # captures): 1,252 docs / 21,491 passages, 0 quarantined, 96 skipped
+  # by rule. ~560 api.php requests at the house 1 s pace ≈ 15–18 min;
+  # re-syncs fetch only changed Page-ns revisions (~150 requests).
+
 baxter-sagart:
   adapter: Nabu::Adapters::BaxterSagart
   adopted: "2026-07-19"

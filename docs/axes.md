@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
-**Members** (7): `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`, `ojw`
+**Members** (8): `ban-wikisource`, `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`, `ojw`
 
 ### sinitic
 
