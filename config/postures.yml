@@ -431,11 +431,10 @@ sources:
   # ── P116-2: the South Slavic wikisource cone (owner ruling) ──────────────────
   bg-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: "chu (the 16 charters' original-script text, bare
-        anchor) + bul (Paisiy, hosted as a modern-literary rendering — declared). The
-        wiki's own grouping rides as metadata recension (serbian 10 / bulgarian 6): a
-        facet-rule candidate onto chu/srp (exists); a Bulgarian-recension chu node does
-        not exist — reported, never guessed"}
+    # lect machine-postured since 2026-10-12 — the bg-charter-recension facet
+    # rule (ruled the same day) stages the charters onto the Middle Bulgarian
+    # and Serbian recensions; Paisiy's modern-literary bul rendering rides its
+    # own stored language. The declaration retired under the shadowing rule.
     dating: {posture: partial, note: "the charters' issuance years (бележки, typed);
         Paisiy's rendering carries none"}
     places: {posture: unplaced, note: "no place fields; grantee places live in prose notes"}
@@ -888,10 +887,10 @@ sources:
     script: {posture: implied, note: "Latin script, semi-diplomatic (long s, ¬, superscript
         marks verbatim)"}
   ticha:   # P117-5
-    kind: {posture: pending, note: "candidate: a kind_map fold over the work_type facet
-        (arte → scholarly; catecismo/miscelaneo → hymn-prayer or ritual; manuscript →
-        legal — testaments and bills of sale) — the manuscripts' own document types
-        live on the Ticha website, not in the repo; the fold is a ruled table"}
+    # kind machine-postured since 2026-10-12 — the ruled work_type fold in
+    # kind_map.yml (manuscript → legal, arte → lexical/grammar, catecismo →
+    # exegesis, miscelaneo → unknown). The pending row retired under the
+    # shadowing rule.
     # lect machine-postured since 2026-10-11 — the per-collection zap/xzp →
     # zap:col overrides (the americas registry package merged; xzp stays
     # universally unmapped: SIL's Monte Albán glyphic reading), the
@@ -1573,7 +1572,14 @@ sources:
         the deposit carries no native Newa/Devanagari surface"}
   dcs:
     kind: {posture: unclassified}
-    dating: {posture: undatable}
+    dating: {posture: pending, note: "the corpus's five composition time slots ride as
+        the time_slot facet (projected 2026-10-12, ruled the same day — the undatable
+        claim retired: the asset DOES carry dating); candidate: slot → year-band
+        conversion as attributed composition-era dates, once the corpus's published
+        epoch boundaries are in hand — the project describes five slots over
+        500 BCE–1900 CE (slot 1 Vedic/early … slot 5 late) but publishes no per-slot
+        boundary table; the regnal-table shape: a researched table ratified before
+        any arithmetic"}
     places: {posture: unplaced}
     script: {posture: implied}
   digiliblt:
@@ -1611,9 +1617,9 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   kdsp:   # 02-sources row 242
-    kind: {posture: pending, note: "candidate: a kind_map fold over the textType facet
-        genre (povest / roman / novela / črtica / drugo — all narrative prose); the fold
-        is a ruled table, not a default"}
+    # kind machine-postured since 2026-10-12 — the ruled genre fold in
+    # kind_map.yml (roman → novel, povest/novela → tale, črtica → narrative,
+    # drugo → unknown). The pending row retired under the shadowing rule.
     lect: {posture: dates, note: "as prilit/imp — the sl stage bands stage the
         print year on every text (1836–1849 → sl:emod, 1850–1918 → sl:mod)"}
     dating: {posture: dated, note: "the sourceDesc bibl's publication year (@when on
