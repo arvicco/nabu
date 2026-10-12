@@ -1025,6 +1025,11 @@ are scored by shared-gram count **weighted by rarity** (1/document-frequency,
 the df free from each probe's own hit count), so a rare shared phrase — a
 real quotation — outweighs a pile of common function-word grams. Grams in
 ≥ `COMMON_GRAM_DF` passages are dropped (no evidence, and a cost bound).
+P122-2: the gram size, an all-function-token gram drop and the candidate
+pool are run knobs (defaults unchanged — 4-grams, no stop list, the
+page-fill overfetch) that the batch producer's reuse profiles turn (§15);
+all-Han char grams also probe the CJK bigram lane (P93-3), because the
+main lane indexes an unbroken Han run as one token and cannot answer them.
 
 **Two measured correctness riders (design §1).** (i) *Elision fold at
 gram-build.* The elision apostrophe splits editions — SBLGNT writes it
@@ -1251,7 +1256,10 @@ the per-edge evidence
 journal migration 002; the headword ← ancestor line for etymology, P28-3),
 plus a `link_runs` companion
 `(producer, scope, params_json, code_version, created_at)` so every edge is
-honest about the run that minted it. The `links` reader resolves
+honest about the run that minted it (P122-2, migration 003: chunked runs add
+`status`/`chunk_size`/`cursor_urn`/`chunks_done`/`anchors_done`/`finished_at`
+on the run, a `chunk` on each edge, and a `link_run_chunks` row per
+committed chunk — see "Reuse profiles and resumable chunks" below). The `links` reader resolves
 counterparts at passage grain first, document grain second, and — P28-3 —
 dictionary-entry grain third (an ingested shelf's `urn:nabu:dict:` urns
 read "headword — dictionary title"; a not-ingested shelf's forward edges
@@ -1289,6 +1297,44 @@ edges and run row replaced in one transaction, so reruns are idempotent.
 Interactive output is NEVER persisted (design §7: recomputing
 costs milliseconds; a stored copy is caching with staleness obligations),
 and no flag blurs that line. The same discipline holds for every producer.
+
+**Reuse profiles and resumable chunks (P122-2).** What the batch matches
+on: SURFACE grams only — the anchor's search form cut into overlapping
+shingles, each probed as an exact FTS5 phrase, candidates scored Σ 1/df
+(§13); all-Han grams (the Grams char grain for unspaced CJK) also probe
+the CJK bigram lane, since the main lane's one-token-per-run index cannot
+answer a character n-gram (before this, Classical Chinese parallels were
+empty), the two row sets unioned. The lemma-echo signal is never
+persisted; lemma-grain reuse is future work. Tuning is DECLARED in
+`config/reuse_profiles.yml` (`Nabu::ReuseProfiles`, strict: unknown keys
+and mistyped knobs refuse at load): per profile the lang, the scopes it
+serves, `gram_size`, `min_score`, `per_anchor`, `candidate_pool`,
+`stop_tokens` (a gram made entirely of them is never probed) and a
+required rationale. Two ship, each with its census: `latin` (Patrologia ×
+the classical shelf — trigrams, floor 0.1, a 75-form function-word drop)
+and `chinese` (Kanripo/CBETA commentary chains — character 4-grams on the
+lane, floor 0.1, 10 hits per anchor). `parallels --batch --profile NAME`
+loads one; explicit flags override knob by knob
+(`BatchParallels::Settings.resolve`), and the run's `params_json` records
+the profile name plus every EFFECTIVE parameter, engine defaults
+resolved; the code marker is `parallels-batch/2` (the CJK lane; gram size
+left the marker for the params). `--chunk-size N` mines the scope in
+urn-ordered chunks keyset-paged from the catalog, each chunk's edges, its
+`link_run_chunks` row (anchor span, engine candidates, edges minted/
+refreshed, seconds) and the run cursor committing in ONE journal
+transaction — the chunk state lives in the journal beside the edges it
+describes (one lifecycle, atomic by construction), not in a sidecar
+file. A killed run loses at most the chunk in flight; rerunning the same
+scope under the same effective params and code version resumes at the
+cursor (finished chunks never re-mined), anything else is refused unless
+`--restart` supersedes it. The within-run first-found rule rides the
+journal (`write_edge!` `first_in_run`), so resume yields exactly the
+uninterrupted run's edges, never a duplicate. Progress is one stderr line
+per chunk (`chunk N/M · anchors · candidates · edges minted · refreshed ·
+elapsed · run elapsed`), readable live under `2> log`. Without
+`--chunk-size` a run stays one atomic transaction (the P16-1 contract).
+The recorded link scope keeps the profile NAME and chunk size; the
+rebuild replay re-resolves the profile from `config/`.
 
 **Producers #2/#3 (P16-2).** `nabu formulas --batch SCOPE`
 (`Nabu::BatchFormulas`): the whole-tradition formula sweep (§13's miner, one
