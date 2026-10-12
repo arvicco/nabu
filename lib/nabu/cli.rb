@@ -1063,6 +1063,273 @@ module Nabu
     end
   end
 
+  # `nabu export` — the research exporter (P121-1, architecture §18): each
+  # table command streams one documented query (Nabu::Export) to CSV or
+  # JSONL under exports/ with a license manifest beside it. The passage
+  # stream is the family's DEFAULT command, so the long-standing
+  # `nabu export --format plain|jsonl ...` spelling routes to `passages`
+  # unchanged. Every table is read-only on every database.
+  class ExportCLI < Thor
+    include DurationFormat
+
+    namespace "export"
+
+    default_command :passages
+
+    def self.exit_on_failure?
+      true
+    end
+
+    OVERVIEW = <<~HELP
+      Get matrices out of the library.
+
+      Tables — each writes <table>.csv (or .jsonl with --format jsonl) into
+      exports/ (--out DIR elsewhere) plus <table>.manifest.yml beside it:
+      generated_at, the filters applied, the row total, every column
+      documented, and every source drawn on with its license class. Default
+      exports include everything (local research use); --license-class
+      open,attribution keeps only rows whose every source is in the list —
+      a redistributable set, and the manifest proves what it drew on.
+
+        documents   one row per live document (--with-axes: lect, script,
+                    date envelope, place, genre, kind)
+        links       the links journal's edges with run provenance and each
+                    endpoint's source + license (--dated: endpoint dates)
+        lemmas      the lemma × language × century × grade × source
+                    attestation matrix, from the precompiled lemma rollup
+
+      The passage stream (stdout, no manifest) is the default command:
+        passages    --format plain | jsonl — jsonl lines carry the parsed
+                    annotations (lemmas/morphology where the source has them)
+
+      Examples:
+        nabu export documents --with-axes
+        nabu export documents --lang lat --from -200 --to 200 --license-class open,attribution
+        nabu export links --kind parallel --dated --format jsonl
+        nabu export --format jsonl --lang got > gothic.jsonl
+
+    HELP
+
+    # `nabu help export` / `nabu export --help`: the family overview, then
+    # Thor's command list.
+    def self.help(shell, *)
+      shell.say OVERVIEW
+      super
+    end
+
+    # The options every table command shares.
+    def self.table_options
+      option :format, type: :string, default: "csv", banner: "csv|jsonl", desc: "Output format"
+      option :out, type: :string, banner: "DIR", desc: "Output directory (default: exports/ at the tree root)"
+      option :license_class, type: :string, banner: "CLASS[,CLASS...]",
+                             desc: "Keep only rows whose every source is in these license classes " \
+                                   "(open, attribution, nc, odbl, research_private, restricted)"
+    end
+
+    desc "passages", "Stream non-withdrawn passages to stdout as plain text or JSONL (the default command)"
+    long_desc <<~HELP, wrap: false
+      Stream the live corpus to stdout, one passage per line — the
+      longevity-hedge exit formats: the data must survive the code.
+      Withdrawn passages are excluded; retired-upstream documents are
+      INCLUDED (they are part of your collection — that is the point of
+      keeping them). Streaming end to end: constant memory at any corpus
+      size, so piping a million passages is fine. The default command of
+      `nabu export`: `nabu export --format ...` means exactly this.
+
+      Formats:
+        plain   text only, internal newlines collapsed to one space
+        jsonl   one JSON object per line: urn, language, text,
+                text_normalized, annotations — annotations is a real nested
+                object carrying lemmas/morphology where the source provides
+                them (the treebanks: UD, PROIEL, TOROT)
+        conllu  arrives with the enrichment phase (needs the token model)
+
+      Same --lang / --license / --source filters as search.
+
+      Examples:
+        nabu export --format plain --lang got > gothic.txt
+        nabu export --format jsonl --source ccmh > ccmh.jsonl
+        nabu export --format jsonl --license open | jq -r .urn
+        nabu export --format jsonl --lang chu | jq '.annotations' | head
+
+      Use cases: feed a corpus slice to external NLP tooling; a license-clean
+      subset for anything you plan to publish; plain-text dumps for grep-scale
+      workflows or personal backups independent of nabu itself.
+    HELP
+    option :format, type: :string, required: true, desc: "plain | jsonl"
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :license, type: :string,
+                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
+    option :source, type: :string, banner: "SLUG",
+                    desc: "Restrict to one source (`nabu list` names the slugs)"
+    option :axis, type: :string, banner: "NAME[,NAME...]",
+                  desc: "Restrict to the members of one or more research axes (config/axes.yml) — the " \
+                        "multi-source generalization of --source"
+    def passages
+      Nabu::CLI.new([], options).stream_passage_export
+    end
+
+    desc "documents", "One row per live document — identity, license, passage count (+ the axes with --with-axes)"
+    long_desc <<~HELP, wrap: false
+      Writes exports/documents.csv (or .jsonl) and documents.manifest.yml.
+      One row per live (non-withdrawn) document, in urn order:
+
+        urn, source, language, title, license_class, passage_count
+
+      license_class is the EFFECTIVE class (a document override wins over
+      its source's); passage_count counts live passages. --with-axes adds:
+
+        lect, lect_basis      the resolved lect id and the tier that ruled it
+                              (NULL basis = the bare code resolves to itself)
+        script                the held text's script (the lect's ~segment)
+        artifact_script       the artifact's own script where it differs
+        not_before, not_after the date envelope: signed historical years,
+                              BCE negative, no year 0; NULL = open/undated
+        date_precision, date_class (artifact | composition), date_basis
+                              (the minting lane), date_raw (upstream string)
+        place_name, place_ref, place_lat, place_lon
+        genre, kind           facet values, sorted and |-joined
+
+      Every axis column is NULL where that axis is absent for the document.
+      The envelope is the document's primary dated row (the one `nabu show`
+      renders); --from/--to keep documents whose timeline overlaps the
+      window, open-ended intervals included (search's semantics).
+
+      Examples:
+        nabu export documents --with-axes
+        nabu export documents --source ddbdp,edh --with-axes --format jsonl
+        nabu export documents --lang lat --from -200 --to 200 --license-class open,attribution
+    HELP
+    table_options
+    option :with_axes, type: :boolean, default: false,
+                       desc: "Add the library axes: lect, script, date envelope, place, genre, kind"
+    option :source, type: :string, banner: "SLUG[,SLUG...]", desc: "Restrict to these sources"
+    option :lang, type: :string, banner: "CODE[,CODE...]", aliases: ["--language"],
+                  desc: "Restrict to these document languages (ISO 639-1 spellings fold)"
+    option :from, type: :numeric, banner: "YEAR", desc: "Timeline overlaps from this year (BCE negative)"
+    option :to, type: :numeric, banner: "YEAR", desc: "Timeline overlaps up to this year"
+    def documents
+      with_writer("documents") do |writer, config|
+        with_catalog(config) do |catalog|
+          table = Nabu::Export::Documents.new(catalog: catalog, sources: list(options[:source]),
+                                              langs: list(options[:lang]), from: options[:from]&.to_i,
+                                              to: options[:to]&.to_i, with_axes: options[:with_axes])
+          report(writer.write(table))
+        end
+      end
+    end
+
+    desc "links", "The links journal's edges — kind, endpoints, score, run provenance, endpoint licenses"
+    long_desc <<~HELP, wrap: false
+      Writes exports/links.csv (or .jsonl) and links.manifest.yml from the
+      links journal (db/links.sqlite3), one row per edge in journal order:
+
+        kind, from_urn, to_urn, score, detail,
+        run_id, producer, scope, code_version        (the run provenance)
+        from_source, from_license_class, to_source, to_license_class
+
+      Endpoints resolve through the catalog at passage, document, then
+      dictionary-entry grain; an endpoint the catalog no longer holds stays
+      NULL (the manifest counts them). An edge draws on BOTH endpoints'
+      sources: under --license-class it survives only when both classes are
+      in the list. --dated adds each endpoint document's date envelope
+      (from_/to_ not_before, not_after, date_class).
+
+      Examples:
+        nabu export links
+        nabu export links --kind parallel,formula --dated
+        nabu export links --license-class open --format jsonl
+    HELP
+    table_options
+    option :kind, type: :string, banner: "KIND[,KIND...]", desc: "Restrict to these edge kinds"
+    option :dated, type: :boolean, default: false, desc: "Add each endpoint's date envelope"
+    def links
+      with_writer("links") do |writer, config|
+        with_catalog(config) do |catalog|
+          journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+          raise Thor::Error, "export links: no links journal at #{config.links_path} — no batch producer has run" \
+            unless journal
+
+          begin
+            table = Nabu::Export::Links.new(catalog: catalog, journal: journal, kinds: list(options[:kind]),
+                                            dated: options[:dated])
+            report(writer.write(table))
+          ensure
+            journal.disconnect
+          end
+        end
+      end
+    end
+
+    desc "lemmas", "The lemma attestation matrix — lemma × language × century × grade × source counts"
+    long_desc <<~HELP, wrap: false
+      Writes exports/lemmas.csv (or .jsonl) and lemmas.manifest.yml from
+      the precompiled lemma rollup — the same rows the `nabu lemma` desk
+      reads, never a live scan. One row per cell:
+
+        lemma, language, century, basis, grade, source,
+        occurrences, documents, license_class
+
+      lemma is the folded key; century the signed century index of the
+      document envelope's midpoint (NULL = undated) with basis its date
+      class; grade separates gold (upstream annotation) from silver
+      (machine lemmas); occurrences counts passage attestations.
+
+      A catalog without the rollup tables refuses with the migration
+      hint; an empty rollup exports honestly and the manifest names
+      `bundle exec rake builders:refresh`.
+
+      Examples:
+        nabu export lemmas --lang lat
+        nabu export lemmas --lang grc,lat --grade gold --format jsonl
+        nabu export lemmas --license-class open,attribution
+    HELP
+    table_options
+    option :lang, type: :string, banner: "CODE[,CODE...]", aliases: ["--language"],
+                  desc: "Restrict to these passage-language codes (as stored)"
+    option :grade, type: :string, banner: "gold|silver", desc: "Restrict to one or both grades"
+    def lemmas
+      with_writer("lemmas") do |writer, config|
+        with_catalog(config) do |catalog|
+          table = Nabu::Export::Lemmas.new(catalog: catalog, langs: list(options[:lang]),
+                                           grades: list(options[:grade]))
+          report(writer.write(table))
+        end
+      end
+    end
+
+    private
+
+    def list(value) = value.to_s.split(",").map(&:strip).reject(&:empty?)
+
+    # The frame, built (and so validated) before any database opens.
+    def with_writer(name)
+      config = Nabu::Config.load
+      classes = options[:license_class] && list(options[:license_class])
+      writer = Nabu::Export::Writer.new(out_dir: File.expand_path(options[:out] || config.exports_dir),
+                                        format: options[:format], license_classes: classes,
+                                        progress: ->(count) { warn "  … #{count} rows" })
+      yield writer, config
+    rescue Nabu::Export::Error => e
+      raise Thor::Error, "export #{name}: #{e.message}"
+    end
+
+    # Read-only: the exporter never writes a database.
+    def with_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless File.exist?(config.catalog_path)
+
+      catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      yield catalog
+    ensure
+      catalog&.disconnect
+    end
+
+    def report(result)
+      say "#{result.table}: #{result.rows} rows → #{result.data_path} (in #{format_duration(result.seconds)})"
+      say "  manifest → #{result.manifest_path}"
+    end
+  end
+
   # Command-line entry point. Only `version` is functional in Phase 0; the
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
@@ -3737,6 +4004,151 @@ module Nabu
             "try nabu char CHAR, nabu language --list, or a script tag from config/script_dossiers.yml"
     end
 
+    desc "lemma FORM", "A lemma's attestation profile: first/last century, the gold/silver curve, sources"
+    long_desc <<~HELP, wrap: false
+      Reads the precompiled lemma rollup (built at rebuild and by
+      `rake builders:refresh`, refreshed per source after every sync) — never
+      the passages themselves, so the card is instant at any corpus size.
+
+      - FIRST / LAST attested century, each with its date basis: "artifact"
+        (the object/witness date the source asserts) or "composition"
+        (author-era dating). A document's century is the MIDPOINT of its
+        date envelope (300–30 BCE buckets as 2nd c. BCE).
+      - The per-century curve, gold (verified annotation) and silver
+        (automatic lemmatization) kept apart: attestations / documents per
+        century, then one sparkline row per grade on a shared scale.
+        Undated attestations close the table.
+      - The top sources, and the dictionary shelves carrying the form.
+
+      An attestation is one passage attesting the lemma (the lemma-index
+      grain). FORM folds like `search --lemma`; --lang scopes to one
+      language (every stored spelling of the code).
+
+        nabu lemma hostis --lang lat
+        nabu lemma λόγος --lang grc
+    HELP
+    option :lang, type: :string, aliases: ["--language"], banner: "CODE",
+                  desc: "Scope to one language (lat, grc…; --language is an alias)"
+    def lemma(form)
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "lemma: no catalog — run nabu sync or nabu rebuild" if catalog.nil?
+
+      result = Nabu::Query::LemmaProfile.new(catalog: catalog).run(form, language: options[:lang])
+      print_lemma_profile(result)
+    ensure
+      catalog&.disconnect
+    end
+
+    SPARK_LEVELS = %w[▁ ▂ ▃ ▄ ▅ ▆ ▇ █].freeze
+    ROLLUP_REFRESH_HINT = "run `bundle exec rake builders:refresh` (or the next nabu rebuild)"
+    ROLLUP_MIGRATION_HINT = "this catalog predates the lemma rollups (migration 038) — " \
+                            "the next nabu rebuild builds them"
+    CURVE_BAR_WIDTH = 30
+
+    no_commands do
+      # The honest hints of the absent/unbuilt rollup (the desk law: a hint,
+      # never a scan).
+      def rollup_status_error(command, status)
+        case status
+        when :absent then raise Thor::Error, "#{command}: #{ROLLUP_MIGRATION_HINT}"
+        when :unbuilt then raise Thor::Error, "#{command}: the rollup is not built yet — #{ROLLUP_REFRESH_HINT}"
+        end
+      end
+
+      def print_lemma_profile(result)
+        rollup_status_error("lemma", result.status)
+        scope = result.language ? " [#{result.language}]" : ""
+        if result.status == :unattested
+          say "lemma #{result.form}#{scope}: not attested in the lemma rollup (gold or silver)"
+          print_lemma_dictionary(result.dictionary)
+          return say("lemma: 0 attestations (#{format_duration(result.seconds)})")
+        end
+
+        say "lemma #{result.form}#{scope_label(result)} — #{lemma_span(result)}"
+        print_lemma_curve(result.curve)
+        print_lemma_sources(result.sources)
+        print_lemma_dictionary(result.dictionary)
+        total = result.curve.sum { |point| point.gold[:occurrences] + point.silver[:occurrences] }
+        say "lemma: #{commafy(total)} attestations · " \
+            "#{dated_centuries(result.curve.count(&:century))} " \
+            "(#{format_duration(result.seconds)})"
+      end
+
+      def dated_centuries(count) = "#{count} dated #{count == 1 ? 'century' : 'centuries'}"
+
+      def scope_label(result)
+        result.language ? " [#{result.language}]" : " [#{result.languages.join(', ')}]"
+      end
+
+      def lemma_span(result)
+        return "no dated attestation (every attestation is undated)" unless result.first
+
+        edge = ->(point) { "#{point.label}#{" (#{point.bases.join(', ')})" if point.bases.any?}" }
+        return "attested in #{edge.call(result.first)} only" if result.first.century == result.last.century
+
+        "first attested #{edge.call(result.first)} · last #{edge.call(result.last)}"
+      end
+
+      def print_lemma_curve(curve)
+        width = (curve.map { |point| point.label.length } + [7]).max
+        say "  #{'century'.ljust(width)}  #{'gold att/docs'.rjust(16)}  #{'silver att/docs'.rjust(16)}"
+        curve.each do |point|
+          say "  #{point.label.ljust(width)}  #{grade_cell(point.gold).rjust(16)}  " \
+              "#{grade_cell(point.silver).rjust(16)}"
+        end
+        dated = curve.reject { |point| point.century.nil? }
+        return if dated.empty?
+
+        peak = dated.flat_map { |point| [point.gold[:occurrences], point.silver[:occurrences]] }.max
+        %i[gold silver].each do |grade|
+          next if dated.all? { |point| point.public_send(grade)[:occurrences].zero? }
+
+          say "  #{grade.to_s.ljust(6)} #{sparkline(dated, grade, peak)}  " \
+              "(#{dated.first.label} → #{dated.last.label}, one cell per century)"
+        end
+      end
+
+      def grade_cell(tally)
+        tally[:occurrences].zero? ? "—" : "#{commafy(tally[:occurrences])} / #{commafy(tally[:documents])}"
+      end
+
+      # One cell per century across the contiguous dated span (no century
+      # 0 — the signed index skips it), on a scale shared by both grades so
+      # the rows compare; "·" = no attestation that century.
+      def sparkline(dated, grade, peak)
+        by_century = dated.to_h { |point| [point.century, point.public_send(grade)[:occurrences]] }
+        (dated.first.century..dated.last.century).reject(&:zero?).map do |century|
+          count = by_century.fetch(century, 0)
+          next "·" if count.zero?
+
+          SPARK_LEVELS[((count.to_f / peak) * (SPARK_LEVELS.size - 1)).round]
+        end.join
+      end
+
+      def print_lemma_sources(sources)
+        return if sources.empty?
+
+        cells = sources.map do |share|
+          grades = []
+          grades << "#{commafy(share.gold)} gold" if share.gold.positive?
+          grades << "#{commafy(share.silver)} silver" if share.silver.positive?
+          "#{share.slug} #{grades.join(' + ')}"
+        end
+        say "  top sources: #{cells.join(' · ')}"
+      end
+
+      def print_lemma_dictionary(links)
+        return if links.empty?
+
+        say "  dictionaries (nabu define for the full entry):"
+        links.each do |link|
+          gloss = link.gloss ? " — #{truncate_line(link.gloss, 70)}" : ""
+          say "    #{link.slug}: #{link.headword}#{gloss}  #{link.urn}"
+        end
+      end
+    end
+
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
     long_desc <<~HELP, wrap: false
       Explains any language code the library surfaces — the corpus tags
@@ -3767,6 +4179,13 @@ module Nabu
       the upstream-code split of the etymology edges (chu's edges arrive
       as Wiktionary's "cu"). --list shows the held languages only — the
       ~800-code etymology tail is what `language CODE` is for.
+      --curve draws the code's documents + passages per century (each
+      document at its date-envelope midpoint; undated last). --mixing (no
+      CODE) is the multilingualism census: documents by how many passage
+      languages they hold, the commonest mixed inventories, and per source
+      how the mixing runs — "block" (each language one contiguous run) or
+      "interleaved" (switching back and forth). Both read the precompiled
+      rollups only.
       --export-dossiers is THE one-shot canonical-memory migration
       (owner-fired): it writes the ledger's language notes out as dossier
       files, absence-filling only, idempotent; --dry-run previews it.
@@ -3775,6 +4194,8 @@ module Nabu
         nabu language zle-ort      # the code from an etym cognate list
         nabu language chu --long   # a held language, full holdings
         nabu language --list       # every held language
+        nabu lang lat --curve      # Latin documents/passages by century
+        nabu lang --mixing         # the multilingualism census
         nabu language --export-dossiers --dry-run   # preview the migration
     HELP
     option :list, type: :boolean, default: false,
@@ -3786,9 +4207,14 @@ module Nabu
                        desc: "With --export-dossiers: report what would be written, touch nothing"
     option :long, type: :boolean, default: false,
                   desc: "Add per-source document counts and the upstream-code edge split"
+    option :curve, type: :boolean, default: false,
+                   desc: "Documents + passages per century for CODE (precompiled curve)"
+    option :mixing, type: :boolean, default: false,
+                    desc: "The multilingualism census: inventory sizes, mixed inventories, switch grain"
     def language(code = nil)
       config = Nabu::Config.load
       return export_language_dossiers(config) if options[:"export-dossiers"]
+      return language_census(config, code) if options[:curve] || options[:mixing]
 
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
@@ -3810,6 +4236,82 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+    end
+
+    no_commands do
+      # P121-2: the two rollup-backed language desks (--curve / --mixing).
+      def language_census(config, code)
+        catalog = open_catalog(config)
+        raise Thor::Error, "language: no catalog — run nabu sync or nabu rebuild" if catalog.nil?
+
+        census = Nabu::Query::LanguageCensus.new(catalog: catalog)
+        if options[:mixing]
+          print_language_mixing(census.mixing)
+        else
+          term = code.to_s.strip
+          raise Thor::Error, "language --curve: give a code (lat, grc…)" if term.empty?
+
+          print_language_curve(census.curve(term))
+        end
+      ensure
+        catalog&.disconnect
+      end
+
+      def print_language_curve(result)
+        rollup_status_error("language --curve", result.status)
+        if result.points.empty?
+          return say("language --curve #{result.code}: no documents hold this code " \
+                     "(#{format_duration(result.seconds)})")
+        end
+
+        say "#{result.code} — documents and passages per century (each document at its date-envelope midpoint)"
+        width = (result.points.map { |point| point.label.length } + [7]).max
+        peak = result.points.map(&:passages).max
+        result.points.each do |point|
+          bar = "█" * [(CURVE_BAR_WIDTH * point.passages.to_f / peak).round, 1].max
+          bases = point.bases.any? ? "  (#{point.bases.join(', ')})" : ""
+          say "  #{point.label.ljust(width)}  #{commafy(point.documents).rjust(9)} docs · " \
+              "#{commafy(point.passages).rjust(11)} passages  #{bar}#{bases}"
+        end
+        say "curve: #{commafy(result.documents)} docs · #{commafy(result.passages)} passages over " \
+            "#{dated_centuries(result.points.count(&:century))} " \
+            "(#{format_duration(result.seconds)})"
+      end
+
+      def print_language_mixing(result)
+        rollup_status_error("language --mixing", result.status)
+        say "language mixing — #{commafy(result.documents)} documents by passage-language inventory size"
+        result.by_size.each do |size, count|
+          share = (100.0 * count / result.documents).round(1)
+          say "  #{pluralize(size, 'language').ljust(12)}  #{commafy(count).rjust(11)} docs (#{share}%)"
+        end
+        print_mixing_inventories(result.inventories)
+        print_mixing_sources(result.sources)
+        mixed = result.by_size.sum { |size, count| size > 1 ? count : 0 }
+        share = result.documents.zero? ? 0 : (100.0 * mixed / result.documents).round(1)
+        say "mixing: #{commafy(mixed)} mixed of #{commafy(result.documents)} documents (#{share}%) " \
+            "(#{format_duration(result.seconds)})"
+      end
+
+      def print_mixing_inventories(inventories)
+        return if inventories.empty?
+
+        say "top mixed inventories:"
+        width = inventories.map { |languages, _| languages.length }.max
+        inventories.each { |languages, count| say "  #{languages.ljust(width)}  #{commafy(count).rjust(9)} docs" }
+      end
+
+      def print_mixing_sources(sources)
+        return if sources.empty?
+
+        say "switch grain by source (mixed docs · block / interleaved · total switches):"
+        width = sources.map { |grain| grain.slug.length }.max
+        sources.each do |grain|
+          say "  #{grain.slug.ljust(width)}  #{commafy(grain.mixed).rjust(9)} mixed · " \
+              "#{commafy(grain.block)} block / #{commafy(grain.interleaved)} interleaved · " \
+              "#{commafy(grain.switches)} switches"
+        end
+      end
     end
 
     desc "kind census", "The document-kind axis: cross-corpus class counts"
@@ -4759,61 +5261,37 @@ module Nabu
       log.close if log && !log.equal?($stderr)
     end
 
-    desc "export", "Stream non-withdrawn passages as plain text or JSONL"
-    long_desc <<~HELP, wrap: false
-      Stream the live corpus to stdout, one passage per line — the
-      longevity-hedge exit formats: the data must survive the code.
-      Withdrawn passages are excluded; retired-upstream documents are
-      INCLUDED (they are part of your collection — that is the point of
-      keeping them). Streaming end to end: constant memory at any corpus
-      size, so piping a million passages is fine.
+    # P121-1: `nabu export` is a command family — the research tables
+    # (documents, links: a file + license manifest under exports/) and the
+    # passage stream, which stays the DEFAULT command so `nabu export
+    # --format jsonl ...` is byte-unchanged (ExportCLI).
+    desc "export SUBCOMMAND ...ARGS",
+         "Research exports — documents/links tables with a license manifest — and the passage stream"
+    subcommand "export", ExportCLI
 
-      Formats:
-        plain   text only, internal newlines collapsed to one space
-        jsonl   one JSON object per line: urn, language, text,
-                text_normalized, annotations — annotations is a real nested
-                object carrying lemmas/morphology where the source provides
-                them (the treebanks: UD, PROIEL, TOROT)
-        conllu  arrives with the enrichment phase (needs the token model)
+    no_commands do
+      # The passage stream (P4-3), driven by `nabu export passages` (and the
+      # bare `nabu export --format ...`, its default-command spelling). It
+      # lives here because it shares the root's catalog/source/axis
+      # helpers; ExportCLI#passages hands its options over.
+      def stream_passage_export
+        format = validate_format!(options[:format])
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      Same --lang / --license / --source filters as search.
-
-      Examples:
-        nabu export --format plain --lang got > gothic.txt
-        nabu export --format jsonl --source ccmh > ccmh.jsonl
-        nabu export --format jsonl --license open | jq -r .urn
-        nabu export --format jsonl --lang chu | jq '.annotations' | head
-
-      Use cases: feed a corpus slice to external NLP tooling; a license-clean
-      subset for anything you plan to publish; plain-text dumps for grep-scale
-      workflows or personal backups independent of nabu itself.
-    HELP
-    option :format, type: :string, required: true, desc: "plain | jsonl"
-    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
-    option :license, type: :string,
-                     desc: "Restrict to an exact license class (open, attribution, nc, …)"
-    option :source, type: :string, banner: "SLUG",
-                    desc: "Restrict to one source (`nabu list` names the slugs)"
-    option :axis, type: :string, banner: "NAME[,NAME...]",
-                  desc: "Restrict to the members of one or more research axes (config/axes.yml) — the " \
-                        "multi-source generalization of --source"
-    def export
-      format = validate_format!(options[:format])
-      validate_license!(options[:license])
-      config = Nabu::Config.load
-      catalog = open_catalog(config)
-      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
-
-      validate_source!(catalog, options[:source])
-      _axis_names, axis_slugs = axis_membership(command: "export", config: config)
-      lines = Nabu::Query::Export.new(catalog: catalog)
-                                 .run(format: format, lang: options[:lang], license: options[:license],
-                                      source: options[:source], sources: axis_slugs)
-      # Stream: write each serialized line as it arrives — never join a
-      # 238k-passage corpus into one string.
-      lines.each { |line| $stdout.puts(line) }
-    ensure
-      catalog&.disconnect
+        validate_source!(catalog, options[:source])
+        _axis_names, axis_slugs = axis_membership(command: "export", config: config)
+        lines = Nabu::Query::Export.new(catalog: catalog)
+                                   .run(format: format, lang: options[:lang], license: options[:license],
+                                        source: options[:source], sources: axis_slugs)
+        # Stream: write each serialized line as it arrives — never join a
+        # 238k-passage corpus into one string.
+        lines.each { |line| $stdout.puts(line) }
+      ensure
+        catalog&.disconnect
+      end
     end
 
     desc "backup", "Snapshot the permanent set (canonical/, config/, local/, .docs/) — never the derived dbs"
@@ -8094,6 +8572,18 @@ module Nabu
           catalog.disconnect
           fulltext.disconnect
         end
+        refresh_lemma_rollup(config)
+      end
+
+      # P121-2: the projection just moved silver passage_lemmas rows, so
+      # the lemma attestation rollup re-derives in the same breath — the
+      # `lemma` desk never serves a pre-projection silver curve.
+      def refresh_lemma_rollup(config)
+        catalog = Nabu::Store.connect(config.catalog_path)
+        rows = Nabu::Store::LemmaRollup.refresh_lemmas!(catalog: catalog, fulltext_path: config.fulltext_path)
+        say "lemma rollup re-derived: #{commas(rows)} rows"
+      ensure
+        catalog&.disconnect
       end
 
       def lemma_spot_check(enricher)
@@ -10069,11 +10559,14 @@ module Nabu
         # the registry names it and its descent line renders even with zero
         # holdings (the Aramaic-fan anchors are exactly this case).
         registry_record = lects&.lect(code)
-        unless name || context || held || extras.any? || stages.any? || registry_record || overlay || notes.any?
+        override_readings = lects&.override_sources(code) || {}
+        unless name || context || held || extras.any? || stages.any? || registry_record || overlay ||
+               notes.any? || override_readings.any?
           return print_language_miss(code, fallback)
         end
 
         say "#{code} — #{name || registry_record&.name || '(no name in the held kaikki extracts)'}"
+        print_language_override_readings(code, override_readings, lects)
         print_language_family(code, languages, fallback, overlay_family: overlay&.family)
         print_language_descent(code, lects)
         print_language_context(context, fallback)
@@ -10088,6 +10581,22 @@ module Nabu
         print_language_dictionary_group(code, info, lects) if info
         print_language_axes(code, info, registry)
         print_language_stage_ladder(code, stages, lects, info)
+      end
+
+      # The claim gloss for per-source override codes (owner ruling
+      # 2026-10-12): where a collection's legacy code is overridden onto a
+      # registered lect, the card states that reading in words — the bare
+      # code's ISO assignment may name a different language entirely, and
+      # a count surface listing the raw code must never leave that
+      # unglossed.
+      def print_language_override_readings(code, readings, lects)
+        readings.each do |source, lect_id|
+          record = lects.lect(lect_id)
+          named = record ? "#{record.name} (#{lect_id})" : lect_id
+          say_wrapped("collection override: #{source} reads #{code} as #{named} — " \
+                      "the collection's own usage, not the code's ISO assignment",
+                      indent: 2)
+        end
       end
 
       # P67-2: the descent line — the registry's parent arc, code →

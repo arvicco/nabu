@@ -175,6 +175,8 @@ sources:
     # The ruled exception to D57-f (ud deliberately unstaged): the Old
     # Guaraní treebank (Montoya/Restivo, 1639-1724) is precisely a stage
     # witness, and it is the ONLY ud document claiming bare gn (gug and the
-    # modern treebanks claim their own codes). Ruled 2026-10-11; revisit if
+    # modern treebanks claim their own codes). Ruled 2026-10-11 and
+    # re-confirmed by the 2026-10-12 posture-folds ruling (the gn:old
+    # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }

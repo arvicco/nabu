@@ -206,6 +206,16 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P121-1: `nabu export` tables land in the gitignored exports/ beside
+  # config/ at the tree root — derived from config_dir, so a relocated tree
+  # exports into itself.
+  def test_exports_dir_sits_beside_config_at_the_tree_root
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "exports"), config.exports_dir
+    end
+  end
+
   # P57-3: the per-source lect override file lives beside sources.yml/nabu.yml
   # (Nabu-specific knowledge, distinct from the nabu-lects module's own
   # universal codemap.yml), derived from config_dir the gaiji_dir way — so it

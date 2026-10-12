@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "uri"
+require "time"
 require "faraday"
 
 module Nabu
@@ -22,12 +23,24 @@ module Nabu
   # - +headers+ ride EVERY hop: a conditional GET's If-Modified-Since must
   #   reach the mirror, and upstream may answer 304 at the first hop
   #   (pre-redirect) or at the last — callers put 304 in +accept+ and get
-  #   the honest terminal response either way.
+  #   the honest terminal response either way;
+  # - HTTP 429 carrying Retry-After (the 2026 Wikimedia per-client API
+  #   limits answer bursts this way) backs off min(Retry-After,
+  #   RETRY_AFTER_CAP) seconds and retries ONCE per get; a second 429, a
+  #   429 without the header, or an unreadable header is the honest error.
   module RedirectFollow
     # Statuses followed; any other status outside +accept+ is terminal.
     REDIRECT_STATUSES = [301, 302, 303, 307, 308].freeze
     # Hop cap — beyond this the chain is honestly a loop.
     MAX_REDIRECTS = 5
+    # Too Many Requests — the one status that may earn a back-off.
+    RATE_LIMITED = 429
+    # Longest Retry-After pause honoured, in seconds: a larger ask is a
+    # quota exhausted, not a burst — the retry after the cap then fails
+    # honestly instead of stalling a sync for an hour.
+    RETRY_AFTER_CAP = 120
+    # The real pause; tests inject their own sleeper.
+    SLEEPER = ->(seconds) { Kernel.sleep(seconds) }
 
     # A signed CDN URL's query must travel BYTE-VERBATIM (the aranese/HF
     # xet-bridge 403, 2026-08-20): Faraday's default params machinery
@@ -64,12 +77,21 @@ module Nabu
     # buffering in memory. A factory (not a bare proc) because a redirect
     # hop's body streams too: the caller resets its sink each hop, so only
     # the terminal artifact's bytes survive.
-    def self.get(url, http:, error:, headers: {}, accept: [200], stream: nil)
+    #
+    # +sleeper+ takes the Retry-After pause in seconds (tests inject one).
+    def self.get(url, http:, error:, headers: {}, accept: [200], stream: nil, sleeper: SLEEPER)
       current = url
       hops = 0
+      backed_off = false
       loop do
         response = attempt(current, http: http, error: error, headers: headers, on_data: stream&.call)
         return [response, current] if accept.include?(response.status)
+
+        if response.status == RATE_LIMITED && !backed_off && (pause = retry_after(response))
+          backed_off = true
+          sleeper.call(pause)
+          next
+        end
         raise error, "HTTP #{response.status} for #{current}" unless REDIRECT_STATUSES.include?(response.status)
 
         hops += 1
@@ -81,6 +103,21 @@ module Nabu
         current = URI.join(current, location).to_s
       end
     end
+
+    # The capped pause a 429's Retry-After asks for (delta-seconds or an
+    # HTTP-date), or nil when the header is absent or unreadable.
+    def self.retry_after(response)
+      value = response.headers["retry-after"].to_s.strip
+      seconds = if value.match?(/\A\d+\z/)
+                  value.to_i
+                else
+                  (Time.httpdate(value) - Time.now).ceil
+                end
+      seconds.clamp(0, RETRY_AFTER_CAP)
+    rescue ArgumentError
+      nil
+    end
+    private_class_method :retry_after
 
     def self.attempt(url, http:, error:, headers:, on_data: nil)
       # The encoder must be in place BEFORE the url is assigned — Request#url

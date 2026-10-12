@@ -50,6 +50,7 @@ nabu/
 │   ├── health/                  # invariants, trend rules, remote probes
 │   ├── ops/                     # backup, drill, site-data projection
 │   ├── data_build/              # the nabu-data production rail (§17)
+│   ├── export/                  # the research exporter: tables + manifest frame (§18)
 │   └── *.rb                     # normalization, fetch arms, gateways, runners (flat files)
 ├── config/
 │   ├── sources.yml              # registry: adapter class, upstream, license, wired, translations opt-in
@@ -75,6 +76,7 @@ nabu/
 │   ├── ledger_migrate/          # ledger migration track (own schema_info per file)
 │   ├── links_migrate/           # links journal migration track
 │   └── lects_migrate/           # lect journal migration track
+├── exports/                     # gitignored output of `nabu export` (§18) — neither permanent nor derived
 ├── test/
 │   ├── fixtures/<source>/       # small real upstream samples, checked in
 │   └── ...
@@ -254,6 +256,27 @@ lect_stats(kind, key, documents, ...)
    -- same breath that writes the lect facet rows (the P42-0
    -- write-time-census stance), so the numbers can never drift from the
    -- facet they summarize.
+lemma_rollup(lemma, language, century, basis, grade, source_id, occurrences, documents)
+language_curve(language, century, basis, source_id, documents, passages)
+language_mix(document_id, source_id, urn, languages, language_count, switches)
+   -- P121-2 (migration 038): the lemma attestation instrument, written by
+   -- Store::LemmaRollup. lemma_rollup counts passage attestations of each
+   -- FOLDED lemma (passage_lemmas grain) per passage language, century,
+   -- date basis, grade (gold | silver — the passage_lemmas tier) and
+   -- source; language_curve counts documents + passages per language and
+   -- century; language_mix is one row per live document (sorted passage-
+   -- language inventory, adjacent-passage switch count). century = the
+   -- signed century index of the document's date-envelope MIDPOINT
+   -- (astronomical-year arithmetic, so the missing year 0 cannot skew a
+   -- BCE/CE straddle), NULL when undated; basis = the envelope's
+   -- date_class (artifact | composition). The lemma rows join the
+   -- fulltext file's passage_lemmas to the catalog through a scoped
+   -- ATTACH — one grouped INSERT-SELECT, no per-row Ruby. Built
+   -- wholesale behind the index in both rebuild flavors and last in
+   -- `builders:refresh`, per source after every sync, lemma rows again
+   -- after `lemma-enrich --index-only`; read by `nabu lemma` and
+   -- `nabu language --curve/--mixing`, which answer an absent or unbuilt
+   -- rollup with the refresh hint, never a scan.
 ```
 
 **The write-time doctrine (P42-0):** anything O(corpus) runs at write time;
@@ -1669,3 +1692,57 @@ Tibetan verb lane). The remaining features are single-truth projections:
 their internal consumers read the same upstream truth the builders
 flatten, so they are one-way by design. Producer rail and consumer seams
 never touch — the loop closes only through a public commit.
+
+## 18. The research exporter — matrices out, licenses named (P121-1)
+
+`nabu export <table>` answers the bulk question without raw SQL: each
+table is one DOCUMENTED query (`lib/nabu/export/`) streamed to CSV (default)
+or JSONL (`--format jsonl`) under the gitignored `exports/` at the tree root
+(`--out DIR` elsewhere). Beside every data file the frame
+(`Nabu::Export::Writer`) writes `<table>.manifest.yml`: generated_at, the
+filters applied, the row total, every column with its one-line
+description, the data file's sha256, and — the load-bearing part — every
+source drawn on with its effective license class and row count. Default
+exports include everything (local research use); `--license-class
+open,attribution` keeps only rows whose EVERY draw is in the list, which is
+how a redistributable set is cut, and the manifest proves what it drew on
+either way. A `license_class` column rides in each documents row; a links
+row carries both endpoints' classes, and an edge survives the filter only
+when both are allowed (an endpoint the catalog cannot resolve cannot be
+vouched for and drops out).
+
+Two tables today, registered by name in the explicit `Nabu::Export::TABLES`
+map — a further table is one file under `export/`, one registry line, and
+one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
+(NAME, SUMMARY, columns, filters, each_row, notes):
+
+- `documents` — one row per live document, urn-ordered: urn, source,
+  language, title, effective license, live passage count; `--with-axes`
+  adds the resolved lect (the §15a materialized facet; the bare code where
+  no row exists, NULL on a catalog that never materialized), the held
+  script (the lect id's `~` segment) and the artifact script, the date
+  envelope, place (name, ref, coordinates), and the genre and kind facets
+  (multi-valued facets sorted and `|`-joined). The envelope is ONE row's
+  bounds, never a fabricated hull: the primary dated document-grain
+  timeline row (earliest, the row `nabu show` renders), with its precision,
+  minting lane, verbatim upstream string, and date class — `artifact`
+  (migration 034's NULL: the source's own date of the object) or
+  `composition`. `--source`, `--lang`, and `--from`/`--to` (CatalogJoin's
+  NULL-aware overlap, so export and search agree on a window) filter.
+- `links` — the §15 journal's edges in id order: kind, endpoints, score,
+  detail, the run provenance (run id, producer, scope, code version), and
+  each endpoint resolved through the catalog at passage, document, then
+  dictionary-entry grain to its source and license; `--kind` filters,
+  `--dated` adds both endpoints' envelopes. Two databases, no ATTACH — each
+  page of edges resolves its urns with one batched catalog read per grain.
+
+Streaming is keyset paging (urn for documents, id for links) with one
+batched read per page per concern, so memory is constant at library scale;
+the files land through a staging name and rename, and two runs over the
+same catalog are byte-identical but for the manifest's generated_at. The
+exporter is READ-ONLY on every database (the catalog opens read-only) and,
+like `data_build/`, sits outside the shared derivation digest — producer
+code that writes files nobody derives from; the purity scan in
+`derivation_fingerprint_test` keeps it that way. The passage stream (P4-3)
+is the family's default command: `nabu export --format plain|jsonl` is
+unchanged and means `nabu export passages`.

@@ -16,11 +16,13 @@ class BuilderRefreshTest < Minitest::Test
   # test are catalog-side (facet_map/kind rules over metadata_json); the
   # canonical-backed walks (KR-Catalog, nabu-places, hiero cone) are the
   # rebuild suite's business and only cost minutes here.
-  HybridConfig = Struct.new(:config_dir, :canonical_dir, keyword_init: true)
+  HybridConfig = Struct.new(:config_dir, :canonical_dir, :fulltext_path, keyword_init: true)
 
+  # No fulltext file: the lemma rollup honestly stays empty, the
+  # catalog-only rollups (language mix/curve) still project.
   def hybrid_config(dir)
     HybridConfig.new(config_dir: File.expand_path("../../config", __dir__),
-                     canonical_dir: dir)
+                     canonical_dir: dir, fulltext_path: File.join(dir, "fulltext.sqlite3"))
   end
 
   def setup
@@ -52,6 +54,17 @@ class BuilderRefreshTest < Minitest::Test
     assert_operator summary.facets.rows, :>=, 1
     refute_nil summary.timeline
     refute_nil summary.kinds
+  end
+
+  # P121-2: the lemma attestation rollups ride the refresh (last, after
+  # the timeline they bucket by).
+  def test_refresh_rebuilds_the_lemma_rollups
+    Nabu::Store::Passage.create(document_id: @doc.id, urn: "urn:nabu:seal:1:1", sequence: 1,
+                                language: "akk", text: "t", text_normalized: "t", content_sha256: "x")
+    summary = Dir.mktmpdir { |dir| Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir)) }
+    assert_equal 1, summary.lemma_rollups.mix_rows
+    assert_equal 0, summary.lemma_rollups.lemma_rows, "no fulltext file: the honest empty lemma rollup"
+    assert_equal "akk", @catalog[:language_mix].where(document_id: @doc.id).get(:languages)
   end
 
   def test_refresh_is_reprojection_not_accretion

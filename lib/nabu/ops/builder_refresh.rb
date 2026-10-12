@@ -3,7 +3,7 @@
 module Nabu
   module Ops
     # The standalone corpus-wide builder pass (P104): timeline →
-    # place apply → facets → kind axis, in rebuild's own order with
+    # place apply → facets → kind axis → … → lemma rollups, in rebuild's own order with
     # rebuild's own arguments — over a LIVE catalog. Exists because
     # rebuilds are owner-fired inter-phase steps (owner rule
     # 2026-09-26): a phase whose live changes are builder-side
@@ -12,7 +12,8 @@ module Nabu
     # builder invoked is drop-and-reproject, so the pass is idempotent
     # and db/ stays a pure function of the permanent folders.
     module BuilderRefresh
-      Summary = Data.define(:timeline, :facets, :kinds, :lect_rows, :dictionary_stats, :derge_titles)
+      Summary = Data.define(:timeline, :facets, :kinds, :lect_rows, :dictionary_stats, :derge_titles,
+                            :lemma_rollups)
 
       module_function
 
@@ -42,8 +43,14 @@ module Nabu
                                                            lects: Lects.load_default(config: config))
         progress&.stage("derge titles")
         derge_titles = E84000DergeTitles.new(catalog: catalog, canonical_dir: canonical_dir).run
+        # P121-2: the lemma attestation rollups LAST — they read the
+        # timeline just re-projected (and the live fulltext index), so the
+        # `lemma` / `language --curve/--mixing` desks follow every refresh.
+        progress&.stage("lemma rollups")
+        lemma_rollups = Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
         Summary.new(timeline: timeline, facets: facets, kinds: kinds, lect_rows: lect_rows,
-                    dictionary_stats: dictionary_stats, derge_titles: derge_titles)
+                    dictionary_stats: dictionary_stats, derge_titles: derge_titles,
+                    lemma_rollups: lemma_rollups)
       end
     end
   end

@@ -8,14 +8,10 @@ require "tmpdir"
 # titus-tocharian-a family with its own constants, fetched through the
 # credentials seam.
 #
-# FIXTURE DECISION: no B page has ever been seen (no credentials existed
-# when the adapter was built, and none may be invented), so there are NO
-# B parse fixtures. Re-labelling Tocharian A pages as B stand-ins would be
-# hand-made fake upstream — their anchors and lanes are A's, so they would
-# either exercise nothing B-specific or need hand edits. Coverage here is
-# therefore fetch + config + credentials only; parse coverage (and the
-# conformance suite) arrives with the first authenticated sync, whose real
-# pages are cut into local/fixtures/titus-tocharian-b/ (the A recipe).
+# Parse coverage rides real member-area pages cut into the restricted
+# local/fixtures/titus-tocharian-b/ (never test/fixtures — the grant forbids
+# redistribution): two Berlin THT pages, one London IOL page and one Paris
+# PK page.
 class TitusTocharianBTest < Minitest::Test
   SLUG = "titus-tocharian-b"
   ADAPTER = Nabu::Adapters::TitusTocharianB
@@ -47,8 +43,12 @@ class TitusTocharianBTest < Minitest::Test
   def test_the_corpus_constants_are_its_own
     assert_equal "txb", ADAPTER::LANGUAGE
     assert_match ADAPTER::PAGE_RE, "tochb001.htm"
+    assert_match ADAPTER::PAGE_RE, "toch1000.htm", "from Part No. 1000 the chain drops the b"
+    assert_match ADAPTER::PAGE_RE, "toch4349.htm"
     refute_match ADAPTER::PAGE_RE, "tocha001.htm"
     refute_match ADAPTER::PAGE_RE, "tochb.htm"
+    refute_match ADAPTER::PAGE_RE, "toch.htm"
+    assert_equal %w[TochB_THT TochB_SHT TochB_BLK-IOL TochB_PK], ADAPTER::PARSER_PROFILE.anchor_prefixes
     assert_equal :txb, ADAPTER::PARSER_PROFILE.primary_language
     refute_same Nabu::Adapters::TitusTocharianParser::TOCHARIAN_A, ADAPTER::PARSER_PROFILE
   end
@@ -142,13 +142,65 @@ class TitusTocharianBTest < Minitest::Test
     assert(doc.passages.all? { |p| p.text.unicode_normalized?(:nfc) })
   end
 
+  def test_berlin_citations_are_unchanged_by_the_heading_levels
+    require_b_fixtures!
+    doc = parse_fixture("tochb001")
+    assert_equal "urn:nabu:titus-tocharian-b:tochb001:1.1a.1", doc.passages.first.urn
+    assert_equal "Tocharian B Corpus — THT 1 (tochb001)", doc.title
+  end
+
+  # London (IOL Toch. 2, toch3562): labels with underscores ("Toch._2"),
+  # Hoernle alternate numbering riding each line.
+  def test_london_page_parses_to_txb_lines
+    require_b_fixtures!
+    doc = parse_fixture("toch3562")
+    assert_equal "txb", doc.language
+    assert_equal 8, doc.passages.size
+    first = doc.passages.first
+    assert_equal "urn:nabu:titus-tocharian-b:toch3562:Toch._2.r.1", first.urn
+    assert_equal "txb", first.language
+    assert_includes first.text, "pelaikne klyauṣalñene"
+    assert_equal({ "manuscript" => "Toch._2", "part" => "r", "line" => "1" },
+                 first.annotations.slice("manuscript", "part", "line"))
+    assert_equal "H.149.015_a", first.annotations["alternate"]
+    assert first.annotations["syllabic"], "the syllabic lane rides as before"
+    assert_equal "urn:nabu:titus-tocharian-b:toch3562:Toch._2.v.4", doc.passages.last.urn
+    assert_equal "Tocharian B Corpus — BLK-IOL Toch._2 (toch3562)", doc.title
+    assert(doc.passages.all? { |p| p.text.unicode_normalized?(:nfc) })
+  end
+
+  # Paris (NS 144, toch4345): lines straight under the manuscript (no page
+  # heading — the page component stays empty), the `v` notation lane.
+  def test_paris_page_parses_to_txb_lines
+    require_b_fixtures!
+    doc = parse_fixture("toch4345")
+    assert_equal 8, doc.passages.size
+    first = doc.passages.first
+    assert_equal "urn:nabu:titus-tocharian-b:toch4345:NS_144._a.1", first.urn
+    assert_equal "//// kormeṃ mahāprabhāsi ////", first.text
+    refute first.annotations.key?("part"), "no page heading, no part"
+    assert_equal first.text, first.annotations["variant"], "the v lane is a rendering, never text"
+    assert_equal "PK_NS_144._a", first.annotations["alternate"]
+    second_side = doc.passages[4]
+    assert_equal "urn:nabu:titus-tocharian-b:toch4345:NS_144._a.1#2", second_side.urn
+    assert_equal "PK_NS_144._b", second_side.annotations["alternate"]
+    assert(doc.passages.all? { |p| p.language == "txb" && p.text.unicode_normalized?(:nfc) })
+  end
+
   def test_real_pages_parse_stably_twice
     require_b_fixtures!
     adapter = Nabu::Adapters::TitusTocharianB.new
     refs = adapter.discover(B_FIXTURES).to_a
-    assert_equal 2, refs.size
+    assert_equal %w[toch3562 toch4345 tochb001 tochb002], refs.map { |r| r.metadata["page"] }.sort
     first = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
     second = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
     assert_equal first, second, "URNs stable across two parses"
+  end
+
+  def parse_fixture(stem)
+    adapter = Nabu::Adapters::TitusTocharianB.new
+    ref = adapter.discover(B_FIXTURES).find { |r| r.metadata["page"] == stem }
+    refute_nil ref, "#{stem} discovered from the fixture dir"
+    adapter.parse(ref)
   end
 end

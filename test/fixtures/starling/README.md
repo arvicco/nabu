@@ -283,6 +283,13 @@ descriptors verbatim, only the record count rewritten; the trailing
   `-1`, AHD "asca, asga"), **3** (bark: the `-100` Gothic cell with no
   form), **58 BOTH ROWS** (neck: GOT hals → germet #390 \*xálsa-z, IN
   this fixture set; the synonym row's HOL nek → #874 and AEG swēora).
+- `LEXSTAT/mix.dbf` (cut 2026-10-12 from the held IE.exe tree, same
+  recipe; mix has the trailing `0x1A`) — file position 0 (the date row:
+  HIT -15, LUV -5), item **36** (hair: LUV tappāni- numbered **5000**,
+  one of the three mix cells whose number has no piet record — the
+  resolve-or-verbatim pin; ALB qime → #429, not in this fixture set, so
+  it rides verbatim here), item **58** (neck: ALB qafɛ → piet #562, IN
+  this fixture set — the resolving pin).
 - `LEXSTAT/iranet.dbf` — NUMBER **1** (\*hama 'all': "hama hama" form +
   etymon cells, OSS äppät, REF "\*hama-kaϑa всем домом Аб.", PRNUM →
   piet #3005), **3** (\*pawasta 'bark'), **127** (headword-less: MEANING

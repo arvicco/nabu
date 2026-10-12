@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="edition.xsl" ?>
+<?xml-model href="tei_all.dtd" type="application/xml-dtd"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title><title xml:lang="ta">Kuṟuntokai</title> 359. <persName xml:lang="ta"></persName>: <hi rend="italic"></hi></title>
+      </titleStmt>
+      <sourceDesc>
+        <msDesc xml:lang="en">
+          <msIdentifier>
+          </msIdentifier>
+           <msContents>
+            <summary><p></p>
+            </summary>
+          </msContents>    
+        </msDesc>
+    
+      </sourceDesc>
+    </fileDesc>
+<revisionDesc/>
+  </teiHeader>
+  <text xml:lang="ta" type="edition">
+    <body>
+        <div xml:id="KT359-kilavi">
+          <p type="edition">
+          </p>
+
+
+          <p type="translation" xml:lang="en">
+
+          </p>
+          </div>
+
+        <div xml:id="KT359">
+            <lg type="edition">
+
+
+
+
+            </lg>
+        
+            <lg type="translation" xml:lang="en">
+
+            
+            
+            
+                
+            
+            
+            
+                      
+                     
+                                    </lg>
+        </div>
+    </body>
+  </text>
+  
+</TEI>

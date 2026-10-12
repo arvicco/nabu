@@ -273,7 +273,14 @@ class PosturesTest < Minitest::Test
                  "ban-wikisource ADDED P120-2 — pending on the ban/sas nodes of the " \
                  "nabu-lects mint (kaw resolves on the held node): 133→135; " \
                  "P120-3 ADDS gu/ms/th-wikisource as PENDING on the hub-side gu/ms/th " \
-                 "anchor mints (no Gujarati, Malay or Tai node exists): 135→138"
+                 "anchor mints (no Gujarati, Malay or Tai node exists): 135→138; " \
+                 "the SEA/Gujarat package landing (merged + canonical-synced 2026-10-12) " \
+                 "RETIRES all four P120 pendings to identity — the add-then-retire shape " \
+                 "at family scale, count unchanged at 138; the same sitting's ruling lands " \
+                 "the bg-charter-recension facet rule, so bg-wikisource's lect declaration " \
+                 "retires under the shadowing rule: 138→137; " \
+                 "tamilex ADDED P121-3 — identity ta (tam-Latn through the held codemap row; " \
+                 "no Tamil stage exists, declared coarse): 137→138"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -372,6 +379,15 @@ class PosturesTest < Minitest::Test
     # P120-2 ADDS ban-wikisource PENDING on the ban/sas nodes of the
     # nabu-lects mint (kaw already resolves) and P120-3 the three
     # scan-indexed cones (gu/ms/th) on their anchor mints: pending 0→4.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 107, "pending" => 4 }, by_posture)
+    # P121: the SEA/Gujarat registry package (merged + canonical-synced
+    # 2026-10-12 — ban/sas/ms + ms:cls/gu/tai + th anchors, guj/msa/tha
+    # codemap rows) retires all four at once to identity (the
+    # add-then-retire shape at family scale again): identity 107→111,
+    # pending 4→0. The same sitting's recension ruling retires
+    # bg-wikisource's identity declaration to the bg-charter-recension
+    # facet rule (the shadowing rule): identity 111→110. Zero pendings.
+    # P121-3 ADDS tamilex as identity (tam-Latn → ta, declared coarse — no
+    # Tamil stage in the registry): identity 110→111.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 111 }, by_posture)
   end
 end

@@ -83,6 +83,26 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # P121-2: the lemma attestation rollups are derived — the rebuild re-mints
+  # them from the fresh catalog + index (the language-mix rows prove the
+  # stage ran; lemma_rollup's own math lives in the store test).
+  def test_rebuild_derives_the_lemma_rollups
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    rebuilder.run
+
+    with_db do |db|
+      assert_equal [["grc", 1, 0], ["grc", 1, 0]],
+                   db[:language_mix].select_map(%i[languages language_count switches])
+      assert_equal [[nil, 2, 3]], db[:language_curve].select_map(%i[century documents passages])
+    end
+  end
+
   # -- place index re-derivation (P45-6) ------------------------------------
 
   # The derived Pleiades place index is f(canonical dump): a rebuild must
@@ -148,7 +168,7 @@ class RebuildTest < Minitest::Test
 
     assert_equal ["corpus", "timeline", "place apply", "facets", "kind axis", "hiero postings", "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "artifact scripts",
-                  "source stats", "fulltext index", "links", "analyze"],
+                  "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
   end
 

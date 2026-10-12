@@ -84,6 +84,14 @@ sources:
   oncoj:                      # census: 4,991 poems
     fields:
       corpus: collection      # MYS 4,693 · NSK 133 · KK 112 · BS · FK · SNK …
+  bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
+    fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
+      recension: recension    # projected so the ruled recension facet rule can read it
+  dcs:                        # census 2026-10-12: the corpus's five composition time
+    fields: #                   slots (1 early/Vedic … 5 late; 1 ×6,962 · 2 ×2,940 ·
+      dcs_time_slot: time_slot  # 3 ×2,315 · 4 ×2,014 · 5 ×1,493) — the upstream claim,
+      #                         verbatim; year-banding waits on the corpus's published
+      #                         epoch boundaries (the regnal-table shape)
   ban-wikisource:             # census 2026-10-12 (scratch first-sync run): 1,252 lontars
     fields:
       genre: genre            # the wiki's genre categories: Geguritan 142 · Usada 30 · Wariga 27 …

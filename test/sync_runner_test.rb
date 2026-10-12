@@ -430,6 +430,14 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 2, outcome.load_report.added
   end
 
+  # P121-2: the lemma attestation rollups follow the sync (per-source
+  # drop-and-reproject) — the language-mix row lands without a rebuild.
+  def test_sync_refreshes_the_language_mix_rollup
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    make_runner(registry(entry("breaker", BreakerAdapter, wired: true))).sync("breaker", parse_only: true)
+    assert_equal %w[grc grc], @db[:language_mix].order(:urn).select_map(:languages)
+  end
+
   def test_parse_only_keeps_prior_last_sync_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"

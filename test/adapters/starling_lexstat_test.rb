@@ -131,6 +131,18 @@ class StarlingLexstatTest < Minitest::Test
     assert_equal "ang", by_id["58.aeg-b"].language
   end
 
+  # mix.dbf is the one IE.exe table whose positive numbers do not all
+  # resolve (858 of 861: the three LUV cells numbered 5000-5002 have no
+  # piet record) — resolve-or-verbatim, never a dead link.
+  def test_mix_cognation_numbers_resolve_or_ride_verbatim
+    by_id = entries("starling-lexstat-mix")
+    assert_includes by_id["58.alb"].body, "IE etymology: #562", "piet #562 is IN this fixture set — a live link"
+    luwian = by_id["36.luv"]
+    assert_equal "tappāni-", luwian.headword
+    assert_includes luwian.body, "Cognation number: 5000"
+    refute_includes luwian.body, "IE etymology: #5000", "no piet record 5000 — never a dead link"
+  end
+
   def test_germ_multiform_cells_stay_verbatim_and_fold_the_first_form
     by_id = entries("starling-lexstat-germ")
     ahd = by_id["2.ahd"]
