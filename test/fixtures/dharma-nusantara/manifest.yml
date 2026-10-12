@@ -1,7 +1,7 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# Three whole real editions incl. the languageb-Latn upstream bug (README.md).
+# Four whole real editions incl. the languageb-Latn upstream bug (README.md).
 source: dharma-nusantara
 adapter_test: null
 retrieved: 2026-09-01
@@ -14,4 +14,7 @@ files:
     whole: true
   - path: xml/DHARMA_INSIDENK00050.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfc-nusantara-epigraphy/master/xml/DHARMA_INSIDENK00050.xml
+    whole: true
+  - path: xml/DHARMA_INSIDENKPasrujambe28.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-nusantara-epigraphy/65b4a426af7dd546790210e60d1b6e3410f507eb/xml/DHARMA_INSIDENKPasrujambe28.xml
     whole: true

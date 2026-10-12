@@ -25,7 +25,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 All eight sources are wired. The grants are personal, so every one is grant-gated: each box records its own acknowledgment of the terms before its first fetch, and none of the texts ships in any public artifact.
 
-**Remaining long tail:** Tocharian B (already covered by the 2026-10-06 terms, not yet ingested) and other TITUS corpora as concrete needs arise — the same scoped-letter route, now with three precedents to cite. Hittite is served independently (the tlhdig and hittite-glossed shelves), and the hieroglyphic Luwian corpus arrived by a separate personal grant (ACLT, I. Yakubovich, 2026-09-28).
+**Remaining long tail:** Tocharian B (already covered by the 2026-10-06 terms; the members-only adapter `titus-tocharian-b` is built and awaits the TITUS member credential and its first authenticated sync) and other TITUS corpora as concrete needs arise — the same scoped-letter route, now with three precedents to cite. Hittite is served independently (the tlhdig and hittite-glossed shelves), and the hieroglyphic Luwian corpus arrived by a separate personal grant (ACLT, I. Yakubovich, 2026-09-28).
 
 ## 3. IIIF manuscript universe (Vatican, BnF, British Library, Bodleian, Munich…)
 

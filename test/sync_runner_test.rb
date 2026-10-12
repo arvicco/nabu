@@ -1065,6 +1065,56 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 1, LiveEnabled.fetches, "an acknowledged grant source syncs normally"
   end
 
+  # --- the credentials seam -----------------------------------------------
+
+  # A source whose fetch records the credential the runner handed it.
+  class CredentialedSource < CountingSource
+    def self.slug = "cred-src"
+
+    class << self
+      attr_accessor :seen
+    end
+
+    def fetch(workdir, **)
+      self.class.seen = credentials
+      super
+    end
+  end
+
+  def credentialed_registry
+    registry(Nabu::SourceRegistry::Entry.new(
+               slug: "cred-src", adapter_class_name: CredentialedSource.name, wired: true,
+               sync_policy: "manual", kind: "source", credentials: "titus"
+             ))
+  end
+
+  def test_a_credentials_source_with_nothing_stored_refuses_before_any_fetch
+    CredentialedSource.reset!
+    error = assert_raises(Nabu::Credentials::Missing) { make_runner(credentialed_registry).sync("cred-src") }
+    assert_equal "credentials required: run bin/nabu creds set titus", error.message
+    assert_kind_of Nabu::FetchError, error
+    assert_equal 0, CredentialedSource.fetches, "the refusal comes before any network"
+    assert_equal 0, Nabu::Store::Run.count, "no run row — nothing was attempted"
+  end
+
+  def test_a_credentials_source_hands_the_stored_entry_to_the_adapter
+    CredentialedSource.reset!
+    CredentialedSource.seen = nil
+    Nabu::Credentials.new(path: config.credentials_path).set!("titus", user: "member", password: "pw")
+    outcome = make_runner(credentialed_registry).sync("cred-src")
+    refute outcome.aborted?
+    assert_equal 1, CredentialedSource.fetches
+    assert_equal "member", CredentialedSource.seen.user
+    assert_equal "pw", CredentialedSource.seen.password
+  end
+
+  def test_parse_only_needs_no_credentials
+    CredentialedSource.reset!
+    outcome = make_runner(credentialed_registry).sync("cred-src", parse_only: true)
+    refute outcome.aborted?
+    assert_equal 0, CredentialedSource.fetches
+  end
+
   # --- reference edges (P19-4) ---------------------------------------------
 
   def test_sync_refreshes_reference_edges_for_a_reference_edges_source

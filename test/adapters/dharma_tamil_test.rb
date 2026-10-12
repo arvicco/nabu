@@ -16,7 +16,9 @@ require "fileutils"
 # "tam" (upstream tag dirt, aliased), a BY-SA French+Tamil Réunion
 # temple pair of slabs, a BY-SA Tamil/Telugu/Sanskrit copper-plate grant
 # carrying an anuṣṭubh verse, and a lang-less Cōḻa plate (an honest
-# quarantine: no xml:lang anywhere in the edition).
+# quarantine: no xml:lang anywhere in the edition). P120: a fifth whole
+# file, a Grantha Sanskrit verse whose title pairs a regnal statement with
+# a Śaka-era year ("time of Tammusiddhi, Śaka era, year 1129").
 class DharmaTamilTest < Minitest::Test
   include AdapterConformance
 
@@ -24,7 +26,8 @@ class DharmaTamilTest < Minitest::Test
   REUNION = "urn:nabu:dharma-tamil:INSTamilOutsideTN90002"
   GRANT = "urn:nabu:dharma-tamil:INSTiruvavatuturai00018"
   LANGLESS = "urn:nabu:dharma-tamil:INSTamilNadu01015"
-  CLEAN = [SII, REUNION, GRANT].freeze
+  TAMMUSIDDHI = "urn:nabu:dharma-tamil:INSTamilNadu00011"
+  CLEAN = [SII, REUNION, GRANT, TAMMUSIDDHI].freeze
 
   BY_SA = "https://creativecommons.org/licenses/by-sa/4.0/"
 
@@ -33,7 +36,7 @@ class DharmaTamilTest < Minitest::Test
   FETCH_REPOS = %w[tfa-pallava-epigraphy tfa-sii-epigraphy].freeze
 
   # The lang-less plate quarantines by design, so the conformance sweep
-  # runs over the three clean fixtures (the nusantara pattern); the
+  # runs over the four clean fixtures (the nusantara pattern); the
   # quarantine is asserted on its own below.
   def conformance_adapter
     adapter = Nabu::Adapters::DharmaTamil.new
@@ -86,7 +89,7 @@ class DharmaTamilTest < Minitest::Test
 
   def test_discover_spans_the_repo_subdirs
     refs = adapter.discover(workdir).to_a
-    assert_equal [LANGLESS, REUNION, GRANT, SII].sort, refs.map(&:id).sort,
+    assert_equal [LANGLESS, TAMMUSIDDHI, REUNION, GRANT, SII].sort, refs.map(&:id).sort,
                  "urn:nabu:dharma-tamil:<stem sans DHARMA_>, one per edition across repos"
     assert(refs.all? { |ref| ref.source_id == "dharma-tamil" })
     assert_equal "tfa-sii-epigraphy", refs.find { |r| r.id == SII }.metadata["repo"]
@@ -138,7 +141,8 @@ class DharmaTamilTest < Minitest::Test
                  "the edition div's script classification, verbatim"
     assert_equal "draft", metadata["revision_status"]
     assert_equal ["time of Rājakesarivarman, year 9"], metadata["title_dating"],
-                 "the title's attributed dating statement, verbatim — never converted"
+                 "the title's attributed dating statement, verbatim"
+    assert_nil metadata["date"], "a regnal year stays verbatim-only (no ruled regnal table)"
     assert_equal "Centalai, Sundareśvara temple, time of Rājakesarivarman, year 9", document.title
   end
 
@@ -171,6 +175,56 @@ class DharmaTamilTest < Minitest::Test
                     "the Telugu lines of a Sētupati grant mint as tel-Latn"
     assert_equal ["Śaka year 1589"], document.metadata["title_dating"]
     assert_equal "83215", document.metadata["maturity"]
+  end
+
+  # -- the date lane: era-typed title years through config/eras.yml ---------
+
+  def test_a_saka_title_year_converts_through_the_era_table
+    date = adapter.parse(ref_for(GRANT)).metadata["date"]
+    assert_equal({ "not_before" => 1667, "not_after" => 1667, "raw" => "Śaka year 1589",
+                   "era" => "saka", "era_year" => 1589, "basis" => "title" }, date,
+                 "Śaka Y + 78, the ruled single-valued row (width 0)")
+  end
+
+  def test_a_regnal_and_saka_title_dates_by_the_era_year_only
+    metadata = adapter.parse(ref_for(TAMMUSIDDHI)).metadata
+    assert_equal ["time of Tammusiddhi", "Śaka era, year 1129"], metadata["title_dating"],
+                 "both statements ride verbatim, the Śaka-era spelling included"
+    assert_equal 1207, metadata["date"]["not_before"]
+    assert_equal 1207, metadata["date"]["not_after"]
+    assert_equal "Śaka era, year 1129", metadata["date"]["raw"]
+    assert_equal "san-Latn", adapter.parse(ref_for(TAMMUSIDDHI)).language
+  end
+
+  def test_era_date_helper_covers_the_censused_spellings
+    date = ->(*phrases) { Nabu::Adapters::DharmaTamil.era_date(phrases) }
+    assert_equal 1488, date.call("Śaka 1410")["not_before"]
+    assert_equal 1729, date.call("śaka 1651")["not_before"], "the lowercase spelling"
+    assert_equal 1449, date.call("year 1371 of the Śaka era")["not_before"]
+    assert_equal({ "not_before" => 1778, "not_after" => 1779, "raw" => "Kollam year 954",
+                   "era" => "kollam", "era_year" => 954, "basis" => "title" },
+                 date.call("Kollam year 954"), "Kollam is era-typed too: the width-1 envelope")
+    assert_equal 1393, date.call("time of Viruppaṇa", "Śaka year 1315")["not_before"]
+    assert_nil date.call("time of Parāntaka I, year 36"), "regnal years stay verbatim-only"
+    assert_nil date.call("time of Bhūti Vikramakesarin"), "a king's name is no era"
+    assert_nil date.call("Śaka year 14??"), "an unreadable digit is no year"
+  end
+
+  def test_title_dating_records_every_censused_era_spelling_verbatim
+    scan = ->(title) { title.scan(Nabu::Adapters::DharmaTamil::TITLE_DATING) }
+    assert_equal ["Śaka 1410"], scan.call("Cīrkāḻi, Brahmapurīśvara, Śaka 1410")
+    assert_equal ["śaka 1651"], scan.call("Ciṟupaṇaiyūr grant, śaka 1651")
+    assert_equal ["year 1371 of the Śaka era"],
+                 scan.call("Poṉṉamarāvati, no king, year 1371 of the Śaka era")
+    assert_equal ["Kollam year 954"], scan.call("Cattūr grant, Kollam year 954")
+    assert_equal ["time of Parāntaka I, year 36"],
+                 scan.call("Mēlappaḻuvūr, Agastyeśvara temple, time of Parāntaka I, year 36")
+  end
+
+  def test_the_source_registers_in_the_metadata_dates_lane
+    dates = Nabu::Store::TimelineBuilder::MetadataDates
+    assert_equal :structured, dates::SHAPES["dharma-tamil"]
+    refute_includes dates::COMPOSITION, "dharma-tamil", "an inscription's own year dates the object"
   end
 
   # -- quarantines ------------------------------------------------------------

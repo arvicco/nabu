@@ -84,3 +84,9 @@ sources:
   oncoj:                      # census: 4,991 poems
     fields:
       corpus: collection      # MYS 4,693 · NSK 133 · KK 112 · BS · FK · SNK …
+  ban-wikisource:             # census 2026-10-12 (scratch first-sync run): 1,252 lontars
+    fields:
+      genre: genre            # the wiki's genre categories: Geguritan 142 · Usada 30 · Wariga 27 …
+      collection: collection  # holding collections: Lontar ring Perpustakaan Kantor Dokumentasi
+      #                         Budaya Bali 191 · Lontar Balai Bahasa Bali 179 · Wanagiri 153 …
+      gedong_kirtya_class: classification  # Agama 492 · Itihasa 121 · Wéda 68 · Babad 17

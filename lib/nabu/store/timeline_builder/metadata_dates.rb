@@ -89,6 +89,8 @@ module Nabu
           #                                 place = the origPlace placeName (findspot)
           "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
           #                              (certainty + evidence ride the date hash)
+          "dharma-tamil" => :structured, # P120: the title's era-typed year (Śaka, Kollam —
+          #                                config/eras.yml); regnal years stay verbatim
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
@@ -103,6 +105,8 @@ module Nabu
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
+          "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
+          #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
@@ -119,6 +123,8 @@ module Nabu
           "mdz-protestant" => :structured,
           "menota" => :structured,
           "mk-wikisource" => :structured,
+          "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
+          #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
           "obi-burmese" => :ce_year_text,
           "ogham" => :century_prose,
@@ -143,10 +149,13 @@ module Nabu
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
           "syriac-corpus" => :when_key,
+          "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
+          #                                         BE converted to CE (date_class edition)
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
           "titus-tocharian-a" => :place_only,
+          "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
           "viet-wikisource" => :structured,
           "vuk-danicic" => :structured, # P117-2: the translation era per testament
@@ -170,6 +179,7 @@ module Nabu
         PLACE_KEYS = {
           "seal" => "provenance", "rsti" => "findspot", "titus-tocharian-a" => "findspot",
           "titus-manichaica" => "findspot",
+          "titus-tocharian-b" => "findspot",
           # P109-4: eebo-tcp documents ARE the early-modern prints — the
           # imprint place is the artifact's own production place (39k+
           # London), cleaned of the ESTC-style bracket/colon furniture.

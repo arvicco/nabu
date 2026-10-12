@@ -88,6 +88,14 @@ module Nabu
     # holding only digits: the print edition's footnote reference (TITUS
     # carries the number but not the note) — apparatus, collected as the
     # "footnotes" annotation. Whitespace collapses; NFC at the boundary.
+    #
+    # == Profiles (the family's per-corpus constants)
+    #
+    # The anchor prefix, the content-lane family, its stem → language map
+    # and the corpus language are a PROFILE (TOCHARIAN_A is the censused
+    # default; the Tocharian B adapter declares its own). Everything else —
+    # the catalogue/note lanes, the line discipline, the language claims —
+    # is the family's.
     module TitusTocharianParser
       # One keyed line: +components+ the anchor tail after the collection
       # prefix ([ms, part, line]); +text+ the NFC transcription ("" for a
@@ -112,6 +120,9 @@ module Nabu
       # remark — no passage, the remark rides document metadata).
       Page = Data.define(:manuscripts, :lines, :notes)
 
+      # A corpus's anchor/lane constants (see Profiles above).
+      Profile = Data.define(:anchor_prefix, :lane_family, :lane_languages, :primary_language)
+
       # The structural anchor prefix every section carries; the bare
       # language/collection anchors open nothing.
       ANCHOR_PREFIX = "TochA_THT"
@@ -128,6 +139,10 @@ module Nabu
       # The corpus language: the claim of a line whose transcription
       # interleaves it with another language.
       PRIMARY_LANGUAGE = :xto
+
+      # The censused Tocharian A profile — the family default.
+      TOCHARIAN_A = Profile.new(anchor_prefix: ANCHOR_PREFIX, lane_family: LANE_FAMILY,
+                                lane_languages: LANE_LANGUAGES, primary_language: PRIMARY_LANGUAGE)
 
       # The per-line editorial remark lane (`iocd16`, the 16-size sibling of
       # the catalogue lane): census 2026-10-10 over all 467 pages — 152
@@ -161,18 +176,18 @@ module Nabu
         raise Nabu::ParseError, "titus-tocharian: #{path} is not valid UTF-8 (beyond the severed-sequence repair)"
       end
 
-      # Parse one page's HTML. Raises Nabu::ParseError on a structural
-      # surprise: an over-deep anchor, lane text before any line anchor, an
-      # unknown content-shaped lane id, or a line whose transcription lanes
-      # vote two languages.
-      def self.parse(html)
+      # Parse one page's HTML under +profile+ (default: Tocharian A). Raises
+      # Nabu::ParseError on a structural surprise: an over-deep anchor, lane
+      # text before any line anchor, an unknown content-shaped lane id, or a
+      # line whose transcription lanes vote two languages.
+      def self.parse(html, profile: TOCHARIAN_A)
         raise Nabu::ParseError, "titus-tocharian: page is not valid UTF-8" unless html.valid_encoding?
 
-        state = { manuscripts: [], lines: [], current: nil, part_side: nil, part_open: false }
+        state = { manuscripts: [], lines: [], current: nil, part_side: nil, part_open: false, profile: profile }
         doc = Nokogiri::HTML(html)
         fold_quoted_lanes(doc)
         TitusAvestanParser.walk(doc) { |node| visit(node, state) }
-        finished = state[:lines].filter_map { |line| finish(line) }
+        finished = state[:lines].filter_map { |line| finish(line, profile) }
         Page.new(
           manuscripts: state[:manuscripts].map { |m| Manuscript.new(number: m[:number], catalogue: m[:catalogue]) },
           lines: finished.reject(&:note_only?),
@@ -204,12 +219,13 @@ module Nabu
       end
 
       def self.visit(node, state)
-        if (comps = section_components(node))
+        profile = state[:profile]
+        if (comps = section_components(node, profile))
           open_section(comps, state)
         elsif catalogue_span?(node)
           note = clean(node.text)
           record_catalogue(note, state) unless note.empty?
-        elsif node.text? && !image_label?(node) && (lane = lane_of(node))
+        elsif node.text? && !image_label?(node) && (lane = lane_of(node, profile))
           return if blank?(node.text) && state[:current].nil?
           raise Nabu::ParseError, "titus-tocharian: lane text before any line anchor" if state[:current].nil?
 
@@ -248,13 +264,14 @@ module Nabu
 
       # The anchor-tail components when +node+ is a structural anchor under
       # the collection prefix, else nil (bare language/collection included).
-      def self.section_components(node)
+      def self.section_components(node, profile = TOCHARIAN_A)
         return nil unless node.element? && node.name == "a"
 
         name = node["name"]
-        return nil unless name&.start_with?("#{ANCHOR_PREFIX}_")
+        prefix = "#{profile.anchor_prefix}_"
+        return nil unless name&.start_with?(prefix)
 
-        comps = TitusAvestanParser.split_components(name.delete_prefix("#{ANCHOR_PREFIX}_"))
+        comps = TitusAvestanParser.split_components(name.delete_prefix(prefix))
         return comps if (1..MAX_LEVELS).cover?(comps.size) && comps.none?(&:empty?)
 
         raise Nabu::ParseError,
@@ -285,12 +302,12 @@ module Nabu
       # open and swallows the next `h5` "Line: N" heading; walking past the
       # heading's own id would read the heading as lane text. An unknown
       # content-shaped lane id raises.
-      def self.lane_of(node)
+      def self.lane_of(node, profile = TOCHARIAN_A)
         id = node.ancestors.lazy.map { |ancestor| ancestor["id"] }.find { |candidate| !candidate.nil? }
         return nil if id.nil?
 
-        if (match = LANE_FAMILY.match(id))
-          return [match[:syllabic].empty? ? :text : :syllabic, LANE_LANGUAGES.fetch(match[:stem])]
+        if (match = profile.lane_family.match(id))
+          return [match[:syllabic].empty? ? :text : :syllabic, profile.lane_languages.fetch(match[:stem])]
         end
         return [:note, nil] if id == NOTE_LANE
         return nil unless LANE_SHAPE.match?(id)
@@ -326,14 +343,15 @@ module Nabu
         node.parent&.name == "sup" && node.text.strip.match?(/\A\d+\z/)
       end
 
-      def self.finish(line)
+      def self.finish(line, profile = TOCHARIAN_A)
         text_runs = clean_runs(line[:text])
         syllabic_runs = clean_runs(line[:syllabic])
         note = clean(line[:note])
         return nil if text_runs.empty? && syllabic_runs.empty? && note.empty?
         return note_only(line, note) if text_runs.empty? && syllabic_runs.empty?
 
-        language = line_language(line[:comps], text_runs.empty? ? syllabic_runs : text_runs)
+        language = line_language(line[:comps], text_runs.empty? ? syllabic_runs : text_runs,
+                                 primary: profile.primary_language)
         text, inline = split_runs(text_runs, language, mirror: false)
         syllabic, inline_syllabic = split_runs(syllabic_runs, language, mirror: true)
         # A syllabic-only line never occurred in the census; stay honest.
@@ -354,13 +372,13 @@ module Nabu
 
       # The deciding runs' language (the transcription's; the syllabic
       # lane's only when the line has no transcription): one language is the
-      # claim; a mix that includes the corpus language (PRIMARY_LANGUAGE —
-      # the tocha414 bilingual interleave) claims it, the rest riding
-      # inline; any other mix quarantines.
-      def self.line_language(comps, runs)
+      # claim; a mix that includes the corpus language (+primary+ — the
+      # tocha414 bilingual interleave) claims it, the rest riding inline;
+      # any other mix quarantines.
+      def self.line_language(comps, runs, primary: PRIMARY_LANGUAGE)
         languages = runs.map(&:first).uniq
         return languages.first if languages.size == 1
-        return PRIMARY_LANGUAGE if languages.include?(PRIMARY_LANGUAGE)
+        return primary if languages.include?(primary)
 
         raise Nabu::ParseError,
               "titus-tocharian: line #{comps.join('_').inspect} mixes languages " \

@@ -2,6 +2,8 @@
 
 require "yaml"
 
+require_relative "credentials"
+
 module Nabu
   # The source registry (architecture §5, config/sources.yml): the authoritative
   # list of corpora Nabu knows about — which adapter class ingests each, whether
@@ -68,6 +70,21 @@ module Nabu
     # and --gold-only excludes it like any non-gold tier.
     LEMMA_TIERS = %w[gold silver equivalence].freeze
     DEFAULT_LEMMA_TIER = "gold"
+
+    # The credentials seam: `credentials: <name>` names the stored
+    # credential (Nabu::Credentials, local/config/credentials.yml) a gated
+    # upstream's fetch needs. SyncRunner refuses the fetch BEFORE any
+    # network when the name has nothing stored. Absent = no credentials.
+    def self.credentials!(slug, config)
+      value = config.fetch("credentials", nil)
+      return nil if value.nil?
+      return value if value.is_a?(String) && value.match?(Credentials::NAME_SHAPE)
+
+      raise ValidationError,
+            "source #{slug.inspect}: credentials must be a credential name " \
+            "(#{Credentials::NAME_SHAPE.inspect}), got #{value.inspect}"
+    end
+    private_class_method :credentials!
 
     # The public-availability posture (P44-r3a). `public` (the default, absent
     # on every ordinary row) means the source is part of the library as a
@@ -180,12 +197,14 @@ module Nabu
     # surface form (SilverLemmaIndexer's class note carries the argument).
     # An index-time policy flag like fuzzy_index, and the same posture
     # doctrine: declared per source in sources.yml, never hardcoded.
+    # +credentials+: the stored-credential name (Nabu::Credentials) a gated
+    # upstream's fetch needs — nil for every ordinary source.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :cjk_index, :embed_index, :lemma_tier,
                         :lemma_dictionary_filter,
                         :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
-                        :group, :requires, :adopted) do
+                        :group, :requires, :adopted, :credentials) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
                      embed_index: false,
@@ -193,7 +212,7 @@ module Nabu
                      classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
-                     group: nil, requires: [], adopted: nil)
+                     group: nil, requires: [], adopted: nil, credentials: nil)
         super
       end
 
@@ -387,7 +406,8 @@ module Nabu
         quickstart: boolean!(slug, config, "quickstart"),
         multilingual: boolean!(slug, config, "multilingual"),
         group: group!(slug, config),
-        requires: requires!(slug, config)
+        requires: requires!(slug, config),
+        credentials: credentials!(slug, config)
       )
     end
     private_class_method :build_entry

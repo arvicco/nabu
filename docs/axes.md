@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (14): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `kannada-texts`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `siddham`, `suttacentral`, `ud`
+**Members** (15): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gu-wikisource`, `kannada-texts`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `siddham`, `suttacentral`, `ud`
 
 ### buddhist
 
@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
-**Members** (7): `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`, `ojw`
+**Members** (10): `ban-wikisource`, `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `ms-wikisource`, `obi-burmese`, `ojw`, `th-wikisource`
 
 ### sinitic
 

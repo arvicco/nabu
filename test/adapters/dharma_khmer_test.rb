@@ -10,9 +10,10 @@ require "fileutils"
 # The anchor source of the SEA desk, minting the `dharma-epidoc` parser
 # family the four sibling repos compose.
 #
-# Fixtures: two whole real files (retrieved 2026-09-01, see the fixture
-# README): K.1 (okz-Latn prose, lb-grain, add/unclear/break="no") and K.2
-# (san-Latn verse, lg/l pada grain, gap-heavy opening).
+# Fixtures: whole real files (see the fixture README): K.1 (okz-Latn
+# prose, lb-grain, add/unclear/break="no"), K.2 (san-Latn verse, lg/l
+# pada grain, gap-heavy opening), K.46 (pagelike faces), and the P120-R1
+# nested-editorial-div pins K.452 and K.814-2.
 #
 # License: per-file <licence target> CC BY-SA 4.0 (the repo README badge
 # says CC BY — the in-file grant governs, recorded verbatim per document);
@@ -51,7 +52,7 @@ class DharmaKhmerTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_edition_file_sorted
     refs = adapter.discover(workdir).to_a
-    assert_equal [K1, K2, "urn:nabu:dharma-khmer:INSCIK00046"], refs.map(&:id),
+    assert_equal [K1, K2, "urn:nabu:dharma-khmer:INSCIK00046", K452, K814_2], refs.map(&:id),
                  "urn:nabu:dharma-khmer:<stem sans DHARMA_>, sorted"
     assert(refs.all? { |ref| ref.source_id == "dharma-khmer" })
   end
@@ -111,6 +112,38 @@ class DharmaKhmerTest < Minitest::Test
            "face B restarts its numbering — the pagelike milestone opens the section " \
            "(before this fix the restart collided and quarantined the whole file)")
     assert_equal keys.uniq, keys
+  end
+
+  # -- K.814-2: nested editorial divs (P120-R1 regression) -------------------
+
+  K814_2 = "urn:nabu:dharma-khmer:INSCIK00814-2"
+
+  def test_k814_2_nested_translation_and_bibliography_never_mint
+    document = adapter.parse(ref_for(K814_2))
+    assert_equal "okz-Latn", document.language
+    assert_equal [
+      ["1", "1018 śaka vyar· roc·"],
+      ["2", "Aśvayuja sauravāra gi nu"],
+      ["3", "vraḥ pāda kamrateṅ· Añ·"],
+      ["4", "śriya jayavarmmadeva jvan·"],
+      ["5", "teṅ· ta neḥ ta kamrateṅ·"],
+      ["6", "jagat· vnaṁ māsa"]
+    ], document.passages.map { |p| [p.urn.delete_prefix("#{K814_2}:"), p.text] },
+                 "the six Old Khmer lines exactly — the edition div's nested French " \
+                 "<div type=\"translation\"> and <div type=\"bibliography\"> are editorial " \
+                 "matter and never glue onto line 6"
+  end
+
+  K452 = "urn:nabu:dharma-khmer:INSCIK00452"
+
+  def test_k452_nested_french_translation_no_longer_quarantines_the_edition
+    document = adapter.parse(ref_for(K452))
+    assert_equal "san-Latn", document.language
+    assert_equal 24, document.passages.size, "six stanzas × four pādas, nothing editorial"
+    assert(document.passages.all? { |p| p.language == "san-Latn" },
+           "the nested <div type=\"translation\" xml:lang=\"fra\"> mints nothing — before " \
+           "P120-R1 its paragraphs minted as fra and quarantined the whole edition")
+    assert_equal "sugatim iti vabhāṣe namra-mūrddhā sa buddhe .", document.passages.last.text
   end
 
   # -- sequences and metadata -------------------------------------------------
