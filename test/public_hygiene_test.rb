@@ -11,11 +11,20 @@ require "test_helper"
 # grantor+date provenance; this guard keeps the tree that way. PR bodies
 # and commit messages are the other half of the surface — checked at
 # authoring time, not testable here.
+#
+# Internal identifiers are workflow state too, wherever they sit — a
+# runtime string, a code comment, a config note, a doc. No tolerance:
+# rewrite the id into the content it stood for (a date, "owner ruling",
+# the grantor and date of a reply, or one plain clause).
 class PublicHygieneTest < Minitest::Test
-  # Each entry: [pattern, plain-language reason].
+  # Each entry: [pattern, plain-language reason]. Scanned over every
+  # tracked file except SELF, GRANDFATHERED, ALLOWLIST and upstream
+  # fixture bytes (see #scanned?).
   FORBIDDEN = [
-    [/№\d+-\d/, "internal thread/report ids — use grantor+date provenance instead"],
-    [/thread\s+T-\d/i, "internal thread ids — use grantor+date provenance instead"],
+    [/№/, "the numero sign only ever marks an internal register/thread id — " \
+          "use the ruling date or grantor+date provenance instead"],
+    [/\bQ\d{2,3}\b/, "internal work-queue ids — state the content (or the date) instead"],
+    [/\bT-\d+\b/, "internal thread ids — use grantor+date provenance instead"],
     [/OWNER\s+ACTIONS/, "owner-action lists live in chat and untracked docs only"],
     [/email-register/, "the correspondence register is private machinery"],
     [/external-communications\.md/, "the correspondence protocol is private machinery"],
@@ -25,15 +34,27 @@ class PublicHygieneTest < Minitest::Test
 
   # Living HISTORY files written before the rule, awaiting the owner's
   # call (scrub-in-place vs untrack) — grandfathered, NOT license to add
-  # more. №R-n ruling ids in code comments are tolerated decision
-  # provenance (dated), deliberately not matched above.
+  # more.
   GRANDFATHERED = %w[docs/history/worklog.md docs/history/backlog.md].freeze
+
+  # Per-path exemptions, each with its reason. NOT license to add more:
+  # a new entry needs a file that genuinely cannot be rewritten.
+  ALLOWLIST = {
+    # The owner-authored agent instructions: their wording is the owner's
+    # to change, never a sweep's.
+    "CLAUDE.md" => "owner-authored agent instructions"
+  }.freeze
+
+  # Under test/fixtures/ only our own provenance notes are prose we
+  # write (each set's README.md and manifest.yml); every other fixture
+  # file is upstream bytes kept verbatim, whatever they contain.
+  FIXTURE_PROSE = %r{\Atest/fixtures/(?:.+/)?(?:README\.md|manifest\.yml)\z}
 
   # This guard names its own patterns; the untracked-import pointer in
   # CLAUDE.md names this file.
   SELF = "test/public_hygiene_test.rb"
 
-  # Q119: a grant-gated source whose license class forbids redistribution
+  # A grant-gated source whose license class forbids redistribution
   # (the personal TITUS / ACLT grants) must ship NO fixture bytes in the
   # public tree — its samples live in the gitignored local/fixtures/<slug>/
   # and its tests skip-when-absent. Grant-gated sources under an open class
@@ -52,7 +73,7 @@ class PublicHygieneTest < Minitest::Test
   def test_tracked_files_carry_no_internal_workflow_markers
     offenders = []
     tracked_files.each do |rel|
-      next if rel == SELF || GRANDFATHERED.include?(rel)
+      next unless scanned?(rel)
 
       path = File.join(ROOT, rel)
       next unless File.file?(path)
@@ -89,7 +110,30 @@ class PublicHygieneTest < Minitest::Test
                  "(README recipe + skip-when-absent tests), never in the public test/fixtures/"
   end
 
+  # The exemptions stay honest: every allowlisted or grandfathered path
+  # must still be tracked (a stale entry would silently exempt a future
+  # file of the same name), and the id patterns must bite on the shapes
+  # they exist for.
+  def test_exemptions_name_tracked_files_and_the_patterns_bite
+    tracked = tracked_files
+    (ALLOWLIST.keys + GRANDFATHERED).each do |rel|
+      assert_includes tracked, rel, "stale hygiene exemption: #{rel} is no longer tracked"
+    end
+    ["(№R-51-B, 2026-08-29)", "grant №23", "the Q83 drain", "(P104-1, Q77)", "thread T-12"].each do |leak|
+      assert FORBIDDEN.any? { |pattern, _| leak.match?(pattern) }, "the guard must catch #{leak.inspect}"
+    end
+    refute scanned?("test/fixtures/perseus/data/tlg0012.xml"), "upstream fixture bytes stay verbatim"
+    assert scanned?("test/fixtures/perseus/README.md"), "our fixture provenance notes are prose"
+  end
+
   private
+
+  def scanned?(rel)
+    return false if rel == SELF || GRANDFATHERED.include?(rel) || ALLOWLIST.key?(rel)
+    return rel.match?(FIXTURE_PROSE) if rel.start_with?("test/fixtures/")
+
+    true
+  end
 
   def tracked_files
     Nabu::Shell.run("git", "-C", ROOT, "ls-files").split("\n")
