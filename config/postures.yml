@@ -1174,6 +1174,23 @@ sources:
     script: {posture: qualified, note: "romanized (tam-Latn/san-Latn); Tamil, Grantha and
         Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
         script_rendition verbatim"}
+  sii-clean:
+    # P122-3: the grant-bearing DHARMA conversions of the printed SII volumes.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "tam-Latn/san-Latn/tel-Latn/kan-Latn — the dharma-tamil
+        and dharma-deccan codes, all resolving on the canonical rows (tam → ta, tel → te,
+        kan → kn, san-Latn); Tamil stages unminted, the bare anchor declared coarse"}
+    dating: {posture: partial, note: "no origDate in any header; the SII headings' own
+        dating is mined: the editor's A.D. conversion (179), else a Śaka year via
+        config/eras.yml (20), else the summary's single reign line 'Year N: YYYY A.D.'
+        (12) — 211 of 589 parsed docs (census 2026-10-12), rows via MetadataDates
+        :structured; regnal-only headings and hedged summary prose stay verbatim"}
+    places: {posture: named, note: "the heading's findspot sentence → village (419 docs,
+        44 distinct names), taluk and district as printed (colonial-era units); no
+        gazetteer refs — a South Asian place authority is the open gap"}
+    script: {posture: qualified, note: "romanized (tam/san/tel/kan -Latn); Tamil, Grantha,
+        Telugu and Kannada scripts are the artifact facts — the edition rendition rides
+        metadata script_rendition verbatim"}
   obi-burmese:
     kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the

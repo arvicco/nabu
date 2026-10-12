@@ -4571,6 +4571,28 @@ siddham:   # P118-4, 02-sources row 256
   # config/eras.yml (Gupta–Valabhī envelope) + 4 century attributions;
   # 88 untyped "year N" titles ride raw, never converted.
 
+sii-clean:   # P122-3, 02-sources row 267
+  adapter: Nabu::Adapters::SiiClean
+  adopted: "2026-10-12"
+  axes: [indic, epigraphy]
+  wired: false
+  sync_policy: manual
+  # South Indian Inscriptions — the DHARMA conversions of the printed SII
+  # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions,
+  # SII_B_clean/; census at HEAD 3ea671b6, 2026-10-12): 4,974 edition files,
+  # NO repo licence. The cone is the files bearing their OWN in-file
+  # <licence> CC BY-SA 4.0 — 907 today (SII 2/3/4/8/17/22/26/41), of which
+  # 258 are ~DHARMA_ in-progress files outside the sparse cone (they arrive
+  # by promotion), so 649 grant-bearing DHARMA_ editions; the other 4,067
+  # stay out by rule (censused per volume at discovery). Romanized Tamil
+  # above all (tam-Latn 579 docs; san/tel/kan-Latn 4/4/2). Headings mined:
+  # findspot/taluk/district/village (419 places), A.R. number, A.D./Śaka
+  # dating (211 dated). Class attribution. FETCH: one sparse GitFetch, cone
+  # /SII_B_clean/*/DHARMA_*.xml + README.txt (SII_A_raw stays out).
+  # EXPECTED FIRST SYNC: 649 discovered (4,067 grant-less skipped by rule)
+  # → 589 docs / 8,372 passages; 60 honest quarantines (40 edition-less
+  # stubs, 14 text-less editions, 6 "und").
+
 sillok:
   adapter: Nabu::Adapters::Sillok
   adopted: "2026-08-18"
