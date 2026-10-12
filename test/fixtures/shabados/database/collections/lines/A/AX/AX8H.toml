@@ -1,0 +1,11 @@
+[[content]]
+assets = ["DGDG"]
+type = "primary"
+data = "ਛਪੈ ਛੰਦ ॥ ਤ੍ਵ ਪ੍ਰਸਾਦਿ ॥"
+page = 1
+line = 3
+
+[[content]]
+assets = ["DDTK"]
+type = "primary"
+data = "ਛਪੈ, ਛੰਦ ॥ ਤ੍ਵਪ੍ਰਸਾਦਿ ॥"

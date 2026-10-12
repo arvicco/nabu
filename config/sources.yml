@@ -4567,6 +4567,31 @@ sefaria:
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 
+shabados:   # P122-3, 02-sources row 269
+  adapter: Nabu::Adapters::Shabados
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: false
+  sync_policy: manual
+  # Shabad OS — the Gurmukhī PRIMARY text of Sikh scripture and the Panthic
+  # canon (github.com/shabados/shabados, database/collections/ — the live
+  # home since the shabados/database repo was archived; census at 307ed9d1,
+  # 2026-10-12): 141,264 line records under ten sources (Guru Granth Sahib
+  # 60,555 · Dasam Granth 67,758 · Vārāṅ Bhāī Gurdās 7,585 · Kabitt Savayye
+  # 2,761 · Bhāī Nand Lāl's four Persian works 2,510 · Sarabloh 78 · Ardās
+  # 17), 127 sections. type = primary ONLY: the database README marks the
+  # gurbani and panthic texts public domain (PDM 1.0); the modern
+  # translations/notes on the same records carry no grant and are never
+  # read. Class open. Document = section, passage = line (upstream id); 681
+  # second-source primary readings ride annotations as variants. Languages
+  # a declared table: pan (Granth, Vārāṅ, Ardās), bra-Guru (Dasam Granth,
+  # Kabitt Savayye, Sarabloh), fas-Guru (Nand Lāl, the Zafarnāmā,
+  # Hikāyatāṅ). FETCH: one sparse GitFetch of the monorepo, cone
+  # database/collections/{sources,sections,line-groups,lines,authors,assets}/
+  # + README/LICENSE (the app code stays out); ~141k small files.
+  # EXPECTED FIRST SYNC: 127 docs / 141,264 passages, 0 quarantined
+  # (parse census ~55 s on the scratch clone).
+
 shkz:   # P107-3b
   adapter: Nabu::Adapters::Shkz
   adopted: "2026-09-28"
