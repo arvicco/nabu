@@ -222,7 +222,9 @@ module Nabu
         Nabu::Adapter::DiscoverySkips.new(
           skipped_by_rule: classes.values.sum,
           unrecognized: strays.size,
-          notes: RULE_NOTES.filter_map { |klass, note| "#{classes[klass]} #{note}" if classes[klass].positive? } +
+          notes: self.class::RULE_NOTES.filter_map do |klass, note|
+            "#{classes[klass]} #{note}" if classes[klass].positive?
+          end +
                  strays.map { |rel| "non-corpus file: #{rel}" }
         )
       end

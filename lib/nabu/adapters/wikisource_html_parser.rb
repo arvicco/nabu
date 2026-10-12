@@ -31,6 +31,10 @@ module Nabu
     # #ws-footer, #mojNaglowek, table.textinfo, .navigacePaP), reference
     # markers and lists, figures, navboxes, licence boxes, TOCs, styles.
     #
+    # Renderer red links (a.new) whose text is the bare namespaced target —
+    # the placeholders for missing scan pages / templates — are removed
+    # too (#placeholder_redlink?).
+    #
     # == Segmentation
     #
     # Block boundaries (p, div, tr/td, li, dd, headings…) separate
@@ -66,6 +70,7 @@ module Nabu
 
       def parse(html)
         root = Nokogiri::HTML5.fragment(html.to_s)
+        root.css("a.new").each { |link| link.remove if placeholder_redlink?(link) }
         root.css(FURNITURE.join(", ")).each(&:remove)
         root.css("li, dd, dt, p").each { |node| node.remove if link_only?(node) }
         # Hand-made note markers outside the cite machinery (ru: a link to
@@ -90,6 +95,18 @@ module Nabu
 
         output = root.css("div.mw-parser-output")
         output.empty? ? [root] : output
+      end
+
+      # A red link the RENDERER emitted for a transclusion target that does
+      # not exist — a not-yet-created scan page ("Laman:X.pdf/9") or a
+      # missing template ("Templat:U"): its text is the bare namespaced
+      # target title, never a word of the text (P120-3, the ms manuscript
+      # ranges run far past the transcribed pages).
+      def placeholder_redlink?(link)
+        return false unless link["href"].to_s.include?("redlink=1")
+
+        text = link.text.gsub(/[[:space:]]+/, " ").strip
+        text.include?(":") && link["title"].to_s.gsub(/[[:space:]]+/, " ").start_with?(text)
       end
 
       # A list item / paragraph whose every letter sits inside a link is

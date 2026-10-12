@@ -105,6 +105,8 @@ module Nabu
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
+          "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
+          #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
@@ -121,6 +123,8 @@ module Nabu
           "mdz-protestant" => :structured,
           "menota" => :structured,
           "mk-wikisource" => :structured,
+          "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
+          #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
           "obi-burmese" => :ce_year_text,
           "ogham" => :century_prose,
@@ -145,6 +149,8 @@ module Nabu
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
           "syriac-corpus" => :when_key,
+          "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
+          #                                         BE converted to CE (date_class edition)
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,

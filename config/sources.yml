@@ -2180,6 +2180,33 @@ gretil:
   # decision, not a scheduled one — and the corpus has been stable since 2021.
   sync_policy: manual
 
+gu-wikisource:   # P120-3, 02-sources row 262
+  adapter: Nabu::Adapters::GuWikisource
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: false   # awaiting the first real sync
+  sync_policy: manual
+  # The Gujarati bhakti cone (the owner-ruled wikisource posture), census
+  # 2026-10-12 — 466 cone pages (union):
+  #   cone entry                                 pages  admitted  unstated  excl
+  #   શ્રેણી:નરસિંહ મહેતા (Narsinh Mehta)          122      53        69       0
+  #   શ્રેણી:મીરાંબાઈ (Mirabai)                     165       6       159       0
+  #   શ્રેણી:દયારામ (Dayaram)                        27       6        21       0
+  #   શ્રેણી:અખો (Akho)                               8       4         4       0
+  #   શ્રેણી:પ્રેમાનંદ (Premanand)                     8       2         5       1
+  #   index Bruhad Kavyadohan Granth 1 (1908)      192     192         0       0
+  #   index Bruhad Kavyadohan Granth 3 (1888)        2       2         0       0
+  #   index Bruhat Kavyadohan Granth 2 (1913)       11      11         0       0
+  #   (Granth X / Granth 8 / Granth 1 1890: no transcluding pages)
+  #   TOTAL (union)                                466     207       258       1
+  # The edition is the scan Index's વર્ષ= (verbatim). The large Meerabai
+  # Lekhan / Narasinh lekhan 2 / Mira Ane Narsinh / Bhajan Sar Sindhu /
+  # Dayaram Lekhan scans state NO year → edition_unstated (an undated
+  # edition cannot pass EDITION_TAINT_POST_1930); Mameru.pdf's વર્ષ=1683
+  # is the composition year → censused exclusion. Admitted: 207 docs /
+  # 1,462 passages, all guj; Page: levels 1 (379) and 3 (55). Texts PD;
+  # transcription layer CC BY-SA 4.0.
+
 guaman-poma:   # P117-5, 02-sources row 255
   adapter: Nabu::Adapters::GuamanPoma
   adopted: "2026-10-11"
@@ -3156,6 +3183,29 @@ monlam-lexicon:   # P88-A3, 02-sources row 183
   # 107,113 + grand 342,716 — the desk's largest lexical shelf by two
   # orders of magnitude, glossless, complementary to wiktionary-bo.
   sync_policy: manual
+
+ms-wikisource:   # P120-3, 02-sources row 263
+  adapter: Nabu::Adapters::MsWikisource
+  adopted: "2026-10-12"
+  axes: [sea]
+  wired: false   # awaiting the first real sync
+  sync_policy: manual
+  # The Jawi manuscript cone (the owner-ruled wikisource posture), census
+  # 2026-10-12: 74 MANUSCRIPT Index pages (shelfmarked names — Leiden
+  # Or. NNNN, MSS Malay, BnF Malayo-polynésien, NBG-Kl., Harvard MS Indo,
+  # Garrett, Schoemann, WM ID 010) → 45 carry transcluding ns-0 pages →
+  # 99 cone pages:
+  #   class                                         pages
+  #   admitted (text)                                  64   (5,081 passages)
+  #   excluded_index — WM ID 010 series (Syakur)       34
+  #   edition_taint — the 1949 tafsir root               1
+  # Transcribed straight from the manuscripts (no edition layer). The
+  # WATCH-THE-RATCHET cone: Page: levels behind the 64 admitted pages —
+  # 0:75 · 1:235 · 2:2 · 3:189 · 4:9 · not yet created 3,052; 50 docs'
+  # lowest text level is 1 (unproofread), 14 reach 3. Script measured per
+  # page: Arab 62 (msa-Arab), Latn 1, Rencong+Latin 1 (msa). Dated 37/64
+  # (header year= / Index Year=, "abad ke-N" → the century). Texts PD;
+  # transcription layer CC BY-SA 4.0.
 
 mvp:
   adapter: Nabu::Adapters::Mvp
@@ -4857,6 +4907,27 @@ syriac-corpus:
   # 4.0" (base texts PD per the availability note) → class attribution.
   # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
   sync_policy: manual
+
+th-wikisource:   # P120-3, 02-sources row 264
+  adapter: Nabu::Adapters::ThWikisource
+  adopted: "2026-10-12"
+  axes: [sea]
+  wired: false   # awaiting the first real sync
+  sync_policy: manual
+  # The ประชุมพงศาวดาร cone (the owner-ruled wikisource posture), census
+  # 2026-10-12 — the three work trees, 267 cone pages:
+  #   tree                                    pages  admitted  taint  unstated  apparatus
+  #   ประชุมพงศาวดาร (Prachum Phongsawadan)      235      92      102     16        25
+  #   ประมวลกฎหมายรัชกาลที่ 1 (Lingat, BE 2482)    30       0       30      0         0
+  #   กฎหมายตราสามดวง (Khurusapha, BE 2505)        2       0        1      1         0
+  # Every year is BUDDHIST ERA (ปี=, header year=, Thai-digit Index
+  # names) → CE by −543; EDITION_TAINT_POST_1930 keeps the parts printed
+  # to BE 2473. The 54 named Indexes split 30 clean / 24 tainted (18
+  # chronicle parts reprinted BE 2475–2510 + the 6 Three Seals Law
+  # Indexes — the law code has NO pre-1930 edition on the wiki).
+  # Admitted: 92 docs / 11,006 passages, all tha; Page: levels 1:1,759 ·
+  # 3:1,265 · 4:196 (+0:3, 2:1). Publisher (ผู้เผยแพร่=) verbatim. Texts
+  # PD; transcription layer CC BY-SA 4.0.
 
 tibetan-verbs:
   adapter: Nabu::Adapters::TibetanVerbs
