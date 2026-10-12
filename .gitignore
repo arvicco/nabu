@@ -11,6 +11,9 @@
 /tmp/
 /log/
 
+# Research exports (nabu export, P121-1): output files + their manifests
+/exports/
+
 # Manual Adapter drop box (P63-1): owner-acquired downloads awaiting ingest
 /incoming/
 

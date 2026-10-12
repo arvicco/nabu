@@ -129,6 +129,13 @@ module Nabu
       @fallback_warned = {}
     end
 
+    # The research exporter's default home (P121-1): exports/ at the tree
+    # root beside config/ — gitignored output, neither permanent nor
+    # derived state (`nabu export --out DIR` writes anywhere else).
+    def exports_dir
+      File.expand_path(File.join("..", "exports"), config_dir)
+    end
+
     # The directory holding the config files (nabu.yml + sources.yml) — the
     # `config/` section of the backup set (P7-2). Derived from the config file's
     # own location so it follows a restored/relocated tree.

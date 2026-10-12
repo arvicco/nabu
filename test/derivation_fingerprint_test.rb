@@ -342,6 +342,32 @@ class DerivationFingerprintTest < Minitest::Test
                  "#{offenders.join("\n")}"
   end
 
+  # -- the research exporter exclusion (P121-1, the data_build posture) ----
+
+  # `nabu export` tables are producer-only: they READ the catalog and the
+  # links journal and write files under exports/ — so an exporter packet
+  # must not dirty every source's fingerprint. Same purity contract as
+  # data_build: nothing that shapes stored data may consume Nabu::Export.
+  EXPORT_EXEMPT = [
+    /\Anabu\.rb\z/,                          # the require manifest
+    %r{\Anabu/export(\.rb\z|/)},             # the exporter itself
+    %r{\Anabu/cli\.rb\z},                    # the CLI drives exports
+    %r{\Anabu/derivation_fingerprint\.rb\z}  # names the exclusion
+  ].freeze
+
+  def test_export_left_the_shared_core_and_nothing_derived_consumes_it
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_DIRS, "export"
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "export.rb"
+    lib = File.expand_path(File.join("..", "lib"), __dir__)
+    pattern = %r{\bNabu::Export\b|(?<!Query::)\bExport::|require(?:_relative)?\s+["'][^"']*(?<!query/)export["'/]}
+    offenders = Dir[File.join(lib, "**", "*.rb")].select do |file|
+      rel = file.delete_prefix("#{lib}#{File::SEPARATOR}")
+      EXPORT_EXEMPT.none? { |exempt| rel.match?(exempt) } && File.read(file).match?(pattern)
+    end
+    assert_empty offenders, "the exporter is excluded from the derivation fingerprint because it cannot " \
+                            "influence stored data — this reference breaks that. Offenders:\n#{offenders.join("\n")}"
+  end
+
   def test_legacy_single_sha_fold_stamp_reads_dirty_with_full_blame
     # Stamps written before P39-1 carry one whole-table sha: they must read
     # dirty (:fold) — the rebless task, not silent acceptance, migrates them.
