@@ -58,8 +58,10 @@ class CredsCommandTest < Minitest::Test
       end
       out, err, status = with_stdin_io(stdin) { with_config(config) { run_cli(%w[creds set titus]) } }
       assert_nil status, err
-      assert_match(/user/i, out)
-      assert_match(/password/i, out)
+      # The user-prompt ECHO is environment-dependent (Thor's ask writes
+      # it locally but not under a CI pseudo-stdin) — the test pins what
+      # matters: the hidden read, the redaction, and the stored result.
+      assert_match(/password.*hidden/i, out)
       assert_equal 1, noecho_calls.size, "the secret is read with echo off"
       refute_includes out, SECRET
       assert_equal SECRET, Nabu::Credentials.new(path: config.credentials_path)["titus"].password
