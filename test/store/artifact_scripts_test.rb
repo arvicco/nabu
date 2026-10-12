@@ -90,7 +90,7 @@ class ArtifactScriptsTest < Minitest::Test
     end
   end
 
-  # P86 (№R-50): the REAL config file's rows validate at TEST time, not
+  # P86: the REAL config file's rows validate at TEST time, not
   # first at rebuild — every script tag must be a registry script, and
   # every row carries a note or is one of the two note-less P61 originals.
   # The compiler raises on unregistered tags at derive; this guard moves
@@ -108,7 +108,7 @@ class ArtifactScriptsTest < Minitest::Test
     end
     tags = shipped.values.flat_map { |langs| langs.values.map { |row| row["script"] } }.uniq.sort
     assert_equal %w[avst egyd hant ital phnx tibt ugar xsux], tags,
-                 "the №R-50 census set — a new tag here means a new owner ruling"
+                 "the owner-ruled (2026-08-28) census set — a new tag here means a new owner ruling"
   end
 
   # The 2026-08-29 regression class: YAML resolves a DUPLICATE source key by
@@ -127,6 +127,6 @@ class ArtifactScriptsTest < Minitest::Test
       File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml")
     ).fetch("sources")
     assert_equal %w[egy-Egyd phn], shipped.fetch("elephantine").keys.sort,
-                 "the P61 egyd row and the №R-50 phnx row coexist in ONE section"
+                 "the P61 egyd row and the 2026-08-28 phnx row coexist in ONE section"
   end
 end

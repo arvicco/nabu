@@ -4,7 +4,7 @@ require_relative "ia_scan_shelf"
 
 module Nabu
   module Adapters
-    # archiv-slav-phil (Q105) — Jagić's Archiv für slavische Philologie
+    # archiv-slav-phil — Jagić's Archiv für slavische Philologie
     # (Berlin: Weidmann, 1876–1929), the field's journal of record, as the
     # archive.org scan run: one document per volume, page grain over the
     # hOCR derivative pair, UNCORRECTED OCR declared (Nabu::Adapters::

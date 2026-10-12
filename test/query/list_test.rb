@@ -100,7 +100,7 @@ module Query
       assert_equal 1, row.withdrawn
     end
 
-    # P105-5a (Q87): the two local shelves whose holdings live outside
+    # P105-5a: the two local shelves whose holdings live outside
     # documents/entries/dossiers — owner notes (urn_notes) and the silver
     # lemma lane (fulltext passage_lemmas, tier "silver") — must census,
     # never read "empty" while live.

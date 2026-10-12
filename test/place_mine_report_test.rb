@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Nabu::PlaceMineReport (P97-1 — Q70): the aggregate review surface over
+# Nabu::PlaceMineReport (P97-1): the aggregate review surface over
 # kind=place-candidate edges — candidates grouped by place, ranked by
 # DOCUMENT spread (distinct documents beat raw passage counts), titles
 # resolved through the gazetteer's derived slice, each row carrying the
@@ -114,7 +114,7 @@ class PlaceMineReportTest < Minitest::Test
     assert_empty report(source: "cbeta").rows, "an unmined source reports honestly empty"
   end
 
-  # --- the board (P105-1 — Q86): the name-grouped verdict surface ----------
+  # --- the board (P105-1): the name-grouped verdict surface ----------
 
   # A verdict is made per NAME (names.yml keys are verbatim names), so the
   # board's grain is the mined name, its candidates listed under it with

@@ -8,7 +8,7 @@ require_relative "../url_download"
 module Nabu
   module Adapters
     # ATMO — Annotated Turki Manuscripts from the Jarring Collection
-    # Online (P107-4, Q97.1; uyghur.linguistics.indiana.edu — Dwyer,
+    # Online (P107-4; uyghur.linguistics.indiana.edu — Dwyer,
     # Sperberg-McQueen et al.; Kansas/Indiana + Lund UB, Luce-funded):
     # 18 line-by-line TEI P5 transcripts of 18th–20th c. Eastern Turki
     # manuscripts from Lund's Jarring collection. THE Chagatai-lane

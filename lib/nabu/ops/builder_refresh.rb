@@ -29,7 +29,7 @@ module Nabu
         kinds = Store::KindBuilder.rebuild!(catalog: catalog,
                                             kinds: Kinds.load_default(config: config),
                                             progress: progress, canonical_dir: canonical_dir)
-        # P106-7 (Q88.2): the lect facet joins the sanctioned in-phase
+        # P106-7: the lect facet joins the sanctioned in-phase
         # pass — the one rebuild-only derivation a killed rebuild could
         # strand dark corpus-wide (the 2026-09-26 incident); with it ride
         # the two cheap censuses derived in the same breath (P106-1/-5).

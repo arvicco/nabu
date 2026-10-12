@@ -3,8 +3,8 @@
 require "yaml"
 
 module Nabu
-  # The metadata-field → facet projection config (P104-1, under №R-70's
-  # aggressive-mining policy): config/facet_map.yml declares, per source,
+  # The metadata-field → facet projection config (P104-1, under the
+  # aggressive-mining policy, owner-ruled 2026-09-26): config/facet_map.yml declares, per source,
   # which documents.metadata_json fields project into document_facets
   # rows and under which facet name — so a source whose axis-shaped
   # fields already ride the catalog verbatim (okhc's corpus, seal's

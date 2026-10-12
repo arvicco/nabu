@@ -35,7 +35,7 @@ module Nabu
     #    International (CC BY-NC-SA 4.0)."
     # The Zenodo record's own license field: cc-by-4.0.
     # The claims conflict; the class stays nc (the conservative reading)
-    # until owner email №24 resolves it — photographs need per-institution
+    # until a licensing clarification by email resolves it — photographs need per-institution
     # consent and are entirely out of scope (never fetched).
     #
     # == Identity and grain

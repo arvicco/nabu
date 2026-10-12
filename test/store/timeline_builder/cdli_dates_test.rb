@@ -39,7 +39,7 @@ module Store
       Nabu::Store::TimelineBuilder::CdliDates.build(catalog: @db, canonical_dir: root)
     end
 
-    # №R-28 upgraded this very fixture row: the tablet is regnally dated
+    # The regnal-precision ruling (2026-08-11) upgraded this very fixture row: the tablet is regnally dated
     # Amar-Suen.01.04.00, so the ruled table's year (2046 BC) replaces the
     # Ur III period band — finer wins, on real upstream data.
     def test_a_regnally_dated_fixture_row_converts_finer_than_its_period_band
@@ -130,7 +130,7 @@ module Store
       end
     end
 
-    # №R-28 (2026-08-11, the P73-6 scout ratified): a ruled ruler's regnal
+    # Owner-ruled 2026-08-11 (the P73-6 scout ratified): a ruled ruler's regnal
     # year converts to its one conventional absolute year — FINER WINS over
     # the period band; unruled rulers and out-of-range years fall back to
     # the period band, censused.

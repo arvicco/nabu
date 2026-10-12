@@ -2,7 +2,7 @@
 
 module Nabu
   module Store
-    # P87-2 (Q51, under №R-51-B) — the silver-lemma PROJECTION CACHE.
+    # P87-2 (under the owner ruling of 2026-08-29) — the silver-lemma PROJECTION CACHE.
     #
     # The 2026-08-29 lesson ([[rebuildable-is-not-recomputed]]): the
     # derivability law requires the projection to be REGENERABLE, not

@@ -58,6 +58,6 @@ the Electronic Babylonian Library Project", 2024), License section:
 Zenodo record 10018951 license field: `cc-by-4.0`.
 
 nabu holds the source at `license_class: nc` (the conservative reading)
-until owner email №24 resolves the conflict. Photographs are entirely
+until the maintainers clarify which claim governs. Photographs are entirely
 out of scope. The Corpus side of eBL (Gilgameš chapter editions) is NOT
 in this deposit and NOT covered by these grants — out of scope.

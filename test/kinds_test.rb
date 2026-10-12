@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Nabu::Kinds (P99-1 — №R-63): the kind-axis config seam. Two files —
+# Nabu::Kinds (P99-1 — owner-ruled 2026-09-13): the kind-axis config seam. Two files —
 # config/kind_classes.yml (the RULED 26-head class list + crosswalks)
 # and config/kind_map.yml (per-source folds: exact map, prefix_map,
 # range_map, source_kind) — loaded with validation, plus the §4b
@@ -127,7 +127,7 @@ class KindsTest < Minitest::Test
     assert_nil kinds.source_kind("edr")
   end
 
-  # -- the №R-66 tree: slash-keyed sub-classes + head extraction ------------
+  # -- the owner-ruled (2026-09-18) tree: slash-keyed sub-classes + head extraction ------------
 
   def test_slash_keyed_sub_classes_carry_their_own_desc_under_a_declared_head
     assert_includes kinds.class_names, "literary/narrative"
@@ -147,7 +147,7 @@ class KindsTest < Minitest::Test
                  "the tree is optionally deeper than two — the head still validates"
   end
 
-  # -- deliberate not-genre declarations (P101 / Q75) ------------------------
+  # -- deliberate not-genre declarations (P101) ------------------------
 
   def test_a_deliberate_value_folds_to_nothing
     assert_empty kinds.normalize("elephantine", "vertical format"),
@@ -285,7 +285,7 @@ class KindsTest < Minitest::Test
     )
     heads = shipped.heads - ["unknown"]
     assert_equal 21, heads.size,
-                 "№R-63's 26 heads restructured under №R-66: the six literature " \
+                 "the 26 original heads restructured (owner ruling 2026-09-18): the six literature " \
                  "families live under `literary` — 21 heads + unknown"
     %w[funerary dedicatory honorific building boundary mark royal
        administrative legal letter lexical scholarly school
@@ -302,12 +302,12 @@ class KindsTest < Minitest::Test
     assert_operator shipped.sources.size, :>=, 10,
                     "the initial map covers the genre-bearing census sources"
     assert_equal ["literary"], shipped.normalize("cdli", "Literary"),
-                 "№R-66: upstream's own literature catch-all folds to the bare head"
+                 "upstream's own literature catch-all folds to the bare head"
     assert_equal ["administrative/note"], shipped.normalize("elephantine", "note")
     assert_equal ["unknown"], shipped.normalize("cdli", "fake (modern)")
   end
 
-  # P104-1 (Q77 under №R-70): the okhc blanket source_kind graduates to
+  # P104-1 (the aggressive-mining law): the okhc blanket source_kind graduates to
   # the corpus-field fold — the 1.2M-doc shelf splits into honest kinds.
   def test_shipped_okhc_folds_the_corpus_field
     shipped = shipped_kinds
@@ -415,7 +415,7 @@ class KindsTest < Minitest::Test
                  "an object description is a reviewed non-claim"
   end
 
-  # P116 R4 (№R-78, ruled 2026-10-10): the Bactrian corpus's own
+  # P116 R4 (owner-ruled 2026-10-10): the Bactrian corpus's own
   # six-genre CONTENTS list folds onto the ruled heads through the genre
   # facet (census 2026-10-10, 123 docs: 70 letters / 32 dated / 8
   # lists / 5 uncertain-date / 5 Buddhist / 3 uncertain-type).

@@ -2,11 +2,11 @@
 
 module Nabu
   module Store
-    # The durable per-stage wall-time record (P78-r1, Q34: every long pass
+    # The durable per-stage wall-time record (P78-r1: every long pass
     # should say how long it expects to run). The P36-0 profiler measured
     # per-source/per-stage rebuild times all along and DISCARDED them
     # ("observability only"); this module keeps the latest facts in the
-    # history LEDGER (migration 009 — the №R-21 home: operational history,
+    # history LEDGER (migration 009 — the owner-ruled home: operational history,
     # not f(canonical), and a rebuild must never wipe the very timings that
     # predict it) so the next run can say "~6m (last run 5m48s over N rows)".
     #

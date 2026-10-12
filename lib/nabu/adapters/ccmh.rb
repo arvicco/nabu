@@ -105,8 +105,8 @@ module Nabu
 
       BOOK_TITLES = { "MAT" => "Matthew", "MAR" => "Mark", "LUK" => "Luke", "JOH" => "John" }.freeze
 
-      # The curated witness-dating overlay (P105-5c — Q87, under №R-70's
-      # aggressive-mining posture): the standard paleographic century
+      # The curated witness-dating overlay (P105-5c, under the
+      # aggressive-mining posture, owner-ruled 2026-09-26): the standard paleographic century
       # bands for the five codices, as top-level bounds the timeline's
       # :bounds_keys shape projects (corpus-gysseling mold). These date
       # the WITNESS (the manuscript object), so the rows keep the default

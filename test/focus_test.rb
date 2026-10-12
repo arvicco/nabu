@@ -212,7 +212,7 @@ class FocusTest < Minitest::Test
                  Nabu::Focus.footer_line(%w[germanic], [], resolved_count: 7)
   end
 
-  # Q95 (owner confusion 2026-09-27: "enabled: 170 entries" under "187
+  # Owner confusion 2026-09-27 ( "enabled: 170 entries" under "187
   # sources" read as a 17-source gap): the footer names its EXPANSION —
   # entries are axes+slugs, and the arrow states what they resolve to.
   def test_footer_line_without_a_resolved_count_keeps_the_old_shape

@@ -137,7 +137,7 @@ class OkhcTest < Minitest::Test
     assert_equal "en", record.language
   end
 
-  # --- P92-6 (Q64): the year field onto the timeline ------------------------
+  # --- P92-6: the year field onto the timeline ------------------------
 
   def test_dating_registers_in_the_metadata_dates_lane
     assert_equal :year_key, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["okhc"],

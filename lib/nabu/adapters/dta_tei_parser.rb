@@ -114,7 +114,7 @@ module Nabu
       def extraction_metadata(extraction)
         metadata = extraction.header.slice("author", "author_gnd", "date", "place",
                                            "genre", "subgenre", "dta_dirname").compact
-        # P104-1 (Q77): the dtamain/dtasub classCodes as facets — most of
+        # P104-1: the dtamain/dtasub classCodes as facets — most of
         # the corpus carries none (2,010 genre / 1,850 subgenre of 5,478
         # censused 2026-09-26): honest sparsity, never a blank row.
         facets = %w[genre subgenre].filter_map do |facet|

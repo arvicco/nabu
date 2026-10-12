@@ -7,7 +7,7 @@ require_relative "../url_download"
 
 module Nabu
   module Adapters
-    # kouigenji — the 校異源氏物語テキストDB (P108-3, Q89.2;
+    # kouigenji — the 校異源氏物語テキストDB (P108-3;
     # kouigenjimonogatari.github.io — the デジタル源氏物語 project,
     # Nakamura/Nagasaki et al., repo license CC BY 4.0): Ikeda Kikan's
     # 1942 critical edition of Genji Monogatari, all 54 maki as one TEI

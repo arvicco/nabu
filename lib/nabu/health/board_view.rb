@@ -4,12 +4,12 @@ require_relative "../duration_format"
 
 module Nabu
   module Health
-    # The health board's signal/noise policy (P98-1 — Q71, owner ask at the
+    # The health board's signal/noise policy (P98-1, owner ask at the
     # P97 board read: 185 rows drowned the 3 that mattered). The default
     # view prints FINDINGS ONLY — ok rows and the by-design notes (a
     # feature module's no-rows note, an empty owner shelf) fold into ONE
     # rollup line; `--all` restores the full board unchanged. The verdict
-    # is ONE line carrying elapsed (the Q69 standing rule); the CLI says it
+    # is ONE line carrying elapsed (the elapsed-time standing rule); the CLI says it
     # on the quiet path and raises it on the loud one — never both.
     module BoardView
       extend DurationFormat

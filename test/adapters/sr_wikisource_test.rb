@@ -45,7 +45,7 @@ module Adapters
       assert_equal "Фала Богу лијепе љепоте,", d.passages.first.text
       meta = d.metadata
       assert_includes meta["base_edition"], "Пјесме јуначке средњијех времена, књига трећа 1846",
-                      "№R-74: the page's own Избор source line, verbatim"
+                      "the base-edition rule: the page's own Избор source line, verbatim"
       assert_equal ["Српске епске народне песме", "Збирке Вука Стефановића Караџића"], meta["cone"]
       assert_includes meta["categories"], "Збирка народних песама Вук књига трећа"
       assert_equal "verse", meta["grain"]

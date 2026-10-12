@@ -56,7 +56,7 @@ module Store
       assert_equal 1, counts[:documents]
     end
 
-    # P104-1 (Q77): the koordinaten1 findspot pair — the WGS84 lane the
+    # P104-1: the koordinaten1 findspot pair — the WGS84 lane the
     # rundata precedent opened (migration 027) finally reads EDH's own
     # column (79,488 of 82,450 rows filled at the 2026-09-26 census).
     def test_findspot_coordinates_ride_the_axes

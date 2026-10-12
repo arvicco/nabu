@@ -133,7 +133,7 @@ class PlaceMineTest < Minitest::Test
     refute @journal[:links].where(Sequel.like(:to_urn, "%hvd_gate")).any?
   end
 
-  # The ceiling allow-list (№R-67, owner 2026-09-18 — the 吐蕃/Tibet
+  # The ceiling allow-list (owner-ruled 2026-09-18 — the 吐蕃/Tibet
   # case): a RULED genuinely-geographic name may exceed the derived
   # frequency ceiling and still mine. Allow exempts ONLY the derived
   # stop — the floor, the ambiguity cap and the hand stop list still

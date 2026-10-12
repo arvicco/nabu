@@ -29,7 +29,7 @@ module Nabu
       # never aggregate the half-million-row facet, and the numbers cannot
       # drift from the facet they summarize.
       #
-      # ONE transaction end to end (P106-7, Q88.1 — the 2026-09-26
+      # ONE transaction end to end (P106-7 — the 2026-09-26
       # incident: a killed rebuild committed the DELETE without the
       # rewrite and the live axis went dark corpus-wide for a day): a
       # failure anywhere rolls the drop back and the prior

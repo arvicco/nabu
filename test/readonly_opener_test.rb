@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# Nabu::ReadonlyOpener (Q65, the P93 disk incident's systemic fix): the
+# Nabu::ReadonlyOpener (the P93 disk incident's systemic fix): the
 # lazy memoizing read-only opener extracted from the CLI's mcp plumbing,
 # plus the piece the incident showed was missing — vacate_stale!, so an
 # IDLE long-lived server releases a rebuilt file's disk (a deleted inode

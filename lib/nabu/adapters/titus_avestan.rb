@@ -58,7 +58,7 @@ module Nabu
       # (Y 28-34, 43-51, 53) plus the Yasna Haptaŋhāiti (Y 35-41) — the
       # Old Avestan corpus by the standard scholarly division (Y 42 and 52
       # are Young Avestan insertions and fall outside the ranges). Every
-      # other book (Yt, V, Vr, …) is Young Avestan. Ruled with №3
+      # other book (Yt, V, Vr, …) is Young Avestan. Owner-ruled
       # (2026-08-09, ave:old/yng minted upstream); the avestan-stage facet
       # this set derives is what the ave-stage lect rule attaches to.
       GATHIC_CHAPTERS = ((28..41).to_a + (43..51).to_a + [53]).freeze

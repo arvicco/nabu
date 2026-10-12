@@ -474,7 +474,7 @@ module Nabu
         !load_report.passages_changed?
     end
 
-    # P112-1 (Q112): the load's IndexDelta, when the refresh may work the
+    # P112-1: the load's IndexDelta, when the refresh may work the
     # delta grain — a secondary dictionary lane moves lemma/reflex state
     # the SLICE rewrite re-derives for unchanged passages too (the
     # skip_reindex? rationale), so a lane-bearing sync keeps the slice.
@@ -574,7 +574,7 @@ module Nabu
       report
     end
 
-    # P104-4 (Q81, the №R-69a seam): a source whose adapter declares a
+    # P104-4 (the multi-shelf dictionary seam): a source whose adapter declares a
     # secondary dictionary lane loads it through the DictionaryLoader
     # right after the primary load, inside the same run — announced and
     # ticked like every long pass, timed under its own ledger stage. The

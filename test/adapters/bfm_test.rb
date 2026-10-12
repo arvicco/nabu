@@ -100,7 +100,7 @@ class BfmTest < Minitest::Test
                  metadata["license_url"], "the in-file <licence target> rides verbatim"
   end
 
-  # P104-1 (Q77): the header keywords project as facets — French values
+  # P104-1: the header keywords project as facets — French values
   # verbatim (upstream's own vocabulary), English facet keys shared with
   # the rest of the library (form = cantigas' key, dialect = the future
   # fr:old lect-evidence lane).

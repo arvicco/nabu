@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Store
-  # Nabu::Store::CjkBigrams (P93-3, №R-39 b) — the character-pair mint
+  # Nabu::Store::CjkBigrams (P93-3) — the character-pair mint
   # shared by the index side (Indexer's cjk lane) and the query side
   # (Query::Search), the fold-both-sides contract applied to unsegmented
   # CJK runs.

@@ -34,7 +34,7 @@ module Nabu
     # survives (empty gloss slots — 27 corpus-wide — keep their
     # position).
     #
-    # == Axes (№R-70)
+    # == Axes (owner ruling 2026-09-26)
     #
     # The CSV's axis-shaped field is cth_number: emitted as the same
     # "cth" facet shape TLHdig emits ({"value" =>, "raw" => "CTH n"}),

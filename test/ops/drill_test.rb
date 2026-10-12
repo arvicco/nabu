@@ -124,7 +124,7 @@ class DrillTest < Minitest::Test
     end
   end
 
-  # Q21 (P74, minted from the first live drill_pure failure 2026-08-12):
+  # P74 (minted from the first live drill_pure failure 2026-08-12):
   # a failing drill must hand over evidence. Rig: tamper the LIVE catalog
   # after its rebuild (inject a stray passage) — the drill's fresh rebuild
   # then diverges from the "source of truth", and the report must NAME

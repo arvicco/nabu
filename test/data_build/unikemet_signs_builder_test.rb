@@ -28,7 +28,7 @@ class UnikemetSignsBuilderTest < Minitest::Test
       assert_equal %w[ID Codepoint Glyph Gardiner UniK Core Description Functions Values
                       JSesh Hieroglyphica IFAO Source].join(","),
                    table.headers.join(",")
-      assert_equal 7, table.size, "one row per fixture codepoint (incl. the Q68 N46 addition)"
+      assert_equal 7, table.size, "one row per fixture codepoint (incl. the N46 addition)"
 
       horus = table.find { |row| row["Codepoint"] == "U+13143" }
       assert_equal %w[U13143 𓅃 G-12-002 G005 C G5 ḥr],

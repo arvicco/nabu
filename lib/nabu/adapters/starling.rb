@@ -70,7 +70,7 @@ module Nabu
     #                    ccs-pro is minted by the family-code + -pro
     #                    convention (ISO 639-5 ccs; the bat-pro precedent).
     #
-    # == The P104-3 packages (Q84: six further downloads, same shelf, same grant)
+    # == The P104-3 packages (six further downloads, same shelf, same grant)
     #
     # ALTAIC / CAUC / SINTIB / DRAV / CHUKCHEE / YENISEY .exe — plain zips
     # like IE.exe/KART.exe, each fetched into its own subdir with its own

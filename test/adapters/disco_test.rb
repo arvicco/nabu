@@ -79,7 +79,7 @@ module Adapters
     def test_disco_is_registered_for_the_author_century_band_shape
       assert_equal :author_century_band,
                    Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["disco"],
-                   "P104-1 (№R-70 grade 2): author life bands project as composition-class rows"
+                   "P104-1 (the attributed-era class): author life bands project as composition-class rows"
       assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "disco"
     end
 

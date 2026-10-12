@@ -32,7 +32,7 @@ module Nabu
     # Dodatek, Indeks Ch, Objaśnienie znaków i skróceń), honestly absent.
     # Scan proofreading: 138 validated · 387 proofread · 292 NOT proofread
     # (raw OCR) · 11 without text — ingested at any transcription status
-    # (the №R-74 posture), declared here rather than filtered.
+    # (the owner-ruled Wikisource posture), declared here rather than filtered.
     #
     # == Canonical shape (written by the pl-wikisource fetch)
     #

@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # gams-zrcalo (Q102, 02-sources row 244): the GAMS digital edition of the
+  # gams-zrcalo (02-sources row 244): the GAMS digital edition of the
   # 1445 Croatian Glagolitic Zrcalo člověčaskago spasenja (CC BY 4.0 TEI,
   # one datastream). Fixture: the real TEI with its header whole and the
   # body cut to the foreword + chapters 1, 8, 14, 24 and 35 (each removed

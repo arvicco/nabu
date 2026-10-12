@@ -8,7 +8,7 @@ require_relative "../url_download"
 module Nabu
   module Adapters
     # Skjaervø, Khotanese Manuscripts from Chinese Turkestan in the
-    # British Library (P107-3a, Q96.2): the revised 2014 online edition
+    # British Library (P107-3a): the revised 2014 online edition
     # as ONE TEI.2 XML (Zenodo doi 10.5281/zenodo.3372682, CC BY 4.0) —
     # 2,357 msDescription records, 20,596 khot-Latn transliteration
     # lines. THE text lane for the Khotanese documents IEDC catalogs.

@@ -25,7 +25,7 @@ module Nabu
     #   document urn  urn:nabu:eebo-tcp:<TCPID>          (…:eebo-tcp:A90004)
     #   passage urn   <document-urn>:<div-path>.<unit>   (…:eebo-tcp:A90004:d1.h1)
     #
-    # == Wave scoping (№R-43, ruled 2026-08-26)
+    # == Wave scoping (owner-ruled 2026-08-26)
     #
     # `classes:` (the kanripo mold) scopes BOTH acquisition and discovery
     # to a phase subset — Phase I is the RULED wave-1 configuration
@@ -66,7 +66,7 @@ module Nabu
       # codes it maps; unmapped MARC codes ride verbatim (class note).
       LANGUAGE_ALIASES = { "eng" => "en", "spa" => "es", "ita" => "it" }.freeze
 
-      # The wave scope vocabulary + the №R-43 RULED wave-1 default
+      # The wave scope vocabulary + the owner-ruled wave-1 default
       # (Phase I whole; both phases the stated follow-on).
       PHASES = Nabu::EeboTcpFetch::PHASES.keys.freeze
       DEFAULT_PHASES = %w[phase1].freeze

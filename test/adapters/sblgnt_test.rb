@@ -72,7 +72,7 @@ class SblgntTest < Minitest::Test
     refute_nil(document.find { |p| p.urn == "urn:nabu:sblgnt:mark:2.3" })
   end
 
-  # P110-4 (the Q78 sidecar harvest): the repo's own sblgntapp critical
+  # P110-4 (the sidecar harvest): the repo's own sblgntapp critical
   # apparatus joins the held verses as passage annotations — variant
   # readings with witness sigla (WH Treg NA27/NA28 RP), verbatim, keyed
   # by the verse refs the apparatus itself states ("3 John 1:4" → :1.4).

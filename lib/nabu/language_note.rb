@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nabu
-  # The language-note addressing (P85-A, №R-48-2): personal, per-language notes
+  # The language-note addressing (P85-A, owner-ruled 2026-08-28): personal, per-language notes
   # ride the SAME note mechanism as URN- and source-bound notes (`nabu note`),
   # kept local/ and private — the FOURTH layer of the language card, composed
   # beneath the published universal overlay (nabu-data mul/language-dossiers)

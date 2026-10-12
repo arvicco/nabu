@@ -585,7 +585,7 @@ module Nabu
     end
     private_class_method :boolean!
 
-    # Q93 (owner ruling 2026-09-27): every entry records its adoption
+    # Owner ruling 2026-09-27: every entry records its adoption
     # date — the recentness the alphabetic file order no longer carries.
     # A plain date string, never a phase id (public surface).
     def self.adopted!(slug, config)
@@ -789,7 +789,7 @@ module Nabu
       @entries.each_value.select(&:fuzzy_index).map(&:slug)
     end
 
-    # Slugs opted into the CJK bigram lane (P93-3, №R-39 b) — what the
+    # Slugs opted into the CJK bigram lane (P93-3) — what the
     # Indexer scopes its bigram pass to. The fuzzy_index posture doctrine
     # exactly: an index-economics owner flag in sources.yml (measured
     # 2026-09-02: ~22M CJK passages across the flagged sources), never a
@@ -798,7 +798,7 @@ module Nabu
       @entries.each_value.select(&:cjk_index).map(&:slug)
     end
 
-    # Slugs opted into the semantic-vector scope (P93-4, №R-36) — the
+    # Slugs opted into the semantic-vector scope (P93-4) — the
     # literary core `nabu embed` builds vectors for. The trial's ruling
     # scoped the feature to literary same-language retrieval (the
     # full-library extrapolation was a measured NO); the flag is the

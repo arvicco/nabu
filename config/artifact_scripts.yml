@@ -17,7 +17,7 @@ sources:
       script: egyd
     phn:
       script: phnx
-      note: "№R-50 census discovery — the Phoenician documents are held in
+      note: "census discovery (owner-ruled 2026-08-28) — the Phoenician documents are held in
         Hebrew square-script transcription (surface 90% hebr), artifact
         Phoenician. (Merged INTO this section 2026-08-29: the row first
         landed as a DUPLICATE elephantine: key, which YAML silently
@@ -33,7 +33,7 @@ sources:
     xcg-Ital-x-xcglep:
       script: ital
       note: Lepontic alphabet (upstream's -x-xcglep private-use subtag)
-  # P86 (№R-50, ruled 2026-08-28 "as recommended"): the rows the six-script
+  # P86 (owner-ruled 2026-08-28 "as recommended"): the rows the six-script
   # mint unblocked, each an owner-ruled reading of the 2026-08-28 byte
   # census (200-passage samples; every held surface measured 100% latn
   # unless noted).
@@ -69,4 +69,4 @@ sources:
     ojp:
       script: hant
       note: "man'yōgana — Han characters used phonographically (8th c.,
-        pre-kana); №R-50's judgment call: hant, not the anachronistic jpan"
+        pre-kana); the ruling's judgment call: hant, not the anachronistic jpan"

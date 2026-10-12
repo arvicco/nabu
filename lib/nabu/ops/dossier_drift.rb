@@ -73,7 +73,7 @@ module Nabu
         entry = @registry[slug]
         mentioned = mentioned?(slug)
         if dossier.description&.start_with?(SourceDossier::PLACEHOLDER)
-          # P66-4 (Q3): a scaffolded placeholder is an UNWRITTEN dossier —
+          # P66-4: a scaffolded placeholder is an UNWRITTEN dossier —
           # loud until the owner writes the content-first prose.
           [Finding.new(slug: slug, message: "placeholder description — write the content-first " \
                                             "prose (nabu ingest --shelf source #{slug})")]

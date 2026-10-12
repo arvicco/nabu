@@ -1,5 +1,5 @@
-# The kind axis — the RULED class list (№R-63, owner 2026-09-13;
-# restructured under №R-66, owner 2026-09-18: the literature families
+# The kind axis — the RULED class list (owner-ruled 2026-09-13;
+# restructured by owner ruling 2026-09-18: the literature families
 # live under ONE `literary` head — "optionally two-level", so upstream's
 # own bare "Literary" folds to the plain head while `literary/poetry`
 # etc. carry the grain). 21 heads + `unknown`. The heads are the ruled
@@ -89,7 +89,7 @@ classes:
   divination:
     desc: "Reading the future: omens, extispicy, astrology, oracles, hemerologies."
     subs: [omen, extispicy, astrology, oracle, hemerology]
-  # -- literature (№R-66: one family; the bare head is upstream's own
+  # -- literature (the 2026-09-18 ruling: one family; the bare head is upstream's own
   # "literary, unspecified" — cdli/oracc "Literary", kanripo KR4 集部,
   # eBL bare CANONICAL) --------------------------------------------------
   literary:

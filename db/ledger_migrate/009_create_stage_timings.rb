@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-# P78-r1 (Q34, owner commission 2026-08-18: every long pass should say
+# P78-r1 (owner commission 2026-08-18: every long pass should say
 # how long it expects to run): the durable per-stage wall-time record
 # the ETA line reads. The P36-0 profiler has measured per-source /
 # per-stage rebuild times all along and DISCARDED them ("observability
 # only"); this table keeps the latest facts so the next run can say
 # "~6m (last run 5m48s over 2,830 rows)".
 #
-# It belongs in the history LEDGER for the №R-21 reason: operational
+# It belongs in the history LEDGER for the owner-ruled ledger reason: operational
 # history, not a function of canonical/ — a `nabu rebuild` must never
 # wipe the very timings that predict it. Keyed by (kind, scope, stage):
 # kind names the operation family ("rebuild", "sync", "drill"), scope

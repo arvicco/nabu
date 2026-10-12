@@ -41,7 +41,7 @@ module Nabu
     # == License (granted)
     #
     # CC BY-NC-SA 4.0 — the API's own availability.license on season sets
-    # and text items, confirmed by grant №23 (Miller Prosser, U. Chicago
+    # and text items, confirmed by grant by email (Miller Prosser, U. Chicago
     # CORPUS/OCHRE, 2026-07-27): "retrieve the RSTI data and add it to your
     # collection, with attribution. The data is governed by the NC-SA
     # license." Class nc, MCP-excluded like all nc; the attribution rides

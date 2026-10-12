@@ -115,7 +115,7 @@ module Nabu
         end
       end
 
-      # P104-2 (Q79): Wiktionary titles MediaWiki cannot represent live
+      # P104-2: Wiktionary titles MediaWiki cannot represent live
       # under "Unsupported titles/…" and wiktextract emits them with the
       # RAW character as `word` — the zh extract's "Unsupported
       # titles/Space" record (line 53403 of 323,840; the only one in the
@@ -159,7 +159,7 @@ module Nabu
         ety ? "#{id}:#{ety}" : id
       end
 
-      # P104-2 (Q79, poison shape 2): the positional homograph suffix and
+      # P104-2 (poison shape 2): the positional homograph suffix and
       # the etymology_number suffix share one id shape (word:pos:<n>), so
       # the two paths can collide — the zh extract's 夆 quartet ships
       # THREE etymology-less character records (positionally 夆:character,

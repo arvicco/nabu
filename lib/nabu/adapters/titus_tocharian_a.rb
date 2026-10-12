@@ -29,7 +29,7 @@ module Nabu
     # manuscript LINES are the passages (the bilingual pages' 1a/1b
     # sub-lines are their own passages, each with its lane's language).
     #
-    # == Mined metadata (the №R-70 aggressive-mining law)
+    # == Mined metadata (the aggressive-mining law, owner-ruled 2026-09-26)
     #
     # The THT catalogue block rides document metadata: the edition number,
     # the Berlin find signature verbatim ("T_III_Š_72.1"), the THT

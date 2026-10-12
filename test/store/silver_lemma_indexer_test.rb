@@ -207,7 +207,7 @@ module Store
       assert_equal %w[urn:d:1:2], lemmas.select_map(:urn)
     end
 
-    # №R-51-B (2026-08-29, flipping the P84-1 pin DELIBERATELY): a full
+    # Owner-ruled 2026-08-29 (flipping the P84-1 pin DELIBERATELY): a full
     # rebuild never projects the shelf — the projection is an owner-fired
     # act (`nabu lemma-enrich --index-only`), so the 99-minute replay tax
     # died with this test's old expectation.

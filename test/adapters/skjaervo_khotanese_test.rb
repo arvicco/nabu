@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # Skjaervø's Khotanese BL records (P107-3a, Q96.2): 2,357 TEI.2
+  # Skjaervø's Khotanese BL records (P107-3a): 2,357 TEI.2
   # msDescription records with khot-Latn transliteration LINES — the
   # text lane for the Khotanese documents IEDC catalogs. Upstream's own
   # caveat (DRAFT, unproofed) is declared on every surface.

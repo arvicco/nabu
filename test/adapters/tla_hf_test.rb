@@ -255,7 +255,7 @@ class TlaHfTest < Minitest::Test
     assert_equal 0, first.errored
     assert_equal 24, catalog[:passages].count,
                  "(4 + 4 + 4) originals + (4 + 4 + 4) -de siblings (the late-egyptian fixture " \
-                 "gained the Q68 <g>N46</g> row; earlier-egyptian joined P108-7)"
+                 "gained the <g>N46</g> row; earlier-egyptian joined P108-7)"
 
     second = Nabu::Store::Loader.new(db: catalog, source: source)
                                 .load_from(adapter, workdir: FIXTURES, full: true)

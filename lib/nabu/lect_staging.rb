@@ -8,7 +8,7 @@ module Nabu
   # invariant. The sync report prints it as one line, so lect-staging
   # progress is visible at exactly the moment new documents arrive.
   #
-  # Honesty gates (the Q71 lesson — silence over noise): languages with
+  # Honesty gates (silence over noise): languages with
   # no minted stages never count (0-unstaged there is the healthy steady
   # state, not a gap); a source holding nothing stageable returns nil,
   # never a zero line; nil registry = lane off.

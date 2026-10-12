@@ -87,11 +87,11 @@ column `CC-BY-SA 4.0` on ALL 91; per-file `<availability status="free">
 dan 2, non 1. 86/91 carry the dipl level; the 5 without (incl. Holm A 80)
 are facs-only.
 
-## texts/ — the Q45 mixed-level trims
+## texts/ — the mixed-level trims
 
 Three more fixtures cut/copied 2026-08-27 from the 2026-08-23 canonical
 sync (same session-gated korpuskel downloads — `refetchable: false`).
-The Q45 census (91 canonical documents): 30 mixed-level documents leave
+The 2026-08-27 mixed-level census (91 canonical documents): 30 mixed-level documents leave
 98,575 tokens bare (no me: level children) — 98,496 punctuation, 79
 real `<w>` words — and 11 documents interleave OTHER layouts (printed
 editions, another hand, the transcriber's lacuna markers, a parallel

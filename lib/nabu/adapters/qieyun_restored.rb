@@ -78,7 +78,7 @@ module Nabu
       # through Store::DictionaryLoader.
       def self.content_kind = :dictionary
 
-      # P107 (the Q78 sidecar harvest): the sparse cone's
+      # P107 (the sidecar harvest): the sparse cone's
       # to_tshet_uinh_data/small_rimes.csv finally consumed — the
       # 對應廣韻小韻號 join lands as reference edges into the held
       # guangyun shelf after every sync (Nabu::QieyunCrosswalk).

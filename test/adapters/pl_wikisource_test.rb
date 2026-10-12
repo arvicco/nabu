@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # pl-wikisource (P116-3, Q103 under №R-74): the premodern Polish-
+  # pl-wikisource (P116-3, under the base-edition rule): the premodern Polish-
   # literature cone + Brückner's etymological dictionary (the declared
   # dictionary lane). Fixture envelopes are real api.php captures
   # (2026-10-10): Bogurodzica (pieśń) (a ProofreadPage transclusion of
@@ -51,7 +51,7 @@ module Adapters
       bogurodzica = doc(1481)
       assert_equal "pol", bogurodzica.language
       assert_includes bogurodzica.metadata["base_edition"], "Na podstawie: Jan Łoś, M. Arct i S-ka, Lublin 1922",
-                      "the Nagłówek adnotacje rides verbatim (№R-74)"
+                      "the Nagłówek adnotacje rides verbatim (owner ruling)"
       fraszka = doc(11_208)
       assert_equal "index: Fraszki (Jan Kochanowski) · title: Kochanowski, 1883",
                    fraszka.metadata["base_edition"], "the scan index + the title's dated parenthetical"

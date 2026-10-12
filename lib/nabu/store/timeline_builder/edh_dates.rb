@@ -35,8 +35,8 @@ module Nabu
       # - place_lat/place_lon = the koordinaten1 WGS84 findspot pair
       #   ("40.8471577,14.0550756" — 79,488 of 82,450 rows at the 2026-09-26
       #   census), both-or-nothing, riding the rundata coordinates lane
-      #   (migration 027). P104-1 (Q77) reverses the survey-v2
-      #   canonical-only stance — №R-70 rules all metadata mined; the
+      #   (migration 027). P104-1 reverses the survey-v2
+      #   canonical-only stance — the aggressive-mining law rules all metadata mined; the
       #   secondary koordinaten2 pair stays canonical-only (a second locus
       #   claim on 838 rows, no axis column pair to honestly carry it).
       #

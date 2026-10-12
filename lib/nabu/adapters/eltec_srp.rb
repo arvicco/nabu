@@ -5,7 +5,7 @@ require_relative "eltec_tei_parser"
 module Nabu
   module Adapters
     # eltec-srp — ELTeC-srp, the Serbian novel collection of the European
-    # Literary Text Collection (P117-2, Q104; COST Action CA16204 "Distant
+    # Literary Text Collection (P117-2; COST Action CA16204 "Distant
     # Reading for European Literary History"; collection editor Cvetana
     # Krstev, JeRTeH & University of Belgrade; doi:10.5281/zenodo.3524056).
     # 100 novels at level 1 (the README's v0.9.0 release note says 90; the

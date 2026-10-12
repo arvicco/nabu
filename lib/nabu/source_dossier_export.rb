@@ -36,7 +36,7 @@ module Nabu
     # (unchanged — the idempotency contract).
     Report = Data.define(:written, :stubs, :unchanged, :stub_slugs)
 
-    # The seeded description a prose-less source gets (P66-4/Q3): an
+    # The seeded description a prose-less source gets (P66-4): an
     # explicit marker + writing instructions — site:check flags it until
     # the owner replaces it. Never invented content.
     PLACEHOLDER_DESCRIPTION =

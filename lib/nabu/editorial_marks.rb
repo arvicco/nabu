@@ -11,7 +11,7 @@ module Nabu
   #
   # These are project definition (config/, git-shared), NOT the universal
   # curated overlay (nabu-data) — the brackets are Nabu's display conventions,
-  # authored here and shipped identically to every install (P85, №R-47).
+  # authored here and shipped identically to every install (P85).
   module EditorialMarks
     PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "editorial_marks.yml")
 

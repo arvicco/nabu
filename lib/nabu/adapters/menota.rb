@@ -5,7 +5,7 @@ require_relative "../menota_fetch"
 
 module Nabu
   module Adapters
-    # Menota — the Medieval Nordic Text Archive (P82-1, queue Q42 / grant
+    # Menota — the Medieval Nordic Text Archive (P82-1, grant
     # by email 2026-08-20): ~100 medieval Nordic manuscripts in Menota-TEI (multi-level
     # facsimile/diplomatic/normalized transcription), served through the
     # Corpuscle (korpuskel) REST API behind the catalogue SPA at

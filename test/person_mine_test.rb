@@ -2,9 +2,9 @@
 
 require "test_helper"
 
-# Nabu::PersonMine + Query::Person (P97-2 — №R-62 option b): the
+# Nabu::PersonMine + Query::Person (P97-2 — owner-ruled 2026-09-11, option b): the
 # census-only person-name scan and the person desk card. The miner has
-# NO write path by design — №R-62's own condition: the apply gate opens
+# NO write path by design — the ruling's own condition: the apply gate opens
 # only after the owner reads a census.
 class PersonMineTest < Minitest::Test
   include StoreTestDB
@@ -58,7 +58,7 @@ class PersonMineTest < Minitest::Test
 
   def test_the_miner_has_no_write_path
     refute Nabu::PersonMine.method_defined?(:apply!),
-           "№R-62: census only — the apply gate does not exist yet, not even flagged off"
+           "census only — the apply gate does not exist yet, not even flagged off"
   end
 
   # --- the card --------------------------------------------------------------

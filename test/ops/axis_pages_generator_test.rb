@@ -82,7 +82,7 @@ module Ops
       catalog.disconnect
     end
 
-    # P105-5a (Q87): the owner-notes and lemma shelves hold their content
+    # P105-5a: the owner-notes and lemma shelves hold their content
     # outside documents — urn_notes rows and tier-silver fulltext rows.
     def seed_local_shelves(catalog, catalog_path)
       catalog[:sources].insert(slug: "local-notes", name: "Notes",

@@ -20,7 +20,7 @@ module Nabu
     # `lemma_tier: silver` — ruled on upstream evidence: Gago Jover &
     # Pueyo Mena (Scriptum Digital 7) document the lemmatization as
     # FreeLing + HSMS-app, i.e. AUTOMATIC (the GLAUx precedent).
-    # The tables/ works metadata lane (P77-r6, №R-30 ruled 2026-08-13)
+    # The tables/ works metadata lane (P77-r6, owner-ruled 2026-08-13)
     # joins per-siglum: works rows + codex row + the lengua facet — see
     # OstaTables.
     #
@@ -37,7 +37,7 @@ module Nabu
     #
     # == Language
     #
-    # Per document from the works table (P77-r6, №R-30): the majority
+    # Per document from the works table (P77-r6): the majority
     # OstaTables::LENGUA_CODES mapping over the codex's works — osp for
     # the castellano bulk, ast/roa-opt/arg/lat for the Leonese/Galician/
     # Navarro-Aragonese/Latin layers; `osp` stays the honest fallback

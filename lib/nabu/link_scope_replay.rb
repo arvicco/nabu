@@ -2,7 +2,7 @@
 
 module Nabu
   # The links-stage scope replay (P70-3b, extracted from Rebuild;
-  # P106-6/Q94 adds the place pair): dispatch one recorded
+  # P106-6 adds the place pair): dispatch one recorded
   # link_scopes.yml entry back through its batch producer, so
   # db/links.sqlite3 stays a pure function of canonical + config + the
   # catalog. The 2026-09-27 rebuild dropped a 3.25M-edge place-mine run

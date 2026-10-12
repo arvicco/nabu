@@ -9,7 +9,7 @@ require_relative "../zip_fetch"
 
 module Nabu
   module Adapters
-    # The archive.org scan-shelf base (Q105): a CURATED table of archive.org
+    # The archive.org scan-shelf base: a CURATED table of archive.org
     # items — public-domain scholarship whose only machine text is the
     # archive's own uncorrected OCR — fetched as their hOCR derivative pair
     # (Nabu::Adapters::IaHocrText) and minted at PAGE grain. Subclasses

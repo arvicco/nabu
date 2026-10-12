@@ -127,7 +127,7 @@ module Nabu
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild.
       # Since P78-r1 its facts persist to the LEDGER at run end (stage_timings
-      # — №R-21 territory, so still rebuild-safe: db/ stays f(canonical)).
+      # — operational history outside db/, so still rebuild-safe: db/ stays f(canonical)).
       profile = RebuildProfile.new
       ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
       # Sidecars go WITH each db (Store.drop_database_files! — the 2026-08-02
@@ -189,7 +189,7 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
-      # The kind axis (P99-2 — №R-63) projects FROM the facet rows just
+      # The kind axis (P99-2, owner-ruled 2026-09-13) projects FROM the facet rows just
       # re-minted, so it rides directly behind FacetBuilder; nil config
       # files = lane off, zero rows.
       progress&.stage("kind axis")
@@ -204,7 +204,7 @@ module Nabu
         Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
                                              progress: progress)
       end
-      # P89-1 (№R-54 (c)): the corpus builders just ran against the current
+      # P89-1 (owner ruling option c): the corpus builders just ran against the current
       # code — mint their sentinel so an incremental run can skip them
       # honestly until a builder file actually changes.
       Store::DerivationStamp.stamp_builders!(
@@ -278,7 +278,7 @@ module Nabu
                                         progress: progress,
                                         lemma_shelf: lemma_shelf,
                                         lemma_filter_slugs: @registry.lemma_filter_slugs)
-      # P112-4 (Q115): the index just rebuilt under the current index-core
+      # P112-4: the index just rebuilt under the current index-core
       # code — mint its sentinel so an incremental run can skip the whole
       # index honestly until an index file actually changes.
       Store::DerivationStamp.stamp_index!(
@@ -303,9 +303,9 @@ module Nabu
         Store::AnalyzeReport.new(scope: "catalog + index",
                                  seconds: Store.analyze!(db) + Store.analyze!(fulltext))
       end
-      # P78-r1 (Q34): the profiler's facts now OUTLIVE the run — appended to
+      # P78-r1: the profiler's facts now OUTLIVE the run — appended to
       # the ledger's stage_timings so the next rebuild can render ETAs. The
-      # ledger is №R-21 territory (operational history, never dropped here),
+      # ledger lies outside db/ (operational history, never dropped here),
       # so the derivability law holds: db/ stays f(canonical) and the
       # timings survive it by construction.
       persist_stage_timings!(ledger, profile, outcomes, indexed)
@@ -363,7 +363,7 @@ module Nabu
       Outcome.new(slug: entry.slug, report: report, quarantine: finding)
     end
 
-    # P78-r2 (Q34): the estimates the stage announcements carry, read from
+    # P78-r2: the estimates the stage announcements carry, read from
     # the P78-r1 history. "fulltext index" is an umbrella over the indexer's
     # six timed sub-stages, so its estimate sums them. No current-rows
     # denominator here — a rebuild doesn't know its document counts until it
@@ -382,7 +382,7 @@ module Nabu
       Nabu::Eta.for_stages(ledger, kind: "rebuild", scope: "corpus", stages: INDEX_ETA_STAGES)
     end
 
-    # P78-r1 (Q34): append the profiler's facts to the ledger's stage_timings
+    # P78-r1: append the profiler's facts to the ledger's stage_timings
     # (append-only; the latest row governs the next run's ETA). +rows+ is the
     # honest work-size denominator so the estimate can scale by drift: the
     # replayed document count for a source's :load, the indexed passage count

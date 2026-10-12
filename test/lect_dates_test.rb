@@ -70,9 +70,9 @@ class LectDatesTest < Minitest::Test
     end
   end
 
-  # -- open-ended bands (P84-3, the Q44 gap) ----------------------------------
+  # -- open-ended bands (P84-3) -----------------------------------------------
 
-  # The №R-42 survey's find: two Menota documents (Þiðriks supplements
+  # The 2026-08-24 survey's find: two Menota documents (Þiðriks supplements
   # 1600–1700, Heimskringla 2 1695–1705) sit wholly inside isl:mod's
   # [1550, null] band yet were never offered — banded_stages demanded BOTH
   # bounds, so an open-ended band was no band at all. The law:

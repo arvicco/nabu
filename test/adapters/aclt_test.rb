@@ -6,7 +6,7 @@ require "tmpdir"
 require "fileutils"
 
 module Adapters
-  # ACLT (P110-2, Q110): the Annotated Corpus of Luwian Texts —
+  # ACLT (P110-2): the Annotated Corpus of Luwian Texts —
   # Yakubovich's edition, delivered by Arkhangelskiy as Tsakorpus
   # per-inscription JSON (personal grant → research_private). Fixtures
   # are three real files copied whole from the emailed archive: the

@@ -11,7 +11,7 @@ require_relative "../normalize"
 
 module Nabu
   module Adapters
-    # mdz-protestant (Q102, 02-sources row 243): the 16th-century Slovene
+    # mdz-protestant (02-sources row 243): the 16th-century Slovene
     # (and Latin-script Croatian) Protestant prints held by the Bayerische
     # Staatsbibliothek and served by the Münchener DigitalisierungsZentrum
     # (MDZ, digitale-sammlungen.de) — Trubar's 1562 Articuli, Dalmatin's

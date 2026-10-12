@@ -196,7 +196,7 @@ module Nabu
       end
 
       # The CorA-XML sibling's unpack lands beside upstream's TEI tree
-      # (Q59-a): declared so the canonical identity stays strong.
+      # (the declared-materializations rule, 2026-09-03): declared so the canonical identity stays strong.
       def self.materialized_paths = [CORA_DIRNAME]
 
       # +pin+ / +cora_pin+ override the release shas (tests; a future owner

@@ -1,7 +1,7 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml.
 #
-# All entries come from the granted OCHRE resolver (grant №23; see
+# All entries come from the granted OCHRE resolver (grant by email, 2026-07-27; see
 # README.md) — the one URL shape is
 # https://pi.lib.uchicago.edu/1001/org/ochre/<uuid>&format=json (literal
 # `&`, no `?`). menu.json and the two set files are documented TRIMS

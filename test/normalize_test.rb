@@ -474,7 +474,7 @@ class NormalizeTest < Minitest::Test
                     "the sweep must exercise at least one real cross-script mutation (gml × greek)"
   end
 
-  # -- query-side neutralization scoping (P81-2 / Q40) -----------------------
+  # -- query-side neutralization scoping (P81-2) -----------------------
 
   # OWNER REPRO (2026-08-20): `search houlá` (Gil Vicente's Portuguese hail,
   # bdcamoes) surfaced Romanian "hulă" passages. The chu/orv/bul Slavonic

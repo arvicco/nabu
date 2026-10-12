@@ -6,7 +6,7 @@ require_relative "gysseling_fromdb_parser"
 
 module Nabu
   module Adapters
-    # Corpus Gysseling (P84-7, work-queue Q48): the 13th-century originals that
+    # Corpus Gysseling (P84-7): the 13th-century originals that
     # sourced the Vroegmiddelnederlands Woordenboek — the Early Middle Dutch
     # (dum) reference corpus, ~2,228 .fromdb documents, GOLD lemma + POS. Parser
     # family gysseling-fromdb.
@@ -123,7 +123,7 @@ module Nabu
         raise ParseError, "#{document_ref.path}: #{e.message}"
       end
 
-      # P109-4 (№R-70): the Corpus Gysseling series vocabulary the genre
+      # P109-4: the Corpus Gysseling series vocabulary the genre
       # facet labels (A ambtelijke bescheiden / L literaire
       # handschriften); an unlisted code (the lone W) rides value-only.
       GENRE_LABELS = { "A" => "ambtelijke bescheiden",

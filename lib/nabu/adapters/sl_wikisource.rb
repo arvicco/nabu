@@ -46,7 +46,7 @@ module Nabu
     # not_after, raw} (MetadataDates :structured; a page under two years
     # spans them). Orthography is declared, never normalized: Dela v
     # bohoričici → metadata "orthography" "bohoričica"; Dela v
-    # prekmurščini → "variety" "prekmurščina". Base edition (№R-74): the
+    # prekmurščini → "variety" "prekmurščina". Base edition (owner ruling): the
     # header's izdano (publication line) verbatim, else spisano, else vir,
     # else "unstated"; vir rides separately as "source".
     class SlWikisource < SlavicWikisource

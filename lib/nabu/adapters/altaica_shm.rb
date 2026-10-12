@@ -8,7 +8,7 @@ require_relative "../url_download"
 module Nabu
   module Adapters
     # altaica-shm — Street's Text of the Secret History of the Mongols
-    # (P107-7, Q99): the romanized Middle Mongol SHM, Version 24
+    # (P107-7): the romanized Middle Mongol SHM, Version 24
     # (2013), hosted by Monumenta Altaica (altaica.ru). USE GRANTED by
     # the site's maintainer by email, 2026-09-27 — the grant notes the
     # late Prof. Street "always wanted free propagation of his works";

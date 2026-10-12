@@ -277,7 +277,7 @@ class CopticScriptoriumTest < Minitest::Test
     assert_equal "urn:nabu:coptic-scriptorium:nt.mark.sahidica", document.urn
   end
 
-  # P104-1 (Q77 under №R-70): the header's Trismegistos number rode
+  # P104-1 (the aggressive-mining law, owner-ruled 2026-09-26): the header's Trismegistos number rode
   # metadata unminted — now a "tm:<n>" related edge per the P25-1 scheme
   # rule, joining the papyri/elephantine TM key space; upstream's
   # "none" (and any non-numeric value) claims nothing.

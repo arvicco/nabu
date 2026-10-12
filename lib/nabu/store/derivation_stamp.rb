@@ -14,13 +14,13 @@ module Nabu
     module DerivationStamp
       module_function
 
-      # The corpus-builders sentinel row (P89-1, №R-54 (c)): the builders
+      # The corpus-builders sentinel row (P89-1, owner ruling option (c)): the builders
       # digest rides the same table under a slug no source can carry, so
       # migration 017's schema needs no change. Excluded from slugs() —
       # and thereby from the incremental orphan guard — by design.
       BUILDERS_SLUG = "__corpus-builders__"
 
-      # The fulltext-index sentinel row (P112-4, Q115): the index-core
+      # The fulltext-index sentinel row (P112-4): the index-core
       # digest rides the same table — same design as the builders sentinel.
       INDEX_SLUG = "__fulltext-index__"
 

@@ -98,7 +98,7 @@ class KanripoTest < Minitest::Test
     assert_equal "lzh", document.language
     assert_equal "CHANT", document.metadata["edition"]
     assert_equal "KR1", document.metadata["class"]
-    # P109-5 (Q78, №R-70): the KR-Catalog 部/類 taxonomy reaches the
+    # P109-5 (the aggressive-mining law, 2026-09-26): the KR-Catalog 部/類 taxonomy reaches the
     # facet lane — division from KR<n>.txt, subclass from its link line.
     assert_equal({ "value" => "經部", "raw" => "KR1" }, document.metadata.dig("facets", "bu"))
     assert_equal({ "value" => "四書類", "raw" => "KR1h" }, document.metadata.dig("facets", "lei"))

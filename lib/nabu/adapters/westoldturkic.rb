@@ -7,7 +7,7 @@ module Nabu
   module Adapters
     # westoldturkic — the CLDF dataset of Róna-Tas & Berta, *West Old
     # Turkic: Turkic Loanwords in Hungarian* (2011), via the
-    # LoanpyDataHub extraction (P108-7, the Q107 half; Zenodo
+    # LoanpyDataHub extraction (P108-7; Zenodo
     # 10.5281/zenodo.7893910 v2.0, license cc-by-4.0 on the record).
     # The turkic desk's comparative instrument: WOT — the r-Turkic
     # (Bolgar-type) branch Hungarian borrowed from — attested through
@@ -24,7 +24,7 @@ module Nabu
     # stays unmarked. Dictionary language `trk` (the ISO 639-5 Turkic
     # collective; WOT itself carries no ISO code — Glottocode
     # bolg1249). The Hungarian first-attestation Year is mined into
-    # the body (the №R-70 law); Segments ride the body as the
+    # the body (the aggressive-mining law, owner-ruled 2026-09-26); Segments ride the body as the
     # phonemic transcription.
     class Westoldturkic < Nabu::Adapter
       ZIP_URL = "https://zenodo.org/api/records/7893910/files/" \
@@ -174,7 +174,7 @@ module Nabu
       end
 
       # The modern-Hungarian sibling's Year column — the loan's dated
-      # surfacing in the written record (the №R-70 mining law).
+      # surfacing in the written record (the aggressive-mining law).
       def hungarian_year(form, tables)
         sibling = tables[:forms].values.find do |f|
           f["Language_ID"] == "H" && f["Parameter_ID"] == form["Parameter_ID"]

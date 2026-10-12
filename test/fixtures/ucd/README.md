@@ -25,7 +25,7 @@ Twenty real lines, chosen to exercise every shape the read seam
   `30A2` (ア, the ambiguity-panel anchor), and the jamo/letter cast
   `110B`/`1175`/`11B8`/`3147` (the hangul reading-line tests).
 
-## Member files (P86-1, №R-49a — the useful-context tier)
+## Member files (P86-1, owner ruling 2026-08-28 — the useful-context tier)
 
 All retrieved 2026-08-28 from the real `UCD.zip`
 (<https://www.unicode.org/Public/17.0.0/ucd/UCD.zip>, Unicode 17.0.0),

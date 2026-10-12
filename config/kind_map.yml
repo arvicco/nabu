@@ -1,5 +1,5 @@
-# The kind axis — per-source folds (P99-4, under №R-63; tail drained
-# P101 under №R-66 + Q75). Every entry is rule curation like a lect
+# The kind axis — per-source folds (P99-4, under the ruled class list, owner
+# 2026-09-13; tail drained P101 under the 2026-09-18 restructure ruling). Every entry is rule curation like a lect
 # rule: upstream's own vocabulary on the left, a ruled class path
 # (head or head/sub from kind_classes.yml) on the right. Values the
 # map does not cover surface as the counted `unmapped` bucket
@@ -29,11 +29,11 @@ sources:
       "Prayer/Incantation": [hymn-prayer, magic/incantation]   # 971 — ruled split
       "Scientific": scholarly                    # 763
       "Ritual": ritual                           # 420
-      "Literary": literary                       # 9,657 (+98 "?") — №R-66: upstream's own
+      "Literary": literary                       # 9,657 (+98 "?") — owner-ruled: upstream's own
       #   literature catch-all folds to the bare literary head
       "Historical": historiography               # 55
       "Private/Votive": dedicatory/votive        # 54
-      "fake (modern)": unknown                   # 230 — №R-66: authenticity claim, not a
+      "fake (modern)": unknown                   # 230 — owner-ruled: authenticity claim, not a
       #   genre; the verbatim label stays on every card
       "Other (see subgenre)": unknown            # 39 — upstream's own other-pointer; the
       #   subgenre field is not walked (P105-6)
@@ -55,7 +55,7 @@ sources:
       "CANONICAL/Magic": magic                                   # 539
       "CANONICAL/Lexicography": lexical
       "CANONICAL/School Tablet": school                          # 58
-      "CANONICAL": literary                      # 576 bare — №R-66: eBL's canonical series
+      "CANONICAL": literary                      # 576 bare — owner-ruled: eBL's canonical series
       #   ARE the Babylonian literary canon; the bare tag says no more than "Literary"
       "ARCHIVAL/Letter": letter                                  # 470
       "ARCHIVAL/Administrative": administrative                  # 273
@@ -114,7 +114,7 @@ sources:
       "tombstone": funerary                      # 744
       "letter": letter                           # 208 + 268 composite
       "account": administrative/account          # 207
-      "note": administrative/note                # 2,048 — №R-66 ruled 2026-09-18
+      "note": administrative/note                # 2,048 — owner-ruled 2026-09-18
       "receipt": administrative/receipt          # 116 + composites
       "list": administrative/list                # 57 + composites
       "name list": administrative/list           # 97 + composites
@@ -242,7 +242,7 @@ sources:
       # TLH sub-corpus tag, genre-mixed; no in-tree evidence to fold on
       # — the honest remainder, worklist-visible).
   okhc:               # census: 1,198,779 docs, corpus on all, 2026-09-26 (P104-1 under
-    metadata: corpus  # №R-70) — the P100-4 blanket historiography/annals declaration
+    metadata: corpus  # the mining law) — the P100-4 blanket historiography/annals declaration
     #                   retired: the per-record corpus field splits the shelf honestly.
     map:
       "Korean Literary Collections": literary                       # 652,405 — munjip 文集,
@@ -445,7 +445,7 @@ sources:
       "Uncertain": unknown                       # 260
       "Clay pithos inscription": mark            # 240 — jar inscriptions
       "Clay bulla inscription": mark             # 126
-      "Literary": literary                       # 1,389 — №R-66 (the cdli-shared fold)
+      "Literary": literary                       # 1,389 — owner-ruled (the cdli-shared fold)
       "Literary Work": literary                  # 112
       # P105-6:
       "Hymn-Prayer": hymn-prayer                 # 43
@@ -510,13 +510,13 @@ sources:
       "KR3k": scholarly                          # 類書類 63 — encyclopedias
       "KR3l": literary/narrative                 # 小說家類 128 — the fiction shelf
       "KR3": literary/wisdom                     # 儒家 117 · 法家 8 · 雜家 191 — the Masters'
-      #   philosophical texts under the №R-66 wisdom head
+      #   philosophical texts under the ruled wisdom head
       # KR4 集部 — belles-lettres
       "KR4a": literary/poetry                    # 楚辭類 7
       "KR4i": scholarly                          # 詩文評類 64 — poetry criticism
       "KR4j": literary/poetry                    # 詞曲類 87 — ci and qu verse
       "KR4": literary                            # 別集 漢六朝 19 · 唐 112 · 宋 578 · 明 243 ·
-      #   清 69 · 總集 165 — individual and collected œuvres (№R-66 bare head)
+      #   清 69 · 總集 165 — individual and collected œuvres (the ruled bare head)
       # KR5 道部 — the Daoist canon (all subclasses are canon divisions)
       "KR5": scripture                           # 洞真 327 · 洞玄 318 · 洞神 373 · 太玄 119 ·
       #   太平 68 · 太清 25 · 正一 242 · 續道藏 57 · 清代道教文獻 92
@@ -532,10 +532,10 @@ sources:
   prague-bible-1488:
     source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
   slavistics-pd:
-    source_kind: scholarly   # Q105: the PD Slavistics reference shelf — grammars,
+    source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
   archiv-slav-phil:
-    source_kind: scholarly   # Q105: Jagić's Archiv für slavische Philologie volumes
+    source_kind: scholarly   # Jagić's Archiv für slavische Philologie volumes
   eng-web:
     source_kind: scripture
   vuk-danicic:
@@ -684,7 +684,7 @@ sources:
       "Wisdom Literature": literary/wisdom
       "Lamentations": hymn-prayer/lament
       "Literary Letters": letter/literary
-  titus-bactrian:     # census: 123 docs, one genre each, 2026-10-10 (P116 R4, №R-78)
+  titus-bactrian:     # census: 123 docs, one genre each, 2026-10-10 (P116 R4, owner-ruled)
     facet: genre      # the corpus's own six-genre CONTENTS list (baktc001), verbatim
     map:
       "Letters": letter                          # 70
@@ -695,8 +695,8 @@ sources:
       "Lists and accounts": administrative       # 8 (the am tally slips among them)
       "Buddhist texts": hymn-prayer              # 5 — za/zb/zc/zd + the TiS inscription:
       #   homage formulas (ναμωο βοδδο …), confession and merit-dedication prayers.
-      #   №R-78 ruled "religious"; the ruled class list carries no such head, so the
+      #   owner-ruled "religious"; the ruled class list carries no such head, so the
       #   fold takes the religion family's head that the texts themselves fit —
       #   non-canonical (not scripture), addressed to the Buddhas
       "Fragments of documents of uncertain type": unknown  # 3 — upstream's own
-      #   "cannot determine" (№R-78 "unclassified": the honest class)
+      #   "cannot determine" (ruled "unclassified": the honest class)

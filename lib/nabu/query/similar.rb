@@ -4,7 +4,7 @@ require_relative "stored_snippet"
 
 module Nabu
   module Query
-    # P93-5 (№R-36): `search --similar <urn>` — same-language semantic /
+    # P93-5: `search --similar <urn>` — same-language semantic /
     # cross-edition retrieval over the vector store `nabu embed` built
     # ("find this passage's other witnesses / passages like this"; the
     # P79-5 trial measured R@1 0.80 across editions within a language).

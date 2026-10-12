@@ -33,7 +33,7 @@ module Nabu
     # citation-less entries (the day-one state); the entries revise when
     # it lands.
     #
-    # == The KELLIA etymologies tab (P89-2, №R-52 ruled (a)+(c) 2026-08-30)
+    # == The KELLIA etymologies tab (P89-2, owner-ruled (a)+(c) 2026-08-30)
     #
     # Third artifact: KELLIA/dictionary's data/egyptian_etymologies.tab,
     # PINNED at release tag v3.0.0 (the lexicon stays on the frozen

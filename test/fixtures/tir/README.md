@@ -35,8 +35,8 @@ the same machinery as LexLep, one wiki family) via the fetcher's own
   License."*
 - The wiki's rightsinfo (api.php `meta=siteinfo&siprop=rightsinfo`) is
   **empty** — no footer grant.
-- Class `nc` pending the licensing clarification (email №17, queued);
-  relabel-on-reply.
+- Class `nc`; the maintainer's reply by email (C. Salomon, 2026-07-20)
+  confirmed CC BY-NC-SA 4.0 for the LexLep and TIR data.
 
 Envelope note: as with lexlep, the JSON envelope is the fetch layer's own
 shape; the `wikitext` inside is byte-verbatim. `refetchable: false` in the

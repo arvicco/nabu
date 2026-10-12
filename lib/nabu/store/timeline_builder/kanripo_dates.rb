@@ -5,7 +5,7 @@ require_relative "../../period_bands"
 module Nabu
   module Store
     module TimelineBuilder
-      # Kanripo KR-Catalog dates (P104-1, Q77 under №R-70): the catalog's
+      # Kanripo KR-Catalog dates (P104-1, under the aggressive-mining law): the catalog's
       # per-text org entries carry dating claims the shelf never minted —
       # 5,122 held documents sat `undatable` while the KR-Catalog states,
       # per text, an explicit :DATE: (672 entries), the first 人物
@@ -22,7 +22,7 @@ module Nabu
       #      唐/清 commentators): :DATES: mint the author-life envelope,
       #      else :DYNASTY: bands through the ruled period_bands.yml
       #      sinological rows — both ATTRIBUTIONS, precision "era"
-      #      (№R-70's distinct honestly-labeled grade-2 class);
+      #      (the mining law's distinct honestly-labeled grade-2 class);
       #   3. the entry's own :DYNASTY: (the Daozang shape — KR5 texts
       #      carry it in the text drawer), banded the same way.
       #

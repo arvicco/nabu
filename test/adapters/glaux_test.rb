@@ -168,7 +168,7 @@ class GlauxTest < Minitest::Test
     assert_equal "Perseus", metadata["source"]
   end
 
-  # P104-1 (Q77): the metadata.txt GENRE_STANDARD column projects as a
+  # P104-1: the metadata.txt GENRE_STANDARD column projects as a
   # facet. The ADAPTER emits no DIALECT facet: a Greek-dialect lect story
   # needs a lects-registry ruling (registry notes carry philology); the
   # plain "dialect" filter facet is facet_map's projection (P118-R4).
@@ -197,7 +197,7 @@ class GlauxTest < Minitest::Test
   def test_glaux_is_registered_for_the_composition_class_signed_bounds_shape
     assert_equal :signed_bounds_keys,
                  Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["glaux"],
-                 "P104-1 (№R-70 grade 2): start/end_date project as composition-class rows"
+                 "P104-1 (the attributed-era class): start/end_date project as composition-class rows"
     assert_includes Nabu::Store::TimelineBuilder::MetadataDates::COMPOSITION, "glaux"
   end
 

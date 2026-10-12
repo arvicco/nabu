@@ -6,7 +6,7 @@ module Nabu
   # optimization"). It holds monotonic-clock deltas in memory for the length of
   # one rebuild; NOT derived data — since P78-r1 the run-end facts are appended
   # to the history ledger's stage_timings (Store::StageTimings, the ETA record),
-  # which is №R-21 territory, so rebuild-safety still holds by construction
+  # which is operational history outside db/, so rebuild-safety still holds by construction
   # (nothing under db/ to regenerate).
   #
   # == The two levels
@@ -66,7 +66,7 @@ module Nabu
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",
       trigram: "trigram",
-      cjk: "cjk bigrams",                 # P93-3: the №R-39 substring lane
+      cjk: "cjk bigrams",                 # P93-3: the CJK substring lane
       passage_chars: "char coverage",     # P72-1: the char coverage index
       passage_signs: "sign index",        # P77-r16: the OSL sign postings
       alignment: "alignment refs",

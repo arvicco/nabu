@@ -3,7 +3,7 @@
 require "yaml"
 
 module Nabu
-  # The ruled regnal-year table (№R-28, 2026-08-11 — the P73-6 scout
+  # The ruled regnal-year table (owner-ruled 2026-08-11 — the P73-6 scout
   # ratified): config/regnal_years.yml maps cdli's dates_referenced ruler
   # spellings to accession year + reign length under a STATED chronology
   # commitment (middle chronology for the second millennium; Parker &

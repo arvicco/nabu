@@ -373,12 +373,12 @@ module Nabu
         dialect = meta["language"] || meta["languages"]
         if dialect
           meta["dialect"] = dialect
-          # P64-6 (№2): the dialect rides as a FACET so the cop-dialect lect
+          # P64-6: the dialect rides as a FACET so the cop-dialect lect
           # rule (Sahidic → cop/sah, Bohairic → cop/boh) can read it — rules
           # are facet-grained by design.
           meta["facets"] = (meta["facets"] || {}).merge("dialect" => { "value" => dialect })
         end
-        # P104-1 (Q77 under №R-70): the header's Trismegistos number →
+        # P104-1 (the aggressive-mining law): the header's Trismegistos number →
         # a "tm:<n>" related edge (the P25-1 scheme rule; the shared
         # LibraryReferences producer reads metadata "related"), joining
         # the papyri/elephantine TM key space.

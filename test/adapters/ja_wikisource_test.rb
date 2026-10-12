@@ -4,7 +4,7 @@ require "test_helper"
 require "support/adapter_conformance"
 
 module Adapters
-  # ja-wikisource (P109-1, Q90 under №R-74): the Japanese Wikisource
+  # ja-wikisource (P109-1, under the base-edition rule): the Japanese Wikisource
   # premodern era cone. Fixture envelopes are real api.php captures
   # (2026-09-29): 土佐日記 (a {{versions}} disambiguation shell — skip
   # by rule), 万葉集/第一巻 (the structured per-poem block grammar,
@@ -41,7 +41,7 @@ module Adapters
       assert_equal 2, skips.skipped_by_rule
     end
 
-    # -- the <pages index> expansion (P111-2, Q109-1 mold A) -----------------
+    # -- the <pages index> expansion (P111-2, mold A) -------------------------
 
     def test_pages_index_shell_parses_from_its_page_payloads
       d = doc(8082)
@@ -82,7 +82,7 @@ module Adapters
                    "芭蕉俳句全集 first-sync quarantine)"
     end
 
-    # -- the dispatcher-shell expansion (P111-2, Q109-1 mold B) --------------
+    # -- the dispatcher-shell expansion (P111-2, mold B) ----------------------
 
     def test_expanded_dispatcher_shell_parses_with_furniture_stripped
       d = doc(46_951)
@@ -120,7 +120,7 @@ module Adapters
     def test_prose_page_carries_the_botsubon_verbatim_and_era_band
       meta = doc(7285).metadata
       assert_includes meta["base_edition"], "『日本文学大系 : 校註』第3巻",
-                      "the 底本 line rides verbatim (№R-74)"
+                      "the 底本 line rides verbatim (owner ruling)"
       assert_equal %w[鎌倉時代 南北朝時代], meta["eras"]
       band = meta["era_band"]
       assert_equal [1185, 1392], [band["not_before"], band["not_after"]],
@@ -149,7 +149,7 @@ module Adapters
 
     def test_unstated_edition_recorded_honestly
       meta = doc(11_940).metadata
-      assert_equal "unstated", meta["base_edition"], "№R-74: absence is recorded, never guessed"
+      assert_equal "unstated", meta["base_edition"], "the base-edition rule: absence is recorded, never guessed"
     end
   end
 end

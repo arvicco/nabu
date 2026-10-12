@@ -105,7 +105,7 @@ module Store
       assert_equal ["grc:koi", "overlay"], row.values_at(:value, :raw)
     end
 
-    # P106-7 (Q88.1 — the 2026-09-26 incident): the killed P104 rebuild
+    # P106-7 (the 2026-09-26 incident): the killed P104 rebuild
     # committed the wholesale DELETE but died before the rewrite, zeroing
     # the live lect axis corpus-wide for a day. The delete + rewrite (and
     # the census derived in the same breath) are ONE transaction now: a
