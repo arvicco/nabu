@@ -94,7 +94,10 @@ module Nabu
     # whole-table projections re-minted per builder run, never per-source
     # rows — per-source stamps owe them nothing.
     BUILDER_DIRS = %w[store/timeline_builder].freeze
-    BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb].freeze
+    # P121-2: the lemma rollup builder joins them — whole-table projections
+    # too (wholesale at both rebuild flavors; the incremental runs it
+    # whenever the builders digest drifts).
+    BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb].freeze
 
     # P112-4: the fulltext-index core — files that shape ONLY
     # fulltext.sqlite3 rows (read the catalog, write the index; never a

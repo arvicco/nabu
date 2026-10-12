@@ -197,6 +197,7 @@ class RebuildIncrementalTest < Minitest::Test
   def test_a_builder_file_change_reruns_corpus_builders_without_dirtying_sources
     full_rebuilder.run
     before_passages = raw_rows(:passages)
+    with_db(write: true) { |db| db[:language_mix].delete } # proves the re-run re-mints it
 
     result = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.run }
 
@@ -205,6 +206,7 @@ class RebuildIncrementalTest < Minitest::Test
     refute_nil result.axes, "the covering mechanism: builders re-run on their own digest drift"
     refute_nil result.facets
     assert_equal before_passages, raw_rows(:passages), "no source row may move"
+    with_db { |db| refute db[:language_mix].empty?, "the lemma rollups ride the builders' re-run (P121-2)" }
 
     # The sentinel re-minted at the drifted digest: a second run inside the
     # same diversion is fully clean, builders included.

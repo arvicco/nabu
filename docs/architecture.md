@@ -256,6 +256,27 @@ lect_stats(kind, key, documents, ...)
    -- same breath that writes the lect facet rows (the P42-0
    -- write-time-census stance), so the numbers can never drift from the
    -- facet they summarize.
+lemma_rollup(lemma, language, century, basis, grade, source_id, occurrences, documents)
+language_curve(language, century, basis, source_id, documents, passages)
+language_mix(document_id, source_id, urn, languages, language_count, switches)
+   -- P121-2 (migration 038): the lemma attestation instrument, written by
+   -- Store::LemmaRollup. lemma_rollup counts passage attestations of each
+   -- FOLDED lemma (passage_lemmas grain) per passage language, century,
+   -- date basis, grade (gold | silver — the passage_lemmas tier) and
+   -- source; language_curve counts documents + passages per language and
+   -- century; language_mix is one row per live document (sorted passage-
+   -- language inventory, adjacent-passage switch count). century = the
+   -- signed century index of the document's date-envelope MIDPOINT
+   -- (astronomical-year arithmetic, so the missing year 0 cannot skew a
+   -- BCE/CE straddle), NULL when undated; basis = the envelope's
+   -- date_class (artifact | composition). The lemma rows join the
+   -- fulltext file's passage_lemmas to the catalog through a scoped
+   -- ATTACH — one grouped INSERT-SELECT, no per-row Ruby. Built
+   -- wholesale behind the index in both rebuild flavors and last in
+   -- `builders:refresh`, per source after every sync, lemma rows again
+   -- after `lemma-enrich --index-only`; read by `nabu lemma` and
+   -- `nabu language --curve/--mixing`, which answer an absent or unbuilt
+   -- rollup with the refresh hint, never a scan.
 ```
 
 **The write-time doctrine (P42-0):** anything O(corpus) runs at write time;
