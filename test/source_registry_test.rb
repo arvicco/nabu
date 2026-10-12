@@ -1277,14 +1277,14 @@ class SourceRegistryTest < Minitest::Test
           grantor: G. Starostin
           date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "№1"
+          thread: "by email, 2026-07-15"
           request_hint: write to George Starostin for your own grant
     YAML
     assert_predicate entry, :grant_required?
     assert_equal "G. Starostin", entry.grant.grantor
     assert_equal "2026-07-15", entry.grant.date
     assert_equal "any use, per-base attribution required", entry.grant.terms
-    assert_equal "№1", entry.grant.thread
+    assert_equal "by email, 2026-07-15", entry.grant.thread
     assert_match(/your own grant/, entry.grant.request_hint)
   end
 
@@ -1310,7 +1310,7 @@ class SourceRegistryTest < Minitest::Test
             grantor: X
             date: "2026-07-15"
             terms: t
-            thread: "№1"
+            thread: "by email, 2026-07-15"
             request_hint: ask
       YAML
     end
@@ -1349,7 +1349,7 @@ class SourceRegistryTest < Minitest::Test
             grantor: X
             date: 2026-07-15
             terms: t
-            thread: "№1"
+            thread: "by email, 2026-07-15"
             request_hint: ask
       YAML
     end

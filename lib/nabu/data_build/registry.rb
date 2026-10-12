@@ -322,8 +322,8 @@ module Nabu
                    "in-band per row — the corpus-scale stage stratification no other project " \
                    "publishes; the id grammar and registry are public in nabu-lects (cited). " \
                    "License classes open+attribution only (nc/odbl/research_private slices " \
-                   "excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 " \
-                   "carve-out dataset carrying the share-alike lanes (edh, aes, ...).",
+                   "excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the share-alike " \
+                   "carve-out dataset (owner ruling 2026-08-11) carrying the share-alike lanes (edh, aes, ...).",
         maintenance: "re-derive after journal-moving events (a sync wave re-running lect rules, " \
                      "new owner rulings, a rebuild) — the published-slice digest makes an " \
                      "unchanged journal a fingerprint no-op"
@@ -341,15 +341,16 @@ module Nabu
         # per-source folds are Nabu config, cited by the recipe; the
         # recipe embeds the published-slice sha256.
         inputs: [], canonical_cones: [], builder: KindClassificationsBuilder,
-        rationale: "Publishes the classification layer behind Nabu's kind axis (№R-63/№R-66) — " \
+        rationale: "Publishes the classification layer behind Nabu's kind axis (owner-ruled " \
+                   "2026-09-13, restructured 2026-09-18) — " \
                    "per-document ruled class paths (a 21-family cross-corpus list with named " \
                    "sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), " \
                    "multi-label as multiple rows, the VERBATIM upstream genre label riding every " \
                    "row so each fold is checkable against its source. The honest `unknown` class " \
                    "publishes; the `unmapped` curation bucket does not (a TODO marker is not a " \
                    "classification). License classes open+attribution only (nc slices excluded " \
-                   "row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out " \
-                   "carrying the share-alike lanes.",
+                   "row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the share-alike carve-out " \
+                   "(owner ruling 2026-08-11) carrying the share-alike lanes.",
         maintenance: "re-derive after classification-moving events (new kind_map folds, a class " \
                      "tree change, a re-projection) — the published-slice digest makes an " \
                      "unchanged projection a fingerprint no-op"
@@ -398,7 +399,7 @@ module Nabu
                    "with the verbatim upstream name and the Basis (upstream-asserted vs " \
                    "nabu-places-applied) in-band per row. License classes open+attribution only " \
                    "(the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 " \
-                   "— the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the " \
+                   "— the share-alike carve-out of 2026-08-11 (edh/aes/elephantine/ceipom share-alike lanes and the " \
                    "conservative tm:-index inheritance ride inside it).",
         maintenance: "re-derive after place-moving events (a sync wave, a nabu-places registry " \
                      "sync + apply, a rebuild) — the published-slice digest makes an unchanged " \
@@ -425,7 +426,7 @@ module Nabu
                    "place_index (never invented), when-spans aggregated from document dates. " \
                    "The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): " \
                    "geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 " \
-                   "— the TM lane's share-alike inheritance (№R-24).",
+                   "— the TM lane's share-alike inheritance (owner ruling 2026-08-11).",
         maintenance: "re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the " \
                      "stale-ingest guard enforces freshness) or place-moving catalog events; " \
                      "the collection digest in the recipe makes an unchanged projection a " \
@@ -448,10 +449,10 @@ module Nabu
                    "dating string riding every row, so each normalization is checkable against " \
                    "its source. License classes open+attribution only — the nc slices AND the " \
                    "rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, " \
-                   "censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the " \
+                   "censused in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out (2026-08-11) carrying the " \
                    "share-alike lanes (edh, tla-hf, aes, ...).",
         maintenance: "re-derive after dating-moving events (sync waves, infer-dates rule " \
-                     "changes — the №R-28 regnal upgrade lands here on its next build); the " \
+                     "changes — the regnal-precision upgrade ruled 2026-08-11 lands here on its next build); the " \
                      "published-slice digest makes an unchanged projection a fingerprint no-op"
       ),
       Feature.new(
@@ -472,7 +473,7 @@ module Nabu
                    "frequency data any school can consume, derived from Nabu's ingested " \
                    "corpora only (Edubba's own TSVs are NEVER an input — the circularity " \
                    "guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, " \
-                   "censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).",
+                   "censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (owner ruling 2026-08-11).",
         maintenance: "re-derive after CJK-lane syncs (the census rebuilds with the fulltext " \
                      "index); the published-slice digest makes an unchanged census a " \
                      "fingerprint no-op"
@@ -495,7 +496,7 @@ module Nabu
                    "non-derivable curated layer travels — section accretions (iecor varieties, " \
                    "corpus witnesses, the lect stage ladder) are excluded, each install rebuilds " \
                    "them from its own synced sources. CC BY-SA 4.0: ~71% of the context prose is " \
-                   "Wikipedia-derived (share-alike), so the whole dataset inherits it (№R-48); " \
+                   "Wikipedia-derived (share-alike), so the whole dataset inherits it (owner ruling 2026-08-28); " \
                    "the Wikipedia-derived share is censused in nabu.eval, and personal notes ride " \
                    "the private `nabu note` layer, never here.",
         maintenance: "re-derive after curating dossiers (owner front-matter/context edits, the " \
@@ -513,7 +514,7 @@ module Nabu
         # pattern: git-shared config, dataset = its public mirror); the
         # recipe embeds the published-slice sha256.
         inputs: [], canonical_cones: [], builder: ScriptDossiersBuilder,
-        rationale: "The char desk's script layer (P86, №R-49): every writing system in the " \
+        rationale: "The char desk's script layer (P86, owner-ruled): every writing system in the " \
                    "registry's scripts table gets a human-written dossier — what the script " \
                    "IS, and the desk conventions a working library actually uses for it " \
                    "(transliteration surfaces, fold tables, honest gaps). Unlike the language " \
@@ -579,7 +580,7 @@ module Nabu
                    "Pyramid Texts vs Amarna letters vs medical papyri). To the survey's " \
                    "knowledge the first public hieroglyph frequency list anywhere. Joins " \
                    "egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from " \
-                   "AES's share-alike grant, the №R-24/D51-a carve-out (the char-postings " \
+                   "AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings " \
                    "precedent).",
         maintenance: "re-derive after `nabu sync aes`; the doc-attestation digest in the " \
                      "recipe makes an unchanged census a fingerprint no-op"

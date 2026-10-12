@@ -190,7 +190,7 @@ module Nabu
       def recipe(digest)
         "place-refs v1: project document_axes.place_ref through Nabu::PlaceRefs at (document, " \
           "claim) grain, license classes #{PUBLISHABLE_LICENSE_CLASSES.join('+')} only, ordered " \
-          "(urn, axis row), sharded ≤#{@shard_size} rows/file (№R-29); " \
+          "(urn, axis row), sharded ≤#{@shard_size} rows/file, owner-ruled 2026-08-11); " \
           "published-slice sha256=#{digest}"
       end
 

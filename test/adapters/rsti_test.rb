@@ -56,7 +56,8 @@ module Adapters
       manifest = Nabu::Adapters::Rsti.manifest
       assert_equal "nc", manifest.license_class
       assert_includes manifest.license, "CC BY-NC-SA 4.0"
-      assert_includes manifest.license, "№23",
+      assert_includes manifest.license, "grant by email (Miller " \
+                                        "Prosser, U. Chicago CORPUS/OCHRE, 2026-07-27",
                       "the granted basis (Miller Prosser, U. Chicago CORPUS/OCHRE, 2026-07-27) must ride verbatim"
       assert_includes manifest.license, "Bordreuil and Pardee (1989)",
                       "the menu-level availability credit must ride verbatim"

@@ -45,7 +45,7 @@ module Adapters
     def test_manifest_records_the_click_through_provenance_and_part_ii_exclusion
       manifest = Nabu::Adapters::BdCamoes.manifest
       assert_match(/CC - BY/, manifest.license, "the record's licence field verbatim")
-      assert_match(/№R-37/, manifest.license, "the click-through rides the recorded owner ruling")
+      assert_match(/owner ruling, 2026-08-19/, manifest.license, "the click-through rides the recorded owner ruling")
       assert_match(/Part II/, manifest.license, "the Part II exclusion is stated, not implied")
       assert_equal "attribution", manifest.license_class
     end

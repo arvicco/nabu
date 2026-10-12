@@ -98,7 +98,7 @@ module Nabu
         license: "CONFLICTING upstream claims, both verbatim: the JOHD data paper " \
                  "(10.5334/johd.148) License section says \"#{LICENSE_JOHD}\" while the " \
                  "Zenodo record 10018951 license field says cc-by-4.0 — held at nc until " \
-                 "email №24 resolves it; photographs out of scope entirely",
+                 "the maintainers clarify which claim governs; photographs out of scope entirely",
         license_class: "nc",
         upstream_url: "https://doi.org/10.5281/zenodo.10018951",
         parser_family: "atf"

@@ -63,7 +63,7 @@ module Nabu
               "objects of Ugarit and Ras Ibn Hani)",
         license: "CC BY-NC-SA 4.0 — the API's own availability.license on season sets and text " \
                  "items (\"Creative Commons Attribution-NonCommercial-ShareAlike\", " \
-                 "creativecommons.org/licenses/by-nc-sa/4.0/), confirmed by grant №23 (Miller " \
+                 "creativecommons.org/licenses/by-nc-sa/4.0/), confirmed by grant by email (Miller " \
                  "Prosser, U. Chicago CORPUS/OCHRE, 2026-07-27, verbatim: \"retrieve the RSTI " \
                  "data and add it to your collection, with attribution. The data is governed by " \
                  "the NC-SA license.\"). Menu-level availability verbatim: \"#{TEO_CREDIT}\"",

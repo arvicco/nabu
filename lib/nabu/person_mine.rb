@@ -39,7 +39,7 @@ module Nabu
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       names = load_names
       @progress&.stage("person-mine: scanning #{source} against #{names.size} #{@authority} " \
-                       "person name keys (census only — the apply gate is closed by №R-62)")
+                       "person name keys (census only — the apply gate stays closed until an owner ruling)")
       tally = Hash.new(0)
       passages = 0
       each_passage(source) do |row|

@@ -122,7 +122,7 @@ module Nabu
 
       def recipe(digest)
         "kind-classifications v1: project facet=kind document_facets rows at URN grain " \
-          "(config/kind_classes.yml + kind_map.yml folds, №R-63/№R-66), license classes " \
+          "(config/kind_classes.yml + kind_map.yml folds, owner-ruled 2026-09-13/2026-09-18), license classes " \
           "#{PUBLISHABLE_LICENSE_CLASSES.join('+')} only, unmapped excluded, ordered " \
           "(urn, facet row); published-slice sha256=#{digest}"
       end
