@@ -532,9 +532,9 @@ sources:
     kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet (the
         wiki's Usada/Geguritan/Tatwa/Babad/Wariga/Kakawin categories) and the Gedong
         Kirtya classification facet (Agama/Itihasa/Wéda/Babad …) — both ride verbatim"}
-    lect: {posture: pending, note: "kaw resolves on the held registry node (the Lontar Basa
-        Kawi works); candidate: the ban (Balinese) and sas (Sasak, 4 lontars) nodes in the
-        nabu-lects mint — the bare codes are the claim until it merges"}
+    lect: {posture: identity, note: "ban (Balinese), sas (Sasak, 4 lontars) and kaw all
+        resolve on registry nodes (the SEA package merged + synced 2026-10-12); the bare
+        codes are the honest claim at source grain"}
     dating: {posture: pending, note: "no typed date: the Index Year= is the photography
         campaign year (2017–2021), the works carry the wiki's own Undated works category;
         candidate: the colophon Saka-year statements in the leaf text (a text-mining
@@ -547,11 +547,10 @@ sources:
   # P120-3: the scan-indexed wikisource cones (the owner-ruled wikisource posture).
   gu-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: a gu (Gujarati) anchor under inc in
-        nabu-lects + a guj → gu codemap row — no Gujarati node exists (census
-        2026-10-12); documents claim bare guj meanwhile. Deliberately coarse at source
-        grain: the cone spans Narsinh Mehta (15th c.) to Dayaram (19th c.) — staging
-        Old/Middle Gujarati is a recorded future look"}
+    lect: {posture: identity, note: "guj resolves through the codemap onto the gu anchor
+        (the SEA/Gujarat package merged + synced 2026-10-12). Deliberately coarse at
+        source grain: the cone spans Narsinh Mehta (15th c.) to Dayaram (19th c.) —
+        staging Old/Middle Gujarati is a recorded future look"}
     dating: {posture: dated, note: "P120-3: the scan Index's verbatim વર્ષ= print year
         (source_date → MetadataDates :edition_year_text, date_class edition — never the
         poets' composition era); every admitted page carries one (REQUIRE_EDITION_YEAR)"}
@@ -560,10 +559,10 @@ sources:
     script: {posture: implied}
   ms-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: an ms (Malay) anchor in nabu-lects + an
-        msa → ms codemap row — no Malay node exists (census 2026-10-12; the Old Malay
-        DHARMA lane claims omy); Classical Malay (a stage under ms) is the named
-        refinement. Documents claim bare msa / msa-Arab meanwhile"}
+    lect: {posture: identity, note: "msa / msa-Arab resolve through the codemap onto the
+        ms anchor (merged + synced 2026-10-12); the Classical Malay stage (ms:cls,
+        1300–1900) is the NAMED refinement for the pre-1930 manuscript cone, not
+        defaulted — a facet-rule candidate once the cone's registers are censused"}
     dating: {posture: partial, note: "P120-3: the manuscript's stated date — the page
         header year= (a year, a span, or 'abad ke-N' → the century) else the Index
         Year= → MetadataDates :structured; Hijri-marked years mint nothing (never
@@ -576,10 +575,10 @@ sources:
         Language= riding verbatim as index_language"}
   th-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: a th (Thai) anchor in nabu-lects + a
-        tha → th codemap row — no Tai node exists (census 2026-10-12); documents claim
-        bare tha meanwhile. The chronicles' Ayutthaya/early-Bangkok register is the
-        named refinement (an early-Thai stage), never defaulted"}
+    lect: {posture: identity, note: "tha resolves through the codemap onto the th anchor
+        under the tai family (merged + synced 2026-10-12). The chronicles'
+        Ayutthaya/early-Bangkok register stays the named refinement (an early-Thai
+        stage), never defaulted"}
     dating: {posture: dated, note: "P120-3: the Index ปี= print year, Buddhist Era
         converted −543 to CE (source_date → MetadataDates :edition_year_text, date_class
         edition — never the chronicles' composition); every admitted page carries one"}
