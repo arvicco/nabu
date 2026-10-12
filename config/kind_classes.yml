@@ -60,8 +60,8 @@ classes:
     crosswalk: {lcgft: gf2014026141, aat: "300026879"}
   # -- knowledge and school ----------------------------------------------
   lexical:
-    desc: "Words about words: sign lists, word lists, glossaries."
-    subs: [sign-list, word-list, glossary]
+    desc: "Words about words: sign lists, word lists, glossaries, grammars."
+    subs: [sign-list, word-list, glossary, grammar]
   scholarly:
     desc: "The learned disciplines: mathematics, astronomy, medicine, commentary, recipes."
     subs: [mathematics, astronomy, medicine, commentary, recipe]
