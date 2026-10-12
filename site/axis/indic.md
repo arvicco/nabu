@@ -31,10 +31,10 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
-| `tamilex` | texts | nc | not yet wired | nothing held yet |
+| `tamilex` | texts | nc | wired · auto | 7,830 docs / 14,972 passages |
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 October 2026)</span>: `san` 209,688 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 1,789 · `tam-Latn` 1,145 · `pra-Latn` 1,131 · `und` 583 · `lzh` 276 · `guj` 207 · `tel-Latn` 101 … and 34 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 October 2026)</span>: `san` 209,688 · `tam-Latn` 8,975 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 1,789 · `pra-Latn` 1,131 · `und` 583 · `lzh` 276 · `guj` 207 · `tel-Latn` 101 … and 34 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
