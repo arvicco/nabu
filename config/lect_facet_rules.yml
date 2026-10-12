@@ -312,6 +312,26 @@ rules:
     map:
       "dan": "da:old"
 
+  # ── Owner-ruled 2026-10-12 (as recorded at the Slavic-cone census;
+  # targets minted by the Slavic registry package, in canonical since
+  # 2026-10-11): the bg-wikisource chu charters carry the wiki's own
+  # recension grouping, projected as the recension facet — 7 Bulgarian
+  # (Ivan Asen II's Vatopedi and Dubrovnik, Ivan Alexander's Zograf and
+  # Mrachka, Konstantin Asen's Virgino, Ivan Sratsimir's Brashov, Rila
+  # 1378) onto the Middle Bulgarian recension, 9 Serbian (the Nemanjić
+  # and successor charters: Milutin, Dušan, Vukašin, Vuk Branković)
+  # onto the Serbian recension. The Povaljska listina (hr-wikisource,
+  # language hrv) is the ruled chu:csl/cro assignment — per-document,
+  # through the lect journal, not a rule here.
+  - id: bg-charter-recension
+    tier: certain
+    sources: [bg-wikisource]
+    code: chu
+    facet: recension
+    map:
+      "bulgarian": "chu:csl/bul"
+      "serbian": "chu:csl/srp"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows
