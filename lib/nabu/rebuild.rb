@@ -586,8 +586,7 @@ module Nabu
     # loudly, by design. Returns the failure strings.
     def rederive_links!(db, fulltext)
       journal = Store::LinksJournal.open!(@config.links_path)
-      journal[:links].delete
-      journal[:link_runs].delete
+      Store::LinksJournal.wipe!(journal)
       failures = []
       @registry.each_source do |entry|
         next unless entry.adapter_class.reference_edges?
