@@ -167,6 +167,102 @@ module Store
       assert_equal [0, 0], Nabu::Store::LinksJournal.supersede!(@db, producer: "parallels", scope: "urn:h")
     end
 
+    # -- chunked runs: the resumable cursor (P122-2, migration 003) --------------
+
+    def chunked_run(scope: "urn:h")
+      Nabu::Store::LinksJournal.record_run!(@db, producer: "parallels", scope: scope, params: { "gram_size" => 3 },
+                                                 code_version: "test/1", status: "running", chunk_size: 2)
+    end
+
+    def record_chunk(run_id, chunk:, first:, last:, anchors: 2)
+      Nabu::Store::LinksJournal.record_chunk!(@db, run_id: run_id, chunk: chunk, first_urn: first,
+                                                   last_urn: last, anchors: anchors, candidates: 7,
+                                                   edges_inserted: 3, edges_refreshed: 1, seconds: 0.5)
+    end
+
+    def test_a_chunk_row_advances_the_run_cursor
+      run_id = chunked_run
+      record_chunk(run_id, chunk: 1, first: "urn:h:1", last: "urn:h:2")
+      record_chunk(run_id, chunk: 2, first: "urn:h:3", last: "urn:h:4", anchors: 2)
+      run = @db[:link_runs].first(id: run_id)
+      assert_equal ["running", 2, "urn:h:4", 2, 4], run.values_at(:status, :chunk_size, :cursor_urn,
+                                                                  :chunks_done, :anchors_done)
+      chunk = @db[:link_run_chunks].first(run_id: run_id, chunk: 2)
+      assert_equal ["urn:h:3", "urn:h:4", 2, 7, 3, 1],
+                   chunk.values_at(:first_urn, :last_urn, :anchors, :candidates, :edges_inserted, :edges_refreshed)
+    end
+
+    def test_a_chunk_is_recorded_once_per_run
+      run_id = chunked_run
+      record_chunk(run_id, chunk: 1, first: "urn:h:1", last: "urn:h:2")
+      assert_raises(Sequel::UniqueConstraintViolation) do
+        record_chunk(run_id, chunk: 1, first: "urn:h:1", last: "urn:h:2")
+      end
+    end
+
+    def test_unfinished_run_finds_the_running_row_until_it_is_finished
+      run_id = chunked_run
+      assert_equal run_id, Nabu::Store::LinksJournal.unfinished_run(@db, producer: "parallels", scope: "urn:h")[:id]
+      assert_nil Nabu::Store::LinksJournal.unfinished_run(@db, producer: "parallels", scope: "urn:other")
+      Nabu::Store::LinksJournal.finish_run!(@db, run_id)
+      assert_equal "complete", @db[:link_runs].first(id: run_id)[:status]
+      refute_nil @db[:link_runs].first(id: run_id)[:finished_at]
+      assert_nil Nabu::Store::LinksJournal.unfinished_run(@db, producer: "parallels", scope: "urn:h")
+    end
+
+    def test_legacy_runs_carry_no_status_and_are_never_unfinished
+      record_run
+      assert_nil @db[:link_runs].first[:status], "the other producers' runs are untouched by migration 003"
+      assert_nil Nabu::Store::LinksJournal.unfinished_run(@db, producer: "parallels", scope: "urn:h")
+    end
+
+    def test_edges_carry_their_chunk
+      run_id = chunked_run
+      Nabu::Store::LinksJournal.write_edge!(@db, from_urn: "urn:a:1", to_urn: "urn:b:1", kind: "parallel",
+                                                 score: 1.0, run_id: run_id, chunk: 3)
+      assert_equal 3, @db[:links].first[:chunk]
+      assert_nil(@db[:links].tap { write_edge(from: "urn:c:1", to: "urn:d:1", run_id: run_id) }
+                            .first(from_urn: "urn:c:1")[:chunk])
+    end
+
+    # first_in_run: a pair this very run already wrote stays as found — a
+    # resumed run's later chunk re-probing the reverse direction neither
+    # duplicates nor re-scores it (the in-memory within-run dedupe, made
+    # durable across a kill).
+    def test_first_in_run_keeps_the_runs_own_edge_untouched
+      run_id = chunked_run
+      Nabu::Store::LinksJournal.write_edge!(@db, from_urn: "urn:a:1", to_urn: "urn:b:1", kind: "parallel",
+                                                 score: 1.0, run_id: run_id, chunk: 1)
+      outcome = Nabu::Store::LinksJournal.write_edge!(@db, from_urn: "urn:b:1", to_urn: "urn:a:1", kind: "parallel",
+                                                           score: 9.0, run_id: run_id, chunk: 2,
+                                                           first_in_run: true)
+      assert_equal :kept, outcome
+      edge = @db[:links].first
+      assert_equal [1, "urn:a:1"], [edge[:chunk], edge[:from_urn]]
+      assert_in_delta 1.0, edge[:score]
+    end
+
+    def test_first_in_run_still_refreshes_another_runs_edge
+      other = record_run(scope: "urn:other")
+      write_edge(from: "urn:a:1", to: "urn:b:1", run_id: other)
+      run_id = chunked_run
+      outcome = Nabu::Store::LinksJournal.write_edge!(@db, from_urn: "urn:b:1", to_urn: "urn:a:1", kind: "parallel",
+                                                           score: 2.0, run_id: run_id, chunk: 1,
+                                                           first_in_run: true)
+      assert_equal :refreshed, outcome
+      assert_equal [run_id, 1], @db[:links].first.values_at(:run_id, :chunk)
+    end
+
+    def test_supersede_and_wipe_clear_the_chunk_rows_too
+      run_id = chunked_run
+      record_chunk(run_id, chunk: 1, first: "urn:h:1", last: "urn:h:2")
+      Nabu::Store::LinksJournal.supersede!(@db, producer: "parallels", scope: "urn:h")
+      assert_equal 0, @db[:link_run_chunks].count
+      record_chunk(chunked_run, chunk: 1, first: "urn:h:1", last: "urn:h:2")
+      Nabu::Store::LinksJournal.wipe!(@db)
+      assert_equal [0, 0, 0], [@db[:links].count, @db[:link_runs].count, @db[:link_run_chunks].count]
+    end
+
     # -- kind_counts: the show footer's query ----------------------------------
 
     def test_kind_counts_sees_both_directions_grouped_by_kind
