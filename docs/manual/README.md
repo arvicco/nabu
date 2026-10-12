@@ -43,7 +43,7 @@ this project has already observed such drift, the doc says so.
   merely *initiates* (multi-GB clones, rarely-changing upstreams).
   No human steps, no doc.
 - **Automated click-through consent.** bdcamoes and the CIPM-class
-  sources (ruling №R-37) present a license form that
+  sources (owner-ruled 2026-08-19) present a license form that
   `Nabu::LicenseAgreeFetch` reads, verifies against the declared
   license text, and agrees to mechanically. That is an automated
   acquisition with a consent guard, not a manual one — excluded by
@@ -85,9 +85,9 @@ Sources whose adapter is built but awaits the owner's first sync
 `local/fixtures/`, the suite skips when absent):
 
 - [corpus-oudnederlands.md](corpus-oudnederlands.md) — INT/IvdNT Corpus
-  Oudnederlands (Old Dutch 475–1200, TEI, gold lemma+POS; P84-7/Q48).
+  Oudnederlands (Old Dutch 475–1200, TEI, gold lemma+POS; P84-7).
 - [corpus-gysseling.md](corpus-gysseling.md) — INT/IvdNT Corpus Gysseling
-  (13th-c. Early Middle Dutch, .fromdb, gold lemma+POS; P84-7/Q48).
+  (13th-c. Early Middle Dutch, .fromdb, gold lemma+POS; P84-7).
 
 Acquisition overview (spans several corpora; the per-source cards above
 are authoritative for the two built adapters):

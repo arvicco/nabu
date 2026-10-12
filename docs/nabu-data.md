@@ -66,7 +66,7 @@ valid-by-construction `Feature` value:
 
 | field | meaning |
 | --- | --- |
-| `slug` | `<lang>/<feature>`, lower-case hyphen-joined segments; also the dataset directory path. Single-language datasets lead with the language code; datasets spanning the whole catalog file under `mul/` — ISO 639-3's special code "Multiple languages" (P73-0) |
+| `slug` | `<lang>/<feature>`, lower-case hyphen-joined segments; also the dataset directory path. Single-language datasets lead with the language code; datasets spanning the whole catalog file under `mul/` — ISO 639-3's special code "Multiple languages" (owner ruling, P73-0) |
 | `language` | a `Language` value: Nabu's code + the `languages.csv` statics (Name, Glottocode, ISO 639-3) |
 | `title` | the dataset's human title (the manifest `title`) |
 | `status` | `:available` (builder landed) or `:planned` (build refuses) |
@@ -160,7 +160,7 @@ is exactly two values — `CC-BY-4.0` (the default) and `CC-BY-SA-4.0`
 (datasets derived from share-alike inputs, whose READMEs add the one-line
 carve-out: the repository's default license does not apply to them). A
 BY-SA dataset additionally ships its **own `LICENSE` file** (the canonical
-CC BY-SA 4.0 plaintext, emitted by the runner — P73-0), so the
+CC BY-SA 4.0 plaintext, emitted by the runner — owner-ruled 2026-08-11, P73-0), so the
 carve-out is visible in the dataset directory itself; default-license
 datasets ship none, because the repository-level LICENSE already covers
 them. The set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
@@ -311,7 +311,7 @@ The first full-corpus re-publication: the complete secular lyric of medieval Gal
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
 
-Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note in-band per row — the corpus-scale stage stratification no other project publishes; the id grammar and registry are public in nabu-lects (cited). License classes open+attribution only (nc/odbl/research_private slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out dataset carrying the share-alike lanes (edh, aes, ...).
+Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note in-band per row — the corpus-scale stage stratification no other project publishes; the id grammar and registry are public in nabu-lects (cited). License classes open+attribution only (nc/odbl/research_private slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the share-alike carve-out dataset (owner ruling 2026-08-11) carrying the share-alike lanes (edh, aes, ...).
 
 **Maintenance**: re-derive after journal-moving events (a sync wave re-running lect rules, new owner rulings, a rebuild) — the published-slice digest makes an unchanged journal a fingerprint no-op
 
@@ -319,7 +319,7 @@ Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, lang
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
 
-Publishes the classification layer behind Nabu's kind axis (№R-63/№R-66) — per-document ruled class paths (a 21-family cross-corpus list with named sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), multi-label as multiple rows, the VERBATIM upstream genre label riding every row so each fold is checkable against its source. The honest `unknown` class publishes; the `unmapped` curation bucket does not (a TODO marker is not a classification). License classes open+attribution only (nc slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes.
+Publishes the classification layer behind Nabu's kind axis (owner-ruled 2026-09-13, restructured 2026-09-18) — per-document ruled class paths (a 21-family cross-corpus list with named sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), multi-label as multiple rows, the VERBATIM upstream genre label riding every row so each fold is checkable against its source. The honest `unknown` class publishes; the `unmapped` curation bucket does not (a TODO marker is not a classification). License classes open+attribution only (nc slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the share-alike carve-out (owner ruling 2026-08-11) carrying the share-alike lanes.
 
 **Maintenance**: re-derive after classification-moving events (new kind_map folds, a class tree change, a re-projection) — the published-slice digest makes an unchanged projection a fingerprint no-op
 
@@ -335,7 +335,7 @@ The BY-SA sense-lane sidecar the P73 sign-table deliberately deferred so its cor
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: nabu-places
 
-Publishes the compiled doc→place projection behind Nabu's places desk — ~586K (URN, claim) rows, every historical ref spelling (verbatim upstream URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form (pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, with the verbatim upstream name and the Basis (upstream-asserted vs nabu-places-applied) in-band per row. License classes open+attribution only (the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the conservative tm:-index inheritance ride inside it).
+Publishes the compiled doc→place projection behind Nabu's places desk — ~586K (URN, claim) rows, every historical ref spelling (verbatim upstream URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form (pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, with the verbatim upstream name and the Basis (upstream-asserted vs nabu-places-applied) in-band per row. License classes open+attribution only (the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the share-alike carve-out of 2026-08-11 (edh/aes/elephantine/ceipom share-alike lanes and the conservative tm:-index inheritance ride inside it).
 
 **Maintenance**: re-derive after place-moving events (a sync wave, a nabu-places registry sync + apply, a rebuild) — the published-slice digest makes an unchanged projection a fingerprint no-op
 
@@ -343,7 +343,7 @@ Publishes the compiled doc→place projection behind Nabu's places desk — ~586
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: pleiades, trismegistos, cigs
 
-Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical Gazetteer's intake shapes): one Feature per claim (merging identities is entity resolution — the crosswalk rides as closeMatch links instead), attested spellings cited to their corpora, titles/coordinates from place_index (never invented), when-spans aggregated from document dates. The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 — the TM lane's share-alike inheritance (№R-24).
+Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical Gazetteer's intake shapes): one Feature per claim (merging identities is entity resolution — the crosswalk rides as closeMatch links instead), attested spellings cited to their corpora, titles/coordinates from place_index (never invented), when-spans aggregated from document dates. The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 — the TM lane's share-alike inheritance (owner ruling 2026-08-11).
 
 **Maintenance**: re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the stale-ingest guard enforces freshness) or place-moving catalog events; the collection digest in the recipe makes an unchanged projection a fingerprint no-op
 
@@ -351,15 +351,15 @@ Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCo
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
 
-Publishes the dating layer behind Nabu's timeline — ~700K dated documents as normalized signed year spans (negative = BCE) with the VERBATIM upstream dating string riding every row, so each normalization is checkable against its source. License classes open+attribution only — the nc slices AND the rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes (edh, tla-hf, aes, ...).
+Publishes the dating layer behind Nabu's timeline — ~700K dated documents as normalized signed year spans (negative = BCE) with the VERBATIM upstream dating string riding every row, so each normalization is checkable against its source. License classes open+attribution only — the nc slices AND the rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, censused in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out (2026-08-11) carrying the share-alike lanes (edh, tla-hf, aes, ...).
 
-**Maintenance**: re-derive after dating-moving events (sync waves, infer-dates rule changes — the №R-28 regnal upgrade lands here on its next build); the published-slice digest makes an unchanged projection a fingerprint no-op
+**Maintenance**: re-derive after dating-moving events (sync waves, infer-dates rule changes — the regnal-precision upgrade ruled 2026-08-11 lands here on its next build); the published-slice digest makes an unchanged projection a fingerprint no-op
 
 ### `mul/char-postings` — Han character × corpus doc-frequency census (the graded-reading substrate)
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
 
-Publishes the char_postings census behind Nabu's Han cards and graded-reading lane — one row per (character, corpus) with the attesting document count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the survey left TBD, settled here). The Edubba P-1 rider's character half: frequency data any school can consume, derived from Nabu's ingested corpora only (Edubba's own TSVs are NEVER an input — the circularity guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).
+Publishes the char_postings census behind Nabu's Han cards and graded-reading lane — one row per (character, corpus) with the attesting document count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the survey left TBD, settled here). The Edubba P-1 rider's character half: frequency data any school can consume, derived from Nabu's ingested corpora only (Edubba's own TSVs are NEVER an input — the circularity guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (owner ruling 2026-08-11).
 
 **Maintenance**: re-derive after CJK-lane syncs (the census rebuilds with the fulltext index); the published-slice digest makes an unchanged census a fingerprint no-op
 
@@ -367,7 +367,7 @@ Publishes the char_postings census behind Nabu's Han cards and graded-reading la
 
 **Status**: available · **Tier**: curated · **Anchoring**: language-code · **Inputs**: —
 
-Fixes the replicability gap the curated dossiers left behind: the hand-authored name/family/context lanes lived only in the originating instance's local/ shelf, so a fresh install saw bare language codes. Published as an overlay (re-consumed via `nabu sync nabu-data`), every install composes the same curated context beneath its live holdings and lect ladder. Only the non-derivable curated layer travels — section accretions (iecor varieties, corpus witnesses, the lect stage ladder) are excluded, each install rebuilds them from its own synced sources. CC BY-SA 4.0: ~71% of the context prose is Wikipedia-derived (share-alike), so the whole dataset inherits it (№R-48); the Wikipedia-derived share is censused in nabu.eval, and personal notes ride the private `nabu note` layer, never here.
+Fixes the replicability gap the curated dossiers left behind: the hand-authored name/family/context lanes lived only in the originating instance's local/ shelf, so a fresh install saw bare language codes. Published as an overlay (re-consumed via `nabu sync nabu-data`), every install composes the same curated context beneath its live holdings and lect ladder. Only the non-derivable curated layer travels — section accretions (iecor varieties, corpus witnesses, the lect stage ladder) are excluded, each install rebuilds them from its own synced sources. CC BY-SA 4.0: ~71% of the context prose is Wikipedia-derived (share-alike), so the whole dataset inherits it (owner ruling 2026-08-28); the Wikipedia-derived share is censused in nabu.eval, and personal notes ride the private `nabu note` layer, never here.
 
 **Maintenance**: re-derive after curating dossiers (owner front-matter/context edits, the coming `nabu note` language layer); the published-slice digest makes an unchanged dossier corpus a fingerprint no-op
 
@@ -375,7 +375,7 @@ Fixes the replicability gap the curated dossiers left behind: the hand-authored 
 
 **Status**: available · **Tier**: curated · **Anchoring**: script-tag · **Inputs**: —
 
-The char desk's script layer (P86, №R-49): every writing system in the registry's scripts table gets a human-written dossier — what the script IS, and the desk conventions a working library actually uses for it (transliteration surfaces, fold tables, honest gaps). Unlike the language dossiers (curated per-instance in local/), the source of truth is the git-shared config fact file, so every install answers identically and this dataset is the citable public mirror. The suite's drift guard pins dossier tags to the nabu-lects scripts table, so registry mints and dossiers cannot diverge silently.
+The char desk's script layer (P86, owner-ruled): every writing system in the registry's scripts table gets a human-written dossier — what the script IS, and the desk conventions a working library actually uses for it (transliteration surfaces, fold tables, honest gaps). Unlike the language dossiers (curated per-instance in local/), the source of truth is the git-shared config fact file, so every install answers identically and this dataset is the citable public mirror. The suite's drift guard pins dossier tags to the nabu-lects scripts table, so registry mints and dossiers cannot diverge silently.
 
 **Maintenance**: re-derive after editing config/script_dossiers.yml (a new registry script mint forces a dossier via the drift guard); the published-slice digest makes an unchanged table a fingerprint no-op
 
@@ -400,7 +400,7 @@ Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardine
 
 **Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: aes
 
-The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere. Joins egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from AES's share-alike grant, the №R-24/D51-a carve-out (the char-postings precedent).
+The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere. Joins egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings precedent).
 
 **Maintenance**: re-derive after `nabu sync aes`; the doc-attestation digest in the recipe makes an unchanged census a fingerprint no-op
 

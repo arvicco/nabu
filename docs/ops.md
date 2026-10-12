@@ -135,7 +135,7 @@ What each command does and its exit contract:
   re-runs the affected adapter tests. Never overwrites. Nonzero on drift.
 - **`nabu backup`** — file-level rsync of the permanent set — canonical/
   (attic included), config/, local/ (shelves, instance config, the history
-  ledger), and `.docs/` (№R-22) — to a mounted external volume. **Nothing
+  ledger), and `.docs/` (owner ruling 2026-08-11) — to a mounted external volume. **Nothing
   under db/ ever ships**: `nabu rebuild` re-derives it (the P77-r12
   contract, §9). Read-only on canonical/. **Exit 1** if the target volume is
   not mounted (the mount-point guard, §9), any rsync section fails, or the
@@ -654,10 +654,10 @@ disk that a bare `rsync` (or Finder drag) could restore.
 | `canonical/` | the universal asset | The fetched corpus — **including every `.attic/`** |
 | `config/` | the project definition | Registries, rules, postures — what the corpus *is* |
 | `local/` | THE INSTANCE | Owner shelves (`local/shelves/`), instance config (`local/config/` — rulings, grants, profile, settings), the ledger (`local/history.sqlite3` — the **only** copy of runs/pins/baselines/revisions/probes, the grant/creep historical mirrors, and the `stage_timings` ETA history, P78-r1) |
-| `.docs/` | the steering record | Owner working material with no other copy (№R-22) — non-contract, backed up by default |
+| `.docs/` | the steering record | Owner working material with no other copy (owner ruling 2026-08-11) — non-contract, backed up by default |
 
 **Nothing under `db/` is ever backed up** (owner ruling 2026-08-16, closing the
-№R-21 "convenience tier"): every derived store re-mints via `nabu rebuild` from
+derived-db "convenience tier"): every derived store re-mints via `nabu rebuild` from
 the three folders. The tier existed as a restore-time shortcut and hauled
 ~120 GB of derived db into every backup and every drill workspace — the cost
 that drained the boot disk on 2026-08-15. A pre-P71 box whose ledger still sits
