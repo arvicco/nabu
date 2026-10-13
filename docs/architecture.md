@@ -873,6 +873,10 @@ and stay unresolved (rendered verbatim) — they would resolve the day a
 `twot` dictionary is loaded and the pointing source re-loads. The xref's
 strong/aug ids are the entry's own identity and mint nothing.
 
+Further id-keyed sets (P124-3): Unihan `kSemanticVariant` items (the
+codepoint is the entry id; kind `kSemanticVariant`, source tags verbatim
+in the label).
+
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
 `nabu etym богъ --lang chu` walks from an attested lemma to its
