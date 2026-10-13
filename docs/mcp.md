@@ -101,7 +101,10 @@ CLI note — never an error.
 
 Optional document-grain filters (text search only, refused with
 `lemma`/`near`): `from`/`to`/`century` — signed historical years over the
-document timeline; `place` — since P75 **identity-aware**: a namespaced ref
+document timeline; `date_basis` (P123-4, the CLI `--date-basis` parity) —
+a comma list of `artifact`/`composition`/`edition`/`silver`, keeping only
+documents whose primary dated row is of one of those classes (an unknown
+class is refused naming the known set); `place` — since P75 **identity-aware**: a namespaced ref
 (`tm:2810`, `cigs:GIR`) matches the document's `place_ref` identity claims
 in any spelling, a place NAME resolves through the derived place index and
 the registry's decisions (name-LIKE recall kept, one crosswalk hop), a LIKE

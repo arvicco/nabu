@@ -651,6 +651,59 @@ module MCP
       end
     end
 
+    # -- nabu_search date_basis (P123-4, CLI --date-basis parity) -------
+
+    # Three dated documents sharing a term: a (NULL class = artifact), b
+    # (composition), c (edition).
+    def seed_classed_corpus!
+      { "a" => [-113, nil], "b" => [-400, "composition"], "c" => [1890, "edition"] }.each do |key, (year, klass)|
+        doc = make_document(urn: "urn:db:#{key}")
+        make_passage(doc, urn: "urn:db:#{key}:1", text: "στρατηγος", sequence: 0)
+        @catalog[:document_axes].insert(document_id: doc.id, not_before: year, not_after: year,
+                                        axis_source: "hgv", date_class: klass)
+      end
+      rebuild!
+    end
+
+    def date_basis_urns(args)
+      payload(call("nabu_search", { "query" => "στρατηγος" }.merge(args))).fetch("matches").map { |h| h.fetch("urn") }
+    end
+
+    def test_search_date_basis_keeps_the_named_class
+      seed_classed_corpus!
+      assert_equal %w[urn:db:b:1], date_basis_urns("date_basis" => "composition")
+      assert_equal %w[urn:db:a:1], date_basis_urns("date_basis" => "artifact"),
+                   "a NULL class is the source's own artifact date"
+    end
+
+    def test_search_date_basis_takes_a_comma_list_and_composes_with_the_window
+      seed_classed_corpus!
+      assert_equal %w[urn:db:a:1 urn:db:c:1], date_basis_urns("date_basis" => "artifact,edition").sort
+      assert_equal %w[urn:db:a:1], date_basis_urns("date_basis" => "artifact,edition", "from" => -300, "to" => -1)
+    end
+
+    def test_search_unknown_date_basis_is_refused_naming_the_known_set
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "x", "date_basis" => "bogus" })
+      end
+      assert_match(/unknown date basis "bogus"/, error.message)
+      assert_match(/artifact, composition, edition, silver/, error.message)
+    end
+
+    def test_search_date_basis_does_not_compose_with_lemma_or_near
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "date_basis" => "artifact" })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "arma", "near" => "cano", "date_basis" => "artifact" })
+      end
+    end
+
+    def test_search_schema_documents_the_date_basis_param
+      description = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties).fetch(:date_basis).fetch(:description)
+      Nabu::Query::DateBasis::KNOWN.each { |klass| assert_includes description, klass }
+    end
+
     # -- nabu_search script + place lanes (P75 C-1/C-2 parity) ----------
 
     def test_search_script_filters_by_the_held_script_axis
