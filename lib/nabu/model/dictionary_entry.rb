@@ -90,9 +90,14 @@ module Nabu
   # JMdict <xref>/<ant>, kaikki synonyms/antonyms/related). The citation
   # pattern again — the parser mints it, the loader persists it and
   # resolves the TO entry by folded headword (unique match only).
+  # P124-3 widens the shape: id-keyed pointers (+target_id+) and pointers
+  # into ANOTHER dictionary (+to_dictionary+).
   #
-  # - +kind+: the pointer class, normalized (see, equals, variant,
-  #   false-reading, gloss, like, synonym, antonym, related).
+  # - +kind+: the pointer class — normalized (see, equals, variant,
+  #   false-reading, gloss, like, synonym, antonym, related, cf., q.v.)
+  #   or the upstream relation type verbatim where it is already a
+  #   controlled vocabulary (AED root/rootOf/partOf…, TLS hypernymy…,
+  #   Unihan kSemanticVariant, the OSHB xref's bdb/twot).
   # - +label+: the pointer as the dictionary prints it ("v. μῦθος") — what
   #   renders when the target is not resolvable.
   # - +target+: the pointed-at headword as displayed (NFC).
