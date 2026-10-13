@@ -880,7 +880,10 @@ target="…/Dillmann/lemma/<id>">` links (kind `see`) — its `ref
 target="#c…"` elements name no entry (dangling sigla) and are not mined.
 The CCL's `<xr type="cf|syn|ant"><ref target="#<headword>">` pointers are
 headword-keyed (folded through the shelf's own fold); its homograph grain
-leaves most of them verbatim.
+leaves most of them verbatim. TLS concept pointer lists (hypernymy,
+taxonymy, see, antonymy, mereonymy) are id-keyed by concept uuid; the
+tree's many other `ref target="#uuid…"` elements name bibliography
+records, not entries, and are not mined.
 
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
