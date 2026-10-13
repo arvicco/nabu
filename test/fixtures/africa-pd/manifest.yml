@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three items are documented prefix trims (whole: false), so
+# adapter_test stays null.
+source: africa-pd
+adapter_test: null
+retrieved: "2026-10-13"
+files:
+  - path: prosaundpoesiede00velt/prosaundpoesiede00velt_hocr_searchtext.txt.gz
+    url: https://archive.org/download/prosaundpoesiede00velt/prosaundpoesiede00velt_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 22 hOCR pages (15,457 of 798,781 characters), re-gzipped — README recipe
+  - path: prosaundpoesiede00velt/prosaundpoesiede00velt_hocr_pageindex.json.gz
+    url: https://archive.org/download/prosaundpoesiede00velt/prosaundpoesiede00velt_hocr_pageindex.json.gz
+    whole: false
+    trim: first 22 of 470 rows, re-gzipped — README recipe
+  - path: AfricanAphorisms/African_aphorisms_hocr_searchtext.txt.gz
+    url: https://archive.org/download/AfricanAphorisms/African_aphorisms_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 9 hOCR pages (10,043 of 356,537 characters), re-gzipped — README recipe
+  - path: AfricanAphorisms/African_aphorisms_hocr_pageindex.json.gz
+    url: https://archive.org/download/AfricanAphorisms/African_aphorisms_hocr_pageindex.json.gz
+    whole: false
+    trim: first 9 of 206 rows, re-gzipped — README recipe
+  - path: hanoteau-essai-de-grammaire-de-la-langue-tamachek-1860-copy-c/Hanoteau, Essai de grammaire de la langue tamachek (1860) - copy C_hocr_searchtext.txt.gz
+    url: https://archive.org/download/hanoteau-essai-de-grammaire-de-la-langue-tamachek-1860-copy-c/Hanoteau%2C%20Essai%20de%20grammaire%20de%20la%20langue%20tamachek%20%281860%29%20-%20copy%20C_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 10 hOCR pages (8,964 of 573,160 characters), re-gzipped — README recipe
+  - path: hanoteau-essai-de-grammaire-de-la-langue-tamachek-1860-copy-c/Hanoteau, Essai de grammaire de la langue tamachek (1860) - copy C_hocr_pageindex.json.gz
+    url: https://archive.org/download/hanoteau-essai-de-grammaire-de-la-langue-tamachek-1860-copy-c/Hanoteau%2C%20Essai%20de%20grammaire%20de%20la%20langue%20tamachek%20%281860%29%20-%20copy%20C_hocr_pageindex.json.gz
+    whole: false
+    trim: first 10 of 342 rows, re-gzipped — README recipe

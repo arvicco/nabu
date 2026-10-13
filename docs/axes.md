@@ -273,9 +273,9 @@ The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (C�
 
 > The Africanist — Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse.
 
-Africa south and west of the Nile–Ethiopia axis (the Egyptian and Ethiopic desks keep theirs): the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, with the public-domain grammars, text editions and readers of the nineteenth and early twentieth centuries joining as their shelves land.
+Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, and the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai.
 
-**Members** (1): `bu-ajami`
+**Members** (2): `africa-pd`, `bu-ajami`
 
 ### local
 

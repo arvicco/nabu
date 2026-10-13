@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 142, lect.size,
+    assert_equal 143, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -288,7 +288,9 @@ class PosturesTest < Minitest::Test
                  "shabados ADDED P122-3 — PENDING on the aggregated nabu-lects mint (no pa " \
                  "anchor, no guru script row, no bra-Guru/fas-Guru codemap rows exist): 140→141; " \
                  "bu-ajami ADDED P124-1 — PENDING on the aggregated nabu-lects Africa mint (no " \
-                 "ha/mnk/fuf/wo node exists): 141→142"
+                 "ha/mnk/fuf/wo node exists): 141→142; africa-pd ADDED P124-1 — PENDING on the " \
+                 "same mint's sw anchor (Velten's reader; the other nine works claim real " \
+                 "prose-language anchors): 142→143"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -403,7 +405,8 @@ class PosturesTest < Minitest::Test
     # add-then-retire shape within ONE phase) retires shabados to identity:
     # identity 113→114, pending 1→0. Zero pendings again.
     # P124-1 ADDS bu-ajami PENDING on the ha/mnk/fuf/wo anchors of the
-    # aggregated Africa registry mint: pending 0→1.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 114, "pending" => 1 }, by_posture)
+    # aggregated Africa registry mint: pending 0→1; africa-pd PENDING on
+    # the same mint's sw anchor: pending 1→2.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 114, "pending" => 2 }, by_posture)
   end
 end
