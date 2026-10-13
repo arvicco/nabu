@@ -2232,7 +2232,11 @@ guaman-poma:   # P117-5, 02-sources row 255
   # Public Domain Mark per the KB's project page → open. Paced crawl
   # (1 s), resumable at the page grain. Document = page, passage =
   # paragraph; Spanish with Quechua and Aymara passages (italic, untagged).
-
+  # PD Mark coverage of the searchable Adorno-Boserup transcription (not
+  # only the images) CONFIRMED by the Royal Danish Library (by email,
+  # 2026-10-13): "You are welcome to use the transcribed text for your
+  # projects." A second digitisation (jpeg) exists in their Digital
+  # Collections (object852735) — images only, recorded as reference.
 hdic:
   adapter: Nabu::Adapters::Hdic
   adopted: "2026-07-19"
