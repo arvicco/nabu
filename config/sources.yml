@@ -215,7 +215,9 @@ africa-pd:   # P124-1, 02-sources row 271
   adapter: Nabu::Adapters::AfricaPd
   adopted: "2026-10-13"
   axes: [africa]
-  wired: false   # checklist §6: bin/nabu enable africa-pd && bin/nabu sync africa-pd
+  wired: true    # first sync verified 2026-10-13: 10 docs / 3,536 passages,
+                 # 0 errors — exactly the lane census; the Griffith 1913
+                 # Nubian Texts card eyeballed (scholarly kind, dated)
   sync_policy: manual
   # The PD African-languages reference shelf as archive.org scans — 10
   # census items: Griffith's Nubian Texts of the Christian Period (1913);
@@ -606,7 +608,10 @@ bu-ajami:   # P124-1, 02-sources row 270
   adapter: Nabu::Adapters::BuAjami
   adopted: "2026-10-13"
   axes: [africa]
-  wired: false   # checklist §6: bin/nabu enable bu-ajami && bin/nabu sync bu-ajami
+  wired: true    # first sync verified 2026-10-13: 80 docs / 705 passages,
+                 # 0 errors — exactly the lane census (ha/mnk/fuf/wo ×20 each,
+                 # 80 placed, 33 dated); Mandinka history and poetry cards
+                 # eyeballed (places, genre facets, the structured dates)
   sync_policy: manual
   # Boston University's NEH Ajami collection (sites.bu.edu/nehajami, PI
   # Fallou Ngom) — the library's first Hausa, Mandinka, Fula (Pular) and
