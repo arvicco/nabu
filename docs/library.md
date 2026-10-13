@@ -1061,6 +1061,44 @@ Library's edition of the *Nueva corónica y buen gobierno* (1,189 /
 **Character identity.** `ucd` — the Unicode Character Database core, the
 universal character-identity instrument behind `nabu char`.
 
+## 8am. The South Asia opening and the members' gate (P118–P123)
+
+The October 2026 arc, in the §8al register shape — one line per
+shelf, live holdings read from the catalog 2026-10-13, license class
+per source; fuller review sections follow per §10.
+
+**The DHARMA epigraphy estates** (ERC no. 809994; CC BY 4.0):
+`dharma-tamil` — the Tamil-country inscriptions, Śaka/Kollam dates
+converted (1,267 / 17,993) · `dharma-deccan` — Telugu, Kannada,
+Sanskrit and Prakrit epigraphy (1,694 / 27,929) · `dharma-mdt` — the
+project's works database (734 records; metadata CC0) · `sii-clean` —
+the license-marked DHARMA conversions of the printed *South Indian
+Inscriptions* volumes, original ASI editors credited (589 / 8,372;
+per-file CC BY-SA).
+
+**The literary canon.** `tamilex` — the Hamburg critical editions of
+classical Tamil with the per-word gold wordsplit layer (7,830 /
+14,972 + 262k gold rows; CC BY-NC-SA by the maintainers) · `madurai`
+— Project Madurai's pre-modern e-texts at line grain (755 /
+1,214,683; attribution, header carried verbatim) · `kannada-texts`
+and `prakrit-texts` — Andrew Ollett's editions, the library's first
+individually-named Prakrit (16 / 16,151 and 22 / 27,124; CC BY-SA) ·
+`siddham` — the Gupta-era inscriptions with regnal years converted
+(427 / 6,334; CC BY-SA) · `shabados` — the Gurmukhī scriptural canon
+at line grain (127 / 141,264; public domain).
+
+**The scan-indexed cones.** `ban-wikisource` — the Balinese lontars,
+manuscript-direct (1,252 / 21,491) · `gu-wikisource` — the Gujarati
+bhakti prints (207 / 1,462) · `ms-wikisource` — the Jawi manuscript
+cone (64 / 5,081) · `th-wikisource` — the Collected Chronicles to
+BE 2473 (92 / 11,006); all texts PD, transcription CC BY-SA.
+
+**The members' gate.** `titus-tocharian-b` — the whole West
+Tocharian B chain across the Berlin, London and Paris collections,
+retrieved through the credentials seam under the TITUS personal
+grant, with two leaves identified as Tumshuqese (4,250 / 43,499;
+`nc`, never redistributed).
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
