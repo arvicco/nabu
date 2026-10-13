@@ -856,6 +856,13 @@ entry's `entry_id` (unique per dictionary) instead of a folded headword,
 and `target_folded` stays NULL. The field enters the content hash only
 when set, so headword-keyed rows keep their shas.
 
+Monier-Williams (P124-3) marks its pointers only as prose abbreviations,
+so just the two mechanically-safe shapes are mined: `<ab>cf.</ab>`
+whitespace-adjacent to an `<s>`, and `<ab>q.v.</ab>` right after an `<s>`
+(past at most a comma or an opening bracket) — kinds `cf.` / `q.v.`,
+headword-keyed. Looser prose ("cf. also …", "cf. √ …", a q.v. after a
+proper name) stays unextracted; the census sits in the parser.
+
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
 `nabu etym богъ --lang chu` walks from an attested lemma to its

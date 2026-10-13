@@ -191,6 +191,39 @@ module Adapters
       assert_empty entry("10").reflexes
     end
 
+    # -- P124-3: the mechanically-safe "cf." / "q.v." pointers --------------------
+
+    SLICE = File.join(Nabu::TestSupport.fixtures("mw"), "crossrefs-slice.xml")
+
+    def slice_entry(id)
+      @slice ||= Nabu::Adapters::MwXmlParser.new.entries(File.foreach(SLICE))
+      @slice.find { |candidate| candidate.entry_id == id } or flunk "no slice entry L=#{id}"
+    end
+
+    def test_cf_adjacent_to_an_s_mints_a_headword_keyed_crossref
+      assert_equal 1, slice_entry("10608").crossrefs.size
+      crossref = slice_entry("10608").crossrefs.first
+      assert_equal "cf.", crossref.kind
+      assert_equal "a-pratistabdha", crossref.target, "the <s> SLP1 rendered as display IAST"
+      assert_equal "cf. a-pratistabdha", crossref.label
+      assert_equal "apratistabdha", crossref.target_folded, "compound seams drop — the headword fold"
+      assert_nil crossref.target_id
+    end
+
+    def test_qv_after_an_s_and_only_the_first_cf_item_are_extracted
+      # L 1702: "(for <s>aNguli</s>, <ab>q.v.</ab>) … (<ab>cf.</ab> <s>an-aNguri</s>,
+      # <s>pa/YcA<srs/>Nguri</s>, <s>sv-aNguri/</s>.)" — the q.v. binds to the
+      # <s> right before it; the cf. list's later items are prose, not taken.
+      crossrefs = slice_entry("1702").crossrefs
+      assert_equal([["q.v.", "aṅguli q.v.", "anguli"], ["cf.", "cf. an-aṅguri", "ananguri"]],
+                   crossrefs.map { |c| [c.kind, c.label, c.target_folded] })
+    end
+
+    def test_entries_without_the_safe_shapes_carry_no_crossrefs
+      assert_empty slice_entry("1715").crossrefs
+      assert(entries.all? { |e| e.crossrefs.empty? }, "the main fixture carries no cf./q.v. adjacency")
+    end
+
     # -- hygiene -------------------------------------------------------------------
 
     def test_output_is_nfc_everywhere

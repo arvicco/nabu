@@ -182,6 +182,33 @@ class MwTest < Minitest::Test
     assert_equal "amsa", amsha[:headword_folded]
   end
 
+  # P124-3: the cf./q.v. pointers of the real crossref slice (README) resolve
+  # by folded headword like the P123-1 pointers; an unheld target stays text.
+  def crossref_slice_document
+    path = File.join(FIXTURES, "crossrefs-slice.xml")
+    document = Nabu::DictionaryDocument.new(slug: "mw", language: "san", title: "MW slice",
+                                            canonical_path: path)
+    Nabu::Adapters::MwXmlParser.new.entries(File.foreach(path)).each { |entry| document << entry }
+    document
+  end
+
+  def test_cf_and_qv_crossrefs_resolve_by_headword_and_render_through_define
+    db, loader = loader_setup
+    loader.load([crossref_slice_document], full: false)
+    define = Nabu::Query::Define.new(catalog: db)
+
+    anguri = define.by_urn("urn:nabu:dict:mw:1702")
+    assert_equal([["aṅguli q.v.", "urn:nabu:dict:mw:1715"], ["cf. an-aṅguri", nil]],
+                 anguri.crossrefs.map { |c| [c.label, c.resolved_urn] })
+    assert_equal ["urn:nabu:dict:mw:10619"], define.by_urn("urn:nabu:dict:mw:10608").crossrefs.map(&:resolved_urn)
+    assert_equal ["urn:nabu:dict:mw:10608"], define.by_urn("urn:nabu:dict:mw:10619").crossrefs.map(&:resolved_urn)
+
+    before = db[:dictionary_crossrefs].order(:id).all
+    report = loader.load([crossref_slice_document], full: false)
+    assert_equal 4, report.skipped
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
+  end
+
   def test_citation_and_reflex_rows_land_and_replace_wholesale
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
