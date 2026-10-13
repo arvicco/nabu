@@ -24,6 +24,12 @@ module Nabu
         # P122-1: the armed silver-date lane re-projects behind the timeline.
         progress&.stage("silver dates")
         Store::SilverDates.replay!(catalog: catalog, shelf: DateShelf.present(config))
+        # The timeline rebuild drops EVERY axis row, this lane included —
+        # before 2026-10-13 only a full rebuild restored it (the refresh
+        # served script-axis queries without the artifact-script rows).
+        progress&.stage("artifact scripts")
+        Store::ArtifactScripts.derive!(catalog, config_path: config.artifact_scripts_path,
+                                                registry: Lects.load_default(config: config))
         progress&.stage("place apply")
         PlaceApply.run(catalog: catalog, canonical_dir: canonical_dir)
         progress&.stage("facets")
