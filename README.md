@@ -25,52 +25,42 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-09-02** the shelves hold **2,268,754 documents /
-106,121,620 passages** in 167 language codes — from proto-cuneiform
+As of **2026-10-13** the shelves hold **2,374,951 documents /
+112,521,554 passages** in 207 language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to Meiji-era Japanese. The
-August waves crossed the hundred-million-passage line: **EEBO-TCP
-Phase I** brought the early-modern English print library whole (24.1M
-passages — now the corpus's second language) beside the **Corpus of
-Middle English** prose and verse, both under the maintainer's
-written grant; the Dutch shelf opened with the Gysseling corpus and
-Oudnederlands under the INT license; **Menota's Old Norse manuscript
-archive** joined at diplomatic/normalized grain; and the **Old
-Mandarin desk** arrived as a connected series of rhyme books —
-the Guangyun and Wang Renxu's Qieyun (42,563 entries between them),
-Fujita's restoration of the Qieyun itself, the 'Phags-pa 蒙古字韻, and
-the 中原音韻 of 1324 — beside a 1.9M-passage Classical↔Modern Chinese
-parallel corpus, the Monlam Tibetan lexicon (449,829 entries), and
-DACON's annotated Newar; **SEAL — Sources of Early Akkadian
-Literature** — the edition of record for Old Babylonian Gilgamesh and
-early Akkadian poetry, ingested under the editors' written
-personal-research grant. The newest wave (2026-09-01) more than
-doubled the document count in a single source: the historical slice
-of the **Open Korean Historical Corpus** (Song et al., KAIST) —
-1,198,779 documents spanning the Samguk sagi of 1145 (the oldest
-Korean history), the Ilseongnok court diaries, the ITKC munjip mass,
-and the AKS/Kyujanggak old-literature shelves, each record carrying
-its own license (1.2M relabel Public Domain → open under the ud
-split-licensing seam). And on 2026-09-02 the **Southeast Asia desk**
-opened — the Indic cosmopolis at its eastern edge, ten languages
-the library had never held: the DHARMA epigraphic corpora (the Old
-Khmer inscriptions of the Cœdès K-numbers, the Campā corpus whose
-Đông Yên Châu inscription is the oldest attested Austronesian text,
-the Nusantara charters in Old Malay and Old Sundanese, the Pyu
-corpus), the kakawin library (Deśavarṇana, Sutasoma, Pararaton), the
-Old Burmese inscriptions of Bagan, the Old Javanese Wordnet — and,
-inside the Pyu corpus, **the first digital Old Mon text anywhere**
-(two inscriptions; every survey had recorded the gap as absolute).
-They join the July
-library: **OpenITI's premodern Islamicate corpus** (Quran and hadith,
-history, fiqh, falsafa, the dīwāns, with its Persian shelf — still
-**the largest language at 33.3 million passages of Classical
-Arabic**, now ahead of early-modern English at 24.3M and Literary
-Chinese at 18.7M), the Rabbinic library (Mishnah, both Talmuds at
-daf-grain citation), the Geʿez shelf (**1 Enoch and Jubilees,
-complete only in Geʿez**), the Romance and Germanic waves, the
-inscriptions of Italy, and the Japanese reading desk.
-Plus **1,903,742 dictionary entries** across 110 dictionary
-shelves and **21.9 million gold lemma annotations in 45 languages** (a
+summer waves built the core: **EEBO-TCP Phase I** brought the
+early-modern English print library whole (24.1M passages — the
+corpus's second language) under the maintainer's written grant, the
+**Old Mandarin desk** arrived as a connected series of rhyme books
+(the Guangyun, Wang Renxu's Qieyun, the 'Phags-pa 蒙古字韻, the
+中原音韻 of 1324), and the historical slice of the **Open Korean
+Historical Corpus** more than doubled the document count in a day
+(1,198,779 documents from the Samguk sagi of 1145 through the
+Ilseongnok court diaries, each record carrying its own license).
+The autumn arc then opened whole regions: the **Southeast Asia
+desk** (the DHARMA epigraphic corpora with the first digital Old
+Mon text anywhere, the kakawin library, Bagan's Old Burmese — then
+1,252 **Balinese palm-leaf lontars** transcribed manuscript-direct,
+Jawi-script Malay manuscripts, the Thai Collected Chronicles), the
+**Central Asia corridor** (Khotanese, Sogdian, Bactrian, Chagatai,
+the Secret History of the Mongols), the **Slavic shelves end to
+end** (nine Wikisource cones, the 1488 Prague Bible, the Ipatiev
+chronicle), a first **American wing** (colonial Zapotec testaments,
+Guaman Poma's chronicle), and **South Asia in force**: the DHARMA
+Tamil-country and Deccan epigraphy, Siddham's Gupta pillars, the
+printed *South Indian Inscriptions* volumes, Project Madurai's
+classical Tamil e-texts at 1.2M lines, the Gurmukhī scriptural
+canon at line grain — and **TAMILEX**, whose per-word gold
+wordsplit layer (262,093 rows) exists nowhere else for Old Tamil.
+Behind TITUS's members-only gate, personal grants opened the
+**Middle Iranian books** and the **whole Tocharian corpus** — all
+4,250 West Tocharian documents of the Berlin, London and Paris
+collections, plus two leaves Maue's handlist identifies as
+Tumshuqese. **OpenITI's Classical Arabic** remains the largest
+language at 33.3 million passages, ahead of early-modern English
+(24.3M) and Literary Chinese (19.0M).
+Plus **2,761,739 dictionary entries** across 566 dictionary
+shelves and **22.8 million gold lemma annotations in 48 languages** (a
 further 31.0 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
 
@@ -338,25 +328,28 @@ shelf map with research uses per shelf is
 | Korean desk | The Veritable Records of Joseon (sillok) in the original hanmun, the Goryeosa family, and since 2026-09-01 the OKHC historical slice: the Samguk sagi (1145), the Ilseongnok, the ITKC munjip mass, the AKS/Kyujanggak/NHM old-literature dbs | 1,198,779 / 3,542,662 (okhc alone) | per-record PD/KOGL/nc (source CC BY-NC 4.0) |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **151 corpus sources + 5 local shelves + 20 feature
-modules** (the kind-split census, 2026-09-02 — `sources.yml`
+The registry holds **215 corpus sources + 5 local shelves + 25 feature
+modules** (the kind-split census, 2026-10-13 — `sources.yml`
 distinguishes what a row IS: a corpus that mints catalog rows, an
 owner-authored local memory shelf, or machinery like `osl` (the Oracc
 Sign List behind `nabu signs`), `nabu-data` (Nabu's own published
 datasets, consumed back) and `pedecerto`/`bridging` that fetches
 reference data but mints no documents of its own). All corpus
 sources are **wired** — adapter built and first sync verified —
-except the two newest, the grant-gated **TITUS Tocharian A and
-Pahlavi books** (adapters READY, each awaiting its owner-fired
-one-time retrieval under a personal grant, 2026-10-06); recent
-arrivals before them include the 28 **StarLing branch etymology
-bases** (42k entries across the Altaic, North Caucasian, Dravidian
-and Sino-Tibetan comparative shelves) and the **Southeast Asia seven**
-(the five DHARMA corpora, the Bagan inscriptions, and the Old
-Javanese Wordnet — the desk opened whole in one phase), a day behind
-`okhc` — the historical slice of
+except **KorBa** (the Baroque Polish corpus: adapter ready, the
+IJP's download server answering 502 since early October); the
+newest arrivals are the October South Asia slice (`tamilex`,
+`sii-clean`, `madurai`, `shabados`), the whole members-area
+**Tocharian B chain** behind the new credentials seam, the
+SEA/Gujarat Wikisource cones (`ban`/`gu`/`ms`/`th`), and the TITUS
+Middle Iranian books — behind them the **StarLing etymology
+bases** (Pokorny, Vasmer, the branch comparative shelves and the
+LEXSTAT wordlists), the
+**Southeast Asia seven** (the five DHARMA corpora, the Bagan
+inscriptions, and the Old Javanese Wordnet — the desk opened whole
+in one phase), `okhc` — the historical slice of
 the Open Korean Historical Corpus, 1,198,779 documents that more
-than doubled the library's document count in a day — itself a day behind
+than doubled the library's document count in a day —
 `titus-osco-umbrian` (the complete Iguvine Tables with the Oscan
 inscriptions, 386 documents at line grain under a personal grant)
 and `seal` (Sources of Early Akkadian Literature, 408 compositions,

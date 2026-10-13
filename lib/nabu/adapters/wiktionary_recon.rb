@@ -290,7 +290,14 @@ module Nabu
           url: "https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl",
           language: "zho",
           title: "Wiktionary — Chinese (kaikki.org extract; Middle/Old Chinese readings)",
-          historical_sounds: true
+          historical_sounds: true,
+          # P123-1: NO crossref extraction here. Census 2026-10-13: the zh
+          # records' `synonyms` are Wiktionary's dialectal-synonym tables
+          # (every regional form, per entry) — 1,695,525 pointers over
+          # 88,119 of 327,296 entries, 18x every other extract combined;
+          # a thesaurus, not entry-to-entry "see" pointers. Left as a
+          # census finding.
+          crossrefs: false
         }
       }.freeze
 
@@ -344,8 +351,15 @@ module Nabu
           slug: slug, language: extract.fetch(:language),
           title: extract.fetch(:title), canonical_path: document_ref.path
         )
+        # P123-1: the extracts' synonyms/antonyms/related lists are
+        # machine-readable entry→entry pointers. Census 2026-10-13 over
+        # the 19 extracts that extract them (zh opts out, see its row):
+        # 31,365 pointers on 9,104 entries (related 24,082 · synonym
+        # 6,930 · antonym 353 — sla-pro alone 13,105), 17,856 resolving to
+        # a unique headword of the same extract.
         WiktionaryJsonlParser.new(language: extract.fetch(:language), reflexes: true,
-                                  historical_sounds: extract.fetch(:historical_sounds, false))
+                                  historical_sounds: extract.fetch(:historical_sounds, false),
+                                  crossrefs: extract.fetch(:crossrefs, true))
                              .entries(document_ref.path).each { |entry| document << entry }
         document
       rescue Nabu::ValidationError => e

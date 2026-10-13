@@ -54,13 +54,19 @@ module Nabu
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :key_raw, :gloss, :body,
                            :license, :license_class, :source_slug, :citations, :reflexes,
-                           :withdrawn, :via_lila) do
-        def initialize(withdrawn: false, via_lila: nil, **) = super
+                           :withdrawn, :via_lila, :crossrefs) do
+        def initialize(withdrawn: false, via_lila: nil, crossrefs: [], **) = super
       end
 
       # One citation of an entry: display label always; resolved_urn is the
       # in-catalog passage urn or nil.
       CitationView = Data.define(:label, :urn_raw, :resolved_urn)
+
+      # One entry→entry cross-reference (P123-1): the pointer verbatim
+      # (label), its kind, and the TO entry's urn + headword when the
+      # loader's resolution pass found exactly one live target — else nil,
+      # and the pointer renders as text (never a dead link).
+      CrossrefView = Data.define(:kind, :label, :target, :resolved_urn, :resolved_headword)
 
       DEFAULT_LIMIT = 5
 
@@ -330,8 +336,33 @@ module Nabu
           citations: resolve_citations(row.fetch(:entry_row_id)),
           reflexes: recon ? @reflex_views.for_entry(row.fetch(:entry_row_id)) : [],
           withdrawn: row[:withdrawn] ? true : false,
-          via_lila: via_lila
+          via_lila: via_lila,
+          crossrefs: crossrefs_for(row.fetch(:entry_row_id))
         )
+      end
+
+      # P123-1: the entry's cross-references in entry order. The TO entry
+      # was resolved at load (unique folded match); a target withdrawn
+      # since reads unresolved. Pre-039 catalogs have no table — [].
+      def crossrefs_for(entry_row_id)
+        return [] unless crossrefs_table?
+
+        @catalog[:dictionary_crossrefs]
+          .left_join(Sequel[:dictionary_entries].as(:target_entry),
+                     id: Sequel[:dictionary_crossrefs][:to_entry_id], withdrawn: false)
+          .where(Sequel[:dictionary_crossrefs][:dictionary_entry_id] => entry_row_id)
+          .order(Sequel[:dictionary_crossrefs][:seq])
+          .select(Sequel[:dictionary_crossrefs][:kind], Sequel[:dictionary_crossrefs][:label],
+                  Sequel[:dictionary_crossrefs][:target],
+                  Sequel[:target_entry][:urn].as(:resolved_urn),
+                  Sequel[:target_entry][:headword].as(:resolved_headword))
+          .all
+          .map { |row| CrossrefView.new(**row) }
+      end
+
+      def crossrefs_table?
+        @crossrefs_table = @catalog.table_exists?(:dictionary_crossrefs) if @crossrefs_table.nil?
+        @crossrefs_table
       end
 
       # -- the LiLa variant-form fallback (P44-8) ----------------------------------

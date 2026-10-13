@@ -221,6 +221,18 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P123-1: define renders cross-references — a resolved pointer names its
+  # target entry (one `nabu show` away), an unresolved one stays text.
+  def test_define_renders_resolved_and_verbatim_cross_references
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *gudą]) }
+      assert_nil status
+      assert_match(/^cross-references:$/, out)
+      assert_match(/^ {2}related gudjô \(related\) → gudjô urn:nabu:dict:wiktionary-gem-pro:gudjô:noun$/, out)
+      assert_match(/^ {2}\S.* \((related|synonym|antonym)\)$/, out, "an unresolved pointer renders as plain text")
+    end
+  end
+
   def test_show_resolves_the_urn_define_prints
     with_recon_shelf do |config|
       out, = with_config(config) { run_cli(%w[define *zima]) }
@@ -2238,6 +2250,47 @@ class CLITest < Minitest::Test
       _o, err, status = with_config(config) { run_cli(%w[enable bogus]) }
       assert_equal 1, status
       assert_match(/enable: unknown name "bogus"/, err)
+    end
+  end
+
+  # Owner feature (2026-10-13): `enable all` switches on everything the
+  # box can sync unattended in one move — the access-gated rows (blocked,
+  # grant-gated, credential-bound) are skipped with their reasons printed,
+  # because each of those must be enabled by name to run its own flow.
+  def test_enable_all_enables_every_ungated_source_and_names_the_gated_skips
+    with_axis_corpus do |config|
+      File.write(config.sources_path, File.read(config.sources_path) + <<~YAML)
+        gated:
+          adapter: TestAdapter
+          wired: false
+          sync_policy: manual
+          availability: blocked
+          grant_required: true
+          grant: {grantor: "the member desk", date: "2026-10-06", terms: "personal research", thread: "by email, 2026-10-06", request_hint: "write to the member desk"}
+          axes: [classical]
+      YAML
+      out, err, status = with_config(config) { run_cli(%w[enable all]) }
+      assert_nil status, err
+      entries = Nabu::Profile.load(config.profile_path).entries
+      assert_includes entries, "shelf"
+      assert_includes entries, "lex"
+      refute_includes entries, "gated", "access-gated sources never ride enable all"
+      assert_match(/enable all → \d+ ungated sources/, out)
+      assert_match(/skipped as access-gated/, out)
+      assert_match(/gated \(blocked, grant-gated\)/, out)
+
+      # Idempotent: a second run changes nothing and still succeeds.
+      _out2, _err2, status2 = with_config(config) { run_cli(%w[enable all]) }
+      assert_nil status2
+      assert_equal entries.sort, Nabu::Profile.load(config.profile_path).entries.sort
+    end
+  end
+
+  def test_enable_all_refuses_mixed_with_other_names
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[enable all shelf]) }
+      assert_equal 1, status
+      assert_match(/enable all: stands alone/, err)
     end
   end
 

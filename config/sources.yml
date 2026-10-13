@@ -440,7 +440,8 @@ betamasaheft-works:   # P46-2, 02-sources row 123
   # Gospels, 1 Enoch 179k chars, Jubilees 188k, Kebra nagast 174k, royal
   # chronicles; the long tail is incipit/explicit-only mini-documents, honest
   # and small). Living edition -> manual re-syncs.
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
 
 bfm:   # P45-4
   adapter: Nabu::Adapters::Bfm
@@ -972,7 +973,8 @@ coptic-scriptorium:
   # is `manual` + the adapter's fetch PINNED to CopticScriptorium::RELEASE_TAG
   # (v6.2.0; GitFetch ref:) — never master. Owner re-pins per release by
   # bumping the constant, then fires the re-sync.
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # license_watch candidate (P16-5, owner decision — the license section
   # lives in the repo README):
   # license_watch: https://raw.githubusercontent.com/CopticScriptorium/corpora/master/README.md
@@ -1252,7 +1254,8 @@ dcs:
   # two honest witnesses, the MW-beside-kaikki precedent; backlog P26-0).
   # Upstream dump regenerates occasionally from the DCS database → re-syncs
   # are owner-fired.
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
 
 derge-kangyur:
   adapter: Nabu::Adapters::DergeKangyur
@@ -1357,7 +1360,8 @@ dharma-campa:   # P92-2
   adopted: "2026-09-01"
   axes: [sea, epigraphy]
   wired: true    # first sync verified 2026-09-02: 121 docs / 2,728 passages, 0 quarantined
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Campā corpus (~121 editions, xml/ cone): Old Cham (ocm-Latn —
   # the Đông Yên Châu inscription is the oldest attested Austronesian
   # text) and Sanskrit epigraphy of the Cham polities; absorbs the
@@ -1370,7 +1374,8 @@ dharma-deccan:   # P118-2
   adopted: "2026-10-11"
   axes: [indic, epigraphy]
   wired: true    # first sync verified 2026-10-11: 1,694 docs / 27,929 passages, 29 honest quarantines (the lane census exactly)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Task Force B — the South Asian inscription estate: the 20
   # edition-bearing tfb-* repos on github.com/erc-dharma (live census
   # 2026-10-11) composed into one source, each repo a sparse GitFetch
@@ -1391,7 +1396,8 @@ dharma-javanese-texts:   # P92-4
   adopted: "2026-09-01"
   axes: [sea]
   wired: true    # first sync verified 2026-09-02: 88 docs / 46,108 passages, 7 quarantined
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Nusantara philology — the desk's literary wing: the kakawin
   # critical editions of the first rank (Deśavarṇana, Sutasoma,
   # Pararaton, Calon Arang…), prose critical editions (Bhīma Svarga's
@@ -1408,7 +1414,8 @@ dharma-khmer:   # P92-1, the SEA desk anchor
   adopted: "2026-09-01"
   axes: [sea, epigraphy]
   wired: true    # first sync verified 2026-09-02: 1,219 docs / 50,165 passages, 34 honest quarantines
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Corpus des inscriptions khmères (EFEO/ERC no. 809994;
   # github.com/erc-dharma/tfc-khmer-epigraphy, scouted P47-s3 2026-07-26,
   # re-verified 2026-09-01): the Cœdès K-number corpus digitized — 1,187
@@ -1427,7 +1434,8 @@ dharma-mdt:   # P118-4, 02-sources row 257
   axes: [indic]
   wired: true    # first sync verified 2026-10-11: 734 metadata-row docs, 0 quarantined
                  # verified 2026-10-11: 734 metadata docs, 94 placeholder rows skipped)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA text metadata (github.com/erc-dharma/mdt-texts): four per-corpus
   # CSVs (DaksinaKosala / Pallava / Somavamsin / Telugu, header at row 3) as
   # a METADATA-ROW source — one zero-passage document per INS<Corpus>NNNNN
@@ -1443,7 +1451,8 @@ dharma-nusantara:   # P92-2
   adopted: "2026-09-01"
   axes: [sea, epigraphy]
   wired: true    # first sync verified 2026-09-02: 291 docs / 5,893 passages, 19 quarantined (16 lang-less upstream)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Nusantara epigraphy (~309 editions): Old Javanese sīma
   # charters, Borobudur, Old Sundanese (Kawali, Batutulis), Old Malay
   # (Sojomerto, the Laguna copperplate) and Sanskrit. Full-repo language
@@ -1456,7 +1465,8 @@ dharma-pyu:   # P92-2
   adopted: "2026-09-01"
   axes: [sea, epigraphy]
   wired: true    # first sync verified 2026-09-02: 145 docs / 629 passages, 17 text-less stubs
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Corpus of Pyu Inscriptions (Griffiths et al.) — 161 editions
   # of the extinct Sino-Tibetan language of the Irrawaddy city-states,
   # romanized (pyx-Latn), flat repo layout. No repo-level LICENSE: the
@@ -1468,7 +1478,8 @@ dharma-tamil:   # P118-1
   adopted: "2026-10-11"
   axes: [indic, epigraphy]
   wired: true    # first sync verified 2026-10-11: 1,267 docs / 17,993 passages, 32 honest quarantines (the lane census exactly)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # DHARMA Tamil-country epigraphy (Task Force A; EFEO/CNRS/CEIAS, ERC
   # no. 809994): the eleven tfa-* INSCRIPTION edition repos on
   # github.com/erc-dharma — 1,301 DHARMA_ edition files (live census
@@ -1639,7 +1650,8 @@ dss:
   # lex rides tokens; OSHB join by consonantal folding measured at fixture
   # time: 301/372 = 80.9% — journaled in 02-sources row 88, not wired).
   # No timeline: tf/2.0 carries no period/dating feature (censused).
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
 
 dta:   # P94-1
   adapter: Nabu::Adapters::Dta
@@ -2220,7 +2232,11 @@ guaman-poma:   # P117-5, 02-sources row 255
   # Public Domain Mark per the KB's project page → open. Paced crawl
   # (1 s), resumable at the page grain. Document = page, passage =
   # paragraph; Spanish with Quechua and Aymara passages (italic, untagged).
-
+  # PD Mark coverage of the searchable Adorno-Boserup transcription (not
+  # only the images) CONFIRMED by the Royal Danish Library (by email,
+  # 2026-10-13): "You are welcome to use the transcribed text for your
+  # projects." A second digitisation (jpeg) exists in their Digital
+  # Collections (object852735) — images only, recorded as reference.
 hdic:
   adapter: Nabu::Adapters::Hdic
   adopted: "2026-07-19"
@@ -2571,7 +2587,8 @@ kannada-texts:   # P118-3
   adopted: "2026-10-11"
   axes: [indic]
   wired: true    # first sync verified 2026-10-11: 16 docs / 16,151 passages, 0 quarantined
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # Kannada Digital Texts Project (Andrew Ollett; text entry Krishnaprasada
   # G. / Adishila Publications; github.com/aso2101/kannada_texts): 16 TEI
   # editions, ISO-15919 romanized — Pampa (941), Ponna (953), Ranna,
@@ -3893,7 +3910,15 @@ papyri-ddbdp:
   # adapter header). Lands at the next re-parse: ~2,245 docs / ~179,783
   # passages (grc/lat/cop/egy-Egyd; 12,571 metadata-only stubs skip at
   # discover, 5 defective files quarantine honestly; census 2026-09-26).
-  sync_policy: manual
+  sync_policy: manual # DEMOTED 2026-10-13 same day as the auto promotion:
+                      # upstream finished its SVN switchover with a layout
+                      # rationalization (DDB_EpiDoc_XML -> DDbDP, translations
+                      # -> Translations, 256k files moved) and the circuit
+                      # breaker rightly refused the merge (98% would read as
+                      # withdrawn under the old cone). Canonical holds the
+                      # healthy pre-switchover snapshot; the migration packet
+                      # (cone update + URN-stability proof + breakered merge)
+                      # re-promotes it.
   # P16-4: trigram fragment index (search --fuzzy), DOCUMENTARY scope — the
   # owner-approved 250–270 MB line (intertext design §4). Papyrus lines
   # average 34 chars; damaged-fragment search earns its bytes here. Future
@@ -4065,7 +4090,8 @@ prakrit-texts:   # P118-3
   adopted: "2026-10-11"
   axes: [indic]
   wired: true    # first sync verified 2026-10-11: 22 docs / 27,124 passages, 1 honest quarantine (malformed upstream)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # Prakrit Digital Texts Project (Andrew Ollett; github.com/aso2101/
   # prakrit_texts): 33 TEI files, ISO-15919 romanized. Ingests ONLY the
   # 23 files whose availability reads "Prakrit Digital Texts Project.
@@ -4579,7 +4605,8 @@ shabados:   # P122-3, 02-sources row 269
                  # passages, 0 quarantined — exactly the lane census; SGGS
                  # and Varan cards eyeballed (Gurmukhi lines, per-document
                  # printed-source credits)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # Shabad OS — the Gurmukhī PRIMARY text of Sikh scripture and the Panthic
   # canon (github.com/shabados/shabados, database/collections/ — the live
   # home since the shabados/database repo was archived; census at 307ed9d1,
@@ -4639,7 +4666,8 @@ sii-clean:   # P122-3, 02-sources row 267
                  # skipped by rule) — exactly the lane census; SII 8.513 and
                  # 22.177 cards eyeballed (romanized Tamil, places, the
                  # ASI-editor credit chain)
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # South Indian Inscriptions — the DHARMA conversions of the printed SII
   # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions,
   # SII_B_clean/; census at HEAD 3ea671b6, 2026-10-12): 4,974 edition files,
@@ -4954,7 +4982,8 @@ suttacentral:
   # PARALLELS_COMMIT + PARALLELS_SHA256 in the adapter (a parse-only sync
   # without the fetched file leaves standing edges untouched). Live
   # upstream, but a ~350 MB pull is an owner decision → manual.
-  sync_policy: manual
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
   # Aligned English rides the SAME segment ids (the ORACC precedent):
   # -en siblings from translation/en/<translator>/, translator-priority
   # pick on the 104 double-covered stems, orphans skipped by rule
@@ -5458,10 +5487,14 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
                  # same day: 4,138 docs / 42,243 passages (+3,272 docs; THT
                  # continued 2,469, SHT 10, London 778 incl. 28 xto passages,
                  # Paris 9; 6 old Berlin quarantines recovered), 2 pages
-                 # catalogue-only by rule, quarantine baseline re-recorded at
-                 # 209 (127 Berlin pre-anchor-note cases + 80 nothing-legible
-                 # note-only pages + 2 unclassified ts-lane pages); Paris
-                 # NS 38+37 and PK NF cards eyeballed.
+                 # catalogue-only by rule. Tidy rounds 2026-10-13: pre-anchor
+                 # catalogue notes recovered (+112 docs), note-only pages and
+                 # the London editorial header skip by rule, the two ts-lane
+                 # leaves classify as Tumshuqese xtq (Maue's handlist; the
+                 # Araṇemijātaka leaf) — re-parse verified 4,252 docs /
+                 # 43,499 passages, quarantine baseline 15 (14 pages carrying
+                 # real unanchored text, ruled honest + 1 iotk16 page);
+                 # IOL Toch 162 card eyeballed xtq.
                  # Post-widening tidy (P122-4, ruled 2026-10-12; re-parse
                  # pending — the hub trues the exact counts): a pre-anchor
                  # catalogue note now lands in the manuscript catalogue / part

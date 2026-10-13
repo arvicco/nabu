@@ -35,8 +35,8 @@ classes:
   documents_display: '22,915'
   sources: 7
 - head: scripture
-  documents: 20584
-  documents_display: '20,584'
+  documents: 20605
+  documents_display: '20,605'
   sources: 17
 - head: lexical
   documents: 15455
@@ -91,5 +91,5 @@ unknown_documents: 46978
 unknown_documents_display: '46,978'
 unmapped_documents: 11131
 unmapped_documents_display: '11,131'
-unclassified_documents: 458333
-unclassified_documents_display: '458,333'
+unclassified_documents: 459420
+unclassified_documents_display: '459,420'

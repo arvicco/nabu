@@ -28,7 +28,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `kr-gaiji` | feature module | attribution | wired · manual | nothing held yet |
 | `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
 | `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |
-| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
+| `suttacentral` | texts | open | wired · auto | 12,393 docs / 699,345 passages |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 | `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
@@ -38,7 +38,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `zh-wikisource` | texts | attribution | wired · manual | 1,238 docs / 71,547 passages |
 | `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `zho` 543,313 · `lzh` 81,481 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 37 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `zho` 543,313 · `lzh` 81,502 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,690 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 37 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 

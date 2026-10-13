@@ -515,7 +515,9 @@ module Nabu
                                  primary: profile.primary_language)
         text, inline = split_runs(text_runs, language, mirror: false)
         syllabic, inline_syllabic = split_runs(syllabic_runs, language, mirror: true)
-        # A syllabic-only line never occurred in the census; stay honest.
+        # A syllabic-only line (the Tocharian B Tumshuqese leaves, whose
+        # iots16 transcription lane is always empty) carries the syllabic
+        # lane as its text; stay honest.
         text = syllabic if text.empty?
         Line.new(components: line[:comps], text: text, syllabic: syllabic.empty? ? nil : syllabic,
                  language: language.to_s, footnotes: line[:footnotes], side: line[:side],

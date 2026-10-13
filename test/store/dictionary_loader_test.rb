@@ -267,6 +267,77 @@ class DictionaryLoaderTest < Minitest::Test
 
   # The fixture μῆνις entry with its body replaced — a real model object, the
   # store-level testing seam (no fake TEI involved).
+  # -- P123-1: entry→entry cross-references -------------------------------------
+
+  def xref(target, kind: "see")
+    Nabu::DictionaryCrossref.new(kind: kind, label: "v. #{target}", target: target, target_folded: target)
+  end
+
+  def xr_entry(id, folded, crossrefs: [])
+    Nabu::DictionaryEntry.new(entry_id: id, key_raw: id, language: "grc", headword: folded,
+                              headword_folded: folded, body: "body #{id}", crossrefs: crossrefs)
+  end
+
+  def xr_document(path, *entries)
+    document = Nabu::DictionaryDocument.new(slug: "xr-test", language: "grc", title: "XR",
+                                            canonical_path: path)
+    entries.each { |entry| document << entry }
+    document
+  end
+
+  def xr_row(entry_id, target)
+    from = @db[:dictionary_entries].where(entry_id: entry_id).get(:id)
+    @db[:dictionary_crossrefs].where(dictionary_entry_id: from, target: target).first
+  end
+
+  def entry_row_id(entry_id) = @db[:dictionary_entries].where(entry_id: entry_id).get(:id)
+
+  def test_crossrefs_resolve_only_a_unique_live_target_of_the_same_dictionary
+    first = xr_document("/x/a.xml",
+                        xr_entry("a", "alpha", crossrefs: [xref("beta"), xref("gamma"), xref("zeta"), xref("alpha")]),
+                        xr_entry("b", "beta"))
+    # the target loads from a LATER file of the same batch — resolution
+    # runs after the whole load, so it still resolves
+    second = xr_document("/x/b.xml", xr_entry("g1", "gamma"), xr_entry("g2", "gamma"))
+    loader.load([first, second], full: false)
+
+    assert_equal entry_row_id("b"), xr_row("a", "beta")[:to_entry_id]
+    assert_nil xr_row("a", "gamma")[:to_entry_id], "an ambiguous homograph pointer is never guessed"
+    assert_nil xr_row("a", "zeta")[:to_entry_id], "an absent headword stays verbatim"
+    assert_nil xr_row("a", "alpha")[:to_entry_id], "an entry never resolves onto itself"
+    assert_equal ["v. beta", "v. gamma", "v. zeta", "v. alpha"],
+                 @db[:dictionary_crossrefs].where(dictionary_entry_id: entry_row_id("a"))
+                                           .order(:seq).select_map(:label)
+  end
+
+  def test_a_withdrawn_target_unresolves_and_a_restored_one_resolves_again
+    full = [xr_document("/x/a.xml", xr_entry("a", "alpha", crossrefs: [xref("beta")]), xr_entry("b", "beta"))]
+    loader.load(full, full: true)
+    assert_equal entry_row_id("b"), xr_row("a", "beta")[:to_entry_id]
+
+    loader.load([xr_document("/x/a.xml", xr_entry("a", "alpha", crossrefs: [xref("beta")]))], full: true)
+    assert_nil xr_row("a", "beta")[:to_entry_id]
+
+    loader.load(full, full: true)
+    assert_equal entry_row_id("b"), xr_row("a", "beta")[:to_entry_id]
+  end
+
+  def test_crossrefs_load_idempotently_and_revision_replaces_them_wholesale
+    docs = [xr_document("/x/a.xml", xr_entry("a", "alpha", crossrefs: [xref("beta"), xref("gamma")]),
+                        xr_entry("b", "beta"))]
+    loader.load(docs, full: false)
+    before = @db[:dictionary_crossrefs].order(:id).all
+    report = loader.load(docs, full: false)
+    assert_equal 2, report.skipped
+    assert_equal before, @db[:dictionary_crossrefs].order(:id).all
+
+    report = loader.load([xr_document("/x/a.xml", xr_entry("a", "alpha", crossrefs: [xref("beta")]))],
+                         full: false)
+    assert_equal 1, report.updated, "a crossref change is a content revision"
+    assert_equal ["beta"], @db[:dictionary_crossrefs].where(dictionary_entry_id: entry_row_id("a"))
+                                                     .select_map(:target)
+  end
+
   def modified_document
     parsed = @adapter.discover(@workdir)
                      .map { |ref| @adapter.parse(ref) }

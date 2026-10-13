@@ -395,6 +395,37 @@ class WiktionaryReconTest < Minitest::Test
     assert_equal "bogъ", bog[:headword_folded]
   end
 
+  # P123-1: the relation lists load as crossrefs and resolve within their
+  # own extract — Proto-Germanic *gudą's "related gudjô" lands on the
+  # *gudjô entry; PIE né ↔ méh₁ point at each other. zh opts out.
+  def test_relation_lists_load_as_crossrefs_resolving_within_their_extract
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+
+    gudjo = db[:dictionary_entries].where(entry_id: "gudjô:noun").get(:id)
+    guda = db[:dictionary_entries].where(entry_id: "gudą:noun").get(:id)
+    row = db[:dictionary_crossrefs].where(dictionary_entry_id: guda, target: "gudjô").first
+    assert_equal "related", row[:kind]
+    assert_equal gudjo, row[:to_entry_id]
+
+    ne = db[:dictionary_entries].where(entry_id: "né:particle").get(:id)
+    meh = db[:dictionary_entries].where(entry_id: "méh₁:particle").get(:id)
+    assert_equal meh, db[:dictionary_crossrefs].where(dictionary_entry_id: ne, target: "méh₁").get(:to_entry_id)
+    assert_equal ne, db[:dictionary_crossrefs].where(dictionary_entry_id: meh, target: "né").get(:to_entry_id)
+
+    zh = db[:dictionaries].where(slug: "wiktionary-zh").get(:id)
+    zh_entries = db[:dictionary_entries].where(dictionary_id: zh).select(:id)
+    assert_equal 0, db[:dictionary_crossrefs].where(dictionary_entry_id: zh_entries).count,
+                 "the zh dialectal-synonym tables are a census finding, not pointers"
+
+    view = Nabu::Query::Define.new(catalog: db, lila: nil, form_lemma: nil, verb_lemma: nil, lects: nil)
+                              .run("*gudą", limit: nil).find { |r| r.urn.end_with?(":gudą:noun") }
+    pointer = view.crossrefs.find { |c| c.target == "gudjô" }
+    assert_equal "urn:nabu:dict:wiktionary-gem-pro:gudjô:noun", pointer.resolved_urn
+    assert_equal "gudjô", pointer.resolved_headword
+    assert(view.crossrefs.any? { |c| c.resolved_urn.nil? }, "unresolved pointers stay as text")
+  end
+
   def test_registry_row_exists_disabled_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["wiktionary-recon"]

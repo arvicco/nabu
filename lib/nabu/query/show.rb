@@ -524,14 +524,19 @@ module Nabu
       # the primary (earliest not_before) one — document-grain rows are a single
       # row today. P122-1: upstream rows outrank silver estimates (an
       # estimate renders only where no upstream row exists, labeled).
+      # P123-4: dated rows lead, in that primary-date order; a NULL-bound
+      # row (place-only, artifact-script) renders only when the document
+      # has no dated row — SQLite sorts NULLs first, so without the
+      # undated flag such a row hid the date.
       # `document_axes` may be absent from a catalog that predates
       # migration 008 (never rebuilt): degrade to nil, never crash.
       def timeline_for(document_id)
         return nil unless @catalog.table_exists?(:document_axes)
 
+        date_key = Sequel.function(:coalesce, :not_before, :not_after)
+        undated = Sequel.case([[{ date_key => nil }, 1]], 0)
         row = @catalog[:document_axes].where(document_id: document_id)
-                                      .order(Store::SilverDates.rank_expr,
-                                             Sequel.function(:coalesce, :not_before, :not_after), :id).first
+                                      .order(undated, Store::SilverDates.rank_expr, date_key, :id).first
         return nil if row.nil?
 
         Timeline.new(
