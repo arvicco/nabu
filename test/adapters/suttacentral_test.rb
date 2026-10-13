@@ -438,7 +438,7 @@ class SuttacentralTest < Minitest::Test
     refute_nil entry, "suttacentral must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Suttacentral, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-18: synced, parallel siblings eyeballed, flipped)"
-    assert_equal "manual", entry.sync_policy
+    assert_equal "auto", entry.sync_policy  # promoted 2026-10-13: actively-edited upstream rides the sync --all sweep
     assert entry.translations, "-en siblings are the point — the ORACC precedent"
     assert_equal Nabu::Adapters::Suttacentral.manifest, entry.manifest
   end
