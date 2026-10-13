@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>SII 17.582: original edition by K. G. Krishnan</title>
+                <title type="alt">No. 582. (A.R. No. 537 of 1904.) TIRUVĀRŪR, NAGAPATTINAM, TALUK, TANJORE DISTRICT.</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INSSIIv17p0i0582.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+            <date from="2019" to="2026">2019-2026</date></publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary>
+                            
+                            <p>On the east wall of the first <hi rend="italic">prākāra</hi> in the Tyāgarājasvāmin temple, right of entrance.</p>						                            
+                            <p>Kulōttuṅga III. Year 8: 1184-85 A.D.</p>						
+                            
+                            <p>This inscription commences with the <hi rend="italic">praśasti Puyal vāyttu</hi> etc., of Kulōttuṅga III. The month Tulā is mentioned as the date of the grant. It seems to refer to a transaction made in the reign of <hi rend="italic">Śuṅgantavirttaruḷiṉa</hi> Kulōttuṅgachōḷa. The donor of this record is probably the same as Vēdavaṉam-uḍaiyāṉ Ammaiyappaṉ Pallavarāyaṉ, who figures as an officer of the king's predecessor Rājādhirāja II (Vide <hi rend="italic">Ep. Ind.</hi> Vol. XXI, p. 191).</p>						
+                            
+                            <p>This records a grant of land to the temple for burning 3 perpetual lamps each for the deities Tiruvārūr Śrī Mūlasthāṉamuḍaiyār, Vīdiviḍaṅga-pperumāḷ and goddess Tirukkāmakkōṭṭamuḍaiya Periyanāchchiyār, by <hi rend="italic">Vēdavaṉam-u . . . of Paḻaiyaṉūr in Mēlmalai-ppaḻaiyaṉūr-nāḍu</hi> in Jayaṅgoṇḍaśōḻa-maṇḍalam. The land was entrusted in pieces to two persons who agreed to contribute the ghee required for the lamps.</p>						
+                            
+                        </summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+        </encodingDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2025-05-04" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+            <change who="part:mime" when="2026-03-17" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:vernacular">
+                
+                <p>
+                    <lb n="1"/><hi rend="grantha">svasti śrī</hi> <supplied reason="undefined"><g ref="sym:ddanda" type="punctuation">.</g></supplied> puyal vāyttu vaḷam perukap poyyāta nāṉmaṟaiyiṉ ceyal vāyppat tirumakaḷuñ <unclear>ce</unclear>yamakaḷuñ ciṟantuvāḻa veṇmatipol kuṭaiviḷaṅka velventar Aṭivaṇa<unclear>ṅ</unclear>ka maṇmaṭantai maṉaṅkaḷippa maṉuniti taḻait toṅkac cakkaramuñ ceṅkolun tikkaṉaittuñ celanaṭappak kaṟpakālam puvikāppa <gap reason="lost" quantity="28" unit="character"/>
+                    <lb n="2"/>pparakecaripa<hi rend="grantha">tma</hi>rāṉa <hi rend="grantha">tribhu</hi>vaṉaccakkaravattikaḷ <hi rend="grantha">śrī</hi>kulottuṅkacoḻatevaṟku yāṇṭu 8 tulā nāyaṟṟu Uṭaiyār tiruvārur <hi rend="grantha">śrī</hi> mūla<hi rend="grantha">stā</hi>ṉa muṭaiyāṟkum vitiviṭaṅkap perumāḷukkum tirukkāmakkoṭṭamuṭaiya periyanācciyā<unclear>ṟ</unclear>kun tirununtāviḷakkerikka <hi rend="grantha">ja</hi>yaṅkoṇṭa coḻamaṇṭalattu melmalaip paḻaiyaṉūr nāṭṭup paḻaiyaṉūruṭaiyāṉ vetavaṉa<unclear>mu</unclear> <gap reason="lost" quantity="26" unit="character"/> 
+                    <lb n="3"/>viḷakku muṉṟukku nāḷ Oṉṟukku ney muvuḻakkāka nāḷ muṉṉūṟṟaṟupattaiñcukkum ney Irunūṟṟeḻupattumuṉṉāḻimuvuḻakkukkum tevatāṉam keyamāṇikkavaḷanāṭṭut tiruvārurk kūṟṟattu <hi rend="grantha">braM<supplied reason="omitted">ha</supplied>de</hi>yam putukkuṭiyil kāṇiyāḷar <unclear>pa</unclear>kkal Uṭaiyār cuṅkantavirntaruḷiṉa kulottuṅkacoḻa<unclear>t</unclear>e <gap reason="lost" quantity="20" unit="character"/> 
+                    <lb n="4"/>māy Ivvūravarpakkal Ivar vilaikoṇṭapiramāṇappaṭi kāṇiyāy viḷainilamākat tirutti viṭṭa <g ref="sym:tam-nilam" type="symbol">@</g> <hi rend="check">va pa</hi> Innilam Āṟumāvum Ivvūṟ kāṇiĀḷa<unclear>ri</unclear>l Iḻakkantiṟattu tiruvicalūr <unclear>Aṭikaḷ paṭṭa</unclear>neṉ kaikkoṇṭu tirununtāviḷakku Iraṇṭukku Āṭṭaikku Aḷakku ney nūṟṟeṇpattirunāḻi Uriyum centamaṅkalattilum Iṟaiyāṅkuṭiyilum <gap reason="lost" quantity="6" unit="character"/> va <gap reason="lost" quantity="2" unit="character"/> <unclear>Āṟ</unclear>ṟu <gap reason="lost" quantity="4" unit="character"/> A <gap reason="lost" quantity="12" unit="character"/> 
+                    <lb n="5"/>pāya Ivar tiruttip payiṟceytu viṭṭa Iṟaiyāṅkuṭiyil <g ref="sym:tam-nilam" type="symbol">@</g> <hi rend="check"><g type="numeral">1/�</g> <g type="numeral">1/40</g></hi> m Āka <g ref="sym:tam-nilam" type="symbol">@</g> 3 <g type="numeral">1/20</g> Innilam muṉṟumāvum Iṟaiyāṉkuṭiyil Irukkum veḷḷāḷaṉ mārāyamaṅkalamuṭaiyāṉ viti viṭaṅkaṉeṉ kaikkoṇṭu tiruviḷakku Oṉṟukku Ā<unclear>ṭṭai</unclear>kku Aḷakku ney toṇnūṟ ṟorunāḻi Uḻakkum Aḷakkakkaṭavomākavum Ippaṭi Aḷakku miṭat<unclear>tu</unclear> Innilam nāṅkaḷ veṇṭum payiṟceytu muṟṟūṭṭuṅ koṇṭu Iṭṭapaṭi <gap reason="lost" quantity="10" unit="character"/> ppuṟṟiṭa<unclear>ṅ</unclear>koṇ<unclear>ṭa</unclear> <gap reason="lost" quantity="8" unit="character"/> 
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+            </div>
+            
+            <div type="commentary">
+                 <p>The inscription is built in at the right end and incomplete.</p>
+            </div>
+            
+            <div type="bibliography">
+                
+                <p>Digital edition of SII 17.582 by <bibl><ptr target="bib:Krishnan1964_01"/></bibl> converted to DHARMA conventions by Emmanuel Francis.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:Krishnan1964_01"/>
+                        <citedRange unit="page">248-249</citedRange>
+                        <citedRange unit="item">582</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    
+                    <bibl/>
+                    
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>

@@ -758,9 +758,11 @@ module Nabu
       # collapses multi-row documents (HGV alternatives, metadata+entry
       # lanes) into one envelope. Runs at census scale (~750k dated docs
       # live): one grouped scan of document_axes, streamed.
+      # Upstream dates only (P122-1): silver estimates never enter the census.
       def dated_document_rows
         axes = Sequel[:document_axes]
-        @catalog[:document_axes]
+        upstream = Store::SilverDates.upstream(@catalog[:document_axes], axes: axes)
+        upstream
           .join(:documents, id: axes[:document_id])
           .join(:sources, id: Sequel[:documents][:source_id])
           .where(Sequel[:documents][:withdrawn] => false, axes[:passage_seq_from] => nil)
@@ -790,7 +792,8 @@ module Nabu
       def dated_coverage(source_id)
         return nil unless @catalog.table_exists?(:document_axes)
 
-        row = @catalog[:document_axes]
+        upstream = Store::SilverDates.upstream(@catalog[:document_axes]) # P122-1: no estimates
+        row = upstream
               .join(:documents, id: Sequel[:document_axes][:document_id])
               .where(Sequel[:documents][:source_id] => source_id, Sequel[:documents][:withdrawn] => false)
               .select(

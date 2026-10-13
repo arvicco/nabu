@@ -78,7 +78,8 @@ module Nabu
       # The lane census (2026-10-12): `tob` the B transcription/syllabic
       # (c and the Paris `v` notation variants), `sbpl` the Sanskrit of the
       # bilinguals, `toa` the Tocharian A lines of five London manuscripts
-      # (claimed xto, line by line). Still unclassified, so quarantining:
+      # (claimed xto line by line — and so, every line agreeing, at document
+      # grain: ruled 2026-10-12). Still unclassified, so quarantining:
       # `iotk16` (one Berlin page) and the `ts` stem (two London pages).
       PARSER_PROFILE = TitusTocharianParser::Profile.new(
         anchor_prefix: COLLECTIONS.map { |c| "TochB_#{c}" }.freeze,

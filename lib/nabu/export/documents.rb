@@ -63,8 +63,9 @@ module Nabu
         Column.new(name: "not_after", description: "envelope upper bound, same convention"),
         Column.new(name: "date_precision", description: "the dating lane's precision marker, verbatim"),
         Column.new(name: "date_class",
-                   description: "artifact (the source's own date of the object/witness) or composition " \
-                                "(the work's composition era)"),
+                   description: "artifact (the source's own date of the object/witness), composition " \
+                                "(the work's composition era), edition (a print year) or silver (a model/tool " \
+                                "estimate, only where no upstream date exists)"),
         Column.new(name: "date_basis", description: "the extractor lane that minted the envelope (axis_source)"),
         Column.new(name: "date_raw", description: "the upstream dating string the envelope was normalized from"),
         Column.new(name: "place_name", description: "provenance place as the source names it"),

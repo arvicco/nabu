@@ -1174,6 +1174,55 @@ sources:
     script: {posture: qualified, note: "romanized (tam-Latn/san-Latn); Tamil, Grantha and
         Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
         script_rendition verbatim"}
+  sii-clean:
+    # P122-3: the grant-bearing DHARMA conversions of the printed SII volumes.
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "tam-Latn/san-Latn/tel-Latn/kan-Latn — the dharma-tamil
+        and dharma-deccan codes, all resolving on the canonical rows (tam → ta, tel → te,
+        kan → kn, san-Latn); Tamil stages unminted, the bare anchor declared coarse"}
+    dating: {posture: partial, note: "no origDate in any header; the SII headings' own
+        dating is mined: the editor's A.D. conversion (179), else a Śaka year via
+        config/eras.yml (20), else the summary's single reign line 'Year N: YYYY A.D.'
+        (12) — 211 of 589 parsed docs (census 2026-10-12), rows via MetadataDates
+        :structured; regnal-only headings and hedged summary prose stay verbatim"}
+    places: {posture: named, note: "the heading's findspot sentence → village (419 docs,
+        44 distinct names), taluk and district as printed (colonial-era units); no
+        gazetteer refs — a South Asian place authority is the open gap"}
+    script: {posture: qualified, note: "romanized (tam/san/tel/kan -Latn); Tamil, Grantha,
+        Telugu and Kannada scripts are the artifact facts — the edition rendition rides
+        metadata script_rendition verbatim"}
+  madurai:
+    # P122-3: Project Madurai's classical-Tamil cone (the works list's genre rule).
+    kind: {posture: pending, note: "candidate: a kind_map fold over the works list's own
+        Genre column (riding metadata genres verbatim — சங்ககாலம், நீதிநெறி, சமயம் - சைவம்,
+        பிரபந்தம் - …, புராணம், காப்பியம், இலக்கணம் …); one ruling"}
+    lect: {posture: identity, note: "tam (Tamil script) → ta through the held codemap row;
+        no Tamil stage in nabu-lects — the Caṅkam-to-prabandha span claims the bare anchor,
+        declared coarse (the tamilex shape; an Old Tamil stage is the named mint candidate)"}
+    dating: {posture: undatable, note: "the works list carries no date column and the
+        e-texts no composition date; the footers' first-put-up / revised dates date the
+        e-text, never the work — they ride metadata pm_footer verbatim"}
+    places: {posture: unplaced, note: "no place field anywhere in the asset"}
+    script: {posture: implied, note: "Tamil script, the native surface (Unicode HTML);
+        lines without Tamil script are counted (non_tamil_lines), never minted"}
+  shabados:
+    # P122-3: Shabad OS — the Gurmukhī primary text (type = primary only).
+    kind: {posture: unclassified, note: "scripture and the Panthic canon; the source/
+        section names ride metadata (source_name, section_name, section_description)"}
+    lect: {posture: identity, note: "the Punjabi package merged + canonical-synced
+        2026-10-13 (the add-then-retire shape within ONE phase): pan resolves through the
+        codemap onto the pa anchor, bra-Guru/fas-Guru onto bra and fa with the script
+        fact on the ~ axis; pa:old (granthic, [1450, 1708]) is the NAMED refinement for
+        the scriptural corpus, not defaulted. The per-source/section language table in
+        the adapter is declared coarse"}
+    dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
+        database's author records (the Gurus, the bhagats, Bhāī Gurdās, Bhāī Nand Lāl —
+        each line group names its author) as the composition class; the records carry no
+        date field of their own"}
+    places: {posture: unplaced, note: "no place field in any record"}
+    script: {posture: mixed, note: "Gurmukhī throughout: native for the Punjabi lanes
+        (pan, implied) and a transliteration surface for Braj and Persian (bra-Guru,
+        fas-Guru, qualified)"}
   obi-burmese:
     kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the

@@ -3062,6 +3062,36 @@ local-source:
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
 
+madurai:   # P122-3, 02-sources row 268
+  adapter: Nabu::Adapters::Madurai
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-13: 755 docs / 1,214,683 line
+                 # passages, 0 quarantined, fetch 23m42s — exactly the lane
+                 # census (5 catalog 404s ledgered as fetch notes); two
+                 # Tamil devotional cards eyeballed, the header-intact
+                 # credit condition carried verbatim on every document
+  sync_policy: manual
+  # Project Madurai (www.projectmadurai.org; K. Kalyanasundaram and
+  # volunteers): 1,090 works in 1,367 Unicode HTML e-texts (works list
+  # census 2026-10-12), classics and modern authors interleaved. THE CONE:
+  # the works list's own Genre column — a file is in scope when every
+  # catalog row naming it carries a pre-modern genre (Caṅkam, the didactic
+  # canon, Śaiva/Vaiṣṇava/Islamic devotional, epics/purāṇas, prabandha,
+  # grammar/lexicon) and no row's genre or title names a modern apparatus
+  # (translation, English, research, essays): 760 files. License: each
+  # file's header page — "freely distribute this file, provided this header
+  # page is kept intact" — class attribution, the header riding every
+  # document verbatim (pm_header). Tamil script, bare tam (→ ta); physical
+  # line grain (madurai-html). FETCH: the works list, then the cone over
+  # HTTPS (MaduraiFetch on the LitopysFetch contract, 1 s apart, ~760
+  # GETs; the census download ran ~40 min at the server's pace — over
+  # the 30-min loop limit, see the 02-sources row).
+  # EXPECTED FIRST SYNC: 760 in the cone, 5 of them dead catalog links (404:
+  # pmuni073, 0850, 0861-0863 — named in the fetch notes, censused as missing)
+  # → 755 docs / 1,214,683 line passages, 0 quarantined; 10,294 non-Tamil
+  # lines counted, not minted (parse census ~70 s).
+
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"
@@ -4541,6 +4571,34 @@ sefaria:
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 
+shabados:   # P122-3, 02-sources row 269
+  adapter: Nabu::Adapters::Shabados
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-13: 127 docs / 141,264 line
+                 # passages, 0 quarantined — exactly the lane census; SGGS
+                 # and Varan cards eyeballed (Gurmukhi lines, per-document
+                 # printed-source credits)
+  sync_policy: manual
+  # Shabad OS — the Gurmukhī PRIMARY text of Sikh scripture and the Panthic
+  # canon (github.com/shabados/shabados, database/collections/ — the live
+  # home since the shabados/database repo was archived; census at 307ed9d1,
+  # 2026-10-12): 141,264 line records under ten sources (Guru Granth Sahib
+  # 60,555 · Dasam Granth 67,758 · Vārāṅ Bhāī Gurdās 7,585 · Kabitt Savayye
+  # 2,761 · Bhāī Nand Lāl's four Persian works 2,510 · Sarabloh 78 · Ardās
+  # 17), 127 sections. type = primary ONLY: the database README marks the
+  # gurbani and panthic texts public domain (PDM 1.0); the modern
+  # translations/notes on the same records carry no grant and are never
+  # read. Class open. Document = section, passage = line (upstream id); 681
+  # second-source primary readings ride annotations as variants. Languages
+  # a declared table: pan (Granth, Vārāṅ, Ardās), bra-Guru (Dasam Granth,
+  # Kabitt Savayye, Sarabloh), fas-Guru (Nand Lāl, the Zafarnāmā,
+  # Hikāyatāṅ). FETCH: one sparse GitFetch of the monorepo, cone
+  # database/collections/{sources,sections,line-groups,lines,authors,assets}/
+  # + README/LICENSE (the app code stays out); ~141k small files.
+  # EXPECTED FIRST SYNC: 127 docs / 141,264 passages, 0 quarantined
+  # (parse census ~55 s on the scratch clone).
+
 shkz:   # P107-3b
   adapter: Nabu::Adapters::Shkz
   adopted: "2026-09-28"
@@ -4570,6 +4628,33 @@ siddham:   # P118-4, 02-sources row 256
   # Dating mines the English titles only: 9 era-typed "GE N" years via
   # config/eras.yml (Gupta–Valabhī envelope) + 4 century attributions;
   # 88 untyped "year N" titles ride raw, never converted.
+
+sii-clean:   # P122-3, 02-sources row 267
+  adapter: Nabu::Adapters::SiiClean
+  adopted: "2026-10-12"
+  axes: [indic, epigraphy]
+  wired: true    # first sync verified 2026-10-13: 589 docs / 8,372 passages
+                 # from 649 grant-bearing editions (60-quarantine baseline
+                 # recorded: stubs and uncitable files; 4,067 ungranted files
+                 # skipped by rule) — exactly the lane census; SII 8.513 and
+                 # 22.177 cards eyeballed (romanized Tamil, places, the
+                 # ASI-editor credit chain)
+  sync_policy: manual
+  # South Indian Inscriptions — the DHARMA conversions of the printed SII
+  # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions,
+  # SII_B_clean/; census at HEAD 3ea671b6, 2026-10-12): 4,974 edition files,
+  # NO repo licence. The cone is the files bearing their OWN in-file
+  # <licence> CC BY-SA 4.0 — 907 today (SII 2/3/4/8/17/22/26/41), of which
+  # 258 are ~DHARMA_ in-progress files outside the sparse cone (they arrive
+  # by promotion), so 649 grant-bearing DHARMA_ editions; the other 4,067
+  # stay out by rule (censused per volume at discovery). Romanized Tamil
+  # above all (tam-Latn 579 docs; san/tel/kan-Latn 4/4/2). Headings mined:
+  # findspot/taluk/district/village (419 places), A.R. number, A.D./Śaka
+  # dating (211 dated). Class attribution. FETCH: one sparse GitFetch, cone
+  # /SII_B_clean/*/DHARMA_*.xml + README.txt (SII_A_raw stays out).
+  # EXPECTED FIRST SYNC: 649 discovered (4,067 grant-less skipped by rule)
+  # → 589 docs / 8,372 passages; 60 honest quarantines (40 edition-less
+  # stubs, 14 text-less editions, 6 "und").
 
 sillok:
   adapter: Nabu::Adapters::Sillok
@@ -5377,6 +5462,17 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
                  # 209 (127 Berlin pre-anchor-note cases + 80 nothing-legible
                  # note-only pages + 2 unclassified ts-lane pages); Paris
                  # NS 38+37 and PK NF cards eyeballed.
+                 # Post-widening tidy (P122-4, ruled 2026-10-12; re-parse
+                 # pending — the hub trues the exact counts): a pre-anchor
+                 # catalogue note now lands in the manuscript catalogue / part
+                 # label (worktree census: +112 docs / +1,237 passages,
+                 # all txb); note-only pages skip by rule "nothing legible
+                 # (note-only page)" (79); the five London Tocharian A
+                 # manuscripts (toch3846/3847/3855/3856/3857) are xto
+                 # documents. Expected quarantines ~18: the 2 ts-lane pages
+                 # and the 1 iotk16 page (unclassified, ruled to stay), 14
+                 # pages with B-lane TEXT (not a note) before a line anchor,
+                 # and the London collection header page toch3560.
   # TITUS Tocharian B Corpus (members area,
   # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
   # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.

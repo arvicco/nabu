@@ -57,10 +57,12 @@ module Nabu
       # DOCUMENT-grain rows only (passage_seq_from NULL): a chronicle's
       # passage-grain annal rows (P16-3) would count one document dozens of
       # times in a histogram labelled "documents" — its document-grain
-      # envelope row represents it here instead.
+      # envelope row represents it here instead. Upstream dates only
+      # (P122-1): silver estimates never enter the diachrony.
       def dated_documents(lang:, license:, from:, to:, place:)
         axes = Sequel[:document_axes]
-        ds = @catalog[:document_axes]
+        upstream = Store::SilverDates.upstream(@catalog[:document_axes], axes: axes)
+        ds = upstream
              .join(:documents, id: axes[:document_id])
              .join(:sources, id: Sequel[:documents][:source_id])
              .where(Sequel[:documents][:withdrawn] => false)

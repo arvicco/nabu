@@ -11,9 +11,12 @@ module Nabu
     # A document may carry several timeline rows (several dating lanes, a
     # chronicle's passage-grain annals, a place-only or artifact-script
     # lane). The exported envelope is the PRIMARY dated row — document
-    # grain only (passage_seq_from NULL), at least one bound present, the
-    # earliest by coalesce(not_before, not_after), then row id — the rule
-    # `nabu show` renders, so an export never disagrees with the card. Its
+    # grain only (passage_seq_from NULL), at least one bound present,
+    # upstream rows before silver estimates (P122-1: an estimate is the
+    # envelope only where no upstream date exists, and then ships with
+    # date_class "silver"), the earliest by coalesce(not_before,
+    # not_after), then row id — the rule `nabu show` renders and `search
+    # --date-basis` filters on, so an export never disagrees with the card. Its
     # bounds ship verbatim (signed historical years, no year 0; a NULL
     # bound is open-ended), with the precision, the minting lane
     # (axis_source) and the upstream date string beside them. date_class
@@ -49,7 +52,9 @@ module Nabu
 
       def summarize(rows)
         dated = rows.select { |row| row[:not_before] || row[:not_after] }
-                    .min_by { |row| [row[:not_before] || row[:not_after], row[:id]] }
+                    .min_by do |row|
+                      [Store::SilverDates.silver?(row) ? 1 : 0, row[:not_before] || row[:not_after], row[:id]]
+                    end
         place = rows.find { |row| row[:place_name] || row[:place_ref] || row[:place_lat] }
         Summary.new(**date_fields(dated), **place_fields(place),
                     artifact_script: rows.filter_map { |row| row[:artifact_script] }.first)

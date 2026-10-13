@@ -117,6 +117,11 @@ module Nabu
       CANDIDATE_FACTOR = 30
       MIN_CANDIDATES = 300
 
+      # The default candidate pool for a +limit+-hit page — the overfetch
+      # above. Public so the batch producer can record the EFFECTIVE pool in
+      # its run provenance (P122-2).
+      def self.candidate_cap(limit) = [limit * CANDIDATE_FACTOR, MIN_CANDIDATES].max
+
       # A rarity cap on the lemma-co-occurrence signal, CORPUS-RELATIVE exactly
       # like COMMON_GRAM_DF (D36-a): a lemma attested in more than this fraction
       # of the corpus is too common to diagnose an echo (and bounds the IN-list
@@ -174,21 +179,31 @@ module Nabu
       # (P16-1) persists only kind=parallel surface-gram edges, and the
       # per-lemma df probes are the engine's one per-anchor cost worth shedding
       # over a gold-lemmatized slice.
-      def run(urn, limit: 15, lang: nil, license: nil, echoes: true, lect: nil)
+      #
+      # The P122-2 tuning knobs (a reuse profile turns them; defaults keep the
+      # interactive engine exactly as measured): +gram_size+ the shingle width;
+      # +stop_tokens+ a function-token set — a gram made ENTIRELY of them is
+      # neither probed nor counted (the most expensive probes, since the
+      # commonest, and the weakest evidence); +candidate_pool+ the number of
+      # top-scored candidate passages joined per anchor (nil = the engine's
+      # page-fill overfetch, #candidate_cap).
+      def run(urn, limit: 15, lang: nil, license: nil, echoes: true, lect: nil,
+              gram_size: GRAM_SIZE, stop_tokens: nil, candidate_pool: nil)
         anchor = load_anchor(urn)
         return nil if anchor.nil?
 
         scope = lect_filter(lect)
         snapshot_cutoffs
         tokens = gram_tokens(anchor.fetch(:text_normalized))
-        grams = shingle(tokens, GRAM_SIZE)
-        scores, matched = probe_grams(grams, anchor_passage_id: anchor.fetch(:passage_id))
+        gram_index = index_grams(shingle(tokens, gram_size), stop_tokens)
+        scores, matched = probe_grams(gram_index, anchor_passage_id: anchor.fetch(:passage_id))
         hits = assemble(scores, matched,
                         tokens: tokens, anchor_document_id: anchor.fetch(:document_id),
-                        lang: lang, license: license, limit: limit, scope: scope)
+                        lang: lang, license: license, limit: limit, scope: scope,
+                        gram_size: gram_size, pool: candidate_pool)
         echo_hits = echoes ? lemma_echoes(anchor, lang: lang, license: license, limit: limit, scope: scope) : []
         Result.new(anchor_urn: anchor.fetch(:urn), anchor_title: anchor.fetch(:title),
-                   gram_count: grams.size, hits: hits, lemma_echoes: echo_hits)
+                   gram_count: gram_index.values.sum(&:size), hits: hits, lemma_echoes: echo_hits)
       end
 
       private
@@ -242,10 +257,9 @@ module Nabu
       # matched gram indices per candidate passage. Returns [scores, matched]
       # where scores[pid] is Σ 1/df and matched[pid] the anchor gram indices it
       # hit (for the evidence-span reconstruction).
-      def probe_grams(grams, anchor_passage_id:)
+      def probe_grams(gram_index, anchor_passage_id:)
         scores = Hash.new(0.0)
         matched = Hash.new { |hash, key| hash[key] = [] }
-        gram_index = index_grams(grams)
 
         gram_index.each do |gram, indices|
           rows = fts_probe(gram)
@@ -266,19 +280,62 @@ module Nabu
 
       # Distinct grams → the anchor positions each occupies (a gram can recur in
       # the anchor; every position counts toward the span reconstruction and the
-      # weight, so a repeated shared phrase is stronger evidence).
-      def index_grams(grams)
+      # weight, so a repeated shared phrase is stronger evidence). A gram made
+      # entirely of +stop_tokens+ is left out (P122-2) — positions stay the
+      # ORIGINAL shingle offsets, so evidence spans still rebuild exactly.
+      def index_grams(grams, stop_tokens = nil)
+        stop = stop_tokens.nil? || stop_tokens.empty? ? nil : stop_tokens.to_set
         positions = {}
-        grams.each_with_index { |gram, position| (positions[gram] ||= []) << position }
+        grams.each_with_index do |gram, position|
+          next if stop && gram.all? { |token| stop.include?(token) }
+
+          (positions[gram] ||= []) << position
+        end
         positions
       end
 
+      # One gram's hit rows. An all-Han gram (the char grain Grams mints for
+      # unspaced CJK) ALSO probes the CJK bigram lane (P93-3) when the
+      # fulltext carries it: unicode61 indexes an unbroken Han run as ONE
+      # token, so the main-lane phrase "學 而 時 習" can only match text
+      # whose every char is its own token — the lane answers the substring
+      # question the gram actually asks. The lane holds only the
+      # cjk_index-flagged sources, so the main lane still runs and the two
+      # row sets union (deduped by passage id) — the df is the honest count
+      # over both. Bound: the lane's bigrams never bridge two runs, so a
+      # gram spanning punctuation matches only unpunctuated witnesses
+      # (stated, not hidden — the lane's mint grammar).
       def fts_probe(gram)
-        @fulltext[Store::Indexer::TABLE]
-          .where(Sequel.lit("passages_fts MATCH ?", phrase(gram)))
-          .select(Store::Indexer.fts_passage_id_expression(@fulltext))
+        rows = @fulltext[Store::Indexer::TABLE]
+               .where(Sequel.lit("passages_fts MATCH ?", phrase(gram)))
+               .select(Store::Indexer.fts_passage_id_expression(@fulltext))
+               .limit(@common_gram_df)
+               .all
+        lane = cjk_lane_probe(gram)
+        return rows if lane.empty?
+
+        (lane + rows).uniq { |row| row.fetch(:passage_id) }
+      end
+
+      def cjk_lane_probe(gram)
+        return [] unless cjk_lane? && gram.all? { |token| token.match?(Grams::HAN_CHAR) }
+
+        expression = Store::CjkBigrams.query_expression(gram.join)
+        return [] if expression.nil?
+
+        @fulltext[Store::Indexer::CJK_TABLE]
+          .where(Sequel.lit("passages_cjk MATCH ?", expression))
+          .select(Sequel.lit("rowid").as(:passage_id))
           .limit(@common_gram_df)
           .all
+      end
+
+      # Feature-detected once per engine (a fulltext predating the lane, or
+      # one built with no cjk-flagged source, degrades to the main lane).
+      def cjk_lane?
+        return @cjk_lane if defined?(@cjk_lane)
+
+        @cjk_lane = @fulltext.table_exists?(Store::Indexer::CJK_TABLE)
       end
 
       # An FTS5 phrase: the folded gram tokens space-joined and double-quoted,
@@ -289,21 +346,21 @@ module Nabu
 
       # Group scored candidates to document grain, exclude the anchor's own
       # document, rank by score, and reconstruct evidence spans for the page.
-      def assemble(scores, matched, tokens:, anchor_document_id:, lang:, license:, limit:, scope: {})
+      def assemble(scores, matched, tokens:, anchor_document_id:, lang:, license:, limit:, scope: {},
+                   gram_size: GRAM_SIZE, pool: nil)
         return [] if scores.empty?
 
-        cap = [limit * CANDIDATE_FACTOR, MIN_CANDIDATES].max
-        top_ids = scores.keys.sort_by { |id| -scores[id] }.first(cap)
+        top_ids = scores.keys.sort_by { |id| -scores[id] }.first(pool || self.class.candidate_cap(limit))
         rows = candidate_rows(top_ids, lang: lang, license: license, scope: scope)
                .reject { |row| row.fetch(:document_id) == anchor_document_id }
 
         rows.group_by { |row| row.fetch(:document_id) }
-            .map { |_doc, doc_rows| document_hit(doc_rows, scores, matched, tokens) }
+            .map { |_doc, doc_rows| document_hit(doc_rows, scores, matched, tokens, gram_size) }
             .sort_by { |hit| [-hit.score, hit.urn] }
             .first(limit)
       end
 
-      def document_hit(doc_rows, scores, matched, tokens)
+      def document_hit(doc_rows, scores, matched, tokens, gram_size)
         best = doc_rows.max_by { |row| scores[row.fetch(:passage_id)] }
         indices = matched[best.fetch(:passage_id)].uniq.sort
         Hit.new(
@@ -311,16 +368,17 @@ module Nabu
           document_title: best.fetch(:document_title), license_class: best.fetch(:license_class),
           score: scores[best.fetch(:passage_id)].round(4),
           shared_gram_count: indices.size, loci: doc_rows.size,
-          evidence: evidence_spans(indices, tokens)
+          evidence: evidence_spans(indices, tokens, gram_size)
         )
       end
 
       # Merge consecutive matched gram indices back into contiguous anchor token
       # spans — so the evidence reads as the shared PHRASE ("ανδρα μοι εννεπε
-      # μουσα πολυτροπον"), not a bag of overlapping 4-grams.
-      def evidence_spans(indices, tokens)
+      # μουσα πολυτροπον"), not a bag of overlapping 4-grams. Grain-aware join
+      # (Grams.join): an all-Han span reads as the run itself.
+      def evidence_spans(indices, tokens, gram_size = GRAM_SIZE)
         indices.slice_when { |a, b| b != a + 1 }.map do |run|
-          tokens[run.first..(run.last + GRAM_SIZE - 1)].join(" ")
+          Grams.join(tokens[run.first..(run.last + gram_size - 1)])
         end
       end
 

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>SII 8.391: original edition by K.V. Subrahmanya Aiyer</title>
+				<title type="alt">No. 391. (A.R. No. 105 of 1903). ON A PILLAR NEAR THE ANJANEYA SHRINE AT THE EASTERN GOPURA OF THE SAME TEMPLE.</title>
+				<respStmt>
+					<resp key="creator">author of digital edition</resp>
+					<persName ref="part:doop">
+						<forename>Dorotea</forename>
+						<surname>Operato</surname>
+					</persName>
+				</respStmt>
+			<funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+			<publicationStmt>
+				<authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+				<pubPlace>Paris, CEIAS</pubPlace>
+				<idno type="filename">DHARMA_INSSIIv08p0i0391.xml</idno>
+				<availability>
+					<licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence>
+				</availability>
+			<date from="2019" to="2026">2019-2026</date></publicationStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier><repository>as per external metadata</repository></msIdentifier>
+					<msContents>
+						<summary/>
+					</msContents>
+					<physDesc>
+						<handDesc>
+							<p/>
+						</handDesc>
+					</physDesc>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+		</encodingDesc>
+		<revisionDesc>
+			<change who="part:doop" when="2026-08-25" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+			<change who="part:mime" when="2026-07-21" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+		</revisionDesc>
+	</teiHeader>
+	<text xml:space="preserve">
+		<body>
+			
+			<div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:vernacular">
+				
+				<p>
+					<lb n="0"/><g ref="sym:tam-pillaiyarCuli" type="punctuation"/> rāmecvaram
+					<lb n="1"/><g ref="sym:tam-pillaiyarCuli" type="punctuation"/> <hi rend="grantha"><unclear>svasti</unclear> śrī</hi> <supplied reason="subaudible"><g ref="sym:doubleBar" type="punctuation">.</g></supplied> <unclear>cakāt=ta</unclear><hi rend="grantha"><unclear>M</unclear></hi>
+					<lb n="2"/><num value="1540"><g type="numeral">1000</g> 5 <g type="numeral">100</g> 4 <g type="numeral">10</g></num>ṉ Itaṉ⌈
+					<lb n="3" break="no"/>meṟ cellāni<unclear>ṉṟa</unclear> pi
+					<lb n="4" break="no"/>ṟa<hi rend="grantha"><unclear>bha</unclear></hi>va<g ref="sym:tam-varusam"/> Āva<unclear>ṇi</unclear>
+					<lb n="5" break="no"/><g ref="sym:tam-matam"/> <num value="16"><g type="numeral">10</g> 6</num><g ref="sym:tam-pillaiyarCuli" type="punctuation"/> pūṟuvapa<hi rend="grantha">kṣa</hi>
+					<lb n="6" break="no"/>ttil pūṟaṇaiyum ku
+					<lb n="7" break="no"/>ruvāramum taṉiṭṭai <unclear>na</unclear><hi rend="grantha">kṣa</hi>
+					<lb n="8" break="no"/><hi rend="grantha">tra</hi>mum cu<unclear>ta</unclear><hi rend="grantha"><unclear>rmma</unclear></hi>cit=tayo
+					<lb n="9" break="no"/><hi rend="grantha">ga</hi> nāḷ <hi rend="grantha"><unclear>svā</unclear></hi><unclear>mi</unclear> rāmanāta
+					<lb n="10" break="no"/>cuvā<hi rend="grantha">mi</hi> caṉṉatiyil U
+					<lb n="11" break="no"/>ṭaiyaṉāyaṉāṉ cetu
+					<lb n="12" break="no"/>patikāt=tatevar puttira
+					<lb n="13" break="no"/>ṉ taḷavāy teva<unclear>n kula</unclear>
+					<lb n="14" break="no"/>cekaraṉāṉa cetupati
+					<lb n="15" break="no"/>kāt=tateva<unclear>r</unclear> puṇṇiya
+					<lb n="16" break="no"/>māka cuvāmi tiruviḻā
+					<lb n="17" break="no"/>vukku Eḻuntaruḷi Iru
+					<lb n="18"/>k<unclear>ka</unclear>c ceyvitta ma
+					<lb n="19" break="no"/>ṇṭapam <g ref="sym:tam-pillaiyarCuli" type="punctuation"/>
+				</p>
+				
+			</div>
+			
+			
+			<div type="commentary">
+				
+			</div>
+			
+			<div type="bibliography">
+				
+				<p>Digital edition of SII 8.391 by <bibl><ptr target="bib:SubrahmanyaAiyer1937_01"/></bibl> converted to DHARMA conventions by Dorotea Operato.</p>
+				
+				<listBibl type="primary">
+					
+					<bibl n="SII">
+						<ptr target="bib:SubrahmanyaAiyer1937_01"/>
+						<citedRange unit="page">206-207</citedRange>
+						<citedRange unit="item">391</citedRange>
+					</bibl>
+					
+				</listBibl>
+				
+				<listBibl type="secondary">
+					
+					<bibl/>
+					
+				</listBibl>
+				
+			</div>
+			
+		</body>
+	</text>
+</TEI>

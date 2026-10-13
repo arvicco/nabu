@@ -617,7 +617,9 @@ module Nabu
                 .where(Sequel.like(:metadata_json, '%"not_before"%')).limit(1).count
           next nil if has.zero?
 
-          rows = @catalog[:document_axes]
+          # P122-1: upstream lanes only — an estimate never lights a dark lane.
+          upstream = Store::SilverDates.upstream(@catalog[:document_axes])
+          rows = upstream
                  .where(document_id: @catalog[:documents].where(source_id: id).select(:id))
                  .limit(1).count
           rows.zero? ? slug : nil
@@ -718,9 +720,11 @@ module Nabu
       # for it traces into its own rows, in any lane.
       def projected_strings(doc_ids)
         projected = Hash.new { |hash, key| hash[key] = [] }
-        @catalog[:document_axes].where(document_id: doc_ids)
-                                .select_map(%i[document_id date_raw place_name place_ref not_before not_after])
-                                .each { |id, *values| projected[id].concat(values.compact.map(&:to_s)) }
+        # P122-1: upstream lanes only — an estimate's provenance string mines nothing.
+        upstream = Store::SilverDates.upstream(@catalog[:document_axes])
+        upstream.where(document_id: doc_ids)
+                .select_map(%i[document_id date_raw place_name place_ref not_before not_after])
+                .each { |id, *values| projected[id].concat(values.compact.map(&:to_s)) }
         @catalog[:document_facets].where(document_id: doc_ids).select_map(%i[document_id value raw])
                                   .each { |id, *values| projected[id].concat(values.compact.map(&:to_s)) }
         projected

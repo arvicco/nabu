@@ -173,6 +173,29 @@ module Store
       refute dated.key?(placed.id), "a place-only document is undated, never bucketed"
     end
 
+    # P122-1: a silver estimate dates only what no upstream row dates, under
+    # its own basis — it never widens or relabels an upstream envelope.
+    def test_silver_estimates_fill_only_the_upstream_gap_under_their_own_basis
+      estimate = lambda do |doc, low, high|
+        @catalog[:document_axes].insert(document_id: doc.id, not_before: low, not_after: high,
+                                        date_class: Nabu::Store::SilverDates::DATE_CLASS,
+                                        axis_source: Nabu::Store::SilverDates::AXIS_SOURCE)
+      end
+      upstream = document(@gold, "urn:s:upstream")
+      date(upstream, 101, 200)
+      estimate.call(upstream, -900, -800)
+      gap = document(@gold, "urn:s:gap")
+      estimate.call(gap, -300, -201)
+      placed = document(@gold, "urn:s:placed")
+      date(placed, nil, nil)
+      estimate.call(placed, 501, 600)
+
+      rows = Nabu::Store::LemmaRollup.document_dates(@catalog).as_hash(:document_id, %i[century basis])
+      assert_equal [2, "artifact"], rows.fetch(upstream.id), "the upstream envelope stands untouched"
+      assert_equal [-3, "silver"], rows.fetch(gap.id)
+      assert_equal [6, "silver"], rows.fetch(placed.id), "a place-only upstream row dates nothing"
+    end
+
     # -- lemma_rollup ------------------------------------------------------------
 
     def test_lemma_rollup_separates_gold_and_silver_with_centuries_and_the_undated_row

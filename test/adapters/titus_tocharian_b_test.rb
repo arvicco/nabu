@@ -10,8 +10,9 @@ require "tmpdir"
 #
 # Parse coverage rides real member-area pages cut into the restricted
 # local/fixtures/titus-tocharian-b/ (never test/fixtures — the grant forbids
-# redistribution): two Berlin THT pages, one London IOL page and one Paris
-# PK page.
+# redistribution): Berlin THT pages (incl. pre-anchor-note and note-only
+# shapes), London IOL pages (one Tocharian A manuscript) and one Paris PK
+# page.
 class TitusTocharianBTest < Minitest::Test
   SLUG = "titus-tocharian-b"
   ADAPTER = Nabu::Adapters::TitusTocharianB
@@ -187,13 +188,120 @@ class TitusTocharianBTest < Minitest::Test
     assert(doc.passages.all? { |p| p.language == "txb" && p.text.unicode_normalized?(:nfc) })
   end
 
+  # --- the post-widening tidy (P122-4, ruled 2026-10-12) ----------------------
+
+  # THT 494 (tochb494): the manuscript-level preservation note "fehlt 5/95"
+  # (the iocd16 lane) arrives BEFORE the first line anchor. It lands in the
+  # manuscript catalogue — document metadata — and the page parses.
+  def test_a_pre_anchor_manuscript_note_lands_in_the_catalogue
+    require_b_fixtures!
+    doc = parse_fixture("tochb494")
+    assert_includes doc.metadata["catalogue"], "fehlt 5/95"
+    assert_equal "txb", doc.language
+    first = doc.passages.first
+    assert_equal "urn:nabu:titus-tocharian-b:tochb494:494.494.(1)", first.urn
+    assert_includes first.text, "kṣemawarmentse"
+    refute first.annotations.key?("note"), "the manuscript note never rides a line"
+  end
+
+  # THT 301 (tochb301): a per-page note ("(0301v)", the photo plate) sits in
+  # the page heading before the page's first line — a catalogue note of the
+  # part, so it labels the part (the +side+), as an iocd12 note there does.
+  def test_a_pre_anchor_page_note_labels_its_part
+    require_b_fixtures!
+    doc = parse_fixture("tochb301")
+    recto = doc.passages.find { |p| p.annotations["part"] == "301a(?)" }
+    verso = doc.passages.find { |p| p.annotations["part"] == "301b(?)" }
+    assert_equal "(0301v)", recto.annotations["side"]
+    assert_equal "(0301r)", verso.annotations["side"]
+    assert_equal "//// tanäñña ////", recto.text
+    assert(doc.passages.none? { |p| p.annotations.key?("note") })
+  end
+
+  # IOL Toch. 295 (toch3855): a Tocharian A manuscript inside the B chain.
+  # Every line claims xto, so the DOCUMENT follows the measured claim.
+  def test_a_wholly_tocharian_a_page_claims_xto_at_document_grain
+    require_b_fixtures!
+    doc = parse_fixture("toch3855")
+    assert_equal "xto", doc.language
+    assert_equal 4, doc.passages.size
+    assert(doc.passages.all? { |p| p.language == "xto" })
+  end
+
+  # A mixed page keeps the corpus default (the measured claim is not single).
+  def test_a_mixed_page_keeps_the_corpus_language
+    doc = Nabu::Adapters::TitusTocharianB.new.send(:document_language, %w[txb san])
+    assert_equal "txb", doc
+    assert_equal "san", Nabu::Adapters::TitusTocharianB.new.send(:document_language, %w[san san])
+    assert_equal "txb", Nabu::Adapters::TitusTocharianB.new.send(:document_language, %w[txb])
+  end
+
+  # THT 1699 (toch1215): both sides "{{nichts zu lesen}}" — upstream's own
+  # empty leaf. Skipped by rule, never quarantined.
+  def test_a_note_only_page_is_skipped_by_rule
+    require_b_fixtures!
+    error = assert_raises(Nabu::DocumentSkipped) { parse_fixture("toch1215") }
+    assert_equal "nothing legible (note-only page)", error.reason
+    refute_kind_of Nabu::ParseError, error
+  end
+
+  # Lane text (not a note) before any line anchor stays a structural surprise.
+  def test_pre_anchor_lane_text_still_quarantines
+    html = <<~HTML
+      <span id=h3>Manuscript: 9<A NAME="TochB_THT_9">&nbsp;</A></span>
+      <span id=iotobx16>nt^o -no</span>
+      <span id=h4>Page: 9a<A NAME="TochB_THT_9_9a">&nbsp;</A></span>
+      <span id=h5>Line: 1<A NAME="TochB_THT_9_9a_1">&nbsp;</A></span><span id=iotob16>ente</span>
+    HTML
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::TitusTocharianParser.parse(html, profile: ADAPTER::PARSER_PROFILE)
+    end
+    assert_match(/before any line anchor/, error.message)
+  end
+
+  # The note's word spacing survives: the generator links each word, and the
+  # blanks between the links are part of the note (real shape, tochb073:
+  # "(Vorderseite ist anderes)" in a page heading).
+  def test_a_pre_anchor_note_keeps_its_word_spacing
+    html = <<~HTML
+      <span id=h3>Manuscript: 73<A NAME="TochB_THT_73">&nbsp;</A></span>
+      <span id=h4>Page: 73a<A NAME="TochB_THT_73_73a">&nbsp;</A></span> </span><span id=iocd16><a id=iocd16 href="#">(Vorderseite</a> <a id=iocd16 href="#">ist</a> <a id=iocd16 href="#">anderes)</a></span><span id=n16>
+      <span id=h5>Line: 1<A NAME="TochB_THT_73_73a_1">&nbsp;</A></span><span id=iotob16>ente</span>
+    HTML
+    page = Nabu::Adapters::TitusTocharianParser.parse(html, profile: ADAPTER::PARSER_PROFILE)
+    assert_equal "(Vorderseite ist anderes)", page.lines.first.side
+  end
+
+  # A note before any manuscript has nowhere to land — still loud.
+  def test_a_note_before_any_manuscript_quarantines
+    html = '<span id=iocd16>fehlt 3/95</span><span id=h3>Manuscript: 9<A NAME="TochB_THT_9">&nbsp;</A></span>'
+    assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::TitusTocharianParser.parse(html, profile: ADAPTER::PARSER_PROFILE)
+    end
+  end
+
+  # The pages that parsed before the tidy parse exactly as before.
+  PINNED_PAGES = { "tochb001" => 16, "tochb002" => nil, "toch3562" => 8, "toch4345" => 8 }.freeze
+
+  def test_previously_parsing_pages_keep_their_language_and_shape
+    require_b_fixtures!
+    PINNED_PAGES.each do |stem, count|
+      doc = parse_fixture(stem)
+      assert_equal "txb", doc.language, stem
+      assert_equal count, doc.passages.size, stem if count
+      assert(doc.passages.none? { |p| p.annotations.key?("side") && p.annotations["side"].match?(/fehlt/) })
+    end
+  end
+
   def test_real_pages_parse_stably_twice
     require_b_fixtures!
     adapter = Nabu::Adapters::TitusTocharianB.new
     refs = adapter.discover(B_FIXTURES).to_a
-    assert_equal %w[toch3562 toch4345 tochb001 tochb002], refs.map { |r| r.metadata["page"] }.sort
-    first = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
-    second = refs.map { |r| adapter.parse(r).passages.map(&:urn) }
+    assert_equal %w[toch1215 toch3562 toch3855 toch4345 tochb001 tochb002 tochb301 tochb494],
+                 refs.map { |r| r.metadata["page"] }.sort
+    parseable = refs.reject { |r| r.metadata["page"] == "toch1215" }
+    first = parseable.map { |r| adapter.parse(r).passages.map(&:urn) }
+    second = parseable.map { |r| adapter.parse(r).passages.map(&:urn) }
     assert_equal first, second, "URNs stable across two parses"
   end
 

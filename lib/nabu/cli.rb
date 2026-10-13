@@ -1185,7 +1185,9 @@ module Nabu
         artifact_script       the artifact's own script where it differs
         not_before, not_after the date envelope: signed historical years,
                               BCE negative, no year 0; NULL = open/undated
-        date_precision, date_class (artifact | composition), date_basis
+        date_precision, date_class (artifact | composition | edition | silver
+                              — a model/tool estimate, only where no
+                              upstream date exists), date_basis
                               (the minting lane), date_raw (upstream string)
         place_name, place_ref, place_lat, place_lon
         genre, kind           facet values, sorted and |-joined
@@ -2272,7 +2274,7 @@ module Nabu
 
       BROWSE (term-less): run search with NO query to LIST the corpus, but only
       when at least one CONTENT-NARROWING filter is present — a date window
-      (--from/--to/--century), --place, a genre facet (--type/--province/
+      (--from/--to/--century), --date-basis, --place, a genre facet (--type/--province/
       --material), or --loans. The page is served in corpus order (no ranking),
       the standard hit rendering with a stored-text window per passage, --limit
       honored. --lang/--license/--source/--axis select whole shelves and are NOT
@@ -2361,6 +2363,19 @@ module Nabu
       replaces the FTS query syntax: the fragment is matched literally
       (no AND/phrase/prefix operators) and does not combine with
       --lemma/--near/--morph.
+
+      DATE BASIS (--date-basis CLASS[,CLASS...]): keep only documents whose
+      PRIMARY date — the one `nabu show` renders — is of the named class:
+      artifact (the source's own typed date of the object or witness),
+      composition (attributed author-era dating), edition (a print year) or
+      silver (a model/tool ESTIMATE from the local-dates shelf, projected by
+      `nabu silver-dates --project`; any upstream date outranks it). With
+      --from/--to/--century the window then reads that same primary date,
+      so `--date-basis artifact --century 2` holds out author-era datings
+      instead of mixing them in. Without --date-basis the date window reads
+      upstream dates only — silver estimates answer only when named. An
+      unknown class is refused naming the known set. Text search, --fuzzy,
+      --scan and a term-less browse.
 
       FACETS (--type / --province / --material): document-grained categorical
       filters over the facet table (P17-2 — EDH inscriptions seed it: 22
@@ -2461,6 +2476,10 @@ module Nabu
                 desc: "Latest date: signed historical year (14 = 14 CE); composes with --from"
     option :century, type: :numeric, banner: "N",
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
+    option :date_basis, type: :string, banner: "CLASS[,CLASS...]",
+                        desc: "Date-basis filter: keep documents whose primary date is of this class " \
+                              "(artifact, composition, edition, silver); with --from/--to the window " \
+                              "reads that same date"
     option :place, type: :string, banner: "NAME|ns:id",
                    desc: "Provenance filter: a namespaced ref (tm:2810, cigs:GIR), a name resolved " \
                          "to its identities + name match, or a LIKE pattern (oxyrhynch%)"
@@ -2561,10 +2580,12 @@ module Nabu
     def search(query = nil)
       query = query.to_s.strip
       display_mode
-      if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters) &&
+      date_basis_filter
+      if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
+          options[:date_basis]) &&
          (options[:near] || options[:lemma])
-        raise Thor::Error, "search: --from/--to/--century/--place/--type/--province/--material compose " \
-                           "with text search only, not --lemma/--near (the dated/faceted corpus — " \
+        raise Thor::Error, "search: --from/--to/--century/--date-basis/--place/--type/--province/--material " \
+                           "compose with text search only, not --lemma/--near (the dated/faceted corpus — " \
                            "papyri, inscriptions — is not lemmatized)"
       end
       if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
@@ -2678,7 +2699,7 @@ module Nabu
       # built/indexed; a search cannot run.
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-      require_timeline!(catalog) if from || to || place
+      require_timeline!(catalog) if from || to || place || options[:date_basis]
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
       axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -2688,6 +2709,7 @@ module Nabu
                                          places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
+                                    date_basis: date_basis_filter,
                                     facets: facets, source: options[:source], sources: axis_slugs,
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
@@ -2847,6 +2869,18 @@ module Nabu
       scratch run). Interactive output is NEVER persisted — recomputing costs
       milliseconds; a stored copy would only go stale.
 
+      PROFILES AND CHUNKS (P122-2): --profile NAME loads a declared tuning
+      profile from config/reuse_profiles.yml (latin: trigrams, a 0.1 floor,
+      a function-word drop; chinese: character 4-grams on the CJK lane, a 0.1
+      floor, 10 hits per anchor) — explicit flags (--lang, --min-score,
+      --per-anchor, --gram-size) still override it, and the run records the
+      profile plus every effective parameter. --chunk-size N mines N anchors
+      per committed chunk and prints one progress line per chunk (chunk N/M ·
+      anchors · candidates · edges minted · elapsed) on stderr; a killed run
+      resumes at its cursor when the same command is rerun (finished chunks
+      are never re-mined, no edge is duplicated); --restart discards an
+      unfinished run instead.
+
       Examples:
         nabu parallels urn:nabu:sblgnt:john:1.1          # John 1:1 across the Fathers
         nabu parallels urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -2856,6 +2890,8 @@ module Nabu
         nabu parallels --batch urn:nabu:sblgnt:matt --lang grc
                                                          # mine Matthew's parallels into the journal
         nabu parallels --batch sblgnt --min-score 0.1    # a whole source, stricter floor
+        nabu parallels --batch corpus-corporum --profile latin --chunk-size 5000 2> pl.log
+                                                         # Patrologia, resumable, logged
 
       Use cases: trace a verse's reception; find the source a Father is quoting;
       seed the citation graph one batch scope at a time.
@@ -2876,6 +2912,17 @@ module Nabu
                               "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    option :profile, type: :string, banner: "NAME",
+                     desc: "With --batch: load a tuning profile from config/reuse_profiles.yml " \
+                           "(latin, chinese); explicit flags override it"
+    option :gram_size, type: :numeric, banner: "N",
+                       desc: "With --batch: shingle width in gram tokens " \
+                             "(default #{Nabu::Query::Parallels::GRAM_SIZE}, or the profile's)"
+    option :chunk_size, type: :numeric, banner: "N",
+                        desc: "With --batch: mine N anchors per committed chunk — a killed run " \
+                              "resumes at its cursor when rerun with the same flags"
+    option :restart, type: :boolean, default: false,
+                     desc: "With --batch: supersede an unfinished chunked run instead of resuming it"
     option :lect, type: :string, banner: "LECT-ID",
                   desc: "Restrict candidates to a lect (P59-3, nabu-lects module): keep only hits " \
                         "whose resolution is this lect id or a more specific one under it — the " \
@@ -2890,7 +2937,7 @@ module Nabu
       end
       return batch_parallels(urn) if options[:batch]
 
-      %i[min_score per_anchor db].each do |flag|
+      %i[min_score per_anchor db profile gram_size chunk_size restart].each do |flag|
         next unless options[flag]
 
         raise Thor::Error, "parallels: --#{flag.to_s.tr('_', '-')} only applies with --batch " \
@@ -3421,6 +3468,70 @@ module Nabu
       lemma_index_only(config, shelf) if options[:index]
     rescue Nabu::Error => e
       raise Thor::Error, e.message
+    end
+
+    desc "silver-dates", "The local-dates shelf: import date estimates, project them as silver dates (P122-1)"
+    long_desc <<~HELP, wrap: false
+      The silver-date lane (P122-1, the silver-lemma mold at document
+      grain): model- or tool-emitted date ESTIMATES are non-derivable
+      output, so they live on the local-dates shelf
+      (local/shelves/local-dates/, JSONL shards written only through the
+      Nabu::DateShelf gateway) — never in db/.
+
+      --import FILE shelves one batch: a JSONL file, one estimate per line —
+        {"urn": "urn:…", "not_before": -300, "not_after": -200,
+         "basis": "model", "estimator": "chronos", "estimator_version": "0.3",
+         "confidence": 0.8, "note": "…"}
+      Signed historical years (BCE negative, no year 0; either bound may be
+      null = open). Every urn must name a live document the catalog holds
+      (--force shelves estimates for material not yet held). A later
+      estimate for the same urn supersedes the earlier one.
+
+      --project is the OWNER's gate: it arms the shelf and projects the
+      latest estimate per live document into the timeline as SILVER rows
+      (date_class "silver", precision "estimate", the estimator named in
+      the date string). Once armed, every rebuild flavor, builders:refresh
+      and sync re-projects behind the timeline — the lane survives `nabu
+      rebuild`. --retract disarms the shelf and drops the projected rows
+      (the shelf itself is untouched). Both re-derive the lemma/curve
+      rollups, which bucket by date.
+
+      Honesty: a silver date never answers a filter that promises
+      upstream dates (`search --from/--to`, `vocab --by-century`, source
+      date coverage, lect date inference, published nabu-data dates). It
+      is the primary date only where no upstream date exists, and then
+      renders labeled ("[silver — model estimate …]" on the card,
+      date_class silver in exports); `search --date-basis silver` finds
+      exactly those documents.
+
+      Examples:
+        nabu silver-dates                          census: shelf, arm state, projected rows
+        nabu silver-dates --import estimates.jsonl
+        nabu silver-dates --project
+        nabu silver-dates --retract
+    HELP
+    option :import, type: :string, banner: "FILE", desc: "Shelve a JSONL batch of date estimates"
+    option :force, type: :boolean, default: false,
+                   desc: "With --import: shelve estimates for urns the catalog does not hold"
+    option :project, type: :boolean, default: false,
+                     desc: "Arm the shelf and project it into the timeline as silver dates (owner's gate)"
+    option :retract, type: :boolean, default: false,
+                     desc: "Disarm the shelf and drop the projected silver dates"
+    def silver_dates
+      modes = %i[import project retract].select { |mode| options[mode] }
+      raise Thor::Error, "silver-dates: one of --import/--project/--retract at a time" if modes.size > 1
+      raise Thor::Error, "silver-dates: --force only accompanies --import" if options[:force] && !options[:import]
+
+      config = Nabu::Config.load
+      shelf = Nabu::DateShelf.new(dir: Nabu::DateShelf.dir(config))
+      case modes.first
+      when :import then silver_dates_import(config, shelf)
+      when :project then silver_dates_project(config, shelf)
+      when :retract then silver_dates_retract(config, shelf)
+      else silver_dates_census(config, shelf)
+      end
+    rescue Nabu::Error => e
+      raise Thor::Error, "silver-dates: #{e.message}"
     end
 
     desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4)"
@@ -5651,6 +5762,15 @@ module Nabu
         [from, to]
       end
 
+      # The parsed --date-basis class list (P122-1, Nabu::Query::DateBasis), or
+      # nil. Validated up front — before any db opens — so an unknown class
+      # exits 1 naming the known set, the validate_license! stance.
+      def date_basis_filter
+        Nabu::Query::DateBasis.parse(options[:date_basis])
+      rescue Nabu::Error => e
+        raise Thor::Error, "search: #{e.message}"
+      end
+
       def coerce_year(value, flag)
         return nil if value.nil?
 
@@ -5706,7 +5826,7 @@ module Nabu
       # or axis) is a corpus DUMP, not a browse. The character-structure filters
       # are already a legal term-less path and return earlier (char_structured_search).
       def content_narrowing_filters?
-        options[:from] || options[:to] || options[:century] || options[:place] ||
+        options[:from] || options[:to] || options[:century] || options[:date_basis] || options[:place] ||
           facet_filters || loans_filter || options[:meter] || options[:meter_pattern] ||
           options[:lect] || options[:script] || options[:within]
       end
@@ -5732,7 +5852,7 @@ module Nabu
       # what WOULD make a term-less browse legal, and why the shelf-selectors do not.
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
-          "term-less: a date window (--from/--to/--century), --place, a genre facet " \
+          "term-less: a date window (--from/--to/--century), --date-basis, --place, a genre facet " \
           "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, --script, " \
           "or --within. " \
           "--lang/--license/--source/--axis " \
@@ -5763,7 +5883,7 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-        require_timeline!(catalog) if from || to || place
+        require_timeline!(catalog) if from || to || place || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -5773,6 +5893,7 @@ module Nabu
                                            places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.browse(lang: options[:lang], license: options[:license],
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
+                                  date_basis: date_basis_filter,
                                   facets: facets, source: options[:source], sources: axis_slugs,
                                   loans: loans, meter: options[:meter],
                                   meter_pattern: options[:meter_pattern], lect: options[:lect],
@@ -5823,7 +5944,7 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-        require_timeline!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place] || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -5833,6 +5954,7 @@ module Nabu
                                            places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.run_sign(values, lang: options[:lang], license: options[:license],
                                             limit: options[:limit].to_i, from: from, to: to,
+                                            date_basis: date_basis_filter,
                                             place: options[:place], facets: facets,
                                             source: options[:source], sources: axis_slugs,
                                             loans: loans, lect: options[:lect], script: options[:script])
@@ -5877,7 +5999,7 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-        require_timeline!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place] || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
@@ -5887,6 +6009,7 @@ module Nabu
                                            places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.run_scan(query, lang: options[:lang], license: options[:license],
                                            limit: options[:limit].to_i, from: from, to: to,
+                                           date_basis: date_basis_filter,
                                            place: options[:place], facets: facets,
                                            source: options[:source], sources: axis_slugs,
                                            loans: loans, meter: options[:meter],
@@ -7438,7 +7561,10 @@ module Nabu
 
         span = Nabu::Timeline.format_span(timeline.not_before, timeline.not_after)
         place = timeline.place_name ? " · #{timeline.place_name}#{place_query_gloss(timeline.place_name)}" : ""
-        if span
+        if span && timeline.date_class == Nabu::Store::SilverDates::DATE_CLASS
+          # P122-1: an estimate is never dressed as an upstream date.
+          say "  date: #{span} [silver — #{timeline.date_raw}]#{place}"
+        elsif span
           say "  date: #{span}#{precision_note(timeline.precision)}#{place}"
         elsif timeline.place_name
           say "  place: #{timeline.place_name}#{place_query_gloss(timeline.place_name)}"
@@ -8220,19 +8346,35 @@ module Nabu
         fulltext = open_fulltext(config)
         raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
+        profile = batch_profile
+        chunk_size = batch_chunk_size
         journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
         result = Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
-                                     .run(scope, lang: options[:lang], license: options[:license],
-                                                 progress: batch_progress,
+                                     .run(scope, profile: profile, lang: options[:lang], license: options[:license],
+                                                 chunk_size: chunk_size, restart: options[:restart],
+                                                 progress: chunk_size ? nil : batch_progress,
+                                                 on_chunk: chunk_size ? batch_chunk_progress : nil,
                                                  **batch_thresholds)
-        # P70-3b: the batch scope is config-durable — rebuild replays it.
+        # P70-3b: the batch scope is config-durable — rebuild replays it
+        # (P122-2: the profile NAME and chunk size ride along; the replay
+        # re-resolves the profile from config/, the project definition).
         unless options[:db]
-          params = { "lang" => options[:lang], "license" => options[:license] }
+          params = { "lang" => options[:lang], "license" => options[:license],
+                     "profile" => options[:profile], "chunk_size" => chunk_size }
                    .merge(batch_thresholds.transform_keys(&:to_s)).compact
           Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels",
                                                             scope: scope, params: params)
         end
         print_batch_parallels(result)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      rescue Interrupt
+        raise unless chunk_size
+
+        # A chunked run's committed chunks are durable (their edges and the
+        # cursor landed together); only the chunk in flight rolled back.
+        warn "\ninterrupted — every committed chunk is kept; rerun the same command to resume at the cursor."
+        exit 130
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -8243,7 +8385,31 @@ module Nabu
         thresholds = {}
         thresholds[:min_score] = options[:min_score].to_f if options[:min_score]
         thresholds[:per_anchor] = options[:per_anchor].to_i if options[:per_anchor]
+        thresholds[:gram_size] = options[:gram_size].to_i if options[:gram_size]
         thresholds
+      end
+
+      # The --profile lookup (P122-2): a ReuseProfiles::Profile, nil when
+      # the flag is absent; an undeclared name names the declared ones.
+      def batch_profile
+        return nil unless options[:profile]
+
+        Nabu::ReuseProfiles.default.fetch(options[:profile])
+      end
+
+      # One stderr line per committed chunk (P122-2) — log-friendly, so a
+      # `2> mine.log` run is readable while it is live.
+      def batch_chunk_progress
+        ->(report) { warn "  #{Nabu::BatchParallels.chunk_line(report)}" }
+      end
+
+      def batch_chunk_size
+        return nil unless options[:chunk_size]
+
+        size = options[:chunk_size].to_i
+        raise Thor::Error, "parallels --batch: --chunk-size must be a positive integer" unless size.positive?
+
+        size
       end
 
       # A stderr tick every BATCH_PROGRESS_EVERY anchors (and at the end), so a
@@ -8258,9 +8424,15 @@ module Nabu
 
       def print_batch_parallels(result)
         say "batch parallels over #{result.scope}#{" [#{result.lang}]" if result.lang}: " \
-            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}"
+            "#{plural(result.edges_written, 'edge')} written#{batch_refreshed(result)} · run #{result.run_id}" \
+            "#{" · profile #{result.profile}" if result.profile}"
         say "  #{plural(result.anchor_count, 'anchor')} · kept top #{result.per_anchor}/anchor " \
-            "at score ≥ #{result.min_score}#{batch_superseded(result)} · #{format('%.1f', result.elapsed)} s"
+            "at score ≥ #{result.min_score} · #{result.gram_size}-grams#{batch_superseded(result)} · " \
+            "#{format('%.1f', result.elapsed)} s"
+        return unless result.chunks > 1 || result.resumed
+
+        say "  #{result.chunks_mined} of #{plural(result.chunks, 'chunk')} mined this run" \
+            "#{' (resumed at the cursor)' if result.resumed}"
       end
 
       # `formulas --batch SCOPE` (P16-2): sweep the whole tradition once and
@@ -8418,7 +8590,14 @@ module Nabu
       # Ruby arrays — compact house style.
       def format_link_params(params)
         pairs = params.except("kind").map do |key, value|
-          "#{key} #{value.is_a?(Array) ? value.join(',') : value}"
+          # A long list (a profile's stop tokens) is provenance, not footer
+          # reading — counted here; params_json keeps it whole.
+          shown = if value.is_a?(Array)
+                    value.size > 5 ? "#{value.size} tokens" : value.join(",")
+                  else
+                    value
+                  end
+          "#{key} #{shown}"
         end
         pairs.empty? ? "" : "(#{pairs.join(', ')}) "
       end
@@ -8584,6 +8763,77 @@ module Nabu
         say "lemma rollup re-derived: #{commas(rows)} rows"
       ensure
         catalog&.disconnect
+      end
+
+      # -- silver-dates (P122-1) --------------------------------------------
+
+      def silver_dates_import(config, shelf)
+        records = Nabu::DateShelf.read_import(options[:import])
+        catalog = open_catalog(config) unless options[:force]
+        raise Thor::Error, "silver-dates: no catalog to resolve urns against — run nabu sync, or --force" \
+          if catalog.nil? && !options[:force]
+
+        resolver = catalog && ->(urn) { !catalog[:documents].where(urn: urn, withdrawn: false).empty? }
+        path = Nabu::DateShelf.new(dir: shelf.dir, resolver: resolver)
+                              .append_batch!(records: records, force: options[:force])
+        say "shelved #{commas(records.size)} estimate(s) → #{path}"
+        say "  not yet on the timeline — `nabu silver-dates --project` projects the shelf" unless shelf.armed?
+        say "  the shelf is armed — re-project now with `nabu silver-dates --project`" if shelf.armed?
+      ensure
+        catalog&.disconnect
+      end
+
+      def silver_dates_project(config, shelf)
+        raise Thor::Error, "silver-dates: the local-dates shelf at #{shelf.dir} is empty — --import first" \
+          if shelf.shard_paths.empty?
+
+        catalog = open_or_create_catalog(config)
+        shelf.arm!
+        report = Nabu::Store::SilverDates.project!(catalog: catalog, shelf: shelf)
+        say "projected #{commas(report.projected)} silver date(s) — " \
+            "#{commas(report.unresolved)} estimate(s) name no live document, " \
+            "#{commas(report.superseded)} superseded by a later estimate"
+        say "  armed: every rebuild, builders:refresh and sync now re-projects the shelf"
+        refresh_date_rollups(config, catalog)
+      ensure
+        catalog&.disconnect
+      end
+
+      def silver_dates_retract(config, shelf)
+        shelf.disarm!
+        catalog = open_catalog(config)
+        removed = catalog ? Nabu::Store::SilverDates.retract!(catalog: catalog) : 0
+        say "retracted #{commas(removed)} silver date(s); the shelf is disarmed (its estimates stay shelved)"
+        refresh_date_rollups(config, catalog) if catalog
+      ensure
+        catalog&.disconnect
+      end
+
+      def silver_dates_census(config, shelf)
+        records = 0
+        shelf.each_record { records += 1 }
+        say "local-dates shelf: #{shelf.dir}"
+        say "  #{commas(records)} estimate(s) in #{commas(shelf.shard_paths.size)} shard(s), " \
+            "#{commas(shelf.latest_by_urn.size)} document urn(s)"
+        say "  #{shelf.armed? ? 'ARMED — projected at every rebuild/refresh/sync' : 'not armed — never projected'}"
+        catalog = open_catalog(config)
+        return unless catalog&.table_exists?(:document_axes)
+
+        rows = catalog[:document_axes].where(axis_source: Nabu::Store::SilverDates::AXIS_SOURCE).count
+        say "  #{commas(rows)} silver date row(s) on the timeline"
+      ensure
+        catalog&.disconnect
+      end
+
+      # The lemma/curve rollups bucket documents by date, so a moved
+      # silver lane re-derives them in the same breath (the desks never
+      # lag a projection — the lemma-enrich --index-only precedent).
+      def refresh_date_rollups(config, catalog)
+        return say("  lemma rollups: not in this catalog (migrate, then rake builders:refresh)") \
+          unless Nabu::Store::LemmaRollup.available?(catalog)
+
+        summary = Nabu::Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
+        say "  lemma rollups re-derived: #{commas(summary.lemma_rows)} lemma, #{commas(summary.curve_rows)} curve rows"
       end
 
       def lemma_spot_check(enricher)
@@ -9011,13 +9261,14 @@ module Nabu
                              "run nabu sync or nabu rebuild"
         end
 
-        require_timeline!(catalog) if from || to || options[:place]
+        require_timeline!(catalog) if from || to || options[:place] || options[:date_basis]
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
         fuzzy = Nabu::Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = fuzzy.run(query, lang: options[:lang], license: options[:license],
                                    limit: options[:limit].to_i, from: from, to: to, place: options[:place],
+                                   date_basis: date_basis_filter,
                                    facets: facets, source: options[:source], sources: axis_slugs,
                                    loans: loans_filter)
         print_fuzzy_results(results, scope: fuzzy.scope, long: options[:long], facets: facets,

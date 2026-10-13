@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>SII 22.391: original edition by G.V. Srinivasa Rao</title>
+                <title type="alt">No. 391. (A.R. No. 391 of 1906) TIRUCHIRAPALLI DISTRICT, PUDUKKOTTAI STATE, TIRUMAYYAM. ROCK-CUT ŚIVA TEMPLE—IN THE SAME PLACE RĀJARĀJA I—19th YEAR (A.D. 1003-04)</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+                <funder>European Research Council (ERC), grant agreement no 809994</funder>
+            </titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INSSIIv22p0i0391.xml</idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence>
+                </availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>as per external metadata</repository>
+                    </msIdentifier>
+                    <msContents>
+                        <summary>
+                            
+                            <p>The inscription is damaged and built in and also incomplete. It begins with the introduction <hi rend="italic">Tirumagaḷpōla</hi> etc. It seems to record an endowment of land made by the <hi rend="italic">Sabhā</hi> of Tirumeyyam a <hi rend="italic">dēvadāna-brahmadēya</hi> village in Kāṉa-nāḍu said to be a division of Arumoḻidēva-vaḷanāḍu to provide for worship and offerings to god Vishṇu-Bhaṭāraka consecreted in the temple of Śrī Mūlasthānam-uḍaiya Mahādēva by a resident of the place by name Tiruvēṅgaḍa[Tātar].</p>						
+                            
+                        </summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+        </encodingDesc>
+        <revisionDesc>
+            <change who="part:emfr" when="2026-10-01" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+            <change who="part:mime" when="2026-09-29" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:vernacular">
+                
+                <p>
+                    <lb n="1"/><hi rend="grantha">svasti śrī</hi> <supplied reason="undefined"><g ref="sym:doubleBar" type="punctuation">.</g></supplied> tirumakaḷ po <gap reason="lost" quantity="10" unit="character"/> 
+                    <lb n="2"/>manakkoḷa kāntaḷḷūrccālai kalamaṟuttaruḷi <gap reason="lost" quantity="10" unit="character"/> 
+                    <lb n="3"/>yun taṭikaipāṭiyum nuḷampapāṭiyum kuṭamalaināṭum kol <gap reason="lost" quantity="8" unit="character"/> 
+                    <lb n="4"/>m Eṇṭicai nikaḻtara Īḻamaṇṭalamum tiṇṭiṟal ve <gap reason="lost" quantity="10" unit="character"/> 
+                    <lb n="5"/>taṉneḻil vaḷar Ūḻiyu ḷellāyāṇṭun toḻutakaviḷaṅku miyāṇṭey ceḻi
+                    <lb n="6" break="no"/><unclear>yarai</unclear>t tecukoḷ <hi rend="grantha">śrī</hi>ko<hi rend="grantha">rājarāja</hi>kecaripaṉmarāna <hi rend="grantha">śrīrājarāja de</hi>vaṟkku <unclear>yā</unclear>
+                    <lb n="7" break="no"/>ṇṭu <num value="19"><g type="numeral">10</g> 9</num>-Āvatu Arumoḻi tevavaḷanāṭṭuk kāṉanāṭṭu tevatāna <hi rend="grantha">brahma</hi>
+                    <lb n="8" break="no"/><hi rend="grantha">de</hi>yan tirumeyyattu <hi rend="grantha">sabhai</hi>yom Ivvūr <hi rend="grantha">śrī</hi>mula<hi rend="grantha">stā</hi>namuṭaiya ma<hi rend="grantha">hāde</hi>va<hi rend="grantha"></hi> <gap reason="lost" quantity="4" unit="character"/>
+                    <lb n="9"/>Ivvūrt tiruveṅkaṭa<unclear>tātar</unclear> Eḻuntaruḷina vi<hi rend="grantha">ṣṇubhaṭṭā</hi>rakarkku Iṟaiyiṟukkak
+                    <lb n="10"/>kaṭava nilam Ivvū <gap reason="lost" quantity="6" unit="character"/> ttu melaipaṭai <gap reason="lost" quantity="3" unit="character"/> <num value="23">2 <g type="numeral">10</g> 3</num> Innel
+                    <lb n="11"/><gap reason="lost" quantity="10" unit="character"/> ṇiyaraikkāṇimuntirikaiyum <gap reason="lost" quantity="3" unit="character"/> 
+                    <lb n="12"/>ṇi <gap reason="lost" quantity="8" unit="character"/> ṇikkiḻ Iraṇṭu māvum Aru <unclear>moḻi</unclear>
+                    <lb n="13"/><gap reason="lost" quantity="10" unit="character"/> Iṟainilaṉ Araimāmuntirikai
+                    <lb n="14"/><gap reason="lost" quantity="6" unit="character"/> nirpāñcu <gap reason="lost" quantity="3" unit="character"/> viḷaivatu
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+            </div>
+            
+            <div type="commentary">
+                
+            </div>
+            
+            <div type="bibliography">
+                
+                <p>Digital edition of SII 22.391 by <bibl><ptr target="bib:SrinivasaRao1997_01"/></bibl> converted to DHARMA conventions by Emmanuel Francis.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:SrinivasaRao1997_01"/>
+                        <citedRange unit="page">326-327</citedRange>
+                        <citedRange unit="item">391</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    
+                    <bibl/>
+                    
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>

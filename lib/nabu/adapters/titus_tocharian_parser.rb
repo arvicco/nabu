@@ -216,8 +216,9 @@ module Nabu
 
       # Parse one page's HTML under +profile+ (default: Tocharian A). Raises
       # Nabu::ParseError on a structural surprise: an over-deep anchor, lane
-      # text before any line anchor, an unknown content-shaped lane id, or a
-      # line whose transcription lanes vote two languages.
+      # text before any line anchor (a pre-anchor NOTE is catalogue — see
+      # hold_pending_note), an unknown content-shaped lane id, or a line
+      # whose transcription lanes vote two languages.
       def self.parse(html, profile: TOCHARIAN_A)
         raise Nabu::ParseError, "titus-tocharian: page is not valid UTF-8" unless html.valid_encoding?
 
@@ -226,6 +227,7 @@ module Nabu
         doc = Nokogiri::HTML(html)
         fold_quoted_lanes(doc)
         TitusAvestanParser.walk(doc) { |node| visit(node, state) }
+        flush_pending_note(state)
         finished = state[:lines].filter_map { |line| finish(line, profile) }
         Page.new(
           manuscripts: state[:manuscripts].map do |m|
@@ -261,17 +263,52 @@ module Nabu
 
       def self.visit(node, state)
         profile = state[:profile]
+        flush_pending_note(state) if note_boundary?(node)
         if (anchor = structural_anchor(node, profile))
           open_anchor(node, *anchor, state)
         elsif catalogue_span?(node)
           note = clean(node.text)
           record_catalogue(note, state) unless note.empty?
         elsif node.text? && !image_label?(node) && (lane = lane_of(node, profile))
+          return hold_pending_note(node, state) if pending_note_text?(node, lane, state)
           return if blank?(node.text) && state[:current].nil?
+
           raise Nabu::ParseError, "titus-tocharian: lane text before any line anchor" if state[:current].nil?
 
           accumulate(state[:current], lane, node)
         end
+      end
+
+      # A pre-anchor note (ruled 2026-10-12): an iocd16 remark that arrives
+      # BEFORE the first line of its manuscript or part — the manuscript-
+      # level "fehlt 3/95" (the glass-plate inventory), a page heading's
+      # "(0301v)" photo plate — is a catalogue-grade note, not a line's. Its
+      # text nodes gather until the span ends (the next span or anchor), then
+      # land where a catalogue note in that position lands: the part's label
+      # inside an open part, else the manuscript catalogue. With no
+      # manuscript open it has nowhere to land — still a structural surprise.
+      def self.hold_pending_note(node, state)
+        unless state[:part_open] || state[:manuscripts].any?
+          raise Nabu::ParseError, "titus-tocharian: lane text before any line anchor"
+        end
+
+        (state[:pending_note] ||= +"") << node.text
+      end
+
+      # Note-lane text before any line: a note opens on its first non-blank
+      # text; the blanks between its linked words then belong to it.
+      def self.pending_note_text?(node, lane, state)
+        state[:current].nil? && lane.first == :note && (state.key?(:pending_note) || !blank?(node.text))
+      end
+
+      def self.note_boundary?(node)
+        node.element? && (node.name == "span" || (node.name == "a" && !node["name"].nil?))
+      end
+
+      def self.flush_pending_note(state)
+        pending = state.delete(:pending_note)
+        note = pending && clean(pending)
+        record_catalogue(note, state) unless note.nil? || note.empty?
       end
 
       # Open the section a structural anchor names (see Levels): its level
