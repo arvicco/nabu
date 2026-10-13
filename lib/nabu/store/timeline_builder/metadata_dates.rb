@@ -71,6 +71,8 @@ module Nabu
         # registers here and the health lane-drift check flags it if it
         # doesn't).
         SHAPES = {
+          "africa-pd" => :structured, # P124-1: each work's edition year (the slavistics-pd
+          #                             mold); the imprint rides "imprint" — no place claim
           "archiv-slav-phil" => :structured, # each volume's title-page year
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
