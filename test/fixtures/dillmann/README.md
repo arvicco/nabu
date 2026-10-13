@@ -28,3 +28,14 @@ licence target `http(s)://creativecommons.org/licenses/by-sa-nc/4.0/` —
 "licensed under the Creative Commons Attribution-ShareAlike Non Commercial
 4.0", i.e. **CC BY-NC-SA 4.0** → class `nc`. Both URL-scheme variants are
 pinned here (12,453 `http://` + 1,274 `https://` censused 2026-07-26).
+
+## The P124-3 lemma-link pair (2026-10-13)
+
+Two more whole entry files from the same commit, byte-verbatim, a MUTUAL
+lemma-link pair — each carries a `<ref type="external"
+target="https://betamasaheft.eu/Dillmann/lemma/<id>">` naming the other:
+
+- `5/Ld81100c6adcb4110a5712a3be0e9a0ca.xml` — ሐፈጠ (`n="12016"`), the
+  "cf. vid." link in its sense C.
+- `new/L111hmnxugcml3cpnctdxmsdxgwdfioxe.xml` — ሐፈጠ (a TraCES addition,
+  `n="13179"`), linking back.
