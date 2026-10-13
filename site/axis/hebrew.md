@@ -19,7 +19,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 |---|---|---|---|---|
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
-| `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
+| `dss` | texts | nc | wired · auto | 1,001 docs / 52,895 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |

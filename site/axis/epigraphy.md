@@ -18,12 +18,12 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 October 2026)</span> |
 |---|---|---|---|---|
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
-| `dharma-campa` | texts | attribution | wired · manual | 121 docs / 2,728 passages |
-| `dharma-deccan` | texts | attribution | wired · manual | 1,694 docs / 27,929 passages |
-| `dharma-khmer` | texts | attribution | wired · manual | 1,221 docs / 50,245 passages |
-| `dharma-nusantara` | texts | attribution | wired · manual | 291 docs / 5,893 passages |
-| `dharma-pyu` | texts | attribution | wired · manual | 145 docs / 629 passages |
-| `dharma-tamil` | texts | attribution | wired · manual | 1,267 docs / 17,993 passages |
+| `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
+| `dharma-deccan` | texts | attribution | wired · auto | 1,695 docs / 27,983 passages |
+| `dharma-khmer` | texts | attribution | wired · auto | 1,302 docs / 53,825 passages |
+| `dharma-nusantara` | texts | attribution | wired · auto | 291 docs / 5,898 passages |
+| `dharma-pyu` | texts | attribution | wired · auto | 145 docs / 629 passages |
+| `dharma-tamil` | texts | attribution | wired · auto | 1,267 docs / 17,993 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
@@ -41,7 +41,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
-| `sii-clean` | texts | attribution | wired · manual | 589 docs / 8,372 passages |
+| `sii-clean` | texts | attribution | wired · auto | 590 docs / 8,376 passages |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `trismegistos` | feature module | attribution | wired · manual | nothing held yet |

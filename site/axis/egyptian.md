@@ -20,7 +20,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
 | `ccl` | dictionary | attribution | wired · manual | 11,284 entries |
-| `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
+| `coptic-scriptorium` | texts | nc | wired · auto | 482 docs / 74,169 passages |
 | `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 | `tla-hf` | texts | attribution | wired · manual | 6 docs / 59,524 passages |
