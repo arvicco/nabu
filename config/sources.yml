@@ -4571,7 +4571,10 @@ shabados:   # P122-3, 02-sources row 269
   adapter: Nabu::Adapters::Shabados
   adopted: "2026-10-12"
   axes: [indic]
-  wired: false
+  wired: true    # first sync verified 2026-10-13: 127 docs / 141,264 line
+                 # passages, 0 quarantined — exactly the lane census; SGGS
+                 # and Varan cards eyeballed (Gurmukhi lines, per-document
+                 # printed-source credits)
   sync_policy: manual
   # Shabad OS — the Gurmukhī PRIMARY text of Sikh scripture and the Panthic
   # canon (github.com/shabados/shabados, database/collections/ — the live
@@ -4626,7 +4629,12 @@ sii-clean:   # P122-3, 02-sources row 267
   adapter: Nabu::Adapters::SiiClean
   adopted: "2026-10-12"
   axes: [indic, epigraphy]
-  wired: false
+  wired: true    # first sync verified 2026-10-13: 589 docs / 8,372 passages
+                 # from 649 grant-bearing editions (60-quarantine baseline
+                 # recorded: stubs and uncitable files; 4,067 ungranted files
+                 # skipped by rule) — exactly the lane census; SII 8.513 and
+                 # 22.177 cards eyeballed (romanized Tamil, places, the
+                 # ASI-editor credit chain)
   sync_policy: manual
   # South Indian Inscriptions — the DHARMA conversions of the printed SII
   # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions,
