@@ -59,9 +59,9 @@ classes:
   documents_display: '10,493'
   sources: 6
 - head: scholarly
-  documents: 9010
-  documents_display: '9,010'
-  sources: 10
+  documents: 9020
+  documents_display: '9,020'
+  sources: 11
 - head: building
   documents: 8016
   documents_display: '8,016'
@@ -86,10 +86,10 @@ classes:
   documents: 617
   documents_display: '617'
   sources: 3
-unclassified_sources: 125
+unclassified_sources: 126
 unknown_documents: 46978
 unknown_documents_display: '46,978'
 unmapped_documents: 11131
 unmapped_documents_display: '11,131'
-unclassified_documents: 459420
-unclassified_documents_display: '459,420'
+unclassified_documents: 460300
+unclassified_documents_display: '460,300'

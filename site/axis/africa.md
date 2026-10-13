@@ -17,10 +17,10 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 October 2026)</span> |
 |---|---|---|---|---|
-| `africa-pd` | texts | open | not yet wired | not synced yet |
-| `bu-ajami` | texts | nc | not yet wired | not synced yet |
+| `africa-pd` | texts | open | wired · manual | 10 docs / 3,536 passages |
+| `bu-ajami` | texts | nc | wired · manual | 80 docs / 705 passages |
 
-**Languages on this desk** — nothing held yet.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `fuf` 20 · `ha` 20 · `mnk` 20 · `wo` 20 · `eng` 6 · `fra` 2 · `deu` 1 · `sw` 1.
 
 ## The desk's instruments
 
