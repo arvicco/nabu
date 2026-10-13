@@ -37,6 +37,9 @@ module Nabu
     #   verbatim, the work-level prefix and dot-joined citation are derived
     #   for query-time resolution. URN-less and non-CTS bibls ("Dig. 33.6.9")
     #   mint no row — their display text still reads in the body.
+    # - crossrefs (P123-1): one DictionaryCrossref per <xr>/<ref> pointer
+    #   (kind from the <lbl>, target decoded and folded like @key) — see
+    #   XR_KINDS for the census.
     class LexiconTeiParser
       ENTRY_ELEMENT = "entryFree"
 
@@ -45,6 +48,24 @@ module Nabu
       # abbreviations (italic runs ending in "." — "gen. plur."). Best-effort:
       # nil is honest (see #gloss).
       GLOSS_XPATH = %(.//tr[not(ancestor::cit)] | .//hi[@rend="ital"][not(ancestor::cit)])
+
+      # P123-1: LSJ's <xr><lbl>v.</lbl> <ref>mu=qos</ref></xr> pointers —
+      # the label names the relation, the ref the headword (betacode).
+      # Normalized label (downcased, spaces dropped) => kind. Census
+      # 2026-10-13 over the 27 LSJ files (116,497 entries): 27,091
+      # pointers on 23,204 entries — equals 14,719 ("="), see 7,647 ("v.",
+      # "s.v.", unlabeled), variant 2,346 ("v.l.", "v.l. for"),
+      # false-reading 998 ("f.l. for"), gloss 877 ("gloss on"), like 504;
+      # 15,501 resolve to a unique LSJ headword, 1,137 are ambiguous
+      # homographs (left verbatim), the rest point at phrases or unheld
+      # forms. Lewis & Short carries no <xr>. An unlisted or absent label
+      # reads as a plain "see".
+      XR_KINDS = {
+        "=" => "equals", "v." => "see", "s.v." => "see",
+        "v.l." => "variant", "v.l.for" => "variant",
+        "f.l." => "false-reading", "f.l.for" => "false-reading",
+        "glosson" => "gloss", "like" => "like"
+      }.freeze
 
       # Parse +path+ and return its DictionaryEntry values in file order.
       def entries(path, language:, betacode: false)
@@ -81,8 +102,29 @@ module Nabu
           headword_folded: fold_key(key, language: language, betacode: betacode),
           gloss: gloss(elem),
           body: body(elem, betacode: betacode),
-          citations: citations(elem)
+          citations: citations(elem),
+          crossrefs: crossrefs(elem, language: language, betacode: betacode)
         )
+      end
+
+      # P123-1: one crossref per <xr>/<ref>; kind per XR_KINDS (census there).
+      def crossrefs(elem, language:, betacode:)
+        elem.xpath(".//xr").flat_map do |xr|
+          lbl = collapse(xr.at_xpath("./lbl")&.text.to_s)
+          kind = XR_KINDS.fetch(lbl.downcase.delete(" "), "see")
+          xr.xpath("./ref").filter_map { |ref| crossref(ref, lbl, kind, language: language, betacode: betacode) }
+        end
+      end
+
+      def crossref(ref, lbl, kind, language:, betacode:)
+        raw = collapse(ref.text)
+        return nil if raw.empty?
+
+        greek = betacode && ref["lang"] == "greek" # the body walk's decode rule
+        target = Nabu::Normalize.nfc(greek ? Betacode.decode(raw) : raw)
+        folded = Nabu::Normalize.search_form(target.delete("-").sub(/\d+\z/, ""), language: language)
+        Nabu::DictionaryCrossref.new(kind: kind, label: [lbl, target].reject(&:empty?).join(" "),
+                                     target: target, target_folded: folded.strip.empty? ? nil : folded)
       end
 
       def headword(elem, key, betacode:)

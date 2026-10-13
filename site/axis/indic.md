@@ -18,26 +18,26 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 October 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
-| `dcs` | treebank | attribution | wired · manual | 15,741 docs / 753,093 passages |
-| `dharma-deccan` | texts | attribution | wired · manual | 1,694 docs / 27,929 passages |
-| `dharma-mdt` | texts | attribution | wired · manual | 734 docs |
-| `dharma-tamil` | texts | attribution | wired · manual | 1,267 docs / 17,993 passages |
+| `dcs` | treebank | attribution | wired · auto | 15,905 docs / 769,399 passages |
+| `dharma-deccan` | texts | attribution | wired · auto | 1,695 docs / 27,983 passages |
+| `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
+| `dharma-tamil` | texts | attribution | wired · auto | 1,267 docs / 17,993 passages |
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
-| `kannada-texts` | texts | attribution | wired · manual | 16 docs / 16,151 passages |
+| `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
-| `prakrit-texts` | texts | attribution | wired · manual | 22 docs / 27,124 passages |
+| `prakrit-texts` | texts | attribution | wired · auto | 22 docs / 27,124 passages |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
-| `shabados` | texts | open | wired · manual | 127 docs / 141,264 passages |
+| `shabados` | texts | open | wired · auto | 127 docs / 141,264 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
-| `sii-clean` | texts | attribution | wired · manual | 589 docs / 8,372 passages |
-| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
+| `sii-clean` | texts | attribution | wired · auto | 590 docs / 8,376 passages |
+| `suttacentral` | texts | open | wired · auto | 12,393 docs / 699,345 passages |
 | `tamilex` | texts | nc | wired · auto | 7,830 docs / 14,972 passages |
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `san` 209,688 · `tam-Latn` 9,554 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 1,793 · `pra-Latn` 1,131 · `tam` 755 · `und` 583 · `lzh` 276 · `guj` 207 … and 38 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `san` 209,852 · `tam-Latn` 9,555 · `pli` 7,288 · `eng` 4,790 · `san-Latn` 1,793 · `pra-Latn` 1,131 · `tam` 755 · `und` 583 · `lzh` 297 · `guj` 207 … and 38 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

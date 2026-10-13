@@ -132,10 +132,15 @@ refreshed at every gate to reflect what actually works.
 
 The original concept's enrichment layer has been landing piece by piece,
 always on-box: ingestion of one's own PDFs and scans shipped in July 2026
-(`nabu ingest`), and September 2026 brought semantic search over a local
+(`nabu ingest`), September 2026 brought semantic search over a local
 vector store (`nabu embed`, `search --similar`) and local lemmatization
 campaigns that project machine-suggested lemmas, honestly labelled
-*silver*, onto passages without gold annotation (`nabu lemma-enrich`).
+*silver*, onto passages without gold annotation (`nabu lemma-enrich`),
+and October 2026 added the research-export surface (`nabu export`,
+every table shipped with a license manifest), lemma attestation
+profiles from precompiled rollups (`nabu lemma`), and a parallel
+shelf for machine-suggested *datings* under the same silver
+discipline (`nabu silver-dates`).
 What still waits — on local inference hardware and on demand — is
 on-demand glossing and text recognition for image-only scans; no paid
 cloud service is ever a runtime requirement.

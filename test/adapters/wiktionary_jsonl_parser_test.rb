@@ -176,6 +176,34 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert(entries.all? { |e| e.reflexes.empty? })
   end
 
+  # -- P123-1: synonyms/antonyms/related as entry→entry crossrefs (opt-in) -------
+
+  def sla_xref_entries
+    @sla_xref_entries ||= Nabu::Adapters::WiktionaryJsonlParser.new(language: "sla-pro", crossrefs: true)
+                                                               .entries(File.join(
+                                                                          Nabu::TestSupport.fixtures("wiktionary-recon"),
+                                                                          "kaikki.org-dictionary-ProtoSlavic.jsonl"
+                                                                        ))
+  end
+
+  def test_crossrefs_default_off
+    assert(sla_entries.all? { |e| e.crossrefs.empty? })
+  end
+
+  def test_crossrefs_mint_synonyms_antonyms_and_related_with_the_asterisk_folded_away
+    bog = sla_xref_entries.find { |e| e.entry_id == "bogъ:adj:3" }
+    assert_equal([["synonym", "synonym *ubògъ", "*ubògъ", "ubogъ"],
+                  ["synonym", "synonym *bědьnъ", "*bědьnъ", "bedьnъ"],
+                  ["antonym", "antonym *bogàtъ", "*bogàtъ", "bogatъ"]],
+                 bog.crossrefs.map { |c| [c.kind, c.label, c.target, c.target_folded] })
+  end
+
+  def test_relation_items_keep_their_word_whatever_tags_ride_along
+    # upstream mi: "synonyms": [{"tags": ["dative"], "word": "mьně"}]
+    mi = sla_xref_entries.find { |e| e.entry_id == "mi:pron" }
+    assert_equal([%w[synonym mьně]], mi.crossrefs.map { |c| [c.kind, c.target] })
+  end
+
   def test_reflexes_flatten_worded_nodes_depth_first
     bog = sla_entry("bogъ:noun:2")
     # parent before child, siblings in upstream order: orv богъ leads its

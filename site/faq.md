@@ -40,8 +40,8 @@ walkthrough is [Quickstart]({{ '/quickstart/' | relative_url }}).
 
 Ruby 3.3 or newer, git, and disk space: about 1 GB covers the starter
 shelf (canonical files plus derived databases), while the full library
-occupies roughly 117 GB canonical plus 159 GB of derived databases on the
-reference machine (measured 2026-10-11) — growth is entirely at your
+occupies roughly 120 GB canonical plus 163 GB of derived databases on the
+reference machine (measured 2026-10-13) — growth is entirely at your
 discretion, shelf by shelf. There are no cloud requirements at runtime
 and the dependency set is deliberately small. Details and per-shelf
 sizes are on [Quickstart]({{ '/quickstart/' | relative_url }}).
@@ -100,10 +100,13 @@ the first printed books in English (EEBO-TCP) and Middle English, the
 classical Chinese library and the Buddhist canon, the Korean dynastic
 records, classical Greek and Latin and the Latin–Romance continuum,
 papyri, Latin inscriptions, cuneiform and the Ancient Near East with the
-Hittite and Luwian corpora, Sanskrit and the Pali canon, Hebrew and
+Hittite and Luwian corpora, Sanskrit and the Pali canon, the South
+Asian shelves (the Tamil-country and Deccan epigraphy, the classical
+Tamil canon with its per-word gold layer, the Gurmukhī scripture),
+Hebrew and
 Aramaic, Egyptian, Coptic, Ethiopic, Japanese from the Man'yōshū to the
 National Diet Library's classical stacks, Tibetan, the inscriptions of
-Southeast Asia, Old English and the wider Germanic shelves (Old Norse,
+Southeast Asia and the Balinese lontars, Old English and the wider Germanic shelves (Old Norse,
 Old Saxon, Middle High German, Old Dutch, Old Swedish, the runestones,
 and German print), the Slavic shelves from Old Church Slavonic to the
 Balkan oral epic, Celtic, the Middle Iranian, Turkic and Mongolic

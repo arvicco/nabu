@@ -94,8 +94,30 @@ class BosworthCsvParserTest < Minitest::Test
     end
   end
 
-  def test_citations_start_empty_no_oe_crosswalk_yet
-    assert(entries.all? { |e| e.citations.empty? })
+  # P123-1: every reference unit mints a citation (verbatim label); the
+  # census-validated ASPR sigla resolve. Fixture census: 1,134 units, 226
+  # resolved (148 passage grain, 78 document grain).
+  def test_citations_mint_every_reference_unit_and_resolve_the_aspr_subset
+    all = entries.flat_map(&:citations)
+    assert_equal 1134, all.size
+    resolved = all.select(&:cts_work)
+    assert_equal 226, resolved.size
+    assert_equal 148, resolved.count(&:citation)
+    assert(resolved.all? { |c| c.cts_work.start_with?("urn:nabu:aspr:A") })
+  end
+
+  def test_aefter_cites_beowulf_line_twelve
+    # æfter (451): "Ðæm eafera wæs æfter cenned" — Beowulf 12.
+    beowulf = entry("451").citations.find { |c| c.label == "B. 12" }
+    refute_nil beowulf
+    assert_equal "urn:nabu:aspr:A4.1", beowulf.cts_work
+    assert_equal "12", beowulf.citation
+  end
+
+  def test_a_beag_pairs_thorpe_with_grein_and_only_grein_resolves
+    labels = entry("37").citations.map { |c| [c.label, c.cts_work, c.citation] }
+    assert_includes labels, ["Beo. Th. 1555", nil, nil]
+    assert_includes labels, ["B. 775", "urn:nabu:aspr:A4.1", "775"]
   end
 
   def test_malformed_csv_raises_parse_error

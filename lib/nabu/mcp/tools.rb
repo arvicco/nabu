@@ -120,6 +120,9 @@ module Nabu
       # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
+      # P123-1: entry→entry cross-references per entry (resolved first).
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
+      DEFINE_MAX_CROSSREFS = 20
       # The reconstruction walk (P14-1): proto entries per query, and the
       # cognate cap per entry (attested first — gem-pro trees run to ~150
       # reflexes; the CLI is the unbounded surface).
@@ -286,7 +289,9 @@ module Nabu
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
         "in the local catalog the citation carries a resolved passage urn (open it with " \
-        "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
+        "nabu_show); otherwise resolved_urn is null and the display text stands. Entries " \
+        "may carry `crossrefs` — pointers to other headwords of the same dictionary (kind, " \
+        "label verbatim, resolved_urn of the target entry or null — open it with nabu_show). Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
         "separate entries). The owner's own notes on an entry ride along in `notes` — " \
         "useful curatorial context.".freeze
@@ -426,6 +431,15 @@ module Nabu
           century: { type: "integer",
                      description: "Shorthand for one century's from/to (6 = 6th c. CE, -2 = 2nd c. " \
                                   "BCE); mutually exclusive with from/to." },
+          date_basis: { type: "string",
+                        description: "Date-basis filter (CLI --date-basis parity, text search only): " \
+                                     "keep only documents whose PRIMARY dated row is of one of these " \
+                                     "classes, comma-joined — artifact (the source's own artifact/" \
+                                     "typed date), composition (attributed author-era dating), " \
+                                     "edition (a print/edition year), silver (a model ESTIMATE, " \
+                                     "never an upstream claim). Composes with from/to/century: " \
+                                     "`date_basis: \"artifact\"` holds out author-era datings. An " \
+                                     "unknown class is refused naming the known set." },
           place: { type: "string",
                    description: "Provenance filter (P75 C-1): a namespaced place ref (tm:2810, " \
                                 "cigs:GIR) matches identity claims on the document's place_ref " \
@@ -925,6 +939,7 @@ module Nabu
         end
 
         from, to, place = search_date(args, mode, near)
+        date_basis = search_date_basis(args, mode, near)
         kind = search_kind(args, mode, near)
         meter, meter_pattern = search_meter(args, mode, near)
         words = search_words?(args, mode, near)
@@ -940,7 +955,7 @@ module Nabu
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
                                  kind: kind, meter: meter, meter_pattern: meter_pattern, words: words,
-                                 lect: lect, lects: lects, script: script)
+                                 lect: lect, lects: lects, script: script, date_basis: date_basis)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
                                meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note,
@@ -1389,6 +1404,22 @@ module Nabu
         [from, to, place]
       end
 
+      # The date-basis arg (P123-4, the P122-1 CLI --date-basis's exact
+      # semantics) — text search only, like the timeline. The class list is
+      # parsed once here, so an unknown (or empty) class is refused as an
+      # argument error naming the known set, never a silent empty page.
+      def search_date_basis(args, mode, near)
+        value = string_arg(args, "date_basis")
+        return nil if value.nil?
+        raise InvalidArguments, "date_basis composes with text search only, not lemma/near" if mode == :lemma || near
+
+        Query::DateBasis.parse(value)
+      rescue InvalidArguments
+        raise
+      rescue Nabu::Error => e
+        raise InvalidArguments, e.message
+      end
+
       # The kind facet arg (P100-5, the P99 CLI --kind's exact semantics) —
       # text search only, refusal parity with the meter facet. Threaded as
       # the facets hash entry the CLI's facet_filters builds, so the family
@@ -1418,7 +1449,7 @@ module Nabu
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil, kind: nil, meter: nil, meter_pattern: nil, words: false,
-                     lect: nil, lects: nil, script: nil)
+                     lect: nil, lects: nil, script: nil, date_basis: nil)
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1432,7 +1463,7 @@ module Nabu
                                          tibetan_words: words ? tibetan_words_seam : nil,
                                          lects: lects || :auto)
             [searcher.run(term, lang: lang, license: license, limit: limit,
-                                from: from, to: to, place: place, script: script,
+                                from: from, to: to, place: place, script: script, date_basis: date_basis,
                                 facets: kind ? { "kind" => kind } : nil,
                                 meter: meter, meter_pattern: meter_pattern, words: words, lect: lect), searcher]
           end
@@ -1638,11 +1669,20 @@ module Nabu
           body_truncated: truncated,
           citations: define_citations(result)
         }
+        base = base.merge(crossrefs: define_crossrefs(result)) unless result.crossrefs.empty?
         base = base.merge(reflex_fields(result.reflexes, cap: DEFINE_MAX_REFLEXES)) unless result.reflexes.empty?
         return base unless truncated
 
         base.merge(note: "entry body truncated at #{DEFINE_BODY_CAP} chars — " \
                          "`nabu define #{result.headword}` (CLI) renders it whole")
+      end
+
+      # P123-1: cross-references, resolved first (actionable), capped.
+      def define_crossrefs(result)
+        ordered = result.crossrefs.partition(&:resolved_urn).flatten(1)
+        ordered.first(DEFINE_MAX_CROSSREFS).map do |crossref|
+          { kind: crossref.kind, label: crossref.label, resolved_urn: crossref.resolved_urn }
+        end
       end
 
       # Resolved citations first (they are the actionable ones), capped.

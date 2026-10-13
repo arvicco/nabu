@@ -37,7 +37,7 @@ module Adapters
       entry = registry["dss"]
       refute_nil entry, "dss must be registered in config/sources.yml"
       assert entry.wired, "live (owner sign-off 2026-07-19: Hebrew shelf synced, flip ordered)"
-      assert_equal "manual", entry.sync_policy
+      assert_equal "auto", entry.sync_policy # promoted 2026-10-13: actively-edited upstream rides the sync --all sweep
       assert_equal "dss", entry.adapter_class.manifest.id
     end
 

@@ -19,7 +19,10 @@ complete corpus of Old English poetry and the first printed books in
 English, the classical Chinese library with
 the Buddhist canon, the Korean dynastic records, the Islamicate library
 in Arabic and Persian, the Tibetan Buddhist canon, the inscriptions of
-Southeast Asia, the Middle Iranian and Turkic manuscripts of the Silk
+Southeast Asia and the palm-leaf lontars of Bali, the stone record of
+South India with the classical Tamil canon and its commentators, the
+Gurmukhī scripture of the Sikh canon, the Middle Iranian, Tocharian
+and Turkic manuscripts of the Silk
 Road, the medieval lyric of Galicia, the Japanese classical and
 public-domain libraries, the Slavic shelves from Old Church Slavonic to
 the Balkan oral epic, the runestones of Scandinavia, and the colonial
@@ -70,11 +73,13 @@ tablets of the late fourth millennium BCE to Meiji-era Japanese.
 **{{ name1 }} is the largest language on the shelves
 ({{ top1.millions }} million passages)**, ahead of {{ name2 }}
 ({{ top2.millions }} million) and {{ name3 }} ({{ top3.millions }}
-million). The newest wings are the Slavic shelves opened end to end,
-the Middle Iranian and Turkic manuscripts of the Silk Road, and the
-library's first American shelf — colonial Zapotec testaments, Guaman
-Poma's chronicle, and the Jesuit-era Tupinambá and Old Guaraní
-treebanks; each wave is told, dated, on the
+million). The newest wings are the South Asian shelves — the DHARMA
+epigraphy estates, the TAMILEX critical editions with the only
+per-word gold layer for Old Tamil, the printed *South Indian
+Inscriptions* volumes, the Gurmukhī canon — and the complete West
+Tocharian corpus retrieved through TITUS's members' gate, beside a
+new research bench of license-manifest exports, lemma attestation
+curves and text-reuse instruments; each wave is told, dated, on the
 [News]({{ '/news/' | relative_url }}) page. Beneath every shelf runs the
 **lect layer**: historical-stage ladders, stage-aware search, and honest
 reconstruction display through the

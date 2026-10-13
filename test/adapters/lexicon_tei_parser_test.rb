@@ -132,4 +132,21 @@ class LexiconTeiParserTest < Minitest::Test
     assert_equal "urn:cts:greekLit:tlg0027.tlg0088", work_only.cts_work
     assert_nil work_only.citation, "an empty citation suffix mints nil, not an empty string"
   end
+
+  # P123-1: LSJ's <xr><lbl/><ref/></xr> pointers become crossrefs — kind
+  # from the label, target decoded from betacode and folded like @key.
+  def test_lsj_xr_pointers_mint_crossrefs_in_entry_order
+    logos = parse(LSJ_LAMBDA, language: "grc", betacode: true).find { |e| e.entry_id == "n63772" }
+    assert_equal([["variant", "v.l. λόγων", "λογων"],
+                  ["equals", "= φύσει νόμος", "φυσει νομοσ"],
+                  ["equals", "= ἁπλῶς, περὶ πάντων ἑνὶ λ.", "απλωσ, περι παντων ενι λ."],
+                  ["equals", "= πρᾶγμα", "πραγμα"],
+                  ["equals", "= μῦθος", "μυθοσ"]],
+                 logos.crossrefs.map { |c| [c.kind, c.label, c.target_folded] })
+    assert_equal "μῦθος", logos.crossrefs.last.target
+  end
+
+  def test_lewis_short_carries_no_xr_markup
+    assert(parse(LS, language: "lat").all? { |e| e.crossrefs.empty? })
+  end
 end

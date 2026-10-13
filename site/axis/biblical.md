@@ -17,11 +17,11 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 October 2026)</span> |
 |---|---|---|---|---|
-| `betamasaheft-works` | texts | attribution | wired · manual | 3,810 docs / 66,916 passages |
+| `betamasaheft-works` | texts | attribution | wired · auto | 3,817 docs / 66,932 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
-| `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
-| `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
+| `coptic-scriptorium` | texts | nc | wired · auto | 482 docs / 74,169 passages |
+| `dss` | texts | nc | wired · auto | 1,001 docs / 52,895 passages |
 | `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
@@ -33,7 +33,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `hbo` 30,259 · `gez` 3,788 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 17 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `hbo` 30,259 · `gez` 3,795 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 17 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 

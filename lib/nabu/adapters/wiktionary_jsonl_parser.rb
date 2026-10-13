@@ -76,16 +76,22 @@ module Nabu
       # `sounds` (modern lect romanizations, IPA) stays out of bodies.
       HISTORICAL_SOUND_TAGS = %w[Middle-Chinese Old-Chinese].freeze
 
+      # P123-1: kaikki relation lists => crossref kind (opt-in below).
+      CROSSREF_LISTS = { "synonyms" => "synonym", "antonyms" => "antonym", "related" => "related" }.freeze
+
       # Parse +path+ and return DictionaryEntry values in file order.
       # +language+ is the ISO 639-3 code the entries carry and fold by;
       # kaikki's own lang_code is 639-1 ("cu") and stays in the raw record.
       # +reflexes+ turns on descendants-tree extraction (reconstruction
       # shelves only). +historical_sounds+ (P32-3) turns on the
       # Middle/Old-Chinese sound lines (the wiktionary-zh extract only —
-      # off elsewhere so existing shelf bodies never shift).
-      def initialize(language: "chu", reflexes: false, historical_sounds: false)
+      # off elsewhere so existing shelf bodies never shift). +crossrefs+
+      # (P123-1) turns on the synonyms/antonyms/related pointers (the
+      # recon extracts, zh excepted — census on WiktionaryRecon#parse).
+      def initialize(language: "chu", reflexes: false, historical_sounds: false, crossrefs: false)
         @language = language
         @reflexes = reflexes
+        @crossrefs = crossrefs
         @historical_sounds = historical_sounds
       end
 
@@ -146,7 +152,8 @@ module Nabu
           gloss: gloss(record),
           body: body_text(record),
           citations: [],
-          reflexes: @reflexes ? reflexes(record) : []
+          reflexes: @reflexes ? reflexes(record) : [],
+          crossrefs: @crossrefs ? crossrefs(record) : []
         )
       rescue Nabu::ValidationError, Nabu::Normalize::EncodingError => e
         raise Nabu::ParseError, "wiktionary-jsonl: record at line #{line_number} " \
@@ -247,6 +254,35 @@ module Nabu
         else
           path.map { |gloss| gloss.to_s.gsub(/\s+/, " ").strip }.join(" — ")
         end
+      end
+
+      # -- cross-references (P123-1) ------------------------------------------------
+
+      # The word-level relation lists (CROSSREF_LISTS) come first, then
+      # each sense's own, in record order; a (kind, word) pair repeated
+      # across levels mints once.
+      def crossrefs(record)
+        seen = {}
+        [record, *Array(record["senses"])].flat_map do |level|
+          CROSSREF_LISTS.flat_map do |list, kind|
+            Array(level[list]).filter_map { |item| crossref_for(item, kind, seen) }
+          end
+        end
+      end
+
+      # One worded relation item; tag-only items ({"tags": ["dative"]})
+      # and repeats mint nothing. The leading reconstruction asterisk stays
+      # in the displayed target but is stripped before folding — the recon
+      # shelves key headword_folded bare (the reflex_fold convention).
+      def crossref_for(item, kind, seen)
+        return nil unless item.is_a?(Hash)
+
+        word = Nabu::Normalize.nfc(item["word"].to_s.strip)
+        return nil if word.empty? || seen.key?([kind, word])
+
+        seen[[kind, word]] = true
+        Nabu::DictionaryCrossref.new(kind: kind, label: "#{kind} #{word}", target: word,
+                                     target_folded: reflex_fold(word, @language))
       end
 
       # -- reflexes (P14-1) ---------------------------------------------------------

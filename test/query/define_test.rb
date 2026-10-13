@@ -218,7 +218,10 @@ module Query
       assert_equal "urn:nabu:dict:bosworth-toller:940", aethele.urn
       assert_equal "bosworth-toller", aethele.dictionary_slug
       assert_equal "attribution", aethele.license_class
-      assert_empty aethele.citations, "no OE crosswalk yet — citations start empty"
+      # P123-1: the references mint verbatim citations; no ASPR is held
+      # here, so none resolves — an honest miss, never an invented link.
+      assert_includes aethele.citations.map(&:label), "Gen. 1182"
+      assert(aethele.citations.none?(&:resolved_urn))
 
       assert_equal ["æðele"], define("æðele").map(&:headword), "native spelling folds the same"
     end
