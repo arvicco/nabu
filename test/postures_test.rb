@@ -397,6 +397,9 @@ class PosturesTest < Minitest::Test
     # P122-3 ADDS sii-clean as identity (the dharma-family -Latn codes):
     # identity 111→112; madurai as identity (tam → ta): 112→113; and
     # shabados PENDING on the pa/guru registry mint: pending 0→1.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 113, "pending" => 1 }, by_posture)
+    # The Punjabi package (merged + canonical-synced 2026-10-13, the
+    # add-then-retire shape within ONE phase) retires shabados to identity:
+    # identity 113→114, pending 1→0. Zero pendings again.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 114 }, by_posture)
   end
 end
