@@ -2253,6 +2253,47 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Owner feature (2026-10-13): `enable all` switches on everything the
+  # box can sync unattended in one move — the access-gated rows (blocked,
+  # grant-gated, credential-bound) are skipped with their reasons printed,
+  # because each of those must be enabled by name to run its own flow.
+  def test_enable_all_enables_every_ungated_source_and_names_the_gated_skips
+    with_axis_corpus do |config|
+      File.write(config.sources_path, File.read(config.sources_path) + <<~YAML)
+        gated:
+          adapter: TestAdapter
+          wired: false
+          sync_policy: manual
+          availability: blocked
+          grant_required: true
+          grant: {grantor: "the member desk", date: "2026-10-06", terms: "personal research", thread: "by email, 2026-10-06", request_hint: "write to the member desk"}
+          axes: [classical]
+      YAML
+      out, err, status = with_config(config) { run_cli(%w[enable all]) }
+      assert_nil status, err
+      entries = Nabu::Profile.load(config.profile_path).entries
+      assert_includes entries, "shelf"
+      assert_includes entries, "lex"
+      refute_includes entries, "gated", "access-gated sources never ride enable all"
+      assert_match(/enable all → \d+ ungated sources/, out)
+      assert_match(/skipped as access-gated/, out)
+      assert_match(/gated \(blocked, grant-gated\)/, out)
+
+      # Idempotent: a second run changes nothing and still succeeds.
+      _out2, _err2, status2 = with_config(config) { run_cli(%w[enable all]) }
+      assert_nil status2
+      assert_equal entries.sort, Nabu::Profile.load(config.profile_path).entries.sort
+    end
+  end
+
+  def test_enable_all_refuses_mixed_with_other_names
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[enable all shelf]) }
+      assert_equal 1, status
+      assert_match(/enable all: stands alone/, err)
+    end
+  end
+
   def test_enable_blocked_source_runs_the_grant_flow_records_then_skips_on_ack
     Dir.mktmpdir("nabu-cli-blocken") do |root|
       sources = File.join(root, "sources.yml")
