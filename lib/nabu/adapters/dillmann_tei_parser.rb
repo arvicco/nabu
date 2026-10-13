@@ -2,6 +2,8 @@
 
 require "nokogiri"
 
+require_relative "dillmann_bible_refs"
+
 module Nabu
   module Adapters
     # Parser for one DillmannData TEI entry file (P46-2) — the `dillmann-tei`
@@ -25,6 +27,14 @@ module Nabu
     #   excludes its nested senses' text, so nothing doubles. Prefixed-
     #   namespace elements (<t:quote>) read like any other — the parser
     #   matches local names throughout.
+    # - citations (P123-1): one DictionaryCitation per <ref cRef loc>
+    #   scripture reference, label verbatim; books held as verse-grained
+    #   Gǝʿǝz witnesses (or, for the NT books not held in Gǝʿǝz, the hub's
+    #   SBLGNT column) resolve per DillmannBibleRefs — census and grains
+    #   there. Census 2026-10-13 over the full tree: 92,835 references,
+    #   72,754 resolved (56,357 verse grain, 16,397 book grain; 65,670
+    #   onto Gǝʿǝz witnesses, 7,084 onto SBLGNT); the fixture mints 88
+    #   (81 resolved: 60 verse, 21 book).
     class DillmannTeiParser
       def entry(path)
         doc = read_xml(path)
@@ -38,7 +48,8 @@ module Nabu
           headword: headword,
           headword_folded: Normalize.search_form(headword, language: "gez"),
           gloss: gloss_for(node),
-          body: body_for(node, path)
+          body: body_for(node, path),
+          citations: DillmannBibleRefs.citations(node)
         )
       rescue Nabu::ValidationError => e
         raise ParseError, "#{path}: #{e.message}"
