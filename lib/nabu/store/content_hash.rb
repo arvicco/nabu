@@ -51,8 +51,22 @@ module Nabu
         digest(
           entry.entry_id, entry.key_raw, entry.language, entry.headword,
           entry.headword_folded, entry.gloss, entry.body, canonical_json(citations),
-          *reflex_fields(entry)
+          *reflex_fields(entry), *crossref_fields(entry)
         )
+      end
+
+      # Cross-references (P123-1) ride the reflex guard exactly: appended
+      # ONLY when present, so every crossref-less entry keeps its stored
+      # sha (no revision storm), while an extracting reparse re-mints the
+      # entries that gained pointers — the content they are.
+      def crossref_fields(entry)
+        return [] if entry.crossrefs.empty?
+
+        crossrefs = entry.crossrefs.map do |crossref|
+          { "kind" => crossref.kind, "label" => crossref.label,
+            "target" => crossref.target, "target_folded" => crossref.target_folded }
+        end
+        [canonical_json({ "crossrefs" => crossrefs })]
       end
 
       # The only-when-non-empty guard: an empty reflex list contributes NO

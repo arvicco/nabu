@@ -829,6 +829,25 @@ the seed data for a future reconstruction/etymology shelf (see the
 improvements register). Citations start empty (Wiktionary quotations are
 unanchored — the B-T precedent).
 
+**Entry↔entry cross-references (P123-1, migration 039).** Citations point
+OUT of the shelf at corpus passages; `dictionary_crossrefs` holds the
+pointers an entry makes to ANOTHER headword of the SAME dictionary — only
+where upstream marks them up (LSJ `<xr><lbl/><ref/></xr>`, JMdict
+`<xref>`/`<ant>`, the kaikki `synonyms`/`antonyms`/`related` lists of the
+wiktionary-recon extracts; prose "cf." mentions are not mined). The parser
+mints a `DictionaryCrossref` (kind, verbatim label, target, folded target);
+the rows are entry content (part of the content hash, appended only when
+present, so pointer-less entries keep their stored shas) and are replaced
+wholesale on revision. Resolution is the loader's job, not the parser's:
+after every load of a source a pass sets `to_entry_id` to the ONE live
+entry of the same dictionary whose `headword_folded` equals the target's
+fold (self excluded) — zero or several candidates leave it NULL, so an
+ambiguous homograph pointer is never guessed, and a target loaded from a
+later letter file still resolves. `define` (CLI and MCP) renders a resolved
+pointer with its target urn and an unresolved one as its verbatim text,
+never a dead link. The Wiktionary Chinese extract opts out: its `synonyms`
+are dialectal-synonym tables (1.7M rows), a thesaurus rather than pointers.
+
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
 `nabu etym богъ --lang chu` walks from an attested lemma to its

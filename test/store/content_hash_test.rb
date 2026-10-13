@@ -74,4 +74,25 @@ class ContentHashTest < Minitest::Test
                    entry(reflexes: [reflex(lang_name: "Old Church Slavonic")])
                  )
   end
+
+  # P123-1: cross-references are content, appended only when present —
+  # the pins above (crossref-less entries) are untouched by construction.
+  def crossref(target = "богъ")
+    Nabu::DictionaryCrossref.new(kind: "synonym", label: "synonym #{target}", target: target,
+                                 target_folded: target)
+  end
+
+  def test_crossrefs_are_content_and_absent_crossrefs_change_nothing
+    plain = Nabu::Store::ContentHash.dictionary_entry(entry)
+    assert_equal plain, Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: []))
+    with = Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref]))
+    refute_equal plain, with
+    assert_equal with, Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref]))
+    refute_equal with, Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref("богы")]))
+  end
+
+  def test_crossrefs_never_collide_with_a_reflex_encoding
+    refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex])),
+                 Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref]))
+  end
 end

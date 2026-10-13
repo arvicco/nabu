@@ -85,6 +85,30 @@ module Nabu
     end
   end
 
+  # One entry→entry cross-reference (P123-1): a MACHINE-READABLE pointer
+  # the entry makes to another headword of the same dictionary (LSJ <xr>,
+  # JMdict <xref>/<ant>, kaikki synonyms/antonyms/related). The citation
+  # pattern again — the parser mints it, the loader persists it and
+  # resolves the TO entry by folded headword (unique match only).
+  #
+  # - +kind+: the pointer class, normalized (see, equals, variant,
+  #   false-reading, gloss, like, synonym, antonym, related).
+  # - +label+: the pointer as the dictionary prints it ("v. μῦθος") — what
+  #   renders when the target is not resolvable.
+  # - +target+: the pointed-at headword as displayed (NFC).
+  # - +target_folded+: its search form in the dictionary language — the
+  #   resolution key; nil when the fold comes out empty.
+  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded) do
+    def initialize(kind:, label:, target:, target_folded: nil)
+      super(
+        kind: Model::Validation.present_string!(kind, field: "kind"),
+        label: Model::Validation.nfc_text!(label, field: "label"),
+        target: Model::Validation.nfc_text!(target, field: "target"),
+        target_folded: target_folded.nil? ? nil : Model::Validation.nfc_text!(target_folded, field: "target_folded")
+      )
+    end
+  end
+
   # One dictionary entry (P11-4): what the lexicon-tei parser yields and the
   # DictionaryLoader persists. NOT a passage — dictionaries are a separate
   # surface (improvements §1.3) with their own storage shape.
@@ -103,6 +127,8 @@ module Nabu
   # - +citations+: DictionaryCitation values in entry order.
   # - +reflexes+: DictionaryReflex values in descendants-tree depth-first
   #   order (P14-1) — empty for every non-reconstruction shelf.
+  # - +crossrefs+: DictionaryCrossref values in entry order (P123-1) —
+  #   empty where the parser extracts none.
   #
   # The P26-3 hbo/arc NFC exemption applies HERE too (P30-1 + P30-2,
   # independently required and identically shaped): Masoretic pointing is
@@ -114,14 +140,17 @@ module Nabu
   # a SEARCH form and keeps the NFC contract for every language — the
   # exemption never widens to the lookup key.
   DictionaryEntry = Data.define(:entry_id, :key_raw, :language, :headword,
-                                :headword_folded, :gloss, :body, :citations, :reflexes) do
+                                :headword_folded, :gloss, :body, :citations, :reflexes, :crossrefs) do
     def initialize(entry_id:, key_raw:, language:, headword:, headword_folded:, body:,
-                   gloss: nil, citations: [], reflexes: [])
+                   gloss: nil, citations: [], reflexes: [], crossrefs: [])
       unless citations.is_a?(Array) && citations.all?(Nabu::DictionaryCitation)
         raise ValidationError, "citations must be an Array of Nabu::DictionaryCitation"
       end
       unless reflexes.is_a?(Array) && reflexes.all?(Nabu::DictionaryReflex)
         raise ValidationError, "reflexes must be an Array of Nabu::DictionaryReflex"
+      end
+      unless crossrefs.is_a?(Array) && crossrefs.all?(Nabu::DictionaryCrossref)
+        raise ValidationError, "crossrefs must be an Array of Nabu::DictionaryCrossref"
       end
 
       language = Model::Validation.language!(language)
@@ -139,7 +168,8 @@ module Nabu
         gloss: gloss.nil? ? nil : display_text.call(gloss, field: "gloss"),
         body: display_text.call(body, field: "body"),
         citations: citations.freeze,
-        reflexes: reflexes.freeze
+        reflexes: reflexes.freeze,
+        crossrefs: crossrefs.freeze
       )
     end
   end

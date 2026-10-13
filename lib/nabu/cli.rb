@@ -9679,6 +9679,27 @@ module Nabu
         say result.body
         print_reflexes(result.reflexes)
         print_resolved_citations(result)
+        print_crossrefs(result)
+      end
+
+      # P123-1: entry→entry cross-references — a resolved pointer names
+      # its target entry's urn (one `nabu show` away); an unresolved one
+      # renders as its verbatim text, never a dead link. Compact cap like
+      # the citations; --long shows all.
+      def print_crossrefs(result)
+        crossrefs = Array(result.crossrefs)
+        return if crossrefs.empty?
+
+        say ""
+        say "cross-references:"
+        shown = options[:long] ? crossrefs : crossrefs.first(12)
+        shown.each do |crossref|
+          line = "  #{crossref.label} (#{crossref.kind})"
+          line += " → #{crossref.resolved_headword} #{crossref.resolved_urn}" if crossref.resolved_urn
+          say line
+        end
+        rest = crossrefs.size - shown.size
+        say "  … and #{rest} more (--long shows all)" if rest.positive?
       end
 
       # -- nabu signs (P53-2) ----------------------------------------------------

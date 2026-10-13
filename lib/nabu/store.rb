@@ -74,6 +74,7 @@ module Nabu
       DictionaryEntry: :dictionary_entries,
       DictionaryCitation: :dictionary_citations,
       DictionaryReflex: :dictionary_reflexes,
+      DictionaryCrossref: :dictionary_crossrefs,
       DocumentTimeline: :document_axes,
       LanguageName: :language_names,
       LanguageRecord: :language_records,
@@ -395,6 +396,7 @@ module Nabu
         require_relative "store/dictionary_entry"
         require_relative "store/dictionary_citation"
         require_relative "store/dictionary_reflex"
+        require_relative "store/dictionary_crossref"
         require_relative "store/document_timeline"
         require_relative "store/language_name"
         require_relative "store/language_record"

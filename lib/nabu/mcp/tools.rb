@@ -120,6 +120,9 @@ module Nabu
       # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       DEFINE_BODY_CAP = 6_000
       DEFINE_MAX_CITATIONS = 40
+      # P123-1: entry→entry cross-references per entry (resolved first).
+      # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
+      DEFINE_MAX_CROSSREFS = 20
       # The reconstruction walk (P14-1): proto entries per query, and the
       # cognate cap per entry (attested first — gem-pro trees run to ~150
       # reflexes; the CLI is the unbounded surface).
@@ -286,7 +289,9 @@ module Nabu
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
         "in the local catalog the citation carries a resolved passage urn (open it with " \
-        "nabu_show); otherwise resolved_urn is null and the display text stands. Bounded " \
+        "nabu_show); otherwise resolved_urn is null and the display text stands. Entries " \
+        "may carry `crossrefs` — pointers to other headwords of the same dictionary (kind, " \
+        "label verbatim, resolved_urn of the target entry or null — open it with nabu_show). Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
         "separate entries). The owner's own notes on an entry ride along in `notes` — " \
         "useful curatorial context.".freeze
@@ -1664,11 +1669,20 @@ module Nabu
           body_truncated: truncated,
           citations: define_citations(result)
         }
+        base = base.merge(crossrefs: define_crossrefs(result)) unless result.crossrefs.empty?
         base = base.merge(reflex_fields(result.reflexes, cap: DEFINE_MAX_REFLEXES)) unless result.reflexes.empty?
         return base unless truncated
 
         base.merge(note: "entry body truncated at #{DEFINE_BODY_CAP} chars — " \
                          "`nabu define #{result.headword}` (CLI) renders it whole")
+      end
+
+      # P123-1: cross-references, resolved first (actionable), capped.
+      def define_crossrefs(result)
+        ordered = result.crossrefs.partition(&:resolved_urn).flatten(1)
+        ordered.first(DEFINE_MAX_CROSSREFS).map do |crossref|
+          { kind: crossref.kind, label: crossref.label, resolved_urn: crossref.resolved_urn }
+        end
       end
 
       # Resolved citations first (they are the actionable ones), capped.

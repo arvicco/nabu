@@ -2017,6 +2017,19 @@ module MCP
       assert_nil unresolved.fetch("resolved_urn")
     end
 
+    # P123-1: LSJ's <xr> pointers ride the payload as crossrefs; none of
+    # λόγος's targets is a fixture headword, so every one is honest text
+    # (resolved_urn null); a pointer-less entry carries no crossrefs key.
+    def test_define_carries_crossrefs_verbatim_when_unresolved
+      seed_shelf
+      logos = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
+      crossrefs = logos.fetch("crossrefs")
+      assert_includes crossrefs, { "kind" => "equals", "label" => "= μῦθος", "resolved_urn" => nil }
+      assert_equal 5, crossrefs.size
+      menis = payload(call("nabu_define", { "lemma" => "μῆνις" })).fetch("entries").first
+      refute menis.key?("crossrefs")
+    end
+
     def test_define_truncates_long_bodies_with_an_honest_note
       seed_shelf
       entry = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
