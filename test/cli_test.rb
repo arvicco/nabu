@@ -233,6 +233,40 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P124-3: a cross-DICTIONARY pointer renders with the other shelf's urn
+  # (hebrew-lexicon -> bdb); an unheld dictionary's (TWOT) stays text.
+  def test_define_renders_cross_dictionary_pointers
+    with_hebrew_lexicon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define ברא]) }
+      assert_nil status
+      assert_match(/^ {2}BDB b\.cw\.aa \(bdb\) → \S+ urn:nabu:dict:bdb:b\.cw\.aa$/, out)
+      assert_match(/^ {2}TWOT 278 \(twot\)$/, out)
+    end
+  end
+
+  def with_hebrew_lexicon_shelf
+    Dir.mktmpdir("nabu-cli-hebrew") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"),
+        config_path: File.join(root, "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(
+        slug: "hebrew-lexicon", name: "OSHB Hebrew Lexicon",
+        adapter_class: "Nabu::Adapters::HebrewLexicon", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::HebrewLexicon.new,
+                                              workdir: Nabu::TestSupport.fixtures("hebrew-lexicon"))
+      db.disconnect
+      yield config
+    end
+  end
+
   def test_show_resolves_the_urn_define_prints
     with_recon_shelf do |config|
       out, = with_config(config) { run_cli(%w[define *zima]) }

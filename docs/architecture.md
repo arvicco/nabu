@@ -863,6 +863,16 @@ whitespace-adjacent to an `<s>`, and `<ab>q.v.</ab>` right after an `<s>`
 headword-keyed. Looser prose ("cf. also …", "cf. √ …", a q.v. after a
 proper name) stays unextracted; the census sits in the parser.
 
+**Cross-dictionary pointers (P124-3, migration 041).** `to_dictionary`
+names the target dictionary's slug when a pointer leaves its own
+dictionary (NULL = same dictionary). The OSHB LexicalIndex `<xref>` gives
+each Strong entry its BDB and TWOT ids: BDB is held (the `bdb` shelf of
+the same source, entry ids = BDB ids), so those pointers resolve there by
+`target_id`; TWOT is not held, so its pointers keep `to_dictionary: twot`
+and stay unresolved (rendered verbatim) — they would resolve the day a
+`twot` dictionary is loaded and the pointing source re-loads. The xref's
+strong/aug ids are the entry's own identity and mint nothing.
+
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
 `nabu etym богъ --lang chu` walks from an attested lemma to its

@@ -42,6 +42,20 @@ module Nabu
     # scaffolding (LexicalIndex-internal root links) stays in canonical,
     # deliberately unmined this packet.
     #
+    # crossrefs (P124-3): the xref's bdb and twot ids are pointers ACROSS
+    # dictionaries — one id-keyed DictionaryCrossref each (kind "bdb" /
+    # "twot", to_dictionary the same slug). BDB is held (the bdb shelf
+    # below, entry_id = the BDB id) and resolves; TWOT is NOT held (no
+    # catalog dictionary) and renders verbatim. The strong/aug ids are the
+    # entry's OWN identity, not pointers: strong+aug equals the aug id on
+    # 9,298 of the 9,299 rows — the one exception, aug 2007 sharing
+    # Strong 2004's LexicalIndex entry, reads in the body's strong line and
+    # mints nothing. Census 2026-10-13 over LexicalIndex.xml (10,221
+    # entries, one <xref> each: bdb 10,175, strong 9,299, twot 7,303, aug
+    # 1,157 attributes): on the 9,299 minted entries, 9,299 bdb pointers
+    # (every one a held BDB entry; 8,834 distinct, 418 shared by several
+    # Strong ids) and 6,648 twot pointers.
+    #
     # == #bdb_entries — the BDB outline shelf
     #
     # One DictionaryEntry per BrownDriverBriggs <entry>, in file order,
@@ -134,8 +148,25 @@ module Nabu
           headword: headword(li, id: id),
           headword_folded: Nabu::Normalize.search_form(headword(li, id: id), language: entry.fetch(:language)),
           gloss: optional_text(li.at_xpath("def")),
-          body: strong_body(id, index_entry: li, strong: strong)
+          body: strong_body(id, index_entry: li, strong: strong),
+          crossrefs: xref_crossrefs(li.at_xpath("xref"))
         )
+      end
+
+      # P124-3: the cross-dictionary pointers (census in the class note).
+      XREF_DICTIONARIES = { "bdb" => "BDB", "twot" => "TWOT" }.freeze
+      private_constant :XREF_DICTIONARIES
+
+      def xref_crossrefs(xref)
+        return [] if xref.nil?
+
+        XREF_DICTIONARIES.filter_map do |slug, label|
+          id = collapse(xref[slug].to_s)
+          next if id.empty?
+
+          Nabu::DictionaryCrossref.new(kind: slug, label: "#{label} #{id}", target: id,
+                                       target_id: id, to_dictionary: slug)
+        end
       end
 
       def headword(node, id:)
