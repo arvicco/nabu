@@ -3066,7 +3066,11 @@ madurai:   # P122-3, 02-sources row 268
   adapter: Nabu::Adapters::Madurai
   adopted: "2026-10-12"
   axes: [indic]
-  wired: false
+  wired: true    # first sync verified 2026-10-13: 755 docs / 1,214,683 line
+                 # passages, 0 quarantined, fetch 23m42s — exactly the lane
+                 # census (5 catalog 404s ledgered as fetch notes); two
+                 # Tamil devotional cards eyeballed, the header-intact
+                 # credit condition carried verbatim on every document
   sync_policy: manual
   # Project Madurai (www.projectmadurai.org; K. Kalyanasundaram and
   # volunteers): 1,090 works in 1,367 Unicode HTML e-texts (works list
