@@ -36,6 +36,10 @@ module Nabu
     class DictionaryLoader
       TOOL = "nabu-dictionary-loader"
 
+      # P123-1: crossref resolution looks targets up in IN-lists of this
+      # many folded keys (a bounded statement whatever the shelf size).
+      RESOLVE_SLICE = 2_000
+
       # +language_shelf_dir+ (P19-1; P71-2 resolved by the caller) roots the
       # language-notes accretion redirect:
       # notes a batch or adapter carries land as dossier SECTIONS under
@@ -104,6 +108,7 @@ module Nabu
         end
         yield(process, quarantine)
         sweep_withdrawn(seen, counts) if full
+        resolve_crossrefs
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
           withdrawn: counts[:withdrawn], errored: counts[:errored]
@@ -226,6 +231,7 @@ module Nabu
         )
         insert_citations(row, entry)
         insert_reflexes(row, entry)
+        insert_crossrefs(row, entry)
         journal(event: "loaded", dictionary_entry_id: row.id)
         :added
       end
@@ -242,6 +248,8 @@ module Nabu
         insert_citations(row, entry)
         DictionaryReflex.where(dictionary_entry_id: row.id).delete
         insert_reflexes(row, entry)
+        DictionaryCrossref.where(dictionary_entry_id: row.id).delete if crossrefs_table?
+        insert_crossrefs(row, entry)
         journal(event: "revised", dictionary_entry_id: row.id,
                 params: { "old_sha" => old_sha, "new_sha" => sha })
         durable(event: "revised", urn: row.urn, old_sha: old_sha, new_sha: sha)
@@ -273,6 +281,68 @@ module Nabu
             borrowed: reflex.borrowed, uncertain: reflex.uncertain
           )
         end
+      end
+
+      # P123-1: entry→entry pointers persist like citations — content of
+      # the entry, replaced wholesale on revision. to_entry_id is minted
+      # by the resolution pass below, never here (the target may load
+      # later in the same batch — another letter file).
+      def insert_crossrefs(row, entry)
+        return if entry.crossrefs.empty? || !crossrefs_table?
+
+        entry.crossrefs.each_with_index do |crossref, seq|
+          DictionaryCrossref.create(
+            dictionary_entry_id: row.id, seq: seq, kind: crossref.kind,
+            label: crossref.label, target: crossref.target,
+            target_folded: crossref.target_folded
+          )
+        end
+      end
+
+      # The resolution pass (P123-1), after every load of this source:
+      # each crossref of the source's dictionaries points at the ONE live
+      # entry of the same dictionary whose headword_folded equals its
+      # target_folded — self excluded; zero or several candidates (an
+      # unheld headword, an ambiguous homograph) leave to_entry_id NULL,
+      # and the pointer renders verbatim. Re-run wholesale so a withdrawal
+      # or a newly loaded target is always reflected.
+      def resolve_crossrefs
+        return unless crossrefs_table?
+
+        Dictionary.where(source_id: @source.id).select_map(:id).each do |dictionary_id|
+          @db.transaction { resolve_dictionary_crossrefs(dictionary_id) }
+        end
+      end
+
+      def resolve_dictionary_crossrefs(dictionary_id)
+        entry_ids = DictionaryEntry.where(dictionary_id: dictionary_id).select(:id)
+        rows = DictionaryCrossref.where(dictionary_entry_id: entry_ids)
+                                 .select_map(%i[id dictionary_entry_id target_folded to_entry_id])
+        return if rows.empty?
+
+        candidates = crossref_candidates(dictionary_id, rows.filter_map { |row| row[2] }.uniq)
+        rows.each do |id, from_id, folded, current|
+          matches = folded ? Array(candidates[folded]) - [from_id] : []
+          resolved = matches.size == 1 ? matches.first : nil
+          DictionaryCrossref.where(id: id).update(to_entry_id: resolved) unless resolved == current
+        end
+      end
+
+      # folded headword => [live entry ids] within one dictionary.
+      def crossref_candidates(dictionary_id, keys)
+        keys.each_slice(RESOLVE_SLICE).with_object(Hash.new { |h, k| h[k] = [] }) do |slice, out|
+          DictionaryEntry.where(dictionary_id: dictionary_id, withdrawn: false, headword_folded: slice)
+                         .select_map(%i[headword_folded id])
+                         .each { |folded, id| out[folded] << id }
+        end
+      end
+
+      # A catalog predating migration 039 has no crossref table — the
+      # loader writes none (the pre-migration degradation every shelf
+      # table honors).
+      def crossrefs_table?
+        @crossrefs_table = @db.table_exists?(:dictionary_crossrefs) if @crossrefs_table.nil?
+        @crossrefs_table
       end
 
       def restore(row)

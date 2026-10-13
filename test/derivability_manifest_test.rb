@@ -22,7 +22,7 @@ class DerivabilityManifestTest < Minitest::Test
     catalog: {
       kind: :derived, stage: "the whole corpus replay + derived lanes",
       tables: %w[
-        derivation_stamps dictionaries dictionary_citations
+        derivation_stamps dictionaries dictionary_citations dictionary_crossrefs
         dictionary_entries dictionary_reflexes dictionary_stats document_axes
         document_facets documents enrichments hiero_postings kind_stats language_curve
         language_mix language_names language_records lect_stats lemma_rollup passages person_index person_index_names

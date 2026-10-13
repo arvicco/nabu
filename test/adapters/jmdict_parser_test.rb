@@ -52,6 +52,16 @@ class JmdictParserTest < Minitest::Test
     assert_includes taberu.body, "eat"
   end
 
+  # P123-1: sense-level <xref> pointers become "see" crossrefs; the target
+  # is the first "・" part (the keb/reb this parser keys headwords by).
+  def test_xref_pointers_mint_see_crossrefs
+    love = by_id.fetch("1150410")
+    assert_equal([["see", "see 愛する", "愛する"], ["see", "see アガペー・1", "アガペー"]],
+                 love.crossrefs.map { |c| [c.kind, c.label, c.target] })
+    assert_equal Nabu::Normalize.search_form("アガペー", language: "jpn"), love.crossrefs.last.target_folded
+    assert_empty by_id.fetch("1358280").crossrefs, "an entry without xref/ant mints none"
+  end
+
   def test_output_is_nfc
     entries.each do |entry|
       assert entry.headword.unicode_normalized?(:nfc)

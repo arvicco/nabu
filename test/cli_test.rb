@@ -221,6 +221,18 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P123-1: define renders cross-references — a resolved pointer names its
+  # target entry (one `nabu show` away), an unresolved one stays text.
+  def test_define_renders_resolved_and_verbatim_cross_references
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *gudą]) }
+      assert_nil status
+      assert_match(/^cross-references:$/, out)
+      assert_match(/^ {2}related gudjô \(related\) → gudjô urn:nabu:dict:wiktionary-gem-pro:gudjô:noun$/, out)
+      assert_match(/^ {2}\S.* \((related|synonym|antonym)\)$/, out, "an unresolved pointer renders as plain text")
+    end
+  end
+
   def test_show_resolves_the_urn_define_prints
     with_recon_shelf do |config|
       out, = with_config(config) { run_cli(%w[define *zima]) }
