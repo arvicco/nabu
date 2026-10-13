@@ -66,6 +66,17 @@ module Nabu
     #   are onomasiological, not etymological — minting them as
     #   dictionary_reflexes would pollute the etym/cognates lanes
     #   (architecture §12); recorded in 02-sources row 106.
+    # - crossrefs (P124-3): one id-keyed DictionaryCrossref per concept
+    #   pointer <div type="pointers">/<list type>/<item>/<ref target> —
+    #   kind = the list type verbatim, target_id = the concept uuid (the
+    #   concept shelf's entry id). Census 2026-10-13: the tree carries
+    #   21,342 "#uuid" ref targets (concepts 19,293, words 2,049), but only
+    #   the concept pointer lists name ENTRIES — 8,493 pointers on 3,017
+    #   concepts (hypernymy 3,017, taxonymy 2,979, see 1,526, antonymy
+    #   786, mereonymy 185); 8,488 name another held concept, 2 their own,
+    #   3 dangle. The rest are source-reference refs naming BIBLIOGRAPHY
+    #   uuids (both sides) and stay unextracted, as do the wordnet lists
+    #   (bare synset numbers, no ref).
     #
     # == Skip rules (censused by Tls#discovery_skips)
     #
@@ -260,7 +271,7 @@ module Nabu
         end
 
         build_entry(entry_id: entry_id, key_raw: head, headword: head,
-                    gloss: definition.first, lines: lines, path: path)
+                    gloss: definition.first, lines: lines, path: path, crossrefs: pointer_crossrefs(root))
       end
 
       def build_word_entry(path, attestations = nil)
@@ -422,6 +433,20 @@ module Nabu
         end
       end
 
+      # P124-3: the concept→concept pointers as id-keyed crossrefs, in
+      # document order (census in the class note).
+      def pointer_crossrefs(root)
+        root.xpath(%(./tei:div[@type="pointers"]/tei:list[@type]/tei:item/tei:ref[@target]), "tei" => TEI_NS)
+            .filter_map do |ref|
+          target = ref["target"].to_s.delete_prefix("#")
+          next if target.empty?
+
+          kind = ref.parent.parent["type"].to_s
+          shown = Nabu::Normalize.nfc(squeeze(ref.text).then { |name| name.empty? ? target : name })
+          Nabu::DictionaryCrossref.new(kind: kind, label: "#{kind} #{shown}", target: shown, target_id: target)
+        end
+      end
+
       def pointer_refs(list)
         list.xpath("./tei:item/tei:ref", "tei" => TEI_NS).filter_map do |ref|
           label = squeeze(ref.text)
@@ -454,7 +479,7 @@ module Nabu
         end
       end
 
-      def build_entry(entry_id:, key_raw:, headword:, gloss:, lines:, path:, citations: [])
+      def build_entry(entry_id:, key_raw:, headword:, gloss:, lines:, path:, citations: [], crossrefs: [])
         Nabu::DictionaryEntry.new(
           entry_id: entry_id,
           key_raw: Nabu::Normalize.nfc(key_raw),
@@ -463,7 +488,7 @@ module Nabu
           headword_folded: Nabu::Normalize.search_form(headword, language: LANGUAGE),
           gloss: gloss.nil? || gloss.empty? ? nil : Nabu::Normalize.nfc(gloss),
           body: Nabu::Normalize.nfc(lines.join("\n")),
-          citations: citations
+          citations: citations, crossrefs: crossrefs
         )
       rescue Nabu::ValidationError => e
         raise Nabu::ParseError, "tls: #{path}: #{e.message}"

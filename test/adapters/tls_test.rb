@@ -109,6 +109,18 @@ class TlsTest < Minitest::Test
     assert_match(/taxonymy: DIVIDE → #{CONCEPTS_URN}uuid-3762c04a-9ca0-4fd6-b04e-2e24b1f91682/, two.body)
   end
 
+  # P124-3: the concept pointer lists mint id-keyed crossrefs (the target
+  # uuid IS the concept's entry id); source-reference refs (bibliography
+  # uuids) and the words side mint none.
+  def test_concept_pointers_mint_uuid_keyed_crossrefs
+    two = concepts_doc.entries.find { |entry| entry.headword == "TWO" }
+    assert_equal([["taxonymy", "taxonymy DIVIDE", "uuid-3762c04a-9ca0-4fd6-b04e-2e24b1f91682"],
+                  ["hypernymy", "hypernymy NUMBER", "uuid-dd1c8de7-8201-4782-b6e3-960df290eae7"]],
+                 two.crossrefs.map { |c| [c.kind, c.label, c.target_id] })
+    assert_equal(4, concepts_doc.entries.sum { |entry| entry.crossrefs.size })
+    assert(words_doc.entries.all? { |entry| entry.crossrefs.empty? })
+  end
+
   def test_concept_membership_is_inverted_from_the_words_side
     two = concepts_doc.entries.find { |entry| entry.headword == "TWO" }
     assert_match(/^words:$/, two.body)
@@ -297,8 +309,13 @@ class TlsTest < Minitest::Test
     qi = db[:dictionary_entries].where(entry_id: "uuid-fbba1aa8-49bc-49be-ba1a-a849bc59bed5").first
     assert_equal 7, db[:dictionary_citations].where(dictionary_entry_id: qi[:id]).count
 
+    crossrefs = db[:dictionary_crossrefs].order(:id).all
+    assert_equal 4, crossrefs.size, "the fixture's concept pointers (targets outside the slice)"
+    assert(crossrefs.all? { |row| row[:to_entry_id].nil? })
+
     loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 9, db[:dictionary_citations].count, "idempotent reload keeps counts"
+    assert_equal crossrefs, db[:dictionary_crossrefs].order(:id).all
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq, "no revision flap"
   end
 
