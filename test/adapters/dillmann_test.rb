@@ -150,6 +150,32 @@ class DillmannTest < Minitest::Test
     db&.disconnect
   end
 
+  # P123-1 end to end: Dillmann's "Ruth 1,8" lands on the held Gǝʿǝz
+  # Ruth verse whose text carries the quoted እለ፡ ሞቱ፡.
+  def test_define_resolves_a_scripture_reference_onto_the_held_geez_verse
+    db = store_test_db
+    works = Nabu::Store::Source.create(
+      slug: "betamasaheft-works", name: "Beta maṣāḥǝft works",
+      adapter_class: "Nabu::Adapters::BetamasaheftWorks", license_class: "attribution"
+    )
+    Nabu::Store::Loader.new(db: db, source: works)
+                       .load_from(Nabu::Adapters::BetamasaheftWorks.new,
+                                  workdir: Nabu::TestSupport.fixtures("betamasaheft-works"))
+    Nabu::Store::DictionaryLoader.new(db: db, source: create_source(db)).load_from(adapter, workdir: FIXTURES)
+
+    mota = Nabu::Query::Define.new(catalog: db, lila: nil, form_lemma: nil, verb_lemma: nil, lects: nil)
+                              .run("ሞተ", limit: nil)
+                              .find { |result| result.urn == "urn:nabu:dict:dillmann:#{MOTA}" }
+    refute_nil mota
+    resolved = mota.citations.to_h { |citation| [citation.label, citation.resolved_urn] }
+    assert_equal "urn:nabu:betamasaheft-works:LIT2229RuthBo:1.8", resolved["Ruth 1,8"]
+    assert_equal "urn:nabu:betamasaheft-works:LIT2229RuthBo:1.8",
+                 db[:passages].where(urn: resolved["Ruth 1,8"]).get(:urn)
+    assert_nil resolved["Kedr f. 73."], "an unheld source stays an honest miss"
+  ensure
+    db&.disconnect
+  end
+
   # --- fetch (local git only, no network) ------------------------------------
 
   def test_fetch_sparse_clones_the_entry_cone
