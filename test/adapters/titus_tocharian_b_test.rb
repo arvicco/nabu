@@ -228,6 +228,31 @@ class TitusTocharianBTest < Minitest::Test
     assert(doc.passages.all? { |p| p.language == "xto" })
   end
 
+  # IOL Toch. 162 (toch3722): a Tumshuqese leaf in the B chain — the
+  # iots/iotsx lanes (the transcription lane empty, the syllabic lane
+  # carrying the line). Every line claims xtq, so the document does too.
+  def test_the_ts_lanes_claim_tumshuqese
+    require_b_fixtures!
+    doc = parse_fixture("toch3722")
+    assert_equal "xtq", doc.language
+    assert_equal 9, doc.passages.size, "8 numbered lines + the leaf-number line"
+    assert(doc.passages.all? { |p| p.language == "xtq" && p.text.unicode_normalized?(:nfc) })
+    first = doc.passages.first
+    assert_equal "urn:nabu:titus-tocharian-b:toch3722:Toch._162.r.1", first.urn
+    assert_equal "bye nu ta ro nu pe rtha pu ma na [n](u) ////", first.text
+    assert_equal "H.149.add.121_a", first.annotations["alternate"]
+    last = doc.passages.last
+    assert_equal "urn:nabu:titus-tocharian-b:toch3722:Toch._162.v.4", last.urn
+    assert_equal "ti bā r[dh]ye nu : 1 | je ʽa-ra-ṇe-[m]i ////", last.text,
+                 "the leaf's own title word (the Araṇemijātaka) survives verbatim"
+    assert_equal "Tocharian B Corpus — BLK-IOL Toch._162 (toch3722)", doc.title
+  end
+
+  def test_the_ts_lane_family_maps_to_xtq
+    assert_equal :xtq, ADAPTER::PARSER_PROFILE.lane_languages.fetch("ts")
+    %w[iots16 iotsx16].each { |id| assert_match ADAPTER::PARSER_PROFILE.lane_family, id }
+  end
+
   # A mixed page keeps the corpus default (the measured claim is not single).
   def test_a_mixed_page_keeps_the_corpus_language
     doc = Nabu::Adapters::TitusTocharianB.new.send(:document_language, %w[txb san])
@@ -297,7 +322,7 @@ class TitusTocharianBTest < Minitest::Test
     require_b_fixtures!
     adapter = Nabu::Adapters::TitusTocharianB.new
     refs = adapter.discover(B_FIXTURES).to_a
-    assert_equal %w[toch1215 toch3562 toch3855 toch4345 tochb001 tochb002 tochb301 tochb494],
+    assert_equal %w[toch1215 toch3562 toch3722 toch3855 toch4345 tochb001 tochb002 tochb301 tochb494],
                  refs.map { |r| r.metadata["page"] }.sort
     parseable = refs.reject { |r| r.metadata["page"] == "toch1215" }
     first = parseable.map { |r| adapter.parse(r).passages.map(&:urn) }
