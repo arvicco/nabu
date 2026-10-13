@@ -178,6 +178,24 @@ class UnihanTest < Minitest::Test
     assert_equal "一", one[:headword]
   end
 
+  # P124-3: 体 <-> 體 both sit on the fixture shelf and resolve to each other;
+  # a variant outside the slice stays verbatim. Idempotent on reload.
+  def test_semantic_variant_crossrefs_resolve_by_codepoint_and_render_through_define
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    define = Nabu::Query::Define.new(catalog: db)
+    ti = define.by_urn("urn:nabu:dict:unihan:U+4F53")
+    assert_equal([["urn:nabu:dict:unihan:U+9AD4", "體"], [nil, nil]],
+                 ti.crossrefs.map { |c| [c.resolved_urn, c.resolved_headword] })
+    assert_equal ["urn:nabu:dict:unihan:U+4F53"],
+                 define.by_urn("urn:nabu:dict:unihan:U+9AD4").crossrefs.map(&:resolved_urn)
+
+    before = db[:dictionary_crossrefs].order(:id).all
+    assert_equal 8, before.size
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all
+  end
+
   def test_registry_row_exists_disabled_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["unihan"]

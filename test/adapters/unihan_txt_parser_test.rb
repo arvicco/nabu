@@ -53,6 +53,17 @@ class UnihanTxtParserTest < Minitest::Test
     assert_includes by_id.fetch("U+4E9A").body, "kTraditionalVariant: U+4E9E"
   end
 
+  # P124-3: kSemanticVariant items are id-keyed pointers (the codepoint IS
+  # the entry id); the <source tags ride the label verbatim.
+  def test_semantic_variants_mint_codepoint_keyed_crossrefs
+    crossrefs = by_id.fetch("U+4E00").crossrefs
+    assert_equal([["kSemanticVariant", "弌 U+5F0C<kLau,kMatthews,kMeyerWempe", "弌", "U+5F0C"],
+                  ["kSemanticVariant", "壹 U+58F9<kLau,kMatthews,kMeyerWempe", "壹", "U+58F9"]],
+                 crossrefs.map { |c| [c.kind, c.label, c.target, c.target_id] })
+    assert_equal 8, entries.sum { |e| e.crossrefs.size }, "8 kSemanticVariant items over 6 fixture lines"
+    assert_empty by_id.fetch("U+4E9E").crossrefs, "the other variant fields stay body lines"
+  end
+
   def test_a_variants_only_codepoint_mints_with_the_variant_line_as_body
     spoof = by_id.fetch("U+340A")
     assert_equal "kSpoofingVariant: U+340B", spoof.body

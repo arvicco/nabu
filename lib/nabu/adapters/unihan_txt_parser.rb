@@ -60,6 +60,16 @@ module Nabu
       # out — they answer "which standard encodes this", not a reading.
       IRG_SOURCE_FIELDS = %w[kIRG_VSource].freeze
 
+      # P124-3: kSemanticVariant values are codepoint pointers — one
+      # id-keyed DictionaryCrossref per space-separated item ("U+5F0C<kLau,
+      # kMatthews"; the codepoint IS the target's entry id, the <source
+      # tags ride the label verbatim). Census 2026-10-13 over Unihan 17.0
+      # Unihan_Variants.txt: 3,538 kSemanticVariant lines carrying 4,323
+      # items; 4,322 name another codepoint the shelf holds (1 names its
+      # own, never resolved). The other variant fields stay body lines this
+      # packet (kind scope: semantic variants).
+      CROSSREF_FIELD = "kSemanticVariant"
+
       FIELD_ORDER = (READING_FIELDS + VARIANT_FIELDS +
                      RADICAL_STROKE_FIELDS + IRG_SOURCE_FIELDS).freeze
 
@@ -105,8 +115,19 @@ module Nabu
           headword_folded: Normalize.search_form(character, language: language),
           gloss: gloss(values["kDefinition"]),
           body: Normalize.nfc(FIELD_ORDER.filter_map { |field| "#{field}: #{values[field]}" if values[field] }
-                                         .join("\n"))
+                                         .join("\n")),
+          crossrefs: crossrefs(values[CROSSREF_FIELD])
         )
+      end
+
+      # P124-3: one codepoint-keyed crossref per kSemanticVariant item.
+      def crossrefs(value)
+        value.to_s.split.filter_map do |item|
+          code = item[/\AU\+\h{4,6}/] or next
+          character = Normalize.nfc([codepoint(code)].pack("U"))
+          Nabu::DictionaryCrossref.new(kind: CROSSREF_FIELD, label: Normalize.nfc("#{character} #{item}"),
+                                       target: character, target_id: code)
+        end
       end
 
       # Short first gloss, best-effort: the first `;`-separated sense of
