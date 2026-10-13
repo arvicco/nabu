@@ -1,0 +1,86 @@
+<?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Dillmann/master/schema/Dillmann.rng"
+schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Dillmann/master/schema/Dillmann.rng"
+type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title xml:lang="gez">ሐፈጠ</title>
+            <editor>Alessandro Bausi</editor>
+         </titleStmt>
+         <publicationStmt>
+            <authority>Hiob-Ludolf-Zentrum für Äthiopistik</authority>
+            <publisher>Hiob-Ludolf-Zentrum für Äthiopistik</publisher>
+            <pubPlace>Hamburg</pubPlace>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by-sa-nc/4.0/"> This file is
+                  licensed under the Creative Commons Attribution-ShareAlike Non Commercial 4.0.
+               </licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <p>The origin of the lexicon is in a thoroughly elaborated txt version of <ref xml:id="dillmann" target="https://archive.org/details/lexiconlinguaeae00dilluoft">Dillmann, Christian Friedrich August. <emph>Lexicon linguae aethiopicae, cum
+                     indice latino. Adiectum est vocabularium tigre dialecti septentrionalis
+                     compilatum</emph> a W. Munziger. Lipsiae: Th.O. Weigel, 1865.</ref></p>
+            <p>Additional records were created by the project <ref xml:id="traces" target="https://www.traces.uni-hamburg.de/"> TraCES (ERC Advanced Grant, Grant
+                  Agreement 338756)</ref> and follow-up projects at HLCEES</p>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>A digital edition of the Lexicon in TEI.</p>
+         <listPrefixDef>
+            <prefixDef ident="bm" matchPattern="([a-zA-Z0-9]+)" replacementPattern="https://www.zotero.org/groups/358366/ethiostudies/items/tag/bm:$1"/>
+         </listPrefixDef>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="en">English</language>
+            <language ident="la">latin</language>
+            <language ident="it">Italian</language>
+            <language ident="gez">Gǝʿǝz</language>
+            <language ident="grc">Ancient Greek</language>
+            <language ident="syr">Syriac</language>
+            <language ident="ar">Arabic</language>
+            <language ident="sa">Sanskrit</language>
+            <language ident="geo">Georgian</language>
+            <language ident="cop">Coptic</language>
+            <language ident="osa">Old South Arabian</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change who="MK" when="2023-08-14">added Les</change>
+         <change who="MK" when="2023-08-14">added link</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div>
+            <entry xml:id="L111hmnxugcml3cpnctdxmsdxgwdfioxe" n="13179">
+               <form><foreign xml:lang="gez">ሐፈጠ</foreign></form>
+               <sense xml:id="Tmain" xml:lang="en" source="#traces">
+                  <cit type="transcription" xml:lang="gez">
+                     <t:quote xmlns:t="http://www.tei-c.org/ns/1.0">ḥafaṭa</t:quote>
+                  </cit>
+                  <sense n="L" xml:id="TL">
+                     <foreign xml:lang="gez">ሐፈጠ</foreign>
+                     <cit type="transcription" xml:lang="gez">
+                        <t:quote xmlns:t="http://www.tei-c.org/ns/1.0">ḥafaṭa</t:quote>
+                     </cit> (<bibl><ptr target="bm:AlaqaTayya1965MSawasew"/></bibl>, <bibl><ptr target="bm:daMag1953"/></bibl>) <cit type="translation" xml:lang="en">
+                        <t:quote xmlns:t="http://www.tei-c.org/ns/1.0">blacken</t:quote>
+                     </cit>, <cit type="translation" xml:lang="en">
+                        <t:quote xmlns:t="http://www.tei-c.org/ns/1.0">make black</t:quote>
+                     </cit>, <cit type="translation" xml:lang="en">
+                        <t:quote xmlns:t="http://www.tei-c.org/ns/1.0">carbonize</t:quote>
+                     </cit>
+                     <bibl><ptr target="bm:Leslau1987dic"/><citedRange unit="page">
+                           227b</citedRange></bibl>
+                  </sense>
+                  <sense n="C" xml:id="TC">cf. <lbl expand="videas">vid.</lbl>
+                     <ref type="external" target="https://betamasaheft.eu/Dillmann/lemma/Ld81100c6adcb4110a5712a3be0e9a0ca"><foreign xml:lang="gez">ሐፈጠ፡</foreign></ref>
+                  </sense>
+                  <nd/>
+               </sense>
+            </entry>
+         </div>
+      </body>
+   </text>
+</TEI>

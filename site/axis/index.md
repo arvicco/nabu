@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The 28 research desks of the Nabu library — tags over the
+  The 29 research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The 28 desks
+## The 29 desks
 
 ### classical
 
@@ -245,6 +245,14 @@ The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Mon
 The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (Córdova's 1578 Arte, Agüero's 1666 Miscelaneo, the testaments and their period Spanish translations), the Royal Danish Library's Guaman Poma Nueva corónica (Spanish with Quechua and Aymara passages), and the UD Tupinambá and Old Guaraní treebanks of the Jesuit grammars and catechisms — the modern UD treebanks of American languages deliberately out.
 
 [Open the americas desk]({{ '/axis/americas/' | relative_url }})
+
+### africa
+
+> The Africanist — Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse.
+
+Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, and the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai.
+
+[Open the africa desk]({{ '/axis/africa/' | relative_url }})
 
 ### local
 

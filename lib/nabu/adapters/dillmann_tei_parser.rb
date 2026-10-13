@@ -35,6 +35,18 @@ module Nabu
     #   72,754 resolved (56,357 verse grain, 16,397 book grain; 65,670
     #   onto Gǝʿǝz witnesses, 7,084 onto SBLGNT); the fixture mints 88
     #   (81 resolved: 60 verse, 21 book).
+    # - crossrefs (P124-3): one id-keyed DictionaryCrossref (kind "see",
+    #   label = the link's printed fidäl) per <ref type="external"
+    #   target="https://betamasaheft.eu/Dillmann/lemma/<entry-id>"> — the
+    #   only entry→entry markup the tree carries. Census 2026-10-13 over
+    #   the full tree (13,727 entries): 303 lemma links in 265 entries —
+    #   299 name another held entry, 2 link their own entry, 2 dangle (all
+    #   four stay verbatim); the prose before them varies
+    #   ("vid." 181, bare 44, "also" 32, …) and is not the pointer. The
+    #   264 <ref target="#c…"> elements are NOT entry pointers — no element
+    #   anywhere in the tree carries those ids (dangling sigla) — and the
+    #   "#D…"/"#T…" targets are sense anchors inside one entry: neither is
+    #   minted.
     class DillmannTeiParser
       def entry(path)
         doc = read_xml(path)
@@ -49,13 +61,27 @@ module Nabu
           headword_folded: Normalize.search_form(headword, language: "gez"),
           gloss: gloss_for(node),
           body: body_for(node, path),
-          citations: DillmannBibleRefs.citations(node)
+          citations: DillmannBibleRefs.citations(node),
+          crossrefs: crossrefs_for(node)
         )
       rescue Nabu::ValidationError => e
         raise ParseError, "#{path}: #{e.message}"
       end
 
       private
+
+      LEMMA_LINK = %r{\A\s*https?://betamasaheft\.eu/Dillmann/lemma/(L[0-9A-Za-z]+)\s*\z}
+      private_constant :LEMMA_LINK
+
+      # P124-3: the lemma links (census in the class note).
+      def crossrefs_for(node)
+        node.xpath(".//*[local-name()='ref'][@target]").filter_map do |ref|
+          id = ref["target"][LEMMA_LINK, 1] or next
+          printed = Normalize.nfc(flat(ref.text))
+          Nabu::DictionaryCrossref.new(kind: "see", label: printed.empty? ? id : printed,
+                                       target: printed.empty? ? id : printed, target_id: id)
+        end
+      end
 
       def read_xml(path)
         Nokogiri::XML(File.read(path), &:strict)

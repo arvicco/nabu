@@ -72,6 +72,20 @@ class OshbLexiconParserTest < Minitest::Test
     assert_empty e.citations, "the Strong shelf mints no citation rows (BDB pages live on the bdb shelf)"
   end
 
+  # P124-3: the LexicalIndex <xref> points ACROSS dictionaries — bdb at the
+  # held BDB outline shelf (by its entry id), twot at the unheld TWOT.
+  def test_xref_bdb_and_twot_mint_cross_dictionary_id_keyed_crossrefs
+    assert_equal([["bdb", "BDB b.cw.aa", "b.cw.aa", "bdb"], ["twot", "TWOT 278", "278", "twot"]],
+                 strong_entry("1254a").crossrefs.map { |c| [c.kind, c.label, c.target_id, c.to_dictionary] })
+    assert(strong_entry("1254a").crossrefs.all? { |c| c.target_folded.nil? })
+  end
+
+  def test_the_strong_and_aug_ids_are_the_entrys_own_identity_not_pointers
+    assert_equal %w[bdb], strong_entry("1567").crossrefs.map(&:kind), "1567 carries no twot id upstream"
+    assert_equal 84, strongs.sum { |e| e.crossrefs.size }, "43 bdb + 41 twot over the 43 fixture entries"
+    assert(bdb.all? { |e| e.crossrefs.empty? }, "the BDB outline carries no xref markup")
+  end
+
   def test_the_particle_l_has_no_hebrew_strong_entry_and_falls_back_to_the_index
     # One of the eight non-numeric particle ids (the OSHB prefix morphemes):
     # no HebrewStrong entry exists, so the body is the LexicalIndex lane only.

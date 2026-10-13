@@ -99,6 +99,19 @@ class CclTeiParserTest < Minitest::Test
     assert by_id.fetch("C1").citations.empty?, "entries without a crosswalk row mint none"
   end
 
+  # P124-3: <xr type><ref target="#headword"> pointers, headword-keyed
+  # under the shelf's own fold; the ref text (a German gloss) rides the label.
+  def test_xr_refs_mint_headword_keyed_crossrefs
+    by_id = entries.to_h { |e| [e.entry_id, e] }
+    assert_equal([["synonym", "syn. ⲁϩ(ⲁ)- (Verbalpräfix Perfekt I)", "ⲁϩ(ⲁ)-", "ⲁϩ(ⲁ)"],
+                  ["synonym", "syn. ϩⲁ- (Verbalpräfix Perfekt I)", "ϩⲁ-", "ϩⲁ"]],
+                 by_id.fetch("C2").crossrefs.map { |c| [c.kind, c.label, c.target, c.target_folded] })
+    assert_equal %w[ⲁⲛⲍⲏⲃⲉ ⲁⲛⲁϩⲱⲣ], by_id.fetch("C5").crossrefs.map(&:target)
+    assert_equal ["cf."], by_id.fetch("C1497").crossrefs.map(&:kind)
+    assert_equal 7, entries.sum { |e| e.crossrefs.size }, "7 <ref> in the fixture's 6 <xr>"
+    assert_empty by_id.fetch("C1494").crossrefs
+  end
+
   def test_output_is_nfc
     entries.each do |entry|
       assert entry.headword.unicode_normalized?(:nfc)

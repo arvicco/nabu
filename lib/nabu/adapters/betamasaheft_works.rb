@@ -36,6 +36,34 @@ module Nabu
     # DIFFERENT grant than BY-SA is counted UNRECOGNIZED, loudly: a licence
     # drift upstream must never skip silently.
     #
+    # == Declared exclusion: the Arabic-declared estate (P124-2, census 2026-10-13)
+    #
+    # 4,564 records list <language ident="ar"> in langUsage. 405 of them sit
+    # in the BM thousand-range dirs, where "ar" is template boilerplate
+    # beside gez/en: 373 load already (Ethiopic editions; ONE, LIT3989Aragawi,
+    # carries 22 Arabic-script characters inside a Gǝʿǝz text) and 32 skip by
+    # the existing rule (empty or non-Ethiopic-script editions; no Arabic
+    # script in any of them). The other 4,159 are the IHA/works/ tree — the
+    # IslHornAfr records (ERC AdG 322849, "Islam in the Horn of Africa"),
+    # converted 2019-03-27 from that project's database export; every one
+    # carries the same BY-SA <licence> grant as the rest of the repo. They
+    # are CATALOG-GRADE, with ZERO transcribed text: 3,958 have a
+    # self-closing <div type="edition"/>, the other 201 hold only
+    # textpart <label> skeletons (section titles, longest 82 characters);
+    # no file has an <ab>, <l>, <lg> or <p> in its edition. What they DO
+    # carry: Arabic script (titles) in 4,002 (all 4,159 titles tagged ar),
+    # genre keywords (Devotional 2,355, prose 1,939, poetry 1,876,
+    # Mysticism 1,180, Jurisprudence 364 …), and 1,988 dcterms:creator +
+    # ~1,300 iha:* work-to-work relations. Language reality per the edition
+    # xml:lang: ar 3,961, Ajami-type Arabic-script vernaculars aa 44 / am 42 /
+    # x-oh 41 / or 24, und 6, it 1, unset 40. Date and place density is ZERO
+    # (no origDate, creation, notBefore/notAfter, placeName or origPlace in
+    # any of the 4,159). All of them fail the edition-has-Ethiopic peek and
+    # land in discovery_skips by rule. Deliberate coarseness, declared: no
+    # passages exist to load, and a title-only catalog shelf is out of this
+    # text adapter's scope; reopen only if upstream ships transcriptions
+    # (a non-empty Arabic-script edition region would be the signal).
+    #
     # == License — D46-a (owner-ratified 2026-07-26)
     #
     # The PER-DOCUMENT in-file grant governs (house doctrine): 6,545 of

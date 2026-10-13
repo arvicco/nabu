@@ -22,3 +22,7 @@ files:
     url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
     whole: false
     trim: verbatim member xml/mwheader.xml of the zip (the operative CC BY-NC-SA 3.0 grant; whole FILE inside the zip)
+  - path: crossrefs-slice.xml
+    url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
+    whole: false
+    trim: P124-3 cf./q.v. slice — 4 record lines of 286,530 (L1702, L1715, L10608, L10619; upstream lines 2049, 2062, 12696, 12709) + header/footer; recipe in README.md

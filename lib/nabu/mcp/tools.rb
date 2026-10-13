@@ -290,8 +290,9 @@ module Nabu
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
         "in the local catalog the citation carries a resolved passage urn (open it with " \
         "nabu_show); otherwise resolved_urn is null and the display text stands. Entries " \
-        "may carry `crossrefs` — pointers to other headwords of the same dictionary (kind, " \
-        "label verbatim, resolved_urn of the target entry or null — open it with nabu_show). Bounded " \
+        "may carry `crossrefs` — pointers to other entries, usually of the same dictionary, " \
+        "sometimes of another (the Strong shelf's BDB ids) (kind, label verbatim, resolved_urn " \
+        "of the target entry or null — open it with nabu_show). Bounded " \
         "(default #{DEFINE_DEFAULT_LIMIT} entries, max #{DEFINE_MAX_LIMIT}; homographs are " \
         "separate entries). The owner's own notes on an entry ride along in `notes` — " \
         "useful curatorial context.".freeze

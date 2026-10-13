@@ -50,6 +50,17 @@ module Nabu
     #   the links journal, never the CTS citation path). KELLIA's
     #   transcriptions and EN/DE glosses (owner ruling 2026-08-30, option c) ride as a `tla:` body
     #   line.
+    # - crossrefs (P124-3): one headword-keyed DictionaryCrossref per
+    #   <xr type><ref target="#<headword>"> anywhere in the entry (kind per
+    #   XR_KINDS; the ref text — a German gloss — rides the label; the
+    #   target folds through the shelf's own fold, so it meets
+    #   headword_folded). Census 2026-10-13 over v1.2: 2,611 <xr> (cf
+    #   2,489, syn 118, ant 4; 2,550 entry-level, 54 in a sense, 7 in an
+    #   etym) carrying 2,614 refs, every target a "#headword" string — no
+    #   C-id targets — on 2,070 entries. The CCL's homograph grain (ⲁ-
+    #   names four entries) keeps most verbatim under the unique-match
+    #   rule: 796 resolve, 1,716 meet several homographs, 102 name no
+    #   headword.
     class CclTeiParser
       TEI_NS = { "tei" => "http://www.tei-c.org/ns/1.0" }.freeze
 
@@ -60,6 +71,9 @@ module Nabu
       # Gloss preference: the define surface is English-first; de/fr stay
       # in the body verbatim.
       GLOSS_LANGS = %w[en de fr].freeze
+
+      # P124-3: xr @type => [kind, printed label prefix].
+      XR_KINDS = { "cf" => ["cf.", "cf."], "syn" => ["synonym", "syn."], "ant" => ["antonym", "ant."] }.freeze
 
       # Parse +path+ and return its DictionaryEntry values in file order.
       # +etymologies+ maps C-id => Ccl::Etymology (either id may be nil —
@@ -94,8 +108,24 @@ module Nabu
           headword_folded: fold(headword),
           gloss: gloss(elem),
           body: body(elem, etymology),
-          citations: crosswalk_citations(etymology)
+          citations: crosswalk_citations(etymology),
+          crossrefs: crossrefs(elem)
         )
+      end
+
+      # P124-3: the xr pointers (census in the class note).
+      def crossrefs(elem)
+        elem.xpath(".//tei:xr/tei:ref[@target]", TEI_NS).filter_map do |ref|
+          target = Nabu::Normalize.nfc(collapse(ref["target"].delete_prefix("#")))
+          next if target.empty?
+
+          kind, prefix = XR_KINDS.fetch(ref.parent["type"].to_s, XR_KINDS.fetch("cf"))
+          gloss = collapse(ref.text)
+          label = gloss.empty? ? "#{prefix} #{target}" : "#{prefix} #{target} (#{gloss})"
+          folded = fold(target)
+          Nabu::DictionaryCrossref.new(kind: kind, label: Nabu::Normalize.nfc(label), target: target,
+                                       target_folded: folded.strip.empty? ? nil : folded)
+        end
       end
 
       def headword(elem, entry_id)

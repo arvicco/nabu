@@ -1,0 +1,67 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Item pages and PDFs are whole byte copies; the REST listing pages are a
+# documented trim (7 of 111 rows) and the text layers are recorded mutool
+# output — so adapter_test stays null.
+source: bu-ajami
+adapter_test: null
+retrieved: "2026-10-13"
+files:
+  - path: items/hausa/falke-2729-wakar-sarkin-kano.html
+    url: https://sites.bu.edu/nehajami/the-four-languages/hausa/hausa-manuscripts/falke-2729-wakar-sarkin-kano/
+    whole: true
+    trim: none
+  - path: items/wolof/bakk-wi.html
+    url: https://sites.bu.edu/nehajami/the-four-languages/wolof/wolof-manuscripts/bakk-wi/
+    whole: true
+    trim: none
+  - path: items/mandinka/mandinkakan-leetaroolu-3.html
+    url: https://sites.bu.edu/nehajami/the-four-languages/mandinka/mandinka-manuscripts/mandinkakan-leetaroolu-3/
+    whole: true
+    trim: none
+  - path: items/fula/coora.html
+    url: https://sites.bu.edu/nehajami/the-four-languages/fula/fula-manuscripts/coora/
+    whole: true
+    trim: none
+  - path: files/2022/02/Falke-2729_Transcription.pdf
+    url: https://sites.bu.edu/nehajami/files/2022/02/Falke-2729_Transcription.pdf
+    whole: true
+    trim: none
+  - path: files/2021/07/Bàkk-wi_Transcription.pdf
+    url: https://sites.bu.edu/nehajami/files/2021/07/Ba%CC%80kk-wi_Transcription.pdf
+    whole: true
+    trim: none
+  - path: files/2022/08/Mandinkakan-Leetaroolu-3_Transcription.pdf
+    url: https://sites.bu.edu/nehajami/files/2022/08/Mandinkakan-Leetaroolu-3_Transcription.pdf
+    whole: true
+    trim: none
+  - path: rest/pages-1.json
+    url: https://sites.bu.edu/nehajami/wp-json/wp/v2/pages?per_page=100&page=1&_fields=id,link,slug,modified
+    whole: false
+    trim: 3 of the page's 100 rows (one non-item page + the hausa and wolof fixture items), re-serialized compactly
+  - path: rest/pages-2.json
+    url: https://sites.bu.edu/nehajami/wp-json/wp/v2/pages?per_page=100&page=2&_fields=id,link,slug,modified
+    whole: false
+    trim: 4 of the listing's rows (two non-item pages + the mandinka and fula fixture items), re-serialized compactly
+  - path: textlayers/Falke-2729_Transcription.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-10-13"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/Bàkk-wi_Transcription.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-10-13"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/Mandinkakan-Leetaroolu-3_Transcription.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-10-13"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim

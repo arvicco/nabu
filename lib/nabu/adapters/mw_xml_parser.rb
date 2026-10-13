@@ -55,6 +55,14 @@ module Nabu
     #   tag (P57-5 — MW's own dotted print abbreviation, Gk./Lat./Angl.Sax.,
     #   used to leak through verbatim even though this table already
     #   resolves it; lang_code now equals language for every cognate row).
+    # - crossrefs (P124-3): MW's "cf." / "q.v." pointers, ONLY in the two
+    #   mechanically-safe shapes (see CROSSREF_QV_GAP): <ab>cf.</ab> whose
+    #   next sibling — whitespace aside — is an <s> (kind "cf."), and
+    #   <ab>q.v.</ab> whose previous sibling, past at most a comma or an
+    #   opening bracket, is an <s> (kind "q.v."). Only that ONE adjacent
+    #   <s> is the target (a "cf. A, B, C" list yields A); headword-keyed
+    #   like P123-1 (IAST display, generic fold with the compound seams
+    #   dropped — the same shape key1 folds to).
     class MwXmlParser
       LANGUAGE = "san"
 
@@ -89,6 +97,20 @@ module Nabu
         "Goth." => "got", "Eng." => "en", "Zd." => "ae", "Angl.Sax." => "ang",
         "Russ." => "ru", "Armen." => "hy", "Slav." => "sla", "Hib." => "gle"
       }.freeze
+
+      # P124-3 census 2026-10-13 over the full mw.xml (286,525 records):
+      # 11,916 <ab>cf.</ab> — 7,895 whitespace-adjacent to an <s> (MINTED);
+      # the rest stay prose: 1,529 before an <ls> citation, 713 before a
+      # <lang> cognate note, 441 "cf. √ <s>" root mentions, 297 before
+      # another <ab>, 223 before a <hom>, and a long tail of "cf. also",
+      # "cf. under", "(cf. next)" shapes. 3,652 <ab>q.v.</ab> — 3,029 right
+      # after an <s> past ", " (2,661), " (" (325), " [" (35) or bare
+      # space (MINTED); the other 623 follow <s1> proper names, a <lex>,
+      # or other prose and stay unextracted. Never a guess at prose.
+      # Minted: 10,924 pointers on 9,943 entries; 4,630 resolve to a unique
+      # MW headword, 3,434 meet homograph records (left verbatim), 2,860
+      # name no headword (inflected forms, phrase targets).
+      CROSSREF_QV_GAP = /\A\s*[,(\[]?\s*\z/
 
       # Parse +lines+ (any Enumerable of record lines — a File enumerator or
       # an unzipped string's each_line) and return DictionaryEntry values in
@@ -142,7 +164,8 @@ module Nabu
           gloss: gloss(main[:body]),
           body: body_text(group),
           citations: citations(group),
-          reflexes: reflexes(group)
+          reflexes: reflexes(group),
+          crossrefs: crossrefs(group)
         )
       rescue Nabu::ValidationError, Nabu::Normalize::EncodingError => e
         raise Nabu::ParseError, "mw-xml: record L=#{main[:l].inspect}: #{e.message}"
@@ -295,6 +318,37 @@ module Nabu
       def restored_label(element)
         restored = [element["n"], element.text].compact.join(" ")
         restored.gsub(/\s+/, " ").strip
+      end
+
+      # -- cross-references (P124-3; census at CROSSREF_QV_GAP) ---------------------
+
+      def crossrefs(group)
+        group.flat_map { |record| record[:body].xpath(".//ab") }.filter_map do |ab|
+          case ab.text.strip
+          when "cf." then crossref("cf.", adjacent_s(ab.next_sibling, :next_sibling, /\A\s*\z/))
+          when "q.v." then crossref("q.v.", adjacent_s(ab.previous_sibling, :previous_sibling, CROSSREF_QV_GAP))
+          end
+        end
+      end
+
+      # The <s> sibling right beside the <ab>, past at most one text node
+      # matching +gap+; nil for any other shape.
+      def adjacent_s(node, step, gap)
+        node = node.public_send(step) if node&.text? && node.text.match?(gap)
+        node if node&.element? && node.name == "s"
+      end
+
+      def crossref(kind, s_node)
+        return nil if s_node.nil?
+
+        target = Nabu::Normalize.nfc(sanskrit(s_node).gsub(/\s+/, " ").strip)
+        return nil if target.empty?
+
+        folded = Nabu::Normalize.search_form(target.gsub(/[-—]/, ""), language: LANGUAGE)
+        Nabu::DictionaryCrossref.new(
+          kind: kind, label: kind == "cf." ? "cf. #{target}" : "#{target} q.v.",
+          target: target, target_folded: folded.strip.empty? ? nil : folded
+        )
       end
 
       # -- cognate reflexes (survey §4) -------------------------------------------

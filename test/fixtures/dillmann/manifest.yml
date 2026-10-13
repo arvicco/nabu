@@ -2,7 +2,7 @@
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
 # DillmannData ships one TEI <entry> per file under numbered directories
-# plus new/ and new1/. All three fixtures are WHOLE byte-identical upstream
+# plus new/ and new1/. All five fixtures are WHOLE byte-identical upstream
 # copies. adapter_test is null — the source-specific test pins ids/
 # headwords/glosses a full refetch would not false-fail.
 source: dillmann
@@ -19,5 +19,13 @@ files:
     trim: none
   - path: new1/L844cd3b8849f4c16b5f3390e611a4f7b.xml
     url: https://raw.githubusercontent.com/BetaMasaheft/DillmannData/master/new1/L844cd3b8849f4c16b5f3390e611a4f7b.xml
+    whole: true
+    trim: none
+  - path: 5/Ld81100c6adcb4110a5712a3be0e9a0ca.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/DillmannData/master/5/Ld81100c6adcb4110a5712a3be0e9a0ca.xml
+    whole: true
+    trim: none
+  - path: new/L111hmnxugcml3cpnctdxmsdxgwdfioxe.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/DillmannData/master/new/L111hmnxugcml3cpnctdxmsdxgwdfioxe.xml
     whole: true
     trim: none

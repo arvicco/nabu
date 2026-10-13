@@ -848,6 +848,43 @@ pointer with its target urn and an unresolved one as its verbatim text,
 never a dead link. The Wiktionary Chinese extract opts out: its `synonyms`
 are dialectal-synonym tables (1.7M rows), a thesaurus rather than pointers.
 
+**Id-keyed pointers (P124-3, migration 040).** Some dictionaries point by
+upstream entry id, not headword — the AED's `<xr type="root"><ref
+target="tla866216"/></xr>` carries no surface form at all. Such a pointer
+sets `target_id`; the resolution pass then matches it against the target
+entry's `entry_id` (unique per dictionary) instead of a folded headword,
+and `target_folded` stays NULL. The field enters the content hash only
+when set, so headword-keyed rows keep their shas.
+
+Monier-Williams (P124-3) marks its pointers only as prose abbreviations,
+so just the two mechanically-safe shapes are mined: `<ab>cf.</ab>`
+whitespace-adjacent to an `<s>`, and `<ab>q.v.</ab>` right after an `<s>`
+(past at most a comma or an opening bracket) — kinds `cf.` / `q.v.`,
+headword-keyed. Looser prose ("cf. also …", "cf. √ …", a q.v. after a
+proper name) stays unextracted; the census sits in the parser.
+
+**Cross-dictionary pointers (P124-3, migration 041).** `to_dictionary`
+names the target dictionary's slug when a pointer leaves its own
+dictionary (NULL = same dictionary). The OSHB LexicalIndex `<xref>` gives
+each Strong entry its BDB and TWOT ids: BDB is held (the `bdb` shelf of
+the same source, entry ids = BDB ids), so those pointers resolve there by
+`target_id`; TWOT is not held, so its pointers keep `to_dictionary: twot`
+and stay unresolved (rendered verbatim) — they would resolve the day a
+`twot` dictionary is loaded and the pointing source re-loads. The xref's
+strong/aug ids are the entry's own identity and mint nothing.
+
+Further id-keyed sets (P124-3): Unihan `kSemanticVariant` items (the
+codepoint is the entry id; kind `kSemanticVariant`, source tags verbatim
+in the label); Dillmann's `<ref type="external"
+target="…/Dillmann/lemma/<id>">` links (kind `see`) — its `ref
+target="#c…"` elements name no entry (dangling sigla) and are not mined.
+The CCL's `<xr type="cf|syn|ant"><ref target="#<headword>">` pointers are
+headword-keyed (folded through the shelf's own fold); its homograph grain
+leaves most of them verbatim. TLS concept pointer lists (hypernymy,
+taxonymy, see, antonymy, mereonymy) are id-keyed by concept uuid; the
+tree's many other `ref target="#uuid…"` elements name bibliography
+records, not entries, and are not mined.
+
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
 `nabu etym богъ --lang chu` walks from an attested lemma to its
