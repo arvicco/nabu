@@ -583,6 +583,26 @@ bridging:
   # completed comparison build → re-syncs are an owner decision.
   sync_policy: manual
 
+bu-ajami:   # P124-1, 02-sources row 270
+  adapter: Nabu::Adapters::BuAjami
+  adopted: "2026-10-13"
+  axes: [africa]
+  wired: false   # checklist §6: bin/nabu enable bu-ajami && bin/nabu sync bu-ajami
+  sync_policy: manual
+  # Boston University's NEH Ajami collection (sites.bu.edu/nehajami, PI
+  # Fallou Ngom) — the library's first Hausa, Mandinka, Fula (Pular) and
+  # Wolof: 80 manuscripts, 20 per language, each a WordPress item page
+  # (metadata table + manuscript images + EN/FR translations) and a typed
+  # ROMANIZED transcription PDF (the text served; the originals are Ajami,
+  # declared per document). CC BY-NC 4.0 verbatim on every item page →
+  # nc. Walk: the wp-json pages listing → 80 item pages → 80 transcription
+  # PDFs (~58 MB), 1 s pacing with retries (the host 503s bursts);
+  # incremental on the listing's modified stamps, never deletes.
+  # EXPECTED FIRST SYNC (census 2026-10-13, every item fetched and parsed
+  # through mutool): 80 docs / 705 passages (PDF pages) / ~609k chars;
+  # ha 20 · mnk 20 · fuf 20 · wo 20; place on 80 (Provenance), dates on
+  # 33 (15 stated witness/typed dates + 18 authorship eras, composition
+  # class), 0 parse errors.
 burman-concordance:
   adapter: Nabu::Adapters::BurmanConcordance
   adopted: "2026-08-17"

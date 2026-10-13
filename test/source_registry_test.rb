@@ -1048,7 +1048,7 @@ class SourceRegistryTest < Minitest::Test
 
     assert_equal %w[classical romance epigraphy slavic germanic celtic italic etym biblical hebrew
                     syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist tibetan
-                    korean sea sinitic japonic turkic mongolic americas local],
+                    korean sea sinitic japonic turkic mongolic americas africa local],
                  registry.axes.names,
                  "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
                  "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
@@ -1060,7 +1060,8 @@ class SourceRegistryTest < Minitest::Test
                  "minted P78-1 with sillok, per the owner-adopted P47-s4 survey, before sinitic " \
                  "— the sinoverse neighborhood + sea minted P92-1 with dharma-khmer, owner-" \
                  "ruled (a) 2026-09-01 per the P47-s3 survey, after korean — the Indic " \
-                 "cosmopolis's eastern edge beside the sinoverse)"
+                 "cosmopolis's eastern edge beside the sinoverse + americas minted P117-5 with " \
+                 "ticha/guaman-poma + africa minted P124-1 with bu-ajami, after americas)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"
