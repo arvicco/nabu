@@ -242,6 +242,21 @@ class CclTest < Minitest::Test
                  "both ancestor citations persisted"
   end
 
+  # P124-3: the fixture's xr targets are all outside the slice (or, like
+  # ⲁ-, homographs) — every pointer lands and renders verbatim, idempotently.
+  def test_xr_crossrefs_land_unresolved_and_reload_idempotently
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    rows = db[:dictionary_crossrefs].order(:id).all
+    assert_equal 7, rows.size
+    assert(rows.all? { |row| row[:to_entry_id].nil? })
+    result = Nabu::Query::Define.new(catalog: db).by_urn("urn:nabu:dict:ccl:C4")
+    assert_equal([["cf. ⲛⲁ- (ungefähr)", nil]], result.crossrefs.map { |c| [c.label, c.resolved_urn] })
+
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal rows, db[:dictionary_crossrefs].order(:id).all
+  end
+
   def test_a_crosswalk_change_revises_the_entry
     db, loader = loader_setup
     Dir.mktmpdir do |workdir|
