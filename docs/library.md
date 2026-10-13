@@ -1099,6 +1099,25 @@ retrieved through the credentials seam under the TITUS personal
 grant, with two leaves identified as Tumshuqese (4,250 / 43,499;
 `nc`, never redistributed).
 
+## 8an. The Africa opening (P124)
+
+The continent's first text shelves, in the register shape (counts
+read from the catalog 2026-10-13):
+
+**The Ajami manuscripts.** `bu-ajami` — the Boston University NEH
+Ajami collection: 80 typed romanized transcriptions of
+Arabic-script manuscripts in Hausa, Mandinka, Pular and Wolof —
+four languages the library never held — with provenance places on
+every item and a third carrying dates (80 / 705; CC BY-NC 4.0,
+Fallou Ngom and the collection credited).
+
+**The reference shelf.** `africa-pd` — ten public-domain editions
+and grammars on the scan-shelf mold: Griffith's 1913 Old Nubian
+texts, the Swahili classics (Steere, Taylor, Büttner, Velten),
+the Hausa pair (Schön, Robinson), Hanoteau's Tamachek and Kabyle,
+Koelle's Vai (10 / 3,536; public domain on stated print-era
+facts).
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
