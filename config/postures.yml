@@ -1209,12 +1209,12 @@ sources:
     # P122-3: Shabad OS — the Gurmukhī primary text (type = primary only).
     kind: {posture: unclassified, note: "scripture and the Panthic canon; the source/
         section names ride metadata (source_name, section_name, section_description)"}
-    lect: {posture: pending, note: "candidate: the aggregated nabu-lects mint — a pa
-        (Punjabi) anchor under inc with the pan → pa codemap alias, the guru (Gurmukhī)
-        script row, and the bra-Guru → bra~guru and fas-Guru → fa~guru codemap rows (bra
-        and fa are held anchors); a pa:old stage for the Granth's Old Punjabi / Sant
-        Bhāṣā is the refinement candidate. The per-source/section language table in the
-        adapter is declared coarse"}
+    lect: {posture: identity, note: "the Punjabi package merged + canonical-synced
+        2026-10-13 (the add-then-retire shape within ONE phase): pan resolves through the
+        codemap onto the pa anchor, bra-Guru/fas-Guru onto bra and fa with the script
+        fact on the ~ axis; pa:old (granthic, [1450, 1708]) is the NAMED refinement for
+        the scriptural corpus, not defaulted. The per-source/section language table in
+        the adapter is declared coarse"}
     dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
         database's author records (the Gurus, the bhagats, Bhāī Gurdās, Bhāī Nand Lāl —
         each line group names its author) as the composition class; the records carry no
