@@ -878,6 +878,9 @@ codepoint is the entry id; kind `kSemanticVariant`, source tags verbatim
 in the label); Dillmann's `<ref type="external"
 target="…/Dillmann/lemma/<id>">` links (kind `see`) — its `ref
 target="#c…"` elements name no entry (dangling sigla) and are not mined.
+The CCL's `<xr type="cf|syn|ant"><ref target="#<headword>">` pointers are
+headword-keyed (folded through the shelf's own fold); its homograph grain
+leaves most of them verbatim.
 
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
