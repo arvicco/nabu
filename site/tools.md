@@ -37,6 +37,10 @@ and third centuries. The chronological axis covers
 ORACC tablets, the inscription databases and the papyri foremost among
 them; the
 century-by-century census is on [Layers]({{ '/layers/' | relative_url }}).
+A `--date-basis` flag (October 2026) filters by the date's *provenance
+class* — artifact, composition, edition, or the visibly-flagged
+machine-estimated silver tier — the holdout discipline for dating
+research as a search flag.
 On the epigraphic shelves, genre facets compose with the same filters:
 
 ```
@@ -207,6 +211,16 @@ A morphology filter (`--morph case=gen,number=pl`, in Universal
 Dependencies vocabulary) restricts hits to attestations with the stated
 gold morphology.
 
+**Attestation profiles** (`nabu lemma FORM --language CODE`, October
+2026) answer the diachronic question from precompiled rollups,
+instantly: first and last attested century — each with the date's
+provenance class — a per-century frequency curve with the gold and
+silver tiers shown separately, top sources, and the dictionary
+entries for the form. The same rollups serve `nabu lang CODE --curve`
+(a language's attestation curve across the centuries) and
+`nabu lang --mixing` (the multilingual-documents census) — the
+demography questions as desk commands.
+
 **Semantic search** (`search --similar URN`, September 2026) finds
 passages by *meaning*: anchor on any passage of the literary core and
 get its nearest same-language neighbors — the same line in another held
@@ -260,7 +274,15 @@ $ bin/nabu align "MARK 2.3" --collate --base zographensis
 
 **Export** (`nabu export --format plain|jsonl`) streams the corpus out
 with language and license filters — the exit format, so the collection is
-never captive to its own tooling.
+never captive to its own tooling. Since October 2026 the same door
+serves **research tables**: `export documents --with-axes` (every
+document with its language, stage, script, date envelope, place, genre
+and kind), `export links` (the mined cross-reference graph) and
+`export lemmas` (the attestation matrix) write CSV or JSONL with a
+**license manifest** beside every file — the generation time, the
+filters, every column documented, and every source drawn on with its
+license class; `--license-class open,attribution` cuts a provably
+redistributable set.
 
 ## The reference desk
 
@@ -438,6 +460,14 @@ the other.
 $ bin/nabu parallels urn:nabu:sblgnt:matt:4.4
 ```
 
+At corpus scale the same engine runs as a **batch producer**
+(`parallels SCOPE --batch`): per-language tuning profiles
+(`--profile latin` probes word trigrams past a Latin function-word
+stop list; `--profile chinese` probes character 4-grams through the
+CJK bigram index — the fix that first made Chinese parallels answer
+at all), resumable chunking whose cursor survives a killed run, and
+full run provenance on every minted edge.
+
 **Formula mining** (`nabu formulas SCOPE`) points the same machinery inward:
 the repeated formulas within a corpus slice, ranked by count and length —
 Homer's ὣς ἔφαθ᾽ οἵ δ᾽ (72 occurrences), the *Beowulf maþelode bearn
@@ -512,6 +542,13 @@ typed syllabified, Old Japanese romanized) — on its
 [axis page]({{ '/axis/' | relative_url }}) under **Ask your model**.
 
 ## Stewardship
+
+**Silver dates** (`nabu silver-dates`, October 2026) give
+machine-suggested datings the same honest home machine lemmas have: a
+local shelf written only through its gateway, projected into the
+timeline as visibly-flagged *silver* rows only when the owner arms the
+gate — never mixed into any surface that promises upstream dates, and
+outranked by any upstream date wherever one exists.
 
 **Lect rulings** (`nabu lect …`, added 4 August 2026) manage the layer beneath language
 codes: which historical stage of a language a document actually

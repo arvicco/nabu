@@ -64,6 +64,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Coptic | Coptic Scriptorium: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, gold-lemmatized | c. 3rd – 10th c. CE | 482 / 74,169 | CC BY per document (source class `nc`) |
 | Sanskrit | GRETIL: Rāmāyaṇa, purāṇas, kāvya, śāstra, the Ṛgveda with Vedic accents | c. 1200 BCE – 18th c. CE | 780 / 703,068 | CC BY-NC-SA |
 | Indic expansion | SARIT, SuttaCentral (the segmented Pali canon with aligned English and its variant apparatus), the gold-lemmatized DCS, Classical Newar (DACON) | Veda – early modern | 28,171 / 1,797,358 | CC BY / CC BY-SA / NC per source |
+| South Asia | The DHARMA Tamil-country and Deccan epigraphy estates, Siddham's Gupta-era inscriptions, the printed *South Indian Inscriptions* volumes, TAMILEX's critical editions of the classical Tamil canon, Project Madurai's e-texts, Ollett's Kannada and Prakrit editions, the Gurmukhī scriptural canon, the Gujarati bhakti prints | c. 3rd c. BCE – 19th c. CE | 13,668 / 1,476,284 | CC BY / BY-SA / BY-NC-SA / PD per source |
 | Treebanks | PROIEL, TOROT, UD, ISWOC: gold lemma, morphology, and syntax | 5th c. BCE – 18th c. CE | 136 / 413,135 | mostly CC BY-NC-SA |
 | Cuneiform | ORACC, over a hundred projects: the complete State Archives of Assyria, the Achaemenid trilinguals, the ePSD2 corpora, the CC0 project pack, with aligned English translations | late 4th mill. – 4th c. BCE | 118,367 / 1,800,218 | CC0 |
 | Ancient Near East | TLHdig Hittite and the glossed Hittite texts, the Luwian corpus, the CDLI catalog, eBL Fragmentarium, Achemenet Babylonian, SEAL, Ugaritic (CUC), Peshitta and the Syriac corpus, ETCSL Sumerian literature | late 4th mill. BCE – 13th c. CE | 412,228 / 3,223,988 | CC BY / CC0 / NC / personal grants per source |
@@ -71,7 +72,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Hebrew &amp; Aramaic | OSHB and BHSA Masoretic text, the Dead Sea Scrolls, the Sefaria Targums, the inscriptions of Israel/Palestine | c. 1000 BCE – 10th c. CE | 7,499 / 591,787 | CC BY / NC per source |
 | Elephantine | The island's multilingual documentary record: Aramaic, Greek, Demotic, Egyptian, Coptic, with English translation siblings | 3rd mill. BCE – Islamic Egypt | 15,539 / 69,350 | CC BY-SA |
 | Arabic &amp; Persian | OpenITI: Quran and hadith, history and biography, fiqh, kalām and falsafa, the dīwāns and adab; the Persian classics; the DiCCAS disaster corpus | 7th c. – early modern | 9,089 / 34,632,378 | CC BY-NC-SA |
-| Iranian &amp; the Silk Road | The Invisible East documents, Skjærvø's Khotanese manuscripts, the trilingual Kaʿba-ye Zartošt inscription, Hafez in Perseus | 3rd – 14th c. CE | 3,678 / 37,857 | CC BY / CC BY-SA |
+| Iranian &amp; the Silk Road | The Invisible East documents, Skjærvø's Khotanese manuscripts, the trilingual Kaʿba-ye Zartošt inscription, Hafez in Perseus — and the TITUS grant estate: the Avestan canon, the Pahlavi books, the Bactrian documents, the Manichaica, the Khotanese and Sogdian books, and the complete Tocharian A and B corpora | 3rd c. BCE – 14th c. CE | 12,891 / 195,785 | CC BY / CC BY-SA / personal grants (nc) |
 | Turkic &amp; Mongolic | ATMO's Eastern Turki manuscripts, Street's *Secret History of the Mongols* | 13th – 20th c. | 16 / 8,457 | CC BY-SA / use grant |
 | Egyptian | The TLA sentence corpora (AES + Late Egyptian/Demotic), gold-lemmatized | late 4th mill. – 1st c. BCE | 26,017 / 261,950 | CC BY-SA |
 | Ethiopic (Gǝʿǝz) | Beta maṣāḥǝft works incl. the Gǝʿǝz Bible; the TraCES gold-analyzed corpus with the Aksumite royal inscriptions | Aksumite – the manuscript tradition | 3,825 / 142,352 | CC BY-SA / NC |
@@ -84,7 +85,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Korean | The Joseon Veritable Records and the Royal Secretariat diaries, the Goryeo histories, the Border Defense Command register, the ITKC classical originals, the Open Korean Historical Corpus, the *Yongbi eocheon ga* | Goryeo – late Joseon | 1,210,839 / 6,027,145 | KOGL open / CC BY-NC |
 | Tibetan | The Derge Kangyur and Tengyur complete, the 84000 English translations, the Old Tibetan documents (OTDO), the SOAS gold-POS corpus | 8th c. – the 18th-c. Derge woodblocks | 5,368 / 1,497,590 | PD / CC BY / CC BY-NC-ND (84000) |
 | Japanese | Aozora Bunko, the National Diet Library's classical OCR stacks, Minna de Honkoku, Japanese Wikisource, the NIJL and Genji TEI editions, ONCOJ's gold-morphology Old Japanese | 7th c. – 20th c. CE | 55,959 / 4,094,528 | open / CC BY / CC BY-SA |
-| Southeast Asia | The DHARMA epigraphy of Old Khmer, Cham, Pyu and the Nusantara charters, the Old Javanese kakawin library, the Old Burmese inscriptions of Bagan | c. 5th – 15th c. CE | 2,989 / 131,135 | CC BY / CC BY-SA |
+| Southeast Asia | The DHARMA epigraphy of Old Khmer, Cham, Pyu and the Nusantara charters, the Old Javanese kakawin library, the Old Burmese inscriptions of Bagan, the Balinese lontar transcriptions, the Jawi-script Malay manuscripts, the Thai Collected Chronicles | c. 5th c. CE – the lontar tradition | 4,397 / 168,713 | CC BY / CC BY-SA / PD |
 | Germanic | Menotec and Menota Old Norse, Old Swedish, the Old Saxon *Heliand*, ReM, ReN and ReF (Middle High, Middle Low and Early New High German), the Deutsches Textarchiv, Old and Middle Dutch, the Rundata runic corpus | c. 200 – 1969 CE | 39,525 / 2,497,571 | nc / CC BY / CC BY-SA / ODbL / `research_private` |
 | The Americas | Ticha's colonial Valley Zapotec, Guaman Poma's *Nueva corónica* | 16th – 18th c. CE | 1,282 / 7,014 | PD / CC BY-SA |
 | Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the StarLing / Tower of Babel databases, three Slovenian historical dictionaries, Brückner and Nasovič, the Welsh GPC, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Chinese rime books), the Tibetan rack (Mahāvyutpatti, the Verbs Database, the Monlam headwords), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
@@ -264,6 +265,32 @@ variant readings with their witness sigla, the concordances to the PTS
 and other print editions, and the translators' notes. DACON (Zenodo,
 CC BY) adds Classical Newar manuscripts, morphosyntactically annotated.
 
+## South Asia
+
+The subcontinent's own record arrived in force in October 2026. The ERC
+DHARMA project's epigraphy estates came first: the **Tamil country**
+(1,267 inscriptions — temple walls, hero stones, the Pallava and Chola
+donative record, with Śaka and Kollam era dates converted to CE
+envelopes) and the **Deccan** (1,694 inscriptions in Telugu, Kannada,
+Sanskrit and Prakrit), joined by **Siddham**'s Gupta-era corpus (427
+inscriptions whose regnal years convert through the era table) and the
+DHARMA works database. The **printed *South Indian Inscriptions*
+volumes** follow as their license-marked DHARMA conversions — 589
+inscriptions whose original ASI editors are credited per document. The
+literary canon came next: **TAMILEX** (Universität Hamburg), critical
+TEI editions of the Caṅkam anthologies, the Tirukkuṟaḷ with its
+commentators, Tolkāppiyam and the devotional canons — 7,830 documents
+whose per-word *wordsplit* layer (262,093 gold rows: segmentation,
+gloss, grammatical role) exists nowhere else for Old Tamil — beside
+**Project Madurai**'s 755 classical e-texts at 1.2 million lines, and
+Andrew Ollett's **Kannada and Prakrit editions** (the library's first
+individually-named Prakrit). The **Gurmukhī scriptural canon** rounds
+the wing: the Shabad OS database's 141,264 primary scripture lines —
+the Gurū Granth Sāhib, the Vārāṅ of Bhāī Gurdās — at line grain, with
+the registry's Punjabi anchor and granthic stage behind it, while the
+**Gujarati bhakti prints** (Narasiṃha Mehtā to Dayārām in 1888–1913
+editions) open the western vernacular.
+
 ## Morphosyntactic treebanks
 
 Gold-standard linguistically annotated corpora — lemma, morphology, and
@@ -396,6 +423,19 @@ arrives sentence-aligned in all three of its versions — Middle Persian,
 Parthian, Greek — the library's first Parthian. Ḥāfeẓ's *Dīwān* rides
 the Perseus Persian shelf beside the OpenITI Persian classics, and the
 CDLI and ORACC Old Persian royal inscriptions serve the same desk.
+
+October 2026 completed the corridor under personal research grants
+from the TITUS project (Frankfurt): the **Avestan canon** (248
+documents), the **Pahlavi books** (1,572 — the Dēnkard, the Bundahišn,
+the Zoroastrian theological library), the **Bactrian documents**, the
+**Manichaica** in Middle Persian, Parthian and Sogdian, and the
+**Khotanese and Sogdian book corpora** — then the **complete Tocharian
+corpus**: all 466 Tocharian A documents and, through the members' gate
+with a stored credential, the whole 4,250-document Tocharian B chain
+across the Berlin, London and Paris collections, each collection's
+data-entry editors credited. Two of its leaves, identified in Maue's
+handlist as **Tumshuqese** (one carries the *Araṇemijātaka*), give the
+library its rarest Saka language.
 
 ## Turkic and Mongolic
 
@@ -578,7 +618,7 @@ is opened. Beside it sit ONCOJ's gold-morphology Old Japanese
 The classical side arrived in late September 2026. The National Diet
 Library's next-generation digital library serves machine-OCR full text
 for its copyright-expired classical books, and a resumable crawl walks
-them at a deliberately gentle pace — 26,860 documents so far, each
+them at a deliberately gentle pace — 32,733 documents so far, each
 labelled as machine OCR and carrying its permalink to the NDL viewer.
 Beside it: Minna de Honkoku's citizen transcriptions of premodern
 documents (CC BY-SA), Japanese Wikisource's era cone from Asuka to Edo
@@ -597,7 +637,14 @@ charters in Old Javanese, Old Malay and Old Sundanese, with its
 philology repository's Old Javanese kakawin library; the Old Burmese
 stone inscriptions of Bagan (OBI); and the Old Javanese Wordnet as the
 desk's glossary — most of these languages in their only
-machine-readable form.
+machine-readable form. October 2026 added the manuscript shelves:
+Balinese Wikisource's **1,252 palm-leaf lontars** transcribed
+manuscript-direct in Balinese script (usada healing texts, geguritan
+verse, the lontar tradition's Basa Kawi works), the **Jawi-script
+Malay manuscripts** of the Leiden and British Library collections
+(Hikayat Aceh, the Sejarah Melayu), and the **Thai Collected
+Chronicles** (Prachum Phongsawadan) in their pre-1930 printings with
+Buddhist-era years converted.
 
 ## The Germanic shelves
 
