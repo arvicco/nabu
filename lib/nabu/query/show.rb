@@ -36,8 +36,11 @@ module Nabu
       # `show` under the document/passage header. Signed historical years
       # (negative = BCE); either bound may be nil (open-ended). nil when the
       # document is undated (an absence, honestly blank).
+      # +date_class+ (P122-1) is the row's stored class — nil for the
+      # source's own artifact date, "silver" for a projected estimate (which
+      # every renderer must label).
       Timeline = Data.define(:not_before, :not_after, :precision, :date_raw,
-                             :place_name, :place_ref, :axis_source)
+                             :place_name, :place_ref, :axis_source, :date_class)
 
       # A passage in the context of its document + source, with the effective
       # license class (override coalesced over source class), its full
@@ -519,19 +522,22 @@ module Nabu
       # The document's timeline (P15-2), or nil when undated. A document
       # may carry several timeline rows (Part 2's chronicle annals); `show` renders
       # the primary (earliest not_before) one — document-grain rows are a single
-      # row today. `document_axes` may be absent from a catalog that predates
+      # row today. P122-1: upstream rows outrank silver estimates (an
+      # estimate renders only where no upstream row exists, labeled).
+      # `document_axes` may be absent from a catalog that predates
       # migration 008 (never rebuilt): degrade to nil, never crash.
       def timeline_for(document_id)
         return nil unless @catalog.table_exists?(:document_axes)
 
         row = @catalog[:document_axes].where(document_id: document_id)
-                                      .order(Sequel.function(:coalesce, :not_before, :not_after)).first
+                                      .order(Store::SilverDates.rank_expr,
+                                             Sequel.function(:coalesce, :not_before, :not_after), :id).first
         return nil if row.nil?
 
         Timeline.new(
           not_before: row[:not_before], not_after: row[:not_after], precision: row[:precision],
           date_raw: row[:date_raw], place_name: row[:place_name], place_ref: row[:place_ref],
-          axis_source: row[:axis_source]
+          axis_source: row[:axis_source], date_class: row[:date_class]
         )
       end
 

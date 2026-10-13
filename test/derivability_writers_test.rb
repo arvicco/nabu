@@ -67,7 +67,11 @@ class DerivabilityWritersTest < Minitest::Test
   # enricher's non-derivable model output as JSONL shards
   # (tmp+validate+rename) plus its campaign checkpoint under
   # local/shelves/local-lemmas/ — the shelf-gateway law kind at machine
-  # grain, the corpus-corporum checkpoint kind for state. The P80-8 ctilc
+  # grain, the corpus-corporum checkpoint kind for state. date_shelf
+  # (P122-1) is the SIXTH local-shelf gateway: it writes model/tool date
+  # estimates as JSONL shards (tmp+validate+rename) plus the owner's
+  # projection arm marker under local/shelves/local-dates/ — the
+  # shelf-gateway law kind at document grain. The P80-8 ctilc
   # adapter writes its crawled works (tmp+rename) and their replacement
   # attic copies into canonical/ inside Adapter#fetch — the riig crawl
   # law kind. seal_fetch (P89-3) writes canonical/seal/texts/
@@ -158,7 +162,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/aclt.rb
     nabu/adapters/mdz_protestant.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
-    nabu/language_shelf.rb nabu/lemma_shelf.rb
+    nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
     nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb nabu/credentials.rb

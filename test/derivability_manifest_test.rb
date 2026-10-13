@@ -33,7 +33,9 @@ class DerivabilityManifestTest < Minitest::Test
     },
     links: {
       kind: :derived, stage: "links",
-      tables: %w[links link_runs]
+      # link_run_chunks (P122-2): a chunked run's resumable cursor — state
+      # ABOUT the derived edges, wiped and re-minted with them.
+      tables: %w[links link_runs link_run_chunks]
     },
     lects: {
       kind: :derived, stage: "lect journal",

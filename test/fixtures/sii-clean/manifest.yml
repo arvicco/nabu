@@ -1,0 +1,32 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Eight whole real grant-bearing SII_B_clean edition files (see README.md).
+source: sii-clean
+adapter_test: null
+retrieved: 2026-10-12
+files:
+  - path: SII_B_clean/SII08/DHARMA_INSSIIv08p0i0391.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII08/DHARMA_INSSIIv08p0i0391.xml
+    whole: true
+  - path: SII_B_clean/SII08/DHARMA_INSSIIv08p0i0503.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII08/DHARMA_INSSIIv08p0i0503.xml
+    whole: true
+  - path: SII_B_clean/SII17/DHARMA_INSSIIv17p0i0582.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII17/DHARMA_INSSIIv17p0i0582.xml
+    whole: true
+  - path: SII_B_clean/SII17/DHARMA_INSSIIv17p0i0656.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII17/DHARMA_INSSIIv17p0i0656.xml
+    whole: true
+  - path: SII_B_clean/SII22/DHARMA_INSSIIv22p0i0252.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII22/DHARMA_INSSIIv22p0i0252.xml
+    whole: true
+  - path: SII_B_clean/SII22/DHARMA_INSSIIv22p0i0349.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII22/DHARMA_INSSIIv22p0i0349.xml
+    whole: true
+  - path: SII_B_clean/SII22/DHARMA_INSSIIv22p0i0391.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII22/DHARMA_INSSIIv22p0i0391.xml
+    whole: true
+  - path: SII_B_clean/SII22/DHARMA_INSSIIv22p0i0408.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII22/DHARMA_INSSIIv22p0i0408.xml
+    whole: true

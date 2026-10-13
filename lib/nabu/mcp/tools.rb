@@ -2160,7 +2160,7 @@ module Nabu
         block = { not_before: line.not_before, not_after: line.not_after,
                   precision: line.precision, place: line.place_name,
                   place_ref: line.place_ref, date_raw: line.date_raw,
-                  axis_source: line.axis_source }.compact
+                  axis_source: line.axis_source, date_class: line.date_class }.compact
         block.merge!(Nabu::Certainty.payload(:hgv_precision, line.precision)) if line.precision
         if line.place_name.to_s.strip.end_with?("?")
           block[:place_certainty] = Nabu::Certainty.payload(:cataloguer_query, "?").fetch(:certainty)

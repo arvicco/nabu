@@ -1774,6 +1774,54 @@ anchors:
            dardet database's claims, which assume a Proto-Dardic level;
            the registry records the claim without endorsing the clade"
 
+  gu:
+    name: Gujarati
+    parent: inc
+    glottocode: guja1252
+    note: "ISO 639-1 (639-3 guj aliases here). Western Indo-Aryan;
+           the Old Gujarati / Māru-Gurjar literary record opens
+           ~12th c.; the bhakti canon (Narasiṃha Mehtā, 15th c.,
+           Mīrāṃbāī, Akho, Premānand, Dayārām) is the consuming
+           corpus's substance, held in 1888–1913 print editions.
+           Corpus: gu-wikisource (207 scan-backed documents).
+           Stages unminted — the editions are modern prints of the
+           bhakti compositions; the consumer claims the bare code,
+           declared coarse"
+
+  pa:
+    name: Punjabi
+    parent: inc
+    glottocode: panj1256
+    note: "ISO 639-1 pa / 639-3 pan (aliases here). Northwestern
+           Indo-Aryan, continuous with the Lahndā continuum; the
+           literary record opens with the Gurmukhī scriptural canon.
+           The granthic written language is not modern Punjabi but
+           the Sant Bhāṣā mix — Old Punjabi with Lahndā, Braj and
+           Sahaskritī registers side by side in one codex — so the
+           pa:old stage carries the canon and the bare anchor stays
+           for modern material. Corpus: the shabados line database
+           (Gurū Granth Sāhib 60,555 primary lines, the Vārāṅ of
+           Bhāī Gurdās, Sarabloh; its Braj and Persian layers claim
+           bra and fa through script-qualified codemap rows, never
+           pa)"
+    stages:
+      old: {name: Old Punjabi (granthic), band: [1450, 1708], ord: 10,
+            band_note: "the scriptural-canon convention: from Gurū
+                        Nānak's bāṇī (b. 1469; compositions from the
+                        late 15th c.) through the Ādi Granth
+                        compilation (1604, Gurū Arjan) to the canon's
+                        closure at Gurū Gobind Singh's death (1708);
+                        approximate at both ends",
+            note: "the language of the Gurmukhī scriptural corpus:
+                   Old Punjabi as the base of the Sant Bhāṣā blend
+                   (with Lahndā, Braj and Sahaskritī passages
+                   riding their own claims where the source marks
+                   them). Witnesses: the Ādi Granth / Gurū Granth
+                   Sāhib (1604; the Kartārpur pothī tradition), the
+                   Vārāṅ of Bhāī Gurdās (c. 1551-1636). Corpus:
+                   shabados, the consuming library's line-grain
+                   scripture database"}
+
   bra:
     name: Braj
     parent: inc
@@ -1854,6 +1902,50 @@ anchors:
            attested Austronesian document anywhere. The DHARMA Campa
            corpus attests it beside Sanskrit; held romanized (ocm-Latn)"
 
+  ban:
+    name: Balinese
+    parent: poz
+    glottocode: bali1278
+    note: "Bali–Sasak–Sumbawa subgroup of Malayo-Polynesian (the
+           subgroup carries no ISO 639-5 code — the kaw precedent;
+           the edge reads through poz). Attested from the Old
+           Balinese royal edicts (Bebetin/Sembiran, late 9th c. CE);
+           the lontar palm-leaf tradition carries Balinese and Kawi
+           literature in Balinese script to the present. Corpus:
+           ban-wikisource (542 Balinese-script manuscripts / 18,374
+           page passages + 5 romanized Leiden copies); Old Balinese
+           stays unminted — the manuscript corpus is the living
+           literary language, declared coarse"
+
+  sas:
+    name: Sasak
+    parent: poz
+    glottocode: sasa1249
+    note: "the language of Lombok; Bali–Sasak–Sumbawa beside ban
+           (same no-ISO-branch note). The Sasak lontar tradition
+           shares the Balinese script and the Kawi literary
+           inheritance. Corpus: ban-wikisource (3 Sasak manuscripts
+           — minted because the consumer tags them, the
+           smallest-honest-anchor practice)"
+
+  ms:
+    name: Malay
+    parent: poz
+    glottocode: mala1479
+    note: "ISO 639-1 (the 639-3 macrolanguage code msa aliases
+           here). Malayic; attested from the Old Malay inscriptions
+           (Sojomerto, Kedukan Bukit, 7th c. — held via the DHARMA
+           Nusantara corpus as omy) and, in Jawi, from the
+           Terengganu stone (1303). Corpus: ms-wikisource (64
+           Leiden/BL manuscript transcriptions — the hikayat and
+           syair court tradition, 62 in Jawi)"
+    stages:
+      cls: {name: Classical Malay, band: [1300, 1900], ord: 10,
+            band_note: "the Jawi literary language from the
+                        Terengganu stone through the court hikayat
+                        and syair manuscripts (Hikayat Aceh, 17th
+                        c.) to the 19th-c. lithographs; approximate"}
+
   kaw:
     name: Old Javanese (Kawi)
     parent: poz
@@ -1890,6 +1982,25 @@ anchors:
                    Moscow school); this registry's corpus is starling-stibet
                    (2,823 Peiros-Starostin 1996 etymologies, improved
                    reconstructions)"}
+
+  tai:
+    name: Tai
+    kind: family
+    note: "ISO 639-5 tai: the Tai branch (Kra-Dai's largest; the
+           Kra-Dai phylum itself carries no ISO 639-5 code — the
+           placement stays prose, the aav/map top-level shape).
+           Minted with the th anchor"
+
+  th:
+    name: Thai
+    parent: tai
+    glottocode: thai1261
+    note: "ISO 639-1 (639-3 tha aliases here). Siamese; attested
+           from the Sukhothai-era inscriptions (13th–14th c.); the
+           consuming corpus is the royal chronicle compilation
+           ประชุมพงศาวดาร in its early-Rattanakosin printings
+           (≤ BE 2473 / 1930 CE by the edition rule). Corpus:
+           th-wikisource (92 chronicle parts / 11,006 pages)"
 
   tbq:
     name: Tibeto-Burman
@@ -2571,6 +2682,7 @@ scripts:
   grek: {name: Greek,                                iso15924: Grek}
   ogam: {name: Ogham,                                iso15924: Ogam}
   deva: {name: Devanagari (Nagari),                  iso15924: Deva}
+  guru: {name: "Gurmukhi",                           iso15924: Guru}
   ital: {name: "Old Italic (Etruscan, Oscan, etc.)", iso15924: Ital}
   egyd: {name: Egyptian demotic,                     iso15924: Egyd}
   egyp: {name: Egyptian hieroglyphs,                 iso15924: Egyp}

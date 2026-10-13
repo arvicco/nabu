@@ -144,17 +144,27 @@ module Nabu
         Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skipped, unrecognized: 0, notes: notes)
       end
 
-      # Parse one page into a Document of line Passages. A page with no
-      # keyable lines quarantines whole (ParseError) — never served empty.
+      # The skip reason of a page whose every line is a preservation note.
+      NOTE_ONLY_REASON = "nothing legible (note-only page)"
+
+      # Parse one page into a Document of line Passages. A page whose lines
+      # are ALL preservation notes ("{{nichts zu lesen}}" on every side —
+      # upstream's own empty leaf; ruled 2026-10-12) skips by rule
+      # (DocumentSkipped); any other page with no keyable lines quarantines
+      # whole (ParseError) — never served empty.
       def parse(document_ref)
         html = TitusTocharianParser.read_page(document_ref.path)
         page = TitusTocharianParser.parse(html, profile: self.class::PARSER_PROFILE)
+        if page.lines.empty? && page.notes.any?
+          raise Nabu::DocumentSkipped.new("#{self.class::SLUG}: #{document_ref.path}", reason: NOTE_ONLY_REASON)
+        end
         raise Nabu::ParseError, "#{self.class::SLUG}: no text lines in #{document_ref.path}" if page.lines.empty?
 
         stem = document_ref.metadata["page"]
         metadata = page_metadata(page)
         document = Nabu::Document.new(
-          urn: document_ref.id, language: self.class::LANGUAGE, canonical_path: document_ref.path,
+          urn: document_ref.id, language: document_language(page.lines.map(&:language)),
+          canonical_path: document_ref.path,
           title: title_for(stem, page, metadata), metadata: metadata
         )
         seen = Hash.new(0)
@@ -199,6 +209,16 @@ module Nabu
       def catalogue_only?(path)
         html = File.binread(path)
         html.match?(self.class::MANUSCRIPT_ANCHOR) && !html.match?(self.class::DEEPER_ANCHOR)
+      end
+
+      # The document's language follows the page-measured claim when every
+      # line claims ONE language other than the corpus default (ruled
+      # 2026-10-12: the five London Tocharian A manuscripts inside the B
+      # chain, toch3846/3847/3855/3856/3857, are xto documents); a mixed
+      # page (the bilinguals) keeps the corpus language.
+      def document_language(line_languages)
+        measured = line_languages.uniq
+        measured.size == 1 ? measured.first : self.class::LANGUAGE
       end
 
       def document_urn(stem)

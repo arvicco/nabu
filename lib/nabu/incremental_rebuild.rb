@@ -542,6 +542,14 @@ module Nabu
     def corpus_builders(db, progress)
       progress&.stage("timeline")
       axes = Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      # P122-1: the armed silver-date lane re-projects behind the timeline.
+      progress&.stage("silver dates")
+      Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
+      # The timeline rebuild drops EVERY axis row, this lane included —
+      # before 2026-10-13 only a full rebuild restored it.
+      progress&.stage("artifact scripts")
+      Store::ArtifactScripts.derive!(db, config_path: @config.artifact_scripts_path,
+                                         registry: Nabu::Lects.load_default(config: @config))
       progress&.stage("facets")
       facets = Store::FacetBuilder.rebuild!(catalog: db,
                                             facet_map: Nabu::FacetMap.load_default(config: @config))

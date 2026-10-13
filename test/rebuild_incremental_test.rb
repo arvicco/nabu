@@ -195,9 +195,24 @@ class RebuildIncrementalTest < Minitest::Test
   end
 
   def test_a_builder_file_change_reruns_corpus_builders_without_dirtying_sources
+    # The artifact-script replay hole (fixed 2026-10-13): corpus_builders
+    # drops every axis row through the timeline rebuild and must re-derive
+    # this lane too, not leave it for the next full rebuild.
+    FileUtils.mkdir_p(File.join(@root, "config"))
+    File.write(File.join(@root, "config", "artifact_scripts.yml"), <<~YAML)
+      sources:
+        alpha:
+          grc:
+            script: grek
+    YAML
     full_rebuilder.run
     before_passages = raw_rows(:passages)
+    with_db do |db|
+      refute db[:document_axes].where(axis_source: "artifact-script").empty?,
+             "the full rebuild mints the artifact-script lane"
+    end
     with_db(write: true) { |db| db[:language_mix].delete } # proves the re-run re-mints it
+    with_db(write: true) { |db| db[:document_axes].where(axis_source: "artifact-script").delete }
 
     result = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.run }
 
@@ -207,6 +222,10 @@ class RebuildIncrementalTest < Minitest::Test
     refute_nil result.facets
     assert_equal before_passages, raw_rows(:passages), "no source row may move"
     with_db { |db| refute db[:language_mix].empty?, "the lemma rollups ride the builders' re-run (P121-2)" }
+    with_db do |db|
+      refute db[:document_axes].where(axis_source: "artifact-script").empty?,
+             "the artifact-script lane rides the builders' re-run (the replay-hole fix)"
+    end
 
     # The sentinel re-minted at the drifted digest: a second run inside the
     # same diversion is fully clean, builders included.

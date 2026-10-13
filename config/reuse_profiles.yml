@@ -1,0 +1,100 @@
+# config/reuse_profiles.yml — per-language tuning profiles for the
+# parallels batch producer (P122-2; architecture §15).
+#
+# `nabu parallels --batch SCOPE --profile NAME` loads one profile; an
+# explicit flag (--lang, --min-score, --per-anchor, --gram-size) still
+# overrides it, and the run's provenance (link_runs.params_json) records
+# the profile name plus EVERY effective parameter, so an edge is honest
+# about the tuning that minted it.
+#
+# Keys (anything else is refused loudly at load):
+#   lang            default --lang: scopes the anchors AND the candidates
+#   serves          free text — the scopes/use case this profile is for
+#   gram_size       shingle width in gram tokens (words; one Han char per
+#                   token in unspaced CJK — the Grams char grain)
+#   min_score       rarity-score floor an edge must clear (Σ 1/df)
+#   per_anchor      document-grain hits kept per anchor
+#   candidate_pool  scored candidate passages joined per anchor before
+#                   document grouping (omit = the engine's overfetch,
+#                   max(per_anchor × 30, 300))
+#   stop_tokens     function tokens; a gram made ENTIRELY of them is never
+#                   probed (folded to the language's search form at load)
+#   rationale       free text — why these numbers (required)
+#
+# What the batch matches on, stated once: SURFACE grams only. The anchor's
+# folded search form (text_search) is cut into overlapping gram_size
+# shingles; each is probed as an exact FTS5 phrase (all-Han grams also on
+# the CJK bigram lane); candidates score Σ 1/df over shared grams. The
+# engine's lemma-echo signal is NOT persisted by the batch — lemma-grain
+# reuse is future work (a new edge kind, not a profile key).
+#
+# Census method (2026-10-12, read-only over canonical/, no catalog): every
+# 25th file of the held asset, tags stripped, folded as the search form
+# folds (lowercase; Latin v→u j→i), grams counted within paragraph (Latin)
+# or print-line (CBETA) grain.
+profiles:
+  latin:
+    lang: lat
+    serves: >-
+      Corpus Corporum's Patrologia Latina against the classical Latin shelf
+      (perseus-latin and the other lat sources) — the Fathers quoting and
+      adapting Scripture and the classics.
+    # census: 212 of 5,276 PL files, 3,719,613 tokens, 45,845 paragraphs
+    # (mean 81.1 tokens), 2026-10-12. Trigrams: 92.7% hapax (7.3% recur),
+    # top-1% of distinct trigrams carry 8.7% of occurrences — distinctive
+    # enough to probe; 4-grams: 3.7% recur.
+    gram_size: 3
+    min_score: 0.1
+    per_anchor: 5
+    # census: these 75 forms are 28.5% of all tokens; grams made only of
+    # them are 1.67% of trigram occurrences (0.38% of 4-grams) — and they
+    # are the costliest probes (highest df, up to the corpus-relative
+    # cutoff in rows each) for the weakest evidence.
+    stop_tokens: [et, in, est, non, ad, cum, quod, ut, sed, de, qui, quae, quia, enim, per, a, ab, ex, e,
+                  se, si, nec, hoc, autem, esse, id, sunt, etiam, ac, atque, uel, aut, iam, sic, tamen,
+                  ne, quam, eius, eum, ea, quo, qua, quid, quoque, nam, ergo, igitur, nos, uos, me, te,
+                  mihi, tibi, sibi, ille, illa, illud, ipse, ipsa, ipsum, is, hic, haec, omnia, omnis,
+                  dum, post, ante, sub, super, inter, pro, sine, erat, fuit]
+    rationale: >-
+      Latin inflects, and the Fathers adapt what they quote: a re-cased noun
+      breaks every gram that contains it. Smaller shingles survive
+      adaptation better — a changed word costs three trigrams instead of
+      four 4-grams, so a 7-word quotation with its middle word re-inflected
+      still shares two clean trigrams on each side. Trigrams stay
+      distinctive in this corpus (92.7% hapax in the census). The price is
+      weaker single-gram evidence, so the floor doubles to 0.1: the minimal
+      persisted edge is two shared trigrams at df ≤ 20 — a 4-word verbatim
+      span, the same span length the 4-gram default's single-gram floor
+      demanded. All-function trigrams (et in hoc, quod non est) are dropped
+      before probing. Lemma-grain matching would catch the re-inflected
+      word itself, but the batch persists surface grams only (future work).
+  chinese:
+    lang: lzh
+    serves: >-
+      Kanripo and CBETA commentary chains — a root text (sutra, classic)
+      quoted lemma by lemma down its commentaries and sub-commentaries
+      (疏 → 鈔/記), across the two canons.
+    # census: 99 of 2,459 CBETA Taishō files, 4,295,890 Han chars, 278,629
+    # print lines (mean 15.4 chars), 2026-10-12. Char 4-grams: 10.5% recur,
+    # top-1% carry 11.2% of occurrences; 5-grams: 6.7% recur.
+    gram_size: 4
+    min_score: 0.1
+    per_anchor: 10
+    rationale: >-
+      Classical Chinese is unspaced, so the gram grain is the character (the
+      Grams char split) and every all-Han gram is probed on the CJK bigram
+      lane — the main lane's one-token-per-run index cannot answer a
+      character n-gram. Four characters is the prosodic unit of the
+      translated sutra prose and the length commentaries quote their lemmata
+      in, so 4-grams keep a quoted four-character lemma visible where 5-grams
+      would miss it. Four-character phrases also recur more (10.5% vs 6.7%
+      for 5-grams in the census), so the floor doubles to 0.1: one shared
+      4-gram must be rare (df ≤ 10), or two at df ≤ 20 — a 5-character
+      verbatim span. A root line is quoted down a whole commentary chain, so
+      ten documents are kept per anchor instead of five. No stop policy:
+      grams made only of function characters (之乎者也而以於其…) are 0.12% of
+      4-gram occurrences in the census — the df cutoff already handles them.
+      Bound: the lane's bigrams never bridge punctuation, so a gram spanning
+      a punctuation mark matches only unpunctuated witnesses (Kanripo's
+      unpunctuated base texts match; a punctuated CBETA line matches within
+      its clauses).

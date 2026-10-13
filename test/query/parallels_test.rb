@@ -388,5 +388,85 @@ module Query
       assert_equal Nabu::Query::Parallels::RARE_LEMMA_DF,
                    eng.instance_variable_get(:@rare_lemma_df)
     end
+
+    # == P122-2: the tuning knobs a reuse profile turns ========================
+
+    AENEID_1_1 = "Arma virumque cano, Troiae qui primus ab oris"
+
+    def seed_latin_trigram_quote
+      vergil = make_document(urn: "urn:lat:aen", title: "Aeneid", language: "lat")
+      make_passage(vergil, urn: "urn:lat:aen:1.1", text: AENEID_1_1, sequence: 0, language: "lat")
+      # Shares exactly ONE three-token span with the anchor — no 4-gram.
+      father = make_document(urn: "urn:lat:pl", title: "Sermo", language: "lat")
+      make_passage(father, urn: "urn:lat:pl:1", text: "unde ille Troiae qui primus venit dicitur",
+                           sequence: 0, language: "lat")
+      rebuild!
+    end
+
+    def test_gram_size_is_a_run_knob_smaller_shingles_reach_shorter_spans
+      seed_latin_trigram_quote
+      assert_empty parallels("urn:lat:aen:1.1").hits, "the default 4-gram misses a 3-token span"
+
+      result = parallels("urn:lat:aen:1.1", gram_size: 3)
+      assert_equal ["urn:lat:pl:1"], result.hits.map(&:urn), "3-grams reach the shared trigram"
+      assert_equal ["troiae qui primus"], result.hits.first.evidence,
+                   "evidence spans are rebuilt with the run's own gram size"
+      assert_equal 6, result.gram_count, "8 tokens → 6 trigrams"
+    end
+
+    def test_stop_tokens_drop_grams_made_entirely_of_function_words
+      anchor = make_document(urn: "urn:st:a", title: "A", language: "lat")
+      make_passage(anchor, urn: "urn:st:a:1", text: "et in hoc est verbum vivum", sequence: 0, language: "lat")
+      other = make_document(urn: "urn:st:b", title: "B", language: "lat")
+      make_passage(other, urn: "urn:st:b:1", text: "et in hoc est aliud nihil", sequence: 0, language: "lat")
+      rebuild!
+
+      assert_equal ["urn:st:b:1"], parallels("urn:st:a:1").hits.map(&:urn),
+                   "without a policy the all-function gram 'et in hoc est' is evidence"
+      result = parallels("urn:st:a:1", stop_tokens: %w[et in hoc est])
+      assert_empty result.hits, "an all-stop gram is never probed"
+      assert_equal 2, result.gram_count, "the dropped gram does not count toward the anchor's grams"
+    end
+
+    def test_candidate_pool_caps_the_candidate_passages_joined_per_anchor
+      seed_latin_trigram_quote
+      extra = make_document(urn: "urn:lat:x", title: "X", language: "lat")
+      make_passage(extra, urn: "urn:lat:x:1", text: "Troiae qui primus fuit", sequence: 0, language: "lat")
+      rebuild!
+
+      assert_equal 2, parallels("urn:lat:aen:1.1", gram_size: 3).hits.size
+      assert_equal 1, parallels("urn:lat:aen:1.1", gram_size: 3, candidate_pool: 1).hits.size,
+                   "the pool caps the scored candidates before document grouping"
+    end
+
+    # == P122-2: Han grams probe the CJK bigram lane ===========================
+    #
+    # unicode61 indexes an unbroken Han run as ONE token, so the char-grain
+    # gram 學 而 時 習 probed as a main-lane phrase can only match text whose
+    # every char is its own token — i.e. practically never. The CJK bigram
+    # lane (P93-3) answers the substring question exactly.
+
+    def seed_lzh_quote
+      analects = make_document(urn: "urn:lzh:lunyu", title: "論語", language: "lzh")
+      make_passage(analects, urn: "urn:lzh:lunyu:1.1", text: "學而時習之不亦說乎", sequence: 0, language: "lzh")
+      shu = make_document(urn: "urn:lzh:shu", title: "疏", language: "lzh")
+      make_passage(shu, urn: "urn:lzh:shu:1", text: "經曰學而時習之此明", sequence: 0, language: "lzh")
+    end
+
+    def test_han_grams_find_nothing_on_the_main_lane_alone
+      seed_lzh_quote
+      rebuild!
+      assert_empty parallels("urn:lzh:lunyu:1.1").hits,
+                   "without the CJK lane the run-token index cannot answer a char gram"
+    end
+
+    def test_han_grams_probe_the_cjk_lane_when_it_exists
+      seed_lzh_quote
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: ["open"])
+      result = parallels("urn:lzh:lunyu:1.1")
+      assert_equal ["urn:lzh:shu:1"], result.hits.map(&:urn), "the commentary quoting the line is found"
+      assert_equal 2, result.hits.first.shared_gram_count, "學而時習 + 而時習之 — the shared 5-char span"
+      assert_equal ["學而時習之"], result.hits.first.evidence, "all-Han evidence joins without spaces"
+    end
   end
 end

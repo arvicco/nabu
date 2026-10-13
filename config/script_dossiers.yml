@@ -61,6 +61,19 @@ deva:
     Sanskrit shelves hold Devanagari and IAST side by side; the san-Deva /
     san-Latn codemap rows carry the surface distinction.
 
+guru:
+  name: Gurmukhi
+  context: >-
+    The Punjabi abugida standardized by Guru Angad in the 16th c. from
+    the Landa mercantile scripts for writing the Sikh scriptural canon;
+    an inherent-vowel system of the Brahmic family, left-to-right, with
+    the canonical corpus (the Adi Granth, 1604) as its founding monument.
+  desk: >-
+    The shabados shelf holds the scriptural canon natively in Gurmukhi at
+    line grain; its Braj and Persian layers are Gurmukhi TRANSCRIPTIONS,
+    carried by the bra-Guru / fas-Guru codemap rows as language claims on
+    bra and fa with the script fact on the ~ axis.
+
 ital:
   name: Old Italic (Etruscan, Oscan, etc.)
   context: >-

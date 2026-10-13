@@ -27,9 +27,11 @@ module Nabu
     # and losing it costs only a re-mine.
     #
     # Plain module functions over datasets (no Sequel models): the journal has
-    # exactly two tables and four verbs — open, supersede, record, write — and
-    # the readers (Query::Links, the `show` footer, MCP nabu_links) are
-    # dataset-shaped too.
+    # two tables and four verbs — open, supersede, record, write — plus the
+    # P122-2 chunk companion (link_run_chunks, migration 003) and its three
+    # verbs for resumable chunked runs (record_chunk!, finish_run!,
+    # unfinished_run); the readers (Query::Links, the `show` footer, MCP
+    # nabu_links) are dataset-shaped too.
     module LinksJournal
       MIGRATIONS_DIR = File.expand_path("../../../db/links_migrate", __dir__)
 
@@ -69,15 +71,53 @@ module Nabu
         return [0, 0] if run_ids.empty?
 
         edges = db[:links].where(run_id: run_ids).delete
+        db[:link_run_chunks].where(run_id: run_ids).delete
         runs = db[:link_runs].where(id: run_ids).delete
         [runs, edges]
       end
 
-      # Record a producer run; returns its id (the edges' run_id).
-      def record_run!(db, producer:, scope:, params:, code_version:, at: Time.now)
+      # Empty the whole journal (the rebuild links stage's re-mine start):
+      # edges, chunk rows, runs — children first.
+      def wipe!(db)
+        db[:links].delete
+        db[:link_run_chunks].delete
+        db[:link_runs].delete
+      end
+
+      # Record a producer run; returns its id (the edges' run_id). A chunked
+      # run (P122-2) passes status: "running" and its chunk_size, and is
+      # advanced by record_chunk! / closed by finish_run!; every other
+      # producer leaves status NULL (a run row written whole).
+      def record_run!(db, producer:, scope:, params:, code_version:, at: Time.now, status: nil, chunk_size: nil)
         db[:link_runs].insert(producer: producer, scope: scope,
                               params_json: JSON.generate(params),
-                              code_version: code_version, created_at: at)
+                              code_version: code_version, created_at: at,
+                              status: status, chunk_size: chunk_size)
+      end
+
+      # The latest still-running chunked run of (producer, scope), or nil —
+      # what a resumed batch continues from.
+      def unfinished_run(db, producer:, scope:)
+        db[:link_runs].where(producer: producer, scope: scope, status: "running").reverse(:id).first
+      end
+
+      # Record one committed chunk and advance its run's cursor. Callers run
+      # this INSIDE the chunk's edge transaction, so the cursor can never
+      # claim a chunk whose edges did not land (P122-2).
+      def record_chunk!(db, run_id:, chunk:, first_urn:, last_urn:, anchors:, candidates:,
+                        edges_inserted:, edges_refreshed:, seconds:, at: Time.now)
+        db[:link_run_chunks].insert(run_id: run_id, chunk: chunk, first_urn: first_urn, last_urn: last_urn,
+                                    anchors: anchors, candidates: candidates, edges_inserted: edges_inserted,
+                                    edges_refreshed: edges_refreshed, seconds: seconds, finished_at: at)
+        db[:link_runs].where(id: run_id)
+                      .update(cursor_urn: last_urn || Sequel[:cursor_urn],
+                              chunks_done: Sequel[:chunks_done] + 1,
+                              anchors_done: Sequel[:anchors_done] + anchors)
+      end
+
+      # Close a chunked run: every chunk committed.
+      def finish_run!(db, run_id, at: Time.now)
+        db[:link_runs].where(id: run_id).update(status: "complete", finished_at: at)
       end
 
       # Write one edge, keeping AT MOST ONE edge per unordered pair per kind:
@@ -85,15 +125,25 @@ module Nabu
       # overlapping scope), that edge is REFRESHED in place (score/detail/
       # run_id/created_at updated, its original discovery direction preserved)
       # rather than duplicated. +detail+ is the optional per-edge evidence
-      # string (migration 002: the formula gram, the cognate meet). Returns
+      # string (migration 002: the formula gram, the cognate meet); +chunk+
+      # the chunked run's chunk that minted it (migration 003). Returns
       # :inserted or :refreshed.
-      def write_edge!(db, from_urn:, to_urn:, kind:, score:, run_id:, detail: nil, at: Time.now)
-        fresh = { score: score, detail: detail, run_id: run_id, created_at: at }
-        return :refreshed if db[:links].where(from_urn: from_urn, to_urn: to_urn, kind: kind).update(fresh) == 1
-        return :refreshed if db[:links].where(from_urn: to_urn, to_urn: from_urn, kind: kind).update(fresh) == 1
+      #
+      # +first_in_run+ (P122-2): a pair THIS run already wrote is left
+      # exactly as found and :kept is returned — the within-run "stored
+      # once, in the direction first found" rule made durable, so a resumed
+      # run's later chunk re-finding the reverse direction neither
+      # duplicates nor re-scores it. Another run's edge still refreshes.
+      def write_edge!(db, from_urn:, to_urn:, kind:, score:, run_id:, detail: nil, chunk: nil, at: Time.now,
+                      first_in_run: false)
+        pairs = [{ from_urn: from_urn, to_urn: to_urn }, { from_urn: to_urn, to_urn: from_urn }]
+        return :kept if first_in_run && pairs.any? { |pair| db[:links].where(kind: kind, run_id: run_id, **pair).any? }
 
-        db[:links].insert(from_urn: from_urn, to_urn: to_urn, kind: kind,
-                          score: score, detail: detail, run_id: run_id, created_at: at)
+        fresh = { score: score, detail: detail, run_id: run_id, chunk: chunk, created_at: at }
+        return :refreshed if pairs.any? { |pair| db[:links].where(kind: kind, **pair).update(fresh) == 1 }
+
+        db[:links].insert(from_urn: from_urn, to_urn: to_urn, kind: kind, score: score, detail: detail,
+                          run_id: run_id, chunk: chunk, created_at: at)
         :inserted
       end
 

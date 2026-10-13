@@ -141,6 +141,8 @@ module Nabu
           "seal" => :period_label,
           "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
           #                           or century attribution
+          "sii-clean" => :structured, # P122-3: the SII heading's A.D. / Śaka year or the
+          #                             summary's reign line; place = the heading's village
           "sillok" => :structured,
           "sjw" => :structured,
           "sl-wikisource" => :structured,

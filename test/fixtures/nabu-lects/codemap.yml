@@ -30,6 +30,17 @@ map:
   tam:     ta
   tel:     te
   kan:     kn
+  guj:     gu
+  pan:     pa
+  # The shabados line database's script-qualified claims: the Dasam
+  # Granth-tradition Braj corpus (Kabitt Savayye, Sarabloh) and Bhai
+  # Nand Lal's Persian works (the Zafarnama, the Hikayatan) are held
+  # in Gurmukhi transcription — the language claims are bra and fa,
+  # the script fact rides the ~ axis.
+  bra-Guru: "bra~guru"
+  fas-Guru: "fa~guru"
+  msa:     ms
+  tha:     th
   ger:     de   # the 639-2/B bibliographic spelling (deu is the /T twin)
   nor:     "no" # the macrolanguage alias, claiming nothing historical (quoted: YAML 1.1 reads bare no as false)
   dan:     da

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "place_filter"
+require_relative "date_basis"
+require_relative "../store/silver_dates"
 
 module Nabu
   module Query
@@ -59,11 +61,12 @@ module Nabu
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
                        sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
-                       lect_target: nil, script: nil, within: nil)
+                       lect_target: nil, script: nil, within: nil, date_basis: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                          facets: facets, source: source, sources: sources, loans: loans,
                          meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs,
-                         lect_target: lect_target, script: script, within: within)
+                         lect_target: lect_target, script: script, within: within,
+                         date_basis: date_basis)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -100,9 +103,15 @@ module Nabu
       # exhaustive, and per-DOCUMENT journal rulings ride branch one, which
       # (language, source) pairs cannot express. Search picks the path:
       # facet rows present -> lect_target, none -> the legacy pairs.
+      # +date_basis+ (P122-1, `--date-basis`) is a parsed class list
+      # (Nabu::Query::DateBasis): the document's PRIMARY dated row must carry one
+      # of the classes, and an active +from+/+to+ window then reads THAT row
+      # (#primary_date_exists) — the holdout question "documents dated by
+      # composition era in this window" — while +place+ keeps its any-row
+      # lane.
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
                            sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
-                           lect_target: nil, script: nil, within: nil)
+                           lect_target: nil, script: nil, within: nil, date_basis: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -112,7 +121,12 @@ module Nabu
         dataset = dataset.where(Sequel[:sources][:slug] => sources) if sources && !sources.empty?
         dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
-        dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
+        if date_basis
+          dataset = dataset.where(primary_date_exists(date_basis, from: from, to: to))
+          dataset = dataset.where(timeline_exists(from: nil, to: nil, place: place)) if place
+        elsif from || to || place
+          dataset = dataset.where(timeline_exists(from: from, to: to, place: place))
+        end
         dataset = dataset.where(script_exists(script)) if script
         dataset = dataset.where(within_exists(*within)) if within
         (facets || {}).each do |facet, pattern|
@@ -167,9 +181,13 @@ module Nabu
       # name-LIKE lane, byte-identical pre-P75 behavior): the conjunct is
       # name-ILIKE OR identity-claims — a resolved name keeps its name
       # recall, a mint is identity-only (PlaceFilter class note).
+      # P122-1: the any-row filter promises UPSTREAM dates, so the silver
+      # estimate lane (Store::SilverDates) never answers it — estimates are
+      # reached only by naming them (`--date-basis silver`).
       def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
-        sub = @catalog[:document_axes].where(axes[:document_id] => Sequel[:documents][:id])
+        sub = Store::SilverDates.upstream(@catalog[:document_axes], axes: axes)
+                                .where(axes[:document_id] => Sequel[:documents][:id])
         sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
         sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
         if (resolution = PlaceFilter.coerce(place))
@@ -179,6 +197,67 @@ module Nabu
           sub = sub.where(Sequel.|(*clauses))
         end
         sub.exists
+      end
+
+      # The --date-basis filter (P122-1): a correlated EXISTS over the
+      # document's PRIMARY dated row — document grain (passage_seq_from
+      # NULL), at least one bound, and no other such row of the document
+      # preceding it in the (silver rank, coalesce(not_before, not_after),
+      # id) order, so any upstream date outranks every silver estimate —
+      # whose class (NULL reads "artifact", Nabu::Query::DateBasis) is one of
+      # +bases+. The rule is the documents export's and `nabu show`'s, so a filtered
+      # page never disagrees with the card. +from+/+to+ apply the
+      # NULL-aware overlap (#timeline_exists) to that same row. Cost: the
+      # inner NOT EXISTS rides the document_id index over a document's
+      # handful of axis rows, per candidate — the timeline filter's class.
+      def primary_date_exists(bases, from: nil, to: nil)
+        primary = Sequel[:primary_axes]
+        @catalog.from(Sequel.as(:document_axes, :primary_axes))
+                .where(primary[:document_id] => Sequel[:documents][:id])
+                .where(dated_document_grain(primary))
+                .where(date_class_expr(primary) => bases)
+                .then { |dataset| overlapping(dataset, primary, from: from, to: to) }
+                .exclude(earlier_dated_row(primary).exists)
+                .exists
+      end
+
+      # Any other document-grain dated row of the same document that sorts
+      # before +primary+ in the primary-row order.
+      def earlier_dated_row(primary)
+        rival = Sequel[:rival_axes]
+        @catalog.from(Sequel.as(:document_axes, :rival_axes))
+                .where(rival[:document_id] => primary[:document_id])
+                .where(dated_document_grain(rival))
+                .where(sorts_before([[Store::SilverDates.rank_expr(rival), Store::SilverDates.rank_expr(primary)],
+                                     [date_key(rival), date_key(primary)], [rival[:id], primary[:id]]]))
+      end
+
+      def dated_document_grain(axes)
+        Sequel.&({ axes[:passage_seq_from] => nil },
+                 Sequel.|(Sequel.~(axes[:not_before] => nil), Sequel.~(axes[:not_after] => nil)))
+      end
+
+      def date_key(axes) = Sequel.function(:coalesce, axes[:not_before], axes[:not_after])
+
+      def date_class_expr(axes)
+        Sequel.function(:coalesce, axes[:date_class], Nabu::Query::DateBasis::ARTIFACT)
+      end
+
+      # Lexicographic (a1, a2, …) < (b1, b2, …) over [a, b] pairs.
+      def sorts_before(pairs)
+        (left, right), *rest = pairs
+        less = Sequel.expr(left) < right
+        return less if rest.empty?
+
+        Sequel.|(less, Sequel.&({ left => right }, sorts_before(rest)))
+      end
+
+      # +dataset+ narrowed by the NULL-aware interval overlap
+      # (#timeline_exists' rule) on +axes+; unchanged when no window is active.
+      def overlapping(dataset, axes, from:, to:)
+        dataset = dataset.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
+        dataset = dataset.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
+        dataset
       end
 
       # TRUE when the row's place_ref claims ANY of +identities+ in any

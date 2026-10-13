@@ -59,6 +59,22 @@ class DocumentDatesBuilderTest < Minitest::Test
     end
   end
 
+  # P122-1: the published dates are upstream dates — a silver estimate
+  # (model/tool output on the local-dates shelf) is never minted outward.
+  def test_silver_estimates_are_never_published
+    doc_id = @catalog[:documents].where(urn: "urn:nabu:alpha:d3").get(:id)
+    @catalog[:document_axes].insert(document_id: doc_id, not_before: -300, not_after: -200,
+                                    date_raw: "model estimate — chronos 0.3",
+                                    axis_source: Nabu::Store::SilverDates::AXIS_SOURCE,
+                                    date_class: Nabu::Store::SilverDates::DATE_CLASS)
+    Dir.mktmpdir do |dir|
+      result = build!(dir)
+      table = CSV.read(File.join(dir, "document-dates.csv"), headers: true)
+      refute_includes table.map { |row| row["URN"] }, "urn:nabu:alpha:d3"
+      assert_equal 3, result.evaluation["dated_axis_rows"], "the estimate is not even censused as a dated row"
+    end
+  end
+
   def test_the_census_rides_in_band
     Dir.mktmpdir do |dir|
       evaluation = build!(dir).evaluation
