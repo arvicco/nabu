@@ -142,6 +142,29 @@ class BosworthTollerTest < Minitest::Test
     assert_equal "aethele", aethele[:headword_folded]
   end
 
+  # P123-1 end to end: with ASPR held, define resolves B-T's Grein
+  # reference onto the Beowulf LINE passage (the fixture holds lines 1–24).
+  def test_define_resolves_a_grein_beowulf_reference_onto_the_held_aspr_line
+    db, loader = loader_setup
+    aspr = Nabu::Store::Source.create(
+      slug: "aspr", name: "ASPR", adapter_class: "Nabu::Adapters::Aspr",
+      license: "CC BY-SA 3.0", license_class: "attribution",
+      upstream_url: Nabu::Adapters::Aspr.manifest.upstream_url, enabled: false
+    )
+    Nabu::Store::Loader.new(db: db, source: aspr)
+                       .load_from(Nabu::Adapters::Aspr.new, workdir: Nabu::TestSupport.fixtures("aspr"))
+    loader.load_from(adapter, workdir: FIXTURES)
+
+    aefter = Nabu::Query::Define.new(catalog: db, lila: nil, form_lemma: nil, verb_lemma: nil, lects: nil)
+                                .run("æfter", limit: nil)
+                                .find { |result| result.urn == "urn:nabu:dict:bosworth-toller:451" }
+    refute_nil aefter
+    beowulf = aefter.citations.find { |citation| citation.label == "B. 12" }
+    assert_equal "urn:nabu:aspr:A4.1:12", beowulf.resolved_urn
+    thorpe = aefter.citations.find { |citation| citation.label == "Beo. Th. 24" }
+    assert_nil thorpe.resolved_urn, "Thorpe's half-line numbering is carried verbatim, never guessed"
+  end
+
   def test_registry_row_exists_disabled_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["bosworth-toller"]

@@ -4,6 +4,7 @@ require "csv"
 require "nokogiri"
 
 require_relative "../normalize"
+require_relative "bosworth_aspr_refs"
 
 module Nabu
   module Adapters
@@ -35,9 +36,15 @@ module Nabu
     #   carries the label), <br/> honored, whitespace collapsed, the dump's
     #   double-encoded entities (&amp;#39;, &amp;mdash;, &amp;para;) decoded,
     #   NFC. Untagged bodies fall through as their whole text.
-    # - citations: always empty — B-T cites OE works by short title without
-    #   urns; the crosswalk to ISWOC/ASPR urns is future work (architecture
-    #   §11).
+    # - citations (P123-1): one DictionaryCitation per reference unit of
+    #   every <references> block (a <ref>, or a ;-segment of an untagged
+    #   block), label verbatim; the poems and Paris Psalter whose Grein/
+    #   Thorpe numbering the census validated against the held ASPR
+    #   edition resolve onto urn:nabu:aspr documents (BosworthAsprRefs —
+    #   census and grains there), everything else carries verbatim with
+    #   cts_work nil. Census 2026-10-13 over the full dump: 253,462 units,
+    #   37,049 resolved (24,661 passage grain, 12,388 document grain);
+    #   the fixture mints 1,134 (226 resolved: 148 passage, 78 document).
     class BosworthCsvParser
       LANGUAGE = "ang"
       CSV_OPTIONS = { col_sep: ";", quote_char: '"', headers: true }.freeze
@@ -70,7 +77,7 @@ module Nabu
           headword_folded: fold(headword.to_s),
           gloss: gloss(fragment),
           body: body_text(fragment),
-          citations: []
+          citations: BosworthAsprRefs.citations(fragment)
         )
       rescue Nabu::ValidationError, Nabu::Normalize::EncodingError => e
         raise Nabu::ParseError, "bosworth-csv: row id=#{id.inspect} in #{path}: #{e.message}"
