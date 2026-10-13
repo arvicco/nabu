@@ -800,8 +800,14 @@ CLI/MCP `lang` gates to `ang` and the conventions §9 ang fold: æ→ae,
 þ/ð→th, so `define aethele` reaches æðele from an ASCII keyboard). Entry
 ids are the dump's CSV ids (`urn:nabu:dict:bosworth-toller:940` ↔
 `bosworthtoller.com/940`). Its bodies cite OE works by short title without
-urns, so its `dictionary_citations` start empty until a crosswalk to
-ISWOC/ASPR urns exists; the resolution layer needed nothing new. Fetch is
+urns; since P123-1 every reference unit of a `<references>` block mints a
+verbatim citation row, and the curated `BosworthAsprRefs` crosswalk
+resolves the Grein/Thorpe sigla whose numbering a quotation-validated
+census proved to match the held ASPR edition (passage grain inside the
+validated line range, the poem document beyond it; the Paris Psalter at
+psalm-document grain — ASPR numbers metrical lines, not verses).
+Everything else (Riddles, Thorpe's page editions, prose) carries verbatim
+with no `cts_work`; the resolution layer needed nothing new. Fetch is
 the ASPR FileFetch path (one ~84 MB CSV, DSpace bitstream `/content` URL).
 A second dictionary from the SAME repo (Middle Liddell lives beside LSJ
 upstream) is one entry in the lexica adapter's DICTIONARIES map.
