@@ -40,6 +40,18 @@ module Nabu
     #   reflex rows cannot be minted honestly; they land as body
     #   cross-reference lines whose ids resolve through the join contract
     #   (nabu show urn:nabu:dict:aed:<id>).
+    # - crossrefs (P124-3): the same <xr> pointers as ID-KEYED
+    #   DictionaryCrossref rows — one per <ref target>, kind = the xr
+    #   @type verbatim, target_id = the TLA id (resolved by the loader
+    #   against entry_id within the shelf; no headword fold). Census
+    #   2026-10-13 over the full files/dictionary.xml (35,052 entries):
+    #   19,399 <xr> elements carrying 30,498 <ref target> pointers — by
+    #   element: root 13,470, rootOf 3,254, partOf 1,674, contains 837,
+    #   referencing 82, referencedBy 78, predecessor 2, successor 2; by
+    #   pointer: rootOf 13,493, root 13,483, partOf 1,677, contains 1,677,
+    #   referencing 82, referencedBy 82, predecessor 2, successor 2 — on
+    #   17,619 entries. 30,488 name a held entry (the shelf is closed under
+    #   its own pointers but for 10 dangling ids, which stay verbatim).
     # - citations: one DictionaryCitation per bibl SEGMENT (";"-split)
     #   matching /\AWb\s/ — the Wörterbuch der aegyptischen Sprache, a
     #   PRINT dictionary: label and urn_raw carry the segment verbatim,
@@ -97,8 +109,24 @@ module Nabu
           headword_folded: Nabu::Normalize.search_form(headword, language: LANGUAGE),
           gloss: gloss(elem),
           body: body(elem),
-          citations: citations(elem)
+          citations: citations(elem),
+          crossrefs: crossrefs(elem)
         )
+      end
+
+      # P124-3: one id-keyed crossref per <xr>/<ref target> (census in the
+      # class note); kind is the upstream @type verbatim.
+      def crossrefs(elem)
+        elem.xpath("xr").flat_map do |xr|
+          kind = xr["type"].to_s.strip
+          xr.xpath("ref").filter_map do |ref|
+            target = ref["target"].to_s.strip
+            next if target.empty? || kind.empty?
+
+            Nabu::DictionaryCrossref.new(kind: kind, label: "#{kind} #{target}", target: target,
+                                         target_id: target)
+          end
+        end
       end
 
       # The German quote — the complete lane (every upstream entry carries

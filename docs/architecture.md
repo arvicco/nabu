@@ -848,6 +848,14 @@ pointer with its target urn and an unresolved one as its verbatim text,
 never a dead link. The Wiktionary Chinese extract opts out: its `synonyms`
 are dialectal-synonym tables (1.7M rows), a thesaurus rather than pointers.
 
+**Id-keyed pointers (P124-3, migration 040).** Some dictionaries point by
+upstream entry id, not headword — the AED's `<xr type="root"><ref
+target="tla866216"/></xr>` carries no surface form at all. Such a pointer
+sets `target_id`; the resolution pass then matches it against the target
+entry's `entry_id` (unique per dictionary) instead of a folded headword,
+and `target_folded` stays NULL. The field enters the content hash only
+when set, so headword-keyed rows keep their shas.
+
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
 `nabu etym богъ --lang chu` walks from an attested lemma to its

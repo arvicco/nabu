@@ -322,6 +322,27 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal entry_row_id("b"), xr_row("a", "beta")[:to_entry_id]
   end
 
+  # P124-3: an id-keyed pointer (AED's <ref target="tla…">) resolves by the
+  # target's upstream entry_id, never by headword.
+  def id_xref(target_id, kind: "root")
+    Nabu::DictionaryCrossref.new(kind: kind, label: "#{kind} #{target_id}", target: target_id,
+                                 target_id: target_id)
+  end
+
+  def test_id_keyed_crossrefs_resolve_by_entry_id_within_the_dictionary
+    docs = [xr_document("/x/a.xml",
+                        xr_entry("t1", "nfr", crossrefs: [id_xref("t2"), id_xref("t9"), id_xref("t1")]),
+                        xr_entry("t2", "nfr"), xr_entry("t3", "t2"))]
+    loader.load(docs, full: false)
+
+    assert_equal entry_row_id("t2"), xr_row("t1", "t2")[:to_entry_id],
+                 "the entry_id names the target even across a homograph headword"
+    assert_nil xr_row("t1", "t9")[:to_entry_id], "an unheld id stays verbatim"
+    assert_nil xr_row("t1", "t1")[:to_entry_id], "never onto itself"
+    assert_equal "t2", xr_row("t1", "t2")[:target_id]
+    assert_nil xr_row("t1", "t2")[:target_folded]
+  end
+
   def test_crossrefs_load_idempotently_and_revision_replaces_them_wholesale
     docs = [xr_document("/x/a.xml", xr_entry("a", "alpha", crossrefs: [xref("beta"), xref("gamma")]),
                         xr_entry("b", "beta"))]
