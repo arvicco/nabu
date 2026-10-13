@@ -111,4 +111,11 @@ class ContentHashTest < Minitest::Test
     refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref])),
                  Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [id_keyed]))
   end
+
+  def test_a_target_dictionary_is_content
+    within = Nabu::DictionaryCrossref.new(kind: "bdb", label: "BDB a", target: "a", target_id: "a")
+    across = within.with(to_dictionary: "bdb")
+    refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [within])),
+                 Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [across]))
+  end
 end

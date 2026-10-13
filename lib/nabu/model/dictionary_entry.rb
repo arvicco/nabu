@@ -102,14 +102,18 @@ module Nabu
   #   dictionaries that point by id rather than headword (AED's
   #   <ref target="tla…">). When set it is THE resolution key (matched
   #   against entry_id) and target_folded stays nil.
-  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded, :target_id) do
-    def initialize(kind:, label:, target:, target_folded: nil, target_id: nil)
+  # - +to_dictionary+ (P124-3): the target dictionary's slug for a
+  #   cross-DICTIONARY pointer (the OSHB xref's bdb/twot ids); nil means
+  #   the entry's own dictionary.
+  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded, :target_id, :to_dictionary) do
+    def initialize(kind:, label:, target:, target_folded: nil, target_id: nil, to_dictionary: nil)
       super(
         kind: Model::Validation.present_string!(kind, field: "kind"),
         label: Model::Validation.nfc_text!(label, field: "label"),
         target: Model::Validation.nfc_text!(target, field: "target"),
         target_folded: target_folded.nil? ? nil : Model::Validation.nfc_text!(target_folded, field: "target_folded"),
-        target_id: target_id.nil? ? nil : Model::Validation.present_string!(target_id, field: "target_id")
+        target_id: target_id && Model::Validation.present_string!(target_id, field: "target_id"),
+        to_dictionary: to_dictionary && Model::Validation.present_string!(to_dictionary, field: "to_dictionary")
       )
     end
   end

@@ -70,10 +70,11 @@ module Nabu
         [canonical_json({ "crossrefs" => crossrefs })]
       end
 
-      # P124-3: the id-keyed field joins the encoding ONLY when set, so a
-      # P123-1 headword-keyed pointer hashes byte for byte as before.
+      # P124-3: the id-keyed and cross-dictionary fields join the encoding
+      # ONLY when set, so a P123-1 headword-keyed pointer hashes byte for
+      # byte as before.
       def crossref_keys(crossref)
-        crossref.target_id.nil? ? {} : { "target_id" => crossref.target_id }
+        { "target_id" => crossref.target_id, "to_dictionary" => crossref.to_dictionary }.compact
       end
 
       # The only-when-non-empty guard: an empty reflex list contributes NO
