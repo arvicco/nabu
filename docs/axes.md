@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to a dozen desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-eight desks
+Everything below documents **shipped behaviour** — the twenty-nine desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-eight desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-nine desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -268,6 +268,14 @@ The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Mon
 The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (Córdova's 1578 Arte, Agüero's 1666 Miscelaneo, the testaments and their period Spanish translations), the Royal Danish Library's Guaman Poma Nueva corónica (Spanish with Quechua and Aymara passages), and the UD Tupinambá and Old Guaraní treebanks of the Jesuit grammars and catechisms — the modern UD treebanks of American languages deliberately out.
 
 **Members** (3): `guaman-poma`, `ticha`, `ud`
+
+### africa
+
+> The Africanist — Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse.
+
+Africa south and west of the Nile–Ethiopia axis (the Egyptian and Ethiopic desks keep theirs): the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, with the public-domain grammars, text editions and readers of the nineteenth and early twentieth centuries joining as their shelves land.
+
+**Members** (1): `bu-ajami`
 
 ### local
 

@@ -804,6 +804,23 @@ sources:
         extraction follow-up}
     places: {posture: unplaced}
     script: {posture: implied, note: Perso-Arabic lit + Latin translit layers per line}
+  bu-ajami:   # P124-1
+    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet — Poetry/Poem →
+        literary/poetry; Prose (and the mixed 'Poetry and prose' forms) names a FORM, not a genre,
+        so it would ride the deliberate block — the fold awaits its ruling"}
+    lect: {posture: pending, note: "candidate: the ha / mnk / fuf / wo anchors of the aggregated
+        nabu-lects Africa mint — no registry node exists for any of the four; the bare codes are
+        claimed per item meanwhile (fula = upstream's 'Fuuta Jalon Fula', i.e. Pular fuf, not the
+        ff macrolanguage)"}
+    dating: {posture: partial, note: "33 of 80 (census 2026-10-13): the source reference's typed year
+        (Northwestern's “Title” (1968/9) form) or a date the item page states with its basis —
+        witness dates plain, authorship eras ('written by Serigne Moussa Ka (1889-1963)') in the
+        composition class; subjects' lifespans and inferred termini never claimed — :structured"}
+    places: {posture: named, note: "all 80: the item's Provenance (Touba, Kano, Sedhiou, Labé,
+        Dalaba, Ziguinchor, Zaria, …) — the manuscript's provenance, verbatim"}
+    script: {posture: qualified, note: "the text is the editors' Latin ROMANIZED transcription of
+        Ajami (Arabic-script) originals — metadata text_script says so; manuscript_script keeps
+        upstream's script field (Hausa Ajami, Wolof Ajami, …)"}
   altaica-shm:   # P107-7
     kind: {posture: unclassified}
     lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}
