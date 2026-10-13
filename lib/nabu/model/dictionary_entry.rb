@@ -98,13 +98,18 @@ module Nabu
   # - +target+: the pointed-at headword as displayed (NFC).
   # - +target_folded+: its search form in the dictionary language — the
   #   resolution key; nil when the fold comes out empty.
-  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded) do
-    def initialize(kind:, label:, target:, target_folded: nil)
+  # - +target_id+ (P124-3): the target's UPSTREAM entry id, for
+  #   dictionaries that point by id rather than headword (AED's
+  #   <ref target="tla…">). When set it is THE resolution key (matched
+  #   against entry_id) and target_folded stays nil.
+  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded, :target_id) do
+    def initialize(kind:, label:, target:, target_folded: nil, target_id: nil)
       super(
         kind: Model::Validation.present_string!(kind, field: "kind"),
         label: Model::Validation.nfc_text!(label, field: "label"),
         target: Model::Validation.nfc_text!(target, field: "target"),
-        target_folded: target_folded.nil? ? nil : Model::Validation.nfc_text!(target_folded, field: "target_folded")
+        target_folded: target_folded.nil? ? nil : Model::Validation.nfc_text!(target_folded, field: "target_folded"),
+        target_id: target_id.nil? ? nil : Model::Validation.present_string!(target_id, field: "target_id")
       )
     end
   end

@@ -95,4 +95,20 @@ class ContentHashTest < Minitest::Test
     refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex])),
                  Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref]))
   end
+
+  # P124-3: the id-keyed pointer field (target_id) enters the
+  # encoding ONLY when set — a P123-1 headword-keyed crossref keeps the sha
+  # pinned here (computed before those fields existed): no revision storm
+  # on LSJ / JMdict / recon.
+  def test_headword_keyed_crossref_sha_is_pinned_pre_target_id_encoding
+    assert_equal "baec93bf1b5840dd692bb71b43076bd5a169d90091a19e4eeaede00813137962",
+                 Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref]))
+  end
+
+  def test_a_target_id_is_content
+    id_keyed = Nabu::DictionaryCrossref.new(kind: "synonym", label: "synonym богъ", target: "богъ",
+                                            target_folded: "богъ", target_id: "tla1")
+    refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref])),
+                 Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [id_keyed]))
+  end
 end

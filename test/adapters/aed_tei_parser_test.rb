@@ -123,6 +123,28 @@ class AedTeiParserTest < Minitest::Test
     assert_includes entry("tla101810").body, "referencing: tla101800"
   end
 
+  # --- P124-3: id-keyed crossrefs (one per <xr>/<ref target>) -------------------
+
+  def test_every_xr_ref_mints_an_id_keyed_crossref_with_the_type_as_kind
+    crossrefs = entry("tla83470").crossrefs
+    assert_equal([%w[contains tla550034], %w[contains tla853734], %w[partOf tla854519], %w[root tla866216]],
+                 crossrefs.map { |c| [c.kind, c.target_id] })
+    assert_equal "contains tla550034", crossrefs.first.label
+    assert_equal "tla550034", crossrefs.first.target
+    assert(crossrefs.all? { |c| c.target_folded.nil? }, "id-keyed pointers carry no headword fold")
+  end
+
+  def test_the_fixture_crossrefs_cover_every_censused_xr_type
+    kinds = entries.flat_map(&:crossrefs).map(&:kind).uniq.sort
+    assert_equal %w[contains partOf predecessor referencedBy referencing root rootOf successor], kinds
+    assert_equal 89, entries.sum { |e| e.crossrefs.size }, "one crossref per <xr>/<ref target> (89 in the fixture)"
+    assert_equal(56, entry("tla866216").crossrefs.count { |c| c.kind == "rootOf" })
+  end
+
+  def test_entries_without_xr_carry_no_crossrefs
+    assert_empty entry("tla100000").crossrefs
+  end
+
   # --- hygiene ------------------------------------------------------------------
 
   def test_output_is_nfc

@@ -294,7 +294,7 @@ module Nabu
           DictionaryCrossref.create(
             dictionary_entry_id: row.id, seq: seq, kind: crossref.kind,
             label: crossref.label, target: crossref.target,
-            target_folded: crossref.target_folded
+            target_folded: crossref.target_folded, target_id: crossref.target_id
           )
         end
       end
@@ -302,10 +302,12 @@ module Nabu
       # The resolution pass (P123-1), after every load of this source:
       # each crossref of the source's dictionaries points at the ONE live
       # entry of the same dictionary whose headword_folded equals its
-      # target_folded — self excluded; zero or several candidates (an
-      # unheld headword, an ambiguous homograph) leave to_entry_id NULL,
-      # and the pointer renders verbatim. Re-run wholesale so a withdrawal
-      # or a newly loaded target is always reflected.
+      # target_folded — or, for an id-keyed pointer (P124-3, target_id
+      # set), whose entry_id equals its target_id — self excluded; zero or
+      # several candidates (an unheld headword or id, an ambiguous
+      # homograph) leave to_entry_id NULL, and the pointer renders
+      # verbatim. Re-run wholesale so a withdrawal or a newly loaded target
+      # is always reflected.
       def resolve_crossrefs
         return unless crossrefs_table?
 
@@ -317,23 +319,26 @@ module Nabu
       def resolve_dictionary_crossrefs(dictionary_id)
         entry_ids = DictionaryEntry.where(dictionary_id: dictionary_id).select(:id)
         rows = DictionaryCrossref.where(dictionary_entry_id: entry_ids)
-                                 .select_map(%i[id dictionary_entry_id target_folded to_entry_id])
+                                 .select_map(%i[id dictionary_entry_id target_folded target_id to_entry_id])
         return if rows.empty?
 
-        candidates = crossref_candidates(dictionary_id, rows.filter_map { |row| row[2] }.uniq)
-        rows.each do |id, from_id, folded, current|
-          matches = folded ? Array(candidates[folded]) - [from_id] : []
+        by_fold = crossref_candidates(dictionary_id, :headword_folded, rows.filter_map { |row| row[2] unless row[3] }.uniq)
+        by_id = crossref_candidates(dictionary_id, :entry_id, rows.filter_map { |row| row[3] }.uniq)
+        rows.each do |id, from_id, folded, target_id, current|
+          matches = target_id ? by_id.fetch(target_id, []) : by_fold.fetch(folded, [])
+          matches -= [from_id]
           resolved = matches.size == 1 ? matches.first : nil
           DictionaryCrossref.where(id: id).update(to_entry_id: resolved) unless resolved == current
         end
       end
 
-      # folded headword => [live entry ids] within one dictionary.
-      def crossref_candidates(dictionary_id, keys)
-        keys.each_slice(RESOLVE_SLICE).with_object(Hash.new { |h, k| h[k] = [] }) do |slice, out|
-          DictionaryEntry.where(dictionary_id: dictionary_id, withdrawn: false, headword_folded: slice)
-                         .select_map(%i[headword_folded id])
-                         .each { |folded, id| out[folded] << id }
+      # key value (folded headword, or upstream entry_id) => [live entry
+      # ids] within one dictionary.
+      def crossref_candidates(dictionary_id, column, keys)
+        keys.each_slice(RESOLVE_SLICE).with_object({}) do |slice, out|
+          DictionaryEntry.where(dictionary_id: dictionary_id, withdrawn: false, column => slice)
+                         .select_map([column, :id])
+                         .each { |key, id| (out[key] ||= []) << id }
         end
       end
 

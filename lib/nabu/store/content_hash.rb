@@ -65,8 +65,15 @@ module Nabu
         crossrefs = entry.crossrefs.map do |crossref|
           { "kind" => crossref.kind, "label" => crossref.label,
             "target" => crossref.target, "target_folded" => crossref.target_folded }
+            .merge(crossref_keys(crossref))
         end
         [canonical_json({ "crossrefs" => crossrefs })]
+      end
+
+      # P124-3: the id-keyed field joins the encoding ONLY when set, so a
+      # P123-1 headword-keyed pointer hashes byte for byte as before.
+      def crossref_keys(crossref)
+        crossref.target_id.nil? ? {} : { "target_id" => crossref.target_id }
       end
 
       # The only-when-non-empty guard: an empty reflex list contributes NO
