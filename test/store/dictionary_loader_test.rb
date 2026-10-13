@@ -322,6 +322,49 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal entry_row_id("b"), xr_row("a", "beta")[:to_entry_id]
   end
 
+  # P124-3: an id-keyed pointer (AED's <ref target="tla…">) resolves by the
+  # target's upstream entry_id, never by headword.
+  def id_xref(target_id, kind: "root")
+    Nabu::DictionaryCrossref.new(kind: kind, label: "#{kind} #{target_id}", target: target_id,
+                                 target_id: target_id)
+  end
+
+  def test_id_keyed_crossrefs_resolve_by_entry_id_within_the_dictionary
+    docs = [xr_document("/x/a.xml",
+                        xr_entry("t1", "nfr", crossrefs: [id_xref("t2"), id_xref("t9"), id_xref("t1")]),
+                        xr_entry("t2", "nfr"), xr_entry("t3", "t2"))]
+    loader.load(docs, full: false)
+
+    assert_equal entry_row_id("t2"), xr_row("t1", "t2")[:to_entry_id],
+                 "the entry_id names the target even across a homograph headword"
+    assert_nil xr_row("t1", "t9")[:to_entry_id], "an unheld id stays verbatim"
+    assert_nil xr_row("t1", "t1")[:to_entry_id], "never onto itself"
+    assert_equal "t2", xr_row("t1", "t2")[:target_id]
+    assert_nil xr_row("t1", "t2")[:target_folded]
+  end
+
+  # P124-3: a cross-dictionary pointer names its target dictionary by slug
+  # and resolves there by entry_id; an unheld dictionary leaves it verbatim.
+  def test_cross_dictionary_crossrefs_resolve_by_id_in_the_named_dictionary
+    across = Nabu::DictionaryCrossref.new(kind: "bdb", label: "BDB t2", target: "t2", target_id: "t2",
+                                          to_dictionary: "xr-other")
+    unheld = Nabu::DictionaryCrossref.new(kind: "twot", label: "TWOT 7", target: "7", target_id: "7",
+                                          to_dictionary: "twot")
+    home = xr_document("/x/a.xml", xr_entry("t1", "alpha", crossrefs: [across, unheld]), xr_entry("t2", "beta"))
+    other = Nabu::DictionaryDocument.new(slug: "xr-other", language: "grc", title: "Other",
+                                         canonical_path: "/x/b.xml")
+    other << xr_entry("t2", "beta")
+    loader.load([home, other], full: false)
+
+    other_id = @db[:dictionaries].where(slug: "xr-other").get(:id)
+    target = @db[:dictionary_entries].where(entry_id: "t2", dictionary_id: other_id).get(:id)
+    from = @db[:dictionary_entries].exclude(dictionary_id: other_id).where(entry_id: "t1").get(:id)
+    rows = @db[:dictionary_crossrefs].where(dictionary_entry_id: from).order(:seq).all
+    assert_equal [target, nil], rows.map { |row| row[:to_entry_id] },
+                 "the named dictionary's t2 (never the home shelf's); an unheld dictionary stays verbatim"
+    assert_equal(%w[xr-other twot], rows.map { |row| row[:to_dictionary] })
+  end
+
   def test_crossrefs_load_idempotently_and_revision_replaces_them_wholesale
     docs = [xr_document("/x/a.xml", xr_entry("a", "alpha", crossrefs: [xref("beta"), xref("gamma")]),
                         xr_entry("b", "beta"))]

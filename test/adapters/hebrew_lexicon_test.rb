@@ -227,6 +227,24 @@ class HebrewLexiconTest < Minitest::Test
     assert_equal "heap", result.gloss
   end
 
+  # P124-3: the cross-dictionary pointers resolve onto the BDB shelf by id;
+  # TWOT is not held, so its pointer renders verbatim.
+  def test_xref_pointers_resolve_across_to_the_bdb_shelf_and_twot_stays_verbatim
+    result = define_on_loaded_shelf.by_urn("urn:nabu:dict:hebrew-lexicon:1254a")
+    assert_equal([["BDB b.cw.aa", "urn:nabu:dict:bdb:b.cw.aa"], ["TWOT 278", nil]],
+                 result.crossrefs.map { |c| [c.label, c.resolved_urn] })
+  end
+
+  def test_xref_crossrefs_load_idempotently
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    before = db[:dictionary_crossrefs].order(:id).all
+    assert_equal 84, before.size
+    assert_equal 3, before.count { |row| row[:to_entry_id] }, "the fixture holds 3 of the 43 BDB targets"
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all
+  end
+
   def test_bdb_print_pages_stay_unresolved_deep_links
     result = define_on_loaded_shelf.run("ברא", limit: 10)
                                    .find { |r| r.urn == "urn:nabu:dict:bdb:b.cw.aa" }

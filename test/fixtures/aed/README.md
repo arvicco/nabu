@@ -30,7 +30,7 @@ is the authoritative one and is quoted in the adapter manifest.
   `define nfr` exercises the homograph fan-out.
 - **Root entries** (gramGrp `root/`, empty `<bibl/>`): tla863246,
   tla863258, tla866216, tla866258, tla867539, tla872102 — no bibl line,
-  no citations, `rootOf` target lists (tla866216 lists 55).
+  no citations, `rootOf` target lists (tla866216 lists 56).
 - **Wb print citations**: page.line ("Wb 1, 1.1"), page-only
   ("Wb 1, 270", tla10010), ranges ("Wb 3, 5.14-20", tla100010;
   "Wb 2, 253.1-256.15"), the dot-after-volume quirk ("Wb 3. 293.2-6",

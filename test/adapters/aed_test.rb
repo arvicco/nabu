@@ -159,6 +159,34 @@ class AedTest < Minitest::Test
     assert_equal ["urn:nabu:dict:aed:tla866258"], define.run("aa").map(&:urn), "root ꜥꜣ via ꜥ→a"
   end
 
+  # P124-3: the <xr> pointers resolve by TLA id within the shelf — the
+  # fixture holds tla550034's root tla866216 (resolves) but not every
+  # rootOf derivative (those stay verbatim).
+  def test_xr_crossrefs_resolve_by_tla_id_and_render_through_define
+    result = define_on_loaded_shelf.run("nfr", limit: 10)
+                                   .find { |r| r.urn == "urn:nabu:dict:aed:tla550034" }
+    by_kind = result.crossrefs.to_h { |c| [c.kind, c] }
+    assert_equal %w[partOf root], result.crossrefs.map(&:kind)
+    assert_equal "urn:nabu:dict:aed:tla866216", by_kind["root"].resolved_urn
+    assert_equal "root tla866216", by_kind["root"].label
+    assert_equal "urn:nabu:dict:aed:tla83470", by_kind["partOf"].resolved_urn
+  end
+
+  def test_xr_crossrefs_load_idempotently_and_unheld_targets_stay_verbatim
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    before = db[:dictionary_crossrefs].order(:id).all
+    assert_equal 89, before.size
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all
+
+    root = db[:dictionary_entries].where(entry_id: "tla866216").get(:id)
+    rows = db[:dictionary_crossrefs].where(dictionary_entry_id: root, kind: "rootOf")
+    assert_equal 56, rows.count
+    assert_equal 5, rows.exclude(to_entry_id: nil).count, "the 5 derivatives held in the slice resolve"
+    assert_equal 51, rows.where(to_entry_id: nil).count, "derivatives outside the slice stay verbatim"
+  end
+
   def test_wb_citations_stay_unresolved_print_deep_links
     result = define_on_loaded_shelf.run("nfr", limit: 10)
                                    .find { |r| r.urn == "urn:nabu:dict:aed:tla550034" }

@@ -124,7 +124,11 @@ class DerivabilityWritersTest < Minitest::Test
   # scan-shelf base (ia_scan_shelf) writes each census item's hOCR
   # derivative pair (.part + rename, whole item or nothing) under
   # canonical/<slug>/<identifier>/ inside Adapter#fetch — the same
-  # canonical-gateway law kind.
+  # canonical-gateway law kind. The P124-1 bu_ajami_fetch writes
+  # canonical/bu-ajami/ (the NEH Ajami item pages under items/ + their
+  # transcription PDFs under files/, .part + rename, and its
+  # .bu-ajami-fetch.json pin) inside Adapter#fetch — the elektire_fetch
+  # WP-JSON crawl law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -143,7 +147,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
-    nabu/poma_fetch.rb
+    nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/litopys_fetch.rb

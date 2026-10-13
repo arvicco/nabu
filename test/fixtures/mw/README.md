@@ -73,3 +73,16 @@ tail -1 mw.xml >> fixture                 # </mw>
 
 Every extracted line is byte-verbatim (`grep -F` of each record line against
 the upstream file succeeds); re-apply after any refresh.
+
+## `crossrefs-slice.xml` — the P124-3 cf./q.v. slice (4 records)
+
+A second, separate slice (not named `mw.xml`, so `discover` never picks it
+up) cut 2026-10-13 from the same upstream `xml/mw.xml` (sha256
+`1e1932ce…7558b9`): the upstream frame lines plus four record lines,
+byte-verbatim (upstream lines 2049, 2062, 12696, 12709).
+
+| Record | Why |
+|---|---|
+| L 1702 aṅguri | "(for `<s>aNguli</s>`, `<ab>q.v.</ab>`)" — the q.v. shape; "(`<ab>cf.</ab>` `<s>an-aNguri</s>`, `<s>pa/YcA<srs/>Nguri</s>`, …)" — only the first, adjacent list item is a pointer |
+| L 1715 aṅguli | the q.v. target (resolves) |
+| L 10608 apratiṣṭabdha / L 10619 apratistabdha | a mutual cf. pair ("cf. … below" / "cf. … above") — both resolve |

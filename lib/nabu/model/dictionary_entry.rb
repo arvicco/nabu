@@ -90,21 +90,35 @@ module Nabu
   # JMdict <xref>/<ant>, kaikki synonyms/antonyms/related). The citation
   # pattern again — the parser mints it, the loader persists it and
   # resolves the TO entry by folded headword (unique match only).
+  # P124-3 widens the shape: id-keyed pointers (+target_id+) and pointers
+  # into ANOTHER dictionary (+to_dictionary+).
   #
-  # - +kind+: the pointer class, normalized (see, equals, variant,
-  #   false-reading, gloss, like, synonym, antonym, related).
+  # - +kind+: the pointer class — normalized (see, equals, variant,
+  #   false-reading, gloss, like, synonym, antonym, related, cf., q.v.)
+  #   or the upstream relation type verbatim where it is already a
+  #   controlled vocabulary (AED root/rootOf/partOf…, TLS hypernymy…,
+  #   Unihan kSemanticVariant, the OSHB xref's bdb/twot).
   # - +label+: the pointer as the dictionary prints it ("v. μῦθος") — what
   #   renders when the target is not resolvable.
   # - +target+: the pointed-at headword as displayed (NFC).
   # - +target_folded+: its search form in the dictionary language — the
   #   resolution key; nil when the fold comes out empty.
-  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded) do
-    def initialize(kind:, label:, target:, target_folded: nil)
+  # - +target_id+ (P124-3): the target's UPSTREAM entry id, for
+  #   dictionaries that point by id rather than headword (AED's
+  #   <ref target="tla…">). When set it is THE resolution key (matched
+  #   against entry_id) and target_folded stays nil.
+  # - +to_dictionary+ (P124-3): the target dictionary's slug for a
+  #   cross-DICTIONARY pointer (the OSHB xref's bdb/twot ids); nil means
+  #   the entry's own dictionary.
+  DictionaryCrossref = Data.define(:kind, :label, :target, :target_folded, :target_id, :to_dictionary) do
+    def initialize(kind:, label:, target:, target_folded: nil, target_id: nil, to_dictionary: nil)
       super(
         kind: Model::Validation.present_string!(kind, field: "kind"),
         label: Model::Validation.nfc_text!(label, field: "label"),
         target: Model::Validation.nfc_text!(target, field: "target"),
-        target_folded: target_folded.nil? ? nil : Model::Validation.nfc_text!(target_folded, field: "target_folded")
+        target_folded: target_folded.nil? ? nil : Model::Validation.nfc_text!(target_folded, field: "target_folded"),
+        target_id: target_id && Model::Validation.present_string!(target_id, field: "target_id"),
+        to_dictionary: to_dictionary && Model::Validation.present_string!(to_dictionary, field: "to_dictionary")
       )
     end
   end

@@ -26,6 +26,9 @@ class DillmannTest < Minitest::Test
   ASM = "L3c8821a46d56420283fc3bdedc1c341a"   # ዐፅም "os/bone", n=7417
   MOTA = "L2d417be91261494990015aae6b9b5d81"  # ሞተ "mori/die", n=1472 — the TraCES crosswalk anchor
   DARABA = "L844cd3b8849f4c16b5f3390e611a4f7b" # ደረባ, the TraCES-addition shape, n=12860
+  # P124-3: a mutual lemma-link pair (each entry links the other)
+  HAFATA = "Ld81100c6adcb4110a5712a3be0e9a0ca" # ሐፈጠ, n=12016
+  HAFATA_NEW = "L111hmnxugcml3cpnctdxmsdxgwdfioxe" # ሐፈጠ (TraCES addition), n=13179
 
   def adapter = Nabu::Adapters::Dillmann.new
 
@@ -50,7 +53,8 @@ class DillmannTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_entry_file_sorted
     refs = adapter.discover(FIXTURES).to_a
-    assert_equal ["dillmann:#{MOTA}", "dillmann:#{ASM}", "dillmann:#{DARABA}"], refs.map(&:id),
+    assert_equal ["dillmann:#{HAFATA_NEW}", "dillmann:#{MOTA}", "dillmann:#{ASM}", "dillmann:#{DARABA}",
+                  "dillmann:#{HAFATA}"], refs.map(&:id),
                  "one ref per */<entry-id>.xml, sorted by id"
     assert(refs.all? { |ref| ref.source_id == "dillmann" })
   end
@@ -138,12 +142,12 @@ class DillmannTest < Minitest::Test
     first = Nabu::Store::DictionaryLoader.new(db: db, source: source)
                                          .load_from(adapter, workdir: FIXTURES)
     assert_equal 0, first.errored
-    assert_equal 3, db[:dictionary_entries].count
+    assert_equal 5, db[:dictionary_entries].count
 
     second = Nabu::Store::DictionaryLoader.new(db: db, source: source)
                                           .load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.errored
-    assert_equal 3, db[:dictionary_entries].count, "a byte-identical reload upserts, never duplicates"
+    assert_equal 5, db[:dictionary_entries].count, "a byte-identical reload upserts, never duplicates"
     urns = db[:dictionary_entries].select_map(:urn)
     assert_includes urns, "urn:nabu:dict:dillmann:#{MOTA}"
   ensure
@@ -152,6 +156,30 @@ class DillmannTest < Minitest::Test
 
   # P123-1 end to end: Dillmann's "Ruth 1,8" lands on the held Gǝʿǝz
   # Ruth verse whose text carries the quoted እለ፡ ሞቱ፡.
+  # P124-3: <ref type="external" target="…/Dillmann/lemma/<id>"> links name
+  # another entry by its id — resolved within the shelf, rendered by define.
+  def test_lemma_links_mint_id_keyed_crossrefs_that_resolve_through_define
+    entry = adapter.parse(ref_for(HAFATA)).first
+    assert_equal([["see", "ሐፈጠ፡", HAFATA_NEW]], entry.crossrefs.map { |c| [c.kind, c.label, c.target_id] })
+    assert_empty adapter.parse(ref_for(ASM)).first.crossrefs
+
+    db = store_test_db
+    loader = Nabu::Store::DictionaryLoader.new(db: db, source: create_source(db))
+    loader.load_from(adapter, workdir: FIXTURES)
+    define = Nabu::Query::Define.new(catalog: db)
+    assert_equal ["urn:nabu:dict:dillmann:#{HAFATA_NEW}"],
+                 define.by_urn("urn:nabu:dict:dillmann:#{HAFATA}").crossrefs.map(&:resolved_urn)
+    assert_equal ["urn:nabu:dict:dillmann:#{HAFATA}"],
+                 define.by_urn("urn:nabu:dict:dillmann:#{HAFATA_NEW}").crossrefs.map(&:resolved_urn)
+
+    before = db[:dictionary_crossrefs].order(:id).all
+    assert_equal 2, before.size
+    loader.load_from(adapter, workdir: FIXTURES)
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
+  ensure
+    db&.disconnect
+  end
+
   def test_define_resolves_a_scripture_reference_onto_the_held_geez_verse
     db = store_test_db
     works = Nabu::Store::Source.create(
