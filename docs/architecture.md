@@ -875,7 +875,9 @@ strong/aug ids are the entry's own identity and mint nothing.
 
 Further id-keyed sets (P124-3): Unihan `kSemanticVariant` items (the
 codepoint is the entry id; kind `kSemanticVariant`, source tags verbatim
-in the label).
+in the label); Dillmann's `<ref type="external"
+target="…/Dillmann/lemma/<id>">` links (kind `see`) — its `ref
+target="#c…"` elements name no entry (dangling sigla) and are not mined.
 
 ## 12. The reconstruction shelf — the comparativist's crosswalk (P14-1)
 
