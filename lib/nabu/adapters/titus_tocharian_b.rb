@@ -79,12 +79,23 @@ module Nabu
       # (c and the Paris `v` notation variants), `sbpl` the Sanskrit of the
       # bilinguals, `toa` the Tocharian A lines of five London manuscripts
       # (claimed xto line by line — and so, every line agreeing, at document
-      # grain: ruled 2026-10-12). Still unclassified, so quarantining:
-      # `iotk16` (one Berlin page) and the `ts` stem (two London pages).
+      # grain: ruled 2026-10-12), and `ts` Tumshuqese (below). Still
+      # unclassified, so quarantining: `iotk16` (one Berlin page).
+      #
+      # The `ts` stem (iots16 / iotsx16; the transcription lane empty, the
+      # syllabic lane carrying every line) occurs on two London pages,
+      # toch3722 (IOL Toch. 162 = H.149.add.121) and toch3745 (IOL Toch. 185
+      # = H.Add.149.54). Both manuscripts are listed in D. Maue, "Tumshuqese
+      # manuscripts. A provisional handlist" (April 2009; TITUS,
+      # texte/iranica/tumshuq/handlist.pdf); IOL Toch. 162 is the Tumshuqese
+      # Araṇemijātaka (H. W. Bailey 1968, p. 44; P. O. Skjærvø 2002, p. 576),
+      # and the leaf itself reads "ʽa-ra-ṇe-[m]i". The lanes claim `xtq`
+      # (Tumshuqese, ISO 639-3) as a bare identity code (ruled 2026-10-13);
+      # every line agreeing, the document follows the measured claim.
       PARSER_PROFILE = TitusTocharianParser::Profile.new(
         anchor_prefix: COLLECTIONS.map { |c| "TochB_#{c}" }.freeze,
-        lane_family: /\Aio(?<stem>tob|toa|sbpl)(?<syllabic>[xv]?)c?16\z/,
-        lane_languages: { "tob" => :txb, "toa" => :xto, "sbpl" => :san }.freeze,
+        lane_family: /\Aio(?<stem>tob|toa|sbpl|ts)(?<syllabic>[xv]?)c?16\z/,
+        lane_languages: { "tob" => :txb, "toa" => :xto, "sbpl" => :san, "ts" => :xtq }.freeze,
         primary_language: :txb
       )
       CORPUS_TITLE = "Tocharian B Corpus"

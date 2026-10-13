@@ -1329,8 +1329,11 @@ sources:
     # adapter's page-shape constants are PROVISIONAL until the first
     # authenticated sync (members-only upstream) — the postures below are
     # the titus-tocharian-a family's, re-censused at that sync.
+    # The two London Tumshuqese leaves (IOL Toch. 162 / 185, the `ts` lane
+    # stem; ruled 2026-10-13) claim bare `xtq` — the ISO code is the claim.
     lect: {posture: identity, note: txb whole-source; bilingual Sanskrit sub-lines (if the B pages carry
-        them) ride bare san per passage}
+        them) ride bare san per passage; the five London Tocharian A manuscripts claim xto and the
+        two Tumshuqese leaves bare xtq at document grain}
     dating: {posture: undatable, note: "the family's pages carry no dating — the THT catalogue block names
         signature/number/condition only; re-censused at the first authenticated sync"}
     places: {posture: named, note: "the Berlin find signature's site siglum → findspot via the family's
