@@ -443,6 +443,33 @@ module Query
       assert_equal [-300, "silver"], [estimate.not_before, estimate.date_class]
     end
 
+    # P123-4: a NULL-bound row (place-only, artifact-script) never leads
+    # the card over a dated row, even when inserted first (SQLite sorts
+    # NULLs first) — and an upstream place-only row never hides a silver
+    # estimate, the primary-date rule's row. A document with ONLY a
+    # NULL-bound row still renders it.
+    def test_dated_rows_lead_null_bound_rows
+      load_document("1", [%w[1 μῆνιν]])
+      load_document("2", [%w[1 ἄειδε]])
+      load_document("3", [%w[1 θεά]])
+      first, second, third = %w[urn:d:1 urn:d:2 urn:d:3].map { |urn| @catalog[:documents].where(urn: urn).get(:id) }
+      @catalog[:document_axes].insert(document_id: first, place_name: "Pathyris", axis_source: "trismegistos")
+      @catalog[:document_axes].insert(document_id: first, artifact_script: "grek", axis_source: "script")
+      @catalog[:document_axes].insert(document_id: first, not_before: -113, not_after: -113, axis_source: "hgv")
+      @catalog[:document_axes].insert(document_id: second, place_name: "Oxyrhynchus", axis_source: "hgv")
+      @catalog[:document_axes].insert(document_id: second, not_before: -300, not_after: -200,
+                                      precision: "estimate", axis_source: Nabu::Store::SilverDates::AXIS_SOURCE,
+                                      date_class: Nabu::Store::SilverDates::DATE_CLASS)
+      @catalog[:document_axes].insert(document_id: third, place_name: "Arsinoites", axis_source: "hgv")
+
+      dated = show("urn:d:1").timeline
+      assert_equal [-113, "hgv"], [dated.not_before, dated.axis_source], "the dated row leads"
+      estimate = show("urn:d:2").timeline
+      assert_equal [-300, "silver"], [estimate.not_before, estimate.date_class]
+      place_only = show("urn:d:3").timeline
+      assert_equal [nil, "Arsinoites"], [place_only.not_before, place_only.place_name]
+    end
+
     def test_undated_document_has_nil_timeline
       load_document("2", [%w[1 ἄειδε]])
       assert_nil show("urn:d:2").timeline
