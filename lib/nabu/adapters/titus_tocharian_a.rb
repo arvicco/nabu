@@ -147,17 +147,25 @@ module Nabu
       # The skip reason of a page whose every line is a preservation note.
       NOTE_ONLY_REASON = "nothing legible (note-only page)"
 
+      # The skip reason of a page with no manuscript heading at all that
+      # carries the edition's editorial prose (the `textdescr` lane: title
+      # and data-entry credits) — a collection's header page.
+      COLLECTION_HEADER_REASON = "editorial collection header (no manuscript)"
+      EDITORIAL_PROSE = /<span id=textdescr>/i
+
       # Parse one page into a Document of line Passages. A page whose lines
       # are ALL preservation notes ("{{nichts zu lesen}}" on every side —
       # upstream's own empty leaf; ruled 2026-10-12) skips by rule
-      # (DocumentSkipped); any other page with no keyable lines quarantines
-      # whole (ParseError) — never served empty.
+      # (DocumentSkipped), as does a page carrying editorial prose but no
+      # manuscript at all (the Tocharian B London collection header
+      # toch3560; ruled 2026-10-13); any other page with no keyable lines —
+      # a blank page included — quarantines whole (ParseError), never
+      # served empty.
       def parse(document_ref)
         html = TitusTocharianParser.read_page(document_ref.path)
         page = TitusTocharianParser.parse(html, profile: self.class::PARSER_PROFILE)
-        if page.lines.empty? && page.notes.any?
-          raise Nabu::DocumentSkipped.new("#{self.class::SLUG}: #{document_ref.path}", reason: NOTE_ONLY_REASON)
-        end
+        skip_reason = empty_page_skip_reason(page, html)
+        raise Nabu::DocumentSkipped.new("#{self.class::SLUG}: #{document_ref.path}", reason: skip_reason) if skip_reason
         raise Nabu::ParseError, "#{self.class::SLUG}: no text lines in #{document_ref.path}" if page.lines.empty?
 
         stem = document_ref.metadata["page"]
@@ -199,6 +207,13 @@ module Nabu
       end
 
       private
+
+      def empty_page_skip_reason(page, html)
+        return nil unless page.lines.empty?
+        return NOTE_ONLY_REASON if page.notes.any?
+
+        COLLECTION_HEADER_REASON if page.manuscripts.empty? && html.match?(EDITORIAL_PROSE)
+      end
 
       def text_pages(workdir)
         Dir.glob(File.join(workdir, self.class::PAGE_GLOB)).select do |path|

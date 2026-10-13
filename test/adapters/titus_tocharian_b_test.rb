@@ -270,6 +270,32 @@ class TitusTocharianBTest < Minitest::Test
     refute_kind_of Nabu::ParseError, error
   end
 
+  # The London collection header (toch3560): editorial prose only (title,
+  # data-entry credits), no manuscript heading at all. Skipped by rule
+  # (ruled 2026-10-13), never quarantined.
+  def test_the_editorial_collection_header_is_skipped_by_rule
+    require_b_fixtures!
+    error = assert_raises(Nabu::DocumentSkipped) { parse_fixture("toch3560") }
+    assert_equal "editorial collection header (no manuscript)", error.reason
+    refute_kind_of Nabu::ParseError, error
+  end
+
+  # A page with a manuscript heading but no keyable line still quarantines.
+  def test_a_manuscript_page_without_lines_still_quarantines
+    html = <<~HTML
+      <span id=h3>Manuscript: 9<A NAME="TochB_THT_9">&nbsp;</A></span>
+      <span id=h4>Page: 9a<A NAME="TochB_THT_9_9a">&nbsp;</A></span>
+    HTML
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "tochb009.htm")
+      File.write(path, html)
+      ref = Nabu::DocumentRef.new(source_id: SLUG, id: "urn:nabu:#{SLUG}:tochb009", path: path,
+                                  metadata: { "page" => "tochb009" })
+      error = assert_raises(Nabu::ParseError) { @adapter.parse(ref) }
+      assert_match(/no text lines/, error.message)
+    end
+  end
+
   # Lane text (not a note) before any line anchor stays a structural surprise.
   def test_pre_anchor_lane_text_still_quarantines
     html = <<~HTML
@@ -322,9 +348,9 @@ class TitusTocharianBTest < Minitest::Test
     require_b_fixtures!
     adapter = Nabu::Adapters::TitusTocharianB.new
     refs = adapter.discover(B_FIXTURES).to_a
-    assert_equal %w[toch1215 toch3562 toch3722 toch3855 toch4345 tochb001 tochb002 tochb301 tochb494],
+    assert_equal %w[toch1215 toch3560 toch3562 toch3722 toch3855 toch4345 tochb001 tochb002 tochb301 tochb494],
                  refs.map { |r| r.metadata["page"] }.sort
-    parseable = refs.reject { |r| r.metadata["page"] == "toch1215" }
+    parseable = refs.reject { |r| %w[toch1215 toch3560].include?(r.metadata["page"]) }
     first = parseable.map { |r| adapter.parse(r).passages.map(&:urn) }
     second = parseable.map { |r| adapter.parse(r).passages.map(&:urn) }
     assert_equal first, second, "URNs stable across two parses"
