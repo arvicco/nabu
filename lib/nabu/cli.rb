@@ -4926,7 +4926,7 @@ module Nabu
     # The one pointer line every deprecated `focus` alias prints (P44-r3b).
     FOCUS_POINTER = "focus is now enable/disable; this alias will be removed in a future release"
 
-    desc "enable AXIS|SOURCE...", "Enable sources or axes on this box (the local enablement config)"
+    desc "enable AXIS|SOURCE...|all", "Enable sources or axes on this box — `all` is every ungated source in one move"
     long_desc <<~HELP, wrap: false
       Add axes and/or sources to config/profile.yml — this box's ENABLEMENT
       CONFIG (P44-r3b). The entries govern BOTH what `nabu sync` / `sync --all`
@@ -4960,6 +4960,28 @@ module Nabu
       registry = Nabu::SourceRegistry.load(config.sources_path)
       names = names.map(&:strip).reject(&:empty?)
       raise Thor::Error, "enable: name at least one axis, source, or group to enable" if names.empty?
+
+      # `enable all` (owner feature, 2026-10-13): the fast path to a whole
+      # library — every source the box can sync unattended, in one move.
+      # Access-gated rows (blocked availability, grant-gated, credential-
+      # bound) are deliberately skipped with their reasons: each of those
+      # must be enabled BY NAME so its own grant/credential flow runs.
+      if names.include?("all")
+        raise Thor::Error, "enable all: stands alone (it already covers every ungated source)" if names.size > 1
+
+        rows = registry.slugs.map { |slug| registry[slug] }.reject(&:feature_module?)
+        gated, open_rows = rows.partition { |e| e.blocked? || e.grant_required? || e.credentials }
+        unless gated.empty?
+          say "skipped as access-gated (enable each by name to run its grant or credential flow):"
+          gated.each do |e|
+            reasons = [e.blocked? ? "blocked" : nil, e.grant_required? ? "grant-gated" : nil,
+                       e.credentials ? "credentials: #{e.credentials}" : nil].compact
+            say "  #{e.slug} (#{reasons.join(', ')})"
+          end
+        end
+        names = open_rows.map(&:slug)
+        say "enable all → #{names.size} ungated sources"
+      end
 
       # P68-4: a GROUP name expands to its source members (modules are
       # machinery — pre-enabled by nature, never profile entries), so
