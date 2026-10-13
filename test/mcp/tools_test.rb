@@ -2092,7 +2092,11 @@ module MCP
       assert_equal "bosworth-toller", entry.fetch("dictionary")
       assert_equal "noble", entry.fetch("gloss")
       assert_equal "attribution", entry.fetch("license_class")
-      assert_empty entry.fetch("citations"), "no OE crosswalk yet — citations start empty"
+      # P123-1: B-T's references mint verbatim citations; with no ASPR in
+      # this catalog none resolves (honest misses, never invented links).
+      citations = entry.fetch("citations")
+      assert_includes citations, { "label" => "Gen. 1182", "resolved_urn" => nil }
+      assert(citations.all? { |c| c.fetch("resolved_urn").nil? })
       assert_includes define_lang_enum, "ang", "the live-derived enum advertises the synced shelf"
     end
 
