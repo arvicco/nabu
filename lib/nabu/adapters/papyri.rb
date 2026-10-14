@@ -10,15 +10,53 @@ module Nabu
     # header metadata resolution (idnos/title/language peeked cheaply from
     # each file's teiHeader), and fetch.
     #
-    # == Layout and discovery
+    # == Layout and discovery (the post-switchover layout)
     #
-    # The DDbDP tree lives under DDB_EpiDoc_XML/<collection>/, with volumed
-    # collections nesting one more level (<collection>.<volume>/): both
-    # bgu/bgu.1/bgu.1.102.xml (nested) and c.epist.lat/c.epist.lat.10.xml
-    # (flat, volume-less) occur. Discover globs both shapes and peeks each
-    # header; files without an <idno type="ddb-hybrid"> or an edition
-    # language are skipped defensively (the repo carries the odd non-DDbDP
-    # artifact that must not error discover).
+    # Upstream's SVN-to-git switchover (2026-07, completed upstream by
+    # 2026-10) rationalized idp.data: the edition-centric
+    # DDB_EpiDoc_XML/<collection>/(<collection>.<volume>/)?<file>.xml tree
+    # is GONE, replaced by two documentary trees (HGV_trans_EpiDoc/ likewise
+    # became Translations/, which this adapter does not read):
+    #
+    # - DDbDP/<HGV-thousand>/<HGV>.xml — the CURATED, text-centric tree,
+    #   one file per HGV text, named by its <idno type="filename"> (the HGV
+    #   number: 8875.xml, 13a.xml). Every live edit lands here. 67,980 files
+    #   at upstream 8f7ed708 (2026-10-13), of which 61,801 carry text; the
+    #   other 6,179 are stubs generated from HGV ("This text has not been
+    #   added to papyri.info yet." over an empty <ab/>).
+    # - Historical/<collection>/(<volume>/)?<number>.xml — the archived
+    #   edition-centric tree (the old layout's successor): 82,332 files,
+    #   52,637 with text; the rest are "historical edition has not been
+    #   added" stubs pointing at the curated edition, plus 6,458 DCLP
+    #   catalog shells with no edition div at all.
+    #
+    # Discover walks DDbDP/ (any depth) first, then Historical/ (any depth;
+    # a handful of entries nest one or two levels below the volume) as a
+    # FALLBACK: a Historical file becomes a ref only when no text-bearing
+    # DDbDP/ file claims its urn. Measured at 8f7ed708: 103 editions have
+    # their text only in Historical/ (c.epist.lat;;10 is one — DDbDP/78/
+    # 78573.xml is merely its stub); every other text-bearing Historical
+    # file duplicates a curated text and yields to it. Dual-tree discovery
+    # retains 61,346 of the 61,453 text-bearing pre-switchover documents
+    # (DDbDP/ alone would retain 61,246); the 107 that go are upstream's
+    # own retirements (69 now only stubs — superseded editions such as
+    # bgu;4;1087, whose text DDbDP/ carries as bgu;13;2280 — 36 re-keyed
+    # under another hybrid, 2 left only as translations). The old
+    # DDB_EpiDoc_XML/ root is NOT tolerated as a third root: upstream
+    # deleted it, and a canonical clone that still has it is pre-switchover
+    # and needs the sync, not a compatibility walk.
+    #
+    # Each header is peeked; files without an <idno type="ddb-hybrid"> or an
+    # edition language are skipped defensively (the repo carries the odd
+    # non-DDbDP artifact that must not error discover), and so are TEXT-LESS
+    # STUBS — editions without a single <lb> (the parser's citable unit). In
+    # the old layout a stub had its own hybrid and merely quarantined at
+    # parse; in this layout a stub can share its hybrid with the real text
+    # (a multi-text edition: DDbDP/0/13.xml carries p.adl;;G13 with text,
+    # its per-HGV siblings 13a.xml/13b.xml carry the same hybrid as stubs;
+    # or a curated stub over a Historical text), so skipping is what keeps
+    # the urn unique. Over the text-bearing files the ddb-hybrid IS unique
+    # in each tree (61,801 of 61,801; 52,637 of 52,637).
     #
     # == Identity (FROZEN minting)
     #
@@ -31,11 +69,38 @@ module Nabu
     # for future cross-linking (Trismegistos is the id crosswalk of the
     # papyrological world).
     #
+    # Identity never reads the path — and the switchover proved why that
+    # matters: every documentary file moved (and was rewritten; no blob
+    # survived byte-identical), yet all 61,246 documents present text-bearing
+    # in both the old tree and DDbDP/ mint the SAME document urn from either
+    # file (corpus-wide parse comparison at 8f7ed708; 59,514 re-parse
+    # byte-identically down to every passage). The new <idno
+    # type="filename"> (an HGV number in DDbDP/, a collection/volume/number
+    # path in Historical/) is path-shaped and is deliberately NOT used.
+    #
+    # PASSAGE urns did not all survive, and not because of paths: upstream's
+    # 2026-10-04 schema pass rewrote textpart @n values without punctuation
+    # ("r,1" → "r1", "int,1" → "int1", "with-fibers" → "withfibers", even
+    # "1-2" → "12"), keeping the old label as a <head> inside the textpart.
+    # 1,666 DDbDP and 85 DCLP documents carry such textparts; their passages
+    # re-mint under the new suffixes (texts unchanged), and 20 documents
+    # whose @n was all punctuation now lack @n and quarantine. This adapter
+    # mints from @n as upstream publishes it (canonical means canonical).
+    #
     # == The DCLP lane (P104-3)
     #
     # The same idp.data clone carries DCLP/ — the Digital Corpus of
-    # Literary Papyri, 14,842 EpiDoc files under DCLP/<TM-thousand>/<TM>.xml
+    # Literary Papyri, 14,845 EpiDoc files under DCLP/<bucket>/<dclp>.xml
     # — parsed since P104-3 as a SECOND document family of THIS source.
+    # The switchover kept the DCLP/ root but re-sharded it: the bucket was
+    # <n>/1000 + 1 (DCLP/63/62952.xml) and is now <n>/1000
+    # (DCLP/62/62952.xml). Three ids (62441, 62509, 65542) ALSO survive at
+    # their old-bucket path as diverged duplicates — the old-bucket copies
+    # carry editorial changes committed after the reshard, which suggests
+    # an upstream editing path still writing the old location. One urn
+    # needs one file, so discover keeps the <n>/1000 bucket copy (a
+    # deterministic layout rule, not a judgment on content); the conflict
+    # is upstream's to resolve.
     # Shape decision (extend-the-walk over a papyri-dclp sibling row,
     # recorded here): one upstream repo is one canonical asset is one
     # source — a sibling row's workdir is slug-bound (Config#source_workdir
@@ -51,7 +116,8 @@ module Nabu
     # Identity: urn = urn:nabu:dclp:<idno type="dclp">, e.g.
     # urn:nabu:dclp:62952 — the dclp number is upstream's own primary key
     # (papyri.info/dclp/<n>, the TM number, AND the filename; unique
-    # across all 14,842 files, census 2026-09-26). NOT the dclp-hybrid:
+    # across all 14,842 ids, census 2026-09-26, re-verified at 8f7ed708
+    # modulo the three stale-bucket duplicates above). NOT the dclp-hybrid:
     # the hybrid is demonstrably non-unique (two Homer papyri, TM 60467
     # and TM 61136, both carry <idno type="dclp-hybrid">p.hal;;5 — an
     # upstream cataloguing defect that would collide urns). Non-numeric
@@ -60,15 +126,17 @@ module Nabu
     # dclp urns are structurally non-colliding with urn:nabu:ddbdp:* even
     # where one papyrus is held by both corpora.
     #
-    # Discovery reality (census 2026-09-26 on the live clone): 12,571 of
-    # 14,842 files are metadata-only catalog stubs — a SELF-CLOSED edition
+    # Discovery reality (census 2026-09-26 on the live clone; 12,567 of
+    # 14,845 at 8f7ed708): 12,571 of 14,842 files are metadata-only
+    # catalog stubs — a SELF-CLOSED edition
     # div, no transcription — and a further handful scaffold an empty
     # <ab>/<lb> skeleton with no text. The DCLP peek therefore requires,
     # beyond dclp-hybrid + edition language, at least one non-whitespace
     # text node INSIDE the edition div (still a bounded header-and-edition
     # Reader walk that stops at the first hit); text-less files are
     # skipped at discover, not quarantined at parse. Expected live yield:
-    # ~2,260 literary documents (grc ~2,19x, lat ~6x, cop ~1x).
+    # ~2,260 literary documents (grc ~2,19x, lat ~6x, cop ~1x); measured
+    # at 8f7ed708: 2,256 refs (grc 2,181 · lat 57 · cop 17 · egy-Egyd 1).
     #
     # == fetch
     #
@@ -108,10 +176,18 @@ module Nabu
         MANIFEST
       end
 
-      # Walk <workdir>/DDB_EpiDoc_XML for both nested and flat collections
-      # plus <workdir>/DCLP (P104-3), one DocumentRef per file, the whole
-      # union sorted by urn (dclp:* precedes ddbdp:* — discovery order is
-      # urn order). Returns an Enumerator without a block (the adapter
+      # The documentary walk roots (see "Layout and discovery" above): the
+      # curated tree first, the historical tree as fallback.
+      DDBDP_ROOT = "DDbDP"
+      HISTORICAL_ROOT = "Historical"
+      DCLP_ROOT = "DCLP"
+      private_constant :DDBDP_ROOT, :HISTORICAL_ROOT, :DCLP_ROOT
+
+      # Walk <workdir>/DDbDP (curated) with <workdir>/Historical as the
+      # fallback for editions the curated tree does not carry as text, plus
+      # <workdir>/DCLP (P104-3), one DocumentRef per urn, the whole union
+      # sorted by urn (dclp:* precedes ddbdp:* — discovery order is urn
+      # order). Returns an Enumerator without a block (the adapter
       # contract's lazy shape).
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
@@ -177,10 +253,21 @@ module Nabu
         manifest.upstream_url
       end
 
+      # The documentary walk: every text-bearing file of the curated tree,
+      # then each text-bearing Historical file whose urn the curated tree
+      # did not already claim (see the file header's precedence rule).
       def document_refs(workdir)
-        root = File.join(workdir, "DDB_EpiDoc_XML")
-        paths = Dir.glob(File.join(root, "*", "*.xml")) + Dir.glob(File.join(root, "*", "*", "*.xml"))
-        paths.filter_map do |path|
+        curated = ddbdp_tree_refs(File.join(workdir, DDBDP_ROOT))
+        claimed = curated.to_h { |ref| [ref.id, true] }
+        historical = ddbdp_tree_refs(File.join(workdir, HISTORICAL_ROOT)).reject { |ref| claimed[ref.id] }
+        (curated + historical).sort_by(&:id)
+      end
+
+      # One tree's refs, any depth (DDbDP/<n>/<n>.xml; Historical nests
+      # collection/volume/number, a few entries one or two levels deeper).
+      # Dir.glob's sorted path order keeps the walk deterministic.
+      def ddbdp_tree_refs(root)
+        Dir.glob(File.join(root, "**", "*.xml")).filter_map do |path|
           header = peek_header(path)
           next unless header
 
@@ -190,16 +277,18 @@ module Nabu
             path: File.expand_path(path),
             metadata: metadata_for(header, path)
           )
-        end.sort_by(&:id)
+        end
       end
 
-      # The DCLP walk (P104-3): DCLP/<TM-thousand>/<TM>.xml, one ref per
-      # file that carries a numeric dclp idno, an edition language AND
-      # transcription text — the 12,571 metadata-only stubs (self-closed
+      # The DCLP walk (P104-3): DCLP/<dclp-thousand>/<dclp>.xml, one ref
+      # per file that carries a numeric dclp idno, an edition language AND
+      # transcription text — the ~12,570 metadata-only stubs (self-closed
       # or text-less edition) are skipped here, never quarantined at
-      # parse (see the file header's census).
+      # parse (see the file header's census). A dclp id present in more
+      # than one bucket keeps only its <n>/1000 bucket copy (the stale
+      # pre-reshard duplicates; file header).
       def dclp_document_refs(workdir)
-        Dir.glob(File.join(workdir, "DCLP", "*", "*.xml")).filter_map do |path|
+        refs = Dir.glob(File.join(workdir, DCLP_ROOT, "*", "*.xml")).filter_map do |path|
           header = peek_dclp_header(path)
           next unless header
 
@@ -210,6 +299,13 @@ module Nabu
             metadata: metadata_for(header, path)
           )
         end
+        refs.group_by(&:id).map { |_, group| group.min_by { |ref| [dclp_bucket_rank(ref), ref.path] } }
+      end
+
+      # 0 when the file sits in its canonical <n>/1000 bucket, 1 otherwise.
+      def dclp_bucket_rank(ref)
+        bucket = File.basename(File.dirname(ref.path))
+        bucket == (Integer(ref.id.delete_prefix("urn:nabu:dclp:"), 10) / 1000).to_s ? 0 : 1
       end
 
       def metadata_for(header, path)
@@ -224,14 +320,19 @@ module Nabu
 
       # Cheap Reader peek at a file's teiHeader (Proiel#peek_source pattern):
       # the interesting idnos, the titleStmt <title>, and — first thing past
-      # the header — the edition div's xml:lang (mapped la→lat), stopping
-      # right there. Returns nil — skip the file — when the ddb-hybrid idno
-      # or the edition language is missing, or the XML is malformed. Never
-      # reads past the edition div's start tag.
+      # the header — the edition div's xml:lang (mapped la→lat), then INTO
+      # the edition div just far enough to meet its first <lb> (the parser's
+      # citable unit). Returns nil — skip the file — when the ddb-hybrid
+      # idno, the edition language or any <lb> is missing, or the XML is
+      # malformed. The <lb> requirement is what skips upstream's text-less
+      # stubs (an empty <ab/>, at most a "not yet added" <note>): in the
+      # post-switchover layout a stub can share its ddb-hybrid with the real
+      # text (a multi-text edition's per-HGV siblings; a curated stub over a
+      # Historical text), so it must not become a ref at all.
       def peek_header(path)
-        idnos, title, language, = read_header(path)
+        idnos, title, language, has_lb = read_header(path, probe: :lb)
         hybrid = idnos["ddb-hybrid"]
-        return nil if hybrid.nil? || hybrid.empty? || language.nil?
+        return nil if hybrid.nil? || hybrid.empty? || language.nil? || !has_lb
 
         { hybrid: hybrid, title: title, language: language, hgv: idnos["HGV"], tm: idnos["TM"] }
       rescue Nokogiri::XML::SyntaxError
@@ -241,13 +342,12 @@ module Nabu
       # The DCLP peek: same header walk keyed on the numeric dclp idno,
       # plus the text requirement — the Reader continues INTO the edition
       # div just far enough to see one non-whitespace text node (most
-      # stubs self-close the div, so the walk usually ends where the
-      # DDbDP peek ends). nil — skip — when identity, language or text is
+      # stubs self-close the div, so the walk usually ends at the edition
+      # start tag). nil — skip — when identity, language or text is
       # missing (a non-numeric idno, upstream's one "hgvTEMP" placeholder,
       # counts as missing identity).
       def peek_dclp_header(path)
-        idnos, title, language, has_text =
-          read_header(path, idno_types: DCLP_IDNO_TYPES, require_edition_text: true)
+        idnos, title, language, has_text = read_header(path, idno_types: DCLP_IDNO_TYPES, probe: :text)
         id = idnos["dclp"]
         return nil unless id&.match?(/\A\d+\z/) && language && has_text
 
@@ -256,26 +356,29 @@ module Nabu
         nil
       end
 
-      def read_header(path, idno_types: IDNO_TYPES, require_edition_text: false)
-        state = { idnos: {}, title: nil, language: nil, has_text: false,
-                  capture: nil, edition_depth: nil }
+      # +probe+ names what the walk seeks inside the edition div: :lb (the
+      # first <lb> element) or :text (the first non-whitespace text node).
+      # The fourth return value says whether it was found.
+      def read_header(path, probe:, idno_types: IDNO_TYPES)
+        state = { idnos: {}, title: nil, language: nil, found: false,
+                  capture: nil, edition_depth: nil, probe: probe }
         File.open(path, "r") do |io|
           Nokogiri::XML::Reader(io, path).each do |node|
-            break unless continue_header_walk?(node, state, idno_types, require_edition_text)
+            break unless continue_header_walk?(node, state, idno_types)
           end
         end
-        [state[:idnos], state[:title], state[:language], state[:has_text]]
+        [state[:idnos], state[:title], state[:language], state[:found]]
       end
 
       # One Reader step of the header walk; false stops the scan. Before
       # the edition div: capture idnos/title. At the edition div: record
-      # the language and stop — unless edition text is required and the
-      # div has a body, in which case the walk continues inside it until
-      # the first non-whitespace text node (or the div's end).
-      def continue_header_walk?(node, state, idno_types, require_edition_text)
+      # the language; a self-closed div ends the walk (nothing to find),
+      # otherwise the walk continues inside it until the probe is met (or
+      # the div ends).
+      def continue_header_walk?(node, state, idno_types)
         case node.node_type
         when Nokogiri::XML::Reader::TYPE_ELEMENT
-          return continue_after_element?(node, state, idno_types, require_edition_text)
+          return continue_after_element?(node, state, idno_types)
         when Nokogiri::XML::Reader::TYPE_END_ELEMENT
           return false if state[:edition_depth] && node.depth == state[:edition_depth]
 
@@ -286,10 +389,14 @@ module Nabu
         true
       end
 
-      def continue_after_element?(node, state, idno_types, require_edition_text)
-        return true if state[:edition_depth] # inside the edition: text is all we seek
+      def continue_after_element?(node, state, idno_types)
+        name = node.name.split(":").last
+        if state[:edition_depth] # inside the edition: only the probe matters
+          state[:found] = true if state[:probe] == :lb && name == "lb"
+          return !state[:found]
+        end
 
-        case node.name.split(":").last
+        case name
         when "idno"
           state[:capture] = idno_types.find { |type| type == node.attribute("type") }
         when "title"
@@ -297,7 +404,7 @@ module Nabu
         when "div"
           if node.attribute("type") == "edition"
             state[:language] = DdbdpParser.normalize_language(node.attribute("xml:lang"))
-            return false unless require_edition_text && !node.empty_element?
+            return false if node.empty_element?
 
             state[:edition_depth] = node.depth
           end
@@ -308,8 +415,8 @@ module Nabu
       def continue_after_text?(node, state)
         value = node.value.to_s.strip
         if state[:edition_depth]
-          state[:has_text] = true unless value.empty?
-          return !state[:has_text] # first real text inside the edition: done
+          state[:found] = true if state[:probe] == :text && !value.empty?
+          return !state[:found] # first real text inside the edition: done
         end
         state[:title] = value if state[:capture] == :title
         state[:idnos][state[:capture]] = value if state[:capture].is_a?(String)
