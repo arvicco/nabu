@@ -47,6 +47,25 @@ class HieroPostingsBuilderTest < Minitest::Test
     end
   end
 
+  # The finer attestation grain the stand-off files carry beside the
+  # flat tally: WORD tokens (<w corresp="src:tla…">) attesting the
+  # glyph, and occurrences read inside <unclear> (damaged). Expected
+  # values counted by hand-script over the glyph-bearing fixture.
+  def test_records_word_grain_and_damaged_occurrences
+    with_canonical do |dir|
+      Nabu::Store::HieroPostingsBuilder.rebuild!(catalog: @catalog, canonical_dir: dir)
+      r = @catalog[:hiero_postings].first(glyph: "𓂋")
+      assert_equal [42, 39, 2], [r[:signs], r[:words], r[:unclear]],
+                   "𓂋: 42 occurrences over 39 word tokens, 2 of them damaged"
+      n = @catalog[:hiero_postings].first(glyph: "𓈖")
+      assert_equal [67, 62, 4], [n[:signs], n[:words], n[:unclear]]
+      ankh = @catalog[:hiero_postings].first(glyph: "𓋹")
+      assert_equal [1, 1, 1], [ankh[:signs], ankh[:words], ankh[:unclear]],
+                   "the sign attested only inside <unclear> is wholly damaged"
+      assert_operator @catalog[:hiero_postings].where { words > signs }.count, :zero?
+    end
+  end
+
   def test_rebuild_is_drop_and_reproject
     with_canonical do |dir|
       Nabu::Store::HieroPostingsBuilder.rebuild!(catalog: @catalog, canonical_dir: dir)
