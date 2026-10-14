@@ -12,25 +12,29 @@ module Nabu
     # tagger was trained on). Language: Middle Polish, `pl` (the stage claim
     # waits on the nabu-lects mint — config/postures.yml).
     #
-    # == Shape (censused 2026-10-10)
+    # == Shape (censused 2026-10-14 on the live v2.0 tree)
     #
     # ONE zip from the project's download page (korba_xml.zip; the
-    # /download_corpus link), a single top dir korba_corpus/ holding one
-    # directory per text in the NKJP TEI P5 stand-off package (header.xml,
+    # /download_corpus link; upstream Last-Modified 2024-09-02, the corpus
+    # header "Final version, edition 2.0", c. 850k tokens). ZipFetch strips
+    # any single wrapping dir; the whole upstream tree lands in canonical/
+    # (no materialized paths):
+    #
+    #   KorBa_manual_header.xml      the corpus-level header (xi:included)
+    #   TEI_korba1/<text>/           850 texts — project stage 1
+    #   TEI_korba2/<text>/         1,241 texts — project stage 2
+    #
+    # each <text> directory the NKJP TEI P5 stand-off package (header.xml,
     # text.xml, ann_segmentation.xml, ann_morphosyntax.xml — the nkjp-tei
-    # family) beside the corpus-level header files the text files
-    # xi:include. ZipFetch strips the top dir; the whole upstream tree lands
-    # in canonical/ (no materialized paths). The census copy (the live host
-    # answered 502 on 2026-10-10; the Internet Archive's 2024-08-11 capture
-    # of the same URL, upstream Last-Modified 2021-06-07, the corpus header
-    # "Version 1.2 published" 2021-05-21, c. 0.5M tokens): 850 texts →
-    # 850 documents / 6,034 passages / 510,205 tokens (494,601 with a
-    # lemma), 0 parse errors; dates 1601–1775 on every text. The download
-    # page now advertises version 2.0 (c. 850k segments) — the same NKJP
-    # package format is expected; the first live sync re-censuses.
+    # family). The 2021 v1.2 archive (the first census copy, an Internet
+    # Archive capture) held the same 850 stage-1 texts FLAT under one top
+    # dir; discovery reads only the v2.0 stage-folder layout.
     #
     # Document = one text directory (urn :<dirname>, NFC — the directory
-    # name IS the KORBA idno sans prefix). Passage = one <ab> block, cited
+    # name IS the KORBA idno sans prefix; the stage folder is NOT in the
+    # URN: dirnames are unique across both stage folders, so the stage-1
+    # URNs are the v1.2 build's unchanged, and the stage rides as
+    # metadata project_stage 1|2). Passage = one <ab> block, cited
     # by its xml:id's numbering ("txt_1.10-ab" → 1.10); the text is the
     # TRANSCRIBED spelling of text.xml, verbatim modulo whitespace. Tokens
     # (gold — manual annotation) ride as annotations: form = translit (the
@@ -69,15 +73,27 @@ module Nabu
       FACET_SCHEMES = { "genre" => "genre", "kind" => "kind", "subject" => "subject",
                         "text" => "text_form" }.freeze
 
-      # The corpus's own absent-value sentinel for pubPlace place/region
-      # ("unknown"; censused on ~40% of headers) — mints no place claim.
-      UNKNOWN = "nieznane"
+      # The corpus's own absent-value sentinels for pubPlace place/region
+      # ("unknown") — mint no place claim. Censused on the v2.0 tree
+      # (2026-10-14): stage 1 writes "nieznane" for both (405 place / 347
+      # region of 850); stage 2 writes "nieznane" for place (227 of 1,241)
+      # but the masculine "nieznany" for region (168).
+      UNKNOWN = %w[nieznane nieznany].freeze
       UNKNOWN_KEYS = %w[place region].freeze
+
+      # The v2.0 tree's stage folders: TEI_korba1/ (850 texts — the 2021
+      # v1.2 archive's set, flat there) and TEI_korba2/ (1,241). The digit is
+      # the project stage (the corpus header: two projects, 2013–2018 and
+      # 2018–2023).
+      STAGE_GLOB = "TEI_korba[0-9]"
+      STAGE_DIR = /\ATEI_korba(\d)\z/
 
       # The corpus header (KorBa_manual_header.xml projectDesc): most
       # samples were annotated by two independent annotators with an
-      # adjudicator; samples with "_s" attached to the id had one.
+      # adjudicator — "in the second stage of the project - by the annotator
+      # and the tagger"; samples with "_s" attached to the id had one.
       SINGLE_SUFFIX = "_s"
+      REGIMES = { 1 => "two annotators + adjudicator", 2 => "annotator + tagger + adjudicator" }.freeze
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "korba",
@@ -119,7 +135,7 @@ module Nabu
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        Dir.glob(File.join(workdir, "*", "text.xml")).each do |path|
+        Dir.glob(File.join(workdir, STAGE_GLOB, "*", "text.xml")).each do |path|
           dir = File.dirname(path)
           yield Nabu::DocumentRef.new(
             source_id: MANIFEST.id, id: "#{URN_PREFIX}#{Normalize.nfc(File.basename(dir))}",
@@ -133,7 +149,7 @@ module Nabu
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
           title: text.header["title"] && Normalize.nfc(text.header["title"]),
-          metadata: metadata_for(text.header, File.basename(document_ref.path))
+          metadata: metadata_for(text.header, document_ref.path)
         )
         sequence = 0
         text.blocks.each do |block|
@@ -159,10 +175,13 @@ module Nabu
         ab_id.delete_prefix("txt_").delete_suffix("-ab")
       end
 
-      def metadata_for(header, dirname)
+      def metadata_for(header, path)
         meta = deep_nfc(header.except("title", "classes"))
-        meta["annotation"] = dirname.end_with?(SINGLE_SUFFIX) ? "single annotator" : "two annotators + adjudicator"
-        UNKNOWN_KEYS.each { |key| meta.delete(key) if meta[key] == UNKNOWN }
+        stage = Integer(File.basename(File.dirname(path))[STAGE_DIR, 1])
+        meta["project_stage"] = stage
+        regime = File.basename(path).end_with?(SINGLE_SUFFIX) ? "single annotator" : REGIMES[stage]
+        meta["annotation"] = regime if regime
+        UNKNOWN_KEYS.each { |key| meta.delete(key) if UNKNOWN.include?(meta[key]) }
         classes = deep_nfc(header["classes"] || {})
         facets = FACET_SCHEMES.each_with_object({}) do |(scheme, facet), out|
           codes = classes[scheme]

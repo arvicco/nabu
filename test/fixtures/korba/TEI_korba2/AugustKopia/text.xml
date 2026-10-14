@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <xi:include href="../../KorBa_manual_header.xml"/>
+  <TEI>
+    <xi:include href="header.xml"/>
+    <text>
+      <body>
+        <div xml:id="txt_1-div">
+          <ab n="txt_2.2-p" xml:id="txt_1.1-ab"><pb n="A"/>AUGUST II.</ab>
+          <ab n="txt_2.3-p" xml:id="txt_1.2-ab">Z BOZEY Łáski KROL POLSKI, Wielki Xiążę Litewski, Ruski, Pruski, Mazowiecki, Zmudzki, Kijowski, Wołyński, Podolski, Podláski, Inflántski, Smolenski, Siewierski, y Czernichowski, á Dźiedźiczny XIĄZĘ SASKI, y ELEKTOR <foreign xml:lang="la" xml:id="txt_1.2.1-foreign">etc.</foreign></ab>
+          
+        </div>
+      </body>
+    </text>
+  </TEI>
+</teiCorpus>

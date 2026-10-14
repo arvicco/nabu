@@ -4,23 +4,38 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
-# Papyri.info (DDbDP + DCLP) adapter tests (P3-6; DCLP lane P104-3). The
-# adapter composes DdbdpParser with the idp.data repo layout: discover
-# walks DDB_EpiDoc_XML/<collection>/(<collection>.<volume>/)?*.xml — both
-# nested (bgu/bgu.1/) and flat (c.epist.lat/) collections — peeking each
-# header for ddb-hybrid/HGV/TM idnos, title and edition language, PLUS
-# (P104-3) DCLP/<TM-thousand>/<TM>.xml — the literary-papyri tree of the
-# SAME idp.data clone — peeking dclp-hybrid and skipping the
-# metadata-only catalog stubs (12,571 of 14,842 upstream files carry a
-# self-closed or text-less edition div); parse delegates to DdbdpParser
-# (urn namespace dclp for DCLP refs); fetch clones/pulls the single
-# upstream repo. Includes the shared AdapterConformance suite against the
-# checked-in fixtures. No network: fetch runs against a local git repo in
-# a tmpdir.
+# Papyri.info (DDbDP + DCLP) adapter tests (P3-6; DCLP lane P104-3;
+# post-switchover layout 2026-10). The adapter composes DdbdpParser with the
+# idp.data repo layout: discover walks the curated DDbDP/<HGV-thousand>/
+# <HGV>.xml tree, falls back to Historical/<collection>/(<volume>/)?<n>.xml
+# for editions the curated tree does not (yet) carry as text, skips
+# text-less stubs (no <lb> in the edition) in both, and walks
+# DCLP/<dclp-thousand>/<dclp>.xml — the literary-papyri tree of the SAME
+# idp.data clone — skipping its metadata-only catalog stubs; parse
+# delegates to DdbdpParser (urn namespace dclp for DCLP refs); fetch
+# clones/pulls the single upstream repo. Includes the shared
+# AdapterConformance suite against the checked-in fixtures, plus the
+# layout-migration proof: the same documents cut from the pre-switchover
+# tree (test/fixtures/ddbdp/pre-switchover/) parse to identical urns and
+# passages. No network: fetch runs against a local git repo in a tmpdir.
 class PapyriTest < Minitest::Test
   include AdapterConformance
 
   FIXTURES = Nabu::TestSupport.fixtures("ddbdp") # NABU_FIXTURE_DIR-aware (fixtures:check)
+  # The P5-1/P6-2 exemplars, re-cut in the new layout: aegyptus;89;240 is
+  # text-bearing in BOTH DDbDP/25/25457.xml and Historical/aegyptus/89/240.xml.
+  EXEMPLARS = File.expand_path("../fixtures/papyri-ddbdp", __dir__)
+  # The same documents as cut from the pre-switchover tree (upstream commit
+  # 0eec6593, byte-identical to its blobs), old path => new path.
+  PRE_SWITCHOVER = File.join(FIXTURES, "pre-switchover")
+  RELOCATED = {
+    "DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml" => "DDbDP/8/8875.xml",
+    "DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml" => "DDbDP/8/8877.xml",
+    "DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml" => "Historical/c.epist.lat/10.xml",
+    "DCLP/63/62952.xml" => "DCLP/62/62952.xml",
+    "DCLP/65/64388.xml" => "DCLP/64/64388.xml",
+    "DCLP/806/805566.xml" => "DCLP/805/805566.xml"
+  }.freeze
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -52,7 +67,7 @@ class PapyriTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_both_nested_and_flat_collections_with_frozen_urn_minting
+  def test_discover_walks_the_post_switchover_layout_with_frozen_urn_minting
     refs = Nabu::Adapters::Papyri.new.discover(FIXTURES).to_a
     assert_equal %w[
       urn:nabu:dclp:62952
@@ -66,6 +81,89 @@ class PapyriTest < Minitest::Test
       assert_equal "papyri-ddbdp", ref.source_id
       assert File.absolute_path?(ref.path), "path must be absolute: #{ref.path.inspect}"
       assert File.file?(ref.path)
+    end
+    # The urn comes from the in-file idno, never the path: the curated tree
+    # names files by HGV number (DDbDP/8/8875.xml), the historical tree by
+    # collection/volume/number, and neither shape leaks into the identity.
+    paths = refs.to_h { |ref| [ref.id, ref.path.delete_prefix("#{FIXTURES}/")] }
+    assert_equal "DDbDP/8/8875.xml", paths["urn:nabu:ddbdp:bgu:1:100"]
+    assert_equal "DDbDP/8/8877.xml", paths["urn:nabu:ddbdp:bgu:1:102"]
+    assert_equal "Historical/c.epist.lat/10.xml", paths["urn:nabu:ddbdp:c.epist.lat::10"]
+    assert_equal "DCLP/62/62952.xml", paths["urn:nabu:dclp:62952"]
+  end
+
+  def test_discover_skips_curated_stubs_that_share_a_hybrid_with_a_historical_text
+    # DDbDP/78/78573.xml is a real upstream stub generated from HGV: it carries
+    # ddb-hybrid c.epist.lat;;10 (and a grc edition div) but only a "not yet
+    # added" note over an empty <ab/>. The text of c.epist.lat;;10 lives in
+    # Historical/c.epist.lat/10.xml (Latin). The stub must neither become a
+    # ref nor shadow the historical text.
+    refs = Nabu::Adapters::Papyri.new.discover(FIXTURES).to_a
+    cel = refs.select { |ref| ref.id == "urn:nabu:ddbdp:c.epist.lat::10" }
+    assert_equal 1, cel.size, "exactly one ref per urn"
+    assert cel.first.path.end_with?("Historical/c.epist.lat/10.xml")
+    assert_equal "lat", cel.first.metadata["language"]
+    assert(refs.none? { |ref| ref.path.include?("78573") })
+  end
+
+  def test_discover_skips_historical_stubs_of_curated_texts
+    # Historical/bgu/1/100.xml is upstream's "historical edition has not been
+    # added" stub (empty <ab/>) for a text the curated tree carries.
+    refs = Nabu::Adapters::Papyri.new.discover(FIXTURES).to_a
+    assert(refs.none? { |ref| ref.path.include?("Historical/bgu") })
+  end
+
+  def test_discover_prefers_the_curated_tree_when_both_trees_carry_the_text
+    # aegyptus;89;240 is text-bearing in both DDbDP/25/25457.xml and
+    # Historical/aegyptus/89/240.xml; chrest.wilck;;101 survives only as a
+    # text-less Historical stub (skipped, as it quarantined before).
+    refs = Nabu::Adapters::Papyri.new.discover(EXEMPLARS).to_a
+    assert_equal %w[urn:nabu:ddbdp:aegyptus:89:240 urn:nabu:ddbdp:o.claud:3:457], refs.map(&:id)
+    assert refs.first.path.end_with?("DDbDP/25/25457.xml")
+  end
+
+  def test_discover_no_longer_walks_the_pre_switchover_layout
+    # The single-layout decision: DDB_EpiDoc_XML/ is gone upstream and is not
+    # tolerated as a further root. (The DCLP/ root kept its name — only its
+    # bucketing changed — so the old DCLP files are still walked.)
+    refs = Nabu::Adapters::Papyri.new.discover(PRE_SWITCHOVER).to_a
+    assert(refs.none? { |ref| ref.id.start_with?("urn:nabu:ddbdp:") },
+           "no documentary ref may come from DDB_EpiDoc_XML/")
+    assert_equal %w[urn:nabu:dclp:62952 urn:nabu:dclp:64388 urn:nabu:dclp:805566], refs.map(&:id)
+  end
+
+  # --- the layout migration: identity is idno-minted, not path-minted ---------
+
+  def test_relocated_documents_parse_to_identical_urns_and_passages_from_either_tree
+    adapter = Nabu::Adapters::Papyri.new
+    refs = adapter.discover(FIXTURES).to_h { |ref| [ref.path.delete_prefix("#{FIXTURES}/"), ref] }
+    RELOCATED.each do |old_path, new_path|
+      ref = refs.fetch(new_path)
+      new_document = adapter.parse(ref)
+      # The parser cross-checks the caller urn against the file's own idno,
+      # so a clean parse of the OLD blob under the NEW ref's urn proves the
+      # old file mints the same identity.
+      old_document = adapter.parse(ref.with(path: File.join(PRE_SWITCHOVER, old_path)))
+      assert_equal new_document.urn, old_document.urn, old_path
+      assert_equal old_document.to_a.map { |p| [p.urn, p.text, p.annotations] },
+                   new_document.to_a.map { |p| [p.urn, p.text, p.annotations] },
+                   "#{old_path} -> #{new_path}: passages must re-mint byte-identically"
+      refute_empty new_document.to_a
+    end
+  end
+
+  def test_dclp_stale_bucket_duplicate_yields_to_the_canonical_bucket
+    # Upstream re-sharded DCLP from the old bucket (<n>/1000 + 1) to
+    # <n>/1000, but three ids (62441, 62509, 65542) still also exist at their
+    # old-bucket path. One urn, one ref: the <n>/1000 bucket wins.
+    Dir.mktmpdir do |root|
+      %w[62 63].each do |bucket|
+        FileUtils.mkdir_p(File.join(root, "DCLP", bucket))
+        FileUtils.cp(File.join(FIXTURES, "DCLP", "62", "62952.xml"), File.join(root, "DCLP", bucket))
+      end
+      refs = Nabu::Adapters::Papyri.new.discover(root).to_a
+      assert_equal ["urn:nabu:dclp:62952"], refs.map(&:id)
+      assert refs.first.path.end_with?("DCLP/62/62952.xml")
     end
   end
 
@@ -112,9 +210,9 @@ class PapyriTest < Minitest::Test
   end
 
   def test_dclp_discover_skips_metadata_only_stubs
-    # DCLP/317/316777.xml is a real upstream catalog stub: dclp-hybrid and
+    # DCLP/316/316777.xml is a real upstream catalog stub: dclp-hybrid and
     # a Coptic edition div, but the div is SELF-CLOSED — no transcription.
-    # 12,571 of the 14,842 upstream DCLP files have this shape; they must
+    # 12,567 of the 14,845 upstream DCLP files have this shape; they must
     # be skipped at discover, not quarantined at parse ("no citable
     # lines").
     refs = Nabu::Adapters::Papyri.new.discover(FIXTURES).to_a
@@ -156,9 +254,9 @@ class PapyriTest < Minitest::Test
 
   def test_discover_skips_files_without_a_ddb_hybrid_idno
     Dir.mktmpdir do |root|
-      collection = File.join(root, "DDB_EpiDoc_XML", "bgu", "bgu.1")
+      collection = File.join(root, "DDbDP", "8")
       FileUtils.mkdir_p(collection)
-      FileUtils.cp(File.join(FIXTURES, "DDB_EpiDoc_XML", "bgu", "bgu.1", "bgu.1.100.xml"), collection)
+      FileUtils.cp(File.join(FIXTURES, "DDbDP", "8", "8875.xml"), collection)
       # A stray non-DDbDP xml (no ddb-hybrid idno) must be skipped, not error.
       File.write(File.join(collection, "stray.xml"), "<TEI><teiHeader/></TEI>\n")
       refs = Nabu::Adapters::Papyri.new.discover(root).to_a

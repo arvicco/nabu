@@ -1,43 +1,88 @@
 # Nabu fixture manifest (P5-4). Schema documented in
-# test/fixtures/perseus/manifest.yml. Built from this directory's README.md:
-# base https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/
-# joined to each file's path under DDB_EpiDoc_XML/. All files kept whole.
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# These are the P3-6 clean-parse DDbDP fixtures (bgu.1.100, bgu.1.102,
-# c.epist.lat.10) and the papyri adapter's conformance workdir. The P5-1
-# line-restart quarantine exemplars live in ../papyri-ddbdp/ (local-trim,
+# The papyri adapter's conformance workdir, in upstream's POST-SWITCHOVER
+# layout (DDbDP/, Historical/, DCLP/; re-cut 2026-10-14 from upstream commit
+# 8f7ed7085c4ed9055c239800286d3a6c3bc2a79f, byte-identical to its blobs).
+# Raw base https://raw.githubusercontent.com/papyri/idp.data/master/ joined
+# to each file's path. All files kept whole.
+#
+# pre-switchover/ holds the SAME documents as cut from the old layout
+# (DDB_EpiDoc_XML/, old DCLP buckets), byte-identical to upstream commit
+# 0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7 — the layout-migration proof
+# (papyri_test.rb parses both copies and requires identical urns). Those
+# paths no longer exist on master, so their urls pin that commit.
+#
+# The P5-1/P6-2 quarantine exemplars live in ../papyri-ddbdp/ (local-trim,
 # non-refetchable). The papyri adapter test (papyri_test.rb) drives THIS dir.
 source: ddbdp
 adapter_test: test/adapters/papyri_test.rb
-retrieved: 2026-07-03
+retrieved: 2026-10-14
 files:
-  - path: DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
+  - path: DDbDP/8/8875.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDbDP/8/8875.xml
     whole: true
-    trim: none (ddb-hybrid bgu;1;100, kept whole)
-  - path: DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml
+    trim: none (ddb-hybrid bgu;1;100, curated tree, kept whole)
+  - path: DDbDP/8/8877.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDbDP/8/8877.xml
     whole: true
-    trim: none (ddb-hybrid bgu;1;102, kept whole)
-  - path: DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
+    trim: none (ddb-hybrid bgu;1;102, curated tree, kept whole)
+  - path: DDbDP/78/78573.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DDbDP/78/78573.xml
     whole: true
-    trim: none (ddb-hybrid c.epist.lat;;10 — empty volume segment, kept whole)
-  # -- P104-3: the DCLP lane (copied 2026-09-26 byte-verbatim from the box's
-  # canonical clone; same idp.data repo, TM-sharded DCLP/ tree; README §P104-3) --
-  - path: DCLP/63/62952.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/63/62952.xml
+    trim: none (curated-tree STUB sharing ddb-hybrid c.epist.lat;;10; pins the discover skip)
+  - path: Historical/c.epist.lat/10.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/Historical/c.epist.lat/10.xml
+    whole: true
+    trim: none (ddb-hybrid c.epist.lat;;10 — empty volume segment; text only in Historical/; kept whole)
+  - path: Historical/bgu/1/100.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/Historical/bgu/1/100.xml
+    whole: true
+    trim: none (historical-tree STUB of the curated bgu;1;100; pins the discover skip)
+  - path: DCLP/62/62952.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/62/62952.xml
     whole: true
     trim: none (dclp 62952, o.claud;1;190 — Vergil Aeneid ostracon, lat, restart-block lb; kept whole)
-  - path: DCLP/65/64388.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/65/64388.xml
+  - path: DCLP/64/64388.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/64/64388.xml
     whole: true
     trim: none (dclp 64388, p.harr;1;98 — grc medical recipe, two textparts; kept whole)
-  - path: DCLP/806/805566.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/806/805566.xml
+  - path: DCLP/805/805566.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/805/805566.xml
     whole: true
     trim: none (dclp 805566, tm;;805566 — grc curse text, break="no" wraps; kept whole)
-  - path: DCLP/317/316777.xml
-    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/317/316777.xml
+  - path: DCLP/316/316777.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/316/316777.xml
     whole: true
     trim: none (dclp 316777 — cop metadata-only stub, SELF-CLOSED edition div; pins the discover skip)
+  # -- pre-switchover copies (layout-migration proof; pinned to 0eec6593) --
+  - path: pre-switchover/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
+    retrieved: 2026-07-03
+    whole: true
+    trim: none (old-layout bgu;1;100; now DDbDP/8/8875.xml)
+  - path: pre-switchover/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.102.xml
+    retrieved: 2026-07-03
+    whole: true
+    trim: none (old-layout bgu;1;102; now DDbDP/8/8877.xml)
+  - path: pre-switchover/DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DDB_EpiDoc_XML/c.epist.lat/c.epist.lat.10.xml
+    retrieved: 2026-07-03
+    whole: true
+    trim: none (old-layout c.epist.lat;;10; now Historical/c.epist.lat/10.xml)
+  - path: pre-switchover/DCLP/63/62952.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DCLP/63/62952.xml
+    retrieved: 2026-09-26
+    whole: true
+    trim: none (old-bucket dclp 62952; now DCLP/62/62952.xml)
+  - path: pre-switchover/DCLP/65/64388.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DCLP/65/64388.xml
+    retrieved: 2026-09-26
+    whole: true
+    trim: none (old-bucket dclp 64388; now DCLP/64/64388.xml)
+  - path: pre-switchover/DCLP/806/805566.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DCLP/806/805566.xml
+    retrieved: 2026-09-26
+    whole: true
+    trim: none (old-bucket dclp 805566; now DCLP/805/805566.xml)

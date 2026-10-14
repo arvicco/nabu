@@ -806,11 +806,11 @@ sources:
     script: {posture: implied, note: Perso-Arabic lit + Latin translit layers per line}
   africa-pd:   # P124-1
     # kind: machine-postured — kind_map.yml source_kind scholarly.
-    lect: {posture: pending, note: "candidate: the sw anchor of the aggregated nabu-lects Africa
-        mint (Velten's Swahili reader, the one object-language claim); the other nine works claim
-        their PROSE language — eng 6, deu 1, fra 2, all real anchors (the reference-shelf
-        posture); the African languages presented (onw, sw, ha, tmh, kab, vai) ride metadata
-        object_language, never a claim"}
+    lect: {posture: identity, note: "the Africa package merged + canonical-synced 2026-10-14
+        (the add-then-retire shape): the sw anchor now exists for Velten's Swahili reader, the
+        one object-language claim; the other nine works claim their PROSE language — eng 6,
+        deu 1, fra 2, all real anchors (the reference-shelf posture); the African languages
+        presented (onw, sw, ha, tmh, kab, vai) ride metadata object_language, never a claim"}
     dating: {posture: dated, note: "every work carries its edition year — :structured lane"}
     places: {posture: unplaced, note: "imprint places (London, Berlin, Paris, Cambridge) ride
         metadata 'imprint' — the printing place, not a text place"}
@@ -818,12 +818,13 @@ sources:
         languages; Old Nubian, Ajami facsimiles, Tifinagh and the Vai syllabary are uncorrected
         OCR, garbled (declared per document)"}
   bu-ajami:   # P124-1
-    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet — Poetry/Poem →
-        literary/poetry; Prose (and the mixed 'Poetry and prose' forms) names a FORM, not a genre,
-        so it would ride the deliberate block — the fold awaits its ruling"}
-    lect: {posture: pending, note: "candidate: the ha / mnk / fuf / wo anchors of the aggregated
-        nabu-lects Africa mint — no registry node exists for any of the four; the bare codes are
-        claimed per item meanwhile (fula = upstream's 'Fuuta Jalon Fula', i.e. Pular fuf, not the
+    # kind machine-postured since 2026-10-14 — the genre fold in kind_map
+    # (Poetry/Poem onto the poetry sub; the prose and mixed form labels
+    # are reviewed non-claims). The pending row retired under the
+    # shadowing rule.
+    lect: {posture: identity, note: "the Africa package merged + canonical-synced 2026-10-14
+        (the add-then-retire shape): the ha / mnk / fuf / wo anchors all live; the bare codes
+        are the claim per item (fula = upstream's 'Fuuta Jalon Fula', i.e. Pular fuf, not the
         ff macrolanguage)"}
     dating: {posture: partial, note: "33 of 80 (census 2026-10-13): the source reference's typed year
         (Northwestern's “Title” (1968/9) form) or a date the item page states with its basis —
@@ -834,6 +835,21 @@ sources:
     script: {posture: qualified, note: "the text is the editors' Latin ROMANIZED transcription of
         Ajami (Arabic-script) originals — metadata text_script says so; manuscript_script keeps
         upstream's script field (Hausa Ajami, Wolof Ajami, …)"}
+  old-nubian-ud:   # P125
+    kind: {posture: unclassified, note: "one document holding a miracle (Saint Menas), a homily
+        and scriptural fragments with no text boundary marked upstream — no single kind is
+        true of it, and splitting by inferred boundaries would invent structure"}
+    lect: {posture: identity, note: "the Old Nubian registry package (the nub family + the onw
+        anchor) merged + canonical-synced 2026-10-14 — the add-then-retire shape within one
+        phase; the bare onw code is the claim"}
+    dating: {posture: undatable, note: "censused 2026-10-14: every sentence carries only sent_id
+        (ordinal), text and translation — no date, manuscript siglum or text identifier
+        anywhere in the file; the manuscripts' dating is not in the asset"}
+    places: {posture: unplaced, note: "same census: no findspot, provenance or place field in
+        the file"}
+    script: {posture: qualified, note: "measured: the text lane is a Latin TRANSLITERATION
+        (onw in Latn — 7,450 Latin letters, zero Coptic-block characters); the manuscripts'
+        Coptic-derived Old Nubian alphabet is not carried. Metadata script Latn"}
   altaica-shm:   # P107-7
     kind: {posture: unclassified}
     lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}

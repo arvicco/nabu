@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_AugustKopia">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Kopia listu J. K. Mości do województw koronnych i Wielkiego Ks. Litewskiego"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="free">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Kopia listu J. K. Mości do województw koronnych i Wielkiego Ks. Litewskiego</title>
+        <author>August II Mocny</author>
+        <publisher>s.n.</publisher>
+        <pubPlace role="place">nieznane</pubPlace>
+        <pubPlace role="region">nieznany</pubPlace>
+        <date when="1704">1704</date>
+        <ref target="https://polona.pl/item/kopia-listv-i-k-mosci-do-woiewodztw-koronnych-y-wielkiego-x-litewskiego-dat-dan,MTI1NDcwNjEx/0/#info:metadata">https://polona.pl/item/kopia-listv-i-k-mosci-do-woiewodztw-koronnych-y-wielkiego-x-litewskiego-dat-dan,MTI1NDcwNjEx/0/#info:metadata</ref>
+        <idno type="KORBA">KORBA_AugustKopia</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#persw"/>
+      <catRef scheme="#kind" target="#odezwy"/>
+      <catRef scheme="#subject" target="#polityka"/>
+      <catRef scheme="#ironic" target="#nie"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>
