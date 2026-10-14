@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <xi:include href="NKJP_1M_header.xml"/>
+  <xi:include href="../../KorBa_manual_header.xml"/>
   <TEI>
     <xi:include href="header.xml"/>
     <text xml:id="morph_text" xml:lang="pl">
@@ -428,15 +428,15 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1.14.2.1-msd" value="gen:nwok"/>
-                        <symbol xml:id="morph_1.14.2.2-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.14.2.1-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.14.2.2-msd" value="gen:nwok"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
                 <f name="disamb">
                   <fs type="tool_report">
-                    <f fVal="#morph_1.14.2.1-msd" name="choice"/>
+                    <f fVal="#morph_1.14.2.2-msd" name="choice"/>
                     <f name="interpretation">
                       <string>z:prep:gen:nwok</string>
                     </f>
@@ -553,7 +553,7 @@
                 </f>
               </fs>
             </seg>
-            <seg xml:id="morph_1620296694_1.1-seg" corresp="ann_segmentation.xml#segm_1620296694_1.1-seg">
+            <seg xml:id="morph_1686762991_1.1-seg" corresp="ann_segmentation.xml#segm_1686762991_1.1-seg">
               <fs type="morph">
                 <f name="orth">
                   <string>osadzi</string>
@@ -562,7 +562,7 @@
                   <string>osadzi</string>
                 </f>
                 <f name="interps">
-                  <fs xml:id="morph_1620296694_1.1.1-lex" type="lex">
+                  <fs xml:id="morph_1686762991_1.1.1-lex" type="lex">
                     <f name="base">
                       <string>osadzić</string>
                     </f>
@@ -570,13 +570,13 @@
                       <symbol value="fin"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1620296694_1.1.1.1-msd" value="sg:ter:perf"/>
+                      <symbol xml:id="morph_1686762991_1.1.1.1-msd" value="sg:ter:perf"/>
                     </f>
                   </fs>
                 </f>
               </fs>
             </seg>
-            <seg xml:id="morph_1620296694_1.2-seg" corresp="ann_segmentation.xml#segm_1620296694_1.2-seg">
+            <seg xml:id="morph_1686762991_1.2-seg" corresp="ann_segmentation.xml#segm_1686762991_1.2-seg">
               <fs type="morph">
                 <f name="orth">
                   <string>li</string>
@@ -588,7 +588,7 @@
                   <binary value="true"/>
                 </f>
                 <f name="interps">
-                  <fs xml:id="morph_1620296694_1.2.1-lex" type="lex">
+                  <fs xml:id="morph_1686762991_1.2.1-lex" type="lex">
                     <f name="base">
                       <string>li</string>
                     </f>
@@ -596,7 +596,7 @@
                       <symbol value="part"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1620296694_1.2.1.1-msd" value=""/>
+                      <symbol xml:id="morph_1686762991_1.2.1.1-msd" value=""/>
                     </f>
                   </fs>
                 </f>
@@ -1665,7 +1665,10 @@
                       <symbol value="subst"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1.46.1.1-msd" value="pl:gen:m"/>
+                      <vAlt>
+                        <symbol xml:id="morph_1.46.1.1-msd" value="pl:acc:manim1"/>
+                        <symbol xml:id="morph_1.46.1.2-msd" value="pl:gen:m"/>
+                      </vAlt>
                     </f>
                   </fs>
                   <fs xml:id="morph_1.46.2-lex" type="lex">
@@ -1790,7 +1793,7 @@
                 </f>
               </fs>
             </seg>
-            <seg xml:id="morph_1620296694_1.3-seg" corresp="ann_segmentation.xml#segm_1620296694_1.3-seg">
+            <seg xml:id="morph_1686762991_1.3-seg" corresp="ann_segmentation.xml#segm_1686762991_1.3-seg">
               <fs type="morph">
                 <f name="orth">
                   <string>rozsadza</string>
@@ -1799,7 +1802,7 @@
                   <string>rozsadza</string>
                 </f>
                 <f name="interps">
-                  <fs xml:id="morph_1620296694_1.3.1-lex" type="lex">
+                  <fs xml:id="morph_1686762991_1.3.1-lex" type="lex">
                     <f name="base">
                       <string>rozsadzać</string>
                     </f>
@@ -1807,13 +1810,13 @@
                       <symbol value="fin"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1620296694_1.3.1.1-msd" value="sg:ter:imperf"/>
+                      <symbol xml:id="morph_1686762991_1.3.1.1-msd" value="sg:ter:imperf"/>
                     </f>
                   </fs>
                 </f>
               </fs>
             </seg>
-            <seg xml:id="morph_1620296694_1.4-seg" corresp="ann_segmentation.xml#segm_1620296694_1.4-seg">
+            <seg xml:id="morph_1686762991_1.4-seg" corresp="ann_segmentation.xml#segm_1686762991_1.4-seg">
               <fs type="morph">
                 <f name="orth">
                   <string>ć</string>
@@ -1825,7 +1828,7 @@
                   <binary value="true"/>
                 </f>
                 <f name="interps">
-                  <fs xml:id="morph_1620296694_1.4.1-lex" type="lex">
+                  <fs xml:id="morph_1686762991_1.4.1-lex" type="lex">
                     <f name="base">
                       <string>ć</string>
                     </f>
@@ -1833,7 +1836,7 @@
                       <symbol value="part"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1620296694_1.4.1.1-msd" value=""/>
+                      <symbol xml:id="morph_1686762991_1.4.1.1-msd" value=""/>
                     </f>
                   </fs>
                 </f>

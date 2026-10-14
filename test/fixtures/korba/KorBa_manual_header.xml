@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiHeader xmlns="http://www.tei-c.org/ns/1.0" xml:id="KorBa_header" xml:lang="en" type="corpus">
+  <fileDesc>
+    <titleStmt>
+      <title xml:lang="pl">Elektroniczny Korpus Tekstów Polskich z XVII i XVIII w. -- podkorpus anotowany ręcznie</title>
+      <title xml:lang="en">The Electronic Corpus of 17th- and 18th-century Polisth Texts -- the manually annotated subcorpus</title>
+      <funder xml:lang="pl" xml:id="mnisw">Ministerstwo Nauki i Szkolnictwa Wyższego (Polska)</funder>
+      <funder xml:lang="en">Ministry of Science and Higher Education (Poland)</funder>
+      <respStmt>
+        <name xml:id="wg">Włodzimierz Gruszczyński</name>
+        <resp>head of the team at the Institute of Polish Language at the Polish Academy of Sciences</resp>
+        <resp>project coordinator</resp>
+        <resp>adaptation of inflectional data for use in the analysis of baroque-period texts</resp>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="rb">Renata Bronikowska</name>
+        <resp>coordinator</resp>
+        <resp>morphosyntacitc annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="aw">Aleksandra Wieczorek</name>
+        <resp>coordinator</resp>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="da">Dorota Adamiec</name>
+        <resp>selecting texts</resp>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="pj">Piotr Janas</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="kk">Kacper Kardas</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="wk">Witold Kieraś</name>
+        <resp>adaptation of inflectional data for use in the analysis of baroque-period texts</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="dk">Dorota Komosińska</name>
+        <resp>general technical responsibilities in the project</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mk">Matylda Kozłowska</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mkr">Monika Kresa</name>
+        <resp>formulation of rules for transcribing 17th- and 18th-century texts</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="ml">Michał Lenart</name>
+        <resp>development of the document format compliant with TEI XML</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="dl">Dawid Lipiński</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mm">Magdalena Majdak</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mbm">Małgorzata B. Majewska</name>
+        <resp>transliteration rules </resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="em">Emanuel Modrzejewski</name>
+        <resp>formulation of rules for transcribing 17th- and 18th-century texts</resp>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="wm">Wiesław Morawski</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="bn">Bartłomiej Nitoń</name>
+        <resp>creation of the transcriber based on neural networks</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mo">Maciej Ogrodniczuk</name>
+        <resp>development of the document format compliant with TEI XML</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="ip">Izabela Pawlak</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="wp">Ewelina Pędzich</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mp">Marcin Podlaski</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="aps">Aldona Przyborska-Szulc</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="er">Ewa Rodek</name>
+        <resp>selecting texts</resp>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="pr">Paulina Rosalska</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="mw">Marcin Woliński</name>
+        <resp>adaptation of inflectional data for use in the analysis of baroque-period texts</resp>
+        <resp>creation of the transcriber based on neural networks</resp>
+      </respStmt>
+      <respStmt>
+        <name xml:id="sz">Sebastian Żurowski</name>
+        <resp>morphosyntactic annotation</resp>
+      </respStmt>
+    </titleStmt>
+    <editionStmt>
+      <edition>Final version, edition 2.0</edition>
+    </editionStmt>
+    <publicationStmt>
+      <publisher>Institute of Polish Language Polish Academy of Sciences</publisher>
+      <!-- cooperation>Linguistic Engineering Group, Institute of Computer Science, Polish Academy of Sciences</cooperation -->
+      <pubPlace>Warsaw, Poland</pubPlace>
+      <address>
+        <addrLine xml:lang="pl">Instytut Języka Polskiego PAN</addrLine>
+        <addrLine xml:lang="pl">ul. Ratuszowa 11</addrLine>
+        <addrLine xml:lang="pl">03-450 Warszawa</addrLine>
+        <addrLine>Poland</addrLine>
+        <addrLine>tel. (+48 12) 632-87-13 wew. 800</addrLine>
+        <addrLine>
+          <email n="coordinator">renata.bronikowska@ijp.pan.pl</email>
+        </addrLine>
+        <addrLine>
+          <ref target="https://www.korba.edu.pl" n="www">https://www.korba.edu.pl</ref>
+        </addrLine>
+      </address>
+      <availability>
+        <p>This manually annotated subcorpus of the The Electronic Corpus of 17th- and 18th-century Polisth Texts is available publicly for free.</p>
+      </availability>
+      <date when="2023-03-21">Version 2.0 published.</date>
+    </publicationStmt>
+    <sourceDesc>
+      <p>
+Types of sources:
+<list type="bulleted"><item>original historical prints</item><item>19th-century and modern editions</item><item>manuscripts.</item></list>
+</p>
+      <p>See https://www.korba.edu.pl/ tab Texts Included in the Corpus.</p>
+    </sourceDesc>
+  </fileDesc>
+  <encodingDesc>
+    <projectDesc>
+      <p>The Electronic Corpus of 17th- and 18th-century Polish Texts, also known as KorBa (an acronym of Korpus Barokowy, which is Polish for The Baroque Corpus), is the primary result of two projects carried out in the years 2013-2018 and 2018-2023 by the Department of the History of the 17th and 18th Century Polish of the Institute of Polish Language, Polish Academy of Sciences (PAS), in cooperation with the Linguistic Engineering Group of the Institute of Computer Science, Polish Academy of Sciences.</p>
+      <p>The presented subcorpus consists of c. 850 thousand tokens as understood by the creators of the National Corpus of Polish. It contains samples from all of the texts included in the full corpus. The majority of samples has been annotated manually by two independent annotators (in the second stage of the project - by the annotator and the tagger) and the conflicts between their decisions were resolved by an adjudicator. A part of the samples has been processed by a single annotator. These samples have symbol "_s" attached to the ID. The texts are presented in both transcribed and transliterated forms.</p>
+      <p>The corpus was created in cooperation with Linguistic Engineering Group (Institute of Computer Science, Polish Academy of Sciences).</p>
+      <p>More information about the corpus can be found at https://www.korba.edu.pl/ tab About the Corpus.</p>
+    </projectDesc>
+    <classDecl>
+      <taxonomy xml:id="text">
+        <desc xml:lang="en">rhymed/non-rhymed text</desc>
+        <desc xml:lang="pl">typ mowy</desc>
+        <category xml:id="mieszany">
+          <desc xml:lang="en">mixed</desc>
+          <desc xml:lang="pl">mieszany</desc>
+        </category>
+        <category xml:id="proza">
+          <desc xml:lang="en">non-rhymed</desc>
+          <desc xml:lang="pl">proza</desc>
+        </category>
+        <category xml:id="wiersz">
+          <desc xml:lang="en">rhymed</desc>
+          <desc xml:lang="pl">wiersz</desc>
+        </category>
+      </taxonomy>
+      <taxonomy xml:id="genre">
+        <desc xml:lang="en">type of text</desc>
+        <desc xml:lang="pl">rodzaj</desc>
+        <category xml:id="bibl">
+          <desc xml:lang="en">Bible</desc>
+          <desc xml:lang="pl">Biblia</desc>
+        </category>
+        <category xml:id="dramat">
+          <desc xml:lang="en">drama</desc>
+          <desc xml:lang="pl">dramat</desc>
+        </category>
+        <category xml:id="dydakt">
+          <desc xml:lang="en">scientific-didactic texts</desc>
+          <desc xml:lang="pl">teksty naukowo-dydaktyczne lub informacyjno-poradnikowe</desc>
+        </category>
+        <category xml:id="epika">
+          <desc xml:lang="en">epic</desc>
+          <desc xml:lang="pl">epika</desc>
+        </category>
+        <category xml:id="fakt">
+          <desc xml:lang="en">factual literature</desc>
+          <desc xml:lang="pl">literatura faktograficzna</desc>
+        </category>
+        <category xml:id="kanc">
+          <desc xml:lang="en">official and secretarial texts</desc>
+          <desc xml:lang="pl">teksty urzędowo-kancelaryjne</desc>
+        </category>
+        <category xml:id="liryka">
+          <desc xml:lang="en">lyric</desc>
+          <desc xml:lang="pl">liryka</desc>
+        </category>
+        <category xml:id="list">
+          <desc xml:lang="en">letters</desc>
+          <desc xml:lang="pl">listy</desc>
+        </category>
+        <category xml:id="persw">
+          <desc xml:lang="en">persuasive texts</desc>
+          <desc xml:lang="pl">teksty perswazyjne</desc>
+        </category>
+        <category xml:id="pras">
+          <desc xml:lang="en">press releases and leaflets</desc>
+          <desc xml:lang="pl">wiadomości prasowe i druki ulotne</desc>
+        </category>
+        <category xml:id="synkr">
+          <desc xml:lang="en">syncretic texts</desc>
+          <desc xml:lang="pl">utwory synkretyczne</desc>
+        </category>
+      </taxonomy>
+      <taxonomy xml:id="kind">
+        <desc xml:lang="en">genre</desc>
+        <desc xml:lang="pl">gatunek</desc>
+        <category xml:id="akta_sejm">
+          <desc xml:lang="en">documents of regional parliaments</desc>
+          <desc xml:lang="pl">akta sejmikowe</desc>
+        </category>
+        <category xml:id="bajki">
+          <desc xml:lang="en">fables</desc>
+          <desc xml:lang="pl">bajki</desc>
+        </category>
+        <category xml:id="dedykacje">
+          <desc xml:lang="en">dedications</desc>
+          <desc xml:lang="pl">dedykacje</desc>
+        </category>
+        <category xml:id="dialogi">
+          <desc xml:lang="en">dialogues</desc>
+          <desc xml:lang="pl">dialogi</desc>
+        </category>
+        <category xml:id="diariusze">
+          <desc xml:lang="en">Seym journals</desc>
+          <desc xml:lang="pl">diariusze sejmowe</desc>
+        </category>
+        <category xml:id="emblematy">
+          <desc xml:lang="en">emblems</desc>
+          <desc xml:lang="pl">emblematy</desc>
+        </category>
+        <category xml:id="encyklopedie">
+          <desc xml:lang="en">encyclopedias and compendiums</desc>
+          <desc xml:lang="pl">encyklopedie, kompendia</desc>
+        </category>
+        <category xml:id="epitafia">
+          <desc xml:lang="en">epitaphs</desc>
+          <desc xml:lang="pl">epitafia</desc>
+        </category>
+        <category xml:id="epitalamia">
+          <desc xml:lang="en">epithalamia</desc>
+          <desc xml:lang="pl">epitalamia</desc>
+        </category>
+        <category xml:id="fraszki">
+          <desc xml:lang="en">epigrams</desc>
+          <desc xml:lang="pl">fraszki i epigramaty</desc>
+        </category>
+        <category xml:id="herbarze">
+          <desc xml:lang="en">rolls of arms</desc>
+          <desc xml:lang="pl">herbarze</desc>
+        </category>
+        <category xml:id="instrukcje">
+          <desc xml:lang="en">instructions</desc>
+          <desc xml:lang="pl">instrukcje</desc>
+        </category>
+        <category xml:id="intercyzy">
+          <desc xml:lang="en">prenuptial agreements</desc>
+          <desc xml:lang="pl">intercyzy</desc>
+        </category>
+        <category xml:id="inwentarze">
+          <desc xml:lang="en">inventories</desc>
+          <desc xml:lang="pl">inwentarze</desc>
+        </category>
+        <category xml:id="jasełka">
+          <desc xml:lang="en">nativity plays</desc>
+          <desc xml:lang="pl">jasełka</desc>
+        </category>
+        <category xml:id="kalendarze">
+          <desc xml:lang="en">calendars</desc>
+          <desc xml:lang="pl">kalendarze</desc>
+        </category>
+        <category xml:id="kazania">
+          <desc xml:lang="en">sermons</desc>
+          <desc xml:lang="pl">kazania</desc>
+        </category>
+        <category xml:id="kolędy">
+          <desc xml:lang="en">carols and folk carols</desc>
+          <desc xml:lang="pl">kolędy i pastorałki</desc>
+        </category>
+        <category xml:id="komedie">
+          <desc xml:lang="en">comedies</desc>
+          <desc xml:lang="pl">komedie</desc>
+        </category>
+        <category xml:id="konstytucje">
+          <desc xml:lang="en">Seym bills</desc>
+          <desc xml:lang="pl">konstytucje sejmowe</desc>
+        </category>
+        <category xml:id="kroniki">
+          <desc xml:lang="en">chronicles</desc>
+          <desc xml:lang="pl">kroniki</desc>
+        </category>
+        <category xml:id="księgi_litur">
+          <desc xml:lang="en">liturgical books</desc>
+          <desc xml:lang="pl">księgi liturgiczne</desc>
+        </category>
+        <category xml:id="księgi_sąd">
+          <desc xml:lang="en">judicial records</desc>
+          <desc xml:lang="pl">księgi sądowe</desc>
+        </category>
+        <category xml:id="lamenty">
+          <desc xml:lang="en">laments</desc>
+          <desc xml:lang="pl">lamenty</desc>
+        </category>
+        <category xml:id="listy_urz">
+          <desc xml:lang="en">official letters</desc>
+          <desc xml:lang="pl">listy urzędowe</desc>
+        </category>
+        <category xml:id="modlitwy">
+          <desc xml:lang="en">prayers</desc>
+          <desc xml:lang="pl">modlitwy</desc>
+        </category>
+        <category xml:id="mowy_okol">
+          <desc xml:lang="en">speeches for various occasions</desc>
+          <desc xml:lang="pl">mowy okolicznościowe</desc>
+        </category>
+        <category xml:id="mowy_polit">
+          <desc xml:lang="en">political speeches</desc>
+          <desc xml:lang="pl">mowy polityczne</desc>
+        </category>
+        <category xml:id="ody">
+          <desc xml:lang="en">odes</desc>
+          <desc xml:lang="pl">ody</desc>
+        </category>
+        <category xml:id="opisy_geogr">
+          <desc xml:lang="en">geographical descriptions</desc>
+          <desc xml:lang="pl">opisy geograficzne</desc>
+        </category>
+        <category xml:id="opisy_podr">
+          <desc xml:lang="en">descriptions of journeys</desc>
+          <desc xml:lang="pl">opisy podróży</desc>
+        </category>
+        <category xml:id="pamiętniki">
+          <desc xml:lang="en">memoirs</desc>
+          <desc xml:lang="pl">pamiętniki</desc>
+        </category>
+        <category xml:id="panegiryki">
+          <desc xml:lang="en">panegyrics</desc>
+          <desc xml:lang="pl">panegiryki</desc>
+        </category>
+        <category xml:id="pieśni">
+          <desc xml:lang="en">songs</desc>
+          <desc xml:lang="pl">pieśni</desc>
+        </category>
+        <category xml:id="pisma_rel">
+          <desc xml:lang="en">writings on religious topics</desc>
+          <desc xml:lang="pl">pisma religijne</desc>
+        </category>
+        <category xml:id="podręczniki">
+          <desc xml:lang="en">textbooks</desc>
+          <desc xml:lang="pl">podręczniki</desc>
+        </category>
+        <category xml:id="poematy_ep">
+          <desc xml:lang="en">epic poems</desc>
+          <desc xml:lang="pl">poematy epickie</desc>
+        </category>
+        <category xml:id="polityczne">
+          <desc xml:lang="en">writings on political and social topics</desc>
+          <desc xml:lang="pl">pisma polityczne, społeczne</desc>
+        </category>
+        <category xml:id="poradniki">
+          <desc xml:lang="en">guides</desc>
+          <desc xml:lang="pl">poradniki</desc>
+        </category>
+        <category xml:id="przepisy">
+          <desc xml:lang="en">culinary recipes</desc>
+          <desc xml:lang="pl">przepisy kucharskie</desc>
+        </category>
+        <category xml:id="przewodniki">
+          <desc xml:lang="en">guidebooks</desc>
+          <desc xml:lang="pl">przewodniki</desc>
+        </category>
+        <category xml:id="przypowieści">
+          <desc xml:lang="en">parables and specula (mirrors)</desc>
+          <desc xml:lang="pl">przypowieści, specula (zwierciadła)</desc>
+        </category>
+        <category xml:id="przysłowia">
+          <desc xml:lang="en">proverbs</desc>
+          <desc xml:lang="pl">przysłowia</desc>
+        </category>
+        <category xml:id="przywileje">
+          <desc xml:lang="en">privileges and charters</desc>
+          <desc xml:lang="pl">przywileje, akty nadania</desc>
+        </category>
+        <category xml:id="psalmy">
+          <desc xml:lang="en">psalms</desc>
+          <desc xml:lang="pl">psalmy</desc>
+        </category>
+        <category xml:id="relacje">
+          <desc xml:lang="en">accounts of events</desc>
+          <desc xml:lang="pl">relacje</desc>
+        </category>
+        <category xml:id="romanse">
+          <desc xml:lang="en">romances</desc>
+          <desc xml:lang="pl">romanse</desc>
+        </category>
+        <category xml:id="rozmówki">
+          <desc xml:lang="en">phrasebooks</desc>
+          <desc xml:lang="pl">rozmówki do nauki języka</desc>
+        </category>
+        <category xml:id="satyry">
+          <desc xml:lang="en">satires</desc>
+          <desc xml:lang="pl">satyry</desc>
+        </category>
+        <category xml:id="sielanki">
+          <desc xml:lang="en">pastorals</desc>
+          <desc xml:lang="pl">sielanki</desc>
+        </category>
+        <category xml:id="sonety">
+          <desc xml:lang="en">sonnets</desc>
+          <desc xml:lang="pl">sonety</desc>
+        </category>
+        <category xml:id="teksty_sejm">
+          <desc xml:lang="en">Seym texts</desc>
+          <desc xml:lang="pl">teksty sejmowe</desc>
+        </category>
+        <category xml:id="teksty_wstepne">
+          <desc xml:lang="en">introductory texts</desc>
+          <desc xml:lang="pl">teksty wstępne</desc>
+        </category>
+        <category xml:id="testamenty">
+          <desc xml:lang="en">testaments</desc>
+          <desc xml:lang="pl">testamenty</desc>
+        </category>
+        <category xml:id="tragedie">
+          <desc xml:lang="en">tragedies</desc>
+          <desc xml:lang="pl">tragedie</desc>
+        </category>
+        <category xml:id="traktaty">
+          <desc xml:lang="en">treatises</desc>
+          <desc xml:lang="pl">traktaty</desc>
+        </category>
+        <category xml:id="umowy">
+          <desc xml:lang="en">contracts</desc>
+          <desc xml:lang="pl">umowy</desc>
+        </category>
+        <category xml:id="wilkierze">
+          <desc xml:lang="en">city laws</desc>
+          <desc xml:lang="pl">wilkierze</desc>
+        </category>
+        <category xml:id="zagadki">
+          <desc xml:lang="en">riddles</desc>
+          <desc xml:lang="pl">zagadki</desc>
+        </category>
+        <category xml:id="żywoty">
+          <desc xml:lang="en">hagiographies</desc>
+          <desc xml:lang="pl">żywoty świętych</desc>
+        </category>
+      </taxonomy>
+      <taxonomy xml:id="subject">
+        <desc xml:lang="en">subject</desc>
+        <desc xml:lang="pl">tematyka</desc>
+        <category xml:id="alchemia">
+          <desc xml:lang="en">alchemy</desc>
+          <desc xml:lang="pl">alchemia</desc>
+        </category>
+        <category xml:id="anatomia">
+          <desc xml:lang="en">anatomy</desc>
+          <desc xml:lang="pl">anatomia</desc>
+        </category>
+        <category xml:id="architektura">
+          <desc xml:lang="en">architecture</desc>
+          <desc xml:lang="pl">architektura</desc>
+        </category>
+        <category xml:id="astrologia">
+          <desc xml:lang="en">astrology</desc>
+          <desc xml:lang="pl">astrologia</desc>
+        </category>
+        <category xml:id="astronomia">
+          <desc xml:lang="en">astronomy</desc>
+          <desc xml:lang="pl">astronomia</desc>
+        </category>
+        <category xml:id="biologia">
+          <desc xml:lang="en">biology</desc>
+          <desc xml:lang="pl">biologia</desc>
+        </category>
+        <category xml:id="botanika">
+          <desc xml:lang="en">botany</desc>
+          <desc xml:lang="pl">botanika</desc>
+        </category>
+        <category xml:id="budownictwo">
+          <desc xml:lang="en">construction engineering</desc>
+          <desc xml:lang="pl">budownictwo</desc>
+        </category>
+        <category xml:id="chemia">
+          <desc xml:lang="en">chemistry</desc>
+          <desc xml:lang="pl">chemia</desc>
+        </category>
+        <category xml:id="egzotyka">
+          <desc xml:lang="en">exoticism</desc>
+          <desc xml:lang="pl">egzotyka</desc>
+        </category>
+        <category xml:id="ekonomia">
+          <desc xml:lang="en">economy</desc>
+          <desc xml:lang="pl">ekonomia</desc>
+        </category>
+        <category xml:id="filozofia">
+          <desc xml:lang="en">philosophy</desc>
+          <desc xml:lang="pl">filozofia</desc>
+        </category>
+        <category xml:id="fizyka">
+          <desc xml:lang="en">physics</desc>
+          <desc xml:lang="pl">fizyka</desc>
+        </category>
+        <category xml:id="geografia">
+          <desc xml:lang="en">geography</desc>
+          <desc xml:lang="pl">geografia</desc>
+        </category>
+        <category xml:id="gospodarstwo">
+          <desc xml:lang="en">farm management</desc>
+          <desc xml:lang="pl">gospodarstwo</desc>
+        </category>
+        <category xml:id="górnictwo">
+          <desc xml:lang="en">mining</desc>
+          <desc xml:lang="pl">górnictwo</desc>
+        </category>
+        <category xml:id="gramatyka">
+          <desc xml:lang="en">grammar</desc>
+          <desc xml:lang="pl">gramatyka</desc>
+        </category>
+        <category xml:id="historia">
+          <desc xml:lang="en">history</desc>
+          <desc xml:lang="pl">historia</desc>
+        </category>
+        <category xml:id="hutnictwo">
+          <desc xml:lang="en">metallurgy</desc>
+          <desc xml:lang="pl">hutnictwo</desc>
+        </category>
+        <category xml:id="języki">
+          <desc xml:lang="en">languages</desc>
+          <desc xml:lang="pl">języki</desc>
+        </category>
+        <category xml:id="kulinaria">
+          <desc xml:lang="en">culinary skills</desc>
+          <desc xml:lang="pl">kulinaria</desc>
+        </category>
+        <category xml:id="magia">
+          <desc xml:lang="en">magic</desc>
+          <desc xml:lang="pl">magia</desc>
+        </category>
+        <category xml:id="matematyka">
+          <desc xml:lang="en">maths</desc>
+          <desc xml:lang="pl">matematyka</desc>
+        </category>
+        <category xml:id="medycyna">
+          <desc xml:lang="en">medicine</desc>
+          <desc xml:lang="pl">medycyna</desc>
+        </category>
+        <category xml:id="mitologia">
+          <desc xml:lang="en">mythology</desc>
+          <desc xml:lang="pl">mitologia</desc>
+        </category>
+        <category xml:id="muzyka">
+          <desc xml:lang="en">music</desc>
+          <desc xml:lang="pl">muzyka</desc>
+        </category>
+        <category xml:id="myślistwo">
+          <desc xml:lang="en">hunting</desc>
+          <desc xml:lang="pl">myślistwo</desc>
+        </category>
+        <category xml:id="obyczajowość">
+          <desc xml:lang="en">lifeway and customs</desc>
+          <desc xml:lang="pl">obyczajowość</desc>
+        </category>
+        <category xml:id="poetyka">
+          <desc xml:lang="en">poetics</desc>
+          <desc xml:lang="pl">poetyka</desc>
+        </category>
+        <category xml:id="polityka">
+          <desc xml:lang="en">politics</desc>
+          <desc xml:lang="pl">polityka</desc>
+        </category>
+        <category xml:id="prawo">
+          <desc xml:lang="en">law</desc>
+          <desc xml:lang="pl">prawo</desc>
+        </category>
+        <category xml:id="religia">
+          <desc xml:lang="en">religion</desc>
+          <desc xml:lang="pl">religia</desc>
+        </category>
+        <category xml:id="retoryka">
+          <desc xml:lang="en">rhetoric</desc>
+          <desc xml:lang="pl">retoryka</desc>
+        </category>
+        <category xml:id="sądownictwo">
+          <desc xml:lang="en">court cases</desc>
+          <desc xml:lang="pl">sprawy sądowe</desc>
+        </category>
+        <category xml:id="wojskowość">
+          <desc xml:lang="en">army</desc>
+          <desc xml:lang="pl">wojskowość</desc>
+        </category>
+        <category xml:id="zielarstwo">
+          <desc xml:lang="en">herbal medicine</desc>
+          <desc xml:lang="pl">zielarstwo</desc>
+        </category>
+        <category xml:id="zoologia">
+          <desc xml:lang="en">zoology</desc>
+          <desc xml:lang="pl">zoologia</desc>
+        </category>
+        <category xml:id="żeglarstwo">
+          <desc xml:lang="en">sailing</desc>
+          <desc xml:lang="pl">żeglarstwo</desc>
+        </category>
+      </taxonomy>
+      <taxonomy xml:id="ironic">
+        <desc xml:lang="en">humorous</desc>
+        <desc xml:lang="pl">poetyka żartu</desc>
+        <category xml:id="tak">
+          <desc xml:lang="en">yes</desc>
+          <desc xml:lang="pl">tak</desc>
+        </category>
+        <category xml:id="nie">
+          <desc xml:lang="en">no</desc>
+          <desc xml:lang="pl">nie</desc>
+        </category>
+      </taxonomy>
+    </classDecl>
+  </encodingDesc>
+  <revisionDesc>
+    <change who="#aw" when="2018-03-26" xml:lang="en">First version of the header created.</change>
+    <change who="#dk" when="2021-05-21" xml:lang="en">Header updated for version 1.2</change>
+    <change who="#dk" when="2024-09-02" xml:lang="en">Header updated for version 2.0</change>
+  </revisionDesc>
+</teiHeader>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <xi:include href="NKJP_1M_header.xml"/>
+  <xi:include href="../../KorBa_manual_header.xml"/>
   <TEI>
     <xi:include href="header.xml"/>
     <text xml:id="segm_text" xml:lang="pl">
@@ -51,14 +51,8 @@
             <seg xml:id="segm_1.14-seg" corresp="text.xml#string-range(txt_1.1-ab,64,9)">
               <w>Suplikuię</w>
             </seg>
-            <seg xml:id="segm_1.15-seg" corresp="text.xml#string-range(txt_1.1-ab,74,2)">
-              <w>WX</w>
-            </seg>
-            <seg xml:id="segm_1.16-seg" corresp="text.xml#string-range(txt_1.1-ab,76,1)" nkjp:nps="true">
-              <w>.</w>
-            </seg>
-            <seg xml:id="segm_1.17-seg" corresp="text.xml#string-range(txt_1.1-ab,78,3)">
-              <w>Mci</w>
+            <seg xml:id="segm_1672612470.1104994-seg" corresp="text.xml#string-range(txt_1.1-ab,74,7)">
+              <w>WX. Mci</w>
             </seg>
             <seg xml:id="segm_1.18-seg" corresp="text.xml#string-range(txt_1.1-ab,82,5)">
               <w>ażeby</w>
@@ -74,10 +68,10 @@
             </seg>
             <choice>
               <nkjp:paren>
-                <seg xml:id="segm_1620296698_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,98,6)" nkjp:rejected="true">
+                <seg xml:id="segm_1686762989_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,98,6)" nkjp:rejected="true">
                   <w>uczyni</w>
                 </seg>
-                <seg xml:id="segm_1620296698_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,104,1)" nkjp:nps="true" nkjp:rejected="true">
+                <seg xml:id="segm_1686762989_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,104,1)" nkjp:nps="true" nkjp:rejected="true">
                   <w>ć</w>
                 </seg>
               </nkjp:paren>
@@ -102,12 +96,19 @@
             <seg xml:id="segm_1.27-seg" corresp="text.xml#string-range(txt_1.1-ab,141,8)">
               <w>Będziesz</w>
             </seg>
-            <seg xml:id="segm_1.30-seg" corresp="text.xml#string-range(txt_1.1-ab,150,3)">
-              <w>WmP</w>
-            </seg>
-            <seg xml:id="segm_1.31-seg" corresp="text.xml#string-range(txt_1.1-ab,153,1)" nkjp:nps="true">
-              <w>.</w>
-            </seg>
+            <choice>
+              <seg xml:id="segm_1686762989_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,150,4)" nkjp:rejected="true">
+                <w>WmP.</w>
+              </seg>
+              <nkjp:paren>
+                <seg xml:id="segm_1.30-seg" corresp="text.xml#string-range(txt_1.1-ab,150,3)" nkjp:manual="true">
+                  <w>WmP</w>
+                </seg>
+                <seg xml:id="segm_1.31-seg" corresp="text.xml#string-range(txt_1.1-ab,153,1)" nkjp:nps="true" nkjp:manual="true">
+                  <w>.</w>
+                </seg>
+              </nkjp:paren>
+            </choice>
             <seg xml:id="segm_1.32-seg" corresp="text.xml#string-range(txt_1.1-ab,171,7)">
               <w>kontent</w>
             </seg>
@@ -190,12 +191,19 @@
             <seg xml:id="segm_1.60-seg" corresp="text.xml#string-range(txt_1.1-ab,309,2)">
               <w>mi</w>
             </seg>
-            <seg xml:id="segm_1.63-seg" corresp="text.xml#string-range(txt_1.1-ab,312,3)">
-              <w>WmP</w>
-            </seg>
-            <seg xml:id="segm_1.64-seg" corresp="text.xml#string-range(txt_1.1-ab,315,1)" nkjp:nps="true">
-              <w>.</w>
-            </seg>
+            <choice>
+              <seg xml:id="segm_1686762989_1.4-seg" corresp="text.xml#string-range(txt_1.1-ab,312,4)" nkjp:rejected="true">
+                <w>WmP.</w>
+              </seg>
+              <nkjp:paren>
+                <seg xml:id="segm_1.63-seg" corresp="text.xml#string-range(txt_1.1-ab,312,3)" nkjp:manual="true">
+                  <w>WmP</w>
+                </seg>
+                <seg xml:id="segm_1.64-seg" corresp="text.xml#string-range(txt_1.1-ab,315,1)" nkjp:nps="true" nkjp:manual="true">
+                  <w>.</w>
+                </seg>
+              </nkjp:paren>
+            </choice>
             <seg xml:id="segm_1.67-seg" corresp="text.xml#string-range(txt_1.1-ab,333,5)">
               <w>pokoy</w>
             </seg>
@@ -243,17 +251,8 @@
             <seg xml:id="segm_1.81-seg" corresp="text.xml#string-range(txt_1.1-ab,780,9)">
               <w>obligacye</w>
             </seg>
-            <seg xml:id="segm_1.82-seg" corresp="text.xml#string-range(txt_1.1-ab,790,1)">
-              <w>W</w>
-            </seg>
-            <seg xml:id="segm_1.83-seg" corresp="text.xml#string-range(txt_1.1-ab,791,1)" nkjp:nps="true">
-              <w>.</w>
-            </seg>
-            <seg xml:id="segm_1.84-seg" corresp="text.xml#string-range(txt_1.1-ab,792,1)" nkjp:nps="true">
-              <w>X</w>
-            </seg>
-            <seg xml:id="segm_1.85-seg" corresp="text.xml#string-range(txt_1.1-ab,794,3)">
-              <w>Mci</w>
+            <seg xml:id="segm_1672612418.1104990-seg" corresp="text.xml#string-range(txt_1.1-ab,790,7)">
+              <w>W.X Mci</w>
             </seg>
             <seg xml:id="segm_1.86-seg" corresp="text.xml#string-range(txt_1.1-ab,797,1)" nkjp:nps="true">
               <w>.</w>
@@ -275,12 +274,19 @@
             <seg xml:id="segm_1.91-seg" corresp="text.xml#string-range(txt_1.1-ab,829,3)">
               <w>się</w>
             </seg>
-            <seg xml:id="segm_1.94-seg" corresp="text.xml#string-range(txt_1.1-ab,833,3)">
-              <w>WmP</w>
-            </seg>
-            <seg xml:id="segm_1.95-seg" corresp="text.xml#string-range(txt_1.1-ab,836,1)" nkjp:nps="true">
-              <w>.</w>
-            </seg>
+            <choice>
+              <seg xml:id="segm_1686762989_1.5-seg" corresp="text.xml#string-range(txt_1.1-ab,833,4)" nkjp:rejected="true">
+                <w>WmP.</w>
+              </seg>
+              <nkjp:paren>
+                <seg xml:id="segm_1.94-seg" corresp="text.xml#string-range(txt_1.1-ab,833,3)" nkjp:manual="true">
+                  <w>WmP</w>
+                </seg>
+                <seg xml:id="segm_1.95-seg" corresp="text.xml#string-range(txt_1.1-ab,836,1)" nkjp:nps="true" nkjp:manual="true">
+                  <w>.</w>
+                </seg>
+              </nkjp:paren>
+            </choice>
           </s>
           <s xml:id="segm_1.101-s">
             <seg xml:id="segm_1.96-seg" corresp="text.xml#string-range(txt_1.1-ab,854,4)">
@@ -294,10 +300,10 @@
             </seg>
             <choice>
               <nkjp:paren>
-                <seg xml:id="segm_1620296698_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,866,6)" nkjp:rejected="true">
+                <seg xml:id="segm_1686762989_1.6-seg" corresp="text.xml#string-range(txt_1.1-ab,866,6)" nkjp:rejected="true">
                   <w>uczyni</w>
                 </seg>
-                <seg xml:id="segm_1620296698_1.4-seg" corresp="text.xml#string-range(txt_1.1-ab,872,1)" nkjp:nps="true" nkjp:rejected="true">
+                <seg xml:id="segm_1686762989_1.7-seg" corresp="text.xml#string-range(txt_1.1-ab,872,1)" nkjp:nps="true" nkjp:rejected="true">
                   <w>ć</w>
                 </seg>
               </nkjp:paren>

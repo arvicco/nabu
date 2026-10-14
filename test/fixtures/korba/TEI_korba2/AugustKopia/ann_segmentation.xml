@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <xi:include href="../../KorBa_manual_header.xml"/>
+  <TEI>
+    <xi:include href="header.xml"/>
+    <text xml:id="segm_text" xml:lang="pl">
+      <body xml:id="segm_body">
+        <p xml:id="segm_1-p" corresp="text.xml#txt_1-div">
+          <s xml:id="segm_1.47-s">
+            <seg xml:id="segm_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,0,6)">
+              <w>AUGUST</w>
+            </seg>
+            <seg xml:id="segm_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,7,2)">
+              <w>II</w>
+            </seg>
+            <seg xml:id="segm_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,9,1)" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+            <seg xml:id="segm_1.4-seg" corresp="text.xml#string-range(txt_1.2-ab,0,1)">
+              <w>Z</w>
+            </seg>
+            <seg xml:id="segm_1.5-seg" corresp="text.xml#string-range(txt_1.2-ab,2,5)">
+              <w>BOZEY</w>
+            </seg>
+            <seg xml:id="segm_1.6-seg" corresp="text.xml#string-range(txt_1.2-ab,8,5)">
+              <w>Łáski</w>
+            </seg>
+            <seg xml:id="segm_1.7-seg" corresp="text.xml#string-range(txt_1.2-ab,14,4)">
+              <w>KROL</w>
+            </seg>
+            <seg xml:id="segm_1.8-seg" corresp="text.xml#string-range(txt_1.2-ab,19,6)">
+              <w>POLSKI</w>
+            </seg>
+            <seg xml:id="segm_1.9-seg" corresp="text.xml#string-range(txt_1.2-ab,25,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.10-seg" corresp="text.xml#string-range(txt_1.2-ab,27,6)">
+              <w>Wielki</w>
+            </seg>
+            <seg xml:id="segm_1.11-seg" corresp="text.xml#string-range(txt_1.2-ab,34,5)">
+              <w>Xiążę</w>
+            </seg>
+            <seg xml:id="segm_1.12-seg" corresp="text.xml#string-range(txt_1.2-ab,40,8)">
+              <w>Litewski</w>
+            </seg>
+            <seg xml:id="segm_1.13-seg" corresp="text.xml#string-range(txt_1.2-ab,48,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.14-seg" corresp="text.xml#string-range(txt_1.2-ab,50,5)">
+              <w>Ruski</w>
+            </seg>
+            <seg xml:id="segm_1.15-seg" corresp="text.xml#string-range(txt_1.2-ab,55,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.16-seg" corresp="text.xml#string-range(txt_1.2-ab,57,6)">
+              <w>Pruski</w>
+            </seg>
+            <seg xml:id="segm_1.17-seg" corresp="text.xml#string-range(txt_1.2-ab,63,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.18-seg" corresp="text.xml#string-range(txt_1.2-ab,65,10)">
+              <w>Mazowiecki</w>
+            </seg>
+            <seg xml:id="segm_1.19-seg" corresp="text.xml#string-range(txt_1.2-ab,75,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.20-seg" corresp="text.xml#string-range(txt_1.2-ab,77,7)">
+              <w>Zmudzki</w>
+            </seg>
+            <seg xml:id="segm_1.21-seg" corresp="text.xml#string-range(txt_1.2-ab,84,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.22-seg" corresp="text.xml#string-range(txt_1.2-ab,86,8)">
+              <w>Kijowski</w>
+            </seg>
+            <seg xml:id="segm_1.23-seg" corresp="text.xml#string-range(txt_1.2-ab,94,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.24-seg" corresp="text.xml#string-range(txt_1.2-ab,96,8)">
+              <w>Wołyński</w>
+            </seg>
+            <seg xml:id="segm_1.25-seg" corresp="text.xml#string-range(txt_1.2-ab,104,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.26-seg" corresp="text.xml#string-range(txt_1.2-ab,106,8)">
+              <w>Podolski</w>
+            </seg>
+            <seg xml:id="segm_1.27-seg" corresp="text.xml#string-range(txt_1.2-ab,114,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.28-seg" corresp="text.xml#string-range(txt_1.2-ab,116,8)">
+              <w>Podláski</w>
+            </seg>
+            <seg xml:id="segm_1.29-seg" corresp="text.xml#string-range(txt_1.2-ab,124,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.30-seg" corresp="text.xml#string-range(txt_1.2-ab,126,10)">
+              <w>Inflántski</w>
+            </seg>
+            <seg xml:id="segm_1.31-seg" corresp="text.xml#string-range(txt_1.2-ab,136,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.32-seg" corresp="text.xml#string-range(txt_1.2-ab,138,9)">
+              <w>Smolenski</w>
+            </seg>
+            <seg xml:id="segm_1.33-seg" corresp="text.xml#string-range(txt_1.2-ab,147,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.34-seg" corresp="text.xml#string-range(txt_1.2-ab,149,10)">
+              <w>Siewierski</w>
+            </seg>
+            <seg xml:id="segm_1.35-seg" corresp="text.xml#string-range(txt_1.2-ab,159,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.36-seg" corresp="text.xml#string-range(txt_1.2-ab,161,1)">
+              <w>y</w>
+            </seg>
+            <seg xml:id="segm_1.37-seg" corresp="text.xml#string-range(txt_1.2-ab,163,13)">
+              <w>Czernichowski</w>
+            </seg>
+            <seg xml:id="segm_1.38-seg" corresp="text.xml#string-range(txt_1.2-ab,176,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.39-seg" corresp="text.xml#string-range(txt_1.2-ab,178,1)">
+              <w>á</w>
+            </seg>
+            <seg xml:id="segm_1.40-seg" corresp="text.xml#string-range(txt_1.2-ab,180,11)">
+              <w>Dźiedźiczny</w>
+            </seg>
+            <seg xml:id="segm_1.41-seg" corresp="text.xml#string-range(txt_1.2-ab,192,5)">
+              <w>XIĄZĘ</w>
+            </seg>
+            <seg xml:id="segm_1.42-seg" corresp="text.xml#string-range(txt_1.2-ab,198,5)">
+              <w>SASKI</w>
+            </seg>
+            <seg xml:id="segm_1.43-seg" corresp="text.xml#string-range(txt_1.2-ab,203,1)" nkjp:nps="true">
+              <w>,</w>
+            </seg>
+            <seg xml:id="segm_1.44-seg" corresp="text.xml#string-range(txt_1.2-ab,205,1)">
+              <w>y</w>
+            </seg>
+            <seg xml:id="segm_1.45-seg" corresp="text.xml#string-range(txt_1.2-ab,207,7)">
+              <w>ELEKTOR</w>
+            </seg>
+            <seg xml:id="segm_1.46-seg" corresp="text.xml#string-range(txt_1.2.1-foreign,0,3)" type="foreign">
+              <w>etc</w>
+            </seg>
+            <seg xml:id="segm_1.47-seg" corresp="text.xml#string-range(txt_1.2.1-foreign,3,1)" type="foreign" nkjp:nps="true">
+              <w>.</w>
+            </seg>
+          </s>
+          
+          
+          
+          
+        </p>
+      </body>
+    </text>
+  </TEI>
+</teiCorpus>
