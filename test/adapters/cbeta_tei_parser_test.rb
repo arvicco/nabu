@@ -15,6 +15,9 @@ class CbetaTeiParserTest < Minitest::Test
   T01 = File.join(FIXTURES, "T", "T01", "T01n0001-xu.xml")
   X01 = File.join(FIXTURES, "X", "X01", "X01n0001.xml")
   X55 = File.join(FIXTURES, "X", "X55", "X55n0899.xml")
+  J36 = File.join(FIXTURES, "J", "J36", "J36nB354.xml")
+  N26 = File.join(FIXTURES, "N", "N26", "N26n0008.xml")
+  N44 = File.join(FIXTURES, "N", "N44", "N44n0021-xu.xml")
 
   def parse(path, urn: "urn:nabu:cbeta:#{File.basename(path, '.xml')}", canon: File.basename(path)[0])
     Nabu::Adapters::CbetaTeiParser.new.parse(path, urn: urn, canon: canon)
@@ -175,6 +178,60 @@ class CbetaTeiParserTest < Minitest::Test
     # own print lines keep their text.
     assert_equal "No. 899-A", by_cite["0471c05"].text
     assert_equal "因明入正理論題辭", by_cite["0471c06"].text
+  end
+
+  # --- per-canon language: the J and N canons (P126) --------------------------
+  #
+  # J (嘉興藏, the Ming–Qing Jiaxing canon) is Literary Chinese like T/X/K
+  # and rides lzh. N (漢譯南傳大藏經, Yuan Heng Temple edition) is a
+  # 20th-century CHINESE translation of the Pāli Tipiṭaka (made from the
+  # Japanese Nanden daizōkyō) — modern written Chinese, never the lzh claim:
+  # it rides cmn (the classical-modern translation-sibling precedent) and
+  # records its Pāli source in metadata.
+
+  def test_language_is_assigned_per_canon
+    language_for = Nabu::Adapters::CbetaTeiParser.method(:language_for)
+    %w[T X K J].each { |canon| assert_equal "lzh", language_for.call(canon), canon }
+    assert_equal "cmn", language_for.call("N")
+  end
+
+  def test_j_canon_rides_lzh_with_its_ming_byline
+    document = parse(J36)
+    assert_equal "lzh", document.language
+    document.each { |passage| assert_equal "lzh", passage.language }
+    assert_equal "錦屏破石卓禪師雜著", document.title
+    assert_equal "明", document.metadata["dynasty"], "明 悟卓說　超常記錄　發林行狀 — the seat splits on U+3000 too"
+    line = document.find { |p| p.urn.end_with?(":0545a04") }
+    assert_equal "出欄群牧童兒犢，蹶矣酣兮無箇亍，快爽風雲得自", line.text
+    assert_nil document.metadata["translated_from"], "J is native Chinese composition"
+  end
+
+  def test_n_canon_is_modern_chinese_translated_from_pali
+    document = parse(N26)
+    assert_equal "cmn", document.language
+    document.each { |passage| assert_equal "cmn", passage.language }
+    assert_equal "小誦經", document.title
+    assert_equal "pli", document.metadata["translated_from"]
+    assert_match(/南傳大藏經/, document.metadata["translation_basis"])
+    assert_equal "悟醒", document.metadata["translator"]
+    assert_nil document.metadata["dynasty"], "a modern translator byline carries no dynasty seat"
+    line = document.find { |p| p.urn.end_with?(":0001a07") }
+    assert_equal "我歸依佛，我歸依法，我歸依僧伽。我再歸依佛，我再歸依法，我再歸依僧伽。", line.text
+  end
+
+  # N files anchor their Pāli source with empty <ref cRef="PTS.Khp.1"/>
+  # milestones (Pali Text Society page references) — carried verbatim per
+  # line as the "cref" annotation, never reading text. Censused absent from
+  # every held T/X/K file.
+  def test_cref_milestones_ride_the_line_annotation
+    document = parse(N26)
+    line = document.find { |p| p.urn.end_with?(":0001a03") }
+    assert_equal "歸命彼世尊應供等覺者", line.text
+    assert_equal ["PTS.Khp.1"], line.annotations["cref"]
+    head = parse(N44).find { |p| p.urn.end_with?(":0267a07") }
+    assert_equal "第二 僧伽所行", head.text
+    assert_equal ["PTS.Cp.74"], head.annotations["cref"]
+    parse(T85).each { |passage| assert_nil passage.annotations["cref"] }
   end
 
   # --- the license gate and the canon identity check, both loud --------------

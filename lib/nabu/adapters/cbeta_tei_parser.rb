@@ -57,6 +57,12 @@ module Nabu
     #   text flows to the open print line.
     # - <milestone unit="juan" n="…"/> tracks the current fascicle; each
     #   passage carries it as the "juan" annotation.
+    # - <ref cRef="PTS.Khp.1"/> (N canon only — censused absent from every
+    #   T/X/K file, 2026-10-14): the Pali Text Society page anchor of the
+    #   Pāli original, empty, carried verbatim per line as the "cref"
+    #   annotation (folded into the preceding line from a layout-only one).
+    #   N's <label type="translation-mark"> (a, a'…) is printed text and
+    #   flows.
     #
     # == The license gate (canon-level, re-verified per file)
     #
@@ -74,18 +80,43 @@ module Nabu
     # Nokogiri::XML::Reader only: T ships 27 files over the house 5 MB DOM
     # limit (max 17.2 MB, T25n1509), X ships 7 (max 9.0 MB). One pass.
     class CbetaTeiParser
-      # All CBETA T/X text is Literary Chinese (headers tag zh-Hant, the
+      # CBETA's T/X/K/J text is Literary Chinese (headers tag zh-Hant, the
       # script; the language is lzh — the SuttaCentral Āgama precedent).
       LANGUAGE = "lzh"
+
+      # Canons whose text is NOT Literary Chinese (P126). N — 漢譯南傳大藏經
+      # (Yuan Heng Temple edition, 1990–98, 70 vols) — is a 20th-century
+      # Chinese translation of the Pāli Tipiṭaka, made from the Japanese
+      # Nanden daizōkyō (1935–41): modern written Chinese in a classicizing
+      # Buddhist register, tagged cmn (the classical-modern translation-
+      # sibling precedent), never the lzh claim. Its headers tag zh-Hant
+      # exactly like T, so the canon — not the header — decides.
+      CANON_LANGUAGES = { "N" => "cmn" }.freeze
+
+      # What a translated canon was translated FROM, recorded per document
+      # (the Pāli source the N text renders; the Japanese intermediary named
+      # in the basis). Canons absent here are native Chinese composition or
+      # carry their own translation bylines.
+      CANON_TRANSLATIONS = {
+        "N" => {
+          "translated_from" => "pli",
+          "translation_basis" => "漢譯南傳大藏經（元亨寺版）— Chinese translation of the Pāli " \
+                                 "Tipiṭaka via the Japanese 南傳大藏經 (Nanden daizōkyō, 1935–41)"
+        }.freeze
+      }.freeze
+
+      def self.language_for(canon)
+        CANON_LANGUAGES.fetch(canon, LANGUAGE)
+      end
 
       # The in-file grant, byte-verbatim (see class note). Field-gated at
       # <body>; quoted in docs and the 02-sources row.
       AVAILABILITY_GRANT =
         "Available for non-commercial use when distributed with this header intact."
 
-      # One print line: citation = lb @n verbatim; juan/gaiji/notes ride
-      # annotations.
-      Unit = Data.define(:citation, :text, :juan, :gaiji, :notes)
+      # One print line: citation = lb @n verbatim; juan/gaiji/notes/cref
+      # ride annotations.
+      Unit = Data.define(:citation, :text, :juan, :gaiji, :notes, :crefs)
       private_constant :Unit
 
       # A role-suffixed byline token: 譯 translated, 造/撰/述/說 authored,
@@ -163,14 +194,15 @@ module Nabu
       end
 
       def build_document(extraction, units, urn:, title:, path:)
+        language = self.class.language_for(extraction.canon_siglum)
         document = Document.new(
-          urn: urn, language: LANGUAGE, title: extraction.title || title,
+          urn: urn, language: language, title: extraction.title || title,
           canonical_path: path, metadata: document_metadata(extraction)
         )
         units.each_with_index do |unit, sequence|
           text = Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip)
           document << Passage.new(
-            urn: "#{urn}:#{unit.citation}", language: LANGUAGE, text: text,
+            urn: "#{urn}:#{unit.citation}", language: language, text: text,
             annotations: unit_annotations(unit), sequence: sequence
           )
         end
@@ -187,6 +219,7 @@ module Nabu
         metadata["canon"] = extraction.canon if extraction.canon
         metadata["vol"] = extraction.vol if extraction.vol
         metadata["no"] = extraction.no if extraction.no
+        metadata.merge!(CANON_TRANSLATIONS.fetch(extraction.canon_siglum, {}))
         merge_byline(metadata, extraction.author)
         metadata
       end
@@ -218,6 +251,7 @@ module Nabu
         annotations["juan"] = unit.juan if unit.juan
         annotations["gaiji"] = unit.gaiji unless unit.gaiji.empty?
         annotations["notes"] = unit.notes unless unit.notes.empty?
+        annotations["cref"] = unit.crefs unless unit.crefs.empty?
         annotations
       end
 
@@ -235,7 +269,7 @@ module Nabu
         DROPPED_ELEMENTS = %w[note rdg mulu].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no)
+        Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no, :canon_siglum)
 
         attr_reader :title, :author, :witnesses, :canon, :vol, :no
 
@@ -256,7 +290,7 @@ module Nabu
           @drop_depth = nil
           @note_buffer = nil        # open inline-note text, riding annotations
           @juan = nil
-          @line = nil               # open print line {citation:, text:, gaiji:, notes:}
+          @line = nil               # open print line {citation:, text:, gaiji:, notes:, crefs:}
           @units = []
         end
 
@@ -268,7 +302,8 @@ module Nabu
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
           Result.new(units: @units, title: @title, author: @author, witnesses: @witnesses,
-                     canon: @idno["canon"], vol: @idno["vol"], no: @idno["no"])
+                     canon: @idno["canon"], vol: @idno["vol"], no: @idno["no"],
+                     canon_siglum: @expected_canon)
         end
 
         private
@@ -291,6 +326,7 @@ module Nabu
           when "lb" then line_break(node)
           when "note" then open_note(node)
           when "g" then @line[:gaiji] << node.attribute("ref") if @line && node.attribute("ref")
+          when "ref" then @line[:crefs] << node.attribute("cRef") if @line && node.attribute("cRef")
           when "milestone" then @juan = node.attribute("n") if node.attribute("unit") == "juan"
           when "space" then append(" ") unless node.attribute("quantity") == "0"
           when "t" then drop_subtree(node) if node.attribute("place") == "foot"
@@ -389,7 +425,7 @@ module Nabu
           return unless node.attribute("ed") == @expected_canon
 
           flush_line
-          @line = { citation: node.attribute("n"), text: +"", gaiji: [], notes: [] }
+          @line = { citation: node.attribute("n"), text: +"", gaiji: [], notes: [], crefs: [] }
         end
 
         def open_note(node)
@@ -424,18 +460,23 @@ module Nabu
           # 35-file class, T10n0285:0458a18). A layout-only line mints no
           # passage; its interlinear notes fold into the preceding text
           # line so the apparatus survives (a title gloss hangs under its
-          # title line in print). Gaiji cannot occur on a blank line (a
-          # gaiji ref IS text).
+          # title line in print); a Pāli cRef milestone on such a line folds
+          # the same way. Gaiji cannot occur on a blank line (a gaiji ref IS
+          # text).
           if line[:text].gsub(/[[:space:]]+/, "").empty?
-            unless line[:notes].empty? || @units.empty?
-              last = @units.last
-              @units[-1] = last.with(notes: last.notes + line[:notes])
-            end
+            fold_into_previous(line)
             return
           end
 
-          @units << Unit.new(citation: line[:citation], text: line[:text],
-                             juan: @juan, gaiji: line[:gaiji], notes: line[:notes])
+          @units << Unit.new(citation: line[:citation], text: line[:text], juan: @juan,
+                             gaiji: line[:gaiji], notes: line[:notes], crefs: line[:crefs])
+        end
+
+        def fold_into_previous(line)
+          return if @units.empty? || (line[:notes].empty? && line[:crefs].empty?)
+
+          last = @units.last
+          @units[-1] = last.with(notes: last.notes + line[:notes], crefs: last.crefs + line[:crefs])
         end
 
         def append(value)

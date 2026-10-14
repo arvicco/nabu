@@ -725,6 +725,15 @@ cbeta:
                    # 2026-09-29: 10 K docs / 60,178 passages; the +7
                    # quarantine delta is upstream T/X drift in the same pull
                    # (509 files updated, 3 withdrawn), K contributed zero.
+                   # P126 (owner-ruled next step): + J (嘉興藏, Ming–Qing
+                   # Jiaxing canon, 287 XMLs / 105 MB, lzh) and N (漢譯南傳
+                   # 大藏經, Yuan Heng Temple Chinese translation of the Pāli
+                   # canon, 83 XMLs / 56 MB, cmn — NOT lzh; Pāli source in
+                   # metadata) — both Category A on cbeta.org/copyright
+                   # (re-read 2026-10-14). PENDING FIRST FETCH: the next
+                   # sync widens the existing sparse cone (≈161 MB working
+                   # tree) and expects ≈370 new documents / ≈1.1M passages
+                   # (census at 2026.R2; estimate from sampled bytes/line).
                    # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at

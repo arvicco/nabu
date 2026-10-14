@@ -177,11 +177,18 @@ sources:
     places: {posture: unplaced}
     script: {posture: mixed, note: "gaiji variant characters ride annotations"}
   cbeta:
-    lect: {posture: codemap, note: lzh → zho/lit}
+    lect: {posture: codemap, note: "lzh → zho/lit for T/X/K/J; the N canon (漢譯南傳大藏經,
+        the Yuan Heng Temple 1990–98 Chinese translation of the Pāli Tipiṭaka via the
+        Japanese Nanden daizōkyō) is modern written Chinese and claims bare cmn (identity —
+        the classical-modern translation-sibling precedent), never lzh; its Pāli source
+        rides metadata translated_from: pli and per-line PTS cRef annotations (P126)"}
     dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the header byline's dynasty seat
         (3,163 of 3,707 headers censused 2026-09-26) bands via period_bands.yml through
         MetadataDates :dynasty_band — precision `era`, an attributed translation-era claim,
-        never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing"}
+        never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing.
+        P126: J bylines carry 明/清 seats (both banded rows) and date the same way; N's
+        modern translator bylines (悟醒譯) carry no seat and DELIBERATELY mint nothing — the
+        1990–98 translation era is source-level knowledge, not a per-file upstream claim"}
     places: {posture: unplaced}
     script: {posture: implied}
   suttacentral:
