@@ -1118,6 +1118,15 @@ the Hausa pair (Schön, Robinson), Hanoteau's Tamachek and Kabyle,
 Koelle's Vai (10 / 3,536; public domain on stated print-era
 facts).
 
+**The Old Nubian treebank.** `old-nubian-ud` — Innokentii Smirnov's
+Universal Dependencies treebank of Old Nubian, the written language
+of the medieval Nile kingdoms: 124 sentences in Latin transliteration
+from the Miracle of Saint Menas, a homily on church offerings and
+short scriptural fragments, each word lemmatized, tagged, parsed and
+segmented into glossed morphemes, with Russian or English sentence
+translations (one document, 124 passages by file census; CC BY-NC-SA
+4.0, the author credited).
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
