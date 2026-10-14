@@ -415,6 +415,9 @@ class PosturesTest < Minitest::Test
     # P125 ADDS old-nubian-ud PENDING on the nub family + onw anchor of the
     # nabu-lects Old Nubian package (the treebank is the anchor's consumer;
     # flips to identity onw when the package reaches canonical): pending 0→1.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 116, "pending" => 1 }, by_posture)
+    # The Old Nubian package (merged + canonical-synced 2026-10-14, the
+    # add-then-retire shape WITHIN one phase — the shabados precedent)
+    # retires it: identity 116→117, pending 1→0. Zero pendings again.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 117 }, by_posture)
   end
 end

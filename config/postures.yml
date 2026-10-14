@@ -839,9 +839,9 @@ sources:
     kind: {posture: unclassified, note: "one document holding a miracle (Saint Menas), a homily
         and scriptural fragments with no text boundary marked upstream — no single kind is
         true of it, and splitting by inferred boundaries would invent structure"}
-    lect: {posture: pending, note: "candidate: identity onw — the nabu-lects Old Nubian package
-        (the nub family + the onw anchor) is minted in the registry repo but not yet merged or
-        synced to the canonical registry copy; flips to identity at that landing"}
+    lect: {posture: identity, note: "the Old Nubian registry package (the nub family + the onw
+        anchor) merged + canonical-synced 2026-10-14 — the add-then-retire shape within one
+        phase; the bare onw code is the claim"}
     dating: {posture: undatable, note: "censused 2026-10-14: every sentence carries only sent_id
         (ordinal), text and translation — no date, manuscript siglum or text identifier
         anywhere in the file; the manuscripts' dating is not in the asset"}
