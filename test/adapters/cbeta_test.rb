@@ -16,13 +16,18 @@ class CbetaTest < Minitest::Test
 
   FIXTURES = Nabu::TestSupport.fixtures("cbeta")
 
+  J29 = "urn:nabu:cbeta:J29nB247"
+  J36 = "urn:nabu:cbeta:J36nB354"
   K05 = "urn:nabu:cbeta:K05n0016"
+  N26 = "urn:nabu:cbeta:N26n0008"
+  N44 = "urn:nabu:cbeta:N44n0021-xu"
   T01 = "urn:nabu:cbeta:T01n0001-xu"
   T10 = "urn:nabu:cbeta:T10n0285"
   T85 = "urn:nabu:cbeta:T85n2884"
   X01 = "urn:nabu:cbeta:X01n0001"
   X55 = "urn:nabu:cbeta:X55n0899"
-  ALL_FIXTURES = [K05, T01, T10, T85, X01, X55].freeze # discover order (sorted by urn)
+  # discover order (sorted by urn)
+  ALL_FIXTURES = [J29, J36, K05, N26, N44, T01, T10, T85, X01, X55].freeze
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -63,6 +68,18 @@ class CbetaTest < Minitest::Test
     by_id = refs.to_h { |ref| [ref.id, ref] }
     assert_equal %w[T 85 2884], by_id[T85].metadata.values_at("canon", "vol", "work")
     assert_equal %w[X 01 0001], by_id[X01].metadata.values_at("canon", "vol", "work")
+    assert_equal %w[J 29 B247], by_id[J29].metadata.values_at("canon", "vol", "work")
+    assert_equal %w[N 26 0008], by_id[N26].metadata.values_at("canon", "vol", "work")
+  end
+
+  # P126: the scope is the five Category A canons cbeta.org/copyright names
+  # and the ruling admitted — T, X, K, plus J (嘉興大藏經 第一冊至第四十冊)
+  # and N (漢譯南傳大藏經 第一冊至第七十冊).
+  def test_scope_canons_are_t_x_k_j_n
+    assert_equal %w[T X K J N], Nabu::Adapters::Cbeta::CANONS
+    Nabu::Adapters::Cbeta::CATEGORY_B.each_key do |code|
+      refute_includes Nabu::Adapters::Cbeta::CANONS, code
+    end
   end
 
   # --- THE CANON-LEVEL LICENSE GATE ------------------------------------------
@@ -108,7 +125,7 @@ class CbetaTest < Minitest::Test
   # drift apart.
   def test_sparse_cone_covers_scope_and_excludes_every_category_b_dir
     cone = Nabu::Adapters::Cbeta::SPARSE_CONE
-    assert_equal ["T/", "X/", "K/", "canons.json", "schema/"], cone
+    assert_equal ["T/", "X/", "K/", "J/", "N/", "canons.json", "schema/"], cone
     Nabu::Adapters::Cbeta::CATEGORY_B.each_key do |code|
       refute(cone.any? { |path| path.start_with?(code) }, "cone must not include #{code}")
     end
@@ -119,8 +136,8 @@ class CbetaTest < Minitest::Test
   def test_non_scope_category_a_canons_skip_by_rule
     Dir.mktmpdir do |root|
       FileUtils.cp_r(File.join(FIXTURES, "T"), root)
-      FileUtils.mkdir_p(File.join(root, "J", "J01"))
-      File.write(File.join(root, "J", "J01", "J01nA042.xml"), "")
+      FileUtils.mkdir_p(File.join(root, "B", "B01"))
+      File.write(File.join(root, "B", "B01", "B01n0001.xml"), "")
       adapter = Nabu::Adapters::Cbeta.new
       assert_equal [T01, T10, T85], adapter.discover(root).to_a.map(&:id)
       skips = adapter.discovery_skips(root)
@@ -169,8 +186,31 @@ class CbetaTest < Minitest::Test
       document = adapter.parse(ref)
       assert_equal Nabu::Adapters::CbetaTeiParser::AVAILABILITY_GRANT, document.metadata["license"]
       assert_includes document.metadata["witnesses"], "【CB】"
-      assert_equal "lzh", document.language
+      expected = ref.metadata["canon"] == "N" ? "cmn" : "lzh"
+      assert_equal expected, document.language, "#{ref.id}: the canon decides the language"
     end
+  end
+
+  # P126 lect honesty: the N canon (Yuan Heng Temple Chinese translation of
+  # the Pāli Tipiṭaka) never rides the lzh claim; its Pāli source is
+  # recorded per document. The J canon (Ming–Qing Jiaxing) is lzh with its
+  # dynasty bylines feeding the attributed-era lane.
+  def test_j_and_n_canons_parse_on_the_held_family
+    adapter = Nabu::Adapters::Cbeta.new
+    docs = adapter.discover(FIXTURES).to_h { |ref| [ref.id, adapter.parse(ref)] }
+
+    assert_equal "清", docs[J29].metadata["dynasty"]
+    assert_equal "普光坦菴禪師語錄", docs[J29].title
+    assert_equal 204, docs[J29].passages.size
+    assert_equal 94, docs[J36].passages.size
+
+    n26 = docs[N26]
+    assert_equal "cmn", n26.language
+    assert_equal "pli", n26.metadata["translated_from"]
+    assert_equal 123, n26.passages.size
+    assert_equal "urn:nabu:cbeta:N26n0008:0001a03", n26.passages[1].urn
+    assert_equal ["PTS.Khp.1"], n26.passages[1].annotations["cref"]
+    assert_equal 24, docs[N44].passages.size
   end
 
   # --- load: idempotency (the house double-load rule) -------------------------
@@ -180,7 +220,7 @@ class CbetaTest < Minitest::Test
     source = cbeta_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 6, first.added
+    assert_equal 10, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]
@@ -207,9 +247,12 @@ class CbetaTest < Minitest::Test
       assert File.exist?(File.join(workdir, "T", "T85", "T85n2884.xml")), "T/ is in the cone"
       assert File.exist?(File.join(workdir, "canons.json")), "canons.json is in the cone"
       refute Dir.exist?(File.join(workdir, "Y")), "Category B dir Y must never materialize"
-      refute Dir.exist?(File.join(workdir, "J")), "non-scope canon J stays outside the cone"
-      # And the materialized tree passes the Category B gate + discovers T.
-      assert_includes adapter.discover(workdir).to_a.map(&:id), T85
+      refute Dir.exist?(File.join(workdir, "B")), "non-scope canon B stays outside the cone"
+      assert File.exist?(File.join(workdir, "J", "J36", "J36nB354.xml")), "J/ is in the cone (P126)"
+      assert File.exist?(File.join(workdir, "N", "N26", "N26n0008.xml")), "N/ is in the cone (P126)"
+      # And the materialized tree passes the Category B gate + discovers T, J, N.
+      ids = adapter.discover(workdir).to_a.map(&:id)
+      [T85, J36, N26].each { |urn| assert_includes ids, urn }
     end
   end
 
@@ -248,13 +291,15 @@ class CbetaTest < Minitest::Test
 
   # A miniature upstream with the real layout: scope canons, a non-scope
   # canon, a Category B canon, canons.json — the cone must take exactly
-  # T/ + X/ + canons.json + schema/.
+  # T/ + X/ + K/ + J/ + N/ + canons.json + schema/.
   def make_upstream_repo(dir)
     FileUtils.mkdir_p(dir)
-    %w[T/T85 X/X01 J/J01 Y/Y44 schema].each { |sub| FileUtils.mkdir_p(File.join(dir, sub)) }
+    %w[T/T85 X/X01 J/J36 N/N26 B/B01 Y/Y44 schema].each { |sub| FileUtils.mkdir_p(File.join(dir, sub)) }
     FileUtils.cp(File.join(FIXTURES, "T", "T85", "T85n2884.xml"), File.join(dir, "T", "T85"))
     FileUtils.cp(File.join(FIXTURES, "X", "X01", "X01n0001.xml"), File.join(dir, "X", "X01"))
-    File.write(File.join(dir, "J", "J01", "J01nA042.xml"), "<TEI/>\n")
+    FileUtils.cp(File.join(FIXTURES, "J", "J36", "J36nB354.xml"), File.join(dir, "J", "J36"))
+    FileUtils.cp(File.join(FIXTURES, "N", "N26", "N26n0008.xml"), File.join(dir, "N", "N26"))
+    File.write(File.join(dir, "B", "B01", "B01n0001.xml"), "<TEI/>\n")
     File.write(File.join(dir, "Y", "Y44", "Y44n0001.xml"), "<TEI/>\n")
     File.write(File.join(dir, "schema", "cbeta-p5.rnc"), "# schema stub\n")
     FileUtils.cp(File.join(FIXTURES, "canons.json"), dir)

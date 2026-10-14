@@ -523,7 +523,7 @@ sources:
       "KR6": scripture                           # the Buddhist canon class — excluded from
       #   the fetch cone by doctrine (CBETA is the Buddhist shelf), ruled here so a future
       #   widening never lands unmapped
-  cbeta:              # the whole source IS the Buddhist canon (Taishō + Xuzangjing)
+  cbeta:              # the whole source IS the Buddhist canon (Taishō, Xuzangjing, Koreana, Jiaxing, Nanchuan)
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
   # the source IS a canon or a dynastic record — one ruled line each) ---
