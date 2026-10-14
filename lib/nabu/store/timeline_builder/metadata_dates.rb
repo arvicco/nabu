@@ -155,6 +155,10 @@ module Nabu
           #                                 reprint keeps its first edition's); the imprint
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
+          "stgall-priscian" => :structured, # the manuscript's copying (AD 850–1, upstream's
+          #                                   statement) on every page; orig_place "Ireland (?)"
+          #                                   — upstream's hedge — while St Gallen (the holding
+          #                                   library) rides "repository", never a place claim
           "syriac-corpus" => :when_key,
           "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
           #                                         BE converted to CE (date_class edition)
