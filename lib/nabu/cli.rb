@@ -1470,6 +1470,9 @@ module Nabu
                         "grouped; disabled members are skipped by name (an axis is not an explicit request)"
     option :parse_only, type: :boolean, default: false,
                         desc: "Skip fetch; re-parse the snapshot already on disk"
+    option :fetch_only, type: :boolean, default: false,
+                        desc: "Fetch into canonical (breaker + bookkeeping), then stop; " \
+                              "parse/load/index deferred to a later sync or rebuild"
     option :force, type: :boolean, default: false,
                    desc: "Override the >20% withdrawal circuit breaker"
     option :redownload, type: :boolean, default: false,
@@ -1486,6 +1489,8 @@ module Nabu
       # --redownload refusals up front (P44-i1): contradictory with
       # --parse-only (nothing to re-download if we skip fetch), and
       # per-source by design (a wipe is an explicit, named decision).
+      raise Thor::Error, "sync: --fetch-only contradicts --parse-only" if options[:fetch_only] && options[:parse_only]
+
       if options[:redownload]
         raise Thor::Error, "sync: --redownload contradicts --parse-only" if options[:parse_only]
         raise Thor::Error, "sync: --redownload is per-source — name one slug" if options[:all] || options[:axis]
@@ -11692,8 +11697,8 @@ module Nabu
         if (eta = Nabu::Eta.last_sync(ledger, slug: slug))
           say "#{slug}: last sync took #{Nabu::Eta.format_seconds(eta.seconds)}"
         end
-        outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
-                                    progress: progress_reporter)
+        outcome = runner.sync(slug, parse_only: options[:parse_only], fetch_only: options[:fetch_only],
+                                    force: options[:force], progress: progress_reporter)
         finish_progress
         raise Thor::Error, "#{slug}: #{outcome.breaker.message}" if outcome.aborted?
 
@@ -11822,8 +11827,8 @@ module Nabu
       # summary line names the enabled scope honestly.
       def sync_all(runner, enabled:)
         filter = options[:parse_only] ? nil : enabled
-        results = runner.sync_all(parse_only: options[:parse_only], force: options[:force],
-                                  progress: progress_reporter, enabled: filter)
+        results = runner.sync_all(parse_only: options[:parse_only], fetch_only: options[:fetch_only],
+                                  force: options[:force], progress: progress_reporter, enabled: filter)
         finish_progress
         return say("Nothing to sync: no wired, auto-cadence sources.") if results.empty?
 
@@ -11912,7 +11917,9 @@ module Nabu
       # re-run). Failures (and ManualDrop acquisition cards) are contained
       # so the requested sync still runs.
       def auto_sync_core!(runner, registry, slug, db, extra: [])
-        return if options[:parse_only]
+        # fetch-only defers all loading, so the core pre-sweep (which loads)
+        # defers with it — the deferred parse's own sync runs it.
+        return if options[:parse_only] || options[:fetch_only]
 
         members = registry.core_members
         # A request that IS the core sweep (the group, or a member by name)
@@ -12259,6 +12266,9 @@ module Nabu
                     "parse-only"
                   end
         report = outcome.load_report
+        # --fetch-only: no load ran — say so instead of rendering nil counts.
+        return "#{outcome.slug.ljust(24)} #{fetched}  parse+load deferred (fetch-only)" if report.nil?
+
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
