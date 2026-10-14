@@ -857,6 +857,26 @@ sources:
     script: {posture: qualified, note: "measured: the text lane is a Latin TRANSLITERATION
         (onw in Latn — 7,450 Latin letters, zero Coptic-block characters); the manuscripts'
         Coptic-derived Old Nubian alphabet is not carried. Metadata script Latn"}
+  stgall-priscian:   # P126
+    # kind: machine-postured — kind_map.yml source_kind scholarly/commentary.
+    lect: {posture: dates, note: "measured mix (full dump, 2026-10-14): passages sga 3,524 /
+        lat 9,871 — per gloss, upstream's irish flag plus 422 Latin-flagged glosses whose words
+        are mostly analysed Old Irish forms; 3,800 construe/symbol glosses abstain from the
+        page vote → 198 lat + 41 sga page documents. Every page dates 850–851, so the date-band
+        grain stages the lat pages to lat:med; sga is a bare banded node (to 900) with no
+        stages and stays sga — the corph shape on the same desk. The page grain is declared
+        coarse: the per-gloss language rides the passages"}
+    dating: {posture: dated, note: "the manuscript's copying, AD 850–1, upstream's own
+        statement (home_text.php: 'written by Irish scribes in 850–1, probably in Ireland') —
+        one artifact envelope on every page (:structured lane); glosses older than the copy
+        are not separated upstream"}
+    places: {posture: named, note: "orig_place 'Ireland (?)' — upstream's hedge 'probably in
+        Ireland', uncertainty verbatim (the ReM convention); St Gallen is the holding library
+        ('reaching St Gall sometime after 888') and rides 'repository' only, never a place
+        claim"}
+    script: {posture: implied, note: "Latin script for both lat and sga (metadata script
+        Latn); Priscian's Greek examples put Greek letters in 250 glosses (0.7% of letters) —
+        declared, not a second script lane"}
   altaica-shm:   # P107-7
     kind: {posture: unclassified}
     lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}
