@@ -3542,6 +3542,25 @@ okhc:   # P91-1, 02-sources row 189
   # Re-syncs owner-fired (the deposit versions via HF; conditional GETs
   # make an unchanged re-sync cheap).
 
+old-nubian-ud:
+  adapter: Nabu::Adapters::OldNubianUd
+  adopted: "2026-10-14"
+  axes: [africa]
+  wired: false   # flips after the first real sync is verified (expect 1 document /
+                 # 124 passages / 1,544 syntactic words)
+  sync_policy: manual
+  # The Old Nubian UD treebank (github.com/Innokentii-Smirnov/
+  # OldNubianUDTreebank): 124 sentences of medieval Old Nubian (onw) in
+  # Latin transliteration — the Miracle of Saint Menas, a homily on
+  # church offerings, short scriptural fragments — with UD annotation and
+  # a MISC morpheme layer (MSeg/MGloss/Gloss); Russian and English
+  # translation comments. One file → one document, passages by sent_id;
+  # the repo's segmentation sidecars are tooling, censused, not ingested.
+  # LICENSE.txt (the repository author, Innokentii Smirnov, 2026-10-13),
+  # verbatim: "The treebank is licensed under the Attribution-
+  # NonCommercial-ShareAlike 4.0 International." → CC BY-NC-SA 4.0 → nc
+  # (grant verified 2026-10-14).
+
 old-tibetan:
   adapter: Nabu::Adapters::OldTibetan
   adopted: "2026-07-28"

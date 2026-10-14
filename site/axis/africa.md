@@ -7,18 +7,19 @@ description: >-
 
 > The Africanist — Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse.
 
-Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, and the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai.
+Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai — and the Old Nubian UD treebank, the medieval Nile kingdoms' language parsed word by word.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 October 2026)</span> |
 |---|---|---|---|---|
 | `africa-pd` | texts | open | wired · manual | 10 docs / 3,536 passages |
 | `bu-ajami` | texts | nc | wired · manual | 80 docs / 705 passages |
+| `old-nubian-ud` | texts | nc | not yet wired | nothing held yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `fuf` 20 · `ha` 20 · `mnk` 20 · `wo` 20 · `eng` 6 · `fra` 2 · `deu` 1 · `sw` 1.
 

@@ -1,0 +1,126 @@
+# sent_id = 0
+# text = ṅokkora khristosin martyros-u-ṅiss-u-minana awsa-lo tillin tokinnawėlo amin
+# translation = Чудо, которое совершил св. мученик Христов Мина. В милости божией, аминь.
+1	ṅokkora	ṅokkor	NOUN	_	Case=Abs|Number=Sing	0	root	_	Gloss=чудо|MGloss=чудо-ABS|MSeg=ṅokkor-a
+2	khristosin	khristosi	NOUN	_	Case=Gen|Number=Sing	3	nmod	_	Gloss=Христос|MGloss=Христос-GEN|MSeg=khristosi-n
+3-6	martyros-u-ṅiss-u-minana	_	_	_	_	_	_	_	_
+3	martyrosu	martyrosi	NOUN	_	Case=Gen|Number=Sing	7	nsubj	_	Gloss=мученик|MGloss=мученик|MSeg=martyrosu
+4	ṅissu	ṅiss(i)	ADJ	_	_	3	amod	_	Gloss=святой|MGloss=святой|MSeg=ṅissu
+5	mina	mina	NOUN	_	_	3	appos	_	Gloss=Мина|MGloss=Мина|MSeg=mina
+6	na	_	ADP	_	_	3	case	_	MGloss=GEN|MSeg=na
+7-8	awsa-lo	_	_	_	_	_	_	_	_
+7	awsa	aw-	VERB	_	Case=Abs|Number=Sing|Tense=Past|VerbForm=Part	1	acl:relcl	_	Gloss=делать|MGloss=делать-PST-PTCP-ABS|MSeg=aw-s-a
+8	lo	_	PART	_	_	1	advmod	_	MSeg=lo
+9	tillin	till(i)	NOUN	_	Case=Gen|Number=Sing	10	nmod	_	Gloss=бог|MGloss=бог-GEN|MSeg=tilli-n
+10	tokinnawėlo	tokinnawė	NOUN	_	Case=Loc|Number=Sing	11	obl	_	Gloss=мир, милость|MGloss=мир, милость-LOC|MSeg=tokinnawė-lo
+11	amin	_	INTJ	_	_	1	parataxis	_	Gloss=аминь|MGloss=аминь|MSeg=amin
+
+# sent_id = 1
+# text = ontakraguė-ke
+# translation = Возлюбленные!
+1-2	ontakraguė-ke	_	_	_	_	_	_	_	_
+1	ontakraguė	on-	VERB	_	Aspect=Imp|Case=Abs|Number=Plur|VerbForm=Part|Voice=Pass	0	root	_	Gloss=любить|MGloss=любить-PASS-IPFV-PTCP-PL-ABS|MSeg=on-tak-ra-gu-ė
+2	ke	_	PART	_	_	1	advmod	_	MSeg=ke
+
+# sent_id = 2
+# text = ittuwello dippuwella duȧra ȧlexandren šikgula
+# translation = Некая женщина жила в некоем городе, в округе Александрия.
+1-3	ittuwello	_	_	_	_	_	_	_	_
+1	ittu	itt	NOUN	_	Case=Nom|Number=Sing	7	nsubj	_	Gloss=женщина|MGloss=женщина|MSeg=ittu
+2	wel	wel	DET	_	_	1	det	_	Gloss=один; некий|MGloss=один; некий|MSeg=wel
+3	lo	_	PART	_	_	1	advmod	_	MSeg=lo
+4-6	dippuwella	_	_	_	_	_	_	_	_
+4	dippu	dipp(i)	NOUN	_	Case=Ine|Number=Sing	7	obl	_	Gloss=город, селение|MGloss=город, селение|MSeg=dippu
+5	wel	wel	DET	_	_	4	det	_	Gloss=один; некий|MGloss=один; некий|MSeg=wel
+6	la	_	ADP	_	_	4	case	_	MGloss=INE|MSeg=la
+7	duȧra	du-	VERB	_	Aspect=Imp|VerbForm=Conv	0	root	_	Gloss=быть, пребывать|MGloss=быть, пребывать-IPFV-CVB|MSeg=du-ȧr-a
+8	ȧlexandren	_	NOUN	_	Case=Gen|Number=Sing	9	nmod	_	Gloss=Александрия|MGloss=Александрия-GEN|MSeg=ȧlexandre-n
+9	šikgula	šik	NOUN	_	Case=Ine|Number=Plur	7	obl	_	Gloss=округ, область, окрестность|MGloss=округ, область, окрестность-PL-INE|MSeg=šik-gu-la
+
+# sent_id = 6
+# text = inṅeynǧuriȧ iȧyon tan aylla maïkarisna
+# translation = Из-за этого, (зная это?), она стыдилась в сердце своем.
+1-3	inṅeynǧuriȧ	_	_	_	_	_	_	_	_
+1	in	in	DET	_	_	2	det	_	Gloss=этот|MGloss=этот|MSeg=in
+2	ṅeyn	ṅey	NOUN	_	Case=Gen|Number=Sing	8	obl	_	Gloss=вещь, дело|MGloss=вещь, дело-GEN|MSeg=ṅey-n
+3	ǧuriȧ	_	ADP	_	_	2	case	_	Gloss=из-за; потому что|MGloss=из_за; потому что|MSeg=ǧuriȧ
+4-5	iȧyon	_	_	_	_	_	_	_	_
+4	iȧ	iȧ-	VERB	_	VerbForm=Conv	8	advcl	_	Gloss=знать|MGloss=знать-CVB|MSeg=i-ȧ
+5	lon	_	CCONJ	_	_	4	cc	_	Gloss=а, и, но|MGloss=а, и, но|MSeg=lon
+6	tan	tar	PRON	_	Case=Gen|Number=Sing|PronType=Prs	7	nmod	_	Gloss=он, она, оно|MGloss=он, она, оно-GEN|MSeg=tar-n
+7	aylla	ay	NOUN	_	Case=Ine|Definite=Def|Number=Sing	8	obl	_	Gloss=сердце, душа|MGloss=сердце, душа-DEF-INE|MSeg=ay-l-la
+8	maïkarisna	maïk-	VERB	_	Aspect=Imp|Number=Sing|Person=3|Tense=Past	0	root	_	Gloss=стыдиться|MGloss=стыдиться-IPFV-PST-3SG|MSeg=maïk-ar-is-na
+
+# sent_id = 75
+# text = mna ulgrimena ke partakokka tillika [*****]titta mēȧ kural tiǧǧika sin tillil unnasin
+# translation = Have ye not heard that which is written, "... gift ... God, him that giveth cheerfully God loveth"?
+1	mna	_	PART	_	Mood=Int	2	advmod	_	Gloss=Lat. nonn|MGloss=Lat. nonn-INT|MSeg=mna
+2	ulgrimena	ulgir-	VERB	_	Polarity=Neg|VerbForm=Conv	0	root	_	Gloss=hear|MGloss=hear-NEG-CVB|MSeg=ulgri-men-a
+3	ke	_	PART	_	_	2	advmod	_	MSeg=ke
+4	partakokka	par-	VERB	_	Case=Acc|Definite=Def|Number=Sing|VerbForm=Vnoun	2	obj	_	Gloss=write|MGloss=write-NMLZ-SG-DEF-ACC|MSeg=par-tako-l-ka
+5	tillika	till	NOUN	_	Case=Acc|Number=Sing	6	obj	_	Gloss=God|MGloss=God-ACC|MSeg=tilli-ka
+6	[*****]titta	_	VERB	_	_	4	ccomp	_	Gloss=?|MGloss=?|MSeg=[*****]titta
+7	mēȧ	_	AUX	_	_	6	cop	_	MSeg=mēȧ
+8	kural	kur-	VERB	_	VerbForm=Part	9	advcl	_	Gloss=be willing, be glad|MGloss=be willing, be glad-PTCP|MSeg=kura-l
+9	tiǧǧika	tir-	VERB	_	Case=Acc|Number=Sing|Number[obj]=Plur|VerbForm=Part	12	obj	_	Gloss=give|MGloss=give-PL.O-PTCP-ACC|MSeg=tiǧ-ǧ-ika
+10	sin	_	SCONJ	_	_	12	mark	_	Gloss=|MSeg=sin
+11	tillil	till	NOUN	_	Case=Nom|Definite=Def|Number=Sing	12	nsubj	_	Gloss=God|MGloss=God-DEF|MSeg=tilli-l
+12	unnasin	unna-	VERB	_	Number=Sing|Person=3|Subordinative=Yes|Tense=Past	6	ccomp	_	Gloss=love|MGloss=love-PST-3SG.SUB|MSeg=unna-s-in
+
+# sent_id = 100
+# text = ale sin wel tdir kapa koreka eten dīol kapildal lo pikitk unna
+# translation = Verily a donor (?) who has eaten and received the sacrament loveth (?) light with the eater of the dead (?).
+1	ale	_	ADV	_	_	12	advmod	_	Gloss=verily|MGloss=verily|MSeg=ale
+2	sin	_	SCONJ	_	_	12	mark	_	MSeg=sin
+3-4	wel-tdir	_	_	_	_	_	_	_	CorrectForm=wel-tril
+3	wel	_	DET	_	PronType=Ind	4	det	_	Gloss=one|MGloss=one|MSeg=wel
+4	tdir	tir-	VERB	_	Case=Nom|Number=Sing|VerbForm=Part	12	nsubj	_	CorrectForm=tril|Gloss=give (to you or them)|MGloss=give (to you or them)-PTCP|MSeg=tdir
+5	kapa	kap-	VERB	_	VerbForm=Conv	7	advcl	_	Gloss=eat|MGloss=eat-CVB|MSeg=kap-a
+6	koreka	kore	NOUN	_	Case=Acc|Number=Sing	7	obj	_	Gloss=feast, sacrament|MGloss=feast, sacrament-ACC|MSeg=kore-ka
+7	eten	et-	VERB	_	Subordinative=Yes|VerbForm=Conv	12	advcl	_	Gloss=take, receive|MGloss=take, receive-CVB.SUB|MSeg=et-en
+8	dīol	dīol	NOUN	_	_	9	compound	_	Gloss=dead|MGloss=dead|MSeg=dīol
+9	kapildal	kap-	VERB	_	Case=Com|Number=Sing|VerbForm=Part	12	obl	_	Gloss=eat|MGloss=eat-PTCP-COM|MSeg=kap-il-dal
+10	lo	_	PART	_	_	9	advcl	_	MSeg=lo
+11	pikitk	pikit	NOUN	_	Case=Acc|Number=Sing	12	obj	_	Gloss=light|MGloss=light-ACC|MSeg=pikit-ka
+12	unna	un-	VERB	_	Number=Sing|Person=3|Tense=Pres	0	root	_	Gloss=love|MGloss=love-3SG|MSeg=un-na
+
+# sent_id = 106
+# text = ītu kissela pesil appa tillil ukkatta sin
+# translation = For the man that speaketh in the church is the enemy of God.
+1	ītu	īt	NOUN	_	Case=Nom|Number=Sing	6	nsubj	_	Gloss=person|MGloss=person|MSeg=ītu
+2	kissela	kisse	NOUN	_	Case=Ine|Number=Sing	3	obl:loc	_	Gloss=church|MGloss=church-INE|MSeg=kisse-la
+3	pesil	pes-	VERB	_	Tense=Pres|VerbForm=Part	1	acl	_	Gloss=say|MGloss=say-PTCP|MSeg=pes-il
+4	appa	_	SCONJ	_	_	6	mark	_	Gloss=for|MGloss=for|MSeg=appa
+5	tillil	till	NOUN	_	Case=Gen|Number=Sing	6	nmod	_	CorrectForm=tillin (?)|Gloss=God|MGloss=God-GEN|MSeg=tilli-l
+6	ukkatta	ukkatt	NOUN	_	Case=Abs|Number=Sing	0	root	_	Gloss=enemy|MGloss=enemy-ABS|MSeg=ukkatt-a
+7	sin	_	SCONJ	_	_	6	mark	_	MSeg=sin
+
+# sent_id = 118
+# text = [p]estakol kiriṅi[kon] no ȧ lō
+# translation = 
+1	[p]estakol	pes-	VERB	_	Tense=Pqp|VerbForm=Conv|Voice=Pass	2	nsubj	_	Gloss=say|MGloss=say-PASS-PLUPRF-CVB|MSeg=[p]es-tak-o-l
+2	kiriṅi[kon]	kiriṅ-	VERB	_	Mood=Cnd|Number=Sing|Person=3|Subordinative=Yes	0	root	_	Gloss=complete, finish|MGloss=complete, finish-CND-3SG.SUB|MSeg=kiriṅi-[ko-n]
+3	no	_	PART	_	Mood=Cnd	2	advmod	_	MGloss=CND|MSeg=no
+4	ȧ	_	PART	_	Mood=Sub	2	advmod	_	MGloss=SBJV|MSeg=ȧ
+5	lō	_	PART	_	_	0	advmod	_	MSeg=lō
+
+# sent_id = 121
+# text = tan taṅiska emmanuēla okarrana ȧ
+# translation = And they called him Emmanuel.
+1	tan	tar	PRON	_	Case=Gen|Number=Sing|Person=3|PronType=Prs	2	nmod	_	Gloss=he|MGloss=he-GEN|MSeg=tar-n
+2	taṅiska	taṅis	NOUN	_	Case=Acc|Number=Sing	4	obj	_	Gloss=name|MGloss=name-ACC|MSeg=taṅis-ka
+3	emmanuēla	emmanuēl	NOUN	_	Case=Abs|Number=Sing	4	iobj	_	Gloss=Emmanuel|MGloss=Emmanuel-ABS|MSeg=emmanuēl-a
+4	okarrana	ok-	VERB	_	Number=Plur|Person=3|Tense=Fut	0	root	_	Gloss=call, summon, name|MGloss=call, summon, name-FUT-3PL|MSeg=ok-arr-ana
+5	ȧ	_	PART	_	Mood=Sub	4	advmod	_	MGloss=SBJV|MSeg=ȧ
+
+# sent_id = 124
+# text = ṅodin aggelosnȧ takka murtat esin kellika awȧ
+# translation = 
+1	ṅodin	ṅod	NOUN	_	Case=Gen|Number=Sing	2	nmod	_	Gloss=Lord|MGloss=Lord-GEN|MSeg=ṅod-in
+2	aggelosnȧ	aggelos	NOUN	_	Case=Gen|Number=Sing	3	nmod	_	Gloss=angel|MGloss=angel-GEN|MSeg=aggelos-nȧ
+3	takka	tar	PRON	_	Case=Acc|Number=Sing|Person=3|PronType=Prs	4	obj	_	Gloss=he|MGloss=he-ACC|MSeg=tar-ka
+4	murtat	murt-	VERB	_	VerbForm=Conv	7	advcl	_	Gloss=warn|MGloss=warn-CVB|MSeg=murt-at
+5	esin	_	CCONJ	_	_	7	cc	_	MSeg=esin
+6	kellika	kell	NOUN	_	Case=Acc|Number=Sing	7	obj	_	Gloss=likeness|MGloss=likeness-ACC|MSeg=kell-ika
+7	awȧ	aw-	VERB	_	VerbForm=Conv	0	root	_	Gloss=do, make|MGloss=do, make-CVB|MSeg=aw-ȧ
+
