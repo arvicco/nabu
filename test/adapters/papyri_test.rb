@@ -343,7 +343,7 @@ class PapyriTest < Minitest::Test
     refute_nil entry, "papyri-ddbdp must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Papyri, entry.adapter_class
     assert_equal "papyri-ddbdp", entry.manifest.id
-    assert_equal "manual", entry.sync_policy
+    assert_equal "auto", entry.sync_policy, "re-promoted to the auto sweep after the switchover migration"
     assert_equal Nabu::Adapters::Papyri.manifest, entry.manifest
   end
 
