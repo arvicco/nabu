@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="https://epidoc.stoa.org/schema/8.16/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<TEI xmlns="http://www.tei-c.org/ns/1.0"
-     n="0020;3;457"
-     xml:id="o.claud.3.457"
-     xml:lang="en">
+<TEI xmlns="http://www.tei-c.org/ns/1.0" n="0008;;101" xml:id="chrest.wilck.101" xml:lang="en">
    <teiHeader>
       <fileDesc>
          <titleStmt>
-            <title>o.claud.3.457</title>
+            <title>chrest.wilck.101</title>
          </titleStmt>
          <publicationStmt>
             <authority>Duke Collaboratory for Classics Computing (DC3)</authority>
-            <idno type="filename">o.claud.3.457</idno>
-            <idno type="ddb-perseus-style">0020;3;457</idno>
-            <idno type="ddb-hybrid">o.claud;3;457</idno>
-            <idno type="HGV">73640</idno>
-            <idno type="TM">73640</idno>
+            <idno type="filename">chrest.wilck/101</idno>
+            <idno type="ddb-perseus-style">0008;;101</idno>
+            <idno type="ddb-hybrid">chrest.wilck;;101</idno>
+            <idno type="HGV">3290</idno>
+            <idno type="TM">3290</idno>
             <availability>
                <p>© Duke Databank of Documentary Papyri. This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</ref>.</p>
             </availability>
          </publicationStmt>
-         <sourceDesc>
-            <p/>
-         </sourceDesc>
+         <sourceDesc><bibl>chrest.wilck/101</bibl></sourceDesc>
       </fileDesc>
       <profileDesc>
          <langUsage>
@@ -41,14 +36,12 @@
    </teiHeader>
    <text>
       <body>
-         <head n="73640" xml:lang="en">
-            <date>ca. AD 137</date>
-            <placeName>Mons Claudianus</placeName>
+         <head xml:lang="en">
+            <date>222 BC</date>
+            <placeName>Arsinoite</placeName>
+            <ref n="p.enteux;;13" type="reprint-in">P.Enteux. 13</ref>
          </head>
-         <div xml:lang="grc" type="edition" xml:space="preserve"><ab>
-    <lb n="1"/><del rend="erasure">Κύνων Ζήνωνος Εἰσίω-</del>
-
-    <lb n="2"/><del rend="erasure">νι χαίρειν. ὁμολογῶ <app type="alternative"><lem>πα<unclear>ρ</unclear></lem><rdg>πα<unclear>ι</unclear></rdg></app></del></ab></div>
+         <div xml:lang="grc" type="edition" xml:space="preserve"><ab/></div>
       </body>
    </text>
 </TEI>

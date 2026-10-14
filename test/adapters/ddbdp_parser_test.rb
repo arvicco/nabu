@@ -13,10 +13,13 @@ require "digest"
 # render del in Leiden double brackets ⟦…⟧ — owner-ruled 2026-08-10, conventions.md §5 —
 # gap → "[…]" marker, line = passage).
 class DdbdpParserTest < Minitest::Test
-  FIXTURES = File.expand_path("../fixtures/ddbdp/DDB_EpiDoc_XML", __dir__)
-  BGU102 = File.join(FIXTURES, "bgu", "bgu.1", "bgu.1.102.xml")
-  BGU100 = File.join(FIXTURES, "bgu", "bgu.1", "bgu.1.100.xml")
-  CEL10 = File.join(FIXTURES, "c.epist.lat", "c.epist.lat.10.xml")
+  # The upstream layout since the 2026-07 switchover (see the Papyri adapter
+  # header): curated texts under DDbDP/<HGV-thousand>/<HGV>.xml, texts not
+  # yet curated under Historical/<collection>/(<volume>/)?<number>.xml.
+  FIXTURES = File.expand_path("../fixtures/ddbdp", __dir__)
+  BGU102 = File.join(FIXTURES, "DDbDP", "8", "8877.xml")
+  BGU100 = File.join(FIXTURES, "DDbDP", "8", "8875.xml")
+  CEL10 = File.join(FIXTURES, "Historical", "c.epist.lat", "10.xml")
 
   BGU102_URN = "urn:nabu:ddbdp:bgu:1:102"
   BGU100_URN = "urn:nabu:ddbdp:bgu:1:100"
@@ -24,22 +27,22 @@ class DdbdpParserTest < Minitest::Test
   # ";"→":" minting rule preserves it as an empty urn segment ("::").
   CEL10_URN = "urn:nabu:ddbdp:c.epist.lat::10"
 
-  # P5-1 fixtures (copied whole 2026-07-04 from the locally synced snapshot;
+  # P5-1 fixtures (re-cut whole from the post-switchover upstream tree;
   # see test/fixtures/papyri-ddbdp/README.md): the line-number-restart
   # exemplar and a genuinely text-less cross-reference stub.
-  PAPYRI_FIXTURES = File.expand_path("../fixtures/papyri-ddbdp/DDB_EpiDoc_XML", __dir__)
-  AEG240 = File.join(PAPYRI_FIXTURES, "aegyptus", "aegyptus.89", "aegyptus.89.240.xml")
-  CW101 = File.join(PAPYRI_FIXTURES, "chrest.wilck", "chrest.wilck.101.xml")
+  PAPYRI_FIXTURES = File.expand_path("../fixtures/papyri-ddbdp", __dir__)
+  AEG240 = File.join(PAPYRI_FIXTURES, "DDbDP", "25", "25457.xml")
+  CW101 = File.join(PAPYRI_FIXTURES, "Historical", "chrest.wilck", "101.xml")
 
   AEG240_URN = "urn:nabu:ddbdp:aegyptus:89:240"
   CW101_URN = "urn:nabu:ddbdp:chrest.wilck::101"
 
-  # P6-2 fixture (copied whole 2026-07-04, same provenance as the others):
+  # P6-2 fixture (re-cut whole, same provenance as the others):
   # the cancelled-but-legible exemplar — every line of the edition sits
   # inside <del rend="erasure">. Under the original blanket drop-<del>
   # policy it quarantined; P6-2 recovered it via a document-scoped
   # fallback; the owner ruling of 2026-08-10 made the ⟦…⟧ rendering unconditional.
-  OC457 = File.join(PAPYRI_FIXTURES, "o.claud", "o.claud.3", "o.claud.3.457.xml")
+  OC457 = File.join(PAPYRI_FIXTURES, "DDbDP", "73", "73640.xml")
   OC457_URN = "urn:nabu:ddbdp:o.claud:3:457"
 
   def parser

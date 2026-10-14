@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://epidoc.stoa.org/schema/8.23/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://papyri.info/schemas/papyri.info.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://papyri.info/schemas/papyri.info.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="m316777" xml:lang="en">
    <teiHeader>
       <fileDesc>
@@ -14,7 +15,7 @@
             <idno type="filename">316777</idno>
             <idno type="dclp-hybrid">tm;;316777</idno>
             <availability>
-               <p>© Digital Corpus of Literary Papyri. This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</ref>.</p>
+               <p>© Digital Corpus of Literary Papyri and LDAB (Trismegistos). This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</ref>.</p>
             </availability>
          </publicationStmt>
          <sourceDesc>
@@ -82,23 +83,17 @@
       </revisionDesc>
    </teiHeader>
    <text>
-      <body>
-         <div type="bibliography" subtype="ancientEdition">
+      <body><head><ref n="533771"><title>Jones [http://www.bricecjones.com/blog/a-coptic-new-testament-papyrus-fragment-galatians-2-for-sale-on-ebay] descr.</title><date>2012</date></ref></head><div type="bibliography" subtype="ancientEdition">
             <listBibl>
                <bibl type="publication" subtype="ancient">
                   <author>Testamentum Novum, Paulus (Coptic)</author>
-                  <title type="main"
-                         level="m"
-                         ref="http://www.trismegistos.org/authorwork/3148">Epistula ad Galatas</title>
+                  <title type="main" level="m" ref="http://www.trismegistos.org/authorwork/3148">Epistula ad Galatas</title>
                </bibl>
             </listBibl>
-         </div>
-         <div type="edition" xml:space="preserve" xml:lang="cop"/>
-         <div type="bibliography" subtype="illustrations">
+         </div><div type="edition" xml:space="preserve" xml:lang="cop"/><div type="bibliography" subtype="illustrations">
             <listBibl>
                <bibl type="printed">http://thequaternion.blogspot.ca/2012/10/a-coptic-new-testament-papyrus-fragment.html</bibl>
             </listBibl>
-         </div>
-      </body>
+         </div></body>
    </text>
 </TEI>
