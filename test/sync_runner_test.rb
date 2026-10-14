@@ -700,6 +700,46 @@ class SyncRunnerTest < Minitest::Test
                  "a pending (crashed) slice must refresh despite the no-op load"
   end
 
+  # The pending marker's blind spot (live 2026-10-14): a sync whose load
+  # LANDS rows but dies BEFORE the reindex step ever starts mints no
+  # slice row at all (the marker is written at refresh start), so the
+  # pending check sees nothing and the P110-1 skip freezes a
+  # never-indexed source out of search forever. The skip now also probes
+  # the index for the source's max live passage id — absent means the
+  # index is behind the catalog regardless of markers.
+  def test_idempotent_resync_reindexes_when_the_slice_never_started
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    # Simulate the load-landed-reindex-never-ran state: the source's fts
+    # rows gone AND no slice row (not a pending one — none at all).
+    max_id = Nabu::Store::Passage.dataset.max(:id)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      fulltext[:passages_fts].where(rowid: max_id).delete
+      if fulltext.table_exists?(Nabu::Store::Indexer::SLICE_REFRESHES_TABLE)
+        fulltext[Nabu::Store::Indexer::SLICE_REFRESHES_TABLE]
+          .where(slug: "breaker").delete
+      end
+    ensure
+      fulltext.disconnect
+    end
+
+    outcome = runner.sync("breaker")
+
+    assert_equal 1, outcome.load_report.skipped, "the load itself is still a no-op"
+    assert_equal 1, outcome.indexed,
+                 "a never-indexed slice must refresh despite the no-op load"
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      assert_equal 1, fulltext[:passages_fts].where(rowid: max_id).count,
+                   "the refresh healed the missing row"
+    ensure
+      fulltext.disconnect
+    end
+  end
+
   # P112-1: a content-bearing resync refreshes at the DELTA grain —
   # only the rows the load changed are rewritten. The proof is a tampered
   # fts row of an UNCHANGED passage: the old slice rewrite would heal it
