@@ -5021,8 +5021,9 @@ stgall-priscian:
   adapter: Nabu::Adapters::StgallPriscian
   adopted: "2026-10-14"
   axes: [celtic]
-  wired: false   # flips after the first real sync is verified (expect 239 documents /
-                 # 13,395 passages: sga 3,524 · lat 9,871; 17,526 gold sga tokens)
+  wired: true    # first sync verified 2026-10-14: 239 documents / 13,395 passages
+                 # (sga 3,524 · lat 9,871), 0 errors, 4s — the expected counts
+                 # exactly; eyeballed (p1:9 ".i. libardaib" renders sga)
   sync_policy: manual
   # The St Gall Priscian glosses (St Gallen, Stiftsbibliothek 904, copied
   # AD 850–1): the edition v2.1 (2023) of Rijcklof Hofman, Pádraic Moran
