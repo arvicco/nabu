@@ -10414,12 +10414,16 @@ module Nabu
           lines << "#{card.corpus['signs']} sign(s) across #{card.corpus['passages']} " \
                    "passage(s) (#{Nabu::Query::HieroCard::HIERO_SOURCES.keys.join(' + ')} annotations)"
         end
-        # The AED per-text postings (P103-2) — text grain, its own line.
-        if card.corpus["aed_texts"]
-          lines << "#{card.corpus['aed_signs']} sign(s) across #{card.corpus['aed_texts']} " \
-                   "text(s) (aed hieroglyph transcriptions)"
-        end
+        # The AED per-text postings (P103-2) — text grain, its own line,
+        # with the word-token grain and the damaged (<unclear>) share.
+        lines << format_aed_hiero_postings(card.corpus) if card.corpus["aed_texts"]
         say "in the wild: #{lines.join(' · ')}"
+      end
+
+      def format_aed_hiero_postings(corpus)
+        damaged = corpus["aed_unclear"].to_i.positive? ? ", #{corpus['aed_unclear']} damaged" : ""
+        "#{corpus['aed_signs']} sign(s) in #{corpus['aed_words']} word(s) across " \
+          "#{corpus['aed_texts']} text(s)#{damaged} (aed hieroglyph transcriptions)"
       end
 
       # The Edubba overlay section (P72-6). The certainty grade is

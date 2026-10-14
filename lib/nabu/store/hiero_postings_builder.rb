@@ -25,6 +25,9 @@ module Nabu
       # extension (U+13000–1345F, the Unikemet space the sign cards key).
       GLYPH = /[\u{13000}-\u{1345F}]/
       BODY = %r{<body>(.*)</body>}m
+      # The finer grain (migration 042): word tokens and damaged runs.
+      WORD = %r{<w\b[^>]*>(.*?)</w>}m
+      UNCLEAR = %r{<unclear>(.*?)</unclear>}m
 
       Summary = Data.define(:texts, :glyphs, :rows)
 
@@ -35,26 +38,34 @@ module Nabu
         files = hiero_files(canonical_dir)
         return Summary.new(texts: 0, glyphs: 0, rows: 0) if files.empty?
 
-        texts_by_glyph = Hash.new(0)
-        signs_by_glyph = Hash.new(0)
+        tallies = Hash.new { |hash, glyph| hash[glyph] = { texts: 0, signs: 0, words: 0, unclear: 0 } }
         scanned = 0
         files.each do |path|
-          runs = File.read(path, encoding: Encoding::UTF_8)[BODY, 1].to_s.scan(GLYPH)
+          body = File.read(path, encoding: Encoding::UTF_8)[BODY, 1].to_s
           scanned += 1
           progress&.load_tick(scanned, 0) if (scanned % 1000).zero?
-          next if runs.empty?
-
-          runs.tally.each do |glyph, count|
-            texts_by_glyph[glyph] += 1
-            signs_by_glyph[glyph] += count
-          end
+          tally_text(body, tallies)
         end
-        rows = texts_by_glyph.keys.sort.map do |glyph|
-          { glyph: glyph, texts: texts_by_glyph[glyph], signs: signs_by_glyph[glyph] }
-        end
+        rows = tallies.keys.sort.map { |glyph| { glyph: glyph, **tallies[glyph] } }
         rows.each_slice(2_000) { |slice| catalog[TABLE].multi_insert(slice) }
         Summary.new(texts: scanned, glyphs: rows.size,
                     rows: rows.sum { |row| row[:signs] })
+      end
+
+      # One text's contribution: per glyph, the text itself (+texts+),
+      # every occurrence (+signs+), each word token carrying it at least
+      # once (+words+ — the census found every glyph inside a <w>), and
+      # the occurrences read inside <unclear> (+unclear+, damaged).
+      def tally_text(body, tallies)
+        runs = body.scan(GLYPH)
+        return if runs.empty?
+
+        runs.tally.each do |glyph, count|
+          tallies[glyph][:texts] += 1
+          tallies[glyph][:signs] += count
+        end
+        body.scan(WORD) { |(word)| word.scan(GLYPH).uniq.each { |glyph| tallies[glyph][:words] += 1 } }
+        body.scan(UNCLEAR) { |(run)| run.scan(GLYPH).each { |glyph| tallies[glyph][:unclear] += 1 } }
       end
 
       def hiero_files(canonical_dir)
