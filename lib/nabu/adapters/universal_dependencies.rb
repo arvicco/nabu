@@ -121,9 +121,39 @@ module Nabu
         # "CC BY-SA 4.0" (README metadata; LICENSE.txt "Attribution-
         # ShareAlike 4.0 International") → the P10-4 per-document
         # attribution override, the birchbark/RNC mechanics.
+        #
+        # == DipSGG's unreleased layer (not-to-release/)
+        #
+        # Beside the released test set (64 dependency-annotated glosses) the
+        # repo carries not-to-release/incomplete.conllu: 3,406 further
+        # glosses (sent_ids disjoint from the release — together the
+        # collection's 3,470), 21,358 tokens, lemma/UPOS/FEATS but EVERY
+        # HEAD/DEPREL `_` (censused 2026-10-14; the folder's other file,
+        # check_release.py, is a renumbering tool). GRANT: the maintainer,
+        # Adrian Doyle, by email, 2026-10-14 — use of the not-to-release
+        # content with "all the same freedoms and permissions as that of the
+        # main release" (CC BY-NC-SA 4.0 → the source's nc class, no
+        # override); it is unreleased only because unproofed and without
+        # dependency relations yet. The caveats stated with the grant:
+        #   (a) the treebanks use a discrete word-separation method
+        #       (aclanthology.org/2025.cltw-1.1.pdf) not fully
+        #       interoperable with CorPH/POMIC tokenisation;
+        #   (b) the unreleased content was auto-tokenised and POS-tagged
+        #       from the St. Gall Priscian database
+        #       (aclanthology.org/2025.nlp4dh-1.34.pdf), proofing pending,
+        #       errors may remain;
+        #   (c) artificial inter-word spacing stands in the unreleased raw
+        #       text.
+        # The `drafts:` globs mint those files as their own documents
+        # (urn :<file-stem>, the split convention) carrying the DRAFT_MARK
+        # metadata, so the unproofed layer is never mistaken for the
+        # proofed release at query time. DECLARED COARSENESS: lemma_tier is
+        # per source, so the draft layer's lemmas index under ud's gold
+        # default beside the release's; the document-level draft mark is
+        # the honest label until a per-document tier exists.
         "old-irish-dipsgg" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_Irish-DipSGG",
-          language: "sga"
+          language: "sga", drafts: "not-to-release"
         },
         "old-irish-dipwbg" => {
           repo: "https://github.com/UniversalDependencies/UD_Old_Irish-DipWBG",
@@ -446,6 +476,10 @@ module Nabu
         parser_family: "conllu"
       )
 
+      # A treebank row's `drafts:` folder holds content upstream keeps out of
+      # its release (DipSGG's not-to-release/) — minted with this mark.
+      DRAFT_STATUS = "draft-unproofed"
+
       def self.manifest
         MANIFEST
       end
@@ -489,6 +523,7 @@ module Nabu
           language: document_ref.metadata["language"],
           title: document_ref.metadata["title"],
           license_override: document_ref.metadata["license_class"],
+          metadata: draft_metadata(document_ref),
           sentence_comments: true
         )
       end
@@ -552,22 +587,43 @@ module Nabu
 
       def document_refs(workdir)
         TREEBANKS.flat_map do |slug, info|
-          Dir.glob(File.join(workdir, slug, "*.conllu")).map do |path|
-            stem = File.basename(path, ".conllu")
-            metadata = {
-              "language" => info[:language],
-              "treebank" => slug,
-              "title" => "#{repo_name(info[:repo])} (#{stem})"
-            }
-            # Only the treebanks with a declared override carry the key (P10-4);
-            # the legacy ones stay bare so they inherit the source class.
-            metadata["license_class"] = info[:license_class] if info[:license_class]
-            Nabu::DocumentRef.new(
-              source_id: MANIFEST.id, id: "urn:nabu:ud:#{slug}:#{stem}",
-              path: File.expand_path(path), metadata: metadata
-            )
+          released = Dir.glob(File.join(workdir, slug, "*.conllu")).map do |path|
+            document_ref(slug, info, path, draft: false)
           end
+          drafts = info[:drafts] ? Dir.glob(File.join(workdir, slug, info[:drafts], "*.conllu")) : []
+          released + drafts.map { |path| document_ref(slug, info, path, draft: true) }
         end.sort_by(&:id)
+      end
+
+      def document_ref(slug, info, path, draft:)
+        stem = File.basename(path, ".conllu")
+        metadata = {
+          "language" => info[:language],
+          "treebank" => slug,
+          "title" => "#{repo_name(info[:repo])} (#{stem}#{', unreleased draft' if draft})"
+        }
+        # Only the treebanks with a declared override carry the key (P10-4);
+        # the legacy ones stay bare so they inherit the source class.
+        metadata["license_class"] = info[:license_class] if info[:license_class]
+        if draft
+          metadata["edition_status"] = DRAFT_STATUS
+          metadata["drafts_dir"] = info[:drafts]
+        end
+        Nabu::DocumentRef.new(
+          source_id: MANIFEST.id, id: "urn:nabu:ud:#{slug}:#{stem}",
+          path: File.expand_path(path), metadata: metadata
+        )
+      end
+
+      # The draft mark (the skjaervo-khotanese edition_status value),
+      # mirrored as an edition_status facet so `nabu show` prints it on the
+      # card; released documents carry no metadata at all (unchanged).
+      def draft_metadata(document_ref)
+        status = document_ref.metadata["edition_status"]
+        return {} unless status
+
+        { "edition_status" => status,
+          "facets" => { "edition_status" => { "value" => status, "raw" => document_ref.metadata["drafts_dir"] } } }
       end
 
       def repo_name(repo)
