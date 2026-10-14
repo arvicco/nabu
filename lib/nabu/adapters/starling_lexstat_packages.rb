@@ -186,7 +186,10 @@ module Nabu
         "AOC" => %w[njo Ao-Chungli], "AOM" => [nil, "Ao-Mongsen"], "MAO" => %w[nbi Mao],
         "KHE" => %w[nkh Khezhama], "CHO" => %w[nri Chokri], "KHN" => [nil, "Ang.-Khonoma"],
         "KHM" => [nil, "Ang.Kohima"], "MZI" => %w[nme Mzieme], "ZEM" => %w[nzm Zeme], "LIA" => %w[njn Liangmai],
-        "MAR" => %w[nma Maram], "KHO" => [nil, "Khoirao"], "KAB" => %w[nbu Kabui],
+        "MAR" => %w[nma Maram], "KHO" => [nil, "Khoirao"],
+        # KAB "Kabui" = the Rongmei ethnonym -> nbu Rongmei Naga (Glottolog
+        # rong1266; re-verified 2026-10-14).
+        "KAB" => %w[nbu Kabui],
         "ROU" => [nil, "Rourou"], "NUS" => %w[nuf Nusu],
         "SER" => %w[sdp Serdukpen], "SUL" => %w[suv Sulong], "BUG" => %w[bgg Bugun],
         "QIN" => %w[qxs S-Qiang], "QIA" => %w[cng N-Qiang], "MUY" => %w[mvm Muya], "PUM" => [nil, "Pumi1"],
@@ -211,6 +214,9 @@ module Nabu
         "KUI" => %w[kxu Kui], "KUR" => %w[kru Kurukh], "MLT" => %w[mjt Malto], "BRA" => %w[brh Brahui],
         # ruled standard readings (the DED abbreviations)
         "KOT" => %w[kfe Kota], "TOD" => %w[tcx Toda], "TEL" => %w[te Telugu],
+        # KOL = the DED's "Kol." citations, the Wardha/Northwestern variety ->
+        # kfb Northwestern Kolami (Glottolog nort2699, vs nit Southeastern;
+        # re-verified 2026-10-14).
         "KOL" => %w[kfb Kolami], "NAI" => [nil, "Naikri"], "PAR" => %w[pci Parji],
         "GAD" => [nil, "Gadba"], "GON" => %w[gon Gondi], "PEN" => %w[peg Pengo],
         "MAN" => %w[mha Manda], "KUW" => %w[kxv Kuwi]
