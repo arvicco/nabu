@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <xi:include href="NKJP_1M_header.xml"/>
+  <xi:include href="../../KorBa_manual_header.xml"/>
   <TEI>
     <xi:include href="header.xml"/>
     <text xml:id="segm_text" xml:lang="pl">
@@ -51,10 +51,10 @@
             </seg>
             <choice>
               <nkjp:paren>
-                <seg xml:id="segm_1620296694_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,434,6)" nkjp:rejected="true">
+                <seg xml:id="segm_1686762991_1.1-seg" corresp="text.xml#string-range(txt_1.1-ab,434,6)" nkjp:rejected="true">
                   <w>osadzi</w>
                 </seg>
-                <seg xml:id="segm_1620296694_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,440,2)" nkjp:nps="true" nkjp:rejected="true">
+                <seg xml:id="segm_1686762991_1.2-seg" corresp="text.xml#string-range(txt_1.1-ab,440,2)" nkjp:nps="true" nkjp:rejected="true">
                   <w>li</w>
                 </seg>
               </nkjp:paren>
@@ -154,10 +154,10 @@
             </seg>
             <choice>
               <nkjp:paren>
-                <seg xml:id="segm_1620296694_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,641,8)" nkjp:rejected="true">
+                <seg xml:id="segm_1686762991_1.3-seg" corresp="text.xml#string-range(txt_1.1-ab,641,8)" nkjp:rejected="true">
                   <w>rozsadza</w>
                 </seg>
-                <seg xml:id="segm_1620296694_1.4-seg" corresp="text.xml#string-range(txt_1.1-ab,649,1)" nkjp:nps="true" nkjp:rejected="true">
+                <seg xml:id="segm_1686762991_1.4-seg" corresp="text.xml#string-range(txt_1.1-ab,649,1)" nkjp:nps="true" nkjp:rejected="true">
                   <w>ć</w>
                 </seg>
               </nkjp:paren>

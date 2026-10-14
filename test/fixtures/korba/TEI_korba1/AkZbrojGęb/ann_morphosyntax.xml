@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <xi:include href="NKJP_1M_header.xml"/>
+  <xi:include href="../../KorBa_manual_header.xml"/>
   <TEI>
     <xi:include href="header.xml"/>
     <text xml:id="morph_text" xml:lang="pl">
@@ -278,15 +278,15 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1.8.2.1-msd" value="gen:nwok"/>
-                        <symbol xml:id="morph_1.8.2.2-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.8.2.1-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.8.2.2-msd" value="gen:nwok"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
                 <f name="disamb">
                   <fs type="tool_report">
-                    <f fVal="#morph_1.8.2.1-msd" name="choice"/>
+                    <f fVal="#morph_1.8.2.2-msd" name="choice"/>
                     <f name="interpretation">
                       <string>z:prep:gen:nwok</string>
                     </f>
@@ -356,7 +356,10 @@
                       <symbol value="praet"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1.10.1.1-msd" value="sg:n:imperf"/>
+                      <vAlt>
+                        <symbol xml:id="morph_1.10.1.1-msd" value="sg:n:imperf"/>
+                        <symbol xml:id="morph_1.10.1.2-msd" value="sg:n:perf"/>
+                      </vAlt>
                     </f>
                   </fs>
                   <fs xml:id="morph_1.10.2-lex" type="lex">
@@ -1124,7 +1127,10 @@
                       <symbol value="praet"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1.28.1.1-msd" value="sg:n:imperf"/>
+                      <vAlt>
+                        <symbol xml:id="morph_1.28.1.1-msd" value="sg:n:imperf"/>
+                        <symbol xml:id="morph_1.28.1.2-msd" value="sg:n:perf"/>
+                      </vAlt>
                     </f>
                   </fs>
                   <fs xml:id="morph_1.28.2-lex" type="lex">
@@ -1337,15 +1343,15 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1.35.2.1-msd" value="gen:nwok"/>
-                        <symbol xml:id="morph_1.35.2.2-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.35.2.1-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.35.2.2-msd" value="gen:nwok"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
                 <f name="disamb">
                   <fs type="tool_report">
-                    <f fVal="#morph_1.35.2.1-msd" name="choice"/>
+                    <f fVal="#morph_1.35.2.2-msd" name="choice"/>
                     <f name="interpretation">
                       <string>z:prep:gen:nwok</string>
                     </f>
@@ -1762,7 +1768,10 @@
                       <symbol value="praet"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1.45.1.1-msd" value="sg:n:imperf"/>
+                      <vAlt>
+                        <symbol xml:id="morph_1.45.1.1-msd" value="sg:n:imperf"/>
+                        <symbol xml:id="morph_1.45.1.2-msd" value="sg:n:perf"/>
+                      </vAlt>
                     </f>
                   </fs>
                   <fs xml:id="morph_1.45.2-lex" type="lex">
@@ -1977,15 +1986,15 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1.50.2.1-msd" value="gen:nwok"/>
-                        <symbol xml:id="morph_1.50.2.2-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.50.2.1-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.50.2.2-msd" value="gen:nwok"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
                 <f name="disamb">
                   <fs type="tool_report">
-                    <f fVal="#morph_1.50.2.1-msd" name="choice"/>
+                    <f fVal="#morph_1.50.2.2-msd" name="choice"/>
                     <f name="interpretation">
                       <string>z:prep:gen:nwok</string>
                     </f>
@@ -2261,7 +2270,7 @@
                 </f>
               </fs>
             </seg>
-            <seg xml:id="morph_1620296704_1.1-seg" corresp="ann_segmentation.xml#segm_1620296704_1.1-seg">
+            <seg xml:id="morph_1686763001_1.1-seg" corresp="ann_segmentation.xml#segm_1686763001_1.1-seg">
               <fs type="morph">
                 <f name="orth">
                   <string>który</string>
@@ -2270,7 +2279,7 @@
                   <string>który</string>
                 </f>
                 <f name="interps">
-                  <fs xml:id="morph_1620296704_1.1.1-lex" type="lex">
+                  <fs xml:id="morph_1686763001_1.1.1-lex" type="lex">
                     <f name="base">
                       <string>który</string>
                     </f>
@@ -2279,16 +2288,16 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1620296704_1.1.1.1-msd" value="sg:acc:m:pos"/>
-                        <symbol xml:id="morph_1620296704_1.1.1.2-msd" value="sg:nom:m:pos"/>
-                        <symbol xml:id="morph_1620296704_1.1.1.3-msd" value="sg:voc:m:pos"/>
+                        <symbol xml:id="morph_1686763001_1.1.1.1-msd" value="sg:acc:m:pos"/>
+                        <symbol xml:id="morph_1686763001_1.1.1.2-msd" value="sg:nom:m:pos"/>
+                        <symbol xml:id="morph_1686763001_1.1.1.3-msd" value="sg:voc:m:pos"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
               </fs>
             </seg>
-            <seg xml:id="morph_1620296704_1.2-seg" corresp="ann_segmentation.xml#segm_1620296704_1.2-seg">
+            <seg xml:id="morph_1686763001_1.2-seg" corresp="ann_segmentation.xml#segm_1686763001_1.2-seg">
               <fs type="morph">
                 <f name="orth">
                   <string>m</string>
@@ -2300,7 +2309,7 @@
                   <binary value="true"/>
                 </f>
                 <f name="interps">
-                  <fs xml:id="morph_1620296704_1.2.1-lex" type="lex">
+                  <fs xml:id="morph_1686763001_1.2.1-lex" type="lex">
                     <f name="base">
                       <string>być</string>
                     </f>
@@ -2308,7 +2317,7 @@
                       <symbol value="aglt"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1620296704_1.2.1.1-msd" value="sg:pri:imperf:nwok"/>
+                      <symbol xml:id="morph_1686763001_1.2.1.1-msd" value="sg:pri:imperf:nwok"/>
                     </f>
                   </fs>
                 </f>
@@ -2646,15 +2655,15 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1.64.2.1-msd" value="gen:nwok"/>
-                        <symbol xml:id="morph_1.64.2.2-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.64.2.1-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.64.2.2-msd" value="gen:nwok"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
                 <f name="disamb">
                   <fs type="tool_report">
-                    <f fVal="#morph_1.64.2.2-msd" name="choice"/>
+                    <f fVal="#morph_1.64.2.1-msd" name="choice"/>
                     <f name="interpretation">
                       <string>z:prep:inst:nwok</string>
                     </f>
@@ -2859,15 +2868,15 @@
                     </f>
                     <f name="msd">
                       <vAlt>
-                        <symbol xml:id="morph_1.69.2.1-msd" value="gen:nwok"/>
-                        <symbol xml:id="morph_1.69.2.2-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.69.2.1-msd" value="inst:nwok"/>
+                        <symbol xml:id="morph_1.69.2.2-msd" value="gen:nwok"/>
                       </vAlt>
                     </f>
                   </fs>
                 </f>
                 <f name="disamb">
                   <fs type="tool_report">
-                    <f fVal="#morph_1.69.2.2-msd" name="choice"/>
+                    <f fVal="#morph_1.69.2.1-msd" name="choice"/>
                     <f name="interpretation">
                       <string>z:prep:inst:nwok</string>
                     </f>
@@ -2975,13 +2984,24 @@
                 <f name="interps">
                   <fs xml:id="morph_1.72.1-lex" type="lex">
                     <f name="base">
+                      <string>etc</string>
+                    </f>
+                    <f name="ctag">
+                      <symbol value="xxx"/>
+                    </f>
+                    <f name="msd">
+                      <symbol xml:id="morph_1.72.1.1-msd" value="" nkjp:manual="true"/>
+                    </f>
+                  </fs>
+                  <fs xml:id="morph_1.72.2-lex" type="lex">
+                    <f name="base">
                       <string>et_cetera</string>
                     </f>
                     <f name="ctag">
                       <symbol value="brev"/>
                     </f>
                     <f name="msd">
-                      <symbol xml:id="morph_1.72.1.1-msd" value="pun"/>
+                      <symbol xml:id="morph_1.72.2.1-msd" value="pun"/>
                     </f>
                   </fs>
                 </f>
@@ -2989,7 +3009,7 @@
                   <fs type="tool_report">
                     <f fVal="#morph_1.72.1.1-msd" name="choice"/>
                     <f name="interpretation">
-                      <string>et_cetera:brev:pun</string>
+                      <string>etc:xxx</string>
                     </f>
                   </fs>
                 </f>

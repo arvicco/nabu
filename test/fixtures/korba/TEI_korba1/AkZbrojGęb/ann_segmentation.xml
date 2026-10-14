@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <xi:include href="NKJP_1M_header.xml"/>
+  <xi:include href="../../KorBa_manual_header.xml"/>
   <TEI>
     <xi:include href="header.xml"/>
     <text xml:id="segm_text" xml:lang="pl">
@@ -177,10 +177,10 @@
             </seg>
             <choice>
               <nkjp:paren>
-                <seg xml:id="segm_1620296704_1.1-seg" corresp="text.xml#string-range(txt_1.3-ab,58,5)" nkjp:rejected="true">
+                <seg xml:id="segm_1686763001_1.1-seg" corresp="text.xml#string-range(txt_1.3-ab,58,5)" nkjp:rejected="true">
                   <w>który</w>
                 </seg>
-                <seg xml:id="segm_1620296704_1.2-seg" corresp="text.xml#string-range(txt_1.3-ab,63,1)" nkjp:nps="true" nkjp:rejected="true">
+                <seg xml:id="segm_1686763001_1.2-seg" corresp="text.xml#string-range(txt_1.3-ab,63,1)" nkjp:nps="true" nkjp:rejected="true">
                   <w>m</w>
                 </seg>
               </nkjp:paren>
