@@ -3975,15 +3975,16 @@ papyri-ddbdp:
   # adapter header). Lands at the next re-parse: ~2,245 docs / ~179,783
   # passages (grc/lat/cop/egy-Egyd; 12,571 metadata-only stubs skip at
   # discover, 5 defective files quarantine honestly; census 2026-09-26).
-  sync_policy: manual # DEMOTED 2026-10-13 same day as the auto promotion:
-                      # upstream finished its SVN switchover with a layout
-                      # rationalization (DDB_EpiDoc_XML -> DDbDP, translations
-                      # -> Translations, 256k files moved) and the circuit
-                      # breaker rightly refused the merge (98% would read as
-                      # withdrawn under the old cone). Canonical holds the
-                      # healthy pre-switchover snapshot; the migration packet
-                      # (cone update + URN-stability proof + breakered merge)
-                      # re-promotes it.
+  sync_policy: auto   # RE-PROMOTED 2026-10-14: the switchover migration
+                      # landed end to end — the dual-root cone (DDbDP/ +
+                      # Historical/ fallback) shipped with document-grain URN
+                      # stability proven corpus-wide, the owner-fired breakered
+                      # merge put canonical on upstream's current head, and the
+                      # full re-parse verified (64,115 docs / 1.109M passages,
+                      # the DCLP literary family's first landing). The 2026-10-13
+                      # demotion's reason (the breaker's catch of the layout
+                      # rationalization) is fully resolved; the auto sweep
+                      # resumes on the new layout.
   # P16-4: trigram fragment index (search --fuzzy), DOCUMENTARY scope — the
   # owner-approved 250–270 MB line (intertext design §4). Papyrus lines
   # average 34 chars; damaged-fragment search earns its bytes here. Future
