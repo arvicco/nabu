@@ -43,6 +43,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
     "urn:nabu:ud:old-french-profiterole:fro_profiterole-ud-test-head50",
+    "urn:nabu:ud:old-irish-dipsgg:incomplete-head10",
     "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50",
     "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
     "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50",
@@ -538,9 +539,70 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_thirty_three_files_sorted_by_urn
+  def test_discover_finds_exactly_thirty_four_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
+  end
+
+  # --- DipSGG's unreleased layer (not-to-release/, granted 2026-10-14) -----
+
+  DIPSGG_DRAFT = "urn:nabu:ud:old-irish-dipsgg:incomplete-head10"
+  DIPSGG_RELEASE = "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50"
+
+  def ud_ref(urn)
+    Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).find { |ref| ref.id == urn } || flunk("no #{urn}")
+  end
+
+  def test_dipsgg_unreleased_layer_is_discovered_and_flagged_only_there
+    draft = ud_ref(DIPSGG_DRAFT)
+    assert_equal "sga", draft.metadata["language"]
+    assert_equal "draft-unproofed", draft.metadata["edition_status"]
+    assert_equal "UD_Old_Irish-DipSGG (incomplete-head10, unreleased draft)", draft.metadata["title"]
+    assert_nil ud_ref(DIPSGG_RELEASE).metadata["edition_status"]
+  end
+
+  def test_an_unreleased_subdir_on_a_treebank_without_the_key_is_ignored
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "old-irish-dipwbg", "not-to-release"))
+      FileUtils.cp(File.join(FIXTURES, "old-irish-dipwbg", "sga_dipwbg-ud-test.conllu"),
+                   File.join(root, "old-irish-dipwbg", "not-to-release", "x.conllu"))
+      assert_empty Nabu::Adapters::UniversalDependencies.new.discover(root).to_a,
+                   "only a treebank whose row names an unreleased-layer subdir reads one"
+    end
+  end
+
+  def test_the_draft_document_carries_the_unproofed_mark_and_the_release_does_not
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    draft = adapter.parse(ud_ref(DIPSGG_DRAFT))
+    assert_equal "draft-unproofed", draft.metadata["edition_status"]
+    assert_equal({ "value" => "draft-unproofed", "raw" => "not-to-release" },
+                 draft.metadata.dig("facets", "edition_status"))
+    assert_equal 10, draft.count
+    first = draft.first
+    assert_equal "#{DIPSGG_DRAFT}:21", first.urn
+    assert_equal ".i. dligeth nimmognama rann", first.text
+    refute(first.annotations["tokens"].any? { |t| t.key?("head") || t.key?("deprel") },
+           "the unreleased layer has no dependency relations yet")
+    assert_equal({}, adapter.parse(ud_ref(DIPSGG_RELEASE)).metadata,
+                 "the proofed release stays unmarked (and byte-unchanged)")
+  end
+
+  def test_nabu_show_surfaces_the_draft_mark_at_query_time
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "ud", name: "Universal Dependencies",
+                                        adapter_class: "Nabu::Adapters::UniversalDependencies",
+                                        license_class: "nc")
+    Nabu::Store::Loader.new(db: catalog, source: source)
+                       .load_from(conformance_adapter, workdir: FIXTURES, full: true)
+    Nabu::Store::FacetBuilder.refresh_source!(catalog: catalog, slug: "ud")
+    show = Nabu::Query::Show.new(catalog: catalog)
+    draft = show.run(DIPSGG_DRAFT).facets
+    assert_equal([%w[edition_status draft-unproofed]], draft.map { |f| [f.facet, f.value] })
+    assert_empty show.run(DIPSGG_RELEASE).facets, "a released document shows no draft mark"
+    passage = show.run("#{DIPSGG_DRAFT}:21")
+    refute_nil passage
+  ensure
+    catalog&.disconnect
   end
 
   def test_discover_sets_source_id_language_treebank_and_absolute_path

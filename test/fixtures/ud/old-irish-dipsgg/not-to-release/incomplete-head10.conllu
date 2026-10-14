@@ -1,0 +1,124 @@
+# sent_id = 21
+# reference = 2b3
+# scribe = Main Glossator
+# text = .i. dligeth nimmognama rann
+# translation = i.e. law of construction of parts
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	dligeth	dliged	NOUN	_	Case=Nom|Number=Sing	_	_	_	_
+3	nimmognama	imḟognam	NOUN	_	Case=Gen|Number=Sing	_	_	_	_
+4	rann	rann	NOUN	_	Case=Gen|Number=Plur	_	_	_	_
+
+# sent_id = 22
+# reference = 3a1
+# scribe = Main Glossator
+# text = .i. cita biat chlúasa
+# translation = i.e. which ears perceive
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	cita	cita	PART	_	PartType=Vb	_	_	_	_
+3	biat	citabí	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|Voice=Act	_	_	_	_
+4	chlúasa	clúas	NOUN	_	Case=Nom|Number=Plur	_	_	_	_
+
+# sent_id = 23
+# reference = 3a2
+# scribe = Main Glossator
+# text = .i. a folad di a nimmolṅgaithær vox
+# translation = i.e. the substance from which vox is produced
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	a	a	DET	_	Case=Nom|Gender=Neut|Number=Sing|PronType=Art	_	_	_	_
+3	folad	folad	NOUN	_	Case=Nom|Number=Sing	_	_	_	_
+4	di	de	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+5	a	a	PART	_	PartType=Rel	_	_	_	_
+6	nimmolṅgaithær	immfolngai	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|Voice=Pass	_	_	_	_
+7	vox	_	X	_	Foreign=Yes	_	_	_	_
+
+# sent_id = 24
+# reference = 3a3
+# scribe = Main Glossator
+# text = .i. ex aere et ore in unam vocem .i. do immthastar fri slond ṅintliuchta bís hi sin menmain
+# translation = i.e. it is combined to express the meaning which is in the mind
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	ex	_	X	_	Foreign=Yes	_	_	_	_
+3	aere	_	X	_	Foreign=Yes	_	_	_	_
+4	et	_	X	_	Foreign=Yes	_	_	_	_
+5	ore	_	X	_	Foreign=Yes	_	_	_	_
+6	in	_	X	_	Foreign=Yes	_	_	_	_
+7	unam	_	X	_	Foreign=Yes	_	_	_	_
+8	vocem	_	X	_	Foreign=Yes	_	_	_	_
+9	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+10	do	do	PART	_	PartType=Vb	_	_	_	_
+11	immthastar	doimmthas	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|Voice=Pass	_	_	_	_
+12	fri	fri	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+13	slond	slond	NOUN	_	Case=Acc|Number=Sing	_	_	_	_
+14	ṅintliuchta	intliucht	NOUN	_	Case=Gen|Number=Sing	_	_	_	_
+15	bís	attá	VERB	_	Aspect=Hab|Mood=Ind|Number=Sing|Person=3|Tense=Pres|Voice=Act	_	_	_	_
+16	hi	i	ADP	_	AdpType=Prep|Definite=Def	_	_	_	_
+17	sin	in	DET	_	Case=Dat|Gender=Masc|Number=Sing|PronType=Art	_	_	_	_
+18	menmain	menma	NOUN	_	Case=Dat|Number=Sing	_	_	_	_
+
+# sent_id = 25
+# reference = 3a4
+# scribe = Main Glossator
+# text = .i. ni astaider ⁊ ni timmorcar fri slond ṅintliucta
+# translation = i.e. it is not fastened down and it is not checked to express a meaning
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	ni	ní	PART	_	Polarity=Neg	_	_	_	_
+3	astaider	adsuidi	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|Voice=Pass	_	_	_	_
+4	⁊	ocus	CCONJ	_	_	_	_	_	_
+5	ni	ní	PART	_	Polarity=Neg	_	_	_	_
+6	timmorcar	doimmoirc	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|Voice=Pass	_	_	_	_
+7	fri	fri	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+8	slond	slond	NOUN	_	Case=Acc|Number=Sing	_	_	_	_
+9	ṅintliucta	intliucht	NOUN	_	Case=Gen|Number=Sing	_	_	_	_
+
+# sent_id = 26
+# reference = 3a5
+# scribe = Main Glossator
+# text = .i. hua duthracht
+# translation = i.e. from volition
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	hua	ó	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+3	duthracht	dúthracht	NOUN	_	Case=Dat|Number=Sing	_	_	_	_
+
+# sent_id = 27
+# reference = 3a6
+# scribe = Main Glossator
+# text = .i. ní æscomlai
+# translation = i.e. it proceeds not
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	ní	ní	PART	_	Polarity=Neg	_	_	_	_
+3	æscomlai	ascomlai	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|Voice=Act	_	_	_	_
+
+# sent_id = 28
+# reference = 3a7
+# scribe = Main Glossator
+# text = .i. is cosmart do rétaib ind fet
+# translation = i.e. the hissing sound is a signal by things
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	is	is	AUX	_	Mood=Ind|Number=Sing|Person=3|Polarity=Pos|Tense=Pres|VerbType=Cop	_	_	_	_
+3	cosmart	cosmart	NOUN	_	Case=Nom|Number=Sing	_	_	_	_
+4	do	do	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+5	rétaib	rét	NOUN	_	Case=Dat|Number=Plur	_	_	_	_
+6	ind	in	DET	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Art	_	_	_	_
+7	fet	fet	NOUN	_	Case=Nom|Number=Sing	_	_	_	_
+
+# sent_id = 29
+# reference = 3a8
+# scribe = Main Glossator
+# text = .i. neph thimmorti fri slond nintliuchta
+# translation = i.e. not constrained to express a meaning
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	neph	neph	PART	_	Polarity=Neg|Prefix=Yes	_	_	_	_
+3	thimmorti	timortae	ADJ	_	Case=Nom|Degree=Pos|Gender=Fem|Number=Plur	_	_	_	_
+4	fri	fri	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+5	slond	slond	NOUN	_	Case=Acc|Number=Sing	_	_	_	_
+6	nintliuchta	intliucht	NOUN	_	Case=Gen|Number=Sing	_	_	_	_
+
+# sent_id = 30
+# reference = 3a9
+# scribe = Main Glossator
+# text = .i. ci de
+# translation = i.e. from which
+1	.i.	.i.	ADV	_	Abbr=Yes	_	_	_	_
+2	ci	cía	PRON	_	PronType=Int	_	_	_	_
+3	de	de	ADP	_	AdpType=Prep|Definite=Ind	_	_	_	_
+

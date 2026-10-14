@@ -56,6 +56,10 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Irish-DipSGG/master/sga_dipsgg-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of sga_dipsgg-ud-test.conllu (64 blocks upstream — the annotated subset of the 3,471 St Gall glosses; no MWT/empty-node lines; P25-2) (37,231 B -> 24,075 B)
+  - path: old-irish-dipsgg/not-to-release/incomplete-head10.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Irish-DipSGG/e92ab8864f37c40e94960f3950a21fb19f167b2e/not-to-release/incomplete.conllu
+    whole: false
+    trim: first 10 complete sentence blocks of not-to-release/incomplete.conllu (3,406 blocks upstream — the unreleased, unproofed layer; no dependency relations; cut from the held canonical tree at e92ab886, 2026-10-14) (1,689,484 B -> 4,804 B)
   - path: hittite-hittb/hit_hittb-ud-test-head50.conllu
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Hittite-HitTB/master/hit_hittb-ud-test.conllu
     whole: false
