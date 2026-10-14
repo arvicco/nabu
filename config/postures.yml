@@ -818,9 +818,10 @@ sources:
         languages; Old Nubian, Ajami facsimiles, Tifinagh and the Vai syllabary are uncorrected
         OCR, garbled (declared per document)"}
   bu-ajami:   # P124-1
-    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet — Poetry/Poem →
-        literary/poetry; Prose (and the mixed 'Poetry and prose' forms) names a FORM, not a genre,
-        so it would ride the deliberate block — the fold awaits its ruling"}
+    # kind machine-postured since 2026-10-14 — the genre fold in kind_map
+    # (Poetry/Poem onto the poetry sub; the prose and mixed form labels
+    # are reviewed non-claims). The pending row retired under the
+    # shadowing rule.
     lect: {posture: pending, note: "candidate: the ha / mnk / fuf / wo anchors of the aggregated
         nabu-lects Africa mint — no registry node exists for any of the four; the bare codes are
         claimed per item meanwhile (fula = upstream's 'Fuuta Jalon Fula', i.e. Pular fuf, not the
