@@ -156,12 +156,12 @@ class OldNubianUdTest < Minitest::Test
     assert_equal "conllu", manifest.parser_family
   end
 
-  def test_registry_row_is_unwired_on_the_africa_desk
+  def test_registry_row_is_wired_on_the_africa_desk
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["old-nubian-ud"]
     refute_nil entry, "old-nubian-ud must be registered in config/sources.yml"
     assert_equal "Nabu::Adapters::OldNubianUd", entry.adapter_class_name
-    refute entry.wired, "flips after a verified first real sync"
+    assert entry.wired, "first real sync verified 2026-10-14 (1 doc / 124 passages)"
     assert_equal "manual", entry.sync_policy
     assert_equal ["africa"], entry.axes
   end

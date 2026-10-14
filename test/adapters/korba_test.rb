@@ -167,11 +167,11 @@ module Adapters
       assert_includes manifest.license, "Creative Commons Attribution Share Alike"
     end
 
-    def test_registry_row_is_ready_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["korba"]
       refute_nil entry
-      refute entry.wired
+      assert entry.wired, "first full parse verified 2026-10-14 (2,091 docs / 10,281 passages)"
       assert_equal "manual", entry.sync_policy
     end
 
