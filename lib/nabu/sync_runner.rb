@@ -135,11 +135,13 @@ module Nabu
     # unknown slug is a ValidationError. Returns an Outcome; a tripped breaker
     # returns Outcome#aborted? (the `runs` row is recorded "aborted"). Any other
     # Nabu::Error (fetch failure, ...) propagates after its failure is recorded.
-    def sync(slug, parse_only: false, force: false, progress: nil)
+    def sync(slug, parse_only: false, fetch_only: false, force: false, progress: nil)
+      raise ValidationError, "--fetch-only contradicts --parse-only" if parse_only && fetch_only
+
       entry = @registry[slug]
       raise ValidationError, "unknown source #{slug.inspect}" if entry.nil?
 
-      sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
+      sync_entry(entry, parse_only: parse_only, fetch_only: fetch_only, force: force, progress: progress)
     end
 
     # Sync every ENABLED kind: source with sync_policy "auto". Returns { slug => Outcome |
@@ -149,7 +151,9 @@ module Nabu
     # sweep is intersected with it (sync --all = the enabled set only); nil
     # keeps the whole registry sweep (an unconfigured box, or a --parse-only
     # repair run — the CLI decides).
-    def sync_all(parse_only: false, force: false, progress: nil, enabled: nil)
+    def sync_all(parse_only: false, fetch_only: false, force: false, progress: nil, enabled: nil)
+      raise ValidationError, "--fetch-only contradicts --parse-only" if parse_only && fetch_only
+
       sweep = live_enabled
       sweep = sweep.select { |entry| enabled.include?(entry.slug) } unless enabled.nil?
       sweep.to_h do |entry|
@@ -160,7 +164,7 @@ module Nabu
             GrantRequired.new(slug: entry.slug)
           else
             begin
-              sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
+              sync_entry(entry, parse_only: parse_only, fetch_only: fetch_only, force: force, progress: progress)
             rescue Nabu::Error => e
               e
             end
@@ -178,6 +182,28 @@ module Nabu
       return nil unless Dir.exist?(dir)
 
       LemmaShelf.new(dir: dir)
+    end
+
+    # The --fetch-only half (sync_entry note): one run row around the fetch
+    # stage alone. A tripped fetch breaker reports as the usual aborted
+    # Outcome; a FetchError propagates after the run row records "failed"
+    # (both exactly the full sync's contracts). The source-state pin still
+    # advances — canonical moved, and that is what the pin records.
+    def fetch_only_outcome(entry, source, adapter, workdir, force:, progress:)
+      fetch_report = nil
+      begin
+        Store::RunRecorder.record(source_slug: entry.slug) do
+          fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress)
+          nil # no load — the run row keeps zero counts
+        end
+      rescue Nabu::SyncAborted => e
+        return Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
+                           breaker: e, indexed: nil, warnings: [], discovery: nil)
+      end
+      update_source_state(source, entry, fetch_report)
+      progress&.stage("fetched #{entry.slug} — parse+load deferred (fetch-only)")
+      Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
+                  breaker: nil, indexed: nil, warnings: [], discovery: nil)
     end
 
     # The stored Credentials::Entry an entry declares, nil when it declares
@@ -201,7 +227,7 @@ module Nabu
       @registry.each_source.select { |entry| entry.source? && entry.wired && entry.sync_policy == "auto" }
     end
 
-    def sync_entry(entry, parse_only:, force:, progress:)
+    def sync_entry(entry, parse_only:, force:, progress:, fetch_only: false)
       # The credentials seam: a gated upstream's stored credential resolves
       # BEFORE anything else — an absent one refuses with the gateway
       # command, before any network and before any run row.
@@ -210,6 +236,13 @@ module Nabu
       adapter = entry.build_adapter
       adapter.credentials = credentials if credentials
       workdir = workdir_for(entry.slug)
+      # --fetch-only (the --parse-only mirror): the fetch stage with its
+      # breaker, attic and run-row bookkeeping, then STOP — no parse, no
+      # load, no index work. The parse rides a later sync or rebuild (the
+      # taint-before-rebuild sequencing: update canonical now, let the
+      # pending replay do the parsing once).
+      return fetch_only_outcome(entry, source, adapter, workdir, force: force, progress: progress) if fetch_only
+
       fetch_report = nil
       load_report = nil
       lane_report = nil
