@@ -806,11 +806,11 @@ sources:
     script: {posture: implied, note: Perso-Arabic lit + Latin translit layers per line}
   africa-pd:   # P124-1
     # kind: machine-postured — kind_map.yml source_kind scholarly.
-    lect: {posture: pending, note: "candidate: the sw anchor of the aggregated nabu-lects Africa
-        mint (Velten's Swahili reader, the one object-language claim); the other nine works claim
-        their PROSE language — eng 6, deu 1, fra 2, all real anchors (the reference-shelf
-        posture); the African languages presented (onw, sw, ha, tmh, kab, vai) ride metadata
-        object_language, never a claim"}
+    lect: {posture: identity, note: "the Africa package merged + canonical-synced 2026-10-14
+        (the add-then-retire shape): the sw anchor now exists for Velten's Swahili reader, the
+        one object-language claim; the other nine works claim their PROSE language — eng 6,
+        deu 1, fra 2, all real anchors (the reference-shelf posture); the African languages
+        presented (onw, sw, ha, tmh, kab, vai) ride metadata object_language, never a claim"}
     dating: {posture: dated, note: "every work carries its edition year — :structured lane"}
     places: {posture: unplaced, note: "imprint places (London, Berlin, Paris, Cambridge) ride
         metadata 'imprint' — the printing place, not a text place"}
@@ -822,9 +822,9 @@ sources:
     # (Poetry/Poem onto the poetry sub; the prose and mixed form labels
     # are reviewed non-claims). The pending row retired under the
     # shadowing rule.
-    lect: {posture: pending, note: "candidate: the ha / mnk / fuf / wo anchors of the aggregated
-        nabu-lects Africa mint — no registry node exists for any of the four; the bare codes are
-        claimed per item meanwhile (fula = upstream's 'Fuuta Jalon Fula', i.e. Pular fuf, not the
+    lect: {posture: identity, note: "the Africa package merged + canonical-synced 2026-10-14
+        (the add-then-retire shape): the ha / mnk / fuf / wo anchors all live; the bare codes
+        are the claim per item (fula = upstream's 'Fuuta Jalon Fula', i.e. Pular fuf, not the
         ff macrolanguage)"}
     dating: {posture: partial, note: "33 of 80 (census 2026-10-13): the source reference's typed year
         (Northwestern's “Title” (1968/9) form) or a date the item page states with its basis —
