@@ -2794,7 +2794,9 @@ korba:   # P116-1
   adapter: Nabu::Adapters::Korba
   adopted: "2026-10-10"
   axes: [slavic]
-  wired: false   # ready; flips after the first sync is verified
+  wired: true    # first retrieval 2026-10-14 (the server back after 4 days of 502):
+                 # 2,091 texts / 10,281 passages / 855,904 tokens, 0 errors —
+                 # the edition-2.0 stage folders, counts verified + eyeballed
   sync_policy: manual
   # KorBa — the manually annotated subcorpus 2.0 of the Electronic Corpus
   # of 17th- and 18th-century Polish Texts (to 1772; IJP PAN). One zip
@@ -3541,6 +3543,25 @@ okhc:   # P91-1, 02-sources row 189
   # this scale; the sync announces stages per the no-silent-passes rule).
   # Re-syncs owner-fired (the deposit versions via HF; conditional GETs
   # make an unchanged re-sync cheap).
+
+old-nubian-ud:
+  adapter: Nabu::Adapters::OldNubianUd
+  adopted: "2026-10-14"
+  axes: [africa]
+  wired: true    # first sync 2026-10-14: 1 document / 124 passages — the expected
+                 # counts exactly, eyeballed (lacunae verbatim, translations riding)
+  sync_policy: manual
+  # The Old Nubian UD treebank (github.com/Innokentii-Smirnov/
+  # OldNubianUDTreebank): 124 sentences of medieval Old Nubian (onw) in
+  # Latin transliteration — the Miracle of Saint Menas, a homily on
+  # church offerings, short scriptural fragments — with UD annotation and
+  # a MISC morpheme layer (MSeg/MGloss/Gloss); Russian and English
+  # translation comments. One file → one document, passages by sent_id;
+  # the repo's segmentation sidecars are tooling, censused, not ingested.
+  # LICENSE.txt (the repository author, Innokentii Smirnov, 2026-10-13),
+  # verbatim: "The treebank is licensed under the Attribution-
+  # NonCommercial-ShareAlike 4.0 International." → CC BY-NC-SA 4.0 → nc
+  # (grant verified 2026-10-14).
 
 old-tibetan:
   adapter: Nabu::Adapters::OldTibetan

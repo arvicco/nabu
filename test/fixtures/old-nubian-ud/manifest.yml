@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# A documented selection of whole sentence blocks from the one treebank
+# file (a fresh fetch returns the FULL file), so adapter_test stays null —
+# a fresh-copy re-run would false-fail the count assertions.
+source: old-nubian-ud
+adapter_test:
+retrieved: "2026-10-14"
+files:
+  - path: OldNubian.conllu
+    url: https://raw.githubusercontent.com/Innokentii-Smirnov/OldNubianUDTreebank/64a7b043b42dc0c776c320407de7856b44db4445/OldNubian.conllu
+    whole: false
+    trim: ten real sentence blocks (sent_id 0 1 2 6 75 100 106 118 121 124 of 124), byte-verbatim (README)

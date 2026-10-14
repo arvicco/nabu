@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 143, lect.size,
+    assert_equal 144, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -290,7 +290,9 @@ class PosturesTest < Minitest::Test
                  "bu-ajami ADDED P124-1 — PENDING on the aggregated nabu-lects Africa mint (no " \
                  "ha/mnk/fuf/wo node exists): 141→142; africa-pd ADDED P124-1 — PENDING on the " \
                  "same mint's sw anchor (Velten's reader; the other nine works claim real " \
-                 "prose-language anchors): 142→143"
+                 "prose-language anchors): 142→143; old-nubian-ud ADDED P125 — PENDING on the " \
+                 "nabu-lects Old Nubian package (the nub family + onw anchor; nothing Nubian " \
+                 "exists in the canonical registry yet): 143→144"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -407,6 +409,15 @@ class PosturesTest < Minitest::Test
     # P124-1 ADDS bu-ajami PENDING on the ha/mnk/fuf/wo anchors of the
     # aggregated Africa registry mint: pending 0→1; africa-pd PENDING on
     # the same mint's sw anchor: pending 1→2.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 114, "pending" => 2 }, by_posture)
+    # The Africa package (merged + canonical-synced 2026-10-14, the
+    # add-then-retire shape across one gate) retires both to identity:
+    # identity 114→116, pending 2→0. Zero pendings again.
+    # P125 ADDS old-nubian-ud PENDING on the nub family + onw anchor of the
+    # nabu-lects Old Nubian package (the treebank is the anchor's consumer;
+    # flips to identity onw when the package reaches canonical): pending 0→1.
+    # The Old Nubian package (merged + canonical-synced 2026-10-14, the
+    # add-then-retire shape WITHIN one phase — the shabados precedent)
+    # retires it: identity 116→117, pending 1→0. Zero pendings again.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 117 }, by_posture)
   end
 end

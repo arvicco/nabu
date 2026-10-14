@@ -258,9 +258,16 @@ module Nabu
       indexed =
         if index_inert?(adapter)
           nil
-        elsif skip_reindex?(adapter, load_report, lane_report) && !slice_pending?(entry)
-          progress&.stage("index slice: #{entry.slug} skipped — no passage content changed")
-          nil
+        elsif skip_reindex?(adapter, load_report, lane_report)
+          if slice_stale?(entry)
+            # The heal path: a pending (crashed) or behind (never-started)
+            # slice under a no-op load — the load's empty delta covers none
+            # of the missing work, so the full slice rewrite runs (delta nil).
+            reindex!(entry, adapter, progress)
+          else
+            progress&.stage("index slice: #{entry.slug} skipped — no passage content changed")
+            nil
+          end
         else
           reindex!(entry, adapter, progress, delta: reindex_delta(load_report, lane_report))
         end
@@ -531,12 +538,16 @@ module Nabu
     # "drop the file and re-run", and the skip must never eat the re-run
     # (the fallback full rebuild lives behind reindex! — the live
     # 2026-10-01 recovery no-op).
-    def slice_pending?(entry)
+    def slice_stale?(entry)
       return true unless File.exist?(@config.fulltext_path)
 
       fulltext = Store.connect_fulltext(@config.fulltext_path)
       begin
-        Store::Indexer.slice_pending?(fulltext, entry.slug)
+        # Pending = a refresh started and crashed; behind = a refresh never
+        # started after a landed load (the marker's blind spot — Indexer
+        # note). Either way the skip must not eat the heal.
+        Store::Indexer.slice_pending?(fulltext, entry.slug) ||
+          Store::Indexer.slice_behind?(fulltext, @db, entry.slug)
       ensure
         fulltext.disconnect
       end

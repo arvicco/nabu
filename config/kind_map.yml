@@ -639,6 +639,16 @@ sources:
       "NDC 779": "modern NDC subject shelving (vaudeville), not genre"
       "NDC 786": "modern NDC subject shelving (outdoor pursuits), not genre"
       "NDC 787": "modern NDC subject shelving (fishing), not genre"
+  bu-ajami:           # census: 80 docs, 2026-10-14 — upstream's own form labels;
+    facet: genre      # the identity-grade fold (poetry means poetry)
+    map:
+      "Poetry": literary/poetry                  # 44
+      "Poem": literary/poetry                    # 5
+    deliberate:
+      "Prose": "a form label, not a genre claim"                 # 28
+      "Poetry and prose": "a mixed form label, not a genre claim"  # 1
+      "Prose and poetry": "a mixed form label, not a genre claim"  # 1
+      "Prose/poem": "a mixed form label, not a genre claim"        # 1
   ticha:              # census: 93 docs, 2026-10-12 — the colonial Zapotec corpus's
     facet: work_type  # own four-value vocabulary, ruled the same day
     map:

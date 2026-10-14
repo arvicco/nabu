@@ -43,6 +43,7 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `old-east-slavic-rnc/orv_rnc-ud-test-head50.conllu` | `UD_Old_East_Slavic-RNC/master/orv_rnc-ud-test.conllu` | 2,483,580 | 365,977 | 50 |
 | `old-east-slavic-ruthenian/orv_ruthenian-ud-test-head50.conllu` | `UD_Old_East_Slavic-Ruthenian/master/orv_ruthenian-ud-test.conllu` | 940,453 | 309,311 | 50 |
 | `old-irish-dipsgg/sga_dipsgg-ud-test-head50.conllu` | `UD_Old_Irish-DipSGG/master/sga_dipsgg-ud-test.conllu` | 37,231 | 24,075 | 50 |
+| `old-irish-dipsgg/not-to-release/incomplete-head10.conllu` | `UD_Old_Irish-DipSGG/e92ab886…/not-to-release/incomplete.conllu` | 1,689,484 | 4,804 | 10 |
 | `old-irish-dipwbg/sga_dipwbg-ud-test.conllu` | `UD_Old_Irish-DipWBG/master/sga_dipwbg-ud-test.conllu` | 32,767 | 32,767 (whole) | 34 |
 | `hittite-hittb/hit_hittb-ud-test-head50.conllu` | `UD_Hittite-HitTB/master/hit_hittb-ud-test.conllu` | 118,705 | 46,175 | 50 |
 | `ancient-greek-perseus/grc_perseus-ud-test-head50.conllu` | `UD_Ancient_Greek-Perseus/master/grc_perseus-ud-test.conllu` | 1,979,022 | 85,337 | 50 |
@@ -120,6 +121,23 @@ the treebank language tag is `sga`, the same one-tag-per-treebank practice
 as RNC's Middle Russian under `orv`. Note the SAME St Gall glosses arrive
 at a different grain via CorPH (sibling packet P25-0, morphology) — two
 honest witnesses, NO dedup (the MW-beside-kaikki precedent).
+
+**The unreleased DipSGG layer (2026-10-14).**
+`old-irish-dipsgg/not-to-release/incomplete-head10.conllu` is the plain
+**first 10 complete sentence blocks** of the repo's
+`not-to-release/incomplete.conllu`, cut verbatim from the held canonical
+clone (HEAD `e92ab8864f37c40e94960f3950a21fb19f167b2e`; upstream file
+sha256 `f519d2db2e415865bca47b2bb5dd6757c48f565e4fe364674d58aac172799e63`),
+mirrored at the same relative path so discovery walks the same layout.
+Upstream file-wide: 3,406 sentence blocks (sent_ids 21–3469, disjoint from
+the released test set's 64; references disjoint too — together the
+collection's 3,470 glosses), 21,358 tokens, no MWT/empty-node lines, the
+same five comments as the release (`sent_id`, `reference`, `scribe`,
+`text`, `translation`), and EVERY HEAD/DEPREL `_` — no dependency layer
+yet. Use granted by the maintainer, Adrian Doyle (by email, 2026-10-14),
+under the main release's license (CC BY-NC-SA 4.0); the content is
+unreleased because unproofed (the caveats are recorded verbatim in the
+UD adapter's DipSGG comment).
 
 ### Hittite HitTB trim note (P31-0)
 

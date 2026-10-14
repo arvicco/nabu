@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 33 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 14 October 2026)</span> |
 |---|---|---|---|---|
 | `archiv-slav-phil` | texts | open | wired · manual | 33 docs / 22,348 passages |
 | `bg-wikisource` | texts | attribution | wired · manual | 26 docs / 220 passages |
@@ -30,7 +30,7 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `hr-wikisource` | texts | attribution | wired · manual | 1,390 docs / 132,052 passages |
 | `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
 | `kdsp` | texts | attribution | wired · manual | 262 docs / 290,394 passages |
-| `korba` | texts | attribution | not yet wired | nothing held yet |
+| `korba` | texts | attribution | wired · manual | 2,091 docs / 10,281 passages |
 | `litopys` | texts | open | wired · manual | 41 docs / 964 passages / 923 entries |
 | `mdz-protestant` | texts | open | wired · manual | 6 docs / 1,518 passages |
 | `mk-wikisource` | texts | attribution | wired · manual | 836 docs / 31,114 passages |
@@ -46,12 +46,12 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `slouniki-nasovic` | dictionary | open | wired · manual | 35,159 entries |
 | `sr-wikisource` | texts | attribution | wired · manual | 4,607 docs / 581,423 passages |
 | `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
-| `ud` | treebank | nc | wired · manual | 79 docs / 326,193 passages |
+| `ud` | treebank | nc | wired · manual | 80 docs / 329,599 passages |
 | `uk-wikisource` | texts | attribution | wired · manual | 7 docs / 541 passages |
 | `vuk-danicic` | texts | open | wired · manual | 66 docs / 31,102 passages |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 October 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,660 · `srp` 4,636 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 · `bul` 154 … and 26 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 October 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,660 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 27 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 

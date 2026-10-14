@@ -582,6 +582,11 @@ module Nabu
         # the prior run crashed mid-slice, so the lemma-frequency delta's
         # baseline is lost (absolute re-census below instead of the delta)
         # and a load delta cannot cover the crashed run's missing work.
+        # (The slice_behind? case — a landed load whose reindex never
+        # started — heals through the runner instead: it passes delta nil,
+        # which takes the full-slice path here. Probing behind-ness at this
+        # depth would misread every content-adding refresh, whose new max
+        # id is legitimately unindexed on entry.)
         healing = slice_pending?(fulltext, slug)
         use_delta = !delta.nil? && !delta.overflowed? && !healing
         ids, urns =
@@ -926,6 +931,23 @@ module Nabu
         return false unless fulltext.table_exists?(SLICE_REFRESHES_TABLE)
 
         !fulltext[SLICE_REFRESHES_TABLE].where(slug: slug, finished_at: nil).empty?
+      end
+
+      # The pending marker's blind spot (live 2026-10-14: two first syncs
+      # lost their index step to a catalog lock held by a concurrent crawl;
+      # the idempotent retries skipped the slice): the marker is written at
+      # refresh START, so a sync whose load lands rows but dies before the
+      # reindex ever begins leaves no row at all — pending? sees nothing.
+      # This probe asks the index itself: a slice is BEHIND when the
+      # source's max live passage id is absent from passages_fts (every
+      # indexed passage lands there — the CJK/trigram lanes are additive).
+      # O(1): one bounded B-tree max + one fts rowid lookup. A source with
+      # no live passages is vacuously current.
+      def slice_behind?(fulltext, catalog, slug)
+        _count, max_id = source_live_stats(catalog, slug)
+        return false if max_id.nil?
+
+        fulltext[TABLE].where(rowid: max_id).empty?
       end
 
       # The slice body's transaction shape (constants note): the ordinary
