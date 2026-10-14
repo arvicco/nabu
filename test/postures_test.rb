@@ -407,6 +407,9 @@ class PosturesTest < Minitest::Test
     # P124-1 ADDS bu-ajami PENDING on the ha/mnk/fuf/wo anchors of the
     # aggregated Africa registry mint: pending 0→1; africa-pd PENDING on
     # the same mint's sw anchor: pending 1→2.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 114, "pending" => 2 }, by_posture)
+    # The Africa package (merged + canonical-synced 2026-10-14, the
+    # add-then-retire shape across one gate) retires both to identity:
+    # identity 114→116, pending 2→0. Zero pendings again.
+    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 116 }, by_posture)
   end
 end
