@@ -12,7 +12,8 @@ module Adapters
   # the disamb choice). Pinned against three real KorBa texts trimmed to
   # their first block(s) consistently across the three layers.
   class NkjpTeiParserTest < Minitest::Test
-    FIXTURES = Nabu::TestSupport.fixtures("korba")
+    # The edition-2.0 tree nests the stage-1 texts under TEI_korba1/.
+    FIXTURES = File.join(Nabu::TestSupport.fixtures("korba"), "TEI_korba1")
 
     def parse(name) = Nabu::Adapters::NkjpTeiParser.new.parse(File.join(FIXTURES, name))
 
