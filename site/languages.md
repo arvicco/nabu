@@ -116,7 +116,7 @@ carries that stage; one dated across a boundary stays honestly in
 `unstaged`, which is what most of that line is (band-spanning or undated
 inscriptions, never a guess). The same machinery gives Sumerian a
 five-stage ladder topped by Neo-Sumerian (Ur III) at 191,325 documents
-(as of 11 October 2026),
+(as of 16 October 2026),
 and Akkadian the field's own six-way Assyrian/Babylonian grid
 (`nabu language sux`, `nabu language akk`).
 

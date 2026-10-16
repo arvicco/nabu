@@ -153,8 +153,8 @@ is scoped to the documentary shelves, where fragment search earns its
 cost; the scope has grown in waves — the Heidelberg inscriptions joined
 13 July 2026, Italy's EDR and the Elephantine archives 28 July 2026, the
 Etruscan inscriptions after them — and the production index covers
-3,985,264 passages across the papyri, cuneiform, and inscription shelves
-as of 11 October 2026.
+3,988,867 passages across the papyri, cuneiform, and inscription shelves
+as of 16 October 2026.
 
 **Concordance** (`nabu concord QUERY`) prints classic keyword-in-context
 lines, column-aligned in the pristine (accented) text and in corpus order —
