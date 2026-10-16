@@ -55,9 +55,11 @@ machine-readable Florentine Codex.
 By the numbers: twenty-four new text sources across the three
 phases, two new dictionary shelves (Brückner's Polish etymologicum,
 Nasovič's Belarusian), one new research desk, and the kotenseki
-crawl past a quarter of its 97,731 books. The library stands at 2.35
-million documents and 110 million passages across 203 corpus
-sources on 28 desks — and the whole wave rode the quarantine belts
+crawl past a quarter of its 97,731 books. The library stands, as of
+this writing, at 2.35 million documents and 110 million passages
+across 203 corpus sources on 28 desks (the [live
+census]({{ '/library/' | relative_url }}) has since moved on) — and the whole wave
+rode the quarantine belts
 without a single aborted sync.
 
 As always: canonical means canonical — every text verbatim from its

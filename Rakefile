@@ -356,6 +356,35 @@ namespace :census do
   end
 end
 
+# The lect: filter timing harness (Nabu::Ops::LectFilterBench): per
+# (term, lect) case, the same search with and without the lect filter,
+# median wall times printed. Both databases open READONLY (the engine
+# refuses writes). Overrides: CATALOG=/path/catalog.sqlite3
+# FULLTEXT=/path/fulltext.sqlite3 CASES="rex@lat,λόγος@grc:koi" REPEATS=5
+# LIMIT=20 LECTS=/path/nabu-lects (a registry checkout, bare — default:
+# the instance's canonical/nabu-lects with its overrides and overlay).
+namespace :bench do
+  desc "Time the lect: filter's catalog-join path over a catalog (read-only)"
+  task :lect_filter do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(ENV.fetch("CATALOG", config.catalog_path), readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(ENV.fetch("FULLTEXT", config.fulltext_path), readonly: true)
+    lects = (ENV["LECTS"] ? Nabu::Lects.load(ENV["LECTS"]) : Nabu::Lects.load_default(config: config)) or
+      abort "bench:lect_filter: nabu-lects module not synced"
+    bench = Nabu::Ops::LectFilterBench.new(catalog: catalog, fulltext: fulltext, lects: lects,
+                                           repeats: Integer(ENV.fetch("REPEATS", "5")),
+                                           limit: Integer(ENV.fetch("LIMIT", "20")))
+    cases = Nabu::Ops::LectFilterBench.parse_cases(ENV.fetch("CASES", Nabu::Ops::LectFilterBench::DEFAULT_CASES))
+    puts bench.report(bench.run(cases))
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+end
+
 # Print one check result to stdout.
 def print_check_report(result)
   puts "[#{result.source}]"

@@ -661,6 +661,51 @@ class SyncRunnerTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # --fetch-only (the --parse-only mirror): update canonical through the
+  # fetch stage — breaker, attic, run row, source-state pin — then stop.
+  # No parse, no load, no index work: the parse rides a later sync or
+  # rebuild (the taint-before-rebuild sequencing this flag exists for).
+  def test_fetch_only_updates_canonical_and_defers_the_parse
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    outcome = forbidding_index_work { runner.sync("breaker", fetch_only: true) }
+
+    refute outcome.aborted?
+    refute_nil outcome.fetch_report, "the fetch stage ran"
+    assert_equal 1, BreakerAdapter.fetch_count
+    assert_nil outcome.load_report, "parse and load are deferred"
+    assert_nil outcome.indexed, "no index work on a fetch-only sync"
+    assert_equal 0, Nabu::Store::Document.count, "nothing loaded"
+    run = Nabu::Store::Run.order(:id).last
+    assert_equal "succeeded", run.status, "the fetch is bookkept as its own run"
+
+    # The deferred parse: a later parse-only sync loads the fetched snapshot.
+    deferred = runner.sync("breaker", parse_only: true)
+    assert_equal 1, deferred.load_report.added
+    assert_equal 1, BreakerAdapter.fetch_count, "parse-only re-fetched nothing"
+  end
+
+  def test_fetch_only_contradicts_parse_only
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    assert_raises(Nabu::ValidationError) do
+      runner.sync("breaker", parse_only: true, fetch_only: true)
+    end
+  end
+
+  def test_fetch_only_propagates_fetch_errors_and_records_the_failed_run
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    BreakerAdapter.fetch_error = true
+    assert_raises(Nabu::FetchError) { runner.sync("breaker", fetch_only: true) }
+
+    run = Nabu::Store::Run.order(:id).last
+    assert_equal "failed", run.status, "the fetch failure is bookkept like any sync's"
+  end
+
   def test_idempotent_resync_skips_the_reindex
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))

@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 14 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 16 October 2026)</span> |
 |---|---|---|---|---|
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
@@ -36,7 +36,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
-| `papyri-ddbdp` | papyri | attribution | wired · manual | 63,659 docs / 1,105,279 passages |
+| `papyri-ddbdp` | papyri | attribution | wired · auto | 64,096 docs / 1,108,882 passages |
 | `pleiades` | feature module | attribution | wired · manual | nothing held yet |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
@@ -48,7 +48,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 October 2026)</span>: `lat` 195,059 · `grc` 76,445 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,531 … and 72 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 16 October 2026)</span>: `lat` 195,058 · `grc` 76,507 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,907 … and 72 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
@@ -59,16 +59,17 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
   the Levant (IIP).
 - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
   shelves — **papyri-ddbdp, EDH, EDR, Elephantine, ORACC and
-  open-etruscan** (3.8M passages as of 28 July 2026). The other
+  open-etruscan** (4.0M passages as of 16 October 2026). The other
   epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
   plain `search --axis epigraphy`.
-- **The timeline desk:** 549,771 documents carry a date or place (as of
-  26 July 2026 — CDLI's tablets, the Heidelberg inscriptions and the
-  papyri foremost), so `--from/--to`, `--century` and `--place` scope
+- **The timeline desk:** 1,426,438 documents carry a date or place (as
+  of 16 October 2026 — CDLI's tablets, the Korean and Japanese waves,
+  the Heidelberg inscriptions and the papyri foremost), so
+  `--from/--to`, `--century` and `--place` scope
   the stones and sherds by when and where. EDH's genre facets
   (`--type/--province/--material`) live.
 - **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
-  against the Pleiades gazetteer (42,242 places in a derived index —
+  against the Pleiades gazetteer (42,404 places in a derived index —
   millisecond lookups) and counts this library's holdings found there;
   an inscription's `nabu show` names its findspot with the Pleiades id.
 

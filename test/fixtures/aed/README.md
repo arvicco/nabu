@@ -69,3 +69,10 @@ U+13000-block codepoints, some inside `<unclear>`) and
 glyphs — the honest empty case). They drive the
 Store::HieroPostingsBuilder walk tests; refresh recipe = the same
 `git show` against the current cone.
+
+The same two files drive the finer attestation grain (migration 042):
+word tokens per glyph and `<unclear>` (damaged) occurrences — e.g. 𓂋
+has 42 occurrences over 39 `<w>` tokens, 2 of them damaged; 𓋹 is
+attested once, inside `<unclear>`. Signs without a Unicode codepoint
+appear only as `<note>Keine Entsprechung in Unicode für D31A-A1</note>`
+(Gardiner-coded) and are not tallied.

@@ -43,3 +43,21 @@ fixture will ever exist for these: 《印順法師佛學著作集》（印順文
 the REAL header + first 3 body paragraphs of K05n0016 (one of the
 10 Koreana-only XMLs upstream — texts without Taishō parallels),
 balanced closing tags, retrieved 2026-09-29.
+
+## The J and N canons (P126)
+
+Retrieved **2026-10-14** at master commit
+**dbdea41071e1e260ad84b72faefd4587333cf76d** ("CBETA 2026.R2",
+2026-09-05) via
+`https://raw.githubusercontent.com/cbeta-org/xml-p5/<commit>/<path>`.
+cbeta.org/copyright (re-read 2026-10-14) names both under Category A:
+《嘉興大藏經》（新文豐出版公司）第一冊至第四十冊 and
+《漢譯南傳大藏經》（元亨寺 ©）第一冊至第七十冊. Every file carries the
+in-file grant verbatim.
+
+| file | upstream path | trim | why this file |
+|---|---|---|---|
+| `J/J36/J36nB354.xml` | `J/J36/J36nB354.xml` | none (whole, 16.6 KB — the smallest J file) | 錦屏破石卓禪師雜著: Ming byline 「明 悟卓說　超常記錄　發林行狀」 (U+3000-separated), verse `<lg>`, gaiji `<g ref="#CB05513">`, cb:juan/jhead |
+| `J/J29/J29nB247.xml` | `J/J29/J29nB247.xml` | none (whole, 24.7 KB) | 普光坦菴禪師語錄: Qing byline, inline notes (`<note place="inline">`), prose yulu |
+| `N/N26/N26n0008.xml` | `N/N26/N26n0008.xml` | none (whole, 28.1 KB) | 小誦經 (Khuddakapāṭha): `<ref cRef="PTS.Khp.1"/>` Pāli page anchors, translator byline 悟醒譯 (no dynasty seat), `nanchuan-notes` back matter |
+| `N/N44/N44n0021-xu.xml` | `N/N44/N44n0021.xml` | teiHeader + body lb 0266a01–0268a04, back dropped, balanced close; 112.5 KB → 8.4 KB | 所行藏經 (Cariyāpiṭaka): a cRef inside `<head>`, numbered-verse `<p cb:place="inline">` pairs; suffixed stem keeps fixture urns disjoint |

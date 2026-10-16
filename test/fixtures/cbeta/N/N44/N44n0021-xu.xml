@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc" type="application/relax-ng-compact-syntax"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:id="N44n0021">
+<teiHeader>
+  <fileDesc>
+    <titleStmt>
+      <title level="s">Chinese Translation of the Pāḷi Tipiṭaka (Yuan Heng Temple Edition)</title>
+      <title level="s" xml:lang="zh-Hant">漢譯南傳大藏經（元亨寺版）</title>
+      <title level="m" xml:lang="zh-Hant">所行藏經</title>
+      <title>Chinese Translation of the Pāḷi Tipiṭaka (Yuan Heng Temple Edition), Electronic version, No. 21 所行藏經</title>
+      <title xml:lang="zh-Hant">漢譯南傳大藏經（元亨寺版）數位版, No. 21 所行藏經</title>
+      <author>悟醒譯</author>
+      <respStmt>
+        <resp>Electronic Version by</resp>
+        <name>CBETA</name>
+      </respStmt>
+    </titleStmt>
+    <editionStmt>
+      <edition>XML TEI P5</edition>
+      <respStmt xml:id="resp1"><resp>corrections</resp><name>orig</name></respStmt>
+      <respStmt xml:id="resp2"><resp>corrections</resp><name>NanChuan</name></respStmt>
+      <respStmt xml:id="resp3"><resp>corrections</resp><name>CBETA</name></respStmt>
+      <respStmt xml:id="resp4"><resp>corrections</resp><name>CBETA.maha</name></respStmt>
+    </editionStmt>
+    <extent>1卷</extent>
+    <publicationStmt>
+      <idno type="CBETA">
+        <idno type="canon">N</idno>.<idno type="vol">44</idno>.<idno type="no">21</idno>
+      </idno>
+      <distributor>
+        <name>財團法人佛教電子佛典基金會 (CBETA)</name>
+        <address>
+          <addrLine><email>service@cbeta.org</email></addrLine>
+        </address>
+      </distributor>
+      <availability>
+        <p>Available for non-commercial use when distributed with this header intact.</p>
+      </availability>
+      <date>2025-01-30 02:14:01 +0800</date>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl>漢譯南傳大藏經（元亨寺版）</bibl>
+    </sourceDesc>
+  </fileDesc>
+  <encodingDesc>
+    <projectDesc>
+      <p xml:lang="en" cb:type="ly">OCR by CBETA, Text as provided by Ven. Zhiguang, Text as provided by Ven. Xiangyin</p>
+      <p xml:lang="zh-Hant" cb:type="ly">CBETA OCR，智光法師提供，祥因法師提供</p>
+    </projectDesc>
+    <editorialDecl>
+      <punctuation resp="#resp1"><p>新式標點</p></punctuation>
+    </editorialDecl>
+    <tagsDecl>
+      <namespace name="http://www.tei-c.org/ns/1.0">
+        <tagUsage gi="rdg">
+          <listWit>
+            <witness xml:id="wit.cbeta">【CB】</witness>
+            <witness xml:id="wit.orig">【南傳】</witness>
+          </listWit>
+        </tagUsage>
+      </namespace>
+    </tagsDecl>
+  </encodingDesc>
+  <profileDesc>
+    <langUsage>
+      <language ident="en">English</language>
+      <language ident="zh-Hant">Chinese (Traditional)</language>
+    </langUsage>
+  </profileDesc>
+  <revisionDesc>
+    <change when="2013-11-07">
+      <name>Ray Chou 周邦信</name>Created initial TEI XML P5a version with bm2p5a.py
+    </change>
+  </revisionDesc>
+</teiHeader>
+<text><body>
+<milestone unit="juan" n="1"/>
+<pb ed="N" xml:id="N44.0021.0266a" n="0266a"/>
+<lb ed="N" n="0266a01"/><cb:div type="other"><cb:mulu type="其他" level="1">一　施波羅蜜</cb:mulu><head><ref cRef="PTS.Cp.73"></ref>所行藏經</head>
+<lb ed="N" n="0266a02"/>
+<lb ed="N" n="0266a03"/><lg xml:id="lgN44p0266a0301" style="margin-left:0em;text-indent:0em;"><l style="text-indent:2em">歸命彼世尊<caesura style="text-indent:5em;"/>應供等覺</l></lg>
+<lb ed="N" n="0266a04"/>
+<lb ed="N" n="0266a05"/>
+<lb ed="N" n="0266a06"/><p cb:type="head1" xml:id="pN44p0266a0601">一　施波羅蜜</p>
+<lb ed="N" n="0266a07"/>
+<lb ed="N" n="0266a08"/>
+<lb ed="N" n="0266a09"/><cb:div type="other"><cb:mulu type="其他" level="2">第一　阿伽提所行</cb:mulu><head>第一　阿伽提所行</head>
+<lb ed="N" n="0266a10"/><p xml:id="pN44p0266a1001">一</p><p xml:id="pN44p0266a1002" style="margin-left:2em" cb:place="inline">於十萬劫與四無量〔劫〕其間所為之一切行，為熟練菩提者。</p>
+<lb ed="N" n="0266a11"/><p xml:id="pN44p0266a1101">二</p><p xml:id="pN44p0266a1102" style="margin-left:2em" cb:place="inline">於過去劫依有除有間之行，於此劫我談出行，向我聞之！</p>
+<lb ed="N" n="0266a12"/><p xml:id="pN44p0266a1201">三、四</p><p xml:id="pN44p0266a1203" style="margin-left:2em" cb:place="inline">我名阿伽提苦行者，於空漠彼森<anchor xml:id="nkr_note_orig_0266001" n="0266001"/>等荒野，入住廣大之阿蘭若時，三天之
+<lb ed="N" n="0266a13"/>天主我<anchor xml:id="nkr_note_orig_0266002" n="0266002"/>苦行力而熱，取婆羅門之身相，為乞食者而近我。</p>
+<lb ed="N" n="0266a14"/><p xml:id="pN44p0266a1401">五</p><p xml:id="pN44p0266a1402" style="margin-left:2em" cb:place="inline">有由森林持來未加油、鹽之葉，見於我門口，我以己之鍋多量施與。</p>
+<pb ed="N" xml:id="N44.0021.0267a" n="0267a"/>
+<lb ed="N" n="0267a01"/><p xml:id="pN44p0267a0101">六</p><p xml:id="pN44p0267a0102" style="margin-left:2em" cb:place="inline">我傾器物與彼葉，再求施捨，入由葉所成之小屋。</p>
+<lb ed="N" n="0267a02"/><p xml:id="pN44p0267a0201">七</p><p xml:id="pN44p0267a0202" style="margin-left:2em" cb:place="inline">再次又三次彼近我前。無震無躊，如是我已與之。</p>
+<lb ed="N" n="0267a03"/><p xml:id="pN44p0267a0301">八</p><p xml:id="pN44p0267a0302" style="margin-left:2em" cb:place="inline">依此，予之身體已未變色。持喜樂、持歡樂而過日。</p>
+<lb ed="N" n="0267a04"/><p xml:id="pN44p0267a0401">九</p><p xml:id="pN44p0267a0402" style="margin-left:2em" cb:place="inline">雖然若一月若二月，如得善受施者，不恐、不惓，我與最上之施物。</p>
+<lb ed="N" n="0267a05"/><p xml:id="pN44p0267a0501">一〇</p><p xml:id="pN44p0267a0503" style="margin-left:2em" cb:place="inline">與彼施物，名聲、所得，我無所求，以一切智性為目的，我為此等之業。</p></cb:div>
+<lb ed="N" n="0267a06"/>
+<lb ed="N" n="0267a07"/><cb:div type="other"><cb:mulu type="其他" level="2">第二　僧伽所行</cb:mulu><head><ref cRef="PTS.Cp.74"></ref>第二　僧伽所行</head>
+<lb ed="N" n="0267a08"/><p xml:id="pN44p0267a0801">一</p><p xml:id="pN44p0267a0802" style="margin-left:2em" cb:place="inline">又於他，我僧伽名為婆羅門時，欲渡大河以近港市。</p>
+<lb ed="N" n="0267a09"/><p xml:id="pN44p0267a0901">二</p><p xml:id="pN44p0267a0902" style="margin-left:2em" cb:place="inline">於彼路上，見我方向堅熱地步履難行之道，無他乃勝自在者。</p>
+<lb ed="N" n="0267a10"/><p xml:id="pN44p0267a1001">三</p><p xml:id="pN44p0267a1002" style="margin-left:2em" cb:place="inline">我於路上會見彼，思考以下之義：「此〔福〕<anchor xml:id="nkr_note_orig_0267003" n="0267003"/>田願到福人來。」</p>
+<lb ed="N" n="0267a11"/><p xml:id="pN44p0267a1101">四</p><p xml:id="pN44p0267a1102" style="margin-left:2em" cb:place="inline">然為農夫之人，見有此大收護之土地，如不向彼處種芽，彼則非希求穀物者。</p>
+<lb ed="N" n="0267a12"/><p xml:id="pN44p0267a1201">五</p><p xml:id="pN44p0267a1202" style="margin-left:2em" cb:place="inline">如是我願為求福者，見最勝優良之福田，若於彼處不作業，則我非希求福者。</p>
+<lb ed="N" n="0267a13"/><p xml:id="pN44p0267a1301">六</p><p xml:id="pN44p0267a1302" style="margin-left:2em" cb:place="inline">恰如大臣於王後宮諸人之處，將欲得印<anchor xml:id="nkr_note_orig_0267004" n="0267004"/>，若不與彼等財、穀物，則不得印。</p>
+<lb ed="N" n="0267a14"/><p xml:id="pN44p0267a1401">七</p><p xml:id="pN44p0267a1402" style="margin-left:2em" cb:place="inline">如是我願為求福者，見廣大受施者，若我不與彼施物，未來將離福。</p>
+<pb ed="N" xml:id="N44.0021.0268a" n="0268a"/>
+<lb ed="N" n="0268a01"/><p xml:id="pN44p0268a0101">八</p><p xml:id="pN44p0268a0102" style="margin-left:2em" cb:place="inline">如是我思考已，脫履禮彼之兩足，施蓋與履。</p>
+<lb ed="N" n="0268a02"/><p xml:id="pN44p0268a0201">九</p><p xml:id="pN44p0268a0202" style="margin-left:2em" cb:place="inline">由此，我實柔和百倍住於安樂。又充實施物，如是我施與彼。</p></cb:div>
+<lb ed="N" n="0268a03"/>
+<lb ed="N" n="0268a04"/>
+</cb:div>
+</body></text></TEI>

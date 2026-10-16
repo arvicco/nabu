@@ -155,6 +155,10 @@ module Nabu
           #                                 reprint keeps its first edition's); the imprint
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
+          "stgall-priscian" => :structured, # the manuscript's copying (AD 850–1, upstream's
+          #                                   statement) on every page; orig_place "Ireland (?)"
+          #                                   — upstream's hedge — while St Gallen (the holding
+          #                                   library) rides "repository", never a place claim
           "syriac-corpus" => :when_key,
           "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
           #                                         BE converted to CE (date_class edition)
@@ -475,15 +479,40 @@ module Nabu
         end
 
         # P108-8: obi-burmese "CS 586(580) = CE 1224(1218) …" — every CE
-        # year in the string joins the envelope; CS-only strings mint
-        # nothing (never converted here — the CE equivalences are
-        # upstream's own).
+        # year in the string joins the envelope. The CE equivalences are
+        # upstream's own, but their arithmetic is wrong on two live rows
+        # (vol4 n°65 "CE 7380", vol6 n°28 "CE 2960" — a BE year mislabeled
+        # CS), so a CE year beyond the corpus ceiling (the 1998 edition;
+        # nothing it prints postdates it) never joins the envelope. When a
+        # string's CE years are ALL implausible, its CS years convert here
+        # instead (CE = CS + 638, same ceiling); CS-only strings still
+        # mint nothing — the deliberate P108-8 scope.
+        OBI_CE_CEILING = 2000
+
         def ce_year_text(meta)
           text = meta["date"].to_s
-          years = text.scan(/CE\s*(\d{3,4})(?:\((\d{3,4})\))?/).flatten.compact.map { |y| Integer(y, 10) }
+          years = era_years(text, "CE")
           return [nil, nil, nil] if years.empty?
 
-          [years.min, years.max, text.strip]
+          plausible = years.select { |y| y <= OBI_CE_CEILING }
+          if plausible.empty?
+            plausible = era_years(text, "CS").map { |y| y + 638 }
+                                             .select { |y| y <= OBI_CE_CEILING }
+          end
+          return [nil, nil, nil] if plausible.empty?
+
+          [plausible.min, plausible.max, text.strip]
+        end
+
+        # Every year in the contiguous span after an era label — the
+        # censused grammar covers plain years, parenthetical alternates
+        # "586(580)", dash ranges "1763-1776" (and chains "1341-1342-…"),
+        # and the open-ended "1000+".
+        def era_years(text, label)
+          text.scan(/\b#{label}\s*([\d()+\-–]+)/)
+              .flatten
+              .flat_map { |span| span.scan(/\d{3,4}/) }
+              .map { |y| Integer(y, 10) }
         end
 
         ORDINAL_WORDS = %w[zeroth first second third fourth fifth sixth seventh eighth

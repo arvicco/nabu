@@ -57,7 +57,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Greek silver layer | Diorisis and GLAUx: machine-lemmatized second editions of the Greek canon, honestly labelled | Homer – early Byzantium | 2,188 / 1,485,083 | CC BY-SA / mixed per document |
 | Classical Latin | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with 181 English translations | 3rd c. BCE – Late Antiquity | 554 / 401,207 | CC BY-SA |
 | Latin–Romance continuum | digilibLT late-antique Latin, openMGH, CroALa, Corpus Córporum's Patrologia; BFM Old French, the Galician-Portuguese cantigas, Old Spanish, Portuguese, Catalan, Occitan, Sardinian and Judeo-Spanish shelves | 2nd c. CE – early modern | 11,309 / 3,271,768 | CC BY / CC BY-SA / NC / written grant |
-| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 63,659 / 1,105,279 | CC BY |
+| Documentary papyri | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | 64,096 / 1,108,882 | CC BY |
 | Latin inscriptions | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | 81,881 / 406,306 | CC BY-SA |
 | Inscriptions of Italy | Epigraphic Database Roma: the peninsula itself, the geographic complement of Heidelberg's provinces — dated and faceted end to end | Republic – Late Antiquity | 115,590 / 596,064 | CC BY |
 | Celtic | CorPH Early Irish (gold-lemmatized), the RIIG Gaulish inscriptions, the Ogham in 3D stones | c. 2nd c. BCE – 10th c. CE | 1,444 / 20,352 | CC BY / MIT (ogham held `nc` pending clarification) |
@@ -176,7 +176,7 @@ synthetic.
 
 The everyday written record of a millennium of Egypt, from the Duke Databank
 of Documentary Papyri via papyri.info: contracts, tax receipts, petitions,
-private letters, census returns, leases, and court records — 63,659
+private letters, census returns, leases, and court records — 64,096
 documents (October 2026) from Ptolemaic to early Islamic Egypt, chiefly Greek with Coptic,
 Latin, Arabic, and Demotic minorities. Leiden-convention editorial markup
 (restorations, cancellations) is preserved, and the fragment-search index
@@ -252,7 +252,7 @@ words with human-verified sandhi splitting, lemmatization, and
 morphology: the first gold-annotated Sanskrit in the lemma index. SARIT
 adds 78 scholarly TEI editions / 345,601 passages of works GRETIL
 lacks, including a complete Mahābhārata in the Southern Recension.
-SuttaCentral supplies the whole Tipiṭaka — 12,022 documents / 654,974
+SuttaCentral supplies the whole Tipiṭaka — 12,393 documents / 699,345
 passages of roman-script Pali (the Mahāsaṅgīti edition, overwhelmingly
 CC0) with translator-picked English siblings riding the same segment
 identifiers, so a sutta reads with facing translation. Together with
@@ -541,8 +541,10 @@ volume.
 The step change of 20 July 2026: the Kanseki Repository (Kyoto's
 premodern-Chinese library, KR1 classics through the KR5 Daoist canon)
 and the CBETA Buddhist canon (Taishō and Xuzangjing in TEI) together
-hold **13.2 million passages of Literary Chinese** — the library's
-second-largest language, behind only Classical Arabic. The
+hold **14.6 million passages of Literary Chinese** — and with the
+Korean hanmun registers and the Chinese wikisources beside them the
+language stands third in the library, behind Classical Arabic and
+early modern English. The
 Thesaurus Linguae Sericae adds sense-level attributions into the
 classics, and the character instruments (Unihan, the BabelStone IDS
 decompositions, Baxter-Sagart Old Chinese, the Guangyun rime dictionary,

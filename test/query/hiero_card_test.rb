@@ -117,6 +117,21 @@ module Query
       db&.disconnect
     end
 
+    # The finer AED grain: word-token attestations and damaged
+    # (<unclear>) occurrences ride as further additive keys.
+    def test_the_aed_panel_carries_word_and_damaged_grain
+      db = store_test_db
+      db[:hiero_postings].insert(glyph: "𓈖", texts: 42, signs: 1_311, words: 1_200, unclear: 57)
+      corpus = card_for("N35", catalog: db).card.corpus
+      assert_equal 1_200, corpus["aed_words"]
+      assert_equal 57, corpus["aed_unclear"]
+
+      out, = capture_io { Nabu::CLI.new.send(:print_hiero_card, card_for("N35", catalog: db)) }
+      assert_match(/1311 sign\(s\) in 1200 word\(s\) across 42 text\(s\), 57 damaged \(aed/, out)
+    ensure
+      db&.disconnect
+    end
+
     def test_the_aed_panel_is_absent_without_a_row_or_a_codepoint
       db = store_test_db
       load_aes_fixture(db)
