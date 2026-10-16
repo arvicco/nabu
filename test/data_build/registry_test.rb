@@ -17,7 +17,8 @@ class DataBuildRegistryTest < Minitest::Test
                       mul/place-refs mul/places-lpf mul/document-dates
                       mul/char-postings mul/lemma-frequencies mul/language-curve
                       mul/language-dossiers mul/script-dossiers sux/sign-table
-                      egy/unikemet-signs egy/hiero-frequency sga/form-lemma].freeze
+                      egy/unikemet-signs egy/hiero-frequency sga/form-lemma
+                      hbo/form-lemma].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -460,7 +461,10 @@ class DataBuildRegistryTest < Minitest::Test
       # carve-out, the char-postings precedent).
       "egy/hiero-frequency" => "CC-BY-SA-4.0",
       # Both editions are MIT (stgall-priscian, corph) — clean BY.
-      "sga/form-lemma" => "CC-BY-4.0"
+      "sga/form-lemma" => "CC-BY-4.0",
+      # OSHB's lemma/morphology layer is CC BY 4.0 (WLC text public
+      # domain); BHSA (CC BY-NC) is never an input, so the table stays BY.
+      "hbo/form-lemma" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
