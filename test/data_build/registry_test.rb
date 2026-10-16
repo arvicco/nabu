@@ -17,7 +17,7 @@ class DataBuildRegistryTest < Minitest::Test
                       mul/place-refs mul/places-lpf mul/document-dates
                       mul/char-postings mul/lemma-frequencies mul/language-curve
                       mul/language-dossiers mul/script-dossiers sux/sign-table
-                      egy/unikemet-signs egy/hiero-frequency].freeze
+                      egy/unikemet-signs egy/hiero-frequency sga/form-lemma].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -376,6 +376,13 @@ class DataBuildRegistryTest < Minitest::Test
     # place-refs, document-dates, places-lpf) file under it.
     mul = Nabu::DataBuild::LANGUAGES.fetch("mul")
     assert_equal ["Multiple languages", nil, "mul"], [mul.name, mul.glottocode, mul.iso639p3]
+
+    # Checked 2026-10-16: oldi1245 is the languoid carrying ISO sga (level:
+    # language; Glottolog names it "Early Irish", its Old Irish 8–9th c.
+    # stage oldi1246 a dialect beneath it). The Name column uses the
+    # dataset's own label for the gloss language.
+    sga = Nabu::DataBuild::LANGUAGES.fetch("sga")
+    assert_equal ["Old Irish", "oldi1245", "sga"], [sga.name, sga.glottocode, sga.iso639p3]
   end
 
   # Owner ruling: the mul/ namespace is real plumbing — a mul-led slug must
@@ -451,7 +458,9 @@ class DataBuildRegistryTest < Minitest::Test
       "egy/unikemet-signs" => "CC-BY-4.0",
       # P77-r17: derived from AES's share-alike grant (the share-alike/D51-a
       # carve-out, the char-postings precedent).
-      "egy/hiero-frequency" => "CC-BY-SA-4.0"
+      "egy/hiero-frequency" => "CC-BY-SA-4.0",
+      # Both editions are MIT (stgall-priscian, corph) — clean BY.
+      "sga/form-lemma" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

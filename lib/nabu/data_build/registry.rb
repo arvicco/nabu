@@ -22,6 +22,7 @@ require_relative "place_refs_builder"
 require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
+require_relative "sga_form_lemma"
 require_relative "script_dossiers_builder"
 require_relative "sign_table_builder"
 require_relative "unikemet_signs_builder"
@@ -73,7 +74,11 @@ module Nabu
       # egyp1246 = Egyptian (Ancient), ISO egy, level: language — checked
       # 2026-08-11 (P73-9) against the same cone.
       "egy" => Language.new(id: "egy", name: "Egyptian (Ancient)", glottocode: "egyp1246",
-                            iso639p3: "egy")
+                            iso639p3: "egy"),
+      # oldi1245 carries ISO sga, level: language — Glottolog's name is
+      # "Early Irish" (its 8–9th c. Old Irish stage, oldi1246, is a dialect
+      # beneath it); checked 2026-10-16 against the same cone.
+      "sga" => Language.new(id: "sga", name: "Old Irish", glottocode: "oldi1245", iso639p3: "sga")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -634,6 +639,28 @@ module Nabu
                    "precedent).",
         maintenance: "re-derive after `nabu sync aes`; the doc-attestation digest in the " \
                      "recipe makes an unchanged census a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "sga/form-lemma", language: LANGUAGES.fetch("sga"),
+        title: "Old Irish form→lemma table from two gold editions of the St Gall Priscian glosses",
+        # gold-DERIVED, the san/form-lemma posture: a mechanical aggregation
+        # of human-annotated tokens plus a measured cross-edition census.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: %w[stgall-priscian corph], canonical_cones: %w[stgall-priscian corph],
+        builder: SgaFormLemma,
+        rationale: "Bridges attested Old Irish forms to their dictionary lemmas from two independent " \
+                   "gold annotations of the same St Gall Priscian glosses — the St Gall Priscian " \
+                   "Glosses edition v2.1 (Hofman, Moran, Bauer) and CorPH's St Gall text (ChronHib), " \
+                   "both MIT — with Edition, homonym index, part of speech and morphological analysis " \
+                   "per row. The differentiator is the two-edition agreement census: the editions are " \
+                   "joined on the Thesaurus Palaeohibernicus reference, their tokens aligned by folded " \
+                   "form, and identical / fold-equal / divergent lemma counts published in nabu.eval, " \
+                   "with every divergent pair side by side in divergences.csv — an inter-annotator " \
+                   "measurement and a concordance between two lemmatization conventions no single " \
+                   "edition can offer.",
+        maintenance: "re-derive after a stgall-priscian or corph sync (both upstreams are stable — " \
+                     "corph is pinned; the stale-ingest guard enforces freshness); mechanical, every " \
+                     "build re-measures the agreement census"
       )
     ].freeze
 
