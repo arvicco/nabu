@@ -203,7 +203,7 @@ no page update is a red suite, and vice versa.
 | `mul/script-dossiers` | available | curated | CC-BY-4.0 | mul | — |
 | `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
 | `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
-| `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes |
+| `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes, aed |
 | `sga/form-lemma` | available | gold-derived | CC-BY-4.0 | sga | stgall-priscian, corph |
 | `hbo/form-lemma` | available | gold-derived | CC-BY-4.0 | hbo | oshb |
 
@@ -416,13 +416,13 @@ Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardine
 
 **Maintenance**: re-derive after `nabu sync unikemet` (upstream moves at annual Unicode releases); mechanical, no review needed beyond spot-checks
 
-### `egy/hiero-frequency` — Egyptian hieroglyph frequencies — Gardiner codes censused from AES, per subcorpus
+### `egy/hiero-frequency` — Egyptian hieroglyph frequencies — Gardiner codes censused from AES per subcorpus, with word-grain and damaged-attestation counts
 
-**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: aes
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: aes, aed
 
-The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere. Joins egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings precedent).
+The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token, word and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere, now at the word grain: Words counts the words attesting a sign (a sign repeated inside one word counts once). The hiero-glyphs.csv sidecar publishes the AED per-glyph census (the catalog's hiero_postings, over the TLA per-text stand-off hieroglyph files): Texts, Signs, Words, and Unclear — the occurrences read inside TEI `<unclear>`, i.e. damage-flagged attestations. Joins egy/unikemet-signs on the Gardiner column and on Codepoint. CC BY-SA 4.0 — derived from the AES and AED share-alike grants, the D51-a share-alike carve-out of 2026-08-11 (the char-postings precedent).
 
-**Maintenance**: re-derive after `nabu sync aes`; the doc-attestation digest in the recipe makes an unchanged census a fingerprint no-op
+**Maintenance**: re-derive after `nabu sync aes` or `nabu sync aed`; the doc-attestation and glyph-census digests in the recipe make an unchanged census a fingerprint no-op
 
 ### `sga/form-lemma` — Old Irish form→lemma table from two gold editions of the St Gall Priscian glosses
 

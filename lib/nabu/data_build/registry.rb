@@ -629,23 +629,30 @@ module Nabu
       ),
       Feature.new(
         slug: "egy/hiero-frequency", language: LANGUAGES.fetch("egy"),
-        title: "Egyptian hieroglyph frequencies — Gardiner codes censused from AES, per subcorpus",
+        title: "Egyptian hieroglyph frequencies — Gardiner codes censused from AES per " \
+               "subcorpus, with word-grain and damaged-attestation counts",
         # gold-DERIVED: a mechanical census over TLA gold annotation — no
         # interpretation, no sampling.
         status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
         anchoring: "none",
-        inputs: ["aes"], canonical_cones: [],
+        inputs: %w[aes aed], canonical_cones: [],
         builder: HieroFrequencyBuilder,
         rationale: "The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code " \
-                   "token and document frequencies censused from AES's per-word hiero_inventar " \
-                   "annotations, overall and per subcorpus (frequency is genre-dependent — " \
-                   "Pyramid Texts vs Amarna letters vs medical papyri). To the survey's " \
-                   "knowledge the first public hieroglyph frequency list anywhere. Joins " \
-                   "egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from " \
-                   "AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings " \
-                   "precedent).",
-        maintenance: "re-derive after `nabu sync aes`; the doc-attestation digest in the " \
-                     "recipe makes an unchanged census a fingerprint no-op"
+                   "token, word and document frequencies censused from AES's per-word " \
+                   "hiero_inventar annotations, overall and per subcorpus (frequency is " \
+                   "genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To " \
+                   "the survey's knowledge the first public hieroglyph frequency list anywhere, " \
+                   "now at the word grain: Words counts the words attesting a sign (a sign " \
+                   "repeated inside one word counts once). The hiero-glyphs.csv sidecar " \
+                   "publishes the AED per-glyph census (the catalog's hiero_postings, over the " \
+                   "TLA per-text stand-off hieroglyph files): Texts, Signs, Words, and Unclear — " \
+                   "the occurrences read inside TEI `<unclear>`, i.e. damage-flagged attestations. " \
+                   "Joins egy/unikemet-signs on the Gardiner column and on Codepoint. CC BY-SA " \
+                   "4.0 — derived from the AES and AED share-alike grants, the D51-a share-alike " \
+                   "carve-out of 2026-08-11 (the char-postings precedent).",
+        maintenance: "re-derive after `nabu sync aes` or `nabu sync aed`; the doc-attestation " \
+                     "and glyph-census digests in the recipe make an unchanged census a " \
+                     "fingerprint no-op"
       ),
       Feature.new(
         slug: "sga/form-lemma", language: LANGUAGES.fetch("sga"),
