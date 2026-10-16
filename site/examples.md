@@ -86,8 +86,8 @@ urn:nabu:corpus-corporum:9349:d142.p1 [lat]
 
 *The [Epigraphy desk]({{ '/axis/epigraphy/' | relative_url }}) — papyri, stones and sherds.*
 
-The library holds 63,659 documents of the Duke Databank of Documentary
-Papyri (as of 11 October 2026), with the Leiden editorial conventions preserved. Fragment search is
+The library holds 64,096 documents of the Duke Databank of Documentary
+Papyri (as of 16 October 2026), with the Leiden editorial conventions preserved. Fragment search is
 built for damaged texts: type the line as the edition prints it, brackets
 and all, and the trigram index matches it inside words:
 
