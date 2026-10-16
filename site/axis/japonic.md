@@ -32,14 +32,14 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `kokubunken` | texts | attribution | wired · manual | 3 docs / 1,723 passages |
 | `kouigenji` | texts | attribution | wired · manual | 54 docs / 25,065 passages |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
-| `ndl-kotenseki` | texts | open | wired · manual | 35,533 docs / 1,559,480 passages |
+| `ndl-kotenseki` | texts | open | wired · manual | 35,933 docs / 1,580,754 passages |
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 16 October 2026)</span>: `zho` 430,294 · `jpn` 329,904 · `lzh` 63,807 · `ojp` 11,413 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 12 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 16 October 2026)</span>: `zho` 430,294 · `jpn` 330,304 · `lzh` 63,807 · `ojp` 11,413 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 12 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 
