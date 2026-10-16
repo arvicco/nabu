@@ -541,7 +541,11 @@ bhsa:
   # 929 chapters / 23,213 verses / 88,131 clauses / 253,203 phrases /
   # 9,230 lexemes. LICENSE: README.md verbatim CC BY-NC 4.0 citing DOI
   # 10.17026/dans-z6y-skyh (the GitHub MIT badge covers code only) → class
-  # nc, the proiel/gretil posture. Version PINNED to the frozen tf/2021
+  # nc, the proiel/gretil posture — CONFIRMED by the ETCBC directorate
+  # (W. van Peursen, by email, 2026-10-15): all ETCBC-created data CC
+  # BY-NC 4.0, software MIT, the BHSA one indivisible package (base text
+  # + annotations), commercial use negotiated via the Deutsche
+  # Bibelgesellschaft. Version PINNED to the frozen tf/2021
   # dataset (the sparse cone IS the pin); upstream moves rarely and only
   # in other version dirs → re-syncs are an owner decision.
   # Sibling repo ETCBC/bridging (MIT, the OSHB↔BHSA word-level crosswalk)
