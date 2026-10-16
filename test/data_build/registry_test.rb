@@ -15,7 +15,8 @@ class DataBuildRegistryTest < Minitest::Test
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
                       mul/kind-classifications mul/cuneiform-senses
                       mul/place-refs mul/places-lpf mul/document-dates
-                      mul/char-postings mul/language-dossiers mul/script-dossiers sux/sign-table
+                      mul/char-postings mul/lemma-frequencies mul/language-curve
+                      mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency].freeze
 
   def features
@@ -276,6 +277,25 @@ class DataBuildRegistryTest < Minitest::Test
     assert_match(/circularity/, postings.rationale,
                  "the Edubba never-re-import guard is stated where the owner reads it")
 
+    frequencies = Nabu::DataBuild.feature("mul/lemma-frequencies")
+    assert_equal :available, frequencies.status, "builder and feature land together"
+    assert_equal Nabu::DataBuild::LemmaFrequenciesBuilder, frequencies.builder
+    assert_equal "gold-derived", frequencies.tier
+    assert_equal "none", frequencies.anchoring
+    assert_empty frequencies.inputs, "the catalog rollup is the source of truth"
+    assert_match(/GOLD lemmatization only/, frequencies.rationale,
+                 "the gold-only scope is stated where the owner reads it")
+    assert_match(/research_private/, frequencies.rationale,
+                 "the license screening is stated where the owner reads it")
+
+    curve = Nabu::DataBuild.feature("mul/language-curve")
+    assert_equal :available, curve.status, "builder and feature land together"
+    assert_equal Nabu::DataBuild::LanguageCurveBuilder, curve.builder
+    assert_equal "gold-derived", curve.tier
+    assert_empty curve.inputs, "the catalog rollup is the source of truth"
+    assert_match(/research_private/, curve.rationale,
+                 "the license screening is stated where the owner reads it")
+
     sign_table = Nabu::DataBuild.feature("sux/sign-table")
     assert_equal :available, sign_table.status, "P73-9: builder and feature land together"
     assert_equal Nabu::DataBuild::SignTableBuilder, sign_table.builder
@@ -416,6 +436,10 @@ class DataBuildRegistryTest < Minitest::Test
       "mul/document-dates" => "CC-BY-SA-4.0",
       # P73-8: the kanripo lane's share-alike grant.
       "mul/char-postings" => "CC-BY-SA-4.0",
+      # The share-alike carve-out: BY-SA lemmatized lanes (aes, tla-hf,
+      # menota, glaux, ...) contribute to both rollup projections.
+      "mul/lemma-frequencies" => "CC-BY-SA-4.0",
+      "mul/language-curve" => "CC-BY-SA-4.0",
       # P85-A: ~71% Wikipedia-derived context prose — the whole overlay
       # inherits share-alike (owner ruling 2026-08-28).
       "mul/language-dossiers" => "CC-BY-SA-4.0",
