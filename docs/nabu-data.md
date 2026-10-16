@@ -204,6 +204,7 @@ no page update is a red suite, and vice versa.
 | `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
 | `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
 | `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes |
+| `sga/form-lemma` | available | gold-derived | CC-BY-4.0 | sga | stgall-priscian, corph |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -421,6 +422,14 @@ Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardine
 The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere. Joins egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings precedent).
 
 **Maintenance**: re-derive after `nabu sync aes`; the doc-attestation digest in the recipe makes an unchanged census a fingerprint no-op
+
+### `sga/form-lemma` — Old Irish form→lemma table from two gold editions of the St Gall Priscian glosses
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: stgall-priscian, corph
+
+Bridges attested Old Irish forms to their dictionary lemmas from two independent gold annotations of the same St Gall Priscian glosses — the St Gall Priscian Glosses edition v2.1 (Hofman, Moran, Bauer) and CorPH's St Gall text (ChronHib), both MIT — with Edition, homonym index, part of speech and morphological analysis per row. The differentiator is the two-edition agreement census: the editions are joined on the Thesaurus Palaeohibernicus reference, their tokens aligned by folded form, and identical / fold-equal / divergent lemma counts published in nabu.eval, with every divergent pair side by side in divergences.csv — an inter-annotator measurement and a concordance between two lemmatization conventions no single edition can offer.
+
+**Maintenance**: re-derive after a stgall-priscian or corph sync (both upstreams are stable — corph is pinned; the stale-ingest guard enforces freshness); mechanical, every build re-measures the agreement census
 
 ## What the rail never does
 
