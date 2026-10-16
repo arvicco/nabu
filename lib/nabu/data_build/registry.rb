@@ -9,6 +9,7 @@ require_relative "char_postings_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
+require_relative "hbo_form_lemma_builder"
 require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kind_classifications_builder"
@@ -78,7 +79,13 @@ module Nabu
       # oldi1245 carries ISO sga, level: language — Glottolog's name is
       # "Early Irish" (its 8–9th c. Old Irish stage, oldi1246, is a dialect
       # beneath it); checked 2026-10-16 against the same cone.
-      "sga" => Language.new(id: "sga", name: "Old Irish", glottocode: "oldi1245", iso639p3: "sga")
+      "sga" => Language.new(id: "sga", name: "Old Irish", glottocode: "oldi1245", iso639p3: "sga"),
+      # bibl1238 = Biblical Hebrew — checked 2026-10-16 against the same
+      # cone: level dialect under anci1244 (Ancient Hebrew, the languoid
+      # carrying ISO hbo), Closest_ISO369P3code hbo. The WLC is exactly
+      # Biblical Hebrew, so the precise node is claimed (the oldp1257
+      # dialect-level precedent) while the ID/ISO stay Nabu's hbo code.
+      "hbo" => Language.new(id: "hbo", name: "Biblical Hebrew", glottocode: "bibl1238", iso639p3: "hbo")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -661,6 +668,26 @@ module Nabu
         maintenance: "re-derive after a stgall-priscian or corph sync (both upstreams are stable — " \
                      "corph is pinned; the stale-ingest guard enforces freshness); mechanical, every " \
                      "build re-measures the agreement census"
+      ),
+      Feature.new(
+        slug: "hbo/form-lemma", language: LANGUAGES.fetch("hbo"),
+        title: "Biblical Hebrew form→lemma table derived from the Open Scriptures Hebrew Bible",
+        # gold-DERIVED: a mechanical count over OSHB's complete, edited
+        # lemma/morphology layer — the san/form-lemma tier parity.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["oshb"], canonical_cones: ["oshb"], builder: HboFormLemmaBuilder,
+        rationale: "Maps every attested Biblical Hebrew word form of the Westminster Leningrad " \
+                   "Codex to its OSHB lemma — the augmented Strong's id verbatim (prefix " \
+                   "morphemes slash-joined, homograph letters kept), its content head lemma, and " \
+                   "the OSHM morphology code — with attestation counts, plus a per-head-lemma " \
+                   "sidecar. OSHB ALONE: the catalog's BHSA Hebrew is CC BY-NC and contributes " \
+                   "nothing (the exclusion is censused in the manifest); Aramaic words and qere " \
+                   "readings are excluded and censused too. Forms are carried byte-verbatim and " \
+                   "never NFC-normalized — hbo is NFC-exempt (the Masoretic mark order is not " \
+                   "NFC-stable). OSHB's lemma/morphology layer is CC BY 4.0 over the " \
+                   "public-domain WLC text → clean CC BY 4.0.",
+        maintenance: "re-derive after `nabu sync oshb` (upstream is a completed digitization " \
+                     "with occasional corrections); mechanical, no review needed beyond spot-checks"
       )
     ].freeze
 
