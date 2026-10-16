@@ -430,6 +430,24 @@ module Store
       assert_includes row[:date_raw], "CS 586"
     end
 
+    def test_metadata_dates_obi_bounds_upstream_ce_arithmetic
+      # Two live upstream defects (vol4 n°65, vol6 n°28): the corpus's own
+      # "= CE" conversions are wrong. An implausible CE year (beyond the
+      # corpus ceiling) never joins the envelope; when ALL CE years in a
+      # string are implausible, the CS half converts here (CE = CS + 638).
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:v2",
+                        { "date" => "CS 1000+ approx. = CE 7380+ approx." })
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:v3",
+                        { "date" => "CS 2322-1140 = CE 2960-1778" })
+      build!
+      v2 = timeline_for("urn:nabu:obi-burmese:v2")
+      assert_equal [1638, 1638], [v2[:not_before], v2[:not_after]],
+                   "all-implausible CE falls back to CS + 638"
+      v3 = timeline_for("urn:nabu:obi-burmese:v3")
+      assert_equal [1778, 1778], [v3[:not_before], v3[:not_after]],
+                   "the mislabeled BE-as-CS year and its CE product both drop"
+    end
+
     def test_metadata_dates_century_prose_bands
       seed_metadata_doc("ogham", "urn:nabu:ogham:o1",
                         { "date" => { "text" => "Fifth century or possibly early sixth century" } })
