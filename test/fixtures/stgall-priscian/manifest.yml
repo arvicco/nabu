@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# GIT-EXTRACT PROVENANCE (the corph shape). The St Gall Priscian database is
+# one 7.7 MB phpMyAdmin dump inside the edition's website git repo; the
+# fixture is a line-verbatim TRIM of it (see README.md), so no raw GET can
+# ever byte-match it: refetchable: false — `fixtures:check` SKIPS it
+# (printing the reason) and `fixtures:refresh` refuses to touch it.
+source: stgall-priscian
+adapter_test:
+retrieved: 2026-10-14
+files:
+  - path: db_priscian_v2.sql
+    refetchable: false
+    provenance: git-extract
+    reason: trimmed from the 7.7 MB dump at github.com/padraicmoran/stgallpriscian @ fdb2502e7ef9 — no raw per-row URL exists
+    upstream: https://github.com/padraicmoran/stgallpriscian/blob/fdb2502e7ef97c4cd09ac25511271d1548759fc1/db_priscian_v2.sql
+    copied: 2026-10-14
+    whole: false
+    trim: 26 glosses on MS pp. 1, 2, 51 + their 24 Priscian lines and 62 word analyses; all 86 types (see README.md)

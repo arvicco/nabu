@@ -541,7 +541,11 @@ bhsa:
   # 929 chapters / 23,213 verses / 88,131 clauses / 253,203 phrases /
   # 9,230 lexemes. LICENSE: README.md verbatim CC BY-NC 4.0 citing DOI
   # 10.17026/dans-z6y-skyh (the GitHub MIT badge covers code only) → class
-  # nc, the proiel/gretil posture. Version PINNED to the frozen tf/2021
+  # nc, the proiel/gretil posture — CONFIRMED by the ETCBC directorate
+  # (W. van Peursen, by email, 2026-10-15): all ETCBC-created data CC
+  # BY-NC 4.0, software MIT, the BHSA one indivisible package (base text
+  # + annotations), commercial use negotiated via the Deutsche
+  # Bibelgesellschaft. Version PINNED to the frozen tf/2021
   # dataset (the sparse cone IS the pin); upstream moves rarely and only
   # in other version dirs → re-syncs are an owner decision.
   # Sibling repo ETCBC/bridging (MIT, the OSHB↔BHSA word-level crosswalk)
@@ -725,6 +729,15 @@ cbeta:
                    # 2026-09-29: 10 K docs / 60,178 passages; the +7
                    # quarantine delta is upstream T/X drift in the same pull
                    # (509 files updated, 3 withdrawn), K contributed zero.
+                   # P126 (owner-ruled next step): + J (嘉興藏, Ming–Qing
+                   # Jiaxing canon, 287 XMLs / 105 MB, lzh) and N (漢譯南傳
+                   # 大藏經, Yuan Heng Temple Chinese translation of the Pāli
+                   # canon, 83 XMLs / 56 MB, cmn — NOT lzh; Pāli source in
+                   # metadata) — both Category A on cbeta.org/copyright
+                   # (re-read 2026-10-14). PENDING FIRST FETCH: the next
+                   # sync widens the existing sparse cone (≈161 MB working
+                   # tree) and expects ≈370 new documents / ≈1.1M passages
+                   # (census at 2026.R2; estimate from sampled bytes/line).
                    # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at
@@ -3975,15 +3988,16 @@ papyri-ddbdp:
   # adapter header). Lands at the next re-parse: ~2,245 docs / ~179,783
   # passages (grc/lat/cop/egy-Egyd; 12,571 metadata-only stubs skip at
   # discover, 5 defective files quarantine honestly; census 2026-09-26).
-  sync_policy: manual # DEMOTED 2026-10-13 same day as the auto promotion:
-                      # upstream finished its SVN switchover with a layout
-                      # rationalization (DDB_EpiDoc_XML -> DDbDP, translations
-                      # -> Translations, 256k files moved) and the circuit
-                      # breaker rightly refused the merge (98% would read as
-                      # withdrawn under the old cone). Canonical holds the
-                      # healthy pre-switchover snapshot; the migration packet
-                      # (cone update + URN-stability proof + breakered merge)
-                      # re-promotes it.
+  sync_policy: auto   # RE-PROMOTED 2026-10-14: the switchover migration
+                      # landed end to end — the dual-root cone (DDbDP/ +
+                      # Historical/ fallback) shipped with document-grain URN
+                      # stability proven corpus-wide, the owner-fired breakered
+                      # merge put canonical on upstream's current head, and the
+                      # full re-parse verified (64,115 docs / 1.109M passages,
+                      # the DCLP literary family's first landing). The 2026-10-13
+                      # demotion's reason (the breaker's catch of the layout
+                      # rationalization) is fully resolved; the auto sweep
+                      # resumes on the new layout.
   # P16-4: trigram fragment index (search --fuzzy), DOCUMENTARY scope — the
   # owner-approved 250–270 MB line (intertext design §4). Papyrus lines
   # average 34 chars; damaged-fragment search earns its bytes here. Future
@@ -5006,6 +5020,30 @@ starling:
       promise to credit each base's compilers per
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
       Baltet, Kartet) verbatim on every serving surface.
+
+stgall-priscian:
+  adapter: Nabu::Adapters::StgallPriscian
+  adopted: "2026-10-14"
+  axes: [celtic]
+  wired: true    # first sync verified 2026-10-14: 239 documents / 13,395 passages
+                 # (sga 3,524 · lat 9,871), 0 errors, 4s — the expected counts
+                 # exactly; eyeballed (p1:9 ".i. libardaib" renders sga)
+  sync_policy: manual
+  # The St Gall Priscian glosses (St Gallen, Stiftsbibliothek 904, copied
+  # AD 850–1): the edition v2.1 (2023) of Rijcklof Hofman, Pádraic Moran
+  # and Bernhard Bauer (stgallpriscian.ie) — 9,400+ Latin and Old Irish
+  # glosses plus ~3,700 construe marks, with English translations of the
+  # Old Irish, word-by-word morphological analysis and the gloss typology.
+  # Per-gloss language (upstream's irish flag, plus Latin-flagged glosses
+  # whose words are mostly analysed Old Irish forms — the adapter's class
+  # note); construe-mark glosses read through their anchor words.
+  # One phpMyAdmin dump (db_priscian_v2.sql) in the edition's website repo
+  # github.com/padraicmoran/stgallpriscian, SPARSE-fetched (the dump, the
+  # LICENSE/README and the edition's prose pages; the ~200 MB of page scans
+  # stay out). Document = MS page, passage = gloss by the edition's gloss id.
+  # LICENSE verbatim: "MIT License / Copyright (c) 2023 Pádraic Moran" —
+  # the repo LICENSE covers the repository including the dump → class
+  # attribution (verified 2026-10-14).
 
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral

@@ -177,11 +177,18 @@ sources:
     places: {posture: unplaced}
     script: {posture: mixed, note: "gaiji variant characters ride annotations"}
   cbeta:
-    lect: {posture: codemap, note: lzh → zho/lit}
+    lect: {posture: codemap, note: "lzh → zho/lit for T/X/K/J; the N canon (漢譯南傳大藏經,
+        the Yuan Heng Temple 1990–98 Chinese translation of the Pāli Tipiṭaka via the
+        Japanese Nanden daizōkyō) is modern written Chinese and claims bare cmn (identity —
+        the classical-modern translation-sibling precedent), never lzh; its Pāli source
+        rides metadata translated_from: pli and per-line PTS cRef annotations (P126)"}
     dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the header byline's dynasty seat
         (3,163 of 3,707 headers censused 2026-09-26) bands via period_bands.yml through
         MetadataDates :dynasty_band — precision `era`, an attributed translation-era claim,
-        never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing"}
+        never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing.
+        P126: J bylines carry 明/清 seats (both banded rows) and date the same way; N's
+        modern translator bylines (悟醒譯) carry no seat and DELIBERATELY mint nothing — the
+        1990–98 translation era is source-level knowledge, not a per-file upstream claim"}
     places: {posture: unplaced}
     script: {posture: implied}
   suttacentral:
@@ -850,6 +857,26 @@ sources:
     script: {posture: qualified, note: "measured: the text lane is a Latin TRANSLITERATION
         (onw in Latn — 7,450 Latin letters, zero Coptic-block characters); the manuscripts'
         Coptic-derived Old Nubian alphabet is not carried. Metadata script Latn"}
+  stgall-priscian:   # P126
+    # kind: machine-postured — kind_map.yml source_kind scholarly/commentary.
+    lect: {posture: dates, note: "measured mix (full dump, 2026-10-14): passages sga 3,524 /
+        lat 9,871 — per gloss, upstream's irish flag plus 422 Latin-flagged glosses whose words
+        are mostly analysed Old Irish forms; 3,800 construe/symbol glosses abstain from the
+        page vote → 198 lat + 41 sga page documents. Every page dates 850–851, so the date-band
+        grain stages the lat pages to lat:med; sga is a bare banded node (to 900) with no
+        stages and stays sga — the corph shape on the same desk. The page grain is declared
+        coarse: the per-gloss language rides the passages"}
+    dating: {posture: dated, note: "the manuscript's copying, AD 850–1, upstream's own
+        statement (home_text.php: 'written by Irish scribes in 850–1, probably in Ireland') —
+        one artifact envelope on every page (:structured lane); glosses older than the copy
+        are not separated upstream"}
+    places: {posture: named, note: "orig_place 'Ireland (?)' — upstream's hedge 'probably in
+        Ireland', uncertainty verbatim (the ReM convention); St Gallen is the holding library
+        ('reaching St Gall sometime after 888') and rides 'repository' only, never a place
+        claim"}
+    script: {posture: implied, note: "Latin script for both lat and sga (metadata script
+        Latn); Priscian's Greek examples put Greek letters in 250 glosses (0.7% of letters) —
+        declared, not a second script lane"}
   altaica-shm:   # P107-7
     kind: {posture: unclassified}
     lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}

@@ -7,15 +7,15 @@ description: >-
 
 > The Celticist — from Lepontic stones to the Old Irish glossators.
 
-Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
+Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the St Gall Priscian glosses in Latin and Old Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 14 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 16 October 2026)</span> |
 |---|---|---|---|---|
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
 | `gpc` | dictionary | attribution | wired · manual | 89,386 entries |
@@ -23,10 +23,11 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
+| `stgall-priscian` | texts | attribution | wired · manual | 239 docs / 13,395 passages |
 | `ud` | treebank | nc | wired · manual | 80 docs / 329,599 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,213 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 October 2026)</span>: `zho` 327,296 · `cy` 89,386 · `sga` 6,797 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 · `ine-pro` 1,928 · `wlm` 1,046 … and 54 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 16 October 2026)</span>: `zho` 327,296 · `cy` 89,386 · `sga` 6,838 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 · `ine-pro` 1,928 · `wlm` 1,046 … and 54 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 

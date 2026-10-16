@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 144, lect.size,
+    assert_equal 145, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -292,7 +292,9 @@ class PosturesTest < Minitest::Test
                  "same mint's sw anchor (Velten's reader; the other nine works claim real " \
                  "prose-language anchors): 142→143; old-nubian-ud ADDED P125 — PENDING on the " \
                  "nabu-lects Old Nubian package (the nub family + onw anchor; nothing Nubian " \
-                 "exists in the canonical registry yet): 143→144"
+                 "exists in the canonical registry yet): 143→144; stgall-priscian ADDED P126 — " \
+                 "dates (every page dated 850–851: lat pages stage to lat:med, the bare sga " \
+                 "node stays sga — the corph shape): 144→145"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -418,6 +420,10 @@ class PosturesTest < Minitest::Test
     # The Old Nubian package (merged + canonical-synced 2026-10-14, the
     # add-then-retire shape WITHIN one phase — the shabados precedent)
     # retires it: identity 116→117, pending 1→0. Zero pendings again.
-    assert_equal({ "dates" => 14, "codemap" => 13, "identity" => 117 }, by_posture)
+    # P126 ADDS stgall-priscian as dates (the St Gall Priscian glosses: a
+    # measured sga/lat per-gloss mix on page documents all dated 850–851 —
+    # the date-band grain stages the Latin, the bare sga node stays):
+    # dates 14→15.
+    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 117 }, by_posture)
   end
 end

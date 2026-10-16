@@ -457,6 +457,18 @@ kaikki extracts (`wiktionary-sga`/`-mga`/`-wlm`, 8,097 entries on the
 treebanks (§6). Together they light Proto-Celtic reflex attestations, the
 piet CELT column's context, and IE-CoR's `sga` variety.
 
+**The St Gall Priscian glosses.** `stgall-priscian` — the digital
+edition (v2.1, 2023) by Rijcklof Hofman, Pádraic Moran and Bernhard
+Bauer of the glosses in St Gallen, Stiftsbibliothek 904, Priscian's
+grammar copied by Irish scribes in AD 850–1: every Latin and Old Irish
+gloss and construe mark on the manuscript's 239 pages, each with its
+glossed Priscian word and line, English translations of the Old Irish,
+the Thesaurus Palaeohibernicus reference, the gloss typology and a
+word-by-word Old Irish analysis that lands as gold `sga` lemmas (239
+documents / 13,395 glosses by dump census — 3,524 Old Irish, 9,871
+Latin; MIT, the editors credited). CorPH carries the same Old Irish
+glosses in ChronHib's edition; this shelf is the whole commentary.
+
 **Research uses:** Early Irish philology with gold lemma search; the
 Continental Celtic epigraphic record beside the insular one (RIIG's
 Segomaros dedication against the Kerry stones); ogham palaeography with

@@ -46,3 +46,24 @@ files:
     whole: false
     retrieved: "2026-09-29"
     trim: real header + first 3 body paragraphs, balanced close
+  - path: J/J36/J36nB354.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/J/J36/J36nB354.xml
+    whole: true
+    retrieved: "2026-10-14"
+    trim: none (complete short Jiaxing text, copied whole at dbdea41 "CBETA 2026.R2"; Ming byline, gaiji, verse lg)
+  - path: J/J29/J29nB247.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/J/J29/J29nB247.xml
+    whole: true
+    retrieved: "2026-10-14"
+    trim: none (complete short Jiaxing yulu, copied whole at dbdea41; Qing byline, inline notes)
+  - path: N/N26/N26n0008.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/N/N26/N26n0008.xml
+    whole: true
+    retrieved: "2026-10-14"
+    trim: none (complete Khuddakapāṭha translation, copied whole at dbdea41; PTS cRef anchors, nanchuan-notes back matter)
+  - path: N/N44/N44n0021-xu.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/N/N44/N44n0021.xml
+    whole: false
+    retrieved: "2026-10-14"
+    trim: teiHeader + body lb 0266a01..0268a04 (the first two cariyā sections, cRef in a head),
+      back dropped, outer cb:div + body/text/TEI closed; 112.5 KB -> 8.4 KB

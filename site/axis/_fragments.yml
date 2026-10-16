@@ -131,16 +131,17 @@ epigraphy:
       the Levant (IIP).
     - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
       shelves — **papyri-ddbdp, EDH, EDR, Elephantine, ORACC and
-      open-etruscan** (3.8M passages as of 28 July 2026). The other
+      open-etruscan** (4.0M passages as of 16 October 2026). The other
       epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
       plain `search --axis epigraphy`.
-    - **The timeline desk:** 549,771 documents carry a date or place (as of
-      26 July 2026 — CDLI's tablets, the Heidelberg inscriptions and the
-      papyri foremost), so `--from/--to`, `--century` and `--place` scope
+    - **The timeline desk:** 1,426,438 documents carry a date or place (as
+      of 16 October 2026 — CDLI's tablets, the Korean and Japanese waves,
+      the Heidelberg inscriptions and the papyri foremost), so
+      `--from/--to`, `--century` and `--place` scope
       the stones and sherds by when and where. EDH's genre facets
       (`--type/--province/--material`) live.
     - **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
-      against the Pleiades gazetteer (42,242 places in a derived index —
+      against the Pleiades gazetteer (42,404 places in a derived index —
       millisecond lookups) and counts this library's holdings found there;
       an inscription's `nabu show` names its findspot with the Pleiades id.
   recipes:

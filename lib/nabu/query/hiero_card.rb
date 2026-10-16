@@ -36,7 +36,9 @@ module Nabu
       #            from canonical/aed's 13,949 per-text stand-off files
       #            (Store::HieroPostingsBuilder); the card reads ONE row
       #            and reports it under its own additive aed_texts/
-      #            aed_signs keys — text grain, never conflated with the
+      #            aed_signs keys (plus aed_words — word tokens — and
+      #            aed_unclear — damaged occurrences, migration 042)
+      #            — text grain, never conflated with the
       #            passage-grain counts above. Codepoint signs only (the
       #            AED runs are plain U+13xxx; a no-codepoint sign has
       #            no row, honestly).
@@ -121,7 +123,12 @@ module Nabu
         return {} unless sign.glyph && @catalog&.table_exists?(:hiero_postings)
 
         row = @catalog[:hiero_postings].first(glyph: sign.glyph)
-        row ? { "aed_texts" => row[:texts], "aed_signs" => row[:signs] } : {}
+        return {} unless row
+
+        # The finer grain (migration 042): word-token attestations and
+        # damaged (<unclear>) occurrences — further additive keys.
+        { "aed_texts" => row[:texts], "aed_signs" => row[:signs],
+          "aed_words" => row[:words], "aed_unclear" => row[:unclear] }
       end
 
       def count_source(slug, shape, sign)
