@@ -13,8 +13,10 @@ require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kind_classifications_builder"
 require_relative "kyujitai_fold_builder"
+require_relative "language_curve_builder"
 require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
+require_relative "lemma_frequencies_builder"
 require_relative "meter_builder"
 require_relative "place_refs_builder"
 require_relative "places_lpf_builder"
@@ -477,6 +479,54 @@ module Nabu
         maintenance: "re-derive after CJK-lane syncs (the census rebuilds with the fulltext " \
                      "index); the published-slice digest makes an unchanged census a " \
                      "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/lemma-frequencies", language: LANGUAGES.fetch("mul"),
+        title: "Gold lemma frequencies per language at century grain (the diachronic frequency tables)",
+        # gold-DERIVED: a mechanical census over gold (treebank / verified)
+        # lemmatization — no sampling, no model output.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The catalog's lemma_rollup is the source of truth (derived from the
+        # whole ingested corpus set — no single cone sha is load-bearing);
+        # the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: LemmaFrequenciesBuilder,
+        rationale: "Frequency tables for the ancient and premodern languages at century grain — " \
+                   "frequency dictionaries exist for almost none of these languages, diachronic ones " \
+                   "for none. One row per (lemma, language, century, basis, corpus) with passage " \
+                   "attestations and attesting documents, projected from the catalog's lemma " \
+                   "rollup; the lemma is the folded lookup key, the century the signed index of " \
+                   "the document's date-envelope midpoint, undated material in its own row. Scope: " \
+                   "GOLD lemmatization only (treebank / verified annotation) — the silver grade " \
+                   "is skipped and censused, and silver-estimate datings fold into undated (an " \
+                   "estimate is never published). License screening row-by-row: open+attribution " \
+                   "classes only — nc, ODbL and research_private sources are excluded and censused " \
+                   "(rows and occurrences per class) in nabu.eval, so no screened contribution can " \
+                   "hide in an integer; CC BY-SA 4.0 — the share-alike carve-out carrying the " \
+                   "share-alike lanes (aes, tla-hf, menota, glaux, ...).",
+        maintenance: "re-derive after lemma-moving events (sync waves of treebank/annotated " \
+                     "sources, a rebuild or builders:refresh re-projecting the rollup); the " \
+                     "published-slice digest makes an unchanged slice a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/language-curve", language: LANGUAGES.fetch("mul"),
+        title: "Documents and passages per language × century × corpus (the attestation census)",
+        # gold-DERIVED: a mechanical count over the held catalog.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The catalog's language_curve rollup is the source of truth; the
+        # recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: LanguageCurveBuilder,
+        rationale: "The library-wide diachronic attestation census — the rise-and-fall table: " \
+                   "live documents and passages per (language, century, basis, corpus), " \
+                   "projected from the catalog's language curve rollup; the century is the " \
+                   "signed index of the document's date-envelope midpoint, undated material " \
+                   "in its own row, silver-estimate datings folded into undated. License " \
+                   "screening row-by-row: open+attribution classes only — nc, ODbL and " \
+                   "research_private sources are excluded and censused (rows and passages per " \
+                   "class) in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out.",
+        maintenance: "re-derive after sync waves, dating-moving events or a rebuild; the " \
+                     "published-slice digest makes an unchanged census a fingerprint no-op"
       ),
       Feature.new(
         slug: "mul/language-dossiers", language: LANGUAGES.fetch("mul"),
