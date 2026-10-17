@@ -3,6 +3,7 @@
 require "nokogiri"
 
 require_relative "conllu_parser"
+require_relative "dcs_lexicon_lane"
 
 module Nabu
   module Adapters
@@ -103,6 +104,12 @@ module Nabu
       def self.manifest
         MANIFEST
       end
+
+      # The lookup/ reference tables (dictionary.csv lexicon + the
+      # word-senses sense bank and its relation/attestation sidecars) load
+      # as the dcs-lexicon / dcs-senses shelves after the chapter load
+      # (Adapter.dictionary_lane; DcsLexiconLane's class note).
+      def self.dictionary_lane = DcsLexiconLane.new
 
       # One chapter's machine-readable declaration from chapter-info.xml.
       # +gold_layers+ is THE gate's input; the whole declaration rides into

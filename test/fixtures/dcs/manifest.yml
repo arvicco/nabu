@@ -40,3 +40,22 @@ files:
     url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/files/Su%C5%9Brutasa%E1%B9%83hit%C4%81/Su%C5%9Brutasa%E1%B9%83hit%C4%81-0115-Su%2C%20Ka.%2C%204-3656.conllu
     whole: false
     trim: header + first 3 blocks + the 2 kaṇṭha blocks + the śīghra block (189,133 B -> 22,528 B; 6 of 92 blocks)
+  # The lookup lane (dcs-lexicon / dcs-senses): line selections cut
+  # 2026-10-17 from upstream commit 8aeed5a1343d0e48b64eb32af8c00e8c6eb29359
+  # (README "The lookup lane" table has the line numbers).
+  - path: dcs/data/conllu/lookup/dictionary.csv
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/dictionary.csv
+    whole: false
+    trim: header + 13 upstream lines incl. the newline-broken 39892 pair and an empty-word row (10 MB -> 1,953 B)
+  - path: dcs/data/conllu/lookup/word-senses.csv
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/word-senses.csv
+    whole: false
+    trim: header + 11 upstream lines incl. the newline-broken 127090 pair (10 MB -> 957 B)
+  - path: dcs/data/conllu/lookup/sembank-relations.csv
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/sembank-relations.csv
+    whole: false
+    trim: 18 upstream lines among the fixture senses, incl. a triplicated edge and a junk code (3.0 MB -> 247 B)
+  - path: dcs/data/conllu/lookup/sembank-attestations.xml
+    url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/sembank-attestations.xml
+    whole: false
+    trim: five whole concept blocks (568, 569, 574, 127090, the closing 147806), lexicalizations cut to the cited lemmas, <n> lines capped at 3 (14 MB -> 1,989 B)
