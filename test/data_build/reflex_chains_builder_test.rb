@@ -107,7 +107,12 @@ class ReflexChainsBuilderTest < Minitest::Test
     Nabu::DataBuild::ReflexChainsBuilder.new(registry: registry_rig).build(catalog: @catalog, out_dir: out_dir)
   end
 
-  def table(dir) = CSV.read(File.join(dir, "reflex-chains.csv"), headers: true)
+  # The table ships gzipped (the plain CSV crosses the platform's 100 MB
+  # limit live); reading back through GzipReader is part of the contract.
+  def table(dir)
+    raw = Zlib::GzipReader.open(File.join(dir, "reflex-chains.csv.gz"), &:read)
+    CSV.parse(raw, headers: true)
+  end
 
   def test_publishes_reflex_rows_of_publishable_dictionaries_in_dictionary_entry_seq_order
     Dir.mktmpdir do |dir|

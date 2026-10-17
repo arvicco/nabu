@@ -29,8 +29,9 @@ module Nabu
     # order) and optionally +primary_key+; non-tabular ones leave fields nil
     # and say what they are via +format+/+mediatype+. +rows+ is the data row
     # count (nil when rows are not the honest unit, e.g. a .bib).
-    Resource = Data.define(:name, :path, :rows, :fields, :primary_key, :format, :mediatype) do
-      def initialize(name:, path:, rows: nil, fields: nil, primary_key: nil, format: nil, mediatype: nil)
+    Resource = Data.define(:name, :path, :rows, :fields, :primary_key, :format, :mediatype, :compression) do
+      def initialize(name:, path:, rows: nil, fields: nil, primary_key: nil, format: nil, mediatype: nil,
+                     compression: nil)
         super
       end
 
