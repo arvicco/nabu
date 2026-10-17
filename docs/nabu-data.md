@@ -207,6 +207,7 @@ no page update is a red suite, and vice versa.
 | `sga/form-lemma` | available | gold-derived | CC-BY-4.0 | sga | stgall-priscian, corph |
 | `hbo/form-lemma` | available | gold-derived | CC-BY-4.0 | hbo | oshb |
 | `mul/dictionary-crossrefs` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/reflex-chains` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -448,6 +449,14 @@ Maps every attested Biblical Hebrew word form of the Westminster Leningrad Codex
 The cross-reference estate of Nabu's dictionaries as one queryable graph — no one publishes cross-dictionary link data for these languages. One row per edge: the from-entry (dictionary, stable entry URN, headword), the pointer's kind and verbatim label, the target as the dictionary stores it (display form, folded form, upstream id), and where the target resolved unambiguously the target dictionary and entry URN; an unresolved edge is still an edge and publishes with the target-entry fields empty (both resolution states censused). License screening on BOTH endpoints: an edge publishes only when its own dictionary's source is open/attribution class AND, when resolved, the target entry's dictionary's source is too — an nc endpoint on either side drops the edge, censused per endpoint role and class in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out carrying the share-alike dictionaries (Wiktionary, JMdict, LSJ, AED, ...).
 
 **Maintenance**: re-derive after dictionary-source syncs or a rebuild (the loader's resolution pass re-mints the graph); the published-slice digest makes an unchanged graph a fingerprint no-op
+
+### `mul/reflex-chains` — Reconstruction→reflex edges of the held etymological dictionaries, joined to the gold corpus
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
+
+Every reconstruction→reflex edge of the held etymological dictionaries (Wiktionary reconstruction shelves, the Tower of Babel databases, IE-CoR, WOLD and smaller lanes) as one table — dictionary, entry headword, the reflex's upstream language code verbatim and its catalog code, the reflex verbatim with romanization and both folded forms, borrowed/uncertain edge flags carried through — plus the join no etymological database publishes: Attested, the gold passage attestations whose folded lemma EQUALS the reflex's folded form (else its folded romanization, the script bridge) under the same catalog language code — the rule Nabu's etym desk resolves at query time, stored-key equality only, no fuzzy or cross-language matching; match/miss censused per language in nabu.eval. License screening row-by-row: open+attribution dictionary sources only — nc dictionaries (derom, mw, edl) are excluded and censused per class and source, and only gold rows of publishable sources count toward Attested; CC BY-SA 4.0 — Wiktionary's share-alike grant dominates (the share-alike carve-out).
+
+**Maintenance**: re-derive after dictionary-shelf syncs (wiktionary-recon, starling, iecor, wold, ...) or lemma-moving events (treebank syncs, a rebuild or builders:refresh re-projecting the rollup); the published-slice digest makes an unchanged slice a fingerprint no-op
 
 ## What the rail never does
 
