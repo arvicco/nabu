@@ -52,7 +52,11 @@ module Nabu
     # unchanged slice is a fingerprint no-op and a screened row can never
     # move it. Rows stream to the CSV (well over a million).
     class ReflexChainsBuilder
-      FILENAME = "reflex-chains.csv"
+      # Gzipped: the plain CSV runs past the hosting platform's 100 MB
+      # file limit (~201 MB live) — the first dataset to cross it. The
+      # writer's gzip is deterministic and the datapackage declares the
+      # compression (Frictionless "compression": "gz").
+      FILENAME = "reflex-chains.csv.gz"
       COLUMNS = %w[ID Dictionary URN Headword Headword_Language Seq Lang_Code Language_ID Form Roman
                    Form_Folded Roman_Folded Borrowed Uncertain Attested Attested_Via Source].freeze
       INTEGER_COLUMNS = %w[Seq Attested].freeze
@@ -245,7 +249,8 @@ module Nabu
 
       def resource(count)
         fields = COLUMNS.map { |name| { name: name, type: field_type(name) } }
-        Resource.new(name: "reflex_chains", path: FILENAME, rows: count, fields: fields, primary_key: ["ID"])
+        Resource.new(name: "reflex_chains", path: FILENAME, rows: count, fields: fields, primary_key: ["ID"],
+                     format: "csv", mediatype: "text/csv", compression: "gz")
       end
 
       def field_type(name)
