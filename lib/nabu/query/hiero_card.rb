@@ -39,9 +39,10 @@ module Nabu
       #            aed_signs keys (plus aed_words — word tokens — and
       #            aed_unclear — damaged occurrences, migration 042)
       #            — text grain, never conflated with the
-      #            passage-grain counts above. Codepoint signs only (the
-      #            AED runs are plain U+13xxx; a no-codepoint sign has
-      #            no row, honestly).
+      #            passage-grain counts above. The glyph row first (the
+      #            AED runs are plain U+13xxx); a sign AED writes only
+      #            as a Gardiner-coded note reads its code-keyed row
+      #            (migration 043).
       HIERO_SOURCES = { "aes" => :inventar, "tla-hf" => :glyph_run }.freeze
 
       # +overlay+ (P72-6): the Nabu::EdubbaOverlay read seam, or nil when
@@ -117,12 +118,16 @@ module Nabu
       end
 
       # The precompiled AED postings row (P103-2) — additive keys on the
-      # frozen corpus contract; no row (unfetched cone, no-codepoint
-      # sign) → no keys, never zero-filled.
+      # frozen corpus contract. The glyph-keyed row wins; a sign AED never
+      # writes as a codepoint falls back to its code-keyed row (the
+      # Gardiner-coded "Keine Entsprechung" notes, migration 043). No row
+      # (unfetched cone, unattested sign) → no keys, never zero-filled.
       def aed_panel(sign)
-        return {} unless sign.glyph && @catalog&.table_exists?(:hiero_postings)
+        return {} unless @catalog&.table_exists?(:hiero_postings)
 
-        row = @catalog[:hiero_postings].first(glyph: sign.glyph)
+        postings = @catalog[:hiero_postings]
+        row = (sign.glyph && postings.first(glyph: sign.glyph)) ||
+              (sign.jsesh && postings.first(code: sign.jsesh))
         return {} unless row
 
         # The finer grain (migration 042): word-token attestations and

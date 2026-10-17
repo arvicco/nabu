@@ -102,16 +102,45 @@ class HieroFrequencyBuilderTest < Minitest::Test
                    "𓂋: 42 occurrences in 39 words, 2 occurrences damage-flagged (<unclear>)"
       assert(table.all? { |row| Integer(row["Words"]) <= Integer(row["Signs"]) })
       assert(table.all? { |row| Integer(row["Unclear"]) <= Integer(row["Signs"]) })
-      assert_equal table.map { |row| row["Codepoint"] }.sort, table.map { |row| row["Codepoint"] },
-                   "deterministic codepoint order"
+      codepoints = table.map { |row| row["Codepoint"] }.compact
+      assert_equal codepoints.sort, codepoints, "deterministic codepoint order"
       assert(table.any? { |row| Integer(row["Unclear"]).positive? }, "the damage flag is live in the fixtures")
 
       sidecar = result.resources.find { |res| res.path == "hiero-glyphs.csv" }
       assert_equal ["ID"], sidecar.primary_key
       assert_equal(%w[Texts Signs Words Unclear],
                    sidecar.fields.select { |f| f[:type] == "integer" }.map { |f| f[:name] })
-      assert_equal @catalog[:hiero_postings].sum(:unclear), result.evaluation["glyph_unclear_occurrences"]
+      assert_equal @catalog[:hiero_postings].where(code: nil).sum(:unclear),
+                   result.evaluation["glyph_unclear_occurrences"]
       assert_includes result.recipe, "hiero_postings"
+    end
+  end
+
+  # Signs AED marks "Keine Entsprechung in Unicode für <code>" ride as
+  # code-keyed rows after the codepoint rows: ID = the Gardiner code,
+  # Codepoint and Glyph empty.
+  def test_the_sidecar_publishes_code_keyed_rows_after_the_codepoint_rows
+    Dir.mktmpdir do |dir|
+      result = build!(dir)
+      table = CSV.read(File.join(dir, "hiero-glyphs.csv"), headers: true, encoding: "UTF-8")
+      x1 = table.find { |row| row["ID"] == "X1" }
+      refute_nil x1, "a coded note member has its sidecar row"
+      assert_nil x1["Codepoint"]
+      assert_nil x1["Glyph"]
+      assert_equal %w[1 8 8 0 aed], x1.values_at("Texts", "Signs", "Words", "Unclear", "Source")
+      assert_equal %w[1 1 1 1], table.find { |row| row["ID"] == "D31A" }.values_at("Texts", "Signs", "Words", "Unclear")
+
+      coded = table.reject { |row| row["Codepoint"] }
+      assert_equal 56, coded.size
+      assert_equal coded.map { |row| row["ID"] }.sort, coded.map { |row| row["ID"] }, "code order"
+      keyed = table.map { |row| row["Codepoint"] ? :codepoint : :code }
+      assert_equal keyed.sort_by { |key| key == :codepoint ? 0 : 1 }, keyed, "code rows follow the codepoint rows"
+      assert_equal table.map { |row| row["ID"] }.uniq.size, table.size, "IDs stay unique across both keys"
+
+      assert_equal 56, result.evaluation["codes"]
+      assert_equal 111, result.evaluation["code_sign_occurrences"]
+      assert_equal @catalog[:hiero_postings].where(code: nil).count, result.evaluation["glyphs"]
+      assert_includes result.recipe, "Gardiner-coded"
     end
   end
 

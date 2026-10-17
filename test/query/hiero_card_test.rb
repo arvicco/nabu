@@ -132,6 +132,28 @@ module Query
       db&.disconnect
     end
 
+    # A sign AED never writes as a codepoint (a later Unikemet
+    # assignment, or a member of a spelling lacking Unicode) reaches the
+    # census only through its Gardiner-coded "Keine Entsprechung" notes:
+    # with no glyph row, the card reads the code-keyed row instead.
+    def test_the_aed_panel_falls_back_to_the_code_keyed_row
+      db = store_test_db
+      db[:hiero_postings].insert(code: "N35", texts: 3, signs: 7, words: 6, unclear: 1)
+      corpus = card_for("N35", catalog: db).card.corpus
+      assert_equal [3, 7, 6, 1], corpus.values_at("aed_texts", "aed_signs", "aed_words", "aed_unclear")
+    ensure
+      db&.disconnect
+    end
+
+    def test_the_glyph_row_wins_over_the_code_row
+      db = store_test_db
+      db[:hiero_postings].insert(glyph: "𓈖", texts: 42, signs: 1_311, words: 1_200, unclear: 57)
+      db[:hiero_postings].insert(code: "N35", texts: 3, signs: 7, words: 6, unclear: 1)
+      assert_equal 42, card_for("N35", catalog: db).card.corpus["aed_texts"]
+    ensure
+      db&.disconnect
+    end
+
     def test_the_aed_panel_is_absent_without_a_row_or_a_codepoint
       db = store_test_db
       load_aes_fixture(db)
