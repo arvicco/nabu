@@ -82,12 +82,13 @@ module Nabu
       # AGDT positional postag decode, slot (0-based) → [UD facet key, codes],
       # or nil for a slot left undecoded. Nine slots: pos, then person …
       # degree. The AGDT guidelines' code letters for those eight categories
-      # coincide with PROIEL's, so the PROIEL rows are reused verbatim (one
-      # query vocabulary, one spelling per value). Slot 1 (pos) stays
-      # undecoded: the façade has no pos facet (cf. PROIEL's skipped
-      # strength/inflection positions). AGDT codes PROIEL lacks (gender `c`,
-      # common) are dropped like any unknown code.
-      AGDT_FIELDS = [nil, *PROIEL_FIELDS].freeze
+      # coincide with PROIEL's, so the PROIEL rows are reused (one query
+      # vocabulary, one spelling per value) — plus AGDT's one extra code:
+      # gender `c` (common, on personal pronouns like σε), UD's Gender=Com.
+      # Slot 1 (pos) stays undecoded: the façade has no pos facet (cf.
+      # PROIEL's skipped strength/inflection positions).
+      AGDT_GENDER = ["gender", PROIEL_FIELDS.assoc("gender").last.merge("c" => "com").freeze].freeze
+      AGDT_FIELDS = [nil, *PROIEL_FIELDS].map { |field| field&.first == "gender" ? AGDT_GENDER : field }.freeze
 
       # The per-tagset decoder seam: token key → decode method, in precedence
       # order. The first key a token carries decides — a token never falls
