@@ -9,6 +9,7 @@ require_relative "char_postings_builder"
 require_relative "dictionary_crossrefs_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
+require_relative "grc_form_lemma_builder"
 require_relative "hani_fold_builder"
 require_relative "hbo_form_lemma_builder"
 require_relative "hiero_frequency_builder"
@@ -41,7 +42,8 @@ module Nabu
     # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28;
     # re-checked 2026-07-29 for P52-3/P52-5): sans1269 = Sanskrit (ISO san),
     # clas1254 = Classical Tibetan (ISO xct), nucl1643 = Japanese (ISO jpn),
-    # lati1261 = Latin (ISO lat), anci1242 = Ancient Greek (ISO grc).
+    # lati1261 = Latin (ISO lat), anci1242 = Ancient Greek (ISO grc; re-checked
+    # 2026-10-17 for grc/form-lemma — still level language, ISO grc).
     # zho is an ISO 639-3 MACROLANGUAGE: Glottolog deliberately assigns
     # macrolanguages no glottocode (the cone carries no row with ISO zho;
     # the nearest node, sini1245 Sinitic, is a family — claiming it would
@@ -788,6 +790,30 @@ module Nabu
                    "CC BY-SA 4.0 → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).",
         maintenance: "re-derive after `nabu sync menota` (the archive grows as editors deposit " \
                      "new transcriptions); mechanical, no review needed beyond spot-checks"
+      ),
+      Feature.new(
+        slug: "grc/form-lemma", language: LANGUAGES.fetch("grc"),
+        title: "Ancient Greek form→lemma table from the GLAUx treebanks, with the hand-annotated " \
+               "share counted",
+        # SILVER: most of GLAUx is automatic annotation (sources.yml
+        # lemma_tier: silver); the Manual_Count column carries the
+        # hand-annotated share so the gold slice stays separable.
+        status: :available, tier: "silver", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: ["glaux"], canonical_cones: ["glaux"], builder: GrcFormLemmaBuilder,
+        rationale: "Maps every lemmatized Ancient Greek word form of the GLAUx corpus (8th c. BC – " \
+                   "4th c. AD, literary and documentary) to its lemma and AGDT 9-place " \
+                   "positional tag, with attestation counts, plus a per-lemma sidecar — a " \
+                   "corpus-scale form→lemma table spanning a millennium of Greek. SILVER: most of " \
+                   "GLAUx is automatic annotation (lemma accuracy ~98.8% per its README), so every " \
+                   "row also carries Manual_Count, the attestations from sentences GLAUx marks as " \
+                   "hand-annotated, keeping the gold share separable. GLAUx ALONE: the catalog's " \
+                   "PROIEL Greek is CC BY-NC-SA and contributes nothing, and GLAUx's own nc texts " \
+                   "(NC source texts, PROIEL- and Gorman-annotated trees) are excluded too — both " \
+                   "exclusions censused in the manifest. Forms carried verbatim. GLAUx is CC BY-SA " \
+                   "→ the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).",
+        maintenance: "re-derive after `nabu sync glaux` (upstream releases occasionally; a release " \
+                     "that re-runs the automatic annotation shifts silver counts); mechanical, " \
+                     "spot-check the Manual_Count share"
       )
     ].freeze
 
