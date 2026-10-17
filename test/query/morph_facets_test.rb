@@ -76,6 +76,70 @@ module Query
       refute MF.match?(token, [%w[case dat]]), "no morphology matches no facet"
     end
 
+    # -- AGDT positional decode (GLAUx `postag`) -------------------------------
+
+    # Real GLAUx shapes (test/fixtures/glaux/xml): `postag` is the 9-slot AGDT
+    # tag — pos, person, number, tense, mood, voice, gender, case, degree.
+    # Slots 2-9 decode to the SAME UD facet names as the other families.
+    def test_agdt_noun_decoded
+      token = { "form" => "Δημόκριτος", "lemma" => "Δημόκριτος", "postag" => "n-s---mn-" }
+      assert_equal({ "number" => "sing", "gender" => "masc", "case" => "nom" }, MF.features(token))
+      assert MF.match?(token, [%w[case nom], %w[number sing]])
+      refute MF.match?(token, [%w[case gen]])
+    end
+
+    def test_agdt_finite_verb_decoded_with_proiel_aorist_spelling
+      token = { "form" => "ἔφυ", "lemma" => "φύω", "postag" => "v3saia---" }
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "aor",
+                     "mood" => "ind", "voice" => "act" }, MF.features(token))
+      assert MF.match?(token, [%w[tense aor], %w[mood ind]])
+    end
+
+    def test_agdt_participle_carries_verbal_and_nominal_slots
+      token = { "form" => "τέρψας", "lemma" => "τέρπω", "postag" => "v-sapamn-" }
+      assert_equal({ "number" => "sing", "tense" => "aor", "mood" => "part", "voice" => "act",
+                     "gender" => "masc", "case" => "nom" }, MF.features(token))
+    end
+
+    def test_agdt_infinitive_and_passive_subjunctive
+      assert_equal({ "tense" => "pres", "mood" => "inf", "voice" => "act" },
+                   MF.features({ "form" => "ὁρᾶν", "postag" => "v--pna---" }))
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "aor",
+                     "mood" => "sub", "voice" => "pass" },
+                   MF.features({ "form" => "ἑψηθῇ", "postag" => "v3sasp---" }))
+    end
+
+    def test_agdt_degree_slot_decoded
+      token = { "form" => "πλεῖστα", "lemma" => "πολύς", "postag" => "a-p---nas" }
+      assert_equal({ "number" => "plur", "gender" => "neut", "case" => "acc", "degree" => "sup" },
+                   MF.features(token))
+    end
+
+    # AGDT gender `c` (common, on personal pronouns like σε) has no code in
+    # the shared decode table: dropped, never guessed.
+    def test_agdt_unknown_slot_code_dropped
+      token = { "form" => "σε", "lemma" => "σύ", "postag" => "p-s---ca-" }
+      assert_equal({ "number" => "sing", "case" => "acc" }, MF.features(token))
+      assert_equal({ "case" => "acc" }, MF.features({ "postag" => "n-x---qa-" }))
+    end
+
+    def test_agdt_punctuation_and_artificial_yield_no_features
+      assert_empty MF.features({ "form" => "·", "lemma" => "·", "postag" => "u--------" })
+      assert_empty MF.features({ "form" => "E", "lemma" => "E", "postag" => "z--------" })
+      refute MF.match?({ "postag" => "u--------" }, [%w[case dat]])
+    end
+
+    # Precedence: morphology → feats → postag; a token carrying an earlier
+    # key never falls through to a later one.
+    def test_decoder_precedence
+      assert_equal({ "case" => "dat" },
+                   MF.features({ "feats" => "Case=Dat", "postag" => "n-s---mn-" }))
+      assert_equal({ "number" => "plur" },
+                   MF.features({ "morphology" => "-p--------", "postag" => "n-s---mn-" }))
+      assert_empty MF.features({ "morphology" => "---------n", "postag" => "n-s---mn-" }),
+                   "an all-blank earlier tag does not fall through"
+    end
+
     # -- ORACC honest absence -------------------------------------------------
 
     # ORACC tokens carry a NER-flavoured `pos` and NO inflectional morphology:
@@ -99,6 +163,16 @@ module Query
       assert_equal "number=plur|gender=masc|case=dat", MF.describe(ud)
       proiel = { "morphology" => "2spma----i" }
       assert_equal "person=2|number=sing|tense=pres|mood=imp|voice=act", MF.describe(proiel)
+      agdt = { "postag" => "v-sapamn-" }
+      assert_equal "number=sing|gender=masc|case=nom|tense=aor|mood=part|voice=act", MF.describe(agdt)
+    end
+
+    # The decoder seam: an explicit ordered table, token key → decode method.
+    def test_decoder_table_is_explicit_and_ordered
+      assert_equal %w[morphology feats postag], MF::DECODERS.map(&:first)
+      MF::DECODERS.map(&:last).each do |method|
+        assert MF.respond_to?(method), "#{method} is a module function"
+      end
     end
   end
 end
