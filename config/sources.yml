@@ -1310,7 +1310,10 @@ dcs:
   # ud/sanskrit-vedic (same Hellwig Vedic material at a different grain —
   # two honest witnesses, the MW-beside-kaikki precedent; backlog P26-0).
   # Upstream dump regenerates occasionally from the DCS database → re-syncs
-  # are owner-fired.
+  # are owner-fired. The cone's lookup/ tables also load, through the
+  # declared secondary dictionary lane (Dcs.dictionary_lane →
+  # DcsLexiconLane), as the dcs-lexicon and dcs-senses shelves — no
+  # registry row of their own; they inherit this source's license/credit.
   sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
                        # git-incremental fetch — rides the sync --all sweep
 

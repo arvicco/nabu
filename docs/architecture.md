@@ -692,7 +692,13 @@ kind, and a second primary kind would fork all of them; the lane instead
 adds one post-load step at the two existing routing points. Second lane
 (P106-4): 84000's back-matter glossary entities — one shared xct-headed
 shelf (`e84000-glossary`), discovery delegated to the primary adapter's
-cone and duplicate-winner rule, filtered to gloss-bearing files.
+cone and duplicate-winner rule, filtered to gloss-bearing files. DCS's
+lookup tables ride the same seam (`DcsLexiconLane`) as TWO shelves from
+one lane — `dcs-lexicon` (dictionary.csv, keyed by the gold tokens'
+LemmaIds) and `dcs-senses` (the WordNet-shaped sense bank, its relation
+edges as id-keyed crossrefs within the shelf and its sense→lemma
+attestation bridge as crossrefs INTO `dcs-lexicon`, resolved by the
+loader's ordinary end-of-load pass).
 
 **The dictionary-group census (P106, an owner-ruled generalization).**
 Dictionary shelves group by LECT: `dictionary_stats` (migration 036) is

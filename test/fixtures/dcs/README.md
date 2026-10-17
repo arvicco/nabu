@@ -58,3 +58,28 @@ Citation requested upstream: Oliver Hellwig, *The Digital Corpus of Sanskrit
 Trims keep whole sentence blocks (header `##` lines ride in the first block)
 — structurally intact for the streaming ConlluParser. Re-trim per this table
 after any refresh.
+
+## The lookup lane (dcs-lexicon / dcs-senses)
+
+- **Retrieved:** 2026-10-17, cut from the held tree at upstream commit
+  `8aeed5a1343d0e48b64eb32af8c00e8c6eb29359` (master) — the same sparse cone,
+  same CC BY 4.0 grant. Exact LINES copied byte-verbatim (no edits); the
+  cut is a line selection by upstream line number.
+- **Upstream census (that commit):** `dictionary.csv` 180,458 lines (one
+  newline-broken record: 39892 aiḍavi; 176 rows with an empty word);
+  `word-senses.csv` 120,485 lines (header names 5 columns, rows carry 6; one
+  newline-broken record: 127090 bāhyadruti); `sembank-relations.csv`
+  194,529 lines, no header (17 pointer symbols + 5 junk codes, 11 rows);
+  `sembank-attestations.xml` 14 MB / 22,474 concepts / 64,350
+  lexicalizations — NOT well-formed XML (only the last `<concept>` closes;
+  notes carry bare `<`), read line by line.
+
+| file | trim |
+|---|---|
+| `lookup/dictionary.csv` | header + upstream lines 3217 (3562, the empty-word shape), 21997 (25207 bhūta), 34775–34778 (39891 aiḍaka, the broken 39892 aiḍavi pair, 39893 aiṇa), 44332 (50589 bhurij), 127327 (148105 bāhyadruti), 129599 (150748 prajā), 135216–135217 (157202 acchāgam: preverb + empty meanings; 157203 acchācar) and the 44242 nara / 87452 jana rows — every lemma the trimmed attestations cite |
+| `lookup/word-senses.csv` | header + lines 2–6 (568 entity … 574 person, the WordNet-field-bearing row), 4993–4994 (5675 engagement / 5676 non-engagement), 109873–109874 (126807/126808, the junk-code pair), 110151–110152 (the broken 127090 bāhyadruti pair) |
+| `lookup/sembank-relations.csv` | lines 1–3, 17–19, 50, 68, 75 (edges among the held senses + two to unheld 575/576), 296 (from unheld 575), 6679–6681 + 6685–6687 (the triplicated 5675⇄5676 antonym), 184751 (junk `77D15`), 185041 (103704 → 127090, from unheld) |
+| `lookup/sembank-attestations.xml` | the `<corpus>` line + whole concept blocks 568, 569, 574, 127090 and the closing 147806 block (with upstream's only `</lexicalizations></concept>` and `</corpus>`); within 569/574 only the cited lexicalizations kept, each capped at its first 3 `<n>` lines (whole elements) |
+
+Re-cut with the same line numbers after a refresh (re-census first: the
+line numbers are commit-bound).

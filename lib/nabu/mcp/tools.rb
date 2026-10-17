@@ -407,8 +407,9 @@ module Nabu
                                 "Universal Dependencies vocabulary (case, number, gender, person, " \
                                 "tense, mood, voice, degree; values dat, pl/sg, masc, aor, opt, " \
                                 "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
-                                "match on feats, PROIEL/TOROT are decoded to the same names; ORACC " \
-                                "has no inflectional morphology so these facets never match it." },
+                                "match on feats; PROIEL/TOROT positional tags and GLAUx's AGDT " \
+                                "postags are decoded to the same names; ORACC has no inflectional " \
+                                "morphology so these facets never match it." },
           near: { type: "string",
                   description: "Proximity: keep only hits where this term occurs within `window` " \
                                "words of query (or lemma) in the SAME passage. FTS5 NEAR over the " \

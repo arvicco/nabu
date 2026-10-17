@@ -75,11 +75,10 @@ module Nabu
     #
     # The Indexer reads per-token "lemma" + "form" for the lemma index (source
     # tier from sources.yml `lemma_tier: silver`). "postag" is the AGDT 9-place
-    # positional morphology; it rides on the token verbatim but is DELIBERATELY
-    # NOT wired into the --morph façade (Nabu::Query::MorphFacets speaks the UD
-    # and PROIEL positional schemes, and the AGDT layout differs — an incorrect
-    # mapping would be dishonest; the diorisis prose-morph precedent, "honest
-    # absence over a wrong mapping"). "analysis" records the gold/silver signal
+    # positional morphology; it rides on the token verbatim and the --morph
+    # façade decodes it at query time (Nabu::Query::MorphFacets AGDT_FIELDS:
+    # slots 2-9 into the UD facet names, pos undecoded), so it must stay the
+    # upstream string unaltered. "analysis" records the gold/silver signal
     # per sentence; the source-wide tier stays the conservative silver floor.
     class GlauxParser
       # A finished sentence awaiting Passage construction.
