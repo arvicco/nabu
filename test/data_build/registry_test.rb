@@ -15,8 +15,10 @@ class DataBuildRegistryTest < Minitest::Test
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
                       mul/kind-classifications mul/cuneiform-senses
                       mul/place-refs mul/places-lpf mul/document-dates
-                      mul/char-postings mul/language-dossiers mul/script-dossiers sux/sign-table
-                      egy/unikemet-signs egy/hiero-frequency].freeze
+                      mul/char-postings mul/lemma-frequencies mul/language-curve
+                      mul/language-dossiers mul/script-dossiers sux/sign-table
+                      egy/unikemet-signs egy/hiero-frequency sga/form-lemma
+                      hbo/form-lemma].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -276,6 +278,25 @@ class DataBuildRegistryTest < Minitest::Test
     assert_match(/circularity/, postings.rationale,
                  "the Edubba never-re-import guard is stated where the owner reads it")
 
+    frequencies = Nabu::DataBuild.feature("mul/lemma-frequencies")
+    assert_equal :available, frequencies.status, "builder and feature land together"
+    assert_equal Nabu::DataBuild::LemmaFrequenciesBuilder, frequencies.builder
+    assert_equal "gold-derived", frequencies.tier
+    assert_equal "none", frequencies.anchoring
+    assert_empty frequencies.inputs, "the catalog rollup is the source of truth"
+    assert_match(/GOLD lemmatization only/, frequencies.rationale,
+                 "the gold-only scope is stated where the owner reads it")
+    assert_match(/research_private/, frequencies.rationale,
+                 "the license screening is stated where the owner reads it")
+
+    curve = Nabu::DataBuild.feature("mul/language-curve")
+    assert_equal :available, curve.status, "builder and feature land together"
+    assert_equal Nabu::DataBuild::LanguageCurveBuilder, curve.builder
+    assert_equal "gold-derived", curve.tier
+    assert_empty curve.inputs, "the catalog rollup is the source of truth"
+    assert_match(/research_private/, curve.rationale,
+                 "the license screening is stated where the owner reads it")
+
     sign_table = Nabu::DataBuild.feature("sux/sign-table")
     assert_equal :available, sign_table.status, "P73-9: builder and feature land together"
     assert_equal Nabu::DataBuild::SignTableBuilder, sign_table.builder
@@ -356,6 +377,13 @@ class DataBuildRegistryTest < Minitest::Test
     # place-refs, document-dates, places-lpf) file under it.
     mul = Nabu::DataBuild::LANGUAGES.fetch("mul")
     assert_equal ["Multiple languages", nil, "mul"], [mul.name, mul.glottocode, mul.iso639p3]
+
+    # Checked 2026-10-16: oldi1245 is the languoid carrying ISO sga (level:
+    # language; Glottolog names it "Early Irish", its Old Irish 8–9th c.
+    # stage oldi1246 a dialect beneath it). The Name column uses the
+    # dataset's own label for the gloss language.
+    sga = Nabu::DataBuild::LANGUAGES.fetch("sga")
+    assert_equal ["Old Irish", "oldi1245", "sga"], [sga.name, sga.glottocode, sga.iso639p3]
   end
 
   # Owner ruling: the mul/ namespace is real plumbing — a mul-led slug must
@@ -416,6 +444,10 @@ class DataBuildRegistryTest < Minitest::Test
       "mul/document-dates" => "CC-BY-SA-4.0",
       # P73-8: the kanripo lane's share-alike grant.
       "mul/char-postings" => "CC-BY-SA-4.0",
+      # The share-alike carve-out: BY-SA lemmatized lanes (aes, tla-hf,
+      # menota, glaux, ...) contribute to both rollup projections.
+      "mul/lemma-frequencies" => "CC-BY-SA-4.0",
+      "mul/language-curve" => "CC-BY-SA-4.0",
       # P85-A: ~71% Wikipedia-derived context prose — the whole overlay
       # inherits share-alike (owner ruling 2026-08-28).
       "mul/language-dossiers" => "CC-BY-SA-4.0",
@@ -427,7 +459,12 @@ class DataBuildRegistryTest < Minitest::Test
       "egy/unikemet-signs" => "CC-BY-4.0",
       # P77-r17: derived from AES's share-alike grant (the share-alike/D51-a
       # carve-out, the char-postings precedent).
-      "egy/hiero-frequency" => "CC-BY-SA-4.0"
+      "egy/hiero-frequency" => "CC-BY-SA-4.0",
+      # Both editions are MIT (stgall-priscian, corph) — clean BY.
+      "sga/form-lemma" => "CC-BY-4.0",
+      # OSHB's lemma/morphology layer is CC BY 4.0 (WLC text public
+      # domain); BHSA (CC BY-NC) is never an input, so the table stays BY.
+      "hbo/form-lemma" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
