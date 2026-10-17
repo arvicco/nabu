@@ -37,7 +37,11 @@ class DerivabilityWritersTest < Minitest::Test
   # ingest write local/shelves/; the write-through modules write
   # local/config/; ops/ and data_build/ write generated repo/site or
   # caller-named output (places_lpf_builder writes its GeoJSON/TSV into
-  # the runner's caller-named dataset dir — P73-5); fixture_sentinel
+  # the runner's caller-named dataset dir — P73-5; readme_index rewrites
+  # the generated dataset table between markers in the caller-named
+  # clone's README.md — the runner/caller-named-output law kind, owner
+  # correction 2026-10-17 after the hand table went a release stale);
+  # fixture_sentinel
   # writes test fixtures; local_migration executes the P71 layout move;
   # ops/drill writes its evidence files (report.txt, verify-issues.tsv)
   # into its OWN tmp workspace, and its workspace sweep (P77-r14)
@@ -175,7 +179,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb
     nabu/ops/drill.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
-    nabu/data_build/places_lpf_builder.rb
+    nabu/data_build/places_lpf_builder.rb nabu/data_build/readme_index.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
     nabu/canonical_identity_cache.rb nabu/git_identity_cache.rb
   ].freeze
