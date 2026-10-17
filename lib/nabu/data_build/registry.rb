@@ -21,6 +21,7 @@ require_relative "lect_assignments_builder"
 require_relative "lemma_frequencies_builder"
 require_relative "meter_builder"
 require_relative "place_refs_builder"
+require_relative "reflex_chains_builder"
 require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
@@ -728,6 +729,36 @@ module Nabu
         maintenance: "re-derive after dictionary-source syncs or a rebuild (the loader's " \
                      "resolution pass re-mints the graph); the published-slice digest makes an " \
                      "unchanged graph a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/reflex-chains", language: LANGUAGES.fetch("mul"),
+        title: "Reconstruction→reflex edges of the held etymological dictionaries, joined to the gold corpus",
+        # gold-DERIVED: a mechanical projection of upstream descendant edges
+        # plus a stated stored-key equality join — no fuzzy matching.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The catalog crosswalk (dictionary_reflexes) and lemma_rollup are the
+        # source of truth (no single cone sha is load-bearing); the recipe
+        # embeds the published-slice sha256, attested counts included.
+        inputs: [], canonical_cones: [], builder: ReflexChainsBuilder,
+        rationale: "Every reconstruction→reflex edge of the held etymological dictionaries (Wiktionary " \
+                   "reconstruction shelves, the Tower of Babel databases, IE-CoR, WOLD and smaller " \
+                   "lanes) as one table — dictionary, entry headword, the reflex's upstream language " \
+                   "code verbatim and its catalog code, the reflex verbatim with romanization and both " \
+                   "folded forms, borrowed/uncertain edge flags carried through — plus the join no " \
+                   "etymological database publishes: Attested, the gold passage attestations whose " \
+                   "folded lemma EQUALS the reflex's folded form (else its folded romanization, the " \
+                   "script bridge) under the same catalog language code — the rule Nabu's etym desk " \
+                   "resolves at query time, stored-key equality only, no fuzzy or cross-language " \
+                   "matching; match/miss censused per language in nabu.eval. License screening " \
+                   "row-by-row: open+attribution dictionary sources only — nc dictionaries (derom, mw, " \
+                   "edl) are excluded and censused per class and source, and only gold rows of " \
+                   "publishable sources count toward Attested; CC BY-SA 4.0 — Wiktionary's share-alike " \
+                   "grant dominates (the share-alike carve-out).",
+        maintenance: "re-derive after dictionary-shelf syncs (wiktionary-recon, starling, iecor, wold, " \
+                     "...) or lemma-moving events (treebank syncs, a rebuild or builders:refresh " \
+                     "re-projecting the rollup); the published-slice digest makes an unchanged slice a " \
+                     "fingerprint no-op"
       )
     ].freeze
 

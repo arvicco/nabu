@@ -18,7 +18,8 @@ class DataBuildRegistryTest < Minitest::Test
                       mul/char-postings mul/lemma-frequencies mul/language-curve
                       mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency sga/form-lemma
-                      hbo/form-lemma mul/dictionary-crossrefs].freeze
+                      hbo/form-lemma mul/dictionary-crossrefs
+                      mul/reflex-chains].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -298,6 +299,16 @@ class DataBuildRegistryTest < Minitest::Test
     assert_match(/BOTH endpoints/, crossrefs.rationale,
                  "the both-endpoint screening is stated where the owner reads it")
     assert_match(/unresolved edge is still an edge/, crossrefs.rationale)
+    chains = Nabu::DataBuild.feature("mul/reflex-chains")
+    assert_equal :available, chains.status, "builder and feature land together"
+    assert_equal Nabu::DataBuild::ReflexChainsBuilder, chains.builder
+    assert_equal "gold-derived", chains.tier
+    assert_equal "none", chains.anchoring
+    assert_empty chains.inputs, "the catalog crosswalk is the source of truth"
+    assert_match(/stored-key equality only/, chains.rationale,
+                 "the mechanical join rule is stated where the owner reads it")
+    assert_match(/nc dictionaries/, chains.rationale,
+                 "the license screening is stated where the owner reads it")
 
     curve = Nabu::DataBuild.feature("mul/language-curve")
     assert_equal :available, curve.status, "builder and feature land together"
@@ -477,7 +488,9 @@ class DataBuildRegistryTest < Minitest::Test
       "hbo/form-lemma" => "CC-BY-4.0",
       # The share-alike carve-out: the BY-SA dictionaries (Wiktionary,
       # JMdict, LSJ, AED, ...) carry their cross-references inside it.
-      "mul/dictionary-crossrefs" => "CC-BY-SA-4.0"
+      "mul/dictionary-crossrefs" => "CC-BY-SA-4.0",
+      # Wiktionary's share-alike reconstruction shelves dominate the rows.
+      "mul/reflex-chains" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
