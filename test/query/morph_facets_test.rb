@@ -115,11 +115,15 @@ module Query
                    MF.features(token))
     end
 
-    # AGDT gender `c` (common, on personal pronouns like σε) has no code in
-    # the shared decode table: dropped, never guessed.
-    def test_agdt_unknown_slot_code_dropped
+    # AGDT gender `c` (common, on personal pronouns like σε) is UD's
+    # Gender=Com — AGDT's one code beyond the shared PROIEL rows.
+    def test_agdt_common_gender_decoded
       token = { "form" => "σε", "lemma" => "σύ", "postag" => "p-s---ca-" }
-      assert_equal({ "number" => "sing", "case" => "acc" }, MF.features(token))
+      assert_equal({ "number" => "sing", "gender" => "com", "case" => "acc" }, MF.features(token))
+      assert MF.match?(token, MF.parse("gender=com"))
+    end
+
+    def test_agdt_unknown_slot_code_dropped
       assert_equal({ "case" => "acc" }, MF.features({ "postag" => "n-x---qa-" }))
     end
 
