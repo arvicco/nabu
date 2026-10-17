@@ -75,4 +75,11 @@ word tokens per glyph and `<unclear>` (damaged) occurrences — e.g. 𓂋
 has 42 occurrences over 39 `<w>` tokens, 2 of them damaged; 𓋹 is
 attested once, inside `<unclear>`. Signs without a Unicode codepoint
 appear only as `<note>Keine Entsprechung in Unicode für D31A-A1</note>`
-(Gardiner-coded) and are not tallied.
+inside the `<w>` (migration 043): the glyph-bearing file carries 51 such
+notes — 42 Gardiner-coded (2 of them inside `<unclear>`) and 9 "für
+diese Graphien" (all inside `<unclear>`). The coded spellings split on
+`-` (damage brackets `[[-I9-]]` stripped) into 111 sign occurrences
+over 56 code-keyed rows (e.g. X1: 8 occurrences in 8 words; D31A: 1,
+damaged); the bare numerals of `O50-2`, `T22-W24-2`, `Aa1-D52-X1-3`…
+(7× "2", 2× "3") fail the Gardiner grammar and are censused in the
+builder's remainder with the 9 untalliable notes, never posted.
