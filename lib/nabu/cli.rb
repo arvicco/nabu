@@ -112,6 +112,7 @@ module Nabu
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       summary = build_runner.run(feature: feature, into: options[:into])
       print_build_summary(summary, seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+      refresh_readme_index(options[:into])
       say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
     rescue Nabu::Error => e
       raise Thor::Error, "data build: #{e.message}"
@@ -173,8 +174,26 @@ module Nabu
         end
         say "#{built} dataset(s) built, #{skipped.size} skipped (planned), #{failed.size} failed " \
             "in #{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - all_started)}"
+        refresh_readme_index(options[:into])
         say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
         raise Thor::Error, "data build --all: failed: #{failed.join(', ')}" unless failed.empty?
+      end
+
+      # The repository README's dataset table regenerates after every build
+      # (ReadmeIndex — owner correction 2026-10-17: the hand table had gone
+      # a release stale). A scratch --into dir with no README is a silent
+      # no-op; a clone README missing the markers raises loudly.
+      def refresh_readme_index(into)
+        return unless File.exist?(File.join(into, "README.md"))
+
+        features = Nabu::DataBuild.features
+        dates = Nabu::DataBuild::ReadmeIndex.published_dates(
+          out_dir: into, slugs: features.select(&:available?).map(&:slug)
+        )
+        result = Nabu::DataBuild::ReadmeIndex.refresh!(features: features, out_dir: into,
+                                                       published_dates: dates)
+        say "README dataset table regenerated — #{result.listed} dataset(s) listed" \
+            "#{" (not yet built here: #{result.missing.join(', ')})" unless result.missing.empty?}"
       end
 
       def available_features_hint
