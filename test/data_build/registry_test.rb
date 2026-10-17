@@ -18,7 +18,7 @@ class DataBuildRegistryTest < Minitest::Test
                       mul/char-postings mul/lemma-frequencies mul/language-curve
                       mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency sga/form-lemma
-                      hbo/form-lemma].freeze
+                      hbo/form-lemma mul/dictionary-crossrefs].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -289,6 +289,16 @@ class DataBuildRegistryTest < Minitest::Test
     assert_match(/research_private/, frequencies.rationale,
                  "the license screening is stated where the owner reads it")
 
+    crossrefs = Nabu::DataBuild.feature("mul/dictionary-crossrefs")
+    assert_equal :available, crossrefs.status, "builder and feature land together"
+    assert_equal Nabu::DataBuild::DictionaryCrossrefsBuilder, crossrefs.builder
+    assert_equal "gold-derived", crossrefs.tier
+    assert_equal "entry-urn", crossrefs.anchoring, "entries are referenced by their stable catalog URN"
+    assert_empty crossrefs.inputs, "the catalog crossref table is the source of truth"
+    assert_match(/BOTH endpoints/, crossrefs.rationale,
+                 "the both-endpoint screening is stated where the owner reads it")
+    assert_match(/unresolved edge is still an edge/, crossrefs.rationale)
+
     curve = Nabu::DataBuild.feature("mul/language-curve")
     assert_equal :available, curve.status, "builder and feature land together"
     assert_equal Nabu::DataBuild::LanguageCurveBuilder, curve.builder
@@ -464,7 +474,10 @@ class DataBuildRegistryTest < Minitest::Test
       "sga/form-lemma" => "CC-BY-4.0",
       # OSHB's lemma/morphology layer is CC BY 4.0 (WLC text public
       # domain); BHSA (CC BY-NC) is never an input, so the table stays BY.
-      "hbo/form-lemma" => "CC-BY-4.0"
+      "hbo/form-lemma" => "CC-BY-4.0",
+      # The share-alike carve-out: the BY-SA dictionaries (Wiktionary,
+      # JMdict, LSJ, AED, ...) carry their cross-references inside it.
+      "mul/dictionary-crossrefs" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

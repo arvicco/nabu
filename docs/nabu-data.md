@@ -206,6 +206,7 @@ no page update is a red suite, and vice versa.
 | `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes, aed |
 | `sga/form-lemma` | available | gold-derived | CC-BY-4.0 | sga | stgall-priscian, corph |
 | `hbo/form-lemma` | available | gold-derived | CC-BY-4.0 | hbo | oshb |
+| `mul/dictionary-crossrefs` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -439,6 +440,14 @@ Bridges attested Old Irish forms to their dictionary lemmas from two independent
 Maps every attested Biblical Hebrew word form of the Westminster Leningrad Codex to its OSHB lemma — the augmented Strong's id verbatim (prefix morphemes slash-joined, homograph letters kept), its content head lemma, and the OSHM morphology code — with attestation counts, plus a per-head-lemma sidecar. OSHB ALONE: the catalog's BHSA Hebrew is CC BY-NC and contributes nothing (the exclusion is censused in the manifest); Aramaic words and qere readings are excluded and censused too. Forms are carried byte-verbatim and never NFC-normalized — hbo is NFC-exempt (the Masoretic mark order is not NFC-stable). OSHB's lemma/morphology layer is CC BY 4.0 over the public-domain WLC text → clean CC BY 4.0.
 
 **Maintenance**: re-derive after `nabu sync oshb` (upstream is a completed digitization with occasional corrections); mechanical, no review needed beyond spot-checks
+
+### `mul/dictionary-crossrefs` — The cross-dictionary reference graph — every machine-marked entry→entry pointer
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: entry-urn · **Inputs**: —
+
+The cross-reference estate of Nabu's dictionaries as one queryable graph — no one publishes cross-dictionary link data for these languages. One row per edge: the from-entry (dictionary, stable entry URN, headword), the pointer's kind and verbatim label, the target as the dictionary stores it (display form, folded form, upstream id), and where the target resolved unambiguously the target dictionary and entry URN; an unresolved edge is still an edge and publishes with the target-entry fields empty (both resolution states censused). License screening on BOTH endpoints: an edge publishes only when its own dictionary's source is open/attribution class AND, when resolved, the target entry's dictionary's source is too — an nc endpoint on either side drops the edge, censused per endpoint role and class in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out carrying the share-alike dictionaries (Wiktionary, JMdict, LSJ, AED, ...).
+
+**Maintenance**: re-derive after dictionary-source syncs or a rebuild (the loader's resolution pass re-mints the graph); the published-slice digest makes an unchanged graph a fingerprint no-op
 
 ## What the rail never does
 
