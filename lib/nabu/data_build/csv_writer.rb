@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "csv"
+require "zlib"
 
 require_relative "../errors"
 
@@ -76,20 +77,38 @@ module Nabu
         # +columns+ (first MUST be "ID"). Cells are emitted in column order
         # regardless of hash key order; a missing key is an empty cell; an
         # unknown key raises (it is a typo, not data). Returns the row count.
+        #
+        # A ".csv.gz" path writes DETERMINISTIC gzip (mtime pinned to the
+        # epoch, no embedded original name — byte-identical across builds):
+        # the escape hatch for a table whose plain CSV would cross the
+        # hosting platform's 100 MB file limit (mul/reflex-chains, the first
+        # to cross it). The datapackage declares the compression.
         def write(path:, columns:, rows:)
           validate_columns!(columns)
-          seen = {}
-          CSV.open(path, "w", encoding: Encoding::UTF_8) do |csv|
-            csv << columns
-            rows.each do |row|
-              validate_row!(row, columns: columns, seen: seen)
-              csv << columns.map { |name| row[name] }
-            end
+          if path.end_with?(".csv.gz")
+            gz = Zlib::GzipWriter.open(path)
+            gz.mtime = 0
+            emit(CSV.new(gz), columns: columns, rows: rows)
+          else
+            emit(CSV.open(path, "w", encoding: Encoding::UTF_8), columns: columns, rows: rows)
           end
           rows.size
         end
 
         private
+
+        # Emits header + validated rows and ALWAYS closes +csv+ (which
+        # closes its underlying IO — the gzip trailer flushes there).
+        def emit(csv, columns:, rows:)
+          seen = {}
+          csv << columns
+          rows.each do |row|
+            validate_row!(row, columns: columns, seen: seen)
+            csv << columns.map { |name| row[name] }
+          end
+        ensure
+          csv.close
+        end
 
         def validate_columns!(columns)
           raise Nabu::ValidationError, "CSV columns must not be empty" if columns.empty?

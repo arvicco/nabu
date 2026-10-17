@@ -95,6 +95,7 @@ module Nabu
           entry = { "name" => resource.name, "path" => resource.path }
           entry["format"] = resource.format if resource.format
           entry["mediatype"] = resource.mediatype if resource.mediatype
+          entry["compression"] = resource.compression if resource.compression
           if resource.tabular?
             schema = { "fields" => resource.fields.map { |field| { "name" => field[:name], "type" => field[:type] } } }
             schema["primaryKey"] = resource.primary_key if resource.primary_key
