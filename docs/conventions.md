@@ -273,19 +273,21 @@ comparative-grammar questions. In Nabu, source-provided analyses ride in
 compute later (CLTK/Stanza lemmatization) are enrichments with tool+version
 provenance, kept strictly apart from upstream's.
 
-### 6.1 Morphology facets — one façade over three tagsets (P13-6)
+### 6.1 Morphology facets — one façade over many tagsets (P13-6)
 
 `search --lemma λόγος --morph case=dat,number=pl` narrows a lemma search to
 attestations whose morphology matches the facets — "every dative plural of
 λόγος", "every subjunctive of *sum*". The design note behind it:
 
-**Tagset reality (measured against the live catalog).** The gold shelves store
-three different morphology dialects per token in `annotations_json`:
+**Tagset reality (measured against the live catalog).** The treebank shelves
+store different morphology dialects per token in `annotations_json`; the
+decoded ones:
 
 | family | field | shape | example |
 | --- | --- | --- | --- |
 | CoNLL-U / UD (grc-perseus, got, …) | `feats` | UD `Key=Value` string, `\|`-joined | `Case=Dat\|Gender=Masc\|Number=Plur` |
 | PROIEL / TOROT (chu, orv, PROIEL grc/lat) | `morphology` | 10-position positional tag | `-p---mgpwi` (plur masc gen pos) |
+| AGDT (glaux) | `postag` | 9-slot positional tag (pos first) | `v3saia---` (3 sing aor ind act) |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
@@ -293,12 +295,19 @@ vocabulary is the **Universal Dependencies feature names** (`case`, `number`,
 `gender`, `person`, `tense`, `mood`, `voice`, `degree`; values `dat`, `pl`/`sg`,
 `masc`, `aor`, `opt`, `sub`…), chosen because UD is (a) a documented public
 standard and (b) already the stored form for the CoNLL-U family, which needs
-zero translation. The two families with inflectional morphology fold into it:
+zero translation. The families with inflectional morphology fold into it:
 UD `feats` is parsed as-is (lowercased); the PROIEL positional tag is **decoded
 position-by-position into the same UD names** (a fixed 10×~8 code map in
 `Query::MorphFacets::PROIEL_FIELDS` — the bounded-but-fiddly bit; positions 9–10,
 Germanic strong/weak and the inflecting flag, have no clean UD facet and are
-left undecoded rather than mapped wrongly). ORACC carries no inflectional
+left undecoded rather than mapped wrongly). The AGDT postag's slots 2–9 carry
+the same eight categories in the same order with the same code letters as
+PROIEL positions 1–8, so they decode through the same rows
+(`AGDT_FIELDS`); slot 1 (part of speech) is undecoded, and AGDT codes the
+PROIEL rows lack (gender `c`, common) are dropped, never guessed. Each tagset
+is one row of `MorphFacets::DECODERS` (token key → decode method, in
+precedence order `morphology` → `feats` → `postag`), so a further tagset is
+one row plus one decoder. ORACC carries no inflectional
 morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
 inflectional facets **never match ORACC** — honest absence, not error. A unified
 `pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and

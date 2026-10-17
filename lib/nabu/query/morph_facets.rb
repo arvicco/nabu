@@ -9,14 +9,16 @@ module Nabu
     # key=value pairs, ANDed) matched against the per-token morphology already
     # stored in annotations_json — no new index, no re-parse of canonical.
     #
-    # == One façade over three tagsets (the vocabulary verdict)
+    # == One façade over many tagsets (the vocabulary verdict)
     #
-    # The gold shelves speak three morphology dialects, and this module folds
-    # the two that HAVE inflectional morphology into ONE query vocabulary — the
-    # Universal Dependencies feature names (case/number/gender/person/tense/
-    # mood/voice/degree, values Nom/Plur/Aor…), because UD is (a) a documented
-    # public standard a user can look up, and (b) already the STORED form for
-    # the CoNLL-U family, so that family needs zero translation:
+    # The treebank shelves speak several morphology dialects, and this module
+    # folds the ones that HAVE inflectional morphology into ONE query
+    # vocabulary — the Universal Dependencies feature names (case/number/
+    # gender/person/tense/mood/voice/degree, values Nom/Plur/Aor…), because UD
+    # is (a) a documented public standard a user can look up, and (b) already
+    # the STORED form for the CoNLL-U family, so that family needs zero
+    # translation. Each tagset is one row of DECODERS (token key → decode
+    # method); a new tagset is one row + one decode method + its tests:
     #
     # - CoNLL-U / UD (grc-perseus, got, …): the token's `feats` string is
     #   `Case=Dat|Number=Plur|…` verbatim. Parsed as-is (lowercased). Any UD
@@ -26,6 +28,11 @@ module Nabu
     #   positive). DECODED here, position by position, into the SAME UD feature
     #   names. The decode table is the bounded, fiddly bit the design note flags
     #   — but it is a fixed 10×~8 code map, not open-ended.
+    # - AGDT (GLAUx): the token's `postag` is the 9-slot AGDT positional tag
+    #   (`v3saia---` = 3rd sing aorist indicative active). Slots 2-9 carry the
+    #   same eight categories, in the same order and with the same code
+    #   letters, as PROIEL positions 1-8, so they decode through PROIEL_FIELDS
+    #   (see AGDT_FIELDS); slot 1 (pos) is not decoded.
     # - ORACC (akk, sux): tokens carry a NER-flavoured `pos` (N/PN/GN/DN/V…) and
     #   NO inflectional morphology (upstream `morph`/`base` is an un-ingested
     #   enrichment, conventions §6). So inflectional facets NEVER match ORACC —
@@ -34,12 +41,12 @@ module Nabu
     #   incompatible pos scheme into the façade would be dishonest for the sake
     #   of one field. It is a clean follow-up.
     #
-    # A query key that UD carries but the PROIEL decode does not (e.g. `aspect`,
-    # `verbform`) simply matches UD passages and not PROIEL ones — the same
-    # honest, documented cross-family divergence: the vocabulary is UD, and
-    # where a treebank encodes a category UD's way (grc-perseus writes an aorist
-    # as Aspect=Perf|Tense=Past, not Tense=Aor) the query must follow that
-    # treebank's convention.
+    # A query key that UD carries but the positional decodes do not (e.g.
+    # `aspect`, `verbform`) simply matches UD passages and not PROIEL/AGDT ones
+    # — the same honest, documented cross-family divergence: the vocabulary is
+    # UD, and where a treebank encodes a category UD's way (grc-perseus writes
+    # an aorist as Aspect=Perf|Tense=Past, not Tense=Aor) the query must follow
+    # that treebank's convention.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -70,6 +77,25 @@ module Nabu
         ["case",   { "n" => "nom", "a" => "acc", "g" => "gen", "d" => "dat",
                      "b" => "abl", "v" => "voc", "l" => "loc", "i" => "ins" }],
         ["degree", { "p" => "pos", "c" => "cmp", "s" => "sup" }]
+      ].freeze
+
+      # AGDT positional postag decode, slot (0-based) → [UD facet key, codes],
+      # or nil for a slot left undecoded. Nine slots: pos, then person …
+      # degree. The AGDT guidelines' code letters for those eight categories
+      # coincide with PROIEL's, so the PROIEL rows are reused verbatim (one
+      # query vocabulary, one spelling per value). Slot 1 (pos) stays
+      # undecoded: the façade has no pos facet (cf. PROIEL's skipped
+      # strength/inflection positions). AGDT codes PROIEL lacks (gender `c`,
+      # common) are dropped like any unknown code.
+      AGDT_FIELDS = [nil, *PROIEL_FIELDS].freeze
+
+      # The per-tagset decoder seam: token key → decode method, in precedence
+      # order. The first key a token carries decides — a token never falls
+      # through to a later key, even when its tag decodes to nothing.
+      DECODERS = [
+        ["morphology", :proiel_features],
+        ["feats", :ud_features],
+        ["postag", :agdt_features]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -104,7 +130,7 @@ module Nabu
       end
 
       # Does +token+ satisfy every facet? A token with no decodable morphology
-      # (ORACC, or a UD/PROIEL token whose features are all blank) matches
+      # (ORACC, or a UD/PROIEL/AGDT token whose features are all blank) matches
       # nothing — honest absence.
       def match?(token, facets)
         features = features(token)
@@ -118,13 +144,11 @@ module Nabu
       def features(token)
         return {} unless token.is_a?(Hash)
 
-        if (morphology = token["morphology"])
-          proiel_features(morphology)
-        elsif (feats = token["feats"])
-          ud_features(feats)
-        else
-          {}
+        DECODERS.each do |key, decoder|
+          tag = token[key]
+          return public_send(decoder, tag) if tag
         end
+        {}
       end
 
       # Render a token's decoded features as `case=dat|number=plur|…` in a
@@ -148,9 +172,23 @@ module Nabu
 
       # PROIEL `morphology`: positional string → UD-named facet hash.
       def proiel_features(morphology)
-        chars = morphology.to_s.chars
+        positional_features(morphology, PROIEL_FIELDS)
+      end
+
+      # AGDT `postag` (GLAUx): 9-slot positional string → UD-named facet hash.
+      def agdt_features(postag)
+        positional_features(postag, AGDT_FIELDS)
+      end
+
+      # Shared positional decode: `-` and unknown codes are skipped, never
+      # guessed; a nil field row leaves that slot undecoded.
+      def positional_features(tag, fields)
+        chars = tag.to_s.chars
         out = {}
-        PROIEL_FIELDS.each_with_index do |(key, codes), index|
+        fields.each_with_index do |field, index|
+          next if field.nil?
+
+          key, codes = field
           code = chars[index]
           next if code.nil? || code == "-"
 

@@ -401,6 +401,38 @@ module Query
       assert_equal %w[urn:d:gold:1], gold.map(&:urn)
     end
 
+    # GLAUx-shaped tokens (lemma + AGDT `postag`, NO feats/morphology) from a
+    # `lemma_tier: silver` source: the default lemma search reaches them
+    # through the AGDT decoder; --gold-only (the existing tier flag) drops
+    # them; a facet the postag contradicts excludes the passage.
+    def test_morph_reaches_silver_agdt_postag_tokens
+      glaux = Nabu::Store::Source.create(
+        slug: "glaux", name: "GLAUx", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+      doc = make_document(urn: "urn:nabu:glaux:0004-002", source: glaux)
+      make_passage(doc, urn: "urn:nabu:glaux:0004-002:1", text: "ἔφυ Δημόκριτος ·", sequence: 0,
+                        lemmas: [],
+                        tokens: [{ "id" => "122737018", "form" => "ἔφυ", "lemma" => "φύω",
+                                   "postag" => "v3saia---" },
+                                 { "id" => "122737031", "form" => "Δημόκριτος",
+                                   "lemma" => "Δημόκριτος", "postag" => "n-s---mn-" },
+                                 { "id" => "100477571", "form" => "·", "lemma" => "·",
+                                   "postag" => "u--------" }])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                    lemma_tiers: { "glaux" => "silver" })
+
+      hits = search("φύω", morph: "tense=aor,mood=ind,person=3")
+      assert_equal %w[urn:nabu:glaux:0004-002:1], hits.map(&:urn)
+      assert_equal "silver", hits.first.tier
+      assert_equal "person=3|number=sing|tense=aor|mood=ind|voice=act", hits.first.morph
+      assert_equal %w[urn:nabu:glaux:0004-002:1],
+                   search("Δημόκριτος", morph: "case=nom,number=sg,gender=masc").map(&:urn)
+
+      assert_empty search("φύω", morph: "tense=pres"), "a contradicting facet excludes the passage"
+      assert_empty search("Δημόκριτος", morph: "case=gen")
+      assert_empty search("φύω", morph: "tense=aor", gold_only: true), "silver stays behind --gold-only"
+    end
+
     # A pre-tier fulltext index (built before the column existed) still
     # serves: every row reads gold — the current, correct semantics of an
     # index that predates silver sources (the ReflexViews pre-migration
