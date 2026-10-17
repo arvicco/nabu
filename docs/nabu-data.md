@@ -209,6 +209,7 @@ no page update is a red suite, and vice versa.
 | `mul/dictionary-crossrefs` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/reflex-chains` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `non/form-lemma` | available | gold-derived | CC-BY-SA-4.0 | non | menota |
+| `grc/form-lemma` | available | silver | CC-BY-SA-4.0 | grc | glaux |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -466,6 +467,14 @@ Every reconstruction→reflex edge of the held etymological dictionaries (Wiktio
 Maps every lemmatized word of the Menota archive's Old Icelandic and Old Norwegian manuscripts to its lemma and me:msa morphosyntactic analysis, with attestation counts at each transcription level the word carries — facsimile (the glyphs as written, MUFI characters included), diplomatic (abbreviations expanded, scribal spelling kept) and normalized (standard Old Norse orthography) — the Level column naming which, since dipl-only documents carry lemmatized words with no normalized reading; plus a per-lemma sidecar. A bridge from manuscript spellings to dictionary headwords no single edition offers. Scope is Old Norse as Glottolog bounds it: Old Swedish and Old Danish documents are excluded and censused, as are texts whose own licence is not open. Forms are carried verbatim. Menota is CC BY-SA 4.0 → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).
 
 **Maintenance**: re-derive after `nabu sync menota` (the archive grows as editors deposit new transcriptions); mechanical, no review needed beyond spot-checks
+
+### `grc/form-lemma` — Ancient Greek form→lemma table from the GLAUx treebanks, with the hand-annotated share counted
+
+**Status**: available · **Tier**: silver · **Anchoring**: none · **Inputs**: glaux
+
+Maps every lemmatized Ancient Greek word form of the GLAUx corpus (8th c. BC – 4th c. AD, literary and documentary) to its lemma and AGDT 9-place positional tag, with attestation counts, plus a per-lemma sidecar — a corpus-scale form→lemma table spanning a millennium of Greek. SILVER: most of GLAUx is automatic annotation (lemma accuracy ~98.8% per its README), so every row also carries Manual_Count, the attestations from sentences GLAUx marks as hand-annotated, keeping the gold share separable. GLAUx ALONE: the catalog's PROIEL Greek is CC BY-NC-SA and contributes nothing, and GLAUx's own nc texts (NC source texts, PROIEL- and Gorman-annotated trees) are excluded too — both exclusions censused in the manifest. Forms carried verbatim. GLAUx is CC BY-SA → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).
+
+**Maintenance**: re-derive after `nabu sync glaux` (upstream releases occasionally; a release that re-runs the automatic annotation shifts silver counts); mechanical, spot-check the Manual_Count share
 
 ## What the rail never does
 

@@ -19,7 +19,7 @@ class DataBuildRegistryTest < Minitest::Test
                       mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency sga/form-lemma
                       hbo/form-lemma mul/dictionary-crossrefs
-                      mul/reflex-chains non/form-lemma].freeze
+                      mul/reflex-chains non/form-lemma grc/form-lemma].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -367,6 +367,8 @@ class DataBuildRegistryTest < Minitest::Test
     lat = Nabu::DataBuild::LANGUAGES.fetch("lat")
     assert_equal %w[Latin lati1261 lat], [lat.name, lat.glottocode, lat.iso639p3]
 
+    # Re-checked 2026-10-17 for grc/form-lemma: anci1242 still carries
+    # ISO grc at level language (Attic, Ionic dialects beneath it).
     grc = Nabu::DataBuild::LANGUAGES.fetch("grc")
     assert_equal ["Ancient Greek", "anci1242", "grc"], [grc.name, grc.glottocode, grc.iso639p3]
 
@@ -499,7 +501,9 @@ class DataBuildRegistryTest < Minitest::Test
       # Wiktionary's share-alike reconstruction shelves dominate the rows.
       "mul/reflex-chains" => "CC-BY-SA-4.0",
       # Menota is CC BY-SA 4.0 — the share-alike carve-out (D51-a).
-      "non/form-lemma" => "CC-BY-SA-4.0"
+      "non/form-lemma" => "CC-BY-SA-4.0",
+      # GLAUx is CC BY-SA (its NC texts are excluded at build) — share-alike.
+      "grc/form-lemma" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
