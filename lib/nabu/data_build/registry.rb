@@ -6,6 +6,7 @@ require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
 require_relative "cuneiform_senses_builder"
 require_relative "char_postings_builder"
+require_relative "dictionary_crossrefs_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
@@ -695,6 +696,38 @@ module Nabu
                    "public-domain WLC text → clean CC BY 4.0.",
         maintenance: "re-derive after `nabu sync oshb` (upstream is a completed digitization " \
                      "with occasional corrections); mechanical, no review needed beyond spot-checks"
+      ),
+      Feature.new(
+        slug: "mul/dictionary-crossrefs", language: LANGUAGES.fetch("mul"),
+        title: "The cross-dictionary reference graph — every machine-marked entry→entry pointer",
+        # gold-DERIVED: a mechanical projection of the dictionaries' own
+        # upstream pointer markup — no inference; an ambiguous pointer
+        # stays unresolved, never guessed.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        # Entries are referenced by their catalog URN
+        # (urn:nabu:dict:<dictionary>:<upstream entry id>) — stable across
+        # rebuilds, unlike the integer row id.
+        anchoring: "entry-urn",
+        # The catalog's dictionary_crossrefs is the source of truth (derived
+        # from every ingested dictionary — no single cone sha is
+        # load-bearing); the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: DictionaryCrossrefsBuilder,
+        rationale: "The cross-reference estate of Nabu's dictionaries as one queryable graph — no " \
+                   "one publishes cross-dictionary link data for these languages. One row per " \
+                   "edge: the from-entry (dictionary, stable entry URN, headword), the pointer's " \
+                   "kind and verbatim label, the target as the dictionary stores it (display " \
+                   "form, folded form, upstream id), and where the target resolved unambiguously " \
+                   "the target dictionary and entry URN; an unresolved edge is still an edge and " \
+                   "publishes with the target-entry fields empty (both resolution states censused). " \
+                   "License screening on BOTH endpoints: an edge publishes only when its own " \
+                   "dictionary's source is open/attribution class AND, when resolved, the target " \
+                   "entry's dictionary's source is too — an nc endpoint on either side drops the " \
+                   "edge, censused per endpoint role and class in nabu.eval; CC BY-SA 4.0 — the " \
+                   "share-alike carve-out carrying the share-alike dictionaries (Wiktionary, " \
+                   "JMdict, LSJ, AED, ...).",
+        maintenance: "re-derive after dictionary-source syncs or a rebuild (the loader's " \
+                     "resolution pass re-mints the graph); the published-slice digest makes an " \
+                     "unchanged graph a fingerprint no-op"
       )
     ].freeze
 
