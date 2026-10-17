@@ -20,6 +20,7 @@ require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
 require_relative "lemma_frequencies_builder"
 require_relative "meter_builder"
+require_relative "non_form_lemma_builder"
 require_relative "place_refs_builder"
 require_relative "reflex_chains_builder"
 require_relative "places_lpf_builder"
@@ -87,7 +88,13 @@ module Nabu
       # carrying ISO hbo), Closest_ISO369P3code hbo. The WLC is exactly
       # Biblical Hebrew, so the precise node is claimed (the oldp1257
       # dialect-level precedent) while the ID/ISO stay Nabu's hbo code.
-      "hbo" => Language.new(id: "hbo", name: "Biblical Hebrew", glottocode: "bibl1238", iso639p3: "hbo")
+      "hbo" => Language.new(id: "hbo", name: "Biblical Hebrew", glottocode: "bibl1238", iso639p3: "hbo"),
+      # oldn1244 = Old Norse — checked 2026-10-17 against the same cone:
+      # level language, ISO non, with Old West Norse (oldw1240) and Old
+      # East Norse (olde1240) as dialects beneath it. Old Swedish
+      # (olds1252) and Old Danish (oldd1239) sit under swed1254/dani1285,
+      # NOT under oldn1244 — the scope line non/form-lemma draws.
+      "non" => Language.new(id: "non", name: "Old Norse", glottocode: "oldn1244", iso639p3: "non")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -759,6 +766,28 @@ module Nabu
                      "...) or lemma-moving events (treebank syncs, a rebuild or builders:refresh " \
                      "re-projecting the rollup); the published-slice digest makes an unchanged slice a " \
                      "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "non/form-lemma", language: LANGUAGES.fetch("non"),
+        title: "Old Norse form→lemma table from Menota's lemmatized manuscript transcriptions",
+        # gold-DERIVED: a mechanical count over Menota's encoder-assigned
+        # lemma + me:msa analyses — the san/form-lemma tier parity.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: ["menota"], canonical_cones: ["menota"], builder: NonFormLemmaBuilder,
+        rationale: "Maps every lemmatized word of the Menota archive's Old Icelandic and Old " \
+                   "Norwegian manuscripts to its lemma and me:msa morphosyntactic analysis, " \
+                   "with attestation counts at each transcription level the word carries — " \
+                   "facsimile (the glyphs as written, MUFI characters included), diplomatic " \
+                   "(abbreviations expanded, scribal spelling kept) and normalized (standard Old " \
+                   "Norse orthography) — the Level column naming which, since dipl-only " \
+                   "documents carry lemmatized words with no normalized reading; plus a " \
+                   "per-lemma sidecar. A bridge from manuscript spellings to dictionary " \
+                   "headwords no single edition offers. Scope is Old Norse as Glottolog bounds " \
+                   "it: Old Swedish and Old Danish documents are excluded and censused, as are " \
+                   "texts whose own licence is not open. Forms are carried verbatim. Menota is " \
+                   "CC BY-SA 4.0 → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).",
+        maintenance: "re-derive after `nabu sync menota` (the archive grows as editors deposit " \
+                     "new transcriptions); mechanical, no review needed beyond spot-checks"
       )
     ].freeze
 
