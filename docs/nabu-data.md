@@ -208,6 +208,7 @@ no page update is a red suite, and vice versa.
 | `hbo/form-lemma` | available | gold-derived | CC-BY-4.0 | hbo | oshb |
 | `mul/dictionary-crossrefs` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/reflex-chains` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `non/form-lemma` | available | gold-derived | CC-BY-SA-4.0 | non | menota |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -457,6 +458,14 @@ The cross-reference estate of Nabu's dictionaries as one queryable graph — no 
 Every reconstruction→reflex edge of the held etymological dictionaries (Wiktionary reconstruction shelves, the Tower of Babel databases, IE-CoR, WOLD and smaller lanes) as one table — dictionary, entry headword, the reflex's upstream language code verbatim and its catalog code, the reflex verbatim with romanization and both folded forms, borrowed/uncertain edge flags carried through — plus the join no etymological database publishes: Attested, the gold passage attestations whose folded lemma EQUALS the reflex's folded form (else its folded romanization, the script bridge) under the same catalog language code — the rule Nabu's etym desk resolves at query time, stored-key equality only, no fuzzy or cross-language matching; match/miss censused per language in nabu.eval. License screening row-by-row: open+attribution dictionary sources only — nc dictionaries (derom, mw, edl) are excluded and censused per class and source, and only gold rows of publishable sources count toward Attested; CC BY-SA 4.0 — Wiktionary's share-alike grant dominates (the share-alike carve-out).
 
 **Maintenance**: re-derive after dictionary-shelf syncs (wiktionary-recon, starling, iecor, wold, ...) or lemma-moving events (treebank syncs, a rebuild or builders:refresh re-projecting the rollup); the published-slice digest makes an unchanged slice a fingerprint no-op
+
+### `non/form-lemma` — Old Norse form→lemma table from Menota's lemmatized manuscript transcriptions
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: menota
+
+Maps every lemmatized word of the Menota archive's Old Icelandic and Old Norwegian manuscripts to its lemma and me:msa morphosyntactic analysis, with attestation counts at each transcription level the word carries — facsimile (the glyphs as written, MUFI characters included), diplomatic (abbreviations expanded, scribal spelling kept) and normalized (standard Old Norse orthography) — the Level column naming which, since dipl-only documents carry lemmatized words with no normalized reading; plus a per-lemma sidecar. A bridge from manuscript spellings to dictionary headwords no single edition offers. Scope is Old Norse as Glottolog bounds it: Old Swedish and Old Danish documents are excluded and censused, as are texts whose own licence is not open. Forms are carried verbatim. Menota is CC BY-SA 4.0 → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).
+
+**Maintenance**: re-derive after `nabu sync menota` (the archive grows as editors deposit new transcriptions); mechanical, no review needed beyond spot-checks
 
 ## What the rail never does
 

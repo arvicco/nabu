@@ -19,7 +19,7 @@ class DataBuildRegistryTest < Minitest::Test
                       mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency sga/form-lemma
                       hbo/form-lemma mul/dictionary-crossrefs
-                      mul/reflex-chains].freeze
+                      mul/reflex-chains non/form-lemma].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -405,6 +405,13 @@ class DataBuildRegistryTest < Minitest::Test
     # dataset's own label for the gloss language.
     sga = Nabu::DataBuild::LANGUAGES.fetch("sga")
     assert_equal ["Old Irish", "oldi1245", "sga"], [sga.name, sga.glottocode, sga.iso639p3]
+
+    # Checked 2026-10-17: oldn1244 is the languoid carrying ISO non (level:
+    # language; Old West Norse oldw1240 and Old East Norse olde1240 are
+    # dialects beneath it, while Old Swedish olds1252 and Old Danish
+    # oldd1239 sit under modern Swedish/Danish — non/form-lemma's scope).
+    non = Nabu::DataBuild::LANGUAGES.fetch("non")
+    assert_equal ["Old Norse", "oldn1244", "non"], [non.name, non.glottocode, non.iso639p3]
   end
 
   # Owner ruling: the mul/ namespace is real plumbing — a mul-led slug must
@@ -490,7 +497,9 @@ class DataBuildRegistryTest < Minitest::Test
       # JMdict, LSJ, AED, ...) carry their cross-references inside it.
       "mul/dictionary-crossrefs" => "CC-BY-SA-4.0",
       # Wiktionary's share-alike reconstruction shelves dominate the rows.
-      "mul/reflex-chains" => "CC-BY-SA-4.0"
+      "mul/reflex-chains" => "CC-BY-SA-4.0",
+      # Menota is CC BY-SA 4.0 — the share-alike carve-out (D51-a).
+      "non/form-lemma" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
