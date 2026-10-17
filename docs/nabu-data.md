@@ -197,11 +197,15 @@ no page update is a red suite, and vice versa.
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/lemma-frequencies` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/language-curve` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/language-dossiers` | available | curated | CC-BY-SA-4.0 | mul | — |
 | `mul/script-dossiers` | available | curated | CC-BY-4.0 | mul | — |
 | `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
 | `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
-| `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes |
+| `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes, aed |
+| `sga/form-lemma` | available | gold-derived | CC-BY-4.0 | sga | stgall-priscian, corph |
+| `hbo/form-lemma` | available | gold-derived | CC-BY-4.0 | hbo | oshb |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -363,6 +367,22 @@ Publishes the char_postings census behind Nabu's Han cards and graded-reading la
 
 **Maintenance**: re-derive after CJK-lane syncs (the census rebuilds with the fulltext index); the published-slice digest makes an unchanged census a fingerprint no-op
 
+### `mul/lemma-frequencies` — Gold lemma frequencies per language at century grain (the diachronic frequency tables)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
+
+Frequency tables for the ancient and premodern languages at century grain — frequency dictionaries exist for almost none of these languages, diachronic ones for none. One row per (lemma, language, century, basis, corpus) with passage attestations and attesting documents, projected from the catalog's lemma rollup; the lemma is the folded lookup key, the century the signed index of the document's date-envelope midpoint, undated material in its own row. Scope: GOLD lemmatization only (treebank / verified annotation) — the silver grade is skipped and censused, and silver-estimate datings fold into undated (an estimate is never published). License screening row-by-row: open+attribution classes only — nc, ODbL and research_private sources are excluded and censused (rows and occurrences per class) in nabu.eval, so no screened contribution can hide in an integer; CC BY-SA 4.0 — the share-alike carve-out carrying the share-alike lanes (aes, tla-hf, menota, glaux, ...).
+
+**Maintenance**: re-derive after lemma-moving events (sync waves of treebank/annotated sources, a rebuild or builders:refresh re-projecting the rollup); the published-slice digest makes an unchanged slice a fingerprint no-op
+
+### `mul/language-curve` — Documents and passages per language × century × corpus (the attestation census)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
+
+The library-wide diachronic attestation census — the rise-and-fall table: live documents and passages per (language, century, basis, corpus), projected from the catalog's language curve rollup; the century is the signed index of the document's date-envelope midpoint, undated material in its own row, silver-estimate datings folded into undated. License screening row-by-row: open+attribution classes only — nc, ODbL and research_private sources are excluded and censused (rows and passages per class) in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out.
+
+**Maintenance**: re-derive after sync waves, dating-moving events or a rebuild; the published-slice digest makes an unchanged census a fingerprint no-op
+
 ### `mul/language-dossiers` — Curated language dossiers — the human-written name/family/context per language
 
 **Status**: available · **Tier**: curated · **Anchoring**: language-code · **Inputs**: —
@@ -396,13 +416,29 @@ Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardine
 
 **Maintenance**: re-derive after `nabu sync unikemet` (upstream moves at annual Unicode releases); mechanical, no review needed beyond spot-checks
 
-### `egy/hiero-frequency` — Egyptian hieroglyph frequencies — Gardiner codes censused from AES, per subcorpus
+### `egy/hiero-frequency` — Egyptian hieroglyph frequencies — Gardiner codes censused from AES per subcorpus, with word-grain and damaged-attestation counts
 
-**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: aes
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: aes, aed
 
-The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere. Joins egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings precedent).
+The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token, word and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere, now at the word grain: Words counts the words attesting a sign (a sign repeated inside one word counts once). The hiero-glyphs.csv sidecar publishes the AED per-glyph census (the catalog's hiero_postings, over the TLA per-text stand-off hieroglyph files): Texts, Signs, Words, and Unclear — the occurrences read inside TEI `<unclear>`, i.e. damage-flagged attestations. Joins egy/unikemet-signs on the Gardiner column and on Codepoint. CC BY-SA 4.0 — derived from the AES and AED share-alike grants, the D51-a share-alike carve-out of 2026-08-11 (the char-postings precedent).
 
-**Maintenance**: re-derive after `nabu sync aes`; the doc-attestation digest in the recipe makes an unchanged census a fingerprint no-op
+**Maintenance**: re-derive after `nabu sync aes` or `nabu sync aed`; the doc-attestation and glyph-census digests in the recipe make an unchanged census a fingerprint no-op
+
+### `sga/form-lemma` — Old Irish form→lemma table from two gold editions of the St Gall Priscian glosses
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: stgall-priscian, corph
+
+Bridges attested Old Irish forms to their dictionary lemmas from two independent gold annotations of the same St Gall Priscian glosses — the St Gall Priscian Glosses edition v2.1 (Hofman, Moran, Bauer) and CorPH's St Gall text (ChronHib), both MIT — with Edition, homonym index, part of speech and morphological analysis per row. The differentiator is the two-edition agreement census: the editions are joined on the Thesaurus Palaeohibernicus reference, their tokens aligned by folded form, and identical / fold-equal / divergent lemma counts published in nabu.eval, with every divergent pair side by side in divergences.csv — an inter-annotator measurement and a concordance between two lemmatization conventions no single edition can offer.
+
+**Maintenance**: re-derive after a stgall-priscian or corph sync (both upstreams are stable — corph is pinned; the stale-ingest guard enforces freshness); mechanical, every build re-measures the agreement census
+
+### `hbo/form-lemma` — Biblical Hebrew form→lemma table derived from the Open Scriptures Hebrew Bible
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: oshb
+
+Maps every attested Biblical Hebrew word form of the Westminster Leningrad Codex to its OSHB lemma — the augmented Strong's id verbatim (prefix morphemes slash-joined, homograph letters kept), its content head lemma, and the OSHM morphology code — with attestation counts, plus a per-head-lemma sidecar. OSHB ALONE: the catalog's BHSA Hebrew is CC BY-NC and contributes nothing (the exclusion is censused in the manifest); Aramaic words and qere readings are excluded and censused too. Forms are carried byte-verbatim and never NFC-normalized — hbo is NFC-exempt (the Masoretic mark order is not NFC-stable). OSHB's lemma/morphology layer is CC BY 4.0 over the public-domain WLC text → clean CC BY 4.0.
+
+**Maintenance**: re-derive after `nabu sync oshb` (upstream is a completed digitization with occasional corrections); mechanical, no review needed beyond spot-checks
 
 ## What the rail never does
 

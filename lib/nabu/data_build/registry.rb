@@ -9,17 +9,21 @@ require_relative "char_postings_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
+require_relative "hbo_form_lemma_builder"
 require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kind_classifications_builder"
 require_relative "kyujitai_fold_builder"
+require_relative "language_curve_builder"
 require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
+require_relative "lemma_frequencies_builder"
 require_relative "meter_builder"
 require_relative "place_refs_builder"
 require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
+require_relative "sga_form_lemma"
 require_relative "script_dossiers_builder"
 require_relative "sign_table_builder"
 require_relative "unikemet_signs_builder"
@@ -71,7 +75,17 @@ module Nabu
       # egyp1246 = Egyptian (Ancient), ISO egy, level: language — checked
       # 2026-08-11 (P73-9) against the same cone.
       "egy" => Language.new(id: "egy", name: "Egyptian (Ancient)", glottocode: "egyp1246",
-                            iso639p3: "egy")
+                            iso639p3: "egy"),
+      # oldi1245 carries ISO sga, level: language — Glottolog's name is
+      # "Early Irish" (its 8–9th c. Old Irish stage, oldi1246, is a dialect
+      # beneath it); checked 2026-10-16 against the same cone.
+      "sga" => Language.new(id: "sga", name: "Old Irish", glottocode: "oldi1245", iso639p3: "sga"),
+      # bibl1238 = Biblical Hebrew — checked 2026-10-16 against the same
+      # cone: level dialect under anci1244 (Ancient Hebrew, the languoid
+      # carrying ISO hbo), Closest_ISO369P3code hbo. The WLC is exactly
+      # Biblical Hebrew, so the precise node is claimed (the oldp1257
+      # dialect-level precedent) while the ID/ISO stay Nabu's hbo code.
+      "hbo" => Language.new(id: "hbo", name: "Biblical Hebrew", glottocode: "bibl1238", iso639p3: "hbo")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -479,6 +493,54 @@ module Nabu
                      "fingerprint no-op"
       ),
       Feature.new(
+        slug: "mul/lemma-frequencies", language: LANGUAGES.fetch("mul"),
+        title: "Gold lemma frequencies per language at century grain (the diachronic frequency tables)",
+        # gold-DERIVED: a mechanical census over gold (treebank / verified)
+        # lemmatization — no sampling, no model output.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The catalog's lemma_rollup is the source of truth (derived from the
+        # whole ingested corpus set — no single cone sha is load-bearing);
+        # the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: LemmaFrequenciesBuilder,
+        rationale: "Frequency tables for the ancient and premodern languages at century grain — " \
+                   "frequency dictionaries exist for almost none of these languages, diachronic ones " \
+                   "for none. One row per (lemma, language, century, basis, corpus) with passage " \
+                   "attestations and attesting documents, projected from the catalog's lemma " \
+                   "rollup; the lemma is the folded lookup key, the century the signed index of " \
+                   "the document's date-envelope midpoint, undated material in its own row. Scope: " \
+                   "GOLD lemmatization only (treebank / verified annotation) — the silver grade " \
+                   "is skipped and censused, and silver-estimate datings fold into undated (an " \
+                   "estimate is never published). License screening row-by-row: open+attribution " \
+                   "classes only — nc, ODbL and research_private sources are excluded and censused " \
+                   "(rows and occurrences per class) in nabu.eval, so no screened contribution can " \
+                   "hide in an integer; CC BY-SA 4.0 — the share-alike carve-out carrying the " \
+                   "share-alike lanes (aes, tla-hf, menota, glaux, ...).",
+        maintenance: "re-derive after lemma-moving events (sync waves of treebank/annotated " \
+                     "sources, a rebuild or builders:refresh re-projecting the rollup); the " \
+                     "published-slice digest makes an unchanged slice a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/language-curve", language: LANGUAGES.fetch("mul"),
+        title: "Documents and passages per language × century × corpus (the attestation census)",
+        # gold-DERIVED: a mechanical count over the held catalog.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The catalog's language_curve rollup is the source of truth; the
+        # recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: LanguageCurveBuilder,
+        rationale: "The library-wide diachronic attestation census — the rise-and-fall table: " \
+                   "live documents and passages per (language, century, basis, corpus), " \
+                   "projected from the catalog's language curve rollup; the century is the " \
+                   "signed index of the document's date-envelope midpoint, undated material " \
+                   "in its own row, silver-estimate datings folded into undated. License " \
+                   "screening row-by-row: open+attribution classes only — nc, ODbL and " \
+                   "research_private sources are excluded and censused (rows and passages per " \
+                   "class) in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out.",
+        maintenance: "re-derive after sync waves, dating-moving events or a rebuild; the " \
+                     "published-slice digest makes an unchanged census a fingerprint no-op"
+      ),
+      Feature.new(
         slug: "mul/language-dossiers", language: LANGUAGES.fetch("mul"),
         title: "Curated language dossiers — the human-written name/family/context per language",
         # CURATED: hand-authored prose, not a mechanical derivation — the
@@ -567,23 +629,72 @@ module Nabu
       ),
       Feature.new(
         slug: "egy/hiero-frequency", language: LANGUAGES.fetch("egy"),
-        title: "Egyptian hieroglyph frequencies — Gardiner codes censused from AES, per subcorpus",
+        title: "Egyptian hieroglyph frequencies — Gardiner codes censused from AES per " \
+               "subcorpus, with word-grain and damaged-attestation counts",
         # gold-DERIVED: a mechanical census over TLA gold annotation — no
         # interpretation, no sampling.
         status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
         anchoring: "none",
-        inputs: ["aes"], canonical_cones: [],
+        inputs: %w[aes aed], canonical_cones: [],
         builder: HieroFrequencyBuilder,
         rationale: "The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code " \
-                   "token and document frequencies censused from AES's per-word hiero_inventar " \
-                   "annotations, overall and per subcorpus (frequency is genre-dependent — " \
-                   "Pyramid Texts vs Amarna letters vs medical papyri). To the survey's " \
-                   "knowledge the first public hieroglyph frequency list anywhere. Joins " \
-                   "egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from " \
-                   "AES's share-alike grant, the D51-a share-alike carve-out of 2026-08-11 (the char-postings " \
-                   "precedent).",
-        maintenance: "re-derive after `nabu sync aes`; the doc-attestation digest in the " \
-                     "recipe makes an unchanged census a fingerprint no-op"
+                   "token, word and document frequencies censused from AES's per-word " \
+                   "hiero_inventar annotations, overall and per subcorpus (frequency is " \
+                   "genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To " \
+                   "the survey's knowledge the first public hieroglyph frequency list anywhere, " \
+                   "now at the word grain: Words counts the words attesting a sign (a sign " \
+                   "repeated inside one word counts once). The hiero-glyphs.csv sidecar " \
+                   "publishes the AED per-glyph census (the catalog's hiero_postings, over the " \
+                   "TLA per-text stand-off hieroglyph files): Texts, Signs, Words, and Unclear — " \
+                   "the occurrences read inside TEI `<unclear>`, i.e. damage-flagged attestations. " \
+                   "Joins egy/unikemet-signs on the Gardiner column and on Codepoint. CC BY-SA " \
+                   "4.0 — derived from the AES and AED share-alike grants, the D51-a share-alike " \
+                   "carve-out of 2026-08-11 (the char-postings precedent).",
+        maintenance: "re-derive after `nabu sync aes` or `nabu sync aed`; the doc-attestation " \
+                     "and glyph-census digests in the recipe make an unchanged census a " \
+                     "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "sga/form-lemma", language: LANGUAGES.fetch("sga"),
+        title: "Old Irish form→lemma table from two gold editions of the St Gall Priscian glosses",
+        # gold-DERIVED, the san/form-lemma posture: a mechanical aggregation
+        # of human-annotated tokens plus a measured cross-edition census.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: %w[stgall-priscian corph], canonical_cones: %w[stgall-priscian corph],
+        builder: SgaFormLemma,
+        rationale: "Bridges attested Old Irish forms to their dictionary lemmas from two independent " \
+                   "gold annotations of the same St Gall Priscian glosses — the St Gall Priscian " \
+                   "Glosses edition v2.1 (Hofman, Moran, Bauer) and CorPH's St Gall text (ChronHib), " \
+                   "both MIT — with Edition, homonym index, part of speech and morphological analysis " \
+                   "per row. The differentiator is the two-edition agreement census: the editions are " \
+                   "joined on the Thesaurus Palaeohibernicus reference, their tokens aligned by folded " \
+                   "form, and identical / fold-equal / divergent lemma counts published in nabu.eval, " \
+                   "with every divergent pair side by side in divergences.csv — an inter-annotator " \
+                   "measurement and a concordance between two lemmatization conventions no single " \
+                   "edition can offer.",
+        maintenance: "re-derive after a stgall-priscian or corph sync (both upstreams are stable — " \
+                     "corph is pinned; the stale-ingest guard enforces freshness); mechanical, every " \
+                     "build re-measures the agreement census"
+      ),
+      Feature.new(
+        slug: "hbo/form-lemma", language: LANGUAGES.fetch("hbo"),
+        title: "Biblical Hebrew form→lemma table derived from the Open Scriptures Hebrew Bible",
+        # gold-DERIVED: a mechanical count over OSHB's complete, edited
+        # lemma/morphology layer — the san/form-lemma tier parity.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["oshb"], canonical_cones: ["oshb"], builder: HboFormLemmaBuilder,
+        rationale: "Maps every attested Biblical Hebrew word form of the Westminster Leningrad " \
+                   "Codex to its OSHB lemma — the augmented Strong's id verbatim (prefix " \
+                   "morphemes slash-joined, homograph letters kept), its content head lemma, and " \
+                   "the OSHM morphology code — with attestation counts, plus a per-head-lemma " \
+                   "sidecar. OSHB ALONE: the catalog's BHSA Hebrew is CC BY-NC and contributes " \
+                   "nothing (the exclusion is censused in the manifest); Aramaic words and qere " \
+                   "readings are excluded and censused too. Forms are carried byte-verbatim and " \
+                   "never NFC-normalized — hbo is NFC-exempt (the Masoretic mark order is not " \
+                   "NFC-stable). OSHB's lemma/morphology layer is CC BY 4.0 over the " \
+                   "public-domain WLC text → clean CC BY 4.0.",
+        maintenance: "re-derive after `nabu sync oshb` (upstream is a completed digitization " \
+                     "with occasional corrections); mechanical, no review needed beyond spot-checks"
       )
     ].freeze
 
