@@ -206,6 +206,10 @@ no page update is a red suite, and vice versa.
 | `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes, aed |
 | `sga/form-lemma` | available | gold-derived | CC-BY-4.0 | sga | stgall-priscian, corph |
 | `hbo/form-lemma` | available | gold-derived | CC-BY-4.0 | hbo | oshb |
+| `mul/dictionary-crossrefs` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/reflex-chains` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `non/form-lemma` | available | gold-derived | CC-BY-SA-4.0 | non | menota |
+| `grc/form-lemma` | available | silver | CC-BY-SA-4.0 | grc | glaux |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -439,6 +443,38 @@ Bridges attested Old Irish forms to their dictionary lemmas from two independent
 Maps every attested Biblical Hebrew word form of the Westminster Leningrad Codex to its OSHB lemma — the augmented Strong's id verbatim (prefix morphemes slash-joined, homograph letters kept), its content head lemma, and the OSHM morphology code — with attestation counts, plus a per-head-lemma sidecar. OSHB ALONE: the catalog's BHSA Hebrew is CC BY-NC and contributes nothing (the exclusion is censused in the manifest); Aramaic words and qere readings are excluded and censused too. Forms are carried byte-verbatim and never NFC-normalized — hbo is NFC-exempt (the Masoretic mark order is not NFC-stable). OSHB's lemma/morphology layer is CC BY 4.0 over the public-domain WLC text → clean CC BY 4.0.
 
 **Maintenance**: re-derive after `nabu sync oshb` (upstream is a completed digitization with occasional corrections); mechanical, no review needed beyond spot-checks
+
+### `mul/dictionary-crossrefs` — The cross-dictionary reference graph — every machine-marked entry→entry pointer
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: entry-urn · **Inputs**: —
+
+The cross-reference estate of Nabu's dictionaries as one queryable graph — no one publishes cross-dictionary link data for these languages. One row per edge: the from-entry (dictionary, stable entry URN, headword), the pointer's kind and verbatim label, the target as the dictionary stores it (display form, folded form, upstream id), and where the target resolved unambiguously the target dictionary and entry URN; an unresolved edge is still an edge and publishes with the target-entry fields empty (both resolution states censused). License screening on BOTH endpoints: an edge publishes only when its own dictionary's source is open/attribution class AND, when resolved, the target entry's dictionary's source is too — an nc endpoint on either side drops the edge, censused per endpoint role and class in nabu.eval; CC BY-SA 4.0 — the share-alike carve-out carrying the share-alike dictionaries (Wiktionary, JMdict, LSJ, AED, ...).
+
+**Maintenance**: re-derive after dictionary-source syncs or a rebuild (the loader's resolution pass re-mints the graph); the published-slice digest makes an unchanged graph a fingerprint no-op
+
+### `mul/reflex-chains` — Reconstruction→reflex edges of the held etymological dictionaries, joined to the gold corpus
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
+
+Every reconstruction→reflex edge of the held etymological dictionaries (Wiktionary reconstruction shelves, the Tower of Babel databases, IE-CoR, WOLD and smaller lanes) as one table — dictionary, entry headword, the reflex's upstream language code verbatim and its catalog code, the reflex verbatim with romanization and both folded forms, borrowed/uncertain edge flags carried through — plus the join no etymological database publishes: Attested, the gold passage attestations whose folded lemma EQUALS the reflex's folded form (else its folded romanization, the script bridge) under the same catalog language code — the rule Nabu's etym desk resolves at query time, stored-key equality only, no fuzzy or cross-language matching; match/miss censused per language in nabu.eval. License screening row-by-row: open+attribution dictionary sources only — nc dictionaries (derom, mw, edl) are excluded and censused per class and source, and only gold rows of publishable sources count toward Attested; CC BY-SA 4.0 — Wiktionary's share-alike grant dominates (the share-alike carve-out).
+
+**Maintenance**: re-derive after dictionary-shelf syncs (wiktionary-recon, starling, iecor, wold, ...) or lemma-moving events (treebank syncs, a rebuild or builders:refresh re-projecting the rollup); the published-slice digest makes an unchanged slice a fingerprint no-op
+
+### `non/form-lemma` — Old Norse form→lemma table from Menota's lemmatized manuscript transcriptions
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: menota
+
+Maps every lemmatized word of the Menota archive's Old Icelandic and Old Norwegian manuscripts to its lemma and me:msa morphosyntactic analysis, with attestation counts at each transcription level the word carries — facsimile (the glyphs as written, MUFI characters included), diplomatic (abbreviations expanded, scribal spelling kept) and normalized (standard Old Norse orthography) — the Level column naming which, since dipl-only documents carry lemmatized words with no normalized reading; plus a per-lemma sidecar. A bridge from manuscript spellings to dictionary headwords no single edition offers. Scope is Old Norse as Glottolog bounds it: Old Swedish and Old Danish documents are excluded and censused, as are texts whose own licence is not open. Forms are carried verbatim. Menota is CC BY-SA 4.0 → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).
+
+**Maintenance**: re-derive after `nabu sync menota` (the archive grows as editors deposit new transcriptions); mechanical, no review needed beyond spot-checks
+
+### `grc/form-lemma` — Ancient Greek form→lemma table from the GLAUx treebanks, with the hand-annotated share counted
+
+**Status**: available · **Tier**: silver · **Anchoring**: none · **Inputs**: glaux
+
+Maps every lemmatized Ancient Greek word form of the GLAUx corpus (8th c. BC – 4th c. AD, literary and documentary) to its lemma and AGDT 9-place positional tag, with attestation counts, plus a per-lemma sidecar — a corpus-scale form→lemma table spanning a millennium of Greek. SILVER: most of GLAUx is automatic annotation (lemma accuracy ~98.8% per its README), so every row also carries Manual_Count, the attestations from sentences GLAUx marks as hand-annotated, keeping the gold share separable. GLAUx ALONE: the catalog's PROIEL Greek is CC BY-NC-SA and contributes nothing, and GLAUx's own nc texts (NC source texts, PROIEL- and Gorman-annotated trees) are excluded too — both exclusions censused in the manifest. Forms carried verbatim. GLAUx is CC BY-SA → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).
+
+**Maintenance**: re-derive after `nabu sync glaux` (upstream releases occasionally; a release that re-runs the automatic annotation shifts silver counts); mechanical, spot-check the Manual_Count share
 
 ## What the rail never does
 

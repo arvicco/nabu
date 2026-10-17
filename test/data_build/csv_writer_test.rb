@@ -74,6 +74,36 @@ class DataBuildCsvWriterTest < Minitest::Test
   end
 
   # The property test the packet asks for: over seeded random garbage
+  # A dataset whose plain CSV would cross the platform's 100 MB file
+  # limit ships gzipped (mul/reflex-chains, the first to cross it): the
+  # writer emits deterministic gzip bytes (fixed mtime, no embedded
+  # name), the table reads back identically, and building twice is
+  # byte-identical — the datapackage declares the compression.
+  def test_gzip_output_is_deterministic_and_reads_back
+    rows = [
+      { "ID" => "a-1", "Form" => "fōrm", "Lemma" => "lemma" },
+      { "ID" => "a-2", "Form" => "όψις", "Lemma" => "ὄψις" }
+    ]
+    Dir.mktmpdir("nabu-csv-gz") do |dir|
+      path = File.join(dir, "table.csv.gz")
+      count = WRITER.write(path: path, columns: %w[ID Form Lemma], rows: rows)
+      first = File.binread(path)
+      WRITER.write(path: path, columns: %w[ID Form Lemma], rows: rows)
+      assert_equal first, File.binread(path), "gzip bytes must be reproducible across builds"
+      assert_equal 2, count
+      table = Zlib::GzipReader.open(path) { |gz| CSV.parse(gz.read) }
+      assert_equal [%w[ID Form Lemma], %w[a-1 fōrm lemma], %w[a-2 όψις ὄψις]], table
+    end
+  end
+
+  def test_gzip_engages_by_path_extension_only
+    Dir.mktmpdir("nabu-csv-plain") do |dir|
+      path = File.join(dir, "table.csv")
+      WRITER.write(path: path, columns: %w[ID], rows: [{ "ID" => "x" }])
+      assert_equal "ID\nx\n", File.read(path), "a .csv path stays plain text"
+    end
+  end
+
   # (identifier chars, URN punctuation, Greek, spaces), every minted ID is
   # regex-valid and re-minting the mint is a fixed point; refusals happen
   # only when the input carried nothing identifier-worthy.

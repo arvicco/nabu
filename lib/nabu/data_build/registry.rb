@@ -6,8 +6,10 @@ require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
 require_relative "cuneiform_senses_builder"
 require_relative "char_postings_builder"
+require_relative "dictionary_crossrefs_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
+require_relative "grc_form_lemma_builder"
 require_relative "hani_fold_builder"
 require_relative "hbo_form_lemma_builder"
 require_relative "hiero_frequency_builder"
@@ -19,7 +21,9 @@ require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
 require_relative "lemma_frequencies_builder"
 require_relative "meter_builder"
+require_relative "non_form_lemma_builder"
 require_relative "place_refs_builder"
+require_relative "reflex_chains_builder"
 require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
@@ -38,7 +42,8 @@ module Nabu
     # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28;
     # re-checked 2026-07-29 for P52-3/P52-5): sans1269 = Sanskrit (ISO san),
     # clas1254 = Classical Tibetan (ISO xct), nucl1643 = Japanese (ISO jpn),
-    # lati1261 = Latin (ISO lat), anci1242 = Ancient Greek (ISO grc).
+    # lati1261 = Latin (ISO lat), anci1242 = Ancient Greek (ISO grc; re-checked
+    # 2026-10-17 for grc/form-lemma — still level language, ISO grc).
     # zho is an ISO 639-3 MACROLANGUAGE: Glottolog deliberately assigns
     # macrolanguages no glottocode (the cone carries no row with ISO zho;
     # the nearest node, sini1245 Sinitic, is a family — claiming it would
@@ -85,7 +90,13 @@ module Nabu
       # carrying ISO hbo), Closest_ISO369P3code hbo. The WLC is exactly
       # Biblical Hebrew, so the precise node is claimed (the oldp1257
       # dialect-level precedent) while the ID/ISO stay Nabu's hbo code.
-      "hbo" => Language.new(id: "hbo", name: "Biblical Hebrew", glottocode: "bibl1238", iso639p3: "hbo")
+      "hbo" => Language.new(id: "hbo", name: "Biblical Hebrew", glottocode: "bibl1238", iso639p3: "hbo"),
+      # oldn1244 = Old Norse — checked 2026-10-17 against the same cone:
+      # level language, ISO non, with Old West Norse (oldw1240) and Old
+      # East Norse (olde1240) as dialects beneath it. Old Swedish
+      # (olds1252) and Old Danish (oldd1239) sit under swed1254/dani1285,
+      # NOT under oldn1244 — the scope line non/form-lemma draws.
+      "non" => Language.new(id: "non", name: "Old Norse", glottocode: "oldn1244", iso639p3: "non")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -695,6 +706,114 @@ module Nabu
                    "public-domain WLC text → clean CC BY 4.0.",
         maintenance: "re-derive after `nabu sync oshb` (upstream is a completed digitization " \
                      "with occasional corrections); mechanical, no review needed beyond spot-checks"
+      ),
+      Feature.new(
+        slug: "mul/dictionary-crossrefs", language: LANGUAGES.fetch("mul"),
+        title: "The cross-dictionary reference graph — every machine-marked entry→entry pointer",
+        # gold-DERIVED: a mechanical projection of the dictionaries' own
+        # upstream pointer markup — no inference; an ambiguous pointer
+        # stays unresolved, never guessed.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        # Entries are referenced by their catalog URN
+        # (urn:nabu:dict:<dictionary>:<upstream entry id>) — stable across
+        # rebuilds, unlike the integer row id.
+        anchoring: "entry-urn",
+        # The catalog's dictionary_crossrefs is the source of truth (derived
+        # from every ingested dictionary — no single cone sha is
+        # load-bearing); the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: DictionaryCrossrefsBuilder,
+        rationale: "The cross-reference estate of Nabu's dictionaries as one queryable graph — no " \
+                   "one publishes cross-dictionary link data for these languages. One row per " \
+                   "edge: the from-entry (dictionary, stable entry URN, headword), the pointer's " \
+                   "kind and verbatim label, the target as the dictionary stores it (display " \
+                   "form, folded form, upstream id), and where the target resolved unambiguously " \
+                   "the target dictionary and entry URN; an unresolved edge is still an edge and " \
+                   "publishes with the target-entry fields empty (both resolution states censused). " \
+                   "License screening on BOTH endpoints: an edge publishes only when its own " \
+                   "dictionary's source is open/attribution class AND, when resolved, the target " \
+                   "entry's dictionary's source is too — an nc endpoint on either side drops the " \
+                   "edge, censused per endpoint role and class in nabu.eval; CC BY-SA 4.0 — the " \
+                   "share-alike carve-out carrying the share-alike dictionaries (Wiktionary, " \
+                   "JMdict, LSJ, AED, ...).",
+        maintenance: "re-derive after dictionary-source syncs or a rebuild (the loader's " \
+                     "resolution pass re-mints the graph); the published-slice digest makes an " \
+                     "unchanged graph a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/reflex-chains", language: LANGUAGES.fetch("mul"),
+        title: "Reconstruction→reflex edges of the held etymological dictionaries, joined to the gold corpus",
+        # gold-DERIVED: a mechanical projection of upstream descendant edges
+        # plus a stated stored-key equality join — no fuzzy matching.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The catalog crosswalk (dictionary_reflexes) and lemma_rollup are the
+        # source of truth (no single cone sha is load-bearing); the recipe
+        # embeds the published-slice sha256, attested counts included.
+        inputs: [], canonical_cones: [], builder: ReflexChainsBuilder,
+        rationale: "Every reconstruction→reflex edge of the held etymological dictionaries (Wiktionary " \
+                   "reconstruction shelves, the Tower of Babel databases, IE-CoR, WOLD and smaller " \
+                   "lanes) as one table — dictionary, entry headword, the reflex's upstream language " \
+                   "code verbatim and its catalog code, the reflex verbatim with romanization and both " \
+                   "folded forms, borrowed/uncertain edge flags carried through — plus the join no " \
+                   "etymological database publishes: Attested, the gold passage attestations whose " \
+                   "folded lemma EQUALS the reflex's folded form (else its folded romanization, the " \
+                   "script bridge) under the same catalog language code — the rule Nabu's etym desk " \
+                   "resolves at query time, stored-key equality only, no fuzzy or cross-language " \
+                   "matching; match/miss censused per language in nabu.eval. License screening " \
+                   "row-by-row: open+attribution dictionary sources only — nc dictionaries (derom, mw, " \
+                   "edl) are excluded and censused per class and source, and only gold rows of " \
+                   "publishable sources count toward Attested; CC BY-SA 4.0 — Wiktionary's share-alike " \
+                   "grant dominates (the share-alike carve-out).",
+        maintenance: "re-derive after dictionary-shelf syncs (wiktionary-recon, starling, iecor, wold, " \
+                     "...) or lemma-moving events (treebank syncs, a rebuild or builders:refresh " \
+                     "re-projecting the rollup); the published-slice digest makes an unchanged slice a " \
+                     "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "non/form-lemma", language: LANGUAGES.fetch("non"),
+        title: "Old Norse form→lemma table from Menota's lemmatized manuscript transcriptions",
+        # gold-DERIVED: a mechanical count over Menota's encoder-assigned
+        # lemma + me:msa analyses — the san/form-lemma tier parity.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: ["menota"], canonical_cones: ["menota"], builder: NonFormLemmaBuilder,
+        rationale: "Maps every lemmatized word of the Menota archive's Old Icelandic and Old " \
+                   "Norwegian manuscripts to its lemma and me:msa morphosyntactic analysis, " \
+                   "with attestation counts at each transcription level the word carries — " \
+                   "facsimile (the glyphs as written, MUFI characters included), diplomatic " \
+                   "(abbreviations expanded, scribal spelling kept) and normalized (standard Old " \
+                   "Norse orthography) — the Level column naming which, since dipl-only " \
+                   "documents carry lemmatized words with no normalized reading; plus a " \
+                   "per-lemma sidecar. A bridge from manuscript spellings to dictionary " \
+                   "headwords no single edition offers. Scope is Old Norse as Glottolog bounds " \
+                   "it: Old Swedish and Old Danish documents are excluded and censused, as are " \
+                   "texts whose own licence is not open. Forms are carried verbatim. Menota is " \
+                   "CC BY-SA 4.0 → the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).",
+        maintenance: "re-derive after `nabu sync menota` (the archive grows as editors deposit " \
+                     "new transcriptions); mechanical, no review needed beyond spot-checks"
+      ),
+      Feature.new(
+        slug: "grc/form-lemma", language: LANGUAGES.fetch("grc"),
+        title: "Ancient Greek form→lemma table from the GLAUx treebanks, with the hand-annotated " \
+               "share counted",
+        # SILVER: most of GLAUx is automatic annotation (sources.yml
+        # lemma_tier: silver); the Manual_Count column carries the
+        # hand-annotated share so the gold slice stays separable.
+        status: :available, tier: "silver", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: ["glaux"], canonical_cones: ["glaux"], builder: GrcFormLemmaBuilder,
+        rationale: "Maps every lemmatized Ancient Greek word form of the GLAUx corpus (8th c. BC – " \
+                   "4th c. AD, literary and documentary) to its lemma and AGDT 9-place " \
+                   "positional tag, with attestation counts, plus a per-lemma sidecar — a " \
+                   "corpus-scale form→lemma table spanning a millennium of Greek. SILVER: most of " \
+                   "GLAUx is automatic annotation (lemma accuracy ~98.8% per its README), so every " \
+                   "row also carries Manual_Count, the attestations from sentences GLAUx marks as " \
+                   "hand-annotated, keeping the gold share separable. GLAUx ALONE: the catalog's " \
+                   "PROIEL Greek is CC BY-NC-SA and contributes nothing, and GLAUx's own nc texts " \
+                   "(NC source texts, PROIEL- and Gorman-annotated trees) are excluded too — both " \
+                   "exclusions censused in the manifest. Forms carried verbatim. GLAUx is CC BY-SA " \
+                   "→ the dataset is CC BY-SA 4.0 (the D51-a share-alike carve-out).",
+        maintenance: "re-derive after `nabu sync glaux` (upstream releases occasionally; a release " \
+                     "that re-runs the automatic annotation shifts silver counts); mechanical, " \
+                     "spot-check the Manual_Count share"
       )
     ].freeze
 

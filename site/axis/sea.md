@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 16 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 October 2026)</span> |
 |---|---|---|---|---|
 | `ban-wikisource` | texts | attribution | wired · manual | 1,252 docs / 21,491 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
@@ -28,7 +28,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `ojw` | dictionary | attribution | wired · manual | 3,632 entries |
 | `th-wikisource` | texts | attribution | wired · manual | 92 docs / 11,006 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 16 October 2026)</span>: `kaw` 3,632 · `obr` 1,121 · `okz-Latn` 906 · `kaw-Bali` 701 · `ban-Bali` 542 · `san-Latn` 487 · `kaw-Latn` 271 · `pyx-Latn` 124 · `tha` 92 · `ocm-Latn` 75 … and 11 more (`nabu axis sea` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 October 2026)</span>: `kaw` 3,632 · `obr` 1,121 · `okz-Latn` 906 · `kaw-Bali` 701 · `ban-Bali` 542 · `san-Latn` 487 · `kaw-Latn` 271 · `pyx-Latn` 124 · `tha` 92 · `ocm-Latn` 75 … and 11 more (`nabu axis sea` lists all).
 
 ## The desk's instruments
 
