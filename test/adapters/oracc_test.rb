@@ -136,6 +136,55 @@ module Adapters
       assert_equal "Royal Inscription", document.metadata.dig("facets", "genre", "value")
     end
 
+    # -- the catalogue extras (Nabu::Adapters::OraccCatalogue) ----------------
+
+    # The member's persons, works identity, archive and sender place ride
+    # the parsed document's metadata beside the facets.
+    def test_parse_threads_the_catalogue_persons_works_and_sender_place
+      refs = conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
+      document = conformance_adapter.parse(refs["urn:nabu:oracc:saao-saa01:P224395"])
+      metadata = document.metadata
+      assert_equal "Sargon II", metadata["ruler"]
+      assert_equal "Adda-hati", metadata["ancient_author"]
+      assert_equal "the king", metadata["ancient_recipient"]
+      assert_equal "adda-hati", metadata["dossier_list"]
+      assert_equal "Arabs Attack a Column of Booty", metadata["work_title"]
+      assert_equal "006 - Northwest Palace, Room ZT 4", metadata["archive"]
+      assert_equal "ND 02381", metadata["excavation_no"]
+      assert_equal "721–705 BC", metadata["regnal_dates"]
+      assert_equal "Hamath", metadata["sender_loc"]
+      assert_equal "Administrative Letter", metadata.dig("facets", "genre", "value"), "facets unchanged"
+      assert_equal "SAA 01 175", document.title, "the designation stays the document title"
+    end
+
+    def test_parse_threads_royal_works_identity_and_the_composite_edge
+      refs = conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
+      metadata = conformance_adapter.parse(refs["urn:nabu:oracc:etcsri:Q004151"]).metadata
+      assert_equal "RIME 3-2.01.03.2049add", metadata["rime_no"]
+      assert_equal "Ur", metadata["dynastic_seat"]
+      assert_equal "Amar-Suena", metadata["ruler"]
+      assert_equal "LIT", metadata["supergenre"]
+      assert_equal ["urn:nabu:cdli:q004151"], metadata["related"],
+                   "the composite Q mints the CDLI hub target CDLI's composite_id mints"
+    end
+
+    # The -en sibling is the same artifact: it carries the catalogue
+    # metadata (persons, sender place) but asserts no edges — the tablet
+    # document does, once.
+    def test_translation_siblings_carry_the_catalogue_metadata_but_no_edges
+      refs = conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
+      metadata = conformance_adapter.parse(refs["urn:nabu:oracc:saao-saa01:P224395-en"]).metadata
+      assert_equal "Adda-hati", metadata["ancient_author"]
+      assert_equal "Hamath", metadata["sender_loc"]
+      assert_nil metadata["related"]
+    end
+
+    def test_reference_edges_run_under_the_oracc_producer
+      assert Nabu::Adapters::Oracc.reference_edges?
+      producer = Nabu::Adapters::Oracc.reference_producer(catalog: nil, journal: nil)
+      assert_equal "oracc", producer.producer
+    end
+
     # -- P11-7 fix 1: subproject NESTED-ROOT discovery ------------------------
 
     # The saao/saa01 (and rinap/rinap1) zips unpack with a nested root —

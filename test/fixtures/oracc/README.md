@@ -116,6 +116,29 @@ excludes exactly the translations. → translation documents carry
   `"/"`), `nonx` (illegible/excised stretches). Every `line-start` carries
   a `label`, unique within its text (verified project-wide).
 
+## Catalogue-member sampler (the catalogue extras, cut 2026-10-18)
+
+`catalogue-members/members.json` — nine WHOLE catalogue members, each
+copied verbatim (every key and value) from this box's own
+`canonical/oracc/<slug>/…/catalogue.json` (the same per-project zips as
+above), keyed `"<project>:<id>"` and re-serialized with
+`JSON.pretty_generate`. Nothing discovers it (no corpusjson, not named
+catalogue.json); `OraccCatalogueTest` reads it directly. Picked by a
+census walk as the first member carrying each field shape the
+catalogue-extras mining reads:
+
+| key | shape |
+|---|---|
+| `atae/burmarina:P522614` | eponym, archive, excavation_no, findspot_square, regnal_dates |
+| `atae/imgurenlil:P522820` | ancient_creditor / ancient_debtor, seal_owner |
+| `atae/mallanate:P522850` | seal_owner + ancient_buyer + ancient_seller + eponym |
+| `cmawro/cmawr1:P236997` | qcat_2__id_composite / qcat_2__other_names |
+| `dcclt/nineveh:P235300` | series_tablet_no, subgenre, supergenre "unknown" |
+| `dcclt/signlists:Q000055` | series + other_names, id_composite, supergenre LEX |
+| `riao:Q006482` | popular_name, Q_designation, dynastic_seat, regnal_dates without date_of_origin |
+| `saao/saa01:P313416` | ancient_author/recipient, title, sender_loc + pleiades_sender_loc + coordinates |
+| `saao/saa15:P238649` | the "(unknown)" / "not assigned" / "N/A" sender placeholders |
+
 ## Glossary fixtures (P104-4 — the secondary dictionary lane)
 
 Two real per-project glossary files for the `OraccGlossaryLane`

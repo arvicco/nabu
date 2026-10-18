@@ -67,6 +67,19 @@ module Nabu
     # below. Both go through ZipFetch.default_http (the vendored-cert path),
     # since oracc.museum.upenn.edu serves an incomplete TLS chain.
     #
+    # == The catalogue (per-member document metadata + edges)
+    #
+    # catalogue.json supplies each tablet's title (the designation) and the
+    # period/genre facets, and — through Nabu::Adapters::OraccCatalogue —
+    # the rest of what a member holds: persons with their roles (ruler,
+    # ancient_author/recipient, eponym, dossier, legal parties), works
+    # identity (id_composite, work title, popular_name, rime_no …),
+    # archive/findspot context, sub/supergenre, regnal context and the SAA
+    # sender place, all verbatim into document metadata; facets via
+    # config/facet_map.yml. The composite Q-numbers mint reference edges
+    # (reference_edges?, producer "oracc") onto the urn:nabu:cdli:q… hubs.
+    # An -en sibling carries its tablet's catalogue metadata but no edges.
+    #
     # == Translations (P13-4; registry `translations: true`, default inert)
     #
     # The JSON carries word glosses (gw) but NO prose translations (P9-5a: 0
@@ -277,6 +290,16 @@ module Nabu
       # lane after the tablet load (Adapter.dictionary_lane).
       def self.dictionary_lane = OraccGlossaryLane.new
 
+      # The catalogue's composite Q-numbers mint reference edges onto the
+      # urn:nabu:cdli:q… hubs CDLI's composite_id also targets
+      # (OraccCatalogue) — the ORACC corner of the CDLI/ETCSL/ORACC
+      # concordance.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        LibraryReferences.new(catalog: catalog, journal: journal, producer: "oracc")
+      end
+
       # P11-2: ORACC is the HTTP-zip fetch path, so the remote-health probe
       # HEADs each project zip and GETs each metadata.json instead of
       # ls-remote (there is no git repo).
@@ -363,7 +386,7 @@ module Nabu
       # derived from the data); -en refs (metadata "kind" => "translation")
       # go to the OraccTranslationParser with their sibling corpusjson.
       def parse(document_ref)
-        metadata = document_ref.metadata.slice("facets")
+        metadata = document_ref.metadata.fetch("catalogue", {}).merge(document_ref.metadata.slice("facets"))
         if document_ref.metadata["kind"] == "translation"
           OraccTranslationParser.new.parse(
             document_ref.path,
@@ -590,6 +613,8 @@ module Nabu
           metadata = { "project" => slug(project), "title" => members.dig(id, :title) || id }
           facets = member_facets(members[id])
           metadata["facets"] = facets if facets
+          catalogue = members.dig(id, :catalogue)
+          metadata["catalogue"] = catalogue if catalogue
           Nabu::DocumentRef.new(
             source_id: MANIFEST.id,
             id: "urn:nabu:oracc:#{slug(project)}:#{id}",
@@ -617,6 +642,8 @@ module Nabu
                        "title" => "#{members.dig(id, :title) || id} (English translation)" }
           facets = member_facets(members[id])
           metadata["facets"] = facets if facets
+          catalogue = members.dig(id, :catalogue)&.except("related")
+          metadata["catalogue"] = catalogue unless catalogue.nil? || catalogue.empty?
           Nabu::DocumentRef.new(
             source_id: MANIFEST.id,
             id: "urn:nabu:oracc:#{slug(project)}:#{id}-en",
@@ -673,11 +700,16 @@ module Nabu
         raise Nabu::FetchError, "oracc project #{project}: malformed metadata.json: #{e.message}"
       end
 
-      # id → {title, period} from the project catalogue; missing/malformed
-      # catalogues only cost titles (the id stands in) and periods, never
-      # discovery. +period+ (P62-2) becomes an adapter-emitted facet so
-      # the lect period rules and FacetBuilder can reach oracc's own
-      # 123k-entry period census.
+      # id → {title, period, genre, catalogue} from the project catalogue;
+      # missing/malformed catalogues only cost titles (the id stands in),
+      # periods and the catalogue extras, never discovery. +period+ (P62-2)
+      # becomes an adapter-emitted facet so the lect period rules and
+      # FacetBuilder can reach oracc's own 123k-entry period census.
+      # +catalogue+ is the member's further document metadata — persons,
+      # works identity, archive/findspot context, the sender place — plus
+      # its composite Q edges under "related" (OraccCatalogue), nil when
+      # the member carries none of it; parse threads it into the
+      # document's metadata.
       def catalogue_members(dir)
         path = File.join(dir, "catalogue.json")
         return {} unless File.file?(path)
@@ -688,10 +720,18 @@ module Nabu
         members.filter_map do |id, member|
           next unless member.is_a?(Hash)
 
-          [id, { title: member["designation"], period: member["period"], genre: member["genre"] }]
+          [id, { title: member["designation"], period: member["period"], genre: member["genre"],
+                 catalogue: catalogue_metadata(member) }]
         end.to_h
       rescue JSON::ParserError
         {}
+      end
+
+      def catalogue_metadata(member)
+        metadata = OraccCatalogue.document_metadata(member)
+        related = OraccCatalogue.related(member)
+        metadata["related"] = related unless related.empty?
+        metadata.empty? ? nil : metadata
       end
 
       # The facets hash for one catalogue member (the ebl metadata shape
