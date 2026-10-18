@@ -349,3 +349,8 @@ sources:
       #                         校訂者 / その他 (39 rows) ride metadata "persons" only. 原題
       #                         (262 PD works) stays metadata: a free-form original-language
       #                         title, no work-facet mold fits it cleanly
+  kokubunken:                 # 3 documents (whole works), poets from the poems' own pointers
+    fields:
+      authors: author         # kokin 121 · 廣瀬本 71 · 元暦校本 12 poets — the listPerson ids,
+      #                         which ARE upstream's normalized names (在原元方, 雄略天皇)
+      author_ids: author_id   # "kokubunken:在原元方" — the person-index slice key

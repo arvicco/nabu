@@ -4503,16 +4503,19 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB + EDH)"
+    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB, EDH, …)"
     long_desc <<~HELP, wrap: false
       Look a person up in the derived person index: the CBDB thin slice
-      (~658k persons of Chinese history) and EDH's attested persons (~93.6k
+      (~658k persons of Chinese history), EDH's attested persons (~93.6k
       Latin inscription persons, one card per attestation — the ref names
-      the inscription). Input is an authority ref (cbdb:1762,
-      edh:HD000001/3) or a name — hanzi, pinyin, courtesy/studio names, a
-      Roman name as inscribed or in the nominative all key through the
-      shared fold; matching is exact under the fold, never fuzzy; homonyms
-      print several cards (cbdb first, then edh).
+      the inscription), the Elephantine ancient persons, the Aozora Bunko
+      author/translator index (1,335 persons) and the kokubunken waka-poet
+      personographies (266). Input is an authority ref (cbdb:1762,
+      edh:HD000001/3, aozora:001257, kokubunken:紀貫之) or a name — hanzi,
+      pinyin, courtesy/studio names, kana readings, romaji, a Roman name
+      as inscribed or in the nominative all key through the shared fold;
+      matching is exact under the fold, never fuzzy; homonyms print
+      several cards (cbdb first, then edh, elephantine, aozora, kokubunken).
 
       `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
       source's passages (the PlaceMine Han-lane shape). It writes nothing —
