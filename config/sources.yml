@@ -3541,6 +3541,30 @@ obi-burmese:   # P92-3
   # the start of the next inscription mint section keys (37.1) —
   # censused in metadata, never dropped, never duplicated.
 
+ociana:
+  adapter: Nabu::Adapters::Ociana
+  adopted: "2026-10-18"
+  axes: [epigraphy, arabic]   # no semitic/arabian axis exists — the Arabic desk is the
+  #                             nearest home for Old Arabian epigraphy (dual-tagged)
+  wired: false   # until the first real sync is verified (checklist §6)
+  sync_policy: frozen
+  # OCIANA — the Online Corpus of the Inscriptions of Ancient North Arabia
+  # (Khalili Research Centre, University of Oxford), ONE immutable ORA
+  # deposit (doi 10.5287/bodleian:OBVk0AY52, copyright 2017; acquired
+  # 2026-10-18, sha256-pinned in the adapter): 37,955 Safaitic, Hismaic,
+  # Dadanitic, Taymanitic and minor-script records, language xna. No open
+  # licence — the deposit falls under ORA's own Terms of Use (one copy
+  # "to facilitate their private study or research for non-commercial
+  # purposes"; no profit-making use) and no redistribution grant was
+  # sought → license_class research_private on the corpus-gysseling
+  # non-grant precedent: local research only, never redistributed; the
+  # class gates keep it off MCP, the site figures and nabu-data. NO
+  # deposit bytes in the public repo: fixtures live under gitignored
+  # local/fixtures/ociana/. The file is not one XML document (schema
+  # preamble + sibling roots) — records are cut on the raw bytes. Expect
+  # 36,794 documents / 36,794 passages (1,161 empty-transliteration
+  # records skipped by rule), translations on ~36.8k, coordinates on ~21.8k.
+
 ogham:
   adapter: Nabu::Adapters::Ogham
   adopted: "2026-07-17"

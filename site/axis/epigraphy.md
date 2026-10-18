@@ -36,6 +36,7 @@ A source wears every desk it serves — these 31 answer this desk. Holdings are 
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `nabu-places` | feature module | attribution | wired · manual | nothing held yet |
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
+| `ociana` | inscriptions | research_private | not yet wired | not synced yet |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
 | `papyri-ddbdp` | papyri | attribution | wired · auto | 64,096 docs / 1,108,882 passages |

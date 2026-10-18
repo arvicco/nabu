@@ -498,6 +498,24 @@ module Store
                  "an uncensused siglum mints no place"
     end
 
+    # ociana: the place hash (site + region/country + the WGS84 pair) is a
+    # place-only lane — findDate is the DISCOVERY date and never dates.
+    def test_metadata_places_ociana_site_and_coordinates
+      seed_metadata_doc("ociana", "urn:nabu:ociana:OCIANA_0002826",
+                        { "find_date" => "1959",
+                          "place" => { "ancient" => "Negev V 9591-2", "geo" => "30.712172, 34.874716" } })
+      seed_metadata_doc("ociana", "urn:nabu:ociana:OCIANA_0003194",
+                        { "place" => { "country" => "Syria", "coordinates_raw" => "33° 04', 36° 58'" } })
+      build!
+      row = timeline_for("urn:nabu:ociana:OCIANA_0002826")
+      assert_equal "Negev V 9591-2", row[:place_name]
+      assert_equal [30.712172, 34.874716], [row[:place_lat], row[:place_lon]]
+      assert_nil row[:not_before], "place-only: the find date is never a dating claim"
+      raw = timeline_for("urn:nabu:ociana:OCIANA_0003194")
+      assert_equal "Syria", raw[:place_name], "the country ladder names a site-less record"
+      assert_nil raw[:place_lat], "raw degree-minute strings never mint a point"
+    end
+
     # titus-manichaica: the Reader's Berlin Turfan find signatures mine
     # "findspot" at parse through the titus-tocharian-a site sigla — the
     # same place-only lane (the pages carry no dating).

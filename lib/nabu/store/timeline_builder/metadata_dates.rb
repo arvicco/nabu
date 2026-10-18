@@ -138,6 +138,8 @@ module Nabu
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
           "obi-burmese" => :ce_year_text,
+          "ociana" => :place_only, # site + region/country + the WGS84 pair; its findDate is
+          #                          the DISCOVERY date (survey year), never a dating claim
           "ogham" => :century_prose,
           "okhc" => :year_key,
           "openmgh" => :printed_year_text,

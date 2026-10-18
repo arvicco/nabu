@@ -712,6 +712,21 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+  ociana:
+    kind: {posture: unclassified, note: "no genre field upstream — overwhelmingly signature
+        graffiti (\"By N son of N\"), with prayers, laments and tomb texts unmarked"}
+    lect: {posture: pending, note: "candidates: xna anchor + Safaitic/Hismaic/Dadanitic/Taymanitic
+        stages — the aggregated registry mint is in flight this phase; flips when
+        canonical/nabu-lects carries the nodes (the per-record script rides metadata for the
+        stage flip; the 36 non-ANA records carry grc/lat/inm/arc/xsa already)"}
+    dating: {posture: undatable, note: "findDate (17,681 of 37,955 records) is the DISCOVERY /
+        survey date (\"1989\", \"1920s and 1930s\"), never the inscription's — carried as metadata
+        find_date, deliberately not a dating claim; the deposit carries no typed date"}
+    places: {posture: named, note: "site/region/country on the place hash (32,670 of 36,794
+        docs) via MetadataDates :place_only; WGS84 points on 21,178 — no gazetteer refs upstream"}
+    script: {posture: qualified, note: "the per-record script field (Safaitic, Hismaic,
+        Dadanitic, Taymanitic, …) over a romanized ANA transliteration (Latn); Greek records
+        in Greek capitals"}
   tir:
     kind: {posture: unclassified}
     lect: {posture: identity, note: xrr Raetic}
