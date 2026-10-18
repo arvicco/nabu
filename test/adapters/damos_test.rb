@@ -309,7 +309,7 @@ module Adapters
     def test_registry_row
       entry = YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))["damos"]
       assert_equal "Nabu::Adapters::Damos", entry["adapter"]
-      assert_equal true, entry["wired"]  # wired at the completed crawl (5,890 docs, 2026-10-18)
+      assert_equal true, entry["wired"] # wired at the completed crawl (5,890 docs, 2026-10-18)
       assert_equal "manual", entry["sync_policy"]
       assert_equal %w[epigraphy classical], entry["axes"]
       assert_equal "nc", Nabu::Adapters::Damos.manifest.license_class
