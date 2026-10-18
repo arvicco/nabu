@@ -1862,7 +1862,12 @@ sources:
     # kind declaration retired P104-1: the subject-facet regex rule in
     # kind_map.yml machine-postures it now (the shadowing rule).
     dating: {posture: dated}
-    places: {posture: unplaced}
+    places: {posture: linked, note: "the AUTHOR's place of activity, not a findspot:
+        al-Ṯurayyā settlement ids from the TSV tags' died@/resided@ (1,442 in-scope
+        versions) unioned with the author sidecars' DIED/RESIDED (344 filled)
+        mint thurayya: place_refs on the AH death-year row; region ids, unfinished
+        ids and born/visited stay metadata (author_places). The edition imprint
+        (ed_info) is lineage, carried, never projected"}
     script: {posture: implied}
   openmgh:
     kind: {posture: unclassified}
