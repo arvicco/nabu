@@ -407,7 +407,7 @@ module Nabu
             return [place, nil, nil, nil]
           end
           return [meta["orig_place"], nil, nil, nil] if place.nil?
-          return [place, nil, nil, nil] unless place.is_a?(Hash)
+          return [place, string_place_ref(meta), nil, nil] unless place.is_a?(Hash)
 
           refs = []
           pleiades = place["pleiades"].to_s.strip
@@ -422,6 +422,15 @@ module Nabu
                    ladder.empty? ? nil : ladder.join(", ")
                  end
           [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # A string place's sibling "place_ref" (croala's creation placeName
+        # @ref — a Wikidata place URL) rides verbatim, the logainm precedent:
+        # no wikidata namespace is minted. Only a URL self-identifies its
+        # gazetteer; a bare number (2 croala files) or blank → nil.
+        def string_place_ref(meta)
+          ref = meta["place_ref"].to_s.strip
+          ref.match?(%r{\Ahttps?://\S+\z}) ? ref : nil
         end
 
         # P118-R4 S5: a toponym list [{"name", "latitude", "longitude", …}]
