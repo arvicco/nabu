@@ -190,7 +190,7 @@ class RebuildTest < Minitest::Test
 
     assert_equal ["corpus", "timeline", "silver dates", "place apply", "facets", "kind axis", "hiero postings",
                   "lect journal",
-                  "lect facets", "dictionary stats", "derge titles", "artifact scripts",
+                  "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
   end
