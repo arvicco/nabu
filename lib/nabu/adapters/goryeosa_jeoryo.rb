@@ -157,7 +157,7 @@ module Nabu
       end
 
       def parser
-        @parser ||= NikhXmlParser.new
+        @parser ||= NikhXmlParser.new(entities: true)
       end
 
       def build_document(document_ref, volume)
@@ -185,7 +185,7 @@ module Nabu
             "title" => leaf.title, "date" => leaf.date_raw,
             "subject_classes" => (leaf.subject_classes unless leaf.subject_classes.empty?),
             "sources" => (leaf.sources unless leaf.sources.empty?)
-          }.compact
+          }.compact.merge(leaf.entities)
         )
       end
     end

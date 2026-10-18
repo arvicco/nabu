@@ -43,4 +43,5 @@ attribute at all** (the family's 서기 line does not exist here); book
 |---|---|
 | `bb_001.xml` | **trimmed** (9,301 → 356 lines: level2 siblings 003–007 removed) — the ONE `<item>`-rooted member: the 1959 print-edition front with the 서문 introduction, then TWO year sections in upstream's own non-monotonic order (1617 then 1616), one leaf each (a 좌목 roster table; a 계 memorandum dated 1616-12-30L0) |
 | `bb_054.xml` | **trimmed** (3,334 → 224 lines: level4 siblings 0030 onward and level3 months 02–05 removed) — 54책 (숙종 30년 = 1704): the level1-rooted norm, level2 year attrs (`value="1704" 간지="갑신" 왕명="숙종" 재위년도="30"`), a 좌목 roster + the 비망기 entry |
+| `bb_248.xml` | **re-cut 2026-10-18 from the box's `canonical/bibyeonsa/bb_248.xml`** (13,453 → 62 lines by whole-line cuts: every sibling level2/3/4 removed) — 248책 (철종 12년 = 1861), one 成均館 草記 leaf whose text carries the index-markup case the entity mining must fold: an id-less `<index type="이름">` wrapping `<index id="p16_000058_00" type="이름">朴彭年</index>` (75 such double-tags in the deposit) |
 | `history.dtd` | the DTD verbatim (ver 1.4, byte-identical to the goryeosa zip's) — the family's spec travels with the fixture |
