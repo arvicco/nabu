@@ -6035,6 +6035,14 @@ ud:
   # (UD_Old_Turkish-Tonqq, CC0): Old Turkic clausal examples, test split
   # only upstream; sync-verified 1 doc / 20 sentences, language otk (the
   # first Turkic treebank; the seed grows as upstream releases splits).
+  # 2026-10-18: TREEBANKS grew to THIRTY-FOUR — phrygian-kul
+  # (UD_Phrygian-KUL, KU Leuven): the Phrygian epigraphic corpus (Old,
+  # Middle and New Phrygian, ca. 8th c. BCE – 3rd c. CE; Trismegistos
+  # ids per token), test split only; LICENSE.txt verbatim BY-SA 4.0 +
+  # README agrees → per-document `attribution` override; language xpg
+  # (resolves by identity). The fixture pins the first 50 of 203
+  # sentence blocks. EXPECTED SYNC DELTA at the next `bin/nabu sync ud`:
+  # +1 repo clone / +1 doc / +203 passages (1,927 word lines).
 
 uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource
