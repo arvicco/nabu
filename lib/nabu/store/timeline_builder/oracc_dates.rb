@@ -36,7 +36,15 @@ module Nabu
       #
       # Place: `provenience` verbatim (NFC), except the no-place values
       # unclear/uncertain/unknown; `pleiades_id` becomes the place_ref URL
-      # (same gazetteer HGV's refs point at). A translation document
+      # (same gazetteer HGV's refs point at).
+      #
+      # The SAA second place (2,678 members carry sender_loc, 1,733 with
+      # coordinates): a letter's sender_loc is where it was WRITTEN, the
+      # provenience where it was FOUND. It rides a SEPARATE place-only row
+      # under axis_source "oracc-sender" (SENDER_AXIS) with its own
+      # pleiades ref and coordinates — its own labeled class, so a place
+      # consumer can always tell a sending place from a findspot. A
+      # translation document
       # (…:<textid>-en, P13-4) carries its tablet's timeline row: the date/place
       # of the artifact, not of the modern rendering — so the English witness
       # inherits the time filter.
@@ -78,6 +86,10 @@ module Nabu
         # Members whose provenience is an explicit don't-know, not a place.
         NO_PLACE = %w[unclear uncertain unknown].freeze
 
+        # The axis_source of the letters' sender-place rows (class note) —
+        # a labeled place class beside the provenience row, never merged.
+        SENDER_AXIS = "oracc-sender"
+
         # "Sargon2.000.00.00" or "Esarhaddon.limu Nabu-belu-usur.02.16" — the
         # king is everything before the first dot.
         REGNAL = /\A([A-Za-z][A-Za-z'’-]*\d*)\./
@@ -113,6 +125,9 @@ module Nabu
             data.fetch("members", {}).each do |textid, member|
               ids = document_ids(urn_ids, project, textid)
               next if ids.empty?
+
+              sender = extract_sender(member)
+              ids.each { |id| TimelineBuilder.insert_timeline(catalog, id, sender, SENDER_AXIS) } if sender
 
               timeline = extract(member)
               undated += ids.size if timeline.nil? || timeline[:not_before].nil?
@@ -159,7 +174,23 @@ module Nabu
           parsed = parse_date_of_origin(raw) unless raw.empty?
           return parsed if parsed
 
-          period_range(member["period"].to_s.strip)
+          parse_regnal_dates(member["regnal_dates"].to_s.strip) || period_range(member["period"].to_s.strip)
+        end
+
+        # The catalogue's regnal_dates — the attributed ruler's reign as an
+        # absolute BCE span ("721–705 BC", "668–ca. 631 BC", riao's bare
+        # "721-705"; 4,359 members, 17 distinct values censused 2026-10-18)
+        # — banded at precision "reign". Consulted only when date_of_origin
+        # yields nothing (on SAA it restates the same reign), and before the
+        # far coarser period band. The ABS_RANGE grammar (descending, no
+        # year 0) is the guard.
+        def parse_regnal_dates(raw)
+          span = raw.sub(/\s*BC\z/, "")
+          return nil if span.empty?
+
+          parsed = parse_absolute(span) or return nil
+
+          parsed.merge(precision: "reign", date_raw: raw)
         end
 
         def parse_date_of_origin(raw)
@@ -227,6 +258,25 @@ module Nabu
           return nil unless table
 
           table.lookup(name) || table.lookup(name.sub(QUALIFIER, ""))
+        end
+
+        # The SAA letters' SENDER location (class note): sender_loc verbatim
+        # (NFC) — "(unknown)" and the NO_PLACE values are no place —
+        # pleiades_sender_loc as the place_ref when numeric ("not assigned"
+        # is no ref), and sender_loc_coordinates "lon,lat" (upstream's own
+        # order: Nineveh "43.151937,36.358684") as place_lon/place_lat
+        # ("N/A" is none). A place-only row, nil when there is no sender
+        # name.
+        def extract_sender(member)
+          name = TimelineBuilder.normalize(member["sender_loc"].to_s)
+          return nil if name.nil? || NO_PLACE.include?(name.delete("()").downcase)
+
+          pleiades = member["pleiades_sender_loc"].to_s.strip
+          lon, lat = member["sender_loc_coordinates"].to_s.split(",").map(&:strip)
+          coordinates = [lon, lat].all? { |part| part.to_s.match?(/\A-?\d+(?:\.\d+)?\z/) }
+          { not_before: nil, not_after: nil, precision: nil, date_raw: nil, place_name: name,
+            place_ref: pleiades.match?(/\A\d+\z/) ? "#{PLEIADES}#{pleiades}" : nil,
+            place_lat: (lat.to_f if coordinates), place_lon: (lon.to_f if coordinates) }
         end
 
         def extract_place(member)
