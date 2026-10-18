@@ -2414,6 +2414,16 @@ module Nabu
       filters they do not combine with --lemma/--near. Facet rows land at
       `nabu rebuild` (like the timeline).
 
+      --facet NAME=PATTERN is the generic form: any facet name, repeatable
+      (each one must hold). A name is one axis across both grains — the
+      document facets (okhc collection, cdli material, author …) AND the
+      passage facets projected from per-article annotations (sillok
+      subject, itkc genre), which narrow to the very passage that carries
+      the claim: `--facet subject=왕실-%` lists Sillok articles under the
+      royal-house subject tree. The pattern matches the value or the
+      authority ref. --type/--province/--material are shorthands for
+      --facet genre=/province=/material=.
+
       LOANS (--loans CODE): the language-contact facet (P34-2, reading the
       P17-1 annotations) — keep only passages carrying at least one token
       the corpus tags as borrowed from CODE. Passage-grained and read
@@ -2460,6 +2470,7 @@ module Nabu
         nabu search "dis manibus" --type epitaph --province "Germania superior"
                                                    # the D M formula on epitaphs of
                                                    #   one province (EDH facets)
+        nabu search 大王大妃 --facet subject=왕실-의식%   # Sillok articles on royal rites
         nabu search --fuzzy "votum solvit" --type "votive%" --material Sandstein
                                                    # V S L M on sandstone votives
         nabu search ⲡⲛⲟⲩⲧⲉ --loans grc --lang cop   # "God" in verses that carry
@@ -2532,6 +2543,10 @@ module Nabu
                       desc: "Roman-province facet filter (Germania inferior, pannonia%)"
     option :material, type: :string, banner: "PATTERN",
                       desc: "Material facet filter (Marmor, sandstein%)"
+    option :facet, type: :string, repeatable: true, banner: "NAME=PATTERN",
+                   desc: "Any facet by name, at either grain — document facets (collection, author …) " \
+                         "and passage facets (sillok subject, itkc genre): --facet subject=왕실-% " \
+                         "matches value or ref, LIKE patterns pass through; repeatable (AND)"
     option :loans, type: :string, banner: "CODE",
                    desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
                          "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
@@ -2608,7 +2623,7 @@ module Nabu
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
          (options[:near] || options[:lemma])
-        raise Thor::Error, "search: --from/--to/--century/--date-basis/--place/--type/--province/--material " \
+        raise Thor::Error, "search: --from/--to/--century/--date-basis/--place/--type/--province/--material/--facet " \
                            "compose with text search only, not --lemma/--near (the dated/faceted corpus — " \
                            "papyri, inscriptions — is not lemmatized)"
       end
@@ -5853,13 +5868,22 @@ module Nabu
       end
 
       # The active facet filters as {facet name => pattern}, or nil when none
-      # (P17-2): --type → genre, --province → province, --material → material.
+      # (P17-2): --type → genre, --province → province, --material → material;
+      # each --facet NAME=PATTERN adds its name (a repeat of a name wins last).
       def facet_filters
         filters = {}
         filters["genre"] = options[:type] if options[:type]
         filters["kind"] = options[:kind] if options[:kind]
         filters["province"] = options[:province] if options[:province]
         filters["material"] = options[:material] if options[:material]
+        Array(options[:facet]).each do |spec|
+          name, pattern = spec.to_s.split("=", 2).map(&:strip)
+          if name.to_s.empty? || pattern.to_s.empty?
+            raise Thor::Error, "search: --facet takes NAME=PATTERN (subject=왕실-%) — got #{spec.inspect}"
+          end
+
+          filters[name] = pattern
+        end
         filters.empty? ? nil : filters
       end
 
@@ -5907,8 +5931,8 @@ module Nabu
       # what WOULD make a term-less browse legal, and why the shelf-selectors do not.
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
-          "term-less: a date window (--from/--to/--century), --date-basis, --place, a genre facet " \
-          "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, --script, " \
+          "term-less: a date window (--from/--to/--century), --date-basis, --place, a facet " \
+          "(--type/--province/--material/--facet), --loans, --meter/--meter-pattern, --lect, --script, " \
           "or --within. " \
           "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
