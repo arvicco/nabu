@@ -26,9 +26,10 @@ module Nabu
   # == Projection onto the Person shape
   #
   # person_id = the id verbatim (M_0006771, p094190); name and name_han
-  # (the native-form lane) = the most frequent tagged surface — ties
-  # break by document order, so a title alias can win a 1–1 tie; every
-  # distinct surface keys under the shared fold. Only a source's own
+  # (the native-form lane) = the surface tagged in the most passages
+  # (records dedupe per passage) — ties break by document order, so a
+  # title alias can win a 1–1 tie; every distinct surface keys under the
+  # shared fold. Only a source's own
   # person ids project (ID_PATTERNS): a person tag carrying an office or
   # place id (one each in goryeosa) or the secondary pid (sillok's
   # id-only tags) is no member of the authority. The markup carries no

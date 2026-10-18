@@ -137,8 +137,10 @@ sources:
     script: {posture: implied}
     # The index markup (NikhXmlParser entities): 8,355,291 이름 person and
     # 140,958 서명 book tags ride passage annotations and the person/book
-    # passage facets, with upstream's normalized @name kept where it
-    # differs from the surface. No person-key ids (only the cross-database
+    # passage facets. Persons are VALUED by upstream's own normalized
+    # @name (its resolution claim, transcribed — variants group in the
+    # facet; the raw surface rides beside it where it differs; the 미결
+    # unresolved sentinel leaves the surface). No person-key ids (only the cross-database
     # pid on a few thousand tags) — sjw mints no person authority.
   viet-wikisource:
     kind: {posture: unclassified}

@@ -158,16 +158,32 @@ class NikhXmlParserTest < Minitest::Test
     assert_equal %w[books offices orgs persons places], kinds
   end
 
-  def test_sjw_carries_the_normalized_name_only_where_it_differs
+  def test_sjw_persons_take_upstreams_normalized_name_as_value
     leaf = mining.parse_file(File.join(SJW_FIXTURES, "2nd_F02.sjw.y.xml")).leaves.first
     persons = leaf.entities["persons"]
-    assert_equal({ "value" => "鄭亨益" }, persons.first, "name= equal to the surface is stored once")
-    assert_includes persons, { "value" => "密平君㙫", "name" => "李㙫" }
-    assert_includes persons, { "value" => "梓", "ref" => "nikh:p17_100010_00", "name" => "黃梓" },
+    assert_equal({ "value" => "鄭亨益" }, persons.first, "name= equal to the surface: no surface field")
+    assert_includes persons, { "value" => "李㙫", "surface" => "密平君㙫" },
+                    "the normalized name= is the value; the differing surface rides beside it"
+    assert_includes persons, { "value" => "黃梓", "ref" => "nikh:p17_100010_00", "surface" => "梓" },
                     "the person pid is the only id sjw carries"
-    assert_includes persons, { "value" => "程子" }, "name=\"미결\" (unresolved) asserts no name"
-    assert_includes leaf.entities["books"], { "value" => "孟子離婁上", "name" => "孟子" }
+    assert_includes persons, { "value" => "黃梓", "ref" => "nikh:p17_100010_00" }
+    assert_includes persons, { "value" => "程子" }, "name=\"미결\" (unresolved): the surface stays the value"
+    assert_includes leaf.entities["books"], { "value" => "孟子離婁上", "name" => "孟子" },
+                    "books keep the surface-valued shape"
     assert_equal [{ "value" => "時敏堂" }], leaf.entities["places"]
+  end
+
+  def test_identical_records_dedupe_per_passage_in_first_seen_order
+    leaf = mining.parse_file(File.join(SJW_FIXTURES, "2nd_F02.sjw.y.xml")).leaves.first
+    leaf.entities.each_value { |records| assert_equal records.uniq, records }
+    assert_equal 1, leaf.entities["persons"].count({ "value" => "許錫" }),
+                 "許錫 is tagged 20+ times in the article — one record; repeats live in the text"
+    assert_operator leaf.text.scan("許錫").size, :>, 10
+    vol = mining.parse_file(File.join(GORYEOSA_FIXTURES, "kr_118.xml"))
+    persons = vol.leaves.first.entities["persons"]
+    assert_equal 1, persons.count({ "value" => "浚", "ref" => "nikh:p094190" })
+    assert_equal [{ "value" => "趙浚", "ref" => "nikh:p094190" }, { "value" => "明仲", "ref" => "nikh:p094190" }],
+                 persons.first(2), "first occurrence fixes the order"
   end
 
   def test_a_wrapper_index_around_one_same_typed_index_is_one_mention
