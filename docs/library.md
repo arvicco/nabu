@@ -357,6 +357,24 @@ Bohairic dialect comparison over the same verses (the hub renders both);
 the Greek-loan stratum of Coptic as data; continuity with the 2,063
 documentary Coptic papyri (§4) across the literary/documentary line.
 
+**The epigraphic belt (2026-10-18).** Three corpora that opened
+scripts the library had never held. `ig-cyprus` — the Berlin academy's
+IG XV 1,1, the Cypriot syllabary fascicle (ed. Karnava/Perna with
+Egetmeyer, 2020): 593 inscriptions from Amathus, Kurion and Marion —
+Arcadocypriot Greek in the syllabary, Eteocypriot, and bilinguals —
+with the editors' alphabetic transcriptions and German translations
+(982 documents / 1,680 passages; CC BY 4.0, each record linking back
+to its edition page). `damos` — Federico Aurora's Database of
+Mycenaean at Oslo, the complete Linear B corpus: 5,890 tablets,
+sealings, labels and inscribed stirrup jars from Knossos, Pylos,
+Thebes, Mycenae and ten smaller sites, at the edition's own line
+grain with series, scribal hands and findspots (14,421 passages;
+CC BY-NC-SA). `ociana` — the Khalili Research Centre's Online Corpus
+of the Inscriptions of Ancient North Arabia: 36,794 Safaitic,
+Hismaic, Dadanitic and Taymanitic inscriptions with translations and
+21k findspot coordinates, held under the archive's private-study
+terms (local research only, never served or published onward).
+
 ## 8g. Latin inscriptions (EDH)
 
 | | |
