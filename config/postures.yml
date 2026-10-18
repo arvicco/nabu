@@ -1124,9 +1124,18 @@ sources:
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
         excerpts; an ara:cla whole-source staging is a future ruling, not a
         default"}
-    dating: {posture: undatable, note: "excerpt corpus — the classical works'
-        composition dates are not per-passage claims upstream makes"}
-    places: {posture: unplaced}
+    dating: {posture: partial, note: "each book's byline states its author's
+        birth/death (AH/CE pairs, e.g. 194/810 – 261/870) — 9 of 10 books date
+        by that life span, class composition (the work was written within it);
+        the Qurʾān book carries no byline and stays undated. The header
+        imprint dates are the modern EDITIONS' (lineage, carried in
+        edition, never projected)"}
+    places: {posture: unplaced, note: "the 2,779 <placeName translation=…> tags
+        name places the disaster accounts are ABOUT (Egypt 501, Damascus 270,
+        Cairo 235 …) — annotated per passage and faceted per book as
+        place_mentioned, never an origin claim; the corpus states no origin
+        or findspot for its excerpts. Gazetteer resolution of the mentions is
+        a future look"}
     script: {posture: implied}
   dta:   # P94-2
     lect: {posture: identity, note: "de IS German — the print era, 1473–1969

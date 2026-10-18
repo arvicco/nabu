@@ -13,3 +13,10 @@ passage text — annotation), catastrophe `<term>` tagging with
 `translation` attributes, the div1(book)/div2(sura|section)/…@n
 ladder, and in-file `<licence>CC BY-NC-SA</licence>` agreeing with
 the deposit page.
+
+Book 10's `<byline>` carries the author (Arabic name with the
+transliteration gloss INSIDE `<name>`) and its life dates written
+CE/AH (`767/150`, `869/255`) — the reversed order the adapter reads by
+magnitude. The other eight bylines (AH/CE pairs, Muslim's bare CE year
+with `@when`) live in books 2–9, outside the trim; the adapter test
+pins their parse against the verbatim strings.
