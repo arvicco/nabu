@@ -57,6 +57,9 @@ module Nabu
       # Registrum: Harant's alphabetical register — an index, not prose.
       APPARATUS_SEGMENT = /\A(Úvod|Poznámky|Rejstřík|Obsah|Registrum.*)\z/
       EDITION_FIELDS = %w[ZDROJ VYDÁNO].freeze
+      # Textinfo's AUTOR and TITUL — the parent work of a ČÁST page.
+      AUTHOR_FIELDS = %w[AUTOR].freeze
+      WORK_FIELD = "TITUL"
       EXCLUDED_TITLES = {
         "Bible kralická (1918)" => "the edition root: the title leaf plus a section transclusion " \
                                    "({{#lst:}}) of the moderní-pravopis deuterocanon, which is held " \

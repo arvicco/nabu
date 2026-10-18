@@ -206,6 +206,42 @@ class DharmaDeccanTest < Minitest::Test
     assert passage(document, "1").text.start_with?("siddhaṃ rājñaḥ kṣaharātasya")
   end
 
+  # -- inline names (the donor/king/village layer) -----------------------------
+
+  def test_n10_inline_names_ride_the_entities_annotation_with_their_keys
+    line = passage(parsed(N10), "1")
+
+    assert_equal [
+      { "type" => "person", "text" => "nahapānasya", "key" => "pers:Nahapāna" },
+      { "type" => "person", "text" => "dīnīka", "key" => "pers:Dīnīka" },
+      { "type" => "person", "text" => "uṣavadātena", "key" => "pers:Uṣavadāta" },
+      { "type" => "place", "text" => "bārṇāsāyāṃ", "key" => "pl:Bārṇāsā" }
+    ], line.annotations["entities"]
+    assert_includes line.text, "kṣatrapasya nahapānasya jāmātrā dīnīkaputreṇa uṣavadātena",
+                    "the names stay read-through text"
+  end
+
+  def test_n10_a_name_reads_through_its_apparatus_like_the_text
+    entities = passage(parsed(N10), "2").annotations["entities"]
+
+    assert_includes entities, { "type" => "place", "text" => "piṃḍitakā", "key" => "pl:Piṃḍitakā" },
+                    "app→lem inside the placeName, rdg dropped"
+    assert_equal(2, entities.count { |e| e["key"] == "pl:Śūrpāraka" })
+  end
+
+  def test_the_family_parser_mines_names_only_for_adapters_that_opt_in
+    plain = Nabu::Adapters::DharmaEpidocParser.parse(ref_for(N10).path, allowed_languages: %w[pra-Latn san-Latn])
+
+    assert(plain.passages.all? { |unit| unit.entities.nil? },
+           "the other DHARMA sources keep their passages unchanged")
+  end
+
+  def test_passages_without_inline_names_carry_no_entities_layer
+    verse = passage(parsed(KC1004), "1.ab")
+
+    refute verse.annotations.key?("entities")
+  end
+
   # -- Telugu -----------------------------------------------------------------
 
   def test_telugu48_is_tel_latn

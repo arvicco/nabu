@@ -282,6 +282,9 @@ module Nabu
           @header = {}
           @capture = nil
           @contexts = []
+          @ms_item_depth = 0
+          @ms_item = nil
+          @works = []
           @levels_census = MenotaTeiParser::LEVELS.to_h { |level| [level, 0] }
         end
 
@@ -386,6 +389,9 @@ module Nabu
         private_constant :CONTEXT_ELEMENTS
 
         def header_start(node, name)
+          return open_ms_item if name == "msItem" && !node.empty_element?
+          return ms_item_title(node) if name == "title" && @ms_item_depth == 1
+
           if CONTEXT_ELEMENTS.include?(name) && !node.empty_element?
             @contexts.push(name)
             return
@@ -435,11 +441,50 @@ module Nabu
         private_constant :CAPTURE_CLOSERS
 
         def header_end(name)
+          close_ms_item if name == "msItem"
           @capture = nil if CAPTURE_CLOSERS.include?(name)
           @contexts.pop if CONTEXT_ELEMENTS.include?(name) && @contexts.last == name
         end
 
         def context?(name) = @contexts.include?(name)
+
+        # -- the work: msContents' top-level msItem titles ----------------------
+        #
+        # The manuscript's msName names the CODEX ("A fragment of Konungs
+        # skuggsjá"); each top-level msItem's title names a WORK it carries
+        # (Konungs skuggsjá, Njáls saga, Stjórn). Per item the main title
+        # wins, else the untyped title, else an editor-supplied/uniform one;
+        # abbreviated and chapter titles never count, nor do nested
+        # sub-items (Gylfaginning inside the Edda) or the corpus's own
+        # "Will be added/corrected" placeholders. Census 2026-10-18: 74 of
+        # 91 texts carry an item title (56 a main one).
+        ITEM_TITLE_RANK = { "main" => 0, nil => 1, "supplied" => 2, "uniform" => 2 }.freeze
+        ITEM_PLACEHOLDER = /\AWill be (added|corrected)\b/i
+        private_constant :ITEM_TITLE_RANK, :ITEM_PLACEHOLDER
+
+        def open_ms_item
+          @ms_item_depth += 1
+          @ms_item = {} if @ms_item_depth == 1
+        end
+
+        def ms_item_title(node)
+          return if node.empty_element?
+
+          rank = ITEM_TITLE_RANK.fetch(presence(node.attribute("type")), nil)
+          return if rank.nil? || @ms_item.key?(rank)
+
+          @capture = (@ms_item[rank] = +"")
+        end
+
+        def close_ms_item
+          if @ms_item_depth == 1
+            candidates = @ms_item.sort.map { |_, text| flatten(text) }
+            title = candidates.find { |text| text && !text.match?(ITEM_PLACEHOLDER) }
+            @works << title if title && !@works.include?(title)
+            @ms_item = nil
+          end
+          @ms_item_depth -= 1 if @ms_item_depth.positive?
+        end
 
         def open_capture(key)
           return if @header.key?(key)
@@ -455,6 +500,7 @@ module Nabu
             "settlement" => flatten(@header[:settlement]),
             "country" => flatten(@header[:country]),
             "orig_place" => flatten(@header[:orig_place]),
+            "work" => (@works unless @works.empty?),
             "date" => date_envelope,
             "license" => flatten(@header[:license]),
             "license_url" => @header[:license_url],

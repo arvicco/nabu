@@ -710,8 +710,30 @@ module Store
       assert_equal 2, rows
       refute_nil timeline_for("urn:nabu:elephantine:200002"), "the post-refresh doc joins the lane"
       refute_nil timeline_for("urn:nabu:edr:edr900001"), "other sources' rows survive untouched"
-      assert_equal 0, Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "papyri-ddbdp"),
+      assert_equal 0, Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "goo300k"),
                    "an unregistered slug is a no-op"
+    end
+
+    # The DCLP header lane (PapyriHeader): papyri-ddbdp registers :structured
+    # for its literary documents' header date + findspot; the place "ref"
+    # carries verbatim Trismegistos/Pleiades URLs (the HGV ref spelling).
+    # The DDbDP documents carry no "date"/"place" metadata — their rows
+    # stay the HGV walk's (axis_source hgv), never doubled.
+    def test_papyri_dclp_header_dates_and_places_project
+      seed_metadata_doc("papyri-ddbdp", "urn:nabu:dclp:64388",
+                        { "date" => { "not_before" => 300, "not_after" => 399, "raw" => "300 - 399" },
+                          "place" => { "ancient" => "Found: Oxyrhynchos (Oxyrhynchites, Egypt); written: Egypt",
+                                       "ref" => "https://www.trismegistos.org/place/1524 " \
+                                                "https://www.trismegistos.org/place/2722" } })
+      seed_metadata_doc("papyri-ddbdp", "urn:nabu:ddbdp:p.ryl:4:560",
+                        { "hgv" => "2416", "mentioned_dates" => [{ "not_before" => -256, "not_after" => -256 }] })
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "papyri-ddbdp")
+      assert_equal 1, rows, "the mentioned date of a DDbDP text never rows"
+      row = timeline_for("urn:nabu:dclp:64388")
+      assert_equal [300, 399], [row[:not_before], row[:not_after]]
+      assert_equal "papyri-ddbdp", row[:axis_source]
+      assert_nil row[:date_class], "an artifact date"
+      assert_equal "tm:1524 tm:2722", row[:place_ref]
     end
 
     # -- P104-1 (the aggressive-mining law): the metadata-drain shapes --------
@@ -780,6 +802,25 @@ module Store
       build!
       assert_equal "composition", timeline_for("urn:nabu:croala:grauisius-2")[:date_class],
                    "croala's author-era year ranges were the class's precedent — now labeled"
+    end
+
+    # croala's creation placeName carries a Wikidata place ref on 67
+    # files: it rides the row's place_ref verbatim beside the STRING place
+    # name (the logainm verbatim-URL precedent — no wikidata namespace is
+    # minted); a string place without a ref stays ref-less.
+    def test_metadata_dates_croala_string_place_carries_its_ref
+      seed_metadata_doc("croala", "urn:nabu:croala:nin",
+                        { "date" => "1070", "place" => "Nin",
+                          "place_ref" => "http://www.wikidata.org/entity/Q396372" })
+      seed_metadata_doc("croala", "urn:nabu:croala:split-2", { "date" => "1490", "place" => "Split" })
+      seed_metadata_doc("croala", "urn:nabu:croala:bare", { "date" => "1500", "place" => "Šibenik",
+                                                            "place_ref" => "3190586" })
+      build!
+      nin = timeline_for("urn:nabu:croala:nin")
+      assert_equal ["Nin", "http://www.wikidata.org/entity/Q396372"], [nin[:place_name], nin[:place_ref]]
+      assert_nil timeline_for("urn:nabu:croala:split-2")[:place_ref]
+      assert_nil timeline_for("urn:nabu:croala:bare")[:place_ref],
+                 "a bare number names no gazetteer (2 live files) — never lifted"
     end
 
     def test_metadata_dates_ogham_place_hash_mints_coordinates_and_logainm_refs
@@ -872,6 +913,19 @@ module Store
       row = timeline_for("urn:nabu:ddbdp:p.cair.zen:3:59354")
       assert_equal(-244, row.fetch(:not_before)) # min of the two alternatives
       assert_equal(-243, row.fetch(:not_after))  # max of the two alternatives
+    end
+
+    # The nome tier: HGV's provenance lists the settlement THEN its nome,
+    # each with its own Pleiades/TM refs. Both tiers' refs ride place_ref
+    # (settlement first), so a nome-level place query reaches the
+    # village-located documents; the region tier ("Ägypten") never does.
+    def test_hgv_place_ref_carries_the_settlement_and_nome_tiers
+      make_document("urn:nabu:ddbdp:p.adl::G2")
+      build!
+      ref = timeline_for("urn:nabu:ddbdp:p.adl::G2").fetch(:place_ref)
+      assert_equal "https://pleiades.stoa.org/places/786084 https://www.trismegistos.org/place/1628 " \
+                   "https://www.trismegistos.org/place/2849", ref
+      assert_equal [%w[pleiades 786084], %w[tm 1628], %w[tm 2849]], Nabu::PlaceRefs.ids(ref)
     end
 
     def test_hgv_record_without_a_matching_document_is_skipped

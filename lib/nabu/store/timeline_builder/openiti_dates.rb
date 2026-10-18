@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require "json"
+
 require_relative "../../adapters/openiti"
+require_relative "../../althurayya_index"
 
 module Nabu
   module Store
@@ -23,7 +26,21 @@ module Nabu
       # "year", date_raw "d. AH NNNN" naming the source honestly. Urns
       # without the prefix (the MS* documentary shapes — out of scope by
       # D41-e, guarded here anyway) are counted undated, never guessed.
-      # No place lane: the corpus carries no findspots.
+      #
+      # == The place lane: the author's place of activity
+      #
+      # The corpus carries no findspots, but its authors are placed: the
+      # parse-time "author_places" metadata (the TSV tags' role@URI bag
+      # unioned with the author sidecar's DIED/RESIDED lists) names
+      # al-Ṯurayyā gazetteer ids. The row's place_ref mints the author's
+      # DEATH and RESIDENCE settlements as thurayya: claims (death place
+      # first, deduped) — where the author worked, the honest place of a
+      # text composed on-or-before that death. Only settlement-shaped ids
+      # (AlthurayyaIndex::ID_PATTERN) mint: region ids (Iraq_RE, the
+      # "_Auto" guesses) are not place-index rows, unfinished ids
+      # (SAFADXXXYYY) resolve nowhere, and born/visited are biography,
+      # never the work's place — all four stay document metadata. No
+      # place_name: the claim is an id, the gazetteer names it.
       module OpenitiDates
         SLUG = "openiti"
 
@@ -32,24 +49,27 @@ module Nabu
 
         DEATH_AH = /\A(\d{4})/
 
+        PLACING_ROLES = %w[died resided].freeze
+
         module_function
 
         # One row per held OpenITI document whose urn carries the AH prefix.
         # Returns { documents:, undated: }. +canonical_dir+ is unused (urn =
-        # f(canonical)) but kept for the uniform lane signature.
+        # f(canonical); places ride the catalog metadata) but kept for the
+        # uniform lane signature.
         def build(catalog:, canonical_dir: nil) # rubocop:disable Lint/UnusedMethodArgument
           rows = 0
           undated = 0
           prefix = Adapters::Openiti::URN_PREFIX
           catalog[:documents].where(Sequel.like(:urn, "#{prefix}%"))
-                             .select_map(%i[id urn]).each do |id, urn|
+                             .select_map(%i[id urn metadata_json]).each do |id, urn, json|
             ah = urn.delete_prefix(prefix)[DEATH_AH, 1]
             if ah.nil?
               undated += 1
               next
             end
 
-            insert(catalog, id, ah)
+            insert(catalog, id, ah, place_ref: place_ref(json))
             rows += 1
           end
           { documents: rows, undated: undated }
@@ -59,13 +79,26 @@ module Nabu
           ((death_ah * AH_TO_CE_FACTOR) + AH_TO_CE_OFFSET).round
         end
 
-        def insert(catalog, document_id, death_ah)
+        # "thurayya:<id> thurayya:<id>" from the metadata's author_places
+        # (died, then resided; settlements only), or nil.
+        def place_ref(json)
+          places = JSON.parse(json.to_s)["author_places"]
+          return nil unless places.is_a?(Hash)
+
+          ids = PLACING_ROLES.flat_map { |role| Array(places[role]) }
+                             .select { |id| AlthurayyaIndex::ID_PATTERN.match?(id.to_s) }.uniq
+          ids.empty? ? nil : ids.map { |id| "#{AlthurayyaIndex::GAZETTEER}:#{id}" }.join(" ")
+        rescue JSON::ParserError
+          nil
+        end
+
+        def insert(catalog, document_id, death_ah, place_ref: nil)
           year = ce_year(death_ah.to_i)
           catalog[:document_axes].insert(
             document_id: document_id,
             not_before: year, not_after: year,
             precision: "year", date_raw: "d. AH #{death_ah}",
-            axis_source: SLUG
+            place_ref: place_ref, axis_source: SLUG
           )
         end
       end

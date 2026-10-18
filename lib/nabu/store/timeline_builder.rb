@@ -74,7 +74,8 @@ module Nabu
                             :open_etruscan_undated, :open_etruscan_invalid,
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
                             :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
-                            :rundata_undated, :openiti_undated, :nikh_entries) do
+                            :rundata_undated, :openiti_undated, :nikh_entries,
+                            :tlg_concordance) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -88,14 +89,14 @@ module Nabu
                        cdli: 0, cdli_undated: 0, cdli_invalid: 0,
                        rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
                        kanripo: 0, kanripo_undated: 0,
-                       metadata_dates: {}, nikh_entries: {}, **)
+                       metadata_dates: {}, nikh_entries: {}, tlg_concordance: {}, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
             tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
-            rundata + openiti + kanripo + metadata_dates.values.sum +
+            rundata + openiti + kanripo + metadata_dates.values.sum + tlg_concordance.values.sum +
             # the leaf-grain lane's DOCUMENT contribution: envelopes minted
             # for documents the metadata lane left undated (runs are
             # passage grain and never double-count a document)
@@ -133,8 +134,9 @@ module Nabu
         kanripo = KanripoDates.build(catalog: catalog, canonical_dir: canonical_dir)
         metadata = MetadataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         nikh = NikhEntryDates.build(catalog: catalog)
+        tlg = TlgConcordanceDates.build(catalog: catalog)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
-                    metadata_dates: metadata, nikh_entries: nikh,
+                    metadata_dates: metadata, nikh_entries: nikh, tlg_concordance: tlg,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
@@ -250,16 +252,32 @@ module Nabu
         }
       end
 
-      # origPlace text as the place name; the first provenance placeName carrying
-      # a ref (Trismegistos/Pleiades URLs) as the ref string. Both verbatim (no
-      # gazetteer — the §1.4 stance), NFC-folded whitespace.
+      # Provenance placeName tiers whose refs the place lane carries: the
+      # settlement (no subtype) and its nome. The region/province tiers
+      # ("Ägypten", 19,796 ref-less region rows at the 2026-10-18 census)
+      # are too coarse to claim beside them.
+      PLACE_TIERS = [nil, "nome"].freeze
+
+      # origPlace text as the place name; the ref string joins the Trismegistos/
+      # Pleiades URLs of the FIRST provenance's settlement AND nome placeNames
+      # (settlement first, tokens deduped — 21,887 records carry a referenced
+      # nome after the settlement), so a nome-level query reaches its
+      # villages' documents. A record whose refs sit only on a coarser tier
+      # keeps that first referenced placeName (the pre-tier behavior). All
+      # verbatim (no gazetteer — the §1.4 stance), NFC-folded whitespace.
       def extract_place(doc)
         name = normalize(doc.at_xpath("//origPlace")&.text)
         name = normalize(doc.at_xpath("//provenance//placeName")&.text) if name.nil?
-        ref = doc.at_xpath("//provenance//placeName[@ref]")&.attr("ref")
-        ref = ref.to_s.strip.gsub(/\s+/, " ") unless ref.nil?
-        ref = nil if ref && ref.empty?
-        [name, ref]
+        [name, provenance_refs(doc)]
+      end
+
+      def provenance_refs(doc)
+        provenance = doc.at_xpath("//provenance") or return nil
+        named = provenance.xpath(".//placeName[@ref]")
+        tiered = named.select { |place| PLACE_TIERS.include?(place["subtype"]) }
+        tiered = named.first(1) if tiered.empty?
+        tokens = tiered.flat_map { |place| place["ref"].to_s.split(/\s+/) }.reject(&:empty?).uniq
+        tokens.empty? ? nil : tokens.join(" ")
       end
 
       # -- goo300k / IMP (year in the urn suffix) ------------------------------
@@ -314,6 +332,7 @@ require_relative "timeline_builder/coptic_scriptorium_dates"
 require_relative "timeline_builder/edh_dates"
 require_relative "timeline_builder/kanripo_dates"
 require_relative "timeline_builder/metadata_dates"
+require_relative "timeline_builder/tlg_concordance_dates"
 require_relative "timeline_builder/nikh_entry_dates"
 require_relative "timeline_builder/damaskini_dates"
 require_relative "timeline_builder/corph_dates"

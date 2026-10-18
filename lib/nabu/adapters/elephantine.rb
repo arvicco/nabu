@@ -34,6 +34,14 @@ module Nabu
     #   objects_index.html                 the persisted listing POST
     #                                      (metadata sidecar)
     #
+    # Of the authority files, ancient_persons is READ: it projects into
+    # the "elephantine" person-index slice (person_index_producer below,
+    # Nabu::ElephantinePersons), and each record's scribe pointers resolve
+    # into it as metadata "persons" refs. DECLARED, not yet read: places
+    # (record origPlace settlement names already carry the place axis),
+    # modern_persons (editors/scholars — no library axis) and literature
+    # (bibliography).
+    #
     # == Identity (FROZEN minting)
     #
     # urn = urn:nabu:elephantine:<ID6> — the root TEI xml:id's zero-padded
@@ -88,6 +96,15 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # The ancient-persons authority file (one of the four the crawl
+      # lands) projects into the "elephantine" person-index slice at sync
+      # and rebuild (Nabu::ElephantinePersons; the CBDB mold).
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::ElephantinePersons::Producer.new(catalog: catalog)
       end
 
       # P11-2: no git repo — the probe HEADs one stable record TEI

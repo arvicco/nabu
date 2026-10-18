@@ -99,6 +99,25 @@ module Adapters
                    "attrs + flattened text (the editorial <note> inside origDate strips, like all notes)")
     end
 
+    # The titleStmt series titles ABOVE the document (title[@level="s"]
+    # with their syriaca.org work URIs) were dropped: the parent works —
+    # "The Odes of Solomon" above Ode 19, the Peshitta NT ladder above 2
+    # John. The corpus's own imprint series ("Digital Syriac Corpus", on
+    # every file) is never a parent work.
+    def test_parent_works_ride_metadata_innermost_first
+      ode = parse_urn("urn:nabu:syriac-corpus:170")
+      assert_equal ["The Odes of Solomon"], ode.metadata["parent_works"]
+      assert_equal ["http://syriaca.org/work/8620"], ode.metadata["parent_work_refs"]
+      john = parse_urn("urn:nabu:syriac-corpus:142")
+      assert_equal 3, john.metadata["parent_works"].size, "the whole series ladder rides"
+      assert_equal %w[http://syriaca.org/work/209 http://syriaca.org/work/10513 http://syriaca.org/work/70],
+                   john.metadata["parent_work_refs"]
+      helena = parse_urn("urn:nabu:syriac-corpus:687")
+      assert_equal ["The Letters of Papa bar Aggai"], helena.metadata["parent_works"]
+      refute helena.metadata.key?("parent_work_refs"), "a ref-less series title mints no ref"
+      refute_includes ode.metadata["parent_works"], "Digital Syriac Corpus"
+    end
+
     # -- passages: block grain with the citation lane -------------------------
 
     def test_passages_are_blocks_in_document_order_with_ordinal_urns

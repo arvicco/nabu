@@ -73,6 +73,19 @@ no ATF block — the owner-approved universal-catalog shape):
 | `P282287` | Middle Hittite (ca. 1500-1100 BC), Assur |
 | `P519993` | "Akkadian; Persian; Elamite" multi-language Achaemenid trilingual |
 
+### Concordance rows (appended 2026-10-18)
+
+Three more metadata-only rows, cut from this box's own
+`canonical/cdli/cdli_cat.csv` (the same pinned payload, sha256 above) and
+appended with Ruby CSV (CRLF row separators, all 64 columns, content
+verbatim) for the subgenre / seal_id mining:
+
+| row | why |
+| --- | --- |
+| `P343553` | `ETCSL 1.08.02.01 … (witness)` subgenre + museum_no `Ist Ni 04405 + Ist Ni 09933` — the same join ETCSL's c.1.8.2.1 header lists as "Ni 4405 (ISET 2 43) + Ni 9933 (ISET 1 148)" (the Istanbul-prefix + zero-padding fold) |
+| `P384833` | TWO ETCSL refs in one subgenre cell, the second cut off at the column limit ("… ETCSL 1.08.02.02 Lugalb"), and two composites (`Q000367, Q000368`) |
+| `P101833` | seal_id `S000493.2, S002932` — a sub-numbered seal composite beside a plain one |
+
 ## Trim recipe
 
 Blocks/rows extracted by P-number with a python csv/regex pass over the

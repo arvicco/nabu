@@ -256,18 +256,28 @@ module Nabu
         # -- header -----------------------------------------------------------
         #
         # Coarse single-pass capture: the FIRST <title> is titleStmt/title; the
-        # first <author>'s persName is the author; profileDesc/creation's
-        # <date>/<placeName> feed the timeline. Enough for honest metadata
-        # without a second parse of a possibly-6 MB file.
+        # first <author>'s persName is the author, its @ref the author's
+        # identity (a Wikidata entity URL on 480 of 573 files, a corpus-local
+        # key on the rest — verbatim either way, the Wikidata id ALSO lifted
+        # into the shared "wikidata:Q…" author_refs spelling) and its <date>
+        # the life/floruit dates verbatim ("1490-1571", "floruit 1070");
+        # profileDesc/creation's <date>/<placeName> feed the timeline, the
+        # placeName's @ref (a Wikidata place URL, 67 files) riding as
+        # place_ref. Enough for honest metadata without a second parse of a
+        # possibly-6 MB file.
+        WIKIDATA_ENTITY = %r{\Ahttps?://(?:www\.)?wikidata\.org/(?:entity|wiki)/(Q\d+)\z}
+        private_constant :WIKIDATA_ENTITY
 
         def header_start(node, name)
           case name
           when "title" then @capture = (@header[:title] ||= +"") if @header[:title].nil?
-          when "author" then @in_author = true unless node.empty_element?
+          when "author" then open_author(node)
           when "persName" then @capture = (@header[:author] ||= +"") if @in_author && @header[:author].nil?
           when "creation" then @in_creation = true unless node.empty_element?
-          when "date" then creation_date(node) if @in_creation
-          when "placeName" then @capture = (@header[:place] ||= +"") if @in_creation && @header[:place].nil?
+          when "date"
+            creation_date(node) if @in_creation
+            @capture = (@header[:author_dates] = +"") if @in_author && !@header.key?(:author_dates)
+          when "placeName" then creation_place(node) if @in_creation && @header[:place].nil?
           when "keywords" then @in_genre = node.attribute("scheme") == "genre" unless node.empty_element?
           when "term" then start_genre_term if @in_genre
           end
@@ -281,6 +291,20 @@ module Nabu
           when "keywords" then @in_genre = false
           when "term" then finish_genre_term
           end
+        end
+
+        # Only the FIRST author element counts (the coarse-capture stance).
+        def open_author(node)
+          return if node.empty_element? || @header.key?(:author_seen)
+
+          @header[:author_seen] = true
+          @header[:author_ref] = presence(node.attribute("ref")&.strip)
+          @in_author = true
+        end
+
+        def creation_place(node)
+          @header[:place_ref] = presence(node.attribute("ref")&.strip)
+          @capture = (@header[:place] = +"")
         end
 
         def creation_date(node)
@@ -305,17 +329,26 @@ module Nabu
         def metadata
           {
             "author" => flatten(@header[:author]),
+            "author_ref" => @header[:author_ref],
+            "author_refs" => author_refs,
+            "author_dates" => flatten(@header[:author_dates]),
             "date" => flatten(@header[:date]),
             "date_when" => @header[:when],
             "date_not_before" => @header[:not_before],
             "date_period" => @header[:period],
             "date_precision" => @header[:precision],
             "place" => flatten(@header[:place]),
+            "place_ref" => (@header[:place_ref] if flatten(@header[:place])),
             "genre" => (@header[:genre].empty? ? nil : @header[:genre]),
             # P104-1: upstream's own two-level genre taxonomy as a
             # facet — one row per term (the IIP plural-values shape).
             "facets" => (@header[:genre].empty? ? nil : { "genre" => { "values" => @header[:genre] } })
           }.compact
+        end
+
+        def author_refs
+          match = WIKIDATA_ENTITY.match(@header[:author_ref].to_s)
+          match ? ["wikidata:#{match[1]}"] : nil
         end
 
         # -- body: div context ------------------------------------------------

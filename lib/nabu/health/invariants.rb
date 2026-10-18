@@ -212,6 +212,11 @@ module Nabu
                                  "year projects instead (date_class edition)" },
         "openmgh" => { "printed_place" => "the modern MGH volume's publisher city — edition " \
                                           "lineage; the print year projects (date_class edition)" },
+        "papyri-ddbdp" => { "mentioned_dates" => "dates the papyrus TEXT mentions (HGV <date " \
+                                                 "type=\"mentioned\">, per line), never its own " \
+                                                 "date — kept as their own labeled class so no " \
+                                                 "timeline reader can rank one as the origin; " \
+                                                 "the HGV origDate projects instead" },
         # P118-R4 S4: the per-key, prefix-aware census surfaced these;
         # each is lineage, machinery or a holding location (live values
         # sampled 2026-10-11). Everything else it surfaced is real ore
@@ -240,6 +245,12 @@ module Nabu
                            "settlement" => "the holding library's city (a PRESENT location)" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
+        "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
+                                       "date_of_origin is absent; on the SAA letters it restates " \
+                                       "the date_of_origin reign the row already carries",
+                     "findspot_square" => "an excavation grid square inside the provenience site " \
+                                          "(\"L 2769\", \"Area F\") — sub-site grain, below the " \
+                                          "place axis; the provenience projects" },
         "prilit" => { "date_cert" => "a certainty qualifier on the projected date, not a date" },
         "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
                                                   "doc — a PRESENT location)" },

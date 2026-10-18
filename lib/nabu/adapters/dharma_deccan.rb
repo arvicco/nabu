@@ -74,6 +74,12 @@ module Nabu
     #   evidence" → "date" for 107 texts.
     # - editors (fileDesc/titleStmt editor + respStmt names), maturity
     #   (edition @rendition), repo.
+    # - the edition's inline persName/placeName (kings, donors, granted
+    #   villages; census 2026-10-18: 881 + 240 in 382 editions — the rest
+    #   of the estate's 5,316 persNames are header editor references or sit
+    #   in commentary/translation/notes) → passage annotations "entities"
+    #   (the family's names: true). Mentioned places, not findspots: they
+    #   never feed the place axis.
     # DECLARED COARSENESS: the DHARMA working files carry NO origDate or
     # origPlace (census: zero across 1,260 DHARMA_ editions); their titles'
     # date prose is not an extractor. EIAD's inventory comment block
@@ -172,7 +178,7 @@ module Nabu
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
         result = DharmaEpidocParser.parse_doc(doc, path: path, allowed_languages: config[:languages],
-                                                   aliases: config.fetch(:aliases, {}))
+                                                   aliases: config.fetch(:aliases, {}), names: true)
         metadata = header_metadata(doc, path, repo, config, document_ref.metadata["stem"])
         metadata["maturity"] = result.maturity if result.maturity
         document = Nabu::Document.new(
@@ -182,7 +188,7 @@ module Nabu
         result.passages.each_with_index do |unit, index|
           document << Nabu::Passage.new(
             urn: "#{document_ref.id}:#{unit.key}", language: unit.language, text: unit.text,
-            sequence: index, annotations: unit.met ? { "met" => unit.met } : {}
+            sequence: index, annotations: { "met" => unit.met, "entities" => unit.entities }.compact
           )
         end
         document

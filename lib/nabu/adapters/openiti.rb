@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "openiti_markdown_parser"
+require_relative "openiti_sidecar"
 
 module Nabu
   module Adapters
@@ -65,8 +66,13 @@ module Nabu
     # orphan-*, empty-unit, "### <token>") surfaces as document metadata
     # "census" when non-empty (the aozora unrecognized_elements pattern).
     # The .yml sidecar's ISSUES line (PRIMARY_VERSION flags) rides verbatim
-    # as metadata "version_issues" when the sidecar is present — no further
-    # machinery on sidecars. A header-only in-scope file quarantines: the
+    # as metadata "version_issues" when the sidecar is present. The AUTHOR
+    # and BOOK sidecars feed the crosswalk lanes (OpenitiSidecar): the
+    # author's Wikidata id ("author_wikidata"), the al-Ṯurayyā DIED/
+    # RESIDED ids (unioned with the TSV tags into "author_places" — the
+    # OpenitiDates place lane reads them), and the book's RELATED work↔work
+    # assertions ("related_works" — the OpenitiRelations links producer
+    # joins them at book grain). A header-only in-scope file quarantines: the
     # TSV promised text (tok_length > 0 on every in-scope row, P41-g).
     #
     # == License (D41-b ruled)
@@ -123,7 +129,33 @@ module Nabu
 
       # The TSV columns this adapter reads (of the 27 the index carries).
       TSV_COLUMNS = %w[version_uri subcorpus date author_ar author_lat
-                       title_ar title_lat status local_path].freeze
+                       title_ar title_lat status local_path
+                       uncorrected_OCR ed_info tags].freeze
+
+      # The `tags` bag (" :: "-joined) mixes four vocabularies, split here:
+      #   <role>@<al-Ṯurayyā URI> — the author's biography places
+      #     (born/died/resided/visited; 1,442 in-scope versions carry a
+      #     died@/resided@ SETTLEMENT id) → "author_places", per role;
+      #   <scheme>@<keyword> — classification tags (GAL@ Brockelmann, JK@,
+      #     Shamela@, ShamAY@, Shia@, Zaydiyya@ …) → "genre_tags", verbatim
+      #     with the scheme prefix (GAL mixes genre, period and region
+      #     keywords — upstream's own multi-axis scheme, never split by
+      #     guess), projected as the genre_tag facet;
+      #   _UPPER — KITAB's internal grouping labels (_HADITH, _IBNTAYMIYYA:
+      #     genre and author groupings mixed) → "kitab_tags", carried, not
+      #     projected;
+      #   bare UPPER — version flags (PRIMARY_VERSION, UNCORRECTED_OCR …) →
+      #     "version_flags", carried.
+      # CENT#### tags are dropped by rule: the AH death century the period
+      # facet already derives from the URI prefix.
+      PLACE_ROLES = %w[born died resided visited].freeze
+      PLACE_TAG = /\A(#{PLACE_ROLES.join('|')})@(\S+)\z/
+      CENTURY_TAG = /\ACENT\d+\z/
+      ABSENT_CELLS = ["", "None", "NODATA"].freeze
+
+      # The TSV lanes carried from discovery onto the document.
+      CARRIED_REF_KEYS = %w[title_ar author_lat author_ar death_ah status uncorrected_ocr ed_info
+                            genre_tags kitab_tags version_flags].freeze
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "openiti",
@@ -140,6 +172,16 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # The book sidecars' RELATED work↔work assertions (metadata
+      # "related_works") refresh into the links journal after every load
+      # through the reference-producer seam — Nabu::OpenitiRelations joins
+      # them at book grain against the held versions.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::OpenitiRelations.new(catalog: catalog, journal: journal)
       end
 
       # HEAD both Zenodo artifacts: reachability + Last-Modified drift
@@ -279,8 +321,34 @@ module Nabu
           "author_ar" => presence(row[:author_ar]),
           "death_ah" => presence(row[:date])&.to_i,
           "status" => row[:status],
-          "language" => language_for(row[:version_uri])
-        }.compact
+          "language" => language_for(row[:version_uri]),
+          # The OCR-quality flag (720 in-scope versions): a text-quality
+          # fact, carried; False is absence.
+          "uncorrected_ocr" => (true if row[:uncorrected_OCR] == "True"),
+          # The edition imprint ("editor :: place :: year :: publisher",
+          # free-form) — edition LINEAGE, never the text's own origin or
+          # date: carried verbatim, deliberately not projected.
+          "ed_info" => (row[:ed_info].strip unless ABSENT_CELLS.include?(row[:ed_info].strip))
+        }.merge(tag_lanes(row[:tags])).compact
+      end
+
+      # The tags bag split into its four lanes (see PLACE_TAG); an empty
+      # lane is absence.
+      def tag_lanes(cell)
+        lanes = { "author_places" => {}, "genre_tags" => [], "kitab_tags" => [], "version_flags" => [] }
+        cell.split("::").map(&:strip).reject(&:empty?).each do |tag|
+          if (match = PLACE_TAG.match(tag))
+            (lanes["author_places"][match[1]] ||= []) << match[2]
+          elsif tag.include?("@") then lanes["genre_tags"] << tag
+          elsif tag.start_with?("_") then lanes["kitab_tags"] << tag
+          elsif !CENTURY_TAG.match?(tag) then lanes["version_flags"] << tag
+          end
+        end
+        lanes.transform_values do |lane|
+          next nil if lane.empty?
+
+          lane.is_a?(Hash) ? lane.transform_values(&:uniq) : lane.uniq
+        end
       end
 
       # "ara" / "fas" (see the class comment), nil when the suffix cannot
@@ -367,14 +435,40 @@ module Nabu
 
       def document_metadata(header, body, document_ref)
         subject = book_subj(header.meta_lines)
-        document_ref.metadata.slice("title_ar", "author_lat", "author_ar", "death_ah", "status")
+        author = OpenitiSidecar.author_facts(author_sidecar(document_ref.path))
+        related = OpenitiSidecar.related_works(book_sidecar(document_ref.path))
+        document_ref.metadata.slice(*CARRIED_REF_KEYS)
                     .merge(
+                      "author_wikidata" => author["wikidata"],
+                      "author_places" => author_places(document_ref.metadata["author_places"], author),
+                      "related_works" => (related unless related.empty?),
                       "meta_lines" => (header.meta_lines unless header.meta_lines.empty?),
                       "book_subj" => subject,
                       "facets" => facets(subject, document_ref.metadata["death_ah"]),
                       "census" => (body.census unless body.census.empty?),
                       "version_issues" => sidecar_issues(document_ref.path)
                     ).compact
+      end
+
+      # data/<author>/<book>/<version> → the author and book sidecars
+      # beside it (the relative shape is the same in both layouts).
+      def author_sidecar(path)
+        author_dir = File.dirname(path, 2)
+        File.join(author_dir, "#{File.basename(author_dir)}.yml")
+      end
+
+      def book_sidecar(path)
+        book_dir = File.dirname(path)
+        File.join(book_dir, "#{File.basename(book_dir)}.yml")
+      end
+
+      # The TSV tag places unioned with the author sidecar's DIED/RESIDED
+      # (the TSV first; the sidecar adds what the index lacks), deduped
+      # per role, roles in PLACE_ROLES order.
+      def author_places(tsv, sidecar)
+        merged = PLACE_ROLES.to_h { |role| [role, ((tsv || {})[role].to_a + sidecar[role].to_a).uniq] }
+        merged.reject! { |_, places| places.empty? }
+        merged.empty? ? nil : merged
       end
 
       # P104-1 (the aggressive-mining law): the #META# block's 021.BookSUBJ value,

@@ -410,6 +410,14 @@ sources:
       "Getreide": "a subject label (grain), not a genre"   # 21
   oracc:              # catalogue genre (P100-2 emission; 115,263 bearing entries,
     facet: genre      # CDLI-drifted vocabulary; case-insensitive fold covers lexical/letter)
+    # subgenre/supergenre (mined 2026-10-18; metadata + facets) are deliberately
+    # NOT folded here, the loop's census call: supergenre restates genre on
+    # 99.9% of members (ELA=Administrative 77,711 · LEX=Lexical 8,884; only 159
+    # genre-less members carry one) and its LIT spans Royal Inscription
+    # (7,479), so a fold would multi-label royal texts literary; subgenre
+    # (2,415 values) mixes lexical series, ruler names (the royal-inscription
+    # subgenre IS the king) and archive names under one column — no single
+    # fold table maps it onto the class list honestly.
     map:
       "Administrative": administrative           # 77,717
       "Lexical": lexical                         # 8,884 + 1,009 lowercase
@@ -894,3 +902,79 @@ sources:
       #   non-canonical (not scripture), addressed to the Buddhas
       "Fragments of documents of uncertain type": unknown  # 3 — upstream's own
       #   "cannot determine" (ruled "unclassified": the honest class)
+  gretil:             # census: 784 files, 48 ladder values, 2026-10-18 — the teiHeader's
+    metadata: genre   # keywords term ("Sanskrit -- Śāstra -- Philosophy -- Buddhist"),
+    #                   mined verbatim; exact rules per ladder value, folded as the
+    #                   loop's call on each shelf's own scholarly identity
+    map:
+      # -- Veda: śruti, the canonical corpus; the Vedāṅga manuals by their subject
+      "Sanskrit -- Veda -- Upaniṣad": scripture                  # 18
+      "Sanskrit -- Veda -- Saṃhitā": scripture                   # 5 — the hymn and formula
+      #   collections (Ṛgveda, Yajurveda saṃhitās)
+      "Sanskrit -- Veda -- Brāhmaṇa": scripture                  # 3 — śruti prose on the rite
+      "Sanskrit -- Veda -- Āraṇyaka": scripture                  # 1
+      "Sanskrit -- Veda -- Vedāṅga -- Gṛhyasūtra": ritual        # 9 — the domestic-rite manuals
+      "Sanskrit -- Veda -- Vedāṅga -- Śrautasūtra": ritual       # 4 — the solemn-rite manuals
+      "Sanskrit -- Veda -- Vedāṅga -- Pariśiṣṭa": ritual         # 3 — the ritual supplements
+      "Sanskrit -- Veda -- Vedāṅga -- Prātiśākhya": lexical/grammar  # 2 — Vedic phonetics
+      #   (upstream's shelf; the Ṛgvidhāna rides it verbatim)
+      # -- Religious Literature: the traditions' canonical sūtras, tantras, āgamas and
+      #    saṃhitās with their stotra/sādhana literature — the scripture head, coarse by
+      #    declaration (the stotras within are not split out by a per-file reading)
+      "Sanskrit -- Religious Literature -- Buddhist": scripture  # 225
+      "Sanskrit -- Religious Literature -- Śaiva": scripture     # 30
+      "Sanskirt -- Religious Literature -- Śaiva": scripture     # 1 — upstream's typo of the same
+      "Sanskrit -- Religious Literature -- Vaiṣṇava": scripture  # 28
+      "Sanskrit -- Religious Literature -- Jaina": scripture     # 1
+      # -- Śāstra: the systematic disciplines
+      "Sanskrit -- Śāstra -- Philosophy -- Buddhist": literary/wisdom  # 133 — Abhidharma,
+      #   Madhyamaka, pramāṇa: the darśana treatises sit under the ruled wisdom head
+      #   (the Kanripo KR3 Masters precedent for a tradition's systematic philosophy)
+      "Sanskrit -- Śāstra -- Philosophy -- Vedānta": literary/wisdom   # 31
+      "Sanskrit -- Śāstra -- Philosophy -- Śaiva": literary/wisdom     # 30
+      "Sanskrit -- Śāstra -- Philosophy -- Sāṃkhya": literary/wisdom   # 18
+      "Sanskrit -- Śāstra -- Philosophy -- Nyāya": literary/wisdom     # 12
+      "Sanskrit -- Śāstra -- Philosophy -- Mīmāṃsā": literary/wisdom   # 7
+      "Sanskrit -- Śāstra -- Philosophy -- Yoga": literary/wisdom      # 6
+      "Sanskrit -- Śāstra -- Philosophy -- Vaiśeṣika": literary/wisdom # 4
+      "Sanskrit -- Śāstra -- Philosophy -- Advaita": literary/wisdom   # 2
+      "Sanskrit -- Śāstra -- Philosophy": literary/wisdom              # 3 — the bare shelf
+      "Sanskrit -- Śāstra -- Āyurveda": scholarly/medicine       # 20
+      "Sanskrit -- Śāstra -- Jyotiḥśāstra": [scholarly/astronomy, divination/astrology]  # 13 —
+      #   jyotiṣa spans mathematical astronomy and horoscopy/omens; ruled split (the
+      #   cdli Prayer/Incantation shape)
+      "Sanskrit -- Śāstra -- Dharma -- Smṛti": legal/law         # 13 — the dharma codes
+      "Sanskrit -- Śāstra -- Dharma -- Nibandha": legal/law      # 1 — the legal digest
+      "Sanskrit -- Śāstra -- Dharmaśāstra -- Sūtra": legal/law   # 6 — the dharmasūtras
+      "Sanskrit -- Śāstra -- Grammar": lexical/grammar           # 7
+      "Sanskrit -- Śāstra -- Lexikography": lexical/word-list    # 1 — the kośa (the
+      #   tamilex nikaṇṭu precedent)
+      "Sanskrit -- Śāstra -- Kāmaśāstra": scholarly              # 5 — the erotic-science treatises
+      "Sanskrit -- Śāstra -- Arthaśāstra": scholarly             # 1 — statecraft (the KR3b
+      #   military-treatise precedent)
+      # -- Poetry and its theory
+      "Sanskrit -- Poetry -- Kāvya": literary/poetry             # 55
+      "Sanskrit -- Poetry -- Subhāṣita": literary/wisdom/proverbs  # 7 — the gnomic anthologies
+      "Sanskrit -- Poetry -- Narrative Literature": literary/narrative  # 7
+      "Sanskrit -- Poetry -- Historical": [literary/poetry, historiography]  # 2 — historical
+      #   kāvya: verse that is also a history of its kings — both claims
+      "Sanskrit -- Poetry -- Drama": literary/drama              # 10
+      "Sanskrit -- Poetry -- Alaṃkāra": literary/essay/criticism # 27 — poetics (Dhvanyāloka …)
+      "Sanskrit -- Poetry -- Nāṭya": literary/essay/criticism    # 2 — dramaturgy treatises
+      #   (Nāṭyaśāstra, Daśarūpaka), theory of the stage rather than plays
+      "Sanskrit -- Poetry -- Chandas": scholarly                 # 4 — the metrical handbooks
+      #   (chandas is its own vedāṅga, apart from grammar in the Sanskrit tradition)
+      # -- Epic and Purāṇa
+      "Sanskrit -- Epic -- Mahābhārata": literary/narrative/epic # 4
+      "Sanskrit -- Epic -- Rāmāyaṇa": literary/narrative/epic    # 2
+      "Sanskrit -- Epics -- Rāmāyaṇa": literary/narrative/epic   # 1 — upstream's variant
+      "Sanskrit -- Purāṇa": literary/narrative/myth              # 19 — the mythological-
+      #   cosmological compendia, by form (their smṛti standing in reception is not
+      #   claimed as a genre — the tamilex canon stance)
+      # -- the non-Sanskrit shelves
+      "Manipravalam -- Vyākhyānas": exegesis                     # 1 — the Śrīvaiṣṇava
+      #   commentary on Perumāḷ Tirumoḻi
+    deliberate:
+      "Sanskrit -- later works -- 20th century": "a period shelf (when written), not a genre claim"
+      "Tibetan -- Translation": "a language shelf (the Tibetan rendering of a Buddhist work), not a genre claim"
+      "Tibetan": "a language shelf, not a genre claim"

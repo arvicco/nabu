@@ -90,6 +90,8 @@ module Nabu
         @catalog = catalog
       end
 
+      def authority = AUTHORITY
+
       def run(_slug, workdir:)
         path = CbdbPersons.sqlite_path(workdir)
         return nil if path.nil?

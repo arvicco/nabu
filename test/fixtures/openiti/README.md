@@ -172,3 +172,25 @@ license_class: **attribution-noncommercial-sharealike** (the NC clause matters).
 record's `license` field. Cite: Romanov, Maxim, and Masoumeh Seydi.
 *OpenITI: A Machine-Readable Corpus of Islamicate Texts*, Zenodo, 2019–
 (version 2025.1.9). Co-PIs: Miller, Romanov, Savant.
+
+## Crosswalk additions (re-cut 2026-10-18 from canonical/openiti)
+
+Two more body trims (header intact through `#META#Header#End#`, body cut
+after line 60) and real `.yml` sidecars copied **whole** under
+`sidecars/` in the release tree's own `data/<author>/<book>/` layout
+(the adapter tests copy that tree into the assembled workdir):
+
+| File | why it's here |
+|---|---|
+| `0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1` | TSV tags carry `died@`/`resided@` al-Ṯurayyā settlement ids; the author sidecar's RESIDED continues on an indented line |
+| `0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.JK000027-ara1` | its book sidecar's RELATED is filled (`0458Bayhaqi.ShucabIman (ABR.mukhtasar)`) |
+| `sidecars/0001AbuTalibCabdManaf/…` | wikidata EXTID beside template-filled DIED/RESIDED; template RELATED |
+| `sidecars/0390AbuFarajCukbari/…` | RESIDED is a region-only guess (`Iraq_RE_Auto`) |
+| `sidecars/0428IbnSina/0428IbnSina.ShifaNafs/…` | a three-entry RELATED value continued over two lines |
+
+Sidecar format: NOT YAML — `NN#TYPE#FIELD###: value` lines, continuation
+lines indented four spaces, every field pre-filled with upstream's
+TEMPLATE text until catalogued. The TSV's `tags` column mixes
+`role@<al-Ṯurayyā URI>` biography places, `scheme@keyword`
+classification tags, `_GROUP` labels, `CENT####` centuries and bare
+version flags.

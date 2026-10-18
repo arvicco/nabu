@@ -75,6 +75,25 @@ boilerplate; the files are checked in WHOLE (28–37 KB each) so the
   literature, ancient_persons — same /xml/ dir); kept whole (58 KB) as
   the discovery skip-by-rule exemplar (an authority file is not a record)
   and the cross-file `@ref` fragment target.
+- `elephantine_erc_db_ancient_persons.tei.xml` — a TRIM of the
+  ancient-persons authority (2,148,023 B, 7,577 persons; cut 2026-10-18
+  from the box's `canonical/elephantine` copy of the frozen export):
+  the original header lines through `<listPerson type="historical">`,
+  then whole byte-verbatim `<person>` blocks p5 (the "(Unknown)"
+  placeholder), p20 (TM name record, no TM person link), p30 (TM person
+  link + name record), p100 and p21875 (the scribes of records 100467 and
+  002858 above), p120 and p3560 (the "(Unknown [not mentioned in
+  text])" / "(Unknown [lost])" placeholders those records' siblings
+  point at), p2635 (female, Coptic form), p4346 (untagged Greek form),
+  p9665 (no `<sex>`, untagged Aramaic form) and p19245 ("Hatres (praktor
+  sitikon)"); the list closer; the mythological list with d1 (Amun —
+  untagged native form + `@type="epithet"` forms) and d2; three
+  `<relation>` lines of the trailing listRelation (TM-person parent,
+  internal parent, mutual spouse — present so the parser is seen to
+  ignore them); and the file's own closing lines. Recipe: the same line
+  selection over the current authority file (whole `<person>`…`</person>`
+  line runs, nothing rewrapped). Drives Nabu::ElephantinePersons and the
+  person-index derive.
 
 Every record's `<licence target="http://creativecommons.org/licenses/by-sa/3.0/">`
 reads "Licence for this TEI document: Creative Commons, Attribution-ShareAlike

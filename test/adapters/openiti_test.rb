@@ -38,6 +38,20 @@ class OpenitiTest < Minitest::Test
     urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1
   ].freeze
 
+  # Real author/book .yml sidecars (copied whole from the release tree,
+  # canonical layout under sidecars/) and two more trimmed texts whose
+  # sidecars carry the crosswalk lanes: Ibn Taymiyya (al-Ṯurayyā DIED/
+  # RESIDED settlement ids, a continuation-line RESIDED value) and
+  # al-Qazwīnī's Mukhtaṣar (a RELATED work↔work edge). Assembled only by
+  # the crosswalk tests, so the conformance set stays the original six.
+  SIDECARS = File.join(FIXTURES, "sidecars")
+  CROSSWALK_FILES = [
+    "0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.JK000027-ara1",
+    "0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1"
+  ].freeze
+  TAYMIYYA = "urn:nabu:openiti:0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1"
+  QAZWINI = "urn:nabu:openiti:0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.JK000027-ara1"
+
   # The sample TSV split, awk-verified against the fixture (297 data rows):
   # 214 pri (122 ara + 70 per + 22 MSS) + 83 sec. In scope: pri AND not MSS.
   SAMPLE_IN_SCOPE = 192
@@ -303,6 +317,100 @@ class OpenitiTest < Minitest::Test
     refute plain.metadata.key?("version_issues"), "no sidecar → no key, no machinery"
   end
 
+  # --- the crosswalk harvest: TSV tags + author/book sidecars -------------------
+
+  # The TSV `tags` column is a "::"-joined bag mixing four vocabularies:
+  # biography places (born@/died@/resided@/visited@ + al-Ṯurayyā URIs),
+  # scheme@keyword classification tags (GAL@, JK@, Shamela@ …), KITAB's
+  # internal _GROUP labels, and bare version flags. uncorrected_OCR and
+  # ed_info ride verbatim beside them.
+  def test_discover_mines_the_tsv_tags_ocr_flag_and_edition_info
+    with_crosswalk_workdir do |dir|
+      ref = discover_ref(TAYMIYYA, workdir: dir)
+      assert_equal({ "born" => %w[HARRAN_390E368N_S Aqur_RE], "died" => %w[DIMASHQ_363E335N_S],
+                     "resided" => %w[DIMASHQ_363E335N_S QAHIRA_312E300N_S ISKANDARIYYA_299E311N_S],
+                     "visited" => %w[MAKKA_398E213N_S BAYTMAQDIS_352E317N_S] },
+                   ref.metadata["author_places"])
+      assert_includes ref.metadata["genre_tags"], "GAL@fiqh"
+      assert_includes ref.metadata["genre_tags"], "Shamela@كتب ابن تيمية"
+      refute(ref.metadata["genre_tags"].any? { |tag| tag.start_with?("born@", "died@") },
+             "biography places never masquerade as classification tags")
+      assert_equal %w[_IBNTAYMIYYA], ref.metadata["kitab_tags"]
+      assert_equal %w[PRIMARY_VERSION CLEANED_VERSION], ref.metadata["version_flags"]
+      assert_equal "د. محمد رشاد سالم :: 1403هـ - القاهرة", ref.metadata["ed_info"]
+      refute ref.metadata.key?("uncorrected_ocr"), "False is absence, never a key"
+    end
+    ocr = sample_rows.drop(1).find { |fields| fields[3] == "True" && fields[12] == "pri" && fields[2] != "MSS" }
+    refute_nil ocr, "the sample TSV carries an uncorrected-OCR primary row"
+    Dir.mktmpdir("openiti-ocr") do |dir|
+      write_tsv(dir, [ocr])
+      ref = Nabu::Adapters::Openiti.new.discover(dir).first
+      assert_equal true, ref.metadata["uncorrected_ocr"]
+    end
+  end
+
+  def test_sparse_tag_bags_mint_only_what_they_carry
+    hafiz = discover_ref("urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1")
+    assert_equal %w[PRIMARY_VERSION], hafiz.metadata["version_flags"]
+    assert_equal "https://ganjoor.net/hafez/montasab/", hafiz.metadata["ed_info"]
+    %w[author_places genre_tags kitab_tags].each do |key|
+      refute hafiz.metadata.key?(key), "a flags-only bag mints no #{key}"
+    end
+    hadith = discover_ref("urn:nabu:openiti:0390AbuFarajCukbari.Hadith.ShamAY0032805-ara1")
+    refute hadith.metadata.key?("ed_info"), "an empty ed_info cell is absence"
+    assert_equal({ "resided" => %w[Iraq_RE_Auto] }, hadith.metadata["author_places"],
+                 "a region URI rides the metadata verbatim (the axis reads settlements only)")
+  end
+
+  # The author sidecar: the Wikidata id (70#AUTH#EXTID) and the
+  # al-Ṯurayyā DIED/RESIDED lists (continuation lines joined, the
+  # template placeholders never values) — unioned into author_places.
+  def test_author_sidecar_mints_the_wikidata_id_and_merges_its_places
+    with_crosswalk_workdir do |dir|
+      document = Nabu::Adapters::Openiti.new.parse(discover_ref(TAYMIYYA, workdir: dir))
+      assert_equal "Q491558", document.metadata["author_wikidata"]
+      assert_equal %w[DIMASHQ_363E335N_S QAHIRA_312E300N_S ISKANDARIYYA_299E311N_S],
+                   document.metadata.dig("author_places", "resided"),
+                   "the yml's continuation-line RESIDED value joins the TSV claim, deduped"
+    end
+    poet = parse_urn("urn:nabu:openiti:0001AbuTalibCabdManaf.Diwan.JK007501-ara1")
+    assert_equal "Q297913", poet.metadata["author_wikidata"]
+    refute poet.metadata.fetch("author_places", {}).key?("died"),
+           "the template line \"URIs from Althurayya, comma separated\" is never a place"
+    hafiz = parse_urn("urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1")
+    refute hafiz.metadata.key?("author_wikidata"), "no sidecar → no id, never invented"
+  end
+
+  # The book sidecar's RELATED value: "<book URI> (<relation>)" entries,
+  # ";"-separated, continuation lines joined; the template line and
+  # author-only / bracketed-title entries mint no work edge.
+  def test_book_sidecar_related_works_parse_into_work_relations
+    with_crosswalk_workdir do |dir|
+      document = Nabu::Adapters::Openiti.new.parse(discover_ref(QAZWINI, workdir: dir))
+      assert_equal [{ "work" => "0458Bayhaqi.ShucabIman", "relation" => "ABR.mukhtasar" }],
+                   document.metadata["related_works"]
+      taymiyya = Nabu::Adapters::Openiti.new.parse(discover_ref(TAYMIYYA, workdir: dir))
+      refute taymiyya.metadata.key?("related_works"), "the template RELATED line is absence"
+    end
+    shifa = Nabu::Adapters::OpenitiSidecar.related_works(
+      File.join(SIDECARS, "0428IbnSina", "0428IbnSina.ShifaNafs", "0428IbnSina.ShifaNafs.yml")
+    )
+    assert_equal [{ "work" => "0428IbnSina.Shifa", "relation" => "PART" },
+                  { "work" => "0428IbnSina.Tabiciyyat", "relation" => "PART" },
+                  { "work" => "0001Aristotle.DeAnima", "relation" => "COMM" }],
+                 shifa, "a RELATED value continued over two lines parses whole"
+  end
+
+  def test_related_entry_grammar_keeps_only_work_uris
+    parse = ->(value) { Nabu::Adapters::OpenitiSidecar.parse_related(value) }
+    assert_equal [{ "work" => "0748Dhahabi.SiyarAclamNubala", "relation" => "CONT.dhayl" }],
+                 parse.call("0748Dhahabi.SiyarAclamNubala (CONT.dhayl)."), "a trailing full stop is furniture"
+    assert_equal [{ "work" => "0001Hippocrates.Aphorismoi", "relation" => "COMM.sharh" }],
+                 parse.call("0001Hippocrates.Aphorismoi (COMM.sharh) > 0750IbrahimKishi.WasailWusul")
+    assert_empty parse.call("0298IshaqIbnHunay (TRANSL.tarjama)"), "an author-only entry is no work"
+    assert_empty parse.call("URI of a book from OpenITI, or [Author's Title], followed by abbreviation")
+  end
+
   # --- parse: quarantines -------------------------------------------------------
 
   def test_a_missing_in_scope_file_quarantines_loudly
@@ -471,6 +579,15 @@ class OpenitiTest < Minitest::Test
     assert_equal basenames.size, rows.size, "every fixture file must have its TSV row"
     write_tsv(dir, rows)
     rows.each { |row| place_file(dir, row, source: File.join(FIXTURES, File.basename(row[15]))) }
+    FileUtils.mkdir_p(File.join(dir, "data"))
+    FileUtils.cp_r(File.join(SIDECARS, "."), File.join(dir, "data"))
+  end
+
+  def with_crosswalk_workdir
+    Dir.mktmpdir("openiti-crosswalk") do |dir|
+      build_workdir(dir, CROSSWALK_FILES)
+      yield dir
+    end
   end
 
   # Zip the assembled canonical tree under the release's single top-level

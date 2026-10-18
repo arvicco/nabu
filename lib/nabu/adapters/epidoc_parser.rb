@@ -62,8 +62,9 @@ module Nabu
     #
     # == Text extraction rules
     #
-    # - Mixed content is concatenated; <note> subtrees are dropped (editorial
-    #   noise, not text). TODO(app-crit): <app>/<lem>/<rdg>, <choice>/<corr>/
+    # - Mixed content is concatenated; <note> subtrees are dropped from the
+    #   text (editorial, not the work) — their text rides the "notes"
+    #   annotation instead (see "Inline layers" below). TODO(app-crit): <app>/<lem>/<rdg>, <choice>/<corr>/
     #   <sic>, <gap>/<del>/<supplied> do not occur in the Perseus fixtures;
     #   decide their policy (likely: keep lem/corr, drop rdg/sic) when a
     #   source actually exercises them — don't invent upstream formats.
@@ -177,9 +178,132 @@ module Nabu
     # carries both, verified against the 2026-07-03 snapshot).
     class EpidocParser
       # One citable unit as extracted from the stream: citation is the dotted
-      # path (e.g. "2", "1.7"), text is cleaned NFC content.
-      Unit = Data.define(:citation, :text)
+      # path (e.g. "2", "1.7"), text is cleaned NFC content, annotations the
+      # inline layers mined beside it (InlineLayer; {} when none).
+      Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
+
+      # == Inline layers (passage annotations)
+      #
+      # The text rules above flatten inline markup; the markup itself is
+      # mined here, beside the text, so the leaf text stays byte-identical.
+      # Each layer is a list in document order (by span START), omitted
+      # when empty:
+      #
+      #   "entities" [{ "type", "text", "key", "ref", "subtype" }]
+      #       persName → "person", placeName → "place", name → its @type
+      #       (person/pers → "person", place → "place", else verbatim —
+      #       ethnic, group, title…; untyped → "name"). "key" is @key
+      #       VERBATIM: Perseus mixes TGN ids ("tgn,7002677"), its own
+      #       gazetteer names ("perseus,Athens"), TLG author ids on the
+      #       Greek Anthology's attributions ("tlg-1589") and Morpheus
+      #       analyses on some dialogue speakers — the shape is upstream's,
+      #       never guessed into a namespace. "ref" is @ref, or @n when @n
+      #       is a URN (the Homer Multitext's urn:cite:hmt:pers.* ids;
+      #       numeric @n is line furniture). "subtype" is @type on
+      #       persName/placeName (region, river…).
+      #   "notes"    [{ "text", "type", "resp" }] — the <note> subtrees the
+      #       text drops. Everything nested in a note (names, foreign
+      #       words, quotations) belongs to the note: it is the editor's
+      #       apparatus, not the work's, so it reaches no other layer.
+      #   "foreign"  [{ "lang", "text" }] — @xml:lang verbatim.
+      #   "quotes"   [{ "text", "type", "lang" }] — <q> and <quote>.
+      #
+      # Span text follows the leaf discipline (breaks space, whitespace
+      # collapses, NFC); a span left empty is skipped. DECLARED: mentioned
+      # places are not a document's place-axis claim (the axis records
+      # where a text was made or found), and TGN is not a held gazetteer —
+      # the keys ride verbatim for a future join, the source's places
+      # posture stays unplaced.
+      class InlineLayer
+        ENTITY_TYPES = { "persName" => "person", "placeName" => "place" }.freeze
+        NAME_TYPES = { "person" => "person", "pers" => "person", "place" => "place" }.freeze
+        TRACKED = %w[persName placeName name foreign q quote note].freeze
+        LAYERS = { "note" => "notes", "foreign" => "foreign", "q" => "quotes", "quote" => "quotes" }.freeze
+
+        Span = Struct.new(:name, :depth, :order, :fields, :buffer, keyword_init: true)
+        private_constant :Span
+
+        def initialize
+          @open = []
+          @done = []
+          @order = 0
+        end
+
+        # A tracked element opened at +depth+. Nothing opens inside a note:
+        # its whole subtree is the note's text.
+        def start(name, depth:, attributes:)
+          return unless TRACKED.include?(name)
+          return if @open.any? { |span| span.name == "note" }
+
+          @order += 1
+          @open << Span.new(name: name, depth: depth, order: @order, fields: fields_for(name, attributes),
+                            buffer: +"")
+        end
+
+        def finish(name, depth:)
+          span = @open.last
+          return unless span && span.name == name && span.depth == depth
+
+          @open.pop
+          text = span.buffer.gsub(/[[:space:]]+/, " ").strip
+          return if text.empty?
+
+          text = Normalize.nfc(text)
+          layer = LAYERS.fetch(name, "entities")
+          record = layer == "entities" ? { "type" => span.fields["type"], "text" => text } : { "text" => text }
+          @done << [span.order, layer, record.merge(span.fields)]
+        end
+
+        # The attributes a span reads, off a Reader node.
+        def self.attributes_of(node)
+          { "key" => node.attribute("key"), "ref" => node.attribute("ref"), "n" => node.attribute("n"),
+            "type" => node.attribute("type"), "resp" => node.attribute("resp"),
+            "lang" => node.attribute("xml:lang") || node.attribute("lang") }
+        end
+
+        def text(value)
+          @open.each { |span| span.buffer << value }
+        end
+
+        def break!
+          text(" ")
+        end
+
+        # The completed spans as annotation layers; resets the completed set
+        # (open spans keep accumulating — a P4 segment boundary may fall
+        # inside one).
+        def take
+          spans = @done.sort_by(&:first)
+          @done = []
+          spans.each_with_object({}) do |(_order, layer, record), result|
+            (result[layer] ||= []) << record
+          end
+        end
+
+        private
+
+        def fields_for(name, attributes)
+          case name
+          when "persName", "placeName"
+            fields = { "type" => ENTITY_TYPES.fetch(name) }.merge(identity(attributes))
+            fields.merge("subtype" => attributes["type"]).compact
+          when "name"
+            type = attributes["type"]
+            { "type" => type.nil? || type.empty? ? "name" : NAME_TYPES.fetch(type, type) }
+              .merge(identity(attributes)).compact
+          when "note" then { "type" => attributes["type"], "resp" => attributes["resp"] }.compact
+          when "foreign" then { "lang" => attributes["lang"] }.compact
+          else { "type" => attributes["type"], "lang" => attributes["lang"] }.compact
+          end
+        end
+
+        def identity(attributes)
+          n = attributes["n"]
+          { "key" => attributes["key"], "ref" => attributes["ref"] || (n if n&.start_with?("urn:")) }
+        end
+      end
+      private_constant :InlineLayer
 
       # Citation-shape failures of the subtype pass that the structural retry
       # may honestly recover (see the file header). Everything else (malformed
@@ -315,7 +439,7 @@ module Nabu
             urn: "#{urn}:#{unit.citation}",
             language: language,
             text: unit.text,
-            annotations: {},
+            annotations: unit.annotations,
             sequence: sequence
           )
         end
@@ -344,7 +468,7 @@ module Nabu
 
         CRefPattern = Data.define(:unit, :depth, :replacement)
         Scheme = Data.define(:depth, :leaf_element, :unit_names, :deepest_unit)
-        Capture = Struct.new(:citation, :depth, :buffer, :drop_depths, keyword_init: true)
+        Capture = Struct.new(:citation, :depth, :buffer, :drop_depths, :inline, keyword_init: true)
         # One xpath step of the structural scheme: element name, axis
         # (:child for /, :desc for //), the citation component it binds
         # ($k → k, nil for structural steps), and literal attribute
@@ -436,9 +560,10 @@ module Nabu
         end
 
         def text_node(node)
-          return unless @capture && @capture.drop_depths.empty?
+          return unless @capture
 
-          @capture.buffer << node.value.to_s
+          @capture.inline.text(node.value.to_s)
+          @capture.buffer << node.value.to_s if @capture.drop_depths.empty?
         end
 
         # -- header: refsDecl -------------------------------------------------
@@ -545,7 +670,8 @@ module Nabu
           citation = components.join(".")
           return if node.empty_element? # nothing to capture; empty unit → skipped
 
-          @capture = Capture.new(citation: citation, depth: node.depth, buffer: +"", drop_depths: [])
+          @capture = Capture.new(citation: citation, depth: node.depth, buffer: +"", drop_depths: [],
+                                 inline: InlineLayer.new)
         end
 
         def citation_components(node, leaf_n)
@@ -714,6 +840,10 @@ module Nabu
         end
 
         def captured_start(node, name)
+          if InlineLayer::TRACKED.include?(name) && !node.empty_element?
+            @capture.inline.start(name, depth: node.depth, attributes: InlineLayer.attributes_of(node))
+          end
+          @capture.inline.break! if BREAK_ELEMENTS.include?(name)
           if DROPPED_ELEMENTS.include?(name)
             @capture.drop_depths << node.depth unless node.empty_element?
           elsif BREAK_ELEMENTS.include?(name) && @capture.drop_depths.empty?
@@ -726,8 +856,9 @@ module Nabu
         def captured_end(node, name)
           if name == leaf_name && node.depth == @capture.depth
             finish_capture
-          elsif DROPPED_ELEMENTS.include?(name) && @capture.drop_depths.last == node.depth
-            @capture.drop_depths.pop
+          else
+            @capture.drop_depths.pop if DROPPED_ELEMENTS.include?(name) && @capture.drop_depths.last == node.depth
+            @capture.inline.finish(name, depth: node.depth)
           end
         end
 
@@ -738,10 +869,11 @@ module Nabu
         def finish_capture
           text = @capture.buffer.gsub(/[[:space:]]+/, " ").strip
           citation = @capture.citation
+          annotations = @capture.inline.take
           @capture = nil
           return if text.empty?
 
-          @units << Unit.new(citation: citation, text: Normalize.nfc(text))
+          @units << Unit.new(citation: citation, text: Normalize.nfc(text), annotations: annotations)
         end
 
         def local_name(node)
@@ -793,12 +925,15 @@ module Nabu
           @paragraph = 0
           @in_paragraph = false
           @buffer = +""
-          @segments = [] # [citation, raw text] — merged + NFC'd at the end
+          @segments = [] # [citation, raw text, annotations] — merged + NFC'd at the end
+          @inline = InlineLayer.new
         end
 
         def call
           @reader.each { |node| process(node) }
-          @segments.map { |citation, text| Unit.new(citation: citation, text: Normalize.nfc(text)) }
+          @segments.map do |citation, text, annotations|
+            Unit.new(citation: citation, text: Normalize.nfc(text), annotations: annotations)
+          end
         end
 
         private
@@ -807,11 +942,16 @@ module Nabu
           case node.node_type
           when READER::TYPE_ELEMENT then start_element(node)
           when READER::TYPE_END_ELEMENT then end_element(node)
-          when READER::TYPE_ENTITY_REFERENCE
-            @buffer << ENTITIES.fetch(node.name, " ") if capturing?
-          when *TEXT_NODE_TYPES
-            @buffer << node.value.to_s if capturing?
+          when READER::TYPE_ENTITY_REFERENCE then text(ENTITIES.fetch(node.name, " "))
+          when *TEXT_NODE_TYPES then text(node.value.to_s)
           end
+        end
+
+        # Spans open only while capturing (or inside a note opened then), so
+        # feeding every body text node to the inline layer is safe.
+        def text(value)
+          @buffer << value if capturing?
+          @inline.text(value) if @body_depth.positive?
         end
 
         def capturing?
@@ -829,9 +969,19 @@ module Nabu
           raise P4Declined if name == "cRefPattern" && usable_cref_pattern?(node)
           return enter_body(node) if name == "body"
           return if @body_depth.zero?
+
+          inline_start(node, name)
           return open_drop(node) if @drop_depth.positive? || DROPPED_ELEMENTS.include?(name)
 
           dispatch_start(node, name)
+        end
+
+        def inline_start(node, name)
+          @inline.break! if Extraction::BREAK_ELEMENTS.include?(name)
+          return unless InlineLayer::TRACKED.include?(name) && !node.empty_element?
+          return unless @drop_depth.zero? && capturing?
+
+          @inline.start(name, depth: node.depth, attributes: InlineLayer.attributes_of(node))
         end
 
         def dispatch_start(node, name)
@@ -855,7 +1005,14 @@ module Nabu
             @body_depth -= 1
           elsif @body_depth.zero?
             nil
-          elsif @drop_depth.positive?
+          else
+            body_end(node, name)
+          end
+        end
+
+        def body_end(node, name)
+          @inline.finish(name, depth: node.depth)
+          if @drop_depth.positive?
             @drop_depth -= 1
           elsif CONTAINER_DIV.match?(name) && @mode != :paragraphs
             close_container
@@ -936,15 +1093,19 @@ module Nabu
           return if text.empty?
 
           label = citation
-          return if label.empty?
+          # Spans completed outside any citation have no passage to ride.
+          return @inline.take if label.empty?
 
           # A boundary that did not change the citation did not create a new
-          # unit: consecutive same-citation segments merge. Non-adjacent
-          # repeats survive to the duplicate-urn check — honest quarantine.
+          # unit: consecutive same-citation segments merge (their inline
+          # layers too). Non-adjacent repeats survive to the duplicate-urn
+          # check — honest quarantine.
+          annotations = @inline.take
           if @segments.last&.first == label
             @segments.last[1] << " " << text
+            annotations.each { |layer, records| (@segments.last[2][layer] ||= []).concat(records) }
           else
-            @segments << [label, text]
+            @segments << [label, text, annotations]
           end
         end
 

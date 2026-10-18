@@ -64,7 +64,12 @@ module Nabu
     # lane), "idno" (verbatim), "status" (revisionDesc quality label —
     # uncorrectedTranscription/Edited/ProofedDigitalEdition…: silver is
     # LABELED, the goo300k discipline), "orig_date" (profileDesc origDate
-    # attrs + text — the timeline lane, extractor a future packet).
+    # attrs + text — the timeline lane, extractor a future packet),
+    # "parent_works" + "parent_work_refs" (the titleStmt series titles
+    # above the document and their syriaca.org work URIs — the works
+    # hierarchy, e.g. "The Odes of Solomon" above each Ode). Facet
+    # projections (config/facet_map.yml): author → author, author_ref →
+    # author_ref (the person-id lane), parent_works → work.
     class SyriacCorpus < Nabu::Adapter
       REPO_URL = "https://github.com/srophe/syriac-corpus"
 
@@ -176,9 +181,21 @@ module Nabu
         metadata["author"] = edition.author if edition.author && !edition.author.empty?
         metadata["author_ref"] = edition.author_ref if edition.author_ref
         metadata["work"] = edition.work_ref if edition.work_ref
+        parent_metadata(edition.parent_works, metadata)
         metadata["status"] = edition.status if edition.status
         metadata["orig_date"] = edition.orig_date if edition.orig_date
         metadata
+      end
+
+      # The parent-work ladder as two flat lists (the facet lane projects
+      # arrays one row per element): titles innermost first, and the
+      # syriaca.org work URIs those titles carry (a ref-less title adds
+      # none — the lists are not index-aligned, each is its own claim).
+      def parent_metadata(parents, metadata)
+        titles = parents.map { |parent| Nabu::Normalize.nfc(parent["title"]) }
+        refs = parents.filter_map { |parent| parent["ref"] }
+        metadata["parent_works"] = titles unless titles.empty?
+        metadata["parent_work_refs"] = refs unless refs.empty?
       end
 
       def passage(block, urn:, index:)

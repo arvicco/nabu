@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>  
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader xml:lang="eng">
+        <fileDesc>
+            <titleStmt>
+                <title>First Olynthiac</title>
+                <author>Demosthenes</author>
+                <editor role="translator">James Herbert Vince</editor>
+                <sponsor>Perseus Project, Tufts University</sponsor>
+                <principal>Gregory Crane</principal>
+                <respStmt>
+                    <resp>Prepared under the supervision of</resp>
+                    <name>Lisa Cerrato</name>
+                    <name>William Merrill</name>
+                    <name>Elli Mylonas</name>
+                    <name>David Smith</name>
+                </respStmt>
+                <funder n="org:AnnCPB">The Annenberg CPB/Project</funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>Trustees of Tufts University</publisher>
+                <pubPlace>Medford, MA</pubPlace>
+                <authority>Perseus Project</authority>
+                <date type="release">1996</date>
+            </publicationStmt> 			
+            <notesStmt><note>Perseus 2.0</note></notesStmt>
+            <sourceDesc>
+                <biblStruct>
+                    <monogr>
+                        <author>Demosthenes</author>
+                        <title>Demosthenes</title>
+                        <title type="sub">Olynthiacs, Philippics, Minor Public Speeches, Speech Against Leptines, I-XVII, XX</title>
+                        <editor role="translator">James Herbert Vince</editor>
+                        <imprint>
+                            <pubPlace>London</pubPlace>
+                            <pubPlace>Cambridge, MA</pubPlace>
+                            <publisher>William Heinemann Ltd.</publisher>
+                            <publisher>Harvard University Press</publisher>
+                            <date type="printing">1930</date>
+                        </imprint>
+                        <biblScope unit="volume">1</biblScope>
+                    </monogr>
+                    <ref target="https://archive.org/details/in.ernet.dli.2015.12682/page/n27/mode/2up">Internet Archive</ref>
+                </biblStruct>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <refsDecl n="CTS">
+                <cRefPattern n="section"
+                    matchPattern="(\w+)"
+                    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1'])">
+                    <p>This pointer pattern extracts section</p>
+                </cRefPattern>
+            </refsDecl>
+            <refsDecl>
+                <refState unit="section"/>
+            </refsDecl>
+            <editorialDecl>
+                <quotation marks="none"/>
+            </editorialDecl>
+                <refsDecl xml:id="CTS">
+          <citeStructure match="/TEI/text/body" use="@xml:base">
+            <citeStructure unit="section" delim=":" match="div/div[@subtype='section']" use="@n"/>
+          </citeStructure>
+        </refsDecl>
+</encodingDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="eng">English</language>
+                <language ident="grc">Greek</language>
+            </langUsage>
+        </profileDesc>
+        <revisionDesc>
+          <change who="Charles Pletcher" when="2026-08-26">Add citeStructure refsDecl</change>
+            <change when="2018-12-12" who="Lisa Cerrato">converted to EpiDoc and CTS</change>
+            <change when="2014-08-01" who="Stella Dee">edited markup</change>
+            <change when="2014-07-01" who="Stella Dee">split composite text and converted to unicode</change>
+            <change when="1992-06-02" who="David Smith">inserted quotedtext tag around verse</change>
+        </revisionDesc>
+    </teiHeader>
+    
+    <text xml:lang="eng">
+        <body xml:base="urn:cts:greekLit:tlg0014.tlg001.perseus-eng2">
+        <div n="urn:cts:greekLit:tlg0014.tlg001.perseus-eng2" type="translation" xml:lang="eng">
+<div type="textpart" subtype="section" n="8"><p>Men of <placeName key="perseus,Athens">Athens</placeName>, you must not let slip the opportunity that offers, nor make the blunder you have so often made before. When we returned from the Euboean expedition<note resp="Loeb" anchored="true">The Athenians took <placeName key="tgn,7002677">Euboea</placeName> from the Thebans in <date when="-0357">357</date>.</note> and Hierax and Stratocles, the envoys of <placeName key="perseus,Amphipolis">Amphipolis</placeName>, mounted this platform and bade you sail and take over their city, if we had shown the same earnestness in our own cause as in defence of the safety of <placeName key="tgn,7002677">Euboea</placeName>, <placeName key="perseus,Amphipolis">Amphipolis</placeName> would have been yours at once and you would have been relieved of all your subsequent difficulties.</p></div> 
+<div type="textpart" subtype="section" n="9"><p>Once again, when news came of the siege of <placeName key="perseus,Pydna">Pydna</placeName>, of <placeName key="tgn,6004814">Potidaea</placeName>, of <placeName key="perseus,Methone">Methone</placeName>, of <placeName key="tgn,7012084">Pagasae</placeName>,<note resp="Loeb" anchored="true">In <date when="-0357">357</date>, <date when="-0356">356</date>, <date when="-0354">354</date>, and <date when="-0352">352</date> respectively.</note> and of the rest of them—not to weary you with a complete catalogue—if we had at that time shown the required zeal in marching to the help of the first that appealed, we should have found Philip today much more humble and accommodating. Unfortunately we always neglect the present chance and imagine that the future will right itself, and so, men of <placeName key="perseus,Athens">Athens</placeName>, Philip has us to thank for his prosperity. We have raised him to a greater height than ever king of <placeName key="tgn,7006667">Macedonia</placeName> reached before. Today this opportunity comes to us from the Olynthians unsought, a fairer opportunity than we have ever had before.</p></div> 
+<div type="textpart" subtype="section" n="14"><p rend="indent"><q type="spoken">Well,</q> some of you may say, <q type="spoken">why tell us this now?</q> Because, men of <placeName key="perseus,Athens">Athens</placeName>, I want you to know and realize two things: first, what an expensive game it is to squander your interests one by one; and secondly, the restless activity which is ingrained in Philip’s nature, and which makes it impossible for him ever to rest on his laurels. But if Philip adopts the principle that he ought always to be improving his position, and you the principle of never facing your difficulties resolutely, just reflect what is likely to be the end of it all.</p></div> 
+<div type="textpart" subtype="section" n="20"><p>Only it is my opinion that we must provide soldiers and that there must be one uniform system of pay in return for service. Your opinion, however, is that you should, without any trouble, just appropriate the money for your festivals.<note resp="Loeb" anchored="true">The Theoric Fund had been instituted by Pericles, nominally to enable the poorer citizens to attend the public festivals. It would seem that definite sums were alloted to the various departments of State expenditure, and the surplus was at the disposal of the democracy for special military or other objects. Somewhere about <date when="-0354">354</date> Eubulus, who was one of the board which controlled the Theoric Fund, carried a law appropriating to it the <emph>whole</emph> of the surplus revenue. He does not seem to have starved the defensive services, but he left no provision for a war, except by means of an extraordinary levy or <foreign xml:lang="grc">ἐσφορά</foreign>. Either in <date when="-0360">360</date>, or perhaps in <date when="-0349">349</date> before the delivery of the third Olynthiac, an attempt to revert to the earlier arrangement was followed by the usual <foreign xml:lang="grc">γραφὴ παρανόμων</foreign>, and Eubulus is alleged to have confirmed the bad system by making it a capital offence even to propose a diversion of the fund. Demosthenes approaches the subject with a studied show of embarrassment.</note> Then the only alternative is a war-tax, heavy or light, as circumstances demand. Only money we must have, and without money nothing can be done that ought to be done. There are other proposals before you for raising supplies; choose whichever of them you think expedient, and, while there is yet time, grapple with the problem.</p></div> 
+            </div>
+
+        </body>
+    </text>
+</TEI>

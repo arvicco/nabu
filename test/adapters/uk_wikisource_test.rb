@@ -29,6 +29,17 @@ module Adapters
 
     def envelope(pageid) = JSON.parse(File.read(File.join(FIXTURES, "pages", "#{pageid}.json")))
 
+    # The section author (автор_секції) answers before the work author;
+    # назва names the parent work on a section page (секція filled).
+    def test_author_and_parent_work_ride_metadata
+      meta = documents.first.metadata
+      assert_equal "Симеон Коростенський", meta["author"]
+      assert_equal "Сборникъ лѣтописей, относящихся къ исторіи Южной и Западной Руси", meta["work"]
+      bare = envelope(50_958)
+      assert_nil conformance_adapter.parent_work(bare["wikitext"]),
+                 "a label-less relative link ([[../]]) names nothing"
+    end
+
     def test_discovery_census
       assert_equal %w[urn:nabu:uk-wikisource:40746], conformance_adapter.discover(FIXTURES).map(&:id)
       skips = conformance_adapter.discovery_skips(FIXTURES)
