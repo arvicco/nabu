@@ -698,6 +698,102 @@ class StatusReportTest < Minitest::Test
     assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} \(\+1 ~0 -0 !0\)/, out)
   end
 
+  # -- module + dictionary rows report their own grains ----------------------
+
+  # A kind: module holds no catalog rows by invariant: the detail block and
+  # the long table carry its seam census (nabu-lects — read from the
+  # canonical tree) or, for a census-less module, the pin it is held at.
+  # The compact table stays silent for modules (the P40-s design).
+  def test_module_rows_carry_the_seam_census_or_the_pin
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = load_registry(<<~YAML)
+      nabu-lects:
+        adapter: Nabu::Adapters::NabuLects
+        kind: module
+        wired: true
+        sync_policy: manual
+      nabu-places:
+        adapter: Nabu::Adapters::NabuPlaces
+        kind: module
+        wired: true
+        sync_policy: manual
+    YAML
+    registry["nabu-lects"].sync_source!(db)
+    registry["nabu-places"].sync_source!(db).update(last_sync_sha: "fedcba9876543210")
+    Dir.mktmpdir do |canonical|
+      lects_dir = File.join(canonical, "nabu-lects")
+      FileUtils.mkdir_p(lects_dir)
+      %w[lects.yml codemap.yml].each do |name|
+        FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-lects"), name), lects_dir)
+      end
+
+      detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "nabu-lects",
+                                                canonical_dir: canonical)
+      assert_match(/holds:\s+246 anchors · 125 stages · 27 varieties · 157 codemap rows/, detail)
+      places = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "nabu-places",
+                                                canonical_dir: canonical)
+      assert_match(/holds:\s+module @ fedcba987654/, places)
+
+      long = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: true,
+                                       canonical_dir: canonical)
+      assert_match(/nabu-lects\s+-\s+module\s+up=module\s+246 anchors · 125 stages/, long)
+      assert_match(/nabu-places\s+-\s+module\s+up=module\s+module @ fedcba987654/, long)
+
+      compact = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, canonical_dir: canonical)
+      refute_match(/anchors|module @/, compact, "the compact table keeps modules silent")
+    end
+  end
+
+  # A dictionary source's detail/long rows count its dictionaries beside
+  # the entries (the dicts/entries pair, docs/pass's twin).
+  def test_dictionary_rows_count_dictionaries_beside_entries
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = load_registry(<<~YAML)
+      fake-dict:
+        adapter: StatusReportTest::FakeDictAdapter
+        wired: true
+        sync_policy: auto
+    YAML
+    source = registry["fake-dict"].sync_source!(db)
+    %w[lsj mw].each_with_index do |slug, d|
+      dictionary = Nabu::Store::Dictionary.create(source_id: source.id, slug: slug, title: slug, language: "grc")
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dictionary.id, urn: "urn:nabu:dict:#{slug}:n", entry_id: "n#{d}",
+        key_raw: "k", headword: "h", headword_folded: "h",
+        gloss: "g", body: "b", content_sha256: "s#{d}", revision: 1, withdrawn: false
+      )
+    end
+
+    detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "fake-dict")
+    assert_match(/dicts:\s+2\n\s+entries:\s+2/, detail)
+    long = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: true)
+    assert_match(/fake-dict\s+wired\(a\)\s+source\s+up=\S+\s+dicts=2 entries=2\s+attribution/, long)
+  end
+
+  # A passage source holding a dictionary lane (dcs-shaped) keeps its
+  # docs/pass and adds the dicts/entries pair; one holding none is
+  # byte-identical to before.
+  def test_a_passage_source_with_a_dictionary_lane_adds_the_pair
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    source = registry["fake-src"].sync_source!(db)
+    Nabu::Store::Loader.new(db: db, source: source).load([seed_document])
+    plain = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: true)
+    assert_match(/up=\S+\s+docs=1 pass=2\s+attribution/, plain)
+
+    dictionary = Nabu::Store::Dictionary.create(source_id: source.id, slug: "lane", title: "Lane", language: "grc")
+    Nabu::Store::DictionaryEntry.create(
+      dictionary_id: dictionary.id, urn: "urn:nabu:dict:lane:n", entry_id: "n",
+      key_raw: "k", headword: "h", headword_folded: "h",
+      gloss: "g", body: "b", content_sha256: "s", revision: 1, withdrawn: false
+    )
+    laned = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: true)
+    assert_match(/docs=1 pass=2 dicts=1 entries=1\s+attribution/, laned)
+  end
+
   private
 
   def single_source_registry

@@ -271,6 +271,22 @@ module Nabu
           language: "xto",
           title: "Wiktionary — Tocharian A (kaikki.org extract)"
         },
+        # -- Mycenaean Greek, ATTESTED, the P29-1 Umbrian rider shape
+        # verbatim (real ISO 639-3 gmy, no display asterisk). Census of
+        # the full download 2026-10-18: 542 records / 481 distinct words
+        # / 669 senses; 486 headwords in real Linear B codepoints
+        # (U+10000 syllabary, U+10100 Aegean numerals — 𐀞𐀳 pa-te
+        # "father"); 89 syllable + 17 logogram `character` records sit
+        # beside the words; 321 with etymology_text; only 4 with
+        # descendants (the grc/el/omn loan edges). etymology_number is a
+        # STRING where present (the ojp quirk; 24 records).
+        "wiktionary-gmy" => {
+          subdir: "mycenaean-greek",
+          filename: "kaikki.org-dictionary-MycenaeanGreek.jsonl",
+          url: "https://kaikki.org/dictionary/Mycenaean%20Greek/kaikki.org-dictionary-MycenaeanGreek.jsonl",
+          language: "gmy",
+          title: "Wiktionary — Mycenaean Greek (kaikki.org extract)"
+        },
         # -- P32-3 (the Sino reconstruction shelf; OWNER-APPROVED disk
         # call) -- ATTESTED Chinese, the whole-macrolanguage extract:
         # ~1.1 GB / 323,840 records (census 2026-07-19 on the full file;

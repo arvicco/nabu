@@ -90,6 +90,10 @@ module Nabu
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
           "dacon" => :structured,
+          "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
+          #   IIIB") bands only once period_bands.yml carries ruled rows; the
+          #   site/findspot place hash projects meanwhile
+
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)
           "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
@@ -115,6 +119,8 @@ module Nabu
           "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
+          "ig-cyprus" => :structured, # IG XV 1,1: origDate prose, unsigned BCE years and
+          #                             centuries (the syllabary's era); place = origPlace
           "itant" => :structured,
           "itkc" => :structured,
           "ja-wikisource" => :era_band_key,
@@ -132,6 +138,8 @@ module Nabu
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
           "obi-burmese" => :ce_year_text,
+          "ociana" => :place_only, # site + region/country + the WGS84 pair; its findDate is
+          #                          the DISCOVERY date (survey year), never a dating claim
           "ogham" => :century_prose,
           "okhc" => :year_key,
           "openmgh" => :printed_year_text,

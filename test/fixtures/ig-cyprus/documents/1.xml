@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+    <?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+    <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Weihinschrift, eteokyprisch und griechisch</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>Inscriptiones Graecae</authority>
+                <idno type="URI">https://telota.bbaw.de/ig/digitale-edition/inschrift/IG XV 1, 1</idno>
+                <idno type="localId">IG XV 1, 1 </idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/legalcode). All reuse or distribution of this work must contain somewhere a link back to this page.</licence>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <msName>IG XV 1, 1</msName>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><objectType>Basis</objectType> (<material>Marmor</material>)</support>
+                            </supportDesc>
+                        </objectDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>Amathus</origPlace>
+                            <origDate>330-310</origDate>
+                        </origin>
+                        <provenance type="found">Akropolis, jetzt Mus. Limassol</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+        <text>
+            <body>
+            <div type="edition" xml:space="preserve">
+                <ab xmlns="http://www.tei-c.org/ns/1.0"><div xmlns="http://www.tei-c.org/ns/1.0" type="textpart" subtype="fragment" n="I"><lb n="1"/>] ị-te-ọ-..-..-..-j̣ạ [  ←</div><div xmlns="http://www.tei-c.org/ns/1.0" type="textpart" subtype="fragment" n="II"><lb n="1"/>θησαυρὸν Κυπρίαι κ̣αὶ̣ [Ὀρε]σ̣θ̣έως εἰ[κόνα] μορ̣[φ]ῆ̣[ς]<lb n="2"/>υἱοῦ τήνδε ἀνέθηκε Ἀνδ̣ρο̣κλῆς βασιλεύς.</div></ab>
+            </div>
+            <div type="translation" xml:lang="DE" resp="Klaus Hallof"><ab xmlns="http://www.tei-c.org/ns/1.0"><div xmlns="http://www.tei-c.org/ns/1.0" type="textpart" subtype="fragment" n="I"><lb n="1"/>[<hi rend="italic">eteokyprisch</hi>]</div><div xmlns="http://www.tei-c.org/ns/1.0" type="textpart" subtype="fragment" n="II"><lb n="1"/>Die Schatztruhe und diese Bildgestalt hier hat der kyprischen (Aphrodite) des Orestheus<lb n="2"/>Sohn geweiht, der König Androkles.</div></ab></div>
+            <div type="bibliography">
+                <p>Inscriptiones Cypri. Pars I. Inscriptiones Cypri syllabicae. Fasc. 1. Inscriptiones Amathuntis, Curii, Marii. Edid. Artemis Karnava et Massimo Perna adiuvante Markus Egetmeyer. – Berlin 2020</p>
+            </div>
+            </body>
+        </text>
+</TEI>

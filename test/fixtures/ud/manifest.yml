@@ -168,3 +168,7 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Guarani-OldTuDeT/master/gn_oldtudet-ud-test.conllu
     whole: true
     trim: none
+  - path: phrygian-kul/xpg_kul-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Phrygian-KUL/master/xpg_kul-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of xpg_kul-ud-test.conllu (203 blocks upstream, 195,121 B -> 10,968 B; no MWT/empty-node lines file-wide; opens with Old Phrygian Midas City TM756906-1; Phrygian, retrieved 2026-10-18)

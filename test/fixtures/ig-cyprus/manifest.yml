@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The six records are byte-identical raw GETs from the record API
+# (retrieved 2026-10-18; the URL is api/xml/<listing id> with spaces as
+# %20). map/inscriptions.json is a documented TRIM of the 449 KB listing
+# (the whole IG digital edition, 33 fascicle keys): kept are the IG XV 1,1
+# key with these six records' ids and the IG XV 2,1 key with two ids (the
+# key-selection case), every key and id string byte-identical and in
+# upstream order — so adapter_test stays null (a re-run against the full
+# listing would false-fail the fetch tests' id count).
+source: ig-cyprus
+adapter_test:
+retrieved: 2026-10-18
+files:
+  - path: documents/1.xml
+    url: https://telota.bbaw.de/ig/api/xml/IG%20XV%201,%201
+    whole: true
+    trim: none (Eteocypriot + alphabetic-Greek bilingual from Amathus — fragments I/II, BCE year range, German translation with the italic Eteocypriot placeholder)
+  - path: documents/5.xml
+    url: https://telota.bbaw.de/ig/api/xml/IG%20XV%201,%205
+    whole: true
+    trim: none (pure Eteocypriot, five lines, century date "4.Jh.", placeholder-only German div)
+  - path: documents/180.xml
+    url: https://telota.bbaw.de/ig/api/xml/IG%20XV%201,%20180
+    whole: true
+    trim: none (syllabic Greek epitaph — unnumbered <lb/> + smallit "linea" ruling lines, letterspacing hi, GRC transcription + German translation)
+  - path: documents/237-I.xml
+    url: https://telota.bbaw.de/ig/api/xml/IG%20XV%201,%20237(I)
+    whole: true
+    trim: none (suffixed roman id, tab before the direction arrow, "Anfang 4.Jh.")
+  - path: documents/254-1.xml
+    url: https://telota.bbaw.de/ig/api/xml/IG%20XV%201,%20254(1)
+    whole: true
+    trim: none (suffixed digit id, alphabetic letter + a private-use glyph U+F0011, unnumbered placeholder German line)
+  - path: documents/410.xml
+    url: https://telota.bbaw.de/ig/api/xml/IG%20XV%201,%20410
+    whole: true
+    trim: none (Stasioikos II coin legends — twelve fragments (a)–(l), syllabic and alphabetic lines alternating, smallit "tit. evanidus")
+  - path: map/inscriptions.json
+    url: https://telota.bbaw.de/ig/api/inscriptions
+    whole: false
+    trim: two of 33 fascicle keys kept (IG XV 1,1 with six of its 593 ids; IG XV 2,1 with two of 916), key and id strings byte-identical, upstream order

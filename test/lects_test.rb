@@ -355,7 +355,9 @@ class LectsTest < Minitest::Test
   end
 
   def test_varieties_of_is_empty_for_an_anchor_without_varieties_or_undefined
-    assert_empty lects.varieties_of("grc")
+    # grc served here until it grew the Arcadocypriot variety
+    # (fixture refresh 2026-10-18); gmy stays variety-less.
+    assert_empty lects.varieties_of("gmy")
     assert_empty lects.varieties_of("zzz")
   end
 

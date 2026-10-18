@@ -82,6 +82,14 @@ class FacetMapTest < Minitest::Test
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
 
+  # ociana: the per-record script (the lect stage-flip key) and the
+  # recording survey, both stored verbatim on every document.
+  def test_shipped_config_projects_ociana_script_and_survey
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    assert_equal({ "script" => "script", "survey" => "collection" },
+                 Nabu::FacetMap.load(path).fields_for("ociana"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)

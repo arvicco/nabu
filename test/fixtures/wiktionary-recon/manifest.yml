@@ -1,11 +1,12 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All fourteen files are documented TRIMs (whole: false) of the upstream
-# extracts (258 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
+# All fifteen files are documented TRIMs (whole: false) of the upstream
+# extracts (273 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
 # Celtic + 3 P29-1 Umbrian + 4 P29-0 Etruscan + 5 P32-5 Old Japanese
-# + 11 P32-3/P104-2 Chinese lines, of which the whitespace-word
-# "Unsupported titles/Space" line mints NO entry — 257 entries; every
+# + 15 Mycenaean Greek + 11 P32-3/P104-2 Chinese lines, of which the
+# whitespace-word "Unsupported titles/Space" line mints NO entry — 272
+# entries; every
 # kept line byte-verbatim), so a fresh GET
 # returns the full extract and is fetched for URL-liveness only, never
 # byte-compared. Re-apply the README extraction recipes after any
@@ -72,3 +73,7 @@ files:
     url: https://kaikki.org/dictionary/Chinese/kaikki.org-dictionary-Chinese.jsonl
     whole: false
     trim: 6 P32-3 lines retrieved 2026-07-19 (upstream lines 2/3/4/9/122/18894 — GDP no-MC modern noun; A verb/adj etymology_number homographs; 犬 — MC + BOTH OC reconstructions; MD soft-redirect stub; 茶 — Sino-Xenic borrowed ja/ryu/ko descendants) + 5 P104-2 regression lines cut 2026-09-26 from the same download (line 53403 — the "Unsupported titles/Space" whitespace-word record, skipped not minted; lines 5047-5050 — the 夆 quartet whose etymology_number-"3" record collided with the positional :3 id) — 1,181,142,520 B -> ~201 KB; recipe in README.md
+  - path: kaikki.org-dictionary-MycenaeanGreek.jsonl
+    url: https://kaikki.org/dictionary/Mycenaean%20Greek/kaikki.org-dictionary-MycenaeanGreek.jsonl
+    whole: false
+    trim: 15 lines retrieved 2026-10-18 (upstream lines 1/2/4/5/6/15/23/24/25/27/135/199/273/278/279 — 𐀞𐀳 1/2 STRING etymology_number homographs; 𐀃𐀏 noun:1/noun:2/verb:3; 𐀩𐀀 no-etymology noun; 𐀁𐀐 form-of verb; 𐀀𐀯𐀹𐀊 borrowed grc descendants; 𐄇 Aegean numeral; 𐀼𐀓𐀯𐀍 unflagged grc descendant; 𐀏 syllable + logogram split by pos) — 713,109 B -> 22,848 B; recipe in README.md

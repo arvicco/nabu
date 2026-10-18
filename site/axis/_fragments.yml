@@ -40,6 +40,7 @@ kinds:
   edh: inscriptions
   riig: inscriptions
   isicily: inscriptions
+  ig-cyprus: inscriptions
   itant: inscriptions
   ceipom: inscriptions
   open-etruscan: inscriptions
@@ -49,6 +50,7 @@ kinds:
   rundata: inscriptions
   lexlep: inscriptions
   edr: inscriptions
+  ociana: inscriptions
   elephantine: papyri & ostraca
   # cuneiform tablet corpora
   tlhdig: tablets

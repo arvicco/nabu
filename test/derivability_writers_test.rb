@@ -132,15 +132,21 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/bu-ajami/ (the NEH Ajami item pages under items/ + their
   # transcription PDFs under files/, .part + rename, and its
   # .bu-ajami-fetch.json pin) inside Adapter#fetch — the elektire_fetch
-  # WP-JSON crawl law kind.
+  # WP-JSON crawl law kind. The damos adapter writes canonical/damos/
+  # (the POSTed listing under map/ + items/<id>.json, tmp+rename, and
+  # its .damos-crawl.json ledger) inside Adapter#fetch — the
+  # ndl-kotenseki crawl law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
   # write-through law kind (grant_gate's grants.yml sibling); never db/.
+  # The ig-cyprus adapter writes its crawled IG XV 1,1 records
+  # (canonical/ig-cyprus/documents/, tmp+rename) inside Adapter#fetch —
+  # the riig crawl law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
-    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
+    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
@@ -169,6 +175,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/adapters/mdz_protestant.rb
+    nabu/adapters/damos.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
