@@ -186,10 +186,29 @@ module Store
       expected = { "sillok" => "subject_classes", "itkc" => "genre_classes" }.sum do |slug, field|
         stored_labels(slug, field).size
       end
-      assert_equal expected, summary.rows
-      assert_equal [13, 24, 10], [summary.passages, summary.rows, summary.values],
-                   "the fixture census: 13 labelled article passages, 24 pairs, 5 + 5 labels"
-      assert_equal %w[genre subject], @db[:passage_facet_values].distinct.select_map(:facet).sort
+      assert_equal expected, pair_count(%w[subject genre])
+      assert_equal 24, expected, "the fixture census: 24 label pairs, 5 + 5 labels"
+      # sillok's index markup: 純宗 · 純明皇后/純明孝皇后 (one M_ id, two
+      # surfaces) · 晋山府院君/河崙 · 鄭麟趾 · 孝宗… persons, 太廟/璿源殿
+      # places, 永樂/正統 eras across its 5 article passages.
+      assert_equal 7, pair_count(%w[person]), "one pair per distinct (passage, surface, ref)"
+      assert_equal [2, 2], [pair_count(%w[place]), pair_count(%w[era])]
+      assert_equal expected + 11, summary.rows
+      assert_equal %w[era genre person place subject], @db[:passage_facet_values].distinct.select_map(:facet).sort
+      assert_equal ["nikh:M_0006771"], @db[:passage_facet_values].where(value: "純明孝皇后").select_map(:ref)
+    end
+
+    # The NIKH goryeosa family's every mined kind projects, refs riding.
+    def test_shipped_config_projects_the_goryeosa_index_markup
+      goryeosa = make_source("goryeosa")
+      workdir = Nabu::TestSupport.fixtures("goryeosa")
+      Nabu::Store::Loader.new(db: @db, source: goryeosa)
+                         .load_from(Nabu::Adapters::Goryeosa.new, workdir: workdir, full: true)
+      map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+      Nabu::Store::PassageFacetBuilder.refresh_source!(catalog: @db, slug: "goryeosa", facet_map: map)
+      facets = @db[:passage_facet_values].where(source_id: goryeosa.id).distinct.select_map(:facet).sort
+      assert_equal %w[book office org person place], facets
+      assert_equal ["nikh:p094190"], @db[:passage_facet_values].where(value: "明仲").select_map(:ref)
     end
 
     private
@@ -200,6 +219,10 @@ module Store
                     .where(Sequel[:documents][:source_id] => source_id)
                     .select_map(Sequel[:passages][:annotations_json])
                     .flat_map { |json| Array(JSON.parse(json)[field]).uniq }
+    end
+
+    def pair_count(facets)
+      @db[:passage_facets].join(:passage_facet_values, id: :value_id).where(facet: facets).count
     end
 
     def pairs_for(passage_id)
