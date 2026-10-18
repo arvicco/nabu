@@ -26,6 +26,7 @@ class E84000Test < Minitest::Test
   TOH846A = "urn:nabu:e84000:toh846a"
   TOH539E = "urn:nabu:e84000:toh539e"
   TOH761 = "urn:nabu:e84000:toh761"
+  TOH471 = "urn:nabu:e84000:toh471"
   TOH3156 = "urn:nabu:e84000:toh3156"
   TOH1_6 = "urn:nabu:e84000:toh1-6"
 
@@ -43,7 +44,7 @@ class E84000Test < Minitest::Test
 
   def test_discover_yields_toh_slugs_from_both_publication_cones
     refs = adapter.discover(workdir).to_a
-    assert_equal [TOH1_6, TOH3156, TOH539E, TOH761, TOH846A], refs.map(&:id),
+    assert_equal [TOH1_6, TOH3156, TOH471, TOH539E, TOH761, TOH846A], refs.map(&:id),
                  "one ref per published text, slugged by its first Toh number, sorted; " \
                  "placeholders and the duplicate loser never become refs"
     assert(refs.all? { |ref| ref.source_id == "e84000" })
@@ -53,8 +54,8 @@ class E84000Test < Minitest::Test
 
   def test_discovery_skips_census_counts_stubs_and_duplicate_losers
     skips = adapter.discovery_skips(workdir)
-    assert_equal 2, skips.skipped_by_rule,
-                 "1 placeholder stub + 1 duplicate-pair loser skip by rule, censused"
+    assert_equal 3, skips.skipped_by_rule,
+                 "2 placeholder stubs (kangyur + tengyur) + 1 duplicate-pair loser skip by rule, censused"
     assert_equal 0, skips.unrecognized
   end
 
@@ -223,6 +224,26 @@ class E84000Test < Minitest::Test
                  "monk the colophon names) is a separate field, never mixed into the team list"
   end
 
+  # The source text's own persons (sourceDesc bibl authors): every Tibetan
+  # translator, the role-less ORIGINAL author, and contested attributions,
+  # each per its bibl — "persons" verbatim with roles, flat arrays for the
+  # facet lane. The 84000 team stays the separate "translators" list.
+  def test_source_desc_persons_carry_original_authors_and_every_tibetan_translator
+    myth = adapter.parse(ref_for(TOH471)).metadata
+    assert_equal [{ "name" => "Tathāgata­rakṣita", "role" => "author", "lang" => "Sa-Ltn", "toh" => "toh2006" }],
+                 myth["persons"], "a role-less <author> is the original author, keyed to its own bibl"
+    assert_equal ["Tathāgata­rakṣita"], myth["authors"], "verbatim, soft hyphen included"
+    assert_nil myth["translators_tib"]
+
+    vinaya = adapter.parse(ref_for(TOH1_6)).metadata
+    assert_equal ["Palgyi Lhünpo", "Sarvajñādeva", "Vidyākaraprabha", "Dharmākara", "Paltsek"],
+                 vinaya["translators_tib"],
+                 "every translatorTib, not only the first"
+    assert_equal "Palgyi Lhünpo", vinaya["translator_tib"], "the first stays where it always was"
+    assert_equal(%w[translatorTib], vinaya["persons"].map { |person| person["role"] }.uniq)
+    assert_nil vinaya["authors"], "a sūtra names no author — none is invented"
+  end
+
   # -- license -----------------------------------------------------------------
 
   def test_manifest_class_is_nc_with_the_terms_of_use_caveat_pinned
@@ -240,15 +261,15 @@ class E84000Test < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 5, first.added
+    assert_equal 6, first.added
     assert_equal 0, first.errored
-    assert_equal 47, db[:passages].count,
-                 "10 toh846a + 10 toh539e + 3 toh761(trim) + 15 toh3156 + 9 toh1-6(trim)"
+    assert_equal 50, db[:passages].count,
+                 "10 toh846a + 10 toh539e + 3 toh761(trim) + 15 toh3156 + 9 toh1-6(trim) + 3 toh471(trim)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 5, second.skipped
-    assert_equal 47, db[:passages].count
+    assert_equal 6, second.skipped
+    assert_equal 50, db[:passages].count
   ensure
     db&.disconnect
   end

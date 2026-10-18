@@ -83,6 +83,11 @@ module Nabu
       Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
 
+      # The role a role-less sourceDesc <author> carries in metadata
+      # "persons": the element itself says author — the text's original
+      # author (shared with Nabu::E84000DergeTitles, the placeholder side).
+      ORIGINAL_AUTHOR_ROLE = "author"
+
       # The Toh-number base: part-publications (upstream bibl keys toh1-1 …
       # toh44-45, one Toh published chapter-wise) strip their "-<part>"
       # suffix; letter suffixes (toh846a) are part of the Toh number itself
@@ -197,9 +202,11 @@ module Nabu
           @capture = nil
           @titles = {}
           @authors = []
+          @source_persons = []
+          @current_source_person = nil
+          @bibl_key = nil
           @toh = []
-          @header = { ut_id: nil, edition: nil, publication_date: nil, bibl_scope: nil,
-                      translator_tib: nil }
+          @header = { ut_id: nil, edition: nil, publication_date: nil, bibl_scope: nil }
           # text state
           @section = nil            # :front | :body | :back
           @section_depth = nil
@@ -297,7 +304,9 @@ module Nabu
 
         def header_end(name)
           @capture = nil if %w[title author edition date biblScope].include?(name)
-          finish_author if name == "author"
+          if name == "author"
+            @container == "sourceDesc" ? finish_source_person : finish_author
+          end
           @container = nil if HEADER_CONTAINERS.include?(name)
         end
 
@@ -337,16 +346,32 @@ module Nabu
           when "bibl"
             key = presence(node.attribute("key"))
             @toh << key if key
+            @bibl_key = key
           when "biblScope"
             @capture = (@header[:bibl_scope] ||= +"") if @header[:bibl_scope].nil? && !node.empty_element?
           when "author"
-            # The HISTORICAL translator: sourceDesc's author role="translatorTib"
-            # names the Tibetan-era translator of the source text (toh3156's
-            # colophon monk), distinct from the 84000 team in titleStmt.
-            return unless node.attribute("role") == "translatorTib" && !node.empty_element?
+            # The SOURCE TEXT's persons, per bibl: role="translatorTib" the
+            # Tibetan-era translator (toh3156's colophon monk), a role-less
+            # <author> the text's original author ("Anon" is upstream's own
+            # claim), role="authorContested" one of several disputed
+            # attributions — all distinct from the 84000 team in titleStmt.
+            return if node.empty_element?
 
-            @capture = (@header[:translator_tib] ||= +"") if @header[:translator_tib].nil?
+            @current_source_person = { role: presence(node.attribute("role")) || ORIGINAL_AUTHOR_ROLE,
+                                       lang: presence(node.attribute("xml:lang")), toh: @bibl_key,
+                                       text: +"" }
+            @capture = @current_source_person[:text]
           end
+        end
+
+        def finish_source_person
+          person = @current_source_person
+          @current_source_person = nil
+          name = person && flatten(person[:text])
+          return unless name
+
+          @source_persons << { "name" => Normalize.nfc(name), "role" => person[:role],
+                               "lang" => person[:lang], "toh" => person[:toh] }.compact
         end
 
         # -- text: sections and divisions ------------------------------------
@@ -503,11 +528,22 @@ module Nabu
             "title_sanskrit" => flatten(@titles[:title_sanskrit]),
             "translators" => (translators.empty? ? nil : translators.map { |a| a[:name] }),
             "translator_main" => main&.fetch(:name),
-            "translator_tib" => flatten(@header[:translator_tib]),
+            "translator_tib" => source_names("translatorTib")&.first,
+            "persons" => (@source_persons unless @source_persons.empty?),
+            "authors" => source_names(ORIGINAL_AUTHOR_ROLE),
+            "authors_contested" => source_names("authorContested"),
+            "translators_tib" => source_names("translatorTib"),
             "edition" => flatten(@header[:edition]),
             "publication_date" => flatten(@header[:publication_date]),
             "bibl_scope" => flatten(@header[:bibl_scope])
           }.compact
+        end
+
+        # The distinct source-person names holding +role+, document order;
+        # nil when none.
+        def source_names(role)
+          names = @source_persons.select { |person| person["role"] == role }.map { |person| person["name"] }.uniq
+          names.empty? ? nil : names
         end
 
         # -- helpers ---------------------------------------------------------

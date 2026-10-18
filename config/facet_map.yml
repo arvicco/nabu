@@ -354,3 +354,26 @@ sources:
       authors: author         # kokin 121 · 廣瀬本 71 · 元暦校本 12 poets — the listPerson ids,
       #                         which ARE upstream's normalized names (在原元方, 雄略天皇)
       author_ids: author_id   # "kokubunken:在原元方" — the person-index slice key
+  # the 84000 header persons (sourceDesc bibl authors). On the derge shelves the
+  # E84000DergeTitles pass merges them into metadata AND writes these rows itself
+  # (it runs after the facet builders); the declarations here make any later
+  # facet refresh re-derive the same rows. Censuses: canonical/e84000 joined to
+  # the live derge rows, 2026-10-18.
+  derge-tengyur:              # 3,351 of 3,362 texts carry persons
+    fields:
+      authors: author         # 3,327 role-less originals, 672 names ("Anon" upstream's claim)
+      authors_contested: author_contested  # 66 disputed attributions, 48 names — never
+      #                         folded into author: the header says contested
+      translators_tib: translator  # 4,366 Tibetan-era translators, 1,252 names
+  derge-kangyur:              # 266 of 1,198 texts (most Kangyur keys are sūtras: no author)
+    fields:
+      authors: author         # 17
+      authors_contested: author_contested
+      translators_tib: translator  # 664, 202 names
+  e84000:                     # the published English translations' source-text persons
+    fields:
+      authors: author         # the role-less original author (6 publications)
+      authors_contested: author_contested
+      translators_tib: translator_tib  # the Tibetan-era translators, kept apart from the
+      #                         84000 English team ("translators", unfaceted) whose
+      #                         translation the document actually is

@@ -39,3 +39,11 @@ files:
     url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/placeholders/096-016_toh767-tantra_of_the_supreme_dancer_of_the_yaksas.xml
     whole: true
     trim: none
+  - path: "translations/kangyur/translations/083-019_toh471,2006-the_myth_chapter.xml"
+    url: "https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/083-019_toh471%2C2006-the_myth_chapter.xml"
+    whole: false
+    trim: "teiHeader + summary div + the first two body chunks, closing tags re-added (README; added 2026-10-18 from the local canonical sync)"
+  - path: translations/tengyur/placeholders/001-019_toh1127-prajnaparamitastotra.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/tengyur/placeholders/001-019_toh1127-prajnaparamitastotra.xml
+    whole: true
+    trim: none
