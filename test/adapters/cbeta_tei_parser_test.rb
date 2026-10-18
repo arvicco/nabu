@@ -12,6 +12,9 @@ class CbetaTeiParserTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("cbeta")
 
   T85 = File.join(FIXTURES, "T", "T85", "T85n2884.xml")
+  T85_2831 = File.join(FIXTURES, "T", "T85", "T85n2831.xml")
+  T10 = File.join(FIXTURES, "T", "T10", "T10n0285.xml")
+  K05 = File.join(FIXTURES, "K", "K05", "K05n0016.xml")
   T01 = File.join(FIXTURES, "T", "T01", "T01n0001-xu.xml")
   X01 = File.join(FIXTURES, "X", "X01", "X01n0001.xml")
   X55 = File.join(FIXTURES, "X", "X55", "X55n0899.xml")
@@ -80,6 +83,48 @@ class CbetaTeiParserTest < Minitest::Test
       assert_nil metadata["dynasty"]
       assert_nil metadata["facets"], "#{File.basename(path)}: no byline — no claim invented"
     end
+  end
+
+  # --- the body <byline> harvest: persons with typed roles -------------------
+  #
+  # Body bylines carry CBETA's typed role (cb:type author/Translator/editor/
+  # Collector/other…) and name preface and sub-work authors the header
+  # never does (T01's preface by 釋僧肇). Names ride verbatim (the reading
+  # text of the byline, anchors transparent); the ASCII role folds case.
+
+  def test_body_bylines_ride_as_persons_with_roles
+    metadata = parse(T01).metadata
+    assert_equal [{ "name" => "長安釋僧肇述", "role" => "author" },
+                  { "name" => "後秦弘始年佛陀耶舍共竺佛念譯", "role" => "translator" }],
+                 metadata["persons"]
+    assert_nil metadata["byline_authors"], "the header names an author — no byline author facet"
+  end
+
+  def test_untyped_and_other_bylines_keep_their_claim
+    assert_equal [{ "name" => "西晉月支三藏竺法護譯" }], parse(T10).metadata["persons"]
+    assert_equal [{ "name" => "侍者超常記錄", "role" => "other" }], parse(J36).metadata["persons"]
+    assert_equal [{ "name" => "唐三藏法師玄奘譯", "role" => "translator" }],
+                 parse(K05).metadata["persons"]
+  end
+
+  def test_author_byline_feeds_the_author_field_when_the_header_is_silent
+    metadata = parse(T85_2831).metadata
+    assert_nil metadata["author"], "the header <author> is empty"
+    assert_equal [{ "name" => "釋菩提達摩製", "role" => "author" }], metadata["persons"]
+    assert_equal ["釋菩提達摩製"], metadata["byline_authors"]
+  end
+
+  def test_fileless_bylines_mint_no_persons
+    assert_nil parse(T85).metadata["persons"]
+    assert_nil parse(T85).metadata["byline_authors"]
+  end
+
+  def test_repeated_bylines_dedupe_per_name_and_role
+    xml = File.read(K05).sub(%r{(<byline cb:type="translator">唐三藏法師玄奘譯</byline>)}, '\1\1')
+    document = Nabu::Adapters::CbetaTeiParser.new.parse(
+      StringIO.new(xml), urn: "urn:nabu:cbeta:K05n0016", canon: "K", canonical_path: K05
+    )
+    assert_equal [{ "name" => "唐三藏法師玄奘譯", "role" => "translator" }], document.metadata["persons"]
   end
 
   # The structural split on censused byline shapes (2026-09-26, whole-

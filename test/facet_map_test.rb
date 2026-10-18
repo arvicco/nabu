@@ -207,6 +207,16 @@ class FacetMapTest < Minitest::Test
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
 
+  # The CJK persons tail: person/place/series fields the CJK adapters
+  # now mine at parse time (bylines, header slots, catalog joins).
+  def test_shipped_config_projects_the_cjk_persons_tail
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    expected = {
+      "cbeta" => { "byline_authors" => "author" }
+    }
+    expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)
