@@ -672,6 +672,21 @@ module Store
                    row.values_at(:not_before, :not_after, :date_raw, :precision, :date_class)
     end
 
+    # honkoku: the NDL catalog record the HonkokuNdlCatalog join wrote —
+    # the item's own publication date, its raw labeled with the record.
+    def test_metadata_dates_honkoku_ndl_catalog_record
+      seed_metadata_doc("honkoku", "urn:nabu:honkoku:p:m1",
+                        { "ndl_catalog" => { "pid" => "2532153",
+                                             "date" => { "not_before" => 1605, "not_after" => 1605,
+                                                         "raw" => "[慶長10(1605)]" } } })
+      seed_metadata_doc("honkoku", "urn:nabu:honkoku:p:m2", { "label" => "no NDL record" })
+      build!
+      row = timeline_for("urn:nabu:honkoku:p:m1")
+      assert_equal [1605, 1605, "NDL catalog record (pid 2532153): [慶長10(1605)]", nil],
+                   row.values_at(:not_before, :not_after, :date_raw, :date_class)
+      assert_nil timeline_for("urn:nabu:honkoku:p:m2"), "no record, no row"
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

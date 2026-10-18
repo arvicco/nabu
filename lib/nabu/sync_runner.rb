@@ -341,6 +341,7 @@ module Nabu
         else
           reindex!(entry, adapter, progress, delta: reindex_delta(load_report, lane_report))
         end
+      refresh_honkoku_ndl_catalog(entry)
       refresh_catalog_lanes(entry, load_report)
       refresh_dictionary_stats(entry, combined_report)
       refresh_derge_titles(entry)
@@ -446,6 +447,24 @@ module Nabu
       return unless %w[e84000 derge-kangyur derge-tengyur].include?(entry.slug)
 
       E84000DergeTitles.new(catalog: @db, canonical_dir: @config.canonical_dir).run
+    end
+
+    # The honkoku <- NDL catalog join re-merges after a sync of either side
+    # (a honkoku re-parse reconciles the record away; an ndl fetch may
+    # re-derive the census) — BEFORE the catalog lanes, and the honkoku
+    # facet + metadata-date slices re-project behind it so they read the
+    # record just written (a sync of ndl-kotenseki never refreshes
+    # honkoku's slices on its own).
+    def refresh_honkoku_ndl_catalog(entry)
+      slugs = [HonkokuNdlCatalog::HONKOKU_SLUG, HonkokuNdlCatalog::NDL_SLUG]
+      return unless slugs.include?(entry.slug)
+
+      HonkokuNdlCatalog.new(catalog: @db, canonical_dir: @config.canonical_dir).run
+      slug = HonkokuNdlCatalog::HONKOKU_SLUG
+      Store::FacetBuilder.refresh_source!(catalog: @db, slug: slug,
+                                          facet_map: Nabu::FacetMap.load_default(config: @config))
+      Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: slug,
+                                                            canonical_dir: @config.canonical_dir)
     end
 
     # The AES <- AED title join re-fills after a sync of either side (an

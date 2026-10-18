@@ -123,6 +123,8 @@ module Nabu
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
+          "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
+          #                                  writes for NDL-held materials (出版日 envelope)
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
           "ig-cyprus" => :structured, # IG XV 1,1: origDate prose, unsigned BCE years and
@@ -777,6 +779,18 @@ module Nabu
         # ja-wikisource (P109-1): the adapter's era-category envelope —
         # {"not_before", "not_after", "raw" => "平安時代"} — rides as an
         # era attribution (precision "era", the cbeta dynasty precedent).
+        # honkoku: the "ndl_catalog" record (Nabu::HonkokuNdlCatalog) — the
+        # NDL item's own 出版日 envelope, the raw labeled with the record it
+        # came from so no reader takes it for honkoku's claim. The material
+        # IS the NDL item transcribed, so the row keeps the artifact class.
+        def ndl_catalog_date(meta)
+          record = meta["ndl_catalog"]
+          date = record.is_a?(Hash) ? record["date"] : nil
+          return [nil, nil, nil] unless date.is_a?(Hash)
+
+          [date["not_before"], date["not_after"], "NDL catalog record (pid #{record['pid']}): #{date['raw']}"]
+        end
+
         # ja-wikisource: the header's integer "year" — a one-year envelope,
         # its own labeled class "composition" (the work's year as the wiki
         # states it) — outranks the coarser era-category band.

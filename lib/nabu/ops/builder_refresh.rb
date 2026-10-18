@@ -12,7 +12,8 @@ module Nabu
     # builder invoked is drop-and-reproject, so the pass is idempotent
     # and db/ stays a pure function of the permanent folders.
     module BuilderRefresh
-      Summary = Data.define(:timeline, :facets, :kinds, :passage_facets, :lect_rows, :dictionary_stats, :derge_titles,
+      Summary = Data.define(:honkoku_ndl, :timeline, :facets, :kinds, :passage_facets, :lect_rows,
+                            :dictionary_stats, :derge_titles,
                             :aes_titles,
                             :lemma_rollups)
 
@@ -20,6 +21,10 @@ module Nabu
 
       def run(catalog:, config:, progress: nil)
         canonical_dir = config.canonical_dir
+        # The honkoku <- NDL catalog join FIRST: the facet map and the
+        # timeline below project the record it writes.
+        progress&.stage("honkoku ndl catalog")
+        honkoku_ndl = HonkokuNdlCatalog.new(catalog: catalog, canonical_dir: canonical_dir).run
         progress&.stage("timeline")
         timeline = Store::TimelineBuilder.rebuild!(catalog: catalog, canonical_dir: canonical_dir)
         # P122-1: the armed silver-date lane re-projects behind the timeline.
@@ -65,8 +70,8 @@ module Nabu
         # `lemma` / `language --curve/--mixing` desks follow every refresh.
         progress&.stage("lemma rollups")
         lemma_rollups = Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
-        Summary.new(timeline: timeline, facets: facets, kinds: kinds, passage_facets: passage_facets,
-                    lect_rows: lect_rows,
+        Summary.new(honkoku_ndl: honkoku_ndl, timeline: timeline, facets: facets, kinds: kinds,
+                    passage_facets: passage_facets, lect_rows: lect_rows,
                     dictionary_stats: dictionary_stats, derge_titles: derge_titles,
                     aes_titles: aes_titles,
                     lemma_rollups: lemma_rollups)

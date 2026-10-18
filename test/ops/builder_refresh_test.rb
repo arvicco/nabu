@@ -149,6 +149,29 @@ class BuilderRefreshTest < Minitest::Test
     assert_equal 1, summary.aes_titles.titled
   end
 
+  # The honkoku <- NDL catalog join runs FIRST, so the same refresh
+  # projects the record it writes: author/subject facets + a dated row.
+  def test_refresh_joins_the_ndl_catalog_record_before_projecting_it
+    source = Nabu::Store::Source.create(
+      slug: "honkoku", name: "honkoku", adapter_class: "X", license: "x",
+      license_class: "attribution", upstream_url: "x", enabled: true
+    )
+    doc = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:honkoku:p:m", language: "jpn", canonical_path: "x",
+      content_sha256: "3" * 64,
+      metadata_json: JSON.generate("manifest" => "https://dl.ndl.go.jp/api/iiif/2532153/manifest.json")
+    )
+    summary = Dir.mktmpdir do |dir|
+      File.symlink(File.join(Nabu::TestSupport::FIXTURES_ROOT, "ndl-kotenseki"), File.join(dir, "ndl-kotenseki"))
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+    end
+    assert_equal 1, summary.honkoku_ndl.joined
+    assert_equal %w[倭玉篇 辞書],
+                 @catalog[:document_facets].where(document_id: doc.id,
+                                                  facet: "subject").order(:value).select_map(:value)
+    assert_equal [1605, 1605], @catalog[:document_axes].where(document_id: doc.id).get(%i[not_before not_after])
+  end
+
   def test_refresh_is_reprojection_not_accretion
     Dir.mktmpdir do |dir|
       config = hybrid_config(dir)

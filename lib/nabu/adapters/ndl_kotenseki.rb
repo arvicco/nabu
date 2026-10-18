@@ -227,6 +227,36 @@ module Nabu
         { "name" => value.sub(/[[:space:]]+#{Regexp.escape(tokens.last)}\z/, ""), "role" => tokens.last }
       end
 
+      # The derived census.tsv as {pid => {column => value}} ({} when the
+      # file is absent). Public: the honkoku catalog join reads the same
+      # rows (Nabu::HonkokuNdlCatalog).
+      def self.census_table(path)
+        return {} unless File.file?(path)
+
+        header = nil
+        File.foreach(path).each_with_object({}) do |line, rows|
+          values = line.chomp.split("\t", -1)
+          (header = values) && next if header.nil?
+
+          rows[values[0]] = header.zip(values).to_h
+        end
+      end
+
+      # Every 4-digit year in the ||-separated W3CDTF value joins the
+      # envelope; the bare unknown-date sentinel mints nothing; the
+      # prose 出版日 is the raw.
+      def self.date_envelope(bib)
+        value = bib["w3cdtf"].to_s.strip
+        return nil if value.empty? || value == DATE_SENTINEL
+
+        years = value.scan(/\b(\d{4})\b/).flatten.map { |year| Integer(year, 10) }
+        return nil if years.empty?
+
+        raw = bib["pub_date"].to_s.strip
+        { "not_before" => years.min, "not_after" => years.max,
+          "raw" => raw.empty? ? value : Normalize.nfc(raw) }
+      end
+
       private
 
       # -- fetch internals ---------------------------------------------------
@@ -424,20 +454,7 @@ module Nabu
       # process — discover + parse must not re-read per document).
       def census_row(workdir, pid)
         @census ||= {}
-        @census[workdir] ||= begin
-          path = File.join(workdir, CENSUS_TSV)
-          if File.file?(path)
-            header = nil
-            File.foreach(path).each_with_object({}) do |line, rows|
-              values = line.chomp.split("\t", -1)
-              (header = values) && next if header.nil?
-
-              rows[values[0]] = header.zip(values).to_h
-            end
-          else
-            {}
-          end
-        end
+        @census[workdir] ||= self.class.census_table(File.join(workdir, CENSUS_TSV))
         @census[workdir][pid] || {}
       end
 
@@ -458,26 +475,11 @@ module Nabu
         end
         parts = bib["author"].to_s.split("||").reject { |part| part.strip.empty? }
         metadata["authors"] = parts.map { |part| self.class.author_part(part) } unless parts.empty?
-        date = date_envelope(bib)
+        date = self.class.date_envelope(bib)
         metadata["date"] = date if date
         facets = facets_for(bib)
         metadata["facets"] = facets unless facets.empty?
         metadata
-      end
-
-      # Every 4-digit year in the ||-separated W3CDTF value joins the
-      # envelope; the bare unknown-date sentinel mints nothing; the
-      # prose 出版日 is the raw.
-      def date_envelope(bib)
-        value = bib["w3cdtf"].to_s.strip
-        return nil if value.empty? || value == DATE_SENTINEL
-
-        years = value.scan(/\b(\d{4})\b/).flatten.map { |year| Integer(year, 10) }
-        return nil if years.empty?
-
-        raw = bib["pub_date"].to_s.strip
-        { "not_before" => years.min, "not_after" => years.max,
-          "raw" => raw.empty? ? value : Normalize.nfc(raw) }
       end
 
       # Both 件名 and コレクション are ||-multi (the dataset's own
