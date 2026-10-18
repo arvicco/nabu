@@ -171,6 +171,14 @@ sources:
     # americas package merged the same day).
     zap: { lect: "zap:col", tier: certain }
     xzp: { lect: "zap:col", tier: certain }
+  ig-cyprus:
+    # The Cypriot syllabary fascicle IS pre-Hellenistic Cyprus: its Greek
+    # is the Arcadocypriot dialect by the edition's own identity (the
+    # registry's grc/cyp variety, minted 2026-10-18). Eteocypriot (ecy)
+    # and und-Latn documents are untouched — the override keys on grc
+    # alone. Upstream metadata taken at face value, the parse-time
+    # mapping discipline.
+    grc: { lect: "grc/cyp", tier: certain }
   ud:
     # The ruled exception to D57-f (ud deliberately unstaged): the Old
     # Guaraní treebank (Montoya/Restivo, 1639-1724) is precisely a stage

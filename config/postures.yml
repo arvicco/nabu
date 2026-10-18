@@ -715,11 +715,10 @@ sources:
   ociana:
     kind: {posture: unclassified, note: "no genre field upstream — overwhelmingly signature
         graffiti (\"By N son of N\"), with prayers, laments and tomb texts unmarked"}
-    lect: {posture: identity, note: "the epigraphic-belt registry package (the xna anchor with
-        its saf/his/dad/tay varieties, plus xsa/inm for the minor scripts) merged +
-        canonical-synced 2026-10-18 — the add-then-retire shape within one phase; the bare
-        codes are the claim. The per-record script rides metadata for a future variety-staging
-        facet rule (an owner-ruled lect_facet_rules row, queued)"}
+    # lect machine-postured since 2026-10-18 — the ociana-script facet
+    # rule stages the four big ANA script traditions onto their xna
+    # varieties; minor/mixed classes stay bare xna and the 36 non-ANA
+    # records carry their own codes (the shadowing rule).
     dating: {posture: undatable, note: "findDate (17,681 of 37,955 records) is the DISCOVERY /
         survey date (\"1989\", \"1920s and 1930s\"), never the inscription's — carried as metadata
         find_date, deliberately not a dating claim; the deposit carries no typed date"}
@@ -895,12 +894,10 @@ sources:
         head as upstream writes it (Weihinschrift, Grabinschrift, Besitzerinschrift,
         Einzelbuchstabe…), censused at the first sync; titles without a script label
         (coin legends) carry no genre"}
-    lect: {posture: identity, note: "the epigraphic-belt registry package (the ecy anchor +
-        the grc/cyp Arcadocypriot variety) merged + canonical-synced 2026-10-18 — the
-        add-then-retire shape within one phase; the bare codes are the claim. Lines read
-        ecy-Latn / grc-Latn / grc / und-Latn per the parser's letter-and-label rules; staging
-        grc docs onto the grc/cyp variety is a future owner-ruled lect_facet_rules row
-        (queued)"}
+    # lect machine-postured since 2026-10-18 — the lect_overrides grc →
+    # grc/cyp row (the fascicle IS pre-Hellenistic Cyprus); ecy and
+    # und-Latn documents ride their own codes untouched (the shadowing
+    # rule).
     dating: {posture: partial, note: "origDate is German prose with unsigned BCE years and
         centuries (330-310, 4.Jh., Anfang 4.Jh., 5.-4.Jh., nach 498); the grammar bands all
         six fixture records; 'Zeit?' and unforeseen prose keep raw only — census the
