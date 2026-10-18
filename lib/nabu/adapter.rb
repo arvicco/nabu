@@ -146,6 +146,15 @@ module Nabu
     # replay tax, not a default.
     def self.materialized_paths = []
 
+    # The seam-census hook for a kind: module row (Nabu::ModuleCensus):
+    # +read+ maps a canonical-relative path to its content (nil when
+    # absent); a module whose seam can census itself returns ordered
+    # ModuleCensus::Count values, which every info printout and the sync
+    # summary render in place of the document counters a module holds
+    # zero of by invariant. nil (the default) = no census — printouts fall
+    # back to the module's pin / changed-file list, never fake zeros.
+    def self.module_census(_read) = nil
+
     # The declared SECONDARY dictionary lane (P104-4 — the
     # multi-shelf dictionary seam): content_kind stays the PRIMARY routing, and a
     # source whose canonical tree ALSO carries dictionary-shaped content

@@ -1333,7 +1333,7 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(["list"]) }
       assert_nil status, "the census exits 0"
       assert_match(/^shelf\s+docs=2 pass=3\s+langs=grc,lat\s+license=nc,open\s+withdrawn=1\s+retired=1/, out)
-      assert_match(/^lex\s+entries=2\s+langs=sla-pro\s+license=attribution/, out)
+      assert_match(/^lex\s+dicts=1 entries=2\s+langs=sla-pro\s+license=attribution/, out)
       assert_match(/^library\s+docs=3/, out)
       assert_match(/3 sources/, out)
     end
@@ -1364,7 +1364,7 @@ class CLITest < Minitest::Test
     with_list_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[list lex]) }
       assert_nil status
-      assert_match(/entries=2/, out)
+      assert_match(/^  dicts=1 entries=2$/, out)
       assert_match(/dict sla-pro — Proto-Slavic \[sla-pro\] entries=2/, out)
     end
   end
@@ -1768,7 +1768,7 @@ class CLITest < Minitest::Test
       assert_match(/^reference — The Lexicographer — the dictionary shelves\.$/, out)
       # Members render the same census line, indented under their axis.
       assert_match(/^  shelf\s+docs=2 pass=3\s+langs=grc,lat\s+license=nc,open/, out)
-      assert_match(/^  lex\s+entries=2\s+langs=sla-pro\s+license=attribution/, out)
+      assert_match(/^  lex\s+dicts=1 entries=2\s+langs=sla-pro\s+license=attribution/, out)
       # Ratified order: classical before slavic before reference (file order).
       assert_operator out.index("classical — "), :<, out.index("slavic — ")
       assert_operator out.index("slavic — "), :<, out.index("reference — ")

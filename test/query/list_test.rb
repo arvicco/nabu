@@ -173,6 +173,22 @@ module Query
                    "the pre-019 fallback must produce identical census rows and cards"
     end
 
+    # The dictionary-grain container count rides beside the entries (the
+    # docs/pass pair's twin: dicts/entries), and the catalog's pin rides
+    # every row — a kind: module row's honest generic descriptor.
+    def test_census_counts_dictionaries_and_carries_the_pin
+      make_dictionary(source: @ccmh, slug: "lsj", language: "grc")
+      make_dictionary(source: @ccmh, slug: "mw", language: "san")
+      @ccmh.update(last_sync_sha: "abcdef0123456789")
+      row = list.census.find { |r| r.slug == "ccmh" }
+      assert_equal 2, row.dictionaries
+      assert_equal "abcdef0123456789", row.pin
+      library = list.census.find { |r| r.slug == "local-library" }
+      assert_equal 0, library.dictionaries
+      assert_nil library.pin
+      assert_equal "abcdef0123456789", list.card("ccmh").pin
+    end
+
     def test_census_source_without_content_reads_source_license_class
       row = list.census.find { |r| r.slug == "local-library" }
       assert_equal 0, row.docs

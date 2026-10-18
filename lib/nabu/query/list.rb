@@ -47,10 +47,14 @@ module Nabu
       # P105-5a: +notes+ (urn_notes rows, the owner-notes shelf) and
       # +lemma_rows+ (tier-silver passage_lemmas, the lemma shelf) keep the
       # two non-document local shelves from censusing as "empty".
+      # +dictionaries+ (the dicts/entries pair, docs/pass's twin) counts the
+      # source's dictionaries; +pin+ is the catalog's last_sync_sha — the
+      # honest generic descriptor for a kind: module row, which holds no
+      # catalog content by invariant (Nabu::ModuleCensus.summary).
       CensusRow = Data.define(:slug, :docs, :passages, :entries, :languages,
                               :license_classes, :withdrawn, :retired, :dossiers,
-                              :notes, :lemma_rows) do
-        def initialize(dossiers: 0, notes: 0, lemma_rows: 0, **rest) = super
+                              :notes, :lemma_rows, :dictionaries, :pin) do
+        def initialize(dossiers: 0, notes: 0, lemma_rows: 0, dictionaries: 0, pin: nil, **rest) = super
       end
 
       # One source's card (`nabu list SOURCE`). +languages+ maps language →
@@ -60,8 +64,8 @@ module Nabu
       Card = Data.define(:slug, :name, :adapter_class, :enabled, :license_text, :license_classes,
                          :docs, :passages, :entries, :withdrawn, :retired,
                          :languages, :dictionaries, :dated, :facets, :collections,
-                         :dossiers, :record_kinds, :description) do
-        def initialize(dossiers: 0, record_kinds: {}, description: nil, **rest) = super
+                         :dossiers, :record_kinds, :description, :pin) do
+        def initialize(dossiers: 0, record_kinds: {}, description: nil, pin: nil, **rest) = super
       end
       Dated = Data.define(:docs, :min, :max)
       FacetRow = Data.define(:facet, :values, :docs)
@@ -148,14 +152,16 @@ module Nabu
         docs = doc_counts
         passages = passage_counts
         entries = entry_counts
+        dicts = dictionary_counts
         langs = census_languages
         licenses = license_mix
-        @catalog[:sources].order(:slug).select(:id, :slug, :license_class, :adapter_class).all.map do |source|
+        @catalog[:sources].order(:slug).select(:id, :slug, :license_class, :adapter_class, :last_sync_sha)
+                          .all.map do |source|
           id = source.fetch(:id)
           doc = docs.fetch(id, { docs: 0, withdrawn: 0, retired: 0 })
           CensusRow.new(
             slug: source.fetch(:slug), docs: doc.fetch(:docs), passages: passages.fetch(id, 0),
-            entries: entries.fetch(id, 0),
+            entries: entries.fetch(id, 0), dictionaries: dicts.fetch(id, 0), pin: source.fetch(:last_sync_sha),
             dossiers: shelf_dossier_count(source),
             notes: notes_shelf_count(source),
             lemma_rows: lemma_shelf_count(source),
@@ -182,7 +188,8 @@ module Nabu
           dated: dated_coverage(id), facets: facet_summary(id), collections: collections(slug),
           dossiers: shelf_dossier_count(source),
           record_kinds: shelf_record_kinds(source),
-          description: description_for(slug)
+          description: description_for(slug),
+          pin: source.fetch(:last_sync_sha)
         )
       end
 
@@ -585,7 +592,7 @@ module Nabu
       def source_row!(slug)
         row = @catalog[:sources]
               .where(slug: slug)
-              .select(:id, :slug, :name, :adapter_class, :enabled, :license, :license_class)
+              .select(:id, :slug, :name, :adapter_class, :enabled, :license, :license_class, :last_sync_sha)
               .first
         return row if row
 
@@ -703,6 +710,14 @@ module Nabu
                           .select(Sequel[:dictionaries][:source_id].as(:source_id),
                                   Sequel.function(:count).*.as(:count))
                           .all.to_h { |row| [row.fetch(:source_id), row.fetch(:count)] }
+      end
+
+      # {source_id => dictionary count} — the dicts half of the dicts/entries pair.
+      def dictionary_counts
+        return {} unless dictionary_shelf?
+
+        @catalog[:dictionaries].group_and_count(:source_id).all
+                               .to_h { |row| [row.fetch(:source_id), row.fetch(:count)] }
       end
 
       def dictionary_languages(source_id)

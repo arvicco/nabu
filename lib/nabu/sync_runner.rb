@@ -98,12 +98,19 @@ module Nabu
     # lane-less source. Kept SEPARATE from load_report so document- and
     # entry-grained counts never blur in reporting — the run row records
     # their sum.
+    #
+    # +module_delta+ is a kind: module row's ModuleCensus::Delta — the ref
+    # movement, changed paths and seam census the summary line renders in
+    # place of the document counters a module holds zero of by invariant;
+    # nil for every other kind. Rendering data only: the run row, stage
+    # timings and pins are exactly as for any sync.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
                           :discovery, :references, :enrichments, :place_index, :person_index,
-                          :analyzed, :lect_staging, :dictionary_lane) do
+                          :analyzed, :lect_staging, :dictionary_lane, :module_delta) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
                      discovery:, references: nil, enrichments: nil, place_index: nil,
-                     person_index: nil, analyzed: nil, lect_staging: nil, dictionary_lane: nil)
+                     person_index: nil, analyzed: nil, lect_staging: nil, dictionary_lane: nil,
+                     module_delta: nil)
         super
       end
 
@@ -191,6 +198,7 @@ module Nabu
     # advances — canonical moved, and that is what the pin records.
     def fetch_only_outcome(entry, source, adapter, workdir, force:, progress:)
       fetch_report = nil
+      before = module_ref_before(entry, source, workdir)
       begin
         Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress)
@@ -203,7 +211,26 @@ module Nabu
       update_source_state(source, entry, fetch_report)
       progress&.stage("fetched #{entry.slug} — parse+load deferred (fetch-only)")
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
-                  breaker: nil, indexed: nil, warnings: [], discovery: nil)
+                  breaker: nil, indexed: nil, warnings: [], discovery: nil,
+                  module_delta: module_delta(entry, adapter, workdir, before, fetch_report))
+    end
+
+    # The module's ref BEFORE this sync's fetch (module sync summaries):
+    # canonical HEAD when the tree is a git repo of its own, else the
+    # catalog's last pin. nil for every non-module row — nothing is read.
+    def module_ref_before(entry, source, workdir)
+      return nil unless entry.feature_module?
+
+      ModuleCensus.head(workdir) || source.last_sync_sha
+    end
+
+    # The kind: module summary data (ModuleCensus::Delta); nil for every
+    # other kind, so non-module rendering never changes.
+    def module_delta(entry, adapter, workdir, before, fetch_report)
+      return nil unless entry.feature_module?
+
+      ModuleCensus.delta(adapter_class: adapter.class, dir: workdir, before: before,
+                         after: fetch_report&.sha, fetched: !fetch_report.nil?)
     end
 
     # The stored Credentials::Entry an entry declares, nil when it declares
@@ -246,6 +273,7 @@ module Nabu
       fetch_report = nil
       load_report = nil
       lane_report = nil
+      module_before = module_ref_before(entry, source, workdir)
 
       begin
         run = Store::RunRecorder.record(source_slug: entry.slug) do
@@ -317,7 +345,8 @@ module Nabu
                   person_index: refresh_person_index(entry),
                   analyzed: analyze_after_load(combined_report, adapter),
                   lect_staging: lect_staging_census(entry),
-                  dictionary_lane: lane_report)
+                  dictionary_lane: lane_report,
+                  module_delta: module_delta(entry, adapter, workdir, module_before, fetch_report))
     end
 
     # P99-5 (the P59-4 front-door bullet): the synced source's
