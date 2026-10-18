@@ -28,6 +28,18 @@ module Adapters
 
     def envelope(pageid) = JSON.parse(File.read(File.join(FIXTURES, "pages", "#{pageid}.json")))
 
+    # Textinfo's AUTOR (the LAST occurrence wins, as MediaWiki renders a
+    # duplicated parameter — Dalimil's header states the work's editor
+    # first, then the part's full attribution) and TITUL, the parent work.
+    def test_author_and_parent_work_ride_metadata
+      dalimil = doc(9925).metadata
+      assert_equal "neznámý, tzv. Dalimil, k vydání upravil Josef Jireček", dalimil["author"]
+      assert_equal "Rýmovaná kronika česká tak řečeného Dalimila", dalimil["work"]
+      assert_equal "Bible kralická (1613)", doc(68_927).metadata["work"]
+      assert_equal "neznámý", conformance_adapter.header_author(envelope(41_239)["wikitext"]),
+                   "a trailing editorial-note template is not part of the author"
+    end
+
     def test_discovery_census
       assert_equal %w[urn:nabu:cs-wikisource:68927 urn:nabu:cs-wikisource:9925],
                    conformance_adapter.discover(FIXTURES).map(&:id).sort

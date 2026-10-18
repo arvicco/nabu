@@ -264,3 +264,22 @@ sources:
       author: author          # the fileDesc titleStmt <author> names, array (Jitāri 6 ·
       #                         Vāgbhaṭa 3 · Dharmakīrti 3 …; base author + commentator on
       #                         the commentaries; upstream's "Anonymous" a claim)
+  # the rendered-HTML wiki family (header author + parent work, mined like the
+  # wikitext family's author); censuses over canonical/, 2026-10-18
+  pl-wikisource:              # 1,228 pages
+    fields:
+      author: author          # 1,176 (Jan Kochanowski 284 · Mikołaj Rej 269 · Wacław Potocki 151 …)
+      work: work              # 646 — |pochodzenie=, the book the page comes from
+      #                         („Figliki“ wydanie z r. 1574 · Wety Parnaskie …)
+  cs-wikisource:              # 330 pages
+    fields:
+      author: author          # 330 (incl. "neznámý" and "(sporné)"-hedged attributions, verbatim)
+      work: work              # 326 — Textinfo TITUL (Rýmovaná kronika … Dalimila · Labyrint …)
+  uk-wikisource:              # 7 pages
+    fields:
+      author: author          # 2 — the section author (Симеон Коростенський …)
+      work: work              # 6 — the collected volume a chronicle section sits in
+  ru-wikisource:              # 12 pages
+    fields:
+      author: author          # 8 (Аввакум · Афанасий Никитин · Владимир Мономах …)
+      work: work              # 1 — ИЗСБОРНИКА

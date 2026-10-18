@@ -154,7 +154,11 @@ class FacetMapTest < Minitest::Test
       "eltec-srp" => { "author" => "author", "author_refs" => "author_id",
                        "title_refs" => "work_id" },
       "gretil" => { "author" => "author", "genre" => "genre" },
-      "sarit" => { "author" => "author" }
+      "sarit" => { "author" => "author" },
+      "pl-wikisource" => { "author" => "author", "work" => "work" },
+      "cs-wikisource" => { "author" => "author", "work" => "work" },
+      "uk-wikisource" => { "author" => "author", "work" => "work" },
+      "ru-wikisource" => { "author" => "author", "work" => "work" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
