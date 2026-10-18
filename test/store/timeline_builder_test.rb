@@ -874,6 +874,19 @@ module Store
       assert_equal(-243, row.fetch(:not_after))  # max of the two alternatives
     end
 
+    # The nome tier: HGV's provenance lists the settlement THEN its nome,
+    # each with its own Pleiades/TM refs. Both tiers' refs ride place_ref
+    # (settlement first), so a nome-level place query reaches the
+    # village-located documents; the region tier ("Ägypten") never does.
+    def test_hgv_place_ref_carries_the_settlement_and_nome_tiers
+      make_document("urn:nabu:ddbdp:p.adl::G2")
+      build!
+      ref = timeline_for("urn:nabu:ddbdp:p.adl::G2").fetch(:place_ref)
+      assert_equal "https://pleiades.stoa.org/places/786084 https://www.trismegistos.org/place/1628 " \
+                   "https://www.trismegistos.org/place/2849", ref
+      assert_equal [%w[pleiades 786084], %w[tm 1628], %w[tm 2849]], Nabu::PlaceRefs.ids(ref)
+    end
+
     def test_hgv_record_without_a_matching_document_is_skipped
       # No DDbDP document created for bgu;3;994 → no timeline row, no crash.
       build!

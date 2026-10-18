@@ -250,16 +250,32 @@ module Nabu
         }
       end
 
-      # origPlace text as the place name; the first provenance placeName carrying
-      # a ref (Trismegistos/Pleiades URLs) as the ref string. Both verbatim (no
-      # gazetteer — the §1.4 stance), NFC-folded whitespace.
+      # Provenance placeName tiers whose refs the place lane carries: the
+      # settlement (no subtype) and its nome. The region/province tiers
+      # ("Ägypten", 19,796 ref-less region rows at the 2026-10-18 census)
+      # are too coarse to claim beside them.
+      PLACE_TIERS = [nil, "nome"].freeze
+
+      # origPlace text as the place name; the ref string joins the Trismegistos/
+      # Pleiades URLs of the FIRST provenance's settlement AND nome placeNames
+      # (settlement first, tokens deduped — 21,887 records carry a referenced
+      # nome after the settlement), so a nome-level query reaches its
+      # villages' documents. A record whose refs sit only on a coarser tier
+      # keeps that first referenced placeName (the pre-tier behavior). All
+      # verbatim (no gazetteer — the §1.4 stance), NFC-folded whitespace.
       def extract_place(doc)
         name = normalize(doc.at_xpath("//origPlace")&.text)
         name = normalize(doc.at_xpath("//provenance//placeName")&.text) if name.nil?
-        ref = doc.at_xpath("//provenance//placeName[@ref]")&.attr("ref")
-        ref = ref.to_s.strip.gsub(/\s+/, " ") unless ref.nil?
-        ref = nil if ref && ref.empty?
-        [name, ref]
+        [name, provenance_refs(doc)]
+      end
+
+      def provenance_refs(doc)
+        provenance = doc.at_xpath("//provenance") or return nil
+        named = provenance.xpath(".//placeName[@ref]")
+        tiered = named.select { |place| PLACE_TIERS.include?(place["subtype"]) }
+        tiered = named.first(1) if tiered.empty?
+        tokens = tiered.flat_map { |place| place["ref"].to_s.split(/\s+/) }.reject(&:empty?).uniq
+        tokens.empty? ? nil : tokens.join(" ")
       end
 
       # -- goo300k / IMP (year in the urn suffix) ------------------------------
