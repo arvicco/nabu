@@ -397,6 +397,9 @@ module Nabu
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug,
                                                             canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
+      # The TLG concordance joins the Greek CTS editions to glaux/diorisis
+      # composition dates — a sync of either side re-derives it.
+      Store::TimelineBuilder::TlgConcordanceDates.refresh_source!(catalog: @db, slug: entry.slug)
       # P122-1: a load may have minted documents an armed shelf estimates
       # (or withdrawn some) — re-project the silver-date lane wholesale (a
       # shelf-sized pass; an unarmed or absent shelf touches nothing).

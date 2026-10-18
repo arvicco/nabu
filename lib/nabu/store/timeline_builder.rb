@@ -74,7 +74,8 @@ module Nabu
                             :open_etruscan_undated, :open_etruscan_invalid,
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
                             :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
-                            :rundata_undated, :openiti_undated, :nikh_entries) do
+                            :rundata_undated, :openiti_undated, :nikh_entries,
+                            :tlg_concordance) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -88,14 +89,14 @@ module Nabu
                        cdli: 0, cdli_undated: 0, cdli_invalid: 0,
                        rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
                        kanripo: 0, kanripo_undated: 0,
-                       metadata_dates: {}, nikh_entries: {}, **)
+                       metadata_dates: {}, nikh_entries: {}, tlg_concordance: {}, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
             tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
-            rundata + openiti + kanripo + metadata_dates.values.sum +
+            rundata + openiti + kanripo + metadata_dates.values.sum + tlg_concordance.values.sum +
             # the leaf-grain lane's DOCUMENT contribution: envelopes minted
             # for documents the metadata lane left undated (runs are
             # passage grain and never double-count a document)
@@ -133,8 +134,9 @@ module Nabu
         kanripo = KanripoDates.build(catalog: catalog, canonical_dir: canonical_dir)
         metadata = MetadataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         nikh = NikhEntryDates.build(catalog: catalog)
+        tlg = TlgConcordanceDates.build(catalog: catalog)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
-                    metadata_dates: metadata, nikh_entries: nikh,
+                    metadata_dates: metadata, nikh_entries: nikh, tlg_concordance: tlg,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
@@ -330,6 +332,7 @@ require_relative "timeline_builder/coptic_scriptorium_dates"
 require_relative "timeline_builder/edh_dates"
 require_relative "timeline_builder/kanripo_dates"
 require_relative "timeline_builder/metadata_dates"
+require_relative "timeline_builder/tlg_concordance_dates"
 require_relative "timeline_builder/nikh_entry_dates"
 require_relative "timeline_builder/damaskini_dates"
 require_relative "timeline_builder/corph_dates"

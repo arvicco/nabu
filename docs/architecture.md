@@ -1216,12 +1216,19 @@ bands above the ruled period table, P81-1). The P81-1 `NikhEntryDates`
 lane projects the NIKH chronicle family's per-entry machine dates from
 CATALOG annotations (load-verified f(canonical) — no re-parse):
 passage-grain year runs (axis_source `<slug>-entries`) plus document
-envelopes where the metadata lane makes no claim. The coordinates lane
+envelopes where the metadata lane makes no claim. The `TlgConcordanceDates`
+lane is an in-library JOIN: glaux and diorisis key per-work composition
+dates by TLG author.work ids, which the Perseus/First1K CTS urns also
+carry, so each original-language Greek CTS edition joins a composition
+envelope by urn (axis_source `tlg-concordance`, date_class `composition`,
+date_raw naming the witness and key — glaux first, diorisis fallback);
+a sync of any target or witness re-derives the lane. The coordinates lane
 (migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
 feeding `search --within`. Since P47-r3 a sync refreshes the synced
 source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
-`NikhEntryDates.refresh_source!`, mirroring the Indexer's per-source
+`NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!`,
+mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
 The whole-library chronological views over this table are `nabu list
 --by-date` (century census, earliest-bound buckets with the announced
