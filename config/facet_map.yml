@@ -259,3 +259,8 @@ sources:
       author: author          # 427 — the titleStmt <author> (Nāgārjuna 24, Dharmakīrti 13 …)
       genre: genre            # 784 — the keywords ladder verbatim ("Sanskrit -- Poetry --
       #                         Kāvya"); config/kind_map.yml folds it onto the house kinds
+  sarit:                      # 66 of 78 loaded editions
+    fields:
+      author: author          # the fileDesc titleStmt <author> names, array (Jitāri 6 ·
+      #                         Vāgbhaṭa 3 · Dharmakīrti 3 …; base author + commentator on
+      #                         the commentaries; upstream's "Anonymous" a claim)
