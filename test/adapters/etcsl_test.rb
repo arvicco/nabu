@@ -112,8 +112,16 @@ class EtcslTest < Minitest::Test
     # rendered "(not in catalog)" on documents that ARE in the catalog).
     # The self-assertion lives in metadata["etcsl_no"], never as a
     # self-loop edge; epsd2 concordance producers target these same urns.
-    assert_equal %w[urn:nabu:etcsl:0.2.01 urn:nabu:etcsl:0.2.02 urn:nabu:etcsl:0.2.04],
-                 document.metadata["related"]
+    # After the xrefs come the concordance HUBS (Nabu::CuneiformConcordance):
+    # the composition's own padding-folded "etcsl:" hub (CDLI witnesses
+    # assert the same key from their subgenre) and one "object:" hub per
+    # witness fragment (CDLI asserts the same keys from museum_no).
+    related = document.metadata["related"]
+    assert_equal %w[urn:nabu:etcsl:0.2.01 urn:nabu:etcsl:0.2.02 urn:nabu:etcsl:0.2.04 etcsl:1.8.2.1],
+                 related.first(4)
+    assert_includes related, "object:CBS 8337"
+    assert_includes related, "object:N 1362"
+    assert_includes related, "object:N 1412"
 
     passages = document.passages
     assert_equal 17, passages.size, "10 div1-A lines + 7 div1-B lines (trim)"
@@ -156,7 +164,52 @@ class EtcslTest < Minitest::Test
     assert_equal "lugal-me-en cag4-ta", document.passages.first.text
     assert_includes document.metadata["related"], "urn:nabu:etcsl:1.8.2.1",
                     "the catalogue's incipit xrefs mint the concordance edges"
-    assert_equal 46, document.metadata["related"].size, "46 unique xref targets, no self-loop"
+    xrefs = document.metadata["related"].grep(/\Aurn:/)
+    assert_equal 46, xrefs.size, "46 unique xref targets, no self-loop"
+  end
+
+  # -- the tablet witness list (<listBibl type="tablets">) ---------------------
+
+  # Every c.*.xml header lists its witness tablets; the museum numbers
+  # ride the composite's metadata (raw verbatim + the cleaned display form,
+  # publication stripped, joins intact) with the per-witness provenance
+  # when the header gives one.
+  def test_composite_metadata_carries_the_tablet_witness_list
+    witnesses = parse(LUGALBANDA).metadata["witnesses"]
+    assert_equal 56, witnesses.size, "every museumNumber entry of the header"
+    assert_equal({ "raw" => "AO 8896 (TRS 90)", "museum_number" => "AO 8896" }, witnesses.first)
+    join = witnesses.find { |w| w["raw"].start_with?("HS 1517") }
+    assert_equal "HS 1517 + Ni 4102", join["museum_number"], "the join stays intact; sic flags drop"
+  end
+
+  def test_witness_hubs_meet_the_cdli_museum_number_keys
+    related = parse(LUGALBANDA).metadata["related"]
+    # CDLI catalogues this join as "HS 1517 + Ist Ni 04102".
+    assert_equal Nabu::CuneiformConcordance.object_hubs("HS 1517 + Ist Ni 04102"),
+                 related & ["object:HS 1517", "object:NI 4102"]
+    # ETCSL's sic-flagged "AUAM 73.2389! (RA 70 144, photo)" meets CDLI's
+    # plain "AUAM 73.2389" (P249270).
+    assert_includes related, Nabu::CuneiformConcordance.object_hubs("AUAM 73.2389").first
+  end
+
+  WITNESSES = File.join(Nabu::TestSupport.fixtures("etcsl"), "witnesses", "c.1.3.3.xml")
+
+  def test_witness_provenance_rides_when_the_header_gives_one
+    document = Nabu::Adapters::EtcslTeiParser.new.parse_composite(WITNESSES, urn: "urn:nabu:etcsl:1.3.3")
+    witnesses = document.metadata["witnesses"]
+    assert_equal({ "raw" => "N 3551 (Tf. 1)", "museum_number" => "N 3551", "provenance" => "Nippur" },
+                 witnesses.first)
+    ur = witnesses.find { |w| w["raw"].start_with?("UET VI/3 79") }
+    refute ur.key?("provenance"), "a witness without a provenance scope carries none (never guessed)"
+    related = document.metadata["related"]
+    assert_includes related, "etcsl:1.3.3"
+    assert_includes related, "object:CBS 10315", "a bare join number inherits the CBS prefix"
+    assert_includes related, "object:3 NT 407"
+  end
+
+  def test_translation_siblings_carry_no_witness_list
+    document = parse("#{LUGALBANDA}-en")
+    assert_nil document.metadata["witnesses"], "the witness list belongs to the composite"
   end
 
   # -- translation siblings ---------------------------------------------------
