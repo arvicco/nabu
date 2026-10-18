@@ -283,3 +283,8 @@ sources:
     fields:
       author: author          # 8 (Аввакум · Афанасий Никитин · Владимир Мономах …)
       work: work              # 1 — ИЗСБОРНИКА
+  menota:                     # 72 of 91 texts
+    fields:
+      work: work              # the top-level msItem titles, array (Landslǫg Magnúss
+      #                         Hákonarsonar 8 · Konungs skuggsjá 6 · Njáls saga 3 · Stjórn 3 …)
+      #                         — the WORK, distinct from the msName codex title
