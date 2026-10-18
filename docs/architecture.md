@@ -269,11 +269,11 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- First entity producer: the NIKH index markup (NikhXmlParser,
    -- opt-in entities: per adapter — sillok/sjw/goryeosa/goryeosa-jeoryo/
    -- bibyeonsa): each typed <index> tag in a leaf's paragraphs becomes a
-   -- compact {"value", "ref"?, "surface"?|"name"?} record under its kind
+   -- compact {"value", "ref"?, "surface"?} record under its kind
    -- key (persons/places/books/eras/offices/orgs — the DTD's closed
    -- p.index vocabulary mapped whole), refs "nikh:" + upstream's own id;
    -- one record per distinct record per passage (repeats live in the
-   -- text); sjw persons are valued by upstream's normalized @name. Leaf
+   -- text); sjw persons and books are valued by upstream's normalized @name. Leaf
    -- text stays byte-identical. The id-bearing sources also derive
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).

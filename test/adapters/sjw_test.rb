@@ -66,7 +66,7 @@ class SjwTest < Minitest::Test
     assert_includes annotations["persons"], { "value" => "尹鳳朝", "surface" => "鳳朝" }
     assert_includes annotations["persons"], { "value" => "金龍慶", "ref" => "nikh:p16_100002_00", "surface" => "龍慶" }
     assert_equal [{ "value" => "時敏堂" }], annotations["places"]
-    assert_includes annotations["books"], { "value" => "綱目", "name" => "資治通鑑綱目" }
+    assert_includes annotations["books"], { "value" => "資治通鑑綱目", "surface" => "綱目" }
   end
 
   def test_document_metadata_carries_the_structured_date_for_the_timeline

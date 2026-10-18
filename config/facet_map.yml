@@ -324,10 +324,10 @@ sources:
   #    The NIKH index markup (NikhXmlParser entities: typed <index> tags
   #    mined per leaf; censuses: a full parse of the box's canonical tree,
   #    2026-10-18 — "mentions" = tags in leaf text, "records" = the
-  #    annotation records, one per distinct (kind, value, ref, name/
-  #    surface) per passage (≈ the facet pairs; repeats live in the
+  #    annotation records, one per distinct (kind, value, ref, surface)
+  #    per passage (≈ the facet pairs; repeats live in the
   #    text), "distinct" = the facet dictionary's (value, ref) rows).
-  #    Values are the tagged surfaces verbatim — except sjw persons,
+  #    Values are the tagged surfaces verbatim — except sjw persons and books,
   #    valued by upstream's own normalized name= (its resolution claim,
   #    the raw surface beside it); refs are "nikh:" + upstream's own id (sillok M_ person
   #    ids; the goryeosa family's p/o/t/m/b ids; the cross-database person
@@ -438,9 +438,9 @@ sources:
       persons: person         # 鳳朝/尹鳳朝 → 尹鳳朝; 미결 or absent → the surface) — 8,351,049
       #                         mentions → 6,909,974 records, 372,828 distinct (410,493 when
       #                         surface-keyed); 12,222 records carry a person pid
-      places: place           # 1,335,479 지명 mentions → 1,128,117 records, 52,028 distinct, no ref
-      books: book             # 140,958 서명 mentions → 107,254 records, 9,794 distinct (surface-
-      #                         valued; a differing name= rides as "name" on 50,110)
+      places: place           # 1,335,479 지명 mentions → 1,128,117 records, 52,030 distinct, no ref
+      books: book             # 140,958 서명 mentions → 107,254 records, 5,162 distinct — keyed by
+      #                         the normalized name= WORK identity (9,794 when surface-keyed)
   goryeosa:                   # index markup on 18,830 of 31,207 passages; every kind refs
     passage_fields: #           NIKH's own kind-prefixed ids (aliases share a person id)
       persons: person         # 66,275 mentions → 51,571 records, 17,767 distinct (11,505 persons)
