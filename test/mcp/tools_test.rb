@@ -436,6 +436,28 @@ module MCP
       assert_equal "number=plur|case=dat", hits.first.fetch("morph")
     end
 
+    # GLAUx-shaped tokens carry only the AGDT `postag`; the same morph
+    # vocabulary reaches them through the façade's AGDT decoder.
+    def test_search_morph_decodes_agdt_postag_tokens
+      doc = make_document(urn: "urn:d:glaux", title: "GLAUx")
+      make_passage(doc, urn: "urn:d:glaux:1", text: "τέρψας", sequence: 0, tokens: [
+                     { "lemma" => "τέρπω", "form" => "τέρψας", "postag" => "v-sapamn-" }
+                   ])
+      make_passage(doc, urn: "urn:d:glaux:2", text: "τέρπει", sequence: 1, tokens: [
+                     { "lemma" => "τέρπω", "form" => "τέρπει", "postag" => "v3spia---" }
+                   ])
+      rebuild!
+
+      hits = payload(call("nabu_search", { "lemma" => "τέρπω", "morph" => "mood=part,case=nom" }))
+             .fetch("matches")
+      assert_equal(%w[urn:d:glaux:1], hits.map { |hit| hit.fetch("urn") })
+      assert_equal "number=sing|gender=masc|case=nom|tense=aor|mood=part|voice=act",
+                   hits.first.fetch("morph")
+      search_tool = tools.definitions.find { |tool| tool[:name] == "nabu_search" }
+      description = search_tool.dig(:inputSchema, :properties, :morph, :description)
+      assert_match(/AGDT/, description, "the tool description names the decoded tagset")
+    end
+
     def test_search_morph_requires_lemma
       seed_corpus
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do

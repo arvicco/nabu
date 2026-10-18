@@ -113,7 +113,11 @@ module Nabu
       # written: an empty table (aed's hiero cone never synced) refuses,
       # so the dataset never ships without its word-grain resource.
       def glyph_postings!(catalog)
-        rows = catalog.table_exists?(POSTINGS) ? catalog[POSTINGS].order(:glyph).all : []
+        rows = []
+        if catalog.table_exists?(POSTINGS)
+          postings = catalog[POSTINGS]
+          rows = postings.where(code: nil).order(:glyph).all + postings.where(glyph: nil).order(:code).all
+        end
         if rows.empty?
           raise Error, "egy/hiero-frequency: the catalog's #{POSTINGS} table is empty — " \
                        "sync aed (bin/nabu sync aed) to project the AED per-glyph census"
@@ -199,23 +203,33 @@ module Nabu
         end
       end
 
-      # One row per hiero_postings glyph, codepoint order. The ID is the
-      # codepoint without its "+" — the egy/unikemet-signs ID shape, so
-      # the two tables join on ID (or Codepoint) directly.
+      # One row per hiero_postings glyph, codepoint order, then one per
+      # code-keyed row, code order. A glyph row's ID is the codepoint
+      # without its "+" — the egy/unikemet-signs ID shape, so the two
+      # tables join on ID (or Codepoint) directly; a code row's ID is the
+      # Gardiner code itself (Codepoint and Glyph empty — AED wrote the
+      # sign only as a "Keine Entsprechung in Unicode" note).
       def glyph_rows(glyphs)
         glyphs.map do |row|
-          codepoint = format("U+%04X", row[:glyph].ord)
-          { "ID" => codepoint.delete("+"), "Codepoint" => codepoint, "Glyph" => row[:glyph],
-            "Texts" => row[:texts], "Signs" => row[:signs], "Words" => row[:words],
-            "Unclear" => row[:unclear], "Source" => GLYPH_SOURCE_SLUG }
+          key = if row[:glyph]
+                  codepoint = format("U+%04X", row[:glyph].ord)
+                  { "ID" => codepoint.delete("+"), "Codepoint" => codepoint, "Glyph" => row[:glyph] }
+                else
+                  { "ID" => row[:code], "Codepoint" => nil, "Glyph" => nil }
+                end
+          key.merge("Texts" => row[:texts], "Signs" => row[:signs], "Words" => row[:words],
+                    "Unclear" => row[:unclear], "Source" => GLYPH_SOURCE_SLUG)
         end
       end
 
       def glyph_census(glyphs)
-        { "glyphs" => glyphs.size,
-          "glyph_sign_occurrences" => glyphs.sum { |row| row[:signs] },
-          "glyph_unclear_occurrences" => glyphs.sum { |row| row[:unclear] },
-          "glyphs_with_unclear" => glyphs.count { |row| row[:unclear].positive? } }
+        coded, by_glyph = glyphs.partition { |row| row[:glyph].nil? }
+        { "glyphs" => by_glyph.size,
+          "glyph_sign_occurrences" => by_glyph.sum { |row| row[:signs] },
+          "glyph_unclear_occurrences" => by_glyph.sum { |row| row[:unclear] },
+          "glyphs_with_unclear" => by_glyph.count { |row| row[:unclear].positive? },
+          "codes" => coded.size,
+          "code_sign_occurrences" => coded.sum { |row| row[:signs] } }
       end
 
       # The published glyph census, digested — so a moved AED census moves
@@ -223,7 +237,7 @@ module Nabu
       def glyph_digest(glyphs)
         sha = Digest::SHA256.new
         glyphs.each do |row|
-          sha << row.values_at(:glyph, :texts, :signs, :words, :unclear).join("\x1f") << "\n"
+          sha << row.values_at(:glyph, :code, :texts, :signs, :words, :unclear).join("\x1f") << "\n"
         end
         sha.hexdigest
       end
@@ -243,11 +257,12 @@ module Nabu
       end
 
       def recipe(digest, glyph_digest)
-        "hiero-frequency v2: census Gardiner codes from aes hiero_inventar annotations at " \
+        "hiero-frequency v3: census Gardiner codes from aes hiero_inventar annotations at " \
           "(code, subcorpus) grain, token + word (one aes token = one word; a code counts once " \
           "per word) + attesting-doc counts, `all` roll-up per code, live rows only; " \
           "doc-attestation sha256=#{digest}; plus hiero-glyphs.csv, the catalog's aed " \
-          "hiero_postings per-glyph census verbatim (texts, signs, words, unclear) " \
+          "hiero_postings per-glyph census verbatim (texts, signs, words, unclear), then its " \
+          "Gardiner-coded rows (signs aed writes only as a no-Unicode note, ID = the code) " \
           "sha256=#{glyph_digest}"
       end
 
