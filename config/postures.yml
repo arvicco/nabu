@@ -233,7 +233,11 @@ sources:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ojp IS Old Japanese}
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "no findspot or origin claim exists — the poems are
+        transmitted texts. The corpus does tag place NAMES inside the poems (pos pln /
+        pln-kke, 3,343 tokens over 910 lemma ids, census 2026-10-18): they ride a
+        per-passage 'places' annotation (surface + lemma id + headword) at token grain —
+        mentions, never a document place"}
     script: {posture: implied}
   rem:
     kind: {posture: unclassified}
