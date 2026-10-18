@@ -66,13 +66,13 @@ module Adapters
 
     def test_discover_yields_text_and_metadata_only_refs_sorted
       all = refs
-      # 7 distinct ATF blocks (the P469841 duplicate collapses) + 5
-      # catalog-only rows.
-      assert_equal 12, all.size
+      # 7 distinct ATF blocks (the P469841 duplicate collapses) + 8
+      # catalog-only rows (5 original + the 3 concordance rows).
+      assert_equal 15, all.size
       assert_equal all.map(&:id).sort, all.map(&:id)
       metadata_only, text = all.partition { |r| r.metadata["kind"] == "metadata_only" }
       assert_equal 7, text.size
-      assert_equal 5, metadata_only.size
+      assert_equal 8, metadata_only.size
       assert(text.all? { |r| r.path.end_with?("cdliatf_unblocked.atf") })
       assert(metadata_only.all? { |r| r.path.end_with?("cdli_cat.csv") })
     end
@@ -163,6 +163,60 @@ module Adapters
       fake = parse("urn:nabu:cdli:p274853")
       assert_equal "uga", fake.language
       assert_equal "fake (modern)", fake.metadata["period"]
+    end
+
+    # -- subgenre + seal_id: the concordance hubs -----------------------------
+
+    # subgenre (71,814 rows, 4,619 values) rides metadata verbatim; the
+    # 5,101 cells naming an ETCSL composition ("ETCSL 1.08.02.01 …
+    # (witness)") mint the padding-folded etcsl: hub ETCSL's own
+    # composite asserts (Nabu::Adapters::CuneiformConcordance).
+    def test_subgenre_rides_metadata_and_mints_the_etcsl_composition_hub
+      document = parse("urn:nabu:cdli:p343553")
+      assert_equal "ETCSL 1.08.02.01 Lugalbanda and Mountain Cave (witness)", document.metadata["subgenre"]
+      assert_includes document.metadata["related"], "etcsl:1.8.2.1"
+      assert_includes document.metadata["related"], "urn:nabu:cdli:q000367", "composite_id edges unchanged"
+    end
+
+    def test_a_cell_naming_two_compositions_mints_both_but_never_a_cut_off_number
+      related = parse("urn:nabu:cdli:p384833").metadata["related"]
+      assert_includes related, "etcsl:1.8.2.1"
+      assert_includes related, "etcsl:1.8.2.2"
+      assert_equal 2, related.grep(/\Aetcsl:/).size
+    end
+
+    # The literary witnesses (an ETCSL subgenre ref, or a Literary genre)
+    # assert one object: hub per museum/excavation-number fragment — the
+    # same keys ETCSL's witness lists assert, so the composite and the
+    # CDLI artifact meet. Only that scope: an object hub for all 340k
+    # museum numbers would be a quarter-million degree-1 hubs.
+    def test_literary_witnesses_assert_the_object_hubs_etcsl_lists
+      related = parse("urn:nabu:cdli:p343553").metadata["related"]
+      etcsl_side = Nabu::Adapters::CuneiformConcordance.object_hubs("Ni 4405 (ISET 2 43) + Ni 9933 (ISET 1 148)")
+      assert_equal etcsl_side, related.grep(/\Aobject:/)
+    end
+
+    def test_non_literary_rows_assert_no_object_hubs
+      related = parse("urn:nabu:cdli:p104749").metadata["related"]
+      assert_empty related.grep(/\Aobject:/)
+    end
+
+    # seal_id S-numbers are CDLI's SEAL composites — the composite_id
+    # treatment: urn:nabu:cdli:s… hub targets; a sub-number ("S000493.2")
+    # contributes its base S; the "Sx" placeholder contributes nothing.
+    def test_seal_id_mints_seal_composite_hubs
+      document = parse("urn:nabu:cdli:p101833")
+      assert_equal "S000493.2, S002932", document.metadata["seal_id"]
+      assert_equal %w[bdtns:031488 urn:nabu:cdli:s000493 urn:nabu:cdli:s002932], document.metadata["related"],
+                   "the seal hubs ride beside the row's BDTNS concordance"
+
+      placeholder = parse("urn:nabu:cdli:p104749")
+      assert_equal "Sx", placeholder.metadata["seal_id"]
+      assert_equal ["bdtns:015946"], placeholder.metadata["related"], "Sx names no seal"
+    end
+
+    def test_seal_id_edges_ride_text_documents_too
+      assert_includes parse("urn:nabu:cdli:p323717").metadata["related"], "urn:nabu:cdli:s003800"
     end
 
     def test_ruler_facet_excludes_filler_heads

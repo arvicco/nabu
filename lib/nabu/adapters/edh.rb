@@ -148,6 +148,14 @@ module Nabu
 
       def self.zip_url(range) = "#{DUMP_BASE_URL}/edhEpidocDump_#{range}.zip"
 
+      # The pers CSV's attested persons derive the "edh" person-index slice
+      # (Nabu::EdhPersons) at every sync, parse-only included, and at rebuild.
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::EdhPersons::Producer.new(catalog: catalog)
+      end
+
       # One DocumentRef per EpiDoc record that has a CSV row WITH text
       # (metadata-only stubs skip by rule — class note), sorted by urn. The
       # CSVs are read once per call; a workdir without them (the attic

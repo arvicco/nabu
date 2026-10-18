@@ -86,3 +86,66 @@ files:
       books' rows + an assortment (~290 rows: every-50th Arabic, a spread of
       Persian, some MSS) to exercise index-driven discovery. Full upstream TSV
       12,092,756 B / 14,108 lines (md5 cb2226f64264efa964df9ef659d40199). P41-g
+  # -- The crosswalk additions (retrieved 2026-10-18 from the box's own
+  #    canonical/openiti release tree, 2025.1.9): two more body trims whose
+  #    sidecars carry the crosswalk lanes, plus real author/book .yml
+  #    sidecars copied WHOLE under sidecars/ in the canonical
+  #    data/<author>/<book>/ layout.
+  - path: 0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0728IbnTaymiyya/0728IbnTaymiyya.FiCabdMahabba/0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1
+    whole: false
+    trim: >-
+      body trim — header kept through the metadata splitter (line 37), body
+      truncated after line 60; its TSV tags carry died@/resided@ al-Thurayya
+      settlement ids and its author sidecar a continuation-line RESIDED value.
+      Full file 17,910 B / 198 lines.
+  - path: 0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.JK000027-ara1
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0699IbnCabdRahmanQazwiniShafici/0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman/0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.JK000027-ara1
+    whole: false
+    trim: >-
+      body trim — header kept through the metadata splitter (line 37), body
+      truncated after line 60; its book sidecar carries a RELATED work edge
+      (0458Bayhaqi.ShucabIman, ABR.mukhtasar). Full file 114,730 B / 1,171 lines.
+  - path: sidecars/0001AbuTalibCabdManaf/0001AbuTalibCabdManaf.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0001AbuTalibCabdManaf/0001AbuTalibCabdManaf.yml
+    whole: true
+    trim: >-
+      none — author sidecar: a real wikidata EXTID beside template-filled
+      DIED/RESIDED lines (the template text is absence).
+  - path: sidecars/0001AbuTalibCabdManaf/0001AbuTalibCabdManaf.Diwan/0001AbuTalibCabdManaf.Diwan.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0001AbuTalibCabdManaf/0001AbuTalibCabdManaf.Diwan/0001AbuTalibCabdManaf.Diwan.yml
+    whole: true
+    trim: >-
+      none — book sidecar with the template RELATED text (absence).
+  - path: sidecars/0390AbuFarajCukbari/0390AbuFarajCukbari.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0390AbuFarajCukbari/0390AbuFarajCukbari.yml
+    whole: true
+    trim: >-
+      none — author sidecar whose RESIDED is a region-only guess (Iraq_RE_Auto).
+  - path: sidecars/0728IbnTaymiyya/0728IbnTaymiyya.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0728IbnTaymiyya/0728IbnTaymiyya.yml
+    whole: true
+    trim: >-
+      none — author sidecar with filled DIED/RESIDED settlement ids (RESIDED
+      continued on an indented line) and a wikidata EXTID.
+  - path: sidecars/0728IbnTaymiyya/0728IbnTaymiyya.FiCabdMahabba/0728IbnTaymiyya.FiCabdMahabba.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0728IbnTaymiyya/0728IbnTaymiyya.FiCabdMahabba/0728IbnTaymiyya.FiCabdMahabba.yml
+    whole: true
+    trim: >-
+      none — book sidecar, template RELATED.
+  - path: sidecars/0699IbnCabdRahmanQazwiniShafici/0699IbnCabdRahmanQazwiniShafici.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0699IbnCabdRahmanQazwiniShafici/0699IbnCabdRahmanQazwiniShafici.yml
+    whole: true
+    trim: >-
+      none — author sidecar.
+  - path: sidecars/0699IbnCabdRahmanQazwiniShafici/0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman/0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0699IbnCabdRahmanQazwiniShafici/0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman/0699IbnCabdRahmanQazwiniShafici.MukhtasarShucabIman.yml
+    whole: true
+    trim: >-
+      none — book sidecar with a filled RELATED (an abridgement edge).
+  - path: sidecars/0428IbnSina/0428IbnSina.ShifaNafs/0428IbnSina.ShifaNafs.yml
+    url: https://raw.githubusercontent.com/OpenITI/RELEASE/master/data/0428IbnSina/0428IbnSina.ShifaNafs/0428IbnSina.ShifaNafs.yml
+    whole: true
+    trim: >-
+      none — book sidecar whose three-entry RELATED value continues over two
+      lines (PART, PART, COMM).

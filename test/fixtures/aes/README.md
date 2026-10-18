@@ -62,3 +62,26 @@ Re-trim recipe: parse the upstream file, map sentence id → text id, keep the
 raw lines of every sentence block whose text id is listed above (blocks are
 contiguous per text), fix the final block's trailing comma, re-wrap in the
 original first line + `}`.
+
+## The AED header join fixtures (`aed/files/`)
+
+`aed/files/<text-id>_hiero.xml` are the WHOLE, byte-verbatim AED per-text
+stand-off files for the seven AES fixture texts above, copied from the
+`canonical/aed` sparse clone (aed-tei, commit
+`462c722e0323e05641aea2eee8cdf1e27303d939`), retrieved 2026-10-18. The
+directory mirrors the aed workdir shape, so tests build a canonical root
+with `aes/` → this fixture and `aed/` → `aed/` here. They drive
+Nabu::AedTextHeaders, Nabu::AesAedTitles and the AED grain of
+Store::TimelineBuilder::AesDates. What they cover:
+
+| text | title | origDate label (grain) | origPlace |
+|---|---|---|---|
+| 26BP5JT5RZEDHDDU2R5TMUBD24 | pBerlin P 21002 verso (99 E) | Djedkare Asosi (reign) | Abusir |
+| 3F5KUVWQG5EPBM7GMQ6ZFVO5OQ | Stele des Hai … | 18. Dyn. (dynasty) | Abydos |
+| 5YVC3WZOGZHSBGXTIEM7ZUG2UA | Stele der Tadithor … | Makedonen, Ptolemäer (period; `-0332` zero-padded) | Achmim |
+| 2PD2OKCZCRELBGQD6NCAMOFEWA | Eine Sammlung von Verboten (?) | 19. Dyn. / 20. Dyn. (differing labels) | westliches Ufer (a three-ref sub-site) |
+| YSJ3UHIOBJEILCD7KFQIGVOCLY | 〈Stele des Nebanch (aus Abydos)〉 (bracketed editorial title, U+2329) | Sebekhotep IV. (reign) | Abydos |
+| NS6BAIQRENELJM2A2LDNHIYK6E | 〈TEXT〉 placeholder | 6. Dyn. | Qubbet el Hawa |
+| IMLY3YQIZFHHNJUGOZXVPOJTGU | 〈TEXT〉 placeholder | the 0001/0001 placeholder pair, empty labels | "3 = Fundstellen" (thesaurus root) |
+
+Refresh recipe: copy `canonical/aed/files/<id>_hiero.xml` for each id.

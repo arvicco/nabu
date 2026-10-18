@@ -93,6 +93,17 @@ module Nabu
     # unmapped values keep the verbatim metadata but mint no facet and no
     # timeline row — Store::TimelineBuilder::AesDates counts them undated).
     #
+    # DECLARED coarseness: these per-sentence values are the corpus's own
+    # and stay the facet + metadata grain here. The TIGHTER grain — the
+    # text's title, a ruler/dynasty-anchored dating with numeric bounds,
+    # and a site with its TLA thesaurus ref — lives in the per-text AED
+    # header (canonical/aed, same text id) and is joined AFTER load, never
+    # at parse: Nabu::AesAedTitles fills documents.title and
+    # Store::TimelineBuilder::AesDates prefers the header on both axes
+    # (both through Nabu::AedTextHeaders). A cross-source read inside
+    # parse would make this source's documents depend on a tree its
+    # identity stamp does not cover.
+    #
     # == License / fetch / freshness
     #
     # CC BY-SA 4.0, verbatim in the repo README: "All files: CC-BY-SA 4.0"

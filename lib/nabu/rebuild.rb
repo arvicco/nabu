@@ -254,6 +254,12 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :derge_titles) do
         E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
       end
+      # The AES <- AED title join: refills the aes shelf's NULL titles
+      # from canonical/aed per-text headers (absent tree = clean no-op).
+      progress&.stage("aes titles")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :aes_titles) do
+        AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
+      end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.
       progress&.stage("artifact scripts", eta: corpus_eta(ledger, "artifact_scripts"))
@@ -545,15 +551,20 @@ module Nabu
       end
     end
 
-    # P97-2: the person_index replay — same contract as places.
+    # P97-2: the person_index replay — same contract as places, except
+    # the index holds one slice PER AUTHORITY: a clean producer skips only
+    # when its own authority's slice is populated — an empty edh slice
+    # still derives beside a populated cbdb one.
     def replay_person_index(db, dirty: nil)
       @registry.each_source do |entry|
         next unless entry.adapter_class.person_index_producer?
         next unless replayable?(entry)
-        next if dirty && !dirty.include?(entry.slug) && Store::PersonIndex.populated?(db)
 
-        entry.adapter_class.person_index_producer(catalog: db)
-             .run(entry.slug, workdir: workdir_for(entry.slug))
+        producer = entry.adapter_class.person_index_producer(catalog: db)
+        authority = producer.respond_to?(:authority) ? producer.authority : Store::PersonIndex::DEFAULT_AUTHORITY
+        next if dirty && !dirty.include?(entry.slug) && Store::PersonIndex.populated?(db, authority: authority)
+
+        producer.run(entry.slug, workdir: workdir_for(entry.slug))
       end
     end
 

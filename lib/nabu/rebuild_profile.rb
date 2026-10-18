@@ -62,6 +62,7 @@ module Nabu
       lect_facets: "lect facets",         # P58-4: the flattened lect axis
       dictionary_stats: "dictionary stats", # P106-1: the dictionary-group census
       derge_titles: "derge titles", # P106-5: the 84000→Derge title crosswalk
+      aes_titles: "aes titles", # the AES <- AED per-text header titles
       artifact_scripts: "artifact scripts", # P61-3: the artifact-script lane
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",

@@ -129,7 +129,7 @@ module Nabu
         extraction = extract(source, path: path, language: language)
         units = disambiguate_collisions(extraction.units)
         build_document(units, urn: urn, language: language, title: title, path: path,
-                              license: extraction.license)
+                              license: extraction.license, authors: extraction.authors)
       end
 
       private
@@ -165,10 +165,12 @@ module Nabu
         end
       end
 
-      def build_document(units, urn:, language:, title:, path:, license:)
+      def build_document(units, urn:, language:, title:, path:, license:, authors: [])
         deva = language.to_s.split("-").include?("Deva")
+        metadata = { "license" => license }
+        metadata["author"] = authors unless authors.empty?
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path,
-                                metadata: { "license" => license })
+                                metadata: metadata)
         units.each_with_index do |unit, sequence|
           text = Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip)
           document << Passage.new(
@@ -199,7 +201,7 @@ module Nabu
         DROPPED_ELEMENTS = %w[note head].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        Result = Data.define(:units, :license)
+        Result = Data.define(:units, :license, :authors)
 
         def initialize(reader:, path:, language:)
           @reader = reader
@@ -208,6 +210,9 @@ module Nabu
           @in_availability = false
           @availability_text = +""
           @license_targets = []
+          @title_stmt = :before # :inside the fileDesc titleStmt, then :done
+          @author_text = nil
+          @authors = []
           @text_lang = nil
           @body_lang = nil
           @seen_body = false
@@ -225,7 +230,7 @@ module Nabu
           @reader.each { |node| process(node) }
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
-          Result.new(units: @units, license: @license)
+          Result.new(units: @units, license: @license, authors: @authors)
         end
 
         private
@@ -264,6 +269,7 @@ module Nabu
         def end_element(node)
           name = local_name(node)
           @in_availability = false if name == "availability"
+          header_end_element(name) unless @seen_body
           return unless @in_body
 
           if dropping?
@@ -284,6 +290,7 @@ module Nabu
         def text_node(node)
           value = node.value.to_s
           @availability_text << value if @in_availability
+          @author_text << value if @author_text
           return unless @in_body && !dropping?
 
           if @group
@@ -295,15 +302,34 @@ module Nabu
           end
         end
 
-        # -- header: availability + language ---------------------------------
+        # -- header: availability + language + titleStmt authors ---------------
 
         def header_element(node, name)
           case name
+          when "titleStmt" then @title_stmt = :inside if @title_stmt == :before
+          when "author"
+            @author_text = +"" if @title_stmt == :inside && !node.empty_element? && @author_text.nil?
           when "availability" then @in_availability = true unless node.empty_element?
           when "ref", "licence"
             target = node.attribute("target")
             @license_targets << target if @in_availability && target
           when "text" then @text_lang ||= node.attribute("xml:lang")
+          end
+        end
+
+        # Only the FIRST titleStmt (fileDesc's — the edition's own) yields
+        # authors: a sourceDesc biblFull carries its own titleStmt naming the
+        # print edition's authors. Names ride verbatim (71 of 84 editions
+        # carry one or more; base author + commentator on the commentaries).
+        def header_end_element(name)
+          case name
+          when "titleStmt" then @title_stmt = :done if @title_stmt == :inside
+          when "author"
+            return if @author_text.nil?
+
+            author = Normalize.nfc(@author_text.gsub(/[[:space:]]+/, " ").strip)
+            @authors << author unless author.empty? || @authors.include?(author)
+            @author_text = nil
           end
         end
 

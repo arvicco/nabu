@@ -26,9 +26,9 @@ module Store
       )
     end
 
-    def timeline_for(urn)
+    def timeline_for(urn, axis_source: "oracc")
       doc = @db[:documents].where(urn: urn).first
-      @db[:document_axes].where(document_id: doc.fetch(:id)).first
+      @db[:document_axes].where(document_id: doc.fetch(:id), axis_source: axis_source).first
     end
 
     def build!
@@ -116,6 +116,72 @@ module Store
       assert_equal "century", row.fetch(:precision)
     end
 
+    # -- regnal_dates (the catalogue's reign span, between date_of_origin and
+    #    the period) ------------------------------------------------------------
+
+    # riao Q006482 (Sargon II's Annals of Room II) carries no date_of_origin
+    # — before, it fell to the whole Neo-Assyrian period band; its
+    # regnal_dates "721-705" is Sargon II's reign.
+    def test_regnal_dates_band_a_member_without_date_of_origin
+      make_document("urn:nabu:oracc:riao:Q006482")
+      build!
+      row = timeline_for("urn:nabu:oracc:riao:Q006482")
+      assert_equal(-721, row.fetch(:not_before))
+      assert_equal(-705, row.fetch(:not_after))
+      assert_equal "reign", row.fetch(:precision)
+      assert_equal "721-705", row.fetch(:date_raw)
+    end
+
+    def test_regnal_dates_shapes_parse_with_bc_suffix_and_ca
+      dates = Nabu::Store::TimelineBuilder::OraccDates
+      assert_equal [-721, -705], dates.parse_regnal_dates("721–705 BC").values_at(:not_before, :not_after)
+      assert_equal [-668, -631], dates.parse_regnal_dates("668–ca. 631 BC").values_at(:not_before, :not_after)
+      assert_equal [-626, -612], dates.parse_regnal_dates("ca. 626–612 BC").values_at(:not_before, :not_after)
+      assert_equal "reign", dates.parse_regnal_dates("668-ca. 631")[:precision]
+      assert_nil dates.parse_regnal_dates("unknown")
+    end
+
+    def test_date_of_origin_still_wins_over_regnal_dates
+      make_document("urn:nabu:oracc:saao-saa01:P224395") # Sargon2.000.00.00 + regnal 721–705 BC
+      build!
+      assert_equal "Sargon2.000.00.00", timeline_for("urn:nabu:oracc:saao-saa01:P224395").fetch(:date_raw)
+    end
+
+    # -- the SAA second place: the letter's SENDER location -------------------
+
+    # A letter's sender_loc is where it was WRITTEN; provenience is where it
+    # was FOUND. The sender place rides its own place-only axis row under
+    # axis_source "oracc-sender" — a labeled class beside the provenience
+    # row, never merged into it.
+    def test_sender_location_rides_its_own_labeled_place_row
+      make_document("urn:nabu:oracc:saao-saa01:P313416")
+      build!
+      found = timeline_for("urn:nabu:oracc:saao-saa01:P313416")
+      assert_equal "Kuyunjik (Nineveh)", found.fetch(:place_name), "the provenience row is untouched"
+      sender = timeline_for("urn:nabu:oracc:saao-saa01:P313416", axis_source: "oracc-sender")
+      assert_equal "Assyria", sender.fetch(:place_name)
+      assert_equal "https://pleiades.stoa.org/places/29492", sender.fetch(:place_ref)
+      assert_in_delta 36.2, sender.fetch(:place_lat)
+      assert_in_delta 43.2, sender.fetch(:place_lon), 0.001, "upstream writes lon,lat (Nineveh: 43.15,36.36)"
+      assert_nil sender.fetch(:not_before), "a sender row carries no date — the tablet's row does"
+    end
+
+    def test_sender_without_pleiades_keeps_the_name_alone
+      make_document("urn:nabu:oracc:saao-saa01:P224395") # sender_loc Hamath, no pleiades
+      build!
+      sender = timeline_for("urn:nabu:oracc:saao-saa01:P224395", axis_source: "oracc-sender")
+      assert_equal "Hamath", sender.fetch(:place_name)
+      assert_nil sender.fetch(:place_ref)
+      assert_nil sender.fetch(:place_lat)
+    end
+
+    def test_unknown_sender_placeholders_mint_no_row
+      dates = Nabu::Store::TimelineBuilder::OraccDates
+      assert_nil dates.extract_sender("sender_loc" => "(unknown)", "pleiades_sender_loc" => "not assigned",
+                                      "sender_loc_coordinates" => "N/A")
+      assert_nil dates.extract_sender({})
+    end
+
     # -- period fallback --------------------------------------------------------
 
     def test_period_maps_via_the_middle_chronology_table
@@ -194,7 +260,7 @@ module Store
       make_document("urn:nabu:oracc:saao-saa01:P224395")
       build!
       build!
-      assert_equal 1, @db[:document_axes].count
+      assert_equal 2, @db[:document_axes].count, "the tablet row + its sender-place row"
     end
   end
 end

@@ -41,12 +41,16 @@ sources:
       note: ruled DELIBERATELY unstaged at source grain (D57-f — genuinely
         mixed Renaissance-to-modern Latin); per-document date-band rows ride.
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: named, note: "the creation placeName on 298 of 573 texts; 69 carry
+        a Wikidata place URL that rides the axis place_ref verbatim (no wikidata gazetteer
+        join is held, so the posture stays named)"}
     script: {posture: implied}
   edh:
     lect: {posture: dates}
     dating: {posture: partial}
-    places: {posture: linked}
+    places: {posture: linked, note: "fo_antik findspot + Pleiades/GeoNames ref + the koordinaten1 WGS84
+        pair (place_lat/lon, 79,462/81,460 axis rows live 2026-10-18); koordinaten2 (a second locus on
+        838 rows) stays canonical-only — no second column pair to carry it"}
     script: {posture: implied}
   edr:
     lect: {posture: dates}
@@ -74,8 +78,14 @@ sources:
     # lect declaration retired P62-2: the extended akk/sux period rules
     # machine-posture oracc now (the shadowing rule).
     dating: {posture: dated, note: "P62-1/2: 116,708/118,366 via catalogue date_of_origin + the ruled
-        period table (the recursive-glob fix reached the triply-nested epsd2 catalogue)"}
-    places: {posture: linked, note: "refs on 20% — names reach 29%"}
+        period table (the recursive-glob fix reached the triply-nested epsd2 catalogue); 2026-10-18:
+        regnal_dates (4,359 members, absolute BCE reign spans) bands at reign precision ahead of the
+        period when date_of_origin is absent; dynastic_seat is the ruler's political seat — no
+        ruled table dates it, it rides metadata + facet only"}
+    places: {posture: linked, note: "refs on 20% — names reach 29%; 2026-10-18: the SAA letters'
+        sender_loc (2,678 members, 1,733 with Pleiades id + coordinates) rides its OWN place row
+        (axis_source oracc-sender) beside the provenience row; findspot_square is an excavation grid
+        square below the place axis (metadata only)"}
     script: {posture: implied}
 
   # ── codemap: refined universally, no Nabu-specific knowledge needed ────
@@ -255,7 +265,9 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   menota:
-    kind: {posture: unclassified}
+    kind: {posture: unclassified, note: "no genre vocabulary in the headers; the msItem
+        work titles (metadata work, 72 of 91 texts — Konungs skuggsjá, Njáls saga,
+        Landslǫg …) are work NAMES, faceted as work; a per-work kind fold is later curation"}
     # lect: machine-postured (owner-ruled 2026-08-24, nabu-lects v1.1.0
     # minted no/no:old + da/da:old + the nor/dan/gmq-oda codemap rows) —
     # the pending row retired, the ref add-then-retire shape. Coverage:
@@ -1124,9 +1136,18 @@ sources:
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
         excerpts; an ara:cla whole-source staging is a future ruling, not a
         default"}
-    dating: {posture: undatable, note: "excerpt corpus — the classical works'
-        composition dates are not per-passage claims upstream makes"}
-    places: {posture: unplaced}
+    dating: {posture: partial, note: "each book's byline states its author's
+        birth/death (AH/CE pairs, e.g. 194/810 – 261/870) — 9 of 10 books date
+        by that life span, class composition (the work was written within it);
+        the Qurʾān book carries no byline and stays undated. The header
+        imprint dates are the modern EDITIONS' (lineage, carried in
+        edition, never projected)"}
+    places: {posture: unplaced, note: "the 2,779 <placeName translation=…> tags
+        name places the disaster accounts are ABOUT (Egypt 501, Damascus 270,
+        Cairo 235 …) — annotated per passage and faceted per book as
+        place_mentioned, never an origin claim; the corpus states no origin
+        or findspot for its excerpts. Gazetteer resolution of the mentions is
+        a future look"}
     script: {posture: implied}
   dta:   # P94-2
     lect: {posture: identity, note: "de IS German — the print era, 1473–1969
@@ -1142,8 +1163,14 @@ sources:
   first1k-greek:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: dated, note: "two labeled classes, neither the edition's own composition
+        claim: the sourceDesc imprint year of the printed edition (metadata source_date →
+        date_class edition, 1,090 of 1,091 editions) and the TLG concordance lane — 483 grc
+        editions join a glaux/diorisis composition envelope by their CTS author.work id
+        (axis_source tlg-concordance, date_class composition); the rest stay undated"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the EpidocParser inline layer (notes/foreign/quotes
+        annotations) carries no place keys at census — first1k bodies tag no placeName"}
     script: {posture: implied}
   diorisis:
     kind: {posture: unclassified}
@@ -1201,7 +1228,9 @@ sources:
     # lect declaration retired P64-6 (owner-ruled 2026-08-09): the etcsl sux→sux:post
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "a composite has no single place: the per-witness provenance
+        scopes of the header's tablet list (345 of 3,960 witnesses, Nippur 292 …) ride metadata
+        \"witnesses\" beside each museum number, deliberately not projected as the composite's place"}
     script: {posture: implied}
   coptic-scriptorium:
     kind: {posture: unclassified}
@@ -1242,7 +1271,11 @@ sources:
     dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
         Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
     places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
-        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined"}
+        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined. The
+        inline persName/placeName layer (passage annotations entities: 881 persons,
+        240 places in 382 editions — kings, donors, granted villages; Ollett's
+        pers:/pl: lemma keys verbatim) names places MENTIONED in the grant, not the
+        findspot, so it rides the passages and never the axis"}
     script: {posture: qualified, note: "romanized editions (pra/san/tel/kan -Latn); Brāhmī
         and its southern descendants are the artifact facts"}
   dharma-nusantara:
@@ -1647,11 +1680,17 @@ sources:
     places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt"}
     script: {posture: implied}
   gretil:
-    kind: {posture: unclassified}
-    lect: {posture: identity, note: "owner-ruled 2026-08-09: the census found NO
-        content facets (nothing DCS-veda-like) — bare san~latn stands"}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    # kind: config/kind_map.yml folds the teiHeader genre ladder (keywords term,
+    # all 784 files — "Sanskrit -- Śāstra -- Philosophy -- Buddhist"), mined into
+    # metadata genre beside the titleStmt author (427) and the sourceDesc edition (612).
+    lect: {posture: identity, note: "owner-ruled 2026-08-09: no LECT-shaped facet
+        (nothing DCS-veda-like — the genre ladder names shelves such as Veda, not a
+        language stage) — bare san~latn stands"}
+    dating: {posture: undatable, note: "the header carries no composition date; the
+        sourceDesc edition years are print years and ride inside metadata edition
+        verbatim, never a timeline claim"}
+    places: {posture: unplaced, note: "no origin place in the header; the edition
+        imprint places are printing places, kept inside the edition string"}
     script: {posture: qualified}
   tla-hf:
     kind: {posture: unclassified}
@@ -1748,13 +1787,22 @@ sources:
     script: {posture: implied}
   aes:
     kind: {posture: unclassified}
-    dating: {posture: partial}
-    places: {posture: named}
+    dating: {posture: dated, note: "12,838/13,026 texts at the AED header grain (the TLA
+        origDate label + numeric bounds, joined by text id from canonical/aed: 6,483 reign,
+        5,775 dynasty, 560 period, 20 quarter-century); 55 more keep the corpus's coarse
+        period envelope; 118 carry nothing usable (census 2026-10-18)"}
+    places: {posture: named, note: "10,592 texts at SITE grain from the AED origPlace with the
+        TLA thesaurus ref verbatim (ths:…, no registry namespace yet — named, not linked);
+        2,072 keep the corpus's coarse region; category/unknown thesaurus nodes never mint a
+        place (census 2026-10-18)"}
     script: {posture: implied}
   cdli:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+    # 2026-10-18: subgenre (71,814 rows) rides metadata + the subgenre facet and is
+    # deliberately not kind-folded (a mixed series/archive/role vocabulary — genre
+    # stays the kind source); seal_id S-numbers mint seal-composite hubs.
   dacon:
     kind: {posture: unclassified}
     # P88-A4: minted as pending on the nwc anchor (censused absent
@@ -1856,7 +1904,12 @@ sources:
     # kind declaration retired P104-1: the subject-facet regex rule in
     # kind_map.yml machine-postures it now (the shadowing rule).
     dating: {posture: dated}
-    places: {posture: unplaced}
+    places: {posture: linked, note: "the AUTHOR's place of activity, not a findspot:
+        al-Ṯurayyā settlement ids from the TSV tags' died@/resided@ (1,442 in-scope
+        versions) unioned with the author sidecars' DIED/RESIDED (344 filled)
+        mint thurayya: place_refs on the AH death-year row; region ids, unfinished
+        ids and born/visited stay metadata (author_places). The edition imprint
+        (ed_info) is lineage, carried, never projected"}
     script: {posture: implied}
   openmgh:
     kind: {posture: unclassified}
@@ -1868,8 +1921,14 @@ sources:
         declared in Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   papyri-ddbdp:
-    dating: {posture: dated}
-    places: {posture: linked}
+    dating: {posture: dated, note: "DDbDP: the HGV origDate envelope (build walk, axis_source hgv); DCLP:
+        the file's own header origDate envelope (metadata date, MetadataDates :structured — 2,243 of
+        2,256 literary docs at the 2026-10-18 census). HGV <date type=\"mentioned\"> (11,075 dates)
+        rides metadata mentioned_dates as its own class — dates the text cites, never the origin"}
+    places: {posture: linked, note: "HGV origPlace + the first provenance's settlement AND nome refs
+        (Trismegistos/Pleiades URLs, settlement first; region tier never claims); DCLP origPlace
+        verbatim + the findspot provenance's settlement/nome refs (minted tm:/pleiades:), the
+        composed provenance only when no findspot is given"}
     script: {posture: qualified}
   perseus-anglit:   # P95-4
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
@@ -1889,13 +1948,32 @@ sources:
     script: {posture: implied}
   perseus-greek:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: dated, note: "two labeled classes: the sourceDesc imprint year of the
+        printed edition (metadata source_date → date_class edition, 767 of 770 grc editions)
+        and the TLG concordance lane — 760 grc editions join a glaux/diorisis composition
+        envelope by their CTS author.work id (axis_source tlg-concordance, date_class
+        composition, the witness named in date_raw)"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the passage-grain inline layer (EpidocParser
+        annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
+        perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
+        where it was made or found; TGN is no held gazetteer (Pleiades carries
+        ~49 TGN crosswalks), so nothing joins the axis — the keys ride for a
+        future join"}
     script: {posture: implied}
   perseus-latin:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: dated, note: "edition class only: the sourceDesc imprint year of the
+        printed edition (metadata source_date → date_class edition, 312 of 322 editions); no
+        Latin concordance is held (glaux/diorisis are Greek), so the works' composition eras
+        stay unclaimed"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the passage-grain inline layer (EpidocParser
+        annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
+        perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
+        where it was made or found; TGN is no held gazetteer (Pleiades carries
+        ~49 TGN crosswalks), so nothing joins the axis — the keys ride for a
+        future join"}
     script: {posture: implied}
   rundata:
     kind: {posture: unclassified}

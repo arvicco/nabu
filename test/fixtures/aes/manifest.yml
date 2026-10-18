@@ -30,3 +30,33 @@ files:
     url: https://raw.githubusercontent.com/simondschweitzer/aes/master/files/aes/_aes_sawlit.json
     whole: false
     trim: texts 2PD2OKCZCRELBGQD6NCAMOFEWA (one untranslated sentence) + YSJ3UHIOBJEILCD7KFQIGVOCLY, byte-verbatim sentence blocks (90,848,753 B -> 32,099 B)
+  # The AED per-text headers of the seven fixture texts — whole files from
+  # the aed-tei repo (README "The AED header join fixtures").
+  - path: aed/files/26BP5JT5RZEDHDDU2R5TMUBD24_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/26BP5JT5RZEDHDDU2R5TMUBD24_hiero.xml
+    whole: true
+    trim:
+  - path: aed/files/2PD2OKCZCRELBGQD6NCAMOFEWA_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/2PD2OKCZCRELBGQD6NCAMOFEWA_hiero.xml
+    whole: true
+    trim:
+  - path: aed/files/3F5KUVWQG5EPBM7GMQ6ZFVO5OQ_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/3F5KUVWQG5EPBM7GMQ6ZFVO5OQ_hiero.xml
+    whole: true
+    trim:
+  - path: aed/files/5YVC3WZOGZHSBGXTIEM7ZUG2UA_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/5YVC3WZOGZHSBGXTIEM7ZUG2UA_hiero.xml
+    whole: true
+    trim:
+  - path: aed/files/IMLY3YQIZFHHNJUGOZXVPOJTGU_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/IMLY3YQIZFHHNJUGOZXVPOJTGU_hiero.xml
+    whole: true
+    trim:
+  - path: aed/files/NS6BAIQRENELJM2A2LDNHIYK6E_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/NS6BAIQRENELJM2A2LDNHIYK6E_hiero.xml
+    whole: true
+    trim:
+  - path: aed/files/YSJ3UHIOBJEILCD7KFQIGVOCLY_hiero.xml
+    url: https://raw.githubusercontent.com/simondschweitzer/aed-tei/master/files/YSJ3UHIOBJEILCD7KFQIGVOCLY_hiero.xml
+    whole: true
+    trim:

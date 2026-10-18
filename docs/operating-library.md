@@ -141,8 +141,10 @@ installed where:
   numbered census → mine → report → rule → re-mine script, with
   measured costs.
 - **Person census** (the prosopography lane, deliberately gated):
-  `nabu sync cbdb` derives the person index (~660k persons of Chinese history);
-  `nabu person <name|cbdb:ID>` serves the card in either script;
+  `nabu sync cbdb` derives the person index (~660k persons of Chinese history)
+  and `nabu sync edh --parse-only` its second authority (EDH's ~93.6k
+  persons attested on Latin inscriptions, one per attestation);
+  `nabu person <name|cbdb:ID|edh:HD…/n>` serves the card;
   `nabu person mine <source>` runs the census-only name scan — it
   writes nothing by design, and stays census-only until the numbers
   justify opening an apply lane.

@@ -4,6 +4,7 @@ require "nokogiri"
 
 require_relative "../errors"
 require_relative "../normalize"
+require_relative "cuneiform_concordance"
 require_relative "../model/document"
 require_relative "../model/passage"
 
@@ -66,6 +67,23 @@ module Nabu
     # epsd2/literary sibling's Q-number concordance meets), then every
     # //body//xref[@doc] target (the OB catalogues' incipit citations, the
     # narratives' catalogue cross-references), deduped in document order.
+    #
+    # == Witness list (composites only)
+    #
+    # Every c.*.xml header carries `<listBibl type="tablets">` (3,960
+    # museumNumber entries across the 394 composites, censused 2026-10-18;
+    # 345 with a per-witness provenance scope). Metadata "witnesses" keeps
+    # each entry in header order: the raw string verbatim, the cleaned
+    # museum number (Nabu::Adapters::CuneiformConcordance.museum_number — the
+    # parenthetical publication stripped, joins intact), and the provenance
+    # when given. The witnesses' findspots are NOT projected onto the place
+    # axis: a composite is assembled from many tablets and has no single
+    # place of its own. Then "related" gains the concordance hubs: the
+    # composition's own padding-folded "etcsl:<n>" hub (CDLI witnesses
+    # assert the same key from their subgenre) and one "object:<KEY>" hub
+    # per witness fragment (CDLI's literary rows assert the same keys from
+    # museum_no/excavation_no) — the other side of the CDLI↔ETCSL
+    # concordance.
     class EtcslTeiParser
       URN_PREFIX = "urn:nabu:etcsl:"
 
@@ -169,10 +187,11 @@ module Nabu
       def build_document(path, urn:, expected_prefix:, language:, kind:)
         xml = read(path)
         number = composition_number(xml, path: path, expected_prefix: expected_prefix)
+        metadata = { "kind" => kind, "etcsl_no" => number, "related" => related(xml, number) }
+        add_witnesses(metadata, xml) if kind == "composite"
         document = Nabu::Document.new(
           urn: urn, language: language, canonical_path: path,
-          title: title(xml),
-          metadata: { "kind" => kind, "etcsl_no" => number, "related" => related(xml, number) }
+          title: title(xml), metadata: metadata
         )
         yield xml, document
         document
@@ -232,6 +251,35 @@ module Nabu
           keys << "urn:nabu:etcsl:#{target}" if target && target != number
         end
         keys.uniq
+      end
+
+      # The composite header's tablet witness list (class note, "Witness
+      # list"): metadata "witnesses" in header order — raw verbatim, the
+      # cleaned museum number (publication stripped, joins intact) and
+      # the per-witness provenance when the header gives one — then the
+      # concordance hubs appended to "related": the composition's own
+      # padding-folded etcsl: hub and one object: hub per fragment.
+      def add_witnesses(metadata, xml)
+        witnesses = xml.xpath("//teiHeader//listBibl[@type='tablets']/bibl").filter_map do |bibl|
+          raw = header_text(bibl.at_xpath("biblScope[@type='museumNumber']"))
+          next if raw.nil?
+
+          witness = { "raw" => raw, "museum_number" => CuneiformConcordance.museum_number(raw) }
+          provenance = header_text(bibl.at_xpath("biblScope[@type='provenance']"))
+          witness["provenance"] = provenance if provenance
+          witness
+        end
+        metadata["witnesses"] = witnesses unless witnesses.empty?
+        hubs = [CuneiformConcordance.etcsl_hub(metadata["etcsl_no"])].compact +
+               witnesses.flat_map { |witness| CuneiformConcordance.object_hubs(witness["raw"]) }
+        metadata["related"] = (metadata["related"] + hubs).uniq
+      end
+
+      def header_text(node)
+        return nil if node.nil?
+
+        text = Nabu::Normalize.nfc(node.text.gsub(/\s+/, " ").strip)
+        text.empty? ? nil : text
       end
 
       def append_line(document, line, index:, path:)

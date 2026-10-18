@@ -100,6 +100,9 @@ module Nabu
           #                              (certainty + evidence ride the date hash)
           "dharma-tamil" => :structured, # P120: the title's era-typed year (Śaka, Kollam —
           #                                config/eras.yml); regnal years stay verbatim
+          "diccas" => :structured, # each book's byline author-life span (AH/CE pairs read
+          #                          by magnitude), its own class composition; the
+          #                          Qurʾān book has no byline and stays undated
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
@@ -111,6 +114,7 @@ module Nabu
           "elephantine" => :structured,
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "first1k-greek" => :edition_year_text,
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
@@ -143,6 +147,15 @@ module Nabu
           "ogham" => :century_prose,
           "okhc" => :year_key,
           "openmgh" => :printed_year_text,
+          "papyri-ddbdp" => :structured, # the DCLP literary documents' header origDate
+          #                                envelope + findspot (PapyriHeader); the DDbDP
+          #                                texts carry no date/place keys — their rows are
+          #                                the HGV walk's (axis_source hgv), never doubled
+          # the Perseus family: the sourceDesc imprint year of the printed
+          # edition each encoding follows (date_class edition); the works'
+          # composition eras come from the TLG concordance lane instead
+          "perseus-greek" => :edition_year_text,
+          "perseus-latin" => :edition_year_text,
           "pl-wikisource" => :era_band_key,
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,
@@ -400,18 +413,30 @@ module Nabu
             return [place, nil, nil, nil]
           end
           return [meta["orig_place"], nil, nil, nil] if place.nil?
-          return [place, nil, nil, nil] unless place.is_a?(Hash)
+          return [place, string_place_ref(meta), nil, nil] unless place.is_a?(Hash)
 
           refs = []
           pleiades = place["pleiades"].to_s.strip
           refs << "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
           refs += Nabu::PlaceRefs.ids(place["geonames"]).map { |ns, id| "#{ns}:#{id}" }
+          # A generic "ref" field (papyri-ddbdp's DCLP findspot: verbatim
+          # Trismegistos/Pleiades URLs) lifts through the same one reader.
+          refs += Nabu::PlaceRefs.ids(place["ref"]).map { |ns, id| "#{ns}:#{id}" }
           refs += Array(place["logainm"]).map(&:to_s).reject(&:empty?)
           name = place["ancient"] ||
                  place.values_at("townland", "county", "country").compact.then do |ladder|
                    ladder.empty? ? nil : ladder.join(", ")
                  end
           [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # A string place's sibling "place_ref" (croala's creation placeName
+        # @ref — a Wikidata place URL) rides verbatim, the logainm precedent:
+        # no wikidata namespace is minted. Only a URL self-identifies its
+        # gazetteer; a bare number (2 croala files) or blank → nil.
+        def string_place_ref(meta)
+          ref = meta["place_ref"].to_s.strip
+          ref.match?(%r{\Ahttps?://\S+\z}) ? ref : nil
         end
 
         # P118-R4 S5: a toponym list [{"name", "latitude", "longitude", …}]

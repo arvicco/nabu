@@ -142,3 +142,12 @@ files:
     copied: 2026-09-26
     whole: false
     trim: entries reduced to the first 6 (ʾAtaya … Adad-abuʾa); instances/summaries filtered to the kept xis keys; header verbatim (1.4 MB -> ~15 KB; recipe in README)
+  # -- catalogue-member sampler (2026-10-18, the catalogue-extras mining) ------
+  - path: catalogue-members/members.json
+    refetchable: false
+    provenance: zip-extract
+    reason: catalogue members cut from the held project zips' catalogue.json files — no raw per-file URL exists
+    upstream: https://oracc.museum.upenn.edu/json/
+    copied: 2026-10-18
+    whole: false
+    trim: 9 whole members verbatim from 8 project catalogues, keyed "<project>:<id>", re-serialized (recipe in README)

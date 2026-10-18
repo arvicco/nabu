@@ -32,6 +32,12 @@ module Nabu
       APPARATUS_SEGMENT = /\A(Вступ|Передмова|Примітки|Коментарі.*|Архівна і бібліографічна довідка.*|Словник .*)\z/
       EDITION_FIELDS = %w[рік місто редактор Джерело Дата_публікації].freeze
       TRANSLATOR_FIELDS = %w[перекладач Перекладач].freeze
+      # The section's own author first (a chronicle inside a collected
+      # volume), then the work's; назва names the parent volume on a секція
+      # page. рік/місто already ride base_edition (EDITION_FIELDS).
+      AUTHOR_FIELDS = %w[автор_секції автор Автор].freeze
+      WORK_FIELD = "назва"
+      WORK_REQUIRES = "секція"
 
       RETELLING = "a modern-Ukrainian retelling of Primary Chronicle episodes (ukrlit.vn.ua, no " \
                   "edition stated; Мова_оригіналу=українська) — not the chronicle text"

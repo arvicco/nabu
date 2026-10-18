@@ -914,12 +914,13 @@ class NormalizeTest < Minitest::Test
     assert_equal "کندم", Nabu::Normalize.nfc(text).chars[start...finish].join
   end
 
-  # P41-g verified all six OpenITI fixtures NFC-stable; pin it, and pin that
+  # P41-g verified the OpenITI fixtures NFC-stable; pin it, and pin that
   # ara/fas are NOT on the NFC exemption list (that list is hbo/arc only —
-  # Masoretic mark order, nothing Arabic-script).
+  # Masoretic mark order, nothing Arabic-script). Census: the six P41
+  # fixtures plus the two sidecar-era trims (2026-10-18).
   def test_openiti_fixture_bytes_are_nfc_stable_and_not_nfc_exempt
     fixtures = Dir[File.join(OPENITI_FIXTURES, "0*")]
-    assert_equal 6, fixtures.length, "the six P41 OpenITI fixtures"
+    assert_equal 8, fixtures.length, "every held OpenITI fixture text"
     fixtures.each do |path|
       bytes = File.read(path, encoding: "utf-8")
       assert_equal bytes, Nabu::Normalize.nfc(bytes), "#{File.basename(path)} must be NFC-stable"

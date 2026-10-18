@@ -114,6 +114,11 @@ module Adapters
       assert_equal :apparatus, adapter.wikitext_class("Слово о полку Игореве/Историческое содержание песни", "")
     end
 
+    def test_author_rides_metadata
+      assert_equal "Аввакум (1621—1682)", doc(293_263).metadata["author"]
+      assert_nil doc(34_424).metadata["author"], "НЕТ_АВТОРА — no author slot, no key"
+    end
+
     def test_discovery_census
       assert_equal %w[urn:nabu:ru-wikisource:293263 urn:nabu:ru-wikisource:34424],
                    conformance_adapter.discover(FIXTURES).map(&:id).sort

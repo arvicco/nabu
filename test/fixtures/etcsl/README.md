@@ -45,6 +45,24 @@ is **byte-verbatim**, and the spliced regions are the file's own bytes:
   opened + paragraphs p1–p3) ++ lines 127–133 (`</div1>` closing A + the
   whole `div1` B, whose p35 is gap-only, + closers).
 
+## The witness-list file (`witnesses/`, outside the discover set)
+
+`witnesses/c.1.3.3.xml` — "Inana and Enki" (ETCSL c.1.3.3), cut
+**2026-10-18** from this box's own
+`canonical/etcsl/transliterations/c.1.3.3.xml` (the pinned zip above;
+whole-file sha256
+`5e9ce6c35b4a37d20c2bfcaeab2738c2b20373526cbe5e5c49177acb8a802644`).
+Recipe: lines 1–84 (the whole teiHeader + the first two `<l>` lines) ++
+lines 2724–2726 (`</body></text></TEI.2>`), bytes verbatim, CRLF kept. It
+lives OUTSIDE `transliterations/` so the adapter's discover set — and
+every count asserted over it — is unchanged; the witness-list tests call
+`EtcslTeiParser#parse_composite` on it directly. Chosen for the
+`<listBibl type="tablets">` shape the Lugalbanda header lacks: per-witness
+`<biblScope type="provenance">` beside the museum number (Nippur / Ur), a
+witness WITHOUT provenance (UET VI/3 79), joins with bare continuation
+numbers ("CBS 10305 + 10315 + …"), and an excavation-number witness
+("3NT 407").
+
 ## License (verbatim, from the record — the artifact itself carries none)
 
 The LLDS record page states: *"This item is Publicly Available and

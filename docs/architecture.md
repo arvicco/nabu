@@ -1216,12 +1216,19 @@ bands above the ruled period table, P81-1). The P81-1 `NikhEntryDates`
 lane projects the NIKH chronicle family's per-entry machine dates from
 CATALOG annotations (load-verified f(canonical) — no re-parse):
 passage-grain year runs (axis_source `<slug>-entries`) plus document
-envelopes where the metadata lane makes no claim. The coordinates lane
+envelopes where the metadata lane makes no claim. The `TlgConcordanceDates`
+lane is an in-library JOIN: glaux and diorisis key per-work composition
+dates by TLG author.work ids, which the Perseus/First1K CTS urns also
+carry, so each original-language Greek CTS edition joins a composition
+envelope by urn (axis_source `tlg-concordance`, date_class `composition`,
+date_raw naming the witness and key — glaux first, diorisis fallback);
+a sync of any target or witness re-derives the lane. The coordinates lane
 (migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
 feeding `search --within`. Since P47-r3 a sync refreshes the synced
 source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
-`NikhEntryDates.refresh_source!`, mirroring the Indexer's per-source
+`NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!`,
+mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
 The whole-library chronological views over this table are `nabu list
 --by-date` (century census, earliest-bound buckets with the announced
@@ -1249,6 +1256,26 @@ tablet's timeline row — the artifact's date, so the English witness inherits t
 time filter. Scratch-measured coverage: 21,558 of 21,692 oracc documents
 (99.4%) carry a row — 21,517 dated (99.2%), 41 place-only, 172 undated
 members counted, 3 documents absent from any catalogue (upstream drift).
+Since 2026-10-18 a member whose `date_of_origin` yields nothing is banded by
+its `regnal_dates` (absolute BCE reign spans, precision "reign") before the
+period, and the SAA letters' SENDER location (`sender_loc` +
+`pleiades_sender_loc` + `sender_loc_coordinates`, lon,lat upstream) rides a
+SEPARATE place-only row under `axis_source` "oracc-sender" — a labeled place
+class beside the provenience row: where a letter was written is never
+conflated with where it was found.
+
+**The cuneiform concordance hubs (2026-10-18).** CDLI, ORACC and ETCSL meet
+in the links journal at reference-edge HUBS — targets every witness of one
+thing points at, so `nabu links <hub>` lists them all (the CDLI composite_id
+mold, `urn:nabu:cdli:q…`, dangling-but-stable). ORACC's catalogue Q-numbers
+(producer "oracc") target the same Q hubs; CDLI seal_id S-numbers mint
+`urn:nabu:cdli:s…` seal hubs; an ETCSL composite and the CDLI witnesses
+whose subgenre names it both assert the padding-folded `etcsl:<n>` hub
+(ETCSL urns stay frozen as minted); and ETCSL witness-list fragments and
+CDLI literary rows' museum/excavation numbers both assert
+`object:<KEY>` hubs. The fold rules (zero padding, the Istanbul prefix,
+segment padding) live in `Adapters::CuneiformConcordance`, under adapters/
+so they ride only the cdli/etcsl derivation closures.
 
 **Part 2b — TOROT chronicle annals (`TimelineBuilder::ChronicleAnnals`, P16-3):
 the first PASSAGE-GRAIN rows**, using migration 008's `passage_seq_*` columns

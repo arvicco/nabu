@@ -344,6 +344,7 @@ module Nabu
       refresh_catalog_lanes(entry, load_report)
       refresh_dictionary_stats(entry, combined_report)
       refresh_derge_titles(entry)
+      refresh_aes_titles(entry)
       refresh_lemma_rollups(entry, adapter, combined_report, indexed)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
@@ -396,6 +397,9 @@ module Nabu
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug,
                                                             canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
+      # The TLG concordance joins the Greek CTS editions to glaux/diorisis
+      # composition dates — a sync of either side re-derives it.
+      Store::TimelineBuilder::TlgConcordanceDates.refresh_source!(catalog: @db, slug: entry.slug)
       # P122-1: a load may have minted documents an armed shelf estimates
       # (or withdrawn some) — re-project the silver-date lane wholesale (a
       # shelf-sized pass; an unarmed or absent shelf touches nothing).
@@ -440,6 +444,15 @@ module Nabu
       return unless %w[e84000 derge-kangyur derge-tengyur].include?(entry.slug)
 
       E84000DergeTitles.new(catalog: @db, canonical_dir: @config.canonical_dir).run
+    end
+
+    # The AES <- AED title join re-fills after a sync of either side (an
+    # aes re-parse re-mints NULL titles; an aed fetch may carry new
+    # headers) — exact text-id joins only.
+    def refresh_aes_titles(entry)
+      return unless [AesAedTitles::AES_SLUG, AesAedTitles::AED_SLUG].include?(entry.slug)
+
+      AesAedTitles.new(catalog: @db, canonical_dir: @config.canonical_dir).run
     end
 
     # P42-4: after a BULK load, refresh the query-planner statistics — the

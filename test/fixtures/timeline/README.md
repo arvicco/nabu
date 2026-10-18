@@ -45,6 +45,12 @@ date shapes for `TimelineBuilder::OraccDates`:
 | riao | Q003700 | mixed `668-ca. 631` |
 | dcclt | P212382 | period `Old Babylonian`, Nippur + pleiades_id |
 | dcclt | P230009 | period `uncertain` — unmapped, skipped + counted |
+| riao | Q006482 | NO date_of_origin, regnal_dates `721-705` (Sargon II) — the regnal_dates step; added 2026-10-18 |
+| saao-saa01/saa01 | P313416 | the SAA second place: sender_loc `Assyria` + pleiades_sender_loc `29492` + sender_loc_coordinates `43.2,36.2`; added 2026-10-18 |
+
+The 2026-10-18 members were cut verbatim from this box's own
+`canonical/oracc/` catalogues and inserted with a serializer verified to
+round-trip the existing fixture byte-identically (one-space indent).
 
 `torot/lav.xml` — the Primary Chronicle (Codex Laurentianus) trimmed to four
 divs at ≤2 sentences each for `TimelineBuilder::ChronicleAnnals`: `Introduction`

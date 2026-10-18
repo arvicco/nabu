@@ -70,6 +70,24 @@ class PersonMineTest < Minitest::Test
     assert_equal "蘇軾", query.run("Su Shi").cards.first.name_han, "pinyin resolves"
   end
 
+  # A second authority (EDH's attested persons) resolves by its own ref
+  # shape ("HD000001/3") and by name beside cbdb — names search every
+  # derived authority, cbdb first.
+  def test_card_resolves_across_authorities
+    Nabu::Store::PersonIndex.derive!(
+      @catalog, authority: "edh",
+                persons: [Person.new(authority: "edh", person_id: "HD000001/3",
+                                     name: "C. Iulius C.f. Optatus", name_han: nil,
+                                     birth_year: nil, death_year: nil, index_year: nil,
+                                     dynasty: nil, dynasty_han: nil, female: false,
+                                     name_keys: ["c. iulius optatus", "iulius optatus"])]
+    )
+    query = Nabu::Query::Person.new(catalog: @catalog)
+    assert_equal "C. Iulius C.f. Optatus", query.run("edh:HD000001/3").cards.first.name
+    assert_equal ["edh"], query.run("Iulius Optatus").cards.map(&:authority)
+    assert_equal ["cbdb"], query.run("Su Shi").cards.map(&:authority)
+  end
+
   def test_card_misses_are_honest_errors
     query = Nabu::Query::Person.new(catalog: @catalog)
     assert_raises(Nabu::Query::Person::Error) { query.run("岳飛") }

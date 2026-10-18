@@ -22,7 +22,9 @@ module Nabu
     #      shared CTS citation scheme is what makes passage-level alignment
     #      (…perseus-grc2:1.1 ↔ …perseus-eng4:1.1) free downstream.
     #   2. Metadata resolution — titles/urns from the work-level __cts__.xml
-    #      (CTS namespace), which the streaming parser never reads.
+    #      (CTS namespace), which the streaming parser never reads; plus the
+    #      textgroup groupname (author), the teiHeader editors and imprint
+    #      date, and the urn's own CTS ids (#edition_metadata).
     #   3. fetch — a git clone/pull of the vendored upstream snapshot.
     #
     # == Namespace / class design (the one non-obvious decision here)
@@ -164,13 +166,46 @@ module Nabu
       def parse(document_ref)
         language = document_ref.metadata["language"]
         options = language == TRANSLATION_LANGUAGE ? { division_types: TRANSLATION_DIVISION_TYPES } : {}
-        EpidocParser.new.parse(
+        document = EpidocParser.new.parse(
           document_ref.path,
           urn: document_ref.id,
           language: language,
           title: document_ref.metadata["title"],
           **options
         )
+        with_metadata(document, edition_metadata(document_ref))
+      end
+
+      # The edition's catalog + header metadata (aggressive mining):
+      #
+      # - author: the textgroup __cts__.xml <ti:groupname> (English
+      #   preferred, else the first — the CTS catalog's ONE spelling across
+      #   every edition of the group: "Homer", "Homeric Hymns", "New
+      #   Testament"); absent that file, the TEI titleStmt <author>.
+      # - editors: the TEI titleStmt <editor> names, verbatim, in order.
+      # - source_date: the sourceDesc imprint <date> of the printed edition
+      #   the encoding follows ("1908-1920") — MetadataDates projects it as
+      #   an edition-class row (date_class "edition"), never the work's
+      #   dating; the work's composition era arrives only through the
+      #   TLG concordance lane (TimelineBuilder::TlgConcordanceDates).
+      # - cts_textgroup / cts_work: the urn's own ids decoded
+      #   ("tlg0012" / "tlg0012.tlg001") — the keys the in-library
+      #   glaux/diorisis concordance joins on.
+      # - work: the work title discover resolved (the document title).
+      #
+      # The header carries no origin place (pubPlace is the PRINTING
+      # place) — places stay unplaced, declared in config/postures.yml.
+      def edition_metadata(document_ref)
+        textgroup, work = cts_ids(document_ref.id)
+        header = tei_header(document_ref.path)
+        {
+          "author" => groupname(document_ref.path) || header[:author],
+          "editors" => header[:editors],
+          "source_date" => header[:source_date],
+          "cts_textgroup" => textgroup,
+          "cts_work" => work,
+          "work" => document_ref.metadata["title"]
+        }.compact.reject { |_, value| value.respond_to?(:empty?) && value.empty? }
       end
 
       # Bring the vendored upstream snapshot up to date via the shared
@@ -192,6 +227,72 @@ module Nabu
       end
 
       private
+
+      def with_metadata(document, metadata)
+        return document if metadata.empty?
+
+        copy = Nabu::Document.new(urn: document.urn, language: document.language, title: document.title,
+                                  canonical_path: document.canonical_path,
+                                  metadata: document.metadata.merge(metadata),
+                                  license_override: document.license_override)
+        document.passages.each { |passage| copy << passage }
+        copy
+      end
+
+      # "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2" → ["tlg0012", "tlg0012.tlg001"].
+      def cts_ids(urn)
+        textgroup, work, = urn.split(":").last.split(".")
+        [textgroup, work && "#{textgroup}.#{work}"]
+      end
+
+      # The textgroup-level __cts__.xml sits one directory above the work.
+      def groupname(edition_path)
+        cts_path = File.join(File.dirname(edition_path, 2), "__cts__.xml")
+        return nil unless File.file?(cts_path)
+
+        names = Nokogiri::XML(File.read(cts_path)).xpath("//ti:textgroup/ti:groupname", CTS_NS)
+        english = names.find { |name| name.attribute("lang")&.value == "eng" }
+        clean_text((english || names.first)&.text)
+      end
+
+      # The teiHeader alone, DOM-parsed from the bytes before <text> (an
+      # edition can run to many MB; the header is small): the titleStmt
+      # author and editors and the sourceDesc imprint date.
+      HEADER_CHUNK = 65_536
+      TEXT_START = /<text[\s>]/
+      private_constant :HEADER_CHUNK, :TEXT_START
+
+      def tei_header(path)
+        slice = header_slice(path)
+        return {} if slice.nil?
+
+        doc = Nokogiri::XML(slice)
+        doc.remove_namespaces!
+        {
+          author: clean_text(doc.at_xpath("//fileDesc/titleStmt/author")&.text),
+          editors: doc.xpath("//fileDesc/titleStmt/editor").filter_map { |node| clean_text(node.text) }.uniq,
+          source_date: clean_text(doc.at_xpath("//sourceDesc//imprint/date")&.text)
+        }
+      end
+
+      def header_slice(path)
+        slice = +""
+        File.open(path, "r:UTF-8") do |io|
+          while (chunk = io.read(HEADER_CHUNK))
+            slice << chunk
+            cut = slice.index(TEXT_START)
+            return slice[0, cut] if cut
+          end
+        end
+        nil
+      end
+
+      def clean_text(text)
+        return nil if text.nil?
+
+        value = Nabu::Normalize.nfc(text.strip.gsub(/\s+/, " "))
+        value.empty? ? nil : value
+      end
 
       # One discoverable edition before ref construction. +language+ is the
       # passage language the edition will carry: the namespace original, or

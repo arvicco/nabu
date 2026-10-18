@@ -117,6 +117,22 @@ class SaritTest < Minitest::Test
     assert_equal "CC BY-SA 3.0", licenses[MBH]
   end
 
+  # The fileDesc titleStmt <author> names (71 of 84 editions; a commentary
+  # edition names base author and commentator), verbatim and in header
+  # order. The sourceDesc biblFull's own titleStmt authors (the print
+  # edition's front matter) are not the edition's authors and stay out; a
+  # header with no titleStmt author mints no key.
+  def test_parse_carries_the_title_statement_authors
+    adapter = Nabu::Adapters::Sarit.new
+    authors = adapter.discover(FIXTURES).to_h do |ref|
+      [ref.id, adapter.parse(ref).metadata["author"]]
+    end
+    assert_equal ["Akṣapāda Gotama", "Vātsyāyana"], authors[NYAYA]
+    assert_equal ["Aśoka"], authors[SAMANYA]
+    assert_equal ["व्यास"], authors[MBH]
+    assert_nil authors[ASTAVAKRA], "no titleStmt author — absence, never a blank"
+  end
+
   # --- load: idempotency (the house double-load rule) ------------------------
 
   def test_double_load_is_idempotent

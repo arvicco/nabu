@@ -71,6 +71,15 @@ module Nabu
       EDITION_FIELDS = [].freeze
       TRANSLATOR_FIELDS = [].freeze
       TAINTED_SERIES = [].freeze
+      # The header's author slot(s), first filled wins — the same "author"
+      # key the wikitext family (SlavicWikisource: sl/hr/sr/mk/bg) mines.
+      AUTHOR_FIELDS = [].freeze
+      # The header field naming the PARENT work a page belongs to (pl
+      # |pochodzenie=, cs TITUL) → metadata "work"; WORK_REQUIRES gates it
+      # on a field that marks the page as a part (uk: назва is the parent
+      # only on a секція page). nil = the wiki states no parent work.
+      WORK_FIELD = nil
+      WORK_REQUIRES = nil
       # Imprint evidence a wiki states in the BODY HEAD instead of the
       # header (ru: the az.lib.ru imports open with their source book's
       # imprint between rules) — nil = header-only wiki. Only the first
@@ -169,6 +178,32 @@ module Nabu
 
         statement = edition_statement(title, wikitext)
         self.class::TAINTED_SERIES.any? { |series| statement.include?(series) }
+      end
+
+      # The page's author as the header states it, display-reduced: the
+      # LAST occurrence of a field wins (MediaWiki renders a duplicated
+      # template parameter's last value — cs Dalimil states AUTOR twice),
+      # a trailing template after the name is an editorial note and drops
+      # (cs "neznámý{{Redakční poznámka|…}}"), a whole-value list template
+      # reduces to its names. nil when no slot is filled.
+      def header_author(wikitext)
+        self.class::AUTHOR_FIELDS.each do |field|
+          value = name_text(last_header_field(wikitext, field))
+          return value if value
+        end
+        nil
+      end
+
+      # The parent work the header names (WORK_FIELD), display-reduced;
+      # nil when the wiki states none, the page is not a part, or the value
+      # is a label-less relative link ("[[../]]" names nothing).
+      def parent_work(wikitext)
+        field = self.class::WORK_FIELD or return nil
+
+        gate = self.class::WORK_REQUIRES
+        return nil if gate && name_text(header_field(wikitext, gate)).nil?
+
+        name_text(last_header_field(wikitext, field))
       end
 
       def translation?(wikitext)
@@ -276,7 +311,9 @@ module Nabu
         {
           "base_edition" => edition_statement(title, wikitext),
           "cone" => Array(envelope["cone"]).map { |entry| Nabu::Normalize.nfc(entry) },
-          "revid" => envelope["revid"]
+          "revid" => envelope["revid"],
+          "author" => header_author(wikitext),
+          "work" => parent_work(wikitext)
         }.merge(extra_metadata(envelope)).compact
       end
 
@@ -296,6 +333,29 @@ module Nabu
       def header_field(wikitext, field)
         match = wikitext.match(/^\s*\|\s*#{Regexp.escape(field)}\s*=(.*?)(?=^\s*\|\s*[^|=\n]+=|^\s*\}\}|\z)/m)
         match && match[1].gsub(/<!--.*?-->/m, "").strip
+      end
+
+      # Every occurrence of +field+ in the header, the last one returned
+      # (comments stripped); nil when absent.
+      def last_header_field(wikitext, field)
+        values = wikitext.scan(/^\s*\|\s*#{Regexp.escape(field)}\s*=(.*?)(?=^\s*\|\s*[^|=\n]+=|^\s*\}\}|\z)/m)
+        value = values.last&.first
+        value&.gsub(/<!--.*?-->/m, "")&.strip
+      end
+
+      # A name-shaped header value → display text: links reduced to their
+      # labels FIRST (so a list template's "|" never splits inside a link),
+      # a trailing note template dropped, the rest display-reduced; nil when
+      # blank or a bare relative link.
+      def name_text(value)
+        return nil if value.nil?
+
+        text = value.gsub(/\[\[(?:[^\[\]|]*\|)?([^\[\]]*)\]\]/) { ::Regexp.last_match(1) }
+        text = text.sub(/\{\{.*\z/m, "") unless text.lstrip.start_with?("{{")
+        text = display_text(text)
+        return nil if text.empty? || text.start_with?("../", "/")
+
+        Nabu::Normalize.nfc(text)
       end
 
       # The body head (after the header template's closing line) → every

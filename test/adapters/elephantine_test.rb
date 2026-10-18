@@ -105,7 +105,8 @@ class ElephantineTest < Minitest::Test
 
   def test_discovery_skips_count_authority_files_by_rule
     skips = Nabu::Adapters::Elephantine.new.discovery_skips(FIXTURES)
-    assert_equal 1, skips.skipped_by_rule, "elephantine_erc_db_places.tei.xml is an authority file, not a record"
+    assert_equal 2, skips.skipped_by_rule,
+                 "elephantine_erc_db_places + _ancient_persons are authority files, not records"
     assert_equal 0, skips.unrecognized
     assert_predicate skips, :clean?
   end
@@ -206,6 +207,32 @@ class ElephantineTest < Minitest::Test
                  metadata["facets"]["genre"]["value"]
     assert_equal "papyrus", metadata["facets"]["object_type"]["value"]
     refute metadata.key?("date"), "both origDate elements are empty — no date key minted"
+  end
+
+  # --- per-record person pointers + keywords ----------------------------------
+
+  def test_scribe_pointers_become_authority_refs_with_role
+    metadata = parse("urn:nabu:elephantine:002858").metadata
+    assert_equal [{ "ref" => "elephantine:p21875", "role" => "scribe",
+                    "name" => "Praxous?, son of Petechonsis, donkey driver", "cert" => "high" }],
+                 metadata["persons"],
+                 "the listPerson pointer resolves into the elephantine person-index slice"
+    assert_equal [{ "ref" => "elephantine:p100", "role" => "scribe", "name" => "Harchebis", "cert" => "high" }],
+                 parse("urn:nabu:elephantine:100467").metadata["persons"]
+  end
+
+  def test_unknown_scribe_placeholders_mint_no_person_ref
+    %w[002881 100007 100009 100141].each do |id|
+      refute parse("urn:nabu:elephantine:#{id}").metadata.key?("persons"),
+             "#{id}: '(Unknown …)' pointers name no person — no ref minted"
+    end
+  end
+
+  def test_keywords_ride_verbatim_in_upstream_order
+    assert_equal %w[tax_farming synteleia money donkey_driver],
+                 parse("urn:nabu:elephantine:002858").metadata["keywords"]
+    assert_equal %w[contract marriage], parse("urn:nabu:elephantine:002881").metadata["keywords"]
+    refute parse("urn:nabu:elephantine:100117").metadata.key?("keywords"), "no keywords → no key"
   end
 
   # --- the Greek exemplar (4-digit id, in-text date, structured dating) -------

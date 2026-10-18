@@ -1,0 +1,87 @@
+<TEI.2 id="c.1.3.3">
+<teiHeader lang="eng">
+<fileDesc>
+<titleStmt>
+<title>Inana and &C;u-kale-tuda -- a composite transliteration</title>
+<respStmt><name>Jeremy Black</name><resp>Project Director and Editor</resp></respStmt>
+<respStmt><name>G&aacute;bor Z&oacute;lyomi</name><resp>Editor</resp></respStmt>
+<respStmt><name>Graham Cunningham</name><resp>Editor</resp></respStmt>
+<respStmt><name>Eleanor Robson</name><resp>Technical Developer</resp></respStmt>
+<respStmt><name>Jarle Ebeling</name><resp>Technical Developer</resp></respStmt>
+</titleStmt>
+<publicationStmt>
+<distributor>The Electronic Text Corpus of Sumerian Literature
+</distributor><address><addrLine>The Oriental Institute, University of Oxford, Pusey Lane, Oxford OX1 2LE, UK, email etcsl&commat;orinst.ox.ac.uk, http://etcsl.orinst.ox.ac.uk</addrLine></address>
+<date>2000</date>
+</publicationStmt>
+<seriesStmt><p>The Electronic Text Corpus of Sumerian Literature aims to make accessible over 400 literary works composed in the Sumerian language in ancient Mesopotamia during the late third and early second millennia BC. The works are in Sumerian composite transliteration and English prose translation with bibliographical information on each composition.</p></seriesStmt>
+<sourceDesc>
+<listBibl type="secondary">
+<bibl><xref from="b273">Civil 1989h</xref><biblScope type="contents">composite text</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b283">Volk 1993</xref><biblScope type="contents">composite text, score transliteration</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b291">Black 1997e</xref><biblScope type="contents">translation</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b308">Krecher 1996a</xref><biblScope type="contents">composite text, translation</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b454">Krecher 1998</xref><biblScope type="contents">score transliteration</biblScope><note>electronic source</note></bibl>
+<bibl><xref from="b141">Bott&eacute;ro and Kramer 1989</xref><biblScope type="page">257-271</biblScope><biblScope type="contents">translation, commentary</biblScope></bibl>
+<bibl><xref from="b615">Volk 1995</xref><biblScope type="contents">composite text, score transliteration, commentary, handcopy, translation</biblScope></bibl>
+</listBibl>
+<listBibl type="tablets">
+<bibl><biblScope type="museumNumber">N 3551 (Tf. 1)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9616 (ISET 1 175)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 4523 (ISET 2 11) + Ni 4575 (ISET 1 148) + Ni 9609 (ISET 2 11)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 10305 + 10315 + 10393 + 10401 + 10407 + 10413 + N 3068 + Ni 9732 + Ni 9763 (Tf. 2-3)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 10317 (Tf. 4)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 3537 (Tf. 4)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9721 (ISET 2 8-10) + Ni 9564 (Tf. 4) + Ni 9748 (ISET 2 53)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">Ni 9541 (ISET 1 171) + Ni 9608 (ISET 1 174)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UET VI/3 15 + 116 + 171 + 179 + 296 (Tf. 5)</biblScope><biblScope type="provenance">Ur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UET VI/3 129a (Tf. 6)</biblScope><biblScope type="provenance">Ur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">UET VI/3 79 (Tf. 6)</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 13881 (STVC 30)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">N 2830 (Tf. 4)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">CBS 11682 (Tf. 4)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+<bibl><biblScope type="museumNumber">3NT 407 (Tf. 7)</biblScope><biblScope type="provenance">Nippur</biblScope></bibl>
+</listBibl>
+</sourceDesc>
+</fileDesc>
+<revisionDesc>
+<change><date>12.i.1999</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>standardisation</item></change>
+<change><date>08.v.2000-10.v.2000</date><respStmt><name>JAB</name><resp>editor</resp></respStmt>
+<item>proofreading</item></change>
+<change><date>11.v.2000</date><respStmt><name>GZ</name><resp>editor</resp></respStmt>
+<item>SGML tagging</item></change>
+<change><date>12.v.2000</date><respStmt><name>ER</name><resp>editor</resp></respStmt>
+<item>proofreading SGML</item></change>
+<change><date>12.v.2000</date><respStmt><name>ER</name><resp>editor</resp></respStmt>
+<item>web publication</item></change>
+<change><date>01.vi.2003</date><respStmt><name>GC/JE</name><resp>editor/technical developer</resp></respStmt>
+<item>XML/TEI conversion</item></change>
+<change><date>30.iii.2005</date><respStmt><name>GC/JE</name><resp>senior editor/technical developer</resp></respStmt>
+<item>lemmatised version published</item></change>
+</revisionDesc>
+</teiHeader>
+<text lang="sux">
+<body>
+<l n="1" id="c133.1" corresp="t133.p1">
+<damage/>
+<w form="in-nin" lemma="in-nin" pos="N" label="mistress">in-nin</w>
+<damageEnd/>
+<w form="me" lemma="me" pos="N" label="essence">me</w>
+<w form="gal-gal-la" lemma="gal" pos="V" label="to be big" form-type="RR">gal-gal-la</w>
+<damage/>
+<w form="barag-ge4" lemma="barag" pos="N" label="dais">barag<damageEnd/>-ge4</w>
+<w form="he2-du7" lemma="he2-du7" pos="N" label="(fitting) ornament">he2-du7</w>
+<note lang="eng">Cited in <xref doc="c.0.2.01" from="c0201.44">OB catalogue from Nibru, at Philadelphia, 0.2.01, line 44</xref>; <xref doc="c.0.2.02" from="c0202.34">OB catalogue in the Louvre, 0.2.02, line 34</xref>; <xref doc="c.0.2.04" from="c0204.36">OB catalogue from Urim (U2), 0.2.04, line 36</xref></note>
+</l>
+<l n="2" id="c133.2" corresp="t133.p1">
+<w form="&d;inana" lemma="inana" pos="N" type="DN" label="Inana" det="&d;"><damage/>&d;<damageEnd/>inana</w>
+<w form="me" lemma="me" pos="N" label="essence">me</w>
+<w form="gal-gal-la" lemma="gal" pos="V" label="to be big" form-type="RR">gal-gal-la</w>
+<w form="barag" lemma="barag" pos="N" label="dais">barag</w>
+<w form="kug-ge" lemma="kug" pos="AJ" label="shining">kug-ge</w>
+<w form="si-a" lemma="si" pos="V" label="to fill">si-a</w>
+</l>
+</body>
+</text>
+</TEI.2>

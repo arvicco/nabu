@@ -129,6 +129,28 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # The edh person-index slice is f(canonical pers CSV) — a rebuild
+  # re-derives it like the cbdb slice, keyed under its own authority.
+  def test_rebuild_derives_the_edh_person_slice
+    write_sources(<<~YAML)
+      edh:
+        adapter: Nabu::Adapters::Edh
+        wired: true
+        sync_policy: frozen
+    YAML
+    FileUtils.mkdir_p(@canonical)
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("edh"), File.join(@canonical, "edh"))
+
+    rebuilder.run
+
+    with_db do |db|
+      resolver = Nabu::Store::PersonIndex.resolver(db, authority: "edh") ||
+                 flunk("rebuild left the edh person slice underived")
+      assert_equal 5, resolver.size
+      assert_nil Nabu::Store::PersonIndex.resolver(db, authority: "cbdb"), "no cbdb artifact, no cbdb slice"
+    end
+  end
+
   # -- post-load ANALYZE (P42-4) --------------------------------------------
 
   # A full rebuild leaves a fresh db with NO planner statistics; it must
@@ -168,7 +190,7 @@ class RebuildTest < Minitest::Test
 
     assert_equal ["corpus", "timeline", "silver dates", "place apply", "facets", "kind axis", "hiero postings",
                   "lect journal",
-                  "lect facets", "dictionary stats", "derge titles", "artifact scripts",
+                  "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
   end

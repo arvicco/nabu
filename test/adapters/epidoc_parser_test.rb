@@ -573,6 +573,125 @@ class EpidocParserTest < Minitest::Test
     end
   end
 
+  # --- Inline layers: names, notes, foreign spans, quotations -----------------
+  #
+  # The leaf text stays byte-identical; what the flattening used to discard
+  # (persName/placeName/name with their @key, <note> subtrees, <foreign>
+  # @xml:lang spans, <q>/<quote>) rides the passage annotations. Real
+  # samples under perseus/inline/ (see the fixture README): the Greek
+  # Anthology's per-epigram author attribution (persName @key = the TLG
+  # author id) and a Demosthenes translation dense with TGN-keyed and
+  # Perseus-gazetteer-keyed placeNames, Loeb notes and spoken <q>s.
+
+  INLINE_FIXTURES = File.join(FIXTURES, "inline/data")
+  ANTHOLOGY_PATH = File.join(INLINE_FIXTURES, "tlg7000/tlg001/tlg7000.tlg001.perseus-grc10.xml")
+  ANTHOLOGY_URN = "urn:cts:greekLit:tlg7000.tlg001.perseus-grc10"
+  OLYNTHIAC_PATH = File.join(INLINE_FIXTURES, "tlg0014/tlg001/tlg0014.tlg001.perseus-eng2.xml")
+  OLYNTHIAC_URN = "urn:cts:greekLit:tlg0014.tlg001.perseus-eng2"
+  CYPRIA_PATH = File.join(FIXTURES, "strays/data/tlg4036/tlg023/tlg4036.tlg023.cypria-grc1.xml")
+  CYPRIA_URN = "urn:cts:greekLit:tlg4036.tlg023.cypria-grc1"
+
+  def parse_anthology
+    parser.parse(ANTHOLOGY_PATH, urn: ANTHOLOGY_URN, language: "grc")
+  end
+
+  def parse_olynthiac
+    parser.parse(OLYNTHIAC_PATH, urn: OLYNTHIAC_URN, language: "eng", division_types: %w[translation edition])
+  end
+
+  def passage_at(doc, urn, suffix)
+    doc.passages.find { |p| p.urn == "#{urn}:#{suffix}" } or flunk "no passage #{urn}:#{suffix}"
+  end
+
+  def test_anthology_epigram_carries_its_author_attribution_as_a_keyed_person
+    epigram = passage_at(parse_anthology, ANTHOLOGY_URN, "13.1")
+
+    assert_equal [{ "type" => "person", "text" => "Philippus", "key" => "tlg-1589" }],
+                 epigram.annotations["entities"]
+    assert_equal [{ "lang" => "lat", "text" => "Philippus" }], epigram.annotations["foreign"]
+    refute epigram.annotations.key?("quotes")
+    refute epigram.annotations.key?("notes")
+  end
+
+  def test_anthology_quotation_rides_the_quotes_layer
+    epigram = passage_at(parse_anthology, ANTHOLOGY_URN, "14.3")
+
+    assert_equal [{ "text" => "τίπτε τοι, ὦ τέκος, ἄλγος ἐπέχραεν;" }], epigram.annotations["quotes"]
+    assert_equal "tlg-0138", epigram.annotations["entities"].first["key"]
+  end
+
+  def test_inline_mining_leaves_the_passage_text_untouched
+    epigram = passage_at(parse_anthology, ANTHOLOGY_URN, "13.1")
+
+    assert epigram.text.start_with?("Philippus Πεντάμετρον μόνον Ἰίαίρβ θεὰ Παφίη"), epigram.text
+  end
+
+  def test_olynthiac_placenames_keep_surface_and_key_in_document_order
+    section = passage_at(parse_olynthiac, OLYNTHIAC_URN, "8")
+
+    assert_equal [
+      { "type" => "place", "text" => "Athens", "key" => "perseus,Athens" },
+      { "type" => "place", "text" => "Amphipolis", "key" => "perseus,Amphipolis" },
+      { "type" => "place", "text" => "Euboea", "key" => "tgn,7002677" },
+      { "type" => "place", "text" => "Amphipolis", "key" => "perseus,Amphipolis" }
+    ], section.annotations["entities"], "the placeName INSIDE the note belongs to the note, not the text"
+  end
+
+  def test_olynthiac_notes_ride_the_notes_layer_and_stay_out_of_the_text
+    section = passage_at(parse_olynthiac, OLYNTHIAC_URN, "8")
+
+    assert_equal [{ "text" => "The Athenians took Euboea from the Thebans in 357.", "resp" => "Loeb" }],
+                 section.annotations["notes"]
+    refute_includes section.text, "The Athenians took"
+  end
+
+  def test_foreign_inside_a_note_stays_with_the_note
+    section = passage_at(parse_olynthiac, OLYNTHIAC_URN, "20")
+    note = section.annotations["notes"].first["text"]
+
+    assert_includes note, "an extraordinary levy or ἐσφορά. Either in 360"
+    assert_includes note, "carried a law appropriating to it the whole of the surplus revenue"
+    refute section.annotations.key?("foreign"), "foreign spans inside a note are the note's"
+  end
+
+  def test_olynthiac_spoken_quotations_keep_their_type
+    section = passage_at(parse_olynthiac, OLYNTHIAC_URN, "14")
+
+    assert_equal [{ "text" => "Well,", "type" => "spoken" },
+                  { "text" => "why tell us this now?", "type" => "spoken" }], section.annotations["quotes"]
+  end
+
+  def test_cite_urn_identifiers_in_n_become_the_entity_ref
+    doc = parser.parse(CYPRIA_PATH, urn: CYPRIA_URN, language: "grc")
+    entities = doc.passages.flat_map { |p| p.annotations.fetch("entities", []) }
+
+    assert_includes entities, { "type" => "place", "text" => "Σιδῶνι", "ref" => "urn:cite:hmt:place.place71" }
+    assert_includes entities, { "type" => "person", "text" => "Ἀλέξανδρος", "ref" => "urn:cite:hmt:pers.pers129" }
+  end
+
+  def test_p4_fallback_mines_the_same_inline_layers
+    doc = parser.parse(TACITUS_PATH, urn: TACITUS_URN, language: "eng")
+    chapter = passage_at(doc, TACITUS_URN, "2.1")
+    entities = chapter.annotations["entities"]
+
+    assert_equal({ "type" => "person", "text" => "Titus" }, entities[0])
+    assert_equal({ "type" => "place", "text" => "Judæa", "key" => "tgn,7001407" }, entities[1],
+                 "undefined ISO entities resolve inside spans as in the text")
+    assert_includes chapter.annotations["notes"], { "text" => "TITUS' MISSION TO ROME" }
+    refute_includes entities, { "type" => "place", "text" => "ROME", "key" => "perseus,Rome" }
+  end
+
+  def test_p4_fallback_places_actium_with_its_gazetteer_key
+    doc = parser.parse(TACITUS_PATH, urn: TACITUS_URN, language: "eng")
+
+    assert_includes passage_at(doc, TACITUS_URN, "1.1").annotations["entities"],
+                    { "type" => "place", "text" => "Actium", "key" => "perseus,Actium,Acarnania" }
+  end
+
+  def test_passages_without_inline_markup_keep_empty_annotations
+    parse_hh13.passages.each { |passage| assert_equal({}, passage.annotations) }
+  end
+
   # --- Streaming proof --------------------------------------------------------
 
   def test_implementation_streams_and_never_builds_a_full_document_dom

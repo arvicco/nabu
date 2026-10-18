@@ -59,6 +59,29 @@ sources:
       #                         impression) 15,518 · tablet & envelope 7,183 · cone · brick …)
       museum_no: museum       # 340,616 docs, 263,099 values — incl. upstream's own
       #                         number-withheld forms ("BM —" 27,272) and "unknown" (claims)
+      subgenre: subgenre      # 71,814 rows, 4,619 values (catalog census 2026-10-18): lexical-
+      #                         series witness labels, archives, "ETCSL <n> <title> (witness)" —
+      #                         a mixed vocabulary, faceted verbatim, never kind-folded
+  oracc:                      # catalogue census 2026-10-18, 125,738 members (OraccCatalogue)
+    fields:
+      ruler: ruler            # 12,689 (Sargon II 1,431 · Esarhaddon 1,368 · Ashurbanipal 1,288 ·
+      #                         "Esarhaddon or Ashurbanipal" 976 …) — CDLI's ruler facet name
+      ancient_author: author  # 3,967 ("(unknown)" 1,063 — a claim; the king; Issar-šumu-ereš …)
+      ancient_recipient: recipient  # 3,065 (the king ×2,467 in three bracketings …)
+      eponym: eponym          # 1,123, 124 limmu officials
+      dossier_list: dossier   # 2,357 — SAA's correspondent dossier slugs (ashurbanipal …)
+      seal_owner: seal_owner  # 62 ┐ the legal parties: arrays (upstream ";"-joined),
+      ancient_buyer: buyer    # 42 │ one facet row per party
+      ancient_seller: seller  # 41 │
+      ancient_creditor: creditor  # 35 │
+      ancient_debtor: debtor  # 35 ┘
+      subgenre: subgenre      # 39,855, 2,415 values — mixed (series, rulers, archives); not kind-folded
+      supergenre: supergenre  # 108,381 — ELA/LIT/LEX/STL/unknown/UNK; restates genre, not kind-folded
+      archive: archive        # 9,222, 134 archives ("099 - Miscellaneous" 5,047 · Mari palace …)
+      dynastic_seat: dynastic_seat  # 5,411 (Assyria 2,108 · Urartu 1,105 · Ur 758 …)
+      series: series          # 362 lexical series (Aa · Ura · Nabnitu …)
+      sender_loc: sender_place  # 2,678 SAA letters' place of writing (Nineveh 1,046 · "(unknown)"
+      #                         169 …); also its own labeled axis row (axis_source oracc-sender)
   rundata:                    # census: 6,815 inscription records
     fields:
       material_type: material # 7 classes (stone 4,204 · wood 1,279 · metal 646 …)
@@ -70,10 +93,16 @@ sources:
   glaux:                      # census: 1,421 works
     fields:
       dialect: dialect        # 1,176 docs, 7 values (Attic/Koine 416 · Attic 322 · Koine 214 …)
+      author: author          # 1,421 docs, 299 authors (Latinized: Plutarchus, Philo Judaeus …)
+      work: work              # 1,421 docs, 1,230 work titles (the TLG author-work pair rides
+      #                         the urn, "urn:nabu:glaux:0007-017" — no id field to project)
   kdsp:                       # census: 262 Slovene novels (ELTeC)
     fields:
       canonicity: canonicity  # nizka 182 · visoka 80
       period_slot: period     # ELTeC time slots D1–D9 (the date itself is on the timeline)
+      author: author          # 256 docs, 78 authors ("Cigler, Janez"); author_ref is the
+      #                         corpus-local key ("CiglerJanez") — not an authority id, so it
+      #                         stays metadata (the name already facets)
   ref:                        # census: 190 Early New High German texts
     fields:
       medium: medium          # Handschrift 97 · Druck 93
@@ -94,6 +123,8 @@ sources:
   bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
     fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
       recension: recension    # projected so the ruled recension facet rule can read it
+      author: author          # 26 docs, 11 authors (Паисий Хилендарски …) — the wiki header's
+      #                         author slot verbatim, as for the sibling Slavic wikis below
   dcs:                        # census 2026-10-12: the corpus's five composition time
     fields: #                   slots (1 early/Vedic … 5 late; 1 ×6,962 · 2 ×2,940 ·
       dcs_time_slot: time_slot  # 3 ×2,315 · 4 ×2,014 · 5 ×1,493) — the upstream claim,
@@ -105,3 +136,178 @@ sources:
       collection: collection  # holding collections: Lontar ring Perpustakaan Kantor Dokumentasi
       #                         Budaya Bali 191 · Lontar Balai Bahasa Bali 179 · Wanagiri 153 …
       gedong_kirtya_class: classification  # Agama 492 · Itihasa 121 · Wéda 68 · Babad 17
+  # -- The Arabic/Syriac crosswalk wave: parse-time metadata (live census
+  #    figures from the canonical assets, 2026-10-18).
+  openiti:                    # 9,105 primary versions carry a TSV tags bag
+    fields:
+      genre_tags: genre_tag   # the scheme@keyword classification tags verbatim, prefix
+      #                         kept (GAL@fiqh 490 · JK@فقه 471 · Shamela@فقه عام 2,235 …);
+      #                         GAL is Brockelmann's multi-axis scheme (genre + period +
+      #                         region keywords), never split by guess — hence its own
+      #                         facet, not genre (the subject facet keeps the kind rule)
+  diccas:                     # 10 books (one document each)
+    fields:
+      disaster_types: disaster  # the catastrophe <term>s' own English translation labels,
+      #                         distinct per book (wind 476 · torture, punishment 288 ·
+      #                         pestilence 206 · calamity 202 · earthquake 357 · plague
+      #                         188 …); ONE fold: the 167 "earhquake" spellings join
+      #                         "earthquake" (an upstream typo of the same label — the
+      #                         passage annotations keep the verbatim attribute)
+      disaster_classes: disaster_class  # the term @subtype (divine 317 · military 50 ·
+      #                         unspecified 49 · social 19 · natural 14 · moral 3 ·
+      #                         political 1; "divine,unspecified" splits on the comma)
+      places_mentioned: place_mentioned  # the <placeName> translation labels the
+      #                         accounts NAME (Egypt 501 · Damascus 270 · Cairo 235 · Sham
+      #                         204 · Baghdad 150 …) — places the text is ABOUT, never the
+      #                         book's origin (no axis place claim)
+      author: author          # the byline author (transliteration), 9 of 10 books
+  syriac-corpus:              # 632 documents
+    fields:
+      author: author          # titleStmt author, 631 docs (Aphrahat · Jacob of Serugh …)
+      author_ref: author_ref  # its syriaca.org person URI, 493 docs — the person-id lane
+      parent_works: work      # the titleStmt series titles ABOVE the document (603 docs;
+      #                         "The Odes of Solomon" above Ode 19, the Peshitta NT
+      #                         ladder above 2 John) — the corpus imprint series
+      #                         "Digital Syriac Corpus" excluded by rule
+  # -- The author/work wave: sources whose adapters already store an
+  #    author (and sometimes a work title or authority id) in metadata_json
+  #    that surfaced in no facet. Censuses: live catalog 2026-10-18.
+  #    Projecting needs no re-parse — a builder (facet) refresh suffices.
+  #    Ids project under author_id/work_id ONLY where the value names its
+  #    own authority (GND/VIAF URLs, viaf:/wikidata: prefixes, Corpus
+  #    Corporum's work keys); bare source-local keys (cantigas' integer
+  #    author_id, kdsp's author_ref) would collide across sources under a
+  #    shared facet and stay metadata.
+  tamilex:                    # 4,988 of 7,830 docs, 638 poets (Tirumaṅkai Āḻvār 1,142 ·
+    fields: #                   Nammāḻvār 737 …) — the colophon's poet attribution; the
+      poet: author            # work facet is the adapter's own (and kind_map's fold key)
+  madurai:                    # 755 e-texts
+    fields:
+      authors: author         # 724 docs, 386 authors (Tamil script: திருவள்ளுவர் …), array
+      genres: genre           # 755 docs, 109 labels — the works list's Genre column verbatim
+      #                         (நீதிநெறி – பதினெண்கீழ்க்கணக்கு …); the kind fold over it is
+      #                         a separate kind_map ruling
+  shabados:                   # 127 banis
+    fields:
+      authors: author         # 44 values (the Gurus, Bhagats; "Shiromani Gurdwara Parbandhak
+      #                         Committee" for the Ardās — upstream's own attribution), array
+  bu-ajami:                   # 80 manuscripts
+    fields:
+      author_or_owner: author # 59 values — the item page's combined field verbatim
+      #                         ("X (author), Y (owner)"); the roles ride inside the value
+  africa-pd:                  # 10 scanned editions
+    fields:
+      author: author          # "F. Ll. Griffith (ed.)" — the title page's responsibility verbatim
+  eebo-tcp:                   # 45,048 of 60,325 docs, 13,589 authors
+    fields:
+      author: author          # ESTC-style headings with life dates INSIDE the string
+      #                         ("A., fl. 1593.", "Shakespeare, William, 1564-1616.") —
+      #                         projected as-is, never parsed apart
+  dta:                        # 5,478 docs, all with both
+    fields:
+      author: author          # 1,407 authors ("Chamisso, Adelbert von")
+      author_gnd: author_id   # 1,306 GND URIs (http://d-nb.info/gnd/…)
+  corpus-corporum:            # 5,248 Patrologia Latina texts
+    fields:
+      author: author          # 5,248 docs, 1,579 authors
+      author_ref: author_id   # 3,353 docs, 952 VIAF URIs
+      series_idno: work_id    # 5,247 docs — the corpus's own work key ("Novati.DeTri")
+  cantigas:                   # 1,681 of 1,682 cantigas, 158 authors incl. "Anónimo"
+    fields: #                   (upstream's claim); author_id is the database's integer key
+      author: author
+  diorisis:                   # 767 works
+    fields:
+      author: author          # 87 authors (English: Apollonius Rhodius …)
+      work: work              # 748 work titles; tlg_author/tlg_id ride bare ("0001"/"001")
+      #                         and stay metadata — the urn carries the pair
+  sl-wikisource:              # 1,324 of 1,539 docs, 484 authors
+    fields:
+      author: author
+  hr-wikisource:              # 1,319 of 1,390 docs, 36 authors (Marko Marulić …)
+    fields:
+      author: author
+  sr-wikisource:              # 215 of 4,607 docs — the one value "Народна песма" (folk
+    fields: #                   song), upstream's own attribution, verbatim
+      author: author
+  mk-wikisource:              # 836 docs, 11 values — mostly the folk-collection attribution
+    fields: #                   ("македонските народни приказни"), upstream's claim verbatim
+      author: author
+  imp:                        # 621 of 658 docs, 238 authors ("Zschokke, Heinrich")
+    fields:
+      author: author
+  croala:                     # 559 of 570 docs, 214 authors ("Grauisius, Iacobus")
+    fields:
+      author: author
+      author_refs: author_id  # the author @ref's Wikidata id (["wikidata:Q16115490"], 471
+      #                         files), adapter-lifted from the verbatim author_ref URL
+  digiliblt:                  # 372 docs
+    fields:
+      author: author          # 250 docs, 152 authors ("Agennius Vrbicus")
+      work: work              # 372 docs, 359 titles ("De controuersiis agrorum")
+  bfm:                        # 219 docs, 69 authors incl. "anonyme" (a claim)
+    fields:
+      author: author
+  elektire:                   # 205 docs, 84 authors ("Dinko Šimunović"); the "authors"
+    fields: #                   array duplicates the same names
+      author: author
+  eltec-srp:                  # 96 Serbian novels
+    fields:
+      author: author          # 63 authors ("Атанацковић, Богобој")
+      author_refs: author_id  # ["viaf:8970679", "wikidata:Q833421"], array
+      title_refs: work_id     # 94 docs — Wikidata WORK ids ("wikidata:Q109336066")
+  # -- header-mined by the adapter (a re-parse lands the fields first)
+  gretil:                     # 784 files
+    fields:
+      author: author          # 427 — the titleStmt <author> (Nāgārjuna 24, Dharmakīrti 13 …)
+      genre: genre            # 784 — the keywords ladder verbatim ("Sanskrit -- Poetry --
+      #                         Kāvya"); config/kind_map.yml folds it onto the house kinds
+  sarit:                      # 66 of 78 loaded editions
+    fields:
+      author: author          # the fileDesc titleStmt <author> names, array (Jitāri 6 ·
+      #                         Vāgbhaṭa 3 · Dharmakīrti 3 …; base author + commentator on
+      #                         the commentaries; upstream's "Anonymous" a claim)
+  # the rendered-HTML wiki family (header author + parent work, mined like the
+  # wikitext family's author); censuses over canonical/, 2026-10-18
+  pl-wikisource:              # 1,228 pages
+    fields:
+      author: author          # 1,176 (Jan Kochanowski 284 · Mikołaj Rej 269 · Wacław Potocki 151 …)
+      work: work              # 646 — |pochodzenie=, the book the page comes from
+      #                         („Figliki“ wydanie z r. 1574 · Wety Parnaskie …)
+  cs-wikisource:              # 330 pages
+    fields:
+      author: author          # 330 (incl. "neznámý" and "(sporné)"-hedged attributions, verbatim)
+      work: work              # 326 — Textinfo TITUL (Rýmovaná kronika … Dalimila · Labyrint …)
+  uk-wikisource:              # 7 pages
+    fields:
+      author: author          # 2 — the section author (Симеон Коростенський …)
+      work: work              # 6 — the collected volume a chronicle section sits in
+  ru-wikisource:              # 12 pages
+    fields:
+      author: author          # 8 (Аввакум · Афанасий Никитин · Владимир Мономах …)
+      work: work              # 1 — ИЗСБОРНИКА
+  menota:                     # 72 of 91 texts
+    fields:
+      work: work              # the top-level msItem titles, array (Landslǫg Magnúss
+      #                         Hákonarsonar 8 · Konungs skuggsjá 6 · Njáls saga 3 · Stjórn 3 …)
+      #                         — the WORK, distinct from the msName codex title
+  # the CTS editions (catalog + header mining in the Perseus adapter family);
+  # censuses over canonical/, 2026-10-18 — the CTS ids self-namespace
+  # (tlg/phi/stoa/ggm), so they project as authority-grade ids
+  perseus-greek:              # 770 grc editions (+ the opted-in translations)
+    fields:
+      author: author          # the textgroup groupname (89: Homer, Plato, Homeric Hymns …)
+      work: work              # the work title (Iliad …)
+      cts_textgroup: author_id  # "tlg0012"
+      cts_work: work_id       # "tlg0012.tlg001"
+  perseus-latin:              # 322 lat editions
+    fields:
+      author: author          # 55 groupnames (Vergil, Ovid …)
+      work: work
+      cts_textgroup: author_id  # "phi0690", "stoa0045" …
+      cts_work: work_id
+  first1k-greek:              # 1,091 grc editions
+    fields:
+      author: author          # 305 groupnames
+      work: work
+      cts_textgroup: author_id
+      cts_work: work_id
