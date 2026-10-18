@@ -132,7 +132,10 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/bu-ajami/ (the NEH Ajami item pages under items/ + their
   # transcription PDFs under files/, .part + rename, and its
   # .bu-ajami-fetch.json pin) inside Adapter#fetch — the elektire_fetch
-  # WP-JSON crawl law kind.
+  # WP-JSON crawl law kind. The damos adapter writes canonical/damos/
+  # (the POSTed listing under map/ + items/<id>.json, tmp+rename, and
+  # its .damos-crawl.json ledger) inside Adapter#fetch — the
+  # ndl-kotenseki crawl law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -172,6 +175,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/adapters/mdz_protestant.rb
+    nabu/adapters/damos.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb

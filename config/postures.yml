@@ -403,6 +403,22 @@ sources:
         machine date) via MetadataDates :structured — one envelope per work page"}
     places: {posture: unplaced}
     script: {posture: implied}
+  damos:
+    kind: {posture: pending, note: "candidate: a kind_map source_kind administrative — the
+        Linear B corpus is palatial bookkeeping (tablets, sealings, labels; the stirrup-jar
+        inscriptions are labels) — awaiting the ruling"}
+    lect: {posture: identity, note: "gmy — the nabu-lects anchor; the corpus is the whole
+        attested Mycenaean Greek, no finer stage exists to refine into"}
+    dating: {posture: pending, note: "candidate: ruled Aegean ceramic-phase rows (LM/LH,
+        'LM IIIA2 or LM IIIB', 'LH IIIB2/LH IIIC') in config/period_bands.yml — the
+        chronology label rides on ~69% of items (1,878 of 5,932 carry upstream's '-')
+        through MetadataDates :period_label and mints nothing until the bands are ruled"}
+    places: {posture: named, note: "the site (Knossos, Pylos, Thebes …; a 'Vases - X'
+        collection places at X) with find-area/find-spot in the place hash via MetadataDates;
+        the jar clay provenance (West Crete α) stays metadata — no gazetteer refs yet"}
+    script: {posture: implied, note: "the text is the conventional Linear B
+        TRANSLITERATION (syllabograms romanized, logograms as Latin abbreviations) —
+        Latin-script by construction, no Linear B Unicode rides"}
   # Variety-less languages as held (no registry stages to refine into):
   ndl-kotenseki:
     kind: {posture: unclassified}

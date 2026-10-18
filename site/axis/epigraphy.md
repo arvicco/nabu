@@ -18,6 +18,7 @@ A source wears every desk it serves — these 31 answer this desk. Holdings are 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 October 2026)</span> |
 |---|---|---|---|---|
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
+| `damos` | texts | nc | not yet wired | nothing held yet |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
 | `dharma-deccan` | texts | attribution | wired · auto | 1,695 docs / 27,983 passages |
 | `dharma-khmer` | texts | attribution | wired · auto | 1,302 docs / 53,825 passages |

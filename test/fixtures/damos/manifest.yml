@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: damos
+adapter_test:
+retrieved: "2026-10-18"
+files:
+  - path: items/755.json
+    url: https://damos.hf.uio.no/ajaxitem/755/
+    refetchable: true
+    whole: true
+  - path: items/4985.json
+    url: https://damos.hf.uio.no/ajaxitem/4985/
+    refetchable: true
+    whole: true
+  - path: items/277.json
+    url: https://damos.hf.uio.no/ajaxitem/277/
+    refetchable: true
+    whole: true
+  - path: items/5755.json
+    url: https://damos.hf.uio.no/ajaxitem/5755/
+    refetchable: true
+    whole: true
+  - path: map/ajaxgetfilter.json
+    refetchable: false
+    provenance: local-trim
+    reason: the live POST listing (~967 KB) trimmed to six ids — re-cut per README
+    copied: "2026-10-18"
+    whole: false
+    trim: tables cut to ids 277/755/4972/4985/5443/5755; collections cut to their four with counts restated; other filter arrays first 2

@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 146, lect.size,
+    assert_equal 147, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -294,8 +294,10 @@ class PosturesTest < Minitest::Test
                  "nabu-lects Old Nubian package (the nub family + onw anchor; nothing Nubian " \
                  "exists in the canonical registry yet): 143→144; stgall-priscian ADDED P126 — " \
                  "dates (every page dated 850–851: lat pages stage to lat:med, the bare sga " \
-                 "node stays sga — the corph shape): 144→145; ig-cyprus ADDED — PENDING on the " \
-                 "aggregated nabu-lects mint (an ecy anchor + a Cypriot-Greek grc stage): 145→146"
+                 "node stays sga — the corph shape): 144→145; ig-cyprus ADDED P130 — PENDING on " \
+                 "the aggregated nabu-lects mint (an ecy anchor + a Cypriot-Greek grc stage): " \
+                 "145→146; damos ADDED P130 — identity gmy (the whole attested Mycenaean Greek " \
+                 "under the registry anchor): 146→147"
     # P64-6 (the first ten owner rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -427,7 +429,8 @@ class PosturesTest < Minitest::Test
     # dates 14→15.
     # ig-cyprus ADDS PENDING on the aggregated registry mint (an ecy anchor
     # + a Cypriot-Greek grc stage; flips when the nodes reach canonical):
-    # pending 0→1.
-    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 117, "pending" => 1 }, by_posture)
+    # pending 0→1. damos ADDS identity (gmy — the Linear B corpus under
+    # the existing registry anchor): identity 117→118.
+    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 118, "pending" => 1 }, by_posture)
   end
 end

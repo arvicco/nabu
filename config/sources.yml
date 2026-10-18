@@ -1285,6 +1285,26 @@ damaskini:
   # lives on the CLARIN.SI record page, hdl 11356/1441):
   # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1441
 
+damos:   # 02-sources row 274
+  adapter: Nabu::Adapters::Damos
+  adopted: "2026-10-18"
+  axes: [epigraphy, classical]
+  wired: false
+  sync_policy: manual
+  # DĀMOS — Database of Mycenaean at Oslo (damos.hf.uio.no): the complete
+  # Linear B corpus — Knossos 4,224 · Pylos 1,004 · Thebes 363 · Mycenae
+  # 87 · Tiryns 27 · … plus the inscribed stirrup jars. Site footer,
+  # verbatim (2026-10-18): "Content: CC BY-NC-SA 4.0" → nc. Crawl: ONE
+  # POST /ajaxgetfilter listing (the item id space; 7,687 designation
+  # rows over 5,932 unique items — joined fragments share their host's
+  # id; the unique count must equal the summed collection counts) +
+  # GET /ajaxitem/<id>/ per item at 1 req/s, 1,500 per sync, resumable
+  # at the file grain, refusals/timeouts/5xx ledgered in
+  # .damos-crawl.json. EXPECTED: 5,932 documents after four slices
+  # (~25 min each); passages = the transliteration's own labelled lines.
+  # Language gmy (identity); the ceramic-phase chronology rides as a
+  # period label awaiting ruled bands.
+
 dcs:
   adapter: Nabu::Adapters::Dcs
   adopted: "2026-07-18"
