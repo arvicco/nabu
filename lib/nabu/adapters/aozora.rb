@@ -33,6 +33,16 @@ module Nabu
     # deleted). Reconciling atticked zips against historical index rows is a
     # future decision, journaled in the P38-3 report — not guessed here.
     #
+    # == Index metadata (the aggressive-mining law)
+    #
+    # Per work, beyond title/orthography/NDC: "persons" (every person row,
+    # role verbatim, ref "aozora:<人物ID>" into the "aozora" person-index
+    # slice the same index derives — Nabu::AozoraPersons), "authors"/
+    # "translators" names and "author_ids"/"translator_ids" refs (the facet
+    # lane), "original_title" (原題, translations), "first_published"
+    # (初出 verbatim) and "date" — 初出's year(s) as class composition, else
+    # the 底本 first-edition year as class edition (#work_date).
+    #
     # == Identity (FROZEN minting)
     #
     # Document per work: urn:nabu:aozora:<作品ID> (zero-padded upstream id,
@@ -86,7 +96,18 @@ module Nabu
       COL_ROLE = "役割フラグ"
       COL_TEXT_URL = "テキストファイルURL"
       COL_ENCODING = "テキストファイル符号化方式"
+      COL_PERSON_ID = "人物ID"
+      COL_ORIGINAL_TITLE = "原題"
+      COL_FIRST_PUBLISHED = "初出"
+      COL_BASE_EDITION_YEAR = "底本初版発行年1"
       PD_FLAG = "なし"
+      PERSON_REF_PREFIX = "aozora:"
+
+      # Index date grammar (#publication_years). Japanese era → the
+      # Gregorian year before its first year (明治1 = 1868); 元年 is year 1.
+      ERA_BASE = { "明治" => 1867, "大正" => 1911, "昭和" => 1925, "平成" => 1988, "令和" => 2018 }.freeze
+      WESTERN_YEAR = /(\d{4})\s*(?:[（(]|年)/
+      ERA_YEAR = /(明治|大正|昭和|平成|令和)\s*(\d{1,2}|元)年/
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "aozora",
@@ -103,6 +124,15 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # The index's person columns (人物ID + names + life dates) project
+      # into the "aozora" person-index slice at sync and rebuild
+      # (Nabu::AozoraPersons; the ElephantinePersons mold).
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::AozoraPersons::Producer.new(catalog: catalog)
       end
 
       # One ref per unique PD work with a text file, sorted by work id
@@ -155,6 +185,44 @@ module Nabu
                    sparse: SPARSE_CONE)
       end
 
+      # The index rows, from the plain CSV (the fixture form) or the
+      # upstream zip (unzip on read, the work-zip discipline). Upstream
+      # ships the CSV UTF-8 with BOM. Public: Nabu::AozoraPersons reads
+      # the person columns of the same rows.
+      def index_rows(workdir)
+        csv = File.join(workdir, INDEX_DIR, INDEX_CSV)
+        zip = File.join(workdir, INDEX_DIR, INDEX_ZIP)
+        content =
+          if File.file?(csv)
+            File.read(csv, encoding: "bom|utf-8")
+          elsif File.file?(zip)
+            unzip_index(zip)
+          end
+        return [] if content.nil?
+
+        CSV.parse(content, headers: true).map(&:to_h)
+      rescue CSV::MalformedCSVError => e
+        raise Nabu::FetchError, "#{manifest.id}: malformed index CSV under #{workdir}: #{e.message}"
+      end
+
+      # [earliest, latest] Gregorian year an index date string states, or
+      # nil. The censused grammar: "1927（昭和2）年1月号" (the Gregorian
+      # year before its era gloss, full- or half-width parentheses),
+      # "1903年", a bare "1913", serial runs "1934（昭和9）年10月～1935
+      # （昭和10）年12月" (both ends join the envelope), and era-only
+      # "昭和15年2月8日" (converted exactly — the era year is the claim).
+      def self.publication_years(text)
+        text = text.to_s.strip
+        years = text.scan(WESTERN_YEAR).flatten.map { |year| Integer(year, 10) }
+        years = [Integer(text, 10)] if years.empty? && text.match?(/\A\d{4}\z/)
+        if years.empty?
+          years = text.scan(ERA_YEAR).map { |era, n| ERA_BASE.fetch(era) + (n == "元" ? 1 : Integer(n, 10)) }
+        end
+        return nil if years.empty?
+
+        years.minmax
+      end
+
       private
 
       # Test seam (the house pattern): fetch tests point this at a local rig.
@@ -193,11 +261,61 @@ module Nabu
             "ndc" => first[COL_NDC],
             "authors" => person_names(rows, "著者"),
             "translators" => person_names(rows, "翻訳者"),
+            "persons" => persons(rows),
+            "author_ids" => person_refs(rows, "著者"),
+            "translator_ids" => person_refs(rows, "翻訳者"),
+            "original_title" => presence(first[COL_ORIGINAL_TITLE]&.strip),
+            "first_published" => presence(first[COL_FIRST_PUBLISHED]&.strip),
+            "date" => work_date(first),
             # Upstream's own per-file charset declaration (parser honors it,
             # defaults CP932); carried only when non-empty (blank = CP932).
             "file_encoding" => presence(first[COL_ENCODING])
           }.compact
         }
+      end
+
+      # Every person row of the work, index order: {"ref" =>
+      # "aozora:<人物ID>" (the "aozora" person-index slice — Nabu::
+      # AozoraPersons; the prefix is OUR namespace), "name" (姓 名),
+      # "role" (役割フラグ verbatim: 著者 / 翻訳者 / 編者 / 校訂者 /
+      # その他)}.
+      def persons(rows)
+        list = rows.filter_map do |row|
+          id = row[COL_PERSON_ID].to_s.strip
+          next if id.empty?
+
+          { "ref" => "#{PERSON_REF_PREFIX}#{id}", "name" => person_name(row),
+            "role" => presence(row[COL_ROLE].to_s.strip) }.compact
+        end
+        list.empty? ? nil : list
+      end
+
+      def person_refs(rows, role)
+        refs = rows.select { |row| row[COL_ROLE] == role }
+                   .map { |row| row[COL_PERSON_ID].to_s.strip }.reject(&:empty?)
+                   .map { |id| "#{PERSON_REF_PREFIX}#{id}" }.uniq
+        refs.empty? ? nil : refs
+      end
+
+      # The work's dating claim (MetadataDates :structured): 初出 — the
+      # work's FIRST PUBLICATION (10,679 of 17,831 works) — dates the
+      # work itself, class composition (for a translation, the
+      # translation's own first appearance); without one, the 底本's first
+      # edition year (底本初版発行年1) is the print year of the edition the
+      # text follows, class edition (the Perseus imprint-year precedent).
+      # Strings naming no year ("不詳", a bare magazine title) mint nothing.
+      def work_date(row)
+        [[COL_FIRST_PUBLISHED, "composition"], [COL_BASE_EDITION_YEAR, "edition"]].each do |column, klass|
+          raw = row[column].to_s.strip
+          years = self.class.publication_years(raw) or next
+
+          return { "not_before" => years.first, "not_after" => years.last, "raw" => raw, "class" => klass }
+        end
+        nil
+      end
+
+      def person_name(row)
+        [row[COL_SURNAME], row[COL_GIVEN]].compact.map(&:strip).reject(&:empty?).join(" ")
       end
 
       def presence(value)
@@ -223,25 +341,6 @@ module Nabu
         return nil unless author && TEXT_ZIP.match?(basename)
 
         File.expand_path(File.join(workdir, "cards", author, "files", basename))
-      end
-
-      # The index rows, from the plain CSV (the fixture form) or the
-      # upstream zip (unzip on read, the work-zip discipline). Upstream
-      # ships the CSV UTF-8 with BOM.
-      def index_rows(workdir)
-        csv = File.join(workdir, INDEX_DIR, INDEX_CSV)
-        zip = File.join(workdir, INDEX_DIR, INDEX_ZIP)
-        content =
-          if File.file?(csv)
-            File.read(csv, encoding: "bom|utf-8")
-          elsif File.file?(zip)
-            unzip_index(zip)
-          end
-        return [] if content.nil?
-
-        CSV.parse(content, headers: true).map(&:to_h)
-      rescue CSV::MalformedCSVError => e
-        raise Nabu::FetchError, "#{manifest.id}: malformed index CSV under #{workdir}: #{e.message}"
       end
 
       def unzip_index(zip)

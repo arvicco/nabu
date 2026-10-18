@@ -23,7 +23,9 @@ class AozoraTest < Minitest::Test
   URN_51135 = "urn:nabu:aozora:051135"
   URN_56078 = "urn:nabu:aozora:056078"
   URN_59898 = "urn:nabu:aozora:059898"
-  ALL_URNS = [URN_51135, URN_56078, URN_59898].freeze # discover order (work-id sorted)
+  URN_55202 = "urn:nabu:aozora:055202"
+  URN_59115 = "urn:nabu:aozora:059115"
+  ALL_URNS = [URN_51135, URN_55202, URN_56078, URN_59115, URN_59898].freeze # discover order (work-id sorted)
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -73,6 +75,67 @@ class AozoraTest < Minitest::Test
            "zip path maps through the card-url author id: #{ref.path}"
   end
 
+  # The index's person, first-publication and original-title columns ride
+  # discovery metadata: persons with their authority refs (our own
+  # "aozora:" namespace over 人物ID) and verbatim roles, id arrays for the
+  # facet lane, 原題, and the dating claim — 初出 (the work's first
+  # publication) as a composition-class envelope, else the 底本's first
+  # edition year as an edition-class one.
+  def test_discover_carries_persons_ids_and_original_title
+    refs = Nabu::Adapters::Aozora.new.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
+    sonnet = refs.fetch(URN_55202).metadata
+    assert_equal [{ "ref" => "aozora:000235", "name" => "上田 敏", "role" => "翻訳者" },
+                  { "ref" => "aozora:001708", "name" => "マラルメ ステファヌ", "role" => "著者" }],
+                 sonnet["persons"], "index row order, role verbatim"
+    assert_equal ["aozora:001708"], sonnet["author_ids"]
+    assert_equal ["aozora:000235"], sonnet["translator_ids"]
+    assert_equal "QUELLE SOIE AUX BAUMES DE TEMPS", sonnet["original_title"]
+    assert_equal "「芸苑　五」1906（明治39）年5月", sonnet["first_published"]
+    assert_equal({ "not_before" => 1906, "not_after" => 1906,
+                   "raw" => "「芸苑　五」1906（明治39）年5月", "class" => "composition" }, sonnet["date"])
+
+    snow = refs.fetch(URN_59115).metadata
+    assert_equal %w[校訂者 著者], snow["persons"].map { |person| person["role"] },
+                 "a 校訂者 (reviser) rides persons with its role, never as an author"
+    assert_equal ["山東 京山"], snow["authors"]
+    assert_equal ["aozora:001932"], snow["author_ids"]
+    assert_equal 1841, snow.dig("date", "not_before"), "the Edo first printing (天保12) dates the work"
+
+    coach = refs.fetch(URN_56078).metadata
+    assert_nil coach["first_published"]
+    assert_nil coach["original_title"]
+    assert_equal({ "not_before" => 1935, "not_after" => 1935,
+                   "raw" => "1935（昭和10）年9月15日", "class" => "edition" }, coach["date"],
+                 "no 初出: the 底本 first-edition year, honestly classed edition")
+  end
+
+  def test_work_dates_project_through_the_metadata_date_lane_with_their_class
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["aozora"]
+    catalog = store_test_db
+    Nabu::Store::Loader.new(db: catalog, source: aozora_source).load_from(conformance_adapter, workdir: FIXTURES)
+    rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "aozora")
+    assert_equal 5, rows, "every fixture work states 初出 or a 底本 first-edition year"
+    axes = catalog[:document_axes].join(:documents, id: :document_id)
+                                  .select_hash(:urn, %i[not_before date_class])
+    assert_equal [1906, "composition"], axes.fetch(URN_55202)
+    assert_equal [1841, "composition"], axes.fetch(URN_59115)
+    assert_equal [1935, "edition"], axes.fetch(URN_56078)
+  end
+
+  def test_publication_year_reader
+    years = Nabu::Adapters::Aozora.method(:publication_years)
+    assert_equal [1927, 1927], years.call("「文藝春秋」1927（昭和2）年1月号")
+    assert_equal [1934, 1935], years.call("「講談倶樂部」大日本雄辯會講談社、1934（昭和9）年10月～1935（昭和10）年12月")
+    assert_equal [1921, 1921], years.call("「婦人之友」1921(大正10)年4月"), "ASCII parentheses too"
+    assert_equal [1903, 1903], years.call("1903年")
+    assert_equal [1913, 1913], years.call("1913")
+    assert_equal [1940, 1940], years.call("「台湾日日新報　夕刊」昭和15年2月8日、9日"), "era-only strings convert"
+    assert_equal [1912, 1912], years.call("「北國新聞」大正元年")
+    assert_nil years.call("不詳")
+    assert_nil years.call("「太陽　創刊号」"), "no year stated — nothing minted"
+    assert_nil years.call("THE QUEEN OF HEARTS")
+  end
+
   # THE D38-a PIN: the in-copyright work (作品著作権フラグ=あり) is present in
   # the fixture index and its zip is deliberately absent — discovery must
   # exclude it by rule, silently-as-in-no-error but censused, without ever
@@ -83,7 +146,7 @@ class AozoraTest < Minitest::Test
     refute refs.any? { |ref| ref.id.include?("054333") },
            "in-copyright work 054333 must never be discovered (D38-a)"
     skips = adapter.discovery_skips(FIXTURES)
-    assert_equal 1, skips.skipped_by_rule, "the excluded in-copyright work is censused"
+    assert_equal 2, skips.skipped_by_rule, "the excluded in-copyright works are censused (054333, 004333)"
     # The corrupt-zip fixture (56151_ruby_60063.zip, P38-i1) has no index
     # row — upstream re-proofed the work, so the live index points at
     # …_70005.zip — which makes it a REAL stranded-zip exemplar for the
@@ -507,7 +570,7 @@ class AozoraTest < Minitest::Test
     source = aozora_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 3, first.added
+    assert_equal 5, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]

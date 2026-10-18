@@ -340,3 +340,12 @@ sources:
       commentators: commentator  # 237 texts, 216 names — 注/註/疏/箋/集解/索隱/正義 …
       #                         (注 137 · 註 46 …); the remaining long tail (序, 跋, 刪定,
       #                         撰校勘記 …) stays persons-only
+  aozora:                     # 17,195 PD works (index census)
+    fields:
+      authors: author         # every work — the 著者 rows' 姓 名 verbatim
+      translators: translator # 741 works — the 翻訳者 rows
+      author_ids: author_id   # "aozora:001257" — 人物ID under our own aozora: prefix, the
+      translator_ids: translator_id  # person-index slice key (Nabu::AozoraPersons); 編者 /
+      #                         校訂者 / その他 (39 rows) ride metadata "persons" only. 原題
+      #                         (262 PD works) stays metadata: a free-form original-language
+      #                         title, no work-facet mold fits it cleanly

@@ -784,7 +784,11 @@ sources:
     script: {posture: implied}
   aozora:
     lect: {posture: identity, note: modern Japanese literature}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "the index's own columns, via MetadataDates :structured —
+        初出 (the work's first publication; Gregorian years, era-only strings converted)
+        dates 10,460 of 17,195 PD works as class composition; the rest fall back to the
+        底本 first-edition year as class edition (6,724); 11 state neither (censused
+        2026-10-18)"}
     places: {posture: unplaced}
     script: {posture: implied}
   kannada-texts:   # P118-3

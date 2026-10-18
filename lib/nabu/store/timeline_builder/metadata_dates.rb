@@ -73,6 +73,8 @@ module Nabu
         SHAPES = {
           "africa-pd" => :structured, # P124-1: each work's edition year (the slavistics-pd
           #                             mold); the imprint rides "imprint" — no place claim
+          "aozora" => :structured, # the index's 初出 first publication (class composition),
+          #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
@@ -655,13 +657,16 @@ module Nabu
 
         # A per-document "class" => "composition" (bu-ajami, P124-1: one
         # source dating some items by witness and others by authorship era)
-        # classes its own row — the when_key precedent; any other value, or
-        # none, stays class-less.
+        # classes its own row — the when_key precedent; "edition" likewise
+        # (aozora: the 底本 print year where no first publication is
+        # stated); any other value, or none, stays class-less.
+        STRUCTURED_CLASSES = %w[composition edition].freeze
+
         def structured(meta)
           date = meta["date"]
           return [nil, nil, nil] unless date.is_a?(Hash)
 
-          klass = date["class"] == "composition" ? "composition" : nil
+          klass = STRUCTURED_CLASSES.include?(date["class"]) ? date["class"] : nil
           [date["not_before"], date["not_after"], date["raw"], nil, klass]
         end
 

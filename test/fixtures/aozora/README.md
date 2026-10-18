@@ -66,3 +66,19 @@ them directly by path.
 - `legacy/4356_ruby_7914.zip` — 五所川原 (Dazai Osamu), a `_ruby_`-named work
   that still ships no legend block (5 of the 6 legacy `_ruby_` cases). 1.4 KB,
   3 body paragraphs, 底本 colophon. Proves the filename does not imply the shape.
+
+## Person / dating columns (added 2026-10-18, copied from the owner's live canonical)
+
+Six more index rows appended verbatim (CRLF normalized to LF) with the
+two PD works' REAL, WHOLE zips, so the person-authority and dating lanes
+meet real values (the original trim's works carry no 初出):
+
+- `055202` ソネット (Mallarmé, trans. 上田敏) — 原題 "QUELLE SOIE AUX
+  BAUMES DE TEMPS", 初出 「芸苑　五」1906（明治39）年5月;
+  `cards/001708/files/55202_ruby_49061.zip` (1.1 KB).
+- `059115` 北越雪譜 (山東京山, with 岡田武松 as 校訂者 — the reviser
+  role) — 初出 「北越雪譜二編四巻」文溪堂、1841（天保12）年11月;
+  `cards/001932/files/59115_ruby_69944.zip` (4.0 KB).
+- `004333` クリトン (Plato, trans. sogo) — in-copyright (=あり) with an
+  external, non-zip text URL: skipped by discovery, but its persons feed
+  the authority (Plato's 前427/前347 BCE dates; sogo's blank dates).

@@ -30,7 +30,7 @@ module Nabu
 
       # Every authority a producer derives (each keyed by its source slug),
       # the default first — the order name lookups search in.
-      AUTHORITIES = [DEFAULT_AUTHORITY, "edh"].freeze
+      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora"].freeze
 
       Person = Data.define(:authority, :person_id, :name, :name_han,
                            :birth_year, :death_year, :index_year,
