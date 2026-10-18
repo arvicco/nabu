@@ -325,6 +325,6 @@ sources:
       subject_classes: subject  # tree verbatim, upper-lower joined by upstream's own
       #                         hyphen ("왕실-의식(儀式)", "군사-중앙군(中央軍)", "인물(人物)")
   itkc:                       # 37,182 of 37,184 article passages, 29 genre labels, 74,364
-    passage_fields: #           pairs — the 문체분류 classification verbatim (雜著類 ·
-      genre_classes: genre    # 其他類 · 詩類 …); the passage facet shares the document
+    passage_fields: #           pairs — the 문체분류 classification verbatim (詩類 ·
+      genre_classes: genre    # 書簡類 · 其他類 · 雜著類 …); the passage facet shares the document
       #                         facet's axis name, so --type/--facet genre reach both grains
