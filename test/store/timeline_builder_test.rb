@@ -659,6 +659,19 @@ module Store
                    "the era-category attribution wears the era precision label"
     end
 
+    # The page {{header}} year= (the work's own year as the wiki states it)
+    # outranks the era-category band and wears the composition class.
+    def test_metadata_dates_ja_wikisource_header_year_beats_the_era_band
+      seed_metadata_doc("ja-wikisource", "urn:nabu:ja-wikisource:7285",
+                        { "year" => 1330,
+                          "era_band" => { "not_before" => 1185, "not_after" => 1392,
+                                          "raw" => "鎌倉時代・南北朝時代" } })
+      build!
+      row = timeline_for("urn:nabu:ja-wikisource:7285")
+      assert_equal [1330, 1330, "1330", nil, "composition"],
+                   row.values_at(:not_before, :not_after, :date_raw, :precision, :date_class)
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

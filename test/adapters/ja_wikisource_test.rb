@@ -140,6 +140,47 @@ module Adapters
       assert_includes first.annotations["heading"], "泊瀬朝倉宮御宇天皇代"
     end
 
+    # The [事項] keyword bag: verbatim, plus the closed-vocabulary extracts
+    # (poet, 部立 class, rule-recognizable places).
+    def test_manyo_matters_ride_poet_class_and_places
+      first, _second, third = doc(11_940).passages
+      assert_equal "雑歌 作者：雄略天皇 朝倉宮 野遊び 演劇 妻問媿 予祝 枕詞 地名 奈良",
+                   first.annotations["matters"], "the whole bag rides verbatim"
+      assert_equal "雄略天皇", first.annotations["poet"]
+      assert_equal ["雑歌"], first.annotations["class"]
+      assert_equal ["奈良"], first.annotations["places"],
+                   "a prefecture name is a place; 朝倉宮 (historic) stays in matters only"
+      assert_equal "中皇命：間人老", third.annotations["poet"], "the attribution's alternate rides as written"
+      assert_equal ["五条市"], third.annotations["places"], "a municipal suffix marks a place"
+    end
+
+    def test_manyo_place_rule_takes_only_closed_vocabulary_tokens
+      matters = conformance_adapter.send(:manyo_matters, "東歌 相聞 静岡県 富士山 地名 恋情 作者：石川君子 太宰府")
+      assert_equal %w[東歌 相聞], matters["class"]
+      assert_equal %w[静岡県 太宰府], matters["places"],
+                   "富士山 is outside the closed rule; a poet's surname never reads as a place"
+      assert_equal({}, conformance_adapter.send(:manyo_matters, nil))
+    end
+
+    # The page {{header}} author=/year= slots → document metadata; the year
+    # dates the work through MetadataDates (its own composition class).
+    def test_header_author_and_year_ride_document_metadata
+      meta = doc(7285).metadata
+      assert_equal "吉田兼好", meta["author"], "the trailing space trims; the name rides verbatim"
+      assert_equal 1330, meta["year"]
+      assert_equal %w[鴨長明 1212], doc(8082).metadata.values_at("author", "year").map(&:to_s)
+      manyo = doc(11_940).metadata
+      assert_nil manyo["author"], "an empty author= slot claims nothing"
+      assert_nil manyo["year"], "an empty year= slot claims nothing"
+    end
+
+    def test_header_year_mints_only_ce_integers
+      adapter = conformance_adapter
+      assert_equal 1330, adapter.send(:header_year, " 1330 ")
+      assert_nil adapter.send(:header_year, "寛政2"), "an era year is not a CE integer"
+      assert_nil adapter.send(:header_year, "{{{year|1912}}}"), "an unexpanded template default"
+    end
+
     def test_manyo_variant_verse_keeps_the_corpus_own_suffix
       d = doc(12_868)
       assert_equal ["#{d.urn}:03/0235", "#{d.urn}:03/0235S"], d.passages.map(&:urn),

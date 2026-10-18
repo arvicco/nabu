@@ -61,7 +61,11 @@ module Nabu
     # parenthetical, else the honest "unstated"). The era categories
     # a page carries ride as metadata "eras" and band the grade-2 era
     # date envelope ("era_band" → MetadataDates :era_band_key,
-    # precision "era" — an era attribution, never a typed date).
+    # precision "era" — an era attribution, never a typed date). The
+    # page {{header}} author= and year= slots ride metadata "author"
+    # (the author facet) and "year" (a CE integer, which outranks the
+    # band in MetadataDates as its own composition class). 万葉集 poems
+    # carry their [事項] keyword bag as annotations (see #manyo_matters).
     #
     # == Fetch (the WikiFetch mold, category-cone shaped)
     #
@@ -234,6 +238,15 @@ module Nabu
       # The 万葉集 block grammar (P109-1 census: [歌番号] fields).
       MANYO_BLOCK = /^\[歌番号\]/
       MANYO_FIELD = /^\[(歌番号|題詞|原文|訓読|仮名|左注|校異|事項)\](.*)$/
+
+      # The [事項] bag's closed vocabularies (see #manyo_matters).
+      MANYO_POET = "作者："
+      MANYO_CLASS = /\A(?:[春夏秋冬]?(?:雑歌|相聞)|挽歌|譬喩歌|東歌)\z/
+      MANYO_PLACE_SUFFIX = /\A\p{Han}+[県府市町村郡]\z/
+      PREFECTURES = %w[北海道 青森 岩手 宮城 秋田 山形 福島 茨城 栃木 群馬 埼玉 千葉 東京 神奈川
+                       新潟 富山 石川 福井 山梨 長野 岐阜 静岡 愛知 三重 滋賀 京都 大阪 兵庫
+                       奈良 和歌山 鳥取 島根 岡山 広島 山口 徳島 香川 愛媛 高知 福岡 佐賀 長崎
+                       熊本 大分 宮崎 鹿児島 沖縄].freeze
 
       private
 
@@ -457,12 +470,52 @@ module Nabu
       def document_metadata(envelope)
         wikitext = envelope.fetch("wikitext")
         eras = Array(envelope["eras"])
+        header = header_params(wikitext)
         {
           "eras" => (eras unless eras.empty?),
           "era_band" => era_band(eras),
           "base_edition" => base_edition(envelope),
-          "textquality" => wikitext[/\{\{Textquality\|(\d+%?)\}\}/i, 1]
+          "textquality" => wikitext[/\{\{Textquality\|(\d+%?)\}\}/i, 1],
+          "author" => header_author(header["author"]),
+          "year" => header_year(header["year"])
         }.compact
+      end
+
+      # The page {{header}} template's one-per-line params ("| key = value"
+      # — the censused shape), the block found by brace balance so a
+      # nested {{Textquality|…}} never truncates it. {} when absent.
+      def header_params(wikitext)
+        start = wikitext =~ /\{\{\s*[Hh]eader\s*(?:\||\n)/ or return {}
+
+        depth = 0
+        stop = nil
+        wikitext.to_enum(:scan, /\{\{|\}\}/).each do
+          match = ::Regexp.last_match
+          next if match.begin(0) < start
+
+          depth += match[0] == "{{" ? 1 : -1
+          (stop = match.end(0)) && break if depth.zero?
+        end
+        block = wikitext[start...(stop || wikitext.size)]
+        block.scan(/^[ \t]*\|[ \t]*([^=|\n]+?)[ \t]*=[ \t]*(.*)$/).to_h { |key, value| [key, value.strip] }
+      end
+
+      # The header author= slot (census 2026-10-18: 123 pages filled —
+      # 清少納言 20, 羽地朝秀 10, 源実朝 8 …), verbatim; a wikilink keeps
+      # its label; hedges like 「諏訪信重（伝）」 ride as written.
+      def header_author(raw)
+        value = raw.to_s.gsub(/\[\[([^\]|]*\|)?([^\]]*)\]\]/) { ::Regexp.last_match(2) }.strip
+        value.empty? ? nil : Nabu::Normalize.nfc(value)
+      end
+
+      # The header year= slot — the work's year as the wiki states it
+      # (census 2026-10-18: 135 pages filled, 133 a bare CE year 604–1923;
+      # the two others — an era year 「寛政2」 and an unexpanded template
+      # default — are not CE integers and DELIBERATELY mint nothing).
+      # Feeds MetadataDates (ja-wikisource) as its own composition class.
+      def header_year(raw)
+        value = raw.to_s.strip
+        value.match?(/\A\d{3,4}\z/) ? Integer(value, 10) : nil
       end
 
       # The grade-2 era envelope over every era category the page
@@ -731,11 +784,45 @@ module Nabu
           "kana" => fields["仮名"],
           "heading" => fields["題詞"],
           "left_note" => (fields["左注"] unless fields["左注"].to_s == "なし")
-        }.compact.reject { |_, value| value.empty? }
+        }.merge(manyo_matters(fields["事項"])).compact.reject { |_, value| value.empty? }
         Nabu::Passage.new(
           urn: "#{document_ref.id}:#{number}", language: MANYO_LANGUAGE,
           text: original, sequence: sequence, annotations: annotations
         )
+      end
+
+      # The [事項] keyword bag (census 2026-10-18: 4,407 poems) is an
+      # UNORDERED space-separated list mixing the 部立 class, 作者：<poet>,
+      # persons named in the poem, dates (天平８年…), topics (恋情, 枕詞…),
+      # place names and the bare 地名 FLAG ("a place is named") — place
+      # names hold no fixed position (福岡 rides 180 poems, only 143 of
+      # them flagged 地名), so position cannot separate them. Emitted:
+      # - "matters": the whole bag, verbatim (nothing lost);
+      # - "poet": the 作者： value verbatim (never more than one per
+      #   poem; alternates ride as written, 「中皇命：間人老」);
+      # - "class": the bag's 部立 tokens ([春夏秋冬]?雑歌/相聞, 挽歌,
+      #   譬喩歌, 東歌 — 13 values, a closed vocabulary);
+      # - "places": ONLY the tokens a closed rule can call places — the
+      #   47 prefecture names (bare or suffixed) and tokens ending in a
+      #   municipal suffix 県/府/市/町/村/郡 (奈良, 群馬県, 桜井市, 太宰府 …;
+      #   zero false positives over the census). Historic names outside
+      #   that rule (飛鳥, 吉野, 難波 …) DELIBERATELY stay in "matters"
+      #   only — separating them needs a gazetteer join, not a guess.
+      def manyo_matters(raw)
+        return {} if raw.nil? || raw.empty?
+
+        tokens = raw.split(/[[:space:]]+/).reject(&:empty?)
+        poet = tokens.find { |token| token.start_with?(MANYO_POET) }&.delete_prefix(MANYO_POET)
+        { "matters" => raw,
+          "poet" => poet,
+          "class" => tokens.grep(MANYO_CLASS),
+          "places" => tokens.reject { |token| token.start_with?(MANYO_POET) }
+                            .select { |token| manyo_place?(token) }.uniq }
+      end
+
+      def manyo_place?(token)
+        stem = token.sub(/[都道府県]\z/, "")
+        PREFECTURES.include?(token) || PREFECTURES.include?(stem) || token.match?(MANYO_PLACE_SUFFIX)
       end
     end
   end
