@@ -1143,7 +1143,9 @@ sources:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "the EpidocParser inline layer (notes/foreign/
+        quotes annotations) carries no place keys at census — first1k bodies
+        tag no placeName"}
     script: {posture: implied}
   diorisis:
     kind: {posture: unclassified}
@@ -1890,12 +1892,22 @@ sources:
   perseus-greek:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "the passage-grain inline layer (EpidocParser
+        annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
+        perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
+        where it was made or found; TGN is no held gazetteer (Pleiades carries
+        ~49 TGN crosswalks), so nothing joins the axis — the keys ride for a
+        future join"}
     script: {posture: implied}
   perseus-latin:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "the passage-grain inline layer (EpidocParser
+        annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
+        perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
+        where it was made or found; TGN is no held gazetteer (Pleiades carries
+        ~49 TGN crosswalks), so nothing joins the axis — the keys ride for a
+        future join"}
     script: {posture: implied}
   rundata:
     kind: {posture: unclassified}

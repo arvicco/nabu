@@ -192,3 +192,20 @@ files:
       edition sits outside the perseus-grc slug family; under strays/ so the
       main greekLit discover is untouched; copied from the local canonical
       snapshot 2026-10-11)
+  - path: inline/data/tlg7000/tlg001/tlg7000.tlg001.perseus-grc10.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg7000/tlg001/tlg7000.tlg001.perseus-grc10.xml
+    whole: false
+    trim: >-
+      Greek Anthology inline-layer exemplar, trimmed from the local canonical
+      snapshot 2026-10-18: full teiHeader + edition div kept; book 13 reduced
+      to epigrams 1-2, book 14 to epigram 3 (the per-epigram persName @key
+      author attribution with nested foreign, and a q); everything else
+      removed. Under inline/ so the main greekLit discover is untouched.
+  - path: inline/data/tlg0014/tlg001/tlg0014.tlg001.perseus-eng2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/master/data/tlg0014/tlg001/tlg0014.tlg001.perseus-eng2.xml
+    whole: false
+    trim: >-
+      Demosthenes Olynthiac 1 translation, inline-layer exemplar, trimmed from
+      the local canonical snapshot 2026-10-18: full teiHeader + translation
+      div kept; sections 8, 9, 14, 20 kept (tgn/perseus-keyed placeNames,
+      Loeb notes with nested names and foreign, spoken q); the rest removed.

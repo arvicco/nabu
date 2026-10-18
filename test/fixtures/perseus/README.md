@@ -75,3 +75,23 @@ classification is slug-driven), so their refs discover with a nil title.
   The legacy refsDecls (`<refState>`/`<state>`) frequently CONTRADICT the
   body (phi0692 declares book.chapter.section over lb-only verse), which is
   why the P4 fallback mints citation from the body, never the declaration.
+
+## Inline-layer samples (`inline/`)
+
+Two trimmed real files, under `inline/` so the main greekLit discover is
+untouched (the `strays/` precedent), exercising the EpidocParser's inline
+layers (persName/placeName/name with `@key`, `<note>`, `<foreign>`,
+`<q>`/`<quote>` → passage annotations). Cut 2026-10-18 from the local
+canonical snapshot (`canonical/perseus-greek/`), header kept whole, no
+`__cts__.xml` (the parser test passes the urn):
+
+- `inline/data/tlg7000/tlg001/tlg7000.tlg001.perseus-grc10.xml` — the Greek
+  Anthology (Paton, vol. 5): epigrams 13.1, 13.2 and 14.3 kept. Each epigram
+  opens with a `<docAuthor><persName xml:lang="lat" key="tlg-NNNN">`
+  attribution wrapping a `<foreign xml:lang="lat">` author name — the TLG
+  author id as `@key`; 14.3 carries a `<q>`.
+- `inline/data/tlg0014/tlg001/tlg0014.tlg001.perseus-eng2.xml` — Demosthenes,
+  Olynthiac 1 (Vince, Loeb): sections 8, 9, 14 and 20 kept. placeNames keyed
+  both `tgn,<id>` (Getty TGN) and `perseus,<Name>` (the Perseus gazetteer),
+  `<note resp="Loeb">` with nested placeName/date/foreign, `<q
+  type="spoken">`.
