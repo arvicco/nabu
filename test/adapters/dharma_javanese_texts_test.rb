@@ -51,6 +51,34 @@ class DharmaJavaneseTextsTest < Minitest::Test
                  "the canto's met= rides every pāda — the meter axis's SEA feed"
   end
 
+  # -- the header: attributed author + witness shelfmarks ---------------------
+
+  def test_the_attributed_author_and_witness_shelfmarks_ride_metadata
+    metadata = adapter.parse(ref_for(DESA)).metadata
+    assert_equal "Mpu Prapañca", metadata["author"], "the titleStmt <author> — the work's attributed poet"
+    assert_equal ["Leiden, University Library (UB), Special Collections, Or. 5023",
+                  "Karangasem, Bali, Private collection of Dewa Gede Catra"], metadata["shelfmarks"],
+                 "every witness msIdentifier, its parts verbatim in element order"
+  end
+
+  def test_an_authorless_edition_claims_no_author
+    metadata = adapter.parse(ref_for(BHIMA)).metadata
+    assert_nil metadata["author"]
+    assert_equal ["Jakarta, Perpustakaan Nasional Republik Indonesia, L. 455",
+                  "Jakarta, Perpustakaan Nasional Republik Indonesia, L. 623",
+                  "Garut, Java-Ouest, Ermitage de Ciburuy", "Bali, Gedong Kirtya, Bali 1460"],
+                 metadata["shelfmarks"], "witness R (HKS 7507) is commented out upstream — never read"
+    assert_equal ["Jakarta, Perpustakaan Nasional Republik Indonesia, Lontar, L128"],
+                 adapter.parse(ref_for(DIPL)).metadata["shelfmarks"]
+  end
+
+  def test_template_placeholder_parts_never_ride
+    shelfmark = Nabu::Adapters::DharmaJavaneseTexts.method(:shelfmark)
+    node = Nokogiri::XML("<msIdentifier><settlement>...</settlement><institution/>" \
+                         "<repository>...</repository><idno>...</idno></msIdentifier>").root
+    assert_nil shelfmark.call(node), "the edition template's ... placeholders are no shelfmark"
+  end
+
   # -- the prose-apparatus shape: paragraph mode, lem preferred --------------
 
   def test_bhima_svarga_prose_is_paragraph_grain_reading_the_lemma

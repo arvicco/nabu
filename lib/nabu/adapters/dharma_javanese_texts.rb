@@ -32,6 +32,36 @@ module Nabu
       # the held surface is Latin either way, so both resolve to kaw-Latn
       # (the manuscript's own script is the artifact fact).
       ALIASES = { "kaw-Latin" => "kaw-Latn", "kaw-ban" => "kaw-Latn" }.freeze
+
+      # The edition template's unfilled placeholder (7 witnesses carry
+      # "..." in every msIdentifier part — census 2026-10-18).
+      PLACEHOLDER = "..."
+
+      # One witness msIdentifier → its filled parts (settlement,
+      # institution, repository, collection, idno — or a bare msName)
+      # verbatim, joined in element order; nil when nothing is filled.
+      def self.shelfmark(node)
+        parts = node.element_children.map { |child| child.text.gsub(/[[:space:]]+/, " ").strip }
+                                     .reject { |part| part.empty? || part == PLACEHOLDER }
+        parts.empty? ? nil : Normalize.nfc(parts.join(", "))
+      end
+
+      private
+
+      # The header (census 2026-10-18, 98 editions): the titleStmt
+      # <author> — the WORK's attributed poet (11 editions: Mpu Prapañca,
+      # Mpu Tantular, Vararuci …; the digital editors ride respStmt, never
+      # here) — and every witness msIdentifier in sourceDesc as a
+      # shelfmark string (85 editions, 189 witnesses). The author facets
+      # via config/facet_map.yml; the shelfmarks are metadata only.
+      def corpus_header(doc)
+        author = doc.at_xpath("/TEI/teiHeader/fileDesc/titleStmt/author")&.text.to_s
+                    .gsub(/[[:space:]]+/, " ").strip
+        shelfmarks = doc.xpath("/TEI/teiHeader/fileDesc/sourceDesc//msIdentifier")
+                        .filter_map { |node| self.class.shelfmark(node) }
+        { "author" => (author.empty? ? nil : Normalize.nfc(author)),
+          "shelfmarks" => (shelfmarks.empty? ? nil : shelfmarks) }
+      end
     end
   end
 end
