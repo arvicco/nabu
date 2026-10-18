@@ -19,6 +19,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 |---|---|---|---|---|
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
+| `damos` | texts | nc | not yet wired | nothing held yet |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
 | `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |

@@ -90,6 +90,10 @@ module Nabu
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
           "dacon" => :structured,
+          "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
+          #   IIIB") bands only once period_bands.yml carries ruled rows; the
+          #   site/findspot place hash projects meanwhile
+
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)
           "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
