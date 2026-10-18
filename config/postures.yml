@@ -41,7 +41,9 @@ sources:
       note: ruled DELIBERATELY unstaged at source grain (D57-f — genuinely
         mixed Renaissance-to-modern Latin); per-document date-band rows ride.
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: named, note: "the creation placeName on 298 of 573 texts; 69 carry
+        a Wikidata place URL that rides the axis place_ref verbatim (no wikidata gazetteer
+        join is held, so the posture stays named)"}
     script: {posture: implied}
   edh:
     lect: {posture: dates}

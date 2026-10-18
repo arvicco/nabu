@@ -804,6 +804,25 @@ module Store
                    "croala's author-era year ranges were the class's precedent — now labeled"
     end
 
+    # croala's creation placeName carries a Wikidata place ref on 67
+    # files: it rides the row's place_ref verbatim beside the STRING place
+    # name (the logainm verbatim-URL precedent — no wikidata namespace is
+    # minted); a string place without a ref stays ref-less.
+    def test_metadata_dates_croala_string_place_carries_its_ref
+      seed_metadata_doc("croala", "urn:nabu:croala:nin",
+                        { "date" => "1070", "place" => "Nin",
+                          "place_ref" => "http://www.wikidata.org/entity/Q396372" })
+      seed_metadata_doc("croala", "urn:nabu:croala:split-2", { "date" => "1490", "place" => "Split" })
+      seed_metadata_doc("croala", "urn:nabu:croala:bare", { "date" => "1500", "place" => "Šibenik",
+                                                            "place_ref" => "3190586" })
+      build!
+      nin = timeline_for("urn:nabu:croala:nin")
+      assert_equal ["Nin", "http://www.wikidata.org/entity/Q396372"], [nin[:place_name], nin[:place_ref]]
+      assert_nil timeline_for("urn:nabu:croala:split-2")[:place_ref]
+      assert_nil timeline_for("urn:nabu:croala:bare")[:place_ref],
+                 "a bare number names no gazetteer (2 live files) — never lifted"
+    end
+
     def test_metadata_dates_ogham_place_hash_mints_coordinates_and_logainm_refs
       seed_metadata_doc("ogham", "urn:nabu:ogham:i-ant-001",
                         { "layer" => "ogham",

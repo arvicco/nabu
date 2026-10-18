@@ -238,6 +238,8 @@ sources:
   croala:                     # 559 of 570 docs, 214 authors ("Grauisius, Iacobus")
     fields:
       author: author
+      author_refs: author_id  # the author @ref's Wikidata id (["wikidata:Q16115490"], 471
+      #                         files), adapter-lifted from the verbatim author_ref URL
   digiliblt:                  # 372 docs
     fields:
       author: author          # 250 docs, 152 authors ("Agennius Vrbicus")

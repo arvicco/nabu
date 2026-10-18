@@ -94,6 +94,30 @@ class CroalaTest < Minitest::Test
     assert_equal "Adam, redovnik", metadata["author"]
   end
 
+  # The author element's @ref verbatim (a Wikidata entity URL on most
+  # files, a corpus-local key on the rest), the Wikidata id lifted into
+  # the shared "wikidata:Q…" author_refs spelling only when the ref IS a
+  # Wikidata entity, the author's life/floruit <date> verbatim, and the
+  # creation placeName's @ref (a Wikidata place URL) as place_ref.
+  def test_author_identity_life_dates_and_creation_place_ref
+    carmina = adapter.parse(ref_for(CARMINA)).metadata
+    assert_equal "http://www.wikidata.org/entity/Q16115490", carmina["author_ref"]
+    assert_equal ["wikidata:Q16115490"], carmina["author_refs"]
+    assert_equal "1490-1571", carmina["author_dates"]
+    refute carmina.key?("place_ref"), "no creation placeName — no ref"
+
+    donatio = adapter.parse(ref_for(DONATIO)).metadata
+    assert_equal "adamus1070", donatio["author_ref"]
+    refute donatio.key?("author_refs"), "a corpus-local key is not an authority id"
+    assert_equal "floruit 1070", donatio["author_dates"]
+    assert_equal "http://www.wikidata.org/entity/Q396372", donatio["place_ref"]
+
+    inscr = adapter.parse(ref_for(INSCR)).metadata
+    assert_equal "c. 1427-1493", inscr["author_dates"]
+    assert_equal "Split", inscr["place"]
+    refute inscr.key?("place_ref"), "a ref-less placeName names without a ref"
+  end
+
   def test_title_is_mined_from_the_teiheader
     assert_equal "Donatio Radauani (1070), versio electronica",
                  adapter.parse(ref_for(DONATIO)).title

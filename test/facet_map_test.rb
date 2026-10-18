@@ -147,7 +147,7 @@ class FacetMapTest < Minitest::Test
       "mk-wikisource" => { "author" => "author" },
       "bg-wikisource" => { "recension" => "recension", "author" => "author" },
       "imp" => { "author" => "author" },
-      "croala" => { "author" => "author" },
+      "croala" => { "author" => "author", "author_refs" => "author_id" },
       "digiliblt" => { "author" => "author", "work" => "work" },
       "bfm" => { "author" => "author" },
       "elektire" => { "author" => "author" },
