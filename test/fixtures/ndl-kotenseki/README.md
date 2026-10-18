@@ -16,3 +16,13 @@ Real captures retrieved 2026-09-29:
 
 Re-cut: fetch the fulltext-json URL and keep `list[0..5]`; re-derive
 the census row by filtering the open-dataset xlsx to the PID.
+
+Added 2026-10-18:
+
+- `books/2541107.json` — PID 2541107 (古今武者揃, an 赤本 picture book),
+  copied whole (17 koma, 16 KB) from the box's canonical crawl of the
+  same bulk route. Its census row carries two ||-separated 著者 parts
+  with trailing role tokens ("夷福山人 作||広重 画"), a シリーズタイトル
+  (赤本昔はなし) and a 容量・大きさ (1冊 ; 12.2cm).
+- `census.tsv` re-derived for both PIDs with the series/extent
+  columns (the adapter's own `derive_census!` over the held xlsx).
