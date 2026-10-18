@@ -328,3 +328,15 @@ sources:
     passage_fields: #           pairs — the 문체분류 classification verbatim (詩類 ·
       genre_classes: genre    # 書簡類 · 其他類 · 雜著類 …); the passage facet shares the document
       #                         facet's axis name, so --type/--facet genre reach both grains
+  # -- the CJK person blocks (adapter-mined; a re-parse lands the fields first).
+  #    Censuses over canonical/, 2026-10-18.
+  kanripo:                    # 4,119 held texts carry KR-Catalog 人物 blocks (5,202 blocks)
+    fields: #                   — metadata "persons" keeps every block verbatim
+      authors: author         # 3,182 texts, 2,248 names — the text-level byline's 撰-family
+      #                         roles (撰 3,063 · 奉敕撰 160 · 敕撰 18 …; Kanripo adapter table)
+      editors: editor         # 540 texts, 497 names — 編/輯/纂-family compilers (編 436 ·
+      #                         輯 43 · 奉敕編 26 …): a census-warranted facet of its own,
+      #                         never folded into authorship
+      commentators: commentator  # 237 texts, 216 names — 注/註/疏/箋/集解/索隱/正義 …
+      #                         (注 137 · 註 46 …); the remaining long tail (序, 跋, 刪定,
+      #                         撰校勘記 …) stays persons-only
