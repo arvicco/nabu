@@ -102,6 +102,21 @@ class ModuleCensusTest < Minitest::Test
     assert_nil Nabu::ModuleCensus.head(File.join(@root, "absent"))
   end
 
+  # The resettable-pin lesson (caught live 2026-10-18): the catalog's
+  # last_sync_sha resets at rebuild, so a nil pin consults the tree
+  # itself — its own git HEAD, then bare heldness — before ever
+  # claiming "not synced".
+  def test_summary_falls_back_to_the_trees_own_head_then_heldness
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, "data"))
+      File.write(File.join(dir, "data", "spine.txt"), "held content")
+      assert_equal "module (held)", Nabu::ModuleCensus.summary(nil, pin: nil, workdir: dir)
+    end
+    Dir.mktmpdir do |dir|
+      assert_equal "module (not synced)", Nabu::ModuleCensus.summary(nil, pin: nil, workdir: dir)
+    end
+  end
+
   private
 
   def counts(anchors:, stages:, varieties:, codemap:)
@@ -134,4 +149,5 @@ class ModuleCensusTest < Minitest::Test
   def git(dir, *)
     Nabu::Shell.run("git", "-C", dir, *).strip
   end
+
 end

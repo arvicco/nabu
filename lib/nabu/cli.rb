@@ -6851,8 +6851,8 @@ module Nabu
         entry = list_module_registry&.[](slug)
         return nil unless entry&.feature_module?
 
-        counts = Nabu::ModuleCensus.at_dir(entry.adapter_class, File.join(Nabu::Config.load.canonical_dir, slug))
-        Nabu::ModuleCensus.summary(counts, pin: pin)
+        Nabu::ModuleCensus.descriptor(entry.adapter_class, slug: slug,
+                                      canonical_dir: Nabu::Config.load.canonical_dir, pin: pin)
       rescue Nabu::Error
         nil
       end
@@ -12372,7 +12372,7 @@ module Nabu
         after = delta.after&.slice(0, width)
         return before ? "parse-only at #{before}" : "parse-only" unless delta.fetched
         return "fetched" if after.nil?
-        return "cloned at #{after}" if before.nil?
+        return (delta.held_before ? "fetched at #{after}" : "cloned at #{after}") if before.nil?
         return "unchanged at #{after}" if delta.before == delta.after
 
         "#{before}..#{after}"

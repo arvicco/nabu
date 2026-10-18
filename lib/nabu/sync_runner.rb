@@ -199,6 +199,7 @@ module Nabu
     def fetch_only_outcome(entry, source, adapter, workdir, force:, progress:)
       fetch_report = nil
       before = module_ref_before(entry, source, workdir)
+      held_before = module_held_before(entry, workdir)
       begin
         Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress)
@@ -212,7 +213,7 @@ module Nabu
       progress&.stage("fetched #{entry.slug} — parse+load deferred (fetch-only)")
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: nil,
                   breaker: nil, indexed: nil, warnings: [], discovery: nil,
-                  module_delta: module_delta(entry, adapter, workdir, before, fetch_report))
+                  module_delta: module_delta(entry, adapter, workdir, before, fetch_report, held_before: held_before))
     end
 
     # The module's ref BEFORE this sync's fetch (module sync summaries):
@@ -224,12 +225,19 @@ module Nabu
       ModuleCensus.head(workdir) || source.last_sync_sha
     end
 
+    # Whether the module tree already held content before this fetch — a
+    # nil ref is NOT a fresh clone when the tree was on disk (the
+    # resettable-pin lesson: non-git modules carry no ref at all).
+    def module_held_before(entry, workdir)
+      entry.feature_module? && ModuleCensus.held?(workdir)
+    end
+
     # The kind: module summary data (ModuleCensus::Delta); nil for every
     # other kind, so non-module rendering never changes.
-    def module_delta(entry, adapter, workdir, before, fetch_report)
+    def module_delta(entry, adapter, workdir, before, fetch_report, held_before: false)
       return nil unless entry.feature_module?
 
-      ModuleCensus.delta(adapter_class: adapter.class, dir: workdir, before: before,
+      ModuleCensus.delta(adapter_class: adapter.class, dir: workdir, before: before, held_before: held_before,
                          after: fetch_report&.sha, fetched: !fetch_report.nil?)
     end
 
@@ -274,6 +282,7 @@ module Nabu
       load_report = nil
       lane_report = nil
       module_before = module_ref_before(entry, source, workdir)
+      module_held_before = module_held_before(entry, workdir)
 
       begin
         run = Store::RunRecorder.record(source_slug: entry.slug) do
@@ -346,7 +355,7 @@ module Nabu
                   analyzed: analyze_after_load(combined_report, adapter),
                   lect_staging: lect_staging_census(entry),
                   dictionary_lane: lane_report,
-                  module_delta: module_delta(entry, adapter, workdir, module_before, fetch_report))
+                  module_delta: module_delta(entry, adapter, workdir, module_before, fetch_report, held_before: module_held_before))
     end
 
     # P99-5 (the P59-4 front-door bullet): the synced source's
