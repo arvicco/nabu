@@ -574,3 +574,27 @@ International. The complete license text is available at:
 http://creativecommons.org/licenses/by-sa/4.0/legalcode"; each README's
 machine-readable metadata — "License: CC BY-SA 4.0", "Includes text:
 yes" → the per-document attribution override.
+
+## phrygian-kul (retrieved 2026-10-18)
+
+UD_Phrygian-KUL (Oggi Peeters, KU Leuven; in UD since v2.15, README
+changelog v2.18 2026-05-15), from `master` (HEAD b2deb613, 2026-05-06).
+Test split only.
+
+- `phrygian-kul/xpg_kul-ud-test-head50.conllu` — the first 50 complete
+  sentence blocks of `xpg_kul-ud-test.conllu` (203 blocks, 1,927 word
+  lines, 195,121 B upstream, sha256 `efdea547…092bc`; no MWT range lines
+  and no empty nodes file-wide). Sentence ids are Trismegistos
+  inscription ids plus a sentence number (`TM756906-1`), and every
+  token's MISC carries `Ref=TM<inscription>-<sentence>-<token>`. The
+  head opens with the Old Phrygian Midas City inscriptions (Latin
+  transliteration with Leiden underdots and `[--]` lacunae; LEMMA
+  sometimes cites the New Phrygian Greek-alphabet form, `edaes` →
+  `αδδακετ`). Language `xpg`.
+
+License (read verbatim 2026-10-18): LICENSE.txt — "The treebank is
+licensed under the Creative Commons License Attribution-ShareAlike 4.0
+International. The complete license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode"; README
+machine-readable metadata — "License: CC BY-SA 4.0", "Includes text:
+yes" → the per-document attribution override.
