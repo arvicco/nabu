@@ -168,8 +168,8 @@ class NikhXmlParserTest < Minitest::Test
                     "the person pid is the only id sjw carries"
     assert_includes persons, { "value" => "黃梓", "ref" => "nikh:p17_100010_00" }
     assert_includes persons, { "value" => "程子" }, "name=\"미결\" (unresolved): the surface stays the value"
-    assert_includes leaf.entities["books"], { "value" => "孟子離婁上", "name" => "孟子" },
-                    "books keep the surface-valued shape"
+    assert_includes leaf.entities["books"], { "value" => "孟子", "surface" => "孟子離婁上" },
+                    "a book facets under its normalized WORK identity, the cited surface beside it"
     assert_equal [{ "value" => "時敏堂" }], leaf.entities["places"]
   end
 

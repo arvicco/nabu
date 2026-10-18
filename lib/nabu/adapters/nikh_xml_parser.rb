@@ -46,27 +46,27 @@ module Nabu
     # mined per leaf into entity annotations while the leaf text stays
     # byte-identical (the tags are only read, never shed differently).
     # One annotation key per kind (ENTITY_KINDS), each a list of compact
-    # records, ONE RECORD PER DISTINCT (kind, value, ref, name/surface) PER
+    # records, ONE RECORD PER DISTINCT (kind, value, ref, surface) PER
     # PASSAGE in first-occurrence order — repeats live in the text (every
     # surface is in it), so the mention count is recoverable from there:
     #
-    #   { "value" => the tag's surface text (squished, NFC) — except an
-    #                sjw PERSON tag with a resolving @name: there the value
-    #                is upstream's normalized name (its own resolution
-    #                claim, transcribed like a title — 鳳朝 → 尹鳳朝), so
-    #                the person facet groups variants under it,
-    #     "surface"=> that person tag's raw surface, ONLY where it
-    #                differs from the normalized value,
+    #   { "value" => the tag's surface text (squished, NFC) — except a tag
+    #                with a resolving @name (sjw's persons and books):
+    #                there the value is upstream's normalized name, its own
+    #                resolution claim transcribed like a title (鳳朝 →
+    #                尹鳳朝; 孟子離婁上 → 孟子, the WORK identity), so the
+    #                facet groups variants under it,
+    #     "surface"=> that tag's raw surface, ONLY where it differs from
+    #                the normalized value,
     #     "ref"   => "nikh:" + the tag's own id — @ref (sillok's M_ person
     #                ids; the goryeosa family's kind-prefixed p/o/t/m/b
     #                ids), else @id (the cross-database person pid,
     #                p17_100010_00 shape, on sjw/bibyeonsa and some
-    #                sillok tags) — omitted when the tag carries neither,
-    #     "name"  => @name on a NON-person tag (sjw's books) — kept ONLY
-    #                where it differs from the surface }
+    #                sillok tags) — omitted when the tag carries neither }
     #
-    # The "미결" (unresolved) @name sentinel asserts no name: the surface
-    # stays the value and no surface/name field rides.
+    # An absent @name, one equal to the surface, or the "미결"
+    # (unresolved) sentinel leaves the surface as the value, no surface
+    # field riding.
     #
     # Scope mirrors the text: only tags inside the leaf's content
     # paragraphs. A tag with an empty surface (the self-closing and
@@ -92,10 +92,6 @@ module Nabu
       UNRESOLVED_NAME = "미결"
 
       REF_NAMESPACE = "nikh"
-
-      # The one kind whose @name becomes the value (see the class comment).
-      PERSONS = "persons"
-
       # The ancestor-fallback default for a frame that carried no front.
       EMPTY_FRONT = { title: nil, date_raw: nil, subject_classes: [], sources: [], weather: nil }.freeze
 
@@ -277,13 +273,13 @@ module Nabu
           next if wrapper?(tag)
 
           kind = ENTITY_KINDS[tag["type"]]
-          record = kind && entity_record(tag, kind)
+          record = kind && entity_record(tag)
           (entities[kind] ||= []) << record if record
         end
         entities.transform_values(&:uniq)
       end
 
-      def entity_record(tag, kind)
+      def entity_record(tag)
         surface = Nabu::Normalize.nfc(squish(tag.text))
         return nil if surface.empty?
 
@@ -293,11 +289,7 @@ module Nabu
         name = Nabu::Normalize.nfc(name) if name
         name = nil if name == surface || name == UNRESOLVED_NAME
         ref = "#{REF_NAMESPACE}:#{id}" if id
-        if kind == PERSONS && name
-          { "value" => name, "surface" => surface, "ref" => ref }.compact
-        else
-          { "value" => surface, "ref" => ref, "name" => name }.compact
-        end
+        { "value" => name || surface, "surface" => (surface if name), "ref" => ref }.compact
       end
 
       # An index whose only tagged content is one same-typed index of the
