@@ -13,19 +13,19 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eighteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 October 2026)</span> |
 |---|---|---|---|---|
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
-| `damos` | texts | nc | not yet wired | nothing held yet |
+| `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
 | `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
 | `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
 | `hypotactic` | feature module | attribution | wired · manual | nothing held yet |
-| `ig-cyprus` | inscriptions | attribution | not yet wired | nothing held yet |
+| `ig-cyprus` | inscriptions | attribution | wired · manual | 982 docs / 1,680 passages |
 | `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
 | `lila` | feature module | attribution | wired · manual | nothing held yet |
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
@@ -33,10 +33,10 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `perseus-greek` | texts | attribution | wired · auto | 1,419 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 560 docs / 403,319 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
-| `ud` | treebank | nc | wired · manual | 80 docs / 329,599 passages |
+| `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 October 2026)</span>: `grc` 120,554 · `lat` 58,435 · `eng` 874 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 15 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 October 2026)</span>: `grc` 120,785 · `lat` 58,435 · `gmy` 5,890 · `eng` 874 · `grc-Latn` 510 · `deu` 218 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 · `ota` 5 … and 21 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
