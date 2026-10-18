@@ -24,7 +24,8 @@ files:
   - path: index_pages/list_person_all_extended_utf8.csv
     url: https://www.aozora.gr.jp/index_pages/list_person_all_extended_utf8.zip
     whole: false
-    trim: header + 6 person-work rows for works 056078/059898/054333 (16 MB CSV inside upstream zip -> 4 KB)
+    trim: header + 6 person-work rows for works 056078/059898/054333, + the 051135 row (P38-i1) and
+      6 rows for 055202/059115/004333 (person/dating columns, 2026-10-18) — 16 MB CSV -> ~7 KB
   # --- P38-i1 incident regressions (copied from the owner's live canonical;
   # the encoding-fix rule: offending bytes ride as fixtures) ---
   - path: cards/000608/files/51135_ruby_65180.zip
@@ -77,3 +78,23 @@ files:
     copied: 2026-07-22
     whole: true
     trim: none (五所川原, Dazai Osamu — PD; 1.4 KB, 3 body paragraphs + 底本 colophon)
+  # --- person/dating columns (copied whole from the owner live canonical,
+  # 2026-10-18): two PD works whose index rows carry 初出/原題/校訂者 ---
+  - path: cards/001708/files/55202_ruby_49061.zip
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the local canonical; the work index rows carry 原題 + a dated 初出
+    canonical: canonical/aozora/cards/001708/files/55202_ruby_49061.zip
+    upstream: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/001708/files/55202_ruby_49061.zip
+    copied: 2026-10-18
+    whole: true
+    trim: none (ソネット, Mallarmé trans. 上田敏 — PD; 1.1 KB)
+  - path: cards/001932/files/59115_ruby_69944.zip
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the local canonical; the work index rows carry a 校訂者 + an Edo 初出
+    canonical: canonical/aozora/cards/001932/files/59115_ruby_69944.zip
+    upstream: https://raw.githubusercontent.com/aozorabunko/aozorabunko/master/cards/001932/files/59115_ruby_69944.zip
+    copied: 2026-10-18
+    whole: true
+    trim: none (北越雪譜 二編凡例, 山東京山 — PD; 4.0 KB)
