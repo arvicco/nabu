@@ -150,7 +150,9 @@ module Nabu
 
       # The papyri HGV text types (the TimelineBuilder walk precedent):
       # each HGV_meta_EpiDoc record's LEADING `<keywords scheme="hgv">`
-      # term is the text type (later terms are subjects — never read),
+      # term is the text type (later terms are subjects, never read for
+      # kind — the papyri adapter mines their "X an Y" sender/addressee
+      # parties into document metadata at parse),
       # joined ddb-hybrid → urn → document like the timeline lane.
       def hgv_keyword_rows(catalog, kinds, slug, canonical_dir)
         hgv_dir = File.join(canonical_dir, TimelineBuilder::HGV_SLUG, TimelineBuilder::HGV_SUBDIR)

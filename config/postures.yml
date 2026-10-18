@@ -1890,8 +1890,14 @@ sources:
         declared in Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   papyri-ddbdp:
-    dating: {posture: dated}
-    places: {posture: linked}
+    dating: {posture: dated, note: "DDbDP: the HGV origDate envelope (build walk, axis_source hgv); DCLP:
+        the file's own header origDate envelope (metadata date, MetadataDates :structured — 2,243 of
+        2,256 literary docs at the 2026-10-18 census). HGV <date type=\"mentioned\"> (11,075 dates)
+        rides metadata mentioned_dates as its own class — dates the text cites, never the origin"}
+    places: {posture: linked, note: "HGV origPlace + the first provenance's settlement AND nome refs
+        (Trismegistos/Pleiades URLs, settlement first; region tier never claims); DCLP origPlace
+        verbatim + the findspot provenance's settlement/nome refs (minted tm:/pleiades:), the
+        composed provenance only when no findspot is given"}
     script: {posture: qualified}
   perseus-anglit:   # P95-4
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}

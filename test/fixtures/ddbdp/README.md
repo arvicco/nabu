@@ -32,6 +32,21 @@ and, since P104-3, the Digital Corpus of Literary Papyri — via the Papyri.info
 | `DCLP/805/805566.xml` | 5,747 | dclp `805566` | Praxidicae curse text; the `tm;;`-hybrid file shape; `break="no"` line wraps |
 | `DCLP/316/316777.xml` | 4,456 | dclp `316777` (skipped) | a metadata-only catalog stub — SELF-CLOSED edition div: pins the DCLP discover skip |
 
+### Header mining (added 2026-10-18)
+
+Copied byte-verbatim from the box's canonical clone (`canonical/papyri-ddbdp/`,
+upstream commit `91611a190d29b584ca2df01712888ac843e8ef89`), whole:
+
+| Path | Bytes | What it pins |
+|---|---|---|
+| `DDbDP/2/2416.xml` | 3,446 | ddb-hybrid `p.ryl;4;560` (HGV/TM 2416) — the text the HGV record below joins to by its HGV idno |
+| `HGV_meta_EpiDoc/HGV3/2416.xml` | 5,859 | the HGV metadata record: leading keyword "Brief (privat)" then "Apollonios an Zenon" (sender→addressee persons), commentary "Gehört zum Zenon - Archiv." (archive membership), one `<date type="mentioned">` (Z. 5, 4 Oct 256 BCE — never the document's date) |
+| `HGV_meta_EpiDoc/HGV9/8875.xml` | 5,115 | HGV record of `bgu;1;100` — carries none of the mined extras (adds nothing) |
+| `HGV_meta_EpiDoc/HGV9/8877.xml` | 4,964 | HGV record of `bgu;1;102` — settlement (Soknopaiu Nesos) + nome (Arsinoites) provenance refs |
+
+The DCLP header mining (origDate/origPlace/provenance/keywords) reads the
+three text-bearing DCLP files already listed above.
+
 ### `pre-switchover/` — the layout-migration proof
 
 The same six text documents as cut from the old layout, kept byte-identical

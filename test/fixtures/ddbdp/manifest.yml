@@ -55,6 +55,27 @@ files:
     url: https://raw.githubusercontent.com/papyri/idp.data/master/DCLP/316/316777.xml
     whole: true
     trim: none (dclp 316777 — cop metadata-only stub, SELF-CLOSED edition div; pins the discover skip)
+  # -- header mining (re-cut 2026-10-18 from the canonical clone at 91611a19) --
+  - path: DDbDP/2/2416.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/DDbDP/2/2416.xml
+    retrieved: 2026-10-18
+    whole: true
+    trim: none (ddb-hybrid p.ryl;4;560, HGV 2416 — the text beside the HGV header-mining exemplar)
+  - path: HGV_meta_EpiDoc/HGV3/2416.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/HGV_meta_EpiDoc/HGV3/2416.xml
+    retrieved: 2026-10-18
+    whole: true
+    trim: none (HGV 2416 — "Apollonios an Zenon" later keyword term, Zenon - Archiv commentary, one mentioned date)
+  - path: HGV_meta_EpiDoc/HGV9/8875.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/HGV_meta_EpiDoc/HGV9/8875.xml
+    retrieved: 2026-10-18
+    whole: true
+    trim: none (HGV 8875 for bgu;1;100 — a record with none of the mined extras)
+  - path: HGV_meta_EpiDoc/HGV9/8877.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/HGV_meta_EpiDoc/HGV9/8877.xml
+    retrieved: 2026-10-18
+    whole: true
+    trim: none (HGV 8877 for bgu;1;102 — settlement + nome provenance refs)
   # -- pre-switchover copies (layout-migration proof; pinned to 0eec6593) --
   - path: pre-switchover/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml
     url: https://raw.githubusercontent.com/papyri/idp.data/0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7/DDB_EpiDoc_XML/bgu/bgu.1/bgu.1.100.xml

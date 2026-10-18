@@ -710,8 +710,30 @@ module Store
       assert_equal 2, rows
       refute_nil timeline_for("urn:nabu:elephantine:200002"), "the post-refresh doc joins the lane"
       refute_nil timeline_for("urn:nabu:edr:edr900001"), "other sources' rows survive untouched"
-      assert_equal 0, Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "papyri-ddbdp"),
+      assert_equal 0, Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "goo300k"),
                    "an unregistered slug is a no-op"
+    end
+
+    # The DCLP header lane (PapyriHeader): papyri-ddbdp registers :structured
+    # for its literary documents' header date + findspot; the place "ref"
+    # carries verbatim Trismegistos/Pleiades URLs (the HGV ref spelling).
+    # The DDbDP documents carry no "date"/"place" metadata — their rows
+    # stay the HGV walk's (axis_source hgv), never doubled.
+    def test_papyri_dclp_header_dates_and_places_project
+      seed_metadata_doc("papyri-ddbdp", "urn:nabu:dclp:64388",
+                        { "date" => { "not_before" => 300, "not_after" => 399, "raw" => "300 - 399" },
+                          "place" => { "ancient" => "Found: Oxyrhynchos (Oxyrhynchites, Egypt); written: Egypt",
+                                       "ref" => "https://www.trismegistos.org/place/1524 " \
+                                                "https://www.trismegistos.org/place/2722" } })
+      seed_metadata_doc("papyri-ddbdp", "urn:nabu:ddbdp:p.ryl:4:560",
+                        { "hgv" => "2416", "mentioned_dates" => [{ "not_before" => -256, "not_after" => -256 }] })
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "papyri-ddbdp")
+      assert_equal 1, rows, "the mentioned date of a DDbDP text never rows"
+      row = timeline_for("urn:nabu:dclp:64388")
+      assert_equal [300, 399], [row[:not_before], row[:not_after]]
+      assert_equal "papyri-ddbdp", row[:axis_source]
+      assert_nil row[:date_class], "an artifact date"
+      assert_equal "tm:1524 tm:2722", row[:place_ref]
     end
 
     # -- P104-1 (the aggressive-mining law): the metadata-drain shapes --------

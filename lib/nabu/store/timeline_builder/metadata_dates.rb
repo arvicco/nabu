@@ -146,6 +146,10 @@ module Nabu
           "ogham" => :century_prose,
           "okhc" => :year_key,
           "openmgh" => :printed_year_text,
+          "papyri-ddbdp" => :structured, # the DCLP literary documents' header origDate
+          #                                envelope + findspot (PapyriHeader); the DDbDP
+          #                                texts carry no date/place keys — their rows are
+          #                                the HGV walk's (axis_source hgv), never doubled
           "pl-wikisource" => :era_band_key,
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,
@@ -409,6 +413,9 @@ module Nabu
           pleiades = place["pleiades"].to_s.strip
           refs << "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
           refs += Nabu::PlaceRefs.ids(place["geonames"]).map { |ns, id| "#{ns}:#{id}" }
+          # A generic "ref" field (papyri-ddbdp's DCLP findspot: verbatim
+          # Trismegistos/Pleiades URLs) lifts through the same one reader.
+          refs += Nabu::PlaceRefs.ids(place["ref"]).map { |ns, id| "#{ns}:#{id}" }
           refs += Array(place["logainm"]).map(&:to_s).reject(&:empty?)
           name = place["ancient"] ||
                  place.values_at("townland", "county", "country").compact.then do |ladder|
