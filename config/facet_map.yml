@@ -349,6 +349,14 @@ sources:
     passage_fields: #           pairs — the 문체분류 classification verbatim (詩類 ·
       genre_classes: genre    # 書簡類 · 其他類 · 雜著類 …); the passage facet shares the document
       #                         facet's axis name, so --type/--facet genre reach both grains
+    # ALSO document-grain (the 26 held work sidecars' 서지 records, on every fascicle):
+    fields:
+      author: author          # the first 저자 (柳得恭, 申叔舟 …); the full list with 생년/몰년
+      #                         life years rides metadata "authors" (one work names two)
+      subject_class: subject  # 주제분류 — 문집 · 역사 · 잡저 · 법률 · 전기류 · 주의류 · 지리류
+      sabu_class: classification  # 사부분류 중분류, hanja-glossed and consistent across families
+      #                         (별집류(別集類) · 편년류(編年類) · 지리류(地理類) …); the 대분류 rides
+      #                         "sabu_division" unfaceted — written both "사부(史部)" and "사부"
   # -- the CJK person blocks (adapter-mined; a re-parse lands the fields first).
   #    Censuses over canonical/, 2026-10-18.
   kanripo:                    # 4,119 held texts carry KR-Catalog 人物 blocks (5,202 blocks)
@@ -408,14 +416,6 @@ sources:
   ja-wikisource:              # 123 pages fill the {{header}} author= slot
     fields:
       author: author          # 清少納言 20 · 羽地朝秀 10 · 源実朝 8 · 後光厳天皇 7 … verbatim
-  itkc:                       # the 26 held work sidecars' 서지 records, on every fascicle
-    fields:
-      author: author          # the first 저자 (柳得恭, 申叔舟 …); the full list with 생년/몰년
-      #                         life years rides metadata "authors" (one work names two)
-      subject_class: subject  # 주제분류 — 문집 · 역사 · 잡저 · 법률 · 전기류 · 주의류 · 지리류
-      sabu_class: classification  # 사부분류 중분류, hanja-glossed and consistent across families
-      #                         (별집류(別集類) · 편년류(編年類) · 지리류(地理類) …); the 대분류 rides
-      #                         "sabu_division" unfaceted — written both "사부(史部)" and "사부"
   honkoku:                    # the NDL-held materials' NDL catalog record (HonkokuNdlCatalog —
     fields: #                   867 of 918 NDL-manifest materials join the held census, 2026-10-18)
       ndl_catalog.author_names: author  # the 著者 parts' names, role split off — the NDL
