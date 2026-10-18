@@ -457,6 +457,71 @@ class KindsTest < Minitest::Test
                  "sociology shelving is a reviewed non-claim"
   end
 
+  # The 2026-10-18 genre-fold round: tamilex's work facet (21 works; the
+  # facet carries the devotional canons' sub-work titles and the epics'
+  # per-chapter titles, so the fold is prefix rules on the work name),
+  # elektire's genre facet (the portal's 23 knjizevna_vrsta term slugs,
+  # census 205 works) and eltec-srp as a whole-source novel declaration —
+  # the first literary source_kind.
+  def test_shipped_tamilex_elektire_and_eltec_srp_folds
+    shipped = shipped_kinds
+    assert_equal "work", shipped.facet_for("tamilex")
+    { "Kuṟuntokai" => ["literary/poetry/love"],
+      "Aiṅkuṟunūṟu." => ["literary/poetry/love"],
+      "Puṟanāṉūṟu" => ["literary/poetry/praise"],
+      "Maturaikkāñci" => ["literary/poetry/praise"],
+      "Tirukkuṟaḷ" => ["literary/wisdom"],
+      "Tolkāppiyam Collatikāram" => ["lexical/grammar"],
+      "Naṉṉūl Eḻuttatikāram 213" => ["lexical/grammar"],
+      "Tivākaram" => ["lexical/word-list"],
+      "Cilappatikāram. Vañciṉamālai" => ["literary/narrative/epic"],
+      "Peruṅkatai 1.33 — mālaip pulampal" => ["literary/narrative/epic"],
+      "Tiruvāymoḻi" => ["hymn-prayer/hymn"],
+      "Periya Tirumoḻi" => ["hymn-prayer/hymn"],
+      "Aṟputat Tiruvvantāti" => ["hymn-prayer/hymn"],
+      "Paripāṭal" => ["hymn-prayer/hymn", "literary/poetry"] }.each do |work, want|
+      assert_equal want, shipped.normalize("tamilex", work).sort, work
+    end
+    assert_equal "genre", shipped.facet_for("elektire")
+    { "roman" => ["literary/narrative/novel"], "pripovijest" => ["literary/narrative/tale"],
+      "zbirka-pjesama" => ["literary/poetry"], "ep" => ["literary/narrative/epic"],
+      "komedija" => ["literary/drama"], "pastorala" => ["literary/drama"],
+      "putopis" => ["literary/diary/travelogue"], "feljtoni" => ["literary/essay"],
+      "pisma" => ["letter/literary"], "basna" => ["literary/narrative/fable"] }.each do |slug, want|
+      assert_equal want, shipped.normalize("elektire", slug), slug
+    end
+    assert_equal "literary/narrative/novel", shipped.source_kind("eltec-srp")
+  end
+
+  # Every census value of the round folds to a ruled class (no unmapped
+  # remainder): the full elektire slug census and every distinct tamilex
+  # work value read from canonical/ on 2026-10-18.
+  def test_genre_fold_round_leaves_no_census_value_unmapped
+    shipped = shipped_kinds
+    %w[zbirka-pjesama roman pripovijest drama zbirka-pripovijesti komedija drama-jednocinka
+       spjev pastorala feljtoni poema putopis operni-libreto eseji ep tragedija
+       tragikomedija-melodrama bajka prikazanje igrokaz maskereta pisma basna].each do |slug|
+      folded = shipped.normalize("elektire", slug)
+      refute_empty folded, slug
+      refute_includes folded, Nabu::Kinds::UNMAPPED, slug
+    end
+    ["Akanāṉūṟu", "Naṟṟiṇai", "Kalittokai", "Patiṟṟuppattu", "Neṭunalvāṭai", "Malaipaṭukaṭām",
+     "Naṉṉul Eḻuttatikāram", "Tolkāppiyam Eḻuttatikāram", "Puṟapporuḷveṇpāmālai",
+     "Tamiḻneṟi Viḷakkam", "Taṇṭiyalaṅkāravurai", "Cilapparikāram. Ūrcūḻvari.", "Peruṅkatai",
+     "Periyāḻvār Tirumoḻi", "Nācciyār Tirumoḻi", "Tiruccantaviruttam", "Perumāḷ Tirumoḻi",
+     "Iraṇṭān Tiruvantāti", "Mutaṟṟiruvantāti", "Mūṉṟān Tiruvantāti", "Tiruviruttam",
+     "Nāṉmukaṉ Tiruvantāti", "Periyatiruvantāti", "Tirumālai", "Tiruppāvai", "Tiruneṭuntāṇṭakam",
+     "Tirukkuṟuntāṇṭakam", "Tiruppallāṇṭu", "Kaṇṇinuṇ Ciṟuttāmpu", "Tiruppaḷḷiyeḻucci",
+     "Amalaṉ Āti Pirāṉ", "Tiruvāciriyam", "Periya Tirumaṭal", "Ciṟiya Tirumaṭal",
+     "Irāmāṉuca Nūṟṟantāti", "Tiruvāymoli", "Tiruvāvmoḻi", "Tiruveḻukūṟṟirukkai", "Tiruvittam",
+     "Kayilaipāti Kāḷattipāti Antāti", "Tiruviraṭṭaimaṇimālai",
+     "Tiruvalaṅkāṭṭu orāvatu mūtta Tiruppatikam", "Aruḷicceyt Tiru Ātiyulā."].each do |work|
+      folded = shipped.normalize("tamilex", work)
+      refute_empty folded, work
+      refute_includes folded, Nabu::Kinds::UNMAPPED, work
+    end
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
