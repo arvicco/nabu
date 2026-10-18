@@ -478,8 +478,8 @@ module Nabu
 
         def close_ms_item
           if @ms_item_depth == 1
-            title = @ms_item.sort.lazy.map { |_, text| flatten(text) }
-                            .find { |text| text && !text.match?(ITEM_PLACEHOLDER) }
+            candidates = @ms_item.sort.map { |_, text| flatten(text) }
+            title = candidates.find { |text| text && !text.match?(ITEM_PLACEHOLDER) }
             @works << title if title && !@works.include?(title)
             @ms_item = nil
           end
