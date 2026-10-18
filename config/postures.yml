@@ -46,7 +46,9 @@ sources:
   edh:
     lect: {posture: dates}
     dating: {posture: partial}
-    places: {posture: linked}
+    places: {posture: linked, note: "fo_antik findspot + Pleiades/GeoNames ref + the koordinaten1 WGS84
+        pair (place_lat/lon, 79,462/81,460 axis rows live 2026-10-18); koordinaten2 (a second locus on
+        838 rows) stays canonical-only — no second column pair to carry it"}
     script: {posture: implied}
   edr:
     lect: {posture: dates}
