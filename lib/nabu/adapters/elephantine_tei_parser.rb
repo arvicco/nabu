@@ -104,7 +104,12 @@ module Nabu
     #      notBefore-custom/notAfter-custom (the precise editorial claim)
     #      when present, else the history origin origDate's nested
     #      date/@notBefore/@notAfter (the typological range),
-    #    "tm_nr" (the trismegistos.org quick= id, ~15/51 censused)}
+    #    "tm_nr" (the trismegistos.org quick= id, ~15/51 censused),
+    #    "persons" => [{"ref" => "elephantine:p19245", "role" => "scribe",
+    #                   "name", "cert"}] (listPerson pointers into the
+    #      person-index slice; "(Unknown …)" placeholders mint nothing —
+    #      census: 2,644 refs on 2,419 records, 593 distinct persons),
+    #    "keywords" => [terms…] (verbatim; no facet — see keyword_terms)}
     #   — only non-empty keys (honest sparsity).
     #
     # == The -en translation lane
@@ -121,6 +126,13 @@ module Nabu
       LICENCE_TARGET = "http://creativecommons.org/licenses/by-sa/3.0/"
 
       DROPPED_ELEMENTS = %w[note].freeze
+
+      # Person refs point into this Store::PersonIndex authority slice
+      # (Nabu::ElephantinePersons projects the ancient-persons file).
+      PERSON_AUTHORITY = "elephantine"
+      # The authority's own placeholder-name prefix ("(Unknown)",
+      # "(Unknown [lost])", "(Unknown [not mentioned in text])").
+      UNKNOWN_PERSON = "(Unknown"
 
       # ISO 639-1 primaries → 639-3 (the ab pairs say "en"; mainLang is
       # already 639-3-shaped elsewhere).
@@ -346,7 +358,43 @@ module Nabu
         result["date"] = date unless date.empty?
         tm_nr = trismegistos_id(doc)
         result["tm_nr"] = tm_nr if tm_nr
+        persons = person_refs(doc)
+        result["persons"] = persons unless persons.empty?
+        keywords = keyword_terms(doc)
+        result["keywords"] = keywords unless keywords.empty?
         result
+      end
+
+      # sourceDesc/listPerson pointers into the ancient-persons authority
+      # (census 2026-10-18: 5,794 pointers on 5,534 records, every one
+      # inside personGrp[@xml:id="scribe"] with role="scribe"; ref =
+      # "elephantine_erc_db_ancient_persons.tei.xml#p<N>") → person refs
+      # in the Store::PersonIndex "elephantine" slice, with the role, the
+      # record's own display name and its certainty. Placeholder pointers
+      # — names upstream writes in parentheses as "(Unknown …)", 2,411 to
+      # p5 alone plus "(Unknown [lost])"-style variants — identify nobody
+      # and mint no ref (they would falsely join thousands of records as
+      # one "person"); pointers with an empty fragment (35) likewise.
+      def person_refs(doc)
+        doc.xpath("//sourceDesc/listPerson//persName[@ref]").filter_map do |node|
+          id = node["ref"].to_s[/#([pd]\d+)\z/, 1] or next
+          name = presence(node.text)
+          next if name.nil? || name.start_with?(UNKNOWN_PERSON)
+
+          { "ref" => "#{PERSON_AUTHORITY}:#{id}", "role" => presence(node["role"]),
+            "name" => name, "cert" => presence(node["cert"]) }.compact
+        end
+      end
+
+      # textClass/keywords terms verbatim, upstream order (census: 4,928
+      # records, 1,868 distinct terms). DELIBERATELY metadata-only, no
+      # facet row: the vocabulary is free tagging that does not fold
+      # cleanly — English and German side by side ("Lieferung", "Geld",
+      # "Abrechnung"), case variants ("receipt" ×1,501 / "Receipt" ×177),
+      # Greek office names transliterated ad hoc ("potamophylakidos" /
+      # "potamophylakidon") — so a facet would mint noise, not a taxonomy.
+      def keyword_terms(doc)
+        doc.xpath("//textClass/keywords/term").filter_map { |term| presence(term.text) }.uniq
       end
 
       def build_facets(doc)

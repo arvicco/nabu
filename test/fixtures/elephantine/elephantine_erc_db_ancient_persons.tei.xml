@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="http://elephantine.smb.museum/tei/css/tei_oxygen_ERC_elephantine.css"?>
+<!DOCTYPE TEI SYSTEM "http://elephantine.smb.museum/tei/css/tei_erc_elephantine.dtd">
+<TEI xml:id="elephantine_erc_db_ancient_persons" xmlns="http://www.tei-c.org/ns/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <teiHeader>
+  <fileDesc>
+   <titleStmt>
+    <title>ancient persons of interest on Elephantine island</title>
+    <editor>Verena M. Lepper</editor>
+    <respStmt>
+     <resp>TEI encoding</resp>
+     <persName ref="http://www.sandro-schwarz.com">Sandro Schwarz</persName>
+    </respStmt>
+   </titleStmt>
+   <publicationStmt>
+    <ab />
+   </publicationStmt>
+   <sourceDesc>
+    <ab />
+   </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+   <particDesc>
+    <listPerson>
+     <listPerson type="historical">
+      <person xml:id="p5">
+       <sex value="0">not known</sex>
+       <persName xml:lang="en">(Unknown)</persName>
+       <persName xml:lang="de">(Unknown)</persName>
+      </person>
+      <person xml:id="p20">
+       <sex value="1">male</sex>
+       <persName ref="http://www.trismegistos.org/nam/detail.php?record=298" xml:lang="en">Harsiesis, son of Peteharsomtous</persName>
+       <persName xml:lang="egy">Ḥr-sꜢ-Ꜣs.t sꜢ PꜢ-ḏỉ-Ḥr-smꜢ-tꜢ.wỉ</persName>
+      </person>
+      <person xml:id="p30">
+       <sex value="1">male</sex>
+       <persName ref="http://www.trismegistos.org/nam/detail.php?record=103" xml:lang="en">Bienchis, son of Pachnoumis (P.23690)</persName>
+       <persName xml:lang="egy">By-Ꜥnḫ sꜢ Pa-H̱nm</persName>
+       <link target="http://www.trismegistos.org/per/detail.php?pnr=57217" />
+      </person>
+      <person xml:id="p100">
+       <sex value="1">male</sex>
+       <persName ref="http://www.trismegistos.org/nam/detail.php?record=251" xml:lang="en">Harchebis</persName>
+       <persName xml:lang="egy">Ḥr-ḫby</persName>
+       <link target="http://www.trismegistos.org/per/detail.php?pnr=57683" />
+      </person>
+      <person xml:id="p120">
+       <sex value="0">not known</sex>
+       <persName xml:lang="en">(Unknown [not mentioned in text])</persName>
+       <persName xml:lang="de">(Unknown [not mentioned in text])</persName>
+      </person>
+      <person xml:id="p2635">
+       <sex value="2">female</sex>
+       <persName xml:lang="en">Tasi[a]</persName>
+       <persName xml:lang="cop">ⲧⲁⲥⲓ[ⲁ]</persName>
+      </person>
+      <person xml:id="p3560">
+       <sex value="0">not known</sex>
+       <persName xml:lang="en">(Unknown [lost])</persName>
+       <persName xml:lang="nolg">(Unknown [lost])</persName>
+      </person>
+      <person xml:id="p4346">
+       <sex value="0">not known</sex>
+       <persName ref="http://www.trismegistos.org/nam/detail.php?record=34332" xml:lang="en">Walburg, Semnonian</persName>
+       <persName>Βαλουβουργ Σηνονις (Gen. Σηνονι)</persName>
+       <link target="http://www.trismegistos.org/per/detail.php?pnr=275832" />
+      </person>
+      <person xml:id="p9665">
+       <persName xml:lang="en">Nanaiḥem</persName>
+       <persName>נניחמ</persName>
+      </person>
+      <person xml:id="p19245">
+       <sex value="1">male</sex>
+       <persName ref="http://www.trismegistos.org/nam/detail.php?record=317" xml:lang="en">Hatres (praktor sitikon)</persName>
+       <persName xml:lang="egy">Ἁτρὴς</persName>
+       <link target="http://www.trismegistos.org/per/detail.php?pnr=299720" />
+      </person>
+      <person xml:id="p21875">
+       <sex value="1">male</sex>
+       <persName xml:lang="en">Praxous?, son of Petechonsis, donkey driver</persName>
+       <persName xml:lang="grc">Πραξοῦς Πετεχῶντος </persName>
+       <link target="http://www.trismegistos.org/per/detail.php?pnr=269916" />
+      </person>
+     </listPerson>
+     <listPerson type="mythological">
+      <person xml:id="d1">
+       <persName xml:lang="en">Amun</persName>
+       <persName>Jmn</persName>
+       <persName type="epithet">&lt;nb&gt;-ns.wt-tꜣ.wj</persName>
+       <persName type="epithet">nb</persName>
+      </person>
+      <person xml:id="d2">
+       <persName xml:lang="en">Hathor</persName>
+       <persName>Ḥw.t-Ḥr</persName>
+      </person>
+     </listPerson>
+     <listRelation type="personal">
+      <relation active="http://www.trismegistos.org/per/detail.php?pnr=57845" name="parent" passive="#p30" />
+      <relation active="#p9870" name="parent" passive="#p1150" />
+      <relation mutual="http://www.trismegistos.org/per/detail.php?pnr=62275 #p1240" name="spouse" />
+     </listRelation>
+    </listPerson>
+   </particDesc>
+  </profileDesc>
+ </teiHeader>
+ <text>
+  <body>
+   <div />
+  </body>
+ </text>
+</TEI>

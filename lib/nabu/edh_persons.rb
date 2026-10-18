@@ -106,6 +106,8 @@ module Nabu
         @catalog = catalog
       end
 
+      def authority = AUTHORITY
+
       def run(_slug, workdir:)
         path = EdhPersons.csv_path(workdir)
         return nil if path.nil?

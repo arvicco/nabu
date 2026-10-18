@@ -10,6 +10,9 @@ module Nabu
     class Person
       class Error < StandardError; end
 
+      # Authority ids are the authority's own: CBDB numeric ("cbdb:1762"),
+      # EDH per-attestation ("edh:HD000001/3"), Elephantine p/d-prefixed
+      # ("elephantine:p19245", "elephantine:d1").
       REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([A-Za-z0-9][A-Za-z0-9/._-]*)\z}
 
       Result = Data.define(:cards)
