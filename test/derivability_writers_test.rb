@@ -137,10 +137,13 @@ class DerivabilityWritersTest < Minitest::Test
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
   # write-through law kind (grant_gate's grants.yml sibling); never db/.
+  # The ig-cyprus adapter writes its crawled IG XV 1,1 records
+  # (canonical/ig-cyprus/documents/, tmp+rename) inside Adapter#fetch —
+  # the riig crawl law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
-    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
+    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
