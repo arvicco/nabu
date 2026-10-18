@@ -4488,13 +4488,16 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB v1)"
+    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB + EDH)"
     long_desc <<~HELP, wrap: false
-      Look a person up in the derived person index (P97-2 — the owner-ruled scope:
-      the CBDB thin slice, ~658k persons of Chinese history). Input is an
-      authority ref (cbdb:1762) or a name in either script — hanzi, pinyin,
-      courtesy/studio names all key through the shared fold; matching is
-      exact under the fold, never fuzzy; homonyms print several cards.
+      Look a person up in the derived person index: the CBDB thin slice
+      (~658k persons of Chinese history) and EDH's attested persons (~93.6k
+      Latin inscription persons, one card per attestation — the ref names
+      the inscription). Input is an authority ref (cbdb:1762,
+      edh:HD000001/3) or a name — hanzi, pinyin, courtesy/studio names, a
+      Roman name as inscribed or in the nominative all key through the
+      shared fold; matching is exact under the fold, never fuzzy; homonyms
+      print several cards (cbdb first, then edh).
 
       `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
       source's passages (the PlaceMine Han-lane shape). It writes nothing —
@@ -4505,6 +4508,8 @@ module Nabu
         nabu person "Wang Anshi"   # pinyin, same person
         nabu person 介甫           # the courtesy name resolves too
         nabu person cbdb:1762      # by authority ref
+        nabu person "Iulius Optatus"   # an EDH person, nominative form
+        nabu person edh:HD000001/3     # by EDH ref (inscription HD000001, person 3)
         nabu person mine kanripo   # census the person-name attestations
     HELP
     def person(*query_parts)

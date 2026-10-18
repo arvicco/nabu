@@ -3,13 +3,14 @@
 module Nabu
   module Query
     # The person desk card (P97-2 — owner ruling 2026-09-11, option b): look a person up in
-    # the derived person index by authority ref ("cbdb:1762") or by name
-    # in either script (the shared fold; exact key equality, never
-    # fuzzy — homonyms yield several cards, the place-desk shape).
+    # the derived person index by authority ref ("cbdb:1762", "edh:HD000001/3")
+    # or by name in either script (the shared fold; exact key equality, never
+    # fuzzy — homonyms yield several cards, the place-desk shape). A name
+    # searches every derived authority, the default (cbdb) first.
     class Person
       class Error < StandardError; end
 
-      REF_PATTERN = /\A([a-z][a-z0-9-]*):(\d+)\z/
+      REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([A-Za-z0-9][A-Za-z0-9/._-]*)\z}
 
       Result = Data.define(:cards)
 
@@ -29,18 +30,23 @@ module Nabu
           return Result.new(cards: [person])
         end
 
-        resolver = resolver_for(Store::PersonIndex::DEFAULT_AUTHORITY)
-        if resolver.nil?
+        resolvers = authorities.filter_map { |authority| resolver_for(authority) }
+        if resolvers.empty?
           raise Error, "person: the person index is not derived — run `nabu sync cbdb` " \
                        "(or `nabu rebuild`) first"
         end
-        matches = resolver.named(term)
+        matches = resolvers.flat_map { |resolver| resolver.named(term) }
         raise Error, "no person named #{term.inspect} (exact match under the fold)" if matches.empty?
 
         Result.new(cards: matches)
       end
 
       private
+
+      # The authorities a name searches, the default first (the
+      # PersonIndex roster — resolver_for answers nil for an underived one,
+      # so the check is one indexed lookup per authority, never a scan).
+      def authorities = Store::PersonIndex::AUTHORITIES
 
       def resolver_for(authority)
         (@resolvers ||= {})[authority] ||=
