@@ -7,7 +7,10 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-10-11** — the Slavic-package refresh (the zlw /
+- **Retrieved 2026-10-18** — the epigraphic-belt refresh (xpg, ecy,
+  xna + saf/his/dad/tay varieties, xsa, inm, the grc/cyp variety —
+  the merged mint, copied verbatim from canonical/nabu-lects).
+- Previously retrieved 2026-10-11 — the Slavic-package refresh (the zlw /
   zlw-lch / zls families with chu, sl and bul re-wired onto zls; the
   pl and cs anchors with their old/mid stages, whose cs:old override
   target the drift guard now validates; sr, hr, mk; the chu recension

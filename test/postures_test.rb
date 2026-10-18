@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 148, lect.size,
+    assert_equal 146, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -296,13 +296,15 @@ class PosturesTest < Minitest::Test
                  "dates (every page dated 850–851: lat pages stage to lat:med, the bare sga " \
                  "node stays sga — the corph shape): 144→145; ig-cyprus ADDED P130 — PENDING on " \
                  "the aggregated nabu-lects mint (an ecy anchor + a Cypriot-Greek grc stage): " \
-                 "145→146; damos ADDED P130 — identity gmy (the whole attested Mycenaean Greek " \
-                 "under the registry anchor): 146→147; ociana ADDED P130: 147→148 — both P130 " \
-                 "pendings (ig-cyprus, ociana) RETIRED to identity the same day the aggregated " \
-                 "registry mint merged + canonical-synced (the add-then-retire shape)"
+                 "145→146; damos ADDED P130 — identity gmy: 146→147; ig-cyprus + ociana added " \
+                 "and MACHINE-POSTURED the same day (the mint merged + canonical-synced, then " \
+                 "the ociana-script facet rule and the ig-cyprus grc override shadow both " \
+                 "declarations): 147→148→146"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
-    # P130 pendings: identity 118→120, pending 2→0. Zero pendings again.
-    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 120 }, by_posture)
+    # P130 pendings, and the ociana-script rule + the ig-cyprus override
+    # machine-posture both sources the same day (the shadowing rule):
+    # identity 118 (damos stays declared), pending 2→0. Zero pendings.
+    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 118 }, by_posture)
   end
 end

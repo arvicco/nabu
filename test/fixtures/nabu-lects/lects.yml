@@ -243,6 +243,16 @@ anchors:
       byz: {name: Byzantine Greek,      band: [330, 1453],  ord: 40, wikt: gkm,
             band_note: "upper bound 1453 is the LoC/ISO cataloguing convention
                         (fall of Constantinople), not a linguistic boundary"}
+    varieties:
+      cyp: {name: Arcadocypriot (Cypriot) Greek, kind: dialect,
+            note: "the Greek of ancient Cyprus, written in the Cypriot
+                   syllabary from the late second millennium to the end
+                   of the 4th c. BCE; with Arcadian it forms the Achaean
+                   group (the Mycenaean-descended remnant). A regional
+                   dialect outside the hom/cla/koi time-grid — hence a
+                   variety, not a stage. Corpus: the IG Cypriot
+                   syllabary fascicle (~170 Greek-interpreted records,
+                   censused 2026-10-11)"}
 
   gmy:
     name: Mycenaean Greek
@@ -250,6 +260,34 @@ anchors:
     note: "the earliest attested Greek (Linear B); conventionally the elder
            sibling of the alphabetic tradition rather than its direct
            ancestor — hence a sibling anchor, not grc's parent"
+
+  xpg:
+    name: Phrygian
+    glottocode: phry1239
+    parent: ine
+    note: "its own Indo-European branch, epigraphically attested in two
+           phases — Old Phrygian (~8th–4th c. BCE, its own alphabet) and
+           Neo-Phrygian (1st–3rd c. CE, Greek script, mostly funerary
+           curse formulae). Glottolog places it under a Graeco-Phrygian
+           node with Greek (grae1234); that joint node carries no ISO
+           639-5 or Wiktionary code, and anchors require one, so xpg
+           rides as ine's child with the hypothesis stated (the hlu/xlu
+           no-code-for-the-joint-node discipline). Deliberately
+           stage-less: the consuming treebank (UD_Phrygian-KUL, 203
+           sentences) does not mark the phase per sentence — the two
+           phases are a future mint for a consumer that distinguishes
+           them (the hit precedent)"
+
+  ecy:
+    name: Eteocypriot
+    glottocode: eteo1240
+    note: "the non-Greek language of first-millennium Cyprus, written in
+           the Cypriot syllabary and only partly interpreted; Glottolog:
+           unclassifiable. Attested chiefly at Amathus, ~6th–4th c. BCE,
+           the Amathus Greek–Eteocypriot bilingual the key text. No
+           parent edge where no classification exists (the xht/Hattic
+           discipline). Corpus: the IG Cypriot syllabary fascicle (18
+           Eteocypriot records, censused 2026-10-11)"
 
   el:
     name: Modern Greek
@@ -524,6 +562,60 @@ anchors:
     stages:
       rab: {name: Rabbinic Hebrew, ord: 10}
       med: {name: Medieval Hebrew, ord: 20}
+
+  xna:
+    name: Ancient North Arabian
+    glottocode: anci1245
+    parent: sem
+    note: "the ISO cover anchor for the pre-Islamic North Arabian
+           epigraphic varieties (Macdonald's script-based taxonomy).
+           Central Semitic; the unity of the group is CONTESTED — recent
+           scholarship (Al-Jallad) reads Safaitic and Hismaic as Old
+           Arabic dialects rather than a separate branch; the registry
+           keeps the ISO anchor and states the dispute rather than
+           ruling it (the dmn/nub discipline). The varieties below are
+           the corpus's own documentary categories (parallel regional
+           traditions, not time-slices — hence varieties, not stages),
+           mirroring the consuming corpus's per-record script field
+           (OCIANA, 37,955 records censused 2026-10-18)"
+    varieties:
+      saf: {name: Safaitic, kind: dialect,
+            note: "the basalt-desert tradition (S Syria / NE Jordan /
+                   N Saudi Arabia), ~1st c. BCE – 4th c. CE; the bulk of
+                   the record (31,768 OCIANA records). Glottolog
+                   safa1245"}
+      his: {name: Hismaic, kind: dialect,
+            note: "the Ḥismā desert (S Jordan / NW Saudi Arabia),
+                   roughly contemporary with Safaitic (3,644 OCIANA
+                   records)"}
+      dad: {name: Dadanitic, kind: dialect,
+            note: "the oasis tradition of Dadān (al-ʿUlā), ~6th–1st c.
+                   BCE (1,706 OCIANA records)"}
+      tay: {name: Taymanitic, kind: dialect,
+            note: "the oasis tradition of Taymāʾ, ~6th c. BCE (482
+                   OCIANA records)"}
+
+  # Ancient South Arabian (Sayhadic) — bare anchors with parent sem:
+  # the Sayhadic group carries no ISO 639-5 or established Wiktionary
+  # family code, so the pair rides without a family node (the
+  # Aramaic-fan discipline). Minted for OCIANA's minor-script records.
+  xsa:
+    name: Sabaic
+    glottocode: saba1279
+    parent: sem
+    note: "Sabaean — the principal Ancient South Arabian (Sayhadic)
+           language, the Sabaʾ kingdom's epigraphic record, ~1st
+           millennium BCE to the 6th c. CE. Corpus toehold: 1 OCIANA
+           record (censused 2026-10-18); the real ASA corpora (DASI/
+           CSAI) are future acquisitions"
+  inm:
+    name: Minaic
+    glottocode: mina1279
+    parent: sem
+    note: "Madhabic — the Ancient South Arabian (Sayhadic) language of
+           the Maʿīn oasis polity and its trading colonies (incl.
+           Dadān), ~8th–1st c. BCE. Corpus toehold: 8 OCIANA records
+           (censused 2026-10-18)"
 
   # ── Ethiopic (P88 mint: the Geʿez shelf family — Beta maṣāḥǝft 3,774
   # docs + TraCES 15 + the Dillmann dictionary — was the largest
@@ -878,9 +970,28 @@ anchors:
                 Khotanese business documents"
     note: "Eastern Middle Iranian (Saka); the Buddhist literary and
            documentary language of the Khotan oasis, written in Brahmi.
-           Tumshuqese, its poorly attested sibling, stays unminted (no
-           consumer). Consumers: 552 IEDC documents + the 2,357-record
+           Its sibling xtq is minted below (the no-consumer hold lifted
+           2026-10-13). Consumers: 552 IEDC documents + the 2,357-record
            British Library transliteration set (censused 2026-09-28)"
+
+  xtq:
+    name: Tumshuqese
+    parent: iir:pro
+    band: [600, 800]
+    band_note: "the Tumshuq and Maralbashi manuscript horizon,
+                approximate — the Karmavācanā and jātaka fragments'
+                palaeographic window"
+    note: "Eastern Middle Iranian (Saka), Khotanese's poorly attested
+           northern sibling from the Tumshuq oasis — ISO 639-3 xtq;
+           written in a distinctive Brahmi with Fremdzeichen. The
+           corpus is ~70 known pieces (Maue's provisional handlist,
+           2009): Konow's eight founding texts (1935), the Berlin and
+           Paris fragments, the St. Petersburg document, and the two
+           London leaves found among the Tocharian manuscripts —
+           IOL Toch 162 (the Tumshuqese Araṇemijātaka; Bailey 1968,
+           Skjærvø 2002) and IOL Toch 185. Minted when a consumer
+           arrived: the library's titus-tocharian-b chain holds those
+           two leaves as its first xtq documents (2026-10-13)"
 
   sog:
     name: Sogdian
@@ -2663,6 +2774,148 @@ anchors:
                    Vocabulario (1722) and the Arte (1724). Corpus: the UD Guarani-OldTuDeT
                    treebank (59 sentences from Montoya and Restivo in
                    the consuming library's census)"}
+
+  nic:
+    name: Niger–Congo
+    kind: family
+    glottocode: null
+    note: "ISO 639-5 nic. The largest conventional African phylum —
+           Atlantic–Congo at its core with contested outliers; Glottolog
+           declines a single node (Atlantic–Congo atla1278 is its
+           largest accepted unit), so no glottocode is claimed. Minted
+           as the conventional hat for the consuming library's West
+           African and Bantu anchors; placement disputes stay in prose
+           on the members"
+
+  alv:
+    name: Atlantic–Congo
+    kind: family
+    parent: nic
+    glottocode: atla1278
+    note: "ISO 639-5 alv; Glottolog's largest accepted African unit"
+
+  alv-fwo:
+    name: Fula–Wolof
+    kind: family
+    parent: alv
+    note: "Wiktionary family code (Module:families — the Senegambian
+           grouping of Fula and Wolof within Atlantic); no ISO 639-5
+           code exists at this grain"
+
+  bnt:
+    name: Bantu
+    kind: family
+    parent: alv
+    glottocode: narr1281
+    note: "ISO 639-5 bnt; Glottolog Narrow Bantu. The Benue–Congo
+           intermediates between Atlantic–Congo and Bantu carry no
+           ISO 639-5 rungs and stay prose"
+
+  cdc:
+    name: Chadic
+    kind: family
+    parent: afa
+    glottocode: chad1250
+    note: "ISO 639-5 cdc; the Afro-Asiatic branch of Hausa"
+
+  dmn:
+    name: Mande
+    kind: family
+    glottocode: mand1469
+    note: "ISO 639-5 dmn. Deliberately PARENTLESS: Mande's inclusion
+           in Niger–Congo is a live dispute (Glottolog treats it as an
+           independent family; the lexical evidence for the phylum link
+           is thin) — the registry states the dispute rather than
+           ruling it"
+
+  nub:
+    name: Nubian
+    kind: family
+    glottocode: nubi1251
+    note: "ISO 639-5 nub. Deliberately PARENTLESS: the traditional
+           placement (Nilo-Saharan > Eastern Sudanic) is a live
+           dispute — Glottolog treats Nubian as an independent family
+           and accepts neither Nilo-Saharan nor Eastern Sudanic as
+           demonstrated genetic units; the registry states the
+           hypothesis rather than ruling it (the dmn shape)"
+
+  onw:
+    name: Old Nubian
+    parent: nub
+    glottocode: oldn1245
+    note: "ISO 639-3 onw. The written language of the medieval Nile
+           Nubian kingdoms (Nobadia and Makuria), attested ~8th–15th
+           c. CE — the oldest written sub-Saharan African language
+           with a substantial corpus. Alphabet derived from the
+           Coptic uncial (Greek-based) with three signs adapted from
+           Meroitic (ⳡ ⳣ ⳟ). Corpus: the Qasr Ibrim finds
+           (documentary and literary — letters, land sales, legal
+           instruments), Serra East, the Miracle of Saint Menas, the
+           Stauros text, lectionaries and liturgical fragments;
+           Griffith 1913 is the foundational edition, Browne's
+           grammar and dictionary the standard references. Direct
+           ancestor of modern Nobiin (not minted — no consumer
+           claims it). Consumers: the Old Nubian UD treebank (124
+           CoNLL-U sentences, the first machine-readable Old Nubian)
+           and africa-pd object-language metadata (Griffith 1913)"
+
+  ha:
+    name: Hausa
+    parent: cdc
+    glottocode: haus1257
+    note: "ISO 639-1 ha / 639-3 hau (aliases here). West Chadic; the
+           largest Chadic language. Written in Ajami (Arabic script)
+           since at least the Sokoto Caliphate — Usman ɗan Fodio
+           (1754–1817) and Nana Asmaʾu (1793–1864) anchor the literary
+           tradition; the Latin boko orthography is colonial-era.
+           Corpus: 20 bu-ajami manuscripts (Kano, Zaria, Kaduna) in
+           romanized transcription, plus Schön 1885 and Robinson 1896
+           as object language on the africa-pd shelf"
+
+  wo:
+    name: Wolof
+    parent: alv-fwo
+    glottocode: wolo1247
+    note: "ISO 639-1 wo / 639-3 wol (aliases here). Atlantic
+           (Senegambian); the lingua franca of Senegal. The Wolofal
+           Ajami tradition is the written record — above all the Murid
+           poets Serigne Moussa Ka (1889–1963) and Serigne Mor Kayre
+           (1869–1951). Corpus: 20 bu-ajami manuscripts, mostly from
+           Touba, in romanized transcription"
+
+  fuf:
+    name: Pular (Fuuta Jalon)
+    parent: alv-fwo
+    glottocode: pula1263
+    note: "ISO 639-3 fuf — the Fuuta Jalon member of the Fula
+           macrolanguage (ff/ful), minted directly because the
+           consuming corpus claims fuf; the macrolanguage stays
+           unminted until a consumer spells it (the gn/gug shape,
+           inverted). The Ajami tradition of the 18th-century Fuuta
+           Jalon imamate — Cerno Samba Mombeya (1755–1852), whose
+           Oogirde Malal argued for writing Pular itself. Corpus: 20
+           bu-ajami manuscripts (Labé, Dalaba, Conakry)"
+
+  mnk:
+    name: Mandinka
+    parent: dmn
+    glottocode: mand1436
+    note: "ISO 639-3 mnk. Manding cluster (Mande); the Casamance and
+           Gambian member. Ajami tradition in the Casamance (Sitookoto
+           Daabo among the copyists). Corpus: 20 bu-ajami manuscripts
+           (Sedhiou, Ziguinchor, Kolda) in romanized transcription"
+
+  sw:
+    name: Swahili
+    parent: bnt
+    glottocode: swah1253
+    note: "ISO 639-1 sw / 639-2/3 swa (aliases here; the individual
+           code swh is a future ruling, not defaulted). Bantu G42
+           (Sabaki). The Arabic-script utenzi tradition runs from the
+           18th century (Utendi wa Tambuka, 1728); the Latin standard
+           is colonial-era. Corpus: Velten 1907 claims sw on the
+           africa-pd shelf; Steere, Taylor and Büttner carry it as
+           object language"
 
 # ── Scripts (the ~ axis) ─────────────────────────────────────────────────────
 #
