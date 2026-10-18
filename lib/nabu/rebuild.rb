@@ -254,6 +254,12 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :derge_titles) do
         E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
       end
+      # The AES <- AED title join: refills the aes shelf's NULL titles
+      # from canonical/aed per-text headers (absent tree = clean no-op).
+      progress&.stage("aes titles")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :aes_titles) do
+        AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
+      end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.
       progress&.stage("artifact scripts", eta: corpus_eta(ledger, "artifact_scripts"))

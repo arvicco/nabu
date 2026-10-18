@@ -1773,8 +1773,14 @@ sources:
     script: {posture: implied}
   aes:
     kind: {posture: unclassified}
-    dating: {posture: partial}
-    places: {posture: named}
+    dating: {posture: dated, note: "12,838/13,026 texts at the AED header grain (the TLA
+        origDate label + numeric bounds, joined by text id from canonical/aed: 6,483 reign,
+        5,775 dynasty, 560 period, 20 quarter-century); 55 more keep the corpus's coarse
+        period envelope; 118 carry nothing usable (census 2026-10-18)"}
+    places: {posture: named, note: "10,592 texts at SITE grain from the AED origPlace with the
+        TLA thesaurus ref verbatim (ths:…, no registry namespace yet — named, not linked);
+        2,072 keep the corpus's coarse region; category/unknown thesaurus nodes never mint a
+        place (census 2026-10-18)"}
     script: {posture: implied}
   cdli:
     dating: {posture: partial}

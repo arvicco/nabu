@@ -13,6 +13,7 @@ module Nabu
     # and db/ stays a pure function of the permanent folders.
     module BuilderRefresh
       Summary = Data.define(:timeline, :facets, :kinds, :lect_rows, :dictionary_stats, :derge_titles,
+                            :aes_titles,
                             :lemma_rollups)
 
       module_function
@@ -52,6 +53,9 @@ module Nabu
                                                            lects: Lects.load_default(config: config))
         progress&.stage("derge titles")
         derge_titles = E84000DergeTitles.new(catalog: catalog, canonical_dir: canonical_dir).run
+        # The AES <- AED title join (same post-load mold, aed headers).
+        progress&.stage("aes titles")
+        aes_titles = AesAedTitles.new(catalog: catalog, canonical_dir: canonical_dir).run
         # P121-2: the lemma attestation rollups LAST — they read the
         # timeline just re-projected (and the live fulltext index), so the
         # `lemma` / `language --curve/--mixing` desks follow every refresh.
@@ -59,6 +63,7 @@ module Nabu
         lemma_rollups = Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
         Summary.new(timeline: timeline, facets: facets, kinds: kinds, lect_rows: lect_rows,
                     dictionary_stats: dictionary_stats, derge_titles: derge_titles,
+                    aes_titles: aes_titles,
                     lemma_rollups: lemma_rollups)
       end
     end

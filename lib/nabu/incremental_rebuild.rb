@@ -269,6 +269,10 @@ module Nabu
         # crosswalk re-fills in the same breath (seconds, no-op sans tree).
         progress&.stage("derge titles")
         E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
+        # A replayed aes source re-mints NULL titles the same way — the
+        # AES <- AED header join re-fills them.
+        progress&.stage("aes titles")
+        AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
       end
       if outcomes.any?
         progress&.stage("links")
