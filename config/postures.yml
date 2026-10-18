@@ -1163,10 +1163,14 @@ sources:
   first1k-greek:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
-    dating: {posture: undatable}
-    places: {posture: unplaced, note: "the EpidocParser inline layer (notes/foreign/
-        quotes annotations) carries no place keys at census — first1k bodies
-        tag no placeName"}
+    dating: {posture: dated, note: "two labeled classes, neither the edition's own composition
+        claim: the sourceDesc imprint year of the printed edition (metadata source_date →
+        date_class edition, 1,090 of 1,091 editions) and the TLG concordance lane — 483 grc
+        editions join a glaux/diorisis composition envelope by their CTS author.work id
+        (axis_source tlg-concordance, date_class composition); the rest stay undated"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the EpidocParser inline layer (notes/foreign/quotes
+        annotations) carries no place keys at census — first1k bodies tag no placeName"}
     script: {posture: implied}
   diorisis:
     kind: {posture: unclassified}
@@ -1944,8 +1948,13 @@ sources:
     script: {posture: implied}
   perseus-greek:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
-    dating: {posture: undatable}
-    places: {posture: unplaced, note: "the passage-grain inline layer (EpidocParser
+    dating: {posture: dated, note: "two labeled classes: the sourceDesc imprint year of the
+        printed edition (metadata source_date → date_class edition, 767 of 770 grc editions)
+        and the TLG concordance lane — 760 grc editions join a glaux/diorisis composition
+        envelope by their CTS author.work id (axis_source tlg-concordance, date_class
+        composition, the witness named in date_raw)"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the passage-grain inline layer (EpidocParser
         annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
         perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
         where it was made or found; TGN is no held gazetteer (Pleiades carries
@@ -1954,8 +1963,12 @@ sources:
     script: {posture: implied}
   perseus-latin:
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
-    dating: {posture: undatable}
-    places: {posture: unplaced, note: "the passage-grain inline layer (EpidocParser
+    dating: {posture: dated, note: "edition class only: the sourceDesc imprint year of the
+        printed edition (metadata source_date → date_class edition, 312 of 322 editions); no
+        Latin concordance is held (glaux/diorisis are Greek), so the works' composition eras
+        stay unclaimed"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the passage-grain inline layer (EpidocParser
         annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
         perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
         where it was made or found; TGN is no held gazetteer (Pleiades carries
