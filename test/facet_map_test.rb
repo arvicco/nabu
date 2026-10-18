@@ -90,6 +90,20 @@ class FacetMapTest < Minitest::Test
                  Nabu::FacetMap.load(path).fields_for("ociana"))
   end
 
+  # The Arabic/Syriac crosswalk wave: OpenITI's TSV classification tags,
+  # DiCCAS's tagged catastrophe vocabulary + mentioned places + book
+  # authors, and the Syriac corpus's author and parent-work lanes — all
+  # parse-time metadata the facet lane projects verbatim.
+  def test_shipped_config_projects_the_arabic_and_syriac_crosswalk_fields
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "genre_tags" => "genre_tag" }, map.fields_for("openiti"))
+    assert_equal({ "disaster_types" => "disaster", "disaster_classes" => "disaster_class",
+                   "places_mentioned" => "place_mentioned", "author" => "author" },
+                 map.fields_for("diccas"))
+    assert_equal({ "author" => "author", "author_ref" => "author_ref", "parent_works" => "work" },
+                 map.fields_for("syriac-corpus"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)
