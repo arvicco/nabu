@@ -158,7 +158,8 @@ class FacetMapTest < Minitest::Test
       "pl-wikisource" => { "author" => "author", "work" => "work" },
       "cs-wikisource" => { "author" => "author", "work" => "work" },
       "uk-wikisource" => { "author" => "author", "work" => "work" },
-      "ru-wikisource" => { "author" => "author", "work" => "work" }
+      "ru-wikisource" => { "author" => "author", "work" => "work" },
+      "menota" => { "work" => "work" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end

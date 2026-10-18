@@ -168,6 +168,24 @@ class MenotaTest < Minitest::Test
                  "the language facet the future lect rule keys on"
   end
 
+  # The WORK the manuscript carries — each top-level msContents/msItem's
+  # main title (else its untyped title), distinct from the msName. One
+  # entry per top-level item, in order; nested sub-items (Gylfaginning
+  # inside the Edda) and abbreviated titles never count.
+  def test_ms_item_titles_ride_metadata_as_the_work
+    assert_equal ["Konungs skuggsjá"], adapter.parse(ref_for(KONUNGS)).metadata["work"]
+    assert_equal ["Pamphilus saga"], adapter.parse(ref_for(PAMPH)).metadata["work"]
+    assert_equal ["Edda Snorra Sturlusonar", "The four grammatical treatises", "Maríukvæði", "Háttatal",
+                  "Rígsþula", "Ókennd heiti (Orms-eddu-brot)"],
+                 adapter.parse(ref_for(WORMIANUS)).metadata["work"],
+                 "untyped item titles answer when no main title exists; the Edda's own " \
+                 "sub-items (Prologus, Gylfaginning) stay out"
+    assert_equal ["1. De xii abusivis saeculi", "2. Prosper’s Epigrams",
+                  "3. Gregory’s Homilies on the Gospels", "4. Gregory’s Dialogues"],
+                 adapter.parse(ref_for(HOMILIES)).metadata["work"]
+    refute adapter.parse(ref_for(LAXDAELA)).metadata.key?("work"), "no msItem — no work key"
+  end
+
   def test_the_orig_date_attributes_mint_the_structured_envelope
     metadata = adapter.parse(ref_for(KONUNGS)).metadata
     assert_equal({ "not_before" => 1280, "not_after" => 1310, "raw" => "c. 1300" },

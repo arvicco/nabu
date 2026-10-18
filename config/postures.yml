@@ -263,7 +263,9 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   menota:
-    kind: {posture: unclassified}
+    kind: {posture: unclassified, note: "no genre vocabulary in the headers; the msItem
+        work titles (metadata work, 72 of 91 texts — Konungs skuggsjá, Njáls saga,
+        Landslǫg …) are work NAMES, faceted as work; a per-work kind fold is later curation"}
     # lect: machine-postured (owner-ruled 2026-08-24, nabu-lects v1.1.0
     # minted no/no:old + da/da:old + the nor/dan/gmq-oda codemap rows) —
     # the pending row retired, the ref add-then-retire shape. Coverage:
