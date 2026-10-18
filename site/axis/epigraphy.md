@@ -13,12 +13,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 31 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 33 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 October 2026)</span> |
 |---|---|---|---|---|
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
-| `damos` | texts | nc | not yet wired | nothing held yet |
+| `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
 | `dharma-deccan` | texts | attribution | wired · auto | 1,695 docs / 27,983 passages |
 | `dharma-khmer` | texts | attribution | wired · auto | 1,302 docs / 53,825 passages |
@@ -28,7 +28,7 @@ A source wears every desk it serves — these 31 answer this desk. Holdings are 
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
-| `ig-cyprus` | inscriptions | attribution | not yet wired | nothing held yet |
+| `ig-cyprus` | inscriptions | attribution | wired · manual | 982 docs / 1,680 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
@@ -36,7 +36,7 @@ A source wears every desk it serves — these 31 answer this desk. Holdings are 
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `nabu-places` | feature module | attribution | wired · manual | nothing held yet |
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
-| `ociana` | inscriptions | research_private | not yet wired | not synced yet |
+| `ociana` | inscriptions | research_private | wired · frozen | 36,794 docs / 36,794 passages |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
 | `papyri-ddbdp` | papyri | attribution | wired · auto | 64,096 docs / 1,108,882 passages |
@@ -51,7 +51,7 @@ A source wears every desk it serves — these 31 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 October 2026)</span>: `lat` 195,058 · `grc` 76,507 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,907 … and 72 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 October 2026)</span>: `lat` 195,059 · `grc` 76,760 · `xna` 36,758 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `gmy` 5,890 · `swe` 3,393 · `egy` 3,047 … and 79 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
