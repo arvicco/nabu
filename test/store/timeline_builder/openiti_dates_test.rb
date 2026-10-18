@@ -22,10 +22,11 @@ module Store
       )
     end
 
-    def make_document(urn, language: "ara")
+    def make_document(urn, language: "ara", metadata: {})
       Nabu::Store::Document.create(
         source_id: @source.id, urn: urn, title: urn, language: language,
-        content_sha256: urn, revision: 1, withdrawn: false
+        content_sha256: urn, revision: 1, withdrawn: false,
+        metadata_json: JSON.generate(metadata)
       )
     end
 
@@ -68,6 +69,35 @@ module Store
       counts = build!
       assert_equal({ documents: 0, undated: 1 }, counts)
       assert_equal 0, @db[:document_axes].count
+    end
+
+    # The author's al-Ṯurayyā DIED/RESIDED settlement ids (author_places,
+    # from the TSV tags + the author sidecar) ride the same row as
+    # thurayya: mints — the author's place of activity, the death place
+    # first. Region ids (Iraq_RE), unfinished ids (SAFADXXXYYY) and the
+    # born/visited roles never place the work.
+    def test_author_death_and_residence_settlements_place_the_row
+      make_document("urn:nabu:openiti:0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1",
+                    metadata: { "author_places" => {
+                      "born" => %w[HARRAN_390E368N_S Aqur_RE], "died" => %w[DIMASHQ_363E335N_S],
+                      "resided" => %w[DIMASHQ_363E335N_S QAHIRA_312E300N_S SAFADXXXYYY Iraq_RE],
+                      "visited" => %w[MAKKA_398E213N_S]
+                    } })
+      build!
+      row = timeline_for("urn:nabu:openiti:0728IbnTaymiyya.FiCabdMahabba.Shamela0022668-ara1")
+      assert_equal "thurayya:DIMASHQ_363E335N_S thurayya:QAHIRA_312E300N_S", row.fetch(:place_ref)
+      assert_equal [%w[thurayya DIMASHQ_363E335N_S], %w[thurayya QAHIRA_312E300N_S]],
+                   Nabu::PlaceRefs.ids(row.fetch(:place_ref)), "the ONE ref reader parses the mint"
+      assert_nil row.fetch(:place_name), "an id claim, never an invented name"
+      assert_equal 1328, row.fetch(:not_before), "the date lane is untouched"
+    end
+
+    def test_region_only_places_mint_no_ref
+      make_document("urn:nabu:openiti:0390AbuFarajCukbari.Hadith.ShamAY0032805-ara1",
+                    metadata: { "author_places" => { "resided" => %w[Iraq_RE_Auto] } })
+      build!
+      assert_nil timeline_for("urn:nabu:openiti:0390AbuFarajCukbari.Hadith.ShamAY0032805-ara1")
+        .fetch(:place_ref)
     end
 
     def test_other_sources_documents_contribute_nothing
