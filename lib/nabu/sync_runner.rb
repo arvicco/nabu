@@ -199,7 +199,7 @@ module Nabu
     def fetch_only_outcome(entry, source, adapter, workdir, force:, progress:)
       fetch_report = nil
       before = module_ref_before(entry, source, workdir)
-      held_before = module_held_before(entry, workdir)
+      held_before = module_held_before?(entry, workdir)
       begin
         Store::RunRecorder.record(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress)
@@ -228,7 +228,7 @@ module Nabu
     # Whether the module tree already held content before this fetch — a
     # nil ref is NOT a fresh clone when the tree was on disk (the
     # resettable-pin lesson: non-git modules carry no ref at all).
-    def module_held_before(entry, workdir)
+    def module_held_before?(entry, workdir)
       entry.feature_module? && ModuleCensus.held?(workdir)
     end
 
@@ -282,7 +282,7 @@ module Nabu
       load_report = nil
       lane_report = nil
       module_before = module_ref_before(entry, source, workdir)
-      module_held_before = module_held_before(entry, workdir)
+      module_held_before = module_held_before?(entry, workdir)
 
       begin
         run = Store::RunRecorder.record(source_slug: entry.slug) do
@@ -355,7 +355,8 @@ module Nabu
                   analyzed: analyze_after_load(combined_report, adapter),
                   lect_staging: lect_staging_census(entry),
                   dictionary_lane: lane_report,
-                  module_delta: module_delta(entry, adapter, workdir, module_before, fetch_report, held_before: module_held_before))
+                  module_delta: module_delta(entry, adapter, workdir, module_before, fetch_report,
+                                             held_before: module_held_before))
     end
 
     # P99-5 (the P59-4 front-door bullet): the synced source's

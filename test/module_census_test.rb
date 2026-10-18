@@ -149,5 +149,4 @@ class ModuleCensusTest < Minitest::Test
   def git(dir, *)
     Nabu::Shell.run("git", "-C", dir, *).strip
   end
-
 end
