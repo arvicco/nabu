@@ -72,8 +72,8 @@ class FacetMapTest < Minitest::Test
                   "subgenre" => "subgenre" },
       "rundata" => { "material_type" => "material", "material" => "material",
                      "objectInfo" => "object_type", "style" => "style" },
-      "glaux" => { "dialect" => "dialect" },
-      "kdsp" => { "canonicity" => "canonicity", "period_slot" => "period" },
+      "glaux" => { "dialect" => "dialect", "author" => "author", "work" => "work" },
+      "kdsp" => { "canonicity" => "canonicity", "period_slot" => "period", "author" => "author" },
       "ref" => { "medium" => "medium", "text-type" => "text_type" },
       "rem" => { "topic" => "topic", "text_type" => "text_type" },
       "edr" => { "repository" => "museum" },
@@ -118,6 +118,43 @@ class FacetMapTest < Minitest::Test
                  "archive" => "archive", "dynastic_seat" => "dynastic_seat", "series" => "series",
                  "sender_loc" => "sender_place" }
     assert_equal expected, fields
+  end
+
+  # The author/work wave: sources whose adapters already store an author
+  # (and sometimes a work title or an authority id) in metadata_json,
+  # which surfaced in no facet — field names confirmed against the
+  # adapters and the stored metadata. Ids project only where the value
+  # names its own authority (GND/VIAF URLs, viaf:/wikidata: prefixes, the
+  # Corpus Corporum work keys); bare source-local integers do not.
+  def test_shipped_config_projects_the_author_work_wave
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    map = Nabu::FacetMap.load(path)
+    expected = {
+      "tamilex" => { "poet" => "author" },
+      "madurai" => { "authors" => "author", "genres" => "genre" },
+      "shabados" => { "authors" => "author" },
+      "bu-ajami" => { "author_or_owner" => "author" },
+      "africa-pd" => { "author" => "author" },
+      "eebo-tcp" => { "author" => "author" },
+      "dta" => { "author" => "author", "author_gnd" => "author_id" },
+      "corpus-corporum" => { "author" => "author", "author_ref" => "author_id",
+                             "series_idno" => "work_id" },
+      "cantigas" => { "author" => "author" },
+      "diorisis" => { "author" => "author", "work" => "work" },
+      "sl-wikisource" => { "author" => "author" },
+      "hr-wikisource" => { "author" => "author" },
+      "sr-wikisource" => { "author" => "author" },
+      "mk-wikisource" => { "author" => "author" },
+      "bg-wikisource" => { "recension" => "recension", "author" => "author" },
+      "imp" => { "author" => "author" },
+      "croala" => { "author" => "author" },
+      "digiliblt" => { "author" => "author", "work" => "work" },
+      "bfm" => { "author" => "author" },
+      "elektire" => { "author" => "author" },
+      "eltec-srp" => { "author" => "author", "author_refs" => "author_id",
+                       "title_refs" => "work_id" }
+    }
+    expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
 
   def test_shipped_config_loads
