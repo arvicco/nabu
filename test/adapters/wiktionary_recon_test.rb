@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 
 # The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2;
-# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese; P32-3 Chinese): ONE source, FOURTEEN
+# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese; P32-3 Chinese; Mycenaean Greek): ONE source, FIFTEEN
 # dictionaries — kaikki.org's Proto-Slavic / Proto-Indo-European /
 # Proto-Germanic plus the P17-3 Proto-Balto-Slavic / Proto-West Germanic /
 # Proto-Italic / Proto-Indo-Iranian wiktextract extracts, the P25-2
@@ -58,6 +58,7 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-xum:kaikki.org-dictionary-Umbrian.jsonl",
                   "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl",
                   "wiktionary-ojp:kaikki.org-dictionary-OldJapanese.jsonl",
+                  "wiktionary-gmy:kaikki.org-dictionary-MycenaeanGreek.jsonl",
                   "wiktionary-zh:kaikki.org-dictionary-Chinese.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
@@ -67,17 +68,17 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_fourteen_dictionaries
+  def test_parse_yields_the_fifteen_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
                     wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
-                    wiktionary-xum wiktionary-ett wiktionary-ojp wiktionary-zh],
+                    wiktionary-xum wiktionary-ett wiktionary-ojp wiktionary-gmy wiktionary-zh],
                  documents.map(&:slug)
     assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro
-                    sga mga wlm xum ett ojp zho],
+                    sga mga wlm xum ett ojp gmy zho],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 10], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 15, 10], documents.map(&:size)
   end
 
   # P32-5: the attested Old Japanese extract (the P25-2/P29 pattern
@@ -294,6 +295,27 @@ class WiktionaryReconTest < Minitest::Test
            "romanization stubs parse as plain entries")
   end
 
+  # The ATTESTED Mycenaean Greek extract (the P29-1 Umbrian shape).
+  # Headwords ride in real Linear B codepoints (U+10000 syllabary, U+10100
+  # Aegean numerals); STRING etymology_numbers split homographs (𐀞𐀳
+  # "father" / "all"; 𐀃𐀏 noun:1, noun:2, verb:3); a syllabogram and its
+  # logogram reading share a headword split by pos; the Lydian ethnonym
+  # carries upstream-flagged borrowed grc descendants.
+  def test_gmy_entries_carry_linear_b_headwords_homographs_and_loan_edges
+    documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
+    gmy = documents.find { |doc| doc.slug == "wiktionary-gmy" }
+    assert_equal "gmy", gmy.language
+    pa_te = gmy.entries.find { |e| e.entry_id == "\u{1001E}\u{10033}:noun:1" } || flunk("pa-te noun:1 missing")
+    assert_match(/Proto-Hellenic \*patḗr/, pa_te.body)
+    assert(gmy.entries.any? { |e| e.entry_id == "\u{1001E}\u{10033}:noun:2" }, "the string homograph splits")
+    assert_equal %w[character syllable],
+                 gmy.entries.select { |e| e.headword == "\u{1000F}" }.map { |e| e.entry_id.split(":").last }.sort
+    assert(gmy.entries.any? { |e| e.headword == "\u{10107}" }, "Aegean numeral headwords parse")
+    a_si_wi_ja = "\u{10000}\u{1002F}\u{10039}\u{1000A}"
+    asiwija = gmy.entries.find { |e| e.headword == a_si_wi_ja } || flunk("a-si-wi-ja missing")
+    assert(asiwija.reflexes.any? { |r| r.language == "grc" && r.borrowed }, "the borrowed grc edge")
+  end
+
   # --- fetch (WebMock only, no network) ----------------------------------------
 
   def stub_all(status: 200)
@@ -325,11 +347,12 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/otk/, report.notes)
       assert_match(/mnc/, report.notes)
       assert_match(/txb/, report.notes)
-      assert_equal 20, adapter.discover(workdir).count, "all twenty extracts discoverable in place"
+      assert_match(/gmy/, report.notes)
+      assert_equal 21, adapter.discover(workdir).count, "all twenty-one extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
          old-irish middle-irish middle-welsh umbrian etruscan old-japanese
-         old-turkic old-uyghur chagatai manchu tocharian-b tocharian-a].each do |subdir|
+         old-turkic old-uyghur chagatai manchu tocharian-b tocharian-a mycenaean-greek].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -349,9 +372,9 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 20, targets.size
+    assert_equal 21, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[chagatai chinese etruscan manchu middle-irish middle-welsh old-irish
+    assert_equal %w[chagatai chinese etruscan manchu middle-irish middle-welsh mycenaean-greek old-irish
                     old-japanese old-turkic old-uyghur proto-balto-slavic proto-germanic
                     proto-indo-european proto-indo-iranian proto-italic proto-slavic
                     proto-west-germanic tocharian-a tocharian-b umbrian],
@@ -378,7 +401,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 257, first.added
+    assert_equal 272, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -386,7 +409,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 257, second.skipped
+    assert_equal 272, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 

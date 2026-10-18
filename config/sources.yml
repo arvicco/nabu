@@ -6262,6 +6262,13 @@ wiktionary-recon:
   # sync-verified counts). The oui first sync also surfaced the
   # mark-only-headword fold edge (U+10F82; parser regression pinned).
   # 20 extracts, 365,213 entries total.
+  # 2026-10-18: TWENTY-FIRST extract wiktionary-gmy — attested Mycenaean
+  # Greek (the xum rider shape; Linear B headwords in real U+10000-block
+  # codepoints). Full-download census 2026-10-18: 542 records / 481
+  # distinct words / 669 senses, 713,109 B (Last-Modified 2026-10-03).
+  # EXPECTED SYNC DELTA at the next `bin/nabu sync wiktionary-recon`:
+  # +1 GET (~0.7 MB) / +542 entries (481 words, 669 senses; a handful of
+  # grc/el/omn reflex edges from the 4 records with descendants).
   sync_policy: manual
 
 wiktionary-sux:

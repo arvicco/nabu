@@ -369,3 +369,39 @@ the same 2026-07-19 download; `sed -n '<line>p'`):
     5050, 芘 line 18665). Since P104-2 the mint bumps past
     already-minted ids (the fourth record lands on `夆:character:3:2`);
     these lines pin the bump.
+
+## Mycenaean Greek addition (attested gmy; retrieved 2026-10-18)
+
+One NEW extract, the P29-1 Umbrian shape (attested language, real ISO
+639-3 `gmy`, no display asterisk). License statement on
+https://kaikki.org/dictionary/ unchanged ("This data is made available
+under the same licenses as Wiktionary - both CC-BY-SA and GFDL.").
+
+- `.../Mycenaean%20Greek/kaikki.org-dictionary-MycenaeanGreek.jsonl` —
+  713,109 B, **542 lines** (481 distinct words, 669 senses; upstream
+  Last-Modified 2026-10-03), sha256
+  `8a14f718c323ab284da9c27f4f6358a3332dae05bf7471c2c33a97b99cbb44ef`.
+  Whole-file census: 486 headwords in real Linear B codepoints (U+10000
+  syllabary, U+10100 Aegean numerals); pos noun 297 · syllable 89 · num
+  48 · name 39 · adj 30 · character 17 (logograms) · verb 11 · other 11;
+  321 with etymology_text; 4 with descendants; `etymology_number` is a
+  STRING where present (24 records — the ojp quirk).
+  → **15 fixture lines** (upstream lines 1/2/4/5/6/15/23/24/25/27/135/
+  199/273/278/279):
+  - `𐀞𐀳` 1 "father" / `𐀞𐀳` 2 "all" — string etymology_number
+    homographs (pa-te; the Proto-Hellenic *patḗr chain).
+  - `𐀶𐀏𐀳` "daughter", `𐀩𐀄𐀒` "white", `𐀓𐀙𐀊` (two senses) — plain
+    entries with etymologies.
+  - `𐀩𐀀` "nose" — no etymology_text.
+  - `𐀃𐀏` noun 1 / noun 2 / verb 3 — a three-way string homograph.
+  - `𐀁𐀐` — a form-of verb (third-person singular of e-ke-e).
+  - `𐀀𐀯𐀹𐀊` — the Lydian ethnonym, with grc Ἀσίᾱ/Ἀσίη descendants
+    upstream-flagged borrowed.
+  - `𐄇` "one" — an Aegean-numeral headword.
+  - `𐀼𐀓𐀯𐀍` Zakynthos — an unflagged grc descendant.
+  - `𐀏` syllable / `𐀏` character — the syllabogram ⟨ka⟩ and its
+    logogram reading, one headword split by pos.
+
+Selection recipe: whole JSONL lines picked by upstream line number as
+listed (`awk 'NR in k'`); each kept line verified as a literal line of
+the raw download.
