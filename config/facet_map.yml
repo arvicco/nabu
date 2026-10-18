@@ -404,3 +404,7 @@ sources:
     fields:
       subject: subject        # terse English prose verbatim ("ded. of serfs and cattle" …;
       #                         upstream's bare "?" a claim like seal's "Unknown")
+  korba:                      # 322 translated works name their translator in the original bibl
+    fields:
+      translator: translator  # <editor role="translator"> verbatim (Anonim 82 · Daniel Mikołajewski
+      #                         12 · Jakub Wujek 9 …; "(tł. domn.)" hedges as written)
