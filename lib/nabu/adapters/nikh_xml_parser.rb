@@ -2,6 +2,8 @@
 
 require "nokogiri"
 
+require_relative "../normalize"
+
 module Nabu
   module Adapters
     # Parser family "nikh-xml" (P78-1): the Korean History Database
@@ -38,8 +40,48 @@ module Nabu
     # open-ancestor stack, with only the small front/text SUBTREES
     # parsed as mini-DOMs. One implementation for the whole family;
     # sillok's ≤6 MB members ride the same lane.
+    #
+    # THE INDEX MARKUP (opt-in, +entities: true+): the text paragraphs
+    # carry typed <index> tags — the DTD's closed p.index vocabulary —
+    # mined per leaf into entity annotations while the leaf text stays
+    # byte-identical (the tags are only read, never shed differently).
+    # One annotation key per kind (ENTITY_KINDS), each a list of compact
+    # records in document order, one per tagged mention:
+    #
+    #   { "value" => the tag's surface text (squished, NFC),
+    #     "ref"   => "nikh:" + the tag's own id — @ref (sillok's M_ person
+    #                ids; the goryeosa family's kind-prefixed p/o/t/m/b
+    #                ids), else @id (the cross-database person pid,
+    #                p17_100010_00 shape, on sjw/bibyeonsa and some
+    #                sillok tags) — omitted when the tag carries neither,
+    #     "name"  => @name, upstream's normalized form (sjw only) — kept
+    #                ONLY where it differs from the surface; the
+    #                "미결" (unresolved) sentinel asserts no name }
+    #
+    # Scope mirrors the text: only tags inside the leaf's content
+    # paragraphs. A tag with an empty surface (the self-closing and
+    # whitespace-only tags upstream leaves behind) mints nothing. A
+    # WRAPPER — an <index> whose only tagged content is one same-typed
+    # <index> of the same surface (bibyeonsa double-tags 75 mentions
+    # this way) — is one mention, the inner tag's attributes winning;
+    # any other nesting ("忠州界" around "忠州") is two mentions.
     class NikhXmlParser
       LEVELS = %w[level1 level2 level3 level4 level5].freeze
+
+      # The DTD's p.index vocabulary (history.dtd 1.3/1.4 — identical
+      # list) → the annotation key each type mines into. Complete by
+      # construction: every enumerated type maps. Censused 2026-10-18,
+      # only 이름/지명/서명/연호/관직/단체 occur in the five deposits.
+      ENTITY_KINDS = {
+        "이름" => "persons", "지명" => "places", "관직" => "offices", "서명" => "books",
+        "관서" => "agencies", "단체" => "orgs", "사건" => "events", "국명" => "states",
+        "연호" => "eras", "학교" => "schools", "회사조합" => "companies", "기타" => "others"
+      }.freeze
+
+      # sjw's @name sentinel for an unresolved normalization.
+      UNRESOLVED_NAME = "미결"
+
+      REF_NAMESPACE = "nikh"
 
       # The ancestor-fallback default for a frame that carried no front.
       EMPTY_FRONT = { title: nil, date_raw: nil, subject_classes: [], sources: [], weather: nil }.freeze
@@ -57,7 +99,14 @@ module Nabu
       # ("태백산사고본: 太祖實錄 3책 15권 · 14장 A면" shape); +weather+
       # the nearest ancestor's weather record (sjw day fronts), nil
       # elsewhere.
-      Leaf = Data.define(:id, :title, :date_raw, :subject_classes, :sources, :weather, :text)
+      # +entities+ the mined index tags ({} unless the parser mines them).
+      Leaf = Data.define(:id, :title, :date_raw, :subject_classes, :sources, :weather, :text, :entities)
+
+      # +entities+: mine the <index> markup into Leaf#entities — opt-in
+      # per adapter, so each source's rollout is a deliberate change.
+      def initialize(entities: false)
+        @entities = entities
+      end
 
       def parse_file(path)
         walk(path)
@@ -134,7 +183,8 @@ module Nabu
       end
 
       def emit_leaf(frame, leaves)
-        text = frame[:text_xml] ? leaf_text(frame[:text_xml]) : ""
+        block = frame[:text_xml] && subtree_root(frame[:text_xml])
+        text = block ? leaf_text(block) : ""
         return if text.empty?
 
         leaves << Leaf.new(
@@ -143,7 +193,7 @@ module Nabu
           subject_classes: front_of(frame)[:subject_classes],
           sources: front_of(frame)[:sources],
           weather: nearest(frame, :weather),
-          text: text
+          text: text, entities: @entities ? leaf_entities(block) : {}
         )
       end
 
@@ -202,10 +252,52 @@ module Nabu
       # (noteContent's own 【】 marks travel verbatim), whitespace runs
       # collapse — canonical means canonical, so nothing is corrected,
       # only the markup shed.
-      def leaf_text(text_xml)
-        block = subtree_root(text_xml)
+      def leaf_text(block)
         paragraphs = block.xpath("./content/paragraph").map { |paragraph| squish(paragraph.text) }
         paragraphs.reject(&:empty?).join("\n")
+      end
+
+      # The leaf's index tags (see the class comment), kind → records.
+      def leaf_entities(block)
+        entities = {}
+        block.xpath("./content/paragraph//index").each do |tag|
+          next if wrapper?(tag)
+
+          kind = ENTITY_KINDS[tag["type"]]
+          record = kind && entity_record(tag)
+          (entities[kind] ||= []) << record if record
+        end
+        entities
+      end
+
+      def entity_record(tag)
+        value = Nabu::Normalize.nfc(squish(tag.text))
+        return nil if value.empty?
+
+        sources = [tag, enclosing_wrapper(tag)].compact
+        id = sources.lazy.filter_map { |node| present_attr(node, "ref") || present_attr(node, "id") }.first
+        name = sources.lazy.filter_map { |node| present_attr(node, "name") }.first
+        name = Nabu::Normalize.nfc(name) if name
+        name = nil if name == value || name == UNRESOLVED_NAME
+        ref = "#{REF_NAMESPACE}:#{id}" if id
+        { "value" => value, "ref" => ref, "name" => name }.compact
+      end
+
+      # An index whose only tagged content is one same-typed index of the
+      # same surface — the double-tag; its inner tag speaks for it.
+      def wrapper?(tag)
+        inner = tag.xpath("./index")
+        inner.size == 1 && inner.first["type"] == tag["type"] && squish(inner.first.text) == squish(tag.text)
+      end
+
+      def enclosing_wrapper(tag)
+        parent = tag.parent
+        parent if parent&.name == "index" && wrapper?(parent)
+      end
+
+      def present_attr(tag, name)
+        value = tag[name]&.strip
+        value unless value.nil? || value.empty?
       end
 
       def squish(text)

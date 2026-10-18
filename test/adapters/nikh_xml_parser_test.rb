@@ -101,6 +101,92 @@ class NikhXmlParserTest < Minitest::Test
     assert_equal "1704-01-00L0", bb.leaves.first.date_raw, "bibyeonsa's untyped machine date"
   end
 
+  # -- the index markup: typed entity tags mined beside the text ----------
+
+  SJW_FIXTURES = Nabu::TestSupport.fixtures("sjw")
+  JEORYO_FIXTURES = Nabu::TestSupport.fixtures("goryeosa-jeoryo")
+
+  def mining = Nabu::Adapters::NikhXmlParser.new(entities: true)
+
+  def test_entity_mining_is_opt_in
+    article = volume("2nd_wzc_121.xml").leaves.first
+    assert_equal({}, article.entities, "a parser built without entities: mines nothing")
+  end
+
+  def test_sillok_persons_carry_their_m_ids_and_places_ride_bare
+    vol = mining.parse_file(File.join(FIXTURES, "2nd_wzc_121.xml"))
+    first, second = vol.leaves
+    assert_equal({ "persons" => [{ "value" => "純明皇后", "ref" => "nikh:M_0006771" }] }, first.entities)
+    assert_equal [{ "value" => "純宗", "ref" => "nikh:M_0062680" },
+                  { "value" => "純明孝皇后", "ref" => "nikh:M_0006771" }],
+                 second.entities["persons"], "document order; the alias shares its M_ id"
+    assert_equal [{ "value" => "太廟" }, { "value" => "璿源殿" }], second.entities["places"],
+                 "sillok places carry no ref — none is minted"
+  end
+
+  def test_mining_leaves_the_leaf_text_byte_identical
+    %w[2nd_wzc_121.xml 2nd_waa_200.xml 2nd_wqa_000.xml].each do |name|
+      plain = parser.parse_file(File.join(FIXTURES, name)).leaves.map(&:text)
+      mined = mining.parse_file(File.join(FIXTURES, name)).leaves.map(&:text)
+      assert_equal plain, mined, name
+    end
+    plain = parser.parse_file(File.join(SJW_FIXTURES, "2nd_F02.sjw.y.xml")).leaves.map(&:text)
+    assert_equal plain, mining.parse_file(File.join(SJW_FIXTURES, "2nd_F02.sjw.y.xml")).leaves.map(&:text)
+  end
+
+  def test_eras_mine_and_the_m_id_wins_over_the_secondary_person_pid
+    vol = mining.parse_file(File.join(FIXTURES, "2nd_waa_200.xml"))
+    first, second = vol.leaves
+    assert_equal [{ "value" => "永樂" }], first.entities["eras"]
+    assert_equal [{ "value" => "晋山府院君", "ref" => "nikh:M_0059127" },
+                  { "value" => "河崙", "ref" => "nikh:M_0059127" }], first.entities["persons"]
+    # 鄭麟趾 carries ref="M_0005882" AND id="p17_000013_00" (the cross-
+    # database person pid): the M_ ref is the tag's primary key.
+    assert_equal [{ "value" => "鄭麟趾", "ref" => "nikh:M_0005882" }], second.entities["persons"]
+  end
+
+  def test_goryeosa_tags_map_every_type_with_their_kind_prefixed_ids
+    vol = mining.parse_file(File.join(GORYEOSA_FIXTURES, "kr_118.xml"))
+    entities = vol.leaves.first.entities
+    assert_equal({ "value" => "趙浚", "ref" => "nikh:p094190" }, entities["persons"].first)
+    assert_equal({ "value" => "明仲", "ref" => "nikh:p094190" }, entities["persons"][1],
+                 "the courtesy name groups under the person's id")
+    assert_equal({ "value" => "侍中", "ref" => "nikh:o005170" }, entities["offices"].first)
+    assert_equal({ "value" => "旌善郡", "ref" => "nikh:t022420" }, entities["places"].first)
+    whole = mining.parse_file(File.join(GORYEOSA_FIXTURES, "kr_000.xml")).leaves.flat_map(&:entities)
+    kinds = whole.flat_map(&:keys).uniq.sort
+    assert_equal %w[books offices orgs persons places], kinds
+  end
+
+  def test_sjw_carries_the_normalized_name_only_where_it_differs
+    leaf = mining.parse_file(File.join(SJW_FIXTURES, "2nd_F02.sjw.y.xml")).leaves.first
+    persons = leaf.entities["persons"]
+    assert_equal({ "value" => "鄭亨益" }, persons.first, "name= equal to the surface is stored once")
+    assert_includes persons, { "value" => "密平君㙫", "name" => "李㙫" }
+    assert_includes persons, { "value" => "梓", "ref" => "nikh:p17_100010_00", "name" => "黃梓" },
+                    "the person pid is the only id sjw carries"
+    assert_includes persons, { "value" => "程子" }, "name=\"미결\" (unresolved) asserts no name"
+    assert_includes leaf.entities["books"], { "value" => "孟子離婁上", "name" => "孟子" }
+    assert_equal [{ "value" => "時敏堂" }], leaf.entities["places"]
+  end
+
+  def test_a_wrapper_index_around_one_same_typed_index_is_one_mention
+    vol = mining.parse_file(File.join(BIBYEONSA_FIXTURES, "bb_248.xml"))
+    # <index type="이름"><index id="p16_000058_00" type="이름">朴彭年</index></index>:
+    # upstream double-tags the one mention; the inner tag's id survives.
+    assert_equal [{ "value" => "朴彭年", "ref" => "nikh:p16_000058_00" }], vol.leaves.first.entities["persons"]
+  end
+
+  def test_untagged_ref_attributes_and_empty_tags_mint_nothing_spurious
+    vol = mining.parse_file(File.join(JEORYO_FIXTURES, "kj_033.xml"))
+    records = vol.leaves.flat_map { |leaf| leaf.entities.values.flatten }
+    refute_empty records
+    assert(records.all? { |record| !record["value"].strip.empty? }, "no empty-surface mention")
+    assert(records.all? { |record| record["ref"].nil? || record["ref"].match?(/\Anikh:\S+\z/) },
+           "a blank ref attr is no ref")
+    assert(records.any? { |record| record["ref"].nil? }, "jeoryo carries id-less persons and offices")
+  end
+
   def test_malformed_xml_raises_parse_error
     Dir.mktmpdir do |dir|
       path = File.join(dir, "2nd_bad_000.xml")

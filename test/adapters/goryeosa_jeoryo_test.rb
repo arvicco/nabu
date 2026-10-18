@@ -89,6 +89,14 @@ class GoryeosaJeoryoTest < Minitest::Test
     assert_equal "1388-01-01L0", annotations["date"], "the lunar 음 machine date — no 서기 exists upstream"
   end
 
+  def test_passage_annotations_carry_the_index_markup_with_and_without_ids
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:goryeosa-jeoryo:kj_033" }
+    annotations = adapter.parse(ref).first.annotations
+    assert_equal({ "value" => "廉興邦", "ref" => "nikh:p054180" }, annotations["persons"].first)
+    assert_includes annotations["persons"], { "value" => "禑" }, "an id-less person tag rides bare"
+    assert_equal({ "value" => "巡軍上萬戶", "ref" => "nikh:o009090" }, annotations["offices"].first)
+  end
+
   # --- fetch (rigged — no network in tests, ever) ---------------------------
 
   class FetchRig

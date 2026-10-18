@@ -31,7 +31,7 @@ class SjwTest < Minitest::Test
   # --- discover → parse -----------------------------------------------------
 
   def test_discover_yields_one_ref_per_year_member_with_the_short_id
-    assert_equal %w[urn:nabu:sjw:k00 urn:nabu:sjw:l04],
+    assert_equal %w[urn:nabu:sjw:f02 urn:nabu:sjw:k00 urn:nabu:sjw:l04],
                  adapter.discover(FIXTURES).map(&:id).sort,
                  "2nd_K00.sjw.y.xml → k00 — the filename's reign-year key, suffix shed"
   end
@@ -57,6 +57,16 @@ class SjwTest < Minitest::Test
     assert_equal "晴", roster.annotations["weather"],
                  "the day's weather record rides every article via the ancestor chain"
     assert_equal "座目", roster.annotations["title"]
+  end
+
+  def test_passage_annotations_carry_the_index_markup_with_the_normalized_names
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:sjw:f02" }
+    annotations = adapter.parse(ref).first.annotations
+    assert_equal({ "value" => "鄭亨益" }, annotations["persons"].first)
+    assert_includes annotations["persons"], { "value" => "鳳朝", "name" => "尹鳳朝" }
+    assert_includes annotations["persons"], { "value" => "龍慶", "ref" => "nikh:p16_100002_00", "name" => "金龍慶" }
+    assert_equal [{ "value" => "時敏堂" }], annotations["places"]
+    assert_includes annotations["books"], { "value" => "綱目", "name" => "資治通鑑綱目" }
   end
 
   def test_document_metadata_carries_the_structured_date_for_the_timeline
