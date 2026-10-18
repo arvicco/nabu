@@ -6852,7 +6852,7 @@ module Nabu
         return nil unless entry&.feature_module?
 
         Nabu::ModuleCensus.descriptor(entry.adapter_class, slug: slug,
-                                      canonical_dir: Nabu::Config.load.canonical_dir, pin: pin)
+                                                           canonical_dir: Nabu::Config.load.canonical_dir, pin: pin)
       rescue Nabu::Error
         nil
       end
