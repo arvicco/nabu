@@ -62,6 +62,16 @@ module Nabu
     # - lb/pb/milestone with break="no" contribute nothing inline;
     #   whitespace collapses; NFC at the boundary.
     #
+    # == Inline names (opt-in, names: true)
+    #
+    # persName/placeName stay read-through text; an adapter that passes
+    # names: true ALSO gets each one as a Unit#entities record ({ "type"
+    # person|place, "text" (the name's own read-through extraction),
+    # "key"/"ref" verbatim, "subtype" @type[/@subtype] }, document order).
+    # Opt-in per adapter: a corpus's inline names must be censused as
+    # names IN the text — not editor references — before they are mined.
+    # Names inside DROPped subtrees (notes, bibl) never reach a sink.
+    #
     # == Editorial divs (P120-R1)
     #
     # The editorial divs — commentary, translation, apparatus,
@@ -93,10 +103,11 @@ module Nabu
       XML_NS = "http://www.w3.org/XML/1998/namespace"
 
       Result = Data.define(:title, :language, :license, :maturity, :passages)
-      Unit = Data.define(:key, :text, :language, :met)
+      Unit = Data.define(:key, :text, :language, :met, :entities)
 
       DROP = %w[note bibl figure desc certainty ref rdg sic orig abbr head label fw].freeze
       EDITORIAL_DIVS = %w[commentary translation apparatus bibliography].freeze
+      ENTITY_TYPES = { "persName" => "person", "placeName" => "place" }.freeze
       GAP_MARKER = "[…]"
 
       module_function
@@ -104,23 +115,23 @@ module Nabu
       # Parse one DHARMA edition file. +allowed_languages+ is the adapter's
       # measured code set; +aliases+ maps censused upstream tag dirt onto
       # held codes. Any other code raises Nabu::ParseError at mint.
-      def parse(path, allowed_languages:, aliases: {}, default_language: nil)
+      def parse(path, allowed_languages:, aliases: {}, default_language: nil, names: false)
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
         parse_doc(doc, path: path, allowed_languages: allowed_languages, aliases: aliases,
-                       default_language: default_language)
+                       default_language: default_language, names: names)
       end
 
       # #parse on an already-loaded, namespace-stripped DOM (an adapter
       # that also mines the header — dharma-deccan — loads once). PRUNES
       # the edition's nested editorial divs from +doc+ in place.
-      def parse_doc(doc, path:, allowed_languages:, aliases: {}, default_language: nil)
+      def parse_doc(doc, path:, allowed_languages:, aliases: {}, default_language: nil, names: false)
         edition = doc.at_xpath('//body//div[@type="edition"]') or
           raise Nabu::ParseError, "#{File.basename(path)}: no edition div"
         prune_editorial!(edition)
 
         checker = language_checker(allowed_languages, aliases, path)
-        state = WalkState.new(checker: checker,
+        state = WalkState.new(checker: checker, names: names,
                               paragraph_mode: !edition.at_xpath(".//lb[not(ancestor::lg)]"))
         edition_lang = lang_of(edition) ||
                        edition.xpath(".//div").filter_map { |d| lang_of(d) }.first ||
@@ -160,9 +171,14 @@ module Nabu
       class WalkState
         attr_reader :units
 
-        def initialize(checker:, paragraph_mode:)
+        # The open prose line's entity sink (nil when names are off).
+        attr_reader :entities
+
+        def initialize(checker:, paragraph_mode:, names: false)
           @checker = checker
           @paragraph_mode = paragraph_mode
+          @names = names
+          @entities = names ? [] : nil
           @units = []
           @used = Hash.new(0)
           @section = nil
@@ -172,10 +188,14 @@ module Nabu
           @paragraphs = 0
         end
 
-        def mint_verse(key, text, language, met)
+        def mint_verse(key, text, language, met, entities: nil)
           @units << Unit.new(key: disambiguated(sectioned(key)), text: text,
-                             language: @checker.call(language), met: met)
+                             language: @checker.call(language), met: met,
+                             entities: DharmaEpidocParser.entities_or_nil(entities))
         end
+
+        # A fresh sink for one verse line (nil when names are off).
+        def verse_sink = @names ? [] : nil
 
         # An lb opens a new line — unless it re-anchors the CURRENT line
         # (same number, the MpuMano resume shape). The ancestor div @n
@@ -222,8 +242,10 @@ module Nabu
           text = DharmaEpidocParser.clean(@buffer)
           unless text.empty? || DharmaEpidocParser.marker_only?(text)
             @units << Unit.new(key: disambiguated(sectioned(@key || "pre")), text: text,
-                               language: @checker.call(@language), met: nil)
+                               language: @checker.call(@language), met: nil,
+                               entities: DharmaEpidocParser.entities_or_nil(@entities))
           end
+          @entities = @names ? [] : nil
           @buffer = +""
           @key = nil
           @language = nil
@@ -270,7 +292,7 @@ module Nabu
               state.append(" ", lang)
               div_ctx = child["n"] ? child_ctx.with(div_path: ctx.div_path + [child["n"]]) : child_ctx
               walk_edition(child, state, div_ctx)
-            else state.append(extract(child), lang)
+            else state.append(extract(child, sink: state.entities), lang)
             end
           end
         end
@@ -285,10 +307,11 @@ module Nabu
             state.open_section!(pagelike["n"])
           end
           key = (ctx.div_path + [lg_n, l["n"] || (index + 1).to_s]).join(".")
-          text = clean(extract(l))
+          sink = state.verse_sink
+          text = clean(extract(l, sink: sink))
           next if text.empty? || marker_only?(text)
 
-          state.mint_verse(key, text, lang, met)
+          state.mint_verse(key, text, lang, met, entities: sink)
         end
       end
 
@@ -297,8 +320,10 @@ module Nabu
         lg_node.parent.xpath("./lg").index(lg_node) + 1
       end
 
-      # The keep/drop extraction for one subtree.
-      def extract(node)
+      # The keep/drop extraction for one subtree. With a +sink+ (an
+      # adapter that opted into names), every read-through persName/
+      # placeName also lands there as an entity record.
+      def extract(node, sink: nil)
         return node.text if node.text?
         return "" unless node.element?
 
@@ -308,17 +333,50 @@ module Nabu
         when "space" then " "
         when "lb", "pb", "milestone"
           node["break"] == "no" ? "" : " "
-        when "del" then "⟦#{node.children.map { |c| extract(c) }.join}⟧"
-        when "surplus" then "{#{node.children.map { |c| extract(c) }.join}}"
+        when "del" then "⟦#{extract_children(node, sink)}⟧"
+        when "surplus" then "{#{extract_children(node, sink)}}"
         when "choice"
           preferred = node.at_xpath("./corr | ./reg | ./expan") || node.children.first
-          preferred ? extract(preferred) : ""
+          preferred ? extract(preferred, sink: sink) : ""
         when "app"
           lem = node.at_xpath("./lem")
-          lem ? extract(lem) : ""
+          lem ? extract(lem, sink: sink) : ""
+        when *ENTITY_TYPES.keys
+          sink ? extract_entity(node, sink) : extract_children(node, sink)
         else
-          node.children.map { |c| extract(c) }.join
+          extract_children(node, sink)
         end
+      end
+
+      def extract_children(node, sink)
+        node.children.map { |c| extract(c, sink: sink) }.join
+      end
+
+      # A name's text is its read-through extraction (apparatus resolved
+      # exactly as in the passage). The slot is reserved BEFORE descending
+      # so a nested name lands after its container — document order.
+      def extract_entity(node, sink)
+        slot = sink.size
+        sink << nil
+        inner = extract_children(node, sink)
+        text = clean(inner)
+        sink[slot] = entity_record(node, text) unless text.empty?
+        inner
+      end
+
+      # { "type", "text", "key", "ref", "subtype" } — @key/@ref verbatim
+      # (Ollett's pers:/pl: lemma keys); "subtype" is @type, joined with
+      # @subtype when both are present ("king/coronation").
+      def entity_record(node, text)
+        subtype = [node["type"], node["subtype"]].compact.reject(&:empty?).join("/")
+        { "type" => ENTITY_TYPES.fetch(node.name), "text" => text, "key" => node["key"],
+          "ref" => node["ref"], "subtype" => (subtype unless subtype.empty?) }.compact
+      end
+
+      # A sink's records, or nil when it holds none (or names are off).
+      def entities_or_nil(sink)
+        records = sink&.compact
+        records.nil? || records.empty? ? nil : records
       end
 
       def language_checker(allowed, aliases, path)

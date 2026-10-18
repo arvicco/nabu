@@ -1244,7 +1244,11 @@ sources:
     dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
         Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
     places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
-        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined"}
+        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined. The
+        inline persName/placeName layer (passage annotations entities: 881 persons,
+        240 places in 382 editions — kings, donors, granted villages; Ollett's
+        pers:/pl: lemma keys verbatim) names places MENTIONED in the grant, not the
+        findspot, so it rides the passages and never the axis"}
     script: {posture: qualified, note: "romanized editions (pra/san/tel/kan -Latn); Brāhmī
         and its southern descendants are the artifact facts"}
   dharma-nusantara:
