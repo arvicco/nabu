@@ -2486,7 +2486,7 @@ ig-cyprus:
   siblings: ["-de", "-transcription"]  # literal tails — record stems are digits with an
                                        # optional -<digits|roman> suffix, never these
   translations: true  # the -de siblings (Klaus Hallof's German translation divs)
-  wired: false   # flips after the first real sync is verified (593 records — expect
+  wired: true   # first sync verified 2026-10-18: 982 docs / 1,680 passages, 3 quarantined (baseline)
                  # ~593 docs + the -transcription/-de siblings; census the
                  # unparsed origDate prose and the und-Latn title labels then)
   sync_policy: manual
