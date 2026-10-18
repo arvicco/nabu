@@ -100,6 +100,9 @@ module Nabu
           #                              (certainty + evidence ride the date hash)
           "dharma-tamil" => :structured, # P120: the title's era-typed year (Śaka, Kollam —
           #                                config/eras.yml); regnal years stay verbatim
+          "diccas" => :structured, # each book's byline author-life span (AH/CE pairs read
+          #                          by magnitude), its own class composition; the
+          #                          Qurʾān book has no byline and stays undated
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
