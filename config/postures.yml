@@ -115,6 +115,10 @@ sources:
         volumes (prefaces/indexes) gain leaf-derived envelopes"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
+    # The per-article 분류 subject classes (413,102 of 414,321 passages,
+    # 216 labels) are a passage-grain facet (facet_map.yml passage_fields
+    # → "subject"), reachable by `search --facet subject=…`; they are
+    # topical classes, not a document kind, so no kind fold rides them.
   sjw:
     lect: {posture: codemap, note: lzh → zho/lit (the sillok/kanripo precedent, P78-2)}
     dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; P81-1: the
@@ -162,6 +166,13 @@ sources:
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   itkc:
+    # The per-article 문체분류 genre classes (37,182 of 37,184 passages, 29
+    # labels: 詩類 23,207 · 書簡類 12,832 · 其他類 · 雜著類 …) are a
+    # passage-grain facet (facet_map.yml passage_fields → "genre"),
+    # reachable by `search --facet genre=…`. They
+    # classify ARTICLES inside a collected-works fascicle, so the
+    # document-grain kind stays unclassified: a fascicle mixes genres and
+    # a kind fold over its articles would misstate the whole.
     kind: {posture: unclassified}
     lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
     dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
