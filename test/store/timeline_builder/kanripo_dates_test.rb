@@ -127,6 +127,37 @@ module Store
       assert_equal 0, @db[:document_axes].count
     end
 
+    # The same streaming reader serves the adapter's person metadata: every
+    # 人物 block per entry, in byline order, the text-level blocks bare and
+    # the blocks under an appendix/edition heading labeled with that part.
+    def test_persons_by_text_collects_every_person_block_in_byline_order
+      persons = Nabu::Store::TimelineBuilder::KanripoDates.persons_by_text(
+        File.join(FIXTURES, "kanripo", "KR-Catalog", "KR")
+      )
+      shiji = persons.fetch("KR2a0001")
+      main = shiji.reject { |person| person[:part] }
+      assert_equal(%w[司馬遷 裴駰 司馬貞 張守節], main.map { |person| person[:name] })
+      sima = main.first
+      assert_equal ["撰"], sima[:functions]
+      assert_equal "漢", sima[:props]["DYNASTY"]
+      assert_equal "ca. -145 - ca. -86", sima[:props]["DATES"]
+      assert_equal ["集解"], main[1][:functions]
+
+      parts = shiji.select { |person| person[:part] }
+      kaozheng = parts.find { |person| person[:name] == "張照" }
+      assert_equal "(附)考證", kaozheng[:part], "an appendix's own byline keeps its part label"
+      zhen = parts.find { |person| person[:name] == "司馬貞" }
+      assert_equal %w[撰 注], zhen[:functions], "a repeated :FUNCTION: keeps every value in order"
+
+      wu = persons.fetch("KR5c0091")
+      assert_equal [nil, "WYG 道德眞經注"], wu.map { |person| person[:part] },
+                   "the edition-level block is labeled with its edition heading"
+      assert_equal "幼請", wu.first[:props]["ZI"]
+      assert_empty wu.first[:functions], "a block without :FUNCTION: carries no role"
+      assert_equal [{ name: "鄭玄", part: nil, props: {}, functions: [] }], persons.fetch("KR1a0170"),
+                   "a heading-only person block still names the person"
+    end
+
     def test_absent_catalog_tree_is_the_honest_zero
       make_document("KR2a0001")
       counts = Nabu::Store::TimelineBuilder::KanripoDates.build(
