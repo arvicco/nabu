@@ -26,6 +26,31 @@ class ItkcXmlParserTest < Minitest::Test
     assert_equal 1780, work.print_year, "원문간행년 서기년 — the ORIGINAL print year, not the 2020 edition"
   end
 
+  # Every 저자 with its 생년/몰년 life years (the 서기년 attribute — the
+  # CE year; the element text is the reign-year form and rides raw), and
+  # the 주제분류 / 사부분류 classifications.
+  def test_the_sidecar_carries_author_life_years_and_classifications
+    work = parser.parse_work(File.join(FIXTURES, "ITKC_GP_1550A.xml"))
+    assert_equal [{ "name" => "柳得恭", "name_hangul" => "유득공", "birth_year" => 1748,
+                    "death_year" => 1807, "birth" => "영조 24", "death" => "순조 7" }], work.authors
+    assert_equal "문집", work.subject_class
+    assert_equal "집부(集部)", work.sabu_division
+    assert_equal "별집류(別集類)", work.sabu_class
+  end
+
+  def test_unknown_life_year_sentinels_claim_nothing
+    work = parser.parse_work(File.join(FIXTURES, "ITKC_KP_B005A.xml"))
+    assert_equal(%w[崔瑆煥 金正浩], work.authors.map { |author| author["name"] })
+    assert_equal [1813, 1891], work.authors.first.values_at("birth_year", "death_year")
+    kim = work.authors.last
+    assert_nil kim["birth_year"], "서기년=\"9999\" is upstream's unknown sentinel, never a year"
+    assert_nil kim["death_year"]
+    assert_equal "18??", kim["birth"], "the raw form keeps upstream's own uncertainty"
+    assert_equal "지리류", work.subject_class
+    assert_equal "사부", work.sabu_division, "the 대분류 rides verbatim (KP writes it without hanja)"
+    assert_equal "지리류(地理類)", work.sabu_class
+  end
+
   def test_a_sidecar_without_a_print_year_claims_none
     work = parser.parse_work(File.join(FIXTURES, "ITKC_GO_1295A.xml"))
     assert_equal 1895, work.print_year, "국조보감's own 원문간행년"

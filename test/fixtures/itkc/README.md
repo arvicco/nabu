@@ -39,3 +39,4 @@ into ITKC's own 번역문 translation layer by id.
 | `ITKC_GP_1550A_0010.xml` | 卷一, trimmed to the first two 레벨3 articles (圖書集成 with the full apparatus) |
 | `ITKC_GO_1295A.xml` | 국조보감 sidecar — **whole, byte-verbatim** (2.4 KB) |
 | `ITKC_GO_1295A_0010.xml` | 首卷, trimmed to the first two 레벨3 genre sections (레벨4 최종정보 articles — the GO nesting witness) |
+| `ITKC_KP_B005A.xml` | 여도비지 sidecar (dataset 15141476, the KP family), copied 2026-10-18 from the box's canonical extraction with the 해설정보 commentary removed (every kept byte verbatim) — TWO 저자 (崔瑆煥 1813–1891; 金正浩 with 생년/몰년 서기년="9999", upstream's unknown sentinel beside the raw "18??"), 사부분류 대분류 "사부" without hanja, and the KP-only 고전적분류 scheme |
