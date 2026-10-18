@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader xml:lang="eng">
+        <fileDesc>
+            <titleStmt>
+                <title xml:lang="mul">Ἀνθολογία, Volume V</title>
+                <editor>William Roger Paton</editor>
+                <sponsor>Perseus Project, Tufts University</sponsor>
+                <principal>Gregory Crane</principal>
+                <respStmt>
+                    <resp>Prepared under the supervision of</resp>
+                    <name>Lisa Cerrato</name>
+                    <name>Rashmi Singhal</name>
+                    <name>Bridget Almas</name>
+                </respStmt>
+                <funder n="org:NEH">The National Endowment for the Humanities</funder>
+                <funder n="org:Google">Google Digital Humanities Awards Program</funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>Trustees of Tufts University</publisher>
+                <pubPlace>Medford, MA</pubPlace>
+                <authority>Perseus Digital Library Project</authority>
+                <date cert="medium" when="2010-12-13" type="release">Perseus 4.0</date>
+                <idno type="filename">tlg7000.tlg001.perseus-grc10.xml</idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <biblStruct>
+                    <monogr>
+                        <title>The Greek Anthology</title>
+                        <editor>William Roger Paton</editor>
+                        <imprint>
+                            <pubPlace>London</pubPlace>
+                            <publisher>William Heinemann Ltd.</publisher>
+                            <pubPlace>New York, NY</pubPlace>
+                            <publisher>G. P. Putnam's Sons</publisher>
+                            <date>1918</date>
+                        </imprint>
+                        <biblScope unit="volume">5</biblScope>
+                    </monogr>
+                    <ref target="https://archive.org/details/greekanthology05newyuoft/page/2/mode/2up">The Internet Archive</ref>
+                </biblStruct>
+                
+            </sourceDesc>
+        </fileDesc>
+        
+        <encodingDesc>
+            <editorialDecl>
+                <correction method="silent">
+                    <p>optical character recognition</p>
+                </correction>
+            </editorialDecl>
+            <refsDecl n="CTS">
+                <!--<cRefPattern n="number"
+   matchPattern="(\w+).(\w+).(\w+)"
+   replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1']/tei:div[@n='$2']/tei:div[@n='$3'])">
+   <p>This pointer pattern extracts book and type and number.</p>
+  </cRefPattern>-->
+                <cRefPattern n="epigram"
+                    matchPattern="(\w+).(\w+)"
+                    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1']/tei:div[@n='$2'])">
+                    <p>This pointer pattern extracts book and epigram.</p>
+                </cRefPattern>
+                <cRefPattern n="book"
+                    matchPattern="(\w+)"
+                    replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1'])">
+                    <p>This pointer pattern extracts book.</p>
+                </cRefPattern>
+            </refsDecl>
+                <refsDecl xml:id="CTS">
+          <citeStructure match="/TEI/text/body" use="@xml:base">
+            <citeStructure unit="book" delim=":" match="div/div[@subtype='book']" use="@n">
+              <citeStructure use="@n" match="div[@subtype='epigram']" n="chunk" delim="." unit="epigram">
+                <citeStructure unit="line" delim="." match="l" use="@n"/>
+              </citeStructure>
+            </citeStructure>
+          </citeStructure>
+        </refsDecl>
+</encodingDesc>
+        
+        <profileDesc>
+            <langUsage>
+                <language ident="grc">Greek</language>
+                <language ident="lat">Latin</language>
+                <language ident="eng">English</language>
+            </langUsage>
+        </profileDesc>
+        
+        <revisionDesc>
+          <change who="Charles Pletcher" when="2026-08-26">Add citeStructure refsDecl</change>
+            <change when="2025-01-14" who="Lisa Cerrato">Epidoc and CTS conversion and header review for best practices</change>
+            <change when="2010-06" who="RS">tagged and parsed</change>
+        </revisionDesc>
+    </teiHeader>
+    
+<text xml:lang="grc">
+<body xml:base="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10">
+    <div n="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10" type="edition" xml:lang="grc">
+<pb n="v.5.p.2"/>
+<div type="textpart" subtype="book" xml:base="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10" n="13">
+<div type="textpart" subtype="epigram" xml:base="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10:13" n="1">
+<docAuthor xml:lang="lat">
+<persName xml:lang="lat" key="tlg-1589">
+<foreign xml:lang="lat">Philippus</foreign>
+</persName>
+</docAuthor>
+<lb/><label>Πεντάμετρον μόνον</label>
+<l n="1">Ἰίαίρβ θεὰ Παφίη· σὴν γὰ̆ ἀεὶ δύναμιν</l>
+<l n="2">κάλλος τʼ ἀθάνατον καὶ σέβας ἰμβρόβν</l>
+<l n="3">πάντες τιμῶσιν θνατοὶ ἐφαμέριοι</l>
+<l n="4">ἐν πᾶσιν μύθοις ἔργοισίν τε καλοῖς·</l>
+<l n="5">πάντῃ γὰρ πᾶσιν σὴν δηλοῖς τιμήν.</l>
+</div>
+<div type="textpart" subtype="epigram" xml:base="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10:13" n="2">
+<docAuthor xml:lang="lat">
+<persName xml:lang="lat" key="tlg-1577">
+<foreign xml:lang="lat">Phaedimus</foreign>
+</persName>
+</docAuthor>
+<lb/><label>τρίμετρον</label>
+<l n="1">Καλλίστρατός σοι, Ζηνὸς ὦ διάκτορε,</l>
+<l n="2">ἔθηκε μορφῆς ξυνὸν ἥλικος τύπον</l>
+<l n="3">Κηφισιεὺς ὁ κοῦρος· ᾧ χαρείς, ἄναξ,</l>
+<l n="4">Ἀπολλοδώρου παῖδα καὶ πάτραν σάω.</l>
+</div>
+</div>
+<pb n="v.5.p.26"/>
+        <div type="textpart" subtype="book" xml:base="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10" n="14">
+<div type="textpart" subtype="epigram" xml:base="urn:cts:greekLit:tlg7000.tlg001.perseus-grc10:14" n="3">
+<docAuthor xml:lang="lat">
+<persName xml:lang="lat" key="tlg-0138">
+<foreign xml:lang="lat">Anonymi Epigrammatici</foreign>
+</persName>
+</docAuthor>
+<l n="1">ἁ Κύπρις τὸν Ἔρωτα κατηφιόωντα προσηύδα·</l>
+<l n="2">
+<q>τίπτε τοι, ὦ τέκος, ἄλγος ἐπέχραεν;</q> ὃς δʼ ἀπάμειπτο·</l>
+<l n="3">“ Πιερίδες μοι μῆλα διήρπασαν ἄλλυδις ἄλλη,</l>
+<l n="4">αἰνύμεναι κόλποιο, τὰ δὴ φέρον ἐξ Ἑλικῶνος.</l>
+<l n="5">Κλειὼ μὲν μήλων πέμπτον λάβε· δωδέκατον δὲ</l>
+<l n="6">Εὐτέρπη· ἀτὰρ ὀγδοάτην λάχε δῖα Θάλεια·</l>
+<l n="7">Μελπομένη δʼ εἰκοστὸν ἀπαίνυτο· Τερψιχόρη δὲ</l>
+<l n="8">τέτρατον ἑβδομάτην δʼ Ἐρατὼ μετεκίαθε μοίρην</l>
+<l n="9">ἡ δὲ τριηκόντων με Πολύμνια νόσφισε μήλων,</l>
+<l n="10">Οὐρανίη δʼ ἑκατόν τε καὶ εἴκοσι· Καλλιόπη δὲ</l>
+<l n="11">βριθομένη μήλοισι τριηκοσίοισι βέβηκε.</l>
+<l n="12">σοὶ δʼ ἄρα κουφοτέρῃσιν ἐγὼ σὺν χερσὶν ἱκάνω,</l>
+<l n="13">πεντήκοντα φέρων τάδε λείψανα μῆλα θεάων.” </l>
+</div>
+</div>
+    </div>
+</body>
+</text>
+</TEI>
