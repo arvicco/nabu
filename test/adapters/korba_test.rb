@@ -123,6 +123,15 @@ module Adapters
                    "a text keyed from a modernized edition says so"
     end
 
+    # <editor role="translator"> in the original bibl names the translator
+    # of a translated work (322 headers) — verbatim, the translator facet.
+    def test_the_translator_rides_metadata
+      meta = doc("AndPiekBoh").metadata
+      assert_equal "Krzysztof Piekarski", meta["translator"]
+      assert_equal "Francesco Andreini", meta["author"], "the original's author stays the author"
+      assert_nil doc("AkZbrojGęb").metadata["translator"], "an untranslated text claims no translator"
+    end
+
     def test_a_printed_text_carries_its_print_year_and_publisher
       meta = doc("AkDziec").metadata
       assert_equal({ "not_before" => 1761, "not_after" => 1761, "raw" => "1761" }, meta["date"])
