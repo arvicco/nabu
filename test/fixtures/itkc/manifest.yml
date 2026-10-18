@@ -36,3 +36,11 @@ files:
     copied: "2026-09-29"
     whole: true
     trim: none (the 대계집 errata-table record — every article image-only, the metadata-only exemplar)
+  - path: ITKC_KP_B005A.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the 여도비지 서지 sidecar from the box's canonical 15141476 zip extraction, 해설정보
+      commentary removed (every kept byte verbatim) — two 저자, one carrying the 서기년="9999"
+      unknown sentinel; the 사부분류 대분류 written without hanja; the KP 고전적분류 scheme
+    copied: "2026-10-18"
+    whole: false

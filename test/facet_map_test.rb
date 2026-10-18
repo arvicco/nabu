@@ -213,7 +213,8 @@ class FacetMapTest < Minitest::Test
     map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
     expected = {
       "cbeta" => { "byline_authors" => "author" },
-      "ja-wikisource" => { "author" => "author" }
+      "ja-wikisource" => { "author" => "author" },
+      "itkc" => { "author" => "author", "subject_class" => "subject", "sabu_class" => "classification" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
