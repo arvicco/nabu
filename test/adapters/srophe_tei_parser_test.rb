@@ -33,6 +33,8 @@ module Adapters
       assert_equal "uncorrectedTranscription", edition.status
       assert_equal "0337", edition.orig_date["when"]
       assert_equal "composition", edition.orig_date["type"]
+      assert_equal [{ "title" => "The Demonstrations", "ref" => "http://syriaca.org/work/8501" }],
+                   edition.parent_works, "the series title above the document; the corpus imprint excluded"
     end
 
     def test_a_file_without_optional_header_fields_parses_honestly

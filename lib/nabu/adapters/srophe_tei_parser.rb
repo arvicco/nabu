@@ -13,6 +13,7 @@ module Nabu
     # publicationStmt idno[@type=URI] (the syriaccorpus.org id),
     # availability/licence (@target + text — CC BY 4.0 on all 632),
     # titleStmt title[@level='a'] (with the syriaca.org work URI in @ref),
+    # the title[@level='s'] series ladder above it (Edition#parent_works),
     # author (+@ref person URI), revisionDesc/@status (the transcription-
     # quality lane: uncorrectedTranscription … ProofedDigitalEdition), and
     # profileDesc/creation/origDate. The body is divs of 16 censused types
@@ -50,8 +51,15 @@ module Nabu
       Block = Data.define(:tag, :n, :lang, :divs, :text, :notes)
 
       # One parsed file: header identity + rights + ordered blocks.
+      # +parent_works+ is the titleStmt series ladder above the document —
+      # [{"title", "ref"?}] innermost first, upstream order.
       Edition = Data.define(:path, :idno, :license_target, :license_text, :title,
-                            :author, :author_ref, :work_ref, :status, :orig_date, :blocks)
+                            :author, :author_ref, :work_ref, :parent_works, :status, :orig_date,
+                            :blocks)
+
+      # The corpus's own imprint series, a level="s" title on every file
+      # (632/632) — the publication, never a parent work.
+      CORPUS_SERIES = "Digital Syriac Corpus"
 
       BLOCK_TAGS = %w[p ab l head].freeze
       private_constant :BLOCK_TAGS
@@ -99,9 +107,21 @@ module Nabu
           author: author && flatten(author),
           author_ref: author && author["ref"],
           work_ref: title && title["ref"],
+          parent_works: parent_works(doc),
           status: doc.at_xpath("//tei:revisionDesc", TEI_NS)&.[]("status"),
           orig_date: orig_date(doc)
         }
+      end
+
+      # The series titles above the document (603/632 files carry one;
+      # 595 with a syriaca.org work URI), the corpus imprint excluded.
+      def parent_works(doc)
+        doc.xpath("//tei:titleStmt/tei:title[@level='s']", TEI_NS).filter_map do |node|
+          title = flatten(node)
+          next if title.empty? || title == CORPUS_SERIES
+
+          { "title" => title, "ref" => node["ref"] }.compact
+        end
       end
 
       def orig_date(doc)
