@@ -114,6 +114,7 @@ module Nabu
           "elephantine" => :structured,
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "first1k-greek" => :edition_year_text,
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
@@ -150,6 +151,11 @@ module Nabu
           #                                envelope + findspot (PapyriHeader); the DDbDP
           #                                texts carry no date/place keys — their rows are
           #                                the HGV walk's (axis_source hgv), never doubled
+          # the Perseus family: the sourceDesc imprint year of the printed
+          # edition each encoding follows (date_class edition); the works'
+          # composition eras come from the TLG concordance lane instead
+          "perseus-greek" => :edition_year_text,
+          "perseus-latin" => :edition_year_text,
           "pl-wikisource" => :era_band_key,
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,

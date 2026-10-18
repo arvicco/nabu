@@ -143,6 +143,54 @@ class PerseusTest < Minitest::Test
     assert_includes document.first.text, "Δημήτηρ"
   end
 
+  # --- header + catalog metadata ------------------------------------------
+
+  # The textgroup __cts__.xml groupname is the author (English preferred —
+  # the CTS catalog's one spelling across every edition of the group); the
+  # TEI titleStmt editors are the edition's editors; the sourceDesc imprint
+  # date is the print edition's year (an edition-class timeline row, never
+  # the work's dating); the CTS urn decodes into its textgroup and work ids.
+  def test_parse_mines_author_editors_edition_date_and_cts_ids
+    iliad = parse_urn(ILIAD_URN).metadata
+    assert_equal "Homer", iliad["author"]
+    assert_equal ["David B. Monro", "Thomas W. Allen"], iliad["editors"]
+    assert_equal "1908-1920", iliad["source_date"]
+    assert_equal "tlg0012", iliad["cts_textgroup"]
+    assert_equal "tlg0012.tlg001", iliad["cts_work"]
+    assert_equal "Iliad", iliad["work"]
+
+    hymn = parse_urn(HH13_URN).metadata
+    assert_equal "Homeric Hymns", hymn["author"], "the English groupname wins over the Latin alias"
+    assert_equal "1914", hymn["source_date"]
+    assert_equal ["Hugh G. Evelyn-White"], hymn["editors"]
+  end
+
+  # A textgroup without a __cts__.xml groupname falls back to the TEI
+  # titleStmt author (the edition's own claim).
+  def test_author_falls_back_to_the_tei_title_statement
+    Dir.mktmpdir do |dir|
+      work = File.join(dir, "data", "tlg0013", "tlg013")
+      FileUtils.mkdir_p(work)
+      FileUtils.cp(File.join(GREEK_WORKDIR, "data", "tlg0013", "tlg013", "tlg0013.tlg013.perseus-grc2.xml"), work)
+      adapter = Nabu::Adapters::Perseus.new
+      metadata = adapter.parse(adapter.discover(dir).first).metadata
+      assert_equal "Anonymous", metadata["author"]
+      assert_equal "tlg0013.tlg013", metadata["cts_work"]
+    end
+  end
+
+  def test_perseus_registers_the_edition_year_dates_shape
+    shapes = Nabu::Store::TimelineBuilder::MetadataDates::SHAPES
+    %w[perseus-greek perseus-latin first1k-greek].each do |slug|
+      assert_equal :edition_year_text, shapes[slug], slug
+    end
+  end
+
+  def parse_urn(urn)
+    adapter = Nabu::Adapters::Perseus.new
+    adapter.parse(adapter.discover(GREEK_WORKDIR).find { |r| r.id == urn })
+  end
+
   # --- fetch (local git only, no network) ---------------------------------
 
   def test_fetch_clones_when_no_local_repo_then_pulls_and_returns_fetch_report

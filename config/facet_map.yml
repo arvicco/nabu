@@ -290,3 +290,24 @@ sources:
       work: work              # the top-level msItem titles, array (Landslǫg Magnúss
       #                         Hákonarsonar 8 · Konungs skuggsjá 6 · Njáls saga 3 · Stjórn 3 …)
       #                         — the WORK, distinct from the msName codex title
+  # the CTS editions (catalog + header mining in the Perseus adapter family);
+  # censuses over canonical/, 2026-10-18 — the CTS ids self-namespace
+  # (tlg/phi/stoa/ggm), so they project as authority-grade ids
+  perseus-greek:              # 770 grc editions (+ the opted-in translations)
+    fields:
+      author: author          # the textgroup groupname (89: Homer, Plato, Homeric Hymns …)
+      work: work              # the work title (Iliad …)
+      cts_textgroup: author_id  # "tlg0012"
+      cts_work: work_id       # "tlg0012.tlg001"
+  perseus-latin:              # 322 lat editions
+    fields:
+      author: author          # 55 groupnames (Vergil, Ovid …)
+      work: work
+      cts_textgroup: author_id  # "phi0690", "stoa0045" …
+      cts_work: work_id
+  first1k-greek:              # 1,091 grc editions
+    fields:
+      author: author          # 305 groupnames
+      work: work
+      cts_textgroup: author_id
+      cts_work: work_id
