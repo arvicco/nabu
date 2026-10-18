@@ -3,6 +3,7 @@
 require_relative "atf_parser"
 require_relative "flat_csv_parser"
 require_relative "../lfs_fetch"
+require_relative "../cuneiform_concordance"
 
 module Nabu
   module Adapters
@@ -72,9 +73,22 @@ module Nabu
     # == Reference edges (producer "cdli")
     #
     # metadata "related" carries: >>Q/>>P targets and #link definitions
-    # (urn:nabu:cdli:q…/p…), catalog composite_id Q-numbers, and the
+    # (urn:nabu:cdli:q…/p…), catalog composite_id Q-numbers, the
     # colon-schemed external_id concordances (bdtns:015946 — 96,641 rows;
-    # the BDTNS bridge). ORACC edges are deliberately NOT minted: ORACC
+    # the BDTNS bridge), seal_id S-numbers as urn:nabu:cdli:s… seal-
+    # composite hubs (the composite_id treatment; "Sx" names no seal), and
+    # the ETCSL concordance (Nabu::CuneiformConcordance): each ETCSL
+    # composition a subgenre cell names becomes the padding-folded
+    # "etcsl:<n>" hub ETCSL's own composite asserts, and the LITERARY
+    # witnesses (an ETCSL ref or a Literary genre — ~11k rows) assert one
+    # "object:<KEY>" hub per museum_no/excavation_no fragment, the keys
+    # ETCSL's witness lists assert. Censused 2026-10-18 against the held
+    # ETCSL deposit: 3,836 of ETCSL's 4,849 witness-fragment keys meet a
+    # literary-row key (the rest are mostly publication citations like
+    # "UET 6 185", which name no artifact). Object hubs stay scoped to
+    # the literary rows on purpose — keying all ~340k museum numbers
+    # would mint a quarter-million degree-1 hubs for 2% more matches.
+    # ORACC edges are deliberately NOT minted: ORACC
     # urns need a project segment (urn:nabu:oracc:<project>:<P>) the
     # catalog cannot supply — the join lives on the ORACC side, where
     # every P-numbered urn already contains its CDLI id (journaled, not
@@ -141,14 +155,31 @@ module Nabu
       # header gate — a silently renamed upstream column must fail).
       REQUIRED_HEADERS = %w[id_text designation language period provenience collection
                             genre object_type material dates_referenced museum_no
-                            primary_publication composite_id external_id].freeze
+                            primary_publication composite_id external_id subgenre
+                            seal_id excavation_no].freeze
 
       # Catalog fields carried into document metadata verbatim (non-empty,
       # NFC). language rides as "catalog_language" (the parser owns
-      # "language_raw" for #atf lang drift).
+      # "language_raw" for #atf lang drift). subgenre (71,814 rows, 4,619
+      # values — lexical-series witness labels, archive names, the 5,101
+      # "ETCSL <n> <title> (witness)" refs) and seal_id (57,184 rows of
+      # S-number seal composites) joined 2026-10-18; subgenre also
+      # projects as a facet (config/facet_map.yml) but is deliberately NOT
+      # folded onto the kind axis — its vocabulary mixes series names,
+      # archives and role labels under one column, so genre stays the
+      # kind source (the "Other (see subgenre)" pointer folds to unknown).
       METADATA_FIELDS = %w[period provenience collection genre object_type material
                            dates_referenced museum_no primary_publication composite_id
-                           external_id].freeze
+                           external_id subgenre seal_id].freeze
+
+      # excavation_no is read (not carried — the wider archaeological
+      # context columns are a separate mining wave) only to key the
+      # object: concordance hubs of the literary witnesses.
+      HUB_FIELDS = %w[excavation_no].freeze
+
+      # The rows that assert object: hubs (class note, "Reference edges"):
+      # literary witnesses — an ETCSL subgenre ref or a Literary genre.
+      LITERARY_GENRE = /\ALiterary\b/
 
       # dates_referenced heads that are date filler, not rulers.
       RULER_FILLER = /\A[0-9.\- –]*\z/
@@ -343,7 +374,7 @@ module Nabu
       # the 155 MB catalog is streamed once per discover, never per parse.
       def reduce_row(row)
         reduced = {}
-        (%w[designation language] + METADATA_FIELDS).each do |field|
+        (%w[designation language] + METADATA_FIELDS + HUB_FIELDS).each do |field|
           value = row[field].to_s.strip
           reduced[field] = Normalize.nfc(value) unless value.empty?
         end
@@ -437,7 +468,22 @@ module Nabu
         related = row["composite_id"].to_s.scan(/Q\d{6}/).map { |q| "#{URN_PREFIX}#{q.downcase}" }
         external = row["external_id"].to_s.strip
         related << external if external.match?(/\A[a-z][a-z0-9+.-]*:\S+\z/i)
+        related.concat(row["seal_id"].to_s.scan(/S\d{6}/).map { |s| "#{URN_PREFIX}#{s.downcase}" })
+        related.concat(concordance_hubs(row))
         related.uniq
+      end
+
+      # The CDLI side of the ETCSL concordance (class note): every ETCSL
+      # composition the subgenre names, then — for literary witnesses only
+      # — one object: hub per museum/excavation-number fragment.
+      def concordance_hubs(row)
+        refs = CuneiformConcordance.etcsl_refs(row["subgenre"])
+        hubs = refs.filter_map { |number| CuneiformConcordance.etcsl_hub(number) }
+        return hubs unless refs.any? || row["genre"].to_s.match?(LITERARY_GENRE)
+
+        hubs + [row["museum_no"], row["excavation_no"]].compact.flat_map do |value|
+          CuneiformConcordance.object_hubs(value)
+        end
       end
 
       def catalog_language(value)
