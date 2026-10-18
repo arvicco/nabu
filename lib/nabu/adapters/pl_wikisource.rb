@@ -72,6 +72,10 @@ module Nabu
                             Spis .*|Omyłki .*|Uwagi wstępne|Zakończenie|Treść|Bibliografia.*|
                             Do Czytelnika od Wydawcy)\z/xi
       EDITION_FIELDS = ["wydawca", "miejsce wydania", "rok wydania", "druk", "redaktor", "adnotacje"].freeze
+      # Dane tekstu's author (autor1 on the medieval anonymous songs) and
+      # |pochodzenie=, the book or cycle the page comes from (577 pages).
+      AUTHOR_FIELDS = %w[autor autor1].freeze
+      WORK_FIELD = "pochodzenie"
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "pl-wikisource",

@@ -64,6 +64,10 @@ module Nabu
       MODERNIZED_SEGMENT = /\(ВТ\)\s*\z|\AВТ\z/
       EDITION_FIELDS = %w[ИСТОЧНИК ДАТАПУБЛИКАЦИИ].freeze
       TRANSLATOR_FIELDS = %w[ПЕРЕВОДЧИК].freeze
+      # Отексте's АВТОР (НЕТ_АВТОРА pages carry none) and ИЗСБОРНИКА, the
+      # collection a page belongs to.
+      AUTHOR_FIELDS = %w[АВТОР].freeze
+      WORK_FIELD = "ИЗСБОРНИКА"
       TAINTED_SERIES = [
         "Библиотека литературы Древней Руси", # BLDR, ИРЛИ РАН 1997–2012
         "Памятники литературы Древней Руси", # PLDR, Художественная литература 1978–1994

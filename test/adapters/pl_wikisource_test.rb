@@ -57,6 +57,30 @@ module Adapters
                    fraszka.metadata["base_edition"], "the scan index + the title's dated parenthetical"
     end
 
+    # The Dane tekstu header's author slot (autor, or autor1 on the
+    # medieval songs) and the |pochodzenie= parent work — the same author
+    # key the wikitext family (sl/hr/sr) mines.
+    def test_author_and_parent_work_ride_metadata
+      assert_equal "Jan Kochanowski", doc(11_208).metadata["author"]
+      assert_equal "Anonim", doc(1481).metadata["author"]
+      assert_nil doc(1481).metadata["work"], "a page without |pochodzenie= is its own work"
+      apologeticus = JSON.parse(File.read(File.join(FIXTURES, "pages", "1387443.json")))
+      assert_equal "anonimowy", conformance_adapter.header_author(apologeticus["wikitext"])
+      assert_equal "Apologeticus to jest Obrona konfederacyej: przytym Seditio albo bunt kapłański na " \
+                   "ewanieliki w Wilnie z wolej a łaski miłego Boga przed harapem wynurzony",
+                   conformance_adapter.parent_work(apologeticus["wikitext"])
+    end
+
+    def test_author_slot_editorial_notes_and_list_templates
+      adapter = conformance_adapter
+      assert_equal "anonimowy",
+                   adapter.header_author("{{Dane tekstu\n|autor=anonimowy<ref name=\"a\">{{Przypiswiki}} " \
+                                         "przypis</ref>\n}}")
+      assert_equal "Wojciech Stanisław Chrościński; Bolesław Erzepki",
+                   adapter.header_author("{{Dane tekstu\n|autor={{Lista autorów|Wojciech Stanisław " \
+                                         "Chrościński; [[Autor:Bolesław Erzepki|Bolesław Erzepki]]}}\n}}")
+    end
+
     def test_era_band_follows_the_cone_category
       assert_equal({ "not_before" => 1401, "not_after" => 1500, "raw" => "Polska poezja świecka XV wieku" },
                    doc(25_521).metadata["era_band"])
