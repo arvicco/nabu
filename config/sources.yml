@@ -1285,6 +1285,26 @@ damaskini:
   # lives on the CLARIN.SI record page, hdl 11356/1441):
   # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1441
 
+damos:   # 02-sources row 274
+  adapter: Nabu::Adapters::Damos
+  adopted: "2026-10-18"
+  axes: [epigraphy, classical]
+  wired: true   # crawl complete 2026-10-18: 5,890 docs / 14,421 passages, 42 empty-ledgered (census closes at 5,932); KN B 822 eyeballed
+  sync_policy: manual
+  # DĀMOS — Database of Mycenaean at Oslo (damos.hf.uio.no): the complete
+  # Linear B corpus — Knossos 4,224 · Pylos 1,004 · Thebes 363 · Mycenae
+  # 87 · Tiryns 27 · … plus the inscribed stirrup jars. Site footer,
+  # verbatim (2026-10-18): "Content: CC BY-NC-SA 4.0" → nc. Crawl: ONE
+  # POST /ajaxgetfilter listing (the item id space; 7,687 designation
+  # rows over 5,932 unique items — joined fragments share their host's
+  # id; the unique count must equal the summed collection counts) +
+  # GET /ajaxitem/<id>/ per item at 1 req/s, 1,500 per sync, resumable
+  # at the file grain, refusals/timeouts/5xx ledgered in
+  # .damos-crawl.json. EXPECTED: 5,932 documents after four slices
+  # (~25 min each); passages = the transliteration's own labelled lines.
+  # Language gmy (identity); the ceramic-phase chronology rides as a
+  # period label awaiting ruled bands.
+
 dcs:
   adapter: Nabu::Adapters::Dcs
   adopted: "2026-07-18"
@@ -2479,6 +2499,31 @@ iedc:   # P107-2
   # grades (Gold/Silver/Bronze facet) and shelfmarks. Folio TRANSLATIONS
   # are a declared v1 residue. DH Awards 2025 winner.
 
+ig-cyprus:
+  adapter: Nabu::Adapters::IgCyprus
+  adopted: "2026-10-18"
+  axes: [epigraphy, classical]
+  siblings: ["-de", "-transcription"]  # literal tails — record stems are digits with an
+                                       # optional -<digits|roman> suffix, never these
+  translations: true  # the -de siblings (Klaus Hallof's German translation divs)
+  wired: true   # first sync verified 2026-10-18: 982 docs / 1,680 passages, 3 quarantined (baseline)
+                 # ~593 docs + the -transcription/-de siblings; census the
+                 # unparsed origDate prose and the und-Latn title labels then)
+  sync_policy: manual
+  # IG XV 1,1 — Inscriptiones Cypri syllabicae (Amathus, Kurion, Marion;
+  # ed. Karnava/Perna with Egetmeyer, Berlin 2020) from the Berlin-
+  # Brandenburg academy's Inscriptiones Graecae digital edition
+  # (telota.bbaw.de/ig): 593 per-record EpiDoc files — Greek in the
+  # Cypriot syllabary (Latin transliteration), Eteocypriot, alphabetic-
+  # Greek bilinguals. Ingested from the record API only (api/inscriptions
+  # listing + api/xml/<id>), never third-party derivatives.
+  # License: every record's in-file <licence> (governs — the riig
+  # pattern), verbatim "Creative Commons Attribution 4.0 International
+  # (https://creativecommons.org/licenses/by/4.0/legalcode). All reuse or
+  # distribution of this work must contain somewhere a link back to this
+  # page." → CC BY 4.0 → attribution; the link-back target rides each
+  # document's metadata "uri". Re-crawls are owner-fired (593 paced GETs).
+
 iip:
   adapter: Nabu::Adapters::Iip
   adopted: "2026-07-18"
@@ -3495,6 +3540,30 @@ obi-burmese:   # P92-3
   # and intro PDF deliberately not fetched. Page-based files carrying
   # the start of the next inscription mint section keys (37.1) —
   # censused in metadata, never dropped, never duplicated.
+
+ociana:
+  adapter: Nabu::Adapters::Ociana
+  adopted: "2026-10-18"
+  axes: [epigraphy, arabic]   # no semitic/arabian axis exists — the Arabic desk is the
+  #                             nearest home for Old Arabian epigraphy (dual-tagged)
+  wired: true   # first sync verified 2026-10-18: 36,794 docs/passages exactly as censused, 0 quarantined; JaS 1/2 eyeballed with variety staging
+  sync_policy: frozen
+  # OCIANA — the Online Corpus of the Inscriptions of Ancient North Arabia
+  # (Khalili Research Centre, University of Oxford), ONE immutable ORA
+  # deposit (doi 10.5287/bodleian:OBVk0AY52, copyright 2017; acquired
+  # 2026-10-18, sha256-pinned in the adapter): 37,955 Safaitic, Hismaic,
+  # Dadanitic, Taymanitic and minor-script records, language xna. No open
+  # licence — the deposit falls under ORA's own Terms of Use (one copy
+  # "to facilitate their private study or research for non-commercial
+  # purposes"; no profit-making use) and no redistribution grant was
+  # sought → license_class research_private on the corpus-gysseling
+  # non-grant precedent: local research only, never redistributed; the
+  # class gates keep it off MCP, the site figures and nabu-data. NO
+  # deposit bytes in the public repo: fixtures live under gitignored
+  # local/fixtures/ociana/. The file is not one XML document (schema
+  # preamble + sibling roots) — records are cut on the raw bytes. Expect
+  # 36,794 documents / 36,794 passages (1,161 empty-transliteration
+  # records skipped by rule), translations on ~36.8k, coordinates on ~21.8k.
 
 ogham:
   adapter: Nabu::Adapters::Ogham
@@ -6035,6 +6104,14 @@ ud:
   # (UD_Old_Turkish-Tonqq, CC0): Old Turkic clausal examples, test split
   # only upstream; sync-verified 1 doc / 20 sentences, language otk (the
   # first Turkic treebank; the seed grows as upstream releases splits).
+  # 2026-10-18: TREEBANKS grew to THIRTY-FOUR — phrygian-kul
+  # (UD_Phrygian-KUL, KU Leuven): the Phrygian epigraphic corpus (Old,
+  # Middle and New Phrygian, ca. 8th c. BCE – 3rd c. CE; Trismegistos
+  # ids per token), test split only; LICENSE.txt verbatim BY-SA 4.0 +
+  # README agrees → per-document `attribution` override; language xpg
+  # (resolves by identity). The fixture pins the first 50 of 203
+  # sentence blocks. EXPECTED SYNC DELTA at the next `bin/nabu sync ud`:
+  # +1 repo clone / +1 doc / +203 passages (1,927 word lines).
 
 uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource
@@ -6254,6 +6331,13 @@ wiktionary-recon:
   # sync-verified counts). The oui first sync also surfaced the
   # mark-only-headword fold edge (U+10F82; parser regression pinned).
   # 20 extracts, 365,213 entries total.
+  # 2026-10-18: TWENTY-FIRST extract wiktionary-gmy — attested Mycenaean
+  # Greek (the xum rider shape; Linear B headwords in real U+10000-block
+  # codepoints). Full-download census 2026-10-18: 542 records / 481
+  # distinct words / 669 senses, 713,109 B (Last-Modified 2026-10-03).
+  # EXPECTED SYNC DELTA at the next `bin/nabu sync wiktionary-recon`:
+  # +1 GET (~0.7 MB) / +542 entries (481 words, 669 senses; a handful of
+  # grc/el/omn reflex edges from the 4 records with descendants).
   sync_policy: manual
 
 wiktionary-sux:

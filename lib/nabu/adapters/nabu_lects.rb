@@ -47,6 +47,18 @@ module Nabu
         MANIFEST
       end
 
+      # The module census (Nabu::ModuleCensus): the registry's size, read
+      # through Nabu::Lects.census; nil until both files are present.
+      def self.module_census(read)
+        lects = read.call(Nabu::Lects::LECTS_FILE)
+        codemap = read.call(Nabu::Lects::CODEMAP_FILE)
+        return nil unless lects && codemap
+
+        census = Nabu::Lects.census(lects_yaml: lects, codemap_yaml: codemap)
+        [["anchors", census.anchors], ["stages", census.stages], ["varieties", census.varieties],
+         ["codemap rows", census.codemap]].map { |label, count| Nabu::ModuleCensus::Count.new(label: label, count: count) }
+      end
+
       # A feature module mints no documents — its data is a read seam
       # (Nabu::Lects), not passages. Empty by design (the nabu-data shape).
       def discover(workdir, &block)

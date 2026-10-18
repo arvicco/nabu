@@ -342,6 +342,26 @@ rules:
   # hence prefix matching; onto na/nb only — the OB/MB literary tail and
   # no-period docs stay uncomposed (98% of CANONICAL akk is
   # first-millennium; census 2026-08-06: NA 4,864 · NB 2,237 · LB 100).
+  # ── The OCIANA script field (2026-10-18): upstream classifies every
+  # record by its Ancient North Arabian script tradition, and the
+  # registry carries the four big traditions as xna varieties — the
+  # label IS the variety. Deliberately unmatched (bare-anchor honesty):
+  # the minor and mixed classes (Thamudic B/C/D, Mixed Safaitic/Hismaic,
+  # Hasaitic, Dumaitic, Dispersed Oasis North Arabian, Rock Drawing
+  # Only …) stay bare xna until the registry separates them; the 36
+  # non-ANA records (grc/lat/inm/arc/xsa) carry their own codes and no
+  # xna rule touches them.
+  - id: ociana-script
+    tier: certain
+    sources: [ociana]
+    code: xna
+    facet: script
+    map:
+      "Safaitic": "xna/saf"
+      "Hismaic": "xna/his"
+      "Dadanitic": "xna/dad"
+      "Taymanitic": "xna/tay"
+
   - id: ebl-akk-lit
     tier: certain
     kind: compose

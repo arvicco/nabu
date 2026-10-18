@@ -30,6 +30,13 @@ sources:
       set: set                # 35 TEO season/collection sets
       findspot: findspot      # TEO findspot text incl. "Not listed in TEO" (a claim)
       museum_number: museum   # Louvre AE / RS sigla — the museum shelf join
+  ociana:                     # census: 36,794 text-bearing records (full deposit, 2026-10-18)
+    fields:
+      script: script          # Safaitic 30,795 · Hismaic 3,624 · Dadanitic 1,704 · Taymanitic
+      #                         482 · Mixed Safaitic/Hismaic 46 · Hasaitic 43 · Thamudic B/C/D ·
+      #                         Greek 22 · Dispersed Oasis North Arabian 23 · Minaic 8 · …
+      survey: collection      # the recording expedition/survey (SESP, Mission archéologique
+      #                         en Arabie …) — on ~10k records
   local-library:              # census: 62 docs, every manifest multi-language (P105-5b) —
     fields: #                   only languages[0] becomes documents.language; the trailing
       languages: language     # claims (ett under 22 eng facsimile editions, xum, xfa…)

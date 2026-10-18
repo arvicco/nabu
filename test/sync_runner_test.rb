@@ -475,6 +475,68 @@ class SyncRunnerTest < Minitest::Test
     assert_equal "Sparta", resolver.place("570685").title
   end
 
+  # --- the module delta (module sync summaries) ---------------------------
+
+  # nabu-lects over a local upstream repo (the house local-git pattern; no
+  # network): the registry seam is real, only the clone url is redirected.
+  class LocalLects < Nabu::Adapters::NabuLects
+    class << self
+      attr_accessor :upstream
+    end
+
+    private
+
+    def repo_url = self.class.upstream
+  end
+
+  # A kind: module sync carries a ModuleCensus::Delta for the summary line:
+  # the ref before and after the fetch, the changed paths, and the seam
+  # census now + at the old blob. Rendering data only — the run row is the
+  # same zero-count row as ever.
+  def test_a_module_sync_carries_the_ref_movement_and_the_census_delta
+    upstream = seed_lects_upstream
+    runner = make_runner(registry(entry("nabu-lects", LocalLects, wired: true, sync_policy: "manual",
+                                                                  kind: "module")))
+
+    cloned = runner.sync("nabu-lects").module_delta
+    assert_nil cloned.before, "a fresh clone has no prior ref"
+    assert_equal lects_git(upstream, "rev-parse", "HEAD"), cloned.after
+    assert_equal 246, cloned.census.first.count
+
+    old_head = lects_git(upstream, "rev-parse", "HEAD")
+    path = File.join(upstream, "lects.yml")
+    File.write(path, File.read(path).sub(/^scripts:/, "  zzx:\n    name: Test anchor\n\nscripts:"))
+    lects_git(upstream, "add", ".")
+    lects_git(upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "mint zzx")
+
+    moved = runner.sync("nabu-lects")
+    delta = moved.module_delta
+    assert_equal old_head, delta.before
+    assert_equal lects_git(upstream, "rev-parse", "HEAD"), delta.after
+    assert_equal ["lects.yml"], delta.changed
+    assert_equal [247, 246], [delta.census.first.count, delta.previous_census.first.count]
+    assert_equal 0, moved.load_report.added, "the load (and so the run row) is untouched"
+
+    unchanged = runner.sync("nabu-lects").module_delta
+    assert_equal unchanged.before, unchanged.after
+    refute unchanged.moved?
+
+    parse_only = runner.sync("nabu-lects", parse_only: true).module_delta
+    refute parse_only.fetched
+    assert_equal delta.after, parse_only.before
+
+    fetch_only = runner.sync("nabu-lects", fetch_only: true).module_delta
+    assert fetch_only.fetched
+    assert_equal fetch_only.before, fetch_only.after
+  end
+
+  def test_a_non_module_sync_carries_no_module_delta
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    assert_nil runner.sync("breaker").module_delta
+    assert_nil runner.sync("breaker", fetch_only: true).module_delta
+  end
+
   def test_sync_of_an_ordinary_source_derives_no_place_index
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
@@ -1318,6 +1380,22 @@ class SyncRunnerTest < Minitest::Test
   end
 
   def source_row(slug) = Nabu::Store::Source.first(slug: slug)
+
+  def seed_lects_upstream
+    upstream = File.join(@root, "lects-upstream")
+    FileUtils.mkdir_p(upstream)
+    fixtures = Nabu::TestSupport.fixtures("nabu-lects")
+    %w[lects.yml codemap.yml].each { |name| FileUtils.cp(File.join(fixtures, name), upstream) }
+    lects_git(upstream, "init", "-q")
+    lects_git(upstream, "add", ".")
+    lects_git(upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "seed")
+    LocalLects.upstream = upstream
+    upstream
+  end
+
+  def lects_git(dir, *)
+    Nabu::Shell.run("git", "-C", dir, *).strip
+  end
 
   # Ledger pins for +slug+ (P7-1: pins live in the history ledger, slug-keyed).
   def ledger_pins(slug)

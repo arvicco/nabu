@@ -5519,6 +5519,10 @@ module Nabu
     # Sources named per century row by `nabu list --by-date` before the
     # "+N more" tail (P81-1; the same house render-cap rule).
     BY_DATE_SOURCES = 4
+    # Changed paths named on a kind: module's sync line before the "+N
+    # more" tail (the same house render-cap rule).
+    # const: a render cap, not a corpus census
+    MODULE_CHANGED_SHOWN = 5
     # Crosswalk equivalences shown on the place card's "=" line before the
     # "… and N more" tail (P75 C-3, the same house render-cap rule).
     # const: a render cap, not a corpus census
@@ -6314,7 +6318,8 @@ module Nabu
       # v2 table. An unknown SOURCE names the valid slugs, like `list SOURCE`.
       def status_report(registry, db, ledger, slug)
         unless slug.empty?
-          detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: slug)
+          detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: slug,
+                                                    canonical_dir: status_canonical_dir)
           return detail if detail
 
           raise Thor::Error, "unknown source #{slug.inspect} — known sources: #{registry.slugs.join(', ')}"
@@ -6325,7 +6330,13 @@ module Nabu
                                                    tag_note: AXIS_TAG_NOTE)
         end
 
-        Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
+        Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long],
+                                  canonical_dir: status_canonical_dir)
+      end
+
+      # Where module rows' seam censuses are read from (status detail/long).
+      def status_canonical_dir
+        Nabu::Config.load.canonical_dir
       end
 
       # -- the local enablement config (P44-r3b, promoted from P40-f focus) --
@@ -6811,17 +6822,49 @@ module Nabu
       def census_fragments(row)
         parts = []
         parts << "docs=#{row.docs}#{" pass=#{row.passages}" if row.passages.positive?}" if row.docs.positive?
-        parts << "entries=#{row.entries}" if row.entries.positive?
+        parts << dictionary_fragment(row.dictionaries, row.entries) if row.entries.positive?
         parts << "dossiers=#{row.dossiers}" if row.dossiers.positive?
         # P105-5a: the notes and lemma shelves census their own grains.
         parts << "notes=#{row.notes}" if row.notes.positive?
         parts << "lemma-rows=#{row.lemma_rows}" if row.lemma_rows.positive?
-        parts << "empty" if parts.empty?
+        # A kind: module holds no catalog rows BY INVARIANT — "empty" would
+        # be the document-grain lie; it renders its seam census or its pin.
+        parts << (list_module_summary(row.slug, row.pin) || "empty") if parts.empty?
         parts << "langs=#{census_langs(row.languages)}" unless row.languages.empty?
         parts << "license=#{row.license_classes.join(',')}"
         parts << "withdrawn=#{row.withdrawn}" if row.withdrawn.positive?
         parts << "retired=#{row.retired}" if row.retired.positive?
         parts
+      end
+
+      # The dicts/entries pair (docs/pass's twin): the dictionary count rides
+      # beside the entries when the catalog knows it.
+      def dictionary_fragment(dictionaries, entries)
+        dictionaries.positive? ? "dicts=#{dictionaries} entries=#{entries}" : "entries=#{entries}"
+      end
+
+      # A kind: module row's one-cell descriptor for the list surfaces: its
+      # seam census read from canonical/<slug> (Nabu::ModuleCensus), else the
+      # pin the catalog holds it at. nil for every non-module slug, so their
+      # rows never change. The registry/config load once per command.
+      def list_module_summary(slug, pin)
+        entry = list_module_registry&.[](slug)
+        return nil unless entry&.feature_module?
+
+        Nabu::ModuleCensus.descriptor(entry.adapter_class, slug: slug,
+                                                           canonical_dir: Nabu::Config.load.canonical_dir, pin: pin)
+      rescue Nabu::Error
+        nil
+      end
+
+      def list_module_registry
+        return @list_module_registry if defined?(@list_module_registry)
+
+        @list_module_registry = begin
+          Nabu::SourceRegistry.load(Nabu::Config.load.sources_path)
+        rescue Nabu::Error
+          nil
+        end
       end
 
       # The codes when few, the count when the list would swamp the row.
@@ -7020,11 +7063,13 @@ module Nabu
         parts = []
         parts << "docs=#{card.docs}" if card.docs.positive?
         parts << "pass=#{card.passages}" if card.passages.positive?
-        parts << "entries=#{card.entries}" if card.entries.positive?
+        parts << dictionary_fragment(card.dictionaries.size, card.entries) if card.entries.positive?
         parts << "dossiers=#{card.dossiers}" if card.dossiers.positive?
         parts << "withdrawn=#{card.withdrawn}" if card.withdrawn.positive?
         parts << "retired=#{card.retired}" if card.retired.positive?
-        parts.empty? ? "empty" : parts.join(" ")
+        return parts.join(" ") unless parts.empty?
+
+        list_module_summary(card.slug, card.pin) || "empty"
       end
 
       # The optional card layers: timeline coverage, facet summary, and the
@@ -12264,6 +12309,9 @@ module Nabu
         report = outcome.load_report
         discovery = outcome.discovery
         return unless report && discovery
+        # A kind: module discovers nothing by invariant — "0 selected" is
+        # the same document-grain noise the summary line suppresses.
+        return if outcome.module_delta
 
         selected = report.added + report.updated + report.skipped
         skipped = report.skipped_by_rule + discovery.skipped_by_rule
@@ -12276,6 +12324,10 @@ module Nabu
       end
 
       def format_sync_outcome(outcome)
+        # A kind: module row holds zero documents by invariant — its line
+        # reports what moved instead (format_module_sync_outcome).
+        return format_module_sync_outcome(outcome) if outcome.module_delta
+
         # P43-i1: an id-sweep fetch (trismegistos) has no single content
         # sha — its FetchReport carries sha: nil honestly. Render the
         # report's presence, not a sliced nil.
@@ -12295,6 +12347,41 @@ module Nabu
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
           "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}" \
           "#{format_sync_person_index(outcome.person_index)}#{format_sync_lect_staging(outcome.lect_staging)}"
+      end
+
+      # The kind: module summary line: the document counters suppressed
+      # (a module mints none, so "+0 added" was noise), replaced by the ref
+      # movement, the changed files (capped, honest count), and the seam
+      # census with its delta where the module's seam has one
+      # (Nabu::ModuleCensus). A census-less module moved shows its file
+      # list alone — never fake zeros.
+      def format_module_sync_outcome(outcome)
+        delta = outcome.module_delta
+        parts = [outcome.slug.ljust(24), module_ref_movement(delta)]
+        changed = delta.changed
+        parts << " #{module_changed_files(changed)}" if changed && !changed.empty?
+        if delta.census && !delta.census.empty?
+          parts << " #{Nabu::ModuleCensus.render(delta.census, previous: delta.previous_census)}"
+        end
+        parts.join(" ")
+      end
+
+      def module_ref_movement(delta)
+        width = Nabu::ModuleCensus::SHA_WIDTH
+        before = delta.before&.slice(0, width)
+        after = delta.after&.slice(0, width)
+        return before ? "parse-only at #{before}" : "parse-only" unless delta.fetched
+        return "fetched" if after.nil?
+        return (delta.held_before ? "fetched at #{after}" : "cloned at #{after}") if before.nil?
+        return "unchanged at #{after}" if delta.before == delta.after
+
+        "#{before}..#{after}"
+      end
+
+      def module_changed_files(paths)
+        shown = paths.first(MODULE_CHANGED_SHOWN).join(", ")
+        more = paths.size > MODULE_CHANGED_SHOWN ? " +#{paths.size - MODULE_CHANGED_SHOWN} more" : ""
+        "#{paths.size} #{paths.size == 1 ? 'file' : 'files'} changed: #{shown}#{more}"
       end
 
       # P99-5 (the P59-4 front-door bullet): the synced source's

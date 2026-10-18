@@ -48,6 +48,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
     "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50",
     "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50",
+    "urn:nabu:ud:phrygian-kul:xpg_kul-ud-test-head50",
     "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50",
     "urn:nabu:ud:tupinamba-tudet:tpn_tudet-ud-test-head50"
@@ -413,6 +414,25 @@ class UniversalDependenciesTest < Minitest::Test
     assert tpn.passages.first.text.start_with?("Mokõj ojoirunɨk , oito , ʔara sɨkeme")
   end
 
+  # UD_Phrygian-KUL: the Phrygian epigraphic corpus (Old, Middle and New
+  # Phrygian, Trismegistos ids per token). LICENSE.txt verbatim BY-SA 4.0
+  # and README metadata agree (read 2026-10-18) → attribution; language
+  # `xpg` as UD files it. The fixture pins the first 50 of 203 blocks.
+  def test_phrygian_kul_registers_and_round_trips
+    treebank = Nabu::Adapters::UniversalDependencies::TREEBANKS.fetch("phrygian-kul")
+    assert_equal ["https://github.com/UniversalDependencies/UD_Phrygian-KUL", "xpg", "CC BY-SA 4.0", "attribution"],
+                 treebank.values_at(:repo, :language, :license, :license_class)
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    ref = adapter.discover(FIXTURES).find { |r| r.metadata["treebank"] == "phrygian-kul" } || flunk("phrygian fixture")
+    document = adapter.parse(ref)
+    assert_equal 50, document.size, "sentence blocks in the head-50 trim"
+    assert_equal "xpg", document.language
+    assert_equal "attribution", document.license_override
+    first = document.passages.first
+    assert_equal "urn:nabu:ud:phrygian-kul:xpg_kul-ud-test-head50:TM756906-1", first.urn
+    assert_equal "ates arkiaevais akenanogavos midai lavagtaei vanaktei edaes", first.text
+  end
+
   # The Romance pack flows through the same unchanged annotation→index
   # plumbing: the two Latin treebanks contribute rows to the ALREADY
   # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
@@ -494,7 +514,7 @@ class UniversalDependenciesTest < Minitest::Test
                       icelandic-icepahc
                       old-east-slavic-birchbark old-east-slavic-rnc
                       old-east-slavic-ruthenian old-irish-dipwbg
-                      tupinamba-tudet guarani-oldtudet].freeze
+                      tupinamba-tudet guarani-oldtudet phrygian-kul].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
                   sanskrit-vedic old-irish-dipsgg].freeze
 
@@ -539,7 +559,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_thirty_four_files_sorted_by_urn
+  def test_discover_finds_exactly_thirty_five_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end

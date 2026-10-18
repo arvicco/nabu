@@ -57,9 +57,12 @@ module Nabu
     # `nabu status` (COMPACT v2 default) / `nabu status --long` (labeled detail
     # table). Rows are GROUPED BY KIND (modules → shelves → sources) with global
     # column widths so alignment holds across the groups.
-    def render(registry:, db:, ledger:, long: false)
+    #
+    # +canonical_dir+ (module rows): where a kind: module's seam census is
+    # read from (Nabu::ModuleCensus); nil = no census, the pin fallback.
+    def render(registry:, db:, ledger:, long: false, canonical_dir: nil)
       return "No sources registered." if registry.empty?
-      return render_long(registry: registry, db: db, ledger: ledger) if long
+      return render_long(registry: registry, db: db, ledger: ledger, canonical_dir: canonical_dir) if long
 
       layout = layout_for(registry, db, ledger)
       grouped_entries(registry).map { |entry| render_entry(entry, layout) }.join("\n")
@@ -92,7 +95,7 @@ module Nabu
     # thousands-separated counts, license class, full timestamp, full delta,
     # last-run status. Returns nil for an unregistered slug (the CLI owns the
     # not-found error, mirroring `list SOURCE`).
-    def render_source(registry:, db:, ledger:, slug:)
+    def render_source(registry:, db:, ledger:, slug:, canonical_dir: nil)
       entry = registry[slug]
       return nil if entry.nil?
 
@@ -111,6 +114,7 @@ module Nabu
       lines << detail_line("wired", wired_word(entry))
       lines << detail_line("cadence", cadence_word(entry))
       lines << detail_line("liveness", liveness_detail(entry, db, ledger))
+      lines << detail_line("holds", module_summary(entry, source, canonical_dir)) if entry.feature_module? && db
       count_pairs(entry, source).each { |label, value| lines << detail_line(label, group_thousands(value)) }
       lines << detail_line("license", license_class(entry, source))
       lines << detail_line("last sync", last_run_detail(slug, ledger))
@@ -282,12 +286,12 @@ module Nabu
     # table (enablement spelled with cadence, kind, the verbose up= label incl.
     # healthy states, exact thousands-separated labeled counts, license class,
     # and the full stamp + full delta with zeros + status). Grouped by kind.
-    def render_long(registry:, db:, ledger:)
-      layout = long_layout_for(registry, db, ledger)
+    def render_long(registry:, db:, ledger:, canonical_dir: nil)
+      layout = long_layout_for(registry, db, ledger, canonical_dir)
       grouped_entries(registry).map { |entry| render_entry_long(entry, layout) }.join("\n")
     end
 
-    def long_layout_for(registry, db, ledger)
+    def long_layout_for(registry, db, ledger, canonical_dir = nil)
       entries = registry.each_source.to_a
       cache = probe_cache(ledger)
       labels = {}
@@ -298,7 +302,8 @@ module Nabu
           source = Store::Source.first(slug: entry.slug)
           code, age = upstream_verdict(entry, cache[entry.slug], ledger)
           labels[entry.slug] = "up=#{upstream_label(code, age)}"
-          counts[entry.slug] = counts_long(entry, source)
+          counts[entry.slug] =
+            entry.feature_module? ? module_summary(entry, source, canonical_dir) : counts_long(entry, source)
           licenses[entry.slug] = license_class(entry, source)
         end
       end
@@ -342,14 +347,27 @@ module Nabu
       "#{entry.wired ? 'wired' : 'unwired'}(#{CADENCE_LETTER.fetch(entry.sync_policy, '?')})"
     end
 
-    # The labeled, thousands-separated counts string for the long table (empty
-    # for a module — it mints no catalog rows).
+    # The labeled, thousands-separated counts string for the long table (a
+    # module's cell is its module_summary instead — it mints no catalog rows).
     def counts_long(entry, source)
       count_pairs(entry, source).map { |label, value| "#{label}=#{group_thousands(value)}" }.join(" ")
     end
 
     # The full stamp + full delta (all four components, zeros included) + a
     # non-succeeded status word, for the long table.
+    # A kind: module's one-cell descriptor (detail + long views): its seam
+    # census read from canonical/<slug> when the seam has one, else the pin
+    # the catalog holds it at (Nabu::ModuleCensus.summary) — never "empty".
+    def module_summary(entry, source, canonical_dir)
+      klass = begin
+        entry.adapter_class
+      rescue Nabu::Error
+        nil
+      end
+      ModuleCensus.descriptor(klass, slug: entry.slug, canonical_dir: canonical_dir,
+                                     pin: source&.last_sync_sha)
+    end
+
     def last_run_long(slug, ledger)
       return "no run history" if ledger.nil?
 
@@ -504,7 +522,10 @@ module Nabu
       return [] if entry.feature_module?
 
       case content_kind(entry)
-      when :dictionary then [["entries", source.nil? ? 0 : dictionary_entry_count(source)]]
+      when :dictionary
+        return [["entries", 0]] if source.nil?
+
+        [["dicts", dictionary_count(source)], ["entries", dictionary_entry_count(source)]]
       when :language then [["records", language_record_count]]
       when :notes then [["notes", urn_note_count]]
       when :source then [["records", source_record_count]]
@@ -518,6 +539,10 @@ module Nabu
       counts = corpus_counts(source)
       pairs = [["docs", counts.fetch(:docs)], ["pass", counts.fetch(:passages)]]
       pairs << ["retired", counts.fetch(:retired)] if counts.fetch(:retired).positive?
+      # A dictionary lane (dcs-shaped): the dicts/entries pair rides beside
+      # docs/pass; a source holding no dictionary is unchanged.
+      dicts = dictionary_count(source)
+      pairs.push(["dicts", dicts], ["entries", dictionary_entry_count(source)]) if dicts.positive?
       pairs
     end
 
@@ -589,6 +614,10 @@ module Nabu
 
       dictionaries = Store::Dictionary.where(source_id: source.id).select(:id)
       Store::DictionaryEntry.where(dictionary_id: dictionaries, withdrawn: false).count
+    end
+
+    def dictionary_count(source)
+      Store::Dictionary.where(source_id: source.id).count
     end
 
     # The pre-019 fallback for #corpus_counts (and nothing else).

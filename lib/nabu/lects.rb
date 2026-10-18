@@ -91,6 +91,22 @@ module Nabu
     CODEMAP_FILE = "codemap.yml"
     SLUG = "nabu-lects"
 
+    # The registry's size, for the module census (Nabu::ModuleCensus):
+    # anchors, minted stages and varieties summed across anchors, and the
+    # codemap's non-identity rows.
+    Census = Data.define(:anchors, :stages, :varieties, :codemap)
+
+    # Count a registry from its two files' CONTENTS (strings, so the same
+    # counter reads the working tree and an old git blob alike).
+    def self.census(lects_yaml:, codemap_yaml:)
+      anchors = (YAML.safe_load(lects_yaml) || {}).fetch("anchors", nil) || {}
+      codemap = (YAML.safe_load(codemap_yaml) || {}).fetch("map", nil) || {}
+      Census.new(anchors: anchors.size,
+                 stages: anchors.values.sum { |anchor| ((anchor && anchor["stages"]) || {}).size },
+                 varieties: anchors.values.sum { |anchor| ((anchor && anchor["varieties"]) || {}).size },
+                 codemap: codemap.size)
+    end
+
     # anchor: 2-3 lowercase letters, optionally hyphen-extended (roa-opt,
     # ine-bsl). stage: 2-5 lowercase alphanumerics starting with a letter
     # (digits admitted P58-5 for the field's own periodization names —

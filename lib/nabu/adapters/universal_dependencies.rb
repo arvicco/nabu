@@ -464,6 +464,23 @@ module Nabu
         "guarani-oldtudet" => {
           repo: "https://github.com/UniversalDependencies/UD_Guarani-OldTuDeT",
           language: "gn", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # UD_Phrygian-KUL (since UD v2.15; Oggi Peeters, KU Leuven): the
+        # Phrygian epigraphic corpus, ca. 8th c. BCE – 3rd c. CE — Old
+        # Phrygian (Midas City, Diverse documents, Outside Phrygia), Middle
+        # Phrygian (W-11, G-12) and the New Phrygian curse formulae, after
+        # Obrador-Cursach (2020) and Oreshko & Alagöz (2023). 203 sentences,
+        # test split only; every token's MISC carries its Trismegistos
+        # inscription-sentence-token id (Ref=TM…). New Phrygian is written
+        # in the Greek alphabet, Old Phrygian transliterated in Latin
+        # letters with Leiden underdots. Language `xpg` (ISO 639-3
+        # Phrygian). LICENSE.txt verbatim CC BY-SA 4.0 ("The treebank is
+        # licensed under the Creative Commons License Attribution-ShareAlike
+        # 4.0 International"), README metadata `License: CC BY-SA 4.0`
+        # agrees (read 2026-10-18) → attribution.
+        "phrygian-kul" => {
+          repo: "https://github.com/UniversalDependencies/UD_Phrygian-KUL",
+          language: "xpg", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

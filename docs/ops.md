@@ -195,6 +195,21 @@ the index now carries corph's 17,942 live passages — the count is the
 source's own, not the corpus total, because nothing else was reindexed.
 An index-inert shelf prints no `indexed` fragment at all.
 
+A `kind: module` row holds no documents by invariant, so its line drops
+the document counters and reports what moved instead — the ref, the
+changed files, and the seam census with its delta where the module's
+seam has one (nabu-lects today):
+
+```
+nabu-lects               1a2b3c4d5e6f..9f8e7d6c5b4a  2 files changed: CHANGELOG.md, lects.yml  248 anchors (+2) · 125 stages · 27 varieties · 157 codemap rows
+nabu-places              unchanged at 0d1e2f3a4b5c
+```
+
+A census-less module shows its changed-file list alone. The same census
+(or, census-less, the pin `module @ <sha>`) replaces "empty" on the
+module's `nabu list` row and card, and fills the `holds:` line of
+`nabu status <module>` and its `status --long` cell.
+
 
 Flags worth knowing beyond `--parse-only`: `--redownload` wipes the
 source's canonical tree first (a deliberate refetch-from-zero),
