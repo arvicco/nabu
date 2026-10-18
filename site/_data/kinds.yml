@@ -3,29 +3,29 @@
 as_of: 18 October 2026
 classes:
 - head: literary
-  documents: 683672
-  documents_display: '683,672'
-  sources: 17
+  documents: 687632
+  documents_display: '687,632'
+  sources: 21
 - head: administrative
   documents: 488359
   documents_display: '488,359'
   sources: 14
 - head: historiography
-  documents: 348623
-  documents_display: '348,623'
-  sources: 18
+  documents: 348625
+  documents_display: '348,625'
+  sources: 19
 - head: funerary
   documents: 114778
   documents_display: '114,778'
   sources: 9
 - head: legal
-  documents: 35871
-  documents_display: '35,871'
-  sources: 13
+  documents: 35890
+  documents_display: '35,890'
+  sources: 14
 - head: letter
-  documents: 34111
-  documents_display: '34,111'
-  sources: 10
+  documents: 34112
+  documents_display: '34,112'
+  sources: 11
 - head: royal
   documents: 30134
   documents_display: '30,134'
@@ -35,17 +35,17 @@ classes:
   documents_display: '22,915'
   sources: 7
 - head: scripture
-  documents: 20975
-  documents_display: '20,975'
-  sources: 17
+  documents: 21285
+  documents_display: '21,285'
+  sources: 18
 - head: lexical
-  documents: 15455
-  documents_display: '15,455'
-  sources: 6
+  documents: 16534
+  documents_display: '16,534'
+  sources: 8
 - head: ritual
-  documents: 13528
-  documents_display: '13,528'
-  sources: 4
+  documents: 13544
+  documents_display: '13,544'
+  sources: 5
 - head: mark
   documents: 12286
   documents_display: '12,286'
@@ -55,17 +55,21 @@ classes:
   documents_display: '11,413'
   sources: 4
 - head: divination
-  documents: 10493
-  documents_display: '10,493'
-  sources: 6
+  documents: 10505
+  documents_display: '10,505'
+  sources: 7
 - head: scholarly
-  documents: 9259
-  documents_display: '9,259'
-  sources: 12
+  documents: 9301
+  documents_display: '9,301'
+  sources: 13
 - head: building
   documents: 8016
   documents_display: '8,016'
   sources: 4
+- head: hymn-prayer
+  documents: 6487
+  documents_display: '6,487'
+  sources: 10
 - head: school
   documents: 5190
   documents_display: '5,190'
@@ -74,22 +78,18 @@ classes:
   documents: 3327
   documents_display: '3,327'
   sources: 8
-- head: hymn-prayer
-  documents: 3009
-  documents_display: '3,009'
-  sources: 9
 - head: boundary
   documents: 2963
   documents_display: '2,963'
   sources: 3
 - head: exegesis
-  documents: 617
-  documents_display: '617'
-  sources: 3
-unclassified_sources: 129
+  documents: 618
+  documents_display: '618'
+  sources: 4
+unclassified_sources: 125
 unknown_documents: 46986
 unknown_documents_display: '46,986'
 unmapped_documents: 11125
 unmapped_documents_display: '11,125'
-unclassified_documents: 502920
-unclassified_documents_display: '502,920'
+unclassified_documents: 494421
+unclassified_documents_display: '494,421'
