@@ -195,12 +195,14 @@ module Nabu
       Verse = Data.define(:citation, :text, :addressing, :context, :prefix)
       private_constant :Verse
 
-      def parse(source, urn:, language:, title: nil, canonical_path: nil)
+      # +metadata+ is the adapter's header mining (author, genre ladder,
+      # source edition), carried onto the Document verbatim.
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, metadata: {})
         path = resolve_canonical_path(source, canonical_path)
         verses = extract(source, path: path, language: language)
         verses = apply_multi_prefix(verses)
         verses = disambiguate_collisions(verses)
-        build_document(verses, urn: urn, language: language, title: title, path: path)
+        build_document(verses, urn: urn, language: language, title: title, path: path, metadata: metadata)
       end
 
       private
@@ -306,8 +308,9 @@ module Nabu
         source.is_a?(String) ? File.open(source, "r", &) : yield(source)
       end
 
-      def build_document(verses, urn:, language:, title:, path:)
-        document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
+      def build_document(verses, urn:, language:, title:, path:, metadata: {})
+        document = Document.new(urn: urn, language: language, title: title, canonical_path: path,
+                                metadata: metadata)
         verses.each_with_index do |verse, sequence|
           document << Passage.new(
             urn: "#{urn}:#{verse.citation}",

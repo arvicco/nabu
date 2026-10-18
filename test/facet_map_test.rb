@@ -152,7 +152,8 @@ class FacetMapTest < Minitest::Test
       "bfm" => { "author" => "author" },
       "elektire" => { "author" => "author" },
       "eltec-srp" => { "author" => "author", "author_refs" => "author_id",
-                       "title_refs" => "work_id" }
+                       "title_refs" => "work_id" },
+      "gretil" => { "author" => "author", "genre" => "genre" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
