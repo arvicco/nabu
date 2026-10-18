@@ -319,11 +319,27 @@ sources:
   #    objects (the entity shape: a name plus its authority ref).
   #    Censuses: live catalog 2026-10-18. The NIKH siblings (sjw,
   #    bibyeonsa, goryeosa, goryeosa-jeoryo) parse the same subjectClass
-  #    slot but their deposits carry none (0 passages each) — unruled.
+  #    slot but their deposits carry none (0 passages each) — that field
+  #    stays unruled for them.
+  #    The NIKH index markup (NikhXmlParser entities: typed <index> tags
+  #    mined per leaf; censuses: a full parse of the box's canonical tree,
+  #    2026-10-18 — mentions in document order, "distinct" = the facet
+  #    dictionary's (value, ref) rows). Values are the tagged surfaces
+  #    verbatim; refs are "nikh:" + upstream's own id (sillok M_ person
+  #    ids; the goryeosa family's p/o/t/m/b ids; the cross-database person
+  #    pid where that is a tag's only id). Tags in non-leaf header text
+  #    (navigation repeats of the title chain) mint nothing, as that text
+  #    mints no passage.
   sillok:                     # 413,102 of 414,321 article passages, 216 subject labels,
     passage_fields: #           899,669 (passage, label) pairs — the 분류 subjectClass
       subject_classes: subject  # tree verbatim, upper-lower joined by upstream's own
       #                         hyphen ("왕실-의식(儀式)", "군사-중앙군(中央軍)", "인물(人物)")
+      persons: person         # 1,570,018 이름 mentions on 311,113 of 414,321 passages, 156,799
+      #                         distinct (surface, ref) — 1,351,344 carry M_ refs (68,285 persons)
+      places: place           # 526,047 지명 mentions, 27,141 distinct — no ref upstream
+      books: book             # 51,070 서명 mentions, 7,002 distinct (《》 brackets verbatim)
+      eras: era               # 5,534 연호 mentions, 226 distinct era names
+      offices: office         # 2 관직 mentions — the type is near-absent in sillok
   itkc:                       # 37,182 of 37,184 article passages, 29 genre labels, 74,364
     passage_fields: #           pairs — the 문체분류 classification verbatim (詩類 ·
       genre_classes: genre    # 書簡類 · 其他類 · 雜著類 …); the passage facet shares the document
@@ -412,3 +428,26 @@ sources:
     fields:
       author: author          # Mpu Prapañca · Mpu Tantular · Mpu Kaṇva · Vararuci …; the witness
       #                         shelfmarks ride metadata "shelfmarks", unfaceted
+  sjw:                        # index markup on 1,665,849 of 1,896,858 passages — the volume
+    passage_fields: #           source; facets key the SURFACE (the normalized name= rides the
+      persons: person         # annotation only, on 1,757,363 mentions where it differs)
+      #                         8,351,049 mentions, 410,493 distinct (16,882 carry a person pid)
+      places: place           # 1,335,479 지명 mentions, 52,028 distinct — no ref upstream
+      books: book             # 140,958 서명 mentions, 9,794 distinct
+  goryeosa:                   # index markup on 18,830 of 31,207 passages; every kind refs
+    passage_fields: #           NIKH's own kind-prefixed ids (aliases share a person id)
+      persons: person         # 66,275 mentions, 17,767 distinct (p-ids: 11,505 persons)
+      offices: office         # 37,477 관직 mentions, 5,995 distinct (o-ids)
+      places: place           # 16,876 mentions, 5,578 distinct (t-ids)
+      orgs: org               # 2,666 단체 mentions, 383 distinct (m-ids)
+      books: book             # 1,092 서명 mentions, 581 distinct (b-ids)
+  goryeosa-jeoryo:            # index markup on 9,182 of 11,226 passages; goryeosa's id space
+    passage_fields: #           (6,924 of 6,937 person ids shared), id-less tags ride bare
+      persons: person         # 31,984 mentions (23,941 with p-ids), 10,485 distinct
+      offices: office         # 13,419 mentions (12,426 with o-ids), 2,998 distinct
+      places: place           # 6,965 mentions (6,149 with t-ids), 2,149 distinct
+      orgs: org               # 596 mentions, 248 distinct
+      books: book             # 283 mentions, 148 distinct
+  bibyeonsa:                  # 923 person mentions on 736 of 93,528 passages (998 tags, 75
+    passage_fields: #           upstream double-tags folded), 26 distinct — by person pid
+      persons: person

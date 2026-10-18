@@ -113,8 +113,16 @@ sources:
     dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; P81-1: the
         per-day entry dates also project as passage-grain year runs (NikhEntryDates), and undated
         volumes (prefaces/indexes) gain leaf-derived envelopes"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the 531,956 지명 index tags ride passage annotations + the
+        passage 'place' facet as tag-grain MENTIONS (no upstream ref on any) — where a text was
+        made or found is not what they say, so no axis claim is minted"}
     script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 1,572,270 이름 person tags
+    # (1,352,152 carrying M_ ids → the "sillok" person-index slice, 68,285
+    # persons; `nabu person sillok:M_… | nikh:M_…`), 51,261 서명 books and
+    # 6,382 연호 eras ride passage annotations and the person/book/era
+    # passage facets (facet_map.yml) — mentions with refs, never claims
+    # about the article's own author, date or place.
     # The per-article 분류 subject classes (413,102 of 414,321 passages,
     # 216 labels) are a passage-grain facet (facet_map.yml passage_fields
     # → "subject"), reachable by `search --facet subject=…`; they are
@@ -124,8 +132,14 @@ sources:
     dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; P81-1: the
         per-day entry dates also project as passage-grain year runs (NikhEntryDates); weather still
         rides annotations raw"}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "the 1,335,483 지명 index tags ride passage annotations + the
+        passage 'place' facet as tag-grain MENTIONS (no upstream ref) — no findspot/creation claim"}
     script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 8,355,291 이름 person and
+    # 140,958 서명 book tags ride passage annotations and the person/book
+    # passage facets, with upstream's normalized @name kept where it
+    # differs from the surface. No person-key ids (only the cross-database
+    # pid on a few thousand tags) — sjw mints no person authority.
   viet-wikisource:
     kind: {posture: unclassified}
     lect:
@@ -144,8 +158,15 @@ sources:
     dating: {posture: dated, note: "P81-1: the leaf-grain 음/양 machine dates (877–1392, '0877-01-99L0';
         '9999' filler skipped counted) project via NikhEntryDates — document envelopes + passage-grain
         year runs; volume fronts still carry no dateOccured, so the envelope IS the document claim"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the 16,876 지명 index tags (16,862 with NIKH t-ids) ride passage
+        annotations + the passage 'place' facet as tag-grain MENTIONS with nikh: refs — no findspot or
+        creation claim is minted, and NIKH's place ids are not a held gazetteer"}
     script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 66,285 이름 persons (p-ids
+    # → the "goryeosa" person-index slice, 11,505 persons, aliases grouped
+    # under one id), 37,477 관직 offices, 2,666 단체 orgs and 1,092 서명
+    # books ride passage annotations and the person/office/org/book
+    # passage facets, refs verbatim under the shared nikh: namespace.
   goryeosa-jeoryo:
     lect:
       posture: codemap
@@ -153,8 +174,13 @@ sources:
     dating: {posture: dated, note: "P81-1: the per-article 음 machine dates (918–1434) project via
         NikhEntryDates — document envelopes + passage-grain year runs; root fronts still carry only
         coveragePeriod prose, so the envelope IS the document claim"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the 6,965 지명 index tags (6,149 with NIKH t-ids) ride passage
+        annotations + the passage 'place' facet as tag-grain MENTIONS — no findspot/creation claim"}
     script: {posture: implied}
+    # The index markup: 31,997 이름 persons (23,941 with p-ids — goryeosa's
+    # own id space, 6,924 of 6,937 ids shared; this source's own slice,
+    # 6,937 persons), 13,419 관직 offices, 596 단체 orgs, 283 서명 books —
+    # passage annotations + facets as for goryeosa; id-less tags ride bare.
   bibyeonsa:
     lect:
       posture: codemap
@@ -163,8 +189,12 @@ sources:
         '1617-01-00L0') project via NikhEntryDates — document envelopes + passage-grain year runs
         (bb_001's interleaved years stay separate runs, never merged); book fronts still carry only
         the 1959 print-edition data, so the envelope IS the document claim"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the deposit carries no 지명 index tags at all (census 2026-10-18)"}
     script: {posture: implied}
+    # The index markup is thin here: 998 이름 person tags (923 mentions
+    # once upstream's 75 double-tags fold, 26 persons by their
+    # cross-database pid) ride passage annotations + the person facet; no
+    # person-key ids, so no authority is minted.
   itkc:
     # The per-article 문체분류 genre classes (37,182 of 37,184 passages, 29
     # labels: 詩類 23,207 · 書簡類 12,832 · 其他類 · 雜著類 …) are a

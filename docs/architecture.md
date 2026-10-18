@@ -266,6 +266,15 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- document facet rows OR the passage pairs carrying it — the pattern
    -- scans only the value dictionary (value or ref), the pairs answer by
    -- primary key.
+   -- First entity producer: the NIKH index markup (NikhXmlParser,
+   -- opt-in entities: per adapter — sillok/sjw/goryeosa/goryeosa-jeoryo/
+   -- bibyeonsa): each typed <index> tag in a leaf's paragraphs becomes a
+   -- compact {"value", "ref"?, "name"?} record under its kind key
+   -- (persons/places/books/eras/offices/orgs — the DTD's closed p.index
+   -- vocabulary mapped whole), refs "nikh:" + upstream's own id. Leaf
+   -- text stays byte-identical. The id-bearing sources also derive
+   -- person-index slices from those records (Nabu::NikhPersons: authority
+   -- = source slug; `nabu person nikh:<id>` fans out across them).
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source

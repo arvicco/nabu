@@ -70,8 +70,26 @@ class FacetMapTest < Minitest::Test
 
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
     map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
-    assert_equal({ "subject_classes" => "subject" }, map.passage_fields_for("sillok"))
+    assert_equal "subject", map.passage_fields_for("sillok")["subject_classes"]
     assert_equal({ "genre_classes" => "genre" }, map.passage_fields_for("itkc"))
+  end
+
+  # The NIKH index markup: each source rules exactly the entity kinds its
+  # deposit carries (NikhXmlParser::ENTITY_KINDS keys), one facet each.
+  def test_shipped_config_rules_the_nikh_index_markup_per_source
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    entity = ->(slug) { map.passage_fields_for(slug).except("subject_classes") }
+    assert_equal({ "persons" => "person", "places" => "place", "books" => "book", "eras" => "era",
+                   "offices" => "office" }, entity["sillok"])
+    assert_equal({ "persons" => "person", "places" => "place", "books" => "book" }, entity["sjw"])
+    family = { "persons" => "person", "offices" => "office", "places" => "place", "orgs" => "org", "books" => "book" }
+    assert_equal family, entity["goryeosa"]
+    assert_equal family, entity["goryeosa-jeoryo"]
+    assert_equal({ "persons" => "person" }, entity["bibyeonsa"])
+    kinds = Nabu::Adapters::NikhXmlParser::ENTITY_KINDS.values
+    %w[sillok sjw goryeosa goryeosa-jeoryo bibyeonsa].each do |slug|
+      assert_empty entity[slug].keys - kinds, "#{slug} rules only mined kinds"
+    end
   end
 
   def test_load_default_reads_the_config_file_and_absent_file_is_nil
