@@ -27,6 +27,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
 | `kitab` | feature module | nc | wired · manual | nothing held yet |
 | `kitab-reuse` | feature module | nc | wired · manual | nothing held yet |
+| `ociana` | inscriptions | research_private | not yet wired | not synced yet |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 October 2026)</span>: `ara` 8,738 · `fas` 351.
