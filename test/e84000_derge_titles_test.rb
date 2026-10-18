@@ -29,9 +29,10 @@ class E84000DergeTitlesTest < Minitest::Test
     @catalog.disconnect
   end
 
-  def derge_doc(source_id, shelf, slug)
-    @catalog[:documents].insert(source_id: source_id, urn: "urn:nabu:#{shelf}:#{slug}",
-                                language: "xct", content_sha256: "x")
+  def derge_doc(source_id, shelf, slug, metadata: nil)
+    row = { source_id: source_id, urn: "urn:nabu:#{shelf}:#{slug}", language: "xct", content_sha256: "x" }
+    row[:metadata_json] = JSON.generate(metadata) if metadata
+    @catalog[:documents].insert(row)
   end
 
   def titles
@@ -76,6 +77,68 @@ class E84000DergeTitlesTest < Minitest::Test
     result = run_pass
     assert_equal first, titles
     assert_operator result.titled, :>=, 4, "re-fill is the contract — the pass converges"
+  end
+
+  # -- the persons half of the same seam ---------------------------------------
+  # Each header's sourceDesc bibl names its text's persons — role-less
+  # original authors, contested attributions, Tibetan translators. The pass
+  # merges them into the matching derge document's metadata (exact key,
+  # published over placeholder, like titles) and writes that document's
+  # author / author_contested / translator facet rows itself: the facet
+  # builders run before this pass, and config/facet_map.yml re-projects the
+  # same rows from the merged metadata on any later facet refresh.
+
+  def metadata_of(urn)
+    JSON.parse(@catalog[:documents].where(urn: urn).get(:metadata_json) || "{}")
+  end
+
+  def facets_of(urn)
+    id = @catalog[:documents].where(urn: urn).get(:id)
+    @catalog[:document_facets].where(document_id: id).order(:facet, :value).select_map(%i[facet value])
+  end
+
+  def test_placeholder_persons_merge_into_derge_metadata_with_facets
+    derge_doc(@tengyur, "derge-tengyur", "toh1127", metadata: { "volume" => "ka" })
+    result = run_pass
+    meta = metadata_of("urn:nabu:derge-tengyur:toh1127")
+    assert_equal "ka", meta["volume"], "the loader's own metadata survives the merge"
+    assert_equal [{ "name" => "Rāhulabhadra", "role" => "authorContested", "lang" => "Sa-Ltn" },
+                  { "name" => "Nāgārjuna", "role" => "authorContested", "lang" => "Sa-Ltn" },
+                  { "name" => "Tilakakalaśa (Kaśmīr)", "role" => "translatorTib", "lang" => "Sa-Ltn" },
+                  { "name" => "lo tsA ba blo ldan shes rab", "role" => "translatorTib", "lang" => "Bo-Ltn" }],
+                 meta["persons"]
+    assert_equal %w[Rāhulabhadra Nāgārjuna], meta["authors_contested"]
+    assert_equal ["Tilakakalaśa (Kaśmīr)", "lo tsA ba blo ldan shes rab"], meta["translators_tib"]
+    assert_nil meta["authors"]
+    assert_equal [%w[author_contested Nāgārjuna], %w[author_contested Rāhulabhadra],
+                  ["translator", "Tilakakalaśa (Kaśmīr)"], ["translator", "lo tsA ba blo ldan shes rab"]],
+                 facets_of("urn:nabu:derge-tengyur:toh1127")
+    assert_operator result.persons, :>=, 2
+  end
+
+  def test_published_original_author_reaches_its_own_bibl_key
+    derge_doc(@tengyur, "derge-tengyur", "toh2006")
+    run_pass
+    meta = metadata_of("urn:nabu:derge-tengyur:toh2006")
+    assert_equal ["Tathāgata­rakṣita"], meta["authors"], "the toh2006 bibl's role-less author, verbatim"
+    assert_equal [{ "name" => "Tathāgata­rakṣita", "role" => "author", "lang" => "Sa-Ltn" }], meta["persons"]
+    assert_equal [%w[author Tathāgata­rakṣita]], facets_of("urn:nabu:derge-tengyur:toh2006")
+    assert_equal "The Myth Chapter (gtam rgyud kyi rtog pa)", titles["urn:nabu:derge-tengyur:toh2006"],
+                 "a Kangyur file's Tengyur bibl routes by its own location/@work, titles included"
+    assert_equal ["Tsultrim Gyaltsen"], metadata_of("urn:nabu:derge-tengyur:toh3156")["translators_tib"]
+  end
+
+  def test_persons_pass_is_idempotent_and_drops_stale_claims
+    derge_doc(@tengyur, "derge-tengyur", "toh1127")
+    @catalog[:documents].where(urn: "urn:nabu:derge-kangyur:toh1")
+                        .update(metadata_json: JSON.generate("persons" => [{ "name" => "stale" }],
+                                                             "authors" => ["stale"]))
+    run_pass
+    first = [metadata_of("urn:nabu:derge-tengyur:toh1127"), @catalog[:document_facets].count]
+    run_pass
+    assert_equal first, [metadata_of("urn:nabu:derge-tengyur:toh1127"), @catalog[:document_facets].count]
+    assert_equal({}, metadata_of("urn:nabu:derge-kangyur:toh1"),
+                 "a key no header names any more loses its derived persons")
   end
 
   def test_absent_e84000_tree_is_a_clean_no_op
