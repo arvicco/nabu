@@ -91,14 +91,42 @@ module Nabu
       end
 
       # Delegate to GretilParser with the urn/language/title discover resolved
-      # from the header.
+      # from the header, plus the header's content metadata (#mine_header).
       def parse(document_ref)
         GretilParser.new.parse(
           document_ref.path,
           urn: document_ref.id,
           language: document_ref.metadata["language"],
-          title: document_ref.metadata["title"]
+          title: document_ref.metadata["title"],
+          metadata: mine_header(document_ref.path)
         )
+      end
+
+      # The teiHeader's content metadata (aggressive mining): the titleStmt
+      # <author> (427 of 784 files; the other headers carry an EMPTY
+      # element — absence, never a blank author), the GRETIL genre ladder
+      # from profileDesc/textClass/keywords/term (every file; three carry
+      # two terms — kept as the array, verbatim: "Sanskrit -- Śāstra --
+      # Philosophy -- Buddhist", folded onto the house kinds by
+      # config/kind_map.yml) and the sourceDesc edition: each non-empty
+      # <bibl> verbatim (579 files), or — for the 33 headers that describe
+      # their print source as <biblStruct> monographs instead — one line
+      # per monograph in GRETIL's own bibl order ("editor: title, place:
+      # publisher year"). The header carries NO composition date or place:
+      # the edition years are print years and stay inside the edition
+      # string (no timeline claim), and dating stays undatable.
+      def mine_header(path)
+        header = header_document(path)
+        return {} if header.nil?
+
+        metadata = {}
+        author = text_of(header.at_xpath("//fileDesc/titleStmt/author"))
+        metadata["author"] = author if author
+        genres = header.xpath("//profileDesc/textClass/keywords/term").filter_map { |term| text_of(term) }
+        metadata["genre"] = genres unless genres.empty?
+        editions = source_editions(header)
+        metadata["edition"] = editions unless editions.empty?
+        metadata
       end
 
       # Clone or non-destructively pull the TEI mirror into +workdir+ via the
@@ -163,6 +191,57 @@ module Nabu
         return nil if prefix.length < 2 || prefix.first.empty?
 
         GretilParser.normalize_language(prefix.first)
+      end
+
+      # The teiHeader alone, parsed as a DOM (headers are small; the body —
+      # up to megabytes — is never read): the file is read up to its <text>
+      # start tag and the truncated slice parsed in Nokogiri's recover mode.
+      # nil when the file has no <text> (not an edition).
+      HEADER_CHUNK = 65_536
+      TEXT_START = /<text[\s>]/
+
+      def header_document(path)
+        slice = +""
+        File.open(path, "r:UTF-8") do |io|
+          while (chunk = io.read(HEADER_CHUNK))
+            slice << chunk
+            cut = slice.index(TEXT_START)
+            next unless cut
+
+            doc = Nokogiri::XML(slice[0, cut])
+            doc.remove_namespaces!
+            return doc
+          end
+        end
+        nil
+      end
+
+      def source_editions(header)
+        bibls = header.xpath("//sourceDesc//bibl").filter_map { |bibl| text_of(bibl) }
+        return bibls unless bibls.empty?
+
+        header.xpath("//sourceDesc/biblStruct").filter_map { |struct| bibl_struct_line(struct) }
+      end
+
+      def bibl_struct_line(struct)
+        names = struct.xpath(".//monogr/editor | .//monogr/author").filter_map { |node| text_of(node) }
+        title = text_of(struct.at_xpath(".//monogr/title"))
+        place = text_of(struct.at_xpath(".//imprint/pubPlace"))
+        publisher = text_of(struct.at_xpath(".//imprint/publisher"))
+        date = struct.at_xpath(".//imprint/date")
+        year = date && (text_of(date) || date["when-iso"] || date["when"])
+        imprint = [[place, publisher].compact.join(": "), year].compact.reject(&:empty?).join(" ")
+        head = [names.join(", "), title].reject { |part| part.nil? || part.empty? }.join(": ")
+        line = [head, imprint].reject(&:empty?).join(", ")
+        line.empty? ? nil : line
+      end
+
+      # A node's text, whitespace-collapsed and NFC; nil when blank.
+      def text_of(node)
+        return nil if node.nil?
+
+        text = Nabu::Normalize.nfc(node.text.strip.gsub(/\s+/, " "))
+        text.empty? ? nil : text
       end
 
       def read_header(path)

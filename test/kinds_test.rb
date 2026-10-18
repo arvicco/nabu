@@ -523,6 +523,57 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # GRETIL's genre ladder (the teiHeader keywords term on all 784 files,
+  # mined into metadata "genre"): every census value folds to a ruled
+  # class or a reviewed non-claim — none lands unmapped.
+  GRETIL_LADDER_CENSUS = [
+    "Sanskrit -- Religious Literature -- Buddhist", "Sanskrit -- Śāstra -- Philosophy -- Buddhist",
+    "Sanskrit -- Poetry -- Kāvya", "Sanskrit -- Śāstra -- Philosophy -- Vedānta",
+    "Sanskrit -- Religious Literature -- Śaiva", "Sanskrit -- Śāstra -- Philosophy -- Śaiva",
+    "Sanskrit -- Religious Literature -- Vaiṣṇava", "Sanskrit -- Poetry -- Alaṃkāra",
+    "Sanskrit -- Śāstra -- Āyurveda", "Sanskrit -- Purāṇa", "Sanskrit -- Śāstra -- Philosophy -- Sāṃkhya",
+    "Sanskrit -- Veda -- Upaniṣad", "Sanskrit -- Śāstra -- Jyotiḥśāstra",
+    "Sanskrit -- Śāstra -- Dharma -- Smṛti", "Sanskrit -- Śāstra -- Philosophy -- Nyāya",
+    "Sanskrit -- Poetry -- Drama", "Sanskrit -- Veda -- Vedāṅga -- Gṛhyasūtra",
+    "Sanskrit -- Śāstra -- Philosophy -- Mīmāṃsā", "Sanskrit -- Poetry -- Narrative Literature",
+    "Sanskrit -- Poetry -- Subhāṣita", "Sanskrit -- Śāstra -- Grammar",
+    "Sanskrit -- Śāstra -- Dharmaśāstra -- Sūtra", "Sanskrit -- Śāstra -- Philosophy -- Yoga",
+    "Sanskrit -- Veda -- Saṃhitā", "Sanskrit -- Śāstra -- Kāmaśāstra",
+    "Sanskrit -- Śāstra -- Philosophy -- Vaiśeṣika", "Sanskrit -- Poetry -- Chandas",
+    "Sanskrit -- Epic -- Mahābhārata", "Sanskrit -- Veda -- Vedāṅga -- Śrautasūtra",
+    "Sanskrit -- Veda -- Vedāṅga -- Pariśiṣṭa", "Sanskrit -- Veda -- Brāhmaṇa",
+    "Sanskrit -- Śāstra -- Philosophy", "Sanskrit -- Epic -- Rāmāyaṇa",
+    "Sanskrit -- Veda -- Vedāṅga -- Prātiśākhya", "Sanskrit -- Poetry -- Historical",
+    "Sanskrit -- Śāstra -- Philosophy -- Advaita", "Sanskrit -- Poetry -- Nāṭya",
+    "Sanskrit -- Śāstra -- Lexikography", "Sanskrit -- Religious Literature -- Jaina",
+    "Sanskirt -- Religious Literature -- Śaiva", "Sanskrit -- Śāstra -- Arthaśāstra",
+    "Sanskrit -- Epics -- Rāmāyaṇa", "Sanskrit -- later works -- 20th century",
+    "Sanskrit -- Śāstra -- Dharma -- Nibandha", "Sanskrit -- Veda -- Āraṇyaka",
+    "Manipravalam -- Vyākhyānas", "Tibetan -- Translation", "Tibetan"
+  ].freeze
+
+  def test_shipped_gretil_genre_ladder_fold
+    shipped = shipped_kinds
+    assert_equal ["genre"], shipped.metadata_for("gretil")
+    { "Sanskrit -- Veda -- Upaniṣad" => ["scripture"],
+      "Sanskrit -- Religious Literature -- Buddhist" => ["scripture"],
+      "Sanskrit -- Śāstra -- Philosophy -- Buddhist" => ["literary/wisdom"],
+      "Sanskrit -- Poetry -- Kāvya" => ["literary/poetry"],
+      "Sanskrit -- Poetry -- Alaṃkāra" => ["literary/essay/criticism"],
+      "Sanskrit -- Śāstra -- Āyurveda" => ["scholarly/medicine"],
+      "Sanskrit -- Śāstra -- Dharma -- Smṛti" => ["legal/law"],
+      "Sanskrit -- Veda -- Vedāṅga -- Gṛhyasūtra" => ["ritual"],
+      "Sanskrit -- Epic -- Mahābhārata" => ["literary/narrative/epic"],
+      "Sanskrit -- Śāstra -- Jyotiḥśāstra" => ["divination/astrology", "scholarly/astronomy"],
+      "Manipravalam -- Vyākhyānas" => ["exegesis"] }.each do |value, want|
+      assert_equal want, shipped.normalize("gretil", value).sort, value
+    end
+    assert_empty shipped.normalize("gretil", "Tibetan"), "a language shelf is a reviewed non-claim"
+    GRETIL_LADDER_CENSUS.each do |value|
+      refute_includes shipped.normalize("gretil", value), Nabu::Kinds::UNMAPPED, value
+    end
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),

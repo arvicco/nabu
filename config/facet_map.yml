@@ -253,3 +253,9 @@ sources:
       author: author          # 63 authors ("Атанацковић, Богобој")
       author_refs: author_id  # ["viaf:8970679", "wikidata:Q833421"], array
       title_refs: work_id     # 94 docs — Wikidata WORK ids ("wikidata:Q109336066")
+  # -- header-mined by the adapter (a re-parse lands the fields first)
+  gretil:                     # 784 files
+    fields:
+      author: author          # 427 — the titleStmt <author> (Nāgārjuna 24, Dharmakīrti 13 …)
+      genre: genre            # 784 — the keywords ladder verbatim ("Sanskrit -- Poetry --
+      #                         Kāvya"); config/kind_map.yml folds it onto the house kinds

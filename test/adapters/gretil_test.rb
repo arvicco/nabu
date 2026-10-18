@@ -284,6 +284,38 @@ class GretilTest < Minitest::Test
     citations.each { |c| refute_includes c, "BrbUp", "single-prefix file must not be prefix-joined" }
   end
 
+  # --- header mining: author, genre ladder, source edition --------------------
+
+  # The teiHeader carries the titleStmt <author> (on 427 of 784 files), the
+  # GRETIL genre ladder in profileDesc/textClass/keywords/term (on every
+  # file) and the sourceDesc edition (a <bibl>, or <biblStruct> monographs).
+  def test_header_author_genre_and_edition_ride_metadata
+    doc = parse(VALLALACARITA)
+    assert_equal "Ānandabhaṭṭa", doc.metadata["author"]
+    assert_equal ["Sanskrit -- Poetry -- Kāvya"], doc.metadata["genre"]
+    assert_equal ["Haraprasāda Śāstrī: Vallāla Caritam, Calcutta : Asiatic Society 1904 " \
+                  "(Bibliotheca Indica, 164)"], doc.metadata["edition"]
+  end
+
+  def test_empty_author_and_empty_bibl_mint_nothing
+    meta = parse(HEART_SUTRA).metadata
+    refute meta.key?("author"), "an empty <author/> is absence, never a blank author"
+    refute meta.key?("edition"), "an empty <bibl/> is absence"
+    assert_equal ["Sanskrit -- Religious Literature -- Buddhist"], meta["genre"]
+
+    meta = parse(BRAHMABINDU).metadata
+    refute meta.key?("author")
+    assert_equal ["Sanskrit -- Veda -- Upaniṣad"], meta["genre"]
+  end
+
+  # The 33 biblStruct-only headers (the Aufrecht Ṛgveda) render each
+  # monograph in GRETIL's own bibl order: editor: title, place: publisher year.
+  def test_bibl_struct_editions_render_one_line_per_monograph
+    assert_equal ["Theodor Aufrecht: Die Hymnen des Rigveda. Mandala I-VI, Bonn: Mareus 1877",
+                  "Theodor Aufrecht: Die Hymnen des Rigveda. Mandala VII-X, Bonn: Mareus 1877"],
+                 parse(RGVEDA).metadata["edition"]
+  end
+
   # --- urn stability across two independent parses (belt-and-braces) --------
 
   def test_urns_are_stable_across_two_parses_per_rung
