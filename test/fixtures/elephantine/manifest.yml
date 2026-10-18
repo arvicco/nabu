@@ -62,6 +62,10 @@ files:
     url: https://elephantine.smb.museum/xml/elephantine_erc_db_places.tei.xml
     whole: true
     trim: none (places authority file — the discovery skip-by-rule exemplar; P47-1)
+  - path: elephantine_erc_db_ancient_persons.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_ancient_persons.tei.xml
+    whole: false
+    trim: byte-verbatim line trim of the ancient-persons authority — header, 11 historical + 2 mythological whole <person> blocks, 3 listRelation lines, original tail (2,148,023 B -> 4,763 B; README)
   - path: objects-listing-marriage.html
     refetchable: false
     whole: true

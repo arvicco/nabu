@@ -12,6 +12,14 @@ module Nabu
     # name keys folded in Ruby via the shared Pleiades.name_key rule
     # (Unicode case fold; Han text passes untouched, so 王安石 and
     # "wang anshi" both key).
+    #
+    # Authorities (one slice each): "cbdb" (Nabu::CbdbPersons) and
+    # "elephantine" (Nabu::ElephantinePersons). The column names are
+    # CBDB-born; name_han is the NATIVE-form lane every authority fills
+    # with its original-script/original-language name (CBDB: the Han name;
+    # Elephantine: the Egyptian/Greek/Aramaic/Coptic form beside the
+    # English), and refs (migration 044) carries links into other
+    # prosopographies as verbatim URLs (Elephantine: Trismegistos).
     module PersonIndex
       TABLE = :person_index
       NAMES_TABLE = :person_index_names
@@ -26,7 +34,12 @@ module Nabu
 
       Person = Data.define(:authority, :person_id, :name, :name_han,
                            :birth_year, :death_year, :index_year,
-                           :dynasty, :dynasty_han, :female, :name_keys)
+                           :dynasty, :dynasty_han, :female, :name_keys, :refs) do
+        # refs is optional: an authority without external links omits it.
+        def initialize(refs: nil, **fields)
+          super
+        end
+      end
 
       module_function
 
@@ -62,7 +75,8 @@ module Nabu
                       name: person.name, name_han: person.name_han,
                       birth_year: person.birth_year, death_year: person.death_year,
                       index_year: person.index_year, dynasty: person.dynasty,
-                      dynasty_han: person.dynasty_han, female: person.female }
+                      dynasty_han: person.dynasty_han, female: person.female,
+                      refs: person.refs }
             person.name_keys.uniq.each do |key|
               name_rows << { authority: authority, person_id: person.person_id, name_key: key }
             end
@@ -118,7 +132,7 @@ module Nabu
             birth_year: row[:birth_year], death_year: row[:death_year],
             index_year: row[:index_year], dynasty: row[:dynasty],
             dynasty_han: row[:dynasty_han], female: row[:female],
-            name_keys: []
+            name_keys: [], refs: row[:refs]
           )
         end
       end
