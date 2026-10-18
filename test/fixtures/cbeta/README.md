@@ -61,3 +61,11 @@ in-file grant verbatim.
 | `J/J29/J29nB247.xml` | `J/J29/J29nB247.xml` | none (whole, 24.7 KB) | 普光坦菴禪師語錄: Qing byline, inline notes (`<note place="inline">`), prose yulu |
 | `N/N26/N26n0008.xml` | `N/N26/N26n0008.xml` | none (whole, 28.1 KB) | 小誦經 (Khuddakapāṭha): `<ref cRef="PTS.Khp.1"/>` Pāli page anchors, translator byline 悟醒譯 (no dynasty seat), `nanchuan-notes` back matter |
 | `N/N44/N44n0021-xu.xml` | `N/N44/N44n0021.xml` | teiHeader + body lb 0266a01–0268a04, back dropped, balanced close; 112.5 KB → 8.4 KB | 所行藏經 (Cariyāpiṭaka): a cRef inside `<head>`, numbered-verse `<p cb:place="inline">` pairs; suffixed stem keeps fixture urns disjoint |
+
+`T/T85/T85n2831.xml` — the body-byline persons harvest: copied whole
+(13.1 KB) on **2026-10-18** from the box's canonical tree at upstream
+commit dbdea41 ("CBETA 2026.R2"), upstream path `T/T85/T85n2831.xml`.
+無心論: the header `<author>` is EMPTY while the body carries a typed
+`<byline cb:type="author">釋菩提達摩製</byline>` — the shape where a body
+byline is the document's only author claim (census over the whole tree:
+22,210 bylines, 8,586 typed author).

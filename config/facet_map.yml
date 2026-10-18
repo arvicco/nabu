@@ -377,3 +377,10 @@ sources:
       translators_tib: translator_tib  # the Tibetan-era translators, kept apart from the
       #                         84000 English team ("translators", unfaceted) whose
       #                         translation the document actually is
+  # -- The CJK persons tail: parse-time person/place/series fields (censuses
+  #    over canonical/, 2026-10-18). Names ride verbatim.
+  cbeta:                      # 22,210 body <byline>s (author 8,586 · Translator 4,985 …)
+    fields:
+      byline_authors: author  # author-role body bylines, ONLY where the header <author> is
+      #                         silent (無心論 → 釋菩提達摩製); the full typed list rides
+      #                         metadata "persons" (name + role), not faceted

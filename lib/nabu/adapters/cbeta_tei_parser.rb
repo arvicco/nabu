@@ -221,7 +221,31 @@ module Nabu
         metadata["no"] = extraction.no if extraction.no
         metadata.merge!(CANON_TRANSLATIONS.fetch(extraction.canon_siglum, {}))
         merge_byline(metadata, extraction.author)
+        merge_body_bylines(metadata, extraction.bylines)
         metadata
+      end
+
+      # The body <byline> harvest: every byline as a document-level person
+      # with role — {"name" => …, "role" => …} — deduped per (name, role)
+      # (the per-fascicle repeats collapse). Names ride verbatim (the
+      # byline's reading text, anchors transparent, inline notes dropped);
+      # cb:type rides as the role with ASCII case folded (upstream writes
+      # both "Translator" and "translator"); an untyped byline carries no
+      # role. These name preface and sub-work authors the header never
+      # does; where the header <author> is silent, the author-role names
+      # also ride "byline_authors" (the author facet via
+      # config/facet_map.yml). No dynasty/name split here — the body
+      # byline is freer than the header's (era phrases such as 後秦弘始年
+      # run into the name), so the whole string stays the claim.
+      def merge_body_bylines(metadata, bylines)
+        persons = bylines.uniq
+        return if persons.empty?
+
+        metadata["persons"] = persons
+        return if metadata["author"]
+
+        authors = persons.filter_map { |person| person["name"] if person["role"] == "author" }
+        metadata["byline_authors"] = authors unless authors.empty?
       end
 
       # The header byline harvest (P104-1; attributed-era dating, its own labeled class): the teiHeader
@@ -269,7 +293,8 @@ module Nabu
         DROPPED_ELEMENTS = %w[note rdg mulu].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no, :canon_siglum)
+        Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no, :canon_siglum,
+                             :bylines)
 
         attr_reader :title, :author, :witnesses, :canon, :vol, :no
 
@@ -292,6 +317,8 @@ module Nabu
           @juan = nil
           @line = nil               # open print line {citation:, text:, gaiji:, notes:, crefs:}
           @units = []
+          @byline = nil             # open body <byline> {role:, text:}
+          @bylines = []
         end
 
         def call
@@ -303,7 +330,7 @@ module Nabu
 
           Result.new(units: @units, title: @title, author: @author, witnesses: @witnesses,
                      canon: @idno["canon"], vol: @idno["vol"], no: @idno["no"],
-                     canon_siglum: @expected_canon)
+                     canon_siglum: @expected_canon, bylines: @bylines)
         end
 
         private
@@ -328,6 +355,7 @@ module Nabu
           when "g" then @line[:gaiji] << node.attribute("ref") if @line && node.attribute("ref")
           when "ref" then @line[:crefs] << node.attribute("cRef") if @line && node.attribute("cRef")
           when "milestone" then @juan = node.attribute("n") if node.attribute("unit") == "juan"
+          when "byline" then open_byline(node)
           when "space" then append(" ") unless node.attribute("quantity") == "0"
           when "t" then drop_subtree(node) if node.attribute("place") == "foot"
           when *DROPPED_ELEMENTS then drop_subtree(node)
@@ -337,6 +365,7 @@ module Nabu
         def end_element(node)
           if @in_body
             return close_body if local_name(node) == "body"
+            return close_byline if local_name(node) == "byline" && !dropping?
             return unless dropping?
 
             if node.depth == @drop_depth
@@ -481,6 +510,29 @@ module Nabu
 
         def append(value)
           @line[:text] << value if @line
+          @byline[:text] << value if @byline
+        end
+
+        # A body byline's text still flows to the print line (it IS printed
+        # text); it is ALSO captured for the persons harvest.
+        def open_byline(node)
+          return if node.empty_element?
+
+          @byline = { role: node.attribute("cb:type"), text: +"" }
+        end
+
+        def close_byline
+          byline = @byline
+          @byline = nil
+          return if byline.nil?
+
+          name = Nabu::Normalize.nfc(byline[:text].gsub(/[[:space:]]+/, ""))
+          return if name.empty?
+
+          person = { "name" => name }
+          role = byline[:role].to_s.strip
+          person["role"] = role.ascii_only? ? role.downcase : role unless role.empty?
+          @bylines << person
         end
 
         def drop_subtree(node)
