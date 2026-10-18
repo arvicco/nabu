@@ -129,7 +129,9 @@ module Nabu
           #                             centuries (the syllabary's era); place = origPlace
           "itant" => :structured,
           "itkc" => :structured,
-          "ja-wikisource" => :era_band_key,
+          "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
+          #                                               own year, composition class) else the
+          #                                               era-category band (precision era)
           "ko-wikisource-mk" => :structured,
           "kannada-texts" => :structured, # P118-3: the repo README's work dates
           #                                 (941, 953, ca. 1042), composition class
@@ -775,6 +777,16 @@ module Nabu
         # ja-wikisource (P109-1): the adapter's era-category envelope —
         # {"not_before", "not_after", "raw" => "平安時代"} — rides as an
         # era attribution (precision "era", the cbeta dynasty precedent).
+        # ja-wikisource: the header's integer "year" — a one-year envelope,
+        # its own labeled class "composition" (the work's year as the wiki
+        # states it) — outranks the coarser era-category band.
+        def header_year_or_era_band(meta)
+          year = meta["year"]
+          return [year, year, year.to_s, nil, "composition"] if year.is_a?(Integer)
+
+          era_band_key(meta)
+        end
+
         def era_band_key(meta)
           band = meta["era_band"]
           return [nil, nil, nil] unless band.is_a?(Hash) && band["not_before"] && band["not_after"]

@@ -462,8 +462,15 @@ sources:
         precedent) is a NAMED candidate awaiting an owner ruling — not defaulted"}
     dating: {posture: dated, note: "P109-1: the era-category envelope
         (era_band → MetadataDates :era_band_key), precision era — an attribution,
-        never a typed date"}
-    places: {posture: unplaced, note: "no place fields in the cone pages"}
+        never a typed date. The page {{header}} year= (133 pages carry a bare CE
+        year, census 2026-10-18) outranks the band as a one-year envelope of its own
+        class composition (the work's year as the wiki states it); the two non-integer
+        year= values (an era year, a template default) deliberately mint nothing"}
+    places: {posture: unplaced, note: "no DOCUMENT-grain place fields in the cone pages.
+        The 万葉集 poems' [事項] keyword bag names places at poem grain — mentions in
+        the poem, never a findspot or origin claim — riding passage annotations
+        (\"matters\" verbatim; \"places\" only for the closed prefecture/municipal-suffix
+        rule; historic names stay in the verbatim bag until a gazetteer join)"}
     script: {posture: implied}
   zh-wikisource:
     kind: {posture: unclassified}

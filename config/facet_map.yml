@@ -384,3 +384,6 @@ sources:
       byline_authors: author  # author-role body bylines, ONLY where the header <author> is
       #                         silent (無心論 → 釋菩提達摩製); the full typed list rides
       #                         metadata "persons" (name + role), not faceted
+  ja-wikisource:              # 123 pages fill the {{header}} author= slot
+    fields:
+      author: author          # 清少納言 20 · 羽地朝秀 10 · 源実朝 8 · 後光厳天皇 7 … verbatim
