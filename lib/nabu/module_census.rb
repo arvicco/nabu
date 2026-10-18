@@ -28,7 +28,8 @@ module Nabu
     # (nil when not computable or nothing moved); +census+ the seam census
     # now and +previous_census+ at +before+ (nil when nothing moved or the
     # seam has none).
-    Delta = Data.define(:before, :after, :fetched, :changed, :census, :previous_census) do
+    Delta = Data.define(:before, :after, :fetched, :changed, :census, :previous_census,
+                        :held_before) do
       def moved? = fetched && !before.nil? && !after.nil? && before != after
     end
 
@@ -74,12 +75,21 @@ module Nabu
     end
 
     # Assemble the sync Delta for one module (SyncRunner, after the fetch).
-    def delta(adapter_class:, dir:, before:, after:, fetched:)
+    def delta(adapter_class:, dir:, before:, after:, fetched:, held_before: nil)
       moved = fetched && before && after && before != after
       Delta.new(before: before, after: after, fetched: fetched,
                 changed: moved ? changed_paths(dir, before, after) : nil,
                 census: at_dir(adapter_class, dir),
-                previous_census: moved ? at_revision(adapter_class, dir, before) : nil)
+                previous_census: moved ? at_revision(adapter_class, dir, before) : nil,
+                held_before: held_before)
+    end
+
+    # The ONE list/status descriptor entry point: census + pin resolution
+    # in one place (callers hand the registry entry and the canonical
+    # root, nothing else).
+    def descriptor(adapter_class, slug:, canonical_dir:, pin: nil)
+      workdir = canonical_dir && File.join(canonical_dir, slug)
+      summary(workdir && at_dir(adapter_class, workdir), pin: pin, workdir: workdir)
     end
 
     def changed_paths(dir, before, after)
@@ -108,11 +118,24 @@ module Nabu
 
     # The one-cell descriptor for info printouts (list/status): the census
     # when the seam has one, else the honest generic — the pinned sha the
-    # module is held at.
-    def summary(counts, pin:)
+    # module is held at. The catalog's last_sync_sha RESETS at rebuild
+    # (the local_check lesson: the column is resettable, the holding is
+    # not), so a nil pin falls back to the canonical tree itself: its own
+    # git HEAD when it is a repo, the bare fact of being held when not.
+    # "not synced" is printed only when nothing is on disk.
+    def summary(counts, pin:, workdir: nil)
       return render(counts) if counts && !counts.empty?
 
-      pin ? "module @ #{pin[0, SHA_WIDTH]}" : "module (not synced)"
+      pin ||= workdir && head(workdir)
+      return "module @ #{pin[0, SHA_WIDTH]}" if pin
+      return "module (held)" if workdir && held?(workdir)
+
+      "module (not synced)"
+    end
+
+    # A module counts as held when its canonical tree has any content.
+    def held?(dir)
+      Dir.exist?(dir) && Dir.each_child(dir).any? { |c| c != ".attic" }
     end
   end
 end

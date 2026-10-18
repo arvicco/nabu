@@ -28,9 +28,24 @@ class SyncModuleLineTest < Minitest::Test
                                   indexed: nil, warnings: [], discovery: nil, module_delta: delta)
   end
 
-  def delta(before:, after:, fetched: true, changed: nil, census: nil, previous: nil)
+  def delta(before:, after:, fetched: true, changed: nil, census: nil, previous: nil,
+            held_before: false)
     Nabu::ModuleCensus::Delta.new(before: before, after: after, fetched: fetched, changed: changed,
-                                  census: census, previous_census: previous)
+                                  census: census, previous_census: previous,
+                                  held_before: held_before)
+  end
+
+  # The resettable-pin lesson: a held tree with no prior ref is a fetch,
+  # never a "clone".
+  def test_a_held_module_without_a_prior_ref_reports_fetched_not_cloned
+    out = line(outcome(slug: "unikemet", delta: delta(before: nil, after: "f" * 40, held_before: true)))
+    assert_includes out, "fetched at ffffffffffff"
+    refute_includes out, "cloned"
+  end
+
+  def test_a_genuinely_fresh_module_clone_reports_cloned
+    out = line(outcome(slug: "unikemet", delta: delta(before: nil, after: "e" * 40, held_before: false)))
+    assert_includes out, "cloned at eeeeeeeeeeee"
   end
 
   def lects(anchors:, varieties:)

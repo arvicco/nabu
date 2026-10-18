@@ -359,15 +359,13 @@ module Nabu
     # census read from canonical/<slug> when the seam has one, else the pin
     # the catalog holds it at (Nabu::ModuleCensus.summary) — never "empty".
     def module_summary(entry, source, canonical_dir)
-      counts = if canonical_dir
-                 klass = begin
-                   entry.adapter_class
-                 rescue Nabu::Error
-                   nil
-                 end
-                 klass && ModuleCensus.at_dir(klass, File.join(canonical_dir, entry.slug))
-               end
-      ModuleCensus.summary(counts, pin: source&.last_sync_sha)
+      klass = begin
+        entry.adapter_class
+      rescue Nabu::Error
+        nil
+      end
+      ModuleCensus.descriptor(klass, slug: entry.slug, canonical_dir: canonical_dir,
+                                     pin: source&.last_sync_sha)
     end
 
     def last_run_long(slug, ledger)
