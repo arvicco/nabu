@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../../adapters/aes"
+require_relative "../../aed_text_headers"
 require_relative "../../normalize"
 
 module Nabu
@@ -17,6 +18,24 @@ module Nabu
       # conventional year envelopes, place verbatim, unmapped values
       # counted undated and never guessed.
       #
+      # == The AED header grain (the tighter lane, preferred)
+      #
+      # canonical/aed holds a TEI header per TLA text (AedTextHeaders) —
+      # the same text ids, 13,025 of the 13,026 AES texts. Its origDate
+      # is a thesaurus label (ruler / dynasty / period / quarter-century)
+      # with numeric bounds; its origPlace a SITE with a TLA thesaurus ref
+      # ("Abusir", ths:O5AYJCUXENDODEGUIMCH2YWXWM). Each axis takes the
+      # header's claim when it carries one and falls back to the corpus's
+      # coarse value independently: date_raw is the header label, precision
+      # its grain ("reign" / "dynasty" / "period" / "century" — told apart
+      # from the coarse lane's "period" rows by the label itself),
+      # place_ref the ths: ref VERBATIM (no registry namespace resolves
+      # ths: yet — PlaceRefs reads it as nothing, honestly). Still ONE row
+      # per text: the tighter claim replaces the coarse envelope rather
+      # than riding beside it, so a narrow date search is never matched by
+      # the wide period alone. date_class stays NULL: both lanes date the
+      # object (the inscribed monument or papyrus), not a composition era.
+      #
       # The urn mint mirrors Adapters::Aes#discover (FROZEN): subcorpus
       # from the filename + the sentence's own text id; the test pins the
       # two against each other via the shared fixture set. -de siblings
@@ -24,6 +43,7 @@ module Nabu
       module AesDates
         SLUG = "aes"
         URN_PREFIX = "urn:nabu:aes:"
+        AED_SLUG = "aed"
 
         # Egyptian period value → signed year envelope, CONVENTIONAL
         # Egyptological chronology (after Shaw (ed.), The Oxford History of
@@ -49,26 +69,28 @@ module Nabu
         # Walk canonical/aes's subcorpus files and insert one row per
         # dated-or-placed text we hold; texts we hold whose date AND place
         # are both unmapped are counted undated. Returns
-        # { documents:, undated: }.
+        # { documents:, undated:, aed: } — aed counts the rows that took
+        # at least one axis from the AED header.
         def build(catalog:, canonical_dir:)
           dir = File.join(canonical_dir, SLUG, Adapters::Aes::DATA_DIR)
-          return { documents: 0, undated: 0 } unless Dir.exist?(dir)
+          return { documents: 0, undated: 0, aed: 0 } unless Dir.exist?(dir)
 
+          headers = AedTextHeaders.new(aed_dir: File.join(canonical_dir, AED_SLUG))
           ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
-          rows = 0
-          undated = 0
+          counts = { documents: 0, undated: 0, aed: 0 }
           each_text(dir) do |urn, sentence|
             document_id = ids[urn] or next
-            timeline = extract(sentence)
+            timeline = extract(sentence, headers.header(sentence["text"].to_s))
             if timeline.nil?
-              undated += 1
+              counts[:undated] += 1
               next
             end
 
             insert(catalog, document_id, timeline)
-            rows += 1
+            counts[:documents] += 1
+            counts[:aed] += 1 if timeline[:aed]
           end
-          { documents: rows, undated: undated }
+          counts
         end
 
         # Yields [document urn, first sentence] per text — date/findspot
@@ -97,19 +119,31 @@ module Nabu
           urns
         end
 
-        # The timeline fields, or nil when neither the date nor the findspot
-        # maps (unknown/"k" — the honest undated case).
-        def extract(sentence)
-          date = sentence["date"].to_s
-          bounds = PERIODS[date]
-          place = place_of(sentence)
-          return nil if bounds.nil? && place.nil?
+        # The timeline fields, or nil when neither a date nor a place
+        # survives (unknown/"k" with no usable header — the honest undated
+        # case). +header+ is the text's AedTextHeaders::Header or nil; each
+        # axis prefers it and falls back to the coarse corpus value alone.
+        def extract(sentence, header = nil)
+          header_date = header&.date_raw
+          header_place = header&.place_name
+          date = header_date ? aed_date(header) : coarse_date(sentence)
+          place = header_place ? [header_place, header.place_ref] : [place_of(sentence), nil]
+          return nil if date.nil? && place.first.nil?
 
-          {
-            not_before: bounds&.first, not_after: bounds&.last,
-            precision: bounds ? "period" : nil, date_raw: bounds ? date : nil,
-            place_name: place
-          }
+          (date || {}).merge(place_name: place.first, place_ref: place.last,
+                             aed: !(header_date.nil? && header_place.nil?))
+        end
+
+        def aed_date(header)
+          { not_before: header.not_before, not_after: header.not_after,
+            precision: header.precision, date_raw: header.date_raw }
+        end
+
+        def coarse_date(sentence)
+          date = sentence["date"].to_s
+          bounds = PERIODS[date] or return nil
+
+          { not_before: bounds.first, not_after: bounds.last, precision: "period", date_raw: date }
         end
 
         def place_of(sentence)
@@ -124,7 +158,7 @@ module Nabu
             document_id: document_id,
             not_before: timeline[:not_before], not_after: timeline[:not_after],
             precision: timeline[:precision], date_raw: timeline[:date_raw],
-            place_name: timeline[:place_name], axis_source: SLUG
+            place_name: timeline[:place_name], place_ref: timeline[:place_ref], axis_source: SLUG
           )
         end
       end

@@ -112,6 +112,25 @@ class BuilderRefreshTest < Minitest::Test
     end
   end
 
+  # The AES ← AED title join rides the refresh beside the derge titles
+  # (a cross-source post-load pass: f(canonical/aed + loaded aes rows)).
+  def test_refresh_titles_aes_documents_from_the_aed_headers
+    source = Nabu::Store::Source.create(
+      slug: "aes", name: "AES", adapter_class: "X", license: "x",
+      license_class: "attribution", upstream_url: "x", enabled: true
+    )
+    doc = Nabu::Store::Document.create(
+      source_id: source.id, urn: "urn:nabu:aes:bbawarchive:26BP5JT5RZEDHDDU2R5TMUBD24",
+      language: "egy", canonical_path: "x", content_sha256: "2" * 64
+    )
+    summary = Dir.mktmpdir do |dir|
+      File.symlink(File.join(Nabu::TestSupport::FIXTURES_ROOT, "aes", "aed"), File.join(dir, "aed"))
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+    end
+    assert_equal "pBerlin P 21002 verso (99 E)", @catalog[:documents].where(id: doc.id).get(:title)
+    assert_equal 1, summary.aes_titles.titled
+  end
+
   def test_refresh_is_reprojection_not_accretion
     Dir.mktmpdir do |dir|
       config = hybrid_config(dir)
