@@ -245,6 +245,12 @@ module Nabu
                            "settlement" => "the holding library's city (a PRESENT location)" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
+        "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
+                                       "date_of_origin is absent; on the SAA letters it restates " \
+                                       "the date_of_origin reign the row already carries",
+                     "findspot_square" => "an excavation grid square inside the provenience site " \
+                                          "(\"L 2769\", \"Area F\") — sub-site grain, below the " \
+                                          "place axis; the provenience projects" },
         "prilit" => { "date_cert" => "a certainty qualifier on the projected date, not a date" },
         "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
                                                   "doc — a PRESENT location)" },

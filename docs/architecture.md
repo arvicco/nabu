@@ -1249,6 +1249,26 @@ tablet's timeline row — the artifact's date, so the English witness inherits t
 time filter. Scratch-measured coverage: 21,558 of 21,692 oracc documents
 (99.4%) carry a row — 21,517 dated (99.2%), 41 place-only, 172 undated
 members counted, 3 documents absent from any catalogue (upstream drift).
+Since 2026-10-18 a member whose `date_of_origin` yields nothing is banded by
+its `regnal_dates` (absolute BCE reign spans, precision "reign") before the
+period, and the SAA letters' SENDER location (`sender_loc` +
+`pleiades_sender_loc` + `sender_loc_coordinates`, lon,lat upstream) rides a
+SEPARATE place-only row under `axis_source` "oracc-sender" — a labeled place
+class beside the provenience row: where a letter was written is never
+conflated with where it was found.
+
+**The cuneiform concordance hubs (2026-10-18).** CDLI, ORACC and ETCSL meet
+in the links journal at reference-edge HUBS — targets every witness of one
+thing points at, so `nabu links <hub>` lists them all (the CDLI composite_id
+mold, `urn:nabu:cdli:q…`, dangling-but-stable). ORACC's catalogue Q-numbers
+(producer "oracc") target the same Q hubs; CDLI seal_id S-numbers mint
+`urn:nabu:cdli:s…` seal hubs; an ETCSL composite and the CDLI witnesses
+whose subgenre names it both assert the padding-folded `etcsl:<n>` hub
+(ETCSL urns stay frozen as minted); and ETCSL witness-list fragments and
+CDLI literary rows' museum/excavation numbers both assert
+`object:<KEY>` hubs. The fold rules (zero padding, the Istanbul prefix,
+segment padding) live in `Adapters::CuneiformConcordance`, under adapters/
+so they ride only the cdli/etcsl derivation closures.
 
 **Part 2b — TOROT chronicle annals (`TimelineBuilder::ChronicleAnnals`, P16-3):
 the first PASSAGE-GRAIN rows**, using migration 008's `passage_seq_*` columns

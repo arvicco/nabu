@@ -2,13 +2,13 @@
 
 require "test_helper"
 
-# Nabu::CuneiformConcordance — the shared key rules behind the
+# Nabu::Adapters::CuneiformConcordance — the shared key rules behind the
 # CDLI↔ETCSL concordance hubs. Every input string below is a REAL
 # upstream value: the ETCSL c.*.xml `<biblScope type="museumNumber">`
 # entries and CDLI cdli_cat.csv museum_no / subgenre cells (censused
 # 2026-10-18 over the held assets).
 class CuneiformConcordanceTest < Minitest::Test
-  CC = Nabu::CuneiformConcordance
+  CC = Nabu::Adapters::CuneiformConcordance
 
   # -- museum numbers (display form: publication stripped, joins intact) ----
 

@@ -170,7 +170,7 @@ module Adapters
     # subgenre (71,814 rows, 4,619 values) rides metadata verbatim; the
     # 5,101 cells naming an ETCSL composition ("ETCSL 1.08.02.01 …
     # (witness)") mint the padding-folded etcsl: hub ETCSL's own
-    # composite asserts (Nabu::CuneiformConcordance).
+    # composite asserts (Nabu::Adapters::CuneiformConcordance).
     def test_subgenre_rides_metadata_and_mints_the_etcsl_composition_hub
       document = parse("urn:nabu:cdli:p343553")
       assert_equal "ETCSL 1.08.02.01 Lugalbanda and Mountain Cave (witness)", document.metadata["subgenre"]
@@ -192,7 +192,7 @@ module Adapters
     # museum numbers would be a quarter-million degree-1 hubs.
     def test_literary_witnesses_assert_the_object_hubs_etcsl_lists
       related = parse("urn:nabu:cdli:p343553").metadata["related"]
-      etcsl_side = Nabu::CuneiformConcordance.object_hubs("Ni 4405 (ISET 2 43) + Ni 9933 (ISET 1 148)")
+      etcsl_side = Nabu::Adapters::CuneiformConcordance.object_hubs("Ni 4405 (ISET 2 43) + Ni 9933 (ISET 1 148)")
       assert_equal etcsl_side, related.grep(/\Aobject:/)
     end
 

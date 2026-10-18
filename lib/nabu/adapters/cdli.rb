@@ -3,7 +3,7 @@
 require_relative "atf_parser"
 require_relative "flat_csv_parser"
 require_relative "../lfs_fetch"
-require_relative "../cuneiform_concordance"
+require_relative "cuneiform_concordance"
 
 module Nabu
   module Adapters
@@ -77,7 +77,7 @@ module Nabu
     # colon-schemed external_id concordances (bdtns:015946 — 96,641 rows;
     # the BDTNS bridge), seal_id S-numbers as urn:nabu:cdli:s… seal-
     # composite hubs (the composite_id treatment; "Sx" names no seal), and
-    # the ETCSL concordance (Nabu::CuneiformConcordance): each ETCSL
+    # the ETCSL concordance (Nabu::Adapters::CuneiformConcordance): each ETCSL
     # composition a subgenre cell names becomes the padding-folded
     # "etcsl:<n>" hub ETCSL's own composite asserts, and the LITERARY
     # witnesses (an ETCSL ref or a Literary genre — ~11k rows) assert one

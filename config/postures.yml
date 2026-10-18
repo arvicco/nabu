@@ -76,8 +76,14 @@ sources:
     # lect declaration retired P62-2: the extended akk/sux period rules
     # machine-posture oracc now (the shadowing rule).
     dating: {posture: dated, note: "P62-1/2: 116,708/118,366 via catalogue date_of_origin + the ruled
-        period table (the recursive-glob fix reached the triply-nested epsd2 catalogue)"}
-    places: {posture: linked, note: "refs on 20% — names reach 29%"}
+        period table (the recursive-glob fix reached the triply-nested epsd2 catalogue); 2026-10-18:
+        regnal_dates (4,359 members, absolute BCE reign spans) bands at reign precision ahead of the
+        period when date_of_origin is absent; dynastic_seat is the ruler's political seat — no
+        ruled table dates it, it rides metadata + facet only"}
+    places: {posture: linked, note: "refs on 20% — names reach 29%; 2026-10-18: the SAA letters'
+        sender_loc (2,678 members, 1,733 with Pleiades id + coordinates) rides its OWN place row
+        (axis_source oracc-sender) beside the provenience row; findspot_square is an excavation grid
+        square below the place axis (metadata only)"}
     script: {posture: implied}
 
   # ── codemap: refined universally, no Nabu-specific knowledge needed ────
@@ -1214,7 +1220,9 @@ sources:
     # lect declaration retired P64-6 (owner-ruled 2026-08-09): the etcsl sux→sux:post
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "a composite has no single place: the per-witness provenance
+        scopes of the header's tablet list (345 of 3,960 witnesses, Nippur 292 …) ride metadata
+        \"witnesses\" beside each museum number, deliberately not projected as the composite's place"}
     script: {posture: implied}
   coptic-scriptorium:
     kind: {posture: unclassified}
@@ -1772,6 +1780,9 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+    # 2026-10-18: subgenre (71,814 rows) rides metadata + the subgenre facet and is
+    # deliberately not kind-folded (a mixed series/archive/role vocabulary — genre
+    # stays the kind source); seal_id S-numbers mint seal-composite hubs.
   dacon:
     kind: {posture: unclassified}
     # P88-A4: minted as pending on the nwc anchor (censused absent
