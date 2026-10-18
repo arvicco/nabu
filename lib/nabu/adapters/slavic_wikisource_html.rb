@@ -340,7 +340,7 @@ module Nabu
       def last_header_field(wikitext, field)
         values = wikitext.scan(/^\s*\|\s*#{Regexp.escape(field)}\s*=(.*?)(?=^\s*\|\s*[^|=\n]+=|^\s*\}\}|\z)/m)
         value = values.last&.first
-        value && value.gsub(/<!--.*?-->/m, "").strip
+        value&.gsub(/<!--.*?-->/m, "")&.strip
       end
 
       # A name-shaped header value → display text: links reduced to their

@@ -199,6 +199,7 @@ module Nabu
       # nil when the file has no <text> (not an edition).
       HEADER_CHUNK = 65_536
       TEXT_START = /<text[\s>]/
+      private_constant :HEADER_CHUNK, :TEXT_START
 
       def header_document(path)
         slice = +""

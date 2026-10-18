@@ -266,6 +266,7 @@ module Nabu
         # place_ref. Enough for honest metadata without a second parse of a
         # possibly-6 MB file.
         WIKIDATA_ENTITY = %r{\Ahttps?://(?:www\.)?wikidata\.org/(?:entity|wiki)/(Q\d+)\z}
+        private_constant :WIKIDATA_ENTITY
 
         def header_start(node, name)
           case name
