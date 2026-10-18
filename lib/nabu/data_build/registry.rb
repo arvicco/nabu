@@ -658,7 +658,9 @@ module Nabu
                    "publishes the AED per-glyph census (the catalog's hiero_postings, over the " \
                    "TLA per-text stand-off hieroglyph files): Texts, Signs, Words, and Unclear — " \
                    "the occurrences read inside TEI `<unclear>`, i.e. damage-flagged attestations. " \
-                   "Joins egy/unikemet-signs on the Gardiner column and on Codepoint. CC BY-SA " \
+                   "Recipe v3 adds the signs AED writes only as a \"Keine Entsprechung in Unicode\" " \
+                   "note: Gardiner-coded rows (ID = the code, Codepoint and Glyph empty) after the " \
+                   "codepoint rows. Joins egy/unikemet-signs on the Gardiner column and on Codepoint. CC BY-SA " \
                    "4.0 — derived from the AES and AED share-alike grants, the D51-a share-alike " \
                    "carve-out of 2026-08-11 (the char-postings precedent).",
         maintenance: "re-derive after `nabu sync aes` or `nabu sync aed`; the doc-attestation " \

@@ -1,0 +1,61 @@
+<corpus>
+<concept id="568" wn21id="">
+	<name>entity</name>
+	<notes>anything having existence (living or nonliving)</notes>
+	<supersense></supersense>
+	<lexicalizations>
+		<lexicalization lemma="25207" id="bhūta">
+			<n text="Matsyapurāṇa">1</n>
+		</lexicalization>
+<concept id="569" wn21id="">
+	<name>being</name>
+	<notes>any living entity</notes>
+	<supersense></supersense>
+	<lexicalizations>
+		<lexicalization lemma="25207" id="bhūta">
+			<n text="Mahābhārata">76</n>
+			<n text="Rāmāyaṇa">63</n>
+			<n text="Atharvaveda (Paippalāda)">19</n>
+		</lexicalization>
+		<lexicalization lemma="150748" id="prajā">
+			<n text="Pañcaviṃśabrāhmaṇa">28</n>
+			<n text="Maitrāyaṇīsaṃhitā">13</n>
+			<n text="Rāmāyaṇa">12</n>
+		</lexicalization>
+<concept id="574" wn21id="03">
+	<name>person</name>
+	<notes>a human being; "there was too much for one person to do"</notes>
+	<supersense>Tops</supersense>
+	<lexicalizations>
+		<lexicalization lemma="44242" id="nara">
+			<n text="Manusmṛti">8</n>
+			<n text="Bhāgavatapurāṇa">3</n>
+			<n text="Sātvatatantra">2</n>
+		</lexicalization>
+		<lexicalization lemma="87452" id="jana">
+			<n text="Atharvaveda (Paippalāda)">2</n>
+			<n text="Ṛtusaṃhāra">1</n>
+			<n text="Ṛgveda">1</n>
+		</lexicalization>
+<concept id="127090" wn21id="">
+	<name>bāhyadruti</name>
+	<notes>1. one of the Saṃskāras of mercury
+2. amalgamation of a molten metal with mercury</notes>
+	<supersense></supersense>
+	<lexicalizations>
+		<lexicalization lemma="148105" id="bāhyadruti">
+			<n text="Rasahṛdayatantra">4</n>
+			<n text="Rasaprakāśasudhākara">3</n>
+			<n text="Rasaratnasamuccaya">2</n>
+		</lexicalization>
+<concept id="147806" wn21id="">
+	<name>bhurij</name>
+	<notes>a metre with one or two superfluous syllables</notes>
+	<supersense></supersense>
+	<lexicalizations>
+		<lexicalization lemma="50589" id="bhurij">
+			<n text="Śāṅkhāyanaśrautasūtra">1</n>
+		</lexicalization>
+	</lexicalizations>
+</concept>
+</corpus>
