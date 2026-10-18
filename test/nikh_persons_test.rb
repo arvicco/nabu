@@ -6,7 +6,7 @@ require "tmpdir"
 # Nabu::NikhPersons: the person authorities the NIKH index markup carries
 # — sillok's M_ ids and the goryeosa family's p ids aggregated across a
 # source's passages into its own person-index slice (person_id = the id,
-# name = the most frequent tagged surface, every surface a name key).
+# name = the surface tagged in the most passages, every surface a name key).
 # Fixtures: the sources' own real members (test/fixtures/<slug>/).
 class NikhPersonsTest < Minitest::Test
   include StoreTestDB
@@ -40,7 +40,7 @@ class NikhPersonsTest < Minitest::Test
   def test_goryeosa_aggregates_its_p_ids_and_never_its_office_or_place_ids
     goryeosa = persons("goryeosa")
     jo = goryeosa.fetch("p094190")
-    assert_equal "浚", jo.name, "the most frequent surface wins (the biography's bare given name)"
+    assert_equal "浚", jo.name, "the surface in the most passages wins (the biography's bare given name)"
     assert_includes jo.name_keys, Nabu::Pleiades.name_key("趙浚")
     assert_includes jo.name_keys, Nabu::Pleiades.name_key("明仲"), "the courtesy name groups under the id"
     assert(goryeosa.keys.all? { |id| id.match?(/\Ap\d+\z/) }, "offices (o), places (t), orgs (m) are not persons")

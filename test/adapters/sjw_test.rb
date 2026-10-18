@@ -63,8 +63,8 @@ class SjwTest < Minitest::Test
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:sjw:f02" }
     annotations = adapter.parse(ref).first.annotations
     assert_equal({ "value" => "鄭亨益" }, annotations["persons"].first)
-    assert_includes annotations["persons"], { "value" => "鳳朝", "name" => "尹鳳朝" }
-    assert_includes annotations["persons"], { "value" => "龍慶", "ref" => "nikh:p16_100002_00", "name" => "金龍慶" }
+    assert_includes annotations["persons"], { "value" => "尹鳳朝", "surface" => "鳳朝" }
+    assert_includes annotations["persons"], { "value" => "金龍慶", "ref" => "nikh:p16_100002_00", "surface" => "龍慶" }
     assert_equal [{ "value" => "時敏堂" }], annotations["places"]
     assert_includes annotations["books"], { "value" => "綱目", "name" => "資治通鑑綱目" }
   end
