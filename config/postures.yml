@@ -404,9 +404,10 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   damos:
-    kind: {posture: pending, note: "candidate: a kind_map source_kind administrative — the
-        Linear B corpus is palatial bookkeeping (tablets, sealings, labels; the stirrup-jar
-        inscriptions are labels) — awaiting the ruling"}
+    # kind machine-postured since 2026-10-18 — kind_map.yml source_kind
+    # administrative (Linear B is palatial bookkeeping: tablets, sealings,
+    # labels; the stirrup jars are transport labels). The pending row
+    # retired under the shadowing rule.
     lect: {posture: identity, note: "gmy — the nabu-lects anchor; the corpus is the whole
         attested Mycenaean Greek, no finer stage exists to refine into"}
     dating: {posture: pending, note: "candidate: ruled Aegean ceramic-phase rows (LM/LH,
