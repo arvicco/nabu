@@ -105,3 +105,36 @@ sources:
       collection: collection  # holding collections: Lontar ring Perpustakaan Kantor Dokumentasi
       #                         Budaya Bali 191 · Lontar Balai Bahasa Bali 179 · Wanagiri 153 …
       gedong_kirtya_class: classification  # Agama 492 · Itihasa 121 · Wéda 68 · Babad 17
+  # -- The Arabic/Syriac crosswalk wave: parse-time metadata (live census
+  #    figures from the canonical assets, 2026-10-18).
+  openiti:                    # 9,105 primary versions carry a TSV tags bag
+    fields:
+      genre_tags: genre_tag   # the scheme@keyword classification tags verbatim, prefix
+      #                         kept (GAL@fiqh 490 · JK@فقه 471 · Shamela@فقه عام 2,235 …);
+      #                         GAL is Brockelmann's multi-axis scheme (genre + period +
+      #                         region keywords), never split by guess — hence its own
+      #                         facet, not genre (the subject facet keeps the kind rule)
+  diccas:                     # 10 books (one document each)
+    fields:
+      disaster_types: disaster  # the catastrophe <term>s' own English translation labels,
+      #                         distinct per book (wind 476 · torture, punishment 288 ·
+      #                         pestilence 206 · calamity 202 · earthquake 357 · plague
+      #                         188 …); ONE fold: the 167 "earhquake" spellings join
+      #                         "earthquake" (an upstream typo of the same label — the
+      #                         passage annotations keep the verbatim attribute)
+      disaster_classes: disaster_class  # the term @subtype (divine 317 · military 50 ·
+      #                         unspecified 49 · social 19 · natural 14 · moral 3 ·
+      #                         political 1; "divine,unspecified" splits on the comma)
+      places_mentioned: place_mentioned  # the <placeName> translation labels the
+      #                         accounts NAME (Egypt 501 · Damascus 270 · Cairo 235 · Sham
+      #                         204 · Baghdad 150 …) — places the text is ABOUT, never the
+      #                         book's origin (no axis place claim)
+      author: author          # the byline author (transliteration), 9 of 10 books
+  syriac-corpus:              # 632 documents
+    fields:
+      author: author          # titleStmt author, 631 docs (Aphrahat · Jacob of Serugh …)
+      author_ref: author_ref  # its syriaca.org person URI, 493 docs — the person-id lane
+      parent_works: work      # the titleStmt series titles ABOVE the document (603 docs;
+      #                         "The Odes of Solomon" above Ode 19, the Peshitta NT
+      #                         ladder above 2 John) — the corpus imprint series
+      #                         "Digital Syriac Corpus" excluded by rule
