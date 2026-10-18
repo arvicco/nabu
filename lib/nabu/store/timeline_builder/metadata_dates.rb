@@ -228,12 +228,16 @@ module Nabu
           "rem" => "orig_place",
           # P118-R4 S5: the IEDC record's toponym LIST (143 of 1,316 docs,
           # censused 2026-10-11) — see #toponym_claim.
-          "iedc" => "toponyms"
+          "iedc" => "toponyms",
+          # The OBI header's PLACE OF ORIGIN (720 of 1,121 files, census
+          # 2026-10-18: "Mt. Tuyin, Bagan", "Hsu-pyu-kun village, Natogyi").
+          "obi-burmese" => "place_of_origin"
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
-        # "s.l" — the imprint world's sine loco (eebo, 1,311 docs).
+        # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
+        # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29).
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
-                    "s.l", "s.l."].freeze
+                    "s.l", "s.l.", "?"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO

@@ -400,3 +400,7 @@ sources:
       ndl_catalog.author_names: author  # the 著者 parts' names, role split off — the NDL
       #                                   record's claim, labeled by its nesting
       ndl_catalog.subjects: subject     # 件名, ||-multi
+  obi-burmese:                # the OBI header SUBJECT (722 of 1,121 files, 331 distinct)
+    fields:
+      subject: subject        # terse English prose verbatim ("ded. of serfs and cattle" …;
+      #                         upstream's bare "?" a claim like seal's "Unknown")

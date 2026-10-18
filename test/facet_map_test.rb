@@ -215,7 +215,8 @@ class FacetMapTest < Minitest::Test
       "cbeta" => { "byline_authors" => "author" },
       "ja-wikisource" => { "author" => "author" },
       "itkc" => { "author" => "author", "subject_class" => "subject", "sabu_class" => "classification" },
-      "honkoku" => { "ndl_catalog.author_names" => "author", "ndl_catalog.subjects" => "subject" }
+      "honkoku" => { "ndl_catalog.author_names" => "author", "ndl_catalog.subjects" => "subject" },
+      "obi-burmese" => { "subject" => "subject" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
