@@ -159,7 +159,13 @@ class FacetMapTest < Minitest::Test
       "cs-wikisource" => { "author" => "author", "work" => "work" },
       "uk-wikisource" => { "author" => "author", "work" => "work" },
       "ru-wikisource" => { "author" => "author", "work" => "work" },
-      "menota" => { "work" => "work" }
+      "menota" => { "work" => "work" },
+      "perseus-greek" => { "author" => "author", "work" => "work", "cts_textgroup" => "author_id",
+                           "cts_work" => "work_id" },
+      "perseus-latin" => { "author" => "author", "work" => "work", "cts_textgroup" => "author_id",
+                           "cts_work" => "work_id" },
+      "first1k-greek" => { "author" => "author", "work" => "work", "cts_textgroup" => "author_id",
+                           "cts_work" => "work_id" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
