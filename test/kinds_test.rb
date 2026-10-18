@@ -491,6 +491,7 @@ class KindsTest < Minitest::Test
       assert_equal want, shipped.normalize("elektire", slug), slug
     end
     assert_equal "literary/narrative/novel", shipped.source_kind("eltec-srp")
+    assert_equal "administrative", shipped.source_kind("damos")
   end
 
   # Every census value of the round folds to a ruled class (no unmapped

@@ -527,6 +527,12 @@ sources:
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
   # the source IS a canon or a dynastic record — one ruled line each) ---
+  damos:               # census 2026-10-18: 5,932 items, 29 collections
+    # Linear B is palatial bookkeeping by construction — tablets,
+    # sealings and labels recording personnel, livestock, commodities
+    # and offerings; the inscribed stirrup jars are transport labels.
+    # A whole-source declaration, the parse-time mapping call.
+    source_kind: administrative
   vulgate:
     source_kind: scripture
   prague-bible-1488:
