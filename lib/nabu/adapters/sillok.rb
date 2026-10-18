@@ -61,6 +61,14 @@ module Nabu
         MANIFEST
       end
 
+      # The M_ person ids on the index markup project into the "sillok"
+      # person-index slice at sync and rebuild (Nabu::NikhPersons).
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::NikhPersons::Producer.new(catalog: catalog, authority: MANIFEST.id)
+      end
+
       # P79-2: data.go.kr serves no Last-Modified and re-mints the download
       # URL (atchFileId) on every artifact replacement — the probe resolves
       # the CURRENT url per dataset and drifts on URL identity against the

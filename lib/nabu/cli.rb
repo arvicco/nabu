@@ -4528,6 +4528,8 @@ module Nabu
         nabu person cbdb:1762      # by authority ref
         nabu person "Iulius Optatus"   # an EDH person, nominative form
         nabu person edh:HD000001/3     # by EDH ref (inscription HD000001, person 3)
+        nabu person sillok:M_0006771   # a NIKH index-markup person, per source
+        nabu person nikh:p094190       # the passage-annotation ref: every NIKH slice holding it
         nabu person mine kanripo   # census the person-name attestations
     HELP
     def person(*query_parts)
