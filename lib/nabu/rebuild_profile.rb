@@ -64,6 +64,7 @@ module Nabu
       dictionary_stats: "dictionary stats", # P106-1: the dictionary-group census
       derge_titles: "derge titles", # P106-5: the 84000→Derge title crosswalk
       aes_titles: "aes titles", # the AES <- AED per-text header titles
+      honkoku_ndl_catalog: "honkoku ndl catalog", # the honkoku <- NDL catalog-record join
       artifact_scripts: "artifact scripts", # P61-3: the artifact-script lane
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",

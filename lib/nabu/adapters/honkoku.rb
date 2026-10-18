@@ -27,6 +27,11 @@ module Nabu
     # platform's ~5M chars, entries.csv bibliography, different
     # layout) is DELIBERATELY deferred — recorded on the queue's
     # japonic remainder, never silent.
+    #
+    # A material whose manifestUrl is an NDL Digital Collections item
+    # gains that item's NDL catalog record (author, date, subjects) in a
+    # post-load pass — Nabu::HonkokuNdlCatalog, metadata "ndl_catalog" —
+    # never here: the cross-source read stays out of this parse.
     class Honkoku < Nabu::Adapter
       REPO_URL = "https://github.com/yuta1984/honkoku-data"
       URN_PREFIX = "urn:nabu:honkoku:"

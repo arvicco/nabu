@@ -121,7 +121,7 @@ module Nabu
         rows = []
         emitted = {}
         fields.each do |field, facet|
-          Array(metadata[field]).each do |value|
+          Array(field_value(metadata, field)).each do |value|
             value = value.to_s
             next if value.strip.empty? || emitted[[facet, value]]
 
@@ -130,6 +130,18 @@ module Nabu
           end
         end
         rows
+      end
+
+      # A top-level field, or — for a dotted name absent as a literal key
+      # ("ndl_catalog.author_names") — one level into a nested hash: the
+      # labeled cross-source record shape (HonkokuNdlCatalog). A non-hash
+      # parent yields nothing.
+      def field_value(metadata, field)
+        return metadata[field] if metadata.key?(field) || !field.include?(".")
+
+        parent, child = field.split(".", 2)
+        nested = metadata[parent]
+        nested.is_a?(Hash) ? nested[child] : nil
       end
 
       # A facet entry carries a singular "value" (EDH, EDR, Elephantine…)

@@ -395,3 +395,8 @@ sources:
       sabu_class: classification  # 사부분류 중분류, hanja-glossed and consistent across families
       #                         (별집류(別集類) · 편년류(編年類) · 지리류(地理類) …); the 대분류 rides
       #                         "sabu_division" unfaceted — written both "사부(史部)" and "사부"
+  honkoku:                    # the NDL-held materials' NDL catalog record (HonkokuNdlCatalog —
+    fields: #                   867 of 918 NDL-manifest materials join the held census, 2026-10-18)
+      ndl_catalog.author_names: author  # the 著者 parts' names, role split off — the NDL
+      #                                   record's claim, labeled by its nesting
+      ndl_catalog.subjects: subject     # 件名, ||-multi
