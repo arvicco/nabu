@@ -177,8 +177,12 @@ sources:
     # registry's grc/cyp variety, minted 2026-10-18). Eteocypriot (ecy)
     # and und-Latn documents are untouched — the override keys on grc
     # alone. Upstream metadata taken at face value, the parse-time
-    # mapping discipline.
+    # mapping discipline. The syllabary-in-transliteration documents
+    # carry grc-Latn and are the dialect's core witnesses — both
+    # spellings take the variety; und-Latn (double-labeled titles)
+    # and ecy stay untouched.
     grc: { lect: "grc/cyp", tier: certain }
+    grc-Latn: { lect: "grc/cyp", tier: certain }
   ud:
     # The ruled exception to D57-f (ud deliberately unstaged): the Old
     # Guaraní treebank (Montoya/Restivo, 1639-1724) is precisely a stage
