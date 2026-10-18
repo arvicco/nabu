@@ -687,6 +687,20 @@ module Store
       assert_nil timeline_for("urn:nabu:honkoku:p:m2"), "no record, no row"
     end
 
+    # obi-burmese: the header PLACE OF ORIGIN is the named findspot claim;
+    # upstream's bare "?" mints no place.
+    def test_metadata_places_obi_burmese_place_of_origin
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:vol3:207:re:p337",
+                        { "date" => "CS 695 = CE 1333", "place_of_origin" => "Mt. Tuyin, Bagan" })
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:vol1:74:ob:p118",
+                        { "date" => "CS 57(9) = CE 1217", "place_of_origin" => "?" })
+      build!
+      assert_equal "Mt. Tuyin, Bagan", timeline_for("urn:nabu:obi-burmese:vol3:207:re:p337")[:place_name]
+      row = timeline_for("urn:nabu:obi-burmese:vol1:74:ob:p118")
+      assert_nil row[:place_name], "the bare ? is upstream's unknown, never a place"
+      assert_equal 1217, row[:not_before]
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

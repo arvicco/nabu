@@ -23,3 +23,15 @@ files:
     url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol6.zip/content
     whole: false
     trim: one file out of the volume zip (vol6 extracts FLAT, no subdir)
+  - path: vol3/OBI_Vol3_No207__re_p337.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol3.zip/content
+    whole: false
+    retrieved: "2026-10-18"
+    trim: one file out of the volume zip, copied from the box's canonical extraction (header
+      PLACE OF ORIGIN / CURRENT LOCATION / REFERENCES with a BED id / SUBJECT all filled)
+  - path: vol1/OBI_Vol1_No74__ob_p118.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol1.zip/content
+    whole: false
+    retrieved: "2026-10-18"
+    trim: one file out of the volume zip, copied from the box's canonical extraction (PLACE OF
+      ORIGIN and SUBJECT are upstream's bare "?")

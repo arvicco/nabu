@@ -47,9 +47,24 @@ module Nabu
     # Bilingual header values ("TITLE: <Myanmar> ¤ <translit>") split on
     # the ¤ separator: the Myanmar half is the value, the romanization
     # rides a _translit twin.
+    #
+    # The place/reference/subject block (census 2026-10-18, whole deposit
+    # of 1,121 files): PLACE OF ORIGIN (720 filled, 36 bilingual; "?" ×29
+    # is upstream's own unknown), CURRENT LOCATION (707; "in situ" ×211),
+    # REFERENCES (920 — prior editions plus the Bagan Epigraphic Database
+    # concordance, "BED B 623-1", lifted into +bed_ids+), REFERENCE NUMBER
+    # (3) and SUBJECT (722, terse English prose: "ded. of serfs …"). All
+    # verbatim; the bilingual ones split like TITLE. vol6 spells the ref
+    # key "OBI REF" (38 files) where the other volumes write "OBI CORPUS
+    # REF" — both read.
     module ObiTxtParser
       Record = Data.define(:ref, :title, :title_translit, :source, :date,
-                           :donor, :face, :lines, :sections)
+                           :donor, :face, :lines, :sections,
+                           :origin, :origin_translit, :location, :location_translit,
+                           :references, :bed_ids, :reference_number, :subject, :subject_translit)
+
+      # A Bagan Epigraphic Database concordance id inside REFERENCES.
+      BED_ID_RE = /\bBED [A-Z] \d+-\d+[a-z]?/
       Line = Data.define(:n, :text, :translit)
 
       BURMESE_DIGITS = "၀၁၂၃၄၅၆၇၈၉"
@@ -76,11 +91,20 @@ module Nabu
         raise Nabu::ParseError, "#{File.basename(path)}: no inscription lines" if lines.empty?
 
         title_my, title_tr = split_bilingual(header["TITLE"])
+        origin, origin_tr = split_bilingual(header["PLACE OF ORIGIN"])
+        location, location_tr = split_bilingual(header["CURRENT LOCATION"])
+        subject, subject_tr = split_bilingual(header["SUBJECT"])
+        references = presence(header["REFERENCES"].to_s)
         Record.new(
-          ref: header["OBI CORPUS REF"], title: title_my, title_translit: title_tr,
+          ref: presence(header["OBI CORPUS REF"].to_s) || presence(header["OBI REF"].to_s),
+          title: title_my, title_translit: title_tr,
           source: header["INFORMATION SOURCE"], date: header["DATE"],
           donor: split_bilingual(header["DONOR"]).first, face: header["FACE"],
-          lines: lines, sections: sections
+          lines: lines, sections: sections,
+          origin: origin, origin_translit: origin_tr, location: location, location_translit: location_tr,
+          references: references, bed_ids: references.to_s.scan(BED_ID_RE).uniq,
+          reference_number: presence(header["REFERENCE NUMBER"].to_s),
+          subject: subject, subject_translit: subject_tr
         )
       end
 

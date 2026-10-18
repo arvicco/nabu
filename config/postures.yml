@@ -1419,8 +1419,12 @@ sources:
     lect: {posture: identity, note: "obr — the v1.6.0 anchor; the bare code is the claim"}
     dating: {posture: dated, note: "P108-8 retires the pending: every CE year in the
         CS=CE date strings joins the envelope (967 docs banded)"}
-    places: {posture: pending, note: "candidate: PLACE OF ORIGIN / CURRENT LOCATION
-        header fields ride document metadata verbatim where present"}
+    places: {posture: named, note: "the header PLACE OF ORIGIN (720 of 1,121 files, census
+        2026-10-18) rides metadata place_of_origin verbatim (bilingual values split like
+        TITLE) and feeds the place lane as a named findspot claim via MetadataDates; the
+        bare '?' (29) mints no place. CURRENT LOCATION (a PRESENT holding place, 'in situ'
+        ×211) and the REFERENCES concordance (BED ids lifted to bed_ids) ride metadata
+        only; no gazetteer refs — a Myanmar place authority is the open gap"}
     script: {posture: qualified, note: "Myanmar-script Unicode surface (~mymr) with a
         Latin transliteration lane riding annotations"}
   dharma-javanese-texts:
