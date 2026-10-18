@@ -68,7 +68,8 @@ class FacetMapTest < Minitest::Test
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)
     expected = {
-      "cdli" => { "material" => "material", "object_type" => "object_type", "museum_no" => "museum" },
+      "cdli" => { "material" => "material", "object_type" => "object_type", "museum_no" => "museum",
+                  "subgenre" => "subgenre" },
       "rundata" => { "material_type" => "material", "material" => "material",
                      "objectInfo" => "object_type", "style" => "style" },
       "glaux" => { "dialect" => "dialect" },
@@ -102,6 +103,21 @@ class FacetMapTest < Minitest::Test
                  map.fields_for("diccas"))
     assert_equal({ "author" => "author", "author_ref" => "author_ref", "parent_works" => "work" },
                  map.fields_for("syriac-corpus"))
+  end
+
+  # oracc's catalogue extras: persons by role (ancient_author → the shared
+  # author facet; ruler → the ruler facet CDLI already emits), the
+  # context columns, and the letters' sending place.
+  def test_shipped_config_projects_the_oracc_catalogue_persons_and_context
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    fields = Nabu::FacetMap.load(path).fields_for("oracc")
+    expected = { "ruler" => "ruler", "ancient_author" => "author", "ancient_recipient" => "recipient",
+                 "eponym" => "eponym", "dossier_list" => "dossier", "seal_owner" => "seal_owner",
+                 "ancient_buyer" => "buyer", "ancient_seller" => "seller", "ancient_creditor" => "creditor",
+                 "ancient_debtor" => "debtor", "subgenre" => "subgenre", "supergenre" => "supergenre",
+                 "archive" => "archive", "dynastic_seat" => "dynastic_seat", "series" => "series",
+                 "sender_loc" => "sender_place" }
+    assert_equal expected, fields
   end
 
   def test_shipped_config_loads

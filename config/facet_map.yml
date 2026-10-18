@@ -59,6 +59,29 @@ sources:
       #                         impression) 15,518 · tablet & envelope 7,183 · cone · brick …)
       museum_no: museum       # 340,616 docs, 263,099 values — incl. upstream's own
       #                         number-withheld forms ("BM —" 27,272) and "unknown" (claims)
+      subgenre: subgenre      # 71,814 rows, 4,619 values (catalog census 2026-10-18): lexical-
+      #                         series witness labels, archives, "ETCSL <n> <title> (witness)" —
+      #                         a mixed vocabulary, faceted verbatim, never kind-folded
+  oracc:                      # catalogue census 2026-10-18, 125,738 members (OraccCatalogue)
+    fields:
+      ruler: ruler            # 12,689 (Sargon II 1,431 · Esarhaddon 1,368 · Ashurbanipal 1,288 ·
+      #                         "Esarhaddon or Ashurbanipal" 976 …) — CDLI's ruler facet name
+      ancient_author: author  # 3,967 ("(unknown)" 1,063 — a claim; the king; Issar-šumu-ereš …)
+      ancient_recipient: recipient  # 3,065 (the king ×2,467 in three bracketings …)
+      eponym: eponym          # 1,123, 124 limmu officials
+      dossier_list: dossier   # 2,357 — SAA's correspondent dossier slugs (ashurbanipal …)
+      seal_owner: seal_owner  # 62 ┐ the legal parties: arrays (upstream ";"-joined),
+      ancient_buyer: buyer    # 42 │ one facet row per party
+      ancient_seller: seller  # 41 │
+      ancient_creditor: creditor  # 35 │
+      ancient_debtor: debtor  # 35 ┘
+      subgenre: subgenre      # 39,855, 2,415 values — mixed (series, rulers, archives); not kind-folded
+      supergenre: supergenre  # 108,381 — ELA/LIT/LEX/STL/unknown/UNK; restates genre, not kind-folded
+      archive: archive        # 9,222, 134 archives ("099 - Miscellaneous" 5,047 · Mari palace …)
+      dynastic_seat: dynastic_seat  # 5,411 (Assyria 2,108 · Urartu 1,105 · Ur 758 …)
+      series: series          # 362 lexical series (Aa · Ura · Nabnitu …)
+      sender_loc: sender_place  # 2,678 SAA letters' place of writing (Nineveh 1,046 · "(unknown)"
+      #                         169 …); also its own labeled axis row (axis_source oracc-sender)
   rundata:                    # census: 6,815 inscription records
     fields:
       material_type: material # 7 classes (stone 4,204 · wood 1,279 · metal 646 …)

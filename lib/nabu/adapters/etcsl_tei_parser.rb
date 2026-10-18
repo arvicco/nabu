@@ -4,7 +4,7 @@ require "nokogiri"
 
 require_relative "../errors"
 require_relative "../normalize"
-require_relative "../cuneiform_concordance"
+require_relative "cuneiform_concordance"
 require_relative "../model/document"
 require_relative "../model/passage"
 
@@ -74,7 +74,7 @@ module Nabu
     # museumNumber entries across the 394 composites, censused 2026-10-18;
     # 345 with a per-witness provenance scope). Metadata "witnesses" keeps
     # each entry in header order: the raw string verbatim, the cleaned
-    # museum number (Nabu::CuneiformConcordance.museum_number — the
+    # museum number (Nabu::Adapters::CuneiformConcordance.museum_number — the
     # parenthetical publication stripped, joins intact), and the provenance
     # when given. The witnesses' findspots are NOT projected onto the place
     # axis: a composite is assembled from many tablets and has no single

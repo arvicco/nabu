@@ -112,7 +112,7 @@ class EtcslTest < Minitest::Test
     # rendered "(not in catalog)" on documents that ARE in the catalog).
     # The self-assertion lives in metadata["etcsl_no"], never as a
     # self-loop edge; epsd2 concordance producers target these same urns.
-    # After the xrefs come the concordance HUBS (Nabu::CuneiformConcordance):
+    # After the xrefs come the concordance HUBS (Nabu::Adapters::CuneiformConcordance):
     # the composition's own padding-folded "etcsl:" hub (CDLI witnesses
     # assert the same key from their subgenre) and one "object:" hub per
     # witness fragment (CDLI asserts the same keys from museum_no).
@@ -185,11 +185,11 @@ class EtcslTest < Minitest::Test
   def test_witness_hubs_meet_the_cdli_museum_number_keys
     related = parse(LUGALBANDA).metadata["related"]
     # CDLI catalogues this join as "HS 1517 + Ist Ni 04102".
-    assert_equal Nabu::CuneiformConcordance.object_hubs("HS 1517 + Ist Ni 04102"),
+    assert_equal Nabu::Adapters::CuneiformConcordance.object_hubs("HS 1517 + Ist Ni 04102"),
                  related & ["object:HS 1517", "object:NI 4102"]
     # ETCSL's sic-flagged "AUAM 73.2389! (RA 70 144, photo)" meets CDLI's
     # plain "AUAM 73.2389" (P249270).
-    assert_includes related, Nabu::CuneiformConcordance.object_hubs("AUAM 73.2389").first
+    assert_includes related, Nabu::Adapters::CuneiformConcordance.object_hubs("AUAM 73.2389").first
   end
 
   WITNESSES = File.join(Nabu::TestSupport.fixtures("etcsl"), "witnesses", "c.1.3.3.xml")

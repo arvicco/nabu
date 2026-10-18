@@ -410,6 +410,14 @@ sources:
       "Getreide": "a subject label (grain), not a genre"   # 21
   oracc:              # catalogue genre (P100-2 emission; 115,263 bearing entries,
     facet: genre      # CDLI-drifted vocabulary; case-insensitive fold covers lexical/letter)
+    # subgenre/supergenre (mined 2026-10-18; metadata + facets) are deliberately
+    # NOT folded here, the loop's census call: supergenre restates genre on
+    # 99.9% of members (ELA=Administrative 77,711 · LEX=Lexical 8,884; only 159
+    # genre-less members carry one) and its LIT spans Royal Inscription
+    # (7,479), so a fold would multi-label royal texts literary; subgenre
+    # (2,415 values) mixes lexical series, ruler names (the royal-inscription
+    # subgenre IS the king) and archive names under one column — no single
+    # fold table maps it onto the class list honestly.
     map:
       "Administrative": administrative           # 77,717
       "Lexical": lexical                         # 8,884 + 1,009 lowercase
