@@ -59,6 +59,24 @@ class BuilderRefreshTest < Minitest::Test
     assert_operator summary.facets.rows, :>=, 1
     refute_nil summary.timeline
     refute_nil summary.kinds
+    refute_nil summary.passage_facets, "the passage-grain facet lane rides the refresh"
+  end
+
+  # The passage-grain lane re-projects under the shipped passage_fields
+  # (sillok's subject classes) like the document lane does.
+  def test_refresh_projects_passage_facets
+    sillok = Nabu::Store::Source.create(slug: "sillok", name: "Sillok", adapter_class: "X", license: "x",
+                                        license_class: "attribution", upstream_url: "x", enabled: true)
+    doc = Nabu::Store::Document.create(source_id: sillok.id, urn: "urn:nabu:sillok:waa_001", title: "t",
+                                       language: "lzh", canonical_path: "x", content_sha256: "1" * 64)
+    Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:sillok:waa_001:1", sequence: 1,
+                                language: "lzh", text: "t", text_normalized: "t", content_sha256: "x",
+                                revision: 1, annotations_json: JSON.generate("subject_classes" => ["인물(人物)"]))
+    summary = Dir.mktmpdir do |dir|
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+    end
+    assert_equal 1, summary.passage_facets.rows
+    assert_equal [%w[subject 인물(人物)]], @catalog[:passage_facet_values].select_map(%i[facet value])
   end
 
   # P121-2: the lemma attestation rollups ride the refresh (last, after

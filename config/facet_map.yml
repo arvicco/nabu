@@ -311,3 +311,20 @@ sources:
       work: work
       cts_textgroup: author_id
       cts_work: work_id
+  # -- The passage grain: passage_fields project passages.annotations_json
+  #    keys into the passage facet tables (Store::PassageFacetBuilder) —
+  #    the facet lane for claims upstream makes per ARTICLE, not per
+  #    document. Same verbatim discipline; an annotation value may be a
+  #    string, an array of strings, or an array of {"value", "ref"}
+  #    objects (the entity shape: a name plus its authority ref).
+  #    Censuses: live catalog 2026-10-18. The NIKH siblings (sjw,
+  #    bibyeonsa, goryeosa, goryeosa-jeoryo) parse the same subjectClass
+  #    slot but their deposits carry none (0 passages each) — unruled.
+  sillok:                     # 413,102 of 414,321 article passages, 216 subject labels,
+    passage_fields: #           899,669 (passage, label) pairs — the 분류 subjectClass
+      subject_classes: subject  # tree verbatim, upper-lower joined by upstream's own
+      #                         hyphen ("왕실-의식(儀式)", "군사-중앙군(中央軍)", "인물(人物)")
+  itkc:                       # 37,182 of 37,184 article passages, 29 genre labels, 74,364
+    passage_fields: #           pairs — the 문체분류 classification verbatim (雜著類 ·
+      genre_classes: genre    # 其他類 · 詩類 …); the passage facet shares the document
+      #                         facet's axis name, so --type/--facet genre reach both grains

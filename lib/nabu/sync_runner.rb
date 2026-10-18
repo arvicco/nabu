@@ -387,8 +387,10 @@ module Nabu
       end
       return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
 
-      Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug,
-                                          facet_map: Nabu::FacetMap.load_default(config: @config))
+      facet_map = Nabu::FacetMap.load_default(config: @config)
+      Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug, facet_map: facet_map)
+      # The passage-grain facet slice follows the same load (no lane lags a sync).
+      Store::PassageFacetBuilder.refresh_source!(catalog: @db, slug: entry.slug, facet_map: facet_map)
       # Kind rows project from the facet rows just refreshed (P99-2) —
       # same lesson (P47-r3): no lane may lag a sync.
       Store::KindBuilder.refresh_source!(catalog: @db, slug: entry.slug,

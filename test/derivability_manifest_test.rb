@@ -25,7 +25,8 @@ class DerivabilityManifestTest < Minitest::Test
         derivation_stamps dictionaries dictionary_citations dictionary_crossrefs
         dictionary_entries dictionary_reflexes dictionary_stats document_axes
         document_facets documents enrichments hiero_postings kind_stats language_curve
-        language_mix language_names language_records lect_stats lemma_rollup passages person_index person_index_names
+        language_mix language_names language_records lect_stats lemma_rollup passage_facet_values
+        passage_facets passages person_index person_index_names
         place_crosswalk place_index
         place_index_names provenance source_records source_stats
         source_stats_languages sources urn_notes
