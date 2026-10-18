@@ -715,10 +715,11 @@ sources:
   ociana:
     kind: {posture: unclassified, note: "no genre field upstream — overwhelmingly signature
         graffiti (\"By N son of N\"), with prayers, laments and tomb texts unmarked"}
-    lect: {posture: pending, note: "candidates: xna anchor + Safaitic/Hismaic/Dadanitic/Taymanitic
-        stages — the aggregated registry mint is in flight this phase; flips when
-        canonical/nabu-lects carries the nodes (the per-record script rides metadata for the
-        stage flip; the 36 non-ANA records carry grc/lat/inm/arc/xsa already)"}
+    lect: {posture: identity, note: "the epigraphic-belt registry package (the xna anchor with
+        its saf/his/dad/tay varieties, plus xsa/inm for the minor scripts) merged +
+        canonical-synced 2026-10-18 — the add-then-retire shape within one phase; the bare
+        codes are the claim. The per-record script rides metadata for a future variety-staging
+        facet rule (an owner-ruled lect_facet_rules row, queued)"}
     dating: {posture: undatable, note: "findDate (17,681 of 37,955 records) is the DISCOVERY /
         survey date (\"1989\", \"1920s and 1930s\"), never the inscription's — carried as metadata
         find_date, deliberately not a dating claim; the deposit carries no typed date"}
@@ -894,11 +895,12 @@ sources:
         head as upstream writes it (Weihinschrift, Grabinschrift, Besitzerinschrift,
         Einzelbuchstabe…), censused at the first sync; titles without a script label
         (coin legends) carry no genre"}
-    lect: {posture: pending, note: "candidates: ecy anchor + a Cypriot-Greek grc stage — the
-        aggregated registry mint is in flight this phase; flips when canonical/nabu-lects
-        carries the nodes. Lines read ecy-Latn (Eteocypriot, by the title's eteokyprisch
-        label), grc-Latn (Greek in the syllabary) or grc (alphabetic Greek, by the line's own
-        letters); und-Latn where a title labels both eteokyprisch and syllabisch"}
+    lect: {posture: identity, note: "the epigraphic-belt registry package (the ecy anchor +
+        the grc/cyp Arcadocypriot variety) merged + canonical-synced 2026-10-18 — the
+        add-then-retire shape within one phase; the bare codes are the claim. Lines read
+        ecy-Latn / grc-Latn / grc / und-Latn per the parser's letter-and-label rules; staging
+        grc docs onto the grc/cyp variety is a future owner-ruled lect_facet_rules row
+        (queued)"}
     dating: {posture: partial, note: "origDate is German prose with unsigned BCE years and
         centuries (330-310, 4.Jh., Anfang 4.Jh., 5.-4.Jh., nach 498); the grammar bands all
         six fixture records; 'Zeit?' and unforeseen prose keep raw only — census the
