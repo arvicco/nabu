@@ -76,6 +76,7 @@ class PapyriTest < Minitest::Test
       urn:nabu:ddbdp:bgu:1:100
       urn:nabu:ddbdp:bgu:1:102
       urn:nabu:ddbdp:c.epist.lat::10
+      urn:nabu:ddbdp:p.ryl:4:560
     ], refs.map(&:id)
     refs.each do |ref|
       assert_equal "papyri-ddbdp", ref.source_id
@@ -292,6 +293,90 @@ class PapyriTest < Minitest::Test
     assert_equal ["tm:8875"], document.metadata["related"]
   end
 
+  # --- header mining: the HGV record beside each DDbDP text ------------------
+
+  # The HGV metadata record (HGV_meta_EpiDoc/HGV<n/1000+1>/<hgv>.xml, the
+  # same clone) carries what the edition file does not: P.Ryl. 4 560 is
+  # "Apollonios an Zenon" in its LATER keyword terms (the leading term is
+  # the text type the kind lane reads), "Gehört zum Zenon - Archiv" in its
+  # commentary, and one date the text MENTIONS (line 5).
+  def ryl560
+    adapter = Nabu::Adapters::Papyri.new
+    adapter.parse(adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:ddbdp:p.ryl:4:560" })
+  end
+
+  def test_parse_mines_the_hgv_sender_addressee_persons
+    assert_equal [
+      { "name" => "Apollonios", "role" => "sender", "term" => "Apollonios an Zenon" },
+      { "name" => "Zenon", "role" => "addressee", "term" => "Apollonios an Zenon" }
+    ], ryl560.metadata["persons"]
+  end
+
+  def test_parse_mines_the_hgv_archive_membership
+    assert_equal ["Zenon - Archiv"], ryl560.metadata["archive"]
+  end
+
+  def test_parse_carries_mentioned_dates_as_their_own_class_never_the_origin_date
+    meta = ryl560.metadata
+    assert_equal [{ "ref" => "Z. 5", "when" => "-0256-10-04", "not_before" => -256,
+                    "not_after" => -256, "raw" => "4. Okt. 256 v.Chr." }], meta["mentioned_dates"]
+    refute meta.key?("date"), "the origin date (3 Oct 256 BCE) stays the HGV timeline lane's — " \
+                              "a mentioned date is never the document's date"
+  end
+
+  def test_an_hgv_record_without_the_extras_adds_nothing
+    adapter = Nabu::Adapters::Papyri.new
+    document = adapter.parse(adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:ddbdp:bgu:1:100" })
+    assert_equal %w[hgv related tm_nr], document.metadata.keys.sort
+  end
+
+  # Values verbatim from the live HGV census (2026-10-18): "NN"/"N.N." is
+  # HGV's unnamed-party placeholder — a side carrying it is not a person;
+  # designations ("den König") are upstream's own label and ride verbatim;
+  # a document-act noun on the left ("Eingabe an …", "Lieferung (Öl) an
+  # …") names the act, not a sender — only its addressee is a party.
+  def test_keyword_persons_drop_placeholders_and_act_nouns
+    persons = Nabu::Adapters::PapyriHeader.keyword_persons(
+      ["Eingabe an den Strategen", "NN an NN", "N.N. an den König", "Eingabe an den Strategen",
+       "Lieferung (Öl) an Zenon"]
+    )
+    assert_equal [{ "name" => "den König", "role" => "addressee", "term" => "N.N. an den König" },
+                  { "name" => "den Strategen", "role" => "addressee", "term" => "Eingabe an den Strategen" },
+                  { "name" => "Zenon", "role" => "addressee", "term" => "Lieferung (Öl) an Zenon" }],
+                 persons, "the leading term is the text type, never mined; NN sides and act nouns drop"
+  end
+
+  # --- header mining: the DCLP header ---------------------------------------
+
+  def dclp(id)
+    adapter = Nabu::Adapters::Papyri.new
+    adapter.parse(adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:dclp:#{id}" }).metadata
+  end
+
+  def test_dclp_header_date_place_and_keywords_reach_the_metadata
+    meta = dclp("62952")
+    assert_equal({ "not_before" => 100, "not_after" => 120, "raw" => "100 - 120" }, meta["date"])
+    assert_equal({ "ancient" => "Fundort: Claudianus Mons (Eastern desert, Egypt); " \
+                                "Schreibort: Claudianus Mons (Eastern desert, Egypt)",
+                   "ref" => "https://www.trismegistos.org/place/2783" }, meta["place"])
+    assert_equal %w[verse epic classical literature poetry], meta["keywords"], "deduped, upstream order"
+  end
+
+  def test_dclp_place_refs_take_the_findspot_settlement_before_its_nome
+    meta = dclp("64388")
+    assert_equal({ "not_before" => 300, "not_after" => 399, "raw" => "300 - 399" }, meta["date"])
+    assert_equal "https://www.trismegistos.org/place/1524 https://www.trismegistos.org/place/2722",
+                 meta.dig("place", "ref")
+    assert_equal ["medicine", "science", "list of spices, pharmaceutical prescriptions"], meta["keywords"]
+  end
+
+  def test_dclp_undated_header_mints_no_date_but_keeps_the_place
+    meta = dclp("805566")
+    refute meta.key?("date"), "origDate unbekannt is no date"
+    assert_equal({ "ancient" => "Attica" }, meta["place"])
+    assert_equal ["Magic", "prayer for justice"], meta["keywords"]
+  end
+
   def test_reference_producer_records_under_the_source_name
     assert_predicate Nabu::Adapters::Papyri, :reference_edges?
     producer = Nabu::Adapters::Papyri.reference_producer(catalog: nil, journal: nil)
@@ -300,7 +385,7 @@ class PapyriTest < Minitest::Test
 
   def test_parse_latin_document_spot_check
     adapter = Nabu::Adapters::Papyri.new
-    ref = adapter.discover(FIXTURES).to_a.last
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:ddbdp:c.epist.lat::10" }
     document = adapter.parse(ref)
     assert_equal "lat", document.language
     assert_equal "urn:nabu:ddbdp:c.epist.lat::10:r:7", document.to_a[6].urn

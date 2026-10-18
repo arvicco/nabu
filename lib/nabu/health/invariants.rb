@@ -212,6 +212,11 @@ module Nabu
                                  "year projects instead (date_class edition)" },
         "openmgh" => { "printed_place" => "the modern MGH volume's publisher city — edition " \
                                           "lineage; the print year projects (date_class edition)" },
+        "papyri-ddbdp" => { "mentioned_dates" => "dates the papyrus TEXT mentions (HGV <date " \
+                                                 "type=\"mentioned\">, per line), never its own " \
+                                                 "date — kept as their own labeled class so no " \
+                                                 "timeline reader can rank one as the origin; " \
+                                                 "the HGV origDate projects instead" },
         # P118-R4 S4: the per-key, prefix-aware census surfaced these;
         # each is lineage, machinery or a holding location (live values
         # sampled 2026-10-11). Everything else it surfaced is real ore

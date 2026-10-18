@@ -138,6 +138,16 @@ module Nabu
     # ~2,260 literary documents (grc ~2,19x, lat ~6x, cop ~1x); measured
     # at 8f7ed708: 2,256 refs (grc 2,181 · lat 57 · cop 17 · egy-Egyd 1).
     #
+    # == Header mining (PapyriHeader)
+    #
+    # Parse also reads what idp.data asserts ABOUT each document: a DCLP
+    # file's own origDate/origPlace/provenance/keywords, and — for any
+    # edition carrying an HGV idno — the HGV record's later-keyword
+    # sender→addressee parties, archive membership and mentioned dates
+    # (HGV_meta_EpiDoc/, the same clone; the HGV origin date/place/type
+    # stay the build-time timeline and kind walks'). Field shapes and the
+    # census behind each rule live in PapyriHeader's header.
+    #
     # == fetch
     #
     # Single upstream repo → the Perseus git clone/pull pattern verbatim.
@@ -209,8 +219,22 @@ module Nabu
           urn: document_ref.id,
           language: document_ref.metadata["language"],
           title: document_ref.metadata["title"],
-          metadata: idno_metadata(document_ref.metadata)
+          metadata: idno_metadata(document_ref.metadata).merge(header_metadata(document_ref))
         )
+      end
+
+      # The header mining (PapyriHeader — the aggressive-mining law): a DCLP
+      # file's own origDate/origPlace/keywords, and for any edition carrying
+      # an HGV idno, its HGV record's keyword persons, archive membership
+      # and mentioned dates. The HGV tree sits beside the walk roots in the
+      # same clone; a ref whose path sits under no walk root (a caller-built
+      # ref) mines only what its own file carries.
+      def header_metadata(document_ref)
+        metadata = document_ref.id.start_with?("urn:nabu:dclp:") ? PapyriHeader.dclp(document_ref.path) : {}
+        workdir = workdir_of(document_ref.path)
+        return metadata if workdir.nil?
+
+        metadata.merge(PapyriHeader.hgv(PapyriHeader.hgv_paths(workdir, document_ref.metadata["hgv"])))
       end
 
       # P104-1 (the aggressive-mining law): the HGV/TM idnos, peeked at discover
@@ -251,6 +275,14 @@ module Nabu
       # network.
       def repo_url
         manifest.upstream_url
+      end
+
+      # The clone root a ref's file sits under: the parent of the LAST walk
+      # root segment in its path (DDbDP/, Historical/ or DCLP/), or nil.
+      def workdir_of(path)
+        parts = File.expand_path(path).split(File::SEPARATOR)
+        index = parts[0...-1].rindex { |part| [DDBDP_ROOT, HISTORICAL_ROOT, DCLP_ROOT].include?(part) }
+        index&.positive? ? parts[0...index].join(File::SEPARATOR) : nil
       end
 
       # The documentary walk: every text-bearing file of the curated tree,
