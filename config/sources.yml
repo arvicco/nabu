@@ -2479,6 +2479,31 @@ iedc:   # P107-2
   # grades (Gold/Silver/Bronze facet) and shelfmarks. Folio TRANSLATIONS
   # are a declared v1 residue. DH Awards 2025 winner.
 
+ig-cyprus:
+  adapter: Nabu::Adapters::IgCyprus
+  adopted: "2026-10-18"
+  axes: [epigraphy, classical]
+  siblings: ["-de", "-transcription"]  # literal tails — record stems are digits with an
+                                       # optional -<digits|roman> suffix, never these
+  translations: true  # the -de siblings (Klaus Hallof's German translation divs)
+  wired: false   # flips after the first real sync is verified (593 records — expect
+                 # ~593 docs + the -transcription/-de siblings; census the
+                 # unparsed origDate prose and the und-Latn title labels then)
+  sync_policy: manual
+  # IG XV 1,1 — Inscriptiones Cypri syllabicae (Amathus, Kurion, Marion;
+  # ed. Karnava/Perna with Egetmeyer, Berlin 2020) from the Berlin-
+  # Brandenburg academy's Inscriptiones Graecae digital edition
+  # (telota.bbaw.de/ig): 593 per-record EpiDoc files — Greek in the
+  # Cypriot syllabary (Latin transliteration), Eteocypriot, alphabetic-
+  # Greek bilinguals. Ingested from the record API only (api/inscriptions
+  # listing + api/xml/<id>), never third-party derivatives.
+  # License: every record's in-file <licence> (governs — the riig
+  # pattern), verbatim "Creative Commons Attribution 4.0 International
+  # (https://creativecommons.org/licenses/by/4.0/legalcode). All reuse or
+  # distribution of this work must contain somewhere a link back to this
+  # page." → CC BY 4.0 → attribution; the link-back target rides each
+  # document's metadata "uri". Re-crawls are owner-fired (593 paced GETs).
+
 iip:
   adapter: Nabu::Adapters::Iip
   adopted: "2026-07-18"

@@ -115,6 +115,8 @@ module Nabu
           "guaman-poma" => :structured,
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
+          "ig-cyprus" => :structured, # IG XV 1,1: origDate prose, unsigned BCE years and
+          #                             centuries (the syllabary's era); place = origPlace
           "itant" => :structured,
           "itkc" => :structured,
           "ja-wikisource" => :era_band_key,

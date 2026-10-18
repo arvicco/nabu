@@ -857,6 +857,26 @@ sources:
     script: {posture: qualified, note: "measured: the text lane is a Latin TRANSLITERATION
         (onw in Latn — 7,450 Latin letters, zero Coptic-block characters); the manuscripts'
         Coptic-derived Old Nubian alphabet is not carried. Metadata script Latn"}
+  ig-cyprus:
+    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet — the title
+        head as upstream writes it (Weihinschrift, Grabinschrift, Besitzerinschrift,
+        Einzelbuchstabe…), censused at the first sync; titles without a script label
+        (coin legends) carry no genre"}
+    lect: {posture: pending, note: "candidates: ecy anchor + a Cypriot-Greek grc stage — the
+        aggregated registry mint is in flight this phase; flips when canonical/nabu-lects
+        carries the nodes. Lines read ecy-Latn (Eteocypriot, by the title's eteokyprisch
+        label), grc-Latn (Greek in the syllabary) or grc (alphabetic Greek, by the line's own
+        letters); und-Latn where a title labels both eteokyprisch and syllabisch"}
+    dating: {posture: partial, note: "origDate is German prose with unsigned BCE years and
+        centuries (330-310, 4.Jh., Anfang 4.Jh., 5.-4.Jh., nach 498); the grammar bands all
+        six fixture records; 'Zeit?' and unforeseen prose keep raw only — census the
+        unparsed residue at the first sync"}
+    places: {posture: named, note: "origPlace is the ancient city (Amathus, Kurion, Marion) as
+        a bare name — no gazetteer refs in the records; provenance (findspot + present
+        museum) rides metadata, never the place claim"}
+    script: {posture: mixed, note: "the Cypriot syllabary held in Latin TRANSLITERATION
+        (-Latn; zero Cypriot-block characters) beside alphabetic Greek lines (Grek) — per line;
+        writing_system cypriot-syllabary / greek-alphabet on every passage"}
   stgall-priscian:   # P126
     # kind: machine-postured — kind_map.yml source_kind scholarly/commentary.
     lect: {posture: dates, note: "measured mix (full dump, 2026-10-14): passages sga 3,524 /

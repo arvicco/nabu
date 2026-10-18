@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+    <?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+    <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Einzelbuchstaben, alphabetisch</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>Inscriptiones Graecae</authority>
+                <idno type="URI">https://telota.bbaw.de/ig/digitale-edition/inschrift/IG XV 1, 254(1)</idno>
+                <idno type="localId">IG XV 1, 254(1) </idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/legalcode). All reuse or distribution of this work must contain somewhere a link back to this page.</licence>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <msName>IG XV 1, 254(1)</msName>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><objectType>Gefäß</objectType> (<material>Ton</material>)</support>
+                            </supportDesc>
+                        </objectDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>Marion</origPlace>
+                            <origDate>5.-4.Jh.</origDate>
+                        </origin>
+                        <provenance type="found">Ostnekropole, Grab XII</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+        <text>
+            <body>
+            <div type="edition" xml:space="preserve">
+                <ab xmlns="http://www.tei-c.org/ns/1.0"><lb n="1"/>Ε󰀑</ab>
+            </div>
+            <div type="translation" xml:lang="DE" resp="Klaus Hallof"><ab xmlns="http://www.tei-c.org/ns/1.0"><lb/>[<hi rend="italic">Buchstaben</hi>]</ab></div>
+            <div type="bibliography">
+                <p>Inscriptiones Cypri. Pars I. Inscriptiones Cypri syllabicae. Fasc. 1. Inscriptiones Amathuntis, Curii, Marii. Edid. Artemis Karnava et Massimo Perna adiuvante Markus Egetmeyer. – Berlin 2020</p>
+            </div>
+            </body>
+        </text>
+</TEI>
