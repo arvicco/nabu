@@ -50,6 +50,26 @@ module Store
       assert(@db.indexes(:document_facets).values.any? { |i| i[:columns] == %i[facet value] })
     end
 
+    # The passage-grain facet surface (migration 045): a per-source value
+    # dictionary (the vocabulary a pattern scans) + a WITHOUT ROWID pair
+    # table keyed (value_id, passage_id) — the filter index IS the table.
+    def test_passage_facet_tables_are_dictionary_encoded
+      values = @db.schema(:passage_facet_values).to_h
+      assert_equal false, values[:source_id][:allow_null]
+      assert_equal false, values[:facet][:allow_null]
+      assert_equal false, values[:value][:allow_null]
+      refute values[:ref][:allow_null] == false, "ref is optional (labels carry none)"
+      assert(@db.indexes(:passage_facet_values).values.any? { |i| i[:columns] == %i[facet value] })
+      assert(@db.indexes(:passage_facet_values).values.any? { |i| i[:columns] == %i[source_id] })
+
+      pairs = @db.schema(:passage_facets).to_h
+      assert_equal %i[passage_id value_id], pairs.keys.sort
+      assert pairs[:value_id][:primary_key]
+      assert pairs[:passage_id][:primary_key]
+      ddl = @db["SELECT sql FROM sqlite_master WHERE name = 'passage_facets'"].get(:sql)
+      assert_match(/WITHOUT ROWID/i, ddl)
+    end
+
     # P17-2 rider: documents carry their adapter-emitted metadata (persons,
     # crosswalk ids, facets) — NOT NULL, default "{}", never content-hashed.
     def test_documents_metadata_json_column_defaults_to_empty_object

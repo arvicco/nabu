@@ -37,6 +37,43 @@ class FacetMapTest < Minitest::Test
     end
   end
 
+  # The passage grain: a source may declare passage_fields (passage
+  # annotations_json keys → passage facet names) beside — or instead of —
+  # its document fields. The two lanes read separately: #sources stays the
+  # document-field lane FacetBuilder walks.
+  def test_loads_passage_fields_beside_document_fields
+    map = build("sources" => {
+                  "sillok" => { "passage_fields" => { "subject_classes" => "subject" } },
+                  "okhc" => { "fields" => { "corpus" => "collection" },
+                              "passage_fields" => { "topics" => "topic" } }
+                })
+    assert_equal %w[okhc], map.sources
+    assert_nil map.fields_for("sillok")
+    assert_equal %w[sillok okhc], map.passage_sources
+    assert_equal({ "subject_classes" => "subject" }, map.passage_fields_for("sillok"))
+    assert_equal({ "topics" => "topic" }, map.passage_fields_for("okhc"))
+    assert_nil map.passage_fields_for("nope")
+  end
+
+  def test_blank_passage_facet_name_is_a_config_error
+    error = assert_raises(Nabu::FacetMap::ConfigError) do
+      build("sources" => { "sillok" => { "passage_fields" => { "subject_classes" => " " } } })
+    end
+    assert_match(/sillok/, error.message)
+  end
+
+  def test_empty_passage_fields_is_a_config_error
+    assert_raises(Nabu::FacetMap::ConfigError) do
+      build("sources" => { "sillok" => { "passage_fields" => {} } })
+    end
+  end
+
+  def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "subject_classes" => "subject" }, map.passage_fields_for("sillok"))
+    assert_equal({ "genre_classes" => "genre" }, map.passage_fields_for("itkc"))
+  end
+
   def test_load_default_reads_the_config_file_and_absent_file_is_nil
     Dir.mktmpdir do |dir|
       config_dir = File.join(dir, "config")
@@ -175,7 +212,7 @@ class FacetMapTest < Minitest::Test
     map = Nabu::FacetMap.load(path)
     refute_nil map
     slugs = YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml")).keys
-    map.sources.each do |slug|
+    (map.sources + map.passage_sources).each do |slug|
       assert_includes slugs, slug, "facet_map.yml names #{slug}, which is not a registered source"
     end
   end

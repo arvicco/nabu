@@ -203,6 +203,13 @@ module Nabu
         Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
                                     progress: progress, canonical_dir: @config.canonical_dir)
       end
+      # The passage-grain facet lane projects the replayed passages'
+      # annotations under facet_map.yml's passage_fields (the same config
+      # as the document lane above).
+      progress&.stage("passage facets")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :passage_facets) do
+        Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
+      end
       # The AED hieroglyph postings (P103-2): f(canonical/aed) — an
       # absent cone yields the honest empty table.
       progress&.stage("hiero postings")

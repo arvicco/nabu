@@ -438,6 +438,23 @@ class SyncRunnerTest < Minitest::Test
     assert_equal %w[grc grc], @db[:language_mix].order(:urn).select_map(:languages)
   end
 
+  # The passage-grain facet slice follows a changed load: a source the
+  # shipped facet_map does not rule for passage_fields drops any stale
+  # slice it carried (the refresh is wholesale per source).
+  def test_sync_refreshes_the_passage_facet_slice
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker", parse_only: true)
+    source_id = @db[:sources].where(slug: "breaker").get(:id)
+    value_id = @db[:passage_facet_values].insert(source_id: source_id, facet: "subject", value: "stale")
+    @db[:passage_facets].insert(value_id: value_id, passage_id: @db[:passages].get(:id))
+
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner.sync("breaker", parse_only: true)
+    assert_equal 0, @db[:passage_facet_values].count
+    assert_equal 0, @db[:passage_facets].count
+  end
+
   def test_parse_only_keeps_prior_last_sync_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"

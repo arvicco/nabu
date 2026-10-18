@@ -481,6 +481,7 @@ namespace :builders do
     summary = Nabu::Ops::BuilderRefresh.run(catalog: catalog, config: config,
                                             progress: progress)
     puts "builders:refresh done — facets #{summary.facets.rows} rows · " \
+         "passage facets #{summary.passage_facets.rows} rows · " \
          "lect #{summary.lect_rows} rows · dictionaries #{summary.dictionary_stats} · " \
          "derge titles #{summary.derge_titles.titled} · " \
          "lemma rollup #{summary.lemma_rollups.lemma_rows} rows · " \
