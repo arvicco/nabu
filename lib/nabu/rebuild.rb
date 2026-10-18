@@ -545,12 +545,15 @@ module Nabu
       end
     end
 
-    # P97-2: the person_index replay — same contract as places.
+    # P97-2: the person_index replay — same contract as places. Each
+    # producer derives the authority named by its slug (cbdb, edh), so the
+    # clean-skip asks about THAT slice: an empty edh slice still derives
+    # beside a populated cbdb one.
     def replay_person_index(db, dirty: nil)
       @registry.each_source do |entry|
         next unless entry.adapter_class.person_index_producer?
         next unless replayable?(entry)
-        next if dirty && !dirty.include?(entry.slug) && Store::PersonIndex.populated?(db)
+        next if dirty && !dirty.include?(entry.slug) && Store::PersonIndex.populated?(db, authority: entry.slug)
 
         entry.adapter_class.person_index_producer(catalog: db)
              .run(entry.slug, workdir: workdir_for(entry.slug))

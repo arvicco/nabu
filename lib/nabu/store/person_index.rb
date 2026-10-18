@@ -5,7 +5,8 @@ module Nabu
     # The derived person index (P97-2, migration 031 — owner-ruled 2026-09-11, option b):
     # a prosopography authority's persons projected into catalog tables
     # at sync time, the PlaceIndex mold exactly — keyed (authority,
-    # person_id) so CBDB is one authority among future several, derived
+    # person_id) so CBDB is one authority among several (EDH's attested
+    # persons the second — Nabu::EdhPersons), derived
     # wholesale per authority (delete + insert in one transaction, a
     # pure function of the canonical artifact, replayed by rebuild),
     # name keys folded in Ruby via the shared Pleiades.name_key rule
@@ -18,6 +19,10 @@ module Nabu
       INSERT_SLICE = 2_000
 
       DEFAULT_AUTHORITY = "cbdb"
+
+      # Every authority a producer derives (each keyed by its source slug),
+      # the default first — the order name lookups search in.
+      AUTHORITIES = [DEFAULT_AUTHORITY, "edh"].freeze
 
       Person = Data.define(:authority, :person_id, :name, :name_han,
                            :birth_year, :death_year, :index_year,
