@@ -998,9 +998,10 @@ sources:
         (in-word editorial brackets S[EÑ]OR kept, the editors' bracketed glosses moved to
         annotations)"}
   eltec-srp:   # P117-2
-    kind: {posture: pending, note: "candidate: a kind_map source_kind literary/narrative/novel —
-        ELTeC is a novel collection by construction (its sampling frame is the novel); a
-        whole-source fold, awaiting a ruling (no literary source_kind precedent yet)"}
+    # kind machine-postured since 2026-10-18 — kind_map.yml source_kind
+    # literary/narrative/novel (ELTeC's sampling frame is the novel; the
+    # first literary whole-source declaration). The pending row retired
+    # under the shadowing rule.
     lect: {posture: identity, note: "srp → the sr anchor (nabu-lects 2026-10-10), declared
         coarse: first editions 1852–1920 straddle Vuk's 1868 orthographic victory — the
         1850s texts keep pre-reform/Slavenoserbian traces (Игњатовић 1859 'историческиј
@@ -1012,9 +1013,10 @@ sources:
     script: {posture: mixed, note: "Cyrillic (94) + Latin (2: Јанковић 1918, Ћоровић 1919) —
         metadata script per document from the root xml:lang"}
   elektire:   # P117-2
-    kind: {posture: pending, note: "candidate: a kind_map fold over the genre facet (the
-        portal's knjizevna_vrsta terms verbatim — ep, spjev, komedija, pastorala, roman,
-        pripovijest, zbirka pjesama …) onto literary/*; a ruled table, not a default"}
+    # kind machine-postured since 2026-10-18 — the genre fold in
+    # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto
+    # literary/*, letter/literary for pisma). The pending row retired
+    # under the shadowing rule.
     lect: {posture: identity, note: "hrv → the hr anchor (nabu-lects 2026-10-10), declared
         coarse: the cone spans Marulić's Čakavian (Judita, written 1501), Dubrovnik
         Štokavian (Držić, Gundulić), Kajkavian (Brezovački, Domjanić, Galović) and the
@@ -1213,9 +1215,13 @@ sources:
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
         artifact fact"}
   tamilex:
-    kind: {posture: pending, note: "candidate: a kind_map fold over the work facet (the
-        title's own work name, 21 works) — anthology poetry, the grammars and poetics, the
-        Tivākaram lexicon, the narrative poems, the devotional canons; one ruling"}
+    # kind machine-postured since 2026-10-18 — the work fold in
+    # kind_map.yml (prefix rules over the 21 works and the devotional
+    # canons' sub-works: Caṅkam akam → poetry/love, puṟam → poetry/praise,
+    # Tirukkuṟaḷ → wisdom, the grammars and poetics → lexical/grammar,
+    # Tivākaram → lexical/word-list, the epics → narrative/epic, the
+    # Āḻvār and Tirumuṟai hymns → hymn-prayer/hymn). The pending row
+    # retired under the shadowing rule.
     lect: {posture: identity, note: "tam-Latn → ta (the codemap tam row); nabu-lects mints
         no Tamil stage, so the classical corpus (the Caṅkam anthologies to the medieval
         devotional canons) claims the bare anchor, declared coarse — an Old Tamil stage is

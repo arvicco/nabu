@@ -577,6 +577,13 @@ sources:
     source_kind: historiography/chronicle
   guaman-poma:               # P117-5: one work — the Nueva corónica, an illustrated chronicle
     source_kind: historiography/chronicle
+  eltec-srp:                 # the FIRST literary source_kind (2026-10-18, the loop's call):
+    source_kind: literary/narrative/novel
+    #   ELTeC's sampling frame IS the novel — every one of the 100 texts is a
+    #   novel by construction, and the TEI carries no genre field (only the
+    #   textDesc size/canonicity/sex/time-slot keys), so the whole-source
+    #   declaration is the honest grain, the canon/chronicle shape applied to a
+    #   literary collection
   aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:
@@ -674,6 +681,127 @@ sources:
       #   nearest ruled sub (novella grain)
       "črtica": literary/narrative               # 2 — the sketch; no finer ruled sub
       "drugo": unknown                           # 10 — upstream's own "other"
+  elektire:           # census: 205 works, 23 knjizevna_vrsta term slugs, 2026-10-18 —
+    facet: genre      # the portal's own genre terms (slugs; the raw names ride beside
+    #                   them). Folded 2026-10-18 as the loop's call: each slug is
+    #                   a standard Croatian literary-genre label, mapped on its
+    #                   ordinary meaning; the knjizevni_zanr mode facet (epika/
+    #                   drama/poezija) is coarser and stays unmapped
+    map:
+      "zbirka-pjesama": literary/poetry          # 44 — poetry collection
+      "roman": literary/narrative/novel          # 27
+      "pripovijest": literary/narrative/tale     # 22 — the story/novella label (the
+      #   kdsp povest precedent)
+      "zbirka-pripovijesti": literary/narrative/tale   # 19 — story collection
+      "drama": literary/drama                    # 20
+      "komedija": literary/drama                 # 19
+      "drama-jednocinka": literary/drama         # 9 — one-act play
+      "tragedija": literary/drama                # 3
+      "tragikomedija-melodrama": literary/drama  # 3
+      "pastorala": literary/drama                # 7 — the Renaissance pastoral play
+      #   (Držić's Tirena, Grižula)
+      "prikazanje": literary/drama               # 2 — the religious mystery play
+      "igrokaz": literary/drama                  # 2 — a play
+      "maskereta": literary/drama                # 1 — the Dubrovnik carnival masque,
+      #   a verse text for performance
+      "operni-libreto": literary/drama           # 4 — text written for performance
+      "spjev": literary/poetry                   # 7 — a long verse composition, epic
+      #   (Smrt Smail-age Čengića) or religious-lyric (Suze sina razmetnoga); verse
+      #   is the one claim common to the label, so no narrative sub is asserted
+      "poema": literary/poetry                   # 6 — the long lyric-narrative poem
+      "ep": literary/narrative/epic              # 3 — the epic (Judita)
+      "bajka": literary/narrative/tale           # 2 — fairy tale
+      "basna": literary/narrative/fable          # 1
+      "putopis": literary/diary/travelogue       # 5
+      "feljtoni": literary/essay                 # 6 — feuilletons, prose of ideas
+      "eseji": literary/essay                    # 3
+      "pisma": letter/literary                   # 1 — literary letters
+  tamilex:            # census: 7,849 files, 21 works, 2026-10-18 — the work facet is
+    facet: work       # the title's own work name (titleStmt/title/title), which for
+    #                   the two devotional canons is the SUB-WORK title and for the
+    #                   epics the per-chapter title (85 distinct values, with
+    #                   upstream spelling variants and trailing "."/numbers kept
+    #                   verbatim) — so prefix rules on the work name, one per work
+    #                   or sub-work. Folded 2026-10-18 as the loop's call, each work
+    #                   on its own scholarly identity. Maṇimēkalai's files carry no
+    #                   work title (9 docs across four works emit no facet) — no rule.
+    prefix_map:
+      # -- the Caṅkam anthologies (Eṭṭuttokai): akam = love poetry,
+      #    puṟam = heroic/praise poetry
+      "Aiṅkuṟunūṟu": literary/poetry/love       # 497 — akam anthology of short love poems
+      "Kuṟuntokai": literary/poetry/love        # 402 — akam
+      "Naṟṟiṇai": literary/poetry/love          # 401 — akam
+      "Akanāṉūṟu": literary/poetry/love         # 176 — akam (its name: "the four hundred akam")
+      "Kalittokai": literary/poetry/love        # 150 — akam in the kali metre
+      "Puṟanāṉūṟu": literary/poetry/praise      # 199 — puṟam: kings, patrons, war, elegy
+      "Patiṟṟuppattu": literary/poetry/praise   # 88 — puṟam: praise of the Cēra kings
+      "Paripāṭal": [literary/poetry, hymn-prayer/hymn]   # 6 — the anthology mixes hymns
+      #   to Tirumāl and Murukaṉ with akam songs on the Vaiyai river: both claims
+      # -- Pattuppāṭṭu (the Ten Idylls): the three in the corpus are puṟam
+      "Maturaikkāñci": literary/poetry/praise   # 1 — address to the Pāṇṭiya king
+      "Neṭunalvāṭai": literary/poetry/praise    # 1 — puṟam by the commentators' reading
+      #   (the king's winter camp)
+      "Malaipaṭukaṭām": literary/poetry/praise  # 3 — the āṟṟuppaṭai guide poem praising
+      #   the patron Naṉṉaṉ
+      # -- didactic
+      "Tirukkuṟaḷ": literary/wisdom             # 1,330 — aphoristic couplets on virtue,
+      #   wealth and love
+      # -- the grammatical tradition (ilakkaṇam: letters, words, poetic subject
+      #    matter, prosody, figures — poetics is part of grammar in Tamil)
+      "Tolkāppiyam": lexical/grammar            # 617 — Eḻuttatikāram + Collatikāram
+      "Naṉṉūl": lexical/grammar                 # 420 — the 13th-c. grammar (letters, words)
+      "Naṉṉul": lexical/grammar                 # 2 — upstream's spelling variant of Naṉṉūl
+      "Puṟapporuḷveṇpāmālai": lexical/grammar   # 1 — the treatise on puṟam themes
+      "Tamiḻneṟi Viḷakkam": lexical/grammar     # 25 — a poruḷ (akam poetics) treatise
+      "Taṇṭiyalaṅkāra": lexical/grammar         # 1 — Taṇṭiyalaṅkāram, the treatise on
+      #   figures (aṇi) after Daṇḍin's Kāvyādarśa, here with its commentary (the
+      #   title reads Taṇṭiyalaṅkāravurai, hence the stem key)
+      "Tivākaram": lexical/word-list            # 3 — the nikaṇṭu: a versified thesaurus
+      # -- the narrative poems
+      "Cilappatikāram": literary/narrative/epic  # the Tale of the Anklet, per-chapter titles
+      "Cilapparikāram": literary/narrative/epic  # 1 — upstream's misspelling of the same
+      "Peruṅkatai": literary/narrative/epic      # 4 — the Great Story (Udayana cycle)
+      # -- Nālāyira Tivviyap Pirapantam: the Āḻvārs' Vaiṣṇava hymns, one line per
+      #    sub-work title; folded as hymns by form (the canon's scriptural standing
+      #    in Śrīvaiṣṇava reception is not claimed as a genre)
+      "Periya Tirumoḻi": hymn-prayer/hymn        # 1,084 — Tirumaṅkai Āḻvār
+      "Tiruvāymoḻi": hymn-prayer/hymn            # 546 — Nammāḻvār
+      "Tiruvāymoli": hymn-prayer/hymn            # 2 — upstream spelling variant
+      "Tiruvāvmoḻi": hymn-prayer/hymn            # 1 — upstream spelling variant
+      "Periyāḻvār Tirumoḻi": hymn-prayer/hymn    # 461
+      "Nācciyār Tirumoḻi": hymn-prayer/hymn      # 143 — Āṇṭāḷ
+      "Tiruccantaviruttam": hymn-prayer/hymn     # 120 — Tirumaḻicai Āḻvār
+      "Perumāḷ Tirumoḻi": hymn-prayer/hymn       # 105 — Kulacēkara Āḻvār
+      "Mutaṟṟiruvantāti": hymn-prayer/hymn       # 100 — Poykai Āḻvār
+      "Iraṇṭān Tiruvantāti": hymn-prayer/hymn    # 100 — Pūtattāḻvār
+      "Mūṉṟān Tiruvantāti": hymn-prayer/hymn     # 100 — Pēyāḻvār
+      "Nāṉmukaṉ Tiruvantāti": hymn-prayer/hymn   # 96 — Tirumaḻicai Āḻvār
+      "Periyatiruvantāti": hymn-prayer/hymn      # 87 — Nammāḻvār
+      "Tiruviruttam": hymn-prayer/hymn           # 99 — Nammāḻvār
+      "Tiruvittam": hymn-prayer/hymn             # 1 — upstream spelling (Tiruviruttam)
+      "Tiruvāciriyam": hymn-prayer/hymn          # 7 — Nammāḻvār
+      "Tirumālai": hymn-prayer/hymn              # 45 — Toṇṭaraṭippoṭi Āḻvār
+      "Tiruppaḷḷiyeḻucci": hymn-prayer/hymn      # 10 — Toṇṭaraṭippoṭi Āḻvār
+      "Tiruppāvai": hymn-prayer/hymn             # 30 — Āṇṭāḷ
+      "Tiruneṭuntāṇṭakam": hymn-prayer/hymn      # 30 — Tirumaṅkai Āḻvār
+      "Tirukkuṟuntāṇṭakam": hymn-prayer/hymn     # 20 — Tirumaṅkai Āḻvār
+      "Tiruveḻukūṟṟirukkai": hymn-prayer/hymn    # 1 — Tirumaṅkai Āḻvār
+      "Periya Tirumaṭal": hymn-prayer/hymn       # 6 — Tirumaṅkai Āḻvār
+      "Ciṟiya Tirumaṭal": hymn-prayer/hymn       # 1 — Tirumaṅkai Āḻvār
+      "Tiruppallāṇṭu": hymn-prayer/hymn          # 12 — Periyāḻvār
+      "Kaṇṇinuṇ Ciṟuttāmpu": hymn-prayer/hymn    # 11 — Maturakavi Āḻvār's praise of
+      #   Nammāḻvār
+      "Amalaṉ Āti Pirāṉ": hymn-prayer/hymn       # 10 — Tiruppāṇāḻvār
+      "Irāmāṉuca Nūṟṟantāti": hymn-prayer/hymn   # 2 — Tiruvaraṅkattamutaṉār's praise of
+      #   Rāmānuja, closing the canon
+      # -- Patiṉorām Tirumuṟai (the eleventh book of the Śaiva canon): hymns to Śiva
+      "Aṟputat Tiruvvantāti": hymn-prayer/hymn   # 101 — Kāraikkāl Ammaiyār
+      "Tiruviraṭṭaimaṇimālai": hymn-prayer/hymn  # 20 — Kāraikkāl Ammaiyār
+      "Tiruvalaṅkāṭṭu": hymn-prayer/hymn         # 22 — Kāraikkāl Ammaiyār's two Mūtta
+      #   Tiruppatikams at Tiruvālaṅkāṭu
+      "Kayilaipāti Kāḷattipāti Antāti": hymn-prayer/hymn   # 98 — Nakkīrar
+      "Aruḷicceyt Tiru Ātiyulā": hymn-prayer/hymn  # 1 — Cēramāṉ Perumāḷ's ulā, Śiva's
+      #   procession sung as devotion
   dta:                # the subgenre carries the signal; genre alone is too coarse
     metadata: subgenre
     map:
