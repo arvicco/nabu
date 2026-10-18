@@ -33,6 +33,17 @@ module Nabu
     # kun/傍訓 reading layer rides the "kun" annotation with marginal
     # notes and ミセケチ-struck deletions removed (corrections applied
     # — declared, the reading layer is an editorial surface).
+    #
+    # == Persons (both branches)
+    #
+    # Each file's <back> listPerson projects into the "kokubunken"
+    # person-index slice (Nabu::KokubunkenPersons). Poems point into it —
+    # kokin via l/@resp (else the 作者 persName/@corresp of the poem's
+    # div), manyo via the poet division's div/@corresp — and carry the
+    # pointer as the "poet_ref" annotation ("kokubunken:<id>"; manyo also
+    # gains "poet", the id-name, kokin already carried its 作者名 surface).
+    # The document lists its poets as "persons"/"authors"/"author_ids"
+    # (#with_poets).
     class Kokubunken < Nabu::Adapter
       FILES = {
         "kokin" => { repo: "kokinwakashu",
@@ -45,6 +56,8 @@ module Nabu
       RAW_BASE = "https://raw.githubusercontent.com/kokubunken"
       URN_PREFIX = "urn:nabu:kokubunken:"
       TEI_NS = { "tei" => "http://www.tei-c.org/ns/1.0" }.freeze
+      PERSON_REF_PREFIX = "kokubunken:"
+      KOKIN_POET_ROLE = "作者"
 
       TITLES = {
         "kokin" => "嘉禄二年本 古今和歌集 (NIJL TEI)",
@@ -65,6 +78,15 @@ module Nabu
       )
 
       def self.manifest = MANIFEST
+
+      # The files' listPerson personographies project into the
+      # "kokubunken" person-index slice at sync and rebuild
+      # (Nabu::KokubunkenPersons); poems point into it via poet_ref.
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::KokubunkenPersons::Producer.new(catalog: catalog)
+      end
 
       def self.remote_probe_strategy = :http_zip
 
@@ -101,7 +123,7 @@ module Nabu
         raise Nabu::ParseError, "#{document_ref.path}: no passages parsed — reshaped TEI?" if
           document.passages.empty?
 
-        document
+        with_poets(document, role: work == "kokin" ? KOKIN_POET_ROLE : nil)
       end
 
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
@@ -150,6 +172,9 @@ module Nabu
         annotations = {}
         annotations["rdg"] = rdg.join("；") unless rdg.empty?
         waka_div = line.ancestors.find { |a| a.name == "div" }
+        poet_ref = person_ref(line["resp"]) ||
+                   person_ref(waka_div&.at_xpath(".//tei:persName[@type='作者']/@corresp", TEI_NS)&.value)
+        annotations["poet_ref"] = poet_ref if poet_ref
         if waka_div
           poet = waka_div.at_xpath(".//tei:note[@type='作者名']", TEI_NS)&.text
           kotobagaki = waka_div.at_xpath(".//tei:note[@type='詞書']", TEI_NS)
@@ -196,6 +221,11 @@ module Nabu
         annotations["form"] = poem["type"] if poem["type"]
         number = poem.ancestors.find { |a| a.name == "div" && a["type"] == "旧国歌大観番号" }&.[]("n")
         annotations["kokka_taikan"] = number if number
+        poet = poem.ancestors.find { |a| a.name == "div" && a["corresp"].to_s.start_with?("#") }
+        if (poet_ref = person_ref(poet&.[]("corresp")))
+          annotations["poet_ref"] = poet_ref
+          annotations["poet"] = poet_ref.delete_prefix(PERSON_REF_PREFIX)
+        end
         ref = "m#{poem['xml:id'].sub(/\Amanyo0*/, '')}"
         add_passage(document, ref: ref, text: base, annotations: annotations)
       end
@@ -222,6 +252,52 @@ module Nabu
         working = node.dup
         working.xpath(".//tei:note | .//tei:del", TEI_NS).each(&:remove)
         squish(working.text)
+      end
+
+      # -- person pointers ---------------------------------------------------
+
+      # "#藤原定家" (a pointer into the file's listPerson — the ids ARE
+      # names) → "kokubunken:藤原定家", the person-index slice key
+      # (Nabu::KokubunkenPersons; the prefix is OUR namespace). The first
+      # pointer of a space-separated list; nil when absent. Live census
+      # 2026-10-18: kokin 1,069 poems pointed (121 poets, all resolving),
+      # 廣瀬本 465 (71 poets), 元暦校本 28 (12). Unresolved pointers ride
+      # verbatim — a pointer is upstream's claim: 廣瀬本 #盤姫皇后 (5 poems;
+      # the list spells 磐姫皇后) and #長田王 (3; not listed).
+      def person_ref(pointer)
+        id = pointer.to_s.split.first.to_s.delete_prefix("#")
+        id.empty? ? nil : "#{PERSON_REF_PREFIX}#{Normalize.nfc(id)}"
+      end
+
+      # The document-level poet list from the passages' own pointers, first
+      # appearance order: "persons" [{"ref", "name" (the first surface
+      # form a poem shows — kokin's 作者名 note; else the id), "role"
+      # (kokin: the persName @type 作者; manyo divisions state none)}],
+      # "authors" (the ids — upstream's own normalized names) and
+      # "author_ids" (the refs) for the facet lane. Persons named in prose,
+      # headnotes or colophons are mentions and never join.
+      # (Document metadata is frozen at construction, so the poet list —
+      # known only once every passage is parsed — re-wraps the document.)
+      def with_poets(document, role:)
+        persons = {}
+        document.passages.each do |passage|
+          ref = passage.annotations["poet_ref"] or next
+
+          name = passage.annotations["poet"] || ref.delete_prefix(PERSON_REF_PREFIX)
+          persons[ref] ||= { "ref" => ref, "name" => name, "role" => role }.compact
+        end
+        return document if persons.empty?
+
+        metadata = document.metadata.merge(
+          "persons" => persons.values,
+          "authors" => persons.keys.map { |ref| ref.delete_prefix(PERSON_REF_PREFIX) },
+          "author_ids" => persons.keys
+        )
+        rewrapped = Nabu::Document.new(urn: document.urn, language: document.language,
+                                       canonical_path: document.canonical_path,
+                                       title: document.title, metadata: metadata)
+        document.passages.each { |passage| rewrapped << passage }
+        rewrapped
       end
 
       # -- shared -----------------------------------------------------------

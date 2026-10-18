@@ -12,8 +12,10 @@ module Nabu
 
       # Authority ids are the authority's own: CBDB numeric ("cbdb:1762"),
       # EDH per-attestation ("edh:HD000001/3"), Elephantine p/d-prefixed
-      # ("elephantine:p19245", "elephantine:d1").
-      REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([A-Za-z0-9][A-Za-z0-9/._-]*)\z}
+      # ("elephantine:p19245", "elephantine:d1"), Aozora's zero-padded
+      # 人物ID ("aozora:001257"), kokubunken's name-ids
+      # ("kokubunken:藤原定家" — any letter or digit, not only ASCII).
+      REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([\p{L}\p{N}][\p{L}\p{N}/._-]*)\z}
 
       Result = Data.define(:cards)
 

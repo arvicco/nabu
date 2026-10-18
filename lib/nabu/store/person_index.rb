@@ -13,13 +13,17 @@ module Nabu
     # (Unicode case fold; Han text passes untouched, so 王安石 and
     # "wang anshi" both key).
     #
-    # Authorities (one slice each): "cbdb" (Nabu::CbdbPersons) and
-    # "elephantine" (Nabu::ElephantinePersons). The column names are
+    # Authorities (one slice each): "cbdb" (Nabu::CbdbPersons), "edh"
+    # (Nabu::EdhPersons), "elephantine" (Nabu::ElephantinePersons),
+    # "aozora" (Nabu::AozoraPersons) and "kokubunken"
+    # (Nabu::KokubunkenPersons). The column names are
     # CBDB-born; name_han is the NATIVE-form lane every authority fills
     # with its original-script/original-language name (CBDB: the Han name;
     # Elephantine: the Egyptian/Greek/Aramaic/Coptic form beside the
-    # English), and refs (migration 044) carries links into other
-    # prosopographies as verbatim URLs (Elephantine: Trismegistos).
+    # English; Aozora: the index's kanji/katakana form beside the romaji;
+    # kokubunken: the record's own form, which is already native), and
+    # refs (migration 044) carries links into other prosopographies as
+    # verbatim URLs (Elephantine: Trismegistos; kokubunken: VIAF).
     module PersonIndex
       TABLE = :person_index
       NAMES_TABLE = :person_index_names
@@ -30,7 +34,7 @@ module Nabu
 
       # Every authority a producer derives (each keyed by its source slug),
       # the default first — the order name lookups search in.
-      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora"].freeze
+      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora", "kokubunken"].freeze
 
       Person = Data.define(:authority, :person_id, :name, :name_han,
                            :birth_year, :death_year, :index_year,

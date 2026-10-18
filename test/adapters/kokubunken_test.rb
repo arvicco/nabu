@@ -59,6 +59,31 @@ module Adapters
       assert_equal "1", poem1.annotations["kokka_taikan"]
     end
 
+    # -- the person pointers (both branches) --------------------------------
+
+    def test_kokin_poems_carry_their_poet_ref_and_the_document_lists_the_authors
+      poem1 = kokin.passages.find { |p| p.urn.end_with?(":n1") }
+      assert_equal "kokubunken:在原元方", poem1.annotations["poet_ref"], "the l@resp pointer, our namespace"
+      assert_equal [{ "ref" => "kokubunken:在原元方", "name" => "在原元方", "role" => "作者" },
+                    { "ref" => "kokubunken:紀貫之", "name" => "紀貫之", "role" => "作者" }],
+                   kokin.metadata["persons"], "the 作者 persName surface beside its corresp ref"
+      assert_equal %w[在原元方 紀貫之], kokin.metadata["authors"]
+      assert_equal %w[kokubunken:在原元方 kokubunken:紀貫之], kokin.metadata["author_ids"]
+      refute_includes kokin.metadata["author_ids"], "kokubunken:藤原定家",
+                      "persons named in prose or colophons are mentions, never authors"
+    end
+
+    def test_manyo_poems_carry_the_poet_of_their_corresp_division
+      poem1 = manyo.passages.find { |p| p.urn.end_with?(":m1") }
+      assert_equal "kokubunken:雄略天皇", poem1.annotations["poet_ref"]
+      assert_equal "雄略天皇", poem1.annotations["poet"]
+      poem4 = manyo.passages.find { |p| p.urn.end_with?(":m4") }
+      assert_equal "kokubunken:中皇命", poem4.annotations["poet_ref"]
+      assert_equal %w[雄略天皇 舒明天皇 中皇命], manyo.metadata["authors"]
+      assert_equal({ "ref" => "kokubunken:舒明天皇", "name" => "舒明天皇" }, manyo.metadata["persons"][1],
+                   "the division names no role — none is invented")
+    end
+
     def test_documents_carry_language_and_titles
       assert_equal "jpn", kokin.language
       assert_equal "ojp", manyo.language, "the Man'yōshū text is Old Japanese whatever the copy date"

@@ -1005,4 +1005,57 @@
                <lb/><l n="1" xml:id="n1" resp="#在原元方"><seg>年の内に</seg><seg>春はきにけり</seg><seg>ひとゝせを</seg><seg>こそとやいはむ</seg><seg>ことしとやいはむ</seg></l></div>
                <lb/><div type="和歌"><note type="詞書" style="margin-top: 2em" target="#n2"><app><lem wit="#国">はる</lem><rdg wit="#前">はるの</rdg></app>たちける日よめる</note>
                <lb/><note type="作者名" style="margin-top: 12em"><persName type="作者" corresp="#紀貫之">紀貫之</persName></note>
-               <lb/><l n="2" xml:id="n2" resp="#紀貫之"><seg>袖ひちて</seg><seg>むすひし水の</seg><seg>こほれるを</seg><seg>春立けふの</seg><seg>風やとくらむ</seg></l></div></div></body></text></TEI>
+               <lb/><l n="2" xml:id="n2" resp="#紀貫之"><seg>袖ひちて</seg><seg>むすひし水の</seg><seg>こほれるを</seg><seg>春立けふの</seg><seg>風やとくらむ</seg></l></div></div></body>
+     <back>
+        <listPerson>
+           <person xml:id="藤原定家" sex="1">
+              <persName>藤原／定家</persName>
+              <persName>ふじわらの／さだいえ</persName>
+              <persName>ふじわらの／ていか</persName>
+              <persName>京極中納言</persName>
+              <persName>明静</persName>
+              <occupation></occupation>
+              <birth when="1162">応保二年</birth>
+              <death when="1241">仁治二年</death>
+              <idno type="VIAF">http://viaf.org/viaf/29592327</idno>
+           </person>
+           <person xml:id="安倍清行" sex="1">
+               <persName>安倍／清行</persName>
+               <persName type="よみ">あべの／きよゆき</persName>
+               <occupation></occupation>
+               <idno type="VIAF">ナシ</idno>
+               <idno type="国書データベース">ナシ</idno>
+               <birth when="0825">天長二年</birth>
+               <death when="0900">昌泰三年</death>
+            </person>
+            <person xml:id="在原元方" sex="1">
+               <persName>在原／元方</persName>
+               <persName type="よみ">ありわらの／もとかた</persName>
+               <occupation></occupation>
+               <idno type="VIAF">http://viaf.org/viaf/114305486</idno>
+               <idno type="国書データベース">588363</idno>
+               <birth>不明</birth>
+               <death>不明</death>
+            </person>
+            <person xml:id="紀貫之" sex="1">
+               <persName>紀／貫之</persName>
+               <persName type="よみ">きの／つらゆき</persName>
+               <occupation></occupation>
+               <idno type="VIAF">http://viaf.org/viaf/1606145856885622920249</idno>
+               <idno type="国書データベース">134010</idno>
+               <birth when="0871">貞観十三年頃</birth>
+               <death when="0946">天慶九年か</death>
+            </person>
+            <person xml:id="伊勢" sex="2">
+               <persName>伊勢</persName>
+               <persName type="よみ">いせ</persName>
+               <occupation></occupation>
+               <idno type="VIAF">http://viaf.org/viaf/251729740</idno>
+               <idno type="国書データベース">26982</idno>
+               <birth when="0875">貞観十七年頃か</birth>
+               <death>不明</death>
+            </person>
+        </listPerson>
+     </back>
+  </text>
+</TEI>
