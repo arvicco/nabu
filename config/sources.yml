@@ -2671,7 +2671,7 @@ itkc-catalog:   # 02-sources row 277
   adopted: "2026-10-19"
   kind: module   # machinery-only — a bibliographic author-era instrument, zero document rows
   axes: [korean]
-  wired: false   # READY — awaiting the first real sync
+  wired: true    # first sync verified 2026-10-20 (1,540 author-catalog records: MO 1,259 / GO 257 / KP 24)
   sync_policy: manual
   # The ITKC 한국고전종합DB 서지 catalog via the keyless OpenAPI search
   # endpoint: MO_SJ (한국문집총간, 1,259 works) + GO_SJ (고전원문, 257) +
