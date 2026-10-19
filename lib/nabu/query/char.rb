@@ -595,10 +595,13 @@ module Nabu
       # took 180 s at the 68M-row census (2026-08-10) — the owner's ruling
       # is that the card touches only precompiled data, so an absent index
       # answers nil (the renderer prints the honest not-indexed hint) and
-      # NEVER falls back to scanning.
+      # NEVER falls back to scanning. A postings table that EXISTS but holds
+      # no row is the born-empty shape (the indexer creates it before filling
+      # it, so a run killed in the index stage leaves it bare): unbuilt, the
+      # same honest nil — never an empty attestation that renders as silence.
       def corpus_attestation(glyph)
         table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
-        return nil unless @fulltext&.table_exists?(table)
+        return nil unless char_postings_built?
 
         # Fold-both-sides (P6-4): the postings are over text_normalized,
         # where the per-language Han folds ran (lzh 纹→紋, jpn 国→國) — so
@@ -618,7 +621,7 @@ module Nabu
       # frequency tables (kanripo vs the Japanese corpora, named apart).
       def corpus_attestation_by_source(glyph)
         table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
-        return nil unless @fulltext&.table_exists?(table)
+        return nil unless char_postings_built?
 
         slugs = @catalog[:sources].select_hash(:id, :slug)
         @fulltext[table]
@@ -627,6 +630,13 @@ module Nabu
           .select_map([:source_id, :language, Sequel.function(:sum, :docs).as(:docs)])
           .map { |source_id, language, docs| [slugs.fetch(source_id, source_id.to_s), language, docs] }
           .sort_by { |row| -row[2] }
+      end
+
+      # The postings index answers only when it is present AND populated
+      # (one indexed passage posts every char it carries).
+      def char_postings_built?
+        table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
+        @fulltext&.table_exists?(table) && !@fulltext[table].empty?
       end
 
       # -- body helpers -----------------------------------------------------------
