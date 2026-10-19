@@ -91,13 +91,22 @@ module Nabu
     # [slug, :replay | :skip_no_canonical] pairs in registration order.
     Plan = Data.define(:db_path, :db_exists, :items)
 
+    # How many forked parse workers (Nabu::ParsePool) a parallel_parse?
+    # source's replay fans out to; 1 is the serial path exactly. Sources
+    # whose adapter does not opt in always replay in-process.
+    attr_reader :parse_workers
+
     # +full_links+ (`--full-links`): the links stage carries nothing this
     # run — every scope re-mines and the would-be-carried ones are compared
     # against their stamps (the self-check, forced now).
-    def initialize(config:, registry:, full_links: false)
+    # +parse_workers+: nil takes ParsePool.default_workers (cores − 1,
+    # capped); the CLI passes `--parse-workers` / the rebuild.parse_workers
+    # setting.
+    def initialize(config:, registry:, full_links: false, parse_workers: nil)
       @config = config
       @registry = registry
       @full_links = full_links
+      @parse_workers = parse_workers || ParsePool.default_workers
     end
 
     # Describe a would-be rebuild without changing anything on disk.
@@ -496,8 +505,12 @@ module Nabu
       when :source
         Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
+        # Parallel replay: an audited adapter's parses fan out to forked
+        # workers; the loader stays the single writer, in parse order, on
+        # the same transaction grain.
         Store::Loader.new(db: db, source: source, ledger: ledger, profile: profile,
-                          tx_batch: LOAD_TX_BATCH)
+                          tx_batch: LOAD_TX_BATCH,
+                          parse_workers: adapter.class.parallel_parse? ? @parse_workers : 1)
       end
     end
 

@@ -2196,8 +2196,12 @@ module Nabu
                               "compare the would-be-carried ones against their stamps (the " \
                               "self-check, forced now; it also runs every " \
                               "#{Nabu::LinkStamps::SELF_CHECK_EVERY}th links stage)"
+    option :parse_workers, type: :numeric,
+                           desc: "Forked parse workers for parallel-replay sources (1 = serial; " \
+                                 "default: rebuild.parse_workers setting, else cores - 1, capped)"
     def rebuild
       config = Nabu::Config.load
+      parse_workers = rebuild_parse_workers(config)
       # P62 rider: rebuild DROPS the catalog — doing that under a live
       # writer corrupts nothing (derived data) but wastes both runs; the
       # pre-flight fails in a quarter second instead. Dry runs read only.
@@ -2207,9 +2211,10 @@ module Nabu
       # point, so a real run needs no confirmation. An empty registry has nothing
       # to replay.
       return say("Nothing to rebuild: no sources registered.") if registry.empty?
-      return rebuild_incremental(config, registry) if options[:incremental]
+      return rebuild_incremental(config, registry, parse_workers) if options[:incremental]
 
-      rebuilder = Nabu::Rebuild.new(config: config, registry: registry, full_links: options[:full_links])
+      rebuilder = Nabu::Rebuild.new(config: config, registry: registry, full_links: options[:full_links],
+                                    parse_workers: parse_workers)
       if options[:dry_run]
         # --profile implies nothing extra on a dry run: there is no run to time.
         print_plan(rebuilder.plan)
@@ -12551,7 +12556,17 @@ module Nabu
       # rebuild replay seam + per-source index refresh; clean ones are
       # skipped on their derivation stamp. Refusals (schema drift, orphan
       # rows, no catalog) are loud exit-1 errors — full rebuild required.
-      def rebuild_incremental(config, registry)
+      # --parse-workers wins over the rebuild.parse_workers setting; nil
+      # (neither given) lets Rebuild take the pool default.
+      def rebuild_parse_workers(config)
+        workers = options[:parse_workers]
+        return config.parse_workers if workers.nil?
+        raise Thor::Error, "--parse-workers must be at least 1 (got #{workers})" unless workers.to_i >= 1
+
+        workers.to_i
+      end
+
+      def rebuild_incremental(config, registry, parse_workers)
         if options[:trust_derivations] && !Nabu::CodeVoucher.new.able?
           say "WARNING: --trust-derivations is INERT — the adapters tree has uncommitted " \
               "changes, so git cannot vouch for any source and every drift will REPLAY " \
@@ -12560,7 +12575,8 @@ module Nabu
         incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry,
                                                    trust_stages: options[:trust_stages],
                                                    trust_derivations: options[:trust_derivations],
-                                                   full_links: options[:full_links])
+                                                   full_links: options[:full_links],
+                                                   parse_workers: parse_workers)
         if options[:dry_run]
           plan = incremental.plan(progress: progress_reporter)
           finish_progress

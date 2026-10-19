@@ -98,6 +98,10 @@ module Nabu
         MANIFEST
       end
 
+      # Parallel replay (audited): #parse streams one TCP file through a
+      # fresh TcpXmlParser — no state crosses refs.
+      def self.parallel_parse? = true
+
       # P11-2/P79-2: the Box shared folder has no git repo and the ledger
       # pins an aggregate sha the probe cannot diff URL-by-URL — a
       # liveness-only HEAD of the shared folder is the honest posture

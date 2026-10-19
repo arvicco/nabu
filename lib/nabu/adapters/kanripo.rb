@@ -87,6 +87,11 @@ module Nabu
         MANIFEST
       end
 
+      # Parallel replay (audited): #parse is a fresh MandokuParser per
+      # text; the two KR-Catalog memos are pure functions of the catalog
+      # tree (each worker builds its own copy once).
+      def self.parallel_parse? = true
+
       # The org URL is not ls-remote-able; the honest probe target is the
       # discovery index every sync starts from. Per-text pins live in the
       # fetch ledger, not the ledger pins table (2,934 rows would say less
