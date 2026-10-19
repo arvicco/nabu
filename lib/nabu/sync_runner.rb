@@ -400,6 +400,7 @@ module Nabu
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug,
                                                             canonical_dir: @config.canonical_dir)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
+      Store::TimelineBuilder::OpenmghCharterDates.refresh_source!(catalog: @db, slug: entry.slug)
       # The TLG concordance joins the Greek CTS editions to glaux/diorisis
       # composition dates — a sync of either side re-derives it.
       Store::TimelineBuilder::TlgConcordanceDates.refresh_source!(catalog: @db, slug: entry.slug)

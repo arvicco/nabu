@@ -165,6 +165,27 @@ class OpenmghTest < Minitest::Test
     assert_equal "Saint-Prex (885) August 13.", document.to_a[1].annotations["date"]
   end
 
+  # The dating line, structured beside the verbatim string (the
+  # OpenmghCharterDate reader): year bounds for the timeline, the issuing
+  # place for the places lane — never replacing "date".
+  def test_charter_dates_carry_structured_bounds_and_the_issuing_place
+    first, second, third = adapter.parse(ref_for(RUDOLFINGER)).to_a
+    assert_equal [878, 878, nil], first.annotations.values_at("not_before", "not_after", "place"),
+                 "878 März 25. — dated, no place named"
+    assert_equal [885, 885, "Saint-Prex"], second.annotations.values_at("not_before", "not_after", "place"),
+                 "Saint-Prex (885) August 13. — the editor's inferred year, the place before it"
+    assert_equal [888, 888, "Uabre villa"], third.annotations.values_at("not_before", "not_after", "place")
+    friderici = adapter.parse(ref_for(FRIDERICI)).first
+    refute friderici.annotations.key?("not_before"), "a bare <date/> structures nothing"
+  end
+
+  def test_work_titles_and_issuing_places_project_at_passage_grain
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "work" => "work", "place" => "place" }, map.passage_fields_for("openmgh"),
+                 "config/facet_map.yml openmgh passage_fields: the Scriptores work annotation " \
+                 "and the charters' issuing place")
+  end
+
   # P56 hotfix rider (owner's first second-wave sync, 2026-08-02): the three
   # DD F. II. volumes — bsb00066349 (DD 171-426), bsb00002026 (DD 427-657),
   # bsb00002027 (DD 658-929), Die Urkunden Friedrichs II. — quarantined "no

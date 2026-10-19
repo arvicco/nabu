@@ -466,3 +466,14 @@ sources:
   bibyeonsa:                  # 998 person tags (75 upstream double-tags fold → 923 mentions) →
     passage_fields: #           802 records on 736 of 93,528 passages, 26 distinct — by person pid
       persons: person
+  openmgh:                    # a full parse of canonical/openmgh, 2026-10-19 (153 volumes)
+    passage_fields: #           — the Scriptores work-div titles and the Diplomata issuing places
+      work: work              # 33,221 page passages in 140 volumes, 507 distinct work titles
+      #                         verbatim from div[@type=work]/@n ("Ottokars Österr. Reimchron. I"
+      #                         720 · "Konrad v. Megenberg. Ökonomik" 641 · "Ioh. Vict. hist." 624 ·
+      #                         "Greg. Tur. hist." 536 …) — a volume can hold many works, so the
+      #                         claim is per passage, never per document
+      place: place            # 1,633 of 2,808 charter passages, 424 distinct issuing places —
+      #                         the dating line's place verbatim ("Kaiserswerth, im Lager", "im
+      #                         Gebiet von Vercelli"); the same claim rides the charter's
+      #                         passage-grain axis row (TimelineBuilder::OpenmghCharterDates)
