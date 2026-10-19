@@ -1245,6 +1245,10 @@ sources:
     script: {posture: implied}
   # Ruled deliberately unstaged (D57-f): mixed corpora, bare-anchor honesty.
   first1k-greek:
+    # Translation editions (translations: true): 43 eng + 24 non-English
+    # (lat 16 · deu 7 · cop 1; 3,608 passages, census 2026-10-19), each
+    # marked "kind: translation" — no dating/place rows of their own; lat
+    # rides identity like the rest of the source (unstaged).
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
     dating: {posture: dated, note: "two labeled classes, neither the edition's own composition

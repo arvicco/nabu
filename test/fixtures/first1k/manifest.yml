@@ -129,3 +129,43 @@ files:
       div[@type="edition"] kept; chapter 1 whole (verses 1-31, upstream bytes
       0-16,030 rstripped); chapters 2-50 removed; edition div, body, text, TEI
       closed to match the upstream closing shape.
+  - path: greekLit/data/tlg0544/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg0544/__cts__.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (textgroup metadata (Sextus Empiricus))
+  - path: greekLit/data/tlg0544/tlg001/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg0544/tlg001/__cts__.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (work metadata — lists opp-lat1 as ti:translation)
+  - path: greekLit/data/tlg0544/tlg001/tlg0544.tlg001.opp-lat1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg0544/tlg001/tlg0544.tlg001.opp-lat1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (medieval Latin translation specimen, translation-typed body)
+  - path: greekLit/data/tlg0643/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg0643/__cts__.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (textgroup metadata (Anonymus Londinensis))
+  - path: greekLit/data/tlg0643/opp002/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg0643/opp002/__cts__.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (work metadata)
+  - path: greekLit/data/tlg0643/opp002/tlg0643.opp002.1st1K-lat1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg0643/opp002/tlg0643.opp002.1st1K-lat1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (Diels' Latin epimetrum, commentary-typed body — skipped as apparatus)
+  - path: greekLit/data/tlg2959/tlg002/__cts__.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg2959/tlg002/__cts__.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (work metadata (De libero arbitrio))
+  - path: greekLit/data/tlg2959/tlg002/tlg2959.tlg002.opp-ger1.xml
+    url: https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/03776b39f4047c5cff06f5296fae4b2bae4b08fb/data/tlg2959/tlg002/tlg2959.tlg002.opp-ger1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (Bonwetsch's German Methodius, edition-typed body)
