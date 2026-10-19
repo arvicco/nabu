@@ -98,6 +98,7 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "semantic_field" => "semantic_field", "semantic_category" => "word_class",
                    "borrowed" => "borrowed_status" },
                  map.entry_fields_for("wold"))
+    assert_equal({ "concept" => "concept" }, map.entry_fields_for("tls"))
   end
 
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
