@@ -14,6 +14,23 @@ canonical layout `canonical/tamilex/<repo>/`.
 | `Tirukkural/TK1.xml` | `1522875ea875f58651fe1322eb2ec0531b834111` | Tirukkuṟaḷ 1 (kaṭavuḷ vāḻttu): the couplet plus two commentary `<text>`s (Parimēlaḻakar, Maṇakkuṭavar) with xml:id'd paragraphs and English, a `sic`/`corr` choice, `editor role="translator"` |
 | `Tolkappiyam/TolC273.xml` | `8dd962839dcc4326029c4169125926cfdbc1bc81` | Tolkāppiyam Collatikāram 273: the sūtra plus four commentaries whose prose blocks carry NO xml:id (positional citations), unpaired English edition statements, quoted verses with their own wordsplits (multi-word ambiguous readings), a bare `sic` and an `app` holding only a note |
 
+## Upstream's delivery grains
+
+Each repo serves its text at the PER-POEM edition grain (`KT1.xml`,
+`TK1.xml` — the documents) beside grains discovery rejects by rule, one
+real specimen of each pinned here (copied 2026-10-20 from the box's
+`canonical/tamilex/` snapshot, synced 2026-10-12):
+
+| file | grain | rule |
+|---|---|---|
+| `Kuruntokai/_KTSAMPLE.xml` | empty poem template | upstream template or scratch file |
+| `Kuruntokai/witnesses.xml` | generated whole-repo witness list (whole) | not an edition (generated aggregate) |
+| `Kuruntokai/wordindex.xml` | generated whole-repo word index — TRIMMED: listWit cut after its second witness, body after the first entry; every kept byte verbatim, closing tags appended | not an edition (generated aggregate) |
+| `TamilneriVilakkam/Ed.xml` | whole-work base text the per-verse `TNV*ed.xml` editions re-split — TRIMMED: teiHeader + the first two mūlam divs (source lines 1–130), the rest and the standOff cut | the duplicate base edition (EXCLUDED) |
+
+The adapter test reconciles the tree: every XML file is a document or a
+censused skip.
+
 License: CC BY-NC-SA 4.0, stated by the TAMILEX maintainers by email,
 2026-10-12 (the repositories carry no license file yet; one is pending
 upstream). The license permits redistribution with attribution under the

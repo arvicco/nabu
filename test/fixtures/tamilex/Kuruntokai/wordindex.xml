@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="wordindex.xsl"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+        <titleStmt>
+            <title><title xml:lang="ta">Kuṟuntokai</title> word index</title>
+        </titleStmt>
+        <sourceDesc>
+            <listWit>
+                <witness xml:id="KT0" source="KT0.xml"><abbr>KT0</abbr><expan><title xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ta">Kuṟuntokai</title> 0.</expan></witness><witness xml:id="KT1" source="KT1.xml"><abbr>KT1</abbr><expan><title xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ta">Kuṟuntokai</title> 1. <persName xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ta">Tīpputtōḷār
+          
+        </persName>
+      </expan></witness></listWit>
+        </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+
+<text xml:lang="ta"><body><div><head>a</head><entry>
+<form type="standard">a</form>
+<form type="sandhi">av</form><form type="sandhi">am</form><form type="sandhi">ak</form><form type="sandhi">yak</form><form type="sandhi">yav</form><form type="sandhi">vav</form><form type="sandhi">van</form><def xml:lang="en">that-</def><def xml:lang="en">pretty</def><cit><q corresp="#KT26">kaṭuvaṉu maṟiyu<hi>mak</hi> koṭiyō ṉaiyē</q></cit><cit><q corresp="#KT63">veṇṇuti <hi>yav</hi>viṉaik kammā</q></cit><cit><q corresp="#KT63">yavviṉaik <hi>kam</hi>mā varivaiyum</q></cit><cit><q corresp="#KT119">ḷaravi <hi>ṉav</hi>varik kuruḷai</q></cit><cit><q corresp="#KT144">mollā <hi>ḷav</hi>vaḻip paralpāḻ</q></cit><cit><q corresp="#KT180">yalku <hi>lav</hi>vari vāṭat</q></cit><cit><q corresp="#KT256">varutu <hi>mav</hi>varait tāṅka</q></cit><cit><q corresp="#KT277">teṉṟi <hi>yak</hi>kāl varuvareṅ</q></cit><cit><q corresp="#KT297"> <hi>av</hi>viḷim purīiya</q></cit><cit><q corresp="#KT318">ḷaṇaiiya <hi>van</hi>nāṭ piḻaiyā</q></cit><cit><q corresp="#KT364">vantaṉa <hi>vav</hi>varaik kaṇpora</q></cit><cit><q corresp="#KT367">ṭōḻi <hi>yav</hi>van ticiṉē</q></cit></entry>
+</div></body>
+</text>
+</TEI>
