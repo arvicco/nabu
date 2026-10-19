@@ -83,7 +83,7 @@ module Nabu
     # the Wycliffite bible) and the house DOM threshold is 5 MB. The corpus
     # carries no named entities beyond the XML built-ins (censused), so the
     # external DTD reference is never fetched (NONET default).
-    class TcpXmlParser
+    class TcpXmlParser < StreamingTeiParser
       # One emitted unit: citation suffix, raw accumulated text, annotations.
       Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
@@ -112,65 +112,14 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
+      def extraction_class = Extraction
 
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:, notes: false)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, notes: notes).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
-      # The house collision tolerance (ddbdp/GRETIL/croala precedent).
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          seen[unit.citation] += 1
-          count = seen[unit.citation]
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
-
-      def build_document(units, urn:, language:, title:, path:, metadata:, license_override:)
-        document = Document.new(urn: urn, language: language, title: title,
-                                canonical_path: path, metadata: metadata,
-                                license_override: license_override)
-        units.each_with_index do |unit, sequence|
-          document << Passage.new(
-            urn: "#{urn}:#{unit.citation}",
-            language: language,
-            text: Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip),
-            annotations: unit.annotations,
-            sequence: sequence
-          )
-        end
-        raise ParseError, "#{path}: no citable passages found under <TEXT>" if document.empty?
-
-        document
-      rescue ValidationError => e
-        raise ParseError, "#{path}: #{e.message}"
-      end
+      def no_passages_message = "no citable passages found under <TEXT>"
 
       # The single-pass Reader state machine: a header phase mines the
       # <HEADER>, an EEBO phase tracks the nesting-driven div stack and
       # captures unit text.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         DIV_ELEMENTS = %w[DIV1 DIV2 DIV3 DIV4 DIV5 DIV6 DIV7].freeze
         VERSE_UNITS = %w[L].freeze
         HEAD_UNITS = %w[HEAD].freeze
@@ -188,15 +137,14 @@ module Nabu
         DROPPED_ELEMENTS = %w[NOTE TAILNOTE FIGDESC FW].freeze
         # FRONT/BACK mark passage provenance; BODY is the silent default.
         DIVISION_ELEMENTS = %w[FRONT BACK].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DIV_ELEMENTS, :VERSE_UNITS,
+        private_constant :DIV_ELEMENTS, :VERSE_UNITS,
                          :HEAD_UNITS, :PROSE_UNITS, :UNIT_ELEMENTS,
                          :SEPARATOR_ELEMENTS, :DROPPED_ELEMENTS, :DIVISION_ELEMENTS
 
         Result = Data.define(:units, :title, :metadata)
 
         def initialize(reader:, path:, notes: false)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @keep_notes = notes
           @note = nil # the open body <NOTE> capture (P118-R4 S6)
           @pending_notes = [] # notes met between units ride the next unit
@@ -229,14 +177,6 @@ module Nabu
 
         def new_frame(component)
           { component: component, child_divs: 0, l: 0, p: 0, h: 0 }
-        end
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
         end
 
         # -- dispatch ---------------------------------------------------------
@@ -576,8 +516,6 @@ module Nabu
 
         # -- helpers ----------------------------------------------------------
 
-        def dropping? = !@drop_depth.nil?
-
         # Unicode-blank — the same [[:space:]] notion the collapse uses, so
         # the emit gate and the collapse can never disagree again.
         # Blank = no BASE characters: whitespace and bare combining marks
@@ -589,14 +527,6 @@ module Nabu
         # citable text; both consume no ordinal.
         def blank?(text)
           text.match?(/\A[[:space:]\p{M}]*\z/)
-        end
-
-        def flatten(value)
-          presence(value&.gsub(/[[:space:]]+/, " ")&.strip)
-        end
-
-        def presence(value)
-          value if value && !value.empty?
         end
       end
       private_constant :Extraction
