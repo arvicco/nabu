@@ -816,8 +816,15 @@ sources:
       "Kayilaipāti Kāḷattipāti Antāti": hymn-prayer/hymn   # 98 — Nakkīrar
       "Aruḷicceyt Tiru Ātiyulā": hymn-prayer/hymn  # 1 — Cēramāṉ Perumāḷ's ulā, Śiva's
       #   procession sung as devotion
-  dta:                # the subgenre carries the signal; genre alone is too coarse
-    metadata: subgenre
+  dta:                # the subgenre carries the signal; genre alone is too coarse.
+    # BOTH subgenre ladders (2026-10-19): the DTA's own dtasub (1,850 docs) and
+    # the DWDS core-corpus dwds1sub on every non-newspaper file (3,445) — the
+    # same German label vocabulary, so one map folds both and a document whose
+    # two ladders agree dedupes to one row. dwds_genre stays out of the fold:
+    # its four heads restate the subgenre coarsely, and its Zeitung (2,036
+    # newspaper docs, no dwds1sub) has no ruled class — periodical press is a
+    # taxonomy question, not a fold (Zeitschrift below stays unmapped too).
+    metadata: [subgenre, dwds_subgenre]
     map:
       "Roman": literary/narrative/novel          # 163
       "Prosa": literary/narrative                # 128
@@ -850,6 +857,108 @@ sources:
       #   not liturgy or scripture)
       "Erbauungsliteratur": literary/wisdom      # 38 — Christian edification literature
       #   (the sefaria Musar fold)
+      # The dwds1sub tier (census over canonical/ 2026-10-19; counts are dwds1sub files):
+      "Brief": letter                            # 204
+      "Briefe": letter                           # 24
+      "Novelle": literary/narrative              # 126
+      "Gelegenheitsschrift:Tod": funerary        # 116 (+3 "; Lyrik") — occasional prints on a
+      #   death, the Leichenpredigt fold
+      "Sonstiges": unknown                       # 56 — upstream's own other-bucket (the ruled shape)
+      "Jura": legal                              # 50 — the Recht fold's sibling label
+      "Verordnung": legal/law                    # 19 — ordinances
+      "Erlass": legal/law                        # 1 — decrees
+      "Rechnungsbuch": administrative/account    # 4 — account books
+      "Andachtsbuch": literary/wisdom            # 41 (+1 "; Gebetbuch") — devotional books, the
+      #   Erbauungsliteratur fold
+      "Erbauungsbuch": literary/wisdom           # 1
+      "Anstandsliteratur": literary/wisdom       # 13 — conduct literature (the openiti fold)
+      "Gebetbuch": hymn-prayer/prayer            # 16 — prayer books
+      "Märchen": literary/narrative/tale         # 18
+      "Epos": literary/narrative/epic            # 5
+      "Heldenepik": literary/narrative/epic      # 3
+      "Epik": literary/narrative/epic            # 2
+      "Religiöse Reimpaarerzählung": literary/narrative   # 1 — a rhymed-couplet tale
+      "Kolportageliteratur": literary/narrative  # 1 — serial popular fiction
+      "Briefroman": literary/narrative/novel     # 1 — the epistolary novel
+      "Satire": literary                         # 8
+      "Kinderliteratur": literary                # 8
+      "Lied": literary/poetry                    # 2
+      "Reimpaarspruch": literary/poetry          # 2
+      "Schäferdichtung": literary/poetry         # 1 — pastoral poetry
+      "Lyrik, Epigramm": literary/poetry         # 1 — comma-joined upstream, verse both
+      "Lyrik, Drama": [literary/poetry, literary/drama]      # 2
+      "Lyrik, Libretto": [literary/poetry, literary/drama]   # 2 — a libretto is a stage text
+      "Dialog": literary/wisdom/dialogue         # 1
+      "Tagebuch": literary/diary                 # 1
+      "Rezension": literary/essay/criticism      # 9 — reviews
+      "Chronik": historiography/chronicle        # 3
+      "Geschichte": historiography               # 10
+      "Regionalgeschichte": historiography       # 20
+      "Wörterbuch": lexical                      # 6 — dictionaries (a Lexikon is an encyclopedia:
+      #   scholarly below, not words-about-words)
+      "Grammatik": lexical/grammar               # 1 (dtasub)
+      "Schulbuch": school                        # 2
+      "Kochbuch": scholarly/recipe               # 14
+      "Astronomie": scholarly/astronomy          # 13
+      "Astrologie": divination/astrology         # 1
+      "Anatomie": scholarly/medicine             # 5
+      "Tierheilkunde": scholarly/medicine        # 2 — veterinary medicine
+      "Alchemie, Medizin": [scholarly, scholarly/medicine]   # 1
+      "Bibelübersetzung": scripture              # 1 — a Bible translation
+      # the academic-subject tier (the Medizin/Technik shape — a discipline label IS
+      # the learned-writing claim): Politik 33 · Literaturwissenschaft 33 · Lexikon 33
+      # · Kunstgeschichte 33 · Naturwissenschaft 28 (+13 "; Philosophie") ·
+      # Populärwissenschaft 27 · Zoologie 23 · Naturgeschichte 21 · Pädagogik 19 ·
+      # Architektur 18 · Geologie 17 · Chemie 17 · Militär 13 · Sport 12 ·
+      # Landwirtschaft 10 · Gartenbau 9 · Hausväterliteratur 7 (estate-management
+      # manuals) · Bergbau 7 · Soziologie 6 · Verslehre 5 · Ethnologie 5 ·
+      # Altertumskunde 4 · Alchemie 4 · Anthropologie 3 · the singletons; dtasub-only
+      # labels: Kunst 20 (writings on art) · Buchkunde 4 · Geognosie 1
+      "Politik": scholarly
+      "Literaturwissenschaft": scholarly
+      "Lexikon": scholarly
+      "Kunstgeschichte": scholarly
+      "Naturwissenschaft": scholarly
+      "Populärwissenschaft": scholarly
+      "Zoologie": scholarly
+      "Naturgeschichte": scholarly
+      "Pädagogik": scholarly
+      "Architektur": scholarly
+      "Geologie": scholarly
+      "Chemie": scholarly
+      "Militär": scholarly
+      "Sport": scholarly
+      "Landwirtschaft": scholarly
+      "Gartenbau": scholarly
+      "Hausväterliteratur": scholarly
+      "Bergbau": scholarly
+      "Soziologie": scholarly
+      "Verslehre": scholarly
+      "Ethnologie": scholarly
+      "Altertumskunde": scholarly
+      "Alchemie": scholarly
+      "Anthropologie": scholarly
+      "Geowissenschaften": scholarly
+      "Buchwesen": scholarly
+      "Poetik": scholarly
+      "Physiologie": scholarly
+      "Pflanzenbuch": scholarly
+      "Kriminalistik": scholarly
+      "Kameralwissenschaft": scholarly
+      "Glasherstellung": scholarly
+      "Archäologie": scholarly
+      "Kunst": scholarly
+      "Buchkunde": scholarly
+      "Geognosie": scholarly
+      "Politik, Ökonomie": scholarly
+      "Politik, Anstandsliteratur": [scholarly, literary/wisdom]
+      # left unmapped (the worklist — no ruled class or no genre claim yet):
+      # Zeitschrift 217 (periodical press) · Rede 13 (speeches) · Bericht 13 ·
+      # Handbuch 16 (+ ", Rhetorik"/"; Spielregeln") · Flugschrift 10 (pamphlet —
+      # a format) · Amtsdruckschrift 5 · Reformschrift 2 · Gelegenheitsschrift:
+      # Vertrag/Fest 3 · Streitschrift 1 · Briefsteller 1 · Städtelob 1 ·
+      # Ordensliteratur:Jesuiten 1; dtasub-only: Katechismus 1 · Magnetberg 1 ·
+      # "Rede Humboldts" 1 · Vertrag 1 · Fest 1 · a stray "Gebrauchsliteratur" 1
   openiti:            # census: BookSUBJ (→ the subject facet) on 4,191 of 9,079 docs,
     facet: subject    # 2026-09-26 — a long-tail Arabic library taxonomy; regex rules
     #                   fold the recurring heads (multi-label by design, the aozora

@@ -80,13 +80,47 @@ class DtaTest < Minitest::Test
   end
 
   # P104-1: the dtamain/dtasub classCodes project as facets (2,010
-  # genre / 1,850 subgenre docs at the 2026-09-26 census; the rest carry
-  # no classCode — honest sparsity).
+  # genre / 1,850 subgenre docs at the 2026-09-26 census).
   def test_genre_class_codes_ride_as_facets
     kant = documents.fetch(KANT)
     assert_equal({ "value" => "Fachtext" }, kant.metadata.dig("facets", "genre"))
     assert_equal({ "value" => "Philosophie" }, kant.metadata.dig("facets", "subgenre"))
     assert_equal({ "value" => "Belletristik" }, documents.fetch(FONTANE).metadata.dig("facets", "genre"))
+  end
+
+  # The SECOND classification ladder — the DWDS core-corpus scheme
+  # (dwds1main/dwds1sub) sits on EVERY file (census over canonical/
+  # 2026-10-19: dwds1main on 5,481 of 5,481 — Zeitung 2,036 ·
+  # Gebrauchsliteratur 1,718 · Wissenschaft 953 · Belletristik 774;
+  # dwds1sub on all 3,445 non-newspaper files), where the dtamain ladder
+  # covers only ~2k. Mined beside it, its own scheme, its own keys.
+  def test_the_dwds_class_codes_ride_beside_the_dta_ladder
+    kant = documents.fetch(KANT)
+    assert_equal "Wissenschaft", kant.metadata["dwds_genre"]
+    assert_equal "Philosophie", kant.metadata["dwds_subgenre"]
+    assert_equal({ "value" => "Wissenschaft" }, kant.metadata.dig("facets", "dwds_genre"))
+    assert_equal({ "value" => "Philosophie" }, kant.metadata.dig("facets", "dwds_subgenre"))
+
+    luther = documents.fetch(LUTHER)
+    assert_nil luther.metadata["genre"], "the Luther Flugschrift carries no dtamain classCode"
+    assert_equal "Gebrauchsliteratur", luther.metadata["dwds_genre"]
+    assert_equal "Flugschrift", luther.metadata["dwds_subgenre"],
+                 "the DWDS ladder classifies what the DTA ladder leaves dark"
+    assert_equal({ "value" => "Flugschrift" }, luther.metadata.dig("facets", "dwds_subgenre"))
+  end
+
+  def test_the_kind_fold_reads_both_subgenre_ladders
+    kinds = Nabu::Kinds.load(classes_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_classes.yml"),
+                             map_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_map.yml"))
+    assert_equal %w[subgenre dwds_subgenre], kinds.rule_for("dta").metadata
+    {
+      "Brief" => ["letter"], "Briefe" => ["letter"], "Novelle" => ["literary/narrative"],
+      "Gelegenheitsschrift:Tod" => ["funerary"], "Jura" => ["legal"], "Gebetbuch" => ["hymn-prayer/prayer"],
+      "Märchen" => ["literary/narrative/tale"], "Lyrik; Prosa" => %w[literary/poetry literary/narrative],
+      "Wörterbuch" => ["lexical"], "Kochbuch" => ["scholarly/recipe"]
+    }.each do |value, paths|
+      assert_equal paths, kinds.normalize("dta", value), value
+    end
   end
 
   def test_the_print_year_wins_over_the_digital_timestamp
