@@ -284,13 +284,14 @@ class KindsTest < Minitest::Test
       map_path: File.expand_path("../config/kind_map.yml", __dir__)
     )
     heads = shipped.heads - ["unknown"]
-    assert_equal 21, heads.size,
+    assert_equal 23, heads.size,
                  "the 26 original heads restructured (owner ruling 2026-09-18): the six literature " \
-                 "families live under `literary` — 21 heads + unknown"
+                 "families live under `literary`; periodical + sermon ruled 2026-10-19 — " \
+                 "23 heads + unknown"
     %w[funerary dedicatory honorific building boundary mark royal
        administrative legal letter lexical scholarly school
        scripture exegesis hymn-prayer ritual magic divination
-       literary historiography].each do |head|
+       literary historiography periodical sermon].each do |head|
       assert_includes heads, head
     end
     %w[literary/narrative literary/poetry literary/drama

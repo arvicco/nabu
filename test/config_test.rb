@@ -278,6 +278,30 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # The rebuild's parse-worker count: unset = nil (Rebuild takes the
+  # pool default); the instance overlay is where a box sets its own.
+  def test_parse_workers_absent_by_default
+    Dir.mktmpdir do |root|
+      assert_nil Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root).parse_workers
+    end
+  end
+
+  def test_parse_workers_read_from_the_settings_overlay
+    Dir.mktmpdir do |root|
+      path = write_config(root, "")
+      FileUtils.mkdir_p(File.join(root, "local", "config"))
+      File.write(File.join(root, "local", "config", "settings.yml"), "rebuild:\n  parse_workers: 6\n")
+      assert_equal 6, Nabu::Config.load(path: path, root: root).parse_workers
+    end
+  end
+
+  def test_parse_workers_must_be_a_positive_integer
+    Dir.mktmpdir do |root|
+      path = write_config(root, "rebuild:\n  parse_workers: zero\n")
+      assert_raises(Nabu::Error) { Nabu::Config.load(path: path, root: root) }
+    end
+  end
+
   def test_instance_files_live_under_local_config_with_loud_legacy_fallback
     Dir.mktmpdir do |root|
       path = write_config(root, "")

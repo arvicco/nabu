@@ -10,6 +10,7 @@ require "tmpdir"
 # durable ledger revisions). Runs against the real lexica fixtures.
 class DictionaryLoaderTest < Minitest::Test
   include StoreTestDB
+  include BusyCatalog
 
   def setup
     @db = store_test_db
@@ -113,6 +114,37 @@ class DictionaryLoaderTest < Minitest::Test
                                           .load_from(wrapper, workdir: @workdir)
     assert_equal 1, report.errored
     assert_equal 8, report.added, "the healthy files must still load"
+  end
+
+  # A genuine constraint violation is document-shaped: an entry urn already
+  # held by another dictionary row trips the unique index, and exactly that
+  # FILE rolls back and quarantines while its siblings load.
+  def test_a_constraint_violating_file_quarantines_and_the_batch_continues
+    squatter = Nabu::Store::Dictionary.create(slug: "squatter", source_id: @source.id, title: "S", language: "grc")
+    @db[:dictionary_entries].insert(
+      dictionary_id: squatter.id, urn: "urn:nabu:dict:lsj:n67485", entry_id: "x", key_raw: "x",
+      headword: "x", headword_folded: "x", body: "x", content_sha256: "x", revision: 1, withdrawn: false
+    )
+
+    report = loader.load_from(@adapter, workdir: @workdir, full: false)
+
+    assert_equal 1, report.errored
+    assert_equal 6, report.added, "the LSJ file holding μῆνις rolls back alone (2 entries)"
+    quarantined = @db[:provenance].where(event: "quarantined").all
+    assert_equal 1, quarantined.size
+    assert_match(/UNIQUE constraint failed/, JSON.parse(quarantined.first[:params_json]).fetch("error"))
+  end
+
+  # Anything else is operational trouble: a busy catalog ABORTS the load
+  # loudly — no file is quarantined, nothing is half-written.
+  def test_a_busy_catalog_aborts_the_load_instead_of_quarantining
+    busy_once!(@db, /INSERT INTO `dictionary_entries`/)
+
+    error = assert_raises(Sequel::DatabaseError) { load! }
+
+    assert_match(/database is locked/, error.message)
+    assert_equal 0, @db[:provenance].where(event: "quarantined").count, "busy is not a quarantine"
+    assert_equal 0, @db[:dictionary_entries].count, "the load stopped at the first file"
   end
 
   # --- reflexes (P14-1, the reconstruction crosswalk) -----------------------------

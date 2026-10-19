@@ -147,11 +147,16 @@ module Store
       wholesale = freq_rows
 
       # Mutate the gold source: drop "et", add "castra"; re-sync just that source
-      # through the incremental index path, then compare.
-      d1 = Nabu::Store::Document.first(urn: "urn:d1")
-      Nabu::Store::Passage.where(document_id: d1.id).delete
-      make_passage(d1, urn: "urn:d1:1", sequence: 0, lemmas: %w[sum castra])
-      make_passage(d1, urn: "urn:d1:2", sequence: 1, lemmas: %w[hostis])
+      # through the incremental index path, then compare. The passages are
+      # REVISED in place, as the loader does — the catalog never hard-deletes
+      # a passage, so a urn keeps its passage id (the lemma table's key).
+      { "urn:d1:1" => %w[sum castra], "urn:d1:2" => %w[hostis] }.each do |urn, lemmas|
+        tokens = lemmas.map { |lemma| { "lemma" => lemma, "form" => lemma } }
+        Nabu::Store::Passage.first(urn: urn).update(
+          text: lemmas.join(" "), text_normalized: lemmas.join(" "),
+          annotations_json: JSON.generate({ "tokens" => tokens })
+        )
+      end
       Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext,
                                            slug: "proiel", lemma_tiers: { "auto" => "silver" })
       incremental = freq_rows

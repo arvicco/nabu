@@ -263,6 +263,81 @@ module Store
       assert_equal [0, 0, 0], [@db[:links].count, @db[:link_runs].count, @db[:link_run_chunks].count]
     end
 
+    # -- per-scope stamps (LinkStamps' journal half) ---------------------------
+
+    def test_retain_runs_keeps_exactly_the_named_runs_with_their_edges_and_chunks
+      keep = record_run(producer: "formulas", scope: "aspr")
+      write_edge(from: "urn:a:1", to: "urn:a:2", run_id: keep, kind: "formula")
+      drop = chunked_run
+      record_chunk(drop, chunk: 1, first: "urn:h:1", last: "urn:h:2")
+      write_edge(from: "urn:h:1", to: "urn:h:2", run_id: drop)
+      assert_equal [1, 1], Nabu::Store::LinksJournal.retain_runs!(@db, [keep])
+      assert_equal [keep], @db[:link_runs].select_map(:id)
+      assert_equal [keep], @db[:links].select_map(:run_id)
+      assert_equal 0, @db[:link_run_chunks].count
+    end
+
+    def test_retain_runs_with_nothing_kept_empties_the_edges
+      write_edge(from: "urn:a:1", to: "urn:a:2", run_id: record_run)
+      Nabu::Store::LinksJournal.retain_runs!(@db, [])
+      assert_equal [0, 0], [@db[:links].count, @db[:link_runs].count]
+    end
+
+    def test_scope_stamps_round_trip_and_retain
+      Nabu::Store::LinksJournal.write_scope_stamp!(@db, producer: "formulas", scope: "aspr", stamp: "s1",
+                                                        inputs: { "code" => "c" }, run_ids: [3, 4])
+      Nabu::Store::LinksJournal.write_scope_stamp!(@db, producer: "formulas", scope: "aspr", stamp: "s2",
+                                                        inputs: { "code" => "d" }, run_ids: [5])
+      Nabu::Store::LinksJournal.write_scope_stamp!(@db, producer: "place-mine", scope: "kanripo", stamp: "p",
+                                                        inputs: {}, run_ids: [6])
+      stamps = Nabu::Store::LinksJournal.scope_stamps(@db)
+      assert_equal(%w[s2 p], stamps.values_at(%w[formulas aspr], %w[place-mine kanripo]).map { |row| row[:stamp] })
+      assert_equal [5], stamps.fetch(%w[formulas aspr])[:run_ids]
+      assert_equal({ "code" => "d" }, stamps.fetch(%w[formulas aspr])[:inputs])
+      Nabu::Store::LinksJournal.retain_scope_stamps!(@db, [%w[place-mine kanripo]])
+      assert_equal [%w[place-mine kanripo]], Nabu::Store::LinksJournal.scope_stamps(@db).keys
+    end
+
+    def test_wipe_clears_the_scope_stamps_with_the_edges_they_describe
+      Nabu::Store::LinksJournal.write_scope_stamp!(@db, producer: "formulas", scope: "aspr", stamp: "s",
+                                                        inputs: {}, run_ids: [1])
+      Nabu::Store::LinksJournal.wipe!(@db)
+      assert_empty Nabu::Store::LinksJournal.scope_stamps(@db)
+    end
+
+    def test_edge_digests_group_by_producer_scope_and_ignore_run_bookkeeping
+      first = record_run(producer: "formulas", scope: "aspr")
+      write_edge(from: "urn:a:1", to: "urn:a:2", run_id: first, kind: "formula", score: 2.0)
+      write_edge(from: "urn:a:3", to: "urn:a:4", run_id: first, kind: "formula", score: 3.0)
+      before = Nabu::Store::LinksJournal.edge_digests(@db, [first])
+      assert_equal 2, before.fetch("formulas aspr")[:edges]
+
+      Nabu::Store::LinksJournal.retain_runs!(@db, [])
+      second = record_run(producer: "formulas", scope: "aspr")
+      write_edge(from: "urn:a:3", to: "urn:a:4", run_id: second, kind: "formula", score: 3.0)
+      write_edge(from: "urn:a:1", to: "urn:a:2", run_id: second, kind: "formula", score: 2.0)
+      assert_equal before, Nabu::Store::LinksJournal.edge_digests(@db, [second]),
+                   "a re-mine of the same edges digests equal — run ids, order and timestamps are bookkeeping"
+
+      @db[:links].where(from_urn: "urn:a:1").update(score: 2.5)
+      refute_equal before, Nabu::Store::LinksJournal.edge_digests(@db, [second]), "a changed score is drift"
+    end
+
+    def test_stage_runs_log_and_the_stamped_streak
+      assert_equal 0, Nabu::Store::LinksJournal.stamped_streak(@db)
+      log = ->(mode) { Nabu::Store::LinksJournal.record_stage_run!(@db, mode: mode, mined: 1, carried: 2) }
+      log.call("full")
+      log.call("stamped")
+      log.call("stamped")
+      assert_equal 2, Nabu::Store::LinksJournal.stamped_streak(@db)
+      Nabu::Store::LinksJournal.record_stage_run!(@db, mode: "self-check", verified: 2,
+                                                       drift: ["formulas aspr"])
+      assert_equal 0, Nabu::Store::LinksJournal.stamped_streak(@db)
+      row = @db[:link_stage_runs].order(:id).last
+      assert_equal ["self-check", 2, 1, ["formulas aspr"]],
+                   [row[:mode], row[:verified], row[:drifted], JSON.parse(row[:drift_json])]
+    end
+
     # -- kind_counts: the show footer's query ----------------------------------
 
     def test_kind_counts_sees_both_directions_grouped_by_kind

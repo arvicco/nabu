@@ -142,6 +142,10 @@ module Nabu
         MANIFEST
       end
 
+      # Parallel replay (audited): #parse streams one juan file through a
+      # fresh CbetaTeiParser — no state crosses refs.
+      def self.parallel_parse? = true
+
       # Walk the scope canon dirs (<workdir>/T/T01/*.xml …), one ref per
       # file, sorted by urn — after refusing any Category B canon dir
       # LOUDLY. Pure filename walk: no file is opened (breaker-friendly);

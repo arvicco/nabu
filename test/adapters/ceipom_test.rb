@@ -350,7 +350,7 @@ class CeipomTest < Minitest::Test
 
   def test_cle_values_index_as_latin_keys_under_the_equivalence_tier
     catalog, fulltext = indexed_store
-    rows = fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
+    rows = LemmaUrnView.of(fulltext, catalog)
     refute_equal 0, rows.count, "the fixture carries CLE-bearing tokens"
     assert_equal ["equivalence"], rows.select_map(:tier).uniq,
                  "every CEIPoM lemma row carries the equivalence tier — never gold, never silver"

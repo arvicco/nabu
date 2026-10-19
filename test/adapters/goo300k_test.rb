@@ -127,7 +127,7 @@ class Goo300kTest < Minitest::Test
                        .load_from(Nabu::Adapters::Goo300k.new, workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    rows = fulltext[Nabu::Store::Indexer::LEMMA_TABLE].where(lemma_folded: "joger").all
+    rows = LemmaUrnView.of(fulltext, catalog).where(lemma_folded: "joger").all
     assert_equal 1, rows.size, "the gold lemma joger (archaic: apostle) is indexed"
     assert_equal "joger", rows[0][:lemma_raw]
     assert_equal "Iogre", rows[0][:surface_forms], "attested by the pristine Bohorič surface"

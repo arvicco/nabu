@@ -19,6 +19,22 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # Stamps each document's metadata with the pid that parsed it.
+  class PidAdapter < TestAdapter
+    def parse(document_ref)
+      document = super
+      stamped = Nabu::Document.new(urn: document.urn, language: document.language, title: document.title,
+                                   canonical_path: document.canonical_path, metadata: { "pid" => Process.pid })
+      document.passages.each { |passage| stamped << passage }
+      stamped
+    end
+  end
+
+  # The same, opted in to the forked parse pool.
+  class ParallelPidAdapter < PidAdapter
+    def self.parallel_parse? = true
+  end
+
   # A short TestAdapter document: line 1 title, remaining lines passages.
   ILIAD = "Iliad\nμῆνιν\nἄειδε\n"
   ODYSSEY = "Odyssey\nἄνδρα\n"
@@ -57,6 +73,45 @@ class RebuildTest < Minitest::Test
     assert_equal snapshot_before, passage_snapshot
     assert(snapshot_before.all? { |row| row.fetch(:revision) == 1 })
     assert_equal %w[corpus], second.outcomes.map(&:slug)
+  end
+
+  # -- parallel replay -------------------------------------------------------
+
+  # Only adapters that declare parallel_parse? fan their parses out to
+  # forked workers (beside the rebuild's own open catalog, index and
+  # ledger handles); every other source replays in-process. Both land the
+  # same rows a serial rebuild lands.
+  def test_parallel_parse_fans_out_only_for_opted_in_adapters
+    write_sources(<<~YAML)
+      fanned:
+        adapter: RebuildTest::ParallelPidAdapter
+        wired: true
+      serial:
+        adapter: RebuildTest::PidAdapter
+        wired: true
+    YAML
+    write_canonical("fanned", "one.txt" => ILIAD, "two.txt" => ODYSSEY, "three.txt" => ILIAD)
+    write_canonical("serial", "four.txt" => ILIAD, "five.txt" => ODYSSEY) # TestAdapter urns are filename-keyed
+
+    result = rebuilder(parse_workers: 3).run
+
+    assert_equal([3, 2], result.outcomes.map { |outcome| outcome.report.added })
+    pids = parsing_pids
+    refute_includes pids.fetch("fanned"), Process.pid, "the opted-in source parsed in workers"
+    assert_equal [Process.pid], pids.fetch("serial"), "the rest parse in-process"
+    assert_equal 8, passage_snapshot.size
+  end
+
+  def test_parse_workers_default_to_the_pool_default
+    assert_equal Nabu::ParsePool.default_workers, rebuilder.parse_workers
+    assert_equal 1, rebuilder(parse_workers: 1).parse_workers
+  end
+
+  def test_only_audited_adapters_opt_in_to_parallel_parse
+    refute_predicate TestAdapter, :parallel_parse?, "the base default is serial"
+    %w[Openiti EeboTcp Dta Okhc Kanripo Cbeta].each do |name|
+      assert_predicate Nabu::Adapters.const_get(name), :parallel_parse?, "#{name} is audited parse-pure"
+    end
   end
 
   # -- source_stats re-derivation (P42-0) -----------------------------------
@@ -259,7 +314,9 @@ class RebuildTest < Minitest::Test
     db = Nabu::Store.connect(catalog_path)
     passage_idx = db.indexes(:passages).values.map { |i| i[:columns] }
     provenance_idx = db.indexes(:provenance).values.map { |i| i[:columns] }
-    assert_includes passage_idx, [:document_id]
+    refute_includes passage_idx, [:document_id],
+                    "migration 048 retired the single-column index; the rebuild must not resurrect it"
+    assert_includes passage_idx, %i[document_id sequence]
     assert_includes passage_idx, [:language]
     assert_includes provenance_idx, [:passage_id]
     assert_includes provenance_idx, [:document_id]
@@ -913,8 +970,18 @@ class RebuildTest < Minitest::Test
 
   private
 
-  def rebuilder
-    Nabu::Rebuild.new(config: config, registry: Nabu::SourceRegistry.load(@sources_path))
+  def rebuilder(**)
+    Nabu::Rebuild.new(config: config, registry: Nabu::SourceRegistry.load(@sources_path), **)
+  end
+
+  # slug => the distinct pids that parsed its documents.
+  def parsing_pids
+    with_db do |db|
+      db[:documents].join(:sources, id: :source_id)
+                    .select_map([Sequel[:sources][:slug], Sequel[:documents][:metadata_json]])
+                    .group_by(&:first)
+                    .transform_values { |rows| rows.map { |_, json| JSON.parse(json).fetch("pid") }.uniq }
+    end
   end
 
   def config

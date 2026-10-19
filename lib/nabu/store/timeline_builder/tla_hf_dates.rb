@@ -39,20 +39,22 @@ module Nabu
           sentences = 0
           undated = 0
           parser = Adapters::TlaJsonlParser.new
-          Adapters::TlaHf::DATASETS.each do |slug, dataset|
-            outcome = build_dataset(catalog, workdir, parser, slug, dataset)
-            next if outcome.nil?
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            Adapters::TlaHf::DATASETS.each do |slug, dataset|
+              outcome = build_dataset(catalog, axes, workdir, parser, slug, dataset)
+              next if outcome.nil?
 
-            documents += 1
-            sentences += outcome[:sentences]
-            undated += outcome[:undated]
+              documents += 1
+              sentences += outcome[:sentences]
+              undated += outcome[:undated]
+            end
           end
           { documents: documents, sentences: sentences, undated: undated }
         end
 
         # One dataset → its timeline rows, or nil when the file is absent or the
         # document is not in the catalog.
-        def build_dataset(catalog, workdir, parser, slug, dataset)
+        def build_dataset(catalog, axes, workdir, parser, slug, dataset)
           path = Dir.glob(File.join(workdir, dataset.fetch(:subdir), "**",
                                     Adapters::TlaHf::FILENAME)).first
           return nil if path.nil?
@@ -68,8 +70,8 @@ module Nabu
           end
           return { sentences: 0, undated: undated } if rows.empty?
 
-          insert_envelope(catalog, document_id, rows)
-          rows.each { |row| catalog[:document_axes].insert(row.merge(document_id: document_id)) }
+          insert_envelope(axes, document_id, rows)
+          rows.each { |row| axes.insert(row.merge(document_id: document_id)) }
           { sentences: rows.size, undated: undated }
         end
 
@@ -101,10 +103,10 @@ module Nabu
         # The document-grain row: the dataset's full dated span, inserted
         # BEFORE the per-record rows so document-grain readers meet it first
         # (the ChronicleAnnals stance).
-        def insert_envelope(catalog, document_id, rows)
+        def insert_envelope(axes, document_id, rows)
           not_before = rows.filter_map { |row| row[:not_before] }.min
           not_after = rows.filter_map { |row| row[:not_after] }.max
-          catalog[:document_axes].insert(
+          axes.insert(
             document_id: document_id, not_before: not_before, not_after: not_after,
             precision: "range", date_raw: "#{not_before}–#{not_after}",
             axis_source: SLUG

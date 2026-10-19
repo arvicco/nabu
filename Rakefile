@@ -363,6 +363,27 @@ end
 # FULLTEXT=/path/fulltext.sqlite3 CASES="rex@lat,λόγος@grc:koi" REPEATS=5
 # LIMIT=20 LECTS=/path/nabu-lects (a registry checkout, bare — default:
 # the instance's canonical/nabu-lects with its overrides and overlay).
+# The working boards' numbering self-check. The boards (.docs/) are
+# gitignored LOCAL files: a checkout without them — any public clone, a
+# lane worktree — gets an announced skip and exit 0. BOARDS_DIR overrides
+# the location (e.g. a worktree checking the main checkout's boards).
+namespace :boards do
+  desc "Gate check: register 'Next number' headers vs the numbers already minted (stale = exit 1)"
+  task :check do
+    require_relative "lib/nabu/ops/board_check"
+    dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
+    report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
+    if report.skipped
+      puts "boards:check — no boards at #{dir} (a public clone or a worktree); skipped"
+      next
+    end
+    report.findings.each { |finding| puts "STALE  #{finding.register}: #{finding.message}" }
+    abort "boards:check — #{report.findings.size} stale register header(s)" unless report.clean?
+
+    puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
+  end
+end
+
 namespace :bench do
   desc "Time the lect: filter's catalog-join path over a catalog (read-only)"
   task :lect_filter do
@@ -460,6 +481,21 @@ namespace :tools do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
     Nabu::ToolBootstrap.new.print_status
+    Nabu::Ops::GitHooks::Installer.new(root: __dir__).status.each do |tool, state|
+      puts format("%<tool>-52s %<state>s", tool: tool, state: state)
+    end
+  end
+
+  # The local git hook pack (conflict markers, the mid-rebuild hold,
+  # commit-message attribution/id refusals). Symlinks the tracked
+  # script/git-hooks/* into the shared hooks dir — no network, idempotent.
+  # Lives beside ToolBootstrap rather than in it: lib/nabu/ops/ sits
+  # outside the derivation fingerprint's shared core, so the hook pack
+  # never dirties a stamp.
+  desc "Install the git hook pack (pre-commit + commit-msg symlinks); idempotent"
+  task :hooks do
+    require_relative "lib/nabu/ops/git_hooks"
+    Nabu::Ops::GitHooks::Installer.new(root: __dir__).install!
   end
 end
 

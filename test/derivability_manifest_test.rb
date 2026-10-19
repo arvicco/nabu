@@ -36,7 +36,11 @@ class DerivabilityManifestTest < Minitest::Test
       kind: :derived, stage: "links",
       # link_run_chunks (P122-2): a chunked run's resumable cursor — state
       # ABOUT the derived edges, wiped and re-minted with them.
-      tables: %w[links link_runs link_run_chunks]
+      # link_scope_stamps / link_stage_runs (LinkStamps): the identity each
+      # carried scope was mined under, and the stage log driving the
+      # self-check cadence — bookkeeping about the edges; losing them costs
+      # one full re-mine (no stamp = nothing carried), never data.
+      tables: %w[links link_runs link_run_chunks link_scope_stamps link_stage_runs]
     },
     lects: {
       kind: :derived, stage: "lect journal",

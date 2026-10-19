@@ -81,11 +81,13 @@ module Nabu
 
           urn_ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}p%"))
                                        .select_hash(:urn, :id)
-          each_catalog_row(path) do |row|
-            document_id = urn_ids[Nabu::Adapters::Cdli.urn_for(row["id_text"].to_s.strip)]
-            next if document_id.nil?
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            each_catalog_row(path) do |row|
+              document_id = urn_ids[Nabu::Adapters::Cdli.urn_for(row["id_text"].to_s.strip)]
+              next if document_id.nil?
 
-            insert_row(catalog, document_id, row, counts)
+              insert_row(axes, document_id, row, counts)
+            end
           end
           counts
         end
@@ -96,7 +98,7 @@ module Nabu
           nil # a torn catalog costs the timeline, never the rebuild
         end
 
-        def insert_row(catalog, document_id, row, counts)
+        def insert_row(axes, document_id, row, counts)
           date = extract_accounting(row["accounting_period"].to_s.strip, counts) ||
                  extract_regnal(row["dates_referenced"].to_s.strip, counts) ||
                  extract_period(row["period"].to_s.strip, counts)
@@ -107,7 +109,7 @@ module Nabu
           counts[:documents] += 1
           timeline = date || { not_before: nil, not_after: nil, precision: nil, date_raw: nil }
           TimelineBuilder.insert_timeline(
-            catalog, document_id, timeline.merge(place_name: place, place_ref: nil), CDLI_SLUG
+            axes, document_id, timeline.merge(place_name: place, place_ref: nil), CDLI_SLUG
           )
         end
 

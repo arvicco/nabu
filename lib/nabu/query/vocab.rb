@@ -181,7 +181,8 @@ module Nabu
         row = @catalog[:passages]
               .join(:documents, id: Sequel[:passages][:document_id])
               .where(Sequel[:passages][:urn] => urn, Sequel[:documents][:withdrawn] => false)
-              .select(Sequel[:passages][:urn].as(:urn),
+              .select(Sequel[:passages][:id].as(:passage_id),
+                      Sequel[:passages][:urn].as(:urn),
                       Sequel[:passages][:language].as(:language),
                       Sequel[:passages][:annotations_json].as(:annotations_json),
                       Sequel[:passages][:withdrawn].as(:withdrawn),
@@ -214,7 +215,8 @@ module Nabu
                          Sequel[:passages][:withdrawn] => false,
                          Sequel[:documents][:withdrawn] => false)
         dataset = dataset.where(Sequel[:passages][:sequence] => sequence) if sequence
-        dataset.select(Sequel[:passages][:urn].as(:urn),
+        dataset.select(Sequel[:passages][:id].as(:passage_id),
+                       Sequel[:passages][:urn].as(:urn),
                        Sequel[:passages][:language].as(:language),
                        Sequel[:passages][:annotations_json].as(:annotations_json)).all
       end
@@ -325,19 +327,21 @@ module Nabu
       end
 
       # The tier of the scope's OWN lemma rows, read from the index by the
-      # first annotated passage's urn (tier is per-source, a scope is within
-      # one document, so one passage answers for all). nil — no tier claim —
+      # first annotated passage's key (passage_id; urn on a v1 table). Tier
+      # is per-source and a scope is within one document, so one passage
+      # answers for all. nil — no tier claim —
       # when the column predates the tier or the index lacks the passage
       # (stale index): honest unknown, the CLI then labels nothing.
       def scope_tier(rows)
         return nil unless tier_column?
 
-        urn = rows.find do |row|
-          (json = row[:annotations_json]) && json.include?('"lemma"')
-        end&.fetch(:urn, nil)
-        return nil unless urn
+        row = rows.find do |candidate|
+          (json = candidate[:annotations_json]) && json.include?('"lemma"')
+        end
+        return nil unless row
 
-        @fulltext[Store::Indexer::LEMMA_TABLE].where(urn: urn).get(:tier)
+        Store::Indexer.lemma_rows_of_passages(@fulltext, ids: [row.fetch(:passage_id)], urns: [row.fetch(:urn)])
+                      .get(:tier)
       end
 
       # Rank the lemmas by log-odds z-score (see class note), most distinctive

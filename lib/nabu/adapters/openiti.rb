@@ -174,6 +174,10 @@ module Nabu
         MANIFEST
       end
 
+      # Parallel replay (audited): #parse reads one version file plus its
+      # sidecars through a fresh parser per call — no state crosses refs.
+      def self.parallel_parse? = true
+
       # The book sidecars' RELATED work↔work assertions (metadata
       # "related_works") refresh into the links journal after every load
       # through the reference-producer seam — Nabu::OpenitiRelations joins

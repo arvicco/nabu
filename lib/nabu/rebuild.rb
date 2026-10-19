@@ -61,7 +61,7 @@ module Nabu
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
     Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets, :profile,
-                         :analyzed, :link_failures) do
+                         :analyzed, :link_failures, :links) do
       # +axes+ (P15-2) is the TimelineBuilder::Summary of the timeline
       # regenerated from canonical after replay; +facets+ (P17-2) the
       # FacetBuilder::Summary of the genre-facet table projected from the
@@ -76,8 +76,10 @@ module Nabu
       # +link_failures+ (P70-3b) — the links stage's contained per-producer
       # failures ("slug: message" strings): the summary must name the gaps a
       # partial links re-mine left, never claim a clean rebuild over them.
+      # +links+ is the LinkStamps::Outcome of the links stage (carried /
+      # mined / self-check verdicts — its #summary is the result line).
       def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil,
-                     profile: nil, analyzed: nil, link_failures: [])
+                     profile: nil, analyzed: nil, link_failures: [], links: nil)
         super
       end
 
@@ -89,9 +91,22 @@ module Nabu
     # [slug, :replay | :skip_no_canonical] pairs in registration order.
     Plan = Data.define(:db_path, :db_exists, :items)
 
-    def initialize(config:, registry:)
+    # How many forked parse workers (Nabu::ParsePool) a parallel_parse?
+    # source's replay fans out to; 1 is the serial path exactly. Sources
+    # whose adapter does not opt in always replay in-process.
+    attr_reader :parse_workers
+
+    # +full_links+ (`--full-links`): the links stage carries nothing this
+    # run — every scope re-mines and the would-be-carried ones are compared
+    # against their stamps (the self-check, forced now).
+    # +parse_workers+: nil takes ParsePool.default_workers (cores − 1,
+    # capped); the CLI passes `--parse-workers` / the rebuild.parse_workers
+    # setting.
+    def initialize(config:, registry:, full_links: false, parse_workers: nil)
       @config = config
       @registry = registry
+      @full_links = full_links
+      @parse_workers = parse_workers || ParsePool.default_workers
     end
 
     # Describe a would-be rebuild without changing anything on disk.
@@ -144,7 +159,9 @@ module Nabu
       skips = []
       # P89-1: pin every source's code identity BEFORE any replay — a stamp
       # minted hours into the run must describe the code the run loaded, not
-      # whatever sits on disk by then (DerivationFingerprint#warm).
+      # whatever sits on disk by then (DerivationFingerprint#warm). The
+      # links producers' code identity is pinned for the same reason.
+      warm_link_code
       @registry.each_source { |entry| fingerprints.warm(entry) }
       # Warming must COMPLETE before the first replay begins; folding it into
       # the replay loop would warm the last source hours after load time,
@@ -167,8 +184,9 @@ module Nabu
       replay_place_index(db)
       replay_person_index(db)
       # P36-2: the bulk insert is done — build the deferred secondary indexes in
-      # one pass BEFORE the query-side stages (timeline/facets/indexer) that join
-      # on passages.document_id.
+      # one pass BEFORE the query-side stages (timeline/facets/indexer). Their
+      # passages.document_id joins never waited on this step: the unique
+      # (document_id, sequence) index serves them and is never deferred.
       Store.create_deferred_indexes!(db)
       # The honkoku <- ndl-kotenseki catalog join writes each NDL-held
       # material's NDL record onto its honkoku row BEFORE the builders,
@@ -327,14 +345,14 @@ module Nabu
         Store::LemmaRollup.rebuild!(catalog: db, fulltext_path: fulltext_path)
       end
       # P70-3b (the derivability contract): the links instrument is DERIVED —
-      # drop and re-mine it wholesale: every slug-scoped reference producer
-      # (the sync-time lane replayed over the re-minted catalog) plus every
-      # batch scope recorded in config/link_scopes.yml (parallels needs the
-      # fulltext index, hence after it). db/links.sqlite3 thereby needs no
-      # backup.
+      # every slug-scoped reference producer (the sync-time lane replayed
+      # over the re-minted catalog) re-runs, and every batch scope recorded
+      # in config/link_scopes.yml is re-mined or — its stamp unchanged —
+      # carried (LinkStamps; parallels needs the fulltext index, hence after
+      # it). db/links.sqlite3 thereby needs no backup.
       progress&.stage("links", eta: corpus_eta(ledger, "links"))
-      link_failures = profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
-        rederive_links!(db, fulltext)
+      links = profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
+        rederive_links!(db, fulltext, progress: progress)
       end
       # P42-4: the fresh catalog+index have no planner statistics yet — ANALYZE
       # both so the very first query off a rebuilt db plans against real row
@@ -352,7 +370,7 @@ module Nabu
       persist_stage_timings!(ledger, profile, outcomes, indexed)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
-                 analyzed: analyzed, link_failures: link_failures)
+                 analyzed: analyzed, link_failures: links.failures, links: links)
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -487,8 +505,12 @@ module Nabu
       when :source
         Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
+        # Parallel replay: an audited adapter's parses fan out to forked
+        # workers; the loader stays the single writer, in parse order, on
+        # the same transaction grain.
         Store::Loader.new(db: db, source: source, ledger: ledger, profile: profile,
-                          tx_batch: LOAD_TX_BATCH)
+                          tx_batch: LOAD_TX_BATCH,
+                          parse_workers: adapter.class.parallel_parse? ? @parse_workers : 1)
       end
     end
 
@@ -610,15 +632,23 @@ module Nabu
 
     def workdir_for(slug) = @config.source_workdir(slug)
 
-    # The links re-mine (P70-3b): wipe the journal, replay every
-    # slug-scoped reference producer, then every recorded batch scope.
-    # A producer's Nabu::Error-class failure is contained and returned (the
+    # The links stage (P70-3b; per-scope stamps since LinkStamps): plan
+    # which recorded batch scopes carry on an unchanged stamp, drop every
+    # run NOT carried (the old whole-journal wipe, minus the carried
+    # scopes), replay every slug-scoped reference producer, then re-mine
+    # every batch scope the plan does not carry, stamping each. Every Nth
+    # stage (or --full-links) carries nothing and compares instead — the
+    # self-check. A producer's Nabu::Error-class failure is contained (the
     # Result carries it into the summary — a partial links re-mine names
     # its gaps); infrastructure errors (I/O, Sequel) abort the rebuild
-    # loudly, by design. Returns the failure strings.
-    def rederive_links!(db, fulltext)
+    # loudly, by design. Returns the LinkStamps::Outcome.
+    def rederive_links!(db, fulltext, progress: nil)
       journal = Store::LinksJournal.open!(@config.links_path)
-      Store::LinksJournal.wipe!(journal)
+      scopes = LinkScopeReplay.order(LinkScopes.load(@config.link_scopes_path))
+      stamps = LinkStamps.new(catalog: db, config: @config, registry: @registry, code_digests: @link_code_digests)
+      progress&.stage("links: stamping #{scopes.size} recorded scope(s) (member content identities)") if scopes.any?
+      plan = stamps.plan(scopes, journal: journal, force_full: @full_links)
+      expected = stamps.prepare!(plan, journal: journal)
       failures = []
       @registry.each_source do |entry|
         next unless entry.adapter_class.reference_edges?
@@ -628,15 +658,19 @@ module Nabu
       rescue Nabu::Error => e
         failures << "#{entry.slug}: #{e.message}"
       end
-      LinkScopeReplay.order(LinkScopes.load(@config.link_scopes_path)).each do |scope|
+      outcome = stamps.mine!(plan, scopes, journal: journal, expected: expected, failures: failures,
+                                           progress: progress) do |scope|
         LinkScopeReplay.replay!(scope, db: db, fulltext: fulltext, journal: journal, config: @config)
-      rescue Nabu::Error, ArgumentError => e
-        failures << "#{scope['producer']} #{scope['scope']}: #{e.message}"
       end
       warn "links rederive: #{failures.size} producer(s) failed — #{failures.join(' · ')}" unless failures.empty?
-      failures
+      outcome
     ensure
       journal&.disconnect
+    end
+
+    # Pin the links producers' code identity at run start (see #run).
+    def warm_link_code
+      @link_code_digests = LinkStamps.code_digests
     end
 
     def db_path = @config.catalog_path

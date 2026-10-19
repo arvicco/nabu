@@ -145,6 +145,24 @@ module Nabu
       # document count exactly as before.
       TX_BATCH_ROWS = 10_000
 
+      # The bulk passage write: a document's new passages land as multi-row
+      # INSERT ... RETURNING statements rather than one model create per
+      # row (measured ~10x on a 20k-row batch). Each statement carries at
+      # most INSERT_SLICE_ROWS rows (Sequel's own SQLite import slice) and,
+      # once a slice's text passes INSERT_SLICE_BYTES, closes early — so a
+      # source of book-sized passages never builds one giant statement.
+      INSERT_SLICE_ROWS = 500
+      INSERT_SLICE_BYTES = 4 * 1024 * 1024
+
+      # The passage columns the bulk insert writes, in VALUES order.
+      PASSAGE_COLUMNS = %i[document_id urn sequence language text text_normalized annotations_json
+                           content_sha256 revision withdrawn].freeze
+
+      # What revising a document needs to know about its existing passages
+      # — text and annotations stay on disk (a mega-document's text would
+      # otherwise be read back wholesale just to be compared by sha).
+      EXISTING_PASSAGE_COLUMNS = %i[id urn sequence content_sha256 revision withdrawn].freeze
+
       # db: the Sequel database (Store.setup! already applied);
       # source: the Store::Source row this load belongs to;
       # ledger: the history ledger db (Ledger.setup! applied) or nil.
@@ -167,8 +185,14 @@ module Nabu
       # index_delta_cap (P112-1): entries past which the load's IndexDelta
       # overflows to the slice-rewrite fallback (tests shrink it; production
       # keeps IndexDelta::CAP).
+      # parse_workers: 1 (default) parses in-process — the serial path,
+      #   unchanged. More forks that many Nabu::ParsePool workers for
+      #   #load_from: adapter parses run in the children while this process
+      #   stays the single writer, consuming documents in parse order (see
+      #   #load_from_pool). Rebuild passes it for adapters that declare
+      #   parallel_parse?.
       def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil, tx_batch_rows: TX_BATCH_ROWS,
-                     index_delta_cap: IndexDelta::CAP)
+                     index_delta_cap: IndexDelta::CAP, parse_workers: 1)
         @db = db
         @source = source
         @ledger = ledger
@@ -176,6 +200,7 @@ module Nabu
         @tx_batch = tx_batch
         @tx_batch_rows = tx_batch_rows
         @index_delta_cap = index_delta_cap
+        @parse_workers = parse_workers
         # P42-0: the write-time census. Each document mutation applies its
         # contribution delta to source_stats INSIDE the same transaction, so
         # the read surfaces stop aggregating the corpus per invocation. nil on
@@ -201,6 +226,8 @@ module Nabu
       # trouble) propagates and aborts. +on_document+ ticks after every
       # processed OR quarantined document (see #load).
       def load_from(adapter, workdir:, full: true, on_document: nil)
+        return load_from_pool(adapter, workdir: workdir, full: full, on_document: on_document) if @parse_workers > 1
+
         run(full: full, on_document: on_document) do |process, quarantine, skip|
           adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
@@ -219,6 +246,58 @@ module Nabu
       end
 
       private
+
+      # The parallel twin of #load_from: the SAME sequence of process /
+      # quarantine / skip / superseded calls the serial walk makes, in the
+      # same order, with the parses done by forked ParsePool workers.
+      # Discovery runs here first, in full, so the workers inherit the
+      # adapter exactly as discovery left it; an attic duplicate's
+      # "superseded" journal stays a SLOT in that sequence and is written
+      # at the position the serial walk writes it (between the documents
+      # around it), never at discovery time. Each parse outcome then meets
+      # the serial path's own rescue discipline at its slot: ParseError
+      # quarantines, DocumentSkipped skips, anything else — a worker's
+      # adapter bug, a dead worker (ParseWorkerError) — aborts the load
+      # right there, leaving exactly what a serial abort at that document
+      # leaves. The writer-side cost (waiting on workers + un-Marshal-ing
+      # their documents) is this source's :parse bucket.
+      def load_from_pool(adapter, workdir:, full:, on_document:)
+        slots = []
+        adapter.discover_with_attic(workdir, on_superseded: ->(ref) { slots << [:superseded, ref] })
+               .each { |ref| slots << [:parse, ref] }
+        refs = slots.filter_map { |kind, ref| ref if kind == :parse }
+        pool = ParsePool.new(adapter: adapter, workers: @parse_workers)
+        cursor = 0
+        run(full: full, on_document: on_document) do |process, quarantine, skip|
+          pool.each(refs) do |result|
+            cursor = journal_superseded_slots(slots, cursor) + 1
+            document =
+              begin
+                result.value!
+              rescue Nabu::DocumentSkipped => e
+                skip.call(result.ref, e)
+                next
+              rescue Nabu::ParseError => e
+                quarantine.call(result.ref, e)
+                next
+              end
+            process.call(document, retained_params(result.ref))
+          end
+          journal_superseded_slots(slots, cursor)
+        end
+      ensure
+        @profile&.add(scope: @source.slug, stage: :parse, seconds: pool.wait_seconds + pool.decode_seconds) if pool
+      end
+
+      # Journal the superseded slots from +cursor+ up to the next parse
+      # slot; returns that parse slot's index (slots.size when none is left).
+      def journal_superseded_slots(slots, cursor)
+        while cursor < slots.size && slots[cursor].first == :superseded
+          journal_superseded(slots[cursor].last)
+          cursor += 1
+        end
+        cursor
+      end
 
       # P36-0 stage timers: no-op (just yield) without a profile, so the sync
       # path is untouched; under `nabu rebuild` they fold the call's wall time
@@ -343,7 +422,15 @@ module Nabu
         else
           counts[outcome] += 1
         end
-      rescue Sequel::DatabaseError => e
+      rescue Sequel::ConstraintViolation => e
+        # Only constraint-shaped failures are the DOCUMENT's fault: unique
+        # (a cross-source urn collision), NOT NULL, foreign key and CHECK —
+        # everything a bad parse can legitimately make SQLite refuse. Every
+        # other Sequel::DatabaseError (busy timeout, disk full, I/O error,
+        # corruption, a read-only catalog) is the environment's, says
+        # nothing about this document, and propagates to abort the load:
+        # quarantining it would advance the quarantine baseline and let the
+        # sync report success over a catalog it did not finish writing.
         # The rolled-back document's staged rows never happened (P112-1).
         @index_delta.discard!
         counts[:errored] += 1
@@ -351,8 +438,7 @@ module Nabu
       end
 
       def upsert_document(document, retained, pass_urns)
-        passages = document.passages
-        passage_shas = passages.to_h { |passage| [passage.urn, ContentHash.passage(passage)] }
+        passage_shas, annotations = encode_passages(document.passages)
         doc_sha = ContentHash.document(document, passage_shas.values)
 
         row = Document.first(source_id: @source.id, urn: document.urn)
@@ -372,7 +458,7 @@ module Nabu
         end
         pass_urns.add(document.urn)
 
-        return insert_document(document, passage_shas, doc_sha, retained) if row.nil?
+        return insert_document(document, passage_shas, annotations, doc_sha, retained) if row.nil?
 
         if row.content_sha256 == doc_sha
           # Unchanged content: no revision bump, no passage work — only the
@@ -395,9 +481,25 @@ module Nabu
           end
           restored ? :updated_content : :updated_metadata
         else
-          tracking_stats(row) { revise_document(row, document, passage_shas, doc_sha, retained) }
+          tracking_stats(row) { revise_document(row, document, passage_shas, annotations, doc_sha, retained) }
           :updated_content
         end
+      end
+
+      # Each passage's annotations serialized to canonical JSON ONCE, the
+      # same string feeding both its content sha and its stored column.
+      # Returns [urn => sha, urn => annotations_json]; keyed exactly as the
+      # sha map always was (a duplicate urn keeps its last occurrence), so
+      # the document sha is unchanged byte for byte.
+      def encode_passages(passages)
+        shas = {}
+        annotations = {}
+        passages.each do |passage|
+          json = ContentHash.canonical_json(passage.annotations)
+          shas[passage.urn] = ContentHash.passage(passage, annotations_json: json)
+          annotations[passage.urn] = json
+        end
+        [shas, annotations]
       end
 
       # Read-only twin of the same-content reconcile block: does anything
@@ -454,7 +556,7 @@ module Nabu
         true
       end
 
-      def insert_document(document, passage_shas, doc_sha, retained)
+      def insert_document(document, passage_shas, annotations, doc_sha, retained)
         row = Document.create(
           source_id: @source.id, urn: document.urn, title: document.title,
           language: document.language, canonical_path: document.canonical_path,
@@ -465,14 +567,14 @@ module Nabu
         journal(event: "loaded", document_id: row.id)
         # durable: false — an insert is not a transition (see class comment).
         journal_retirement_flip(row, false, retained, durable: false)
-        document.passages.each { |passage| insert_passage(row.id, passage, passage_shas.fetch(passage.urn)) }
+        insert_passages(row.id, document.passages, passage_shas, annotations)
         # P42-0: the insert contribution comes from the in-memory document —
         # no extra query on the rebuild's bulk-insert path.
         @stats&.added(document, retained: retained)
         :added
       end
 
-      def revise_document(row, document, passage_shas, doc_sha, retained)
+      def revise_document(row, document, passage_shas, annotations, doc_sha, retained)
         old_sha = row.content_sha256
         was_withdrawn = row.withdrawn
         was_retired = row.retired_upstream
@@ -490,7 +592,7 @@ module Nabu
           durable(event: "restored", urn: row.urn, new_sha: doc_sha)
         end
         journal_retirement_flip(row, was_retired, retained)
-        upsert_passages(row, document, passage_shas)
+        upsert_passages(row, document, passage_shas, annotations)
         # P112-1: a revision arriving over a WITHDRAWN document is a re-entry
         # — its unchanged passages (untouched above) also return to the live
         # set. Staged after the upserts so the passage states are final.
@@ -550,34 +652,41 @@ module Nabu
                           params_json: JSON.generate(params)).empty?
       end
 
-      def upsert_passages(doc_row, document, passage_shas)
-        existing = Passage.where(document_id: doc_row.id).all.to_h { |passage| [passage.urn, passage] }
+      def upsert_passages(doc_row, document, passage_shas, annotations)
+        existing = Passage.where(document_id: doc_row.id).select(*EXISTING_PASSAGE_COLUMNS).all
+                          .to_h { |passage| [passage.urn, passage] }
         withdraw_vanished_passages(existing, document)
         park_resequenced_passages(existing, document)
 
         document.passages.each do |passage|
-          upsert_passage(doc_row, passage, existing[passage.urn], passage_shas.fetch(passage.urn))
+          upsert_passage(doc_row, passage, existing[passage.urn],
+                         passage_shas.fetch(passage.urn), annotations.fetch(passage.urn))
         end
       end
 
-      def upsert_passage(doc_row, passage, row, sha)
-        return insert_passage(doc_row.id, passage, sha) if row.nil?
+      # A revision's new passages insert one at a time, in parse order, so
+      # the index delta stages exactly as it always did (the revision path
+      # is not the bulk path — a fresh document's passages are).
+      def upsert_passage(doc_row, passage, row, sha, annotations_json)
+        if row.nil?
+          return insert_passages(doc_row.id, [passage], { passage.urn => sha }, { passage.urn => annotations_json })
+        end
 
         if row.content_sha256 == sha
           restore(row) if row.withdrawn # identical content: restore only
         else
-          revise_passage(row, passage, sha)
+          revise_passage(row, passage, sha, annotations_json)
         end
       end
 
-      def revise_passage(row, passage, sha)
+      def revise_passage(row, passage, sha, annotations_json)
         old_sha = row.content_sha256
         was_withdrawn = row.withdrawn
         @index_delta.stage_upsert(row.id, row.urn)
         row.update(
           sequence: passage.sequence, language: passage.language,
           text: passage.text, text_normalized: stored_normalized(passage),
-          annotations_json: ContentHash.canonical_json(passage.annotations),
+          annotations_json: annotations_json,
           content_sha256: sha, revision: row.revision + 1, withdrawn: false
         )
         journal(event: "revised", passage_id: row.id, params: { "old_sha" => old_sha, "new_sha" => sha })
@@ -592,9 +701,11 @@ module Nabu
       # already-withdrawn rows stay silent). If a vanished row still occupies
       # a (document_id, sequence) slot the new layout needs, park it at a
       # unique negative sequence so upserts can't collide with a ghost.
+      # Membership is Set-probed: a mega-document revision would otherwise
+      # compare every existing row against every parsed passage.
       def withdraw_vanished_passages(existing, document)
-        live_urns = document.passages.map(&:urn)
-        occupied = document.passages.map(&:sequence)
+        live_urns = document.passages.to_set(&:urn)
+        occupied = document.passages.to_set(&:sequence)
         existing.each_value do |row|
           next if live_urns.include?(row.urn)
 
@@ -623,14 +734,22 @@ module Nabu
         end
       end
 
-      def insert_passage(document_id, passage, sha)
-        row = Passage.create(
-          document_id: document_id, urn: passage.urn, sequence: passage.sequence,
-          language: passage.language, text: passage.text, text_normalized: stored_normalized(passage),
-          annotations_json: ContentHash.canonical_json(passage.annotations),
-          content_sha256: sha, revision: 1, withdrawn: false
-        )
-        @index_delta.stage_upsert(row.id, row.urn)
+      # Persist passages in parse order through multi-row INSERT ...
+      # RETURNING (INSERT_SLICE_ROWS / INSERT_SLICE_BYTES per statement):
+      # the model layer adds nothing here (no hooks, no validations), and a
+      # failed statement raises inside the document's transaction or
+      # savepoint exactly as a single-row create did. SQLite assigns rowids
+      # in VALUES order, so ids match what one-at-a-time inserts minted; the
+      # RETURNING rows are matched back by urn (their order is unspecified).
+      def insert_passages(document_id, passages, passage_shas, annotations)
+        each_insert_slice(passages) do |slice|
+          values = slice.map do |passage|
+            [document_id, passage.urn, passage.sequence, passage.language, passage.text,
+             stored_normalized(passage), annotations.fetch(passage.urn), passage_shas.fetch(passage.urn), 1, false]
+          end
+          ids = insert_returning_ids(values)
+          slice.each { |passage| @index_delta.stage_upsert(ids.fetch(passage.urn), passage.urn) }
+        end
         # P112-2: no per-passage "loaded" event — at 107.8M rows the
         # constant breadcrumb was 95% of the provenance table (~11 GB with
         # its indexes) duplicating what the row's existence already says.
@@ -638,6 +757,29 @@ module Nabu
         # at a few hundred thousand rows, and the witness the health
         # partial-load probe reads. Passage transitions (revised/withdrawn/
         # restored) keep journaling exactly as before.
+      end
+
+      def each_insert_slice(passages)
+        slice = []
+        bytes = 0
+        passages.each do |passage|
+          slice << passage
+          bytes += passage.text.bytesize + passage.text_normalized.bytesize
+          next if slice.size < INSERT_SLICE_ROWS && bytes < INSERT_SLICE_BYTES
+
+          yield slice
+          slice = []
+          bytes = 0
+        end
+        yield slice unless slice.empty?
+      end
+
+      # urn => id for one multi-row insert.
+      def insert_returning_ids(values)
+        dataset = @db[:passages].returning(:id, :urn)
+        dataset.multi_insert_sql(PASSAGE_COLUMNS, values).each_with_object({}) do |sql, ids|
+          dataset.with_sql(sql).each { |row| ids[row[:urn]] = row[:id] }
+        end
       end
 
       # P112-2: text_normalized measured byte-identical to text on

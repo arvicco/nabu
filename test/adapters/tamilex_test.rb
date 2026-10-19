@@ -140,7 +140,7 @@ class TamilexTest < Minitest::Test
     load_fixtures(catalog)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    lemmas = fulltext[:passage_lemmas]
+    lemmas = LemmaUrnView.of(fulltext, catalog)
     assert_operator lemmas.where(language: "tam-Latn").count, :>, 50
     row = lemmas.where(lemma_folded: Nabu::Normalize.search_form("kāntaṭṭu", language: "tam-Latn")).first
     refute_nil row, "the wordsplit's simple form is the indexed lemma"

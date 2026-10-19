@@ -54,6 +54,10 @@ module Nabu
         MANIFEST
       end
 
+      # Parallel replay (audited): #parse streams one TEI file through a
+      # fresh DtaTeiParser — no state crosses refs.
+      def self.parallel_parse? = true
+
       def self.remote_probe_strategy = :http_zip
 
       def self.http_probe_targets
