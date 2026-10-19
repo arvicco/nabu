@@ -1,0 +1,23 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# LOCAL-TRIM fixtures (real LSJ / Lewis & Short entries from PerseusDL/lexica,
+# re-cut from the box's canonical clone). Non-refetchable: re-acquiring = a
+# ~160 MB clone. See README.md.
+source: lexica-etym
+adapter_test:
+files:
+  - path: CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng13.xml
+    refetchable: false
+    provenance: local-trim
+    reason: "2 real mu entries (metapnoh/, meta/yucis) in the eng13 TEI envelope — the <etym> base-word resolution pin"
+    copied: 2026-10-19
+    whole: false
+    trim: "teiHeader + div0 n=\"*m\" + entries n66879 and n67061 + closing tags (see README.md)"
+  - path: CTS_XML_TEI/perseus/pdllex/lat/ls/lat.ls.perseus-eng2.xml
+    refetchable: false
+    provenance: local-trim
+    reason: "6 real Lewis & Short entries covering the <etym> shapes (compound base, cognate chains, Greek source)"
+    copied: 2026-10-19
+    whole: false
+    trim: "teiHeader + div0 A/B/D/H/M/V frames with ambactus, bimeter, do2, hydrius, metrum, vespa + closing tags (see README.md)"

@@ -28,6 +28,31 @@ module Nabu
     # layout) is DELIBERATELY deferred — recorded on the queue's
     # japonic remainder, never silent.
     #
+    # == The translations/ layer — DECLINED (machine-generated)
+    #
+    # 3,155 of the v3 tree's 12,839 materials carry a translations/ dir
+    # (<page>_en.txt + <page>_ja.txt: 55,441 English + 55,915 modern-
+    # Japanese pages, ~149 MB; census 2026-10-19 on the box's clone).
+    # They are NOT citizen work. The platform's developer states it
+    # outright in the V3 launch interview (note.com/komonjo_contest,
+    # 2025-09-01): 「大規模言語モデルを利用した翻刻文の現代語訳と外国語翻訳も
+    # 実装しています」 — the transcription is rendered into modern Japanese
+    # and a foreign language by a large language model, with no stated
+    # human review. The data agrees first-hand: every translated material
+    # carries the SAME two languages page by page (2,811 of 3,155 with an
+    # exactly paired en/ja page set) across all 72 projects regardless of
+    # script or genre; 509 translated pages belong to transcriptions still
+    # "initiated" (unfinished); the transcribers' own editorial bracket
+    # notes are themselves translated (【「岡山大学図書」の所蔵印あり】 →
+    # 【Library stamp of "Okayama University Library" present】 — 16,948 en
+    # pages carry 【English】 notes), full-width layout spaces are carried
+    # into English verbatim, and 1,303 en pages leak untranslated kanji
+    # mid-word ("attended at the御屋形 (lord's residence)") — the
+    # code-switching artifact of model output. The README is silent on the
+    # layer. Machine output without attribution is not a text this library
+    # ingests: discover/parse read ONLY the page txts (the PAGE_TXT match
+    # never sees the subdirectory), and DECLINED_LAYERS records the call.
+    #
     # A material whose manifestUrl is an NDL Digital Collections item
     # gains that item's NDL catalog record (author, date, subjects) in a
     # post-load pass — Nabu::HonkokuNdlCatalog, metadata "ndl_catalog" —
@@ -37,6 +62,14 @@ module Nabu
       URN_PREFIX = "urn:nabu:honkoku:"
       LANGUAGE = "jpn"
       PAGE_TXT = /\A0*(\d+)\.txt\z/
+
+      # The declined translations/ layer (see the file header).
+      DECLINED_LAYERS = {
+        "translations" => "the platform's large language model output (modern-Japanese and English " \
+                          "renderings of each transcribed page, generated automatically — developer " \
+                          "statement 2025-09-01; first-hand census 2026-10-19), unattributable to any " \
+                          "translator: declined, never ingested"
+      }.freeze
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "honkoku",

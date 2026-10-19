@@ -172,3 +172,27 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Phrygian-KUL/master/xpg_kul-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of xpg_kul-ud-test.conllu (203 blocks upstream, 195,121 B -> 10,968 B; no MWT/empty-node lines file-wide; opens with Old Phrygian Midas City TM756906-1; Phrygian, retrieved 2026-10-18)
+  # The README machine-readable metadata blocks (the Genre line the adapter
+  # reads), cut verbatim from the box's canonical/ud clones 2026-10-19 —
+  # the block only, from its "=== Machine…readable metadata" header line to
+  # its closing rule; the prose README around it is not kept.
+  - path: egyptian-pc/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Egyptian-PC/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre bible fiction nonfiction government)
+  - path: old-east-slavic-birchbark/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_East_Slavic-Birchbark/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre nonfiction)
+  - path: ancient-greek-perseus/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ancient_Greek-Perseus/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre fiction)
+  - path: coptic-bohairic/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Coptic-Bohairic/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (19 lines; its header spells "Machine readable"; Genre bible fiction nonfiction)
+  - path: classical-chinese-kyoto/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-Kyoto/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre nonfiction poetry)

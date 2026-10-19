@@ -7,6 +7,8 @@ require "test_helper"
 # Nabu::DictionaryEntry values. Exercised against the real trimmed LSJ /
 # Lewis & Short fixtures.
 class LexiconTeiParserTest < Minitest::Test
+  include StoreTestDB
+
   FIXTURES = File.join(Nabu::TestSupport.fixtures("lexica"), "CTS_XML_TEI/perseus/pdllex")
   LSJ_MU = File.join(FIXTURES, "grc/lsj/grc.lsj.perseus-eng13.xml")
   LSJ_LAMBDA = File.join(FIXTURES, "grc/lsj/grc.lsj.perseus-eng12.xml")
@@ -148,5 +150,94 @@ class LexiconTeiParserTest < Minitest::Test
 
   def test_lewis_short_carries_no_xr_markup
     assert(parse(LS, language: "lat").all? { |e| e.crossrefs.empty? })
+  end
+
+  # --- <etym> mining (the lexica-etym fixtures: real entries) ---------------------
+
+  ETYM = File.join(Nabu::TestSupport.fixtures("lexica-etym"), "CTS_XML_TEI/perseus/pdllex")
+  ETYM_LSJ = File.join(ETYM, "grc/lsj/grc.lsj.perseus-eng13.xml")
+  ETYM_LS = File.join(ETYM, "lat/ls/lat.ls.perseus-eng2.xml")
+
+  def lsj_etym(path) = parse_etym(path, language: "grc", betacode: true, etym: :lsj)
+
+  def ls_etym = parse_etym(ETYM_LS, language: "lat", etym: :lewis_short)
+
+  def parse_etym(path, **)
+    Nabu::Adapters::LexiconTeiParser.new.entries(path, **)
+  end
+
+  def test_etym_is_opt_in
+    assert(parse(ETYM_LS, language: "lat").all? { |e| e.crossrefs.empty? && e.reflexes.empty? })
+  end
+
+  # LSJ's <etym lang="greek"> names the base word(s) the headword is
+  # formed from — a crossref per comma item, betacode-decoded and folded
+  # exactly like @key (the exact-headword resolution key).
+  def test_lsj_etym_base_words_mint_etym_crossrefs
+    metapsyxis = lsj_etym(ETYM_LSJ).find { |e| e.key_raw == "meta/yucis" }
+    assert_equal([%w[etym μεταπνοή μεταπνοη]], metapsyxis.crossrefs.map { |c| [c.kind, c.target, c.target_folded] })
+    assert_equal "etym μεταπνοή", metapsyxis.crossrefs.first.label
+  end
+
+  def test_lsj_etym_comma_lists_split_and_follow_the_xr_pointers
+    logos = lsj_etym(LSJ_LAMBDA).find { |e| e.entry_id == "n63772" }
+    etyms = logos.crossrefs.select { |c| c.kind == "etym" }.map(&:target)
+    assert_equal ["ὁ λ.", "ἐπιστήμη", "ῥήσεις", "ἔπος", "λέξις", "ὄνομα", "ῥῆμα"], etyms,
+                 "the leading '=' of '= e)pisth/mh' is the equation mark, not the word"
+    assert_equal 5, logos.crossrefs.take_while { |c| c.kind != "etym" }.size, "the <xr> pointers come first"
+  end
+
+  # Lewis & Short's base-word shape: the whole <etym> is a Latin word or
+  # hyphen compound ("bis-metrum") — one crossref per named base part.
+  def test_lewis_short_compounds_point_at_each_named_base
+    bimeter = ls_etym.find { |e| e.key_raw == "bimeter" }
+    assert_equal([%w[bis bis], %w[metrum metrum]], bimeter.crossrefs.map { |c| [c.target, c.target_folded] })
+    assert_equal ["etym bis-metrum"], bimeter.crossrefs.map(&:label).uniq
+    assert_empty bimeter.reflexes
+  end
+
+  # The cognate-chain shape: language-labeled forms mint cognate reflex
+  # rows — the label's held code where the closed table maps it, the label
+  # verbatim (language nil) where it does not; Greek forms come from the
+  # tagged <foreign lang="greek"> runs.
+  def test_lewis_short_cognate_chains_mint_cognate_reflexes
+    do2 = ls_etym.find { |e| e.key_raw == "do2" }
+    assert_equal([%w[san san dhā-], %w[grc grc θε-], %w[grc grc τίθημι], %w[de de thun], %w[en en do]],
+                 do2.reflexes.map { |r| [r.lang_code, r.language, r.word] })
+    assert_equal ["cognate"], do2.reflexes.map(&:relation).uniq
+    assert_equal "dha", do2.reflexes.first.word_folded, "the trailing root hyphen folds off"
+
+    vespa = ls_etym.find { |e| e.key_raw == "vespa" }
+    assert_equal([%w[grc σφήξ], %w[goh wefsa], %w[en wasp]], vespa.reflexes.map { |r| [r.lang_code, r.word] })
+
+    ambactus = ls_etym.find { |e| e.key_raw == "ambactus" }
+    assert_equal [["Celt.", nil, "amb"], %w[got got andbahti]],
+                 ambactus.reflexes.map { |r| [r.lang_code, r.language, r.word] },
+                 "an unmapped label stays verbatim in lang_code, display-only"
+  end
+
+  def test_lewis_short_greek_only_etym_is_the_derivation_source
+    hydrius = ls_etym.find { |e| e.key_raw == "hydrius" }
+    assert_equal([%w[grc ὕδωρ derived]], hydrius.reflexes.map { |r| [r.lang_code, r.word, r.relation] })
+    assert_empty hydrius.crossrefs
+  end
+
+  def test_lewis_short_label_table_maps_every_row_to_a_valid_tag_or_nil
+    Nabu::Adapters::LexiconTeiParser::LS_LANGUAGE_LABELS.each do |label, code|
+      next if code.nil?
+
+      assert_equal code, Nabu::Model::Validation.language!(code), label
+    end
+  end
+
+  def test_etym_crossrefs_resolve_to_the_named_entry_on_load
+    db = store_test_db
+    source = Nabu::Store::Source.create(slug: "lexica", name: "L", adapter_class: "X", license_class: "attribution")
+    document = Nabu::DictionaryDocument.new(slug: "lewis-short", language: "lat", title: "L&S", canonical_path: ETYM_LS)
+    ls_etym.each { |entry| document << entry }
+    Nabu::Store::DictionaryLoader.new(db: db, source: source).load([document], full: false)
+    metrum = db[:dictionary_entries].where(key_raw: "metrum").get(:id)
+    resolved = db[:dictionary_crossrefs].where(kind: "etym").to_h { |row| [row[:target], row[:to_entry_id]] }
+    assert_equal({ "bis" => nil, "metrum" => metrum }, resolved, "bis is not held in the fixture — honestly unresolved")
   end
 end

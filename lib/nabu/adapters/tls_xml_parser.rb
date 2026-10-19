@@ -66,17 +66,27 @@ module Nabu
     #   are onomasiological, not etymological — minting them as
     #   dictionary_reflexes would pollute the etym/cognates lanes
     #   (architecture §12); recorded in 02-sources row 106.
-    # - crossrefs (P124-3): one id-keyed DictionaryCrossref per concept
-    #   pointer <div type="pointers">/<list type>/<item>/<ref target> —
-    #   kind = the list type verbatim, target_id = the concept uuid (the
-    #   concept shelf's entry id). Census 2026-10-13: the tree carries
-    #   21,342 "#uuid" ref targets (concepts 19,293, words 2,049), but only
-    #   the concept pointer lists name ENTRIES — 8,493 pointers on 3,017
-    #   concepts (hypernymy 3,017, taxonymy 2,979, see 1,526, antonymy
-    #   786, mereonymy 185); 8,488 name another held concept, 2 their own,
-    #   3 dangle. The rest are source-reference refs naming BIBLIOGRAPHY
-    #   uuids (both sides) and stay unextracted, as do the wordnet lists
-    #   (bare synset numbers, no ref).
+    # - crossrefs, two directions, both id-keyed (target_id = a concept
+    #   uuid, which IS the concept shelf's entry id):
+    #   * concept → concept (P124-3): one per concept pointer
+    #     <div type="pointers">/<list type>/<item>/<ref target>, kind = the
+    #     list type verbatim. Census 2026-10-13: 8,493 pointers on 3,017
+    #     concepts (hypernymy 3,017, taxonymy 2,979, see 1,526, antonymy
+    #     786, mereonymy 185); 8,488 name another held concept, 2 their
+    #     own, 3 dangle.
+    #   * word → concept: the words side names concept ENTRIES too — not
+    #     through <ref target> but through each word-x-concept <entry>'s
+    #     tls:concept-id ATTRIBUTE (34,808 assignments). A word mints one
+    #     kind "concept" crossref per distinct concept, to_dictionary
+    #     tls-concepts (the loader resolves it there by entry id), and
+    #     annotates the concept ({value: name, ref: uuid}) as its entry
+    #     facet (config/facet_map.yml tls entry_fields). Concept bodies
+    #     render the same edges INVERTED (the member-word list), so the
+    #     word side is the edge's home and the concept side its view.
+    #   The tree's "#uuid" <ref target>s outside the concept pointer lists
+    #   (21,342 in all: concepts 19,293, words 2,049) are source-reference
+    #   refs naming BIBLIOGRAPHY uuids on both sides and stay unextracted,
+    #   as do the wordnet lists (bare synset numbers, no ref).
     #
     # == Skip rules (censused by Tls#discovery_skips)
     #
@@ -98,6 +108,10 @@ module Nabu
       TLS_NS = "http://hxwd.org/ns/1.0"
 
       CONCEPTS_URN_PREFIX = "urn:nabu:dict:tls-concepts:"
+
+      # The concept shelf's dictionary slug — word → concept crossrefs
+      # point into it.
+      CONCEPTS_DICTIONARY = "tls-concepts"
 
       # The pointer-list kinds censused upstream, rendered in this order.
       POINTER_KINDS = %w[hypernymy taxonymy antonymy mereonymy see wordnet].freeze
@@ -289,8 +303,40 @@ module Nabu
           entry_block_lines(entry, index, orth, lines, sense_ids)
         end
 
+        concepts = assigned_concepts(root)
         build_entry(entry_id: entry_id, key_raw: orth, headword: orth, gloss: gloss, lines: lines, path: path,
-                    citations: attestations ? citations_for(sense_ids, attestations) : [])
+                    citations: attestations ? citations_for(sense_ids, attestations) : [],
+                    crossrefs: concept_crossrefs(concepts), annotations: concept_annotations(concepts))
+      end
+
+      # The word's distinct [concept name, concept uuid] assignments in
+      # entry order (class note: the word → concept direction). A block
+      # with a name but no id keeps its name (annotation only — no edge).
+      def assigned_concepts(root)
+        root.xpath("./tei:entry", "tei" => TEI_NS).filter_map do |entry|
+          name = squeeze(entry.attribute_with_ns("concept", TLS_NS)&.value.to_s)
+          id = entry.attribute_with_ns("concept-id", TLS_NS)&.value.to_s
+          [Nabu::Normalize.nfc(name), id.empty? ? nil : id] unless name.empty? && id.empty?
+        end.uniq
+      end
+
+      def concept_crossrefs(concepts)
+        concepts.filter_map do |name, id|
+          next if id.nil?
+
+          shown = name.empty? ? id : name
+          Nabu::DictionaryCrossref.new(kind: "concept", label: "concept #{shown}", target: shown,
+                                       target_id: id, to_dictionary: CONCEPTS_DICTIONARY)
+        end
+      end
+
+      def concept_annotations(concepts)
+        values = concepts.filter_map do |name, id|
+          next if name.empty?
+
+          id ? { "value" => name, "ref" => id } : { "value" => name }
+        end
+        values.empty? ? {} : { "concept" => values }
       end
 
       def entry_block_lines(entry, index, super_orth, lines, sense_ids = [])
@@ -479,7 +525,8 @@ module Nabu
         end
       end
 
-      def build_entry(entry_id:, key_raw:, headword:, gloss:, lines:, path:, citations: [], crossrefs: [])
+      def build_entry(entry_id:, key_raw:, headword:, gloss:, lines:, path:, citations: [], crossrefs: [],
+                      annotations: {})
         Nabu::DictionaryEntry.new(
           entry_id: entry_id,
           key_raw: Nabu::Normalize.nfc(key_raw),
@@ -488,7 +535,7 @@ module Nabu
           headword_folded: Nabu::Normalize.search_form(headword, language: LANGUAGE),
           gloss: gloss.nil? || gloss.empty? ? nil : Nabu::Normalize.nfc(gloss),
           body: Nabu::Normalize.nfc(lines.join("\n")),
-          citations: citations, crossrefs: crossrefs
+          citations: citations, crossrefs: crossrefs, annotations: annotations
         )
       rescue Nabu::ValidationError => e
         raise Nabu::ParseError, "tls: #{path}: #{e.message}"

@@ -71,6 +71,17 @@ module Query
       views.find { |v| v.language == "chu" && v.word == "богъ" } || flunk("chu богъ view missing")
     end
 
+    # Migration 046: an entry's own etymon (an UP edge) is no cognate of it.
+    def test_etymon_rows_stay_out_of_the_entrys_cognate_list
+      @catalog[:dictionary_reflexes].insert(
+        dictionary_entry_id: bog_entry_id, seq: 999, lang_code: "ine-pro", language: "ine-pro",
+        word: "*bʰeh₂g-", word_folded: "bʰeh₂g-", borrowed: false, uncertain: false, relation: "inherited"
+      )
+      views = Nabu::Query::ReflexViews.new(catalog: @catalog, fulltext: @fulltext).for_entry(bog_entry_id)
+      refute(views.any? { |v| v.language == "ine-pro" })
+      assert(views.any? { |v| v.language == "chu" && v.word == "богъ" })
+    end
+
     def test_attested_count_stays_gold_only_with_silver_count_beside_it
       make_passages(source: @gold, language: "chu", lemma: "богъ", form: "ба", count: 2)
       make_passages(source: @silver, language: "chu", lemma: "богъ", form: "богъ", count: 3)

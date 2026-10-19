@@ -244,6 +244,50 @@ class CLITest < Minitest::Test
     end
   end
 
+  # define --facet NAME=PATTERN: the dictionary-entry facet surface narrows
+  # the lookup (JMdict's domain labels, projected under the shipped config).
+  def test_define_facet_narrows_to_tagged_entries
+    with_edrdg_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define プロ --facet domain=medicine]) }
+      assert_nil status
+      assert_match(/urn:nabu:dict:jmdict:2860641/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[define プロ --facet domain=law]) }
+      assert_nil status
+      refute_match(/urn:nabu:dict:jmdict:2860641/, out, "a non-matching domain filters the entry out")
+      assert_match(/domain=law/, out, "the miss names the active facet filter")
+    end
+  end
+
+  def test_define_malformed_facet_exits_one
+    _out, err, status = run_cli(%w[define プロ --facet domain])
+    assert_equal 1, status
+    assert_match(/--facet takes NAME=PATTERN/, err)
+  end
+
+  def with_edrdg_shelf
+    Dir.mktmpdir("nabu-cli-edrdg") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"),
+        config_path: File.join(root, "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      source = Nabu::Store::Source.create(slug: "edrdg", name: "EDRDG", adapter_class: "Nabu::Adapters::Edrdg",
+                                          license_class: "attribution")
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(Nabu::Adapters::Edrdg.new,
+                                              workdir: Nabu::TestSupport.fixtures("edrdg"))
+      map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+      Nabu::Store::EntryFacetBuilder.rebuild!(catalog: db, facet_map: map)
+      db.disconnect
+      yield config
+    end
+  end
+
   def with_hebrew_lexicon_shelf
     Dir.mktmpdir("nabu-cli-hebrew") do |root|
       config = Nabu::Config.new(

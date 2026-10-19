@@ -124,6 +124,82 @@ module Nabu
 
       LANGUAGE = "la-vul"
 
+      # == First-attestation dates (the cognat bibliography)
+      #
+      # Each cognat's <refbibl> lists its attestations as <unerefbibl>
+      # records whose <date> (or <intervalle> of two dates) DÉRom prints in
+      # a compact French notation. Census 2026-10-19 over all 233 written
+      # articles: 2,858 <date> tags, every one inside a cognat; 2,338
+      # cognats carry one date, 1,301 none, 204 two or more (variant
+      # spellings or an attestation interval). Every reflex row minted
+      # from a cognat carries the cognat's EARLIEST-named attestation —
+      # verbatim (an interval as "d1–d2") plus #attested_year. Dates of a
+      # nested <cognat.meme.idiome> belong to signifiants the walk does
+      # not mint (one occurrence) and are not read.
+      #
+      # #attested_year reads the earliest year a date NAMES (a lower bound
+      # for "dp." = depuis, the anchor for "av."/"apr."/"ca"): the shapes
+      # the census shows (counts of the 2,858) — "dp. N" 989, "dp. N/N"
+      # 390, "dp. ca N" 305, "dp. Ne s." 233, bare "N" 177, "dp. fin Ne
+      # s." 66, the half/quarter/third-of-century shapes ("1ère m.", "2e
+      # qu.", "3e t.") and their ranges, "hap." (hapax) and "ms." markers,
+      # trailing "[date du ms.]"/"(vidimus N)"/"(?)" glosses. A century
+      # reads (c−1)·100+1 plus the stated part's offset (déb. 0, mil. 40,
+      # fin 75, half 50, quarter 25, third 33). Unparseable — "s.d." (sans
+      # date), a bare "déb." or "1er qu." with no century (3 tags) — stays
+      # verbatim with year nil. Outcome over the live asset: 2,443 of
+      # 3,582 reflex rows dated, 2 of them year-nil ("s.d.", "1er qu.–2e
+      # m. 14e s.").
+      CENTURY_PART = /(?:(?<part>déb\.|fin|mil\.)|(?<n>\d)(?:er|ère|e) (?<frac>m|qu|t)\.)/
+      CENTURY = /\A(?:#{CENTURY_PART}\s*)?(?<c>\d{1,2})e(?: s\.)?\z/
+      YEAR = /\A(?:(?:ca|av\.|apr\.)\s*)?(?<y>\d{3,4})\z/
+      PART_OFFSET = { "déb." => 0, "mil." => 40, "fin" => 75 }.freeze
+      FRACTION_SPAN = { "m" => 50, "qu" => 25, "t" => 33 }.freeze
+
+      # The earliest year +text+ names, or nil (class note above).
+      def self.attested_year(text)
+        cleaned = text.to_s.strip.sub(/\s*\[[^\]]*\]\z/, "").sub(/\s*\((?:vidimus \d+|\?)\)\z/, "")
+        cleaned.split(/\s*;\s*/).filter_map { |clause| clause_year(clause) }.min
+      end
+
+      def self.clause_year(clause)
+        body = clause.sub(/\A(?:dp\.|hap\.|ms\.)\s*/, "")
+        head, rest = body.split(%r{\s*[/–]\s*}, 2)
+        return nil if head.nil?
+
+        if (year = head.match(YEAR))
+          return year[:y].to_i
+        end
+
+        century_year(widen(head, rest))
+      end
+
+      # A range head that lacks its own century borrows the tail's:
+      # "2e/3e qu. 12e s." reads "2e qu. 12e s."; "mil./2e m. 10e s." reads
+      # "mil. 10e s.". A head that is itself a century ("12e/13e s.") stays.
+      def self.widen(head, rest)
+        return head if rest.nil?
+
+        if head.match?(/\A\d(?:er|ère|e)\z/) && (tail = rest.match(/\A\d(?:er|ère|e) (m|qu|t)\. (\d{1,2})e/))
+          "#{head} #{tail[1]}. #{tail[2]}e"
+        elsif head.match?(/\A(?:déb\.|fin|mil\.)\z/) && (century = rest[/(\d{1,2})e(?: s\.)?\z/, 1])
+          "#{head} #{century}e"
+        else
+          head
+        end
+      end
+
+      def self.century_year(text)
+        match = text.match(CENTURY) or return nil
+        base = ((match[:c].to_i - 1) * 100) + 1
+        offset = if match[:part] then PART_OFFSET.fetch(match[:part])
+                 elsif match[:frac] then (match[:n].to_i - 1) * FRACTION_SPAN.fetch(match[:frac])
+                 else 0
+                 end
+        base + offset
+      end
+      private_class_method :clause_year, :widen, :century_year
+
       # Parse one article file. Returns a DictionaryEntry, or nil for a
       # <NonRedige/> potiche. +entry_id+ is the upstream filename stem.
       def parse_entry(path, entry_id:)
@@ -145,13 +221,15 @@ module Nabu
         raise Nabu::ValidationError, "empty <Signifiant>" if signifiant.nil? || signifiant.empty?
 
         reflexes = reflexes(article)
+        headword_folded = fold_headword(signifiant)
         Nabu::DictionaryEntry.new(
           entry_id: entry_id, key_raw: signifiant, language: LANGUAGE,
           headword: Nabu::Normalize.nfc(signifiant),
-          headword_folded: fold_headword(signifiant),
+          headword_folded: headword_folded,
           gloss: text(lemme.at_xpath("Signifie")),
           body: body_text(article, lemme, signifiant),
-          reflexes: reflexes
+          reflexes: reflexes,
+          crossrefs: crossrefs(article, headword_folded)
         )
       end
 
@@ -165,12 +243,38 @@ module Nabu
       # positional idiome→signifiant walk (class note), exact duplicates
       # deduped, THEN composite citations split (P57-5) so dedup sees the
       # original upstream pair, not an already-split one.
+      # Each (idiome, word) pair rides its cognat's first attestation; the
+      # dedup keeps the FIRST occurrence (with its date).
       def reflexes(article)
-        article.xpath("Materiaux/subdiv/cognats/*[self::premier.cognat or self::cognat]")
-               .flat_map { |cognat| idiome_runs(cognat).flat_map { |idiome, words| words.map { |w| [idiome, w] } } }
-               .uniq
-               .flat_map { |idiome, word| split_idiome(idiome).map { |single| [single, word] } }
-               .map { |idiome, word| build_reflex(idiome, word) }
+        cognats = article.xpath("Materiaux/subdiv/cognats/*[self::premier.cognat or self::cognat]")
+        cognats.flat_map { |cognat| dated_pairs(cognat) }
+               .uniq { |idiome, word, _| [idiome, word] }
+               .flat_map { |idiome, word, dated| split_idiome(idiome).map { |single| [single, word, dated] } }
+               .map { |idiome, word, dated| build_reflex(idiome, word, dated) }
+      end
+
+      # [[idiome, word, attestation], …] for one cognat, document order.
+      def dated_pairs(cognat)
+        dated = attestation(cognat)
+        idiome_runs(cognat).flat_map { |idiome, words| words.map { |word| [idiome, word, dated] } }
+      end
+
+      # The cognat's earliest-named attestation (class note): [verbatim,
+      # year] over its own <unerefbibl> dates — an <intervalle> reads
+      # "d1–d2" and counts by its first date; nil when the cognat's
+      # bibliography names no date. Ties and all-unparseable keep the
+      # first printed.
+      def attestation(cognat)
+        candidates = cognat.xpath("refbibl/unerefbibl").filter_map do |record|
+          dates = record.xpath(".//date").map { |date| text(date) }.reject(&:empty?)
+          next if dates.empty?
+
+          # An interval's own head first; a head that names no century
+          # ("déb.–2e m. 13e s.") reads through the joined range.
+          verbatim = Nabu::Normalize.nfc(dates.join("–"))
+          [verbatim, self.class.attested_year(dates.first) || self.class.attested_year(verbatim)]
+        end
+        candidates.min_by.with_index { |(_, year), index| [year || Float::INFINITY, index] }
       end
 
       # A composite citation like "gal./port." names two idiomes sharing one
@@ -196,15 +300,39 @@ module Nabu
         runs.reject { |idiome, words| idiome.to_s.empty? || words.empty? }
       end
 
-      def build_reflex(idiome, word)
+      def build_reflex(idiome, word, dated)
         language = IDIOME_LANGUAGES[idiome]
         nfc = Nabu::Normalize.nfc(word)
         folded = Nabu::Normalize.search_form(nfc, language: language)
+        attested, year = dated
         Nabu::DictionaryReflex.new(
           lang_code: language || idiome, language: language, word: nfc,
           word_folded: folded.empty? ? nil : folded,
-          borrowed: false
+          borrowed: false, attested: attested, attested_year: year
         )
+      end
+
+      # -- crossrefs ----------------------------------------------------------------
+
+      # The <RenvoiInterne> pointers (census 2026-10-19: 671 across 132
+      # articles — 455 in the Commentaire, 216 in the Notes, which stay out
+      # of the body but whose pointers are still edges): each names another
+      # DÉRom etymon in the article notation, keyed by the same typeable
+      # fold as headwords. One crossref per distinct target in document
+      # order; a pointer at the article itself mints none. Targets that are
+      # unwritten potiches or unpublished articles stay unresolved (the
+      # loader's unique-match rule) and render verbatim. Live asset: 416
+      # distinct pointers on 132 entries, 149 naming a written article.
+      def crossrefs(article, own_fold)
+        article.xpath(".//RenvoiInterne").filter_map { |node| text(node) }.reject(&:empty?).uniq
+               .filter_map do |target|
+                 folded = fold_headword(target)
+                 next if folded == own_fold
+
+                 nfc = Nabu::Normalize.nfc(target)
+                 Nabu::DictionaryCrossref.new(kind: "see", label: "see #{nfc}", target: nfc,
+                                              target_folded: folded.empty? ? nil : folded)
+               end
       end
 
       # -- body -------------------------------------------------------------------

@@ -46,6 +46,37 @@ class DictionaryEntryTest < Minitest::Test
     assert_raises(Nabu::ValidationError) { reflex(language: "Not A Code") }
   end
 
+  # The etymology-mining fields: a typed relation (closed vocabulary), the
+  # verbatim first-attestation date and its parsed lower-bound year.
+  def test_reflex_relation_and_attestation_default_absent
+    r = reflex
+    assert_nil r.relation
+    assert_nil r.attested
+    assert_nil r.attested_year
+  end
+
+  def test_reflex_carries_a_closed_vocabulary_relation
+    Nabu::DictionaryReflex::RELATIONS.each do |relation|
+      assert_equal relation, reflex(relation: relation).relation
+    end
+    assert_raises(Nabu::ValidationError) { reflex(relation: "descends-somehow") }
+  end
+
+  def test_etymon_relations_name_the_entrys_own_ancestor_or_donor
+    assert_equal %w[inherited derived borrowed learned-borrowing], Nabu::DictionaryReflex::ETYMON_RELATIONS
+    assert reflex(relation: "inherited").etymon?
+    refute reflex(relation: "cognate").etymon?
+    refute reflex.etymon?
+  end
+
+  def test_reflex_carries_verbatim_attestation_and_its_year
+    r = reflex(attested: "dp. 1220", attested_year: 1220)
+    assert_equal "dp. 1220", r.attested
+    assert_equal 1220, r.attested_year
+    assert_raises(Nabu::ValidationError) { reflex(attested_year: "1220") }
+    assert_raises(Nabu::ValidationError) { reflex(attested: "") }
+  end
+
   # --- DictionaryEntry#reflexes ---------------------------------------------------
 
   def test_entry_reflexes_default_empty_and_frozen
@@ -60,6 +91,25 @@ class DictionaryEntryTest < Minitest::Test
 
     assert_raises(Nabu::ValidationError) { entry(reflexes: ["not a reflex"]) }
     assert_raises(Nabu::ValidationError) { entry(reflexes: nil) }
+  end
+
+  # --- DictionaryEntry#annotations (the entry-facet seam) -----------------------
+
+  # Per-entry categorical claims upstream makes (JMdict <field>, WOLD
+  # Semantic_field, TLS concepts) ride a JSON-shaped annotations hash —
+  # the passage annotations contract at entry grain; default empty.
+  def test_entry_annotations_default_empty_and_frozen
+    assert_equal({}, entry.annotations)
+    assert entry.annotations.frozen?
+  end
+
+  def test_entry_accepts_json_shaped_annotations
+    e = entry(annotations: { "field" => %w[computing medicine],
+                             "concept" => [{ "value" => "WORLD", "ref" => "uuid-1" }] })
+    assert_equal %w[computing medicine], e.annotations["field"]
+    assert_raises(Nabu::ValidationError) { entry(annotations: nil) }
+    assert_raises(Nabu::ValidationError) { entry(annotations: ["field"]) }
+    assert_raises(Nabu::ValidationError) { entry(annotations: { "x" => Object.new }) }
   end
 
   def test_reconstruction_language_codes_pass_validation

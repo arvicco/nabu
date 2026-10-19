@@ -189,7 +189,7 @@ class RebuildTest < Minitest::Test
     rebuilder.run(progress: reporter)
 
     assert_equal ["corpus", "honkoku ndl catalog", "timeline", "silver dates", "place apply", "facets", "kind axis",
-                  "passage facets", "hiero postings", "lect journal",
+                  "passage facets", "entry facets", "hiero postings", "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
@@ -229,6 +229,7 @@ class RebuildTest < Minitest::Test
     assert_includes corpus_stages, :timeline
     assert_includes corpus_stages, :facets
     assert_includes corpus_stages, :passage_facets
+    assert_includes corpus_stages, :entry_facets
     assert_includes corpus_stages, :stats
     assert_includes corpus_stages, :fts_lemma
     assert_includes corpus_stages, :trigram

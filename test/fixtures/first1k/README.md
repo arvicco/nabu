@@ -80,3 +80,17 @@ three files were fetched.
 - `tlg4037/tlg001` is the checked-in parallel pair: the grc original and its eng
   translation both cite at a single `section` level with identical `@n` values,
   so the pair aligns **section-for-section** (verse-style, all 1:1 pairs).
+
+## Non-English translation editions (added 2026-10-19)
+
+Copied whole from the box's canonical clone (`canonical/first1k-greek/`,
+upstream commit `03776b39f4047c5cff06f5296fae4b2bae4b08fb`):
+
+| Path (under `greekLit/data/`) | Bytes | What it pins |
+|---|---|---|
+| `tlg0544/__cts__.xml`, `tlg0544/tlg001/__cts__.xml` | 169 / 1,356 | Sextus Empiricus metadata; the work file lists `opp-lat1` as a `ti:translation` |
+| `tlg0544/tlg001/tlg0544.tlg001.opp-lat1.xml` | 7,284 | a medieval Latin translation specimen, `div[@type="translation"]` → language `lat` |
+| `tlg2959/tlg002/__cts__.xml` | 813 | *De libero arbitrio* work metadata |
+| `tlg2959/tlg002/tlg2959.tlg002.opp-ger1.xml` | 28,202 | Bonwetsch's German Methodius, `div[@type="edition"]` (the edition-typed fallback) → language `deu` |
+| `tlg0643/__cts__.xml`, `tlg0643/opp002/__cts__.xml` | 173 / 875 | Anonymus Londinensis metadata |
+| `tlg0643/opp002/tlg0643.opp002.1st1K-lat1.xml` | 6,512 | Diels' Latin epimetrum, `div[@type="commentary"]` — apparatus, skipped at discover and censused |

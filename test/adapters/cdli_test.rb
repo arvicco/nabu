@@ -66,13 +66,14 @@ module Adapters
 
     def test_discover_yields_text_and_metadata_only_refs_sorted
       all = refs
-      # 7 distinct ATF blocks (the P469841 duplicate collapses) + 8
-      # catalog-only rows (5 original + the 3 concordance rows).
-      assert_equal 15, all.size
+      # 7 distinct ATF blocks (the P469841 duplicate collapses) + 9
+      # catalog-only rows (5 original + the 3 concordance rows + the
+      # accounting-period row).
+      assert_equal 16, all.size
       assert_equal all.map(&:id).sort, all.map(&:id)
       metadata_only, text = all.partition { |r| r.metadata["kind"] == "metadata_only" }
       assert_equal 7, text.size
-      assert_equal 8, metadata_only.size
+      assert_equal 9, metadata_only.size
       assert(text.all? { |r| r.path.end_with?("cdliatf_unblocked.atf") })
       assert(metadata_only.all? { |r| r.path.end_with?("cdli_cat.csv") })
     end
@@ -217,6 +218,27 @@ module Adapters
 
     def test_seal_id_edges_ride_text_documents_too
       assert_includes parse("urn:nabu:cdli:p323717").metadata["related"], "urn:nabu:cdli:s003800"
+    end
+
+    # -- archaeological context ---------------------------------------------
+
+    # The excavation/object context columns ride metadata verbatim
+    # (excavation_no 49,223 rows · findspot_square 14,449 ·
+    # findspot_remarks 7,516 · provenience_remarks 6,120 · accession_no
+    # 72,246 · join_information 7,367 · accounting_period 4,468 — full
+    # catalog census 2026-10-19).
+    def test_archaeological_context_rides_metadata_verbatim
+      dig = parse("urn:nabu:cdli:p000001").metadata
+      assert_equal "W 06435,a", dig["excavation_no"]
+      assert_equal "M XVIII,?", dig["findspot_square"]
+      assert_equal "auf Hügeloberfläche in der Nähe des Südbaues", dig["findspot_remarks"]
+      assert_equal "1935-01-12, 0067", parse("urn:nabu:cdli:p480562").metadata["accession_no"]
+
+      account = parse("urn:nabu:cdli:p120698").metadata
+      assert_equal "Ur calendar", account["provenience_remarks"]
+      assert_equal "P120698 lead", account["join_information"]
+      assert_equal "Ibbi-Suen.01.02.00 to Ibbi-Suen.02.02.00 (us2 year)  (Reichskalender)",
+                   account["accounting_period"]
     end
 
     def test_ruler_facet_excludes_filler_heads

@@ -598,3 +598,15 @@ International. The complete license text is available at:
 http://creativecommons.org/licenses/by-sa/4.0/legalcode"; README
 machine-readable metadata — "License: CC BY-SA 4.0", "Includes text:
 yes" → the per-document attribution override.
+
+## README metadata blocks (2026-10-19)
+
+`egyptian-pc/README.md`, `old-east-slavic-birchbark/README.md`,
+`ancient-greek-perseus/README.md`, `coptic-bohairic/README.md` and
+`classical-chinese-kyoto/README.md` are each treebank README's
+machine-readable metadata block ONLY — cut verbatim from the box's
+`canonical/ud/<treebank>/README.md` clone, from the `=== Machine-readable
+metadata` header (coptic-bohairic spells it `Machine readable`) to its
+closing rule. The adapter reads their `Genre:` line (the treebank's UD
+genre tags) onto every document of the treebank; treebanks without a
+fixture README honestly claim no genre.

@@ -74,7 +74,7 @@ module Nabu
     # own line labels, so the same suffix span-grouping applies unchanged
     # and the paragraph-grained SAA units render exactly like the
     # card-cited English Homers; both directions resolve). A urn whose
-    # source declares no family (papyri, treebanks) has no work notion and
+    # source declares no family (treebanks) has no work notion and
     # therefore no siblings — Result#right is nil and the CLI says so.
     #
     # == Cross-source translation links (P48-r2)
@@ -258,7 +258,7 @@ module Nabu
       end
 
       # [work urn, dataset of documents sharing it], or nil for a urn with
-      # no work notion (papyri, treebanks — no declared family). CTS
+      # no work notion (treebanks — no declared family). CTS
       # candidates are the dotted editions (the work urn itself is never a
       # document); variant candidates are the bare work + its "-" variants.
       def work_candidates(urn)

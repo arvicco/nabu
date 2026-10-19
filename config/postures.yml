@@ -250,13 +250,21 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ud:
-    kind: {posture: unclassified}
+    kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
+        all 34 treebanks) rides each split document as the genre facet, verbatim — never
+        kind-folded: a split file mixes whatever its treebank mixes, so one kind over the
+        union would misstate each text (census 2026-10-19)"}
     # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
     # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
     # stage witness and the only gn-claiming document); the lzh treebanks →
     # zho/lit via codemap; the rest stays DELIBERATELY unstaged (D57-f).
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: partial, note: "the sentence-comment dates of four treebanks (census
+        2026-10-19): birchbark date_created on 1,203 letters (25 bands), rnc created on 56
+        documents, ruthenian date/created on 83, egyptian-pc date on 3,089 sentences (5th/6th
+        Dynasty, banded by the TLA thesaurus nodes in period_bands.yml) — passage-grain runs +
+        a document envelope (UdSentenceDates). The other 30 treebanks state no date"}
+    places: {posture: named, note: "egyptian-pc's place comment (Saqqara, all 3,089 sentences)
+        rides the UdSentenceDates rows; no other treebank states a place"}
     script: {posture: implied}
 
   # ── identity: the bare code IS the claim ───────────────────────────────
@@ -366,7 +374,15 @@ sources:
         Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   eebo-tcp:
-    kind: {posture: unclassified}
+    kind: {posture: pending, note: "candidate: a kind_map fold over the LCSH subject facet's
+        FORM headings (Ballads, English 1,779 · Funeral sermons 589 · Elegiac poetry, English
+        205 · Prayers 198 · English poetry 168 · Hymns, English 49 · English drama 46 …;
+        census 2026-10-19). Not ruled yet: the subject facet is an OPEN vocabulary (~34.6k
+        distinct headings, overwhelmingly topical — Great Britain -- History …), so a
+        facet fold today would file every topical heading as `unmapped`; it needs a fold
+        shape where uncovered headings mint nothing (a kinds-core change), and the corpus's
+        largest form — Sermons, English 4,317 (+ Fast-day/Visitation/Funeral sermons) — has
+        no ruled class (homiletic) on the kind list"}
     lect:
       posture: identity
       note: "en IS the claim and it is TRUE today (P83-1): 97.6% of the
@@ -469,10 +485,12 @@ sources:
     # retired under the shadowing rule.
     lect: {posture: identity, note: "gmy — the nabu-lects anchor; the corpus is the whole
         attested Mycenaean Greek, no finer stage exists to refine into"}
-    dating: {posture: pending, note: "candidate: ruled Aegean ceramic-phase rows (LM/LH,
-        'LM IIIA2 or LM IIIB', 'LH IIIB2/LH IIIC') in config/period_bands.yml — the
-        chronology label rides on ~69% of items (1,878 of 5,932 carry upstream's '-')
-        through MetadataDates :period_label and mints nothing until the bands are ruled"}
+    dating: {posture: dated, note: "the Aegean ceramic-phase rows RULED in
+        config/period_bands.yml (basis aegean — Warren & Hankey 1989 conventional
+        bounds; compound labels band as envelopes): the chronology label on 4,019 of
+        5,932 documents mints period-class rows through MetadataDates :period_label;
+        the 1,878 carrying upstream's '-' and the handful of unruled strays stay
+        honestly undated"}
     places: {posture: named, note: "the site (Knossos, Pylos, Thebes …; a 'Vases - X'
         collection places at X) with find-area/find-spot in the place hash via MetadataDates;
         the jar clay provenance (West Crete α) stays metadata — no gazetteer refs yet"}
@@ -1014,6 +1032,10 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   honkoku:   # P108-5
+    # The v3 translations/ layer (55,441 en + 55,915 modern-ja pages) is
+    # DECLINED: the platform's large-language-model output, unattributable
+    # (evidence in the adapter header, Honkoku::DECLINED_LAYERS). Zero
+    # translation documents by design.
     kind: {posture: unclassified, note: per-material genre lives in project labels/prose —
         a future facet look over the project taxonomy}
     lect: {posture: identity, note: jpn declared honest-coarse — the mass is largely Edo
@@ -1223,6 +1245,10 @@ sources:
     script: {posture: implied}
   # Ruled deliberately unstaged (D57-f): mixed corpora, bare-anchor honesty.
   first1k-greek:
+    # Translation editions (translations: true): 43 eng + 24 non-English
+    # (lat 16 · deu 7 · cop 1; 3,608 passages, census 2026-10-19), each
+    # marked "kind: translation" — no dating/place rows of their own; lat
+    # rides identity like the rest of the source (unstaged).
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
     dating: {posture: dated, note: "two labeled classes, neither the edition's own composition
@@ -1869,6 +1895,10 @@ sources:
     # 2026-10-18: subgenre (71,814 rows) rides metadata + the subgenre facet and is
     # deliberately not kind-folded (a mixed series/archive/role vocabulary — genre
     # stays the kind source); seal_id S-numbers mint seal-composite hubs.
+    # 2026-10-19: the archaeological context rides metadata (excavation_no +
+    # accession_no facet); accounting_period spans band through the ruled reign
+    # table where both ends resolve (3,718 of 4,468); findspot_square/remarks stay
+    # sub-site metadata below the place axis — the provenience is the place claim.
   dacon:
     kind: {posture: unclassified}
     # P88-A4: minted as pending on the nwc anchor (censused absent
@@ -1979,14 +2009,29 @@ sources:
     script: {posture: implied}
   openmgh:
     kind: {posture: unclassified}
-    dating: {posture: dated, note: "P109-4 (the unmined-metadata drain): the MGH
-        volume's print year projects with date_class 'edition' — never a
-        medieval composition claim, the class label says so"}
-    places: {posture: unplaced, note: "P109-4: printed_place is the
-        modern publisher's city (Hannover, Berlin …) — edition lineage,
-        declared in Invariants::MINING_EXEMPT"}
+    dating: {posture: dated, note: "two lanes. The MGH volume's print year projects with
+        date_class 'edition' (P109-4) — never a medieval claim, the class label says so.
+        The Diplomata charters' own dating lines (2,037 of 2,808 charter passages, census
+        2026-10-19) are read conservatively at parse (OpenmghCharterDate: inferred-year
+        brackets, ranges, split years, open vor/nach bounds) and project at PASSAGE grain
+        (TimelineBuilder::OpenmghCharterDates, 1,915 bounded + a per-volume envelope);
+        hedged lines (?, um, wohl, etwa …) and unreadable ones (122) stay verbatim-only,
+        counted; the DD F. II. volumes' 771 charters ship no dating line at all. The
+        Scriptores volumes carry no per-work dates (their work titles ride the work
+        passage facet)"}
+    places: {posture: named, note: "the Diplomata charters' issuing places, verbatim from
+        their dating lines (1,633 charters, 424 distinct — 'Kaiserswerth, im Lager', 'im
+        Gebiet von Vercelli'), on the charters' passage-grain axis rows and the place
+        passage facet; a line naming two places (Handlung/Beurkundung) claims none.
+        printed_place stays the modern publisher's city — edition lineage, declared in
+        Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   papyri-ddbdp:
+    # Translation siblings (<edition urn>-trans-<id>, 8,225 docs at the
+    # 2026-10-19 census: eng 7,364 · deu 569 · fra 190 · ita 89 · 13 more)
+    # carry the cross-source "kind: translation" marker: they never row on
+    # the timeline or places — the edition holds every axis below. Their
+    # modern-language codes resolve by identity (the bare code is the claim).
     dating: {posture: dated, note: "DDbDP: the HGV origDate envelope (build walk, axis_source hgv); DCLP:
         the file's own header origDate envelope (metadata date, MetadataDates :structured — 2,243 of
         2,256 literary docs at the 2026-10-18 census). HGV <date type=\"mentioned\"> (11,075 dates)

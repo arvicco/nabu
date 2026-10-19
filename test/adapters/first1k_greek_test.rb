@@ -36,6 +36,13 @@ class First1kGreekTest < Minitest::Test
   # The P11-5 LXX witness: tlg0527 is Swete's Septuaginta — Genesis, chapter/
   # verse citation, the alignment hub's cts-verse extractor exemplar.
   LXX_GENESIS_URN = "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1"
+  # The non-English translation editions (served with translations on): a
+  # medieval Latin version (translation-typed body) and a modern German one
+  # (edition-typed body), plus a Latin editorial preface (commentary-typed
+  # body) that must NOT be served.
+  SEXTUS_LAT_URN = "urn:cts:greekLit:tlg0544.tlg001.opp-lat1"
+  METHODIUS_DEU_URN = "urn:cts:greekLit:tlg2959.tlg002.opp-ger1"
+  PREFACE_LAT_URN = "urn:cts:greekLit:tlg0643.opp002.1st1K-lat1"
 
   # All six original-language editions the fixture tree carries (flag-off).
   GRC_URNS = [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN,
@@ -240,9 +247,10 @@ class First1kGreekTranslationsTest < Minitest::Test
 
   # --- discover -------------------------------------------------------------
 
-  def test_discover_adds_the_eng_edition_alongside_originals_sorted_by_urn
+  def test_discover_adds_the_translation_editions_alongside_originals_sorted_by_urn
     refs = adapter.discover(GREEK_WORKDIR).to_a
-    assert_equal (GRC_URNS + [ENG_URN]).sort, refs.map(&:id)
+    expected = GRC_URNS + [ENG_URN, First1kGreekTest::SEXTUS_LAT_URN, First1kGreekTest::METHODIUS_DEU_URN]
+    assert_equal expected.sort, refs.map(&:id)
     assert_equal refs.map(&:id).sort, refs.map(&:id), "discover stays urn-sorted"
   end
 
@@ -256,18 +264,58 @@ class First1kGreekTranslationsTest < Minitest::Test
 
   # Family-agnostic acceptance, mirroring the originals' rule: only the
   # `-eng<version>` tail matters, so opp-eng / letter-suffixed slugs match too,
-  # while non-eng translations (ger/fre/lat) are still skipped.
-  def test_discover_accepts_any_eng_family_and_skips_other_translation_languages
+  # while the multi-language indices (-mul) and tags upstream never ships as
+  # a translation (-fre) are skipped by slug.
+  def test_discover_accepts_any_eng_family_and_skips_mul_and_unserved_tags
     Dir.mktmpdir do |dir|
       work = File.join(dir, "data", "tlg9999", "tlg001")
       FileUtils.mkdir_p(work)
-      %w[1st1K-grc1 opp-eng2 1st1K-ger1 opp-lat1].each do |slug|
+      %w[1st1K-grc1 opp-eng2 1st1K-mul1 opp-fre1].each do |slug|
         FileUtils.touch(File.join(work, "tlg9999.tlg001.#{slug}.xml"))
       end
       refs = adapter.discover(dir).to_a
       assert_equal ["urn:cts:greekLit:tlg9999.tlg001.1st1K-grc1",
                     "urn:cts:greekLit:tlg9999.tlg001.opp-eng2"], refs.map(&:id).sort
     end
+  end
+
+  # The non-English editions: language from the edition tag (lat -> lat,
+  # ger -> deu); a commentary-bodied file (an editor's Latin preface) is
+  # skipped at discover and censused.
+  def test_discover_maps_the_edition_tag_to_the_passage_language
+    langs = adapter.discover(GREEK_WORKDIR).to_h { |ref| [ref.id, ref.metadata["language"]] }
+    assert_equal "lat", langs.fetch(First1kGreekTest::SEXTUS_LAT_URN)
+    assert_equal "deu", langs.fetch(First1kGreekTest::METHODIUS_DEU_URN)
+    refute langs.key?(First1kGreekTest::PREFACE_LAT_URN), "a commentary body is apparatus, not a translation"
+  end
+
+  def test_commentary_bodied_editions_are_censused_skips
+    skips = adapter.discovery_skips(GREEK_WORKDIR)
+    assert_equal 1, skips.skipped_by_rule
+    assert(skips.notes.any? { |note| note.include?("tlg0643.opp002.1st1K-lat1") })
+  end
+
+  def test_flag_off_censuses_nothing
+    assert_equal 0, Nabu::Adapters::First1kGreek.new.discovery_skips(GREEK_WORKDIR).skipped_by_rule
+  end
+
+  def test_parse_yields_a_latin_translation_sibling
+    document = parse_ref(First1kGreekTest::SEXTUS_LAT_URN)
+    assert_equal "lat", document.language
+    assert_equal "translation", document.metadata["kind"]
+    assert(document.any? { |passage| passage.text.include?("pherecides") })
+  end
+
+  def test_parse_reads_an_edition_typed_german_body
+    document = parse_ref(First1kGreekTest::METHODIUS_DEU_URN)
+    assert_equal "deu", document.language
+    assert_equal "translation", document.metadata["kind"]
+    assert_includes document.first.text, "Vielen von den Menschen"
+  end
+
+  def test_originals_never_carry_the_translation_marker
+    refute_equal "translation", parse_ref(GRC_URN).metadata["kind"]
+    assert_equal "translation", parse_ref(ENG_URN).metadata["kind"]
   end
 
   # --- parse ----------------------------------------------------------------

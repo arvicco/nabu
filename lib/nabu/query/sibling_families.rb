@@ -54,7 +54,7 @@ module Nabu
     # * I.Sicily `-en`/`-it`/`-translit` (P34-0): record ids are
     #   isic<digits> — trivially tail-free.
     #
-    # A urn whose namespace declares NO family (papyri, treebanks, cdli…)
+    # A urn whose namespace declares NO family (treebanks, cdli…)
     # matches nothing and has no siblings — the frozen chain's fall-through,
     # preserved.
     #
@@ -62,8 +62,10 @@ module Nabu
     #
     # A variant declaration on slug S compiles to
     #   /\A(?<work>urn:nabu:S:.+?)(?:<tail>|<tail>…)?\z/
-    # — the urn namespace is the slug by house convention (every sibling-
-    # minting source to date). The CTS_SIBLINGS marker compiles to the one
+    # — the urn namespace is the slug by house convention, unless the row
+    # names its namespaces (`sibling_namespaces:` — papyri-ddbdp's
+    # translations ride urn:nabu:ddbdp:* and urn:nabu:dclp:*, so each
+    # namespace compiles its own pattern). The CTS_SIBLINGS marker compiles to the one
     # shared dotted-form pattern regardless of how many rows declare it
     # (perseus-greek, perseus-latin and first1k-greek all mint urn:cts).
     class SiblingFamilies
@@ -103,7 +105,7 @@ module Nabu
             if declaration == Nabu::SourceRegistry::CTS_SIBLINGS
               cts = true
             else
-              variants[entry.slug] = declaration
+              (entry.sibling_namespaces || [entry.slug]).each { |namespace| variants[namespace] = declaration }
             end
           end
           new(cts: cts, variants: variants)

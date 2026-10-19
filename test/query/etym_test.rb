@@ -140,6 +140,36 @@ module Query
       assert_equal 1, got.attested_count, "counted via the roman fold"
     end
 
+    # Migration 046's direction rule: an ETYMON row (the owning entry's
+    # own ancestor/donor — an UP edge) must never read as a descendant.
+    # The same row with no relation is an ordinary reflex edge.
+    def add_reflex_row(urn:, language:, word:, relation:)
+      entry_id = @catalog[:dictionary_entries].where(urn: urn).get(:id) || flunk("#{urn} not loaded")
+      @catalog[:dictionary_reflexes].insert(
+        dictionary_entry_id: entry_id, seq: 999, lang_code: language, language: language,
+        word: word, word_folded: word, borrowed: false, uncertain: false, relation: relation
+      )
+    end
+
+    def test_an_etymon_row_never_reads_as_a_descendant_edge
+      bog = "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2"
+      add_reflex_row(urn: bog, language: "chu", word: "етумонъ", relation: "inherited")
+      assert_empty etym("етумонъ", lang: "chu"), "an UP edge is not a descendant match"
+      add_reflex_row(urn: bog, language: "chu", word: "родъ", relation: nil)
+      assert_equal [bog], etym("родъ", lang: "chu").map(&:urn), "an unstated relation walks as before"
+    end
+
+    def test_an_etymon_row_never_surfaces_its_entry_as_an_ancestor
+      # An entry naming *bogъ as its OWN etymon (an UP edge) must not
+      # appear among *bogъ's ancestors — the descendants edge still does.
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
+      rebuild!
+      gem = "urn:nabu:dict:wiktionary-gem-pro:gudą:noun"
+      add_reflex_row(urn: gem, language: "sla-pro", word: "bogъ", relation: "borrowed")
+      bog = etym("богъ", lang: "chu").first
+      assert_equal ["*bʰeh₂g-"], bog.ancestors.map(&:headword)
+    end
+
     # -- the ascent: the shelf-visited chain (P17-3) -----------------------------------
 
     def test_ascends_to_the_pie_ancestor_with_its_own_cognates

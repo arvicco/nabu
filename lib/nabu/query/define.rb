@@ -151,7 +151,11 @@ module Nabu
       # canonical form is looked up instead, and its hits carry a via_lila
       # note. A miss that LiLa cannot map, or a canonical form still absent
       # from the shelf, stays an honest miss.
-      def run(lemma, lang: nil, limit: DEFAULT_LIMIT, lect: nil)
+      #
+      # +facets+ ({facet name => pattern}, AND'd) narrows every lookup —
+      # direct and fallback alike — to entries the entry facet surface tags
+      # (#entry_facet_in): `define 仏 --facet domain=Buddhism`.
+      def run(lemma, lang: nil, limit: DEFAULT_LIMIT, lect: nil, facets: nil)
         return [] unless shelf?
 
         term = lemma.to_s.strip
@@ -186,11 +190,11 @@ module Nabu
           variants = (variants + verb_lemma_variants(bare, lang: lang)).uniq
         end
 
-        rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only, lect: lect)
+        rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only, lect: lect, facets: facets)
         return rows.map { |row| build_result(row) } unless rows.empty?
         return [] if recon_only # the reconstruction shelves are not LiLa's domain
 
-        lila_fallback(term, lang: lang, limit: limit, lect: lect)
+        lila_fallback(term, lang: lang, limit: limit, lect: lect, facets: facets)
       end
 
       # Batch short-gloss lookup for lemma-search integration (P11-4):
@@ -229,7 +233,7 @@ module Nabu
         @catalog.table_exists?(:dictionary_entries)
       end
 
-      def entry_rows(variants, lang:, limit:, recon_only: false, lect: nil)
+      def entry_rows(variants, lang:, limit:, recon_only: false, lect: nil, facets: nil)
         dataset = @catalog[:dictionary_entries]
                   .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
                   .join(:sources, id: Sequel[:dictionaries][:source_id])
@@ -238,11 +242,30 @@ module Nabu
         dataset = dataset.where(recon_shelf_expr) if recon_only
         dataset = dataset.where(lect_shelf_expr(lect)) if lect
         dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
+        (facets || {}).each { |facet, pattern| dataset = dataset.where(entry_facet_in(facet, pattern)) }
         dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
         # limit: nil = every matching shelf (P34-r2 — the CLI fetches all and
         # caps at render so truncation can announce itself honestly).
         dataset = dataset.limit(limit) if limit
         dataset.select(*entry_columns).all
+      end
+
+      # The entry-facet filter: entries carrying a value under +facet+ whose
+      # value OR ref matches +pattern+ (case-insensitive, LIKE patterns pass
+      # through — search --facet's semantics at entry grain). The pattern
+      # scans only the distinct-value dictionary; the pairs answer by their
+      # (value_id, entry_id) primary key. A catalog without the surface
+      # matches nothing, honestly (an asked-for filter never silently
+      # widens to every entry).
+      def entry_facet_in(facet, pattern)
+        return { Sequel[:dictionary_entries][:id] => nil } unless @catalog.table_exists?(:entry_facet_values)
+
+        value_ids = @catalog[:entry_facet_values]
+                    .where(facet: facet.to_s)
+                    .where(Sequel.ilike(:value, pattern) | Sequel.ilike(:ref, pattern))
+                    .select(:id)
+        Sequel.expr(Sequel[:dictionary_entries][:id] => @catalog[:entry_facets].where(value_id: value_ids)
+                                                                               .select(:entry_id))
       end
 
       # The "*" reconstruction scope (P58-6). Seam present: keep exactly the
@@ -373,7 +396,7 @@ module Nabu
       # <canonical>". No LiLa tree, a non-Latin --lang, an unmapped form, or a
       # canonical form still absent from the shelf all yield [] — an honest
       # miss, byte-identical to before when LiLa is absent.
-      def lila_fallback(term, lang:, limit:, lect: nil)
+      def lila_fallback(term, lang:, limit:, lect: nil, facets: nil)
         return [] unless lat_eligible?(lang)
 
         resolver = lila or return []
@@ -392,7 +415,7 @@ module Nabu
 
         results = seen.values.flat_map do |canonical|
           rows = entry_rows(Nabu::Normalize.query_forms(canonical),
-                            lang: LILA_LANGUAGE, limit: limit, recon_only: false, lect: lect)
+                            lang: LILA_LANGUAGE, limit: limit, recon_only: false, lect: lect, facets: facets)
           rows.map { |row| build_result(row, via_lila: "#{term} → #{canonical}") }
         end
         limit ? results.first(limit) : results

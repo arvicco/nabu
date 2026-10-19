@@ -61,11 +61,20 @@ module Nabu
     # (fileDesc's; sourceDesc/biblFull duplicates it). The print year
     # lives ONLY under sourceDesc — fileDesc's publicationStmt <date>
     # is the digital edition's timestamp and must not win. Genre rides
-    # the dtamain/dtasub classCodes. langUsage is verified: a text whose
+    # BOTH classCode ladders: the DTA's own dtamain/dtasub (genre/
+    # subgenre) and the DWDS core-corpus dwds1main/dwds1sub (dwds_genre/
+    # dwds_subgenre, on every file). The DTACorpus codes (core/ready/
+    # mts/dtae — corpus-membership and workflow flags) are not genre
+    # claims and stay unmined. langUsage is verified: a text whose
     # first ident isn't "deu" quarantines loudly (the rem precedent) —
     # the corpus claims German throughout, so a divergence is news.
     class DtaTeiParser
       GERMAN_IDENT = "deu"
+
+      # classCode @scheme fragment → metadata key (and facet name).
+      CLASS_SCHEMES = { "dtamain" => "genre", "dtasub" => "subgenre",
+                        "dwds1main" => "dwds_genre", "dwds1sub" => "dwds_subgenre" }.freeze
+      CLASS_KEYS = CLASS_SCHEMES.values.freeze
 
       Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
@@ -113,11 +122,17 @@ module Nabu
 
       def extraction_metadata(extraction)
         metadata = extraction.header.slice("author", "author_gnd", "date", "place",
-                                           "genre", "subgenre", "dta_dirname").compact
-        # P104-1: the dtamain/dtasub classCodes as facets — most of
-        # the corpus carries none (2,010 genre / 1,850 subgenre of 5,478
-        # censused 2026-09-26): honest sparsity, never a blank row.
-        facets = %w[genre subgenre].filter_map do |facet|
+                                           *CLASS_KEYS, "dta_dirname").compact
+        # P104-1: the classCodes as facets, one per ladder key. The DTA's
+        # own dtamain/dtasub ladder covers ~2k documents (2,010 genre /
+        # 1,850 subgenre of 5,478, 2026-09-26); the DWDS core-corpus
+        # ladder (dwds1main/dwds1sub) classifies EVERY file (census over
+        # canonical/ 2026-10-19: dwds1main 5,481 of 5,481 — Zeitung 2,036
+        # · Gebrauchsliteratur 1,718 · Wissenschaft 953 · Belletristik 774;
+        # dwds1sub on all 3,445 non-newspaper files — Leichenpredigt 336 ·
+        # Zeitschrift 217 · Theologie 214 · Brief 204 · Roman 198 …).
+        # Two schemes, two key pairs — never merged into one ladder.
+        facets = CLASS_KEYS.filter_map do |facet|
           [facet, { "value" => metadata[facet] }] if metadata[facet]
         end.to_h
         metadata["facets"] = facets unless facets.empty?
@@ -344,10 +359,7 @@ module Nabu
         end
 
         def start_class_code(node)
-          scheme = node.attribute("scheme").to_s
-          key = if scheme.end_with?("#dtamain") then "genre"
-                elsif scheme.end_with?("#dtasub") then "subgenre"
-                end
+          key = CLASS_SCHEMES[node.attribute("scheme").to_s[/#(\w+)\z/, 1]]
           return if key.nil? || @header[key]
 
           @capture = (@header[key] = +"")
@@ -363,7 +375,7 @@ module Nabu
           forename = presence(@header.delete("forename")&.strip)
           @header["author"] = [surname, forename].compact.join(", ") if surname
           @header["title"] = presence(@header["title"]&.gsub(/[[:space:]]+/, " ")&.strip)
-          %w[date place genre subgenre dta_dirname].each do |key|
+          (%w[date place dta_dirname] + CLASS_KEYS).each do |key|
             @header[key] = presence(@header[key]&.strip)
           end
           @header.compact!

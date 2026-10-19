@@ -111,14 +111,44 @@ class TlsTest < Minitest::Test
 
   # P124-3: the concept pointer lists mint id-keyed crossrefs (the target
   # uuid IS the concept's entry id); source-reference refs (bibliography
-  # uuids) and the words side mint none.
+  # uuids) mint none.
   def test_concept_pointers_mint_uuid_keyed_crossrefs
     two = concepts_doc.entries.find { |entry| entry.headword == "TWO" }
     assert_equal([["taxonymy", "taxonymy DIVIDE", "uuid-3762c04a-9ca0-4fd6-b04e-2e24b1f91682"],
                   ["hypernymy", "hypernymy NUMBER", "uuid-dd1c8de7-8201-4782-b6e3-960df290eae7"]],
                  two.crossrefs.map { |c| [c.kind, c.label, c.target_id] })
     assert_equal(4, concepts_doc.entries.sum { |entry| entry.crossrefs.size })
-    assert(words_doc.entries.all? { |entry| entry.crossrefs.empty? })
+  end
+
+  # The word side points the other way: each word-x-concept assignment's
+  # tls:concept-id names a tls-concepts ENTRY, so a word mints one
+  # id-keyed "concept" crossref per distinct concept, into the concept
+  # shelf (to_dictionary), and annotates the concept (name + uuid ref) as
+  # its entry facet.
+  def test_word_assignments_mint_cross_dictionary_concept_crossrefs
+    pei_er = words_doc.entries.find { |entry| entry.headword == "陪貳" }
+    assert_equal([["concept", "concept TWO", "TWO", "uuid-c4a2e239-0e1f-4a1b-8b9e-02a7fc557e6e", "tls-concepts"]],
+                 pei_er.crossrefs.map { |c| [c.kind, c.label, c.target, c.target_id, c.to_dictionary] })
+    assert_equal({ "concept" => [{ "value" => "TWO", "ref" => "uuid-c4a2e239-0e1f-4a1b-8b9e-02a7fc557e6e" }] },
+                 pei_er.annotations)
+
+    she = words_doc.entries.find { |entry| entry.headword == "舍" }
+    targets = she.crossrefs.map(&:target_id)
+    assert_equal targets.uniq, targets, "a concept named by two entry blocks is one edge"
+    assert_equal(she.crossrefs.map(&:target), she.annotations["concept"].map { |c| c["value"] })
+    assert_empty words_doc.entries.find { |entry| entry.headword == "勑" }.crossrefs
+  end
+
+  # Loaded, a word→concept edge resolves to the held concept entry.
+  def test_word_concept_crossrefs_resolve_into_the_concept_shelf
+    db = store_test_db
+    source = Nabu::Store::Source.create(slug: "tls", name: "TLS", adapter_class: "Nabu::Adapters::Tls",
+                                        license_class: "attribution")
+    Nabu::Store::DictionaryLoader.new(db: db, source: source).load_from(adapter, workdir: FIXTURES)
+    concepts = db[:dictionaries].where(slug: "tls-concepts").get(:id)
+    two = db[:dictionary_entries].where(dictionary_id: concepts, headword: "TWO").get(:id)
+    word = db[:dictionary_entries].where(headword: "陪貳").get(:id)
+    assert_equal [two], db[:dictionary_crossrefs].where(dictionary_entry_id: word).select_map(:to_entry_id)
   end
 
   def test_concept_membership_is_inverted_from_the_words_side
@@ -310,8 +340,12 @@ class TlsTest < Minitest::Test
     assert_equal 7, db[:dictionary_citations].where(dictionary_entry_id: qi[:id]).count
 
     crossrefs = db[:dictionary_crossrefs].order(:id).all
-    assert_equal 4, crossrefs.size, "the fixture's concept pointers (targets outside the slice)"
-    assert(crossrefs.all? { |row| row[:to_entry_id].nil? })
+    pointers, assignments = crossrefs.partition { |row| row[:to_dictionary].nil? }
+    assert_equal 4, pointers.size, "the fixture's concept pointers (targets outside the slice)"
+    assert(pointers.all? { |row| row[:to_entry_id].nil? })
+    assert_equal 17, assignments.size, "the 4 words' distinct concept assignments"
+    resolved = assignments.select { |row| row[:to_entry_id] }.map { |row| row[:target] }.sort
+    assert_equal %w[ABANDON ABANDON TWO], resolved, "only the slice's held concepts resolve"
 
     loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 9, db[:dictionary_citations].count, "idempotent reload keeps counts"

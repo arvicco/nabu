@@ -79,6 +79,34 @@ module Nabu
       # P123-1: kaikki relation lists => crossref kind (opt-in below).
       CROSSREF_LISTS = { "synonyms" => "synonym", "antonyms" => "antonym", "related" => "related" }.freeze
 
+      # The etymon edges (opt-in via etymons: true): the record's typed
+      # `etymology_templates` name the ENTRY'S OWN ancestor or donor —
+      # template kind => DictionaryReflex relation (the "+" forms are the
+      # same templates with their "Inherited from …" prose prefix). Census
+      # 2026-10-19 over every non-Chinese extract held (24 files), after the
+      # per-entry dedup below: inherited 14,386 · derived 8,604 · borrowed
+      # 1,583 · learned-borrowing 215 = 24,788 rows (~2.5k of them read the
+      # arg-4/alt= display form; ~900 wordless templates mint nothing). The
+      # borrowings set borrowed: true (the WOLD donor-edge precedent).
+      # Leading targets: ine-pro 10,060, gem-pro 3,452, cel-pro 1,835,
+      # sla-pro 1,807, ine-bsl-pro 1,332, trk-pro 759, la 689 — targets
+      # with no held shelf (cel-pro, trk-pro, tuw-pro 339 …) ride with the
+      # bare code all the same: a dangling edge is honest data. Out of
+      # scope: obor (411, Akkadian orthographic borrowings of Sumerograms
+      # — a spelling, not a lexical donor), the cog/af/root templates
+      # (cognates and morphology, not the entry's own etymon), the
+      # language name (expansion text interleaves it with the displayed
+      # form unreliably — lang_name stays nil; the code is kept verbatim
+      # beside its mapped catalog tag), and the per-sense `topics` (sparse,
+      # ~200 records — no edge to mint).
+      ETYMON_TEMPLATES = {
+        "inh" => "inherited", "inh+" => "inherited",
+        "der" => "derived", "der+" => "derived",
+        "bor" => "borrowed", "bor+" => "borrowed",
+        "lbor" => "learned-borrowing"
+      }.freeze
+      BORROWING_RELATIONS = %w[borrowed learned-borrowing].freeze
+
       # Parse +path+ and return DictionaryEntry values in file order.
       # +language+ is the ISO 639-3 code the entries carry and fold by;
       # kaikki's own lang_code is 639-1 ("cu") and stays in the raw record.
@@ -88,11 +116,15 @@ module Nabu
       # off elsewhere so existing shelf bodies never shift). +crossrefs+
       # (P123-1) turns on the synonyms/antonyms/related pointers (the
       # recon extracts, zh excepted — census on WiktionaryRecon#parse).
-      def initialize(language: "chu", reflexes: false, historical_sounds: false, crossrefs: false)
+      # +etymons+ turns on the etymology_templates edges (ETYMON_TEMPLATES;
+      # appended after the descendants rows).
+      def initialize(language: "chu", reflexes: false, historical_sounds: false, crossrefs: false,
+                     etymons: false)
         @language = language
         @reflexes = reflexes
         @crossrefs = crossrefs
         @historical_sounds = historical_sounds
+        @etymons = etymons
       end
 
       def entries(path)
@@ -152,7 +184,7 @@ module Nabu
           gloss: gloss(record),
           body: body_text(record),
           citations: [],
-          reflexes: @reflexes ? reflexes(record) : [],
+          reflexes: (@reflexes ? reflexes(record) : []) + (@etymons ? etymons(record) : []),
           crossrefs: @crossrefs ? crossrefs(record) : []
         )
       rescue Nabu::ValidationError, Nabu::Normalize::EncodingError => e
@@ -283,6 +315,45 @@ module Nabu
         seen[[kind, word]] = true
         Nabu::DictionaryCrossref.new(kind: kind, label: "#{kind} #{word}", target: word,
                                      target_folded: reflex_fold(word, @language))
+      end
+
+      # -- etymons (the etymology_templates edges) ----------------------------------
+
+      # One row per typed template, record order; a (relation, code, word)
+      # repeated (inh beside its inh+ twin) mints once.
+      def etymons(record)
+        rows = Array(record["etymology_templates"]).filter_map do |template|
+          relation = ETYMON_TEMPLATES[template["name"]] if template.is_a?(Hash)
+          relation && etymon_reflex(template["args"] || {}, relation)
+        end
+        rows.uniq { |reflex| [reflex.relation, reflex.lang_code, reflex.word] }
+      end
+
+      # Arg 2 = the etymon's language code, arg 3 = the etymon with its
+      # inline modifiers (<t:…>, <alt:…>) cut; an empty or "-" arg 3 falls
+      # back to the displayed arg 4, then the named alt=. nil when the
+      # template names a language only.
+      def etymon_reflex(args, relation)
+        code = args["2"].to_s.strip
+        word = etymon_word(args)
+        return nil if code.empty? || word.nil?
+
+        language = reflex_language(code)
+        roman = args["tr"].to_s.strip
+        roman = nil if roman.empty? || roman.include?("<")
+        Nabu::DictionaryReflex.new(
+          lang_code: code, language: language, word: word, roman: roman && Nabu::Normalize.nfc(roman),
+          word_folded: reflex_fold(word, language), roman_folded: roman && reflex_fold(roman, language),
+          borrowed: BORROWING_RELATIONS.include?(relation), relation: relation
+        )
+      end
+
+      def etymon_word(args)
+        [args["3"].to_s.sub(/<.*\z/m, ""), args["4"].to_s, args["alt"].to_s].each do |candidate|
+          word = candidate.gsub(/\s+/, " ").strip
+          return Nabu::Normalize.nfc(word) unless word.empty? || word == "-"
+        end
+        nil
       end
 
       # -- reflexes (P14-1) ---------------------------------------------------------

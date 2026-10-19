@@ -88,7 +88,8 @@ module Store
             Nabu::Normalize.search_form(reflex.fetch(:word), language: reflex[:language])
           end,
           roman_folded: reflex[:roman_folded],
-          borrowed: reflex[:borrowed] # nil = a row predating the flag reparse
+          borrowed: reflex[:borrowed], # nil = a row predating the flag reparse
+          relation: reflex[:relation]
         )
       end
       entry
@@ -115,6 +116,24 @@ module Store
     def roots_for(language, lemma)
       folded = Nabu::Normalize.search_form(lemma, language: language)
       roots.where(language: language, lemma_folded: folded).select_map(:root_urn).sort
+    end
+
+    # Migration 046's direction rule: an ETYMON row names the OWNING
+    # entry's own ancestor/donor — an UP edge the closure never follows,
+    # neither as a direct edge nor on the ascent.
+    def test_etymon_rows_mint_no_roots_and_never_ascend
+      sla = make_dictionary(slug: "t-sla-pro", language: "sla-pro")
+      chu = make_dictionary(slug: "t-chu", language: "chu")
+      proto = make_proto_entry(dictionary: sla, headword: "bogъ", reflexes: [{ language: "chu", word: "богъ" }])
+      make_proto_entry(dictionary: chu, headword: "богъ",
+                       reflexes: [{ language: "sla-pro", word: "bogъ", relation: "inherited" },
+                                  { language: "chu", word: "богатъ", relation: "derived" }])
+      make_gold_passage(language: "chu", lemma: "богъ")
+      make_gold_passage(language: "chu", lemma: "богатъ")
+      rebuild!
+      assert_equal [proto.urn], roots_for("chu", "богъ"),
+                   "the chu entry's own inherited edge must not ascend *bogъ into it"
+      assert_empty roots_for("chu", "богатъ"), "a derived (UP) row is no direct edge"
     end
 
     # -- the closure over the real fixtures ----------------------------------
