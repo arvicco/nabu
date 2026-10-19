@@ -3,6 +3,7 @@
 require "test_helper"
 require "stringio"
 require "digest"
+require "json"
 
 # DdbdpParser unit tests against the three real DDbDP fixtures (P3-6):
 # bgu.1.102 and bgu.1.100 (Greek, flat <ab>, heavy app/choice/subst markup)
@@ -92,7 +93,10 @@ class DdbdpParserTest < Minitest::Test
     assert_equal "Θεόφιλος Λουκιφέρου Καίσαρος οἰκονόμου οὐικάριος", line.text
     refute_includes line.text, "[…]"
     # lem content: <unclear>ο κ ν μ</unclear> → 4, <supplied>ἰ ό ο</supplied> → 3.
-    assert_equal({ "leiden" => { "supplied_chars" => 3, "unclear_chars" => 4 } }, line.annotations)
+    # The rdg's gaps never reach the leiden certainty data; the rdg itself
+    # survives only as the line's "apparatus" annotation (tested below).
+    assert_equal({ "leiden" => { "supplied_chars" => 3, "unclear_chars" => 4 } },
+                 line.annotations.except("apparatus"))
   end
 
   # --- choice/reg/orig: hand-verified line (bgu.1.102 line 2) --------------
@@ -333,7 +337,15 @@ class DdbdpParserTest < Minitest::Test
     document = parse_oc457.to_a
     assert_equal({ "leiden" => { "cancelled" => true } }, document[0].annotations)
     assert_equal({ "leiden" => { "unclear_chars" => 1, "cancelled" => true } },
-                 document[1].annotations)
+                 document[1].annotations.except("apparatus"))
+  end
+
+  def test_app_inside_a_kept_cancellation_records_its_apparatus
+    # Line 2's <app type="alternative"> sits inside the kept <del>: kept
+    # content, so it is recorded; the del opened before the app, so its
+    # bracket belongs to the line text, not to the lemma.
+    assert_equal [{ "type" => "alternative", "lemma" => "παρ", "readings" => [{ "text" => "παι" }] }],
+                 parse_oc457.to_a[1].annotations["apparatus"]
   end
 
   def test_cancelled_document_urns_and_text_stable_across_two_parses
@@ -501,5 +513,183 @@ class DdbdpParserTest < Minitest::Test
     source = File.read(File.expand_path("../../lib/nabu/adapters/ddbdp_parser.rb", __dir__))
     refute_match(/Nokogiri::XML(\.parse)?\s*\(/, source, "must not DOM-parse the document")
     assert_match(/Nokogiri::XML::Reader/, source, "must stream via Nokogiri::XML::Reader")
+  end
+
+  # --- the apparatus layer: <app> → per-line "apparatus" annotations ---------
+  #
+  # The lemma stays the passage text exactly as before; every <app> in kept
+  # content becomes one entry on the line where it opens: its @type, the
+  # rendered lemma, the lemma's @resp, and each <rdg> rendered under the same
+  # Leiden policy (gap → "[…]", reg over orig, del in ⟦…⟧, nested app → its
+  # lem, with the nested app recorded on the reading) plus the reading's
+  # @resp. Line breaks inside a lemma or reading render as " | " ("|" glued
+  # for break="no").
+
+  # p.select;;16 (DDbDP/35/35046.xml, whole) — multi-reading apps with
+  # per-reading @resp, an empty <rdg/>, apps nested in lemmas and in
+  # readings, and a lemma/reading pair spanning a line break.
+  PSELECT16 = File.join(PAPYRI_FIXTURES, "DDbDP", "35", "35046.xml")
+  PSELECT16_URN = "urn:nabu:ddbdp:p.select::16"
+  # sb;30;17872 (DDbDP/135/135776.xml, whole) — a two-line alternative
+  # whose lemma breaks plainly and whose reading breaks with break="no".
+  SB30_17872 = File.join(PAPYRI_FIXTURES, "DDbDP", "135", "135776.xml")
+  SB30_17872_URN = "urn:nabu:ddbdp:sb:30:17872"
+  DCLP64388 = File.join(FIXTURES, "DCLP", "64", "64388.xml")
+
+  def parse_pselect16
+    parser.parse(PSELECT16, urn: PSELECT16_URN, language: "grc")
+  end
+
+  def line_of(document, number)
+    document.find { |passage| passage.urn == "#{document.urn}:#{number}" }
+  end
+
+  def only(items)
+    assert_equal 1, Array(items).size, "expected exactly one item, got #{items.inspect}"
+    items.first
+  end
+
+  def test_apparatus_entry_carries_type_lemma_resp_and_rendered_reading
+    # bgu.1.102 line 1: <lem resp="BL 1.20"> spells οἰκονόμου; the <rdg>
+    # (ed.pr.) reads κ<unclear>ο</unclear> + three <gap>s.
+    line = parse102.first
+    assert_equal [{ "type" => "editorial", "lemma" => "οἰκονόμου", "resp" => "BL 1.20",
+                    "readings" => [{ "text" => "κο[…][…][…]" }] }],
+                 line.annotations["apparatus"]
+  end
+
+  def test_alternative_apparatus_without_resp_and_two_entries_on_one_line
+    # aegyptus.89.240 line 4 carries two <app type="alternative"> side by side.
+    entries = parse_aeg240.flat_map { |passage| Array(passage.annotations["apparatus"]) }
+    assert_includes entries, { "type" => "alternative", "lemma" => "ὠνουμένη",
+                               "readings" => [{ "text" => "ὠνουμένῃ" }] }
+    assert_includes entries, { "type" => "alternative", "lemma" => "Ἰσαροῦς",
+                               "readings" => [{ "text" => "Ἰσάριον" }] }
+  end
+
+  def test_reading_resp_is_recorded_per_reading_in_the_dclp_family
+    document = Nabu::Adapters::DdbdpParser.new(idno_type: "dclp", urn_namespace: "dclp")
+                                          .parse(DCLP64388, urn: "urn:nabu:dclp:64388", language: "grc")
+    entries = document.flat_map { |passage| Array(passage.annotations["apparatus"]) }
+    assert_equal [{ "type" => "editorial", "lemma" => "πεπέρεως", "resp" => "ed.alt.",
+                    "readings" => [{ "text" => "πιπέρεως", "resp" => "ed.pr." }] }], entries
+  end
+
+  def test_multiple_readings_keep_order_resp_and_an_empty_reading
+    # Line 16: lem (BL 12.114) against four readings — two attributed, one
+    # bare "ed", and an empty <rdg/> (the reading omits the lemma).
+    entry = only(line_of(parse_pselect16, 16).annotations["apparatus"])
+    assert_equal "[…] χιλίων καὶ δισκάρια", entry["lemma"]
+    assert_equal "BL 12.114", entry["resp"]
+    assert_equal [{ "text" => "[…] δισκάρια", "resp" => "Original Edition" },
+                  { "text" => "[…] δισκάρια", "resp" => "BL 7.99" },
+                  { "text" => "ed" },
+                  { "text" => "" }], entry["readings"]
+  end
+
+  def test_reading_renders_under_the_leiden_policy_and_records_its_nested_apparatus
+    # Line 4: a reading's <choice> keeps reg (Ἑρμουπόλεως) and drops orig;
+    # the BL 10.113 reading is itself an alternative app with an empty lem —
+    # its text is that lemma (empty), its rdg rides as nested apparatus.
+    entry = only(line_of(parse_pselect16, 4).annotations["apparatus"])
+    assert_equal "ἀπὸ κώμης […] τοῦ Ἑρμουπολίτου νομοῦ", entry["lemma"]
+    assert_equal "H. Maehler, ZPE 25 (1977) 193-194 (BL 7.99)", entry["resp"]
+    assert_equal [
+      { "text" => "[…] ἀπὸ τῆς Ἑρμουπόλεως", "resp" => "P.J. Sijpesteijn, ZPE 19 (1975) 270-271 (BL 7.99)" },
+      { "text" => "[…]Ερμοπόλεως", "resp" => "Original Edition" },
+      { "text" => "", "resp" => "BL 10.113",
+        "apparatus" => [{ "type" => "alternative", "lemma" => "", "readings" => [{ "text" => "Ἑρμοπολίτου" }] }] }
+    ], entry["readings"]
+  end
+
+  def test_doubly_nested_apparatus_inside_a_reading
+    # Line 7: the reading nests an editorial app whose lemma nests an
+    # alternative app — both recorded on the reading, in document order.
+    entry = only(line_of(parse_pselect16, 7).annotations["apparatus"])
+    assert_equal "καὶ φοίνιξιν διακείμενον ἐν πεδιάδι", entry["lemma"]
+    reading = only(entry["readings"])
+    assert_equal "καὶ φοίνιξιν ἐν πεδιάδι", reading["text"]
+    assert_equal [{ "type" => "editorial", "lemma" => "ἐν πεδιάδι",
+                    "resp" => "P.J. Sijpesteijn, ZPE 19 (1975) 271 (BL 7.99)",
+                    "readings" => [{ "text" => "ἐν πεδίῳ περὶ" }] },
+                  { "type" => "alternative", "lemma" => "ἐν πεδιάδι",
+                    "readings" => [{ "text" => "ἐν τῷ λιβὶ" }] }], reading["apparatus"]
+  end
+
+  def test_app_nested_in_a_lemma_is_its_own_entry_after_the_outer_one
+    entries = line_of(parse_pselect16, 9).annotations["apparatus"]
+    assert_equal(["καλαμοστασίαν καὶ περίσκαψιν", "καλαμοστασίαν"], entries.map { |entry| entry["lemma"] })
+    assert_equal [{ "text" => "[…] καὶ περίσκαψιν", "resp" => "P.J. Sijpesteijn, ZPE 19 (1975) 271 (BL 7.99)" },
+                  { "text" => "[…] καλαμοστασίαν ἐμὴν" }], entries.first["readings"]
+    assert_equal [{ "text" => "βοτανολογίαν" }], entries.last["readings"]
+  end
+
+  def test_line_spanning_apparatus_lands_on_its_opening_line_with_line_dividers
+    document = parse_pselect16
+    entry = only(line_of(document, 19).annotations["apparatus"])
+    assert_equal "Αὐρήλιος Ταυρῖνος Γενναδίου ἀξιωθεὶς | ἔγραψα ὑπὲρ αὐτοῦ παρόντος γράμματα μὴ εἰδότος",
+                 entry["lemma"]
+    assert_equal [{ "text" => "Αὐρήλιος Ταυρῖνος Γενναδίου | ἔγραψα ὑπὲρ αὐτοῦ γράμματα μὴ εἰδότος" }],
+                 entry["readings"]
+    refute line_of(document, 20).annotations.key?("apparatus"), "the entry is recorded once, where it opens"
+  end
+
+  def test_break_no_line_divider_glues_and_plain_divider_spaces
+    document = parser.parse(SB30_17872, urn: SB30_17872_URN, language: "grc")
+    assert_equal ["[…]α", "ρια."], document.map(&:text)
+    assert_equal [{ "type" => "alternative", "lemma" => "[…]α | ρια",
+                    "readings" => [{ "text" => "Μα|κα|ρία" }] }],
+                 document.first.annotations["apparatus"]
+  end
+
+  def test_lines_without_an_app_carry_no_apparatus_key
+    refute line_of(parse_pselect16, 1).annotations.key?("apparatus")
+    assert(parse_cel10.none? { |passage| passage.annotations.key?("apparatus") })
+  end
+
+  # The byte-identity proof: every fixture parses to the same urns, texts and
+  # pre-existing annotations as the parser did before the apparatus layer
+  # (digests captured from the pre-change parser; the "apparatus" key is the
+  # only addition). Digest = SHA-256 of JSON [[urn, text, annotations−apparatus]…].
+  PRE_APPARATUS_DIGESTS = {
+    ["ddbdp/DCLP/62/62952.xml", "urn:nabu:dclp:62952", "lat"] =>
+      [7, "4de9c583be2bcf7cd38101ee3cab0e96b8d7d6f9f0592cd9c48fba5214ea825d"],
+    ["ddbdp/DCLP/64/64388.xml", "urn:nabu:dclp:64388", "grc"] =>
+      [11, "a5782b7ad673ae584fe5ef2df1c8fc239a2a4df762aa06265a19b3f143fc06b3"],
+    ["ddbdp/DCLP/805/805566.xml", "urn:nabu:dclp:805566", "grc"] =>
+      [7, "2cfbe82c96db34e96c662a713af7297415f24c7cd06882a119629cdef201996b"],
+    ["ddbdp/DDbDP/13/13581.xml", "urn:nabu:ddbdp:p.tebt:2:484v", "grc"] =>
+      [2, "476fa9313eb60e242b0a087c9a1fd0c24677ebec7604d72bff16da989eaa394e"],
+    ["ddbdp/DDbDP/2/2416.xml", "urn:nabu:ddbdp:p.ryl:4:560", "grc"] =>
+      [7, "70728746812a8125c47cce7e12b7905616415ab306350f0b04fdbf0f5b6d1ef3"],
+    ["ddbdp/DDbDP/8/8875.xml", BGU100_URN, "grc"] =>
+      [12, "04901746a5e4349aca5842b9affd32ef841c2f95431aa9e4d5c7a53c67b21a0a"],
+    ["ddbdp/DDbDP/8/8877.xml", BGU102_URN, "grc"] =>
+      [9, "d3a534b5c6129d29960d9cb8a03fd39a38a3f40b1866fda480685cf2f2fc05fd"],
+    ["ddbdp/Historical/c.epist.lat/10.xml", CEL10_URN, "lat"] =>
+      [11, "f71e18fdb504c963ef29f02a9fb648e03c8bc100148c9eff1dd160cfc4cb22a8"],
+    ["papyri-ddbdp/DDbDP/25/25457.xml", AEG240_URN, "grc"] =>
+      [13, "88cfbbf454fbfd54d5824c4009d97db378c51a8383a3ecbc4da4b5e1e0585d34"],
+    ["papyri-ddbdp/DDbDP/35/35046.xml", PSELECT16_URN, "grc"] =>
+      [22, "e4760c4774a6d33ebd412862ad85529ee8a2a538db0492ce30e135ddfb7de012"],
+    ["papyri-ddbdp/DDbDP/73/73640.xml", OC457_URN, "grc"] =>
+      [2, "7e72c8b397779382273936a3513c465296886eb08367fb8beaa88fb335d0ddc3"],
+    ["papyri-ddbdp/DDbDP/135/135776.xml", SB30_17872_URN, "grc"] =>
+      [2, "977c0f9132c076d858763cc44839b249daa91184a04fcb95ed00473cb778a408"]
+  }.freeze
+
+  def test_apparatus_layer_leaves_passages_byte_identical_on_every_fixture
+    PRE_APPARATUS_DIGESTS.each do |(relative, urn, language), (count, digest)|
+      path = File.expand_path("../fixtures/#{relative}", __dir__)
+      dclp = urn.start_with?("urn:nabu:dclp:")
+      family = dclp ? Nabu::Adapters::DdbdpParser.new(idno_type: "dclp", urn_namespace: "dclp") : parser
+      document = family.parse(path, urn: urn, language: language)
+      payload = document.map do |passage|
+        [passage.urn, passage.text, passage.annotations.except("apparatus")]
+      end
+      assert_equal count, document.size, "#{relative}: passage count must not change"
+      assert_equal digest, Digest::SHA256.hexdigest(JSON.generate(payload)),
+                   "#{relative}: urns, texts and pre-existing annotations must be byte-identical"
+    end
   end
 end

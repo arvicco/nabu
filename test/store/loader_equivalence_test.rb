@@ -45,7 +45,10 @@ module Store
     # differ between runs (a version bump must not trip the pin).
     VOLATILE = %i[at updated_at withdrawn_at tool_version].freeze
 
-    FIXTURE_DIGEST = "dfdd7367728320152fdecdc95af959eb7849b28534d710d3709d063dbbe010b8"
+    # Re-taken when the DDbDP parser gained its apparatus layer: the papyri
+    # fixture passages carrying <app> now persist an "apparatus" annotation
+    # (passage text and urns unchanged — pinned in ddbdp_parser_test).
+    FIXTURE_DIGEST = "ab62606129760b02371d46be20b84aa6803e8c3fda91811226301fc1cddb479b"
     WALK_DIGEST = "cf74dd259cfabc229a7828f6e8dc1c662aaf6eba4bb06dd3221af04eefe0fbcb"
 
     def test_fixture_corpora_load_byte_identically_on_both_grains
