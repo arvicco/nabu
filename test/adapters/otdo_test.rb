@@ -45,10 +45,16 @@ class OtdoTest < Minitest::Test
     ], ids
   end
 
-  def test_discovery_skips_counts_nothing_in_the_fixture_dir
-    # The fixture dir carries no archives_index.html sidecar; a real
-    # canonical dir would, and it is the one skip-by-rule.
-    assert_equal 0, adapter.discovery_skips(FIXTURES).skipped_by_rule
+  # The rejected grain, pinned by a real specimen beside the document
+  # pages: the /archives catalog sidecar (the 6-row trim of the real
+  # table) skips by rule with its note, and the top dir reconciles —
+  # every page is a document or a censused skip.
+  def test_discovery_skips_counts_the_catalog_sidecar
+    skips = adapter.discovery_skips(FIXTURES)
+    assert_equal 1, skips.skipped_by_rule, "archives_index.html, the real catalog specimen"
+    assert_match(/catalog page.*archives_index\.html/, skips.notes.join("\n"))
+    pages = Dir.glob("*.html", base: FIXTURES)
+    assert_equal pages.size, adapter.discover(FIXTURES).count + skips.skipped_by_rule
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, Nabu::OtdoFetch::ARCHIVES_FILE), "<html/>")
       File.write(File.join(dir, "Pt_0016.html"), "<html/>")

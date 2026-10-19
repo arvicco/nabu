@@ -34,6 +34,12 @@ files:
     whole: true
     trim: none (Old Zhangzhung text 5 — the xzh language exemplar, 47 lines; P48-5)
     reason: live-app page — a fresh GET re-stamps the CSRF _token, never byte-identical
+  - path: archives_index.html
+    url: https://otdo.aa-ken.jp/archives
+    refetchable: false
+    whole: false
+    trim: byte copy of fetch/archives-6rows.html (rows 7..414 of the real catalog spliced out) pinned at the TOP level under the sidecar's own name — the rejected catalog-grain specimen discovery skips by rule (2026-10-20)
+    reason: documented local trim of the live catalog (which also re-stamps its CSRF _token per GET); re-acquire by GET + re-trimming per README
   - path: fetch/archives-6rows.html
     url: https://otdo.aa-ken.jp/archives
     refetchable: false
