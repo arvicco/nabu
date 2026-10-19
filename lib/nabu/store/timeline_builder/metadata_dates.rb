@@ -140,7 +140,8 @@ module Nabu
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
           "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
-          #                                  writes for NDL-held materials (出版日 envelope)
+          #                                  writes for NDL-held materials (出版日 envelope),
+          #                                  else the label's nengō "date" (parse time)
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
           "ig-cyprus" => :structured, # IG XV 1,1: origDate prose, unsigned BCE years and
@@ -879,20 +880,23 @@ module Nabu
         # NDL item's own 出版日 envelope, the raw labeled with the record it
         # came from so no reader takes it for honkoku's claim. The material
         # IS the NDL item transcribed, so the row keeps the artifact class.
+        # Without a record, the material label's own nengō date (the
+        # adapter's parse-time "date", owner-ruled 2026-10-20) answers.
         def ndl_catalog_date(meta)
           record = meta["ndl_catalog"]
           date = record.is_a?(Hash) ? record["date"] : nil
-          return [nil, nil, nil] unless date.is_a?(Hash)
+          return structured(meta) unless date.is_a?(Hash)
 
           [date["not_before"], date["not_after"], "NDL catalog record (pid #{record['pid']}): #{date['raw']}"]
         end
 
         # ja-wikisource: the header's integer "year" — a one-year envelope,
         # its own labeled class "composition" (the work's year as the wiki
-        # states it) — outranks the coarser era-category band.
+        # states it) — outranks the coarser era-category band. An era-typed
+        # year= (寛政2, converted at parse) keeps its spelling as the raw.
         def header_year_or_era_band(meta)
           year = meta["year"]
-          return [year, year, year.to_s, nil, "composition"] if year.is_a?(Integer)
+          return [year, year, meta["year_raw"] || year.to_s, nil, "composition"] if year.is_a?(Integer)
 
           era_band_key(meta)
         end

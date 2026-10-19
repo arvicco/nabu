@@ -75,5 +75,19 @@ module Adapters
       reason = Nabu::Adapters::Honkoku::DECLINED_LAYERS.fetch("translations")
       assert_includes reason, "large language model"
     end
+
+    # A material label's own nengō date (owner-ruled 2026-10-20 — census
+    # 2026-10-20: 329 of 12,841 v3 labels carry an era-year shape) mints
+    # the "date" envelope at parse, through the shared table; real labels.
+    def test_a_label_nengo_dates_the_material
+      date = Nabu::Adapters::Honkoku.label_date("天保十一年四月十六日岩窪御廟御普請仕様帳扣")
+      assert_equal({ "not_before" => 1840, "not_after" => 1840,
+                     "raw" => "天保十一年四月十六日岩窪御廟御普請仕様帳扣", "eras" => ["天保十一年"],
+                     "basis" => "label nengō (config/eras.yml)" }, date)
+      span = Nabu::Adapters::Honkoku.label_date("家譜　百二十八　重富公御隠居後　従寛政十一年九月十八日到文化六年七月六日")
+      assert_equal [1799, 1809], span.values_at("not_before", "not_after")
+      assert_nil Nabu::Adapters::Honkoku.label_date("目次"), "a label without an era year mints nothing"
+      assert_nil document.metadata["date"], "the fixture labels carry no era year"
+    end
   end
 end
