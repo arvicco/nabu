@@ -170,6 +170,14 @@ module Nabu
       # one pass BEFORE the query-side stages (timeline/facets/indexer) that join
       # on passages.document_id.
       Store.create_deferred_indexes!(db)
+      # The honkoku <- ndl-kotenseki catalog join writes each NDL-held
+      # material's NDL record onto its honkoku row BEFORE the builders,
+      # which project it (facet map + MetadataDates); absent census = the
+      # honest no-op.
+      progress&.stage("honkoku ndl catalog")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :honkoku_ndl_catalog) do
+        HonkokuNdlCatalog.new(catalog: db, canonical_dir: @config.canonical_dir).run
+      end
       # The timeline (P15-2) is f(canonical): rebuild it from canonical
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
@@ -202,6 +210,13 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :kind_axis) do
         Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
                                     progress: progress, canonical_dir: @config.canonical_dir)
+      end
+      # The passage-grain facet lane projects the replayed passages'
+      # annotations under facet_map.yml's passage_fields (the same config
+      # as the document lane above).
+      progress&.stage("passage facets")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :passage_facets) do
+        Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
       # The AED hieroglyph postings (P103-2): f(canonical/aed) — an
       # absent cone yields the honest empty table.

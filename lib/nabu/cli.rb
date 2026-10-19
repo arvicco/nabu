@@ -2414,6 +2414,16 @@ module Nabu
       filters they do not combine with --lemma/--near. Facet rows land at
       `nabu rebuild` (like the timeline).
 
+      --facet NAME=PATTERN is the generic form: any facet name, repeatable
+      (each one must hold). A name is one axis across both grains — the
+      document facets (okhc collection, cdli material, author …) AND the
+      passage facets projected from per-article annotations (sillok
+      subject, itkc genre), which narrow to the very passage that carries
+      the claim: `--facet subject=왕실-%` lists Sillok articles under the
+      royal-house subject tree. The pattern matches the value or the
+      authority ref. --type/--province/--material are shorthands for
+      --facet genre=/province=/material=.
+
       LOANS (--loans CODE): the language-contact facet (P34-2, reading the
       P17-1 annotations) — keep only passages carrying at least one token
       the corpus tags as borrowed from CODE. Passage-grained and read
@@ -2460,6 +2470,7 @@ module Nabu
         nabu search "dis manibus" --type epitaph --province "Germania superior"
                                                    # the D M formula on epitaphs of
                                                    #   one province (EDH facets)
+        nabu search 大王大妃 --facet subject=왕실-의식%   # Sillok articles on royal rites
         nabu search --fuzzy "votum solvit" --type "votive%" --material Sandstein
                                                    # V S L M on sandstone votives
         nabu search ⲡⲛⲟⲩⲧⲉ --loans grc --lang cop   # "God" in verses that carry
@@ -2532,6 +2543,10 @@ module Nabu
                       desc: "Roman-province facet filter (Germania inferior, pannonia%)"
     option :material, type: :string, banner: "PATTERN",
                       desc: "Material facet filter (Marmor, sandstein%)"
+    option :facet, type: :string, repeatable: true, banner: "NAME=PATTERN",
+                   desc: "Any facet by name, at either grain — document facets (collection, author …) " \
+                         "and passage facets (sillok subject, itkc genre): --facet subject=왕실-% " \
+                         "matches value or ref, LIKE patterns pass through; repeatable (AND)"
     option :loans, type: :string, banner: "CODE",
                    desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
                          "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
@@ -2608,7 +2623,7 @@ module Nabu
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
          (options[:near] || options[:lemma])
-        raise Thor::Error, "search: --from/--to/--century/--date-basis/--place/--type/--province/--material " \
+        raise Thor::Error, "search: --from/--to/--century/--date-basis/--place/--type/--province/--material/--facet " \
                            "compose with text search only, not --lemma/--near (the dated/faceted corpus — " \
                            "papyri, inscriptions — is not lemmatized)"
       end
@@ -4488,16 +4503,19 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB + EDH)"
+    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB, EDH, …)"
     long_desc <<~HELP, wrap: false
       Look a person up in the derived person index: the CBDB thin slice
-      (~658k persons of Chinese history) and EDH's attested persons (~93.6k
+      (~658k persons of Chinese history), EDH's attested persons (~93.6k
       Latin inscription persons, one card per attestation — the ref names
-      the inscription). Input is an authority ref (cbdb:1762,
-      edh:HD000001/3) or a name — hanzi, pinyin, courtesy/studio names, a
-      Roman name as inscribed or in the nominative all key through the
-      shared fold; matching is exact under the fold, never fuzzy; homonyms
-      print several cards (cbdb first, then edh).
+      the inscription), the Elephantine ancient persons, the Aozora Bunko
+      author/translator index (1,335 persons) and the kokubunken waka-poet
+      personographies (266). Input is an authority ref (cbdb:1762,
+      edh:HD000001/3, aozora:001257, kokubunken:紀貫之) or a name — hanzi,
+      pinyin, courtesy/studio names, kana readings, romaji, a Roman name
+      as inscribed or in the nominative all key through the shared fold;
+      matching is exact under the fold, never fuzzy; homonyms print
+      several cards (cbdb first, then edh, elephantine, aozora, kokubunken).
 
       `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
       source's passages (the PlaceMine Han-lane shape). It writes nothing —
@@ -4510,6 +4528,8 @@ module Nabu
         nabu person cbdb:1762      # by authority ref
         nabu person "Iulius Optatus"   # an EDH person, nominative form
         nabu person edh:HD000001/3     # by EDH ref (inscription HD000001, person 3)
+        nabu person sillok:M_0006771   # a NIKH index-markup person, per source
+        nabu person nikh:p094190       # the passage-annotation ref: every NIKH slice holding it
         nabu person mine kanripo   # census the person-name attestations
     HELP
     def person(*query_parts)
@@ -5853,13 +5873,22 @@ module Nabu
       end
 
       # The active facet filters as {facet name => pattern}, or nil when none
-      # (P17-2): --type → genre, --province → province, --material → material.
+      # (P17-2): --type → genre, --province → province, --material → material;
+      # each --facet NAME=PATTERN adds its name (a repeat of a name wins last).
       def facet_filters
         filters = {}
         filters["genre"] = options[:type] if options[:type]
         filters["kind"] = options[:kind] if options[:kind]
         filters["province"] = options[:province] if options[:province]
         filters["material"] = options[:material] if options[:material]
+        Array(options[:facet]).each do |spec|
+          name, pattern = spec.to_s.split("=", 2).map(&:strip)
+          if name.to_s.empty? || pattern.to_s.empty?
+            raise Thor::Error, "search: --facet takes NAME=PATTERN (subject=왕실-%) — got #{spec.inspect}"
+          end
+
+          filters[name] = pattern
+        end
         filters.empty? ? nil : filters
       end
 
@@ -5907,8 +5936,8 @@ module Nabu
       # what WOULD make a term-less browse legal, and why the shelf-selectors do not.
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
-          "term-less: a date window (--from/--to/--century), --date-basis, --place, a genre facet " \
-          "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, --script, " \
+          "term-less: a date window (--from/--to/--century), --date-basis, --place, a facet " \
+          "(--type/--province/--material/--facet), --loans, --meter/--meter-pattern, --lect, --script, " \
           "or --within. " \
           "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."

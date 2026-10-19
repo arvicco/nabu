@@ -115,6 +115,17 @@ class OncojTest < Minitest::Test
                  "logographic segments keep their honest script status"
   end
 
+  # Place-name tokens (pos pln / pln-kke) ride a per-passage "places"
+  # annotation: surface + lemma id (+ the lexicon headword) — mentions in
+  # the poem, never a findspot claim.
+  def test_place_name_tokens_ride_a_places_annotation
+    document = parsed("MYS.1.1")
+    line9 = document.passages.find { |passage| passage.annotations["line"] == "9" }
+    assert_equal [{ "form" => "yamato", "lemma_id" => "l052386", "lemma" => "yamato" }],
+                 line9.annotations["places"]
+    assert_nil document.passages.first.annotations["places"], "a place-less line carries no key"
+  end
+
   def test_token_less_crux_lines_carry_the_manyogana_as_text_and_are_flagged
     document = parsed("MYS.10.2033")
     assert_equal 5, document.size

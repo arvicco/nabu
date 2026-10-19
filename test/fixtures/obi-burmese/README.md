@@ -17,3 +17,10 @@ as the adapter extracts them (vol7/OBI_Corpus_Vol7/):
   space-separated, no tab) — and the volume zip extracts FLAT, without
   the vol7-style OBI_Corpus_VolN subdir, which the fixture layout
   mirrors.
+- `vol3/OBI_Vol3_No207__re_p337.txt` and `vol1/OBI_Vol1_No74__ob_p118.txt`
+  (2026-10-18, copied unmodified from the box's canonical extraction of
+  the same Zenodo volume zips): the header-place witnesses. No207 fills
+  PLACE OF ORIGIN ("Mt. Tuyin, Bagan"), CURRENT LOCATION ("Mandalay
+  Palace stone 362"), REFERENCES (an IOB number + tab + the Bagan
+  Epigraphic Database concordance "BED B 623-1; …") and SUBJECT; No74
+  carries upstream's bare "?" for both PLACE OF ORIGIN and SUBJECT.

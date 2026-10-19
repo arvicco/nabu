@@ -80,6 +80,17 @@ class SillokTest < Minitest::Test
     assert(annotations["sources"].any? { |source| source.include?("18장 A면") })
   end
 
+  def test_passage_annotations_carry_the_index_markup
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:sillok:wzc_121" }
+    passage = adapter.parse(ref).to_a.last
+    assert_equal [{ "value" => "純宗", "ref" => "nikh:M_0062680" },
+                  { "value" => "純明孝皇后", "ref" => "nikh:M_0006771" }], passage.annotations["persons"]
+    assert_equal [{ "value" => "太廟" }, { "value" => "璿源殿" }], passage.annotations["places"]
+    assert_includes passage.text, "祔純宗于太廟", "the text stays the flattened paragraph"
+    appendix = adapter.parse(adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:sillok:waa_200" }).first
+    assert_equal [{ "value" => "永樂" }], appendix.annotations["eras"]
+  end
+
   # --- fetch (rigged — no network in tests, ever) ---------------------------
 
   # The two-dataset choreography: each data.go.kr dataset resolves its

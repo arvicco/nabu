@@ -1336,6 +1336,82 @@ module Query
       assert_equal 2, search("manibus").size, "both visible without a facet filter"
     end
 
+    # -- the passage-grain facets (passage_facet_values + passage_facets) ----
+    # A facet NAME is one axis across both grains: the filter reads the
+    # document facet rows AND the passage facet pairs carrying that name,
+    # so a passage claim narrows to the very passage that carries it.
+
+    def tag_passage(passage, facet, value, ref: nil)
+      source_id = @catalog[:documents].where(id: passage.document_id).get(:source_id)
+      value_id = @catalog[:passage_facet_values].where(source_id: source_id, facet: facet, value: value, ref: ref)
+                                                .get(:id) ||
+                 @catalog[:passage_facet_values].insert(source_id: source_id, facet: facet, value: value, ref: ref)
+      @catalog[:passage_facets].insert(value_id: value_id, passage_id: passage.id)
+    end
+
+    def article_volume
+      doc = make_document(source: @open, urn: "urn:s:1", language: "lat")
+      [make_passage(doc, urn: "urn:s:1:1", text: "rex obiit", sequence: 1, language: "lat"),
+       make_passage(doc, urn: "urn:s:1:2", text: "rex regnat", sequence: 2, language: "lat")]
+    end
+
+    def test_passage_facet_filter_narrows_to_the_tagged_passage
+      died, reigns = article_volume
+      tag_passage(died, "subject", "왕실-의식(儀式)")
+      tag_passage(died, "subject", "인물(人物)")
+      tag_passage(reigns, "subject", "왕실-국왕(國王)")
+      rebuild!
+      assert_equal %w[urn:s:1:1], search("rex", facets: { "subject" => "인물(人物)" }).map(&:urn),
+                   "the sibling article in the same volume does not inherit the claim"
+      assert_equal %w[urn:s:1:1 urn:s:1:2],
+                   search("rex", facets: { "subject" => "왕실-%" }).map(&:urn).sort,
+                   "LIKE patterns pass through (the --type semantics)"
+      assert_empty search("rex", facets: { "subject" => "군사%" })
+    end
+
+    def test_passage_facet_filter_matches_the_authority_ref_too
+      died, = article_volume
+      tag_passage(died, "person", "李昰應", ref: "kh:PER_0001")
+      rebuild!
+      assert_equal %w[urn:s:1:1], search("rex", facets: { "person" => "kh:PER_0001" }).map(&:urn)
+      assert_equal %w[urn:s:1:1], search("rex", facets: { "person" => "李昰應" }).map(&:urn)
+    end
+
+    def test_a_facet_name_reaches_both_grains
+      faceted("urn:e:1", "rex epitaph", { "genre" => %w[epitaph titsep] })
+      _, reigns = article_volume
+      tag_passage(reigns, "genre", "epitaph")
+      rebuild!
+      assert_equal %w[urn:e:1:1 urn:s:1:2],
+                   search("rex", facets: { "genre" => "epitaph" }).map(&:urn).sort,
+                   "the document-faceted inscription AND the passage-tagged article"
+    end
+
+    def test_passage_and_document_facets_compose
+      faceted("urn:e:1", "rex epitaph", { "genre" => %w[epitaph titsep] })
+      inscription = @catalog[:passages].where(urn: "urn:e:1:1").first
+      tag_passage(Nabu::Store::Passage[inscription[:id]], "subject", "인물(人物)")
+      died, = article_volume
+      tag_passage(died, "subject", "인물(人物)")
+      rebuild!
+      assert_equal %w[urn:e:1:1],
+                   search("rex", facets: { "genre" => "epitaph", "subject" => "인물%" }).map(&:urn)
+    end
+
+    def test_browse_lists_by_a_passage_facet_alone
+      died, reigns = article_volume
+      tag_passage(died, "subject", "인물(人物)")
+      tag_passage(reigns, "subject", "왕실-국왕(國王)")
+      rebuild!
+      assert_equal %w[urn:s:1:2], browse(facets: { "subject" => "왕실-국왕(國王)" }).map(&:urn)
+    end
+
+    def test_an_unknown_facet_name_matches_nothing
+      article_volume
+      rebuild!
+      assert_empty search("rex", facets: { "nonesuch" => "x" })
+    end
+
     # -- the loans facet (P34-2 — the P17-1 promise: per-passage loan-code
     # counts already ride annotations["loans"]; the facet READS them, no
     # reparse, no extra table) ---------------------------------------------

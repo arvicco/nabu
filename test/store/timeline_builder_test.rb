@@ -659,6 +659,48 @@ module Store
                    "the era-category attribution wears the era precision label"
     end
 
+    # The page {{header}} year= (the work's own year as the wiki states it)
+    # outranks the era-category band and wears the composition class.
+    def test_metadata_dates_ja_wikisource_header_year_beats_the_era_band
+      seed_metadata_doc("ja-wikisource", "urn:nabu:ja-wikisource:7285",
+                        { "year" => 1330,
+                          "era_band" => { "not_before" => 1185, "not_after" => 1392,
+                                          "raw" => "鎌倉時代・南北朝時代" } })
+      build!
+      row = timeline_for("urn:nabu:ja-wikisource:7285")
+      assert_equal [1330, 1330, "1330", nil, "composition"],
+                   row.values_at(:not_before, :not_after, :date_raw, :precision, :date_class)
+    end
+
+    # honkoku: the NDL catalog record the HonkokuNdlCatalog join wrote —
+    # the item's own publication date, its raw labeled with the record.
+    def test_metadata_dates_honkoku_ndl_catalog_record
+      seed_metadata_doc("honkoku", "urn:nabu:honkoku:p:m1",
+                        { "ndl_catalog" => { "pid" => "2532153",
+                                             "date" => { "not_before" => 1605, "not_after" => 1605,
+                                                         "raw" => "[慶長10(1605)]" } } })
+      seed_metadata_doc("honkoku", "urn:nabu:honkoku:p:m2", { "label" => "no NDL record" })
+      build!
+      row = timeline_for("urn:nabu:honkoku:p:m1")
+      assert_equal [1605, 1605, "NDL catalog record (pid 2532153): [慶長10(1605)]", nil],
+                   row.values_at(:not_before, :not_after, :date_raw, :date_class)
+      assert_nil timeline_for("urn:nabu:honkoku:p:m2"), "no record, no row"
+    end
+
+    # obi-burmese: the header PLACE OF ORIGIN is the named findspot claim;
+    # upstream's bare "?" mints no place.
+    def test_metadata_places_obi_burmese_place_of_origin
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:vol3:207:re:p337",
+                        { "date" => "CS 695 = CE 1333", "place_of_origin" => "Mt. Tuyin, Bagan" })
+      seed_metadata_doc("obi-burmese", "urn:nabu:obi-burmese:vol1:74:ob:p118",
+                        { "date" => "CS 57(9) = CE 1217", "place_of_origin" => "?" })
+      build!
+      assert_equal "Mt. Tuyin, Bagan", timeline_for("urn:nabu:obi-burmese:vol3:207:re:p337")[:place_name]
+      row = timeline_for("urn:nabu:obi-burmese:vol1:74:ob:p118")
+      assert_nil row[:place_name], "the bare ? is upstream's unknown, never a place"
+      assert_equal 1217, row[:not_before]
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

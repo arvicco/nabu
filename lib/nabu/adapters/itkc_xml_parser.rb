@@ -25,8 +25,20 @@ module Nabu
     # tens–hundreds of KB, nowhere near the ~5 MB line.
     class ItkcXmlParser
       # The 서지 sidecar. +print_year+ is the 원문간행년 서기년 (nil
-      # when the record carries none — claim nothing).
-      Work = Data.define(:id, :title_hanja, :title_hangul, :author_hanja, :author_hangul, :print_year)
+      # when the record carries none — claim nothing). +authors+ lists
+      # every 저자 with its 생년/몰년 life years (see #author_record);
+      # +subject_class+ is the 주제분류 label, +sabu_division+ /
+      # +sabu_class+ the 사부분류 대분류/중분류 pair, verbatim. The KP
+      # family's third scheme, 고전적분류 (대분류 역사편 over the same
+      # 중분류 the 사부분류 already names), DELIBERATELY stays unread —
+      # a restatement, not a new claim (census over the 26 held
+      # sidecars, 2026-10-18).
+      Work = Data.define(:id, :title_hanja, :title_hangul, :author_hanja, :author_hangul, :print_year,
+                         :authors, :subject_class, :sabu_division, :sabu_class)
+
+      # 생년/몰년 서기년 values upstream uses for "unknown" (金正浩 18??
+      # carries 9999; the KP 校正廳 records 0000/9999) — never a year.
+      UNKNOWN_YEARS = %w[0000 9999].freeze
 
       # One 권차 file. +articles+ are its 레벨3 units in document order.
       Fascicle = Data.define(:id, :title, :articles)
@@ -43,7 +55,11 @@ module Nabu
           title_hangul: text_at(meta, ".//제목정보/제목[@type='한글서명']"),
           author_hanja: text_at(meta, ".//저자정보//한자성명"),
           author_hangul: text_at(meta, ".//저자정보//한글성명"),
-          print_year: year_attr(meta, ".//간행정보/원문간행년")
+          print_year: year_attr(meta, ".//간행정보/원문간행년"),
+          authors: meta ? meta.xpath(".//저자정보/저자").filter_map { |node| author_record(node) } : [],
+          subject_class: text_at(meta, ".//분류항목[@type='주제분류']/분류내용"),
+          sabu_division: text_at(meta, ".//분류항목[@type='사부분류']/분류내용[@type='대분류']"),
+          sabu_class: text_at(meta, ".//분류항목[@type='사부분류']/분류내용[@type='중분류']")
         )
       end
 
@@ -89,7 +105,11 @@ module Nabu
 
       # 단락 paragraphs, one line each: 고유명사/페이지 markers flatten
       # to their text, whitespace runs collapse — canonical means
-      # canonical, only the markup shed.
+      # canonical, only the markup shed. The 고유명사 proper-noun tags
+      # (239,405 over the held works, census 2026-10-18) are UNTYPED —
+      # no person/place/book distinction, no authority id — so they
+      # DELIBERATELY mint no entity rows; a typed reading needs an
+      # external resolver, not this parser.
       def article_text(node)
         paragraphs = node.xpath("./본문정보/내용/단락").map { |paragraph| squish(paragraph.text) }
         paragraphs.reject(&:empty?).join("\n")
@@ -101,6 +121,25 @@ module Nabu
         value = node.at_xpath(xpath)&.text
         value = value&.gsub(/\s+/, " ")&.strip
         value unless value.nil? || value.empty?
+      end
+
+      # One 저자: hanja/hangul names, the 생년/몰년 서기년 CE years (the
+      # unknown sentinels claim nothing) and the elements' own reign-year
+      # text raw ("영조 24", "18??"). Nil for a nameless, dateless node.
+      def author_record(node)
+        record = {
+          "name" => text_at(node, "./한자성명"), "name_hangul" => text_at(node, "./한글성명"),
+          "birth_year" => life_year(node, "./생년"), "death_year" => life_year(node, "./몰년"),
+          "birth" => text_at(node, "./생년"), "death" => text_at(node, "./몰년")
+        }.compact
+        record.empty? ? nil : record
+      end
+
+      def life_year(node, xpath)
+        year = node.at_xpath(xpath)&.attr("서기년")
+        return nil if year.nil? || UNKNOWN_YEARS.include?(year) || !year.match?(/\A\d{1,4}\z/)
+
+        year.to_i
       end
 
       def year_attr(node, xpath)

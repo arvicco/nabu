@@ -108,6 +108,40 @@ class KanripoTest < Minitest::Test
     assert_includes first.text, "學而時習之"
   end
 
+  # The KR-Catalog 人物 blocks ride document metadata (no authority: the
+  # blocks key texts, not a person registry): every block verbatim in
+  # byline order, the role families projected as flat name arrays for the
+  # facet lane (config/facet_map.yml).
+  def test_catalog_person_blocks_ride_document_metadata
+    document = parse_text("KR2a0001")
+    persons = document.metadata["persons"]
+    main = persons.reject { |person| person["part"] }
+    assert_equal({ "name" => "司馬遷", "role" => "撰", "dynasty" => "漢", "dates" => "ca. -145 - ca. -86" },
+                 main.first)
+    assert_equal(%w[撰 集解 索隱 正義], main.map { |person| person["role"] })
+    assert_equal({ "name" => "張照", "role" => "撰", "dynasty" => "清", "part" => "(附)考證" },
+                 persons.find { |person| person["name"] == "張照" })
+    assert_equal "撰、注", persons.find { |person| person["part"] && person["name"] == "司馬貞" }["role"],
+                 "repeated :FUNCTION: values join in order"
+    assert_equal ["司馬遷"], document.metadata["authors"],
+                 "only the text's own byline feeds the facet arrays — appendix authors stay in persons"
+    assert_equal %w[裴駰 司馬貞 張守節], document.metadata["commentators"]
+    assert_nil document.metadata["editors"]
+
+    assert_equal ["張廷玉"], parse_text("KR2a0038").metadata["authors"], "奉敕撰 is authorship"
+    wu = parse_text("KR5c0091").metadata
+    assert_equal [{ "name" => "吳澄", "zi" => "幼請", "hao" => "草廬", "dates" => "1249 - 1333" },
+                  { "name" => "吳澄", "role" => "撰", "dynasty" => "元", "dates" => "1249 - 1331",
+                    "part" => "WYG 道德眞經注" }], wu["persons"]
+    assert_nil wu["authors"], "a role-less byline block is never promoted to authorship"
+    assert_nil parse_text("KR1h0004").metadata["persons"], "an entry without 人物 blocks claims none"
+  end
+
+  def parse_text(id)
+    adapter = conformance_adapter
+    adapter.parse(adapter.discover(FIXTURES).find { |candidate| candidate.id.end_with?(id) })
+  end
+
   def test_fixture_corpus_parses_to_the_censused_passage_total
     adapter = conformance_adapter
     total = adapter.discover(FIXTURES).sum { |ref| adapter.parse(ref).size }

@@ -38,4 +38,5 @@ named-entity refs in the text.
 |---|---|
 | `2nd_K00.sjw.y.xml` | Gojong accession year (1863) — the 座目 roster with 근무현황 glosses + two 기사; weather 晴 on the day front |
 | `2nd_L04.sjw.y.xml` | Sunjong year 4 (1910, the dynasty's last) — same shape at the far end of the run; 일본연호 明治 43 in the year front |
+| `2nd_F02.sjw.y.xml` | **re-cut 2026-10-18 from the box's `canonical/sjw/2nd_F02.sjw.y.xml`** (196,753 → 77 lines by whole-line cuts, same recipe shape: root front, the 05 month + 29th day fronts, ONE level5) — Yeongjo year 2 (1726), a 晝講 article whose `<index>` tags carry every name shape the entity mining reads: `name=` equal to the surface, differing from it (`密平君㙫` → `李㙫`), the `미결` unresolved sentinel (`程子`), the cross-database person pid `id="p17_100010_00"`, 서명 book tags with names (`綱目` → `資治通鑑綱目`), a bare 지명 place |
 | `history.dtd` | the shared family DTD verbatim (byte-identical to the sillok fixture's copy except the in-zip date stamp) |

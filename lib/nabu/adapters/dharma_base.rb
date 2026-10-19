@@ -82,10 +82,13 @@ module Nabu
       DEFAULT_LANGUAGE = nil
 
       def parse(document_ref)
-        result = DharmaEpidocParser.parse(
-          document_ref.path, allowed_languages: self.class::LANGUAGES,
-                             aliases: self.class::ALIASES,
-                             default_language: self.class::DEFAULT_LANGUAGE
+        doc = Nokogiri::XML(File.read(document_ref.path, encoding: "UTF-8"), &:noblanks)
+        doc.remove_namespaces!
+        header = corpus_header(doc)
+        result = DharmaEpidocParser.parse_doc(
+          doc, path: document_ref.path, allowed_languages: self.class::LANGUAGES,
+               aliases: self.class::ALIASES,
+               default_language: self.class::DEFAULT_LANGUAGE
         )
         document = Nabu::Document.new(
           urn: document_ref.id, language: result.language,
@@ -93,7 +96,7 @@ module Nabu
           title: result.title || document_ref.metadata["stem"],
           metadata: {
             "license" => result.license, "maturity" => result.maturity
-          }.compact
+          }.merge(header).compact
         )
         result.passages.each_with_index do |unit, index|
           document << Nabu::Passage.new(
@@ -113,6 +116,11 @@ module Nabu
       end
 
       private
+
+      # Per-corpus header fields mined from the loaded, namespace-stripped
+      # DOM (one load serves header and edition walk). Default: none — the
+      # epigraphy repos' headers are censused empty (postures declare it).
+      def corpus_header(_doc) = {}
 
       # Seam for tests (the house local-git pattern).
       def repo_url

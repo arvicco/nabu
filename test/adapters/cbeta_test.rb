@@ -24,10 +24,11 @@ class CbetaTest < Minitest::Test
   T01 = "urn:nabu:cbeta:T01n0001-xu"
   T10 = "urn:nabu:cbeta:T10n0285"
   T85 = "urn:nabu:cbeta:T85n2884"
+  T85_2831 = "urn:nabu:cbeta:T85n2831"
   X01 = "urn:nabu:cbeta:X01n0001"
   X55 = "urn:nabu:cbeta:X55n0899"
   # discover order (sorted by urn)
-  ALL_FIXTURES = [J29, J36, K05, N26, N44, T01, T10, T85, X01, X55].freeze
+  ALL_FIXTURES = [J29, J36, K05, N26, N44, T01, T10, T85_2831, T85, X01, X55].freeze
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -139,7 +140,7 @@ class CbetaTest < Minitest::Test
       FileUtils.mkdir_p(File.join(root, "B", "B01"))
       File.write(File.join(root, "B", "B01", "B01n0001.xml"), "")
       adapter = Nabu::Adapters::Cbeta.new
-      assert_equal [T01, T10, T85], adapter.discover(root).to_a.map(&:id)
+      assert_equal [T01, T10, T85_2831, T85], adapter.discover(root).to_a.map(&:id)
       skips = adapter.discovery_skips(root)
       assert_equal 1, skips.skipped_by_rule
       assert_predicate skips, :clean?
@@ -220,7 +221,7 @@ class CbetaTest < Minitest::Test
     source = cbeta_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 10, first.added
+    assert_equal 11, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]

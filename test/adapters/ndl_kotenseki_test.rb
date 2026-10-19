@@ -29,8 +29,8 @@ module Adapters
     def doc(pid) = documents.find { |d| d.urn.end_with?(":#{pid}") } || flunk("#{pid} missing")
 
     def test_discovers_one_document_per_crawled_book
-      assert_equal %w[urn:nabu:ndl-kotenseki:2532153],
-                   conformance_adapter.discover(FIXTURES).map(&:id)
+      assert_equal %w[urn:nabu:ndl-kotenseki:2532153 urn:nabu:ndl-kotenseki:2541107],
+                   conformance_adapter.discover(FIXTURES).map(&:id).sort
     end
 
     def test_koma_contents_become_passages_empty_koma_skipped
@@ -54,6 +54,51 @@ module Adapters
                    "collection is ||-multi like subject — the values shape")
       assert_equal({ "values" => %w[倭玉篇 辞書] }, meta.dig("facets", "subject"),
                    "the ||-separated 件名 values each facet")
+    end
+
+    # シリーズタイトル → metadata + the series facet; 容量・大きさ → metadata
+    # only; the 著者 string keeps its raw form beside a per-part split of
+    # the trailing role token.
+    def test_series_extent_and_author_roles_join_the_document
+      meta = doc(2_541_107).metadata
+      assert_equal "赤本昔はなし", meta["series"]
+      assert_equal({ "values" => ["赤本昔はなし"] }, meta.dig("facets", "series"))
+      assert_equal "1冊 ; 12.2cm", meta["extent"], "the extent rides verbatim, unfaceted"
+      assert_equal "夷福山人 作||広重 画", meta["author"], "the raw string is kept"
+      assert_equal [{ "name" => "夷福山人", "role" => "作" }, { "name" => "広重", "role" => "画" }],
+                   meta["authors"]
+      assert_equal({ "values" => %w[夷福山人 広重] }, meta.dig("facets", "author"))
+      assert_equal "1冊 ; 31cm", doc(2_532_153).metadata["extent"]
+      assert_nil doc(2_532_153).metadata["authors"], "an empty 著者 claims no person"
+    end
+
+    def test_author_role_split_is_conservative
+      split = Nabu::Adapters::NdlKotenseki.method(:author_part)
+      assert_equal({ "name" => "藤原基経", "role" => "編" }, split.call("藤原基経 編"))
+      assert_equal({ "name" => "[藤田幽谷]", "role" => "[著]" }, split.call("[藤田幽谷] [著]"),
+                   "the cataloguer's supplied-role bracket rides verbatim")
+      assert_equal({ "name" => "(梁) 蕭統", "role" => "撰" }, split.call("(梁) 蕭統 撰"))
+      assert_equal({ "name" => "(唐) 李善 等注" }, split.call("(唐) 李善 等注"),
+                   "an et-al. tail is not a single role token — the name stays whole")
+      assert_equal({ "name" => "宋黄庭堅撰" }, split.call("宋黄庭堅撰"), "no whitespace, no split")
+      assert_equal({ "name" => "戸田茂睡" }, split.call("戸田茂睡"))
+    end
+
+    # A census.tsv derived before a column joined CENSUS_COLUMNS re-derives
+    # from the held xlsx at fetch; a current one is left alone.
+    def test_a_stale_census_header_re_derives_at_fetch
+      adapter = quiet_adapter
+      derived = []
+      adapter.define_singleton_method(:derive_census!) { |_xlsx, tsv| derived << tsv }
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, "dataset_202602_k_internet.xlsx"), "")
+        File.write(File.join(dir, "census.tsv"), "pid\ttitle\n")
+        adapter.send(:ensure_census!, dir, nil)
+        assert_equal 1, derived.size, "the pre-series header re-derives"
+        File.write(File.join(dir, "census.tsv"), "#{Nabu::Adapters::NdlKotenseki::CENSUS_HEADER}\n")
+        adapter.send(:ensure_census!, dir, nil)
+        assert_equal 1, derived.size, "a current header is never re-derived"
+      end
     end
 
     def test_crawl_slice_tallies_denied_pids_into_the_ledger
@@ -160,7 +205,8 @@ module Adapters
       stub_request(:get, format(BOOK, "2546843")).to_raise(Net::ReadTimeout)
       Dir.mktmpdir do |dir|
         File.write(File.join(dir, "dataset_202602_k_internet.xlsx"), "")
-        File.write(File.join(dir, "census.tsv"), "pid\ttitle\n2546843\tx\n")
+        File.write(File.join(dir, "census.tsv"),
+                   "#{Nabu::Adapters::NdlKotenseki::CENSUS_HEADER}\n2546843\tx\n")
         report = quiet_adapter.fetch(dir)
         assert_match(/1 stuck on timeout \(2546843\)/, report.notes)
       end

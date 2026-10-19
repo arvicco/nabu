@@ -61,6 +61,10 @@ module Nabu
       LANGUAGE = "ojp"
       URN_PREFIX = "urn:nabu:oncoj"
       LEXICON_FILENAME = "lexicon.xml"
+      # The corpus's place-name tags: pln (3,308 tokens) and pln-kke (35 —
+      # a place name in the kakekotoba pivot-word slot), over 910 distinct
+      # lemma ids (census 2026-10-18) — the per-passage "places" annotation.
+      PLACE_POS = %w[pln pln-kke].freeze
 
       # Corpus sigla → text names, per the project site's Texts list
       # (oncoj.ninjal.ac.jp); ids like "MYS.1.1" render "Man’yōshū 1.1".
@@ -160,6 +164,8 @@ module Nabu
       def build_passage(text_id, line, sequence, lemmas)
         tokens = line.tokens.map { |token| token_hash(token, lemmas) }
         annotations = { "line" => line.upstream_id, "manyogana" => line.manyogana, "tokens" => tokens }
+        places = place_mentions(tokens)
+        annotations["places"] = places unless places.empty?
         text = line.tokens.reject(&:compound).map(&:form).join(" ")
         if text.empty?
           # The censused unanalyzed cruxes: the attested script is all there is.
@@ -170,6 +176,14 @@ module Nabu
           urn: "#{URN_PREFIX}:#{text_id}:#{line.id}", language: LANGUAGE,
           text: Normalize.nfc(text), annotations: annotations, sequence: sequence
         )
+      end
+
+      # One entry per PLACE_POS token, in line order — {form, lemma_id,
+      # lemma} — a MENTION inside the poem, never a findspot or origin
+      # claim (the places posture says so).
+      def place_mentions(tokens)
+        tokens.select { |token| PLACE_POS.include?(token["pos"]) }
+              .map { |token| token.slice("form", "lemma_id", "lemma") }
       end
 
       def token_hash(token, lemmas)

@@ -236,6 +236,9 @@ module Nabu
             "member" => fascicle.id,
             "work_title" => work&.title_hanja, "work_title_hangul" => work&.title_hangul,
             "author" => work&.author_hanja, "author_hangul" => work&.author_hangul,
+            "authors" => (work.authors unless work.nil? || work.authors.empty?),
+            "subject_class" => work&.subject_class,
+            "sabu_division" => work&.sabu_division, "sabu_class" => work&.sabu_class,
             "date" => date_envelope(work),
             "text_state" => (textual.empty? ? "image-only" : nil)
           }.compact

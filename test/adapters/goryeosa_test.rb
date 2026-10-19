@@ -91,6 +91,14 @@ class GoryeosaTest < Minitest::Test
     assert_nil undated.annotations["date"], "an undated ritual prescription claims nothing"
   end
 
+  def test_passage_annotations_carry_the_index_markup
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:goryeosa:kr_118" }
+    annotations = adapter.parse(ref).first.annotations
+    assert_equal({ "value" => "趙浚", "ref" => "nikh:p094190" }, annotations["persons"].first)
+    assert_equal({ "value" => "侍中", "ref" => "nikh:o005170" }, annotations["offices"].first)
+    assert_equal({ "value" => "旌善郡", "ref" => "nikh:t022420" }, annotations["places"].first)
+  end
+
   def test_an_undated_biography_member_leafs_at_level4
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:goryeosa:kr_118" }
     document = adapter.parse(ref)

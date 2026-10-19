@@ -188,8 +188,8 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "silver dates", "place apply", "facets", "kind axis", "hiero postings",
-                  "lect journal",
+    assert_equal ["corpus", "honkoku ndl catalog", "timeline", "silver dates", "place apply", "facets", "kind axis",
+                  "passage facets", "hiero postings", "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
@@ -228,6 +228,7 @@ class RebuildTest < Minitest::Test
     corpus_stages = profile.corpus_stages
     assert_includes corpus_stages, :timeline
     assert_includes corpus_stages, :facets
+    assert_includes corpus_stages, :passage_facets
     assert_includes corpus_stages, :stats
     assert_includes corpus_stages, :fts_lemma
     assert_includes corpus_stages, :trigram

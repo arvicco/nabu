@@ -311,3 +311,150 @@ sources:
       work: work
       cts_textgroup: author_id
       cts_work: work_id
+  # -- The passage grain: passage_fields project passages.annotations_json
+  #    keys into the passage facet tables (Store::PassageFacetBuilder) —
+  #    the facet lane for claims upstream makes per ARTICLE, not per
+  #    document. Same verbatim discipline; an annotation value may be a
+  #    string, an array of strings, or an array of {"value", "ref"}
+  #    objects (the entity shape: a name plus its authority ref).
+  #    Censuses: live catalog 2026-10-18. The NIKH siblings (sjw,
+  #    bibyeonsa, goryeosa, goryeosa-jeoryo) parse the same subjectClass
+  #    slot but their deposits carry none (0 passages each) — that field
+  #    stays unruled for them.
+  #    The NIKH index markup (NikhXmlParser entities: typed <index> tags
+  #    mined per leaf; censuses: a full parse of the box's canonical tree,
+  #    2026-10-18 — "mentions" = tags in leaf text, "records" = the
+  #    annotation records, one per distinct (kind, value, ref, surface)
+  #    per passage (≈ the facet pairs; repeats live in the
+  #    text), "distinct" = the facet dictionary's (value, ref) rows).
+  #    Values are the tagged surfaces verbatim — except sjw persons and books,
+  #    valued by upstream's own normalized name= (its resolution claim,
+  #    the raw surface beside it); refs are "nikh:" + upstream's own id (sillok M_ person
+  #    ids; the goryeosa family's p/o/t/m/b ids; the cross-database person
+  #    pid where that is a tag's only id). Tags in non-leaf header text
+  #    (navigation repeats of the title chain) mint nothing, as that text
+  #    mints no passage.
+  sillok:                     # 413,102 of 414,321 article passages, 216 subject labels,
+    passage_fields: #           899,669 (passage, label) pairs — the 분류 subjectClass
+      subject_classes: subject  # tree verbatim, upper-lower joined by upstream's own
+      #                         hyphen ("왕실-의식(儀式)", "군사-중앙군(中央軍)", "인물(人物)")
+      persons: person         # 1,570,018 이름 mentions → 1,199,460 records on 311,113 of 414,321
+      #                         passages, 156,799 distinct (surface, ref); M_ refs on 1,039,366
+      #                         records (68,285 persons)
+      places: place           # 526,047 지명 mentions → 429,445 records, 27,141 distinct — no ref
+      books: book             # 51,070 서명 mentions → 40,780 records, 7,002 distinct (《》 verbatim)
+      eras: era               # 5,534 연호 mentions → 4,486 records, 226 distinct era names
+      offices: office         # 2 관직 mentions — the type is near-absent in sillok
+  itkc:                       # 37,182 of 37,184 article passages, 29 genre labels, 74,364
+    passage_fields: #           pairs — the 문체분류 classification verbatim (詩類 ·
+      genre_classes: genre    # 書簡類 · 其他類 · 雜著類 …); the passage facet shares the document
+      #                         facet's axis name, so --type/--facet genre reach both grains
+    # ALSO document-grain (the 26 held work sidecars' 서지 records, on every fascicle):
+    fields:
+      author: author          # the first 저자 (柳得恭, 申叔舟 …); the full list with 생년/몰년
+      #                         life years rides metadata "authors" (one work names two)
+      subject_class: subject  # 주제분류 — 문집 · 역사 · 잡저 · 법률 · 전기류 · 주의류 · 지리류
+      sabu_class: classification  # 사부분류 중분류, hanja-glossed and consistent across families
+      #                         (별집류(別集類) · 편년류(編年類) · 지리류(地理類) …); the 대분류 rides
+      #                         "sabu_division" unfaceted — written both "사부(史部)" and "사부"
+  # -- the CJK person blocks (adapter-mined; a re-parse lands the fields first).
+  #    Censuses over canonical/, 2026-10-18.
+  kanripo:                    # 4,119 held texts carry KR-Catalog 人物 blocks (5,202 blocks)
+    fields: #                   — metadata "persons" keeps every block verbatim
+      authors: author         # 3,182 texts, 2,248 names — the text-level byline's 撰-family
+      #                         roles (撰 3,063 · 奉敕撰 160 · 敕撰 18 …; Kanripo adapter table)
+      editors: editor         # 540 texts, 497 names — 編/輯/纂-family compilers (編 436 ·
+      #                         輯 43 · 奉敕編 26 …): a census-warranted facet of its own,
+      #                         never folded into authorship
+      commentators: commentator  # 237 texts, 216 names — 注/註/疏/箋/集解/索隱/正義 …
+      #                         (注 137 · 註 46 …); the remaining long tail (序, 跋, 刪定,
+      #                         撰校勘記 …) stays persons-only
+  aozora:                     # 17,195 PD works (index census)
+    fields:
+      authors: author         # every work — the 著者 rows' 姓 名 verbatim
+      translators: translator # 741 works — the 翻訳者 rows
+      author_ids: author_id   # "aozora:001257" — 人物ID under our own aozora: prefix, the
+      translator_ids: translator_id  # person-index slice key (Nabu::AozoraPersons); 編者 /
+      #                         校訂者 / その他 (39 rows) ride metadata "persons" only. 原題
+      #                         (262 PD works) stays metadata: a free-form original-language
+      #                         title, no work-facet mold fits it cleanly
+  kokubunken:                 # 3 documents (whole works), poets from the poems' own pointers
+    fields:
+      authors: author         # kokin 121 · 廣瀬本 71 · 元暦校本 12 poets — the listPerson ids,
+      #                         which ARE upstream's normalized names (在原元方, 雄略天皇)
+      author_ids: author_id   # "kokubunken:在原元方" — the person-index slice key
+  # the 84000 header persons (sourceDesc bibl authors). On the derge shelves the
+  # E84000DergeTitles pass merges them into metadata AND writes these rows itself
+  # (it runs after the facet builders); the declarations here make any later
+  # facet refresh re-derive the same rows. Censuses: canonical/e84000 joined to
+  # the live derge rows, 2026-10-18.
+  derge-tengyur:              # 3,351 of 3,362 texts carry persons
+    fields:
+      authors: author         # 3,327 role-less originals, 672 names ("Anon" upstream's claim)
+      authors_contested: author_contested  # 66 disputed attributions, 48 names — never
+      #                         folded into author: the header says contested
+      translators_tib: translator  # 4,366 Tibetan-era translators, 1,252 names
+  derge-kangyur:              # 266 of 1,198 texts (most Kangyur keys are sūtras: no author)
+    fields:
+      authors: author         # 17
+      authors_contested: author_contested
+      translators_tib: translator  # 664, 202 names
+  e84000:                     # the published English translations' source-text persons
+    fields:
+      authors: author         # the role-less original author (6 publications)
+      authors_contested: author_contested
+      translators_tib: translator_tib  # the Tibetan-era translators, kept apart from the
+      #                         84000 English team ("translators", unfaceted) whose
+      #                         translation the document actually is
+  # -- The CJK persons tail: parse-time person/place/series fields (censuses
+  #    over canonical/, 2026-10-18). Names ride verbatim.
+  cbeta:                      # 22,210 body <byline>s (author 8,586 · Translator 4,985 …)
+    fields:
+      byline_authors: author  # author-role body bylines, ONLY where the header <author> is
+      #                         silent (無心論 → 釋菩提達摩製); the full typed list rides
+      #                         metadata "persons" (name + role), not faceted
+  ja-wikisource:              # 123 pages fill the {{header}} author= slot
+    fields:
+      author: author          # 清少納言 20 · 羽地朝秀 10 · 源実朝 8 · 後光厳天皇 7 … verbatim
+  honkoku:                    # the NDL-held materials' NDL catalog record (HonkokuNdlCatalog —
+    fields: #                   867 of 918 NDL-manifest materials join the held census, 2026-10-18)
+      ndl_catalog.author_names: author  # the 著者 parts' names, role split off — the NDL
+      #                                   record's claim, labeled by its nesting
+      ndl_catalog.subjects: subject     # 件名, ||-multi
+  obi-burmese:                # the OBI header SUBJECT (722 of 1,121 files, 331 distinct)
+    fields:
+      subject: subject        # terse English prose verbatim ("ded. of serfs and cattle" …;
+      #                         upstream's bare "?" a claim like seal's "Unknown")
+  korba:                      # 322 translated works name their translator in the original bibl
+    fields:
+      translator: translator  # <editor role="translator"> verbatim (Anonim 82 · Daniel Mikołajewski
+      #                         12 · Jakub Wujek 9 …; "(tł. domn.)" hedges as written)
+  dharma-javanese-texts:      # 11 of 98 editions name the work's attributed poet (titleStmt <author>)
+    fields:
+      author: author          # Mpu Prapañca · Mpu Tantular · Mpu Kaṇva · Vararuci …; the witness
+      #                         shelfmarks ride metadata "shelfmarks", unfaceted
+  sjw:                        # index markup on 1,665,849 of 1,896,858 passages — the volume
+    passage_fields: #           source; persons key upstream's NORMALIZED name= (variants group:
+      persons: person         # 鳳朝/尹鳳朝 → 尹鳳朝; 미결 or absent → the surface) — 8,351,049
+      #                         mentions → 6,909,974 records, 372,828 distinct (410,493 when
+      #                         surface-keyed); 12,222 records carry a person pid
+      places: place           # 1,335,479 지명 mentions → 1,128,117 records, 52,030 distinct, no ref
+      books: book             # 140,958 서명 mentions → 107,254 records, 5,162 distinct — keyed by
+      #                         the normalized name= WORK identity (9,794 when surface-keyed)
+  goryeosa:                   # index markup on 18,830 of 31,207 passages; every kind refs
+    passage_fields: #           NIKH's own kind-prefixed ids (aliases share a person id)
+      persons: person         # 66,275 mentions → 51,571 records, 17,767 distinct (11,505 persons)
+      offices: office         # 37,477 관직 mentions → 30,758 records, 5,995 distinct (o-ids)
+      places: place           # 16,876 mentions → 15,569 records, 5,578 distinct (t-ids)
+      orgs: org               # 2,666 단체 mentions → 2,630 records, 383 distinct (m-ids)
+      books: book             # 1,092 서명 mentions → 1,029 records, 581 distinct (b-ids)
+  goryeosa-jeoryo:            # index markup on 9,182 of 11,226 passages; goryeosa's id space
+    passage_fields: #           (6,924 of 6,937 person ids shared), id-less tags ride bare
+      persons: person         # 31,984 mentions (23,941 with p-ids) → 25,846 records, 10,485 distinct
+      offices: office         # 13,419 mentions (12,426 with o-ids) → 12,781 records, 2,998 distinct
+      places: place           # 6,965 mentions (6,149 with t-ids) → 6,537 records, 2,149 distinct
+      orgs: org               # 596 mentions → 573 records, 248 distinct
+      books: book             # 283 mentions → 274 records, 148 distinct
+  bibyeonsa:                  # 998 person tags (75 upstream double-tags fold → 923 mentions) →
+    passage_fields: #           802 records on 736 of 93,528 passages, 26 distinct — by person pid
+      persons: person

@@ -68,6 +68,21 @@ is the operative license (P47-s2 survey, owner-acknowledged).
   for the Tengyur): header-only TEI, `<text><front/></text>`, no body, no
   publication status. Never discovered (placeholders/ is outside the
   discovery cones); counts in the skip census.
+- `translations/kangyur/translations/083-019_toh471,2006-the_myth_chapter.xml`
+  — TRIMMED (14 KB of 49 KB; added 2026-10-18 from the local canonical
+  sync of the same master tree), the toh761 trim procedure below:
+  teiHeader whole, the summary div, the translation div through its
+  first two chunks. A Kangyur publication whose SECOND bibl keys a
+  Tengyur text (toh2006, location/@work UT23703) carrying a role-less
+  `<author>` — the original author, Tathāgata­rakṣita (soft hyphen
+  upstream's). 3 chunks: s.1 1.1-2. Duplicate-pair note: upstream also
+  keeps `…the_practice_of_the_legend.xml` for 083-019; this file is
+  discovery's winner, so the loser is simply absent here.
+- `translations/tengyur/placeholders/001-019_toh1127-prajnaparamitastotra.xml`
+  — WHOLE (3.4 KB; added 2026-10-18). A Tengyur placeholder stub whose
+  bibl carries two `role="authorContested"` attributions (Rāhulabhadra,
+  Nāgārjuna — the header's revisionDesc records the dispute) and two
+  `role="translatorTib"` translators (one Sa-Ltn, one Bo-Ltn form).
 
 ## Trim procedure (the toh761 pair)
 

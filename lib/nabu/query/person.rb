@@ -12,8 +12,13 @@ module Nabu
 
       # Authority ids are the authority's own: CBDB numeric ("cbdb:1762"),
       # EDH per-attestation ("edh:HD000001/3"), Elephantine p/d-prefixed
-      # ("elephantine:p19245", "elephantine:d1").
-      REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([A-Za-z0-9][A-Za-z0-9/._-]*)\z}
+      # ("elephantine:p19245", "elephantine:d1"), Aozora's zero-padded
+      # 人物ID ("aozora:001257"), kokubunken's name-ids
+      # ("kokubunken:藤原定家" — any letter or digit, not only ASCII),
+      # NIKH's per source ("sillok:M_0006771", "goryeosa:p094190") or
+      # through the markup's shared namespace ("nikh:p094190" — every
+      # NIKH slice holding it).
+      REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([\p{L}\p{N}][\p{L}\p{N}/._-]*)\z}
 
       Result = Data.define(:cards)
 
@@ -26,11 +31,10 @@ module Nabu
         raise Error, "person: give a name (either script) or an authority ref (cbdb:1762)" if term.empty?
 
         if (m = term.match(REF_PATTERN))
-          resolver = resolver_for(m[1])
-          person = resolver&.person(m[2])
-          raise Error, "no person #{term.inspect} in the derived index" if person.nil?
+          cards = ref_authorities(m[1]).filter_map { |authority| resolver_for(authority)&.person(m[2]) }
+          raise Error, "no person #{term.inspect} in the derived index" if cards.empty?
 
-          return Result.new(cards: [person])
+          return Result.new(cards: cards)
         end
 
         resolvers = authorities.filter_map { |authority| resolver_for(authority) }
@@ -50,6 +54,14 @@ module Nabu
       # PersonIndex roster — resolver_for answers nil for an underived one,
       # so the check is one indexed lookup per authority, never a scan).
       def authorities = Store::PersonIndex::AUTHORITIES
+
+      # A ref's prefix names its authority — except "nikh:", the NIKH
+      # index markup's shared namespace (the passage-annotation refs),
+      # which resolves in every NIKH authority holding the id (goryeosa
+      # and goryeosa-jeoryo share one person id space).
+      def ref_authorities(prefix)
+        prefix == "nikh" ? Nabu::NikhPersons::NIKH_AUTHORITIES : [prefix]
+      end
 
       def resolver_for(authority)
         (@resolvers ||= {})[authority] ||=

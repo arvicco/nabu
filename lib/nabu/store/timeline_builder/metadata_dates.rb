@@ -73,6 +73,8 @@ module Nabu
         SHAPES = {
           "africa-pd" => :structured, # P124-1: each work's edition year (the slavistics-pd
           #                             mold); the imprint rides "imprint" — no place claim
+          "aozora" => :structured, # the index's 初出 first publication (class composition),
+          #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
@@ -121,13 +123,17 @@ module Nabu
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
+          "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
+          #                                  writes for NDL-held materials (出版日 envelope)
           "hr-wikisource" => :era_band_key,
           "iedc" => :iso_prefix_key,
           "ig-cyprus" => :structured, # IG XV 1,1: origDate prose, unsigned BCE years and
           #                             centuries (the syllabary's era); place = origPlace
           "itant" => :structured,
           "itkc" => :structured,
-          "ja-wikisource" => :era_band_key,
+          "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
+          #                                               own year, composition class) else the
+          #                                               era-category band (precision era)
           "ko-wikisource-mk" => :structured,
           "kannada-texts" => :structured, # P118-3: the repo README's work dates
           #                                 (941, 953, ca. 1042), composition class
@@ -222,12 +228,16 @@ module Nabu
           "rem" => "orig_place",
           # P118-R4 S5: the IEDC record's toponym LIST (143 of 1,316 docs,
           # censused 2026-10-11) — see #toponym_claim.
-          "iedc" => "toponyms"
+          "iedc" => "toponyms",
+          # The OBI header's PLACE OF ORIGIN (720 of 1,121 files, census
+          # 2026-10-18: "Mt. Tuyin, Bagan", "Hsu-pyu-kun village, Natogyi").
+          "obi-burmese" => "place_of_origin"
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
-        # "s.l" — the imprint world's sine loco (eebo, 1,311 docs).
+        # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
+        # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29).
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
-                    "s.l", "s.l."].freeze
+                    "s.l", "s.l.", "?"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -655,13 +665,16 @@ module Nabu
 
         # A per-document "class" => "composition" (bu-ajami, P124-1: one
         # source dating some items by witness and others by authorship era)
-        # classes its own row — the when_key precedent; any other value, or
-        # none, stays class-less.
+        # classes its own row — the when_key precedent; "edition" likewise
+        # (aozora: the 底本 print year where no first publication is
+        # stated); any other value, or none, stays class-less.
+        STRUCTURED_CLASSES = %w[composition edition].freeze
+
         def structured(meta)
           date = meta["date"]
           return [nil, nil, nil] unless date.is_a?(Hash)
 
-          klass = date["class"] == "composition" ? "composition" : nil
+          klass = STRUCTURED_CLASSES.include?(date["class"]) ? date["class"] : nil
           [date["not_before"], date["not_after"], date["raw"], nil, klass]
         end
 
@@ -770,6 +783,28 @@ module Nabu
         # ja-wikisource (P109-1): the adapter's era-category envelope —
         # {"not_before", "not_after", "raw" => "平安時代"} — rides as an
         # era attribution (precision "era", the cbeta dynasty precedent).
+        # honkoku: the "ndl_catalog" record (Nabu::HonkokuNdlCatalog) — the
+        # NDL item's own 出版日 envelope, the raw labeled with the record it
+        # came from so no reader takes it for honkoku's claim. The material
+        # IS the NDL item transcribed, so the row keeps the artifact class.
+        def ndl_catalog_date(meta)
+          record = meta["ndl_catalog"]
+          date = record.is_a?(Hash) ? record["date"] : nil
+          return [nil, nil, nil] unless date.is_a?(Hash)
+
+          [date["not_before"], date["not_after"], "NDL catalog record (pid #{record['pid']}): #{date['raw']}"]
+        end
+
+        # ja-wikisource: the header's integer "year" — a one-year envelope,
+        # its own labeled class "composition" (the work's year as the wiki
+        # states it) — outranks the coarser era-category band.
+        def header_year_or_era_band(meta)
+          year = meta["year"]
+          return [year, year, year.to_s, nil, "composition"] if year.is_a?(Integer)
+
+          era_band_key(meta)
+        end
+
         def era_band_key(meta)
           band = meta["era_band"]
           return [nil, nil, nil] unless band.is_a?(Hash) && band["not_before"] && band["not_after"]

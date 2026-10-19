@@ -4996,6 +4996,58 @@ class CLITest < Minitest::Test
     end
   end
 
+  # --facet NAME=PATTERN: the generic facet filter — any facet name, at
+  # either grain (document facet rows or passage facet pairs).
+  def tag_dated_passage(config, urn, facet, value)
+    catalog = Nabu::Store.connect(config.catalog_path)
+    passage = catalog[:passages].where(urn: urn).first
+    source_id = catalog[:documents].where(id: passage[:document_id]).get(:source_id)
+    value_id = catalog[:passage_facet_values].insert(source_id: source_id, facet: facet, value: value)
+    catalog[:passage_facets].insert(value_id: value_id, passage_id: passage[:id])
+  ensure
+    catalog&.disconnect
+  end
+
+  def test_search_facet_filters_by_a_passage_facet_and_names_it
+    with_dated_corpus do |config|
+      tag_dated_passage(config, "urn:nabu:ddbdp:c:1", "subject", "인물(人物)")
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --facet subject=인물%]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:c:1", out)
+      refute_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+      assert_match(/facets: subject=인물%/, out)
+    end
+  end
+
+  def test_search_facet_reaches_document_facets_and_repeats
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) do
+        run_cli(%w[search στρατηγος --facet province=pannonia% --facet genre=epitaph])
+      end
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+      refute_match("urn:nabu:ddbdp:c:1", out)
+    end
+  end
+
+  def test_search_facet_alone_is_a_legal_browse
+    with_dated_corpus do |config|
+      tag_dated_passage(config, "urn:nabu:ddbdp:b:1", "subject", "인물(人物)")
+      out, _err, status = with_config(config) { run_cli(%w[search --facet subject=인물(人物)]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out)
+      refute_match("urn:nabu:ddbdp:a:1", out)
+    end
+  end
+
+  def test_search_malformed_facet_exits_one
+    _out, err, status = run_cli(%w[search foo --facet subject])
+    assert_equal 1, status
+    assert_match(/--facet takes NAME=PATTERN/, err)
+  end
+
   def test_search_facets_do_not_compose_with_lemma
     _out, err, status = run_cli(%w[search --lemma λέγω --type epitaph])
     assert_equal 1, status

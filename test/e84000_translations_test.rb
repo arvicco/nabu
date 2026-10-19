@@ -40,12 +40,12 @@ class E84000TranslationsTest < Minitest::Test
     load_e84000!
     result = producer.run("e84000")
 
-    assert_equal 7, result.edges_written,
+    assert_equal 9, result.edges_written,
                  "toh846a + toh761 + toh3156 + the toh1-6 part publication mint one each; " \
-                 "the multi-Toh toh539e,774,1074 mints three"
+                 "the multi-Toh toh539e,774,1074 mints three and toh471,2006 two"
     assert_equal 0, result.edges_refreshed
     assert_equal 0, result.skipped_unmapped
-    assert_equal 7, @journal[:links].count
+    assert_equal 9, @journal[:links].count
     assert_equal ["translation"], @journal[:links].select_map(:kind).uniq
     assert_equal [nil], @journal[:links].select_map(:score).uniq,
                  "a curated translation record is not a mined similarity — no fake number"
@@ -131,7 +131,7 @@ class E84000TranslationsTest < Minitest::Test
                            metadata: { "collection" => "kangyur" })
     result = producer.run("e84000")
 
-    assert_equal 7, result.edges_written
+    assert_equal 9, result.edges_written
     assert_equal 1, result.skipped_unmapped,
                  "a document without toh_base metadata mints nothing and is counted"
   end
@@ -143,7 +143,7 @@ class E84000TranslationsTest < Minitest::Test
                                        "toh_base" => ["toh9999"] })
     result = producer.run("e84000")
 
-    assert_equal 7, result.edges_written,
+    assert_equal 9, result.edges_written,
                  "an unknown collection routes to no derge shelf — never guessed"
     assert_equal 1, result.skipped_unmapped
   end
@@ -153,7 +153,7 @@ class E84000TranslationsTest < Minitest::Test
     @catalog[:documents].where(urn: E_TOH846A).update(withdrawn: true)
     result = producer.run("e84000")
 
-    assert_equal 6, result.edges_written
+    assert_equal 8, result.edges_written
     assert_nil @journal[:links].first(from_urn: E_TOH846A)
   end
 
@@ -189,7 +189,7 @@ class E84000TranslationsTest < Minitest::Test
     ensure
       empty_catalog.disconnect
     end
-    assert_equal 7, @journal[:links].count
+    assert_equal 9, @journal[:links].count
   end
 
   private

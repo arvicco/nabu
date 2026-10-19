@@ -113,15 +113,35 @@ sources:
     dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; P81-1: the
         per-day entry dates also project as passage-grain year runs (NikhEntryDates), and undated
         volumes (prefaces/indexes) gain leaf-derived envelopes"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the 531,956 지명 index tags ride passage annotations + the
+        passage 'place' facet as tag-grain MENTIONS (no upstream ref on any) — where a text was
+        made or found is not what they say, so no axis claim is minted"}
     script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 1,572,270 이름 person tags
+    # (1,352,152 carrying M_ ids → the "sillok" person-index slice, 68,285
+    # persons; `nabu person sillok:M_… | nikh:M_…`), 51,261 서명 books and
+    # 6,382 연호 eras ride passage annotations and the person/book/era
+    # passage facets (facet_map.yml) — mentions with refs, never claims
+    # about the article's own author, date or place.
+    # The per-article 분류 subject classes (413,102 of 414,321 passages,
+    # 216 labels) are a passage-grain facet (facet_map.yml passage_fields
+    # → "subject"), reachable by `search --facet subject=…`; they are
+    # topical classes, not a document kind, so no kind fold rides them.
   sjw:
     lect: {posture: codemap, note: lzh → zho/lit (the sillok/kanripo precedent, P78-2)}
     dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; P81-1: the
         per-day entry dates also project as passage-grain year runs (NikhEntryDates); weather still
         rides annotations raw"}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "the 1,335,483 지명 index tags ride passage annotations + the
+        passage 'place' facet as tag-grain MENTIONS (no upstream ref) — no findspot/creation claim"}
     script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 8,355,291 이름 person and
+    # 140,958 서명 book tags ride passage annotations and the person/book
+    # passage facets. Persons and books are VALUED by upstream's own normalized
+    # @name (its resolution claim, transcribed — variants group in the facet, a
+    # book under its WORK identity; the raw surface rides beside it where it differs; the 미결
+    # unresolved sentinel leaves the surface). No person-key ids (only the cross-database
+    # pid on a few thousand tags) — sjw mints no person authority.
   viet-wikisource:
     kind: {posture: unclassified}
     lect:
@@ -140,8 +160,15 @@ sources:
     dating: {posture: dated, note: "P81-1: the leaf-grain 음/양 machine dates (877–1392, '0877-01-99L0';
         '9999' filler skipped counted) project via NikhEntryDates — document envelopes + passage-grain
         year runs; volume fronts still carry no dateOccured, so the envelope IS the document claim"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the 16,876 지명 index tags (16,862 with NIKH t-ids) ride passage
+        annotations + the passage 'place' facet as tag-grain MENTIONS with nikh: refs — no findspot or
+        creation claim is minted, and NIKH's place ids are not a held gazetteer"}
     script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 66,285 이름 persons (p-ids
+    # → the "goryeosa" person-index slice, 11,505 persons, aliases grouped
+    # under one id), 37,477 관직 offices, 2,666 단체 orgs and 1,092 서명
+    # books ride passage annotations and the person/office/org/book
+    # passage facets, refs verbatim under the shared nikh: namespace.
   goryeosa-jeoryo:
     lect:
       posture: codemap
@@ -149,8 +176,13 @@ sources:
     dating: {posture: dated, note: "P81-1: the per-article 음 machine dates (918–1434) project via
         NikhEntryDates — document envelopes + passage-grain year runs; root fronts still carry only
         coveragePeriod prose, so the envelope IS the document claim"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the 6,965 지명 index tags (6,149 with NIKH t-ids) ride passage
+        annotations + the passage 'place' facet as tag-grain MENTIONS — no findspot/creation claim"}
     script: {posture: implied}
+    # The index markup: 31,997 이름 persons (23,941 with p-ids — goryeosa's
+    # own id space, 6,924 of 6,937 ids shared; this source's own slice,
+    # 6,937 persons), 13,419 관직 offices, 596 단체 orgs, 283 서명 books —
+    # passage annotations + facets as for goryeosa; id-less tags ride bare.
   bibyeonsa:
     lect:
       posture: codemap
@@ -159,9 +191,20 @@ sources:
         '1617-01-00L0') project via NikhEntryDates — document envelopes + passage-grain year runs
         (bb_001's interleaved years stay separate runs, never merged); book fronts still carry only
         the 1959 print-edition data, so the envelope IS the document claim"}
-    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    places: {posture: unplaced, note: "the deposit carries no 지명 index tags at all (census 2026-10-18)"}
     script: {posture: implied}
+    # The index markup is thin here: 998 이름 person tags (923 mentions
+    # once upstream's 75 double-tags fold, 26 persons by their
+    # cross-database pid) ride passage annotations + the person facet; no
+    # person-key ids, so no authority is minted.
   itkc:
+    # The per-article 문체분류 genre classes (37,182 of 37,184 passages, 29
+    # labels: 詩類 23,207 · 書簡類 12,832 · 其他類 · 雜著類 …) are a
+    # passage-grain facet (facet_map.yml passage_fields → "genre"),
+    # reachable by `search --facet genre=…`. They
+    # classify ARTICLES inside a collected-works fascicle, so the
+    # document-grain kind stays unclassified: a fascicle mixes genres and
+    # a kind fold over its articles would misstate the whole.
     kind: {posture: unclassified}
     lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
     dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
@@ -222,7 +265,11 @@ sources:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ojp IS Old Japanese}
     dating: {posture: undatable}
-    places: {posture: unplaced}
+    places: {posture: unplaced, note: "no findspot or origin claim exists — the poems are
+        transmitted texts. The corpus does tag place NAMES inside the poems (pos pln /
+        pln-kke, 3,343 tokens over 910 lemma ids, census 2026-10-18): they ride a
+        per-passage 'places' annotation (surface + lemma id + headword) at token grain —
+        mentions, never a document place"}
     script: {posture: implied}
   rem:
     kind: {posture: unclassified}
@@ -451,8 +498,15 @@ sources:
         precedent) is a NAMED candidate awaiting an owner ruling — not defaulted"}
     dating: {posture: dated, note: "P109-1: the era-category envelope
         (era_band → MetadataDates :era_band_key), precision era — an attribution,
-        never a typed date"}
-    places: {posture: unplaced, note: "no place fields in the cone pages"}
+        never a typed date. The page {{header}} year= (133 pages carry a bare CE
+        year, census 2026-10-18) outranks the band as a one-year envelope of its own
+        class composition (the work's year as the wiki states it); the two non-integer
+        year= values (an era year, a template default) deliberately mint nothing"}
+    places: {posture: unplaced, note: "no DOCUMENT-grain place fields in the cone pages.
+        The 万葉集 poems' [事項] keyword bag names places at poem grain — mentions in
+        the poem, never a findspot or origin claim — riding passage annotations
+        (\"matters\" verbatim; \"places\" only for the closed prefecture/municipal-suffix
+        rule; historic names stay in the verbatim bag until a gazetteer join)"}
     script: {posture: implied}
   zh-wikisource:
     kind: {posture: unclassified}
@@ -773,7 +827,11 @@ sources:
     script: {posture: implied}
   aozora:
     lect: {posture: identity, note: modern Japanese literature}
-    dating: {posture: undatable}
+    dating: {posture: dated, note: "the index's own columns, via MetadataDates :structured —
+        初出 (the work's first publication; Gregorian years, era-only strings converted)
+        dates 10,460 of 17,195 PD works as class composition; the rest fall back to the
+        底本 first-edition year as class edition (6,724); 11 state neither (censused
+        2026-10-18)"}
     places: {posture: unplaced}
     script: {posture: implied}
   kannada-texts:   # P118-3
@@ -961,8 +1019,12 @@ sources:
     lect: {posture: identity, note: jpn declared honest-coarse — the mass is largely Edo
         (jpn:emod once the p108-japonic-stages mint merges and a date/staging story exists);
         kanbun materials ride jpn coarse too, declared}
-    dating: {posture: undatable, note: per-material dates live in free-prose labels only —
-        declared, not silent}
+    dating: {posture: dated, note: "the NDL-held materials only (867 of the 918 whose IIIF
+        manifest is a dl.ndl.go.jp item, census 2026-10-18): the item's NDL catalog record
+        joined from the held ndl-kotenseki census (Nabu::HonkokuNdlCatalog, metadata
+        ndl_catalog) dates the row via its 出版日 envelope, the raw labeled as the NDL
+        record's claim. Every other material's date lives in free-prose labels only —
+        declared, not silent"}
     places: {posture: unplaced}
     script: {posture: implied, note: kuzushiji-transcribed kanji-kana with the platform's
         aozora-like notation verbatim}
@@ -1393,8 +1455,12 @@ sources:
     lect: {posture: identity, note: "obr — the v1.6.0 anchor; the bare code is the claim"}
     dating: {posture: dated, note: "P108-8 retires the pending: every CE year in the
         CS=CE date strings joins the envelope (967 docs banded)"}
-    places: {posture: pending, note: "candidate: PLACE OF ORIGIN / CURRENT LOCATION
-        header fields ride document metadata verbatim where present"}
+    places: {posture: named, note: "the header PLACE OF ORIGIN (720 of 1,121 files, census
+        2026-10-18) rides metadata place_of_origin verbatim (bilingual values split like
+        TITLE) and feeds the place lane as a named findspot claim via MetadataDates; the
+        bare '?' (29) mints no place. CURRENT LOCATION (a PRESENT holding place, 'in situ'
+        ×211) and the REFERENCES concordance (BED ids lifted to bed_ids) ride metadata
+        only; no gazetteer refs — a Myanmar place authority is the open gap"}
     script: {posture: qualified, note: "Myanmar-script Unicode surface (~mymr) with a
         Latin transliteration lane riding annotations"}
   dharma-javanese-texts:

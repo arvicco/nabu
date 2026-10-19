@@ -406,11 +406,13 @@ class DerivationFingerprintTest < Minitest::Test
     assert_includes Nabu::DerivationFingerprint::EXCLUDED_DIRS, "store/timeline_builder"
     assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "store/timeline_builder.rb"
     assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "store/facet_builder.rb"
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "store/passage_facet_builder.rb"
   end
 
   def test_the_builders_digest_censuses_every_carved_file
     files = Nabu::DerivationFingerprint.builder_files
-    %w[timeline_builder.rb facet_builder.rb metadata_dates.rb silver_dates.rb date_shelf.rb].each do |basename|
+    %w[timeline_builder.rb facet_builder.rb passage_facet_builder.rb metadata_dates.rb silver_dates.rb
+       date_shelf.rb].each do |basename|
       assert files.any? { |file| file.end_with?(basename) },
              "#{basename} must be inside the covering builders digest"
     end

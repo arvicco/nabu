@@ -18,4 +18,13 @@ files:
     reason: the adapter's derived census shape, one row cut from the public-domain open-dataset xlsx — re-cut per README
     copied: "2026-09-29"
     whole: false
-    trim: header + the PID 2532153 row
+    trim: header + the PID 2532153 and 2541107 rows, re-derived 2026-10-18 with the series/extent columns
+  - path: books/2541107.json
+    url: https://lab.ndl.go.jp/dl/api/book/fulltext-json/2541107
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the box's canonical crawl (the granted bulk route) — 古今武者揃, a
+      two-author 赤本 ("夷福山人 作||広重 画") with a series title and an extent
+    copied: "2026-10-18"
+    whole: true
+    trim: none

@@ -111,7 +111,16 @@ module Nabu
             "ref" => record.ref, "title_translit" => record.title_translit,
             "source" => record.source, "date" => record.date,
             "donor" => record.donor, "face" => record.face,
-            "sections" => (record.sections.empty? ? nil : record.sections)
+            "sections" => (record.sections.empty? ? nil : record.sections),
+            # PLACE OF ORIGIN → the place lane (MetadataDates place key; the
+            # bare "?" mints nothing there); the present location, references
+            # and subject are metadata, the subject also a facet (facet_map).
+            "place_of_origin" => record.origin, "place_of_origin_translit" => record.origin_translit,
+            "current_location" => record.location, "current_location_translit" => record.location_translit,
+            "references" => record.references,
+            "bed_ids" => (record.bed_ids.empty? ? nil : record.bed_ids),
+            "reference_number" => record.reference_number,
+            "subject" => record.subject, "subject_translit" => record.subject_translit
           }.compact
         )
         record.lines.each_with_index do |line, index|

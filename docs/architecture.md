@@ -245,6 +245,38 @@ document_facets(document_id, facet, value, ...)
    -- whose axis-shaped fields already ride the catalog facets without
    -- an adapter change or a canonical re-parse (okhc's 1.2M corpus
    -- labels, seal, rsti, coptic-scriptorium).
+passage_facet_values(id, source_id, facet, value, ref)
+passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, passage_id)
+   -- Migration 045: the passage-grain facet surface — claims upstream
+   -- makes per ARTICLE (sillok's 분류 subject classes, ITKC's 문체분류
+   -- genre classes; designed for per-passage entity tags — person/place/
+   -- book names with authority refs — at tens of millions of rows).
+   -- Dictionary-encoded: passage_facet_values holds each distinct
+   -- (source, facet, value, ref) once (sillok's 899,669 pairs fold to
+   -- 216 values); passage_facets is two integers per tag, its primary
+   -- key the filter index. Written by Store::PassageFacetBuilder from the
+   -- loaded passages' annotations_json under config/facet_map.yml's
+   -- per-source passage_fields (same FacetMap, sibling key to fields):
+   -- strings, numbers, arrays, and {"value", "ref"} entity objects,
+   -- verbatim. Wholesale per source (values are source-scoped, so a
+   -- slice drops by value range), riding both rebuild flavors,
+   -- builders:refresh and the post-load sync refresh. Read by the shared
+   -- facet filter: a facet NAME is one axis across both grains, so
+   -- `search --facet NAME=PATTERN` (and --type for genre) admits the
+   -- document facet rows OR the passage pairs carrying it — the pattern
+   -- scans only the value dictionary (value or ref), the pairs answer by
+   -- primary key.
+   -- First entity producer: the NIKH index markup (NikhXmlParser,
+   -- opt-in entities: per adapter — sillok/sjw/goryeosa/goryeosa-jeoryo/
+   -- bibyeonsa): each typed <index> tag in a leaf's paragraphs becomes a
+   -- compact {"value", "ref"?, "surface"?} record under its kind
+   -- key (persons/places/books/eras/offices/orgs — the DTD's closed
+   -- p.index vocabulary mapped whole), refs "nikh:" + upstream's own id;
+   -- one record per distinct record per passage (repeats live in the
+   -- text); sjw persons and books are valued by upstream's normalized @name. Leaf
+   -- text stays byte-identical. The id-bearing sources also derive
+   -- person-index slices from those records (Nabu::NikhPersons: authority
+   -- = source slug; `nabu person nikh:<id>` fans out across them).
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
