@@ -126,7 +126,7 @@ module Store
                    "version https://git-lfs.github.com/spec/v1\noid sha256:#{'ab' * 32}\nsize 9\n")
         counts = build!(dir)
         assert_equal({ documents: 0, undated: 0, invalid: 0,
-                       regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0, regnal_us2_double: 0,
+                       regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0,
                        regnal_broken_year: 0, regnal_slash: 0,
                        accounting: 0, accounting_unresolved: 0, origin: 0, origin_unresolved: 0 }, counts)
       end
@@ -137,13 +137,14 @@ module Store
     # the document as one envelope, precision "accounting-period" — it
     # outranks the FIRST dates_referenced entry, which on an account is
     # only one of the dates the span covers. The real fixture row:
-    # Ibbi-Suen.01 (2028 BC) to Ibbi-Suen.02 "(us2 year)" (2026 BC).
+    # Ibbi-Suen.01 (2028 BC) to Ibbi-Suen.02 "(us2 year)" — the mark read
+    # as written, year 2 (2027 BC).
     def test_a_resolving_accounting_period_bands_the_whole_account
       make_document("urn:nabu:cdli:p120698")
       counts = build!
       row = timeline_for("urn:nabu:cdli:p120698")
       assert_equal(-2028, row.fetch(:not_before))
-      assert_equal(-2026, row.fetch(:not_after))
+      assert_equal(-2027, row.fetch(:not_after))
       assert_equal "accounting-period", row.fetch(:precision)
       assert_equal "Ibbi-Suen.01.02.00 to Ibbi-Suen.02.02.00 (us2 year)  (Reichskalender)", row.fetch(:date_raw)
       assert_nil row.fetch(:date_class), "the account's own date — the artifact class"
@@ -151,24 +152,24 @@ module Store
       assert_equal 1, counts[:accounting]
     end
 
-    # Censused shapes: cross-reign spans band across both reigns; anything
-    # the ruled table cannot answer at BOTH ends (an unruled ruler, a
-    # ruler-less filler span, an out-of-range year, the "(us2-us2 year)"
-    # second-year-after naming the ruled +1 shift does not cover) is
-    # unresolved — counted, and the document falls back to its
-    # dates_referenced / period dating, never a half-guessed envelope.
+    # Censused shapes: cross-reign spans band across both reigns; the us2
+    # marks read as written (the year number IS the year); anything the
+    # ruled table cannot answer at BOTH ends (an unruled ruler, a
+    # ruler-less filler span, an out-of-range year) is unresolved —
+    # counted, and the document falls back to its dates_referenced /
+    # period dating, never a half-guessed envelope.
     def test_accounting_periods_resolve_only_where_both_ends_are_ruled
       rows = {
         "urn:nabu:cdli:p920001" => ["Šulgi.48.00.00 to Amar-Suen.01.00.00", "",
                                     [-2047, -2046, "accounting-period"]],
         "urn:nabu:cdli:p920002" => ["Šulgi.32.13.00 (intercalated) to Šulgi.33.01.00 (us2 year)", "",
-                                    [-2063, -2061, "accounting-period"]],
+                                    [-2063, -2062, "accounting-period"]],
         "urn:nabu:cdli:p920003" => ["Lugalanda.03.00.00 to Lugalanda.04.00.00", "",
                                     [-2500, -2340, "period"]],
         "urn:nabu:cdli:p920004" => ["--.--.01.00 to --.--.12.00", "Šulgi.44.02.06",
                                     [-2051, -2051, "regnal-year"]],
         "urn:nabu:cdli:p920005" => ["Šulgi.48.03.00 (us2-us2 year) to Šulgi.48.04.00 (us2-us2 year)",
-                                    "Šulgi.48.03.00 (us2-us2 year)", [-2100, -2000, "period"]],
+                                    "Šulgi.48.03.00 (us2-us2 year)", [-2047, -2047, "accounting-period"]],
         "urn:nabu:cdli:p920006" => ["Amar-Suen.12.00.00 to Amar-Suen.13.00.00", "",
                                     [-2100, -2000, "period"]]
       }
@@ -184,9 +185,9 @@ module Store
         end
         rows.each_key { |urn| make_document(urn) }
         counts = build!(dir)
-        assert_equal 2, counts[:accounting]
-        assert_equal 4, counts[:accounting_unresolved]
-        assert_equal 1, counts[:regnal_us2_double], "the dates_referenced twin is not guessed either"
+        assert_equal 3, counts[:accounting]
+        assert_equal 3, counts[:accounting_unresolved]
+        refute counts.key?(:regnal_us2_double), "the double mark is no longer a refusal class"
         rows.each do |urn, (_account, _dated, expected)|
           row = timeline_for(urn)
           assert_equal expected, row.values_at(:not_before, :not_after, :precision), urn
@@ -203,7 +204,7 @@ module Store
         "urn:nabu:cdli:p910001" => ["Šulgi.44.02.06", "Ur III (ca. 2100-2000 BC)",
                                     [-2051, -2051, "regnal-year", "Šulgi.44.02.06"]],
         "urn:nabu:cdli:p910002" => ["Šulgi.47.06.00 (us2 year)", "Ur III (ca. 2100-2000 BC)",
-                                    [-2047, -2047, "regnal-year", "Šulgi.47.06.00 (us2 year)"]],
+                                    [-2048, -2048, "regnal-year", "Šulgi.47.06.00 (us2 year)"]],
         "urn:nabu:cdli:p910003" => ["Amar-Suen.00.00.00", "Ur III (ca. 2100-2000 BC)",
                                     [-2046, -2038, "regnal-reign", "Amar-Suen.00.00.00"]],
         "urn:nabu:cdli:p910004" => ["Lugalanda.04.00.00", "ED IIIb (ca. 2500-2340 BC)",
@@ -260,10 +261,12 @@ module Store
     # resolve nothing, ABOVE the period band. Real catalog strings.
     def test_date_of_origin_dates_an_account_whose_explicit_datings_resolve_nothing
       rows = {
+        # P227461: the account opens under an ED III dynast the table
+        # deliberately leaves unruled; only its closing date resolves.
         "urn:nabu:cdli:p930001" => {
-          "date_of_origin" => "Šū-Suen.07.03.00",
-          "dates_referenced" => "Šū-Suen.06.02.00 (us2-us2 year), Šū-Suen.07.03.00",
-          "accounting_period" => "Šū-Suen.06.02.00 (us2-us2 year) to Šū-Suen.07.03.00",
+          "date_of_origin" => "Amar-Suen.00.00.00",
+          "dates_referenced" => "Lugalkigenedudu.00.00.00, Amar-Suen.00.00.00",
+          "accounting_period" => "Lugalkigenedudu.00.00.00 to Amar-Suen.00.00.00",
           "period" => "Ur III (ca. 2100-2000 BC)"
         },
         "urn:nabu:cdli:p930002" => {
@@ -289,7 +292,7 @@ module Store
         assert_equal 2, counts[:origin]
         assert_equal 1, counts[:regnal], "only the explicit dates_referenced hit counts regnal"
         expected = {
-          "urn:nabu:cdli:p930001" => [-2031, -2031, "regnal-year", "Šū-Suen.07.03.00"],
+          "urn:nabu:cdli:p930001" => [-2046, -2038, "regnal-reign", "Amar-Suen.00.00.00"],
           "urn:nabu:cdli:p930002" => [-2084, -2084, "regnal-year", "Šulgi.11.00.00 ?"],
           "urn:nabu:cdli:p930003" => [-2046, -2046, "regnal-year", "Amar-Suen.01.04.00"],
           "urn:nabu:cdli:p930004" => [-2100, -2000, "period", "Ur III (ca. 2100-2000 BC)"]
@@ -336,13 +339,15 @@ module Store
       end
     end
 
-    # The "(us2-us2 year)" mark is NOT a +2 shift: CDLI's own year-name
-    # tables number the "second year after" names under their canonical
-    # year (Šulgi 41 and 48, Šū-Suen 6, Ibbi-Suen 8 — the years the mark
-    # concentrates on in the catalog). It keeps falling back to the period
-    # band, on the real strings — and a date_of_origin that merely restates
-    # dates_referenced is never re-read (no double census).
-    def test_the_double_us2_mark_never_converts_and_a_restating_origin_is_not_reread
+    # The "(us2-us2 year)" mark is read as written (owner-ruled
+    # 2026-10-20): CDLI's own year-name tables number the "second year
+    # after" names under their canonical year (Šulgi 41 and 48, Šū-Suen 6,
+    # Ibbi-Suen 8 — the years the mark concentrates on in the catalog), so
+    # the year number IS the year. On the real strings — and a
+    # date_of_origin that merely restates dates_referenced is never re-read
+    # (no double census); a DISTINCT one is (p950002, whose first entry is
+    # an unruled ED III dynast).
+    def test_the_double_us2_mark_reads_as_written_and_a_restating_origin_is_not_reread
       rows = {
         "urn:nabu:cdli:p950001" => {
           "date_of_origin" => "Šulgi.41.09.00 (us2-us2 year)",
@@ -356,12 +361,15 @@ module Store
         }
       }
       build_rows(rows, %w[date_of_origin dates_referenced period provenience]) do |counts|
-        assert_equal 0, counts[:origin]
-        assert_equal 1, counts[:origin_unresolved], "only the distinct date_of_origin is read"
-        assert_equal 1, counts[:regnal_us2_double], "the regnal census counts dates_referenced only"
-        rows.each_key do |urn|
-          assert_equal [-2100, -2000, "period"], timeline_for(urn).values_at(:not_before, :not_after, :precision)
-        end
+        assert_equal 1, counts[:origin], "only the distinct date_of_origin is read"
+        assert_equal 0, counts[:origin_unresolved]
+        assert_equal 1, counts[:regnal], "the regnal census counts dates_referenced only"
+        assert_equal [-2054, -2054, "regnal-year"],
+                     timeline_for("urn:nabu:cdli:p950001").values_at(:not_before, :not_after, :precision),
+                     "Šulgi 41 = 2054 BC"
+        assert_equal [-2047, -2047, "regnal-year"],
+                     timeline_for("urn:nabu:cdli:p950002").values_at(:not_before, :not_after, :precision),
+                     "Šulgi 48 = 2047 BC, read through date_of_origin"
       end
     end
   end

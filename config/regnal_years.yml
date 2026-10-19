@@ -15,8 +15,10 @@
 # Keys are cdli's dates_referenced ruler spellings VERBATIM. accession =
 # the ruler's YEAR 1 as a signed year (negative = BCE, the catalog
 # convention: 2094 BC → -2094). reign = the count of numbered regnal
-# years. Year YY maps to accession + (YY - 1); "(us2 year)" shifts +1;
-# YY = 00 (year unknown) maps to the whole-reign span.
+# years. Year YY maps to accession + (YY - 1); the "(us2 year)" and
+# "(us2-us2 year)" year-name marks read as written, no shift (owner-ruled
+# 2026-10-20 — CDLI's own year-name tables number those formulae under
+# their canonical years); YY = 00 (year unknown) maps to the whole-reign span.
 #
 # DELIBERATELY EXCLUDED (censused as unruled, never guessed):
 # - ED III Lagash (Lugalanda, Urukagina_l): absolute anchoring is ±many

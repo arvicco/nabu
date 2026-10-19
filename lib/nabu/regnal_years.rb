@@ -41,11 +41,11 @@ module Nabu
     def size = @rows.size
 
     # The absolute span for +ruler+'s year +year_number+:
-    #   [y, y]            a numbered year (accession + YY - 1; us2 +1)
+    #   [y, y]            a numbered year (accession + YY - 1)
     #   [acc, last]       YY = 0 — year unknown, the whole-reign span
     #   :unruled          the ruler has no table row
     #   :out_of_range     YY exceeds the reign — a data error, censused
-    def span(ruler, year_number, us2: false)
+    def span(ruler, year_number)
       entry = @rows[ruler.to_s]
       return :unruled if entry.nil?
 
@@ -53,7 +53,7 @@ module Nabu
       return [accession, accession + entry[:reign] - 1] if year_number.zero?
       return :out_of_range if year_number > entry[:reign]
 
-      year = accession + (year_number - 1) + (us2 ? 1 : 0)
+      year = accession + (year_number - 1)
       [year, year]
     end
   end
