@@ -555,6 +555,12 @@ module Nabu
       # P122-1: the armed silver-date lane re-projects behind the timeline.
       progress&.stage("silver dates")
       Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
+      # The timeline rebuild just dropped every document_axes row, the
+      # nabu-places registry matches included — re-project them here like
+      # the full path does, or they stay silently absent until the next
+      # full rebuild or builders:refresh.
+      progress&.stage("place apply")
+      Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir)
       # The timeline rebuild drops EVERY axis row, this lane included —
       # before 2026-10-13 only a full rebuild restored it.
       progress&.stage("artifact scripts")
