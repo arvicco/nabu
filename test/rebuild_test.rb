@@ -259,7 +259,9 @@ class RebuildTest < Minitest::Test
     db = Nabu::Store.connect(catalog_path)
     passage_idx = db.indexes(:passages).values.map { |i| i[:columns] }
     provenance_idx = db.indexes(:provenance).values.map { |i| i[:columns] }
-    assert_includes passage_idx, [:document_id]
+    refute_includes passage_idx, [:document_id],
+                    "migration 048 retired the single-column index; the rebuild must not resurrect it"
+    assert_includes passage_idx, %i[document_id sequence]
     assert_includes passage_idx, [:language]
     assert_includes provenance_idx, [:passage_id]
     assert_includes provenance_idx, [:document_id]
