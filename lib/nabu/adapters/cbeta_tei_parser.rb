@@ -110,7 +110,7 @@ module Nabu
     #
     # Nokogiri::XML::Reader only: T ships 27 files over the house 5 MB DOM
     # limit (max 17.2 MB, T25n1509), X ships 7 (max 9.0 MB). One pass.
-    class CbetaTeiParser
+    class CbetaTeiParser < StreamingTeiParser
       # CBETA's T/X/K/J text is Literary Chinese (headers tag zh-Hant, the
       # script; the language is lzh — the SuttaCentral Āgama precedent).
       LANGUAGE = "lzh"
@@ -194,35 +194,7 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:, canon:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, canon: canon).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
-      # The house collision tolerance: duplicates disambiguate
-      # deterministically in document order, never quarantine.
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          count = seen[unit.citation] += 1
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
+      def extraction_class = Extraction
 
       def build_document(extraction, units, urn:, title:, path:)
         language = self.class.language_for(extraction.canon_siglum)
@@ -336,16 +308,11 @@ module Nabu
       # The single-pass Reader state machine: header phase (title, idno,
       # availability gate, witness list), body phase (print-line units),
       # done at </body> — <back> never read.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         # Body subtrees whose text never reaches the reading line. <note> is
         # special-cased (inline notes ride annotations); <mulu> is cb:mulu.
         DROPPED_ELEMENTS = %w[note rdg mulu].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no, :canon_siglum,
                              :bylines, :anchors, :apparatus)
@@ -353,8 +320,7 @@ module Nabu
         attr_reader :title, :author, :witnesses, :canon, :vol, :no
 
         def initialize(reader:, path:, canon:)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @expected_canon = canon
           @title = nil
           @author = nil
@@ -399,14 +365,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -680,14 +638,6 @@ module Nabu
 
         def drop_subtree(node)
           @drop_depth = node.depth unless node.empty_element?
-        end
-
-        def dropping?
-          !@drop_depth.nil?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :Extraction
