@@ -36,7 +36,11 @@ module Nabu
       # out-of-range years fall back to the period band, censused.
       # Above both sits the accounting_period span (#extract_accounting):
       # where an account's regnal span resolves at both ends it is the
-      # document's envelope, precision "accounting-period".
+      # document's envelope, precision "accounting-period". Below the
+      # explicit datings and above the period band sits date_of_origin
+      # (#extract_origin), the tablet's own date, read through the same
+      # table. Precedence: accounting_period > dates_referenced (first
+      # entry) > date_of_origin > period band.
       #
       # Place: provenience verbatim (NFC), except the no-place shapes
       # ("uncertain (mod. uncertain)", "unknown", …). No gazetteer here —
@@ -60,8 +64,20 @@ module Nabu
 
         # A regnal dating's leading "Ruler.YY." — the ruler segment must
         # carry a letter (placeholder shapes like "00." and "--." never
-        # reach the table).
-        REGNAL = /\A([^.]*\p{L}[^.]*)\.(\d{1,2})\./
+        # reach the table). The year is a number (a "?" on it is doubt,
+        # riding date_raw) or a BROKEN year: CDLI's date scheme gives
+        # "components which are broken ... with double hyphen ('--')"
+        # (S. Tinney, "Date Specifications for CDLI/Oracc", Oracc 2019);
+        # the catalog also writes "xx". A broken year under a ruled ruler is
+        # still that reign — the YY=00 whole-reign span.
+        REGNAL = /\A([^.]*\p{L}[^.]*)\.(\d{1,2}|--|xx)\??\./
+        BROKEN_YEAR = /\A(?:--|xx)\z/
+        # The Achaemenid-lane "Ruler.DD/MONTH/YY" shape (day / roman month /
+        # regnal year: "Darius1.18/XI/6", "Artaxerxes1.17/VII/41" — the
+        # 41-year reign fixes the order). Only a numeric year converts; the
+        # accession year ("Darius2.29/X/acc") and doubted/compound forms
+        # ("Darius1.24/27(?)") stay unresolved.
+        SLASH_REGNAL = %r{\A([^./]*\p{L}[^./]*)\.\d{1,2}/[IVX]+/(\d{1,2})(?=\s|\?|\z)}
         US2_SUFFIX = /\(us2 year\)/
 
         module_function
@@ -75,7 +91,8 @@ module Nabu
         def build(catalog:, canonical_dir:)
           counts = { documents: 0, undated: 0, invalid: 0,
                      regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0, regnal_us2_double: 0,
-                     accounting: 0, accounting_unresolved: 0 }
+                     regnal_broken_year: 0, regnal_slash: 0,
+                     accounting: 0, accounting_unresolved: 0, origin: 0, origin_unresolved: 0 }
           path = File.join(canonical_dir, CATALOG_RELPATH)
           return counts unless File.file?(path) && !LfsFetch.pointer?(path)
 
@@ -99,8 +116,10 @@ module Nabu
         end
 
         def insert_row(axes, document_id, row, counts)
+          dates_referenced = row["dates_referenced"].to_s.strip
           date = extract_accounting(row["accounting_period"].to_s.strip, counts) ||
-                 extract_regnal(row["dates_referenced"].to_s.strip, counts) ||
+                 extract_regnal(dates_referenced, counts) ||
+                 extract_origin(row["date_of_origin"].to_s.strip, dates_referenced, counts) ||
                  extract_period(row["period"].to_s.strip, counts)
           counts[:undated] += 1 if date.nil?
           place = extract_place(row["provenience"].to_s)
@@ -122,7 +141,7 @@ module Nabu
           return nil if value.empty?
 
           first = value.split(",").first.to_s.strip
-          return nil if (m = REGNAL.match(first)).nil?
+          return nil if (parsed = parse_regnal(first)).nil?
 
           span = regnal_span(first)
           case span
@@ -131,11 +150,34 @@ module Nabu
           when :us2_double then counts[:regnal_us2_double] += 1
           when Array
             counts[:regnal] += 1
+            counts[:regnal_broken_year] += 1 if parsed[:shape] == :broken
+            counts[:regnal_slash] += 1 if parsed[:shape] == :slash
             return { not_before: span[0], not_after: span[1],
-                     precision: m[2].to_i.zero? ? "regnal-reign" : "regnal-year",
+                     precision: parsed[:year].zero? ? "regnal-reign" : "regnal-year",
                      date_raw: value }
           end
           nil
+        end
+
+        # date_of_origin (catalog census 2026-10-19: 147,383 rows) is the
+        # tablet's own date. On 142,921 rows it restates dates_referenced
+        # verbatim; on the other 4,462 — every one an account carrying an
+        # accounting_period — it is the LAST entry of the dates_referenced
+        # list (the date the account closed). Its shapes are therefore the
+        # dates_referenced shapes (regnal strings, "00.00.00.00" /
+        # "--.--.--.--" filler, Mari/Isin letter-years, Seleucid
+        # "HE.SE.080.09.07", Old Assyrian eponyms "085: Szarru-ken1.…"), read
+        # through the same ruled table. It ranks BELOW the explicit datings
+        # (accounting_period, the first dates_referenced entry) and above
+        # the period band; a value that merely restates dates_referenced is
+        # never re-read (it would only double the regnal census). Hits count
+        # +origin+, distinct values that resolve nothing +origin_unresolved+.
+        def extract_origin(value, dates_referenced, counts)
+          return nil if value.empty? || value == dates_referenced
+
+          date = extract_regnal(value, Hash.new(0))
+          counts[date ? :origin : :origin_unresolved] += 1
+          date
         end
 
         # The accounting_period column (catalog census 2026-10-19: 4,468
@@ -167,19 +209,43 @@ module Nabu
             precision: "accounting-period", date_raw: value }
         end
 
-        # One "Ruler.YY.MM.DD" dating → the ruled table's span, or a reason
-        # symbol (:unparsed, :unruled, :out_of_range, :us2_double). "(us2
-        # year)" — the year after — is the ruled +1 shift; the "(us2-us2
-        # year)" second-year-after naming is NOT covered by that ruling, so
-        # it converts nothing.
+        # One "Ruler.YY.MM.DD" (or slash-shaped) dating → the ruled table's
+        # span, or a reason symbol (:unparsed, :unruled, :out_of_range,
+        # :us2_double). "(us2 year)" is the ruled +1 shift.
+        #
+        # "(us2-us2 year)" (1,415 first entries) is NOT a +2 shift. CDLI's
+        # own year-name tables (cdli.ox.ac.uk/wiki, year_names_shulgi /
+        # year_names_shu-suen / year_names_ibbi-suen, read 2026-10-19) list
+        # the "Second year after the year: …" names (mu us2-sa … mu
+        # us2-sa-a-bi) UNDER their canonical year numbers — Šulgi 41 and 48,
+        # Šū-Suen 6, Ibbi-Suen 8 — and the catalog's double mark sits on
+        # exactly those numbers (Šulgi.48 ×527, Šulgi.41 ×468, Šū-Suen.06
+        # ×306, Ibbi-Suen.08 ×89 of the entries carrying it). The mark
+        # records the year-name formula of an already-numbered year. The
+        # same tables number the single "Year after the year" names the
+        # same way (Šulgi 47 = "mu us2-sa ki-maš ba-hul", where "(us2
+        # year)" sits ×1,880), which contradicts the ruled +1 reading; the
+        # double mark therefore converts nothing here until that ruling is
+        # revisited — the period band stays the honest fallback.
         US2_DOUBLE = /us2-us2/
 
         def regnal_span(dating)
-          return :unparsed if (m = REGNAL.match(dating)).nil?
+          return :unparsed if (parsed = parse_regnal(dating)).nil?
           return :unparsed if (table = Nabu::RegnalYears.default).nil?
           return :us2_double if dating.match?(US2_DOUBLE)
 
-          table.span(m[1], m[2].to_i, us2: dating.match?(US2_SUFFIX))
+          table.span(parsed[:ruler], parsed[:year], us2: dating.match?(US2_SUFFIX))
+        end
+
+        # The ruler + numeric year (0 = unknown or broken — the whole reign)
+        # and the shape that carried them, or nil.
+        def parse_regnal(dating)
+          if (m = REGNAL.match(dating))
+            broken = m[2].match?(BROKEN_YEAR)
+            { ruler: m[1], year: broken ? 0 : m[2].to_i, shape: broken ? :broken : :plain }
+          elsif (m = SLASH_REGNAL.match(dating))
+            { ruler: m[1], year: m[2].to_i, shape: :slash }
+          end
         end
 
         # The period string's own year envelope (module note), or nil.
