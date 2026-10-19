@@ -132,7 +132,11 @@ module Nabu
           end
         end
         accrete_document_language_notes(document)
-      rescue Sequel::DatabaseError => e
+      rescue Sequel::ConstraintViolation => e
+        # Constraint-shaped failures only (the passage Loader's rule): a
+        # file whose content SQLite refuses rolls back and quarantines; a
+        # busy timeout, full disk or I/O error is the environment's and
+        # aborts the load instead of being laundered into a quarantine.
         counts[:errored] += 1
         journal(event: "quarantined", params: { "path" => document.canonical_path, "error" => e.message })
       end

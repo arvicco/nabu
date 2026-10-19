@@ -8,6 +8,7 @@ require "json"
 module Store
   class LoaderTest < Minitest::Test
     include StoreTestDB
+    include BusyCatalog
 
     FIXTURES = File.expand_path("../fixtures/test_adapter", __dir__)
 
@@ -922,6 +923,31 @@ module Store
       assert_equal 1, events.size
       params = JSON.parse(events.first.params_json)
       assert_equal doc_urn("clash"), params.fetch("urn")
+    end
+
+    # Only constraint-shaped failures are document-shaped. A busy catalog
+    # (another writer outlasting the busy timeout) is operational trouble:
+    # it must ABORT the load loudly — never quarantine the document, never
+    # let the batch run on and report success.
+    def test_a_busy_catalog_aborts_the_load_instead_of_quarantining
+      busy_once!(@db, /INSERT INTO `passages`/)
+
+      error = assert_raises(Sequel::DatabaseError) { @loader.load([alpha, beta]) }
+
+      assert_match(/database is locked/, error.message)
+      assert_empty provenance_events(event: "quarantined"), "busy is not a quarantine"
+      assert_nil doc_row("alpha"), "the failing document rolled back"
+      assert_nil doc_row("beta"), "the load stopped: no sibling ran on past the failure"
+    end
+
+    def test_a_busy_catalog_aborts_a_batched_load_too
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 10)
+      busy_once!(@db, /INSERT INTO `passages`/)
+
+      assert_raises(Sequel::DatabaseError) { batched.load([alpha, beta]) }
+
+      assert_empty provenance_events(event: "quarantined")
+      assert_equal 0, Nabu::Store::Document.count, "the whole batch transaction rolled back"
     end
 
     # -- rebuild batch transactions (P36-2) ----------------------------------
