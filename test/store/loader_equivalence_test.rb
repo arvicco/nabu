@@ -32,16 +32,26 @@ module Store
     # differ between runs (a version bump must not trip the pin).
     VOLATILE = %i[at updated_at withdrawn_at tool_version].freeze
 
-    FIXTURE_DIGEST = "453bd8d969cbdf0abd37d691501a3de5e6053746d115a7cc6377f0c9a428265a"
+    FIXTURE_DIGEST = "dfdd7367728320152fdecdc95af959eb7849b28534d710d3709d063dbbe010b8"
     WALK_DIGEST = "cf74dd259cfabc229a7828f6e8dc1c662aaf6eba4bb06dd3221af04eefe0fbcb"
 
     def test_fixture_corpora_load_byte_identically_on_both_grains
-      assert_equal FIXTURE_DIGEST, fixture_digest(tx_batch: nil)
-      assert_equal FIXTURE_DIGEST, fixture_digest(tx_batch: 3)
+      per_row = fixture_digest(tx_batch: nil)
+      assert_equal per_row, fixture_digest(tx_batch: 3),
+                   "both transaction grains must persist byte-identically (shas included)"
+      assert_equal FIXTURE_DIGEST, per_row.portable,
+                   "the portable pin (document shas masked — they hash canonical_path, " \
+                   "which is absolute, so the raw digest differs per checkout)"
     end
 
     def test_revision_walk_persists_byte_identically
-      assert_equal WALK_DIGEST, walk_digest
+      # Synthetic documents use fixed /canonical/ paths, so the full
+      # digest is already portable here.
+      assert_equal WALK_DIGEST, walk_digest.full
+    end
+
+    EquivalenceDigest = Data.define(:full, :portable) do
+      def ==(other) = other.is_a?(self.class) ? super : full == other
     end
 
     private
@@ -115,7 +125,20 @@ module Store
         "revisions" => rows(ledger[:revisions]),
         "reports" => reports.map { |report| report_payload(report) }
       }
-      Digest::SHA256.hexdigest(JSON.generate(payload))
+      # Two environment leaks, two treatments. (1) canonical_path and
+      # report strings embed the checkout's absolute fixture paths —
+      # normalized textually. (2) DOCUMENT shas hash canonical_path
+      # (ContentHash.document), so they differ per checkout IRREDUCIBLY:
+      # the full digest (shas included) backs the env-local grain
+      # comparison, and the PORTABLE digest — document shas masked by a
+      # stable per-document token — backs the cross-checkout pin.
+      # Passage shas hash text+annotations only and stay in both.
+      serialized = JSON.generate(payload).gsub(FIXTURES, "<fixtures>")
+      doc_shas = db[:documents].order(:id).select_map(:content_sha256)
+      portable = serialized.dup
+      doc_shas.each_with_index { |sha, i| portable = portable.gsub(sha, "docsha:#{i}") }
+      EquivalenceDigest.new(full: Digest::SHA256.hexdigest(serialized),
+                            portable: Digest::SHA256.hexdigest(portable))
     end
 
     def rows(dataset)
