@@ -45,13 +45,26 @@ WILL fetch different bytes and must re-record them.
   fixture), 𠀋 2000B (the UPPERCASE plane-2 quirk pinned in a test).
   Recipe: keep bytes up to the first `<character>`, then the 10 matching
   `<character>…</character>` blocks verbatim, then `</kanjidic2>`.
-- `JMdict_e.xml` (6 entries): 1000000 ヽ (kana-only, `&unc;` entity),
+- `JMdict_e.xml` (12 entries; the first 6 from the 07-19 build): 1000000 ヽ (kana-only, `&unc;` entity),
   1150410 愛, 1438210 天, 1366410 人, 1318970 辞書, 1358280 食べる
   (multi-sense verb). Recipe: keep the prolog + full DOCTYPE internal
   subset verbatim, then `<JMdict>`, the upstream `<!-- JMdict created:
   2026-07-19 -->` comment (relocated from the file tail — the one
   structural liberty), the 6 `<entry>…</entry>` blocks verbatim,
   `</JMdict>`.
+- **Label/loan additions (re-cut 2026-10-19 from the box's
+  `canonical/edrdg/jmdict/JMdict_e.gz`, build `JMdict created:
+  2026-07-29`, sha256 `d99a7328…de1586`):** 6 more `<entry>` blocks,
+  verbatim, appended before `</JMdict>` (the 07-19 DOCTYPE defines every
+  entity they use) — the sense-label and loanword-source shapes the
+  parser mines: 1667700 違警罪 (`&law;` field + `&hist;` misc), 2291580
+  カルク (`&comp;` + a WASEI `<lsource ls_wasei="y">calc` with no
+  xml:lang — the DTD default eng), 2853279 クラーク (`&hist;` + an EMPTY
+  `<lsource xml:lang="rus"/>`), 2860641 プロ (`&med;` + `<lsource
+  xml:lang="ger">Pro(zent)`), 2860645 パイシュー (`&food;` + two
+  `ls_type="part"` sources, eng pie + fre choux), 2863934 あんだら
+  (`&arch;` misc + `&ksb;` dial). Recipe: gunzip, then pick each
+  `<entry>` whose `<ent_seq>` is listed, bytes as-is.
 
 Both fixtures are PLAIN XML; canonical after a real fetch holds the .gz
 bodies verbatim and the adapter streams them through Zlib::GzipReader —

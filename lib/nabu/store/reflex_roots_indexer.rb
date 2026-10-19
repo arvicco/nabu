@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "reflex_descent"
+
 module Nabu
   module Store
     # The cognate root-closure table (P15-3, intertext design §6, fable
@@ -204,7 +206,10 @@ module Nabu
         columns = %i[language word_folded roman_folded dictionary_entry_id]
         # Pre-010 catalog: no flag column — every edge reads nil (unknown).
         columns << :borrowed if catalog[:dictionary_reflexes].columns.include?(:borrowed)
-        catalog[:dictionary_reflexes]
+        # Descent rows only: an etymon row (migration 046) names its entry's
+        # OWN ancestor — following it would invert the closure.
+        descent = ReflexDescent.scope(catalog[:dictionary_reflexes], catalog: catalog)
+        descent
           .exclude(language: nil)
           .select(*columns)
           .each do |row|

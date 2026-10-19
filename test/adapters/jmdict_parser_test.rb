@@ -19,7 +19,8 @@ class JmdictParserTest < Minitest::Test
   end
 
   def test_one_entry_per_ent_seq_in_file_order
-    assert_equal %w[1000000 1150410 1318970 1358280 1366410 1438210].sort,
+    assert_equal %w[1000000 1150410 1318970 1358280 1366410 1438210
+                    1667700 2291580 2853279 2860641 2860645 2863934].sort,
                  entries.map(&:entry_id).sort
     assert_equal entries.map(&:entry_id).uniq, entries.map(&:entry_id)
   end
@@ -60,6 +61,53 @@ class JmdictParserTest < Minitest::Test
                  love.crossrefs.map { |c| [c.kind, c.label, c.target] })
     assert_equal Nabu::Normalize.search_form("アガペー", language: "jpn"), love.crossrefs.last.target_folded
     assert_empty by_id.fetch("1358280").crossrefs, "an entry without xref/ant mints none"
+  end
+
+  # The sense labels become entry annotations — the entity texts the DTD
+  # expands them to (NOENT), deduped across senses in document order:
+  # <field> domains, <misc> usage marks, <dial> dialects.
+  def test_field_misc_and_dial_labels_become_annotations
+    assert_equal({ "field" => ["law"], "misc" => ["historical term"] }, by_id.fetch("1667700").annotations)
+    assert_equal({ "misc" => ["archaic"], "dial" => ["Kansai-ben"] }, by_id.fetch("2863934").annotations)
+    assert_equal %w[Buddhism Christianity], by_id.fetch("1150410").annotations["field"],
+                 "one value per distinct label across the entry's senses"
+    assert_empty by_id.fetch("1358280").annotations, "an unlabeled entry carries no annotations"
+  end
+
+  # <lsource>: the donor code verbatim (an absent xml:lang is the DTD
+  # default "eng"); wasei-eigo sources are their own annotation.
+  def test_loanword_sources_annotate_the_donor_code
+    assert_equal %w[ger], by_id.fetch("2860641").annotations["lsource"]
+    assert_equal %w[eng fre], by_id.fetch("2860645").annotations["lsource"]
+    assert_equal %w[rus], by_id.fetch("2853279").annotations["lsource"]
+    calc = by_id.fetch("2291580").annotations
+    assert_equal({ "field" => ["computing"], "wasei" => ["eng"] }, calc)
+  end
+
+  # Genuine loans with a source word mint donor-language reflexes,
+  # borrowed: true (the WOLD donor-edge pattern): lang_code verbatim,
+  # language the ISO 639-3 tag the catalog speaks. A wasei source is no
+  # loan of that word and an empty <lsource/> names no word — neither
+  # mints an edge.
+  def test_loanword_sources_with_a_word_mint_borrowed_donor_reflexes
+    prozent = by_id.fetch("2860641").reflexes
+    assert_equal([["ger", "deu", "Pro(zent)", true]],
+                 prozent.map { |r| [r.lang_code, r.language, r.word, r.borrowed] })
+    assert_equal Nabu::Normalize.search_form("Pro(zent)", language: "deu"), prozent.first.word_folded
+    assert_equal([%w[eng eng pie], %w[fre fra choux]],
+                 by_id.fetch("2860645").reflexes.map { |r| [r.lang_code, r.language, r.word] })
+    assert_empty by_id.fetch("2291580").reflexes, "wasei: a made-in-Japan word, not a loan"
+    assert_empty by_id.fetch("2853279").reflexes, "an empty lsource names no donor word"
+  end
+
+  # The labels also read in the sense line (the body was POS + glosses
+  # only): bracketed labels, then the loan source.
+  def test_sense_lines_carry_labels_and_loan_sources
+    assert_match(/^1\. \(noun \(common\) \(futsuumeishi\)\) \[law; historical term\] misdemeanor$/,
+                 by_id.fetch("1667700").body)
+    assert_includes by_id.fetch("2860645").body, "← eng pie (part); fre choux (part)"
+    assert_includes by_id.fetch("2291580").body, "← wasei eng calc"
+    assert_includes by_id.fetch("2853279").body, "← rus"
   end
 
   def test_output_is_nfc

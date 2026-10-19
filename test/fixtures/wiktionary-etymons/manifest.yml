@@ -1,0 +1,13 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-etymons
+adapter_test: null
+retrieved: 2026-10-19
+files:
+  - path: kaikki.org-dictionary-OldTurkic.jsonl
+    url: https://kaikki.org/dictionary/Old%20Turkic/kaikki.org-dictionary-OldTurkic.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {𐱅𐰭𐰼𐰃, 𐰆𐰍𐰞𐰣} (pos noun),
+      byte-verbatim in upstream order — the inh templates whose etymon
+      argument carries Wiktionary inline modifiers (<alt:…>, <t:…>)

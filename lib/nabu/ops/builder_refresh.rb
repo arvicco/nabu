@@ -12,7 +12,7 @@ module Nabu
     # builder invoked is drop-and-reproject, so the pass is idempotent
     # and db/ stays a pure function of the permanent folders.
     module BuilderRefresh
-      Summary = Data.define(:honkoku_ndl, :timeline, :facets, :kinds, :passage_facets, :lect_rows,
+      Summary = Data.define(:honkoku_ndl, :timeline, :facets, :kinds, :passage_facets, :entry_facets, :lect_rows,
                             :dictionary_stats, :derge_titles,
                             :aes_titles,
                             :lemma_rollups)
@@ -49,6 +49,10 @@ module Nabu
         progress&.stage("passage facets")
         passage_facets = Store::PassageFacetBuilder.rebuild!(catalog: catalog,
                                                              facet_map: FacetMap.load_default(config: config))
+        # The dictionary-entry facet lane (facet_map.yml entry_fields).
+        progress&.stage("entry facets")
+        entry_facets = Store::EntryFacetBuilder.rebuild!(catalog: catalog,
+                                                         facet_map: FacetMap.load_default(config: config))
         # P106-7: the lect facet joins the sanctioned in-phase
         # pass — the one rebuild-only derivation a killed rebuild could
         # strand dark corpus-wide (the 2026-09-26 incident); with it ride
@@ -71,7 +75,7 @@ module Nabu
         progress&.stage("lemma rollups")
         lemma_rollups = Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
         Summary.new(honkoku_ndl: honkoku_ndl, timeline: timeline, facets: facets, kinds: kinds,
-                    passage_facets: passage_facets, lect_rows: lect_rows,
+                    passage_facets: passage_facets, entry_facets: entry_facets, lect_rows: lect_rows,
                     dictionary_stats: dictionary_stats, derge_titles: derge_titles,
                     aes_titles: aes_titles,
                     lemma_rollups: lemma_rollups)

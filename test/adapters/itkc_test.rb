@@ -62,9 +62,25 @@ class ItkcTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_fascicle_never_the_sidecar
     assert_equal %w[urn:nabu:itkc:go-1295a-0010 urn:nabu:itkc:gp-1550a-0010
-                    urn:nabu:itkc:mo-1256a-0020],
+                    urn:nabu:itkc:mo-1250a-0040 urn:nabu:itkc:mo-1256a-0020],
                  adapter.discover(FIXTURES).map(&:id).sort,
                  "the suffix-less 서지 sidecars are metadata, not documents"
+  end
+
+  # The MO (문집총간) zips ship every 권차 fascicle THREE times over: the
+  # volume file, one file per 문체 section (_NNNN_NNN) and one file per
+  # article (_NNNN_NNN_NNNN) — the same articles at three granularities
+  # (canonical census: the 285 volume files carry all 14,190 MO
+  # articles; the 9,814 article files and 318 section files repeat
+  # them). Only the volume is a document; a looser fascicle pattern
+  # double-loaded every split article.
+  def test_mo_sub_fascicle_splits_are_never_documents
+    ids = adapter.discover(FIXTURES).map(&:id)
+    refute_includes ids, "urn:nabu:itkc:mo-1250a-0040-010"
+    refute_includes ids, "urn:nabu:itkc:mo-1250a-0040-010-0010"
+    volume = adapter.parse(adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:itkc:mo-1250a-0040" })
+    assert_equal ["urn:nabu:itkc:mo-1250a-0040:mo-1250a-0040-010-0010"], volume.passages.map(&:urn),
+                 "the volume carries the split files' one article"
   end
 
   def test_parse_mints_article_passages_with_the_work_record_attached
@@ -108,7 +124,9 @@ class ItkcTest < Minitest::Test
   def test_fixture_apparatus_is_recognized
     skips = adapter.discovery_skips(FIXTURES)
     assert_equal 1, skips.unrecognized
-    assert_equal ["non-corpus file: manifest.yml"], skips.notes
+    assert_equal 2, skips.skipped_by_rule, "the MO section + article split files"
+    assert_equal ["non-corpus file: manifest.yml",
+                  "2 MO sub-fascicle split file(s) repeat their volume's articles — skipped"], skips.notes
   end
 
   # --- fetch (rigged — no network in tests, ever) ---------------------------

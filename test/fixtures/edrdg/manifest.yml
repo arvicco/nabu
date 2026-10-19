@@ -17,4 +17,4 @@ files:
   - path: JMdict_e.xml
     url: http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
     whole: false
-    trim: gunzipped JMdict_e (217,951 entries, build 2026-07-19) -> prolog + full DOCTYPE entity subset verbatim + created-comment + 6 selected <entry> blocks + closing tag; recipe in README.md
+    trim: gunzipped JMdict_e (217,951 entries, build 2026-07-19) -> prolog + full DOCTYPE entity subset verbatim + created-comment + 6 selected <entry> blocks + closing tag, plus 6 label/loan <entry> blocks re-cut from the 2026-07-29 build; recipe in README.md

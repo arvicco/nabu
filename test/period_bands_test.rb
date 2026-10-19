@@ -31,6 +31,14 @@ class PeriodBandsTest < Minitest::Test
                  "the unsubperiodized span — honest coarseness"
   end
 
+  # The UD Egyptian-PC sentence dates ("5th Dynasty" / "6th Dynasty") band
+  # through the TLA thesaurus's own dynasty bounds — the same nodes the
+  # held AED headers date AES texts by.
+  def test_the_old_kingdom_dynasties_band_by_the_tla_thesaurus
+    assert_equal [-2520, -2364], table.lookup("5th Dynasty")
+    assert_equal [-2363, -2233], table.lookup("6th Dynasty")
+  end
+
   def test_unruled_labels_are_honestly_nil
     assert_nil table.lookup("Uncertain")
     assert_nil table.lookup("Standard Babylonian"),
@@ -38,6 +46,16 @@ class PeriodBandsTest < Minitest::Test
     assert_nil table.lookup(nil)
     assert_equal [-3350, -3000], table.lookup("Archaic"),
                  "the P16-3 extractor had already ruled Archaic (proto-cuneiform horizon) — adopted"
+  end
+
+  def test_the_aegean_ceramic_phases_band
+    assert_equal [-1370, -1190], table.lookup("LM IIIA2 or LM IIIB"),
+                 "a compound label bands as its phases' envelope"
+    assert_equal [-1230, -1070], table.lookup("LH IIIB2/LH IIIC")
+    assert_equal [-1330, -1190], table.lookup("LM IIIB ?"),
+                 "the cataloguer's trailing ? strips, the shared fold"
+    assert_equal [-1450, -1190], table.lookup("LM II-LM IIIA1 or LM IIIB")
+    assert_nil table.lookup("-"), "the corpus's own no-claim marker stays nil"
   end
 
   def test_every_band_is_a_sane_interval

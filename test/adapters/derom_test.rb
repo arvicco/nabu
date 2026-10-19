@@ -107,6 +107,53 @@ class DeromTest < Minitest::Test
     assert_equal "lapti", reflexes[2].word_folded, "the acute folds off méglénoroum. lápti"
   end
 
+  # The cognat bibliography's first-attestation <date> rides each reflex
+  # row minted from that cognat: verbatim + its parsed earliest year.
+  def test_each_reflex_carries_its_cognats_first_attestation_date
+    reflexes = parse_all.fetch(LAKTE).reflexes
+    first = reflexes.first
+    assert_equal ["lapte", "dp. 1500/1510", 1500], [first.word, first.attested, first.attested_year]
+    fr = reflexes.find { |r| r.lang_code == "fra" }
+    assert_equal ["lait", "dp. 1ère m. 12e s.", 1101], [fr.word, fr.attested, fr.attested_year]
+    roh = reflexes.select { |r| r.lang_code == "roh" }
+    assert_equal [["lat", "dp. 1560"], ["latg", "dp. 1560"]], roh.map { |r| [r.word, r.attested] },
+                 "variant signifiants of one cognat share its date"
+    frioul = reflexes.find { |r| r.lang_code == "fur" }
+    assert_nil frioul.attested, "a cognat whose bibliography names no date stays undated"
+  end
+
+  # The printed date shapes the full census shows (2,858 tags), each read
+  # to the earliest year it names; the unparseable stay verbatim, year nil.
+  def test_attestation_dates_parse_to_their_earliest_named_year
+    parse = ->(text) { Nabu::Adapters::DeromXmlParser.attested_year(text) }
+    {
+      "dp. 1268" => 1268, "dp. 1500/1510" => 1500, "dp. ca 1100" => 1100, "1670" => 1670,
+      "ca 1300" => 1300, "dp. av. 1292" => 1292, "dp. apr. 1180" => 1180, "1350/1425" => 1350,
+      "dp. 13e s." => 1201, "16e s." => 1501, "12e" => 1101, "dp. fin 10e s." => 976,
+      "dp. déb. 14e s." => 1301, "dp. mil. 14e s." => 1341, "dp. 1ère m. 13e s." => 1201,
+      "dp. 2e m. 10e s." => 951, "dp. 2e qu. 10e s." => 926, "dp. 1er qu. 13e s." => 1201,
+      "dp. 3e t. 12e s." => 1167, "dp. fin 12e/déb. 13e s." => 1176, "dp. 12e/13e s." => 1101,
+      "dp. 2e/3e qu. 12e s." => 1126, "dp. mil./2e m. 10e s." => 941, "hap. 15e s." => 1401,
+      "dp. 1500/1510 [date du ms.]" => 1500, "dp. 1265 (vidimus 1517)" => 1265, "ca 1239 (?)" => 1239,
+      "ms. 1470 ; dp. 1723" => 1470, "ca 1170–13e s." => 1170, "dp. 1218/ca 1250" => 1218,
+      "fin 14e s./15e s." => 1376
+    }.each { |text, year| assert_equal year, parse.call(text), text }
+    ["s.d.", "déb.", "1er qu."].each { |text| assert_nil parse.call(text), text }
+  end
+
+  # The 670-odd <RenvoiInterne> pointers name other DÉRom etyma (in the
+  # Commentaire and the Notes) — crossref edges keyed by the typeable fold.
+  def test_renvoi_interne_pointers_mint_see_crossrefs_to_other_etyma
+    crossrefs = parse_all.fetch(LAKTE).crossrefs
+    assert_equal %w[ˈsanɡuen ˈmar-e ˈɸɛl-e ˈmɛl-e ˈsal-e], crossrefs.map(&:target)
+    # The script ɡ (U+0261) survives the fold on both sides — upstream's
+    # headwords spell it identically, so the keys still meet.
+    assert_equal %w[sanɡuen mar-e fel-e mel-e sal-e], crossrefs.map(&:target_folded)
+    assert_equal ["see"], crossrefs.map(&:kind).uniq
+    assert_equal "see ˈsal-e", crossrefs.last.label
+    assert_empty parse_all.fetch(KABALLU).crossrefs
+  end
+
   # P57-5: the idiome→ISO table is now COMPLETE — every idiome in the fixture
   # resolves to a real language code, so lang_code == language everywhere and
   # nothing stays display-only (the former gal./port. joint label is split
@@ -273,6 +320,10 @@ class DeromTest < Minitest::Test
     languages = db[:dictionary_reflexes].select_map(:language)
     %w[ron srd ita fra spa por glg oci].each { |code| assert_includes languages, code }
     refute_includes languages, nil, "P57-5: the idiome table is complete — nothing display-only remains"
+    assert_equal 5, db[:dictionary_crossrefs].count, "lakt-e's five renvoi pointers"
+    assert_equal [nil], db[:dictionary_crossrefs].select_map(:to_entry_id).uniq,
+                 "none of their targets is a written article in the fixture — honestly unresolved"
+    assert_equal 1500, db[:dictionary_reflexes].where(word: "lapte").get(:attested_year)
   end
 
   # --- language-notes rider --------------------------------------------------------

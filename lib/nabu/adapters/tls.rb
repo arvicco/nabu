@@ -20,7 +20,10 @@ module Nabu
     #   each body carrying its word-x-concept entry blocks (34,808 — every
     #   one names its concept + concept urn), pinyin/OC/MC readings and
     #   60,232 sense lines with their upstream uuids verbatim (the join
-    #   keys the deferred attestation crosswalk will need).
+    #   keys the deferred attestation crosswalk will need). Each distinct
+    #   assignment also mints a word → concept crossref into tls-concepts
+    #   (resolved by the concept uuid) and a "concept" entry facet — the
+    #   word's semantic domain, filterable (`define 棄 --facet concept=ABANDON`).
     #
     # Both shelves register och (Old Chinese — the object language; concept
     # heads are English metalanguage labels, the wiktionary-recon

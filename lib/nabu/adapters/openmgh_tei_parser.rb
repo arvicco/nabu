@@ -2,6 +2,8 @@
 
 require "nokogiri"
 
+require_relative "openmgh_charter_date"
+
 module Nabu
   module Adapters
     # Streaming parser for one openMGH volume (P45-2) — a bespoke
@@ -82,7 +84,11 @@ module Nabu
     # printed_date/printed_place and never pretends to feed the timeline.
     # Charter headers additionally yield the medieval date VERBATIM
     # ("878 März 25." — German editorial prose, carried as a per-passage
-    # "date" annotation, unparsed).
+    # "date" annotation) plus, where the line reads cleanly, its
+    # structured claims beside it — "not_before"/"not_after" year bounds
+    # and the issuing "place" (OpenmghCharterDate: conservative, hedged
+    # lines stay verbatim-only). The timeline's OpenmghCharterDates lane
+    # projects them at passage grain.
     #
     # == Streaming
     #
@@ -494,6 +500,7 @@ module Nabu
           return if charter.nil? || text.strip.empty?
 
           number = presence(charter[:number]&.strip)
+          date = flatten(charter[:date])
           @units << Unit.new(
             citation: number ? "c#{number}" : "c~#{@charter_ordinal}",
             text: text,
@@ -502,9 +509,19 @@ module Nabu
               "unit" => "tenor",
               "n" => number,
               "charter" => flatten(charter[:title]),
-              "date" => flatten(charter[:date])
-            }.compact
+              "date" => date
+            }.merge(structured_date(date)).compact
           )
+        end
+
+        # The dating line's structured claims beside the verbatim "date":
+        # not_before/not_after (integer years; either may be open) and the
+        # issuing place — {} when the line is hedged, unreadable or absent.
+        def structured_date(date)
+          result = date && OpenmghCharterDate.parse(date)
+          return {} if result.nil?
+
+          { "not_before" => result.not_before, "not_after" => result.not_after, "place" => result.place }
         end
 
         # -- metadata ---------------------------------------------------------

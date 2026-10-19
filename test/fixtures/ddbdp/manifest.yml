@@ -107,3 +107,63 @@ files:
     retrieved: 2026-09-26
     whole: true
     trim: none (old-bucket dclp 805566; now DCLP/805/805566.xml)
+  - path: DDbDP/13/13581.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/DDbDP/13/13581.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (ddb-hybrid p.tebt;2;484v (HGV 13581) — the edition a hybrid-less APIS translation reaches by HGV number)
+  - path: Translations/8/8875-1.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/8/8875-1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (German HGV translation of bgu;1;100 — line milestones, app/lem, term)
+  - path: Translations/8/8875-2.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/8/8875-2.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (English translation of bgu;1;100 (a second translation of one edition))
+  - path: Translations/8/8877-1.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/8/8877-1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (German HGV translation of bgu;1;102 — inline lb, lem-wrapped term)
+  - path: Translations/8/8877-2.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/8/8877-2.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (English translation of bgu;1;102)
+  - path: Translations/2/2416-1.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/2/2416-1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (space-separated multi-hybrid idno 'p.ryl;4;560 sb;5;7643'; r/v textparts)
+  - path: Translations/13/13581-1.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/13/13581-1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (APIS-authority translation, no hybrid (HGV resolution), one block <ab>)
+  - path: Translations/88/88604-1.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/88/88604-1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (misspelt xml:lang 'fe' over French prose; orphan hybrid o.krok;1;15)
+  - path: Translations/88/o.krok.1.15-1.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/Translations/88/o.krok.1.15-1.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (misnamed twin of 88604-1.xml — skipped by the naming rule)
+  - path: APIS/berkeley/xml/berkeley.apis.629.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/APIS/berkeley/xml/berkeley.apis.629.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (APIS record whose translation Translations/13/13581-1.xml carries — yields; its summary/keywords ride the translation)
+  - path: APIS/berkeley/xml/berkeley.apis.253.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/APIS/berkeley/xml/berkeley.apis.253.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (APIS-only translation (Sophocles, Inachus) resolving by dclp idno 62767; div without xml:lang)
+  - path: APIS/berkeley/xml/berkeley.apis.9834.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/APIS/berkeley/xml/berkeley.apis.9834.xml
+    retrieved: 2026-10-19
+    whole: true
+    trim: none (APIS record naming no text identity (apisid only) — skipped)

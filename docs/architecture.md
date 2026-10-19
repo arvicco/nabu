@@ -117,7 +117,7 @@ Key decisions:
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete. **The within-pass collision seam (P39-4):** "changed content bumps revision" means a legitimate update *across runs*; two files claiming one `urn` *within a single load pass* would instead make revision inflation glob-order-dependent (the last file parsed silently wins — the diorisis rebuild's `~3 updated` on a clean db, from an adapter minting the same urn thrice). So a urn re-encountered in the same pass is **kept-first**: identical content is an idempotent skip, different content is a `collision` — journaled loudly, counted (`LoadReport#collided`, surfaced as `!N collision`), the first file's content preserved deterministically. The discriminator is purely "already persisted this pass"; a urn seen for the first time this pass revises exactly as before. Adapters should mint unique urns so the seam never fires (diorisis disambiguates upstream's reused `tlgAuthor:tlgId` by a title slug); the seam is the loader-side invariant that no future adapter bug can silently last-writer-wins.
 - **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
-- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS` — SAA-first staging; stage 2 = the full project list since P14-4, the tr-en metadata gate keeping translation-less projects inert) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open. **The work notion is a registry declaration, not a code chain (P34-0):** what counts as a sibling is the source row's `siblings:` key — `cts` (the dotted-version form) or a list of `"-"`-leading variant-tail patterns (`["-en"]`, `["-(eng|ita|dipl)"]`, the ORACC `["-[a-z]+"]` open run) — compiled by `Query::SiblingFamilies` into the ONE generic matcher `Query::Parallel` consults. The ten per-source frozen regex constants that used to live in `Parallel` (CTS, ORACC, Freising, Damaskini, SuttaCentral, TLA-HF, AES, RIIG, OpenEtruscan+ItAnt, ETCSL — each new sibling shape an owner repro + a code rider through P29/P30/P32) retired into declarations; a declared tail is a **census claim** (no upstream id ends in it — exactly what each constant's comment used to freeze). The live registry holds 18 sibling declarations (as of P78); I.Sicily shows the shape: `["-en", "-it", "-translit"]` — the `-translit` layer sibling (the Latin-script rendering of a Greek-script carving, suffix-equal to the primary, reachable by explicit `--parallel <lang>`, the ItAnt `-dipl` stance) plus the `-en`/`-it` prose translations (whole-text coarse blocks anchored at the primary's first line via a synthesized `corresp`, the ETCSL loose-alignment mechanism). The sibling grammar is a **global installation fact** (`SiblingFamilies.default` reads the installation's own `sources.yml`, not a redirected-catalog config).
+- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS` — SAA-first staging; stage 2 = the full project list since P14-4, the tr-en metadata gate keeping translation-less projects inert) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open. **The work notion is a registry declaration, not a code chain (P34-0):** what counts as a sibling is the source row's `siblings:` key — `cts` (the dotted-version form) or a list of `"-"`-leading variant-tail patterns (`["-en"]`, `["-(eng|ita|dipl)"]`, the ORACC `["-[a-z]+"]` open run) — compiled by `Query::SiblingFamilies` into the ONE generic matcher `Query::Parallel` consults. The ten per-source frozen regex constants that used to live in `Parallel` (CTS, ORACC, Freising, Damaskini, SuttaCentral, TLA-HF, AES, RIIG, OpenEtruscan+ItAnt, ETCSL — each new sibling shape an owner repro + a code rider through P29/P30/P32) retired into declarations; a declared tail is a **census claim** (no upstream id ends in it — exactly what each constant's comment used to freeze). The live registry holds 18 sibling declarations (as of P78); I.Sicily shows the shape: `["-en", "-it", "-translit"]` — the `-translit` layer sibling (the Latin-script rendering of a Greek-script carving, suffix-equal to the primary, reachable by explicit `--parallel <lang>`, the ItAnt `-dipl` stance) plus the `-en`/`-it` prose translations (whole-text coarse blocks anchored at the primary's first line via a synthesized `corresp`, the ETCSL loose-alignment mechanism). The sibling grammar is a **global installation fact** (`SiblingFamilies.default` reads the installation's own `sources.yml`, not a redirected-catalog config). A tail list compiles under the urn namespace `urn:nabu:<slug>:` unless the row names its namespaces with `sibling_namespaces:` — papyri-ddbdp's translation siblings (`<edition urn>-trans-<translation id>`, `siblings: ["-trans-[0-9A-Za-z.-]+"]`) live under `ddbdp` and `dclp`, so the row declares `sibling_namespaces: [ddbdp, dclp]`.
 
 ## 4. Ad-hoc pipeline (design-stage — not yet built)
 
@@ -277,6 +277,26 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- text stays byte-identical. The id-bearing sources also derive
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).
+entry_facet_values(id, source_id, facet, value, ref)
+entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id)
+   -- Migration 046: the same mold at DICTIONARY-ENTRY grain — the
+   -- categorical claims upstream makes per entry (JMdict's <field>
+   -- domains, <misc> usage marks, <dial> dialects and <lsource> donor
+   -- codes; WOLD's Semantic_field / Semantic_category / Borrowed status;
+   -- TLS's word→concept assignments, ref = the concept uuid). The
+   -- adapter emits them as DictionaryEntry#annotations; the loader stores
+   -- them in dictionary_entries.annotations_json (canonical JSON, NULL
+   -- when none — the common case, never fetched by the builder; part of
+   -- the entry's content sha only when present, so annotation-less
+   -- shelves keep every stored sha). Store::EntryFacetBuilder projects
+   -- them under facet_map.yml's per-source entry_fields (third sibling
+   -- key; PassageFacetBuilder's value rules, shared), reading annotated
+   -- entry ids then their JSON in primary-key slices (million-entry
+   -- shelves never load whole). Lifecycle: both rebuild flavors,
+   -- builders:refresh, and the post-load sync refresh under the
+   -- dictionary-stats gate (withdrawals included). Read by `nabu define
+   -- --facet NAME=PATTERN` (Query::Define#run facets:): entries whose
+   -- value or ref matches, AND across facets.
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
@@ -1103,6 +1123,24 @@ no key; conventions §9). Two structural consequences:
   cognate details append "(loan: chu)", MCP payloads carry the boolean
   with the NULL-honesty note. Projected closure growth ~50,395 → 56–60k
   rows (survey §2), realized at the owner-fired sync + reindex.
+- **Typed relations and first attestations (migration 046)**: three
+  nullable columns on `dictionary_reflexes`. `relation` is a closed
+  vocabulary (`DictionaryReflex::RELATIONS`); NULL is every row that
+  states none (descendants trees, MW, DÉRom, WOLD). The ETYMON relations
+  — `inherited` / `derived` / `borrowed` / `learned-borrowing`, minted
+  from the kaikki `etymology_templates` (inh/der/bor/lbor) — point UP:
+  the named word is the owning entry's OWN ancestor or donor, the reverse
+  of a descendants row. Every descent walk (etym's reflex match and
+  ascent, the `reflex_roots` closure, an entry's cognate list, the
+  nabu-data reflex-chains export) scopes through `Store::ReflexDescent`,
+  so an UP edge never reads as a descendant; the rows are stored data
+  awaiting their own (ascending) surface. `cognate` (the Lewis & Short
+  cognate chains) is direction-free and walks like MW's cognate rows.
+  `attested` / `attested_year` carry the verbatim first-attestation date
+  upstream prints per reflex (DÉRom's "dp. 1220") and its parsed
+  lower-bound year (NULL when the shape does not parse). All three join
+  ContentHash's reflex encoding only when set (no revision storm on
+  shelves that mint none).
 
 ## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
 
@@ -1205,7 +1243,11 @@ CLASS[,CLASS...]` filters on the class of a document's PRIMARY dated row,
 the holdout discipline as a flag. The self-enforcing half is the
 `unmined_axis_metadata` health invariant: axis-shaped metadata keys with
 zero corresponding facet/axis rows stay loud until extracted or
-declared.
+declared. It reads both grains — document metadata and passage
+annotations (sampled across each source's documents; a passage key is
+mined when its values reach the document's axis rows, passage-grain
+included, or the source's passage facet values), with the passage
+ledger `Invariants::PASSAGE_MINING_EXEMPT` beside the document one.
 
 **A catalog-side `document_axes` table (migration 008), NOT columns on
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)
@@ -1254,12 +1296,27 @@ dates by TLG author.work ids, which the Perseus/First1K CTS urns also
 carry, so each original-language Greek CTS edition joins a composition
 envelope by urn (axis_source `tlg-concordance`, date_class `composition`,
 date_raw naming the witness and key — glaux first, diorisis fallback);
-a sync of any target or witness re-derives the lane. The coordinates lane
+a sync of any target or witness re-derives the lane. The
+`OpenmghCharterDates` lane is the same catalog-annotation stance for the
+openMGH Diplomata: each charter's German dating line is read at parse
+(the adapter's conservative `OpenmghCharterDate` reader — hedged lines
+stay verbatim-only) into `not_before`/`not_after`/`place` annotations,
+projected here as one passage-grain row per bounded charter (its issuing
+place as `place_name`, date_class NULL — the charter's own date) plus a
+per-volume envelope (axis_source `openmgh-charters`, beside the volume's
+`edition`-class print year). The coordinates lane The `UdSentenceDates`
+lane is the NikhEntryDates mold for the UD treebanks: ConlluParser's
+newdoc-scoped metadata whitelist carries each sentence's date/created/
+date_created and place comments into passage annotations, and the lane
+projects passage-grain runs (one per stretch sharing upstream document id
++ claim) plus a document envelope (axis_source `ud-sentences`; dynasty
+labels band through `config/period_bands.yml`). The coordinates lane
 (migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
 feeding `search --within`. Since P47-r3 a sync refreshes the synced
 source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
-`NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!`,
+`NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!` +
+`OpenmghCharterDates.refresh_source!` + `UdSentenceDates.refresh_source!`,
 mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
 The whole-library chronological views over this table are `nabu list

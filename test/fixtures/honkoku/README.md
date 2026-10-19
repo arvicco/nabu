@@ -20,3 +20,9 @@ served verbatim; attribution rides the project index per material.
 - The 21dzk index additionally carries the REAL ainu-project row
   whose attribution cell is raw HTML with bare quotes — the
   TSV-is-not-quoted-CSV poison, verbatim.
+- `v3/21dzk/0A678AA21E602F6A3FFF3329B090920C/translations/` (added
+  2026-10-19, copied whole from the box's canonical clone) — the
+  material's real `001_en/001_ja/002_en/002_ja.txt`: the platform's
+  machine-generated modern-Japanese and English renderings. Pins the
+  DECLINE: the adapter must never read this layer (the adapter header
+  carries the provenance evidence).

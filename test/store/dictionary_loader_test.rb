@@ -175,6 +175,22 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal before, census_snapshot(dictionary_id), "reload replaces the census with identical rows"
   end
 
+  def test_reflex_relation_and_attestation_persist
+    document = Nabu::DictionaryDocument.new(slug: "wiktionary-cu", language: "chu", title: "OCS",
+                                            canonical_path: "/x.jsonl")
+    document << Nabu::DictionaryEntry.new(
+      entry_id: "богъ:noun", key_raw: "богъ", language: "chu", headword: "богъ",
+      headword_folded: "богъ", body: "god",
+      reflexes: [Nabu::DictionaryReflex.new(lang_code: "sla-pro", language: "sla-pro", word: "*bogъ",
+                                            word_folded: "bogъ", relation: "inherited"),
+                 Nabu::DictionaryReflex.new(lang_code: "fr.", word: "lait", attested: "dp. 1220",
+                                            attested_year: 1220)]
+    )
+    loader.load([document], full: false)
+    rows = @db[:dictionary_reflexes].order(:seq).select_map(%i[relation attested attested_year])
+    assert_equal [["inherited", nil, nil], [nil, "dp. 1220", 1220]], rows
+  end
+
   def test_reflexless_shelves_write_no_census
     load!
     assert_equal 0, @db[:language_names].count, "the TEI lexica carry no descendants data"
@@ -263,11 +279,9 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal 0, @db[:language_records].count
   end
 
-  private
-
-  # The fixture μῆνις entry with its body replaced — a real model object, the
-  # store-level testing seam (no fake TEI involved).
   # -- P123-1: entry→entry cross-references -------------------------------------
+  # (These tests sat below the class's `private` marker, where Minitest
+  # never collects them; the marker now sits after them.)
 
   def xref(target, kind: "see")
     Nabu::DictionaryCrossref.new(kind: kind, label: "v. #{target}", target: target, target_folded: target)
@@ -381,6 +395,30 @@ class DictionaryLoaderTest < Minitest::Test
                                                      .select_map(:target)
   end
 
+  # The entry-facet seam: annotations persist as canonical JSON (NULL when
+  # the entry carries none), load idempotently, and move with a revision.
+  def test_annotations_persist_null_when_absent_and_revise_with_the_entry
+    labeled = Nabu::DictionaryEntry.new(entry_id: "a", key_raw: "a", language: "grc", headword: "alpha",
+                                        headword_folded: "alpha", body: "body a",
+                                        annotations: { "field" => %w[law Buddhism] })
+    docs = [xr_document("/x/a.xml", labeled, xr_entry("b", "beta"))]
+    loader.load(docs, full: false)
+    assert_equal '{"field":["law","Buddhism"]}',
+                 @db[:dictionary_entries].where(entry_id: "a").get(:annotations_json)
+    assert_nil @db[:dictionary_entries].where(entry_id: "b").get(:annotations_json)
+
+    assert_equal 2, loader.load(docs, full: false).skipped
+
+    relabeled = labeled.with(annotations: { "field" => ["law"] })
+    report = loader.load([xr_document("/x/a.xml", relabeled)], full: false)
+    assert_equal 1, report.updated, "an annotation change is a content revision"
+    assert_equal '{"field":["law"]}', @db[:dictionary_entries].where(entry_id: "a").get(:annotations_json)
+  end
+
+  private
+
+  # The fixture μῆνις entry with its body replaced — a real model object, the
+  # store-level testing seam (no fake TEI involved).
   def modified_document
     parsed = @adapter.discover(@workdir)
                      .map { |ref| @adapter.parse(ref) }

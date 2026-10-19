@@ -89,6 +89,18 @@ periods:
                               cuneiform text (the Late Babylonian upper bound); SB names
                               the register of these copies, not a period of its own}
 
+  # -- Egyptian dynasties (the UD Egyptian-PC treebank's sentence dates —
+  # "5th Dynasty" 1,258 / "6th Dynasty" 1,831 Pyramid Texts sentences,
+  # census 2026-10-19). basis `tla` = the Thesaurus Linguae Aegyptiae's
+  # own dynasty nodes, the bounds its export writes on every header that
+  # dates by them (the held canonical/aed headers: "5. Dyn."
+  # ths:RI3TSGKXUFCE3HV43BX2N2MJVE notBefore -2520 / notAfter -2364;
+  # "6. Dyn." ths:GH2RXLTQ2BCEHPQ6R2SPBER7OM -2363 / -2233) — the same
+  # convention the AES timeline lane already serves at dynasty precision,
+  # and the corpus the treebank's sentences come from (their TLA ids).
+  "5th Dynasty":           {band: [-2520, -2364], basis: tla, note: TLA thesaurus node "5. Dyn."}
+  "6th Dynasty":           {band: [-2363, -2233], basis: tla, note: TLA thesaurus node "6. Dyn."}
+
   # -- Chinese dynasty spans (P104-1, attributed-era dating under the 2026-09-26 mining law: the cbeta
   # header bylines and the kanripo KR-Catalog 人物 DYNASTY attributions
   # band here; census 2026-09-26 over both vocabularies). basis
@@ -154,3 +166,43 @@ periods:
                             note: Silla's conventional whole span — honest coarseness}
   "高麗":                  {band: [918, 1392],    basis: sinological}    # Goryeo
   "朝鮮":                  {band: [1392, 1897],   basis: sinological}    # Joseon
+  # The Aegean ceramic-phase rows (the Linear B tablet corpus's whole
+  # chronology vocabulary — 27 raw labels / 4,019 of 5,932 documents
+  # censused in the live catalog 2026-10-19; the trailing "?" folds in
+  # the shared normalize). basis `aegean` = the conventional absolute
+  # chronology after Warren & Hankey, Aegean Bronze Age Chronology
+  # (1989), the standard handbook convention (round conventional
+  # bounds, middle-of-road: LM II from the Knossos destruction horizon
+  # debate's conventional 1450, LH IIIC's end at the conventional
+  # 1070). Compound labels ("X or Y", "X-Y", "X/Y") band as the
+  # ENVELOPE of their phases — the upstream cataloguer's uncertainty
+  # kept as an honest wide interval (the Neo/Late Babylonian
+  # precedent).
+  "LM II":                 {band: [-1450, -1400], basis: aegean}
+  "LM IIIA1":              {band: [-1400, -1370], basis: aegean}
+  "LM IIIA2":              {band: [-1370, -1330], basis: aegean}
+  "LM IIIB":               {band: [-1330, -1190], basis: aegean}
+  "LM IIIB1":              {band: [-1330, -1260], basis: aegean}
+  "LM IIIB2":              {band: [-1260, -1190], basis: aegean}
+  "LH IIIA":               {band: [-1410, -1300], basis: aegean}
+  "LH IIIA2":              {band: [-1370, -1300], basis: aegean}
+  "LH IIIB":               {band: [-1300, -1190], basis: aegean}
+  "LH IIIB1":              {band: [-1300, -1230], basis: aegean}
+  "LH IIIB2":              {band: [-1230, -1190], basis: aegean}
+  "LH IIIC":               {band: [-1190, -1070], basis: aegean}
+  "LH IIIC1":              {band: [-1190, -1130], basis: aegean}
+  "LM IIIA2 or LM IIIB":   {band: [-1370, -1190], basis: aegean,
+                            note: the Knossos main-deposit dating debate, enveloped}
+  "LM IIIA1 or LM IIIA2 or LM IIIB": {band: [-1400, -1190], basis: aegean}
+  "LM II-LM IIIA1 or LM IIIB": {band: [-1450, -1190], basis: aegean,
+                            note: the Room of the Chariot Tablets debate, enveloped}
+  "LH IIIB2/LH IIIC":      {band: [-1230, -1070], basis: aegean,
+                            note: the Pylos archive horizon, enveloped}
+  "LH IIIB1 or LH IIIB2":  {band: [-1300, -1190], basis: aegean}
+  "LH IIIB2/LH IIIB1":     {band: [-1300, -1190], basis: aegean, note: upstream order variant}
+  "LH IIIA2-LH IIIB":      {band: [-1370, -1190], basis: aegean}
+  "LH IIIB2-LH IIIC":      {band: [-1230, -1070], basis: aegean}
+  "LH IIIB-LH IIIC":       {band: [-1300, -1070], basis: aegean}
+  "LH IIIB or LH IIIC":    {band: [-1300, -1070], basis: aegean}
+  "LH IIIA2/LH IIIB1 or LH IIIC": {band: [-1370, -1070], basis: aegean}
+  "LH IIIA2-LH IIIC":      {band: [-1370, -1070], basis: aegean}

@@ -68,6 +68,39 @@ class FacetMapTest < Minitest::Test
     end
   end
 
+  # The dictionary-entry grain: entry_fields name dictionary_entries
+  # annotations keys → entry facet names, a third sibling lane on the same
+  # per-source entry (a source may carry it alone).
+  def test_loads_entry_fields_as_their_own_lane
+    map = build("sources" => {
+                  "edrdg" => { "entry_fields" => { "field" => "domain" } },
+                  "okhc" => { "fields" => { "corpus" => "collection" } }
+                })
+    assert_equal %w[okhc], map.sources
+    assert_empty map.passage_sources
+    assert_equal %w[edrdg], map.entry_sources
+    assert_equal({ "field" => "domain" }, map.entry_fields_for("edrdg"))
+    assert_nil map.entry_fields_for("okhc")
+  end
+
+  def test_blank_or_empty_entry_fields_are_config_errors
+    assert_raises(Nabu::FacetMap::ConfigError) do
+      build("sources" => { "edrdg" => { "entry_fields" => { "field" => "" } } })
+    end
+    assert_raises(Nabu::FacetMap::ConfigError) { build("sources" => { "edrdg" => { "entry_fields" => {} } }) }
+  end
+
+  def test_shipped_config_rules_the_dictionary_entry_labels
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "field" => "domain", "misc" => "usage", "dial" => "dialect",
+                   "lsource" => "loan_source", "wasei" => "wasei_source" },
+                 map.entry_fields_for("edrdg"))
+    assert_equal({ "semantic_field" => "semantic_field", "semantic_category" => "word_class",
+                   "borrowed" => "borrowed_status" },
+                 map.entry_fields_for("wold"))
+    assert_equal({ "concept" => "concept" }, map.entry_fields_for("tls"))
+  end
+
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
     map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
     assert_equal "subject", map.passage_fields_for("sillok")["subject_classes"]
@@ -117,6 +150,14 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "languages" => "language" }, Nabu::FacetMap.load(path).fields_for("local-library"))
   end
 
+  # UD: the README Genre tags at document grain; egyptian-pc's king and
+  # genre and coptic-bohairic's author at sentence grain.
+  def test_shipped_config_projects_the_ud_genre_line_and_sentence_comments
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "genres" => "genre" }, map.fields_for("ud"))
+    assert_equal({ "king" => "ruler", "genre" => "genre", "author" => "author" }, map.passage_fields_for("ud"))
+  end
+
   # P118-R4 S2 (the held-but-dark audit's facet_map wave): axis-shaped
   # fields already stored verbatim on ~450k documents that fed no facet.
   def test_shipped_config_projects_the_dark_audit_facet_wave
@@ -124,7 +165,7 @@ class FacetMapTest < Minitest::Test
     map = Nabu::FacetMap.load(path)
     expected = {
       "cdli" => { "material" => "material", "object_type" => "object_type", "museum_no" => "museum",
-                  "subgenre" => "subgenre" },
+                  "subgenre" => "subgenre", "excavation_no" => "excavation", "accession_no" => "accession" },
       "rundata" => { "material_type" => "material", "material" => "material",
                      "objectInfo" => "object_type", "style" => "style" },
       "glaux" => { "dialect" => "dialect", "author" => "author", "work" => "work" },
@@ -190,7 +231,7 @@ class FacetMapTest < Minitest::Test
       "shabados" => { "authors" => "author" },
       "bu-ajami" => { "author_or_owner" => "author" },
       "africa-pd" => { "author" => "author" },
-      "eebo-tcp" => { "author" => "author" },
+      "eebo-tcp" => { "author" => "author", "subjects" => "subject" },
       "dta" => { "author" => "author", "author_gnd" => "author_id" },
       "corpus-corporum" => { "author" => "author", "author_ref" => "author_id",
                              "series_idno" => "work_id" },

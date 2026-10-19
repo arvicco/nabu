@@ -62,6 +62,14 @@ sources:
       subgenre: subgenre      # 71,814 rows, 4,619 values (catalog census 2026-10-18): lexical-
       #                         series witness labels, archives, "ETCSL <n> <title> (witness)" —
       #                         a mixed vocabulary, faceted verbatim, never kind-folded
+      excavation_no: excavation  # 49,223 rows, 46,513 values (catalog census 2026-10-19:
+      #                         "W 06435,a", "Ass 21101"; the withheld "U —" ×1,528 is a claim) —
+      #                         an identifier lookup, the museum_no precedent
+      accession_no: accession  # 72,246 rows, 66,396 values (museum accession numbers —
+      #                         "1901-02-09, nn" BM registration days; "—" ×2,324 a claim)
+      # findspot_square / findspot_remarks / provenience_remarks / join_information
+      # stay metadata-only: sub-site grid squares and free prose (the oracc
+      # findspot_square stance; Health::Invariants::MINING_EXEMPT records why)
   oracc:                      # catalogue census 2026-10-18, 125,738 members (OraccCatalogue)
     fields:
       ruler: ruler            # 12,689 (Sargon II 1,431 · Esarhaddon 1,368 · Ashurbanipal 1,288 ·
@@ -120,6 +128,10 @@ sources:
   oncoj:                      # census: 4,991 poems
     fields:
       corpus: collection      # MYS 4,693 · NSK 133 · KK 112 · BS · FK · SNK …
+    passage_fields: #           the pln/pln-kke place-name tokens shipped as per-passage
+      places: place           # annotations (3,343 tokens / 910 distinct lemmas) — mentions
+      #                         in the poem, never findspots (the posture says so); the
+      #                         widened mining census surfaced them unprojected
   bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
     fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
       recension: recension    # projected so the ruled recension facet rule can read it
@@ -203,6 +215,14 @@ sources:
       author: author          # ESTC-style headings with life dates INSIDE the string
       #                         ("A., fl. 1593.", "Shakespeare, William, 1564-1616.") —
       #                         projected as-is, never parsed apart
+      subjects: subject       # census over canonical/, 2026-10-19: TEXTCLASS/KEYWORDS/TERM on
+      #                         57,064 of 60,326 files, 124,920 headings, ~34.6k distinct —
+      #                         LCSH verbatim ("Sermons, English -- 17th century.", "Ireland --
+      #                         History -- 1649-1775", "Broadsides -- England -- London"); the
+      #                         subdivisions' place/period/form signal stays INSIDE the heading
+      #                         (never parsed apart). Leading heads: Great Britain 16,205 ·
+      #                         Broadsides 5,446 · Sermons, English 4,317 · Bible 4,087 ·
+      #                         Church of England 2,712 · Ballads, English 1,779
   dta:                        # 5,478 docs, all with both
     fields:
       author: author          # 1,407 authors ("Chamisso, Adelbert von")
@@ -416,6 +436,14 @@ sources:
   ja-wikisource:              # 123 pages fill the {{header}} author= slot
     fields:
       author: author          # 清少納言 20 · 羽地朝秀 10 · 源実朝 8 · 後光厳天皇 7 … verbatim
+    passage_fields: #           the Man'yōshū [事項] annotations shipped per poem — the
+      class: genre            # 部立 anthology classes (雑歌/相聞/挽歌 …, 2,713 poems) share
+      #                         the genre axis (the itkc both-grains precedent)
+      poet: person            # 作者： attributions, 2,379 poems — the poem's claim, verbatim
+      places: place           # the closed no-false-positive rule's prefecture/county names
+      #                         (1,696 poems); historic names stay in the verbatim matters
+      #                         bag until a gazetteer join — the census surfaced all three
+      #                         unprojected
   honkoku:                    # the NDL-held materials' NDL catalog record (HonkokuNdlCatalog —
     fields: #                   867 of 918 NDL-manifest materials join the held census, 2026-10-18)
       ndl_catalog.author_names: author  # the 著者 parts' names, role split off — the NDL
@@ -458,3 +486,54 @@ sources:
   bibyeonsa:                  # 998 person tags (75 upstream double-tags fold → 923 mentions) →
     passage_fields: #           802 records on 736 of 93,528 passages, 26 distinct — by person pid
       persons: person
+  openmgh:                    # a full parse of canonical/openmgh, 2026-10-19 (153 volumes)
+    passage_fields: #           — the Scriptores work-div titles and the Diplomata issuing places
+      work: work              # 33,221 page passages in 140 volumes, 507 distinct work titles
+      #                         verbatim from div[@type=work]/@n ("Ottokars Österr. Reimchron. I"
+      #                         720 · "Konrad v. Megenberg. Ökonomik" 641 · "Ioh. Vict. hist." 624 ·
+      #                         "Greg. Tur. hist." 536 …) — a volume can hold many works, so the
+      #                         claim is per passage, never per document
+      place: place            # 1,633 of 2,808 charter passages, 424 distinct issuing places —
+      #                         the dating line's place verbatim ("Kaiserswerth, im Lager", "im
+      #                         Gebiet von Vercelli"); the same claim rides the charter's
+      #                         passage-grain axis row (TimelineBuilder::OpenmghCharterDates)
+  ud:                         # census of canonical/ud 2026-10-19 (34 treebanks, 81 split documents)
+    fields: #                   the README machine-readable Genre line, all 34 treebanks —
+      genres: genre           # UD's own genre tags, one row per tag (nonfiction 56 docs · bible
+      #                         33 · fiction 26 · poetry 20 · legal 15 · news · grammar-examples ·
+      #                         government · email · academic); a treebank-level claim
+    passage_fields: #           the sentence comments ConlluParser's whitelist carries
+      king: ruler             # egyptian-pc, all 3,089 sentences: the pyramid's king (Unas 1,240 ·
+      #                         Pepi 829 · Teti 744 · Neferkare 230 · Neith 40 — a queen's
+      #                         pyramid, upstream's label · Merenre 6) — CDLI's ruler facet name
+      genre: genre            # egyptian-pc "religious" on all 3,089 — the passage grain of the
+      #                         same axis name as the document facet (the itkc precedent)
+      author: author          # coptic-bohairic meta::author, newdoc-scoped (Paul the apostle ·
+      #                         Mena of Pshati · Palladius · "N/A"/"unknown" — upstream's claims)
+  # -- the dictionary-entry grain (entry_fields → Store::EntryFacetBuilder) --
+  # Keys name dictionary_entries.annotations_json fields the adapter mines
+  # per ENTRY; values project verbatim, one pair per (entry, value).
+  edrdg:                      # JMdict sense labels, deduped per entry (JMdict_e 2026-07-19 build)
+    entry_fields:
+      field: domain           # <field> 34,235 tags as the DTD expands them: computing 10,750 ·
+      #                         medicine 2,688 · food, cooking 1,872 · Buddhism 1,524 · law 933 …
+      misc: usage             # <misc> verbatim (all of it — register AND word-type marks):
+      #                         usually written using kana alone · abbreviation · archaic 3,781 ·
+      #                         historical term 2,908 · colloquial · slang · honorific …
+      dial: dialect           # <dial> 610: Kansai-ben · Kyuushuu-ben · Touhoku-ben …
+      lsource: loan_source    # <lsource> donor code verbatim (ISO 639-2: fre · ger · eng · san …;
+      #                         an absent xml:lang is the DTD default "eng") — genuine loans only
+      wasei: wasei_source     # <lsource ls_wasei="y"> 2,048: made-in-Japan from the donor's
+      #                         elements — a donor-element claim, never a loan (no reflex edge)
+  wold:                       # every one of the 64,289 lexemes carries its meaning's fields
+    entry_fields:
+      semantic_field: semantic_field  # parameters.csv Semantic_field, 24 fields: The body ·
+      #                         Animals · Agriculture and vegetation · Kinship · Law …
+      semantic_category: word_class   # Noun 38,160 · Verb 15,680 · Adjective 5,728 ·
+      #                         Function word 4,522 · Adverb 198
+      borrowed: borrowed_status       # the curated five-point scale verbatim: "1. clearly
+      #                         borrowed" 13,304 … "5. no evidence for borrowing" 46,379
+  tls:                        # tls-words: 34,808 word→concept assignments (tls:concept-id)
+    entry_fields:
+      concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
+      #                         entry id the word→concept crossref resolves to)

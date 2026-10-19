@@ -482,6 +482,7 @@ namespace :builders do
                                             progress: progress)
     puts "builders:refresh done — facets #{summary.facets.rows} rows · " \
          "passage facets #{summary.passage_facets.rows} rows · " \
+         "entry facets #{summary.entry_facets.rows} rows · " \
          "lect #{summary.lect_rows} rows · dictionaries #{summary.dictionary_stats} · " \
          "derge titles #{summary.derge_titles.titled} · " \
          "lemma rollup #{summary.lemma_rollups.lemma_rows} rows · " \

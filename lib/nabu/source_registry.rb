@@ -175,6 +175,8 @@ module Nabu
     # nil (the default) = the source mints no parallel siblings. Declaring
     # a tail is a CENSUS CLAIM: no upstream document id may end in it —
     # the per-source freeze the retired regex constants used to encode.
+    # +sibling_namespaces+: the urn namespaces a tail list covers when
+    # they differ from the slug (nil = the slug; see sibling_namespaces!).
     # +axes+ (P35-0): the source's research-axis memberships — a non-empty
     # list of names defined in config/axes.yml (AxisRegistry), validated at
     # load. Axes are TAGS (multi-membership deliberate, whole-source grain);
@@ -202,14 +204,14 @@ module Nabu
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :cjk_index, :embed_index, :lemma_tier,
                         :lemma_dictionary_filter,
-                        :classes, :siblings, :axes,
+                        :classes, :siblings, :sibling_namespaces, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
                         :group, :requires, :adopted, :credentials) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
                      embed_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, lemma_dictionary_filter: false,
-                     classes: nil, siblings: nil, axes: [],
+                     classes: nil, siblings: nil, sibling_namespaces: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
                      group: nil, requires: [], adopted: nil, credentials: nil)
@@ -399,6 +401,7 @@ module Nabu
         lemma_dictionary_filter: boolean!(slug, config, "lemma_dictionary_filter"),
         classes: classes!(slug, config),
         siblings: siblings!(slug, config),
+        sibling_namespaces: sibling_namespaces!(slug, config),
         axes: axes!(slug, config, axis_registry),
         adopted: adopted!(slug, config),
         grant_required: grant_required, grant: grant,
@@ -548,6 +551,28 @@ module Nabu
                              "non-empty list of \"-\"-leading tail patterns, got #{value.inspect}"
     end
     private_class_method :siblings!
+
+    # The urn namespaces a tail-list `siblings:` declaration covers when
+    # they are NOT the slug (papyri-ddbdp mints urn:nabu:ddbdp:* and
+    # urn:nabu:dclp:*). nil (the default) = the slug is the namespace.
+    # Meaningless without a tail list, so declaring it alone is an error.
+    SIBLING_NAMESPACE = /\A[a-z0-9][a-z0-9.-]*\z/
+    private_constant :SIBLING_NAMESPACE
+
+    def self.sibling_namespaces!(slug, config)
+      value = config.fetch("sibling_namespaces", nil)
+      return nil if value.nil?
+
+      unless config["siblings"].is_a?(Array)
+        raise ValidationError, "source #{slug.inspect}: sibling_namespaces needs a tail-list siblings: declaration"
+      end
+      return value if value.is_a?(Array) && !value.empty? &&
+                      value.all? { |name| name.is_a?(String) && name.match?(SIBLING_NAMESPACE) }
+
+      raise ValidationError, "source #{slug.inspect}: sibling_namespaces must be a non-empty list of urn " \
+                             "namespace names, got #{value.inspect}"
+    end
+    private_class_method :sibling_namespaces!
 
     def self.valid_sibling_tail?(tail)
       return false unless tail.is_a?(String) && tail.start_with?("-")

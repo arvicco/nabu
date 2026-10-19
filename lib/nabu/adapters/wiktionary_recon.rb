@@ -313,7 +313,13 @@ module Nabu
           # 88,119 of 327,296 entries, 18x every other extract combined;
           # a thesaurus, not entry-to-entry "see" pointers. Left as a
           # census finding.
-          crossrefs: false
+          crossrefs: false,
+          # NO etymon edges either: the etymology-template mining is scoped
+          # outside Chinese. Census 2026-10-19 on the full file: 8,211
+          # templates on 7,000 records (bor 4,894 · der 2,328 · inh 972 ·
+          # lbor 17), led by modern donors (en 2,469, ja 427, ms 219) and
+          # sit-pro 1,022 — the shelf stays byte-stable; a later call.
+          etymons: false
         }
       }.freeze
 
@@ -373,9 +379,12 @@ module Nabu
         # 31,365 pointers on 9,104 entries (related 24,082 · synonym
         # 6,930 · antonym 353 — sla-pro alone 13,105), 17,856 resolving to
         # a unique headword of the same extract.
+        # The etymology_templates edges (WiktionaryJsonlParser
+        # ETYMON_TEMPLATES) ride every extract but zh (see its row).
         WiktionaryJsonlParser.new(language: extract.fetch(:language), reflexes: true,
                                   historical_sounds: extract.fetch(:historical_sounds, false),
-                                  crossrefs: extract.fetch(:crossrefs, true))
+                                  crossrefs: extract.fetch(:crossrefs, true),
+                                  etymons: extract.fetch(:etymons, true))
                              .entries(document_ref.path).each { |entry| document << entry }
         document
       rescue Nabu::ValidationError => e

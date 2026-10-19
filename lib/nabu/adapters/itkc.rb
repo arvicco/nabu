@@ -37,7 +37,16 @@ module Nabu
 
       # Fascicle files carry the _NNNN 권차 suffix; the suffix-less
       # sibling is the work's 서지 sidecar (metadata, never a document).
-      FASCICLE_RE = /\AITKC_[A-Z]{2}_.+_\d{4}\.xml\z/
+      # The work id is one underscore-free segment, so the pattern stops
+      # at the 권차 grain: the MO zips ALSO ship each volume split per
+      # 문체 section (_NNNN_NNN) and per article (_NNNN_NNN_NNNN) — the
+      # volume file's own articles again (canonical census 2026-10-19:
+      # 285 volumes carry all 14,190 MO articles; 318 section files and
+      # 9,814 article files repeat them). Those splits are skipped by
+      # rule, never documents (a looser `.+` here double-loaded every
+      # split article).
+      FASCICLE_RE = /\AITKC_[A-Z]{2}_[^_]+_\d{4}\.xml\z/
+      SPLIT_RE = /\AITKC_[A-Z]{2}_[^_]+_\d{4}_\d{3}(?:_\d{4})?\.xml\z/
 
       # The 17 scouted datasets (verified 제한 없음 2026-08-18; each
       # subdir is the pk — upstream-stable, unambiguous). New ITKC
@@ -144,10 +153,10 @@ module Nabu
 
       def discovery_skips(workdir)
         strays = stray_files(workdir)
-        Nabu::Adapter::DiscoverySkips.new(
-          unrecognized: strays.size,
-          notes: strays.map { |path| "non-corpus file: #{path}" }
-        )
+        splits = split_files(workdir).size
+        notes = strays.map { |path| "non-corpus file: #{path}" }
+        notes << "#{splits} MO sub-fascicle split file(s) repeat their volume's articles — skipped" if splits.positive?
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: splits, unrecognized: strays.size, notes: notes)
       end
 
       def parse(document_ref)
@@ -180,6 +189,12 @@ module Nabu
            .reject { |path| path.include?("/#{ATTIC_DIRNAME}/") }
            .select { |path| File.basename(path).match?(FASCICLE_RE) }
            .sort
+      end
+
+      def split_files(workdir)
+        Dir.glob(File.join(workdir, "**", "ITKC_*.xml"))
+           .reject { |path| path.include?("/#{ATTIC_DIRNAME}/") }
+           .select { |path| File.basename(path).match?(SPLIT_RE) }
       end
 
       def stray_files(workdir)

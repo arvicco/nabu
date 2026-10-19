@@ -101,7 +101,7 @@ module Nabu
           slug: DICTIONARY_SLUG, language: LANGUAGE,
           title: TITLE, canonical_path: document_ref.path
         )
-        WiktionaryJsonlParser.new(language: LANGUAGE, reflexes: true)
+        WiktionaryJsonlParser.new(language: LANGUAGE, reflexes: true, etymons: true)
                              .entries(document_ref.path).each { |entry| document << entry }
         document
       rescue Nabu::ValidationError => e

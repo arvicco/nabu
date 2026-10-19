@@ -86,6 +86,16 @@ verbatim) for the subgenre / seal_id mining:
 | `P384833` | TWO ETCSL refs in one subgenre cell, the second cut off at the column limit ("… ETCSL 1.08.02.02 Lugalb"), and two composites (`Q000367, Q000368`) |
 | `P101833` | seal_id `S000493.2, S002932` — a sub-numbered seal composite beside a plain one |
 
+### Accounting-period row (appended 2026-10-19)
+
+One more metadata-only row from the same box-held payload, appended the
+same way (Ruby CSV, CRLF, all 64 columns, content verbatim) for the
+archaeological-context mining:
+
+| row | why |
+| --- | --- |
+| `P120698` | accounting_period `Ibbi-Suen.01.02.00 to Ibbi-Suen.02.02.00 (us2 year)  (Reichskalender)` (both ends ruled — the timeline envelope) whose dates_referenced LIST carries the "(us2 year)" mark only on its second entry; provenience_remarks `Ur calendar`; join_information `P120698 lead` |
+
 ## Trim recipe
 
 Blocks/rows extracted by P-number with a python csv/regex pass over the

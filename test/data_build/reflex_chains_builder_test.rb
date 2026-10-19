@@ -223,6 +223,22 @@ class ReflexChainsBuilderTest < Minitest::Test
     end
   end
 
+  # Migration 046: an ETYMON row (the entry's own ancestor/donor — an UP
+  # edge) is no descendant-tree node; the export holds it out, censused.
+  def test_etymon_rows_are_held_out_of_the_descent_table_and_censused
+    hlaibaz = @catalog[:dictionary_entries].where(entry_id: "hlaibaz").get(:id)
+    @catalog[:dictionary_reflexes].insert(
+      dictionary_entry_id: hlaibaz, seq: 6, lang_code: "ine-pro", language: "ine-pro", word: "*kleyb-",
+      word_folded: "kleyb-", borrowed: false, uncertain: false, relation: "inherited"
+    )
+    Dir.mktmpdir do |dir|
+      evaluation = build!(dir).evaluation
+      refute_includes table(dir).map { |row| row["Form"] }, "*kleyb-"
+      assert_equal 6, evaluation["published_rows"]
+      assert_equal 1, evaluation["etymon_rows_held_out"]
+    end
+  end
+
   def test_refuses_without_a_catalog
     Dir.mktmpdir do |dir|
       error = assert_raises(Nabu::DataBuild::Error) do
