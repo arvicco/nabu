@@ -1292,7 +1292,14 @@ sillok/sjw/itkc (P78), ref (the ENHG century-half grid) and
 corpus-corporum (the fetch checkpoint's work_composition/author-life
 years with the teiHeader author_date ladder as fallback, P81-1); its ebl
 shape carries the era ladder (exact Seleucid conversion + king-reign
-bands above the ruled period table, P81-1). The P81-1 `NikhEntryDates`
+bands above the ruled period table, P81-1). Ruled tables also serve
+sources whose metadata carries a LABEL rather than a date: ociana's script
+tradition and dcs's composition time slot band through period_bands rows
+(precision `era`); classical-modern's works through the per-work
+`config/work_eras.yml` (attributed composition era, keyed on the work);
+achemenet's archives through `config/archive_axes.yml` (reign volume →
+the regnal table's whole-reign span, else the volume's stated span, else
+the corpus band, plus the archive's findspot). The P81-1 `NikhEntryDates`
 lane projects the NIKH chronicle family's per-entry machine dates from
 CATALOG annotations (load-verified f(canonical) — no re-parse):
 passage-grain year runs (axis_source `<slug>-entries`) plus document

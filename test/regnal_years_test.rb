@@ -24,6 +24,17 @@ class RegnalYearsTest < Minitest::Test
     assert_equal :out_of_range, table.span("Amar-Suen", 12), "Amar-Suen reigned 9 years"
   end
 
+  # The Achaemenid reigns the Babylonian archives date by (Parker &
+  # Dubberstein): Cyrus II and Cambyses II join under cdli's NUMBERED
+  # spellings only — bare "Cyrus"/"Cambyses" stay unruled homonyms.
+  def test_cyrus_and_cambyses_rule_under_their_numbered_spellings
+    table = Nabu::RegnalYears.default
+    assert_equal [-538, -530], table.span("Cyrus2", 0), "P&D: Cyrus years 1–9 = 538/7–530/29 BC"
+    assert_equal [-529, -522], table.span("Cambyses2", 0), "P&D: Cambyses years 1–8 = 529/8–522/1 BC"
+    assert_equal [-536, -536], table.span("Cyrus2", 3)
+    assert_equal :unruled, table.span("Cyrus", 3), "the unnumbered homonym stays unruled"
+  end
+
   def test_load_returns_nil_for_a_missing_file
     assert_nil Nabu::RegnalYears.load("/nonexistent/regnal_years.yml")
   end
