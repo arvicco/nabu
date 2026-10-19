@@ -35,8 +35,6 @@ betamasaheft_works.rb:
   reads: 1
 bfm.rb:
   reads: 1
-bfm_tei_parser.rb:
-  reads: 1
 bilara_json_parser.rb:
   reads: 1
 bosworth_csv_parser.rb:
@@ -46,8 +44,6 @@ bu_ajami_item_parser.rb:
 cantigas_html_parser.rb:
   reads: 1
 cbdb.rb:
-  reads: 1
-cbeta_tei_parser.rb:
   reads: 1
 ccl.rb:
   reads: 2
@@ -80,14 +76,10 @@ corph_sql_parser.rb:
   reads: 1
 corpus_corporum.rb:
   reads: 1
-corpus_corporum_tei_parser.rb:
-  reads: 1
 corpus_gysseling.rb:
   reads: 2
 corpus_oudnederlands.rb:
   reads: 2
-croala_tei_parser.rb:
-  reads: 1
 ctilc.rb:
   reads: 4
 dacon_pos_parser.rb:
@@ -128,14 +120,10 @@ disco_tei_parser.rb:
   reads: 1
 dta.rb:
   reads: 1
-dta_tei_parser.rb:
-  reads: 1
 e84000.rb:
   reads: 1
 e84000_glossary_lane.rb:
   reads: 2
-e84000_tei_parser.rb:
-  reads: 1
 ebl.rb:
   reads: 1
 edh.rb:
@@ -183,7 +171,7 @@ gpc_xlsx_parser.rb:
 gretil.rb:
   reads: 2
 gretil_parser.rb:
-  reads: 4
+  reads: 3
 gysseling_fromdb_parser.rb:
   utf8_guards: 1
 hdic_tsv_parser.rb:
@@ -312,8 +300,6 @@ openiti_markdown_parser.rb:
   reads: 1
 openiti_sidecar.rb:
   reads: 1
-openmgh_tei_parser.rb:
-  reads: 1
 oracc.rb:
   reads: 4
 oracc_glossary_lane.rb:
@@ -366,8 +352,6 @@ sabellic_loans.rb:
   reads: 2
 sarit.rb:
   reads: 1
-sarit_parser.rb:
-  reads: 1
 sblgnt.rb:
   reads: 1
 sblgnt_parser.rb:
@@ -411,11 +395,11 @@ srophe_tei_parser.rb:
 starling_dbf_parser.rb:
   reads: 2
   byteslices: 4
+streaming_tei_parser.rb:
+  reads: 1
 suttacentral.rb:
   reads: 1
 tamilex_tei_parser.rb:
-  reads: 1
-tcp_xml_parser.rb:
   reads: 1
 text_fabric.rb:
   reads: 1
