@@ -209,7 +209,11 @@ module Nabu
                                          "publishers) — edition lineage, not the Middle English " \
                                          "text's origin",
                    "pub_date" => "the U-M e-text release year, machinery — the source edition's " \
-                                 "year projects instead (date_class edition)" },
+                                 "year projects instead (date_class edition)",
+                   "subjects" => "the SOURCE EDITION's catalog headings (94 of 297 files: a " \
+                                 "periodical's own 'Verband der deutschen neuphilologischen " \
+                                 "lehrerschaft', 'Language and languages') — edition lineage, " \
+                                 "not the Middle English text's genre" },
         "openmgh" => { "printed_place" => "the modern MGH volume's publisher city — edition " \
                                           "lineage; the print year projects (date_class edition)" },
         "papyri-ddbdp" => { "mentioned_dates" => "dates the papyrus TEXT mentions (HGV <date " \

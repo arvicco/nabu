@@ -190,7 +190,7 @@ class FacetMapTest < Minitest::Test
       "shabados" => { "authors" => "author" },
       "bu-ajami" => { "author_or_owner" => "author" },
       "africa-pd" => { "author" => "author" },
-      "eebo-tcp" => { "author" => "author" },
+      "eebo-tcp" => { "author" => "author", "subjects" => "subject" },
       "dta" => { "author" => "author", "author_gnd" => "author_id" },
       "corpus-corporum" => { "author" => "author", "author_ref" => "author_id",
                              "series_idno" => "work_id" },

@@ -154,6 +154,26 @@ class EeboTcpTest < Minitest::Test
     assert(document.none? { |passage| passage.text.include?("picture frame") })
   end
 
+  # -- parse: subject headings (LCSH, verbatim) --------------------------------
+
+  def test_the_lcsh_subject_headings_ride_metadata_verbatim
+    # TEXTCLASS/KEYWORDS/TERM on 57,064 of the 60,326 held files (census
+    # 2026-10-19): the heading is the claim — its "--" subdivisions
+    # (place, period, form) are never parsed apart.
+    assert_equal ["Charles -- I, -- King of England, 1600-1649 -- Early works to 1800.",
+                  "Yorkshire (England) -- History -- Early works to 1800.",
+                  "Great Britain -- History -- Civil War, 1642-1649 -- Early works to 1800."],
+                 adapter.parse(ref_for(PETITION)).metadata["subjects"]
+    assert_equal ["Raleigh, Walter, -- Sir, 1552?-1618."], adapter.parse(ref_for(RALEIGH)).metadata["subjects"]
+    assert_equal ["Jesus Christ -- Poetry."], adapter.parse(ref_for(ODE)).metadata["subjects"]
+  end
+
+  def test_the_subjects_project_as_the_subject_facet
+    fields = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+                           .fields_for("eebo-tcp")
+    assert_equal "subject", fields["subjects"], "config/facet_map.yml eebo-tcp: subjects → subject"
+  end
+
   # -- parse: dating (the imprint molds) --------------------------------------
 
   def test_dating_registers_in_the_metadata_dates_lane
