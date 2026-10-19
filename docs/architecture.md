@@ -1400,6 +1400,18 @@ CDLI literary rows' museum/excavation numbers both assert
 segment padding) live in `Adapters::CuneiformConcordance`, under adapters/
 so they ride only the cdli/etcsl derivation closures.
 
+**The PTS page concordance (2026-10-20).** The Pali Text Society
+volume.page citation is a PASSAGE annotation in one shared notation,
+never a journal edge: CBETA's N canon carries it per line as `cref`
+(`PTS.S.3.1`, upstream's own `<ref cRef>`), and SuttaCentral's reference
+sidecars fold into a `pts` key list in the identical spelling
+(`PTS.S.4.16`; `Adapters::PtsConcordance` — book siglum from the root
+path, the Apadāna's continuous pagination folded, two-edition books kept
+edition-explicit as `PTS-ed1.…`/`PTS-ed2.…`), with the VRI tokens beside
+it as `vri`. A Pali segment and its Japanese translation meet on equal
+strings — pairing is a read-time join (the 84000 folio precedent), so
+nothing is minted into the links journal.
+
 **Part 2b — TOROT chronicle annals (`TimelineBuilder::ChronicleAnnals`, P16-3):
 the first PASSAGE-GRAIN rows**, using migration 008's `passage_seq_*` columns
 as designed. Census: the annal year is structural — chronicle `<div>` titles

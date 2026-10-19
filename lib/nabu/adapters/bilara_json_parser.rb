@@ -2,6 +2,8 @@
 
 require "json"
 
+require_relative "pts_concordance"
+
 module Nabu
   module Adapters
     # The `bilara-json` parser family (P26-1): SuttaCentral's bilara-data
@@ -49,6 +51,11 @@ module Nabu
     # absent when everything joined). No sidecars → the annotations stay {}
     # exactly as before.
     #
+    # The "refs" string is also the PTS / VRI concordance: its page tokens
+    # fold into a "pts" key list ("PTS.S.4.16") and its VRI tokens into
+    # "vri", beside the verbatim string (Adapters::PtsConcordance; the
+    # adapter passes the root book's +pts_siglum+).
+    #
     # A malformed file, a non-map top level, a non-string segment, or a file
     # with zero non-blank segments is damage → Nabu::ParseError (quarantine);
     # the same holds for a malformed sidecar (its path named).
@@ -56,14 +63,16 @@ module Nabu
       # Same keyword family as ConlluParser#parse. +stem+ is the upstream
       # text uid (the filename stem before the first "_"); +license_override+
       # is the P10-4 per-document class (the pdhp BY-SA translation);
-      # +sidecars+ is { annotation key => sidecar segment-map path }.
-      def parse(path, urn:, stem:, language:, metadata: {}, license_override: nil, sidecars: {})
+      # +sidecars+ is { annotation key => sidecar segment-map path };
+      # +pts_siglum+ the PTS siglum of the root's book (PtsConcordance) —
+      # nil folds no PTS page keys (VRI tokens need none).
+      def parse(path, urn:, stem:, language:, metadata: {}, license_override: nil, sidecars: {}, pts_siglum: nil)
         segments = read_segments(path)
         kept = segments.reject { |_id, text| text.strip.empty? }
         raise ParseError, "#{path}: no non-blank segments" if kept.empty?
 
-        annotations = sidecar_annotations(sidecars)
-        unjoined = unjoined_census(annotations, kept)
+        annotations = sidecar_annotations(sidecars, pts_siglum: pts_siglum)
+        unjoined = unjoined_census(annotations, kept, sidecars.keys)
         metadata = metadata.merge("sidecar_unjoined" => unjoined) unless unjoined.empty?
 
         document = Nabu::Document.new(
@@ -84,12 +93,17 @@ module Nabu
       private
 
       # segment id → { annotation key => stripped NFC string }, over every
-      # sidecar file's non-blank values.
-      def sidecar_annotations(sidecars)
+      # sidecar file's non-blank values; a "refs" string also yields its
+      # folded "pts" / "vri" concordance keys (PtsConcordance).
+      def sidecar_annotations(sidecars, pts_siglum:)
         sidecars.each_with_object({}) do |(key, sidecar_path), by_segment|
           read_segments(sidecar_path).each do |id, value|
             stripped = value.strip
-            (by_segment[id] ||= {})[key] = Normalize.nfc(stripped) unless stripped.empty?
+            next if stripped.empty?
+
+            annotations = (by_segment[id] ||= {})
+            annotations[key] = Normalize.nfc(stripped)
+            annotations.merge!(PtsConcordance.split(annotations[key], siglum: pts_siglum)) if key == "refs"
           end
         end
       end
@@ -97,11 +111,13 @@ module Nabu
       # annotation key → count of non-blank sidecar values keyed to a segment
       # id with no passage (a skipped blank segment, or an id the root
       # lacks). Counted, never re-homed onto a neighbouring passage.
-      def unjoined_census(annotations, kept)
+      # Only the sidecar keys count — the folded pts/vri keys ride a refs
+      # value and are not separate upstream data.
+      def unjoined_census(annotations, kept, sidecar_keys)
         annotations.each_with_object(Hash.new(0)) do |(id, by_key), census|
           next if kept.key?(id)
 
-          by_key.each_key { |key| census[key] += 1 }
+          (by_key.keys & sidecar_keys).each { |key| census[key] += 1 }
         end.sort.to_h
       end
 

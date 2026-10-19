@@ -24,19 +24,25 @@ class SuttacentralTest < Minitest::Test
 
   ROOT_URNS = %w[
     urn:nabu:suttacentral:dhp21-32
+    urn:nabu:suttacentral:kp1
     urn:nabu:suttacentral:pdhp1-13
     urn:nabu:suttacentral:sa158
     urn:nabu:suttacentral:sa7
+    urn:nabu:suttacentral:sn1.45
     urn:nabu:suttacentral:sn35.24
     urn:nabu:suttacentral:sn46.70
     urn:nabu:suttacentral:t1536.12
+    urn:nabu:suttacentral:thi-ap2
   ].freeze
 
   # Roots the fixture tree carries WITHOUT an English file: the abhidhamma
   # root honestly stays sibling-less (patton translates only ma/sa/ea19
   # today); the sidecar-census roots were snapshotted without their
   # translations (only their sidecar shape matters).
-  SIBLINGLESS = %w[urn:nabu:suttacentral:t1536.12 urn:nabu:suttacentral:sa7].freeze
+  SIBLINGLESS = %w[
+    urn:nabu:suttacentral:t1536.12 urn:nabu:suttacentral:sa7 urn:nabu:suttacentral:sn1.45
+    urn:nabu:suttacentral:kp1 urn:nabu:suttacentral:thi-ap2
+  ].freeze
   ALL_URNS = (ROOT_URNS + (ROOT_URNS - SIBLINGLESS).map { |u| "#{u}-en" }).sort.freeze
 
   def conformance_adapter
@@ -276,6 +282,7 @@ class SuttacentralTest < Minitest::Test
     assert_equal({
                    "variants" => "anabhiratisaññā → anabhiratasaññā (bj)",
                    "refs" => "ms14S5_687, msdiv251, vri27.160",
+                   "vri" => ["vri27.160"],
                    "comments" => "Defined at <a href='https://suttacentral.net/an10.60/en/sujato#11.1'>" \
                                  "AN 10.60:11.1</a> as non-attachment."
                  }, passage.annotations,
@@ -296,6 +303,43 @@ class SuttacentralTest < Minitest::Test
     passage = parse_urn("urn:nabu:suttacentral:sn35.24").find { |p| p.urn.end_with?(":1.1") }
     assert_equal "dr18.18, ms13S4_65, msdiv24, pts-vp-pli4.16, sya18.20, vri26.15", passage.annotations["refs"]
     assert_equal "Sabbappahānāya → sabbaṁ pahānāya (sya-all, km, mr)", passage.annotations["variants"]
+  end
+
+  # --- the PTS / VRI concordance (folded out of the reference string) ---------
+
+  def test_a_segment_knows_its_pts_page_and_vri_reference
+    passage = parse_urn("urn:nabu:suttacentral:sn35.24").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal ["PTS.S.4.16"], passage.annotations["pts"],
+                 "pts-vp-pli4.16 in an SN file = SN iv 16, spelled as CBETA N's cref anchors"
+    assert_equal ["vri26.15"], passage.annotations["vri"]
+    assert_includes passage.annotations["refs"], "pts-vp-pli4.16", "the verbatim string stays beside the keys"
+  end
+
+  def test_sn_volume_one_keeps_both_pts_editions_apart
+    passage = parse_urn("urn:nabu:suttacentral:sn1.45").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal %w[PTS-ed1.S.1.33 PTS-ed2.S.1.69], passage.annotations["pts"],
+                 "SN I has two PTS editions with different pagination — the edition is never assumed"
+    refute passage.annotations.key?("vri"), "sn1.45 carries no VRI token"
+  end
+
+  def test_a_single_volume_book_cites_page_only
+    passage = parse_urn("urn:nabu:suttacentral:kp1").find { |p| p.urn.end_with?(":2.1") }
+    assert_equal ["PTS.Khp.1"], passage.annotations["pts"]
+    assert_equal ["vri47.1"], passage.annotations["vri"]
+    vri_only = parse_urn("urn:nabu:suttacentral:kp1").find { |p| p.urn.end_with?(":4.1") }
+    assert_equal({ "refs" => "ms18Kh_4, vri47.2", "vri" => ["vri47.2"] }, vri_only.annotations)
+  end
+
+  def test_the_apadana_page_folds_its_volume
+    passage = parse_urn("urn:nabu:suttacentral:thi-ap2").find { |p| p.urn.end_with?(":5.1") }
+    assert_equal ["PTS.Ap.514"], passage.annotations["pts"], "Ap II continues Ap I's pagination"
+  end
+
+  def test_reference_strings_without_pts_or_vri_tokens_mint_neither_key
+    passage = parse_urn("urn:nabu:suttacentral:dhp21-32").find { |p| p.urn.end_with?(":dhp24:1") }
+    assert_equal ["refs"], passage.annotations.keys - ["variants"]
+    sa = parse_urn("urn:nabu:suttacentral:sa158")
+    assert(sa.none? { |p| p.annotations.key?("pts") || p.annotations.key?("vri") }, "Taishō lines only")
   end
 
   def test_a_blank_upstream_comment_mints_no_comments_key
