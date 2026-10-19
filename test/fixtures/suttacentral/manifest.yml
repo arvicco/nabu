@@ -126,3 +126,29 @@ files:
     url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/variant/lzh/sct/sutta/lzh-minor/lzh-iti/lzh-iti83_variant-lzh-sct.json
     whole: true
     trim: none (complete variant file, copied whole; its root is unpublished upstream)
+  # PTS-concordance additions (2026-10-20): same provenance as above —
+  # copied whole (cp + cmp) from the held canonical tree at a20fcb09.
+  - path: root/pli/ms/sutta/sn/sn1/sn1.45_root-pli-ms.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/root/pli/ms/sutta/sn/sn1/sn1.45_root-pli-ms.json
+    whole: true
+    trim: none (complete sutta file, copied whole)
+  - path: reference/pli/ms/sutta/sn/sn1/sn1.45_reference.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/reference/pli/ms/sutta/sn/sn1/sn1.45_reference.json
+    whole: true
+    trim: none (complete reference file, copied whole; two PTS editions on 1.1)
+  - path: root/pli/ms/sutta/kn/kp/kp1_root-pli-ms.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/root/pli/ms/sutta/kn/kp/kp1_root-pli-ms.json
+    whole: true
+    trim: none (complete Khuddakapatha file, copied whole)
+  - path: reference/pli/ms/sutta/kn/kp/kp1_reference.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/reference/pli/ms/sutta/kn/kp/kp1_reference.json
+    whole: true
+    trim: none (complete reference file, copied whole; page-only PTS token)
+  - path: root/pli/ms/sutta/kn/thi-ap/thi-ap2_root-pli-ms.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/root/pli/ms/sutta/kn/thi-ap/thi-ap2_root-pli-ms.json
+    whole: true
+    trim: none (complete Apadana file, copied whole)
+  - path: reference/pli/ms/sutta/kn/thi-ap/thi-ap2_reference.json
+    url: https://raw.githubusercontent.com/suttacentral/bilara-data/a20fcb094d1d618080e52f41f24d20d5e347b0f7/reference/pli/ms/sutta/kn/thi-ap/thi-ap2_reference.json
+    whole: true
+    trim: none (complete reference file, copied whole; Ap II page token)

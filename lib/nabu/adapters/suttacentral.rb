@@ -4,6 +4,7 @@ require "json"
 
 require_relative "../file_fetch"
 require_relative "../suttacentral_parallels"
+require_relative "pts_concordance"
 
 module Nabu
   module Adapters
@@ -147,6 +148,17 @@ module Nabu
     # (variant/lzh/sct/…/lzh-iti83, 5 readings — bilara has not published
     # that root): a censused discovery rule skip.
     #
+    # The reference strings are also the PTS / VRI concordance: each root
+    # ref carries its book's PTS siglum ("pts_siglum", from the root path —
+    # Adapters::PtsConcordance), and the parser folds every reference
+    # string's PTS page tokens into a passage "pts" key list ("PTS.S.4.16")
+    # and its VRI tokens into "vri". The seam is the passage annotation,
+    # not the links journal: the citation is a property of the segment,
+    # derivable at parse time, and the house's other PTS citations (CBETA
+    # N's per-line "cref") are passage annotations in the identical
+    # notation — pairing them is a read-time join, the 84000 folio
+    # precedent, so no edges are minted.
+    #
     # == fetch (the shared git path, pinned to `published`)
     #
     # One ordinary clone/pull of the bilara-data repo (~353 MB with .git at
@@ -280,7 +292,8 @@ module Nabu
           language: metadata.fetch("language"),
           metadata: document_metadata(metadata),
           license_override: metadata["license_override"],
-          sidecars: metadata.fetch("sidecars", {})
+          sidecars: metadata.fetch("sidecars", {}),
+          pts_siglum: metadata["pts_siglum"]
         )
       end
 
@@ -357,14 +370,16 @@ module Nabu
       end
 
       def root_ref(workdir, tree, path, stem, language:, edition:, sidecars:)
-        basket, collection = relative_parts(File.join(workdir, tree), path)
+        parts = relative_parts(File.join(workdir, tree), path)
+        basket, collection = parts
+        siglum = (PtsConcordance.siglum(parts) if sidecars.key?("refs"))
         Nabu::DocumentRef.new(
           source_id: manifest.id,
           id: "#{URN_PREFIX}#{stem}",
           path: File.expand_path(path),
           metadata: { "stem" => stem, "language" => language, "edition" => edition,
                       "basket" => basket, "collection" => collection,
-                      "sidecars" => (sidecars unless sidecars.empty?) }.compact
+                      "sidecars" => (sidecars unless sidecars.empty?), "pts_siglum" => siglum }.compact
         )
       end
 
@@ -419,12 +434,12 @@ module Nabu
       end
 
       # The dir parts of +path+ under +base+ minus the filename: basket
-      # ("sutta"/"vinaya"/"abhidhamma") and collection ("mn", "kn",
-      # "pli-tv-bu-vb", "pdhp"; nil for a file sitting at basket level).
+      # ("sutta"/"vinaya"/"abhidhamma"), collection ("mn", "kn",
+      # "pli-tv-bu-vb", "pdhp"; absent for a file sitting at basket level),
+      # then any deeper dirs (the kn book: "kp", "thi-ap").
       def relative_parts(base, path)
-        parts = File.expand_path(path).delete_prefix("#{File.expand_path(base)}#{File::SEPARATOR}")
-                    .split(File::SEPARATOR)[0...-1]
-        [parts[0], parts[1]]
+        File.expand_path(path).delete_prefix("#{File.expand_path(base)}#{File::SEPARATOR}")
+            .split(File::SEPARATOR)[0...-1]
       end
 
       # -- the -en sibling side ----------------------------------------------
