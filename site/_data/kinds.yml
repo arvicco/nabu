@@ -3,29 +3,29 @@
 as_of: 19 October 2026
 classes:
 - head: literary
-  documents: 687632
-  documents_display: '687,632'
+  documents: 687930
+  documents_display: '687,930'
   sources: 21
 - head: administrative
-  documents: 488359
-  documents_display: '488,359'
-  sources: 14
+  documents: 488363
+  documents_display: '488,363'
+  sources: 15
 - head: historiography
-  documents: 348625
-  documents_display: '348,625'
+  documents: 348676
+  documents_display: '348,676'
   sources: 19
 - head: funerary
-  documents: 114778
-  documents_display: '114,778'
+  documents: 114899
+  documents_display: '114,899'
   sources: 9
 - head: legal
-  documents: 35890
-  documents_display: '35,890'
+  documents: 35920
+  documents_display: '35,920'
   sources: 14
 - head: letter
-  documents: 34112
-  documents_display: '34,112'
-  sources: 11
+  documents: 34341
+  documents_display: '34,341'
+  sources: 12
 - head: royal
   documents: 30134
   documents_display: '30,134'
@@ -35,13 +35,13 @@ classes:
   documents_display: '22,915'
   sources: 7
 - head: scripture
-  documents: 21285
-  documents_display: '21,285'
-  sources: 18
+  documents: 21286
+  documents_display: '21,286'
+  sources: 19
 - head: lexical
-  documents: 16534
-  documents_display: '16,534'
-  sources: 8
+  documents: 16541
+  documents_display: '16,541'
+  sources: 9
 - head: ritual
   documents: 13544
   documents_display: '13,544'
@@ -55,25 +55,25 @@ classes:
   documents_display: '11,413'
   sources: 4
 - head: divination
-  documents: 10505
-  documents_display: '10,505'
-  sources: 7
+  documents: 10506
+  documents_display: '10,506'
+  sources: 8
 - head: scholarly
-  documents: 9301
-  documents_display: '9,301'
+  documents: 10135
+  documents_display: '10,135'
   sources: 13
 - head: building
   documents: 8016
   documents_display: '8,016'
   sources: 4
 - head: hymn-prayer
-  documents: 6487
-  documents_display: '6,487'
-  sources: 10
+  documents: 6504
+  documents_display: '6,504'
+  sources: 11
 - head: school
-  documents: 5190
-  documents_display: '5,190'
-  sources: 5
+  documents: 5192
+  documents_display: '5,192'
+  sources: 6
 - head: magic
   documents: 3327
   documents_display: '3,327'
@@ -87,9 +87,9 @@ classes:
   documents_display: '618'
   sources: 4
 unclassified_sources: 125
-unknown_documents: 46986
-unknown_documents_display: '46,986'
-unmapped_documents: 11125
-unmapped_documents_display: '11,125'
-unclassified_documents: 494821
-unclassified_documents_display: '494,821'
+unknown_documents: 47046
+unknown_documents_display: '47,046'
+unmapped_documents: 11128
+unmapped_documents_display: '11,128'
+unclassified_documents: 501878
+unclassified_documents_display: '501,878'
