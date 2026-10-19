@@ -640,6 +640,21 @@ module Store
       assert_nil timeline_for("urn:nabu:titus-manichaica:manreadc.manre090")
     end
 
+    # titus-sogdian: a page whose every line resolves to one findspot
+    # carries it as metadata "findspot" — the titus family's place-only
+    # lane, verbatim (the pages carry no dating).
+    def test_metadata_places_titus_sogdian_findspot
+      seed_metadata_doc("titus-sogdian", "urn:nabu:titus-sogdian:sogdnswc.sogdn385",
+                        { "text" => "Upp.Ind.", "findspot" => "Bugut" })
+      seed_metadata_doc("titus-sogdian", "urn:nabu:titus-sogdian:sogdmor.sogdm001", { "text" => "Stellung-Jesu" })
+      summary = build!
+      row = timeline_for("urn:nabu:titus-sogdian:sogdnswc.sogdn385")
+      assert_equal "Bugut", row[:place_name]
+      assert_nil row[:not_before], "place-only: no date is ever minted"
+      assert_nil timeline_for("urn:nabu:titus-sogdian:sogdmor.sogdm001")
+      assert_equal 1, summary.metadata_dates.fetch("titus-sogdian")
+    end
+
     # P109-4 (the unmined-metadata drain): edition print years project with the
     # honestly-labeled "edition" date class — never composition, never
     # a bare typed date.
