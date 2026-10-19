@@ -298,14 +298,23 @@ module Nabu
 
       # passage_urn => its GOLD lemma index rows (language-filtered when
       # --langs is active; silver rows are not reconstruction evidence —
-      # class note). Batched IN() — a whole-work query holds ~65k urns.
+      # class note). Batched IN() — a whole-work query holds ~65k urns. The
+      # lemma table keys passages by id (Store::Indexer class note), so each
+      # batch resolves its urns through the catalog first; a v1 table still
+      # keys them by its stored urn (lemma_passage_key).
       def lemma_rows_for(hits, langs)
         rows = Hash.new { |hash, key| hash[key] = [] }
+        key = Store::Indexer.lemma_passage_key(@fulltext)
         hits.map { |hit| hit.fetch(:passage_urn) }.uniq.each_slice(URN_BATCH) do |batch|
-          dataset = gold_lemma_rows.where(urn: batch)
+          urn_of = if key == :urn
+                     batch.to_h { |urn| [urn, urn] }
+                   else
+                     @catalog[:passages].where(urn: batch).select_hash(:id, :urn)
+                   end
+          dataset = gold_lemma_rows.where(key => urn_of.keys)
           dataset = dataset.where(language: langs) if langs
-          dataset.select(:urn, :language, :lemma_folded, :lemma_raw, :surface_forms)
-                 .each { |row| rows[row.fetch(:urn)] << row }
+          dataset.select(key, :language, :lemma_folded, :lemma_raw, :surface_forms)
+                 .each { |row| rows[urn_of.fetch(row.fetch(key))] << row }
         end
         rows
       end
@@ -354,7 +363,8 @@ module Nabu
       def accumulate(hits, lemma_rows, roots, doc_of)
         raw = {}
         hits.each do |hit|
-          lemma_rows.fetch(hit.fetch(:passage_urn), []).each do |row|
+          urn = hit.fetch(:passage_urn)
+          lemma_rows.fetch(urn, []).each do |row|
             key = [row.fetch(:language), row.fetch(:lemma_folded)]
             roots.fetch(key, []).each do |root_urn, borrowed|
               slot = ((raw[[hit.fetch(:ref), root_urn]] ||= {})[row.fetch(:language)] ||= {})
@@ -362,8 +372,8 @@ module Nabu
                 { lemma: row.fetch(:lemma_raw), borrowed: borrowed,
                   surfaces: Set.new, documents: Set.new, passages: Set.new }
               entry[:surfaces].merge(row.fetch(:surface_forms).split(", ").reject(&:empty?))
-              entry[:documents].add(doc_of.fetch(row.fetch(:urn)))
-              entry[:passages].add(row.fetch(:urn))
+              entry[:documents].add(doc_of.fetch(urn))
+              entry[:passages].add(urn)
             end
           end
         end

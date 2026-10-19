@@ -127,7 +127,7 @@ module Query
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
       passage = @catalog[:passages].first
       [%w[wordan wordan silver], %w[bokos boka silver], %w[gold gold gold]].each do |surface, lemma, tier|
-        fulltext[:passage_lemmas].insert(passage_id: passage[:id], urn: passage[:urn],
+        fulltext[:passage_lemmas].insert(passage_id: passage[:id],
                                          language: "got", lemma_raw: lemma, lemma_folded: lemma,
                                          surface_forms: surface, tier: tier)
       end

@@ -90,6 +90,17 @@ module Nabu
     #   tiers with per-hit labels and a gold-only filter. The third tier,
     #   "equivalence" (P34-3), mints from a DIFFERENT token key — see the
     #   EQUIVALENCE_TIER constants below.
+    # - Passage-keyed, urn-free (fts_lemma "v2-passage-keyed"): a row names
+    #   its passage by the catalog passage id ONLY. The urn is derivable
+    #   through the catalog (one primary-key hop), and storing it cost ~2 GB
+    #   in-table plus a ~2.6 GB urn B-tree at 56M rows; the passage-keyed
+    #   lookups (sync slice deletes, the frequency snapshots, the silver
+    #   coverage guard, the parallels/cognates/vocab probes) ride a
+    #   passage_id B-tree (~0.7 GB) instead. A v1 table (urn column + urn
+    #   index) stays on disk until the next full rebuild: writers keep
+    #   filling its urn and keyed reads keep going through its urn index —
+    #   the lemma_urn_column? feature detect, the fts_language_column?
+    #   precedent.
     # == The trigram index (P16-4) — fragment search, documentary scope
     #
     # passages_trigram is a second FTS5 table over the SAME folded search form
@@ -425,7 +436,7 @@ module Nabu
       # timer. nil keeps the sync-time incremental path unmeasured.
       # +lemma_shelf+ (P84-1) is the Nabu::LemmaShelf (local-lemmas) — when
       # present, the silver-lemma projection runs AFTER the annotation pass
-      # and its index build (insert-if-absent needs the urn B-tree) and
+      # and its index build (insert-if-absent needs the passage-key B-tree) and
       # BEFORE the frequency census, so lemma_frequencies counts silver
       # rows wholesale. +lemma_filter_slugs+ names the sources under the
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
@@ -531,7 +542,8 @@ module Nabu
       #   rowids by their stored passage_id (UNINDEXED — per-IN-batch scans
       #   would each rescan the table), then deletes by rowid. ~4.3M-row
       #   scan, seconds — against the minutes of a full rebuild.
-      # - passage_lemmas deletes by urn IN-batches (B-tree indexed).
+      # - passage_lemmas deletes by passage-key IN-batches (B-tree indexed:
+      #   passage_id; urn on a v1 table — lemma_passage_key).
       # - trigram: only touched when the source is in scope — flagged now
       #   (fuzzy_slugs) or indexed by the last build (the scope table); a
       #   de-flagged source loses its rows AND its scope row, so coverage
@@ -628,9 +640,9 @@ module Nabu
               # P42-1: snapshot this source's lemma-frequency contribution BEFORE
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
-              # table exists here; both snapshots are urn-scoped and B-tree bounded.
-              before = LemmaFrequencies.snapshot(fulltext, urns)
-              deleted = delete_source_lemma_rows(fulltext, urns)
+              # table exists here; both snapshots are passage-keyed and B-tree bounded.
+              before = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+              deleted = delete_source_lemma_rows(fulltext, ids: ids, urns: urns)
               if fts_contentless?(fulltext)
                 delete_fts_rows_by_rowid(fulltext, TABLE, ids)
               else
@@ -666,8 +678,8 @@ module Nabu
                 # bake its drift in; re-census absolutely instead (rare path).
                 LemmaFrequencies.rebuild!(fulltext)
               else
-                LemmaFrequencies.apply_delta(fulltext, before: before,
-                                                       after: LemmaFrequencies.snapshot(fulltext, urns))
+                after = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+                LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
               end
               if use_delta
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
@@ -1085,6 +1097,32 @@ module Nabu
         fts_contentless?(fulltext) ? Sequel.lit("rowid").as(:passage_id) : Sequel[:passage_id]
       end
 
+      # Whether the LIVE lemma table is the v1 shape that still stores each
+      # row's passage urn (class note) — the write side keeps filling the
+      # column there, and passage-keyed reads go through its urn index
+      # (lemma_passage_key). A fresh rebuild! always creates the narrow
+      # shape; same next-full-rebuild arrival as fts_language_column?.
+      def lemma_urn_column?(fulltext)
+        fulltext[LEMMA_TABLE].columns.include?(:urn)
+      end
+
+      # The column a passage-keyed lemma lookup filters on: :passage_id on
+      # the narrow shape, :urn on a v1 table (whose B-tree is the urn
+      # index — a passage_id filter there would scan 56M rows).
+      def lemma_passage_key(fulltext)
+        lemma_urn_column?(fulltext) ? :urn : :passage_id
+      end
+
+      # The lemma rows of a set of passages, through whichever passage
+      # B-tree the live shape carries. +ids+ and +urns+ name the SAME
+      # passages (catalog ids and their urns); only the one the shape keys
+      # on is read, so a caller holding just one side resolves the other
+      # first (catalog urn/primary-key lookups). Unsliced — callers batch.
+      def lemma_rows_of_passages(fulltext, ids: nil, urns: nil)
+        key = lemma_passage_key(fulltext)
+        fulltext[LEMMA_TABLE].where(key => (key == :urn ? urns : ids).to_a)
+      end
+
       # One streaming pass feeding the FTS and lemma tables (shared by
       # rebuild! and refresh_source!). Returns [passage count, lemma-row
       # count]. The fts row shape is detected ONCE from the live table
@@ -1103,6 +1141,7 @@ module Nabu
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         contentless = fts_contentless?(fulltext)
+        with_urn = lemma_urn_column?(fulltext)
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
@@ -1113,7 +1152,7 @@ module Nabu
                            contentless: contentless)
             end
           )
-          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs) }
+          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs, with_urn: with_urn) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
@@ -1152,7 +1191,10 @@ module Nabu
       # Display choices/census claims live elsewhere; these are code-era
       # markers.
       STAGE_VERSIONS = {
-        "fts_lemma" => "v1",
+        # v2: passage_lemmas sheds its urn column; passage_id is the
+        # passage key (class note). Not reconcilable standalone — the full
+        # rebuild recreates the table narrow.
+        "fts_lemma" => "v2-passage-keyed",
         "char_postings" => POSTINGS_CLASS,
         "trigram" => "v1",
         # P93-3: the run class + mint grammar era. An index stamped before
@@ -1626,11 +1668,13 @@ module Nabu
         doomed.size
       end
 
-      # Delete the source's lemma rows by urn (B-tree indexed — no scan).
-      # Returns the number of rows deleted.
-      def delete_source_lemma_rows(fulltext, urns)
-        urns.each_slice(BATCH_SIZE).sum do |batch|
-          fulltext[LEMMA_TABLE].where(urn: batch).delete
+      # Delete the source's lemma rows by passage key — passage_id, or urn
+      # on a v1 table (B-tree indexed either way — no scan). +ids+ and
+      # +urns+ name the same passages. Returns the number of rows deleted.
+      def delete_source_lemma_rows(fulltext, ids:, urns:)
+        key = lemma_passage_key(fulltext)
+        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).sum do |batch|
+          fulltext[LEMMA_TABLE].where(key => batch).delete
         end
       end
 
@@ -1802,7 +1846,8 @@ module Nabu
           .count
       end
 
-      # The lemma table (see class note). Plain Sequel DSL — no raw DDL. Created
+      # The lemma table (see class note) — the narrow, passage-keyed shape.
+      # Plain Sequel DSL — no raw DDL. Created
       # BARE (P36-2): the three secondary indexes are deferred to
       # #create_lemma_indexes, built in one pass after the bulk insert rather
       # than maintained incrementally per row. rebuild! owns that call; the
@@ -1813,12 +1858,11 @@ module Nabu
           String :lemma_folded, null: false
           String :lemma_raw, null: false
           Integer :passage_id, null: false
-          String :urn, null: false
           String :language, null: false
           String :surface_forms, null: false
           # The per-row lemma tier (P26-0, class note): "gold" | "silver".
           # No index — tier is always a residual filter AFTER an indexed
-          # lemma_folded/urn/language equality.
+          # lemma_folded/passage_id/language equality.
           String :tier, null: false
         end
       end
@@ -1826,17 +1870,20 @@ module Nabu
       # Build the lemma table's three deferred secondary indexes (P36-2) over
       # the now-populated table, in one sorted pass each:
       # - lemma_folded: the primary lemma-search key.
-      # - urn (P15-1): the lemma-aware second signals — parallels' rare-lemma
-      #   co-occurrence and cognate-in-parallel (design §6) — look a passage's
-      #   lemmas up BY urn. Without it the anchor lookup scans 2.6M rows
-      #   (~1.7 s measured); with it, one B-tree hit. ~30–45 MB.
+      # - passage_id: the passage key (P15-1 introduced it as a urn index) —
+      #   the lemma-aware second signals (parallels' rare-lemma co-occurrence,
+      #   cognate-in-parallel, design §6), the sync slice delete, the
+      #   frequency snapshots and the silver coverage guard look a passage's
+      #   lemmas up by it. A v1 table keeps its urn index instead
+      #   (lemma_passage_key) — the shape decides, so an interrupted
+      #   cycle_lemma_indexes on a live v1 file restores the v1 set.
       # - language (P18-4 follow-up): `nabu language CODE` counts a language's
       #   gold rows; without it the card scans 2.85M rows (owner-measured 11.6 s
       #   per card). All rebuilt with the table (never migrated — the fulltext
       #   db is derived-of-derived; class note).
       def create_lemma_indexes(fulltext)
         fulltext.add_index(LEMMA_TABLE, :lemma_folded)
-        fulltext.add_index(LEMMA_TABLE, :urn)
+        fulltext.add_index(LEMMA_TABLE, lemma_passage_key(fulltext))
         fulltext.add_index(LEMMA_TABLE, :language)
       end
 
@@ -1852,7 +1899,7 @@ module Nabu
       end
 
       def drop_lemma_indexes(fulltext)
-        %i[lemma_folded urn language].each do |column|
+        %i[lemma_folded passage_id urn language].each do |column|
           fulltext.drop_index(LEMMA_TABLE, column)
         rescue Sequel::DatabaseError
           nil # a prior interrupted cycle may have left this one missing
@@ -1958,10 +2005,19 @@ module Nabu
       # +slugs+ (source_id → slug) selects the source's LemmaKeys spec
       # (P118-R4 S1): bhsa/dss read their own lexeme keys, everyone else
       # "lemma". Absent map (a caller predating the registry) = default.
-      def lemma_rows(row, tiers: {}, slugs: nil)
+      # +with_urn+ adds the passage urn for a v1 table (lemma_urn_column?).
+      def lemma_rows(row, tiers: {}, slugs: nil, with_urn: false)
         tier = tiers.fetch(row[:source_id], GOLD_TIER)
-        return equivalence_rows(row) if tier == EQUIVALENCE_TIER
+        rows = if tier == EQUIVALENCE_TIER
+                 equivalence_rows(row)
+               else
+                 annotation_rows(row, tier: tier, slugs: slugs)
+               end
+        with_urn ? rows.map { |lemma| lemma.merge(urn: row.fetch(:urn)) } : rows
+      end
 
+      # The annotation-keyed rows (every tier but equivalence).
+      def annotation_rows(row, tier:, slugs:)
         spec = LemmaKeys.spec_for(slugs&.[](row[:source_id]))
         json = row.fetch(:annotations_json)
         return [] if json.nil? || !LemmaKeys.probe?(json, spec)
@@ -1972,7 +2028,7 @@ module Nabu
         group_lemmas(tokens, language: row.fetch(:language), spec: spec).map do |folded, entry|
           {
             lemma_folded: folded, lemma_raw: entry[:raw],
-            passage_id: row.fetch(:passage_id), urn: row.fetch(:urn),
+            passage_id: row.fetch(:passage_id),
             language: row.fetch(:language), surface_forms: entry[:forms].join(", "),
             tier: tier
           }
@@ -1998,7 +2054,7 @@ module Nabu
           .map do |folded, entry|
             {
               lemma_folded: folded, lemma_raw: entry[:raw],
-              passage_id: row.fetch(:passage_id), urn: row.fetch(:urn),
+              passage_id: row.fetch(:passage_id),
               language: EQUIVALENCE_LANGUAGE, surface_forms: entry[:forms].join(", "),
               tier: EQUIVALENCE_TIER
             }

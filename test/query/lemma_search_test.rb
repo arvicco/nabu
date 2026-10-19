@@ -208,9 +208,35 @@ module Query
                         language: "got", lemmas: [%w[ναι nai]])
       rebuild!
 
-      assert_equal %w[urn:d:got:1 urn:d:grc:1], search("ναι").map(&:urn),
-                   "unfiltered: both, in urn order"
+      assert_equal %w[urn:d:grc:1 urn:d:got:1], search("ναι").map(&:urn),
+                   "unfiltered: both, in passage order (the lemma table stores no urn to sort by)"
       assert_equal %w[urn:d:got:1], search("ναι", lang: "got").map(&:urn)
+    end
+
+    # A v1 lemma table (urn stored, urn-indexed) is the live file until the
+    # next full rebuild: the same hits come back in its pre-narrowing urn
+    # order, and the one-passage probe filters its stored urn.
+    def test_a_v1_lemma_table_still_answers_in_urn_order
+      grc = make_document(urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", text: "ναι", sequence: 0, lemmas: [%w[ναι ναι]])
+      got = make_document(urn: "urn:d:got", language: "got")
+      make_passage(got, urn: "urn:d:got:1", text: "nai", sequence: 0,
+                        language: "got", lemmas: [%w[ναι nai]])
+      rebuild!
+      LegacyLemmaTable.widen!(@fulltext, @catalog)
+
+      assert_equal %w[urn:d:got:1 urn:d:grc:1], search("ναι").map(&:urn)
+      assert_equal %w[urn:d:grc:1], search("ναι", urn: "urn:d:grc:1").map(&:urn)
+    end
+
+    def test_the_one_passage_probe_resolves_its_urn_through_the_catalog
+      grc = make_document(urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", text: "ναι", sequence: 0, lemmas: [%w[ναι ναι]])
+      make_passage(grc, urn: "urn:d:grc:2", text: "ναι", sequence: 1, lemmas: [%w[ναι ναι]])
+      rebuild!
+
+      assert_equal %w[urn:d:grc:2], search("ναι", urn: "urn:d:grc:2").map(&:urn)
+      assert_empty search("ναι", urn: "urn:d:grc:absent")
     end
 
     def test_license_filter_is_exact_class

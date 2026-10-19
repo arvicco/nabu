@@ -58,6 +58,10 @@ module Store
 
     def lemmas = @fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
 
+    # A passage's lemma rows by its urn — resolved through the catalog, the
+    # lemma table keys passages by id only.
+    def lemmas_of(urn) = lemmas.where(passage_id: @catalog[:passages].where(urn: urn).select_map(:id))
+
     # Raw MATCH: the Indexer's contract is index-as-stored, so tests query
     # with the already-folded form (query-side folding is Search's job).
     # passages_fts is CONTENTLESS (P93-1) — no stored column values — so a
@@ -314,10 +318,59 @@ module Store
       assert_equal "λέγω", row.fetch(:lemma_raw), "the upstream spelling is kept for display"
       assert_equal "λέγουσι", row.fetch(:surface_forms)
       assert_equal passage.id, row.fetch(:passage_id)
-      assert_equal "urn:d:1:1", row.fetch(:urn)
+      refute row.key?(:urn), "the passage urn is derivable from passage_id — never stored twice"
       assert_equal "grc", row.fetch(:language)
       assert(@fulltext.indexes(:passage_lemmas).values.any? { |i| i[:columns] == [:language] },
              "passage_lemmas.language index missing (P18-4 follow-up — the language card scans without it)")
+    end
+
+    # The fts_lemma v2 shape: passage-keyed lookups (sync deletes, the
+    # frequency snapshots, the silver coverage guard, parallels/cognates/
+    # vocab) ride a passage_id B-tree; the urn column and its index are gone.
+    def test_fresh_lemma_table_is_passage_keyed
+      make_passage(make_document(urn: "urn:d:1"), urn: "urn:d:1:1", text_normalized: "λεγουσι", sequence: 0,
+                                                  annotations: token_annotations(%w[λέγω λέγουσι]))
+      rebuild!
+
+      refute_includes lemmas.columns, :urn
+      refute Nabu::Store::Indexer.lemma_urn_column?(@fulltext)
+      indexed = @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }
+      assert_equal [%i[language], %i[lemma_folded], %i[passage_id]], indexed.sort
+      assert_equal "v2-passage-keyed", Nabu::Store::Indexer::STAGE_VERSIONS.fetch("fts_lemma"),
+                   "the narrowing is a derivation change: a v1-stamped index reads stale"
+    end
+
+    # A v1-shape lemma table (urn column + urn index) is the owner's live
+    # file until the next full rebuild: syncs keep writing that shape — urn
+    # filled — and the slice swap stays urn-keyed and row-identical to the
+    # narrow rebuild everywhere but the urn column itself.
+    def test_incremental_refresh_keeps_a_v1_lemma_table_wide
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
+                        annotations: token_annotations(%w[λέγω λέγει]))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "doomed", sequence: 1,
+                        annotations: token_annotations(%w[ὁράω ὁρᾷ]))
+      rebuild!
+      LegacyLemmaTable.widen!(@fulltext, @catalog)
+      assert Nabu::Store::Indexer.lemma_urn_column?(@fulltext)
+
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "φερει", sequence: 2,
+                        annotations: token_annotations(%w[φέρω φέρει]))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(withdrawn: true)
+      refresh!
+
+      assert_includes lemmas.columns, :urn, "an incremental sync never narrows the table"
+      assert_equal %w[urn:d:s:1 urn:d:s:3], lemmas.order(:urn).distinct.select_map(:urn)
+      assert(@fulltext.indexes(:passage_lemmas).values.any? { |i| i[:columns] == [:urn] })
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        wide = lemmas.all.map { |row| row.except(:urn).sort_by { |key, _| key } }.sort_by(&:inspect)
+        assert_equal table_rows(fresh, :passage_lemmas), wide
+        assert_equal table_rows(fresh, :lemma_frequencies), table_rows(@fulltext, :lemma_frequencies)
+      ensure
+        fresh.disconnect
+      end
     end
 
     # Non-treebank passages (annotations "{}", or annotations without token
@@ -360,9 +413,9 @@ module Store
                         language: "lat", annotations: token_annotations(%w[video videmur]))
       rebuild!
 
-      assert_equal "λογοσ", lemmas.where(urn: "urn:d:grc:1").get(:lemma_folded),
+      assert_equal "λογοσ", lemmas_of("urn:d:grc:1").get(:lemma_folded),
                    "grc final sigma folds ς→σ in the dictionary form"
-      assert_equal "uideo", lemmas.where(urn: "urn:d:lat:1").get(:lemma_folded),
+      assert_equal "uideo", lemmas_of("urn:d:lat:1").get(:lemma_folded),
                    "lat folds v→u in the lemma"
     end
 
@@ -514,9 +567,9 @@ module Store
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
                                     lemma_tiers: { "auto" => "silver" })
 
-      assert_equal "gold", lemmas.where(urn: "urn:d:gold:1").get(:tier),
+      assert_equal "gold", lemmas_of("urn:d:gold:1").get(:tier),
                    "a source ABSENT from the map stays gold"
-      assert_equal "silver", lemmas.where(urn: "urn:d:silver:1").get(:tier),
+      assert_equal "silver", lemmas_of("urn:d:silver:1").get(:tier),
                    "the declared silver source's rows carry the tier"
     end
 
@@ -599,14 +652,14 @@ module Store
                                                          %w[observo anzeriates]))
       equivalence_rebuild!
 
-      assert_equal "gold", lemmas.where(urn: "urn:d:gold:1").get(:tier),
+      assert_equal "gold", lemmas_of("urn:d:gold:1").get(:tier),
                    "a source absent from the map stays gold, untouched"
-      avis = lemmas.where(urn: "urn:d:cle:1", lemma_folded: "auis").all
+      avis = lemmas_of("urn:d:cle:1").where(lemma_folded: "auis").all
       assert_equal 1, avis.size, "one row per (passage, folded key), not per token"
       assert_equal "aves, avif", avis.first.fetch(:surface_forms),
                    "distinct surface forms aggregate on the one row"
       assert_equal %w[equivalence equivalence],
-                   lemmas.where(urn: "urn:d:cle:1").select_map(:tier),
+                   lemmas_of("urn:d:cle:1").select_map(:tier),
                    "every CLE row carries the equivalence tier"
     end
 

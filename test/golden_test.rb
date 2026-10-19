@@ -94,16 +94,15 @@ class GoldenTest < Minitest::Test
   # ProielParser — TOROT shares the urn:nabu:proiel: namespace), and NOTHING
   # else does — non-treebank passages carry no token lemmas (honest absence).
   def test_lemma_index_covers_exactly_the_treebank_families
-    lemmas = self.class.corpus[:ft][Nabu::Store::Indexer::LEMMA_TABLE]
-    ["urn:nabu:ud:%", "urn:nabu:proiel:cic-off:%", "urn:nabu:proiel:zogr:%",
-     "urn:nabu:proiel:peter:%"].each do |pattern|
-      assert_operator lemmas.where(Sequel.like(:urn, pattern)).count, :>, 0,
-                      "#{pattern} must contribute lemma rows"
+    # The lemma table keys passages by id; their urns come from the catalog.
+    ids = self.class.corpus[:ft][Nabu::Store::Indexer::LEMMA_TABLE].select_map(:passage_id)
+    urns = self.class.corpus[:db][:passages].where(id: ids).select_map(:urn)
+    ["urn:nabu:ud:", "urn:nabu:proiel:cic-off:", "urn:nabu:proiel:zogr:",
+     "urn:nabu:proiel:peter:"].each do |prefix|
+      assert(urns.any? { |urn| urn.start_with?(prefix) }, "#{prefix}% must contribute lemma rows")
     end
-    strays = lemmas.exclude(Sequel.like(:urn, "urn:nabu:ud:%"))
-                   .exclude(Sequel.like(:urn, "urn:nabu:proiel:%"))
-    assert_equal 0, strays.count,
-                 "only treebank passages may carry lemma rows; got #{strays.select_map(:urn).first(5).inspect}"
+    strays = urns.reject { |urn| urn.start_with?("urn:nabu:ud:", "urn:nabu:proiel:") }
+    assert_empty strays, "only treebank passages may carry lemma rows; got #{strays.first(5).inspect}"
   end
 
   # The packet requires ≥6 queries spanning grc/lat/got/chu/orv, with one

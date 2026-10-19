@@ -226,7 +226,7 @@ class DamaskiniTest < Minitest::Test
                                   workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    rows = fulltext[Nabu::Store::Indexer::LEMMA_TABLE].where(lemma_raw: "slъnce").all
+    rows = LemmaUrnView.of(fulltext, catalog).where(lemma_raw: "slъnce").all
     assert_equal 1, rows.size, "the gold lemma slъnce (sun) is indexed"
     assert_equal "slnce", rows[0][:surface_forms], "attested by the pristine diplomatic surface"
     assert rows[0][:urn].end_with?(":1")

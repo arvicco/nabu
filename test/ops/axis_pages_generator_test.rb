@@ -98,7 +98,7 @@ module Ops
       fulltext = Nabu::Store.connect_fulltext(File.join(File.dirname(catalog_path), "fulltext.sqlite3"))
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
       3.times do |i|
-        fulltext[:passage_lemmas].insert(passage_id: i, urn: "urn:nabu:pack:big:#{i}",
+        fulltext[:passage_lemmas].insert(passage_id: i,
                                          language: "got", lemma_raw: "w#{i}", lemma_folded: "w#{i}",
                                          surface_forms: "w#{i}", tier: i.zero? ? "gold" : "silver")
       end

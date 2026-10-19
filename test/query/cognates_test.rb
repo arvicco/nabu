@@ -133,6 +133,19 @@ module Query
                    "the attesting passage urns ride the witness word (BatchCognates' edge anchor)"
     end
 
+    # The lemma table keys passages by id; a v1 table (urn stored and
+    # indexed) is the live file until the next full rebuild — a work-wide
+    # query answers identically through either shape.
+    def test_a_v1_lemma_table_answers_identically
+      seed_gospel_verses
+      rebuild!
+      narrow = run_cognates("nt", all: true)
+      LegacyLemmaTable.widen!(@fulltext, @catalog)
+
+      assert_equal narrow, run_cognates("nt", all: true)
+      refute_empty narrow.groups
+    end
+
     # P59-3: `lect:` is ANCHOR-SCOPED on this cross-language tool — a
     # blanket witness filter would kill every cross-language group (only
     # one language can be under one lect). Instead only witnesses OF THE

@@ -277,7 +277,7 @@ class TlaHfTest < Minitest::Test
                                   workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    rows = fulltext[Nabu::Store::Indexer::LEMMA_TABLE].where(lemma_raw: "sḥm.t").all
+    rows = LemmaUrnView.of(fulltext, catalog).where(lemma_raw: "sḥm.t").all
     assert_equal 1, rows.size, "the gold lemma sḥm.t (woman) is indexed"
     assert_equal "sḥm.t", rows[0][:surface_forms], "attested by the pristine surface form"
     assert_equal "gold", rows[0][:tier], "expert-generated lemmatization — the gold default"
