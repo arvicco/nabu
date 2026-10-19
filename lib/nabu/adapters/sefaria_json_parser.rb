@@ -197,7 +197,7 @@ module Nabu
       def clean(raw, language)
         text, footnotes = raw.include?("<") ? strip_markup(raw) : [raw, []]
         text = text.gsub(/[ \t]+/, " ").strip
-        text = Normalize.nfc(text) unless text.empty? || Normalize.nfc_exempt?(language)
+        text = SourceRead.nfc(text, language: language)
         [text, footnotes]
       end
 

@@ -377,7 +377,7 @@ module Nabu
         # languages (arc here) keep their bytes, whitespace-folded only.
         def fold(text)
           folded = text.gsub(/[[:space:]]+/, " ").strip
-          Normalize.nfc_exempt?(@language) ? folded : Normalize.nfc(folded)
+          SourceRead.nfc(folded, language: @language)
         end
 
         def walk(node)

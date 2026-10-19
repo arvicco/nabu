@@ -114,34 +114,21 @@ module Nabu
       MARKER = "nabu-level"
       LEVEL_COMMENT = /<!(X?)Level\s+(\d+)>/
 
-      # A multibyte UTF-8 sequence SEVERED by a tag: its lead (and any
-      # continuation) bytes end one element, its remaining continuation
-      # bytes open the next text. Census 2026-10-10, exactly 2 of 1,573
-      # pages: snstrl/snstr002 "LCḎr̄'\xCC</a>\xB1" (U+0331) and zwy/zwy005
-      # "štr\xCA</a>\xBC" (U+02BC).
-      SEVERED_SEQUENCE = %r{([\xC2-\xF4][\x80-\xBF]{0,2})(</?[A-Za-z][^<>]*>)([\x80-\xBF]{1,3})}n
+      # A multibyte UTF-8 sequence SEVERED by a tag (census 2026-10-10,
+      # exactly 2 of 1,573 pages) — the repair now lives at the shared read
+      # seam (Nabu::SourceRead, :severed_tags); these names stay as the
+      # family's entry points every TITUS sibling reads through.
+      SEVERED_SEQUENCE = SourceRead::SEVERED_SEQUENCE
 
-      # Read one page as valid UTF-8. A page TITUS served with a severed
-      # sequence is repaired by rejoining the bytes AFTER the tag: the
-      # completed character becomes the first character of the following
-      # text — in both census cases the same lane span's text, so it
-      # attaches to the word it was cut from (no break between them). Any
-      # invalidity the repair cannot fix is a quarantine (ParseError naming
-      # the page), never an encoding exception escaping to abort the sync.
+      # Read one page as valid UTF-8: a severed sequence is rejoined (the
+      # completed character attaches to the word it was cut from); anything
+      # the repair cannot fix is a quarantine (ParseError naming the page),
+      # never an encoding exception escaping to abort the sync.
       def self.read_page(path)
-        bytes = File.binread(path)
-        html = bytes.dup.force_encoding(Encoding::UTF_8)
-        return html if html.valid_encoding?
-
-        repaired = repair_severed(bytes)
-        return repaired if repaired.valid_encoding?
-
-        raise Nabu::ParseError, "titus-pahlavi: #{path} is not valid UTF-8 (beyond the severed-sequence repair)"
+        SourceRead.utf8_file(path, label: "titus-pahlavi", repair: :severed_tags)
       end
 
-      def self.repair_severed(bytes)
-        bytes.b.gsub(SEVERED_SEQUENCE, '\2\1\3').force_encoding(Encoding::UTF_8)
-      end
+      def self.repair_severed(bytes) = SourceRead.repair_severed(bytes)
 
       # Parse one page's HTML into ordered text-bearing sections. Raises
       # Nabu::ParseError on a structural surprise (invalid UTF-8, lane text
