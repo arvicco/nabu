@@ -203,6 +203,14 @@ sources:
       author: author          # ESTC-style headings with life dates INSIDE the string
       #                         ("A., fl. 1593.", "Shakespeare, William, 1564-1616.") —
       #                         projected as-is, never parsed apart
+      subjects: subject       # census over canonical/, 2026-10-19: TEXTCLASS/KEYWORDS/TERM on
+      #                         57,064 of 60,326 files, 124,920 headings, ~34.6k distinct —
+      #                         LCSH verbatim ("Sermons, English -- 17th century.", "Ireland --
+      #                         History -- 1649-1775", "Broadsides -- England -- London"); the
+      #                         subdivisions' place/period/form signal stays INSIDE the heading
+      #                         (never parsed apart). Leading heads: Great Britain 16,205 ·
+      #                         Broadsides 5,446 · Sermons, English 4,317 · Bible 4,087 ·
+      #                         Church of England 2,712 · Ballads, English 1,779
   dta:                        # 5,478 docs, all with both
     fields:
       author: author          # 1,407 authors ("Chamisso, Adelbert von")

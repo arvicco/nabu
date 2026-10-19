@@ -193,6 +193,38 @@ class TcpXmlParserTest < Minitest::Test
                  "first-wins capture must skip empty elements"
   end
 
+  # PROFILEDESC/TEXTCLASS/KEYWORDS/TERM — the catalog's subject headings,
+  # every TERM in file order, whitespace-collapsed and otherwise verbatim
+  # (the LCSH "--" subdivisions stay inside the heading: the heading is
+  # the claim, never parsed apart).
+  def test_subject_keyword_terms_ride_the_document_verbatim_in_order
+    assert_equal ["English prose literature -- Middle English, 1100-1500.",
+                  "English language -- Middle English, 1100-1500 -- Texts.",
+                  "Women -- Poetry"], tenwives.metadata["subjects"]
+    assert_equal ["Verband der deutschen neuphilologischen lehrerschaft.",
+                  "Language and languages.", "Literature."], carols.metadata["subjects"]
+    refute hematoscopy.metadata.key?("subjects"), "no TEXTCLASS, no key — absence, never []"
+  end
+
+  def test_typed_terms_keep_their_heading_and_duplicates_collapse
+    # EEBO Phase II headers type some TERMs (TYPE="genre/form", MARC 655 —
+    # 7,341 phase-2 files, censused 2026-10-19); the heading text is the
+    # claim either way, and a repeated heading is one subject.
+    document = Nabu::Adapters::TcpXmlParser.new.parse(
+      StringIO.new(<<~XML), urn: "urn:nabu:eebo-tcp:terms", language: "en", canonical_path: "terms.xml"
+        <?xml version="1.0" encoding="utf-8"?>
+        <ETS><HEADER><FILEDESC><TITLESTMT><TITLE>TERMS</TITLE></TITLESTMT></FILEDESC>
+        <PROFILEDESC><TEXTCLASS><KEYWORDS><TERM TYPE="genre/form">Broadsides --  England --  17th century.</TERM>
+        <TERM TYPE="topical term">Sermons, English</TERM><TERM/><TERM>Sermons, English</TERM></KEYWORDS></TEXTCLASS></PROFILEDESC></HEADER>
+        <EEBO><IDG S="marc" R="UM" ID="A00000"/><TEXT LANG="eng"><BODY><DIV1 TYPE="text">
+        <P>text</P>
+        </DIV1></BODY></TEXT></EEBO></ETS>
+      XML
+    )
+    assert_equal ["Broadsides -- England -- 17th century.", "Sermons, English"],
+                 document.metadata["subjects"]
+  end
+
   def test_language_usage_and_text_lang_are_censused_verbatim
     assert_equal "enm=English, Middle (1100-1500)", hematoscopy.metadata["language_usage"]
     assert_equal "enm", hematoscopy.metadata["text_lang"]

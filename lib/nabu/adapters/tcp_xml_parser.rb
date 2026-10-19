@@ -70,7 +70,10 @@ module Nabu
     # AVAILABILITY verbatim — the per-file license statement), the BIBLFULL
     # print-source block (source_* keys; absent on direct-from-manuscript
     # transcriptions), LANGUSAGE entries verbatim ("enm=English, Middle
-    # (1100-1500)"), plus IDG@ID and the first TEXT@LANG. +license_mapper+
+    # (1100-1500)"), the PROFILEDESC/TEXTCLASS/KEYWORDS/TERM subject
+    # headings ("subjects" — every heading verbatim, in order; LCSH "--"
+    # subdivisions never parsed apart), plus IDG@ID and the first
+    # TEXT@LANG. +license_mapper+
     # and +metadata_mapper+ are the corpus-corporum seams: the parser owns
     # capture, the adapter owns judgment.
     #
@@ -210,6 +213,7 @@ module Nabu
           @units = []
           @header = {}
           @languages = []
+          @subjects = []
           @capture = nil
           @contexts = []
         end
@@ -443,7 +447,7 @@ module Nabu
         # lesson — and quirk 5's empty <AUTHOR/> depends on it).
 
         CONTEXT_ELEMENTS = %w[FILEDESC TITLESTMT PUBLICATIONSTMT SOURCEDESC
-                              BIBLFULL LANGUSAGE AVAILABILITY].freeze
+                              BIBLFULL LANGUSAGE AVAILABILITY KEYWORDS].freeze
         private_constant :CONTEXT_ELEMENTS
 
         def header_start(node, name)
@@ -467,6 +471,7 @@ module Nabu
           when "DATE" then open_capture(source_scoped(:pub_date)) if context?("PUBLICATIONSTMT")
           when "IDNO" then open_capture(:idno) if idno_capture?(node)
           when "LANGUAGE" then start_language(node)
+          when "TERM" then start_term
           end
         end
 
@@ -496,10 +501,23 @@ module Nabu
           @capture = @languages.last[:label]
         end
 
+        # TEXTCLASS/KEYWORDS/TERM — the catalog's subject headings, every
+        # TERM kept (not first-wins). An EEBO Phase II TERM may carry a
+        # MARC heading TYPE ("genre/form", "geographic name", …; 7,341
+        # phase-2 files, censused 2026-10-19): deliberately not mined —
+        # the heading text is the claim, and the type restates what its
+        # own wording already says.
+        def start_term
+          return unless context?("KEYWORDS")
+
+          @subjects << +""
+          @capture = @subjects.last
+        end
+
         # Only a capture-opening element's end closes the capture — inner
         # markup (<HI>) stays transparent inside a captured field.
         CAPTURE_CLOSERS = %w[TITLE AUTHOR EDITOR PUBLISHER PUBPLACE DATE IDNO
-                             LANGUAGE AVAILABILITY].freeze
+                             LANGUAGE AVAILABILITY TERM].freeze
         private_constant :CAPTURE_CLOSERS
 
         def header_end(name)
@@ -533,9 +551,17 @@ module Nabu
             "source_pub_place" => flatten(@header[:source_pub_place]),
             "source_date" => flatten(@header[:source_date]),
             "language_usage" => language_usage,
+            "subjects" => subjects,
             "idg_id" => @header[:idg_id],
             "text_lang" => @header[:text_lang]
           }.compact
+        end
+
+        # The headings verbatim (whitespace-collapsed) in file order, a
+        # repeated heading once; nil when the file carries none.
+        def subjects
+          headings = @subjects.filter_map { |heading| flatten(heading) }.uniq
+          headings.empty? ? nil : headings
         end
 
         def language_usage
