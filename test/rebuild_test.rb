@@ -801,6 +801,54 @@ class RebuildTest < Minitest::Test
     assert_equal [%w[alpha rebuild succeeded], %w[beta rebuild succeeded]], runs
   end
 
+  # A rebuild killed in its corpus stages (the fulltext index here) must not
+  # leave a ledger of "succeeded" replay rows over a half-built library: every
+  # source's row stays open (running, loaded_at stamped) until the WHOLE
+  # rebuild ends — a dead rebuild reads dead in the ledger, not only on disk.
+  def test_a_rebuild_killed_in_the_index_stage_leaves_every_replay_row_open
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+      beta:
+        adapter: TestAdapter
+    YAML
+    write_canonical("alpha", "a.txt" => ILIAD)
+    write_canonical("beta", "b.txt" => ODYSSEY)
+
+    original = Nabu::Store::Indexer.method(:rebuild!)
+    Nabu::Store::Indexer.define_singleton_method(:rebuild!) { |*, **| raise Interrupt }
+    begin
+      assert_raises(Interrupt) { rebuilder.run }
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:rebuild!, original)
+    end
+
+    rows = with_ledger do
+      Nabu::Store::Run.order(:id).all.map { |run| [run.source_slug, run.status, !run.loaded_at.nil?, run.finished_at] }
+    end
+    assert_equal [["alpha", "running", true, nil], ["beta", "running", true, nil]], rows
+  end
+
+  def test_a_rebuild_whose_corpus_stage_raises_closes_every_replay_row_failed
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+    YAML
+    write_canonical("alpha", "a.txt" => ILIAD)
+
+    original = Nabu::Store::Indexer.method(:rebuild!)
+    Nabu::Store::Indexer.define_singleton_method(:rebuild!) { |*, **| raise Nabu::Error, "index boom" }
+    begin
+      assert_raises(Nabu::Error) { rebuilder.run }
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:rebuild!, original)
+    end
+
+    run = with_ledger { Nabu::Store::Run.order(:id).last }
+    assert_equal "failed", run.status
+    assert_match(/after the load: index boom/, run.notes)
+  end
+
   # -- the ledger survives rebuild (P7-1) -----------------------------------
 
   def test_rebuild_never_touches_seeded_ledger_history

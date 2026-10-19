@@ -198,8 +198,9 @@ module Store
 
       # 005 baselines + 006 drift widen + 007 grant acks (P42-r1) + 008 creep
       # acceptances (P43-0) + 009 stage timings (P78-r1) + 010 revisions
-      # reason (P93-2)
-      assert_equal 10, db[:schema_info].get(:version)
+      # reason (P93-2) + 011 runs.loaded_at (the row closes at operation end)
+      assert_equal 11, db[:schema_info].get(:version)
+      assert_includes db[:runs].columns, :loaded_at
       assert db.table_exists?(:stage_timings)
       assert db.table_exists?(:quarantine_baselines)
       assert_equal 0, db[:quarantine_baselines].count
