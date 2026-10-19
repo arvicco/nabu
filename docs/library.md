@@ -859,7 +859,7 @@ on the same sinitic desk as the canon it cites.
 
 ## 8ah. Instruments and registries — the module rack
 
-Nineteen registry rows are `kind: module`: machinery, not documents —
+Twenty registry rows are `kind: module`: machinery, not documents —
 each syncs its own canonical asset and derives an index, a crosswalk, or
 a display layer, minting zero catalog rows. The character-desk trio
 (`babelstone-ids`, `kradfile`, `kr-gaiji`) is §8u's; the rest of the
@@ -883,7 +883,11 @@ rack, grouped:
   identity hub the epigraphic shelves join through (CC BY-SA).
   `bridging` — ETCBC's word-level concordance between the two digital
   Hebrew Bibles (BHSA ↔ OpenScriptures, 420,108 of 426,590 words
-  aligned; MIT).
+  aligned; MIT). `itkc-catalog` — the ITKC 서지 author catalog
+  (1,540 records over the 한국문집총간 and sister series): collection
+  ids joined to author names and life years, the dating instrument
+  behind the munjip mass's author-era bands (bibliographic facts,
+  class nc).
 - **Sign registries.** `osl` — the Oracc Sign List: 3,241 cuneiform
   signs with readings by language and print-list concordances (CC0).
   `unikemet` — Unicode's normative Egyptian hieroglyph data: 5,067
