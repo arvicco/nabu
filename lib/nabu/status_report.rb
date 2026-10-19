@@ -210,18 +210,20 @@ module Nabu
 
     # The fused, humanized, right-aligned holdings cell (P40-s). A corpus reads
     # `docs/passages`; an entry-/shelf-shaped row a single humanized number;
-    # a never-synced corpus/dictionary `—`; a module nothing.
+    # a never-loaded row of ANY content kind `—`; a module nothing. The
+    # shelf kinds (language/notes/source) count a catalog-wide table, so
+    # without this row's own sources row a fresh catalog would print their
+    # zero as if the shelf held nothing — absence must read as absence.
     def holdings_compact(entry, source)
       return "" if entry.feature_module?
+      return "—" if source.nil?
 
       case content_kind(entry)
-      when :dictionary then source.nil? ? "—" : humanize(dictionary_entry_count(source))
+      when :dictionary then humanize(dictionary_entry_count(source))
       when :language then humanize(language_record_count)
       when :notes then humanize(urn_note_count)
       when :source then humanize(source_record_count)
       else
-        return "—" if source.nil?
-
         counts = corpus_counts(source)
         "#{humanize(counts.fetch(:docs))}/#{humanize(counts.fetch(:passages))}"
       end
