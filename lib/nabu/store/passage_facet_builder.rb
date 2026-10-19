@@ -34,9 +34,9 @@ module Nabu
       # total pairs, distinct dictionary values.
       Summary = Data.define(:passages, :rows, :values)
 
-      # Documents fetched per passage query (passages_document_id_index
-      # lookups — never a scan of the whole passages table) and pairs per
-      # multi-row insert.
+      # Documents fetched per passage query (document_id probes on the
+      # (document_id, sequence) unique index's left prefix — never a scan of
+      # the whole passages table) and pairs per multi-row insert.
       DOCUMENT_SLICE = 200
       INSERT_SLICE = 5_000
 

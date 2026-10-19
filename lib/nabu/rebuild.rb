@@ -175,8 +175,9 @@ module Nabu
       replay_place_index(db)
       replay_person_index(db)
       # P36-2: the bulk insert is done — build the deferred secondary indexes in
-      # one pass BEFORE the query-side stages (timeline/facets/indexer) that join
-      # on passages.document_id.
+      # one pass BEFORE the query-side stages (timeline/facets/indexer). Their
+      # passages.document_id joins never waited on this step: the unique
+      # (document_id, sequence) index serves them and is never deferred.
       Store.create_deferred_indexes!(db)
       # The honkoku <- ndl-kotenseki catalog join writes each NDL-held
       # material's NDL record onto its honkoku row BEFORE the builders,
