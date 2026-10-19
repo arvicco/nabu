@@ -529,8 +529,12 @@ sources:
         date — artifact class). Census 2026-10-19, 500 random held PIDs: 41% census-
         typed, +1.2% from the record (6 of 294 undated — the record mostly restates
         the census, which is cut from the same bibliography); the remaining ~57% carry
-        no year in either, ~21% of those a prose era date only (寛政4刊 — a nengō
-        conversion candidate, not faked)"}
+        no year in either. The census prose nengō (寛政4刊, 弘化4-嘉永6) is the LAST
+        rung (owner-ruled 2026-10-20, config/eras.yml): 4,622 of the 56,484 census rows
+        without a W3CDTF year carry an era-year shape; Chinese print-era homonyms
+        (Ming 正徳 / 弘治, Qing 嘉慶 — the collection holds their imprints), the one-year
+        eras, year-less era spans (慶長元和年間) and pre-Taika dates stay unparsed,
+        declared"}
     places: {posture: unplaced, note: "no place fields in the census bibliography; the
         bib record's publisher locations (京 · [京都] · 山田 (伊勢) — ~25% of sampled
         records, the unknown marker [製作地不明] among them) ride metadata
@@ -547,8 +551,9 @@ sources:
         (era_band → MetadataDates :era_band_key), precision era — an attribution,
         never a typed date. The page {{header}} year= (133 pages carry a bare CE
         year, census 2026-10-18) outranks the band as a one-year envelope of its own
-        class composition (the work's year as the wiki states it); the two non-integer
-        year= values (an era year, a template default) deliberately mint nothing"}
+        class composition (the work's year as the wiki states it); the era year=
+        「寛政2」 converts through config/eras.yml (owner-ruled 2026-10-20, raw kept
+        verbatim), the unexpanded template default deliberately mints nothing"}
     places: {posture: unplaced, note: "no DOCUMENT-grain place fields in the cone pages.
         The 万葉集 poems' [事項] keyword bag names places at poem grain — mentions in
         the poem, never a findspot or origin claim — riding passage annotations
@@ -1079,8 +1084,10 @@ sources:
         manifest is a dl.ndl.go.jp item, census 2026-10-18): the item's NDL catalog record
         joined from the held ndl-kotenseki census (Nabu::HonkokuNdlCatalog, metadata
         ndl_catalog) dates the row via its 出版日 envelope, the raw labeled as the NDL
-        record's claim. Every other material's date lives in free-prose labels only —
-        declared, not silent"}
+        record's claim. Without a record, the label's own nengō date (天保十一年…, owner-ruled
+        2026-10-20 — 329 of 12,841 v3 labels carry an era year) converts at parse through
+        config/eras.yml; Chinese-homonym / one-year eras and era-less labels mint
+        nothing — declared"}
     places: {posture: unplaced}
     script: {posture: implied, note: kuzushiji-transcribed kanji-kana with the platform's
         aozora-like notation verbatim}
