@@ -133,8 +133,15 @@ class BilaraJsonParserTest < Minitest::Test
       File.write(sidecar, JSON.generate({ "sn35.24:1.5" => "x → y (bj)", "sn35.24:9.9" => "z" }))
       document = parse(SN, stem: "sn35.24", sidecars: { "variants" => sidecar })
       assert(document.all? { |p| p.annotations.empty? },
-             "1.5 is the blank root segment (skipped) and 9.9 does not exist — both drop")
+             "1.5 is the blank root segment (skipped) and 9.9 does not exist — neither is re-homed")
+      assert_equal({ "variants" => 2 }, document.metadata["sidecar_unjoined"],
+                   "both unjoined values are counted on the document, per annotation key")
     end
+  end
+
+  def test_fully_joined_sidecars_leave_metadata_untouched
+    document = parse(SN, stem: "sn35.24", sidecars: SN_SIDECARS)
+    refute document.metadata.key?("sidecar_unjoined")
   end
 
   def test_sidecar_text_is_normalized_to_nfc

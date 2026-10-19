@@ -134,6 +134,19 @@ module Nabu
     # cites vri) and reference/san (no san roots minted). A tree without
     # the sidecar dirs parses exactly as before (annotations {}).
     #
+    # Join census (re-run against the held tree, bilara-data a20fcb09,
+    # 2026-10-20 — every non-blank sidecar value looked up against its root's
+    # segment map): variant 4,501 in-scope files (pli/ms 4,423 + lzh/sct 78)
+    # / 19,921 non-blank readings; reference 7,596 (pli/ms 7,281 + lzh/sct
+    # 293 + pra/pts 22) / 143,057; comment/en 1,728 (sujato 1,448 +
+    # brahmali 280) / 10,790. ZERO values key an id the root lacks; 17 key a
+    # BLANK root segment (variant 1, reference 15, comment 1 — ma10:23.5,
+    # sa7:5.1, pli-tv-bu-vb-sk69:1.27.0 …) and have no passage to land on:
+    # never re-homed, counted per document as metadata["sidecar_unjoined"]
+    # (BilaraJsonParser). One in-scope sidecar FILE has no root at all
+    # (variant/lzh/sct/…/lzh-iti83, 5 readings — bilara has not published
+    # that root): a censused discovery rule skip.
+    #
     # == fetch (the shared git path, pinned to `published`)
     #
     # One ordinary clone/pull of the bilara-data repo (~353 MB with .git at
@@ -239,7 +252,7 @@ module Nabu
       # (no live root stem) are all explicit rule skips. A root tree present
       # but yielding NO segment files is unrecognized — loud, a layout error.
       def discovery_skips(workdir)
-        skipped = sandbox_files(workdir).size
+        skipped = sandbox_files(workdir).size + rootless_sidecar_files(workdir)
         notes = ROOT_TREES.keys.filter_map do |tree|
           dir = File.join(workdir, tree)
           next nil unless Dir.exist?(dir) && root_files(workdir, tree).empty?
@@ -369,6 +382,14 @@ module Nabu
         comments = Dir.glob(File.join(workdir, COMMENT_TREE, "*", "**", "*_comment-en-*.json"))
         index_sidecars(index, "comments", comments.sort_by { |path| [comment_rank(workdir, path), path] })
         index
+      end
+
+      # In-scope sidecar files whose stem names no live root (class note):
+      # nothing to annotate, so a censused rule skip — never a document.
+      def rootless_sidecar_files(workdir)
+        paths = ROOT_TREES.keys.flat_map { |tree| root_files(workdir, tree) }
+        stems = paths.to_h { |path| [File.basename(path).split("_", 2).first, true] }
+        sidecar_index(workdir).sum { |stem, files| stems.key?(stem) ? 0 : files.size }
       end
 
       def index_sidecars(index, key, paths)
