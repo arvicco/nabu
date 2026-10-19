@@ -24,3 +24,24 @@ files:
   - path: Tolkappiyam/TolC273.xml
     url: https://raw.githubusercontent.com/UHH-Tamilex/Tolkappiyam/main/TolC273.xml
     whole: true
+  # The rejected grains (pinned 2026-10-20 from the box's canonical/tamilex
+  # snapshot, synced 2026-10-12): discovery skips each by rule.
+  - path: Kuruntokai/witnesses.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/Kuruntokai/main/witnesses.xml
+    whole: true
+    trim: none (the generated listWit aggregate, kept whole)
+  - path: Kuruntokai/wordindex.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/Kuruntokai/main/wordindex.xml
+    whole: false
+    trim: >-
+      The generated word-index aggregate (1.7 MB): the teiHeader's listWit
+      cut after its second witness (KT1), the body after the first entry of
+      the first letter div; every kept byte verbatim, closing tags appended.
+  - path: TamilneriVilakkam/Ed.xml
+    url: https://raw.githubusercontent.com/UHH-Tamilex/TamilneriVilakkam/main/Ed.xml
+    whole: false
+    trim: >-
+      The whole-work base text the per-verse TNV*ed.xml editions re-split
+      (151 KB): the teiHeader and the first two mūlam divs kept verbatim
+      (source lines 1-130), the remaining divs and the standOff apparatus
+      cut, closing tags appended.
