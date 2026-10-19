@@ -217,6 +217,33 @@ class EeboTcpTest < Minitest::Test
     assert_nil envelope.call(nil), "no BIBLFULL date — no key at all"
   end
 
+  # -- parse: the imprint place (bare town, parse-time) -----------------------
+
+  def test_the_imprint_place_rides_as_the_bare_town_beside_the_verbatim_pubplace
+    petition = adapter.parse(ref_for(PETITION)).metadata
+    assert_equal "Imprinted at London :", petition["source_pub_place"], "the BIBLFULL PUBPLACE stays verbatim"
+    assert_equal "London", petition["imprint_place"], "the period furniture strips to the town"
+    assert_equal "London", adapter.parse(ref_for(RALEIGH)).metadata["imprint_place"]
+    assert_equal "London", adapter.parse(ref_for(GROBIANUS)).metadata["imprint_place"]
+  end
+
+  def test_a_sine_loco_imprint_mints_no_place_key
+    ode = adapter.parse(ref_for(ODE)).metadata
+    assert_equal "[S.l.] :", ode["source_pub_place"]
+    refute ode.key?("imprint_place"), "s.l. is upstream's own no-place answer"
+    refute ode.key?("imprint_place_conjecture")
+  end
+
+  def test_a_conjectural_imprint_rides_its_own_key
+    # Runtime-edited real A90004 bytes: the "[London?]" shape (1,657 files
+    # censused) — the cataloguer's guess never reads as a certain place.
+    with_edited_petition(/<PUBPLACE>Imprinted at London :/, "<PUBPLACE>[London?] :") do |ref|
+      metadata = Nabu::Adapters::EeboTcp.new.parse(ref).metadata
+      assert_equal "London", metadata["imprint_place_conjecture"]
+      refute metadata.key?("imprint_place")
+    end
+  end
+
   # -- parse: license ---------------------------------------------------------
 
   def test_the_cc0_dedication_maps_every_fixture_open

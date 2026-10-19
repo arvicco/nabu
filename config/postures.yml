@@ -430,7 +430,13 @@ sources:
         already rides. Projected via PLACE_KEYS source_pub_place, ESTC
         bracket/colon furniture stripped, s.l. sine-loco minting nothing
         (59,805 axis rows live 2026-09-29); the TCP's own Ann Arbor
-        pub_place stays lineage (declared, Invariants::MINING_EXEMPT)"}
+        pub_place stays lineage (declared, Invariants::MINING_EXEMPT).
+        Parse-time bare town beside it (census 2026-10-20 over all 60,326
+        files): imprint_place on 56,683 (94.0%), the ?-marked
+        imprint_place_conjecture on 2,288 (3.8%) — period furniture,
+        Latin/Welsh/French forms and cataloguer [i.e.] corrections read
+        to the English town (EeboImprintPlace), the registry-shaped join
+        key for gazetteer refs"}
     script: {posture: implied}
   iswoc:
     kind: {posture: unclassified}
