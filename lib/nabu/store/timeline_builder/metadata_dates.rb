@@ -2,8 +2,10 @@
 
 require "json"
 
+require_relative "../../archive_axes"
 require_relative "../../period_bands"
 require_relative "../../place_refs"
+require_relative "../../work_eras"
 require_relative "../../timeline"
 
 module Nabu
@@ -45,6 +47,13 @@ module Nabu
       #   :author_century_band — top-level "birth_century"/"death_century"
       #     CE-century integer strings (disco P104-1: "17"/"17" → 1601–1700,
       #     the author's own life band, never a midpoint).
+      #   :script_band / :time_slot_band — a label field (ociana's script
+      #     tradition, dcs's composition time slot) banded through ruled
+      #     period_bands.yml rows, precision "era".
+      #   :work_era / :archive_axes — per-source ruled tables
+      #     (config/work_eras.yml per work; config/archive_axes.yml per
+      #     archive: reign volume → regnal span, stated span, corpus band,
+      #     and the archive's findspot).
       #   :place_only — no date reading at all; the source registers for
       #     the PLACE lane below (ogham P104-1: its "date" is free prose,
       #     honestly unparsed, but the place hash carries townland/county/
@@ -71,6 +80,9 @@ module Nabu
         # registers here and the health lane-drift check flags it if it
         # doesn't).
         SHAPES = {
+          "achemenet" => :archive_axes, # the archive table (config/archive_axes.yml): reign
+          #                               volumes via the held regnal table, else the volume's
+          #                               stated span, else the corpus band; archive findspots
           "africa-pd" => :structured, # P124-1: each work's edition year (the slavistics-pd
           #                             mold); the imprint rides "imprint" — no place claim
           "aozora" => :structured, # the index's 初出 first publication (class composition),
@@ -84,6 +96,8 @@ module Nabu
           #                            place = the manuscript's Provenance
           "cbeta" => :dynasty_band,
           "ccmh" => :bounds_keys,
+          "classical-modern" => :work_era, # the work's attributed era (config/work_eras.yml,
+          #                                  keyed on metadata "book"), composition class
           "cme" => :edition_year_text,
           "corpus-corporum" => :structured,
           "corpus-gysseling" => :bounds_keys,
@@ -92,6 +106,8 @@ module Nabu
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
           "dacon" => :structured,
+          "dcs" => :time_slot_band, # the chapter's DCS composition time slot → the ruled
+          #                           "DCS time slot N" period_bands rows, composition class
           "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
           #   IIIB") bands only once period_bands.yml carries ruled rows; the
           #   site/findspot place hash projects meanwhile
@@ -148,8 +164,10 @@ module Nabu
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
           "obi-burmese" => :ce_year_text,
-          "ociana" => :place_only, # site + region/country + the WGS84 pair; its findDate is
-          #                          the DISCOVERY date (survey year), never a dating claim
+          "ociana" => :script_band, # the record's script TRADITION banded through the ruled
+          #                           ANA period_bands rows (precision era); site + region/
+          #                           country + the WGS84 pair place it; its findDate is the
+          #                           DISCOVERY date (survey year), never a dating claim
           "ogham" => :century_prose,
           "okhc" => :year_key,
           "openmgh" => :printed_year_text,
@@ -257,6 +275,11 @@ module Nabu
 
         BATCH = 2_000
 
+        # Shapes whose ruled table is keyed per source — called with the
+        # slug beside the metadata (config/work_eras.yml,
+        # config/archive_axes.yml).
+        TABLE_SHAPES = %i[work_era archive_axes].freeze
+
         # P118-R4 S3 (the held-but-dark audit): per-id date LISTS a source
         # ships beside its texts (canonical/<slug>/<file>, "ID<TAB>date"
         # lines) — a builder-side JOIN on the metadata "idno" that dates
@@ -342,7 +365,7 @@ module Nabu
               row = axis_row(doc, shape, reorder: REORDER.include?(slug),
                                          composition: COMPOSITION.include?(slug),
                                          place_key: PLACE_KEYS.fetch(slug, "place"),
-                                         listed: listed)
+                                         listed: listed, slug: slug)
               next if row.nil?
 
               buffer << row.merge(axis_source: slug)
@@ -358,16 +381,21 @@ module Nabu
 
         # One document's axis row, or nil when it carries neither a date
         # bound nor a place claim (name, ref or coordinates).
-        def axis_row(doc, shape, reorder: false, composition: false, place_key: "place", listed: {})
+        def axis_row(doc, shape, reorder: false, composition: false, place_key: "place", listed: {}, slug: nil)
           meta = JSON.parse(doc[:metadata_json].to_s)
-          not_before, not_after, raw, precision, own_class = send(shape, meta)
+          not_before, not_after, raw, precision, own_class =
+            TABLE_SHAPES.include?(shape) ? send(shape, meta, slug) : send(shape, meta)
           if not_before.nil? && not_after.nil? && (list_raw = listed[meta["idno"].to_s]) &&
              (years = tcp_list_years(list_raw))
             not_before, not_after = years
             raw = list_raw
           end
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
-          place, place_ref, lat, lon = place_claim(meta, key: place_key)
+          place, place_ref, lat, lon = if shape == :archive_axes
+                                         archive_place(meta, slug)
+                                       else
+                                         place_claim(meta, key: place_key)
+                                       end
           # A ref IS placement (P73-2): a doc carrying only a parseable
           # place ref rows too — the HGV place-only precedent extended.
           # P104-1 extends it once more: a coordinate pair alone places.
@@ -493,6 +521,61 @@ module Nabu
           return [nil, nil, nil, nil] if band.nil?
 
           [band[0], band[1], meta["author"] || meta["dynasty"], "era"]
+        end
+
+        # ociana: the record's script TRADITION (Safaitic, Hismaic,
+        # Dadanitic, Taymanitic) bands through the ruled ANA rows of
+        # period_bands.yml — the tradition's conventional span, an
+        # attributed claim worn as precision "era" (the deposit dates no
+        # inscription). A script without a ruled row (the Thamudic
+        # pending file, the non-ANA scripts) mints no date.
+        def script_band(meta)
+          band = Nabu::PeriodBands.default&.lookup(meta["script"])
+          return [nil, nil, nil] if band.nil?
+
+          [band[0], band[1], "#{meta['script']} script tradition", "era"]
+        end
+
+        # dcs: the chapter's composition time slot (chapter-info.xml
+        # dcsTimeSlot "1".."5") bands through the ruled "DCS time slot N"
+        # rows — attributed composition-era dating, its own class. The
+        # "None" slot (17 chapters) has no row and mints nothing.
+        def time_slot_band(meta)
+          slot = meta["dcs_time_slot"].to_s.strip
+          band = Nabu::PeriodBands.default&.lookup("DCS time slot #{slot}") unless slot.empty?
+          return [nil, nil, nil] if band.nil?
+
+          [band[0], band[1], "DCS time slot #{slot}", "era", "composition"]
+        end
+
+        # The ruled per-work era table (config/work_eras.yml): the work
+        # named by the table's key field bands to its attributed
+        # composition era — class composition, precision era, the raw
+        # naming the work and the era label. A work declared without an
+        # era (contested) or absent from the table mints nothing.
+        def work_era(meta, slug)
+          table = Nabu::WorkEras.default
+          work = table && meta[table.key_for(slug).to_s]
+          era = work && table.lookup(slug, work)
+          return [nil, nil, nil] if era.nil?
+
+          [era.band[0], era.band[1], "#{work} — attributed composition era #{era.label}", "era", "composition"]
+        end
+
+        # The ruled archive table (config/archive_axes.yml): reign volume →
+        # the held regnal table's whole-reign span, else the archive's own
+        # stated span, else the source's corpus band.
+        def archive_axes(meta, slug)
+          dating = Nabu::ArchiveAxes.default&.dating(slug, meta["archive"], meta["designation"])
+          return [nil, nil, nil] if dating.nil?
+
+          [dating.band[0], dating.band[1], dating.raw, dating.precision]
+        end
+
+        # The archive's findspot at archive grain, with the held refs.
+        def archive_place(meta, slug)
+          name, ref = Nabu::ArchiveAxes.default&.place(slug, meta["archive"])
+          [name, ref, nil, nil]
         end
 
         # A bare integer year → a one-year envelope (okhc). Anything else

@@ -325,6 +325,24 @@ class KindsTest < Minitest::Test
     assert_empty shipped.normalize("okhc", "AKS Old Korean Books (옛한글 원문정보)")
   end
 
+  # classical-modern: the 97 works fold by their Siku Quanshu 部類 seat
+  # through the SAME heads the held kanripo fold rules (經部 → scripture,
+  # 史部 → historiography, the Masters → literary/wisdom, 兵家 →
+  # scholarly …); the translation siblings share the book key.
+  def test_shipped_classical_modern_folds_the_book_field
+    shipped = shipped_kinds
+    assert_equal %w[book], shipped.metadata_for("classical-modern")
+    assert_equal ["historiography"], shipped.normalize("classical-modern", "史记")
+    assert_equal ["historiography/chronicle"], shipped.normalize("classical-modern", "资治通鉴")
+    assert_equal ["scripture"], shipped.normalize("classical-modern", "论语")
+    assert_equal ["literary/wisdom"], shipped.normalize("classical-modern", "庄子")
+    assert_equal ["scholarly"], shipped.normalize("classical-modern", "孙子兵法")
+    assert_equal ["scholarly/medicine"], shipped.normalize("classical-modern", "黄帝内经")
+    assert_equal ["literary/narrative"], shipped.normalize("classical-modern", "搜神记")
+    assert_equal ["legal"], shipped.normalize("classical-modern", "睡虎地秦墓竹简")
+    assert_equal ["school"], shipped.normalize("classical-modern", "三字经")
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks
@@ -572,6 +590,22 @@ class KindsTest < Minitest::Test
     assert_empty shipped.normalize("gretil", "Tibetan"), "a language shelf is a reviewed non-claim"
     GRETIL_LADDER_CENSUS.each do |value|
       refute_includes shipped.normalize("gretil", value), Nabu::Kinds::UNMAPPED, value
+    end
+  end
+
+  # The ndl-kotenseki NDC fold (the bib join's ndc facet): the census
+  # sample's codes, one class each, the subject-only remainder unmapped.
+  def test_ndl_kotenseki_ndc_codes_fold_one_class_each
+    shipped = shipped_kinds
+    {
+      "813.2" => ["lexical"], "221" => ["historiography"], "288.4" => ["historiography"],
+      "291.36" => ["scholarly"], "911.12" => ["literary/poetry"], "921" => ["literary/poetry"],
+      "913.6" => ["literary/narrative"], "991" => ["literary"], "210.46" => ["historiography"],
+      "148" => ["divination"], "322" => ["legal"], "386" => ["scholarly"], "123.83" => ["scripture"],
+      "490.9" => ["scholarly/medicine"], "375.9" => ["school"]
+    }.each { |code, want| assert_equal want, shipped.normalize("ndl-kotenseki", code), code }
+    %w[180 181 150 337.2 701.1 702.1 385 816 901].each do |code|
+      assert_equal [Nabu::Kinds::UNMAPPED], shipped.normalize("ndl-kotenseki", code), code
     end
   end
 

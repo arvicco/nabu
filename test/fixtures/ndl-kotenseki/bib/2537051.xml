@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ndl-bib pid="2537051">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcndl="http://ndl.go.jp/dcndl/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" >
+          <dcndl:BibAdminResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859">
+              <dcndl:catalogingStatus>C7</dcndl:catalogingStatus>
+              <dcterms:description>type : book</dcterms:description>
+              <dcndl:bibRecordCategory>R100000002</dcndl:bibRecordCategory>
+              <dcndl:bibRecordSubCategory>171</dcndl:bibRecordSubCategory>
+              <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859#material" />
+          </dcndl:BibAdminResource>
+          <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859#material">
+              <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/bib/000007313859"/>
+              <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000007313859</dcterms:identifier>
+              <dcterms:title>花かつみ考</dcterms:title>
+              <dc:title><rdf:Description>
+              <rdf:value>花かつみ考</rdf:value>
+              <dcndl:transcription>ハナカツミコウ</dcndl:transcription>
+          </rdf:Description></dc:title>
+              <dcndl:alternative><rdf:Description>
+              <rdf:value>勝見考</rdf:value>
+              <dcndl:transcription>カツミコウ</dcndl:transcription>
+          </rdf:Description></dcndl:alternative><dcndl:alternative><rdf:Description>
+              <rdf:value>花勝美考</rdf:value>
+              <dcndl:transcription>ハナカツミコウ</dcndl:transcription>
+          </rdf:Description></dcndl:alternative><dcndl:alternative><rdf:Description>
+              <rdf:value>陸奥国安積沼かつみ考</rdf:value>
+              <dcndl:transcription>ムツノクニアサカヌマ カツミコウ</dcndl:transcription>
+          </rdf:Description></dcndl:alternative>
+                  <dcndl:uniformTitle><rdf:Description>
+              <rdf:value>花かつみ考</rdf:value>
+              <dcndl:transcription>ハナカツミコウ</dcndl:transcription>
+          </rdf:Description></dcndl:uniformTitle>
+                  <dcterms:creator><foaf:Agent>
+              <foaf:name>藤塚, 知明</foaf:name>
+              <dcndl:transcription>フジツカ, トモアキ</dcndl:transcription>
+          </foaf:Agent></dcterms:creator>
+              <dc:creator>藤塚知明</dc:creator>
+              <dcterms:publisher><foaf:Agent>
+              <foaf:name>刊</foaf:name>
+          </foaf:Agent></dcterms:publisher>
+              <dcndl:publicationPlace rdf:datatype="http://purl.org/dc/terms/ISO3166">JP</dcndl:publicationPlace>
+              <dcterms:date>寛政7 [1795] 序</dcterms:date>
+                  <dcterms:issued rdf:datatype="http://purl.org/dc/terms/W3CDTF">1795</dcterms:issued>
+              <dcterms:description>装丁 : 和装</dcterms:description>
+              <dcterms:description>広告・蔵版目録・近刊予告等あり</dcterms:description>
+              <dcterms:description>白井文庫</dcterms:description>
+              <dcterms:subject><rdf:Description>
+              <rdf:value>植物</rdf:value>
+          </rdf:Description></dcterms:subject>
+              <dcterms:language rdf:datatype="http://purl.org/dc/terms/ISO639-2">jpn</dcterms:language>
+              <dcterms:extent>1冊 ; 25cm</dcterms:extent>
+              <dcndl:materialType rdf:resource="http://ndl.go.jp/ndltype/JapaneseClassicalBook" rdfs:label="和古書"/>
+                  <rdfs:seeAlso rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859"/>
+          </dcndl:BibResource>
+              <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859#material">
+                  <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859#item" /><dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000039-I2537051#item" />
+              </dcndl:BibResource>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859#item">
+                  <dcndl:holdingAgent>
+                      <foaf:Agent>
+                          <foaf:name>国立国会図書館</foaf:name>
+                          <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLLibCode">0000</dcterms:identifier>
+                      </foaf:Agent>
+                  </dcndl:holdingAgent>
+                  <rdfs:seeAlso rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007313859"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/bib/000007313859"/>
+                  <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000007313859</dcterms:identifier>
+                  <dcndl:callNumber>特1-3369</dcndl:callNumber>
+              </dcndl:Item>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2537051#item">
+                  <rdfs:seeAlso rdf:resource="https://dl.ndl.go.jp/pid/2537051"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/digimeta/2537051"/>
+                  <rdfs:seeAlso rdf:resource="https://doi.org/10.11501/2537051"/>
+                  <dcndl:callNumber>特1-3369</dcndl:callNumber>
+                  <dcterms:description>資料形態 : テキストデータ</dcterms:description><dcterms:description>資料形態 : プレーンテキスト</dcterms:description>
+              </dcndl:Item>
+      </rdf:RDF>
+</ndl-bib>

@@ -143,6 +143,27 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # The wipe class, caught live 2026-10-19: a per-source apply used to
+  # supersede the WHOLE inference basis, so the second source's run
+  # deleted the first source's 45,869 freshly-journaled rows.
+  def test_a_scoped_apply_supersedes_only_its_own_scope
+    with_seeded_catalog do |catalog|
+      journal = Nabu::Store::LectJournal.connect("sqlite::memory:")
+      Nabu::Store::LectJournal.migrate!(journal)
+      # A prior per-source run's row for ANOTHER source, same basis:
+      journal[:lect_assignments].insert(
+        urn: "urn:t:other:doc", code: "lat", lect_id: "lat:late",
+        basis: "rule:date-band", note: "dated 300..400", created_at: Time.now
+      )
+      outcome = dates.apply!(catalog: catalog, journal: journal, source: "edh")
+      assert_equal 1, outcome.assigned
+      assert_equal 1, journal[:lect_assignments].where(urn: "urn:t:other:doc").count,
+                   "a per-source apply must never supersede another source's rows"
+      assert_equal 2, journal[:lect_assignments].count
+      journal.disconnect
+    end
+  end
+
   def test_apply_never_overwrites_a_hand_ruling
     with_seeded_catalog do |catalog|
       journal = Nabu::Store::LectJournal.connect("sqlite::memory:")

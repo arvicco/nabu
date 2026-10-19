@@ -26,3 +26,29 @@ Added 2026-10-18:
   (赤本昔はなし) and a 容量・大きさ (1冊 ; 12.2cm).
 - `census.tsv` re-derived for both PIDs with the series/extent
   columns (the adapter's own `derive_census!` over the held xlsx).
+
+Added 2026-10-19 (the NDL Search bib join):
+
+- `books/2537051.json` — PID 2537051 (花かつみ考), copied from the box's
+  canonical crawl and trimmed to the first 4 of 31 koma; its census row
+  (appended to `census.tsv`) carries only the prose date 寛政7序, the
+  case the bib record's issued year fills.
+- `sru/searchRetrieve-3.xml` — the live NDL Search SRU answer
+  (https://ndlsearch.ndl.go.jp/api/sru, operation=searchRetrieve,
+  version=1.2, recordSchema=dcndl, maximumRecords=200) for the CQL
+  `anywhere="info:ndljp/pid/2532153" OR anywhere="info:ndljp/pid/2537051"
+  OR anywhere="info:ndljp/pid/2541107"`, kept whole.
+- `sru/diagnostic.xml` — a live SRU diagnostic answer (the interface
+  refuses `(dpid=… OR dpid=…) AND (…)` as "illegal query syntax").
+- `bib/<pid>.xml` — the adapter's sidecar shape: 2532153, 2537051 and
+  2541107 split from `sru/searchRetrieve-3.xml` by
+  `NdlSearchBib.sidecar`; 2546138 (ホメーロス批判, a digital-collection
+  record with NDC 991, NDLC KP25, a life-years creator and a publisher
+  location) split the same way from a live 50-PID census batch.
+
+Metadata terms: NDL Search API provider list
+(https://ndlsearch.ndl.go.jp/help/api/provider) — iss-ndl-opac and
+ndl-dl-open metadata CC BY 4.0.
+
+Re-cut: re-run the SRU query above and split it with
+`NdlSearchBib.sidecar(pid, NdlSearchBib.records_for(pid, page.records))`.

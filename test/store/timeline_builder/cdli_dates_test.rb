@@ -127,7 +127,8 @@ module Store
         counts = build!(dir)
         assert_equal({ documents: 0, undated: 0, invalid: 0,
                        regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0, regnal_us2_double: 0,
-                       accounting: 0, accounting_unresolved: 0 }, counts)
+                       regnal_broken_year: 0, regnal_slash: 0,
+                       accounting: 0, accounting_unresolved: 0, origin: 0, origin_unresolved: 0 }, counts)
       end
     end
 
@@ -231,6 +232,135 @@ module Store
           assert_equal expected[1], row.fetch(:not_after), urn
           assert_equal expected[2], row.fetch(:precision), urn
           assert_equal expected[3], row.fetch(:date_raw), urn
+        end
+      end
+    end
+
+    # Writes +rows+ ({ urn => { column => value } }) as a catalog CSV under
+    # a temp canonical root, mints the documents, builds, and yields counts.
+    def build_rows(rows, columns)
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "cdli"))
+        CSV.open(File.join(dir, "cdli", "cdli_cat.csv"), "w") do |csv|
+          csv << (%w[id_text] + columns)
+          rows.each do |urn, values|
+            csv << ([urn[/p(\d+)\z/, 1].to_i] + columns.map { |c| values.fetch(c, "") })
+          end
+        end
+        rows.each_key { |urn| make_document(urn) }
+        yield build!(dir)
+      end
+    end
+
+    # date_of_origin (147,383 catalog rows, census 2026-10-19) restates the
+    # dates_referenced value verbatim on 142,921 rows; on the other 4,462
+    # (all accounts) it is the tablet's own date — the LAST entry of the
+    # dates_referenced list. It sits BELOW the explicit datings: consulted
+    # only when accounting_period and the first dates_referenced entry
+    # resolve nothing, ABOVE the period band. Real catalog strings.
+    def test_date_of_origin_dates_an_account_whose_explicit_datings_resolve_nothing
+      rows = {
+        "urn:nabu:cdli:p930001" => {
+          "date_of_origin" => "Šū-Suen.07.03.00",
+          "dates_referenced" => "Šū-Suen.06.02.00 (us2-us2 year), Šū-Suen.07.03.00",
+          "accounting_period" => "Šū-Suen.06.02.00 (us2-us2 year) to Šū-Suen.07.03.00",
+          "period" => "Ur III (ca. 2100-2000 BC)"
+        },
+        "urn:nabu:cdli:p930002" => {
+          "date_of_origin" => "Šulgi.11.00.00 ?",
+          "dates_referenced" => "Ur-Namma.P.00.00, Šulgi.11.00.00 ?",
+          "accounting_period" => "Ur-Namma.P.00.00 to Šulgi.11.00.00 ?",
+          "period" => "Ur III (ca. 2100-2000 BC)"
+        },
+        # The common case: date_of_origin == dates_referenced — the explicit
+        # dating answers first and date_of_origin is never counted.
+        "urn:nabu:cdli:p930003" => {
+          "date_of_origin" => "Amar-Suen.01.04.00", "dates_referenced" => "Amar-Suen.01.04.00",
+          "period" => "Ur III (ca. 2100-2000 BC)"
+        },
+        # Placeholder filler resolves nothing anywhere — the period band stays.
+        "urn:nabu:cdli:p930004" => {
+          "date_of_origin" => "00.00.00.00", "dates_referenced" => "00.00.00.00",
+          "period" => "Ur III (ca. 2100-2000 BC)"
+        }
+      }
+      columns = %w[date_of_origin dates_referenced accounting_period period provenience]
+      build_rows(rows, columns) do |counts|
+        assert_equal 2, counts[:origin]
+        assert_equal 1, counts[:regnal], "only the explicit dates_referenced hit counts regnal"
+        expected = {
+          "urn:nabu:cdli:p930001" => [-2031, -2031, "regnal-year", "Šū-Suen.07.03.00"],
+          "urn:nabu:cdli:p930002" => [-2084, -2084, "regnal-year", "Šulgi.11.00.00 ?"],
+          "urn:nabu:cdli:p930003" => [-2046, -2046, "regnal-year", "Amar-Suen.01.04.00"],
+          "urn:nabu:cdli:p930004" => [-2100, -2000, "period", "Ur III (ca. 2100-2000 BC)"]
+        }
+        expected.each do |urn, values|
+          assert_equal values, timeline_for(urn).values_at(:not_before, :not_after, :precision, :date_raw), urn
+        end
+      end
+    end
+
+    # CDLI's date scheme (Tinney, "Date Specifications for CDLI/Oracc"):
+    # "components which are broken are given with double hyphen ('--')".
+    # A ruled ruler with a broken (or "xx") year still dates the tablet to
+    # the reign — the YY=00 whole-reign span, precision "regnal-reign". A
+    # "?" on the year itself (doubt) converts like the bare year, the doubt
+    # riding date_raw. The Achaemenid "Ruler.DD/MONTH/YY" shape (day /
+    # roman month / regnal year — "Artaxerxes1.17/VII/41": the 41-year
+    # reign fixes the order) converts its year; "acc" (accession year)
+    # stays unresolved. Unruled rulers stay period-banded. Real strings.
+    def test_broken_doubted_and_slash_year_shapes_convert_where_ruled
+      rows = {
+        "urn:nabu:cdli:p940001" => ["Šulgi.--.00.07", [-2094, -2047, "regnal-reign"]],
+        "urn:nabu:cdli:p940002" => ["Amar-Suen.--.01.01 (us2 year)", [-2046, -2038, "regnal-reign"]],
+        "urn:nabu:cdli:p940003" => ["Nabonidus.xx.03.21", [-555, -539, "regnal-reign"]],
+        "urn:nabu:cdli:p940004" => ["Sennacherib.15?.00.00", [-690, -690, "regnal-year"]],
+        "urn:nabu:cdli:p940005" => ["Darius1.18/XI/6", [-516, -516, "regnal-year"]],
+        "urn:nabu:cdli:p940006" => ["Darius1.20/X/acc", [-2100, -2000, "period"]],
+        "urn:nabu:cdli:p940007" => ["Ibbi-Sin.--.00.00", [-2100, -2000, "period"]],
+        "urn:nabu:cdli:p940008" => ["Cambyses.1/IV/2", [-2100, -2000, "period"]]
+      }
+      table = rows.transform_values do |(dated, _)|
+        { "dates_referenced" => dated, "period" => "Ur III (ca. 2100-2000 BC)" }
+      end
+      build_rows(table, %w[dates_referenced period provenience]) do |counts|
+        assert_equal 5, counts[:regnal]
+        assert_equal 3, counts[:regnal_broken_year]
+        assert_equal 1, counts[:regnal_slash]
+        assert_equal 2, counts[:regnal_unruled], "Ibbi-Sin (a variant spelling) and Cambyses are unruled"
+        rows.each do |urn, (dated, expected)|
+          row = timeline_for(urn)
+          assert_equal expected, row.values_at(:not_before, :not_after, :precision), urn
+          assert_equal dated, row.fetch(:date_raw), urn unless expected[2] == "period"
+        end
+      end
+    end
+
+    # The "(us2-us2 year)" mark is NOT a +2 shift: CDLI's own year-name
+    # tables number the "second year after" names under their canonical
+    # year (Šulgi 41 and 48, Šū-Suen 6, Ibbi-Suen 8 — the years the mark
+    # concentrates on in the catalog). It keeps falling back to the period
+    # band, on the real strings — and a date_of_origin that merely restates
+    # dates_referenced is never re-read (no double census).
+    def test_the_double_us2_mark_never_converts_and_a_restating_origin_is_not_reread
+      rows = {
+        "urn:nabu:cdli:p950001" => {
+          "date_of_origin" => "Šulgi.41.09.00 (us2-us2 year)",
+          "dates_referenced" => "Šulgi.41.09.00 (us2-us2 year)",
+          "period" => "Ur III (ca. 2100-2000 BC)"
+        },
+        "urn:nabu:cdli:p950002" => {
+          "date_of_origin" => "Šulgi.48.03.00 (us2-us2 year)",
+          "dates_referenced" => "Lugalanda.03.00.00, Šulgi.48.03.00 (us2-us2 year)",
+          "period" => "Ur III (ca. 2100-2000 BC)"
+        }
+      }
+      build_rows(rows, %w[date_of_origin dates_referenced period provenience]) do |counts|
+        assert_equal 0, counts[:origin]
+        assert_equal 1, counts[:origin_unresolved], "only the distinct date_of_origin is read"
+        assert_equal 1, counts[:regnal_us2_double], "the regnal census counts dates_referenced only"
+        rows.each_key do |urn|
+          assert_equal [-2100, -2000, "period"], timeline_for(urn).values_at(:not_before, :not_after, :precision)
         end
       end
     end

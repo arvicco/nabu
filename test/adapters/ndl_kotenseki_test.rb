@@ -29,8 +29,62 @@ module Adapters
     def doc(pid) = documents.find { |d| d.urn.end_with?(":#{pid}") } || flunk("#{pid} missing")
 
     def test_discovers_one_document_per_crawled_book
-      assert_equal %w[urn:nabu:ndl-kotenseki:2532153 urn:nabu:ndl-kotenseki:2541107],
+      assert_equal %w[urn:nabu:ndl-kotenseki:2532153 urn:nabu:ndl-kotenseki:2537051
+                      urn:nabu:ndl-kotenseki:2541107],
                    conformance_adapter.discover(FIXTURES).map(&:id).sort
+    end
+
+    # -- The NDL Search bib join (bib/<pid>.xml sidecars) -------------------
+
+    def test_bib_ndc_joins_metadata_and_the_ndc_facet
+      meta = doc(2_532_153).metadata
+      assert_equal ["813.2"], meta["ndc"]
+      assert_equal({ "values" => ["813.2"] }, meta.dig("facets", "ndc"))
+      assert_equal [{ "category" => "R100000002", "bib_id" => "000003284459" }], meta.dig("ndl_bib", "records"),
+                   "the record provenance rides beside the join"
+      assert_equal [1605, 1605, "[慶長10(1605)]"], meta["date"].values_at("not_before", "not_after", "raw"),
+                   "a typed census date stays the date — the bib record never overrides it"
+    end
+
+    def test_bib_creators_ride_metadata_and_join_the_author_facet
+      meta = doc(2_541_107).metadata
+      assert_equal({ "name" => "歌川, 広重 1世", "life" => "1797-1858", "born" => 1797, "died" => 1858,
+                     "reading" => "ウタガワ, ヒロシゲ 1セイ, 1797-1858",
+                     "authority" => "http://id.ndl.go.jp/auth/entity/00272450" }, meta["creators"].last)
+      assert_equal({ "values" => ["夷福山人", "広重", "歌川, 広重 1世"] }, meta.dig("facets", "author"),
+                   "the authority forms join the census names, deduplicated, life-years never in the value")
+      assert_nil meta["date"], "neither the census nor the record carries a year"
+    end
+
+    def test_bib_issued_year_dates_a_census_undated_book_labeled_as_the_records_claim
+      meta = doc(2_537_051).metadata
+      assert_equal "寛政7序", meta["pub_date"], "the census prose rides verbatim as before"
+      assert_equal({ "not_before" => 1795, "not_after" => 1795,
+                     "raw" => "NDL Search record (pid 2537051): 寛政7 [1795] 序" }, meta["date"])
+      assert_nil meta["date"]["class"], "the print's own date — the artifact class, labeled by its raw"
+    end
+
+    def test_a_book_without_a_bib_sidecar_parses_as_before
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "books"))
+        FileUtils.cp(File.join(FIXTURES, "books", "2541107.json"), File.join(dir, "books"))
+        FileUtils.cp(File.join(FIXTURES, "census.tsv"), dir)
+        adapter = conformance_adapter
+        meta = adapter.parse(adapter.discover(dir).first).metadata
+        assert_nil meta["creators"]
+        assert_nil meta["ndl_bib"]
+        assert_equal({ "values" => %w[夷福山人 広重] }, meta.dig("facets", "author"))
+      end
+    end
+
+    def test_bib_sidecars_are_declared_materializations_not_strays
+      assert_includes Nabu::Adapters::NdlKotenseki.materialized_paths, "bib"
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "bib"))
+        File.write(File.join(dir, "bib", "2532153.xml"), "<ndl-bib/>")
+        File.write(File.join(dir, ".ndl-bib.json"), "{}")
+        assert_equal 0, conformance_adapter.discovery_skips(dir).unrecognized
+      end
     end
 
     def test_koma_contents_become_passages_empty_koma_skipped
@@ -67,7 +121,8 @@ module Adapters
       assert_equal "夷福山人 作||広重 画", meta["author"], "the raw string is kept"
       assert_equal [{ "name" => "夷福山人", "role" => "作" }, { "name" => "広重", "role" => "画" }],
                    meta["authors"]
-      assert_equal({ "values" => %w[夷福山人 広重] }, meta.dig("facets", "author"))
+      assert_equal(["夷福山人", "広重", "歌川, 広重 1世"], meta.dig("facets", "author", "values"),
+                   "the census names first; the bib record's authority form joins (the bib-join tests)")
       assert_equal "1冊 ; 31cm", doc(2_532_153).metadata["extent"]
       assert_nil doc(2_532_153).metadata["authors"], "an empty 著者 claims no person"
     end
@@ -209,6 +264,125 @@ module Adapters
                    "#{Nabu::Adapters::NdlKotenseki::CENSUS_HEADER}\n2546843\tx\n")
         report = quiet_adapter.fetch(dir)
         assert_match(/1 stuck on timeout \(2546843\)/, report.notes)
+      end
+    end
+
+    # -- The paced bib crawl: held PIDs without a sidecar, oldest first, in
+    # SRU batches; a PID the answer does not link is ledgered "missing".
+
+    SRU = %r{\Ahttps://ndlsearch\.ndl\.go\.jp/api/sru\?}
+    SRU_BODY = File.read(File.join(FIXTURES, "sru", "searchRetrieve-3.xml"))
+    BIB_PIDS = %w[2532153 2537051 2541107].freeze
+
+    def bib_adapter(batch: 50, slice: 100)
+      Nabu::Adapters::NdlKotenseki.new(delay: 0, timeout_backoff: 0, bib_batch: batch, bib_slice: slice)
+    end
+
+    def held_workdir(dir, pids)
+      FileUtils.mkdir_p(File.join(dir, "books"))
+      pids.each { |pid| File.write(File.join(dir, "books", "#{pid}.json"), '{"list":[]}') }
+      dir
+    end
+
+    def queried_pids(request)
+      URI.decode_www_form_component(request.uri.query[/query=([^&]*)/, 1])
+         .scan(%r{pid/(\d+)}).flatten
+    end
+
+    def test_bib_crawl_writes_one_sidecar_per_linked_pid_and_ledgers_the_rest
+      stub = stub_request(:get, SRU).to_return(status: 200, body: SRU_BODY)
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, [*BIB_PIDS, "9999999"])
+        counts = bib_adapter.send(:crawl_bib_slice!, dir, progress: nil)
+        assert_requested stub, times: 1
+        assert_equal({ fetched: 3, missing: 1, denied: 0, stuck: 0, batches: 1 }, counts)
+        BIB_PIDS.each { |pid| assert File.file?(File.join(dir, "bib", "#{pid}.xml")), pid }
+        assert_equal File.read(File.join(FIXTURES, "bib", "2532153.xml")),
+                     File.read(File.join(dir, "bib", "2532153.xml")), "the fixture sidecar IS the crawl's shape"
+        ledger = JSON.parse(File.read(File.join(dir, ".ndl-bib.json")))
+        assert_equal({ "missing" => ["9999999"], "denied" => [], "timeout-stuck" => [] }, ledger)
+
+        # incremental: held sidecars and ledgered PIDs never re-fetch
+        assert_equal 0, bib_adapter.send(:crawl_bib_slice!, dir, progress: nil)[:batches]
+        assert_requested stub, times: 1
+      end
+    end
+
+    def test_bib_crawl_batches_oldest_pid_first_and_stops_at_the_slice
+      asked = []
+      stub_request(:get, SRU).to_return do |request|
+        asked << queried_pids(request)
+        { status: 200, body: SRU_BODY }
+      end
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, %w[2541107 2537051 2532153 10])
+        counts = bib_adapter(batch: 2, slice: 1).send(:crawl_bib_slice!, dir, progress: nil)
+        assert_equal [%w[10 2532153]], asked, "numeric order, one batch of two, then the slice ends"
+        assert_equal 1, counts[:batches]
+        refute File.file?(File.join(dir, "bib", "2537051.xml")), "the next slice's work waits"
+      end
+    end
+
+    def test_a_partial_answer_pages_through_next_record_position
+      records = SRU_BODY[%r{<records>.*</records>}m]
+      first, *rest = records.scan(%r{<record>.*?</record>}m)
+      page1 = SRU_BODY.sub(records, "<records>#{first}</records><nextRecordPosition>2</nextRecordPosition>")
+      page2 = SRU_BODY.sub(records, "<records>#{rest.join}</records>")
+      stub_request(:get, SRU).with(query: hash_including("startRecord" => "1")).to_return(status: 200, body: page1)
+      stub_request(:get, SRU).with(query: hash_including("startRecord" => "2")).to_return(status: 200, body: page2)
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, BIB_PIDS)
+        assert_equal 3, bib_adapter.send(:crawl_bib_slice!, dir, progress: nil)[:fetched]
+      end
+    end
+
+    def test_a_refused_batch_is_ledgered_denied_and_a_server_error_stays_fatal
+      stub_request(:get, SRU).to_return(status: 403, body: "Forbidden")
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, BIB_PIDS)
+        assert_equal 3, bib_adapter.send(:crawl_bib_slice!, dir, progress: nil)[:denied]
+        assert_equal BIB_PIDS, JSON.parse(File.read(File.join(dir, ".ndl-bib.json")))["denied"]
+      end
+      stub_request(:get, SRU).to_return(status: 500)
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, BIB_PIDS)
+        assert_raises(Nabu::FetchError) { bib_adapter.send(:crawl_bib_slice!, dir, progress: nil) }
+        assert File.file?(File.join(dir, ".ndl-bib.json")), "the ledger is written even when the slice dies"
+      end
+    end
+
+    def test_a_batch_timing_out_repeatedly_is_ledgered_stuck_and_the_slice_continues
+      stub_request(:get, SRU).to_raise(Net::ReadTimeout).times(Nabu::Adapters::NdlKotenseki::TIMEOUT_ATTEMPTS)
+                             .then.to_return(status: 200, body: SRU_BODY)
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, %w[10 2532153])
+        counts = bib_adapter(batch: 1).send(:crawl_bib_slice!, dir, progress: nil)
+        assert_equal({ fetched: 1, missing: 0, denied: 0, stuck: 1, batches: 2 }, counts)
+        assert_equal ["10"], JSON.parse(File.read(File.join(dir, ".ndl-bib.json")))["timeout-stuck"]
+      end
+    end
+
+    def test_fetch_runs_the_bib_slice_after_the_book_slice_and_reports_it
+      stub_request(:get, SRU).to_return(status: 200, body: SRU_BODY)
+      Dir.mktmpdir do |dir|
+        held_workdir(dir, BIB_PIDS)
+        File.write(File.join(dir, "dataset_202602_k_internet.xlsx"), "")
+        File.write(File.join(dir, "census.tsv"), "#{Nabu::Adapters::NdlKotenseki::CENSUS_HEADER}\n")
+        report = bib_adapter.fetch(dir)
+        assert_includes report.notes,
+                        "bib records at 3/3 held book(s) (+3 this sync, 0 missing, 0 refused, 0 stuck; 1 batch(es))"
+      end
+    end
+
+    def test_crawl_sha_moves_with_bib_state_only_when_there_is_some
+      adapter = quiet_adapter
+      Dir.mktmpdir do |dir|
+        ledger = { "denied" => ["1"], "empty" => [] }
+        bare = adapter.send(:crawl_sha, dir, ["9"], ledger)
+        FileUtils.mkdir_p(File.join(dir, "bib"))
+        assert_equal bare, adapter.send(:crawl_sha, dir, ["9"], ledger), "an empty bib dir is no state"
+        File.write(File.join(dir, "bib", "9.xml"), "<ndl-bib/>")
+        refute_equal bare, adapter.send(:crawl_sha, dir, ["9"], ledger)
       end
     end
 

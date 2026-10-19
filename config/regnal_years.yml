@@ -139,6 +139,21 @@ rulers:
     reign: 17
     dynasty: Neo-Babylonian
     basis: Parker & Dubberstein
+  # Cyrus II and Cambyses II as kings of Babylon — the reigns the
+  # Achaemenid-period Babylonian archives date by (Strassmaier's Cyrus /
+  # Cambyses volumes). Numbered spellings only, as cdli writes them
+  # ("Cyrus2.02.06.22", "Cambyses2.02.00.00"); the bare "Cyrus"/"Cambyses"
+  # forms stay unruled homonyms under the exclusion rule above.
+  Cyrus2:
+    accession: -538
+    reign: 9
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein (year 1 = 538/537 BC; year 9 = 530/529)
+  Cambyses2:
+    accession: -529
+    reign: 8
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein (year 1 = 529/528 BC; year 8 = 522/521)
   Darius1:
     accession: -521
     reign: 36
