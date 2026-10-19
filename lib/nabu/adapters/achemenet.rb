@@ -51,6 +51,20 @@ module Nabu
         MANIFEST
       end
 
+      CDLI_URN_PREFIX = "urn:nabu:cdli:"
+
+      # The CDLI concordance (the cdli composite-hub mold): a P-id names
+      # the CDLI artifact, so each such document asserts metadata
+      # "related" → urn:nabu:cdli:p… and the shared LibraryReferences
+      # producer (producer "achemenet") mints the reference edges —
+      # 1,139 of 2,774 documents, every one meeting a held CDLI document
+      # (census 2026-10-19). X-ids are Helsinki-local and assert nothing.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        LibraryReferences.new(catalog: catalog, journal: journal, producer: "achemenet")
+      end
+
       # P79-2: one static Zenodo artifact; the record serves no usable
       # Last-Modified (state records null), so drift rides URL identity —
       # a new deposit version mints a new artifact URL.
@@ -153,11 +167,13 @@ module Nabu
 
       def build_document(document_ref, doc)
         meta = document_ref.metadata
+        cdli_p = doc.id if doc.id.start_with?("P")
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
           title: doc.designation,
           metadata: { "designation" => doc.designation, "archive" => meta["archive"],
-                      "cdli_p" => (doc.id if doc.id.start_with?("P")),
+                      "cdli_p" => cdli_p,
+                      "related" => (["#{CDLI_URN_PREFIX}#{cdli_p.downcase}"] if cdli_p),
                       "facets" => { "archive" => { "value" => meta["archive"] } } }.compact
         )
         text = Nabu::Normalize.nfc(doc.tokens.filter_map { |token| token["form"] }.join(" "))

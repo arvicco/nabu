@@ -206,3 +206,74 @@ periods:
   "LH IIIB or LH IIIC":    {band: [-1300, -1070], basis: aegean}
   "LH IIIA2/LH IIIB1 or LH IIIC": {band: [-1370, -1070], basis: aegean}
   "LH IIIA2-LH IIIC":      {band: [-1370, -1070], basis: aegean}
+
+  # -- Ancient North Arabian script-tradition spans (basis `ana`; OCIANA's
+  # held per-record script field, census 2026-10-19: Safaitic 30,795 ·
+  # Hismaic 3,624 · Dadanitic 1,704 · Taymanitic 482 · Mixed Safaitic/
+  # Hismaic 46, of 36,794 documents). The deposit dates no inscription;
+  # these rows band the TRADITION each record is written in — an
+  # attributed era claim (consumers label it precision "era"), never a
+  # per-inscription date. Bounds after M. C. A. Macdonald, "Reflections on
+  # the linguistic map of pre-Islamic Arabia", Arabian Archaeology and
+  # Epigraphy 11 (2000) 28–79 (cited by section below), and OCIANA's own
+  # corpus introductions (Oxford 2017 Preliminary Editions:
+  # ociana_taymanitic.pdf, ociana_hismaic.pdf, ociana_dadanitic.pdf).
+  # Deliberately WITHOUT a row: Thamudic B/C/D (Macdonald's "pending
+  # file" — no tradition span to claim), Hasaitic, Dispersed Oasis North
+  # Arabian, Dumaitic, and the non-ANA scripts (Greek, Latin, Nabataean,
+  # Minaic, South Arabian).
+  "Safaitic":              {band: [-100, 400],   basis: ana,
+                            note: "Macdonald 2000 § Safaitic — written by nomads 'probably between
+                              the first century BC and the fourth century AD'"}
+  "Hismaic":               {band: [-100, 400],   basis: ana,
+                            note: "OCIANA Hismaic intro — 'very little dating evidence', but the
+                              basileophoric Nabataean royal names make the authors contemporary with
+                              or later than the Nabataean occupation of southern Jordan; Macdonald
+                              2000 § Hismaic calls the two scripts 'perhaps chronologically' close
+                              neighbours — the Safaitic envelope, declared coarse"}
+  "Taymanitic":            {band: [-800, -400],  basis: ana,
+                            note: "Macdonald 2000 § Oasis North Arabian — the ONA script 'by the
+                              eighth century BC'; OCIANA Taymanitic intro — the only datable texts
+                              name Nabonidus (mid-6th c. BC) and it is unknown whether most graffiti
+                              predate or outlast his stay, so the envelope keeps a century past it"}
+  "Dadanitic":             {band: [-800, 100],   basis: ana,
+                            note: "Macdonald 2000 § Oasis North Arabian — Early Dadanitic is the ONA
+                              script (by the eighth century BC); at Dadan Aramaic displaced it only
+                              under Nabataean domination (ended AD 106); its phase dating is
+                              'anyway uncertain' — a deliberately wide honest envelope"}
+  "Mixed Safaitic/Hismaic": {band: [-100, 400],  basis: ana, note: the two traditions' envelope}
+
+  # -- The Digital Corpus of Sanskrit's composition time slots (the
+  # dcsTimeSlot of lookup/chapter-info.xml, census 2026-10-19: slot 1 7,150
+  # · 2 2,944 · 3 2,334 · 4 2,110 · 5 1,496 · None 17 chapters; asset
+  # CC BY 4.0). The corpus names the slots on its own text list
+  # (sanskrit-linguistics.org/dcs, corpus page, read 2026-10-19: early ·
+  # epic · classical · medieval · late) and describes its span as
+  # 500 BCE–1900 CE, but publishes NO per-slot boundary table — so each
+  # bound below cites what pins it: basis `hellwig2020` = O. Hellwig,
+  # "Dating and Stratifying a Historical Corpus with a Bayesian Mixture
+  # Model", LT4HALA 2020, §4.2 (the corpus author's own Vedic priors:
+  # Rigvedic 1300–1000 BCE … Sūtra level 600–300 BCE); `dcs` = the
+  # corpus's own stated outer span; `indological` = the conventional
+  # handbook periodization of post-Vedic Sanskrit literature (the epics
+  # c. 400 BCE–400 CE after J. L. Brockington, The Sanskrit Epics, 1998),
+  # checked against the texts each slot actually holds. Adjacent slots
+  # OVERLAP on purpose: they are attributed envelopes, not a partition.
+  # Consumers label rows class "composition", precision "era".
+  "DCS time slot 1":       {band: [-1300, -300], basis: hellwig2020,
+                            note: "early — the Vedic corpus, Ṛgveda through the Sūtras (Hellwig 2020
+                              §4.2 priors); the lower bound predates the corpus's 500 BCE
+                              self-description because the Ṛgveda sits in this slot"}
+  "DCS time slot 2":       {band: [-500, 400],   basis: indological,
+                            note: "epic — Mahābhārata, Rāmāyaṇa, Aṣṭādhyāyī, Arthaśāstra, Manusmṛti,
+                              Buddhacarita, Yogasūtra: the corpus's 500 BCE floor through the epics'
+                              conventional close"}
+  "DCS time slot 3":       {band: [300, 1000],   basis: indological,
+                            note: "classical — Kālidāsa, Amarakośa, Harṣacarita, Kāśikāvṛtti,
+                              Vācaspati Miśra's works, the major Purāṇas"}
+  "DCS time slot 4":       {band: [800, 1500],   basis: indological,
+                            note: "medieval — Bhāgavatapurāṇa, Tantrāloka, Kathāsaritsāgara,
+                              Gītagovinda, the rasaśāstra compendia, Sarvadarśanasaṃgraha"}
+  "DCS time slot 5":       {band: [1400, 1900],  basis: dcs,
+                            note: "late — Haṭhayogapradīpikā, Bhāvaprakāśa, Gheraṇḍasaṃhitā,
+                              Tarkasaṃgraha; the upper bound is the corpus's own 1900 CE"}

@@ -110,6 +110,19 @@ module Adapters
       ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:achemenet:x000428" }
       document = adapter.parse(ref)
       assert_nil document.metadata["cdli_p"], "X-ids are Helsinki-local placeholders, not CDLI artifacts"
+      assert_nil document.metadata["related"], "no CDLI artifact — no concordance edge"
+    end
+
+    # The CDLI concordance: a P-id names the held CDLI artifact, so the
+    # document asserts a reference edge onto its catalog urn (the cdli
+    # composite-hub mold — metadata "related", producer "achemenet").
+    def test_a_p_id_asserts_a_reference_edge_onto_the_cdli_artifact
+      adapter = Nabu::Adapters::Achemenet.new
+      ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:achemenet:p261571" }
+      assert_equal ["urn:nabu:cdli:p261571"], adapter.parse(ref).metadata["related"]
+      assert Nabu::Adapters::Achemenet.reference_edges?
+      producer = Nabu::Adapters::Achemenet.reference_producer(catalog: nil, journal: nil)
+      assert_equal "achemenet", producer.producer
     end
 
     def test_number_tokens_carry_no_invented_lemma

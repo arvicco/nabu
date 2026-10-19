@@ -1,0 +1,165 @@
+# config/work_eras.yml — the ruled per-work attributed-era table
+# (Nabu::WorkEras; consumer: MetadataDates' :work_era shape).
+#
+# For a source whose units carry no date but whose WORK is a known
+# composition: one row per work, keyed on the declared metadata field,
+# naming the work's attributed composition era — an `era:` dynasty label
+# resolved through the sinological rows of config/period_bands.yml (the
+# kanripo/cbeta dynasty-band precedent: Wilkinson's conventional spans)
+# or an explicit `band:` envelope with its own `label:` where the work
+# straddles eras or predates the table's rows (Warring States = −475…−221,
+# Wilkinson's convention). Consumers mint class "composition", precision
+# "era" — the work's era, never a witness date. A row WITHOUT era/band
+# records a contested attribution deliberately left undated (the work is
+# declared, the lookup mints nothing). Every row carries its reasoning.
+# Ground rule for composite/accreted texts: the envelope spans the
+# conventional composition-to-compilation range (handbook consensus:
+# Wilkinson, Chinese History: A New Manual; Loewe ed., Early Chinese
+# Texts: A Bibliographical Guide, 1993, for the pre-Han and Han works).
+sources:
+  classical-modern:
+    # The 97 works of NiuTrans/Classical-Modern, censused 2026-10-19 over
+    # the live catalog's metadata.book (7,304 chapter units + 7,304 modern
+    # translation siblings — siblings are axis-exempt on the timeline).
+    # The kind fold over the same key lives in config/kind_map.yml; a
+    # suite guard keeps the two work lists identical.
+    key: book
+    works:
+      # -- 經部 classics (pre-Qin and Han compositions) --------------------
+      "论语": {band: [-475, -221], label: "戰國", note: "compiled by Confucius's disciples' successors
+        in the Warring States period (Loewe 1993)"}
+      "孟子": {band: [-475, -221], label: "戰國", note: "Mencius (c. 372–289 BCE) and his disciples"}
+      "左传": {band: [-475, -221], label: "戰國", note: "composed in the 4th c. BCE (the
+        conventional Warring States dating; Loewe 1993)"}
+      "易传": {band: [-475, 8], label: "戰國–前漢", note: "the Ten Wings — accreted Warring States
+        to early Western Han"}
+      "尚书": {band: [-1046, 420], label: "周–東晉", note: "CONTESTED, banded coarse: the New Text
+        chapters span Western Zhou to Warring States; the transmitted Old Text chapters are the
+        Eastern Jin recension (Mei Ze, 4th c. CE) — the whole envelope, declared"}
+      "周礼": {band: [-475, 8], label: "戰國–前漢", note: "the Duke of Zhou attribution is
+        traditional; composition is conventionally Warring States to early Western Han"}
+      "礼记": {band: [-475, 8], label: "戰國–前漢", note: "Warring States ritual material compiled
+        by Dai Sheng (Western Han)"}
+      "仪礼": {band: [-475, 8], label: "戰國–前漢", note: "Warring States composition, transmitted
+        in the Western Han"}
+      "中庸": {band: [-475, 8], label: "戰國–前漢", note: "attributed to Zisi; the received chapter
+        of the Liji is dated Warring States to early Han"}
+      "孝经": {band: [-475, -221], label: "戰國", note: "late Warring States composition"}
+      "大学章句集注": {era: 南宋, note: "Zhu Xi's (1130–1200) commentary edition of the Daxue — the
+        commentary's own era, not the classic's"}
+      # -- 史部 histories (the work's own composition era, never the era it covers) --
+      "史记": {era: 前漢, note: "Sima Qian, completed c. 91 BCE"}
+      "汉书": {era: 後漢, note: "Ban Gu (32–92), completed by Ban Zhao"}
+      "后汉书": {era: 南朝宋, note: "Fan Ye (398–445)"}
+      "三国志": {era: 西晉, note: "Chen Shou (233–297)"}
+      "晋书": {era: 唐, note: "Fang Xuanling et al., 648"}
+      "宋书": {era: 南齊, note: "Shen Yue, 488"}
+      "南齐书": {era: 梁, note: "Xiao Zixian (489–537), Liang"}
+      "梁书": {era: 唐, note: "Yao Silian, 636"}
+      "陈书": {era: 唐, note: "Yao Silian, 636"}
+      "魏书": {era: 北齊, note: "Wei Shou, 554"}
+      "北齐书": {era: 唐, note: "Li Baiyao, 636"}
+      "周书": {era: 唐, note: "Linghu Defen et al., 636"}
+      "隋书": {era: 唐, note: "Wei Zheng et al., 636 (treatises 656)"}
+      "南史": {era: 唐, note: "Li Yanshou, 659"}
+      "北史": {era: 唐, note: "Li Yanshou, 659"}
+      "旧唐书": {era: 五代, note: "Liu Xu et al., Later Jin, 945"}
+      "新唐书": {era: 北宋, note: "Ouyang Xiu and Song Qi, 1060"}
+      "旧五代史": {era: 北宋, note: "Xue Juzheng et al., 974"}
+      "新五代史": {era: 北宋, note: "Ouyang Xiu (1007–1072)"}
+      "宋史": {era: 元, note: "Toqto'a et al., 1343–1345"}
+      "辽史": {era: 元, note: "Toqto'a et al., 1344"}
+      "金史": {era: 元, note: "Toqto'a et al., 1344"}
+      "元史": {era: 明, note: "Song Lian et al., 1370"}
+      "明史": {era: 清, note: "Zhang Tingyu et al., completed 1739"}
+      "资治通鉴": {era: 北宋, note: "Sima Guang, presented 1084"}
+      "国语": {band: [-475, -221], label: "戰國", note: "compiled in the Warring States period"}
+      "战国策": {band: [-475, 8], label: "戰國–前漢", note: "Warring States persuasions, compiled and
+        titled by Liu Xiang (d. 6 BCE) — the material-to-compilation envelope"}
+      "逸周书": {band: [-1046, -221], label: "周–戰國", note: "a composite: some Western Zhou
+        documents, compiled by the Warring States period"}
+      "贞观政要": {era: 唐, note: "Wu Jing (670–749), compiled c. 720s"}
+      "水经注": {era: 北魏, note: "Li Daoyuan (d. 527)"}
+      "徐霞客游记": {era: 明, note: "the travel diaries of Xu Hongzu (1587–1641)"}
+      # -- 子部 Masters, military, technical ------------------------------
+      "老子": {band: [-600, -221], label: "春秋末–戰國", note: "traditionally Lao Dan (6th c. BCE);
+        the Guodian witness (c. 300 BCE) fixes the text's Warring States form — the envelope"}
+      "庄子": {band: [-475, 8], label: "戰國–前漢", note: "Zhuang Zhou (4th c. BCE); the outer and
+        miscellaneous chapters run into the early Han"}
+      "列子": {band: [-475, 420], label: "戰國–東晉", note: "CONTESTED, banded coarse: attributed to
+        Lie Yukou, but the transmitted text is widely judged a Jin compilation (Zhang Zhan's 4th c.
+        edition) — the whole envelope, declared"}
+      "墨子": {band: [-475, -221], label: "戰國", note: "Mohist school writings, Warring States"}
+      "荀子": {band: [-475, -221], label: "戰國", note: "Xun Kuang (c. 310–235 BCE)"}
+      "韩非子": {band: [-475, -221], label: "戰國", note: "Han Fei (d. 233 BCE)"}
+      "商君书": {band: [-475, -221], label: "戰國", note: "Shang Yang's school, 4th–3rd c. BCE"}
+      "管子": {band: [-475, 8], label: "戰國–前漢", note: "an accreted corpus, Warring States to
+        Liu Xiang's Western Han recension"}
+      "公孙龙子": {band: [-475, -221], label: "戰國", note: "Gongsun Long (fl. c. 300 BCE)"}
+      "吕氏春秋": {band: [-475, -221], label: "戰國", note: "compiled under Lü Buwei, c. 239 BCE"}
+      "鬼谷子": {band: [-475, 220], label: "戰國–漢", note: "CONTESTED: a Warring States attribution,
+        first catalogued in the Suishu — envelope through the Han, declared"}
+      "黄帝四经": {band: [-475, 8], label: "戰國–前漢", note: "the Huang-Lao silk manuscripts of
+        Mawangdui (tomb sealed 168 BCE)"}
+      "淮南子": {era: 前漢, note: "Liu An's court, presented 139 BCE"}
+      "论衡": {era: 後漢, note: "Wang Chong (27–c. 97)"}
+      "孔子家语": {band: [-206, 265], label: "漢–魏", note: "transmitted by Wang Su (3rd c.); its
+        authenticity is debated but excavated parallels show Han material — the envelope"}
+      "抱朴子": {era: 東晉, note: "Ge Hong, completed c. 317"}
+      "颜氏家训": {band: [550, 618], label: "北齊–隋", note: "Yan Zhitui (531–c. 591)"}
+      "黄帝内经": {band: [-475, 8], label: "戰國–前漢", note: "compiled Warring States to Western Han"}
+      "伤寒论": {era: 後漢, note: "Zhang Zhongjing, c. 200–210"}
+      "孙子兵法": {band: [-600, -221], label: "春秋末–戰國", note: "attributed to Sun Wu (late Spring
+        and Autumn); the text took its form in the Warring States — the envelope"}
+      "孙膑兵法": {band: [-475, -221], label: "戰國", note: "Sun Bin (4th c. BCE); the Yinqueshan
+        slips are a Western Han burial copy"}
+      "吴子": {band: [-475, -221], label: "戰國", note: "attributed to Wu Qi (d. 381 BCE)"}
+      "司马法": {band: [-475, -221], label: "戰國", note: "compiled at the Qi court, 4th c. BCE"}
+      "尉缭子": {band: [-475, -221], label: "戰國", note: "Warring States; the Yinqueshan slips attest it"}
+      "六韬": {band: [-475, -221], label: "戰國", note: "attributed to Jiang Taigong; Warring States
+        composition (Yinqueshan fragments)"}
+      "三略": {era: 漢, note: "attributed to Huang Shigong; conventionally a Han composition — the
+        whole Han span, coarse"}
+      "将苑": {note: "CONTESTED, left undated: attributed to Zhuge Liang, but no catalogue before the
+        Song lists it — no honest era to claim"}
+      "素书": {note: "CONTESTED, left undated: attributed to Huang Shigong, it surfaces only in the
+        Northern Song with Zhang Shangying's commentary — authenticity disputed"}
+      "百战奇略": {era: 明, note: "a Ming compilation (the Liu Ji attribution is late)"}
+      "三十六计": {band: [1368, 1911], label: "明–清", note: "anonymous; the manuscript surfaced in 1941,
+        conventionally late Ming or Qing"}
+      "棋经十三篇": {era: 北宋, note: "Zhang Ni, c. 1049–1054"}
+      "农桑辑要": {era: 元, note: "the Yuan Office of Agriculture, 1273"}
+      "天工开物": {era: 明, note: "Song Yingxing, 1637"}
+      "梦溪笔谈": {era: 北宋, note: "Shen Kuo, c. 1088"}
+      "容斋随笔": {era: 南宋, note: "Hong Mai (1123–1202)"}
+      "智囊(选录)": {era: 明, note: "Feng Menglong, 1626"}
+      "冰鉴": {era: 清, note: "attributed to Zeng Guofan (authorship contested; the Qing date is not)"}
+      "文心雕龙": {band: [479, 557], label: "南齊–梁", note: "Liu Xie, completed c. 501–502 at the
+        Southern Qi / Liang turn"}
+      # -- tales, anecdotes, collections -----------------------------------
+      "山海经": {band: [-475, 8], label: "戰國–前漢", note: "accreted Warring States to Western Han
+        (Liu Xin's recension)"}
+      "搜神记": {era: 東晉, note: "Gan Bao (fl. 317–350)"}
+      "搜神后记": {band: [317, 479], label: "東晉–南朝宋", note: "attributed to Tao Yuanming
+        (contested) — the Eastern Jin to Liu Song envelope"}
+      "世说新语": {era: 南朝宋, note: "Liu Yiqing's circle, c. 430"}
+      "太平广记": {era: 北宋, note: "Li Fang et al., 977–978"}
+      "笑林广记": {era: 清, note: "Youxi Zhuren's 18th-c. joke collection"}
+      "睡虎地秦墓竹简": {band: [-356, -217], label: "秦 (戰國末)", note: "Qin statutes and legal
+        procedure: from Shang Yang's reforms (356 BCE) to the tomb's own last chronicle entry
+        (217 BCE)"}
+      # -- primers, family instructions, aphorisms, scripture ---------------
+      "千字文": {era: 梁, note: "Zhou Xingsi (d. 521)"}
+      "三字经": {band: [1127, 1911], label: "南宋–清", note: "attributed to Wang Yinglin (13th c.,
+        contested), extended in the Ming and Qing — the envelope"}
+      "幼学琼林": {band: [1368, 1911], label: "明–清", note: "Cheng Dengji (Ming), expanded by Zou
+        Shengmai (Qing)"}
+      "弟子规": {era: 清, note: "Li Yuxiu, Kangxi reign"}
+      "朱子家训": {era: 清, note: "Zhu Yongchun (1627–1698), early Qing"}
+      "增广贤文": {band: [1368, 1911], label: "明–清", note: "a proverb anthology first named in the
+        Wanli era, expanded in the Qing"}
+      "菜根谭": {era: 明, note: "Hong Zicheng, Wanli era"}
+      "围炉夜话": {era: 清, note: "Wang Yongbin, 19th c."}
+      "心经": {era: 唐, note: "Xuanzang's translation, 649"}
+      "文昌孝经": {note: "CONTESTED, left undated: a Daoist morality scripture revealed under
+        Wenchang's name; no secure composition era (Song to Ming proposals)"}

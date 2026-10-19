@@ -211,11 +211,15 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   classical-modern:
-    kind: {posture: unclassified}
+    # kind machine-postured: config/kind_map.yml folds metadata.book (the
+    # 97 works by their Siku seat — all 14,608 documents incl. siblings).
     lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; the
         cmn translation siblings are modern-Chinese apparatus, no lect claim)}
-    dating: {posture: undatable, note: "the chapter units carry no dates —
-        the 97 works span two millennia and upstream states nothing per unit"}
+    dating: {posture: dated, note: "the chapter units carry no dates, but the WORK is known:
+        config/work_eras.yml rules each of the 97 works' attributed composition era (class
+        composition, precision era) — 7,241 of the 7,304 classical chapters band; the 3
+        contested works declared undated (将苑, 素书, 文昌孝经 — 63 chapters) and the 7,304
+        modern-translation siblings (axis-exempt by design) mint nothing"}
     places: {posture: unplaced}
     script: {posture: qualified, note: "SIMPLIFIED script on BOTH sides
         (censused 2026-08-29 — 岂/国/宪 on the 古文 side too): a modern-web
@@ -803,9 +807,14 @@ sources:
     # rule stages the four big ANA script traditions onto their xna
     # varieties; minor/mixed classes stay bare xna and the 36 non-ANA
     # records carry their own codes (the shadowing rule).
-    dating: {posture: undatable, note: "findDate (17,681 of 37,955 records) is the DISCOVERY /
-        survey date (\"1989\", \"1920s and 1930s\"), never the inscription's — carried as metadata
-        find_date, deliberately not a dating claim; the deposit carries no typed date"}
+    dating: {posture: dated, note: "the script TRADITION bands through the ruled ANA rows of
+        config/period_bands.yml (basis ana — Macdonald 2000 + OCIANA's corpus introductions):
+        Safaitic 30,795 · Hismaic 3,624 · Dadanitic 1,704 · Taymanitic 482 · Mixed
+        Safaitic/Hismaic 46 = 36,651 of 36,794 documents carry an attributed tradition span
+        (precision era, never a per-inscription date); the 143 minor-class and non-ANA records
+        (Hasaitic, Thamudic B/C/D, Dispersed ONA, Greek …) stay honestly undated. findDate
+        (17,681 records) is the DISCOVERY / survey date — metadata find_date, never a dating
+        claim"}
     places: {posture: named, note: "site/region/country on the place hash (32,670 of 36,794
         docs) via MetadataDates :place_only; WGS84 points on 21,178 — no gazetteer refs upstream"}
     script: {posture: qualified, note: "the per-record script field (Safaitic, Hismaic,
@@ -1868,14 +1877,17 @@ sources:
     # machine-postures achemenet now (the shadowing rule; same-phase
     # add-then-retire, the osta/fornsvenska shape).
     dating:
-      posture: pending
-      note: "candidate: the corpus band 550–330 BCE + the reign-dated
-        designations (Camb/Cyr/Dar) via the ruled regnal-precision table (2026-08-11) —
-        extractor over real synced data"
+      posture: dated
+      note: "config/archive_axes.yml over the archive + designation: Strassmaier's reign
+        volumes (Cyrus/Cambyses/Darius/Nabonidus/Nebuchadnezzar, 1,373) band to the held
+        regnal table's whole-reign span; YOS 7 (192) to its title's 538–521 BCE; CT55,
+        Bēl-rēmanni and Murašû (1,209) to the Achaemenid corpus band — all 2,774 dated. The
+        1,139 cdli_p documents also assert reference edges onto their held CDLI artifacts"
     places:
-      posture: pending
-      note: "candidate: archive-grain findspots (CT55/Bel-remanni=Sippar,
-        Murashu=Nippur, YOS7=Uruk) from the archive facet"
+      posture: linked
+      note: "archive-grain findspots with the held cigs/pleiades refs: CT55 + Bēl-rēmanni =
+        Sippar, Murašû = Nippur, YOS 7 = Uruk (1,401 of 2,774); Strassmaier's reign volumes
+        gather many sites and stay deliberately unplaced"
     script: {posture: implied}
   aes:
     kind: {posture: unclassified}
@@ -1920,14 +1932,14 @@ sources:
         the deposit carries no native Newa/Devanagari surface"}
   dcs:
     kind: {posture: unclassified}
-    dating: {posture: pending, note: "the corpus's five composition time slots ride as
-        the time_slot facet (projected 2026-10-12, ruled the same day — the undatable
-        claim retired: the asset DOES carry dating); candidate: slot → year-band
-        conversion as attributed composition-era dates, once the corpus's published
-        epoch boundaries are in hand — the project describes five slots over
-        500 BCE–1900 CE (slot 1 Vedic/early … slot 5 late) but publishes no per-slot
-        boundary table; the regnal-table shape: a researched table ratified before
-        any arithmetic"}
+    dating: {posture: dated, note: "the corpus's five composition time slots (early · epic ·
+        classical · medieval · late) band through the ruled 'DCS time slot N' rows of
+        config/period_bands.yml — attributed composition-era dates (class composition,
+        precision era): 15,883 of 15,900 chapters (slot 1 7,094 · 2 2,940 · 3 2,315 · 4 2,041
+        · 5 1,493); the 17 'None' chapters stay honestly undated. The corpus publishes no
+        per-slot boundary table, so each bound cites its own basis (Hellwig 2020's Vedic
+        priors for slot 1, the corpus's 500 BCE–1900 CE span, the conventional handbook
+        periodization) — slots overlap as envelopes, never a partition"}
     places: {posture: unplaced}
     script: {posture: implied}
   digiliblt:
