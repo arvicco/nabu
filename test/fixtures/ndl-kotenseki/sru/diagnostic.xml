@@ -1,0 +1,9 @@
+<searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <diagnostics>
+    <diagnostic xmlns="http://www.loc.gov/zing/srw/diagnostic/">
+      <uri>info:srw/diagnostic/1/1</uri>
+      <details>An error occurred</details>
+      <message>illegal query syntax</message>
+    </diagnostic>
+  </diagnostics>
+</searchRetrieveResponse>

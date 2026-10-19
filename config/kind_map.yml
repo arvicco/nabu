@@ -777,6 +777,63 @@ sources:
       "NDC 779": "modern NDC subject shelving (vaudeville), not genre"
       "NDC 786": "modern NDC subject shelving (outdoor pursuits), not genre"
       "NDC 787": "modern NDC subject shelving (fishing), not genre"
+  ndl-kotenseki:      # the NDL Search bib join's NDC codes (dc:subject NDC, verbatim:
+    facet: ndc        # "813.2", "291.36", "221"). Census 2026-10-19, 500 random held
+    #                   PIDs: 33 carry an NDC (6.6% → ~2.6k of 38.7k books), 26 of them
+    #                   fold below (221 ×12 · 288.4 ×3 · 291.36 ×2 · 210.x · 911.x · 921 ·
+    #                   148 · 322 · 292.25 · 991). The aozora NDC folds are the precedent;
+    #                   NDC is a SUBJECT scheme, so only the classes whose subject IS the
+    #                   text's kind fold. Anchored per code (one value = one code).
+    regex_map:
+      '\A9[1-8]1(\.|\z)': literary/poetry        # 911 waka/haikai · 921 Chinese verse — the
+      #   per-language form digit 1 (91x–98x only: 99x divides by language, 991 is Greek)
+      '\A9[1-8]2(\.|\z)': literary/drama         # 912 · 922 — drama
+      '\A9[1-8]3(\.|\z)': literary/narrative     # 913 物語・草子・読本 — told stories; the
+      #   premodern shelf is narrative at large, not aozora's modern novel sub-class
+      '\A9[1-8]4(\.|\z)': literary/essay         # 914 · 924 — essays and miscellanies
+      '\A9[1-8]5(\.|\z)': literary/diary         # 915 · 925 — diaries, letters, travel
+      #   writing (the class's own first-person records)
+      '\A9[1-8][6-9](\.|\z)': literary           # 916 records · 917 humor · 918 anthologies ·
+      #   919 kanbun — literature, not further classified (aozora's 916/917/9x9 shape)
+      '\A9[1-8]0(\.|\z)': scholarly              # 910 · 920 — literary history and criticism
+      '\A99\d': literary                         # 99x — literatures of other languages
+      #   (991 Greek …), divided by language, so never a form claim
+      '\A2[1-7]\d': historiography               # 210 Japanese · 220/221/222 Asian · 23x–27x
+      #   regional histories — the aozora 21x/22x rows, the same shape for every region
+      '\A28[89]': historiography                 # 289 individual biography (aozora) · 288
+      #   genealogies and house histories (系譜・家史) — the past written as descent
+      '\A29\d': scholarly                        # 290s geography, gazetteers and travel
+      #   (291.36 地誌) — the aozora/dta Geographie precedent
+      '\A4[02-35-8]\d': scholarly                # 400s natural sciences (aozora's 4xx row) …
+      '\A41\d': scholarly/mathematics            # … 410s mathematics (和算) …
+      '\A44\d': scholarly/astronomy              # … 440s astronomy and calendars …
+      '\A49\d': scholarly/medicine               # … 490s medicine and pharmacy (本草)
+      '\A388': literary/narrative/tale           # 388 legends and folktales (aozora)
+      '\A38[02467]': scholarly                   # 380/382/384/386/387 — folklore and the
+      #   ethnography of customs, festivals and beliefs (aozora's ruled row; 葬祭考 386)
+      '\A121': literary/essay                    # 121 Japanese thought (aozora's ruled row)
+      '\A123': scripture                         # 123 経書 — the Confucian classics (the
+      #   kanripo KR1 經部 → scripture precedent)
+      '\A183': scripture                         # 183 Buddhist sutras — the canon itself
+      '\A193': scripture                         # 193 the Bible
+      '\A176': ritual                            # 176 Shinto 祭祀 — how the rites are performed
+      '\A186': ritual/liturgy                    # 186 Buddhist services (仏会) — the liturgy
+      '\A148': divination                        # 148 相法・易占 — physiognomy and divination
+      #   manuals: the reading of fortunes itself
+      '\A32\d': legal                            # 320s law — in this mass the codes and their
+      #   commentaries themselves (律令・式目・御定書; 322 legal history holds them)
+      '\A81[1-58]': lexical                      # 811 script · 812 etymology · 813 dictionaries
+      #   (813.2 玉篇) · 814 vocabulary · 815 grammar · 818 dialects
+      '\A82[1-5]': lexical                       # the same divisions for Chinese
+      '\A375\.9': school                         # 375.9 textbooks — 往来物, the schoolroom's own
+      '\A05\d': periodical                       # 050s serial publications
+      # Left unmapped (the honest worklist — subject shelving, not a text-kind
+      # claim): 0xx general works but serials · 1xx philosophy and religion
+      # outside the rows above (180/181 Buddhist doctrine, 150 ethics) · 30x/31x/
+      # 33x–37x social sciences (337 currency) · 385 rites of passage and
+      # etiquette (礼法 — instruction or record, case by case) · 5xx–6xx
+      # technology and industry · 7xx arts (701/702 art history) · 816/817/819 ·
+      # 90x general literature.
   bu-ajami:           # census: 80 docs, 2026-10-14 — upstream's own form labels;
     facet: genre      # the identity-grade fold (poetry means poetry)
     map:

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ndl-bib pid="2541107">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcndl="http://ndl.go.jp/dcndl/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" >
+          <dcndl:BibAdminResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813">
+              <dcndl:catalogingStatus>C7</dcndl:catalogingStatus>
+              <dcterms:description>type : book</dcterms:description>
+              <dcndl:bibRecordCategory>R100000002</dcndl:bibRecordCategory>
+              <dcndl:bibRecordSubCategory>171</dcndl:bibRecordSubCategory>
+              <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813#material" />
+          </dcndl:BibAdminResource>
+          <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813#material">
+              <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/bib/000007292813"/>
+              <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000007292813</dcterms:identifier>
+              <dcterms:title>古今武者揃</dcterms:title>
+              <dc:title><rdf:Description>
+              <rdf:value>古今武者揃</rdf:value>
+              <dcndl:transcription>ココン ムシャゾロエ</dcndl:transcription>
+          </rdf:Description></dc:title>
+              <dcndl:seriesTitle><rdf:Description>
+              <rdf:value>赤本昔はなし</rdf:value>
+              <dcndl:transcription>アカホン ムカシハナシ</dcndl:transcription>
+          </rdf:Description></dcndl:seriesTitle>
+                  <dcndl:uniformTitle><rdf:Description>
+              <rdf:value>古今武者揃</rdf:value>
+              <dcndl:transcription>ココンムシャゾロエ</dcndl:transcription>
+          </rdf:Description></dcndl:uniformTitle>
+                  <dcterms:creator><foaf:Agent rdf:about="http://id.ndl.go.jp/auth/entity/001172893">
+              <foaf:name>夷福山人</foaf:name>
+              <dcndl:transcription>イフク サンジン</dcndl:transcription>
+          </foaf:Agent></dcterms:creator><dcterms:creator><foaf:Agent rdf:about="http://id.ndl.go.jp/auth/entity/00272450">
+              <foaf:name>歌川, 広重 1世, 1797-1858</foaf:name>
+              <dcndl:transcription>ウタガワ, ヒロシゲ 1セイ, 1797-1858</dcndl:transcription>
+          </foaf:Agent></dcterms:creator>
+              <dc:creator>夷福山人 作</dc:creator><dc:creator>広重 画</dc:creator>
+              <dcterms:publisher><foaf:Agent>
+              <foaf:name>佐野喜</foaf:name>
+          </foaf:Agent></dcterms:publisher>
+              <dcndl:publicationPlace rdf:datatype="http://purl.org/dc/terms/ISO3166">JP</dcndl:publicationPlace>
+              <dcterms:description>装丁 : 和装</dcterms:description>
+              <dcterms:subject><rdf:Description>
+              <rdf:value>赤本</rdf:value>
+          </rdf:Description></dcterms:subject>
+              <dcterms:language rdf:datatype="http://purl.org/dc/terms/ISO639-2">jpn</dcterms:language>
+              <dcterms:extent>1冊 ; 12.2cm</dcterms:extent>
+              <dcndl:materialType rdf:resource="http://ndl.go.jp/ndltype/JapaneseClassicalBook" rdfs:label="和古書"/>
+                  <rdfs:seeAlso rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813"/>
+          </dcndl:BibResource>
+              <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813#material">
+                  <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813#item" /><dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000039-I2541107#item" />
+              </dcndl:BibResource>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813#item">
+                  <dcndl:holdingAgent>
+                      <foaf:Agent>
+                          <foaf:name>国立国会図書館</foaf:name>
+                          <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLLibCode">0000</dcterms:identifier>
+                      </foaf:Agent>
+                  </dcndl:holdingAgent>
+                  <rdfs:seeAlso rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000007292813"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/bib/000007292813"/>
+                  <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000007292813</dcterms:identifier>
+                  <dcndl:callNumber>寄別3-6-1-1</dcndl:callNumber>
+              </dcndl:Item>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2541107#item">
+                  <rdfs:seeAlso rdf:resource="https://dl.ndl.go.jp/pid/2541107"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/digimeta/2541107"/>
+                  <rdfs:seeAlso rdf:resource="https://doi.org/10.11501/2541107"/>
+                  <dcndl:callNumber>寄別3-6-1-1</dcndl:callNumber>
+                  <dcterms:description>資料形態 : テキストデータ</dcterms:description><dcterms:description>資料形態 : プレーンテキスト</dcterms:description>
+              </dcndl:Item>
+      </rdf:RDF>
+</ndl-bib>

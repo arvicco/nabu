@@ -593,6 +593,22 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # The ndl-kotenseki NDC fold (the bib join's ndc facet): the census
+  # sample's codes, one class each, the subject-only remainder unmapped.
+  def test_ndl_kotenseki_ndc_codes_fold_one_class_each
+    shipped = shipped_kinds
+    {
+      "813.2" => ["lexical"], "221" => ["historiography"], "288.4" => ["historiography"],
+      "291.36" => ["scholarly"], "911.12" => ["literary/poetry"], "921" => ["literary/poetry"],
+      "913.6" => ["literary/narrative"], "991" => ["literary"], "210.46" => ["historiography"],
+      "148" => ["divination"], "322" => ["legal"], "386" => ["scholarly"], "123.83" => ["scripture"],
+      "490.9" => ["scholarly/medicine"], "375.9" => ["school"]
+    }.each { |code, want| assert_equal want, shipped.normalize("ndl-kotenseki", code), code }
+    %w[180 181 150 337.2 701.1 702.1 385 816 901].each do |code|
+      assert_equal [Nabu::Kinds::UNMAPPED], shipped.normalize("ndl-kotenseki", code), code
+    end
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
