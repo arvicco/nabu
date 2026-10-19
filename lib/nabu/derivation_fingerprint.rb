@@ -100,10 +100,15 @@ module Nabu
     # whenever the builders digest drifts). P122-1: so does the silver-date
     # projection (re-run behind the timeline in every builder pass) with
     # the shelf reader whose parse rules shape its rows.
+    # P136: the kind fold + its builder join them on the same footing —
+    # both run only in builder passes (full/incremental rebuild,
+    # builders:refresh, the post-sync per-source refresh); a kind-rule
+    # edit re-runs the kind axis, never a parse.
     BUILDER_FILES = %w[
       store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb
       store/silver_dates.rb date_shelf.rb store/passage_facet_builder.rb
       store/entry_facet_builder.rb
+      kinds.rb store/kind_builder.rb
     ].freeze
 
     # P112-4: the fulltext-index core — files that shape ONLY
