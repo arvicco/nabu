@@ -512,6 +512,19 @@ class PapyriTranslationsTest < Minitest::Test
     assert_includes joined, "berkeley.apis.9834"
   end
 
+  # The APIS record-only remainder (an apisid/controlNo identity and a
+  # translation div, no edition the catalog answers to) is a DECLARED
+  # exemption with its own censused reason — never folded into the
+  # generic no-edition bucket a Translations/ file would land in.
+  def test_apis_record_only_remainder_is_a_declared_exemption
+    notes = adapter.discovery_skips(FIXTURES).notes
+    apis = notes.grep(/berkeley\.apis\.9834/)
+    assert_equal 1, apis.size
+    assert_includes apis.first, "1 translation file skipped — " \
+                                "#{Nabu::Adapters::PapyriTranslations::APIS_RECORD_ONLY}"
+    assert_includes apis.first, "standalone APIS namespace declined"
+  end
+
   def test_flag_off_discovers_no_translation_and_censuses_nothing
     refute(Nabu::Adapters::Papyri.new.discover(FIXTURES).any? { |ref| ref.id.include?("-trans-") })
     assert_equal 0, Nabu::Adapters::Papyri.new.discovery_skips(FIXTURES).skipped_by_rule
