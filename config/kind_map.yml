@@ -1268,3 +1268,114 @@ sources:
       "Sanskrit -- later works -- 20th century": "a period shelf (when written), not a genre claim"
       "Tibetan -- Translation": "a language shelf (the Tibetan rendering of a Buddhist work), not a genre claim"
       "Tibetan": "a language shelf, not a genre claim"
+  eebo-tcp:           # 60,325 docs; the LCSH subject facet (config/facet_map.yml subjects → subject)
+    # An OPEN vocabulary: TEXTCLASS/KEYWORDS/TERM headings on 57,064 of 60,326
+    # canonical files, 34,617 distinct full headings / 12,432 distinct main
+    # headings (census over canonical/eebo-tcp, 2026-10-20) — overwhelmingly
+    # topical (Great Britain 13,511 docs · Bible 3,699 · Church of England 2,445 …)
+    # or name headings. `vocabulary: open`: a heading no rule covers mints NO
+    # kind row and is counted as uncovered (`nabu kind census --uncovered`), never
+    # filed as unmapped. The rules read the FORM signal LCSH carries in two places
+    # — a form main heading ("Sermons, English", "Ballads, English") and a form
+    # subdivision ("… -- Sermons.", "… -- Poetry.", "… -- Proclamations.") — and
+    # every rule refuses "-- History and criticism" (a book ABOUT the form is not
+    # an instance of it). Counts: docs carrying a matching heading. First wave:
+    # 15,085 docs kinded (census replay of these rules, same date).
+    facet: subject
+    vocabulary: open
+    regex_map:
+      # -- sermon (the head ruled 2026-10-19 for exactly this corpus)
+      '\A(?!.*History and criticism)(?!Funeral )(?:[A-Z][\w-]* )?[Ss]ermons(?:, [A-Z][a-z]+)?\.?(?: --|\z)': sermon
+      #   4,552 — the form main headings: "Sermons, English" (4,312), Sermons,
+      #   American/Irish/Scottish/Welsh/French, and the occasion forms Fast-day,
+      #   Visitation, Lenten, Farewell, Christmas, Coronation, Election, Assize …
+      #   sermons. An author-title heading ("X. -- Sermon preached at …") is a
+      #   work ABOUT that sermon and never matches (singular, mid-heading)
+      '\A(?!.*History and criticism)Funeral sermons\b': sermon/funeral-sermon  # 602 — the ruled sub
+      '\A(?!.*History and criticism).* -- Sermons\.?(?: --|\z)': sermon
+      #   3,044 — the LCSH form subdivision ("Church of England -- Sermons.",
+      #   "Great Britain -- History -- Civil War, 1642-1649 -- Sermons …")
+      # -- literary
+      '\A(?!.*History and criticism)(?:[A-Z][\w-]*(?: [a-z][\w-]*)* )?[Pp]oetry(?:, [A-Z][a-z]+)?\.?(?: --|\z)': literary/poetry
+      #   715 — the form main headings: Elegiac/English/Love/Political/Religious/
+      #   War poetry, "Poetry, Latin"
+      '\A(?!.*History and criticism).* -- Poetry\.?(?: --|\z)': literary/poetry
+      #   2,753 — the form subdivision (verse on a person or event: "Charles -- II,
+      #   -- King of England, 1630-1685 -- Poetry.")
+      '\A(?!.*History and criticism)(?:[A-Z][a-z]+ )?[Bb]allads\b': literary/poetry
+      #   1,968 — "Ballads, English" (1,779), "Political ballads and songs": the
+      #   broadside ballad is sung verse
+      '\A(?!.*History and criticism)(?:[A-Z][\w-]* )?[Ss]ongs(?:, [A-Z][a-z]+)?\.?(?: --|\z)': literary/poetry
+      #   163 — "Songs, English" (song texts; "Songs and music" never matches)
+      '\ACollege verse\b': literary/poetry   # 28 — university commemorative verse
+      '\A(?!.*History and criticism)[A-Z][a-z]+ drama\b': literary/drama  # 57 — English drama (Comedy) …
+      '\A(?!.*History and criticism)Masques\b': literary/drama   # 28 — the court masque, a performance text
+      '\A(?!.*History and criticism).* -- Drama\.?(?: --|\z)': literary/drama  # 186 — the form subdivision
+      '\A(?!.*History and criticism)(?:[A-Z][a-z]+ )?[Ss]atire\b': literary
+      #   388 — Political/Religious/Verse satire, "Satire, English": satire is a
+      #   literary mode in verse OR prose, so the bare head (literature, not
+      #   further classified) — never a guessed sub-family
+      '\A(?!.*History and criticism)Voyages and travels\b': literary/diary/travelogue  # 73 — travel accounts
+      '\AVoyages, Imaginary\b': literary/narrative  # 11 — the imaginary voyage is fiction
+      '\A(?!.*History and criticism)Fables\b': literary/narrative/fable  # 29
+      '\A(?!.*History and criticism)Romances\b': literary/narrative  # 23 — prose and verse romances
+      '\A(?!.*History and criticism)Proverbs(?! in )\b': literary/wisdom/proverbs
+      #   39 — proverb collections ("Proverbs in the Bible" is topical, refused)
+      '\A(?!.*History and criticism)Dialogues\b': literary/wisdom/dialogue  # 29
+      '\A(?!.*History and criticism)Riddles\b': literary/wisdom/riddle  # 8
+      # -- prayer and hymn
+      '\APrayers\.?(?: --(?!.*(?:Law and legislation|History and criticism))|\z)': hymn-prayer/prayer
+      #   182 — prayer texts; "Prayers -- Law and legislation" (prayer law) and
+      #   the topical "Prayer." never match
+      '\A(?!.*History and criticism)(?:.* -- )?Prayer-books and devotions\b': hymn-prayer/prayer  # 147
+      '\A(?!.*History and criticism)(?:Primers \()?Prayer-books\b': hymn-prayer/prayer  # 30 — incl. Primers
+      '\A(?!.*History and criticism)Hymns\b': hymn-prayer/hymn  # 56 — "Hymns, English"
+      # -- periodical (the head ruled 2026-10-19)
+      '\A(?!.*History and criticism).* -- (?:Periodicals|Newspapers)\.?(?: --|\z)': periodical
+      #   59 — the form subdivisions (newsbooks: "Europe -- History -- 1648-1715
+      #   -- Periodicals."); EEBO carries few serials, so this stays small
+      '\A(?!.*(?:History and criticism|Anecdotes))(?:English (?:newspapers|periodicals)|Newsletters)\b': periodical  # 11
+      # -- legal
+      '\A(?!.*History and criticism)Proclamations\b': legal/law
+      #   193 — royal and civic proclamations carry the force of law
+      '\A(?!.*History and criticism).* -- Proclamations\.?(?: --|\z)': legal/law  # 268 — "England -- Proclamations"
+      '\A(?!.*History and criticism)Trials\b': legal/court
+      #   382 — "Trials (Treason) -- England …": LCSH's form heading for trial
+      #   proceedings and reports
+      '\A(?!.*History and criticism).* -- Trials, litigation, etc\.?(?: --|\z)': legal/court  # 250
+      '\A(?!.*History and criticism).* -- Treaties\.?(?: --|\z)': legal/treaty  # 70 — treaty texts
+      '\ALetters patent\b': legal   # 7 — the royal grant instrument (a legal act, not a letter)
+      # -- letter
+      '\A(?!.*History and criticism).* -- Pastoral letters and charges\b': letter
+      #   326 — Quaker epistles and episcopal pastoral letters; LCSH's combined
+      #   form also covers visitation charges, folded with the letters it names
+      '\A(?:English letters|Love-letters|Letters)\.?(?: --(?!.*History and criticism)|\z)': letter
+      #   27 — letter collections ("Letters patent" never matches: no "." or "--")
+      '\A(?!.*History and criticism).* -- Correspondence\.?(?: --|\z)': letter  # 25
+      # -- exegesis
+      '\A(?!.*History and criticism).* -- Commentaries\.?(?: --|\z)': exegesis
+      #   763 — every held instance is scriptural or creedal (Bible books, Lord's
+      #   prayer, Apostles' Creed, Ten Commandments, one Koran)
+      # -- lexical
+      '\A(?!.*History and criticism).* -- Grammar\.?(?: --|\z)': lexical/grammar  # 77 — Latin/English grammars
+      '\A(?!.*History and criticism).* -- Dictionaries\b': lexical  # 50
+      '\A(?!.*History and criticism).* -- Glossaries, vocabularies, etc\b': lexical/glossary  # 5
+      # -- scholarly + divination: discipline main headings. EEBO pairs them with
+      # "-- Early works to 1800" — LCSH's mark that the book IS a work of the
+      # discipline; controversy, humor and history-of headings are refused
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))(?:Medicine|Surgery|Materia medica|Pharmacy|Botany, Medical)\b': scholarly/medicine  # 682
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))Astronomy\b': scholarly/astronomy  # 66
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))(?:Mathematics|Arithmetic|Geometry)\b': scholarly/mathematics  # 83
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))(?:Navigation(?! acts)|Chemistry|Alchemy|Botany(?!, Medical))\b': scholarly
+      #   166 — the sciences without a named sub ("Navigation acts" is trade law, refused)
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))Cookery\b': scholarly/recipe  # 47
+      '\A(?!.*History and criticism).* -- Formulae, receipts, prescriptions\b': scholarly/recipe
+      #   212 — the receipt books; with "Medicine --" also scholarly/medicine (multi-label)
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))Astrology\b': divination/astrology  # 254
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor|Religious aspects))Prophecies\b': divination/oracle
+      #   202 — prophecy pamphlets (Mother Shipton, Lilly …): oracle is the ruled sub
+      # -- historiography
+      '\A(?!.*History and criticism).* -- Biography\.?(?: --|\z)': historiography
+      #   153 — lives (the elephantine "biography" fold)
+      # -- funerary
+      '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections

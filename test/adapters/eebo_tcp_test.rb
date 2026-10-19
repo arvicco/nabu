@@ -174,6 +174,27 @@ class EeboTcpTest < Minitest::Test
     assert_equal "subject", fields["subjects"], "config/facet_map.yml eebo-tcp: subjects → subject"
   end
 
+  # The kind axis reads the subject facet as an OPEN vocabulary
+  # (config/kind_map.yml `vocabulary: open`): a form heading folds onto a
+  # ruled class, a topical or name heading mints nothing and is counted
+  # as uncovered — never filed as `unmapped`.
+  def test_the_subject_headings_fold_onto_the_kind_axis_as_an_open_vocabulary
+    kinds = Nabu::Kinds.load(classes_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_classes.yml"),
+                             map_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_map.yml"))
+    assert kinds.open?("eebo-tcp")
+    assert_equal "subject", kinds.facet_for("eebo-tcp")
+    ode = adapter.parse(ref_for(ODE)).metadata["subjects"]
+    assert_equal ["literary/poetry"], ode.flat_map { |heading| kinds.normalize("eebo-tcp", heading) },
+                 "the LCSH -- Poetry form subdivision is the claim"
+    [PETITION, RALEIGH].each do |name|
+      adapter.parse(ref_for(name)).metadata["subjects"].each do |heading|
+        fold = kinds.fold("eebo-tcp", heading)
+        assert_empty fold.paths, heading
+        assert_equal [heading], fold.uncovered, "#{heading} — counted, never silent"
+      end
+    end
+  end
+
   # -- parse: dating (the imprint molds) --------------------------------------
 
   def test_dating_registers_in_the_metadata_dates_lane
