@@ -1146,6 +1146,23 @@ class SyncRunnerTest < Minitest::Test
                  "a dictionary source indexes no passages (its index work is the reflex closure)"
   end
 
+  # The dictionary-entry facet slice follows a dictionary load: the edrdg
+  # fixture's JMdict labels project under the shipped entry_fields (no lane
+  # lags a sync).
+  def test_dictionary_sync_refreshes_the_entry_facet_slice
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("edrdg"), File.join(@canonical, "edrdg"))
+    FileUtils.mkdir_p(File.join(@root, "config"))
+    FileUtils.cp(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"), File.join(@root, "config"))
+    reg = registry(entry("edrdg", Nabu::Adapters::Edrdg, wired: true, sync_policy: "manual"))
+    make_runner(reg).sync("edrdg", parse_only: true)
+
+    source_id = @db[:sources].where(slug: "edrdg").get(:id)
+    facets = @db[:entry_facet_values].where(source_id: source_id).distinct.select_map(:facet)
+    assert_includes facets, "domain"
+    assert_includes facets, "loan_source"
+    refute @db[:entry_facets].empty?
+  end
+
   # --- the secondary dictionary lane (P104-4) --------------------------
 
   # A passages source with a declared dictionary lane loads BOTH shapes

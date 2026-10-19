@@ -510,3 +510,18 @@ sources:
       #                         same axis name as the document facet (the itkc precedent)
       author: author          # coptic-bohairic meta::author, newdoc-scoped (Paul the apostle ·
       #                         Mena of Pshati · Palladius · "N/A"/"unknown" — upstream's claims)
+  # -- the dictionary-entry grain (entry_fields → Store::EntryFacetBuilder) --
+  # Keys name dictionary_entries.annotations_json fields the adapter mines
+  # per ENTRY; values project verbatim, one pair per (entry, value).
+  edrdg:                      # JMdict sense labels, deduped per entry (JMdict_e 2026-07-19 build)
+    entry_fields:
+      field: domain           # <field> 34,235 tags as the DTD expands them: computing 10,750 ·
+      #                         medicine 2,688 · food, cooking 1,872 · Buddhism 1,524 · law 933 …
+      misc: usage             # <misc> verbatim (all of it — register AND word-type marks):
+      #                         usually written using kana alone · abbreviation · archaic 3,781 ·
+      #                         historical term 2,908 · colloquial · slang · honorific …
+      dial: dialect           # <dial> 610: Kansai-ben · Kyuushuu-ben · Touhoku-ben …
+      lsource: loan_source    # <lsource> donor code verbatim (ISO 639-2: fre · ger · eng · san …;
+      #                         an absent xml:lang is the DTD default "eng") — genuine loans only
+      wasei: wasei_source     # <lsource ls_wasei="y"> 2,048: made-in-Japan from the donor's
+      #                         elements — a donor-element claim, never a loan (no reflex edge)

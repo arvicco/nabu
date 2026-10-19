@@ -90,6 +90,13 @@ class FacetMapTest < Minitest::Test
     assert_raises(Nabu::FacetMap::ConfigError) { build("sources" => { "edrdg" => { "entry_fields" => {} } }) }
   end
 
+  def test_shipped_config_rules_the_dictionary_entry_labels
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "field" => "domain", "misc" => "usage", "dial" => "dialect",
+                   "lsource" => "loan_source", "wasei" => "wasei_source" },
+                 map.entry_fields_for("edrdg"))
+  end
+
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
     map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
     assert_equal "subject", map.passage_fields_for("sillok")["subject_classes"]

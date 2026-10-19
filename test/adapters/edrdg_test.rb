@@ -63,7 +63,7 @@ class EdrdgTest < Minitest::Test
     jmdict = parse("jmdict")
     assert_equal "jmdict", jmdict.slug
     assert_equal "jpn", jmdict.language
-    assert_equal 6, jmdict.size
+    assert_equal 12, jmdict.size
   end
 
   def test_entry_ids_are_unique_and_stable_across_independent_passes
@@ -102,7 +102,7 @@ class EdrdgTest < Minitest::Test
       assert_equal ["kanjidic2:kanjidic2.xml", "jmdict:JMdict_e.xml"], refs.map(&:id),
                    "gz and plain shapes mint the SAME ref ids (the mw precedent)"
       assert_equal 10, adapter.parse(refs.first).size
-      assert_equal 6, adapter.parse(refs.last).size
+      assert_equal 12, adapter.parse(refs.last).size
     end
   end
 
@@ -168,12 +168,12 @@ class EdrdgTest < Minitest::Test
   def test_loading_the_fixture_twice_is_idempotent_across_both_dictionaries
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 16, first.added
+    assert_equal 22, first.added
     assert_equal 0, first.errored
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 16, second.skipped
+    assert_equal 22, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
 
     asia = db[:dictionary_entries].where(entry_id: "U+4E9C").first
