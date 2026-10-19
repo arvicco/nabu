@@ -1899,6 +1899,12 @@ sources:
     # accession_no facet); accounting_period spans band through the ruled reign
     # table where both ends resolve (3,718 of 4,468); findspot_square/remarks stay
     # sub-site metadata below the place axis — the provenience is the place claim.
+    # 2026-10-19 (dating): date_of_origin (147,383 rows; restates dates_referenced on
+    # 142,921, the account's closing date on 4,462) dates below the explicit datings
+    # (+18); a broken year under a ruled ruler bands the reign, a doubted year
+    # converts (+730 to regnal grain in all, ~94.4k of 353k); the "(us2-us2 year)" mark is a year-name formula,
+    # not a +2 shift, and stays period-banded. Still partial: unruled rulers (18k)
+    # and letter-years/eponyms/Seleucid-era shapes stay period-banded.
   dacon:
     kind: {posture: unclassified}
     # P88-A4: minted as pending on the nwc anchor (censused absent
