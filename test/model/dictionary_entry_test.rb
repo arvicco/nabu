@@ -62,6 +62,25 @@ class DictionaryEntryTest < Minitest::Test
     assert_raises(Nabu::ValidationError) { entry(reflexes: nil) }
   end
 
+  # --- DictionaryEntry#annotations (the entry-facet seam) -----------------------
+
+  # Per-entry categorical claims upstream makes (JMdict <field>, WOLD
+  # Semantic_field, TLS concepts) ride a JSON-shaped annotations hash —
+  # the passage annotations contract at entry grain; default empty.
+  def test_entry_annotations_default_empty_and_frozen
+    assert_equal({}, entry.annotations)
+    assert entry.annotations.frozen?
+  end
+
+  def test_entry_accepts_json_shaped_annotations
+    e = entry(annotations: { "field" => %w[computing medicine],
+                             "concept" => [{ "value" => "WORLD", "ref" => "uuid-1" }] })
+    assert_equal %w[computing medicine], e.annotations["field"]
+    assert_raises(Nabu::ValidationError) { entry(annotations: nil) }
+    assert_raises(Nabu::ValidationError) { entry(annotations: ["field"]) }
+    assert_raises(Nabu::ValidationError) { entry(annotations: { "x" => Object.new }) }
+  end
+
   def test_reconstruction_language_codes_pass_validation
     %w[sla-pro ine-pro gem-pro].each do |code|
       assert_equal code, entry(language: code).language

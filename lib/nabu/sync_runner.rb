@@ -425,6 +425,10 @@ module Nabu
 
       Store::DictionaryStats.refresh_source!(catalog: @db, slug: entry.slug,
                                              lects: Nabu::Lects.load_default(config: @config))
+      # The dictionary-entry facet slice follows the same dictionary-bearing
+      # load under the same gate (withdrawals drop pairs; no lane lags a sync).
+      Store::EntryFacetBuilder.refresh_source!(catalog: @db, slug: entry.slug,
+                                               facet_map: Nabu::FacetMap.load_default(config: @config))
     end
 
     # P121-2: the lemma attestation rollups follow every sync that moved

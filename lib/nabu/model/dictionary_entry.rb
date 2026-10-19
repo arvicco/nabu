@@ -143,6 +143,12 @@ module Nabu
   #   order (P14-1) — empty for every non-reconstruction shelf.
   # - +crossrefs+: DictionaryCrossref values in entry order (P123-1) —
   #   empty where the parser extracts none.
+  # - +annotations+: the entry's categorical claims as upstream makes them
+  #   (JMdict domain/usage/dialect labels, WOLD semantic fields, TLS
+  #   concept assignments) — a JSON-shaped Hash, the Passage annotations
+  #   contract at entry grain. Stored verbatim (annotations_json, NULL when
+  #   empty) and projected into the entry facet surface under
+  #   config/facet_map.yml's entry_fields by Store::EntryFacetBuilder.
   #
   # The P26-3 hbo/arc NFC exemption applies HERE too (P30-1 + P30-2,
   # independently required and identically shaped): Masoretic pointing is
@@ -154,9 +160,10 @@ module Nabu
   # a SEARCH form and keeps the NFC contract for every language — the
   # exemption never widens to the lookup key.
   DictionaryEntry = Data.define(:entry_id, :key_raw, :language, :headword,
-                                :headword_folded, :gloss, :body, :citations, :reflexes, :crossrefs) do
+                                :headword_folded, :gloss, :body, :citations, :reflexes, :crossrefs,
+                                :annotations) do
     def initialize(entry_id:, key_raw:, language:, headword:, headword_folded:, body:,
-                   gloss: nil, citations: [], reflexes: [], crossrefs: [])
+                   gloss: nil, citations: [], reflexes: [], crossrefs: [], annotations: {})
       unless citations.is_a?(Array) && citations.all?(Nabu::DictionaryCitation)
         raise ValidationError, "citations must be an Array of Nabu::DictionaryCitation"
       end
@@ -183,7 +190,8 @@ module Nabu
         body: display_text.call(body, field: "body"),
         citations: citations.freeze,
         reflexes: reflexes.freeze,
-        crossrefs: crossrefs.freeze
+        crossrefs: crossrefs.freeze,
+        annotations: Model::Validation.json_hash!(annotations, field: "annotations").freeze
       )
     end
   end

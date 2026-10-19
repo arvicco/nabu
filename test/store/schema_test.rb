@@ -70,6 +70,31 @@ module Store
       assert_match(/WITHOUT ROWID/i, ddl)
     end
 
+    # The dictionary-entry grain of the same mold (migration 046): entries
+    # carry their annotations (nullable — NULL is "none", the common case
+    # on million-entry shelves), and the facet surface is a per-source
+    # value dictionary + a WITHOUT ROWID (value_id, entry_id) pair table.
+    def test_entry_facet_tables_are_dictionary_encoded
+      column = @db.schema(:dictionary_entries).to_h[:annotations_json]
+      refute_nil column, "dictionary_entries.annotations_json missing (migration 046)"
+      refute column[:allow_null] == false, "annotations_json is NULL for an unannotated entry"
+
+      values = @db.schema(:entry_facet_values).to_h
+      assert_equal false, values[:source_id][:allow_null]
+      assert_equal false, values[:facet][:allow_null]
+      assert_equal false, values[:value][:allow_null]
+      refute values[:ref][:allow_null] == false, "ref is optional (labels carry none)"
+      assert(@db.indexes(:entry_facet_values).values.any? { |i| i[:columns] == %i[facet value] })
+      assert(@db.indexes(:entry_facet_values).values.any? { |i| i[:columns] == %i[source_id] })
+
+      pairs = @db.schema(:entry_facets).to_h
+      assert_equal %i[entry_id value_id], pairs.keys.sort
+      assert pairs[:value_id][:primary_key]
+      assert pairs[:entry_id][:primary_key]
+      ddl = @db["SELECT sql FROM sqlite_master WHERE name = 'entry_facets'"].get(:sql)
+      assert_match(/WITHOUT ROWID/i, ddl)
+    end
+
     # P17-2 rider: documents carry their adapter-emitted metadata (persons,
     # crosswalk ids, facets) — NOT NULL, default "{}", never content-hashed.
     def test_documents_metadata_json_column_defaults_to_empty_object

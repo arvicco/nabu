@@ -24,7 +24,7 @@ class DerivabilityManifestTest < Minitest::Test
       tables: %w[
         derivation_stamps dictionaries dictionary_citations dictionary_crossrefs
         dictionary_entries dictionary_reflexes dictionary_stats document_axes
-        document_facets documents enrichments hiero_postings kind_stats language_curve
+        document_facets documents enrichments entry_facet_values entry_facets hiero_postings kind_stats language_curve
         language_mix language_names language_records lect_stats lemma_rollup passage_facet_values
         passage_facets passages person_index person_index_names
         place_crosswalk place_index

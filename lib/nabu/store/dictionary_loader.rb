@@ -227,7 +227,7 @@ module Nabu
           entry_id: entry.entry_id, key_raw: entry.key_raw,
           headword: entry.headword, headword_folded: entry.headword_folded,
           gloss: entry.gloss, body: entry.body,
-          content_sha256: sha, revision: 1, withdrawn: false
+          content_sha256: sha, revision: 1, withdrawn: false, **annotation_attrs(entry)
         )
         insert_citations(row, entry)
         insert_reflexes(row, entry)
@@ -242,7 +242,7 @@ module Nabu
         row.update(
           key_raw: entry.key_raw, headword: entry.headword,
           headword_folded: entry.headword_folded, gloss: entry.gloss, body: entry.body,
-          content_sha256: sha, revision: row.revision + 1, withdrawn: false
+          content_sha256: sha, revision: row.revision + 1, withdrawn: false, **annotation_attrs(entry)
         )
         DictionaryCitation.where(dictionary_entry_id: row.id).delete
         insert_citations(row, entry)
@@ -354,6 +354,24 @@ module Nabu
                          .select_map([column, :id])
                          .each { |key, id| (out[key] ||= []) << id }
         end
+      end
+
+      # The entry's annotations as canonical JSON (the passage
+      # annotations_json encoding), NULL when it carries none — the common
+      # case, and the entry facet builder's IS NOT NULL probe. Part of the
+      # entry's content sha, so the column only ever moves with a revision.
+      # A catalog predating migration 046 has no column: nothing written.
+      def annotation_attrs(entry)
+        return {} unless annotations_column?
+
+        { annotations_json: entry.annotations.empty? ? nil : ContentHash.canonical_json(entry.annotations) }
+      end
+
+      def annotations_column?
+        if @annotations_column.nil?
+          @annotations_column = @db.schema(:dictionary_entries).any? { |name, _| name == :annotations_json }
+        end
+        @annotations_column
       end
 
       # A catalog predating migration 039 has no crossref table — the

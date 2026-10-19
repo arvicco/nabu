@@ -118,4 +118,21 @@ class ContentHashTest < Minitest::Test
     refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [within])),
                  Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [across]))
   end
+
+  # The entry-facet seam: annotations are content (a reparse that mines a
+  # new label re-mints the entry, which is what lands its facet rows),
+  # appended ONLY when present — every pin above holds byte for byte.
+  def test_annotations_are_content_and_absent_annotations_change_nothing
+    plain = Nabu::Store::ContentHash.dictionary_entry(entry)
+    assert_equal plain, Nabu::Store::ContentHash.dictionary_entry(entry(annotations: {}))
+    with = Nabu::Store::ContentHash.dictionary_entry(entry(annotations: { "field" => ["Buddhism"] }))
+    refute_equal plain, with
+    assert_equal with, Nabu::Store::ContentHash.dictionary_entry(entry(annotations: { "field" => ["Buddhism"] }))
+    refute_equal with, Nabu::Store::ContentHash.dictionary_entry(entry(annotations: { "field" => ["law"] }))
+  end
+
+  def test_annotations_never_collide_with_a_crossref_encoding
+    refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref])),
+                 Nabu::Store::ContentHash.dictionary_entry(entry(annotations: { "crossrefs" => ["богъ"] }))
+  end
 end
