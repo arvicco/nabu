@@ -102,10 +102,11 @@ class WiktionaryBoTest < Minitest::Test
 
   def test_parse_extracts_descendants_as_reflexes
     entries = adapter.parse(adapter.discover(FIXTURES).first).entries
-    bearing = entries.count { |entry| !entry.reflexes.empty? }
-    minted = entries.sum { |entry| entry.reflexes.size }
-    assert_equal 18, bearing
-    assert_equal 88, minted
+    descendants = entries.to_h { |entry| [entry.entry_id, entry.reflexes.reject(&:etymon?)] }
+    assert_equal 18, descendants.values.count(&:any?)
+    assert_equal 88, descendants.values.sum(&:size)
+    # The etymology_templates edges ride after them (the entry's own etymons).
+    assert_equal(31, entries.sum { |entry| entry.reflexes.count(&:etymon?) })
   end
 
   # བོད "Tibet" descends into held languages: grc Βαῖται → la Baetae, and
@@ -195,7 +196,8 @@ class WiktionaryBoTest < Minitest::Test
     assert_equal 172, second.skipped
     assert_equal 172, db[:dictionary_entries].count
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
-    assert_equal 88, db[:dictionary_reflexes].count, "an unchanged re-parse re-mints nothing"
+    assert_equal 88 + 31, db[:dictionary_reflexes].count,
+                 "an unchanged re-parse re-mints nothing (descendants + etymon edges)"
 
     buddha = db[:dictionary_entries].where(entry_id: "སངས་རྒྱས:noun").first
     assert_equal "urn:nabu:dict:wiktionary-bo:སངས་རྒྱས:noun", buddha[:urn]

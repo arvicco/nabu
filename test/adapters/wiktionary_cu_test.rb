@@ -156,13 +156,14 @@ class WiktionaryCuTest < Minitest::Test
   def test_parse_extracts_descendants_as_reflexes
     document = adapter.parse(adapter.discover(FIXTURES).first)
     entries = document.map { |entry| entry }
-    bearing = entries.count { |entry| !entry.reflexes.empty? }
-    minted = entries.sum { |entry| entry.reflexes.size }
-    assert_equal 39, bearing
-    assert_equal 129, minted
+    descendants = entries.map { |entry| entry.reflexes.reject(&:etymon?) }
+    assert_equal 39, descendants.count(&:any?)
+    assert_equal 129, descendants.sum(&:size)
+    # The etymology_templates edges (the entry's own etymons) ride after.
+    assert_equal(215, entries.sum { |entry| entry.reflexes.count(&:etymon?) })
 
     stopa = entries.find { |entry| entry.entry_id == "стопа:noun" }
-    assert_equal 6, stopa.reflexes.size
+    assert_equal 6, stopa.reflexes.reject(&:etymon?).size
     ru = stopa.reflexes.find { |reflex| reflex.lang_code == "ru" }
     assert_equal "ru", ru.language
     assert_equal "стопа́", ru.word
@@ -188,11 +189,11 @@ class WiktionaryCuTest < Minitest::Test
   def test_loader_mints_reflex_rows_and_reindexing_is_idempotent
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 129, db[:dictionary_reflexes].count
+    assert_equal 129 + 215, db[:dictionary_reflexes].count, "descendants + etymon edges"
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 279, second.skipped
-    assert_equal 129, db[:dictionary_reflexes].count, "an unchanged re-parse re-mints nothing"
+    assert_equal 129 + 215, db[:dictionary_reflexes].count, "an unchanged re-parse re-mints nothing"
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
   end
 
