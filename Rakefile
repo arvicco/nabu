@@ -460,6 +460,21 @@ namespace :tools do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
     Nabu::ToolBootstrap.new.print_status
+    Nabu::Ops::GitHooks::Installer.new(root: __dir__).status.each do |tool, state|
+      puts format("%<tool>-52s %<state>s", tool: tool, state: state)
+    end
+  end
+
+  # The local git hook pack (conflict markers, the mid-rebuild hold,
+  # commit-message attribution/id refusals). Symlinks the tracked
+  # script/git-hooks/* into the shared hooks dir — no network, idempotent.
+  # Lives beside ToolBootstrap rather than in it: lib/nabu/ops/ sits
+  # outside the derivation fingerprint's shared core, so the hook pack
+  # never dirties a stamp.
+  desc "Install the git hook pack (pre-commit + commit-msg symlinks); idempotent"
+  task :hooks do
+    require_relative "lib/nabu/ops/git_hooks"
+    Nabu::Ops::GitHooks::Installer.new(root: __dir__).install!
   end
 end
 

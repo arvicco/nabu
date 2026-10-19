@@ -105,3 +105,6 @@ class):
   the network, never data.
 - [embed-venv.md](embed-venv.md) — the Python/sentence-transformers
   venv `nabu embed` needs (P93-4); same class, same rules.
+- [git-hooks.md](git-hooks.md) — the local git hook pack
+  (`rake tools:hooks`): conflict markers, the mid-rebuild hold, and
+  commit-message hygiene; no network, symlinks only.

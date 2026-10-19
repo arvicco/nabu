@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Nabu pre-commit hook (installed by `rake tools:hooks` as a symlink to
+# this tracked file): conflict markers in staged content, and the
+# mid-rebuild hold. Logic and rationale: lib/nabu/ops/git_hooks.rb.
+require File.expand_path("../../lib/nabu/ops/git_hooks", __dir__)
+
+exit Nabu::Ops::GitHooks.pre_commit
