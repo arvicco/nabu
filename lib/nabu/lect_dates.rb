@@ -62,7 +62,11 @@ module Nabu
     # this basis, then insert every candidate whose (urn, code) is not
     # already ruled (hand rulings and facet rules always win).
     def apply!(catalog:, journal:, source: nil, lang: nil, at: Time.now)
-      Store::LectJournal.supersede_basis!(journal, basis: BASIS)
+      # Supersede ONLY this run's scope. The unscoped form wiped the whole
+      # inference basis, so the second per-source run deleted the first
+      # source's rows (caught live: two sequential --source runs, the
+      # second erased 45,869 fresh assignments).
+      supersede_scope!(catalog: catalog, journal: journal, source: source, lang: lang)
       report = census(catalog: catalog, source: source, lang: lang)
       taken = journal[:lect_assignments].select_map(%i[urn code]).to_set
       fresh, held = report.candidates.partition { |c| !taken.include?([c.urn, c.code]) }
@@ -102,6 +106,26 @@ module Nabu
     end
 
     private
+
+    # Supersede the inference basis WITHIN the run's scope only: scoped to
+    # a source, the deletes cover that source's documents (fetched from the
+    # catalog in slices — the journal is a separate db, so no cross-db
+    # join); scoped to a lang, the code narrows them; unscoped, the whole
+    # basis supersedes as before. Stale rows for documents no longer
+    # assignable still go, because the scope covers ALL the source's
+    # documents, not only the current candidates.
+    def supersede_scope!(catalog:, journal:, source:, lang:)
+      scope = journal[:lect_assignments].where(basis: BASIS)
+      scope = scope.where(code: lang) if lang
+      return scope.delete unless source
+
+      docs = catalog[:documents].join(:sources, id: :source_id)
+                                .where(Sequel[:sources][:slug] => source)
+                                .select_map(Sequel[:documents][:urn])
+      docs.each_slice(INSERT_BATCH) do |urns|
+        scope.where(urn: urns).delete
+      end
+    end
 
     # Yields one row per dated document: urn, source slug, language, and the
     # closed-hull bounds (MIN not_before, MAX not_after over its axes rows).
