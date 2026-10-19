@@ -117,24 +117,26 @@ module Nabu
           urn_ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
           documents = 0
           undated = 0
-          catalogue_paths(root).each do |path|
-            data = JSON.parse(File.read(path))
-            project = data["project"].to_s.tr("/", "-")
-            next if project.empty?
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            catalogue_paths(root).each do |path|
+              data = JSON.parse(File.read(path))
+              project = data["project"].to_s.tr("/", "-")
+              next if project.empty?
 
-            data.fetch("members", {}).each do |textid, member|
-              ids = document_ids(urn_ids, project, textid)
-              next if ids.empty?
+              data.fetch("members", {}).each do |textid, member|
+                ids = document_ids(urn_ids, project, textid)
+                next if ids.empty?
 
-              sender = extract_sender(member)
-              ids.each { |id| TimelineBuilder.insert_timeline(catalog, id, sender, SENDER_AXIS) } if sender
+                sender = extract_sender(member)
+                ids.each { |id| TimelineBuilder.insert_timeline(axes, id, sender, SENDER_AXIS) } if sender
 
-              timeline = extract(member)
-              undated += ids.size if timeline.nil? || timeline[:not_before].nil?
-              next if timeline.nil?
+                timeline = extract(member)
+                undated += ids.size if timeline.nil? || timeline[:not_before].nil?
+                next if timeline.nil?
 
-              ids.each { |id| TimelineBuilder.insert_timeline(catalog, id, timeline, "oracc") }
-              documents += ids.size
+                ids.each { |id| TimelineBuilder.insert_timeline(axes, id, timeline, "oracc") }
+                documents += ids.size
+              end
             end
           end
           { documents: documents, undated: undated }

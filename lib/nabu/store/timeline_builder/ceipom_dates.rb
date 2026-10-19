@@ -48,10 +48,12 @@ module Nabu
           return counts unless File.file?(path)
 
           ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
-          each_text(path) do |urn, row|
-            document_id = ids[urn] or next
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            each_text(path) do |urn, row|
+              document_id = ids[urn] or next
 
-            insert_row(catalog, document_id, row, counts)
+              insert_row(axes, document_id, row, counts)
+            end
           end
           counts
         end
@@ -73,7 +75,7 @@ module Nabu
           urns
         end
 
-        def insert_row(catalog, document_id, row, counts)
+        def insert_row(axes, document_id, row, counts)
           timeline = extract(row)
           if timeline == :invalid
             counts[:invalid] += 1
@@ -83,7 +85,7 @@ module Nabu
           counts[:unplaced] += 1 if timeline.nil? || timeline[:place_name].nil?
           return if timeline.nil?
 
-          TimelineBuilder.insert_timeline(catalog, document_id, timeline, SLUG)
+          TimelineBuilder.insert_timeline(axes, document_id, timeline, SLUG)
           counts[:documents] += 1
         end
 

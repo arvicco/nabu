@@ -50,15 +50,17 @@ module Nabu
           return counts if paths.empty?
 
           urn_ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
-          paths.each do |path|
-            document_id = urn_ids["#{URN_PREFIX}#{File.basename(path, '.xml').downcase}"] or next
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            paths.each do |path|
+              document_id = urn_ids["#{URN_PREFIX}#{File.basename(path, '.xml').downcase}"] or next
 
-            insert_row(catalog, document_id, path, counts)
+              insert_row(axes, document_id, path, counts)
+            end
           end
           counts
         end
 
-        def insert_row(catalog, document_id, path, counts)
+        def insert_row(axes, document_id, path, counts)
           timeline = extract(File.read(path))
           if timeline == :invalid
             counts[:invalid] += 1
@@ -67,7 +69,7 @@ module Nabu
           counts[:undated] += 1 if timeline.nil? || timeline[:not_before].nil?
           return if timeline.nil?
 
-          TimelineBuilder.insert_timeline(catalog, document_id, timeline, ISICILY_SLUG)
+          TimelineBuilder.insert_timeline(axes, document_id, timeline, ISICILY_SLUG)
           counts[:documents] += 1
         end
 

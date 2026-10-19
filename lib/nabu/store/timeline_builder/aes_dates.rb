@@ -78,17 +78,19 @@ module Nabu
           headers = AedTextHeaders.new(aed_dir: File.join(canonical_dir, AED_SLUG))
           ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
           counts = { documents: 0, undated: 0, aed: 0 }
-          each_text(dir) do |urn, sentence|
-            document_id = ids[urn] or next
-            timeline = extract(sentence, headers.header(sentence["text"].to_s))
-            if timeline.nil?
-              counts[:undated] += 1
-              next
-            end
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            each_text(dir) do |urn, sentence|
+              document_id = ids[urn] or next
+              timeline = extract(sentence, headers.header(sentence["text"].to_s))
+              if timeline.nil?
+                counts[:undated] += 1
+                next
+              end
 
-            insert(catalog, document_id, timeline)
-            counts[:documents] += 1
-            counts[:aed] += 1 if timeline[:aed]
+              insert(axes, document_id, timeline)
+              counts[:documents] += 1
+              counts[:aed] += 1 if timeline[:aed]
+            end
           end
           counts
         end
@@ -153,8 +155,8 @@ module Nabu
           Nabu::Normalize.nfc(findspot)
         end
 
-        def insert(catalog, document_id, timeline)
-          catalog[:document_axes].insert(
+        def insert(axes, document_id, timeline)
+          axes.insert(
             document_id: document_id,
             not_before: timeline[:not_before], not_after: timeline[:not_after],
             precision: timeline[:precision], date_raw: timeline[:date_raw],

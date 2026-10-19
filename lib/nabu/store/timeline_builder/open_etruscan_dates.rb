@@ -52,10 +52,12 @@ module Nabu
 
           urn_ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
           places = findspot_places(canonical_dir)
-          Adapters::FlatCsvParser.new.each_row(corpus) do |row|
-            document_id = urn_ids[Adapters::OpenEtruscan.urn_for(row.fetch("id"))] or next
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            Adapters::FlatCsvParser.new.each_row(corpus) do |row|
+              document_id = urn_ids[Adapters::OpenEtruscan.urn_for(row.fetch("id"))] or next
 
-            insert_row(catalog, document_id, row, places, counts)
+              insert_row(axes, document_id, row, places, counts)
+            end
           end
           counts
         end
@@ -78,7 +80,7 @@ module Nabu
           places
         end
 
-        def insert_row(catalog, document_id, row, places, counts)
+        def insert_row(axes, document_id, row, places, counts)
           bounds = signed_bounds(row, counts)
           place_name = places[row.fetch("id").to_s.strip]
           counts[:undated] += 1 if bounds.nil?
@@ -86,7 +88,7 @@ module Nabu
 
           timeline = (bounds || { not_before: nil, not_after: nil, precision: nil, date_raw: nil })
                      .merge(place_name: place_name, place_ref: nil)
-          TimelineBuilder.insert_timeline(catalog, document_id, timeline, SLUG)
+          TimelineBuilder.insert_timeline(axes, document_id, timeline, SLUG)
           counts[:documents] += 1
         end
 
