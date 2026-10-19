@@ -185,8 +185,14 @@ module Nabu
       # index_delta_cap (P112-1): entries past which the load's IndexDelta
       # overflows to the slice-rewrite fallback (tests shrink it; production
       # keeps IndexDelta::CAP).
+      # parse_workers: 1 (default) parses in-process — the serial path,
+      #   unchanged. More forks that many Nabu::ParsePool workers for
+      #   #load_from: adapter parses run in the children while this process
+      #   stays the single writer, consuming documents in parse order (see
+      #   #load_from_pool). Rebuild passes it for adapters that declare
+      #   parallel_parse?.
       def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil, tx_batch_rows: TX_BATCH_ROWS,
-                     index_delta_cap: IndexDelta::CAP)
+                     index_delta_cap: IndexDelta::CAP, parse_workers: 1)
         @db = db
         @source = source
         @ledger = ledger
@@ -194,6 +200,7 @@ module Nabu
         @tx_batch = tx_batch
         @tx_batch_rows = tx_batch_rows
         @index_delta_cap = index_delta_cap
+        @parse_workers = parse_workers
         # P42-0: the write-time census. Each document mutation applies its
         # contribution delta to source_stats INSIDE the same transaction, so
         # the read surfaces stop aggregating the corpus per invocation. nil on
@@ -219,6 +226,8 @@ module Nabu
       # trouble) propagates and aborts. +on_document+ ticks after every
       # processed OR quarantined document (see #load).
       def load_from(adapter, workdir:, full: true, on_document: nil)
+        return load_from_pool(adapter, workdir: workdir, full: full, on_document: on_document) if @parse_workers > 1
+
         run(full: full, on_document: on_document) do |process, quarantine, skip|
           adapter.discover_with_attic(workdir, on_superseded: method(:journal_superseded)).each do |ref|
             document =
@@ -237,6 +246,58 @@ module Nabu
       end
 
       private
+
+      # The parallel twin of #load_from: the SAME sequence of process /
+      # quarantine / skip / superseded calls the serial walk makes, in the
+      # same order, with the parses done by forked ParsePool workers.
+      # Discovery runs here first, in full, so the workers inherit the
+      # adapter exactly as discovery left it; an attic duplicate's
+      # "superseded" journal stays a SLOT in that sequence and is written
+      # at the position the serial walk writes it (between the documents
+      # around it), never at discovery time. Each parse outcome then meets
+      # the serial path's own rescue discipline at its slot: ParseError
+      # quarantines, DocumentSkipped skips, anything else — a worker's
+      # adapter bug, a dead worker (ParseWorkerError) — aborts the load
+      # right there, leaving exactly what a serial abort at that document
+      # leaves. The writer-side cost (waiting on workers + un-Marshal-ing
+      # their documents) is this source's :parse bucket.
+      def load_from_pool(adapter, workdir:, full:, on_document:)
+        slots = []
+        adapter.discover_with_attic(workdir, on_superseded: ->(ref) { slots << [:superseded, ref] })
+               .each { |ref| slots << [:parse, ref] }
+        refs = slots.filter_map { |kind, ref| ref if kind == :parse }
+        pool = ParsePool.new(adapter: adapter, workers: @parse_workers)
+        cursor = 0
+        run(full: full, on_document: on_document) do |process, quarantine, skip|
+          pool.each(refs) do |result|
+            cursor = journal_superseded_slots(slots, cursor) + 1
+            document =
+              begin
+                result.value!
+              rescue Nabu::DocumentSkipped => e
+                skip.call(result.ref, e)
+                next
+              rescue Nabu::ParseError => e
+                quarantine.call(result.ref, e)
+                next
+              end
+            process.call(document, retained_params(result.ref))
+          end
+          journal_superseded_slots(slots, cursor)
+        end
+      ensure
+        @profile&.add(scope: @source.slug, stage: :parse, seconds: pool.wait_seconds + pool.decode_seconds) if pool
+      end
+
+      # Journal the superseded slots from +cursor+ up to the next parse
+      # slot; returns that parse slot's index (slots.size when none is left).
+      def journal_superseded_slots(slots, cursor)
+        while cursor < slots.size && slots[cursor].first == :superseded
+          journal_superseded(slots[cursor].last)
+          cursor += 1
+        end
+        cursor
+      end
 
       # P36-0 stage timers: no-op (just yield) without a profile, so the sync
       # path is untouched; under `nabu rebuild` they fold the call's wall time

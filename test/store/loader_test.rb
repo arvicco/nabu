@@ -950,6 +950,92 @@ module Store
       assert_equal 0, Nabu::Store::Document.count, "the whole batch transaction rolled back"
     end
 
+    # -- forked parse workers ------------------------------------------------
+
+    # A parse worker that DIES (OOM-killed, a native crash) says nothing
+    # about its document: the load aborts honestly — no quarantine, no
+    # report, nothing after the dead slot written — while every document
+    # parsed before it already landed exactly as a serial abort leaves it.
+    class DyingAdapter < TestAdapter
+      def parse(document_ref)
+        Process.kill(:KILL, Process.pid) if document_ref.id == "urn:nabu:test_adapter:beta"
+
+        super
+      end
+    end
+
+    # An adapter BUG (not a ParseError) aborts at its slot, carrying its
+    # own class across the fork — exactly the serial path's propagation.
+    class BuggyAdapter < TestAdapter
+      def parse(document_ref)
+        raise ArgumentError, "adapter bug" if document_ref.id == "urn:nabu:test_adapter:beta"
+
+        super
+      end
+    end
+
+    def parallel_loader(**)
+      Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, parse_workers: 3, **)
+    end
+
+    def test_a_dead_parse_worker_aborts_the_load_without_a_quarantine
+      error = assert_raises(Nabu::ParseWorkerError) do
+        parallel_loader.load_from(DyingAdapter.new, workdir: FIXTURES, full: true)
+      end
+      assert_match(/urn:nabu:test_adapter:beta/, error.message)
+      assert_empty provenance_events(event: "quarantined"), "a dead worker is not the document's fault"
+      assert_equal ["urn:nabu:test_adapter:alpha"], Nabu::Store::Document.select_map(:urn),
+                   "the slot before the dead one landed; nothing after it did"
+      assert_empty provenance_events(event: "withdrawn"), "an aborted full load never sweeps"
+    end
+
+    def test_an_adapter_bug_in_a_worker_aborts_with_its_own_class
+      batched = parallel_loader(tx_batch: 10)
+      error = assert_raises(ArgumentError) { batched.load_from(BuggyAdapter.new, workdir: FIXTURES, full: true) }
+      assert_equal "adapter bug", error.message
+      assert_empty provenance_events(event: "quarantined")
+      assert_equal 0, Nabu::Store::Document.count, "the unflushed batch never committed, as in the serial abort"
+    end
+
+    def test_parse_errors_in_workers_still_quarantine_and_continue
+      report = parallel_loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES, full: true)
+      assert_report report, added: 2, errored: 1
+      params = JSON.parse(provenance_events(event: "quarantined").first.params_json)
+      assert_equal "urn:nabu:test_adapter:beta", params.fetch("ref_id")
+    end
+
+    # Stamps each document with the pid that parsed it.
+    class PidAdapter < TestAdapter
+      def parse(document_ref)
+        document = super
+        Nabu::Document.new(urn: document.urn, language: document.language, title: document.title,
+                           canonical_path: document.canonical_path, metadata: { "pid" => Process.pid })
+      end
+    end
+
+    def parsing_pids
+      Nabu::Store::Document.select_map(:metadata_json).map { |json| JSON.parse(json).fetch("pid") }.uniq
+    end
+
+    # One worker is the serial path itself: no pool, no fork.
+    def test_one_parse_worker_parses_in_process
+      Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, parse_workers: 1)
+                         .load_from(PidAdapter.new, workdir: FIXTURES, full: true)
+      assert_equal [Process.pid], parsing_pids
+    end
+
+    def test_more_parse_workers_parse_in_children
+      parallel_loader.load_from(PidAdapter.new, workdir: FIXTURES, full: true)
+      refute_includes parsing_pids, Process.pid
+    end
+
+    def test_the_parallel_parse_folds_its_writer_side_cost_into_the_profile
+      profile = Nabu::RebuildProfile.new
+      parallel_loader(profile: profile, tx_batch: 2).load_from(TestAdapter.new, workdir: FIXTURES, full: true)
+      assert_operator profile.seconds(scope: "test_adapter", stage: :parse), :>, 0.0
+      assert_operator profile.seconds(scope: "test_adapter", stage: :insert), :>, 0.0
+    end
+
     # -- rebuild batch transactions (P36-2) ----------------------------------
 
     # tx_batch (rebuild only) collapses many per-document transactions into one
