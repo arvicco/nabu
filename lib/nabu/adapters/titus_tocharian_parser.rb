@@ -204,14 +204,7 @@ module Nabu
       # character around a tag (tocha314 "k..\xC3</a>\x84\\" = Ä); the
       # titus-pahlavi repair rejoins it. Beyond the repair → ParseError.
       def self.read_page(path)
-        bytes = File.binread(path)
-        html = bytes.dup.force_encoding(Encoding::UTF_8)
-        return html if html.valid_encoding?
-
-        repaired = TitusPahlaviParser.repair_severed(bytes)
-        return repaired if repaired.valid_encoding?
-
-        raise Nabu::ParseError, "titus-tocharian: #{path} is not valid UTF-8 (beyond the severed-sequence repair)"
+        SourceRead.utf8_file(path, label: "titus-tocharian", repair: :severed_tags)
       end
 
       # Parse one page's HTML under +profile+ (default: Tocharian A). Raises

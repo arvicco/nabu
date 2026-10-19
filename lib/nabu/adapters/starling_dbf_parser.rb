@@ -149,11 +149,7 @@ module Nabu
           return cell.strip.empty? ? nil : "�"
         end
 
-        payload = var_data.byteslice(offset, length)
-        if payload.nil? || payload.bytesize < length
-          raise Nabu::ParseError,
-                "#{@var_path}: var pointer #{offset}+#{length} reaches past the end of the file"
-        end
+        payload = SourceRead.slice(var_data, offset: offset, length: length, what: "#{@var_path}: var pointer")
         return REPLACEMENT if payload.getbyte(0) == FRAME_TAG
 
         StarlingText.decode(framed_payload(payload))
