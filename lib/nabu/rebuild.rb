@@ -218,6 +218,12 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :passage_facets) do
         Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
+      # The dictionary-entry grain of the same config (entry_fields),
+      # projected from the replayed entries' annotations.
+      progress&.stage("entry facets")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :entry_facets) do
+        Store::EntryFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
+      end
       # The AED hieroglyph postings (P103-2): f(canonical/aed) — an
       # absent cone yields the honest empty table.
       progress&.stage("hiero postings")

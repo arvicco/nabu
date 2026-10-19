@@ -68,6 +68,28 @@ class FacetMapTest < Minitest::Test
     end
   end
 
+  # The dictionary-entry grain: entry_fields name dictionary_entries
+  # annotations keys → entry facet names, a third sibling lane on the same
+  # per-source entry (a source may carry it alone).
+  def test_loads_entry_fields_as_their_own_lane
+    map = build("sources" => {
+                  "edrdg" => { "entry_fields" => { "field" => "domain" } },
+                  "okhc" => { "fields" => { "corpus" => "collection" } }
+                })
+    assert_equal %w[okhc], map.sources
+    assert_empty map.passage_sources
+    assert_equal %w[edrdg], map.entry_sources
+    assert_equal({ "field" => "domain" }, map.entry_fields_for("edrdg"))
+    assert_nil map.entry_fields_for("okhc")
+  end
+
+  def test_blank_or_empty_entry_fields_are_config_errors
+    assert_raises(Nabu::FacetMap::ConfigError) do
+      build("sources" => { "edrdg" => { "entry_fields" => { "field" => "" } } })
+    end
+    assert_raises(Nabu::FacetMap::ConfigError) { build("sources" => { "edrdg" => { "entry_fields" => {} } }) }
+  end
+
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
     map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
     assert_equal "subject", map.passage_fields_for("sillok")["subject_classes"]

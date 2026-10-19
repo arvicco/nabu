@@ -24,8 +24,17 @@ module Nabu
   # name passages.annotations_json keys that project into the passage
   # facet tables (Store::PassageFacetBuilder) — claims upstream makes per
   # article, which a document facet would smear. Same verbatim rules.
+  #
+  # The dictionary-entry grain is the third sibling: entry_fields name
+  # dictionary_entries.annotations_json keys that project into the entry
+  # facet tables (Store::EntryFacetBuilder) — JMdict's domain labels,
+  # WOLD's semantic fields, TLS's concept assignments. Same rules again.
   class FacetMap
     class ConfigError < Nabu::Error; end
+
+    # The per-source lane keys: document metadata, passage annotations,
+    # dictionary-entry annotations.
+    LANES = %w[fields passage_fields entry_fields].freeze
 
     def self.load(path)
       new(YAML.safe_load_file(path) || {})
@@ -43,6 +52,7 @@ module Nabu
     def initialize(doc)
       @fields = {}
       @passage_fields = {}
+      @entry_fields = {}
       parse_sources(doc["sources"] || {})
     end
 
@@ -58,6 +68,12 @@ module Nabu
     # {annotation_field => facet_name} for +slug+'s passages, or nil.
     def passage_fields_for(slug) = @passage_fields[slug]
 
+    # The dictionary-entry lane's sources (Store::EntryFacetBuilder).
+    def entry_sources = @entry_fields.keys
+
+    # {annotation_field => facet_name} for +slug+'s dictionary entries, or nil.
+    def entry_fields_for(slug) = @entry_fields[slug]
+
     private
 
     # The passage grain is a sibling key on the same per-source entry —
@@ -68,16 +84,17 @@ module Nabu
     def parse_sources(sources_doc)
       sources_doc.each do |slug, spec|
         spec ||= {}
-        unless spec.key?("fields") || spec.key?("passage_fields")
+        unless LANES.any? { |key| spec.key?(key) }
           raise ConfigError,
-                "facet_map: #{slug} must declare fields: {metadata_field: facet} " \
-                "and/or passage_fields: {annotation_field: facet}"
+                "facet_map: #{slug} must declare fields: {metadata_field: facet}, " \
+                "passage_fields: {annotation_field: facet} and/or entry_fields: {annotation_field: facet}"
         end
 
         @fields[slug] = parse_lane(slug, "fields", spec["fields"]) if spec.key?("fields")
         if spec.key?("passage_fields")
           @passage_fields[slug] = parse_lane(slug, "passage_fields", spec["passage_fields"])
         end
+        @entry_fields[slug] = parse_lane(slug, "entry_fields", spec["entry_fields"]) if spec.key?("entry_fields")
       end
     end
 

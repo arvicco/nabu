@@ -51,8 +51,19 @@ module Nabu
         digest(
           entry.entry_id, entry.key_raw, entry.language, entry.headword,
           entry.headword_folded, entry.gloss, entry.body, canonical_json(citations),
-          *reflex_fields(entry), *crossref_fields(entry)
+          *reflex_fields(entry), *crossref_fields(entry), *annotation_fields(entry)
         )
+      end
+
+      # Entry annotations (the entry-facet seam) ride the same guard:
+      # appended ONLY when present, wrapped under their own key so they can
+      # never collide with the crossref encoding — every annotation-less
+      # entry keeps its stored sha, while a mining reparse re-mints exactly
+      # the entries that gained labels (which is what lands their facets).
+      def annotation_fields(entry)
+        return [] if entry.annotations.empty?
+
+        [canonical_json({ "annotations" => entry.annotations })]
       end
 
       # Cross-references (P123-1) ride the reflex guard exactly: appended

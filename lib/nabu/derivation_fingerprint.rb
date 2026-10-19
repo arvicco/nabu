@@ -91,7 +91,7 @@ module Nabu
     # sentinel row both rebuild flavors mint; an incremental run re-runs the
     # builders whenever that digest drifts, even with zero dirty sources.
     # Safe to carve because their output (document_axes, document_facets,
-    # the passage facet tables) is
+    # the passage and entry facet tables) is
     # whole-table projections re-minted per builder run, never per-source
     # rows — per-source stamps owe them nothing.
     BUILDER_DIRS = %w[store/timeline_builder].freeze
@@ -103,6 +103,7 @@ module Nabu
     BUILDER_FILES = %w[
       store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb
       store/silver_dates.rb date_shelf.rb store/passage_facet_builder.rb
+      store/entry_facet_builder.rb
     ].freeze
 
     # P112-4: the fulltext-index core — files that shape ONLY

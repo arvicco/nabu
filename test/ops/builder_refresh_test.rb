@@ -60,6 +60,7 @@ class BuilderRefreshTest < Minitest::Test
     refute_nil summary.timeline
     refute_nil summary.kinds
     refute_nil summary.passage_facets, "the passage-grain facet lane rides the refresh"
+    refute_nil summary.entry_facets, "the dictionary-entry facet lane rides the refresh"
   end
 
   # The passage-grain lane re-projects under the shipped passage_fields
