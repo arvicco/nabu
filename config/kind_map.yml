@@ -6,7 +6,10 @@
 # (`nabu kind census --unmapped` is the worklist); a `deliberate:`
 # block declares reviewed NOT-genre values (layout, cult, copy
 # markers) that fold to nothing and render as their own census
-# section. Census evidence:
+# section. A source may declare `vocabulary: open` (default closed) for
+# an OPEN vocabulary — subject headings, mostly topical — where a value
+# no rule covers mints NOTHING instead of `unmapped`, counted on the
+# census board as uncovered (`nabu kind census --uncovered`). Census evidence:
 # .docs/surveys/document-classification-survey.md §2/§4a + the live
 # document_facets census 2026-09-13 + the full-worklist audit
 # 2026-09-18 (4,409 values read; folds below carry their counts).

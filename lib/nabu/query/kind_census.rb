@@ -19,15 +19,23 @@ module Nabu
     class KindCensus
       ClassRow = Data.define(:head, :documents, :sources)
       UnmappedRow = Data.define(:slug, :raw, :documents)
+      # The open-vocabulary worklist: the capped top rows plus the FULL
+      # distinct-value count, so a truncated render can announce itself.
+      UncoveredWorklist = Data.define(:rows, :total)
       Report = Data.define(:classes, :unmapped_documents, :unknown_documents,
                            :classified_documents, :unclassified_documents,
-                           :unclassified_sources, :seconds)
+                           :unclassified_sources, :uncovered_values,
+                           :uncovered_documents, :uncovered_sources, :seconds)
 
       # const: the two honesty buckets are STRUCTURAL, not a census —
       # "unknown" is the one ruled non-class claim (owner ruling 2026-09-13), "unmapped"
       # the machine bucket; a third bucket would be a scheme change.
+      # (An open vocabulary's uncovered values are NOT a bucket: they mint
+      # no kind row at all — KindBuilder censuses them as UNCOVERED rows
+      # in kind_stats, which this view counts apart from every head.)
       BUCKETS = %w[unmapped unknown].freeze
       FACET = Store::KindBuilder::FACET
+      UNCOVERED = Store::KindBuilder::UNCOVERED_PREFIX
 
       def initialize(catalog:)
         @catalog = catalog
@@ -40,7 +48,8 @@ module Nabu
         buckets, classes = head_rows.partition { |row| BUCKETS.include?(row.head) }
         classified = @catalog[:kind_stats].where(head: nil).sum(:documents) || 0
         live = live_documents
-        classified_source_ids = @catalog[:kind_stats].distinct.select_map(:source_id)
+        classified_source_ids = class_stats.distinct.select_map(:source_id)
+        totals = uncovered_totals
         Report.new(
           classes: classes,
           unmapped_documents: buckets.find { |b| b.head == "unmapped" }&.documents || 0,
@@ -48,8 +57,29 @@ module Nabu
           classified_documents: classified,
           unclassified_documents: [live - classified, 0].max,
           unclassified_sources: unclassified_sources(classified_source_ids),
+          uncovered_values: uncovered_values.count,
+          uncovered_documents: totals.sum(:documents) || 0,
+          uncovered_sources: totals.count,
           seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         )
+      end
+
+      # The open-vocabulary worklist: uncovered values by document count
+      # per source, largest first, capped at +limit+ (the precompiled
+      # kind_stats rows — no facet scan) with the full count beside.
+      def uncovered_worklist(limit:)
+        return UncoveredWorklist.new(rows: [], total: 0) unless @catalog.table_exists?(:kind_stats)
+
+        rows = uncovered_values
+               .join(:sources, id: :source_id)
+               .select(Sequel[:sources][:slug].as(:slug), Sequel[:kind_stats][:head].as(:head),
+                       Sequel[:kind_stats][:documents].as(:docs))
+               .order(Sequel.desc(:docs), :slug, :head)
+               .limit(limit)
+               .map do |row|
+                 UnmappedRow.new(slug: row[:slug], raw: row[:head].delete_prefix(UNCOVERED), documents: row[:docs])
+               end
+        UncoveredWorklist.new(rows: rows, total: uncovered_values.count)
       end
 
       # The curation worklist: every raw value that fell into the
@@ -74,7 +104,7 @@ module Nabu
       # counts are additive across sources (a document has one source),
       # and the source spread is the row count per head.
       def head_rows
-        dataset = @catalog[:kind_stats]
+        dataset = class_stats
                   .exclude(head: nil)
                   .group(:head)
                   .select(:head,
@@ -82,6 +112,23 @@ module Nabu
                           Sequel.function(:count, :source_id).as(:sources))
                   .order(Sequel.desc(:docs), :head)
         dataset.map { |row| ClassRow.new(head: row[:head], documents: row[:docs], sources: row[:sources]) }
+      end
+
+      # kind_stats minus the open-vocabulary census rows: the class heads
+      # and the NULL-head per-source totals (a NULL head survives the
+      # prefix test explicitly — NOT LIKE over NULL is NULL, not true).
+      def class_stats
+        @catalog[:kind_stats].where(Sequel.|({ head: nil }, ~Sequel.like(:head, "#{UNCOVERED}%")))
+      end
+
+      # One row per uncovered value (`uncovered:<raw>`), per source.
+      def uncovered_values
+        @catalog[:kind_stats].where(Sequel.like(:head, "#{UNCOVERED}_%"))
+      end
+
+      # The bare `uncovered:` rows: per-source docs carrying any uncovered value.
+      def uncovered_totals
+        @catalog[:kind_stats].where(head: UNCOVERED)
       end
 
       # Library-wide live-document total from source_stats (precompiled

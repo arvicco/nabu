@@ -77,5 +77,59 @@ module Query
       rows = Nabu::Query::KindCensus.new(catalog: @db).unmapped_worklist
       assert_equal([["cdli", "Literary", 1]], rows.map { |r| [r.slug, r.raw, r.documents] })
     end
+
+    # -- the open-vocabulary census (vocabulary: open) -------------------------
+    #
+    # KindBuilder precompiles an open source's uncovered values into
+    # kind_stats under the `uncovered:` prefix; the census counts them
+    # apart from the classes and never mistakes them for a head or a
+    # classified source.
+
+    def seed_open_vocabulary
+      @eebo = source("eebo", live: 4)
+      stat(@eebo, "sermon", 1)
+      stat(@eebo, nil, 1)
+      stat(@eebo, "uncovered:Plague.", 3)
+      stat(@eebo, "uncovered:Ireland -- History.", 2)
+      stat(@eebo, "uncovered:Quakers.", 2)
+      stat(@eebo, "uncovered:", 3)
+      @topical = source("topical", live: 2) # open, but nothing it carries is covered
+      stat(@topical, "uncovered:Taxation.", 2)
+      stat(@topical, "uncovered:", 2)
+    end
+
+    def test_uncovered_values_are_counted_apart_from_the_classes
+      seed_open_vocabulary
+      report = census
+      refute(report.classes.any? { |r| r.head.start_with?("uncovered:") },
+             "an uncovered census row is never a class row")
+      assert_includes report.classes.map(&:head), "sermon"
+      assert_equal 4, report.uncovered_values, "distinct uncovered values across open sources"
+      assert_equal 5, report.uncovered_documents, "docs carrying any uncovered value (per-source totals sum)"
+      assert_equal 2, report.uncovered_sources
+    end
+
+    def test_an_open_source_with_only_uncovered_values_stays_unclassified
+      seed_open_vocabulary
+      report = census
+      assert_equal 6, report.classified_documents, "the NULL-head totals: edr 2 + cdli 3 + eebo 1"
+      assert_equal 2, report.unclassified_sources,
+                   "bare and the all-uncovered source — an uncovered row is not a classification"
+    end
+
+    def test_uncovered_worklist_ranks_values_with_a_cap_and_the_full_count
+      seed_open_vocabulary
+      worklist = Nabu::Query::KindCensus.new(catalog: @db).uncovered_worklist(limit: 2)
+      assert_equal 4, worklist.total, "the full count rides beside the capped rows"
+      assert_equal([["eebo", "Plague.", 3], ["eebo", "Ireland -- History.", 2]],
+                   worklist.rows.map { |r| [r.slug, r.raw, r.documents] })
+    end
+
+    def test_uncovered_worklist_is_empty_without_open_sources
+      worklist = Nabu::Query::KindCensus.new(catalog: @db).uncovered_worklist(limit: 10)
+      assert_equal 0, worklist.total
+      assert_empty worklist.rows
+      assert_equal 0, census.uncovered_values
+    end
   end
 end

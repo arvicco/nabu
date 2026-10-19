@@ -303,7 +303,15 @@ kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
    -- total, written by KindBuilder in the projection pass (the P42-0
-   -- write-time-census stance), read by `nabu kind census`.
+   -- write-time-census stance), read by `nabu kind census`. An OPEN
+   -- vocabulary (kind_map `vocabulary: open` — eebo-tcp's LCSH subject
+   -- headings) folds an uncovered value to NO kind row instead of the
+   -- `unmapped` bucket; the miss is censused here instead, under the
+   -- reserved `uncovered:` head prefix: `uncovered:<raw>` per uncovered
+   -- value (distinct docs) + the bare `uncovered:` per-source total
+   -- (docs carrying any). No class name may carry a colon (load-time
+   -- guard); Query::KindCensus counts these apart from every head and
+   -- serves `nabu kind census --uncovered` from them (no facet scan).
 lect_stats(kind, key, documents, ...)
    -- P58 rider (migration 023): the precomputed lect census behind the
    -- language card's stage ladder — derived by Store::LectFacets in the
