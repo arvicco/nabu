@@ -61,5 +61,19 @@ module Adapters
       refs = conformance_adapter.discover(FIXTURES).to_a
       assert_equal 1, refs.size, "the quote-bearing dir-less row and the empty zukan material skip cleanly, no crash"
     end
+
+    # The material's real translations/ dir (<page>_en.txt / <page>_ja.txt)
+    # is the platform's LLM-generated rendering layer — declined, never
+    # ingested: no passage may carry its English, and the page count stays
+    # the transcription's own.
+    def test_machine_translation_layer_is_declined
+      assert_equal 2, document.passages.size
+      refute(document.passages.any? { |passage| passage.text.include?("Table of Contents") },
+             "the translations/ layer must never leak into the transcription passages")
+      assert File.directory?(File.join(document.canonical_path, "translations")),
+             "the fixture carries the real layer, so the decline is actually exercised"
+      reason = Nabu::Adapters::Honkoku::DECLINED_LAYERS.fetch("translations")
+      assert_includes reason, "large language model"
+    end
   end
 end

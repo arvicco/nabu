@@ -1032,6 +1032,10 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   honkoku:   # P108-5
+    # The v3 translations/ layer (55,441 en + 55,915 modern-ja pages) is
+    # DECLINED: the platform's large-language-model output, unattributable
+    # (evidence in the adapter header, Honkoku::DECLINED_LAYERS). Zero
+    # translation documents by design.
     kind: {posture: unclassified, note: per-material genre lives in project labels/prose —
         a future facet look over the project taxonomy}
     lect: {posture: identity, note: jpn declared honest-coarse — the mass is largely Edo
