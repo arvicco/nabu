@@ -1220,5 +1220,42 @@ module Store
       assert_report report, skipped: 1
       assert_equal passages_before, snapshot(Nabu::Store::Passage)
     end
+
+    # -- the bulk write path ---------------------------------------------
+    # A document's passages land as multi-row INSERTs (ids read back via
+    # RETURNING), not one statement per row; the persisted bytes are pinned
+    # separately by LoaderEquivalenceTest.
+
+    def passage_insert_statements
+      io = StringIO.new
+      @db.loggers << Logger.new(io)
+      yield
+      @db.loggers.clear
+      io.string.lines.count { |line| line.include?("INSERT INTO `passages`") }
+    end
+
+    def test_new_document_passages_insert_as_one_statement
+      document = build_document("many", (1..40).map { |i| [i.to_s, "λόγος #{i}"] })
+
+      statements = passage_insert_statements { @loader.load([document]) }
+
+      assert_equal 1, statements
+      assert_equal 40, Nabu::Store::Passage.where(withdrawn: false).count
+      # Ids follow passage order, exactly as one-at-a-time inserts minted them.
+      assert_equal (1..40).map { |i| "#{doc_urn('many')}:#{i}" },
+                   Nabu::Store::Passage.order(:id).select_map(:urn)
+    end
+
+    # Huge passages split the multi-row INSERT by bytes as well as rows,
+    # so no single statement grows without bound.
+    def test_the_bulk_insert_slices_by_bytes
+      big = "λ" * (Nabu::Store::Loader::INSERT_SLICE_BYTES / 4)
+      document = build_document("big", (1..6).map { |i| [i.to_s, "#{big}#{i}"] })
+
+      statements = passage_insert_statements { @loader.load([document]) }
+
+      assert_operator statements, :>, 1
+      assert_equal 6, Nabu::Store::Passage.count
+    end
   end
 end
