@@ -57,6 +57,14 @@ module Nabu
         MANIFEST
       end
 
+      # The p person ids on the index markup project into the "goryeosa"
+      # person-index slice at sync and rebuild (Nabu::NikhPersons).
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::NikhPersons::Producer.new(catalog: catalog, authority: MANIFEST.id)
+      end
+
       # +resolver+/+zip_fetch_factory+ exist for the tests (no network in
       # the suite, ever); no-arg construction stays the registry contract.
       # P79-2: the data.go.kr resolver posture (see Sillok) — resolve the
@@ -154,7 +162,7 @@ module Nabu
       end
 
       def parser
-        @parser ||= NikhXmlParser.new
+        @parser ||= NikhXmlParser.new(entities: true)
       end
 
       def build_document(document_ref, volume)
@@ -182,7 +190,7 @@ module Nabu
             "title" => leaf.title, "date" => leaf.date_raw,
             "subject_classes" => (leaf.subject_classes unless leaf.subject_classes.empty?),
             "sources" => (leaf.sources unless leaf.sources.empty?)
-          }.compact
+          }.compact.merge(leaf.entities)
         )
       end
     end

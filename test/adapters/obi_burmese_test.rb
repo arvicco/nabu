@@ -15,6 +15,8 @@ class ObiBurmeseTest < Minitest::Test
   NO3A = "urn:nabu:obi-burmese:vol7:3a:ob:p6"
   NO36 = "urn:nabu:obi-burmese:vol7:36:p121"
   NO19B = "urn:nabu:obi-burmese:vol7:19b:re:p59"
+  NO207 = "urn:nabu:obi-burmese:vol3:207:re:p337"
+  NO74 = "urn:nabu:obi-burmese:vol1:74:ob:p118"
 
   def conformance_adapter = Nabu::Adapters::ObiBurmese.new
 
@@ -37,8 +39,38 @@ class ObiBurmeseTest < Minitest::Test
     assert_equal "obi-txt", manifest.parser_family
   end
 
+  # The header place/reference/subject block: PLACE OF ORIGIN feeds the
+  # place lane (a named findspot claim), CURRENT LOCATION / REFERENCES /
+  # SUBJECT ride metadata verbatim, the BED concordance ids lift out of
+  # REFERENCES, SUBJECT facets.
+  def test_header_places_references_and_subject_ride_metadata
+    metadata = adapter.parse(ref_for(NO207)).metadata
+    assert_equal "Mt. Tuyin, Bagan", metadata["place_of_origin"]
+    assert_equal "Mandalay Palace stone 362", metadata["current_location"]
+    assert_equal "IOB4-448/c BED B 623-1; Pl. II 201b; OBI 3, p. 3; List 255; A, p. 79",
+                 metadata["references"], "verbatim (the tab separator collapses like every header value)"
+    assert_equal ["BED B 623-1"], metadata["bed_ids"]
+    assert_equal "ded. of serfs and cattle; ded. of serfs, altogether 17 persons", metadata["subject"]
+  end
+
+  def test_bilingual_place_values_split_like_every_header_pair
+    metadata = adapter.parse(ref_for("urn:nabu:obi-burmese:vol6:10:ob:p16")).metadata
+    assert_equal "ရွှေကြက်ယက်မုဌောဘုရား", metadata["place_of_origin"]
+    assert_equal "rvhekrakʻyakʻmuṭho pagoda", metadata["place_of_origin_translit"]
+    assert_equal "rvhekrakʻyakʻmuṭho pagoda inscription", metadata["title_translit"]
+    assert_match(/inscription room/, metadata["current_location_translit"])
+    assert_equal "OBI vol6 n°10 ob p16", metadata["ref"], "vol6 writes the ref key as OBI REF"
+  end
+
+  def test_upstream_unknown_marks_ride_verbatim
+    metadata = adapter.parse(ref_for(NO74)).metadata
+    assert_equal "?", metadata["place_of_origin"], "the claim rides; the place lane mints nothing for it"
+    assert_equal "?", metadata["subject"]
+    assert_equal ["BED B 579-1"], metadata["bed_ids"]
+  end
+
   def test_discover_mints_face_grain_urns_from_the_three_filename_shapes
-    assert_equal ["urn:nabu:obi-burmese:vol6:10:ob:p16", NO19B, NO36, NO3A],
+    assert_equal [NO74, NO207, "urn:nabu:obi-burmese:vol6:10:ob:p16", NO19B, NO36, NO3A],
                  adapter.discover(workdir).map(&:id),
                  "vol:number[:face]:page — the page is identity (faces span pages " \
                  "upstream); the face-less three-underscore shape included"

@@ -188,12 +188,74 @@ module Nabu
         document
       end
 
-      # census.tsv column → the dataset's own column header.
+      # census.tsv column → the dataset's own column header. シリーズタイトル
+      # (series title — 11,119 of the 97,731 rows) and 容量・大きさ
+      # (physical extent — 29,138) joined 2026-10-18; a held census.tsv
+      # whose header predates a column re-derives from the held xlsx at
+      # the next fetch (#ensure_census!). Still unread, declared: 版表示
+      # (edition statement), 識別子（ISBN） (empty for these prints) and
+      # the 公開範囲/権利区分注記 access columns (the 権利区分 filter is
+      # applied at derivation).
       CENSUS_COLUMNS = {
         "title" => "タイトル", "volume" => "巻次又は部編番号", "author" => "著者",
         "publisher" => "出版者", "pub_date" => "出版日", "w3cdtf" => "出版日（W3CDTF）",
-        "subject" => "件名", "collection" => "コレクション"
+        "subject" => "件名", "collection" => "コレクション",
+        "series" => "シリーズタイトル", "extent" => "容量・大きさ"
       }.freeze
+
+      # The census.tsv header the current CENSUS_COLUMNS derive.
+      CENSUS_HEADER = ["pid", *CENSUS_COLUMNS.keys].join("\t").freeze
+
+      # A trailing role token on one 著者 part ("藤原基経 編", "春常 画",
+      # "顕真 [著]" — the bracket is the cataloguer's supplied-role mark,
+      # kept verbatim): a closed vocabulary of single role words. Tails
+      # carrying "et al." or decree furniture (等奉敕撰, [ほか編], [等編])
+      # and the rarer composites DELIBERATELY do not split — the name
+      # stays whole rather than guessed apart.
+      AUTHOR_ROLE = /\A\[?(?:編|画|畫|著|作|撰|校|輯|述|補|注|註|訳|譯|記|筆|録|書|集|纂|閲|訂|解|評|稿|誌|
+                          編輯|編纂|著述|輯録|纂輯|口授|戯作|増補|作・画)\]?\z/x
+
+      # One ||-separated 著者 part → {"name" => …, "role" => …}; a part
+      # without a recognized trailing role token is the whole name.
+      # Comma-joined co-authors ("小島好謙, 鈴木世孝 [編]") stay one name
+      # string — the conservative split touches only the trailing token.
+      def self.author_part(part)
+        value = Normalize.nfc(part.to_s.strip)
+        tokens = value.split(/[[:space:]]+/)
+        return { "name" => value } unless tokens.size > 1 && tokens.last.match?(AUTHOR_ROLE)
+
+        { "name" => value.sub(/[[:space:]]+#{Regexp.escape(tokens.last)}\z/, ""), "role" => tokens.last }
+      end
+
+      # The derived census.tsv as {pid => {column => value}} ({} when the
+      # file is absent). Public: the honkoku catalog join reads the same
+      # rows (Nabu::HonkokuNdlCatalog).
+      def self.census_table(path)
+        return {} unless File.file?(path)
+
+        header = nil
+        File.foreach(path).each_with_object({}) do |line, rows|
+          values = line.chomp.split("\t", -1)
+          (header = values) && next if header.nil?
+
+          rows[values[0]] = header.zip(values).to_h
+        end
+      end
+
+      # Every 4-digit year in the ||-separated W3CDTF value joins the
+      # envelope; the bare unknown-date sentinel mints nothing; the
+      # prose 出版日 is the raw.
+      def self.date_envelope(bib)
+        value = bib["w3cdtf"].to_s.strip
+        return nil if value.empty? || value == DATE_SENTINEL
+
+        years = value.scan(/\b(\d{4})\b/).flatten.map { |year| Integer(year, 10) }
+        return nil if years.empty?
+
+        raw = bib["pub_date"].to_s.strip
+        { "not_before" => years.min, "not_after" => years.max,
+          "raw" => raw.empty? ? value : Normalize.nfc(raw) }
+      end
 
       private
 
@@ -207,7 +269,14 @@ module Nabu
           downloaded = Nabu::UrlDownload.new.fetch(CENSUS_URL, dir: workdir)
           FileUtils.mv(downloaded, xlsx) unless downloaded == xlsx
         end
-        derive_census!(xlsx, tsv) unless File.file?(tsv)
+        derive_census!(xlsx, tsv) unless File.file?(tsv) && census_current?(tsv)
+      end
+
+      # A census.tsv derived before a CENSUS_COLUMNS addition lacks the
+      # new columns — re-derived offline from the held xlsx (the xlsx is
+      # the dated snapshot; the TSV is the declared materialization).
+      def census_current?(tsv)
+        File.open(tsv, &:gets).to_s.chomp == CENSUS_HEADER
       end
 
       def derive_census!(xlsx, tsv)
@@ -385,20 +454,7 @@ module Nabu
       # process — discover + parse must not re-read per document).
       def census_row(workdir, pid)
         @census ||= {}
-        @census[workdir] ||= begin
-          path = File.join(workdir, CENSUS_TSV)
-          if File.file?(path)
-            header = nil
-            File.foreach(path).each_with_object({}) do |line, rows|
-              values = line.chomp.split("\t", -1)
-              (header = values) && next if header.nil?
-
-              rows[values[0]] = header.zip(values).to_h
-            end
-          else
-            {}
-          end
-        end
+        @census[workdir] ||= self.class.census_table(File.join(workdir, CENSUS_TSV))
         @census[workdir][pid] || {}
       end
 
@@ -413,40 +469,33 @@ module Nabu
           "permalink" => "https://dl.ndl.go.jp/pid/#{pid}",
           "koma_count" => Array(book["list"]).size
         }
-        %w[author publisher pub_date collection].each do |key|
+        %w[author publisher pub_date collection series extent].each do |key|
           value = bib[key].to_s.strip
           metadata[key] = Normalize.nfc(value) unless value.empty?
         end
-        date = date_envelope(bib)
+        parts = bib["author"].to_s.split("||").reject { |part| part.strip.empty? }
+        metadata["authors"] = parts.map { |part| self.class.author_part(part) } unless parts.empty?
+        date = self.class.date_envelope(bib)
         metadata["date"] = date if date
         facets = facets_for(bib)
         metadata["facets"] = facets unless facets.empty?
         metadata
       end
 
-      # Every 4-digit year in the ||-separated W3CDTF value joins the
-      # envelope; the bare unknown-date sentinel mints nothing; the
-      # prose 出版日 is the raw.
-      def date_envelope(bib)
-        value = bib["w3cdtf"].to_s.strip
-        return nil if value.empty? || value == DATE_SENTINEL
-
-        years = value.scan(/\b(\d{4})\b/).flatten.map { |year| Integer(year, 10) }
-        return nil if years.empty?
-
-        raw = bib["pub_date"].to_s.strip
-        { "not_before" => years.min, "not_after" => years.max,
-          "raw" => raw.empty? ? value : Normalize.nfc(raw) }
-      end
-
       # Both 件名 and コレクション are ||-multi (the dataset's own
-      # separator — the first slice fused a two-collection value).
+      # separator — the first slice fused a two-collection value);
+      # シリーズタイトル is the series facet (no || value censused, split
+      # all the same), and the 著者 parts' names facet as author (the
+      # role split off — see .author_part).
       def facets_for(bib)
         facets = {}
-        %w[subject collection].each do |key|
+        %w[subject collection series].each do |key|
           values = bib[key].to_s.split("||").map { |value| Normalize.nfc(value.strip) }.reject(&:empty?)
           facets[key] = { "values" => values } unless values.empty?
         end
+        names = bib["author"].to_s.split("||").reject { |part| part.strip.empty? }
+                                              .map { |part| self.class.author_part(part)["name"] }.uniq
+        facets["author"] = { "values" => names } unless names.empty?
         facets
       end
 

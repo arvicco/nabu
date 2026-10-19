@@ -84,6 +84,20 @@ class ItkcTest < Minitest::Test
     assert_equal "ITKC_BT_1550A_0010_000_0010", first.annotations["translation_ref"]
   end
 
+  # The sidecar's author life years + classifications ride every fascicle
+  # document of the work.
+  def test_the_work_record_carries_author_life_years_and_classifications
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:itkc:gp-1550a-0010" }
+    metadata = adapter.parse(ref).metadata
+    assert_equal [{ "name" => "柳得恭", "name_hangul" => "유득공", "birth_year" => 1748,
+                    "death_year" => 1807, "birth" => "영조 24", "death" => "순조 7" }], metadata["authors"]
+    assert_equal "문집", metadata["subject_class"]
+    assert_equal "집부(集部)", metadata["sabu_division"]
+    assert_equal "별집류(別集類)", metadata["sabu_class"]
+    go = adapter.parse(adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:itkc:go-1295a-0010" })
+    assert_equal %w[역사 편년류(編年類)], go.metadata.values_at("subject_class", "sabu_class")
+  end
+
   def test_the_go_work_parses_with_its_own_print_year
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:itkc:go-1295a-0010" }
     document = adapter.parse(ref)

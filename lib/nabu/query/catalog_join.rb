@@ -327,7 +327,44 @@ module Nabu
       # case-insensitively (`--type epitaph` and `--type titsep?` both work;
       # LIKE patterns pass through, the --place semantics). A document with
       # no facet row falls out under an active filter — honest absence.
+      #
+      # A facet NAME is one axis across both grains: when the passage facet
+      # surface carries the name too, the filter also admits the passages
+      # tagged with it (#passage_facet_in) — OR'd with the document lane
+      # when both grains carry the name, alone when only passages do. The
+      # grain probes are two index-backed LIMIT 1 reads per active facet,
+      # re-read every call (a long-lived searcher sees a builder refresh).
       def facet_exists(facet, pattern)
+        return document_facet_exists(facet, pattern) unless passage_facet_name?(facet)
+
+        passage = passage_facet_in(facet, pattern)
+        return passage if @catalog[:document_facets].where(facet: facet.to_s).empty?
+
+        Sequel.|(document_facet_exists(facet, pattern), passage)
+      end
+
+      # The passage grain: passages.id IN the pairs of every dictionary
+      # value under +facet+ whose value OR authority ref matches +pattern+
+      # (the value/raw semantics of the document lane). The pattern scans
+      # only the distinct-value dictionary; the pairs answer by their
+      # (value_id, passage_id) primary key — never a scan of the tag rows.
+      def passage_facet_in(facet, pattern)
+        value_ids = @catalog[:passage_facet_values]
+                    .where(facet: facet.to_s)
+                    .where(Sequel.ilike(:value, pattern) | Sequel.ilike(:ref, pattern))
+                    .select(:id)
+        Sequel.expr(Sequel[:passages][:id] => @catalog[:passage_facets].where(value_id: value_ids)
+                                                                       .select(:passage_id))
+      end
+
+      # Does the passage facet surface carry +facet+? False on a catalog
+      # predating it (the lane simply stays document-grain).
+      def passage_facet_name?(facet)
+        @catalog.table_exists?(:passage_facet_values) &&
+          !@catalog[:passage_facet_values].where(facet: facet.to_s).empty?
+      end
+
+      def document_facet_exists(facet, pattern)
         facets = Sequel[:document_facets]
         @catalog[:document_facets]
           .where(facets[:document_id] => Sequel[:documents][:id], facets[:facet] => facet.to_s)

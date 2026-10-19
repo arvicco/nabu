@@ -1,0 +1,32 @@
+OBI CORPUS REF: OBI vol1 n°74 ob p118
+INFORMATION SOURCE: ရှေးဟောင်းမြန်မာကျောက်စာများ ပထမတွဲ (ရှေးဟောင်းသုတေသနဦးစီးဌာန၊ ၁၉၇၂)။ N.A. Ancient Burmese Inscriptions Volume 1. Rangoon: Archaeological Directorate, 1972.; Tilman Frasch. Bagan Epigraphic Database. 2013.
+VOLUME: 1
+PART: A
+INSCRIPTION NUMBER: 74
+PAGE NUMBER: 118
+NUMBER OF FACES: 1
+FACE: obverse
+LANGUAGE: 
+INSCRIPTION SOURCE: 
+PLACE OF ORIGIN:  ?
+CURRENT LOCATION:   from Amarapura, stone lost
+REFERENCE NUMBER: 
+REFERENCES: IOB1-118/b 	BED B 579-1; Pl. II 118a; OBI 1, p. 118
+TITLE: ဖုန်းသည် သင်္ဃာကျောက်စာ ¤ phunʻḥsaññʻ saṅʻghā inscription
+DATE: CS 57(9) = CE 12(17)	 CS 57(9) = CE 1217
+DONOR:  Saṅghathera
+SUBJECT:  ?
+LENGTH: 
+NOTES: (အမရပူရမြို့ ပုထိုးတော်ကြီးအရံအတွင်း၌တဆင့်ပြောင်းရွှေ့ထားပြီးယခုပျောက်နေသည်) ¤ The inscription is now inside the old brick building southeast corner of Min Nan Thu Sha Sin Phyu Shin Pagoda in Bagan. fragmentary
+FOOTNOTES: 
+127 တိုင်းရင်း-ပ-၁၁၈/ခ။  ¤ IOB1-118/b 
+128 ဤကျောက်စာသည် အပိုင်းအစဖြစ်၍့ စာကြောင်းမည်မျှရှိသည် မသိသာ။  ¤  This inscription is fragmented and it is not known how many lines it contains.
+INSCRIPTION: 
+၁	။ 𝚘 ။ သကရစ်။ ၅၇(၉) . .
+¤ 1	|| 𝚘 || sakaracʻ|| 57(9) . .
+၂	ယ်နှစ်။ နံယုန်လဆန် ၁၁ ရျ .
+¤ 2	yʻnhacʻ|| naṃyunʻlachanʻ 11 rya .
+၃	. နိယ် နံနက်။ ဖုန်သည်သင်္ဃာ . . <ftn>127</ftn> <ftn>128</ftn>
+¤ 3	. niyʻ naṃnakʻ|| phunʻsaññʻsaṅʻghā . . <ftn>127</ftn> <ftn>128</ftn>
+FULL TRANSLITERATION:
+|| 𝚘 || sakaracʻ|| 57(9) . .yʻnhacʻ|| naṃyunʻlachanʻ 11 rya .. niyʻ naṃnakʻ|| phunʻsaññʻsaṅʻghā . . <ftn>127</ftn> <ftn>128</ftn>

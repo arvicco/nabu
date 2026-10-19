@@ -32,7 +32,7 @@ class BibyeonsaTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_book_file
     refs = adapter.discover(FIXTURES).to_a
-    assert_equal %w[urn:nabu:bibyeonsa:bb_001 urn:nabu:bibyeonsa:bb_054],
+    assert_equal %w[urn:nabu:bibyeonsa:bb_001 urn:nabu:bibyeonsa:bb_054 urn:nabu:bibyeonsa:bb_248],
                  refs.map(&:id).sort
   end
 
@@ -89,6 +89,14 @@ class BibyeonsaTest < Minitest::Test
     annotations = adapter.parse(ref).first.annotations
     assert_equal "肅宗 30년(1704) 1월 좌목", annotations["title"]
     assert_equal "1704-01-00L0", annotations["date"], "bibyeonsa's dateOccured carries NO type attr — date only"
+  end
+
+  def test_passage_annotations_carry_the_person_tags_with_their_pid
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:bibyeonsa:bb_248" }
+    passage = adapter.parse(ref).first
+    assert_equal [{ "value" => "朴彭年", "ref" => "nikh:p16_000058_00" }], passage.annotations["persons"],
+                 "the double-tagged mention is one record carrying the inner tag's person pid"
+    assert_includes passage.text, "忠貞公 朴彭年 , 景獻公", "the text keeps upstream's flattened spacing"
   end
 
   # --- fetch (rigged — no network in tests, ever) ---------------------------

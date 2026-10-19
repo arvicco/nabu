@@ -123,11 +123,13 @@ module Nabu
 
       def parse(document_ref)
         text_id = File.basename(document_ref.path)
+        workdir = File.dirname(document_ref.path)
         MandokuParser.new.parse(
           document_ref.path,
           urn: document_ref.id,
           text_id: text_id,
-          facets: catalog_facets(File.dirname(document_ref.path), text_id)
+          facets: catalog_facets(workdir, text_id),
+          catalog_metadata: catalog_persons(workdir, text_id)
         )
       end
 
@@ -145,6 +147,42 @@ module Nabu
       rescue Nabu::Shell::Error, KanripoFetch::Error => e
         raise Nabu::FetchError, "kanripo fetch failed into #{workdir}: #{e.message}"
       end
+
+      # The KR-Catalog 人物 blocks as document metadata — METADATA ONLY,
+      # never a person-index authority: the blocks key texts (one block per
+      # text attribution, no person ids; the same person recurs as
+      # unrelated blocks under every text naming him), so they are not a
+      # personography. Census over the live catalog, 2026-10-18: 10,480
+      # text-level blocks across 8,521 entries, plus 276 under an
+      # appendix/edition heading; on HELD texts 5,202 blocks (4,950
+      # text-level) across 4,119 texts. The reader is KanripoDates' own
+      # (one grammar, two views).
+      #
+      #   "persons" => [{"name", "role" (the :FUNCTION: values, verbatim,
+      #     "、"-joined when a drawer repeats it), "dynasty", "dates" (the
+      #     :DATES: string verbatim), "zi"/"hao"/"alias"/"cert", "part"
+      #     (the appendix/edition heading for blocks outside the text's
+      #     own byline)}] — byline order, absent keys omitted;
+      #   "authors"/"editors"/"commentators" — the TEXT-LEVEL byline names
+      #     whose role falls in a family below, flat arrays for the facet
+      #     lane (config/facet_map.yml). Appendix/edition blocks stay in
+      #     "persons" only: their 撰 authored the appendix or a variant
+      #     edition, not the text the document serves.
+      #
+      # The role families are exact-match tables over the censused
+      # :FUNCTION: vocabulary on held texts (275 distinct values); the long
+      # tail (撰校勘記, 刪定, 序, 跋 …) stays persons-only, verbatim.
+      AUTHOR_ROLES = %w[撰 奉敕撰 敕撰 等奉勅撰 等撰 原撰 御撰 續撰 刪撰 撰著 編撰 著 御製].freeze
+      EDITOR_ROLES = %w[編 奉敕編 敕編 編纂 輯 輯編 奉敕纂 纂 重編 續編 原編 合編 同輯 奉敕輯
+                        輔輯 編校 補編 纂修 等輯 編選 編次 纂集 增輯 續輯 續纂 初編 原輯 彙集
+                        輯錄 蒐錄 奉敕續編 奉敕重編].freeze
+      COMMENTATOR_ROLES = %w[注 註 疏 箋 傳 解 集解 補注 音義 集注 集註 箋注 箋註 御注 重添注
+                             評註 注釋 註釋 校注 增注 音釋 解詁 義疏 原注 原註 次注 續注 補註
+                             纂註 定註 奉詔注 指解 箋解 輯注 索隱 正義 詁訓 衍義 釋文].freeze
+      ROLE_FIELDS = { "authors" => AUTHOR_ROLES, "editors" => EDITOR_ROLES,
+                      "commentators" => COMMENTATOR_ROLES }.freeze
+      PERSON_PROPS = { "DYNASTY" => "dynasty", "DATES" => "dates", "ZI" => "zi", "HAO" => "hao",
+                       "ALIAS" => "alias", "CERT" => "cert" }.freeze
 
       # The KR-Catalog index grammars (P109-5): division headings and
       # subclass link lines in KR-Catalog/KR/KR<n>.txt.
@@ -187,6 +225,34 @@ module Nabu
           end
           labels
         end
+      end
+
+      # The KR-Catalog person blocks for one text (constants above).
+      def catalog_persons(workdir, text_id)
+        @catalog_persons ||= {}
+        index = @catalog_persons[workdir] ||= Store::TimelineBuilder::KanripoDates.persons_by_text(
+          File.join(workdir, "KR-Catalog", "KR")
+        )
+        blocks = index[text_id] or return nil
+
+        metadata = { "persons" => blocks.map { |block| person_metadata(block) } }
+        ROLE_FIELDS.each do |field, roles|
+          names = blocks.select { |block| block[:part].nil? && block[:functions].intersect?(roles) }
+                        .map { |block| Normalize.nfc(block[:name]) }.uniq
+          metadata[field] = names unless names.empty?
+        end
+        metadata
+      end
+
+      def person_metadata(block)
+        person = { "name" => Normalize.nfc(block[:name]) }
+        person["role"] = Normalize.nfc(block[:functions].join("、")) unless block[:functions].empty?
+        PERSON_PROPS.each do |prop, key|
+          value = block[:props][prop].to_s
+          person[key] = Normalize.nfc(value) unless value.empty?
+        end
+        person["part"] = Normalize.nfc(block[:part]) if block[:part]
+        person
       end
 
       # Test seams (the UD repo_url precedent): fetch tests point these at

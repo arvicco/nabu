@@ -8,9 +8,9 @@ files:
     url: https://raw.githubusercontent.com/kokubunken/kokinwakashu/main/Kokinwakashu_200003050_20240922.xml
     refetchable: true
     whole: false
-    trim: real header + the 仮名序 + the first two 和歌 divs, balanced close
+    trim: real header + the 仮名序 + the first two 和歌 divs, balanced close; back keeps only listPerson with 5 real records (藤原定家, 安倍清行, 在原元方, 紀貫之, 伊勢 — added 2026-10-18)
   - path: "manyo_hirose_v06_0001-0234,3348-3577_202603.xml"
     url: "https://raw.githubusercontent.com/kokubunken/nijl-manyoshuTEI/main/manyo_hirose_v06_0001-0234,3348-3577_202603.xml"
     refetchable: true
     whole: false
-    trim: real header + front matter + poems 1-4, balanced close
+    trim: real header + front matter + poems 1-4, balanced close; back keeps only listPerson with 4 real records (雄略天皇, 舒明天皇, 中皇命, 持統天皇 — added 2026-10-18)

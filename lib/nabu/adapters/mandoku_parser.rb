@@ -206,16 +206,20 @@ module Nabu
       # Parse the text directory at +dir+ into one Document. +urn+ is the
       # document urn the adapter minted; +text_id+ the KR id (names the
       # per-juan files).
-      def parse(dir, urn:, text_id:, facets: nil)
+      # +catalog_metadata+: extra document metadata the adapter mined from
+      # outside the juan files (Kanripo's KR-Catalog person blocks),
+      # merged over the header-derived keys.
+      def parse(dir, urn:, text_id:, facets: nil, catalog_metadata: nil)
         files = juan_files(dir, text_id)
         raise ParseError, "#{dir}: no #{text_id}_*.txt juan files" if files.empty?
 
         headers = read_headers(files)
         state = collect_pages(files, urn: urn, text_id: text_id, witness: headers["witness"])
+        metadata = document_metadata(text_id, headers, state[:scheme], facets)
+        metadata.merge!(catalog_metadata) if catalog_metadata
         document = Nabu::Document.new(
           urn: urn, language: LANGUAGE, canonical_path: File.expand_path(dir),
-          title: headers["title"],
-          metadata: document_metadata(text_id, headers, state[:scheme], facets)
+          title: headers["title"], metadata: metadata
         )
         state[:passages].each { |passage| document << passage }
         document

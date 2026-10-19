@@ -57,12 +57,14 @@ module Nabu
       timeline: "timeline",
       facets: "facets",
       kind_axis: "kind axis",             # P99: the kind projection + stats
+      passage_facets: "passage facets",   # the passage-grain facet projection
       hiero_postings: "hiero postings",   # P103: the AED per-text glyph census
       lect_journal: "lect journal",       # P70: the re-minted lect journal
       lect_facets: "lect facets",         # P58-4: the flattened lect axis
       dictionary_stats: "dictionary stats", # P106-1: the dictionary-group census
       derge_titles: "derge titles", # P106-5: the 84000→Derge title crosswalk
       aes_titles: "aes titles", # the AES <- AED per-text header titles
+      honkoku_ndl_catalog: "honkoku ndl catalog", # the honkoku <- NDL catalog-record join
       artifact_scripts: "artifact scripts", # P61-3: the artifact-script lane
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",

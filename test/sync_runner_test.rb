@@ -345,6 +345,30 @@ class SyncRunnerTest < Minitest::Test
     end
   end
 
+  # --- the honkoku <- NDL catalog join -------------------------------------
+
+  # A sync of EITHER side re-merges the NDL record onto honkoku rows and
+  # re-projects honkoku's metadata-date slice behind it (an ndl-kotenseki
+  # sync never refreshes honkoku's slices on its own); other slugs no-op.
+  def test_an_ndl_sync_rejoins_honkoku_and_reprojects_its_dates
+    honkoku = Nabu::Store::Source.create(slug: "honkoku", name: "h", adapter_class: "X",
+                                         license_class: "attribution")
+    doc = Nabu::Store::Document.create(
+      source_id: honkoku.id, urn: "urn:nabu:honkoku:p:m", language: "jpn", content_sha256: "h", revision: 1,
+      metadata_json: JSON.generate("manifest" => "https://dl.ndl.go.jp/api/iiif/2532153/manifest.json")
+    )
+    File.symlink(File.join(Nabu::TestSupport::FIXTURES_ROOT, "ndl-kotenseki"), File.join(@canonical, "ndl-kotenseki"))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    runner.send(:refresh_honkoku_ndl_catalog, entry("breaker", BreakerAdapter, wired: true))
+    assert_nil JSON.parse(@db[:documents].where(id: doc.id).get(:metadata_json))["ndl_catalog"],
+               "an unrelated sync touches nothing"
+
+    runner.send(:refresh_honkoku_ndl_catalog, entry("ndl-kotenseki", BreakerAdapter, wired: true))
+    assert_equal "2532153", JSON.parse(@db[:documents].where(id: doc.id).get(:metadata_json))["ndl_catalog"]["pid"]
+    assert_equal [1605, 1605], @db[:document_axes].where(document_id: doc.id).get(%i[not_before not_after])
+  end
+
   # --- post-load ANALYZE (P42-4) ------------------------------------------
 
   # The trigger is the changed-row count (added + updated + withdrawn) against
@@ -436,6 +460,23 @@ class SyncRunnerTest < Minitest::Test
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
     make_runner(registry(entry("breaker", BreakerAdapter, wired: true))).sync("breaker", parse_only: true)
     assert_equal %w[grc grc], @db[:language_mix].order(:urn).select_map(:languages)
+  end
+
+  # The passage-grain facet slice follows a changed load: a source the
+  # shipped facet_map does not rule for passage_fields drops any stale
+  # slice it carried (the refresh is wholesale per source).
+  def test_sync_refreshes_the_passage_facet_slice
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker", parse_only: true)
+    source_id = @db[:sources].where(slug: "breaker").get(:id)
+    value_id = @db[:passage_facet_values].insert(source_id: source_id, facet: "subject", value: "stale")
+    @db[:passage_facets].insert(value_id: value_id, passage_id: @db[:passages].get(:id))
+
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner.sync("breaker", parse_only: true)
+    assert_equal 0, @db[:passage_facet_values].count
+    assert_equal 0, @db[:passage_facets].count
   end
 
   def test_parse_only_keeps_prior_last_sync_sha

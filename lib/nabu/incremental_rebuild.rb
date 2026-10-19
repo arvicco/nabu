@@ -228,6 +228,12 @@ module Nabu
       # builders digest re-runs the corpus builders even when every source
       # is clean; the sentinel then records the code they just ran as.
       builders_ran = outcomes.any? || builders_dirty?(db)
+      if builders_ran
+        # The honkoku <- NDL catalog join re-merges onto replayed honkoku
+        # rows (or a re-derived census) BEFORE the builders project it.
+        progress&.stage("honkoku ndl catalog")
+        HonkokuNdlCatalog.new(catalog: db, canonical_dir: @config.canonical_dir).run
+      end
       axes, facets = corpus_builders(db, progress) if builders_ran
       if builders_ran
         Store::DerivationStamp.stamp_builders!(
@@ -562,6 +568,8 @@ module Nabu
       progress&.stage("kind axis")
       Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
                                   progress: progress, canonical_dir: @config.canonical_dir)
+      progress&.stage("passage facets")
+      Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       progress&.stage("hiero postings")
       Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
                                            progress: progress)

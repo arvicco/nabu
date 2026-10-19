@@ -2666,4 +2666,23 @@
                               <add place="right" rend="red" resp="#廣瀬本" type="仮名遣訂正">ヌ</add>
                            </subst>
                         </l>
-                     </lg></div></div></div></div></body></text></TEI>
+                     </lg></div></div></div></div></body>
+      <back>
+         <listPerson>
+            <person xml:id="雄略天皇">
+               <name>雄略天皇</name>
+            </person>
+            <person xml:id="舒明天皇">
+               <name>舒明天皇</name>
+            </person>
+            <person xml:id="中皇命">
+               <name>中皇命</name>
+            </person>
+            <person xml:id="持統天皇">
+               <name>持統天皇</name>
+               <name>沙羅羅大后</name>
+            </person>
+         </listPerson>
+      </back>
+   </text>
+</TEI>

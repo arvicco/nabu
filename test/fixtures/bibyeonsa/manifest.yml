@@ -22,6 +22,13 @@ files:
     reason: trimmed by whole-line cuts (level4 siblings 0030 onward + months 02-05
       removed, kept bytes verbatim) — the level1-rooted norm (숙종 30년 = 1704) with the
       year-attr level2, a 좌목 roster table leaf and the 비망기 entry leaf
+  - path: bb_248.xml
+    url: https://www.data.go.kr/data/15053636/fileData.do
+    whole: false
+    reason: re-cut 2026-10-18 from the box canonical member by whole-line cuts (13,453 →
+      62 lines, kept bytes verbatim) — 248책 (철종 12년 = 1861), the root/year/month
+      fronts and ONE 成均館 草記 leaf carrying upstream's double-tagged person mention
+      (an id-less <index> wrapping <index id="p16_000058_00">朴彭年</index>)
   - path: history.dtd
     url: https://www.data.go.kr/data/15053636/fileData.do
     whole: true

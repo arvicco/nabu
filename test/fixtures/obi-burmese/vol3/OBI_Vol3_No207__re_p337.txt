@@ -1,0 +1,27 @@
+OBI CORPUS REF: OBI vol3 n°207 re p337
+INFORMATION SOURCE: ဦးငြိမ်းမောင်၊ ရှေးဟောင်းမြန်မာကျောက်စာများ တတိယတွဲ (ရှေးဟောင်းသုတေသနဦးစီးဌာန၊ ၁၉၈၃)။ U Nyein Maung. Ancient Burmese Inscriptions Volume 3. Rangoon: Archaeological Directorate, 1983.; Tilman Frasch. Bagan Epigraphic Database. 2013.
+VOLUME: 3
+PART: 
+INSCRIPTION NUMBER: 207
+PAGE NUMBER: 337
+NUMBER OF FACES: 2
+FACE: reverse
+LANGUAGE: 
+INSCRIPTION SOURCE: 
+PLACE OF ORIGIN:  Mt. Tuyin, Bagan
+CURRENT LOCATION:   Mandalay Palace stone 362
+REFERENCE NUMBER: 
+REFERENCES: IOB4-448/c	BED B 623-1; Pl. II 201b; OBI 3, p. 3; List 255; A, p. 79
+TITLE: ငမလိုဝ်သင်ကျောက်စာ ¤ ṅamaluivʻsaṅʻ inscription
+DATE: CS 695 = CE 1333	 CS 623 = CE 1261
+DONOR:  Saṅgharājapaṇḍit and two rich persons
+SUBJECT:  ded. of serfs and cattle; ded. of serfs, altogether 17 persons
+LENGTH: 
+NOTES: (မန္တလေး မြို့နန်းတွင်းကျောက်စာရုံတွင် အမှတ် ၂၆၂ ဖြစ်သည်၊) ¤ No. 262 in Mandalay Royal Palace.
+FOOTNOTES: 
+371 တိုင်းရင်း-စ–၄၄၈/ဂ။  ¤ IOB4-448/c 
+INSCRIPTION: 
+၁	ငမလိုဝ်သင် ကိန်သေတည် <ftn>371</ftn>
+¤ 1	ṅamaluivʻsaṅʻ kinʻsetaññʻ <ftn>371</ftn>
+FULL TRANSLITERATION:
+ṅamaluivʻsaṅʻ kinʻsetaññʻ <ftn>371</ftn>

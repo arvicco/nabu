@@ -21,6 +21,14 @@ files:
     whole: false
     reason: Sunjong year 4 (1910) — the far end of the run, 일본연호 明治 in the year
       front, same article shape
+  - path: 2nd_F02.sjw.y.xml
+    url: https://www.data.go.kr/data/15064218/fileData.do
+    whole: false
+    reason: Yeongjo year 2 (1726), re-cut 2026-10-18 from the box canonical member by whole-line
+      cuts (196,753 → 77 lines) — the root front, the 05 month and 29th day fronts, and
+      ONE 晝講 article whose index tags carry every name shape the entity mining reads
+      (name= equal to the surface, differing from it, the 미결 sentinel, the person pid
+      id=, 서명 book tags with names, a bare 지명 place)
   - path: history.dtd
     url: https://www.data.go.kr/data/15064218/fileData.do
     whole: true

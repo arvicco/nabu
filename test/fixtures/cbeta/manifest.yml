@@ -67,3 +67,9 @@ files:
     retrieved: "2026-10-14"
     trim: teiHeader + body lb 0266a01..0268a04 (the first two cariyā sections, cRef in a head),
       back dropped, outer cb:div + body/text/TEI closed; 112.5 KB -> 8.4 KB
+  - path: T/T85/T85n2831.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T85/T85n2831.xml
+    whole: true
+    retrieved: "2026-10-18"
+    trim: none (complete short Taishō text, copied whole from the box's canonical tree at dbdea41;
+      empty header <author> beside a typed body byline cb:type="author" 釋菩提達摩製)

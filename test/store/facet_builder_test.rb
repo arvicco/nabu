@@ -124,6 +124,19 @@ module Store
       assert_equal %w[Egyptian Ugaritic], values
     end
 
+    # A dotted field reads one level into a nested metadata hash (a
+    # labeled cross-source record such as honkoku's "ndl_catalog").
+    def test_facet_map_dotted_field_reads_a_nested_hash
+      doc = make_document("urn:nabu:edh:hd000014",
+                          metadata: { "ndl_catalog" => { "author_names" => %w[夷福山人 広重] } })
+      Nabu::Store::FacetBuilder.rebuild!(catalog: @db, facet_map: facet_map("ndl_catalog.author_names" => "author"))
+      assert_equal %w[夷福山人 広重],
+                   @db[:document_facets].where(document_id: doc.id, facet: "author").order(:value).select_map(:value)
+      plain = make_document("urn:nabu:edh:hd000015", metadata: { "ndl_catalog" => "a bare string" })
+      Nabu::Store::FacetBuilder.rebuild!(catalog: @db, facet_map: facet_map("ndl_catalog.author_names" => "author"))
+      assert_empty @db[:document_facets].where(document_id: plain.id).all, "a non-hash parent mints nothing"
+    end
+
     def test_facet_map_skips_absent_empty_and_duplicate_values
       doc = make_document("urn:nabu:edh:hd000012",
                           metadata: { "corpus" => "", "languages" => ["Egyptian", "Egyptian", nil] })

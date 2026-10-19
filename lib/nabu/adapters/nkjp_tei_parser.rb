@@ -76,6 +76,10 @@ module Nabu
         {
           "title" => text_of(bibl.at_xpath("./title")),
           "author" => text_of(bibl.at_xpath("./author")),
+          # The translator of a translated work (korba: 322 headers, one
+          # per header — "Paweł Łęczycki", upstream's "Anonim"/"?" claims
+          # and "(tł. domn.)" attribution hedges all verbatim).
+          "translator" => text_of(bibl.at_xpath("./editor[@role='translator']")),
           "publisher" => text_of(bibl.at_xpath("./publisher")),
           "place" => text_of(bibl.at_xpath("./pubPlace[@role='place']")),
           "region" => text_of(bibl.at_xpath("./pubPlace[@role='region']")),

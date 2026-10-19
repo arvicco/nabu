@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../schema/current/translation.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="mainTitle" xml:lang="en">The Myth Chapter</title>
+                <title type="mainTitle" xml:lang="bo">གཏམ་རྒྱུད་ཀྱི་རྟོག་པ།</title>
+                <title type="mainTitle" xml:lang="Bo-Ltn">gtam rgyud kyi rtog pa</title>
+                <author role="translatorMain" xml:id="UT22084-083-019-1"><!--84000 Associate Translators--></author>
+                <author role="translatorEng" xml:id="UT22084-083-019-2">Bruno Galasek-Hul</author>
+                <editor role="projectEditor" xml:id="UT22084-083-019-14">Ryan Damron</editor>
+                <editor role="copyEditor" xml:id="UT22084-083-019-23">Dawn Collins</editor>
+                <editor role="projectEditor" xml:id="UT22084-083-019-33">Andreas Doctor</editor>
+                <editor role="TEImarkupEditor" xml:id="UT22084-083-019-44">Martina Cotter</editor>
+                <editor role="finalReviewer" xml:id="UT22084-083-019-142">Andreas Doctor</editor>
+            </titleStmt>
+            <editionStmt>
+                <edition>v 1.0.1 <date>2025</date>
+                </edition>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name>84000: Translating the Words of the Buddha</name> is a global
+                    non-profit initiative to translate all the Buddha’s words into modern languages,
+                    and to make them available to everyone. </publisher>
+                <availability status="1.a">
+                    <p type="tantricRestriction">
+                        <emph rend="bold">Warning:</emph> Readers are
+                        reminded that according to Vajrayāna Buddhist tradition there are
+                        restrictions and commitments concerning tantra. Practitioners who are not
+                        sure if they should read this translation are advised to consult the
+                        authorities of their lineage. The responsibility for reading this text or
+                        sharing it with others who may or may not fulfill the requirements lies in
+                        the hands of readers.</p>
+                    <licence>
+                        <graphic url="http://i.creativecommons.org/l/by-nc-nd/2.0/88x31.png"/>
+                        <p>This work is provided under the protection of a Creative Commons CC
+                            BY-NC-ND (Attribution - Non-commercial - No-derivatives) 3.0 copyright.
+                            It may be copied or printed for fair use, but only with full
+                            attribution, and not for commercial advantage or personal compensation.
+                            For full details, see the Creative Commons license.</p>
+                    </licence>
+                </availability>
+                <idno xml:id="UT22084-083-019"/>
+                <note>An early mistake in the assigning of UT numbers within the 84000 project means
+                    that these ids diverge slightly from the standard logic.</note>
+                <date>2025-01-20</date>
+            </publicationStmt>
+            <sourceDesc>
+                <bibl key="toh471" type="text">
+                    <ref>Toh 471</ref>
+                    <biblScope>Degé Kangyur, vol. 83 (rgyud, ja), folios 173.b–174.a</biblScope>
+                    <location work="UT4CZ5369" count-pages="2">
+                        <volume number="83" start-page="346" end-page="347"/>
+                    </location>
+                    <idno parent-id="O1JC114941JC21412" work="http://read.84000.co/sections"/>
+                    <idno source-id="O1JC114941JC12183" work="W22084"/>
+                </bibl>
+                <bibl key="toh2006" type="text">
+                    <ref>Toh 2006</ref>
+                    <biblScope>Degé Tengyur, vol. 47 (rgyud ’grel, mi), folios
+                        213.b–214.a</biblScope>
+                    <author xml:lang="Sa-Ltn" xml:id="UT22084-083-019-26">Tathāgata­rakṣita</author>
+                    <location work="UT23703" count-pages="2">
+                        <volume number="47" start-page="424" end-page="425"/>
+                    </location>
+                    <idno parent-id="O1JC76301JC21622" work="http://read.84000.co/sections"/>
+                    <idno source-id="O1JC76301JC8579" work="W23703"/>
+                </bibl>
+            </sourceDesc>
+            <notesStmt/>
+            <revisionDesc>
+                <change who="#admin" when="2019-12-20T12:56:48.575Z" type="text-version" status="v 0.0.1" xml:id="UT22084-083-019-3">
+                    <desc>Automated version increment</desc>
+                </change>
+                <change who="#line-tofte" when="2022-06-30T13:06:52.251Z" type="translation-status" status="3" xml:id="UT22084-083-019-4">
+                    <desc>3</desc>
+                </change>
+                <change who="#line-tofte" when="2022-06-30T13:06:52.251Z" type="text-version" status="0.0.2" xml:id="UT22084-083-019-5">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2022-06-30T13:07:28.729Z" type="text-version" status="0.0.3" xml:id="UT22084-083-019-6">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2023-05-11T07:52:23.328Z" type="translation-status" status="2.h" xml:id="UT22084-083-019-7">
+                    <desc>2.h</desc>
+                </change>
+                <change who="#line-tofte" when="2023-05-11T07:52:23.328Z" type="text-version" status="0.0.4" xml:id="UT22084-083-019-8">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#admin" when="2023-07-30T22:39:48.323Z" type="text-version" status="0.0.5" xml:id="UT22084-083-019-9">
+                    <desc>TEI migrated to 2.19.0</desc>
+                </change>
+                <change who="#line-tofte" when="2024-07-12T12:16:10.569Z" type="translation-status" status="2.g" xml:id="UT22084-083-019-10">
+                    <desc>2.g</desc>
+                </change>
+                <change who="#line-tofte" when="2024-07-12T12:16:10.569Z" type="text-version" status="0.0.6" xml:id="UT22084-083-019-11">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-07-12T12:16:43.788Z" type="text-version" status="0.0.7" xml:id="UT22084-083-019-15">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-07T14:14:59.263Z" type="translation-status" status="2.f" xml:id="UT22084-083-019-16">
+                    <desc>2.f</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-07T14:14:59.263Z" type="text-version" status="0.0.8" xml:id="UT22084-083-019-17">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-12T13:52:32.026Z" type="translation-status" status="2.e" xml:id="UT22084-083-019-18">
+                    <desc>2.e</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-12T13:52:32.026Z" type="text-version" status="0.0.9" xml:id="UT22084-083-019-19">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-12T13:53:12.139Z" type="text-version" status="0.0.10" xml:id="UT22084-083-019-24">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#celso" when="2024-08-12T15:51:51.999Z" type="text-version" status="0.0.11" xml:id="UT22084-083-019-25">
+                    <desc>merged with Toh 2006</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-30T11:32:41.842Z" type="translation-status" status="2.c" xml:id="UT22084-083-019-27">
+                    <desc>2.c</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-30T11:32:41.842Z" type="text-version" status="0.0.12" xml:id="UT22084-083-019-28">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-08-30T11:33:18.18Z" type="text-version" status="0.0.13" xml:id="UT22084-083-019-34">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-19T14:32:08.718Z" type="translation-status" status="2.b" xml:id="UT22084-083-019-35">
+                    <desc>2.b</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-19T14:32:08.718Z" type="text-version" status="0.0.14" xml:id="UT22084-083-019-36">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-26T08:58:08.667Z" type="translation-status" status="2.a" xml:id="UT22084-083-019-37">
+                    <desc>2.a</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-26T08:58:08.667Z" type="text-version" status="0.0.15" xml:id="UT22084-083-019-38">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-26T08:58:43.141Z" type="text-version" status="0.0.16" xml:id="UT22084-083-019-45">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-10-08T08:48:42.6Z" type="translation-status" status="2" xml:id="UT22084-083-019-134">
+                    <desc>2</desc>
+                </change>
+                <change who="#line-tofte" when="2024-10-08T08:48:42.6Z" type="text-version" status="0.0.2" xml:id="UT22084-083-019-135">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-20T09:36:10.815Z" type="text-version" status="0.0.3" xml:id="UT22084-083-019-143">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#martina-cotter" when="2025-01-20T15:46:51.657Z" type="translation-status" status="1.a" xml:id="UT22084-083-019-144">
+                    <desc>1.a</desc>
+                </change>
+                <change who="#martina-cotter" when="2025-01-20T15:46:51.657Z" type="text-version" status="1.0.0" xml:id="UT22084-083-019-145">
+                    <desc>First published version.</desc>
+                </change>
+                <change who="#martina-cotter" when="2025-02-12T21:10:42.81Z" type="text-version" status="1.0.1" xml:id="UT22084-083-019-146">
+                    <desc>typo in Sanskrit</desc>
+                </change>
+            </revisionDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <!--Note the "Contents" outline from the Word DOCX has not been included in the script. If the 
+                    Outline to the text is quite complex, it is recommended that you paste the outlined contents from the DOCX here as a comment for
+                    markup's reference. The actual table of contents will be generated in the Reading Room by the parser.-->
+        <front>
+            <div type="summary" xml:id="UT22084-083-019-summary">
+                <head type="summary" tid="1">Summary</head>
+                <milestone unit="chunk" xml:id="UT22084-083-019-46"/>
+                <p tid="2">
+                    <title xml:lang="en">The Myth Chapter</title> concisely relates the story
+                    of Vajrabhairava’s subjugation of Yama and his entourage. The text describes how
+                    Vajrabhairava crushes the city of Yama and forces its inhabitants to surrender.
+                    He then binds them under oath and empowers them to serve as protectors of his
+                    teachings. The text also presents the root mantra of Vajrabhairava, which
+                    encapsulates the essential life force of Yama and his followers.</p>
+            </div>
+        </front>
+        <body>
+            <div type="translation" xml:id="UT22084-083-019-translation">
+                <head type="translation">The Translation</head>
+                <head type="titleMain" tid="14">The Myth Chapter</head>
+                <div type="section" xml:id="UT22084-083-019-section-1">
+                <milestone unit="chunk" xml:id="UT22084-083-019-62"/>
+                    <p tid="17">
+                        <ref cRef="F.173.b" type="folio" key="toh471" xml:id="UT22084-083-019-131"/> <ref cRef="F.213.b" type="folio" key="toh2006" xml:id="UT22084-083-019-132"/> Homage to the glorious Vajrabhairava.</p>
+                <lb/>
+                <milestone unit="chunk" xml:id="UT22084-083-019-64"/>
+                <lg tid="19">
+                    <l>“Now, I will explain</l>
+                    <l>How the great Vajrabhairava—</l>
+                    <l>He who has emerged from the vajras</l>
+                    <l>Of the Blessed One’s body, speech, and mind—</l>
+                    <l>Crossed the southern ocean </l>
+                    <l>And reached the city of Yama.</l>
+                </lg>
+                </div>
+            </div>
+        </body>
+    </text>
+</TEI>
