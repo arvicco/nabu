@@ -1744,7 +1744,10 @@ sources:
         site siglum (T_<exp>_D Qočo, T_<exp>_B Bulayïq — the titus-tocharian-a table) and the
         Upp.Ind. text's chapter toponyms (Shatial, Ladakh, Bugut, …) — declared coarse: other
         sigla/chapters (Or., P_, SDGM, 80TBI, DP) mint nothing, the raw manuscript value rides;
-        gazetteer linking via nabu-places is a future look"}
+        a page whose every line resolves to ONE findspot carries it as document metadata
+        `findspot` (the titus place-only timeline lane — 27 pages at the 2026-10-20 census;
+        the 2 mixed pages claim nothing at the document grain); gazetteer linking via
+        nabu-places is a future look"}
     script: {posture: qualified, note: "Latin transliteration of four script traditions —
         per-passage `script` annotation from the lane's script code: Syrc (the Christian
         texts), Mani (Manichaean script), Sogd (the Sogdian script: Ancient Letters, Buddhist,

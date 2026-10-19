@@ -210,6 +210,7 @@ module Nabu
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
+          "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
@@ -235,6 +236,7 @@ module Nabu
         PLACE_KEYS = {
           "seal" => "provenance", "rsti" => "findspot", "titus-tocharian-a" => "findspot",
           "titus-manichaica" => "findspot",
+          "titus-sogdian" => "findspot",
           "titus-tocharian-b" => "findspot",
           # P109-4: eebo-tcp documents ARE the early-modern prints — the
           # imprint place is the artifact's own production place (39k+
