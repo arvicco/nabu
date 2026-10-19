@@ -101,6 +101,18 @@ reparse of all 1,683 canonical pages): **1,682 documents / 34,162
 verse passages, 1 quarantine (1066)**; the tolerance annotations fire
 on exactly the six pages above and nowhere else.
 
+## The rejected grain (top level, skipped by rule)
+
+Upstream serves two grains: one page per cantiga (the documents) and the
+23 alphabetical incipit indexes that enumerate them. A real index sits
+beside the pages so the skip rule runs against upstream bytes:
+
+- `listacantigas-H.html` — the letter-H incipit index WHOLE (7 unique
+  cdcant ids), copied byte-identically 2026-10-20 from the box's
+  canonical crawl of 2026-08-13 (URL: `listacantigas.asp?letra=H`).
+  discovery_skips counts it by rule; the adapter test reconciles the
+  top dir (every page a document or a censused skip).
+
 ## Fetch fixtures (`fetch/`, invisible to discover)
 
 - `fetch/listacantigas-A.html` — the letter-A incipit index WHOLE: 326
