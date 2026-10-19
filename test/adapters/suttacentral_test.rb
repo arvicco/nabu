@@ -26,14 +26,18 @@ class SuttacentralTest < Minitest::Test
     urn:nabu:suttacentral:dhp21-32
     urn:nabu:suttacentral:pdhp1-13
     urn:nabu:suttacentral:sa158
+    urn:nabu:suttacentral:sa7
     urn:nabu:suttacentral:sn35.24
     urn:nabu:suttacentral:sn46.70
     urn:nabu:suttacentral:t1536.12
   ].freeze
 
-  # Every root except t1536.12 has an English file — the abhidhamma root
-  # honestly stays sibling-less (patton translates only ma/sa/ea19 today).
-  ALL_URNS = (ROOT_URNS + (ROOT_URNS - %w[urn:nabu:suttacentral:t1536.12]).map { |u| "#{u}-en" }).sort.freeze
+  # Roots the fixture tree carries WITHOUT an English file: the abhidhamma
+  # root honestly stays sibling-less (patton translates only ma/sa/ea19
+  # today); the sidecar-census roots were snapshotted without their
+  # translations (only their sidecar shape matters).
+  SIBLINGLESS = %w[urn:nabu:suttacentral:t1536.12 urn:nabu:suttacentral:sa7].freeze
+  ALL_URNS = (ROOT_URNS + (ROOT_URNS - SIBLINGLESS).map { |u| "#{u}-en" }).sort.freeze
 
   def conformance_adapter
     Nabu::Adapters::Suttacentral.new(translations: true)
@@ -79,8 +83,9 @@ class SuttacentralTest < Minitest::Test
                "(\"Do not commit this file…\"), never a document"
     skips = conformance_adapter.discovery_skips(FIXTURES)
     assert skips.clean?
-    assert_equal 2, skips.skipped_by_rule,
-                 "the sandbox file + the losing suddhaso alternate are censused rule skips"
+    assert_equal 3, skips.skipped_by_rule,
+                 "the sandbox file + the losing suddhaso alternate + the rootless lzh-iti83 " \
+                 "variant file are censused rule skips"
   end
 
   def test_discover_reads_language_from_the_root_tree
@@ -315,6 +320,29 @@ class SuttacentralTest < Minitest::Test
     assert_equal(6, document.count { |p| p.annotations.key?("refs") })
   end
 
+  def test_sidecar_data_keyed_to_a_blank_root_segment_is_counted_never_guessed
+    document = parse_urn("urn:nabu:suttacentral:sa7")
+    assert_nil document.find { |p| p.urn.end_with?(":5.1") },
+               "sa7:5.1 is an EMPTY root segment — skipped by rule, so no passage"
+    assert_equal({ "refs" => 1 }, document.metadata["sidecar_unjoined"],
+                 "its Taishō ref (t99.2.1c20) has no passage to land on: counted on the document, " \
+                 "never re-homed onto a neighbour")
+    assert_equal "t99.2.1c20", document.find { |p| p.urn.end_with?(":6.1") }.annotations["refs"],
+                 "the neighbour keeps only its OWN upstream ref"
+  end
+
+  def test_fully_joined_sidecars_record_no_unjoined_census
+    %w[sn46.70 sn35.24 dhp21-32 sa158].each do |stem|
+      assert_nil parse_urn("urn:nabu:suttacentral:#{stem}").metadata["sidecar_unjoined"], stem
+    end
+  end
+
+  def test_a_rootless_sidecar_file_mints_nothing
+    refs = conformance_adapter.discover(FIXTURES).to_a
+    assert_nil refs.find { |r| r.id.include?("lzh-iti83") },
+               "variant/lzh/sct/…/lzh-iti83 has no root in the published tree — never a document"
+  end
+
   def test_roots_without_sidecar_files_carry_no_sidecar_keys
     %w[pdhp1-13 t1536.12].each do |stem|
       document = parse_urn("urn:nabu:suttacentral:#{stem}")
@@ -345,7 +373,8 @@ class SuttacentralTest < Minitest::Test
         with_sidecars = parse_urn(ref.id)
         assert_equal with_sidecars.map(&:text), document.map(&:text), "#{ref.id}: text untouched"
         assert_equal with_sidecars.map(&:urn), document.map(&:urn)
-        assert_equal with_sidecars.metadata, document.metadata, "#{ref.id}: sidecar paths never leak"
+        assert_equal with_sidecars.metadata.except("sidecar_unjoined"), document.metadata,
+                     "#{ref.id}: sidecar paths never leak; only the sidecar census key differs"
       end
     end
   end

@@ -44,8 +44,10 @@ module Nabu
     # text) and NFC at this boundary, interior verbatim (inline <a href>
     # markup in comments included). Blank values mint no key; data keyed to
     # a skipped blank segment or to an id the root lacks has no passage to
-    # land on and drops (censused: 6 + 11 corpus-wide). No sidecars → the
-    # annotations stay {} exactly as before.
+    # land on — never re-homed onto a neighbour, but COUNTED per annotation
+    # key in the document's metadata["sidecar_unjoined"] ({"refs" => 1};
+    # absent when everything joined). No sidecars → the annotations stay {}
+    # exactly as before.
     #
     # A malformed file, a non-map top level, a non-string segment, or a file
     # with zero non-blank segments is damage → Nabu::ParseError (quarantine);
@@ -61,6 +63,8 @@ module Nabu
         raise ParseError, "#{path}: no non-blank segments" if kept.empty?
 
         annotations = sidecar_annotations(sidecars)
+        unjoined = unjoined_census(annotations, kept)
+        metadata = metadata.merge("sidecar_unjoined" => unjoined) unless unjoined.empty?
 
         document = Nabu::Document.new(
           urn: urn, language: language, title: title(segments, stem),
@@ -88,6 +92,17 @@ module Nabu
             (by_segment[id] ||= {})[key] = Normalize.nfc(stripped) unless stripped.empty?
           end
         end
+      end
+
+      # annotation key → count of non-blank sidecar values keyed to a segment
+      # id with no passage (a skipped blank segment, or an id the root
+      # lacks). Counted, never re-homed onto a neighbouring passage.
+      def unjoined_census(annotations, kept)
+        annotations.each_with_object(Hash.new(0)) do |(id, by_key), census|
+          next if kept.key?(id)
+
+          by_key.each_key { |key| census[key] += 1 }
+        end.sort.to_h
       end
 
       def read_segments(path)
