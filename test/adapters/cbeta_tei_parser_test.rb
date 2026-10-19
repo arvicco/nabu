@@ -5,15 +5,17 @@ require "stringio"
 
 # CbetaTeiParser (the `cbeta-tei` family, P33-2) against real T and X
 # fixtures: print-line grain riding the lb/@n citation verbatim, own-canon
-# lb stream only (witness R-edition streams never mint), stand-off <back>
-# apparatus never read, gaiji/inline-note annotations, and the per-file
-# availability license gate quoted byte-verbatim.
+# lb stream only (witness R-edition streams never mint), the stand-off <back>
+# apparatus resolved onto passage annotations (never the reading text),
+# gaiji/inline-note annotations, and the per-file availability license gate
+# quoted byte-verbatim.
 class CbetaTeiParserTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("cbeta")
 
   T85 = File.join(FIXTURES, "T", "T85", "T85n2884.xml")
   T85_2831 = File.join(FIXTURES, "T", "T85", "T85n2831.xml")
   T10 = File.join(FIXTURES, "T", "T10", "T10n0285.xml")
+  T45 = File.join(FIXTURES, "T", "T45", "T45n1909-xu.xml")
   K05 = File.join(FIXTURES, "K", "K05", "K05n0016.xml")
   T01 = File.join(FIXTURES, "T", "T01", "T01n0001-xu.xml")
   X01 = File.join(FIXTURES, "X", "X01", "X01n0001.xml")
@@ -169,6 +171,105 @@ class CbetaTeiParserTest < Minitest::Test
     xu_text = xu.map(&:text).join
     refute_includes xu_text, "Dīrgha-āgama", "back cb:tt foot glosses must not be read"
     refute_includes xu_text, "校注", "the apparatus division head must not be read"
+  end
+
+  # --- the stand-off apparatus rides passage annotations ---------------------
+  #
+  # <back>'s cb:div type="apparatus" holds one <app from="#beg…" to="#end…">
+  # per variant, keyed by empty body <anchor xml:id> milestones. Each entry
+  # resolves to the print line holding its FROM anchor and rides that
+  # passage's "apparatus" annotation (the tamilex stand-off shape: lemma +
+  # witnesses + readings), witness ids resolved to the header's own sigla.
+
+  def by_cite(path)
+    parse(path).to_h { |p| [p.urn.split(":").last, p] }
+  end
+
+  def test_back_apparatus_resolves_to_the_anchor_line
+    lines = by_cite(T01)
+    assert_equal [
+      { "lemma" => "長安", "witnesses" => ["【大】"],
+        "readings" => [{ "text" => "", "witnesses" => ["【宋】"], "resp" => ["Taisho"] }] },
+      { "lemma" => "述", "witnesses" => ["【大】"],
+        "readings" => [{ "text" => "", "witnesses" => ["【宋】"], "resp" => ["Taisho"] }] }
+    ], lines["0001a04"].annotations["apparatus"], "an omission is an empty reading, never a dropped one"
+    assert_equal [{ "lemma" => "韞", "witnesses" => ["【大】"],
+                    "readings" => [{ "text" => "溫", "witnesses" => %w[【宋】 【元】], "resp" => ["Taisho"] }] }],
+                 lines["0001a15"].annotations["apparatus"]
+    assert_nil lines["0001a05"].annotations["apparatus"], "a line without variants carries no key"
+    assert_equal 6, lines.values.sum { |p| p.annotations.fetch("apparatus", []).size },
+                 "every fixture <app> lands on exactly one passage"
+  end
+
+  def test_star_apparatus_carries_its_corresp_note_number
+    entry = by_cite(T45)["0929b06"].annotations["apparatus"].find { |app| app["corresp"] }
+    assert_equal({ "corresp" => "0928014", "lemma" => "某甲等", "witnesses" => ["【大】"],
+                   "readings" => [{ "text" => "某等", "witnesses" => ["【乙】"], "resp" => ["Taisho"] }] },
+                 entry, "an interlinear note inside the lemma is printed lemma text")
+  end
+
+  def test_a_span_crossing_print_lines_rides_its_from_line_and_names_the_to_line
+    lines = by_cite(T45)
+    entry = lines["0929b08"].annotations["apparatus"].find { |app| app["lemma"].start_with?("頂禮") }
+    assert_equal "0929b09", entry["to"]
+    assert_equal "頂禮十方一切三寶一拜", entry["lemma"],
+                 "the nested restated <app> flattens to its lemma; orig/mod notes drop"
+    assert_equal [{ "text" => "歸依世間大慈悲父", "witnesses" => ["【甲】"], "resp" => ["Taisho"] }],
+                 entry["readings"]
+    single = lines["0929b08"].annotations["apparatus"].find { |app| app["lemma"] == "重復至誠" }
+    assert_nil single["to"], "a span closing on its own line names no to-line"
+    # The nested app's own top-level twin (from beg0929020) rides b09 once.
+    assert_equal(["一拜"], lines["0929b09"].annotations["apparatus"].map { |app| app["lemma"] })
+  end
+
+  def test_cbeta_corrections_carry_resp_gaiji_text_cross_refs_and_reading_type
+    j36 = by_cite(J36)["0545a12"].annotations["apparatus"].first
+    assert_equal({ "lemma" => "㲯", "witnesses" => ["【CB】"], "resp" => ["CBETA.maha"],
+                   "readings" => [{ "text" => "󳴕", "witnesses" => ["【嘉興】"] }] }, j36)
+    lines = by_cite(T85_2831)
+    cf = lines["1269c27"].annotations["apparatus"].first
+    assert_equal %w[T16n0658_p0220a25 T15n0587_p0092b09], cf["cf"]
+    assert_equal "不", cf["lemma"], "cf cross-references never reach the lemma text"
+    remark = lines["1270a26"].annotations["apparatus"].first
+    assert_equal [{ "text" => "之義", "witnesses" => ["【大】"], "resp" => ["Taisho"],
+                    "type" => "correctionRemark" }], remark["readings"]
+  end
+
+  def test_an_unresolvable_anchor_is_counted_never_guessed
+    cut = File.read(T45).sub('<anchor xml:id="beg0929018" n="0929018"/>', "")
+    document = Nabu::Adapters::CbetaTeiParser.new.parse(
+      StringIO.new(cut), urn: "urn:nabu:cbeta:T45n1909-xu", canon: "T", canonical_path: T45
+    )
+    assert_equal 1, document.metadata["apparatus_unresolved"]
+    lemmas = document.flat_map { |p| p.annotations.fetch("apparatus", []) }.map { |app| app["lemma"] }
+    refute_includes lemmas, "重復至誠"
+    assert_nil parse(T45).metadata["apparatus_unresolved"], "a fully resolved file carries no count"
+  end
+
+  # Reading the back apparatus must not move one byte of passage text: the
+  # digests were taken with the pre-apparatus parser over every fixture
+  # (SHA-256 of "urn\ttext\n" per passage, document order).
+  PRE_APPARATUS_TEXT_DIGESTS = {
+    "J/J29/J29nB247.xml" => "5c8e45d21fb2c64cb5d19ff21bf661cf5009875a1a5f10fa5321ef3ba8c7a531",
+    "J/J36/J36nB354.xml" => "211835402167af38f5fb54ee4394830f27cc57960888fa77cc3c0ec8b29a8ec8",
+    "K/K05/K05n0016.xml" => "b9aaf72a8a0bda9ba28addba83a5ed639a07a09e732651722cf017abee3a13cf",
+    "N/N26/N26n0008.xml" => "97d640bfb5b28934db0d30f951e29528e083bc9becfc0c1c1f8271b90ca519a9",
+    "N/N44/N44n0021-xu.xml" => "a79d05256b30334f90629774d5149c5d67d7e764ed0831c2b318f5e04a88a4b1",
+    "T/T01/T01n0001-xu.xml" => "1ac1288687dd92b1ababb50020ebae3203a6ec0a05a3ec952aa638adf5646769",
+    "T/T10/T10n0285.xml" => "55a01d1db46d357910ab17a1d26f100b80a04c37153736b67f63b94c4283757e",
+    "T/T45/T45n1909-xu.xml" => "5e3d08145cc29959e32a63f323e5858e34852d51eea1502b347256b9b600c126",
+    "T/T85/T85n2831.xml" => "4fd7376d39196d84db120686cbc71850f94dca0a71a4986f6af8867f939f8109",
+    "T/T85/T85n2884.xml" => "6f35b040b1cb659cc0bb9142989088ccae527c7b9663ea92b3129998b7218525",
+    "X/X01/X01n0001.xml" => "f80bc75be50be6157f83725834455793f3b9a7a960de5c9f1d4488797c99e81c",
+    "X/X55/X55n0899.xml" => "14685983f989b8573c12ef27f6106f010a32217c78fffbd06063d8e63791c4b8"
+  }.freeze
+
+  def test_passage_text_is_byte_identical_to_the_pre_apparatus_parse
+    PRE_APPARATUS_TEXT_DIGESTS.each do |relative, digest|
+      document = parse(File.join(FIXTURES, relative))
+      actual = Digest::SHA256.hexdigest(document.map { |p| "#{p.urn}\t#{p.text}\n" }.join)
+      assert_equal digest, actual, "#{relative}: passage urns/text drifted"
+    end
   end
 
   # T01n0001's apparatus is stand-off: the body byline carries the reading
