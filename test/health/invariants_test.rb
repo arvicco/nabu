@@ -857,8 +857,6 @@ class InvariantsTest < Minitest::Test
     refute_includes finding.message, "pleiades:111"
   end
 
-  private
-
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------
 
   def local_entry
@@ -875,9 +873,9 @@ class InvariantsTest < Minitest::Test
   end
 
   def write_dossier(root, rel, body)
-    dir = File.join(root, "local-language")
-    FileUtils.mkdir_p(dir)
-    File.write(File.join(dir, rel), body)
+    path = File.join(root, "local-language", rel)
+    FileUtils.mkdir_p(File.dirname(path)) # rel may nest (the .attic/ case)
+    File.write(path, body)
     Digest::SHA256.hexdigest(body)
   end
 
