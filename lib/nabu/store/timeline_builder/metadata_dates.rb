@@ -238,9 +238,13 @@ module Nabu
           "titus-tocharian-b" => "findspot",
           # P109-4: eebo-tcp documents ARE the early-modern prints — the
           # imprint place is the artifact's own production place (39k+
-          # London), cleaned of the ESTC-style bracket/colon furniture.
-          # The TCP's own pub_place (Ann Arbor) is lineage, exempted.
-          "eebo-tcp" => "source_pub_place",
+          # London). The parse-time bare town (imprint_place) is the
+          # registry-shaped key and answers first; a conjecture doc
+          # carries none and falls back to the verbatim imprint, cleaned
+          # of the ESTC-style bracket/colon furniture — uncertainty never
+          # reads as a claim, and no placed doc loses its name. The TCP's
+          # own pub_place (Ann Arbor) is lineage, exempted.
+          "eebo-tcp" => %w[imprint_place source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
           "rem" => "orig_place",
@@ -435,6 +439,9 @@ module Nabu
         # settlement (the holding library — a PRESENT location) stay
         # metadata-only, the rundata origin-axis stance.
         def place_claim(meta, key: "place")
+          # An ordered key list tries each in turn — the first key
+          # carrying a value answers.
+          key = key.find { |k| !meta[k].to_s.strip.empty? } || key.last if key.is_a?(Array)
           place = meta[key]
           return toponym_claim(place) if place.is_a?(Array)
 
