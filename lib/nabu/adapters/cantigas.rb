@@ -22,6 +22,12 @@ module Nabu
     # enumeration comes ONLY from the 23 alphabetical incipit indexes
     # (letter A: 244 unique ids; whole corpus ≈ 1,680).
     #
+    # Reconciled against upstream's own count (2026-10-20, the box's
+    # canonical crawl of 2026-08-13): the 23 indexes advertise 1,683
+    # unique cdcant ids = the 1,683 cantiga pages held = 1,682 documents
+    # + 1 quarantine (1066, the no-text page); the 23 index pages are the
+    # rejected grain, skipped by rule.
+    #
     # == Identity
     #
     # urn = urn:nabu:cantigas:<cdcant> — the database's own stable id.
@@ -102,12 +108,17 @@ module Nabu
       end
 
       # The 23 persisted letter-index sidecars are content-pattern files
-      # discover deliberately skips — an explicit, benign rule, censused
-      # here so the accounting never hides it.
+      # discover deliberately skips — upstream's ENUMERATION grain (the
+      # incipit indexes), not a cantiga — an explicit, benign rule,
+      # censused here so the accounting never hides it.
       def discovery_skips(workdir)
-        skipped = Dir.glob(File.join(workdir, "*.html"))
-                     .count { |path| !Nabu::CantigasFetch.record?(File.basename(path)) }
-        DiscoverySkips.new(skipped_by_rule: skipped)
+        skipped = Dir.glob("*.html", base: workdir).reject { |name| Nabu::CantigasFetch.record?(name) }.sort
+        return DiscoverySkips.new if skipped.empty?
+
+        named = skipped.first(3).join(", ") + (skipped.size > 3 ? ", …" : "")
+        DiscoverySkips.new(skipped_by_rule: skipped.size,
+                           notes: ["#{skipped.size} letter-index page(s) skipped — the incipit " \
+                                   "enumeration grain, not a cantiga (#{named})"])
       end
 
       def parse(document_ref)
