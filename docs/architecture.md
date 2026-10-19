@@ -1335,13 +1335,21 @@ newdoc-scoped metadata whitelist carries each sentence's date/created/
 date_created and place comments into passage annotations, and the lane
 projects passage-grain runs (one per stretch sharing upstream document id
 + claim) plus a document envelope (axis_source `ud-sentences`; dynasty
-labels band through `config/period_bands.yml`). The coordinates lane
+labels band through `config/period_bands.yml`). The `LitopysAnnalDates`
+lane is the ChronicleAnnals mold read from the catalog: the Ipatiev
+chronicle's per-column annal-year keys (the site's "[6360 (852)]"
+markers, the `annal_years` annotation) become one passage-grain row per
+annal (axis_source `litopys-annals`, AM → CE through `Timeline.am_to_ce`,
+spanning the key's column to the next key's), a page opening mid-annal
+carrying its contiguous predecessor's last annal; no envelope — the
+document grain stays the svod's attributed era band. The coordinates lane
 (migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
 feeding `search --within`. Since P47-r3 a sync refreshes the synced
 source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
 `NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!` +
-`OpenmghCharterDates.refresh_source!` + `UdSentenceDates.refresh_source!`,
+`OpenmghCharterDates.refresh_source!` + `UdSentenceDates.refresh_source!` +
+`LitopysAnnalDates.refresh_source!`,
 then `ItkcAuthorDates.refresh_source!`, not load-gated since its module
 mints no documents — mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
