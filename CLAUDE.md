@@ -36,6 +36,8 @@ bin/nabu sync <source> --parse-only   # re-parse without network
 bin/nabu rebuild --dry-run
 rake fixtures:refresh[source]           # re-snapshot upstream sample (network, manual only)
 rake tools:embed / tools:stanza[la] / tools:status   # external-tool bootstraps (owner-fired network)
+rake tools:hooks          # install the git hook pack (marker scan, mid-rebuild hold, commit-msg hygiene)
+rake boards:check         # local-board header sanity (skips cleanly on public clones)
 ```
 
 - **External tools install through `rake tools:*` only** (owner rule
