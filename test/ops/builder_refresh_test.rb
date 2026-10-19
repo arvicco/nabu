@@ -80,6 +80,22 @@ class BuilderRefreshTest < Minitest::Test
     assert_equal [%w[subject 인물(人物)]], @catalog[:passage_facet_values].select_map(%i[facet value])
   end
 
+  # The dictionary-entry lane re-projects under the shipped entry_fields
+  # (JMdict's domain labels) the same way.
+  def test_refresh_projects_entry_facets
+    edrdg = Nabu::Store::Source.create(slug: "edrdg", name: "EDRDG", adapter_class: "X", license: "x",
+                                       license_class: "attribution", upstream_url: "x", enabled: true)
+    jmdict = Nabu::Store::Dictionary.create(source_id: edrdg.id, slug: "jmdict", title: "JMdict", language: "jpn")
+    Nabu::Store::DictionaryEntry.create(dictionary_id: jmdict.id, urn: "urn:nabu:dict:jmdict:1", entry_id: "1",
+                                        key_raw: "1", headword: "仏", headword_folded: "仏", body: "b",
+                                        content_sha256: "x", annotations_json: JSON.generate("field" => ["Buddhism"]))
+    summary = Dir.mktmpdir do |dir|
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+    end
+    assert_equal 1, summary.entry_facets.rows
+    assert_equal [%w[domain Buddhism]], @catalog[:entry_facet_values].select_map(%i[facet value])
+  end
+
   # P121-2: the lemma attestation rollups ride the refresh (last, after
   # the timeline they bucket by).
   def test_refresh_rebuilds_the_lemma_rollups

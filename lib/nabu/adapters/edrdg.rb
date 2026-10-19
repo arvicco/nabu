@@ -15,6 +15,20 @@ module Nabu
     # jmdict (JMdict_e, 217,951 entries) is the modern-Japanese gloss
     # backstop behind it. Language jpn for both.
     #
+    # == Mined entry labels (JmdictParser constants carry the census)
+    #
+    # JMdict's sense labels ride each entry's annotations — <field> domains,
+    # <misc> usage marks, <dial> dialects, <lsource> donor codes (wasei
+    # sources under their own key) — and project as entry facets under
+    # config/facet_map.yml's edrdg entry_fields (domain / usage / dialect /
+    # loan_source / wasei_source). Genuine loans naming a source word also
+    # mint borrowed: true donor reflexes (ISO 639-2 code verbatim in
+    # lang_code, its 639-3 tag in language). The adapter stays
+    # reflex_bearing? false deliberately: JMdict names donors by code only,
+    # so the language_names census that promise also checks could never
+    # fill. KANJIDIC2 mines nothing new here (its readings/meanings are the
+    # char desk's own lane).
+    #
     # == License (edrdg.org/edrdg/licence.html, read 2026-07-19)
     #
     # Verbatim: "The dictionary files are made available under a Creative
