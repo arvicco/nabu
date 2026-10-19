@@ -126,7 +126,70 @@ module Store
                    "version https://git-lfs.github.com/spec/v1\noid sha256:#{'ab' * 32}\nsize 9\n")
         counts = build!(dir)
         assert_equal({ documents: 0, undated: 0, invalid: 0,
-                       regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0 }, counts)
+                       regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0, regnal_us2_double: 0,
+                       accounting: 0, accounting_unresolved: 0 }, counts)
+      end
+    end
+
+    # The accounting_period column (4,468 catalog rows): an account's own
+    # regnal span. Both ends resolving through the ruled reign table band
+    # the document as one envelope, precision "accounting-period" — it
+    # outranks the FIRST dates_referenced entry, which on an account is
+    # only one of the dates the span covers. The real fixture row:
+    # Ibbi-Suen.01 (2028 BC) to Ibbi-Suen.02 "(us2 year)" (2026 BC).
+    def test_a_resolving_accounting_period_bands_the_whole_account
+      make_document("urn:nabu:cdli:p120698")
+      counts = build!
+      row = timeline_for("urn:nabu:cdli:p120698")
+      assert_equal(-2028, row.fetch(:not_before))
+      assert_equal(-2026, row.fetch(:not_after))
+      assert_equal "accounting-period", row.fetch(:precision)
+      assert_equal "Ibbi-Suen.01.02.00 to Ibbi-Suen.02.02.00 (us2 year)  (Reichskalender)", row.fetch(:date_raw)
+      assert_nil row.fetch(:date_class), "the account's own date — the artifact class"
+      assert_equal "Nippur (mod. Nuffar)", row.fetch(:place_name)
+      assert_equal 1, counts[:accounting]
+    end
+
+    # Censused shapes: cross-reign spans band across both reigns; anything
+    # the ruled table cannot answer at BOTH ends (an unruled ruler, a
+    # ruler-less filler span, an out-of-range year, the "(us2-us2 year)"
+    # second-year-after naming the ruled +1 shift does not cover) is
+    # unresolved — counted, and the document falls back to its
+    # dates_referenced / period dating, never a half-guessed envelope.
+    def test_accounting_periods_resolve_only_where_both_ends_are_ruled
+      rows = {
+        "urn:nabu:cdli:p920001" => ["Šulgi.48.00.00 to Amar-Suen.01.00.00", "",
+                                    [-2047, -2046, "accounting-period"]],
+        "urn:nabu:cdli:p920002" => ["Šulgi.32.13.00 (intercalated) to Šulgi.33.01.00 (us2 year)", "",
+                                    [-2063, -2061, "accounting-period"]],
+        "urn:nabu:cdli:p920003" => ["Lugalanda.03.00.00 to Lugalanda.04.00.00", "",
+                                    [-2500, -2340, "period"]],
+        "urn:nabu:cdli:p920004" => ["--.--.01.00 to --.--.12.00", "Šulgi.44.02.06",
+                                    [-2051, -2051, "regnal-year"]],
+        "urn:nabu:cdli:p920005" => ["Šulgi.48.03.00 (us2-us2 year) to Šulgi.48.04.00 (us2-us2 year)",
+                                    "Šulgi.48.03.00 (us2-us2 year)", [-2100, -2000, "period"]],
+        "urn:nabu:cdli:p920006" => ["Amar-Suen.12.00.00 to Amar-Suen.13.00.00", "",
+                                    [-2100, -2000, "period"]]
+      }
+      periods = { "urn:nabu:cdli:p920003" => "ED IIIb (ca. 2500-2340 BC)" }
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "cdli"))
+        CSV.open(File.join(dir, "cdli", "cdli_cat.csv"), "w") do |csv|
+          csv << %w[id_text accounting_period dates_referenced period provenience]
+          rows.each do |urn, (account, dated, _expected)|
+            csv << [urn[/p(\d+)\z/, 1].to_i, account, dated,
+                    periods.fetch(urn, "Ur III (ca. 2100-2000 BC)"), ""]
+          end
+        end
+        rows.each_key { |urn| make_document(urn) }
+        counts = build!(dir)
+        assert_equal 2, counts[:accounting]
+        assert_equal 4, counts[:accounting_unresolved]
+        assert_equal 1, counts[:regnal_us2_double], "the dates_referenced twin is not guessed either"
+        rows.each do |urn, (_account, _dated, expected)|
+          row = timeline_for(urn)
+          assert_equal expected, row.values_at(:not_before, :not_after, :precision), urn
+        end
       end
     end
 

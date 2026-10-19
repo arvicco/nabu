@@ -247,6 +247,12 @@ module Nabu
                                               "works' origin",
                                "pub_date" => "the Patrologia Latina volume's printing year " \
                                              "(1844–1855) — edition lineage" },
+        "cdli" => { "findspot_square" => "an excavation grid square inside the provenience site " \
+                                         "(\"L 2769\", \"Qa XVI,2\") — sub-site grain, below the " \
+                                         "place axis (the oracc precedent); the provenience projects",
+                    "findspot_remarks" => "excavator prose on the find context (room, stratum, " \
+                                          "t.a.q. notes, German/English) — sub-site grain, carried " \
+                                          "verbatim; the provenience projects" },
         "gams-zrcalo" => { "edition_date" => "the modern digital edition's year — lineage",
                            "settlement" => "the holding library's city (a PRESENT location)" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \

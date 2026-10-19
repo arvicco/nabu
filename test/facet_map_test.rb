@@ -124,7 +124,7 @@ class FacetMapTest < Minitest::Test
     map = Nabu::FacetMap.load(path)
     expected = {
       "cdli" => { "material" => "material", "object_type" => "object_type", "museum_no" => "museum",
-                  "subgenre" => "subgenre" },
+                  "subgenre" => "subgenre", "excavation_no" => "excavation", "accession_no" => "accession" },
       "rundata" => { "material_type" => "material", "material" => "material",
                      "objectInfo" => "object_type", "style" => "style" },
       "glaux" => { "dialect" => "dialect", "author" => "author", "work" => "work" },

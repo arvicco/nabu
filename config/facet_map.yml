@@ -62,6 +62,14 @@ sources:
       subgenre: subgenre      # 71,814 rows, 4,619 values (catalog census 2026-10-18): lexical-
       #                         series witness labels, archives, "ETCSL <n> <title> (witness)" —
       #                         a mixed vocabulary, faceted verbatim, never kind-folded
+      excavation_no: excavation  # 49,223 rows, 46,513 values (catalog census 2026-10-19:
+      #                         "W 06435,a", "Ass 21101"; the withheld "U —" ×1,528 is a claim) —
+      #                         an identifier lookup, the museum_no precedent
+      accession_no: accession  # 72,246 rows, 66,396 values (museum accession numbers —
+      #                         "1901-02-09, nn" BM registration days; "—" ×2,324 a claim)
+      # findspot_square / findspot_remarks / provenience_remarks / join_information
+      # stay metadata-only: sub-site grid squares and free prose (the oracc
+      # findspot_square stance; Health::Invariants::MINING_EXEMPT records why)
   oracc:                      # catalogue census 2026-10-18, 125,738 members (OraccCatalogue)
     fields:
       ruler: ruler            # 12,689 (Sargon II 1,431 · Esarhaddon 1,368 · Ashurbanipal 1,288 ·

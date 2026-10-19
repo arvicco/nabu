@@ -34,6 +34,9 @@ module Nabu
       # "regnal-reign"; "(us2 year)" shifts +1); unruled rulers (ED III,
       # OAkk, floating dynasts — the table header names them) and
       # out-of-range years fall back to the period band, censused.
+      # Above both sits the accounting_period span (#extract_accounting):
+      # where an account's regnal span resolves at both ends it is the
+      # document's envelope, precision "accounting-period".
       #
       # Place: provenience verbatim (NFC), except the no-place shapes
       # ("uncertain (mod. uncertain)", "unknown", …). No gazetteer here —
@@ -71,7 +74,8 @@ module Nabu
         # BC, zero years).
         def build(catalog:, canonical_dir:)
           counts = { documents: 0, undated: 0, invalid: 0,
-                     regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0 }
+                     regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0, regnal_us2_double: 0,
+                     accounting: 0, accounting_unresolved: 0 }
           path = File.join(canonical_dir, CATALOG_RELPATH)
           return counts unless File.file?(path) && !LfsFetch.pointer?(path)
 
@@ -93,7 +97,8 @@ module Nabu
         end
 
         def insert_row(catalog, document_id, row, counts)
-          date = extract_regnal(row["dates_referenced"].to_s.strip, counts) ||
+          date = extract_accounting(row["accounting_period"].to_s.strip, counts) ||
+                 extract_regnal(row["dates_referenced"].to_s.strip, counts) ||
                  extract_period(row["period"].to_s.strip, counts)
           counts[:undated] += 1 if date.nil?
           place = extract_place(row["provenience"].to_s)
@@ -108,23 +113,71 @@ module Nabu
 
         # The RULED regnal conversion (owner ruling 2026-08-11), or nil for anything the
         # table does not answer — the period band is always the fallback.
+        # dates_referenced is a LIST ("Šulgi.39.00.00, Šulgi.40.00.00 (us2
+        # year)"); only its FIRST entry is read — and only that entry's own
+        # "(us2 year)" mark shifts it (a later entry's mark never does).
         def extract_regnal(value, counts)
           return nil if value.empty?
-          return nil if (m = REGNAL.match(value)).nil?
-          return nil if (table = Nabu::RegnalYears.default).nil?
 
-          year_number = m[2].to_i
-          span = table.span(m[1], year_number, us2: value.match?(US2_SUFFIX))
+          first = value.split(",").first.to_s.strip
+          return nil if (m = REGNAL.match(first)).nil?
+
+          span = regnal_span(first)
           case span
           when :unruled then counts[:regnal_unruled] += 1
           when :out_of_range then counts[:regnal_out_of_range] += 1
-          else
+          when :us2_double then counts[:regnal_us2_double] += 1
+          when Array
             counts[:regnal] += 1
             return { not_before: span[0], not_after: span[1],
-                     precision: year_number.zero? ? "regnal-reign" : "regnal-year",
+                     precision: m[2].to_i.zero? ? "regnal-reign" : "regnal-year",
                      date_raw: value }
           end
           nil
+        end
+
+        # The accounting_period column (catalog census 2026-10-19: 4,468
+        # rows, 3,457 values — "Amar-Suen.07.00.00 to Amar-Suen.08.00.00",
+        # "Šulgi.48.00.00 to Amar-Suen.01.00.00", "--.--.01.00 to
+        # --.--.12.00"): the span an account covers. Both ends must resolve
+        # through the ruled table; the envelope is min..max of the two end
+        # spans (month/day refine the raw, never the bounds; a trailing
+        # "?" or "(Reichskalender)" rides raw). Its own labeled precision,
+        # "accounting-period" — and it outranks dates_referenced, whose
+        # first entry is only one date inside the span. Anything else
+        # (unruled rulers such as Lugalanda, ruler-less filler, eponym
+        # prose, out-of-range years, "(us2-us2 year)") is counted
+        # unresolved and the column stays metadata.
+        ACCOUNTING_SPLIT = /\s+to\s+/
+
+        def extract_accounting(value, counts)
+          return nil if value.empty?
+
+          sides = value.split(ACCOUNTING_SPLIT)
+          spans = sides.size == 2 ? sides.map { |side| regnal_span(side.strip) } : []
+          unless spans.size == 2 && spans.all?(Array)
+            counts[:accounting_unresolved] += 1
+            return nil
+          end
+
+          counts[:accounting] += 1
+          { not_before: spans.map(&:first).min, not_after: spans.map(&:last).max,
+            precision: "accounting-period", date_raw: value }
+        end
+
+        # One "Ruler.YY.MM.DD" dating → the ruled table's span, or a reason
+        # symbol (:unparsed, :unruled, :out_of_range, :us2_double). "(us2
+        # year)" — the year after — is the ruled +1 shift; the "(us2-us2
+        # year)" second-year-after naming is NOT covered by that ruling, so
+        # it converts nothing.
+        US2_DOUBLE = /us2-us2/
+
+        def regnal_span(dating)
+          return :unparsed if (m = REGNAL.match(dating)).nil?
+          return :unparsed if (table = Nabu::RegnalYears.default).nil?
+          return :us2_double if dating.match?(US2_DOUBLE)
+
+          table.span(m[1], m[2].to_i, us2: dating.match?(US2_SUFFIX))
         end
 
         # The period string's own year envelope (module note), or nil.
