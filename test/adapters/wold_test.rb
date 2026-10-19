@@ -139,6 +139,18 @@ class WoldTest < Minitest::Test
     assert_empty world.reflexes
   end
 
+  # The entry-facet seam: each lexeme carries its meaning's
+  # Semantic_field + Semantic_category (parameters.csv, joined at parse)
+  # and its own curated borrowed status, verbatim.
+  def test_entries_annotate_semantic_field_category_and_borrowed_status
+    wine = parse("English").entries.find { |e| e.entry_id == "English-5-92-1" }
+    assert_equal({ "semantic_field" => "Food and drink", "semantic_category" => "Noun",
+                   "borrowed" => "1. clearly borrowed" }, wine.annotations)
+    world = parse("English").entries.find { |e| e.entry_id == "English-1-1-1" }
+    assert_equal "The physical world", world.annotations["semantic_field"]
+    assert_equal "5. no evidence for borrowing", world.annotations["borrowed"]
+  end
+
   def test_concept_line_carries_the_concepticon_id_for_the_spine
     wine = parse("English").entries.find { |e| e.entry_id == "English-5-92-1" }
     assert_includes wine.body, "concept: the wine (Concepticon 1524 WINE)",

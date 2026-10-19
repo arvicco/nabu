@@ -525,3 +525,11 @@ sources:
       #                         an absent xml:lang is the DTD default "eng") — genuine loans only
       wasei: wasei_source     # <lsource ls_wasei="y"> 2,048: made-in-Japan from the donor's
       #                         elements — a donor-element claim, never a loan (no reflex edge)
+  wold:                       # every one of the 64,289 lexemes carries its meaning's fields
+    entry_fields:
+      semantic_field: semantic_field  # parameters.csv Semantic_field, 24 fields: The body ·
+      #                         Animals · Agriculture and vegetation · Kinship · Law …
+      semantic_category: word_class   # Noun 38,160 · Verb 15,680 · Adjective 5,728 ·
+      #                         Function word 4,522 · Adverb 198
+      borrowed: borrowed_status       # the curated five-point scale verbatim: "1. clearly
+      #                         borrowed" 13,304 … "5. no evidence for borrowing" 46,379

@@ -95,6 +95,9 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "field" => "domain", "misc" => "usage", "dial" => "dialect",
                    "lsource" => "loan_source", "wasei" => "wasei_source" },
                  map.entry_fields_for("edrdg"))
+    assert_equal({ "semantic_field" => "semantic_field", "semantic_category" => "word_class",
+                   "borrowed" => "borrowed_status" },
+                 map.entry_fields_for("wold"))
   end
 
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain

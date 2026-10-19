@@ -359,10 +359,25 @@ module Nabu
           headword_folded: fold(headword, language) || form.fetch("ID"),
           gloss: gloss(form, all),
           body: body_text(form, events, all),
-          reflexes: events.flat_map { |event| donor_reflexes(event) }
+          reflexes: events.flat_map { |event| donor_reflexes(event) },
+          annotations: annotations(form, all)
         )
       rescue Nabu::ValidationError, Nabu::Normalize::EncodingError => e
         raise Nabu::ParseError, "wold: form #{form['ID'].inspect}: #{e.message}"
+      end
+
+      # The entry-facet seam (config/facet_map.yml wold entry_fields): the
+      # meaning's Semantic_field (24 fields) and Semantic_category (Noun /
+      # Verb / Adjective / Function word / Adverb) from parameters.csv,
+      # joined per lexeme — v4.2 census: every one of the 64,289 forms
+      # cites a parameter carrying a field — plus the lexeme's own curated
+      # five-point Borrowed status. All verbatim; blanks omitted.
+      def annotations(form, all)
+        parameter = all.fetch(:parameters)[form.fetch("Parameter_ID")] || {}
+        { "semantic_field" => presence(parameter["Semantic_field"]),
+          "semantic_category" => presence(parameter["Semantic_category"]),
+          "borrowed" => presence(form["Borrowed"]) }
+          .compact.transform_values { |value| Nabu::Normalize.nfc(value) }
       end
 
       def gloss(form, all)
