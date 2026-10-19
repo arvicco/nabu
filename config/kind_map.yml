@@ -820,12 +820,17 @@ sources:
     # BOTH subgenre ladders (2026-10-19): the DTA's own dtasub (1,850 docs) and
     # the DWDS core-corpus dwds1sub on every non-newspaper file (3,445) — the
     # same German label vocabulary, so one map folds both and a document whose
-    # two ladders agree dedupes to one row. dwds_genre stays out of the fold:
-    # its four heads restate the subgenre coarsely, and its Zeitung (2,036
-    # newspaper docs, no dwds1sub) has no ruled class — periodical press is a
-    # taxonomy question, not a fold (Zeitschrift below stays unmapped too).
-    metadata: [subgenre, dwds_subgenre]
+    # two ladders agree dedupes to one row. dwds_genre JOINED the fold when the
+    # periodical head was ruled (2026-10-19): Zeitung (2,036 newspaper docs,
+    # no dwds1sub) folds to periodical/newspaper; its Belletristik/Wissenschaft
+    # restate the subgenre coarsely and dedupe against it; Gebrauchsliteratur
+    # is a reviewed use-category umbrella, not a genre claim — deliberate.
+    metadata: [subgenre, dwds_subgenre, dwds_genre]
     map:
+      "Zeitung": periodical/newspaper            # 2,036 — the ruled head's anchor case
+      "Zeitschrift": periodical/journal          # 217 — off the worklist with the ruling
+      "Belletristik": literary                   # dwds_genre coarse restatement, dedupes
+      "Wissenschaft": scholarly                  # dwds_genre coarse restatement, dedupes
       "Roman": literary/narrative/novel          # 163
       "Prosa": literary/narrative                # 128
       "Lyrik": literary/poetry                   # 114
@@ -953,12 +958,15 @@ sources:
       "Politik, Ökonomie": scholarly
       "Politik, Anstandsliteratur": [scholarly, literary/wisdom]
       # left unmapped (the worklist — no ruled class or no genre claim yet):
-      # Zeitschrift 217 (periodical press) · Rede 13 (speeches) · Bericht 13 ·
+      # Rede 13 (speeches) · Bericht 13 ·
       # Handbuch 16 (+ ", Rhetorik"/"; Spielregeln") · Flugschrift 10 (pamphlet —
       # a format) · Amtsdruckschrift 5 · Reformschrift 2 · Gelegenheitsschrift:
       # Vertrag/Fest 3 · Streitschrift 1 · Briefsteller 1 · Städtelob 1 ·
       # Ordensliteratur:Jesuiten 1; dtasub-only: Katechismus 1 · Magnetberg 1 ·
       # "Rede Humboldts" 1 · Vertrag 1 · Fest 1 · a stray "Gebrauchsliteratur" 1
+    deliberate:
+      "Gebrauchsliteratur": "a use-category umbrella (practical texts of every genre), not a genre claim"  # 1,718
+
   openiti:            # census: BookSUBJ (→ the subject facet) on 4,191 of 9,079 docs,
     facet: subject    # 2026-09-26 — a long-tail Arabic library taxonomy; regex rules
     #                   fold the recurring heads (multi-label by design, the aozora
