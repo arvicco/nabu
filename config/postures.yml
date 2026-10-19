@@ -92,12 +92,13 @@ sources:
   okhc:
     # P91-1: three codes, each with a real anchor — lzh rides the korean
     # shelves' codemap precedent (Hanmun = Literary Sinitic as read in
-    # Korea); ko is the honest-coarse claim for the Early Modern/Modern
-    # Korean labels (the stage refinement is a future date-band story
-    # over the per-record year field); okm would ride the held
-    # ko-wikisource-mk precedent if Middle Korean rows surface at sync.
-    lect: {posture: codemap, note: "lzh → zho/lit (the sillok mold); ko/okm identity;
-        Korean stage refinement deferred to a ruled year-band table"}
+    # Korea). The Korean stage refinement is LIVE (2026-10-19): the
+    # registry's ruled ladder (oko → okm emk/lmk → ko emod/mod, Lee &
+    # Ramsey bands) + lect infer-dates stage the year-carrying records.
+    lect: {posture: codemap, note: "lzh → zho/lit (the sillok mold); the dated ko records
+        STAGE through the registry's Korean ladder (ko:emod 2,306 · ko:mod 26,329 ·
+        okm:lmk 5, journaled rule:date-band); the 29,731 year-less ko records stay
+        honestly bare"}
     dating: {posture: dated, note: "P92-6: the per-record integer year projects
         through MetadataDates :year_key — 490,014 of 1,198,779 records carry one
         (censused 2026-09-01, range 695–1995). The klc munjip records (652,405, none
@@ -488,8 +489,9 @@ sources:
     script: {posture: implied}
   ko-wikisource-mk:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: okm IS Middle Korean (the MK layer; the hanmun
-        ruby passages ride lzh, sillok's codemap precedent, no separate claim)}
+    lect: {posture: identity, note: "okm IS Middle Korean, now staged okm:lmk by its
+        1447 date through the registry's ladder (journaled rule:date-band); the hanmun
+        ruby passages ride lzh, sillok's codemap precedent, no separate claim"}
     dating: {posture: dated, note: "P78-4: 머리말 연도 = 1447 (the print year, upstream's
         machine date) via MetadataDates :structured — one envelope per work page"}
     places: {posture: unplaced}
