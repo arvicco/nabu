@@ -693,6 +693,82 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # eebo-tcp's first kind wave: the LCSH subject facet as an OPEN
+  # vocabulary — form headings and form subdivisions fold onto ruled
+  # heads; topical, name and about-the-form headings mint nothing.
+  EEBO_FOLDS = {
+    "Sermons, English -- 17th century." => ["sermon"],
+    "Fast-day sermons." => ["sermon"],
+    "Sermons, American -- 17th century." => ["sermon"],
+    "Funeral sermons -- 17th century." => ["sermon/funeral-sermon"],
+    "Church of England -- Sermons." => ["sermon"],
+    "Great Britain -- History -- Civil War, 1642-1649 -- Sermons -- Early works to 1800." => ["sermon"],
+    "Ballads, English -- 17th century." => ["literary/poetry"],
+    "Political ballads and songs -- England -- 17th century." => ["literary/poetry"],
+    "Elegiac poetry, English -- 17th century." => ["literary/poetry"],
+    "English poetry -- Early modern, 1500-1700." => ["literary/poetry"],
+    "Songs, English." => ["literary/poetry"],
+    "Charles -- II, -- King of England, 1630-1685 -- Poetry." => ["literary/poetry"],
+    "English drama -- Restoration, 1660-1700." => ["literary/drama"],
+    "Masques -- Early works to 1800." => ["literary/drama"],
+    "Political satire, English -- Early works to 1800." => ["literary"],
+    "Prayers -- Early works to 1800." => ["hymn-prayer/prayer"],
+    "Church of England -- Prayer-books and devotions." => ["hymn-prayer/prayer"],
+    "Hymns, English -- Early works to 1800." => ["hymn-prayer/hymn"],
+    "Europe -- History -- 1648-1715 -- Periodicals." => ["periodical"],
+    "England -- Proclamations -- Early works to 1800." => ["legal/law"],
+    "Proclamations -- Great Britain." => ["legal/law"],
+    "Trials (Treason) -- England -- Early works to 1800." => ["legal/court"],
+    "Great Britain -- History -- Civil War, 1642-1649 -- Treaties -- Early works to 1800." => ["legal/treaty"],
+    "Society of Friends -- Pastoral letters and charges." => ["letter"],
+    "Bible. -- N.T. -- Revelation -- Commentaries -- Early works to 1800." => ["exegesis"],
+    "Latin language -- Grammar -- Early works to 1800." => ["lexical/grammar"],
+    "English language -- Dictionaries -- Early works to 1700." => ["lexical"],
+    "Medicine -- Early works to 1800." => ["scholarly/medicine"],
+    "Medicine -- Formulae, receipts, prescriptions -- Early works to 1800." =>
+      %w[scholarly/medicine scholarly/recipe],
+    "Cookery -- Early works to 1800." => ["scholarly/recipe"],
+    "Astronomy -- Early works to 1800." => ["scholarly/astronomy"],
+    "Geometry -- Early works to 1800." => ["scholarly/mathematics"],
+    "Navigation -- Early works to 1800." => ["scholarly"],
+    "Astrology -- Early works to 1800." => ["divination/astrology"],
+    "Prophecies -- Early works to 1800." => ["divination/oracle"],
+    "Great Britain -- Biography." => ["historiography"],
+    "Voyages and travels -- Early works to 1800." => ["literary/diary/travelogue"],
+    "Fables -- Early works to 1800." => ["literary/narrative/fable"],
+    "Proverbs, English." => ["literary/wisdom/proverbs"],
+    "Dialogues, English -- Early works to 1800." => ["literary/wisdom/dialogue"],
+    "Epitaphs -- England -- Early works to 1800." => ["funerary/epitaph"]
+  }.freeze
+
+  # Topical, name, and ABOUT-the-form headings: no rule covers them.
+  EEBO_UNCOVERED = [
+    "Great Britain -- Politics and government -- 1642-1649.",
+    "Broadsides -- England -- London -- 17th century.",
+    "Church of England -- Controversial literature.",
+    "Sermons -- History and criticism -- England -- 17th century.",
+    "Smallwood, Allan, 1608-1686. -- Sermon preached at Carlisle, Aug. 17, 1664.",
+    "Prayers -- Law and legislation -- Scotland -- Early works to 1800.",
+    "Prayer.",
+    "Navigation acts, 1649-1696 -- Early works to 1800.",
+    "Medicine -- England -- Controversial literature.",
+    "Astrology -- Humor -- Early works to 1800.",
+    "Proverbs in the Bible.",
+    "Catechisms, English."
+  ].freeze
+
+  def test_shipped_eebo_subject_fold_is_an_open_vocabulary
+    shipped = shipped_kinds
+    assert shipped.open?("eebo-tcp")
+    assert_equal "subject", shipped.facet_for("eebo-tcp")
+    EEBO_FOLDS.each { |heading, want| assert_equal want, shipped.normalize("eebo-tcp", heading).sort, heading }
+    EEBO_UNCOVERED.each do |heading|
+      fold = shipped.fold("eebo-tcp", heading)
+      assert_empty fold.paths, heading
+      assert_equal [heading], fold.uncovered, heading
+    end
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),

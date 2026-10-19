@@ -391,15 +391,6 @@ sources:
         Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   eebo-tcp:
-    kind: {posture: pending, note: "candidate: a kind_map fold over the LCSH subject facet's
-        FORM headings (Ballads, English 1,779 · Funeral sermons 589 · Elegiac poetry, English
-        205 · Prayers 198 · English poetry 168 · Hymns, English 49 · English drama 46 …;
-        census 2026-10-19). Not ruled yet: the subject facet is an OPEN vocabulary (~34.6k
-        distinct headings, overwhelmingly topical — Great Britain -- History …), so a
-        facet fold today would file every topical heading as `unmapped`; it needs a fold
-        shape where uncovered headings mint nothing (a kinds-core change), and the corpus's
-        largest form — Sermons, English 4,317 (+ Fast-day/Visitation/Funeral sermons) — has
-        no ruled class (homiletic) on the kind list"}
     lect:
       posture: identity
       note: "en IS the claim and it is TRUE today (P83-1): 97.6% of the
