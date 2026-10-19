@@ -412,6 +412,7 @@ end
 require_relative "store/ledger"
 require_relative "store/stage_timings"
 require_relative "store/links_journal"
+require_relative "store/source_content_identity"
 require_relative "store/lect_journal"
 require_relative "store/lect_facets"
 require_relative "store/artifact_scripts"

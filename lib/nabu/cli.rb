@@ -2191,6 +2191,11 @@ module Nabu
                                desc: "--incremental only (P89-1): re-stamp parser-drift-only sources " \
                                      "without replay when git vouches their own parser files predate " \
                                      "the stamp — the bridge for a catalog built by current code"
+    option :full_links, type: :boolean, default: false,
+                        desc: "Carry no links scope this run: re-mine every recorded scope and " \
+                              "compare the would-be-carried ones against their stamps (the " \
+                              "self-check, forced now; it also runs every " \
+                              "#{Nabu::LinkStamps::SELF_CHECK_EVERY}th links stage)"
     def rebuild
       config = Nabu::Config.load
       # P62 rider: rebuild DROPS the catalog — doing that under a live
@@ -2204,7 +2209,7 @@ module Nabu
       return say("Nothing to rebuild: no sources registered.") if registry.empty?
       return rebuild_incremental(config, registry) if options[:incremental]
 
-      rebuilder = Nabu::Rebuild.new(config: config, registry: registry)
+      rebuilder = Nabu::Rebuild.new(config: config, registry: registry, full_links: options[:full_links])
       if options[:dry_run]
         # --profile implies nothing extra on a dry run: there is no run to time.
         print_plan(rebuilder.plan)
@@ -12554,7 +12559,8 @@ module Nabu
         end
         incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry,
                                                    trust_stages: options[:trust_stages],
-                                                   trust_derivations: options[:trust_derivations])
+                                                   trust_derivations: options[:trust_derivations],
+                                                   full_links: options[:full_links])
         if options[:dry_run]
           plan = incremental.plan(progress: progress_reporter)
           finish_progress
@@ -12600,10 +12606,22 @@ module Nabu
         summary += ", trusted #{result.trusted.size}" if result.trusted.any?
         say summary
         say "  indexed #{result.indexed} passages" if result.indexed
+        print_links_stage(result.links)
         result.link_failures.each do |failure|
           say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow
         end
         print_analyzed(result.analyzed)
+      end
+
+      # The links stage's verdict line (LinkStamps::Outcome#summary); a
+      # self-check drift is an incident — red, never folded into the line.
+      def print_links_stage(links)
+        return if links.nil?
+
+        say "  #{links.summary}", links.drift.empty? ? nil : :red
+        links.drift.each do |line|
+          say "  LINKS DRIFT: #{line} — a stamp lied; the fresh mine is kept", :red
+        end
       end
 
       # --dry-run: report the plan, touch nothing.
@@ -12641,6 +12659,7 @@ module Nabu
               "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
               "rundata #{result.axes.rundata}, openiti #{result.axes.openiti})"
         end
+        print_links_stage(result.links)
         result.link_failures.each do |failure|
           say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow
         end

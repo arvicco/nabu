@@ -72,10 +72,12 @@ module Nabu
     # stats refresh — present when any source re-derived (the dirty replays
     # shifted the catalog/index distribution), nil when everything was clean.
     # +trusted+ (P89-1) lists the sources re-stamped without replay.
+    # +links+ is the LinkStamps::Outcome when the links stage ran (nil
+    # when nothing was dirty and --full-links was not given).
     Result = Data.define(:db_path, :outcomes, :cleans, :skips, :indexed, :axes, :facets, :analyzed,
-                         :link_failures, :trusted) do
+                         :link_failures, :trusted, :links) do
       def initialize(db_path:, outcomes:, cleans:, skips:, indexed:, axes:, facets:, analyzed: nil,
-                     link_failures: [], trusted: [])
+                     link_failures: [], trusted: [], links: nil)
         super
       end
 
@@ -121,8 +123,8 @@ module Nabu
     # was shared-core code the owner attests is content-neutral). Anything
     # the voucher cannot vouch for replays honestly — never a run refusal.
     def initialize(config:, registry:, trust_stages: false, trust_derivations: false,
-                   code_voucher: nil)
-      super(config: config, registry: registry)
+                   code_voucher: nil, full_links: false)
+      super(config: config, registry: registry, full_links: full_links)
       @trust_stages = trust_stages
       @trust_derivations = trust_derivations
       @code_voucher = code_voucher || CodeVoucher.new
@@ -148,6 +150,7 @@ module Nabu
       # P89-1: pin code identities before any replay (see Rebuild#run) —
       # the last verdict of a long dirty run happens hours after load time.
       warm_code_identities(progress)
+      warm_link_code
       # The trust horizon (owner ruling option b): the ELDEST per-source stamp, not each
       # stamp's own time. A long run stamps late from disk bytes while its
       # rows come from code loaded at start — a closure file committed
@@ -246,12 +249,13 @@ module Nabu
       # closes the hand-edit gap (an edited rulings file, facet rule, or
       # local/config overlay propagates immediately, dirty or clean).
       # Facet re-materialization rides only when something could have
-      # changed (dirty replay or a journal delta). The links re-mine
-      # stays DIRTY-ONLY: it is minutes-scale against the cheap-clean-run
-      # design goal, and its config lane (link_scopes.yml) is written by
-      # the batch CLIs live — only a hand edit diverges, and that waits
-      # for the next full rebuild or dirty incremental (stated in §1 and
-      # restore.md).
+      # changed (dirty replay or a journal delta). The links stage
+      # stays DIRTY-ONLY (or --full-links): its member identities cost a
+      # catalog pass against the cheap-clean-run design goal, and its
+      # config lane (link_scopes.yml) is written by the batch CLIs live —
+      # only a hand edit diverges, and that waits for the next full
+      # rebuild or dirty incremental (stated in §1 and restore.md). When
+      # it runs, clean scopes carry on their stamps (LinkStamps).
       progress&.stage("lect journal")
       journal = Store::LectJournal.open!(@config.lects_journal_path)
       begin
@@ -279,10 +283,6 @@ module Nabu
         # AES <- AED header join re-fills them.
         progress&.stage("aes titles")
         AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
-      end
-      if outcomes.any?
-        progress&.stage("links")
-        link_failures = rederive_links!(db, fulltext)
       end
       if index_dirty
         # P112-4: the covering mechanism — index-core drift re-derives the
@@ -321,6 +321,19 @@ module Nabu
         progress&.stage("lemma rollups")
         Store::LemmaRollup.rebuild!(catalog: db, fulltext_path: fulltext_path)
       end
+      # The links stage rides AFTER the index has settled (heal + stage
+      # reconciliation), exactly as in the full rebuild: parallels mines
+      # the fulltext index, and its scope stamp names the index code it
+      # ran against — mining before an index-core re-derivation would mint
+      # edges from the old index under a stamp claiming the new one.
+      # --full-links runs it even when nothing was dirty (the owner's
+      # forced self-check).
+      links = nil
+      if outcomes.any? || @full_links
+        progress&.stage("links")
+        links = rederive_links!(db, fulltext, progress: progress)
+        link_failures = links.failures
+      end
       # P42-4: refresh the planner stats when dirty sources re-derived — their
       # replays revised the catalog and (per source) the index, so the
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
@@ -328,7 +341,7 @@ module Nabu
       analyzed = analyze_after_incremental(db, fulltext) if builders_ran
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,
                  indexed: indexed, axes: axes, facets: facets, analyzed: analyzed,
-                 link_failures: link_failures, trusted: trusted)
+                 link_failures: link_failures, trusted: trusted, links: links)
     ensure
       db&.disconnect
       fulltext&.disconnect
