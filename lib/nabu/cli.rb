@@ -3781,6 +3781,12 @@ module Nabu
       --lang grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro restricts to one
       shelf; --limit caps the entries.
 
+      --facet NAME=PATTERN (repeatable, each must hold) keeps only entries
+      the dictionary-entry facet surface tags: JMdict's domain / usage /
+      dialect / loan_source labels, WOLD's semantic_field / word_class /
+      borrowed_status, TLS's concept. The pattern matches the value or its
+      ref, case-insensitively; LIKE patterns pass through.
+
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
         nabu define λόγος              # the long one, whole
@@ -3789,6 +3795,7 @@ module Nabu
         nabu define amsa --lang san    # Monier-Williams: aṃśa/aṃsa, RV. resolved into GRETIL
         nabu define богъ --lang chu    # Wiktionary-OCS: god, ex Proto-Slavic *bogъ
         nabu define '*bogъ'            # the reconstruction, with its reflexes (quote *)
+        nabu define 経 --facet domain=Buddhism  # JMdict's Buddhist-domain senses only
     HELP
     option :lang, type: :string,
                   desc: "Restrict to one dictionary language (any language on the live " \
@@ -3802,10 +3809,14 @@ module Nabu
                   desc: "Restrict to shelves whose (language, source) RESOLUTION is this lect id " \
                         "or under it (P59-3; per-source overrides included — derom's la-vul " \
                         "scopes under roa, never lat); errors if the nabu-lects module is not synced"
+    option :facet, type: :string, repeatable: true, banner: "NAME=PATTERN",
+                   desc: "Entry facet filter — domain=medicine, usage=archaic, semantic_field=Kinship, " \
+                         "concept=WORLD: matches value or ref, LIKE patterns pass through; repeatable (AND)"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
 
+      facets = facet_specs(command: "define", example: "domain=Buddhism")
       config = Nabu::Config.load
       catalog = open_catalog(config)
       raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
@@ -3826,6 +3837,9 @@ module Nabu
         end
       @shelf_summary = "the shelf holds #{shelf_count} dictionaries " \
                        "(#{shelf_langs.join(', ')})"
+      unless facets.empty?
+        @shelf_summary += "; entry facets #{facets.map { |name, pattern| "#{name}=#{pattern}" }.join(', ')}"
+      end
       if options[:lang] && !Nabu::Languages.code_variants(options[:lang]).intersect?(shelf_langs)
         raise Thor::Error, "define: --lang must be a language on the live shelf " \
                            "(#{shelf_langs.join(', ')})"
@@ -3838,7 +3852,8 @@ module Nabu
       # fetch-time cap hid the tail silently (the gate found `define 棄`
       # missing tls-words). --long lifts the cap; compact announces it.
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
-                                   .run(lemma, lang: options[:lang], limit: nil, lect: options[:lect])
+                                   .run(lemma, lang: options[:lang], limit: nil, lect: options[:lect],
+                                               facets: facets)
       shown = options[:long] ? results : results.first(options[:limit].to_i)
       print_define_results(lemma, shown, catalog: catalog)
       if (hidden = results.size - shown.size).positive?
@@ -5881,15 +5896,21 @@ module Nabu
         filters["kind"] = options[:kind] if options[:kind]
         filters["province"] = options[:province] if options[:province]
         filters["material"] = options[:material] if options[:material]
-        Array(options[:facet]).each do |spec|
+        filters.merge!(facet_specs(command: "search", example: "subject=왕실-%"))
+        filters.empty? ? nil : filters
+      end
+
+      # The repeatable --facet NAME=PATTERN specs as {name => pattern} (a
+      # repeat of a name wins last) — search's and define's shared parse.
+      def facet_specs(command:, example:)
+        Array(options[:facet]).to_h do |spec|
           name, pattern = spec.to_s.split("=", 2).map(&:strip)
           if name.to_s.empty? || pattern.to_s.empty?
-            raise Thor::Error, "search: --facet takes NAME=PATTERN (subject=왕실-%) — got #{spec.inspect}"
+            raise Thor::Error, "#{command}: --facet takes NAME=PATTERN (#{example}) — got #{spec.inspect}"
           end
 
-          filters[name] = pattern
+          [name, pattern]
         end
-        filters.empty? ? nil : filters
       end
 
       # The active loans code (P34-2), or nil. No validation beyond the strip:

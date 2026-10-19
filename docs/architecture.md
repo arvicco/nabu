@@ -277,6 +277,26 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- text stays byte-identical. The id-bearing sources also derive
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).
+entry_facet_values(id, source_id, facet, value, ref)
+entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id)
+   -- Migration 046: the same mold at DICTIONARY-ENTRY grain — the
+   -- categorical claims upstream makes per entry (JMdict's <field>
+   -- domains, <misc> usage marks, <dial> dialects and <lsource> donor
+   -- codes; WOLD's Semantic_field / Semantic_category / Borrowed status;
+   -- TLS's word→concept assignments, ref = the concept uuid). The
+   -- adapter emits them as DictionaryEntry#annotations; the loader stores
+   -- them in dictionary_entries.annotations_json (canonical JSON, NULL
+   -- when none — the common case, never fetched by the builder; part of
+   -- the entry's content sha only when present, so annotation-less
+   -- shelves keep every stored sha). Store::EntryFacetBuilder projects
+   -- them under facet_map.yml's per-source entry_fields (third sibling
+   -- key; PassageFacetBuilder's value rules, shared), reading annotated
+   -- entry ids then their JSON in primary-key slices (million-entry
+   -- shelves never load whole). Lifecycle: both rebuild flavors,
+   -- builders:refresh, and the post-load sync refresh under the
+   -- dictionary-stats gate (withdrawals included). Read by `nabu define
+   -- --facet NAME=PATTERN` (Query::Define#run facets:): entries whose
+   -- value or ref matches, AND across facets.
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
