@@ -46,6 +46,37 @@ class DictionaryEntryTest < Minitest::Test
     assert_raises(Nabu::ValidationError) { reflex(language: "Not A Code") }
   end
 
+  # The etymology-mining fields: a typed relation (closed vocabulary), the
+  # verbatim first-attestation date and its parsed lower-bound year.
+  def test_reflex_relation_and_attestation_default_absent
+    r = reflex
+    assert_nil r.relation
+    assert_nil r.attested
+    assert_nil r.attested_year
+  end
+
+  def test_reflex_carries_a_closed_vocabulary_relation
+    Nabu::DictionaryReflex::RELATIONS.each do |relation|
+      assert_equal relation, reflex(relation: relation).relation
+    end
+    assert_raises(Nabu::ValidationError) { reflex(relation: "descends-somehow") }
+  end
+
+  def test_etymon_relations_name_the_entrys_own_ancestor_or_donor
+    assert_equal %w[inherited derived borrowed learned-borrowing], Nabu::DictionaryReflex::ETYMON_RELATIONS
+    assert reflex(relation: "inherited").etymon?
+    refute reflex(relation: "cognate").etymon?
+    refute reflex.etymon?
+  end
+
+  def test_reflex_carries_verbatim_attestation_and_its_year
+    r = reflex(attested: "dp. 1220", attested_year: 1220)
+    assert_equal "dp. 1220", r.attested
+    assert_equal 1220, r.attested_year
+    assert_raises(Nabu::ValidationError) { reflex(attested_year: "1220") }
+    assert_raises(Nabu::ValidationError) { reflex(attested: "") }
+  end
+
   # --- DictionaryEntry#reflexes ---------------------------------------------------
 
   def test_entry_reflexes_default_empty_and_frozen

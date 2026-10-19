@@ -278,7 +278,8 @@ module Nabu
             lang_code: reflex.lang_code, language: reflex.language,
             word: reflex.word, roman: reflex.roman,
             word_folded: reflex.word_folded, roman_folded: reflex.roman_folded,
-            borrowed: reflex.borrowed, uncertain: reflex.uncertain
+            borrowed: reflex.borrowed, uncertain: reflex.uncertain,
+            relation: reflex.relation, attested: reflex.attested, attested_year: reflex.attested_year
           )
         end
       end

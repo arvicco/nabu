@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../store/indexer"
+require_relative "../store/reflex_descent"
 require_relative "../store/lemma_frequencies"
 
 module Nabu
@@ -66,11 +67,13 @@ module Nabu
         columns = %i[lang_code language word roman word_folded roman_folded]
         columns << :borrowed if borrowed_column?
         columns << :uncertain if uncertain_column?
-        rows = @catalog[:dictionary_reflexes]
-               .where(dictionary_entry_id: entry_row_id)
-               .order(:seq)
-               .select(*columns)
-               .all
+        # An entry's own etymon rows (migration 046's UP edges) are no
+        # cognates of it — Store::ReflexDescent.
+        descent = Store::ReflexDescent.scope(@catalog[:dictionary_reflexes], catalog: @catalog)
+        rows = descent.where(dictionary_entry_id: entry_row_id)
+                      .order(:seq)
+                      .select(*columns)
+                      .all
         counts = attestation_counts(rows)
         dedupe(rows).map do |row|
           tiers = counts[[row.fetch(:language), row.fetch(:word_folded)]] ||

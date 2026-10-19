@@ -1123,6 +1123,24 @@ no key; conventions §9). Two structural consequences:
   cognate details append "(loan: chu)", MCP payloads carry the boolean
   with the NULL-honesty note. Projected closure growth ~50,395 → 56–60k
   rows (survey §2), realized at the owner-fired sync + reindex.
+- **Typed relations and first attestations (migration 046)**: three
+  nullable columns on `dictionary_reflexes`. `relation` is a closed
+  vocabulary (`DictionaryReflex::RELATIONS`); NULL is every row that
+  states none (descendants trees, MW, DÉRom, WOLD). The ETYMON relations
+  — `inherited` / `derived` / `borrowed` / `learned-borrowing`, minted
+  from the kaikki `etymology_templates` (inh/der/bor/lbor) — point UP:
+  the named word is the owning entry's OWN ancestor or donor, the reverse
+  of a descendants row. Every descent walk (etym's reflex match and
+  ascent, the `reflex_roots` closure, an entry's cognate list, the
+  nabu-data reflex-chains export) scopes through `Store::ReflexDescent`,
+  so an UP edge never reads as a descendant; the rows are stored data
+  awaiting their own (ascending) surface. `cognate` (the Lewis & Short
+  cognate chains) is direction-free and walks like MW's cognate rows.
+  `attested` / `attested_year` carry the verbatim first-attestation date
+  upstream prints per reflex (DÉRom's "dp. 1220") and its parsed
+  lower-bound year (NULL when the shape does not parse). All three join
+  ContentHash's reflex encoding only when set (no revision storm on
+  shelves that mint none).
 
 ## 13. Passage-anchored intertext — the corpus reads itself (P15-1)
 

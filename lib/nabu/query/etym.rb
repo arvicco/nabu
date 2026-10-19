@@ -2,6 +2,7 @@
 
 require_relative "../lects"
 require_relative "../normalize"
+require_relative "../store/reflex_descent"
 require_relative "../store/reflex_roots_indexer"
 require_relative "reflex_views"
 
@@ -147,8 +148,8 @@ module Nabu
       # stored order wins as the MatchedVia).
       def proto_rows_by_reflex(term, lang:, limit:)
         variants = Nabu::Normalize.query_forms(term)
-        dataset = entry_dataset
-                  .join(:dictionary_reflexes, dictionary_entry_id: Sequel[:dictionary_entries][:id])
+        dataset = descent(entry_dataset.join(:dictionary_reflexes,
+                                             dictionary_entry_id: Sequel[:dictionary_entries][:id]))
                   .where(
                     Sequel.|({ Sequel[:dictionary_reflexes][:word_folded] => variants },
                              { Sequel[:dictionary_reflexes][:roman_folded] => variants })
@@ -234,8 +235,8 @@ module Nabu
       # from one ancestor collapse, their loan flags merged true > false >
       # nil.
       def ancestors_of(row, visited)
-        rows = entry_dataset
-               .join(:dictionary_reflexes, dictionary_entry_id: Sequel[:dictionary_entries][:id])
+        rows = descent(entry_dataset.join(:dictionary_reflexes,
+                                          dictionary_entry_id: Sequel[:dictionary_entries][:id]))
                .where(Sequel[:dictionary_reflexes][:language] => row.fetch(:language),
                       Sequel[:dictionary_reflexes][:word_folded] => row.fetch(:headword_folded))
                .exclude(Sequel[:dictionaries][:language] => visited.to_a)
@@ -250,6 +251,10 @@ module Nabu
                                                       .reduce { |a, b| Store::ReflexRootsIndexer.max_flag(a, b) })
         end
       end
+
+      # Migration 046's direction rule: the walk follows descent rows only
+      # (an etymon row names its entry's OWN ancestor — Store::ReflexDescent).
+      def descent(dataset) = Store::ReflexDescent.scope(dataset, catalog: @catalog)
 
       def entry_dataset
         @catalog[:dictionary_entries]
