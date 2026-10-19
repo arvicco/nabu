@@ -175,8 +175,10 @@ module Nabu
       # Compound tokens the prefix/suffix rule would mis-hit — machinery
       # (timestamps, web addresses) and the "original_*" title/text family
       # ("origin" is a place word; "original" is not).
+      # "foreign" (an inline foreign-language span — korba/ticha/the CTS
+      # editions' passage annotations) ends with "reign".
       MINING_FALSE_FRIENDS = %w[timestamp timestamps timezone website websites original originals
-                                classname].freeze
+                                classname foreign].freeze
 
       # Fetch bookkeeping — keys whose FIRST token marks them as
       # machinery, never ore.
@@ -262,6 +264,25 @@ module Nabu
       }.freeze
 
       MINING_SAMPLE = 40
+
+      # Passages read per spread-sampled document by the passage-grain
+      # census (the first few in reading order — enough to see a
+      # document's annotation shape, never a scan).
+      PASSAGE_SAMPLE = 5
+
+      # The passage-grain twin of MINING_EXEMPT: slug => { annotation key
+      # => reason } for axis-shaped passage annotations that are
+      # deliberately not projected. Same discipline — every entry states
+      # its reason (suite-enforced).
+      # Seeded from the first passage-grain census of the live catalog
+      # (2026-10-19); everything else it surfaced is real ore and stays
+      # loud on purpose.
+      PASSAGE_MINING_EXEMPT = {
+        "prague-bible-1488" => { "region_id" => "the PAGE-XML layout region of the scan " \
+                                                "(\"tr_1\") — a place on the page, not a geography",
+                                 "region_type" => "the PAGE-XML region's layout class " \
+                                                  "(\"paragraph\") — page structure, not a place" }
+      }.freeze
 
       private
 
@@ -659,21 +680,17 @@ module Nabu
       # Deliberate coarseness stays allowed but must be DECLARED:
       # MINING_EXEMPT (a public constant above) names each (source,
       # key) with its reason, and the suite requires every entry to
-      # carry one.
+      # carry one. The census reads BOTH grains: document metadata and
+      # passage annotations (a per-charter dating line, per-entry place
+      # tags) — the passage half named "passage <lane>" in the message,
+      # declared in PASSAGE_MINING_EXEMPT.
       def unmined_axis_metadata
         return nil unless table?(@catalog, :document_axes) && table?(@catalog, :document_facets)
 
         dark = @catalog[:sources].order(:slug).select_map(%i[id slug]).filter_map do |id, slug|
-          sample = sampled_metadata(id)
-          ore = ore_keys_by_lane(sample.flat_map { |_, meta| meta.keys }.uniq, slug)
-          next nil if ore.empty?
-
-          projected = projected_strings(sample.map(&:first))
-          lanes = ore.transform_values { |keys| keys.reject { |key| key_traced?(key, sample, projected) } }
-                     .reject { |_, keys| keys.empty? }
-          next nil if lanes.empty?
-
-          "#{slug} (#{lanes.map { |lane, keys| "#{lane}: #{keys.sort.join('/')}" }.join('; ')})"
+          segments = dark_document_lanes(id, slug).map { |lane, keys| "#{lane}: #{keys.sort.join('/')}" } +
+                     dark_passage_lanes(id, slug).map { |lane, keys| "passage #{lane}: #{keys.sort.join('/')}" }
+          segments.empty? ? nil : "#{slug} (#{segments.join('; ')})"
         end
         return nil if dark.empty?
 
@@ -682,12 +699,94 @@ module Nabu
           message: "unmined axis ore in #{dark.join(' · ')} — metadata carries axis-shaped keys " \
                    "the lane never projects (the aggressive-mining law, owner-ruled 2026-09-26): " \
                    "extract them, or declare " \
-                   "the coarseness in Invariants::MINING_EXEMPT with its reason"
+                   "the coarseness in Invariants::MINING_EXEMPT (document metadata) or " \
+                   "PASSAGE_MINING_EXEMPT (passage annotations) with its reason"
         )
       end
 
-      def ore_keys_by_lane(keys, slug)
-        exempt = MINING_EXEMPT.fetch(slug, {})
+      # {lane => [dark document-metadata keys]} for one source.
+      def dark_document_lanes(source_id, slug)
+        sample = sampled_metadata(source_id)
+        ore = ore_keys_by_lane(sample.flat_map { |_, meta| meta.keys }.uniq, slug)
+        return {} if ore.empty?
+
+        projected = projected_strings(sample.map(&:first))
+        ore.transform_values { |keys| keys.reject { |key| key_traced?(key, sample, projected) } }
+           .reject { |_, keys| keys.empty? }
+      end
+
+      # The passage grain: ore riding passage ANNOTATIONS (a charter's
+      # dating line, an entry's place tags) is invisible to the document
+      # sample. Sampled passages' keys go through the same vocabulary;
+      # a key is MINED when a sampled value traces into its document's
+      # axis rows (passage-grain rows included — projected_strings reads
+      # every row of the document) or equals one of the source's passage
+      # facet values (exact: those values ARE verbatim annotation values).
+      def dark_passage_lanes(source_id, slug)
+        sample = sampled_passages(source_id)
+        ore = ore_keys_by_lane(sample.flat_map { |_, annotations| annotations.keys }.uniq, slug,
+                               exempt: PASSAGE_MINING_EXEMPT)
+        return {} if ore.empty?
+
+        projected = projected_strings(sample.map(&:first).uniq)
+        facet_values = passage_facet_values(source_id, sample)
+        dark = ore.transform_values do |keys|
+          keys.reject { |key| passage_key_traced?(key, sample, projected, facet_values) }
+        end
+        dark.reject { |_, keys| keys.empty? }
+      end
+
+      # [[document_id, annotations Hash], …]: the first PASSAGE_SAMPLE
+      # passages of up to MINING_SAMPLE documents spread evenly over the
+      # source's id range — a first-N document sample would see only one
+      # series of a multi-series source (openMGH's Diplomata volumes sit
+      # between its Scriptores ones). Index-backed probes only: no
+      # passage scan.
+      def sampled_passages(source_id)
+        spread_document_ids(source_id).flat_map do |document_id|
+          @catalog[:passages].where(document_id: document_id, withdrawn: false)
+                             .order(:sequence).limit(PASSAGE_SAMPLE)
+                             .select_map(:annotations_json).filter_map do |json|
+            annotations = JSON.parse(json.to_s) rescue nil # rubocop:disable Style/RescueModifier
+            [document_id, annotations] if annotations.is_a?(Hash) && !annotations.empty?
+          end
+        end
+      end
+
+      def spread_document_ids(source_id)
+        documents = @catalog[:documents].where(source_id: source_id, withdrawn: false)
+        low = documents.min(:id) or return []
+        step = [(documents.max(:id) - low + 1).fdiv(MINING_SAMPLE), 1].max
+        Array.new(MINING_SAMPLE) { |k| low + (k * step).floor }.uniq.filter_map do |floor|
+          documents.where { id >= floor }.order(:id).get(:id)
+        end.uniq
+      end
+
+      # The source's passage facet values among the sampled leaves — one
+      # source-scoped query (passage_facets is keyed by value, never by
+      # passage, so the per-passage join would scan millions of rows).
+      def passage_facet_values(source_id, sample)
+        return Set.new unless table?(@catalog, :passage_facet_values)
+
+        leaves = sample.flat_map { |_, annotations| metadata_leaves(annotations) }.uniq
+        return Set.new if leaves.empty?
+
+        @catalog[:passage_facet_values].where(source_id: source_id, value: leaves).select_map(:value).to_set
+      end
+
+      def passage_key_traced?(key, sample, projected, facet_values)
+        sample.any? do |document_id, annotations|
+          next false unless annotations.key?(key)
+
+          rows = projected[document_id].map(&:strip).reject(&:empty?)
+          metadata_leaves(annotations[key]).any? do |leaf|
+            facet_values.include?(leaf) || rows.any? { |row| value_traces?(leaf, row) }
+          end
+        end
+      end
+
+      def ore_keys_by_lane(keys, slug, exempt: MINING_EXEMPT)
+        exempt = exempt.fetch(slug, {})
         keys = keys.reject do |key|
           exempt.key?(key) || MINING_META_TOKENS.include?(key_tokens(key).first)
         end

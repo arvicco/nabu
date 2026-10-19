@@ -1205,7 +1205,11 @@ CLASS[,CLASS...]` filters on the class of a document's PRIMARY dated row,
 the holdout discipline as a flag. The self-enforcing half is the
 `unmined_axis_metadata` health invariant: axis-shaped metadata keys with
 zero corresponding facet/axis rows stay loud until extracted or
-declared.
+declared. It reads both grains — document metadata and passage
+annotations (sampled across each source's documents; a passage key is
+mined when its values reach the document's axis rows, passage-grain
+included, or the source's passage facet values), with the passage
+ledger `Invariants::PASSAGE_MINING_EXEMPT` beside the document one.
 
 **A catalog-side `document_axes` table (migration 008), NOT columns on
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)

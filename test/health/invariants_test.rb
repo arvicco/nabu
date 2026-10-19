@@ -643,6 +643,57 @@ class InvariantsTest < Minitest::Test
                  "fetch bookkeeping is not axis ore")
   end
 
+  # The census's passage blind spot: axis ore can ride passage
+  # ANNOTATIONS (per-charter dating lines, per-entry places), which the
+  # document-metadata sample never sees. Passage keys are sampled across
+  # the source's documents and must trace into that document's axis rows
+  # (passage grain included) or the source's passage facet values.
+  def seed_lane_passage(doc_id, sequence, annotations)
+    @db[:passages].insert(
+      document_id: doc_id, urn: "#{doc_id}:#{sequence}", sequence: sequence, text: "t",
+      text_normalized: "t", annotations_json: JSON.generate(annotations), content_sha256: "x#{sequence}"
+    )
+  end
+
+  def test_unmined_axis_metadata_watches_passage_annotations
+    doc_id = seed_lane_doc("rawore8", "urn:nabu:rawore8:c1", "{}")
+    passage = seed_lane_passage(doc_id, 0, { "unit" => "tenor", "date" => "(498) Dezember 29, Reims",
+                                             "place" => "Reims", "work" => "Greg. Tur. hist." })
+    finding = global_finding(:unmined_axis_metadata)
+    refute_nil finding, "date- and place-shaped passage annotations with no rows are unmined ore"
+    assert_match(/rawore8 \(passage dates: date; passage places: place\)/, finding.message,
+                 "passage keys are named as passage-grain, never confused with document metadata")
+
+    @db[:document_axes].insert(document_id: doc_id, not_before: 498, not_after: 498,
+                               date_raw: "(498) Dezember 29, Reims", place_name: "Reims",
+                               passage_seq_from: 0, passage_seq_to: 0, axis_source: "rawore8-charters")
+    assert_nil global_finding(:unmined_axis_metadata), "a passage-grain axis row mines both keys"
+    refute_nil passage
+  end
+
+  def test_passage_facet_values_mine_passage_annotation_keys
+    doc_id = seed_lane_doc("rawore9", "urn:nabu:rawore9:e1", "{}")
+    passage = seed_lane_passage(doc_id, 0, { "places" => [{ "value" => "漢城", "ref" => nil }] })
+    refute_nil global_finding(:unmined_axis_metadata)
+
+    source_id = @db[:sources].where(slug: "rawore9").get(:id)
+    value_id = @db[:passage_facet_values].insert(source_id: source_id, facet: "place", value: "漢城")
+    @db[:passage_facets].insert(value_id: value_id, passage_id: passage)
+    assert_nil global_finding(:unmined_axis_metadata), "the passage facet lane mines the key"
+  end
+
+  def test_passage_mining_exempt_declares_passage_keys_with_reasons
+    exempt = Nabu::Health::Invariants::PASSAGE_MINING_EXEMPT
+    exempt.each do |slug, keys|
+      keys.each { |key, reason| refute_empty reason.to_s.strip, "#{slug}/#{key} (passage) needs its reason" }
+    end
+    slug, keys = exempt.first
+    doc_id = seed_lane_doc(slug, "urn:nabu:#{slug}:exempt1", "{}")
+    seed_lane_passage(doc_id, 0, { keys.keys.first => "an undeclared-looking value" })
+    finding = global_finding(:unmined_axis_metadata)
+    assert(finding.nil? || !finding.message.include?(slug), "a declared passage key is exempt")
+  end
+
   def test_mining_exempt_entries_each_carry_a_reason
     Nabu::Health::Invariants::MINING_EXEMPT.each do |slug, keys|
       assert_kind_of Hash, keys, "#{slug}: exemptions are key => reason"
