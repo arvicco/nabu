@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<response>
+<header>
+	<field name='secId'>MO_SJ</field>
+	<field name='keyword'></field>
+	<field name='start'>1000</field>
+	<field name='rows'>1000</field>
+	<field name='totalCount'>1259</field>
+</header>
+<result>
+<doc>
+	<field name='서지ID'>ITKC_MO_1247A</field>
+	<field name='저자'>오횡묵|吳宖默</field>
+	<field name='저자몰년'>1906</field>
+	<field name='간행기간'>2012</field>
+	<field name='서명'>총쇄(叢瑣)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>1834</field>
+	<field name='검색필드'>叢瑣|총쇄</field>
+	<field name='자료ID'>ITKC_MO_1247A</field>
+	<field name='간행년'>미상</field>
+</doc>
+<doc>
+	<field name='서지ID'>ITKC_MO_1250A</field>
+	<field name='저자'>송병순|宋秉珣</field>
+	<field name='저자몰년'>1912</field>
+	<field name='간행기간'>2012</field>
+	<field name='서명'>심석재집(心石齋集)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>1839</field>
+	<field name='검색필드'>心石齋集|심석재집</field>
+	<field name='자료ID'>ITKC_MO_1250A</field>
+	<field name='간행년'>1912</field>
+</doc>
+<doc>
+	<field name='서지ID'>ITKC_MO_1255A</field>
+	<field name='저자'>신득구|申得求</field>
+	<field name='저자몰년'>1900</field>
+	<field name='간행기간'>2012</field>
+	<field name='서명'>농산집(農山集)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>1850</field>
+	<field name='검색필드'>農山集|농산집</field>
+	<field name='자료ID'>ITKC_MO_1255A</field>
+	<field name='간행년'>미상</field>
+</doc>
+</result>
+</response>

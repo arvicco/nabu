@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<response>
+<header>
+	<field name='secId'>MO_SJ</field>
+	<field name='keyword'></field>
+	<field name='start'>0</field>
+	<field name='rows'>1000</field>
+	<field name='totalCount'>1259</field>
+</header>
+<result>
+<doc>
+	<field name='서지ID'>ITKC_MO_0001A</field>
+	<field name='저자'>최치원|崔致遠</field>
+	<field name='저자몰년'>9999</field>
+	<field name='간행기간'>1990</field>
+	<field name='서명'>계원필경집(桂苑筆耕集)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>857</field>
+	<field name='검색필드'>桂苑筆耕集|계원필경집|桂苑筆耕集|桂苑筆耕</field>
+	<field name='자료ID'>ITKC_MO_0001A</field>
+	<field name='간행년'>1834</field>
+</doc>
+<doc>
+	<field name='서지ID'>ITKC_MO_0003A</field>
+	<field name='저자'>임춘|林椿</field>
+	<field name='저자몰년'>9999</field>
+	<field name='간행기간'>1990</field>
+	<field name='서명'>서하집(西河集)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>0</field>
+	<field name='검색필드'>西河集|서하집|西河先生集|林西河集</field>
+	<field name='자료ID'>ITKC_MO_0003A</field>
+	<field name='간행년'>1713</field>
+</doc>
+<doc>
+	<field name='서지ID'>ITKC_MO_0004A</field>
+	<field name='저자'>이규보|李奎報</field>
+	<field name='저자몰년'>1241</field>
+	<field name='간행기간'>1990</field>
+	<field name='서명'>동국이상국집(東國李相國集)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>1168</field>
+	<field name='검색필드'>東國李相國集|동국이상국집|東國李相國全集|李相國集</field>
+	<field name='자료ID'>ITKC_MO_0004A</field>
+	<field name='간행년'>미상</field>
+</doc>
+<doc>
+	<field name='서지ID'>ITKC_MO_0009A</field>
+	<field name='저자'>홍간|洪侃</field>
+	<field name='저자몰년'>1304</field>
+	<field name='간행기간'>1990</field>
+	<field name='서명'>홍애유고(洪崖遺槀)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>0</field>
+	<field name='검색필드'>洪崖遺槀|홍애유고|洪崖先生遺槀|洪崖遺槀</field>
+	<field name='자료ID'>ITKC_MO_0009A</field>
+	<field name='간행년'>1688</field>
+</doc>
+<doc>
+	<field name='서지ID'>ITKC_MO_0672A</field>
+	<field name='저자'>정구|鄭球</field>
+	<field name='저자몰년'>9999</field>
+	<field name='간행기간'>2005</field>
+	<field name='서명'>괴은유고(乖隱遺稿)</field>
+	<field name='간행처'>한국고전번역원</field>
+	<field name='아이템ID'>ITKC_MO</field>
+	<field name='자료구분'>서지</field>
+	<field name='주제분류'>문집</field>
+	<field name='저자생년'>1490</field>
+	<field name='검색필드'>乖隱遺稿|괴은유고|乖隱遺稿|乖隱集</field>
+	<field name='자료ID'>ITKC_MO_0672A</field>
+	<field name='간행년'>미상</field>
+</doc>
+</result>
+</response>

@@ -1,0 +1,61 @@
+# config/archive_axes.yml — the ruled archive-grain axes table
+# (Nabu::ArchiveAxes; consumer: MetadataDates' :archive_axes shape).
+#
+# For a source whose documents carry only an upstream ARCHIVE label (the
+# publication group) and a designation: each archive's findspot (name +
+# the gazetteer refs the catalog already holds for that name — the cdli
+# provenience rows' own "cigs:… pleiades:…" pairs, never a new mint) and
+# its dating ladder, first hit wins:
+#   1. `reigns` — a designation naming a REIGN volume → the held
+#      config/regnal_years.yml whole-reign span (a ruler key absent from
+#      that table is a load error, never a guess);
+#   2. `band` — the archive's own stated span (a volume title's dates);
+#   3. `corpus_period` — the source's corpus band, a period_bands.yml row.
+# An archive without `place` groups many sites and stays unplaced. Places
+# are archive-grain claims: a tablet carried off-site and filed in its
+# archive's publication still places at the archive's findspot — the
+# honest coarseness of the field, declared.
+sources:
+  achemenet:
+    # Census 2026-10-19 (live catalog): Strassmaier 1,373 · Murashu 762 ·
+    # CT55 291 · YOS7 192 · Jursa_Bel-remanni 156 = 2,774 documents.
+    # The Helsinki deposit describes the corpus as Achaemenid-period
+    # (550–330 BCE) — the Achaemenid period_bands row is the floor.
+    corpus_period: Achaemenid
+    archives:
+      CT55:
+        place: Sippar
+        place_ref: "cigs:SAP pleiades:894089"
+        note: "CT 55–57 (Pinches) — the British Museum's Neo-Babylonian and Achaemenid economic
+          texts from the Ebabbar temple archive of Sippar (Abu Habbah); no reign grain in the
+          designation, so the corpus band"
+      Jursa_Bel-remanni:
+        place: Sippar
+        place_ref: "cigs:SAP pleiades:894089"
+        note: "the Bēl-rēmanni archive (M. Jursa, Das Archiv des Bēl-rēmanni, 1999) — a Sippar
+          family/temple-official archive; designations are museum numbers, so the corpus band"
+      Murashu:
+        place: Nippur
+        place_ref: "cigs:NIP pleiades:912910"
+        note: "the Murašû firm's archive, excavated at Nippur (BE 9/10, PBS 2/1, TuM 2/3, IMT,
+          Stolper's Entrepreneurs and Empire); designations name the edition, not a reign, so
+          the corpus band"
+      YOS7:
+        place: Uruk
+        place_ref: "cigs:URU pleiades:912986"
+        band: [-538, -521]
+        band_raw: "YOS 7 (Tremayne 1925): Records from Erech, Time of Cyrus and Cambyses (538–521 B.C.)"
+        note: "the Eanna archive of Uruk; the volume's own title states its span"
+      Strassmaier:
+        reigns:
+          pattern: '\AStrassmaier, (\w+) '
+          rulers:
+            Cyrus: Cyrus2
+            Cambyse: Cambyses2
+            Darius: Darius1
+            Nebukadnezzar: Nebuchadnezzar2
+            Nebonidus: Nabonidus
+        note: "J. N. Strassmaier's Babylonische Texte — one volume per king (Inschriften von
+          Cyrus / Cambyses / Darius / Nabonidus / Nabuchodonosor), so the designation names the
+          reign and bands to its whole span; the volumes gather British Museum tablets from many
+          sites (Babylon, Sippar, Borsippa …), so no findspot is claimed"

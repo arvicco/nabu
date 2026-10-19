@@ -343,6 +343,7 @@ module Nabu
         end
       refresh_honkoku_ndl_catalog(entry)
       refresh_catalog_lanes(entry, load_report)
+      refresh_itkc_author_dates(entry)
       refresh_dictionary_stats(entry, combined_report)
       refresh_derge_titles(entry)
       refresh_aes_titles(entry)
@@ -471,6 +472,16 @@ module Nabu
                                           facet_map: Nabu::FacetMap.load_default(config: @config))
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: slug,
                                                             canonical_dir: @config.canonical_dir)
+    end
+
+    # The ITKC author-era join re-derives after a sync of okhc, itkc or
+    # the itkc-catalog module — AFTER the catalog lanes, so a target's
+    # freshly re-projected metadata dates are what it defers to. Not
+    # load-gated: the catalog module mints no documents, and its fetch
+    # alone changes every band.
+    def refresh_itkc_author_dates(entry)
+      Store::TimelineBuilder::ItkcAuthorDates.refresh_source!(catalog: @db, canonical_dir: @config.canonical_dir,
+                                                              slug: entry.slug)
     end
 
     # The AES <- AED title join re-fills after a sync of either side (an

@@ -58,6 +58,31 @@ class PeriodBandsTest < Minitest::Test
     assert_nil table.lookup("-"), "the corpus's own no-claim marker stays nil"
   end
 
+  # The Ancient North Arabian script-tradition spans (OCIANA's held
+  # script field): conventional tradition envelopes after Macdonald 2000
+  # and OCIANA's own corpus introductions; the minor classes stay nil.
+  def test_the_ana_script_traditions_band
+    assert_equal [-100, 400], table.lookup("Safaitic"), "1st c. BC – 4th c. AD (Macdonald 2000: 44)"
+    assert_equal [-100, 400], table.lookup("Hismaic")
+    assert_equal [-800, -400], table.lookup("Taymanitic")
+    assert_equal [-800, 100], table.lookup("Dadanitic")
+    assert_equal [-100, 400], table.lookup("Mixed Safaitic/Hismaic"), "a compound label = its envelope"
+    assert_nil table.lookup("Thamudic B"), "the Thamudic pending file carries no ruled span"
+    assert_nil table.lookup("Greek"), "a non-ANA script names no tradition span"
+  end
+
+  # The DCS composition time slots (Hellwig's five slots, named early/
+  # epic/classical/medieval/late on the corpus's own text list).
+  def test_the_dcs_time_slots_band
+    assert_equal [-1300, -300], table.lookup("DCS time slot 1"),
+                 "the Vedic slot: Hellwig 2020's own RV-to-Sūtra priors"
+    assert_equal [-500, 400], table.lookup("DCS time slot 2")
+    assert_equal [300, 1000], table.lookup("DCS time slot 3")
+    assert_equal [800, 1500], table.lookup("DCS time slot 4")
+    assert_equal [1400, 1900], table.lookup("DCS time slot 5"), "the corpus's own 1900 CE ceiling"
+    assert_nil table.lookup("DCS time slot None"), "upstream's None slot stays honestly bare"
+  end
+
   def test_every_band_is_a_sane_interval
     yaml = YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "period_bands.yml"))
     yaml["periods"].each do |label, entry|

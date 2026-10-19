@@ -516,6 +516,116 @@ module Store
       assert_nil raw[:place_lat], "raw degree-minute strings never mint a point"
     end
 
+    # ociana: the held script tradition bands through the ruled ANA rows of
+    # config/period_bands.yml — an attributed TRADITION span (precision
+    # "era"), never a per-inscription date; the find date still never
+    # dates, and a script without a ruled row mints no date.
+    def test_metadata_dates_ociana_script_traditions_band_as_era_claims
+      seed_metadata_doc("ociana", "urn:nabu:ociana:OCIANA_0002825",
+                        { "script" => "Safaitic", "find_date" => "1989",
+                          "place" => { "ancient" => "Km 612 32 km W. of Badana" } })
+      seed_metadata_doc("ociana", "urn:nabu:ociana:OCIANA_0035040",
+                        { "script" => "Taymanitic" })
+      seed_metadata_doc("ociana", "urn:nabu:ociana:OCIANA_0099999",
+                        { "script" => "Thamudic B" })
+      summary = build!
+      assert_equal 2, summary.metadata_dates.fetch("ociana")
+
+      row = timeline_for("urn:nabu:ociana:OCIANA_0002825")
+      assert_equal [-100, 400], [row[:not_before], row[:not_after]]
+      assert_equal "era", row[:precision], "a script-tradition span is an era claim"
+      assert_equal "Safaitic script tradition", row[:date_raw]
+      assert_equal "Km 612 32 km W. of Badana", row[:place_name], "the place lane still rides"
+      assert_nil row[:date_class], "the inscription's own (artifact) dating class, attributed by tradition"
+      assert_equal(-800, timeline_for("urn:nabu:ociana:OCIANA_0035040")[:not_before])
+      assert_nil timeline_for("urn:nabu:ociana:OCIANA_0099999"),
+                 "the Thamudic pending file has no ruled span and no place — no row"
+    end
+
+    # dcs: the chapter's composition time slot bands through the ruled DCS
+    # slot rows — attributed composition-era dating (class composition,
+    # precision era); upstream's None slot mints nothing.
+    def test_metadata_dates_dcs_time_slots_band_as_composition_eras
+      seed_metadata_doc("dcs", "urn:nabu:dcs:109:582", { "dcs_time_slot" => "2", "text" => "Śira'upaniṣad" })
+      seed_metadata_doc("dcs", "urn:nabu:dcs:1:270", { "dcs_time_slot" => "5", "text" => "Gheraṇḍasaṃhitā" })
+      seed_metadata_doc("dcs", "urn:nabu:dcs:9:9", { "dcs_time_slot" => "None" })
+      summary = build!
+      assert_equal 2, summary.metadata_dates.fetch("dcs")
+
+      row = timeline_for("urn:nabu:dcs:109:582")
+      assert_equal [-500, 400], [row[:not_before], row[:not_after]]
+      assert_equal "composition", row[:date_class]
+      assert_equal "era", row[:precision]
+      assert_equal "DCS time slot 2", row[:date_raw]
+      assert_equal 1900, timeline_for("urn:nabu:dcs:1:270")[:not_after]
+      assert_nil timeline_for("urn:nabu:dcs:9:9"), "the None slot stays honestly undated"
+    end
+
+    # classical-modern: the work's attributed composition era from the
+    # ruled config/work_eras.yml table, keyed on metadata "book" — a
+    # dynasty row of period_bands or an explicit envelope; contested
+    # works declared out mint nothing; translation siblings never row.
+    def test_metadata_dates_classical_modern_works_band_by_the_ruled_table
+      seed_metadata_doc("classical-modern", "urn:nabu:classical-modern:史记:本纪:项羽本纪",
+                        { "book" => "史记", "chapter" => "项羽本纪" })
+      seed_metadata_doc("classical-modern", "urn:nabu:classical-modern:史记:本纪:项羽本纪-cmn",
+                        { "book" => "史记", "chapter" => "项羽本纪", "kind" => "translation" })
+      seed_metadata_doc("classical-modern", "urn:nabu:classical-modern:战国策:秦策:苏秦",
+                        { "book" => "战国策", "chapter" => "苏秦" })
+      seed_metadata_doc("classical-modern", "urn:nabu:classical-modern:文昌孝经:育子",
+                        { "book" => "文昌孝经", "chapter" => "育子" })
+      summary = build!
+      assert_equal 2, summary.metadata_dates.fetch("classical-modern")
+
+      row = timeline_for("urn:nabu:classical-modern:史记:本纪:项羽本纪")
+      assert_equal [-206, 8], [row[:not_before], row[:not_after]], "Western Han, the sinological row"
+      assert_equal "composition", row[:date_class]
+      assert_equal "era", row[:precision]
+      assert_match(/史记/, row[:date_raw])
+      assert_nil timeline_for("urn:nabu:classical-modern:史记:本纪:项羽本纪-cmn"),
+                 "the modern translation sibling is axis-exempt"
+      assert_equal [-475, 8], timeline_for("urn:nabu:classical-modern:战国策:秦策:苏秦")
+        .values_at(:not_before, :not_after), "material Warring States, compiled Western Han — the envelope"
+      assert_nil timeline_for("urn:nabu:classical-modern:文昌孝经:育子"),
+                 "a contested attribution declared out mints no era"
+    end
+
+    # achemenet: the archive table (config/archive_axes.yml) — Strassmaier's
+    # reign volumes band through the HELD regnal table (whole-reign span),
+    # a volume stating its own span bands to it, the rest take the corpus
+    # band (period_bands' Achaemenid row); archive findspots place at
+    # archive grain with the held gazetteer refs; Strassmaier's mixed
+    # collection volumes stay unplaced.
+    def test_metadata_dates_achemenet_archives_reigns_and_findspots
+      seed_metadata_doc("achemenet", "urn:nabu:achemenet:p100001",
+                        { "archive" => "Strassmaier", "designation" => "Strassmaier, Cambyse 12" })
+      seed_metadata_doc("achemenet", "urn:nabu:achemenet:p100002",
+                        { "archive" => "Strassmaier", "designation" => "Strassmaier, Darius 300" })
+      seed_metadata_doc("achemenet", "urn:nabu:achemenet:p261571",
+                        { "archive" => "Murashu", "designation" => "Murašu BE 9, 2", "cdli_p" => "P261571" })
+      seed_metadata_doc("achemenet", "urn:nabu:achemenet:p307862",
+                        { "archive" => "YOS7", "designation" => "YOS 7 1" })
+      summary = build!
+      assert_equal 4, summary.metadata_dates.fetch("achemenet")
+
+      cambyses = timeline_for("urn:nabu:achemenet:p100001")
+      assert_equal [-529, -522], [cambyses[:not_before], cambyses[:not_after]]
+      assert_equal "regnal-reign", cambyses[:precision]
+      assert_match(/Cambyse/, cambyses[:date_raw])
+      assert_nil cambyses[:place_name], "Strassmaier's reign volumes gather many findspots — unplaced"
+      assert_equal [-521, -486], timeline_for("urn:nabu:achemenet:p100002").values_at(:not_before, :not_after)
+
+      murashu = timeline_for("urn:nabu:achemenet:p261571")
+      assert_equal [-547, -331], [murashu[:not_before], murashu[:not_after]], "the corpus band"
+      assert_equal "period", murashu[:precision]
+      assert_equal "Nippur", murashu[:place_name]
+      assert_equal "cigs:NIP pleiades:912910", murashu[:place_ref]
+
+      yos = timeline_for("urn:nabu:achemenet:p307862")
+      assert_equal [-538, -521], [yos[:not_before], yos[:not_after]], "the volume's own stated span"
+      assert_equal "Uruk", yos[:place_name]
+    end
+
     # titus-manichaica: the Reader's Berlin Turfan find signatures mine
     # "findspot" at parse through the titus-tocharian-a site sigla — the
     # same place-only lane (the pages carry no dating).
