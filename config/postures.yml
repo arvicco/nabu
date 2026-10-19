@@ -1989,12 +1989,22 @@ sources:
     script: {posture: implied}
   openmgh:
     kind: {posture: unclassified}
-    dating: {posture: dated, note: "P109-4 (the unmined-metadata drain): the MGH
-        volume's print year projects with date_class 'edition' — never a
-        medieval composition claim, the class label says so"}
-    places: {posture: unplaced, note: "P109-4: printed_place is the
-        modern publisher's city (Hannover, Berlin …) — edition lineage,
-        declared in Invariants::MINING_EXEMPT"}
+    dating: {posture: dated, note: "two lanes. The MGH volume's print year projects with
+        date_class 'edition' (P109-4) — never a medieval claim, the class label says so.
+        The Diplomata charters' own dating lines (2,037 of 2,808 charter passages, census
+        2026-10-19) are read conservatively at parse (OpenmghCharterDate: inferred-year
+        brackets, ranges, split years, open vor/nach bounds) and project at PASSAGE grain
+        (TimelineBuilder::OpenmghCharterDates, 1,915 bounded + a per-volume envelope);
+        hedged lines (?, um, wohl, etwa …) and unreadable ones (122) stay verbatim-only,
+        counted; the DD F. II. volumes' 771 charters ship no dating line at all. The
+        Scriptores volumes carry no per-work dates (their work titles ride the work
+        passage facet)"}
+    places: {posture: named, note: "the Diplomata charters' issuing places, verbatim from
+        their dating lines (1,633 charters, 424 distinct — 'Kaiserswerth, im Lager', 'im
+        Gebiet von Vercelli'), on the charters' passage-grain axis rows and the place
+        passage facet; a line naming two places (Handlung/Beurkundung) claims none.
+        printed_place stays the modern publisher's city — edition lineage, declared in
+        Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   papyri-ddbdp:
     dating: {posture: dated, note: "DDbDP: the HGV origDate envelope (build walk, axis_source hgv); DCLP:

@@ -1254,12 +1254,21 @@ dates by TLG author.work ids, which the Perseus/First1K CTS urns also
 carry, so each original-language Greek CTS edition joins a composition
 envelope by urn (axis_source `tlg-concordance`, date_class `composition`,
 date_raw naming the witness and key — glaux first, diorisis fallback);
-a sync of any target or witness re-derives the lane. The coordinates lane
+a sync of any target or witness re-derives the lane. The
+`OpenmghCharterDates` lane is the same catalog-annotation stance for the
+openMGH Diplomata: each charter's German dating line is read at parse
+(the adapter's conservative `OpenmghCharterDate` reader — hedged lines
+stay verbatim-only) into `not_before`/`not_after`/`place` annotations,
+projected here as one passage-grain row per bounded charter (its issuing
+place as `place_name`, date_class NULL — the charter's own date) plus a
+per-volume envelope (axis_source `openmgh-charters`, beside the volume's
+`edition`-class print year). The coordinates lane
 (migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
 feeding `search --within`. Since P47-r3 a sync refreshes the synced
 source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
-`NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!`,
+`NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!` +
+`OpenmghCharterDates.refresh_source!`,
 mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
 The whole-library chronological views over this table are `nabu list
