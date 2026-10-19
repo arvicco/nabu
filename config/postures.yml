@@ -469,10 +469,12 @@ sources:
     # retired under the shadowing rule.
     lect: {posture: identity, note: "gmy — the nabu-lects anchor; the corpus is the whole
         attested Mycenaean Greek, no finer stage exists to refine into"}
-    dating: {posture: pending, note: "candidate: ruled Aegean ceramic-phase rows (LM/LH,
-        'LM IIIA2 or LM IIIB', 'LH IIIB2/LH IIIC') in config/period_bands.yml — the
-        chronology label rides on ~69% of items (1,878 of 5,932 carry upstream's '-')
-        through MetadataDates :period_label and mints nothing until the bands are ruled"}
+    dating: {posture: dated, note: "the Aegean ceramic-phase rows RULED in
+        config/period_bands.yml (basis aegean — Warren & Hankey 1989 conventional
+        bounds; compound labels band as envelopes): the chronology label on 4,019 of
+        5,932 documents mints period-class rows through MetadataDates :period_label;
+        the 1,878 carrying upstream's '-' and the handful of unruled strays stay
+        honestly undated"}
     places: {posture: named, note: "the site (Knossos, Pylos, Thebes …; a 'Vases - X'
         collection places at X) with find-area/find-spot in the place hash via MetadataDates;
         the jar clay provenance (West Crete α) stays metadata — no gazetteer refs yet"}
