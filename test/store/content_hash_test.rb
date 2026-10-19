@@ -112,6 +112,25 @@ class ContentHashTest < Minitest::Test
                  Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [id_keyed]))
   end
 
+  # The etymology-mining fields (relation, attested, attested_year) join
+  # the reflex encoding ONLY when set: every reflex row minted before they
+  # existed keeps this sha (computed before the fields existed) — no
+  # revision storm on the shelves that mint none.
+  def test_a_relationless_undated_reflex_sha_is_pinned_pre_relation_encoding
+    assert_equal "3fe63b8a49a194405ab247348adf0cbce56121b28bee7f69e30532ef2b12b58d",
+                 Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex]))
+  end
+
+  def test_relation_and_attestation_are_content
+    plain = Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex]))
+    refute_equal plain, Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(relation: "inherited")]))
+    refute_equal plain, Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(attested: "dp. 1220")]))
+    refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(reflexes: [reflex(attested: "dp. 1220")])),
+                 Nabu::Store::ContentHash.dictionary_entry(
+                   entry(reflexes: [reflex(attested: "dp. 1220", attested_year: 1220)])
+                 )
+  end
+
   def test_a_target_dictionary_is_content
     within = Nabu::DictionaryCrossref.new(kind: "bdb", label: "BDB a", target: "a", target_id: "a")
     across = within.with(to_dictionary: "bdb")

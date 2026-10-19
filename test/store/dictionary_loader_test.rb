@@ -175,6 +175,22 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal before, census_snapshot(dictionary_id), "reload replaces the census with identical rows"
   end
 
+  def test_reflex_relation_and_attestation_persist
+    document = Nabu::DictionaryDocument.new(slug: "wiktionary-cu", language: "chu", title: "OCS",
+                                            canonical_path: "/x.jsonl")
+    document << Nabu::DictionaryEntry.new(
+      entry_id: "богъ:noun", key_raw: "богъ", language: "chu", headword: "богъ",
+      headword_folded: "богъ", body: "god",
+      reflexes: [Nabu::DictionaryReflex.new(lang_code: "sla-pro", language: "sla-pro", word: "*bogъ",
+                                            word_folded: "bogъ", relation: "inherited"),
+                 Nabu::DictionaryReflex.new(lang_code: "fr.", word: "lait", attested: "dp. 1220",
+                                            attested_year: 1220)]
+    )
+    loader.load([document], full: false)
+    rows = @db[:dictionary_reflexes].order(:seq).select_map(%i[relation attested attested_year])
+    assert_equal [["inherited", nil, nil], [nil, "dp. 1220", 1220]], rows
+  end
+
   def test_reflexless_shelves_write_no_census
     load!
     assert_equal 0, @db[:language_names].count, "the TEI lexica carry no descendants data"

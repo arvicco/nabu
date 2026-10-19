@@ -106,8 +106,18 @@ module Nabu
             "word" => reflex.word, "roman" => reflex.roman,
             "word_folded" => reflex.word_folded, "roman_folded" => reflex.roman_folded,
             "borrowed" => reflex.borrowed, "uncertain" => reflex.uncertain }
+            .merge(reflex_mining_keys(reflex))
         end
         [canonical_json(reflexes)]
+      end
+
+      # Migration 046's relation / attested / attested_year join a reflex's
+      # encoding ONLY when set (the crossref_keys rule): every row minted
+      # before them hashes byte for byte as before, while the mining
+      # reparse re-mints exactly the entries that gained them.
+      def reflex_mining_keys(reflex)
+        { "relation" => reflex.relation, "attested" => reflex.attested,
+          "attested_year" => reflex.attested_year }.compact
       end
 
       # JSON with hash keys sorted recursively (by string form), so

@@ -8,6 +8,7 @@ require_relative "../source_registry"
 require_relative "builder"
 require_relative "csv_writer"
 require_relative "rollup_slice"
+require_relative "../store/reflex_descent"
 
 module Nabu
   module DataBuild
@@ -157,7 +158,11 @@ module Nabu
         r = :dictionary_reflexes
         e = :dictionary_entries
         d = :dictionaries
-        catalog[r]
+        # Descent rows only: an etymon row (migration 046) names the
+        # headword's OWN ancestor/donor, not a node of its descendant tree
+        # — held out, censused as etymon_rows_held_out.
+        descent = Store::ReflexDescent.scope(catalog[r], catalog: catalog)
+        descent
           .join(e, id: Sequel[r][:dictionary_entry_id])
           .join(d, id: Sequel[e][:dictionary_id])
           .join(:sources, id: Sequel[d][:source_id])
@@ -234,6 +239,8 @@ module Nabu
                     .where(Sequel[:dictionary_entries][:withdrawn] => true)
         { "reflex_rows" => catalog[:dictionary_reflexes].count,
           "withdrawn_entry_rows_skipped" => withdrawn.count,
+          "etymon_rows_held_out" => catalog[:dictionary_reflexes].count -
+            Store::ReflexDescent.scope(catalog[:dictionary_reflexes], catalog: catalog).count,
           "published_rows" => count,
           "published_rows_by_source" => RollupSlice.sorted_census(state[:slugs]),
           "excluded_rows" => RollupSlice.sorted_census(state[:excluded]),

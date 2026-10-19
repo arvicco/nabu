@@ -60,15 +60,35 @@ module Nabu
   #   row and NOT part of the entry ContentHash (display metadata, not
   #   content identity): the loader aggregates it into the language_names
   #   census, which is what `nabu language` reads.
+  # - +relation+ (migration 046): the typed edge, nil when the parser
+  #   states none (every descendants-tree, MW, DÉRom and WOLD row). The
+  #   ETYMON_RELATIONS (the kaikki etymology templates inh/der/bor/lbor)
+  #   point UP — the named word is the owning entry's own ancestor or
+  #   donor — so the descent walks skip them (Store::DictionaryReflex
+  #   .descent). "cognate" (Lewis & Short's cognate chains) is
+  #   direction-free, the MW cognate rows' standing.
+  # - +attested+ / +attested_year+ (migration 046): the verbatim
+  #   first-attestation date upstream prints for this reflex (DÉRom's
+  #   "dp. 1220") and its parsed lower-bound year (nil when unparseable —
+  #   the verbatim text stays the record).
   DictionaryReflex = Data.define(:lang_code, :language, :word, :roman,
-                                 :word_folded, :roman_folded, :borrowed, :uncertain, :lang_name) do
+                                 :word_folded, :roman_folded, :borrowed, :uncertain, :lang_name,
+                                 :relation, :attested, :attested_year) do
     def initialize(lang_code:, word:, language: nil, roman: nil, word_folded: nil,
-                   roman_folded: nil, borrowed: false, uncertain: false, lang_name: nil)
+                   roman_folded: nil, borrowed: false, uncertain: false, lang_name: nil,
+                   relation: nil, attested: nil, attested_year: nil)
       unless [true, false].include?(borrowed)
         raise ValidationError, "borrowed must be true or false (parser-minted reflexes are never NULL)"
       end
       unless [true, false].include?(uncertain)
         raise ValidationError, "uncertain must be true or false (parser-minted reflexes are never NULL)"
+      end
+      unless relation.nil? || DictionaryReflex::RELATIONS.include?(relation)
+        raise ValidationError,
+              "relation must be one of #{DictionaryReflex::RELATIONS.join(', ')} (got #{relation.inspect})"
+      end
+      unless attested_year.nil? || attested_year.is_a?(Integer)
+        raise ValidationError, "attested_year must be an Integer or nil"
       end
 
       super(
@@ -80,9 +100,21 @@ module Nabu
         roman_folded: roman_folded.nil? ? nil : Model::Validation.nfc_text!(roman_folded, field: "roman_folded"),
         borrowed: borrowed,
         uncertain: uncertain,
-        lang_name: lang_name.nil? ? nil : Model::Validation.nfc_text!(lang_name, field: "lang_name")
+        lang_name: lang_name.nil? ? nil : Model::Validation.nfc_text!(lang_name, field: "lang_name"),
+        relation: relation,
+        attested: attested.nil? ? nil : Model::Validation.nfc_text!(attested, field: "attested"),
+        attested_year: attested_year
       )
     end
+
+    # Does this row name the owning entry's own ancestor/donor (an UP
+    # edge) rather than a descendant or cognate?
+    def etymon? = DictionaryReflex::ETYMON_RELATIONS.include?(relation)
+  end
+
+  class DictionaryReflex
+    ETYMON_RELATIONS = %w[inherited derived borrowed learned-borrowing].freeze
+    RELATIONS = (ETYMON_RELATIONS + %w[cognate]).freeze
   end
 
   # One entry→entry cross-reference (P123-1): a MACHINE-READABLE pointer
