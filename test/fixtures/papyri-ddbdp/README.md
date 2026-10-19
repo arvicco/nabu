@@ -1,4 +1,4 @@
-# DDbDP (Papyri.info) fixtures — quarantine-class exemplars (P5-1, P6-2)
+# DDbDP (Papyri.info) fixtures — quarantine-class and apparatus exemplars
 
 Real EpiDoc documents for the P5-1 restart-aware minting fix and the P6-2
 cancelled-document class. First copied 2026-07-04 from the locally synced
@@ -26,10 +26,25 @@ The clean-parse fixtures and the conformance workdir live in
 | `Historical/aegyptus/89/240.xml` | `aegyptus;89;240` | The same edition's **historical copy**, also text-bearing: pins the discover precedence (the curated `DDbDP/` copy wins; one urn, one ref). |
 | `Historical/chrest.wilck/101.xml` | `chrest.wilck;;101` | **Text-less stub** (9,351 docs at the 2026-07-04 sync): literally empty `<ab/>`; the body `<ref type="reprint-in">` points at the republication (P.Enteux. 13). The parser must KEEP refusing it ("no citable lines"); the adapter now skips such stubs at discover. Upstream no longer carries this hybrid in `DDbDP/` at all. |
 | `DDbDP/73/73640.xml` | `o.claud;3;457` | **Cancelled-but-legible document** (P6-2, ~40 docs): every line sits inside `<del rend="erasure">` — an ancient cancellation, fully legible and fully edited; renders in Leiden double brackets `⟦…⟧` with a `"cancelled"` annotation. |
+| `DDbDP/35/35046.xml` | `p.select;;16` | **Apparatus exemplar** (the `<app>` layer): 19 editorial/alternative apps — `<lem resp>` against up to four `<rdg>`s with their own `@resp`, an empty `<rdg/>`, apps nested inside lemmas and inside readings (two levels deep on line 7), readings carrying `<choice>`/`<gap>`/`<expan>`, and a lemma/reading pair spanning the line 19→20 break. |
+| `DDbDP/135/135776.xml` | `sb;30;17872` | **Apparatus line breaks**: a two-line alternative whose lemma breaks with a plain `<lb>` and whose reading breaks twice with `<lb break="no"/>` (rendered " \| " vs glued "\|"). |
+
+### The apparatus exemplars — recipe (2026-10-20)
+
+Both copied **whole**, byte-identical, from the canonical working tree
+(`canonical/papyri-ddbdp/`, upstream commit
+`91611a190d29b584ca2df01712888ac843e8ef89`), chosen by a Nokogiri census
+over every `DDbDP/` file carrying `<rdg>`: rank files by how many
+apparatus shapes they exhibit (multi-reading app, `<lb>` in lemma, `<lb>`
+in reading, app inside lemma, app inside reading, empty reading, reading
+`@resp`, editorial and alternative types), then by size — `35046.xml`
+(16.8 KB) is the smallest file showing all nine; `135776.xml` (2.6 KB) is
+the smallest hit of a single-line grep for a `<rdg>` carrying `<lb break="no"/>`. To re-cut: copy the
+same paths from `canonical/papyri-ddbdp/DDbDP/`.
 
 ## License (recorded exactly)
 
-Per-document `<availability>` (identical in all four):
+Per-document `<availability>` (the same statement in all six; line wrapping varies):
 > © Duke Databank of Documentary Papyri. This work is licensed under a
 > Creative Commons Attribution 3.0 License.
 

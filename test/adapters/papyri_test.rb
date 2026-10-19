@@ -119,8 +119,10 @@ class PapyriTest < Minitest::Test
     # aegyptus;89;240 is text-bearing in both DDbDP/25/25457.xml and
     # Historical/aegyptus/89/240.xml; chrest.wilck;;101 survives only as a
     # text-less Historical stub (skipped, as it quarantined before).
+    # p.select;;16 and sb;30;17872 are the apparatus exemplars (curated only).
     refs = Nabu::Adapters::Papyri.new.discover(EXEMPLARS).to_a
-    assert_equal %w[urn:nabu:ddbdp:aegyptus:89:240 urn:nabu:ddbdp:o.claud:3:457], refs.map(&:id)
+    assert_equal %w[urn:nabu:ddbdp:aegyptus:89:240 urn:nabu:ddbdp:o.claud:3:457
+                    urn:nabu:ddbdp:p.select::16 urn:nabu:ddbdp:sb:30:17872], refs.map(&:id)
     assert refs.first.path.end_with?("DDbDP/25/25457.xml")
   end
 

@@ -199,6 +199,19 @@ counts, hand shifts) lives in per-passage `"leiden"` annotations. The
 authoritative, exhaustively documented version of the policy is the
 `DdbdpParser` file header (`lib/nabu/adapters/ddbdp_parser.rb`).
 
+**The apparatus layer.** Dropping `<rdg>` from the text does not discard
+it: every `<app>` in kept content becomes an entry in the passage's
+`"apparatus"` annotation, on the line where the `<app>` opens —
+`{"type", "lemma", "resp", "readings" => [{"text", "resp"}…]}`, the
+variant readings rendered under the same Leiden policy as the text, and
+their attribution taken from `@resp` (DDbDP credits a reading to the
+editor, Berichtigungsliste entry or edition that proposed it; it carries
+no manuscript `@wit` sigla). The passage text is unchanged — still exactly
+the lemma — so the layer adds data without revising any frozen text. The
+shape follows the house variant-annotation precedent (Tamil Lexicon's
+`apparatus` entries; SBLGNT carries its apparatus verbatim under the same
+key).
+
 **Cancelled documents and `⟦…⟧` (P6-2 amendment).** In print practice
 Leiden double brackets `⟦αβγ⟧` mean *deleted in antiquity but legible*:
 the scribe crossed the text out (cross-strokes, slashes, wash-out), yet
