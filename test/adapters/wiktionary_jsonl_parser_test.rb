@@ -176,6 +176,76 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert(entries.all? { |e| e.reflexes.empty? })
   end
 
+  # --- etymons: the typed etymology_templates (inh/der/bor/lbor) ------------------
+
+  def etymon_entries(path = FIXTURE, language: "chu")
+    Nabu::Adapters::WiktionaryJsonlParser.new(language: language, etymons: true).entries(path)
+  end
+
+  def cu_etymons
+    @cu_etymons ||= etymon_entries
+  end
+
+  def etymons_of(id, list = cu_etymons)
+    (list.find { |e| e.entry_id == id } || flunk("fixture entry #{id} not parsed")).reflexes
+  end
+
+  def test_etymon_rows_name_the_entrys_own_ancestor_typed_by_template_kind
+    bog = etymons_of("богъ:noun")
+    assert_equal [["sla-pro", "sla-pro", "*bogъ", "bogъ", "inherited", false]],
+                 bog.map { |r| [r.lang_code, r.language, r.word, r.word_folded, r.relation, r.borrowed] },
+                 "inh and inh+ name the same etymon — one row"
+    assert(bog.all?(&:etymon?))
+  end
+
+  def test_borrowings_carry_the_wold_borrowed_flag_and_the_mapped_donor
+    hellin = etymons_of("еллинъ:noun")
+    assert_equal([["grc", "grc", "Ἕλλην", "borrowed", true]],
+                 hellin.map { |r| [r.lang_code, r.language, r.word, r.relation, r.borrowed] })
+    amin = etymons_of("аминъ:intj")
+    assert_equal [["grc-koi", "ἀμήν", nil, "derived", false], ["hbo", "אמן", "amén", "derived", false]],
+                 amin.map { |r| [r.lang_code, r.word, r.roman, r.relation, r.borrowed] },
+                 "the chain's every hop, record order; the template's tr rides as the roman"
+  end
+
+  def test_learned_borrowings_are_typed_and_flagged
+    tibetan = File.join(Nabu::TestSupport.fixtures("wiktionary-bo"), "kaikki.org-dictionary-Tibetan.jsonl")
+    mangalam = etymon_entries(tibetan, language: "bod").find { |e| e.key_raw == "མངྒལཾ" }
+    assert_equal([["sa", "san", "मङ्गल", "learned-borrowing", true]],
+                 mangalam.reflexes.map { |r| [r.lang_code, r.language, r.word, r.relation, r.borrowed] })
+  end
+
+  # An empty or "-" etymon argument: Wiktionary displays arg 4 (or the
+  # named alt=) instead — that form is the etymon; with neither, the
+  # template names only a language and mints nothing.
+  def test_display_only_etymons_fall_back_to_the_alt_form_and_wordless_templates_mint_nothing
+    assert_includes etymons_of("градъ:noun:1").map { |r| [r.lang_code, r.word] }, ["ine-pro", "*gʰordʰ-os"]
+    refute(etymons_of("царь:noun").any? { |r| r.lang_code == "gem" }, "der|cu|gem names no word")
+    refute(etymons_of("сꙑнъ:noun:2").any? { |r| r.lang_code == "xbo" }, "bor with '-' and no alt")
+    sla = etymon_entries(File.join(RECON, "kaikki.org-dictionary-ProtoSlavic.jsonl"), language: "sla-pro")
+    assert_includes etymons_of("suka:noun", sla).map { |r| [r.lang_code, r.word] }, ["ine-bsl-pro", "*śaukāˀ"]
+  end
+
+  # Inline modifiers (<t:…>, <alt:…>) trail the etymon in arg 3 — the word
+  # is the text before the first "<". The target (trk-pro) has no held
+  # shelf: the edge rides with its bare code all the same.
+  def test_inline_modifiers_strip_and_dangling_targets_still_ride
+    path = File.join(Nabu::TestSupport.fixtures("wiktionary-etymons"), "kaikki.org-dictionary-OldTurkic.jsonl")
+    rows = etymon_entries(path, language: "otk").flat_map(&:reflexes)
+    assert_equal([%w[trk-pro *teŋri inherited], %w[trk-pro *oglan inherited]],
+                 rows.map { |r| [r.lang_code, r.word, r.relation] })
+  end
+
+  def test_etymons_default_off_and_ride_after_the_descendants
+    assert(entries.all? { |e| e.reflexes.none?(&:etymon?) })
+    both = Nabu::Adapters::WiktionaryJsonlParser.new(language: "sla-pro", reflexes: true, etymons: true)
+                                                .entries(File.join(RECON, "kaikki.org-dictionary-ProtoSlavic.jsonl"))
+                                                .find { |e| e.entry_id == "bogъ:noun:2" }
+    descendants = sla_entry("bogъ:noun:2").reflexes
+    assert_equal descendants, both.reflexes.first(descendants.size)
+    assert(both.reflexes.drop(descendants.size).all?(&:etymon?))
+  end
+
   # -- P123-1: synonyms/antonyms/related as entry→entry crossrefs (opt-in) -------
 
   def sla_xref_entries
