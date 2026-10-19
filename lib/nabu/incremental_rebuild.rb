@@ -123,8 +123,8 @@ module Nabu
     # was shared-core code the owner attests is content-neutral). Anything
     # the voucher cannot vouch for replays honestly — never a run refusal.
     def initialize(config:, registry:, trust_stages: false, trust_derivations: false,
-                   code_voucher: nil, full_links: false)
-      super(config: config, registry: registry, full_links: full_links)
+                   code_voucher: nil, full_links: false, parse_workers: nil)
+      super(config: config, registry: registry, full_links: full_links, parse_workers: parse_workers)
       @trust_stages = trust_stages
       @trust_derivations = trust_derivations
       @code_voucher = code_voucher || CodeVoucher.new

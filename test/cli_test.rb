@@ -2925,6 +2925,25 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_rebuild_accepts_a_parse_worker_count
+    with_rebuild_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --parse-workers 2]) }
+
+      assert_nil status
+      assert_match(/TOTAL.*\+2 added/, out)
+    end
+  end
+
+  def test_rebuild_refuses_a_parse_worker_count_below_one
+    with_rebuild_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[rebuild --parse-workers 0]) }
+
+      refute_nil status
+      assert_match(/--parse-workers must be at least 1/, err)
+      refute File.exist?(config.catalog_path), "refused before anything was dropped or built"
+    end
+  end
+
   # rebuild --profile prints the per-source/per-stage timing table (P36-0).
   def test_rebuild_profile_prints_the_stage_timing_table
     with_rebuild_env do |config|
