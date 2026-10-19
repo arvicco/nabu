@@ -63,15 +63,17 @@ module Nabu
 
           urn_ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
           counts = { documents: 0, undated: 0, invalid: 0 }
-          CSV.foreach(path, headers: true) do |row|
-            document_id = urn_ids["#{URN_PREFIX}#{row['hd_nr'].to_s.strip.downcase}"] or next
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            CSV.foreach(path, headers: true) do |row|
+              document_id = urn_ids["#{URN_PREFIX}#{row['hd_nr'].to_s.strip.downcase}"] or next
 
-            insert_row(catalog, document_id, row, counts)
+              insert_row(axes, document_id, row, counts)
+            end
           end
           counts
         end
 
-        def insert_row(catalog, document_id, row, counts)
+        def insert_row(axes, document_id, row, counts)
           timeline = extract(row)
           if timeline == :invalid
             counts[:invalid] += 1
@@ -80,7 +82,7 @@ module Nabu
           counts[:undated] += 1 if timeline.nil? || timeline[:not_before].nil?
           return if timeline.nil?
 
-          TimelineBuilder.insert_timeline(catalog, document_id, timeline, EDH_SLUG)
+          TimelineBuilder.insert_timeline(axes, document_id, timeline, EDH_SLUG)
           counts[:documents] += 1
         end
 

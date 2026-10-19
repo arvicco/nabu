@@ -60,16 +60,18 @@ module Nabu
                 .where(withdrawn: false)
                 .select_hash(:urn, :id)
           counts = { documents: 0, undated: 0 }
-          Dir.glob(File.join(dir, "KR?[a-z].txt")).each do |path|
-            each_entry(path) do |kr_id, claim|
-              document_id = ids["#{URN_PREFIX}#{kr_id}"] or next
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            Dir.glob(File.join(dir, "KR?[a-z].txt")).each do |path|
+              each_entry(path) do |kr_id, claim|
+                document_id = ids["#{URN_PREFIX}#{kr_id}"] or next
 
-              if claim.nil?
-                counts[:undated] += 1
-                next
+                if claim.nil?
+                  counts[:undated] += 1
+                  next
+                end
+                insert(axes, document_id, claim)
+                counts[:documents] += 1
               end
-              insert(catalog, document_id, claim)
-              counts[:documents] += 1
             end
           end
           counts
@@ -199,8 +201,8 @@ module Nabu
             raw: name || "(#{dynasty})" }
         end
 
-        def insert(catalog, document_id, claim)
-          catalog[:document_axes].insert(
+        def insert(axes, document_id, claim)
+          axes.insert(
             document_id: document_id,
             not_before: claim[:not_before], not_after: claim[:not_after],
             precision: claim[:precision], date_raw: claim[:raw],

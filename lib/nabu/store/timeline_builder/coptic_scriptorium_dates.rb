@@ -47,24 +47,24 @@ module Nabu
           return { documents: 0, invalid: 0 } unless Dir.exist?(dir)
 
           ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
-          rows = 0
           invalid = 0
           seen = Set.new
-          tt_headers(dir) do |meta|
-            urn = document_urn(meta)
-            next unless seen.add?(urn)
+          rows = TimelineBuilder.writing_axes(catalog) do |axes|
+            tt_headers(dir) do |meta|
+              urn = document_urn(meta)
+              next unless seen.add?(urn)
 
-            begin
-              timeline = extract(meta)
-            rescue Timeline::InvalidYear
-              invalid += 1
-              next
+              begin
+                timeline = extract(meta)
+              rescue Timeline::InvalidYear
+                invalid += 1
+                next
+              end
+              next if timeline.nil?
+
+              document_id = ids[urn] or next
+              insert(axes, document_id, timeline)
             end
-            next if timeline.nil?
-
-            document_id = ids[urn] or next
-            insert(catalog, document_id, timeline)
-            rows += 1
           end
           { documents: rows, invalid: invalid }
         end
@@ -118,8 +118,8 @@ module Nabu
           nil
         end
 
-        def insert(catalog, document_id, timeline)
-          catalog[:document_axes].insert(
+        def insert(axes, document_id, timeline)
+          axes.insert(
             document_id: document_id,
             not_before: timeline[:not_before], not_after: timeline[:not_after],
             precision: timeline[:precision], date_raw: timeline[:date_raw],

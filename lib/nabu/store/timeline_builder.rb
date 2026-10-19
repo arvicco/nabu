@@ -186,23 +186,23 @@ module Nabu
         # One urn→id map for the whole DDbDP shelf (the ddb-hybrid↔urn join,
         # design §3 — verified), so each HGV file is a hash hit, not a query.
         ddbdp = catalog[:documents].where(Sequel.like(:urn, "#{DDBDP_PREFIX}%")).select_hash(:urn, :id)
-        rows = 0
         files = 0
         invalid = 0
-        Dir.glob(File.join(hgv_dir, "**", "*.xml")).each do |path|
-          files += 1
-          timeline =
-            begin
-              extract_hgv(File.read(path))
-            rescue Timeline::InvalidYear
-              invalid += 1 # a year-0 (or otherwise invalid) file: skipped, counted, never stored
-              next
-            end
-          next if timeline.nil?
+        rows = writing_axes(catalog) do |axes|
+          Dir.glob(File.join(hgv_dir, "**", "*.xml")).each do |path|
+            files += 1
+            timeline =
+              begin
+                extract_hgv(File.read(path))
+              rescue Timeline::InvalidYear
+                invalid += 1 # a year-0 (or otherwise invalid) file: skipped, counted, never stored
+                next
+              end
+            next if timeline.nil?
 
-          doc_id = ddbdp[timeline[:urn]] or next # HGV record for a DDbDP doc we don't hold
-          insert_timeline(catalog, doc_id, timeline, "hgv")
-          rows += 1
+            doc_id = ddbdp[timeline[:urn]] or next # HGV record for a DDbDP doc we don't hold
+            insert_timeline(axes, doc_id, timeline, "hgv")
+          end
         end
         { rows: rows, files: files, invalid: invalid }
       end
@@ -296,26 +296,35 @@ module Nabu
       # The Slovene corpora carry only a CE year, in the urn ("…:sigil-1584");
       # urn = f(canonical), so reading it from the catalog is rebuild-safe.
       def build_year_from_urn(catalog, prefix, source)
-        rows = 0
-        catalog[:documents].where(Sequel.like(:urn, "#{prefix}%")).select_map(%i[id urn]).each do |id, urn|
-          m = urn.match(URN_YEAR) or next
+        documents = catalog[:documents].where(Sequel.like(:urn, "#{prefix}%")).select_map(%i[id urn])
+        writing_axes(catalog) do |axes|
+          documents.each do |id, urn|
+            m = urn.match(URN_YEAR) or next
 
-          year = m[1].to_i
-          next if year.zero?
+            year = m[1].to_i
+            next if year.zero?
 
-          catalog[:document_axes].insert(
-            document_id: id, not_before: year, not_after: year,
-            precision: "year", date_raw: year.to_s, axis_source: source
-          )
-          rows += 1
+            axes.insert(
+              document_id: id, not_before: year, not_after: year,
+              precision: "year", date_raw: year.to_s, axis_source: source
+            )
+          end
         end
-        rows
       end
 
       # -- shared --------------------------------------------------------------
 
-      def insert_timeline(catalog, document_id, timeline, source)
-        catalog[:document_axes].insert(
+      # The lanes' write path: a RowBuffer over document_axes, one
+      # transaction per lane, multi-row INSERTs in insertion order (so the
+      # rows and their ids are exactly what row-at-a-time autocommit inserts
+      # minted, without a commit per row). Returns the rows written. A lane
+      # passes the yielded buffer wherever it used to pass the catalog to an
+      # insert.
+      def writing_axes(catalog, &) = RowBuffer.into(catalog[:document_axes], &)
+
+      # +axes+ is the lane's RowBuffer (see #writing_axes).
+      def insert_timeline(axes, document_id, timeline, source)
+        axes.insert(
           document_id: document_id,
           not_before: timeline[:not_before], not_after: timeline[:not_after],
           precision: timeline[:precision], date_raw: timeline[:date_raw],

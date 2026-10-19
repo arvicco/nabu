@@ -185,5 +185,62 @@ module Store
       Nabu::Store::FacetBuilder.rebuild!(catalog: @db, facet_map: map)
       assert_equal(first, @db[:document_facets].order(:id).all.map { |row| row.except(:id) })
     end
+
+    # -- the batched write path ----------------------------------------------
+    # The adapter-facet lane streams documents in id order (keyset paging,
+    # never the whole facet-bearing set in memory) and writes its rows as
+    # multi-row INSERTs in one transaction. Row ids follow document order,
+    # then facet-entry order — exactly the row-at-a-time output.
+
+    def facet_inserts
+      io = StringIO.new
+      @db.loggers << Logger.new(io)
+      yield
+      @db.loggers.clear
+      io.string.lines.count { |line| line.include?("INSERT INTO `document_facets`") }
+    end
+
+    def three_faceted_documents
+      [
+        make_document("urn:nabu:edh:hd000101", metadata: FACETS),
+        make_document("urn:nabu:edh:hd000102", metadata: { "facets" => { "religion" => { "values" => %w[a b] } } }),
+        make_document("urn:nabu:edh:hd000103", metadata: { "facets" => { "genre" => { "value" => "votive" } } })
+      ]
+    end
+
+    def ordered_rows = @db[:document_facets].order(:id).select_map(%i[document_id facet value raw])
+
+    def expected_rows(docs)
+      [[docs[0].id, "genre", "epitaph", "titsep?"], [docs[0].id, "province", "Pannonia inferior", "PaI"],
+       [docs[1].id, "religion", "a", nil], [docs[1].id, "religion", "b", nil],
+       [docs[2].id, "genre", "votive", nil]]
+    end
+
+    def test_rebuild_writes_rows_in_document_then_entry_order_as_one_statement
+      docs = three_faceted_documents
+
+      statements = facet_inserts { assert_equal 5, Nabu::Store::FacetBuilder.rebuild!(catalog: @db).rows }
+
+      assert_equal 1, statements
+      assert_equal expected_rows(docs), ordered_rows
+    end
+
+    def test_refresh_source_writes_rows_in_order_as_one_statement
+      docs = three_faceted_documents
+
+      statements = facet_inserts { assert_equal 5, Nabu::Store::FacetBuilder.refresh_source!(catalog: @db, slug: "edh") }
+
+      assert_equal 1, statements
+      assert_equal expected_rows(docs), ordered_rows
+    end
+
+    # Keyset paging crosses page boundaries without dropping or repeating
+    # a document.
+    def test_rebuild_streams_across_pages
+      docs = three_faceted_documents
+
+      assert_equal 3, Nabu::Store::FacetBuilder.rebuild!(catalog: @db, page: 2).documents
+      assert_equal expected_rows(docs), ordered_rows
+    end
   end
 end
