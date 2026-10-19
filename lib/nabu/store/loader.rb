@@ -361,7 +361,15 @@ module Nabu
         else
           counts[outcome] += 1
         end
-      rescue Sequel::DatabaseError => e
+      rescue Sequel::ConstraintViolation => e
+        # Only constraint-shaped failures are the DOCUMENT's fault: unique
+        # (a cross-source urn collision), NOT NULL, foreign key and CHECK —
+        # everything a bad parse can legitimately make SQLite refuse. Every
+        # other Sequel::DatabaseError (busy timeout, disk full, I/O error,
+        # corruption, a read-only catalog) is the environment's, says
+        # nothing about this document, and propagates to abort the load:
+        # quarantining it would advance the quarantine baseline and let the
+        # sync report success over a catalog it did not finish writing.
         # The rolled-back document's staged rows never happened (P112-1).
         @index_delta.discard!
         counts[:errored] += 1
