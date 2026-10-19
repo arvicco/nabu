@@ -1266,13 +1266,19 @@ stay verbatim-only) into `not_before`/`not_after`/`place` annotations,
 projected here as one passage-grain row per bounded charter (its issuing
 place as `place_name`, date_class NULL — the charter's own date) plus a
 per-volume envelope (axis_source `openmgh-charters`, beside the volume's
-`edition`-class print year). The coordinates lane
+`edition`-class print year). The coordinates lane The `UdSentenceDates`
+lane is the NikhEntryDates mold for the UD treebanks: ConlluParser's
+newdoc-scoped metadata whitelist carries each sentence's date/created/
+date_created and place comments into passage annotations, and the lane
+projects passage-grain runs (one per stretch sharing upstream document id
++ claim) plus a document envelope (axis_source `ud-sentences`; dynasty
+labels band through `config/period_bands.yml`). The coordinates lane
 (migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
 feeding `search --within`. Since P47-r3 a sync refreshes the synced
 source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
 `NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!` +
-`OpenmghCharterDates.refresh_source!`,
+`OpenmghCharterDates.refresh_source!` + `UdSentenceDates.refresh_source!`,
 mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
 The whole-library chronological views over this table are `nabu list

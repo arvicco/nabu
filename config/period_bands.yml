@@ -89,6 +89,18 @@ periods:
                               cuneiform text (the Late Babylonian upper bound); SB names
                               the register of these copies, not a period of its own}
 
+  # -- Egyptian dynasties (the UD Egyptian-PC treebank's sentence dates —
+  # "5th Dynasty" 1,258 / "6th Dynasty" 1,831 Pyramid Texts sentences,
+  # census 2026-10-19). basis `tla` = the Thesaurus Linguae Aegyptiae's
+  # own dynasty nodes, the bounds its export writes on every header that
+  # dates by them (the held canonical/aed headers: "5. Dyn."
+  # ths:RI3TSGKXUFCE3HV43BX2N2MJVE notBefore -2520 / notAfter -2364;
+  # "6. Dyn." ths:GH2RXLTQ2BCEHPQ6R2SPBER7OM -2363 / -2233) — the same
+  # convention the AES timeline lane already serves at dynasty precision,
+  # and the corpus the treebank's sentences come from (their TLA ids).
+  "5th Dynasty":           {band: [-2520, -2364], basis: tla, note: TLA thesaurus node "5. Dyn."}
+  "6th Dynasty":           {band: [-2363, -2233], basis: tla, note: TLA thesaurus node "6. Dyn."}
+
   # -- Chinese dynasty spans (P104-1, attributed-era dating under the 2026-09-26 mining law: the cbeta
   # header bylines and the kanripo KR-Catalog 人物 DYNASTY attributions
   # band here; census 2026-09-26 over both vocabularies). basis

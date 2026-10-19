@@ -564,6 +564,29 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
 
+  # --- the README Genre line (upstream's own treebank classification) -----
+
+  # Every UD treebank README's machine-readable block carries a `Genre:`
+  # line of space-separated UD genre tags (all 34 held treebanks); each
+  # document of the treebank carries them verbatim as "genres" (the
+  # facet_map genre facet), at document grain — a treebank-level claim.
+  def test_the_readme_genre_line_rides_every_document_of_the_treebank
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    egyptian = adapter.parse(ud_ref("urn:nabu:ud:egyptian-pc:egy_pc-ud-test-head50"))
+    assert_equal %w[bible fiction nonfiction government], egyptian.metadata["genres"]
+    coptic = adapter.parse(ud_ref("urn:nabu:ud:coptic-bohairic:cop_bohairic-ud-test-head50"))
+    assert_equal %w[bible fiction nonfiction], coptic.metadata["genres"],
+                 "the README's own spelling of the block header varies; the Genre line does not"
+    kyoto = adapter.discover(FIXTURES).select { |ref| ref.metadata["treebank"] == "classical-chinese-kyoto" }
+    assert_equal 2, kyoto.size
+    assert(kyoto.all? { |ref| adapter.parse(ref).metadata["genres"] == %w[nonfiction poetry] })
+  end
+
+  def test_a_treebank_without_a_readme_claims_no_genre
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    refute adapter.parse(ud_ref("urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50")).metadata.key?("genres")
+  end
+
   # --- DipSGG's unreleased layer (not-to-release/, granted 2026-10-14) -----
 
   DIPSGG_DRAFT = "urn:nabu:ud:old-irish-dipsgg:incomplete-head10"

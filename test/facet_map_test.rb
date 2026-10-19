@@ -117,6 +117,14 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "languages" => "language" }, Nabu::FacetMap.load(path).fields_for("local-library"))
   end
 
+  # UD: the README Genre tags at document grain; egyptian-pc's king and
+  # genre and coptic-bohairic's author at sentence grain.
+  def test_shipped_config_projects_the_ud_genre_line_and_sentence_comments
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "genres" => "genre" }, map.fields_for("ud"))
+    assert_equal({ "king" => "ruler", "genre" => "genre", "author" => "author" }, map.passage_fields_for("ud"))
+  end
+
   # P118-R4 S2 (the held-but-dark audit's facet_map wave): axis-shaped
   # fields already stored verbatim on ~450k documents that fed no facet.
   def test_shipped_config_projects_the_dark_audit_facet_wave

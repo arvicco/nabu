@@ -485,3 +485,16 @@ sources:
       #                         the dating line's place verbatim ("Kaiserswerth, im Lager", "im
       #                         Gebiet von Vercelli"); the same claim rides the charter's
       #                         passage-grain axis row (TimelineBuilder::OpenmghCharterDates)
+  ud:                         # census of canonical/ud 2026-10-19 (34 treebanks, 81 split documents)
+    fields: #                   the README machine-readable Genre line, all 34 treebanks —
+      genres: genre           # UD's own genre tags, one row per tag (nonfiction 56 docs · bible
+      #                         33 · fiction 26 · poetry 20 · legal 15 · news · grammar-examples ·
+      #                         government · email · academic); a treebank-level claim
+    passage_fields: #           the sentence comments ConlluParser's whitelist carries
+      king: ruler             # egyptian-pc, all 3,089 sentences: the pyramid's king (Unas 1,240 ·
+      #                         Pepi 829 · Teti 744 · Neferkare 230 · Neith 40 — a queen's
+      #                         pyramid, upstream's label · Merenre 6) — CDLI's ruler facet name
+      genre: genre            # egyptian-pc "religious" on all 3,089 — the passage grain of the
+      #                         same axis name as the document facet (the itkc precedent)
+      author: author          # coptic-bohairic meta::author, newdoc-scoped (Paul the apostle ·
+      #                         Mena of Pshati · Palladius · "N/A"/"unknown" — upstream's claims)

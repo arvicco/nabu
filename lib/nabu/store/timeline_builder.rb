@@ -75,7 +75,7 @@ module Nabu
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
                             :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
                             :rundata_undated, :openiti_undated, :nikh_entries,
-                            :tlg_concordance, :openmgh_charters) do
+                            :tlg_concordance, :openmgh_charters, :ud_sentences) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -90,7 +90,8 @@ module Nabu
                        rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
                        kanripo: 0, kanripo_undated: 0,
                        metadata_dates: {}, nikh_entries: {}, tlg_concordance: {},
-                       openmgh_charters: {}, **)
+                       openmgh_charters: {},
+                       ud_sentences: { documents: 0, runs: 0, undated: 0 }, **)
           super
         end
 
@@ -104,7 +105,10 @@ module Nabu
             nikh_entries.values.sum { |counts| counts[:documents] } +
             # the openMGH charter lane's volume envelopes (charter rows are
             # passage grain; the volumes' edition rows count under metadata)
-            openmgh_charters.fetch(:documents, 0)
+            openmgh_charters.fetch(:documents, 0) +
+            # the UD sentence-date lane's document envelopes (its runs are
+            # passage grain)
+            ud_sentences[:documents]
         end
       end
 
@@ -140,7 +144,8 @@ module Nabu
         nikh = NikhEntryDates.build(catalog: catalog)
         tlg = TlgConcordanceDates.build(catalog: catalog)
         charters = OpenmghCharterDates.build(catalog: catalog)
-        Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
+        ud = UdSentenceDates.build(catalog: catalog)
+        Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp, ud_sentences: ud,
                     metadata_dates: metadata, nikh_entries: nikh, tlg_concordance: tlg,
                     openmgh_charters: charters,
                     oracc: oracc[:documents], torot: torot[:documents],
@@ -354,3 +359,4 @@ require_relative "timeline_builder/iip_dates"
 require_relative "timeline_builder/cdli_dates"
 require_relative "timeline_builder/rundata_dates"
 require_relative "timeline_builder/openiti_dates"
+require_relative "timeline_builder/ud_sentence_dates"
