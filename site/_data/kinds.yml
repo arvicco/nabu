@@ -3,25 +3,25 @@
 as_of: 19 October 2026
 classes:
 - head: literary
-  documents: 687981
-  documents_display: '687,981'
-  sources: 21
+  documents: 692299
+  documents_display: '692,299'
+  sources: 22
 - head: administrative
   documents: 488363
   documents_display: '488,363'
   sources: 15
 - head: historiography
-  documents: 348676
-  documents_display: '348,676'
-  sources: 19
+  documents: 355548
+  documents_display: '355,548'
+  sources: 20
 - head: funerary
   documents: 114899
   documents_display: '114,899'
   sources: 9
 - head: legal
-  documents: 35920
-  documents_display: '35,920'
-  sources: 14
+  documents: 35958
+  documents_display: '35,958'
+  sources: 15
 - head: letter
   documents: 34341
   documents_display: '34,341'
@@ -30,14 +30,14 @@ classes:
   documents: 30134
   documents_display: '30,134'
   sources: 4
+- head: scripture
+  documents: 23180
+  documents_display: '23,180'
+  sources: 20
 - head: dedicatory
   documents: 22915
   documents_display: '22,915'
   sources: 7
-- head: scripture
-  documents: 21286
-  documents_display: '21,286'
-  sources: 19
 - head: lexical
   documents: 16541
   documents_display: '16,541'
@@ -50,18 +50,18 @@ classes:
   documents: 12286
   documents_display: '12,286'
   sources: 9
+- head: scholarly
+  documents: 11723
+  documents_display: '11,723'
+  sources: 14
 - head: honorific
   documents: 11413
   documents_display: '11,413'
   sources: 4
 - head: divination
-  documents: 10506
-  documents_display: '10,506'
-  sources: 8
-- head: scholarly
-  documents: 10337
-  documents_display: '10,337'
-  sources: 13
+  documents: 10520
+  documents_display: '10,520'
+  sources: 9
 - head: building
   documents: 8016
   documents_display: '8,016'
@@ -71,9 +71,9 @@ classes:
   documents_display: '6,504'
   sources: 11
 - head: school
-  documents: 5192
-  documents_display: '5,192'
-  sources: 6
+  documents: 5278
+  documents_display: '5,278'
+  sources: 7
 - head: magic
   documents: 3327
   documents_display: '3,327'
@@ -90,10 +90,10 @@ classes:
   documents: 618
   documents_display: '618'
   sources: 4
-unclassified_sources: 125
+unclassified_sources: 124
 unknown_documents: 47046
 unknown_documents_display: '47,046'
 unmapped_documents: 10911
 unmapped_documents_display: '10,911'
-unclassified_documents: 500242
-unclassified_documents_display: '500,242'
+unclassified_documents: 486145
+unclassified_documents_display: '486,145'
