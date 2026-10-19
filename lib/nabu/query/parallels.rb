@@ -70,7 +70,7 @@ module Nabu
     # RARE ones (global df below a cap), and find passages sharing ≥2 of them,
     # rarity-weighted the same way. It fires only when the anchor carries gold
     # lemmas (else the anchor-lemma lookup returns empty and we skip in one
-    # query); its speed depends on the passage_lemmas(urn) index this packet
+    # query); its speed depends on the passage_lemmas passage-key index this packet
     # adds (Indexer#create_lemma_table). Rendered as a separate "lemma echoes"
     # section so the two signals never masquerade as one.
     class Parallels
@@ -411,13 +411,13 @@ module Nabu
       # gold-rare but corpus-common is genuinely undiagnostic, and the df
       # now sees it (test-pinned).
       def lemma_echoes(anchor, lang:, license:, limit:, scope: {})
-        rare = rare_anchor_lemmas(anchor.fetch(:urn))
+        rare = rare_anchor_lemmas(anchor)
         return [] if rare.size < 2
 
         weights = rare.transform_values { |df| 1.0 / df }
         rows = @fulltext[Store::Indexer::LEMMA_TABLE]
                .where(lemma_folded: rare.keys)
-               .exclude(urn: anchor.fetch(:urn))
+               .exclude(passage_id: anchor.fetch(:passage_id))
                .select(:passage_id, :lemma_folded, :lemma_raw)
                .all
         assemble_echoes(rows, weights, anchor: anchor, lang: lang, license: license, limit: limit,
@@ -427,8 +427,12 @@ module Nabu
       # The anchor's folded lemmas mapped to their global df, keeping only the
       # rare ones (2 ≤ df ≤ RARE_LEMMA_DF): df==1 co-occurs with nothing, common
       # lemmas do not diagnose an echo and would balloon the IN-list probe.
-      def rare_anchor_lemmas(urn)
-        folded = @fulltext[Store::Indexer::LEMMA_TABLE].where(urn: urn).distinct.select_map(:lemma_folded)
+      # The anchor's rows come through the passage-key B-tree (passage_id;
+      # its urn on a v1 table — Store::Indexer.lemma_passage_key).
+      def rare_anchor_lemmas(anchor)
+        folded = Store::Indexer.lemma_rows_of_passages(@fulltext, ids: [anchor.fetch(:passage_id)],
+                                                                  urns: [anchor.fetch(:urn)])
+                               .distinct.select_map(:lemma_folded)
         folded.each_with_object({}) do |lemma, acc|
           df = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: lemma).count
           acc[lemma] = df if df.between?(2, @rare_lemma_df)

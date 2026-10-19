@@ -95,6 +95,22 @@ class LemmaEnrichTest < Minitest::Test
     assert_equal %w[urn:d:1:2 urn:d:1:3], shelf_records.map(&:urn).sort
   end
 
+  # The coverage skip set is keyed the way the live lemma table names a
+  # passage — ids on the narrow table, urns on a v1 table (the live file
+  # until the next full rebuild); the run skips the same passage either way.
+  def test_a_v1_lemma_table_still_gates_the_covered_passages
+    make_passage(urn: "urn:d:1:1", text: "covered text", sequence: 0,
+                 annotations: { "tokens" => [{ "lemma" => "covered", "form" => "covered" }] })
+    make_passage(urn: "urn:d:1:2", text: "fresh text", sequence: 1)
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+    LegacyLemmaTable.widen!(@fulltext, @catalog)
+
+    assert_equal 1, enricher.census.covered
+    result = enricher.run!
+    assert_equal 1, result.skipped_covered
+    assert_equal %w[urn:d:1:2], shelf_records.map(&:urn)
+  end
+
   def test_run_flushes_shards_and_checkpoints_monotonically
     ids = (0..4).map { |i| make_passage(urn: "urn:d:1:#{i + 1}", text: "verba #{i}", sequence: i).id }
     Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)

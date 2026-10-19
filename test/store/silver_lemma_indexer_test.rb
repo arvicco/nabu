@@ -76,6 +76,12 @@ module Store
 
     def lemmas = @fulltext[:passage_lemmas]
 
+    # A passage's lemma rows by urn, resolved through the catalog (the
+    # lemma table keys passages by id only); and the reverse map.
+    def lemmas_of(urn) = lemmas.where(passage_id: @catalog[:passages].where(urn: urn).select_map(:id))
+
+    def urns_of(ids) = @catalog[:passages].where(id: ids).select_map(:urn).sort
+
     def test_applies_shelf_records_as_tier_silver_rows_grouped_by_folded_lemma
       doc = make_document
       passage = make_passage(doc, urn: "urn:d:1:1")
@@ -85,7 +91,7 @@ module Store
 
       result = apply!
       assert_equal 1, result.passages_indexed
-      rows = lemmas.where(urn: "urn:d:1:1").order(:lemma_folded).all
+      rows = lemmas_of("urn:d:1:1").order(:lemma_folded).all
       assert_equal(%w[frons in], rows.map { |r| r[:lemma_folded] })
       frons = rows.first
       assert_equal "silver", frons[:tier]
@@ -99,13 +105,13 @@ module Store
       make_passage(doc, urn: "urn:d:1:1",
                         annotations: { "tokens" => [{ "lemma" => "frons", "form" => "fronte" }] })
       rebuild_gold!
-      assert_equal %w[gold], lemmas.where(urn: "urn:d:1:1").select_map(:tier)
+      assert_equal %w[gold], lemmas_of("urn:d:1:1").select_map(:tier)
 
       shelve(urn: "urn:d:1:1", tokens: [%w[fronte WRONG NOUN]])
       result = apply!
       assert_equal 0, result.passages_indexed
       assert_equal 1, result.skipped_covered
-      assert_equal %w[gold], lemmas.where(urn: "urn:d:1:1").select_map(:tier),
+      assert_equal %w[gold], lemmas_of("urn:d:1:1").select_map(:tier),
                    "gold rows stand untouched; no silver row lands beside them"
     end
 
@@ -119,7 +125,7 @@ module Store
       second = apply!
       assert_equal 0, second.passages_indexed
       assert_equal 1, second.skipped_covered
-      assert_equal 1, lemmas.where(urn: "urn:d:1:1").count
+      assert_equal 1, lemmas_of("urn:d:1:1").count
     end
 
     def test_skips_missing_withdrawn_and_language_drifted_passages
@@ -145,7 +151,7 @@ module Store
       shelve(urn: "urn:d:1:1", tokens: [["fronte", "frons", "NOUN"], ["·", "", "PUNCT"]])
 
       apply!
-      assert_equal %w[frons], lemmas.where(urn: "urn:d:1:1").select_map(:lemma_folded)
+      assert_equal %w[frons], lemmas_of("urn:d:1:1").select_map(:lemma_folded)
     end
 
     def test_dictionary_filter_drops_unattested_non_identity_lemmas_for_flagged_sources
@@ -165,7 +171,7 @@ module Store
              ])
 
       result = apply!(dictionary_filter_slugs: %w[edr])
-      folded = lemmas.where(urn: "urn:d:1:1").select_map(:lemma_folded).sort
+      folded = lemmas_of("urn:d:1:1").select_map(:lemma_folded).sort
       assert_equal %w[frons ipsius], folded
       assert_equal 1, result.filtered_lemmas
     end
@@ -177,7 +183,7 @@ module Store
       shelve(urn: "urn:d:1:1", tokens: [%w[Aureliae Aurelius PROPN]])
 
       apply!(dictionary_filter_slugs: %w[edr])
-      assert_equal %w[aurelius], lemmas.where(urn: "urn:d:1:1").select_map(:lemma_folded),
+      assert_equal %w[aurelius], lemmas_of("urn:d:1:1").select_map(:lemma_folded),
                    "no dictionary to confirm against — dropping everything would be dishonest"
     end
 
@@ -204,7 +210,7 @@ module Store
 
       result = apply!(urns: Set.new(%w[urn:d:1:2]))
       assert_equal 1, result.passages_indexed
-      assert_equal %w[urn:d:1:2], lemmas.select_map(:urn)
+      assert_equal %w[urn:d:1:2], urns_of(lemmas.select_map(:passage_id))
     end
 
     # Owner-ruled 2026-08-29 (flipping the P84-1 pin DELIBERATELY): a full
@@ -218,7 +224,7 @@ module Store
       shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
 
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, lemma_shelf: @shelf)
-      assert_empty lemmas.where(urn: "urn:d:1:1", tier: "silver").all,
+      assert_empty lemmas_of("urn:d:1:1").where(tier: "silver").all,
                    "the shelf stays unprojected until the owner fires the apply"
       assert_empty @fulltext[:lemma_frequencies].where(tier: "silver").all
     end
@@ -235,7 +241,7 @@ module Store
 
       direct = apply!(update_frequencies: true)
       reference = lemmas.where(tier: "silver")
-                        .select_map(%i[urn lemma_folded lemma_raw surface_forms language]).sort
+                        .select_map(%i[passage_id lemma_folded lemma_raw surface_forms language]).sort
       lemmas.where(tier: "silver").delete
       @fulltext[:lemma_frequencies].where(tier: "silver").delete
 
@@ -248,7 +254,7 @@ module Store
       assert_equal direct.passages_indexed, cached.passages_indexed
       assert_equal reference,
                    lemmas.where(tier: "silver")
-                         .select_map(%i[urn lemma_folded lemma_raw surface_forms language]).sort
+                         .select_map(%i[passage_id lemma_folded lemma_raw surface_forms language]).sort
     end
 
     def test_cached_apply_honors_coverage_and_the_dictionary_filter
@@ -270,7 +276,7 @@ module Store
       )
       assert_equal 1, result.skipped_covered, "gold-covered urn skipped whole"
       assert_equal 1, result.filtered_lemmas, "unattested non-identity Aurelius dropped"
-      assert_equal %w[frons], lemmas.where(urn: "urn:d:1:2", tier: "silver").select_map(:lemma_raw),
+      assert_equal %w[frons], lemmas_of("urn:d:1:2").where(tier: "silver").select_map(:lemma_raw),
                    "attested frons lands; identity check rides the precomputed bit"
     end
 
@@ -289,6 +295,28 @@ module Store
         end
       end
       assert_equal before, index_names.call, "indexes restored by ensure"
+    end
+
+    # A v1 lemma table (urn stored + urn-indexed — the live file until the
+    # next full rebuild) takes the projection in its own shape: the coverage
+    # guard reads its urns, inserted rows carry the urn, and an interrupted
+    # index cycle restores the v1 index set (urn, not passage_id).
+    def test_a_v1_lemma_table_takes_the_projection_in_its_own_shape
+      doc = make_document
+      make_passage(doc, urn: "urn:d:1:1", annotations: { "tokens" => [{ "form" => "In", "lemma" => "in" }] })
+      make_passage(doc, urn: "urn:d:1:2", sequence: 1)
+      rebuild_gold!
+      LegacyLemmaTable.widen!(@fulltext, @catalog)
+      shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
+      shelve(urn: "urn:d:1:2", tokens: [%w[fronte frons NOUN]])
+
+      result = apply!
+      assert_equal 1, result.skipped_covered, "the gold-covered urn is skipped through the urn index"
+      assert_equal [["urn:d:1:2", "frons"]], lemmas.where(tier: "silver").select_map(%i[urn lemma_raw])
+      before = @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }.sort
+      assert_includes before, [:urn]
+      assert_raises(RuntimeError) { Nabu::Store::Indexer.cycle_lemma_indexes(@fulltext) { raise "boom" } }
+      assert_equal before, @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }.sort
     end
 
     # The arm-gate's other half: an index the owner never armed stays
@@ -313,11 +341,11 @@ module Store
       rebuild_gold!
       shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
       apply!(update_frequencies: true)
-      assert_equal %w[silver], lemmas.where(urn: "urn:d:1:1").select_map(:tier)
+      assert_equal %w[silver], lemmas_of("urn:d:1:1").select_map(:tier)
 
       Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "edr",
                                            lemma_shelf: @shelf)
-      assert_equal %w[silver], lemmas.where(urn: "urn:d:1:1").select_map(:tier),
+      assert_equal %w[silver], lemmas_of("urn:d:1:1").select_map(:tier),
                    "a source re-sync must not silently strip its shelf-covered silver rows"
       assert_equal 1, @fulltext[:lemma_frequencies].where(lemma_folded: "frons", tier: "silver")
                                                    .get(:passage_count)

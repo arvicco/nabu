@@ -8,7 +8,7 @@ module Nabu
     # unchanged (search --lemma labels silver hits and gold-scoped
     # consumers exclude them already).
     #
-    # The pass is INSERT-IF-ABSENT at passage grain: a urn with ANY
+    # The pass is INSERT-IF-ABSENT at passage grain: a passage with ANY
     # existing lemma rows — gold annotation rows, an upstream-silver
     # source's rows, the equivalence tier, or an earlier run of this very
     # pass — is skipped whole. That one rule is simultaneously the
@@ -99,7 +99,8 @@ module Nabu
                              filter_slugs:)
         by_urn = rows.group_by { |row| row[:urn] }
         urns = by_urn.keys
-        covered = fulltext[Indexer::LEMMA_TABLE].where(urn: urns).distinct.select_map(:urn).to_set
+        covered = covered_urns(catalog, fulltext, urns)
+        with_urn = Indexer.lemma_urn_column?(fulltext)
         live = live_passages_for_urns(catalog, urns)
         insert_rows = []
         by_urn.each do |urn, cache_rows|
@@ -121,9 +122,10 @@ module Nabu
               counts[:filtered_lemmas] += 1
               next
             end
-            { lemma_folded: row[:lemma_folded], lemma_raw: row[:lemma_raw],
-              passage_id: passage[:passage_id], urn: urn, language: row[:language],
-              surface_forms: row[:surface_forms], tier: TIER }
+            lemma = { lemma_folded: row[:lemma_folded], lemma_raw: row[:lemma_raw],
+                      passage_id: passage[:passage_id], language: row[:language],
+                      surface_forms: row[:surface_forms], tier: TIER }
+            with_urn ? lemma.merge(urn: urn) : lemma
           end
           next if kept.empty?
 
@@ -166,7 +168,8 @@ module Nabu
       end
 
       def apply_batch(catalog, fulltext, batch, counts:, frequencies:, dictionary:, filter_slugs:)
-        covered = covered_urns(fulltext, batch)
+        covered = covered_urns(catalog, fulltext, batch.map(&:urn))
+        with_urn = Indexer.lemma_urn_column?(fulltext)
         live = live_passages_by_urn(catalog, batch)
         rows = []
         batch.each do |record|
@@ -177,7 +180,7 @@ module Nabu
           next counts[:skipped_mismatch] += 1 if passage[:language] != record.language
 
           filter = dictionary if filter_slugs.include?(passage[:slug])
-          record_rows = silver_rows(record, passage, dictionary: filter, counts: counts)
+          record_rows = silver_rows(record, passage, dictionary: filter, counts: counts, with_urn: with_urn)
           next if record_rows.empty?
 
           counts[:passages_indexed] += 1
@@ -188,10 +191,18 @@ module Nabu
         fulltext.transaction { rows.each_slice(BATCH) { |slice| fulltext[Indexer::LEMMA_TABLE].multi_insert(slice) } }
       end
 
-      # Urns of +batch+ that already hold ANY lemma rows (the
-      # insert-if-absent guard; urn is B-tree indexed).
-      def covered_urns(fulltext, batch)
-        fulltext[Indexer::LEMMA_TABLE].where(urn: batch.map(&:urn)).distinct.select_map(:urn).to_set
+      # The +urns+ that already hold ANY lemma rows (the insert-if-absent
+      # guard), through the passage-key B-tree (Indexer.lemma_passage_key).
+      # The narrow table keys by passage id, so the urns resolve through the
+      # catalog first — EVERY passage, withdrawn included, so a lingering
+      # row of a since-withdrawn passage reads covered exactly as the v1
+      # urn-keyed guard read it.
+      def covered_urns(catalog, fulltext, urns)
+        lemmas = fulltext[Indexer::LEMMA_TABLE]
+        return lemmas.where(urn: urns).distinct.select_map(:urn).to_set if Indexer.lemma_urn_column?(fulltext)
+
+        by_id = catalog[:passages].where(urn: urns).select_hash(:id, :urn)
+        lemmas.where(passage_id: by_id.keys).distinct.select_map(:passage_id).to_set { |id| by_id.fetch(id) }
       end
 
       # { urn => { passage_id:, language:, slug: } } for the LIVE passages
@@ -213,17 +224,17 @@ module Nabu
       # annotation pass), one row per (passage, folded lemma), distinct
       # surface forms in first-seen order. Lemma-less tokens contribute
       # nothing; the dictionary filter (when armed) drops unattested
-      # non-identity lemmas.
-      def silver_rows(record, passage, dictionary:, counts:)
+      # non-identity lemmas. +with_urn+ fills a v1 table's urn column.
+      def silver_rows(record, passage, dictionary:, counts:, with_urn: false)
         grouped = group_tokens(record)
         grouped.filter_map do |folded, entry|
           if dictionary && !dictionary.include?(folded) && !identity_lemma?(folded, entry, record.language)
             counts[:filtered_lemmas] += 1
             next
           end
-          { lemma_folded: folded, lemma_raw: entry[:raw], passage_id: passage[:passage_id],
-            urn: record.urn, language: record.language,
-            surface_forms: entry[:forms].join(", "), tier: TIER }
+          row = { lemma_folded: folded, lemma_raw: entry[:raw], passage_id: passage[:passage_id],
+                  language: record.language, surface_forms: entry[:forms].join(", "), tier: TIER }
+          with_urn ? row.merge(urn: record.urn) : row
         end
       end
 

@@ -268,6 +268,25 @@ module Query
       assert_equal %w[στόμα ἄρτος], hit.shared_lemmas.sort, "the shared lemmas are reported (dictionary forms)"
     end
 
+    # The anchor's lemmas come up by passage id; a v1 lemma table (urn
+    # stored + indexed, the live file until the next full rebuild) still
+    # serves them through its urn index — the echoes are identical.
+    def test_lemma_echoes_answer_identically_from_a_v1_lemma_table
+      anchor = make_document(urn: "urn:le:anchor", title: "Anchor")
+      make_passage(anchor, urn: "urn:le:anchor:1", text: "ἄρτος ἐκπορεύεται στόμα θεός", sequence: 0,
+                           lemmas: [%w[ἄρτος ἄρτος], %w[ἐκπορεύομαι ἐκπορεύεται],
+                                    %w[στόμα στόμα], %w[θεός θεός]])
+      echo = make_document(urn: "urn:le:echo", title: "Echo")
+      make_passage(echo, urn: "urn:le:echo:1", text: "ἄρτον καὶ στόματι", sequence: 0,
+                         lemmas: [%w[ἄρτος ἄρτον], %w[στόμα στόματι]])
+      rebuild!
+      narrow = parallels("urn:le:anchor:1").lemma_echoes
+      LegacyLemmaTable.widen!(@fulltext, @catalog)
+
+      assert_equal %w[urn:le:echo:1], narrow.map(&:urn)
+      assert_equal narrow, parallels("urn:le:anchor:1").lemma_echoes
+    end
+
     # P26-4 (the P26-0 journaled decision, pinned): lemma echoes are a
     # HEURISTIC DISCOVERY signal, so they deliberately read BOTH tiers — a
     # silver (automatic) anchor still finds echoes and a silver passage still

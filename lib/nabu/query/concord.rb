@@ -38,7 +38,7 @@ module Nabu
     # == Order
     #
     # Corpus order, not rank order: a concordance is for scanning usage. The
-    # underlying query selects the page (Search by rank, LemmaSearch by urn);
+    # underlying query selects the page (Search by rank, LemmaSearch by passage order);
     # concord then re-sorts that page by urn — grouping a document's lines and
     # reading them in citation order. (urn-lexical, the only order a formatter
     # over the Result values can reach without a new query path.)

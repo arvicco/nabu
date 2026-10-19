@@ -212,6 +212,21 @@ module Query
       assert_equal 2, profile.distinct_lemmas
     end
 
+    # The scope's tier probe reads one passage's lemma rows by passage id; a
+    # v1 lemma table (urn stored + indexed — the live file until the next
+    # full rebuild) answers it through the urn, with the identical profile.
+    def test_a_v1_lemma_table_profiles_identically
+      seed_corpus
+      doc = make_silver_document(urn: "urn:d:silver")
+      make_passage(doc, urn: "urn:d:silver:1", sequence: 1, language: "grc", lemmas: %w[θεός θεός λόγος])
+      silver_rebuild!
+      narrow = %w[urn:d:lat urn:d:silver urn:d:silver:1].map { |urn| vocab(urn) }
+      LegacyLemmaTable.widen!(@fulltext, @catalog)
+
+      assert_equal %w[gold silver silver], narrow.map(&:lemma_tier)
+      assert_equal(narrow, %w[urn:d:lat urn:d:silver urn:d:silver:1].map { |urn| vocab(urn) })
+    end
+
     def test_corpus_reference_frequencies_are_gold_scoped
       seed_corpus # gold "et" df = 43 (40 background + 3 in the document)
       doc = make_silver_document(urn: "urn:d:silver")

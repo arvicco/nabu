@@ -32,8 +32,11 @@ module Nabu
     # == Ranking
     #
     # There is none: an exact-lemma hit has no bm25-style relevance. Hits come
-    # back in urn order — deterministic, and it groups a document's passages
-    # together.
+    # back in PASSAGE order (catalog passage id — load order, which keeps a
+    # loaded document's passages together) — deterministic, and answerable from
+    # the lemma table alone, which stores no urn (Store::Indexer class note).
+    # A v1 table, which still stores the urn, keeps its urn order until the
+    # next full rebuild narrows it.
     class LemmaSearch
       include CatalogJoin
 
@@ -67,7 +70,7 @@ module Nabu
         @fulltext = fulltext
       end
 
-      # Search +lemma+ and return up to +limit+ Result values in urn order.
+      # Search +lemma+ and return up to +limit+ Result values in passage order.
       # +lang+ / +license+ filter catalog-side exactly as in Search. +urn+
       # restricts the match to one passage — the ranking-independent golden
       # replay probe (health), not a pagination knob. +morph+ (P13-6), when
@@ -128,7 +131,7 @@ module Nabu
       # real content-word query in tens of ms; conventions §6.1). So:
       #
       #   1. take EVERY candidate passage attesting the folded lemma (all of
-      #      them, in urn order — NOT the inner-limit slice: morph is far more
+      #      them, in passage order — NOT the inner-limit slice: morph is far more
       #      selective than license, so truncating before filtering would
       #      silently drop pages),
       #   2. load their stored annotations and, per passage, keep the tokens
@@ -153,21 +156,37 @@ module Nabu
       end
 
       # [passage ids, { passage_id => tier }] for every distinct passage
-      # attesting the folded lemma, in urn order. Unlike #lemma_hits this
+      # attesting the folded lemma, in passage order. Unlike #lemma_hits this
       # pulls the WHOLE candidate set (morph filtering happens after) — the
       # lemma anchor bounds it to that lemma's attestations.
       def candidate_passages(variants, urn:, gold_only:)
-        dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants)
-        dataset = dataset.where(urn: urn) if urn
+        dataset = passage_scoped(@fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants), urn)
         dataset = dataset.where(tier: Store::Indexer::GOLD_TIER) if gold_only && tier_column?
         columns = tier_column? ? %i[passage_id tier] : %i[passage_id]
         tiers = {}
-        ids = dataset.order(:urn).select(*columns).all.map do |row|
+        ids = dataset.order(order_key).select(*columns).all.map do |row|
           id = row.fetch(:passage_id)
           tiers[id] ||= row[:tier] || Store::Indexer::GOLD_TIER
           id
         end
         [ids.uniq, tiers]
+      end
+
+      # Narrow +dataset+ to the one passage +urn+ names (nil = no narrowing),
+      # through the live shape's passage key: the catalog resolves the urn
+      # to its id on the narrow table (an unknown urn → no rows); a v1 table
+      # still filters its stored urn.
+      def passage_scoped(dataset, urn)
+        return dataset unless urn
+        return dataset.where(urn: urn) if order_key == :urn
+
+        dataset.where(passage_id: @catalog[:passages].where(urn: urn).select_map(:id))
+      end
+
+      # The hit order (class note): passage id, or the stored urn on a v1
+      # table (its pre-narrowing order, unchanged until the rebuild).
+      def order_key
+        @order_key ||= Store::Indexer.lemma_passage_key(@fulltext)
       end
 
       # Pre-tier fulltext tolerance (P26-0): an index built before the tier
@@ -242,13 +261,12 @@ module Nabu
       # `--lemma láta --lang is` returned an empty page at any realistic
       # --limit). License/withdrawn stay catalog-side visibility checks.
       def lemma_hits(variants, inner_limit:, urn: nil, gold_only: false, lang: nil)
-        dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants)
-        dataset = dataset.where(urn: urn) if urn
+        dataset = passage_scoped(@fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: variants), urn)
         dataset = dataset.where(language: Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(tier: Store::Indexer::GOLD_TIER) if gold_only && tier_column?
         columns = %i[passage_id lemma_raw surface_forms]
         columns << :tier if tier_column?
-        dataset.order(:urn)
+        dataset.order(order_key)
                .limit(inner_limit)
                .select(*columns)
                .all

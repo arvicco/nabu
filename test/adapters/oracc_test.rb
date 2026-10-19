@@ -344,7 +344,7 @@ module Adapters
                          .load_from(Nabu::Adapters::Oracc.new, workdir: EXPANSION, full: true)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-      lemmas = fulltext[:passage_lemmas]
+      lemmas = LemmaUrnView.of(fulltext, catalog)
       # Old Persian citation forms flow through the unchanged cf plumbing:
       # xšāyaθiya- "king" (DPd Persian 2, surface XŠ — the logogram).
       assert_operator lemmas.where(language: "peo").count, :>, 0
@@ -466,7 +466,7 @@ module Adapters
                          .load_from(Nabu::Adapters::Oracc.new, workdir: EXTENSION46, full: true)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-      lemmas = fulltext[:passage_lemmas]
+      lemmas = LemmaUrnView.of(fulltext, catalog)
       assert_operator lemmas.where(language: "xur").count, :>, 0,
                       "Urartian citation forms flow through the unchanged cf plumbing"
       row = lemmas.where(language: "xur", lemma_raw: "Haldi").first
@@ -571,7 +571,7 @@ module Adapters
                          .load_from(conformance_adapter, workdir: FIXTURES, full: true)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-      lemmas = fulltext[:passage_lemmas]
+      lemmas = LemmaUrnView.of(fulltext, catalog)
       assert_operator lemmas.where(language: "akk").count, :>, 0
       assert_operator lemmas.where(language: "sux").count, :>, 0
 

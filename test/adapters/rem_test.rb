@@ -157,8 +157,8 @@ class RemTest < Minitest::Test
     Nabu::Store::Loader.new(db: catalog, source: source)
                        .load_from(Nabu::Adapters::Rem.new, workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
-    lemmas = fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
-             .where(Sequel.like(:urn, "urn:nabu:rem:m058:%")).select_map(:lemma_raw)
+    lemmas = LemmaUrnView.of(fulltext, catalog).where(Sequel.like(:urn, "urn:nabu:rem:m058:%"))
+                         .select_map(:lemma_raw)
     assert_includes lemmas, "wër(e)lt"
     refute_includes lemmas, "werelt", "the normalized form no longer poses as the lemma"
   ensure
@@ -417,7 +417,7 @@ class RemTest < Minitest::Test
                        .load_from(Nabu::Adapters::Rem.new, workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    rows = fulltext[Nabu::Store::Indexer::LEMMA_TABLE].where(lemma_folded: "grimme").all
+    rows = LemmaUrnView.of(fulltext, catalog).where(lemma_folded: "grimme").all
     assert_equal 1, rows.size, "the gold lemma grimme is indexed for gmh"
     assert_equal "grínme", rows[0][:surface_forms], "attested by the pristine diplomatic surface"
     assert rows[0][:urn].end_with?(":100v.5")
