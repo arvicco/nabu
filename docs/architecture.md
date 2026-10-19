@@ -1310,6 +1310,17 @@ carry, so each original-language Greek CTS edition joins a composition
 envelope by urn (axis_source `tlg-concordance`, date_class `composition`,
 date_raw naming the witness and key — glaux first, diorisis fallback);
 a sync of any target or witness re-derives the lane. The
+`ItkcAuthorDates` lane is the same in-library JOIN shape against a
+reference module: the itkc-catalog module holds the ITKC OpenAPI 서지
+records (MO/GO/KP — author, birth/death years, original print year;
+read by `ItkcCatalogRecords`, which lives with the builders so the
+builders digest covers its band rules), and every okhc klc record and
+itkc fascicle whose urn carries an ITKC work id gains the author-era
+band (axis_source `okhc-authors` / `itkc-authors`, date_class
+`composition`, precision `era`, date_raw naming author, years and
+record) — runs LAST in the timeline rebuild and fills only documents no
+other upstream lane dates (a silver estimate blocks nothing); a sync of
+okhc, itkc or the module re-derives it. The
 `OpenmghCharterDates` lane is the same catalog-annotation stance for the
 openMGH Diplomata: each charter's German dating line is read at parse
 (the adapter's conservative `OpenmghCharterDate` reader — hedged lines
@@ -1330,7 +1341,8 @@ source's facet and metadata-timeline slices post-load
 (`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
 `NikhEntryDates.refresh_source!` + `TlgConcordanceDates.refresh_source!` +
 `OpenmghCharterDates.refresh_source!` + `UdSentenceDates.refresh_source!`,
-mirroring the Indexer's per-source
+then `ItkcAuthorDates.refresh_source!`, not load-gated since its module
+mints no documents — mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
 The whole-library chronological views over this table are `nabu list
 --by-date` (century census, earliest-bound buckets with the announced

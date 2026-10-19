@@ -369,6 +369,29 @@ class SyncRunnerTest < Minitest::Test
     assert_equal [1605, 1605], @db[:document_axes].where(document_id: doc.id).get(%i[not_before not_after])
   end
 
+  # --- the ITKC author-era join ----------------------------------------------
+
+  # A sync of okhc, itkc or the itkc-catalog module re-derives the lane
+  # (the catalog module mints no documents, so no load-gated lane would
+  # ever run for it); any other slug touches nothing.
+  def test_an_itkc_catalog_sync_redates_the_okhc_munjip_records
+    okhc = Nabu::Store::Source.create(slug: "okhc", name: "o", adapter_class: "X", license_class: "nc")
+    doc = Nabu::Store::Document.create(
+      source_id: okhc.id, urn: "urn:nabu:okhc:klc:ITKC_MO_0004A_0010_010_0010", language: "lzh",
+      content_sha256: "o", revision: 1, metadata_json: "{}"
+    )
+    File.symlink(File.join(Nabu::TestSupport::FIXTURES_ROOT, "itkc-catalog"), File.join(@canonical, "itkc-catalog"))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    runner.send(:refresh_itkc_author_dates, entry("breaker", BreakerAdapter, wired: true))
+    assert_equal 0, @db[:document_axes].count, "an unrelated sync touches nothing"
+
+    runner.send(:refresh_itkc_author_dates, entry("itkc-catalog", BreakerAdapter, wired: true))
+    runner.send(:refresh_itkc_author_dates, entry("okhc", BreakerAdapter, wired: true))
+    assert_equal [[1168, 1241, "okhc-authors"]],
+                 @db[:document_axes].where(document_id: doc.id).select_map(%i[not_before not_after axis_source])
+  end
+
   # --- post-load ANALYZE (P42-4) ------------------------------------------
 
   # The trigger is the changed-row count (added + updated + withdrawn) against

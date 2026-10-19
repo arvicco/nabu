@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: itkc-catalog
+adapter_test: null
+retrieved: 2026-10-19
+files:
+  - path: MO_SJ/0000.xml
+    url: https://db.itkc.or.kr/openapi/search?secId=MO_SJ&start=0&rows=1000
+    whole: false
+    trim: header + 5 of 1,000 docs verbatim (ITKC_MO_0001A, 0003A, 0004A, 0009A, 0672A)
+  - path: MO_SJ/1000.xml
+    url: https://db.itkc.or.kr/openapi/search?secId=MO_SJ&start=1000&rows=1000
+    whole: false
+    trim: header + 3 of 259 docs verbatim (ITKC_MO_1247A, 1250A, 1255A)
+  - path: GO_SJ/0000.xml
+    url: https://db.itkc.or.kr/openapi/search?secId=GO_SJ&start=0&rows=1000
+    whole: false
+    trim: header + 1 of 257 docs verbatim (ITKC_GO_1432A)
+  - path: KP_SJ/0000.xml
+    url: https://db.itkc.or.kr/openapi/search?secId=KP_SJ&start=0&rows=1000
+    whole: false
+    trim: header + 1 of 24 docs verbatim (ITKC_KP_C004A)
