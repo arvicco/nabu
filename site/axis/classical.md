@@ -22,7 +22,7 @@ A source wears every desk it serves — these eighteen answer this desk. Holding
 | `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
-| `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
+| `first1k-greek` | texts | attribution | wired · auto | 1,153 docs / 260,088 passages |
 | `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
 | `hypotactic` | feature module | attribution | wired · manual | nothing held yet |
 | `ig-cyprus` | inscriptions | attribution | wired · manual | 982 docs / 1,680 passages |
@@ -36,7 +36,7 @@ A source wears every desk it serves — these eighteen answer this desk. Holding
 | `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 19 October 2026)</span>: `grc` 120,785 · `lat` 58,435 · `gmy` 5,890 · `eng` 874 · `grc-Latn` 510 · `deu` 218 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 · `ota` 5 … and 21 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 19 October 2026)</span>: `grc` 120,785 · `lat` 58,451 · `gmy` 5,890 · `eng` 874 · `grc-Latn` 510 · `deu` 225 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 · `ota` 5 … and 21 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
