@@ -44,3 +44,24 @@ files:
       unknown sentinel; the 사부분류 대분류 written without hanja; the KP 고전적분류 scheme
     copied: "2026-10-18"
     whole: false
+  - path: ITKC_MO_1250A_0040.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the 심석재집 卷四 volume file (one 疏 section, one article) copied whole from the box's
+      canonical 15096001 zip extraction — the MO volume grain that IS the document
+    copied: "2026-10-19"
+    whole: true
+  - path: ITKC_MO_1250A_0040_010.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the same volume's 문체 section split file, copied whole — the MO zips repeat each
+      volume per section; never a document (the discovery regression witness)
+    copied: "2026-10-19"
+    whole: true
+  - path: ITKC_MO_1250A_0040_010_0010.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the same volume's per-article split file, copied whole — the one article the volume
+      already carries; never a document (the double-load regression witness)
+    copied: "2026-10-19"
+    whole: true

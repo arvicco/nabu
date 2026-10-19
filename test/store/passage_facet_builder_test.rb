@@ -187,7 +187,8 @@ module Store
         stored_labels(slug, field).size
       end
       assert_equal expected, pair_count(%w[subject genre])
-      assert_equal 24, expected, "the fixture census: 24 label pairs, 5 + 5 labels"
+      assert_equal 26, expected, "the fixture census: 26 label pairs (the MO " \
+                                 "volume's one article adds 公車類 · 疏箚類)"
       # sillok's index markup: 純宗 · 純明皇后/純明孝皇后 (one M_ id, two
       # surfaces) · 晋山府院君/河崙 · 鄭麟趾 · 孝宗… persons, 太廟/璿源殿
       # places, 永樂/正統 eras across its 5 article passages.
