@@ -533,3 +533,7 @@ sources:
       #                         Function word 4,522 · Adverb 198
       borrowed: borrowed_status       # the curated five-point scale verbatim: "1. clearly
       #                         borrowed" 13,304 … "5. no evidence for borrowing" 46,379
+  tls:                        # tls-words: 34,808 word→concept assignments (tls:concept-id)
+    entry_fields:
+      concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
+      #                         entry id the word→concept crossref resolves to)
