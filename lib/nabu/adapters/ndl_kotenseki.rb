@@ -10,6 +10,7 @@ require_relative "../xlsx"
 require_relative "../zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
+require_relative "ndl_search_bib"
 
 module Nabu
   module Adapters
@@ -59,6 +60,47 @@ module Nabu
     # censused 2026-09-29, the dataset's unknown-date placeholder —
     # mints nothing, declared); the prose 出版日 rides verbatim as raw.
     # 件名 (subjects, ||-separated) and コレクション facet.
+    #
+    # == The NDL Search bib join (bib/<pid>.xml)
+    #
+    # The census bibliography carries no classification, no authority
+    # forms and — on ~59% of held books — no typed year. NDL Search
+    # (国立国会図書館サーチ) holds the richer records for the same
+    # items; the fetch crawls them AFTER the book slice into per-PID
+    # sidecars, through the SRU interface (recordSchema dcndl) in
+    # batches of BIB_BATCH PIDs per request (one CQL OR — a per-PID
+    # OpenSearch call measured ~5.8 s each, 2026-10-19, so batching is
+    # the difference between ~65 h and ~1.5 h of crawl). Paced by the
+    # same DELAY, sliced (BIB_SLICE batches per sync), oldest PID first,
+    # incremental (a PID with a sidecar never re-fetches) and resumable
+    # through its own ledger (.ndl-bib.json): "missing" (the answer
+    # links no record to the PID), "denied" (a 403/404 batch), and
+    # "timeout-stuck" (the book crawl's timeout mold, per batch).
+    #
+    # Terms, read first-hand 2026-10-19:
+    # - https://ndlsearch.ndl.go.jp/help/api/provider — メタデータ利用条件:
+    #   国立国会図書館蔵書 (iss-ndl-opac, R100000002) "CC BY" (非営利 and
+    #   営利 alike); 国立国会図書館デジタルコレクション（オープンデータ）
+    #   (ndl-dl-open, R100000039) "CC BY" — every R100000039 PID sampled
+    #   answers inside ndl-dl-open.
+    # - https://ndlsearch.ndl.go.jp/help/api 17-4 (2): 「本APIを利用する
+    #   サイトやアプリケーションには、NDLサーチのAPIを用いていることを
+    #   明記してください。」 — the manifest license names it.
+    # - 17-4 (1): 「APIをご利用いただく際は、多重アクセスが生じないよう
+    #   ご対応をお願いいたします。」 — one request at a time, paced.
+    # - https://www.ndl.go.jp/jp/help/data — 書誌データ: 「営利・非営利の
+    #   目的や件数等にかかわらず、申請は必要ありません。」
+    #
+    # The join at parse: "ndc"/"ndlc" (codes verbatim, the ndc/ndlc
+    # facets; NDC folds onto the kind axis in config/kind_map.yml),
+    # "creators" (authority forms; life-years split conservatively, the
+    # authority URI and reading kept) whose names join the author facet,
+    # "publication_places" (publishers' locations verbatim — metadata
+    # only, no place fold yet), and — ONLY where the census mints no
+    # typed year — the record's W3CDTF issued years as the date
+    # envelope, its raw labeled as the NDL Search record's claim (the
+    # honkoku ndl_catalog precedent; the print's own date, so the
+    # artifact class).
     class NdlKotenseki < Nabu::Adapter
       CENSUS_URL = "https://dl.ndl.go.jp/static/files/dataset/dataset_202602_k_internet.xlsx"
       CENSUS_XLSX = "dataset_202602_k_internet.xlsx"
@@ -95,13 +137,25 @@ module Nabu
       # 5,388 rows carry the bare "1000") — mints no envelope.
       DATE_SENTINEL = "1000"
 
+      # The bib join (see the header): sidecar dir, its ledger, PIDs per
+      # SRU request, and requests per sync — 120 batches ≈ 6,000 PIDs ≈
+      # 16 min at the measured ~7 s per batch answer + DELAY.
+      BIB_DIRNAME = "bib"
+      BIB_LEDGER_FILE = ".ndl-bib.json"
+      BIB_BATCH = 50
+      BIB_SLICE = 120
+      BIB_LEDGER_CLASSES = ["missing", "denied", STUCK].freeze
+      # Pages followed for one batch before the answer is distrusted.
+      BIB_MAX_PAGES = 10
+
       MANIFEST = Nabu::SourceManifest.new(
         id: "ndl-kotenseki",
         name: "NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)",
         license: "Copyright-expired classical materials (権利区分「保護期間満了」only); the " \
                  "bibliographic dataset is public domain (NDL open dataset page). Bulk API " \
                  "route confirmed by NDL Lab (by email, 2026-09-29); credit the National Diet " \
-                 "Library digital collections, per-item permalink carried",
+                 "Library digital collections, per-item permalink carried. Joined bibliographic " \
+                 "records via the NDL Search (国立国会図書館サーチ) API — NDL metadata, CC BY 4.0",
         license_class: "open",
         upstream_url: "https://lab.ndl.go.jp/service/tsugidigi/",
         parser_family: "ndl-fulltext-json"
@@ -118,15 +172,19 @@ module Nabu
         )]
       end
 
-      # census.tsv is derived beside the upstream xlsx at fetch (the declared-materializations rule, 2026-09-03).
-      def self.materialized_paths = [CENSUS_TSV]
+      # census.tsv is derived beside the upstream xlsx at fetch, and the bib
+      # sidecars are written per PID from the NDL Search answers (the
+      # declared-materializations rule, 2026-09-03).
+      def self.materialized_paths = [CENSUS_TSV, BIB_DIRNAME]
 
       def initialize(delay: DELAY, slice: SLICE, http: Nabu::ZipFetch.default_http,
-                     timeout_backoff: TIMEOUT_BACKOFF)
+                     timeout_backoff: TIMEOUT_BACKOFF, bib_batch: BIB_BATCH, bib_slice: BIB_SLICE)
         super()
         @delay = delay
         @slice = slice
         @timeout_backoff = timeout_backoff
+        @bib_batch = bib_batch
+        @bib_slice = bib_slice
         @http = http
         @requests = 0
       end
@@ -147,6 +205,10 @@ module Nabu
                 "(+#{crawled} this sync, #{denied} newly refused, " \
                 "#{stuck.size} stuck on timeout#{stuck_list}, " \
                 "#{LEDGER_CLASSES.sum { |key| ledger[key].size }} ledgered)"
+        bib = crawl_bib_slice!(workdir, progress: progress)
+        notes += "; bib records at #{bib_held(workdir).size}/#{held.size} held book(s) " \
+                 "(+#{bib[:fetched]} this sync, #{bib[:missing]} missing, #{bib[:denied]} refused, " \
+                 "#{bib[:stuck]} stuck; #{bib[:batches]} batch(es))"
         progress&.call("#{notes}\n")
         Nabu::FetchReport.new(sha: crawl_sha(workdir, held, ledger), fetched_at: Time.now, notes: notes)
       end
@@ -178,11 +240,13 @@ module Nabu
       def parse(document_ref)
         pid = document_ref.metadata.fetch("pid")
         book = read_book(document_ref.path)
-        bib = census_row(File.dirname(document_ref.path, 2), pid)
+        workdir = File.dirname(document_ref.path, 2)
+        bib = census_row(workdir, pid)
+        record = bib_record(workdir, pid)
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE,
           canonical_path: document_ref.path,
-          title: title_for(bib), metadata: metadata_for(pid, bib, book)
+          title: title_for(bib), metadata: metadata_for(pid, bib, book, record)
         )
         append_koma(document, document_ref, book)
         document
@@ -255,6 +319,17 @@ module Nabu
         raw = bib["pub_date"].to_s.strip
         { "not_before" => years.min, "not_after" => years.max,
           "raw" => raw.empty? ? value : Normalize.nfc(raw) }
+      end
+
+      # The bib record's envelope (NdlSearchBib.read fields): its W3CDTF
+      # issued years, the raw labeled as the record's claim so no reader
+      # takes it for the census. nil without a year.
+      def self.bib_date_envelope(pid, record)
+        years = Array(record["issued"])
+        return nil if years.empty?
+
+        { "not_before" => years.min, "not_after" => years.max,
+          "raw" => "NDL Search record (pid #{pid}): #{record['date_prose'] || years.join(', ')}" }
       end
 
       private
@@ -391,6 +466,126 @@ module Nabu
         File.join(workdir, BOOKS_DIRNAME, "#{pid}.json")
       end
 
+      # -- the bib crawl -----------------------------------------------------
+
+      # Up to @bib_slice SRU batches over the held PIDs that have neither a
+      # sidecar nor a ledger entry, oldest PID first. Returns the tallies.
+      def crawl_bib_slice!(workdir, progress:)
+        ledger = read_bib_ledger(workdir)
+        skip = BIB_LEDGER_CLASSES.flat_map { |key| ledger[key] }.to_set
+        todo = held_pids(workdir).sort_by { |pid| Integer(pid, 10) }
+                                 .reject { |pid| skip.include?(pid) || File.file?(bib_path(workdir, pid)) }
+        counts = { fetched: 0, missing: 0, denied: 0, stuck: 0, batches: 0 }
+        todo.each_slice(@bib_batch).first(@bib_slice).each do |batch|
+          tally_bib_batch!(workdir, batch, ledger, counts, progress)
+          counts[:batches] += 1
+          next unless (counts[:batches] % 10).zero?
+
+          progress&.call("bib: +#{counts[:fetched]} record(s), #{counts[:missing]} missing " \
+                         "(#{counts[:batches]} batch(es))…\n")
+        end
+        counts
+      ensure
+        # A fatal answer mid-slice still keeps what the slice learned.
+        write_bib_ledger!(workdir, ledger) if ledger
+      end
+
+      def tally_bib_batch!(workdir, batch, ledger, counts, progress)
+        case (records = fetch_bib_with_retries!(batch, progress))
+        when :denied
+          ledger["denied"].concat(batch)
+          counts[:denied] += batch.size
+        when :timeout
+          ledger[STUCK].concat(batch)
+          counts[:stuck] += batch.size
+        else
+          batch.each do |pid|
+            mine = NdlSearchBib.records_for(pid, records)
+            if mine.empty?
+              ledger["missing"] << pid
+              counts[:missing] += 1
+            else
+              write_bib!(workdir, pid, mine)
+              counts[:fetched] += 1
+            end
+          end
+        end
+      end
+
+      # The book crawl's timeout mold, per batch: TIMEOUT_ATTEMPTS tries
+      # with doubling backoff, then :timeout (the caller ledgers it stuck).
+      def fetch_bib_with_retries!(batch, progress)
+        TIMEOUT_ATTEMPTS.times do |attempt|
+          outcome = fetch_bib_batch(batch)
+          return outcome unless outcome == :timeout
+          break if attempt == TIMEOUT_ATTEMPTS - 1
+
+          progress&.call("bib: batch at #{batch.first} timed out (attempt #{attempt + 1}/#{TIMEOUT_ATTEMPTS})…\n")
+          backoff = @timeout_backoff * (2**attempt)
+          sleep(backoff) if backoff.positive?
+        end
+        :timeout
+      end
+
+      # Every record the batch's answer holds (paged through
+      # nextRecordPosition), :denied on 403/404, :timeout on a timeout;
+      # anything else stays fatal — the crawl is resumable.
+      def fetch_bib_batch(batch)
+        records = []
+        start = 1
+        BIB_MAX_PAGES.times do
+          page = NdlSearchBib.page(bib_get(NdlSearchBib.query_url(batch, start: start)))
+          records.concat(page.records)
+          return records unless page.next_position && page.next_position > start && records.size < page.total
+
+          start = page.next_position
+        end
+        raise Nabu::FetchError, "NDL Search SRU: batch at #{batch.first} still paging after #{BIB_MAX_PAGES} pages"
+      rescue Nabu::FetchError => e
+        return :timeout if e.message.match?(TIMEOUT_PATTERN)
+        raise unless e.message.match?(/HTTP 40[34]\b/)
+
+        :denied
+      end
+
+      def bib_get(url)
+        sleep(@delay) if @delay.positive? && @requests.positive?
+        @requests += 1
+        response, = Nabu::RedirectFollow.get(url, http: @http, error: Nabu::FetchError,
+                                                  headers: { "User-Agent" => Nabu::WikiFetch::USER_AGENT })
+        response.body.to_s
+      end
+
+      def write_bib!(workdir, pid, records)
+        target = bib_path(workdir, pid)
+        FileUtils.mkdir_p(File.dirname(target))
+        File.write("#{target}.tmp", NdlSearchBib.sidecar(pid, records))
+        File.rename("#{target}.tmp", target)
+      end
+
+      def bib_path(workdir, pid)
+        File.join(workdir, BIB_DIRNAME, "#{pid}.xml")
+      end
+
+      def bib_held(workdir)
+        Dir.glob(File.join(workdir, BIB_DIRNAME, "*.xml")).map { |path| File.basename(path, ".xml") }.sort
+      end
+
+      def read_bib_ledger(workdir)
+        blank = BIB_LEDGER_CLASSES.to_h { |key| [key, []] }
+        path = File.join(workdir, BIB_LEDGER_FILE)
+        return blank unless File.file?(path)
+
+        blank.merge(JSON.parse(File.read(path)))
+      rescue JSON::ParserError
+        blank
+      end
+
+      def write_bib_ledger!(workdir, ledger)
+        File.write(File.join(workdir, BIB_LEDGER_FILE),
+                   JSON.pretty_generate(BIB_LEDGER_CLASSES.to_h { |key| [key, ledger.fetch(key, []).uniq.sort] }))
+      end
+
       def held_pids(workdir)
         Dir.glob(File.join(workdir, BOOKS_DIRNAME, "*.json")).map { |path| File.basename(path, ".json") }.sort
       end
@@ -424,6 +619,12 @@ module Nabu
         stuck = ledger.fetch(STUCK, []).sort
         parts = [census, held, ledger["denied"].sort, ledger["empty"].sort]
         parts << stuck unless stuck.empty?
+        # The bib state joins likewise only once there is some (a crawl
+        # from before the bib join keeps its identity).
+        bib = bib_held(workdir)
+        bib_ledger = read_bib_ledger(workdir)
+        parts << ["bib", bib, BIB_LEDGER_CLASSES.map { |key| bib_ledger[key].sort }] unless
+          bib.empty? && BIB_LEDGER_CLASSES.all? { |key| bib_ledger[key].empty? }
         Digest::SHA256.hexdigest(JSON.generate(parts))
       end
 
@@ -435,6 +636,7 @@ module Nabu
            .reject { |path| path.include?("/#{ATTIC_DIRNAME}/") }
            .reject { |path| File.basename(path).start_with?(".") }
            .grep_v(%r{/#{BOOKS_DIRNAME}/\d+\.json\z})
+           .grep_v(%r{/#{BIB_DIRNAME}/\d+\.xml\z})
            .reject { |path| [CENSUS_XLSX, CENSUS_TSV].include?(File.basename(path)) }
            .reject { |path| File.basename(path).downcase == "readme.md" }
            .map { |path| path.delete_prefix("#{workdir}/") }
@@ -463,7 +665,14 @@ module Nabu
         parts.empty? ? nil : Normalize.nfc(parts.join(" "))
       end
 
-      def metadata_for(pid, bib, book)
+      # The bib sidecar's fields for +pid+ ({} when the crawl has not
+      # reached it, or the answer linked no record).
+      def bib_record(workdir, pid)
+        path = bib_path(workdir, pid)
+        File.file?(path) ? NdlSearchBib.read(path) : {}
+      end
+
+      def metadata_for(pid, bib, book, record)
         metadata = {
           "text_nature" => "machine-ocr",
           "permalink" => "https://dl.ndl.go.jp/pid/#{pid}",
@@ -475,9 +684,11 @@ module Nabu
         end
         parts = bib["author"].to_s.split("||").reject { |part| part.strip.empty? }
         metadata["authors"] = parts.map { |part| self.class.author_part(part) } unless parts.empty?
-        date = self.class.date_envelope(bib)
+        %w[ndc ndlc creators publication_places].each { |key| metadata[key] = record[key] if record[key] }
+        metadata["ndl_bib"] = { "records" => record["records"] } if record["records"]
+        date = self.class.date_envelope(bib) || self.class.bib_date_envelope(pid, record)
         metadata["date"] = date if date
-        facets = facets_for(bib)
+        facets = facets_for(bib, record)
         metadata["facets"] = facets unless facets.empty?
         metadata
       end
@@ -486,16 +697,20 @@ module Nabu
       # separator — the first slice fused a two-collection value);
       # シリーズタイトル is the series facet (no || value censused, split
       # all the same), and the 著者 parts' names facet as author (the
-      # role split off — see .author_part).
-      def facets_for(bib)
+      # role split off — see .author_part), joined by the bib record's
+      # authority-form creator names (life-years never in the value).
+      # The record's NDC and NDLC codes facet verbatim.
+      def facets_for(bib, record)
         facets = {}
         %w[subject collection series].each do |key|
           values = bib[key].to_s.split("||").map { |value| Normalize.nfc(value.strip) }.reject(&:empty?)
           facets[key] = { "values" => values } unless values.empty?
         end
         names = bib["author"].to_s.split("||").reject { |part| part.strip.empty? }
-                                              .map { |part| self.class.author_part(part)["name"] }.uniq
+                                              .map { |part| self.class.author_part(part)["name"] }
+        names = (names + Array(record["creators"]).map { |creator| creator["name"] }).uniq
         facets["author"] = { "values" => names } unless names.empty?
+        %w[ndc ndlc].each { |key| facets[key] = { "values" => record[key] } if record[key] }
         facets
       end
 

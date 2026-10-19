@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ndl-bib pid="2532153">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcndl="http://ndl.go.jp/dcndl/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" >
+          <dcndl:BibAdminResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459">
+              <dcndl:catalogingStatus>C7</dcndl:catalogingStatus>
+              <dcterms:description>type : book</dcterms:description>
+              <dcndl:bibRecordCategory>R100000002</dcndl:bibRecordCategory>
+              <dcndl:bibRecordSubCategory>171</dcndl:bibRecordSubCategory>
+              <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459#material" />
+          </dcndl:BibAdminResource>
+          <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459#material">
+              <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/bib/000003284459"/>
+              <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000003284459</dcterms:identifier>
+              <dcterms:title>玉篇. 巻中</dcterms:title>
+              <dc:title><rdf:Description>
+              <rdf:value>玉篇</rdf:value>
+              <dcndl:transcription>ゴクヘン</dcndl:transcription>
+          </rdf:Description></dc:title>
+              <dcndl:volume><rdf:Description>
+              <rdf:value>巻中</rdf:value>
+              <dcndl:transcription>2</dcndl:transcription>
+          </rdf:Description></dcndl:volume>
+              <dcndl:alternative><rdf:Description>
+              <rdf:value>慶長十年夢梅本玉篇巻中本</rdf:value>
+              <dcndl:transcription>ケイチョウ ジュウネン ムバイボン ゴクヘン マキ ノ チュウ ホン</dcndl:transcription>
+          </rdf:Description></dcndl:alternative>
+              <dcterms:publisher><foaf:Agent>
+              <foaf:name>[夢梅]</foaf:name>
+          </foaf:Agent></dcterms:publisher>
+              <dcndl:publicationPlace rdf:datatype="http://purl.org/dc/terms/ISO3166">JP</dcndl:publicationPlace>
+              <dcterms:date>[慶長10(1605)]</dcterms:date>
+                  <dcterms:issued rdf:datatype="http://purl.org/dc/terms/W3CDTF">1605</dcterms:issued>
+              <dcterms:description>装丁 : 和装</dcterms:description>
+              <dcterms:description>書名は目首による 元表紙外題: 慶長十年夢梅本玉篇巻中本</dcterms:description>
+              <dcterms:description>亀田文庫</dcterms:description>
+              <dcterms:subject><rdf:Description>
+              <rdf:value>倭玉篇</rdf:value>
+              <dcndl:transcription>ワギョクヘン</dcndl:transcription>
+          </rdf:Description></dcterms:subject><dcterms:subject><rdf:Description>
+              <rdf:value>辞書</rdf:value>
+          </rdf:Description></dcterms:subject>
+              <dc:subject rdf:datatype="http://ndl.go.jp/dcndl/terms/NDC">813.2</dc:subject>
+              <dcterms:language rdf:datatype="http://purl.org/dc/terms/ISO639-2">jpn</dcterms:language>
+              <dcterms:extent>1冊 ; 31cm</dcterms:extent>
+              <dcndl:materialType rdf:resource="http://ndl.go.jp/ndltype/JapaneseClassicalBook" rdfs:label="和古書"/>
+                  <rdfs:seeAlso rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459"/>
+          </dcndl:BibResource>
+              <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459#material">
+                  <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459#item" /><dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000039-I2532153#item" />
+              </dcndl:BibResource>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459#item">
+                  <dcndl:holdingAgent>
+                      <foaf:Agent>
+                          <foaf:name>国立国会図書館</foaf:name>
+                          <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLLibCode">0000</dcterms:identifier>
+                      </foaf:Agent>
+                  </dcndl:holdingAgent>
+                  <rdfs:seeAlso rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000002-I000003284459"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/bib/000003284459"/>
+                  <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000003284459</dcterms:identifier>
+                  <dcndl:callNumber>WA7-67</dcndl:callNumber>
+              </dcndl:Item>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2532153#item">
+                  <rdfs:seeAlso rdf:resource="https://dl.ndl.go.jp/pid/2532153"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/digimeta/2532153"/>
+                  <rdfs:seeAlso rdf:resource="https://doi.org/10.11501/2532153"/>
+                  <dcndl:callNumber>WA7-67</dcndl:callNumber>
+                  <dcterms:description>資料形態 : テキストデータ</dcterms:description><dcterms:description>資料形態 : プレーンテキスト</dcterms:description>
+              </dcndl:Item>
+      </rdf:RDF>
+</ndl-bib>

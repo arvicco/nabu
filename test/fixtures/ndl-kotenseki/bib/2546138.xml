@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ndl-bib pid="2546138">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcndl="http://ndl.go.jp/dcndl/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" >
+          <dcndl:BibAdminResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2546138">
+              <dcterms:description>type : book</dcterms:description>
+              <dcndl:bibRecordCategory>R100000039</dcndl:bibRecordCategory>
+              <dcndl:bibRecordSubCategory>A00008</dcndl:bibRecordSubCategory><dcndl:bibRecordSubCategory>A00003</dcndl:bibRecordSubCategory><dcndl:bibRecordSubCategory>A00000</dcndl:bibRecordSubCategory><dcndl:bibRecordSubCategory>A00001</dcndl:bibRecordSubCategory>
+              <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000039-I2546138#material" />
+          </dcndl:BibAdminResource>
+          <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2546138#material">
+              <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/digimeta/2546138"/>
+                  <dcndl:sourceIdentifier rdf:datatype="http://ndl.go.jp/dcndl/terms/JPNO">75029121</dcndl:sourceIdentifier>
+                  <dcndl:sourceIdentifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLBibID">000001274374</dcndl:sourceIdentifier>
+              <rdfs:seeAlso rdf:resource="https://doi.org/10.11501/2546138"/>
+              <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/DOI">10.11501/2546138</dcterms:identifier>
+              <dcterms:identifier rdf:datatype="http://ndl.go.jp/dcndl/terms/NDLJP">info:ndljp/pid/2546138</dcterms:identifier>
+              <dcterms:title>ホメーロス批判 [1]</dcterms:title>
+              <dc:title><rdf:Description>
+              <rdf:value>ホメーロス批判</rdf:value>
+              <dcndl:transcription>ホメーロス ヒハン</dcndl:transcription>
+          </rdf:Description></dc:title>
+              <dcndl:volume><rdf:Description>
+              <rdf:value>[1]</rdf:value>
+              <dcndl:transcription>1</dcndl:transcription>
+          </rdf:Description></dcndl:volume>
+                  <dcterms:creator><foaf:Agent>
+              <foaf:name>和辻, 哲郎, 1889-1960</foaf:name>
+          </foaf:Agent></dcterms:creator>
+              <dc:creator>和辻哲郎 著</dc:creator>
+              <dcterms:publisher><foaf:Agent>
+              <foaf:name>[和辻哲郎]</foaf:name>
+              <dcndl:location>[製作地不明]</dcndl:location>
+          </foaf:Agent></dcterms:publisher>
+              <dcndl:publicationPlace rdf:datatype="http://purl.org/dc/terms/ISO3166">JP</dcndl:publicationPlace>
+                  <dcndl:digitizedPublisher>国立国会図書館</dcndl:digitizedPublisher>
+              <dcterms:date>[製作年不明]</dcterms:date>
+              <dcterms:dateAccepted rdf:datatype="http://purl.org/dc/terms/W3CDTF">2011-08-30T11:55:15+09:00</dcterms:dateAccepted>
+                  <dcndl:dateDigitized rdf:datatype="http://purl.org/dc/terms/W3CDTF">2011-03-31</dcndl:dateDigitized>
+              <dcterms:description>資料形態 : テキストデータ プレーンテキスト</dcterms:description>
+                  <dcterms:description>コレクション : 国立国会図書館デジタルコレクション &gt; デジタル化資料 &gt; 古典籍資料（貴重書等） &gt; その他</dcterms:description>
+                  <dcterms:description>コレクション : 国立国会図書館デジタルコレクション &gt; デジタル化資料 &gt; 図書</dcterms:description>
+              <dcterms:description>資料種別 : [稿本]</dcterms:description><dcterms:description>資料形態 : テキストデータ プレーンテキスト</dcterms:description><dcterms:description>自筆原稿</dcterms:description>
+              <dcterms:subject rdf:resource="http://id.ndl.go.jp/class/ndlc/KP25"/>
+              <dc:subject rdf:datatype="http://ndl.go.jp/dcndl/terms/NDC">991</dc:subject>
+              <dcterms:language rdf:datatype="http://purl.org/dc/terms/ISO639-2">jpn</dcterms:language>
+              <dcterms:extent>2冊 ; 27cm</dcterms:extent>
+                  <dcterms:format rdf:datatype="http://purl.org/dc/terms/IMT">image/jp2</dcterms:format>
+              <dcndl:materialType rdf:resource="http://ndl.go.jp/ndltype/Book" rdfs:label="図書"/><dcndl:materialType rdf:resource="http://ndl.go.jp/ndltype/Manuscript" rdfs:label="書写資料"/><dcndl:materialType rdf:resource="http://ndl.go.jp/ndltype/MicroForm" rdfs:label="マイクロ資料"/>
+                  <dcterms:accessRights>インターネット公開</dcterms:accessRights>
+                  <dcterms:rights>pdm</dcterms:rights>
+                  <dcterms:rights>PDM</dcterms:rights>
+              <dcterms:audience>一般</dcterms:audience>
+                  <rdfs:seeAlso rdf:resource="https://dl.ndl.go.jp/pid/2546138"/>
+                  <rdfs:seeAlso rdf:resource="https://dl.ndl.go.jp/api/iiif/2546138/manifest.json" rdf:type="http://iiif.io/api/presentation/2#Manifest"/>
+                  <foaf:thumbnail rdf:resource="https://dl.ndl.go.jp/titleThumb/info:ndljp/pid/2546138"/>
+                  <dcterms:source rdf:resource="https://id.ndl.go.jp/bib/000001274374"/>
+                  <dcterms:source rdf:resource="http://id.ndl.go.jp/jpno/75029121"/>
+              <dcterms:isPartOf rdf:resource="https://dl.ndl.go.jp/pid/2606071"/>
+          </dcndl:BibResource>
+              <dcndl:BibResource rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2546138#material">
+                  <dcndl:record rdf:resource="https://ndlsearch.ndl.go.jp/books/R100000039-I2546138#item" />
+              </dcndl:BibResource>
+              <dcndl:Item rdf:about="https://ndlsearch.ndl.go.jp/books/R100000039-I2546138#item">
+                  <rdfs:seeAlso rdf:resource="https://dl.ndl.go.jp/pid/2546138"/>
+                  <rdfs:seeAlso rdf:resource="http://id.ndl.go.jp/digimeta/2546138"/>
+                  <rdfs:seeAlso rdf:resource="https://doi.org/10.11501/2546138"/>
+                  <dcndl:callNumber>WB12-6</dcndl:callNumber>
+                  <dcterms:description>資料形態 : テキストデータ</dcterms:description><dcterms:description>資料形態 : プレーンテキスト</dcterms:description>
+              </dcndl:Item>
+      </rdf:RDF>
+</ndl-bib>

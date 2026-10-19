@@ -18,7 +18,8 @@ files:
     reason: the adapter's derived census shape, one row cut from the public-domain open-dataset xlsx — re-cut per README
     copied: "2026-09-29"
     whole: false
-    trim: header + the PID 2532153 and 2541107 rows, re-derived 2026-10-18 with the series/extent columns
+    trim: header + the PID 2532153 and 2541107 rows, re-derived 2026-10-18 with the series/extent columns;
+      the 2537051 row appended 2026-10-19 from the held census.tsv
   - path: books/2541107.json
     url: https://lab.ndl.go.jp/dl/api/book/fulltext-json/2541107
     refetchable: false
@@ -26,5 +27,61 @@ files:
     reason: copied whole from the box's canonical crawl (the granted bulk route) — 古今武者揃, a
       two-author 赤本 ("夷福山人 作||広重 画") with a series title and an extent
     copied: "2026-10-18"
+    whole: true
+    trim: none
+  - path: books/2537051.json
+    url: https://lab.ndl.go.jp/dl/api/book/fulltext-json/2537051
+    refetchable: false
+    provenance: local-trim
+    reason: copied from the box's canonical crawl (the granted bulk route) and trimmed — 花かつみ考,
+      the census row's date is prose only (寛政7序) and the NDL Search record supplies the year
+    copied: "2026-10-19"
+    whole: false
+    trim: list[0..3] kept, hit/from envelope kept
+  - path: sru/searchRetrieve-3.xml
+    url: https://ndlsearch.ndl.go.jp/api/sru?operation=searchRetrieve&version=1.2&recordSchema=dcndl&maximumRecords=200&query=anywhere%3D%22info%3Andljp%2Fpid%2F2532153%22%20OR%20anywhere%3D%22info%3Andljp%2Fpid%2F2537051%22%20OR%20anywhere%3D%22info%3Andljp%2Fpid%2F2541107%22
+    refetchable: false
+    provenance: local-trim
+    reason: a live SRU answer kept whole as the recorded-shape fixture for the bib crawl; the records'
+      admin timestamps move upstream, so a re-fetch is a re-cut, never a drift check
+    copied: "2026-10-19"
+    whole: true
+    trim: none
+  - path: sru/diagnostic.xml
+    refetchable: false
+    provenance: local-trim
+    reason: a live SRU diagnostic answer (a CQL the interface refuses — "(dpid=… OR dpid=…) AND (…)")
+      kept whole as the error-shape fixture
+    copied: "2026-10-19"
+    whole: true
+    trim: none
+  - path: bib/2532153.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the adapter's own sidecar shape, split from sru/searchRetrieve-3.xml by NdlSearchBib.sidecar
+    copied: "2026-10-19"
+    whole: true
+    trim: none
+  - path: bib/2537051.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the adapter's own sidecar shape, split from sru/searchRetrieve-3.xml by NdlSearchBib.sidecar
+    copied: "2026-10-19"
+    whole: true
+    trim: none
+  - path: bib/2541107.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the adapter's own sidecar shape, split from sru/searchRetrieve-3.xml by NdlSearchBib.sidecar
+    copied: "2026-10-19"
+    whole: true
+    trim: none
+  - path: bib/2546138.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the adapter's own sidecar shape, split from a live 50-PID census batch — a digital-collection
+      record (R100000039) carrying NDC, NDLC, an authority creator with life-years and a publisher
+      location; sidecar only (no book), exercising the parser
+    copied: "2026-10-19"
     whole: true
     trim: none
