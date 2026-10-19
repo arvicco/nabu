@@ -154,4 +154,27 @@ class ContentHashTest < Minitest::Test
     refute_equal Nabu::Store::ContentHash.dictionary_entry(entry(crossrefs: [crossref])),
                  Nabu::Store::ContentHash.dictionary_entry(entry(annotations: { "crossrefs" => ["богъ"] }))
   end
+
+  def annotated_passage
+    Nabu::Passage.new(urn: "urn:nabu:test:a:1", language: "grc", text: "μῆνιν ἄειδε",
+                      annotations: { "upos" => "NOUN", "feats" => { "Number" => "Sing", "Case" => "Acc" } },
+                      sequence: 3)
+  end
+
+  # The passage encoding is persistent too: pinned before the loader
+  # started handing in its once-serialized annotations.
+  def test_passage_sha_is_pinned
+    assert_equal "94eef27829eadef30b903c2f425fb4189a90c70425db78daedf042e8a35b61cc",
+                 Nabu::Store::ContentHash.passage(annotated_passage)
+  end
+
+  # The loader serializes a passage's annotations once and feeds the same
+  # string to the sha and the stored column; the precomputed form must hash
+  # exactly as the self-serialized one.
+  def test_passage_sha_accepts_the_precomputed_annotations_json
+    json = Nabu::Store::ContentHash.canonical_json(annotated_passage.annotations)
+
+    assert_equal Nabu::Store::ContentHash.passage(annotated_passage),
+                 Nabu::Store::ContentHash.passage(annotated_passage, annotations_json: json)
+  end
 end
