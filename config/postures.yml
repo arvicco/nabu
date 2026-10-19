@@ -1879,6 +1879,10 @@ sources:
     # 2026-10-18: subgenre (71,814 rows) rides metadata + the subgenre facet and is
     # deliberately not kind-folded (a mixed series/archive/role vocabulary — genre
     # stays the kind source); seal_id S-numbers mint seal-composite hubs.
+    # 2026-10-19: the archaeological context rides metadata (excavation_no +
+    # accession_no facet); accounting_period spans band through the ruled reign
+    # table where both ends resolve (3,718 of 4,468); findspot_square/remarks stay
+    # sub-site metadata below the place axis — the provenience is the place claim.
   dacon:
     kind: {posture: unclassified}
     # P88-A4: minted as pending on the nwc anchor (censused absent

@@ -156,7 +156,9 @@ module Nabu
       REQUIRED_HEADERS = %w[id_text designation language period provenience collection
                             genre object_type material dates_referenced museum_no
                             primary_publication composite_id external_id subgenre
-                            seal_id excavation_no].freeze
+                            seal_id excavation_no findspot_square findspot_remarks
+                            provenience_remarks accession_no join_information
+                            accounting_period].freeze
 
       # Catalog fields carried into document metadata verbatim (non-empty,
       # NFC). language rides as "catalog_language" (the parser owns
@@ -168,13 +170,34 @@ module Nabu
       # folded onto the kind axis — its vocabulary mixes series names,
       # archives and role labels under one column, so genre stays the
       # kind source (the "Other (see subgenre)" pointer folds to unknown).
+      #
+      # The archaeological/object context (full catalog census
+      # 2026-10-19): excavation_no 49,223 rows (46,513 values — "W 06435,a",
+      # "Ass 21101"; upstream's withheld "U —" forms are claims too),
+      # findspot_square 14,449 (774 grid squares — "Qa XVI,2", "Red House"),
+      # findspot_remarks 7,516 (excavator prose, German/English — room,
+      # stratum, t.a.q. notes), provenience_remarks 6,120 (683 values —
+      # "antiquities market", archives, palace names, but also catalogue
+      # correction notes such as "20111230 corrected firth": verbatim,
+      # unsorted), accession_no 72,246 (museum accession numbers),
+      # join_information 7,367 (join notes and "P… lead" pointers, prose),
+      # accounting_period 4,468 (an account's regnal span, "Amar-Suen.07.00.00
+      # to Amar-Suen.08.00.00" — CdliDates bands it through the ruled reign
+      # table where both ends resolve; Lugalanda-style unruled spans stay
+      # metadata). excavation_no and accession_no also facet (identifier
+      # lookups — the museum_no precedent, config/facet_map.yml) and
+      # findspot_square facets as the sub-site grid; the prose columns stay
+      # metadata only (a facet over free prose would split one note into
+      # thousands of near-singleton values).
       METADATA_FIELDS = %w[period provenience collection genre object_type material
                            dates_referenced museum_no primary_publication composite_id
-                           external_id subgenre seal_id].freeze
+                           external_id subgenre seal_id
+                           excavation_no findspot_square findspot_remarks provenience_remarks
+                           accession_no join_information accounting_period].freeze
 
-      # excavation_no is read (not carried — the wider archaeological
-      # context columns are a separate mining wave) only to key the
-      # object: concordance hubs of the literary witnesses.
+      # Fields read only to key the object: concordance hubs of the
+      # literary witnesses (excavation_no is now carried in METADATA_FIELDS
+      # as well; the hub read is unchanged).
       HUB_FIELDS = %w[excavation_no].freeze
 
       # The rows that assert object: hubs (class note, "Reference edges"):
@@ -374,7 +397,7 @@ module Nabu
       # the 155 MB catalog is streamed once per discover, never per parse.
       def reduce_row(row)
         reduced = {}
-        (%w[designation language] + METADATA_FIELDS + HUB_FIELDS).each do |field|
+        (%w[designation language] + METADATA_FIELDS + HUB_FIELDS).uniq.each do |field|
           value = row[field].to_s.strip
           reduced[field] = Normalize.nfc(value) unless value.empty?
         end
