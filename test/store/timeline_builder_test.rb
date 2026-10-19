@@ -676,6 +676,24 @@ module Store
                  "sine loco is the imprint world's unknown — never a place name"
     end
 
+    # The parse-time bare town (imprint_place) outranks the verbatim
+    # imprint; a doc whose reading is a conjecture carries no
+    # imprint_place and keeps its verbatim axis name — uncertainty
+    # never reads as a claim, and no doc loses its place.
+    def test_metadata_places_eebo_imprint_place_outranks_the_verbatim
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:b1",
+                        { "imprint_place" => "London",
+                          "source_pub_place" => "Imprinted at London :" })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:b2",
+                        { "imprint_place_conjecture" => "London",
+                          "source_pub_place" => "[London? :" })
+      build!
+      assert_equal "London", timeline_for("urn:nabu:eebo-tcp:b1")[:place_name],
+                   "the bare town is the registry-shaped key"
+      assert_equal "London?", timeline_for("urn:nabu:eebo-tcp:b2")[:place_name],
+                   "a conjecture doc keeps the stripped verbatim imprint"
+    end
+
     # P118-R4 S3: ~10.3k eebo docs whose header imprint date the parser
     # could not bound ("1700?]", "[between 1670-1696]") — the TCP's own
     # per-id date lists (the fetched sidecars, real trimmed copies under
