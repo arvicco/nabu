@@ -75,7 +75,7 @@ module Nabu
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
                             :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
                             :rundata_undated, :openiti_undated, :nikh_entries,
-                            :tlg_concordance, :openmgh_charters, :ud_sentences) do
+                            :tlg_concordance, :openmgh_charters, :ud_sentences, :itkc_authors) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -91,7 +91,7 @@ module Nabu
                        kanripo: 0, kanripo_undated: 0,
                        metadata_dates: {}, nikh_entries: {}, tlg_concordance: {},
                        openmgh_charters: {},
-                       ud_sentences: { documents: 0, runs: 0, undated: 0 }, **)
+                       ud_sentences: { documents: 0, runs: 0, undated: 0 }, itkc_authors: {}, **)
           super
         end
 
@@ -108,7 +108,9 @@ module Nabu
             openmgh_charters.fetch(:documents, 0) +
             # the UD sentence-date lane's document envelopes (its runs are
             # passage grain)
-            ud_sentences[:documents]
+            ud_sentences[:documents] +
+            # the ITKC author-era join (undated documents only, per target)
+            itkc_authors.values.sum { |counts| counts[:documents] }
         end
       end
 
@@ -145,9 +147,12 @@ module Nabu
         tlg = TlgConcordanceDates.build(catalog: catalog)
         charters = OpenmghCharterDates.build(catalog: catalog)
         ud = UdSentenceDates.build(catalog: catalog)
+        # LAST: the author-era join fills only documents every lane above
+        # left undated.
+        itkc = ItkcAuthorDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp, ud_sentences: ud,
                     metadata_dates: metadata, nikh_entries: nikh, tlg_concordance: tlg,
-                    openmgh_charters: charters,
+                    openmgh_charters: charters, itkc_authors: itkc,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
@@ -369,3 +374,4 @@ require_relative "timeline_builder/cdli_dates"
 require_relative "timeline_builder/rundata_dates"
 require_relative "timeline_builder/openiti_dates"
 require_relative "timeline_builder/ud_sentence_dates"
+require_relative "timeline_builder/itkc_author_dates"

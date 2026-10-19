@@ -100,7 +100,14 @@ sources:
         Korean stage refinement deferred to a ruled year-band table"}
     dating: {posture: dated, note: "P92-6: the per-record integer year projects
         through MetadataDates :year_key — 490,014 of 1,198,779 records carry one
-        (censused 2026-09-01, range 695–1995); year-less records honestly mint nothing"}
+        (censused 2026-09-01, range 695–1995). The klc munjip records (652,405, none
+        with a year) join the itkc-catalog module's 서지 records by the ITKC work id in
+        the urn (ItkcAuthorDates, axis_source okhc-authors): the author's birth–death
+        years band the work — date_class composition, precision era, an attributed
+        author-era claim, never a text's own date; an unknown death falls back to the
+        original print year as the terminus. Census 2026-10-19: 650,232 banded (837
+        with an open lower side — birth unknown), 2,173 left undated (6 munjip whose
+        author has a birth year only and no print year); dated share 41% → 95%"}
     places: {posture: unplaced, note: "archive/corpus provenance rides document metadata"}
     script: {posture: qualified, note: "the per-record script field (Hanja / Old Hangeul /
         Hangeul mixes) rides document metadata verbatim"}
@@ -207,7 +214,12 @@ sources:
     # a kind fold over its articles would misstate the whole.
     kind: {posture: unclassified}
     lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
-    dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
+    dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured;
+        fascicles of a work without one join the itkc-catalog 서지 record by work id
+        (ItkcAuthorDates, axis_source itkc-authors — the author's life band,
+        date_class composition): census 2026-10-19 at the volume grain, 608 of 758
+        print-year dated + 78 author-banded (총쇄, 농산집, 임하필기); 72 stay undated
+        (국조인물고 — compiler, years and print all unknown)"}
     places: {posture: unplaced}
     script: {posture: implied}
   classical-modern:

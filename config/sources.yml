@@ -2666,6 +2666,27 @@ itkc:
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
 
+itkc-catalog:   # 02-sources row 277
+  adapter: Nabu::Adapters::ItkcCatalog
+  adopted: "2026-10-19"
+  kind: module   # machinery-only — a bibliographic author-era instrument, zero document rows
+  axes: [korean]
+  wired: false   # READY — awaiting the first real sync
+  sync_policy: manual
+  # The ITKC 한국고전종합DB 서지 catalog via the keyless OpenAPI search
+  # endpoint: MO_SJ (한국문집총간, 1,259 works) + GO_SJ (고전원문, 257) +
+  # KP_SJ (한국고전총간, 24) — 5 paged requests at 1 req/s, each response
+  # held verbatim at <section>/<start>.xml. Every record names its
+  # author with birth/death years (0/9999 the unknown fillers) and the
+  # original print year; the timeline's ItkcAuthorDates lane bands the
+  # okhc klc munjip records and the itkc fascicles by work id
+  # (composition class, axis_source okhc-authors / itkc-authors). Terms:
+  # the OpenAPI page invites external services; the institute's
+  # copyright policy reserves DB content against redistribution and
+  # revenue use; only facts (life years as date bands) are derived →
+  # class nc pending the institute's word. EXPECTED FIRST SYNC: 1,540
+  # records (1,259 + 257 + 24), no documents.
+
 ja-wikisource:   # P109-1
   adapter: Nabu::Adapters::JaWikisource
   adopted: "2026-09-29"
