@@ -16,7 +16,9 @@ class RegnalYearsTest < Minitest::Test
     assert_operator table.size, :>=, 20
 
     assert_equal [-2051, -2051], table.span("Šulgi", 44), "Šulgi 44 = 2051 BC middle chronology"
-    assert_equal [-2050, -2050], table.span("Šulgi", 44, us2: true), "the us2 year is the next year"
+    assert_raises(ArgumentError, "the us2 mark is read as written — no shift keyword") do
+      table.span("Šulgi", 44, us2: true)
+    end
     assert_equal [-2094, -2047], table.span("Šulgi", 0), "year 00 = the whole-reign span"
     assert_equal [-486, -486], table.span("Darius1", 36), "P&D: Darius I year 36 = 486 BC"
     assert_equal :unruled, table.span("Lugalanda", 4),

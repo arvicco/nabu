@@ -31,7 +31,8 @@ module Nabu
       # & Dubberstein, stated per entry). FINER WINS: a ruled ruler's
       # numbered year replaces the period band with its one conventional
       # year (precision "regnal-year"; YY=00 gives the whole-reign span,
-      # "regnal-reign"; "(us2 year)" shifts +1); unruled rulers (ED III,
+      # "regnal-reign"; the "(us2 year)" / "(us2-us2 year)" marks read as
+      # written — #regnal_span); unruled rulers (ED III,
       # OAkk, floating dynasts — the table header names them) and
       # out-of-range years fall back to the period band, censused.
       # Above both sits the accounting_period span (#extract_accounting):
@@ -78,7 +79,6 @@ module Nabu
         # accession year ("Darius2.29/X/acc") and doubted/compound forms
         # ("Darius1.24/27(?)") stay unresolved.
         SLASH_REGNAL = %r{\A([^./]*\p{L}[^./]*)\.\d{1,2}/[IVX]+/(\d{1,2})(?=\s|\?|\z)}
-        US2_SUFFIX = /\(us2 year\)/
 
         module_function
 
@@ -90,7 +90,7 @@ module Nabu
         # BC, zero years).
         def build(catalog:, canonical_dir:)
           counts = { documents: 0, undated: 0, invalid: 0,
-                     regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0, regnal_us2_double: 0,
+                     regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0,
                      regnal_broken_year: 0, regnal_slash: 0,
                      accounting: 0, accounting_unresolved: 0, origin: 0, origin_unresolved: 0 }
           path = File.join(canonical_dir, CATALOG_RELPATH)
@@ -135,8 +135,7 @@ module Nabu
         # The RULED regnal conversion (owner ruling 2026-08-11), or nil for anything the
         # table does not answer — the period band is always the fallback.
         # dates_referenced is a LIST ("Šulgi.39.00.00, Šulgi.40.00.00 (us2
-        # year)"); only its FIRST entry is read — and only that entry's own
-        # "(us2 year)" mark shifts it (a later entry's mark never does).
+        # year)"); only its FIRST entry is read.
         def extract_regnal(value, counts)
           return nil if value.empty?
 
@@ -147,7 +146,6 @@ module Nabu
           case span
           when :unruled then counts[:regnal_unruled] += 1
           when :out_of_range then counts[:regnal_out_of_range] += 1
-          when :us2_double then counts[:regnal_us2_double] += 1
           when Array
             counts[:regnal] += 1
             counts[:regnal_broken_year] += 1 if parsed[:shape] == :broken
@@ -190,7 +188,7 @@ module Nabu
         # "accounting-period" — and it outranks dates_referenced, whose
         # first entry is only one date inside the span. Anything else
         # (unruled rulers such as Lugalanda, ruler-less filler, eponym
-        # prose, out-of-range years, "(us2-us2 year)") is counted
+        # prose, out-of-range years) is counted
         # unresolved and the column stays metadata.
         ACCOUNTING_SPLIT = /\s+to\s+/
 
@@ -210,31 +208,27 @@ module Nabu
         end
 
         # One "Ruler.YY.MM.DD" (or slash-shaped) dating → the ruled table's
-        # span, or a reason symbol (:unparsed, :unruled, :out_of_range,
-        # :us2_double). "(us2 year)" is the ruled +1 shift.
+        # span, or a reason symbol (:unparsed, :unruled, :out_of_range).
         #
-        # "(us2-us2 year)" (1,415 first entries) is NOT a +2 shift. CDLI's
-        # own year-name tables (cdli.ox.ac.uk/wiki, year_names_shulgi /
-        # year_names_shu-suen / year_names_ibbi-suen, read 2026-10-19) list
-        # the "Second year after the year: …" names (mu us2-sa … mu
-        # us2-sa-a-bi) UNDER their canonical year numbers — Šulgi 41 and 48,
-        # Šū-Suen 6, Ibbi-Suen 8 — and the catalog's double mark sits on
-        # exactly those numbers (Šulgi.48 ×527, Šulgi.41 ×468, Šū-Suen.06
-        # ×306, Ibbi-Suen.08 ×89 of the entries carrying it). The mark
-        # records the year-name formula of an already-numbered year. The
-        # same tables number the single "Year after the year" names the
-        # same way (Šulgi 47 = "mu us2-sa ki-maš ba-hul", where "(us2
-        # year)" sits ×1,880), which contradicts the ruled +1 reading; the
-        # double mark therefore converts nothing here until that ruling is
-        # revisited — the period band stays the honest fallback.
-        US2_DOUBLE = /us2-us2/
-
+        # THE us2 MARKS READ AS WRITTEN (owner-ruled 2026-10-20): the year
+        # number IS the year, for "(us2 year)" and "(us2-us2 year)" alike.
+        # The marks record which year-NAME formula the scribe used (mu
+        # us2-sa "year after the year: …", mu us2-sa … mu us2-sa-a-bi
+        # "second year after the year: …"), not an offset from the number.
+        # CDLI's own year-name tables (cdli.ox.ac.uk/wiki, year_names_shulgi
+        # / year_names_shu-suen / year_names_ibbi-suen, read 2026-10-19)
+        # list those formulae UNDER their canonical year numbers: the
+        # single-mark names (Šulgi 47 = "mu us2-sa ki-maš ba-hul") and the
+        # double-mark names (Šulgi 41 and 48, Šū-Suen 6, Ibbi-Suen 8) alike —
+        # and the catalog's marks concentrate on exactly those numbers
+        # (first entries, census 2026-10-20: "(us2 year)" Šulgi.47 ×1,750;
+        # "(us2-us2 year)" Šulgi.48 ×486, Šulgi.41 ×409, Šū-Suen.06 ×294,
+        # Ibbi-Suen.08 ×75). The mark annotates an already-numbered year.
         def regnal_span(dating)
           return :unparsed if (parsed = parse_regnal(dating)).nil?
           return :unparsed if (table = Nabu::RegnalYears.default).nil?
-          return :us2_double if dating.match?(US2_DOUBLE)
 
-          table.span(parsed[:ruler], parsed[:year], us2: dating.match?(US2_SUFFIX))
+          table.span(parsed[:ruler], parsed[:year])
         end
 
         # The ruler + numeric year (0 = unknown or broken — the whole reign)
