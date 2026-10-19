@@ -725,6 +725,58 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 0, live_docs, "a failed fetch loads nothing"
   end
 
+  # --- the run row closes at OPERATION end --------------------------------
+
+  # The process dies in the index slice — after the load committed, before
+  # the sync finished. The row used to read "succeeded" already (it closed
+  # at load end), so the only honest instrument was a slice probe. Now the
+  # row itself says so: still running, the load's counts and loaded_at
+  # stamped, no finished_at.
+  def test_a_sync_killed_in_the_index_slice_leaves_an_open_row
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    assert_raises(Interrupt) do
+      swapping_singleton(Nabu::Store::Indexer, :refresh_source!, ->(*, **) { raise Interrupt }) do
+        runner.sync("breaker")
+      end
+    end
+
+    run = Nabu::Store::Run.order(:id).last
+    assert_equal "running", run.status, "a sync killed mid-index never reads succeeded"
+    refute_nil run.loaded_at
+    assert_nil run.finished_at
+    assert_equal 2, run.added, "the load's counts are on the row — it landed"
+  end
+
+  # A post-load stage that RAISES (rather than dying) closes the row failed,
+  # naming the stage boundary — the load landed, the operation did not.
+  def test_a_sync_whose_index_slice_raises_closes_its_row_failed
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    assert_raises(Nabu::Error) do
+      swapping_singleton(Nabu::Store::Indexer, :refresh_source!, ->(*, **) { raise Nabu::Error, "slice boom" }) do
+        runner.sync("breaker")
+      end
+    end
+
+    run = Nabu::Store::Run.order(:id).last
+    assert_equal "failed", run.status
+    assert_match(/after the load: slice boom/, run.notes)
+  end
+
+  def test_a_healthy_sync_closes_its_row_succeeded_with_both_stamps
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    make_runner(registry(entry("breaker", BreakerAdapter, wired: true))).sync("breaker")
+
+    run = Nabu::Store::Run.order(:id).last
+    assert_equal "succeeded", run.status
+    refute_nil run.loaded_at
+    refute_nil run.finished_at
+    assert_operator run.finished_at, :>=, run.loaded_at
+  end
+
   # --- fulltext auto-indexing (P4-1) --------------------------------------
 
   # A successful sync reindexes the corpus into the fulltext db: the passages
@@ -1498,6 +1550,16 @@ class SyncRunnerTest < Minitest::Test
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count
 
   def last_run_status = Nabu::Store::Run.order(:id).last&.status
+
+  # Swap one singleton method for the block's duration (Minitest 6 ships no
+  # stub), restoring the original in ensure.
+  def swapping_singleton(mod, name, replacement)
+    original = mod.method(name)
+    mod.define_singleton_method(name, &replacement)
+    yield
+  ensure
+    mod.define_singleton_method(name, original) if original
+  end
 
   # One document + a two-entry glossary under canonical/lane-src (the
   # P104-4 lane rig — LaneTestAdapter reads both from the same cone).

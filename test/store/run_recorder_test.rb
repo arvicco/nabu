@@ -87,6 +87,91 @@ module Store
       assert_equal run.started_at, run.finished_at
     end
 
+    # -- the two-stage contract: the row closes at OPERATION end -------------
+    #
+    # A sync or rebuild keeps working after its load (the index slice, the
+    # catalog-lane refreshes, the corpus stages). A row that read "succeeded"
+    # the moment the load returned lied for the whole post-load stretch —
+    # and forever, when the process died in it. record_load stamps the load's
+    # counts and loaded_at but keeps the row "running"; only close ends it.
+
+    def test_record_load_stamps_counts_and_loaded_at_but_keeps_the_row_running
+      report = Nabu::Store::LoadReport.new(added: 3, updated: 2, skipped: 0, withdrawn: 1, errored: 4)
+
+      run = Nabu::Store::RunRecorder.record_load(source_slug: "test_adapter") { report }
+
+      run.refresh
+      assert_equal "running", run.status, "the load landed; the operation has not closed"
+      refute_nil run.loaded_at
+      assert_nil run.finished_at
+      assert_equal [3, 2, 1, 4], [run.added, run.updated, run.withdrawn_count, run.errored]
+    end
+
+    def test_close_finalizes_the_open_row_as_succeeded
+      run = Nabu::Store::RunRecorder.record_load(source_slug: "test_adapter") { nil }
+
+      value = Nabu::Store::RunRecorder.close([run]) { :post_load_result }
+
+      assert_equal :post_load_result, value
+      run.refresh
+      assert_equal "succeeded", run.status
+      refute_nil run.finished_at
+    end
+
+    # The type specimen: the process dies DURING a post-load stage (a
+    # background timeout's kill, ^C). Signals are not StandardError, so
+    # nothing rescues them — and the row must still say the operation never
+    # finished: running, loaded_at set (the load landed), finished_at nil.
+    def test_a_kill_after_the_load_leaves_a_row_that_says_so
+      run = Nabu::Store::RunRecorder.record_load(source_slug: "test_adapter") { nil }
+
+      assert_raises(Interrupt) do
+        Nabu::Store::RunRecorder.close([run]) { raise Interrupt }
+      end
+
+      run.refresh
+      assert_equal "running", run.status, "a killed operation never reads succeeded"
+      refute_nil run.loaded_at, "the load stage did land — the row says how far it got"
+      assert_nil run.finished_at
+    end
+
+    def test_a_post_load_failure_closes_the_row_failed_and_reraises
+      run = Nabu::Store::RunRecorder.record_load(source_slug: "test_adapter") { nil }
+
+      error = assert_raises(Nabu::Error) do
+        Nabu::Store::RunRecorder.close([run]) { raise Nabu::Error, "index slice died" }
+      end
+      assert_equal "index slice died", error.message
+
+      run.refresh
+      assert_equal "failed", run.status
+      assert_match(/failed after the load: index slice died/, run.notes)
+      refute_nil run.finished_at
+    end
+
+    # A rebuild closes MANY rows at once (every replayed source's), when the
+    # corpus stages end — and fails them all together when one stage dies.
+    def test_close_settles_every_row_it_was_handed
+      runs = %w[alpha beta].map { |slug| Nabu::Store::RunRecorder.record_load(source_slug: slug, kind: "rebuild") { nil } }
+
+      assert_raises(Nabu::Error) { Nabu::Store::RunRecorder.close(runs) { raise Nabu::Error, "index died" } }
+
+      assert_equal(%w[failed failed], runs.map { |run| run.refresh.status })
+    end
+
+    # A row the load stage already closed (failed/aborted) is never
+    # re-closed by a later close — its own terminal state stands.
+    def test_close_leaves_an_already_closed_row_alone
+      failed = Nabu::Store::Run.create(source_slug: "s", kind: "rebuild", started_at: Time.now,
+                                       finished_at: Time.now, status: "failed", notes: "own error")
+
+      Nabu::Store::RunRecorder.close([failed]) { nil }
+
+      failed.refresh
+      assert_equal "failed", failed.status
+      assert_equal "own error", failed.notes
+    end
+
     # P7-1: runs are keyed by SLUG, not source id — a rebuild re-mints every
     # catalog id, and the ledger's history must read continuously across that
     # boundary. Two runs recorded "before" and "after" an id re-mint are the
