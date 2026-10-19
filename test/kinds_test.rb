@@ -276,6 +276,90 @@ class KindsTest < Minitest::Test
     assert_raises(Nabu::Kinds::ConfigError) { load_kinds(map: bad) }
   end
 
+  # -- open vocabularies: uncovered values mint nothing -----------------------
+  #
+  # A subject-heading facet (eebo-tcp's LCSH TERMs) is an OPEN vocabulary:
+  # tens of thousands of distinct values, overwhelmingly topical. Filing
+  # every topical heading as `unmapped` would drown the curation worklist
+  # and claim a gap where there is none; `vocabulary: open` declares that
+  # an uncovered value folds to NOTHING — and reports it as uncovered so
+  # the census can count it (never silent).
+
+  OPEN_MAP = <<~'YAML'
+    split: ["|"]
+    strip: ["?"]
+    sources:
+      eebo:
+        facet: subject
+        vocabulary: open
+        regex_map:
+          '\ASermons, English\b': hymn-prayer
+          '-- Poetry\.?( --|\z)': literary/poetry
+        deliberate:
+          "Broadsides": "physical format, not a genre"
+      edr:
+        facet: genre
+        map:
+          "sepulcralis": funerary/epitaph
+  YAML
+
+  def open_kinds = @open_kinds ||= load_kinds(map: OPEN_MAP)
+
+  def test_an_open_vocabulary_folds_uncovered_values_to_nothing
+    assert open_kinds.open?("eebo")
+    refute open_kinds.open?("edr"), "closed is the default"
+    assert_equal ["hymn-prayer"], open_kinds.normalize("eebo", "Sermons, English -- 17th century.")
+    assert_equal ["literary/poetry"], open_kinds.normalize("eebo", "Great Britain -- History -- Poetry.")
+    assert_empty open_kinds.normalize("eebo", "Great Britain -- Politics and government -- 1660-1688."),
+                 "an uncovered topical heading mints nothing — never the unmapped bucket"
+  end
+
+  def test_fold_reports_uncovered_fragments_for_the_census
+    fold = open_kinds.fold("eebo", "Ireland -- History.")
+    assert_empty fold.paths
+    assert_equal ["Ireland -- History."], fold.uncovered, "the uncovered value is counted, not dropped"
+    mixed = open_kinds.fold("eebo", "Sermons, English | Plague")
+    assert_equal ["hymn-prayer"], mixed.paths
+    assert_equal ["Plague"], mixed.uncovered
+  end
+
+  def test_open_vocabulary_deliberate_values_are_reviewed_not_uncovered
+    fold = open_kinds.fold("eebo", "Broadsides")
+    assert_empty fold.paths
+    assert_empty fold.uncovered, "a declared not-genre value is a reviewed non-claim, not an open-vocabulary miss"
+  end
+
+  def test_closed_vocabularies_keep_the_unmapped_bucket_and_report_no_uncovered
+    fold = open_kinds.fold("edr", "cetera")
+    assert_equal ["unmapped"], fold.paths
+    assert_empty fold.uncovered, "a closed vocabulary's miss is the unmapped bucket, already counted"
+  end
+
+  def test_fold_of_an_unruled_source_is_empty
+    fold = open_kinds.fold("perseus", "anything")
+    assert_empty fold.paths
+    assert_empty fold.uncovered
+  end
+
+  def test_a_class_name_may_not_carry_a_colon
+    bad = CLASSES.sub("  unknown:\n", "  \"uncovered:x\":\n    desc: \"shadow\"\n  unknown:\n")
+    error = assert_raises(Nabu::Kinds::ConfigError) { load_kinds(classes: bad) }
+    assert_match(/colon/, error.message, "the colon is reserved for the uncovered census rows")
+  end
+
+  def test_vocabulary_must_be_open_or_closed
+    bad = OPEN_MAP.sub("vocabulary: open", "vocabulary: ajar")
+    error = assert_raises(Nabu::Kinds::ConfigError) { load_kinds(map: bad) }
+    assert_match(/vocabulary/, error.message)
+  end
+
+  def test_a_whole_source_declaration_cannot_be_open
+    bad = OPEN_MAP.sub("facet: subject\n", "source_kind: literary\n").sub(/^\s+regex_map:\n(.*\n){2}/, "")
+                  .sub(/^\s+deliberate:\n.*\n/, "")
+    error = assert_raises(Nabu::Kinds::ConfigError) { load_kinds(map: bad) }
+    assert_match(/source_kind/, error.message)
+  end
+
   # -- the shipped config ----------------------------------------------------
 
   def test_the_shipped_config_loads_and_carries_the_ruled_21_heads

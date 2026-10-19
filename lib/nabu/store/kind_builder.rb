@@ -22,6 +22,13 @@ module Nabu
     module KindBuilder
       FACET = "kind"
       INSERT_SLICE = 2_000
+      # The open-vocabulary census rows (vocabulary: open) ride kind_stats
+      # beside the class heads under this prefix — `uncovered:<raw>` per
+      # uncovered value (distinct docs carrying it) and the bare
+      # `uncovered:` per-source total (distinct docs carrying any). No
+      # class name carries a colon, so the prefix can never shadow a head;
+      # Query::KindCensus, the table's one reader, keeps them apart.
+      UNCOVERED_PREFIX = "uncovered:"
 
       Summary = Data.define(:documents, :rows)
 
@@ -60,25 +67,28 @@ module Nabu
         source_id = catalog[:sources].where(slug: slug).get(:id)
         return [0, 0] if source_id.nil?
 
+        uncovered = Hash.new { |hash, key| hash[key] = {} }
         rows = if kinds.source_kind(slug)
                  declaration_rows(catalog, kinds, slug, source_id)
                elsif kinds.metadata_for(slug)
-                 metadata_rows(catalog, kinds, slug, source_id)
+                 metadata_rows(catalog, kinds, slug, source_id, uncovered)
                elsif kinds.walk_for(slug)
-                 walk_rows(catalog, kinds, slug, source_id, canonical_dir)
+                 walk_rows(catalog, kinds, slug, canonical_dir, uncovered)
                else
-                 mapped_rows(catalog, kinds, slug, source_id)
+                 mapped_rows(catalog, kinds, slug, source_id, uncovered)
                end
         rows.each_slice(INSERT_SLICE) { |slice| catalog[:document_facets].multi_insert(slice) }
-        write_stats(catalog, source_id, rows)
+        write_stats(catalog, source_id, rows, uncovered)
         [rows.map { |row| row[:document_id] }.uniq.size, rows.size]
       end
 
       # The precompiled census (migration 032): per (source, head)
       # distinct docs + one NULL-head total row per source, aggregated
       # from the rows just projected — so `nabu kind census` never
-      # groups the millions (the desk-commands law).
-      def write_stats(catalog, source_id, rows)
+      # groups the millions (the desk-commands law). An open vocabulary's
+      # uncovered values (+uncovered+: raw => {document_id => true}) land
+      # beside them as UNCOVERED_PREFIX rows.
+      def write_stats(catalog, source_id, rows, uncovered = {})
         return unless catalog.table_exists?(:kind_stats)
 
         heads = Hash.new { |hash, key| hash[key] = {} }
@@ -89,7 +99,27 @@ module Nabu
         end
         stats = heads.map { |head, docs| { source_id: source_id, head: head, documents: docs.size } }
         stats << { source_id: source_id, head: nil, documents: total.size } unless total.empty?
-        catalog[:kind_stats].multi_insert(stats)
+        stats.concat(uncovered_stats(source_id, uncovered))
+        stats.each_slice(INSERT_SLICE) { |slice| catalog[:kind_stats].multi_insert(slice) }
+      end
+
+      def uncovered_stats(source_id, uncovered)
+        return [] if uncovered.empty?
+
+        carrying = {}
+        stats = uncovered.map do |raw, docs|
+          carrying.merge!(docs)
+          { source_id: source_id, head: "#{UNCOVERED_PREFIX}#{raw}", documents: docs.size }
+        end
+        stats << { source_id: source_id, head: UNCOVERED_PREFIX, documents: carrying.size }
+      end
+
+      # One value through Kinds#fold: the class paths to mint, with any
+      # open-vocabulary uncovered fragments tallied per document.
+      def fold_paths(kinds, slug, value, document_id, uncovered)
+        fold = kinds.fold(slug, value)
+        fold.uncovered.each { |raw| uncovered[raw][document_id] = true }
+        fold.paths
       end
 
       # source_kind: one row per live document — the whole-source claim
@@ -110,7 +140,7 @@ module Nabu
       # contributes nothing (absence, never "unmapped"). metadata_json
       # is our own canonical_json output, so a parse failure is real
       # corruption and honestly raises (the FacetBuilder stance).
-      def metadata_rows(catalog, kinds, slug, source_id)
+      def metadata_rows(catalog, kinds, slug, source_id, uncovered)
         fields = kinds.metadata_for(slug)
         rows = []
         seen = Hash.new { |hash, key| hash[key] = {} }
@@ -124,7 +154,7 @@ module Nabu
               value = value.first if value.is_a?(Array)
               next if value.nil? || value.to_s.empty?
 
-              kinds.normalize(slug, value.to_s).each do |path|
+              fold_paths(kinds, slug, value.to_s, document_id, uncovered).each do |path|
                 next if seen[document_id].key?(path)
 
                 seen[document_id][path] = true
@@ -138,12 +168,12 @@ module Nabu
       # Canonical-tree walkers (P100-3): sidecar files no facet or
       # metadata field carries. Without canonical_dir the walk skips to
       # zero rows honestly (a caller that cannot name the corpus root).
-      def walk_rows(catalog, kinds, slug, _source_id, canonical_dir)
+      def walk_rows(catalog, kinds, slug, canonical_dir, uncovered)
         return [] if canonical_dir.nil?
 
         case kinds.walk_for(slug)
-        when "hgv-keywords" then hgv_keyword_rows(catalog, kinds, slug, canonical_dir)
-        when "kr-subclass" then kr_subclass_rows(catalog, kinds, slug, canonical_dir)
+        when "hgv-keywords" then hgv_keyword_rows(catalog, kinds, slug, canonical_dir, uncovered)
+        when "kr-subclass" then kr_subclass_rows(catalog, kinds, slug, canonical_dir, uncovered)
         else []
         end
       end
@@ -154,7 +184,7 @@ module Nabu
       # kind — the papyri adapter mines their "X an Y" sender/addressee
       # parties into document metadata at parse),
       # joined ddb-hybrid → urn → document like the timeline lane.
-      def hgv_keyword_rows(catalog, kinds, slug, canonical_dir)
+      def hgv_keyword_rows(catalog, kinds, slug, canonical_dir, uncovered)
         hgv_dir = File.join(canonical_dir, TimelineBuilder::HGV_SLUG, TimelineBuilder::HGV_SUBDIR)
         return [] unless Dir.exist?(hgv_dir)
 
@@ -169,7 +199,7 @@ module Nabu
           next if hybrid.nil? || term.nil?
 
           document_id = ddbdp["#{TimelineBuilder::DDBDP_PREFIX}#{hybrid.tr(';', ':')}"] or next
-          kinds.normalize(slug, term).each do |kind_path|
+          fold_paths(kinds, slug, term, document_id, uncovered).each do |kind_path|
             next if seen[document_id].key?(kind_path)
 
             seen[document_id][kind_path] = true
@@ -200,7 +230,7 @@ module Nabu
       KR_CATALOG_DIR = File.join("kanripo", "KR-Catalog", "KR").freeze
       KR_SUBCLASS_HEADER = /^\*\*\s+(KR\d[a-z])\s+\S+\s+(\S+)/
 
-      def kr_subclass_rows(catalog, kinds, slug, canonical_dir)
+      def kr_subclass_rows(catalog, kinds, slug, canonical_dir, uncovered)
         labels = kr_subclass_labels(File.join(canonical_dir, KR_CATALOG_DIR))
         return [] if labels.nil?
 
@@ -212,7 +242,7 @@ module Nabu
           .select_map(%i[id urn]).each do |document_id, urn|
             subclass = urn.delete_prefix(KR_URN_PREFIX)[0, 4]
             value = labels[subclass] ? "#{subclass} #{labels[subclass]}" : subclass
-            kinds.normalize(slug, value).each do |path|
+            fold_paths(kinds, slug, value, document_id, uncovered).each do |path|
               next if seen[document_id].key?(path)
 
               seen[document_id][path] = true
@@ -240,7 +270,7 @@ module Nabu
 
       # Facet-mapped: each (document, value) of the source's declared
       # facet normalizes to 0..n class paths, deduped per document.
-      def mapped_rows(catalog, kinds, slug, source_id)
+      def mapped_rows(catalog, kinds, slug, source_id, uncovered)
         facet = kinds.facet_for(slug)
         seen = Hash.new { |hash, key| hash[key] = {} }
         rows = []
@@ -248,7 +278,7 @@ module Nabu
           .where(facet: facet)
           .where(document_id: catalog[:documents].where(source_id: source_id).select(:id))
           .select_map(%i[document_id value]).each do |document_id, value|
-            kinds.normalize(slug, value).each do |path|
+            fold_paths(kinds, slug, value, document_id, uncovered).each do |path|
               next if seen[document_id].key?(path)
 
               seen[document_id][path] = true

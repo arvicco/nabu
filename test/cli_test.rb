@@ -4349,6 +4349,44 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The open-vocabulary census (vocabulary: open): uncovered values mint
+  # no kind row, so the board counts them on their own line, and
+  # `--uncovered` lists them capped with the full count announced.
+  def seed_uncovered_rows(config)
+    db = Sequel.sqlite(config.catalog_path)
+    source_id = db[:documents].order(:id).get(:source_id)
+    db[:kind_stats].multi_insert([
+                                   { source_id: source_id, head: "uncovered:Plague.", documents: 2 },
+                                   { source_id: source_id, head: "uncovered:Ireland -- History.", documents: 1 },
+                                   { source_id: source_id, head: "uncovered:", documents: 2 }
+                                 ])
+    db.disconnect
+  end
+
+  def test_kind_census_board_counts_open_vocabulary_uncovered_values
+    with_indexed_corpus do |config|
+      seed_kind_rows(config)
+      seed_uncovered_rows(config)
+      out, _err, status = with_config(config) { run_cli(%w[kind census]) }
+      assert_nil status
+      assert_match(/uncovered: 2 values · 2 docs in 1 source/, out,
+                   "the open-vocabulary misses are counted on the board, never silent")
+      assert_match(/kind census: 2 class families/, out, "an uncovered row is never a class family")
+    end
+  end
+
+  def test_kind_census_uncovered_lists_the_open_vocabulary_worklist_capped
+    with_indexed_corpus do |config|
+      seed_kind_rows(config)
+      seed_uncovered_rows(config)
+      out, _err, status = with_config(config) { run_cli(%w[kind census --uncovered --limit 1]) }
+      assert_nil status
+      assert_match(/"Plague\."\s+×2/, out)
+      refute_match(/Ireland/, out, "the cap holds")
+      assert_match(/showing 1 of 2 uncovered values/, out, "a truncated list announces itself")
+    end
+  end
+
   # The deliberate: section (P101): reviewed not-genre values render
   # as their own labelled block with reasons, apart from the TODO tail.
   def test_kind_census_unmapped_renders_the_deliberate_section
