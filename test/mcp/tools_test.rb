@@ -2047,7 +2047,10 @@ module MCP
       logos = payload(call("nabu_define", { "lemma" => "λόγος" })).fetch("entries").first
       crossrefs = logos.fetch("crossrefs")
       assert_includes crossrefs, { "kind" => "equals", "label" => "= μῦθος", "resolved_urn" => nil }
-      assert_equal 5, crossrefs.size
+      # 5 <xr> pointers + the 7 base words its in-sense <etym> tags name.
+      assert_equal({ "etym" => 7, "other" => 5 },
+                   crossrefs.group_by { |c| c.fetch("kind") == "etym" ? "etym" : "other" }.transform_values(&:size))
+      assert_includes crossrefs, { "kind" => "etym", "label" => "etym ἐπιστήμη", "resolved_urn" => nil }
       menis = payload(call("nabu_define", { "lemma" => "μῆνις" })).fetch("entries").first
       refute menis.key?("crossrefs")
     end
