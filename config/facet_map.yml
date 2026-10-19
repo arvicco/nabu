@@ -128,6 +128,10 @@ sources:
   oncoj:                      # census: 4,991 poems
     fields:
       corpus: collection      # MYS 4,693 · NSK 133 · KK 112 · BS · FK · SNK …
+    passage_fields: #           the pln/pln-kke place-name tokens shipped as per-passage
+      places: place           # annotations (3,343 tokens / 910 distinct lemmas) — mentions
+      #                         in the poem, never findspots (the posture says so); the
+      #                         widened mining census surfaced them unprojected
   bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
     fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
       recension: recension    # projected so the ruled recension facet rule can read it
@@ -432,6 +436,14 @@ sources:
   ja-wikisource:              # 123 pages fill the {{header}} author= slot
     fields:
       author: author          # 清少納言 20 · 羽地朝秀 10 · 源実朝 8 · 後光厳天皇 7 … verbatim
+    passage_fields: #           the Man'yōshū [事項] annotations shipped per poem — the
+      class: genre            # 部立 anthology classes (雑歌/相聞/挽歌 …, 2,713 poems) share
+      #                         the genre axis (the itkc both-grains precedent)
+      poet: person            # 作者： attributions, 2,379 poems — the poem's claim, verbatim
+      places: place           # the closed no-false-positive rule's prefecture/county names
+      #                         (1,696 poems); historic names stay in the verbatim matters
+      #                         bag until a gazetteer join — the census surfaced all three
+      #                         unprojected
   honkoku:                    # the NDL-held materials' NDL catalog record (HonkokuNdlCatalog —
     fields: #                   867 of 918 NDL-manifest materials join the held census, 2026-10-18)
       ndl_catalog.author_names: author  # the 著者 parts' names, role split off — the NDL
