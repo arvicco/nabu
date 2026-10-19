@@ -3,8 +3,8 @@
 as_of: 19 October 2026
 classes:
 - head: literary
-  documents: 687930
-  documents_display: '687,930'
+  documents: 687981
+  documents_display: '687,981'
   sources: 21
 - head: administrative
   documents: 488363
@@ -59,8 +59,8 @@ classes:
   documents_display: '10,506'
   sources: 8
 - head: scholarly
-  documents: 10135
-  documents_display: '10,135'
+  documents: 10337
+  documents_display: '10,337'
   sources: 13
 - head: building
   documents: 8016
@@ -82,6 +82,10 @@ classes:
   documents: 2963
   documents_display: '2,963'
   sources: 3
+- head: periodical
+  documents: 2253
+  documents_display: '2,253'
+  sources: 1
 - head: exegesis
   documents: 618
   documents_display: '618'
@@ -89,7 +93,7 @@ classes:
 unclassified_sources: 125
 unknown_documents: 47046
 unknown_documents_display: '47,046'
-unmapped_documents: 11128
-unmapped_documents_display: '11,128'
-unclassified_documents: 501878
-unclassified_documents_display: '501,878'
+unmapped_documents: 10911
+unmapped_documents_display: '10,911'
+unclassified_documents: 500242
+unclassified_documents_display: '500,242'
