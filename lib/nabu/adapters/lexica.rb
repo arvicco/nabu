@@ -45,15 +45,23 @@ module Nabu
       # Adding a dictionary from the same repo is one entry here; a dictionary
       # from ANOTHER upstream (Bosworth-Toller) is its own adapter writing the
       # same store shape (architecture §11).
+      #
+      # +etym+ names each lexicon's <etym> mining mode (LexiconTeiParser
+      # class note): LSJ's base-word pointers become "etym" crossrefs;
+      # Lewis & Short's split into base-word crossrefs and cognate-chain
+      # reflex rows. The adapter stays OUT of reflex_bearing?: the L&S
+      # cognate rows carry no upstream language NAME (only print
+      # abbreviations), so the language_names census honestly stays empty
+      # — the DÉRom stance.
       DICTIONARIES = {
         "lsj" => {
           title: "A Greek-English Lexicon (Liddell-Scott-Jones)",
-          language: "grc", betacode: true,
+          language: "grc", betacode: true, etym: :lsj,
           dir: "CTS_XML_TEI/perseus/pdllex/grc/lsj", glob: "grc.lsj.perseus-eng*.xml"
         },
         "lewis-short" => {
           title: "A Latin Dictionary (Lewis & Short)",
-          language: "lat", betacode: false,
+          language: "lat", betacode: false, etym: :lewis_short,
           dir: "CTS_XML_TEI/perseus/pdllex/lat/ls", glob: "lat.ls.perseus-eng2.xml"
         }
       }.freeze
@@ -91,7 +99,7 @@ module Nabu
         )
         LexiconTeiParser.new
                         .entries(document_ref.path, language: config.fetch(:language),
-                                                    betacode: config.fetch(:betacode))
+                                                    betacode: config.fetch(:betacode), etym: config.fetch(:etym))
                         .each { |entry| document << entry }
         document
       rescue Nabu::ValidationError => e
