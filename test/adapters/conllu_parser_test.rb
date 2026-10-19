@@ -97,6 +97,69 @@ class ConlluParserTest < Minitest::Test
            "callers serving translations as sibling documents (old-tibetan) keep them out"
   end
 
+  # --- sentence metadata comments (the newdoc-scoped whitelist) ----------
+
+  BIRCHBARK = File.join(FIXTURES, "old-east-slavic-birchbark", "orv_birchbark-ud-test-head50.conllu")
+  RNC = File.join(FIXTURES, "old-east-slavic-rnc", "orv_rnc-ud-test-head50.conllu")
+  RUTHENIAN = File.join(FIXTURES, "old-east-slavic-ruthenian", "orv_ruthenian-ud-test-head50.conllu")
+  EGYPTIAN = File.join(FIXTURES, "egyptian-pc", "egy_pc-ud-test-head50.conllu")
+  COPTIC = File.join(FIXTURES, "coptic-bohairic", "cop_bohairic-ud-test-head50.conllu")
+
+  # A `# newdoc id` block opens an upstream document: the whitelisted
+  # comments in that block (birchbark's date_created) belong to EVERY
+  # sentence until the next newdoc, never only to the first.
+  def test_newdoc_comments_scope_to_every_sentence_of_their_document
+    passages = parse_whitelisted(BIRCHBARK, language: "orv").to_a
+    first, second = passages.first(2)
+    assert_equal "texts/birchbark/002", first.annotations["newdoc_id"]
+    assert_equal "1360-1380", first.annotations["date_created"]
+    assert_equal %w[texts/birchbark/002 1360-1380], second.annotations.values_at("newdoc_id", "date_created"),
+                 "002-2 carries no comment of its own — the document's scope does"
+    letter = passages.find { |p| p.urn.end_with?(":005-1") } || flunk("005-1")
+    assert_equal %w[texts/birchbark/005 1320-1340], letter.annotations.values_at("newdoc_id", "date_created")
+  end
+
+  def test_rnc_and_ruthenian_document_titles_and_creation_dates
+    rnc = parse_whitelisted(RNC, language: "orv").to_a
+    assert_equal "kungur__Kungur_akty_75", rnc.first.annotations["newdoc_id"]
+    assert_equal "1698-05-02", rnc.first.annotations["created"]
+    assert_match(/\AЦарская грамота кунгурскому воеводе/, rnc.first.annotations["title"])
+    duel = rnc.find { |p| p.urn.end_with?(":Delo_duel_1637-2") } || flunk("Delo_duel_1637-2")
+    assert_equal %w[varia__Delo_duel_1637 1637], duel.annotations.values_at("newdoc_id", "created")
+
+    # The bare `# newdoc = …` spelling opens a document too.
+    ruthenian = parse_whitelisted(RUTHENIAN, language: "orv").first
+    assert_equal "litopys.org.ua__statut2__st1566_05", ruthenian.annotations["newdoc_id"]
+    assert_equal "orv-be", ruthenian.annotations["lang"]
+    assert_match(/\AДругий \(Волинський\) статут/, ruthenian.annotations["title"])
+  end
+
+  # egyptian-pc states its metadata on every sentence (no newdoc): each
+  # sentence keeps its own, verbatim.
+  def test_egyptian_sentence_metadata_rides_verbatim
+    first = parse_whitelisted(EGYPTIAN, language: "egy").first
+    expected = { "title" => "PT", "edition" => "Sethe", "spell" => "23", "section" => "16a",
+                 "king" => "Unas", "date" => "5th Dynasty", "lang" => "Old_Egyptian",
+                 "genre" => "religious", "place" => "Saqqara",
+                 "TLA" => "IBUBd7piZ5pZrUceohIbqW09xnA; IBUBdWfjUXae5UrZjn2Peb3DWVs" }
+    assert_equal expected, first.annotations.slice(*expected.keys)
+    refute first.annotations.key?("newdoc_id")
+  end
+
+  # The GUM-style meta:: namespace (coptic-bohairic) sheds its prefix;
+  # the CTS urn is crosswalk material, stored verbatim (no join here).
+  def test_meta_namespace_comments_and_cts_ids
+    first = parse_whitelisted(COPTIC, language: "cop").first
+    assert_equal "bohairic.mark:bohairic.Mark_01", first.annotations["newdoc_id"]
+    assert_equal "urn:cts:copticLit:nt.mark.bohairic_ed:1", first.annotations["document_cts_urn"]
+    assert_equal "Bohairic Gospel of Mark 1 (Digital Edition)", first.annotations["title"]
+    assert_equal "N/A", first.annotations["author"], "upstream's own not-applicable mark, verbatim"
+  end
+
+  def test_sentence_metadata_is_opt_in_too
+    refute parse(BIRCHBARK, urn: "urn:x", language: "orv").first.annotations.key?("newdoc_id")
+  end
+
   def parse_whitelisted(source, language:)
     Nabu::Adapters::ConlluParser.new.parse(source, urn: "urn:x", language: language, sentence_comments: true)
   end

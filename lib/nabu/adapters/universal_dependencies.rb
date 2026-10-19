@@ -497,6 +497,9 @@ module Nabu
       # its release (DipSGG's not-to-release/) — minted with this mark.
       DRAFT_STATUS = "draft-unproofed"
 
+      # A treebank README's machine-readable genre line (#readme_genres).
+      GENRE_LINE = /\AGenre:\s*(.+?)\s*\z/
+
       def self.manifest
         MANIFEST
       end
@@ -540,7 +543,7 @@ module Nabu
           language: document_ref.metadata["language"],
           title: document_ref.metadata["title"],
           license_override: document_ref.metadata["license_class"],
-          metadata: draft_metadata(document_ref),
+          metadata: document_metadata(document_ref),
           sentence_comments: true
         )
       end
@@ -604,15 +607,36 @@ module Nabu
 
       def document_refs(workdir)
         TREEBANKS.flat_map do |slug, info|
+          genres = readme_genres(File.join(workdir, slug))
           released = Dir.glob(File.join(workdir, slug, "*.conllu")).map do |path|
-            document_ref(slug, info, path, draft: false)
+            document_ref(slug, info, path, draft: false, genres: genres)
           end
           drafts = info[:drafts] ? Dir.glob(File.join(workdir, slug, info[:drafts], "*.conllu")) : []
-          released + drafts.map { |path| document_ref(slug, info, path, draft: true) }
+          released + drafts.map { |path| document_ref(slug, info, path, draft: true, genres: genres) }
         end.sort_by(&:id)
       end
 
-      def document_ref(slug, info, path, draft:)
+      # The treebank README's `Genre:` line (GENRE_LINE) — UD's
+      # machine-readable metadata block, present in all 34 held treebanks
+      # (census 2026-10-19: "bible fiction nonfiction government",
+      # "nonfiction poetry", "grammar-examples" …) — as its space-separated
+      # UD genre tags, verbatim. A treebank-level claim, so every document
+      # of the treebank carries it ("genres" → the genre facet, config/
+      # facet_map.yml). Deliberately NOT kind-folded: a split file mixes
+      # whatever the treebank mixes, and a kind over the union would
+      # misstate each text. No README (or no line) claims nothing.
+      def readme_genres(treebank_dir)
+        path = File.join(treebank_dir, "README.md")
+        return nil unless File.file?(path)
+
+        File.foreach(path, chomp: true) do |line|
+          match = GENRE_LINE.match(line) or next
+          return match[1].split(/\s+/)
+        end
+        nil
+      end
+
+      def document_ref(slug, info, path, draft:, genres: nil)
         stem = File.basename(path, ".conllu")
         metadata = {
           "language" => info[:language],
@@ -622,6 +646,7 @@ module Nabu
         # Only the treebanks with a declared override carry the key (P10-4);
         # the legacy ones stay bare so they inherit the source class.
         metadata["license_class"] = info[:license_class] if info[:license_class]
+        metadata["genres"] = genres if genres
         if draft
           metadata["edition_status"] = DRAFT_STATUS
           metadata["drafts_dir"] = info[:drafts]
@@ -632,15 +657,20 @@ module Nabu
         )
       end
 
-      # The draft mark (the skjaervo-khotanese edition_status value),
-      # mirrored as an edition_status facet so `nabu show` prints it on the
-      # card; released documents carry no metadata at all (unchanged).
-      def draft_metadata(document_ref)
+      # The README genre tags (#readme_genres) plus the draft mark (the
+      # skjaervo-khotanese edition_status value), mirrored as an
+      # edition_status facet so `nabu show` prints it on the card; a
+      # released document of a README-less treebank carries no metadata.
+      def document_metadata(document_ref)
+        metadata = {}
+        genres = document_ref.metadata["genres"]
+        metadata["genres"] = genres if genres
         status = document_ref.metadata["edition_status"]
-        return {} unless status
+        return metadata unless status
 
-        { "edition_status" => status,
-          "facets" => { "edition_status" => { "value" => status, "raw" => document_ref.metadata["drafts_dir"] } } }
+        metadata.merge("edition_status" => status,
+                       "facets" => { "edition_status" => { "value" => status,
+                                                           "raw" => document_ref.metadata["drafts_dir"] } })
       end
 
       def repo_name(repo)

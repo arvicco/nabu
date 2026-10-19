@@ -31,6 +31,14 @@ class PeriodBandsTest < Minitest::Test
                  "the unsubperiodized span — honest coarseness"
   end
 
+  # The UD Egyptian-PC sentence dates ("5th Dynasty" / "6th Dynasty") band
+  # through the TLA thesaurus's own dynasty bounds — the same nodes the
+  # held AED headers date AES texts by.
+  def test_the_old_kingdom_dynasties_band_by_the_tla_thesaurus
+    assert_equal [-2520, -2364], table.lookup("5th Dynasty")
+    assert_equal [-2363, -2233], table.lookup("6th Dynasty")
+  end
+
   def test_unruled_labels_are_honestly_nil
     assert_nil table.lookup("Uncertain")
     assert_nil table.lookup("Standard Babylonian"),

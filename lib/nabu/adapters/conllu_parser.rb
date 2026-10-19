@@ -60,8 +60,10 @@ module Nabu
     # - MISC citations: PROIEL rows carry the source reference as `Ref=MATT_7.12`
     #   / `Ref=1.20.1` inside MISC (kept as-is inside the token's "misc"),
     #   alongside `LId=` lemma-disambiguators. Sanskrit-Vedic adds extra
-    #   sentence-level comments (`# citation_text=…`, `# layer=…`); only
-    #   sent_id/text/source are interpreted, the rest are ignored.
+    #   sentence-level comments (`# citation_text=…`, `# layer=…`). By
+    #   default only sent_id/text/source are interpreted; +sentence_comments+
+    #   arms the translation/reference and METADATA_COMMENTS whitelists
+    #   (the latter newdoc-scoped — see NEWDOC); the rest are ignored.
     # - License variance is per-treebank (see the UD adapter + fixture README);
     #   the parser is license-agnostic.
     class ConlluParser
@@ -92,6 +94,38 @@ module Nabu
                                 transl_en_1 transl_en_2 transl_ru].freeze
       REFERENCE_COMMENTS = %w[reference ref].freeze
 
+      # The metadata comments (the aggressive-mining law; census of
+      # canonical/ud 2026-10-19), upstream key → annotation key. Keys ride
+      # VERBATIM except three folds: the three spellings of the document
+      # opener (`newdoc id` 23,162 sentences incl. the perseus treebanks'
+      # CTS-shaped ids, the bare `newdoc` [rnc, ruthenian], `newdoc_id`
+      # [birchbark, rnc, ruthenian]) → "newdoc_id", and the GUM-style
+      # `meta::` namespace (coptic-bohairic) sheds its prefix. The dates
+      # stay under their own upstream keys — date_created (birchbark,
+      # 1,203 letters, 25 bands "1430-1450"), created (rnc 56, ruthenian 4:
+      # "1652", "1698-05-02", "1391.08.25;1500-1600"), date (ruthenian 79:
+      # "1653"; egyptian-pc 3,089: "6th Dynasty"/"5th Dynasty") — the
+      # timeline's UdSentenceDates lane reads them. egyptian-pc's
+      # place/king/genre/title/spell/section/edition/lang ride with them,
+      # and its TLA sentence ids (crosswalk material; "No" ×134 is
+      # upstream's own absence mark). Empty values mint nothing.
+      METADATA_COMMENTS = {
+        "newdoc id" => "newdoc_id", "newdoc" => "newdoc_id", "newdoc_id" => "newdoc_id",
+        "title" => "title", "meta::title" => "title", "meta::author" => "author",
+        "meta::document_cts_urn" => "document_cts_urn",
+        "date_created" => "date_created", "created" => "created", "date" => "date",
+        "place" => "place", "king" => "king", "genre" => "genre", "spell" => "spell",
+        "section" => "section", "edition" => "edition", "lang" => "lang", "TLA" => "TLA"
+      }.freeze
+
+      # A comment opening an upstream document (CoNLL-U `# newdoc`, with or
+      # without an id, in the three spellings the treebanks use). The
+      # metadata comments of an opener's block belong to the whole document:
+      # they carry to every following sentence until the next opener; a
+      # comment on any other block belongs to its sentence alone (and wins
+      # there over the document's).
+      NEWDOC = /\Anewdoc(?:\s+id|_id)?\s*(?:=|\z)/
+
       # Same signature family as EpidocParser#parse. +license_override+ (P10-4)
       # rides through to the Document unchanged (nil default); the parser stays
       # license-agnostic — the caller decides the per-document class.
@@ -116,10 +150,18 @@ module Nabu
           canonical_path: canonical_path || source.to_s, license_override: license_override
         )
 
+        document_scope = {}
         each_block(source) do |block, sequence|
+          sentence_metadata = {}
+          if sentence_comments
+            own = metadata_comments(block)
+            document_scope = own if newdoc?(block)
+            sentence_metadata = document_scope.merge(own)
+          end
           document << build_passage(block, document_urn: urn, language: language,
                                            sequence: sequence, citation: citation,
-                                           sentence_comments: sentence_comments)
+                                           sentence_comments: sentence_comments,
+                                           sentence_metadata: sentence_metadata)
         end
 
         raise Nabu::ParseError, "#{source}: no sentence blocks found" if document.empty?
@@ -186,7 +228,8 @@ module Nabu
         columns
       end
 
-      def build_passage(block, document_urn:, language:, sequence:, citation: nil, sentence_comments: false)
+      def build_passage(block, document_urn:, language:, sequence:, citation: nil, sentence_comments: false,
+                        sentence_metadata: {})
         sent_id = comment_value(block, "sent_id")
         if sent_id.nil? || sent_id.empty?
           raise Nabu::ParseError,
@@ -205,9 +248,21 @@ module Nabu
           urn: "#{document_urn}:#{cite}",
           language: language,
           text: text,
-          annotations: annotations(block, sentence_comments: sentence_comments),
+          annotations: annotations(block, sentence_comments: sentence_comments).merge(sentence_metadata),
           sequence: sequence
         )
+      end
+
+      def newdoc?(block)
+        block.comments.any? { |comment| comment.match?(NEWDOC) }
+      end
+
+      # The block's own METADATA_COMMENTS, {annotation key => NFC value}.
+      def metadata_comments(block)
+        METADATA_COMMENTS.each_with_object({}) do |(upstream, key), found|
+          value = comment_value(block, upstream).to_s.strip
+          found[key] ||= Nabu::Normalize.nfc(value) unless value.empty?
+        end
       end
 
       # The `# text =` surface string (NFC), else a reconstruction from FORM.
