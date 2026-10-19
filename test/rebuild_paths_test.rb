@@ -63,12 +63,7 @@ class RebuildPathsTest < Minitest::Test
   # names a lane a path drops; the test asserts the gap still exists, so
   # the fix that closes it must also strike its entry here.
   KNOWN_GAPS = {
-    incremental: {
-      "place apply" => "the incremental corpus builders re-run the timeline (which drops every " \
-                       "document_axes row) but never re-project the nabu-places registry onto " \
-                       "it, so registry place matches vanish after any builder-running " \
-                       "incremental until a full rebuild or builders:refresh"
-    }
+    incremental: {}
   }.freeze
 
   def full_stages
