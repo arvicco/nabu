@@ -297,8 +297,6 @@ class E84000Test < Minitest::Test
     end
   end
 
-  private
-
   def ref_for(urn)
     adapter.discover(workdir).to_a.find { |ref| ref.id == urn } || flunk("no ref #{urn}")
   end
