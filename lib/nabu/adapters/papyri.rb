@@ -16,7 +16,8 @@ module Nabu
     # 2026-10) rationalized idp.data: the edition-centric
     # DDB_EpiDoc_XML/<collection>/(<collection>.<volume>/)?<file>.xml tree
     # is GONE, replaced by two documentary trees (HGV_trans_EpiDoc/ likewise
-    # became Translations/, which this adapter does not read):
+    # became Translations/, read — with the APIS records' translations —
+    # by the translation walk, see "The translation siblings" below):
     #
     # - DDbDP/<HGV-thousand>/<HGV>.xml — the CURATED, text-centric tree,
     #   one file per HGV text, named by its <idno type="filename"> (the HGV
@@ -138,6 +139,20 @@ module Nabu
     # ~2,260 literary documents (grc ~2,19x, lat ~6x, cop ~1x); measured
     # at 8f7ed708: 2,256 refs (grc 2,181 · lat 57 · cop 17 · egy-Egyd 1).
     #
+    # == The translation siblings (translations: true)
+    #
+    # Shape decision: SIBLING documents, not passage annotations. The
+    # translations are whole-document prose (one <ab> for the APIS block
+    # translations), several per edition (303 editions carry 2–15 in one
+    # language), and only the HGV ones mark the edition's line numbers —
+    # inline milestones, not one translation per line. A sibling document
+    # keeps every translation whole and attributable (its own
+    # bibliography/authority), and its passages cite the edition's own
+    # line labels where the translator marked them, so `--parallel`
+    # anchors them like any span-grouped translation. Identity
+    # <edition urn>-trans-<translation id>; walk, resolution and census in
+    # PapyriTranslations, parsing in PapyriTranslationParser.
+    #
     # == Header mining (PapyriHeader)
     #
     # Parse also reads what idp.data asserts ABOUT each document: a DCLP
@@ -199,16 +214,49 @@ module Nabu
       # sorted by urn (dclp:* precedes ddbdp:* — discovery order is urn
       # order). Returns an Enumerator without a block (the adapter
       # contract's lazy shape).
+      #
+      # With `translations: true` (the registry posture) the walk also
+      # yields one translation ref per translation file of the clone —
+      # Translations/ and the APIS records — resolved onto the edition it
+      # translates (PapyriTranslations has the census and the rules).
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        (document_refs(workdir) + dclp_document_refs(workdir)).sort_by(&:id).each(&block)
+        bases = document_refs(workdir) + dclp_document_refs(workdir)
+        refs = @translations ? bases + translation_walk(workdir, bases).refs : bases
+        refs.sort_by(&:id).each(&block)
+      end
+
+      # +translations+: when true (the registry row's posture), discover
+      # also yields the translation siblings. Default off — the frozen
+      # edition walk alone.
+      def initialize(translations: false)
+        super()
+        @translations = translations
+      end
+
+      # The translation walk's skip census (misnamed files, APIS duplicates,
+      # translations naming no edition); nothing when translations are off.
+      def discovery_skips(workdir)
+        return super unless @translations
+
+        skips = translation_walk(workdir, document_refs(workdir) + dclp_document_refs(workdir)).skips
+        notes = skips.group_by(&:reason).map do |reason, group|
+          named = group.first(5).map(&:name).join(", ")
+          "#{group.size} translation file#{'s' if group.size > 1} skipped — #{reason} (#{named}" \
+            "#{', …' if group.size > 5})"
+        end
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: skips.size, notes: notes)
       end
 
       # Delegate to the DdbdpParser with the urn/language/title discover
       # resolved from the header; DCLP refs (by urn namespace) parse under
       # the dclp identity, everything else stays the frozen DDbDP default.
+      # Translation refs parse through PapyriTranslationParser, gaining the
+      # APIS record's descriptive header when one backs the translation.
       def parse(document_ref)
+        return parse_translation(document_ref) if document_ref.metadata["kind"] == "translation"
+
         parser = if document_ref.id.start_with?("urn:nabu:dclp:")
                    DdbdpParser.new(idno_type: "dclp", urn_namespace: "dclp")
                  else
@@ -270,6 +318,17 @@ module Nabu
 
       private
 
+      def translation_walk(workdir, bases)
+        PapyriTranslations.new(workdir: workdir, bases: bases, source_id: manifest.id)
+      end
+
+      def parse_translation(document_ref)
+        workdir = workdir_of(document_ref.path)
+        apis = workdir ? PapyriTranslations.apis_metadata(workdir, document_ref.metadata["apisid"]) : {}
+        PapyriTranslationParser.new.parse(document_ref.path, urn: document_ref.id,
+                                                             metadata: apis.merge(document_ref.metadata))
+      end
+
       # The upstream repo URL, split out so fetch tests can point a singleton
       # at a local git tmpdir (the house pattern), keeping fetch off the
       # network.
@@ -278,10 +337,15 @@ module Nabu
       end
 
       # The clone root a ref's file sits under: the parent of the LAST walk
-      # root segment in its path (DDbDP/, Historical/ or DCLP/), or nil.
+      # root segment in its path (DDbDP/, Historical/, DCLP/, Translations/
+      # or APIS/), or nil.
+      WALK_ROOTS = [DDBDP_ROOT, HISTORICAL_ROOT, DCLP_ROOT,
+                    PapyriTranslations::TRANSLATIONS_ROOT, PapyriTranslations::APIS_ROOT].freeze
+      private_constant :WALK_ROOTS
+
       def workdir_of(path)
         parts = File.expand_path(path).split(File::SEPARATOR)
-        index = parts[0...-1].rindex { |part| [DDBDP_ROOT, HISTORICAL_ROOT, DCLP_ROOT].include?(part) }
+        index = parts[0...-1].rindex { |part| WALK_ROOTS.include?(part) }
         index&.positive? ? parts[0...index].join(File::SEPARATOR) : nil
       end
 

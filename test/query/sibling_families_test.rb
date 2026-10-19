@@ -72,6 +72,25 @@ module Query
                  "an undeclared sibling-minting source stays invisible until its row declares"
     end
 
+    # A row whose urns live under other namespaces than its slug declares
+    # them (sibling_namespaces): the papyri translations ride
+    # urn:nabu:ddbdp:<hybrid>-trans-<id> and urn:nabu:dclp:<n>-trans-<id>.
+    def test_declared_namespaces_replace_the_slug_namespace
+      yaml = "papyri-ddbdp:\n  adapter: Some::Adapter\n  siblings: [\"-trans-[0-9A-Za-z.-]+\"]\n  " \
+             "sibling_namespaces: [ddbdp, dclp]\n"
+      registry = Dir.mktmpdir do |dir|
+        path = File.join(dir, "sources.yml")
+        File.write(path, yaml)
+        break Nabu::SourceRegistry.load(path)
+      end
+      families = Nabu::Query::SiblingFamilies.from_registry(registry)
+
+      assert_equal "urn:nabu:ddbdp:bgu:1:100", families.match("urn:nabu:ddbdp:bgu:1:100-trans-8875-2").work
+      assert_equal "urn:nabu:ddbdp:bgu:1:100", families.match("urn:nabu:ddbdp:bgu:1:100").work
+      assert_equal "urn:nabu:dclp:62767", families.match("urn:nabu:dclp:62767-trans-berkeley.apis.253").work
+      assert_nil families.match("urn:nabu:papyri-ddbdp:x-trans-1"), "the slug itself is no namespace here"
+    end
+
     # -- the CTS dotted-version form ------------------------------------------
 
     def test_cts_declaration_matches_the_dotted_edition_form
@@ -122,7 +141,10 @@ module Query
         # ETCSL (P31-5)
         "urn:nabu:etcsl:1.8.2.1-en" => ["urn:nabu:etcsl:1.8.2.1", :variant],
         # I.Sicily (P34-0 — the newly declared eleventh family)
-        "urn:nabu:isicily:isic000006-translit" => ["urn:nabu:isicily:isic000006", :variant]
+        "urn:nabu:isicily:isic000006-translit" => ["urn:nabu:isicily:isic000006", :variant],
+        # Papyri translations (HGV/APIS translation files over both families)
+        "urn:nabu:ddbdp:p.ryl:4:560-trans-2416-1" => ["urn:nabu:ddbdp:p.ryl:4:560", :variant],
+        "urn:nabu:dclp:62767-trans-berkeley.apis.253" => ["urn:nabu:dclp:62767", :variant]
       }.each do |urn, (work, family)|
         match = families.match(urn)
         refute_nil match, "the shipped registry must declare a family for #{urn}"

@@ -88,3 +88,26 @@ copy — `papyri_test.rb` asserts it. The adapter does not walk
   papyri.info/dclp/<n>) mints `urn:nabu:dclp:<n>`. NOT the `dclp-hybrid`,
   which is non-unique upstream (TM 60467 and TM 61136 both carry
   `p.hal;;5`).
+
+### Translations (added 2026-10-19)
+
+Copied byte-verbatim and whole from the box's canonical clone
+(`canonical/papyri-ddbdp/`, upstream commit
+`91611a190d29b584ca2df01712888ac843e8ef89`). They pin the translation
+siblings (`translations: true`): the walk, the edition resolution, the
+skip census and the line-milestone passages.
+
+| Path | Bytes | What it pins |
+|---|---|---|
+| `Translations/8/8875-1.xml` | 3,547 | German HGV translation of `bgu;1;100`: line milestones 1/2/6/9/10, `app`/`lem`, `term` |
+| `Translations/8/8875-2.xml` | 3,428 | English translation of the same edition — several translations per edition |
+| `Translations/8/8877-1.xml` | 3,956 | German translation of `bgu;1;102`: inline `<lb/>`, a lemma-wrapped term |
+| `Translations/8/8877-2.xml` | 3,776 | English translation of `bgu;1;102` |
+| `Translations/2/2416-1.xml` | 2,966 | ddb-hybrid idno `p.ryl;4;560 sb;5;7643` (two hybrids, space-separated); `r`/`v` textparts |
+| `Translations/13/13581-1.xml` | 1,935 | an APIS-authority translation with NO hybrid: reaches `p.tebt;2;484v` by its HGV number; one block `<ab>` |
+| `Translations/88/88604-1.xml` | 2,500 | misspelt `xml:lang="fe"` over French prose; its edition `o.krok;1;15` is not in the catalog (minted under its own hybrid) |
+| `Translations/88/o.krok.1.15-1.xml` | 2,524 | the misnamed twin of 88604-1.xml — skipped by the naming rule |
+| `DDbDP/13/13581.xml` | 3,865 | the `p.tebt;2;484v` edition (HGV 13581) the APIS translation above resolves to |
+| `APIS/berkeley/xml/berkeley.apis.629.xml` | 4,345 | the APIS record of 13581-1: its translation yields to Translations/, its summary + keywords ride the translation |
+| `APIS/berkeley/xml/berkeley.apis.253.xml` | 5,259 | an APIS-only translation (Sophocles, *Inachus*): no `xml:lang` on the div (langUsage → en), resolves by `dclp` idno 62767 |
+| `APIS/berkeley/xml/berkeley.apis.9834.xml` | 2,814 | an APIS record naming no text (apisid/controlNo only) — skipped, censused |

@@ -4075,6 +4075,20 @@ papyri-ddbdp:
   # average 34 chars; damaged-fragment search earns its bytes here. Future
   # documentary sources (inscriptions) join by adding this flag, no code.
   fuzzy_index: true
+  # The translation siblings: every translation file of the clone
+  # (Translations/ — HGV, DDbDP and APIS translations — plus the APIS
+  # records upstream has not yet pulled out) as a document
+  # <edition urn>-trans-<translation id>, line-cited where the translator
+  # marked the edition's lines. Census 2026-10-19: 7,971 Translations
+  # files + 254 APIS-only translations (8,225 docs / 15,826 passages) land at the next re-parse
+  # (en/de/fr/it dominant); 1,158 APIS records naming no text and the
+  # misnamed/duplicate/empty files skip, censused. Rationale and rules in
+  # the adapter header and PapyriTranslations.
+  translations: true
+  # The literal "-trans-" tail is a census claim: no ddb-hybrid or dclp id
+  # contains it. The urns live under ddbdp/dclp, not the slug.
+  siblings: ["-trans-[0-9A-Za-z.-]+"]
+  sibling_namespaces: [ddbdp, dclp]
 
 pedecerto:
   adapter: Nabu::Adapters::Pedecerto
