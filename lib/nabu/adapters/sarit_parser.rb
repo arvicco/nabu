@@ -74,7 +74,7 @@ module Nabu
     # The only Nokogiri entry point is Nokogiri::XML::Reader — the corpus
     # ships nine >5 MB files including the 38.6 MB Mahābhārata, exactly what
     # the house >5 MB rule exists for. One pass per document.
-    class SaritParser
+    class SaritParser < StreamingTeiParser
       # SARIT tags languages with ISO 639-1 / bare names; Nabu uses ISO 639-3
       # (conventions §4). Script subtags survive (sa-Deva → san-Deva).
       LANGUAGE_MAP = { "sa" => "san", "braj" => "bra", "avadhi" => "awa" }.freeze
@@ -134,36 +134,7 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:, language:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, language: language).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
-      # The house collision tolerance (ddbdp/GRETIL precedent): duplicates
-      # disambiguate deterministically in document order, never quarantine.
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          seen[unit.citation] += 1
-          count = seen[unit.citation]
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
+      def extraction_class = Extraction
 
       def build_document(units, urn:, language:, title:, path:, license:, authors: [])
         deva = language.to_s.split("-").include?("Deva")
@@ -192,20 +163,14 @@ module Nabu
       # The single-pass Reader state machine. Header phase reads the
       # availability grant; body phase tracks div/quote context and captures
       # text inside lg/l/p units.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         DROPPED_ELEMENTS = %w[note head].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         Result = Data.define(:units, :license, :authors)
 
         def initialize(reader:, path:, language:)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @language = language
           @in_availability = false
           @availability_text = +""
@@ -234,14 +199,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -567,14 +524,6 @@ module Nabu
         def separator
           target = @group ? @group[:current] : @para
           target[:text] << " " if target
-        end
-
-        def dropping?
-          !@drop_depth.nil?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :Extraction
