@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "fileutils"
+require "digest"
 require "json"
 
 module Nabu
@@ -76,12 +77,120 @@ module Nabu
         [runs, edges]
       end
 
-      # Empty the whole journal (the rebuild links stage's re-mine start):
-      # edges, chunk rows, runs — children first.
+      # Empty the whole journal: edges, chunk rows, runs — children first —
+      # and the scope stamps that described them.
       def wipe!(db)
         db[:links].delete
         db[:link_run_chunks].delete
         db[:link_runs].delete
+        db[:link_scope_stamps].delete
+      end
+
+      # -- per-scope stamps (Nabu::LinkStamps; migration 004) --------------
+
+      # Delete every run NOT in +keep+ (ids) with its edges and chunk rows —
+      # the links stage's start under stamps: the carried scopes' runs
+      # survive, everything else is re-mined. Returns [runs_deleted,
+      # edges_deleted]. One scan of the edge table (run_id is unindexed;
+      # the same cost the old whole-journal wipe paid in spirit).
+      def retain_runs!(db, keep)
+        doomed = db[:link_runs].exclude(id: keep).select_map(:id)
+        return [0, 0] if doomed.empty?
+
+        edges = keep.empty? ? db[:links].delete : db[:links].exclude(run_id: keep).delete
+        db[:link_run_chunks].where(run_id: doomed).delete
+        [db[:link_runs].where(id: doomed).delete, edges]
+      end
+
+      # Every run id recorded by one of +producers+.
+      def run_ids_for(db, producers:)
+        db[:link_runs].where(producer: producers).select_order_map(:id)
+      end
+
+      # The highest run id so far (0 on an empty journal) — what a scope's
+      # replay compares against to name the runs it minted.
+      def max_run_id(db) = db[:link_runs].max(:id) || 0
+
+      # { [producer, scope] => { stamp:, inputs:, run_ids: } } — the stored
+      # scope stamps, JSON columns decoded.
+      def scope_stamps(db)
+        db[:link_scope_stamps].all.to_h do |row|
+          [[row[:producer], row[:scope]],
+           { stamp: row[:stamp], inputs: JSON.parse(row[:inputs_json]),
+             run_ids: JSON.parse(row[:run_ids_json]), stamped_at: row[:stamped_at] }]
+        end
+      end
+
+      # Upsert one scope's stamp: the identity it was just mined under and
+      # the runs that mining minted.
+      def write_scope_stamp!(db, producer:, scope:, stamp:, inputs:, run_ids:, at: Time.now)
+        db[:link_scope_stamps].where(producer: producer, scope: scope).delete
+        db[:link_scope_stamps].insert(producer: producer, scope: scope, stamp: stamp,
+                                      inputs_json: JSON.generate(inputs),
+                                      run_ids_json: JSON.generate(run_ids.sort), stamped_at: at)
+      end
+
+      # Keep only the stamps of +keys+ ([producer, scope] pairs) — a scope
+      # about to be re-mined loses its stamp FIRST, so a crash mid-mine can
+      # never leave a stamp vouching for edges that are gone.
+      def retain_scope_stamps!(db, keys)
+        db[:link_scope_stamps].all.each do |row|
+          next if keys.include?([row[:producer], row[:scope]])
+
+          db[:link_scope_stamps].where(producer: row[:producer], scope: row[:scope]).delete
+        end
+      end
+
+      # The self-check's comparison basis: per "producer scope" (the run
+      # row's own scope string), the edge count and an ORDER-INDEPENDENT
+      # digest of the edges' content (pair, kind, score, detail) — run ids,
+      # chunk numbers and timestamps are bookkeeping and stay out, so a
+      # faithful re-mine digests equal to the edges it replaces.
+      def edge_digests(db, run_ids)
+        return {} if run_ids.empty?
+
+        sums = Hash.new { |hash, key| hash[key] = { edges: 0, digest: 0 } }
+        db[:links].join(:link_runs, id: :run_id)
+                  .where(Sequel[:links][:run_id] => run_ids)
+                  .select(Sequel[:link_runs][:producer], Sequel[:link_runs][:scope],
+                          Sequel[:links][:from_urn], Sequel[:links][:to_urn], Sequel[:links][:kind],
+                          Sequel[:links][:score], Sequel[:links][:detail])
+                  .each do |row|
+          slot = sums["#{row[:producer]} #{row[:scope]}"]
+          slot[:edges] += 1
+          slot[:digest] = (slot[:digest] + edge_hash(row)) & DIGEST_MASK
+        end
+        sums.transform_values { |slot| { edges: slot[:edges], digest: slot[:digest].to_s(16) } }
+      end
+
+      DIGEST_MASK = (1 << 128) - 1
+
+      # One edge's content hash as a 128-bit integer (summed mod 2^128 —
+      # commutative, so the digest never depends on row order). The score
+      # rides as its exact IEEE bytes: a bitwise-equal re-mine is the claim.
+      def edge_hash(row)
+        score = row[:score].nil? ? "-" : [row[:score]].pack("G").unpack1("H*")
+        Digest::SHA256.digest([row[:from_urn], row[:to_urn], row[:kind], score, row[:detail].to_s]
+                                .join("\x1f")).unpack("Q>Q>").then { |hi, lo| (hi << 64) | lo }
+      end
+
+      # Append one links-stage execution to the stage log (+mode+ "full" |
+      # "stamped" | "self-check"; +drift+ the drifted "producer scope"
+      # names a self-check found).
+      def record_stage_run!(db, mode:, mined: 0, carried: 0, verified: 0, drift: [], at: Time.now)
+        db[:link_stage_runs].insert(mode: mode, mined: mined, carried: carried, verified: verified,
+                                    drifted: drift.size, drift_json: drift.empty? ? nil : JSON.generate(drift),
+                                    ran_at: at)
+      end
+
+      # How many "stamped" stage runs have happened since the last full
+      # re-mine (a "full" or "self-check" row) — the self-check cadence's
+      # counter. An empty log reads 0.
+      def stamped_streak(db)
+        last_full = db[:link_stage_runs].exclude(mode: "stamped").max(:id)
+        dataset = db[:link_stage_runs].where(mode: "stamped")
+        dataset = dataset.where { id > last_full } if last_full
+        dataset.count
       end
 
       # Record a producer run; returns its id (the edges' run_id). A chunked
