@@ -73,3 +73,11 @@ files:
     retrieved: "2026-10-18"
     trim: none (complete short Taishō text, copied whole from the box's canonical tree at dbdea41;
       empty header <author> beside a typed body byline cb:type="author" 釋菩提達摩製)
+  - path: T/T45/T45n1909-xu.xml
+    url: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T45/T45n1909.xml
+    refetchable: true
+    whole: false
+    retrieved: "2026-10-20"
+    trim: teiHeader + body lb 0929b06..0929b09 (one complete p, juan-2 milestone + pb + enclosing
+      cb:div type="other") + back apparatus div with every top-level app anchored in the window
+      (5), balanced close; cut from the box's canonical tree at dbdea41; 1.2 MB -> 13 KB

@@ -62,6 +62,24 @@ in-file grant verbatim.
 | `N/N26/N26n0008.xml` | `N/N26/N26n0008.xml` | none (whole, 28.1 KB) | 小誦經 (Khuddakapāṭha): `<ref cRef="PTS.Khp.1"/>` Pāli page anchors, translator byline 悟醒譯 (no dynasty seat), `nanchuan-notes` back matter |
 | `N/N44/N44n0021-xu.xml` | `N/N44/N44n0021.xml` | teiHeader + body lb 0266a01–0268a04, back dropped, balanced close; 112.5 KB → 8.4 KB | 所行藏經 (Cariyāpiṭaka): a cRef inside `<head>`, numbered-verse `<p cb:place="inline">` pairs; suffixed stem keeps fixture urns disjoint |
 
+`T/T45/T45n1909-xu.xml` — the stand-off apparatus shapes: cut on
+**2026-10-20** from the box's canonical tree at upstream commit dbdea41
+("CBETA 2026.R2"), upstream path `T/T45/T45n1909.xml` (慈悲道場懺法,
+1.2 MB → 13 KB). Recipe (line-verbatim, no element edited): the whole
+teiHeader; `<text><body>`, then the `<milestone n="2" unit="juan"/>` and
+`<pb n="0929b"…/>` milestones in force at the window, an opening
+`<cb:div type="other">` (the enclosing division), the four body lines
+lb 0929b06–0929b09 verbatim (one complete `<p>`), `</cb:div></body>`;
+then `<back>` with the `cb:div type="apparatus"` head and EVERY
+top-level `<app>` line whose `from` anchor lies in the window (5 apps),
+balanced close; the other back divisions are dropped. Why this window:
+a star app (`corresp="#0928014"`, re-anchored note), a span crossing
+print lines (beg0929019 on b08 → end0929019 on b09) whose lemma nests a
+restated `<app n="0929020">` and the Taishō orig/mod notes, an
+interlinear `<note place="inline">` inside a lemma, omissions
+(`<rdg><space quantity="0"/></rdg>`), witnesses 【甲】【乙】. The
+suffixed stem keeps fixture urns disjoint from the real corpus urns.
+
 `T/T85/T85n2831.xml` — the body-byline persons harvest: copied whole
 (13.1 KB) on **2026-10-18** from the box's canonical tree at upstream
 commit dbdea41 ("CBETA 2026.R2"), upstream path `T/T85/T85n2831.xml`.
