@@ -480,6 +480,47 @@ class SourceRegistryTest < Minitest::Test
     assert_equal "cts", entry.siblings
   end
 
+  # A source whose urns live under namespaces other than its slug (papyri:
+  # urn:nabu:ddbdp:* + urn:nabu:dclp:*) names them; absent, the slug is
+  # the namespace (every other sibling-minting source).
+  def test_sibling_namespaces_default_nil_and_parse_as_a_list
+    entry = load_registry(<<~YAML)["itant"]
+      itant:
+        adapter: Nabu::Adapters::Itant
+        siblings: ["-(eng|ita|dipl)"]
+    YAML
+    assert_nil entry.sibling_namespaces
+
+    entry = load_registry(<<~YAML)["papyri-ddbdp"]
+      papyri-ddbdp:
+        adapter: Nabu::Adapters::Papyri
+        siblings: ["-trans-[0-9A-Za-z.-]+"]
+        sibling_namespaces: [ddbdp, dclp]
+    YAML
+    assert_equal %w[ddbdp dclp], entry.sibling_namespaces
+  end
+
+  def test_sibling_namespaces_need_a_tail_list_and_well_formed_names
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        papyri-ddbdp:
+          adapter: Nabu::Adapters::Papyri
+          sibling_namespaces: [ddbdp]
+      YAML
+    end
+    assert_match(/sibling_namespaces/, error.message)
+
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        papyri-ddbdp:
+          adapter: Nabu::Adapters::Papyri
+          siblings: ["-trans-.+"]
+          sibling_namespaces: ["ddb:dp"]
+      YAML
+    end
+    assert_match(/papyri-ddbdp/, error.message)
+  end
+
   def test_non_cts_scalar_siblings_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)

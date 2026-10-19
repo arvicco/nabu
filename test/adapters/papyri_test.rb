@@ -77,6 +77,7 @@ class PapyriTest < Minitest::Test
       urn:nabu:ddbdp:bgu:1:102
       urn:nabu:ddbdp:c.epist.lat::10
       urn:nabu:ddbdp:p.ryl:4:560
+      urn:nabu:ddbdp:p.tebt:2:484v
     ], refs.map(&:id)
     refs.each do |ref|
       assert_equal "papyri-ddbdp", ref.source_id
@@ -453,4 +454,120 @@ class PapyriTest < Minitest::Test
   def git(dir, *)
     Nabu::Shell.run("git", "-C", dir, *).strip
   end
+end
+
+# The translation siblings (translations: true — the registry posture):
+# every translation file of the clone — Translations/<bucket>/<HGV>-<n>.xml
+# and the APIS records whose translation upstream has not yet pulled out —
+# becomes a document <edition urn>-trans-<translation id>, resolved onto the
+# edition it translates (ddb-hybrid → dclp → HGV → TM; space-separated
+# multi-hybrids and re-keyed hybrids resolve through the discovered set).
+class PapyriTranslationsTest < Minitest::Test
+  include StoreTestDB
+
+  FIXTURES = Nabu::TestSupport.fixtures("ddbdp")
+
+  TRANSLATION_URNS = %w[
+    urn:nabu:dclp:62767-trans-berkeley.apis.253
+    urn:nabu:ddbdp:bgu:1:100-trans-8875-1
+    urn:nabu:ddbdp:bgu:1:100-trans-8875-2
+    urn:nabu:ddbdp:bgu:1:102-trans-8877-1
+    urn:nabu:ddbdp:bgu:1:102-trans-8877-2
+    urn:nabu:ddbdp:o.krok:1:15-trans-88604-1
+    urn:nabu:ddbdp:p.ryl:4:560-trans-2416-1
+    urn:nabu:ddbdp:p.tebt:2:484v-trans-13581-1
+  ].freeze
+
+  def adapter = Nabu::Adapters::Papyri.new(translations: true)
+
+  def refs = @refs ||= adapter.discover(FIXTURES).to_a
+
+  def parse(urn) = adapter.parse(refs.find { |ref| ref.id == urn })
+
+  def test_discover_adds_one_translation_ref_per_translation_file
+    flag_off = Nabu::Adapters::Papyri.new.discover(FIXTURES).map(&:id)
+    assert_equal (flag_off + TRANSLATION_URNS).sort, refs.map(&:id)
+    assert_equal refs.map(&:id).uniq, refs.map(&:id)
+  end
+
+  def test_resolution_reaches_the_edition_through_multi_hybrids_and_hgv
+    by_id = refs.to_h { |ref| [ref.id, ref] }
+    assert_equal "urn:nabu:ddbdp:p.ryl:4:560",
+                 by_id.fetch("urn:nabu:ddbdp:p.ryl:4:560-trans-2416-1").metadata["translation_of"],
+                 "the idno 'p.ryl;4;560 sb;5;7643' names two hybrids; the discovered one wins"
+    assert_equal "urn:nabu:ddbdp:p.tebt:2:484v",
+                 by_id.fetch("urn:nabu:ddbdp:p.tebt:2:484v-trans-13581-1").metadata["translation_of"],
+                 "a hybrid-less APIS translation reaches its edition by HGV number"
+  end
+
+  # The skip rules, censused: a misnamed duplicate file (o.krok.1.15-1.xml,
+  # the same translation as 88604-1.xml), an APIS record whose translation
+  # Translations/ already carries (berkeley.apis.629 → 13581-1), an APIS
+  # record naming no text at all (berkeley.apis.9834 — apisid only).
+  def test_skips_are_censused
+    skips = adapter.discovery_skips(FIXTURES)
+    assert_equal 3, skips.skipped_by_rule
+    joined = skips.notes.join(" ")
+    assert_includes joined, "o.krok.1.15-1"
+    assert_includes joined, "berkeley.apis.9834"
+  end
+
+  def test_flag_off_discovers_no_translation_and_censuses_nothing
+    refute(Nabu::Adapters::Papyri.new.discover(FIXTURES).any? { |ref| ref.id.include?("-trans-") })
+    assert_equal 0, Nabu::Adapters::Papyri.new.discovery_skips(FIXTURES).skipped_by_rule
+  end
+
+  def test_parse_mints_the_translation_document
+    document = parse("urn:nabu:ddbdp:bgu:1:100-trans-8875-1")
+    assert_equal "deu", document.language
+    assert_equal "translation", document.metadata["kind"]
+    assert_equal "urn:nabu:ddbdp:bgu:1:100", document.metadata["translation_of"]
+    assert_equal "8875-1", document.metadata["translation_id"]
+    assert_equal "urn:nabu:ddbdp:bgu:1:100-trans-8875-1:1", document.first.urn
+  end
+
+  def test_apis_provenance_rides_the_translation
+    document = parse("urn:nabu:ddbdp:p.tebt:2:484v-trans-13581-1")
+    assert_equal "berkeley.apis.629", document.metadata["apisid"]
+    assert_equal "Eutuchos notices receipt.", document.metadata["description"]
+    assert_includes document.metadata["keywords"], "Receipts, Roman Period"
+
+    apis_only = parse("urn:nabu:dclp:62767-trans-berkeley.apis.253")
+    assert_equal "eng", apis_only.language
+    assert_equal "berkeley.apis.253", apis_only.metadata["translation_id"]
+    assert_includes apis_only.metadata["description"], "probably the Inachus of Sophocles"
+  end
+
+  # End to end: the German translation of BGU I 100 loads beside its Greek
+  # edition and `--parallel` anchors it on the edition's own line numbers.
+  def test_parallel_anchors_the_translation_on_the_edition_lines
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "papyri-ddbdp", name: "Papyri", adapter_class: "Nabu::Adapters::Papyri",
+                                        license_class: "attribution")
+    docs = %w[urn:nabu:ddbdp:bgu:1:100 urn:nabu:ddbdp:bgu:1:100-trans-8875-1].map { |urn| parse(urn) }
+    Nabu::Store::Loader.new(db: catalog, source: source).load(docs, full: true)
+
+    result = Nabu::Query::Parallel.new(catalog: catalog).run("urn:nabu:ddbdp:bgu:1:100", lang: "deu")
+    assert_equal "urn:nabu:ddbdp:bgu:1:100-trans-8875-1", result.right.urn
+    anchored = result.groups.select(&:translation).map(&:anchor)
+    assert_equal %w[:1 :2 :6 :9 :10], anchored
+    block = result.groups.find { |group| group.anchor == ":2" }
+    assert_equal [":2", ":5"], [block.covers_first, block.covers_last]
+  end
+
+  def test_registry_builds_a_translations_on_adapter
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    built = registry["papyri-ddbdp"].build_adapter
+    assert(built.discover(FIXTURES).any? { |ref| ref.id.include?("-trans-") })
+  end
+end
+
+# The shared conformance suite over the translations-on adapter: every
+# translation document satisfies the adapter guarantees too.
+class PapyriTranslationsConformanceTest < Minitest::Test
+  include AdapterConformance
+
+  def conformance_adapter = Nabu::Adapters::Papyri.new(translations: true)
+  def conformance_workdir = Nabu::TestSupport.fixtures("ddbdp")
+  def conformance_expected_source_id = "papyri-ddbdp"
 end

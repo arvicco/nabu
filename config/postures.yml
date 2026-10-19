@@ -2027,6 +2027,11 @@ sources:
         Invariants::MINING_EXEMPT"}
     script: {posture: implied}
   papyri-ddbdp:
+    # Translation siblings (<edition urn>-trans-<id>, 8,225 docs at the
+    # 2026-10-19 census: eng 7,364 · deu 569 · fra 190 · ita 89 · 13 more)
+    # carry the cross-source "kind: translation" marker: they never row on
+    # the timeline or places — the edition holds every axis below. Their
+    # modern-language codes resolve by identity (the bare code is the claim).
     dating: {posture: dated, note: "DDbDP: the HGV origDate envelope (build walk, axis_source hgv); DCLP:
         the file's own header origDate envelope (metadata date, MetadataDates :structured — 2,243 of
         2,256 literary docs at the 2026-10-18 census). HGV <date type=\"mentioned\"> (11,075 dates)
