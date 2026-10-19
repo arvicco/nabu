@@ -712,5 +712,32 @@ module Query
       assert_equal "eclipsans", absent.run("eclipsans").first.headword,
                    "and direct lookups are entirely unchanged"
     end
+
+    # -- entry facets (the dictionary-entry facet surface) ----------------------
+
+    def tag_entry(headword, facet, value, ref: nil)
+      entry_id = @catalog[:dictionary_entries].where(headword: headword).get(:id)
+      value_id = @catalog[:entry_facet_values].where(facet: facet, value: value, ref: ref).get(:id) ||
+                 @catalog[:entry_facet_values].insert(source_id: @source.id, facet: facet, value: value, ref: ref)
+      @catalog[:entry_facets].insert(value_id: value_id, entry_id: entry_id)
+    end
+
+    # A facet narrows the lookup to entries carrying a matching value — the
+    # value OR its ref, case-insensitive, LIKE patterns passing through
+    # (search --facet's semantics at entry grain); several facets AND.
+    def test_facets_narrow_the_lookup_to_tagged_entries
+      tag_entry("μῆνις", "domain", "emotion", ref: "uuid-wrath")
+      tag_entry("λόγος", "domain", "speech")
+      tag_entry("λόγος", "usage", "archaic")
+
+      assert_equal ["μῆνις"], define("μῆνις", facets: { "domain" => "Emotion" }).map(&:headword)
+      assert_equal ["μῆνις"], define("μῆνις", facets: { "domain" => "uuid-%" }).map(&:headword),
+                   "the ref matches too"
+      assert_empty define("μῆνις", facets: { "domain" => "speech" })
+      assert_empty define("officium", facets: { "domain" => "%" }), "an untagged entry falls out"
+      assert_equal ["λόγος"], define("λόγος", facets: { "domain" => "spe%", "usage" => "archaic" }).map(&:headword)
+      assert_empty define("λόγος", facets: { "domain" => "speech", "usage" => "colloquial" })
+      assert_equal ["λόγος"], define("λόγος", facets: {}).map(&:headword), "no facets is no filter"
+    end
   end
 end
