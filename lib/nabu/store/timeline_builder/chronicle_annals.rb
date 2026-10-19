@@ -64,20 +64,22 @@ module Nabu
           documents = 0
           annals = 0
           skipped = 0
-          Dir.glob(File.join(dir, "*.xml")).each do |path|
-            outcome = build_source(catalog, path)
-            next if outcome.nil?
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            Dir.glob(File.join(dir, "*.xml")).each do |path|
+              outcome = build_source(catalog, axes, path)
+              next if outcome.nil?
 
-            documents += 1
-            annals += outcome[:annals]
-            skipped += outcome[:skipped]
+              documents += 1
+              annals += outcome[:annals]
+              skipped += outcome[:skipped]
+            end
           end
           { documents: documents, annals: annals, skipped_divs: skipped }
         end
 
         # One TOROT source file → its timeline rows, or nil when it is not an
         # annalistic chronicle (no AM-titled divs) or not in the catalog.
-        def build_source(catalog, path)
+        def build_source(catalog, axes, path)
           divs = scan_divs(path)
           annal_divs = divs.filter_map do |title, sentence_ids|
             am = parse_am_title(title)
@@ -89,10 +91,10 @@ module Nabu
           document_id = catalog[:documents].where(urn: urn).get(:id)
           return nil if document_id.nil?
 
-          insert_rows(catalog, document_id, urn, annal_divs, skipped: divs.size - annal_divs.size)
+          insert_rows(catalog, axes, document_id, urn, annal_divs, skipped: divs.size - annal_divs.size)
         end
 
-        def insert_rows(catalog, document_id, urn, annal_divs, skipped:)
+        def insert_rows(catalog, axes, document_id, urn, annal_divs, skipped:)
           sequences = catalog[:passages].where(document_id: document_id).select_hash(:urn, :sequence)
           rows = annal_divs.filter_map do |am, sentence_ids|
             seqs = sentence_ids.filter_map { |sid| sequences["#{urn}:#{sid}"] }
@@ -102,17 +104,17 @@ module Nabu
           end
           return nil if rows.empty?
 
-          insert_envelope(catalog, document_id, rows)
+          insert_envelope(axes, document_id, rows)
           rows.each do |row|
-            catalog[:document_axes].insert(row.merge(document_id: document_id, axis_source: TOROT_SLUG))
+            axes.insert(row.merge(document_id: document_id, axis_source: TOROT_SLUG))
           end
           { annals: rows.size, skipped: skipped }
         end
 
         # The document-grain row: the chronicle's full annal span, inserted
         # BEFORE the annal rows so document-grain readers meet it first.
-        def insert_envelope(catalog, document_id, rows)
-          catalog[:document_axes].insert(
+        def insert_envelope(axes, document_id, rows)
+          axes.insert(
             document_id: document_id,
             not_before: rows.map { |row| row[:not_before] }.min,
             not_after: rows.map { |row| row[:not_after] }.max,

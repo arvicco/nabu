@@ -22,10 +22,13 @@ module Nabu
       # sha256 over (urn, language, text, text_normalized, canonical
       # annotations JSON, sequence). Covers every content column of the
       # passages table except revision/withdrawn, which are bookkeeping.
-      def passage(passage)
+      # +annotations_json+ lets a caller that also STORES the canonical
+      # annotations (the loader) serialize them once and hand the same
+      # string in; it must be canonical_json(passage.annotations).
+      def passage(passage, annotations_json: canonical_json(passage.annotations))
         digest(
           passage.urn, passage.language, passage.text, passage.text_normalized,
-          canonical_json(passage.annotations), passage.sequence.to_s
+          annotations_json, passage.sequence.to_s
         )
       end
 

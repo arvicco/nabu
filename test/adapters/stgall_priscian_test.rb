@@ -231,7 +231,8 @@ module Adapters
                          .load_from(conformance_adapter, workdir: FIXTURES, full: true)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-      row = fulltext[:passage_lemmas].where(lemma_folded: Nabu::Normalize.search_form("serc", language: "sga")).first
+      row = LemmaUrnView.of(fulltext, catalog)
+                        .where(lemma_folded: Nabu::Normalize.search_form("serc", language: "sga")).first
       refute_nil row, "the analysed ṡe(i)rc indexes under its headword serc"
       assert_equal "#{PREFIX}p1:13", row[:urn]
       assert_equal "sga", row[:language]

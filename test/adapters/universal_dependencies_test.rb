@@ -449,7 +449,7 @@ class UniversalDependenciesTest < Minitest::Test
                        .load_from(conformance_adapter, workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    lemmas = fulltext[:passage_lemmas]
+    lemmas = LemmaUrnView.of(fulltext, catalog)
 
     # LLCT: the imperial dating clause of the opening charter — Karolus
     # (Charlemagne), lemmatized to the classicizing Carolus (the charters'
@@ -830,7 +830,7 @@ class UniversalDependenciesTest < Minitest::Test
                        .load_from(conformance_adapter, workdir: FIXTURES, full: true)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-    lemmas = fulltext[:passage_lemmas]
+    lemmas = LemmaUrnView.of(fulltext, catalog)
     assert_operator lemmas.where(language: "orv").count, :>, 0,
                     "the orv treebanks must contribute passage_lemmas rows"
 

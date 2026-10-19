@@ -109,10 +109,12 @@ class DtaTest < Minitest::Test
     assert_equal({ "value" => "Flugschrift" }, luther.metadata.dig("facets", "dwds_subgenre"))
   end
 
-  def test_the_kind_fold_reads_both_subgenre_ladders
+  def test_the_kind_fold_reads_both_subgenre_ladders_and_the_genre_head
     kinds = Nabu::Kinds.load(classes_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_classes.yml"),
                              map_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_map.yml"))
-    assert_equal %w[subgenre dwds_subgenre], kinds.rule_for("dta").metadata
+    assert_equal %w[subgenre dwds_subgenre dwds_genre], kinds.rule_for("dta").metadata,
+                 "dwds_genre joined when the periodical head was ruled: Zeitung folds, " \
+                 "the coarse restatements dedupe"
     {
       "Brief" => ["letter"], "Briefe" => ["letter"], "Novelle" => ["literary/narrative"],
       "Gelegenheitsschrift:Tod" => ["funerary"], "Jura" => ["legal"], "Gebetbuch" => ["hymn-prayer/prayer"],

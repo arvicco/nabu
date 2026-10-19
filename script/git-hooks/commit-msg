@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Nabu commit-msg hook (installed by `rake tools:hooks` as a symlink to
+# this tracked file): refuses AI-attribution lines and internal workflow
+# ids in the message. Logic and rationale: lib/nabu/ops/git_hooks.rb.
+require File.expand_path("../../lib/nabu/ops/git_hooks", __dir__)
+
+exit Nabu::Ops::GitHooks.commit_msg(ARGV.fetch(0))

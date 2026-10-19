@@ -58,19 +58,19 @@ module Nabu
         # f(canonical); places ride the catalog metadata) but kept for the
         # uniform lane signature.
         def build(catalog:, canonical_dir: nil) # rubocop:disable Lint/UnusedMethodArgument
-          rows = 0
           undated = 0
           prefix = Adapters::Openiti::URN_PREFIX
-          catalog[:documents].where(Sequel.like(:urn, "#{prefix}%"))
-                             .select_map(%i[id urn metadata_json]).each do |id, urn, json|
-            ah = urn.delete_prefix(prefix)[DEATH_AH, 1]
-            if ah.nil?
-              undated += 1
-              next
-            end
+          documents = catalog[:documents].where(Sequel.like(:urn, "#{prefix}%")).select_map(%i[id urn metadata_json])
+          rows = TimelineBuilder.writing_axes(catalog) do |axes|
+            documents.each do |id, urn, json|
+              ah = urn.delete_prefix(prefix)[DEATH_AH, 1]
+              if ah.nil?
+                undated += 1
+                next
+              end
 
-            insert(catalog, id, ah, place_ref: place_ref(json))
-            rows += 1
+              insert(axes, id, ah, place_ref: place_ref(json))
+            end
           end
           { documents: rows, undated: undated }
         end
@@ -92,9 +92,9 @@ module Nabu
           nil
         end
 
-        def insert(catalog, document_id, death_ah, place_ref: nil)
+        def insert(axes, document_id, death_ah, place_ref: nil)
           year = ce_year(death_ah.to_i)
-          catalog[:document_axes].insert(
+          axes.insert(
             document_id: document_id,
             not_before: year, not_after: year,
             precision: "year", date_raw: "d. AH #{death_ah}",

@@ -320,8 +320,11 @@ module Nabu
     # STRICTLY non-unique, query-only accelerators, enumerated explicitly
     # against the schema the migrations create (an applied migration is NEVER
     # edited — this drops/recreates the INDEX objects at rebuild time only):
-    # passages' document_id (001) + language (013) and provenance's passage_id
-    # + document_id (001) — the two highest-insert-volume tables of a replay.
+    # passages' language (013) and provenance's passage_id + document_id
+    # (001) — the two highest-insert-volume tables of a replay. (passages'
+    # single-column document_id index left both the schema and this list at
+    # migration 048: the unique (document_id, sequence) index's left prefix
+    # serves every document_id probe.)
     # Dropping them can never change what a rebuild PRODUCES. Deliberately NOT
     # here: unique / constraint indexes (urn, (document_id, sequence)) which
     # enforce identity and back the loader's insert-time lookups, and
@@ -329,7 +332,6 @@ module Nabu
     # Sequel derives the same default index name from the column spec that
     # create_table/add_index used, so drop-by-columns matches what was created.
     DEFERRED_REBUILD_INDEXES = [
-      { table: :passages,   columns: :document_id },
       { table: :passages,   columns: :language },
       { table: :provenance, columns: :passage_id },
       { table: :provenance, columns: :document_id }
@@ -344,7 +346,7 @@ module Nabu
 
     # Recreate the deferred secondary indexes over the now-populated tables,
     # after the replay and before the query-side rebuild stages that use them
-    # (timeline/facets/indexer joins on passages.document_id). Returns +db+.
+    # (timeline/facets/indexer). Returns +db+.
     def create_deferred_indexes!(db)
       DEFERRED_REBUILD_INDEXES.each { |ix| db.add_index(ix[:table], ix[:columns]) }
       db
@@ -412,6 +414,7 @@ end
 require_relative "store/ledger"
 require_relative "store/stage_timings"
 require_relative "store/links_journal"
+require_relative "store/source_content_identity"
 require_relative "store/lect_journal"
 require_relative "store/lect_facets"
 require_relative "store/artifact_scripts"
@@ -434,6 +437,7 @@ require_relative "store/cjk_bigrams"
 require_relative "store/indexer"
 require_relative "store/silver_lemma_indexer"
 require_relative "store/alignment_indexer"
+require_relative "store/row_buffer"
 require_relative "store/timeline_builder"
 require_relative "store/silver_dates"
 require_relative "store/facet_builder"

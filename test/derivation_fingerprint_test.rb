@@ -479,6 +479,16 @@ class DerivationFingerprintTest < Minitest::Test
     refute_includes Nabu::DerivationFingerprint::INDEX_FILES, "store/fts_structure.rb"
   end
 
+  # The links-stage stamp machinery shapes no catalog row: it decides which
+  # links scopes carry, and its own identity changes move the scope stamps
+  # it computes (link_stamps_test). Plain exclusion, like the batch
+  # producers it stamps.
+  def test_the_links_stamp_machinery_is_excluded_from_the_shared_core
+    %w[link_stamps.rb store/source_content_identity.rb].each do |rel|
+      assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, rel
+    end
+  end
+
   def with_changed_index_file(basename)
     singleton = Nabu::DerivationFingerprint.singleton_class
     original = Nabu::DerivationFingerprint.method(:index_file_digest)

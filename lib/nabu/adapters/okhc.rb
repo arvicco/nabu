@@ -111,6 +111,11 @@ module Nabu
         )
       end
 
+      # Parallel replay (audited): #parse seeks one record by the byte
+      # offset discovery recorded and opens its own handle — no state
+      # crosses refs.
+      def self.parallel_parse? = true
+
       # HTTP artifacts, not git: HEAD each included file's resolve URL for
       # liveness; each subdir's FileFetch state feeds the URL-identity lane.
       def self.remote_probe_strategy = :http_zip

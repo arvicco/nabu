@@ -230,17 +230,23 @@ module Nabu
       # Wholesale: drive from passage_lemmas and hop to passages by primary
       # key (CROSS JOIN pins SQLite's join order — the cross-file planner has
       # no statistics at build time). Per source: drive from the source's
-      # documents → passages → passage_lemmas by its urn index.
+      # documents → passages → passage_lemmas by its passage-key index
+      # (passage_id; the urn on a v1 table — Indexer.lemma_passage_key).
       def lemma_dataset(catalog, source_id)
         lemmas = Sequel[:pl]
         documents = Sequel[:documents]
         passages = Sequel[:passages]
         ds = if source_id
+               passage_key = if attached_lemma_urn?(catalog)
+                               { lemmas[:urn] => passages[:urn] }
+                             else
+                               { lemmas[:passage_id] => passages[:id] }
+                             end
                catalog[:documents].where(documents[:source_id] => source_id)
                                   .cross_join(:passages)
                                   .where(passages[:document_id] => documents[:id])
                                   .cross_join(Sequel.as(Sequel[FULLTEXT_ALIAS][:passage_lemmas], :pl))
-                                  .where(lemmas[:urn] => passages[:urn])
+                                  .where(passage_key)
              else
                catalog.from(Sequel.as(Sequel[FULLTEXT_ALIAS][:passage_lemmas], :pl))
                       .cross_join(:passages)
@@ -328,11 +334,17 @@ module Nabu
           .where(type: "table", name: Indexer::LEMMA_TABLE.to_s).any?
       end
 
+      # Whether the attached lemma table is the v1 shape that still stores
+      # the passage urn (Indexer.lemma_urn_column?, read through the attach).
+      def attached_lemma_urn?(catalog)
+        catalog[Sequel[FULLTEXT_ALIAS][Indexer::LEMMA_TABLE]].columns.include?(:urn)
+      end
+
       def clock = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       private_class_method :astronomical, :floor_half, :century_of_astronomical, :mix_dataset,
                            :curve_dataset, :lemma_dataset, :live_passages, :with_dates, :replace!,
-                           :replace_lemmas!, :attachable?, :lemma_source?, :clock
+                           :replace_lemmas!, :attachable?, :lemma_source?, :attached_lemma_urn?, :clock
     end
   end
 end

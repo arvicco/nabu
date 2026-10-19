@@ -237,7 +237,7 @@ module Adapters
                          .load_from(conformance_adapter, workdir: FIXTURES, full: true)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
 
-      lemmas = fulltext[:passage_lemmas]
+      lemmas = LemmaUrnView.of(fulltext, catalog)
       assert_operator lemmas.where(language: "sga").count, :>, 0, "THE first sga gold rows"
       assert_operator lemmas.where(language: "lat").count, :>, 0, "the Latin code-mixing indexes honestly"
 

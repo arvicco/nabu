@@ -250,6 +250,21 @@ module Store
       end
     end
 
+    # The per-source slice joins passages to the lemma table by passage id;
+    # a v1 lemma table (urn stored + indexed — the live file until the next
+    # full rebuild) joins by its urn instead, to the identical rollup.
+    def test_refresh_source_over_a_v1_lemma_table_matches_the_wholesale_build
+      seed
+      build!
+      wholesale = @catalog[:lemma_rollup].order(*@catalog[:lemma_rollup].columns).all
+      fulltext = Nabu::Store.connect_fulltext(@fulltext_path)
+      LegacyLemmaTable.widen!(fulltext, @catalog)
+      fulltext.disconnect
+      @catalog[:lemma_rollup].where(source_id: @gold.id).delete
+      Nabu::Store::LemmaRollup.refresh_source!(catalog: @catalog, fulltext_path: @fulltext_path, slug: "proiel")
+      assert_equal wholesale, @catalog[:lemma_rollup].order(*@catalog[:lemma_rollup].columns).all
+    end
+
     def test_no_fulltext_file_leaves_the_lemma_rollup_empty_and_builds_the_rest
       seed
       summary = build!(File.join(@dir, "absent.sqlite3"))

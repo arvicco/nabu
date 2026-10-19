@@ -155,6 +155,28 @@ module Store
       assert(@db.indexes(:passages).values.any? { |i| i[:columns] == %i[document_id sequence] && i[:unique] })
     end
 
+    # Migration 048: the single-column passages(document_id) index is gone —
+    # the unique (document_id, sequence) index's left prefix serves every
+    # document_id probe (EXPLAIN QUERY PLAN verified against the live
+    # statistics: each consumer switches to the composite, none scans).
+    def test_passages_carries_no_redundant_document_id_index
+      refute(@db.indexes(:passages).values.any? { |i| i[:columns] == [:document_id] },
+             "passages(document_id) is redundant beside the (document_id, sequence) unique index")
+    end
+
+    # A catalog migrated through 047 (index present, the live shape) and then
+    # forward ends with exactly the index set a from-zero migration creates.
+    def test_migration_048_converges_with_a_fresh_schema
+      require "sequel/extensions/migration"
+      upgraded = Sequel.sqlite
+      Sequel::Migrator.run(upgraded, Nabu::Store::MIGRATIONS_DIR, target: 47, allow_missing_migration_files: true)
+      assert(upgraded.indexes(:passages).values.any? { |i| i[:columns] == [:document_id] },
+             "precondition: the pre-048 schema carries the single-column index")
+      Sequel::Migrator.run(upgraded, Nabu::Store::MIGRATIONS_DIR, allow_missing_migration_files: true)
+
+      assert_equal @db.indexes(:passages), upgraded.indexes(:passages)
+    end
+
     def test_enrichments_composite_index_present
       assert(@db.indexes(:enrichments).values.any? { |i| i[:columns] == %i[passage_id kind] })
     end

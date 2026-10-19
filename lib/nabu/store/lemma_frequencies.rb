@@ -41,7 +41,7 @@ module Nabu
     # - INCREMENTAL (#refresh_source_delta): Indexer.refresh_source! rewrites one
     #   source's passage_lemmas rows, then applies that source's before/after
     #   contribution delta to this table IN THE SAME transaction. Per-source
-    #   before/after aggregation (both urn-scoped and B-tree bounded) is chosen
+    #   before/after aggregation (both passage-keyed and B-tree bounded) is chosen
     #   over per-row maintenance: passage_lemmas is bulk-written in slices, so a
     #   single grouped snapshot of the source's rows is far cheaper than tallying
     #   millions of individual inserts, and it is exactly as exact — the
@@ -61,7 +61,7 @@ module Nabu
     module LemmaFrequencies
       TABLE = :lemma_frequencies
 
-      # The insert/scan slice — matches the Indexer's so a source's urn-scoped
+      # The insert/scan slice — matches the Indexer's so a source's passage-keyed
       # snapshot batches identically.
       BATCH_SIZE = 2_000
 
@@ -115,12 +115,15 @@ module Nabu
       # -- incremental (Indexer.refresh_source!) ------------------------------
 
       # One source's contribution to the table: { [folded, language, tier] =>
-      # passage_count } over its urns (B-tree indexed, sliced). Summed across
-      # slices so a urn split over two batches still totals correctly.
-      def snapshot(fulltext, urns)
+      # passage_count } over its passages (B-tree indexed by passage key —
+      # Indexer.lemma_passage_key; +ids+ and +urns+ name the same passages —
+      # sliced). Summed across slices so a key split over two batches still
+      # totals correctly.
+      def snapshot(fulltext, ids:, urns:)
         counts = Hash.new(0)
-        urns.each_slice(BATCH_SIZE) do |batch|
-          fulltext[Indexer::LEMMA_TABLE].where(urn: batch)
+        key = Indexer.lemma_passage_key(fulltext)
+        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE) do |batch|
+          fulltext[Indexer::LEMMA_TABLE].where(key => batch)
                                         .group(:lemma_folded, :language, :tier)
                                         .select(:lemma_folded, :language, :tier,
                                                 Sequel.function(:count).*.as(:n))

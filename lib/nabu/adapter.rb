@@ -186,6 +186,17 @@ module Nabu
     # after every load without special-casing slugs. Default false.
     def self.reference_edges? = false
 
+    # Rebuild's parallel replay (Nabu::ParsePool): true lets `nabu
+    # rebuild` fan this adapter's #parse out to forked workers while the
+    # single writer consumes documents in parse order. Declare it ONLY
+    # after auditing #parse as pure per ref: no state carried from one
+    # parse to the next beyond memo caches of pure functions (each worker
+    # builds its own), no SQLite or other handle opened during discovery
+    # and used during parse (it would cross the fork), and no per-parse
+    # memory so large that N workers each holding it matters. Default
+    # false: in-process parse, the serial path exactly.
+    def self.parallel_parse? = false
+
     # The producer SyncRunner runs for a reference_edges? source (P25-0):
     # anything with #run(slug, workdir:) returning a
     # LibraryReferences::Result-shaped value (+workdir+ is the source's

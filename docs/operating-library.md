@@ -119,6 +119,19 @@ etiquette that was previously only tribal:
   suspenders.
 - New index shapes arrive only at a full rebuild; the old shape keeps
   serving syncs until then (feature-detected, by design).
+- **Parse fan-out:** audited sources replay their parses through a
+  forked worker pool (`--parse-workers N`, else the
+  `rebuild.parse_workers` setting, else cores − 1 capped); output is
+  byte-identical at every worker count, and `1` is the serial path
+  exactly. Sources whose adapter has not opted in always parse
+  in-process.
+- **The links stage carries clean scopes** on per-scope derivation
+  stamps (producer code + params + member content identities) instead
+  of re-mining everything every time; every 4th links stage — or any
+  run with `--full-links` — carries nothing and self-checks the
+  stamped scopes against a fresh mine, reporting any drift loudly in
+  the summary line. Live batch link runs between rebuilds make their
+  scopes re-mine once, by design.
 
 Backup and restore: the three permanent folders are the backup
 (`canonical/`, `config/`, `local/`); `db/` is never backed up.

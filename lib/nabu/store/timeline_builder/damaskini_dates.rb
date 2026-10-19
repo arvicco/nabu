@@ -33,13 +33,13 @@ module Nabu
           return { documents: 0 } unless Dir.exist?(dir)
 
           ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
-          rows = 0
-          Dir.glob(File.join(dir, "tsv", "**", "*.txt")).each do |path|
-            document_id = ids[document_urn(path)] or next
-            timeline = extract(path) or next
+          rows = TimelineBuilder.writing_axes(catalog) do |axes|
+            Dir.glob(File.join(dir, "tsv", "**", "*.txt")).each do |path|
+              document_id = ids[document_urn(path)] or next
+              timeline = extract(path) or next
 
-            insert(catalog, document_id, timeline)
-            rows += 1
+              insert(axes, document_id, timeline)
+            end
           end
           { documents: rows }
         end
@@ -68,8 +68,8 @@ module Nabu
           header.not_before == header.not_after ? "year" : "range"
         end
 
-        def insert(catalog, document_id, timeline)
-          catalog[:document_axes].insert(
+        def insert(axes, document_id, timeline)
+          axes.insert(
             document_id: document_id,
             not_before: timeline[:not_before], not_after: timeline[:not_after],
             precision: timeline[:precision], date_raw: timeline[:date_raw],

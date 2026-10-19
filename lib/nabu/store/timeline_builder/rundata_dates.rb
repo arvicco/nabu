@@ -44,23 +44,23 @@ module Nabu
 
           prefix = "#{Adapters::Rundata::URN_PREFIX}%"
           ids = catalog[:documents].where(Sequel.like(:urn, prefix)).select_hash(:urn, :id)
-          rows = 0
           undated = 0
           parser = Adapters::RundataSqliteParser.new(artifact)
-          parser.each_inscription do |inscription|
-            base_urn = Adapters::Rundata.urn_for(inscription.signum)
-            document_ids = ([base_urn] + LANE_SUFFIXES.map { |sfx| "#{base_urn}#{sfx}" })
-                           .filter_map { |urn| ids[urn] }
-            next if document_ids.empty?
+          rows = TimelineBuilder.writing_axes(catalog) do |axes|
+            parser.each_inscription do |inscription|
+              base_urn = Adapters::Rundata.urn_for(inscription.signum)
+              document_ids = ([base_urn] + LANE_SUFFIXES.map { |sfx| "#{base_urn}#{sfx}" })
+                             .filter_map { |urn| ids[urn] }
+              next if document_ids.empty?
 
-            timeline = extract(parser.record(inscription.signature_id).meta)
-            if timeline.nil?
-              undated += document_ids.size
-              next
+              timeline = extract(parser.record(inscription.signature_id).meta)
+              if timeline.nil?
+                undated += document_ids.size
+                next
+              end
+
+              document_ids.each { |document_id| insert(axes, document_id, timeline) }
             end
-
-            document_ids.each { |document_id| insert(catalog, document_id, timeline) }
-            rows += document_ids.size
           end
           { documents: rows, undated: undated }
         end
@@ -111,8 +111,8 @@ module Nabu
           folded.empty? ? nil : folded
         end
 
-        def insert(catalog, document_id, timeline)
-          catalog[:document_axes].insert(
+        def insert(axes, document_id, timeline)
+          axes.insert(
             document_id: document_id,
             not_before: timeline[:not_before], not_after: timeline[:not_after],
             precision: timeline[:precision], date_raw: timeline[:date_raw],

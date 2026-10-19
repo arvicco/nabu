@@ -51,15 +51,15 @@ module Nabu
           return { documents: 0, undated: 0 } unless File.file?(dump)
 
           ids = catalog[:documents].where(Sequel.like(:urn, "#{URN_PREFIX}%")).select_hash(:urn, :id)
-          rows = 0
           undated = 0
-          Adapters::CorphSqlParser.new(dump).each_row("TEXT") do |row|
-            document_id = ids[document_urn(row)] or next
-            range = extract_range(row["Date"].to_s)
-            next undated += 1 if range.nil?
+          rows = TimelineBuilder.writing_axes(catalog) do |axes|
+            Adapters::CorphSqlParser.new(dump).each_row("TEXT") do |row|
+              document_id = ids[document_urn(row)] or next
+              range = extract_range(row["Date"].to_s)
+              next undated += 1 if range.nil?
 
-            insert(catalog, document_id, range, row["Date"].to_s)
-            rows += 1
+              insert(axes, document_id, range, row["Date"].to_s)
+            end
           end
           { documents: rows, undated: undated }
         end
@@ -89,8 +89,8 @@ module Nabu
           m && [m[1].to_i, m[2].to_i]
         end
 
-        def insert(catalog, document_id, range, raw)
-          catalog[:document_axes].insert(
+        def insert(axes, document_id, range, raw)
+          axes.insert(
             document_id: document_id,
             not_before: range[0], not_after: range[1],
             precision: range[0] == range[1] ? "year" : "range",

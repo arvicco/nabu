@@ -121,6 +121,18 @@ classes:
     desc: "Writing the past: annals, chronicles, king-lists."
     subs: [annals, chronicle, king-list]
     crosswalk: {aat: "300026361"}
+  # -- the two heads ruled 2026-10-19 (the genre-fold wave's gaps) ----------
+  periodical:
+    desc: "Periodical press: newspapers and journals — serial publications
+      issued under a running title."
+    subs: [newspaper, journal]
+    crosswalk: {aat: "300026657"}
+  sermon:
+    desc: "Preached religious prose: sermons and homilies, funeral sermons
+      included — composed for delivery, distinct from scripture and
+      exegesis."
+    subs: [funeral-sermon, homily]
+    crosswalk: {aat: "300026923"}
   # -- the honest class ------------------------------------------------------
   unknown:
     desc: "Upstream's own 'cannot determine' — a claim, not a gap."

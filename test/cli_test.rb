@@ -2900,6 +2900,50 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The links stage's verdict line (LinkStamps): every rebuild says how the
+  # links were derived — and --full-links forces the self-check.
+  def test_rebuild_prints_the_links_line_and_full_links_forces_the_self_check
+    with_rebuild_env do |config|
+      out, = with_config(config) { run_cli(%w[rebuild]) }
+      assert_match(/links: mined 0 scope\(s\) — nothing carried/, out)
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --full-links]) }
+      assert_nil status
+      assert_match(/links: mined 0 scope\(s\)/, out, "nothing stamped yet: a forced run is a plain full mine")
+    end
+  end
+
+  def test_rebuild_incremental_full_links_runs_the_links_stage_on_a_clean_catalog
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+      out, = with_config(config) { run_cli(%w[rebuild --incremental]) }
+      refute_match(/links:/, out, "a clean incremental runs no links stage")
+
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --incremental --full-links]) }
+      assert_nil status
+      assert_match(/links: mined 0 scope\(s\)/, out)
+    end
+  end
+
+  def test_rebuild_accepts_a_parse_worker_count
+    with_rebuild_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --parse-workers 2]) }
+
+      assert_nil status
+      assert_match(/TOTAL.*\+2 added/, out)
+    end
+  end
+
+  def test_rebuild_refuses_a_parse_worker_count_below_one
+    with_rebuild_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[rebuild --parse-workers 0]) }
+
+      refute_nil status
+      assert_match(/--parse-workers must be at least 1/, err)
+      refute File.exist?(config.catalog_path), "refused before anything was dropped or built"
+    end
+  end
+
   # rebuild --profile prints the per-source/per-stage timing table (P36-0).
   def test_rebuild_profile_prints_the_stage_timing_table
     with_rebuild_env do |config|

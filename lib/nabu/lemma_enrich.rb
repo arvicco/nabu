@@ -5,6 +5,7 @@ require "time"
 require_relative "errors"
 require_relative "shell"
 require_relative "lemma_shelf"
+require_relative "store/indexer"
 
 module Nabu
   # P84-1 — the silver-lemma enricher runner: runs a local
@@ -115,7 +116,7 @@ module Nabu
     def census
       @progress&.stage("silver lemmas: census (#{@language})")
       total = live_passages.count
-      covered = covered_urns
+      covered = covered_passages
       shelved = shelved_urns
       uncovered = [total - covered.size - shelved.size, 0].max
       Census.new(language: @language, total: total, covered: covered.size,
@@ -127,7 +128,7 @@ module Nabu
     # shards, checkpoint at every flush. Returns a Result; raises
     # WorkerError (resumably) if the worker fails.
     def run!
-      covered_urns # warm both skip sets before the worker spawns
+      covered_passages # warm both skip sets before the worker spawns
       shelved_urns
       @counts = Hash.new(0)
       @pending = []
@@ -193,13 +194,22 @@ module Nabu
                Sequel[:documents][:withdrawn] => false)
     end
 
-    def covered_urns
-      @covered_urns ||=
-        if @fulltext.table_exists?(:passage_lemmas)
-          @fulltext[:passage_lemmas].where(language: @language).distinct.select_map(:urn).to_set
+    # The lane's lemma-covered passages (any tier), keyed the way the live
+    # lemma table names a passage (Store::Indexer.lemma_passage_key):
+    # passage ids on the narrow table, urns on a v1 one. One distinct
+    # select over the language index either way.
+    def covered_passages
+      @covered_passages ||=
+        if @fulltext.table_exists?(Store::Indexer::LEMMA_TABLE)
+          @covered_key = Store::Indexer.lemma_passage_key(@fulltext)
+          @fulltext[Store::Indexer::LEMMA_TABLE].where(language: @language).distinct.select_map(@covered_key).to_set
         else
           Set.new
         end
+    end
+
+    def covered?(row)
+      covered_passages.include?(row[@covered_key == :urn ? :urn : :passage_id])
     end
 
     def shelved_urns
@@ -258,7 +268,7 @@ module Nabu
     end
 
     def skip_cause(row)
-      return :skipped_covered if covered_urns.include?(row[:urn])
+      return :skipped_covered if covered?(row)
       return :skipped_shelved if shelved_urns.include?(row[:urn])
       return :skipped_empty if row[:text].to_s.strip.empty?
 

@@ -30,7 +30,7 @@ module Nabu
     LECTS_DB_FILENAME = "lects.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :local_dir, :sources_path, :alignments_path,
-                :display_path, :config_path, :backup_target
+                :display_path, :config_path, :backup_target, :parse_workers
 
     # Build a Config from a YAML file. Relative paths in the file resolve
     # against +root+; absolute paths are used verbatim.
@@ -51,6 +51,7 @@ module Nabu
       data = overlay_settings(data, local_dir)
       paths = data.fetch("paths", nil) || {}
       backup = data.fetch("backup", nil) || {}
+      rebuild = data.fetch("rebuild", nil) || {}
       new(
         canonical_dir: resolve(paths["canonical"], default: DEFAULT_CANONICAL_DIR, root: root),
         db_dir: resolve(paths["db"], default: DEFAULT_DB_DIR, root: root),
@@ -60,9 +61,21 @@ module Nabu
         display_path: resolve(paths["display"], default: DEFAULT_DISPLAY_PATH, root: root),
         profile_path: resolve_optional(paths["profile"], root: root),
         config_path: path,
-        backup_target: resolve_optional(backup["target"], root: root)
+        backup_target: resolve_optional(backup["target"], root: root),
+        parse_workers: parse_workers(rebuild["parse_workers"])
       )
     end
+
+    # rebuild.parse_workers: the forked parse-worker count for parallel
+    # replay — box-specific, so it belongs in the settings overlay. nil
+    # (unset) lets Rebuild take ParsePool.default_workers.
+    def self.parse_workers(value)
+      return nil if value.nil?
+      return value if value.is_a?(Integer) && value.positive?
+
+      raise Nabu::Error, "rebuild.parse_workers must be a positive integer, got #{value.inspect}"
+    end
+    private_class_method :parse_workers
 
     # Deep-merge local/config/settings.yml over the nabu.yml data (the
     # overlay wins; hashes merge recursively, scalars replace).
@@ -113,7 +126,8 @@ module Nabu
                    alignments_path: File.join(File.dirname(sources_path), "alignments.yml"),
                    display_path: File.join(File.dirname(sources_path), "display.yml"),
                    profile_path: nil,
-                   backup_target: nil)
+                   backup_target: nil,
+                   parse_workers: nil)
       @canonical_dir = canonical_dir
       @db_dir = db_dir
       # P71-0: local/ sits beside config/ at the tree root by default —
@@ -126,6 +140,7 @@ module Nabu
       @profile_path = profile_path
       @config_path = config_path
       @backup_target = backup_target
+      @parse_workers = parse_workers
       @fallback_warned = {}
     end
 

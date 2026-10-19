@@ -223,7 +223,7 @@ class TlhdigTest < Minitest::Test
     db, fulltext = indexed_store
     search = Nabu::Query::LemmaSearch.new(catalog: db, fulltext: fulltext)
     results = search.run("ḫūmant")
-    assert_equal ["#{MERGED_URN}:17", "#{MERGED_URN}:9"], results.map(&:urn),
+    assert_equal ["#{MERGED_URN}:9", "#{MERGED_URN}:17"], results.map(&:urn),
                  "both attestations (ḫumantuš ACC.PL + ḫumantaš D/L.PL, each digit-selected) " \
                  "answer the dictionary form — ḫ folds to h, the stem hyphen is off"
     assert_equal ["silver"], results.map(&:tier).uniq, "every hit is labeled"

@@ -55,10 +55,12 @@ module Nabu
           return counts if paths.empty?
 
           urn_ids = catalog[:documents].where(Sequel.like(:urn, "#{urn_prefix}%")).select_hash(:urn, :id)
-          paths.each do |path|
-            document_id = urn_ids[urn_for(path, urn_prefix)] or next
+          TimelineBuilder.writing_axes(catalog) do |axes|
+            paths.each do |path|
+              document_id = urn_ids[urn_for(path, urn_prefix)] or next
 
-            insert_row(catalog, document_id, root, path, slug, counts)
+              insert_row(axes, document_id, root, path, slug, counts)
+            end
           end
           counts
         end
@@ -68,7 +70,7 @@ module Nabu
           "#{urn_prefix}#{Adapters::ViennaWiki.title_segment(title)}"
         end
 
-        def insert_row(catalog, document_id, root, path, slug, counts)
+        def insert_row(axes, document_id, root, path, slug, counts)
           timeline = extract(root, path)
           if timeline == :invalid
             counts[:invalid] += 1
@@ -77,7 +79,7 @@ module Nabu
           counts[:undated] += 1 if timeline.nil? || timeline[:not_before].nil?
           return if timeline.nil?
 
-          TimelineBuilder.insert_timeline(catalog, document_id, timeline, slug)
+          TimelineBuilder.insert_timeline(axes, document_id, timeline, slug)
           counts[:documents] += 1
         end
 

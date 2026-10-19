@@ -9,6 +9,11 @@ module Nabu
   # surrounding sync/batch continues.
   class ParseError < Error; end
 
+  # A forked parse worker (Nabu::ParsePool) died mid-document, or its
+  # result could not cross the fork. NOT a ParseError: it says nothing
+  # about the document, so it aborts the load instead of quarantining.
+  class ParseWorkerError < Error; end
+
   # A discovered ref is NOT an ingestible document by an explicit rule, not by
   # damage (P11-7): an ORACC corpusjson skeleton with no transcribed lines (the
   # catalog-only cousin of the 0-byte case), for instance. Unlike ParseError

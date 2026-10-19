@@ -106,7 +106,7 @@ module Adapters
 
       # The lemma lane carries the augmented Strong's id verbatim (no
       # headword exists upstream to invent): Gen 1:1's first word is b/7225.
-      row = fulltext[:passage_lemmas].where(lemma_raw: "b/7225").first
+      row = LemmaUrnView.of(fulltext, catalog).where(lemma_raw: "b/7225").first
       refute_nil row, "expected a passage_lemmas row for the augmented Strong's id b/7225"
       assert_equal "urn:nabu:oshb:gen:1.1", row[:urn]
       assert_equal "hbo", row[:language]

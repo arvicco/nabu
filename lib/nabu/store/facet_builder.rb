@@ -31,25 +31,26 @@ module Nabu
 
       INSERT_SLICE = 2_000
 
+      # Documents per keyset page of the adapter-facet scan.
+      PAGE = 1_000
+
       module_function
 
       # Drop and re-project. The cheap substring probe skips the JSON parse
       # for the facet-less majority; metadata_json is our own canonical_json
       # output, so a parse failure is real corruption and honestly raises.
-      def rebuild!(catalog:, facet_map: nil)
+      # The library-wide adapter-facet lane commits per multi-row statement
+      # rather than holding millions of rows in one transaction (measured
+      # within ~15% of a single transaction, with a bounded WAL).
+      def rebuild!(catalog:, facet_map: nil, page: PAGE)
         catalog[:document_facets].delete
         seen = {}
-        rows = 0
-        catalog[:documents]
-          .where(withdrawn: false)
-          .where(Sequel.like(:metadata_json, '%"facets"%'))
-          .select_map(%i[id metadata_json]).each do |id, json|
-            facets = JSON.parse(json)["facets"]
-            next unless facets.is_a?(Hash) && !facets.empty?
-
+        rows = RowBuffer.into(catalog[:document_facets], transaction: false) do |buffer|
+          each_faceted_document(catalog[:documents].where(withdrawn: false), page) do |id, facets|
             seen[id] = true
-            rows += insert_facets(catalog, id, facets)
+            insert_facets(buffer, id, facets)
           end
+        end
         (facet_map&.sources || []).each do |slug|
           slug_rows = project_metadata_fields(catalog, slug, facet_map.fields_for(slug), seen)
           rows += slug_rows
@@ -63,25 +64,38 @@ module Nabu
       # (before this, facets refreshed only at full rebuild; EDR, IIP,
       # Elephantine and the Sefaria Rabbinic wave all served zero facet
       # rows until the next rebuild).
-      def refresh_source!(catalog:, slug:, facet_map: nil)
+      def refresh_source!(catalog:, slug:, facet_map: nil, page: PAGE)
         source_id = catalog[:sources].where(slug: slug).get(:id)
         return 0 if source_id.nil?
 
         doc_ids = catalog[:documents].where(source_id: source_id).select(:id)
         catalog[:document_facets].where(document_id: doc_ids).delete
-        rows = 0
-        catalog[:documents]
-          .where(source_id: source_id, withdrawn: false)
-          .where(Sequel.like(:metadata_json, '%"facets"%'))
-          .select_map(%i[id metadata_json]).each do |id, json|
-            facets = JSON.parse(json)["facets"]
-            next unless facets.is_a?(Hash) && !facets.empty?
-
-            rows += insert_facets(catalog, id, facets)
+        rows = RowBuffer.into(catalog[:document_facets]) do |buffer|
+          each_faceted_document(catalog[:documents].where(source_id: source_id, withdrawn: false), page) do |id, facets|
+            insert_facets(buffer, id, facets)
           end
+        end
         fields = facet_map&.fields_for(slug)
         rows += project_metadata_fields(catalog, slug, fields, {}) if fields
         rows
+      end
+
+      # Each live document carrying a non-empty "facets" hash, streamed in
+      # id order by keyset paging (never the whole facet-bearing set in
+      # memory). Id order is the order both scans always returned rows in
+      # (a rowid scan, or the source_id index — rowid-ordered within one
+      # source), so facet rows keep their ids.
+      def each_faceted_document(documents, page)
+        documents
+          .where(Sequel.like(:metadata_json, '%"facets"%'))
+          .select(:id, :metadata_json)
+          .order(:id)
+          .paged_each(rows_per_fetch: page, strategy: :filter) do |doc|
+            facets = JSON.parse(doc[:metadata_json])["facets"]
+            next unless facets.is_a?(Hash) && !facets.empty?
+
+            yield doc[:id], facets
+          end
       end
 
       # The FacetMap lane (P104-1): one source's declared metadata fields
@@ -147,18 +161,14 @@ module Nabu
       # A facet entry carries a singular "value" (EDH, EDR, Elephantine…)
       # or a plural "values" array (IIP — one row per value; P47-r3, the
       # lane-drift audit: the singular-only reader left IIP dark through a
-      # full rebuild).
-      def insert_facets(catalog, document_id, facets)
-        facets.sum do |facet, entry|
-          next 0 unless entry.is_a?(Hash)
+      # full rebuild). +rows+ is the lane's RowBuffer.
+      def insert_facets(rows, document_id, facets)
+        facets.each do |facet, entry|
+          next unless entry.is_a?(Hash)
 
           values = entry.key?("values") ? Array(entry["values"]) : [entry["value"]]
-          values.compact.count do |value|
-            catalog[:document_facets].insert(
-              document_id: document_id, facet: facet,
-              value: value, raw: entry["raw"]
-            )
-            true
+          values.compact.each do |value|
+            rows.insert(document_id: document_id, facet: facet, value: value, raw: entry["raw"])
           end
         end
       end
