@@ -13,6 +13,7 @@ require "fileutils"
 class UniversalDependenciesTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
+  include ClassTemplateFiles
 
   FIXTURES = File.expand_path("../fixtures/ud", __dir__)
 
@@ -932,12 +933,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   def test_fetch_clones_each_treebank_then_pulls_and_returns_report
     Dir.mktmpdir do |root|
-      upstreams = {}
-      Nabu::Adapters::UniversalDependencies::TREEBANKS.each_key do |slug|
-        upstream = File.join(root, "upstream-#{slug}")
-        make_git_repo(upstream, slug)
-        upstreams[slug] = upstream
-      end
+      upstreams = seed_upstreams(root)
 
       workdir = File.join(root, "work")
       adapter = ud_pointing_at(upstreams)
@@ -967,12 +963,7 @@ class UniversalDependenciesTest < Minitest::Test
   # repo_url the remote probe reads (here the local tmpdirs the test points at).
   def test_fetch_reports_per_repo_pins_keyed_by_repo_url
     Dir.mktmpdir do |root|
-      upstreams = {}
-      Nabu::Adapters::UniversalDependencies::TREEBANKS.each_key do |slug|
-        upstream = File.join(root, "upstream-#{slug}")
-        make_git_repo(upstream, slug)
-        upstreams[slug] = upstream
-      end
+      upstreams = seed_upstreams(root)
       adapter = ud_pointing_at(upstreams)
 
       report = adapter.fetch(File.join(root, "work"))
@@ -1001,13 +992,11 @@ class UniversalDependenciesTest < Minitest::Test
   def test_fetch_guards_deletions_across_all_repos_before_any_merge_and_force_attics
     Dir.mktmpdir do |root|
       slugs = Nabu::Adapters::UniversalDependencies::TREEBANKS.keys
-      upstreams = slugs.to_h do |slug|
-        upstream = File.join(root, "upstream-#{slug}")
-        make_git_repo(upstream, slug)
+      upstreams = seed_upstreams(root)
+      upstreams.each do |slug, upstream|
         File.write(File.join(upstream, "#{slug}.conllu"), conllu_stub(slug))
         git(upstream, "add", ".")
         git(upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "conllu")
-        [slug, upstream]
       end
       workdir = File.join(root, "work")
       adapter = ud_pointing_at(upstreams)
@@ -1078,6 +1067,18 @@ class UniversalDependenciesTest < Minitest::Test
     adapter = Nabu::Adapters::UniversalDependencies.new
     adapter.define_singleton_method(:repo_url) { |slug| upstreams[slug] }
     adapter
+  end
+
+  # One seeded upstream repo per treebank at <root>/upstream-<slug>, in
+  # TREEBANKS order. The ~90 git calls per set are paid once per class: the
+  # repos are built into a class template and copied per test
+  # (ClassTemplateFiles).
+  def seed_upstreams(root)
+    slugs = Nabu::Adapters::UniversalDependencies::TREEBANKS.keys
+    class_template_files(:upstreams, into: root) do |template|
+      slugs.each { |slug| make_git_repo(File.join(template, "upstream-#{slug}"), slug) }
+    end
+    slugs.to_h { |slug| [slug, File.join(root, "upstream-#{slug}")] }
   end
 
   def make_git_repo(dir, seed)

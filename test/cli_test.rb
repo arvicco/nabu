@@ -40,6 +40,8 @@ class QuickstartFailingAdapter < TestAdapter
 end
 
 class CLITest < Minitest::Test
+  include ClassTemplateFiles
+
   # Run the Thor CLI in-process (never shell out to bin/nabu). Returns the
   # captured [stdout, stderr, exit_status]. exit_status is nil when the CLI
   # returned normally without calling exit.
@@ -9673,18 +9675,26 @@ class CLITest < Minitest::Test
         sources_path: File.join(root, "sources.yml"),
         config_path: File.join(root, "config", "nabu.yml")
       )
-      FileUtils.mkdir_p(config.db_dir)
+      # The shelf load is identical for every caller: built once per class
+      # into a template db dir, copied into this test's own db dir.
+      class_template_files(:recon_shelf, into: config.db_dir) do |template_db_dir|
+        db = Nabu::Store.connect(File.join(template_db_dir, File.basename(config.catalog_path)))
+        Nabu::Store.migrate!(db)
+        Nabu::Store.setup!(db)
+        source = Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+        load_language_shelf(db)
+        db.disconnect
+      end
+      # As after the per-test build: the models stay bound to THIS test's
+      # catalog (callers create rows through them before reconnecting).
       db = Nabu::Store.connect(config.catalog_path)
-      Nabu::Store.migrate!(db)
       Nabu::Store.setup!(db)
-      source = Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: db, source: source)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
-      load_language_shelf(db)
       db.disconnect
       yield config
     end
@@ -10310,12 +10320,23 @@ class CLITest < Minitest::Test
         sources_path: sources, alignments_path: alignments,
         config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
-      FileUtils.mkdir_p(config.db_dir)
+      # Seed + full index build are identical for every caller: built once
+      # per class into a template db dir, copied into this test's own.
+      class_template_files(:cognates_corpus, into: config.db_dir) do |template_db_dir|
+        template = Nabu::Config.new(
+          canonical_dir: config.canonical_dir, db_dir: template_db_dir,
+          sources_path: sources, alignments_path: alignments, config_path: config.config_path
+        )
+        catalog = Nabu::Store.connect(template.catalog_path)
+        Nabu::Store.migrate!(catalog)
+        Nabu::Store.setup!(catalog)
+        seed_cognates_corpus(catalog)
+        index_aligned_corpus(template, catalog)
+        catalog.disconnect
+      end
+      # As after the per-test build: the models stay bound to THIS test's catalog.
       catalog = Nabu::Store.connect(config.catalog_path)
-      Nabu::Store.migrate!(catalog)
       Nabu::Store.setup!(catalog)
-      seed_cognates_corpus(catalog)
-      index_aligned_corpus(config, catalog)
       catalog.disconnect
       yield config
     end
