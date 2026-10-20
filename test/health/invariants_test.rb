@@ -444,6 +444,7 @@ class InvariantsTest < Minitest::Test
     assert_match(/glaux \(sync/, finding.message)
     refute_match(/live-now/, finding.message)
     assert_match(/1 died after its load/, finding.message)
+    assert_match(%r{bin/nabu runs close-stale}, finding.message, "the finding names its remedy")
   end
 
   def test_a_single_stale_open_row_reads_in_the_singular
@@ -455,6 +456,16 @@ class InvariantsTest < Minitest::Test
   def test_open_rows_inside_the_threshold_are_silent
     open_run("rebuilding", kind: "rebuild",
                            started_at: @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS + 60)
+
+    assert_nil global_finding(:stale_open_runs)
+  end
+
+  # `nabu runs close-stale` settles killed rows "abandoned" — closed
+  # history, so the finding stops counting them.
+  def test_abandoned_rows_are_not_stale_open_runs
+    stale_at = @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS - 60
+    @ledger[:runs].insert(source_slug: "glaux", kind: "sync", started_at: stale_at,
+                          finished_at: @now, status: "abandoned")
 
     assert_nil global_finding(:stale_open_runs)
   end
