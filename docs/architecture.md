@@ -226,7 +226,16 @@ place_crosswalk(source, gazetteer_a, id_a, gazetteer_b, id_b, ...)
    -- namespaces, as DATA with provenance — never inferred; each
    -- asserting shelf's derive owns its slice wholesale (the place_index
    -- per-gazetteer contract). Read by `--place` identity expansion and
-   -- the place card's "= tm:…" lines (§14).
+   -- the place card's "= tm:…" lines (§14). The tm→pleiades slices
+   -- `edh` + `pleiades` are DERIVED by Nabu::TmPleiadesCrosswalk from
+   -- two held files — EDH's geography sidecar (canonical/edh/geography/,
+   -- CC BY-SA 4.0: a public export of `edh` rows carries BY-SA +
+   -- attribution) and the Pleiades dump's Trismegistos backlinks — one
+   -- row per TM place: EDH's per-feature plurality, EDH winning
+   -- disagreements, the dump filling the rest, ambiguous claims
+   -- withheld (censused). Run by the edh and pleiades place-index
+   -- producers (sync + rebuild replay); each finds the other input as a
+   -- canonical/ sibling.
 document_facets(document_id, facet, value, ...)
    -- P17-2 (migration 009): categorical document facts — genre,
    -- province, material, object type — an OPEN facet vocabulary (a new
@@ -464,6 +473,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
 - Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot. The row closes at OPERATION end, never at load end: `RunRecorder.record_load` stamps the load's counts and `loaded_at` but leaves the row `running`; the terminal status and `finished_at` are written only when the sync's last post-load stage (index slice, lane refreshes) returns, or — for a rebuild — when the corpus stages after ALL replays return (every replay row closes together). A post-load exception closes the open rows `failed` ("failed after the load: …"); a killed process leaves `running` + `loaded_at` + no `finished_at`, the ledger's own signature of a run that died after its load (ledger migration 011).
 - **Every long stage says how long it expects to run (P78-r1/r2/r3).** SyncRunner times fetch and load (plus the Indexer's refresh sub-stages) into the ledger's `stage_timings` and announces `Nabu::Eta` estimates at stage start; Rebuild persists its profiler's stages at run end. `rebuild --incremental` (and its `--dry-run`) announces its pre-replay prelude too (owner UX rule 2026-10-07): a `pinning code identities (N sources)` stage, then the verdict sweep — every source's fingerprint is computed UP FRONT, before any replay — as a header carrying the sweep's estimate (`stage_timings` kind `rebuild`, scope `corpus`, stage `verdict_sweep`; recorded by real runs only, a dry run just reads it), one `verdict <slug> (i/N)` stage per fingerprinted tree (non-git trees are sha256-hashed file by file unless their identity memo is census-fresh — see the derivation-stamps bullet in §5 — and the owner sees which tree the minutes go into), and a closing `verdicts: N clean · M dirty · K skipped (elapsed) · memo: trees H hit M miss, repos H hit M miss` tally (the identity memos' counts for this sweep: plain trees, then embedded git repos). The one tree a replay can write — the local-language shelf, via dictionary language-notes accretion — re-verifies at its turn once a replay has run, so the up-front sweep yields exactly the verdicts the former interleaved loop did. An estimate renders "~6m (last run 5m48s over N rows)" — the latest recorded row governs, scaled by row-count drift when a cheap current denominator exists — and the no-history answer is the honest "first run — no estimate", never a guess.
+- **`--verbose` explains the run as it goes.** The composite commands (`rebuild` in both flavors, `sync`, `rake builders:refresh[verbose]`, `lect materialize`/`apply-rules`/`infer-dates`, `place apply`, `data build`) take `--verbose`: before any work, one sentence on what the command is about to do to the library; before each stage, one sentence on what that stage derives and which surfaces read it. The texts live in ONE registry, `Nabu::Ops::StageGuide`, matched against the labels the orchestrators already pass to `ProgressReporter#stage` (exact, or a pattern for per-source labels; a bare registered slug is the source-replay stage). They are deliberately not inlined at the call sites: Rebuild, IncrementalRebuild and the lect facet sit in the shared derivation core, where a UX string would dirty every source stamp. Drift is a red suite instead — `test/ops/stage_guide_test.rb` parses every stage call in the orchestrators and fails on a label with no entry or an entry no call site matches. The seam is `ProgressReporter#on_explain` (called just before each stage; `#explain` for a step that opens no stage, such as the sync's post-load lanes), nil on a plain run so verbosity costs nothing when off; each stage explains once per invocation. Output goes to stderr beside the stage lines, green through `Display.paint` when `Display.color?` allows — NO_COLOR or a non-tty stream drops the color, never the text — so stdout stays byte-identical to a plain run.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch — and never withdraw (P37-r2): a quarantined ref's document is still present in canonical, so its urn shields the held row (prior revision, still served) from the full-load withdrawal sweep. Recognition getting stricter can therefore never unserve held content; the row revives via the normal restore/revise path when the parse succeeds again.
 - Database errors quarantine ONLY when constraint-shaped (`Sequel::ConstraintViolation`: unique, NOT NULL, foreign key, CHECK — what a bad document can make SQLite refuse); the document (or dictionary file) rolls back alone and the batch continues. Every other database error — busy timeout, full disk, I/O error, corruption — is the environment's, not the document's, and aborts the load loudly rather than being laundered into a quarantine over a half-written catalog (the CLI turns the busy shape into its resumable "catalog busy" sentence).
 - **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); a source whose latest run succeeded yet which holds zero rows in its grain (docs/entries/language records) is the half-loaded-catalog / synced-to-nothing signature — `enabled` deliberately not consulted (P23-3); flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, timeline extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
@@ -500,11 +510,22 @@ decision: the field moves fast, we keep control; the conformant core is
   recency — what makes "no results" interpretable), then `nabu_concord`
   (P8-3), `nabu_define` (§11), `nabu_etym` and `nabu_cognates` (§12),
   `nabu_parallels` (§13), `nabu_links` (§15), `nabu_align` (§10), and the
-  place/character/sign cards `nabu_place`, `nabu_char`, `nabu_signs`.
-  Translation only: all query logic stays in `lib/nabu/query/`. The tool
-  table is a hash; a new surface is one entry + handler.
+  place/character/sign cards `nabu_place`, `nabu_char`, `nabu_signs` —
+  fourteen since P137's `nabu_clarify`, the reference normalizer
+  (`Query::Clarify`: urn input through the catalog's urn indexes, names
+  through the fulltext index's **clarify lane** — `clarify_entries` /
+  `clarify_names` (B-tree prefix lane over folded names) / `clarify_fts`
+  (FTS5 token lane) / `clarify_trigram` (+ its fts5vocab view, the
+  misspelling lane) — derived by `Indexer.rebuild!` as stage `clarify`,
+  refreshed per source by `refresh_source!` when present (never
+  bootstrapped by a sync), re-derived standalone by the stage reconcile or
+  `rake index:clarify`). Translation only: all query logic stays in
+  `lib/nabu/query/`. The tool table is a hash; a new surface is one entry +
+  handler.
 - **The contract**: every returned passage carries urn + language +
-  license_class + source; outputs are bounded with honest "N total, showing
+  license_class + source; reference data (gazetteer facts, sign cards)
+  carries its own license envelope read from the adapter manifests
+  (`MCP::Envelope`); outputs are bounded with honest "N total, showing
   k" notes; no-match searches carry a one-line coverage hint;
   `research_private`/`restricted` classes are excluded from every tool unless
   `include_restricted: true` is passed explicitly (forward-looking: nothing
@@ -1414,8 +1435,10 @@ never a journal edge: CBETA's N canon carries it per line as `cref`
 (`PTS.S.3.1`, upstream's own `<ref cRef>`), and SuttaCentral's reference
 sidecars fold into a `pts` key list in the identical spelling
 (`PTS.S.4.16`; `Adapters::PtsConcordance` — book siglum from the root
-path, the Apadāna's continuous pagination folded, two-edition books kept
-edition-explicit as `PTS-ed1.…`/`PTS-ed2.…`), with the VRI tokens beside
+path, the Apadāna's continuous pagination folded; in the two-edition
+books the first edition — the one CBETA N's anchors follow, checked
+page-for-page — takes the plain spelling and the second stays explicit
+as `PTS-ed2.…`), with the VRI tokens beside
 it as `vri`. A Pali segment and its Japanese translation meet on equal
 strings — pairing is a read-time join (the 84000 folio precedent), so
 nothing is minted into the links journal.
@@ -1548,7 +1571,13 @@ volatile — re-run every stage (seconds to ~2 min). Every 4th links stage
 nothing carries, and each would-be-carried scope's fresh edges are
 digested against its stamped ones — a difference is DRIFT (a stamp that
 lied), announced on stderr and in the rebuild summary, and logged in
-`link_stage_runs`; the fresh mine is kept either way. In the incremental
+`link_stage_runs`; the fresh mine is kept either way. On ANY stage, a
+scope re-mined because only its producer code moved (blame exactly
+producer_code, or dragged by such a component-mate with its own stamp
+unchanged) is compared the same way — the CODE-CHANGE RECHECK: equal
+digests are "reproduced" (a performance-only rewrite proves itself on its
+first live stage), a difference is "changed" — reported in the summary,
+never drift, since a code change may legitimately move output. In the incremental
 flavor the links stage now runs after the index heal/stage
 reconciliation, as in the full rebuild (parallels mines the index its
 stamp names).
@@ -1655,6 +1684,17 @@ STAY document grain — page pairing is derivation, not minting. The
 alignment-hub verdict stands: the CBETA witnesses cite Taishō
 page-register-line, a genuinely disjoint scheme, so no multi-canon
 Buddhist work earns a §10 hub entry.)
+#13 `EdhEdrSameArtifact` (kind=same-artifact): an EDH record and an EDR
+record carrying the same Trismegistos text number (`tm_nr` metadata on
+both sides — 10,238 shared numbers, 10,420 document pairs on the
+2026-10-20 catalog) are two EDITIONS of one stone; one document-grain
+edge edh → edr per pair, documents never merged. Each edge's detail
+carries the per-field preferred-witness hint ("Trismegistos N · prefer
+text=… date=… findspot=…": lower supplied share, then fuller text;
+narrower date range; a Pleiades-bearing, else longer, findspot; every
+tie → edh). Both adapters declare it under ONE fixed scope (`edh+edr`),
+so a sync of either side supersedes the same run; it reads
+document_axes, which the links stage replays after.
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the
@@ -1669,7 +1709,12 @@ so standing edges survive parse-only syncs.
 source's passage text, emitting kind=place-candidate edges — REVIEW FUEL,
 never place_ref (precision rules censused: length floor, ambiguity cap, a
 derived frequency stop plus the hand stop list in
-config/place_stop_names.yml). Its review surfaces are `place mine report`
+config/place_stop_names.yml). One scan per run: an Aho-Corasick walk
+(`Nabu::NameMatcher`) over rowid windows of the source's passages tallies
+the census and retains each passage's hits as compact integer arrays; the
+write then bulk-inserts the surviving names' edges from those hits
+(`LinksJournal.write_edges!`, write_edge!'s exact semantics), so output is
+identical to the original census-then-rescan miner. Its review surfaces are `place mine report`
 (per-place, document-spread ranked) and `place mine report --board`
 (per-NAME, the verdict grain: candidates with their index discriminators,
 attestations in context, decided names censused off). `nabu place link

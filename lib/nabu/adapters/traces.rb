@@ -33,8 +33,8 @@ module Nabu
     # The repo itself carries NO license file or in-file grant. The same
     # export is deposited in the official Hamburg research-data archive —
     # fdr.uni-hamburg.de record 707, DOI 10.25592/uhhfdm.707 — under
-    # CC BY-NC-ND 4.0, and those terms govern here → class `nc` (MCP
-    # default-excluded, never redistributed).
+    # CC BY-NC-ND 4.0, and those terms govern here → class `nc`
+    # (never redistributed).
     #
     # == fetch / sync policy
     #

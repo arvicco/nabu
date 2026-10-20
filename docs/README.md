@@ -50,7 +50,7 @@ summaries of several pages below.
 | [architecture.md](architecture.md) | The system design: adapters, the catalog schema, normalization, loading, sync, rebuild, the stores, shelves, and the nabu-data rail. |
 | [conventions.md](conventions.md) | Field notes and data conventions: Unicode/NFC, citations, editions and witnesses, language codes, epigraphic brackets, licensing, search folding, CLI output, dates, uncertainty. |
 | [ops.md](ops.md) | The operations runbook: the scheduled cadence (launchd), health and red-job triage, backup and the restore drill, the release rail, ingest, notes, source dossiers, display modes. |
-| [mcp.md](mcp.md) | The read-only MCP server: registration per client, the thirteen tools, the restricted-source stance. |
+| [mcp.md](mcp.md) | The read-only MCP server: registration per client, the fourteen tools, the restricted-source stance. |
 | [embed.md](embed.md) | Semantic search (`nabu embed`, `search --similar`): what it builds, what it costs, its measured limits. |
 | [lemma-enrichment.md](lemma-enrichment.md) | The silver-lemma lane (`nabu lemma-enrich`): gold vs silver, the campaign, its measured accuracy. |
 | [nabu-data.md](nabu-data.md) | The producer contract for the derived-dataset sister repository (CLDF + Frictionless, DOI'd releases). |

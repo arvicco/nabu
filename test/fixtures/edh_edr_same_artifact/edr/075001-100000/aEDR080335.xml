@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="la" xml:base="ex-epidoctemplate.xml">
+		<teiHeader>
+			<fileDesc>
+				<titleStmt>
+				<title>Inscription from Tarracina</title>
+				</titleStmt>  
+				<publicationStmt>
+				<authority>Epigraphic Database Roma</authority>
+				<idno type="URI">http://www.edr-edr.it/edr_programmi/res_complex_comune.php?id_nr=EDR080335</idno>
+				<idno type="TM">251503</idno>
+				<idno type="localID">EDR080335</idno>	
+				<availability>
+					<licence target=" http://www.europeana.eu/rights/rr-f/">Reserved Rights - Free access via Epigraphic Database Roma</licence>
+				</availability>
+				</publicationStmt>
+				<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						
+						
+						
+						<repository>Terracina (Latina), Museo civico </repository>
+						<collection/>
+						<idno/>
+					</msIdentifier>
+					<physDesc>
+						<objectDesc>
+						<supportDesc>
+							<support>
+								<objectType ref="http://www.eagle-network.eu/voc/objtyp/lod/257">tabula</objectType>
+								<material ref="http://www.eagle-network.eu/voc/material/lod/48">marmor</material>
+								<p/>
+								<dimensions unit="cm">
+								<height>52.00</height>
+								<width>33.50</width>
+								<depth/>
+								</dimensions>
+								<rs type="decoration" ref="http://www.eagle-network.eu/voc/decor/lod/1000" xml:lang="en">no decoration</rs>
+								<rs type="statPreserv" ref="http://www.eagle-network.eu/voc/statepreserv/lod/15">tit. fragmentum</rs>
+							</support>
+						</supportDesc>
+						<layoutDesc>
+							<layout>
+								<rs type="execution" ref="http://www.eagle-network.eu/voc/writing/lod/1">scalpro</rs>
+							</layout>
+						</layoutDesc>
+						</objectDesc>
+						<handDesc>
+						<handNote>
+							<width unit="cm"/>
+							<height unit="cm">4,5-7</height>
+						</handNote>
+						</handDesc>
+					</physDesc>
+					
+					<history>
+						<origin>
+
+						<origPlace><placeName type="provinceItalicRegion">Latium et Campania cum insulis (Regio I)</placeName><placeName>Tarracina</placeName></origPlace>
+						<origDate notBefore-custom="1" notAfter-custom="50" datingMethod="http://en.wikipedia.org/wiki/Julian_calendar">1 AD - 50 AD</origDate>
+							
+						
+						</origin>
+						<provenance type="found"> 
+						<placeName>Terracina (Latina)</placeName>                     
+						<placeName type="locus">Terracina (Latina), ignoratur</placeName>
+						<placeName type="modern_region"/><placeName type="modernCountry">Italia</placeName></provenance>
+					</history>
+				</msDesc>
+				</sourceDesc>
+			</fileDesc>
+				
+			<encodingDesc>
+				<p>Marked-up according to the EpiDoc Guidelines</p>
+				<classDecl>
+				<taxonomy>
+					<category xml:id="representation">
+						<catDesc>Digitized other representations</catDesc>
+					</category>
+				</taxonomy>
+				</classDecl>
+			</encodingDesc>
+			<profileDesc>
+				<textClass>
+		<keywords>
+		<term ref="http://www.eagle-network.eu/voc/typeins/lod/92">sepulcralis</term>
+		</keywords>
+		</textClass>
+
+				<langUsage>
+				<language ident="ar">Arabic</language>
+				<language ident="en">English</language>
+				<language ident="fr">French</language>
+				<language ident="de">German</language>
+				<language ident="grc">Ancient Greek</language>
+				<language ident="grc-Latn">Transliterated Greek</language>
+				<language ident="el">Modern Greek</language>
+				<language ident="he">Hebrew</language>
+				<language ident="it">Italian</language>
+				<language ident="la">Latin</language>
+				<language ident="sp">Spanish</language>
+				</langUsage>
+			<creation>EAGLE - Europeana Network of Ancient Greek and Latin Epigraphy</creation></profileDesc>
+			<revisionDesc>
+			<change when="2013-10-07" who="GIOVANNI DI BRINO">
+			</change>
+
+			</revisionDesc>
+		</teiHeader>
+		
+			<facsimile>
+			
+					<graphic url="http://www.edr-edr.it/foto_epigrafi/immagini_uso/80/080335.jpg">
+					<desc>Lastra funeraria 
+					<ref type="licence" target="http://www.europeana.eu/rights/rr-f/">Rights Reserved - Free Access via Epigraphic Database Roma</ref>	
+					</desc>
+					</graphic>
+				
+			</facsimile>
+			
+		<text>
+			<body>
+					
+				<div type="bibliography">
+				<listBibl>
+		
+					<bibl>
+						CIL 10, 08265 (1)
+					</bibl> 
+			
+					<bibl>
+						G. Lugli, Comune di Terracina. Guida del Museo Civico, Roma 1940, p. 14 n. 7 (2)
+					</bibl> 
+			
+					<bibl>
+						U. Broccoli, Terracina. Museo e Raccolte civiche, Roma 1982, pp. 50-51, n. 57, con foto - AE 1987 (3)
+					</bibl> 
+			
+					<bibl>
+						Arctos, 19, 1985, p. 197, nr. 57 (H. Solin) - AE 1987 (4)
+					</bibl> 
+			
+					<bibl>
+						AE 1987, 0238d (5)
+					</bibl> 
+			
+					<bibl>
+						M. R. Coppola, Terracina, il museo e le collezioni, Roma 1989, pp. 52-53 n. 29 con foto (6)
+					</bibl> 
+			
+					<bibl>
+						HD008415 (H. Niquet) (7)
+					</bibl> 
+			
+				</listBibl>
+				</div>
+				
+				
+				<!--
+				[ - - - ]nnidius / [ - - - A]rtemo / [ - - -n]nidius / [ - - - ]o / [ - - - ]ius Eros. 
+				--><div type="edition" xml:lang="la"><head>Text</head><ab><lb n="1"/>
+				<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"> - - - </supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"/>nnidius<lb n="2"/><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"> - - - </supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"/>rtemo<lb n="3"/><supplied reason="lost"> - - -n</supplied>nidius<lb n="4"/><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"> - - - </supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"/>o<lb n="5"/><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"> - - - </supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"/>ius Eros. 
+				</ab></div>
+
+				<div type="apparatus">
+		
+					<p>
+						Textus secundum (1)
+					</p> 
+			
+				</div>
+			
+				<div type="commentary">
+				<p/>
+				</div>
+
+			</body>
+		</text>
+		</TEI>

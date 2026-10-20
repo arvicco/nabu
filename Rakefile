@@ -252,6 +252,32 @@ namespace :stamps do
   end
 end
 
+# The clarify lane (nabu_clarify's title index) re-derived standalone over
+# the live catalog — a STAGE re-derive (the reconcile_stages! path the
+# incremental rebuild takes), never a full reindex: it reads only names
+# (document titles, sources, headwords, places) and writes only the
+# fulltext clarify_* tables, then advances the "clarify" stage stamp.
+# Catalog-only reads; minutes on the full library.
+namespace :index do
+  desc "Re-derive the nabu_clarify title index (fulltext clarify lane) over the live catalog"
+  task :clarify do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    summary = Nabu::Store::Indexer.rebuild_clarify!(catalog: catalog, fulltext: fulltext, stamp: true)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "index:clarify done — #{summary.fetch(:entries)} entries in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+end
+
 # The short handle (owner request 2026-07-22). Same task, same attestation
 # guard — the friction lives in the ARGUMENT (a claim you must be able to
 # make truthfully), not the task name.
@@ -432,7 +458,7 @@ task default: :test
 # prose-chasing. The drift guard (test/site/site_data_test.rb) fails the
 # suite when the committed desks.yml goes stale against the registry.
 namespace :site do
-  desc "Regenerate site/_data (desks + census) from the registries and the live catalog"
+  desc "Regenerate site/_data (desks + census) and site/llms.txt from the registries and the live catalog"
   task :data do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
@@ -448,11 +474,53 @@ namespace :site do
       data_dir: File.expand_path("site/_data", __dir__),
       catalog_path: catalog_path, fulltext_path: fulltext_path
     ).generate!
+    # llms.txt renders from the SSOT files just written — never typed.
+    written << Nabu::Ops::LlmsTxt.write!(site_dir: File.expand_path("site", __dir__))
     puts "site:data wrote #{written.join(', ')}"
   end
 
   desc "The one gate refresh: site:data + site:axes"
   task refresh: %i[data axes]
+end
+
+# The MCP skill pack (docs/mcp.md §8): skills/nabu-<desk>/SKILL.md per
+# research desk. scaffold creates a missing desk's skeleton (seed prose
+# from this box's source dossiers + the live-verified examples curated in
+# site/axis/_mcp.yml) and re-projects every skill's managed
+# sources lanes from the registry — prose is never rewritten. check is the
+# read-only drift report (the suite's test/skills guard enforces the same).
+namespace :skills do
+  skill_pack = lambda do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    shelf = Nabu::SourceShelf.new(dir: Nabu::SourceShelf.dir(config))
+    dossier = lambda do |slug|
+      shelf.load(slug)&.description
+    rescue Nabu::SourceDossier::FormatError
+      nil
+    end
+    examples_path = File.expand_path("site/axis/_mcp.yml", __dir__)
+    examples = (YAML.safe_load_file(examples_path) || {}).transform_values { |axis| axis["mcp"] }
+    Nabu::Ops::SkillPack.new(registry: Nabu::SourceRegistry.load(config.sources_path),
+                             skills_dir: File.expand_path("skills", __dir__),
+                             dossier: dossier, examples: examples)
+  end
+
+  desc "Scaffold missing desk skills + refresh every skill's managed sources block from the registry"
+  task :scaffold do
+    skill_pack.call.sync!.each do |result|
+      puts "#{result.action.to_s.ljust(9)} #{result.path}" unless result.action == :unchanged
+    end
+  end
+
+  desc "Drift check: desk skills whose managed sources lanes disagree with the registry (stale = exit 1)"
+  task :check do
+    stale = skill_pack.call.stale
+    abort "skills:check: stale — run `rake skills:scaffold`:\n  #{stale.join("\n  ")}" unless stale.empty?
+    puts "skills:check: every desk skill matches the registry"
+  end
 end
 
 # External-tool bootstraps (owner rule 2026-09-03): every tool an
@@ -503,16 +571,22 @@ end
 # rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
 # changes refresh projections through this task, never via a rebuild).
 namespace :builders do
+  # Verbose (Ops::StageGuide — the intro + one green line per stage):
+  # `rake builders:refresh[verbose]` or `rake --verbose builders:refresh`.
   desc "Re-project timeline + places + facets + kind axis + lect facets + " \
-       "dictionary stats + derge titles + lemma rollups over the live catalog"
-  task :refresh do
+       "dictionary stats + derge titles + lemma rollups over the live catalog ([verbose] explains each stage)"
+  task :refresh, [:verbose] do |_task, args|
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
     config = Nabu::Config.load
     catalog = Sequel.connect("sqlite://#{File.join(config.db_dir, 'catalog.sqlite3')}")
+    verbose = args[:verbose] == "verbose" || Rake::FileUtilsExt.verbose_flag == true
+    narrator = verbose ? Nabu::Ops::StageGuide::Narrator.new(io: $stdout) : nil
+    narrator&.intro(:builders_refresh)
     progress = Nabu::ProgressReporter.new(
       on_stage: ->(name, _eta = nil) { puts "  stage: #{name}" },
-      on_load_tick: ->(count, _errored) { puts "  … #{count}" if (count % 100_000).zero? }
+      on_load_tick: ->(count, _errored) { puts "  … #{count}" if (count % 100_000).zero? },
+      on_explain: narrator
     )
     summary = Nabu::Ops::BuilderRefresh.run(catalog: catalog, config: config,
                                             progress: progress)

@@ -83,6 +83,51 @@ class RebuildLinkStampsTest < Minitest::Test
     end
   end
 
+  # The code-change recheck: a scope re-mined ONLY because its producer
+  # code moved has its old edges digested before they are dropped and
+  # compared with the fresh mine — a pure-performance rewrite proves
+  # itself on the first live stage after it lands ("reproduced"); a
+  # behaviour change is reported as "changed" (informational, never
+  # drift: a code change may legitimately move output).
+  def test_a_code_only_re_mine_that_reproduces_its_edges_is_reported_reproduced
+    rebuilder.run
+    with_changed_code("batch_formulas.rb") do
+      result = rebuilder.run
+      assert_equal ["formulas corpus"], result.links.reproduced
+      assert_empty result.links.changed
+      assert_empty result.links.drift
+      assert_match(/code-change re-mine.*reproduced 1 exactly/, result.links.summary)
+    end
+  end
+
+  def test_a_code_only_re_mine_with_different_output_is_reported_changed_not_drift
+    rebuilder.run
+    original = Nabu::Store::LinksJournal.method(:write_edge!)
+    altered = ->(db, **kw) { original.call(db, **kw, detail: "#{kw[:detail]}+") }
+    with_changed_code("batch_formulas.rb") do
+      replacing(Nabu::Store::LinksJournal, :write_edge!, altered) do
+        result = rebuilder.run
+        assert_empty result.links.reproduced
+        assert_equal 1, result.links.changed.size
+        assert_match(/\Aformulas corpus: 2 edges before the code change, 2 after — content differs/,
+                     result.links.changed.first)
+        assert_empty result.links.drift, "a code change may move output: reported, never drift"
+        assert_match(/changed 1/, result.links.summary)
+      end
+    end
+  end
+
+  def test_a_re_mine_with_moved_inputs_beyond_code_is_not_rechecked
+    rebuilder.run
+    write_canonical("corpus", "one.txt" => "#{ILIAD}sing goddess once more\n")
+    with_changed_code("batch_formulas.rb") do
+      result = rebuilder.run
+      assert_equal ["formulas corpus"], result.links.mined
+      assert_empty result.links.reproduced, "members moved too: a difference would prove nothing"
+      assert_empty result.links.changed
+    end
+  end
+
   def test_a_content_neutral_rebuild_of_an_unrelated_source_still_carries
     rebuilder.run
     write_canonical("other", "two.txt" => "Odyssey\ntell me muse of the man\n")
@@ -192,6 +237,12 @@ class RebuildLinkStampsTest < Minitest::Test
 
   def journal_edges
     with_journal { |journal| journal[:links].order(:from_urn, :to_urn).select_map(%i[from_urn to_urn detail]) }
+  end
+
+  def with_changed_code(rel, &)
+    target = File.join(Nabu::LinkStamps::LIB_DIR, rel)
+    original = Nabu::LinkStamps.method(:code_file_digest)
+    replacing(Nabu::LinkStamps, :code_file_digest, ->(path) { path == target ? "changed" : original.call(path) }, &)
   end
 
   def replacing(owner, name, body)

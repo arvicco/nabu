@@ -51,7 +51,8 @@ module Nabu
     # SOLE declared grant (verified 2026-08-13: the GitHub repo has no
     # LICENSE file; the reply's "an MIT and a CC BY-NC-SA 4.0 license"
     # stays uncorroborated — clarification asked, nc governs, owner
-    # ruling "keep nc for now"). Class nc → MCP-excluded, never served.
+    # ruling "keep nc for now"). Class nc → served locally with its
+    # license label, never redistributed.
     # CAVEAT recorded (P77-2): verticalized/ lives ONLY in the GitHub
     # repo — the Zenodo deposit holds transcriptions + tables — so the
     # lemma lane's grant basis is the maintainers' reply's own words ("They

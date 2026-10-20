@@ -137,6 +137,9 @@ sources:
       recension: recension    # projected so the ruled recension facet rule can read it
       author: author          # 26 docs, 11 authors (Паисий Хилендарски …) — the wiki header's
       #                         author slot verbatim, as for the sibling Slavic wikis below
+  scat:                       # census 2026-10-20: 24 texts, the release catalog's century on
+    fields: #                   all (16 ×8 · 17 ×6 · 18 ×10) — projected so the ruled
+      century: century        # scat-century lect rule can read it
   dcs:                        # census 2026-10-12: the corpus's five composition time
     fields: #                   slots (1 early/Vedic … 5 late; 1 ×6,962 · 2 ×2,940 ·
       dcs_time_slot: time_slot  # 3 ×2,315 · 4 ×2,014 · 5 ×1,493) — the upstream claim,

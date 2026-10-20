@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Житие Димитрия Прилуцкого</title>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <pb n="201"/>
+        <lb n="1"/>
+        <head n="1">
+          <w xml:id="DmPrlc.1" pos="сущ" msd="jo;род;ед;м" norm="МЕСЯЦА" lemma="месяць">м҇ⷭца</w>
+          <w xml:id="DmPrlc.2" pos="сущ" msd="jo;род;ед;м" norm="ФЕВРАЛЯ" lemma="февраль">ѳевралѧ</w>
+          <num value="11">
+            <c xml:id="DmPrlc.3">.</c>
+            <w xml:id="DmPrlc.4" norm="11" lemma="11">аї҃</w>
+            <c xml:id="DmPrlc.5">.</c>
+          </num>
+          <w xml:id="DmPrlc.6" pos="сущ" msd="jo;им;ед;ср" norm="ЖИТИЕ" lemma="житие">житїе</w>
+          <w xml:id="DmPrlc.7" pos="прил" msd="тв;род;ед;м" norm="ПРЕПОДОБНАГО" lemma="преподобныи">
+            прпѡⷣⷪ
+            <lb n="2"/>
+            бнаго
+          </w>
+          <w xml:id="DmPrlc.8" pos="сущ" msd="jo;род;ед;м" norm="ОТЦА" lemma="отець">ѿца</w>
+          <w xml:id="DmPrlc.9" pos="мест" msd="м;род;ед;м" norm="НАШЕГО" lemma="нашь">нш҃его</w>
+          <name>
+            <w xml:id="DmPrlc.10" pos="сущ" msd="jo;род;ед;м" norm="ДИМИТРИЯ" lemma="димитрии">дїмитрїа</w>
+          </name>
+          <pc xml:id="DmPrlc.11">,</pc>
+          <w xml:id="DmPrlc.12" pos="сущ" msd="o;род;ед;м" norm="ИГУМЕНА" lemma="игуменъ">
+            игѹ
+            <lb n="3"/>
+            мена
+          </w>
+          <name>
+            <w xml:id="DmPrlc.13" pos="прил" msd="тв;род;ед;м" norm="ПРИЛУЦКАГО" lemma="прилуцкии">прилѹцкаго</w>
+          </name>
+          <pc xml:id="DmPrlc.14">.</pc>
+          <name>
+            <w xml:id="DmPrlc.15" pos="прил" msd="тв;род;ед;м" norm="ВОЛОГОЦКАГО" lemma="вологоцкии">вологоцкагѡ</w>
+          </name>
+          <lb n="4"/>
+          <w xml:id="DmPrlc.16" pos="сущ" msd="jo;род;ед;м" norm="ЧЮДОТВОРЦА" lemma="чюдотворець">чюдотворца</w>
+          <pc xml:id="DmPrlc.17">.</pc>
+          <w xml:id="DmPrlc.18" pos="сущ" msd="jo;им;ед;ср" norm="ТВОРЕНИЕ" lemma="творение">творенїе</w>
+          <w xml:id="DmPrlc.19" pos="мест" msd="тв;род;ед;ж" norm="ТОЯ" lemma="тои">тоа</w>
+          <w xml:id="DmPrlc.20" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.21" pos="сущ" msd="i;род;ед;ж" norm="ОБИТЕЛИ" lemma="обитель">
+            ѡ
+            <lb n="5"/>
+            бители
+          </w>
+          <pc xml:id="DmPrlc.22">,</pc>
+          <w xml:id="DmPrlc.23" pos="сущ" msd="o;род;ед;м" norm="ИГУМЕНА" lemma="игуменъ">игѹмена</w>
+          <name>
+            <w xml:id="DmPrlc.24" pos="сущ" msd="jo;род;ед;м" norm="МАКАРИЯ" lemma="макарии">макарїа</w>
+          </name>
+          <pc xml:id="DmPrlc.25">.</pc>
+          <w xml:id="DmPrlc.26" pos="гл" msd="повел;ед;2;4" norm="БЛАГОСЛОВИ" lemma="благословити">бл҇ⷭви</w>
+          <w xml:id="DmPrlc.27" pos="сущ" msd="o;зв;ед;м" norm="ОТЧЕ" lemma="отець">ѡ҇ⷱ</w>
+          <pc xml:id="DmPrlc.28">;</pc>
+          <lb n="6"/>
+        </head>
+        <div1 type="Introductio" n="1">
+          <w xml:id="DmPrlc.29" pos="прил" msd="тв;вин;ед;ср" norm="СВЯТОЕ" lemma="святыи">ст҃ое</w>
+          <w xml:id="DmPrlc.30" pos="сущ" msd="jo;вин;ед;ср" norm="ЖИТИЕ" lemma="житие">житїе</w>
+          <w xml:id="DmPrlc.31" pos="прич" msd="м;прош;род;мн;м" norm="ПОЖИВШИХЪ" lemma="пожити">пожившиⷯ</w>
+          <pc xml:id="DmPrlc.32">,</pc>
+          <w xml:id="DmPrlc.33" pos="прил" msd="тв;род;мн;м" norm="СВЯТЫХЪ" lemma="святыи">ст҃ыⷯ</w>
+          <w xml:id="DmPrlc.34" pos="прил" msd="тв;род;мн;м" norm="ПРЕПОДОБНЫХЪ" lemma="преподобныи">
+            препо
+            <lb n="7"/>
+            добныⷯ
+          </w>
+          <w xml:id="DmPrlc.35" pos="сущ" msd="i;род;мн;м" norm="МУЖЕИ" lemma="мужь">мѹжеи</w>
+          <w xml:id="DmPrlc.36" pos="прил" msd="тв;род;мн;м" norm="ВЕЛИКИХЪ" lemma="великии">великыⷯ</w>
+          <pc xml:id="DmPrlc.37">.</pc>
+          <w xml:id="DmPrlc.38" pos="мест" msd="м;им;мн;м" norm="ИЖЕ" lemma="иже">иже</w>
+          <w xml:id="DmPrlc.39" pos="пред" norm="ВЪ" lemma="въ">в</w>
+          <w xml:id="DmPrlc.40" pos="прил" msd="тв;мест;мн;м" norm="ПОСТНЫХЪ" lemma="постныи">
+            по
+            <lb n="8"/>
+            стныⷯ
+          </w>
+          <w xml:id="DmPrlc.41" pos="сущ" msd="o;мест;мн;м" norm="ПОДВИЗ+ХЪ" lemma="подвигъ">подвизѣⷯ</w>
+          <w xml:id="DmPrlc.42" pos="прич" msd="м;прош;род;мн;м" norm="ПРОСИЯВШИХЪ" lemma="просияти">просїавшиⷯ</w>
+          <pc xml:id="DmPrlc.43">,</pc>
+          <w xml:id="DmPrlc.44" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.45" pos="пред" norm="ВЪ" lemma="въ">в</w>
+          <w xml:id="DmPrlc.46" pos="прил" msd="тв;мест;мн;ж" norm="НЕПРЕСТАННЫХЪ" lemma="непрестанныи">
+            не
+            <lb n="9"/>
+            престанныⷯ
+          </w>
+          <w xml:id="DmPrlc.47" pos="сущ" msd="a;мест;мн;ж" norm="МОЛИТВАХЪ" lemma="молитва">мл҃тваⷯ</w>
+          <w xml:id="DmPrlc.48" pos="пред" norm="КЪ" lemma="къ">къ</w>
+          <w xml:id="DmPrlc.49" pos="сущ" msd="o;дат;ед;м" norm="БОГУ" lemma="богъ">бѹ҃</w>
+          <pc xml:id="DmPrlc.50">.</pc>
+          <w xml:id="DmPrlc.51" pos="прил" msd="a;вин;ед;ж" norm="ВЕЛИКУ" lemma="великии">великꙋ</w>
+          <lb n="10"/>
+          <w xml:id="DmPrlc.52" pos="сущ" msd="a;вин;ед;ж" norm="ПОБ+ДУ" lemma="побѣда">побѣдѹ</w>
+          <w xml:id="DmPrlc.53" pos="пред" norm="НА" lemma="на">на</w>
+          <w xml:id="DmPrlc.54" pos="сущ" msd="o;вин;мн;м" norm="ВРАГИ" lemma="врагъ">врагы</w>
+          <w xml:id="DmPrlc.55" pos="прич" msd="en;прош;им;мн;м" norm="ПОКАЗАВШЕ" lemma="показати">показавше</w>
+          <pc xml:id="DmPrlc.56">.</pc>
+          <w xml:id="DmPrlc.57" pos="прил" msd="тв;вин;мн;ср" norm="КРАСНАЯ" lemma="красныи">
+            кра
+            <lb n="11"/>
+            снаа
+          </w>
+          <w xml:id="DmPrlc.58" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.59" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.60" pos="прил" msd="тв;вин;мн;ср" norm="СУЕТНАЯ" lemma="суетныи">сѹетнаа</w>
+          <w xml:id="DmPrlc.61" pos="сущ" msd="o;род;ед;м" norm="МИРА" lemma="миръ">мира</w>
+          <w xml:id="DmPrlc.62" pos="мест" msd="м;род;ед;м" norm="СЕГО" lemma="сеи">сего</w>
+          <w xml:id="DmPrlc.63" pos="прич" msd="м;прош;род;мн;м" norm="ОТВЕРГШИХЪ" lemma="отвергнути">
+            ѿвергь
+            <lb n="12"/>
+            шиⷯ
+          </w>
+          <pc xml:id="DmPrlc.64">.</pc>
+          <w xml:id="DmPrlc.65" pos="прич" msd="м;наст;род;ед;ж" norm="БУДУЩАЯ" lemma="буднути">бѹдѹщаа</w>
+          <w xml:id="DmPrlc.66" pos="посл" norm="РАДИ" lemma="ради">ради</w>
+          <w xml:id="DmPrlc.67" pos="сущ" msd="i;род;ед;ж" norm="ЖИЗНИ" lemma="жизнь">жизни</w>
+          <pc xml:id="DmPrlc.68">.</pc>
+          <w xml:id="DmPrlc.69" pos="мест" msd="м;вин;мн;ср" norm="ЯЖЕ" lemma="иже">ꙗже</w>
+          <lb n="13"/>
+          <w xml:id="DmPrlc.70" pos="сущ" msd="o;им;ед;м" norm="БОГЪ" lemma="богъ">бъ҃</w>
+          <w xml:id="DmPrlc.71" pos="гл" msd="изъяв;аор гл;ед;3;" norm="УГОТОВА" lemma="уготовати">ѹготова</w>
+          <w xml:id="DmPrlc.72" pos="прич" msd="м;наст;дат;мн;м" norm="ЛЮБЯЩИМЪ" lemma="любити">любѧщимъ</w>
+          <w xml:id="DmPrlc.73" pos="мест" msd="м;род;ед;м" norm="ЕГО" lemma="и">его</w>
+          <pc xml:id="DmPrlc.74">.</pc>
+          <w xml:id="DmPrlc.75" pos="союз" norm="АЩЕ" lemma="аще">аще</w>
+          <lb n="14"/>
+          <w xml:id="DmPrlc.76" pos="союз" norm="БО" lemma="бо">бо</w>
+          <w xml:id="DmPrlc.77" pos="прил" msd="тв;им;мн;м" norm="ЕЛЛИНСТИИ" lemma="еллинскии">еллинстїи</w>
+          <w xml:id="DmPrlc.78" pos="сущ" msd="jo;им;мн;м" norm="БАСНОТВОРЦЫ" lemma="баснотворець">баснотворци</w>
+          <pc xml:id="DmPrlc.79">.</pc>
+          <w xml:id="DmPrlc.80" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.81" pos="мест" msd="м;им;мн;м" norm="ИЖЕ" lemma="иже">иже</w>
+          <lb n="15"/>
+          <w xml:id="DmPrlc.82" pos="пред" norm="СЪ" lemma="съ">с</w>
+          <w xml:id="DmPrlc.83" pos="мест" msd="м;тв;мн;м" norm="НИМИ" lemma="и">ними</w>
+          <w xml:id="DmPrlc.84" pos="прил" msd="тв;им;мн;м" norm="НЕЧЕСТИВИИ" lemma="нечестивыи">нечестивїи</w>
+          <w xml:id="DmPrlc.85" pos="сущ" msd="o;им;мн;м" norm="ЯЗЫЦЫ" lemma="языкъ">ѧзыци</w>
+          <pc xml:id="DmPrlc.86">.</pc>
+          <w xml:id="DmPrlc.87" pos="част" norm="НЕ" lemma="не">не</w>
+          <w xml:id="DmPrlc.88" pos="прич" msd="jo;наст;им;мн;м" norm="ЗНАЮЩИ" lemma="знати">
+            зна
+            <lb n="16"/>
+            ющи
+          </w>
+          <w xml:id="DmPrlc.89" pos="сущ" msd="o;род;ед;м" norm="БОГА" lemma="богъ">ба҃</w>
+          <w xml:id="DmPrlc.90" pos="сущ" msd="jo;род;ед;м" norm="ТВОРЦА" lemma="творець">творца</w>
+          <w xml:id="DmPrlc.91" pos="прил" msd="тв;дат;мн;ср" norm="ВСЯЧЕСКИМЪ" lemma="всяческии">всѧческимъ</w>
+          <pc xml:id="DmPrlc.92">.</pc>
+          <w xml:id="DmPrlc.93" pos="сущ" msd="o;вин;мн;м" norm="ПРАЗДНИКИ" lemma="праздникъ">
+            пра
+            <lb n="17"/>
+            зⷣники
+          </w>
+          <w xml:id="DmPrlc.94" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.95" pos="сущ" msd="jo;вин;ед;ср" norm="ПОКЛОНЕНИЕ" lemma="поклонение">поклоненїе</w>
+          <w xml:id="DmPrlc.96" pos="сущ" msd="o;дат;мн;м" norm="ИДОЛОМЪ" lemma="идолъ">идоломъ</w>
+          <w xml:id="DmPrlc.97" pos="прич" msd="en;наст;им;мн;м" norm="ПРИНОСЯЩЕ" lemma="приносити">
+            прино
+            <lb n="18"/>
+            сѧще
+          </w>
+          <pc xml:id="DmPrlc.98">.</pc>
+          <w xml:id="DmPrlc.99" pos="мест" msd="тв;вин;ед;ср" norm="ЕЛИКО" lemma="елико">елико</w>
+          <w xml:id="DmPrlc.100" pos="мест" msd="тв;им;ед;м" norm="КОЖДО" lemma="кождо">кожⷣо</w>
+          <w xml:id="DmPrlc.101" pos="мест" msd="м;род;мн;м" norm="ИХЪ" lemma="и">ихъ</w>
+          <w xml:id="DmPrlc.102" pos="гл" msd="изъяв;имп;мн;3;" norm="МОЖАХУ" lemma="мощи">можаахѹ</w>
+          <lb n="19"/>
+          <w xml:id="DmPrlc.103" pos="прич/в" msd="en;наст;им;мн;м" norm="ТЩАЩЕСЯ" lemma="титися">тщащесѧ</w>
+          <pc xml:id="DmPrlc.104">,</pc>
+          <w xml:id="DmPrlc.105" pos="пред" norm="ОТ" lemma="отъ">ѿ</w>
+          <w xml:id="DmPrlc.106" pos="сущ" msd="jo;род;мн;ср" norm="ИМ+НИИ" lemma="имѣние">имѣнїи</w>
+          <w xml:id="DmPrlc.107" pos="мест" msd="м;род;мн;ср" norm="СВОИХЪ" lemma="свои">своиⷯ</w>
+          <pc xml:id="DmPrlc.108">.</pc>
+          <w xml:id="DmPrlc.109" pos="мест" msd="тв;дат;мн;м" norm="Т+МЪ" lemma="тои">тѣⷨ</w>
+          <lb n="20"/>
+          <w xml:id="DmPrlc.110" pos="пред" norm="БЕЗЪ" lemma="безъ">без</w>
+          <w xml:id="DmPrlc.111" pos="сущ" msd="o;род;ед;м" norm="УМА" lemma="умъ">ѹма</w>
+          <w xml:id="DmPrlc.112" pos="гл" msd="изъяв;имп;мн;3;" norm="ПРЕДЛАГАХУ" lemma="предлагати">преⷣлагахѹ</w>
+          <pc xml:id="DmPrlc.113">.</pc>
+          <w xml:id="DmPrlc.114" pos="нар" norm="КОЛМИ" lemma="колми">колми</w>
+          <w xml:id="DmPrlc.115" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.116" pos="мест" msd="1;дат;мн" norm="НАМЪ" lemma="мы">наⷨ</w>
+          <pc xml:id="DmPrlc.117">.</pc>
+          <lb n="21"/>
+          <w xml:id="DmPrlc.118" pos="мест" msd="м;им;мн;м" norm="ИЖЕ" lemma="иже">иже</w>
+          <w xml:id="DmPrlc.119" pos="прил" msd="тв;тв;ед;ж" norm="БОЖЕСТВЕНОЮ" lemma="божественыи">бж҇ⷭтвеною</w>
+          <w xml:id="DmPrlc.120" pos="сущ" msd="i;тв;ед;ж" norm="БЛАГОДАТИЮ" lemma="благодать">бл҃годатїю</w>
+          <w xml:id="DmPrlc.121" pos="пред" norm="ОТ" lemma="отъ">ѿ</w>
+          <w xml:id="DmPrlc.122" pos="сущ" msd="o;род;ед;м" norm="ГОСПОДА" lemma="господь">га҃</w>
+          <w xml:id="DmPrlc.123" pos="сущ" msd="o;род;ед;м" norm="БОГА" lemma="богъ">ба҃</w>
+          <lb n="22"/>
+          <w xml:id="DmPrlc.124" pos="прич" msd="тв;прош;дат;мн;м" norm="ПОС+ЩЕНЫМЪ" lemma="посѣтити">посѣщенымъ</w>
+          <pc xml:id="DmPrlc.125">.</pc>
+          <w xml:id="DmPrlc.126" pos="гл" msd="изъяв;н/б;ед;3;3" norm="ПОДОБАЕТЬ" lemma="подобати">подобаеть</w>
+          <w xml:id="DmPrlc.127" pos="нар" norm="ДОСТОИНО" lemma="достоино">
+            досто
+            <lb n="23"/>
+            ино
+          </w>
+          <w xml:id="DmPrlc.128" pos="сущ" msd="i;вин;мн;ж" norm="ПАМЯТИ" lemma="память">памѧти</w>
+          <w xml:id="DmPrlc.129" pos="прил" msd="тв;род;мн;м" norm="СВЯТЫХЪ" lemma="святыи">ст҃ыⷯ</w>
+          <w xml:id="DmPrlc.130" pos="сущ" msd="jo;род;мн;м" norm="ОТЕЦЬ" lemma="отець">ѿ҃ць</w>
+          <w xml:id="DmPrlc.131" pos="нар" norm="ДУХОВНО" lemma="духовно">дх҃овно</w>
+          <w xml:id="DmPrlc.132" pos="инф" norm="ПРАЗНОВАТИ" lemma="празновати">
+            пра
+            <pb n="-201"/>
+            <lb n="1"/>
+            зновати
+          </w>
+          <pc xml:id="DmPrlc.133">.</pc>
+          <w xml:id="DmPrlc.134" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.135" pos="пред" norm="ОТ" lemma="отъ">ѿ</w>
+          <name>
+            <w xml:id="DmPrlc.136" pos="сущ" msd="o;род;ед;м" norm="ХРИСТА" lemma="христосъ">ха҃</w>
+          </name>
+          <w xml:id="DmPrlc.137" pos="сущ" msd="o;род;ед;м" norm="БОГА" lemma="богъ">ба҃</w>
+          <w xml:id="DmPrlc.138" pos="прич" msd="тв;прош;вин;мн;ср" norm="ДАРОВАННАЯ" lemma="даровати">дарованнаа</w>
+          <w xml:id="DmPrlc.139" pos="мест" msd="тв;дат;мн;м" norm="Т+МЪ" lemma="тои">тѣⷨ</w>
+          <pc xml:id="DmPrlc.140">,</pc>
+          <lb n="2"/>
+          <w xml:id="DmPrlc.141" pos="сущ" msd="es;вин;мн;ср" norm="ЧЮДЕСА" lemma="чюдо">чюдеса</w>
+          <w xml:id="DmPrlc.142" pos="инф" norm="ПОХВАЛИТИ" lemma="похвалити">похвалити</w>
+          <w xml:id="DmPrlc.143" pos="пред" norm="ВЪ" lemma="въ">въ</w>
+          <w xml:id="DmPrlc.144" pos="сущ" msd="o;мест;мн;м" norm="ПСАЛМ+ХЪ" lemma="псаломъ">ѱалмѣⷯ</w>
+          <w xml:id="DmPrlc.145" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.146" pos="сущ" msd="jo;мест;мн;ср" norm="П+НИИХЪ" lemma="пѣние">
+            пѣ
+            <lb n="3"/>
+            нїихъ
+          </w>
+          <w xml:id="DmPrlc.147" pos="прич" msd="en;наст;им;мн;м" norm="СЛУЖАЩЕ" lemma="слуити">слѫжаще</w>
+          <w xml:id="DmPrlc.148" pos="сущ" msd="u;дат;ед;м" norm="ГОСПОДЕВИ" lemma="господь">гв҃и</w>
+          <pc xml:id="DmPrlc.149">.</pc>
+          <w xml:id="DmPrlc.150" pos="сущ" msd="i;род;ед;ж" norm="ПАМЯТИ" lemma="память">памѧти</w>
+          <w xml:id="DmPrlc.151" pos="мест" msd="м;род;мн;м" norm="ИХЪ" lemma="и">иⷯ</w>
+          <lb n="4"/>
+          <w xml:id="DmPrlc.152" pos="посл" norm="РАДИ" lemma="ради">ради</w>
+          <w xml:id="DmPrlc.153" pos="гл" msd="изъяв;н/б;ед;3;3" norm="ПОДОБАЕТЪ" lemma="подобати">подобаетъ</w>
+          <w xml:id="DmPrlc.154" pos="мест" msd="м;вин;мн;ср" norm="ЯЖЕ" lemma="иже">ꙗже</w>
+          <w xml:id="DmPrlc.155" pos="гл" msd="изъяв;аор гл;мн;1;" norm="ВИД+ХОМЪ" lemma="видѣти">видѣхомъ</w>
+          <pc xml:id="DmPrlc.156">.</pc>
+          <lb n="5"/>
+          <w xml:id="DmPrlc.157" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.158" pos="союз" norm="АЩЕ" lemma="аще">аще</w>
+          <w xml:id="DmPrlc.159" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.160" pos="прил" msd="м;вин;мн;ср" norm="ПРЕЖНЯЯ" lemma="прежнии">прежнѧа</w>
+          <w xml:id="DmPrlc.161" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.162" pos="гл" msd="изъяв;аор гл;мн;1;" norm="СЛЫШАХОМЪ" lemma="слышати">слышахомъ</w>
+          <pc xml:id="DmPrlc.163">.</pc>
+          <w xml:id="DmPrlc.164" pos="сущ" msd="jo;дат;ед;ср" norm="ПИСАНИЮ" lemma="писание">
+            пи
+            <lb n="6"/>
+            санїю
+          </w>
+          <w xml:id="DmPrlc.165" pos="прил" msd="тв;вин;мн;ср" norm="ИСТИННАЯ" lemma="истинныи">истиннаа</w>
+          <w xml:id="DmPrlc.166" pos="инф" norm="ПОЛОЖИТИ" lemma="положити">положити</w>
+          <pc xml:id="DmPrlc.167">.</pc>
+          <w xml:id="DmPrlc.168" pos="пред" norm="О" lemma="о">ѡ</w>
+          <w xml:id="DmPrlc.169" pos="мест" msd="м;мест;ед;ср" norm="СЕМЪ" lemma="сеи">сеⷨ</w>
+          <lb n="7"/>
+          <w xml:id="DmPrlc.170" pos="союз" norm="БО" lemma="бо">бо</w>
+          <w xml:id="DmPrlc.171" pos="прил" msd="a;им;ед;ж" norm="НЕМАЛА" lemma="немалыи">немала</w>
+          <w xml:id="DmPrlc.172" pos="сущ" msd="a;им;ед;ж" norm="МЗДА" lemma="мзда">мьзⷣа</w>
+          <pc xml:id="DmPrlc.173">,</pc>
+          <w xml:id="DmPrlc.174" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.175" pos="сущ" msd="a;им;ед;ж" norm="ПОЛЗА" lemma="полза">полза</w>
+          <w xml:id="DmPrlc.176" pos="пред" norm="ОТ" lemma="отъ">ѿ</w>
+          <w xml:id="DmPrlc.177" pos="сущ" msd="o;род;ед;м" norm="ГОСПОДА" lemma="господь">га҃</w>
+          <w xml:id="DmPrlc.178" pos="мест" msd="м;род;ед;м" norm="НАШЕГО" lemma="нашь">нш҃его</w>
+          <lb n="8"/>
+          <name>
+            <w xml:id="DmPrlc.179" pos="сущ" msd="o;род;ед;м" norm="ИИ" lemma="*иисусъ">їѵ҃</w>
+            <w xml:id="DmPrlc.180" pos="сущ" msd="o;род;ед;м" norm="ХРИСТА" lemma="христосъ">ха҃</w>
+          </name>
+          <pc xml:id="DmPrlc.181">,</pc>
+          <w xml:id="DmPrlc.182" pos="союз" norm="И" lemma="и">ї</w>
+          <w xml:id="DmPrlc.183" pos="сущ" msd="jo;род;мн;ср" norm="ЧАЯНИИ" lemma="чаяние">чаанїи</w>
+          <w xml:id="DmPrlc.184" pos="прич" msd="м;наст;род;мн;ср" norm="БУДУЩИХЪ" lemma="буднути">бѫдѹщиⷯ</w>
+          <w xml:id="DmPrlc.185" pos="сущ" msd="o;род;мн;ср" norm="БЛАГЪ" lemma="благо">бл҃гъ</w>
+          <pc xml:id="DmPrlc.186">.</pc>
+          <w xml:id="DmPrlc.187" pos="сущ" msd="jo;дат;мн;м" norm="ПОСЛУШАТЕЛЕМ" lemma="послушатель">
+            пѡ
+            <lb n="9"/>
+            слѫшателем
+          </w>
+          <w xml:id="DmPrlc.188" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.189" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.190" pos="сущ" msd="jo;дат;мн;м" norm="НАКАЗАТЕЛЕМЪ" lemma="наказатель">наказателемъ</w>
+          <lb n="10"/>
+          <w xml:id="DmPrlc.191" pos="мест" msd="м;им;мн;м" norm="ИЖЕ" lemma="иже">иже</w>
+          <w xml:id="DmPrlc.192" pos="пред" norm="ВЪ" lemma="въ">въ</w>
+          <w xml:id="DmPrlc.193" pos="сущ" msd="a;мест;ед;ж" norm="ПРАВД+" lemma="правда">правдѣ</w>
+          <w xml:id="DmPrlc.194" pos="прич" msd="м;наст;дат;мн;м" norm="СВ+ДУЩИМЪ" lemma="свести">свѣдѹщимъ</w>
+          <pc xml:id="DmPrlc.195">.</pc>
+          <w xml:id="DmPrlc.196" pos="нар" norm="ПАЧЕ" lemma="паче">
+            па
+            <lb n="11"/>
+            че
+          </w>
+          <w xml:id="DmPrlc.197" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.198" pos="мест" msd="тв;дат;мн;м" norm="Т+МЪ" lemma="тои">тѣмъ</w>
+          <pc xml:id="DmPrlc.199">.</pc>
+          <w xml:id="DmPrlc.200" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.201" pos="прил" msd="тв;вин;ед;м" norm="ДУШЕВНЫИ" lemma="душевныи">дш҃евныи</w>
+          <w xml:id="DmPrlc.202" pos="сущ" msd="o;вин;ед;м" norm="РАЗУМЪ" lemma="разумъ">разѹмъ</w>
+          <lb n="12"/>
+          <w xml:id="DmPrlc.203" pos="прич" msd="м;наст;дат;мн;м" norm="ИМУЩИМЪ" lemma="яти">имѹщимъ</w>
+          <pc xml:id="DmPrlc.204">.</pc>
+          <w xml:id="DmPrlc.205" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.206" pos="прил" msd="тв;род;мн;м" norm="СВЯТЫХЪ" lemma="святыи">ст҃ыⷯ</w>
+          <w xml:id="DmPrlc.207" pos="мест" msd="тв;род;мн;м" norm="Т+ХЪ" lemma="тои">тѣⷯ</w>
+          <w xml:id="DmPrlc.208" pos="сущ" msd="jo;вин;мн;ср" norm="ПОЖИТИЯ" lemma="пожитие">пожитїа</w>
+          <lb n="13"/>
+          <w xml:id="DmPrlc.209" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.210" pos="сущ" msd="o;вин;мн;ср" norm="Д+ЛА" lemma="дѣло">дѣла</w>
+          <w xml:id="DmPrlc.211" pos="прич" msd="jo;наст;им;мн;м" norm="ИСПРАВЛЯЮЩИ" lemma="исправляти">исправлѧющи</w>
+          <w xml:id="DmPrlc.212" pos="мест" msd="м;тв;мн;м" norm="СВОИМИ" lemma="свои">своими</w>
+          <w xml:id="DmPrlc.213" pos="сущ" msd="o;тв;мн;м" norm="ТРУДЫ" lemma="трудъ">
+            трꙋ
+            <lb n="14"/>
+            ды
+          </w>
+          <pc xml:id="DmPrlc.214">.</pc>
+          <w xml:id="DmPrlc.215" pos="союз" norm="АЩЕ" lemma="аще">аще</w>
+          <w xml:id="DmPrlc.216" pos="част" norm="ЛИ" lemma="ли">ли</w>
+          <w xml:id="DmPrlc.217" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.218" pos="нар" norm="ПРЕЖЕ" lemma="преже">преже</w>
+          <w xml:id="DmPrlc.219" pos="прич" msd="тв;прош;вин;мн;ср" norm="ПОМЯНУТАЯ" lemma="помянути">помѧнѫтаа</w>
+          <lb n="15"/>
+          <w xml:id="DmPrlc.220" pos="сущ" msd="jo;дат;ед;ср" norm="МОЛЧАНИЮ" lemma="молчание">молчанїю</w>
+          <w xml:id="DmPrlc.221" pos="инф" norm="ПРЕДАТИ" lemma="предати">предати</w>
+          <pc xml:id="DmPrlc.222">.</pc>
+          <w xml:id="DmPrlc.223" pos="союз" norm="ТО" lemma="то">то</w>
+          <w xml:id="DmPrlc.224" pos="част" norm="УБО" lemma="убо">ѹбѡ</w>
+          <w xml:id="DmPrlc.225" pos="пред" norm="ВЪ" lemma="въ">в</w>
+          <w xml:id="DmPrlc.226" pos="сущ" msd="jo;вин;ед;ср" norm="ЗАБВЕНИЕ" lemma="забвение">
+            за
+            <lb n="16"/>
+            бвенїе
+          </w>
+          <w xml:id="DmPrlc.227" pos="гл" msd="изъяв;н/б;ед;3;1" norm="ИЗЫДЕТЪ" lemma="изыти">изыдетъ</w>
+          <w xml:id="DmPrlc.228" pos="пред" norm="ПО" lemma="по">по</w>
+          <w xml:id="DmPrlc.229" pos="сущ" msd="o;дат;ед;м" norm="РОДУ" lemma="родъ">родѹ</w>
+          <pc xml:id="DmPrlc.230">.</pc>
+          <w xml:id="DmPrlc.231" pos="союз" norm="НО" lemma="но">но</w>
+          <w xml:id="DmPrlc.232" pos="мест" msd="м;вин;мн;ср" norm="СИЯ" lemma="сеи">сїа</w>
+          <w xml:id="DmPrlc.233" pos="гл" msd="изъяв;н/б;мн;1;2" norm="ВЪСПОМЯНЕМЪ" lemma="въспомянути">
+            въ
+            <lb n="17"/>
+            спомѧнемь
+          </w>
+          <pc xml:id="DmPrlc.234">.</pc>
+          <w xml:id="DmPrlc.235" pos="союз" norm="АЩЕ" lemma="аще">аще</w>
+          <w xml:id="DmPrlc.236" pos="мест" msd="1;им;мн" norm="МЫ" lemma="мы">мы</w>
+          <w xml:id="DmPrlc.237" pos="прич/в" msd="jo;наст;им;мн;м" norm="ЛЕНЯЩИСЯ" lemma="ленитися">ленѧщисѧ</w>
+          <lb n="18"/>
+          <w xml:id="DmPrlc.238" pos="гл" msd="изъяв;н/б;мн;1;4" norm="УМОЛЧИМЪ" lemma="умолити">ѹмолчимъ</w>
+          <pc xml:id="DmPrlc.239">.</pc>
+          <w xml:id="DmPrlc.240" pos="союз" norm="НО" lemma="но">но</w>
+          <w xml:id="DmPrlc.241" pos="сущ" msd="o;им;ед;м" norm="БОГЪ" lemma="богъ">бъ҃</w>
+          <w xml:id="DmPrlc.242" pos="пред" norm="ВЪ" lemma="въ">в</w>
+          <w xml:id="DmPrlc.243" pos="мест" msd="тв;мест;мн;м" norm="Т+ХЪ" lemma="тои">тѣⷯ</w>
+          <w xml:id="DmPrlc.244" pos="гл" msd="изъяв;аор гл;ед;3;" norm="ОДАРИ" lemma="одарити">ѡдари</w>
+          <pc xml:id="DmPrlc.245">.</pc>
+          <lb n="19"/>
+          <w xml:id="DmPrlc.246" pos="мест" msd="тв;им;мн;м" norm="САМИ" lemma="самъ">сами</w>
+          <w xml:id="DmPrlc.247" pos="сущ" msd="es;им;мн;ср" norm="ЧЮДЕСА" lemma="чюдо">чюдеса</w>
+          <w xml:id="DmPrlc.248" pos="гл" msd="изъяв;н/б;мн;3;3" norm="ВЪПИЮТЪ" lemma="въпити">въпїютъ</w>
+          <pc xml:id="DmPrlc.249">.</pc>
+          <w xml:id="DmPrlc.250" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.251" pos="пред" norm="ПО" lemma="по">по</w>
+          <w xml:id="DmPrlc.252" pos="сущ" msd="i;мест;ед;ж" norm="СМЕРТИ" lemma="смерть">
+            смръ
+            <lb n="20"/>
+            ти
+          </w>
+          <w xml:id="DmPrlc.253" pos="союз" norm="БО" lemma="бо">бо</w>
+          <w xml:id="DmPrlc.254" pos="прил" msd="o;им;мн;м" norm="ЖИВИ" lemma="живыи">живи</w>
+          <w xml:id="DmPrlc.255" pos="прич" msd="en;наст;им;мн;м" norm="СУЩЕ" lemma="снути">сѹще</w>
+          <pc xml:id="DmPrlc.256">.</pc>
+          <w xml:id="DmPrlc.257" pos="союз" norm="АЩЕ" lemma="аще">аще</w>
+          <w xml:id="DmPrlc.258" pos="част" norm="ЛИ" lemma="ли">ли</w>
+          <w xml:id="DmPrlc.259" pos="част" norm="ЖЕ" lemma="же">же</w>
+          <w xml:id="DmPrlc.260" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.261" pos="гл" msd="изъяв;н/б;ед;3;2" norm="ДЕРЗНЕТЬ" lemma="дерзнути">
+            де
+            <lb n="21"/>
+            рзнеть
+          </w>
+          <w xml:id="DmPrlc.262" pos="сущ" msd="es;вин;ед;ср" norm="СЛОВО" lemma="слово">слово</w>
+          <w xml:id="DmPrlc.263" pos="инф" norm="РЕЩИ" lemma="рещи">рещи</w>
+          <pc xml:id="DmPrlc.264">.</pc>
+          <w xml:id="DmPrlc.265" pos="союз" norm="ТО" lemma="то">то</w>
+          <w xml:id="DmPrlc.266" pos="прил" msd="a;вин;ед;ж" norm="НЕСУМ+ННУ" lemma="несумѣнныи">
+            несѹмѣ
+            <lb n="22"/>
+            ннѹ
+          </w>
+          <w xml:id="DmPrlc.267" pos="сущ" msd="a;вин;ед;ж" norm="В+РУ" lemma="вѣра">вѣрѹ</w>
+          <w xml:id="DmPrlc.268" pos="прич" msd="en;наст;им;мн;м" norm="ИМУЩЕ" lemma="яти">имѹще</w>
+          <pc xml:id="DmPrlc.269">.</pc>
+          <w xml:id="DmPrlc.270" pos="пред" norm="О" lemma="о">ѡ</w>
+          <w xml:id="DmPrlc.271" pos="мест" msd="м;мест;ед;м" norm="НЕМЖЕ" lemma="немжеиже">немже</w>
+          <w xml:id="DmPrlc.272" pos="сущ" msd="es;им;ед;ср" norm="СЛОВО" lemma="слово">
+            сло
+            <lb n="23"/>
+            во
+          </w>
+          <w xml:id="DmPrlc.273" pos="мест" msd="1;дат;мн" norm="НАМЪ" lemma="мы">намъ</w>
+          <w xml:id="DmPrlc.274" pos="гл" msd="изъяв;н/б;ед;3;4" norm="ПРЕДЛЕЖИТЪ" lemma="предлеити">преⷣлежитъ</w>
+          <pc xml:id="DmPrlc.275">.</pc>
+          <w xml:id="DmPrlc.276" pos="мест" msd="тв;род;мн;м" norm="Т+ХЪ" lemma="тои">тѣⷯ</w>
+          <w xml:id="DmPrlc.277" pos="союз" norm="БО" lemma="бо">бо</w>
+          <w xml:id="DmPrlc.278" pos="прил" msd="тв;род;мн;м" norm="СВЯТЫХЪ" lemma="святыи">ст҃ыⷯ</w>
+          <pb n="202"/>
+          <lb n="1"/>
+          <w xml:id="DmPrlc.279" pos="сущ" msd="jo;род;мн;м" norm="ОТЕЦЬ" lemma="отець">ѿ҃ць</w>
+          <w xml:id="DmPrlc.280" pos="прил" msd="тв;дат;ед;ср" norm="ТЕРП+ЛИВОМУ" lemma="терпѣливыи">терпѣливомѹ</w>
+          <w xml:id="DmPrlc.281" pos="сущ" msd="jo;дат;ед;ср" norm="ЖИТИЮ" lemma="житие">житїю</w>
+          <w xml:id="DmPrlc.282" pos="сущ" msd="o;им;мн;м" norm="АНГЕЛИ" lemma="ангелъ">аг҃гли</w>
+          <lb n="2"/>
+          <w xml:id="DmPrlc.283" pos="гл/в" msd="изъяв;аор гл;мн;3;" norm="УДИВИШАСЯ" lemma="удивитися">ѹдивишасѧ</w>
+          <pc xml:id="DmPrlc.284">,</pc>
+          <w xml:id="DmPrlc.285" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.286" pos="гл" msd="изъяв;аор гл;мн;3;" norm="ПОХВАЛИША" lemma="похвалити">похвалиша</w>
+          <q type="modified" source="BQ:LUK11:20">
+            <w xml:id="DmPrlc.287" pos="мест" msd="м;род;мн;м" norm="ИХЖЕ" lemma="ихжеиже">ихже</w>
+            <lb n="3"/>
+            <w xml:id="DmPrlc.288" pos="сущ" msd="men;им;мн;ср" norm="ИМЕНА" lemma="имя">имена</w>
+            <w xml:id="DmPrlc.289" pos="прич" msd="o;прош;им;мн;ср" norm="НАПИСАНА" lemma="написати">написана</w>
+            <w xml:id="DmPrlc.290" pos="гл" msd="изъяв;н/б;мн;3;5" norm="СУТЬ" lemma="быти">сѹть</w>
+            <w xml:id="DmPrlc.291" pos="пред" norm="НА" lemma="на">на</w>
+            <w xml:id="DmPrlc.292" pos="сущ" msd="es;мест;мн;ср" norm="НЕБЕС+ХЪ" lemma="небо">нб҃сѣхъ</w>
+            <pc xml:id="DmPrlc.293">.</pc>
+            <lb n="4"/>
+          </q>
+          <w xml:id="DmPrlc.294" pos="союз" norm="ПОНЕЖЕ" lemma="понеже">понеже</w>
+          <w xml:id="DmPrlc.295" pos="союз" norm="БО" lemma="бо">бо</w>
+          <w xml:id="DmPrlc.296" pos="прил" msd="тв;род;ед;м" norm="СВЯТАГО" lemma="святыи">ст҃го</w>
+          <w xml:id="DmPrlc.297" pos="сущ" msd="o;род;ед;м" norm="ДУХА" lemma="духъ">дх҃а</w>
+          <w xml:id="DmPrlc.298" pos="сущ" msd="jo;тв;ед;ср" norm="ДАРОВАНИЕМЪ" lemma="дарование">дарованїемъ</w>
+          <w xml:id="DmPrlc.299" pos="сущ" msd="o;вин;ед;м" norm="КРЕСТЪ" lemma="крестъ">
+            кре
+            <lb n="5"/>
+            стъ
+          </w>
+          <name>
+            <w xml:id="DmPrlc.300" pos="прил" msd="o;вин;ед;м" norm="ХРИСТОВЪ" lemma="христовъ">хв҃ъ</w>
+          </name>
+          <w xml:id="DmPrlc.301" pos="пред" norm="НА" lemma="на">на</w>
+          <w xml:id="DmPrlc.302" pos="сущ" msd="o;вин;ед;ср" norm="РАМО" lemma="рамо">рамо</w>
+          <w xml:id="DmPrlc.303" pos="прич" msd="en;прош;им;мн;м" norm="ВЗЕМШЕ" lemma="взяти">вземше</w>
+          <pc xml:id="DmPrlc.304">.</pc>
+          <w xml:id="DmPrlc.305" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.306" pos="прил" msd="тв;тв;ед;м" norm="ТЕСНЫМЪ" lemma="тесныи">тесныⷨ</w>
+          <lb n="6"/>
+          <w xml:id="DmPrlc.307" pos="сущ" msd="i;тв;ед;м" norm="ПУТЕМЪ" lemma="путь">пѹтеⷨ</w>
+          <w xml:id="DmPrlc.308" pos="гл" msd="изъяв;аор гл;мн;3;" norm="ШЕСТВОВАША" lemma="шествовати">шествоваша</w>
+          <pc xml:id="DmPrlc.309">,</pc>
+          <w xml:id="DmPrlc.310" pos="союз" norm="И" lemma="и">и</w>
+          <q type="modified" source="BQ:MAT25:21">
+            <w xml:id="DmPrlc.311" pos="гл" msd="изъяв;аор нов;мн;3;" norm="ВНИДОША" lemma="внити">внидоша</w>
+            <lb n="7"/>
+            <w xml:id="DmPrlc.312" pos="пред" norm="ВЪ" lemma="въ">в</w>
+            <w xml:id="DmPrlc.313" pos="сущ" msd="i;вин;ед;ж" norm="РАДОСТЬ" lemma="радость">радость</w>
+            <w xml:id="DmPrlc.314" pos="сущ" msd="o;род;ед;м" norm="ГОСПОДА" lemma="господь">га҃</w>
+            <w xml:id="DmPrlc.315" pos="мест" msd="м;род;ед;м" norm="СВОЕГО" lemma="свои">своего</w>
+            <pc xml:id="DmPrlc.316">;</pc>
+          </q>
+          <q type="modified" source="Q:BasiliusMagnusSermoAsceticus">
+            <seg type="author">
+              <w xml:id="DmPrlc.317" pos="пред" norm="О" lemma="о">ѡ</w>
+              <w xml:id="DmPrlc.318" pos="мест" msd="м;мест;ед;ср" norm="СЕМ" lemma="сеи">сем</w>
+              <w xml:id="DmPrlc.319" pos="союз" norm="БО" lemma="бо">бо</w>
+              <w xml:id="DmPrlc.320" pos="гл" msd="изъяв;н/б;ед;3;3" norm="ПИШЕТЪ" lemma="писати">пишеⷮ</w>
+              <lb n="8"/>
+              <w xml:id="DmPrlc.321" pos="пред" norm="ВЪ" lemma="въ">въ</w>
+              <w xml:id="DmPrlc.322" pos="сущ" msd="jo;мест;ед;ср" norm="ПОУЧЕНИИ" lemma="поучение">поѹченїи</w>
+              <w xml:id="DmPrlc.323" pos="мест" msd="м;мест;ед;ср" norm="СВОЕМЪ" lemma="свои">своемъ</w>
+              <seg type="author">
+                <name>
+                  <w xml:id="DmPrlc.324" pos="сущ" msd="jo;им;ед;м" norm="ВАСИЛИИ" lemma="василии">василїи</w>
+                  <w xml:id="DmPrlc.325" pos="прил" msd="тв;им;ед;м" norm="ВЕЛИКИИ" lemma="великии">великїи</w>
+                </name>
+                <lb n="9"/>
+              </seg>
+              <w xml:id="DmPrlc.326" pos="прич" msd="jo;наст;им;ед;м" norm="ГЛАГОЛЯ" lemma="глаголати">гл҃ѧ</w>
+              <pc xml:id="DmPrlc.327">.</pc>
+            </seg>
+            <w xml:id="DmPrlc.328" pos="гл" msd="повел;мн;2;1" norm="БУДИТЕ" lemma="быти">бѹдите</w>
+            <w xml:id="DmPrlc.329" pos="сущ" msd="jo;им;мн;м" norm="РЕВНИТЕЛИ" lemma="ревнитель">ревнители</w>
+            <w xml:id="DmPrlc.330" pos="прич" msd="м;наст;дат;мн;м" norm="ПРАВОЖИВУЩИМЪ" lemma="правожити">
+              правѡ
+              <lb n="10"/>
+              живѹщимъ
+            </w>
+            <pc xml:id="DmPrlc.331">.</pc>
+            <w xml:id="DmPrlc.332" pos="союз" norm="И" lemma="и">и</w>
+            <w xml:id="DmPrlc.333" pos="мест" msd="м;род;мн;м" norm="СИХЪ" lemma="сеи">сиⷯ</w>
+            <w xml:id="DmPrlc.334" pos="сущ" msd="men;вин;мн;ср" norm="ИМЕНА" lemma="имя">имена</w>
+            <pc xml:id="DmPrlc.335">,</pc>
+            <w xml:id="DmPrlc.336" pos="союз" norm="И" lemma="и">и</w>
+            <w xml:id="DmPrlc.337" pos="сущ" msd="es;вин;мн;ср" norm="Д+ЛЕСА" lemma="дѣло">
+              дѣ
+              <lb n="11"/>
+              леса
+            </w>
+            <w xml:id="DmPrlc.338" pos="гл" msd="повел;ед;2;3" norm="НАПИШИ" lemma="написати">напиши</w>
+            <w xml:id="DmPrlc.339" pos="гл" msd="изъяв;аор пр;ед;3;" norm="РЕЧЕ" lemma="рещи">рече</w>
+            <w xml:id="DmPrlc.340" pos="пред" norm="НА" lemma="на">на</w>
+            <w xml:id="DmPrlc.341" pos="сущ" msd="jo;мест;ед;ср" norm="СЕРДЦЫ" lemma="сердце">срⷣци</w>
+            <w xml:id="DmPrlc.342" pos="мест" msd="м;мест;ед;ср" norm="СВОЕМЪ" lemma="свои">своемъ</w>
+            <pc xml:id="DmPrlc.343">.</pc>
+          </q>
+          <w xml:id="DmPrlc.344" pos="пред" norm="О" lemma="о">ѡ</w>
+          <lb n="12"/>
+          <w xml:id="DmPrlc.345" pos="мест" msd="м;мест;ед;ср" norm="СЕМЪ" lemma="сеи">семъ</w>
+          <w xml:id="DmPrlc.346" pos="мест" msd="1;вин;ед" norm="МЯ" lemma="азъ">мѧ</w>
+          <w xml:id="DmPrlc.347" pos="гл" msd="изъяв;н/б;ед;3;4" norm="СТРАШИТЪ" lemma="страшити">страшитъ</w>
+          <w xml:id="DmPrlc.348" pos="нар" norm="ВЕЛМИ" lemma="велми">велми</w>
+          <w xml:id="DmPrlc.349" pos="сущ" msd="es;им;ед;ср" norm="СЛОВО" lemma="слово">слово</w>
+          <pc xml:id="DmPrlc.350">.</pc>
+          <lb n="13"/>
+          <w xml:id="DmPrlc.351" pos="союз" norm="ЗАНЕЖЕ" lemma="занеже">занеже</w>
+          <w xml:id="DmPrlc.352" pos="гл" msd="изъяв;аор гл;ед;1;" norm="СТЯЖАХЪ" lemma="стяжати">стѧжаⷯ</w>
+          <w xml:id="DmPrlc.353" pos="пред" norm="НА" lemma="на">на</w>
+          <w xml:id="DmPrlc.354" pos="мест" msd="возвр;мест;ед" norm="СЕБ+" lemma="себе">себѣ</w>
+          <w xml:id="DmPrlc.355" pos="прич" msd="o;прош;вин;мн;ср" norm="НЕИСПРАВЛЕНА" lemma="исправити">
+            неисправле
+            <lb n="14"/>
+            на
+          </w>
+          <w xml:id="DmPrlc.356" pos="сущ" msd="o;вин;мн;ср" norm="Д+ЛА" lemma="дѣло">дѣла</w>
+          <pc xml:id="DmPrlc.357">.</pc>
+          <w xml:id="DmPrlc.358" pos="част" norm="НИ" lemma="ни">ни</w>
+          <w xml:id="DmPrlc.359" pos="прил" msd="o;род;ед;ср" norm="МАЛА" lemma="малыи">мала</w>
+          <w xml:id="DmPrlc.360" pos="гл" msd="изъяв;аор пр;ед;3;" norm="ДОСТИЖЕ" lemma="достищи">достиже</w>
+          <w xml:id="DmPrlc.361" pos="инф" norm="ДОИТИ" lemma="доити">доити</w>
+          <lb n="15"/>
+          <w xml:id="DmPrlc.362" pos="пред" norm="ВЪ" lemma="въ">в</w>
+          <w xml:id="DmPrlc.363" pos="сущ" msd="a;вин;ед;ж" norm="М+РУ" lemma="мѣра">мѣрѹ</w>
+          <pc xml:id="DmPrlc.364">.</pc>
+          <w xml:id="DmPrlc.365" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.366" pos="пред" norm="ВЪ" lemma="въ">въ</w>
+          <w xml:id="DmPrlc.367" pos="сущ" msd="o;вин;ед;ср" norm="ПРЯСЛО" lemma="прясло">прѧсло</w>
+          <w xml:id="DmPrlc.368" pos="мест" msd="м;род;мн;м" norm="СИХЪ" lemma="сеи">сиⷯ</w>
+          <pc xml:id="DmPrlc.369">,</pc>
+          <w xml:id="DmPrlc.370" pos="союз" norm="НО" lemma="но">но</w>
+          <w xml:id="DmPrlc.371" pos="пред" norm="НА" lemma="на">на</w>
+          <w xml:id="DmPrlc.372" pos="сущ" msd="o;род;ед;м" norm="БОГА" lemma="богъ">ба҃</w>
+          <lb n="16"/>
+          <w xml:id="DmPrlc.373" pos="сущ" msd="ja;вин;ед;ж" norm="НАДЕЖДУ" lemma="надежда">надеждѹ</w>
+          <w xml:id="DmPrlc.374" pos="прич" msd="jo;наст;им;ед;м" norm="ИМ+Я" lemma="имѣти">имѣа</w>
+          <pc xml:id="DmPrlc.375">;</pc>
+          <w xml:id="DmPrlc.376" pos="союз" norm="И" lemma="и">и</w>
+          <w xml:id="DmPrlc.377" pos="сущ" msd="a;тв;мн;ж" norm="МОЛИТВАМИ" lemma="молитва">мл҃твами</w>
+          <lb n="17"/>
+          <w xml:id="DmPrlc.378" pos="мест" msd="м;род;ед;м" norm="СЕГО" lemma="сеи">сего</w>
+          <w xml:id="DmPrlc.379" pos="прил" msd="тв;род;ед;м" norm="ПРЕПОДОБНАГО" lemma="преподобныи">преподобнаго</w>
+          <w xml:id="DmPrlc.380" pos="прил" msd="тв;вин;ед;ж" norm="РУСКУЮ" lemma="рускии">рѹскѫю</w>
+          <w xml:id="DmPrlc.381" pos="сущ" msd="a;вин;ед;ж" norm="ПОХВАЛУ" lemma="похвала">
+            похва
+            <lb n="18"/>
+            лѹ
+          </w>
+          <pc xml:id="DmPrlc.382">,</pc>
+          <w xml:id="DmPrlc.383" pos="прил" msd="тв;род;ед;м" norm="НОВАГО" lemma="новыи">новаго</w>
+          <w xml:id="DmPrlc.384" pos="сущ" msd="jo;род;ед;м" norm="ЧЮДОТВОРЦА" lemma="чюдотворець">чюдотворца</w>
+          <name>
+            <w xml:id="DmPrlc.385" pos="сущ" msd="jo;род;ед;м" norm="ДИМИТРИЯ" lemma="димитрии">дїмитрїа</w>
+          </name>
+          <pc xml:id="DmPrlc.386">.</pc>
+          <lb n="19"/>
+          <w xml:id="DmPrlc.387" pos="мест" msd="м;тв;ед;м" norm="ИМЖЕ" lemma="имжеиже">имже</w>
+          <w xml:id="DmPrlc.388" pos="гл" msd="изъяв;аор гл;ед;3;" norm="ПОС+ТИ" lemma="посѣтити">посѣти</w>
+          <w xml:id="DmPrlc.389" pos="сущ" msd="i;им;ед;м" norm="ГОСПОДЬ" lemma="господь">гь҃</w>
+          <w xml:id="DmPrlc.390" pos="сущ" msd="o;им;ед;м" norm="БОГЪ" lemma="богъ">бъ҃</w>
+          <w xml:id="DmPrlc.391" pos="сущ" msd="i;род;мн;м" norm="ЛЮДИИ" lemma="людие">людїи</w>
+          <w xml:id="DmPrlc.392" pos="мест" msd="м;род;мн;м" norm="СВОИХЪ" lemma="свои">своихъ</w>
+          <pc xml:id="DmPrlc.393">.</pc>
+          <lb n="20"/>
+          <w xml:id="DmPrlc.394" pos="пред" norm="ВЪ" lemma="въ">въ</w>
+          <w xml:id="DmPrlc.395" pos="прил" msd="м;вин;мн;м" norm="ПОСЛ+ДНЯЯ" lemma="послѣднии">послѣднѧа</w>
+          <w xml:id="DmPrlc.396" pos="сущ" msd="o;вин;мн;м" norm="РОДЫ" lemma="родъ">роды</w>
+          <w xml:id="DmPrlc.397" pos="мест" msd="м;вин;мн;м" norm="НАША" lemma="нашь">нш҃а</w>
+          <pc xml:id="DmPrlc.398">.</pc>
+          <w xml:id="DmPrlc.399" pos="гл" msd="изъяв;аор гл;ед;3;" norm="ПРОЯВИ" lemma="проявити">проꙗви</w>
+          <lb n="21"/>
+          <w xml:id="DmPrlc.400" pos="сущ" msd="o;им;ед;м" norm="БОГЪ" lemma="богъ">бъ҃</w>
+          <w xml:id="DmPrlc.401" pos="прил" msd="тв;род;ед;м" norm="ТАКОВАГО" lemma="таковыи">таковаго</w>
+          <w xml:id="DmPrlc.402" pos="сущ" msd="jo;род;ед;м" norm="ЧЮДОТВОРЦА" lemma="чюдотворець">чюдотворца</w>
+          <pc xml:id="DmPrlc.403">.</pc>
+          <w xml:id="DmPrlc.404" pos="нар" norm="ДНЕС" lemma="днесъ">дне҇ⷭ</w>
+          <w xml:id="DmPrlc.405" pos="союз" norm="БО" lemma="бо">бо</w>
+          <lb n="22"/>
+          <w xml:id="DmPrlc.406" pos="пред" norm="ОТО" lemma="ото">ѿо</w>
+          <w xml:id="DmPrlc.407" pos="сущ" msd="i;род;ед;м" norm="ДНИ" lemma="день">дн҃и</w>
+          <w xml:id="DmPrlc.408" pos="нар" norm="НЫН+" lemma="нынѣ">нн҃ѣ</w>
+          <w xml:id="DmPrlc.409" pos="прич" msd="en;наст;им;мн;м" norm="ВИДЯЩЕ" lemma="видѣти">видѧще</w>
+          <w xml:id="DmPrlc.410" pos="прил/ср" msd="ja;вин;ед;ж" norm="БОЛШУ" lemma="болии">болшѹ</w>
+          <w xml:id="DmPrlc.411" pos="сущ" msd="a;вин;ед;ж" norm="В+РУ" lemma="вѣра">вѣрꙋ</w>
+          <lb n="23"/>
+          <w xml:id="DmPrlc.412" pos="прич" msd="ja;наст;вин;ед;ж" norm="РАСТЯЩУ" lemma="расти">раⷥстѧщѹ</w>
+          <note type="corr">растѧщѹ</note>
+          <w xml:id="DmPrlc.413" pos="пред" norm="ОТ" lemma="отъ">ѿ</w>
+          <w xml:id="DmPrlc.414" pos="прил" msd="тв;род;ед;ж" norm="ХРИСТАЛЮБИВЫЯ" lemma="христалюбивыи">ха҃любивыѧ</w>
+          <w xml:id="DmPrlc.415" pos="сущ" msd="i;род;ед;ж" norm="ЧАДИ" lemma="чадь">чаⷣꙶ</w>
+          <pc xml:id="DmPrlc.416">.</pc>
+          <w xml:id="DmPrlc.417" pos="мест" msd="тв;им;ед;м" norm="ТОИ" lemma="тои">тои</w>
+          </div1></ab></body></text></TEI>

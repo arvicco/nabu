@@ -22,11 +22,17 @@ module Nabu
   #   so must not open a stage (a stage would close with a bogus elapsed
   #   tail). The incremental rebuild's verdict-sweep header and closing
   #   tally ride it; the CLI closes any open stage first.
+  # - +on_explain+: the --verbose seam — called with a stage label just
+  #   BEFORE #stage announces it (and by #explain for a sub-operation that
+  #   opens no stage). The CLI resolves the label against
+  #   Nabu::Ops::StageGuide and prints the stage's one-line explanation;
+  #   nil (every non-verbose run) makes it a no-op, so verbosity costs
+  #   nothing when off.
   #
   # All fields are nil-safe: a reporter with nil callables is a no-op, so
   # callers can hand one down unconditionally.
-  ProgressReporter = Data.define(:on_fetch_line, :on_load_tick, :on_stage, :on_note) do
-    def initialize(on_fetch_line: nil, on_load_tick: nil, on_stage: nil, on_note: nil)
+  ProgressReporter = Data.define(:on_fetch_line, :on_load_tick, :on_stage, :on_note, :on_explain) do
+    def initialize(on_fetch_line: nil, on_load_tick: nil, on_stage: nil, on_note: nil, on_explain: nil)
       super
     end
 
@@ -34,8 +40,13 @@ module Nabu
 
     def load_tick(processed, errored) = on_load_tick&.call(processed, errored)
 
-    def stage(label, eta: nil) = on_stage&.call(label, eta)
+    def stage(label, eta: nil)
+      on_explain&.call(label)
+      on_stage&.call(label, eta)
+    end
 
     def note(line) = on_note&.call(line)
+
+    def explain(label) = on_explain&.call(label)
   end
 end

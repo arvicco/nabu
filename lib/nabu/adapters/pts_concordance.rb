@@ -36,9 +36,22 @@ module Nabu
     #   PTS.Ap.1…615), so its vol.page tokens fold to "PTS.Ap.<page>".
     # - "pts-vp-pli<ed>ed<vol>.<page>" / "pts-vp-pli<ed>ed<page>" (1,350;
     #   SN I, Dhp, Vv, Pv, Bv, Cp — the books with two PTS editions of
-    #   different pagination) → "PTS-ed<ed>.<siglum>…", the edition kept
-    #   explicit: which edition an unmarked citation elsewhere follows is
-    #   never assumed, so these never meet an unmarked key.
+    #   different pagination). The FIRST edition folds to the plain
+    #   spelling ("PTS.S.1.154"); the second stays explicit
+    #   ("PTS-ed2.S.1.332"). Established, not assumed (2026-10-20): CBETA
+    #   N's anchors are the Nanden Daizōkyō's (Japanese, 1935–41; the
+    #   Yuan Heng Temple canon translates it), which predates every second
+    #   edition (Bv/Cp 1974, Vv/Pv 1977, Dhp 1994, SN I 1998); CBETA's own
+    #   SN cross-reference cites "PTS [1884] 1991: I 154" (Feer) at the line
+    #   its cref places on S.1.154; and page-for-page against the held
+    #   trees N matches ed1 exactly — SN I pp. 1–240 (ed2 runs to 516), SN
+    #   6.12/6.14 on 154/155 (ed2 332/335), Dhp vv. 100/200/300/400/423 on
+    #   15/30/43/57/60 (ed2 28/56/84/112/118), Bv's chapter breaks and Cp
+    #   pp. 73–103 (ed2 1–37). SuttaCentral carries only ed2 for Vv and Pv,
+    #   which N (Vv pp. 1–84, Pv 3–68) does not follow — those stay apart.
+    # - The Buddhavaṃsa is one volume in either edition; upstream writes it
+    #   "…ed1.<page>" (volume 1) and CBETA "PTS.Bv.<page>", so the volume
+    #   drops.
     # - NOT folded (they stay in the verbatim "refs" string, counted):
     #   "pts-vp-en…" (2,461 — Horner's English Book of the Discipline, not
     #   a Pali page), "pts-cs…" (6,155 — PTS section numbering in DN and
@@ -49,10 +62,12 @@ module Nabu
     #
     # Expected full-corpus yield (dry-run of this module over the held tree,
     # joined passages only): 15,024 pts keys on 14,835 passages (94 AN
-    # tokens unfolded), 17,589 vri tokens on 17,549 passages. Of the 13,658
-    # distinct unmarked keys, 13,180 (96.5%) are spelled identically to a
-    # CBETA N cref anchor; the rest are Nett/Peṭ (no N translation) and a
-    # few pages N does not anchor.
+    # tokens unfolded), 17,589 vri tokens on 17,549 passages. Of the 14,058
+    # distinct plain keys, 13,579 (96.6%) are spelled identically to a
+    # CBETA N cref anchor (the ed1 fold added 400, 399 matching: SN I
+    # 240/240, Dhp 60/60, Cp 31/31, Bv 68/69); the rest are Nett/Peṭ (no
+    # N translation) and a few pages N does not anchor. 950 distinct
+    # PTS-ed2 keys stay apart by design.
     #
     # Lives under adapters/ (the CuneiformConcordance rule): it shapes
     # parsed rows, so it rides only the suttacentral derivation closure.
@@ -72,8 +87,14 @@ module Nabu
         "vinaya" => "Vin"
       }.freeze
 
-      # Sigla whose volumes share one continuous pagination (fold rule).
-      CONTINUOUS = %w[Ap].freeze
+      # Sigla cited by page alone though upstream names a volume: the
+      # Apadāna's two volumes share one continuous pagination; the
+      # Buddhavaṃsa is a single volume (fold rules).
+      PAGE_CITED = %w[Ap Bv].freeze
+
+      # The PTS edition CBETA N's anchors follow in the two-edition books
+      # (evidence in the module note): its keys take the plain spelling.
+      CBETA_EDITION = "1"
 
       PAGE = /\d+(?:-\d+)?/
       VOLUME_PAGE = /\Apts-vp-pli(\d+)\.(#{PAGE})\z/
@@ -103,9 +124,13 @@ module Nabu
         when VOLUME_PAGE then volume_page_key("PTS", siglum, Regexp.last_match(1), Regexp.last_match(2))
         when PAGE_ONLY then "PTS.#{siglum}.#{Regexp.last_match(1)}"
         when EDITION_VOLUME_PAGE
-          volume_page_key("PTS-ed#{Regexp.last_match(1)}", siglum, Regexp.last_match(2), Regexp.last_match(3))
-        when EDITION_PAGE then "PTS-ed#{Regexp.last_match(1)}.#{siglum}.#{Regexp.last_match(2)}"
+          volume_page_key(edition_prefix(Regexp.last_match(1)), siglum, Regexp.last_match(2), Regexp.last_match(3))
+        when EDITION_PAGE then "#{edition_prefix(Regexp.last_match(1))}.#{siglum}.#{Regexp.last_match(2)}"
         end
+      end
+
+      def edition_prefix(edition)
+        edition == CBETA_EDITION ? "PTS" : "PTS-ed#{edition}"
       end
 
       # A whole upstream reference string → { "pts" => [keys], "vri" =>
@@ -118,7 +143,7 @@ module Nabu
       end
 
       def volume_page_key(prefix, siglum, volume, page)
-        CONTINUOUS.include?(siglum) ? "#{prefix}.#{siglum}.#{page}" : "#{prefix}.#{siglum}.#{volume}.#{page}"
+        PAGE_CITED.include?(siglum) ? "#{prefix}.#{siglum}.#{page}" : "#{prefix}.#{siglum}.#{volume}.#{page}"
       end
     end
   end
