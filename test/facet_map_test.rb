@@ -290,6 +290,16 @@ class FacetMapTest < Minitest::Test
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
   end
 
+  # The mining law's places sweep: place-shaped metadata the place lane
+  # never projected — origin grains (coptic's settlement placeName) and
+  # regional classifications — now facet verbatim.
+  def test_shipped_config_projects_the_places_sweep
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "author" => "author", "origPlace" => "place", "placeName" => "place",
+                   "objectType" => "object_type", "repository" => "repository", "corpus" => "corpus" },
+                 map.fields_for("coptic-scriptorium"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)

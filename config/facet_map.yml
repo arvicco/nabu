@@ -45,6 +45,11 @@ sources:
     fields:
       author: author          # Besa · Shenoute · Johannes · anonymous hagiographies …
       origPlace: place        # White Monastery 227 · Hagr Edfu · Hamuli …
+      placeName: place        # the origin's SETTLEMENT grain beside origPlace's site (306
+      #                         docs, census 2026-10-21: Atripe 225 — the White Monastery's
+      #                         town · Edfu 40 · Hagr Edfu 11 · This …; life.aphou has
+      #                         origPlace "unknown" but placeName "This") — both grains
+      #                         of the same origin claim filter under one place facet
       objectType: object_type # codex · papyrus …
       repository: repository  # holding libraries (BN Napoli, BL, Morgan …)
       corpus: corpus          # upstream corpus ids (besa.letters, shenoute.a22 …)

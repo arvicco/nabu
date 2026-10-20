@@ -111,6 +111,16 @@ module Nabu
       # carries "tm:<n>" where the TT header states a number).
       def self.reference_edges? = true
 
+      # The header "places" roster → the place names the TEXT mentions
+      # (the entity annotation: "Duat; Gehenna", Jonah's "Jaffa; Nineveh;
+      # Tarshish" — live census 2026-10-21: 413 of 482 docs carry it, 234
+      # "none"). Mentions, never the manuscript's origin (origPlace/
+      # placeName hold that): they ride the place_mentioned facet, the
+      # diccas precedent, and never the place axis. "none" claims nothing.
+      def self.mentioned_places(roster)
+        roster.to_s.split(/;\s*/).map(&:strip).uniq - ["none", ""]
+      end
+
       # The header Trismegistos value → the bare TM number, or nil.
       # Censused shapes (482 headers, 2026-09-26): bare "108394" (44) ·
       # an HTML anchor "<a href='www.trismegistos.org/text/107926'>
@@ -377,6 +387,10 @@ module Nabu
           # rule (Sahidic → cop/sah, Bohairic → cop/boh) can read it — rules
           # are facet-grained by design.
           meta["facets"] = (meta["facets"] || {}).merge("dialect" => { "value" => dialect })
+        end
+        mentions = self.class.mentioned_places(meta["places"])
+        unless mentions.empty?
+          meta["facets"] = (meta["facets"] || {}).merge("place_mentioned" => { "values" => mentions })
         end
         # P104-1 (the aggressive-mining law): the header's Trismegistos number →
         # a "tm:<n>" related edge (the P25-1 scheme rule; the shared
