@@ -880,6 +880,22 @@ module Store
       assert_equal 1217, row[:not_before]
     end
 
+    # The places sweep: the Gysseling atlas localizes some texts only to
+    # a REGION (63 of 2,226 docs, census 2026-10-21) — the region is then
+    # the place claim, declared coarse; a localized town still answers.
+    def test_metadata_places_gysseling_region_answers_only_without_a_town
+      seed_metadata_doc("corpus-gysseling", "urn:nabu:corpus-gysseling:0001",
+                        { "not_before" => 1210, "not_after" => 1240, "date_raw" => "1210-1240",
+                          "place" => "Gent", "region" => "Oost-Vlaanderen" })
+      seed_metadata_doc("corpus-gysseling", "urn:nabu:corpus-gysseling:0117",
+                        { "not_before" => 1251, "not_after" => 1300, "date_raw" => "1251-1300",
+                          "region" => "Holland-West" })
+      build!
+      assert_equal "Gent", timeline_for("urn:nabu:corpus-gysseling:0001")[:place_name]
+      assert_equal [1251, "Holland-West"],
+                   timeline_for("urn:nabu:corpus-gysseling:0117").values_at(:not_before, :place_name)
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

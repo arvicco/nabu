@@ -1826,7 +1826,8 @@ sources:
     # dum is a real nabu-lects anchor (Middle Dutch); identity, no shadowing.
     lect: {posture: identity, note: "dum — Middle Dutch anchor (nabu-lects); bare code is the claim"}
     dating: {posture: dated, note: "each doc carries <datering jaar_van jaar_tot>; span = min..max"}
-    places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt"}
+    places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt;
+        the 63 town-less texts place at REGION grain (declared coarse), and the region facets on all"}
     script: {posture: implied}
   gretil:
     # kind: config/kind_map.yml folds the teiHeader genre ladder (keywords term,

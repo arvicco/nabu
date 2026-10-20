@@ -298,6 +298,7 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "author" => "author", "origPlace" => "place", "placeName" => "place",
                    "objectType" => "object_type", "repository" => "repository", "corpus" => "corpus" },
                  map.fields_for("coptic-scriptorium"))
+    assert_equal({ "region" => "region" }, map.fields_for("corpus-gysseling"))
   end
 
   def test_shipped_config_loads
