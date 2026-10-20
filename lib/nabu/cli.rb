@@ -11,6 +11,7 @@ require_relative "cli/layer"
 require_relative "cli/index"
 require_relative "cli/creds"
 require_relative "cli/export"
+require_relative "cli/runs"
 
 # CLI flag conventions (P90-3 standing rules, applied whenever a command is
 # next touched — never as a sweep):
@@ -107,6 +108,9 @@ module Nabu
     # (documents, links: a file + license manifest under exports/) and the
     # passage stream, which stays the DEFAULT command so `nabu export
     # --format jsonl ...` is byte-unchanged (ExportCLI).
+    desc "runs SUBCOMMAND ...ARGS", "The ledger's run rows: close-stale (killed runs nobody closed)"
+    subcommand "runs", RunsCLI
+
     desc "export SUBCOMMAND ...ARGS",
          "Research exports — documents/links tables with a license manifest — and the passage stream"
     subcommand "export", ExportCLI

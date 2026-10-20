@@ -1320,7 +1320,8 @@ module Nabu
         load_note = after_load.zero? ? "" : "; #{after_load} #{died} (index/lanes may lag — re-sync)"
         "#{count} run row#{'s' unless count == 1} still \"running\" #{STALE_OPEN_RUN_SECONDS / 3_600} h+ " \
           "after start — killed runs nobody noticed (e.g. #{examples.join(' · ')})#{load_note}; " \
-          "a later run of the source supersedes the row — re-run any source without one"
+          "a later run of the source supersedes the row — re-run any source without one, " \
+          "then close the rows: bin/nabu runs close-stale"
       end
 
       # -- shared lookups -------------------------------------------------------
