@@ -1169,6 +1169,30 @@ anchors:
            only guarantees the targets"
     stages:
       csl: {name: Church Slavonic (post-canonical), ord: 10}
+      ncs: {name: New Church Slavonic (Synodal), ord: 20,
+            band: [1650, 2100],
+            band_note: "Patriarch Nikon's book revision (1650s-60s) onward;
+                        the standard remains in liturgical use today, so
+                        the band stays open at the modern end",
+            note: "the post-reform standard of the Russian Church after
+                   Nikon's book revision, fixed in the Elizabethan Bible
+                   (1751) and used since as the liturgical language of the
+                   Russian, Ukrainian, Belarusian, Serbian and Bulgarian
+                   Orthodox churches. Classification: the latest stage of
+                   Church Slavonic, Russian-recension in origin but
+                   supra-regional by construction — which is why ncs rides
+                   the STAGE slot bare, not a recension variety (the
+                   recension convention above covers regional written
+                   traditions; this one displaced them). Descent: from
+                   chu:csl/rus through the Kyivan grammatical normalization
+                   (Smotryc'kyj's Grammatica, 1619). Attestation: printed
+                   liturgical books from the 1650s; hagiography and church
+                   prose of the 18th c. Corpus: SCAT's 18th-c. Northern
+                   Russian saints' lives (CC BY-SA 4.0); the DIACU dataset
+                   (Cassese et al. 2025, doi 10.18653/v1/2025.bsnlp-1.12)
+                   labels this period 'New Church Slavonic'. Coarseness
+                   declared: the 17th/18th-c. boundary is a period label,
+                   not an orthographic diagnosis"}
     varieties:
       rus: {name: Russian recension, kind: recension}
       srp: {name: Serbian recension, kind: recension,
@@ -2288,6 +2312,7 @@ anchors:
   qfa-kor:
     name: Koreanic
     kind: family
+    glottocode: kore1284
     note: "Korean + Jeju + the fragmentary ancient peninsular varieties.
            NO parent edge: the Altaic affiliation (the EDAL's premise) is
            contested and not recorded as descent — the koret base's
@@ -2299,6 +2324,147 @@ anchors:
             note: "the koret base's reconstructions lean on Middle Korean
                    — the EDAL school's 'Proto-Korean'; recorded as the
                    Koreanic proto stage, school noted"}
+
+  # ── The Korean ladder (Old → Middle → Korean), periodized after
+  # Lee & Ramsey, A History of the Korean Language (Cambridge UP, 2011),
+  # whose chapters run Old Korean · Early Middle Korean · Late Middle
+  # Korean · Early Modern Korean · Modern Korean. ISO codes the first
+  # two as separate historical languages (oko, okm), so they chain as
+  # anchors (the ang/enm/ojp precedent); the time-slices inside each are
+  # stages. Lee & Ramsey's periodization follows the political and
+  # cultural centre of the peninsula (Kyŏngju under Silla → Kaesŏng
+  # under Koryŏ → Seoul under Chosŏn), so the Old → Middle cut is the
+  # 10th-c. shift of the central dialect, not a sound-change date ──────
+
+  oko:
+    name: Old Korean
+    parent: qfa-kor
+    band: [300, 935]
+    band_note: "Lee & Ramsey's Old Korean — the Three Kingdoms and
+                Unified Silla period, closing with Silla's fall (935);
+                ISO 639-3's reference name says 3rd–9th c. The
+                substantial attestation is 6th–9th c.; approximate"
+    note: "the language of Silla, the dialect base of the peninsula's
+           later standard — Koguryŏ and Paekche are known only from
+           place-name glosses and their relation to Silla's language
+           is disputed (prose here, never edges). Attested
+           exclusively through Chinese characters: idu (the clerical
+           'reading-and-sound' system of documents and stelae), the
+           hyangchal orthography of the hyangga (25 surviving songs —
+           14 preserved in the Samguk yusa, 11 in the Kyunyŏ-jŏn),
+           kugyŏl glosses on Chinese texts, and the toponym
+           correspondences of the Samguk sagi (1145) geography
+           treatises. Parent is the bare Koreanic root lineage (the
+           attested-first lect of the family; qfa-kor:pro is a
+           reconstruction behind it). Glottolog carries no separate
+           Old Korean languoid (checked 2026-10-19; none stated).
+           Corpus: none held as Old Korean — the library's earliest
+           Korean-history text, the Samguk sagi, is Literary Chinese
+           (Lee & Ramsey 2011, ch. 3)"
+
+  okm:
+    name: Middle Korean
+    parent: oko
+    glottocode: midd1372
+    band: [918, 1599]
+    band_note: "Lee & Ramsey's Middle Korean — Koryŏ (918–1392) and
+                early Chosŏn through the 16th c.; ISO 639-3's
+                reference name says 10th–16th c. The close is the
+                conventional post-Imjin War (1592–98) cut; approximate"
+    note: "the language of the Kaesŏng-centred Koryŏ court and of
+           early Chosŏn Seoul. Splits at the invention of the Korean
+           alphabet (1443, promulgated 1446 as the Hunmin chŏngŭm):
+           before it, attestation is again character-mediated; after
+           it, the language is written phonemically for the first
+           time — the best-documented premodern stage, with
+           syllable-by-syllable pitch accent marked by side dots
+           (pangchŏm). Descent edge oko per Lee & Ramsey's continuity
+           of the central dialect. Glottolog midd1372 (a dialect-level
+           languoid under Korean, verified 2026-10-19). Corpus: the
+           Yongbi ŏch'ŏn'ga (1447) and five 16th-c. hangul letters
+           and documents (1516–1595) held, all Late Middle Korean
+           (Lee & Ramsey 2011, chs. 4–5)"
+    stages:
+      emk: {name: Early Middle Korean, band: [918, 1391], ord: 2,
+            band_note: "Lee & Ramsey's 10th–14th c. — the Koryŏ
+                        dynasty; approximate",
+            note: "attested only through Chinese-character transcription:
+                   the Kyerim yusa (1103, a Song envoy's glossary of
+                   some 350 Koryŏ words), the Hyangyak kugŭppang
+                   (13th c., native names of medicinal plants), the
+                   Ming-era Chosŏn-gwan yŏgŏ glossary, and the
+                   interlinear sŏkdok kugyŏl glosses on Buddhist
+                   sutras. Corpus: none held (Lee & Ramsey 2011, ch. 4)"}
+      lmk: {name: Late Middle Korean, band: [1392, 1599], ord: 4,
+            band_note: "Lee & Ramsey's 15th–16th c. — early Chosŏn from
+                        the dynasty's founding (1392) to the Imjin War;
+                        hangul attestation from 1446; approximate",
+            note: "the hangul corpus of the Sejong-era court and its
+                   successors: the Hunmin chŏngŭm haerye (1446), the
+                   Yongbi ŏch'ŏn'ga (1447), the Sŏkpo sangjŏl (1447),
+                   the Wŏrin ch'ŏngang chigok (1449), the Wŏrin sŏkpo
+                   (1459),
+                   and the ŏnhae vernacular translations of Buddhist and
+                   Confucian classics, then the 16th-c. private letters
+                   (ŏn'gan). Tone marks, the letters ㅿ and ㆆ and the
+                   full vowel ㆍ are live. Corpus: ko-wikisource-mk's
+                   Yongbi ŏch'ŏn'ga (125 cantos) + okhc's five records
+                   upstream-labeled Middle Korean, dated 1516–1595 —
+                   all inside the band (Lee & Ramsey 2011, ch. 5)"}
+
+  ko:
+    name: Korean
+    parent: okm
+    glottocode: kore1280
+    note: "the standard language of both Koreas, continuing the Seoul
+           central dialect of Late Middle Korean (Lee & Ramsey 2011,
+           chs. 6–7). Jeju (jje) is a separate Koreanic language —
+           deliberately unminted until a consumer holds it. The
+           North/South standards (Seoul pyojun'ŏ vs. Pyongyang
+           munhwaŏ, divergent since 1945–1966) are standards, not
+           stages — unminted until a consumer distinguishes them.
+           Year-less Korean text stays the bare anchor (honest
+           coarseness). Corpus census (2026-10-19): okhc holds 58,366
+           Korean-language records, 28,635 carrying a single
+           upstream year (1603–1995) and 29,731 year-less"
+    stages:
+      emod: {name: Early Modern Korean, band: [1600, 1893], ord: 6,
+             band_note: "Lee & Ramsey's 17th–19th c. — from the Imjin
+                         War's aftermath to the Kabo Reform; the close
+                         is set at 1893 so the Kabo year itself opens
+                         Modern Korean without band overlap;
+                         approximate",
+             note: "the post-war Chosŏn vernacular: pitch-accent marking
+                    abandoned (by the late 16th c.), ㅿ and ㆆ lost, the
+                    vowel ㆍ merging (first-syllable merger in the 18th
+                    c.), t-palatalization (t > ch before i/y) spreading; the genres are
+                    the hangul novel, sijo and kasa anthologies,
+                    women's letters, the court's ŏnhae translations and
+                    the Sayŏgwŏn language textbooks (the Nogŏltae and
+                    Pak T'ongsa ŏnhae, the Ch'ŏphae sinŏ of 1676).
+                    Corpus census (2026-10-19): okhc 2,306 records
+                    dated 1603–1893 (AKS old documents and letters,
+                    the Gaksa deungnok, Kyujanggak and National Hangeul
+                    Museum holdings) — exactly the records the corpus
+                    itself labels Early Modern Korean
+                    (Lee & Ramsey 2011, ch. 6)"}
+      mod:  {name: Modern Korean, band: [1894, null], ord: 10,
+             band_note: "Lee & Ramsey's modern period, conventionally
+                         opened by the Kabo Reform (1894), whose edicts
+                         made the Korean script the official script of
+                         state documents; open-ended",
+             note: "the mixed-script and then all-hangul written
+                    standard: the Tongnip sinmun (1896, the first
+                    all-hangul newspaper), the colonial-era unified
+                    orthography of the Korean Language Society (1933),
+                    and the post-1945 divergence of the two national
+                    standards. Corpus census (2026-10-19): okhc 26,329
+                    records dated 1894–1995 (the Gaksa deungnok's
+                    1894–1910 government registers, GongU Madang's
+                    public-domain literature, the Japanese Legation
+                    records' Korean documents) — exactly the records
+                    the corpus labels Modern Korean
+                    (Lee & Ramsey 2011, ch. 7)"}
 
   sit-kir:
     name: Kiranti

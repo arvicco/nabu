@@ -1117,9 +1117,9 @@ sources:
   scat:
     # kind: machine-postured — kind_map.yml source_kind historiography (the
     # corpus is saints' lives). lect: machine-postured by the scat-century
-    # facet rules — 16th/17th c. chu:csl/rus; the 18th-c. slice rides
-    # chu:csl/rus DECLARED COARSE (approximation) pending the chu:ncs (New
-    # Church Slavonic) stage mint, which flips the "18" row.
+    # facet rules — 16th/17th c. chu:csl/rus (scat-century); the 18th-c.
+    # slice chu:ncs, the registry's New Church Slavonic stage
+    # (scat-century-ncs).
     dating: {posture: dated, note: "the release catalog's century on all 24 texts → a century
         envelope (16th/17th/18th); coarse by upstream's own grain — the README pairs it with the
         manuscript shelfmark, so it dates the witness"}
