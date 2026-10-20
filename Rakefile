@@ -457,6 +457,46 @@ namespace :site do
   task refresh: %i[data axes]
 end
 
+# The MCP skill pack (docs/mcp.md §8): skills/nabu-<desk>/SKILL.md per
+# research desk. scaffold creates a missing desk's skeleton (seed prose
+# from this box's source dossiers + the live-verified examples curated in
+# site/axis/_mcp.yml) and re-projects every skill's managed
+# sources lanes from the registry — prose is never rewritten. check is the
+# read-only drift report (the suite's test/skills guard enforces the same).
+namespace :skills do
+  skill_pack = lambda do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    shelf = Nabu::SourceShelf.new(dir: Nabu::SourceShelf.dir(config))
+    dossier = lambda do |slug|
+      shelf.load(slug)&.description
+    rescue Nabu::SourceDossier::FormatError
+      nil
+    end
+    examples_path = File.expand_path("site/axis/_mcp.yml", __dir__)
+    examples = (YAML.safe_load_file(examples_path) || {}).transform_values { |axis| axis["mcp"] }
+    Nabu::Ops::SkillPack.new(registry: Nabu::SourceRegistry.load(config.sources_path),
+                             skills_dir: File.expand_path("skills", __dir__),
+                             dossier: dossier, examples: examples)
+  end
+
+  desc "Scaffold missing desk skills + refresh every skill's managed sources block from the registry"
+  task :scaffold do
+    skill_pack.call.sync!.each do |result|
+      puts "#{result.action.to_s.ljust(9)} #{result.path}" unless result.action == :unchanged
+    end
+  end
+
+  desc "Drift check: desk skills whose managed sources lanes disagree with the registry (stale = exit 1)"
+  task :check do
+    stale = skill_pack.call.stale
+    abort "skills:check: stale — run `rake skills:scaffold`:\n  #{stale.join("\n  ")}" unless stale.empty?
+    puts "skills:check: every desk skill matches the registry"
+  end
+end
+
 # External-tool bootstraps (owner rule 2026-09-03): every tool an
 # enrichment lane runs on installs through ONE tracked, idempotent task
 # — never a list of shell incantations handed to a human. Network-
