@@ -267,13 +267,19 @@ module Nabu
           "corpus-gysseling" => %w[place region],
           # The Old Dutch witnessLocalization: 7 of the 17 region-bearing
           # works name no place ("Zuid-Nederrijn", "Utrecht") — same rule.
-          "corpus-oudnederlands" => %w[place region]
+          "corpus-oudnederlands" => %w[place region],
+          # KorBa's pubPlace role=region (the corpus's own classification
+          # of the print/writing place) answers for the 117 of 2,091
+          # texts with no role=place town (sejm acts, sermons).
+          "korba" => %w[place region]
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
-        # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29).
+        # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29);
+        # "zagranica" (abroad, 17) / "inny" (other, 6) — KorBa's region
+        # classes that name no place (they still facet, as claims).
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
-                    "s.l", "s.l.", "?"].freeze
+                    "s.l", "s.l.", "?", "zagranica", "inny"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO

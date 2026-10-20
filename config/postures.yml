@@ -1144,7 +1144,8 @@ sources:
     dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
         @notBefore/@notAfter with the prose kept raw)"}
     places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
-        own region classification (role=region) as metadata"}
+        own region classification (role=region), faceted, answering at REGION grain for the 117
+        town-less texts (declared coarse; zagranica/inny name no place)"}
     script: {posture: implied, note: "Latin script; the transcribed spelling is the text, the
         modernized orth rides per token"}
   prague-bible-1488:   # P116-1
