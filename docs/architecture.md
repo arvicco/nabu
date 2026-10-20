@@ -1561,7 +1561,15 @@ profile), the member sources' CONTENT identities
 content shas, so a content-neutral loader edit carries while any content
 change re-mines), and producer extras (parallels: index-core digest +
 stage versions + registry index flags; place-mine: the gazetteer's name
-keys + the hand stop list; place-link: the nabu-places tree). Membership is
+keys + the hand stop list;
+place-link: the nabu-places tree).
+The code closure honors declared CARVE-OUTS (the BUILDER_FILES
+precedent, per producer): a file the require closure reaches but the
+producer's replay provably never executes — formulas' place/date filter
+stack behind `Query::Scope`, plus `errors.rb`; the place pair's
+`pleiades.rb` behind `places.rb` — leaves the digest, and a TracePoint
+test fails if a carved file ever runs, so a carve cannot hide an
+output-moving change (formulas' closure: 14 files → 7). Membership is
 declared per producer: formulas and the place pair read only their slice;
 parallels scores by corpus-wide gram document frequency, so every source
 is a member. Carrying is per COMPONENT (scopes sharing an edge kind,
