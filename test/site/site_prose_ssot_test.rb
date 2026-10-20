@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "yaml"
 
 module Site
   # The prose single-source-of-truth guard (owner commission 2026-08-28 —
@@ -132,6 +133,40 @@ module Site
                           "the headline figures now come from site/_data/census.yml through Liquid; " \
                           "replace the hardcoded value with its {{ site.data.census.* }} field."
         end
+      end
+    end
+
+    # site/llms.txt is generated (Nabu::Ops::LlmsTxt), so the place a
+    # headline figure could be typed in by hand is the TEMPLATE — the
+    # regeneration guard in site_data_test would bless a number baked into
+    # it. The template must carry no million-scale literal, no current
+    # census headline value, and no known-stale literal; the rendered file
+    # carries only million-scale figures the census states.
+    LLMS_TEMPLATE = File.join(ROOT, "lib", "nabu", "ops", "llms_txt.rb")
+    LLMS_HEADLINE_KEYS = %w[documents passages language_codes live_sources dictionary_entries
+                            gold_lemmas gold_lemmas_m gold_languages silver_lemmas_m desks
+                            redistributable_pct].freeze
+
+    def test_the_llms_txt_template_hardcodes_no_headline_figure
+      template = File.read(LLMS_TEMPLATE)
+      assert_empty template.scan(MILLION_LITERAL),
+                   "lib/nabu/ops/llms_txt.rb carries a million-scale literal — read the census field instead"
+      census = YAML.safe_load_file(File.join(SITE, "_data", "census.yml"))
+      LLMS_HEADLINE_KEYS.each do |key|
+        value = census.fetch(key).to_s
+        next if value.size < 2 # a one-digit value collides with list numbering
+
+        refute_match(/(?<![\d.])#{Regexp.escape(value)}(?![\d.])/, template,
+                     "lib/nabu/ops/llms_txt.rb hardcodes census.#{key} (#{value}) — render the field")
+      end
+      STALE_LITERALS.each { |literal| refute_includes template, literal }
+    end
+
+    def test_rendered_llms_txt_states_only_census_totals
+      census = YAML.safe_load_file(File.join(SITE, "_data", "census.yml"))
+      stated = census.select { |key, _| key.end_with?("_display") }.values
+      File.read(File.join(SITE, "llms.txt")).scan(MILLION_LITERAL).each do |literal|
+        assert_includes stated, literal, "site/llms.txt states #{literal}, which no census field carries"
       end
     end
 

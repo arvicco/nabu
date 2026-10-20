@@ -87,6 +87,29 @@ module Site
       end
     end
 
+    # -- llms.txt (the agent entry file) ---------------------------------------
+
+    # site/llms.txt is a pure projection of the committed census + desks
+    # SSOT: regenerate it in memory and fail the day the committed copy
+    # was hand-edited or left stale by a census refresh that skipped it.
+    def test_committed_llms_txt_matches_the_census_projection
+      committed = File.read(File.join(ROOT, "site", Nabu::Ops::LlmsTxt::FILE))
+      fresh = Nabu::Ops::LlmsTxt.from_site(File.join(ROOT, "site"))
+      assert_equal fresh, committed,
+                   "site/llms.txt is stale or hand-edited against site/_data/census.yml + desks.yml — " \
+                   "run `rake site:data` (it regenerates llms.txt from the SSOT); never edit it by hand"
+    end
+
+    def test_llms_txt_states_the_census_headline_figures
+      census = YAML.safe_load_file(File.join(DATA_DIR, "census.yml"))
+      summary = File.read(File.join(ROOT, "site", "llms.txt"))[/^> .*$/]
+      refute_nil summary, "llms.txt opens with a blockquote census summary"
+      %w[documents_display passages_display language_codes live_sources dictionary_entries_display
+         gold_lemmas_m desks as_of].each do |key|
+        assert_includes summary, census.fetch(key).to_s, "the llms.txt summary cites census.#{key}"
+      end
+    end
+
     # -- the dates page (P81-1, C-6) -------------------------------------------
 
     def test_dates_data_carries_every_key_the_dates_page_cites

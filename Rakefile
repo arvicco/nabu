@@ -432,7 +432,7 @@ task default: :test
 # prose-chasing. The drift guard (test/site/site_data_test.rb) fails the
 # suite when the committed desks.yml goes stale against the registry.
 namespace :site do
-  desc "Regenerate site/_data (desks + census) from the registries and the live catalog"
+  desc "Regenerate site/_data (desks + census) and site/llms.txt from the registries and the live catalog"
   task :data do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
@@ -448,6 +448,8 @@ namespace :site do
       data_dir: File.expand_path("site/_data", __dir__),
       catalog_path: catalog_path, fulltext_path: fulltext_path
     ).generate!
+    # llms.txt renders from the SSOT files just written — never typed.
+    written << Nabu::Ops::LlmsTxt.write!(site_dir: File.expand_path("site", __dir__))
     puts "site:data wrote #{written.join(', ')}"
   end
 

@@ -1,0 +1,64 @@
+# Nabu
+
+> Nabu is a local, license-honest library of the ancient world: 2,427,537 documents and 114,209,499 citable passages in 222 language codes from 216 live public sources, with 3,063,044 dictionary entries, 23.5 million gold-standard lemma annotations in 50 languages (31.0 million more machine-suggested), and 29 research desks; 94% of documents are public-domain or attribution-class (census of 20 October 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
+
+Do not crawl this site page by page to inventory the library — use the lookup files below: the source and language indexes and the desk dossiers answer what is held, and the source registry answers it machine-readably.
+
+## Agent flow
+
+1. Read this file for the census and the map; every figure above is regenerated from the live catalog at each release gate.
+2. To learn what is held, read the [Sources](https://arvicco.github.io/nabu/sources/) index (every corpus, its upstream and its license class) and the [Languages](https://arvicco.github.io/nabu/languages/) index — or the machine-readable [source registry](https://github.com/arvicco/nabu/blob/main/config/sources.yml).
+3. To work one field, open its desk dossier below: the shelves, instruments and commands of that scholarly hat.
+4. To search, read or cite the texts themselves, install Nabu locally ([Quickstart](https://arvicco.github.io/nabu/quickstart/)) and connect the read-only MCP server ([Tools](https://arvicco.github.io/nabu/tools/)); citations resolve to stable URNs at verse or tablet-line grain.
+5. Respect each text's license class as the Sources page states it; derived datasets carry their own terms in nabu-data.
+6. Cite Nabu by its [concept DOI](https://doi.org/10.5281/zenodo.21361956), which resolves to the latest release.
+
+## Lookup indexes
+
+- [Sources](https://arvicco.github.io/nabu/sources/): every corpus and dictionary, with upstream attribution and license terms
+- [Languages](https://arvicco.github.io/nabu/languages/): the language-code census and the headline languages
+- [Library](https://arvicco.github.io/nabu/library/): the shelf map, corpus by corpus
+- [Research desks](https://arvicco.github.io/nabu/axis/): the desk index — tags over the source list
+- [Layers](https://arvicco.github.io/nabu/layers/): when each document was written, where it comes from, and what kind of text it is
+- [Tools](https://arvicco.github.io/nabu/tools/): the command line and the MCP server
+- [FAQ](https://arvicco.github.io/nabu/faq/): scope, licensing and citation
+- [Lect registry](https://arvicco.github.io/nabu-lects): the language-stage registry the library's lect claims resolve against
+- [Place registry](https://arvicco.github.io/nabu-places): the place-matching decisions registry
+
+## Desk dossiers
+
+- [The Classicist](https://arvicco.github.io/nabu/axis/classical/): Greek and Latin letters read whole, Homer to the late grammarians
+- [The Romanist](https://arvicco.github.io/nabu/axis/romance/): the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
+- [The Papyrologist-Epigraphist](https://arvicco.github.io/nabu/axis/epigraphy/): reads what survives on stone, sherd, papyrus and tablet, lacunae and all
+- [The Slavicist](https://arvicco.github.io/nabu/axis/slavic/): Cyril and Methodius to the damaskini, canon to vernacular
+- [The Germanicist](https://arvicco.github.io/nabu/axis/germanic/): Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches
+- [The Celticist](https://arvicco.github.io/nabu/axis/celtic/): from Lepontic stones to the Old Irish glossators
+- [The Italicist](https://arvicco.github.io/nabu/axis/italic/): the languages of pre-Roman Italy, Oscan to Etruscan to Raetic
+- [The Comparative Indo-Europeanist](https://arvicco.github.io/nabu/axis/etym/): laryngeals, reflex chains, the long descent of words
+- [The Biblical scholar](https://arvicco.github.io/nabu/axis/biblical/): one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
+- [The Hebraist](https://arvicco.github.io/nabu/axis/hebrew/): Masoretic vowels, Qumran consonants, the Aramaic of the Targums
+- [The Syriacist](https://arvicco.github.io/nabu/axis/syriac/): the Peshitta and the estrangela bookshelf
+- [The Ethiopicist](https://arvicco.github.io/nabu/axis/ethiopic/): Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible
+- [The Arabist](https://arvicco.github.io/nabu/axis/arabic/): the Islamicate library whole, Quran and hadith to falsafa and adab
+- [The Hittitologist](https://arvicco.github.io/nabu/axis/hittite/): Anatolia in cuneiform, KBo and KUB by tablet and line
+- [The Assyriologist](https://arvicco.github.io/nabu/axis/cuneiform/): Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire
+- [The Egyptologist](https://arvicco.github.io/nabu/axis/egyptian/): hieroglyphs to Coptic, one language across four millennia of script
+- [The Iranologist](https://arvicco.github.io/nabu/axis/iranian/): the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian
+- [The Indologist](https://arvicco.github.io/nabu/axis/indic/): Veda to sastra, the Sanskrit library and its instruments
+- [The Buddhologist](https://arvicco.github.io/nabu/axis/buddhist/): the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
+- [The Tibetologist](https://arvicco.github.io/nabu/axis/tibetan/): the Land of Snows from Dunhuang documents to the complete Derge canon
+- [The Koreanist](https://arvicco.github.io/nabu/axis/korean/): the hanmun state record and the first hangul vernacular
+- [The Southeast Asianist](https://arvicco.github.io/nabu/axis/sea/): the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars they seeded
+- [The Sinologist](https://arvicco.github.io/nabu/axis/sinitic/): the classical Chinese written world and its phonological deep past
+- [The Japanologist](https://arvicco.github.io/nabu/axis/japonic/): Old Japanese song to the Sino-Japanese dictionary tradition
+- [The Turkologist](https://arvicco.github.io/nabu/axis/turkic/): the runiform steppe to the Chagatai chancery, one literary continuum
+- [The Mongolist](https://arvicco.github.io/nabu/axis/mongolic/): the Secret History's empire in its own words, hanzi transcription beside romanization
+- [The Americanist](https://arvicco.github.io/nabu/axis/americas/): the colonial record of the indigenous Americas, Zapotec testaments to the Andean chronicle
+- [The Africanist](https://arvicco.github.io/nabu/axis/africa/): Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse
+- [The Librarian](https://arvicco.github.io/nabu/axis/local/): the owner's own shelves: dossiers, library, notes, and the sources' own records
+
+## Optional
+
+- [nabu-data](https://github.com/arvicco/nabu-data): the derived datasets (CLDF + Frictionless), versioned with DOIs — bulk downloads, not lookups
+- [Source repository](https://github.com/arvicco/nabu): the full pipeline, registry and documentation
+- [News](https://arvicco.github.io/nabu/news/): dated release notes, with an Atom feed at https://arvicco.github.io/nabu/feed.xml
