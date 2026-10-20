@@ -277,6 +277,23 @@ class CopticScriptoriumTest < Minitest::Test
     assert_equal "urn:nabu:coptic-scriptorium:nt.mark.sahidica", document.urn
   end
 
+  # The mining law's places half: the header's "places" roster is the
+  # entity annotation of places the TEXT names (Jonah's Jaffa/Nineveh/
+  # Tarshish), never the manuscript's origin — so it rides the
+  # place_mentioned facet (the diccas precedent), one value per name,
+  # and upstream's "none" claims nothing. The origin stays origPlace/
+  # placeName's (the timeline lane and the place facet).
+  def test_mentioned_places_ride_the_place_mentioned_facet_never_the_origin
+    adapter = conformance_adapter
+    jonah = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ot.jonah.coptot_ed" }
+    meta = adapter.parse(jonah).metadata
+    assert_equal({ "values" => %w[Jaffa Nineveh Tarshish] }, meta.dig("facets", "place_mentioned"))
+    assert_equal "Jaffa; Nineveh; Tarshish", meta["places"], "the roster itself stays verbatim"
+    none = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ap.100.monbeg" }
+    refute adapter.parse(none).metadata["facets"].key?("place_mentioned"),
+           "places='none' is upstream's absence — no mention invented"
+  end
+
   # P104-1 (the aggressive-mining law, owner-ruled 2026-09-26): the header's Trismegistos number rode
   # metadata unminted — now a "tm:<n>" related edge per the P25-1 scheme
   # rule, joining the papyri/elephantine TM key space; upstream's
