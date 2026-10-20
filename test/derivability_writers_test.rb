@@ -35,7 +35,8 @@ class DerivabilityWritersTest < Minitest::Test
   # (c) Persistent-file writers: the sanctioned gateway census. Fetch
   # arms and adapters write canonical/ inside #fetch; the four shelves +
   # ingest write local/shelves/; the write-through modules write
-  # local/config/; ops/ and data_build/ write generated repo/site or
+  # local/config/; ops/ and data_build/ write generated repo/site (the
+  # skill pack writes skills/*/SKILL.md, managed lanes only once seeded) or
   # caller-named output (places_lpf_builder writes its GeoJSON/TSV into
   # the runner's caller-named dataset dir — P73-5; readme_index rewrites
   # the generated dataset table between markers in the caller-named
@@ -187,6 +188,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/health/quarantine_baseline.rb nabu/profile.rb
     nabu/health/shed_acceptance.rb
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb nabu/ops/llms_txt.rb
+    nabu/ops/skill_pack.rb
     nabu/ops/drill.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb nabu/data_build/readme_index.rb
