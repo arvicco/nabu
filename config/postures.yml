@@ -535,11 +535,13 @@ sources:
         (Ming 正徳 / 弘治, Qing 嘉慶 — the collection holds their imprints), the one-year
         eras, year-less era spans (慶長元和年間) and pre-Taika dates stay unparsed,
         declared"}
-    places: {posture: unplaced, note: "no place fields in the census bibliography; the
-        bib record's publisher locations (京 · [京都] · 山田 (伊勢) — ~25% of sampled
-        records, the unknown marker [製作地不明] among them) ride metadata
-        publication_places verbatim — a print-place fold awaits a gazetteer
-        resolution (the nrct lane), not defaulted"}
+    places: {posture: named, note: "no place fields in the census bibliography; the bib
+        record's 出版地 list (publication_places, 6,037 docs) names the digitized item's
+        own production place — the print or manuscript IS the document (the eebo
+        imprint stance) — and projects onto the axis on ~5,040 docs: catalog brackets
+        stripped, the unknown markers ([出版地不明] / [製作地不明] / [書写地不明]) mint
+        nothing, the historical spellings (京 · 東都 · 浪華 · 京城) ride verbatim. No
+        gazetteer refs yet: resolution (the nrct lane) is a nabu-places section, declared"}
     script: {posture: implied}
   ja-wikisource:
     kind: {posture: unclassified}

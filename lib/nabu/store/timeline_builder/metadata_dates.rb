@@ -271,16 +271,26 @@ module Nabu
           # KorBa's pubPlace role=region (the corpus's own classification
           # of the print/writing place) answers for the 117 of 2,091
           # texts with no role=place town (sejm acts, sermons).
-          "korba" => %w[place region]
+          "korba" => %w[place region],
+          # The NDL bibliographic record's 出版地 list (6,037 of 41,685
+          # docs, ~5,040 naming a real place; census 2026-10-21). The
+          # digitized item IS the print or manuscript, so its production
+          # place is the artifact's own — the eebo imprint stance. Names
+          # ride verbatim (京 · 東都 · 浪華 … — the historical spellings;
+          # no registry rows yet, so unresolved: declared coarse).
+          "ndl-kotenseki" => "publication_places"
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
         # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29);
         # "zagranica" (abroad, 17) / "inny" (other, 6) — KorBa's region
         # classes that name no place (they still facet, as claims);
-        # "place of origin unknown" — gams-zrcalo's TEI origPlace absence.
+        # "place of origin unknown" — gams-zrcalo's TEI origPlace absence;
+        # 出版地不明 / 製作地不明 / 書写地不明 — the NDL record's publication /
+        # production / copying place unknown (ndl-kotenseki, 855 docs).
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
-                    "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown"].freeze
+                    "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown",
+                    "出版地不明", "製作地不明", "書写地不明"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -469,6 +479,7 @@ module Nabu
           # carrying a value answers.
           key = key.find { |k| !meta[k].to_s.strip.empty? } || key.last if key.is_a?(Array)
           place = meta[key]
+          return string_list_claim(place) if place.is_a?(Array) && place.all?(String)
           return toponym_claim(place) if place.is_a?(Array)
 
           if key != "place"
@@ -531,6 +542,18 @@ module Nabu
           end
           lat, lon = points.size == 1 ? points.first : [nil, nil]
           [topos.map { |topo| topo["name"].strip }.uniq.join("; "), nil, lat, lon]
+        end
+
+        # The places sweep: a bare string list (ndl-kotenseki's 出版地
+        # list — co-publishers' cities). Catalog brackets anywhere in a
+        # name are furniture ([京城], 〔江戸〕, 大[坂] — the cataloger's
+        # supplied reading, the ESTC precedent); unknown markers and empty
+        # brackets drop; the rest join "; " deduped, verbatim otherwise.
+        LIST_FURNITURE = /[\[\]〔〕]/
+        def string_list_claim(list)
+          names = list.map { |name| name.gsub(LIST_FURNITURE, "").gsub(/\s+/, " ").strip }
+                      .reject { |name| name.empty? || NO_PLACE.include?(name.downcase) }.uniq
+          [names.empty? ? nil : names.join("; "), nil, nil, nil]
         end
 
         # A WGS84 "lat, lon" string → [lat, lon] floats, both-or-nothing

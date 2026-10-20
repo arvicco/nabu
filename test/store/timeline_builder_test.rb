@@ -948,6 +948,37 @@ module Store
       assert_nil row[:place_name], "the unknown sentinel is an absence, never a place"
     end
 
+    # ndl-kotenseki: the NDL record's 出版地 LIST (6,037 of 41,685 docs,
+    # census 2026-10-21) — the digitized item IS the print/manuscript, so
+    # its production place is the artifact's own (the eebo imprint
+    # stance). Cataloger-supplied brackets strip ([京城] → 京城), co-
+    # publishers' cities join ("; ", deduped), and the record's unknown
+    # markers ([出版地不明] / [製作地不明] / [書写地不明] / "[ ]") mint nothing.
+    def test_metadata_places_ndl_publication_places
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:2533331",
+                        { "date" => { "not_before" => 1771, "not_after" => 1771, "raw" => "明和8 [1771]" },
+                          "publication_places" => %w[大坂 江戸] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:2534131",
+                        { "date" => { "not_before" => 1756, "not_after" => 1756, "raw" => "宝暦6 [1756]" },
+                          "publication_places" => %w[東都 東都] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:1194598",
+                        { "date" => { "not_before" => 1930, "not_after" => 1930, "raw" => "昭和5" },
+                          "publication_places" => ["[京城]"] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:u1",
+                        { "date" => { "not_before" => 1870, "not_after" => 1870, "raw" => "明治3" },
+                          "publication_places" => ["[製作地不明]"] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:u2", { "publication_places" => ["[ ]"] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:p1", { "publication_places" => ["〔江戸〕"] })
+      build!
+      assert_equal "大坂; 江戸", timeline_for("urn:nabu:ndl-kotenseki:2533331")[:place_name]
+      assert_equal "東都", timeline_for("urn:nabu:ndl-kotenseki:2534131")[:place_name]
+      assert_equal "京城", timeline_for("urn:nabu:ndl-kotenseki:1194598")[:place_name]
+      assert_nil timeline_for("urn:nabu:ndl-kotenseki:u1")[:place_name], "the unknown marker is no place"
+      assert_nil timeline_for("urn:nabu:ndl-kotenseki:u2"), "an empty bracket places nothing — no row"
+      assert_equal "江戸", timeline_for("urn:nabu:ndl-kotenseki:p1")[:place_name],
+                   "full-width brackets are the same furniture; an undated placed doc still rows"
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!
