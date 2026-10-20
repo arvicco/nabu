@@ -29,28 +29,35 @@ module Store
 
     # -- rigs ---------------------------------------------------------------
 
+    # Both shelf loads are catalog-only and deterministic: replayed once per
+    # class per starting state, restored from the snapshot after that
+    # (StoreTestDB#class_template_step).
     def load_recon_fixtures!
-      recon = Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon",
-        license: "CC-BY-SA + GFDL", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      class_template_step(:recon, db: @catalog) do
+        recon = Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions (kaikki.org)",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon",
+          license: "CC-BY-SA + GFDL", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      end
     end
 
     # The attested-OCS shelf (P16-5 descendants backfill): wiktionary-cu
     # entries mint reflex edges too, from the same trimmed real fixture.
     def load_cu_fixtures!
-      cu = Nabu::Store::Source.create(
-        slug: "wiktionary-cu", name: "Wiktionary OCS (kaikki.org)",
-        adapter_class: "Nabu::Adapters::WiktionaryCu",
-        license: "CC-BY-SA + GFDL", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: cu)
-                                   .load_from(Nabu::Adapters::WiktionaryCu.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-cu"))
+      class_template_step(:cu, db: @catalog) do
+        cu = Nabu::Store::Source.create(
+          slug: "wiktionary-cu", name: "Wiktionary OCS (kaikki.org)",
+          adapter_class: "Nabu::Adapters::WiktionaryCu",
+          license: "CC-BY-SA + GFDL", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: @catalog, source: cu)
+                                     .load_from(Nabu::Adapters::WiktionaryCu.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-cu"))
+      end
     end
 
     def make_gold_passage(language:, lemma:, form: lemma, urn_stem: "urn:nabu:test:#{language}")

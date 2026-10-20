@@ -12,18 +12,23 @@ module Query
   class DefineTest < Minitest::Test
     include StoreTestDB
 
+    # The lexica load is identical for every test: replayed once per class
+    # into a template, each test gets its own fresh copy (StoreTestDB).
     def setup
-      @catalog = store_test_db
-      @source = Nabu::Store::Source.create(
-        slug: "lexica", name: "Perseus Lexica", adapter_class: "Nabu::Adapters::Lexica",
-        license: "CC BY-SA 4.0", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: @source)
-                                   .load_from(Nabu::Adapters::Lexica.new,
-                                              workdir: Nabu::TestSupport.fixtures("lexica"))
-      @texts = Nabu::Store::Source.create(
-        slug: "texts", name: "Texts", adapter_class: "TestAdapter", license_class: "attribution"
-      )
+      @catalog = class_template_db do |db|
+        source = Nabu::Store::Source.create(
+          slug: "lexica", name: "Perseus Lexica", adapter_class: "Nabu::Adapters::Lexica",
+          license: "CC BY-SA 4.0", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                     .load_from(Nabu::Adapters::Lexica.new,
+                                                workdir: Nabu::TestSupport.fixtures("lexica"))
+        Nabu::Store::Source.create(
+          slug: "texts", name: "Texts", adapter_class: "TestAdapter", license_class: "attribution"
+        )
+      end
+      @source = Nabu::Store::Source.first!(slug: "lexica")
+      @texts = Nabu::Store::Source.first!(slug: "texts")
     end
 
     def make_document(urn:, language:, title: "T")
