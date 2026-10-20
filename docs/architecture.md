@@ -1414,8 +1414,10 @@ never a journal edge: CBETA's N canon carries it per line as `cref`
 (`PTS.S.3.1`, upstream's own `<ref cRef>`), and SuttaCentral's reference
 sidecars fold into a `pts` key list in the identical spelling
 (`PTS.S.4.16`; `Adapters::PtsConcordance` — book siglum from the root
-path, the Apadāna's continuous pagination folded, two-edition books kept
-edition-explicit as `PTS-ed1.…`/`PTS-ed2.…`), with the VRI tokens beside
+path, the Apadāna's continuous pagination folded; in the two-edition
+books the first edition — the one CBETA N's anchors follow, checked
+page-for-page — takes the plain spelling and the second stays explicit
+as `PTS-ed2.…`), with the VRI tokens beside
 it as `vri`. A Pali segment and its Japanese translation meet on equal
 strings — pairing is a read-time join (the 84000 folio precedent), so
 nothing is minted into the links journal.

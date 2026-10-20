@@ -49,10 +49,29 @@ class PtsConcordanceTest < Minitest::Test
                  "Ap I runs pp. 1–338, Ap II pp. 339–615 (censused) — the page alone is the citation"
   end
 
-  def test_edition_marked_tokens_carry_their_edition
-    assert_equal "PTS-ed1.S.1.33", PC.key("pts-vp-pli1ed1.33", siglum: "S")
+  # CBETA N (the Nanden Daizōkyō pagination, 1935–41) follows the FIRST PTS
+  # edition of every two-edition book — every second edition postdates it.
+  # Checked page-for-page against the held trees: SN 6.12 body → S.1.154
+  # and SN 6.14 → S.1.155 (ed2: 332/335); Dhp verses 100/200/300/400/423
+  # → pp. 15/30/43/57/60 (ed2: 28/56/84/112/118); Bv and Cp chapter
+  # breaks identical to ed1 (Cp pp. 73–103, ed2 pp. 1–37).
+  def test_first_edition_tokens_fold_to_the_plain_cbeta_spelling
+    assert_equal "PTS.S.1.154", PC.key("pts-vp-pli1ed1.154", siglum: "S")
+    assert_equal "PTS.Dhp.51", PC.key("pts-vp-pli1ed51", siglum: "Dhp")
+    assert_equal "PTS.Cp.73", PC.key("pts-vp-pli1ed73", siglum: "Cp")
+  end
+
+  def test_the_buddhavamsa_volume_number_is_dropped
+    assert_equal "PTS.Bv.39", PC.key("pts-vp-pli1ed1.39", siglum: "Bv"),
+                 "Bv is one volume in either edition; CBETA writes PTS.Bv.<page>"
+    assert_equal "PTS-ed2.Bv.56", PC.key("pts-vp-pli2ed1.56", siglum: "Bv")
+  end
+
+  def test_second_edition_tokens_stay_edition_explicit
     assert_equal "PTS-ed2.S.1.69", PC.key("pts-vp-pli2ed1.69", siglum: "S")
-    assert_equal "PTS-ed2.Pv.9", PC.key("pts-vp-pli2ed9", siglum: "Pv")
+    assert_equal "PTS-ed2.Pv.9", PC.key("pts-vp-pli2ed9", siglum: "Pv"),
+                 "SuttaCentral carries only ed2 for Vv/Pv; CBETA N follows ed1 — no meeting, no fold"
+    assert_equal "PTS-ed2.Dhp.28", PC.key("pts-vp-pli2ed28", siglum: "Dhp")
   end
 
   def test_non_page_and_unread_shapes_yield_nothing
@@ -67,7 +86,7 @@ class PtsConcordanceTest < Minitest::Test
     assert_equal({ "pts" => ["PTS.S.4.16"], "vri" => ["vri26.15"] },
                  PC.split("dr18.18, ms13S4_65, msdiv24, pts-vp-pli4.16, sya18.20, vri26.15", siglum: "S"))
     assert_equal({}, PC.split("ms12S1_249, msdiv44", siglum: "S"))
-    assert_equal({ "pts" => ["PTS-ed1.S.1.33", "PTS-ed2.S.1.69"] },
+    assert_equal({ "pts" => ["PTS.S.1.33", "PTS-ed2.S.1.69"] },
                  PC.split("cck15.43, ms12S1_250, msdiv45, pts-vp-pli1ed1.33, pts-vp-pli2ed1.69", siglum: "S"))
   end
 end

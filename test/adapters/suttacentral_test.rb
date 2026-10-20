@@ -315,10 +315,10 @@ class SuttacentralTest < Minitest::Test
     assert_includes passage.annotations["refs"], "pts-vp-pli4.16", "the verbatim string stays beside the keys"
   end
 
-  def test_sn_volume_one_keeps_both_pts_editions_apart
+  def test_sn_volume_one_meets_cbeta_on_the_first_edition
     passage = parse_urn("urn:nabu:suttacentral:sn1.45").find { |p| p.urn.end_with?(":1.1") }
-    assert_equal %w[PTS-ed1.S.1.33 PTS-ed2.S.1.69], passage.annotations["pts"],
-                 "SN I has two PTS editions with different pagination — the edition is never assumed"
+    assert_equal %w[PTS.S.1.33 PTS-ed2.S.1.69], passage.annotations["pts"],
+                 "SN I has two PTS editions; CBETA N follows Feer's 1884 ed1 (checked), ed2 stays explicit"
     refute passage.annotations.key?("vri"), "sn1.45 carries no VRI token"
   end
 
