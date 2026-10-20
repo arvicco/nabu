@@ -422,6 +422,49 @@ class InvariantsTest < Minitest::Test
     assert_empty checker.global
   end
 
+  # -- stale open run rows (global) ---------------------------------------------
+
+  # The run-row lifecycle (ledger migration 011) closes a row only at
+  # OPERATION end, so a row still "running" long past any plausible
+  # operation is a killed run nobody noticed. Old open rows surface; a
+  # recent open row (a live operation) and closed rows never do.
+  def test_open_run_rows_past_the_threshold_are_a_soft_finding
+    stale_at = @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS - 60
+    open_run("glaux", started_at: stale_at)
+    open_run("dta", kind: "rebuild", started_at: stale_at - 86_400, loaded_at: stale_at)
+    open_run("live-now", started_at: @now - 3_600) # an operation in flight
+    @ledger[:runs].insert(source_slug: "closed", kind: "sync", started_at: stale_at - 86_400,
+                          finished_at: stale_at, status: "failed")
+
+    finding = global_finding(:stale_open_runs)
+    refute_nil finding
+    assert_predicate finding, :soft?
+    assert_match(/2 run rows still "running"/, finding.message)
+    assert_match(/dta \(rebuild/, finding.message, "the oldest row leads the examples")
+    assert_match(/glaux \(sync/, finding.message)
+    refute_match(/live-now/, finding.message)
+    assert_match(/1 died after its load/, finding.message)
+  end
+
+  def test_a_single_stale_open_row_reads_in_the_singular
+    open_run("kanripo", started_at: @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS - 1)
+
+    assert_match(/1 run row still "running"/, global_finding(:stale_open_runs).message)
+  end
+
+  def test_open_rows_inside_the_threshold_are_silent
+    open_run("rebuilding", kind: "rebuild",
+                           started_at: @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS + 60)
+
+    assert_nil global_finding(:stale_open_runs)
+  end
+
+  def test_the_threshold_clears_the_longest_legitimate_open_row
+    # The longest a healthy row stays open: a rebuild's first replayed
+    # source, open until the whole replay + corpus stages finish.
+    assert_operator Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS, :>=, 24 * 3_600
+  end
+
   # -- source_stats drift (D42-a, global) -------------------------------------
 
   # The contract: source_stats is DERIVED and the loader is its only writer.
@@ -1053,6 +1096,11 @@ class InvariantsTest < Minitest::Test
     id = @db[:sources].insert(slug: slug, name: slug, adapter_class: "X",
                               license_class: "open", enabled: true)
     { id: id, slug: slug }
+  end
+
+  def open_run(slug, started_at:, kind: "sync", loaded_at: nil)
+    @ledger[:runs].insert(source_slug: slug, kind: kind, started_at: started_at,
+                          loaded_at: loaded_at, status: "running")
   end
 
   def seed_run(source, status:, started_at: @now, finished_at: @now, notes: nil)
