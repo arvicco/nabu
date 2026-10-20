@@ -764,7 +764,8 @@ class InvariantsTest < Minitest::Test
   # custodial chains, sub-site find context beside a present museum,
   # in-situ qualifiers, author biography — each declared with its reason.
   def test_places_sweep_declares_its_non_origin_keys
-    declared = { "gams-zrcalo" => "provenance", "ig-cyprus" => "provenance" }
+    declared = { "gams-zrcalo" => "provenance", "ig-cyprus" => "provenance",
+                 "openiti" => "author_places" }
     declared.each do |slug, key|
       reason = Nabu::Health::Invariants::MINING_EXEMPT.dig(slug, key)
       refute_nil reason, "#{slug}/#{key} must be declared"
