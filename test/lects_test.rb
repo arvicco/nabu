@@ -550,7 +550,7 @@ class LectsTest < Minitest::Test
     # anchors at exactly the moment a source's documents arrive.
     # The CLI's callsites are named per carved-out file (cli/), never by a
     # blanket directory entry.
-    allowlist = %w[nabu/cli.rb nabu/cli/lect.rb nabu/cli/layer.rb
+    allowlist = %w[nabu/cli.rb nabu/cli/admin.rb nabu/cli/lect.rb nabu/cli/layer.rb
                    nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
                    nabu/rebuild.rb nabu/query/define.rb nabu/query/lect_filter.rb
                    nabu/store/lect_journal.rb nabu/incremental_rebuild.rb
