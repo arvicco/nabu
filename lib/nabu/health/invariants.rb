@@ -279,7 +279,11 @@ module Nabu
                                           "values 118,363 trace (census 2026-10-21) — the first-N " \
                                           "sample meets only the archaic \"00.00.00.00\" filler" },
         "gams-zrcalo" => { "edition_date" => "the modern digital edition's year — lineage",
-                           "settlement" => "the holding library's city (a PRESENT location)" },
+                           "settlement" => "the holding library's city (a PRESENT location)",
+                           "provenance" => "the codex's OWNERSHIP chain (\"Pre-owned: Frano Depope " \
+                                           "(17st ct); Osor, Krk; Matej Savić …; Rome …\") — " \
+                                           "custodial history, not its origin; orig_place is " \
+                                           "the origin claim (upstream: unknown)" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \

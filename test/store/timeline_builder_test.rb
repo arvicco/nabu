@@ -931,6 +931,23 @@ module Store
       assert_nil timeline_for("urn:nabu:korba:abroad")[:place_name], "abroad is a class, not a place"
     end
 
+    # gams-zrcalo's TEI origPlace reads "place of origin unknown" — upstream's
+    # absence, which minted itself as a place name (census 2026-10-21);
+    # the orig_place fallback honors the unknown sentinels too.
+    def test_metadata_places_orig_place_unknown_sentinel_mints_no_place
+      seed_metadata_doc("gams-zrcalo", "urn:nabu:gams-zrcalo:speculum.01",
+                        { "date" => { "not_before" => 1445, "not_after" => 1445, "raw" => "1445" },
+                          "orig_place" => "place of origin unknown",
+                          "provenance" => "Pre-owned: Frano Depope (17st ct); Osor, Krk; Matej Savić " \
+                                          "(from 1772); Rome, Library Congregatio de propaganda fide " \
+                                          "Vatican Apostolic Library",
+                          "settlement" => "Città del Vaticano" })
+      build!
+      row = timeline_for("urn:nabu:gams-zrcalo:speculum.01")
+      assert_equal 1445, row[:not_before]
+      assert_nil row[:place_name], "the unknown sentinel is an absence, never a place"
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!
