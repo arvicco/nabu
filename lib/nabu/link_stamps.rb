@@ -72,6 +72,18 @@ module Nabu
   # fresh mine no longer produces — a real incident (an input the stamp
   # misses), announced loudly and carried into the rebuild summary. The
   # fresh mine is kept either way, so the journal ends correct.
+  #
+  # == The code-change recheck
+  #
+  # A scope re-mined because ONLY its producer code moved (its blame is
+  # exactly producer_code — or it was dragged by such a component-mate
+  # with its own stamp unchanged) is compared the same way, on any stage:
+  # its stamped edges are digested before they are dropped. Equal digests
+  # are REPRODUCED — a performance-only rewrite proves itself on the first
+  # live stage after it lands; a difference is CHANGED, reported beside
+  # the summary but never drift (a code change may legitimately move
+  # output). A scope whose members or params moved too is not rechecked:
+  # a difference there would prove nothing.
   class LinkStamps
     LIB_DIR = File.expand_path(__dir__)
 
@@ -133,7 +145,10 @@ module Nabu
     # been carried and are compared after their re-mine; +reasons+ maps a
     # re-mined unit's key to why (blamed inputs, "unstamped", "volatile",
     # "component (...)", "self-check").
-    Plan = Data.define(:units, :carried_keys, :carried_run_ids, :self_check, :verify_runs, :reasons) do
+    # +recheck_runs+ ({ key => stamped run ids }) the code-only re-mines
+    # compared after their re-mine (the code-change recheck).
+    Plan = Data.define(:units, :carried_keys, :carried_run_ids, :self_check, :verify_runs, :reasons,
+                       :recheck_runs) do
       def carried?(unit) = carried_keys.include?(unit.key)
 
       def verify_keys = verify_runs.keys
@@ -149,9 +164,21 @@ module Nabu
     # links line. Lists hold "producer scope" labels; +drift+ one line per
     # drifted scope; +reasons+ label => why it re-mined; +failures+ the
     # contained producer failures (reference lane included);
-    # +next_check_in+ stamped stages left before the next self-check.
-    Outcome = Data.define(:mode, :mined, :carried, :verified, :drift, :reasons, :failures, :next_check_in) do
+    # +next_check_in+ stamped stages left before the next self-check;
+    # +reproduced+ / +changed+ the code-change recheck's verdicts (labels /
+    # one line per changed scope).
+    Outcome = Data.define(:mode, :mined, :carried, :verified, :drift, :reasons, :failures, :next_check_in,
+                          :reproduced, :changed) do
       def summary
+        line = mode_summary
+        return line if reproduced.empty? && changed.empty?
+
+        verdict = "reproduced #{reproduced.size} exactly"
+        verdict += ", changed #{changed.size}: #{changed.join(' · ')}" unless changed.empty?
+        "#{line} · code-change re-mines: #{verdict}"
+      end
+
+      def mode_summary
         case mode
         when "self-check"
           verdict = drift.empty? ? "no drift" : "DRIFT in #{drift.size}: #{drift.join(' · ')}"
@@ -256,13 +283,15 @@ module Nabu
           members.each { |unit| reasons[unit.key] = verdict.call(unit) }
         end
       end
+      recheck = recheck_runs(units, stored, reasons)
       if self_check
         clean_keys.each { |key| reasons[key] = "self-check" }
         Plan.new(units: units, carried_keys: [], carried_run_ids: [], self_check: true,
-                 verify_runs: clean_keys.to_h { |key| [key, stored.fetch(key)[:run_ids]] }, reasons: reasons)
+                 verify_runs: clean_keys.to_h { |key| [key, stored.fetch(key)[:run_ids]] }, reasons: reasons,
+                 recheck_runs: recheck)
       else
         Plan.new(units: units, carried_keys: clean_keys, carried_run_ids: clean_runs.sort, self_check: false,
-                 verify_runs: {}, reasons: reasons)
+                 verify_runs: {}, reasons: reasons, recheck_runs: recheck)
       end
     end
 
@@ -272,7 +301,8 @@ module Nabu
     # gone), then every run the plan does not carry. Returns the expected
     # digests for #mine!.
     def prepare!(plan, journal:)
-      expected = plan.verify_runs.transform_values { |ids| Store::LinksJournal.edge_digests(journal, ids) }
+      expected = plan.verify_runs.merge(plan.recheck_runs)
+                     .transform_values { |ids| Store::LinksJournal.edge_digests(journal, ids) }
       Store::LinksJournal.retain_scope_stamps!(journal, plan.carried_keys)
       Store::LinksJournal.retain_runs!(journal, plan.carried_run_ids)
       expected
@@ -303,13 +333,15 @@ module Nabu
         fresh[unit.key] = ids
       end
       verified, drift = compare(plan, expected, fresh, journal)
+      reproduced, changed = recheck(plan, expected, fresh, journal)
       Store::LinksJournal.record_stage_run!(journal, mode: plan.mode, mined: mined.size, carried: carried.size,
                                                      verified: verified.size, drift: drift)
       Outcome.new(mode: plan.mode, mined: mined, carried: carried, verified: verified, drift: drift,
                   reasons: plan.units.reject { |unit| plan.carried?(unit) }
                                .to_h { |unit| [unit.label, plan.reasons[unit.key]] },
                   failures: failures,
-                  next_check_in: SELF_CHECK_EVERY - 1 - Store::LinksJournal.stamped_streak(journal))
+                  next_check_in: SELF_CHECK_EVERY - 1 - Store::LinksJournal.stamped_streak(journal),
+                  reproduced: reproduced, changed: changed)
     end
 
     private
@@ -352,6 +384,43 @@ module Nabu
         drift << line
       end
       [verified, drift]
+    end
+
+    # The code-change recheck's comparison: → [reproduced labels, changed
+    # lines]. Informational — a changed scope is announced, never drift.
+    def recheck(plan, expected, fresh, journal)
+      reproduced = []
+      changed = []
+      plan.recheck_runs.each_key do |key|
+        next unless fresh.key?(key)
+
+        unit = plan.units.find { |candidate| candidate.key == key }
+        before = expected.fetch(key)
+        after = Store::LinksJournal.edge_digests(journal, fresh.fetch(key))
+        if before == after
+          reproduced << unit.label
+        else
+          changed << "#{unit.label}: #{edge_count(before)} edges before the code change, " \
+                     "#{edge_count(after)} after — content differs"
+        end
+      end
+      [reproduced, changed]
+    end
+
+    # The units re-mined for a code change alone: re-mined (a reason
+    # recorded), stamped before, volatile-free, and blaming nothing but
+    # producer_code — their own (a "dirty" reason) or a component-mate's
+    # (a "component" reason, own stamp unchanged). → { key => run ids }.
+    def recheck_runs(units, stored, reasons)
+      units.each_with_object({}) do |unit, picked|
+        row = stored[unit.key]
+        reason = reasons[unit.key]
+        next if row.nil? || unit.volatile || reason.nil?
+        next unless reason.start_with?("dirty", "component")
+        next unless (unit.blame(row[:inputs]) - ["producer_code"]).empty?
+
+        picked[unit.key] = row[:run_ids]
+      end
     end
 
     def edge_count(digests) = digests.values.sum { |slot| slot[:edges] }
