@@ -170,13 +170,21 @@ class FacetMapTest < Minitest::Test
                      "objectInfo" => "object_type", "style" => "style" },
       "glaux" => { "dialect" => "dialect", "author" => "author", "work" => "work" },
       "kdsp" => { "canonicity" => "canonicity", "period_slot" => "period", "author" => "author" },
-      "ref" => { "medium" => "medium", "text-type" => "text_type" },
+      "ref" => { "medium" => "medium", "text-type" => "text_type", "genre" => "genre" },
       "rem" => { "topic" => "topic", "text_type" => "text_type" },
       "edr" => { "repository" => "museum" },
       "edh" => { "repository" => "museum" },
       "oncoj" => { "corpus" => "collection" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
+  end
+
+  # The mining-law sweep: DAMOS's per-item writing support (clay ×5,888,
+  # ivory, stone) projects as the material facet — the cdli/rundata
+  # facet name, never a kind.
+  def test_shipped_config_projects_the_damos_material
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    assert_equal({ "material" => "material" }, Nabu::FacetMap.load(path).fields_for("damos"))
   end
 
   # ociana: the per-record script (the lect stage-flip key) and the
