@@ -3600,8 +3600,8 @@ ogham:
   # siblings -translit/-roman/…). LICENSE CONFLICT held at the restrictive
   # reading: site about-page says CC-BY-NC-SA, every sampled record's
   # in-file <licence> says CC BY 4.0, repo has no LICENSE file → class nc
-  # PENDING the clarification email (unlock registry #14); relabel on
-  # reply. The live project still updates (v2.0 2025) → re-syncs are
+  # until upstream clarifies; relabel then via license_class. The live
+  # project still updates (v2.0 2025) → re-syncs are
   # owner-fired.
   sync_policy: manual
 

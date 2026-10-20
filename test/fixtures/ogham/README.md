@@ -19,9 +19,8 @@ through).
   Commons Attribution 4.0 International License"*`</licence>`
 - The repo has **no LICENSE file**.
 
-The two grants contradict; the restrictive reading governs until upstream
-answers the drafted clarification email (unlock registry #14) →
-license_class `nc`, relabel-on-reply.
+The two grants contradict; the restrictive reading governs until
+upstream clarifies → license_class `nc`, relabel then.
 
 ## Records (whole, byte-identical)
 
