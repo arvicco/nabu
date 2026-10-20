@@ -979,6 +979,29 @@ module Store
                    "full-width brackets are the same furniture; an undated placed doc still rows"
     end
 
+    # ReF: the prints place by "place" (92), the manuscripts by their
+    # header text-place — the Schreibort, the writing place (36, census
+    # 2026-10-21; the two never co-occur). The cataloger's "Schreibort"
+    # label is furniture; hedges ride verbatim; "unbekannt" and a bare
+    # "(" mint nothing.
+    def test_metadata_places_ref_text_place_schreibort
+      { "s1" => "(Schreibort) Regensburg (?)", "s2" => "Schreiborte: Hall, Brixen, Meran, Innsbruck, Wien",
+        "s3" => "Straßburg, Kloster zum grünen Wörth (Schreibort)", "s4" => "Schreibort wahrsch. Basel",
+        "s5" => "(Schreibort). Nürnberg", "s6" => "Herstellungsort/Schreibort München",
+        "s7" => "unbekannt (Schreibort)", "s8" => "(" }.each do |id, value|
+        seed_metadata_doc("ref", "urn:nabu:ref:#{id}",
+                          { "date" => { "not_before" => 1350, "not_after" => 1400, "raw" => "ca. 1350-75" },
+                            "medium" => "Handschrift", "text-place" => value })
+      end
+      seed_metadata_doc("ref", "urn:nabu:ref:d1",
+                        { "date" => { "not_before" => 1525, "not_after" => 1525, "raw" => "1525" },
+                          "medium" => "Druck", "place" => "Straßburg" })
+      build!
+      places = %w[s1 s2 s3 s4 s5 s6 s7 s8 d1].map { |id| timeline_for("urn:nabu:ref:#{id}")[:place_name] }
+      assert_equal ["Regensburg (?)", "Hall, Brixen, Meran, Innsbruck, Wien", "Straßburg, Kloster zum grünen Wörth",
+                    "wahrsch. Basel", "Nürnberg", "München", nil, nil, "Straßburg"], places
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!

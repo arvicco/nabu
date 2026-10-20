@@ -1875,9 +1875,11 @@ sources:
         time grid ('15,2' → [1450,1500]) as the prose fallback — all 190
         texts carry the grid, so every document bounds; MetadataDates
         :structured"}
-    places: {posture: pending, note: "candidate: the header place lane riding
-        metadata verbatim ('Regensburg', 'Bamberg' — print/scriptorium
-        place, a genuine origin claim, not a holding library)"}
+    places: {posture: named, note: "the header place lane verbatim — the prints' place
+        (92) and the manuscripts' text-place Schreibort (34 of 36; its 'Schreibort'
+        label stripped as furniture, hedges kept: 'Regensburg (?)', 'wahrsch. Basel') —
+        a genuine origin claim, not a holding library (library rides metadata); 126 of
+        190 placed, no gazetteer refs"}
     script: {posture: implied}
   disco:
     kind: {posture: unclassified}
