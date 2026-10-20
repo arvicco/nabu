@@ -3,24 +3,24 @@
 as_of: 20 October 2026
 classes:
 - head: literary
-  documents: 698024
-  documents_display: '698,024'
+  documents: 698197
+  documents_display: '698,197'
   sources: 24
 - head: administrative
   documents: 488363
   documents_display: '488,363'
   sources: 15
 - head: historiography
-  documents: 356155
-  documents_display: '356,155'
-  sources: 22
+  documents: 356802
+  documents_display: '356,802'
+  sources: 23
 - head: funerary
   documents: 114915
   documents_display: '114,915'
   sources: 10
 - head: legal
-  documents: 37062
-  documents_display: '37,062'
+  documents: 37113
+  documents_display: '37,113'
   sources: 17
 - head: letter
   documents: 34719
@@ -31,24 +31,24 @@ classes:
   documents_display: '30,134'
   sources: 4
 - head: scripture
-  documents: 23200
-  documents_display: '23,200'
+  documents: 23269
+  documents_display: '23,269'
   sources: 21
 - head: dedicatory
   documents: 22915
   documents_display: '22,915'
   sources: 7
 - head: lexical
-  documents: 16679
-  documents_display: '16,679'
+  documents: 16723
+  documents_display: '16,723'
   sources: 11
 - head: ritual
-  documents: 13544
-  documents_display: '13,544'
-  sources: 5
+  documents: 13549
+  documents_display: '13,549'
+  sources: 6
 - head: scholarly
-  documents: 12730
-  documents_display: '12,730'
+  documents: 13238
+  documents_display: '13,238'
   sources: 16
 - head: mark
   documents: 12286
@@ -59,9 +59,9 @@ classes:
   documents_display: '11,413'
   sources: 4
 - head: divination
-  documents: 10949
-  documents_display: '10,949'
-  sources: 10
+  documents: 10972
+  documents_display: '10,972'
+  sources: 11
 - head: building
   documents: 8016
   documents_display: '8,016'
@@ -97,7 +97,7 @@ classes:
 unclassified_sources: 122
 unknown_documents: 47046
 unknown_documents_display: '47,046'
-unmapped_documents: 10977
-unmapped_documents_display: '10,977'
-unclassified_documents: 461078
-unclassified_documents_display: '461,078'
+unmapped_documents: 11345
+unmapped_documents_display: '11,345'
+unclassified_documents: 461221
+unclassified_documents_display: '461,221'

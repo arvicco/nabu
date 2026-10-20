@@ -36,8 +36,8 @@ module Nabu
     # Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0
     # International" (license-cc-by-nc-sa-4_0, status "Free for non
     # commercial use") → CC BY-NC-SA 4.0, class `nc`: INGESTIBLE for the
-    # owner's personal research catalog, excluded from the MCP serving
-    # surface like every nc shelf.
+    # owner's personal research catalog, served locally with its license
+    # label and never redistributed, like every nc shelf.
     #
     # == Proto-Romance speaks la-vul (the packet's code decision)
     #

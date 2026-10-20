@@ -199,6 +199,19 @@ class LinkStampsTest < Minitest::Test
     end
   end
 
+  # The place mine's matcher and bulk writer ride its closure (an edit to
+  # either re-mines it), and the bulk writer stays OUT of every other
+  # producer's closure — it lives beside store/links_journal.rb rather
+  # than in it precisely so a change there does not re-mine the world.
+  def test_the_place_mine_closure_carries_its_matcher_and_bulk_writer_alone
+    rel = ->(producer) { Nabu::LinkStamps.code_files(producer).map { |f| f.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") } }
+    assert_includes rel.call("place-mine"), "name_matcher.rb"
+    assert_includes rel.call("place-mine"), "store/links_journal_bulk.rb"
+    (Nabu::LinkStamps::PRODUCERS.keys - %w[place-mine]).each do |producer|
+      refute_includes rel.call(producer), "store/links_journal_bulk.rb", producer
+    end
+  end
+
   # The reference lane re-runs every stage on top of carried batch edges:
   # that is sound only while no other journal writer mints a batch kind
   # (write_edge! would refresh — and so take over — a carried edge). A

@@ -43,8 +43,8 @@ module Nabu
     # 採用「Creative Commons 姓名標示-非商業性-相同方式分享 4.0 國際授權條款」
     # 釋出。」 (CC BY-NC-SA 4.0), corroborated per file by the availability
     # header (CbetaTeiParser::AVAILABILITY_GRANT, re-verified at every
-    # parse) → license_class "nc": local research use, MCP-excluded by
-    # class, never redistributed.
+    # parse) → license_class "nc": local research use, served locally
+    # with its license label, never redistributed.
     #
     # Category B ("類別 B：不屬於創用 CC 條款授權之文獻" — distribution
     # rights only, NOT CC) is NEVER ingested. The named list, verbatim from

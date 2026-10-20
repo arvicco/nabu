@@ -135,9 +135,28 @@ module Nabu
           script_surface_mismatch,
           *place_ref_findings,
           registry_orphan_names,
-          *index_segment_pressure
+          *index_segment_pressure,
+          stale_open_runs
         ].compact
       end
+
+      # A ledger run row still "running" this long after it started is a
+      # killed run nobody noticed (Interrupt/SIGKILL/power loss leave the row
+      # open by design — RunRecorder never rescues signals). The lifecycle
+      # (ledger migration 011) closes a row only at OPERATION end, so the
+      # longest a HEALTHY row stays open is a rebuild's first-replayed
+      # source: its row opens at the start of the replay and closes only
+      # after every replay and the corpus stages finish.
+      # census: 2026-10-20 live ledger — the longest closed row is 14.85 h
+      # (the full-library rebuild's first replays); the longest sync 9.1 h
+      # (corpus-corporum). 48 h is >3x the longest whole-library operation
+      # observed, so a growing replay never trips it while a dead row still
+      # surfaces within two days.
+      STALE_OPEN_RUN_SECONDS = 48 * 3_600
+
+      # How many stale rows the finding names (oldest first); the rest
+      # are counted.
+      STALE_OPEN_RUN_EXAMPLES = 3
 
       # Dossier-shelf content kind => its derived catalog table (P19-1 the
       # language shelf, P24-0 the source shelf).
@@ -1227,6 +1246,35 @@ module Nabu
           kind: :pending_migrations, severity: :soft,
           message: "#{label} migrations pending: schema at #{applied}, latest is #{latest} — #{remedy}"
         )
+      end
+
+      # -- stale open run rows (global) ----------------------------------------
+
+      # Soft, never loud: the row is history — whatever the dead run left in
+      # the catalog is judged by the per-source checks (a later run of the
+      # source supersedes it; a row with loaded_at set died AFTER its load,
+      # so its index slice / lane refreshes may never have run).
+      def stale_open_runs
+        return nil unless table?(@ledger, :runs)
+
+        cutoff = @now - STALE_OPEN_RUN_SECONDS
+        rows = @ledger[:runs].where(status: "running").where { started_at < cutoff }
+                                                      .order(:started_at, :id).all
+        return nil if rows.empty?
+
+        Finding.new(kind: :stale_open_runs, severity: :soft, message: stale_open_runs_message(rows))
+      end
+
+      def stale_open_runs_message(rows)
+        count = rows.size
+        examples = rows.first(STALE_OPEN_RUN_EXAMPLES)
+                       .map { |row| "#{row[:source_slug]} (#{row[:kind]}, #{stamp(row[:started_at])})" }
+        after_load = rows.count { |row| row.key?(:loaded_at) && row[:loaded_at] }
+        died = after_load == 1 ? "died after its load" : "died after their load"
+        load_note = after_load.zero? ? "" : "; #{after_load} #{died} (index/lanes may lag — re-sync)"
+        "#{count} run row#{'s' unless count == 1} still \"running\" #{STALE_OPEN_RUN_SECONDS / 3_600} h+ " \
+          "after start — killed runs nobody noticed (e.g. #{examples.join(' · ')})#{load_note}; " \
+          "a later run of the source supersedes the row — re-run any source without one"
       end
 
       # -- shared lookups -------------------------------------------------------

@@ -1,0 +1,289 @@
+{
+  "features": [
+    {
+      "properties": {
+        "pleiades_uri": "https://pleiades.stoa.org/places/540639",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/0",
+        "ancient_findspot": "Anthedon",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/15743"
+      },
+      "geometry": {
+        "coordinates": [
+          23.451654999,
+          38.497692999
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          23.273345,
+          38.221257
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/4",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1851",
+        "ancient_findspot": "Lebadea"
+      },
+      "type": "Feature"
+    },
+    {
+      "properties": {
+        "ancient_findspot": "Mantinea",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1851",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/5"
+      },
+      "geometry": {
+        "coordinates": [
+          23.273345,
+          38.221257
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1327",
+        "ancient_findspot": "Megalopolis",
+        "pleiades_uri": "https://pleiades.stoa.org/places/321678",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.876113,
+          38.435817999
+        ]
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.273345,
+          38.221257
+        ]
+      },
+      "properties": {
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/8",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1851",
+        "ancient_findspot": "Opus"
+      },
+      "type": "Feature"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.91066,
+          39.617855
+        ]
+      },
+      "properties": {
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/37",
+        "pleiades_uri": "https://pleiades.stoa.org/places/530835",
+        "ancient_findspot": "Corcyra",
+        "modern_findspot": "K�rkira",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/15798"
+      }
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          22.876113,
+          38.435817999
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "modern_findspot": "Megalopoli",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1327",
+        "ancient_findspot": "Megalopolis",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/46",
+        "pleiades_uri": "https://pleiades.stoa.org/places/321678"
+      },
+      "type": "Feature"
+    },
+    {
+      "properties": {
+        "pleiades_uri": "https://pleiades.stoa.org/places/786123",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/154",
+        "geonames_uri": "https://www.geonames.org/359792",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/2207",
+        "modern_findspot": "Assu�n",
+        "ancient_findspot": "Syene"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.899760883,
+          24.089613817
+        ]
+      },
+      "type": "Feature"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ancient_findspot": "Elephantina",
+        "modern_findspot": "Elephantine",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/2207",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/163",
+        "pleiades_uri": "https://pleiades.stoa.org/places/786021"
+      },
+      "geometry": {
+        "coordinates": [
+          32.888259,
+          24.088791
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ancient_findspot": "Malaca",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/26184",
+        "modern_findspot": "M�laga",
+        "pleiades_uri": "https://pleiades.stoa.org/places/271058",
+        "geonames_uri": "https://www.geonames.org/2514256",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/2609"
+      },
+      "geometry": {
+        "coordinates": [
+          -4.42034,
+          36.72016
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pleiades_uri": "https://pleiades.stoa.org/places/530835",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/7199",
+        "ancient_findspot": "Corcyra",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/15798",
+        "modern_findspot": "K�rkira"
+      },
+      "geometry": {
+        "coordinates": [
+          19.9197,
+          39.62
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "properties": {
+        "ancient_findspot": "Dianium, bei",
+        "modern_findspot": "D�nia",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/26184",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/9532",
+        "pleiades_uri": "https://pleiades.stoa.org/places/403182"
+      },
+      "geometry": {
+        "coordinates": [
+          0.105556,
+          38.840556
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -5.93,
+          40.258333
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "pleiades_uri": "https://pleiades.stoa.org/places/422987",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/12770",
+        "ancient_findspot": "Norba, bei",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/26453",
+        "modern_findspot": "Aldeanueva de Camino"
+      },
+      "type": "Feature"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/12986",
+        "geonames_uri": "https://www.geonames.org/3130491",
+        "findspot_(village/street)": "Mauer, sekund�r verwendet",
+        "pleiades_uri": "https://pleiades.stoa.org/places/236405",
+        "modern_findspot": "Aldeanueva del Camino",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/26453",
+        "ancient_findspot": "Capera, bei?"
+      },
+      "geometry": {
+        "coordinates": [
+          -5.92886,
+          40.2598
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "properties": {
+        "modern_findspot": "Megal�poli",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1327",
+        "ancient_findspot": "Megalopolis",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/21746",
+        "pleiades_uri": "https://pleiades.stoa.org/places/321678"
+      },
+      "geometry": {
+        "coordinates": [
+          22.876113,
+          38.435817999
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "findspot_(village/street)": "byzantinische Kirche, sekund�r verwendet",
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/21784",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/1851",
+        "ancient_findspot": "Plataeae"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.273345,
+          38.221257
+        ]
+      }
+    },
+    {
+      "properties": {
+        "uri": "https://edh-www.adw.uni-heidelberg.de/edh/geographie/22989",
+        "pleiades_uri": "https://pleiades.stoa.org/places/530834",
+        "modern_findspot": "Corfu",
+        "trismegistos_geo_uri": "https://www.trismegistos.org/place/15798",
+        "ancient_findspot": "Paleopolis"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.924457,
+          39.604439999
+        ]
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

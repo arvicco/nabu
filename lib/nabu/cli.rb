@@ -93,10 +93,12 @@ module Nabu
                         "git is never touched"
     option :all, type: :boolean, default: false,
                  desc: "Build every available feature in registry order (planned skipped by name)"
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def build(slug = nil)
       # XOR gate: exactly one of slug / --all.
       raise Thor::Error, "data build: give either a slug or --all (see nabu data list)" if options[:all] == !slug.nil?
 
+      verbose_narrator&.intro(:data_build)
       return build_all if options[:all]
 
       feature = Nabu::DataBuild.feature(slug)
@@ -110,6 +112,7 @@ module Nabu
       end
 
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      explain_feature(feature)
       summary = build_runner.run(feature: feature, into: options[:into])
       print_build_summary(summary, seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
       refresh_readme_index(options[:into])
@@ -123,6 +126,19 @@ module Nabu
       # say it lives; otherwise an unambiguous placeholder beats a wrong path.
       def clone_hint
         File.directory?(File.expand_path("~/Dev/nabu-data")) ? "~/Dev/nabu-data" : "<your-nabu-data-clone>"
+      end
+
+      # --verbose: green narration on stderr (Ops::StageGuide).
+      def verbose_narrator
+        return nil unless options[:verbose]
+
+        @verbose_narrator ||= Nabu::Ops::StageGuide::Narrator.new(io: $stderr)
+      end
+
+      # A feature's explanation is its own registry title (DataBuild
+      # REGISTRY, beside its builder) — never a second string table.
+      def explain_feature(feature)
+        verbose_narrator&.line("#{feature.slug}: #{feature.title}")
       end
 
       def build_runner
@@ -163,6 +179,7 @@ module Nabu
           end
           begin
             started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+            explain_feature(feature)
             summary = runner.run(feature: feature, into: options[:into])
             print_build_summary(summary,
                                 seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
@@ -305,6 +322,7 @@ module Nabu
     HELP
     option :rule, banner: "ID", desc: "compile just this rule"
     option :dry_run, type: :boolean, default: false
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def apply_rules
       config = Nabu::Config.load
       guard_catalog_free!(config) unless options[:"dry-run"]
@@ -323,6 +341,7 @@ module Nabu
       end
 
       catalog = Nabu::Store.connect(config.catalog_path)
+      lect_narrator&.intro(:lect_apply_rules) unless options[:dry_run]
       journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
       # A compose rule's census reads the CURRENT journal even on --dry-run
       # (it buckets candidates by their existing stage rows); absent file →
@@ -351,6 +370,7 @@ module Nabu
     option :source, banner: "SLUG", desc: "scope to one source"
     option :lang, banner: "CODE", desc: "scope to one stored code"
     option :dry_run, type: :boolean, default: false
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def infer_dates
       config = Nabu::Config.load
       guard_catalog_free!(config) unless options[:"dry-run"]
@@ -361,6 +381,7 @@ module Nabu
       end
 
       catalog = Nabu::Store.connect(config.catalog_path)
+      lect_narrator&.intro(:lect_infer_dates) unless options[:dry_run]
       dates = Nabu::LectDates.new(registry: registry)
       scope = [options[:source], options[:lang]].compact
       say "scanning dated documents#{scope.empty? ? ' (whole catalog)' : " (#{scope.join(', ')})"}…"
@@ -394,6 +415,7 @@ module Nabu
       refreshes single documents; this command is the manual full pass
       (e.g. after hand-editing config/lect_overrides.yml).
     HELP
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def materialize
       config = Nabu::Config.load
       guard_catalog_free!(config)
@@ -403,6 +425,7 @@ module Nabu
               "lect materialize: no catalog at #{config.catalog_path}"
       end
 
+      lect_narrator&.intro(:lect_materialize)
       materialize_lect_facets!(config)
     end
 
@@ -726,6 +749,16 @@ module Nabu
         say "lect facet: #{count} rows materialized"
       end
 
+      # --verbose (Ops::StageGuide): green narration on stderr; the
+      # before-hook breaks off a tty row ticker so no line splices.
+      def lect_narrator
+        return nil unless options[:verbose]
+
+        @lect_narrator ||= Nabu::Ops::StageGuide::Narrator.new(
+          io: $stderr, before: -> { $stderr.print("\r\e[K") if $stderr.tty? }
+        )
+      end
+
       # A minimal announce-and-tick reporter for the facet rebuild (the
       # no-silent-passes rule — this subcommand class has no loader
       # plumbing to borrow): stages to stderr; on a tty a \r-updating
@@ -733,6 +766,7 @@ module Nabu
       def facet_progress
         tty = $stderr.tty?
         Nabu::ProgressReporter.new(
+          on_explain: lect_narrator,
           on_stage: ->(label, _eta = nil) { warn(label) },
           on_load_tick: lambda do |processed, _errored|
             if tty
@@ -1504,6 +1538,7 @@ module Nabu
                     desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
                           "the hook's exit status is reported, never fails the sync). " \
                           "Example: --review script/review-sync-claude. Single-source sync only."
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def sync(*slugs)
       # --redownload refusals up front (P44-i1): contradictory with
       # --parse-only (nothing to re-download if we skip fetch), and
@@ -1537,6 +1572,7 @@ module Nabu
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
       enabled = sync_enabled_slugs(config, registry, db)
+      explain_command(sync_intro_key)
       if slugs.size <= 1
         run_sync(runner, registry, slugs.first, db, ledger, enabled: enabled)
       else
@@ -2199,6 +2235,7 @@ module Nabu
     option :parse_workers, type: :numeric,
                            desc: "Forked parse workers for parallel-replay sources (1 = serial; " \
                                  "default: rebuild.parse_workers setting, else cores - 1, capped)"
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def rebuild
       config = Nabu::Config.load
       parse_workers = rebuild_parse_workers(config)
@@ -2219,6 +2256,7 @@ module Nabu
         # --profile implies nothing extra on a dry run: there is no run to time.
         print_plan(rebuilder.plan)
       else
+        explain_command(:rebuild)
         result = rebuilder.run(progress: progress_reporter)
         finish_progress
         print_result(result)
@@ -4629,6 +4667,8 @@ module Nabu
         nabu place mine report kanripo      # review the mined candidates, ranked by document spread
         nabu place mine report kanripo --board   # the per-NAME verdict board (discriminators + snippets)
     HELP
+    option :verbose, type: :boolean, default: false,
+                     desc: "place apply: #{Nabu::Ops::StageGuide::OPTION_DESC}"
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
       return run_place_mine(query_parts[1..]) if query_parts.first == "mine"
@@ -4920,6 +4960,7 @@ module Nabu
         Nabu::Store.assert_writable!(config.catalog_path)
         catalog = Nabu::Store.connect(config.catalog_path)
         Nabu::Store.migrate!(catalog)
+        explain_command(:place_apply)
         apply_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         census = Nabu::PlaceApply.run(catalog: catalog, canonical_dir: config.canonical_dir)
         if census.nil?
@@ -11530,8 +11571,37 @@ module Nabu
           on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
           on_load_tick: load_tick(tty, state),
           on_stage: stage_tick(tty, state),
-          on_note: progress_note(state)
+          on_note: progress_note(state),
+          on_explain: verbose_narrator
         )
+      end
+
+      # --verbose (Ops::StageGuide): ONE narrator per invocation, so each
+      # stage explains once however many reporters the command builds
+      # (an axis sync builds one per member). Green on stderr beside the
+      # stage lines; nil when not verbose, so the reporter's explain seam
+      # is a no-op. +before+ closes an open \r stage line first.
+      def verbose_narrator
+        return nil unless options[:verbose]
+
+        @verbose_narrator ||= Nabu::Ops::StageGuide::Narrator.new(
+          io: $stderr, sources: verbose_source_slugs,
+          before: -> { close_stage(@progress_state) if @progress_state }
+        )
+      end
+
+      # The command's intro (what the run is about to do to the library),
+      # printed before any work when --verbose is on.
+      def explain_command(key)
+        verbose_narrator&.intro(key)
+      end
+
+      # The registered slugs, so a bare-slug replay stage resolves to the
+      # source-replay explanation.
+      def verbose_source_slugs
+        Nabu::SourceRegistry.load(Nabu::Config.load.sources_path).each_source.map(&:slug)
+      rescue Nabu::Error
+        []
       end
 
       # A durable header/tally line (owner UX rule 2026-10-07 — the
@@ -11635,6 +11705,12 @@ module Nabu
         elsif $stderr.tty?
           $stderr.print("\n")
         end
+      end
+
+      def sync_intro_key
+        return :sync_fetch_only if options[:fetch_only]
+
+        options[:parse_only] ? :sync_parse_only : :sync
       end
 
       # sync dispatch (P35-2): --all first (flat batch), then --axis (grouped),
@@ -12566,7 +12642,14 @@ module Nabu
       def format_sync_place_index(census)
         return "" if census.nil?
 
-        "  place index #{census.places} places derived (#{format('%.1f', census.seconds)}s)"
+        parts = []
+        parts << "place index #{census.places} places" if census.places
+        # The tm→pleiades crosswalk rides the edh/pleiades producers
+        # (Nabu::TmPleiadesCrosswalk) — "crosswalk 8401 tm→pleiades pairs".
+        if census.respond_to?(:crosswalk_pairs) && census.crosswalk_pairs
+          parts << "crosswalk #{census.crosswalk_pairs} tm→pleiades pairs"
+        end
+        "  #{parts.join(' + ')} derived (#{format('%.1f', census.seconds)}s)"
       end
 
       # P97-2: the person-index tail — silent for every source deriving
@@ -12619,6 +12702,7 @@ module Nabu
           return print_incremental_plan(plan)
         end
 
+        explain_command(:rebuild_incremental)
         result = incremental.run(progress: progress_reporter)
         finish_progress
         print_incremental_result(result)

@@ -2,11 +2,11 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes thirteen tools — search,
+(Claude Code, Claude Desktop) over stdio. It exposes fourteen tools — search,
 read by urn, concordance, cross-source alignment, dictionary lookup, the
 reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
 the mined links graph, the place desk, the character card, the cuneiform
-sign desk, and coverage —
+sign desk, the reference normalizer, and coverage —
 so a model can look things up in your texts, quote them, and cite them,
 without any ability to change the collection.
 
@@ -36,11 +36,13 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The thirteen tools
+## 2. The fourteen tools
 
 Every passage in every response carries **urn**, **language**, and
-**license_class** (search, concord, align, and parallels rows also carry the
-**source** slug). Preserve those fields when you quote — see §6.
+**license_class** (search, concord, align, parallels, similar_to, and links
+rows also carry the **source** slug; reference data — gazetteer facts, sign
+cards — carries its own license envelope). Preserve those fields when you
+quote — see §6.
 
 ### `nabu_search`
 
@@ -49,9 +51,13 @@ Give **exactly one** of:
 
 - `query` — FTS5 full text. Words are AND by default; `"quoted phrase"` for
   adjacency; `prefix*`. Diacritics optional: `μηνιν` finds `μῆνιν`.
-- `lemma` — exact dictionary form over the gold treebanks. `λέγω` finds every
-  inflection (`εἶπας`, `εἰπεῖν`, …), including suppletive stems no text query
-  reaches. With `lemma`, an optional `morph` — comma-joined `key=value` facets
+- `lemma` — exact dictionary form over the lemma index: every tier it holds —
+  gold (verified treebank annotation), silver (upstream-automatic
+  lemmatization), and equivalence (curated cross-language equivalents). Gold
+  hits are unlabeled; every non-gold hit carries a `tier` field (`silver` /
+  `equivalence`) — keep the label when you count attestations. `λέγω` finds
+  every inflection (`εἶπας`, `εἰπεῖν`, …), including suppletive stems no text
+  query reaches. With `lemma`, an optional `morph` — comma-joined `key=value` facets
   in Universal Dependencies vocabulary (`case=dat,number=pl`; keys case, number,
   gender, person, tense, mood, voice, degree; values `dat`, `pl`/`sg`, `masc`,
   `aor`, `opt`, `sub`…) — keeps only attestations with that morphology, each hit
@@ -300,6 +306,20 @@ text). Only the anchor's own document is excluded — translations self-exclude
 source. `lang`/`license` scope the candidates; the default restricted-exclusion
 stance applies (§below).
 
+`explain: true` adds each hit's **score decomposition** as a present-only
+`explain` list — one row per distinct anchor gram: `gram` (folded),
+`position` (first anchor offset), `positions` (anchor occurrences), `df` (the
+probe's document frequency; `null` for a gram never probed), `weight` (1/df),
+`contribution`, `status` (`shared` · `not_shared` · `too_common` — df at the
+corpus-relative cutoff, where the probe stops, so df reads as that floor ·
+`stop` — an all-stop-token gram). The score is additive in the grams, so the
+rows sum to the served `score` **exactly** (contributions are apportioned at
+the score's 4-place grain by largest remainder, each within 1e-4 of its exact
+positions × 1/df); grams adding nothing are explicit zero rows. The engine is
+unchanged — `Query::ParallelsExplain` observes the same probes
+(thresholds/calibration stay in `config/reuse_profiles.yml` and the run
+provenance; this is the per-hit explanation).
+
 ### `nabu_cognates`
 
 Cognates in parallel (P15-3, design §6): verses of a registered alignment work
@@ -426,6 +446,46 @@ curriculum**). Bounded (default 40 lines, max 200, honest truncation note);
 with the sign list not on this box the tool answers a graceful state note
 with the sync hint (every other tool byte-identical — the lane-off rule);
 urn mode passes the restricted-exclusion gate.
+
+### `nabu_clarify`
+
+The reference normalizer: a partial, misspelled, or half-remembered work or
+passage reference in — a title prefix (`Ilia`), a misspelling (`Illiad`), a
+title plus citation (`Iliad 1.1`), a source name or slug, a dictionary
+headword, a place name, or a full/partial urn — and an honest reading of it
+out:
+
+- `is_ref` — does the input name held text (a urn, or an **exact** document
+  title, optionally with a citation)?
+- `resolved_urn` — **only** when it parses uniquely (open it with
+  `nabu_show`); `ref` says what it is (`passage` · `document` ·
+  `citation_prefix` · `range`) with title, language, license_class, source.
+- `structure` — what a deeper citation looks like there: the document's live
+  passage count, first/last citation suffix, their depth, an example passage
+  urn and a two-passage range example (`citation` is the resolved passage's
+  own suffix).
+- `completions` — typed **candidates** `{title, key, type:
+  document|source|lemma|place, is_primary, match, source, language,
+  license_class}` (+ present-only `detail` — a headword's dictionary, a
+  place's gazetteer — and `ref_urn`, the passage a given citation names in
+  that document). `is_primary`: the matched name is the entry's primary
+  title, not an alias (a source's slug, a place's variant name). `match`:
+  `exact` · `prefix` · `token` · `fuzzy` (the misspelling lane — a guess,
+  said so).
+
+Never a silent guess: two editions sharing a title, or a citation several of
+them hold, resolve to **nothing** and list every reading. Diacritics are
+optional both ways (`οδυσσεια` finds `Ὀδύσσεια`). Names resolve through a
+precompiled title index — the fulltext index's clarify lane (a B-tree prefix
+lane over folded names, an FTS5 token lane, an FTS5 trigram misspelling lane
+probed on the input's rarest trigrams) derived by every rebuild, refreshed
+per source at sync, and re-derivable standalone with `rake index:clarify`;
+when it is absent the payload says so (`index.present: false`) and urn input
+still resolves through the catalog. Restricted entries are withheld unless
+`include_restricted`. Bounded (default 10, max 50). Every not-found /
+no-match answer of `nabu_show`, `nabu_search`, `nabu_parallels`, and
+`nabu_signs` names this tool, so an agent holding a half-right reference
+corrects in one round trip.
 
 ### `nabu_status`
 
@@ -575,6 +635,21 @@ responsibility. A source carrying an owner-recorded **credit line**
 serves it as an additive `credit` key on every text-serving `nabu_show` /
 `nabu_search` payload; preserve it with the license fields.
 
+**Reference data carries its own envelope.** Gazetteers and sign lists answer
+from feature modules that mint no catalog rows, so their licenses are read
+from the adapters' own manifests (`Nabu::MCP::Envelope` — the verbatim
+license string recorded at adoption, never a hand-copied list) and ride
+additively beside the frozen payloads: a `nabu_place` card that serves
+gazetteer facts carries `attribution` {source, license_class, license,
+upstream_url, uri} (Pleiades is CC BY 3.0; the uri is the place's own
+upstream page); `nabu_char` cards carry the answering spine's `source` /
+`license_class` / `license` top-level plus an `attribution` list naming every
+contributing dataset (the OSL, Unikemet, and — when its senses joined — the
+wiktionary-sux shelf); `nabu_signs` carries the OSL envelope as `sign_list`
+and, in urn mode, the text's `license_class` beside its `source`. The
+`similar_to` lane and every `nabu_links` edge carry the counterpart's
+`source` slug (null on an edge whose counterpart left the catalog).
+
 ---
 
 ## 7. Parity with the CLI (the P44-3 audit)
@@ -614,6 +689,8 @@ new, present-only keys.
 | Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
 | The sign desk | `nabu signs URN\|TEXT [--lang] [--dialect etcsl] [--json]` (P53-2) | `nabu_signs` — the same `Query::Signs`, the payload IS the CLI's frozen `--json` contract (one serializer); bounded lines with an honest note; lane-off (no canonical/osl) answers the sync-hint note like the CLI's refusal | **added P53-2** — new tool, read-only; urn mode passes the restricted-exclusion gate |
+| The reference normalizer | — (MCP-first) | `nabu_clarify` — `Query::Clarify` over the catalog urn indexes + the fulltext clarify lane | **added P137** — MCP-only for now; a CLI desk is a documented gap |
+| Parallels score decomposition | — | `nabu_parallels` `explain: true` — `Query::ParallelsExplain` | **added P137** — MCP-only; the CLI `parallels` prints scores without the per-gram rows (documented gap) |
 | Tibetan word-segmented rendering | `nabu show <urn> --segmented` (P54-2) | `nabu_show` `segmented: true` — present-only `segmented` key per passage record (`Query::Show#segmented_text`, one serializer); not-applicable calls carry `segmentation_note` | **added P54-2** (pinned, incl. the flag-off byte-identical case) |
 | Lect (nabu-lects) search filter | `search --lect LECT-ID` (P57-4) | `nabu_search` `lect` — text mode only, refusal parity with lemma/near; resolution-level filter (Nabu::Lects, prefix semantics), errors naming the module when nabu-lects is not synced | **added P57-4** (pinned; no frozen payload key changed) |
 
@@ -659,3 +736,42 @@ axis-page examples encode one such lesson per desk where it exists.
 Server note: a long-running MCP server serves the code it started with —
 after updating nabu, restart the server (re-open the client session) to
 pick up new tools and folds.
+
+---
+
+## 9. The skill pack — per-desk methodological guidance
+
+The tools say *what* the library holds; the skill pack says *how to read
+it*. `skills/` ships one [Agent Skills](https://agentskills.io) file per
+research desk — `skills/nabu-<desk>/SKILL.md` — plus the cross-desk
+`skills/nabu-library/SKILL.md`, so a client connected to `nabu mcp` can
+load the guidance for the desk it is working at: what a source's fields
+mean, which things not to conflate (an edition and a witness, a typed date
+and an estimate, a gold lemma and a silver one), what to record for
+reproducibility, and that each corpus's data license is not the license of
+the code or of the guidance text (MIT).
+
+Each file is YAML front matter (`name`, `description`, `license`,
+`compatibility`, and a string-valued `metadata` map: `desk`, `origin`,
+`sources`) over a Markdown body. Two lanes, two owners:
+
+- **Managed** — `metadata.sources` and the sources table between the
+  `nabu:skill-sources` markers: the desk's live public sources with their
+  upstream names and license classes, projected from `config/axes.yml`,
+  `config/sources.yml` and the adapter manifests. `rake skills:scaffold`
+  re-projects them; `rake skills:check` reports drift. Grant-gated private
+  holdings and unwired sources never appear.
+- **Prose** — everything else. `rake skills:scaffold` seeds a missing
+  desk's skill once (persona and desk description, the per-source
+  descriptions from the box's source dossiers, the live-verified examples
+  of `site/axis/_mcp.yml`, and the house cautions) and never rewrites it
+  afterwards. `metadata.origin` says which skills still carry that seed
+  (`generated`) and which were rewritten into desk-specific methodology
+  (`hand-tuned`).
+
+The suite guard (`test/skills/shipped_skills_test.rb`) holds every shipped
+file to the front-matter shape, requires a skill for every desk, fails a
+managed lane that drifted from the registry, and fails any skill naming a
+source that is not live and public. To use the pack, point the client's
+skills directory at `skills/` (Claude Code: copy or symlink the
+`nabu-*` folders into `.claude/skills/` or `~/.claude/skills/`).

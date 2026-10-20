@@ -31,7 +31,7 @@ module Nabu
     #   text "Creative Commons Attribution-NonCommercial-ShareAlike".
     # The BY-SA 3.0 grant and the BY-NC-SA 4.0 footer CONTRADICT, and the
     # preamble scopes to "scientific use only" → the restrictive reading
-    # is held: class nc (MCP default-excluded, never redistributed) until
+    # is held: class nc (never redistributed) until
     # upstream answers; on reply, relabel via license_class (the P10-4
     # override mechanics — no urns change).
     #

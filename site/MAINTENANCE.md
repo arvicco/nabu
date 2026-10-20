@@ -32,10 +32,12 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
       site refresh").
    2. **Regenerate the SSOT from the live catalog**: `bundle exec rake
       site:refresh` (= `site:data` — recomputes `census.yml` + `desks.yml`
-      + `dates.yml` against the live catalog, stamped today — then
+      + `dates.yml` against the live catalog, stamped today, and renders
+      `site/llms.txt` — the agent entry file — from those SSOT files — then
       `site:axes`). This is the ONLY number-entry step; the prose pages
       update themselves because they read the data.
-   3. **Commit** the regenerated `site/_data/*.yml` and the axis pages.
+   3. **Commit** the regenerated `site/_data/*.yml`, `site/llms.txt` and
+      the axis pages.
 
    Two suite guards make this a red/green gate — drift fails the build,
    not a human's memory: `test/site/site_data_test.rb` pins the census /
@@ -43,6 +45,10 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    `test/site/site_prose_ssot_test.rb` fails if any headline page stops
    reading the census SSOT, if any page carries a known-stale headline
    literal, or if a pure-headline page hardcodes a million-scale total.
+   `site/llms.txt` is guarded the same way: site_data_test regenerates it
+   from the committed census + desks files and fails on any difference (a
+   hand edit or a skipped refresh), and site_prose_ssot_test refuses a
+   headline figure typed into its template (`Nabu::Ops::LlmsTxt`).
    **A new headline figure a page needs = add a field to
    `Nabu::Ops::SiteData#census`** (and its shape assertion in
    site_data_test), regenerate, then reference `{{ site.data.census.NEW }}`

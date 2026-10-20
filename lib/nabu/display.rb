@@ -341,7 +341,21 @@ module Nabu
     ANSI_SGR = /\e\[[0-9;]*m/
     BIDI_ISOLATES = /[\u{2066}-\u{2069}]/
 
+    # Named foreground colors for whole-line accents (.paint) — the one
+    # place command code gets an ANSI escape from.
+    SGR_FOREGROUND = { red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36 }.freeze
+    SGR_RESET = "\e[0m"
+
     class << self
+      # Wrap +text+ in the named foreground color when +enabled+ (callers
+      # decide that through .color?, so NO_COLOR / a piped stream drop
+      # the COLOR, never the text).
+      def paint(text, color:, enabled:)
+        return text unless enabled
+
+        "\e[#{SGR_FOREGROUND.fetch(color)}m#{text}#{SGR_RESET}"
+      end
+
       # Parse config/display.yml → { "hbo" => Policy, ... }. A missing file is
       # no policies (display becomes a pass-through); a malformed one is a
       # named ConfigError — bad display config must never silently strip.

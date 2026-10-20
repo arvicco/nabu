@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "csv"
+require "json"
 
 module Nabu
   module Adapters
@@ -18,9 +19,25 @@ module Nabu
     #   <workdir>/epidoc/<HD range>/HDnnnnnn.xml   (nine flat zip trees)
     #   <workdir>/text/edh_data_text.csv           (75 cols; nl_text/atext/…)
     #   <workdir>/pers/edh_data_pers.csv           (23 cols; one row/person)
+    #   <workdir>/geography/edhGeographicData.json (GeoJSON; one feature per
+    #                                               findspot record)
     #
-    # Each CSV gets its OWN subdir because FileFetch is single-file-per-dir
+    # Each sidecar gets its OWN subdir because FileFetch is single-file-per-dir
     # (anything else in its dir reads as an upstream deletion).
+    #
+    # == The geography sidecar (a declared materialization)
+    #
+    # edhGeographicData.json (19,230,551 B, Last-Modified 2021-12-16 11:04:12
+    # GMT, HEAD-verified 2026-10-20 at DUMP_BASE_URL) is EDH's own findspot
+    # gazetteer: per findspot, the Trismegistos place uri and — where EDH
+    # matched it — the Pleiades uri. It mints no documents; it is the EDH
+    # half of the derived tm→pleiades place crosswalk
+    # (Nabu::TmPleiadesCrosswalk, run as this adapter's place_index_producer
+    # and by the pleiades producer). Declared in materialized_paths so the
+    # canonical identity hashes it rather than reading the tree weak. Same
+    # grantor and terms as every EDH dump: CC BY-SA 4.0 — internal registry
+    # use unencumbered; a public export of derived rows carries CC BY-SA 4.0
+    # and attribution to the Epigraphic Database Heidelberg.
     #
     # == Identity (FROZEN minting)
     #
@@ -87,6 +104,12 @@ module Nabu
       # single-file-per-dir — class note).
       CSVS = { "text" => "edh_data_text.csv", "pers" => "edh_data_pers.csv" }.freeze
 
+      # The geography sidecar: subdir + filename (class note).
+      GEOGRAPHY = { "geography" => "edhGeographicData.json" }.freeze
+
+      # Every single-file artifact FileFetch lands (the CSVs + geography).
+      SIDECARS = CSVS.merge(GEOGRAPHY).freeze
+
       # The text-CSV columns the parser embeds (facet raws + annotation
       # riders, survey §4.3/§4.6; the P104-1 thematic codes —
       # soziales/religion/militaer/erhaltung — joined under the
@@ -137,7 +160,7 @@ module Nabu
             state_subdir: File.join("epidoc", range)
           )
         end
-        csvs = CSVS.map do |subdir, filename|
+        csvs = SIDECARS.map do |subdir, filename|
           Nabu::Adapter::HttpProbeTarget.new(
             label: filename, zip_url: "#{DUMP_BASE_URL}/#{filename}", metadata_url: nil,
             state_subdir: subdir, state_file: FileFetch::STATE_FILE
@@ -147,6 +170,26 @@ module Nabu
       end
 
       def self.zip_url(range) = "#{DUMP_BASE_URL}/edhEpidocDump_#{range}.zip"
+
+      # The geography sidecar is fetched beside upstream's tree (class note).
+      def self.materialized_paths = GEOGRAPHY.keys
+
+      # EDH ↔ EDR same-artifact edges (Nabu::EdhEdrSameArtifact) re-derive
+      # after every edh sync — the shared Trismegistos numbers join the two
+      # editions of one stone; edr declares the same producer and scope.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::EdhEdrSameArtifact.new(catalog: catalog, journal: journal)
+      end
+
+      # The geography sidecar derives the tm→pleiades place crosswalk at
+      # every sync and at rebuild's place-index replay (class note).
+      def self.place_index_producer? = true
+
+      def self.place_index_producer(catalog:)
+        Nabu::TmPleiadesCrosswalk::Producer.new(catalog: catalog)
+      end
 
       # The pers CSV's attested persons derive the "edh" person-index slice
       # (Nabu::EdhPersons) at every sync, parse-only included, and at rebuild.
@@ -229,7 +272,7 @@ module Nabu
       end
 
       def file_fetches(workdir, progress)
-        CSVS.to_h do |subdir, filename|
+        SIDECARS.to_h do |subdir, filename|
           url = "#{DUMP_BASE_URL}/#{filename}"
           [url, Nabu::FileFetch.new(
             url: url, dir: File.join(workdir, subdir), filename: filename,
@@ -259,13 +302,25 @@ module Nabu
 
       def artifact_label(url)
         name = File.basename(url)
+        return GEOGRAPHY.keys.first if name == GEOGRAPHY.values.first
+
         name.sub(/\AedhEpidocDump_/, "").sub(/\.zip\z/, "").sub(/\Aedh_data_(\w+)\.csv\z/, '\1')
+      end
+
+      def geography_features(workdir)
+        subdir, filename = GEOGRAPHY.first
+        path = File.join(workdir, subdir, filename)
+        return 0 unless File.file?(path)
+
+        JSON.parse(SourceRead.utf8_file(path, label: "edh geography")).fetch("features", []).size
       end
 
       def artifact_counts(workdir, url)
         if url.end_with?(".zip")
           range = artifact_label(url)
           "#{Dir.glob(File.join(workdir, 'epidoc', range, 'HD*.xml')).size} records"
+        elsif url.end_with?(GEOGRAPHY.values.first)
+          "#{geography_features(workdir)} features"
         else
           rows = csv_rows(workdir, url)
           stubs = rows.count { |row| blank?(row["atext"]) } if url.include?("edh_data_text")

@@ -27,3 +27,21 @@ at first sync (see `lib/nabu/adapters/pleiades.rb`).
 
 License (quoted from the downloads page, 2026-07-24): "Creative Commons
 Attribution 3.0 License (cc-by)" → class `attribution`.
+
+## `tm-backlinks/pleiades-places.json` — the Trismegistos backlink sample
+
+A TRIM of the held dump `canonical/pleiades/pleiades-places.json.gz`
+(`https://atlantides.org/downloads/pleiades/json/pleiades-places-latest.json.gz`,
+Last-Modified 2026-10-16, sha256
+`d123ab92c10a09f9892a67a183f6145d370504e6ddd96f0941744f0b3b6c2ce6`;
+cut 2026-10-20): the real `{"@context", "@graph"}` container with eight
+real place entries, each trimmed to the keys `@type id uri title
+description placeTypes reprPoint references` (`references` whole, values
+unmodified). Chosen for their `trismegistos.org/place/<id>` references:
+540639 Anthedon (TM 15743), 786123 Syene (TM 2207), 265963 Malaca
+(TM 26184), 570467 Megalopolis (TM 1327), 265876 Consabura (TM 27183),
+570685 Sparta (TM 2181), and 29492 + 569131178 — two places citing the
+ONE TM place 5181 (the ambiguous claim the crosswalk withholds). Pairs
+with `test/fixtures/edh/geography/` in `test/tm_pleiades_crosswalk_test.rb`.
+Kept in its own subdir so the adapter tests' fixture-root workdir never
+sees a second dump.

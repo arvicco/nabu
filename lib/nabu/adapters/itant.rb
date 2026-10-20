@@ -29,7 +29,7 @@ module Nabu
     #
     # Repo README.md + license.txt + EVERY record's <availability><licence>
     # say CC BY-NC-SA 4.0 verbatim (fixture README quotes all three). The
-    # NC term → class "nc": MCP default-excluded, never redistributed (the
+    # NC term → class "nc": never redistributed (the
     # GRETIL/MW posture). One layered nuance recorded, not relied on: the
     # eng translation divs carry their own CC BY-SA 4.0 <ref> — the
     # siblings keep the source-level nc (restrictive reading).

@@ -47,7 +47,7 @@ module Nabu
     # serve to express them according to the selected ontology and link
     # them to the Knowledge Base of Latin lemmas of LiLa." + CC BY-NC-SA
     # 4.0 badge → license_class "nc" (the GRETIL/MW posture: local
-    # research + index, MCP-surface default-excluded, never redistributed).
+    # research + index, served locally with its license label, never redistributed).
     # Cite Mambrini & Passarotti 2020 (Globalex/LREC).
     #
     # == fetch

@@ -27,3 +27,11 @@ files:
       assembled from the two per-place fixtures (a JSON array [462492, 570685])
       to stand in for the quarterly release dump container — see README.md; the
       per-entry shape is the real dump's entry shape.
+  - path: tm-backlinks/pleiades-places.json
+    whole: false
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      trimmed from the held 129 MB dump (canonical/pleiades/pleiades-places.json.gz,
+      2026-10-16 build): eight real entries chosen for their Trismegistos place
+      backlinks, each key-trimmed (references whole) — see README.md.

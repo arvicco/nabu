@@ -489,6 +489,14 @@ class DisplayTest < Minitest::Test
     end
   end
 
+  # The whole-line accent seam (--verbose narration): a named color wraps
+  # the text when enabled; disabled keeps the text byte-identical.
+  def test_paint_wraps_in_the_named_color_only_when_enabled
+    assert_equal "\e[32mtimeline\e[0m", Nabu::Display.paint("timeline", color: :green, enabled: true)
+    assert_equal "timeline", Nabu::Display.paint("timeline", color: :green, enabled: false)
+    assert_raises(KeyError) { Nabu::Display.paint("x", color: :mauve, enabled: true) }
+  end
+
   private
 
   def with_env(pairs)

@@ -26,8 +26,14 @@ maintained original, in the docs/languages.md mold.
 2. **Namespaces are parallel; crosswalks are data.** `tm:2788` and
    `pleiades:579885` are independent claims about Pompeii. Equivalences
    live in `place_crosswalk` with per-row provenance — CIGS's own
-   columns (source `cigs`) and a Wikidata P1958⇄P1584 harvest (source
-   `wikidata`, in the registry's crosswalks.csv) — never inferred.
+   columns (source `cigs`), a Wikidata P1958⇄P1584 harvest (source
+   `wikidata`, in the registry's crosswalks.csv), and the tm→pleiades
+   pairs two upstreams assert themselves — EDH's own geography file
+   (source `edh`; CC BY-SA 4.0, so any public export of those rows
+   carries BY-SA and credits the Epigraphic Database Heidelberg) and the
+   Pleiades dump's Trismegistos backlinks (source `pleiades`), merged
+   one row per TM place with EDH winning disagreements and ambiguous
+   claims withheld (`Nabu::TmPleiadesCrosswalk`) — never inferred.
 3. **Matching decisions are registry rows, not heuristics.** The
    [nabu-places](https://github.com/arvicco/nabu-places) sibling maps
    each source's VERBATIM name strings to refs (`names.yml`), with

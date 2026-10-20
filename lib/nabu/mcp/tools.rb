@@ -13,6 +13,8 @@ require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/parallels"
+require_relative "../query/parallels_explain"
+require_relative "../query/clarify"
 require_relative "../query/align"
 require_relative "../query/collation"
 require_relative "../query/define"
@@ -23,6 +25,7 @@ require_relative "../query/signs"
 require_relative "../lects"
 require_relative "../pleiades"
 require_relative "../sign_list"
+require_relative "envelope"
 
 module Nabu
   module MCP
@@ -146,6 +149,19 @@ module Nabu
       # census: 200000, 2026-07-29, tokens — model-context norms (H5/H6, above)
       SIGNS_DEFAULT_MAX_LINES = 40
       SIGNS_MAX_LINES_CAP = 200
+      # nabu_clarify: candidates per response.
+      # census: 200000, 2026-10-20, tokens — model-context norms (H5/H6, above)
+      CLARIFY_DEFAULT_LIMIT = 10
+      CLARIFY_MAX_LIMIT = 50
+
+      # The self-correction pointer every not-found / no-match answer carries
+      # (one round trip to a candidate urn).
+      CLARIFY_HINT = "nabu_clarify normalizes a partial or misspelled title/reference into " \
+                     "candidate urns plus the citation shape"
+
+      # The answering spine's role line in a char card's attribution list.
+      # const: display labels, not a corpus claim
+      CHAR_SPINE_ROLES = { "osl" => "sign list", "unikemet" => "sign spine" }.freeze
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       # const: a retry-grace choice, not a corpus claim
@@ -195,7 +211,9 @@ module Nabu
         "Slavonic, Gothic, and more: literary editions, documentary papyri, gold treebanks, " \
         "parallel English translations). Give EXACTLY ONE of: `query` — full-text FTS5 " \
         "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
-        "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
+        "μῆνιν) — or `lemma` — exact dictionary form over the lemma index, every tier it holds: " \
+        "gold treebank annotation unlabeled, silver/equivalence hits labeled by a `tier` field " \
+        "(λέγω finds εἶπας, " \
         "εἰπεῖν, every inflection; add `morph` — e.g. \"case=dat,number=pl\" — to keep only " \
         "attestations with that morphology, each hit showing the decoded evidence). Add `near` " \
         "for PROXIMITY — keep only hits where that term sits within `window` words (default " \
@@ -272,18 +290,15 @@ module Nabu
         "Cyrillic Marianus and the Helsinki-ASCII CCMH codices.".freeze
 
       DEFINE_DESCRIPTION =
-        "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
-        "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
-        "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
-        "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
-        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body), and " \
-        "the Wiktionary RECONSTRUCTION shelves (Proto-Slavic/PIE/Proto-Germanic/" \
-        "Proto-Balto-Slavic/Proto-West Germanic/Proto-Italic/Proto-Indo-Iranian, same " \
-        "extract family): a LEADING ASTERISK scopes to reconstructions (*bogъ), whose " \
-        "entries also list their descendant reflexes with corpus attestation counts " \
-        "(nabu_etym walks the same crosswalk from an attested lemma). " \
-        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu|or a -pro shelf " \
-        "code) picks a shelf when the spelling is ambiguous. Each entry carries headword, " \
+        "Look up a lemma (dictionary form) in the dictionary shelves nabu holds locally — " \
+        "hundreds of lexica across many languages (LSJ, Lewis & Short, Bosworth-Toller, the " \
+        "Wiktionary extracts, and far more; the `lang` enum in this schema is the LIVE set of " \
+        "shelf languages, nabu_status counts the entries). The Wiktionary RECONSTRUCTION " \
+        "shelves (*-pro codes) are included: a LEADING ASTERISK scopes to reconstructions " \
+        "(*bogъ), whose entries also list their descendant reflexes with corpus attestation " \
+        "counts (nabu_etym walks the same crosswalk from an attested lemma). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` picks a shelf language when the " \
+        "spelling is ambiguous. Each entry carries headword, " \
         "dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
@@ -357,7 +372,41 @@ module Nabu
         "lemmas, `lemma_echoes` adds passages sharing ≥2 of its RARE lemmas (re-inflected/reordered " \
         "allusion verbatim grams miss). Bounded (default #{PARALLELS_DEFAULT_LIMIT}, max " \
         "#{PARALLELS_MAX_LIMIT}) with an honest note; every hit carries urn, language, license_class, " \
-        "and source — PRESERVE the license fields when quoting. `lang`/`license` scope candidates.".freeze
+        "and source — PRESERVE the license fields when quoting. `lang`/`license` scope candidates. " \
+        "`explain: true` adds each hit's per-gram score decomposition (gram → df → weight → " \
+        "contribution; rows sum to the score exactly, non-contributing grams as zero rows).".freeze
+
+      CLARIFY_DESCRIPTION =
+        "The reference normalizer: give a partial, misspelled, or half-remembered work or passage " \
+        "reference — a title prefix (\"Ilia\"), a misspelling (\"Illiad\"), a title plus citation " \
+        "(\"Iliad 1.1\"), or a full/partial urn — and get an honest reading of it: `is_ref` (does " \
+        "it name held text: a urn, or an EXACT document title [+ citation]), `resolved_urn` ONLY " \
+        "when it parses UNIQUELY (open it with nabu_show), `ref` (passage · document · " \
+        "citation_prefix · range, with license fields), `structure` (what a deeper citation looks " \
+        "like there: passage count, first/last citation, depth, an example urn and a range " \
+        "example), and `completions` — typed CANDIDATES {title, key, type: " \
+        "document|source|lemma|place, is_primary (the matched name is the primary title, not an " \
+        "alias), match: exact|prefix|token|fuzzy (a misspelling guess, said so), source, " \
+        "language, license_class; present-only detail, ref_urn}. Never a silent guess: two " \
+        "editions sharing a title, or a citation several hold, resolve to NOTHING and list every " \
+        "reading (ref_urn each). Diacritics optional (οδυσσεια finds Ὀδύσσεια). Backed by a " \
+        "precompiled title index; when it is not built the note says so and urn input still " \
+        "resolves. Bounded (default #{CLARIFY_DEFAULT_LIMIT}, max #{CLARIFY_MAX_LIMIT}).".freeze
+
+      CLARIFY_SCHEMA = {
+        type: "object",
+        properties: {
+          query: { type: "string",
+                   description: "The reference to normalize: a title (or its prefix/misspelling), a " \
+                                "title plus citation (\"Iliad 1.1\"), a source name/slug, a " \
+                                "dictionary headword, a place name, or a full/partial urn." },
+          limit: { type: "integer", minimum: 1, maximum: CLARIFY_MAX_LIMIT,
+                   default: CLARIFY_DEFAULT_LIMIT, description: "Maximum candidates returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["query"],
+        additionalProperties: false
+      }.freeze
 
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
@@ -378,7 +427,7 @@ module Nabu
         "nabu_parallels; an empty result means no batch has covered this urn, NOT that no " \
         "parallel exists. Edges come back grouped by kind, both directions (direction=out: this " \
         "urn's anchor probe discovered the counterpart; in: another anchor found this urn), each " \
-        "counterpart resolved to document title/language/license_class (null when no longer in " \
+        "counterpart resolved to document title/language/license_class/source (null when no longer in " \
         "the catalog — edges are urn-keyed and outlive rebuilds). `runs` cites the producer " \
         "run(s): producer, scope, params, code_version, date — every edge's provenance. Bounded " \
         "per kind (default #{LINKS_DEFAULT_LIMIT}, max #{LINKS_MAX_LIMIT}) with an honest note; " \
@@ -400,8 +449,9 @@ module Nabu
                                      "alignment (nabu_align/nabu_parallels serve those). " \
                                      "Replaces query/lemma; composes with limit only." },
           lemma: { type: "string",
-                   description: "Dictionary form for exact-lemma treebank search. " \
-                                "Mutually exclusive with query." },
+                   description: "Dictionary form for exact-lemma search over the lemma index " \
+                                "(every tier; non-gold hits carry `tier`). Mutually exclusive " \
+                                "with query." },
           morph: { type: "string",
                    description: "Morphology facets, only WITH lemma: comma-joined key=value in " \
                                 "Universal Dependencies vocabulary (case, number, gender, person, " \
@@ -425,9 +475,10 @@ module Nabu
                      description: "Exact effective license class filter." },
           from: { type: "integer",
                   description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
-                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline " \
-                               "(dated papyri via HGV, Slovene goo300k/IMP); most of the corpus is " \
-                               "undated and absent under a date filter. Text search only (not lemma)." },
+                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline — the " \
+                               "dated documents of most sources, every date class (see date_basis to " \
+                               "pick one); a document the timeline does not date is absent under a " \
+                               "date filter. Text search only (not lemma)." },
           to: { type: "integer",
                 description: "Latest date: signed historical year; composes with from." },
           century: { type: "integer",
@@ -637,6 +688,13 @@ module Nabu
                                "one under it — the same prefix semantics as nabu_search's lect " \
                                "(lect: \"grc:koi\" keeps Koine candidates, drops Classical and " \
                                "bare-grc ones). Errors if the module is not synced on this box." },
+          explain: { type: "boolean", default: false,
+                     description: "Attach each hit's score decomposition as `explain`: one row " \
+                                  "per distinct anchor gram — gram, position, positions (anchor " \
+                                  "occurrences), df (probe document frequency), weight (1/df), " \
+                                  "contribution, status (shared · not_shared · too_common · " \
+                                  "stop). Contributions sum to the hit's score EXACTLY; grams " \
+                                  "adding nothing are explicit zero rows." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["urn"],
@@ -658,7 +716,9 @@ module Nabu
         "Degrades honestly when the gazetteer dump is not on this box: a numeric id still " \
         "counts holdings (the catalog side needs no dump, the card is just fact-less); a NAME " \
         "lookup needs the dump and says so. Coordinates are display facts — no maps, no " \
-        "coordinate math."
+        "coordinate math. A card serving gazetteer facts carries `attribution` (the gazetteer's " \
+        "source slug, license_class, verbatim license, and the place's upstream uri) — PRESERVE " \
+        "it when quoting the facts (Pleiades is CC BY 3.0)."
 
       PLACE_SCHEMA = {
         type: "object",
@@ -683,7 +743,9 @@ module Nabu
         "description, function, phonetic value, JSesh/Hieroglyphica/IFAO concordances, aes " \
         "attestation. The Han character card is CLI-only for now — answered with a note " \
         "(nabu_define serves Han dictionary entries meanwhile). Absent data is null/[], " \
-        "never a placeholder."
+        "never a placeholder. Every card names its reference spine — `source`, " \
+        "`license_class`, `license` (OSL CC0, Unikemet Unicode License) — and `attribution` " \
+        "lists every contributing dataset; PRESERVE them when quoting."
 
       CHAR_SCHEMA = {
         type: "object",
@@ -709,7 +771,8 @@ module Nabu
         "(sign resolved, honestly unencoded upstream) · broken (x, [...]) · unknown (not in " \
         "the OSL — said plainly). Determinatives are unbraced and flagged. The sign list adds " \
         "IDENTITY, not curriculum. Bounded (default #{SIGNS_DEFAULT_MAX_LINES} lines, max " \
-        "#{SIGNS_MAX_LINES_CAP}); the restricted-exclusion stance applies to urn mode.".freeze
+        "#{SIGNS_MAX_LINES_CAP}); the restricted-exclusion stance applies to urn mode. `sign_list` " \
+        "carries the OSL license envelope; urn mode also carries the text's license_class.".freeze
 
       SIGNS_SCHEMA = {
         type: "object",
@@ -811,6 +874,8 @@ module Nabu
                           handler: :place },
         "nabu_signs" => { description: SIGNS_DESCRIPTION, input_schema: SIGNS_SCHEMA,
                           handler: :signs },
+        "nabu_clarify" => { description: CLARIFY_DESCRIPTION, input_schema: CLARIFY_SCHEMA,
+                            handler: :clarify },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -988,6 +1053,7 @@ module Nabu
                              .run(args["similar_to"], limit: limit)
         results = page.results
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        sources = sources_by_urn(catalog, results.map(&:urn))
         json({
                anchor: page.anchor_urn, language: page.language, model: page.model,
                note: "banded semantic similarity (close/near/loose), same-language only — " \
@@ -996,7 +1062,8 @@ module Nabu
                  {
                    urn: result.urn, language: result.language, band: result.band,
                    snippet: result.snippet, document_title: result.document_title,
-                   license_class: result.license_class, credit: result.credit
+                   license_class: result.license_class, source: sources[result.urn],
+                   credit: result.credit
                  }.compact
                end
              })
@@ -1015,10 +1082,7 @@ module Nabu
 
         query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words)
         result = query.run(urn)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
         return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
 
         payload = case result
@@ -1086,13 +1150,12 @@ module Nabu
           lects = lects_seam
           raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
         end
-        result = Query::Parallels.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
-                                 .run(urn, limit: limit + 1, lang: args["lang"], license: license,
-                                           lect: lect)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        # explain: the same engine observed (Query::ParallelsExplain) — every
+        # hit additionally decomposed; the plain engine otherwise.
+        engine = args["explain"] == true ? Query::ParallelsExplain : Query::Parallels
+        result = engine.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+                       .run(urn, limit: limit + 1, lang: args["lang"], license: license, lect: lect)
+        return urn_not_found(urn) if result.nil?
 
         render_parallels(result, limit: limit, catalog: catalog, include_restricted: include_restricted)
       end
@@ -1115,7 +1178,8 @@ module Nabu
                       "passages, nabu_parallels discovers parallels on the fly")
         end
 
-        render_links(result, limit: limit, include_restricted: args["include_restricted"] == true)
+        render_links(result, limit: limit, include_restricted: args["include_restricted"] == true,
+                             catalog: catalog)
       end
 
       # nabu_place (P44-3): the place desk — Query::Place unchanged under an
@@ -1304,6 +1368,42 @@ module Nabu
         render_cognates(result, limit: limit)
       rescue Query::Cognates::Error => e
         tool_error(e.message)
+      end
+
+      # nabu_clarify: the reference normalizer (Query::Clarify). Catalog
+      # lookups for urns, the fulltext clarify lane for names; an absent
+      # lane is a corpus STATE (the payload's note + index.present: false),
+      # never isError.
+      def clarify(args)
+        query = string_arg(args, "query") or
+          raise InvalidArguments, "nabu_clarify needs a query (a title or its prefix/misspelling, a " \
+                                  "title plus citation, or a urn)"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        limit = clamp(args["limit"], default: CLARIFY_DEFAULT_LIMIT, max: CLARIFY_MAX_LIMIT)
+        result = Query::Clarify.new(catalog: catalog, fulltext: resolve(@fulltext))
+                               .run(query, limit: limit, include_restricted: args["include_restricted"] == true)
+        json(clarify_payload(result))
+      end
+
+      def clarify_payload(result)
+        {
+          type: "clarify", query: result.query, is_ref: result.is_ref, resolved_urn: result.resolved_urn,
+          ref: result.ref&.to_h, structure: result.structure&.to_h,
+          completions: result.completions.map { |candidate| clarify_candidate_payload(candidate) },
+          index: { present: result.index_present, built_at: result.index_built_at },
+          note: result.note
+        }
+      end
+
+      # The typed candidate (frozen order: title, key, type, is_primary,
+      # match, source, language, license_class), detail/ref_urn present-only.
+      def clarify_candidate_payload(candidate)
+        row = { title: candidate.title, key: candidate.key, type: candidate.type,
+                is_primary: candidate.is_primary, match: candidate.match, source: candidate.source,
+                language: candidate.language, license_class: candidate.license_class }
+        row[:detail] = candidate.detail if candidate.detail
+        row[:ref_urn] = candidate.ref_urn if candidate.ref_urn
+        row
       end
 
       def status(_args)
@@ -1549,7 +1649,8 @@ module Nabu
         extra[:word_grain_note] = word_grain_note if word_grain_note
         if results.empty?
           return json({ matches: [],
-                        note: ["no matches", rank_note, meter_note, place_note, incomplete].compact.join(" — "),
+                        note: ["no matches", rank_note, meter_note, place_note, incomplete,
+                               "looking for a work by name? #{CLARIFY_HINT}"].compact.join(" — "),
                         coverage: coverage_hint(catalog) }.merge(extra))
         end
 
@@ -1899,6 +2000,9 @@ module Nabu
           evidence: hit.evidence.first(PARALLELS_EVIDENCE_CAP)
         }
         payload[:evidence_truncated] = true if hit.evidence.size > PARALLELS_EVIDENCE_CAP
+        # The explain surface, present-only (explain: true): the additive
+        # per-gram decomposition of `score` — rows sum to it exactly.
+        payload[:explain] = hit.contributions.map(&:to_h) if hit.respond_to?(:contributions)
         payload
       end
 
@@ -1907,14 +2011,16 @@ module Nabu
           source: sources[echo.urn], score: echo.score, shared_lemmas: echo.shared_lemmas }
       end
 
-      def render_links(result, limit:, include_restricted:)
+      def render_links(result, limit:, include_restricted:, catalog:)
         kinds = result.groups.transform_values do |edges|
           include_restricted ? edges : edges.reject { |e| EXCLUDED_LICENSE_CLASSES.include?(e.license_class) }
         end
+        shown = kinds.transform_values { |edges| edges.first(limit) }
+        sources = counterpart_sources(catalog, shown.values.flatten.map(&:urn).uniq)
         json(
           type: "links",
           urn: result.urn, document: result.title,
-          kinds: kinds.sort.to_h { |kind, edges| [kind, edges.first(limit).map { |e| link_edge_payload(e) }] },
+          kinds: shown.sort.to_h { |kind, edges| [kind, edges.map { |e| link_edge_payload(e, sources) }] },
           runs: result.runs.map do |run|
             { id: run.id, producer: run.producer, scope: run.scope, params: run.params,
               code_version: run.code_version, created_at: run.created_at.to_s }
@@ -1924,11 +2030,36 @@ module Nabu
       end
 
       # detail (P16-2): per-edge evidence — the formula gram, the cognate
-      # meet (ref · root [shelf]); nil on parallel edges.
-      def link_edge_payload(edge)
+      # meet (ref · root [shelf]); nil on parallel edges. source (the
+      # reference envelope): the counterpart's source slug, null when the
+      # counterpart no longer resolves in the catalog.
+      def link_edge_payload(edge, sources = {})
         { direction: edge.direction, urn: edge.urn, document: edge.title,
           language: edge.language, license_class: edge.license_class,
-          score: edge.score, detail: edge.detail }
+          source: sources[edge.urn], score: edge.score, detail: edge.detail }
+      end
+
+      # { urn => source slug } across the three grains a links counterpart
+      # can name — passage, document, dictionary entry — each one indexed
+      # urn lookup batch (Query::Links' own resolution order).
+      def counterpart_sources(catalog, urns)
+        return {} if urns.empty?
+
+        found = sources_by_urn(catalog, urns)
+        rest = urns - found.keys
+        unless rest.empty?
+          found = found.merge(catalog[:documents].join(:sources, id: Sequel[:documents][:source_id])
+                                                 .where(Sequel[:documents][:urn] => rest)
+                                                 .select_hash(Sequel[:documents][:urn], Sequel[:sources][:slug]))
+        end
+        rest = urns - found.keys
+        return found if rest.empty? || !catalog.table_exists?(:dictionary_entries)
+
+        found.merge(catalog[:dictionary_entries]
+                      .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+                      .join(:sources, id: Sequel[:dictionaries][:source_id])
+                      .where(Sequel[:dictionary_entries][:urn] => rest)
+                      .select_hash(Sequel[:dictionary_entries][:urn], Sequel[:sources][:slug]))
       end
 
       def links_note(result, kinds:, limit:)
@@ -1978,29 +2109,68 @@ module Nabu
 
       def cuneiform_char_payload(input)
         list = resolve_sign_list or return note(NO_SIGN_LIST_NOTE)
-        json(Query::SignCard.json_payload(sign_card_query(list).run(input)))
+        sign_card_json(sign_card_query(list).run(input))
       end
 
       def hieroglyphic_char_payload(input)
         signs = resolve_hieroglyphs or return note(NO_UNIKEMET_NOTE)
         result = Query::HieroCard.new(hieroglyphs: signs, catalog: resolve(@catalog)).run(input)
-        json(Query::HieroCard.json_payload(result))
+        json(char_envelope(Query::HieroCard.json_payload(result), "unikemet"))
       end
 
       def name_char_payload(input)
         if (list = resolve_sign_list)
           result = sign_card_query(list).run(input)
-          return json(Query::SignCard.json_payload(result)) if result.card || result.candidates.any?
+          return sign_card_json(result) if result.card || result.candidates.any?
         end
         if (signs = resolve_hieroglyphs) && input.match?(Query::HieroCard::CODE)
           hiero = Query::HieroCard.new(hieroglyphs: signs, catalog: resolve(@catalog)).run(input)
-          return json(Query::HieroCard.json_payload(hiero)) if hiero.card
+          return json(char_envelope(Query::HieroCard.json_payload(hiero), "unikemet")) if hiero.card
         end
         return note(NO_SIGN_LIST_NOTE) if resolve_sign_list.nil? && resolve_hieroglyphs.nil?
 
-        json(Query::SignCard.json_payload(
-               Query::SignCard::Result.new(input: input, card: nil, candidates: [])
-             ))
+        empty = Query::SignCard.json_payload(Query::SignCard::Result.new(input: input, card: nil, candidates: []))
+        json(char_envelope(empty, resolve_sign_list ? "osl" : "unikemet"))
+      end
+
+      # The cuneiform card under the reference envelope; a card whose
+      # Wiktionary senses joined also attributes that shelf.
+      def sign_card_json(result)
+        extra = []
+        if result.card && !result.card.senses.empty?
+          shelf = dictionary_shelf_envelope(Query::SignCard::WIKTIONARY_SLUG)
+          extra << shelf.merge("role" => "senses") if shelf
+        end
+        json(char_envelope(Query::SignCard.json_payload(result), "osl", extra: extra))
+      end
+
+      # The reference envelope on a frozen char contract (string keys, the
+      # contract's own style): the answering spine's source/license_class/
+      # license top-level — additive keys only — and `attribution`, every
+      # contributing dataset (the spine first).
+      def char_envelope(payload, slug, extra: [])
+        spine = reference_strings(slug) or return payload
+        payload.merge("source" => spine["source"], "license_class" => spine["license_class"],
+                      "license" => spine["license"],
+                      "attribution" => [spine.merge("role" => CHAR_SPINE_ROLES.fetch(slug))] + extra)
+      end
+
+      # Envelope.reference with the string keys the frozen sign contracts use.
+      def reference_strings(slug)
+        Envelope.reference(slug)&.transform_keys(&:to_s)
+      end
+
+      # A catalog dictionary shelf's source envelope (slug, class, verbatim
+      # license string), or nil when the shelf is not held.
+      def dictionary_shelf_envelope(dictionary_slug)
+        catalog = resolve(@catalog)
+        return nil unless catalog&.table_exists?(:dictionaries)
+
+        row = catalog[:dictionaries].join(:sources, id: Sequel[:dictionaries][:source_id])
+                                    .where(Sequel[:dictionaries][:slug] => dictionary_slug)
+                                    .select(Sequel[:sources][:slug], Sequel[:sources][:license_class],
+                                            Sequel[:sources][:license]).first
+        row && { "source" => row[:slug], "license_class" => row[:license_class], "license" => row[:license] }
       end
 
       def sign_card_query(list)
@@ -2025,10 +2195,7 @@ module Nabu
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         result = Query::Signs.new(sign_list: list, catalog: catalog)
                              .run_urn(urn, language: string_arg(args, "lang"), dialect: dialect)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
         return withheld(urn, result.license_class) if withhold?(result.license_class,
                                                                 args["include_restricted"] == true)
 
@@ -2038,7 +2205,7 @@ module Nabu
       # The frozen contract (Query::Signs.json_payload — ONE serializer with
       # the CLI's --json), bounded per the MCP surface with an honest note.
       def signs_payload(result, bound)
-        payload = Query::Signs.json_payload(result)
+        payload = signs_envelope(result, Query::Signs.json_payload(result))
         lines = payload.fetch("lines")
         return payload if lines.size <= bound
 
@@ -2047,6 +2214,17 @@ module Nabu
           "note" => "#{lines.size} line(s) total, showing #{bound} — raise max_lines " \
                     "(max #{SIGNS_MAX_LINES_CAP}), or read line by line with passage urns"
         )
+      end
+
+      # The reference envelope on the sign desk (additive keys): the OSL's
+      # license as `sign_list`, and — urn mode — the TEXT's effective
+      # license_class beside the source slug the contract already carries.
+      def signs_envelope(result, payload)
+        sign_list = reference_strings("osl")
+        payload = payload.merge("sign_list" => sign_list) if sign_list
+        return payload unless result.respond_to?(:license_class) && result.license_class
+
+        payload.merge("license_class" => result.license_class)
       end
 
       def place_payload(query, result)
@@ -2087,13 +2265,24 @@ module Nabu
           if place.title.to_s.strip.end_with?("?")
             base[:title_certainty] = Nabu::Certainty.payload(:cataloguer_query, "?").fetch(:certainty)
           end
-          base
+          # The reference envelope: served gazetteer FACTS carry the
+          # gazetteer's attribution (CC BY — license verbatim from the
+          # adapter manifest, plus the place's upstream URI).
+          attribution = place_card_attribution(card)
+          attribution ? base.merge(attribution: attribution) : base
         elsif dump_loaded
           base.merge(note: "id not in the local gazetteer dump")
         else
           base.merge(note: "gazetteer dump not synced (the owner runs `nabu sync pleiades` to " \
                            "add the card) — holdings counted from the catalog alone")
         end
+      end
+
+      def place_card_attribution(card)
+        namespace, id = card.ref.to_s.split(":", 2)
+        return Envelope.place_attribution("pleiades", card.pleiades_id) if id.nil?
+
+        Envelope.place_attribution(namespace, id)
       end
 
       def source_count_rows(counts)
@@ -2331,10 +2520,7 @@ module Nabu
         # The links journal rides along (P48-r2) so kind=translation edges
         # pair cross-source at folio grain — the CLI's show --parallel parity.
         result = Query::Parallel.new(catalog: catalog, journal: resolve(@links)).run(urn, lang: lang)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
 
         left_license = document_license(catalog, result.left.urn)
         return withheld(result.left.urn, left_license) if withhold?(left_license, include_restricted)
@@ -2517,6 +2703,13 @@ module Nabu
 
       def withhold?(license_class, include_restricted)
         EXCLUDED_LICENSE_CLASSES.include?(license_class) && !include_restricted
+      end
+
+      # The not-found answer every urn-taking tool shares — it names the
+      # normalizer so a caller holding a half-right urn corrects in one hop.
+      def urn_not_found(urn)
+        note("urn not found: #{urn} — #{CLARIFY_HINT}; nabu_search finds passages, nabu_status " \
+             "shows what this corpus holds")
       end
 
       def withheld(urn, license_class)

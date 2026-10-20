@@ -49,7 +49,7 @@ module Nabu
     # The repo README states the grant verbatim: "These works are provided
     # under the protection of a Creative Commons CC BY-NC-ND (Attribution -
     # Non-commercial - No-derivatives) 3.0 copyright." → class `nc` (the
-    # TraCES BY-NC-ND precedent; MCP default-excluded). CAVEAT: the README's
+    # TraCES BY-NC-ND precedent; never redistributed). CAVEAT: the README's
     # Terms_of_Use link (84000/all-data Terms_of_Use.md) layers "data
     # partnership" registration language over bulk external use — the README
     # grant is the operative license (P47-s2 survey, owner-acknowledged).
