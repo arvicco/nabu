@@ -252,6 +252,32 @@ namespace :stamps do
   end
 end
 
+# The clarify lane (nabu_clarify's title index) re-derived standalone over
+# the live catalog — a STAGE re-derive (the reconcile_stages! path the
+# incremental rebuild takes), never a full reindex: it reads only names
+# (document titles, sources, headwords, places) and writes only the
+# fulltext clarify_* tables, then advances the "clarify" stage stamp.
+# Catalog-only reads; minutes on the full library.
+namespace :index do
+  desc "Re-derive the nabu_clarify title index (fulltext clarify lane) over the live catalog"
+  task :clarify do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    summary = Nabu::Store::Indexer.rebuild_clarify!(catalog: catalog, fulltext: fulltext, stamp: true)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "index:clarify done — #{summary.fetch(:entries)} entries in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+end
+
 # The short handle (owner request 2026-07-22). Same task, same attestation
 # guard — the friction lives in the ARGUMENT (a claim you must be able to
 # make truthfully), not the task name.

@@ -169,11 +169,11 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_thirteen_tools_with_json_schemas
+    def test_definitions_lists_the_fourteen_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
                       nabu_parallels nabu_cognates nabu_links nabu_char nabu_place nabu_signs
-                      nabu_status],
+                      nabu_clarify nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -1669,6 +1669,71 @@ module MCP
       refute result[:isError]
       assert_match(/not found/i, text_of(result))
       assert_match(/nabu_search|nabu_status/, text_of(result), "points at the discovery tools")
+    end
+
+    # Error messages name the normalizer so an agent self-corrects in one
+    # round trip.
+    def test_show_and_search_misses_name_nabu_clarify
+      seed_corpus
+      assert_match(/nabu_clarify/, text_of(call("nabu_show", { "urn" => "urn:d:nope" })))
+      assert_match(/nabu_clarify/, payload(call("nabu_search", { "query" => "nonexistentword" })).fetch("note"))
+      assert_match(/nabu_clarify/, text_of(call("nabu_parallels", { "urn" => "urn:d:nope:1" })))
+    end
+
+    # -- nabu_clarify: the reference normalizer ---------------------------------
+
+    def test_clarify_resolves_a_passage_urn_with_its_citation_structure
+      seed_corpus
+      body = payload(call("nabu_clarify", { "query" => "#{@grc.urn}:1.2" }))
+      assert_equal ["clarify", true, "#{@grc.urn}:1.2"], body.values_at("type", "is_ref", "resolved_urn")
+      assert_equal %w[passage open perseus], body.fetch("ref").values_at("kind", "license_class", "source")
+      structure = body.fetch("structure")
+      assert_equal [3, "1.1", "1.3", 2, "1.2"],
+                   structure.values_at("passages", "first_citation", "last_citation", "depth", "citation")
+      assert_equal "#{@grc.urn}:1.1-1.2", structure.fetch("range_example")
+    end
+
+    def test_clarify_completes_a_misspelled_title_to_typed_candidates
+      seed_corpus
+      body = payload(call("nabu_clarify", { "query" => "Illiad" }))
+      refute body.fetch("is_ref"), "a misspelling is never a resolution"
+      assert_nil body.fetch("resolved_urn")
+      row = body.fetch("completions").find { |c| c.fetch("key") == @grc.urn }
+      assert_equal %w[title key type is_primary match source language license_class], row.keys,
+                   "the recorded candidate shape"
+      assert_equal ["Iliad", "document", true, "fuzzy"], row.values_at("title", "type", "is_primary", "match")
+      assert body.dig("index", "present")
+    end
+
+    def test_clarify_lists_shared_titles_never_a_silent_pick
+      seed_corpus
+      second = make_document(urn: "urn:cts:greekLit:tlg0012.tlg001.first1k", title: "Iliad")
+      make_passage(second, urn: "#{second.urn}:1.1", text: "μῆνιν", sequence: 0)
+      rebuild!
+      body = payload(call("nabu_clarify", { "query" => "iliad 1.1" }))
+      assert body.fetch("is_ref")
+      assert_nil body.fetch("resolved_urn"), "two editions titled Iliad both hold 1.1"
+      assert_equal ["#{second.urn}:1.1", "#{@grc.urn}:1.1"].sort,
+                   body.fetch("completions").map { |c| c.fetch("ref_urn") }.sort
+      assert_match(/never a silent guess/, body.fetch("note"))
+    end
+
+    def test_clarify_withholds_restricted_titles_by_default
+      seed_corpus
+      keys = payload(call("nabu_clarify", { "query" => "private" })).fetch("completions").map { |c| c["key"] }
+      refute_includes keys, "urn:nabu:adhoc:notes"
+      opened = payload(call("nabu_clarify", { "query" => "private", "include_restricted" => true }))
+      assert_includes opened.fetch("completions").map { |c| c["key"] }, "urn:nabu:adhoc:notes"
+    end
+
+    def test_clarify_without_the_lane_hints_honestly_and_needs_a_query
+      seed_corpus
+      Nabu::Store::Indexer.drop_clarify!(@fulltext)
+      body = payload(call("nabu_clarify", { "query" => "Iliad" }))
+      refute body.dig("index", "present")
+      assert_empty body.fetch("completions")
+      assert_match(/rake index:clarify/, body.fetch("note"))
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_clarify", {}) }
     end
 
     def test_show_parallel_aligns_the_sibling_edition

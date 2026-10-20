@@ -14,6 +14,7 @@ require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/parallels"
 require_relative "../query/parallels_explain"
+require_relative "../query/clarify"
 require_relative "../query/align"
 require_relative "../query/collation"
 require_relative "../query/define"
@@ -148,6 +149,15 @@ module Nabu
       # census: 200000, 2026-07-29, tokens — model-context norms (H5/H6, above)
       SIGNS_DEFAULT_MAX_LINES = 40
       SIGNS_MAX_LINES_CAP = 200
+      # nabu_clarify: candidates per response.
+      # census: 200000, 2026-10-20, tokens — model-context norms (H5/H6, above)
+      CLARIFY_DEFAULT_LIMIT = 10
+      CLARIFY_MAX_LIMIT = 50
+
+      # The self-correction pointer every not-found / no-match answer carries
+      # (one round trip to a candidate urn).
+      CLARIFY_HINT = "nabu_clarify normalizes a partial or misspelled title/reference into " \
+                     "candidate urns plus the citation shape"
 
       # The answering spine's role line in a char card's attribution list.
       # const: display labels, not a corpus claim
@@ -366,6 +376,38 @@ module Nabu
         "and source — PRESERVE the license fields when quoting. `lang`/`license` scope candidates. " \
         "`explain: true` adds each hit's per-gram score decomposition (gram → df → weight → " \
         "contribution; rows sum to the score exactly, non-contributing grams as zero rows).".freeze
+
+      CLARIFY_DESCRIPTION =
+        "The reference normalizer: give a partial, misspelled, or half-remembered work or passage " \
+        "reference — a title prefix (\"Ilia\"), a misspelling (\"Illiad\"), a title plus citation " \
+        "(\"Iliad 1.1\"), or a full/partial urn — and get an honest reading of it: `is_ref` (does " \
+        "it name held text: a urn, or an EXACT document title [+ citation]), `resolved_urn` ONLY " \
+        "when it parses UNIQUELY (open it with nabu_show), `ref` (passage · document · " \
+        "citation_prefix · range, with license fields), `structure` (what a deeper citation looks " \
+        "like there: passage count, first/last citation, depth, an example urn and a range " \
+        "example), and `completions` — typed CANDIDATES {title, key, type: " \
+        "document|source|lemma|place, is_primary (the matched name is the primary title, not an " \
+        "alias), match: exact|prefix|token|fuzzy (a misspelling guess, said so), source, " \
+        "language, license_class; present-only detail, ref_urn}. Never a silent guess: two " \
+        "editions sharing a title, or a citation several hold, resolve to NOTHING and list every " \
+        "reading (ref_urn each). Diacritics optional (οδυσσεια finds Ὀδύσσεια). Backed by a " \
+        "precompiled title index; when it is not built the note says so and urn input still " \
+        "resolves. Bounded (default #{CLARIFY_DEFAULT_LIMIT}, max #{CLARIFY_MAX_LIMIT}).".freeze
+
+      CLARIFY_SCHEMA = {
+        type: "object",
+        properties: {
+          query: { type: "string",
+                   description: "The reference to normalize: a title (or its prefix/misspelling), a " \
+                                "title plus citation (\"Iliad 1.1\"), a source name/slug, a " \
+                                "dictionary headword, a place name, or a full/partial urn." },
+          limit: { type: "integer", minimum: 1, maximum: CLARIFY_MAX_LIMIT,
+                   default: CLARIFY_DEFAULT_LIMIT, description: "Maximum candidates returned." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        required: ["query"],
+        additionalProperties: false
+      }.freeze
 
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
@@ -831,6 +873,8 @@ module Nabu
                           handler: :place },
         "nabu_signs" => { description: SIGNS_DESCRIPTION, input_schema: SIGNS_SCHEMA,
                           handler: :signs },
+        "nabu_clarify" => { description: CLARIFY_DESCRIPTION, input_schema: CLARIFY_SCHEMA,
+                            handler: :clarify },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -1037,10 +1081,7 @@ module Nabu
 
         query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words)
         result = query.run(urn)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
         return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
 
         payload = case result
@@ -1113,10 +1154,7 @@ module Nabu
         engine = args["explain"] == true ? Query::ParallelsExplain : Query::Parallels
         result = engine.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
                        .run(urn, limit: limit + 1, lang: args["lang"], license: license, lect: lect)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
 
         render_parallels(result, limit: limit, catalog: catalog, include_restricted: include_restricted)
       end
@@ -1329,6 +1367,42 @@ module Nabu
         render_cognates(result, limit: limit)
       rescue Query::Cognates::Error => e
         tool_error(e.message)
+      end
+
+      # nabu_clarify: the reference normalizer (Query::Clarify). Catalog
+      # lookups for urns, the fulltext clarify lane for names; an absent
+      # lane is a corpus STATE (the payload's note + index.present: false),
+      # never isError.
+      def clarify(args)
+        query = string_arg(args, "query") or
+          raise InvalidArguments, "nabu_clarify needs a query (a title or its prefix/misspelling, a " \
+                                  "title plus citation, or a urn)"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        limit = clamp(args["limit"], default: CLARIFY_DEFAULT_LIMIT, max: CLARIFY_MAX_LIMIT)
+        result = Query::Clarify.new(catalog: catalog, fulltext: resolve(@fulltext))
+                               .run(query, limit: limit, include_restricted: args["include_restricted"] == true)
+        json(clarify_payload(result))
+      end
+
+      def clarify_payload(result)
+        {
+          type: "clarify", query: result.query, is_ref: result.is_ref, resolved_urn: result.resolved_urn,
+          ref: result.ref&.to_h, structure: result.structure&.to_h,
+          completions: result.completions.map { |candidate| clarify_candidate_payload(candidate) },
+          index: { present: result.index_present, built_at: result.index_built_at },
+          note: result.note
+        }
+      end
+
+      # The typed candidate (frozen order: title, key, type, is_primary,
+      # match, source, language, license_class), detail/ref_urn present-only.
+      def clarify_candidate_payload(candidate)
+        row = { title: candidate.title, key: candidate.key, type: candidate.type,
+                is_primary: candidate.is_primary, match: candidate.match, source: candidate.source,
+                language: candidate.language, license_class: candidate.license_class }
+        row[:detail] = candidate.detail if candidate.detail
+        row[:ref_urn] = candidate.ref_urn if candidate.ref_urn
+        row
       end
 
       def status(_args)
@@ -1574,7 +1648,8 @@ module Nabu
         extra[:word_grain_note] = word_grain_note if word_grain_note
         if results.empty?
           return json({ matches: [],
-                        note: ["no matches", rank_note, meter_note, place_note, incomplete].compact.join(" — "),
+                        note: ["no matches", rank_note, meter_note, place_note, incomplete,
+                               "looking for a work by name? #{CLARIFY_HINT}"].compact.join(" — "),
                         coverage: coverage_hint(catalog) }.merge(extra))
         end
 
@@ -2119,10 +2194,7 @@ module Nabu
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         result = Query::Signs.new(sign_list: list, catalog: catalog)
                              .run_urn(urn, language: string_arg(args, "lang"), dialect: dialect)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
         return withheld(urn, result.license_class) if withhold?(result.license_class,
                                                                 args["include_restricted"] == true)
 
@@ -2447,10 +2519,7 @@ module Nabu
         # The links journal rides along (P48-r2) so kind=translation edges
         # pair cross-source at folio grain — the CLI's show --parallel parity.
         result = Query::Parallel.new(catalog: catalog, journal: resolve(@links)).run(urn, lang: lang)
-        if result.nil?
-          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
-                      "what this corpus holds")
-        end
+        return urn_not_found(urn) if result.nil?
 
         left_license = document_license(catalog, result.left.urn)
         return withheld(result.left.urn, left_license) if withhold?(left_license, include_restricted)
@@ -2633,6 +2702,13 @@ module Nabu
 
       def withhold?(license_class, include_restricted)
         EXCLUDED_LICENSE_CLASSES.include?(license_class) && !include_restricted
+      end
+
+      # The not-found answer every urn-taking tool shares — it names the
+      # normalizer so a caller holding a half-right urn corrects in one hop.
+      def urn_not_found(urn)
+        note("urn not found: #{urn} — #{CLARIFY_HINT}; nabu_search finds passages, nabu_status " \
+             "shows what this corpus holds")
       end
 
       def withheld(urn, license_class)
