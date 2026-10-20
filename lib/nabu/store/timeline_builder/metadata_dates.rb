@@ -258,7 +258,13 @@ module Nabu
           "iedc" => "toponyms",
           # The OBI header's PLACE OF ORIGIN (720 of 1,121 files, census
           # 2026-10-18: "Mt. Tuyin, Bagan", "Hsu-pyu-kun village, Natogyi").
-          "obi-burmese" => "place_of_origin"
+          "obi-burmese" => "place_of_origin",
+          # The places sweep (census 2026-10-21): the Gysseling atlas
+          # localizes 63 of 2,226 texts to a dialect REGION only
+          # ("Holland-West", "Zeeland") — the region answers when no town
+          # does, a declared-coarse claim at region grain; the region
+          # itself facets on every doc (config/facet_map.yml).
+          "corpus-gysseling" => %w[place region]
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);

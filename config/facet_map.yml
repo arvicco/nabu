@@ -148,6 +148,13 @@ sources:
       places: place           # annotations (3,343 tokens / 910 distinct lemmas) — mentions
       #                         in the poem, never findspots (the posture says so); the
       #                         widened mining census surfaced them unprojected
+  # -- The places sweep (the mining law's places half; live census
+  #    2026-10-21): regional classifications the place lane only reads as
+  #    a fallback, faceted verbatim on every document that carries one.
+  corpus-gysseling:           # 2,226 texts, region on ALL — the atlas regio of the
+    fields: #                   localization (West-Vlaanderen 1,224 · Holland-West 314 ·
+      region: region          # Oost-Vlaanderen 299 · Brabant-West 181 … 12 regions); the
+      #                         place lane falls back to it for the 63 town-less texts
   bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
     fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
       recension: recension    # projected so the ruled recension facet rule can read it
