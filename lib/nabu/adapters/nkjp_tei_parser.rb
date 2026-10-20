@@ -101,9 +101,15 @@ module Nabu
       def date_of(node)
         return nil unless node
 
-        from = (node["notBefore"] || node["when"]).to_s[/\A-?\d{1,4}/]
-        to = (node["notAfter"] || node["when"]).to_s[/\A-?\d{1,4}/]
-        { "not_before" => from&.to_i, "not_after" => to&.to_i, "raw" => text_of(node) }.compact
+        from = (node["notBefore"] || node["when"]).to_s[/\A-?\d{1,4}/]&.to_i
+        to = (node["notAfter"] || node["when"]).to_s[/\A-?\d{1,4}/]&.to_i
+        raw = text_of(node)
+        # KorBa's one descending range (RespList: notBefore 1733 /
+        # notAfter 1709, "między 1733 a 1709" — "between 1733 and 1709"):
+        # a between-range of explicit CE years, so the P59-0 ladder's
+        # order-normalizing swap stays within upstream's own claim.
+        from, to = Nabu::Timeline.normalize_interval(from, to, raw: raw)
+        { "not_before" => from, "not_after" => to, "raw" => raw }.compact
       end
 
       def modernized(node)

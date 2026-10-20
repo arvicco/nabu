@@ -54,6 +54,13 @@ verbatim, inter-element whitespace may differ).
   stage-2 headers' masculine spelling of the region sentinel (168 of
   1,241 stage-2 headers); a Latin `<foreign>` "etc.".
 
+## Header-only specimens (outside the stage folders — discovery never sees them)
+
+- `headers/RespList/header.xml` — TEI_korba2/RespList's header, whole
+  and verbatim: the corpus's one DESCENDING date range,
+  `<date notAfter="1709" notBefore="1733">między 1733 a 1709</date>`
+  ("between 1733 and 1709"), pinned for the parser's order-normalization.
+
 Re-cut: from canonical/korba/, trim each directory to its first N
 blocks by the rule above into the same stage folder (the recipe script
 is not part of the repo; any re-implementation of the rule reproduces
