@@ -44,7 +44,7 @@ module Nabu
     # and text items, confirmed by grant by email (Miller Prosser, U. Chicago
     # CORPUS/OCHRE, 2026-07-27): "retrieve the RSTI data and add it to your
     # collection, with attribution. The data is governed by the NC-SA
-    # license." Class nc, MCP-excluded like all nc; the attribution rides
+    # license." Class nc, never redistributed like all nc; the attribution rides
     # the manifest credit seam onto every serving surface.
     class Rsti < Nabu::Adapter
       MENU_UUID = "4a7c67a2-6814-4e88-b24c-04db5ab2ad2a"

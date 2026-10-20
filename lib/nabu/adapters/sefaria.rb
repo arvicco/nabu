@@ -101,8 +101,8 @@ module Nabu
     # - Public Domain / literal "PD" (the Kaufmann MS spelling; owner
     #   ruling D46-f) / CC0 → the source class (open); CC-BY/CC-BY-SA →
     #   license_override "attribution"; CC-BY-NC/CC-BY-NC-SA → "nc" (the
-    #   P10-4 mechanics — the Davidson lane; nc documents are MCP-excluded
-    #   downstream).
+    #   P10-4 mechanics — the Davidson lane; nc documents are served locally with
+    #   their license label, never redistributed).
     # - "unknown" or an ABSENT field is not a grant → skipped by rule,
     #   censused, never a ref (known: one Kaufmann file — Pirkei Avot —
     #   and the Davidson Yerushalmi Shekalim English).
@@ -301,7 +301,7 @@ module Nabu
               "Tosefta) + Midrash (Rabbah, halakhic midrashim)",
         license: "Per NAMED version, machine-readable \"license\" field in each version file (the index " \
                  "carries none): PD (both spellings)/CC0 -> open, CC-BY/CC-BY-SA -> attribution override, " \
-                 "CC-BY-NC(-SA) -> nc override (the Davidson lane; MCP-excluded); \"unknown\"/absent -> " \
+                 "CC-BY-NC(-SA) -> nc override (the Davidson lane; never redistributed); \"unknown\"/absent -> " \
                  "never ingested; merged.json carries no license field and is never fetched or ingested",
         license_class: "open",
         upstream_url: "https://github.com/Sefaria/Sefaria-Export",

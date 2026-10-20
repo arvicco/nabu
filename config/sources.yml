@@ -752,7 +752,7 @@ cbeta:
   # canon-level gate: Category A = CC BY-NC-SA 4.0 (cbeta.org/copyright
   # 「Creative Commons 姓名標示-非商業性-相同方式分享 4.0 國際授權條款」 +
   # every file's own header grant, re-verified at parse) → class nc,
-  # MCP-excluded; the four named Category B corpora (Y 印順法師佛學著作集,
+  # never redistributed; the four named Category B corpora (Y 印順法師佛學著作集,
   # LC 呂澂佛學著作集, TX 太虛大師全書, YP 演培法師全集 — 類別 B：不屬於
   # 創用 CC 條款授權之文獻) are NEVER ingested: outside the sparse cone
   # AND refused by canon dir at discover (test-pinned). license_watch on
@@ -1211,7 +1211,7 @@ cuc:
   # listed in document metadata (never faked). LICENSE: every .tf header
   # verbatim — British spelling — "@licence=Creative Commons
   # Attribution-NonCommercial 4.0 International License" → class nc,
-  # MCP-excluded. Version PINNED tf/0.2.8 (the sparse cone IS the pin);
+  # never redistributed. Version PINNED tf/0.2.8 (the sparse cone IS the pin);
   # upstream is work-in-progress, new versions land in new dirs →
   # re-pin is an owner decision.
   sync_policy: manual
@@ -1428,7 +1428,7 @@ derom:   # P56-4, 02-sources row 146
   # (P56-4 gate, item metadata verbatim in the fixture): CC BY-NC-SA 4.0
   # ("Licence Creative Commons Attribution - Pas d'Utilisation Commerciale
   # - Partage dans les Mêmes Conditions 4.0 International", status "Free
-  # for non commercial use") → class nc: ingestible, MCP-EXCLUDED.
+  # for non commercial use") → class nc: ingestible, NEVER REDISTRIBUTED.
   # EXPECTED FIRST SYNC: 513 documents → ~233 entries (188 full + 45
   # renvoi; 280 potiches skipped), ~3.5–4.5k reflex rows (fixture mean ~22
   # signifiants/article over DÉRom-1's densest slice). Next upstream
@@ -1645,7 +1645,7 @@ dillmann:   # P46-2, 02-sources row 124
   # point at. LICENSE QUIRK (recorded): every file's licence target URL is
   # MALFORMED ("…/licenses/by-sa-nc/4.0/", a slug CC does not serve; http
   # x12,453 + https x1,274); the prose names Attribution-ShareAlike Non
-  # Commercial 4.0 -> CC BY-NC-SA 4.0, class nc (MCP default-excluded).
+  # Commercial 4.0 -> CC BY-NC-SA 4.0, class nc (never redistributed).
   # EXPECTED FIRST SYNC (~15 MB, sparse **/*.xml cone): 13,727 entries.
   sync_policy: manual
 
@@ -1722,7 +1722,7 @@ dss:
   # every .tf header machine-readable "@license=Creative Commons
   # Attribution-NonCommercial 4.0 International License" + docs/about.md's
   # Abegg grant ("Martin Abegg graciously gave permission ... under a
-  # CC-BY-NC license") → class nc, MCP-excluded. Version PINNED tf/2.0
+  # CC-BY-NC license") → class nc, never redistributed. Version PINNED tf/2.0
   # (the sparse cone IS the pin). NOT ingested (silver, the goo300k/imp
   # discipline): the ML-derived *_etcbc features and the v2.0 clause/
   # phrase nodes (125/315, all in 1Qisaa — about.md: "trained on BHSA ...
@@ -1781,7 +1781,7 @@ e84000:   # P48-2, 02-sources row 133
   # stated verbatim in the repo README ("These works are provided under
   # the protection of a Creative Commons CC BY-NC-ND (Attribution -
   # Non-commercial - No-derivatives) 3.0 copyright.") -> class nc (the
-  # TraCES BY-NC-ND precedent; MCP default-excluded). CAVEAT (P47-s2,
+  # TraCES BY-NC-ND precedent; never redistributed). CAVEAT (P47-s2,
   # owner-acknowledged): the README's linked Terms_of_Use.md
   # (84000/all-data) layers "data partnership" registration language for
   # bulk external use — the README grant is the operative license.
@@ -1820,7 +1820,7 @@ ebl:
   # channel ONLY — documented, never automated. LICENSE CONFLICT recorded
   # verbatim in the manifest: JOHD 10.5334/johd.148 License section says
   # CC BY-NC-SA 4.0 for fragments.json, the Zenodo field says cc-by-4.0 —
-  # class held at nc (MCP-excluded per standing nc discipline) until
+  # class held at nc (never redistributed per standing nc discipline) until
   # a licensing clarification by email resolves it. The eBL Corpus side (Gilgameš chapter
   # editions) is OUT: no packaged dump, the grant covers fragments only.
   # #tr.en/#tr.ar/#tr.de per-line translations ride as tr annotations
@@ -1866,7 +1866,7 @@ edl:
                    # ~2,653 reflex edges across two shelves; eyeball
                    # `nabu etym rodo` — the lat → PIt → PIE Leiden chain).
   # CIRCSE/EtymologicalDictionaryLatin LiLa LOD skeleton (CC BY-NC-SA 4.0 →
-  # nc: MCP default-excluded, never redistributed — the GRETIL/MW posture).
+  # nc: never redistributed — the GRETIL/MW posture).
   sync_policy: manual
 
 edr:   # P46-4
@@ -2629,7 +2629,7 @@ itant:
   # Corpus ItAnt (DigItAnt, PRIN 2017 CNR-ILC/UniFI; cite Murano et al.,
   # JOCCH 16.3 (2023), 10.1145/3606703): 501 Oscan + 9 Lepontic EpiDoc
   # records (2026-07-18 census). CC BY-NC-SA 4.0 in README + license.txt +
-  # every record's <licence> → nc (MCP default-excluded). Second witness
+  # every record's <licence> → nc (never redistributed). Second witness
   # beside CEIPoM's Oscan — deliberately unmerged, meeting at the shared
   # tm: reference edges. RE-SYNC WATCH (journaled): the Venetic_/Faliscan_
   # dirs are README-only ("available once the revision process is
@@ -4220,7 +4220,7 @@ peshitta:
   # the psalms work rides the P13-5 Hebrew→Greek remap (fourth reuse).
   # LICENSE: docs/about.md verbatim "The plain text of the Peshitta, its
   # conversion to Text-Fabric format, is subject to the CC-BY-NC license"
-  # (the conversion program alone is MIT) → class nc, MCP-excluded.
+  # (the conversion program alone is MIT) → class nc, never redistributed.
   # Version PINNED tf/0.2 (the sparse cone IS the pin); upstream is
   # archived/unsupported (repostatus badge) → effectively frozen.
   sync_policy: manual
@@ -4488,7 +4488,7 @@ rsti:
   # <uuid>&format=json — literal &, no ?). LICENSE: CC BY-NC-SA 4.0 (the
   # API's own availability.license), GRANTED by email 2026-07-27 (M. Prosser, U. Chicago
   # CORPUS/OCHRE, 2026-07-27: "retrieve the RSTI data and add it to your
-  # collection, with attribution") → class nc, MCP-excluded; the Bordreuil &
+  # collection, with attribution") → class nc, never redistributed; the Bordreuil &
   # Pardee (1989) TEO credit rides the manifest verbatim.
   sync_policy: manual
 
@@ -4766,7 +4766,7 @@ sefaria:
   # (Venice, Mechon-Mamre…) are out by rule. THE LICENSE GATE per version
   # FILE (the index carries no license field): PD (both spellings, D46-f)/
   # CC0 → open, CC-BY/CC-BY-SA → attribution override, CC-BY-NC(-SA) → nc
-  # override (P10-4, MCP-excluded — the Davidson lane); "unknown"/absent →
+  # override (P10-4, never redistributed — the Davidson lane); "unknown"/absent →
   # never ingested; merged.json never fetched or ingested (pinned in tests).
   # LANGUAGE RULINGS (D46-e, per shelf on actualLanguage): Targum he→arc
   # (axis-keyed, frozen); Mishnah + Tosefta + both midrash shelves he→hbo;
@@ -5888,7 +5888,7 @@ traces:   # P46-2, 02-sources row 125
   # link in annotations) — the gold lemma lane of the Geʿez shelf. LICENSE =
   # D46-b: no in-repo license; the official archive deposit governs —
   # CC BY-NC-ND 4.0 (fdr.uni-hamburg.de record 707, DOI 10.25592/uhhfdm.707)
-  # -> nc (MCP default-excluded). EXPECTED FIRST SYNC (~137 MB clone): 15
+  # -> nc (never redistributed). EXPECTED FIRST SYNC (~137 MB clone): 15
   # docs / 75,440 passages; the stray Alpheios export skips by rule.
   # Project ended, export effectively frozen -> manual.
   sync_policy: manual
