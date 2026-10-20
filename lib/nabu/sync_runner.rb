@@ -360,6 +360,9 @@ module Nabu
         else
           reindex!(entry, adapter, progress, delta: reindex_delta(load_report, lane_report))
         end
+      # The per-source lane refreshes open no stage (each is seconds);
+      # --verbose still explains them as one step (Ops::StageGuide).
+      progress&.explain("post-load lanes: #{entry.slug}")
       refresh_honkoku_ndl_catalog(entry)
       refresh_catalog_lanes(entry, load_report)
       refresh_itkc_author_dates(entry)
