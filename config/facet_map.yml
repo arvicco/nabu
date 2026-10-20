@@ -98,6 +98,11 @@ sources:
       objectInfo: object_type # 6,807 docs (runestone 1,963 · fragment of runestone 696 …)
       style: style            # 2,669 docs, 88 ornament styles (Pr 1–5, Rak, Fp …; "?" a claim)
       # carver (1,080 docs) is a PERSON field — the person lane, not a facet (later)
+  damos:                      # census: 5,890 Linear B items (live catalog 2026-10-21)
+    fields:
+      material: material      # 5,890 docs, 3 values (clay 5,888 · ivory 1 · stone 1) — the
+      #                         writing support, a physical-object facet under the cdli/rundata
+      #                         name; never a kind (the object facet already says tablet/label)
   glaux:                      # census: 1,421 works
     fields:
       dialect: dialect        # 1,176 docs, 7 values (Attic/Koine 416 · Attic 322 · Koine 214 …)
@@ -115,7 +120,13 @@ sources:
     fields:
       medium: medium          # Handschrift 97 · Druck 93
       text-type: text_type    # 185 docs, 140 upstream text-type labels verbatim
-  rem:                        # census: 406 Middle High German texts
+      genre: genre            # 190 docs (census 2026-10-21): T 87 · P 69 · V 26 · F 8 — the
+      #                         header's one-letter Textart code verbatim (the ReM genre-facet
+      #                         precedent). The deposit's dokumentation.pdf defines Textart as
+      #                         Prosa/Vers (P/V); T and F are undocumented there (F co-occurs
+      #                         with Flugschrift text-types) — so the codes facet as-is and no
+      #                         kind fold reads them: a form code, never a guessed genre
+  rem:                       # census: 406 Middle High German texts
     fields:
       topic: topic            # 406 docs (Religion 278 · Poesie 47 · Wissen(-schaft) 41 …)
       text_type: text_type    # 388 docs, 105 values (Predigt · Segen · Bibeldichtung …)
