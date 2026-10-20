@@ -23,6 +23,7 @@ require_relative "../query/signs"
 require_relative "../lects"
 require_relative "../pleiades"
 require_relative "../sign_list"
+require_relative "envelope"
 
 module Nabu
   module MCP
@@ -146,6 +147,10 @@ module Nabu
       # census: 200000, 2026-07-29, tokens — model-context norms (H5/H6, above)
       SIGNS_DEFAULT_MAX_LINES = 40
       SIGNS_MAX_LINES_CAP = 200
+
+      # The answering spine's role line in a char card's attribution list.
+      # const: display labels, not a corpus claim
+      CHAR_SPINE_ROLES = { "osl" => "sign list", "unikemet" => "sign spine" }.freeze
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       # const: a retry-grace choice, not a corpus claim
@@ -378,7 +383,7 @@ module Nabu
         "nabu_parallels; an empty result means no batch has covered this urn, NOT that no " \
         "parallel exists. Edges come back grouped by kind, both directions (direction=out: this " \
         "urn's anchor probe discovered the counterpart; in: another anchor found this urn), each " \
-        "counterpart resolved to document title/language/license_class (null when no longer in " \
+        "counterpart resolved to document title/language/license_class/source (null when no longer in " \
         "the catalog — edges are urn-keyed and outlive rebuilds). `runs` cites the producer " \
         "run(s): producer, scope, params, code_version, date — every edge's provenance. Bounded " \
         "per kind (default #{LINKS_DEFAULT_LIMIT}, max #{LINKS_MAX_LIMIT}) with an honest note; " \
@@ -658,7 +663,9 @@ module Nabu
         "Degrades honestly when the gazetteer dump is not on this box: a numeric id still " \
         "counts holdings (the catalog side needs no dump, the card is just fact-less); a NAME " \
         "lookup needs the dump and says so. Coordinates are display facts — no maps, no " \
-        "coordinate math."
+        "coordinate math. A card serving gazetteer facts carries `attribution` (the gazetteer's " \
+        "source slug, license_class, verbatim license, and the place's upstream uri) — PRESERVE " \
+        "it when quoting the facts (Pleiades is CC BY 3.0)."
 
       PLACE_SCHEMA = {
         type: "object",
@@ -683,7 +690,9 @@ module Nabu
         "description, function, phonetic value, JSesh/Hieroglyphica/IFAO concordances, aes " \
         "attestation. The Han character card is CLI-only for now — answered with a note " \
         "(nabu_define serves Han dictionary entries meanwhile). Absent data is null/[], " \
-        "never a placeholder."
+        "never a placeholder. Every card names its reference spine — `source`, " \
+        "`license_class`, `license` (OSL CC0, Unikemet Unicode License) — and `attribution` " \
+        "lists every contributing dataset; PRESERVE them when quoting."
 
       CHAR_SCHEMA = {
         type: "object",
@@ -709,7 +718,8 @@ module Nabu
         "(sign resolved, honestly unencoded upstream) · broken (x, [...]) · unknown (not in " \
         "the OSL — said plainly). Determinatives are unbraced and flagged. The sign list adds " \
         "IDENTITY, not curriculum. Bounded (default #{SIGNS_DEFAULT_MAX_LINES} lines, max " \
-        "#{SIGNS_MAX_LINES_CAP}); the restricted-exclusion stance applies to urn mode.".freeze
+        "#{SIGNS_MAX_LINES_CAP}); the restricted-exclusion stance applies to urn mode. `sign_list` " \
+        "carries the OSL license envelope; urn mode also carries the text's license_class.".freeze
 
       SIGNS_SCHEMA = {
         type: "object",
@@ -988,6 +998,7 @@ module Nabu
                              .run(args["similar_to"], limit: limit)
         results = page.results
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        sources = sources_by_urn(catalog, results.map(&:urn))
         json({
                anchor: page.anchor_urn, language: page.language, model: page.model,
                note: "banded semantic similarity (close/near/loose), same-language only — " \
@@ -996,7 +1007,8 @@ module Nabu
                  {
                    urn: result.urn, language: result.language, band: result.band,
                    snippet: result.snippet, document_title: result.document_title,
-                   license_class: result.license_class, credit: result.credit
+                   license_class: result.license_class, source: sources[result.urn],
+                   credit: result.credit
                  }.compact
                end
              })
@@ -1115,7 +1127,8 @@ module Nabu
                       "passages, nabu_parallels discovers parallels on the fly")
         end
 
-        render_links(result, limit: limit, include_restricted: args["include_restricted"] == true)
+        render_links(result, limit: limit, include_restricted: args["include_restricted"] == true,
+                             catalog: catalog)
       end
 
       # nabu_place (P44-3): the place desk — Query::Place unchanged under an
@@ -1907,14 +1920,16 @@ module Nabu
           source: sources[echo.urn], score: echo.score, shared_lemmas: echo.shared_lemmas }
       end
 
-      def render_links(result, limit:, include_restricted:)
+      def render_links(result, limit:, include_restricted:, catalog:)
         kinds = result.groups.transform_values do |edges|
           include_restricted ? edges : edges.reject { |e| EXCLUDED_LICENSE_CLASSES.include?(e.license_class) }
         end
+        shown = kinds.transform_values { |edges| edges.first(limit) }
+        sources = counterpart_sources(catalog, shown.values.flatten.map(&:urn).uniq)
         json(
           type: "links",
           urn: result.urn, document: result.title,
-          kinds: kinds.sort.to_h { |kind, edges| [kind, edges.first(limit).map { |e| link_edge_payload(e) }] },
+          kinds: shown.sort.to_h { |kind, edges| [kind, edges.map { |e| link_edge_payload(e, sources) }] },
           runs: result.runs.map do |run|
             { id: run.id, producer: run.producer, scope: run.scope, params: run.params,
               code_version: run.code_version, created_at: run.created_at.to_s }
@@ -1924,11 +1939,36 @@ module Nabu
       end
 
       # detail (P16-2): per-edge evidence — the formula gram, the cognate
-      # meet (ref · root [shelf]); nil on parallel edges.
-      def link_edge_payload(edge)
+      # meet (ref · root [shelf]); nil on parallel edges. source (the
+      # reference envelope): the counterpart's source slug, null when the
+      # counterpart no longer resolves in the catalog.
+      def link_edge_payload(edge, sources = {})
         { direction: edge.direction, urn: edge.urn, document: edge.title,
           language: edge.language, license_class: edge.license_class,
-          score: edge.score, detail: edge.detail }
+          source: sources[edge.urn], score: edge.score, detail: edge.detail }
+      end
+
+      # { urn => source slug } across the three grains a links counterpart
+      # can name — passage, document, dictionary entry — each one indexed
+      # urn lookup batch (Query::Links' own resolution order).
+      def counterpart_sources(catalog, urns)
+        return {} if urns.empty?
+
+        found = sources_by_urn(catalog, urns)
+        rest = urns - found.keys
+        unless rest.empty?
+          found = found.merge(catalog[:documents].join(:sources, id: Sequel[:documents][:source_id])
+                                                 .where(Sequel[:documents][:urn] => rest)
+                                                 .select_hash(Sequel[:documents][:urn], Sequel[:sources][:slug]))
+        end
+        rest = urns - found.keys
+        return found if rest.empty? || !catalog.table_exists?(:dictionary_entries)
+
+        found.merge(catalog[:dictionary_entries]
+                      .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+                      .join(:sources, id: Sequel[:dictionaries][:source_id])
+                      .where(Sequel[:dictionary_entries][:urn] => rest)
+                      .select_hash(Sequel[:dictionary_entries][:urn], Sequel[:sources][:slug]))
       end
 
       def links_note(result, kinds:, limit:)
@@ -1978,29 +2018,68 @@ module Nabu
 
       def cuneiform_char_payload(input)
         list = resolve_sign_list or return note(NO_SIGN_LIST_NOTE)
-        json(Query::SignCard.json_payload(sign_card_query(list).run(input)))
+        sign_card_json(sign_card_query(list).run(input))
       end
 
       def hieroglyphic_char_payload(input)
         signs = resolve_hieroglyphs or return note(NO_UNIKEMET_NOTE)
         result = Query::HieroCard.new(hieroglyphs: signs, catalog: resolve(@catalog)).run(input)
-        json(Query::HieroCard.json_payload(result))
+        json(char_envelope(Query::HieroCard.json_payload(result), "unikemet"))
       end
 
       def name_char_payload(input)
         if (list = resolve_sign_list)
           result = sign_card_query(list).run(input)
-          return json(Query::SignCard.json_payload(result)) if result.card || result.candidates.any?
+          return sign_card_json(result) if result.card || result.candidates.any?
         end
         if (signs = resolve_hieroglyphs) && input.match?(Query::HieroCard::CODE)
           hiero = Query::HieroCard.new(hieroglyphs: signs, catalog: resolve(@catalog)).run(input)
-          return json(Query::HieroCard.json_payload(hiero)) if hiero.card
+          return json(char_envelope(Query::HieroCard.json_payload(hiero), "unikemet")) if hiero.card
         end
         return note(NO_SIGN_LIST_NOTE) if resolve_sign_list.nil? && resolve_hieroglyphs.nil?
 
-        json(Query::SignCard.json_payload(
-               Query::SignCard::Result.new(input: input, card: nil, candidates: [])
-             ))
+        empty = Query::SignCard.json_payload(Query::SignCard::Result.new(input: input, card: nil, candidates: []))
+        json(char_envelope(empty, resolve_sign_list ? "osl" : "unikemet"))
+      end
+
+      # The cuneiform card under the reference envelope; a card whose
+      # Wiktionary senses joined also attributes that shelf.
+      def sign_card_json(result)
+        extra = []
+        if result.card && !result.card.senses.empty?
+          shelf = dictionary_shelf_envelope(Query::SignCard::WIKTIONARY_SLUG)
+          extra << shelf.merge("role" => "senses") if shelf
+        end
+        json(char_envelope(Query::SignCard.json_payload(result), "osl", extra: extra))
+      end
+
+      # The reference envelope on a frozen char contract (string keys, the
+      # contract's own style): the answering spine's source/license_class/
+      # license top-level — additive keys only — and `attribution`, every
+      # contributing dataset (the spine first).
+      def char_envelope(payload, slug, extra: [])
+        spine = reference_strings(slug) or return payload
+        payload.merge("source" => spine["source"], "license_class" => spine["license_class"],
+                      "license" => spine["license"],
+                      "attribution" => [spine.merge("role" => CHAR_SPINE_ROLES.fetch(slug))] + extra)
+      end
+
+      # Envelope.reference with the string keys the frozen sign contracts use.
+      def reference_strings(slug)
+        Envelope.reference(slug)&.transform_keys(&:to_s)
+      end
+
+      # A catalog dictionary shelf's source envelope (slug, class, verbatim
+      # license string), or nil when the shelf is not held.
+      def dictionary_shelf_envelope(dictionary_slug)
+        catalog = resolve(@catalog)
+        return nil unless catalog&.table_exists?(:dictionaries)
+
+        row = catalog[:dictionaries].join(:sources, id: Sequel[:dictionaries][:source_id])
+                                    .where(Sequel[:dictionaries][:slug] => dictionary_slug)
+                                    .select(Sequel[:sources][:slug], Sequel[:sources][:license_class],
+                                            Sequel[:sources][:license]).first
+        row && { "source" => row[:slug], "license_class" => row[:license_class], "license" => row[:license] }
       end
 
       def sign_card_query(list)
@@ -2038,7 +2117,7 @@ module Nabu
       # The frozen contract (Query::Signs.json_payload — ONE serializer with
       # the CLI's --json), bounded per the MCP surface with an honest note.
       def signs_payload(result, bound)
-        payload = Query::Signs.json_payload(result)
+        payload = signs_envelope(result, Query::Signs.json_payload(result))
         lines = payload.fetch("lines")
         return payload if lines.size <= bound
 
@@ -2047,6 +2126,17 @@ module Nabu
           "note" => "#{lines.size} line(s) total, showing #{bound} — raise max_lines " \
                     "(max #{SIGNS_MAX_LINES_CAP}), or read line by line with passage urns"
         )
+      end
+
+      # The reference envelope on the sign desk (additive keys): the OSL's
+      # license as `sign_list`, and — urn mode — the TEXT's effective
+      # license_class beside the source slug the contract already carries.
+      def signs_envelope(result, payload)
+        sign_list = reference_strings("osl")
+        payload = payload.merge("sign_list" => sign_list) if sign_list
+        return payload unless result.respond_to?(:license_class) && result.license_class
+
+        payload.merge("license_class" => result.license_class)
       end
 
       def place_payload(query, result)
@@ -2087,13 +2177,24 @@ module Nabu
           if place.title.to_s.strip.end_with?("?")
             base[:title_certainty] = Nabu::Certainty.payload(:cataloguer_query, "?").fetch(:certainty)
           end
-          base
+          # The reference envelope: served gazetteer FACTS carry the
+          # gazetteer's attribution (CC BY — license verbatim from the
+          # adapter manifest, plus the place's upstream URI).
+          attribution = place_card_attribution(card)
+          attribution ? base.merge(attribution: attribution) : base
         elsif dump_loaded
           base.merge(note: "id not in the local gazetteer dump")
         else
           base.merge(note: "gazetteer dump not synced (the owner runs `nabu sync pleiades` to " \
                            "add the card) — holdings counted from the catalog alone")
         end
+      end
+
+      def place_card_attribution(card)
+        namespace, id = card.ref.to_s.split(":", 2)
+        return Envelope.place_attribution("pleiades", card.pleiades_id) if id.nil?
+
+        Envelope.place_attribution(namespace, id)
       end
 
       def source_count_rows(counts)

@@ -305,6 +305,8 @@ module MCP
         assert_equal Nabu::Embed::MODEL, body.fetch("model")
         assert_equal([%w[urn:d:sim:2 close]],
                      body.fetch("results").map { |row| [row.fetch("urn"), row.fetch("band")] })
+        assert_equal ["perseus"], body.fetch("results").map { |row| row.fetch("source") },
+                     "the similar lane carries the source slug like every text row"
         assert_match(/never a curated alignment/, body.fetch("note"))
       ensure
         vectors.disconnect
@@ -1240,6 +1242,23 @@ module MCP
       refute plain.key?("title_certainty"), "an unmarked title adds no key"
     end
 
+    # The reference-data envelope: gazetteer FACTS carry the gazetteer's
+    # CC BY attribution (license verbatim from the adapter manifest + the
+    # place's upstream URI); a fact-less card carries no attribution key.
+    def test_place_card_with_gazetteer_facts_carries_the_pleiades_attribution
+      seed_epigraphy
+      card = payload(tools(pleiades: lilybaeum_resolver).call("nabu_place", { "query" => "462281" }))
+             .fetch("cards").fetch(0)
+      attribution = card.fetch("attribution")
+      assert_equal "pleiades", attribution.fetch("source")
+      assert_equal "attribution", attribution.fetch("license_class")
+      assert_match(/CC BY 3\.0/, attribution.fetch("license"))
+      assert_equal "https://pleiades.stoa.org/places/462281", attribution.fetch("uri")
+
+      bare = payload(call("nabu_place", { "query" => "462281" })).fetch("cards").fetch(0)
+      refute bare.key?("attribution"), "no gazetteer facts served → nothing to attribute"
+    end
+
     def test_place_by_exact_title_and_unknown_title
       seed_epigraphy
       rig = tools(pleiades: lilybaeum_resolver)
@@ -1308,6 +1327,22 @@ module MCP
                    body.fetch("lines").first.fetch("tokens").map { |t| t.fetch("input_value") })
     end
 
+    # The reference envelope on the sign desk: the sign identities come from
+    # the OSL (sign_list envelope, every mode); urn mode additionally
+    # carries the TEXT's effective license_class beside its source.
+    def test_signs_payload_carries_the_sign_list_envelope_and_the_text_license
+      text_mode = payload(signs_tools.call("nabu_signs", { "text" => "szesz" }))
+      assert_equal "osl", text_mode.dig("sign_list", "source")
+      assert_equal "open", text_mode.dig("sign_list", "license_class")
+      assert_match(/CC0/, text_mode.dig("sign_list", "license"))
+      refute text_mode.key?("license_class"), "raw text has no catalog license to report"
+
+      seed_signs_corpus
+      urn_mode = payload(signs_tools.call("nabu_signs", { "urn" => "urn:nabu:cdli:p1:o.1" }))
+      assert_equal %w[cdli attribution], [urn_mode.fetch("source"), urn_mode.fetch("license_class")]
+      assert_equal "osl", urn_mode.dig("sign_list", "source")
+    end
+
     def test_signs_needs_exactly_one_of_urn_and_text
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { signs_tools.call("nabu_signs", {}) }
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do
@@ -1363,6 +1398,42 @@ module MCP
       assert_equal "U+13143", body.dig("card", "codepoint")
       glyph = payload(char_tools.call("nabu_char", { "query" => "𓅃" }))
       assert_equal "G-12-002", glyph.dig("card", "cat")
+    end
+
+    # The reference envelope on the sign card: the answering spine's
+    # source/license_class/license ride top-level beside the frozen
+    # contract keys; attribution lists every contributing dataset.
+    def test_char_payloads_carry_the_answering_spine_license
+      cuneiform = payload(char_tools.call("nabu_char", { "query" => "SZESZ" }))
+      assert_equal %w[osl open], [cuneiform.fetch("source"), cuneiform.fetch("license_class")]
+      assert_match(/CC0/, cuneiform.fetch("license"))
+      assert_equal(["osl"], cuneiform.fetch("attribution").map { |row| row.fetch("source") })
+      assert_equal "ŠEŠ", cuneiform.dig("card", "name"), "the frozen contract is untouched"
+
+      hiero = payload(char_tools.call("nabu_char", { "query" => "G5" }))
+      assert_equal %w[unikemet open], [hiero.fetch("source"), hiero.fetch("license_class")]
+      assert_match(/UNICODE LICENSE/, hiero.fetch("license"))
+
+      empty = payload(char_tools.call("nabu_char", { "query" => "NOSUCH" }))
+      assert_equal "osl", empty.fetch("source"), "the lane that answered (honestly empty) is named"
+    end
+
+    def test_char_card_attributes_the_wiktionary_senses_shelf
+      wiktionary = Nabu::Store::Source.create(
+        slug: "wiktionary-sux", name: "Wiktionary Sumerian", adapter_class: "TestAdapter",
+        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+      )
+      shelf = @catalog[:dictionaries].insert(source_id: wiktionary.id, slug: "wiktionary-sux",
+                                             title: "Wiktionary (Sumerian)", language: "sux")
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: shelf, urn: "urn:nabu:dict:wiktionary-sux:x", entry_id: "𒋀:noun:1",
+        key_raw: "𒋀", headword: "𒋀", headword_folded: "𒋀", gloss: "brother", body: "brother",
+        content_sha256: "x"
+      )
+      body = payload(char_tools.call("nabu_char", { "query" => "SZESZ" }))
+      refute_empty body.dig("card", "senses"), "the rig joins a sense"
+      wikt = body.fetch("attribution").find { |row| row.fetch("source") == "wiktionary-sux" }
+      assert_equal ["attribution", "CC-BY-SA + GFDL"], [wikt.fetch("license_class"), wikt.fetch("license")]
     end
 
     def test_char_han_input_notes_the_missing_contract
@@ -2270,6 +2341,26 @@ module MCP
       run = body["runs"].first
       assert_equal ["parallels", "urn:d:od", "t/1"], [run["producer"], run["scope"], run["code_version"]]
       assert_match(/PRESERVE license/, body["note"])
+    ensure
+      journal&.disconnect
+    end
+
+    # The envelope's source slug on every RESOLVED edge (passage or
+    # document grain); an unresolved counterpart carries source null —
+    # absence of a catalog row, said plainly.
+    def test_links_edges_carry_the_counterpart_source_slug
+      seed_parallels
+      journal = seed_links_journal
+      run_id = journal[:link_runs].get(:id)
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol",
+                                                     kind: "reference", score: nil, run_id: run_id)
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:gone:1",
+                                                     kind: "reference", score: nil, run_id: run_id)
+      body = payload(tools(links: journal).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+      parallel = body.dig("kinds", "parallel").find { |e| e["urn"] == "urn:d:pol:1" }
+      assert_equal "perseus", parallel.fetch("source")
+      references = body.dig("kinds", "reference").to_h { |e| [e.fetch("urn"), e.fetch("source")] }
+      assert_equal({ "urn:d:pol" => "perseus", "urn:d:gone:1" => nil }, references)
     ensure
       journal&.disconnect
     end
