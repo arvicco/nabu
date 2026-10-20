@@ -155,6 +155,12 @@ sources:
     fields: #                   localization (West-Vlaanderen 1,224 · Holland-West 314 ·
       region: region          # Oost-Vlaanderen 299 · Brabant-West 181 … 12 regions); the
       #                         place lane falls back to it for the 63 town-less texts
+  dharma-deccan:              # Ollett's origPlace placeName @key on 445 of 1,695 editions:
+    fields: #                   his own pl: site authority, 35 keys (pl:Kanaganahalli 108 ·
+      place_key: findspot     # pl:Sannati 77 · pl:Dhānyakaṭaka 66 — Amarāvatī's ancient
+      #                         name …) — the findspot's IDENTITY, folding the name's spelling
+      #                         variants (Karle/Kārle); verbatim, never a gazetteer ref
+      #                         (place_ref stays NULL for the registry's decisions to fill)
   corpus-oudnederlands:       # 17 of 89 works carry the witnessLocalization region
     fields: #                   (Groningen 5 · Zuid-Nederrijn 4 · Friesland 2 …); the place
       region: region          # lane falls back to it for the 7 place-less ones
