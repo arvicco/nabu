@@ -291,6 +291,16 @@ module Nabu
                                          "the present museum (\"jetzt Mus. Nikosia\") — sub-site " \
                                          "grain and a PRESENT location (the cdli/oracc " \
                                          "findspot_square stance); origPlace's city projects" },
+        # The places sweep (live census 2026-10-21): 4,712 of 9,079
+        # versions carry the role bag {born/died/resided/visited => ids}.
+        "openiti" => { "author_places" => "consumed where honest: OpenitiDates mints the AUTHOR's " \
+                                          "died/resided al-Ṯurayyā SETTLEMENTS as thurayya: " \
+                                          "place_refs (1,432 versions — where the author worked, " \
+                                          "a place of activity, never a composition place); " \
+                                          "born (3,214 versions carry ONLY born) and visited are " \
+                                          "biography (the disco birthplace stance), region ids " \
+                                          "(Iraq_RE, the _Auto guesses) and unfinished XXXYYY ids " \
+                                          "are not settlements — they stay metadata" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
