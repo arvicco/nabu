@@ -1092,6 +1092,13 @@ module Nabu
       # links journal's 「name」 details, not in document_axes — all 10
       # kanripo rows fired "orphaned" against a lane they never lived
       # in. A name now counts as occurring if EITHER surface carries it.
+      #
+      # The ruling fallback (2026-10-20): the place mine WITHHOLDS the
+      # candidates of names the registry rules region/rejected, so after a
+      # re-mine those rows' names leave the edge details by design — the
+      # mine's run row records the ruled names it still found
+      # (params.ruled_out), and that counts as occurring. Before the next
+      # re-mine the old edges still carry them; either way, no false alarm.
       def registry_orphan_names
         return nil unless @canonical_dir && table?(@catalog, :document_axes)
 
@@ -1105,7 +1112,7 @@ module Nabu
                  .where(document_id: @catalog[:documents].where(source_id: source_id).select(:id))
                  .exclude(place_name: nil).distinct.select_map(:place_name).to_set
           registry.decisions_for(slug).each_key do |name|
-            next if live.include?(name) || mined_name?(name)
+            next if live.include?(name) || mined_name?(name) || ruled_out_name?(name)
 
             orphans << "#{slug}: #{name}"
           end
@@ -1229,6 +1236,17 @@ module Nabu
           .where(kind: %w[place-candidate place])
           .where(Sequel.like(:detail, "%「#{name}」%"))
           .first.nil?
+      end
+
+      # The fallback: a ruled name the latest place mine found and withheld
+      # (its run row's params.ruled_out).
+      def ruled_out_name?(name)
+        @ruled_out_names ||= begin
+          journal = links_journal
+          rows = journal ? journal[:link_runs].where(producer: PlaceMine::PRODUCER).select_map(:params_json) : []
+          rows.flat_map { |json| (JSON.parse(json)["ruled_out"] || {}).keys }.to_set
+        end
+        @ruled_out_names.include?(name)
       end
 
       def links_journal

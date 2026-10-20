@@ -19,10 +19,12 @@ module Nabu
         scopes.select { |scope| scope["producer"] == "place-link" }
     end
 
-    # +places+ is the nabu-places registry seam for the place-link
-    # producer: :auto loads from canonical (the live path), tests inject
-    # a stub; the other producers never touch it. +config+ supplies the
-    # alignments path (cognates) and canonical_dir (:auto places).
+    # +places+ is the nabu-places registry seam for the place pair
+    # (place-link promotes its matched decisions, place-mine withholds its
+    # region/rejected names): :auto loads from canonical (the live path),
+    # tests inject a stub; the other producers never touch it. +config+
+    # supplies the alignments path (cognates) and canonical_dir (:auto
+    # places).
     def replay!(scope, db:, fulltext:, journal:, config:, places: :auto)
       params = scope["params"] || {}
       case scope["producer"]
@@ -47,8 +49,12 @@ module Nabu
                           **{ gram_size: params["gram_size"], min_count: params["min_count"],
                               lang: params["lang"], max_formulas: params["max_formulas"] }.compact)
       when "place-mine"
+        # The registry's region/rejected rulings withhold their names'
+        # candidates (PlaceMine rule 5); an unsynced registry rules nothing.
+        registry = places == :auto ? Places.load_default(canonical_dir: config.canonical_dir) : places
         PlaceMine.new(catalog: db, journal: journal,
-                      gazetteer: params["gazetteer"] || "chgis")
+                      gazetteer: params["gazetteer"] || "chgis",
+                      ruled_out: PlaceMine.ruled_out_names(registry, scope["scope"]))
                  .apply!(source: scope["scope"])
       when "place-link"
         registry = places == :auto ? Places.load_default(canonical_dir: config.canonical_dir) : places

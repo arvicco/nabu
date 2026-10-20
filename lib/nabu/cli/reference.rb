@@ -482,8 +482,10 @@ module Nabu
                       Nabu::Store::LinksJournal.connect("sqlite://#{config.links_path}")
                     )
                   end
+        places = Nabu::Places.load_default(canonical_dir: config.canonical_dir)
         miner = Nabu::PlaceMine.new(catalog: catalog, journal: journal, gazetteer: gazetteer,
-                                    progress: progress_reporter)
+                                    progress: progress_reporter,
+                                    ruled_out: Nabu::PlaceMine.ruled_out_names(places, source))
         if dry
           print_mine_census(miner.census(source: source), applied: false)
         else
@@ -617,6 +619,9 @@ module Nabu
         census.names_allowed.each do |name, count|
           say "  ALLOWED #{name} — #{count} passages (over the ceiling, mined anyway " \
               "by allow_names: ruling)"
+        end
+        census.names_ruled_out.each do |name, count|
+          say "  RULED OUT #{name} — #{count} passages (nabu-places rules it region/rejected: no candidates)"
         end
         say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
             "#{census.candidate_edges} across #{census.name_hits.size} attested names " \

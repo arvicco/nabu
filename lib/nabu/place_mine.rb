@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "name_matcher"
+require_relative "places"
 require_relative "store/links_journal_bulk"
 
 module Nabu
@@ -40,6 +41,15 @@ module Nabu
   #    the DERIVED stop only, is itself censused, and never overrides
   #    the floor, the cap, or the hand stop list.
   # 4. The hand stop list (config/place_stop_names.yml) always applies.
+  # 5. THE REGISTRY'S RULINGS (owner ruling 2026-10-20): a name the
+  #    nabu-places registry has ruled "region" or "rejected" for this
+  #    source mints no candidate — the review board already decided it
+  #    names no single locatable place. Ruled names are still SCANNED
+  #    (so the derived stop ceiling and the census stay exactly what
+  #    they were) and are censused with their hit counts; only their
+  #    edges are withheld. The ruled names that hit ride the run row's
+  #    params (ruled_out), the evidence health's registry-orphan probe
+  #    reads once the edges are gone.
   #
   # == Shape
   #
@@ -78,24 +88,41 @@ module Nabu
 
     STOP_NAMES_PATH = File.expand_path("../../config/place_stop_names.yml", __dir__)
 
+    # The registry statuses that withhold a name's candidates (rule 5).
+    RULED_OUT_STATUSES = %w[region rejected].freeze
+
     # Both summary values carry their elapsed +seconds+ (owner rule
     # 2026-09-11: time elapsed is part of all summary reporting);
     # Result's covers both passes.
     Census = Data.define(:source, :gazetteer, :passages, :name_hits, :candidate_edges,
                          :names_loaded, :names_non_han, :names_ambiguous, :names_stopped,
-                         :names_allowed, :seconds)
+                         :names_allowed, :names_ruled_out, :seconds)
     Result = Data.define(:census, :run_id, :edges_written, :edges_refreshed,
                          :superseded_runs, :superseded_edges, :seconds)
 
+    # +ruled_out+ the registry's region/rejected names for the source
+    # (rule 5; PlaceMine.ruled_out_names) — none by default.
     def initialize(catalog:, journal:, gazetteer:, progress: nil, stop_names: nil,
-                   allow_names: nil, window: WINDOW)
+                   allow_names: nil, ruled_out: [], window: WINDOW)
       @catalog = catalog
       @journal = journal
       @gazetteer = gazetteer
       @progress = progress
       @stop_names = stop_names || self.class.hand_stop_names
       @allow_names = allow_names || self.class.hand_allow_names
+      @ruled_out = ruled_out.map(&:to_s).uniq.sort
       @window = window
+    end
+
+    # The names +registry+ (Nabu::Places, a stub answering decisions_for,
+    # or nil when the registry is not synced) rules region/rejected for
+    # +source+, sorted — what rule 5 withholds.
+    def self.ruled_out_names(registry, source)
+      return [] if registry.nil?
+
+      registry.decisions_for(source).filter_map do |name, decision|
+        name if RULED_OUT_STATUSES.include?(decision.status)
+      end.sort
     end
 
     def self.hand_stop_names
@@ -128,7 +155,7 @@ module Nabu
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       report, retained = scan_source(source, retain: true)
       stopped = report.names_stopped.map(&:first) + @stop_names
-      names = load_names.except(*stopped)
+      names = load_names.except(*stopped, *@ruled_out)
       @progress&.stage("place-mine: writing candidates for #{source} " \
                        "(#{retained.size} passages with hits, #{names.size} names after stops)")
       counts = { inserted: 0, refreshed: 0 }
@@ -137,8 +164,7 @@ module Nabu
       @journal.transaction do
         superseded = Store::LinksJournal.supersede!(@journal, producer: PRODUCER, scope: scope)
         run_id = Store::LinksJournal.record_run!(
-          @journal, producer: PRODUCER, scope: scope,
-                    params: { kind: KIND, gazetteer: @gazetteer }, code_version: CODE_VERSION
+          @journal, producer: PRODUCER, scope: scope, params: run_params(report), code_version: CODE_VERSION
         )
         write_pass(retained, names, run_id, counts)
       end
@@ -179,6 +205,15 @@ module Nabu
 
     private
 
+    # The run row's params: the kind and gazetteer, plus — only when a
+    # ruling withheld a name that hit — those names and their passage
+    # hits (rule 5's evidence for the registry-orphan probe).
+    def run_params(report)
+      params = { kind: KIND, gazetteer: @gazetteer }
+      params[:ruled_out] = report.names_ruled_out.to_h unless report.names_ruled_out.empty?
+      params
+    end
+
     # The one scan: tally every name's passage hits (the census), and —
     # when +retain+ — keep each hitting passage's hit list for the write.
     # → [Census, Retained or nil].
@@ -208,6 +243,7 @@ module Nabu
         candidate_edges: edges,
         names_loaded: names.size, names_non_han: @non_han, names_ambiguous: @ambiguous,
         names_stopped: stopped, names_allowed: allowed,
+        names_ruled_out: tally.slice(*@ruled_out).sort_by { |name, c| [-c, name] },
         seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
       )
       [census, retained]

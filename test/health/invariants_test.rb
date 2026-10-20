@@ -924,6 +924,32 @@ class InvariantsTest < Minitest::Test
     end
   end
 
+  # The cost-law fallback: once the place mine WITHHOLDS a ruled
+  # (region/rejected) name, its edges are gone by design — the mine's run
+  # row records the name (params.ruled_out), and that counts as occurring.
+  def test_a_name_the_mine_withheld_by_ruling_is_not_an_orphan
+    Nabu::Store::Source.create(slug: "cdli", name: "CDLI", adapter_class: "T", license_class: "open")
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "nabu-places"))
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-places"), "names.yml"),
+                   File.join(root, "nabu-places"))
+      withheld = Nabu::Places.load_default(canonical_dir: root).decisions_for("cdli").keys.first
+      journal_path = File.join(root, "links.sqlite3")
+      journal = Nabu::Store::LinksJournal.open!(journal_path)
+      Nabu::Store::LinksJournal.record_run!(journal, producer: "place-mine", scope: "cdli:chgis",
+                                                     params: { kind: "place-candidate", ruled_out: { withheld => 7 } },
+                                                     code_version: "t/1")
+      journal.disconnect
+      count = lambda do |path|
+        finding = Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext, ledger: @ledger,
+                                               canonical_dir: root, now: @now, links_journal_path: path)
+                                          .global.find { |f| f.kind == :registry_orphan_names }
+        finding ? finding.message[/\A(\d+)/, 1].to_i : 0
+      end
+      assert_equal count.call(nil) - 1, count.call(journal_path), "the withheld name (#{withheld}) is not an orphan"
+    end
+  end
+
   # P63-4 (Dp-b): the namespaced mint spelling (`pleiades:<id>`, the itant
   # metadata lift) is verified exactly like the verbatim URL spelling.
   def test_unresolvable_place_refs_verify_namespaced_pleiades_mints_too
