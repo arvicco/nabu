@@ -186,7 +186,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb nabu/credentials.rb
     nabu/health/quarantine_baseline.rb nabu/profile.rb
     nabu/health/shed_acceptance.rb
-    nabu/ops/axis_pages.rb nabu/ops/site_data.rb
+    nabu/ops/axis_pages.rb nabu/ops/site_data.rb nabu/ops/llms_txt.rb
     nabu/ops/drill.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb nabu/data_build/readme_index.rb
