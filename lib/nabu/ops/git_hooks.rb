@@ -74,7 +74,9 @@ module Nabu
       # written so this file never matches its own patterns.
       WORKFLOW_IDS = [
         [Regexp.new(NUMERO), "the numero sign only ever marks an internal register/thread id"],
-        [/\bQ\d{2,3}\b/, "an internal work-queue id"],
+        # A Q-token in an explicit wikidata context is an identifier
+        # (short QIDs share the queue-id shape), never workflow state.
+        [/(?<!wikidata:)(?<!wikidata )\bQ\d{2,3}\b/, "an internal work-queue id"],
         [/\bT-\d+\b/, "an internal thread id"],
         [/OWNER\s+ACTIONS/, "an owner-action list"],
         [/email.register|external.communications\.md/, "a private correspondence path"],
