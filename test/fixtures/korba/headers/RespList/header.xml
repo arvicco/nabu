@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<teiHeader xmlns:nkjp="http://www.nkjp.pl/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="RECZNA_KORBA_RespList">
+  <fileDesc>
+    <titleStmt>
+      <title>TEI P5 encoded version of "Respons na list promowujący królewica jego mości Augusta do korony"</title>
+    </titleStmt>
+    <publicationStmt nkjp:subcorpus="RECZNA_KORBA">
+      <publisher/>
+      <availability status="free">
+        <p>See the licence agreement.</p>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <bibl type="original">
+        <title>Respons na list promowujący królewica jego mości Augusta do korony</title>
+        <author>Anonim</author>
+        <pubPlace role="place">nieznane</pubPlace>
+        <pubPlace role="region">nieznany</pubPlace>
+        <date notAfter="1709" notBefore="1733">między 1733 a 1709</date>
+        <idno type="KORBA">KORBA_RespList</idno>
+      </bibl>
+    </sourceDesc>
+  </fileDesc>
+  <profileDesc>
+    <textClass>
+      <catRef scheme="#text" target="#proza"/>
+      <catRef scheme="#genre" target="#list"/>
+      <catRef scheme="#ironic" target="#nie"/>
+    </textClass>
+  </profileDesc>
+  <revisionDesc/>
+</teiHeader>
