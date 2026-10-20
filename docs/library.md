@@ -1012,7 +1012,10 @@ oral-tradition cone, epic songs and Vuk (4,607 / 581,423),
 dictionary (1,228 / 15,823; 5,711 entries), `ru-wikisource` and
 `uk-wikisource` — the edition-filtered Old East Slavic chronicles
 (12 / 429 and 7 / 541). Further: `scripta-bulgarica` — Old and
-Middle Bulgarian monuments (124 / 4,491; nc), `prague-bible-1488` —
+Middle Bulgarian monuments (124 / 4,491; nc), `scat` — the St.
+Petersburg Corpus of Hagiographic Texts, 24 Russian saints' lives in
+16th–18th-century manuscripts at folio-side grain (24 / 2,446;
+share-alike), `prague-bible-1488` —
 Medieval Czech ground truth from the 1488 Prague Bible (31 / 2,939),
 `litopys` — the Ipatiev chronicle and glossaries from Izbornyk
 (41 / 964; 923 entries; open), `slouniki-nasovic` — Nasovič's 1870
