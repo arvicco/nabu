@@ -2504,15 +2504,20 @@ module MCP
 
     # -- nabu_etym (P14-1) --------------------------------------------------------
 
+    # The shelf load is catalog-only and deterministic: replayed once per
+    # class per starting state, restored from the snapshot after that
+    # (StoreTestDB#class_template_step).
     def seed_recon_shelf(source: nil)
-      recon = source || Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon",
-        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      class_template_step([:recon_shelf, source&.id], db: @catalog) do
+        recon = source || Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon",
+          license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+        )
+        Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      end
     end
 
     def test_etym_walks_an_attested_lemma_with_counts_and_ancestors
@@ -3223,13 +3228,15 @@ module MCP
     # bearing tokens: MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-,
     # MARK 2.1 meets ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (a loan).
     def seed_cognates_corpus(marianus_override: nil)
-      recon = Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      class_template_step(:cognates_recon, db: @catalog) do
+        recon = Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      end
       nc = Nabu::Store::Source.create(
         slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
         license_class: "nc", enabled: true
