@@ -551,7 +551,7 @@ class LectsTest < Minitest::Test
     # The CLI's callsites are named per carved-out file (cli/), never by a
     # blanket directory entry.
     allowlist = %w[nabu/cli.rb nabu/cli/admin.rb nabu/cli/lect.rb nabu/cli/layer.rb nabu/cli/lexicon.rb
-                   nabu/cli/query.rb
+                   nabu/cli/query.rb nabu/cli/signs.rb
                    nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
                    nabu/rebuild.rb nabu/query/define.rb nabu/query/lect_filter.rb
                    nabu/store/lect_journal.rb nabu/incremental_rebuild.rb
