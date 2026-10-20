@@ -129,9 +129,26 @@ module Nabu
         end
         return nil if lowers.empty? && uppers.empty?
 
-        { "not_before" => lowers.min, "not_after" => uppers.max, "raw" => raw }
+        ordered(lowers.min, uppers.max, raw)
       rescue Timeline::InvalidYear
         nil
+      end
+
+      # A descending envelope (census 2026-10-21: three DCLP headers) is
+      # repaired only where the display text names the era — the P59-0
+      # ladder (Timeline.normalize_interval): "99 - 1 v. Chr." with
+      # notBefore "0099" negates to -99..-1. An unsigned descending pair
+      # ("199 - 50", "199 - 79": a dropped BCE sign on the lower bound, the
+      # upper's era unknowable) is no clean claim — the raw rides alone and
+      # mints no bounds (absence, never a guessed swap).
+      def ordered(not_before, not_after, raw)
+        if not_before && not_after && not_before > not_after
+          return raw && { "raw" => raw } unless raw.to_s.match?(Timeline::BCE_SIGNAL) ||
+                                                raw.to_s.match?(Timeline::CE_SIGNAL)
+
+          not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw)
+        end
+        { "not_before" => not_before, "not_after" => not_after, "raw" => raw }
       end
 
       # -- HGV ---------------------------------------------------------------

@@ -167,3 +167,19 @@ files:
     retrieved: 2026-10-19
     whole: true
     trim: none (APIS record naming no text identity (apisid only) — skipped)
+  # -- descending origDate pairs (outside the walked trees; PapyriHeader.dclp reads them directly) --
+  - path: origdate-cases/154374.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/DCLP/154/154374.xml
+    retrieved: 2026-10-21
+    whole: true
+    trim: none (dclp 154374 — notBefore "0099" / notAfter "-0001", display "99 - 1 v. Chr.")
+  - path: origdate-cases/243958.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/DCLP/243/243958.xml
+    retrieved: 2026-10-21
+    whole: true
+    trim: none (dclp 243958 — notBefore "0199" / notAfter "0050", display "199 - 50", no era word)
+  - path: origdate-cases/382584.xml
+    url: https://raw.githubusercontent.com/papyri/idp.data/91611a190d29b584ca2df01712888ac843e8ef89/DCLP/382/382584.xml
+    retrieved: 2026-10-21
+    whole: true
+    trim: none (dclp 382584 — notBefore "0199" / notAfter "0079", display "199 - 79", no era word)
