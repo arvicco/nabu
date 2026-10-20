@@ -55,8 +55,8 @@ module Nabu
     # Uniform CC BY-NC-SA 4.0 in every teiHeader <availability>, under a
     # good-faith/takedown disclaimer (GRETIL is an aggregator, not the
     # rights-holder) → license_class "nc" (the same class UD-PROIEL lives
-    # under). Ingestable for local research, indexed/searchable, but
-    # default-excluded from the MCP surface and never redistributed.
+    # under). Ingestable for local research, indexed/searchable, served locally
+    # with its license label, and never redistributed.
     class Gretil < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "gretil",

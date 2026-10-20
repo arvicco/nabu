@@ -35,7 +35,7 @@ module Nabu
     # creativecommons.org/licenses/by-nc-sa/4.0/); the Språkbanken /
     # Nasjonalbiblioteket catalogue record agrees. CLARINO handle
     # hdl.handle.net/11495/E628-DBC4-82EE-1. license_class `nc`, the
-    # PROIEL/ISWOC posture; nc documents are MCP-excluded downstream.
+    # PROIEL/ISWOC posture; nc documents are never redistributed.
     class Menotec < Nabu::Adapter
       # The INESS REST endpoint (test seam: #rest_url).
       REST_URL = "https://clarino.uib.no/iness/rest"

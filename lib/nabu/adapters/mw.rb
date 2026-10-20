@@ -37,7 +37,7 @@ module Nabu
     # work is distributed under the same license."
     #
     # → CC BY-NC-SA 3.0, license_class "nc" (the GRETIL class): local
-    # research + index, default-excluded from the MCP surface, never
+    # research + index, served locally with its license label, never
     # redistributed. Credit line: "The Sanskrit Library and Thomas Malten;
     # Cologne Digital Sanskrit Lexicon (CDSL), sanskrit-lexicon.uni-koeln.de".
     # CDSL licenses PER DICTIONARY — this verdict covers MW 1899 only. There
