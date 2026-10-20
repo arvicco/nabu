@@ -292,4 +292,45 @@ class PlaceMineTest < Minitest::Test
     refute @catalog[:document_axes].where(Sequel.like(:place_ref, "%chgis%")).any?,
            "mining is review fuel for the np: doctrine — place_ref stays untouched"
   end
+
+  # -- rule 5: the registry's rulings (owner ruling 2026-10-20) ----------------
+
+  # A stand-in nabu-places registry: verbatim name => status.
+  def registry(rulings)
+    Nabu::Places.new("kanripo" => rulings.transform_values { |status| { "status" => status } })
+  end
+
+  def test_ruled_out_names_are_the_region_and_rejected_decisions
+    places = registry("霸州" => "rejected", "順天府" => "region", "新州" => "matched", "某" => "unlocatable")
+    assert_equal %w[霸州 順天府].sort, Nabu::PlaceMine.ruled_out_names(places, "kanripo")
+    assert_empty Nabu::PlaceMine.ruled_out_names(places, "other")
+    assert_empty Nabu::PlaceMine.ruled_out_names(nil, "kanripo"), "an unsynced registry rules nothing"
+  end
+
+  def test_a_ruled_out_name_mints_no_candidates_but_is_censused
+    plain = miner.census(source: "kanripo")
+    ruled = Nabu::PlaceMine.new(catalog: @catalog, journal: @journal, gazetteer: "chgis", stop_names: [],
+                                allow_names: [], ruled_out: %w[霸州])
+    result = ruled.apply!(source: "kanripo")
+    assert_equal 1, result.edges_written, "only 順天府 — the rejected name's two candidates are withheld"
+    assert_equal(["順天府"], @journal[:links].select_map(:detail).map { |detail| detail[/「(.+)」/, 1] })
+    assert_equal [["霸州", 2]], result.census.names_ruled_out
+    assert_equal plain.name_hits, result.census.name_hits, "ruled names are still scanned: the census is unchanged"
+    assert_equal plain.names_stopped, result.census.names_stopped, "…and so is the derived stop ceiling"
+    params = JSON.parse(@journal[:link_runs].get(:params_json))
+    assert_equal({ "霸州" => 2 }, params["ruled_out"], "the run row keeps the withheld names (health's evidence)")
+  end
+
+  def test_no_ruling_leaves_the_run_params_as_they_were
+    miner.apply!(source: "kanripo")
+    assert_equal({ "kind" => "place-candidate", "gazetteer" => "chgis" },
+                 JSON.parse(@journal[:link_runs].get(:params_json)))
+  end
+
+  def test_the_links_replay_passes_the_registrys_rulings
+    scope = { "producer" => "place-mine", "scope" => "kanripo", "params" => { "gazetteer" => "chgis" } }
+    Nabu::LinkScopeReplay.replay!(scope, db: @catalog, fulltext: nil, journal: @journal, config: nil,
+                                         places: registry("霸州" => "region"))
+    assert_equal 1, @journal[:links].count, "the replay honors the ruling the CLI honors"
+  end
 end

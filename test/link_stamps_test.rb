@@ -142,6 +142,17 @@ class LinkStampsTest < Minitest::Test
     assert_equal %w[places_registry], after.blame(before.inputs)
   end
 
+  # The place mine withholds the registry's region/rejected names (owner
+  # ruling 2026-10-20), so a new ruling moves its stamp — the next stage
+  # re-mines and the overruled candidates drop.
+  def test_the_registry_rulings_are_a_place_mine_input
+    before = unit(PLACE_MINE)
+    File.write(File.join(@places_tree, "names.yml"), { "kanripo" => { "杜陵" => { "status" => "rejected" } } }.to_yaml)
+    after = Nabu::LinkStamps.new(catalog: @catalog, config: config, registry: nil).unit(PLACE_MINE)
+    assert_equal %w[杜陵], after.inputs.fetch("ruled_out")
+    assert_equal %w[ruled_out], after.blame(before.inputs)
+  end
+
   def test_place_link_without_a_registry_tree_is_volatile
     FileUtils.remove_entry(@places_tree)
     assert_nil unit(PLACE_LINK).stamp

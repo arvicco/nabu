@@ -40,7 +40,8 @@ module Nabu
   #   finds candidates anywhere, so every source is a member.
   # - extras — what else the producer reads: the fulltext-index identity
   #   (parallels: index-core code digest + stage versions + the registry's
-  #   index flags), the gazetteer's name keys and the hand stop list
+  #   index flags), the gazetteer's name keys, the hand stop list and the
+  #   nabu-places registry's region/rejected names for the scope
   #   (place-mine), the nabu-places registry tree (place-link).
   #
   # == Carrying is per COMPONENT, not per scope
@@ -508,6 +509,7 @@ module Nabu
       when "place-mine"
         inputs["gazetteer"] = gazetteer_identity(params["gazetteer"] || "chgis")
         inputs["stop_names"] = file_identity(PlaceMine::STOP_NAMES_PATH)
+        inputs["ruled_out"] = PlaceMine.ruled_out_names(places_registry, scope)
       when "place-link"
         tree = DerivationFingerprint.canonical_identity(File.join(@config.canonical_dir, Places::DIRNAME))
         inputs[:volatile] = "the nabu-places tree has no honest identity" if tree.nil?
@@ -572,5 +574,13 @@ module Nabu
     end
 
     def file_identity(path) = File.file?(path) ? Digest::SHA256.file(path).hexdigest : "absent"
+
+    # The nabu-places registry the place mine's rulings come from (nil
+    # when unsynced — no rulings). Loaded once per stamping.
+    def places_registry
+      return @places_registry if defined?(@places_registry)
+
+      @places_registry = Places.load_default(canonical_dir: @config.canonical_dir)
+    end
   end
 end

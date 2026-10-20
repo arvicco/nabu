@@ -1561,7 +1561,7 @@ profile), the member sources' CONTENT identities
 content shas, so a content-neutral loader edit carries while any content
 change re-mines), and producer extras (parallels: index-core digest +
 stage versions + registry index flags; place-mine: the gazetteer's name
-keys + the hand stop list;
+keys + the hand stop list + the registry's region/rejected names for the scope;
 place-link: the nabu-places tree).
 The code closure honors declared CARVE-OUTS (the BUILDER_FILES
 precedent, per producer): a file the require closure reaches but the
@@ -1725,7 +1725,13 @@ config/place_stop_names.yml). One scan per run: an Aho-Corasick walk
 the census and retains each passage's hits as compact integer arrays; the
 write then bulk-inserts the surviving names' edges from those hits
 (`LinksJournal.write_edges!`, write_edge!'s exact semantics), so output is
-identical to the original census-then-rescan miner. Its review surfaces are `place mine report`
+identical to the original census-then-rescan miner. The registry's rulings
+bind the mine (owner ruling 2026-10-20): a name nabu-places rules
+`region` or `rejected` for the source mints no candidate — still scanned
+(the census and derived stop ceiling are unchanged), censused as RULED
+OUT with its hits, and recorded in the run row's `params.ruled_out`
+(the evidence health's registry-orphan probe accepts once those edges
+are gone). Its review surfaces are `place mine report`
 (per-place, document-spread ranked) and `place mine report --board`
 (per-NAME, the verdict grain: candidates with their index discriminators,
 attestations in context, decided names censused off). `nabu place link
