@@ -105,6 +105,16 @@ module Nabu
         )]
       end
 
+      # EDH ↔ EDR same-artifact edges (Nabu::EdhEdrSameArtifact): the EDR
+      # records sharing a Trismegistos number with an EDH record are the
+      # same stone in a second edition. Re-derived after every edr sync;
+      # edh declares the same producer and scope.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::EdhEdrSameArtifact.new(catalog: catalog, journal: journal)
+      end
+
       # +pin+ overrides the release sha (tests; a future owner re-pin
       # drill).
       def initialize(pin: RELEASE_SHA256)

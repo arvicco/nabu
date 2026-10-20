@@ -1,0 +1,55 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Whole records copied byte-identical
+# from the box's canonical trees (zip extractions — no raw per-file URL)
+# plus documented CSV trims; every entry is refetchable: false.
+source: edh_edr_same_artifact
+adapter_test:
+files:
+  - path: edh/epidoc/HD000001-HD010000/HD002664.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD000001-HD010000.zip; re-acquiring = zip download + unzip, not a raw GET
+    whole: true
+    trim: none
+  - path: edh/epidoc/HD000001-HD010000/HD003323.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD000001-HD010000.zip; re-acquiring = zip download + unzip, not a raw GET
+    whole: true
+    trim: none
+  - path: edh/epidoc/HD000001-HD010000/HD008415.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from edhEpidocDump_HD000001-HD010000.zip; re-acquiring = zip download + unzip, not a raw GET
+    whole: true
+    trim: none
+  - path: edh/text/edh_data_text.csv
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from the 57 MB corpus-wide download; a fresh GET returns the full file, not this trim
+    whole: false
+    trim: header + the HD002664/HD003323/HD008415 rows (whole physical lines, byte-identical)
+  - path: edh/pers/edh_data_pers.csv
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from the 8.9 MB corpus-wide download; a fresh GET returns the full file, not this trim
+    whole: false
+    trim: header + the one person row of the three records (whole physical line, byte-identical)
+  - path: edr/075001-100000/aEDR078741.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from the Zenodo EDR.zip release; re-acquiring = the 268 MB zip, not a raw GET
+    whole: true
+    trim: none
+  - path: edr/075001-100000/aEDR080335.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from the Zenodo EDR.zip release; re-acquiring = the 268 MB zip, not a raw GET
+    whole: true
+    trim: none
+  - path: edr/075001-100000/aEDR092812.xml
+    refetchable: false
+    provenance: local-trim
+    reason: extracted byte-identical from the Zenodo EDR.zip release; re-acquiring = the 268 MB zip, not a raw GET
+    whole: true
+    trim: none

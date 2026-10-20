@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="la" xml:base="ex-epidoctemplate.xml">
+		<teiHeader>
+			<fileDesc>
+				<titleStmt>
+				<title>Inscription from Volaterrae</title>
+				</titleStmt>  
+				<publicationStmt>
+				<authority>Epigraphic Database Roma</authority>
+				<idno type="URI">http://www.edr-edr.it/edr_programmi/res_complex_comune.php?id_nr=EDR078741</idno>
+				<idno type="TM">248008</idno>
+				<idno type="localID">EDR078741</idno>	
+				<availability>
+					<licence target=" http://www.europeana.eu/rights/rr-f/">Reserved Rights - Free access via Epigraphic Database Roma</licence>
+				</availability>
+				</publicationStmt>
+				<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						
+						
+						
+						<repository>Volterra (Pisa), Museo Guarnacci</repository>
+						<collection/>
+						<idno/>
+					</msIdentifier>
+					<physDesc>
+						<objectDesc>
+						<supportDesc>
+							<support>
+								<objectType ref="http://www.eagle-network.eu/voc/objtyp/lod/129">gradus, theatrum</objectType>
+								<material ref="http://www.eagle-network.eu/voc/material/lod/48">marmor, bardiglio</material>
+								<p/>
+								<dimensions unit="cm">
+								<height>13.50</height>
+								<width>26.00</width>
+								<depth>6.40</depth>
+								</dimensions>
+								<rs type="decoration" ref="http://www.eagle-network.eu/voc/decor/lod/1000" xml:lang="en">no decoration</rs>
+								<rs type="statPreserv">tit. mutilus</rs>
+							</support>
+						</supportDesc>
+						<layoutDesc>
+							<layout>
+								<rs type="execution" ref="http://www.eagle-network.eu/voc/writing/lod/1">scalpro</rs>
+							</layout>
+						</layoutDesc>
+						</objectDesc>
+						<handDesc>
+						<handNote>
+							<width unit="cm"/>
+							<height unit="cm">4,3-4,9</height>
+						</handNote>
+						</handDesc>
+					</physDesc>
+					
+					<history>
+						<origin>
+
+						<origPlace><placeName type="provinceItalicRegion">Etruria (Regio VII)</placeName><placeName>Volaterrae</placeName></origPlace>
+						<origDate notBefore-custom="1" notAfter-custom="100" datingMethod="http://en.wikipedia.org/wiki/Julian_calendar">1 AD - 100 AD</origDate>
+							
+						
+						</origin>
+						<provenance type="found"> 
+						<placeName>Volterra (Pisa)</placeName>                     
+						<placeName type="locus">Volterra (Pisa), località Vallebuona, rinvenuta nel canale dell'auleum (inv. Fiumi 9 rosso), prob. proveniente dalla proedria</placeName>
+						<placeName type="modern_region"/><placeName type="modernCountry">Italia</placeName></provenance>
+					</history>
+				</msDesc>
+				</sourceDesc>
+			</fileDesc>
+				
+			<encodingDesc>
+				<p>Marked-up according to the EpiDoc Guidelines</p>
+				<classDecl>
+				<taxonomy>
+					<category xml:id="representation">
+						<catDesc>Digitized other representations</catDesc>
+					</category>
+				</taxonomy>
+				</classDecl>
+			</encodingDesc>
+			<profileDesc>
+				<textClass>
+		<keywords>
+		<term ref="http://www.eagle-network.eu/voc/typeins/lod/106">cetera</term>
+		</keywords>
+		</textClass>
+
+				<langUsage>
+				<language ident="ar">Arabic</language>
+				<language ident="en">English</language>
+				<language ident="fr">French</language>
+				<language ident="de">German</language>
+				<language ident="grc">Ancient Greek</language>
+				<language ident="grc-Latn">Transliterated Greek</language>
+				<language ident="el">Modern Greek</language>
+				<language ident="he">Hebrew</language>
+				<language ident="it">Italian</language>
+				<language ident="la">Latin</language>
+				<language ident="sp">Spanish</language>
+				</langUsage>
+			<creation>EAGLE - Europeana Network of Ancient Greek and Latin Epigraphy</creation></profileDesc>
+			<revisionDesc>
+			<change when="2011-12-22" who="NOVELLA LAPINI">
+			</change>
+
+			</revisionDesc>
+		</teiHeader>
+		
+		<text>
+			<body>
+					
+				<div type="bibliography">
+				<listBibl>
+		
+					<bibl>
+						Rassegna Volterrana, 40-41, 1974, p. 96, nr. 56 - AE 1982 (1)
+					</bibl> 
+			
+					<bibl>
+						AE 1982, 0339 (2)
+					</bibl> 
+			
+					<bibl>
+						M. Munzi - N. Terrenato, Volterra: il teatro e le terme, Firenze 2000, p. 124, nr. 13, con foto (3)
+					</bibl> 
+			
+					<bibl>
+						HD002664 (F. Feraudi) (4)
+					</bibl> 
+			
+				</listBibl>
+				</div>
+				
+				
+				<!--
+				G(ai) Caeci[nae - - -?]
+				--><div type="edition" xml:lang="la"><head>Text</head><ab><lb n="1"/>
+				<expan><abbr>G</abbr><ex>ai</ex></expan> Caeci<supplied reason="lost">nae </supplied><gap reason="lost" extent="unknown" unit="character"><certainty locus="name" match=".." cert="low"/></gap>
+				</ab></div>
+
+				<div type="apparatus">
+		
+					<p>
+						Textus secundum (3).&lt;br&gt;v.1 Caeci[na] (1) et (2); Caeci[na?] (4)&lt;br&gt;L'ed. (3) ha per prima notato la presenza del praenomen in frattura.
+					</p> 
+			
+				</div>
+			
+				<div type="commentary">
+				<p/>
+				</div>
+
+			</body>
+		</text>
+		</TEI>
