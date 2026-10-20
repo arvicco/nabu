@@ -759,6 +759,19 @@ class InvariantsTest < Minitest::Test
     end
   end
 
+  # The mining law's places sweep (live census 2026-10-21): the
+  # place-shaped keys that are honestly NOT an origin/findspot claim —
+  # custodial chains, sub-site find context beside a present museum,
+  # in-situ qualifiers, author biography — each declared with its reason.
+  def test_places_sweep_declares_its_non_origin_keys
+    declared = { "gams-zrcalo" => "provenance" }
+    declared.each do |slug, key|
+      reason = Nabu::Health::Invariants::MINING_EXEMPT.dig(slug, key)
+      refute_nil reason, "#{slug}/#{key} must be declared"
+      refute_empty reason.strip
+    end
+  end
+
   # P61-4: the ~script claim is byte-checkable BY DESIGN (D60-b — the axis
   # claims the held surface) — this invariant is the P60-1 census made
   # permanent: sample the claimed slice's passages, classify by Unicode

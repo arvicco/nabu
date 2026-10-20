@@ -277,9 +277,10 @@ module Nabu
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
         # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29);
         # "zagranica" (abroad, 17) / "inny" (other, 6) — KorBa's region
-        # classes that name no place (they still facet, as claims).
+        # classes that name no place (they still facet, as claims);
+        # "place of origin unknown" — gams-zrcalo's TEI origPlace absence.
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
-                    "s.l", "s.l.", "?", "zagranica", "inny"].freeze
+                    "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -482,7 +483,7 @@ module Nabu
 
             return [place, nil, nil, nil]
           end
-          return [meta["orig_place"], nil, nil, nil] if place.nil?
+          return [present_place(meta["orig_place"]), nil, nil, nil] if place.nil?
           return [place, string_place_ref(meta), nil, nil] unless place.is_a?(Hash)
 
           refs = []
@@ -498,6 +499,12 @@ module Nabu
                    ladder.empty? ? nil : ladder.join(", ")
                  end
           [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # The orig_place fallback's value, nil for an unknown-class
+        # sentinel (gams-zrcalo's "place of origin unknown").
+        def present_place(value)
+          value.nil? || NO_PLACE.include?(value.to_s.strip.downcase) ? nil : value
         end
 
         # A string place's sibling "place_ref" (croala's creation placeName
