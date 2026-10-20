@@ -301,6 +301,14 @@ module Nabu
                                           "biography (the disco birthplace stance), region ids " \
                                           "(Iraq_RE, the _Auto guesses) and unfinished XXXYYY ids " \
                                           "are not settlements — they stay metadata" },
+        # The places sweep (live census 2026-10-21): 1,111 of 30,647 records.
+        "rundata" => { "original_site" => "an in-situ QUALIFIER on the found location, not a " \
+                                          "place: \"Yes\" 551 · \"No\" 503 · \"?\"/\"Unknown\", " \
+                                          "plus relative-distance prose (\"20 m southwards\", " \
+                                          "\"Erected 200 m N of the original site\"); ~15 values " \
+                                          "name a former spot (\"Formerly at Grännarp, Vårkumla " \
+                                          "parish.\") as free prose — kept verbatim; " \
+                                          "found_location + coordinates project the place" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
