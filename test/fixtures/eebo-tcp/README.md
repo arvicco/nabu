@@ -37,5 +37,8 @@ Dedication.
 - `IDnos_in_phase1.txt`, `eebo_phase1_IDs_and_dates.txt`,
   `IDnos_in_phase2.txt`, `EEBO_Phase2_IDs_and_dates.txt` — the per-phase
   ID lists, trimmed real: first 6 rows + the fixture texts' own rows.
+  The Phase 2 dates list also keeps `A87970	1704-1689` — the lists' one
+  descending range (header imprint "1689?]"), pinned for the timeline
+  join's order-normalization.
 - `eebo2prf.xml.dtd` — the P4 schema, WHOLE real file (45 KB; its
   2011-05 changelog line documents the `<FW>` element the family drops).
