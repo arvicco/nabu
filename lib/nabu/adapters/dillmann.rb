@@ -25,8 +25,8 @@ module Nabu
     # .org/licenses/by-sa-nc/4.0/">` — a URL Creative Commons does NOT
     # serve ("by-sa-nc" is not a license slug). The prose beside it reads
     # "licensed under the Creative Commons Attribution-ShareAlike Non
-    # Commercial 4.0": the intent is CC BY-NC-SA 4.0 → class `nc` (MCP
-    # default-excluded, never redistributed — the GRETIL/MW posture). Both
+    # Commercial 4.0": the intent is CC BY-NC-SA 4.0 → class `nc`
+    # (never redistributed — the GRETIL/MW posture). Both
     # URL-scheme variants exist upstream (12,453 http + 1,274 https,
     # censused 2026-07-26); the quirk is pinned by the fixtures.
     #
