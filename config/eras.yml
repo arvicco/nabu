@@ -1,4 +1,6 @@
-# config/eras.yml — the shared Indian-calendar era table (P118-5).
+# config/eras.yml — the shared era table (P118-5): the Indian-calendar
+# eras below, and the Japanese nengō rows (family "nengo", their own
+# header further down; owner-ruled 2026-10-20).
 #
 # Converts an ERA-TYPED year (an upstream field or title that names its
 # era: "GE 98", "Śaka 1208") to a CE envelope [not_before, not_after].
@@ -61,3 +63,1546 @@ eras:
     width: 1
     aliases: [Gupta, Gupta era, GE, Gupta-Valabhī, Valabhī, GS, Gupta-saṃvat]
     source: Sewell & Dikshit 1896, The Indian Calendar, Part I (the Gupta–Valabhī era; +319/320)
+  # ── Japanese era names (nengō 年号, owner-ruled 2026-10-20) ──────────────
+  #
+  # The standard era list (元号一覧): every official era from 大化 (645) to
+  # 令和 (2019) — 248 rows, both courts of the Nanboku-chō (1331–1392)
+  # included. Keys are the era names in the list's kanji; old-form
+  # spellings (寶永, 承應, 萬延 …) fold at match time (Nabu::Eras::NENGO_FOLD).
+  #
+  # CONVENTIONS (declared, never silent):
+  # - start = the Western year the era's FIRST year (元年) mostly
+  #   coincides with — the list's convention, so era year n converts as
+  #   CE = start + (n − 1) (offset = start − 1). An era proclaimed in a
+  #   lunar year's last weeks (Western January–February) starts in the
+  #   PRECEDING Western year (建保 1213, 安貞 1227, 天保 1830).
+  # - width 0, ruled single-valued like Śaka: the lunisolar year's
+  #   January–February tail falling in the next Western year is the
+  #   accepted residual.
+  # - max_year: the era's last numbered year (its successor's start −
+  #   start + 1; set by hand across the Nanboku-chō split). A year beyond
+  #   it reads nothing (天保20 is not 天保).
+  # - parse: false — held in the table, never read out of prose:
+  #   * Chinese homonyms of the PRINT era (960 on: Liao 天慶, Jin 天徳 貞元
+  #     承安, Western Xia 元徳, Yuan 天暦, Northern Yuan 天元, Ming 弘治 正徳,
+  #     Qing 嘉慶) — the Japanese collections hold Chinese and Korean
+  #     imprints dated by exactly those names (ndl-kotenseki: 正徳6 [1511],
+  #     嘉慶22 …), so a bare match is ambiguous;
+  #   * the one-year eras 朱鳥 (686; its later reckoning disputed) and
+  #     天平感宝 (749).
+  #   Earlier Chinese homonyms (Tang 貞観 元和 宝暦 文明, Six Dynasties 天保
+  #   天和 天平 …) predate the printed book; a prose date in these
+  #   bibliographies is read as the Japanese era — the declared residual.
+  # - Nothing older than 大化: pre-Taika dates have no row and ride
+  #   unparsed. Unofficial eras (私年号 — 白鳳, 朱雀 …) likewise.
+  大化:
+    family: nengo
+    offset: 644
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 645
+  白雉:
+    family: nengo
+    offset: 649
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 650
+  朱鳥:
+    family: nengo
+    offset: 685
+    width: 0
+    max_year: 1
+    parse: false
+    note: a one-year era whose later reckoning is disputed — prose rides unparsed
+    source: Japanese era list (元号一覧), start 686
+  大宝:
+    family: nengo
+    offset: 700
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 701
+  慶雲:
+    family: nengo
+    offset: 703
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 704
+  和銅:
+    family: nengo
+    offset: 707
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 708
+  霊亀:
+    family: nengo
+    offset: 714
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 715
+  養老:
+    family: nengo
+    offset: 716
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 717
+  神亀:
+    family: nengo
+    offset: 723
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 724
+  天平:
+    family: nengo
+    offset: 728
+    width: 0
+    max_year: 21
+    source: Japanese era list (元号一覧), start 729
+  天平感宝:
+    family: nengo
+    offset: 748
+    width: 0
+    max_year: 1
+    parse: false
+    note: a one-year era (749), superseded within the year — prose rides unparsed
+    source: Japanese era list (元号一覧), start 749
+  天平勝宝:
+    family: nengo
+    offset: 748
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 749
+  天平宝字:
+    family: nengo
+    offset: 756
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 757
+  天平神護:
+    family: nengo
+    offset: 764
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 765
+  神護景雲:
+    family: nengo
+    offset: 766
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 767
+  宝亀:
+    family: nengo
+    offset: 769
+    width: 0
+    max_year: 12
+    source: Japanese era list (元号一覧), start 770
+  天応:
+    family: nengo
+    offset: 780
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 781
+  延暦:
+    family: nengo
+    offset: 781
+    width: 0
+    max_year: 25
+    source: Japanese era list (元号一覧), start 782
+  大同:
+    family: nengo
+    offset: 805
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 806
+  弘仁:
+    family: nengo
+    offset: 809
+    width: 0
+    max_year: 15
+    source: Japanese era list (元号一覧), start 810
+  天長:
+    family: nengo
+    offset: 823
+    width: 0
+    max_year: 11
+    source: Japanese era list (元号一覧), start 824
+  承和:
+    family: nengo
+    offset: 833
+    width: 0
+    max_year: 15
+    source: Japanese era list (元号一覧), start 834
+  嘉祥:
+    family: nengo
+    offset: 847
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 848
+  仁寿:
+    family: nengo
+    offset: 850
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 851
+  斉衡:
+    family: nengo
+    offset: 853
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 854
+  天安:
+    family: nengo
+    offset: 856
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 857
+  貞観:
+    family: nengo
+    offset: 858
+    width: 0
+    max_year: 19
+    source: Japanese era list (元号一覧), start 859
+  元慶:
+    family: nengo
+    offset: 876
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 877
+  仁和:
+    family: nengo
+    offset: 884
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 885
+  寛平:
+    family: nengo
+    offset: 888
+    width: 0
+    max_year: 10
+    source: Japanese era list (元号一覧), start 889
+  昌泰:
+    family: nengo
+    offset: 897
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 898
+  延喜:
+    family: nengo
+    offset: 900
+    width: 0
+    max_year: 23
+    source: Japanese era list (元号一覧), start 901
+  延長:
+    family: nengo
+    offset: 922
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 923
+  承平:
+    family: nengo
+    offset: 930
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 931
+  天慶:
+    family: nengo
+    offset: 937
+    width: 0
+    max_year: 10
+    parse: false
+    note: Chinese homonym of the print era (Liao 天慶 1111–1120) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 938
+  天暦:
+    family: nengo
+    offset: 946
+    width: 0
+    max_year: 11
+    parse: false
+    note: Chinese homonym of the print era (Yuan 天暦 1328–1330) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 947
+  天徳:
+    family: nengo
+    offset: 956
+    width: 0
+    max_year: 5
+    parse: false
+    note: Chinese homonym of the print era (Jin 天徳 1149–1153) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 957
+  応和:
+    family: nengo
+    offset: 960
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 961
+  康保:
+    family: nengo
+    offset: 963
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 964
+  安和:
+    family: nengo
+    offset: 967
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 968
+  天禄:
+    family: nengo
+    offset: 969
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 970
+  天延:
+    family: nengo
+    offset: 972
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 973
+  貞元:
+    family: nengo
+    offset: 975
+    width: 0
+    max_year: 3
+    parse: false
+    note: Chinese homonym of the print era (Jin 貞元 1153–1156) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 976
+  天元:
+    family: nengo
+    offset: 977
+    width: 0
+    max_year: 6
+    parse: false
+    note: Chinese homonym of the print era (Northern Yuan 天元 1379–1388) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 978
+  永観:
+    family: nengo
+    offset: 982
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 983
+  寛和:
+    family: nengo
+    offset: 984
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 985
+  永延:
+    family: nengo
+    offset: 986
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 987
+  永祚:
+    family: nengo
+    offset: 988
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 989
+  正暦:
+    family: nengo
+    offset: 989
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 990
+  長徳:
+    family: nengo
+    offset: 994
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 995
+  長保:
+    family: nengo
+    offset: 998
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 999
+  寛弘:
+    family: nengo
+    offset: 1003
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 1004
+  長和:
+    family: nengo
+    offset: 1011
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1012
+  寛仁:
+    family: nengo
+    offset: 1016
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1017
+  治安:
+    family: nengo
+    offset: 1020
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1021
+  万寿:
+    family: nengo
+    offset: 1023
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1024
+  長元:
+    family: nengo
+    offset: 1027
+    width: 0
+    max_year: 10
+    source: Japanese era list (元号一覧), start 1028
+  長暦:
+    family: nengo
+    offset: 1036
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1037
+  長久:
+    family: nengo
+    offset: 1039
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1040
+  寛徳:
+    family: nengo
+    offset: 1043
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1044
+  永承:
+    family: nengo
+    offset: 1045
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1046
+  天喜:
+    family: nengo
+    offset: 1052
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1053
+  康平:
+    family: nengo
+    offset: 1057
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1058
+  治暦:
+    family: nengo
+    offset: 1064
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1065
+  延久:
+    family: nengo
+    offset: 1068
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1069
+  承保:
+    family: nengo
+    offset: 1073
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1074
+  承暦:
+    family: nengo
+    offset: 1076
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1077
+  永保:
+    family: nengo
+    offset: 1080
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1081
+  応徳:
+    family: nengo
+    offset: 1083
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1084
+  寛治:
+    family: nengo
+    offset: 1086
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1087
+  嘉保:
+    family: nengo
+    offset: 1093
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1094
+  永長:
+    family: nengo
+    offset: 1095
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1096
+  承徳:
+    family: nengo
+    offset: 1096
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1097
+  康和:
+    family: nengo
+    offset: 1098
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1099
+  長治:
+    family: nengo
+    offset: 1103
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1104
+  嘉承:
+    family: nengo
+    offset: 1105
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1106
+  天仁:
+    family: nengo
+    offset: 1107
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1108
+  天永:
+    family: nengo
+    offset: 1109
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1110
+  永久:
+    family: nengo
+    offset: 1112
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1113
+  元永:
+    family: nengo
+    offset: 1117
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1118
+  保安:
+    family: nengo
+    offset: 1119
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1120
+  天治:
+    family: nengo
+    offset: 1123
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1124
+  大治:
+    family: nengo
+    offset: 1125
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1126
+  天承:
+    family: nengo
+    offset: 1130
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1131
+  長承:
+    family: nengo
+    offset: 1131
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1132
+  保延:
+    family: nengo
+    offset: 1134
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1135
+  永治:
+    family: nengo
+    offset: 1140
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1141
+  康治:
+    family: nengo
+    offset: 1141
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1142
+  天養:
+    family: nengo
+    offset: 1143
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1144
+  久安:
+    family: nengo
+    offset: 1144
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1145
+  仁平:
+    family: nengo
+    offset: 1150
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1151
+  久寿:
+    family: nengo
+    offset: 1153
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1154
+  保元:
+    family: nengo
+    offset: 1155
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1156
+  平治:
+    family: nengo
+    offset: 1158
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1159
+  永暦:
+    family: nengo
+    offset: 1159
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1160
+  応保:
+    family: nengo
+    offset: 1160
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1161
+  長寛:
+    family: nengo
+    offset: 1162
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1163
+  永万:
+    family: nengo
+    offset: 1164
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1165
+  仁安:
+    family: nengo
+    offset: 1165
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1166
+  嘉応:
+    family: nengo
+    offset: 1168
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1169
+  承安:
+    family: nengo
+    offset: 1170
+    width: 0
+    max_year: 5
+    parse: false
+    note: Chinese homonym of the print era (Jin 承安 1196–1200) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 1171
+  安元:
+    family: nengo
+    offset: 1174
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1175
+  治承:
+    family: nengo
+    offset: 1176
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1177
+  養和:
+    family: nengo
+    offset: 1180
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1181
+  寿永:
+    family: nengo
+    offset: 1181
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1182
+  元暦:
+    family: nengo
+    offset: 1183
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1184
+  文治:
+    family: nengo
+    offset: 1184
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1185
+  建久:
+    family: nengo
+    offset: 1189
+    width: 0
+    max_year: 10
+    source: Japanese era list (元号一覧), start 1190
+  正治:
+    family: nengo
+    offset: 1198
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1199
+  建仁:
+    family: nengo
+    offset: 1200
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1201
+  元久:
+    family: nengo
+    offset: 1203
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1204
+  建永:
+    family: nengo
+    offset: 1205
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1206
+  承元:
+    family: nengo
+    offset: 1206
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1207
+  建暦:
+    family: nengo
+    offset: 1210
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1211
+  建保:
+    family: nengo
+    offset: 1212
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1213
+  承久:
+    family: nengo
+    offset: 1218
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1219
+  貞応:
+    family: nengo
+    offset: 1221
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1222
+  元仁:
+    family: nengo
+    offset: 1223
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1224
+  嘉禄:
+    family: nengo
+    offset: 1224
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1225
+  安貞:
+    family: nengo
+    offset: 1226
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1227
+  寛喜:
+    family: nengo
+    offset: 1228
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1229
+  貞永:
+    family: nengo
+    offset: 1231
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1232
+  天福:
+    family: nengo
+    offset: 1232
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1233
+  文暦:
+    family: nengo
+    offset: 1233
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1234
+  嘉禎:
+    family: nengo
+    offset: 1234
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1235
+  暦仁:
+    family: nengo
+    offset: 1237
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1238
+  延応:
+    family: nengo
+    offset: 1238
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1239
+  仁治:
+    family: nengo
+    offset: 1239
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1240
+  寛元:
+    family: nengo
+    offset: 1242
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1243
+  宝治:
+    family: nengo
+    offset: 1246
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1247
+  建長:
+    family: nengo
+    offset: 1248
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1249
+  康元:
+    family: nengo
+    offset: 1255
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1256
+  正嘉:
+    family: nengo
+    offset: 1256
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1257
+  正元:
+    family: nengo
+    offset: 1258
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1259
+  文応:
+    family: nengo
+    offset: 1259
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1260
+  弘長:
+    family: nengo
+    offset: 1260
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1261
+  文永:
+    family: nengo
+    offset: 1263
+    width: 0
+    max_year: 12
+    source: Japanese era list (元号一覧), start 1264
+  建治:
+    family: nengo
+    offset: 1274
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1275
+  弘安:
+    family: nengo
+    offset: 1277
+    width: 0
+    max_year: 11
+    source: Japanese era list (元号一覧), start 1278
+  正応:
+    family: nengo
+    offset: 1287
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1288
+  永仁:
+    family: nengo
+    offset: 1292
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1293
+  正安:
+    family: nengo
+    offset: 1298
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1299
+  乾元:
+    family: nengo
+    offset: 1301
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1302
+  嘉元:
+    family: nengo
+    offset: 1302
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1303
+  徳治:
+    family: nengo
+    offset: 1305
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1306
+  延慶:
+    family: nengo
+    offset: 1307
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1308
+  応長:
+    family: nengo
+    offset: 1310
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1311
+  正和:
+    family: nengo
+    offset: 1311
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1312
+  文保:
+    family: nengo
+    offset: 1316
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1317
+  元応:
+    family: nengo
+    offset: 1318
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1319
+  元亨:
+    family: nengo
+    offset: 1320
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1321
+  正中:
+    family: nengo
+    offset: 1323
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1324
+  嘉暦:
+    family: nengo
+    offset: 1325
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1326
+  元徳:
+    family: nengo
+    offset: 1328
+    width: 0
+    max_year: 4
+    parse: false
+    note: Chinese homonym of the print era (Western Xia 元徳 1119–1127) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 1329
+  元弘:
+    family: nengo
+    offset: 1330
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1331
+  正慶:
+    family: nengo
+    offset: 1331
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1332
+  建武:
+    family: nengo
+    offset: 1333
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1334
+  延元:
+    family: nengo
+    offset: 1335
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1336
+  興国:
+    family: nengo
+    offset: 1339
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1340
+  正平:
+    family: nengo
+    offset: 1345
+    width: 0
+    max_year: 25
+    source: Japanese era list (元号一覧), start 1346
+  建徳:
+    family: nengo
+    offset: 1369
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1370
+  文中:
+    family: nengo
+    offset: 1371
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1372
+  天授:
+    family: nengo
+    offset: 1374
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1375
+  弘和:
+    family: nengo
+    offset: 1380
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1381
+  元中:
+    family: nengo
+    offset: 1383
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 1384
+  暦応:
+    family: nengo
+    offset: 1337
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1338
+  康永:
+    family: nengo
+    offset: 1341
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1342
+  貞和:
+    family: nengo
+    offset: 1344
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1345
+  観応:
+    family: nengo
+    offset: 1349
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1350
+  文和:
+    family: nengo
+    offset: 1351
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1352
+  延文:
+    family: nengo
+    offset: 1355
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1356
+  康安:
+    family: nengo
+    offset: 1360
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1361
+  貞治:
+    family: nengo
+    offset: 1361
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1362
+  応安:
+    family: nengo
+    offset: 1367
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1368
+  永和:
+    family: nengo
+    offset: 1374
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1375
+  康暦:
+    family: nengo
+    offset: 1378
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1379
+  永徳:
+    family: nengo
+    offset: 1380
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1381
+  至徳:
+    family: nengo
+    offset: 1383
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1384
+  嘉慶:
+    family: nengo
+    offset: 1386
+    width: 0
+    max_year: 3
+    parse: false
+    note: Chinese homonym of the print era (Qing 嘉慶 1796–1820) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 1387
+  康応:
+    family: nengo
+    offset: 1388
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1389
+  明徳:
+    family: nengo
+    offset: 1389
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1390
+  応永:
+    family: nengo
+    offset: 1393
+    width: 0
+    max_year: 35
+    source: Japanese era list (元号一覧), start 1394
+  正長:
+    family: nengo
+    offset: 1427
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1428
+  永享:
+    family: nengo
+    offset: 1428
+    width: 0
+    max_year: 13
+    source: Japanese era list (元号一覧), start 1429
+  嘉吉:
+    family: nengo
+    offset: 1440
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1441
+  文安:
+    family: nengo
+    offset: 1443
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1444
+  宝徳:
+    family: nengo
+    offset: 1448
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1449
+  享徳:
+    family: nengo
+    offset: 1451
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1452
+  康正:
+    family: nengo
+    offset: 1454
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1455
+  長禄:
+    family: nengo
+    offset: 1456
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1457
+  寛正:
+    family: nengo
+    offset: 1459
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1460
+  文正:
+    family: nengo
+    offset: 1465
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1466
+  応仁:
+    family: nengo
+    offset: 1466
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1467
+  文明:
+    family: nengo
+    offset: 1468
+    width: 0
+    max_year: 19
+    source: Japanese era list (元号一覧), start 1469
+  長享:
+    family: nengo
+    offset: 1486
+    width: 0
+    max_year: 3
+    source: Japanese era list (元号一覧), start 1487
+  延徳:
+    family: nengo
+    offset: 1488
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1489
+  明応:
+    family: nengo
+    offset: 1491
+    width: 0
+    max_year: 10
+    source: Japanese era list (元号一覧), start 1492
+  文亀:
+    family: nengo
+    offset: 1500
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1501
+  永正:
+    family: nengo
+    offset: 1503
+    width: 0
+    max_year: 18
+    source: Japanese era list (元号一覧), start 1504
+  大永:
+    family: nengo
+    offset: 1520
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1521
+  享禄:
+    family: nengo
+    offset: 1527
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1528
+  天文:
+    family: nengo
+    offset: 1531
+    width: 0
+    max_year: 24
+    source: Japanese era list (元号一覧), start 1532
+  弘治:
+    family: nengo
+    offset: 1554
+    width: 0
+    max_year: 4
+    parse: false
+    note: Chinese homonym of the print era (Ming 弘治 1488–1505) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 1555
+  永禄:
+    family: nengo
+    offset: 1557
+    width: 0
+    max_year: 13
+    source: Japanese era list (元号一覧), start 1558
+  元亀:
+    family: nengo
+    offset: 1569
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1570
+  天正:
+    family: nengo
+    offset: 1572
+    width: 0
+    max_year: 20
+    source: Japanese era list (元号一覧), start 1573
+  文禄:
+    family: nengo
+    offset: 1591
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1592
+  慶長:
+    family: nengo
+    offset: 1595
+    width: 0
+    max_year: 20
+    source: Japanese era list (元号一覧), start 1596
+  元和:
+    family: nengo
+    offset: 1614
+    width: 0
+    max_year: 10
+    source: Japanese era list (元号一覧), start 1615
+  寛永:
+    family: nengo
+    offset: 1623
+    width: 0
+    max_year: 21
+    source: Japanese era list (元号一覧), start 1624
+  正保:
+    family: nengo
+    offset: 1643
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1644
+  慶安:
+    family: nengo
+    offset: 1647
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1648
+  承応:
+    family: nengo
+    offset: 1651
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1652
+  明暦:
+    family: nengo
+    offset: 1654
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1655
+  万治:
+    family: nengo
+    offset: 1657
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1658
+  寛文:
+    family: nengo
+    offset: 1660
+    width: 0
+    max_year: 13
+    source: Japanese era list (元号一覧), start 1661
+  延宝:
+    family: nengo
+    offset: 1672
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 1673
+  天和:
+    family: nengo
+    offset: 1680
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1681
+  貞享:
+    family: nengo
+    offset: 1683
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1684
+  元禄:
+    family: nengo
+    offset: 1687
+    width: 0
+    max_year: 17
+    source: Japanese era list (元号一覧), start 1688
+  宝永:
+    family: nengo
+    offset: 1703
+    width: 0
+    max_year: 8
+    source: Japanese era list (元号一覧), start 1704
+  正徳:
+    family: nengo
+    offset: 1710
+    width: 0
+    max_year: 6
+    parse: false
+    note: Chinese homonym of the print era (Ming 正徳 1506–1521) — prose rides unparsed
+    source: Japanese era list (元号一覧), start 1711
+  享保:
+    family: nengo
+    offset: 1715
+    width: 0
+    max_year: 21
+    source: Japanese era list (元号一覧), start 1716
+  元文:
+    family: nengo
+    offset: 1735
+    width: 0
+    max_year: 6
+    source: Japanese era list (元号一覧), start 1736
+  寛保:
+    family: nengo
+    offset: 1740
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1741
+  延享:
+    family: nengo
+    offset: 1743
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1744
+  寛延:
+    family: nengo
+    offset: 1747
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1748
+  宝暦:
+    family: nengo
+    offset: 1750
+    width: 0
+    max_year: 14
+    source: Japanese era list (元号一覧), start 1751
+  明和:
+    family: nengo
+    offset: 1763
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 1764
+  安永:
+    family: nengo
+    offset: 1771
+    width: 0
+    max_year: 10
+    source: Japanese era list (元号一覧), start 1772
+  天明:
+    family: nengo
+    offset: 1780
+    width: 0
+    max_year: 9
+    source: Japanese era list (元号一覧), start 1781
+  寛政:
+    family: nengo
+    offset: 1788
+    width: 0
+    max_year: 13
+    source: Japanese era list (元号一覧), start 1789
+  享和:
+    family: nengo
+    offset: 1800
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1801
+  文化:
+    family: nengo
+    offset: 1803
+    width: 0
+    max_year: 15
+    source: Japanese era list (元号一覧), start 1804
+  文政:
+    family: nengo
+    offset: 1817
+    width: 0
+    max_year: 13
+    source: Japanese era list (元号一覧), start 1818
+  天保:
+    family: nengo
+    offset: 1829
+    width: 0
+    max_year: 15
+    source: Japanese era list (元号一覧), start 1830
+  弘化:
+    family: nengo
+    offset: 1843
+    width: 0
+    max_year: 5
+    source: Japanese era list (元号一覧), start 1844
+  嘉永:
+    family: nengo
+    offset: 1847
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1848
+  安政:
+    family: nengo
+    offset: 1853
+    width: 0
+    max_year: 7
+    source: Japanese era list (元号一覧), start 1854
+  万延:
+    family: nengo
+    offset: 1859
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1860
+  文久:
+    family: nengo
+    offset: 1860
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1861
+  元治:
+    family: nengo
+    offset: 1863
+    width: 0
+    max_year: 2
+    source: Japanese era list (元号一覧), start 1864
+  慶応:
+    family: nengo
+    offset: 1864
+    width: 0
+    max_year: 4
+    source: Japanese era list (元号一覧), start 1865
+  明治:
+    family: nengo
+    offset: 1867
+    width: 0
+    max_year: 45
+    source: Japanese era list (元号一覧), start 1868
+  大正:
+    family: nengo
+    offset: 1911
+    width: 0
+    max_year: 15
+    source: Japanese era list (元号一覧), start 1912
+  昭和:
+    family: nengo
+    offset: 1925
+    width: 0
+    max_year: 64
+    source: Japanese era list (元号一覧), start 1926
+  平成:
+    family: nengo
+    offset: 1988
+    width: 0
+    max_year: 31
+    source: Japanese era list (元号一覧), start 1989
+  令和:
+    family: nengo
+    offset: 2018
+    width: 0
+    source: Japanese era list (元号一覧), start 2019

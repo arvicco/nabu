@@ -9,6 +9,7 @@ require_relative "../wiki_fetch"
 require_relative "../zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
+require_relative "../eras"
 
 module Nabu
   module Adapters
@@ -477,7 +478,8 @@ module Nabu
           "base_edition" => base_edition(envelope),
           "textquality" => wikitext[/\{\{Textquality\|(\d+%?)\}\}/i, 1],
           "author" => header_author(header["author"]),
-          "year" => header_year(header["year"])
+          "year" => header_year(header["year"]),
+          "year_raw" => header_year_raw(header["year"])
         }.compact
       end
 
@@ -510,12 +512,30 @@ module Nabu
 
       # The header year= slot — the work's year as the wiki states it
       # (census 2026-10-18: 135 pages filled, 133 a bare CE year 604–1923;
-      # the two others — an era year 「寛政2」 and an unexpanded template
-      # default — are not CE integers and DELIBERATELY mint nothing).
+      # the era year 「寛政2」 converts through the shared nengō table —
+      # config/eras.yml, owner-ruled 2026-10-20 — its spelling riding
+      # "year_raw"; the unexpanded template default mints nothing).
       # Feeds MetadataDates (ja-wikisource) as its own composition class.
       def header_year(raw)
         value = raw.to_s.strip
-        value.match?(/\A\d{3,4}\z/) ? Integer(value, 10) : nil
+        return Integer(value, 10) if value.match?(/\A\d{3,4}\z/)
+
+        era_header_year(value)
+      end
+
+      # The verbatim era spelling of a converted header year, else nil.
+      def header_year_raw(raw)
+        value = raw.to_s.strip
+        era_header_year(value) ? Nabu::Normalize.nfc(value) : nil
+      end
+
+      # A header year= that IS one era year (the whole value — prose
+      # around it would make it something else) → its CE year, or nil.
+      def era_header_year(value)
+        hits = Nabu::Eras.default&.nengo_years(value) || []
+        return nil unless hits.size == 1 && hits.first.text == value
+
+        hits.first.conversion.not_before
       end
 
       # The grade-2 era envelope over every era category the page

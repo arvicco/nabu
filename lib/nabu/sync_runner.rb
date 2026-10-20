@@ -285,7 +285,7 @@ module Nabu
       module_held_before = module_held_before?(entry, workdir)
 
       begin
-        run = Store::RunRecorder.record(source_slug: entry.slug) do
+        run = Store::RunRecorder.record_load(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
@@ -301,6 +301,23 @@ module Nabu
                            breaker: e, indexed: nil, warnings: [], discovery: nil)
       end
 
+      # The row stays open (running, loaded_at stamped) through every
+      # post-load stage below and closes only when the sync's LAST stage
+      # returns — "succeeded" means the operation finished, index slice and
+      # lane refreshes included; a death in any of them leaves the open row.
+      Store::RunRecorder.close([run]) do
+        post_load_outcome(entry: entry, source: source, adapter: adapter, workdir: workdir, run: run,
+                          fetch_report: fetch_report, load_report: load_report, lane_report: lane_report,
+                          progress: progress, module_before: module_before,
+                          module_held_before: module_held_before)
+      end
+    end
+
+    # Everything a sync does after its load commits, up to the Outcome — run
+    # inside RunRecorder.close so the run row's terminal state is written
+    # only once all of it returns.
+    def post_load_outcome(entry:, source:, adapter:, workdir:, run:, fetch_report:, load_report:, lane_report:,
+                          progress:, module_before:, module_held_before:)
       discovery = adapter.discovery_skips(workdir)
       record_discovery_notes(run, discovery)
       update_source_state(source, entry, fetch_report)
@@ -311,9 +328,11 @@ module Nabu
       combined_report = lane_report ? load_report + lane_report : load_report
       warnings = deviation_warnings(source, load_report, adapter, lane_report: lane_report)
       Health::QuarantineBaseline.record!(@ledger, entry.slug, errored: combined_report.errored)
-      # Reindex AFTER the RunRecorder block: the index files have their own
-      # lifecycle, so index work must not live inside a source's run row (an
-      # indexing failure surfaces as its own error, never a falsified run).
+      # Reindex AFTER the load block: the index files have their own
+      # lifecycle, so index work never rides the load's transaction or its
+      # counts. The run row, though, is still open here — an indexing
+      # failure closes it "failed after the load", never a falsified
+      # "succeeded".
       # Incremental since P26-5: an index-inert grain (notes/language/source —
       # neither passages nor dictionary entries) skips indexing entirely
       # (indexed nil; the CLI omits the fragment); everything else refreshes
@@ -403,6 +422,7 @@ module Nabu
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::OpenmghCharterDates.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::UdSentenceDates.refresh_source!(catalog: @db, slug: entry.slug)
+      Store::TimelineBuilder::LitopysAnnalDates.refresh_source!(catalog: @db, slug: entry.slug)
       # The TLG concordance joins the Greek CTS editions to glaux/diorisis
       # composition dates — a sync of either side re-derives it.
       Store::TimelineBuilder::TlgConcordanceDates.refresh_source!(catalog: @db, slug: entry.slug)
@@ -537,10 +557,10 @@ module Nabu
     # +workdir+ rides along for the producer whose input is a canonical
     # file rather than catalog rows (P32-6, the suttacentral parallels
     # graph — read-only on canonical, like the loader); the catalog-derived
-    # producers ignore it. Outside the RunRecorder block like reindexing:
-    # the journal is a third store with its own lifecycle, and a journal
-    # failure must surface as its own error, never falsify the source's
-    # run row.
+    # producers ignore it. Outside the load block like reindexing: the
+    # journal is a third store with its own lifecycle; a journal failure
+    # surfaces as its own error and closes the still-open run row "failed
+    # after the load" (the load's counts stand on the row).
     def refresh_references(entry)
       return nil unless entry.adapter_class.reference_edges?
 

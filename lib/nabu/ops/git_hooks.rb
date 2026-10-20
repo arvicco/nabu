@@ -74,7 +74,9 @@ module Nabu
       # written so this file never matches its own patterns.
       WORKFLOW_IDS = [
         [Regexp.new(NUMERO), "the numero sign only ever marks an internal register/thread id"],
-        [/\bQ\d{2,3}\b/, "an internal work-queue id"],
+        # A Q-token in an explicit wikidata context is an identifier
+        # (short QIDs share the queue-id shape), never workflow state.
+        [/(?<!wikidata:)(?<!wikidata )\bQ\d{2,3}\b/, "an internal work-queue id"],
         [/\bT-\d+\b/, "an internal thread id"],
         [/OWNER\s+ACTIONS/, "an owner-action list"],
         [/email.register|external.communications\.md/, "a private correspondence path"],
@@ -94,6 +96,10 @@ module Nabu
         offenses = []
         path = nil
         line_no = 0
+        # Staged diffs can carry non-UTF-8 fixture bytes (Windows-1252
+        # upstream files); the markers are pure ASCII, so scrubbing loses
+        # nothing and the scan must never crash a commit.
+        diff = diff.dup.force_encoding(Encoding::UTF_8).scrub("�")
         diff.each_line do |raw|
           line = raw.chomp
           if line.start_with?("+++ ")

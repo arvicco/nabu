@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "tcp_xml_parser"
+require_relative "eebo_imprint_place"
 require_relative "../eebo_tcp_fetch"
 
 module Nabu
@@ -50,6 +51,15 @@ module Nabu
     # into a {not_before, not_after, raw} envelope; uncertainty marks
     # (?, ca.) stay raw-only, bounds never invented. Projected through
     # TimelineBuilder::MetadataDates :structured.
+    #
+    # == Imprint place (parse-time bare town)
+    #
+    # The BIBLFULL PUBPLACE rides verbatim as source_pub_place; beside it
+    # the imprint's town, stripped of its period furniture and folded to
+    # the English name, rides as imprint_place ("Imprinted at London :" →
+    # "London"), a ?-marked conjecture as imprint_place_conjecture, s.l.
+    # as nothing (EeboImprintPlace — the reading, the census, and the
+    # declared coarseness: uncorrected false imprints ride as written).
     #
     # == License
     #
@@ -154,7 +164,8 @@ module Nabu
           license_mapper: ->(availability) { license_class(availability) },
           notes: true, # P118-R4 S6: the prints' own marginalia ride "notes"
           metadata_mapper: lambda { |header|
-            { "phase" => phase, "date" => self.class.imprint_envelope(header["source_date"]) }.compact
+            dated = { "phase" => phase, "date" => self.class.imprint_envelope(header["source_date"]) }.compact
+            dated.merge(self.class.imprint_place(header["source_pub_place"]))
           }
         )
       rescue Nabu::ValidationError => e
@@ -174,6 +185,9 @@ module Nabu
       rescue Nabu::EeboTcpFetch::Error => e
         raise Nabu::FetchError, "eebo-tcp fetch failed into #{workdir}: #{e.message}"
       end
+
+      # The imprint PUBPLACE's bare town (class note; EeboImprintPlace).
+      def self.imprint_place(raw) = EeboImprintPlace.call(raw)
 
       # -- the imprint-date molds (fixture-backed; class note) ----------------
 

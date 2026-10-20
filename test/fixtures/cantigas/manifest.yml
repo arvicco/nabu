@@ -71,6 +71,12 @@ files:
     whole: true
     trim: none (João Airas de Santiago — the "Texto ainda não disponível" no-text page; STAYS QUARANTINED, so it sits outside the discover path; P56-1)
     reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: listacantigas-H.html
+    url: https://cantigas.fcsh.unl.pt/listacantigas.asp?letra=H
+    refetchable: false
+    whole: true
+    trim: none (the letter-H incipit index — 7 cdcant ids — pinned at the TOP level beside the cantiga pages as the rejected enumeration-grain specimen discovery skips by rule; 2026-10-20)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-08-13 crawl (canonical/cantigas/); the live index re-renders per request, never byte-identical
   - path: fetch/listacantigas-A.html
     url: https://cantigas.fcsh.unl.pt/listacantigas.asp?letra=A
     refetchable: false

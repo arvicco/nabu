@@ -119,8 +119,10 @@ class PapyriTest < Minitest::Test
     # aegyptus;89;240 is text-bearing in both DDbDP/25/25457.xml and
     # Historical/aegyptus/89/240.xml; chrest.wilck;;101 survives only as a
     # text-less Historical stub (skipped, as it quarantined before).
+    # p.select;;16 and sb;30;17872 are the apparatus exemplars (curated only).
     refs = Nabu::Adapters::Papyri.new.discover(EXEMPLARS).to_a
-    assert_equal %w[urn:nabu:ddbdp:aegyptus:89:240 urn:nabu:ddbdp:o.claud:3:457], refs.map(&:id)
+    assert_equal %w[urn:nabu:ddbdp:aegyptus:89:240 urn:nabu:ddbdp:o.claud:3:457
+                    urn:nabu:ddbdp:p.select::16 urn:nabu:ddbdp:sb:30:17872], refs.map(&:id)
     assert refs.first.path.end_with?("DDbDP/25/25457.xml")
   end
 
@@ -510,6 +512,19 @@ class PapyriTranslationsTest < Minitest::Test
     joined = skips.notes.join(" ")
     assert_includes joined, "o.krok.1.15-1"
     assert_includes joined, "berkeley.apis.9834"
+  end
+
+  # The APIS record-only remainder (an apisid/controlNo identity and a
+  # translation div, no edition the catalog answers to) is a DECLARED
+  # exemption with its own censused reason — never folded into the
+  # generic no-edition bucket a Translations/ file would land in.
+  def test_apis_record_only_remainder_is_a_declared_exemption
+    notes = adapter.discovery_skips(FIXTURES).notes
+    apis = notes.grep(/berkeley\.apis\.9834/)
+    assert_equal 1, apis.size
+    assert_includes apis.first, "1 translation file skipped — " \
+                                "#{Nabu::Adapters::PapyriTranslations::APIS_RECORD_ONLY}"
+    assert_includes apis.first, "standalone APIS namespace declined"
   end
 
   def test_flag_off_discovers_no_translation_and_censuses_nothing

@@ -68,7 +68,7 @@ module Nabu
     # claims and stay unmined. langUsage is verified: a text whose
     # first ident isn't "deu" quarantines loudly (the rem precedent) —
     # the corpus claims German throughout, so a divergence is news.
-    class DtaTeiParser
+    class DtaTeiParser < StreamingTeiParser
       GERMAN_IDENT = "deu"
 
       # classCode @scheme fragment → metadata key (and facet name).
@@ -91,26 +91,6 @@ module Nabu
       end
 
       private
-
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
 
       def verify_language!(extraction, path)
         ident = extraction.header["lang_ident"]
@@ -139,43 +119,14 @@ module Nabu
         metadata
       end
 
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          seen[unit.citation] += 1
-          count = seen[unit.citation]
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
+      def extraction_class = Extraction
 
-      def build_document(units, urn:, language:, title:, path:, metadata:)
-        document = Document.new(urn: urn, language: language, title: title,
-                                canonical_path: path, metadata: metadata)
-        units.each_with_index do |unit, sequence|
-          document << Passage.new(
-            urn: "#{urn}:#{unit.citation}",
-            language: language,
-            text: Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip),
-            annotations: unit.annotations,
-            sequence: sequence
-          )
-        end
-        raise ParseError, "#{path}: no citable passages found" if document.empty?
-
-        document
-      rescue ValidationError => e
-        raise ParseError, "#{path}: #{e.message}"
-      end
+      def no_passages_message = "no citable passages found"
 
       # The single-pass Reader state machine: a header phase mines the
       # teiHeader (first-wins fields, sourceDesc-scoped dates), then the
       # text phase runs the page chunker with the ¬<lb/> join.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         # fw/figure: apparatus. corr/expan/reg: the editors' layer — the
         # printed sic/abbr/orig halves stay (class note).
         DROPPED_ELEMENTS = %w[fw figure corr expan reg teiHeader].freeze
@@ -185,13 +136,12 @@ module Nabu
                             item l lg row cell titlePart docTitle docAuthor docImprint
                             docDate speaker stage sp table list castItem trailer].freeze
         HYPHEN = "¬"
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS, :BLOCK_ELEMENTS, :HYPHEN
+        private_constant :DROPPED_ELEMENTS, :BLOCK_ELEMENTS, :HYPHEN
 
         Result = Data.define(:units, :header)
 
         def initialize(reader:, path:)
-          @reader = reader
-          @path = path
+          super
           @in_header = false
           @header_done = false
           @capture = nil
@@ -220,14 +170,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -487,16 +429,6 @@ module Nabu
         end
 
         # -- helpers -----------------------------------------------------------
-
-        def dropping? = !@drop_depth.nil?
-
-        def presence(value)
-          value if value && !value.empty?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
-        end
       end
       private_constant :Extraction
     end

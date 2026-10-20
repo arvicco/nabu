@@ -23,7 +23,11 @@ class PublicHygieneTest < Minitest::Test
   FORBIDDEN = [
     [/№/, "the numero sign only ever marks an internal register/thread id — " \
           "use the ruling date or grantor+date provenance instead"],
-    [/\bQ\d{2,3}\b/, "internal work-queue ids — state the content (or the date) instead"],
+    # Short Wikidata QIDs collide with the queue-id shape (London IS
+    # Q84, live in the tree since the imprint-towns mint) — a Q-token
+    # in an explicit wikidata context is an identifier, not workflow.
+    [/(?<!wikidata:)(?<!wikidata )\bQ\d{2,3}\b/,
+     "internal work-queue ids — state the content (or the date) instead"],
     [/\bT-\d+\b/, "internal thread ids — use grantor+date provenance instead"],
     [/OWNER\s+ACTIONS/, "owner-action lists live in chat and untracked docs only"],
     [/email-register/, "the correspondence register is private machinery"],

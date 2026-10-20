@@ -129,7 +129,23 @@ class TamilexTest < Minitest::Test
 
   def test_the_textless_template_is_never_a_document
     refute(adapter.discover(FIXTURES).any? { |ref| ref.path.end_with?("_KTSAMPLE.xml") })
-    assert_equal 1, adapter.discovery_skips(FIXTURES).skipped_by_rule
+  end
+
+  # The rejected grains, pinned by REAL specimens: upstream serves each
+  # repo at the per-poem edition grain (taken) beside generated whole-repo
+  # aggregates (witnesses.xml, wordindex.xml) and, in TamilneriVilakkam,
+  # a whole-work base text the per-verse editions re-split (Ed.xml) —
+  # each skipped by its own rule, and the fixture tree reconciles: every
+  # XML file is a document or a censused skip.
+  def test_rejected_grain_specimens_skip_by_rule_and_the_tree_reconciles
+    skips = adapter.discovery_skips(FIXTURES)
+    notes = skips.notes.join("\n")
+    assert_match(%r{Kuruntokai/witnesses\.xml: not an edition}, notes)
+    assert_match(%r{Kuruntokai/wordindex\.xml: not an edition}, notes)
+    assert_match(%r{TamilneriVilakkam/Ed\.xml: .*per-verse}, notes)
+    assert_equal 4, skips.skipped_by_rule, "the template + the two aggregates + the base text"
+    files = Dir.glob("*/*.xml", base: FIXTURES)
+    assert_equal files.size, adapter.discover(FIXTURES).count + skips.skipped_by_rule + skips.unrecognized
   end
 
   # -- the store: gold lemmas + idempotency ---------------------------------

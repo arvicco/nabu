@@ -199,7 +199,7 @@ module Nabu
       # Extraction helper calls back into the family policy.
       def fold(text, language)
         collapsed = text.gsub(/[[:space:]]+/, " ").strip
-        Normalize.nfc_exempt?(language) ? collapsed : Normalize.nfc(collapsed)
+        SourceRead.nfc(collapsed, language: language)
       end
 
       # The space-separated script+lang pair on an <ab> ("Armi arc",

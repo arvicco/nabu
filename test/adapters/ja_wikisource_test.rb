@@ -177,7 +177,8 @@ module Adapters
     def test_header_year_mints_only_ce_integers
       adapter = conformance_adapter
       assert_equal 1330, adapter.send(:header_year, " 1330 ")
-      assert_nil adapter.send(:header_year, "寛政2"), "an era year is not a CE integer"
+      assert_equal 1790, adapter.send(:header_year, "寛政2"),
+                   "an era year converts through the shared nengō table (owner-ruled 2026-10-20)"
       assert_nil adapter.send(:header_year, "{{{year|1912}}}"), "an unexpanded template default"
     end
 

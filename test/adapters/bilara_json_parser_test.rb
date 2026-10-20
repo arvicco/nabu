@@ -123,8 +123,24 @@ class BilaraJsonParserTest < Minitest::Test
     assert_equal ["urn:nabu:suttacentral:sn35.24:1.1"], annotated.map(&:urn),
                  "variant + reference both key 1.1; the comment file's only key (1.4) is an empty string"
     assert_equal({ "variants" => "Sabbappahānāya → sabbaṁ pahānāya (sya-all, km, mr)",
-                   "refs" => "dr18.18, ms13S4_65, msdiv24, pts-vp-pli4.16, sya18.20, vri26.15" },
-                 annotated.first.annotations)
+                   "refs" => "dr18.18, ms13S4_65, msdiv24, pts-vp-pli4.16, sya18.20, vri26.15",
+                   "vri" => ["vri26.15"] },
+                 annotated.first.annotations,
+                 "no pts_siglum given → no PTS key folds; VRI tokens need no siglum")
+  end
+
+  def test_refs_fold_pts_keys_when_the_book_siglum_is_known
+    passage = parse(SN, stem: "sn35.24", sidecars: SN_SIDECARS, pts_siglum: "S").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal ["PTS.S.4.16"], passage.annotations["pts"]
+  end
+
+  def test_folded_keys_never_inflate_the_unjoined_census
+    Dir.mktmpdir do |dir|
+      sidecar = File.join(dir, "sn35.24_reference.json")
+      File.write(sidecar, JSON.generate({ "sn35.24:1.5" => "pts-vp-pli4.17, vri26.16" }))
+      document = parse(SN, stem: "sn35.24", sidecars: { "refs" => sidecar }, pts_siglum: "S")
+      assert_equal({ "refs" => 1 }, document.metadata["sidecar_unjoined"])
+    end
   end
 
   def test_sidecar_data_on_a_skipped_blank_segment_has_no_passage_to_land_on
@@ -133,8 +149,15 @@ class BilaraJsonParserTest < Minitest::Test
       File.write(sidecar, JSON.generate({ "sn35.24:1.5" => "x → y (bj)", "sn35.24:9.9" => "z" }))
       document = parse(SN, stem: "sn35.24", sidecars: { "variants" => sidecar })
       assert(document.all? { |p| p.annotations.empty? },
-             "1.5 is the blank root segment (skipped) and 9.9 does not exist — both drop")
+             "1.5 is the blank root segment (skipped) and 9.9 does not exist — neither is re-homed")
+      assert_equal({ "variants" => 2 }, document.metadata["sidecar_unjoined"],
+                   "both unjoined values are counted on the document, per annotation key")
     end
+  end
+
+  def test_fully_joined_sidecars_leave_metadata_untouched
+    document = parse(SN, stem: "sn35.24", sidecars: SN_SIDECARS)
+    refute document.metadata.key?("sidecar_unjoined")
   end
 
   def test_sidecar_text_is_normalized_to_nfc

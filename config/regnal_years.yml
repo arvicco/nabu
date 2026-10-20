@@ -15,8 +15,10 @@
 # Keys are cdli's dates_referenced ruler spellings VERBATIM. accession =
 # the ruler's YEAR 1 as a signed year (negative = BCE, the catalog
 # convention: 2094 BC → -2094). reign = the count of numbered regnal
-# years. Year YY maps to accession + (YY - 1); "(us2 year)" shifts +1;
-# YY = 00 (year unknown) maps to the whole-reign span.
+# years. Year YY maps to accession + (YY - 1); the "(us2 year)" and
+# "(us2-us2 year)" year-name marks read as written, no shift (owner-ruled
+# 2026-10-20 — CDLI's own year-name tables number those formulae under
+# their canonical years); YY = 00 (year unknown) maps to the whole-reign span.
 #
 # DELIBERATELY EXCLUDED (censused as unruled, never guessed):
 # - ED III Lagash (Lugalanda, Urukagina_l): absolute anchoring is ±many
@@ -26,6 +28,37 @@
 # - Sin-kashid (Uruk) and other floating OB local dynasts.
 # - Unnumbered homonyms ("Nebuchadnezzar" bare) and placeholder shapes
 #   (HE, EH, xx, --).
+#
+# THE 2026-10-20 EXTENSION (owner-ruled; census of the first
+# dates_referenced entries whose ruler had no row: 17,754 rows under 702
+# spellings) adds the major rulers of the established dynastic sequences,
+# each row naming its published basis — Isin I / Larsa / Babylon I and the
+# Middle Assyrian kings on Brinkman's 1977 tables (middle chronology; the
+# second-millennium Assyrian dates carry the field's known ~10-year
+# latitude before 1179 BC — the offset is conventional, the intra-reign
+# arithmetic exact), the Kassites on Brinkman 1976, Erishum I on the
+# revised Old Assyrian eponym list, the first-millennium reigns on Parker &
+# Dubberstein / the eponym canon; cdli's spelling variants of an already
+# ruled king get their own row carrying the same reign. STILL OUT —
+# absolute chronology genuinely contested, the period band the honest
+# fallback:
+# - ED III dynasts (Lugalanda, Urukagina, Enmetena, Eannatum, Ur-Nanshe,
+#   Enentarzi, Lugalzagesi, …) and every Old Akkadian king (Sargon,
+#   Rimush, Manishtusu, Naramsin, Shar-kali-sharri): no anchored reign
+#   sequence.
+# - Lagash II beyond Gudea (Ur-Baba, Nammahni, Ur-Ningirsu …): reign
+#   lengths and order debated.
+# - The OB local dynasties outside the Isin/Larsa/Babylon lines (Uruk:
+#   Sin-kashid, Anam, IRnene, Rim-Anum; Eshnunna: Ibal-pi-el, Dāduša;
+#   Mari: Zimri-Lim, Yahdun-Lim), Shamshi-Adad I (reign length contested)
+#   and Rim-Sin II (a rebel of a few years).
+# - The post-Assurbanipal Assyrian kings (Assur-etel-ilani,
+#   Sin-sharru-ishkun): the sequence 631–612 BC is disputed.
+# - Isin II / Second Sealand / Early Neo-Babylonian kings and the Middle
+#   Elamite kings: editions of the tables differ by several years.
+# - Unnumbered Kassite and Achaemenid homonyms (Kurigalzu, Kadašman-Enlil,
+#   Burna-Buriash, Kashtiliashu, Cyrus, Cambyses, Darius, Xerxes,
+#   Artaxerxes) under the homonym rule above.
 rulers:
   # -- Lagash II (conventional placement) ------------------------------
   Gudea:
@@ -159,3 +192,350 @@ rulers:
     reign: 36
     dynasty: Achaemenid
     basis: Parker & Dubberstein
+  # == Extension (owner-ruled 2026-10-20): the major unruled rulers of the
+  # 2026-10-20 census, each row naming its published basis.
+
+  # -- Isin I (middle chronology) ----------------------------------------
+  Shu-ilishu:
+    accession: -1984
+    reign: 10
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Iddin-Dagan:
+    accession: -1974
+    reign: 21
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Ishme-Dagan:
+    accession: -1953
+    reign: 19
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; the Isin king — cdli writes Assyria's homonym numbered (Ishme-Dagan1), and the bare spelling's rows are Early Old Babylonian Ur/Nippur/Isin tablets (census 2026-10-20)
+  Išme-Dagan:
+    accession: -1953
+    reign: 19
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; cdli spelling variant of Ishme-Dagan (Isin)
+  Lipit-Ishtar:
+    accession: -1934
+    reign: 11
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Lipit-Ištar:
+    accession: -1934
+    reign: 11
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; cdli spelling variant of Lipit-Ishtar
+  Ur-Ninurta:
+    accession: -1923
+    reign: 28
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Bur-Sin1:
+    accession: -1895
+    reign: 22
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Enlil-bani:
+    accession: -1860
+    reign: 24
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Zambiya:
+    accession: -1836
+    reign: 3
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Iter-pisha:
+    accession: -1833
+    reign: 3
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Ur-dukuga:
+    accession: -1830
+    reign: 3
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sin-magir:
+    accession: -1827
+    reign: 11
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Damiq-ilišu:
+    accession: -1816
+    reign: 23
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Damiq-ilishu:
+    accession: -1816
+    reign: 23
+    dynasty: Isin I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; cdli spelling variant of Damiq-ilišu
+  # -- Larsa (middle chronology) -----------------------------------------
+  Zabaya:
+    accession: -1941
+    reign: 9
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Gungunum:
+    accession: -1932
+    reign: 27
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Abi-sare:
+    accession: -1905
+    reign: 11
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sumu-el:
+    accession: -1894
+    reign: 29
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sumuel:
+    accession: -1894
+    reign: 29
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; cdli spelling variant of Sumu-el
+  Nur-Adad:
+    accession: -1865
+    reign: 16
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sin-iddinam:
+    accession: -1849
+    reign: 7
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sin-eribam:
+    accession: -1842
+    reign: 2
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sin-iqisham:
+    accession: -1840
+    reign: 5
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Silli-Adad:
+    accession: -1835
+    reign: 1
+    dynasty: Larsa
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  # -- Babylon I (middle chronology) -------------------------------------
+  Sumu-abum:
+    accession: -1894
+    reign: 14
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sumu-la-El:
+    accession: -1880
+    reign: 36
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sumu-la-el:
+    accession: -1880
+    reign: 36
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; cdli spelling variant of Sumu-la-El
+  Sabium:
+    accession: -1844
+    reign: 14
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Apil-Sin:
+    accession: -1830
+    reign: 18
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Sin-muballit:
+    accession: -1812
+    reign: 20
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Abi-ešuḫ:
+    accession: -1711
+    reign: 28
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Abi-ešuh:
+    accession: -1711
+    reign: 28
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology; cdli spelling variant of Abi-ešuḫ
+  Samsu-ditana:
+    accession: -1625
+    reign: 31
+    dynasty: Babylon I
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  # -- Old Assyrian (middle chronology) ----------------------------------
+  Erishum1:
+    accession: -1972
+    reign: 40
+    dynasty: Old Assyrian
+    basis: Barjamovic, Hertel & Larsen 2012 (Ups and Downs at Kanesh), revised eponym list REL 1–40 = 1972–1933 BC, middle chronology
+  # -- Kassite (Brinkman's conventional dates) ---------------------------
+  Nazi-Maruttash:
+    accession: -1307
+    reign: 26
+    dynasty: Kassite
+    basis: Brinkman 1976 (Materials and Studies for Kassite History I), as tabulated in Brinkman 1977
+  Kadašman-Turgu:
+    accession: -1281
+    reign: 18
+    dynasty: Kassite
+    basis: Brinkman 1976 (Materials and Studies for Kassite History I), as tabulated in Brinkman 1977
+  Kudur-Enlil:
+    accession: -1254
+    reign: 9
+    dynasty: Kassite
+    basis: Brinkman 1976 (Materials and Studies for Kassite History I), as tabulated in Brinkman 1977
+  Shagarakti-shuriash:
+    accession: -1245
+    reign: 13
+    dynasty: Kassite
+    basis: Brinkman 1976 (Materials and Studies for Kassite History I), as tabulated in Brinkman 1977
+  # -- Middle Assyrian (Assyrian King List, Brinkman 1977) ---------------
+  Assur-uballit1:
+    accession: -1363
+    reign: 36
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Adad-nerari1:
+    accession: -1305
+    reign: 32
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Shalmaneser1:
+    accession: -1273
+    reign: 30
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Tukulti-Ninurta1:
+    accession: -1243
+    reign: 37
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Assur-resha-ishi1:
+    accession: -1132
+    reign: 18
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Tiglath-pileser1:
+    accession: -1114
+    reign: 39
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Assur-bel-kala:
+    accession: -1073
+    reign: 18
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  Assur-dan2:
+    accession: -934
+    reign: 23
+    dynasty: Middle Assyrian
+    basis: Brinkman 1977 (Mesopotamian chronology appendix, in Oppenheim, Ancient Mesopotamia, rev. ed.), middle chronology
+  # -- Neo-Assyrian (eponym-anchored) ------------------------------------
+  Adad-nerari2:
+    accession: -911
+    reign: 21
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Tukulti-Ninurta2:
+    accession: -890
+    reign: 7
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Aassurnasirpal2:
+    accession: -883
+    reign: 25
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977); cdli's misspelling of Assurnasirpal2, same reign
+  Shamshi-Adad5:
+    accession: -823
+    reign: 13
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Adad-nerari3:
+    accession: -810
+    reign: 28
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Shalmaneser4:
+    accession: -782
+    reign: 10
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Tiglath-pileser3:
+    accession: -744
+    reign: 18
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Shalmaneser5:
+    accession: -726
+    reign: 5
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977)
+  Ashurbanipal:
+    accession: -668
+    reign: 38
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored (Brinkman 1977); cdli spelling variant of Assurbanipal, the same 38-year row
+  # -- Neo-Babylonian (Parker & Dubberstein) -----------------------------
+  Shamash-shuma-ukin:
+    accession: -667
+    reign: 20
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 667/666; year 20 = 648/647)
+  Kandalanu:
+    accession: -647
+    reign: 21
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 647/646; year 21 = 627/626)
+  Nabopolassar:
+    accession: -625
+    reign: 21
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 625/624; year 21 = 605/604)
+  Nabupolassar:
+    accession: -625
+    reign: 21
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75); cdli spelling variant of Nabopolassar
+  Amel-Marduk:
+    accession: -561
+    reign: 2
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 561/560)
+  Neriglissar:
+    accession: -559
+    reign: 4
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 559/558; year 4 = 556/555)
+  # -- Achaemenid (Parker & Dubberstein) ---------------------------------
+  Xerxes1:
+    accession: -485
+    reign: 21
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 485/484; year 21 = 465/464)
+  Artaxerxes1:
+    accession: -464
+    reign: 41
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 464/463; year 41 = 424/423)
+  Darius2:
+    accession: -423
+    reign: 19
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 423/422; year 19 = 405/404)
+  Artaxerxes2:
+    accession: -404
+    reign: 46
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 404/403; year 46 = 359/358)
+  Artaxerxes3:
+    accession: -358
+    reign: 21
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein 1956 (Babylonian Chronology 626 B.C.–A.D. 75) (year 1 = 358/357; year 21 = 338/337)

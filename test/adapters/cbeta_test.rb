@@ -23,12 +23,13 @@ class CbetaTest < Minitest::Test
   N44 = "urn:nabu:cbeta:N44n0021-xu"
   T01 = "urn:nabu:cbeta:T01n0001-xu"
   T10 = "urn:nabu:cbeta:T10n0285"
+  T45 = "urn:nabu:cbeta:T45n1909-xu"
   T85 = "urn:nabu:cbeta:T85n2884"
   T85_2831 = "urn:nabu:cbeta:T85n2831"
   X01 = "urn:nabu:cbeta:X01n0001"
   X55 = "urn:nabu:cbeta:X55n0899"
   # discover order (sorted by urn)
-  ALL_FIXTURES = [J29, J36, K05, N26, N44, T01, T10, T85_2831, T85, X01, X55].freeze
+  ALL_FIXTURES = [J29, J36, K05, N26, N44, T01, T10, T45, T85_2831, T85, X01, X55].freeze
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -140,7 +141,7 @@ class CbetaTest < Minitest::Test
       FileUtils.mkdir_p(File.join(root, "B", "B01"))
       File.write(File.join(root, "B", "B01", "B01n0001.xml"), "")
       adapter = Nabu::Adapters::Cbeta.new
-      assert_equal [T01, T10, T85_2831, T85], adapter.discover(root).to_a.map(&:id)
+      assert_equal [T01, T10, T45, T85_2831, T85], adapter.discover(root).to_a.map(&:id)
       skips = adapter.discovery_skips(root)
       assert_equal 1, skips.skipped_by_rule
       assert_predicate skips, :clean?
@@ -221,7 +222,7 @@ class CbetaTest < Minitest::Test
     source = cbeta_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 11, first.added
+    assert_equal 12, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]
@@ -231,6 +232,19 @@ class CbetaTest < Minitest::Test
     assert_equal counts, [catalog[:documents].count, catalog[:passages].count]
     assert_equal revisions, catalog[:documents].select_hash(:urn, :revision),
                  "an unchanged corpus must not fake content revisions"
+  end
+
+  # The stand-off back apparatus lands in the catalog as the passage's
+  # "apparatus" annotation, the reading text untouched.
+  def test_back_apparatus_rides_the_loaded_passage_annotations
+    catalog = store_test_db
+    Nabu::Store::Loader.new(db: catalog, source: cbeta_source)
+                       .load_from(conformance_adapter, workdir: FIXTURES, full: true)
+    row = catalog[:passages].where(urn: "#{T45}:0929b08").first
+    assert_equal "之地一切解脫。重復至誠五體投地，頂禮", row[:text]
+    apparatus = JSON.parse(row[:annotations_json]).fetch("apparatus")
+    assert_equal(%w[重復至誠 頂禮十方一切三寶一拜], apparatus.map { |app| app["lemma"] })
+    assert_equal "0929b09", apparatus.last["to"]
   end
 
   # --- fetch (local git only, no network) -------------------------------------

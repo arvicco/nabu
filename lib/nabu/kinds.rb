@@ -29,6 +29,13 @@ module Nabu
   #   bare copy marker), each with its one-line reason. A deliberate
   #   fragment folds to nothing: it is a reviewed non-claim, rendered as
   #   its own census section, never `unmapped` noise (P101).
+  #   A source may declare `vocabulary: open` (default `closed`): an
+  #   OPEN vocabulary (eebo-tcp's ~34.6k LCSH subject headings, mostly
+  #   topical) folds an uncovered fragment to NOTHING instead of the
+  #   `unmapped` bucket — the rules cover the genre-shaped slice, and a
+  #   topical heading is not a gap awaiting a rule. The miss is never
+  #   silent: #fold reports it as `uncovered`, and KindBuilder censuses
+  #   the uncovered values per source (`nabu kind census --uncovered`).
   #
   # Normalization (survey §4b): strip trailing uncertainty markers →
   # split composites → per-fragment lookup → 0..n class paths; a fragment
@@ -53,8 +60,18 @@ module Nabu
     # chain. +deliberate+ (P101) is the reviewed not-genre set: a
     # fragment in it folds to NOTHING (value → reason, case-insensitive
     # like the exact map).
+    # +open+ (vocabulary: open) turns the chain's miss from the
+    # unmapped bucket into an uncovered report that mints nothing.
     Rule = Data.define(:slug, :facet, :metadata, :walk, :map, :fold_map, :prefix_map, :regex_map,
-                       :range_map, :source_kind, :deliberate, :deliberate_fold)
+                       :range_map, :source_kind, :deliberate, :deliberate_fold, :open)
+
+    # One value's fold: the class paths it mints, plus the fragments an
+    # OPEN vocabulary left uncovered (always empty for a closed one —
+    # its miss is the unmapped path, already counted as a row).
+    Fold = Data.define(:paths, :uncovered)
+    EMPTY_FOLD = Fold.new(paths: [].freeze, uncovered: [].freeze)
+
+    VOCABULARIES = %w[closed open].freeze
 
     # The canonical-tree walkers KindBuilder implements; a walk: value
     # outside this set is a config error, not a silent no-op.
@@ -100,15 +117,31 @@ module Nabu
     def metadata_for(slug) = @rules[slug]&.metadata
     def walk_for(slug) = @rules[slug]&.walk
     def source_kind(slug) = @rules[slug]&.source_kind
+    def open?(slug) = @rules[slug]&.open || false
 
     # +value+ (one upstream facet or metadata value) → 0..n class paths
-    # for +slug+, deduped, "unmapped" per uncovered fragment. A source
-    # with no rule (or a pure declaration) returns [] — nothing to map.
-    def normalize(slug, value)
-      rule = @rules[slug]
-      return [] if rule.nil? || rule.source_kind
+    # for +slug+, deduped, "unmapped" per uncovered fragment of a closed
+    # vocabulary (nothing for an open one). A source with no rule (or a
+    # pure declaration) returns [] — nothing to map.
+    def normalize(slug, value) = fold(slug, value).paths
 
-      fragments(value).flat_map { |fragment| lookup(rule, fragment) }.uniq
+    # The full fold of +value+: class paths plus, for an open vocabulary,
+    # the uncovered fragments (deduped, in order) the census counts.
+    def fold(slug, value)
+      rule = @rules[slug]
+      return EMPTY_FOLD if rule.nil? || rule.source_kind
+
+      paths = []
+      uncovered = []
+      fragments(value).each do |fragment|
+        hits = lookup(rule, fragment)
+        if hits.nil?
+          rule.open ? uncovered << fragment : paths << UNMAPPED
+        else
+          paths.concat(hits)
+        end
+      end
+      Fold.new(paths: paths.uniq, uncovered: uncovered.uniq)
     end
 
     private
@@ -126,6 +159,9 @@ module Nabu
       fragment
     end
 
+    # The rule chain for one fragment: its class paths, [] for a
+    # declared not-genre value, nil when no rule covers it (the caller
+    # decides unmapped vs uncovered by the vocabulary declaration).
     def lookup(rule, fragment)
       return [] if rule.deliberate.key?(fragment) || rule.deliberate_fold.key?(fragment.downcase)
 
@@ -141,7 +177,7 @@ module Nabu
       range = (rule.range_map.find { |span, _| span.cover?(fragment.to_i) } if fragment.match?(/\A\d+\z/))
       return range[1] if range
 
-      [UNMAPPED]
+      nil
     end
 
     # -- parsing + validation ----------------------------------------------
@@ -154,6 +190,10 @@ module Nabu
                              crosswalk: spec["crosswalk"] || {})]
       end
       classes.each_key do |name|
+        if name.include?(":")
+          raise ConfigError,
+                "kind_classes: #{name.inspect} carries a colon — reserved for KindBuilder's uncovered census rows"
+        end
         head = name.split("/", 2).first
         next if classes.key?(head)
 
@@ -180,6 +220,7 @@ module Nabu
         end
 
         validate_target(slug, source_kind) if source_kind
+        open = open_vocabulary?(slug, spec["vocabulary"], source_kind)
         map = targets_of(slug, spec["map"])
         deliberate = (spec["deliberate"] || {}).to_h { |value, reason| [value.to_s, reason.to_s] }
         [slug, Rule.new(slug: slug, facet: facet, metadata: metadata, walk: walk, map: map,
@@ -188,8 +229,23 @@ module Nabu
                         regex_map: regexes_of(slug, spec["regex_map"]),
                         range_map: ranges_of(slug, spec["range_map"]),
                         source_kind: source_kind, deliberate: deliberate,
-                        deliberate_fold: deliberate.transform_keys(&:downcase))]
+                        deliberate_fold: deliberate.transform_keys(&:downcase), open: open)]
       end
+    end
+
+    def open_vocabulary?(slug, vocabulary, source_kind)
+      return false if vocabulary.nil?
+
+      unless VOCABULARIES.include?(vocabulary.to_s)
+        raise ConfigError,
+              "kind_map: #{slug} vocabulary #{vocabulary.inspect} is not one of #{VOCABULARIES.join('/')}"
+      end
+      open = vocabulary.to_s == "open"
+      if open && source_kind
+        raise ConfigError,
+              "kind_map: #{slug} is a source_kind declaration — it folds no values, so it cannot be open"
+      end
+      open
     end
 
     def regexes_of(slug, doc)

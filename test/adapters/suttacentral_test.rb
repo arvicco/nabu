@@ -24,16 +24,26 @@ class SuttacentralTest < Minitest::Test
 
   ROOT_URNS = %w[
     urn:nabu:suttacentral:dhp21-32
+    urn:nabu:suttacentral:kp1
     urn:nabu:suttacentral:pdhp1-13
     urn:nabu:suttacentral:sa158
+    urn:nabu:suttacentral:sa7
+    urn:nabu:suttacentral:sn1.45
     urn:nabu:suttacentral:sn35.24
     urn:nabu:suttacentral:sn46.70
     urn:nabu:suttacentral:t1536.12
+    urn:nabu:suttacentral:thi-ap2
   ].freeze
 
-  # Every root except t1536.12 has an English file — the abhidhamma root
-  # honestly stays sibling-less (patton translates only ma/sa/ea19 today).
-  ALL_URNS = (ROOT_URNS + (ROOT_URNS - %w[urn:nabu:suttacentral:t1536.12]).map { |u| "#{u}-en" }).sort.freeze
+  # Roots the fixture tree carries WITHOUT an English file: the abhidhamma
+  # root honestly stays sibling-less (patton translates only ma/sa/ea19
+  # today); the sidecar-census roots were snapshotted without their
+  # translations (only their sidecar shape matters).
+  SIBLINGLESS = %w[
+    urn:nabu:suttacentral:t1536.12 urn:nabu:suttacentral:sa7 urn:nabu:suttacentral:sn1.45
+    urn:nabu:suttacentral:kp1 urn:nabu:suttacentral:thi-ap2
+  ].freeze
+  ALL_URNS = (ROOT_URNS + (ROOT_URNS - SIBLINGLESS).map { |u| "#{u}-en" }).sort.freeze
 
   def conformance_adapter
     Nabu::Adapters::Suttacentral.new(translations: true)
@@ -79,8 +89,9 @@ class SuttacentralTest < Minitest::Test
                "(\"Do not commit this file…\"), never a document"
     skips = conformance_adapter.discovery_skips(FIXTURES)
     assert skips.clean?
-    assert_equal 2, skips.skipped_by_rule,
-                 "the sandbox file + the losing suddhaso alternate are censused rule skips"
+    assert_equal 3, skips.skipped_by_rule,
+                 "the sandbox file + the losing suddhaso alternate + the rootless lzh-iti83 " \
+                 "variant file are censused rule skips"
   end
 
   def test_discover_reads_language_from_the_root_tree
@@ -271,6 +282,7 @@ class SuttacentralTest < Minitest::Test
     assert_equal({
                    "variants" => "anabhiratisaññā → anabhiratasaññā (bj)",
                    "refs" => "ms14S5_687, msdiv251, vri27.160",
+                   "vri" => ["vri27.160"],
                    "comments" => "Defined at <a href='https://suttacentral.net/an10.60/en/sujato#11.1'>" \
                                  "AN 10.60:11.1</a> as non-attachment."
                  }, passage.annotations,
@@ -293,6 +305,43 @@ class SuttacentralTest < Minitest::Test
     assert_equal "Sabbappahānāya → sabbaṁ pahānāya (sya-all, km, mr)", passage.annotations["variants"]
   end
 
+  # --- the PTS / VRI concordance (folded out of the reference string) ---------
+
+  def test_a_segment_knows_its_pts_page_and_vri_reference
+    passage = parse_urn("urn:nabu:suttacentral:sn35.24").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal ["PTS.S.4.16"], passage.annotations["pts"],
+                 "pts-vp-pli4.16 in an SN file = SN iv 16, spelled as CBETA N's cref anchors"
+    assert_equal ["vri26.15"], passage.annotations["vri"]
+    assert_includes passage.annotations["refs"], "pts-vp-pli4.16", "the verbatim string stays beside the keys"
+  end
+
+  def test_sn_volume_one_keeps_both_pts_editions_apart
+    passage = parse_urn("urn:nabu:suttacentral:sn1.45").find { |p| p.urn.end_with?(":1.1") }
+    assert_equal %w[PTS-ed1.S.1.33 PTS-ed2.S.1.69], passage.annotations["pts"],
+                 "SN I has two PTS editions with different pagination — the edition is never assumed"
+    refute passage.annotations.key?("vri"), "sn1.45 carries no VRI token"
+  end
+
+  def test_a_single_volume_book_cites_page_only
+    passage = parse_urn("urn:nabu:suttacentral:kp1").find { |p| p.urn.end_with?(":2.1") }
+    assert_equal ["PTS.Khp.1"], passage.annotations["pts"]
+    assert_equal ["vri47.1"], passage.annotations["vri"]
+    vri_only = parse_urn("urn:nabu:suttacentral:kp1").find { |p| p.urn.end_with?(":4.1") }
+    assert_equal({ "refs" => "ms18Kh_4, vri47.2", "vri" => ["vri47.2"] }, vri_only.annotations)
+  end
+
+  def test_the_apadana_page_folds_its_volume
+    passage = parse_urn("urn:nabu:suttacentral:thi-ap2").find { |p| p.urn.end_with?(":5.1") }
+    assert_equal ["PTS.Ap.514"], passage.annotations["pts"], "Ap II continues Ap I's pagination"
+  end
+
+  def test_reference_strings_without_pts_or_vri_tokens_mint_neither_key
+    passage = parse_urn("urn:nabu:suttacentral:dhp21-32").find { |p| p.urn.end_with?(":dhp24:1") }
+    assert_equal ["refs"], passage.annotations.keys - ["variants"]
+    sa = parse_urn("urn:nabu:suttacentral:sa158")
+    assert(sa.none? { |p| p.annotations.key?("pts") || p.annotations.key?("vri") }, "Taishō lines only")
+  end
+
   def test_a_blank_upstream_comment_mints_no_comments_key
     passage = parse_urn("urn:nabu:suttacentral:sn35.24").find { |p| p.urn.end_with?(":1.4") }
     assert_equal({}, passage.annotations,
@@ -313,6 +362,29 @@ class SuttacentralTest < Minitest::Test
     document = parse_urn("urn:nabu:suttacentral:sa158")
     assert_equal "t99.44b1, t99.44b2", document.find { |p| p.urn.end_with?(":2.2") }.annotations["refs"]
     assert_equal(6, document.count { |p| p.annotations.key?("refs") })
+  end
+
+  def test_sidecar_data_keyed_to_a_blank_root_segment_is_counted_never_guessed
+    document = parse_urn("urn:nabu:suttacentral:sa7")
+    assert_nil document.find { |p| p.urn.end_with?(":5.1") },
+               "sa7:5.1 is an EMPTY root segment — skipped by rule, so no passage"
+    assert_equal({ "refs" => 1 }, document.metadata["sidecar_unjoined"],
+                 "its Taishō ref (t99.2.1c20) has no passage to land on: counted on the document, " \
+                 "never re-homed onto a neighbour")
+    assert_equal "t99.2.1c20", document.find { |p| p.urn.end_with?(":6.1") }.annotations["refs"],
+                 "the neighbour keeps only its OWN upstream ref"
+  end
+
+  def test_fully_joined_sidecars_record_no_unjoined_census
+    %w[sn46.70 sn35.24 dhp21-32 sa158].each do |stem|
+      assert_nil parse_urn("urn:nabu:suttacentral:#{stem}").metadata["sidecar_unjoined"], stem
+    end
+  end
+
+  def test_a_rootless_sidecar_file_mints_nothing
+    refs = conformance_adapter.discover(FIXTURES).to_a
+    assert_nil refs.find { |r| r.id.include?("lzh-iti83") },
+               "variant/lzh/sct/…/lzh-iti83 has no root in the published tree — never a document"
   end
 
   def test_roots_without_sidecar_files_carry_no_sidecar_keys
@@ -345,7 +417,8 @@ class SuttacentralTest < Minitest::Test
         with_sidecars = parse_urn(ref.id)
         assert_equal with_sidecars.map(&:text), document.map(&:text), "#{ref.id}: text untouched"
         assert_equal with_sidecars.map(&:urn), document.map(&:urn)
-        assert_equal with_sidecars.metadata, document.metadata, "#{ref.id}: sidecar paths never leak"
+        assert_equal with_sidecars.metadata.except("sidecar_unjoined"), document.metadata,
+                     "#{ref.id}: sidecar paths never leak; only the sidecar census key differs"
       end
     end
   end

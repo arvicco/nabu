@@ -55,7 +55,9 @@ module Nabu
     #               Leiden, printed inside ⟦…⟧; nesting nests the brackets
     #
     # DROP (apparatus/metadata, never reading text):
-    #   <rdg>       rejected variant readings
+    #   <rdg>       rejected variant readings (dropped from the text, captured
+    #               into the "apparatus" annotation — see "The apparatus
+    #               layer" below)
     #   <orig>      pre-regularization spellings
     #   <note>, <figure>   editorial noise
     #   <handShift> a metadata milestone — the hand id goes to annotations
@@ -194,11 +196,46 @@ module Nabu
     #                 "unclear_chars"  => <grapheme count>,        # dotted
     #                 "hands" => ["m2", …],                        # handShift
     #                 "cancelled" => true},                        # any <del> touched the line
-    #    "languages" => ["lat", …]}   # inline xml:lang scopes differing from
+    #    "languages" => ["lat", …],   # inline xml:lang scopes differing from
     #                                 # the document language, mapped (la→lat)
+    #    "apparatus" => [{"type","lemma","resp","readings"}…]}  # see below
     #
     # supplied_chars/unclear_chars count non-whitespace grapheme clusters —
     # "letters restored", the number a print edition's brackets would enclose.
+    #
+    # == The apparatus layer (<app>/<lem>/<rdg>)
+    #
+    # The editorial apparatus is kept as STRUCTURE beside the text, never in
+    # it: the passage text is exactly the lemma reading it always was (the
+    # layer only adds the "apparatus" key), and every <app> in kept content
+    # becomes one entry on the line where the <app> opens:
+    #
+    #   {"type"     => "editorial" | "alternative" | …,   # @type, verbatim
+    #    "lemma"    => "<the lem rendered as the passage text renders it>",
+    #    "resp"     => "BL 7.99",                         # lem/@resp, verbatim
+    #    "readings" => [{"text" => "<rdg rendered>",
+    #                    "resp" => "Original Edition",     # rdg/@resp
+    #                    "apparatus" => [<entry>…]}…]}     # apps nested in the rdg
+    #
+    # Absent attributes leave their key out; "lemma" and each reading's
+    # "text" are always present (an empty <rdg/> reads "" — the reading
+    # omits the lemma). DDbDP attributes variants by @resp — the editor,
+    # Berichtigungsliste entry or edition that proposed the reading — never
+    # by manuscript @wit sigla, so "resp" is the witness field here.
+    #
+    # Readings render under the SAME Leiden policy as the text (gap → "[…]",
+    # reg over orig, del in ⟦…⟧, supplied/unclear/expan read through,
+    # note/figure drop). An <app> nested inside a reading contributes its
+    # lemma to the reading's text and is itself recorded on the reading's
+    # "apparatus"; an <app> nested inside a lemma is kept content and gets
+    # its own entry, after its enclosing one (document order). An <app>
+    # inside a dropped branch (<orig>) drops with that branch. A line break
+    # inside a lemma or reading renders as " | " — "|" glued to both sides
+    # for <lb break="no"/> — and the entry is recorded once, on the line
+    # where its <app> opened; a line that extracts empty (and is therefore
+    # not a passage) takes its entries with it. The rdg subtree never
+    # touches the line machinery: its <lb>s are not boundaries, its gaps,
+    # hands and certainty counts never reach the "leiden" annotation.
     #
     # == Identity cross-checks (honest mismatch surfacing, sibling spirit)
     #
@@ -240,8 +277,258 @@ module Nabu
       # One extracted line: urn_suffix is "<textpart-path?>:<lb n>" joined
       # with ":", text is final (collapsed, NFC), leiden/languages feed the
       # passage annotations.
-      Line = Data.define(:urn_suffix, :text, :leiden, :languages)
+      Line = Data.define(:urn_suffix, :text, :leiden, :languages, :apparatus)
       private_constant :Line
+
+      # In-buffer line-break sentinels for lemma/reading rendering (control
+      # characters XML 1.0 cannot carry, so they never collide with text).
+      BREAK = "\u0002"
+      NO_BREAK = "\u0001"
+      private_constant :BREAK, :NO_BREAK
+
+      # Final form of a lemma or reading buffer: the house whitespace
+      # treatment, edge breaks trimmed, breaks rendered " | " (plain) or
+      # "|" (break="no"), NFC.
+      def self.render_apparatus_text(buffer)
+        text = buffer.gsub(/[[:space:]]+/, " ")
+                     .gsub(/\A[ #{BREAK}#{NO_BREAK}]+|[ #{BREAK}#{NO_BREAK}]+\z/o, "")
+                     .gsub(/ ?#{NO_BREAK} ?/o, "|")
+                     .gsub(/ ?#{BREAK} ?/o, " | ")
+        Normalize.nfc(text)
+      end
+
+      def self.break_sentinel(node)
+        node.attribute("break") == "no" ? NO_BREAK : BREAK
+      end
+
+      # One <app> under construction. Mutable while the stream runs (a lemma
+      # may span lines, so the Line holding it is minted before it closes);
+      # #to_h is taken only after extraction completes.
+      class AppEntry
+        attr_reader :depth, :readings
+        attr_accessor :lem_depth
+
+        def initialize(node)
+          @depth = node.depth
+          @type = node.attribute("type")
+          @resp = nil
+          @lemma = +""
+          @lem_depth = nil
+          @readings = []
+        end
+
+        def open_lem(node)
+          @resp = node.attribute("resp")
+          @lem_depth = node.depth unless node.empty_element?
+        end
+
+        def lem_open?
+          !@lem_depth.nil?
+        end
+
+        def <<(value)
+          @lemma << value
+        end
+
+        def to_h
+          entry = {}
+          entry["type"] = @type if @type
+          entry["lemma"] = DdbdpParser.render_apparatus_text(@lemma)
+          entry["resp"] = @resp if @resp
+          entry["readings"] = @readings unless @readings.empty?
+          entry
+        end
+      end
+      private_constant :AppEntry
+
+      # The open <app> elements of one reading scope (the edition's kept
+      # content, or one <rdg>'s content): routes lemma text to every open
+      # lemma (an app nested in a lemma feeds both lemmas) and answers
+      # whether a <lem>/<rdg> is a direct child of the innermost app.
+      class AppStack
+        def initialize
+          @entries = []
+        end
+
+        # Returns the new entry (nil for an empty <app/>).
+        def open_app(node)
+          return nil if node.empty_element?
+
+          entry = AppEntry.new(node)
+          @entries << entry
+          entry
+        end
+
+        def open_lem(node)
+          entry = child_of_top(node)
+          entry&.open_lem(node)
+        end
+
+        # The innermost app when +node+ is its direct child, else nil.
+        def child_of_top(node)
+          entry = @entries.last
+          entry if entry && node.depth == entry.depth + 1
+        end
+
+        def emit(value)
+          @entries.each { |entry| entry << value if entry.lem_open? }
+        end
+
+        def close(name, node)
+          entry = @entries.last
+          return unless entry
+
+          if name == "lem" && entry.lem_depth == node.depth
+            entry.lem_depth = nil
+          elsif name == "app" && entry.depth == node.depth
+            @entries.pop
+          end
+        end
+      end
+      private_constant :AppStack
+
+      # One <rdg> subtree, rendered under the Leiden policy into a reading
+      # hash. Consumes every Reader event from the rdg's start to its end
+      # tag — the line machinery never sees them, exactly as when the whole
+      # subtree was dropped. Nested apps keep their lemma in the text and
+      # are recorded on the reading; their own readings capture recursively.
+      class ReadingCapture
+        READER = Nokogiri::XML::Reader
+        TEXT_NODE_TYPES = [
+          READER::TYPE_TEXT, READER::TYPE_CDATA,
+          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
+        ].freeze
+        DROPPED_ELEMENTS = %w[orig note figure].freeze
+
+        def self.empty_reading(node)
+          { "text" => "", "resp" => node.attribute("resp") }.compact
+        end
+
+        def initialize(node)
+          @depth = node.depth
+          @resp = node.attribute("resp")
+          @buffer = +""
+          @apps = AppStack.new
+          @entries = [] # apps nested in this reading, document order
+          @drop_depth = nil
+          @del_depths = []
+          @subst_depths = []
+          @child = nil # the open nested <rdg> capture
+          @child_entry = nil
+          @done = false
+        end
+
+        def done?
+          @done
+        end
+
+        def reading
+          result = { "text" => DdbdpParser.render_apparatus_text(@buffer) }
+          result["resp"] = @resp if @resp
+          result["apparatus"] = @entries.map(&:to_h) unless @entries.empty?
+          result
+        end
+
+        def process(node)
+          return delegate(node) if @child
+
+          case node.node_type
+          when READER::TYPE_ELEMENT then start_element(node)
+          when READER::TYPE_END_ELEMENT then end_element(node)
+          when *TEXT_NODE_TYPES then emit(node.value.to_s) unless @drop_depth
+          end
+        end
+
+        private
+
+        def delegate(node)
+          @child.process(node)
+          return unless @child.done?
+
+          @child_entry.readings << @child.reading
+          @child = nil
+          @child_entry = nil
+        end
+
+        def start_element(node)
+          return if @drop_depth
+
+          name = node.name.split(":").last
+          case name
+          when "rdg" then open_rdg(node)
+          when *DROPPED_ELEMENTS then drop(node)
+          when "app" then open_app(node)
+          when "lem" then @apps.open_lem(node)
+          when "gap"
+            emit(GAP_MARKER)
+            drop(node)
+          when "del" then open_del(node)
+          when "subst" then @subst_depths << node.depth unless node.empty_element?
+          when "lb" then emit(DdbdpParser.break_sentinel(node)) unless duplicate_subst_del_lb?
+          end
+        end
+
+        def end_element(node)
+          if @drop_depth
+            @drop_depth = nil if node.depth == @drop_depth
+            return
+          end
+          return @done = true if node.depth == @depth
+
+          name = node.name.split(":").last
+          case name
+          when "del" then close_del(node)
+          when "subst" then @subst_depths.pop if @subst_depths.last == node.depth
+          when "app", "lem" then @apps.close(name, node)
+          end
+        end
+
+        def open_app(node)
+          entry = @apps.open_app(node)
+          @entries << entry if entry
+        end
+
+        def open_rdg(node)
+          entry = @apps.child_of_top(node)
+          return drop(node) unless entry
+          return entry.readings << ReadingCapture.empty_reading(node) if node.empty_element?
+
+          @child = ReadingCapture.new(node)
+          @child_entry = entry
+        end
+
+        def open_del(node)
+          return if node.empty_element?
+
+          @del_depths << node.depth
+          emit(CANCELLATION_OPEN)
+        end
+
+        def close_del(node)
+          return unless @del_depths.last == node.depth
+
+          @del_depths.pop
+          emit(CANCELLATION_CLOSE)
+        end
+
+        # The main extraction's nearest-scope rule: an <lb> inside a subst's
+        # <del> branch duplicates the <add> branch's copy.
+        def duplicate_subst_del_lb?
+          return false if @del_depths.empty? || @subst_depths.empty?
+
+          @del_depths.last > @subst_depths.last
+        end
+
+        def drop(node)
+          @drop_depth = node.depth unless node.empty_element?
+        end
+
+        def emit(value)
+          @buffer << value
+          @apps.emit(value)
+        end
+      end
+      private_constant :ReadingCapture
 
       # The identity family this instance parses (P104-3): DDbDP by
       # default (idno "ddb-hybrid" minting urn:nabu:ddbdp:…, frozen), or
@@ -314,6 +601,7 @@ module Nabu
         result = {}
         result["leiden"] = line.leiden unless line.leiden.empty?
         result["languages"] = line.languages unless line.languages.empty?
+        result["apparatus"] = line.apparatus.map(&:to_h) unless line.apparatus.empty?
         result
       end
 
@@ -356,10 +644,14 @@ module Nabu
           @lines = []
           @block = 1 # implicit restart-block ordinal (see file header)
           @seen_suffixes = {} # suffix => true, for collision-triggered blocks
+          @apps = AppStack.new # open <app>s in kept content (the apparatus layer)
+          @reading = nil # the open <rdg> capture, which consumes its whole subtree
+          @reading_entry = nil
+          @pending_apparatus = [] # entries opened before any line (attach to the next)
         end
 
         def call
-          @reader.each { |node| process(node) }
+          @reader.each { |node| @reading ? capture_reading(node) : process(node) }
           raise ParseError, "#{@path}: no div[@type=\"edition\"] found" unless @edition_seen
 
           @lines
@@ -394,6 +686,7 @@ module Nabu
         def edition_element(node)
           name = local_name(node)
           return open_cancellation(node) if name == "del"
+          return open_reading(node) if name == "rdg"
 
           if DROPPED_ELEMENTS.include?(name)
             @drop_depth = node.depth unless node.empty_element?
@@ -409,6 +702,8 @@ module Nabu
           when "supplied" then @supplied_depths << node.depth unless node.empty_element?
           when "unclear" then @unclear_depths << node.depth unless node.empty_element?
           when "subst" then @subst_depths << node.depth unless node.empty_element?
+          when "app" then open_app(node)
+          when "lem" then @apps.open_lem(node)
           end
         end
 
@@ -426,6 +721,7 @@ module Nabu
           when "supplied" then @supplied_depths.pop if @supplied_depths.last == node.depth
           when "unclear" then @unclear_depths.pop if @unclear_depths.last == node.depth
           when "subst" then @subst_depths.pop if @subst_depths.last == node.depth
+          when "app", "lem" then @apps.close(local_name(node), node)
           end
         end
 
@@ -439,7 +735,39 @@ module Nabu
 
           value = node.value.to_s
           @current[:buffer] << value
+          @apps.emit(value)
           count_certainty(value)
+        end
+
+        # -- the apparatus layer (see file header) --------------------------------
+
+        def open_app(node)
+          entry = @apps.open_app(node) or return
+
+          (@current ? @current[:apparatus] : @pending_apparatus) << entry
+        end
+
+        # A <rdg> that is a direct child of an open kept <app> is captured
+        # into a reading; any other <rdg> drops wholesale as it always did.
+        def open_reading(node)
+          entry = @apps.child_of_top(node)
+          if entry.nil?
+            @drop_depth = node.depth unless node.empty_element?
+          elsif node.empty_element?
+            entry.readings << ReadingCapture.empty_reading(node)
+          else
+            @reading = ReadingCapture.new(node)
+            @reading_entry = entry
+          end
+        end
+
+        def capture_reading(node)
+          @reading.process(node)
+          return unless @reading.done?
+
+          @reading_entry.readings << @reading.reading
+          @reading = nil
+          @reading_entry = nil
         end
 
         def count_certainty(value)
@@ -497,11 +825,14 @@ module Nabu
           raise ParseError, "#{@path}: <lb> ##{@lb_ordinal} (document order) is missing its @n" if n.nil? || n.empty?
 
           finish_line
+          @apps.emit(DdbdpParser.break_sentinel(node)) # a lemma spanning the break
           @current = {
             n: n, textpath: @textparts.map { |part| part[:n] },
             buffer: +"", gaps: [], supplied: 0, unclear: 0, hands: [], languages: [],
-            cancelled: !@del_depths.empty? # line opened inside a kept cancellation
+            cancelled: !@del_depths.empty?, # line opened inside a kept cancellation
+            apparatus: @pending_apparatus
           }
+          @pending_apparatus = []
         end
 
         def finish_line
@@ -514,7 +845,8 @@ module Nabu
 
           @lines << Line.new(
             urn_suffix: mint_suffix(current),
-            text: text, leiden: leiden(current), languages: current[:languages]
+            text: text, leiden: leiden(current), languages: current[:languages],
+            apparatus: current[:apparatus]
           )
         end
 
@@ -586,6 +918,7 @@ module Nabu
           return unless @current
 
           @current[:buffer] << marker
+          @apps.emit(marker)
           @current[:cancelled] = true
         end
 
@@ -596,6 +929,7 @@ module Nabu
           # children (<desc>, <certainty> — metadata, not text).
           if @current
             @current[:buffer] << GAP_MARKER
+            @apps.emit(GAP_MARKER)
             @current[:gaps] << gap_annotation(node)
           end
           @drop_depth = node.depth unless node.empty_element?

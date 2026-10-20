@@ -122,7 +122,7 @@ module Nabu
     # (sa → san), script subtag preserved (sa-Latn → san-Latn). Cross-checked
     # against the caller's language (discover peeks the same attribute); a
     # divergence is a cataloguing error, surfaced as ParseError, not smoothed.
-    class GretilParser
+    class GretilParser < StreamingTeiParser
       # GRETIL tags Indic languages with ISO 639-1; Nabu uses ISO 639-3
       # (conventions.md §4). Script subtags survive the mapping (sa-Latn →
       # san-Latn). Codes already in 639-3 pass through unchanged.
@@ -235,28 +235,6 @@ module Nabu
         end
       end
 
-      # P9-4c fix 3 (collision tolerance). Deterministically disambiguate any
-      # duplicate citation in document order instead of quarantining the whole
-      # document (ddbdp precedent): the second occurrence gets a ":b2" suffix,
-      # the third ":b3", and so on. A document with no duplicate citations is
-      # returned untouched (frozen-urn: clean docs keep byte-identical urns).
-      def disambiguate_collisions(verses)
-        seen = Hash.new(0)
-        verses.map do |verse|
-          seen[verse.citation] += 1
-          count = seen[verse.citation]
-          count == 1 ? verse : verse.with(citation: "#{verse.citation}:b#{count}")
-        end
-      end
-
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
       # Primary pass, then two frozen-urn-safe fallbacks that fire ONLY when the
       # primary rungs leave the document empty (so they cannot touch any
       # already-loaded doc): the pure lg-xml:id shape (P9-4c fix 1,
@@ -304,10 +282,6 @@ module Nabu
         ).call
       end
 
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
       def build_document(verses, urn:, language:, title:, path:, metadata: {})
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path,
                                 metadata: metadata)
@@ -337,18 +311,12 @@ module Nabu
       # <text><body>; inside the body it captures text within <l>/<p>, tracks
       # div/lg addressing context, filters the dropped subtrees, and emits a
       # passage at each of the three rung triggers (see the file header).
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         DROPPED_ELEMENTS = %w[reg note].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         def initialize(reader:, path:, language:, marker: MARKER)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @language = language
           @marker = marker
           @in_body = false
@@ -371,14 +339,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -527,14 +487,6 @@ module Nabu
 
           @divs << { type: node.attribute("type"), n: node.attribute("n"), depth: node.depth }
         end
-
-        def dropping?
-          !@drop_depth.nil?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
-        end
       end
       private_constant :Extraction
 
@@ -545,18 +497,12 @@ module Nabu
       # Extraction (Reader only, <reg>/<note> dropped, text confined to
       # <text><body>). Run ONLY when the primary pass found nothing, so it is
       # invisible to every already-loaded document (frozen-urn).
-      class XmlIdExtraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class XmlIdExtraction < StreamingTeiParser::Walker
         DROPPED_ELEMENTS = %w[reg note].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         def initialize(reader:, path:, language:)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @language = language
           @in_body = false
           @capturing = false
@@ -572,14 +518,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -652,14 +590,6 @@ module Nabu
             text: text, addressing: "xml-id", context: {}, prefix: nil
           )
         end
-
-        def dropping?
-          !@drop_depth.nil?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
-        end
       end
       private_constant :XmlIdExtraction
 
@@ -679,18 +609,12 @@ module Nabu
       # dropped, text confined to <text><body>). Run ONLY when the primary +
       # xml:id + pipe passes leave the document empty, so it is invisible to
       # every already-loaded document (frozen-urn).
-      class LineMarkerExtraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class LineMarkerExtraction < StreamingTeiParser::Walker
         DROPPED_ELEMENTS = %w[reg note].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         def initialize(reader:, path:, language:)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @language = language
           @in_body = false
           @capturing = false
@@ -706,14 +630,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -784,14 +700,6 @@ module Nabu
           @verses << Verse.new(
             citation: num, text: text, addressing: "verse-marker", context: {}, prefix: prefix
           )
-        end
-
-        def dropping?
-          !@drop_depth.nil?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :LineMarkerExtraction

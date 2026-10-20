@@ -29,12 +29,10 @@ module Nabu
     #
     # == Text discipline (all shapes censused on real files)
     #
-    # Reading text is captured between <text><body> and </body>. <back> is
-    # never read: CBETA encodes the witness apparatus STAND-OFF there
-    # (cb:div type="apparatus" — <app from="#beg…"><lem wit="#wit.orig">
-    # …</lem><rdg wit="#wit1">…</rdg></app> keyed by body anchors — plus
-    # taisho-notes/cf/tt divisions), so the body already carries the
-    # edition's reading text. Inside the body:
+    # Reading text is captured between <text><body> and </body> only. CBETA
+    # encodes the witness apparatus STAND-OFF in <back> (see "The stand-off
+    # apparatus" below), so the body already carries the edition's reading
+    # text and <back> never contributes a byte of it. Inside the body:
     #
     # - <note place="inline"> — CBETA's interlinear small-print notes — are
     #   dropped from the reading text but carried VERBATIM per line as a
@@ -64,6 +62,39 @@ module Nabu
     #   N's <label type="translation-mark"> (a, a'…) is printed text and
     #   flows.
     #
+    # == The stand-off apparatus (census: 924,766 top-level <app> in 3,905
+    #    of 4,075 scope files, every FROM anchor resolved onto a passage —
+    #    0 unresolved, 11,233 spans closing on a later line, 2026-10-20,
+    #    this parser run in memory over T/X/K/J/N at 2026.R2)
+    #
+    # <back>'s <cb:div type="apparatus"> holds one
+    # <app from="#beg…" to="#end…"> per variant — <lem wit="#wit.orig">
+    # (the edition's reading) beside <rdg wit="#wit1 #wit2" resp="#resp2">
+    # (witness readings; an empty <rdg><space quantity="0"/></rdg> is an
+    # omission) — anchored on empty body <anchor xml:id> milestones. Each
+    # entry resolves to the print line holding its FROM anchor (an anchor on
+    # a layout-only line folds to the preceding text line, one before any
+    # text line to the next — the inline-note fold) and rides that passage's
+    # "apparatus" annotation in the house stand-off shape (tamilex):
+    # {"lemma", "witnesses", "resp"?, "readings" => [{"text", "witnesses",
+    # "resp"?, "type"?}], "type"?, "corresp"?, "cf"?, "to"?}. Witness ids
+    # resolve to the header's own sigla (wit1 → 【宋】), resp ids to the
+    # respStmt names (resp2 → Taisho); an undeclared id rides verbatim.
+    # "type"/"corresp" are the star-app markers (CBETA's re-anchoring of a
+    # Taishō note number onto a later occurrence); "cf" carries the
+    # <note type="cf…"> cross-canon page references verbatim; "to" names
+    # the closing print line when the TO anchor sits on another line.
+    # Apparatus text flattens like reading text (gaiji text kept, lb/anchor
+    # empty) except that an interlinear <note place="inline"> IS printed
+    # lemma text there; the Taishō orig/mod note restatements drop, and a
+    # nested <app> (a variant restated inside a longer lemma — it also
+    # stands as its own top-level entry) contributes its lemma only.
+    # cb:word-count is derivable from the lemma and not carried. An entry
+    # whose FROM anchor is absent from the body is never guessed onto a
+    # line: it is counted in metadata["apparatus_unresolved"]. The tt
+    # (multilingual term) and note divisions are not variant apparatus and
+    # stay unread.
+    #
     # == The license gate (canon-level, re-verified per file)
     #
     # Every T and X header carries the SAME <availability> grant verbatim:
@@ -79,7 +110,7 @@ module Nabu
     #
     # Nokogiri::XML::Reader only: T ships 27 files over the house 5 MB DOM
     # limit (max 17.2 MB, T25n1509), X ships 7 (max 9.0 MB). One pass.
-    class CbetaTeiParser
+    class CbetaTeiParser < StreamingTeiParser
       # CBETA's T/X/K/J text is Literary Chinese (headers tag zh-Hant, the
       # script; the language is lzh — the SuttaCentral Āgama precedent).
       LANGUAGE = "lzh"
@@ -163,47 +194,24 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:, canon:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, canon: canon).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
-      # The house collision tolerance: duplicates disambiguate
-      # deterministically in document order, never quarantine.
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          count = seen[unit.citation] += 1
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
+      def extraction_class = Extraction
 
       def build_document(extraction, units, urn:, title:, path:)
         language = self.class.language_for(extraction.canon_siglum)
+        apparatus, unresolved = resolve_apparatus(extraction, units)
+        metadata = document_metadata(extraction)
+        metadata["apparatus_unresolved"] = unresolved if unresolved.positive?
         document = Document.new(
           urn: urn, language: language, title: extraction.title || title,
-          canonical_path: path, metadata: document_metadata(extraction)
+          canonical_path: path, metadata: metadata
         )
         units.each_with_index do |unit, sequence|
           text = Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip)
+          annotations = unit_annotations(unit)
+          annotations["apparatus"] = apparatus[sequence] if apparatus.key?(sequence)
           document << Passage.new(
             urn: "#{urn}:#{unit.citation}", language: language, text: text,
-            annotations: unit_annotations(unit), sequence: sequence
+            annotations: annotations, sequence: sequence
           )
         end
         raise ParseError, "#{path}: no citable print lines found in <text><body>" if document.empty?
@@ -270,6 +278,24 @@ module Nabu
         metadata["facets"] = facets unless facets.empty?
       end
 
+      # Stand-off entries onto unit indexes (see the class note): FROM anchor
+      # → the hosting unit; a TO anchor on a later unit names its citation.
+      # Returns [{unit index => [entry, …]}, unresolved count].
+      def resolve_apparatus(extraction, units)
+        anchors = extraction.anchors
+        unresolved = 0
+        by_unit = {}
+        extraction.apparatus.each do |from, to, entry|
+          index = anchors[from]
+          next unresolved += 1 if index.nil?
+
+          to_index = anchors[to]
+          entry = entry.merge("to" => units[to_index].citation) if to_index && to_index != index
+          (by_unit[index] ||= []) << entry
+        end
+        [by_unit, unresolved]
+      end
+
       def unit_annotations(unit)
         annotations = {}
         annotations["juan"] = unit.juan if unit.juan
@@ -282,25 +308,19 @@ module Nabu
       # The single-pass Reader state machine: header phase (title, idno,
       # availability gate, witness list), body phase (print-line units),
       # done at </body> — <back> never read.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         # Body subtrees whose text never reaches the reading line. <note> is
         # special-cased (inline notes ride annotations); <mulu> is cb:mulu.
         DROPPED_ELEMENTS = %w[note rdg mulu].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         Result = Data.define(:units, :title, :author, :witnesses, :canon, :vol, :no, :canon_siglum,
-                             :bylines)
+                             :bylines, :anchors, :apparatus)
 
         attr_reader :title, :author, :witnesses, :canon, :vol, :no
 
         def initialize(reader:, path:, canon:)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @expected_canon = canon
           @title = nil
           @author = nil
@@ -319,34 +339,41 @@ module Nabu
           @units = []
           @byline = nil             # open body <byline> {role:, text:}
           @bylines = []
+          @witness_id = nil         # header <witness xml:id> being captured
+          @witness_sigla = {}       # wit1 => 【宋】
+          @resp_id = nil            # header <respStmt xml:id> being captured
+          @resp_names = {}          # resp2 => Taisho
+          @anchors = {}             # body <anchor xml:id> => unit index
+          @pending_anchors = []     # anchors seen before any text line
+          @back_done = false        # the apparatus division (or </back>) closed
+          @apparatus_depth = nil    # depth of the open cb:div type="apparatus"
+          @app_depth = nil          # depth of the top-level <app> being skipped
+          @apparatus = []           # [from, to, entry] in back order
         end
 
         def call
           @reader.each do |node|
             process(node)
-            break if @seen_body && !@in_body # </body> reached: back matter is never read
+            break if @back_done # nothing after the apparatus division is read
           end
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
           Result.new(units: @units, title: @title, author: @author, witnesses: @witnesses,
                      canon: @idno["canon"], vol: @idno["vol"], no: @idno["no"],
-                     canon_siglum: @expected_canon, bylines: @bylines)
+                     canon_siglum: @expected_canon, bylines: @bylines, anchors: @anchors,
+                     apparatus: @apparatus)
         end
 
         private
 
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
-
         def start_element(node)
           name = local_name(node)
           return enter_body(node) if name == "body" && !@seen_body
+          return back_element(node, name) if @seen_body && !@in_body
           return header_element(node, name) unless @in_body
+          # An anchor marks a position even inside a dropped subtree (an
+          # inline note's span still sits on its print line).
+          return record_anchor(node.attribute("xml:id")) if name == "anchor"
           return if dropping?
 
           case name
@@ -372,6 +399,8 @@ module Nabu
               @drop_depth = nil
               close_note
             end
+          elsif @seen_body
+            back_end_element(node)
           else
             header_end_element(local_name(node))
           end
@@ -384,7 +413,7 @@ module Nabu
             return if dropping?
 
             append(value)
-          else
+          elsif !@seen_body
             header_text(value)
           end
         end
@@ -401,8 +430,12 @@ module Nabu
             # attribution seat; P104-1).
             @capture = :author if @author.nil? && !node.empty_element?
           when "idno" then @idno_type = node.attribute("type")
-          when "witness" then @capture = :witness
+          when "witness"
+            @capture = :witness
+            @witness_id = node.attribute("xml:id")
           when "availability" then @in_availability = true unless node.empty_element?
+          when "respStmt" then @resp_id = node.attribute("xml:id")
+          when "name" then @capture = :resp_name if @resp_id
           end
         end
 
@@ -410,6 +443,7 @@ module Nabu
           @capture = nil
           @in_availability = false if name == "availability"
           @idno_type = nil if name == "idno"
+          @resp_id = nil if name == "respStmt"
         end
 
         def header_text(value)
@@ -424,6 +458,10 @@ module Nabu
             @capture = nil
           when :witness
             @witnesses << value.strip
+            @witness_sigla[@witness_id] = value.strip if @witness_id
+            @capture = nil
+          when :resp_name
+            @resp_names[@resp_id] = value.strip
             @capture = nil
           end
           @idno[@idno_type] = value.strip if @idno_type
@@ -454,7 +492,7 @@ module Nabu
           return unless node.attribute("ed") == @expected_canon
 
           flush_line
-          @line = { citation: node.attribute("n"), text: +"", gaiji: [], notes: [], crefs: [] }
+          @line = { citation: node.attribute("n"), text: +"", gaiji: [], notes: [], crefs: [], anchors: [] }
         end
 
         def open_note(node)
@@ -477,10 +515,52 @@ module Nabu
           @in_body = false
         end
 
+        # -- back: the stand-off apparatus (never reading text) -------------
+
+        # Only top-level <app> inside cb:div type="apparatus" is read, each
+        # as one small DOM (the Reader's outer_xml carries its namespace
+        # declarations) — bounded memory; its descendants are skipped.
+        def back_element(node, name)
+          return if @app_depth
+
+          if name == "div" && node.attribute("type") == "apparatus" && !node.empty_element?
+            @apparatus_depth = node.depth
+          elsif name == "app" && @apparatus_depth
+            read_app(node)
+            @app_depth = node.depth unless node.empty_element?
+          end
+        end
+
+        def back_end_element(node)
+          name = local_name(node)
+          if @app_depth
+            @app_depth = nil if name == "app" && node.depth == @app_depth
+          elsif name == "div" && node.depth == @apparatus_depth
+            # census: in all 3,905 apparatus-bearing files the apparatus is
+            # the FIRST back division, 2026-10-20 — the notes/tt divisions
+            # after it are never needed, so the read ends here.
+            @apparatus_depth = nil
+            @back_done = true
+          elsif name == "back"
+            @back_done = true
+          end
+        end
+
+        def read_app(node)
+          app = Nokogiri::XML(node.outer_xml).root
+          entry = ApparatusEntry.new(witnesses: @witness_sigla, resps: @resp_names).build(app)
+          @apparatus << [target(app["from"]), target(app["to"]), entry]
+        end
+
+        def target(ref)
+          ref.to_s.strip.delete_prefix("#")
+        end
+
         def flush_line
           line = @line
           @line = nil
-          return if line.nil? || line[:citation].nil?
+          return if line.nil?
+          return fold_anchors(line[:anchors]) if line[:citation].nil?
 
           # Blankness must be judged with the same Unicode collapse the
           # passage build applies: a line of ideographic layout space
@@ -494,11 +574,32 @@ module Nabu
           # text).
           if line[:text].gsub(/[[:space:]]+/, "").empty?
             fold_into_previous(line)
+            fold_anchors(line[:anchors])
             return
           end
 
+          index = @units.size
+          @pending_anchors.each { |id| @anchors[id] = index }
+          @pending_anchors.clear
+          line[:anchors].each { |id| @anchors[id] = index }
           @units << Unit.new(citation: line[:citation], text: line[:text], juan: @juan,
                              gaiji: line[:gaiji], notes: line[:notes], crefs: line[:crefs])
+        end
+
+        # Body anchors (the apparatus targets) map to the unit they sit on;
+        # an anchor on a layout-only line folds like its notes (to the
+        # preceding text line), one before any text line waits for the next.
+        def record_anchor(id)
+          return if id.nil?
+          return @line[:anchors] << id if @line
+
+          @pending_anchors << id
+        end
+
+        def fold_anchors(ids)
+          return @pending_anchors.concat(ids) if @units.empty?
+
+          ids.each { |id| @anchors[id] = @units.size - 1 }
         end
 
         def fold_into_previous(line)
@@ -538,16 +639,91 @@ module Nabu
         def drop_subtree(node)
           @drop_depth = node.depth unless node.empty_element?
         end
-
-        def dropping?
-          !@drop_depth.nil?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
-        end
       end
       private_constant :Extraction
+
+      # One top-level stand-off <app> → its annotation entry (the class
+      # note's shape). Witness/resp ids resolve through the header maps; an
+      # undeclared id rides verbatim.
+      class ApparatusEntry
+        def initialize(witnesses:, resps:)
+          @witnesses = witnesses
+          @resps = resps
+        end
+
+        def build(app)
+          entry = {}
+          entry["type"] = app["type"] if app["type"]
+          entry["corresp"] = app["corresp"].delete_prefix("#") if app["corresp"]
+          lem = child(app, "lem")
+          entry["lemma"] = lem ? flatten(lem) : ""
+          ids(entry, "witnesses", lem&.[]("wit"), @witnesses)
+          ids(entry, "resp", lem&.[]("resp"), @resps)
+          entry["readings"] = app.element_children.select { |el| el.name == "rdg" }.map { |rdg| reading(rdg) }
+          cf = cross_references(app)
+          entry["cf"] = cf unless cf.empty?
+          entry
+        end
+
+        private
+
+        def reading(rdg)
+          reading = { "text" => flatten(rdg) }
+          ids(reading, "witnesses", rdg["wit"], @witnesses)
+          ids(reading, "resp", rdg["resp"], @resps)
+          reading["type"] = rdg["type"] if rdg["type"]
+          reading
+        end
+
+        def ids(hash, key, value, names)
+          list = value.to_s.split.map do |ref|
+            id = ref.delete_prefix("#")
+            names.fetch(id, id)
+          end
+          hash[key] = list unless list.empty?
+        end
+
+        def child(node, name)
+          node.element_children.find { |el| el.name == name }
+        end
+
+        # <note type="cf1">K17n0647_p0840b23</note> — upstream's own
+        # cross-canon page references, verbatim, deduped (a nested restated
+        # app may repeat its twin's).
+        def cross_references(app)
+          app.xpath(".//*[local-name()='note'][starts-with(@type, 'cf')]")
+             .map { |note| note.text.strip }.reject(&:empty?).uniq
+        end
+
+        def flatten(node)
+          Normalize.nfc(collect(node, +"").gsub(/[[:space:]]+/, " ").strip)
+        end
+
+        def collect(node, buffer)
+          node.children.each do |part|
+            if part.text? || part.cdata?
+              buffer << part.content
+            elsif part.element?
+              collect_element(part, buffer)
+            end
+          end
+          buffer
+        end
+
+        def collect_element(element, buffer)
+          case element.name
+          when "note" then collect(element, buffer) if element["place"] == "inline"
+          when "app"
+            lem = child(element, "lem")
+            collect(lem, buffer) if lem
+          when "rdg", "mulu" then nil
+          when "space" then buffer << " " unless element["quantity"] == "0"
+          when "t" then collect(element, buffer) unless element["place"] == "foot"
+          else collect(element, buffer)
+          end
+        end
+      end
+      private_constant :ApparatusEntry
     end
   end
 end

@@ -386,6 +386,24 @@ module Adapters
       end
     end
 
+    # The prose 出版日 nengō (owner-ruled 2026-10-20): where neither the
+    # census W3CDTF nor the bib record types a year, the census prose era
+    # date converts through the shared table (config/eras.yml) — real
+    # census values. Typed years always win; Chinese print-era homonyms
+    # (Ming 正徳 imprints share the collection) ride unparsed.
+    def test_a_prose_nengo_dates_a_book_neither_typed_source_dates
+      era = Nabu::Adapters::NdlKotenseki.method(:era_date_envelope)
+      assert_equal({ "not_before" => 1792, "not_after" => 1792, "raw" => "寛政4刊",
+                     "eras" => ["寛政4"], "basis" => "census 出版日 nengō (config/eras.yml)" },
+                   era.call({ "pub_date" => "寛政4刊", "w3cdtf" => "" }))
+      assert_equal [1847, 1853], era.call({ "pub_date" => "弘化4-嘉永6", "w3cdtf" => "1000" })
+                                    .values_at("not_before", "not_after")
+      assert_nil era.call({ "pub_date" => "正徳3", "w3cdtf" => "" }), "Ming or Japanese 正徳 — not guessed"
+      assert_nil era.call({ "pub_date" => "[慶長元和年間]", "w3cdtf" => "" }), "no year number"
+      typed = doc(2_537_051).metadata["date"]
+      assert_match(/\ANDL Search record/, typed["raw"], "the bib record's typed year outranks the prose 寛政7序")
+    end
+
     def test_w3cdtf_year_mints_the_date_envelope
       date = doc(2_532_153).metadata["date"]
       assert_equal [1605, 1605, "[慶長10(1605)]"],

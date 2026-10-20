@@ -76,10 +76,7 @@ module Nabu
       end
 
       def self.read_text(path)
-        text = Zlib::GzipReader.open(path, &:read).force_encoding(Encoding::UTF_8)
-        raise ParseError, "#{path}: search text is not valid UTF-8" unless text.valid_encoding?
-
-        text
+        SourceRead.utf8(Zlib::GzipReader.open(path, &:read), label: "#{path}: search text")
       rescue Zlib::Error, Errno::ENOENT => e
         raise ParseError, "#{path}: unreadable hOCR search text (#{e.message})"
       end
