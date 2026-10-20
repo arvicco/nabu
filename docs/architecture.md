@@ -510,11 +510,22 @@ decision: the field moves fast, we keep control; the conformant core is
   recency — what makes "no results" interpretable), then `nabu_concord`
   (P8-3), `nabu_define` (§11), `nabu_etym` and `nabu_cognates` (§12),
   `nabu_parallels` (§13), `nabu_links` (§15), `nabu_align` (§10), and the
-  place/character/sign cards `nabu_place`, `nabu_char`, `nabu_signs`.
-  Translation only: all query logic stays in `lib/nabu/query/`. The tool
-  table is a hash; a new surface is one entry + handler.
+  place/character/sign cards `nabu_place`, `nabu_char`, `nabu_signs` —
+  fourteen since P137's `nabu_clarify`, the reference normalizer
+  (`Query::Clarify`: urn input through the catalog's urn indexes, names
+  through the fulltext index's **clarify lane** — `clarify_entries` /
+  `clarify_names` (B-tree prefix lane over folded names) / `clarify_fts`
+  (FTS5 token lane) / `clarify_trigram` (+ its fts5vocab view, the
+  misspelling lane) — derived by `Indexer.rebuild!` as stage `clarify`,
+  refreshed per source by `refresh_source!` when present (never
+  bootstrapped by a sync), re-derived standalone by the stage reconcile or
+  `rake index:clarify`). Translation only: all query logic stays in
+  `lib/nabu/query/`. The tool table is a hash; a new surface is one entry +
+  handler.
 - **The contract**: every returned passage carries urn + language +
-  license_class + source; outputs are bounded with honest "N total, showing
+  license_class + source; reference data (gazetteer facts, sign cards)
+  carries its own license envelope read from the adapter manifests
+  (`MCP::Envelope`); outputs are bounded with honest "N total, showing
   k" notes; no-match searches carry a one-line coverage hint;
   `research_private`/`restricted` classes are excluded from every tool unless
   `include_restricted: true` is passed explicitly (forward-looking: nothing

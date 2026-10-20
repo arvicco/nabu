@@ -2,11 +2,11 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes thirteen tools — search,
+(Claude Code, Claude Desktop) over stdio. It exposes fourteen tools — search,
 read by urn, concordance, cross-source alignment, dictionary lookup, the
 reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
 the mined links graph, the place desk, the character card, the cuneiform
-sign desk, and coverage —
+sign desk, the reference normalizer, and coverage —
 so a model can look things up in your texts, quote them, and cite them,
 without any ability to change the collection.
 
@@ -36,7 +36,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The thirteen tools
+## 2. The fourteen tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, align, parallels, similar_to, and links
@@ -443,6 +443,46 @@ with the sign list not on this box the tool answers a graceful state note
 with the sync hint (every other tool byte-identical — the lane-off rule);
 urn mode passes the restricted-exclusion gate.
 
+### `nabu_clarify`
+
+The reference normalizer: a partial, misspelled, or half-remembered work or
+passage reference in — a title prefix (`Ilia`), a misspelling (`Illiad`), a
+title plus citation (`Iliad 1.1`), a source name or slug, a dictionary
+headword, a place name, or a full/partial urn — and an honest reading of it
+out:
+
+- `is_ref` — does the input name held text (a urn, or an **exact** document
+  title, optionally with a citation)?
+- `resolved_urn` — **only** when it parses uniquely (open it with
+  `nabu_show`); `ref` says what it is (`passage` · `document` ·
+  `citation_prefix` · `range`) with title, language, license_class, source.
+- `structure` — what a deeper citation looks like there: the document's live
+  passage count, first/last citation suffix, their depth, an example passage
+  urn and a two-passage range example (`citation` is the resolved passage's
+  own suffix).
+- `completions` — typed **candidates** `{title, key, type:
+  document|source|lemma|place, is_primary, match, source, language,
+  license_class}` (+ present-only `detail` — a headword's dictionary, a
+  place's gazetteer — and `ref_urn`, the passage a given citation names in
+  that document). `is_primary`: the matched name is the entry's primary
+  title, not an alias (a source's slug, a place's variant name). `match`:
+  `exact` · `prefix` · `token` · `fuzzy` (the misspelling lane — a guess,
+  said so).
+
+Never a silent guess: two editions sharing a title, or a citation several of
+them hold, resolve to **nothing** and list every reading. Diacritics are
+optional both ways (`οδυσσεια` finds `Ὀδύσσεια`). Names resolve through a
+precompiled title index — the fulltext index's clarify lane (a B-tree prefix
+lane over folded names, an FTS5 token lane, an FTS5 trigram misspelling lane
+probed on the input's rarest trigrams) derived by every rebuild, refreshed
+per source at sync, and re-derivable standalone with `rake index:clarify`;
+when it is absent the payload says so (`index.present: false`) and urn input
+still resolves through the catalog. Restricted entries are withheld unless
+`include_restricted`. Bounded (default 10, max 50). Every not-found /
+no-match answer of `nabu_show`, `nabu_search`, `nabu_parallels`, and
+`nabu_signs` names this tool, so an agent holding a half-right reference
+corrects in one round trip.
+
 ### `nabu_status`
 
 Coverage of the corpus, and the tool to call to interpret an empty search
@@ -645,6 +685,8 @@ new, present-only keys.
 | Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
 | The sign desk | `nabu signs URN\|TEXT [--lang] [--dialect etcsl] [--json]` (P53-2) | `nabu_signs` — the same `Query::Signs`, the payload IS the CLI's frozen `--json` contract (one serializer); bounded lines with an honest note; lane-off (no canonical/osl) answers the sync-hint note like the CLI's refusal | **added P53-2** — new tool, read-only; urn mode passes the restricted-exclusion gate |
+| The reference normalizer | — (MCP-first) | `nabu_clarify` — `Query::Clarify` over the catalog urn indexes + the fulltext clarify lane | **added P137** — MCP-only for now; a CLI desk is a documented gap |
+| Parallels score decomposition | — | `nabu_parallels` `explain: true` — `Query::ParallelsExplain` | **added P137** — MCP-only; the CLI `parallels` prints scores without the per-gram rows (documented gap) |
 | Tibetan word-segmented rendering | `nabu show <urn> --segmented` (P54-2) | `nabu_show` `segmented: true` — present-only `segmented` key per passage record (`Query::Show#segmented_text`, one serializer); not-applicable calls carry `segmentation_note` | **added P54-2** (pinned, incl. the flag-off byte-identical case) |
 | Lect (nabu-lects) search filter | `search --lect LECT-ID` (P57-4) | `nabu_search` `lect` — text mode only, refusal parity with lemma/near; resolution-level filter (Nabu::Lects, prefix semantics), errors naming the module when nabu-lects is not synced | **added P57-4** (pinned; no frozen payload key changed) |
 

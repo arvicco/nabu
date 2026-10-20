@@ -122,7 +122,7 @@ module MCP
       names = list.fetch("result").fetch("tools").map { |tool| tool["name"] }
       assert_equal %w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
                       nabu_parallels nabu_cognates nabu_links nabu_char nabu_place nabu_signs
-                      nabu_status].sort, names.sort
+                      nabu_clarify nabu_status].sort, names.sort
     end
 
     def assert_status_call(call)

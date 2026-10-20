@@ -500,10 +500,10 @@ peaks in the second century CE.
 
 Everything above is also available *in conversation*: the library ships
 a read-only [MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md)
-(`bin/nabu mcp`) exposing thirteen tools — `nabu_search`, `nabu_show`,
+(`bin/nabu mcp`) exposing fourteen tools — `nabu_search`, `nabu_show`,
 `nabu_define`, `nabu_etym`, `nabu_links`, `nabu_parallels`,
 `nabu_cognates`, `nabu_align`, `nabu_concord`, `nabu_place`,
-`nabu_char`, `nabu_signs`, and `nabu_status` — so an AI assistant wired
+`nabu_char`, `nabu_signs`, `nabu_clarify`, and `nabu_status` — so an AI assistant wired
 to your library can search, cite, align, and etymologize over it
 mid-discussion. Registration for Claude Code and Claude Desktop is in
 the [server documentation](https://github.com/arvicco/nabu/blob/main/docs/mcp.md);
