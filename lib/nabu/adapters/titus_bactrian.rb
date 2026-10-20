@@ -333,7 +333,9 @@ module Nabu
                      "editors" => "N. Sims-Williams; TITUS version J. Gippert" }
         names = genres.map { |code| GENRES.fetch(code, code) }
         metadata["genre_name"] = names.join(" + ")
-        metadata["facets"] = { "genre" => { "value" => names.first } } if names.size == 1
+        # raw = the corpus's own genre code ("Dat.Doc.") — the claim the
+        # value spells out, so the code on every line's annotations traces.
+        metadata["facets"] = { "genre" => { "value" => names.first, "raw" => genres.first } } if names.size == 1
         unheaded = lines.count { |line| line.text.empty? }
         metadata["unheaded_lines"] = unheaded if unheaded.positive?
         metadata.merge(era_metadata(lines)).merge(header_statements(html))
