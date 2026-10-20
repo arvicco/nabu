@@ -51,6 +51,9 @@ nabu/
 │   ├── ops/                     # backup, drill, site-data projection
 │   ├── data_build/              # the nabu-data production rail (§17)
 │   ├── export/                  # the research exporter: tables + manifest frame (§18)
+│   ├── cli.rb                   # the CLI registry: root class, subcommand registrations, area requires
+│   ├── cli/                     # the CLI by area — one file per command area or subcommand family,
+│   │                            #   each reopening Nabu::CLI; outside the derivation fingerprint, like cli.rb
 │   └── *.rb                     # normalization, fetch arms, gateways, runners (flat files)
 ├── config/
 │   ├── sources.yml              # registry: adapter class, upstream, license, wired, translations opt-in
