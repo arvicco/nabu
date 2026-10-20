@@ -12642,7 +12642,14 @@ module Nabu
       def format_sync_place_index(census)
         return "" if census.nil?
 
-        "  place index #{census.places} places derived (#{format('%.1f', census.seconds)}s)"
+        parts = []
+        parts << "place index #{census.places} places" if census.places
+        # The tm→pleiades crosswalk rides the edh/pleiades producers
+        # (Nabu::TmPleiadesCrosswalk) — "crosswalk 8401 tm→pleiades pairs".
+        if census.respond_to?(:crosswalk_pairs) && census.crosswalk_pairs
+          parts << "crosswalk #{census.crosswalk_pairs} tm→pleiades pairs"
+        end
+        "  #{parts.join(' + ')} derived (#{format('%.1f', census.seconds)}s)"
       end
 
       # P97-2: the person-index tail — silent for every source deriving
