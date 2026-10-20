@@ -278,8 +278,16 @@ module Nabu
           # place is the artifact's own — the eebo imprint stance. Names
           # ride verbatim (京 · 東都 · 浪華 … — the historical spellings;
           # no registry rows yet, so unresolved: declared coarse).
-          "ndl-kotenseki" => "publication_places"
+          "ndl-kotenseki" => "publication_places",
+          # ReF: the prints place by "place" (92 of 190), the manuscripts by
+          # the header text-place — the Schreibort, the writing place (36;
+          # the two never co-occur, census 2026-10-21).
+          "ref" => %w[place text-place]
         }.freeze
+        # ReF's text-place label ("Schreibort:", "(Schreibort)",
+        # "Herstellungsort/Schreibort") — furniture, stripped before the
+        # sentinel check; the hedges beside it ("(?)", "wahrsch.") stay.
+        PLACE_LABEL = %r{\(?\s*(?:Herstellungsort/)?Schreiborte?\s*\)?\s*[:.]?}i
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
         # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29);
@@ -290,7 +298,7 @@ module Nabu
         # production / copying place unknown (ndl-kotenseki, 855 docs).
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
                     "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown",
-                    "出版地不明", "製作地不明", "書写地不明"].freeze
+                    "出版地不明", "製作地不明", "書写地不明", "unbekannt"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -488,8 +496,13 @@ module Nabu
             # P109-4: imprint-catalog furniture (leading "[", trailing
             # ":"/","/"."/brackets — the ESTC transcription style eebo
             # carries) strips before the sentinel check and the mint.
-            place = place.to_s.strip.sub(/\A[\[\s]+/, "").sub(/[\s:,.;\[\]]+\z/, "") unless place.nil?
-            return [nil, nil, nil, nil] if place.nil? || place.empty? ||
+            # The places sweep: the ReF header's "Schreibort" label is
+            # catalog furniture too ("(Schreibort) Regensburg (?)").
+            unless place.nil?
+              place = place.to_s.gsub(PLACE_LABEL, " ").strip.sub(/\A[\[\s.:,;]+/, "")
+                           .sub(/[\s:,.;\[\]]+\z/, "")
+            end
+            return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) ||
                                            NO_PLACE.include?(place.downcase)
 
             return [place, nil, nil, nil]
