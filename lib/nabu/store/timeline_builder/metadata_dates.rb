@@ -264,7 +264,10 @@ module Nabu
           # ("Holland-West", "Zeeland") — the region answers when no town
           # does, a declared-coarse claim at region grain; the region
           # itself facets on every doc (config/facet_map.yml).
-          "corpus-gysseling" => %w[place region]
+          "corpus-gysseling" => %w[place region],
+          # The Old Dutch witnessLocalization: 7 of the 17 region-bearing
+          # works name no place ("Zuid-Nederrijn", "Utrecht") — same rule.
+          "corpus-oudnederlands" => %w[place region]
         }.freeze
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
