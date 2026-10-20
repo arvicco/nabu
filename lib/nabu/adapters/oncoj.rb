@@ -178,12 +178,18 @@ module Nabu
         )
       end
 
-      # One entry per PLACE_POS token, in line order — {form, lemma_id,
-      # lemma} — a MENTION inside the poem, never a findspot or origin
-      # claim (the places posture says so).
+      # One entry per PLACE_POS token, in line order, in the passage facet
+      # lane's entity shape — {value: the lexicon headword (else the
+      # surface), ref: the lemma id, form: the surface} — a MENTION inside
+      # the poem, never a findspot or origin claim (the places posture
+      # says so). The entity shape is what config/facet_map.yml's
+      # passage_fields rule projects; the earlier {form, lemma_id, lemma}
+      # hash carried no "value" and projected nothing.
       def place_mentions(tokens)
-        tokens.select { |token| PLACE_POS.include?(token["pos"]) }
-              .map { |token| token.slice("form", "lemma_id", "lemma") }
+        tokens.select { |token| PLACE_POS.include?(token["pos"]) }.map do |token|
+          { "value" => token["lemma"] || token["form"], "ref" => token["lemma_id"],
+            "form" => token["form"] }.compact
+        end
       end
 
       def token_hash(token, lemmas)
