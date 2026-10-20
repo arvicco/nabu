@@ -23,7 +23,7 @@ class DerivabilityWritersTest < Minitest::Test
   # (b) Journal rows carry config write-throughs: only these callsites
   # may mint lect assignments (cli writes through LectRulings first;
   # the appliers replay config; the test-support rig is suite-only).
-  ASSIGN_ALLOWLIST = %w[nabu/cli.rb nabu/lect_rules.rb nabu/lect_dates.rb nabu/lect_rulings.rb].freeze
+  ASSIGN_ALLOWLIST = %w[nabu/cli/lect.rb nabu/lect_rules.rb nabu/lect_dates.rb nabu/lect_rulings.rb].freeze
 
   def test_lect_journal_assign_callsites_are_allowlisted
     offenders = grep_files(/LectJournal\.assign!/) - ASSIGN_ALLOWLIST - ["nabu/store/lect_journal.rb"]
