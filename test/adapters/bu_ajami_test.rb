@@ -88,7 +88,10 @@ module Adapters
       assert_equal "Kano, Nigeria", meta["provenance"]
       assert_equal "Kano, Nigeria", meta["place"]
       assert_equal "Poetry", meta["genre"]
-      assert_equal({ "genre" => { "value" => "Poetry" } }, meta["facets"])
+      assert_equal({ "genre" => { "value" => "Poetry" },
+                     "subject" => { "values" => ["Literature", "Eulogy for the Emir of Kano", "Abdullahi Bayero",
+                                                 "Diplomacy", "England"] } },
+                   meta["facets"], "the Subject list facets one row per comma-separated heading")
       assert_equal "Hausa", meta["upstream_language"]
       assert_equal "Hausa Ajami", meta["manuscript_script"]
       assert_equal "Handwritten", meta["manuscript_type"]
