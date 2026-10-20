@@ -13,6 +13,7 @@ require_relative "../query/concord"
 require_relative "../query/show"
 require_relative "../query/parallel"
 require_relative "../query/parallels"
+require_relative "../query/parallels_explain"
 require_relative "../query/align"
 require_relative "../query/collation"
 require_relative "../query/define"
@@ -362,7 +363,9 @@ module Nabu
         "lemmas, `lemma_echoes` adds passages sharing ≥2 of its RARE lemmas (re-inflected/reordered " \
         "allusion verbatim grams miss). Bounded (default #{PARALLELS_DEFAULT_LIMIT}, max " \
         "#{PARALLELS_MAX_LIMIT}) with an honest note; every hit carries urn, language, license_class, " \
-        "and source — PRESERVE the license fields when quoting. `lang`/`license` scope candidates.".freeze
+        "and source — PRESERVE the license fields when quoting. `lang`/`license` scope candidates. " \
+        "`explain: true` adds each hit's per-gram score decomposition (gram → df → weight → " \
+        "contribution; rows sum to the score exactly, non-contributing grams as zero rows).".freeze
 
       STATUS_DESCRIPTION =
         "Coverage of the local nabu corpus: per-source document/passage counts and last-sync " \
@@ -642,6 +645,13 @@ module Nabu
                                "one under it — the same prefix semantics as nabu_search's lect " \
                                "(lect: \"grc:koi\" keeps Koine candidates, drops Classical and " \
                                "bare-grc ones). Errors if the module is not synced on this box." },
+          explain: { type: "boolean", default: false,
+                     description: "Attach each hit's score decomposition as `explain`: one row " \
+                                  "per distinct anchor gram — gram, position, positions (anchor " \
+                                  "occurrences), df (probe document frequency), weight (1/df), " \
+                                  "contribution, status (shared · not_shared · too_common · " \
+                                  "stop). Contributions sum to the hit's score EXACTLY; grams " \
+                                  "adding nothing are explicit zero rows." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["urn"],
@@ -1098,9 +1108,11 @@ module Nabu
           lects = lects_seam
           raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
         end
-        result = Query::Parallels.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
-                                 .run(urn, limit: limit + 1, lang: args["lang"], license: license,
-                                           lect: lect)
+        # explain: the same engine observed (Query::ParallelsExplain) — every
+        # hit additionally decomposed; the plain engine otherwise.
+        engine = args["explain"] == true ? Query::ParallelsExplain : Query::Parallels
+        result = engine.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+                       .run(urn, limit: limit + 1, lang: args["lang"], license: license, lect: lect)
         if result.nil?
           return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
                       "what this corpus holds")
@@ -1912,6 +1924,9 @@ module Nabu
           evidence: hit.evidence.first(PARALLELS_EVIDENCE_CAP)
         }
         payload[:evidence_truncated] = true if hit.evidence.size > PARALLELS_EVIDENCE_CAP
+        # The explain surface, present-only (explain: true): the additive
+        # per-gram decomposition of `score` — rows sum to it exactly.
+        payload[:explain] = hit.contributions.map(&:to_h) if hit.respond_to?(:contributions)
         payload
       end
 
