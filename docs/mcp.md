@@ -659,3 +659,42 @@ axis-page examples encode one such lesson per desk where it exists.
 Server note: a long-running MCP server serves the code it started with —
 after updating nabu, restart the server (re-open the client session) to
 pick up new tools and folds.
+
+---
+
+## 9. The skill pack — per-desk methodological guidance
+
+The tools say *what* the library holds; the skill pack says *how to read
+it*. `skills/` ships one [Agent Skills](https://agentskills.io) file per
+research desk — `skills/nabu-<desk>/SKILL.md` — plus the cross-desk
+`skills/nabu-library/SKILL.md`, so a client connected to `nabu mcp` can
+load the guidance for the desk it is working at: what a source's fields
+mean, which things not to conflate (an edition and a witness, a typed date
+and an estimate, a gold lemma and a silver one), what to record for
+reproducibility, and that each corpus's data license is not the license of
+the code or of the guidance text (MIT).
+
+Each file is YAML front matter (`name`, `description`, `license`,
+`compatibility`, and a string-valued `metadata` map: `desk`, `origin`,
+`sources`) over a Markdown body. Two lanes, two owners:
+
+- **Managed** — `metadata.sources` and the sources table between the
+  `nabu:skill-sources` markers: the desk's live public sources with their
+  upstream names and license classes, projected from `config/axes.yml`,
+  `config/sources.yml` and the adapter manifests. `rake skills:scaffold`
+  re-projects them; `rake skills:check` reports drift. Grant-gated private
+  holdings and unwired sources never appear.
+- **Prose** — everything else. `rake skills:scaffold` seeds a missing
+  desk's skill once (persona and desk description, the per-source
+  descriptions from the box's source dossiers, the live-verified examples
+  of `site/axis/_mcp.yml`, and the house cautions) and never rewrites it
+  afterwards. `metadata.origin` says which skills still carry that seed
+  (`generated`) and which were rewritten into desk-specific methodology
+  (`hand-tuned`).
+
+The suite guard (`test/skills/shipped_skills_test.rb`) holds every shipped
+file to the front-matter shape, requires a skill for every desk, fails a
+managed lane that drifted from the registry, and fails any skill naming a
+source that is not live and public. To use the pack, point the client's
+skills directory at `skills/` (Claude Code: copy or symlink the
+`nabu-*` folders into `.claude/skills/` or `~/.claude/skills/`).
