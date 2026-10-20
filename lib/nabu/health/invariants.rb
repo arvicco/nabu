@@ -271,7 +271,13 @@ module Nabu
                                          "place axis (the oracc precedent); the provenience projects",
                     "findspot_remarks" => "excavator prose on the find context (room, stratum, " \
                                           "t.a.q. notes, German/English) — sub-site grain, carried " \
-                                          "verbatim; the provenience projects" },
+                                          "verbatim; the provenience projects",
+                    "dates_referenced" => "consumed: CdliDates reads its first entry through the " \
+                                          "ruled reign table (the tablet's own date formula — " \
+                                          "date_of_origin restates it on 142,921 rows) and the " \
+                                          "ruler facet carries its head; of 119,316 claim-bearing " \
+                                          "values 118,363 trace (census 2026-10-21) — the first-N " \
+                                          "sample meets only the archaic \"00.00.00.00\" filler" },
         "gams-zrcalo" => { "edition_date" => "the modern digital edition's year — lineage",
                            "settlement" => "the holding library's city (a PRESENT location)" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
@@ -283,6 +289,17 @@ module Nabu
                                           "(\"L 2769\", \"Area F\") — sub-site grain, below the " \
                                           "place axis; the provenience projects" },
         "prilit" => { "date_cert" => "a certainty qualifier on the projected date, not a date" },
+        # The mining-law sweep, dates half (live census 2026-10-21).
+        # digital_edition_date is the Ollett TEI header's publicationStmt
+        # <date> beside the project <authority> — the year the digital
+        # edition was released (kannada: 2025 ×8 · 2022 ×6 · 2026 · one
+        # upstream "2065"; prakrit: 2020 ×17 · 2021 ×3 · 2022 · 2025).
+        "kannada-texts" => { "digital_edition_date" => "the Kannada Digital Texts Project's digital " \
+                                                       "edition release year (publicationStmt) — " \
+                                                       "lineage, never the text's date" },
+        "prakrit-texts" => { "digital_edition_date" => "the Prakrit Digital Texts Project's digital " \
+                                                       "edition release year (publicationStmt) — " \
+                                                       "lineage, never the text's date" },
         "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
                                                   "doc — a PRESENT location)" },
         "ticha" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }

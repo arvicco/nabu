@@ -737,6 +737,19 @@ class InvariantsTest < Minitest::Test
     assert(finding.nil? || !finding.message.include?(slug), "a declared passage key is exempt")
   end
 
+  # The mining-law sweep's dates declarations: the modern digital
+  # editions' publication years (kannada/prakrit, the Ollett TEI header's
+  # publicationStmt date) are never text dates, and CDLI's
+  # dates_referenced is consumed by CdliDates + the ruler facet (the
+  # first-N sample only meets its "00.00.00.00" filler).
+  def test_mining_sweep_declares_the_non_text_and_consumed_dates
+    exempt = Nabu::Health::Invariants::MINING_EXEMPT
+    %w[kannada-texts prakrit-texts].each do |slug|
+      assert_match(/digital edition/, exempt.dig(slug, "digital_edition_date").to_s, slug)
+    end
+    assert_match(/\Aconsumed:/, exempt.dig("cdli", "dates_referenced").to_s)
+  end
+
   def test_mining_exempt_entries_each_carry_a_reason
     Nabu::Health::Invariants::MINING_EXEMPT.each do |slug, keys|
       assert_kind_of Hash, keys, "#{slug}: exemptions are key => reason"
