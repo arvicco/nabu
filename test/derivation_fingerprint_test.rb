@@ -500,8 +500,12 @@ class DerivationFingerprintTest < Minitest::Test
   # links scopes carry, and its own identity changes move the scope stamps
   # it computes (link_stamps_test). Plain exclusion, like the batch
   # producers it stamps.
+  # The mined-layers machinery (the cost law) shapes no catalog row either:
+  # the classification, the gateway, the read union and the mine verbs
+  # live entirely on the links side.
   def test_the_links_stamp_machinery_is_excluded_from_the_shared_core
-    %w[link_stamps.rb store/source_content_identity.rb].each do |rel|
+    %w[link_stamps.rb store/source_content_identity.rb mined_layers.rb store/mined_links.rb
+       store/link_layers.rb links_mine_commands.rb].each do |rel|
       assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, rel
     end
   end

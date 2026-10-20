@@ -44,6 +44,13 @@ module Nabu
   #   nabu-places registry's region/rejected names for the scope
   #   (place-mine), the nabu-places registry tree (place-link).
   #
+  # == Heavy producers (the cost law, config/mined_layers.yml)
+  #
+  # A heavy producer's scopes never reach #plan (the rebuild filters them
+  # out) and its journal runs/stamps are PRESERVED, never dropped, until
+  # `nabu links migrate-mined` moves them; the mined-layers store keeps
+  # this class's #unit preimage as each layer's provenance instead.
+  #
   # == Carrying is per COMPONENT, not per scope
   #
   # LinksJournal.write_edge! keeps one edge per pair per kind ACROSS runs
@@ -177,8 +184,12 @@ module Nabu
     # "component (...)", "self-check").
     # +recheck_runs+ ({ key => stamped run ids }) the code-only re-mines
     # compared after their re-mine (the code-change recheck).
+    # +preserved_run_ids+ / +preserved_keys+ the runs and stamps of the
+    # PRESERVED producers (the heavy class, config/mined_layers.yml) still
+    # sitting in the journal — never planned, never dropped: the stage
+    # leaves them for `nabu links migrate-mined` to move.
     Plan = Data.define(:units, :carried_keys, :carried_run_ids, :self_check, :verify_runs, :reasons,
-                       :recheck_runs) do
+                       :recheck_runs, :preserved_run_ids, :preserved_keys) do
       def carried?(unit) = carried_keys.include?(unit.key)
 
       def verify_keys = verify_runs.keys
@@ -196,16 +207,23 @@ module Nabu
     # contained producer failures (reference lane included);
     # +next_check_in+ stamped stages left before the next self-check;
     # +reproduced+ / +changed+ the code-change recheck's verdicts (labels /
-    # one line per changed scope).
+    # one line per changed scope). +layers+ the mined-layers presence line
+    # (MinedLayers.presence_line — the heavy class made visible in a stage
+    # that does no heavy work), nil when not reported.
     Outcome = Data.define(:mode, :mined, :carried, :verified, :drift, :reasons, :failures, :next_check_in,
-                          :reproduced, :changed) do
+                          :reproduced, :changed, :layers) do
+      def initialize(layers: nil, **rest)
+        super
+      end
+
       def summary
         line = mode_summary
-        return line if reproduced.empty? && changed.empty?
-
-        verdict = "reproduced #{reproduced.size} exactly"
-        verdict += ", changed #{changed.size}: #{changed.join(' · ')}" unless changed.empty?
-        "#{line} · code-change re-mines: #{verdict}"
+        unless reproduced.empty? && changed.empty?
+          verdict = "reproduced #{reproduced.size} exactly"
+          verdict += ", changed #{changed.size}: #{changed.join(' · ')}" unless changed.empty?
+          line = "#{line} · code-change re-mines: #{verdict}"
+        end
+        layers ? "#{line} · #{layers}" : line
       end
 
       def mode_summary
@@ -296,8 +314,10 @@ module Nabu
     end
 
     # Decide what the stage carries. +scopes+ in replay order
-    # (LinkScopeReplay.order); +force_full+ the owner's --full-links.
-    def plan(scopes, journal:, force_full: false)
+    # (LinkScopeReplay.order); +force_full+ the owner's --full-links;
+    # +preserve+ the producers whose journal runs and stamps the stage must
+    # leave untouched (the heavy class — its scopes are never in +scopes+).
+    def plan(scopes, journal:, force_full: false, preserve: [])
       units = scopes.map { |scope| unit(scope) }
       stored = Store::LinksJournal.scope_stamps(journal)
       self_check = force_full ||
@@ -315,27 +335,30 @@ module Nabu
         end
       end
       recheck = recheck_runs(units, stored, reasons)
+      preserved = { preserved_run_ids: Store::LinksJournal.run_ids_for(journal, producers: preserve),
+                    preserved_keys: stored.keys.select { |key| preserve.include?(key.first) } }
       if self_check
         clean_keys.each { |key| reasons[key] = "self-check" }
         Plan.new(units: units, carried_keys: [], carried_run_ids: [], self_check: true,
                  verify_runs: clean_keys.to_h { |key| [key, stored.fetch(key)[:run_ids]] }, reasons: reasons,
-                 recheck_runs: recheck)
+                 recheck_runs: recheck, **preserved)
       else
         Plan.new(units: units, carried_keys: clean_keys, carried_run_ids: clean_runs.sort, self_check: false,
-                 verify_runs: {}, reasons: reasons, recheck_runs: recheck)
+                 verify_runs: {}, reasons: reasons, recheck_runs: recheck, **preserved)
       end
     end
 
     # The stage's opening move under +plan+: digest what the self-check
     # will compare, drop the stamps of everything about to re-mine (FIRST —
     # a crash mid-mine must never leave a stamp vouching for edges that are
-    # gone), then every run the plan does not carry. Returns the expected
+    # gone), then every run the plan does not carry — the preserved
+    # (heavy) producers' runs and stamps excepted. Returns the expected
     # digests for #mine!.
     def prepare!(plan, journal:)
       expected = plan.verify_runs.merge(plan.recheck_runs)
                      .transform_values { |ids| Store::LinksJournal.edge_digests(journal, ids) }
-      Store::LinksJournal.retain_scope_stamps!(journal, plan.carried_keys)
-      Store::LinksJournal.retain_runs!(journal, plan.carried_run_ids)
+      Store::LinksJournal.retain_scope_stamps!(journal, plan.carried_keys + plan.preserved_keys)
+      Store::LinksJournal.retain_runs!(journal, plan.carried_run_ids + plan.preserved_run_ids)
       expected
     end
 

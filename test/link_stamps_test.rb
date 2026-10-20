@@ -327,6 +327,31 @@ class LinkStampsTest < Minitest::Test
     assert_equal [%w[formulas aspr]], stamps.plan([FORMULAS, PLACE_MINE], journal: @journal).carried_keys
   end
 
+  # The cost law: a heavy producer's runs and stamps still sitting in the
+  # journal (awaiting `nabu links migrate-mined`) are PRESERVED by the
+  # stage's opening move — never planned, never dropped.
+  def test_preserved_producers_survive_the_stages_opening_move
+    stamp_after_mine(FORMULAS)
+    heavy = Nabu::Store::LinksJournal.record_run!(@journal, producer: "parallels", scope: "lat", params: {},
+                                                            code_version: "p")
+    Nabu::Store::LinksJournal.write_edge!(@journal, from_urn: "a", to_urn: "b", kind: "parallel", score: 1.0,
+                                                    run_id: heavy)
+    Nabu::Store::LinksJournal.write_scope_stamp!(@journal, producer: "parallels", scope: "lat", stamp: "dirty",
+                                                           inputs: {}, run_ids: [heavy])
+    plan = stamps.plan([FORMULAS], journal: @journal, force_full: true, preserve: %w[parallels])
+    assert_equal [[heavy], [%w[parallels lat]]], [plan.preserved_run_ids, plan.preserved_keys]
+    stamps.prepare!(plan, journal: @journal)
+    assert_equal [heavy], Nabu::Store::LinksJournal.run_ids_for(@journal, producers: %w[parallels])
+    assert_equal 1, @journal[:links].where(kind: "parallel").count
+    assert Nabu::Store::LinksJournal.scope_stamps(@journal).key?(%w[parallels lat])
+    assert_empty Nabu::Store::LinksJournal.run_ids_for(@journal, producers: %w[formulas]), "the cheap re-mine drops"
+
+    unpreserved = stamps.plan([FORMULAS], journal: @journal, force_full: true)
+    stamps.prepare!(unpreserved, journal: @journal)
+    assert_empty Nabu::Store::LinksJournal.run_ids_for(@journal, producers: %w[parallels]),
+                 "without the preserve list the old whole-journal sweep would take it"
+  end
+
   def test_a_volatile_scope_never_carries
     assert_empty stamps.plan([COGNATES], journal: @journal).carried_keys
   end

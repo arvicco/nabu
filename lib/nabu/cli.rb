@@ -12,6 +12,7 @@ require_relative "cli/index"
 require_relative "cli/creds"
 require_relative "cli/export"
 require_relative "cli/runs"
+require_relative "links_mine_commands"
 
 # CLI flag conventions (P90-3 standing rules, applied whenever a command is
 # next touched — never as a sweep):

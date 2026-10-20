@@ -91,7 +91,7 @@ module Nabu
       def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now,
                      canonical_dir: nil, creep_acceptances_path: nil, workdir_resolver: nil,
                      place_ref_errata_path: nil, shed_acceptances_path: nil, lects: nil,
-                     links_journal_path: nil)
+                     links_journal_path: nil, mined_links_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -107,7 +107,8 @@ module Nabu
                                      creep_acceptances_path: creep_acceptances_path,
                                      workdir_resolver: workdir_resolver,
                                      place_ref_errata_path: place_ref_errata_path,
-                                     lects: lects, links_journal_path: links_journal_path)
+                                     lects: lects, links_journal_path: links_journal_path,
+                                     mined_links_path: mined_links_path)
       end
 
       def run

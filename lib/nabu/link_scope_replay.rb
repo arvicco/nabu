@@ -24,8 +24,9 @@ module Nabu
     # region/rejected names): :auto loads from canonical (the live path),
     # tests inject a stub; the other producers never touch it. +config+
     # supplies the alignments path (cognates) and canonical_dir (:auto
-    # places).
-    def replay!(scope, db:, fulltext:, journal:, config:, places: :auto)
+    # places). +on_chunk+ reaches a chunked parallels run (the mine
+    # command's per-chunk progress lines); nothing else reads it.
+    def replay!(scope, db:, fulltext:, journal:, config:, places: :auto, on_chunk: nil)
       params = scope["params"] || {}
       case scope["producer"]
       when "parallels"
@@ -38,7 +39,7 @@ module Nabu
                                            **{ lang: params["lang"], license: params["license"],
                                                min_score: params["min_score"], per_anchor: params["per_anchor"],
                                                gram_size: params["gram_size"],
-                                               chunk_size: params["chunk_size"] }.compact)
+                                               chunk_size: params["chunk_size"], on_chunk: on_chunk }.compact)
       when "cognates"
         BatchCognates.new(catalog: db, fulltext: fulltext, journal: journal,
                           registry: AlignmentRegistry.load(config.alignments_path))

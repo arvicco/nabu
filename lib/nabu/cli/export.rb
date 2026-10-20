@@ -188,7 +188,7 @@ module Nabu
     def links
       with_writer("links") do |writer, config|
         with_catalog(config) do |catalog|
-          journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+          journal = Nabu::Store::LinkLayers.open_readonly(config)
           raise Thor::Error, "export links: no links journal at #{config.links_path} — no batch producer has run" \
             unless journal
 

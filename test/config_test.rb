@@ -167,6 +167,15 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # The cost law: the heavy mined layers are INSTANCE data — under local/,
+  # outside the rebuild's drop zone, carried by the backup's local/ section.
+  def test_mined_links_path_is_under_local
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "local", "mined-links.sqlite3"), config.mined_links_path
+    end
+  end
+
   # P7-2: the backup target is optional and has no default (nil until wired).
   def test_backup_target_absent_by_default
     Dir.mktmpdir do |root|

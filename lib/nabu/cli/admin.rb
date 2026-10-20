@@ -186,8 +186,9 @@ module Nabu
         end,
         # The links journal, read-only (P16-1): nabu_links reads batch-mined
         # edges. Absent file = no batch has run (a graceful state).
-        links: Nabu::ReadonlyOpener.new(config.links_path) do
-          Nabu::Store.connect(config.links_path, readonly: true)
+        # The mined-layers store rides the same handle (Store::LinkLayers).
+        links: Nabu::ReadonlyOpener.new(config.links_path, config.mined_links_path) do
+          Nabu::Store::LinkLayers.open_readonly(config)
         end,
         # The vector store, read-only (P93-5): nabu_search's similar_to.
         # Absent file = never embedded (the honest-note state).
@@ -723,7 +724,8 @@ module Nabu
           workdir_resolver: config.method(:source_workdir),
           place_ref_errata_path: File.join(config.config_dir, "place_ref_errata.yml"),
           lects: Nabu::Lects.load_default(config: config),
-          links_journal_path: config.links_path
+          links_journal_path: config.links_path,
+          mined_links_path: config.mined_links_path
         ).run
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         print_local_health(report, all: options[:all], seconds: seconds)
