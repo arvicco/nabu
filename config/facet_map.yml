@@ -486,6 +486,10 @@ sources:
     fields:
       translator: translator  # <editor role="translator"> verbatim (Anonim 82 · Daniel Mikołajewski
       #                         12 · Jakub Wujek 9 …; "(tł. domn.)" hedges as written)
+      region: region          # the places sweep (census 2026-10-21): pubPlace role=region on
+      #                         1,576 of 2,091 texts (Małopolska 534 · Mazowsze 420 · Ziemie
+      #                         Ruskie 160 …; "zagranica"/"inny" claims verbatim; both
+      #                         "Ziemie W. Ks. Lit." and "…Litewskiego" spellings as written)
   dharma-javanese-texts:      # 11 of 98 editions name the work's attributed poet (titleStmt <author>)
     fields:
       author: author          # Mpu Prapañca · Mpu Tantular · Mpu Kaṇva · Vararuci …; the witness

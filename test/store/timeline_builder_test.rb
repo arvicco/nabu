@@ -911,6 +911,26 @@ module Store
       assert_equal "Nederberg", timeline_for("urn:nabu:corpus-oudnederlands:w2")[:place_name]
     end
 
+    # KorBa's pubPlace role=region (the corpus's own regional
+    # classification) answers for the 117 place-less texts (census
+    # 2026-10-21); its non-place classes — "zagranica" (abroad) and
+    # "inny" (other) — never mint a place name.
+    def test_metadata_places_korba_region_fallback_and_non_place_classes
+      seed_metadata_doc("korba", "urn:nabu:korba:AktaPozn_I_1",
+                        { "date" => { "not_before" => 1601, "not_after" => 1616, "raw" => "między 1601 a 1616" },
+                          "region" => "Wielkopolska" })
+      seed_metadata_doc("korba", "urn:nabu:korba:AkDziec",
+                        { "date" => { "not_before" => 1761, "not_after" => 1761, "raw" => "1761" },
+                          "place" => "Wilno", "region" => "Ziemie W. Ks. Lit." })
+      seed_metadata_doc("korba", "urn:nabu:korba:abroad",
+                        { "date" => { "not_before" => 1700, "not_after" => 1700, "raw" => "1700" },
+                          "region" => "zagranica" })
+      build!
+      assert_equal "Wielkopolska", timeline_for("urn:nabu:korba:AktaPozn_I_1")[:place_name]
+      assert_equal "Wilno", timeline_for("urn:nabu:korba:AkDziec")[:place_name]
+      assert_nil timeline_for("urn:nabu:korba:abroad")[:place_name], "abroad is a class, not a place"
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!
