@@ -312,7 +312,7 @@ module Nabu
         path = File.join(workdir, subdir, filename)
         return 0 unless File.file?(path)
 
-        JSON.parse(File.read(path, encoding: "UTF-8")).fetch("features", []).size
+        JSON.parse(SourceRead.utf8_file(path, label: "edh geography")).fetch("features", []).size
       end
 
       def artifact_counts(workdir, url)
