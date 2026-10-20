@@ -39,8 +39,10 @@ corpus. What you register today is what that surface promises.
 ## 2. The thirteen tools
 
 Every passage in every response carries **urn**, **language**, and
-**license_class** (search, concord, align, and parallels rows also carry the
-**source** slug). Preserve those fields when you quote — see §6.
+**license_class** (search, concord, align, parallels, similar_to, and links
+rows also carry the **source** slug; reference data — gazetteer facts, sign
+cards — carries its own license envelope). Preserve those fields when you
+quote — see §6.
 
 ### `nabu_search`
 
@@ -574,6 +576,21 @@ responsibility. A source carrying an owner-recorded **credit line**
 (`sources.credit` — a grant's "clearly indicated wherever displayed" duty)
 serves it as an additive `credit` key on every text-serving `nabu_show` /
 `nabu_search` payload; preserve it with the license fields.
+
+**Reference data carries its own envelope.** Gazetteers and sign lists answer
+from feature modules that mint no catalog rows, so their licenses are read
+from the adapters' own manifests (`Nabu::MCP::Envelope` — the verbatim
+license string recorded at adoption, never a hand-copied list) and ride
+additively beside the frozen payloads: a `nabu_place` card that serves
+gazetteer facts carries `attribution` {source, license_class, license,
+upstream_url, uri} (Pleiades is CC BY 3.0; the uri is the place's own
+upstream page); `nabu_char` cards carry the answering spine's `source` /
+`license_class` / `license` top-level plus an `attribution` list naming every
+contributing dataset (the OSL, Unikemet, and — when its senses joined — the
+wiktionary-sux shelf); `nabu_signs` carries the OSL envelope as `sign_list`
+and, in urn mode, the text's `license_class` beside its `source`. The
+`similar_to` lane and every `nabu_links` edge carry the counterpart's
+`source` slug (null on an edge whose counterpart left the catalog).
 
 ---
 
