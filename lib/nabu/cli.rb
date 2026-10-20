@@ -93,10 +93,12 @@ module Nabu
                         "git is never touched"
     option :all, type: :boolean, default: false,
                  desc: "Build every available feature in registry order (planned skipped by name)"
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def build(slug = nil)
       # XOR gate: exactly one of slug / --all.
       raise Thor::Error, "data build: give either a slug or --all (see nabu data list)" if options[:all] == !slug.nil?
 
+      verbose_narrator&.intro(:data_build)
       return build_all if options[:all]
 
       feature = Nabu::DataBuild.feature(slug)
@@ -110,6 +112,7 @@ module Nabu
       end
 
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      explain_feature(feature)
       summary = build_runner.run(feature: feature, into: options[:into])
       print_build_summary(summary, seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
       refresh_readme_index(options[:into])
@@ -123,6 +126,19 @@ module Nabu
       # say it lives; otherwise an unambiguous placeholder beats a wrong path.
       def clone_hint
         File.directory?(File.expand_path("~/Dev/nabu-data")) ? "~/Dev/nabu-data" : "<your-nabu-data-clone>"
+      end
+
+      # --verbose: green narration on stderr (Ops::StageGuide).
+      def verbose_narrator
+        return nil unless options[:verbose]
+
+        @verbose_narrator ||= Nabu::Ops::StageGuide::Narrator.new(io: $stderr)
+      end
+
+      # A feature's explanation is its own registry title (DataBuild
+      # REGISTRY, beside its builder) — never a second string table.
+      def explain_feature(feature)
+        verbose_narrator&.line("#{feature.slug}: #{feature.title}")
       end
 
       def build_runner
@@ -163,6 +179,7 @@ module Nabu
           end
           begin
             started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+            explain_feature(feature)
             summary = runner.run(feature: feature, into: options[:into])
             print_build_summary(summary,
                                 seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
@@ -305,6 +322,7 @@ module Nabu
     HELP
     option :rule, banner: "ID", desc: "compile just this rule"
     option :dry_run, type: :boolean, default: false
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def apply_rules
       config = Nabu::Config.load
       guard_catalog_free!(config) unless options[:"dry-run"]
@@ -323,6 +341,7 @@ module Nabu
       end
 
       catalog = Nabu::Store.connect(config.catalog_path)
+      lect_narrator&.intro(:lect_apply_rules) unless options[:dry_run]
       journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
       # A compose rule's census reads the CURRENT journal even on --dry-run
       # (it buckets candidates by their existing stage rows); absent file →
@@ -351,6 +370,7 @@ module Nabu
     option :source, banner: "SLUG", desc: "scope to one source"
     option :lang, banner: "CODE", desc: "scope to one stored code"
     option :dry_run, type: :boolean, default: false
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def infer_dates
       config = Nabu::Config.load
       guard_catalog_free!(config) unless options[:"dry-run"]
@@ -361,6 +381,7 @@ module Nabu
       end
 
       catalog = Nabu::Store.connect(config.catalog_path)
+      lect_narrator&.intro(:lect_infer_dates) unless options[:dry_run]
       dates = Nabu::LectDates.new(registry: registry)
       scope = [options[:source], options[:lang]].compact
       say "scanning dated documents#{scope.empty? ? ' (whole catalog)' : " (#{scope.join(', ')})"}…"
@@ -394,6 +415,7 @@ module Nabu
       refreshes single documents; this command is the manual full pass
       (e.g. after hand-editing config/lect_overrides.yml).
     HELP
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def materialize
       config = Nabu::Config.load
       guard_catalog_free!(config)
@@ -403,6 +425,7 @@ module Nabu
               "lect materialize: no catalog at #{config.catalog_path}"
       end
 
+      lect_narrator&.intro(:lect_materialize)
       materialize_lect_facets!(config)
     end
 
@@ -726,6 +749,16 @@ module Nabu
         say "lect facet: #{count} rows materialized"
       end
 
+      # --verbose (Ops::StageGuide): green narration on stderr; the
+      # before-hook breaks off a tty row ticker so no line splices.
+      def lect_narrator
+        return nil unless options[:verbose]
+
+        @lect_narrator ||= Nabu::Ops::StageGuide::Narrator.new(
+          io: $stderr, before: -> { $stderr.print("\r\e[K") if $stderr.tty? }
+        )
+      end
+
       # A minimal announce-and-tick reporter for the facet rebuild (the
       # no-silent-passes rule — this subcommand class has no loader
       # plumbing to borrow): stages to stderr; on a tty a \r-updating
@@ -733,6 +766,7 @@ module Nabu
       def facet_progress
         tty = $stderr.tty?
         Nabu::ProgressReporter.new(
+          on_explain: lect_narrator,
           on_stage: ->(label, _eta = nil) { warn(label) },
           on_load_tick: lambda do |processed, _errored|
             if tty
@@ -4633,6 +4667,8 @@ module Nabu
         nabu place mine report kanripo      # review the mined candidates, ranked by document spread
         nabu place mine report kanripo --board   # the per-NAME verdict board (discriminators + snippets)
     HELP
+    option :verbose, type: :boolean, default: false,
+                     desc: "place apply: #{Nabu::Ops::StageGuide::OPTION_DESC}"
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
       return run_place_mine(query_parts[1..]) if query_parts.first == "mine"
@@ -4924,6 +4960,7 @@ module Nabu
         Nabu::Store.assert_writable!(config.catalog_path)
         catalog = Nabu::Store.connect(config.catalog_path)
         Nabu::Store.migrate!(catalog)
+        explain_command(:place_apply)
         apply_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         census = Nabu::PlaceApply.run(catalog: catalog, canonical_dir: config.canonical_dir)
         if census.nil?
