@@ -36,10 +36,10 @@ class OghamTest < Minitest::Test
   def test_manifest_quotes_both_conflicting_grants_and_holds_nc
     manifest = Nabu::Adapters::Ogham.manifest
     assert_equal "ogham", manifest.id
-    assert_equal "nc", manifest.license_class, "restrictive reading PENDING the clarification reply"
+    assert_equal "nc", manifest.license_class, "the restrictive reading holds until upstream clarifies"
     assert_match(/CC-BY-NC-SA/, manifest.license)
     assert_match(/Creative Commons Attribution 4\.0 International License/, manifest.license)
-    assert_match(/registry #14/, manifest.license)
+    assert_match(/until upstream clarifies/, manifest.license)
     assert_equal "ogham-epidoc", manifest.parser_family
   end
 

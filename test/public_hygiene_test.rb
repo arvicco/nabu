@@ -33,6 +33,13 @@ class PublicHygieneTest < Minitest::Test
     [/email-register/, "the correspondence register is private machinery"],
     [/external-communications\.md/, "the correspondence protocol is private machinery"],
     [/\b(?:your|the)\s+Drafts\b|Drafts folder|thank-you draft|mailbox draft/i,
+     "correspondence workflow state never appears on a public surface"],
+    # The ogham manifest leak (found 2026-10-20): a pending-ask note had
+    # been phrased as our workflow ("clarification email drafted, unlock
+    # registry #14"). State the FACT (unresolved, pending upstream
+    # clarification), never the machinery.
+    [/unlock registry/i, "internal unlock-registry ids are workflow state"],
+    [/\b(?:email|ask|letter)\s+(?:already\s+)?drafted\b/i,
      "correspondence workflow state never appears on a public surface"]
   ].freeze
 

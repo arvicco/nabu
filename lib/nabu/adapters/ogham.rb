@@ -21,12 +21,11 @@ module Nabu
     # - The repo has NO LICENSE file.
     # Elsewhere the in-file header governs (Freising, RIIG), but here the
     # two grants CONTRADICT rather than layer, and the restrictive reading
-    # is the safe one until upstream answers: license_class "nc" (GRETIL/MW
-    # posture — MCP default-excluded, never redistributed) PENDING the
-    # clarification email already drafted (unlock registry #14). On reply:
-    # relabel via the license_class field (the P10-4 override mechanics
-    # need not even fire — a source-level relabel + resync of nothing; no
-    # urns change).
+    # is the safe one until upstream clarifies: license_class "nc" (the
+    # GRETIL/MW posture — never redistributed). If upstream resolves the
+    # conflict: relabel via the license_class field (the P10-4 override
+    # mechanics need not even fire — a source-level relabel + resync of
+    # nothing; no urns change).
     #
     # == Layers (see OghamEpidocParser)
     #
@@ -71,11 +70,10 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "ogham",
         name: "OG(H)AM — Ogham in 3D v2.0 (DIAS / Maynooth)",
-        license: "UNRESOLVED CONFLICT, restrictive reading held (clarification email drafted, unlock " \
-                 "registry #14): site about-page \"the XML files… are freely accessible and downloadable " \
-                 "under a CC-BY-NC-SA License\" vs EVERY sampled record's <licence> \"Creative Commons " \
-                 "Attribution 4.0 International License\" (target …/by/4.0/); repo has no LICENSE file — " \
-                 "class nc until upstream answers, relabel-on-reply",
+        license: "UNRESOLVED CONFLICT, restrictive reading held: site about-page \"the XML files… are " \
+                 "freely accessible and downloadable under a CC-BY-NC-SA License\" vs EVERY sampled " \
+                 "record's <licence> \"Creative Commons Attribution 4.0 International License\" (target " \
+                 "…/by/4.0/); repo has no LICENSE file — class nc until upstream clarifies",
         license_class: "nc",
         upstream_url: REPO_URL,
         parser_family: "ogham-epidoc"
