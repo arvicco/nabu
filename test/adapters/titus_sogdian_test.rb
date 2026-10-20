@@ -205,6 +205,19 @@ class TitusSogdianTest < Minitest::Test
     assert_equal "Bulayïq", line.annotations["findspot"], "the Berlin T II B signature's site siglum"
   end
 
+  # --- the page findspot (the place axis's document grain) --------------------
+
+  # A page whose every line resolves to ONE findspot claims it at the
+  # document grain (metadata "findspot", the titus family's place key);
+  # a page mixing a resolved siglum with an unresolved one (sogdm001:
+  # T_II_D_II_169 = Qočo beside TM_351) claims none — the lines keep
+  # their own. A page with no resolvable siglum (BBB) claims none.
+  def test_page_findspot_only_when_every_line_agrees
+    assert_equal "Bulayïq", documents_by_page.fetch("sogdn003").metadata["findspot"]
+    refute documents_by_page.fetch("sogdm001").metadata.key?("findspot"), "TM_351 resolves to no site"
+    refute documents_by_page.fetch("sogdn119").metadata.key?("findspot")
+  end
+
   # --- sogdn119: BBB, the Manichaean script ------------------------------------
 
   def test_manichaean_page_mints_one_passage_per_line

@@ -107,6 +107,34 @@ class RebuildIncrementalTest < Minitest::Test
     assert_incremental_state_equals_fresh_full_rebuild
   end
 
+  # The dirty replay's run row stays open past its load: a kill in the
+  # index refresh that follows leaves it running (loaded_at stamped) — and
+  # a later run never retro-closes it: the dead run's row stays the record
+  # of a dead run.
+  def test_incremental_replay_row_closes_only_at_run_end
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+
+    original = Nabu::Store::Indexer.method(:refresh_source!)
+    Nabu::Store::Indexer.define_singleton_method(:refresh_source!) { |*, **| raise Interrupt }
+    begin
+      assert_raises(Interrupt) { incremental_rebuilder.run }
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:refresh_source!, original)
+    end
+    killed = with_ledger { |ledger| ledger[:runs].where(source_slug: "beta").order(:id).last }
+    assert_equal "running", killed[:status], "a run killed in its index stage never reads succeeded"
+    refute_nil killed[:loaded_at]
+    assert_nil killed[:finished_at]
+
+    write_canonical("alpha", "a.txt" => "Iliad\nμῆνιν ἄειδε θεά\n")
+    incremental_rebuilder.run
+    rows = with_ledger { |ledger| ledger[:runs].where(kind: "rebuild").order(:id).all }
+    assert_equal "running", rows.find { |row| row[:id] == killed[:id] }[:status]
+    assert_equal "succeeded", rows.last[:status], "the healthy run's row closes at its end"
+    assert_equal "alpha", rows.last[:source_slug]
+  end
+
   def test_incremental_with_nothing_dirty_is_a_no_op_on_rows_and_index
     full_rebuilder.run
     before_passages = raw_rows(:passages)

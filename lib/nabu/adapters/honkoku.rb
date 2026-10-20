@@ -2,6 +2,9 @@
 
 require "csv"
 
+require_relative "../normalize"
+require_relative "../eras"
+
 module Nabu
   module Adapters
     # honkoku — みんなで翻刻 (P108-5; github.com/yuta1984/
@@ -108,11 +111,30 @@ module Nabu
         )
       end
 
+      # A material label's own nengō date (owner-ruled 2026-10-20; census
+      # 2026-10-20: 329 of 12,841 v3 labels carry an era-year shape —
+      # 天保十一年四月十六日…仕様帳扣, 家譜 … 従寛政十一年九月十八日到文化六年七月六日)
+      # through the shared era table (config/eras.yml): every era year the
+      # label states spans the envelope, "同N年" continuing the last named
+      # era. The label dates what the material records (artifact class,
+      # the raw naming the label); the NDL catalog record, where the
+      # HonkokuNdlCatalog join wrote one, outranks it (MetadataDates).
+      # Homonym/one-year eras, era-less labels and pre-Taika dates mint
+      # nothing — declared.
+      def self.label_date(label, eras: Nabu::Eras.default)
+        text = Normalize.nfc(label.to_s.strip)
+        return nil if text.empty? || eras.nil?
+
+        eras.nengo_date(text, basis: "label nengō (config/eras.yml)")
+      end
+
       def parse(document_ref)
+        metadata = document_ref.metadata.reject { |_k, v| v.to_s.empty? }
+        date = self.class.label_date(document_ref.metadata["label"])
+        metadata = metadata.merge("date" => date) if date
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
-          title: presence(document_ref.metadata["label"]),
-          metadata: document_ref.metadata.reject { |_k, v| v.to_s.empty? }
+          title: presence(document_ref.metadata["label"]), metadata: metadata
         )
         images = page_images(document_ref.path)
         page_files(document_ref.path).each do |number, path|

@@ -174,6 +174,27 @@ class EeboTcpTest < Minitest::Test
     assert_equal "subject", fields["subjects"], "config/facet_map.yml eebo-tcp: subjects → subject"
   end
 
+  # The kind axis reads the subject facet as an OPEN vocabulary
+  # (config/kind_map.yml `vocabulary: open`): a form heading folds onto a
+  # ruled class, a topical or name heading mints nothing and is counted
+  # as uncovered — never filed as `unmapped`.
+  def test_the_subject_headings_fold_onto_the_kind_axis_as_an_open_vocabulary
+    kinds = Nabu::Kinds.load(classes_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_classes.yml"),
+                             map_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_map.yml"))
+    assert kinds.open?("eebo-tcp")
+    assert_equal "subject", kinds.facet_for("eebo-tcp")
+    ode = adapter.parse(ref_for(ODE)).metadata["subjects"]
+    assert_equal ["literary/poetry"], ode.flat_map { |heading| kinds.normalize("eebo-tcp", heading) },
+                 "the LCSH -- Poetry form subdivision is the claim"
+    [PETITION, RALEIGH].each do |name|
+      adapter.parse(ref_for(name)).metadata["subjects"].each do |heading|
+        fold = kinds.fold("eebo-tcp", heading)
+        assert_empty fold.paths, heading
+        assert_equal [heading], fold.uncovered, "#{heading} — counted, never silent"
+      end
+    end
+  end
+
   # -- parse: dating (the imprint molds) --------------------------------------
 
   def test_dating_registers_in_the_metadata_dates_lane
@@ -215,6 +236,33 @@ class EeboTcpTest < Minitest::Test
     assert_equal({ "raw" => "[ca. 1570]" }, envelope.call("[ca. 1570]"))
     assert_equal({ "raw" => "1695?]" }, envelope.call("1695?]"))
     assert_nil envelope.call(nil), "no BIBLFULL date — no key at all"
+  end
+
+  # -- parse: the imprint place (bare town, parse-time) -----------------------
+
+  def test_the_imprint_place_rides_as_the_bare_town_beside_the_verbatim_pubplace
+    petition = adapter.parse(ref_for(PETITION)).metadata
+    assert_equal "Imprinted at London :", petition["source_pub_place"], "the BIBLFULL PUBPLACE stays verbatim"
+    assert_equal "London", petition["imprint_place"], "the period furniture strips to the town"
+    assert_equal "London", adapter.parse(ref_for(RALEIGH)).metadata["imprint_place"]
+    assert_equal "London", adapter.parse(ref_for(GROBIANUS)).metadata["imprint_place"]
+  end
+
+  def test_a_sine_loco_imprint_mints_no_place_key
+    ode = adapter.parse(ref_for(ODE)).metadata
+    assert_equal "[S.l.] :", ode["source_pub_place"]
+    refute ode.key?("imprint_place"), "s.l. is upstream's own no-place answer"
+    refute ode.key?("imprint_place_conjecture")
+  end
+
+  def test_a_conjectural_imprint_rides_its_own_key
+    # Runtime-edited real A90004 bytes: the "[London?]" shape (1,657 files
+    # censused) — the cataloguer's guess never reads as a certain place.
+    with_edited_petition(/<PUBPLACE>Imprinted at London :/, "<PUBPLACE>[London?] :") do |ref|
+      metadata = Nabu::Adapters::EeboTcp.new.parse(ref).metadata
+      assert_equal "London", metadata["imprint_place_conjecture"]
+      refute metadata.key?("imprint_place")
+    end
   end
 
   # -- parse: license ---------------------------------------------------------

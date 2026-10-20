@@ -78,7 +78,7 @@ module Nabu
     # ride "toh_base" — the P48-6 join key), the UT id (publicationStmt idno
     # @xml:id), translators (author role translator*), the edition string and
     # publication date, and the first biblScope.
-    class E84000TeiParser
+    class E84000TeiParser < StreamingTeiParser
       # One emitted chunk: citation suffix, raw accumulated text, provenance.
       Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
@@ -107,68 +107,15 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
+      def extraction_class = Extraction
 
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
-      # Belt and braces (the house ddbdp/GRETIL rule): labels are unique by
-      # construction, but a repeated same-type front div would collide its
-      # label — disambiguate deterministically, never quarantine.
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          seen[unit.citation] += 1
-          count = seen[unit.citation]
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
-
-      def build_document(units, urn:, language:, title:, path:, metadata:)
-        document = Document.new(urn: urn, language: language, title: title,
-                                canonical_path: path, metadata: metadata)
-        units.each_with_index do |unit, sequence|
-          text = Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip)
-          document << Passage.new(
-            urn: "#{urn}:#{unit.citation}",
-            language: language,
-            text: text,
-            annotations: unit.annotations,
-            sequence: sequence
-          )
-        end
-        raise ParseError, "#{path}: no citable passages found in <front>/<body>" if document.empty?
-
-        document
-      rescue ValidationError => e
-        raise ParseError, "#{path}: #{e.message}"
-      end
+      def no_passages_message = "no citable passages found in <front>/<body>"
 
       # The single-pass Reader state machine: a header phase mines the
       # teiHeader, a text phase tracks front/body divisions and captures
       # chunk spans. Local names throughout — <div> and <tei:div> are the
       # same element.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         DROPPED_ELEMENTS = %w[head note].freeze
         SEPARATOR_ELEMENTS = %w[lb pb].freeze
         # The inline Degé anchors (class note "Folio anchors"): typed folio
@@ -187,15 +134,14 @@ module Nabu
         TITLE_LANG_KEYS = {
           "bo" => :title_bo, "Bo-Ltn" => :title_wylie, "Sa-Ltn" => :title_sanskrit, "en" => :title_en
         }.freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS, :SEPARATOR_ELEMENTS,
+        private_constant :DROPPED_ELEMENTS, :SEPARATOR_ELEMENTS,
                          :DIVISION_LABELS, :NUMBERED_DIVISION_TYPES, :HEADER_CONTAINERS,
                          :TITLE_LANG_KEYS, :FOLIO_CREF, :VOLUME_CREF
 
         Result = Data.define(:units, :title, :metadata)
 
         def initialize(reader:, path:)
-          @reader = reader
-          @path = path
+          super
           # header state
           @in_header = false
           @container = nil
@@ -230,14 +176,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         # -- dispatch --------------------------------------------------------
 
@@ -547,20 +485,6 @@ module Nabu
         end
 
         # -- helpers ---------------------------------------------------------
-
-        def dropping? = !@drop_depth.nil?
-
-        def flatten(value)
-          presence(value&.gsub(/[[:space:]]+/, " ")&.strip)
-        end
-
-        def presence(value)
-          value if value && !value.empty?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
-        end
       end
       private_constant :Extraction
     end

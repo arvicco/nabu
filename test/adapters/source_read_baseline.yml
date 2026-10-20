@@ -1,0 +1,467 @@
+# The encoding/bounds belt ratchet (test/adapters/source_read_conventions_test.rb):
+# per adapter file, how many bare reads / hand-rolled UTF-8 guards / byte
+# slices predate Nabu::Adapters::SourceRead. Counts may only go DOWN — a
+# file migrated onto the belt lowers (or drops) its line in the same change.
+# A new adapter starts with no line: it reads through the belt.
+aclt.rb:
+  reads: 3
+aed_tei_parser.rb:
+  reads: 1
+aes.rb:
+  reads: 1
+aoxml_parser.rb:
+  reads: 1
+aozora.rb:
+  reads: 2
+aozora_ruby_parser.rb:
+  reads: 1
+aranese.rb:
+  reads: 1
+asl_parser.rb:
+  reads: 1
+aspr_parser.rb:
+  reads: 1
+atmo.rb:
+  reads: 2
+baby_conllu_parser.rb:
+  reads: 1
+ban_wikisource.rb:
+  reads: 3
+bdcamoes.rb:
+  reads: 1
+betamasaheft_tei_parser.rb:
+  reads: 1
+betamasaheft_works.rb:
+  reads: 1
+bfm.rb:
+  reads: 1
+bilara_json_parser.rb:
+  reads: 1
+bosworth_csv_parser.rb:
+  reads: 1
+bu_ajami_item_parser.rb:
+  reads: 1
+cantigas_html_parser.rb:
+  reads: 1
+cbdb.rb:
+  reads: 1
+ccl.rb:
+  reads: 2
+ccl_tei_parser.rb:
+  reads: 1
+ccmh_ces_parser.rb:
+  reads: 1
+ccmh_txt_parser.rb:
+  reads: 1
+cdli.rb:
+  reads: 2
+  utf8_guards: 1
+ceipom.rb:
+  reads: 1
+classical_modern.rb:
+  reads: 2
+clics_gml_parser.rb:
+  reads: 1
+conllu_parser.rb:
+  reads: 1
+coptic_scriptorium.rb:
+  reads: 1
+coptic_tt_parser.rb:
+  reads: 1
+cora_tei_parser.rb:
+  reads: 1
+cora_xml_parser.rb:
+  reads: 1
+corph_sql_parser.rb:
+  reads: 1
+corpus_corporum.rb:
+  reads: 1
+corpus_gysseling.rb:
+  reads: 2
+corpus_oudnederlands.rb:
+  reads: 2
+ctilc.rb:
+  reads: 4
+dacon_pos_parser.rb:
+  reads: 1
+damaskini.rb:
+  reads: 3
+damos.rb:
+  reads: 2
+dcs.rb:
+  reads: 1
+dcs_lexicon_lane.rb:
+  reads: 3
+ddbdp_parser.rb:
+  reads: 1
+derom_xml_parser.rb:
+  reads: 1
+dharma_base.rb:
+  reads: 1
+dharma_deccan.rb:
+  reads: 3
+dharma_epidoc_parser.rb:
+  reads: 1
+dharma_mdt.rb:
+  reads: 1
+dharma_tamil.rb:
+  reads: 1
+diccas.rb:
+  reads: 1
+digiliblt_conllu_parser.rb:
+  reads: 1
+dillmann_tei_parser.rb:
+  reads: 1
+diorisis.rb:
+  reads: 1
+diorisis_parser.rb:
+  reads: 1
+disco_tei_parser.rb:
+  reads: 1
+dta.rb:
+  reads: 1
+e84000.rb:
+  reads: 1
+e84000_glossary_lane.rb:
+  reads: 2
+ebl.rb:
+  reads: 1
+edh.rb:
+  reads: 3
+edh_epidoc_parser.rb:
+  reads: 1
+edl.rb:
+  reads: 1
+edr_epidoc_parser.rb:
+  reads: 1
+edrdg.rb:
+  reads: 2
+elektire.rb:
+  reads: 1
+elektire_epub_parser.rb:
+  reads: 4
+elephantine_tei_parser.rb:
+  reads: 1
+eltec_tei_parser.rb:
+  reads: 2
+epidoc_parser.rb:
+  reads: 1
+esukhia_text_parser.rb:
+  reads: 1
+etcsl_tei_parser.rb:
+  reads: 1
+first1k_greek.rb:
+  reads: 1
+flat_csv_parser.rb:
+  reads: 1
+freising_tei_parser.rb:
+  reads: 1
+gams_zrcalo.rb:
+  reads: 1
+glaux.rb:
+  reads: 1
+glaux_parser.rb:
+  reads: 1
+goo300k.rb:
+  reads: 1
+gpc.rb:
+  reads: 2
+gpc_xlsx_parser.rb:
+  reads: 1
+gretil.rb:
+  reads: 2
+gretil_parser.rb:
+  reads: 3
+gysseling_fromdb_parser.rb:
+  utf8_guards: 1
+hdic_tsv_parser.rb:
+  reads: 1
+helipad.rb:
+  reads: 1
+hittite_glossed.rb:
+  reads: 1
+honkoku.rb:
+  reads: 4
+hsms_parser.rb:
+  reads: 1
+hsms_vrt_parser.rb:
+  reads: 1
+ia_hocr_text.rb:
+  reads: 2
+ids_txt_parser.rb:
+  reads: 1
+iecor_cldf_parser.rb:
+  reads: 1
+iedc.rb:
+  reads: 1
+ig_cyprus.rb:
+  reads: 2
+ig_cyprus_epidoc_parser.rb:
+  reads: 1
+iip_epidoc_parser.rb:
+  reads: 1
+imp_tei_parser.rb:
+  reads: 1
+isicily_epidoc_parser.rb:
+  reads: 1
+itant_epidoc_parser.rb:
+  reads: 1
+itkc_catalog.rb:
+  reads: 1
+itkc_xml_parser.rb:
+  reads: 1
+ja_wikisource.rb:
+  reads: 2
+jis0213.rb:
+  reads: 1
+kanripo.rb:
+  reads: 1
+kdsp.rb:
+  reads: 3
+ko_wikisource_mk.rb:
+  reads: 1
+kokubunken.rb:
+  reads: 1
+kouigenji.rb:
+  reads: 1
+kradfile.rb:
+  reads: 2
+lexicon_tei_parser.rb:
+  reads: 1
+lexlep_words.rb:
+  reads: 1
+litopys.rb:
+  reads: 2
+litopys_glossary_lane.rb:
+  reads: 2
+litopys_html_parser.rb:
+  utf8_guards: 1
+liv.rb:
+  reads: 1
+lo_congres.rb:
+  reads: 1
+local_language.rb:
+  reads: 1
+local_lemmas.rb:
+  reads: 1
+local_library.rb:
+  reads: 1
+local_source.rb:
+  reads: 1
+madurai.rb:
+  reads: 2
+madurai_html_parser.rb:
+  utf8_guards: 1
+mandoku_parser.rb:
+  reads: 1
+mdz_protestant.rb:
+  reads: 4
+menota_tei_parser.rb:
+  reads: 2
+menotec_stream_parser.rb:
+  reads: 1
+monlam_wordlist_parser.rb:
+  reads: 1
+mvp.rb:
+  reads: 1
+mw.rb:
+  reads: 1
+ndl_kotenseki.rb:
+  reads: 7
+ndl_search_bib.rb:
+  reads: 1
+nikh_xml_parser.rb:
+  reads: 1
+nkjp_tei_parser.rb:
+  reads: 2
+obi_txt_parser.rb:
+  reads: 1
+ociana.rb:
+  reads: 1
+ogham_epidoc_parser.rb:
+  reads: 2
+ojw.rb:
+  reads: 1
+okhc.rb:
+  reads: 2
+old_tibetan.rb:
+  reads: 1
+ollett_tei_parser.rb:
+  reads: 1
+ollett_texts_base.rb:
+  reads: 1
+oncoj_lexicon_parser.rb:
+  reads: 1
+oncoj_xml_parser.rb:
+  reads: 1
+openiti.rb:
+  reads: 2
+openiti_markdown_parser.rb:
+  reads: 1
+openiti_sidecar.rb:
+  reads: 1
+oracc.rb:
+  reads: 4
+oracc_glossary_lane.rb:
+  reads: 1
+oracc_json_parser.rb:
+  reads: 1
+oracc_translation_parser.rb:
+  reads: 2
+oshb_lexicon_parser.rb:
+  reads: 1
+oshb_osis_parser.rb:
+  reads: 1
+otdo_html_parser.rb:
+  reads: 1
+page_xml_parser.rb:
+  reads: 1
+papyri.rb:
+  reads: 1
+papyri_header.rb:
+  reads: 1
+papyri_translation_parser.rb:
+  reads: 1
+papyri_translations.rb:
+  reads: 1
+penn_psd_parser.rb:
+  reads: 1
+perseus.rb:
+  reads: 3
+perseus_anglit.rb:
+  reads: 1
+pl_wikisource_bruckner_lane.rb:
+  reads: 2
+poma_xhtml_parser.rb:
+  reads: 1
+prilit.rb:
+  reads: 2
+proiel.rb:
+  reads: 1
+proiel_parser.rb:
+  reads: 1
+riig.rb:
+  reads: 1
+riig_epidoc_parser.rb:
+  reads: 1
+rsti.rb:
+  reads: 2
+rundata.rb:
+  reads: 1
+sabellic_loans.rb:
+  reads: 2
+sarit.rb:
+  reads: 1
+sblgnt.rb:
+  reads: 1
+sblgnt_parser.rb:
+  reads: 2
+scripta_bulgarica.rb:
+  reads: 1
+sdbh_xml_parser.rb:
+  reads: 1
+seal.rb:
+  reads: 3
+seal_html_parser.rb:
+  reads: 1
+  utf8_guards: 1
+sefaria.rb:
+  reads: 1
+sefaria_json_parser.rb:
+  reads: 1
+sentence_lines_parser.rb:
+  reads: 1
+  utf8_guards: 1
+shabados.rb:
+  reads: 1
+shkz.rb:
+  reads: 1
+siddham_epidoc_parser.rb:
+  reads: 1
+sii_clean.rb:
+  reads: 2
+skjaervo_khotanese.rb:
+  reads: 1
+slavic_wikisource.rb:
+  reads: 1
+slavic_wikisource_html.rb:
+  reads: 1
+slouniki_nasovic.rb:
+  reads: 1
+soas_pos_parser.rb:
+  reads: 1
+srophe_tei_parser.rb:
+  reads: 1
+starling_dbf_parser.rb:
+  reads: 2
+  byteslices: 4
+streaming_tei_parser.rb:
+  reads: 1
+suttacentral.rb:
+  reads: 1
+tamilex_tei_parser.rb:
+  reads: 1
+text_fabric.rb:
+  reads: 1
+ticha.rb:
+  reads: 2
+ticha_tei_parser.rb:
+  reads: 1
+titus_avestan.rb:
+  reads: 1
+titus_bactrian.rb:
+  reads: 2
+titus_bactrian_parser.rb:
+  utf8_guards: 1
+titus_khotanese_parser.rb:
+  utf8_guards: 1
+titus_manichaica.rb:
+  reads: 1
+titus_manichaica_parser.rb:
+  utf8_guards: 1
+titus_osco_umbrian.rb:
+  reads: 2
+titus_pahlavi.rb:
+  reads: 1
+titus_pahlavi_parser.rb:
+  utf8_guards: 1
+titus_sogdian.rb:
+  reads: 1
+titus_sogdian_parser.rb:
+  utf8_guards: 1
+titus_tocharian_a.rb:
+  reads: 1
+titus_tocharian_parser.rb:
+  utf8_guards: 1
+tla_jsonl_parser.rb:
+  reads: 1
+tlhdig.rb:
+  reads: 2
+tls_xml_parser.rb:
+  reads: 2
+traces_ling_parser.rb:
+  reads: 1
+trismegistos_geo.rb:
+  reads: 2
+unihan_txt_parser.rb:
+  reads: 1
+universal_dependencies.rb:
+  reads: 1
+usfm_parser.rb:
+  reads: 1
+usfx_parser.rb:
+  reads: 1
+vienna_wiki.rb:
+  reads: 1
+viet_wikisource.rb:
+  reads: 2
+westoldturkic.rb:
+  reads: 2
+wiktionary_jsonl_parser.rb:
+  reads: 1
+wold.rb:
+  reads: 1
+zh_wikisource.rb:
+  reads: 1
+zrc_xml_parser.rb:
+  reads: 1

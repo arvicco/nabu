@@ -58,7 +58,9 @@ module Nabu
     # the Berlin find-signature site sigla censused on the live pages (D
     # Qočo, B Bulayïq; the titus-tocharian-a table) and the Upper Indus
     # chapter toponyms TITUS's own index lists resolve; any other siglum or
-    # chapter mints no place (the raw values still ride). The pages carry
+    # chapter mints no place (the raw values still ride). Per document: the
+    # page's findspot when every line resolves to the same one (the titus
+    # family's place-only timeline key — see #page_findspot). The pages carry
     # no dating (only TITUS data-entry dates) — undatable is honest.
     class TitusSogdian < Nabu::Adapter
       SLUG = "titus-sogdian"
@@ -311,7 +313,19 @@ module Nabu
         metadata.merge!(page.header)
         scripts = page.sections.flat_map(&:scripts).uniq.sort
         metadata["scripts"] = scripts unless scripts.empty?
+        findspot = page_findspot(page, text: text)
+        metadata["findspot"] = findspot if findspot
         metadata
+      end
+
+      # The page's place claim (the timeline's place-only lane reads it):
+      # the ONE findspot every line resolves to, else nil. A page mixing a
+      # resolved siglum with an unresolved one (2 pages at the 2026-10-20
+      # census: sogdn209, sogdm001) claims nothing at the document grain —
+      # declared coarse; its lines keep their own findspot annotations.
+      def page_findspot(page, text:)
+        places = page.sections.map { |section| self.class.findspot_for(section.context, text: text) }.uniq
+        places.size == 1 ? places.first : nil
       end
 
       # The header block of the text's opening page (a sibling file in the

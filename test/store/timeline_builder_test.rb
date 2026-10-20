@@ -640,6 +640,21 @@ module Store
       assert_nil timeline_for("urn:nabu:titus-manichaica:manreadc.manre090")
     end
 
+    # titus-sogdian: a page whose every line resolves to one findspot
+    # carries it as metadata "findspot" — the titus family's place-only
+    # lane, verbatim (the pages carry no dating).
+    def test_metadata_places_titus_sogdian_findspot
+      seed_metadata_doc("titus-sogdian", "urn:nabu:titus-sogdian:sogdnswc.sogdn385",
+                        { "text" => "Upp.Ind.", "findspot" => "Bugut" })
+      seed_metadata_doc("titus-sogdian", "urn:nabu:titus-sogdian:sogdmor.sogdm001", { "text" => "Stellung-Jesu" })
+      summary = build!
+      row = timeline_for("urn:nabu:titus-sogdian:sogdnswc.sogdn385")
+      assert_equal "Bugut", row[:place_name]
+      assert_nil row[:not_before], "place-only: no date is ever minted"
+      assert_nil timeline_for("urn:nabu:titus-sogdian:sogdmor.sogdm001")
+      assert_equal 1, summary.metadata_dates.fetch("titus-sogdian")
+    end
+
     # P109-4 (the unmined-metadata drain): edition print years project with the
     # honestly-labeled "edition" date class — never composition, never
     # a bare typed date.
@@ -674,6 +689,24 @@ module Store
                    "a place-only doc still rows (the HGV precedent)"
       assert_nil timeline_for("urn:nabu:eebo-tcp:a3"),
                  "sine loco is the imprint world's unknown — never a place name"
+    end
+
+    # The parse-time bare town (imprint_place) outranks the verbatim
+    # imprint; a doc whose reading is a conjecture carries no
+    # imprint_place and keeps its verbatim axis name — uncertainty
+    # never reads as a claim, and no doc loses its place.
+    def test_metadata_places_eebo_imprint_place_outranks_the_verbatim
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:b1",
+                        { "imprint_place" => "London",
+                          "source_pub_place" => "Imprinted at London :" })
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:b2",
+                        { "imprint_place_conjecture" => "London",
+                          "source_pub_place" => "[London? :" })
+      build!
+      assert_equal "London", timeline_for("urn:nabu:eebo-tcp:b1")[:place_name],
+                   "the bare town is the registry-shaped key"
+      assert_equal "London?", timeline_for("urn:nabu:eebo-tcp:b2")[:place_name],
+                   "a conjecture doc keeps the stripped verbatim imprint"
     end
 
     # P118-R4 S3: ~10.3k eebo docs whose header imprint date the parser
@@ -795,6 +828,32 @@ module Store
       assert_equal [1605, 1605, "NDL catalog record (pid 2532153): [慶長10(1605)]", nil],
                    row.values_at(:not_before, :not_after, :date_raw, :date_class)
       assert_nil timeline_for("urn:nabu:honkoku:p:m2"), "no record, no row"
+    end
+
+    # honkoku without an NDL record: the label's own nengō date (parse-time
+    # "date", owner-ruled 2026-10-20) dates the material; a record wins.
+    def test_metadata_dates_honkoku_label_nengo_without_a_record
+      label_date = { "not_before" => 1840, "not_after" => 1840, "raw" => "天保十一年…仕様帳扣",
+                     "eras" => ["天保十一年"], "basis" => "label nengō (config/eras.yml)" }
+      seed_metadata_doc("honkoku", "urn:nabu:honkoku:p:m3", { "date" => label_date })
+      seed_metadata_doc("honkoku", "urn:nabu:honkoku:p:m4",
+                        { "date" => label_date,
+                          "ndl_catalog" => { "pid" => "1", "date" => { "not_before" => 1841, "not_after" => 1841,
+                                                                       "raw" => "天保12" } } })
+      build!
+      assert_equal [1840, 1840, "天保十一年…仕様帳扣"],
+                   timeline_for("urn:nabu:honkoku:p:m3").values_at(:not_before, :not_after, :date_raw)
+      assert_equal 1841, timeline_for("urn:nabu:honkoku:p:m4").fetch(:not_before), "the NDL record outranks"
+    end
+
+    # ja-wikisource: an era-typed header year= (寛政2) converted at parse
+    # keeps its verbatim spelling as the raw.
+    def test_metadata_dates_ja_wikisource_era_header_year_keeps_its_raw
+      seed_metadata_doc("ja-wikisource", "urn:nabu:ja-wikisource:9001", { "year" => 1790, "year_raw" => "寛政2" })
+      build!
+      row = timeline_for("urn:nabu:ja-wikisource:9001")
+      assert_equal [1790, 1790, "寛政2", "composition"],
+                   row.values_at(:not_before, :not_after, :date_raw, :date_class)
     end
 
     # obi-burmese: the header PLACE OF ORIGIN is the named findspot claim;

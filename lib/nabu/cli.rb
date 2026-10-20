@@ -4492,21 +4492,27 @@ module Nabu
     desc "kind census", "The document-kind axis: cross-corpus class counts"
     option :unmapped, type: :boolean, default: false,
                       desc: "List the unmapped raw values by count per source — the curation worklist"
+    option :uncovered, type: :boolean, default: false,
+                       desc: "List the open-vocabulary values no rule covers (they mint nothing)"
+    option :limit, type: :numeric, default: 50, desc: "Rows shown by --uncovered (the full count is announced)"
     long_desc <<~HELP, wrap: false
       The fourth document axis: what KIND of document is this? Upstream
       genre vocabularies fold onto the ruled cross-corpus classes
       (config/kind_classes.yml; the per-source folds live in
       config/kind_map.yml). `census` shows every class family with its
       document and source spread, the honesty buckets (unknown = upstream's
-      own "cannot determine"; unmapped = values awaiting a fold rule), and
-      the unclassified remainder. Filter the corpus with `nabu search
-      --kind CLASS[/SUB]`.
+      own "cannot determine"; unmapped = values awaiting a fold rule), the
+      open-vocabulary misses (uncovered = subject headings and the like
+      that no rule covers — a source declared `vocabulary: open` folds
+      them to nothing, counted here instead), and the unclassified
+      remainder. Filter the corpus with `nabu search --kind CLASS[/SUB]`.
 
         nabu kind census              # the class board
         nabu kind census --unmapped   # raw values awaiting a rule
+        nabu kind census --uncovered  # open-vocabulary values no rule covers (top 50; --limit N)
     HELP
     def kind(subcommand = "census")
-      raise Thor::Error, "usage: nabu kind census [--unmapped]" unless subcommand == "census"
+      raise Thor::Error, "usage: nabu kind census [--unmapped|--uncovered]" unless subcommand == "census"
 
       config = Nabu::Config.load
       catalog = open_catalog(config)
@@ -4515,6 +4521,8 @@ module Nabu
       census = Nabu::Query::KindCensus.new(catalog: catalog)
       if options[:unmapped]
         print_kind_unmapped(census, Nabu::Kinds.load_default(config: config))
+      elsif options[:uncovered]
+        print_kind_uncovered(census, limit: options[:limit].to_i)
       else
         report = census.run
         if report.nil?
@@ -7786,6 +7794,12 @@ module Nabu
             "(upstream's own \"cannot determine\")"
         say "  #{'unmapped'.ljust(width)}  #{commafy(report.unmapped_documents).rjust(9)} docs " \
             "(values awaiting a fold rule — `nabu kind census --unmapped`)"
+        if report.uncovered_values.positive?
+          say "uncovered: #{pluralize(report.uncovered_values, 'value')} · " \
+              "#{commafy(report.uncovered_documents)} docs in #{pluralize(report.uncovered_sources, 'source')} " \
+              "(open vocabularies — no rule covers them, so they mint nothing; " \
+              "`nabu kind census --uncovered`)"
+        end
         say "no classification: #{pluralize(report.unclassified_sources, 'source')} · " \
             "#{commafy(report.unclassified_documents)} docs (their postures speak)"
         total = report.classified_documents + report.unclassified_documents
@@ -7819,6 +7833,28 @@ module Nabu
         rows.each do |row|
           say "  #{row.slug.ljust(14)}  #{row.raw.inspect}  ×#{commafy(row.documents)}"
         end
+      end
+
+      # The open-vocabulary worklist: values a `vocabulary: open` source
+      # carries that no rule covers — they minted no kind row, so this is
+      # where they stay visible. Capped at +limit+, the full count
+      # announced (cap at render, never a silent truncation).
+      def print_kind_uncovered(census, limit:)
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        worklist = census.uncovered_worklist(limit: [limit, 1].max)
+        if worklist.total.zero?
+          say "kind census: nothing uncovered — no open-vocabulary source carries a value its rules miss"
+        else
+          say "kind census: open-vocabulary values no rule covers (they mint no kind row) — " \
+              "a genre-shaped line is a candidate config/kind_map.yml rule; a topical one needs nothing."
+          worklist.rows.each do |row|
+            say "  #{row.slug.ljust(14)}  #{row.raw.inspect}  ×#{commafy(row.documents)}"
+          end
+        end
+        shown = worklist.rows.size
+        scope = shown < worklist.total ? "showing #{commafy(shown)} of " : ""
+        say "kind census: #{scope}#{pluralize(worklist.total, 'uncovered value')} " \
+            "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
       end
 
       # The reviewed non-claims: values config declares NOT genre at all

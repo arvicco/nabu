@@ -34,6 +34,15 @@ marked non-refetchable in `manifest.yml`.
   OTDO's own catalog describes as "mostly Old Zhangzhung language" →
   language `xzh`, the one non-`otb` slice; 47 lines `r1`–`r47`.
 
+## The rejected grain (top level, skipped by rule)
+
+Upstream serves two grains: one page per document and the /archives
+catalog table that enumerates them. `archives_index.html` — a byte copy
+of `fetch/archives-6rows.html` (below) under the sidecar's own name —
+sits beside the pages so the skip rule runs against upstream bytes; the
+adapter test reconciles the top dir (every page a document or a
+censused skip).
+
 ## Catalog trims (`fetch/`, the OtdoFetch fixtures)
 
 The live `/archives` catalog is ONE numbered table (rows 1..414, one

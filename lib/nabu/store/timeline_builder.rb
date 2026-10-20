@@ -59,7 +59,10 @@ module Nabu
       # and rundata_undated (P40-6: inscriptions with neither a year bound
       # nor a find-spot — skipped, counted, never guessed),
       # and openiti_undated (P41-2: urns without the 4-digit AH death-year
-      # prefix — the MS* documentary shapes, out of scope but guarded).
+      # prefix — the MS* documentary shapes, out of scope but guarded),
+      # and litopys_annals (the Ipatiev chronicle's passage-grain annal
+      # rows — never a document count; its leading undated columns ride
+      # +unkeyed+).
       # The later-phase fields default so every prior construction stays
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
@@ -75,7 +78,8 @@ module Nabu
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
                             :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
                             :rundata_undated, :openiti_undated, :nikh_entries,
-                            :tlg_concordance, :openmgh_charters, :ud_sentences, :itkc_authors) do
+                            :tlg_concordance, :openmgh_charters, :ud_sentences, :itkc_authors,
+                            :litopys_annals) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -91,7 +95,8 @@ module Nabu
                        kanripo: 0, kanripo_undated: 0,
                        metadata_dates: {}, nikh_entries: {}, tlg_concordance: {},
                        openmgh_charters: {},
-                       ud_sentences: { documents: 0, runs: 0, undated: 0 }, itkc_authors: {}, **)
+                       ud_sentences: { documents: 0, runs: 0, undated: 0 }, itkc_authors: {},
+                       litopys_annals: { annals: 0, carried: 0, unkeyed: 0, invalid: 0 }, **)
           super
         end
 
@@ -147,10 +152,11 @@ module Nabu
         tlg = TlgConcordanceDates.build(catalog: catalog)
         charters = OpenmghCharterDates.build(catalog: catalog)
         ud = UdSentenceDates.build(catalog: catalog)
+        litopys = LitopysAnnalDates.build(catalog: catalog)
         # LAST: the author-era join fills only documents every lane above
         # left undated.
         itkc = ItkcAuthorDates.build(catalog: catalog, canonical_dir: canonical_dir)
-        Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp, ud_sentences: ud,
+        Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp, ud_sentences: ud, litopys_annals: litopys,
                     metadata_dates: metadata, nikh_entries: nikh, tlg_concordance: tlg,
                     openmgh_charters: charters, itkc_authors: itkc,
                     oracc: oracc[:documents], torot: torot[:documents],
@@ -374,4 +380,5 @@ require_relative "timeline_builder/cdli_dates"
 require_relative "timeline_builder/rundata_dates"
 require_relative "timeline_builder/openiti_dates"
 require_relative "timeline_builder/ud_sentence_dates"
+require_relative "timeline_builder/litopys_annal_dates"
 require_relative "timeline_builder/itkc_author_dates"

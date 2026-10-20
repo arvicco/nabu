@@ -21,6 +21,12 @@ module Nabu
     # ITJ (39) · insc (34) · S (18) · OZ (5). Slugs carry apostrophes
     # (insc_'Bis2) and hyphens (ITJ_0737-1). No robots.txt (404).
     #
+    # Reconciled against the catalog's own count (2026-10-20, the box's
+    # canonical crawl of 2026-07-28): 414 catalog rows = 414 unique slugs
+    # = 414 document pages discovered (+ the archives_index.html sidecar,
+    # the rejected catalog grain, skipped by rule) = 413 documents + 1
+    # parse quarantine (Or_8212_0172: zero citable transliteration lines).
+    #
     # == Identity
     #
     # urn = urn:nabu:otdo:<slug> — the catalog's own document id, also the
@@ -90,12 +96,16 @@ module Nabu
       end
 
       # The persisted catalog sidecar is a content-pattern file discover
-      # deliberately skips — an explicit, benign rule, censused here so the
-      # accounting never hides it.
+      # deliberately skips — upstream's CATALOG grain (the /archives
+      # table), not a document — an explicit, benign rule, censused here so
+      # the accounting never hides it.
       def discovery_skips(workdir)
-        skipped = Dir.glob(File.join(workdir, "*.html"))
-                     .count { |path| !Nabu::OtdoFetch.record?(File.basename(path)) }
-        DiscoverySkips.new(skipped_by_rule: skipped)
+        skipped = Dir.glob("*.html", base: workdir).reject { |name| Nabu::OtdoFetch.record?(name) }.sort
+        return DiscoverySkips.new if skipped.empty?
+
+        DiscoverySkips.new(skipped_by_rule: skipped.size,
+                           notes: ["#{skipped.size} catalog page(s) skipped — the /archives table " \
+                                   "grain, not a document (#{skipped.join(', ')})"])
       end
 
       def parse(document_ref)

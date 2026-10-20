@@ -46,6 +46,16 @@ module Ops
       assert_empty H.conflict_markers(diff_adding("test/fixtures/src/a.txt", EQ))
     end
 
+    def test_non_utf8_diff_bytes_never_crash_the_scan
+      # A Windows-1252 fixture (0x93 = curly quote) rides a staged diff as
+      # raw bytes; the scan scrubs rather than raising, and still catches a
+      # marker on a neighbouring line.
+      diff = diff_adding("lib/x.rb", "sm\x93art quote", EQ).force_encoding(Encoding::UTF_8)
+      offenses = H.conflict_markers(diff)
+      assert_equal 1, offenses.size
+      assert_match(%r{lib/x\.rb:4}, offenses.first)
+    end
+
     # -- (b) the mid-rebuild hold -----------------------------------------------
 
     PS = <<~PS

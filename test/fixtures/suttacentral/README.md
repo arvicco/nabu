@@ -31,6 +31,17 @@ and each byte-compared identical (`cmp`) to the synced canonical tree at
 that same commit. Whole files, upstream-relative paths (exact URLs in
 `manifest.yml`).
 
+**Sidecar-census additions (2026-10-20):** the `sa7` root + reference and
+the rootless `lzh-iti83` variant file below — and the PTS-concordance
+roots + references `sn1.45`, `kp1`, `thi-ap2` — were copied byte-verbatim
+(whole files, `cp`, then `cmp`) from the held canonical tree —
+`canonical/suttacentral/` at bilara-data commit
+`a20fcb094d1d618080e52f41f24d20d5e347b0f7` (branch `published`) — zero
+network. Recipe for any further sidecar sample: pick the file from the
+census, `cp` the root and its sidecar(s) whole from `canonical/suttacentral/`
+to the same upstream-relative path here, `cmp` each, add a manifest entry
+pinned to the canonical commit.
+
 ## License chain (verified 2026-07-18, from the repo's own metadata)
 
 Per-publication licensing lives in `_publication.json` (140 publications
@@ -104,6 +115,12 @@ translations (CC0 + the one BY-SA) are ingested.
 | `variant/pli/ms/sutta/kn/dhp/dhp21-32_variant-pli-ms.json` | whole | RANGE-STEM sidecar: 6 readings keyed by per-verse ids (`dhp24:1`) |
 | `reference/pli/ms/sutta/kn/dhp/dhp21-32_reference.json` | whole | RANGE-STEM sidecar: 12 per-verse concordances |
 | `reference/lzh/sct/sutta/sa/sa101-200/sa158_reference.json` | whole | lzh Taishō line refs (`t99.44a28`); 6 of sa158's 10 segments |
+| `root/lzh/sct/sutta/sa/sa1-100/sa7_root-lzh-sct.json` | whole | sidecar-census root: `sa7:5.1` is an EMPTY root segment (skipped by rule); snapshotted WITHOUT its patton translation (only the sidecar shape matters) |
+| `reference/lzh/sct/sutta/sa/sa1-100/sa7_reference.json` | whole | keys `sa7:5.1` with a Taishō line (`t99.2.1c20`) — reference data on a blank root segment: no passage to land on, counted (`sidecar_unjoined`), never re-homed (one of 17 such values corpus-wide) |
+| `variant/lzh/sct/sutta/lzh-minor/lzh-iti/lzh-iti83_variant-lzh-sct.json` | whole | the ONE in-scope sidecar file whose root bilara has not published — a censused discovery rule skip, never a document |
+| `root/pli/ms/sutta/sn/sn1/sn1.45_root-pli-ms.json` + `reference/…/sn1/sn1.45_reference.json` | whole | PTS concordance: SN I's TWO PTS editions on one segment (`pts-vp-pli1ed1.33`, `pts-vp-pli2ed1.69`) → edition-explicit keys `PTS-ed1.S.1.33` / `PTS-ed2.S.1.69`; no -en sibling snapshotted |
+| `root/pli/ms/sutta/kn/kp/kp1_root-pli-ms.json` + `reference/…/kp/kp1_reference.json` | whole | PTS concordance: a single-volume book's page-only token (`pts-vp-pli1` → `PTS.Khp.1`) + VRI tokens, one segment VRI-only (`4.1`) |
+| `root/pli/ms/sutta/kn/thi-ap/thi-ap2_root-pli-ms.json` + `reference/…/thi-ap/thi-ap2_reference.json` | whole | PTS concordance: the Apadāna's continuous pagination (`pts-vp-pli2.514` → `PTS.Ap.514`) |
 | `_publication.json` | SLICE | 8 of 140 publication entries (scpub1, scpub4, scpub7, scpub20, scpub39, scpub53, scpub64, scpub69), entry blocks byte-identical to upstream; drives the per-publication license gate + override |
 | `parallels/parallels.json` | SLICE | the sc-data parallels graph (P32-6): 10 of 8,221 relation entries, value-identical to upstream, at the adapter's fetch-target path (`parallels/`, not upstream's `relationship/`) — see below |
 

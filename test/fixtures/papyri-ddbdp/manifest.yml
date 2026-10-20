@@ -51,3 +51,21 @@ files:
     copied: 2026-10-14
     whole: true
     trim: none (o.claud;3;457 cancelled-document exemplar, copied whole)
+  - path: DDbDP/35/35046.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the canonical clone's working tree; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/DDbDP/35/35046.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-10-20
+    whole: true
+    trim: none (p.select;;16 apparatus exemplar — multi-reading apps, reading resp, empty rdg, apps nested in lemmas and readings, line-spanning lemma, copied whole)
+  - path: DDbDP/135/135776.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the canonical clone's working tree; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/DDbDP/135/135776.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-10-20
+    whole: true
+    trim: none (sb;30;17872 apparatus exemplar — plain and break="no" line breaks inside lemma and reading, copied whole)

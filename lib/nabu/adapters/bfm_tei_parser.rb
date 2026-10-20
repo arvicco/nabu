@@ -94,7 +94,7 @@ module Nabu
     # The only Nokogiri entry point is Nokogiri::XML::Reader — the corpus's
     # largest file (qgraal_cm.xml) is ~6.5 MB, over the house >5 MB DOM
     # threshold. One pass per document.
-    class BfmTeiParser
+    class BfmTeiParser < StreamingTeiParser
       def parse(source, urn:, language:, title: nil, canonical_path: nil)
         path = resolve_canonical_path(source, canonical_path)
         extraction = extract(source, path: path)
@@ -106,56 +106,7 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
-
-      # The house collision tolerance (ddbdp/GRETIL/croala precedent):
-      # duplicates disambiguate deterministically in document order.
-      def disambiguate_collisions(units)
-        seen = Hash.new(0)
-        units.map do |unit|
-          seen[unit.citation] += 1
-          count = seen[unit.citation]
-          count == 1 ? unit : unit.with(citation: "#{unit.citation}:b#{count}")
-        end
-      end
-
-      def build_document(units, urn:, language:, title:, path:, metadata:)
-        document = Document.new(urn: urn, language: language, title: title,
-                                canonical_path: path, metadata: metadata)
-        units.each_with_index do |unit, sequence|
-          text = Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip)
-          document << Passage.new(
-            urn: "#{urn}:#{unit.citation}",
-            language: language,
-            text: text,
-            annotations: unit.annotations,
-            sequence: sequence
-          )
-        end
-        raise ParseError, "#{path}: no citable passages found in <text><body>" if document.empty?
-
-        document
-      rescue ValidationError => e
-        raise ParseError, "#{path}: #{e.message}"
-      end
+      def extraction_class = Extraction
 
       # One emitted unit: citation suffix, raw accumulated text, provenance
       # annotations (including the tokens lane where lemmas exist).
@@ -165,12 +116,7 @@ module Nabu
       # The single-pass Reader state machine: a header phase mines the
       # metadata; a body phase tracks the div stack, blocks and (for verse
       # groups) the <lb>-milestone segments.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         # Whole-subtree drops: editorial apparatus and scribal deletions.
         DROPPED_ELEMENTS = %w[note figure del].freeze
         # Inside <choice> only: the un-preferred siblings of corr/expan/reg.
@@ -184,7 +130,7 @@ module Nabu
         # P104-1: upstream's explicit unknown dialect — honest
         # absence at facet time, never a facet value.
         UNDEFINED_DIALECT = "non défini"
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS,
+        private_constant :DROPPED_ELEMENTS,
                          :CHOICE_DROPPED_ELEMENTS, :SEPARATOR_ELEMENTS,
                          :PUNCTUATION_POS, :NO_LEMMA, :LANGUAGE_SHAPE,
                          :UNDEFINED_DIALECT
@@ -192,8 +138,7 @@ module Nabu
         Result = Data.define(:units, :title, :language, :metadata)
 
         def initialize(reader:, path:)
-          @reader = reader
-          @path = path
+          super
           @seen_body = false
           @in_body = false
           @drop_depth = nil
@@ -225,14 +170,6 @@ module Nabu
 
         def root_frame
           { component: nil, child_divs: 0, verse: 0, prose: 0, heads: 0, type: nil, n: nil }
-        end
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
         end
 
         # -- dispatch ---------------------------------------------------------
@@ -593,22 +530,8 @@ module Nabu
           true
         end
 
-        def dropping? = !@drop_depth.nil?
-
         def sanitize(value)
           value.gsub(/[^A-Za-z0-9_-]/, "-")
-        end
-
-        def flatten(value)
-          presence(value&.gsub(/[[:space:]]+/, " ")&.strip)
-        end
-
-        def presence(value)
-          value if value && !value.empty?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :Extraction

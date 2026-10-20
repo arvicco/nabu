@@ -45,6 +45,11 @@ module Store
           walk: hgv-keywords
           map:
             "Quittung": legal
+        eebo:
+          facet: subject
+          vocabulary: open
+          regex_map:
+            '\\ASermons\\b': legal
         kanripo:
           walk: kr-subclass
           prefix_map:
@@ -250,6 +255,47 @@ module Store
       assert_includes kind_rows, [play.id, "funerary", "Drama"]
       assert_includes kind_rows, [play.id, "legal", "Wissenschaft"],
                       "each declared metadata field maps independently"
+    end
+
+    # The open-vocabulary fold (vocabulary: open): an uncovered subject
+    # heading mints NO kind row — no unmapped noise — and is censused
+    # instead, precompiled into kind_stats beside the class heads: one
+    # `uncovered:<raw>` row per uncovered value (distinct docs) and the
+    # `uncovered:` total (distinct docs carrying any uncovered value).
+    def test_open_vocabulary_mints_nothing_for_uncovered_values_and_censuses_them
+      eebo = Nabu::Store::Source.create(slug: "eebo", name: "E", adapter_class: "X",
+                                        license_class: "open")
+      sermon_and_plague = doc(eebo, "urn:e:1")
+      topical = doc(eebo, "urn:e:2")
+      sermon = doc(eebo, "urn:e:3")
+      facet(sermon_and_plague, "subject", "Sermons, English -- 17th century.")
+      facet(sermon_and_plague, "subject", "Plague.")
+      facet(topical, "subject", "Plague.")
+      facet(topical, "subject", "Ireland -- History.")
+      facet(sermon, "subject", "Sermons, English.")
+
+      rebuild!
+      eebo_rows = kind_rows.select { |row| [sermon_and_plague.id, topical.id, sermon.id].include?(row[0]) }
+      assert_equal [[sermon_and_plague.id, "legal", "Sermons, English -- 17th century."],
+                    [sermon.id, "legal", "Sermons, English."]], eebo_rows,
+                   "only covered headings mint rows; nothing lands in the unmapped bucket"
+
+      stats = @db[:kind_stats].where(source_id: eebo.id).select_map(%i[head documents]).sort_by(&:to_s)
+      assert_includes stats, ["legal", 2]
+      assert_includes stats, [nil, 2], "the classified total counts kinded docs only"
+      assert_includes stats, ["uncovered:Plague.", 2]
+      assert_includes stats, ["uncovered:Ireland -- History.", 1]
+      assert_includes stats, ["uncovered:", 2], "the uncovered total: distinct docs carrying any uncovered value"
+    end
+
+    def test_refresh_of_an_open_source_re_mints_its_uncovered_census_once
+      eebo = Nabu::Store::Source.create(slug: "eebo", name: "E", adapter_class: "X",
+                                        license_class: "open")
+      facet(doc(eebo, "urn:e:1"), "subject", "Plague.")
+      rebuild!
+      Nabu::Store::KindBuilder.refresh_source!(catalog: @db, kinds: @kinds, slug: "eebo")
+      assert_equal 1, @db[:kind_stats].where(source_id: eebo.id, head: "uncovered:Plague.").count
+      assert_equal 1, @db[:kind_stats].where(source_id: eebo.id, head: "uncovered:").count
     end
   end
 end

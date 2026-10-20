@@ -2,6 +2,7 @@
 
 require "csv"
 require_relative "aozora_ruby_parser"
+require_relative "../eras"
 
 module Nabu
   module Adapters
@@ -103,11 +104,13 @@ module Nabu
       PD_FLAG = "なし"
       PERSON_REF_PREFIX = "aozora:"
 
-      # Index date grammar (#publication_years). Japanese era → the
-      # Gregorian year before its first year (明治1 = 1868); 元年 is year 1.
-      ERA_BASE = { "明治" => 1867, "大正" => 1911, "昭和" => 1925, "平成" => 1988, "令和" => 2018 }.freeze
+      # Index date grammar (#publication_years). Era-only dates (昭和15年,
+      # 大正元年) convert through the shared nengō table (config/eras.yml,
+      # owner-ruled 2026-10-20 — the former in-adapter 明治…令和 offsets,
+      # moved to the one table). Census 2026-10-20: of 17,343 PD works,
+      # 16 stay undated by this grammar and none of them carries an era
+      # year, so the move dates no new work — it retires a parallel table.
       WESTERN_YEAR = /(\d{4})\s*(?:[（(]|年)/
-      ERA_YEAR = /(明治|大正|昭和|平成|令和)\s*(\d{1,2}|元)年/
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "aozora",
@@ -215,12 +218,15 @@ module Nabu
         text = text.to_s.strip
         years = text.scan(WESTERN_YEAR).flatten.map { |year| Integer(year, 10) }
         years = [Integer(text, 10)] if years.empty? && text.match?(/\A\d{4}\z/)
-        if years.empty?
-          years = text.scan(ERA_YEAR).map { |era, n| ERA_BASE.fetch(era) + (n == "元" ? 1 : Integer(n, 10)) }
-        end
+        years = era_years(text) if years.empty?
         return nil if years.empty?
 
         years.minmax
+      end
+
+      # The era-only years of +text+ through the shared nengō table.
+      def self.era_years(text)
+        (Nabu::Eras.default&.nengo_years(text) || []).map { |hit| hit.conversion.not_before }
       end
 
       private

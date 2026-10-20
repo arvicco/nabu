@@ -138,6 +138,7 @@ module Nabu
       # refuse HERE — before the db drop and the hours of replay the late
       # lect-journal stage would otherwise waste.
       LectRulings.validate!(@config.lect_rulings_paths)
+      @open_runs = []
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild.
@@ -368,9 +369,16 @@ module Nabu
       # so the derivability law holds: db/ stays f(canonical) and the
       # timings survive it by construction.
       persist_stage_timings!(ledger, profile, outcomes, indexed)
+      # Every stage returned: NOW the replay rows close "succeeded".
+      Store::RunRecorder.finish(open_runs)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
                  analyzed: analyzed, link_failures: links.failures, links: links)
+    rescue StandardError => e
+      # A stage raised: the replay rows still open close "failed after the
+      # load" (a signal-kill rescues nothing and leaves them open — also true).
+      Store::RunRecorder.fail_open(open_runs, e) if ledger
+      raise
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -378,6 +386,12 @@ module Nabu
     end
 
     private
+
+    # The replay run rows this run has opened and not yet closed (#replay
+    # appends; #run finishes or fails them all at its end).
+    def open_runs
+      @open_runs ||= []
+    end
 
     # P84-1: the local-lemmas shelf when it exists on this box — an absent
     # shelf projects nothing, honestly (the silver-lemma pass is skipped).
@@ -399,7 +413,12 @@ module Nabu
       source = entry.sync_source!(db)
       adapter = entry.build_adapter
       report = nil
-      Store::RunRecorder.record(source_slug: entry.slug, kind: "rebuild") do
+      # The row stays OPEN past the replay (running, loaded_at stamped): the
+      # rebuild is not done until its corpus stages are, so #run closes every
+      # replay row together at the very end (RunRecorder.finish) — a rebuild
+      # that dies in the index leaves open rows, never a ledger of
+      # "succeeded" over a half-built library.
+      open_runs << Store::RunRecorder.record_load(source_slug: entry.slug, kind: "rebuild") do
         report = build_loader(adapter, db, ledger, source, profile).load_from(
           adapter,
           workdir: workdir_for(entry.slug), full: true,

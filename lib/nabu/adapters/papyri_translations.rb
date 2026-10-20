@@ -56,12 +56,15 @@ module Nabu
     #   88604-1.xml);
     # - empty translation divs (13), unmapped language tags (none today);
     # - APIS translations already carried by Translations/ (4,552);
-    # - translations naming no text identity at all (1,174: a handful of
-    #   Translations files, the rest APIS records — apisid/controlNo, at most a
-    #   collection-style ddbdp idno nothing in the catalog answers to):
-    #   with no edition to pair and no stable text namespace to mint
-    #   under, they are not served. A standalone APIS document namespace
-    #   would be a separate shape decision.
+    # - translations naming no text identity at all (1,174 at the
+    #   2026-10-20 census): 15 Translations files (the generic no-edition
+    #   reason) and the APIS RECORD-ONLY remainder, 1,159 records — an
+    #   apisid/controlNo identity, at most a collection-style ddbdp idno
+    #   nothing in the catalog answers to. With no edition to pair and no
+    #   stable text namespace to mint under, they are not served: a
+    #   standalone APIS document namespace was weighed and declined, so
+    #   the remainder is a DECLARED exemption with its own censused reason
+    #   (APIS_RECORD_ONLY), never silence and never the generic bucket.
     #
     # == Identity
     #
@@ -76,6 +79,13 @@ module Nabu
       APIS_ROOT = "APIS"
       TAIL = "-trans-"
       STEM = /\A\d+[a-z]*-\d+\z/
+
+      NO_EDITION = "names no edition (no hybrid, dclp, HGV or TM the catalog answers to)"
+      # The declared exemption (see the class comment): an APIS record whose
+      # only identity is its apisid/controlNo — 1,159 records, census
+      # 2026-10-20 (upstream 91611a19).
+      APIS_RECORD_ONLY = "APIS record-only — apisid/controlNo identity, no edition to pair " \
+                         "(exempt: a standalone APIS namespace declined)"
 
       Skip = Data.define(:name, :reason)
 
@@ -136,16 +146,16 @@ module Nabu
           apisid = apisids(doc).first || File.basename(path, ".xml")
           next skip(apisid, "APIS translation already carried by Translations/") if @claimed_apis[apisid]
 
-          ref_for(doc, path, apisid)
+          ref_for(doc, path, apisid, no_edition: APIS_RECORD_ONLY)
         end
       end
 
-      def ref_for(doc, path, id)
+      def ref_for(doc, path, id, no_edition: NO_EDITION)
         name = File.basename(path, ".xml")
         return skip(name, "empty translation div") if blank_translation?(doc)
         return skip(name, "unmapped translation language") if PapyriTranslationParser.language_of(doc).nil?
 
-        base = resolve(doc) or return skip(name, "names no edition (no hybrid, dclp, HGV or TM the catalog answers to)")
+        base = resolve(doc) or return skip(name, no_edition)
 
         metadata = { "kind" => "translation", "translation_of" => base, "translation_id" => id }
         apisid = apisids(doc).first

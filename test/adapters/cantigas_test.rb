@@ -51,9 +51,16 @@ class CantigasTest < Minitest::Test
             "added the six recovered quirk pages; quirks/cantiga-1066.html stays undiscovered)"
   end
 
+  # The rejected grain, pinned by a real specimen beside the cantiga
+  # pages: upstream's letter-H incipit index (the enumeration grain, 7
+  # cdcant ids) skips by rule with its note, and the top dir reconciles —
+  # every page is a document or a censused skip.
   def test_discovery_skips_counts_the_letter_index_sidecars
-    assert_equal 0, adapter.discovery_skips(FIXTURES).skipped_by_rule,
-                 "the fixture top dir carries no index sidecars"
+    skips = adapter.discovery_skips(FIXTURES)
+    assert_equal 1, skips.skipped_by_rule, "listacantigas-H.html, the real index specimen"
+    assert_match(/1 letter-index page.*listacantigas-H\.html/, skips.notes.join("\n"))
+    pages = Dir.glob("*.html", base: FIXTURES)
+    assert_equal pages.size, adapter.discover(FIXTURES).count + skips.skipped_by_rule
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, "listacantigas-A.html"), "<html/>")
       File.write(File.join(dir, "cantiga-2.html"), "<html/>")

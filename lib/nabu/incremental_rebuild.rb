@@ -137,6 +137,7 @@ module Nabu
       # P70 fail-fast, mirroring the full rebuild: a malformed hand edit to
       # config/lect_rulings.yml refuses before any replay work.
       LectRulings.validate!(@config.lect_rulings_paths)
+      @open_runs = []
 
       db = Store.connect(db_path)
       Store.setup!(db)
@@ -339,9 +340,15 @@ module Nabu
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
       # touched no rows, so the existing stats still describe them.
       analyzed = analyze_after_incremental(db, fulltext) if builders_ran
+      # Every stage returned: NOW the dirty replays' rows close "succeeded"
+      # (Rebuild#replay leaves them open past the load).
+      Store::RunRecorder.finish(open_runs)
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,
                  indexed: indexed, axes: axes, facets: facets, analyzed: analyzed,
                  link_failures: link_failures, trusted: trusted, links: links)
+    rescue StandardError => e
+      Store::RunRecorder.fail_open(open_runs, e) if ledger
+      raise
     ensure
       db&.disconnect
       fulltext&.disconnect

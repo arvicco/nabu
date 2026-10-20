@@ -10,6 +10,7 @@ require_relative "../xlsx"
 require_relative "../zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
+require_relative "../eras"
 require_relative "ndl_search_bib"
 
 module Nabu
@@ -330,6 +331,22 @@ module Nabu
 
         { "not_before" => years.min, "not_after" => years.max,
           "raw" => "NDL Search record (pid #{pid}): #{record['date_prose'] || years.join(', ')}" }
+      end
+
+      # The census prose 出版日's nengō years (寛政4刊, 弘化4-嘉永6, 宝暦8序,安永9刊)
+      # through the shared era table (config/eras.yml, owner-ruled
+      # 2026-10-20) — the LAST rung, below both typed sources: census
+      # 2026-10-20, 4,622 of the 56,484 census rows without a W3CDTF year
+      # carry an era-year shape (天保 458 · 文政 428 · 文化 329 …). All era
+      # years stated span the envelope (a preface and a print date
+      # together); Chinese print-era homonyms (Ming 正徳 imprints sit in
+      # this collection), the one-year eras, era spans without a year
+      # number (慶長元和年間) and pre-Taika dates read nothing — declared.
+      def self.era_date_envelope(bib, eras: Nabu::Eras.default)
+        prose = Normalize.nfc(bib["pub_date"].to_s.strip)
+        return nil if prose.empty? || eras.nil?
+
+        eras.nengo_date(prose, basis: "census 出版日 nengō (config/eras.yml)")
       end
 
       private
@@ -686,7 +703,8 @@ module Nabu
         metadata["authors"] = parts.map { |part| self.class.author_part(part) } unless parts.empty?
         %w[ndc ndlc creators publication_places].each { |key| metadata[key] = record[key] if record[key] }
         metadata["ndl_bib"] = { "records" => record["records"] } if record["records"]
-        date = self.class.date_envelope(bib) || self.class.bib_date_envelope(pid, record)
+        date = self.class.date_envelope(bib) || self.class.bib_date_envelope(pid, record) ||
+               self.class.era_date_envelope(bib)
         metadata["date"] = date if date
         facets = facets_for(bib, record)
         metadata["facets"] = facets unless facets.empty?

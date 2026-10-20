@@ -29,6 +29,10 @@ class PlaceRefsTest < Minitest::Test
                  "nrct joined the mint namespaces with its nabu-places mint (2026-09-29)"
     assert_equal [%w[thurayya BAGHDAD_443E333N_S]], Nabu::PlaceRefs.ids("thurayya:BAGHDAD_443E333N_S"),
                  "thurayya joined with its nabu-places mint (2026-10-10)"
+    assert_equal [%w[wikidata Q84]], Nabu::PlaceRefs.ids("wikidata:Q84"),
+                 "wikidata joined with the eebo imprint-towns mint (2026-10-20)"
+    assert_equal [%w[tgn 7011781]], Nabu::PlaceRefs.ids("tgn:7011781"),
+                 "tgn joined with the eebo imprint-towns mint (2026-10-20)"
   end
 
   def test_an_unknown_mint_namespace_yields_nothing_never_guessed
