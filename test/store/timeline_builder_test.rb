@@ -732,8 +732,16 @@ module Store
                                                           "raw" => "1640-41" } })
       seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A00002", { "idno" => "A00002" })
       seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A99999", { "idno" => "A99999" })
+      # The live catalog's metadata for the one descending list range.
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A87970",
+                        { "idno" => "A87970", "date" => { "raw" => "1689?]" },
+                          "source_pub_place" => "[Edinburgh?,", "imprint_place_conjecture" => "Edinburgh" })
       canonical = eebo_canonical
       Nabu::Store::TimelineBuilder.rebuild!(catalog: @db, canonical_dir: canonical)
+
+      assert_equal [1689, 1704, "1704-1689"],
+                   timeline_for("urn:nabu:eebo-tcp:A87970").values_at(:not_before, :not_after, :date_raw),
+                   "the list's descending range lands ordered; the raw keeps upstream's spelling"
 
       row = timeline_for("urn:nabu:eebo-tcp:A57617")
       assert_equal [1644, 1644, "1644", "London"], row.values_at(:not_before, :not_after, :date_raw, :place_name),
@@ -747,7 +755,7 @@ module Store
       @db[:document_axes].delete
       rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "eebo-tcp",
                                                                          canonical_dir: canonical)
-      assert_equal 3, rows, "the per-source seam joins the lists too"
+      assert_equal 4, rows, "the per-source seam joins the lists too"
     ensure
       FileUtils.rm_rf(canonical) if canonical
     end
@@ -788,6 +796,8 @@ module Store
       assert_equal [1690, 1999], parse.call("1690-1uuu?")
       assert_equal [1688, nil], parse.call("1688-9999?"), "9999 is the open-ended sentinel"
       assert_equal [1660, nil], parse.call("1660-uuuu?")
+      assert_equal [1689, 1704], parse.call("1704-1689"),
+                   "a descending list range (A87970's) order-normalizes — never a reversed interval"
       assert_nil parse.call("n.d.")
       assert_nil parse.call("")
     end

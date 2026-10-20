@@ -353,6 +353,11 @@ module Nabu
           lower = low == "uuuu" ? nil : Integer(low.tr("u", "0"), 10)
           upper = %w[uuuu 9999].include?(high) ? nil : Integer(high.tr("u", "9"), 10)
           return nil if lower.nil? && upper.nil?
+          # One descending range in the lists (A87970 "1704-1689", header
+          # imprint "1689?]"): the TCP lists are all-CE unsigned years, so
+          # the order-normalizing swap is always safe; the raw keeps the
+          # upstream spelling.
+          return [upper, lower] if lower && upper && lower > upper
 
           [lower, upper]
         end
