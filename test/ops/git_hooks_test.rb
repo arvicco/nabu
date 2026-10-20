@@ -53,7 +53,7 @@ module Ops
       diff = diff_adding("lib/x.rb", "sm\x93art quote", EQ).force_encoding(Encoding::UTF_8)
       offenses = H.conflict_markers(diff)
       assert_equal 1, offenses.size
-      assert_match(/lib\/x\.rb:4/, offenses.first)
+      assert_match(%r{lib/x\.rb:4}, offenses.first)
     end
 
     # -- (b) the mid-rebuild hold -----------------------------------------------
