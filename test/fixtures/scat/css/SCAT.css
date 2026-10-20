@@ -1,0 +1,101 @@
+@font-face {
+    font-family: 'agiounicodemedium';
+    src: url('fonts/agiounicode-webfont.eot');
+    src: url('fonts/agiounicode-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/agiounicode-webfont.woff2') format('woff2'),
+         url('fonts/agiounicode-webfont.woff') format('woff'),
+         url('fonts/agiounicode-webfont.ttf') format('truetype'),
+         url('fonts/agiounicode-webfont.svg#agiounicodemedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+.SCAT {
+  background-color: #f8f7ee;
+  font-family: agiounicode, times;
+  font-size: 14px;
+  text-indent: 0px;
+  text-align: left;
+  box-shadow: .3125em .3125em .625em 0 #888;
+  margin: 1.25em auto;
+  padding: 3em;
+  width: 500px;
+  min-height: 90%;
+  position: relative;
+}
+
+.SCAT .txmeditionpb {
+  text-align: center;
+}
+
+.SCAT .txmlettrinep:first-letter {
+  float: left;
+  font-size: 6em;
+  line-height: 1;
+  margin-right: 0.2em;
+}
+
+.SCAT .metadata-page {
+  font-family: times;
+}
+
+.SCAT .editionpageverse {
+  font-family: times;
+  color: red;
+  display: block;
+  text-align: center;
+}
+
+.SCAT .verselinenumber {
+  color: darkgray;
+  position: absolute;
+  left: 0.5em;
+}
+
+.SCAT a {
+  color:#802520;
+}
+
+.SCAT h1 {
+  font-size: 20px;
+  font-variant: small-caps;
+  text-align: center;
+  color:#802520;
+}
+
+.SCAT h2 {
+  font-size: 18px;
+  font-variant: small-caps;
+  text-align: center;
+  color:#802520;
+}
+
+.SCAT h3 {
+  font-size: 16px;
+  font-variant: small-caps;
+  text-align: center;
+  color:#802520;
+}
+
+.SCAT p {
+  text-indent: 0.2cm;
+  text-align: justify;
+  text-justify: inter-word;  
+}
+
+.SCAT img {
+  margin: 10px 10px 10px 10px;
+}
+
+.SCAT td[rend="table-cell-align-right"] {
+  text-align: right;
+}
+
+.SCAT td[rend="table-cell-align-left"] {
+  text-align: left;
+}
+
+.SCAT td[rend="table-cell-align-center"] {
+  text-align: center;
+}
+

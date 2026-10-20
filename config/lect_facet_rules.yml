@@ -332,6 +332,31 @@ rules:
       "bulgarian": "chu:csl/bul"
       "serbian": "chu:csl/srp"
 
+  # ── SCAT (2026-10-20): the release catalog's century → the Russian-
+  # recension Church Slavonic of the saints' lives. The 16th- and
+  # 17th-century texts ARE chu:csl/rus (post-canonical Church Slavonic,
+  # Russian recension — the registry's own node). The 18th-century slice
+  # (10 texts: AKush-EvSzh, AndTtm, ArsKml, GrsVlg, IgnLm, IgnVlg, InnKml,
+  # ThdTtm, VsTix, VsTix-m) is post-Nikonian New Church Slavonic; the
+  # registry has no such stage yet, so it rides chu:csl/rus DECLARED
+  # COARSE (tier approximation) pending the chu:ncs stage mint — the "18"
+  # row flips to chu:ncs when that node reaches canonical/nabu-lects.
+  - id: scat-century
+    tier: certain
+    sources: [scat]
+    code: chu
+    facet: century
+    map:
+      "16": "chu:csl/rus"
+      "17": "chu:csl/rus"
+  - id: scat-century-ncs-pending
+    tier: approximation
+    sources: [scat]
+    code: chu
+    facet: century
+    map:
+      "18": "chu:csl/rus"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows

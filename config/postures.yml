@@ -1111,6 +1111,19 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied, note: kana-heavy hentaigana-normalized transcription per the
         project's own conventions}
+  scat:
+    # kind: machine-postured — kind_map.yml source_kind historiography (the
+    # corpus is saints' lives). lect: machine-postured by the scat-century
+    # facet rules — 16th/17th c. chu:csl/rus; the 18th-c. slice rides
+    # chu:csl/rus DECLARED COARSE (approximation) pending the chu:ncs (New
+    # Church Slavonic) stage mint, which flips the "18" row.
+    dating: {posture: dated, note: "the release catalog's century on all 24 texts → a century
+        envelope (16th/17th/18th); coarse by upstream's own grain — the README pairs it with the
+        manuscript shelfmark, so it dates the witness"}
+    places: {posture: unplaced, note: "the release carries no origin place; the saints' Vologda /
+        Russian North monasteries are the texts' subject, never claimed as the writing place, and
+        the README's shelfmarks name holding libraries (present locations)"}
+    script: {posture: implied, note: "Cyrillic, diplomatic (titla and superscript letters kept)"}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old

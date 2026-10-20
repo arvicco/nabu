@@ -1,0 +1,68 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. SCAT's TEI ships only inside the release zip
+# (scat-content-120.zip, tag 1.2.0); no raw per-file URL serves it. Every
+# fixture was extracted 2026-10-20 from that zip (TEI trimmed per the
+# README), so every entry is refetchable: false — re-acquiring means
+# re-downloading the zip and re-applying the README trims.
+source: scat
+adapter_test:
+retrieved: 2026-10-20
+files:
+  - path: DmPrlc.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: false
+    trim: body cut before the 4th pb (folios 201, -201, 202), open elements closed; 685,814 B -> 47,966 B
+  - path: AKush.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: false
+    trim: body cut before the 4th pb (folios 371, -371, 372); 423,304 B -> 18,802 B
+  - path: ThdTtm.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: false
+    trim: body cut before the 6th pb (-51, 52, -52, 53, 53 — the repeated label kept); 387,127 B -> 24,212 B
+  - path: metadata.csv
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: false
+    trim: header + the three fixture texts' rows (of 24)
+  - path: Documentation.jsp
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: true
+    trim: none
+  - path: css/SCAT.css
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: true
+    trim: none
+  - path: xsl/3-posttok/txm-posttok-addRef.xsl
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the scat-content-120.zip release asset — no raw per-file URL exists
+    upstream: https://github.com/vintagentleman/scat-content/releases/download/1.2.0/scat-content-120.zip
+    copied: 2026-10-20
+    whole: true
+    trim: none

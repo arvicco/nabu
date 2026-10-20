@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Житие Феодосия Тотемского</title>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <pb n="-51"/>
+        <lb n="16"/>
+        <w xml:id="ThdTtm.1" norm="ПОВ+СТЬ">повѣсть</w>
+        <w xml:id="ThdTtm.2" norm="О">о</w>
+        <w xml:id="ThdTtm.3" norm="РОЖДЕНИИ">рожденїи</w>
+        <w xml:id="ThdTtm.4" norm="ПРЕПОДОБНАГО">прпⷣбнаго</w>
+        <lb n="17"/>
+        <w xml:id="ThdTtm.5" norm="ОТЦА">оц҃а</w>
+        <w xml:id="ThdTtm.6" norm="НАШЕГО">нашегѡ</w>
+        <name>
+          <w xml:id="ThdTtm.7" norm="ФЕОДОСИЯ">феодосїѧ</w>
+        </name>
+        <pc xml:id="ThdTtm.8">,</pc>
+        <pb n="52"/>
+        <lb n="1"/>
+        <name>
+          <w xml:id="ThdTtm.9" norm="ТОТЕМОСКАГО">тотемскаго</w>
+        </name>
+        <w xml:id="ThdTtm.10" norm="НОВАГО">новаго</w>
+        <w xml:id="ThdTtm.11" norm="ЧЮДОТВОРЦА">чюдоⷮворца</w>
+        <pc xml:id="ThdTtm.12">.</pc>
+        <lb n="2"/>
+        <w xml:id="ThdTtm.13" norm="СИИ">сїи</w>
+        <w xml:id="ThdTtm.14" norm="ПРЕПОДОБНЫИ">прпⷣбныи</w>
+        <w xml:id="ThdTtm.15" norm="ОТЕЦЬ">оц҃ъ</w>
+        <w xml:id="ThdTtm.16" norm="НАШЬ">нашъ</w>
+        <name>
+          <w xml:id="ThdTtm.17" norm="ФЕОДОСИИ">
+            феѡдо
+            <lb n="3"/>
+            сїи
+          </w>
+        </name>
+        <pc xml:id="ThdTtm.18">,</pc>
+        <w xml:id="ThdTtm.19" norm="РОДИСЯ">родисѧ</w>
+        <w xml:id="ThdTtm.20" norm="ВО">во</w>
+        <w xml:id="ThdTtm.21" norm="ДНИ">дни</w>
+        <w xml:id="ThdTtm.22" norm="БЛАГОЧЕСТИВЫЯ">
+          бл҃гѡ
+          <lb n="4"/>
+          честивыѧ
+        </w>
+        <w xml:id="ThdTtm.23" norm="ДЕРЖАВЫ">державы</w>
+        <pc xml:id="ThdTtm.24">,</pc>
+        <w xml:id="ThdTtm.25" norm="ГОСУДАРЯ">г҇ⷭдрѧ</w>
+        <lb n="5"/>
+        <w xml:id="ThdTtm.26" norm="И">и</w>
+        <w xml:id="ThdTtm.27" norm="ВЕЛИКОГО">великого</w>
+        <w xml:id="ThdTtm.28" norm="КНЯЗЯ">кн҃зѧ</w>
+        <name>
+          <w xml:id="ThdTtm.29" norm="ВАСИЛИЯ">василїѧ</w>
+        </name>
+        <lb n="6"/>
+        <name>
+          <w xml:id="ThdTtm.30" norm="ИОАННОВИЧА">иѡанновича</w>
+        </name>
+        <pc xml:id="ThdTtm.31">,</pc>
+        <w xml:id="ThdTtm.32" norm="ВСЕЯ">всеѧ</w>
+        <name>
+          <w xml:id="ThdTtm.33" norm="РОССИИ">россїи</w>
+        </name>
+        <lb n="7"/>
+        <w xml:id="ThdTtm.34" norm="САМОДЕРЖЦА">самодержца</w>
+        <pc xml:id="ThdTtm.35">,</pc>
+        <w xml:id="ThdTtm.36" norm="И">и</w>
+        <w xml:id="ThdTtm.37" norm="ВЕЛИКИЯ">великїѧ</w>
+        <w xml:id="ThdTtm.38" norm="КНЯГИНИИ">
+          кнѧ
+          <lb n="8"/>
+          гинїи
+        </w>
+        <name>
+          <w xml:id="ThdTtm.39" norm="ЕЛЕНЫ">елены</w>
+        </name>
+        <pc xml:id="ThdTtm.40">,</pc>
+        <w xml:id="ThdTtm.41" norm="ВО">во</w>
+        <w xml:id="ThdTtm.42" norm="ГРАД+">градѣ</w>
+        <name>
+          <w xml:id="ThdTtm.43" norm="ВОЛОГД+">
+            воло
+            <lb n="9"/>
+            гдѣ
+          </w>
+        </name>
+        <pc xml:id="ThdTtm.44">,</pc>
+        <w xml:id="ThdTtm.45" norm="ОТ">ѿ</w>
+        <w xml:id="ThdTtm.46" norm="БЛАГОВ+РНУ">бл҃говѣрнꙋ</w>
+        <w xml:id="ThdTtm.47" norm="И">и</w>
+        <w xml:id="ThdTtm.48" norm="ХРИСТИАНУ">хр҇ⷭтїанꙋ</w>
+        <w xml:id="ThdTtm.49" norm="РОДИТЕЛЮ">
+          ро
+          <lb n="10"/>
+          дителю
+        </w>
+        <pc xml:id="ThdTtm.50">,</pc>
+        <w xml:id="ThdTtm.51" norm="ОТЦА">ѡц҃а</w>
+        <w xml:id="ThdTtm.52" norm="БЛАГОЧЕСТИВА">бл҃гочестива</w>
+        <w xml:id="ThdTtm.53" norm="ИМЯНЕМЪ">
+          и
+          <lb n="11"/>
+          мѧнемъ
+        </w>
+        <name>
+          <w xml:id="ThdTtm.54" norm="ИУЛИЯНА">иѹлїана</w>
+        </name>
+        <pc xml:id="ThdTtm.55">,</pc>
+        <w xml:id="ThdTtm.56" norm="И">и</w>
+        <w xml:id="ThdTtm.57" norm="МАТЕРЕ">мт҃ре</w>
+        <w xml:id="ThdTtm.58" norm="БЛАГОГОВ+ИНЫ">
+          бл҃го
+          <lb n="12"/>
+          говѣины
+        </w>
+        <pc xml:id="ThdTtm.59">,</pc>
+        <w xml:id="ThdTtm.60" norm="ВОСПИТАНЪ">воспитанъ</w>
+        <w xml:id="ThdTtm.61" norm="ЖЕ">же</w>
+        <w xml:id="ThdTtm.62" norm="БЫСТЬ">бысть</w>
+        <lb n="13"/>
+        <w xml:id="ThdTtm.63" norm="В">в</w>
+        <w xml:id="ThdTtm.64" norm="ДОБРОМЪ">добромъ</w>
+        <w xml:id="ThdTtm.65" norm="НАКАЗАНИИ">наказанїи</w>
+        <pc xml:id="ThdTtm.66">,</pc>
+        <w xml:id="ThdTtm.67" norm="И">и</w>
+        <w xml:id="ThdTtm.68" norm="ВДАНЪ">вданъ</w>
+        <lb n="14"/>
+        <w xml:id="ThdTtm.69" norm="БЫВАЕТЪ">бываетъ</w>
+        <w xml:id="ThdTtm.70" norm="В">в</w>
+        <w xml:id="ThdTtm.71" norm="НАУЧЕНИЕ">наꙋченїе</w>
+        <w xml:id="ThdTtm.72" norm="БОЖЕСТВЕННОМУ">
+          бж҃естве
+          <lb n="15"/>
+          нномꙋ
+        </w>
+        <w xml:id="ThdTtm.73" norm="ПИСАНИЮ">писанїю</w>
+        <pc xml:id="ThdTtm.74">,</pc>
+        <w xml:id="ThdTtm.75" norm="И">и</w>
+        <w xml:id="ThdTtm.76" norm="ЕЩЕ">еще</w>
+        <w xml:id="ThdTtm.77" norm="ЮНЪ">юнъ</w>
+        <lb n="16"/>
+        <w xml:id="ThdTtm.78" norm="СЫИ">сыи</w>
+        <w xml:id="ThdTtm.79" norm="Т+ЛОМЪ">тѣломъ</w>
+        <pc xml:id="ThdTtm.80">,</pc>
+        <w xml:id="ThdTtm.81" norm="СТАРЕЦЬ">старецъ</w>
+        <w xml:id="ThdTtm.82" norm="МНОГОЛ+ТНЫХЪ">
+          много
+          <lb n="17"/>
+          лѣтныхъ
+        </w>
+        <pb n="-52"/>
+        <lb n="1"/>
+        <w xml:id="ThdTtm.83" norm="РАЗУМОМЪ">разꙋмомъ</w>
+        <w xml:id="ThdTtm.84" norm="ПРЕВЗЫДЕ">превзыде</w>
+        <pc xml:id="ThdTtm.85">,</pc>
+        <w xml:id="ThdTtm.86" norm="ИГРЫ">игры</w>
+        <w xml:id="ThdTtm.87" norm="ЖЕ">же</w>
+        <lb n="2"/>
+        <w xml:id="ThdTtm.88" norm="И">и</w>
+        <w xml:id="ThdTtm.89" norm="СМ+ХОТВОРНЫХЪ">смѣхотворныхъ</w>
+        <w xml:id="ThdTtm.90" norm="СЛОВЕСЪ">словесъ</w>
+        <w xml:id="ThdTtm.91" norm="ОТНЮД">ѿнюⷣ</w>
+        <lb n="3"/>
+        <w xml:id="ThdTtm.92" norm="ОШАЯВАЯСЯ">ѡшаѧваѧсѧ</w>
+        <pc xml:id="ThdTtm.93">.</pc>
+        <w xml:id="ThdTtm.94" norm="НО">но</w>
+        <w xml:id="ThdTtm.95" norm="ВО">во</w>
+        <w xml:id="ThdTtm.96" norm="ВСЕМЪ">всемъ</w>
+        <w xml:id="ThdTtm.97" norm="БЯШЕ">бѧше</w>
+        <lb n="4"/>
+        <w xml:id="ThdTtm.98" norm="ПОВИНУЯСЯ">повинꙋѧсѧ</w>
+        <w xml:id="ThdTtm.99" norm="РОДИТЕЛЕМЪ">родителемъ</w>
+        <w xml:id="ThdTtm.100" norm="СВОИМЪ">своиⷨ</w>
+        <pc xml:id="ThdTtm.101">.</pc>
+        <lb n="5"/>
+        <w xml:id="ThdTtm.102" norm="ЕГДА">егда</w>
+        <w xml:id="ThdTtm.103" norm="ЖЕ">же</w>
+        <w xml:id="ThdTtm.104" norm="ПРИИДЕ">прїиде</w>
+        <w xml:id="ThdTtm.105" norm="В">в</w>
+        <w xml:id="ThdTtm.106" norm="СОВЕРШЕННЫИ">совершенныꙶ</w>
+        <lb n="6"/>
+        <w xml:id="ThdTtm.107" norm="ВОЗРАСТЪ">возрастъ</w>
+        <pc xml:id="ThdTtm.108">,</pc>
+        <w xml:id="ThdTtm.109" norm="И">и</w>
+        <w xml:id="ThdTtm.110" norm="ПРИНУЖДЕНИЕМЪ">принꙋжденїемъ</w>
+        <w xml:id="ThdTtm.111" norm="РОДИТЕЛЕИ">
+          ро
+          <lb n="7"/>
+          дителеи
+        </w>
+        <w xml:id="ThdTtm.112" norm="СВОИХЪ">своихъ</w>
+        <w xml:id="ThdTtm.113" norm="И">и</w>
+        <w xml:id="ThdTtm.114" norm="БРАКУ">бракꙋ</w>
+        <w xml:id="ThdTtm.115" norm="СОЧЕТАСЯ">
+          соче
+          <lb n="8"/>
+          тасѧ
+        </w>
+        <pc xml:id="ThdTtm.116">.</pc>
+        <w xml:id="ThdTtm.117" norm="НО">но</w>
+        <w xml:id="ThdTtm.118" norm="НИКАКОЖЕ">никакоже</w>
+        <w xml:id="ThdTtm.119" norm="ЛЮБВЕ">любве</w>
+        <w xml:id="ThdTtm.120" norm="БОЖИЯ">
+          бо
+          <lb n="9"/>
+          жїѧ
+        </w>
+        <w xml:id="ThdTtm.121" norm="РАЗЛУЧИ">разлꙋчи</w>
+        <w xml:id="ThdTtm.122" norm="ЕГО">его</w>
+        <w xml:id="ThdTtm.123" norm="СУПРУЖЕСТВО">
+          сꙋпрꙋже
+          <lb n="10"/>
+          ство
+        </w>
+        <pc xml:id="ThdTtm.124">,</pc>
+        <w xml:id="ThdTtm.125" norm="КО">ко</w>
+        <w xml:id="ThdTtm.126" norm="ЦЕРКВИ">цр҃кви</w>
+        <w xml:id="ThdTtm.127" norm="БОЖИИ">бж҃їи</w>
+        <w xml:id="ThdTtm.128" norm="ВСЕГДА">всегда</w>
+        <lb n="11"/>
+        <w xml:id="ThdTtm.129" norm="ХОЖДАШЕ">хождаше</w>
+        <pc xml:id="ThdTtm.130">,</pc>
+        <w xml:id="ThdTtm.131" norm="И">и</w>
+        <w xml:id="ThdTtm.132" norm="СТОЯШЕ">стоѧше</w>
+        <w xml:id="ThdTtm.133" norm="НА">на</w>
+        <w xml:id="ThdTtm.134" norm="МОЛИТВ+">мл҃твѣ</w>
+        <lb n="12"/>
+        <w xml:id="ThdTtm.135" norm="УЕДИНЯЯСЯ">ѹединѧѧсѧ</w>
+        <w xml:id="ThdTtm.136" norm="ОТ">ѿ</w>
+        <w xml:id="ThdTtm.137" norm="ЧЕЛОВ+КЪ">чл҃къ</w>
+        <pc xml:id="ThdTtm.138">.</pc>
+        <w xml:id="ThdTtm.139" norm="ДАБЫ">дабы</w>
+        <lb n="13"/>
+        <w xml:id="ThdTtm.140" norm="НИ">ни</w>
+        <w xml:id="ThdTtm.141" norm="С">с</w>
+        <w xml:id="ThdTtm.142" norm="КИМЖЕ">кимже</w>
+        <w xml:id="ThdTtm.143" norm="БЕС+ДОВАЛЪ">бесѣдовалъ</w>
+        <pc xml:id="ThdTtm.144">,</pc>
+        <w xml:id="ThdTtm.145" norm="ВО">во</w>
+        <w xml:id="ThdTtm.146" norm="ВРЕМЯ">
+          вре
+          <lb n="14"/>
+          мѧ
+        </w>
+        <w xml:id="ThdTtm.147" norm="ЦЕРКОВНАГО">цр҃ковнаго</w>
+        <w xml:id="ThdTtm.148" norm="П+НИЯ">пѣнїѧ</w>
+        <pc xml:id="ThdTtm.149">,</pc>
+        <w xml:id="ThdTtm.150" norm="О">ѡ</w>
+        <w xml:id="ThdTtm.151" norm="ЗЕМНЫХЪ">
+          зе
+          <lb n="15"/>
+          мныхъ
+        </w>
+        <w xml:id="ThdTtm.152" norm="И">и</w>
+        <w xml:id="ThdTtm.153" norm="ТЛ+ННЫХЪ">тлѣнныхъ</w>
+        <w xml:id="ThdTtm.154" norm="ВЕЩЕХЪ">вещехъ</w>
+        <pc xml:id="ThdTtm.155">,</pc>
+        <lb n="16"/>
+        <w xml:id="ThdTtm.156" norm="И">и</w>
+        <w xml:id="ThdTtm.157" norm="ЕДИНОЮ">единою</w>
+        <w xml:id="ThdTtm.158" norm="ИДЕ">иде</w>
+        <w xml:id="ThdTtm.159" norm="ВО">во</w>
+        <w xml:id="ThdTtm.160" norm="СВЯТУЮ">ст҃ꙋю</w>
+        <w xml:id="ThdTtm.161" norm="ЦЕРКОВЬ">цр҃ковь</w>
+        <pc xml:id="ThdTtm.162">.</pc>
+        <lb n="17"/>
+        <w xml:id="ThdTtm.163" norm="И">и</w>
+        <w xml:id="ThdTtm.164" norm="СЛЫША">слыша</w>
+        <w xml:id="ThdTtm.165" norm="ВО">во</w>
+        <w xml:id="ThdTtm.166" norm="ЕВАНГЕЛИИ">еѵ҇ⷢлїи</w>
+        <w xml:id="ThdTtm.167" norm="ГЛАГОЛЮЩЕЕ">гл҃ющее</w>
+        <pc xml:id="ThdTtm.168">,</pc>
+        <pb n="53"/>
+        <lb n="1"/>
+        <w xml:id="ThdTtm.169" norm="АЩЕ">аще</w>
+        <w xml:id="ThdTtm.170" norm="КТО">кто</w>
+        <w xml:id="ThdTtm.171" norm="ХОЩЕТЪ">хощетъ</w>
+        <w xml:id="ThdTtm.172" norm="ПО">по</w>
+        <w xml:id="ThdTtm.173" norm="МН+">мнѣ</w>
+        <w xml:id="ThdTtm.174" norm="ИТТИ">итⷮи</w>
+        <pc xml:id="ThdTtm.175">,</pc>
+        <lb n="2"/>
+        <w xml:id="ThdTtm.176" norm="ДА">да</w>
+        <w xml:id="ThdTtm.177" norm="ОТВЕРЖЕТСЯ">ѿвержетсѧ</w>
+        <w xml:id="ThdTtm.178" norm="СЕБЕ">себе</w>
+        <w xml:id="ThdTtm.179" norm="И">и</w>
+        <w xml:id="ThdTtm.180" norm="ВОЗМЕТЪ">возметъ</w>
+        <lb n="3"/>
+        <w xml:id="ThdTtm.181" norm="КРЕСТЪ">кр҇ⷭтъ</w>
+        <w xml:id="ThdTtm.182" norm="СВОИ">свои</w>
+        <w xml:id="ThdTtm.183" norm="И">и</w>
+        <w xml:id="ThdTtm.184" norm="ГРЯДЕТЪ">грѧдетъ</w>
+        <w xml:id="ThdTtm.185" norm="ВОСЛ+ДЪ">вослѣдъ</w>
+        <lb n="4"/>
+        <w xml:id="ThdTtm.186" norm="МЕНЕ">мене</w>
+        <pc xml:id="ThdTtm.187">,</pc>
+        <w xml:id="ThdTtm.188" norm="И">и</w>
+        <w xml:id="ThdTtm.189" norm="ПРИИМЪ">прїимъ</w>
+        <w xml:id="ThdTtm.190" norm="В">в</w>
+        <w xml:id="ThdTtm.191" norm="РАЗУМЪ">разꙋмъ</w>
+        <pc xml:id="ThdTtm.192">,</pc>
+        <w xml:id="ThdTtm.193" norm="ВОСХОТ+">
+          восхо
+          <lb n="5"/>
+          тѣ
+        </w>
+        <w xml:id="ThdTtm.194" norm="ШЕСТВОВАТИ">шествовати</w>
+        <w xml:id="ThdTtm.195" norm="Т+СНЫМЪ">тѣснымъ</w>
+        <w xml:id="ThdTtm.196" norm="И">и</w>
+        <lb n="6"/>
+        <w xml:id="ThdTtm.197" norm="СКОРБНЫМЪ">скорбнымъ</w>
+        <w xml:id="ThdTtm.198" norm="ПУТЕМЪ">пꙋтемъ</w>
+        <pc xml:id="ThdTtm.199">.</pc>
+        <w xml:id="ThdTtm.200" norm="И">и</w>
+        <w xml:id="ThdTtm.201" norm="ОЖИДАШЕ">
+          ѡжида
+          <lb n="7"/>
+          ше
+        </w>
+        <w xml:id="ThdTtm.202" norm="СЕБ+">себѣ</w>
+        <w xml:id="ThdTtm.203" norm="ПОДОБНО">подобно</w>
+        <w xml:id="ThdTtm.204" norm="ВРЕМЯ">времѧ</w>
+        <pc xml:id="ThdTtm.205">,</pc>
+        <w xml:id="ThdTtm.206" norm="КАКО">како</w>
+        <lb n="8"/>
+        <w xml:id="ThdTtm.207" norm="БЫ">бы</w>
+        <w xml:id="ThdTtm.208" norm="ОСТАВИТИ">ѡставити</w>
+        <w xml:id="ThdTtm.209" norm="МИРЪ">миръ</w>
+        <w xml:id="ThdTtm.210" norm="СЕИ">сеи</w>
+        <w xml:id="ThdTtm.211" norm="ПРЕЛЕСТНЫИ">
+          преле
+          <lb n="9"/>
+          стныи
+        </w>
+        <pc xml:id="ThdTtm.212">.</pc>
+        <w xml:id="ThdTtm.213" norm="ЕГДА">егда</w>
+        <w xml:id="ThdTtm.214" norm="ЖЕ">же</w>
+        <w xml:id="ThdTtm.215" norm="РОДИТЕЛИ">родители</w>
+        <w xml:id="ThdTtm.216" norm="ЕГО">его</w>
+        <lb n="10"/>
+        <w xml:id="ThdTtm.217" norm="ОТ">ѿ</w>
+        <w xml:id="ThdTtm.218" norm="МАЛОВРЕМЕННАГО">маловременнаго</w>
+        <w xml:id="ThdTtm.219" norm="ЖИТИЯ">житїѧ</w>
+        <w xml:id="ThdTtm.220" norm="СЕГО">сего</w>
+        <lb n="11"/>
+        <w xml:id="ThdTtm.221" norm="ПРЕСТАВИСТАСЯ">преставистасѧ</w>
+        <pc xml:id="ThdTtm.222">,</pc>
+        <w xml:id="ThdTtm.223" norm="БЛАЖЕННЫИ">бл҃женныи</w>
+        <w xml:id="ThdTtm.224" norm="ЖЕ">же</w>
+        <lb n="12"/>
+        <w xml:id="ThdTtm.225" norm="ПРОВОДИ">проводи</w>
+        <w xml:id="ThdTtm.226" norm="Я">ѧ</w>
+        <w xml:id="ThdTtm.227" norm="КО">ко</w>
+        <w xml:id="ThdTtm.228" norm="ГРОБУ">гробꙋ</w>
+        <w xml:id="ThdTtm.229" norm="ЧЕСТНО">честно</w>
+        <pc xml:id="ThdTtm.230">.</pc>
+        <w xml:id="ThdTtm.231" norm="ПО">по</w>
+        <lb n="13"/>
+        <w xml:id="ThdTtm.232" norm="ПРЕСТАВЛЕНИИ">преставленїи</w>
+        <w xml:id="ThdTtm.233" norm="ЖЕ">же</w>
+        <w xml:id="ThdTtm.234" norm="РОДИТЕЛЕИ">родителеи</w>
+        <w xml:id="ThdTtm.235" norm="СВОИХЪ">своиⷯ</w>
+        <lb n="14"/>
+        <w xml:id="ThdTtm.236" norm="ВЕЛМИ">велми</w>
+        <w xml:id="ThdTtm.237" norm="БОЖЕСТВЕННОЮ">бж҃ественною</w>
+        <w xml:id="ThdTtm.238" norm="ЛЮБОВИЮ">любовїю</w>
+        <lb n="15"/>
+        <w xml:id="ThdTtm.239" norm="РАЗГОР+ВСЯ">разгорѣвсѧ</w>
+        <pc xml:id="ThdTtm.240">,</pc>
+        <w xml:id="ThdTtm.241" norm="И">и</w>
+        <w xml:id="ThdTtm.242" norm="ЯКО">ꙗкѡ</w>
+        <w xml:id="ThdTtm.243" norm="НИКИМЪ">никимъ</w>
+        <lb n="16"/>
+        <w xml:id="ThdTtm.244" norm="ВОЗБРАНЯЕМЪ">возбранѧемъ</w>
+        <w xml:id="ThdTtm.245" norm="СЫИ">сыи</w>
+        <w xml:id="ThdTtm.246" norm="Б+">бѣ</w>
+        <pc xml:id="ThdTtm.247">.</pc>
+        <w xml:id="ThdTtm.248" norm="И">и</w>
+        <w xml:id="ThdTtm.249" norm="АБИЕ">абїе</w>
+        <lb n="17"/>
+        <w xml:id="ThdTtm.250" norm="ОСТАВЛЯЕТЪ">ѡставлѧетъ</w>
+        <w xml:id="ThdTtm.251" norm="ДОМЪ">домъ</w>
+        <w xml:id="ThdTtm.252" norm="СВОИ">свои</w>
+        <w xml:id="ThdTtm.253" norm="И">и</w>
+        <w xml:id="ThdTtm.254" norm="БЛИЖНИКИ">ближники</w>
+        <pb n="53"/>
+        <lb n="1"/>
+        <w xml:id="ThdTtm.255" norm="И">и</w>
+        <w xml:id="ThdTtm.256" norm="ПРИХОДИТЪ">приходитъ</w>
+        <w xml:id="ThdTtm.257" norm="ЯЖЕ">ꙗже</w>
+        <w xml:id="ThdTtm.258" norm="БЛИЗЪ">близъ</w>
+        <w xml:id="ThdTtm.259" norm="ГРАДА">града</w>
+        <lb n="2"/>
+        <name>
+          <w xml:id="ThdTtm.260" norm="ВОЛОГДЫ">вологды</w>
+        </name>
+        <pc xml:id="ThdTtm.261">,</pc>
+        <w xml:id="ThdTtm.262" norm="В">в</w>
+        <w xml:id="ThdTtm.263" norm="МОНАСТЫРЬ">мн҇ⷭтрь</w>
+        <w xml:id="ThdTtm.264" norm="ВСЕМИЛОСТИВАГО">всемл҇ⷭтиваго</w>
+        <lb n="3"/>
+        <w xml:id="ThdTtm.265" norm="СПАСА">спаса</w>
+        <pc xml:id="ThdTtm.266">,</pc>
+        <w xml:id="ThdTtm.267" norm="И">и</w>
+        <w xml:id="ThdTtm.268" norm="ПРЕПОДОБНАГО">прпⷣбнаго</w>
+        <w xml:id="ThdTtm.269" norm="ОТЦА">ѿ҃ца</w>
+        <name>
+          <w xml:id="ThdTtm.270" norm="ДИМИТРИЯ">
+            дими
+            <lb n="4"/>
+            трїѧ
+          </w>
+        </name>
+        <w xml:id="ThdTtm.271" norm="НА">на</w>
+        <name>
+          <w xml:id="ThdTtm.272" norm="ПРИЛУКЪ">прилꙋкъ</w>
+        </name>
+        <pc xml:id="ThdTtm.273">.</pc>
+        <w xml:id="ThdTtm.274" norm="И">и</w>
+        <w xml:id="ThdTtm.275" norm="МОЛИТЪ">молитъ</w>
+        <w xml:id="ThdTtm.276" norm="ИГУМЕНА">
+          игꙋ
+          <lb n="5"/>
+          мена
+        </w>
+        <w xml:id="ThdTtm.277" norm="ОБИТЕЛИ">ѡбители</w>
+        <w xml:id="ThdTtm.278" norm="ТОЯ">тоѧ</w>
+        <pc xml:id="ThdTtm.279">.</pc>
+        <w xml:id="ThdTtm.280" norm="ДА">да</w>
+        <w xml:id="ThdTtm.281" norm="ОБЛЕЧЕТЪ">ѡблечеⷮ</w>
+        <lb n="6"/>
+        <w xml:id="ThdTtm.282" norm="ЕГО">его</w>
+        <w xml:id="ThdTtm.283" norm="ВО">во</w>
+        <w xml:id="ThdTtm.284" norm="СВЯТЫИ">ст҃ыи</w>
+        <w xml:id="ThdTtm.285" norm="АНГЕЛЬСКИИ">аг҃гльскїи</w>
+        <w xml:id="ThdTtm.286" norm="ОБРАЗЪ">ѡбразъ</w>
+        <pc xml:id="ThdTtm.287">.</pc>
+        <lb n="7"/>
+        <w xml:id="ThdTtm.288" norm="ВИД+В">видѣв</w>
+        <w xml:id="ThdTtm.289" norm="ЖЕ">же</w>
+        <w xml:id="ThdTtm.290" norm="ИГУМЕНЪ">игꙋменъ</w>
+        <w xml:id="ThdTtm.291" norm="НЕПРЕЛОЖНОЕ">непреложное</w>
+        <lb n="8"/>
+        <w xml:id="ThdTtm.292" norm="ЕГО">егѡ</w>
+        <w xml:id="ThdTtm.293" norm="МОЛЕНИЕ">моленїе</w>
+        <pc xml:id="ThdTtm.294">,</pc>
+        <w xml:id="ThdTtm.295" norm="И">и</w>
+        <w xml:id="ThdTtm.296" norm="РАЗУМ+">разꙋмѣ</w>
+        <w xml:id="ThdTtm.297" norm="О">ѡ</w>
+        <w xml:id="ThdTtm.298" norm="НЕМЪ">немъ</w>
+        <lb n="9"/>
+        <w xml:id="ThdTtm.299" norm="ЯКО">ꙗкѡ</w>
+        <w xml:id="ThdTtm.300" norm="ХОЩЕТЪ">хощетъ</w>
+        <w xml:id="ThdTtm.301" norm="БЫТИ">быти</w>
+        <w xml:id="ThdTtm.302" norm="СОСУДЪ">сосꙋдъ</w>
+        <w xml:id="ThdTtm.303" norm="ИЗБРАНЪ">
+          иⷥ
+          <lb n="10"/>
+          бранъ
+        </w>
+        <w xml:id="ThdTtm.304" norm="ДУХА">дх҃а</w>
+        <w xml:id="ThdTtm.305" norm="СВЯТАГО">ст҃аго</w>
+        <pc xml:id="ThdTtm.306">:</pc>
+        <w xml:id="ThdTtm.307" norm="И">и</w>
+        <w xml:id="ThdTtm.308" norm="АБИЕ">абїе</w>
+        <w xml:id="ThdTtm.309" norm="ПОСТРИЖЕ">
+          постри
+          <lb n="11"/>
+          же
+        </w>
+        <w xml:id="ThdTtm.310" norm="ЕГО">егѡ</w>
+        <pc xml:id="ThdTtm.311">,</pc>
+        <w xml:id="ThdTtm.312" norm="И">и</w>
+        <w xml:id="ThdTtm.313" norm="КО">ко</w>
+        <w xml:id="ThdTtm.314" norm="БРАТИИ">братїи</w>
+        <w xml:id="ThdTtm.315" norm="ПРИЧИТАЕТСЯ">
+          причита
+          <lb n="12"/>
+          етсѧ
+        </w>
+        <pc xml:id="ThdTtm.316">,</pc>
+        <w xml:id="ThdTtm.317" norm="И">и</w>
+        <w xml:id="ThdTtm.318" norm="ВДАНЪ">вданъ</w>
+        <w xml:id="ThdTtm.319" norm="БЫВАЕТЪ">бываетъ</w>
+        <w xml:id="ThdTtm.320" norm="СТАРЦУ">
+          ста
+          <lb n="13"/>
+          рцꙋ
+        </w>
+        <w xml:id="ThdTtm.321" norm="ДУХОВНУ">дх҃овнꙋ</w>
+        <w xml:id="ThdTtm.322" norm="МУЖУ">мꙋжꙋ</w>
+        <w xml:id="ThdTtm.323" norm="В">в</w>
+        <w xml:id="ThdTtm.324" norm="НАКАЗАНИЕ">наказанїе</w>
+        <lb n="14"/>
+        <w xml:id="ThdTtm.325" norm="И">и</w>
+        <w xml:id="ThdTtm.326" norm="ОТТОЛ+">ѿтолѣ</w>
+        <w xml:id="ThdTtm.327" norm="ПРЕПОДОБНЫИ">прпⷣбныи</w>
+        <w xml:id="ThdTtm.328" norm="ВЕСЬ">весь</w>
+        <w xml:id="ThdTtm.329" norm="СЕБЕ">себе</w>
+        <lb n="15"/>
+        <w xml:id="ThdTtm.330" norm="ПРЕДАДЕ">предаде</w>
+        <w xml:id="ThdTtm.331" norm="БОГОВИ">бг҃ови</w>
+        <pc xml:id="ThdTtm.332">,</pc>
+        <w xml:id="ThdTtm.333" norm="И">и</w>
+        <w xml:id="ThdTtm.334" norm="ВО">во</w>
+        <w xml:id="ThdTtm.335" norm="ВСЕМЪ">всемъ</w>
+        <lb n="16"/>
+        <w xml:id="ThdTtm.336" norm="ПОВИНУЯСЯ">повинꙋѧсѧ</w>
+        <w xml:id="ThdTtm.337" norm="НАСТАВНИКУ">наставникꙋ</w>
+        <w xml:id="ThdTtm.338" norm="СВОЕМУ">
+          свое
+          <lb n="17"/>
+          мꙋ
+        </w>
+        <pc xml:id="ThdTtm.339">,</pc>
+        <w xml:id="ThdTtm.340" norm="И">и</w>
+        <w xml:id="ThdTtm.341" norm="ПОТОМЪ">потомъ</w>
+        <w xml:id="ThdTtm.342" norm="ЖЕ">же</w>
+        <w xml:id="ThdTtm.343" norm="ПОСЫЛАЕМЪ">посылаемь</w>
+        </ab></body></text></TEI>
