@@ -70,11 +70,15 @@ module Nabu
 
       # The dump derives the catalog place index at sync/rebuild time
       # (P45-6): SyncRunner runs the producer after every pleiades sync,
-      # Rebuild after replay — the class-note contract.
+      # Rebuild after replay — the class-note contract. The producer is the
+      # crosswalk-aware subclass: the same index, plus the dump's
+      # Trismegistos backlinks merged with EDH's geography sidecar into the
+      # tm→pleiades place_crosswalk slices (Nabu::TmPleiadesCrosswalk), off
+      # one dump parse.
       def self.place_index_producer? = true
 
       def self.place_index_producer(catalog:)
-        Nabu::Store::PlaceIndex::Producer.new(catalog: catalog)
+        Nabu::TmPleiadesCrosswalk::PleiadesProducer.new(catalog: catalog)
       end
 
       # A feature module mints no documents — its data is a read seam

@@ -226,7 +226,16 @@ place_crosswalk(source, gazetteer_a, id_a, gazetteer_b, id_b, ...)
    -- namespaces, as DATA with provenance — never inferred; each
    -- asserting shelf's derive owns its slice wholesale (the place_index
    -- per-gazetteer contract). Read by `--place` identity expansion and
-   -- the place card's "= tm:…" lines (§14).
+   -- the place card's "= tm:…" lines (§14). The tm→pleiades slices
+   -- `edh` + `pleiades` are DERIVED by Nabu::TmPleiadesCrosswalk from
+   -- two held files — EDH's geography sidecar (canonical/edh/geography/,
+   -- CC BY-SA 4.0: a public export of `edh` rows carries BY-SA +
+   -- attribution) and the Pleiades dump's Trismegistos backlinks — one
+   -- row per TM place: EDH's per-feature plurality, EDH winning
+   -- disagreements, the dump filling the rest, ambiguous claims
+   -- withheld (censused). Run by the edh and pleiades place-index
+   -- producers (sync + rebuild replay); each finds the other input as a
+   -- canonical/ sibling.
 document_facets(document_id, facet, value, ...)
    -- P17-2 (migration 009): categorical document facts — genre,
    -- province, material, object type — an OPEN facet vocabulary (a new

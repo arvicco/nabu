@@ -78,3 +78,12 @@ files:
     copied: 2026-07-13
     whole: false
     trim: header + the five person rows of the three fixtured records (whole physical lines, byte-identical)
+  - path: geography/edhGeographicData.json
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from the 19 MB corpus-wide geography file; a fresh GET returns the full file, not this trim
+    canonical: canonical/edh/geography/edhGeographicData.json
+    upstream: https://edh.ub.uni-heidelberg.de/data/download/edhGeographicData.json
+    copied: 2026-10-20
+    whole: false
+    trim: the FeatureCollection container + the 17 features of seven Trismegistos place ids (one per crosswalk merge branch), feature content unchanged, re-serialized pretty

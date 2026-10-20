@@ -61,3 +61,25 @@ the `/data` page's blanket grant — `license_class: attribution`.
   3 records corpus-wide) resolves to **"adnuntiatio"** — verified against
   the live record page of HD014570, 2026-07-13. No code-side mapping table
   is needed: the parser reads each record's own EAGLE `<term>`.
+
+## Geography sidecar (trimmed, features byte-identical in content)
+
+`geography/edhGeographicData.json` — a TRIM of EDH's own findspot gazetteer
+`https://edh.ub.uni-heidelberg.de/data/download/edhGeographicData.json`
+(19,230,551 B, Last-Modified 2021-12-16 11:04:12 GMT, sha256
+`4d76a3984009165981dcba0d3f8f20f920589f2e3fc5a82b8273b2e90e660595`;
+retrieved and HEAD-verified 2026-10-20). Upstream is a GeoJSON
+`FeatureCollection` of 29,861 features, one per EDH findspot record, each
+`properties` carrying `uri` / `ancient_findspot` / `trismegistos_geo_uri`
+and (21,514 of them) `pleiades_uri`. Delivery grain: ONE file — the
+feature is the only record grain, and it mints no documents (it feeds the
+derived tm→pleiades place crosswalk, `Nabu::TmPleiadesCrosswalk`). The
+trim keeps the container keys and every feature (17, unmodified) whose
+Trismegistos place id is one of seven ids chosen to exercise each merge
+branch: 15743 Anthedon (agrees with the Pleiades dump), 15798 Corcyra (2
+votes vs 1 — the plurality rule), 2207 Syene/Elephantina (a 1–1 tie the
+dump corroborates), 26184 (a tie the dump answers with a third place),
+26453 (a tie nothing settles — withheld), 1327 Megalopolis (EDH vs dump
+disagreement — EDH wins), 1851 Lebadea (a TM uri with no Pleiades uri).
+Re-serialized with `JSON.pretty_generate` (feature content unchanged).
+License: CC BY-SA 4.0, as every EDH file.

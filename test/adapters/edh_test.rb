@@ -7,7 +7,7 @@ require "tmpdir"
 # The EDH adapter (P17-2): conformance suite + the survey-verified specifics —
 # language from the CSV nl_text column (the langUsage trap), metadata-only
 # stubs skipped by rule at discover, the pers-CSV prosopography join, and the
-# eleven-artifact fetch (nine flat zips + two CSV sidecars) exercised against
+# twelve-artifact fetch (nine flat zips + two CSV sidecars + the geography JSON) exercised against
 # WebMock-stubbed responses assembled from the checked-in fixtures. No
 # network, ever.
 class EdhTest < Minitest::Test
@@ -140,7 +140,7 @@ class EdhTest < Minitest::Test
 
   LAST_MODIFIED = "Thu, 16 Dec 2021 11:04:11 GMT"
 
-  def test_fetch_downloads_all_eleven_artifacts
+  def test_fetch_downloads_all_twelve_artifacts
     Dir.mktmpdir do |root|
       stub_edh_artifacts(root)
       workdir = File.join(root, "work")
@@ -151,13 +151,34 @@ class EdhTest < Minitest::Test
       assert File.file?(File.join(workdir, "epidoc", "HD080001-HD082828", "HD080825.xml"))
       assert File.file?(File.join(workdir, "text", "edh_data_text.csv"))
       assert File.file?(File.join(workdir, "pers", "edh_data_pers.csv"))
+      assert File.file?(File.join(workdir, "geography", "edhGeographicData.json"))
       assert_match(/\A\h{64}\z/, report.sha)
       assert_match(/HD000001-HD010000=\h{12} \(2 records\)/, report.notes)
       assert_match(/text=\h{12} \(5 rows\)/, report.notes)
       assert_match(/pers=\h{12} \(5 rows\)/, report.notes)
-      # repos pins every artifact by its URL: 9 zips + 2 CSVs.
-      assert_equal 11, report.repos.size
+      assert_match(/geography=\h{12} \(17 features\)/, report.notes)
+      # repos pins every artifact by its URL: 9 zips + 2 CSVs + the geography sidecar.
+      assert_equal 12, report.repos.size
       assert report.repos.key?("#{Nabu::Adapters::Edh::DUMP_BASE_URL}/edh_data_text.csv")
+      assert report.repos.key?("#{Nabu::Adapters::Edh::DUMP_BASE_URL}/edhGeographicData.json")
+    end
+  end
+
+  # The geography sidecar is a DECLARED materialization (the canonical
+  # identity hashes it instead of reading the tree weak) and is probed like
+  # every other artifact.
+  def test_geography_sidecar_is_declared_and_probed
+    assert_equal ["geography"], Nabu::Adapters::Edh.materialized_paths
+    labels = Nabu::Adapters::Edh.http_probe_targets.map(&:label)
+    assert_includes labels, "edhGeographicData.json"
+    assert_equal 12, labels.size
+  end
+
+  def test_geography_sidecar_never_reads_as_a_document
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(File.join(FIXTURES, "."), dir)
+      assert_equal 5, conformance_adapter.discover(dir).count, "the sidecar is not an EpiDoc record"
+      assert_predicate conformance_adapter.discovery_skips(dir), :clean?
     end
   end
 
@@ -263,7 +284,7 @@ class EdhTest < Minitest::Test
         headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
       )
     end
-    Nabu::Adapters::Edh::CSVS.each do |subdir, filename|
+    Nabu::Adapters::Edh::SIDECARS.each do |subdir, filename|
       stub_request(:get, "#{Nabu::Adapters::Edh::DUMP_BASE_URL}/#{filename}").to_return(
         status: 200, body: File.binread(File.join(FIXTURES, subdir, filename)),
         headers: { "Content-Type" => "text/csv", "Last-Modified" => LAST_MODIFIED }
@@ -273,6 +294,6 @@ class EdhTest < Minitest::Test
 
   def all_urls
     Nabu::Adapters::Edh::ZIP_RANGES.map { |range| Nabu::Adapters::Edh.zip_url(range) } +
-      Nabu::Adapters::Edh::CSVS.values.map { |name| "#{Nabu::Adapters::Edh::DUMP_BASE_URL}/#{name}" }
+      Nabu::Adapters::Edh::SIDECARS.values.map { |name| "#{Nabu::Adapters::Edh::DUMP_BASE_URL}/#{name}" }
   end
 end

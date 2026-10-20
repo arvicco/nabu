@@ -129,6 +129,11 @@ module Nabu
       new(index(entries))
     end
 
+    # The dump's raw place entries (every key, references included) — for a
+    # consumer that needs more than the resolver's fields (the
+    # Nabu::TmPleiadesCrosswalk backlinks) without a second parse.
+    def self.dump_entries(dump_path) = read_entries(dump_path)
+
     def self.read_entries(dump_path)
       raw = File.binread(dump_path)
       raw = Zlib::GzipReader.new(StringIO.new(raw)).read if gzip?(raw)
