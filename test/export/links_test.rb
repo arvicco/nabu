@@ -11,7 +11,7 @@ module Export
     include StoreTestDB
 
     COLUMNS = %w[kind from_urn to_urn score detail run_id producer scope code_version
-                 from_source from_license_class to_source to_license_class].freeze
+                 from_source from_license_class to_source to_license_class mined_at].freeze
     DATED = %w[from_not_before from_not_after from_date_class to_not_before to_not_after to_date_class].freeze
 
     def setup
@@ -67,7 +67,7 @@ module Export
       assert_equal({ "kind" => "parallel", "from_urn" => "urn:a:1:1", "to_urn" => "urn:b:1:1", "score" => 0.5,
                      "detail" => "gram", "run_id" => @run, "producer" => "parallels", "scope" => "alpha",
                      "code_version" => "test/1", "from_source" => "alpha", "from_license_class" => "open",
-                     "to_source" => "beta", "to_license_class" => "nc" }, row)
+                     "to_source" => "beta", "to_license_class" => "nc", "mined_at" => nil }, row)
       assert_equal [%w[alpha open], %w[beta nc]], draws
     end
 
@@ -118,6 +118,38 @@ module Export
         got << row.values[2]
       end
       assert_equal targets, got, "journal order, every edge once"
+    end
+
+    # The links union (Store::LinkLayers): mined-layer edges carry negative
+    # ids, so the keyset must start below them — every edge of both stores
+    # exported once, the mined ones dated by their layer.
+    def test_the_union_exports_both_stores_with_the_mined_layer_date
+      Dir.mktmpdir("nabu-export-union") do |dir|
+        links_path = File.join(dir, "links.sqlite3")
+        journal = Nabu::Store::LinksJournal.open!(links_path)
+        run = Nabu::Store::LinksJournal.record_run!(journal, producer: "formulas", scope: "alpha", params: {},
+                                                             code_version: "f/1")
+        3.times { |i| Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:c:#{i}", to_urn: "urn:c:x", kind: "formula", score: 1.0, run_id: run) }
+        journal.disconnect
+        mined_path = File.join(dir, "mined-links.sqlite3")
+        Nabu::Store::MinedLinks.mine!(mined_path, producer: "parallels", scope: "alpha", stamp: nil, inputs: nil,
+                                                  catalog: nil) do |store|
+          mined_run = Nabu::Store::LinksJournal.record_run!(store, producer: "parallels", scope: "alpha", params: {},
+                                                                   code_version: "p/1")
+          3.times { |i| Nabu::Store::LinksJournal.write_edge!(store, from_urn: "urn:m:#{i}", to_urn: "urn:m:x", kind: "parallel", score: 0.5, run_id: mined_run) }
+          Nabu::Store::LinksJournal.finish_run!(store, mined_run)
+        end
+        union = Nabu::Store::LinkLayers.open_paths(links_path: links_path, mined_path: mined_path)
+        table = Nabu::Export::Links.new(catalog: @catalog, journal: union, page_size: 2)
+        got = []
+        table.each_row { |row| got << table.columns.map(&:name).zip(row.values).to_h }
+        assert_equal 6, got.size, "both stores, every edge once, across page boundaries"
+        mined, cheap = got.partition { |row| row["kind"] == "parallel" }
+        assert(mined.all? { |row| row["mined_at"].is_a?(String) && row["run_id"].negative? })
+        assert(cheap.all? { |row| row["mined_at"].nil? && row["run_id"].positive? })
+        assert_equal(%w[parallels], mined.map { |row| row["producer"] }.uniq, "the run join holds across the union")
+        union.disconnect
+      end
     end
   end
 end

@@ -2148,7 +2148,7 @@ module Nabu
       # journal holds edges touching this urn — zero-signal silence otherwise
       # (no journal, no edges, nothing printed). Read-only, absent-file-safe.
       def print_linked_footer(config, urn)
-        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        journal = Nabu::Store::LinkLayers.open_readonly(config)
         return if journal.nil?
 
         counts = Nabu::Store::LinksJournal.kind_counts(journal, urn)

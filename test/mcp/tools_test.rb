@@ -2470,6 +2470,43 @@ module MCP
       journal&.disconnect
     end
 
+    # The cost law's reader half: through the links union a mined-layer
+    # edge (and its run) carries mined_at — ADDITIVE: a rebuild-lane edge's
+    # payload keeps exactly its old keys.
+    def test_links_mined_layer_edges_carry_their_mined_at
+      seed_parallels
+      Dir.mktmpdir("nabu-mcp-links") do |dir|
+        journal = Nabu::Store::LinksJournal.open!(File.join(dir, "links.sqlite3"))
+        run = Nabu::Store::LinksJournal.record_run!(journal, producer: "formulas", scope: "urn:d:od", params: {},
+                                                             code_version: "f/1")
+        Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "formula",
+                                                       score: 1.0, detail: "g", run_id: run)
+        journal.disconnect
+        Nabu::Store::MinedLinks.mine!(File.join(dir, "mined.sqlite3"), producer: "parallels", scope: "urn:d:od",
+                                                                       stamp: nil, inputs: nil, catalog: nil) do |db|
+          mined = Nabu::Store::LinksJournal.record_run!(db, producer: "parallels", scope: "urn:d:od", params: {},
+                                                            code_version: "p/2")
+          Nabu::Store::LinksJournal.write_edge!(db, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "parallel",
+                                                    score: 2.0, run_id: mined)
+          Nabu::Store::LinksJournal.finish_run!(db, mined)
+        end
+        union = Nabu::Store::LinkLayers.open_paths(links_path: File.join(dir, "links.sqlite3"),
+                                                   mined_path: File.join(dir, "mined.sqlite3"))
+        body = payload(tools(links: union).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+        parallel = body.dig("kinds", "parallel").first
+        assert_match(/\A\d{4}-\d\d-\d\d /, parallel.fetch("mined_at"))
+        formula = body.dig("kinds", "formula").first
+        assert_equal %w[detail direction document language license_class score source urn], formula.keys.sort,
+                     "a rebuild-lane edge's payload is unchanged"
+        mined_run = body["runs"].find { |row| row["producer"] == "parallels" }
+        assert_equal(-1, mined_run["id"])
+        assert mined_run.key?("mined_at")
+        refute body["runs"].find { |row| row["producer"] == "formulas" }.key?("mined_at")
+        assert_match(/mined layer/, body["note"])
+        union.disconnect
+      end
+    end
+
     def test_links_excludes_restricted_counterparts_by_default
       seed_parallels
       journal = seed_links_journal

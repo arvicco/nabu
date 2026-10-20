@@ -895,7 +895,8 @@ class RebuildTest < Minitest::Test
   # replay from the registry, batch scopes replay from
   # config/link_scopes.yml. A journal row with NO durable scope behind it
   # (the pre-P70 shape below) is honestly wiped — it was non-derived data
-  # hiding in db/.
+  # hiding in db/. (A cheap producer's run: a HEAVY producer's runs are
+  # preserved for `nabu links migrate-mined` — rebuild_link_stamps_test.)
   def test_rebuild_rederives_the_links_journal
     write_sources(<<~YAML)
       corpus:
@@ -907,12 +908,12 @@ class RebuildTest < Minitest::Test
 
     journal = Nabu::Store::LinksJournal.open!(config.links_path)
     run_id = Nabu::Store::LinksJournal.record_run!(
-      journal, producer: "parallels", scope: "urn:nabu:test_adapter",
-               params: { min_score: 0.05 }, code_version: "t/1"
+      journal, producer: "formulas", scope: "urn:nabu:test_adapter",
+               params: { min_count: 2 }, code_version: "t/1"
     )
     Nabu::Store::LinksJournal.write_edge!(
       journal, from_urn: "urn:nabu:test_adapter:one:1", to_urn: "urn:nabu:test_adapter:one:2",
-               kind: "parallel", score: 1.5, run_id: run_id
+               kind: "formula", score: 1.5, run_id: run_id
     )
     journal.disconnect
 

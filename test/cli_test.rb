@@ -6004,11 +6004,17 @@ class CLITest < Minitest::Test
       assert_match(/batch parallels over urn:h:od: 1 edge written · run 1/, out)
       assert_match(%r{1 anchor · kept top 5/anchor at score ≥ 0.05}, out,
                    "the summary names every pruning threshold — no silent caps")
-      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
-      edge = journal[:links].first
+      assert_match(/mined layer .*mined-links\.sqlite3: first mine of this layer/, out)
+      # The cost law: parallels is HEAVY — a mined layer under local/,
+      # never an edge in the rebuild's db/links.sqlite3.
+      refute_path_exists config.links_path
+      store = Nabu::Store::MinedLinks.open_readonly(config.mined_links_path)
+      edge = store[:links].first
       assert_equal %w[urn:h:od:1.1 urn:q:full:1 parallel],
                    [edge[:from_urn], edge[:to_urn], edge[:kind]]
-      journal.disconnect
+      layer = Nabu::Store::MinedLinks.layers(store).first
+      assert_equal ["parallels", "urn:h:od", 1, "mine"], [layer.producer, layer.scope, layer.edges, layer.origin]
+      store.disconnect
     end
   end
 
@@ -6018,9 +6024,11 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
       assert_nil status
       assert_match(/superseded 1 prior run \(1 edge\)/, out)
-      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
-      assert_equal [1, 1], [journal[:links].count, journal[:link_runs].count], "rerun is idempotent"
-      journal.disconnect
+      assert_match(/self-check: inputs unchanged, edges reproduced exactly/, out,
+                   "a re-mine under unchanged inputs verifies itself against the layer it replaces")
+      store = Nabu::Store::MinedLinks.open_readonly(config.mined_links_path)
+      assert_equal [1, 1], [store[:links].count, store[:link_runs].count], "rerun is idempotent"
+      store.disconnect
     end
   end
 
@@ -6053,9 +6061,9 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/· run 1 · profile latin/, out, "the summary names the profile")
       assert_match(/score ≥ 0\.1 · 3-grams/, out, "the profile's floor and gram size are in force")
-      journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
-      params = JSON.parse(journal[:link_runs].first[:params_json])
-      journal.disconnect
+      store = Nabu::Store::MinedLinks.open_readonly(config.mined_links_path)
+      params = JSON.parse(store[:link_runs].first[:params_json])
+      store.disconnect
       assert_equal %w[latin grc], params.values_at("profile", "lang"), "--lang overrides the profile's lat"
       assert_includes params["stop_tokens"], "et", "every effective parameter is provenance"
       scopes = Nabu::LinkScopes.load(config.link_scopes_path)
@@ -6102,9 +6110,11 @@ class CLITest < Minitest::Test
       assert_match(/parallel \(1\):/, out, "edges group by kind")
       assert_match(/← urn:h:od:1\.1 — urn:h:od \[grc\]  score \d/, out,
                    "the incoming edge resolves its counterpart to title\\/language")
-      footer = "1 edge · run 1: parallels over urn:h:od " \
-               "(min_score 0.05, per_anchor 5, gram_size 4, candidate_pool 300)"
-      assert_includes out, footer, "the provenance footer cites the producer run and its EFFECTIVE params"
+      footer = "1 edge · mined layer run 1: parallels over urn:h:od " \
+               "(min_score 0.05, per_anchor 5, gram_size 4, candidate_pool 300) · " \
+               "mined #{Time.now.strftime('%Y-%m-%d')}"
+      assert_includes out, footer, "the provenance footer cites the producer run, its EFFECTIVE params, " \
+                                   "and the mined layer's date"
 
       anchor_side, = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
       assert_match(/→ urn:q:full:1/, anchor_side, "the same edge reads outgoing from its anchor")
@@ -6171,6 +6181,46 @@ class CLITest < Minitest::Test
 
       unlinked, = with_config(config) { run_cli(%w[show urn:h:od]) }
       refute_match(/linked:/, unlinked, "a urn without edges stays silent even with a journal present")
+    end
+  end
+
+  # -- the mined layers' verbs (the cost law) ----------------------------------
+
+  def test_links_mine_re_mines_a_recorded_heavy_scope_into_the_store
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      out, _err, status = with_config(config) { run_cli(%w[links mine urn:h:od]) }
+      assert_nil status
+      assert_match(/links mine: parallels urn:h:od — 1 edges in .* · self-check: inputs unchanged, edges reproduced/,
+                   out, "the mine command re-runs the recorded params and checks itself")
+      refute_path_exists config.links_path, "a heavy mine never writes the rebuild's journal"
+    end
+  end
+
+  def test_links_mine_refuses_an_unrecorded_scope
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[links mine nope]) }
+      assert_equal 1, status
+      assert_match(/no recorded heavy scope "nope"/, err)
+    end
+  end
+
+  def test_links_migrate_mined_moves_heavy_runs_out_of_the_journal
+    with_parallels_corpus do |config|
+      # A pre-split journal: a parallels run sitting in db/links.sqlite3.
+      with_config(config) { run_cli(["parallels", "--batch", "urn:h:od", "--db", config.links_path]) }
+      dry, _err, status = with_config(config) { run_cli(%w[links migrate-mined --dry-run]) }
+      assert_nil status
+      assert_match(/dry run — nothing written\): 1 heavy run\(s\)/, dry)
+      assert_match(/would move: parallels urn:h:od/, dry)
+      refute_path_exists config.mined_links_path, "a dry run writes nothing"
+      out, = with_config(config) { run_cli(%w[links migrate-mined]) }
+      assert_match(/moved: parallels urn:h:od/, out)
+      assert_match(/journal heavy edges 1 → 0 · mined store edges 0 → 1/, out, "counts before and after, both sides")
+      again, = with_config(config) { run_cli(%w[links migrate-mined]) }
+      assert_match(/: 0 heavy run\(s\)/, again, "idempotent: nothing left to move")
+      linked, = with_config(config) { run_cli(%w[links urn:h:od:1.1]) }
+      assert_match(/mined layer run 1: parallels/, linked, "readers see the moved layer")
     end
   end
 

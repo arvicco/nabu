@@ -79,7 +79,7 @@ module Nabu
       # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
                      creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil,
-                     lects: nil, links_journal_path: nil)
+                     lects: nil, links_journal_path: nil, mined_links_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -100,6 +100,9 @@ module Nabu
         # mined-lane occurrence probe; nil-safe, hot-WAL-safe (an
         # unopenable journal just skips the probe).
         @links_journal_path = links_journal_path
+        # The cost law: the mined-layers store (local/mined-links.sqlite3)
+        # for the per-layer staleness/orphan census; nil skips it honestly.
+        @mined_links_path = mined_links_path
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -135,6 +138,7 @@ module Nabu
           script_surface_mismatch,
           *place_ref_findings,
           registry_orphan_names,
+          *mined_layer_findings,
           *index_segment_pressure,
           stale_open_runs
         ].compact
@@ -157,6 +161,10 @@ module Nabu
       # How many stale rows the finding names (oldest first); the rest
       # are counted.
       STALE_OPEN_RUN_EXAMPLES = 3
+
+      # const: edges sampled per mined layer for the orphan census — a
+      # sample, not a census claim; 200 indexed probes keep it low-ms
+      MINED_ORPHAN_SAMPLE = 200
 
       # Dossier-shelf content kind => its derived catalog table (P19-1 the
       # language shelf, P24-0 the source shelf).
@@ -1093,12 +1101,14 @@ module Nabu
       # kanripo rows fired "orphaned" against a lane they never lived
       # in. A name now counts as occurring if EITHER surface carries it.
       #
-      # The ruling fallback (2026-10-20): the place mine WITHHOLDS the
+      # The cost-law fallback (2026-10-20): the place mine WITHHOLDS the
       # candidates of names the registry rules region/rejected, so after a
       # re-mine those rows' names leave the edge details by design — the
       # mine's run row records the ruled names it still found
       # (params.ruled_out), and that counts as occurring. Before the next
       # re-mine the old edges still carry them; either way, no false alarm.
+      # The probe reads the links UNION, so a place layer the owner moves
+      # to the mined store keeps answering.
       def registry_orphan_names
         return nil unless @canonical_dir && table?(@catalog, :document_axes)
 
@@ -1249,15 +1259,91 @@ module Nabu
         @ruled_out_names.include?(name)
       end
 
+      # The links union (db/links + the mined layers, Store::LinkLayers).
       def links_journal
         return @links_journal if defined?(@links_journal)
 
-        @links_journal =
-          if @links_journal_path && File.exist?(@links_journal_path)
-            Store::LinksJournal.connect("sqlite://#{@links_journal_path}", readonly: true)
-          end
+        @links_journal = Store::LinkLayers.open_paths(links_path: @links_journal_path, mined_path: @mined_links_path)
       rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
         @links_journal = nil # hot-WAL/readonly failure — probe off, honestly
+      end
+
+      # -- the mined layers (the cost law, global) -----------------------------
+
+      # One finding per mined layer — its age, its staleness against the
+      # live catalog (member ingest identities, producer code), and an
+      # orphaned-edge estimate from a cheap sample — plus one for heavy
+      # runs still waiting in db/links.sqlite3. Info when current, soft
+      # when stale/orphaned/waiting: a stale layer is honest, aged data,
+      # re-mined only by the owner's `nabu links mine SCOPE`.
+      def mined_layer_findings
+        return [] unless @mined_links_path
+
+        store = Store::MinedLinks.open_readonly(@mined_links_path)
+        findings = Store::MinedLinks.layers(store).map { |layer| mined_layer_finding(store, layer) }
+        findings << unmigrated_heavy_runs
+        findings.compact
+      rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
+        [] # hot-WAL/readonly failure — census off, honestly
+      ensure
+        store&.disconnect
+      end
+
+      def mined_layer_finding(store, layer)
+        staleness = MinedLayers.staleness(layer, catalog: @catalog)
+        orphans, sampled = mined_orphans(store, layer)
+        days = ((@now - layer.mined_at) / 86_400).floor
+        notes = []
+        if staleness.changed.nil?
+          notes << "catalog identity unrecorded (#{layer.origin} layer) — known from its next mine"
+        elsif !staleness.changed.empty?
+          notes << "STALE: #{staleness.changed.size} member source(s) re-ingested since " \
+                   "(e.g. #{staleness.changed.first(3).join(', ')})"
+        end
+        notes << "STALE: producer code changed since the mine" if staleness.code_moved
+        notes << "#{orphans} of #{sampled} sampled edges have an endpoint no longer in the catalog" if orphans.positive?
+        notes << "current against the catalog" if notes.empty?
+        stale = staleness.stale? || orphans.positive?
+        Finding.new(
+          kind: :mined_layer, severity: stale ? :soft : :info,
+          message: "mined layer #{layer.label}: #{layer.edges} edges mined #{layer.mined_at.strftime('%Y-%m-%d')} " \
+                   "(#{days} day#{'s' unless days == 1} ago) — #{notes.join('; ')}" \
+                   "#{" — `nabu links mine #{layer.scope}` re-mines it (owner-fired)" if stale}"
+        )
+      end
+
+      # [orphaned, sampled]: endpoints of a sample of the layer's edges no
+      # live catalog row (passage, document or dictionary entry) answers.
+      def mined_orphans(store, layer)
+        pairs = Store::MinedLinks.sample_edges(store, layer.run_ids, size: MINED_ORPHAN_SAMPLE)
+        urns = pairs.flatten.uniq
+        return [0, 0] if urns.empty?
+
+        known = @catalog[:passages].where(urn: urns).select_map(:urn).to_set
+        rest = urns.reject { |urn| known.include?(urn) }
+        known.merge(@catalog[:documents].where(urn: rest).select_map(:urn)) unless rest.empty?
+        rest = urns.reject { |urn| known.include?(urn) }
+        if !rest.empty? && table?(@catalog, :dictionary_entries)
+          known.merge(@catalog[:dictionary_entries].where(urn: rest).select_map(:urn))
+        end
+        [pairs.count { |from, to| !known.include?(from) || !known.include?(to) }, pairs.size]
+      end
+
+      # Heavy runs the one-time move has not taken yet.
+      def unmigrated_heavy_runs
+        journal = @links_journal_path && Store::LinksJournal.open_readonly(@links_journal_path)
+        return nil if journal.nil?
+
+        runs = Store::LinksJournal.run_ids_for(journal, producers: MinedLayers.heavy_producers).size
+        return nil if runs.zero?
+
+        Finding.new(
+          kind: :mined_layers_unmigrated, severity: :soft,
+          message: "#{runs} heavy run(s) still in db/links.sqlite3 — `nabu links migrate-mined` moves them " \
+                   "into local/mined-links.sqlite3 (the rebuild preserves them meanwhile, never re-mines them)"
+        )
+      ensure
+        journal&.disconnect
       end
 
       # {facet value => live-document count}, exactly the derive_stats!

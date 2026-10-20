@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../query/catalog_join"
+require_relative "../store/link_layers"
 require_relative "types"
 require_relative "axes"
 
@@ -22,7 +23,10 @@ module Nabu
     #
     # Two databases, no ATTACH (the CatalogJoin two-step): edges page out
     # of the journal by id keyset, and each page resolves its endpoint urns
-    # with one batched catalog read per grain.
+    # with one batched catalog read per grain. The journal handle is the
+    # links union (Store::LinkLayers): mined-layer edges carry NEGATIVE ids,
+    # so the keyset starts below every id, and their layer date fills the
+    # mined_at column.
     class Links
       include Nabu::Query::CatalogJoin
 
@@ -46,7 +50,9 @@ module Nabu
         Column.new(name: "from_source", description: "from endpoint's source slug; NULL when not in the catalog"),
         Column.new(name: "from_license_class", description: "from endpoint's effective license class"),
         Column.new(name: "to_source", description: "to endpoint's source slug; NULL when not in the catalog"),
-        Column.new(name: "to_license_class", description: "to endpoint's effective license class")
+        Column.new(name: "to_license_class", description: "to endpoint's effective license class"),
+        Column.new(name: "mined_at", description: "a mined layer's date (the heavy class, " \
+                                                  "local/mined-links.sqlite3); NULL on a rebuild-lane edge")
       ].freeze
 
       DATED_COLUMNS = [
@@ -82,9 +88,9 @@ module Nabu
       # classes are known only after resolution).
       def each_row(license_classes: nil)
         _ = license_classes
-        last = 0
+        last = nil
         loop do
-          page = edges.where(Sequel[:links][:id] > last).limit(@page_size).all
+          page = (last ? edges.where(Sequel[:links][:id] > last) : edges).limit(@page_size).all
           break if page.empty?
 
           endpoints = resolve(page.flat_map { |edge| [edge[:from_urn], edge[:to_urn]] }.uniq)
@@ -104,7 +110,15 @@ module Nabu
         dataset.select(links[:id].as(:id), links[:kind].as(:kind), links[:from_urn].as(:from_urn),
                        links[:to_urn].as(:to_urn), links[:score].as(:score), detail_column,
                        links[:run_id].as(:run_id), runs[:producer].as(:producer), runs[:scope].as(:scope),
-                       runs[:code_version].as(:code_version))
+                       runs[:code_version].as(:code_version), mined_at_column)
+      end
+
+      # The union handle's mined_at; a plain journal (no mined store) has
+      # none — every edge is a rebuild-lane edge.
+      def mined_at_column
+        return Sequel[:links][:mined_at].as(:mined_at) if @journal.schema(:links).any? { |name, _| name == :mined_at }
+
+        Sequel.as(nil, :mined_at)
       end
 
       # A journal predating migration 002 has no detail column (a read-only
@@ -164,7 +178,8 @@ module Nabu
         @runs[edge[:run_id]] = true
         values = [edge[:kind], edge[:from_urn], edge[:to_urn], edge[:score], edge[:detail], edge[:run_id],
                   edge[:producer], edge[:scope], edge[:code_version],
-                  from.source, from.license_class, to.source, to.license_class]
+                  from.source, from.license_class, to.source, to.license_class,
+                  Store::LinkLayers.mined_time(edge[:mined_at])&.iso8601]
         values.concat(dated_values(from, envelopes) + dated_values(to, envelopes)) if @dated
         Row.new(values: values, draws: [[from.source, from.license_class], [to.source, to.license_class]])
       end

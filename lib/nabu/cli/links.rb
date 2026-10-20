@@ -4,6 +4,10 @@
 # cognates. Carved out of lib/nabu/cli.rb, the registry that loads it.
 module Nabu
   class CLI < Thor
+    # `links mine` / `links migrate-mined` (the mined layers' verbs) dispatch
+    # from `links` below.
+    include LinksMineCommands
+
     desc "parallels URN", "Find passages that quote or echo this one (intertext over the FTS index)"
     long_desc <<~HELP, wrap: false
       Passage-anchored intertext: point at ONE passage and find where the corpus
@@ -50,9 +54,12 @@ module Nabu
       BATCH MODE (P16-1, the links journal): `parallels --batch SCOPE` mines a
       whole corpus slice — SCOPE is a source slug or a document-urn prefix,
       exactly the `formulas` scope grammar — looping this same engine over
-      every anchor passage and PERSISTING the hits as kind=parallel edges in
-      the links journal (db/links.sqlite3; `nabu links <urn>` reads them, and
-      `show` grows a "linked:" footer). Each unordered pair is stored once, in
+      every anchor passage and PERSISTING the hits as kind=parallel edges —
+      a HEAVY mined layer (config/mined_layers.yml): written to
+      local/mined-links.sqlite3 with its provenance, never touched by
+      `nabu rebuild`, re-mined later with `nabu links mine SCOPE` (`nabu
+      links <urn>` reads them, and `show` grows a "linked:" footer). Each
+      unordered pair is stored once, in
       the direction the probe found it; a rerun of the same scope supersedes
       the previous run's edges (idempotent). Pruning is explicit, never
       silent: only the top --per-anchor hits (default
@@ -104,7 +111,7 @@ module Nabu
                         desc: "With --batch: top document-grain hits kept per anchor " \
                               "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
     option :db, type: :string, banner: "PATH",
-                desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+                desc: "With --batch: write a plain links journal at PATH (a scratch run) instead of the mined layer"
     option :profile, type: :string, banner: "NAME",
                      desc: "With --batch: load a tuning profile from config/reuse_profiles.yml " \
                            "(latin, chinese); explicit flags override it"
@@ -270,24 +277,39 @@ module Nabu
       producer run(s) that minted the edges — scope, parameters, and date —
       so every edge is honest about its provenance.
 
-      Edges are urn-keyed and live OUTSIDE the rebuildable dbs, so they
-      survive `nabu rebuild` untouched; counterparts re-resolve against the
-      current catalog (passage grain first, document grain second,
-      dictionary-entry grain third — an ingested shelf's urn:nabu:dict:
-      urns read "headword — dictionary"), and one that no longer resolves
-      is flagged "(not in catalog)" rather than hidden. Edges are minted
-      ONLY by batch producers (`parallels --batch SCOPE`, `formulas --batch
-      SCOPE`, `cognates --batch WORK`, and the sync-time reference/etymology
-      refreshes of the declaring sources); interactive output never
-      persists.
+      Edges are urn-keyed in two stores, read as one: db/links.sqlite3
+      holds the cheap lanes `nabu rebuild` re-derives (references,
+      formulas, cognates, the place pair); local/mined-links.sqlite3 holds
+      the HEAVY mined layers (config/mined_layers.yml — the parallels
+      scopes), which no rebuild touches — their run footer says "mined
+      layer" and gives the layer's mine date. Counterparts re-resolve
+      against the current catalog (passage grain first, document grain
+      second, dictionary-entry grain third — an ingested shelf's
+      urn:nabu:dict: urns read "headword — dictionary"), and one that no
+      longer resolves is flagged "(not in catalog)" rather than hidden.
+      Edges are minted ONLY by batch producers (`parallels --batch SCOPE`,
+      `formulas --batch SCOPE`, `cognates --batch WORK`, and the sync-time
+      reference/etymology refreshes of the declaring sources); interactive
+      output never persists.
 
       Compact shows the first few edges per kind; --long lists all. --db
       reads a journal written elsewhere (a scratch batch run).
+
+      The mined layers' two verbs:
+        nabu links mine SCOPE           re-mine a recorded heavy scope into
+                                        local/mined-links.sqlite3 (the ONLY
+                                        trigger — rebuild never does; a
+                                        self-check compares the fresh edges
+                                        with the layer they replace)
+        nabu links migrate-mined        move heavy runs still in
+                                        db/links.sqlite3 into the store, once
+                                        (--dry-run counts, writes nothing)
 
       Examples:
         nabu links urn:nabu:sblgnt:matt:4.4     # who is wired to Matt 4:4
         nabu links urn:nabu:sblgnt:matt:4.4 --long
         nabu links <urn> --db /tmp/links.sqlite3
+        nabu links mine perseus-latin           # re-mine the Latin layer (hours)
 
       Use cases: walk the mined citation graph passage by passage; audit what
       a batch run asserted; jump between quotation and source via `nabu show`.
@@ -296,7 +318,9 @@ module Nabu
                   desc: "List every edge of every kind (compact shows the first few per kind)"
     option :db, type: :string, banner: "PATH",
                 desc: "Read the links journal at PATH instead of db/links.sqlite3"
-    def links(urn = nil)
+    def links(urn = nil, *args)
+      return run_links_verb(urn, args) if LinksMineCommands::VERBS.include?(urn)
+
       urn = urn.to_s.strip
       raise Thor::Error, "links: give a passage or document urn" if urn.empty?
 
@@ -304,8 +328,11 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      path = options[:db] || config.links_path
-      journal = Nabu::Store::LinksJournal.open_readonly(path)
+      journal = if options[:db]
+                  Nabu::Store::LinksJournal.open_readonly(options[:db])
+                else
+                  Nabu::Store::LinkLayers.open_readonly(config) # db/links + the mined layers
+                end
       return say("no links journal yet — mine one with `nabu parallels --batch SCOPE`") if journal.nil?
 
       result = Nabu::Query::Links.new(catalog: catalog, journal: journal).run(urn)
@@ -522,24 +549,38 @@ module Nabu
 
         profile = batch_profile
         chunk_size = batch_chunk_size
-        journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
-        result = Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
-                                     .run(scope, profile: profile, lang: options[:lang], license: options[:license],
-                                                 chunk_size: chunk_size, restart: options[:restart],
-                                                 progress: chunk_size ? nil : batch_progress,
-                                                 on_chunk: chunk_size ? batch_chunk_progress : nil,
-                                                 **batch_thresholds)
-        # P70-3b: the batch scope is config-durable — rebuild replays it
-        # (P122-2: the profile NAME and chunk size ride along; the replay
-        # re-resolves the profile from config/, the project definition).
-        unless options[:db]
-          params = { "lang" => options[:lang], "license" => options[:license],
-                     "profile" => options[:profile], "chunk_size" => chunk_size }
-                   .merge(batch_thresholds.transform_keys(&:to_s)).compact
-          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels",
-                                                            scope: scope, params: params)
+        mine = lambda do |journal|
+          Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
+                              .run(scope, profile: profile, lang: options[:lang], license: options[:license],
+                                          chunk_size: chunk_size, restart: options[:restart],
+                                          progress: chunk_size ? nil : batch_progress,
+                                          on_chunk: chunk_size ? batch_chunk_progress : nil,
+                                          **batch_thresholds)
         end
+        # P70-3b: the batch scope is config-durable (P122-2: the profile
+        # NAME and chunk size ride along, re-resolved from config/ on a
+        # re-mine). The cost law: a HEAVY producer's run is a mined layer —
+        # written through the mined-layers gateway with its provenance,
+        # never into db/links.sqlite3.
+        params = { "lang" => options[:lang], "license" => options[:license],
+                   "profile" => options[:profile], "chunk_size" => chunk_size }
+                 .merge(batch_thresholds.transform_keys(&:to_s)).compact
+        recorded = { "producer" => "parallels", "scope" => scope, "params" => params }
+        result = mined = nil
+        if options[:db] || !Nabu::MinedLayers.heavy?("parallels")
+          journal = Nabu::Store::LinksJournal.open!(options[:db] || config.links_path)
+          result = mine.call(journal)
+        else
+          warn "parallels --batch: stamping the layer's inputs (member content identities) …"
+          mined = Nabu::MinedLayers.mine!(recorded, config: config, catalog: catalog,
+                                                    registry: Nabu::SourceRegistry.load(config.sources_path)) do |store|
+            result = mine.call(store)
+          end
+        end
+        Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels", scope: scope, params: params) \
+          unless options[:db]
         print_batch_parallels(result)
+        say "  mined layer #{config.mined_links_path}: #{mine_verdict(mined)}" if mined
       rescue Nabu::Error => e
         raise Thor::Error, e.message
       rescue Interrupt
@@ -720,8 +761,9 @@ module Nabu
 
         result.groups.keys.sort.each { |kind| print_links_group(kind, result.groups.fetch(kind), long: long) }
         result.runs.each do |run|
-          say "#{plural(result.total, 'edge')} · run #{run.id}: #{run.producer} over #{run.scope} " \
-              "#{format_link_params(run.params)}· #{run.created_at.strftime('%Y-%m-%d')}"
+          date = run.mined? ? "mined #{run.mined_at.strftime('%Y-%m-%d')}" : run.created_at.strftime("%Y-%m-%d")
+          say "#{plural(result.total, 'edge')} · #{run.label}: #{run.producer} over #{run.scope} " \
+              "#{format_link_params(run.params)}· #{date}"
         end
       end
 

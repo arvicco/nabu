@@ -347,10 +347,11 @@ module Nabu
       end
       # P70-3b (the derivability contract): the links instrument is DERIVED —
       # every slug-scoped reference producer (the sync-time lane replayed
-      # over the re-minted catalog) re-runs, and every batch scope recorded
-      # in config/link_scopes.yml is re-mined or — its stamp unchanged —
-      # carried (LinkStamps; parallels needs the fulltext index, hence after
-      # it). db/links.sqlite3 thereby needs no backup.
+      # over the re-minted catalog) re-runs, and every CHEAP batch scope
+      # recorded in config/link_scopes.yml is re-mined or — its stamp
+      # unchanged — carried (LinkStamps). db/links.sqlite3 thereby needs no
+      # backup. Heavy scopes (the cost law) are mined layers under local/,
+      # outside this stage entirely.
       progress&.stage("links", eta: corpus_eta(ledger, "links"))
       links = profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
         rederive_links!(db, fulltext, progress: progress)
@@ -661,12 +662,20 @@ module Nabu
     # Result carries it into the summary — a partial links re-mine names
     # its gaps); infrastructure errors (I/O, Sequel) abort the rebuild
     # loudly, by design. Returns the LinkStamps::Outcome.
+    #
+    # The cost law (owner ruling 2026-10-20; config/mined_layers.yml):
+    # HEAVY producers' scopes are not this stage's work at all — never
+    # mined, re-mined, dropped or stamped here (their journal runs, if
+    # any are still waiting for `nabu links migrate-mined`, are preserved).
+    # Their layers live in local/mined-links.sqlite3; the outcome only
+    # reports their presence and age.
     def rederive_links!(db, fulltext, progress: nil)
       journal = Store::LinksJournal.open!(@config.links_path)
-      scopes = LinkScopeReplay.order(LinkScopes.load(@config.link_scopes_path))
+      heavy, scopes = LinkScopeReplay.order(LinkScopes.load(@config.link_scopes_path))
+                                     .partition { |scope| MinedLayers.heavy?(scope["producer"]) }
       stamps = LinkStamps.new(catalog: db, config: @config, registry: @registry, code_digests: @link_code_digests)
       progress&.stage("links: stamping #{scopes.size} recorded scope(s) (member content identities)") if scopes.any?
-      plan = stamps.plan(scopes, journal: journal, force_full: @full_links)
+      plan = stamps.plan(scopes, journal: journal, force_full: @full_links, preserve: MinedLayers.heavy_producers)
       expected = stamps.prepare!(plan, journal: journal)
       failures = []
       @registry.each_source do |entry|
@@ -682,7 +691,7 @@ module Nabu
         LinkScopeReplay.replay!(scope, db: db, fulltext: fulltext, journal: journal, config: @config)
       end
       warn "links rederive: #{failures.size} producer(s) failed — #{failures.join(' · ')}" unless failures.empty?
-      outcome
+      outcome.with(layers: MinedLayers.presence_line(@config.mined_links_path, heavy_scopes: heavy, journal: journal))
     ensure
       journal&.disconnect
     end

@@ -53,6 +53,24 @@ class ReadonlyOpenerTest < Minitest::Test
     assert_equal 1, @opened.size
   end
 
+  # The links union reads through a second file (the mined-layers store):
+  # its appearance reopens the handle so the new store is attached, and
+  # either file alone is enough to resolve.
+  def test_a_second_file_joins_the_identity
+    also = File.join(@dir, "mined.sqlite3")
+    pair = Nabu::ReadonlyOpener.new(@path, also) do
+      FakeDb.new(@path, File.open(File.exist?(@path) ? @path : also, "r"), false).tap { |db| @opened << db }
+    end
+    assert_nil pair.call
+    File.write(also, "mined")
+    only_mined = pair.call
+    refute_nil only_mined, "the second file alone resolves"
+    File.write(@path, "db")
+    both = pair.call
+    refute_same only_mined, both, "a file appearing changes the identity — reopen"
+    assert_same both, pair.call
+  end
+
   def test_a_rebuild_reconnects_on_the_next_call
     File.write(@path, "db")
     stale = opener.call

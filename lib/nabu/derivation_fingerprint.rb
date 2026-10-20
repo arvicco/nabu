@@ -159,6 +159,7 @@ module Nabu
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
       batch_cognates.rb batch_formulas.rb batch_parallels.rb
       link_stamps.rb store/source_content_identity.rb
+      mined_layers.rb store/mined_links.rb store/link_layers.rb links_mine_commands.rb
       suttacentral_parallels.rb library_references.rb corph_dil_references.rb
       ccl_etymologies.rb
       git_fetch.rb zip_fetch.rb file_fetch.rb lfs_fetch.rb wiki_fetch.rb

@@ -950,6 +950,87 @@ class InvariantsTest < Minitest::Test
     end
   end
 
+  # -- the mined layers (the cost law) -----------------------------------------
+
+  def mined_invariants(root, now: @now)
+    Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext, ledger: @ledger, now: now,
+                                 links_journal_path: File.join(root, "links.sqlite3"),
+                                 mined_links_path: File.join(root, "mined-links.sqlite3"))
+  end
+
+  def seed_mined_layer(root, edges:, catalog: { "perseus-latin" => "i1" })
+    inputs = { "producer_code" => Nabu::LinkStamps.code_digests.fetch("parallels") }
+    Nabu::Store::MinedLinks.mine!(File.join(root, "mined-links.sqlite3"), producer: "parallels",
+                                                                          scope: "perseus-latin", stamp: "s",
+                                                                          inputs: inputs, catalog: catalog) do |db|
+      run = Nabu::Store::LinksJournal.record_run!(db, producer: "parallels", scope: "perseus-latin", params: {},
+                                                      code_version: "p/2")
+      edges.each do |from, to|
+        Nabu::Store::LinksJournal.write_edge!(db, from_urn: from, to_urn: to, kind: "parallel", score: 0.5,
+                                                  run_id: run)
+      end
+      Nabu::Store::LinksJournal.finish_run!(db, run)
+    end
+  end
+
+  def seed_latin
+    src = Nabu::Store::Source.create(slug: "perseus-latin", name: "PL", adapter_class: "T", license_class: "open")
+    @db[:sources].where(id: src.id).update(last_ingest_identity: "i1")
+    doc = Nabu::Store::Document.create(source_id: src.id, urn: "urn:l:d", title: "d", language: "lat",
+                                       content_sha256: "x", revision: 1, withdrawn: false)
+    %w[urn:l:d:1 urn:l:d:2].each_with_index do |urn, i|
+      Nabu::Store::Passage.create(document_id: doc.id, urn: urn, sequence: i, language: "lat", text: "t",
+                                  text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+    end
+  end
+
+  def test_a_current_mined_layer_is_an_info_line_with_its_age
+    seed_latin
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]])
+      finding = mined_invariants(root, now: Time.now + (3 * 86_400)).global.find { |f| f.kind == :mined_layer }
+      assert_equal :info, finding.severity
+      assert_match(/\Amined layer parallels perseus-latin: 1 edges mined \d{4}-\d\d-\d\d \(3 days ago\) — current/,
+                   finding.message)
+    end
+  end
+
+  def test_a_stale_or_orphaned_mined_layer_is_soft_and_names_the_mine_command
+    seed_latin
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2], %w[urn:l:d:1 urn:gone:9]])
+      @db[:sources].where(slug: "perseus-latin").update(last_ingest_identity: "i2")
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :soft, finding.severity
+      assert_match(/STALE: 1 member source\(s\) re-ingested since \(e\.g\. perseus-latin\)/, finding.message)
+      assert_match(/1 of 2 sampled edges have an endpoint no longer in the catalog/, finding.message)
+      assert_match(/`nabu links mine perseus-latin` re-mines it \(owner-fired\)\z/, finding.message)
+    end
+  end
+
+  def test_a_migrated_layer_without_a_catalog_identity_says_so_honestly
+    seed_latin
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]], catalog: nil)
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :info, finding.severity
+      assert_match(/catalog identity unrecorded \(mine layer\) — known from its next mine/, finding.message)
+    end
+  end
+
+  def test_heavy_runs_still_in_the_journal_are_a_soft_finding
+    Dir.mktmpdir do |root|
+      journal = Nabu::Store::LinksJournal.open!(File.join(root, "links.sqlite3"))
+      Nabu::Store::LinksJournal.record_run!(journal, producer: "parallels", scope: "x", params: {}, code_version: "v")
+      journal.disconnect
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layers_unmigrated }
+      assert_equal :soft, finding.severity
+      assert_match(%r{1 heavy run\(s\) still in db/links\.sqlite3 — `nabu links migrate-mined` moves them},
+                   finding.message)
+      assert_empty(mined_invariants(root).global.select { |f| f.kind == :mined_layer }, "no store, no layer lines")
+    end
+  end
+
   # P63-4 (Dp-b): the namespaced mint spelling (`pleiades:<id>`, the itant
   # metadata lift) is verified exactly like the verbatim URL spelling.
   def test_unresolvable_place_refs_verify_namespaced_pleiades_mints_too
