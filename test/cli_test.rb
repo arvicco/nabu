@@ -7724,11 +7724,17 @@ class CLITest < Minitest::Test
       end
       catalog.disconnect
 
-      out, _err, status = with_config(config) { run_cli(%w[place apply]) }
+      out, err, status = with_config(config) { run_cli(%w[place apply]) }
       assert_nil status
       assert_match(/cdli: 2 rows gained refs across 2 names/, out)
       assert_match(/Nereb \(mod\. Neirab\) \? — 1 row \(probable — registry "low"\)/, out)
       refute_match(/Girsu.*registry/, out, "high-certainty names add no per-name line")
+      refute_includes err, Nabu::Ops::StageGuide.intro(:place_apply)
+
+      # --verbose: the intro on stderr before the (now idempotent) apply.
+      _out, err, status = with_config(config) { run_cli(%w[place apply --verbose]) }
+      assert_nil status
+      assert_equal 1, err.scan(Nabu::Ops::StageGuide.intro(:place_apply)).size
     end
   end
 
@@ -8076,6 +8082,41 @@ class CLITest < Minitest::Test
       db = Nabu::Store.connect(config.catalog_path)
       assert_equal %w[akk:ob akk:ob], db[:document_facets].where(facet: "lect").select_map(:value).sort
       db.disconnect
+    end
+  end
+
+  # --verbose on the lect facet commands: the command's intro, then the
+  # facet rewrite's two stage explanations, each once, on stderr; the
+  # plain run carries none of it.
+  def test_lect_materialize_verbose_explains_the_command_and_its_stages
+    guide = Nabu::Ops::StageGuide
+    with_lect_rules_cli_env do |config|
+      out, err, status = with_config(config) { run_cli(%w[lect materialize --verbose]) }
+      assert_nil status
+      assert_equal 1, err.scan(guide.intro(:lect_materialize)).size
+      %i[lect_facet_rewrite lect_facet_stats].each do |key|
+        assert_equal 1, err.scan(guide.fetch(key).text).size, "#{key} explains once"
+      end
+      refute_includes out, guide.intro(:lect_materialize)
+
+      _out, err, = with_config(config) { run_cli(%w[lect materialize]) }
+      refute_includes err, guide.intro(:lect_materialize)
+      refute_includes err, guide.fetch(:lect_facet_rewrite).text
+    end
+  end
+
+  def test_lect_apply_rules_and_infer_dates_verbose_print_their_intros
+    guide = Nabu::Ops::StageGuide
+    with_lect_rules_cli_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[lect apply-rules --verbose]) }
+      assert_nil status
+      assert_equal 1, err.scan(guide.intro(:lect_apply_rules)).size
+      assert_equal 1, err.scan(guide.fetch(:lect_facet_stats).text).size
+    end
+    with_lect_dates_cli_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[lect infer-dates --verbose]) }
+      assert_nil status
+      assert_equal 1, err.scan(guide.intro(:lect_infer_dates)).size
     end
   end
 

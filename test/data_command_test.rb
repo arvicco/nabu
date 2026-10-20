@@ -141,6 +141,26 @@ class DataCommandTest < Minitest::Test
     end
   end
 
+  # --verbose: the command's intro, then each feature's own registry
+  # title before it builds — on stderr, the summary on stdout unchanged.
+  def test_data_build_verbose_explains_the_build_and_each_feature
+    with_build_env do |config, into|
+      fake = DataBuildFake.feature
+      out, err, status = with_config(config) do
+        with_features([fake]) { run_cli(["data", "build", "--all", "--into", into, "--verbose"]) }
+      end
+      assert_nil status
+      assert_equal 1, err.scan(Nabu::Ops::StageGuide.intro(:data_build)).size
+      assert_includes err, "#{fake.slug}: #{fake.title}"
+      refute_includes out, Nabu::Ops::StageGuide.intro(:data_build)
+
+      _out, err, = with_config(config) do
+        with_features([fake]) { run_cli(["data", "build", fake.slug, "--into", into]) }
+      end
+      refute_includes err, Nabu::Ops::StageGuide.intro(:data_build)
+    end
+  end
+
   def test_help_lists_the_data_subcommands
     out, _err, _status = run_cli(%w[data])
     assert_match(/data list/, out)
