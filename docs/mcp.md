@@ -51,9 +51,13 @@ Give **exactly one** of:
 
 - `query` — FTS5 full text. Words are AND by default; `"quoted phrase"` for
   adjacency; `prefix*`. Diacritics optional: `μηνιν` finds `μῆνιν`.
-- `lemma` — exact dictionary form over the gold treebanks. `λέγω` finds every
-  inflection (`εἶπας`, `εἰπεῖν`, …), including suppletive stems no text query
-  reaches. With `lemma`, an optional `morph` — comma-joined `key=value` facets
+- `lemma` — exact dictionary form over the lemma index: every tier it holds —
+  gold (verified treebank annotation), silver (upstream-automatic
+  lemmatization), and equivalence (curated cross-language equivalents). Gold
+  hits are unlabeled; every non-gold hit carries a `tier` field (`silver` /
+  `equivalence`) — keep the label when you count attestations. `λέγω` finds
+  every inflection (`εἶπας`, `εἰπεῖν`, …), including suppletive stems no text
+  query reaches. With `lemma`, an optional `morph` — comma-joined `key=value` facets
   in Universal Dependencies vocabulary (`case=dat,number=pl`; keys case, number,
   gender, person, tense, mood, voice, degree; values `dat`, `pl`/`sg`, `masc`,
   `aor`, `opt`, `sub`…) — keeps only attestations with that morphology, each hit

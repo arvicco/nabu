@@ -211,7 +211,9 @@ module Nabu
         "Slavonic, Gothic, and more: literary editions, documentary papyri, gold treebanks, " \
         "parallel English translations). Give EXACTLY ONE of: `query` — full-text FTS5 " \
         "(words AND by default, \"quoted phrase\", prefix*; diacritics optional, μηνιν finds " \
-        "μῆνιν) — or `lemma` — exact dictionary form over the treebanks (λέγω finds εἶπας, " \
+        "μῆνιν) — or `lemma` — exact dictionary form over the lemma index, every tier it holds: " \
+        "gold treebank annotation unlabeled, silver/equivalence hits labeled by a `tier` field " \
+        "(λέγω finds εἶπας, " \
         "εἰπεῖν, every inflection; add `morph` — e.g. \"case=dat,number=pl\" — to keep only " \
         "attestations with that morphology, each hit showing the decoded evidence). Add `near` " \
         "for PROXIMITY — keep only hits where that term sits within `window` words (default " \
@@ -288,18 +290,15 @@ module Nabu
         "Cyrillic Marianus and the Helsinki-ASCII CCMH codices.".freeze
 
       DEFINE_DESCRIPTION =
-        "Look up a lemma (dictionary form) in the lexica nabu holds locally — LSJ for " \
-        "ancient Greek, Lewis & Short for Latin (CC BY-SA, Perseus Digital Library), " \
-        "Bosworth-Toller for Old English (CC BY 4.0, LINDAT dump; æ/þ/ð typeable in ASCII: " \
-        "aethele finds æðele), Wiktionary for Old Church Slavonic (kaikki.org extract, " \
-        "CC-BY-SA + GFDL; etymologies with Proto-Slavic/PIE chains kept in the body), and " \
-        "the Wiktionary RECONSTRUCTION shelves (Proto-Slavic/PIE/Proto-Germanic/" \
-        "Proto-Balto-Slavic/Proto-West Germanic/Proto-Italic/Proto-Indo-Iranian, same " \
-        "extract family): a LEADING ASTERISK scopes to reconstructions (*bogъ), whose " \
-        "entries also list their descendant reflexes with corpus attestation counts " \
-        "(nabu_etym walks the same crosswalk from an attested lemma). " \
-        "Diacritics optional (μηνις finds μῆνις); `lang` (grc|lat|ang|chu|or a -pro shelf " \
-        "code) picks a shelf when the spelling is ambiguous. Each entry carries headword, " \
+        "Look up a lemma (dictionary form) in the dictionary shelves nabu holds locally — " \
+        "hundreds of lexica across many languages (LSJ, Lewis & Short, Bosworth-Toller, the " \
+        "Wiktionary extracts, and far more; the `lang` enum in this schema is the LIVE set of " \
+        "shelf languages, nabu_status counts the entries). The Wiktionary RECONSTRUCTION " \
+        "shelves (*-pro codes) are included: a LEADING ASTERISK scopes to reconstructions " \
+        "(*bogъ), whose entries also list their descendant reflexes with corpus attestation " \
+        "counts (nabu_etym walks the same crosswalk from an attested lemma). " \
+        "Diacritics optional (μηνις finds μῆνις); `lang` picks a shelf language when the " \
+        "spelling is ambiguous. Each entry carries headword, " \
         "dictionary, license fields " \
         "(PRESERVE them when quoting), a short gloss, the entry body as structured plain " \
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
@@ -450,8 +449,9 @@ module Nabu
                                      "alignment (nabu_align/nabu_parallels serve those). " \
                                      "Replaces query/lemma; composes with limit only." },
           lemma: { type: "string",
-                   description: "Dictionary form for exact-lemma treebank search. " \
-                                "Mutually exclusive with query." },
+                   description: "Dictionary form for exact-lemma search over the lemma index " \
+                                "(every tier; non-gold hits carry `tier`). Mutually exclusive " \
+                                "with query." },
           morph: { type: "string",
                    description: "Morphology facets, only WITH lemma: comma-joined key=value in " \
                                 "Universal Dependencies vocabulary (case, number, gender, person, " \
@@ -475,9 +475,10 @@ module Nabu
                      description: "Exact effective license class filter." },
           from: { type: "integer",
                   description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
-                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline " \
-                               "(dated papyri via HGV, Slovene goo300k/IMP); most of the corpus is " \
-                               "undated and absent under a date filter. Text search only (not lemma)." },
+                               "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline — the " \
+                               "dated documents of most sources, every date class (see date_basis to " \
+                               "pick one); a document the timeline does not date is absent under a " \
+                               "date filter. Text search only (not lemma)." },
           to: { type: "integer",
                 description: "Latest date: signed historical year; composes with from." },
           century: { type: "integer",
