@@ -380,6 +380,20 @@ class PapyriTest < Minitest::Test
     assert_equal ["Magic", "prayer for justice"], meta["keywords"]
   end
 
+  # The live catalog's three reversed DCLP intervals, read from the real
+  # files. A BCE-signalled pair repairs within upstream's own claim (the
+  # P59-0 ladder: "99 - 1 v. Chr." → -99..-1); an unsigned descending pair
+  # ("199 - 50", "199 - 79" — Herculaneum, where the lower bound plainly
+  # lost a BCE sign but the upper's era is unknowable) is no clean claim:
+  # the raw rides alone and mints no bounds — never a guessed swap into
+  # the 2nd century CE.
+  def test_dclp_descending_origdate_pairs_repair_or_stay_raw
+    header = ->(id) { Nabu::Adapters::PapyriHeader.dclp(File.join(FIXTURES, "origdate-cases", "#{id}.xml"))["date"] }
+    assert_equal({ "not_before" => -99, "not_after" => -1, "raw" => "99 - 1 v. Chr." }, header.call("154374"))
+    assert_equal({ "raw" => "199 - 50" }, header.call("243958"))
+    assert_equal({ "raw" => "199 - 79" }, header.call("382584"))
+  end
+
   def test_reference_producer_records_under_the_source_name
     assert_predicate Nabu::Adapters::Papyri, :reference_edges?
     producer = Nabu::Adapters::Papyri.reference_producer(catalog: nil, journal: nil)

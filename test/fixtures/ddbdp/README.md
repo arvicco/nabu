@@ -47,6 +47,19 @@ upstream commit `91611a190d29b584ca2df01712888ac843e8ef89`), whole:
 The DCLP header mining (origDate/origPlace/provenance/keywords) reads the
 three text-bearing DCLP files already listed above.
 
+### `origdate-cases/` — descending origDate pairs (whole, 2026-10-21)
+
+Three whole DCLP files (canonical clone at `91611a19`) whose `<origDate>`
+bounds run backwards — the live catalog's only reversed DCLP intervals.
+They sit OUTSIDE the walked trees (discovery never sees them);
+`papyri_test.rb` reads them through `PapyriHeader.dclp` directly.
+
+| Path | dclp | origDate |
+|---|---|---|
+| `origdate-cases/154374.xml` | `154374` | `notBefore="0099" notAfter="-0001"` — "99 - 1 v. Chr." (the BCE sign dropped on the lower bound) |
+| `origdate-cases/243958.xml` | `243958` | `notBefore="0199" notAfter="0050"` — "199 - 50", no era word (Herculaneum) |
+| `origdate-cases/382584.xml` | `382584` | `notBefore="0199" notAfter="0079"` — "199 - 79", no era word (Herculaneum) |
+
 ### `pre-switchover/` — the layout-migration proof
 
 The same six text documents as cut from the old layout, kept byte-identical
