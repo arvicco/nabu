@@ -155,6 +155,9 @@ sources:
     fields: #                   localization (West-Vlaanderen 1,224 · Holland-West 314 ·
       region: region          # Oost-Vlaanderen 299 · Brabant-West 181 … 12 regions); the
       #                         place lane falls back to it for the 63 town-less texts
+  corpus-oudnederlands:       # 17 of 89 works carry the witnessLocalization region
+    fields: #                   (Groningen 5 · Zuid-Nederrijn 4 · Friesland 2 …); the place
+      region: region          # lane falls back to it for the 7 place-less ones
   bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
     fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
       recension: recension    # projected so the ruled recension facet rule can read it

@@ -1819,7 +1819,8 @@ sources:
     # the honest claim — no machine rule/override covers odt, no shadowing.
     lect: {posture: identity, note: "odt — Old Dutch anchor (nabu-lects); bare code is the claim"}
     dating: {posture: dated, note: "every TEI work carries a witness-year <date> (e.g. 701-800)"}
-    places: {posture: named, note: "witnessLocalization place names ride in metadata; not gazetteer-linked"}
+    places: {posture: named, note: "witnessLocalization place names ride in metadata; not gazetteer-linked;
+        the 7 place-less works place at REGION grain (declared coarse), and the region facets"}
     script: {posture: implied}
   corpus-gysseling:
     kind: {posture: unclassified}

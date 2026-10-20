@@ -896,6 +896,21 @@ module Store
                    timeline_for("urn:nabu:corpus-gysseling:0117").values_at(:not_before, :place_name)
     end
 
+    # The Old Dutch witness localizations: 7 of 17 region-bearing works
+    # name no place (census 2026-10-21) — the region answers, coarse.
+    def test_metadata_places_oudnederlands_region_fallback
+      seed_metadata_doc("corpus-oudnederlands", "urn:nabu:corpus-oudnederlands:bloedbezwering_cg",
+                        { "not_before" => 1001, "not_after" => 1050, "date_raw" => "1001-1050",
+                          "region" => "Noord-Nederrijn", "country" => "Duitsland" })
+      seed_metadata_doc("corpus-oudnederlands", "urn:nabu:corpus-oudnederlands:w2",
+                        { "not_before" => 1001, "not_after" => 1100, "date_raw" => "1001-1100",
+                          "place" => "Nederberg", "region" => "Nederberg" })
+      build!
+      assert_equal "Noord-Nederrijn",
+                   timeline_for("urn:nabu:corpus-oudnederlands:bloedbezwering_cg")[:place_name]
+      assert_equal "Nederberg", timeline_for("urn:nabu:corpus-oudnederlands:w2")[:place_name]
+    end
+
     def test_metadata_places_rem_orig_place
       seed_metadata_doc("rem", "urn:nabu:rem:m1", { "orig_place" => "Siegburg (?)" })
       build!
