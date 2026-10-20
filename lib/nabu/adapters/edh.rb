@@ -174,6 +174,15 @@ module Nabu
       # The geography sidecar is fetched beside upstream's tree (class note).
       def self.materialized_paths = GEOGRAPHY.keys
 
+      # EDH ↔ EDR same-artifact edges (Nabu::EdhEdrSameArtifact) re-derive
+      # after every edh sync — the shared Trismegistos numbers join the two
+      # editions of one stone; edr declares the same producer and scope.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::EdhEdrSameArtifact.new(catalog: catalog, journal: journal)
+      end
+
       # The geography sidecar derives the tm→pleiades place crosswalk at
       # every sync and at rebuild's place-index replay (class note).
       def self.place_index_producer? = true

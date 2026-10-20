@@ -1673,6 +1673,17 @@ STAY document grain — page pairing is derivation, not minting. The
 alignment-hub verdict stands: the CBETA witnesses cite Taishō
 page-register-line, a genuinely disjoint scheme, so no multi-canon
 Buddhist work earns a §10 hub entry.)
+#13 `EdhEdrSameArtifact` (kind=same-artifact): an EDH record and an EDR
+record carrying the same Trismegistos text number (`tm_nr` metadata on
+both sides — 10,238 shared numbers, 10,420 document pairs on the
+2026-10-20 catalog) are two EDITIONS of one stone; one document-grain
+edge edh → edr per pair, documents never merged. Each edge's detail
+carries the per-field preferred-witness hint ("Trismegistos N · prefer
+text=… date=… findspot=…": lower supplied share, then fuller text;
+narrower date range; a Pleiades-bearing, else longer, findspot; every
+tie → edh). Both adapters declare it under ONE fixed scope (`edh+edr`),
+so a sync of either side supersedes the same run; it reads
+document_axes, which the links stage replays after.
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the
