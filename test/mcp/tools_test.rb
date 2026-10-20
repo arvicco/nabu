@@ -2283,6 +2283,26 @@ module MCP
       assert(hit["evidence"].any? { |span| span.include?("ανδρα μοι εννεπε μουσα") }, "shared phrase evidence")
     end
 
+    # The explain surface (present-only): each hit's per-gram rows, the
+    # recorded row shape pinned, contributions summing to the score
+    # decimal-exactly; off by default — the frozen hit shape unchanged.
+    def test_parallels_explain_rides_each_hit_and_sums_to_its_score
+      seed_parallels
+      plain = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1" }))
+      refute(plain["hits"].any? { |hit| hit.key?("explain") }, "no explain key unless asked")
+
+      body = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1", "explain" => true }))
+      hit = body["hits"].find { |h| h["urn"] == "urn:d:pol:1" }
+      rows = hit.fetch("explain")
+      assert_equal(%w[gram position positions df weight contribution status], rows.first.keys,
+                   "the recorded row shape")
+      assert_equal Rational(hit.fetch("score").to_s),
+                   rows.sum { |row| Rational(row.fetch("contribution").to_s) },
+                   "the rows decompose the served score exactly"
+      assert_equal(hit.fetch("shared_grams"), rows.count { |row| row.fetch("status") == "shared" })
+      assert(rows.reject { |row| row.fetch("status") == "shared" }.all? { |row| row.fetch("contribution").zero? })
+    end
+
     def test_parallels_excludes_restricted_candidates_by_default
       seed_parallels
       urns = payload(call("nabu_parallels", { "urn" => "urn:d:od:1.1" }))["hits"].map { |h| h["urn"] }

@@ -302,6 +302,20 @@ text). Only the anchor's own document is excluded — translations self-exclude
 source. `lang`/`license` scope the candidates; the default restricted-exclusion
 stance applies (§below).
 
+`explain: true` adds each hit's **score decomposition** as a present-only
+`explain` list — one row per distinct anchor gram: `gram` (folded),
+`position` (first anchor offset), `positions` (anchor occurrences), `df` (the
+probe's document frequency; `null` for a gram never probed), `weight` (1/df),
+`contribution`, `status` (`shared` · `not_shared` · `too_common` — df at the
+corpus-relative cutoff, where the probe stops, so df reads as that floor ·
+`stop` — an all-stop-token gram). The score is additive in the grams, so the
+rows sum to the served `score` **exactly** (contributions are apportioned at
+the score's 4-place grain by largest remainder, each within 1e-4 of its exact
+positions × 1/df); grams adding nothing are explicit zero rows. The engine is
+unchanged — `Query::ParallelsExplain` observes the same probes
+(thresholds/calibration stay in `config/reuse_profiles.yml` and the run
+provenance; this is the per-hit explanation).
+
 ### `nabu_cognates`
 
 Cognates in parallel (P15-3, design §6): verses of a registered alignment work
