@@ -1504,6 +1504,7 @@ module Nabu
                     desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
                           "the hook's exit status is reported, never fails the sync). " \
                           "Example: --review script/review-sync-claude. Single-source sync only."
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def sync(*slugs)
       # --redownload refusals up front (P44-i1): contradictory with
       # --parse-only (nothing to re-download if we skip fetch), and
@@ -1537,6 +1538,7 @@ module Nabu
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
       enabled = sync_enabled_slugs(config, registry, db)
+      explain_command(sync_intro_key)
       if slugs.size <= 1
         run_sync(runner, registry, slugs.first, db, ledger, enabled: enabled)
       else
@@ -2199,6 +2201,7 @@ module Nabu
     option :parse_workers, type: :numeric,
                            desc: "Forked parse workers for parallel-replay sources (1 = serial; " \
                                  "default: rebuild.parse_workers setting, else cores - 1, capped)"
+    option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def rebuild
       config = Nabu::Config.load
       parse_workers = rebuild_parse_workers(config)
@@ -2219,6 +2222,7 @@ module Nabu
         # --profile implies nothing extra on a dry run: there is no run to time.
         print_plan(rebuilder.plan)
       else
+        explain_command(:rebuild)
         result = rebuilder.run(progress: progress_reporter)
         finish_progress
         print_result(result)
@@ -11530,8 +11534,37 @@ module Nabu
           on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
           on_load_tick: load_tick(tty, state),
           on_stage: stage_tick(tty, state),
-          on_note: progress_note(state)
+          on_note: progress_note(state),
+          on_explain: verbose_narrator
         )
+      end
+
+      # --verbose (Ops::StageGuide): ONE narrator per invocation, so each
+      # stage explains once however many reporters the command builds
+      # (an axis sync builds one per member). Green on stderr beside the
+      # stage lines; nil when not verbose, so the reporter's explain seam
+      # is a no-op. +before+ closes an open \r stage line first.
+      def verbose_narrator
+        return nil unless options[:verbose]
+
+        @verbose_narrator ||= Nabu::Ops::StageGuide::Narrator.new(
+          io: $stderr, sources: verbose_source_slugs,
+          before: -> { close_stage(@progress_state) if @progress_state }
+        )
+      end
+
+      # The command's intro (what the run is about to do to the library),
+      # printed before any work when --verbose is on.
+      def explain_command(key)
+        verbose_narrator&.intro(key)
+      end
+
+      # The registered slugs, so a bare-slug replay stage resolves to the
+      # source-replay explanation.
+      def verbose_source_slugs
+        Nabu::SourceRegistry.load(Nabu::Config.load.sources_path).each_source.map(&:slug)
+      rescue Nabu::Error
+        []
       end
 
       # A durable header/tally line (owner UX rule 2026-10-07 — the
@@ -11635,6 +11668,12 @@ module Nabu
         elsif $stderr.tty?
           $stderr.print("\n")
         end
+      end
+
+      def sync_intro_key
+        return :sync_fetch_only if options[:fetch_only]
+
+        options[:parse_only] ? :sync_parse_only : :sync
       end
 
       # sync dispatch (P35-2): --all first (flat batch), then --axis (grouped),
@@ -12619,6 +12658,7 @@ module Nabu
           return print_incremental_plan(plan)
         end
 
+        explain_command(:rebuild_incremental)
         result = incremental.run(progress: progress_reporter)
         finish_progress
         print_incremental_result(result)

@@ -29,6 +29,10 @@ module Nabu
     # caller names the registered source slugs — a bare slug is that
     # source's replay stage.
     module StageGuide
+      # The one help line every composite command's --verbose carries.
+      OPTION_DESC = "Explain, in green on stderr, what the run and each of its stages do to the library " \
+                    "(the text stays when NO_COLOR or a pipe drops the color)"
+
       Entry = Data.define(:key, :match, :text) do
         def matches?(label) = match.is_a?(Regexp) ? match.match?(label) : match == label
       end

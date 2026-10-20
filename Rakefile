@@ -505,16 +505,22 @@ end
 # rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
 # changes refresh projections through this task, never via a rebuild).
 namespace :builders do
+  # Verbose (Ops::StageGuide — the intro + one green line per stage):
+  # `rake builders:refresh[verbose]` or `rake --verbose builders:refresh`.
   desc "Re-project timeline + places + facets + kind axis + lect facets + " \
-       "dictionary stats + derge titles + lemma rollups over the live catalog"
-  task :refresh do
+       "dictionary stats + derge titles + lemma rollups over the live catalog ([verbose] explains each stage)"
+  task :refresh, [:verbose] do |_task, args|
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
     config = Nabu::Config.load
     catalog = Sequel.connect("sqlite://#{File.join(config.db_dir, 'catalog.sqlite3')}")
+    verbose = args[:verbose] == "verbose" || Rake::FileUtilsExt.verbose_flag == true
+    narrator = verbose ? Nabu::Ops::StageGuide::Narrator.new(io: $stdout) : nil
+    narrator&.intro(:builders_refresh)
     progress = Nabu::ProgressReporter.new(
       on_stage: ->(name, _eta = nil) { puts "  stage: #{name}" },
-      on_load_tick: ->(count, _errored) { puts "  … #{count}" if (count % 100_000).zero? }
+      on_load_tick: ->(count, _errored) { puts "  … #{count}" if (count % 100_000).zero? },
+      on_explain: narrator
     )
     summary = Nabu::Ops::BuilderRefresh.run(catalog: catalog, config: config,
                                             progress: progress)
