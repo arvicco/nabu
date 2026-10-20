@@ -4632,6 +4632,29 @@ sblgnt:
   # re-syncable, not on a live schedule.
   sync_policy: manual
 
+scat:
+  adapter: Nabu::Adapters::Scat
+  adopted: "2026-10-20"
+  axes: [slavic]
+  wired: true    # first sync verified 2026-10-20: 24 docs / 2,446 passages, 0 errored;
+                 # 5 TXM furniture files skipped by rule; 24 = the release catalog's 24
+  sync_policy: manual
+  lemma_tier: silver
+  # SCAT — the St. Petersburg Corpus of Hagiographic Texts (Saint
+  # Petersburg State University; vintagentleman/scat-content): 24 Russian
+  # saints' lives of the Vologda / Russian North tradition in 16th–18th-c.
+  # manuscripts, diplomatic Unicode TEI (release 1.2.0, 2021-10-24) — one
+  # document per text, one passage per folio side, a normalized spelling
+  # per word. CC BY-SA 4.0 (repo LICENSE + README) → class attribution,
+  # share-alike noted. Lemma/POS/morphology on five texts (CrlNvz, DGlush,
+  # DmPrlc, GrPelsh, KrnKml); the release does not state how that layer was
+  # produced, so lemma_tier silver keeps every count labeled until its
+  # provenance is established. Language chu (Russian-recension Church
+  # Slavonic), staged per century by the scat-century facet rule. A tagged
+  # release is frozen → sync_policy manual. The DIACU dataset (Cassese et
+  # al. 2025) re-packages 25 of these texts; they are held here, from the
+  # primary.
+
 scripta-bulgarica:   # P107-8
   adapter: Nabu::Adapters::ScriptaBulgarica
   adopted: "2026-09-28"

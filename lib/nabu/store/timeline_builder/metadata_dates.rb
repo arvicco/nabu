@@ -189,6 +189,8 @@ module Nabu
           "ren" => :structured,
           "rsti" => :place_only,
           "ru-wikisource" => :era_band_key,
+          "scat" => :structured, # the release catalog's century (the witness's, beside the
+          #                        shelfmark) as a century envelope; no place claim
           "seal" => :period_label,
           "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
           #                           or century attribution

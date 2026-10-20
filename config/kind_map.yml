@@ -695,6 +695,12 @@ sources:
     source_kind: scripture
   litopys:
     source_kind: historiography/chronicle   # P117: the passage shelf IS the Ipatiev chronicle
+  scat:                      # 2026-10-20: the whole corpus IS hagiography — 24 saints' lives
+    source_kind: historiography
+    #   (žitija with their miracle cycles and praises); no hagiography class exists, and lives
+    #   fold to historiography by the ruled biography precedent (elephantine "biography",
+    #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
+    #   taxonomy change, not this mapping's call
   sillok:                    # the okhc dynastic-record family
     source_kind: historiography/annals
   sjw:

@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Житие Александра Куштского</title>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <pb n="371"/>
+        <lb n="1"/>
+        <w xml:id="AKush.1" norm="МЕСЯЦА">м҇ⷭца</w>
+        <w xml:id="AKush.2" norm="ИЮНЯ">июнѧ</w>
+        <pc xml:id="AKush.3">,</pc>
+        <w xml:id="AKush.4" norm="ВЪ">въ</w>
+        <num value="9">
+          <w xml:id="AKush.5" norm="9" lemma="9">ѳ҃</w>
+        </num>
+        <w xml:id="AKush.6" norm="ДНЬ">ⷣⷩꙺ</w>
+        <pc xml:id="AKush.7">.</pc>
+        <w xml:id="AKush.8" norm="ЖИТИЕ">житїе</w>
+        <w xml:id="AKush.9" norm="И">и</w>
+        <w xml:id="AKush.10" norm="ПОДВИЗИ">
+          по
+          <lb n="2"/>
+          двизи
+        </w>
+        <w xml:id="AKush.11" norm="И">и</w>
+        <w xml:id="AKush.12" norm="ОТЧАСТИ">ѿчасти</w>
+        <w xml:id="AKush.13" norm="ЧЮДЕС">чюде҇ⷭ</w>
+        <pc xml:id="AKush.14">,</pc>
+        <w xml:id="AKush.15" norm="ИСПОВ+ДАНИЕ">
+          исповѣ
+          <lb n="3"/>
+          данїе
+        </w>
+        <w xml:id="AKush.16" norm="ПРЕПОДОБНАГО">прпⷣбнаго</w>
+        <w xml:id="AKush.17" norm="ОТЦА">ѿ҃ца</w>
+        <w xml:id="AKush.18" norm="НАШЕГО">нашего</w>
+        <pc xml:id="AKush.19">.</pc>
+        <lb n="4"/>
+        <name>
+          <w xml:id="AKush.20" norm="АЛЕКСАНДРА">александра</w>
+          <w xml:id="AKush.21" norm="КУШЕСКАГО">кꙋшскаго</w>
+        </name>
+        <w xml:id="AKush.22" norm="ЧЮДОТВОРЦА">
+          чюдотво
+          <lb n="5"/>
+          рца
+        </w>
+        <w xml:id="AKush.23" norm="БЛАГОСЛОВИ">бл҃гослови</w>
+        <pc xml:id="AKush.24">,</pc>
+        <w xml:id="AKush.25" norm="ОТЧЕ">ѿ҃че</w>
+        <pc xml:id="AKush.26">;</pc>
+        <lb n="6"/>
+        <w xml:id="AKush.27" norm="СЕИ">сеи</w>
+        <w xml:id="AKush.28" norm="УБО">ѹбо</w>
+        <w xml:id="AKush.29" norm="БЛАЖЕННЫИ">бл҃женⷩыи</w>
+        <pc xml:id="AKush.30">,</pc>
+        <w xml:id="AKush.31" norm="О">о</w>
+        <w xml:id="AKush.32" norm="НЕМЪЖЕ">немъⷤⷷ</w>
+        <w xml:id="AKush.33" norm="БОГОГЛАГОЛАСНЫИ">бг҃огла҇ⷭныꙶ</w>
+        <lb n="7"/>
+        <w xml:id="AKush.34" norm="СВ+ТЛЫИ">свѣтлыи</w>
+        <w xml:id="AKush.35" norm="УЧИТЕЛЬ">ѹчитель</w>
+        <w xml:id="AKush.36" norm="СЛАВНЫИ">славныи</w>
+        <lb n="8"/>
+        <name>
+          <w xml:id="AKush.37" norm="ПАВЕЛЪ">павелъ</w>
+        </name>
+        <w xml:id="AKush.38" norm="ВОПИЕТЪ">вопиетъ</w>
+        <pc xml:id="AKush.39">,</pc>
+        <w xml:id="AKush.40" norm="ИХЖЕ">ихже</w>
+        <w xml:id="AKush.41" norm="ЖИТИЕ">
+          жи
+          <lb n="9"/>
+          тїе
+        </w>
+        <w xml:id="AKush.42" norm="НА">на</w>
+        <w xml:id="AKush.43" norm="НЕБЕС+ХЪ">нб҃сѣхъ</w>
+        <w xml:id="AKush.44" norm="ЕСТЬ">есть</w>
+        <pc xml:id="AKush.45">.</pc>
+        <w xml:id="AKush.46" norm="НАСЛАЖДАЯСЯ">
+          наслаж
+          <lb n="10"/>
+          даѧсѧ
+        </w>
+        <w xml:id="AKush.47" norm="ЧЮВСТВА">чювства</w>
+        <w xml:id="AKush.48" norm="БЕЗВ+ЩНЫМЪ">безвѣщныⷨ</w>
+        <lb n="11"/>
+        <w xml:id="AKush.49" norm="НЕНАСЫТНАГО">ненасытнаго</w>
+        <pc xml:id="AKush.50">,</pc>
+        <w xml:id="AKush.51" norm="И">и</w>
+        <w xml:id="AKush.52" norm="НЕВИДИМАГО">невидимаго</w>
+        <lb n="12"/>
+        <w xml:id="AKush.53" norm="ДОБРОТОЮ">добротою</w>
+        <w xml:id="AKush.54" norm="ВИД+ВЪ">видѣвъ</w>
+        <w xml:id="AKush.55" norm="АКИ">аки</w>
+        <w xml:id="AKush.56" norm="РАЗУМНА">
+          разꙋ
+          <lb n="13"/>
+          мна
+        </w>
+        <w xml:id="AKush.57" norm="РАЗУМОМЪ">разꙋмомъ</w>
+        <pc xml:id="AKush.58">,</pc>
+        <w xml:id="AKush.59" norm="ТОЧИЮ">точїю</w>
+        <w xml:id="AKush.60" norm="РАДУИСЯ">
+          радꙋи
+          <lb n="14"/>
+          сѧ
+        </w>
+        <w xml:id="AKush.61" norm="ДОСТОИНАЯ">достоинаѧ</w>
+        <w xml:id="AKush.62" norm="ПО">по</w>
+        <w xml:id="AKush.63" norm="ТЕБ+">тебѣ</w>
+        <pc xml:id="AKush.64">,</pc>
+        <w xml:id="AKush.65" norm="НАШЕ">наше</w>
+        <lb n="15"/>
+        <w xml:id="AKush.66" norm="ЕСТЬ">есть</w>
+        <w xml:id="AKush.67" norm="УДОБРИТИ">ѹдобрити</w>
+        <w xml:id="AKush.68" norm="СЛОВО">слово</w>
+        <w xml:id="AKush.69" norm="КЪ">ⷦꙸ</w>
+        <w xml:id="AKush.70" norm="СКАЗАНИЮ">сказанїю</w>
+        <lb n="16"/>
+        <w xml:id="AKush.71" norm="ПРИЕМЪ">прїемъ</w>
+        <w xml:id="AKush.72" norm="ОТДАНИЯ">ѿданїѧ</w>
+        <w xml:id="AKush.73" norm="ТРУДОВЪ">трꙋдовъ</w>
+        <pc xml:id="AKush.74">.</pc>
+        <w xml:id="AKush.75" norm="И">и</w>
+        <lb n="17"/>
+        <w xml:id="AKush.76" norm="ПРИСНО">пр҇ⷭно</w>
+        <w xml:id="AKush.77" norm="Т+МЪ">тѣмъ</w>
+        <w xml:id="AKush.78" norm="СЫИ">сыи</w>
+        <w xml:id="AKush.79" norm="ИХЖЕ">ихже</w>
+        <w xml:id="AKush.80" norm="НОГА">нога</w>
+        <w xml:id="AKush.81" norm="СТА">ста</w>
+        <lb n="18"/>
+        <w xml:id="AKush.82" norm="НА">на</w>
+        <w xml:id="AKush.83" norm="ПРАВОТ+">правотѣ</w>
+        <pc xml:id="AKush.84">.</pc>
+        <w xml:id="AKush.85" norm="НО">но</w>
+        <w xml:id="AKush.86" norm="ОБАЧЕ">ѡбаче</w>
+        <w xml:id="AKush.87" norm="УНЕ">ѹне</w>
+        <w xml:id="AKush.88" norm="ОТ">ѿ</w>
+        <w xml:id="AKush.89" norm="ТРУДОВЪНЫХЪ">
+          трꙋ
+          <pb n="-371"/>
+          <lb n="1"/>
+          довъныⷯ
+        </w>
+        <w xml:id="AKush.90" norm="Т+ХЪ">тѣхъ</w>
+        <w xml:id="AKush.91" norm="ПОТОВЪ">потовъ</w>
+        <w xml:id="AKush.92" norm="НАШЕ">наше</w>
+        <w xml:id="AKush.93" norm="ЕСТЬ">есть</w>
+        <pc xml:id="AKush.94">.</pc>
+        <lb n="2"/>
+        <w xml:id="AKush.95" norm="УДОБРИТИ">ѹдобрити</w>
+        <w xml:id="AKush.96" norm="СЛОВО">слово</w>
+        <w xml:id="AKush.97" norm="СКАЗУЮЩЕ">сказꙋюще</w>
+        <w xml:id="AKush.98" norm="БЛАГОГОВ+ИНЪСТВО">
+          бл҃го
+          <lb n="3"/>
+          говѣинъство
+        </w>
+        <pc xml:id="AKush.99">.</pc>
+        <w xml:id="AKush.100" norm="И">и</w>
+        <w xml:id="AKush.101" norm="НЕБЕСНОЕ">нб҇ⷭное</w>
+        <w xml:id="AKush.102" norm="ЖИТИЕ">житїе</w>
+        <pc xml:id="AKush.103">,</pc>
+        <lb n="4"/>
+        <w xml:id="AKush.104" norm="О">ѡ</w>
+        <w xml:id="AKush.105" norm="СЕМЪ">семъ</w>
+        <w xml:id="AKush.106" norm="БЛАЖЕННЕМЪ">бл҃женнеⷨ</w>
+        <pc xml:id="AKush.107">.</pc>
+        <w xml:id="AKush.108" norm="ЯКО">ꙗко</w>
+        <w xml:id="AKush.109" norm="ДА">да</w>
+        <w xml:id="AKush.110" norm="НАВЫКНЕМЪ">
+          нⷶвы
+          <lb n="5"/>
+          кнемъ
+        </w>
+        <w xml:id="AKush.111" norm="ИЗВ+СТНО">извѣстно</w>
+        <w xml:id="AKush.112" norm="ОТКУДУ">ѿкꙋдꙋ</w>
+        <w xml:id="AKush.113" norm="СИИ">сїи</w>
+        <lb n="6"/>
+        <w xml:id="AKush.114" norm="ТАКОВЫИ">таковыи</w>
+        <w xml:id="AKush.115" norm="СВ+ТИЛНИКЪ">свѣтилнїкъ</w>
+        <w xml:id="AKush.116" norm="ВОСИЯ">восїѧ</w>
+        <pc xml:id="AKush.117">.</pc>
+        <lb n="7"/>
+        <w xml:id="AKush.118" norm="ЕДА">еда</w>
+        <w xml:id="AKush.119" norm="ОТ">ѿ</w>
+        <name>
+          <w xml:id="AKush.120" norm="ЕРОСАЛИМА">еросалима</w>
+        </name>
+        <w xml:id="AKush.121" norm="ИЛИ">или</w>
+        <w xml:id="AKush.122" norm="ОТ">ѿ</w>
+        <name>
+          <w xml:id="AKush.123" norm="СИОНА">сиона</w>
+        </name>
+        <pc xml:id="AKush.124">,</pc>
+        <lb n="8"/>
+        <w xml:id="AKush.125" norm="НИ">ни</w>
+        <pc xml:id="AKush.126">.</pc>
+        <w xml:id="AKush.127" norm="РЕЧЕНО">речено</w>
+        <w xml:id="AKush.128" norm="В">в</w>
+        <w xml:id="AKush.129" norm="НАШИХЪ">нашиⷯ</w>
+        <w xml:id="AKush.130" norm="РОД+ХЪ">родѣⷯ</w>
+        <w xml:id="AKush.131" norm="ПРОСИЯ">просїѧ</w>
+        <lb n="9"/>
+        <w xml:id="AKush.132" norm="ТАКОВЫИ">таковыи</w>
+        <w xml:id="AKush.133" norm="СВ+ТИЛЬНИКЪ">свѣтильнїкъ</w>
+        <pc xml:id="AKush.134">.</pc>
+        <w xml:id="AKush.135" norm="СЕГО">сего</w>
+        <lb n="10"/>
+        <w xml:id="AKush.136" norm="РАДИ">ради</w>
+        <w xml:id="AKush.137" norm="СПОДВИГОХСЯ">споⷣвигохсѧ</w>
+        <w xml:id="AKush.138" norm="НА">на</w>
+        <w xml:id="AKush.139" norm="РВЕНИЕ">рвенїе</w>
+        <w xml:id="AKush.140" norm="САМИ">сами</w>
+        <lb n="11"/>
+        <w xml:id="AKush.141" norm="СЕБ+">себѣ</w>
+        <w xml:id="AKush.142" norm="ПРИВЕДЕТЕ">приведете</w>
+        <pc xml:id="AKush.143">.</pc>
+        <w xml:id="AKush.144" norm="НО">но</w>
+        <w xml:id="AKush.145" norm="ПЕРВОЕ">первое</w>
+        <w xml:id="AKush.146" norm="УБО">
+          ѹ
+          <lb n="12"/>
+          бо
+        </w>
+        <w xml:id="AKush.147" norm="ПОМЫШЛЯЮЩУ">помышлѧющю</w>
+        <w xml:id="AKush.148" norm="НЕПРАВЕДНО">неправеⷣно</w>
+        <pc xml:id="AKush.149">,</pc>
+        <lb n="13"/>
+        <w xml:id="AKush.150" norm="МОГУЩАЯ">могꙋщаѧ</w>
+        <w xml:id="AKush.151" norm="ПОЛЗЫ">ползы</w>
+        <w xml:id="AKush.152" norm="СЛЫШАЩИМЪ">слышащыⷨ</w>
+        <lb n="14"/>
+        <w xml:id="AKush.153" norm="СОТВОРИТИ">сотворити</w>
+        <w xml:id="AKush.154" norm="СИЕ">сїе</w>
+        <w xml:id="AKush.155" norm="МОЛЧАНИЕМЪ">мо҇ⷧчанїемъ</w>
+        <w xml:id="AKush.156" norm="ПОТАИТИ">
+          по
+          <lb n="15"/>
+          таити
+        </w>
+        <pc xml:id="AKush.157">,</pc>
+        <w xml:id="AKush.158" norm="НО">но</w>
+        <w xml:id="AKush.159" norm="ДА">да</w>
+        <w xml:id="AKush.160" norm="И">и</w>
+        <w xml:id="AKush.161" norm="МЫ">мы</w>
+        <w xml:id="AKush.162" norm="НЕ">не</w>
+        <w xml:id="AKush.163" norm="ВПАДЕМЪ">впадемъ</w>
+        <lb n="16"/>
+        <w xml:id="AKush.164" norm="ВО">во</w>
+        <w xml:id="AKush.165" norm="ОСУЖДЕНИЕ">ѡсꙋжденїе</w>
+        <pc xml:id="AKush.166">,</pc>
+        <w xml:id="AKush.167" norm="ОНОГО">ѡного</w>
+        <w xml:id="AKush.168" norm="РАБА">раба</w>
+        <w xml:id="AKush.169" norm="ПОГРЕБШАГО">
+          по
+          <lb n="17"/>
+          гребшаго
+        </w>
+        <w xml:id="AKush.170" norm="В">в</w>
+        <w xml:id="AKush.171" norm="ЗЕМЛИ">земли</w>
+        <w xml:id="AKush.172" norm="ТАЛАНТЪ">талантъ</w>
+        <pc xml:id="AKush.173">.</pc>
+        <lb n="18"/>
+        <w xml:id="AKush.174" norm="СЕГО">сего</w>
+        <w xml:id="AKush.175" norm="РАДИ">ради</w>
+        <w xml:id="AKush.176" norm="И">и</w>
+        <w xml:id="AKush.177" norm="АЗЪ">азъ</w>
+        <w xml:id="AKush.178" norm="ОТ">ѿ</w>
+        <w xml:id="AKush.179" norm="ПРЕСЛУШАНИЯ">преслꙋшанїѧ</w>
+        <pc xml:id="AKush.180">.</pc>
+        <pb n="372"/>
+        <lb n="1"/>
+        <w xml:id="AKush.181" norm="СМЕРТИ">смерти</w>
+        <w xml:id="AKush.182" norm="УБОЯХСЯ">ѹбоѧхсѧ</w>
+        <w xml:id="AKush.183" norm="ВСЯЧЕСКИ">всѧчески</w>
+        <w xml:id="AKush.184" norm="ПИСАТИ">
+          пи
+          <lb n="2"/>
+          сати
+        </w>
+        <w xml:id="AKush.185" norm="ПОПЕКОХСЯ">попекохсѧ</w>
+        <w xml:id="AKush.186" norm="ЕЛИКО">елико</w>
+        <w xml:id="AKush.187" norm="ПОСТИГНУТИ">
+          пости
+          <lb n="3"/>
+          гнꙋти
+        </w>
+        <add place="margin">
+          <c>[</c>
+          <w xml:id="AKush.188" norm="МОГОХЪ">могоⷯ</w>
+          <c>]</c>
+        </add>
+        <pc xml:id="AKush.189">.</pc>
+        <w xml:id="AKush.190" norm="ИЖЕ">иже</w>
+        <w xml:id="AKush.191" norm="О">ѡ</w>
+        <w xml:id="AKush.192" norm="НЕМЪ">немъ</w>
+        <w xml:id="AKush.193" norm="ТРУДЫ">трꙋды</w>
+        <lb n="4"/>
+        <w xml:id="AKush.194" norm="ЕГО">его</w>
+        <w xml:id="AKush.195" norm="И">и</w>
+        <w xml:id="AKush.196" norm="ХОЖЕНИЯ">хоженїѧ</w>
+        <pc xml:id="AKush.197">,</pc>
+        <w xml:id="AKush.198" norm="ЕЖЕ">еже</w>
+        <w xml:id="AKush.199" norm="НАУЧЕНЪ">наѹченъ</w>
+        <lb n="5"/>
+        <w xml:id="AKush.200" norm="ОТО">ото</w>
+        <w xml:id="AKush.201" norm="ОТЕЦЬ">ѡт҃цъ</w>
+        <w xml:id="AKush.202" norm="МОИХЪ">моихъ</w>
+        <pc xml:id="AKush.203">.</pc>
+        <w xml:id="AKush.204" norm="ИХЖЕ">ихже</w>
+        <w xml:id="AKush.205" norm="СЛЫША">
+          слы
+          <lb n="6"/>
+          ша
+        </w>
+        <w xml:id="AKush.206" norm="ОТО">ѡто</w>
+        <w xml:id="AKush.207" norm="УЧЕНИКЪ">ѹч҃нкъ</w>
+        <w xml:id="AKush.208" norm="ЕГО">его</w>
+        <w xml:id="AKush.209" norm="МНОЖАИШАЯ">
+          мно
+          <lb n="7"/>
+          жаишаѧ
+        </w>
+        <w xml:id="AKush.210" norm="О">о</w>
+        <w xml:id="AKush.211" norm="СВЯТ+МЪ">ст҃ѣмъ</w>
+        <pc xml:id="AKush.212">.</pc>
+        <w xml:id="AKush.213" norm="ГЛАГОЛЮ">глаголю</w>
+        <w xml:id="AKush.214" norm="ЖЕ">же</w>
+        <lb n="8"/>
+        <name>
+          <w xml:id="AKush.215" norm="САВАТИИ">саватии</w>
+        </name>
+        <pc xml:id="AKush.216">,</pc>
+        <w xml:id="AKush.217" norm="А">а</w>
+        <w xml:id="AKush.218" norm="ДРУГИИ">дрꙋгїи</w>
+        <name>
+          <w xml:id="AKush.219" norm="СИМЕОНЪ">симеѡнъ</w>
+        </name>
+        <pc xml:id="AKush.220">.</pc>
+        <lb n="9"/>
+        <w xml:id="AKush.221" norm="ИЖЕ">иже</w>
+        <w xml:id="AKush.222" norm="ВИД+ША">видѣⷲⷶ</w>
+        <w xml:id="AKush.223" norm="СВЯТАГО">ст҃аго</w>
+        <w xml:id="AKush.224" norm="ИЗВ+СТНО">извѣстно</w>
+        <pc xml:id="AKush.225">.</pc>
+        <lb n="10"/>
+        <w xml:id="AKush.226" norm="КАКО">како</w>
+        <w xml:id="AKush.227" norm="ТРУДИСЯ">трꙋдисѧ</w>
+        <w xml:id="AKush.228" norm="И">и</w>
+        <w xml:id="AKush.229" norm="ПАЧЕ">паче</w>
+        <w xml:id="AKush.230" norm="ЖЕ">же</w>
+        <w xml:id="AKush.231" norm="СВИДЕТЕЛЬСТВУЮЩИМЪ">
+          свиде
+          <lb n="11"/>
+          тельствꙋющиⷨ
+        </w>
+        <w xml:id="AKush.232" norm="САМ+МЪ">самѣⷨ</w>
+        <w xml:id="AKush.233" norm="ЧЮДЕС+МЪ">чюдесѣⷨ</w>
+        <lb n="12"/>
+        <w xml:id="AKush.234" norm="ОТ">ѿ</w>
+        <w xml:id="AKush.235" norm="ГРОБА">гроба</w>
+        <w xml:id="AKush.236" norm="СВЯТАГО">ст҃аго</w>
+        <pc xml:id="AKush.237">.</pc>
+        <w xml:id="AKush.238" norm="ИНО">ино</w>
+        <w xml:id="AKush.239" norm="ЖЕ">же</w>
+        <w xml:id="AKush.240" norm="И">и</w>
+        <w xml:id="AKush.241" norm="СВОИМА">
+          свои
+          <lb n="13"/>
+          ма
+        </w>
+        <w xml:id="AKush.242" norm="ОЧИМА">ѡчима</w>
+        <w xml:id="AKush.243" norm="ВИД+ХЪ">видѣⷯ</w>
+        <w xml:id="AKush.244" norm="БЫВАЮЩАЯ">бывающаѧ</w>
+        <lb n="14"/>
+        <w xml:id="AKush.245" norm="ЧЮДЕСА">чюдеса</w>
+        <w xml:id="AKush.246" norm="УДИВИХСЯ">ѹдивихсѧ</w>
+        <pc xml:id="AKush.247">.</pc>
+        <w xml:id="AKush.248" norm="И">и</w>
+        <w xml:id="AKush.249" norm="ПОМОЩИ">помощы</w>
+        <lb n="15"/>
+        <w xml:id="AKush.250" norm="УБО">ѹбо</w>
+        <w xml:id="AKush.251" norm="БОЖИЯ">бж҃їѧ</w>
+        <w xml:id="AKush.252" norm="ПРОСЯ">просѧ</w>
+        <pc xml:id="AKush.253">,</pc>
+        <w xml:id="AKush.254" norm="И">и</w>
+        <w xml:id="AKush.255" norm="НА">на</w>
+        <w xml:id="AKush.256" norm="МОЛИТВУ">мл҃твꙋ</w>
+        <lb n="16"/>
+        <w xml:id="AKush.257" norm="СВЯТАГО">ст҃аго</w>
+        <w xml:id="AKush.258" norm="НАД+ЯХСЯ">надѣѧхсѧ</w>
+        <w xml:id="AKush.259" norm="ДЕРЗНУХЪ">дерзнꙋⷯ</w>
+        <w xml:id="AKush.260" norm="ПИСАТИ">
+          писа
+          <lb n="17"/>
+          ти
+        </w>
+        <w xml:id="AKush.261" norm="ЕЛИКО">елико</w>
+        <w xml:id="AKush.262" norm="СЛЫШАХЪ">слышаⷯ</w>
+        <pc xml:id="AKush.263">.</pc>
+        <w xml:id="AKush.264" norm="ЯКО">ꙗко</w>
+        <w xml:id="AKush.265" norm="ДА">да</w>
+        <w xml:id="AKush.266" norm="НЕЗАБВЕННО">
+          неза
+          <lb n="18"/>
+          бвенно
+        </w>
+        <w xml:id="AKush.267" norm="БУДЕТЪ">бꙋдетъ</w>
+        <w xml:id="AKush.268" norm="ЖИТИЕ">житїе</w>
+        <w xml:id="AKush.269" norm="СВЯТАГО">ст҃аго</w>
+        <pc xml:id="AKush.270">.</pc>
+        </ab></body></text></TEI>
