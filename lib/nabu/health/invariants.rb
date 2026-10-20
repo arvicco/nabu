@@ -284,6 +284,13 @@ module Nabu
                                            "(17st ct); Osor, Krk; Matej Savić …; Rome …\") — " \
                                            "custodial history, not its origin; orig_place is " \
                                            "the origin claim (upstream: unknown)" },
+        # The places sweep (live census 2026-10-21, 590 of 982 docs, 222
+        # values): "<find context>, jetzt Mus. <city>".
+        "ig-cyprus" => { "provenance" => "the find context INSIDE the ancient city (\"Westnekropole, " \
+                                         "Grab XVII\", \"Apollon-Heiligtum\", \"Akropolis\") plus " \
+                                         "the present museum (\"jetzt Mus. Nikosia\") — sub-site " \
+                                         "grain and a PRESENT location (the cdli/oracc " \
+                                         "findspot_square stance); origPlace's city projects" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
