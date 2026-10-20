@@ -105,20 +105,49 @@ module Nabu
     # writes OR reads (the component key); +roots+ the files its code
     # closure starts from; +membership+ :scope | :global; +volatile+ a reason
     # string when the producer is never stamped (then nothing else
-    # matters).
-    Producer = Data.define(:kinds, :roots, :membership, :volatile) do
-      def initialize(kinds:, roots: [], membership: :scope, volatile: nil)
+    # matters); +carved+ the files its require closure reaches but its
+    # replay provably never runs (the carve-outs, below).
+    Producer = Data.define(:kinds, :roots, :membership, :volatile, :carved) do
+      def initialize(kinds:, roots: [], membership: :scope, volatile: nil, carved: [])
         super
       end
     end
+
+    # == The carve-outs (the BUILDER_FILES precedent, applied per producer)
+    #
+    # The require closure is a sound SUPERSET of what a mine runs: a file
+    # rides it because some required file requires it, whether or not the
+    # producer ever calls into it — and every byte change there (comments
+    # included) re-mines the scope. A carved file leaves the closure (and
+    # its own requires are not followed from it). The bound that keeps
+    # this honest: a carve may name ONLY files the producer's replay never
+    # executes — link_stamps_test runs each producer's real replay under
+    # TracePoint and fails if a carved file runs, so a carve can never
+    # hide a code change that moves output.
+    #
+    # formulas: Query::Scope requires the place/date filter stack
+    # (place_filter → place_index/pleiades/place_refs, date_basis →
+    # silver_dates) for its place:/date: options; batch formulas never
+    # passes them (its replay hands it gram_size/min_count/lang/
+    # max_formulas only). errors.rb holds exception class definitions —
+    # no behavior an edge could depend on.
+    FORMULAS_CARVED = %w[
+      query/place_filter.rb query/date_basis.rb store/place_index.rb store/silver_dates.rb
+      pleiades.rb place_refs.rb errors.rb
+    ].freeze
+    # The place pair: places.rb requires pleiades.rb for the registry's
+    # minted-places/crosswalk lane; the mine and the link read decisions
+    # only (Places#decisions_for), never a Pleiades record.
+    PLACE_CARVED = %w[pleiades.rb].freeze
 
     PRODUCERS = {
       "parallels" => Producer.new(kinds: %w[parallel],
                                   roots: %w[batch_parallels.rb reuse_profiles.rb store/cjk_bigrams.rb],
                                   membership: :global),
-      "formulas" => Producer.new(kinds: %w[formula], roots: %w[batch_formulas.rb]),
-      "place-mine" => Producer.new(kinds: %w[place-candidate], roots: %w[place_mine.rb]),
-      "place-link" => Producer.new(kinds: %w[place place-candidate], roots: %w[place_link.rb]),
+      "formulas" => Producer.new(kinds: %w[formula], roots: %w[batch_formulas.rb], carved: FORMULAS_CARVED),
+      "place-mine" => Producer.new(kinds: %w[place-candidate], roots: %w[place_mine.rb], carved: PLACE_CARVED),
+      "place-link" => Producer.new(kinds: %w[place place-candidate], roots: %w[place_link.rb],
+                                   carved: PLACE_CARVED),
       "cognates" => Producer.new(kinds: %w[cognate],
                                  volatile: "reads the lect facets, lemma tiers and alignment/reflex " \
                                            "index — inputs no member identity covers; re-mines in seconds")
@@ -197,11 +226,12 @@ module Nabu
       # The producer's code closure: absolute paths, sorted.
       def code_files(producer)
         spec = PRODUCERS.fetch(producer)
+        carved = spec.carved.map { |rel| File.join(LIB_DIR, rel) }
         queue = (spec.roots + SHARED_ROOTS).map { |rel| File.join(LIB_DIR, rel) }
         closure = []
         until queue.empty?
           file = queue.shift
-          next if closure.include?(file) || !File.file?(file)
+          next if closure.include?(file) || carved.include?(file) || !File.file?(file)
 
           closure << file
           queue.concat(required_files(file))

@@ -189,6 +189,39 @@ class LinkStampsTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # The carve-outs' honesty bound: a carved file leaves the closure only
+  # because the producer's real replay never runs it. Run with a REAL
+  # nabu-places registry (the place pair's decisions path), so a carve
+  # of the registry's Pleiades lane is checked against the code that
+  # actually reads decisions.
+  def test_a_carved_file_is_never_executed_by_its_producers_replay
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["kanripo"])
+    registry = Nabu::Places.new("kanripo" => { "杜陵" => { "status" => "matched", "refs" => ["chgis:hvd_1"] } })
+    [FORMULAS, PLACE_MINE, PLACE_LINK].each do |scope|
+      carved = Nabu::LinkStamps::PRODUCERS.fetch(scope["producer"]).carved
+      refute_empty carved, scope["producer"]
+      executed = executed_lib_files do
+        Nabu::LinkScopeReplay.replay!(scope, db: @catalog, fulltext: fulltext, journal: @journal, config: config,
+                                             places: registry)
+      end
+      rel = executed.map { |file| file.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") }
+      assert_empty rel & carved, "#{scope['producer']} runs a carved file — the carve would hide a code change"
+      closure = Nabu::LinkStamps.code_files(scope["producer"]).map { |f| f.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") }
+      assert_empty closure & carved
+    end
+  ensure
+    fulltext&.disconnect
+  end
+
+  # The narrowing's point: an edit in the place/date filter stack Query::
+  # Scope drags along no longer re-mines the formulas scope.
+  def test_a_carved_files_change_no_longer_moves_the_stamp
+    before = unit(FORMULAS).stamp
+    with_changed_code("query/place_filter.rb") { assert_equal before, unit(FORMULAS).stamp }
+    with_changed_code("query/formulas.rb") { refute_equal before, unit(FORMULAS).stamp }
+  end
+
   def test_the_closures_stay_out_of_the_catalog_loaders
     # The economics guard: a loader edit is content-neutral or moves the
     # member identities — either way the code digest must not see it.
