@@ -1551,7 +1551,13 @@ volatile — re-run every stage (seconds to ~2 min). Every 4th links stage
 nothing carries, and each would-be-carried scope's fresh edges are
 digested against its stamped ones — a difference is DRIFT (a stamp that
 lied), announced on stderr and in the rebuild summary, and logged in
-`link_stage_runs`; the fresh mine is kept either way. In the incremental
+`link_stage_runs`; the fresh mine is kept either way. On ANY stage, a
+scope re-mined because only its producer code moved (blame exactly
+producer_code, or dragged by such a component-mate with its own stamp
+unchanged) is compared the same way — the CODE-CHANGE RECHECK: equal
+digests are "reproduced" (a performance-only rewrite proves itself on its
+first live stage), a difference is "changed" — reported in the summary,
+never drift, since a code change may legitimately move output. In the incremental
 flavor the links stage now runs after the index heal/stage
 reconciliation, as in the full rebuild (parallels mines the index its
 stamp names).
@@ -1672,7 +1678,12 @@ so standing edges survive parse-only syncs.
 source's passage text, emitting kind=place-candidate edges — REVIEW FUEL,
 never place_ref (precision rules censused: length floor, ambiguity cap, a
 derived frequency stop plus the hand stop list in
-config/place_stop_names.yml). Its review surfaces are `place mine report`
+config/place_stop_names.yml). One scan per run: an Aho-Corasick walk
+(`Nabu::NameMatcher`) over rowid windows of the source's passages tallies
+the census and retains each passage's hits as compact integer arrays; the
+write then bulk-inserts the surviving names' edges from those hits
+(`LinksJournal.write_edges!`, write_edge!'s exact semantics), so output is
+identical to the original census-then-rescan miner. Its review surfaces are `place mine report`
 (per-place, document-spread ranked) and `place mine report --board`
 (per-NAME, the verdict grain: candidates with their index discriminators,
 attestations in context, decided names censused off). `nabu place link
