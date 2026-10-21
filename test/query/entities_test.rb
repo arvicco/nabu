@@ -115,7 +115,7 @@ module Query
     def test_a_catalog_predating_the_index_says_so
       bare = Sequel.sqlite
       error = assert_raises(Nabu::Query::Entities::Error) { Nabu::Query::Entities.new(catalog: bare).run("x") }
-      assert_match(/predates the entity index \(migration 049\)/, error.message)
+      assert_match(/predates the entity index \(migration 050\)/, error.message)
     ensure
       bare&.disconnect
     end

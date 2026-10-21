@@ -80,7 +80,7 @@ class EntityCommandTest < Minitest::Test
       db.disconnect
       _out, err, status = with_config(config) { run_cli(%w[entity κροισ]) }
       assert_equal 1, status
-      assert_match(/predates the entity index \(migration 049\)/, err)
+      assert_match(/predates the entity index \(migration 050\)/, err)
     end
   end
 
