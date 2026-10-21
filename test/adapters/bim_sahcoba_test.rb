@@ -95,7 +95,7 @@ class BimSahcobaTest < Minitest::Test
     refute_nil entry, "bim-sahcoba must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::BimSahcoba, entry.adapter_class
     assert_equal Nabu::Adapters::BimSahcoba.manifest, entry.manifest
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired since the verified first sync (2026-10-21)"
   end
 
   private
