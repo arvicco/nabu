@@ -55,6 +55,7 @@ Do not crawl this site page by page to inventory the library — use the lookup 
 - [The Mongolist](https://arvicco.github.io/nabu/axis/mongolic/): the Secret History's empire in its own words, hanzi transcription beside romanization
 - [The Americanist](https://arvicco.github.io/nabu/axis/americas/): the colonial record of the indigenous Americas, Zapotec testaments to the Andean chronicle
 - [The Africanist](https://arvicco.github.io/nabu/axis/africa/): Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse
+- [The Balticist](https://arvicco.github.io/nabu/axis/baltic/): the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish
 - [The Librarian](https://arvicco.github.io/nabu/axis/local/): the owner's own shelves: dossiers, library, notes, and the sources' own records
 
 ## Optional

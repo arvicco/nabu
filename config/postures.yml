@@ -1129,6 +1129,20 @@ sources:
         Russian North monasteries are the texts' subject, never claimed as the writing place, and
         the README's shelfmarks name holding libraries (present locations)"}
     script: {posture: implied, note: "Cyrillic, diplomatic (titla and superscript letters kept)"}
+  senie:
+    # kind: machine-postured — the senie fold in kind_map.yml over the
+    # header <domain> genre facet.
+    lect: {posture: pending, note: "candidate lv:old (Old Latvian, the 16th–18th-c. written
+        language) — nabu-lects carries no lv anchor at all yet; every passage rides the bare
+        lv code (or its run-majority de/lat/…) until the aggregated Baltic–Finnic–Basque
+        registry package mints lv + lv:old and a date-band rule stages the corpus"}
+    dating: {posture: dated, note: "the TEI header <date> on all 183 documents — the print's or
+        manuscript's year, a \"1681_90\" span as its envelope (:structured lane)"}
+    places: {posture: unplaced, note: "the headers name no imprint or writing place; title-page
+        imprints (\"Riga/ bey Georg Matth. Nöller\", \"BRVNSBERGAE\") stay inside the page text —
+        a title-page imprint miner is a recorded future look, declared coarse until then"}
+    script: {posture: implied, note: "Latin script; the Fraktur-era letter forms are transcribed
+        verbatim (ſ, ẜ, Ꞩ, ß, the macron and tilde marks)"}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old

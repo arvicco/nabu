@@ -865,6 +865,37 @@ sources:
       #   teaching; the nearest ruled head (a religious-instruction sub is a
       #   future class-list call if the family ever grows)
       "miscelaneo": unknown                      # 1 — upstream's own miscellany
+  senie:              # census: 183 documents, 2026-10-21 — the TEI header <domain>,
+    facet: genre      # "<genre>; <subgenre>" in Latvian (split on ";" → two values)
+    map:
+      "Bībele": scripture                        # 3 — the Bible prologues
+      "Bībele, Vecā Derība": scripture           # 43 — Glück's Old Testament books (1689–94)
+      "Bībele, Jaunā Derība": scripture          # 34 — the 1685 New Testament books
+      "Bībele, apokrifi": scripture              # 18 — the 1689 Apocrypha
+      "Bībele, Jaunā Derība, Vecā Derība": scripture  # 1
+      "katehisms": exegesis                      # 11 — the catechisms: doctrinal exposition
+      #   for teaching (the ticha catecismo precedent)
+      "tēvreizes": hymn-prayer/prayer            # 8 — the Lord's-prayer specimens (1507–1675)
+      "lūgšanas": hymn-prayer/prayer             # 7 — prayer books and the agenda's formulas
+      "dziesmas": hymn-prayer/hymn               # 8 — the hymnals (Ps1615, LGL, Elger's Cantiones)
+      "sprediķi": sermon                         # 6 — sermons and the postils
+      "gadījuma dzeja": literary/poetry          # 16 — occasional verse (wedding and funeral
+      #   songs, New-Year wishes)
+      "dzeja": literary/poetry                   # 1 — Stender's Siņģu Lustes
+      "luga": literary/drama                     # 1 — A. J. Stender's comedy (1790)
+      "vēstules": letter                         # 1 — the Sila farmer Anšs' letter (1771)
+      "lietišķie teksti": legal                  # 5 — the censused five are all statute
+      #   prints: the war-court articles (SKL1696 ×2), the infanticide law (SL1684), a
+      #   manor peasant-court ordinance (Sulc1764), the linen weavers' guild statute (LS1625)
+      "lietišķie teksti, zvēresti": legal        # 9 — oaths of office and testimony
+      "vārdnīca": lexical/word-list              # 7 — the dictionaries (Mancelius' Lettus,
+      #   Fürecker, Langius, Elger, Depkin)
+      "padomu grāmata": scholarly                # 3 — household and farming advice books
+      "populārzinātnisks izdevums": scholarly    # 1 — Stender's Augstas Gudribas Grahmata
+    deliberate:
+      "Garīgie teksti": "the religious/secular head the subgenre refines, not a genre"   # 139
+      "Laicīgie teksti": "the religious/secular head the subgenre refines, not a genre"  # 40
+      "Vārdnīcas": "the dictionaries head; the subgenre vārdnīca carries the fold"       # 7
   kdsp:               # census: 262 Slovene ELTeC novels, 2026-10-12 — the deposit's
     facet: genre      # own genre vocabulary, ruled the same day
     map:
