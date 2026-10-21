@@ -291,7 +291,13 @@ module Nabu
                            "provenance" => "the codex's OWNERSHIP chain (\"Pre-owned: Frano Depope " \
                                            "(17st ct); Osor, Krk; Matej Savić …; Rome …\") — " \
                                            "custodial history, not its origin; orig_place is " \
-                                           "the origin claim (upstream: unknown)" },
+                                           "the origin claim (upstream: unknown)",
+                           "orig_place" => "consumed: the TEI origPlace origin claim the place " \
+                                           "lane reads (the MetadataDates orig_place fallback); " \
+                                           "upstream's only value is its explicit unknown " \
+                                           "sentinel (\"place of origin unknown\", 1 of 1 codex, " \
+                                           "census 2026-10-21), which NO_PLACE mints as unplaced " \
+                                           "— a sentinel never traces into a row" },
         # The places sweep (live census 2026-10-21, 590 of 982 docs, 222
         # values): "<find context>, jetzt Mus. <city>".
         "ig-cyprus" => { "provenance" => "the find context INSIDE the ancient city (\"Westnekropole, " \

@@ -784,6 +784,29 @@ class InvariantsTest < Minitest::Test
     end
   end
 
+  # gams-zrcalo's one codex (Borg. L. VII. 9) carries the TEI origPlace
+  # as orig_place — and upstream's only value is its explicit unknown
+  # sentinel, which the place lane reads and mints as unplaced. The key
+  # is consumed, but a sentinel can never trace into a row, so the
+  # census needs the declaration. The live document's metadata verbatim
+  # (its date projects; nothing else is axis ore).
+  def test_gams_zrcalo_orig_place_sentinel_is_declared_consumed
+    meta = '{"date":{"not_after":1445,"not_before":1445,"raw":"1445"},' \
+           '"edition":"semi-diplomatic Latin-script transliteration (GAMS o:speculum.01)",' \
+           '"edition_date":"2022","gams_pid":"o:speculum.01","orig_place":"place of origin unknown",' \
+           '"provenance":"Pre-owned: Frano Depope (17st ct); Osor, Krk; Matej Savić (from 1772); ' \
+           'Rome, Library Congregatio de propaganda fide Vatican Apostolic Library",' \
+           '"repository":"Biblioteca Apostolica Vaticana","script_original":"Glagolitic script",' \
+           '"settlement":"Città del Vaticano","shelfmark":"Borg. L. VII. 9, illirico 9"}'
+    doc_id = seed_lane_doc("gams-zrcalo", "urn:nabu:gams-zrcalo:speculum.01", meta)
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1445, not_after: 1445,
+                               date_raw: "1445", axis_source: "gams-zrcalo")
+    finding = global_finding(:unmined_axis_metadata)
+    assert(finding.nil? || !finding.message.include?("gams-zrcalo"),
+           "the unknown-sentinel orig_place is declared: #{finding&.message}")
+    assert_match(/\Aconsumed:/, Nabu::Health::Invariants::MINING_EXEMPT.dig("gams-zrcalo", "orig_place").to_s)
+  end
+
   # P61-4: the ~script claim is byte-checkable BY DESIGN (D60-b — the axis
   # claims the held surface) — this invariant is the P60-1 census made
   # permanent: sample the claimed slice's passages, classify by Unicode
