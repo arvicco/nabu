@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (18): `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `ud`, `vulgate`
+**Members** (19): `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `ud`, `vulgate`
 
 ### romance
 
@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (19): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gu-wikisource`, `kannada-texts`, `madurai`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `ud`
+**Members** (20): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gu-wikisource`, `kannada-texts`, `madurai`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `ud`, `vedaweb`
 
 ### buddhist
 

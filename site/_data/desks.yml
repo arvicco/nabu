@@ -3,7 +3,7 @@
 - slug: classical
   persona: The Classicist
   blurb: Greek and Latin letters read whole, Homer to the late grammarians
-  members: 18
+  members: 19
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
@@ -73,7 +73,7 @@
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 19
+  members: 20
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
