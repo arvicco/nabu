@@ -126,6 +126,22 @@ class LinkStampsTest < Minitest::Test
     end
   end
 
+  # The person-name candidate recipe reads its slice's text only: its
+  # slice's content moves the stamp, another source's does not, and the
+  # person index (which it never reads) is no input at all.
+  def test_person_candidates_stamp_on_their_slice_and_code_only
+    scope = { "producer" => "person-candidates", "scope" => "aspr", "params" => {} }
+    before = unit(scope)
+    Nabu::Store::Document.find(urn: "urn:nabu:kanripo:d1").update(content_sha256: "f" * 64)
+    assert_equal before.stamp, unit(scope).stamp, "another source is not a member"
+    Nabu::Store::Document.find(urn: "urn:nabu:aspr:riddle").update(content_sha256: "f" * 64)
+    assert_equal %w[members], unit(scope).blame(before.inputs)
+    rel = Nabu::LinkStamps.code_files("person-candidates").map { |f| f.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") }
+    assert_includes rel, "name_words.rb"
+    assert_includes rel, "source_passage_walk.rb"
+    refute_includes rel, "store/person_index.rb"
+  end
+
   def test_the_gazetteer_names_are_a_place_mine_input
     before = unit(PLACE_MINE)
     @catalog[:place_index_names].insert(gazetteer: "chgis", place_id: "hvd_2", name_key: "長安")
@@ -244,14 +260,19 @@ class LinkStampsTest < Minitest::Test
   end
 
   # The place mine's matcher and bulk writer ride its closure (an edit to
-  # either re-mines it), and the bulk writer stays OUT of every other
-  # producer's closure — it lives beside store/links_journal.rb rather
-  # than in it precisely so a change there does not re-mine the world.
+  # either re-mines it), and the bulk writer stays OUT of every producer's
+  # closure that does not write through it — it lives beside
+  # store/links_journal.rb rather than in it precisely so a change there
+  # does not re-mine the world. Its users: the place mine and the
+  # person-name candidate recipe (both bulk candidate writers, seconds to
+  # minutes to re-mine).
+  BULK_WRITERS = %w[place-mine person-candidates].freeze
+
   def test_the_place_mine_closure_carries_its_matcher_and_bulk_writer_alone
     rel = ->(producer) { Nabu::LinkStamps.code_files(producer).map { |f| f.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") } }
     assert_includes rel.call("place-mine"), "name_matcher.rb"
-    assert_includes rel.call("place-mine"), "store/links_journal_bulk.rb"
-    (Nabu::LinkStamps::PRODUCERS.keys - %w[place-mine]).each do |producer|
+    BULK_WRITERS.each { |producer| assert_includes rel.call(producer), "store/links_journal_bulk.rb", producer }
+    (Nabu::LinkStamps::PRODUCERS.keys - BULK_WRITERS).each do |producer|
       refute_includes rel.call(producer), "store/links_journal_bulk.rb", producer
     end
   end

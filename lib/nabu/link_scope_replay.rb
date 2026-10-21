@@ -57,6 +57,10 @@ module Nabu
                       gazetteer: params["gazetteer"] || "chgis",
                       ruled_out: PlaceMine.ruled_out_names(registry, scope["scope"]))
                  .apply!(source: scope["scope"])
+      when "person-candidates"
+        # The capitalized-word recipe over the source's own text: no
+        # authority, no registry — the slice is its only input.
+        PersonCandidates.new(catalog: db, journal: journal).apply!(source: scope["scope"])
       when "place-link"
         registry = places == :auto ? Places.load_default(canonical_dir: config.canonical_dir) : places
         if registry.nil?

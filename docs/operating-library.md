@@ -158,9 +158,14 @@ installed where:
   and `nabu sync edh --parse-only` its second authority (EDH's ~93.6k
   persons attested on Latin inscriptions, one per attestation);
   `nabu person <name|cbdb:ID|edh:HD…/n>` serves the card;
-  `nabu person mine <source>` runs the census-only name scan — it
-  writes nothing by design, and stays census-only until the numbers
-  justify opening an apply lane.
+  `nabu person mine <source> [<authority>]` runs the census-only name
+  scan (any derived authority — cbdb by default, edh, elephantine, …;
+  Han keys as substrings, alphabetic keys as whole words) — it writes
+  nothing by design, and stays census-only until the numbers justify
+  opening an apply lane. `nabu person candidates <source> [--dry-run]`
+  mines person-name CANDIDATES from the source's own text (≥3
+  occurrences, ≥90% capitalized) into labelled candidate edges — name
+  forms, never person records; a recorded, rebuild-replayed scope.
 
 ## 6 · Periodic audits
 
