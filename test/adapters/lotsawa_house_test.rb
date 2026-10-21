@@ -44,7 +44,7 @@ class LotsawaHouseTest < Minitest::Test
     entry = registry["lotsawa-house"]
     refute_nil entry
     assert_equal House, entry.adapter_class
-    refute entry.wired
+    assert entry.wired, "wired since the verified first sync (2026-10-21)"
     assert entry.translations, "the translation pages ride (the site's own reason to exist)"
     assert_equal House.manifest, entry.manifest
   end

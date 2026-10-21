@@ -1315,7 +1315,7 @@ cy-wikisource:   # P140, 02-sources row 284
   adapter: Nabu::Adapters::CyWikisource
   adopted: "2026-10-21"
   axes: [celtic]
-  wired: false   # adapter + fixtures; the first real sync is a gate step
+  wired: true    # first sync verified 2026-10-21: 321 docs / 40,126 passages, 0 quarantined (the lane census exactly)
   sync_policy: manual
   # The early-modern Welsh cone (the owner-ruled wikisource posture),
   # census 2026-10-21 — drawn at every fetch from the Indecs Year= of all
@@ -2370,7 +2370,7 @@ gretil-legacy:   # 02-sources row 290
   adapter: Nabu::Adapters::GretilLegacy
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 3 GETs (~11.2 MB) → 21 docs / 81,251 line passages, 1 quarantined
+  wired: true    # first sync verified 2026-10-21: 21 docs / 81,251 passages, 1 honest quarantine + 214 skips-by-rule (the lane census exactly)
                  # (jyotsniu — Malayalam, no registry node), 214 files skipped by rule
                  # (8 packaging duplicates · 199 Project Madurai · 2 TEI copies · 3 TEI
                  # renditions · 2 NIA rules), 0 unrecognized; eyeball nabu show
@@ -2826,7 +2826,7 @@ jv-wikisource:   # P140, 02-sources row 285
   adapter: Nabu::Adapters::JvWikisource
   adopted: "2026-10-21"
   axes: [sea]
-  wired: false   # adapter + fixtures; the first real sync is a gate step
+  wired: true    # first sync verified 2026-10-21: 36 docs / 2,855 passages (the lane census exactly)
   sync_policy: manual
   # The dated 19th-century Javanese cone (the owner-ruled wikisource
   # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
@@ -3106,7 +3106,7 @@ lasla:
   adapter: Nabu::Adapters::Lasla
   adopted: "2026-10-21"
   axes: [classical]
-  wired: false   # the gate's first real sync flips it — expected 242 docs /
+  wired: true    # first sync verified 2026-10-21: 242 docs / 95,974 passages, 0 quarantined (the lane census exactly)
                  # 95,974 passages (full-corpus census 2026-10-21)
   sync_policy: manual
   # LASLA (Laboratoire d'Analyse Statistique des Langues Anciennes, Liège):
@@ -3367,7 +3367,7 @@ lotsawa-house:   # 02-sources row 283
   axes: [tibetan, buddhist]
   multilingual: true   # the Tibetan pages + translations in eight languages
   translations: true   # the translation pages ride (false = the bo pages only)
-  wired: false   # first sync owner-fired at the gate — a PACED CRAWL (1 req/s):
+  wired: true    # first sync verified 2026-10-21: 6,388 docs / 413,067 passages over the completed nine-language crawl
                  # all nine languages ≈ 7,000–7,800 requests ≈ 2–2.2 h, bo-only
                  # (translations: false) ≈ 1,750 ≈ 30 min; resumable at the file
                  # grain. Then eyeball nabu show on the Mipham fixtures' live
@@ -3746,7 +3746,7 @@ obimd:   # 02-sources row 284
   adapter: Nabu::Adapters::Obimd
   adopted: "2026-10-21"
   axes: [sinitic]
-  wired: false   # first sync owner-fired at the gate (checklist §6: bin/nabu
+  wired: true    # first sync verified 2026-10-21: 10,077 docs / 21,941 passages — the dataset card's own figures exactly
                  # sync obimd — three revision-pinned HF files, ~42 MB —
                  # then eyeball nabu show urn:nabu:obimd:H224 and 4 random
                  # rubbings, flip)
@@ -5089,7 +5089,7 @@ shuowen:   # 02-sources row 285
   adopted: "2026-10-21"
   group: signs  # the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic]
-  wired: false   # first sync owner-fired at the gate (checklist §6: bin/nabu
+  wired: true    # first sync verified 2026-10-21: 11,081 entries, 0 errored, 1 skip-by-rule (the lane census exactly)
                  # sync shuowen — sparse git clone ~39 MB — then eyeball
                  # nabu define 帝, nabu define 弌 (the 重文 entry) and
                  # nabu char 一 (the Shuowen block), flip)
@@ -5447,7 +5447,7 @@ su-wikisource:   # P140, 02-sources row 286
   adapter: Nabu::Adapters::SuWikisource
   adopted: "2026-10-21"
   axes: [sea]
-  wired: false   # adapter + fixtures; the first real sync is a gate step
+  wired: true    # first sync verified 2026-10-21: 78 docs / 8,351 passages (the lane census exactly)
   sync_policy: manual
   # The dated 19th-century Sundanese cone (the owner-ruled wikisource
   # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
@@ -5583,7 +5583,7 @@ te-wikisource:   # P140, 02-sources row 283
   adapter: Nabu::Adapters::TeWikisource
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # adapter + fixtures; the first real sync is a gate step
+  wired: true    # first sync verified 2026-10-21: 453 docs / 208,794 passages, 112 skips-by-rule (the lane census exactly)
   sync_policy: manual
   # The classical Telugu cone (the owner-ruled wikisource posture), census
   # 2026-10-21: 12,635 pages carry the {{తలకట్టు}} header (సంవత్సరం=
@@ -6565,7 +6565,7 @@ vedaweb:
   adapter: Nabu::Adapters::Vedaweb
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # the gate's first real sync flips it — expected 1,028 docs /
+  wired: true    # first sync verified 2026-10-21: 1,028 docs / 10,552 passages, 0 quarantined; staged san:ved live
                  # 10,552 passages / 164,758 gold tokens (full-parse census 2026-10-21)
   sync_policy: manual
   # VedaWeb (Cologne Center for eHumanities): the whole Rigveda with the
@@ -6715,7 +6715,7 @@ wiktionary-dv:   # 02-sources row 288
   adapter: Nabu::Adapters::WiktionaryDv
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 2,047 entries / 1,462 reflex rows (one ~3.4 MB GET);
+  wired: true    # first sync verified 2026-10-21: 2,047 entries (the lane census exactly)
                  # eyeball nabu define ފޮތް ("book", ← Prakrit 𑀧𑀼𑀢𑁆𑀣), then flip.
   # The kaikki Dhivehi extraction (2,047 records / "1882 distinct words",
   # census 2026-10-21): Thaana headwords, etymons through Prakrit and
@@ -6748,7 +6748,7 @@ wiktionary-kn:   # 02-sources row 286
   adapter: Nabu::Adapters::WiktionaryKn
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 2,741 entries / 1,857 reflex rows (one ~8.9 MB GET);
+  wired: true    # first sync verified 2026-10-21: 2,741 entries (the lane census exactly)
                  # eyeball nabu define ಒಂದು ("one", ← Proto-Dravidian *onṯu), then flip.
   # The kaikki Kannada extraction (2,741 records / "2495 distinct words",
   # census 2026-10-21): Sanskrit, Proto-Dravidian and Old Kannada etymons
@@ -6763,7 +6763,7 @@ wiktionary-ml:   # 02-sources row 285
   adapter: Nabu::Adapters::WiktionaryMl
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 11,505 entries / 5,266 reflex rows (one ~23.5 MB GET);
+  wired: true    # first sync verified 2026-10-21: 11,505 entries (the lane census exactly)
                  # eyeball nabu define പുസ്തകം ("book", ← Sanskrit पुस्तक), then flip.
   # The kaikki Malayalam extraction (11,505 records / "10942 distinct
   # words", census 2026-10-21): the wave's densest Sanskrit etymon layer
@@ -6779,7 +6779,7 @@ wiktionary-pra:   # 02-sources row 287
   adapter: Nabu::Adapters::WiktionaryPra
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 2,712 entries / 20,311 reflex rows (one ~16.2 MB GET);
+  wired: true    # first sync verified 2026-10-21: 2,712 entries, 20,311 reflex rows (the lane census exactly)
                  # eyeball nabu define 𑀫𑀳𑀼 ("honey") and its NIA descendants, then flip.
   # The kaikki Prakrit extraction (2,712 records / "2452 distinct words",
   # census 2026-10-21): Brāhmī headwords; 1,131 records carry
@@ -6855,7 +6855,7 @@ wiktionary-si:   # 02-sources row 289
   adapter: Nabu::Adapters::WiktionarySi
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 1,281 entries / 854 reflex rows (one ~1.9 MB GET);
+  wired: true    # first sync verified 2026-10-21: 1,281 entries (the lane census exactly)
                  # eyeball nabu define අම්මා ("mother", ← Tamil அம்மா), then flip.
   # The kaikki Sinhala extraction ("Sinhalese" in kaikki's naming —
   # 1,281 records / "1231 distinct words", census 2026-10-21): Indo-Aryan
@@ -6886,7 +6886,7 @@ wiktionary-ta:   # 02-sources row 283
   adapter: Nabu::Adapters::WiktionaryTa
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 13,855 entries / 4,807 reflex rows (one ~88.9 MB GET);
+  wired: true    # first sync verified 2026-10-21: 13,855 entries (the lane census exactly)
                  # eyeball nabu define கோடி ("very", ← Sanskrit कोटि), then flip.
   # The kaikki Tamil extraction (13,855 records / "11180 distinct words",
   # census 2026-10-21): Sanskrit and Proto-Dravidian etymons (1,803 sa /
@@ -6901,7 +6901,7 @@ wiktionary-te:   # 02-sources row 284
   adapter: Nabu::Adapters::WiktionaryTe
   adopted: "2026-10-21"
   axes: [indic]
-  wired: false   # expect 1 doc → 23,325 entries / 2,953 reflex rows (one ~32.7 MB GET);
+  wired: true    # first sync verified 2026-10-21: 23,325 entries (the lane census exactly)
                  # eyeball nabu define నాలుగు ("four", ← Proto-Dravidian *nāl), then flip.
   # The kaikki Telugu extraction (23,325 records / "21803 distinct words",
   # census 2026-10-21): the wave's largest headword count; Sanskrit and

@@ -57,7 +57,7 @@ class ObimdTest < Minitest::Test
     entry = registry["obimd"]
     refute_nil entry
     assert_equal Obimd, entry.adapter_class
-    refute entry.wired, "wired: false until the gate's first sync"
+    assert entry.wired, "wired since the verified first sync (2026-10-21)"
     assert_equal Obimd.manifest, entry.manifest
   end
 
