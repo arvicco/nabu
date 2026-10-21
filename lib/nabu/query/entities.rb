@@ -28,7 +28,7 @@ module Nabu
       Result = Data.define(:query, :names, :name_total, :passage_total, :hits)
       CensusRow = Data.define(:source, :type, :names, :passages)
 
-      MIGRATION_HINT = "this catalog predates the entity index (migration 049) — the next sync or " \
+      MIGRATION_HINT = "this catalog predates the entity index (migration 050) — the next sync or " \
                        "nabu rebuild migrates it, then `bundle exec rake builders:refresh` builds it"
       REFRESH_HINT = "run `bundle exec rake builders:refresh` (or the next nabu rebuild)"
 
