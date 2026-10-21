@@ -3026,6 +3026,29 @@ larth-etp:
   # 2,471/10,783 corpus word tokens (22.9%). Upstream still moves
   # occasionally → manual; a re-pin is an owner decision.
 
+lasla:
+  adapter: Nabu::Adapters::Lasla
+  adopted: "2026-10-21"
+  axes: [classical]
+  wired: false   # the gate's first real sync flips it — expected 242 docs /
+                 # 95,974 passages (full-corpus census 2026-10-21)
+  sync_policy: manual
+  # LASLA (Laboratoire d'Analyse Statistique des Langues Anciennes, Liège):
+  # classical Latin from Plautus to the 2nd c. AD — Cicero (80 files), Seneca,
+  # Tacitus, Ovid, Vergil, Pliny, Horace, Caesar, Plautus, Curtius, Lucretius
+  # … — lemmatized and morphologically annotated "with full manual
+  # verification" (README) → GOLD (lemma_tier default). Via CIRCSE's
+  # LiLa-linked CoNLL-U Plus release github.com/CIRCSE/LASLA: 242 conllup
+  # files (131 works, long works split by book), every token carrying its
+  # LiLa LemmaBank lemma id (the held `lila` module's join). Document = file
+  # (urn:nabu:lasla:<LASLA code>), passage = sentence; UD feats ride every
+  # token (the morph façade). Overlap: most works are also held as Perseus
+  # TEI editions — LASLA's text is its own edition, both kept. LICENSE
+  # (README, verbatim): "These resources are licensed under a Creative
+  # Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
+  # → nc (re-read 2026-10-21). Sparse GitFetch cone [conllup, README.md]; the
+  # Turtle lanes (texts/, complete_lasla.ttl.gz) never transfer.
+
 lexica:
   adapter: Nabu::Adapters::Lexica
   adopted: "2026-07-09"
