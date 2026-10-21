@@ -2327,6 +2327,26 @@ gretil:
   # decision, not a scheduled one — and the corpus has been stable since 2021.
   sync_policy: manual
 
+gretil-legacy:   # 02-sources row 290
+  adapter: Nabu::Adapters::GretilLegacy
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 3 GETs (~11.2 MB) → 21 docs / 81,251 line passages, 1 quarantined
+                 # (jyotsniu — Malayalam, no registry node), 214 files skipped by rule
+                 # (8 packaging duplicates · 199 Project Madurai · 2 TEI copies · 3 TEI
+                 # renditions · 2 NIA rules), 0 unrecognized; eyeball nabu show
+                 # urn:nabu:gretil-legacy:dasaveyu:2 and …:jna1-16u:3, then flip.
+  # GRETIL's pre-TEI e-texts from three download zips (2_prakrt, 3_nia,
+  # 4_drav): the Ousaka/Yamazaki Śvetāmbara Āgamas (pka), Hāla, Haribhadra
+  # and Svayambhū's Paumacariu (pra, coarse), Tulsidas, Qutban's Mirigāvatī
+  # (awa), Haridās, Banārasīdās (bra), the Jñāneśvarī (mar). Project
+  # Madurai's romanized copies skip by rule (the madurai source holds them
+  # in Tamil script); the Tamil TEI file is the gretil source's. Physical-
+  # line grain (gretil-legacy family); per-work composition eras in
+  # config/work_eras.yml. GRETIL's notice ("FOR REFERENCE PURPOSES ONLY!
+  # COPYRIGHT AND TERMS OF USAGE AS FOR SOURCE FILE.") → nc.
+  sync_policy: manual
+
 gu-wikisource:   # P120-3, 02-sources row 262
   adapter: Nabu::Adapters::GuWikisource
   adopted: "2026-10-12"

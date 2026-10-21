@@ -140,6 +140,8 @@ module Nabu
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
+          "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
+          #                               keyed on metadata "work" = the GRETIL file stem)
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,

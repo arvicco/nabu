@@ -1907,6 +1907,25 @@ sources:
     places: {posture: unplaced, note: "no origin place in the header; the edition
         imprint places are printing places, kept inside the edition string"}
     script: {posture: qualified}
+  gretil-legacy:
+    kind: {posture: unclassified, note: "GRETIL's legacy files carry no genre field — the
+        index files them by language only (Prakrit / Hindi / Marathi / Malayalam); the
+        works (canonical Āgamas, a gāthā anthology, a satire, epics, an autobiography,
+        a Gītā commentary) would need a ruled per-work table"}
+    lect: {posture: identity, note: "per-file tags from the adapter's LANGUAGES table:
+        the Āgamas on pka (the canon's Ardhamāgadhī); Hāla, Haribhadra and Svayambhū's
+        Apabhraṃśa on the collective pra, declared coarse (no Māhārāṣṭrī/Apabhraṃśa
+        node); the Mānas, Dohāvalī and Mirigāvatī on awa; Kavitāvalī, Haridās and the
+        Ardhakathānaka on bra; the Jñāneśvarī on mar (→ mr, no Old Marathi stage —
+        coarse). The Maṇipravāḷam Jyotsnikā quarantines until the registry carries
+        Malayalam (candidate: the ml anchor + mal alias)"}
+    dating: {posture: dated, note: "the ruled per-work era table (config/work_eras.yml,
+        key work): attributed composition eras for all 21 admitted works, class
+        composition; the headers' edition years are print years and mint nothing"}
+    places: {posture: unplaced, note: "the headers name only the editions' imprint
+        places (Leipzig, Bombay, Groningen …), never a place of composition"}
+    script: {posture: qualified, note: "GRETIL's romanization (ISO-15919-style, -Latn
+        tags); the source scripts (Devanāgarī, Malayalam) are not carried"}
   tla-hf:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "owner-ruled 2026-08-09: 4 docs total — the
