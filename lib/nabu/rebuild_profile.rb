@@ -58,6 +58,7 @@ module Nabu
       facets: "facets",
       kind_axis: "kind axis",             # P99: the kind projection + stats
       passage_facets: "passage facets",   # the passage-grain facet projection
+      entity_index: "entity index",       # the inline-entity name index
       entry_facets: "entry facets",       # the dictionary-entry facet projection
       hiero_postings: "hiero postings",   # P103: the AED per-text glyph census
       lect_journal: "lect journal",       # P70: the re-minted lect journal

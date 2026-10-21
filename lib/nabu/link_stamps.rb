@@ -156,6 +156,9 @@ module Nabu
       "place-mine" => Producer.new(kinds: %w[place-candidate], roots: %w[place_mine.rb], carved: PLACE_CARVED),
       "place-link" => Producer.new(kinds: %w[place place-candidate], roots: %w[place_link.rb],
                                    carved: PLACE_CARVED),
+      # The capitalized-word recipe reads its slice's passage text and
+      # nothing else (no authority, no registry): members + code suffice.
+      "person-candidates" => Producer.new(kinds: %w[person-name-candidate], roots: %w[person_candidates.rb]),
       "cognates" => Producer.new(kinds: %w[cognate],
                                  volatile: "reads the lect facets, lemma tiers and alignment/reflex " \
                                            "index — inputs no member identity covers; re-mines in seconds")

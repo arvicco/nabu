@@ -15,6 +15,13 @@ name and path, mirroring `canonical/dharma-deccan/<repo>/<path>`:
 - `tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/N10.xml`
   — Nasik 10 (Uṣavadāta): in-file CC BY 3.0, dated 60–84 CE, and a
   `<div type="commentary">` nested INSIDE the edition (the prune pin).
+- `tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/My1.xml`
+  — Myākadoni, year 8 of Vāsiṣṭhīputra Śrī Puḷumāvi (added 2026-10-21,
+  copied whole from the synced canonical tree at upstream HEAD
+  `4ec16f19efbe549e5e3256e60c10b02375a52be2`): licence-less, the
+  edition's `<date datingMethod="cal:regnal">` (the regnal-year pin)
+  beside Ollett's own origDate ca. 90 CE; the translation restates the
+  regnal date.
 - `tfb-satavahana-epigraphy/LICENCE.txt` — the repo's CC BY 4.0 grant
   (the fallback reads its first line).
 - `tfb-telugu-epigraphy/texts/DHARMA_INSTelugu00048.xml` — a Telugu

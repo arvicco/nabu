@@ -415,6 +415,9 @@ module Nabu
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug, facet_map: facet_map)
       # The passage-grain facet slice follows the same load (no lane lags a sync).
       Store::PassageFacetBuilder.refresh_source!(catalog: @db, slug: entry.slug, facet_map: facet_map)
+      # So does the inline-entity slice (config/entity_index.yml's roster).
+      Store::EntityIndex.refresh_source!(catalog: @db, slug: entry.slug,
+                                         sources: Store::EntityIndex.load_default(config: @config))
       # Kind rows project from the facet rows just refreshed (P99-2) —
       # same lesson (P47-r3): no lane may lag a sync.
       Store::KindBuilder.refresh_source!(catalog: @db, slug: entry.slug,

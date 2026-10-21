@@ -136,6 +136,10 @@ africa:   # P124-1 — minted with its first member (bu-ajami)
   persona: "The Africanist — Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse."
   desc: "Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai — and the Old Nubian UD treebank, the medieval Nile kingdoms' language parsed word by word."
 
+baltic:   # minted with its first member (senie)
+  persona: "The Balticist — the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish."
+  desc: "The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land."
+
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."

@@ -1,0 +1,21 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. SENIE's TEI ships only inside the CLARIN-LV
+# bitstream zip (one 61 MB file); no raw per-document URL serves it. The
+# fixture was extracted 2026-10-21 from that zip and trimmed per the README,
+# so the entry is refetchable: false — re-acquiring means re-downloading the
+# zip and re-applying the README trims.
+source: senie
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: SENIE_Unicode.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the SENIE_Unicode.tei.xml.zip bitstream — no raw per-document URL exists
+    upstream: https://repository.clarin.lv/repository/xmlui/bitstream/handle/20.500.12574/141/SENIE_Unicode.tei.xml.zip?sequence=2&isAllowed=y
+    copied: 2026-10-21
+    whole: false
+    trim: the teiCorpus header + AP1622 (3 pages), Depk1681_90_ms (15 pages), an Ench1586 window (9 pages),
+      the JT1685 container with JT1685::2J and JT1685::Prolog_Tit whole, SKL1696_KB (5 sections); 61 MB -> 86 KB

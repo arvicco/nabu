@@ -1,0 +1,76 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# API-RECORDING PROVENANCE. VKS has no file download: every fixture is a
+# recorded Korp API response (korp/) or a landing-shape text built from
+# recorded kwic rows (texts/). The recorded query pages are deterministic for
+# their parameters, but the landing files are cut windows — so every entry is
+# refetchable: false.
+source: vks
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: korp/corpus_info.json
+    refetchable: false
+    provenance: api-recording
+    reason: a recorded Korp API response (corpus_info?corpus=VKS_FROSTERUS,VKS_LPETRI)
+    upstream: https://www.kielipankki.fi/korp/api8/corpus_info
+    copied: 2026-10-21
+    whole: true
+    trim: none
+  - path: korp/query_frosterus_0-1.json
+    refetchable: false
+    provenance: api-recording
+    reason: a recorded Korp API query page (VKS_FROSTERUS, sentences 0-1)
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: true
+    trim: none
+  - path: korp/query_frosterus_2-3.json
+    refetchable: false
+    provenance: api-recording
+    reason: a recorded Korp API query page (VKS_FROSTERUS, sentences 2-3)
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: true
+    trim: none
+  - path: korp/query_lpetri_0-1.json
+    refetchable: false
+    provenance: api-recording
+    reason: a recorded Korp API query page (VKS_LPETRI, sentences 0-1)
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: true
+    trim: none
+  - path: texts/VKS_AGRICOLA/agri1_abc1543.jsonl
+    refetchable: false
+    provenance: api-recording
+    reason: landing-shape text built from recorded kwic rows
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: true
+    trim: none (all 108 sentences of the text)
+  - path: texts/VKS_FROSTERUS/jafro1791.jsonl
+    refetchable: false
+    provenance: api-recording
+    reason: landing-shape text built from recorded kwic rows
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: false
+    trim: the first 40 of 967 sentences
+  - path: texts/VKS_BIBLIA/ut1_ev.jsonl
+    refetchable: false
+    provenance: api-recording
+    reason: landing-shape text built from recorded kwic rows
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: false
+    trim: 60 sentences from corpus sentence 50,000 (John 19:38 - 21:11)
+  - path: texts/VKS_LAIT/as1800.jsonl
+    refetchable: false
+    provenance: api-recording
+    reason: landing-shape text built from recorded kwic rows
+    upstream: https://www.kielipankki.fi/korp/api8/query
+    copied: 2026-10-21
+    whole: false
+    trim: a 40-sentence window crossing the 1805 -> 1806 text elements

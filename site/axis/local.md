@@ -18,7 +18,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 656 dossiers |
-| `local-lemmas` | silver lemmas | open | wired · manual | 31,032,993 lemma rows |
+| `local-lemmas` | silver lemmas | open | wired · manual | 31,420,938 lemma rows |
 | `local-library` | texts | research_private | wired · manual | 62 docs / 13,278 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
 | `local-source` | source records | open | wired · manual | 257 dossiers |
@@ -72,4 +72,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

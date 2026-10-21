@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: etym
   origin: hand-tuned
-  sources: "cldf-spine clics derom edl iecor liv nabu-lects sabellic-loans starling westoldturkic wiktionary-recon wold"
+  sources: "calfa-lexicon cldf-spine clics derom edl iecor liv nabu-lects sabellic-loans starling westoldturkic wiktionary-recon wold"
 ---
 
 # The Comparative Indo-Europeanist — the `etym` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `calfa-lexicon` | Calfa — Classical Armenian dictionary databases (NBHL, Bedrossian, Calfa 1861, Ačaṙean) | nc |
 | `cldf-spine` | Concepticon + Glottolog — the CLDF reference spine (concept/languoid resolver instrument) | attribution |
 | `clics` | CLICS³ — Database of Cross-Linguistic Colexifications (aggregate network, v1.1) | attribution |
 | `derom` | DÉRom — Dictionnaire Étymologique Roman (ATILF/Ortolang) | nc |

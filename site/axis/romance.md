@@ -22,13 +22,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
 | `aranese` | texts | attribution | wired · manual | 2 docs / 839,816 passages |
 | `bdcamoes` | texts | attribution | wired · manual | 127 docs / 69,812 passages |
 | `bfm` | texts | attribution | wired · manual | 219 docs / 333,819 passages |
+| `bim-sahcoba` | texts | attribution | wired · manual | 15 docs / 19,361 passages |
 | `cantigas` | texts | attribution | wired · manual | 1,682 docs / 34,162 passages |
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
@@ -43,7 +44,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `salom` | texts | attribution | wired · manual | 1 docs / 10,685 passages |
 | `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `lat` 6,343 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `gmh` 11 … and 26 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `lat` 6,343 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `eu` 15 … and 27 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 
@@ -79,4 +80,4 @@ With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, 
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

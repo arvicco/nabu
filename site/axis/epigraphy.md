@@ -44,14 +44,14 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
-| `sii-clean` | texts | attribution | wired · auto | 590 docs / 8,376 passages |
+| `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `trismegistos` | feature module | attribution | wired · manual | nothing held yet |
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `lat` 195,059 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `ett` 6,259 · `gmy` 5,890 · `swe` 3,393 · `egy` 3,047 … and 83 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `lat` 195,059 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,697 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 88 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
@@ -125,4 +125,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

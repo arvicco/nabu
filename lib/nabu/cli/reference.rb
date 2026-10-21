@@ -156,9 +156,22 @@ module Nabu
       matching is exact under the fold, never fuzzy; homonyms print
       several cards (cbdb first, then edh, elephantine, aozora, kokubunken).
 
-      `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
-      source's passages (the PlaceMine Han-lane shape). It writes nothing —
-      The apply gate stays closed until an owner ruling on the census.
+      `nabu person mine SOURCE [AUTHORITY]` runs the CENSUS-ONLY name scan:
+      SOURCE's passages against AUTHORITY's name keys (default cbdb; edh,
+      elephantine, … — the scope is always explicit). The lane follows the
+      authority's keys: Han keys match as substrings, alphabetic ones
+      (EDH's Roman names, Elephantine's forms) as whole-word sequences. It
+      writes nothing — the apply gate stays closed until an owner ruling
+      on the census.
+
+      `nabu person candidates SOURCE [--dry-run]` mines person-name
+      CANDIDATES from SOURCE's own case-preserving text — a word occurring
+      ≥3 times, ≥90% of them capitalized — into person-name-candidate
+      edges in the links journal (read back with `nabu links <passage
+      urn>`). Candidates are name forms, never person records: no
+      authority, no person card. The scope is recorded, so the rebuild's
+      links stage re-mints it (a cheap lane, config/mined_layers.yml).
+      --dry-run prints the census and writes nothing.
 
       Examples:
         nabu person 王安石          # by name
@@ -170,9 +183,13 @@ module Nabu
         nabu person sillok:M_0006771   # a NIKH index-markup person, per source
         nabu person nikh:p094190       # the passage-annotation ref: every NIKH slice holding it
         nabu person mine kanripo   # census the person-name attestations
+        nabu person mine edr edh   # EDH's attested persons against EDR's text
+        nabu person candidates edh --dry-run   # the candidate recipe's census
+        nabu person candidates edh             # mine candidate edges (recorded scope)
     HELP
     def person(*query_parts)
       return run_person_mine(query_parts[1..]) if query_parts.first == "mine"
+      return run_person_candidates(query_parts[1..]) if query_parts.first == "candidates"
 
       query = query_parts.join(" ").strip
       config = Nabu::Config.load
@@ -418,24 +435,27 @@ module Nabu
         say "  #{details.join(' · ')}" unless details.empty?
       end
 
-      # `nabu person mine SOURCE` (P97-2): the census-only scan; the
-      # apply gate stays closed until an owner ruling, so there is no --dry-run — dry is
-      # the only mode.
+      # `nabu person mine SOURCE [AUTHORITY]` (P97-2; widened beyond Han):
+      # the census-only scan of SOURCE's text against AUTHORITY's keys; the
+      # apply gate stays closed until an owner ruling, so there is no
+      # --dry-run — dry is the only mode.
       def run_person_mine(args)
-        source = Array(args).first
-        raise Thor::Error, "usage: nabu person mine SOURCE" if source.to_s.empty?
+        source, authority = Array(args)
+        raise Thor::Error, "usage: nabu person mine SOURCE [AUTHORITY]" if source.to_s.empty?
 
+        authority ||= Nabu::Store::PersonIndex::DEFAULT_AUTHORITY
         config = Nabu::Config.load
         catalog = Nabu::Store.connect(config.catalog_path)
-        unless Nabu::Store::PersonIndex.populated?(catalog)
-          raise Thor::Error, "person mine: the person index is not derived — run `nabu sync cbdb` first"
+        unless Nabu::Store::PersonIndex.populated?(catalog, authority: authority)
+          raise Thor::Error, "person mine: the #{authority.inspect} person-index slice is not derived — " \
+                             "sync its source first (nabu sync #{authority})"
         end
 
-        census = Nabu::PersonMine.new(catalog: catalog, progress: progress_reporter)
+        census = Nabu::PersonMine.new(catalog: catalog, authority: authority, progress: progress_reporter)
                                  .census(source: source)
-        say "person mine: #{census.source} × #{census.authority} — #{census.passages} passages " \
-            "scanned against #{census.names_loaded} Han name keys " \
-            "(#{census.names_non_han} non-Han filtered, #{census.names_ambiguous} ambiguous capped; " \
+        say "person mine: #{census.source} × #{census.authority} (#{census.lane} lane) — " \
+            "#{census.passages} passages scanned against #{census.names_loaded} name keys " \
+            "(#{census.names_off_lane} off-lane filtered, #{census.names_ambiguous} ambiguous capped; " \
             "#{format_duration(census.seconds)})"
         census.name_hits.first(15).each do |name, count|
           say format("  %<name>-12s %<count>d passages", name: name, count: count)
@@ -449,6 +469,59 @@ module Nabu
         raise Thor::Error, e.message
       ensure
         catalog&.disconnect
+      end
+
+      # `nabu person candidates SOURCE [--dry-run]`: the person-name
+      # candidate recipe over SOURCE's own text. --dry-run prints the
+      # census (candidates + every exclusion class) and writes nothing;
+      # otherwise the person-name-candidate edges land in the links journal
+      # and the scope is recorded for the rebuild's links stage (the
+      # batch-CLI derivability contract, the place-mine precedent).
+      def run_person_candidates(args)
+        args = Array(args)
+        dry = args.delete("--dry-run") ? true : false
+        source = args.first
+        raise Thor::Error, "usage: nabu person candidates SOURCE [--dry-run]" if source.to_s.empty?
+
+        config = Nabu::Config.load
+        Nabu::Store.assert_writable!(config.catalog_path) unless dry
+        catalog = Nabu::Store.connect(config.catalog_path)
+        journal = unless dry
+                    Nabu::Store::LinksJournal.migrate!(Nabu::Store::LinksJournal.connect("sqlite://#{config.links_path}"))
+                  end
+        miner = Nabu::PersonCandidates.new(catalog: catalog, journal: journal, progress: progress_reporter)
+        if dry
+          print_person_candidates(miner.census(source: source))
+          say "  dry run — nothing written"
+        else
+          result = miner.apply!(source: source)
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: Nabu::PersonCandidates::PRODUCER,
+                                                            scope: source, params: {})
+          print_person_candidates(result.census)
+          say "person candidates: #{result.edges_written} candidate edges written " \
+              "(#{result.superseded_edges} superseded) in #{format_duration(result.seconds)} " \
+              "— name forms, not person records; read back with `nabu links <passage urn>`"
+        end
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
+      end
+
+      def print_person_candidates(census)
+        say "person candidates: #{census.source} — #{census.passages} passages, #{census.words} words, " \
+            "#{census.candidates.size} name candidates (≥#{Nabu::PersonCandidates::MIN_OCCURRENCES} " \
+            "occurrences, ≥#{(Nabu::PersonCandidates::MIN_CAPITALIZED_SHARE * 100).round}% capitalized; " \
+            "#{census.candidate_edges} candidate edges; #{format_duration(census.seconds)})"
+        census.candidates.first(15).each do |candidate|
+          say format("  %<form>-16s %<count>d occurrences, %<share>d%% capitalized",
+                     form: candidate.surface, count: candidate.occurrences,
+                     share: (candidate.capitalized_share * 100).round)
+        end
+        say "  … #{census.candidates.size - 15} more candidates" if census.candidates.size > 15
+        excluded = census.excluded.sort.map { |reason, count| "#{count} #{reason}" }
+        say "  excluded forms: #{excluded.join(', ')}" unless excluded.empty?
       end
 
       # `nabu place mine SOURCE [GAZETTEER] [--dry-run]` (P96-3 — Q9 v0):

@@ -744,5 +744,27 @@ module Query
       assert_empty define("λόγος", facets: { "domain" => "speech", "usage" => "colloquial" })
       assert_equal ["λόγος"], define("λόγος", facets: {}).map(&:headword), "no facets is no filter"
     end
+
+    # The card side: each entry carries its OWN facet pairs (value + ref),
+    # read through the entry_id index — facet, then value order.
+    def test_results_carry_the_entry_s_own_facets
+      tag_entry("λόγος", "usage", "archaic")
+      tag_entry("λόγος", "domain", "speech", ref: "uuid-speech")
+      logos = define("λόγος").first
+      assert_equal([%w[domain speech uuid-speech], ["usage", "archaic", nil]],
+                   logos.facets.map { |f| [f.facet, f.value, f.ref] })
+      assert_empty define("μῆνις").first.facets, "an untagged entry carries none"
+    end
+
+    # Desk-commands rule: a catalog that has not applied the entry_id index
+    # never scans the pair table — an ANNOTATED entry reads nil (honestly
+    # unknown, the card hints), an unannotated one [] (it can carry none).
+    def test_facets_read_nil_for_an_annotated_entry_without_the_entry_id_index
+      tag_entry("λόγος", "usage", "archaic")
+      @catalog.alter_table(:entry_facets) { drop_index :entry_id }
+      @catalog[:dictionary_entries].where(headword: "λόγος").update(annotations_json: '{"usage":["archaic"]}')
+      assert_nil define("λόγος").first.facets
+      assert_empty define("μῆνις").first.facets
+    end
   end
 end

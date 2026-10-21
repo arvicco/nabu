@@ -428,7 +428,9 @@ sources:
         imprint_place_conjecture on 2,288 (3.8%) — period furniture,
         Latin/Welsh/French forms and cataloguer [i.e.] corrections read
         to the English town (EeboImprintPlace), the registry-shaped join
-        key for gazetteer refs"}
+        key for gazetteer refs. A conjecture doc projects its conjecture
+        town as the declared-uncertain claim (\"London?\", the cataloguer's
+        trailing ? — never the raw \"[London?] printed\" prose)"}
     script: {posture: implied}
   iswoc:
     kind: {posture: unclassified}
@@ -1127,6 +1129,51 @@ sources:
         Russian North monasteries are the texts' subject, never claimed as the writing place, and
         the README's shelfmarks name holding libraries (present locations)"}
     script: {posture: implied, note: "Cyrillic, diplomatic (titla and superscript letters kept)"}
+  bim-sahcoba:
+    # kind: machine-postured — the bim-sahcoba fold in kind_map.yml over the
+    # adapter's per-work genre.
+    lect: {posture: dates, note: "eu:arch / eu:old / eu:emod by date-band inference off the
+        works' own dates (the registry's 2026-10-21 Basque mint; Etxepare 1545 → eu:arch,
+        Axular 1643 → eu:old verified live) — the two undated works (Larramendi, Pouvreau)
+        honestly ride bare eu. The per-work dialect (Labourdin, Souletin, Biscayan …) rides
+        as a facet — the variety key in waiting"}
+    dating: {posture: partial, note: "13 of 15 works: the imprint year read from the stream's own
+        title page (7 — Axular, Chourio, Lopez, Maister, Materra, Otxoa, Tartas) or the standard
+        attribution, raw marked attributed (6); Larramendi's selected writings and Pouvreau's
+        manuscript Imitation carry no date in the asset — declared"}
+    places: {posture: named, note: "8 of 15: the imprint town the stream's own title page names
+        (Bordeaux, Bayonne, Pau, Orthez, Donostia, Avignon), place_role imprint; attributed
+        imprints are never claimed as places"}
+    script: {posture: implied, note: "Latin script; the corpus's form column
+        is the text, the standardized form rides per token"}
+  senie:
+    # kind: machine-postured — the senie fold in kind_map.yml over the
+    # header <domain> genre facet.
+    lect: {posture: dates, note: "lv:old by date-band inference off the header dates (the
+        registry's 2026-10-21 mint; all 183 documents fall inside the [1500, 1800] band,
+        verified live) — run-majority de/lat/pol passages stay on their own anchors"}
+    dating: {posture: dated, note: "the TEI header <date> on all 183 documents — the print's or
+        manuscript's year, a \"1681_90\" span as its envelope (:structured lane)"}
+    places: {posture: unplaced, note: "the headers name no imprint or writing place; title-page
+        imprints (\"Riga/ bey Georg Matth. Nöller\", \"BRVNSBERGAE\") stay inside the page text —
+        a title-page imprint miner is a recorded future look, declared coarse until then"}
+    script: {posture: implied, note: "Latin script; the Fraktur-era letter forms are transcribed
+        verbatim (ſ, ẜ, Ꞩ, ß, the macron and tilde marks)"}
+  vks:
+    # kind: machine-postured — the vks fold in kind_map.yml over the Korp
+    # subcorpus (the collection facet).
+    lect: {posture: dates, note: "fi:old (Old Literary Finnish, vanha kirjasuomi) by
+        date-band inference off the Korp date envelopes (the registry's 2026-10-21 mint;
+        every text falls inside the [1540, 1810] band, verified live). Swedish and Latin
+        runs inside the works read fi — the Korp kwic carries no foreign spans (declared
+        coarse)"}
+    dating: {posture: dated, note: "every Korp text element's text_datefrom/text_dateto — the
+        file's envelope on the :structured lane; the collection files (decrees, sermons,
+        almanacs) also date each passage by its own element"}
+    places: {posture: unplaced, note: "VKS carries no place field (imprint towns stay inside the
+        title pages' text)"}
+    script: {posture: implied, note: "Latin script; the corpus's word layer is the text (the
+        abbreviation completions ride as expansions)"}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old
@@ -1485,22 +1532,29 @@ sources:
         Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
         script_rendition verbatim"}
   sii-clean:
-    # P122-3: the grant-bearing DHARMA conversions of the printed SII volumes.
+    # P122-3: the DHARMA conversions of the printed SII volumes; widened
+    # 2026-10-21 to every clean edition + the raw per-inscription layer.
     kind: {posture: unclassified}
     lect: {posture: identity, note: "tam-Latn/san-Latn/tel-Latn/kan-Latn — the dharma-tamil
         and dharma-deccan codes, all resolving on the canonical rows (tam → ta, tel → te,
-        kan → kn, san-Latn); Tamil stages unminted, the bare anchor declared coarse"}
+        kan → kn, san-Latn); plus pra-Latn (row), nld-Latn (nld → nl), lat-Latn (row),
+        ara-Latn (ara) and fas-Latn (upstream's 639-2/B per-Latn, aliased; fas → fa) on
+        held anchors; Tamil stages unminted, the bare anchor declared coarse; mar-Latn (4)
+        and sin-Latn (1) quarantine until mr/si anchors are minted"}
     dating: {posture: partial, note: "no origDate in any header; the SII headings' own
-        dating is mined: the editor's A.D. conversion (179), else a Śaka year via
-        config/eras.yml (20), else the summary's single reign line 'Year N: YYYY A.D.'
-        (12) — 211 of 589 parsed docs (census 2026-10-12), rows via MetadataDates
-        :structured; regnal-only headings and hedged summary prose stay verbatim"}
-    places: {posture: named, note: "the heading's findspot sentence → village (419 docs,
-        44 distinct names), taluk and district as printed (colonial-era units); no
-        gazetteer refs — a South Asian place authority is the open gap"}
-    script: {posture: qualified, note: "romanized (tam/san/tel/kan -Latn); Tamil, Grantha,
-        Telugu and Kannada scripts are the artifact facts — the edition rendition rides
-        metadata script_rendition verbatim"}
+        dating is mined in both layers: the editor's A.D. conversion, else a Śaka year via
+        config/eras.yml (spelled out or SII 10's 'Ś. NNNN'), else the summary's single
+        reign line 'Year N: YYYY A.D.' — 1,536 of 18,490 parsed docs (census
+        2026-10-21: 200 title A.D., 621 title Śaka, 715 summary), rows via MetadataDates
+        :structured; regnal-only and cyclic-year headings and hedged prose stay verbatim"}
+    places: {posture: named, note: "the heading's findspot sentence → village (10,380 docs,
+        ~3,200 distinct names), taluk and district as printed (colonial-era units);
+        monument descriptions, glosses and inherited 'SAME'/'above place' headings claim
+        nothing; no gazetteer refs — a South Asian place authority is the open gap"}
+    script: {posture: qualified, note: "romanized (tam/san/tel/kan/pra/nld/lat/ara/fas
+        -Latn); Tamil, Grantha, Telugu, Kannada, Nāgarī, Brāhmī and Perso-Arabic scripts
+        are the artifact facts — the edition rendition rides metadata script_rendition
+        verbatim"}
   madurai:
     # P122-3: Project Madurai's classical-Tamil cone (the works list's genre rule).
     kind: {posture: pending, note: "candidate: a kind_map fold over the works list's own

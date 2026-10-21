@@ -52,8 +52,73 @@ class PersonMineTest < Minitest::Test
     assert_equal 1, hits["王安石"]
     assert_equal 1, hits["東坡"], "the studio name attests — the zi/hao substrate is the point"
     refute hits.key?("wang anshi"), "Latin keys are filtered (the Han lane) and censused"
-    assert_operator census.names_non_han, :>=, 2
+    assert_equal :han, census.lane, "a Han-keyed authority scans in the Han lane"
+    assert_operator census.names_off_lane, :>=, 2
     assert_operator census.seconds, :>, 0
+  end
+
+  # --- the word lane (the epigraphic estates: EDH, Elephantine) ---------------
+
+  # Real EDH lines (HD000001, HD000002 — the line-grain passages as held)
+  # against the edh authority's own keys: names match as whole-word
+  # sequences under the shared fold, never as substrings, and a name
+  # whose words are not contiguous in the text does not attest.
+  def seed_edh
+    source = Nabu::Store::Source.create(slug: "edh", name: "EDH", adapter_class: "X", license_class: "attribution")
+    doc = Nabu::Store::Document.create(source_id: source.id, urn: "urn:nabu:edh:HD000001", language: "lat",
+                                       title: "t", canonical_path: "x", content_sha256: "1" * 64)
+    ["Dis Manibus", "Noniae Publi filiae Optatae", "et Caio Iulio Artemoni",
+     "Caius Iulius Cai filius Optatus", "Caius Sextius Paris", "Sextiusparis"].each_with_index do |text, i|
+      Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:edh:HD000001:#{i}", language: "lat",
+                                  text: text, text_normalized: text.downcase,
+                                  content_sha256: Digest::SHA256.hexdigest(text), sequence: i, revision: 1)
+    end
+    persons = [
+      edh_person("HD000001/2", "C. Iulio Artemoni", ["c. iulio artemoni", "c. iulius artemo", "iulius artemo"]),
+      edh_person("HD000001/3", "C. Iulius C.f. Optatus", ["c. iulius c.f. optatus", "iulius optatus"]),
+      edh_person("HD000002/1", "C. Sextius Paris", ["c. sextius paris", "sextius paris"]),
+      edh_person("HD000009/1", "[F]elix", ["felix"]),
+      edh_person("HD000009/2", "Felix", ["felix"]),
+      edh_person("HD000009/3", "Felix", ["felix"]),
+      edh_person("HD000009/4", "Felix", ["felix"]),
+      edh_person("HD000009/5", "Ti.", ["ti"])
+    ]
+    Nabu::Store::PersonIndex.derive!(@catalog, authority: "edh", persons: persons)
+  end
+
+  def edh_person(id, name, keys)
+    Person.new(authority: "edh", person_id: id, name: name, name_han: nil, birth_year: nil, death_year: nil,
+               index_year: nil, dynasty: nil, dynasty_han: nil, female: false, name_keys: keys)
+  end
+
+  def test_the_word_lane_matches_whole_word_name_sequences
+    seed_edh
+    census = Nabu::PersonMine.new(catalog: @catalog, authority: "edh").census(source: "edh")
+    hits = census.name_hits.to_h
+    assert_equal :word, census.lane, "an authority keyed in alphabetic script scans by words"
+    assert_equal 6, census.passages
+    assert_equal 1, hits["sextius paris"], "the whole-word sequence attests (not the run-together token)"
+    refute hits.key?("iulius optatus"), "a name whose words are interrupted in the text does not attest"
+    refute hits.key?("felix"), "a key naming more than the cap's persons is ambiguous, censused"
+    assert_equal 1, census.names_ambiguous
+    refute hits.key?("ti"), "a key under the letter floor never scans"
+  end
+
+  def test_the_word_lane_folds_the_inscribed_case_and_leiden_sigla
+    seed_edh
+    @catalog[:passages].where(urn: "urn:nabu:edh:HD000001:4").update(text: "CAIVS SEXTIVS [PA]RIS")
+    @catalog[:passages].where(urn: "urn:nabu:edh:HD000001:5").update(text: "C(aius) Sex[tius] Paris")
+    hits = Nabu::PersonMine.new(catalog: @catalog, authority: "edh").census(source: "edh").name_hits.to_h
+    assert_equal 1, hits["sextius paris"],
+                 "Leiden brackets fold out of the matching form (the EDH key rule); V/U spelling stays verbatim"
+  end
+
+  def test_a_scope_names_its_authority_and_an_unscanned_authority_is_empty
+    seed_edh
+    census = Nabu::PersonMine.new(catalog: @catalog, authority: "elephantine").census(source: "edh")
+    assert_equal "elephantine", census.authority
+    assert_equal 0, census.names_loaded
+    assert_empty census.name_hits
   end
 
   def test_the_miner_has_no_write_path

@@ -23,7 +23,8 @@ class MinedLayersTest < Minitest::Test
 
   def test_the_shipped_classification
     assert_equal({ "parallels" => "heavy", "formulas" => "cheap", "cognates" => "cheap",
-                   "place-mine" => "cheap", "place-link" => "cheap" }, Nabu::MinedLayers.classification)
+                   "place-mine" => "cheap", "place-link" => "cheap", "person-candidates" => "cheap" },
+                 Nabu::MinedLayers.classification)
     assert_equal %w[parallels], Nabu::MinedLayers.heavy_producers
   end
 

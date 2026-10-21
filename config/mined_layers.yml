@@ -48,3 +48,18 @@ producers:
   # place-mine, so the two always share a class.
   place-link:
     class: cheap
+  # The person-name CANDIDATE recipe (≥3 occurrences, ≥90% capitalized,
+  # from the slice's own text; kind person-name-candidate). Measured
+  # 2026-10-21, one full scan + bulk write per source against the live
+  # catalog (edges into a throwaway journal): edh 406,306 passages →
+  # 322,968 edges in 7.5 s; edr 596,064 → 556,244 in 11.2 s; elephantine
+  # 69,350 → 44,486 in 1.5 s; iip 17,823 → 3,094 in 0.2 s; papyri-ddbdp
+  # 1,124,708 → 699,660 in 26.7 s. Linear in passages at ~42-55k
+  # passages/s, so even a 33M-passage slice (the largest held source)
+  # extrapolates to ~10-15 min — under the heavy threshold; the
+  # epigraphic scopes the recipe is for total under a minute. A rebuild
+  # lane: cheap. (The person-index census, `nabu person mine`, writes
+  # nothing and is no layer: edh×edh 2.3 s, edr×edh 3.0 s,
+  # papyri-ddbdp×elephantine 7.4 s.)
+  person-candidates:
+    class: cheap

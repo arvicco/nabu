@@ -12,7 +12,8 @@ module Nabu
     # builder invoked is drop-and-reproject, so the pass is idempotent
     # and db/ stays a pure function of the permanent folders.
     module BuilderRefresh
-      Summary = Data.define(:honkoku_ndl, :timeline, :facets, :kinds, :passage_facets, :entry_facets, :lect_rows,
+      Summary = Data.define(:honkoku_ndl, :timeline, :facets, :kinds, :passage_facets, :entities, :entry_facets,
+                            :lect_rows,
                             :dictionary_stats, :derge_titles,
                             :aes_titles,
                             :lemma_rollups)
@@ -49,6 +50,10 @@ module Nabu
         progress&.stage("passage facets")
         passage_facets = Store::PassageFacetBuilder.rebuild!(catalog: catalog,
                                                              facet_map: FacetMap.load_default(config: config))
+        # The inline-entity index (config/entity_index.yml's roster).
+        progress&.stage("entity index")
+        entities = Store::EntityIndex.rebuild!(catalog: catalog,
+                                               sources: Store::EntityIndex.load_default(config: config))
         # The dictionary-entry facet lane (facet_map.yml entry_fields).
         progress&.stage("entry facets")
         entry_facets = Store::EntryFacetBuilder.rebuild!(catalog: catalog,
@@ -75,7 +80,8 @@ module Nabu
         progress&.stage("lemma rollups")
         lemma_rollups = Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
         Summary.new(honkoku_ndl: honkoku_ndl, timeline: timeline, facets: facets, kinds: kinds,
-                    passage_facets: passage_facets, entry_facets: entry_facets, lect_rows: lect_rows,
+                    passage_facets: passage_facets, entities: entities, entry_facets: entry_facets,
+                    lect_rows: lect_rows,
                     dictionary_stats: dictionary_stats, derge_titles: derge_titles,
                     aes_titles: aes_titles,
                     lemma_rollups: lemma_rollups)

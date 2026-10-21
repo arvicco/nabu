@@ -568,6 +568,28 @@ bibyeonsa:
   license_watch: https://www.data.go.kr/data/15053636/fileData.do
   sync_policy: manual
 
+bim-sahcoba:
+  adapter: Nabu::Adapters::BimSahcoba
+  adopted: "2026-10-21"
+  axes: [romance]
+  wired: true    # first sync verified 2026-10-21: 15 docs / 19,361 passages, 0 quarantined (the lane census exactly)
+  sync_policy: manual
+  lemma_tier: silver
+  # BIM/SAHCOBA — the historical Basque corpus of HiTZ, University of the
+  # Basque Country (CLARIAH-EUS hdl:20.500.14614/43, doi:10.71845/hitz-32,
+  # 2026-06-17): 15 works of Archaic and Old Basque, 1545–1782 —
+  # Etxepare, the Lazarraga manuscript, Leizarraga's New Testament,
+  # Materra, Beriain, Axular's Gero, Kapanaga, Tartas, Belapeire, Otxoa,
+  # Larramendi, three Imitation-of-Christ translations, an Avignon
+  # Rodríguez — as token streams (669,109 tokens: form, standardized
+  # form, lemma, Basque POS, UPOS). The lemma/POS layer is machine output
+  # (the files are "_automatikoa") → lemma_tier silver. Passage = the
+  # source page where the stream marks it, else the sentence (the
+  # declared rule, BimTsvParser). Language bare eu. Desk romance: the
+  # Romance-surrounded isolate, read beside the Gascon/Navarro-Aragonese
+  # and Castilian it borrowed from. CC BY 4.0 → class attribution. A
+  # deposited version is frozen → sync_policy manual.
+
 bosworth-toller:
   adapter: Nabu::Adapters::BosworthToller
   adopted: "2026-07-11"
@@ -654,6 +676,29 @@ burman-concordance:
   # ET-keyed held corpus), never guessed.
   license_watch: https://zenodo.org/records/7801485
   sync_policy: manual
+
+calfa-lexicon:   # P139, 02-sources row 279
+  adapter: Nabu::Adapters::CalfaLexicon
+  adopted: "2026-10-21"
+  axes: [etym]   # Ačaṙean's etymological dictionary is the etym desk's; no Caucasus desk exists yet
+  wired: true    # first sync verified 2026-10-21: 86,067 entries over 5 files, 0 errored, 1 skip-by-rule (the lane census exactly)
+                 # expect 5 docs → 86,067 entries (calfa-en 42,235 · calfa-fr 32,506 ·
+                 # calfa-acharian 11,326), 0 errored, 1 file skipped by rule (synonyms);
+                 # eyeball nabu define աբաս / այր + nabu show urn:nabu:dict:calfa-acharian:+ԱՅՐ, then flip.
+  sync_policy: manual
+  # The Calfa Classical Armenian dictionary (github.com/calfa-co/lexical-databases,
+  # the source files of dictionary.calfa.fr) — the library's FIRST Armenian
+  # dictionary shelf, language xcl. A compiled, standardized update of NBHL
+  # (1836–37), Bedrossian (1875) and Calfa (1861), plus Ačaṙean's etymological
+  # dictionary (1926, an AI-processed working document). Three dictionary slugs
+  # by upstream's own function/language split: calfa-en, calfa-fr (each with an
+  # np: proper-name lane), calfa-acharian. LICENSE: README verbatim "These data
+  # can be freely used under a CC BY-NC 4.0 license" (no LICENSE file;
+  # re-verified 2026-10-21) → nc. CAVEAT: synonyms/ is Łazarean 2006 —
+  # in-copyright material carried under Calfa's grant — skipped by rule until
+  # ruled on (31,449 rows; flipping it in is a one-rule change + a synonyms
+  # crossref lane). Upstream takes small corrections every few weeks (last push
+  # 2026-09-29) → manual.
 
 cantigas:   # P55-1, 02-sources row 144
   adapter: Nabu::Adapters::Cantigas
@@ -4806,6 +4851,25 @@ sefaria:
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 
+senie:
+  adapter: Nabu::Adapters::Senie
+  adopted: "2026-10-21"
+  axes: [baltic, slavic]   # the Balto-Slavic lineage dual-tag (the baltic desk ruling)
+  wired: true    # first sync verified 2026-10-21: 183 docs / 48,995 passages, 0 quarantined (the lane census exactly)
+  sync_policy: manual
+  # SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL + the
+  # Latvian Language Institute, University of Latvia; CLARIN-LV
+  # hdl:20.500.12574/141, issued 2025-11-27): the written Latvian of
+  # 1507–1800 — the Lord's-prayer specimens, the 1585/1586 catechisms,
+  # Mancelius, Elger, Glück's Bible, the manuscript dictionaries, oaths,
+  # laws and the Enlightenment prints. One 61 MB TEI P5 file (a
+  # teiCorpus of 186 TEIs: 99 leaf sources + 3 Bible containers holding
+  # 84 books) — 183 documents, one passage per page / verse / section.
+  # Every run is language-tagged (Latvian with German, Latin, Polish,
+  # Estonian, Greek, Aramaic …), so passage languages follow their runs.
+  # CC BY-SA 4.0 (the CLARIN-LV item) → class attribution, share-alike.
+  # A deposit version is frozen → sync_policy manual.
+
 shabados:   # P122-3, 02-sources row 269
   adapter: Nabu::Adapters::Shabados
   adopted: "2026-10-12"
@@ -4869,7 +4933,8 @@ sii-clean:   # P122-3, 02-sources row 267
   adapter: Nabu::Adapters::SiiClean
   adopted: "2026-10-12"
   axes: [indic, epigraphy]
-  wired: true    # first sync verified 2026-10-13: 589 docs / 8,372 passages
+  wired: true    # first sync 2026-10-13 (589 docs); WIDENED sync verified 2026-10-21:
+                 # 18,490 docs / 314,882 passages, 2,059 honest quarantines (the lane census exactly)
                  # from 649 grant-bearing editions (60-quarantine baseline
                  # recorded: stubs and uncitable files; 4,067 ungranted files
                  # skipped by rule) — exactly the lane census; SII 8.513 and
@@ -4878,20 +4943,31 @@ sii-clean:   # P122-3, 02-sources row 267
   sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
                        # git-incremental fetch — rides the sync --all sweep
   # South Indian Inscriptions — the DHARMA conversions of the printed SII
-  # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions,
-  # SII_B_clean/; census at HEAD 3ea671b6, 2026-10-12): 4,974 edition files,
-  # NO repo licence. The cone is the files bearing their OWN in-file
-  # <licence> CC BY-SA 4.0 — 907 today (SII 2/3/4/8/17/22/26/41), of which
-  # 258 are ~DHARMA_ in-progress files outside the sparse cone (they arrive
-  # by promotion), so 649 grant-bearing DHARMA_ editions; the other 4,067
-  # stay out by rule (censused per volume at discovery). Romanized Tamil
-  # above all (tam-Latn 579 docs; san/tel/kan-Latn 4/4/2). Headings mined:
-  # findspot/taluk/district/village (419 places), A.R. number, A.D./Śaka
-  # dating (211 dated). Class attribution. FETCH: one sparse GitFetch, cone
-  # /SII_B_clean/*/DHARMA_*.xml + README.txt (SII_A_raw stays out).
-  # EXPECTED FIRST SYNC: 649 discovered (4,067 grant-less skipped by rule)
-  # → 589 docs / 8,372 passages; 60 honest quarantines (40 edition-less
-  # stubs, 14 text-less editions, 6 "und").
+  # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions). WIDENED
+  # 2026-10-21: the DHARMA maintainer's statement in SII_B_clean/README.txt
+  # ("All files in this repository are under CC BY-SA 4.0 license",
+  # 2026-10-21) admits every clean edition, not only the in-file-grant
+  # subset. Two layers, one inscription one document (census at HEAD
+  # 76608102): all 4,796 SII_B_clean DHARMA_ editions (729 with an in-file
+  # <licence>, the rest on the README statement — license_basis per doc),
+  # plus the SII_A_raw/3out per-inscription conversions (20,554, each with
+  # its own in-file CC BY-SA 4.0) for the inscriptions no clean edition
+  # holds: 4,801 raw files a clean edition covers (exact stem or number
+  # range) are superseded, skipped by rule per volume; 15,753 stand in.
+  # Clean ~DHARMA_ drafts, the contractor dumps (1orig) and the per-volume
+  # master copies (2mastercopy — the same text at volume grain) stay out of
+  # the cone. Languages: tam/tel/kan/san-Latn, pra-Latn 23, nld-Latn 11,
+  # fas-Latn 2 (upstream per-Latn), ara-Latn 1, lat-Latn 1; bare tam/san/
+  # lat aliased; mar-Latn (4) and sin-Latn (1) quarantine (no registry
+  # node). Headings mined in both layers: village/taluk/district (10,380
+  # villages), A.R. number, A.D./Śaka incl. SII 10's "Ś. NNNN" (1,536
+  # dated). Class attribution. FETCH: one sparse GitFetch, cone
+  # /SII_B_clean/*/DHARMA_*.xml + /SII_A_raw/3out/*/~DHARMA_*.xml + both
+  # READMEs (GitFetch widens the held clone's cone on the pull path).
+  # EXPECTED SYNC: 20,549 discovered (4,801 superseded raw skipped by rule)
+  # → 18,490 docs / 314,882 passages (clean 3,969 / 54,626 · raw 14,521 /
+  # 260,256); 2,059 honest quarantines (798 edition-less clean stubs, 848
+  # text-less, 406 "und", 2 lang-less, 4 mar-Latn, 1 sin-Latn).
 
 sillok:
   adapter: Nabu::Adapters::Sillok
@@ -6238,6 +6314,25 @@ viet-wikisource:
   # (PAGES is the naming authority), 2 batched api.php requests; PD texts
   # + CC BY-SA 4.0 transcription → attribution. All lzh.
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
+
+vks:
+  adapter: Nabu::Adapters::Vks
+  adopted: "2026-10-21"
+  axes: [baltic]
+  wired: true    # first harvest verified 2026-10-21: 128 docs / 65,311 passages,
+                 # 6 baseline quarantines; harvest 5m49s (the pre-flight estimate held)
+  sync_policy: manual
+  # VKS — Vanhan kirjasuomen korpus, the Corpus of Old Literary Finnish
+  # (Kotus; Kielipankki Korp version urn:nbn:fi:lb-201407166): the written
+  # Finnish of 1543–1810 — all of Agricola, the 1642 Bible, the hymnals,
+  # the realm's laws and decrees in Finnish, sermons, almanacs, Lizelius'
+  # newspaper — 4,133,202 tokens / 167,400 sentences / 134 text files in
+  # 12 subcorpora. No bulk file exists: Nabu::KorpFetch harvests the
+  # anonymous Korp API sentence by sentence (a measured ~5 minutes, a
+  # progress line per page). One passage per run of the corpus's own
+  # sentence_code (line / verse / paragraph key). EUPL v1.2 (Kielipankki
+  # PUB) → class attribution with the share-alike rider (ruled
+  # 2026-10-21). A closed historical corpus → sync_policy manual.
 
 vuk-danicic:   # P117-2, 02-sources row 248
   adapter: Nabu::Adapters::VukDanicic

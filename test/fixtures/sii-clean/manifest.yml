@@ -1,16 +1,63 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# Eight whole real grant-bearing SII_B_clean edition files (see README.md).
+# Whole real files from SII_B_clean/ and SII_A_raw/3out/ (see README.md):
+# the 2026-10-12 first cut (url on master) and the 2026-10-21 widening
+# (url pinned to HEAD 76608102).
 source: sii-clean
 adapter_test: null
-retrieved: 2026-10-12
+retrieved: 2026-10-21
 files:
+  - path: SII_A_raw/3out/04/~DHARMA_INSSIIv04p0i0290.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/04/%7EDHARMA_INSSIIv04p0i0290.xml
+    whole: true
+  - path: SII_A_raw/3out/04/~DHARMA_INSSIIv04p0i0294.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/04/%7EDHARMA_INSSIIv04p0i0294.xml
+    whole: true
+  - path: SII_A_raw/3out/10/~DHARMA_INSSIIv10p0i0697.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/10/%7EDHARMA_INSSIIv10p0i0697.xml
+    whole: true
+  - path: SII_A_raw/3out/22/~DHARMA_INSSIIv22p0i0252.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/22/%7EDHARMA_INSSIIv22p0i0252.xml
+    whole: true
+  - path: SII_A_raw/3out/25/~DHARMA_INSSIIv25p0i0241.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/25/%7EDHARMA_INSSIIv25p0i0241.xml
+    whole: true
+  - path: SII_A_raw/3out/35/~DHARMA_INSSIIv35p0i0231.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/35/%7EDHARMA_INSSIIv35p0i0231.xml
+    whole: true
+  - path: SII_A_raw/3out/39/~DHARMA_INSSIIv39p0i0273.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/39/%7EDHARMA_INSSIIv39p0i0273.xml
+    whole: true
+  - path: SII_A_raw/3out/41/~DHARMA_INSSIIv41p0i0058.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/41/%7EDHARMA_INSSIIv41p0i0058.xml
+    whole: true
+  - path: SII_A_raw/3out/42/~DHARMA_INSSIIv42p0i0226.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/3out/42/%7EDHARMA_INSSIIv42p0i0226.xml
+    whole: true
+  - path: SII_A_raw/README.txt
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_A_raw/README.txt
+    whole: true
+  - path: SII_B_clean/README.txt
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/README.txt
+    whole: true
+  - path: SII_B_clean/SII04/DHARMA_INSSIIv04p0i0290-0293.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII04/DHARMA_INSSIIv04p0i0290-0293.xml
+    whole: true
+  - path: SII_B_clean/SII06/DHARMA_INSSIIv06p0i0004.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII06/DHARMA_INSSIIv06p0i0004.xml
+    whole: true
   - path: SII_B_clean/SII08/DHARMA_INSSIIv08p0i0391.xml
     url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII08/DHARMA_INSSIIv08p0i0391.xml
     whole: true
   - path: SII_B_clean/SII08/DHARMA_INSSIIv08p0i0503.xml
     url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII08/DHARMA_INSSIIv08p0i0503.xml
+    whole: true
+  - path: SII_B_clean/SII17/DHARMA_INSSIIv17p0i0380.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII17/DHARMA_INSSIIv17p0i0380.xml
+    whole: true
+  - path: SII_B_clean/SII17/DHARMA_INSSIIv17p0i0559.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII17/DHARMA_INSSIIv17p0i0559.xml
     whole: true
   - path: SII_B_clean/SII17/DHARMA_INSSIIv17p0i0582.xml
     url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII17/DHARMA_INSSIIv17p0i0582.xml
@@ -29,4 +76,10 @@ files:
     whole: true
   - path: SII_B_clean/SII22/DHARMA_INSSIIv22p0i0408.xml
     url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII22/DHARMA_INSSIIv22p0i0408.xml
+    whole: true
+  - path: SII_B_clean/SII22/~DHARMA_INSSIIv22p0i0584.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII22/%7EDHARMA_INSSIIv22p0i0584.xml
+    whole: true
+  - path: SII_B_clean/SII38/DHARMA_INSSIIv38p0i0029.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII38/DHARMA_INSSIIv38p0i0029.xml
     whole: true
