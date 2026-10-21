@@ -4,6 +4,7 @@ require "nokogiri"
 
 require_relative "dharma_base"
 require_relative "../eras"
+require_relative "south_indian_reigns"
 
 module Nabu
   module Adapters
@@ -82,12 +83,20 @@ module Nabu
     # N" 1, "year N of the Śaka era" 1, lowercase "śaka N" 1 — plus 3
     # "Kollam year N") mints the "date" envelope (Śaka Y → Y+78, Kollam
     # Y → [Y+824, Y+825]; raw/era/era_year/basis riding, the siddham
-    # shape) — 112 parsed docs dated. DELIBERATE COARSENESS that remains:
-    # REGNAL years ("time of Rājakesarivarman, year 9" — 853 parsed docs
-    # carry only those) stay verbatim-only, never converted — that needs
-    # a ruled South-Indian regnal table (the regnal_years.yml shape); and
-    # the title's leading toponym is NOT minted as a place (it is
-    # sometimes a monument — "Utayēntiram plates").
+    # shape) — 112 parsed docs dated. REGNAL statements ("time of
+    # Rājarāja I Cōḻa, year 19" — 853 parsed docs carry only those)
+    # convert through the owner-approved accession table
+    # (config/south_indian_reigns.yml via Nabu::SouthIndianReigns): the
+    # title's king spelling → its candidate reigns, regnal year N →
+    # [earliest accession + N − 1, latest accession + N], no usable year →
+    # the whole-reign span; raw/reigns/regnal_year/basis "title regnal"
+    # ride the date hash. An era-typed year outranks a regnal statement.
+    # DELIBERATE COARSENESS that remains: the alternating titles
+    # (Rājakesarivarman / Parakesarivarman, Māṟaṉ Caṭaiyaṉ), early-Pallava
+    # and first-empire Pāṇḍya names and editor-doubted names mint no date
+    # (the table's `unconvertible:` list says why, per spelling); and the
+    # title's leading toponym is NOT minted as a place (it is sometimes a
+    # monument — "Utayēntiram plates").
     class DharmaTamil < DharmaBase
       SLUG = "dharma-tamil"
       NAME = "DHARMA Tamil-country epigraphy (Task Force A)"
@@ -147,6 +156,25 @@ module Nabu
           return conversion.to_date_bounds.merge(
             "raw" => phrase, "era" => key, "era_year" => conversion.year, "basis" => "title"
           )
+        end
+        nil
+      end
+
+      # A regnal statement, read for conversion: "time of <king>[, year <…>]".
+      REGNAL_PARTS = /\Atime of (?<king>[^,]+?)\s*(?:, year (?<year>.+))?\z/
+
+      # The first regnal statement among +phrases+ the reign table converts
+      # → the MetadataDates :structured "date" hash, or nil.
+      def self.regnal_date(phrases, reigns: Nabu::SouthIndianReigns.default)
+        return nil if reigns.nil?
+
+        phrases.each do |phrase|
+          match = REGNAL_PARTS.match(phrase) or next
+          year = Nabu::SouthIndianReigns.regnal_year(match[:year])
+          conversion = reigns.convert(match[:king], year) or next
+          return conversion.to_date_bounds.merge(
+            "raw" => phrase, "reigns" => conversion.reigns, "regnal_year" => year, "basis" => "title regnal"
+          ).compact
         end
         nil
       end
@@ -269,7 +297,7 @@ module Nabu
           "script_rendition" => doc.at_xpath('//body//div[@type="edition"]/@rendition')&.value,
           "revision_status" => doc.at_xpath("//revisionDesc/change[@status][1]/@status")&.value,
           "title_dating" => (dating = title.scan(TITLE_DATING)),
-          "date" => self.class.era_date(dating)
+          "date" => self.class.era_date(dating) || self.class.regnal_date(dating)
         }.reject { |_, value| value.nil? || value.empty? }
       end
 
