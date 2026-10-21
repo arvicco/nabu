@@ -102,10 +102,10 @@ module Nabu
     # per-Latn 2 (aliased: ISO 639-2/B "per" = 639-3 "fas") · ara-Latn 1 ·
     # san-Latn 1. Every admitted code resolves on a held registry anchor.
     # QUARANTINED LOUDLY (the family stance): "und" (6 clean / 400 raw), the
-    # 2 lang-less clean files, mar-Latn (4 clean — Maratha-period Tanjore
-    # records; no Marathi node in nabu-lects) and sin-Latn (1 raw — the
-    # Rāmēśvaram Sinhala record; no Sinhala node): the mr/si anchors are the
-    # named mint candidates.
+    # 2 lang-less clean files. mar-Latn (4 clean — Maratha-period Tanjore
+    # records) and sin-Latn (1 raw — the Rāmēśvaram Sinhala record)
+    # quarantined until the registry carried the anchors; the mr/si mint
+    # merged 2026-10-21 and both codes are admitted since.
     #
     # == Aggressive mining (owner rule 2026-09-26) and its declared limits
     #
@@ -163,7 +163,8 @@ module Nabu
         "/SII_A_raw/3out/*/~DHARMA_*.xml", "/SII_A_raw/README.txt"
       ].freeze
 
-      LANGUAGES = %w[tam-Latn san-Latn tel-Latn kan-Latn pra-Latn nld-Latn lat-Latn ara-Latn fas-Latn].freeze
+      LANGUAGES = %w[tam-Latn san-Latn tel-Latn kan-Latn pra-Latn nld-Latn lat-Latn ara-Latn fas-Latn
+                     mar-Latn sin-Latn].freeze
       # Censused upstream tag dirt → the held codes (class comment).
       ALIASES = { "tam" => "tam-Latn", "san" => "san-Latn", "lat" => "lat-Latn",
                   "per-Latn" => "fas-Latn" }.freeze

@@ -197,9 +197,9 @@ class SiiCleanTest < Minitest::Test
     assert_match(/\ADes Menschen Leven/, document.passages.first.text)
   end
 
-  def test_an_unheld_language_code_quarantines_loudly
-    error = assert_raises(Nabu::ParseError) { adapter.parse(ref_for(MARATHI)) }
-    assert_match(/mar-Latn/, error.message, "no Marathi node in the registry: classify first")
+  def test_the_marathi_record_is_held_as_mar_latn
+    document = adapter.parse(ref_for(MARATHI))
+    assert_equal "mar-Latn", document.language, "the registry carries mr since the 2026-10-21 mint"
   end
 
   # -- the raw layer ------------------------------------------------------------
