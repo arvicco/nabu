@@ -5,7 +5,8 @@ require "json"
 module Nabu
   module Adapters
     # Sefaria — the Targum shelf (P30-3) + the Rabbinic text core (P46-1)
-    # + the midrash shelves (P55-3).
+    # + the midrash shelves (P55-3, P59-5) + the commentaries/halakhah/
+    # Zohar/liturgy wave (P140).
     # Sefaria-Export was RESTRUCTURED upstream: the git repo is a
     # lightweight monthly index (books.json, 19,705 version entries / 6,456
     # titles at the pinned 2026-07-02 generation) and the texts live in a
@@ -67,8 +68,45 @@ module Nabu
     # both shelves fetch every named version and let the per-file license
     # gate sift — the flat bucket's index rows carry no license field.
     #
+    # == The commentaries/halakhah/Zohar/liturgy wave (P140; census
+    #    2026-10-21 against the 2026-10-02 index — 19,815 entries)
+    #
+    # Six shelves (SHELVES, below), every named version fetched and sifted
+    # by the per-file gate. The license census ran a ranged GET of every
+    # candidate file's metadata head (1,547 files): every string sits in
+    # LICENSE_CLASSES or the non-grant set, so nothing stops the sync. A
+    # full parse of the fetched census tree reconciles it:
+    #
+    #   shelf            fetched  no-grant  refs  docs  passages  quarantined
+    #   tanakh-rishonim      697       159   538   536   235,965   2 (1 de, 1 stub)
+    #   mishneh-torah        536       140   396   377    53,575  19 (11 de, 8 stubs)
+    #   shulchan-arukh        72        40    32    32    40,473   0
+    #   tur                   12         5     7     7     8,001   0
+    #   zohar                 28        18    10     9    24,920   1 (stub)
+    #   liturgy              183        93    90    88   228,466   2 (1 hu, 1 stub)
+    #   total              1,528       455 1,073 1,049   591,400  24
+    #
+    # Licence classes of the 1,073 refs: open 651 · attribution 314 · nc
+    # 108. "no-grant" = license "unknown" (420) or absent (35) — skipped by
+    # rule, censused. The 24 quarantines are the standing rules, loud: 13
+    # foreign-language versions on the English axis (de ×12 — the Itkin
+    # German Mishneh Torah and Bamberger's Rashi — and one hu siddur;
+    # D46-e) and 11 SCT stubs with zero text leaves. NB the Zohar proper
+    # ships ENGLISH ONLY: both its Aramaic versions (Sulam Aramaic Text,
+    # Zohar Menukad) say "unknown"; the Aramaic arrives via Tikkunei Zohar
+    # (×2) and Zohar Chadash.
+    #
+    # Out by rule: every Commentary subtree (Mishneh Torah 3,639 entries,
+    # Shulchan Arukh 241, Tur 39, Haggadah 76), commentaries filed FLAT
+    # beside their base text (Peri Megadim; the Zohar commentaries —
+    # Sulam, Ketem Paz, Mikdash Melekh, Nefesh David, Ohr HaChammah, Yahel
+    # Ohr, Beur HaGra — off the zohar title allowlist; the three "Rabbi
+    # Sacks on …" volumes, EXCLUDED_TITLES), and the other commentary
+    # trees (Rishonim on Mishnah/Talmud, every Acharonim and Modern
+    # Commentary tree) — a later wave's scope.
+    #
     # Commentary/Rishonim/Acharonim/Guides subtrees are out of every
-    # shelf's category scope by rule.
+    # earlier shelf's category scope by rule.
     #
     # == fetch (the P30-3 index-driven shape, Nabu::SefariaFetch)
     #
@@ -134,8 +172,11 @@ module Nabu
       # versionTitle; the Lerner critical edition that duplicates the Ruth
       # Rabbah title (its SCT translation would ride the shelf-wide SCT
       # naming otherwise).
+      # P140: the three modern "Rabbi Sacks on …" commentary volumes the
+      # Liturgy categories file beside the prayer books.
       EXCLUDED_TITLES = ["Tafsir Rasag", "Footnotes on Mekhilta DeRabbi Shimon Ben Yochai",
-                         "Ruth Rabbah (Lerner)"].freeze
+                         "Ruth Rabbah (Lerner)", "Rabbi Sacks on Siddur",
+                         "Rabbi Sacks on Rosh HaShana Mahzor", "Rabbi Sacks on Yom Kippur Mahzor"].freeze
 
       # Machine-readable license → our class enum. "unknown"/absent → nil
       # (skip by rule); any other unlisted string is a LOUD STOP.
@@ -288,6 +329,59 @@ module Nabu
         Shelf.new(id: "seder-olam", prefix: ["Midrash", "Aggadah", "Seder Olam Rabbah"],
                   division_index: nil, division: nil,
                   languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # THE P140 WAVE — commentaries, halakhah, Zohar, liturgy (census in
+        # the class note). Every shelf fetches every named version and lets
+        # the per-FILE license gate sift (the aggadah stance): the index
+        # carries no license field, and the census found every string
+        # inside LICENSE_CLASSES.
+        #
+        # The medieval Bible commentaries: the WHOLE Rishonim-on-Tanakh
+        # subtree (Rashi, Ibn Ezra, Ramban, Radak, Rashbam, Sforno,
+        # Abarbanel, Chizkuni, Ralbag, Minchat Shai …); subshelf = the
+        # commentator, division = Torah/Prophets/Writings.
+        Shelf.new(id: "tanakh-rishonim", prefix: ["Tanakh", "Rishonim on Tanakh"], division_index: nil,
+                  division: nil,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # Maimonides' code: the fourteen books + the Introduction volume;
+        # the Commentary subtree (3,639 entries — Kesef Mishneh, Maggid
+        # Mishneh, Lechem Mishneh …) is out.
+        Shelf.new(id: "mishneh-torah", prefix: ["Halakhah", "Mishneh Torah"], division_index: 2,
+                  division: /\A(?!Commentary\z)./,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # The Shulchan Arukh: its four parts + the Introduction by title
+        # (the flat category also files Peri Megadim, a commentary); the
+        # Commentary subtree is out.
+        Shelf.new(id: "shulchan-arukh", prefix: ["Halakhah", "Shulchan Arukh"], division_index: 2,
+                  division: /\A\z/,
+                  titles: ["Shulchan Arukh, Orach Chayim", "Shulchan Arukh, Yoreh De'ah",
+                           "Shulchan Arukh, Even HaEzer", "Shulchan Arukh, Choshen Mishpat",
+                           "Shulchan Arukh, Introduction"].freeze,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # The Arba'ah Turim (one title); its Commentary subtree (Beit Yosef,
+        # Bach, Prisha …) is out.
+        Shelf.new(id: "tur", prefix: %w[Halakhah Tur], division_index: 2, division: /\A\z/,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # The Zohar corpus proper by title — the flat category also files
+        # its commentaries (Sulam, Ketem Paz, Mikdash Melekh, Nefesh David,
+        # Ohr HaChammah, Yahel Ohr, Beur HaGra), which stay out. The Hebrew
+        # axis is the Zohar's literary Aramaic → arc (the targum stance;
+        # Zohar Chadash's Hebrew Midrash HaNe'lam stretches ride arc
+        # wholesale — declared coarseness).
+        Shelf.new(id: "zohar", prefix: %w[Kabbalah Zohar], division_index: 2, division: /\A\z/,
+                  titles: ["Zohar", "Zohar Chadash", "Tikkunei Zohar", "Idra Zuta"].freeze,
+                  languages: { "he" => "arc", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # The liturgy: Siddur, High Holidays, Piyutim, Other Liturgy Works,
+        # Haggadah — EXACTLY one level past "Liturgy" (/\A\z/ at index 2
+        # keeps the Haggadah Commentary subtree out); the three "Rabbi Sacks
+        # on …" modern commentary volumes are EXCLUDED_TITLES.
+        Shelf.new(id: "liturgy", prefix: ["Liturgy"], division_index: 2, division: /\A\z/,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil)
       ].freeze
 
@@ -298,7 +392,8 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "sefaria",
         name: "Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, " \
-              "Tosefta) + Midrash (Rabbah, halakhic midrashim)",
+              "Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, " \
+              "Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy",
         license: "Per NAMED version, machine-readable \"license\" field in each version file (the index " \
                  "carries none): PD (both spellings)/CC0 -> open, CC-BY/CC-BY-SA -> attribution override, " \
                  "CC-BY-NC(-SA) -> nc override (the Davidson lane; never redistributed); \"unknown\"/absent -> " \

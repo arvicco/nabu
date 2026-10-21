@@ -1,0 +1,184 @@
+{
+    "language": "he",
+    "title": "Zohar Chadash",
+    "versionSource": "http://www.toratemetfreeware.com/online/d_root__106_kblh.html",
+    "versionTitle": "Zohar Chadash",
+    "actualLanguage": "he",
+    "languageFamilyName": "hebrew",
+    "isSource": true,
+    "isPrimary": true,
+    "direction": "rtl",
+    "status": "locked",
+    "license": "Public Domain",
+    "versionTitleInHebrew": "זוהר חדש",
+    "heTitle": "זוהר חדש",
+    "categories": [
+        "Kabbalah",
+        "Zohar"
+    ],
+    "text": {
+        "Bereshit": [
+            "(בראשית א׳:ג׳) וַיֹּאמֶר אֱלֹהִים יְהִי אוֹר, אָמַר רִבִּי יִצְחָק, מִכָּאן מַשְׁמַע, דַּעֲקָרָן קוּדְשָׁא בְּרִיךְ הוּא לְהַנֵּי נְטִיעָן, וְשָׁתֵיל לוֹן. דִּכְתִיב יְהִי. ",
+            "רַבִּי יְהוּדָה אוֹמֵר אוֹר שֶׁכְּבָר הָיָה, תְּנַן. מַשְׁמַע דִּכְתִיב וַיְהִי אוֹר. וְהָיָה לָא כְתִיב, אֶלָּא וַיְהִי. "
+        ],
+        "Noach": [
+            "וְר' חִזְקִיָּה אֲמַר, זַכָּאָה חוּלָקֵיהוֹן דְּיִשְׂרָאֵל, דְּקוּדְשָׁא בְּרִיךְ הוּא אִתְרְעֵי בְּהוּ, וִיהַב לוֹן אוֹרַיְיתָא קַדִּישָׁא, וְאַזְהַר לוֹן, וִיהַב לוֹן עֵיטָא, לְאִסְתַּמָּרָא מֵעֵילָא וְתַתָּא, בְּגִין דְּלָא יִשְׁלוֹט בְּהוּ בַּר קוּדְשָׁא בְּרִיךְ הוּא בִּלְחוֹדוֹי. וְאִינוּן יָדְעֵי לְדַחְיָיא מִנַּיְיהוּ כָּל מְקַטְרְגִין, וְכָל קַסְטִירִין, בְּגִין דִּיהוֹן חוּלָקָא דְּעַדְבֵיהּ וְאַחְסַנְתֵּיהּ, כְּמָה דְאַתְּ אָמֵר (דברים ל״ב:ט׳) כִּי חֵלֶק ה' עַמּוֹ יַעֲקֹב חֶבֶל נַחֲלָתוֹ. ",
+            "תָּא חֲזֵי, בְּיוֹמָא דְּרֹאשׁ הַשָּׁנָה, קוּדְשָׁא בְּרִיךְ הוּא יָתֵיב בְּדִינָא עַל עָלְמָא, וְכָל בְּנֵי עָלְמָא עָאלִין לְחוּשְׁבְּנָא, וְלָא אִית מָאן דְּלָא עָאל בְּחוּשְׁבְּנָא. וְסִפְרִין דְּחַיִּין וּמֵתִין פְּתִיחָן בְּהַהוּא יוֹמָא. "
+        ],
+        "Lech Lecha": [],
+        "Vayera": [],
+        "Toldot": [],
+        "Vayetzei": [],
+        "Vayeshev": [],
+        "Beshalach": [],
+        "Yitro": [],
+        "Terumah": [],
+        "Ki Tisa": [],
+        "Tzav": [],
+        "Achrei Mot": [],
+        "Behar": [],
+        "Nasso": [],
+        "Chukat": [],
+        "Balak": [],
+        "Matot": [],
+        "Vaetchanan": [],
+        "Ki Teitzei": [],
+        "Ki Tavo": [],
+        "Shir HaShirim": [],
+        "Midrash Rut": [],
+        "Midrash HaNe'elam Al Eichah": [],
+        "Tikkunim Mizohar Chadash": [],
+        "Sifra Tanina": [],
+        "Tikuna Kadma'ah": [],
+        "More about Parshat Noach": [],
+        "More about Parshat Shelach": [],
+        "More about Parshat Vayera": []
+    },
+    "schema": {
+        "heTitle": "זוהר חדש",
+        "enTitle": "Zohar Chadash",
+        "key": "Zohar Chadash",
+        "nodes": [
+            {
+                "heTitle": "פרשת בראשית",
+                "enTitle": "Bereshit"
+            },
+            {
+                "heTitle": "פרשת נח",
+                "enTitle": "Noach"
+            },
+            {
+                "heTitle": "פרשת לך לך",
+                "enTitle": "Lech Lecha"
+            },
+            {
+                "heTitle": "פרשת וירא",
+                "enTitle": "Vayera"
+            },
+            {
+                "heTitle": "פרשת תולדות",
+                "enTitle": "Toldot"
+            },
+            {
+                "heTitle": "פרשת ויצא",
+                "enTitle": "Vayetzei"
+            },
+            {
+                "heTitle": "פרשת וישב",
+                "enTitle": "Vayeshev"
+            },
+            {
+                "heTitle": "פרשת בשלח",
+                "enTitle": "Beshalach"
+            },
+            {
+                "heTitle": "פרשת יתרו",
+                "enTitle": "Yitro"
+            },
+            {
+                "heTitle": "פרשת תרומה",
+                "enTitle": "Terumah"
+            },
+            {
+                "heTitle": "פרשת כי תשא",
+                "enTitle": "Ki Tisa"
+            },
+            {
+                "heTitle": "פרשת צו",
+                "enTitle": "Tzav"
+            },
+            {
+                "heTitle": "פרשת אחרי",
+                "enTitle": "Achrei Mot"
+            },
+            {
+                "heTitle": "פרשת בהר",
+                "enTitle": "Behar"
+            },
+            {
+                "heTitle": "פרשת נשא",
+                "enTitle": "Nasso"
+            },
+            {
+                "heTitle": "פרשת חקת",
+                "enTitle": "Chukat"
+            },
+            {
+                "heTitle": "פרשת בלק",
+                "enTitle": "Balak"
+            },
+            {
+                "heTitle": "פרשת מטות",
+                "enTitle": "Matot"
+            },
+            {
+                "heTitle": "פרשת ואתחנן",
+                "enTitle": "Vaetchanan"
+            },
+            {
+                "heTitle": "פרשת כי תצא",
+                "enTitle": "Ki Teitzei"
+            },
+            {
+                "heTitle": "פרשת כי תבא",
+                "enTitle": "Ki Tavo"
+            },
+            {
+                "heTitle": "שיר השירים",
+                "enTitle": "Shir HaShirim"
+            },
+            {
+                "heTitle": "מדרש רות",
+                "enTitle": "Midrash Rut"
+            },
+            {
+                "heTitle": "מדרש הנעלם על איכה",
+                "enTitle": "Midrash HaNe'elam Al Eichah"
+            },
+            {
+                "heTitle": "תקונים מזהר חדש",
+                "enTitle": "Tikkunim Mizohar Chadash"
+            },
+            {
+                "heTitle": "ספרא תנינא",
+                "enTitle": "Sifra Tanina"
+            },
+            {
+                "heTitle": "תקונא קדמאה",
+                "enTitle": "Tikuna Kadma'ah"
+            },
+            {
+                "heTitle": "זה שייך לפרשת נח",
+                "enTitle": "More about Parshat Noach"
+            },
+            {
+                "heTitle": "זה שייך לפרשת שלח לך",
+                "enTitle": "More about Parshat Shelach"
+            },
+            {
+                "heTitle": "עוד לפרשת וירא אליו",
+                "enTitle": "More about Parshat Vayera"
+            }
+        ]
+    }
+}

@@ -4817,6 +4817,16 @@ sefaria:
                    # urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-
                    # rabbah-2022:petichta.1 (the default-node citation) and a
                    # sifrei-zuta passage (5.2.1 = its real opening).
+                   # P140 adds the commentaries/halakhah/Zohar/liturgy wave
+                   # (six shelves, Sefaria::SHELVES): +1,528 named files
+                   # (≈385 MB) on the 2026-10-02 index → expected EXACTLY
+                   # +1,049 documents / +591,400 passages, 455 rule skips
+                   # (licence "unknown"/absent) and 24 quarantines (13
+                   # de/hu versions, 11 zero-leaf SCT stubs) — a full parse
+                   # of the census tree, per-shelf table in the class note.
+                   # Eyeball urn:nabu:sefaria:minchat-shai-on-jonah:he:
+                   # minchat-shai:1.1.1, a tur:he:onyourway passage, and a
+                   # zohar-chadash:he:zohar-chadash passage (arc).
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version
@@ -4841,7 +4851,10 @@ sefaria:
   # Shimoni, Otzar Midrashim, Ein Yaakov) is not category-separable → out of
   # wave 2; cutting it is a title-level owner ruling.
   # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
-  # (Venice, Mechon-Mamre…) are out by rule. THE LICENSE GATE per version
+  # (Venice, Mechon-Mamre…) are out of the wave-1/2 shelves by rule. P140
+  # opens the Rishonim-on-Tanakh subtree whole (tanakh-rishonim) plus the
+  # Mishneh Torah, Shulchan Arukh, Tur, Zohar and Liturgy shelves, every
+  # named version, their own Commentary subtrees out. THE LICENSE GATE per version
   # FILE (the index carries no license field): PD (both spellings, D46-f)/
   # CC0 → open, CC-BY/CC-BY-SA → attribution override, CC-BY-NC(-SA) → nc
   # override (P10-4, never redistributed — the Davidson lane); "unknown"/absent →
