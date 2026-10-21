@@ -93,6 +93,10 @@ module Store
       assert pairs[:entry_id][:primary_key]
       ddl = @db["SELECT sql FROM sqlite_master WHERE name = 'entry_facets'"].get(:sql)
       assert_match(/WITHOUT ROWID/i, ddl)
+      # Migration 049: the reverse probe (an entry's own facets, the define
+      # card) answers by index, never a pair-table scan.
+      assert(@db.indexes(:entry_facets).values.any? { |i| i[:columns] == %i[entry_id] },
+             "entry_facets(entry_id) index missing (migration 049)")
     end
 
     # P17-2 rider: documents carry their adapter-emitted metadata (persons,

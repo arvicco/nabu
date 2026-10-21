@@ -261,6 +261,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The card prints the entry's OWN facets (one compact line, the search
+  # card's "facets:" idiom) — read through the entry_id index.
+  def test_define_card_prints_the_entry_s_facets
+    with_edrdg_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define プロ]) }
+      assert_nil status
+      assert_match(/^ {2}facets: (?:\S.* · )?domain=medicine(?: · .*)?$/, out)
+    end
+  end
+
+  # Desk-commands rule: a catalog without the entry_id index (migration 049
+  # not yet applied — read surfaces never migrate) hints honestly instead of
+  # scanning the pair table.
+  def test_define_card_hints_when_the_entry_facet_index_is_missing
+    with_edrdg_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      db.alter_table(:entry_facets) { drop_index :entry_id }
+      db.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[define プロ]) }
+      assert_nil status
+      assert_match(/^ {2}facets: not indexed in this catalog yet — the next sync or rebuild migrates it$/, out)
+    end
+  end
+
   def test_define_malformed_facet_exits_one
     _out, err, status = run_cli(%w[define プロ --facet domain])
     assert_equal 1, status

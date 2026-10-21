@@ -145,7 +145,8 @@ module Nabu
       the dictionary-entry facet surface tags: JMdict's domain / usage /
       dialect / loan_source labels, WOLD's semantic_field / word_class /
       borrowed_status, TLS's concept. The pattern matches the value or its
-      ref, case-insensitively; LIKE patterns pass through.
+      ref, case-insensitively; LIKE patterns pass through. Every card prints
+      the entry's own facets on a "facets:" line (refs too under --long).
 
       Examples:
         nabu define μῆνις              # LSJ: wrath — with Il. 1.1 resolved
@@ -743,6 +744,7 @@ module Nabu
         say "#{result.headword}#{lang} — #{result.dictionary_title} [#{result.license_class}]" \
             "#{' (withdrawn)' if result.withdrawn}  #{result.urn}"
         say "  gloss: #{result.gloss}" if result.gloss
+        print_entry_facets(result.facets)
         print_etymon_line(result.etymons)
         say ""
         say result.body
@@ -750,6 +752,23 @@ module Nabu
         print_etymon_ascent(result.etymons) if options[:long]
         print_resolved_citations(result)
         print_crossrefs(result)
+      end
+
+      # The entry's own facets (the dictionary-entry facet surface — JMdict
+      # domain/usage labels, WOLD semantic fields, TLS concepts), one line in
+      # the search card's "facets: name=value · …" idiom; an authority ref
+      # (the TLS concept uuid) rides in parentheses under --long only. nil
+      # is the honest unknown — the catalog lacks the entry_id index — and
+      # says so rather than scanning; no facets, no line.
+      def print_entry_facets(facets)
+        return say("  facets: not indexed in this catalog yet — the next sync or rebuild migrates it") if facets.nil?
+        return if facets.empty?
+
+        rendered = facets.map do |facet|
+          ref = options[:long] && facet.ref ? " (#{facet.ref})" : ""
+          "#{facet.facet}=#{facet.value}#{ref}"
+        end
+        say "  facets: #{rendered.join(' · ')}"
       end
 
       # The etymon line: the entry's OWN stated etymology (the typed UP
