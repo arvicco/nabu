@@ -257,7 +257,8 @@ module Nabu
           # uncertain claim (CONJECTURE_KEYS — "London?", never the raw
           # "[London?] printed" prose); only a doc the reading left
           # unplaced falls back to the verbatim imprint, cleaned of the
-          # ESTC-style bracket/colon furniture. The TCP's own pub_place
+          # ESTC-style bracket/colon furniture and screened by the
+          # no-place conventions (NO_PLACE_SHAPES). The TCP's own pub_place
           # (Ann Arbor) is lineage, exempted.
           "eebo-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
@@ -317,6 +318,27 @@ module Nabu
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
                     "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown",
                     "出版地不明", "製作地不明", "書写地不明", "unbekannt"].freeze
+        # The early-print no-place conventions, by shape (the eebo raw-
+        # imprint fallback, census 2026-10-21 — 22 docs that minted junk
+        # names): sine loco / sine nomine / no place in every catalogue
+        # spelling ("S.n", "N.p", "n.p", "S. l", the OCR'd "S.1");
+        # "printed abroad", bracketed whole or in part ("Printed [abroad");
+        # a printer-only imprint naming no town ("Printed by Iohn Legat");
+        # a collation statement catalogued into the place field ("[2], 6
+        # p."). Anchored whole-value shapes — "S. Román" and kin never match.
+        NO_PLACE_SHAPES = [
+          /\As\.?\s*[l1n]\.?\z/i, /\An\.?\s*p\.?\z/i,
+          /\A(?:printed\s+)?\[?\s*abroad\s*\]?\z/i,
+          /\Aprinted\s+by\s+(?!.*\b(?:at|in)\b)/i,
+          /\A[\d\[\]\s,]+p\z/i
+        ].freeze
+
+        # A value naming no place: a NO_PLACE sentinel or a NO_PLACE_SHAPES form.
+        def no_place?(value)
+          text = value.to_s.strip.downcase
+          NO_PLACE.include?(text) || NO_PLACE_SHAPES.any? { |shape| shape.match?(text) }
+        end
+        module_function :no_place?
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -520,8 +542,7 @@ module Nabu
               place = place.to_s.gsub(PLACE_LABEL, " ").strip.sub(/\A[\[\s.:,;]+/, "")
                            .sub(/[\s:,.;\[\]]+\z/, "")
             end
-            return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) ||
-                                           NO_PLACE.include?(place.downcase)
+            return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) || no_place?(place)
 
             place = "#{place}?" if CONJECTURE_KEYS.include?(key) && !place.end_with?("?")
             return [place, nil, nil, nil]
