@@ -41,7 +41,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `ru-wikisource` | texts | attribution | wired · manual | 12 docs / 429 passages |
 | `scat` | texts | attribution | wired · manual | 24 docs / 2,446 passages |
 | `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
-| `senie` | texts | attribution | not yet wired | not synced yet |
+| `senie` | texts | attribution | wired · manual | 183 docs / 48,995 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `sl-wikisource` | texts | attribution | wired · manual | 1,539 docs / 145,035 passages |
 | `slavistics-pd` | texts | open | wired · manual | 21 docs / 5,833 passages |
@@ -53,7 +53,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `vuk-danicic` | texts | open | wired · manual | 66 docs / 31,102 passages |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,684 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 28 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,684 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 30 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 
