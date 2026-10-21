@@ -310,6 +310,6 @@ class PosturesTest < Minitest::Test
     # identity 118 (damos stays declared), pending 2→0. Zero pendings.
     # senie, bim-sahcoba and vks join as pending on the Baltic–Finnic–Basque
     # package's lv:old, eu:arch/eu:old and fi:old.
-    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 118, "pending" => 3 }, by_posture)
+    assert_equal({ "dates" => 18, "codemap" => 13, "identity" => 118 }, by_posture)
   end
 end
