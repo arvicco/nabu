@@ -288,18 +288,21 @@ sources:
     script: {posture: implied}
   ud:
     kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
-        all 34 treebanks) rides each split document as the genre facet, verbatim — never
+        all 36 treebanks) rides each split document as the genre facet, verbatim — never
         kind-folded: a split file mixes whatever its treebank mixes, so one kind over the
         union would misstate each text (census 2026-10-19)"}
     # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
     # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
     # stage witness and the only gn-claiming document); the lzh treebanks →
     # zho/lit via codemap; the rest stays DELIBERATELY unstaged (D57-f).
+    # axm (middle-armenian-armtdp) resolves by identity on the held
+    # xcl → axm → hy chain; oge (old-georgian-glc) stays bare until the
+    # Kartvelian registry nodes (oge + ka under ccs) land in nabu-lects.
     dating: {posture: partial, note: "the sentence-comment dates of four treebanks (census
         2026-10-19): birchbark date_created on 1,203 letters (25 bands), rnc created on 56
         documents, ruthenian date/created on 83, egyptian-pc date on 3,089 sentences (5th/6th
         Dynasty, banded by the TLA thesaurus nodes in period_bands.yml) — passage-grain runs +
-        a document envelope (UdSentenceDates). The other 30 treebanks state no date"}
+        a document envelope (UdSentenceDates). The other 32 treebanks state no date"}
     places: {posture: named, note: "egyptian-pc's place comment (Saqqara, all 3,089 sentences)
         rides the UdSentenceDates rows; no other treebank states a place"}
     script: {posture: implied}

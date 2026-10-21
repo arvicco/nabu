@@ -610,3 +610,40 @@ metadata` header (coptic-bohairic spells it `Machine readable`) to its
 closing rule. The adapter reads their `Genre:` line (the treebank's UD
 genre tags) onto every document of the treebank; treebanks without a
 fixture README honestly claim no genre.
+
+## old-georgian-glc + middle-armenian-armtdp (retrieved 2026-10-21)
+
+Both from `master` (the repos' default branch), the v2.18 release state.
+
+- `old-georgian-glc/oge_glc-ud-test-head20.conllu` — UD_Old_Georgian-GLC
+  (Irina Lobzhanidze, Ilia State University; HEAD 5458da8e, 2026-05-06).
+  The first 20 complete sentence blocks of `oge_glc-ud-test.conllu`
+  (151 blocks, 6,884 word lines, 302 MWT range lines, no empty nodes;
+  943,229 B upstream, sha256 `29a8e5c3…5fd73eb`) → 94,243 B. Head-20
+  rather than the house head-50: the sentences are long (~6 KB per
+  block with the per-token Translit= MISC), so 50 blocks would be
+  ~310 KB. Sentence ids are bare `OGLC_nnnnn` (no source-text, date or
+  place comment anywhere in the file); each block carries `# text`
+  (Mkhedruli) and `# translit`. MWT ranges split the case postpositions
+  (`საქმეთაგანნი` → `საქმეთა` + `განნი`). Language `oge`.
+- `middle-armenian-armtdp/axm_armtdp-ud-test.conllu` — UD_Middle_Armenian-
+  ArmTDP (Anna S. Danielyan, Marat M. Yavrumyan, Yerevan State
+  University; HEAD f26c8d22, 2026-05-06). The WHOLE released test file
+  (27 blocks, 1,093 word lines, 65 MWT range lines; 91,628 B, sha256
+  `4eaefe59…bb936f39`) — two newdoc runs, `legal-00AA` (`# doc_title =
+  Դատաստանագիրք`, a law code) and `medical-00AB` (`# doc_title =
+  Քննութիւն բնութեան մարդոյ եւ նորին ցաւոց (Դուռն վասն օձից
+  խայթելոյն նշանացն)`, a medical treatise's snakebite chapter; the
+  README's own example truncates it). The `dev` branch already holds a
+  410,264 B test file — the next release grows the treebank. Language
+  `axm`.
+- `old-georgian-glc/README.md`, `middle-armenian-armtdp/README.md` — the
+  machine-readable metadata block only (the 2026-10-19 recipe below):
+  Genre `fiction` (GLC) and `legal medical` (ArmTDP).
+
+License (read verbatim 2026-10-21, both repos identical): LICENSE.txt —
+"The treebank is licensed under the Creative Commons License
+Attribution-ShareAlike 4.0 International. The complete license text is
+available at: http://creativecommons.org/licenses/by-sa/4.0/legalcode";
+README machine-readable metadata — "License: CC BY-SA 4.0", "Includes
+text: yes" → the per-document attribution override.
