@@ -1174,8 +1174,16 @@ no key; conventions §9). Two structural consequences:
   of a descendants row. Every descent walk (etym's reflex match and
   ascent, the `reflex_roots` closure, an entry's cognate list, the
   nabu-data reflex-chains export) scopes through `Store::ReflexDescent`,
-  so an UP edge never reads as a descendant; the rows are stored data
-  awaiting their own (ascending) surface. `cognate` (the Lewis & Short
+  so an UP edge never reads as a descendant. Their ascending surface is
+  `Query::EtymonAscent`: an entry's own etymon rows in stated order,
+  then UP through the shelf — an etymon held as exactly ONE live entry
+  (dictionary language + folded headword, the crosswalk keys) resolves
+  to that entry's urn and that entry's own etymon rows continue the
+  chain (a (language, folded word) never repeats, an entry is entered
+  once, capped at 4 climbs / 16 steps). `nabu define` and `nabu etym`
+  print it as one compact "etymon: ←(inherited) *śaukāˀ [ine-bsl-pro]
+  ←(inherited) …" line (`--long`: one step per line, held urns
+  beside). `cognate` (the Lewis & Short
   cognate chains) is direction-free and walks like MW's cognate rows.
   `attested` / `attested_year` carry the verbatim first-attestation date
   upstream prints per reflex (DÉRom's "dp. 1220") and its parsed

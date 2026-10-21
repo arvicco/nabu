@@ -4,6 +4,7 @@ require_relative "../normalize"
 require_relative "../lects"
 require_relative "lect_filter"
 require_relative "reflex_views"
+require_relative "etymon_ascent"
 
 module Nabu
   module Query
@@ -50,12 +51,13 @@ module Nabu
       # "<queried form> → <canonical form>" when the entry was reached only by
       # the LiLa variant-form fallback (folded into the displayed headword so
       # the provenance shows in `define` output — "via LiLa: eclypsans →
-      # eclipsans").
+      # eclipsans"). +etymons+ are EtymonAscent::Step values — the entry's
+      # stated etymology and its ascent up the shelf, [] when none.
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :key_raw, :gloss, :body,
                            :license, :license_class, :source_slug, :citations, :reflexes,
-                           :withdrawn, :via_lila, :crossrefs) do
-        def initialize(withdrawn: false, via_lila: nil, crossrefs: [], **) = super
+                           :withdrawn, :via_lila, :crossrefs, :etymons) do
+        def initialize(withdrawn: false, via_lila: nil, crossrefs: [], etymons: [], **) = super
       end
 
       # One citation of an entry: display label always; resolved_urn is the
@@ -135,6 +137,7 @@ module Nabu
                      lects: :auto)
         @catalog = catalog
         @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
+        @etymons = EtymonAscent.new(catalog: catalog)
         @lila = lila
         @form_lemma = form_lemma
         @verb_lemma = verb_lemma
@@ -374,7 +377,8 @@ module Nabu
           reflexes: recon ? @reflex_views.for_entry(row.fetch(:entry_row_id)) : [],
           withdrawn: row[:withdrawn] ? true : false,
           via_lila: via_lila,
-          crossrefs: crossrefs_for(row.fetch(:entry_row_id))
+          crossrefs: crossrefs_for(row.fetch(:entry_row_id)),
+          etymons: @etymons.for_entry(row.fetch(:entry_row_id))
         )
       end
 
