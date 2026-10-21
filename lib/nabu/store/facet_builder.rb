@@ -164,6 +164,12 @@ module Nabu
       # full rebuild). +rows+ is the lane's RowBuffer.
       def insert_facets(rows, document_id, facets)
         facets.each do |facet, entry|
+          # A bare string is an honest single-value claim (the sefaria
+          # shelf id); the {raw, value(s)} hash remains the richer shape.
+          if entry.is_a?(String)
+            rows.insert(document_id: document_id, facet: facet, value: entry, raw: nil)
+            next
+          end
           next unless entry.is_a?(Hash)
 
           values = entry.key?("values") ? Array(entry["values"]) : [entry["value"]]
