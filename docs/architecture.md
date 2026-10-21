@@ -298,7 +298,7 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).
 entry_facet_values(id, source_id, facet, value, ref)
-entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id)
+entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id); index (entry_id) (049)
    -- Migration 046: the same mold at DICTIONARY-ENTRY grain — the
    -- categorical claims upstream makes per entry (JMdict's <field>
    -- domains, <misc> usage marks, <dial> dialects and <lsource> donor
@@ -316,7 +316,11 @@ entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, en
    -- builders:refresh, and the post-load sync refresh under the
    -- dictionary-stats gate (withdrawals included). Read by `nabu define
    -- --facet NAME=PATTERN` (Query::Define#run facets:): entries whose
-   -- value or ref matches, AND across facets.
+   -- value or ref matches, AND across facets. Migration 049 adds the
+   -- (entry_id) index for the reverse probe: every define card (and
+   -- `show` on an entry urn) prints the entry's own "facets: name=value
+   -- · …" line; a catalog without the index never scans the pairs — an
+   -- annotated entry's card says the facets are not indexed yet.
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
