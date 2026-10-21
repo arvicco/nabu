@@ -16,6 +16,8 @@ module Nabu
 
       DEFAULT_LIMIT = 20
       # Matched names listed (by passage count); the total is always told.
+      # const: a render cap, not a corpus claim — the desk announces the
+      # hidden tail ("… N more names") whatever the census.
       NAME_LIMIT = 15
 
       Name = Data.define(:id, :source, :type, :text, :identity, :key, :ref, :subtype, :passages) do
