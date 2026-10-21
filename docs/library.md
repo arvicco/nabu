@@ -1192,6 +1192,58 @@ Ačaṙean's etymological dictionary as a working document — 86,067
 entries across English and French definition tables and the
 etymology file (CC BY-NC 4.0, Calfa credited).
 
+## 8ap. The content-expansion wave (P140)
+
+Eighteen new sources and two canon widens in one window, in the
+register shape (counts read from each first sync, 2026-10-21/22):
+
+**The gold annotated classics.** `vedaweb` — the VedaWeb Rigveda:
+1,028 hymns / 10,552 stanzas with gold morphology per word, staged
+Vedic Sanskrit (CC BY annotation layers; the nc text versions held
+unread) · `lasla` — the Liège LASLA corpus: 242 files / 95,974
+sentence passages of gold-lemmatized classical Latin, Plautus to
+Juvenal (CC BY-NC-SA, the open CIRCSE release).
+
+**The eastern openers.** `lotsawa-house` — Tibetan Buddhist texts
+with translations in eight further languages: 6,388 documents /
+413,067 passages from the completed nine-language crawl (CC BY-NC,
+the site's own crawl grant honored) · `obimd` — the Anyang
+oracle-bone corpus: 10,077 rubbings / 21,941 inscription passages,
+the earliest Chinese stratum (CC BY 4.0) · `shuowen` — the Shuowen
+Jiezi: 11,081 dictionary entries including the encoded 重文
+variants, wired into the Han character card (Apache-2.0).
+
+**The canon widens.** `sefaria` grows by the medieval library —
+the Rishonim on Tanakh, Mishneh Torah, the Tur, Shulchan Arukh,
+Zohar and liturgy: +1,049 documents / 591,400 passages, the
+Hebrew shelves staged Medieval Hebrew (per-text licenses screened,
+455 ungranted texts excluded by rule) · `cbeta` gains the ten
+historical canon editions — 房山石經, 趙城金藏, 永樂北藏, 乾隆藏
+and kin: +236 documents / 836,777 passages (CC BY-NC-SA).
+
+**The South-Asian dictionary shelves.** Seven kaikki.org Wiktionary
+extracts — `wiktionary-ta`, `wiktionary-te`, `wiktionary-ml`,
+`wiktionary-kn`, `wiktionary-pra`, `wiktionary-dv` and `wiktionary-si`:
+57,466 entries
+across Tamil, Telugu, Malayalam, Kannada, Prakrit (with 20,311
+Brāhmī-headword reflex rows), Dhivehi and Sinhala (CC BY-SA/GFDL) ·
+`gretil-legacy` — GRETIL's pre-TEI zips: 21 documents / 81,251
+passages including the Jñāneśvarī and Rāmcaritmānas with
+attributed-era dating (nc, reference-only terms).
+
+**The Wikisource cones, wave 3 complete.** `te-wikisource` — 453
+classical Telugu works / 208,794 passages (the Sanskrit-in-Telugu
+overlap excluded by rule) · `cy-wikisource` — 321 Welsh prints /
+40,126 passages, Salesbury 1547 and both Bibles · `br-wikisource` —
+3,155 Breton pages / 137,115 passages · `jv-wikisource` and
+`su-wikisource` — 36 and 78 documents in Javanese and Sundanese
+scripts (all CC BY-SA).
+
+**The Caucasus-belt instruments.** The `ud` treebanks gain Old
+Georgian (GLC) and Middle Armenian (ArmTDP); `wiktionary-recon`
+gains the Old/Middle Armenian, Old Georgian and Ossetian extracts
+(10,660 entries) — all on the registry's new Caucasus anchors.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored

@@ -606,7 +606,7 @@ br-wikisource:   # P140, 02-sources row 287
   adapter: Nabu::Adapters::BrWikisource
   adopted: "2026-10-21"
   axes: [celtic]
-  wired: false   # adapter + fixtures; the first real sync is a gate step (≈ 75 min — see 02-sources)
+  wired: true    # first sync verified 2026-10-22: 3,155 docs / 137,115 passages, 100 skips-by-rule (the lane's ~3,150 estimate held)
   sync_policy: manual
   # The dated 19th-century Breton cone (the owner-ruled wikisource posture,
   # the Macedonian precedent), census 2026-10-21 — the cone is drawn at
