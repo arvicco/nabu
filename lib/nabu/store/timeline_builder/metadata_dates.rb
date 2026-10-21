@@ -223,6 +223,8 @@ module Nabu
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
           "viet-wikisource" => :structured,
+          "vks" => :structured, # the Korp text elements' text_datefrom/text_dateto, the file's
+          #                       envelope (collection files carry per-passage years too)
           "vuk-danicic" => :structured, # P117-2: the translation era per testament
           #                               (NT 1847, OT 1865–1868), composition class
           "zh-wikisource" => :dynasty_band

@@ -82,7 +82,11 @@ class DerivabilityWritersTest < Minitest::Test
   # law kind. seal_fetch (P89-3) writes canonical/seal/texts/
   # (tmp+rename) + the search-index sidecars + attic copies + its state
   # ledger inside Adapter#fetch — the cantigas_fetch law kind, its
-  # fourth crawl sibling. The P96-4 cbdb adapter writes
+  # fourth crawl sibling. korp_fetch (vks, 2026-10-21) writes
+  # canonical/vks/texts/<CORPUS>/*.jsonl (a .korp-staging tree swapped in
+  # whole) + attic copies + its .korp-fetch.json ledger inside
+  # Adapter#fetch — the iness_fetch law kind (an API harvest, sha-pinned
+  # by content). The P96-4 cbdb adapter writes
   # canonical/cbdb/ inside Adapter#fetch — the downloaded zip
   # (removed after unpack), the unpacked sqlite artifact, and the
   # .cbdb-fetch.json sha pin — the zip_fetch/file_fetch law kind
@@ -166,6 +170,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/litopys_fetch.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
+    nabu/korp_fetch.rb
     nabu/adapters/altaica_shm.rb nabu/adapters/atmo.rb
     nabu/adapters/iedc.rb nabu/adapters/shkz.rb
     nabu/scripta_bulgarica_fetch.rb nabu/elektire_fetch.rb

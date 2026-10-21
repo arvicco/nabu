@@ -6314,6 +6314,24 @@ viet-wikisource:
   # + CC BY-SA 4.0 transcription → attribution. All lzh.
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
 
+vks:
+  adapter: Nabu::Adapters::Vks
+  adopted: "2026-10-21"
+  axes: [baltic]
+  wired: false   # until the first real harvest is verified
+  sync_policy: manual
+  # VKS — Vanhan kirjasuomen korpus, the Corpus of Old Literary Finnish
+  # (Kotus; Kielipankki Korp version urn:nbn:fi:lb-201407166): the written
+  # Finnish of 1543–1810 — all of Agricola, the 1642 Bible, the hymnals,
+  # the realm's laws and decrees in Finnish, sermons, almanacs, Lizelius'
+  # newspaper — 4,133,202 tokens / 167,400 sentences / 134 text files in
+  # 12 subcorpora. No bulk file exists: Nabu::KorpFetch harvests the
+  # anonymous Korp API sentence by sentence (a measured ~5 minutes, a
+  # progress line per page). One passage per run of the corpus's own
+  # sentence_code (line / verse / paragraph key). EUPL v1.2 (Kielipankki
+  # PUB) → class attribution with the share-alike rider (ruled
+  # 2026-10-21). A closed historical corpus → sync_policy manual.
+
 vuk-danicic:   # P117-2, 02-sources row 248
   adapter: Nabu::Adapters::VukDanicic
   adopted: "2026-10-11"

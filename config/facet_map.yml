@@ -178,6 +178,12 @@ sources:
       dialect: dialect        # Labourdin 5 · Souletin 3 · Gipuzkoan 2 · Alavese · Biscayan ·
       #                         Lower Navarrese · Upper Navarrese (14; Lopez unattributed) —
       #                         the standard attribution, the lect lane's future variety key
+  vks:                        # census 2026-10-21 (pre-flight struct_values): 134 files —
+    fields: #                   the Korp subcorpus on all
+      korp_corpus: collection # VKS_VARIA 71 · LAIT 15 · AGRICOLA 12 · BIBLIA 10 · GANANDER 10 ·
+      #                         VIRRET 4 · LIZELIUS 3 · LPETRI 3 · BJORKQVIST 2 · SAARNAT 2 ·
+      #                         ALMANAKAT 1 · FROSTERUS 1 — folded in config/kind_map.yml
+      author: author          # the title's "Name:" head (Mikael Agricola, Hemminki Maskulainen …)
   senie:                      # census 2026-10-21 (fixture-time, the full release file): 183
     fields: #                   docs; every TEI header carries all four
       genre: genre            # the <domain> text "Garīgie teksti; Bībele, Vecā Derība" —
