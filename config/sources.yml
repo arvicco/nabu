@@ -6382,6 +6382,18 @@ ud:
   # (resolves by identity). The fixture pins the first 50 of 203
   # sentence blocks. EXPECTED SYNC DELTA at the next `bin/nabu sync ud`:
   # +1 repo clone / +1 doc / +203 passages (1,927 word lines).
+  # 2026-10-21: TREEBANKS grew to THIRTY-SIX — the Caucasus pair:
+  # old-georgian-glc (UD_Old_Georgian-GLC, Ilia State University; 151
+  # OGLC-sampled sentences / 6,884 word lines, test only; language oge —
+  # the library's first Old Georgian text lane) and middle-armenian-armtdp
+  # (UD_Middle_Armenian-ArmTDP, Yerevan State University; 27 sentences /
+  # 1,093 word lines, test only, a law code + a medical treatise;
+  # language axm — the first axm text lane). Both LICENSE.txt verbatim
+  # BY-SA 4.0 + README agrees → per-document `attribution` override.
+  # Axis-less (no Caucasus desk exists; the classical-armenian-caval
+  # precedent). EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +2
+  # repo clones / +2 docs / +178 passages (151 + 27). The fetch-breaker
+  # minimum tripping count moves 7 → 8 (0.2 × 36 = 7.2).
 
 uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource

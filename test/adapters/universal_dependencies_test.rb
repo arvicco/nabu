@@ -39,11 +39,13 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:latin-llct:la_llct-ud-test-head50",
     "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
     "urn:nabu:ud:latin-udante:la_udante-ud-test-head50",
+    "urn:nabu:ud:middle-armenian-armtdp:axm_armtdp-ud-test",
     "urn:nabu:ud:middle-french-profiterole:frm_profiterole-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
     "urn:nabu:ud:old-french-profiterole:fro_profiterole-ud-test-head50",
+    "urn:nabu:ud:old-georgian-glc:oge_glc-ud-test-head20",
     "urn:nabu:ud:old-irish-dipsgg:incomplete-head10",
     "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50",
     "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
@@ -434,6 +436,53 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "ates arkiaevais akenanogavos midai lavagtaei vanaktei edaes", first.text
   end
 
+  # UD_Old_Georgian-GLC: 151 sentences sampled from the Old Georgian
+  # Language Corpus (Lobzhanidze, Ilia State University), test split only,
+  # Mkhedruli text with a `# translit` comment per sentence. LICENSE.txt
+  # verbatim BY-SA 4.0 and README metadata agree (read 2026-10-21) →
+  # attribution; language `oge` as UD files it. Fixture: first 20 blocks.
+  def test_old_georgian_glc_registers_and_round_trips
+    treebank = Nabu::Adapters::UniversalDependencies::TREEBANKS.fetch("old-georgian-glc")
+    assert_equal ["https://github.com/UniversalDependencies/UD_Old_Georgian-GLC", "oge", "CC BY-SA 4.0", "attribution"],
+                 treebank.values_at(:repo, :language, :license, :license_class)
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    document = adapter.parse(ud_ref("urn:nabu:ud:old-georgian-glc:oge_glc-ud-test-head20"))
+    assert_equal 20, document.size, "sentence blocks in the head-20 trim"
+    assert_equal "oge", document.language
+    assert_equal "attribution", document.license_override
+    assert_equal %w[fiction], document.metadata["genres"], "the README Genre line"
+    first = document.passages.first
+    assert_equal "urn:nabu:ud:old-georgian-glc:oge_glc-ud-test-head20:OGLC_00001", first.urn
+    assert first.text.start_with?("თითოეულნი ჩუენ შორისთა საქმეთაგანნი"), first.text
+  end
+
+  # UD_Middle_Armenian-ArmTDP: the Middle Armenian slice of ArmTDP v3.0
+  # (Yerevan State University), test split only in the v2.18 release —
+  # 27 sentences in two newdoc runs (a law code, a medical treatise).
+  # LICENSE.txt verbatim BY-SA 4.0 and README metadata agree (read
+  # 2026-10-21) → attribution; language `axm`. Fixture: the whole file.
+  def test_middle_armenian_armtdp_registers_and_round_trips
+    treebank = Nabu::Adapters::UniversalDependencies::TREEBANKS.fetch("middle-armenian-armtdp")
+    assert_equal ["https://github.com/UniversalDependencies/UD_Middle_Armenian-ArmTDP", "axm", "CC BY-SA 4.0",
+                  "attribution"], treebank.values_at(:repo, :language, :license, :license_class)
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    document = adapter.parse(ud_ref("urn:nabu:ud:middle-armenian-armtdp:axm_armtdp-ud-test"))
+    assert_equal 27, document.size, "every sentence of the released test split"
+    assert_equal "axm", document.language
+    assert_equal "attribution", document.license_override
+    assert_equal %w[legal medical], document.metadata["genres"], "the README Genre line"
+    first = document.passages.first
+    assert_equal "urn:nabu:ud:middle-armenian-armtdp:axm_armtdp-ud-test:legal-00AA-00010IDB", first.urn
+    assert first.text.start_with?("Չէ իրավունք որ թագաւոր անպսակ"), first.text
+    # The `# doc_title` work titles (opening each newdoc run beside its id)
+    # ride every sentence of their run as the "title" annotation.
+    assert_equal %w[Դատաստանագիրք legal-00AA], first.annotations.values_at("title", "newdoc_id")
+    medical = document.passages.find { |p| p.annotations["newdoc_id"] == "medical-00AB" } || flunk("medical run")
+    assert_equal "Քննութիւն բնութեան մարդոյ եւ նորին ցաւոց (Դուռն վասն օձից խայթելոյն նշանացն)",
+                 medical.annotations["title"]
+    assert_equal "Դատաստանագիրք", document.passages[1].annotations["title"], "document-scoped, not block-scoped"
+  end
+
   # The Romance pack flows through the same unchanged annotation→index
   # plumbing: the two Latin treebanks contribute rows to the ALREADY
   # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
@@ -515,7 +564,8 @@ class UniversalDependenciesTest < Minitest::Test
                       icelandic-icepahc
                       old-east-slavic-birchbark old-east-slavic-rnc
                       old-east-slavic-ruthenian old-irish-dipwbg
-                      tupinamba-tudet guarani-oldtudet phrygian-kul].freeze
+                      tupinamba-tudet guarani-oldtudet phrygian-kul
+                      old-georgian-glc middle-armenian-armtdp].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
                   sanskrit-vedic old-irish-dipsgg].freeze
 
@@ -560,7 +610,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_thirty_five_files_sorted_by_urn
+  def test_discover_finds_exactly_thirty_seven_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -568,7 +618,7 @@ class UniversalDependenciesTest < Minitest::Test
   # --- the README Genre line (upstream's own treebank classification) -----
 
   # Every UD treebank README's machine-readable block carries a `Genre:`
-  # line of space-separated UD genre tags (all 34 held treebanks); each
+  # line of space-separated UD genre tags (all 36 held treebanks); each
   # document of the treebank carries them verbatim as "genres" (the
   # facet_map genre facet), at document grain — a treebank-level claim.
   def test_the_readme_genre_line_rides_every_document_of_the_treebank
@@ -1002,14 +1052,14 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST SEVEN repos each lose their only
-      # treebank file. Re-derived at THIRTY treebanks (P77-3 italian-old,
-      # exactly as the previous derivation predicted — "a THIRTIETH
-      # treebank pushes the minimum to 7"): the guard trips on strictly
-      # greater, `doomed > 0.2 × ingestible`, so 7 > 0.2 × 30 = 6 trips
-      # while 6 does not — 7 is the new minimum tripping count.
+      # First repo gains a file; the LAST EIGHT repos each lose their only
+      # treebank file. Re-derived at THIRTY-SIX treebanks (old-georgian-glc
+      # + middle-armenian-armtdp): the guard trips on strictly greater,
+      # `doomed > 0.2 × ingestible`, so 8 > 0.2 × 36 = 7.2 trips while 7
+      # does not — 8 is the new minimum tripping count (it was 7 from
+      # thirty through thirty-four treebanks).
       first = slugs.first
-      doomed = slugs.last(7)
+      doomed = slugs.last(8)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -1027,7 +1077,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 7"
+      assert_includes report.notes, "atticked 8"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"

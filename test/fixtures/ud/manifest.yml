@@ -196,3 +196,19 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Chinese-Kyoto/master/README.md
     whole: false
     trim: the machine-readable metadata block only (15 lines; Genre nonfiction poetry)
+  - path: old-georgian-glc/oge_glc-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Georgian-GLC/master/oge_glc-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of oge_glc-ud-test.conllu (151 blocks upstream, 943,229 B -> 94,243 B; long Translit-bearing sentences, hence head-20; Old Georgian, retrieved 2026-10-21)
+  - path: middle-armenian-armtdp/axm_armtdp-ud-test.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Middle_Armenian-ArmTDP/master/axm_armtdp-ud-test.conllu
+    whole: true
+    trim: none
+  - path: old-georgian-glc/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Georgian-GLC/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre fiction)
+  - path: middle-armenian-armtdp/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Middle_Armenian-ArmTDP/master/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre legal medical)

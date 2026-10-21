@@ -481,6 +481,40 @@ module Nabu
         "phrygian-kul" => {
           repo: "https://github.com/UniversalDependencies/UD_Phrygian-KUL",
           language: "xpg", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Old Georgian — GLC (Irina Lobzhanidze, Ilia State University):
+        # 151 sentences (6,884 word lines, 302 MWT ranges — the case
+        # postpositions UD splits off) sampled from the Old Georgian
+        # Language Corpus, test split only (since UD v2.17; the 151 test
+        # utterances landed in v2.18). Mkhedruli text with a `# translit`
+        # sentence comment and a per-token Translit= MISC. The sampled
+        # sentences carry no source-text or date comment (bare OGLC_nnnnn
+        # sent_ids) — nothing to mine for the date/place axes. Language
+        # `oge` (ISO 639-3 Old Georgian). LICENSE.txt verbatim CC BY-SA
+        # 4.0 ("The treebank is licensed under the Creative Commons
+        # License Attribution-ShareAlike 4.0 International"), README
+        # metadata `License: CC BY-SA 4.0` agrees (read 2026-10-21) →
+        # attribution. The treebank's own grant governs here; the parent
+        # OGLC site's separate terms do not reach this release.
+        "old-georgian-glc" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_Georgian-GLC",
+          language: "oge", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Middle Armenian — ArmTDP (Anna S. Danielyan, Marat M. Yavrumyan,
+        # Yerevan State University): the Middle Armenian component of
+        # ArmTDP v3.0, manually annotated; initial release v2.18 = 27
+        # sentences (1,093 word lines, 65 MWT ranges) in two newdoc runs
+        # — `doc_title = Դատաստանագիրք` (a law code, legal-00AA) and
+        # `Քննութիւն բնութեան մարդոյ եւ նորին ցաւոց …` (a medical treatise —
+        # its snakebite chapter; medical-00AB); both titles ride the passages.
+        # Test split only; dev already carries a ~4.5x larger test file
+        # (410,264 B vs 91,628 B on master) — the next UD release grows it.
+        # Language `axm` (ISO 639-3 Middle Armenian). LICENSE.txt verbatim
+        # CC BY-SA 4.0, README metadata agrees (read 2026-10-21) →
+        # attribution.
+        "middle-armenian-armtdp" => {
+          repo: "https://github.com/UniversalDependencies/UD_Middle_Armenian-ArmTDP",
+          language: "axm", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 
@@ -617,7 +651,7 @@ module Nabu
       end
 
       # The treebank README's `Genre:` line (GENRE_LINE) — UD's
-      # machine-readable metadata block, present in all 34 held treebanks
+      # machine-readable metadata block, present in all 36 held treebanks
       # (census 2026-10-19: "bible fiction nonfiction government",
       # "nonfiction poetry", "grammar-examples" …) — as its space-separated
       # UD genre tags, verbatim. A treebank-level claim, so every document
