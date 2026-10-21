@@ -654,6 +654,13 @@ sources:
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
   # the source IS a canon or a dynastic record — one ruled line each) ---
+  obimd:               # census 2026-10-21: 10,077 Heji/Huadong rubbings
+    # Shang oracle-bone inscriptions are royal and princely divination by
+    # construction — charge, prognostication, verification, with the
+    # crack numbers (OracleSequence) and outcome notes (OracleOutcome)
+    # upstream's own group types; the few record-keeping notches ride the
+    # same bones. A whole-source declaration, the parse-time mapping call.
+    source_kind: divination/oracle
   damos:               # census 2026-10-18: 5,932 items, 29 collections
     # Linear B is palatial bookkeeping by construction — tablets,
     # sealings and labels recording personnel, livestock, commodities

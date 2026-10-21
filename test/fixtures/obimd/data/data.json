@@ -1,0 +1,496 @@
+[
+    {
+        "Facsimile": "facsimile/h00002.jpg",
+        "Rubbing": "rubbing/h00002.jpg",
+        "RubbingName": "H2",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "558,581,80,218",
+                        "OrderNumber": 5,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "xkubtjk815",
+                        "SubLabel": "xkubtjk815"
+                    },
+                    {
+                        "Position": "824,483,94,88",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "9xhq4zclpe",
+                        "SubLabel": "9xhq4zclpe"
+                    },
+                    {
+                        "Position": "797,583,143,161",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "ve0ebxq620",
+                        "SubLabel": "ve0ebxq620"
+                    },
+                    {
+                        "Position": "829,769,46,67",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "pzvzykmf5e",
+                        "SubLabel": "pzvzykmf5e"
+                    },
+                    {
+                        "Position": "526,137,150,151",
+                        "OrderNumber": 3,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "qmvfvw99v9",
+                        "SubLabel": "qmvfvw99v9"
+                    },
+                    {
+                        "Position": "572,846,125,97",
+                        "OrderNumber": 6,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "lstx3iocs6",
+                        "SubLabel": "lstx3iocs6"
+                    },
+                    {
+                        "Position": "508,332,135,214",
+                        "OrderNumber": 4,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "52a130pcmy",
+                        "SubLabel": "52a130pcmy"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/h00224.jpg",
+        "Rubbing": "rubbing/h00224.jpg",
+        "RubbingName": "H224",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "442,347,79,154",
+                        "OrderNumber": 5,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "6p9s6p6wyb",
+                        "SubLabel": "6p9s6p6wyb"
+                    },
+                    {
+                        "Position": "386,474,56,98",
+                        "OrderNumber": 3,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "dhewuxyotl",
+                        "SubLabel": "dhewuxyotl"
+                    },
+                    {
+                        "Position": "386,406,52,65",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "kkt3pdctdg",
+                        "SubLabel": "2vsix7bgfw"
+                    },
+                    {
+                        "Position": "409,323,44,78",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "h0gzv3styy",
+                        "SubLabel": "h0gzv3styy"
+                    },
+                    {
+                        "Position": "377,236,62,55",
+                        "OrderNumber": 0,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    },
+                    {
+                        "Position": "365,583,103,290",
+                        "OrderNumber": 4,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "tbecf7rhkr",
+                        "SubLabel": "iwct7l5l2h"
+                    }
+                ]
+            },
+            {
+                "GroupCategory": "OracleSequence",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "241,414,65,78",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "8gxzzbv7w8",
+                        "SubLabel": "8gxzzbv7w8"
+                    },
+                    {
+                        "Position": "205,660,49,43",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "p77d58vew4",
+                        "SubLabel": "p77d58vew4"
+                    },
+                    {
+                        "Position": "153,886,50,45",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "8gxzzbv7w8",
+                        "SubLabel": "8gxzzbv7w8"
+                    },
+                    {
+                        "Position": "335,831,49,28",
+                        "OrderNumber": 3,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "jrzjjh3g1r",
+                        "SubLabel": "jrzjjh3g1r"
+                    }
+                ]
+            },
+            {
+                "GroupCategory": "OracleOutcome1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "296,758,53,92",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "mmknbwc3qf",
+                        "SubLabel": "mmknbwc3qf"
+                    },
+                    {
+                        "Position": "194,819,102,92",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "kvjaqv4fa1",
+                        "SubLabel": "kvjaqv4fa1"
+                    },
+                    {
+                        "Position": "268,613,58,82",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "mmknbwc3qf",
+                        "SubLabel": "mmknbwc3qf"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/h04413.jpg",
+        "Rubbing": "rubbing/h04413.jpg",
+        "RubbingName": "H4413",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "94,182,76,110",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "61p261idyu",
+                        "SubLabel": "61p261idyu"
+                    },
+                    {
+                        "Position": "106,51,45,118",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "ji97td3npi",
+                        "SubLabel": "ji97td3npi"
+                    },
+                    {
+                        "Position": "99,25,60,17",
+                        "OrderNumber": 0,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    },
+                    {
+                        "Position": "94,302,75,36",
+                        "OrderNumber": 2,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/h08342.jpg",
+        "Rubbing": "rubbing/h08342.jpg",
+        "RubbingName": "H8342",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "127,175,64,81",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "4n6v7cj6m9",
+                        "SubLabel": "4n6v7cj6m9"
+                    },
+                    {
+                        "Position": "153,264,71,79",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "eadbesllam",
+                        "SubLabel": "eadbesllam"
+                    },
+                    {
+                        "Position": "135,105,36,38",
+                        "OrderNumber": 0,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/h09830.jpg",
+        "Rubbing": "rubbing/h09830.jpg",
+        "RubbingName": "H9830",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence2",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "229,63,44,130",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "52a130pcmy",
+                        "SubLabel": "52a130pcmy"
+                    },
+                    {
+                        "Position": "181,87,42,114",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "xkubtjk815",
+                        "SubLabel": "xkubtjk815"
+                    },
+                    {
+                        "Position": "231,10,35,46",
+                        "OrderNumber": 0,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            },
+            {
+                "GroupCategory": "InscriptionSentence2",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "205,229,56,53",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "oesivb520y",
+                        "SubLabel": "oesivb520y"
+                    },
+                    {
+                        "Position": "151,218,47,76",
+                        "OrderNumber": 2,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "y0f5gu3q0a",
+                        "SubLabel": "y0f5gu3q0a"
+                    },
+                    {
+                        "Position": "220,294,46,43",
+                        "OrderNumber": 1,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    },
+                    {
+                        "Position": "157,310,42,44",
+                        "OrderNumber": 3,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            },
+            {
+                "GroupCategory": "OracleSequence2",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "109,228,40,16",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "jrzjjh3g1r",
+                        "SubLabel": "jrzjjh3g1r"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/h14717.jpg",
+        "Rubbing": "rubbing/h14717.jpg",
+        "RubbingName": "H14717",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "270,179,63,108",
+                        "OrderNumber": 3,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "jjm889wxay",
+                        "SubLabel": "jjm889wxay"
+                    },
+                    {
+                        "Position": "262,310,74,249",
+                        "OrderNumber": 4,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "9tpoluos1q",
+                        "SubLabel": "9tpoluos1q"
+                    },
+                    {
+                        "Position": "249,42,70,144",
+                        "OrderNumber": 2,
+                        "SeatFont": 1,
+                        "Mark": 2,
+                        "Label": null,
+                        "SubLabel": null
+                    },
+                    {
+                        "Position": "129,391,75,114",
+                        "OrderNumber": 1,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/h17138.jpg",
+        "Rubbing": "rubbing/h17138.jpg",
+        "RubbingName": "H17138",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "81,29,37,34",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "qmvfvw99v9",
+                        "SubLabel": "qmvfvw99v9"
+                    },
+                    {
+                        "Position": "73,64,40,35",
+                        "OrderNumber": 2,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    },
+                    {
+                        "Position": "120,32,19,34",
+                        "OrderNumber": 0,
+                        "SeatFont": 1,
+                        "Mark": -1,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            },
+            {
+                "GroupCategory": "Uncertain",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "35,71,36,46",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": 0,
+                        "Label": null,
+                        "SubLabel": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Facsimile": "facsimile/hd514.jpg",
+        "Rubbing": "rubbing/hd514.jpg",
+        "RubbingName": "HD514",
+        "RecordUtilSentenceGroupVoList": [
+            {
+                "GroupCategory": "InscriptionSentence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "462,359,56,98",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "yhwcwu1uot",
+                        "SubLabel": "yhwcwu1uot"
+                    },
+                    {
+                        "Position": "522,346,56,101",
+                        "OrderNumber": 1,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "dhewuxyotl",
+                        "SubLabel": "dhewuxyotl"
+                    }
+                ]
+            },
+            {
+                "GroupCategory": "OracleSequence1",
+                "RecordUtilOracleCharVoList": [
+                    {
+                        "Position": "499,444,64,21",
+                        "OrderNumber": 0,
+                        "SeatFont": 0,
+                        "Mark": -1,
+                        "Label": "jrzjjh3g1r",
+                        "SubLabel": "jrzjjh3g1r"
+                    }
+                ]
+            }
+        ]
+    }
+]

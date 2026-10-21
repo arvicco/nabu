@@ -3660,6 +3660,29 @@ obi-burmese:   # P92-3
   # the start of the next inscription mint section keys (37.1) —
   # censused in metadata, never dropped, never duplicated.
 
+obimd:   # 02-sources row 284
+  adapter: Nabu::Adapters::Obimd
+  adopted: "2026-10-21"
+  axes: [sinitic]
+  wired: false   # first sync owner-fired at the gate (checklist §6: bin/nabu
+                 # sync obimd — three revision-pinned HF files, ~42 MB —
+                 # then eyeball nabu show urn:nabu:obimd:H224 and 4 random
+                 # rubbings, flip)
+  sync_policy: manual
+  # OBIMD — the Oracle Bone Inscriptions Multi-modal Dataset (Anyang
+  # Normal University KLOBIP; HF KLOBIP/OBIMD, DOI 10.57967/hf/7821; CC BY
+  # 4.0 on the dataset card + LICENSE → attribution; the Zenodo MIT record
+  # is the code release). The library's earliest Chinese stratum: Late
+  # Shang divination inscriptions from the Heji (H, 9,913) and Huadong
+  # (HD, 164) corpora. Document = rubbing, passage = inscription group
+  # (sentence / oracle sequence / outcome / uncertain) in reading order,
+  # text = upstream's reference modern character per glyph UID (□ lost
+  # position, ⬚ no encoded glyph), UIDs + Mark codes in annotations.
+  # Language och. Images (770 MB of zips) never fetched — text layer only.
+  # EXPECTED FIRST SYNC: 10,077 docs / 21,941 passages, 0 quarantined
+  # (census parse 2026-10-21 of the revision-pinned data.json); 1 card
+  # file skipped by rule.
+
 ociana:
   adapter: Nabu::Adapters::Ociana
   adopted: "2026-10-18"
