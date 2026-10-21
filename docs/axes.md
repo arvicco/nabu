@@ -283,7 +283,7 @@ Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa,
 
 The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
 
-**Members** (1): `senie`
+**Members** (2): `senie`, `vks`
 
 ### local
 

@@ -882,6 +882,23 @@ sources:
       "devotional translation": exegesis         # 4 — the Imitation of Christ ×3 (Pouvreau,
       #   Chourio, Maister) and Rodríguez's Ejercicio (Lopez): same reading as above
       "miscellany": unknown                      # 1 — Larramendi's letters, poems and sermons
+  vks:                # census: 134 text files in 12 Korp subcorpora, 2026-10-21 — the
+    facet: collection # subcorpus IS a genre shelf for five of them; the author-named
+    map:              # shelves are folded where the author's corpus is one genre
+      "VKS_BIBLIA": scripture                    # 10 files — the 1642 Bible
+      "VKS_LAIT": legal/law                      # 15 — laws and decrees in Finnish, 1555–1810
+      "VKS_SAARNAT": sermon                      # 2 — the 17th- and 18th-c. sermon collections
+      "VKS_VIRRET": hymn-prayer/hymn             # 4 — the hymnals (1583–1701)
+      "VKS_ALMANAKAT": periodical                # 1 — the almanacs 1705–1809, an annual
+      #   serial issued under a running title
+      "VKS_LPETRI": sermon                       # 3 — Laurentius Petri's sermons (1644–70)
+      "VKS_BJORKQVIST": sermon                   # 2 — Björkqvist's gospel postil (1801)
+    deliberate:
+      "VKS_AGRICOLA": "an author shelf — primer, prayer book, New Testament, psalter, prophets"
+      "VKS_GANANDER": "an author shelf of mixed prints"
+      "VKS_LIZELIUS": "an author shelf — the newspaper beside proclamations"
+      "VKS_FROSTERUS": "an author shelf (one popular natural-theology book)"
+      "VKS_VARIA": "the miscellany shelf (71 files), not a genre"
   senie:              # census: 183 documents, 2026-10-21 — the TEI header <domain>,
     facet: genre      # "<genre>; <subgenre>" in Latvian (split on ";" → two values)
     map:

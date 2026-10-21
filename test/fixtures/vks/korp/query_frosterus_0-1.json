@@ -1,0 +1,251 @@
+{
+"kwic": [
+{
+"corpus": "VKS_FROSTERUS",
+"match": {
+"position": 0,
+"start": 0,
+"end": 1
+},
+"structs": {
+"text_title": "Johan Frosterus: Hy\u00f6dyllinen Huwitus Luomisen T\u00f6ist\u00e4, Yxinkertaisille awuxi Jumalan  Hywyden Tundoon Ja Palweluxeen (1791)",
+"div_n": "d1",
+"span_page": "1",
+"sentence_id": "1",
+"sentence_code": "JAFro1791-1",
+"text_dateto": "17911231",
+"text_year": "1791",
+"supplement_cRef": null,
+"sentence_type": "sentence",
+"sentence_cRef": "",
+"text_filename": "jafro1791.sen",
+"text_datefrom": "17910101"
+},
+"tokens": [
+{
+"word": "Hy\u00f6dyllinen",
+"word_completed": "Hy\u00f6dyllinen",
+"word_tilde": "Hy\u00f6dyllinen"
+},
+{
+"word": "Huwitus",
+"word_completed": "Huwitus",
+"word_tilde": "Huwitus"
+},
+{
+"word": "Luomisen",
+"word_completed": "Luomisen",
+"word_tilde": "Luomisen"
+},
+{
+"word": "T\u00f6ist\u00e4",
+"word_completed": "T\u00f6ist\u00e4",
+"word_tilde": "T\u00f6ist\u00e4"
+},
+{
+"word": ",",
+"word_completed": ",",
+"word_tilde": ","
+},
+{
+"word": "Yxinkertaisille",
+"word_completed": "Yxinkertaisille",
+"word_tilde": "Yxinkertaisille"
+},
+{
+"word": "awuxi",
+"word_completed": "awuxi",
+"word_tilde": "awuxi"
+},
+{
+"word": "Jumalan",
+"word_completed": "Jumalan",
+"word_tilde": "Jumalan"
+},
+{
+"word": "Hywyden",
+"word_completed": "Hywyden",
+"word_tilde": "Hywyden"
+},
+{
+"word": "Tundoon",
+"word_completed": "Tundoon",
+"word_tilde": "Tundoon"
+},
+{
+"word": "Ja",
+"word_completed": "Ja",
+"word_tilde": "Ja"
+},
+{
+"word": "Palweluxeen",
+"word_completed": "Palweluxeen",
+"word_tilde": "Palweluxeen"
+},
+{
+"word": ".",
+"word_completed": ".",
+"word_tilde": "."
+}
+]
+},
+{
+"corpus": "VKS_FROSTERUS",
+"match": {
+"position": 13,
+"start": 0,
+"end": 1
+},
+"structs": {
+"text_title": "Johan Frosterus: Hy\u00f6dyllinen Huwitus Luomisen T\u00f6ist\u00e4, Yxinkertaisille awuxi Jumalan  Hywyden Tundoon Ja Palweluxeen (1791)",
+"div_n": "d1",
+"span_page": "1",
+"sentence_id": "2",
+"sentence_code": "JAFro1791-1",
+"text_dateto": "17911231",
+"text_year": "1791",
+"supplement_cRef": null,
+"sentence_type": "sentence",
+"sentence_cRef": "",
+"text_filename": "jafro1791.sen",
+"text_datefrom": "17910101"
+},
+"tokens": [
+{
+"word": "1",
+"word_completed": "1",
+"word_tilde": "1"
+},
+{
+"word": ".",
+"word_completed": ".",
+"word_tilde": "."
+},
+{
+"word": "Mos",
+"word_completed": "Mos",
+"word_tilde": "Mos"
+},
+{
+"word": ".",
+"word_completed": ".",
+"word_tilde": "."
+},
+{
+"word": "Kir",
+"word_completed": "Kir",
+"word_tilde": "Kir"
+},
+{
+"word": ".",
+"word_completed": ".",
+"word_tilde": "."
+},
+{
+"word": "1:",
+"word_completed": "1:",
+"word_tilde": "1:"
+},
+{
+"word": "31",
+"word_completed": "31",
+"word_tilde": "31"
+},
+{
+"word": ".",
+"word_completed": ".",
+"word_tilde": "."
+},
+{
+"word": "Jumala",
+"word_completed": "Jumala",
+"word_tilde": "Jumala"
+},
+{
+"word": "katzoi",
+"word_completed": "katzoi",
+"word_tilde": "katzoi"
+},
+{
+"word": "kaikkia",
+"word_completed": "kaikkia",
+"word_tilde": "kaikkia"
+},
+{
+"word": "kuin",
+"word_completed": "kuin",
+"word_tilde": "kuin"
+},
+{
+"word": "h\u00e4n",
+"word_completed": "h\u00e4n",
+"word_tilde": "h\u00e4n"
+},
+{
+"word": "tehnyt",
+"word_completed": "tehnyt",
+"word_tilde": "tehnyt"
+},
+{
+"word": "oli",
+"word_completed": "oli",
+"word_tilde": "oli"
+},
+{
+"word": ",",
+"word_completed": ",",
+"word_tilde": ","
+},
+{
+"word": "ja",
+"word_completed": "ja",
+"word_tilde": "ja"
+},
+{
+"word": "katzo",
+"word_completed": "katzo",
+"word_tilde": "katzo"
+},
+{
+"word": ",",
+"word_completed": ",",
+"word_tilde": ","
+},
+{
+"word": "ne",
+"word_completed": "ne",
+"word_tilde": "ne"
+},
+{
+"word": "olit",
+"word_completed": "olit",
+"word_tilde": "olit"
+},
+{
+"word": "sangen",
+"word_completed": "sangen",
+"word_tilde": "sangen"
+},
+{
+"word": "hyw\u00e4t",
+"word_completed": "hyw\u00e4t",
+"word_tilde": "hyw\u00e4t"
+},
+{
+"word": ".",
+"word_completed": ".",
+"word_tilde": "."
+}
+]
+}
+],
+"hits": 967,
+"corpus_hits": {
+"VKS_FROSTERUS": 967
+},
+"corpus_order": [
+"VKS_FROSTERUS"
+],
+"query_data": "eJwFwUESgCAIAMAvARJqnevSoRmtro0g_P8J7QqURFOBQIMZQ4pmSsJJsiuKLcDgCzKRKyuGesxR3BCGmVXb3rN_R7v6vbenr1XyD47gFv4=\n",
+"time": 0.6099307537078857
+}

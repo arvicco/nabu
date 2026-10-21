@@ -1161,6 +1161,22 @@ sources:
         a title-page imprint miner is a recorded future look, declared coarse until then"}
     script: {posture: implied, note: "Latin script; the Fraktur-era letter forms are transcribed
         verbatim (ſ, ẜ, Ꞩ, ß, the macron and tilde marks)"}
+  vks:
+    # kind: machine-postured — the vks fold in kind_map.yml over the Korp
+    # subcorpus (the collection facet).
+    lect: {posture: pending, note: "candidate fi:old (Old Literary Finnish, vanha kirjasuomi —
+        Agricola 1543 to the turn of the 19th c., the band VKS itself spans: 1543–1810) —
+        nabu-lects carries no fi anchor at all yet; bare fi until the aggregated
+        Baltic–Finnic–Basque package mints fi + fi:old and a date-band rule stages the
+        corpus. Swedish and Latin runs inside the works read fi — the Korp kwic carries no
+        foreign spans (declared coarse)"}
+    dating: {posture: dated, note: "every Korp text element's text_datefrom/text_dateto — the
+        file's envelope on the :structured lane; the collection files (decrees, sermons,
+        almanacs) also date each passage by its own element"}
+    places: {posture: unplaced, note: "VKS carries no place field (imprint towns stay inside the
+        title pages' text)"}
+    script: {posture: implied, note: "Latin script; the corpus's word layer is the text (the
+        abbreviation completions ride as expansions)"}
   scripta-bulgarica:   # P107-8
     kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
     lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old
