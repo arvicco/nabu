@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-kn
+adapter_test: test/adapters/wiktionary_kn_test.rb
+retrieved: 2026-10-21
+files:
+  - path: kaikki.org-dictionary-Kannada.jsonl
+    url: https://kaikki.org/dictionary/Kannada/kaikki.org-dictionary-Kannada.jsonl
+    whole: false
+    trim: >-
+      the 3 complete JSONL lines with word in {ನುಡಿ, ಒಂದು, ಬಸವ},
+      byte-verbatim in upstream order, of 2,741 lines

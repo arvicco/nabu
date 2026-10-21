@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-pra
+adapter_test: test/adapters/wiktionary_pra_test.rb
+retrieved: 2026-10-21
+files:
+  - path: kaikki.org-dictionary-Prakrit.jsonl
+    url: https://kaikki.org/dictionary/Prakrit/kaikki.org-dictionary-Prakrit.jsonl
+    whole: false
+    trim: >-
+      the 3 complete JSONL lines with word in {𑀓𑀇, 𑀫𑀳𑀼, 𑀚𑀸𑀬},
+      byte-verbatim in upstream order, of 2,712 lines

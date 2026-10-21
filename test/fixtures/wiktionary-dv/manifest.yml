@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-dv
+adapter_test: test/adapters/wiktionary_dv_test.rb
+retrieved: 2026-10-21
+files:
+  - path: kaikki.org-dictionary-Dhivehi.jsonl
+    url: https://kaikki.org/dictionary/Dhivehi/kaikki.org-dictionary-Dhivehi.jsonl
+    whole: false
+    trim: >-
+      the 3 complete JSONL lines with word in {ދިވެހި, ފޮތް, މާލެ},
+      byte-verbatim in upstream order, of 2,047 lines
