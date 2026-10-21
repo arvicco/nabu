@@ -145,10 +145,18 @@ module Nabu
       index.fetch("books").each_with_object({}) do |entry, map|
         next unless entry.is_a?(Hash) && @select.call(entry)
 
-        map[relpath!(entry, base)] = entry["json_url"]
+        rel = relpath!(entry, base)
+        map[rel] = "#{base}/#{rel}" # raw key; #encode makes the one wire form
       end
     end
 
+    # The raw bucket key (upstream's exact bytes — the on-disk relpath).
+    # Index generations differ: through 2026-08 json_url carried the raw
+    # key (spaces, commas verbatim); the 2026-10-02 generation
+    # percent-encodes it. Both decode to the same key, so a held file never
+    # reads as "left the index" across the switch. A raw key with a
+    # literal %XX sequence would be mis-read — censused absent (zero "%" in
+    # every raw-key generation held).
     def relpath!(entry, base)
       url = entry["json_url"]
       unless url.is_a?(String) && url.start_with?("#{base}/")
@@ -156,12 +164,16 @@ module Nabu
                      "#{entry['versionTitle'].inspect} has json_url #{url.inspect} outside base_url #{base}"
       end
 
-      rel = url.delete_prefix("#{base}/")
-      if rel.empty? || rel.start_with?("/") || rel.split("/").include?("..")
+      rel = percent_decode(url.delete_prefix("#{base}/"))
+      if rel.empty? || rel.start_with?("/") || rel.split("/").include?("..") || !rel.valid_encoding?
         raise Error, "#{@index_url}: unsafe bucket path #{rel.inspect}"
       end
 
       rel
+    end
+
+    def percent_decode(value)
+      value.b.gsub(/%\h\h/) { |escape| escape[1, 2].hex.chr }.force_encoding(Encoding::UTF_8)
     end
 
     def parse_index(body)
