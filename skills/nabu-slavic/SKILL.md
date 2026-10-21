@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: slavic
   origin: generated
-  sources: "archiv-slav-phil bg-wikisource ccmh cs-wikisource damaskini elektire eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu"
+  sources: "archiv-slav-phil bg-wikisource ccmh cs-wikisource damaskini elektire eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu"
 ---
 
 # The Slavicist — the `slavic` desk
@@ -47,6 +47,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `ru-wikisource` | Russian Wikisource — the Old East Slavic cone (edition-filtered) | attribution |
 | `scat` | SCAT — St. Petersburg Corpus of Hagiographic Texts (Saint Petersburg State University) | attribution |
 | `scripta-bulgarica` | Scripta Bulgarica — Old/Middle Bulgarian written monuments (BAS) | nc |
+| `senie` | SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL / Latvian Language Institute, University of Latvia) | attribution |
 | `sl-lexica` | sl-lexica — Slovenian historical dictionary shelf (ZRC SAZU / CLARIN.SI) | attribution |
 | `sl-wikisource` | Wikivir (Slovene Wikisource) — the dated cone to 1899 | attribution |
 | `slavistics-pd` | PD Slavistics reference shelf — Miklosich, Berneker, Leskien, Vondrák, Jagić (archive.org scans, uncorrected OCR) | open |
