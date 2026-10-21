@@ -156,9 +156,13 @@ module Nabu
       matching is exact under the fold, never fuzzy; homonyms print
       several cards (cbdb first, then edh, elephantine, aozora, kokubunken).
 
-      `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
-      source's passages (the PlaceMine Han-lane shape). It writes nothing —
-      The apply gate stays closed until an owner ruling on the census.
+      `nabu person mine SOURCE [AUTHORITY]` runs the CENSUS-ONLY name scan:
+      SOURCE's passages against AUTHORITY's name keys (default cbdb; edh,
+      elephantine, … — the scope is always explicit). The lane follows the
+      authority's keys: Han keys match as substrings, alphabetic ones
+      (EDH's Roman names, Elephantine's forms) as whole-word sequences. It
+      writes nothing — the apply gate stays closed until an owner ruling
+      on the census.
 
       Examples:
         nabu person 王安石          # by name
@@ -170,6 +174,7 @@ module Nabu
         nabu person sillok:M_0006771   # a NIKH index-markup person, per source
         nabu person nikh:p094190       # the passage-annotation ref: every NIKH slice holding it
         nabu person mine kanripo   # census the person-name attestations
+        nabu person mine edr edh   # EDH's attested persons against EDR's text
     HELP
     def person(*query_parts)
       return run_person_mine(query_parts[1..]) if query_parts.first == "mine"
@@ -418,24 +423,27 @@ module Nabu
         say "  #{details.join(' · ')}" unless details.empty?
       end
 
-      # `nabu person mine SOURCE` (P97-2): the census-only scan; the
-      # apply gate stays closed until an owner ruling, so there is no --dry-run — dry is
-      # the only mode.
+      # `nabu person mine SOURCE [AUTHORITY]` (P97-2; widened beyond Han):
+      # the census-only scan of SOURCE's text against AUTHORITY's keys; the
+      # apply gate stays closed until an owner ruling, so there is no
+      # --dry-run — dry is the only mode.
       def run_person_mine(args)
-        source = Array(args).first
-        raise Thor::Error, "usage: nabu person mine SOURCE" if source.to_s.empty?
+        source, authority = Array(args)
+        raise Thor::Error, "usage: nabu person mine SOURCE [AUTHORITY]" if source.to_s.empty?
 
+        authority ||= Nabu::Store::PersonIndex::DEFAULT_AUTHORITY
         config = Nabu::Config.load
         catalog = Nabu::Store.connect(config.catalog_path)
-        unless Nabu::Store::PersonIndex.populated?(catalog)
-          raise Thor::Error, "person mine: the person index is not derived — run `nabu sync cbdb` first"
+        unless Nabu::Store::PersonIndex.populated?(catalog, authority: authority)
+          raise Thor::Error, "person mine: the #{authority.inspect} person-index slice is not derived — " \
+                             "sync its source first (nabu sync #{authority})"
         end
 
-        census = Nabu::PersonMine.new(catalog: catalog, progress: progress_reporter)
+        census = Nabu::PersonMine.new(catalog: catalog, authority: authority, progress: progress_reporter)
                                  .census(source: source)
-        say "person mine: #{census.source} × #{census.authority} — #{census.passages} passages " \
-            "scanned against #{census.names_loaded} Han name keys " \
-            "(#{census.names_non_han} non-Han filtered, #{census.names_ambiguous} ambiguous capped; " \
+        say "person mine: #{census.source} × #{census.authority} (#{census.lane} lane) — " \
+            "#{census.passages} passages scanned against #{census.names_loaded} name keys " \
+            "(#{census.names_off_lane} off-lane filtered, #{census.names_ambiguous} ambiguous capped; " \
             "#{format_duration(census.seconds)})"
         census.name_hits.first(15).each do |name, count|
           say format("  %<name>-12s %<count>d passages", name: name, count: count)
