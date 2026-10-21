@@ -149,14 +149,17 @@ module Nabu
     # DataBuild; derivation_fingerprint_test). The research exporter (export
     # dir + export.rb, P121-1) is out on the same footing: it reads the
     # catalog and links journal and writes files under exports/, with its
-    # own purity scan in the same test.
-    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export] + BUILDER_DIRS).freeze
+    # own purity scan in the same test. The CLI's area files (cli/, carved
+    # out of cli.rb) are out on cli.rb's own footing: the operator surface
+    # drives derivation but is not derivation code.
+    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export cli] + BUILDER_DIRS).freeze
     EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
       store/fts_structure.rb
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
       batch_cognates.rb batch_formulas.rb batch_parallels.rb
       link_stamps.rb store/source_content_identity.rb
+      mined_layers.rb store/mined_links.rb store/link_layers.rb links_mine_commands.rb
       suttacentral_parallels.rb library_references.rb corph_dil_references.rb
       ccl_etymologies.rb
       git_fetch.rb zip_fetch.rb file_fetch.rb lfs_fetch.rb wiki_fetch.rb

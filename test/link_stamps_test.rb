@@ -142,6 +142,17 @@ class LinkStampsTest < Minitest::Test
     assert_equal %w[places_registry], after.blame(before.inputs)
   end
 
+  # The place mine withholds the registry's region/rejected names (owner
+  # ruling 2026-10-20), so a new ruling moves its stamp — the next stage
+  # re-mines and the overruled candidates drop.
+  def test_the_registry_rulings_are_a_place_mine_input
+    before = unit(PLACE_MINE)
+    File.write(File.join(@places_tree, "names.yml"), { "kanripo" => { "杜陵" => { "status" => "rejected" } } }.to_yaml)
+    after = Nabu::LinkStamps.new(catalog: @catalog, config: config, registry: nil).unit(PLACE_MINE)
+    assert_equal %w[杜陵], after.inputs.fetch("ruled_out")
+    assert_equal %w[ruled_out], after.blame(before.inputs)
+  end
+
   def test_place_link_without_a_registry_tree_is_volatile
     FileUtils.remove_entry(@places_tree)
     assert_nil unit(PLACE_LINK).stamp
@@ -187,6 +198,39 @@ class LinkStampsTest < Minitest::Test
     end
   ensure
     fulltext&.disconnect
+  end
+
+  # The carve-outs' honesty bound: a carved file leaves the closure only
+  # because the producer's real replay never runs it. Run with a REAL
+  # nabu-places registry (the place pair's decisions path), so a carve
+  # of the registry's Pleiades lane is checked against the code that
+  # actually reads decisions.
+  def test_a_carved_file_is_never_executed_by_its_producers_replay
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["kanripo"])
+    registry = Nabu::Places.new("kanripo" => { "杜陵" => { "status" => "matched", "refs" => ["chgis:hvd_1"] } })
+    [FORMULAS, PLACE_MINE, PLACE_LINK].each do |scope|
+      carved = Nabu::LinkStamps::PRODUCERS.fetch(scope["producer"]).carved
+      refute_empty carved, scope["producer"]
+      executed = executed_lib_files do
+        Nabu::LinkScopeReplay.replay!(scope, db: @catalog, fulltext: fulltext, journal: @journal, config: config,
+                                             places: registry)
+      end
+      rel = executed.map { |file| file.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") }
+      assert_empty rel & carved, "#{scope['producer']} runs a carved file — the carve would hide a code change"
+      closure = Nabu::LinkStamps.code_files(scope["producer"]).map { |f| f.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") }
+      assert_empty closure & carved
+    end
+  ensure
+    fulltext&.disconnect
+  end
+
+  # The narrowing's point: an edit in the place/date filter stack Query::
+  # Scope drags along no longer re-mines the formulas scope.
+  def test_a_carved_files_change_no_longer_moves_the_stamp
+    before = unit(FORMULAS).stamp
+    with_changed_code("query/place_filter.rb") { assert_equal before, unit(FORMULAS).stamp }
+    with_changed_code("query/formulas.rb") { refute_equal before, unit(FORMULAS).stamp }
   end
 
   def test_the_closures_stay_out_of_the_catalog_loaders
@@ -281,6 +325,31 @@ class LinkStampsTest < Minitest::Test
     stamp_after_mine(PLACE_MINE)
     @catalog[:place_index_names].insert(gazetteer: "chgis", place_id: "hvd_2", name_key: "長安")
     assert_equal [%w[formulas aspr]], stamps.plan([FORMULAS, PLACE_MINE], journal: @journal).carried_keys
+  end
+
+  # The cost law: a heavy producer's runs and stamps still sitting in the
+  # journal (awaiting `nabu links migrate-mined`) are PRESERVED by the
+  # stage's opening move — never planned, never dropped.
+  def test_preserved_producers_survive_the_stages_opening_move
+    stamp_after_mine(FORMULAS)
+    heavy = Nabu::Store::LinksJournal.record_run!(@journal, producer: "parallels", scope: "lat", params: {},
+                                                            code_version: "p")
+    Nabu::Store::LinksJournal.write_edge!(@journal, from_urn: "a", to_urn: "b", kind: "parallel", score: 1.0,
+                                                    run_id: heavy)
+    Nabu::Store::LinksJournal.write_scope_stamp!(@journal, producer: "parallels", scope: "lat", stamp: "dirty",
+                                                           inputs: {}, run_ids: [heavy])
+    plan = stamps.plan([FORMULAS], journal: @journal, force_full: true, preserve: %w[parallels])
+    assert_equal [[heavy], [%w[parallels lat]]], [plan.preserved_run_ids, plan.preserved_keys]
+    stamps.prepare!(plan, journal: @journal)
+    assert_equal [heavy], Nabu::Store::LinksJournal.run_ids_for(@journal, producers: %w[parallels])
+    assert_equal 1, @journal[:links].where(kind: "parallel").count
+    assert Nabu::Store::LinksJournal.scope_stamps(@journal).key?(%w[parallels lat])
+    assert_empty Nabu::Store::LinksJournal.run_ids_for(@journal, producers: %w[formulas]), "the cheap re-mine drops"
+
+    unpreserved = stamps.plan([FORMULAS], journal: @journal, force_full: true)
+    stamps.prepare!(unpreserved, journal: @journal)
+    assert_empty Nabu::Store::LinksJournal.run_ids_for(@journal, producers: %w[parallels]),
+                 "without the preserve list the old whole-journal sweep would take it"
   end
 
   def test_a_volatile_scope_never_carries

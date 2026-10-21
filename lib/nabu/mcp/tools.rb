@@ -2022,8 +2022,9 @@ module Nabu
           urn: result.urn, document: result.title,
           kinds: shown.sort.to_h { |kind, edges| [kind, edges.map { |e| link_edge_payload(e, sources) }] },
           runs: result.runs.map do |run|
-            { id: run.id, producer: run.producer, scope: run.scope, params: run.params,
-              code_version: run.code_version, created_at: run.created_at.to_s }
+            row = { id: run.id, producer: run.producer, scope: run.scope, params: run.params,
+                    code_version: run.code_version, created_at: run.created_at.to_s }
+            run.mined? ? row.merge(mined_at: run.mined_at.to_s) : row
           end,
           note: links_note(result, kinds: kinds, limit: limit)
         )
@@ -2032,11 +2033,14 @@ module Nabu
       # detail (P16-2): per-edge evidence — the formula gram, the cognate
       # meet (ref · root [shelf]); nil on parallel edges. source (the
       # reference envelope): the counterpart's source slug, null when the
-      # counterpart no longer resolves in the catalog.
+      # counterpart no longer resolves in the catalog. mined_at (additive,
+      # present ONLY on a mined layer's edge — the heavy class, local/
+      # mined-links.sqlite3): the date its layer was mined.
       def link_edge_payload(edge, sources = {})
-        { direction: edge.direction, urn: edge.urn, document: edge.title,
-          language: edge.language, license_class: edge.license_class,
-          source: sources[edge.urn], score: edge.score, detail: edge.detail }
+        payload = { direction: edge.direction, urn: edge.urn, document: edge.title,
+                    language: edge.language, license_class: edge.license_class,
+                    source: sources[edge.urn], score: edge.score, detail: edge.detail }
+        edge.mined_at ? payload.merge(mined_at: edge.mined_at.to_s) : payload
       end
 
       # { urn => source slug } across the three grains a links counterpart
@@ -2072,6 +2076,10 @@ module Nabu
         parts = ["#{shown} of #{result.total} edges shown (per-kind limit #{limit})"]
         parts << "direction out = this urn's batch anchor discovered the counterpart; in = the reverse"
         parts << "edges are persisted batch output (see runs for provenance); PRESERVE license fields"
+        if kinds.values.flatten.any?(&:mined_at)
+          parts << "an edge carrying mined_at comes from a mined layer — re-mined only on demand, " \
+                   "so it reflects the catalog as of that date"
+        end
         parts.join("; ")
       end
 

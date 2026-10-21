@@ -444,6 +444,7 @@ class InvariantsTest < Minitest::Test
     assert_match(/glaux \(sync/, finding.message)
     refute_match(/live-now/, finding.message)
     assert_match(/1 died after its load/, finding.message)
+    assert_match(%r{bin/nabu runs close-stale}, finding.message, "the finding names its remedy")
   end
 
   def test_a_single_stale_open_row_reads_in_the_singular
@@ -455,6 +456,16 @@ class InvariantsTest < Minitest::Test
   def test_open_rows_inside_the_threshold_are_silent
     open_run("rebuilding", kind: "rebuild",
                            started_at: @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS + 60)
+
+    assert_nil global_finding(:stale_open_runs)
+  end
+
+  # `nabu runs close-stale` settles killed rows "abandoned" — closed
+  # history, so the finding stops counting them.
+  def test_abandoned_rows_are_not_stale_open_runs
+    stale_at = @now - Nabu::Health::Invariants::STALE_OPEN_RUN_SECONDS - 60
+    @ledger[:runs].insert(source_slug: "glaux", kind: "sync", started_at: stale_at,
+                          finished_at: @now, status: "abandoned")
 
     assert_nil global_finding(:stale_open_runs)
   end
@@ -737,12 +748,39 @@ class InvariantsTest < Minitest::Test
     assert(finding.nil? || !finding.message.include?(slug), "a declared passage key is exempt")
   end
 
+  # The mining-law sweep's dates declarations: the modern digital
+  # editions' publication years (kannada/prakrit, the Ollett TEI header's
+  # publicationStmt date) are never text dates, and CDLI's
+  # dates_referenced is consumed by CdliDates + the ruler facet (the
+  # first-N sample only meets its "00.00.00.00" filler).
+  def test_mining_sweep_declares_the_non_text_and_consumed_dates
+    exempt = Nabu::Health::Invariants::MINING_EXEMPT
+    %w[kannada-texts prakrit-texts].each do |slug|
+      assert_match(/digital edition/, exempt.dig(slug, "digital_edition_date").to_s, slug)
+    end
+    assert_match(/\Aconsumed:/, exempt.dig("cdli", "dates_referenced").to_s)
+  end
+
   def test_mining_exempt_entries_each_carry_a_reason
     Nabu::Health::Invariants::MINING_EXEMPT.each do |slug, keys|
       assert_kind_of Hash, keys, "#{slug}: exemptions are key => reason"
       keys.each do |key, reason|
         refute_empty reason.to_s.strip, "#{slug}/#{key}: declared coarseness must state its reason"
       end
+    end
+  end
+
+  # The mining law's places sweep (live census 2026-10-21): the
+  # place-shaped keys that are honestly NOT an origin/findspot claim —
+  # custodial chains, sub-site find context beside a present museum,
+  # in-situ qualifiers, author biography — each declared with its reason.
+  def test_places_sweep_declares_its_non_origin_keys
+    declared = { "gams-zrcalo" => "provenance", "ig-cyprus" => "provenance",
+                 "openiti" => "author_places", "rundata" => "original_site" }
+    declared.each do |slug, key|
+      reason = Nabu::Health::Invariants::MINING_EXEMPT.dig(slug, key)
+      refute_nil reason, "#{slug}/#{key} must be declared"
+      refute_empty reason.strip
     end
   end
 
@@ -883,6 +921,113 @@ class InvariantsTest < Minitest::Test
       with = count.call(journal_path)
       assert_equal without - 1, with,
                    "the mined name (#{mined_name}) stops firing once the journal carries its edge"
+    end
+  end
+
+  # The cost-law fallback: once the place mine WITHHOLDS a ruled
+  # (region/rejected) name, its edges are gone by design — the mine's run
+  # row records the name (params.ruled_out), and that counts as occurring.
+  def test_a_name_the_mine_withheld_by_ruling_is_not_an_orphan
+    Nabu::Store::Source.create(slug: "cdli", name: "CDLI", adapter_class: "T", license_class: "open")
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "nabu-places"))
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-places"), "names.yml"),
+                   File.join(root, "nabu-places"))
+      withheld = Nabu::Places.load_default(canonical_dir: root).decisions_for("cdli").keys.first
+      journal_path = File.join(root, "links.sqlite3")
+      journal = Nabu::Store::LinksJournal.open!(journal_path)
+      Nabu::Store::LinksJournal.record_run!(journal, producer: "place-mine", scope: "cdli:chgis",
+                                                     params: { kind: "place-candidate", ruled_out: { withheld => 7 } },
+                                                     code_version: "t/1")
+      journal.disconnect
+      count = lambda do |path|
+        finding = Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext, ledger: @ledger,
+                                               canonical_dir: root, now: @now, links_journal_path: path)
+                                          .global.find { |f| f.kind == :registry_orphan_names }
+        finding ? finding.message[/\A(\d+)/, 1].to_i : 0
+      end
+      assert_equal count.call(nil) - 1, count.call(journal_path), "the withheld name (#{withheld}) is not an orphan"
+    end
+  end
+
+  # -- the mined layers (the cost law) -----------------------------------------
+
+  def mined_invariants(root, now: @now)
+    Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext, ledger: @ledger, now: now,
+                                 links_journal_path: File.join(root, "links.sqlite3"),
+                                 mined_links_path: File.join(root, "mined-links.sqlite3"))
+  end
+
+  def seed_mined_layer(root, edges:, catalog: { "perseus-latin" => "i1" })
+    inputs = { "producer_code" => Nabu::LinkStamps.code_digests.fetch("parallels") }
+    Nabu::Store::MinedLinks.mine!(File.join(root, "mined-links.sqlite3"), producer: "parallels",
+                                                                          scope: "perseus-latin", stamp: "s",
+                                                                          inputs: inputs, catalog: catalog) do |db|
+      run = Nabu::Store::LinksJournal.record_run!(db, producer: "parallels", scope: "perseus-latin", params: {},
+                                                      code_version: "p/2")
+      edges.each do |from, to|
+        Nabu::Store::LinksJournal.write_edge!(db, from_urn: from, to_urn: to, kind: "parallel", score: 0.5,
+                                                  run_id: run)
+      end
+      Nabu::Store::LinksJournal.finish_run!(db, run)
+    end
+  end
+
+  def seed_latin
+    src = Nabu::Store::Source.create(slug: "perseus-latin", name: "PL", adapter_class: "T", license_class: "open")
+    @db[:sources].where(id: src.id).update(last_ingest_identity: "i1")
+    doc = Nabu::Store::Document.create(source_id: src.id, urn: "urn:l:d", title: "d", language: "lat",
+                                       content_sha256: "x", revision: 1, withdrawn: false)
+    %w[urn:l:d:1 urn:l:d:2].each_with_index do |urn, i|
+      Nabu::Store::Passage.create(document_id: doc.id, urn: urn, sequence: i, language: "lat", text: "t",
+                                  text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+    end
+  end
+
+  def test_a_current_mined_layer_is_an_info_line_with_its_age
+    seed_latin
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]])
+      finding = mined_invariants(root, now: Time.now + (3 * 86_400)).global.find { |f| f.kind == :mined_layer }
+      assert_equal :info, finding.severity
+      assert_match(/\Amined layer parallels perseus-latin: 1 edges mined \d{4}-\d\d-\d\d \(3 days ago\) — current/,
+                   finding.message)
+    end
+  end
+
+  def test_a_stale_or_orphaned_mined_layer_is_soft_and_names_the_mine_command
+    seed_latin
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2], %w[urn:l:d:1 urn:gone:9]])
+      @db[:sources].where(slug: "perseus-latin").update(last_ingest_identity: "i2")
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :soft, finding.severity
+      assert_match(/STALE: 1 member source\(s\) re-ingested since \(e\.g\. perseus-latin\)/, finding.message)
+      assert_match(/1 of 2 sampled edges have an endpoint no longer in the catalog/, finding.message)
+      assert_match(/`nabu links mine perseus-latin` re-mines it \(owner-fired\)\z/, finding.message)
+    end
+  end
+
+  def test_a_migrated_layer_without_a_catalog_identity_says_so_honestly
+    seed_latin
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]], catalog: nil)
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :info, finding.severity
+      assert_match(/catalog identity unrecorded \(mine layer\) — known from its next mine/, finding.message)
+    end
+  end
+
+  def test_heavy_runs_still_in_the_journal_are_a_soft_finding
+    Dir.mktmpdir do |root|
+      journal = Nabu::Store::LinksJournal.open!(File.join(root, "links.sqlite3"))
+      Nabu::Store::LinksJournal.record_run!(journal, producer: "parallels", scope: "x", params: {}, code_version: "v")
+      journal.disconnect
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layers_unmigrated }
+      assert_equal :soft, finding.severity
+      assert_match(%r{1 heavy run\(s\) still in db/links\.sqlite3 — `nabu links migrate-mined` moves them},
+                   finding.message)
+      assert_empty(mined_invariants(root).global.select { |f| f.kind == :mined_layer }, "no store, no layer lines")
     end
   end
 

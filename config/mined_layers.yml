@@ -1,0 +1,50 @@
+# config/mined_layers.yml — the cost law's classification of the batch
+# link producers (architecture §15, "cheap-derived vs heavy-derived").
+#
+# cheap  — a rebuild lane: db/links.sqlite3, replayed (or carried on its
+#          stamp) by `nabu rebuild`'s links stage from local/config/
+#          link_scopes.yml. Seconds to minutes full-corpus.
+# heavy  — an ENRICHMENT-class mined layer: local/mined-links.sqlite3,
+#          written only by its mine command (`nabu links mine SCOPE`, or
+#          the producer's own batch command), never mined, re-mined,
+#          dropped or stamped by any rebuild; provenance stamped, staleness
+#          visible (`nabu health`, the rebuild summary's layers line).
+#
+# The grain is the PRODUCER, not the scope, on purpose: the journal keeps
+# at most one edge per unordered pair per kind ACROSS runs (a later run
+# refreshes an earlier run's edge), and the links-stage stamps group
+# scopes by shared edge kind. Splitting one producer's scopes across two
+# stores would break both invariants, so every scope of a heavy producer
+# is heavy. Every producer LinkScopeReplay dispatches must be classified
+# here (mined_layers_test pins it); a producer born later is classified
+# at birth — an hour-class producer is born heavy.
+producers:
+  # Global-membership n-gram rarity search over the fulltext index: the
+  # perseus-latin scope is ~2h42m live (466,266 edges) and its stamp
+  # re-mined on routine code edits in 4 of 5 recent rebuild intervals.
+  # The Matthew scope (urn:nabu:sblgnt:matt, 5,315 edges) mines in
+  # seconds, but it is the same producer and edge kind — it moves with
+  # the family (see the grain note above).
+  parallels:
+    class: heavy
+  # Refrain mining within one slice: seconds.
+  formulas:
+    class: cheap
+  # Reflex-root meets over aligned witnesses: seconds, and volatile
+  # (reads lect facets / lemma tiers no stamp covers).
+  cognates:
+    class: cheap
+  # FLAGGED FOR THE OWNER: the kanripo place mine (2,976,355 candidate
+  # edges) runs ~5 min since its single-scan rewrite — under the heavy
+  # threshold, so by the cost rule it stays a rebuild lane, its edges in
+  # db/links.sqlite3. The owner may move it categorically (all text-mined
+  # layers heavy) by flipping this line to heavy and running
+  # `nabu links migrate-mined`; place-link reads its candidates, so it
+  # would move with it.
+  place-mine:
+    class: cheap
+  # Promotes place-mine candidates under the nabu-places registry's
+  # matched decisions: seconds. Shares the place-candidate kind with
+  # place-mine, so the two always share a class.
+  place-link:
+    class: cheap

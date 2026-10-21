@@ -84,6 +84,28 @@ module Nabu
         settle(runs, finished_at: clock.call, status: "failed", notes: "#{POST_LOAD_FAILURE}#{error.message}")
       end
 
+      # The terminal status of a row nobody closed: its process died (killed,
+      # crashed, the machine slept through it) and the row stayed "running".
+      ABANDONED = "abandoned"
+      ABANDONED_NOTE = "abandoned: still running long after start — the process died without " \
+                       "closing the row (closed by `nabu runs close-stale`)"
+
+      # The open rows started before +before+ — killed runs nobody noticed
+      # (the health stale-open-runs threshold supplies the cutoff), oldest
+      # first. Read-only: the --dry-run view.
+      def self.stale(before:)
+        Run.where(status: "running").where { started_at < before }.order(:started_at, :id).all
+      end
+
+      # Settle the stale open rows "abandoned" (finished_at stamped, the
+      # reason in notes) and return them. A live row inside the cutoff and
+      # every closed row stand untouched.
+      def self.close_stale(before:, clock: DEFAULT_CLOCK)
+        rows = stale(before: before)
+        settle(rows, finished_at: clock.call, status: ABANDONED, notes: ABANDONED_NOTE)
+        rows
+      end
+
       def self.settle(runs, **fields)
         ids = runs.compact.map(&:id)
         Run.where(id: ids, status: "running").update(fields) unless ids.empty?

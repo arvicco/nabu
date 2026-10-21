@@ -115,6 +115,22 @@ module Adapters
       assert(text.blocks.first.tokens.all? { |t| t["form"] && !t["form"].empty? })
     end
 
+    # The one descending range in the corpus (RespList, "między 1733 a
+    # 1709" — "between 1733 and 1709"): a between-range is symmetric and
+    # the years are explicit CE, so the envelope order-normalizes and the
+    # raw keeps upstream's wording. The real header rides with AkDziec's
+    # three body layers (only the header is under test).
+    def test_a_descending_between_range_order_normalizes
+      Dir.mktmpdir do |dir|
+        FileUtils.cp(File.join(File.dirname(FIXTURES), "headers", "RespList", "header.xml"), dir)
+        %w[text.xml ann_segmentation.xml ann_morphosyntax.xml].each do |layer|
+          FileUtils.cp(File.join(FIXTURES, "AkDziec", layer), dir)
+        end
+        assert_equal({ "not_before" => 1709, "not_after" => 1733, "raw" => "między 1733 a 1709" },
+                     Nabu::Adapters::NkjpTeiParser.new.parse(dir).header["date"])
+      end
+    end
+
     def test_a_missing_layer_raises_parse_error
       Dir.mktmpdir do |dir|
         FileUtils.cp(File.join(FIXTURES, "AkDziec", "header.xml"), dir)

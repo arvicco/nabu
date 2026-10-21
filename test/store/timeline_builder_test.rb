@@ -732,8 +732,16 @@ module Store
                                                           "raw" => "1640-41" } })
       seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A00002", { "idno" => "A00002" })
       seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A99999", { "idno" => "A99999" })
+      # The live catalog's metadata for the one descending list range.
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A87970",
+                        { "idno" => "A87970", "date" => { "raw" => "1689?]" },
+                          "source_pub_place" => "[Edinburgh?,", "imprint_place_conjecture" => "Edinburgh" })
       canonical = eebo_canonical
       Nabu::Store::TimelineBuilder.rebuild!(catalog: @db, canonical_dir: canonical)
+
+      assert_equal [1689, 1704, "1704-1689"],
+                   timeline_for("urn:nabu:eebo-tcp:A87970").values_at(:not_before, :not_after, :date_raw),
+                   "the list's descending range lands ordered; the raw keeps upstream's spelling"
 
       row = timeline_for("urn:nabu:eebo-tcp:A57617")
       assert_equal [1644, 1644, "1644", "London"], row.values_at(:not_before, :not_after, :date_raw, :place_name),
@@ -747,7 +755,7 @@ module Store
       @db[:document_axes].delete
       rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "eebo-tcp",
                                                                          canonical_dir: canonical)
-      assert_equal 3, rows, "the per-source seam joins the lists too"
+      assert_equal 4, rows, "the per-source seam joins the lists too"
     ensure
       FileUtils.rm_rf(canonical) if canonical
     end
@@ -788,6 +796,8 @@ module Store
       assert_equal [1690, 1999], parse.call("1690-1uuu?")
       assert_equal [1688, nil], parse.call("1688-9999?"), "9999 is the open-ended sentinel"
       assert_equal [1660, nil], parse.call("1660-uuuu?")
+      assert_equal [1689, 1704], parse.call("1704-1689"),
+                   "a descending list range (A87970's) order-normalizes — never a reversed interval"
       assert_nil parse.call("n.d.")
       assert_nil parse.call("")
     end
@@ -868,6 +878,128 @@ module Store
       row = timeline_for("urn:nabu:obi-burmese:vol1:74:ob:p118")
       assert_nil row[:place_name], "the bare ? is upstream's unknown, never a place"
       assert_equal 1217, row[:not_before]
+    end
+
+    # The places sweep: the Gysseling atlas localizes some texts only to
+    # a REGION (63 of 2,226 docs, census 2026-10-21) — the region is then
+    # the place claim, declared coarse; a localized town still answers.
+    def test_metadata_places_gysseling_region_answers_only_without_a_town
+      seed_metadata_doc("corpus-gysseling", "urn:nabu:corpus-gysseling:0001",
+                        { "not_before" => 1210, "not_after" => 1240, "date_raw" => "1210-1240",
+                          "place" => "Gent", "region" => "Oost-Vlaanderen" })
+      seed_metadata_doc("corpus-gysseling", "urn:nabu:corpus-gysseling:0117",
+                        { "not_before" => 1251, "not_after" => 1300, "date_raw" => "1251-1300",
+                          "region" => "Holland-West" })
+      build!
+      assert_equal "Gent", timeline_for("urn:nabu:corpus-gysseling:0001")[:place_name]
+      assert_equal [1251, "Holland-West"],
+                   timeline_for("urn:nabu:corpus-gysseling:0117").values_at(:not_before, :place_name)
+    end
+
+    # The Old Dutch witness localizations: 7 of 17 region-bearing works
+    # name no place (census 2026-10-21) — the region answers, coarse.
+    def test_metadata_places_oudnederlands_region_fallback
+      seed_metadata_doc("corpus-oudnederlands", "urn:nabu:corpus-oudnederlands:bloedbezwering_cg",
+                        { "not_before" => 1001, "not_after" => 1050, "date_raw" => "1001-1050",
+                          "region" => "Noord-Nederrijn", "country" => "Duitsland" })
+      seed_metadata_doc("corpus-oudnederlands", "urn:nabu:corpus-oudnederlands:w2",
+                        { "not_before" => 1001, "not_after" => 1100, "date_raw" => "1001-1100",
+                          "place" => "Nederberg", "region" => "Nederberg" })
+      build!
+      assert_equal "Noord-Nederrijn",
+                   timeline_for("urn:nabu:corpus-oudnederlands:bloedbezwering_cg")[:place_name]
+      assert_equal "Nederberg", timeline_for("urn:nabu:corpus-oudnederlands:w2")[:place_name]
+    end
+
+    # KorBa's pubPlace role=region (the corpus's own regional
+    # classification) answers for the 117 place-less texts (census
+    # 2026-10-21); its non-place classes — "zagranica" (abroad) and
+    # "inny" (other) — never mint a place name.
+    def test_metadata_places_korba_region_fallback_and_non_place_classes
+      seed_metadata_doc("korba", "urn:nabu:korba:AktaPozn_I_1",
+                        { "date" => { "not_before" => 1601, "not_after" => 1616, "raw" => "między 1601 a 1616" },
+                          "region" => "Wielkopolska" })
+      seed_metadata_doc("korba", "urn:nabu:korba:AkDziec",
+                        { "date" => { "not_before" => 1761, "not_after" => 1761, "raw" => "1761" },
+                          "place" => "Wilno", "region" => "Ziemie W. Ks. Lit." })
+      seed_metadata_doc("korba", "urn:nabu:korba:abroad",
+                        { "date" => { "not_before" => 1700, "not_after" => 1700, "raw" => "1700" },
+                          "region" => "zagranica" })
+      build!
+      assert_equal "Wielkopolska", timeline_for("urn:nabu:korba:AktaPozn_I_1")[:place_name]
+      assert_equal "Wilno", timeline_for("urn:nabu:korba:AkDziec")[:place_name]
+      assert_nil timeline_for("urn:nabu:korba:abroad")[:place_name], "abroad is a class, not a place"
+    end
+
+    # gams-zrcalo's TEI origPlace reads "place of origin unknown" — upstream's
+    # absence, which minted itself as a place name (census 2026-10-21);
+    # the orig_place fallback honors the unknown sentinels too.
+    def test_metadata_places_orig_place_unknown_sentinel_mints_no_place
+      seed_metadata_doc("gams-zrcalo", "urn:nabu:gams-zrcalo:speculum.01",
+                        { "date" => { "not_before" => 1445, "not_after" => 1445, "raw" => "1445" },
+                          "orig_place" => "place of origin unknown",
+                          "provenance" => "Pre-owned: Frano Depope (17st ct); Osor, Krk; Matej Savić " \
+                                          "(from 1772); Rome, Library Congregatio de propaganda fide " \
+                                          "Vatican Apostolic Library",
+                          "settlement" => "Città del Vaticano" })
+      build!
+      row = timeline_for("urn:nabu:gams-zrcalo:speculum.01")
+      assert_equal 1445, row[:not_before]
+      assert_nil row[:place_name], "the unknown sentinel is an absence, never a place"
+    end
+
+    # ndl-kotenseki: the NDL record's 出版地 LIST (6,037 of 41,685 docs,
+    # census 2026-10-21) — the digitized item IS the print/manuscript, so
+    # its production place is the artifact's own (the eebo imprint
+    # stance). Cataloger-supplied brackets strip ([京城] → 京城), co-
+    # publishers' cities join ("; ", deduped), and the record's unknown
+    # markers ([出版地不明] / [製作地不明] / [書写地不明] / "[ ]") mint nothing.
+    def test_metadata_places_ndl_publication_places
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:2533331",
+                        { "date" => { "not_before" => 1771, "not_after" => 1771, "raw" => "明和8 [1771]" },
+                          "publication_places" => %w[大坂 江戸] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:2534131",
+                        { "date" => { "not_before" => 1756, "not_after" => 1756, "raw" => "宝暦6 [1756]" },
+                          "publication_places" => %w[東都 東都] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:1194598",
+                        { "date" => { "not_before" => 1930, "not_after" => 1930, "raw" => "昭和5" },
+                          "publication_places" => ["[京城]"] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:u1",
+                        { "date" => { "not_before" => 1870, "not_after" => 1870, "raw" => "明治3" },
+                          "publication_places" => ["[製作地不明]"] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:u2", { "publication_places" => ["[ ]"] })
+      seed_metadata_doc("ndl-kotenseki", "urn:nabu:ndl-kotenseki:p1", { "publication_places" => ["〔江戸〕"] })
+      build!
+      assert_equal "大坂; 江戸", timeline_for("urn:nabu:ndl-kotenseki:2533331")[:place_name]
+      assert_equal "東都", timeline_for("urn:nabu:ndl-kotenseki:2534131")[:place_name]
+      assert_equal "京城", timeline_for("urn:nabu:ndl-kotenseki:1194598")[:place_name]
+      assert_nil timeline_for("urn:nabu:ndl-kotenseki:u1")[:place_name], "the unknown marker is no place"
+      assert_nil timeline_for("urn:nabu:ndl-kotenseki:u2"), "an empty bracket places nothing — no row"
+      assert_equal "江戸", timeline_for("urn:nabu:ndl-kotenseki:p1")[:place_name],
+                   "full-width brackets are the same furniture; an undated placed doc still rows"
+    end
+
+    # ReF: the prints place by "place" (92), the manuscripts by their
+    # header text-place — the Schreibort, the writing place (36, census
+    # 2026-10-21; the two never co-occur). The cataloger's "Schreibort"
+    # label is furniture; hedges ride verbatim; "unbekannt" and a bare
+    # "(" mint nothing.
+    def test_metadata_places_ref_text_place_schreibort
+      { "s1" => "(Schreibort) Regensburg (?)", "s2" => "Schreiborte: Hall, Brixen, Meran, Innsbruck, Wien",
+        "s3" => "Straßburg, Kloster zum grünen Wörth (Schreibort)", "s4" => "Schreibort wahrsch. Basel",
+        "s5" => "(Schreibort). Nürnberg", "s6" => "Herstellungsort/Schreibort München",
+        "s7" => "unbekannt (Schreibort)", "s8" => "(" }.each do |id, value|
+        seed_metadata_doc("ref", "urn:nabu:ref:#{id}",
+                          { "date" => { "not_before" => 1350, "not_after" => 1400, "raw" => "ca. 1350-75" },
+                            "medium" => "Handschrift", "text-place" => value })
+      end
+      seed_metadata_doc("ref", "urn:nabu:ref:d1",
+                        { "date" => { "not_before" => 1525, "not_after" => 1525, "raw" => "1525" },
+                          "medium" => "Druck", "place" => "Straßburg" })
+      build!
+      places = %w[s1 s2 s3 s4 s5 s6 s7 s8 d1].map { |id| timeline_for("urn:nabu:ref:#{id}")[:place_name] }
+      assert_equal ["Regensburg (?)", "Hall, Brixen, Meran, Innsbruck, Wien", "Straßburg, Kloster zum grünen Wörth",
+                    "wahrsch. Basel", "Nürnberg", "München", nil, nil, "Straßburg"], places
     end
 
     def test_metadata_places_rem_orig_place

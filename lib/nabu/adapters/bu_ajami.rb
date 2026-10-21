@@ -56,7 +56,8 @@ module Nabu
     # Every table field rides metadata under a stable key (unknown labels
     # kept under "other_fields"); Provenance is also the PLACE claim (the
     # manuscript's provenance: Touba, Kano, Sedhiou, Labé, …); Genre feeds
-    # the genre facet (Poetry/Prose/…). DATES — the item table has no date
+    # the genre facet (Poetry/Prose/…), Subject the subject facet (one row
+    # per comma-separated topical heading — #facets_for). DATES — the item table has no date
     # field, so dating comes from two honest lanes:
     #   * a TYPED year in the source reference — Northwestern's catalog
     #     form “Title” (1968/9) — an artifact/catalog date (typed_date);
@@ -341,7 +342,8 @@ module Nabu
         end
         meta["other_fields"] = other unless other.empty?
         meta["place"] = meta["provenance"]
-        meta["facets"] = { "genre" => { "value" => meta["genre"] } } if meta["genre"]
+        facets = facets_for(meta)
+        meta["facets"] = facets unless facets.empty?
         meta["date"] = DATES["#{lang}/#{slug}"] || self.class.typed_date(meta["source_reference"])
         meta.merge(
           "collection" => "NEH Ajami (Boston University African Ajami Library)",
@@ -353,6 +355,20 @@ module Nabu
           "pdf_citation" => citation, "pdf_pages" => page_count,
           "text_script" => TEXT_SCRIPT
         ).reject { |_k, v| v.nil? || (v.respond_to?(:empty?) && v.empty?) }
+      end
+
+      # The genre facet (the form label the kind fold reads) and the
+      # subject facet: upstream's Subject field is a comma-separated list
+      # of topical headings ("History, Biography, Mandinka Society, …" —
+      # census 2026-10-21: 80 of 80 items, 426 headings, 285 distinct; no
+      # heading carries an inner comma), one facet row per heading. The
+      # headings are topical, not genre claims: no kind fold reads them.
+      def facets_for(meta)
+        facets = {}
+        facets["genre"] = { "value" => meta["genre"] } if meta["genre"]
+        subjects = meta["subject"].to_s.split(",").map(&:strip).reject(&:empty?)
+        facets["subject"] = { "values" => subjects } unless subjects.empty?
+        facets
       end
     end
   end

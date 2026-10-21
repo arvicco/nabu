@@ -94,4 +94,4 @@ files:
   - path: fetch/EEBO_Phase2_IDs_and_dates.txt
     url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=jjzmnrx98dkvanipopz3nxkvymnjccht&file_id=f_841168068645
     whole: false
-    trim: first 6 rows + the two Phase-2 fixture rows (id TAB year)
+    trim: first 6 rows + the two Phase-2 fixture rows (id TAB year) + A87970, the list's one descending range (1704-1689)

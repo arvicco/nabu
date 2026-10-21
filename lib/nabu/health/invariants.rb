@@ -79,7 +79,7 @@ module Nabu
       # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
                      creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil,
-                     lects: nil, links_journal_path: nil)
+                     lects: nil, links_journal_path: nil, mined_links_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -100,6 +100,9 @@ module Nabu
         # mined-lane occurrence probe; nil-safe, hot-WAL-safe (an
         # unopenable journal just skips the probe).
         @links_journal_path = links_journal_path
+        # The cost law: the mined-layers store (local/mined-links.sqlite3)
+        # for the per-layer staleness/orphan census; nil skips it honestly.
+        @mined_links_path = mined_links_path
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -135,6 +138,7 @@ module Nabu
           script_surface_mismatch,
           *place_ref_findings,
           registry_orphan_names,
+          *mined_layer_findings,
           *index_segment_pressure,
           stale_open_runs
         ].compact
@@ -157,6 +161,10 @@ module Nabu
       # How many stale rows the finding names (oldest first); the rest
       # are counted.
       STALE_OPEN_RUN_EXAMPLES = 3
+
+      # const: edges sampled per mined layer for the orphan census — a
+      # sample, not a census claim; 200 indexed probes keep it low-ms
+      MINED_ORPHAN_SAMPLE = 200
 
       # Dossier-shelf content kind => its derived catalog table (P19-1 the
       # language shelf, P24-0 the source shelf).
@@ -271,9 +279,44 @@ module Nabu
                                          "place axis (the oracc precedent); the provenience projects",
                     "findspot_remarks" => "excavator prose on the find context (room, stratum, " \
                                           "t.a.q. notes, German/English) — sub-site grain, carried " \
-                                          "verbatim; the provenience projects" },
+                                          "verbatim; the provenience projects",
+                    "dates_referenced" => "consumed: CdliDates reads its first entry through the " \
+                                          "ruled reign table (the tablet's own date formula — " \
+                                          "date_of_origin restates it on 142,921 rows) and the " \
+                                          "ruler facet carries its head; of 119,316 claim-bearing " \
+                                          "values 118,363 trace (census 2026-10-21) — the first-N " \
+                                          "sample meets only the archaic \"00.00.00.00\" filler" },
         "gams-zrcalo" => { "edition_date" => "the modern digital edition's year — lineage",
-                           "settlement" => "the holding library's city (a PRESENT location)" },
+                           "settlement" => "the holding library's city (a PRESENT location)",
+                           "provenance" => "the codex's OWNERSHIP chain (\"Pre-owned: Frano Depope " \
+                                           "(17st ct); Osor, Krk; Matej Savić …; Rome …\") — " \
+                                           "custodial history, not its origin; orig_place is " \
+                                           "the origin claim (upstream: unknown)" },
+        # The places sweep (live census 2026-10-21, 590 of 982 docs, 222
+        # values): "<find context>, jetzt Mus. <city>".
+        "ig-cyprus" => { "provenance" => "the find context INSIDE the ancient city (\"Westnekropole, " \
+                                         "Grab XVII\", \"Apollon-Heiligtum\", \"Akropolis\") plus " \
+                                         "the present museum (\"jetzt Mus. Nikosia\") — sub-site " \
+                                         "grain and a PRESENT location (the cdli/oracc " \
+                                         "findspot_square stance); origPlace's city projects" },
+        # The places sweep (live census 2026-10-21): 4,712 of 9,079
+        # versions carry the role bag {born/died/resided/visited => ids}.
+        "openiti" => { "author_places" => "consumed where honest: OpenitiDates mints the AUTHOR's " \
+                                          "died/resided al-Ṯurayyā SETTLEMENTS as thurayya: " \
+                                          "place_refs (1,432 versions — where the author worked, " \
+                                          "a place of activity, never a composition place); " \
+                                          "born (3,214 versions carry ONLY born) and visited are " \
+                                          "biography (the disco birthplace stance), region ids " \
+                                          "(Iraq_RE, the _Auto guesses) and unfinished XXXYYY ids " \
+                                          "are not settlements — they stay metadata" },
+        # The places sweep (live census 2026-10-21): 1,111 of 30,647 records.
+        "rundata" => { "original_site" => "an in-situ QUALIFIER on the found location, not a " \
+                                          "place: \"Yes\" 551 · \"No\" 503 · \"?\"/\"Unknown\", " \
+                                          "plus relative-distance prose (\"20 m southwards\", " \
+                                          "\"Erected 200 m N of the original site\"); ~15 values " \
+                                          "name a former spot (\"Formerly at Grännarp, Vårkumla " \
+                                          "parish.\") as free prose — kept verbatim; " \
+                                          "found_location + coordinates project the place" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
@@ -283,6 +326,17 @@ module Nabu
                                           "(\"L 2769\", \"Area F\") — sub-site grain, below the " \
                                           "place axis; the provenience projects" },
         "prilit" => { "date_cert" => "a certainty qualifier on the projected date, not a date" },
+        # The mining-law sweep, dates half (live census 2026-10-21).
+        # digital_edition_date is the Ollett TEI header's publicationStmt
+        # <date> beside the project <authority> — the year the digital
+        # edition was released (kannada: 2025 ×8 · 2022 ×6 · 2026 · one
+        # upstream "2065"; prakrit: 2020 ×17 · 2021 ×3 · 2022 · 2025).
+        "kannada-texts" => { "digital_edition_date" => "the Kannada Digital Texts Project's digital " \
+                                                       "edition release year (publicationStmt) — " \
+                                                       "lineage, never the text's date" },
+        "prakrit-texts" => { "digital_edition_date" => "the Prakrit Digital Texts Project's digital " \
+                                                       "edition release year (publicationStmt) — " \
+                                                       "lineage, never the text's date" },
         "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
                                                   "doc — a PRESENT location)" },
         "ticha" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }
@@ -1046,6 +1100,15 @@ module Nabu
       # links journal's 「name」 details, not in document_axes — all 10
       # kanripo rows fired "orphaned" against a lane they never lived
       # in. A name now counts as occurring if EITHER surface carries it.
+      #
+      # The cost-law fallback (2026-10-20): the place mine WITHHOLDS the
+      # candidates of names the registry rules region/rejected, so after a
+      # re-mine those rows' names leave the edge details by design — the
+      # mine's run row records the ruled names it still found
+      # (params.ruled_out), and that counts as occurring. Before the next
+      # re-mine the old edges still carry them; either way, no false alarm.
+      # The probe reads the links UNION, so a place layer the owner moves
+      # to the mined store keeps answering.
       def registry_orphan_names
         return nil unless @canonical_dir && table?(@catalog, :document_axes)
 
@@ -1059,7 +1122,7 @@ module Nabu
                  .where(document_id: @catalog[:documents].where(source_id: source_id).select(:id))
                  .exclude(place_name: nil).distinct.select_map(:place_name).to_set
           registry.decisions_for(slug).each_key do |name|
-            next if live.include?(name) || mined_name?(name)
+            next if live.include?(name) || mined_name?(name) || ruled_out_name?(name)
 
             orphans << "#{slug}: #{name}"
           end
@@ -1185,15 +1248,102 @@ module Nabu
           .first.nil?
       end
 
+      # The fallback: a ruled name the latest place mine found and withheld
+      # (its run row's params.ruled_out).
+      def ruled_out_name?(name)
+        @ruled_out_names ||= begin
+          journal = links_journal
+          rows = journal ? journal[:link_runs].where(producer: PlaceMine::PRODUCER).select_map(:params_json) : []
+          rows.flat_map { |json| (JSON.parse(json)["ruled_out"] || {}).keys }.to_set
+        end
+        @ruled_out_names.include?(name)
+      end
+
+      # The links union (db/links + the mined layers, Store::LinkLayers).
       def links_journal
         return @links_journal if defined?(@links_journal)
 
-        @links_journal =
-          if @links_journal_path && File.exist?(@links_journal_path)
-            Store::LinksJournal.connect("sqlite://#{@links_journal_path}", readonly: true)
-          end
+        @links_journal = Store::LinkLayers.open_paths(links_path: @links_journal_path, mined_path: @mined_links_path)
       rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
         @links_journal = nil # hot-WAL/readonly failure — probe off, honestly
+      end
+
+      # -- the mined layers (the cost law, global) -----------------------------
+
+      # One finding per mined layer — its age, its staleness against the
+      # live catalog (member ingest identities, producer code), and an
+      # orphaned-edge estimate from a cheap sample — plus one for heavy
+      # runs still waiting in db/links.sqlite3. Info when current, soft
+      # when stale/orphaned/waiting: a stale layer is honest, aged data,
+      # re-mined only by the owner's `nabu links mine SCOPE`.
+      def mined_layer_findings
+        return [] unless @mined_links_path
+
+        store = Store::MinedLinks.open_readonly(@mined_links_path)
+        findings = Store::MinedLinks.layers(store).map { |layer| mined_layer_finding(store, layer) }
+        findings << unmigrated_heavy_runs
+        findings.compact
+      rescue Sequel::DatabaseError, Sequel::DatabaseConnectionError
+        [] # hot-WAL/readonly failure — census off, honestly
+      ensure
+        store&.disconnect
+      end
+
+      def mined_layer_finding(store, layer)
+        staleness = MinedLayers.staleness(layer, catalog: @catalog)
+        orphans, sampled = mined_orphans(store, layer)
+        days = ((@now - layer.mined_at) / 86_400).floor
+        notes = []
+        if staleness.changed.nil?
+          notes << "catalog identity unrecorded (#{layer.origin} layer) — known from its next mine"
+        elsif !staleness.changed.empty?
+          notes << "STALE: #{staleness.changed.size} member source(s) re-ingested since " \
+                   "(e.g. #{staleness.changed.first(3).join(', ')})"
+        end
+        notes << "STALE: producer code changed since the mine" if staleness.code_moved
+        notes << "#{orphans} of #{sampled} sampled edges have an endpoint no longer in the catalog" if orphans.positive?
+        notes << "current against the catalog" if notes.empty?
+        stale = staleness.stale? || orphans.positive?
+        Finding.new(
+          kind: :mined_layer, severity: stale ? :soft : :info,
+          message: "mined layer #{layer.label}: #{layer.edges} edges mined #{layer.mined_at.strftime('%Y-%m-%d')} " \
+                   "(#{days} day#{'s' unless days == 1} ago) — #{notes.join('; ')}" \
+                   "#{" — `nabu links mine #{layer.scope}` re-mines it (owner-fired)" if stale}"
+        )
+      end
+
+      # [orphaned, sampled]: endpoints of a sample of the layer's edges no
+      # live catalog row (passage, document or dictionary entry) answers.
+      def mined_orphans(store, layer)
+        pairs = Store::MinedLinks.sample_edges(store, layer.run_ids, size: MINED_ORPHAN_SAMPLE)
+        urns = pairs.flatten.uniq
+        return [0, 0] if urns.empty?
+
+        known = @catalog[:passages].where(urn: urns).select_map(:urn).to_set
+        rest = urns.reject { |urn| known.include?(urn) }
+        known.merge(@catalog[:documents].where(urn: rest).select_map(:urn)) unless rest.empty?
+        rest = urns.reject { |urn| known.include?(urn) }
+        if !rest.empty? && table?(@catalog, :dictionary_entries)
+          known.merge(@catalog[:dictionary_entries].where(urn: rest).select_map(:urn))
+        end
+        [pairs.count { |from, to| !known.include?(from) || !known.include?(to) }, pairs.size]
+      end
+
+      # Heavy runs the one-time move has not taken yet.
+      def unmigrated_heavy_runs
+        journal = @links_journal_path && Store::LinksJournal.open_readonly(@links_journal_path)
+        return nil if journal.nil?
+
+        runs = Store::LinksJournal.run_ids_for(journal, producers: MinedLayers.heavy_producers).size
+        return nil if runs.zero?
+
+        Finding.new(
+          kind: :mined_layers_unmigrated, severity: :soft,
+          message: "#{runs} heavy run(s) still in db/links.sqlite3 — `nabu links migrate-mined` moves them " \
+                   "into local/mined-links.sqlite3 (the rebuild preserves them meanwhile, never re-mines them)"
+        )
+      ensure
+        journal&.disconnect
       end
 
       # {facet value => live-document count}, exactly the derive_stats!
@@ -1274,7 +1424,8 @@ module Nabu
         load_note = after_load.zero? ? "" : "; #{after_load} #{died} (index/lanes may lag — re-sync)"
         "#{count} run row#{'s' unless count == 1} still \"running\" #{STALE_OPEN_RUN_SECONDS / 3_600} h+ " \
           "after start — killed runs nobody noticed (e.g. #{examples.join(' · ')})#{load_note}; " \
-          "a later run of the source supersedes the row — re-run any source without one"
+          "a later run of the source supersedes the row — re-run any source without one, " \
+          "then close the rows: bin/nabu runs close-stale"
       end
 
       # -- shared lookups -------------------------------------------------------

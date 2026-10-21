@@ -27,6 +27,7 @@ module Nabu
     VECTORS_DB_FILENAME = "vectors.sqlite3"
     HISTORY_DB_FILENAME = "history.sqlite3"
     LINKS_DB_FILENAME = "links.sqlite3"
+    MINED_LINKS_DB_FILENAME = "mined-links.sqlite3"
     LECTS_DB_FILENAME = "lects.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :local_dir, :sources_path, :alignments_path,
@@ -342,10 +343,21 @@ module Nabu
 
     # The links journal (architecture §15, P16-1): batch-mined cross-reference
     # edges. DERIVED since P70: `nabu rebuild`'s links stage wipes and
-    # re-mines it (slug-scoped producers from the registry, batch scopes
-    # replayed from config/link_scopes.yml), so backups may skip it.
+    # re-mines it (slug-scoped producers from the registry, the CHEAP batch
+    # scopes replayed from config/link_scopes.yml — the heavy ones live in
+    # #mined_links_path), so backups may skip it.
     def links_path
       File.join(db_dir, LINKS_DB_FILENAME)
+    end
+
+    # The mined-layers store (the cost law, owner ruling 2026-10-20;
+    # architecture §15): the HEAVY link layers (config/mined_layers.yml)
+    # — hours to regenerate, so INSTANCE data under local/, beside the
+    # ledger: never dropped or re-mined by rebuild, written only through
+    # Nabu::Store::MinedLinks by its mine command, carried by the
+    # backup's local/ section.
+    def mined_links_path
+      File.join(local_dir, MINED_LINKS_DB_FILENAME)
     end
 
     # The lect-assignment journal (P58-1): per-document code → lect rulings,

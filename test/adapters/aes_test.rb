@@ -29,8 +29,9 @@ require "json"
 #
 # THE LEMMA JOIN CONTRACT (P28-1 consumes this): token "lemma" = lemma_form
 # (feeds passage_lemmas via the shared treebank contract, tier gold) and
-# token "lemma_id" = the AED lemmaID VERBATIM ("123130") — P28-1's AED
-# dictionary joins on exact string equality lemma_id == entry_id, no folding.
+# token "lemma_id" = upstream's lemmaID VERBATIM, bare ("123130") — the AED
+# shelf's entry id is the prefixed @xml:id ("tla123130"); Define#by_urn
+# restores the prefix on a bare aed urn (test/adapters/aed_test.rb).
 class AesTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
@@ -102,7 +103,7 @@ class AesTest < Minitest::Test
     assert_equal "ẖn(,w)", token["form"]
     assert_equal "Xn(,w)", token["mdc"], "MdC transliteration rides verbatim"
     assert_equal "ẖn.w", token["lemma"], "lemma_form = the shared treebank lemma contract"
-    assert_equal "123130", token["lemma_id"], "the AED lemmaID VERBATIM — P28-1's exact-equality join key"
+    assert_equal "123130", token["lemma_id"], "upstream's lemmaID VERBATIM, bare — the AED entry id is \"tla\" + it"
     assert_equal "Ruderer", token["gloss"]
     assert_equal "epitheton_title", token["pos"]
     assert_equal "title", token["epitheton"], "fine pos subtypes ride under their upstream names"

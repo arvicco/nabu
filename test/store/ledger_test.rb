@@ -43,6 +43,35 @@ module Store
       end
     end
 
+    # 012: "abandoned" (runs close-stale) joins the status vocabulary; the
+    # table recreate keeps the history, the kind check, and the index.
+    def test_migration_012_widens_runs_status_without_loss
+      db = Nabu::Store::Ledger.connect("sqlite::memory:")
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, Nabu::Store::Ledger::MIGRATIONS_DIR, target: 11)
+      db[:runs].insert(source_slug: "glaux", kind: "sync", started_at: Time.now, loaded_at: Time.now,
+                       added: 7, status: "running")
+      assert_raises(Sequel::DatabaseError) do
+        db[:runs].insert(source_slug: "s", kind: "sync", started_at: Time.now, status: "abandoned")
+      end
+
+      Nabu::Store::Ledger.migrate!(db)
+
+      assert_equal 7, db[:runs].where(source_slug: "glaux").get(:added)
+      refute_nil db[:runs].where(source_slug: "glaux").get(:loaded_at)
+      db[:runs].where(source_slug: "glaux").update(status: "abandoned")
+      assert_equal "abandoned", db[:runs].get(:status)
+      assert_raises(Sequel::DatabaseError) do
+        db[:runs].insert(source_slug: "s", kind: "sync", started_at: Time.now, status: "bogus")
+      end
+      assert_raises(Sequel::DatabaseError) do
+        db[:runs].insert(source_slug: "s", kind: "bogus", started_at: Time.now, status: "running")
+      end
+      assert_includes db.indexes(:runs).values.map { |index| index[:columns] }, [:source_slug]
+    ensure
+      db&.disconnect
+    end
+
     def test_pins_composite_unique_index_enforced
       @ledger[:pins].insert(source_slug: "ud", repo_url: "https://github.com/acme/one", last_sync_sha: "a")
       assert_raises(Sequel::DatabaseError) do
@@ -199,7 +228,8 @@ module Store
       # 005 baselines + 006 drift widen + 007 grant acks (P42-r1) + 008 creep
       # acceptances (P43-0) + 009 stage timings (P78-r1) + 010 revisions
       # reason (P93-2) + 011 runs.loaded_at (the row closes at operation end)
-      assert_equal 11, db[:schema_info].get(:version)
+      # + 012 the "abandoned" run status (runs close-stale)
+      assert_equal 12, db[:schema_info].get(:version)
       assert_includes db[:runs].columns, :loaded_at
       assert db.table_exists?(:stage_timings)
       assert db.table_exists?(:quarantine_baselines)

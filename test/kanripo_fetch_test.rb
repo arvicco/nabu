@@ -13,6 +13,8 @@ require "json"
 # with the REAL fixture bytes (the house pattern), so the catalog scope
 # parsing runs against upstream's actual org shapes.
 class KanripoFetchTest < Minitest::Test
+  include ClassTemplateFiles
+
   FIXTURES = File.expand_path("fixtures/kanripo", __dir__)
 
   def setup
@@ -21,9 +23,13 @@ class KanripoFetchTest < Minitest::Test
     @dir = File.join(@root, "work")
     @attic = File.join(@dir, ".attic")
     @slept = []
-    seed_catalog
-    seed_text("KR1a0170", "KR1a0170_000.txt", "KR1a0170_001.txt", "Readme.org")
-    seed_text("KR3g0023", "KR3g0023_000.txt", "Readme.org")
+    # The seeded upstream org is identical for every test: built once per
+    # class into a template, copied into this test's own root.
+    class_template_files(:upstream, into: @upstream) do |template|
+      seed_catalog(template)
+      seed_text(template, "KR1a0170", "KR1a0170_000.txt", "KR1a0170_001.txt", "Readme.org")
+      seed_text(template, "KR3g0023", "KR3g0023_000.txt", "Readme.org")
+    end
     # KR1b0049 is listed in the catalog trim but has NO upstream repo — the
     # real org has 61 such wave-1 catalog ids (census 2026-07-20).
   end
@@ -223,16 +229,16 @@ class KanripoFetchTest < Minitest::Test
     commit_file(File.join(@upstream, "KR-Catalog"), "KR/#{kclass}.txt", content)
   end
 
-  def seed_catalog
-    dir = File.join(@upstream, "KR-Catalog")
+  def seed_catalog(upstream)
+    dir = File.join(upstream, "KR-Catalog")
     seed_repo(dir,
               "KR/KR1a.txt" => fixture_bytes("KR-Catalog/KR/KR1a.txt"),
               "KR/KR1b.txt" => fixture_bytes("KR-Catalog/KR/KR1b.txt"),
               "KR/KR3g.txt" => fixture_bytes("KR-Catalog/KR/KR3g.txt"))
   end
 
-  def seed_text(id, *files)
-    seed_repo(File.join(@upstream, id),
+  def seed_text(upstream, id, *files)
+    seed_repo(File.join(upstream, id),
               files.to_h { |name| [name, fixture_bytes("#{id}/#{name}")] })
   end
 

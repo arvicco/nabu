@@ -293,8 +293,9 @@ sources:
     places: {posture: unplaced, note: "no findspot or origin claim exists — the poems are
         transmitted texts. The corpus does tag place NAMES inside the poems (pos pln /
         pln-kke, 3,343 tokens over 910 lemma ids, census 2026-10-18): they ride a
-        per-passage 'places' annotation (surface + lemma id + headword) at token grain —
-        mentions, never a document place"}
+        per-passage 'places' annotation (value = headword, ref = lemma id, + surface) at
+        token grain, projected as the passage place facet — mentions, never a document
+        place"}
     script: {posture: implied}
   rem:
     kind: {posture: unclassified}
@@ -535,11 +536,13 @@ sources:
         (Ming 正徳 / 弘治, Qing 嘉慶 — the collection holds their imprints), the one-year
         eras, year-less era spans (慶長元和年間) and pre-Taika dates stay unparsed,
         declared"}
-    places: {posture: unplaced, note: "no place fields in the census bibliography; the
-        bib record's publisher locations (京 · [京都] · 山田 (伊勢) — ~25% of sampled
-        records, the unknown marker [製作地不明] among them) ride metadata
-        publication_places verbatim — a print-place fold awaits a gazetteer
-        resolution (the nrct lane), not defaulted"}
+    places: {posture: named, note: "no place fields in the census bibliography; the bib
+        record's 出版地 list (publication_places, 6,037 docs) names the digitized item's
+        own production place — the print or manuscript IS the document (the eebo
+        imprint stance) — and projects onto the axis on ~5,040 docs: catalog brackets
+        stripped, the unknown markers ([出版地不明] / [製作地不明] / [書写地不明]) mint
+        nothing, the historical spellings (京 · 東都 · 浪華 · 京城) ride verbatim. No
+        gazetteer refs yet: resolution (the nrct lane) is a nabu-places section, declared"}
     script: {posture: implied}
   ja-wikisource:
     kind: {posture: unclassified}
@@ -1114,9 +1117,9 @@ sources:
   scat:
     # kind: machine-postured — kind_map.yml source_kind historiography (the
     # corpus is saints' lives). lect: machine-postured by the scat-century
-    # facet rules — 16th/17th c. chu:csl/rus; the 18th-c. slice rides
-    # chu:csl/rus DECLARED COARSE (approximation) pending the chu:ncs (New
-    # Church Slavonic) stage mint, which flips the "18" row.
+    # facet rules — 16th/17th c. chu:csl/rus (scat-century); the 18th-c.
+    # slice chu:ncs, the registry's New Church Slavonic stage
+    # (scat-century-ncs).
     dating: {posture: dated, note: "the release catalog's century on all 24 texts → a century
         envelope (16th/17th/18th); coarse by upstream's own grain — the README pairs it with the
         manuscript shelfmark, so it dates the witness"}
@@ -1144,7 +1147,8 @@ sources:
     dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
         @notBefore/@notAfter with the prose kept raw)"}
     places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
-        own region classification (role=region) as metadata"}
+        own region classification (role=region), faceted, answering at REGION grain for the 117
+        town-less texts (declared coarse; zagranica/inny name no place)"}
     script: {posture: implied, note: "Latin script; the transcribed spelling is the text, the
         modernized orth rides per token"}
   prague-bible-1488:   # P116-1
@@ -1412,8 +1416,9 @@ sources:
         -Latn as before — the estate's four codes all land on registry nodes"}
     dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
         Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
-    places: {posture: named, note: "Ollett's origPlace findspot names (445, pl: keys, no
-        gazetteer refs); Vengī's artefact findspots carry no text id — unjoined. The
+    places: {posture: named, note: "Ollett's origPlace findspot names (445; no gazetteer
+        refs) — his pl: site keys facet as findspot (35 keys folding name variants:
+        Karle/Kārle → pl:Valūraka, Amarāvatī/Dharanikota → pl:Dhānyakaṭaka); Vengī's artefact findspots carry no text id — unjoined. The
         inline persName/placeName layer (passage annotations entities: 881 persons,
         240 places in 382 editions — kings, donors, granted villages; Ollett's
         pers:/pl: lemma keys verbatim) names places MENTIONED in the grant, not the
@@ -1819,14 +1824,16 @@ sources:
     # the honest claim — no machine rule/override covers odt, no shadowing.
     lect: {posture: identity, note: "odt — Old Dutch anchor (nabu-lects); bare code is the claim"}
     dating: {posture: dated, note: "every TEI work carries a witness-year <date> (e.g. 701-800)"}
-    places: {posture: named, note: "witnessLocalization place names ride in metadata; not gazetteer-linked"}
+    places: {posture: named, note: "witnessLocalization place names ride in metadata; not gazetteer-linked;
+        the 7 place-less works place at REGION grain (declared coarse), and the region facets"}
     script: {posture: implied}
   corpus-gysseling:
     kind: {posture: unclassified}
     # dum is a real nabu-lects anchor (Middle Dutch); identity, no shadowing.
     lect: {posture: identity, note: "dum — Middle Dutch anchor (nabu-lects); bare code is the claim"}
     dating: {posture: dated, note: "each doc carries <datering jaar_van jaar_tot>; span = min..max"}
-    places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt"}
+    places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt;
+        the 63 town-less texts place at REGION grain (declared coarse), and the region facets on all"}
     script: {posture: implied}
   gretil:
     # kind: config/kind_map.yml folds the teiHeader genre ladder (keywords term,
@@ -1868,9 +1875,11 @@ sources:
         time grid ('15,2' → [1450,1500]) as the prose fallback — all 190
         texts carry the grid, so every document bounds; MetadataDates
         :structured"}
-    places: {posture: pending, note: "candidate: the header place lane riding
-        metadata verbatim ('Regensburg', 'Bamberg' — print/scriptorium
-        place, a genuine origin claim, not a holding library)"}
+    places: {posture: named, note: "the header place lane verbatim — the prints' place
+        (92) and the manuscripts' text-place Schreibort (34 of 36; its 'Schreibort'
+        label stripped as furniture, hedges kept: 'Regensburg (?)', 'wahrsch. Basel') —
+        a genuine origin claim, not a holding library (library rides metadata); 126 of
+        190 placed, no gazetteer refs"}
     script: {posture: implied}
   disco:
     kind: {posture: unclassified}

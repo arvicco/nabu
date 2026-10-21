@@ -185,6 +185,60 @@ class RebuildLinkStampsTest < Minitest::Test
     end
   end
 
+  # -- the cost law: heavy scopes are not the stage's work ---------------------------
+
+  HEAVY = { producer: "parallels", scope: "corpus", params: { "min_score" => 0.05 } }.freeze
+
+  def test_a_recorded_heavy_scope_is_never_mined_by_rebuild
+    Nabu::LinkScopes.record!(config.link_scopes_path, **HEAVY)
+    result = rebuilder.run
+    assert_equal ["formulas corpus"], result.links.mined, "only the cheap lane is the stage's work"
+    refute_includes result.links.reasons.keys, "parallels corpus"
+    refute_path_exists config.mined_links_path, "rebuild never creates or writes the mined store"
+    assert_match(/mined layers: none present · not yet mined: parallels corpus/, result.links.summary)
+    assert_equal([%w[formulas corpus]], journal_runs.map { |_id, producer, scope| [producer, scope] })
+  end
+
+  # A heavy run still waiting in the journal (pre-migration) under a
+  # DIRTY stamp: the stage neither re-mines it, nor drops it, nor
+  # re-stamps it — it leaves the dirt calculus entirely.
+  def test_a_heavy_scopes_dirty_stamp_triggers_no_work
+    rebuilder.run
+    Nabu::LinkScopes.record!(config.link_scopes_path, **HEAVY)
+    before = with_journal do |journal|
+      run = Nabu::Store::LinksJournal.record_run!(journal, producer: "parallels", scope: "corpus", params: {},
+                                                           code_version: "p/old")
+      Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:x:1", to_urn: "urn:x:2", kind: "parallel",
+                                                     score: 0.5, run_id: run)
+      Nabu::Store::LinksJournal.write_scope_stamp!(journal, producer: "parallels", scope: "corpus",
+                                                            stamp: "stale-and-dirty", inputs: {}, run_ids: [run])
+      snapshot(journal)
+    end
+
+    [rebuilder.run, rebuilder(full_links: true).run, incremental(full_links: true).run].each do |result|
+      refute_includes result.links.mined, "parallels corpus"
+      assert_match(%r{1 heavy run\(s\) still in db/links\.sqlite3 \(nabu links migrate-mined\)}, result.links.summary)
+      assert_equal before, with_journal { |journal| snapshot(journal) }, "the heavy run, edge and stamp are untouched"
+    end
+    refute_path_exists config.mined_links_path
+  end
+
+  def test_a_mined_layer_is_reported_never_touched
+    Nabu::LinkScopes.record!(config.link_scopes_path, **HEAVY)
+    Nabu::Store::MinedLinks.mine!(config.mined_links_path, producer: "parallels", scope: "corpus", stamp: nil,
+                                                           inputs: nil, catalog: nil) do |db|
+      run = Nabu::Store::LinksJournal.record_run!(db, producer: "parallels", scope: "corpus", params: {},
+                                                      code_version: "p/2")
+      Nabu::Store::LinksJournal.write_edge!(db, from_urn: "urn:x:1", to_urn: "urn:x:2", kind: "parallel",
+                                                score: 0.5, run_id: run)
+      Nabu::Store::LinksJournal.finish_run!(db, run)
+    end
+    layer_before = Nabu::Store::MinedLinks.layers_at(config.mined_links_path)
+    result = rebuilder(full_links: true).run
+    assert_match(/mined layers: 1 present, oldest #{Time.now.strftime('%Y-%m-%d')}\z/, result.links.summary)
+    assert_equal layer_before, Nabu::Store::MinedLinks.layers_at(config.mined_links_path)
+  end
+
   # -- the incremental flavor -------------------------------------------------------
 
   def test_a_dirty_incremental_carries_a_scope_whose_members_are_clean
@@ -231,6 +285,11 @@ class RebuildLinkStampsTest < Minitest::Test
     yield journal
   ensure
     journal&.disconnect
+  end
+
+  def snapshot(journal)
+    [journal[:link_runs].where(producer: "parallels").all, journal[:links].where(kind: "parallel").all,
+     journal[:link_scope_stamps].where(producer: "parallels").all]
   end
 
   def journal_runs = with_journal { |journal| journal[:link_runs].select_map(%i[id producer scope]) }

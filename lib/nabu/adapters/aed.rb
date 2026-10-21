@@ -13,17 +13,18 @@ module Nabu
     # == THE JOIN CONTRACT (the packet's point)
     #
     # AED entry ids are the upstream @xml:id VERBATIM ("tla550034") — the
-    # TLA lemmaIDs that the AES corpus (P28-0, the sibling packet) mints as
-    # its gold lemma ids. So the minted urn
+    # TLA lemma space the AES corpus (P28-0, the sibling packet) draws its
+    # gold lemma ids from. AES spells those ids BARE ("550034", upstream's
+    # lemmaID verbatim), so the minted urn
     #
-    #   urn:nabu:dict:aed:<lemmaID>
+    #   urn:nabu:dict:aed:tla<lemmaID>
     #
-    # is exactly what an AES annotation predicts: Egyptian `define` resolves
-    # an AES lemma id directly (Define#by_urn / nabu show), and the folded
-    # headwords resolve the transliteration lookups (`define nfr`). AES
-    # token references spell the id with the TEI prefix notation
-    # ("tla:550034", prefixDef → dictionary.xml#…); normalizing that to
-    # "tla550034" is the AES side's one obligation.
+    # is "tla" + the AES lemma id: Define#by_urn folds the prefix back onto
+    # a bare-numeric aed urn, so `nabu show urn:nabu:dict:aed:<lemma_id>`
+    # resolves an AES token directly (census 2026-10-21: all 18,733
+    # distinct AES lemma ids land that way, none on exact equality), and
+    # the folded headwords resolve the transliteration lookups
+    # (`define nfr`).
     #
     # == Upstream
     #
