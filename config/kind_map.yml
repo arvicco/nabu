@@ -470,7 +470,9 @@ sources:
   sefaria:            # categories[0] = the top-level category (hierarchy head)
     metadata: categories
     map:
-      "Tanakh": scripture                        # 103
+      "Tanakh": scripture                        # 103 — NB the fold reads categories[0] only, so
+      #   the P140 Rishonim-on-Tanakh commentary shelf (536 docs) rides this head too: a
+      #   declared coarseness (exegesis is the truer class; the rule cannot see past the head)
       "Mishnah": scripture                       # 336
       "Tosefta": scripture                       # 100
       "Talmud": exegesis                         # 300
