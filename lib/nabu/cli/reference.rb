@@ -164,6 +164,15 @@ module Nabu
       writes nothing — the apply gate stays closed until an owner ruling
       on the census.
 
+      `nabu person candidates SOURCE [--dry-run]` mines person-name
+      CANDIDATES from SOURCE's own case-preserving text — a word occurring
+      ≥3 times, ≥90% of them capitalized — into person-name-candidate
+      edges in the links journal (read back with `nabu links <passage
+      urn>`). Candidates are name forms, never person records: no
+      authority, no person card. The scope is recorded, so the rebuild's
+      links stage re-mints it (a cheap lane, config/mined_layers.yml).
+      --dry-run prints the census and writes nothing.
+
       Examples:
         nabu person 王安石          # by name
         nabu person "Wang Anshi"   # pinyin, same person
@@ -175,9 +184,12 @@ module Nabu
         nabu person nikh:p094190       # the passage-annotation ref: every NIKH slice holding it
         nabu person mine kanripo   # census the person-name attestations
         nabu person mine edr edh   # EDH's attested persons against EDR's text
+        nabu person candidates edh --dry-run   # the candidate recipe's census
+        nabu person candidates edh             # mine candidate edges (recorded scope)
     HELP
     def person(*query_parts)
       return run_person_mine(query_parts[1..]) if query_parts.first == "mine"
+      return run_person_candidates(query_parts[1..]) if query_parts.first == "candidates"
 
       query = query_parts.join(" ").strip
       config = Nabu::Config.load
@@ -457,6 +469,59 @@ module Nabu
         raise Thor::Error, e.message
       ensure
         catalog&.disconnect
+      end
+
+      # `nabu person candidates SOURCE [--dry-run]`: the person-name
+      # candidate recipe over SOURCE's own text. --dry-run prints the
+      # census (candidates + every exclusion class) and writes nothing;
+      # otherwise the person-name-candidate edges land in the links journal
+      # and the scope is recorded for the rebuild's links stage (the
+      # batch-CLI derivability contract, the place-mine precedent).
+      def run_person_candidates(args)
+        args = Array(args)
+        dry = args.delete("--dry-run") ? true : false
+        source = args.first
+        raise Thor::Error, "usage: nabu person candidates SOURCE [--dry-run]" if source.to_s.empty?
+
+        config = Nabu::Config.load
+        Nabu::Store.assert_writable!(config.catalog_path) unless dry
+        catalog = Nabu::Store.connect(config.catalog_path)
+        journal = unless dry
+                    Nabu::Store::LinksJournal.migrate!(Nabu::Store::LinksJournal.connect("sqlite://#{config.links_path}"))
+                  end
+        miner = Nabu::PersonCandidates.new(catalog: catalog, journal: journal, progress: progress_reporter)
+        if dry
+          print_person_candidates(miner.census(source: source))
+          say "  dry run — nothing written"
+        else
+          result = miner.apply!(source: source)
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: Nabu::PersonCandidates::PRODUCER,
+                                                            scope: source, params: {})
+          print_person_candidates(result.census)
+          say "person candidates: #{result.edges_written} candidate edges written " \
+              "(#{result.superseded_edges} superseded) in #{format_duration(result.seconds)} " \
+              "— name forms, not person records; read back with `nabu links <passage urn>`"
+        end
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
+      end
+
+      def print_person_candidates(census)
+        say "person candidates: #{census.source} — #{census.passages} passages, #{census.words} words, " \
+            "#{census.candidates.size} name candidates (≥#{Nabu::PersonCandidates::MIN_OCCURRENCES} " \
+            "occurrences, ≥#{(Nabu::PersonCandidates::MIN_CAPITALIZED_SHARE * 100).round}% capitalized; " \
+            "#{census.candidate_edges} candidate edges; #{format_duration(census.seconds)})"
+        census.candidates.first(15).each do |candidate|
+          say format("  %<form>-16s %<count>d occurrences, %<share>d%% capitalized",
+                     form: candidate.surface, count: candidate.occurrences,
+                     share: (candidate.capitalized_share * 100).round)
+        end
+        say "  … #{census.candidates.size - 15} more candidates" if census.candidates.size > 15
+        excluded = census.excluded.sort.map { |reason, count| "#{count} #{reason}" }
+        say "  excluded forms: #{excluded.join(', ')}" unless excluded.empty?
       end
 
       # `nabu place mine SOURCE [GAZETTEER] [--dry-run]` (P96-3 — Q9 v0):

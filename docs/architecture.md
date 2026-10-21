@@ -1836,6 +1836,28 @@ text MENTIONING a place is not FROM it, so document_axes.place_ref (the
 provenance ladder: adapter-asserted refs, then PlaceApply's place_name
 projections) is never touched by either.
 
+**The person lanes.** `nabu person mine SOURCE [AUTHORITY]`
+(`Nabu::PersonMine`) stays CENSUS-ONLY — no write path, the person apply
+gate closed by owner ruling — but its scope is explicit and no longer
+Han-bound: SOURCE's passages against any derived person-index authority
+(cbdb by default; edh, elephantine, …). The lane follows the authority's
+own keys: Han keys match as substrings; alphabetic keys (EDH's inscribed
+and nominative Roman names, Elephantine's Greek/Coptic/Egyptian/English
+forms) match as whole-word sequences under the shared fold
+(`Nabu::NameWords`: Leiden sigla inside a word fold out on both sides,
+spelling stays verbatim). `nabu person candidates SOURCE [--dry-run]`
+(`Nabu::PersonCandidates`, links producer person-candidates, a cheap
+rebuild lane per config/mined_layers.yml) is the mechanical candidate
+recipe over the source's OWN case-preserving text — a word occurring ≥3
+times, ≥90% of its occurrences capitalized (well-formed Roman numerals,
+digit-bearing, sub-2-letter and caseless words censused out) — emitting
+kind=person-name-candidate edges from each passage holding the form
+capitalized to `urn:nabu:person-candidate:<folded form>`. Candidates are
+NAME FORMS, never person records: their own kind and urn namespace, no
+authority, no person card, and the edge detail says so. Both lanes walk
+the source in rowid windows (`Nabu::SourcePassageWalk`, the PlaceMine
+walk).
+
 **Read surface.** Every reader opens the links UNION (`Store::LinkLayers`):
 the journal with the mined store ATTACHed read-only and two temp views
 (`links`, `link_runs`) shadowing the tables — mined rows carry negated
