@@ -1043,6 +1043,7 @@ module Nabu
       # The diachronic column — the half no dictionary site carries.
       def print_char_diachronic(card)
         print_char_shelf_block("Old Chinese (Baxter-Sagart)", card.old_chinese)
+        print_char_shelf_block("Shuowen Jiezi 說文解字 (Xu Shen, Han graphology)", card.shuowen)
         print_char_shelf_block("Middle Chinese (Qieyun / Baxter-Sagart)", card.middle_chinese)
         print_char_shelf_block("early-Japan lexicography (HDIC)", card.early_japan)
         print_char_tls(card.tls)

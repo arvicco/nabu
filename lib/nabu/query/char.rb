@@ -22,7 +22,7 @@ module Nabu
     # (reused verbatim), then partitions the rows by dictionary slug and peels
     # each shelf's free-text `body` to its structured pieces. The new
     # decomposition sources (babelstone-ids, kradfile) plus the held
-    # unihan/kanjidic2/baxter-sagart/tshet-uinh/hdic/tls shelves and a corpus
+    # unihan/kanjidic2/baxter-sagart/shuowen/tshet-uinh/hdic/tls shelves and a corpus
     # attestation count over the passages table make the card; a shelf the
     # catalog does not hold simply yields an empty section.
     class Char
@@ -45,7 +45,7 @@ module Nabu
         :glyph, :codepoint, :radical, :total_strokes,
         :ids, :components, :variants,
         :readings_ja, :readings_sinoxenic, :pedagogy, :desk_reference,
-        :old_chinese, :middle_chinese, :early_japan, :tls, :corpus,
+        :old_chinese, :shuowen, :middle_chinese, :early_japan, :tls, :corpus,
         :corpus_by_source, :held_shelves
       )
 
@@ -229,6 +229,7 @@ module Nabu
         "babelstone-ids" => %w[babelstone-ids],
         "kradfile" => %w[kradfile],
         "baxter-sagart" => %w[baxter-sagart-oc baxter-sagart-mc],
+        "shuowen" => %w[shuowen],
         "tshet-uinh" => %w[guangyun],
         "hdic" => HDIC_SLUGS,
         "tls" => %w[tls-words tls-concepts]
@@ -353,6 +354,7 @@ module Nabu
           pedagogy: pedagogy(by_slug["kanjidic2"]&.first),
           desk_reference: desk_reference(glyph, by_slug["kanjidic2"]&.first),
           old_chinese: shelf_entries(by_slug, %w[baxter-sagart-oc]),
+          shuowen: shelf_entries(by_slug, %w[shuowen]),
           middle_chinese: shelf_entries(by_slug, %w[baxter-sagart-mc guangyun]),
           early_japan: shelf_entries(by_slug, HDIC_SLUGS),
           tls: shelf_entries(by_slug, %w[tls-words tls-concepts]),
