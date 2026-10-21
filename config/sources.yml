@@ -655,6 +655,29 @@ burman-concordance:
   license_watch: https://zenodo.org/records/7801485
   sync_policy: manual
 
+calfa-lexicon:   # P139, 02-sources row 279
+  adapter: Nabu::Adapters::CalfaLexicon
+  adopted: "2026-10-21"
+  axes: [etym]   # Ačaṙean's etymological dictionary is the etym desk's; no Caucasus desk exists yet
+  wired: false   # checklist §6: bin/nabu enable calfa-lexicon && bin/nabu sync calfa-lexicon —
+                 # expect 5 docs → 86,067 entries (calfa-en 42,235 · calfa-fr 32,506 ·
+                 # calfa-acharian 11,326), 0 errored, 1 file skipped by rule (synonyms);
+                 # eyeball nabu define աբաս / այր + nabu show urn:nabu:dict:calfa-acharian:+ԱՅՐ, then flip.
+  sync_policy: manual
+  # The Calfa Classical Armenian dictionary (github.com/calfa-co/lexical-databases,
+  # the source files of dictionary.calfa.fr) — the library's FIRST Armenian
+  # dictionary shelf, language xcl. A compiled, standardized update of NBHL
+  # (1836–37), Bedrossian (1875) and Calfa (1861), plus Ačaṙean's etymological
+  # dictionary (1926, an AI-processed working document). Three dictionary slugs
+  # by upstream's own function/language split: calfa-en, calfa-fr (each with an
+  # np: proper-name lane), calfa-acharian. LICENSE: README verbatim "These data
+  # can be freely used under a CC BY-NC 4.0 license" (no LICENSE file;
+  # re-verified 2026-10-21) → nc. CAVEAT: synonyms/ is Łazarean 2006 —
+  # in-copyright material carried under Calfa's grant — skipped by rule until
+  # ruled on (31,449 rows; flipping it in is a one-rule change + a synonyms
+  # crossref lane). Upstream takes small corrections every few weeks (last push
+  # 2026-09-29) → manual.
+
 cantigas:   # P55-1, 02-sources row 144
   adapter: Nabu::Adapters::Cantigas
   adopted: "2026-07-31"
