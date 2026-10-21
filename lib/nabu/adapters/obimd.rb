@@ -261,9 +261,10 @@ module Nabu
       # state — discover indexes it once, every parse slices it in memory.
       def bytes_of(data)
         key = file_key(data)
-        @bytes = nil unless @bytes_key == key
+        return @bytes if @bytes_key == key
+
         @bytes_key = key
-        @bytes ||= SourceRead.utf8_file(data, label: "obimd")
+        @bytes = SourceRead.utf8_file(data, label: "obimd")
       end
 
       def file_key(data) = [File.expand_path(data), File.size(data), File.mtime(data).to_r]
