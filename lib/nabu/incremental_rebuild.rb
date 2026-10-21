@@ -596,6 +596,8 @@ module Nabu
                                   progress: progress, canonical_dir: @config.canonical_dir)
       progress&.stage("passage facets")
       Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
+      progress&.stage("entity index")
+      Store::EntityIndex.rebuild!(catalog: db, sources: Store::EntityIndex.load_default(config: @config))
       progress&.stage("entry facets")
       Store::EntryFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       progress&.stage("hiero postings")
