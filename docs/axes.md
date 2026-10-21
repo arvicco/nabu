@@ -203,7 +203,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (8): `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `mvp`, `sarit`, `suttacentral`
+**Members** (9): `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `sarit`, `suttacentral`
 
 ### tibetan
 
@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (12): `actib`, `derge-kangyur`, `derge-tengyur`, `e84000`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
+**Members** (13): `actib`, `derge-kangyur`, `derge-tengyur`, `e84000`, `lotsawa-house`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
 
 ### korean
 
@@ -235,7 +235,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (20): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `qieyun-restored`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
+**Members** (22): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `shuowen`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
 
 ### japonic
 

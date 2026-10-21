@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
@@ -27,7 +27,9 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `kanripo` | texts | attribution | wired · manual | 5,123 docs / 4,571,403 passages |
 | `kr-gaiji` | feature module | attribution | wired · manual | nothing held yet |
 | `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
+| `obimd` | texts | attribution | not yet wired | not synced yet |
 | `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |
+| `shuowen` | dictionary | attribution | not yet wired | not synced yet |
 | `suttacentral` | texts | open | wired · auto | 12,393 docs / 699,345 passages |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 | `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
