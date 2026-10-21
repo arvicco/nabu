@@ -17,6 +17,9 @@ files:
   - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/N10.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/N10.xml
     whole: true
+  - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/My1.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/My1.xml
+    whole: true
   - path: tfb-satavahana-epigraphy/LICENCE.txt
     url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/LICENCE.txt
     whole: true

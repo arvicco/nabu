@@ -16,7 +16,9 @@ require "fileutils"
 # (in-file CC BY 3.0, a commentary div nested INSIDE the edition), Telugu
 # 48 (tel-Latn), Kalyāṇa Cālukya 1004 (kan-Latn prose + san-Latn anuṣṭubh
 # verse), Vengī Cālukya 99 (the multi-face plates) with the repo's own
-# metadata TSV trimmed to its row.
+# metadata TSV trimmed to its row; Ollett's My1 (2026-10-21), whose
+# edition dates by a regnal year of Puḷumāvi (cal:regnal) beside Ollett's
+# own CE origDate.
 class DharmaDeccanTest < Minitest::Test
   include AdapterConformance
 
@@ -24,6 +26,7 @@ class DharmaDeccanTest < Minitest::Test
   EIAD1 = "urn:nabu:dharma-deccan:INSEIAD00001"
   AM499 = "urn:nabu:dharma-deccan:Am499"
   N10 = "urn:nabu:dharma-deccan:N10"
+  MY1 = "urn:nabu:dharma-deccan:My1"
   TEL48 = "urn:nabu:dharma-deccan:INSTelugu00048"
   KC1004 = "urn:nabu:dharma-deccan:INSKalyanaCalukya01004"
   VC99 = "urn:nabu:dharma-deccan:INSVengiCalukya00099"
@@ -91,7 +94,7 @@ class DharmaDeccanTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_edition_across_repos_sorted
     refs = adapter.discover(workdir).to_a
-    assert_equal [AM499, EIAD1, KC1004, TEL48, VC99, N10], refs.map(&:id),
+    assert_equal [AM499, EIAD1, KC1004, TEL48, VC99, MY1, N10], refs.map(&:id),
                  "urn:nabu:dharma-deccan:<stem sans DHARMA_>, sorted across repos"
     assert_equal "tfb-satavahana-epigraphy", refs.first.metadata["repo"]
     assert(refs.all? { |ref| ref.source_id == SLUG })
@@ -185,6 +188,17 @@ class DharmaDeccanTest < Minitest::Test
     assert_equal "pl:Dhānyakaṭaka", document.metadata["place_key"]
     assert_match(/\AAmarāvatī, on the reversed \(unpolished\) side of a big slab\.\z/,
                  document.metadata["orig_place_text"])
+  end
+
+  # The edition's cal:regnal <date>s are regnal years, never CE: they ride
+  # verbatim as "regnal_dating" (ruler key, year, the inscribed words)
+  # while the editor's own CE origDate stays the date.
+  def test_regnal_dates_ride_verbatim_beside_the_editors_ce_date
+    metadata = parsed(MY1).metadata
+    assert_equal [{ "ruler" => "VpŚrīPuḷumāvi", "year" => 8, "raw" => "sava 8" }], metadata["regnal_dating"],
+                 "the edition's date only — the translation's restatement is pruned"
+    assert_equal 90, metadata["date"]["not_before"], "Ollett's own conversion (ca. 90 CE) stays the date"
+    assert_nil parsed(N10).metadata["regnal_dating"], "no cal:regnal date, no key"
   end
 
   def test_n10_carries_its_own_cc_by_3_licence
