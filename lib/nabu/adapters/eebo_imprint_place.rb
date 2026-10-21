@@ -49,8 +49,10 @@ module Nabu
     #   - a region or country imprint ("[England]", "[Scotland?]",
     #     "Holland") rides as that region's name — the coarse grain is
     #     upstream's own;
-    #   - two-place imprints ("London and Oxford", "Oxford or London")
-    #     ride as written (no split, no pick);
+    #   - two-place imprints ("London and Oxford", "Oxford or London",
+    #     the conjecture "[Edinburgh? or St. Andrews?]") ride as written
+    #     (no split, no pick); the name-shape word cap applies to each
+    #     town of the pair, so a pair of multi-word towns still reads;
     #   - unmarked misspellings ("Lodnon", "Londou") ride as written — a
     #     fold needs the cataloguer's [sic], never our guess;
     #   - Westminster and Southwark stay their own towns (they were);
@@ -215,9 +217,13 @@ module Nabu
         name_shaped?(name) ? name : nil
       end
 
+      # The joint of a two-place imprint ("Oxford or London").
+      PAIR = /\s+(?:or|and)\s+/i
+
       def name_shaped?(name)
         return false if NOT_A_PLACE.include?(name.downcase)
-        return false unless name.match?(/\A[[:alpha:]][[:alpha:]'. -]*\z/) && name.split.size <= 3
+        return false unless name.match?(/\A[[:alpha:]][[:alpha:]'. -]*\z/)
+        return false unless name.split(PAIR).all? { |town| !town.empty? && town.split.size <= 3 }
         return false if name.gsub(/[^[:alpha:]]/, "").length < 4
         return false if name.split.any? { |word| word.gsub(/[^[:alpha:]]/, "").length < 2 }
 
