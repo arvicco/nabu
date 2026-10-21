@@ -245,11 +245,13 @@ module Nabu
           # imprint place is the artifact's own production place (39k+
           # London). The parse-time bare town (imprint_place) is the
           # registry-shaped key and answers first; a conjecture doc
-          # carries none and falls back to the verbatim imprint, cleaned
-          # of the ESTC-style bracket/colon furniture — uncertainty never
-          # reads as a claim, and no placed doc loses its name. The TCP's
-          # own pub_place (Ann Arbor) is lineage, exempted.
-          "eebo-tcp" => %w[imprint_place source_pub_place],
+          # answers with its parse-time conjecture town as a declared-
+          # uncertain claim (CONJECTURE_KEYS — "London?", never the raw
+          # "[London?] printed" prose); only a doc the reading left
+          # unplaced falls back to the verbatim imprint, cleaned of the
+          # ESTC-style bracket/colon furniture. The TCP's own pub_place
+          # (Ann Arbor) is lineage, exempted.
+          "eebo-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
           "rem" => "orig_place",
@@ -284,6 +286,14 @@ module Nabu
           # the two never co-occur, census 2026-10-21).
           "ref" => %w[place text-place]
         }.freeze
+        # Keys whose value is a parse-time CONJECTURE reading (the bare
+        # town of a ?-marked imprint): it mints as the house's declared-
+        # uncertain place claim — the town with the cataloguer's trailing
+        # "?", the mark the certainty layer glosses as probable
+        # (Certainty :cataloguer_query) — the same shape as the
+        # verbatim-hedged names other sources carry ("Siegburg (?)").
+        CONJECTURE_KEYS = %w[imprint_place_conjecture].freeze
+
         # ReF's text-place label ("Schreibort:", "(Schreibort)",
         # "Herstellungsort/Schreibort") — furniture, stripped before the
         # sentinel check; the hedges beside it ("(?)", "wahrsch.") stay.
@@ -505,6 +515,7 @@ module Nabu
             return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) ||
                                            NO_PLACE.include?(place.downcase)
 
+            place = "#{place}?" if CONJECTURE_KEYS.include?(key) && !place.end_with?("?")
             return [place, nil, nil, nil]
           end
           return [present_place(meta["orig_place"]), nil, nil, nil] if place.nil?
