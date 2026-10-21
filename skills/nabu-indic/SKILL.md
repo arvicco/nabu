@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: indic
   origin: hand-tuned
-  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gu-wikisource kannada-texts madurai mw nabu-data prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex ud"
+  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gretil-legacy gu-wikisource kannada-texts madurai mw nabu-data prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
 ---
 
 # The Indologist — the `indic` desk
@@ -29,6 +29,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dharma-mdt` | DHARMA text metadata (mdt-texts) — dating and typology rows for the DHARMA inscription corpora | attribution |
 | `dharma-tamil` | DHARMA Tamil-country epigraphy (Task Force A) | attribution |
 | `gretil` | GRETIL — Göttingen Register of Electronic Texts in Indian Languages (TEI corpus) | nc |
+| `gretil-legacy` | GRETIL legacy e-texts — Prakrit, New Indo-Aryan and Dravidian collections | nc |
 | `gu-wikisource` | Gujarati Wikisource — the bhakti cone (Narsinh Mehta · Mirabai · Dayaram · Akho · Premanand; Bruhat Kavyadohan) | attribution |
 | `kannada-texts` | Kannada Digital Texts Project — Old and Middle Kannada classics in TEI (A. Ollett) | attribution |
 | `madurai` | Project Madurai — classical Tamil e-texts | attribution |
@@ -41,7 +42,16 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `sii-clean` | South Indian Inscriptions — DHARMA editions and conversions | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
 | `tamilex` | TAMILEX — critical editions of the classical Tamil corpus (Universität Hamburg) | nc |
+| `te-wikisource` | Telugu Wikisource — the classical cone (kāvya, prabandha, śataka; prints to 1930) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `vedaweb` | VedaWeb — the Rigveda with the University of Zurich morphological annotation (Cologne Center for eHumanities) | attribution |
+| `wiktionary-dv` | Wiktionary Dhivehi — kaikki.org machine-readable extract | attribution |
+| `wiktionary-kn` | Wiktionary Kannada — kaikki.org machine-readable extract | attribution |
+| `wiktionary-ml` | Wiktionary Malayalam — kaikki.org machine-readable extract | attribution |
+| `wiktionary-pra` | Wiktionary Prakrit — kaikki.org machine-readable extract | attribution |
+| `wiktionary-si` | Wiktionary Sinhala — kaikki.org machine-readable extract | attribution |
+| `wiktionary-ta` | Wiktionary Tamil — kaikki.org machine-readable extract | attribution |
+| `wiktionary-te` | Wiktionary Telugu — kaikki.org machine-readable extract | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold
