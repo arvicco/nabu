@@ -305,7 +305,7 @@ class PosturesTest < Minitest::Test
                  "vks ADDED — PENDING on the same package's fi anchor + fi:old: 148→149; " \
                  "lasla ADDED — PENDING on a lat:cla approximation override (the perseus-latin " \
                  "shape — a corpus-level reading of Plautus-to-Juvenal Latin, not the corpus's " \
-                 "own definition, so it waits on a ruling): 149→150"
+                 "own definition, so it waits on a ruling): 149→150; " \
                  "gretil-legacy ADDED — identity, per-file pka/pra/awa/bra/mar tags on held " \
                  "nodes (pra declared coarse; the Malayalam file quarantines pending the ml " \
                  "mint): 150→151; " \
