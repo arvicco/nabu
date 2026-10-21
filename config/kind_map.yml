@@ -931,6 +931,16 @@ sources:
       "devotional translation": exegesis         # 4 — the Imitation of Christ ×3 (Pouvreau,
       #   Chourio, Maister) and Rodríguez's Ejercicio (Lopez): same reading as above
       "miscellany": unknown                      # 1 — Larramendi's letters, poems and sermons
+  vakk:               # census: 3,052 texts, 2026-10-21 — the text list's class column
+    facet: genre      # (upstream's own six labels)
+    map:
+      "K - kohtuprotokoll": legal/court          # 2,856 — the parish-court protocols
+      "S - sõnastik": lexical/word-list          # 1 — Stahl's Vocabula (1637)
+    deliberate:
+      "V - vaimulik": "religious content, not a genre — bibles, sermons, catechisms, hymnals mixed (80)"
+      "I - ilmalik": "secular content, not a genre — decrees, chronicles, letters, a cookbook mixed (67)"
+      "M - metatekst": "texts ABOUT Estonian — grammars beside histories and prefaces quoting it (22)"
+      "H - vennastekogudus": "a provenance shelf — the Moravian Brethren manuscripts: letters, life stories (26)"
   vks:                # census: 134 text files in 12 Korp subcorpora, 2026-10-21 — the
     facet: collection # subcorpus IS a genre shelf for five of them; the author-named
     map:              # shelves are folded where the author's corpus is one genre

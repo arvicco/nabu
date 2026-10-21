@@ -451,6 +451,8 @@ usfm_parser.rb:
   reads: 1
 usfx_parser.rb:
   reads: 1
+vakk.rb:
+  reads: 3
 vienna_wiki.rb:
   reads: 1
 viet_wikisource.rb:

@@ -155,6 +155,11 @@ class DerivabilityWritersTest < Minitest::Test
   # pages/<lang>/, the listing pages under catalog/<lang>/, tmp+rename;
   # attic copies + its .lotsawa-fetch.json ledger) inside Adapter#fetch —
   # the otdo_fetch crawl law kind.
+  # the riig crawl law kind. The vakk adapter writes canonical/vakk/
+  # (the text list under map/, tmp+rename, and the crawled reading/info
+  # pages as texts/<kood>/*.html.gz, gzip tmp+rename, plus its
+  # .vakk-crawl.json ledger) inside Adapter#fetch — the ndl-kotenseki
+  # crawl law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -188,7 +193,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
-    nabu/adapters/mdz_protestant.rb
+    nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb
