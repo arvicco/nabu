@@ -1165,6 +1165,33 @@ segmented into glossed morphemes, with Russian or English sentence
 translations (one document, 124 passages by file census; CC BY-NC-SA
 4.0, the author credited).
 
+## 8ao. The Baltic littoral and the Armenian lexicon (P139)
+
+Three historical corpora of languages the library never held, and
+its first Armenian dictionary, in the register shape (counts read
+from the catalog 2026-10-21):
+
+**The Baltic-littoral corpora.** `senie` — SENIE, the Corpus of
+Early Written Latvian (AiLab IMCS UL and the Latvian Language
+Institute): the written Latvian of 1507–1800, from the earliest
+Lord's-prayer specimens through the first catechisms, Mancelius,
+Glück's Bible and the Stenders, every run language-tagged (183 /
+48,995; CC BY-SA 4.0) · `vks` — the Corpus of Old Literary Finnish
+(Kotus, via the Kielipankki Korp API): Agricola's prints of the
+1540s to the end of Swedish rule, the 1642 Bible, laws, sermons,
+almanacs and the first Finnish newspaper (128 / 65,311; EUPL 1.2,
+attribution with share-alike) · `bim-sahcoba` — the historical
+Basque corpus (B.I.M. / SAHCOBA): fifteen lemmatized works from
+Etxepare's 1545 Linguae Vasconum Primitiae and Leizarraga's New
+Testament to the 1782 Avignon Rodríguez (15 / 19,361; CC BY 4.0).
+
+**The Armenian dictionary shelf.** `calfa-lexicon` — the source
+files of the Calfa Classical Armenian dictionary: a compiled,
+standardized update of NBHL, Bedrossian and Calfa 1861 with
+Ačaṙean's etymological dictionary as a working document — 86,067
+entries across English and French definition tables and the
+etymology file (CC BY-NC 4.0, Calfa credited).
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored

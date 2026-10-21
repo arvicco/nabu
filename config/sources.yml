@@ -572,7 +572,7 @@ bim-sahcoba:
   adapter: Nabu::Adapters::BimSahcoba
   adopted: "2026-10-21"
   axes: [romance]
-  wired: false   # until the first real sync is verified
+  wired: true    # first sync verified 2026-10-21: 15 docs / 19,361 passages, 0 quarantined (the lane census exactly)
   sync_policy: manual
   lemma_tier: silver
   # BIM/SAHCOBA — the historical Basque corpus of HiTZ, University of the
@@ -681,7 +681,7 @@ calfa-lexicon:   # P139, 02-sources row 279
   adapter: Nabu::Adapters::CalfaLexicon
   adopted: "2026-10-21"
   axes: [etym]   # Ačaṙean's etymological dictionary is the etym desk's; no Caucasus desk exists yet
-  wired: false   # checklist §6: bin/nabu enable calfa-lexicon && bin/nabu sync calfa-lexicon —
+  wired: true    # first sync verified 2026-10-21: 86,067 entries over 5 files, 0 errored, 1 skip-by-rule (the lane census exactly)
                  # expect 5 docs → 86,067 entries (calfa-en 42,235 · calfa-fr 32,506 ·
                  # calfa-acharian 11,326), 0 errored, 1 file skipped by rule (synonyms);
                  # eyeball nabu define աբաս / այր + nabu show urn:nabu:dict:calfa-acharian:+ԱՅՐ, then flip.
@@ -4855,7 +4855,7 @@ senie:
   adapter: Nabu::Adapters::Senie
   adopted: "2026-10-21"
   axes: [baltic, slavic]   # the Balto-Slavic lineage dual-tag (the baltic desk ruling)
-  wired: false   # until the first real sync is verified
+  wired: true    # first sync verified 2026-10-21: 183 docs / 48,995 passages, 0 quarantined (the lane census exactly)
   sync_policy: manual
   # SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL + the
   # Latvian Language Institute, University of Latvia; CLARIN-LV
@@ -4933,7 +4933,8 @@ sii-clean:   # P122-3, 02-sources row 267
   adapter: Nabu::Adapters::SiiClean
   adopted: "2026-10-12"
   axes: [indic, epigraphy]
-  wired: true    # first sync verified 2026-10-13: 589 docs / 8,372 passages
+  wired: true    # first sync 2026-10-13 (589 docs); WIDENED sync verified 2026-10-21:
+                 # 18,490 docs / 314,882 passages, 2,059 honest quarantines (the lane census exactly)
                  # from 649 grant-bearing editions (60-quarantine baseline
                  # recorded: stubs and uncitable files; 4,067 ungranted files
                  # skipped by rule) — exactly the lane census; SII 8.513 and
@@ -6318,7 +6319,8 @@ vks:
   adapter: Nabu::Adapters::Vks
   adopted: "2026-10-21"
   axes: [baltic]
-  wired: false   # until the first real harvest is verified
+  wired: true    # first harvest verified 2026-10-21: 128 docs / 65,311 passages,
+                 # 6 baseline quarantines; harvest 5m49s (the pre-flight estimate held)
   sync_policy: manual
   # VKS — Vanhan kirjasuomen korpus, the Corpus of Old Literary Finnish
   # (Kotus; Kielipankki Korp version urn:nbn:fi:lb-201407166): the written
