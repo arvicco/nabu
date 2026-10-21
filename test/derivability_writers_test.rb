@@ -151,6 +151,10 @@ class DerivabilityWritersTest < Minitest::Test
   # The ig-cyprus adapter writes its crawled IG XV 1,1 records
   # (canonical/ig-cyprus/documents/, tmp+rename) inside Adapter#fetch —
   # the riig crawl law kind.
+  # lotsawa_fetch writes canonical/lotsawa-house/ (text pages under
+  # pages/<lang>/, the listing pages under catalog/<lang>/, tmp+rename;
+  # attic copies + its .lotsawa-fetch.json ledger) inside Adapter#fetch —
+  # the otdo_fetch crawl law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -165,6 +169,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
+    nabu/lotsawa_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb

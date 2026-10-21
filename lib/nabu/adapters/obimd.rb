@@ -4,6 +4,7 @@ require "json"
 require "strscan"
 require_relative "../file_fetch"
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -168,6 +169,8 @@ module Nabu
         super()
         @pins = pins
         @index = {}
+        @bytes = nil
+        @bytes_key = nil
         @chars = {}
       end
 
@@ -251,9 +254,19 @@ module Nabu
       # string-aware brace scan (formatting-independent); the name comes
       # from the slice's RubbingName key and parse re-verifies it.
       def records(data)
-        key = [data, File.size(data), File.mtime(data).to_r]
-        @index[key] ||= scan_records(File.binread(data))
+        @index[file_key(data)] ||= scan_records(bytes_of(data))
       end
+
+      # The whole data.json through the encoding belt, memoized per file
+      # state — discover indexes it once, every parse slices it in memory.
+      def bytes_of(data)
+        key = file_key(data)
+        @bytes = nil unless @bytes_key == key
+        @bytes_key = key
+        @bytes ||= SourceRead.utf8_file(data, label: "obimd")
+      end
+
+      def file_key(data) = [File.expand_path(data), File.size(data), File.mtime(data).to_r]
 
       def scan_records(bytes)
         scanner = StringScanner.new(bytes)
@@ -284,29 +297,23 @@ module Nabu
       end
 
       def span(bytes, start, finish)
-        slice = bytes.byteslice(start, finish - start)
+        slice = SourceRead.slice(bytes, offset: start, length: finish - start, what: "obimd: data.json record")
         name = slice[/"RubbingName"\s*:\s*"([^"]+)"/, 1]
         raise Nabu::ParseError, "obimd: a data.json record at byte #{start} has no RubbingName" if name.nil?
 
-        [name.dup.force_encoding(Encoding::UTF_8), start, finish - start]
+        [name, start, finish - start]
       end
 
       def read_record(document_ref)
-        File.open(document_ref.path, "rb") do |io|
-          io.seek(document_ref.metadata.fetch("offset"))
-          slice = io.read(document_ref.metadata.fetch("length")).to_s.force_encoding(Encoding::UTF_8)
-          unless slice.valid_encoding?
-            raise Nabu::ParseError,
-                  "obimd: #{document_ref.id}: invalid UTF-8 in the record slice"
-          end
-
-          JSON.parse(slice)
-        end
+        slice = SourceRead.slice(bytes_of(document_ref.path), offset: document_ref.metadata.fetch("offset"),
+                                                              length: document_ref.metadata.fetch("length"),
+                                                              what: "obimd: #{document_ref.id} record slice")
+        JSON.parse(SourceRead.utf8(slice, label: "obimd: #{document_ref.id} record slice"))
       end
 
       def character_map(path)
         path = File.expand_path(path)
-        @chars[path] ||= JSON.parse(File.read(path, encoding: "UTF-8"))
+        @chars[path] ||= JSON.parse(SourceRead.utf8_file(path, label: "obimd"))
       end
 
       # -- building ----------------------------------------------------------------
