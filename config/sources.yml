@@ -6726,6 +6726,16 @@ wiktionary-recon:
   # EXPECTED SYNC DELTA at the next `bin/nabu sync wiktionary-recon`:
   # +1 GET (~0.7 MB) / +542 entries (481 words, 669 senses; a handful of
   # grc/el/omn reflex edges from the 4 records with descendants).
+  # 2026-10-21: FOUR more ATTESTED extracts — the Caucasus four, the
+  # library's first dictionary rows for these lects: wiktionary-xcl Old
+  # Armenian (8,541 records / 7,706 words / 12,881 senses, 48.2 MB),
+  # wiktionary-axm Middle Armenian (478 / 459 / 546, 1.2 MB),
+  # wiktionary-oge Old Georgian (728 / 694 / 930, 1.5 MB), wiktionary-os
+  # Ossetian (913 / 872 / 1,105, 1.3 MB). Full-download censuses
+  # 2026-10-21 (Last-Modified 2026-10-03). EXPECTED SYNC DELTA at the
+  # next `bin/nabu sync wiktionary-recon`: +4 GETs (~52 MB) / +10,660
+  # entries (8,541 + 478 + 728 + 913), the xcl → axm → hy descendant
+  # ladder (~11.7k nodes across the four) and the Caucasus loan lanes.
   sync_policy: manual
 
 wiktionary-si:   # 02-sources row 289

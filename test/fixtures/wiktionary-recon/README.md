@@ -405,3 +405,56 @@ under the same licenses as Wiktionary - both CC-BY-SA and GFDL.").
 Selection recipe: whole JSONL lines picked by upstream line number as
 listed (`awk 'NR in k'`); each kept line verified as a literal line of
 the raw download.
+
+## The Caucasus four (attested xcl/axm/oge/os; retrieved 2026-10-21)
+
+Four NEW extracts, the P29-1 Umbrian shape (attested languages, no
+display asterisk). License statement on https://kaikki.org/dictionary/
+unchanged ("This data is made available under the same licenses as
+Wiktionary - both CC-BY-SA and GFDL."). Upstream Last-Modified
+2026-10-03 on all four; every record's `lang_code` is the extract's own
+code (whole-file check).
+
+- `.../Old%20Armenian/kaikki.org-dictionary-OldArmenian.jsonl` —
+  48,189,014 B, **8,541 lines** (7,706 distinct words, 12,881 senses),
+  sha256 `7dca49829650d0258c166ac9dc4646adec528153b0979aa778fba4ee3c296c23`.
+  pos noun 3,859 · verb 2,026 · adj 1,270 · name 389 · adv 383 · suffix
+  219; 6,303 with etymology_text; 4,684 with descendants (8,632 nodes);
+  2,495 form-of/alt-of records; 358 STRING etymology_numbers.
+  → **5 fixture lines** (upstream 7/8/62/342/361): `ես` pron 1 "I" /
+  verb 2 (a form-of — the homograph split); `հայր` "father" (axm + hy
+  descendants, Proto-Armenian and PIE *ph₂tḗr etymons); `ջուր` "water";
+  `ձու` "egg".
+- `.../Middle%20Armenian/kaikki.org-dictionary-MiddleArmenian.jsonl` —
+  1,157,351 B, **478 lines** (459 words, 546 senses), sha256
+  `25c47d1f7f55c6bb4309fecded5d48df80f001657e86c836a41d9fa1cb2fcb64`.
+  pos noun 395 · adj 32 · name 16 · verb 13 · suffix 13; 423 with
+  etymology_text; 325 with descendants (1,305 nodes, overwhelmingly hy).
+  → **6 fixture lines** (upstream 6/7/12/21/27/31): `մորի` 1 "woods" /
+  2 "bramble"; `կարագ` "butter" (descendants hy/cpg/ka/udi — the
+  Caucasus loan lane); `ջուր` and `ձու` (the Old Armenian rungs of the
+  same ladder); `ունք`, an alternative-form record.
+- `.../Old%20Georgian/kaikki.org-dictionary-OldGeorgian.jsonl` —
+  1,453,608 B, **728 lines** (694 words, 930 senses), sha256
+  `2f309bf499001dbd2da4df84e43464e6541476653e25720112ca8d9f92c045c0`.
+  Headwords in Mkhedruli (U+10D0 block); pos noun 598 · adj 58 · name 31
+  · num 13; 622 with etymology_text; 514 with descendants (1,747 nodes →
+  ka, sva, xmf, lzz and the North Caucasian loans). → **5 fixture
+  lines** (upstream 3/4/8/26/27): `ქართული` (ka/sva descendants);
+  `შაბათი` "Saturday" (ady/bbl/ce/inh/xmf/kbd descendants); `სამი`
+  "three" (an xcl descendant); `ხელი` noun 1 (alternative form) / noun
+  2 "insane" (borrowed from Old Armenian).
+- `.../Ossetian/kaikki.org-dictionary-Ossetian.jsonl` — 1,269,772 B,
+  **913 lines** (872 words, 1,105 senses), sha256
+  `70d24c261d37e8e98af486e08f23c495b4eae067b66544db6aaedf009c006f94`.
+  Cyrillic with `ӕ`; pos noun 640 · adj 69 · verb 60 · character 55 (the
+  alphabet letters) · name 24; 502 with etymology_text and 1,322
+  etymology templates, but only 16 records with descendants (37 nodes).
+  Iron and Digor forms share the extract (Digor ones labelled in their
+  glosses). → **8 fixture lines** (upstream 1/77/84/85/86/87/148/294):
+  `б` (a letter record); `нӕл` "male" (Proto-Iranian → PIE *h₂nḗr);
+  `фыд` noun 1 "meat" / 2 "millstone" / 3 "father" / 4 "evil"; `къерами`
+  (a Digor-form record); `бӕх` "horse" (ka descendants).
+
+Selection recipe: whole JSONL lines picked by upstream line number as
+listed; each kept line verified as a literal line of the raw download.
