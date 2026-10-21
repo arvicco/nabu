@@ -23,6 +23,7 @@ A source wears every desk it serves — these 27 answer this desk. Holdings are 
 | `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
 | `dharma-tamil` | texts | attribution | wired · auto | 1,267 docs / 17,993 passages |
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `gretil-legacy` | texts | nc | not yet wired | not synced yet |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |

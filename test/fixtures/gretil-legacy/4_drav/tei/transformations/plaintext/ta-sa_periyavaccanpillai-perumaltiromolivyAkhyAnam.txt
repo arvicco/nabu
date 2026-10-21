@@ -1,0 +1,40 @@
+Periyavāccāṉ Piḷḷai: Perumāḷ Tirumoḻi vyākhyānam
+
+
+# Header
+
+  This file is a plain text transformation of http://gretil.sub.uni-goettingen.de/gretil/corpustei/ta-sa_periyavaccanpillai-perumaltiromolivyAkhyAnam.xml.xml
+  with a rudimentary header. For a more extensive header please refer to the source file.
+
+## Data entry: Suganya Anandakichenin
+## Contribution: Suganya Anandakichenin
+## Date of this version: 2020-06-02
+
+## Source: 
+   - Suganya Anandakichenin (ed.): My Sapphire-hued Lord, My Beloved. A Complete, Annotated Translation of Kulacēkara Āḻvār’s Perumāḷ Tirumoḻi and Periyavāccāṉ Piḷḷai’s Medieval Maṇipravāḷam Commentary, with an Introduction. Pondichéry 2018 (Collection Indologie 136).
+
+## Publisher: Göttingen Register of Electronic Texts in Indian Languages (GRETIL), SUB Göttingen
+
+## Licence:
+   This e-text was provided to GRETIL in good faith that no copyright rights have been infringed. If anyone wishes to assert copyright over this file, please contact the GRETIL management at gretil(at)sub(dot)uni-goettingen(dot)de. The file will be immediately removed pending resolution of the claim.
+   Distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+
+## Structure of references:
+   A reference is assembled consisting of
+   - a pragmatic abbreviation of the title Periyavāccāṉ Piḷḷai: Perumāḷ Tirumoḻi vyākhyānam = PP-PTv,
+   - the number of the decade in arabic numerals,
+   - the number of the verse.
+
+
+# Text
+
+
+paramakāruṇikarāṉa periyavāccāṉ piḷḷai aruḷicceyta vyākhyānam
+
+avatārikai - śriyaḥpatiyāy jñānānandaikasvarūpaṉāy, samastakalyāṇa-guṇātmakaṉāy, ubhayavibhūtiyuktaṉāy, sarvasmātparaṉāṉa sarveśvaraṉ aṭiyāka perumāḷ peṟṟatu bhaktirūpāpannajñānam-ākaiyālē, kramattālē kāṇkiṟōm eṉṟu āṟi irukkal āvatu tan talaiyālē vantat’ ākiliṟē, avaṉ tāṉē kāṭṭa kāṇkiṟavar-ākaiyālē appōtē kāṇa vēṇṭumpaṭi viṭāy piṟantatu. paramapadattilum anubhavippatu guṇānubhavam-ākaiyālē anta śīlādi-guṇaṅkaḷ pūrṇamāṉa kōyililē anubhavikka prārthikkiṟār. iṅku anubhavikka kuṟai eṉ? prārthanai eṉ? eṉṉil - svātantryam piṟappē uṭaiyar-ākaiyālē, manuṣyar nirodhippār palarum uṇṭākaiyālē, iṅku vant’ anubhavikka māṭṭātē aṭiyārkaḷ kuḻāṅkaḷai uṭaṉ kūṭuvat’ eṉṟu-kolō eṉṟum, am tamil pēr iṉpatt’ aṭiyārōṭ’ iruntamai eṉṟum nammāḻvār prārthittu peṟṟa pēṟṟai iṅkē anubhavikka ācaippaṭukiṟār.
+
+iruḷ iriya cuṭar maṇikaḷ imaikkum neṟṟi
+iṉam tutti aṇi paṇam āyiraṅkaḷ ārnta
+arav’ araca perum cōti aṉantaṉ eṉṉum
+aṇi viḷaṅkum uyar veḷḷai aṇaiyai mēvi
+tiruvaraṅka perum nakar uḷ teḷ nīr poṉṉi
