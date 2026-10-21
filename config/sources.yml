@@ -3305,6 +3305,32 @@ local-source:
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
 
+lotsawa-house:   # 02-sources row 283
+  adapter: Nabu::Adapters::LotsawaHouse
+  adopted: "2026-10-21"
+  axes: [tibetan, buddhist]
+  multilingual: true   # the Tibetan pages + translations in eight languages
+  translations: true   # the translation pages ride (false = the bo pages only)
+  wired: false   # first sync owner-fired at the gate — a PACED CRAWL (1 req/s):
+                 # all nine languages ≈ 7,000–7,800 requests ≈ 2–2.2 h, bo-only
+                 # (translations: false) ≈ 1,750 ≈ 30 min; resumable at the file
+                 # grain. Then eyeball nabu show on the Mipham fixtures' live
+                 # twins + 4 random texts, reconcile against the site's
+                 # "more than 6000 texts in nine languages", flip
+  sync_policy: manual
+  # Lotsawa House (lotsawahouse.org, Lotsawa House CIC) — the
+  # non-canonical Tibetan Buddhist literature shelf: liturgy, terma,
+  # instructions, praises, biographies by 350+ Tibetan and Indian masters
+  # plus sūtras/dhāraṇīs. Document = one (language, text) page: the bo
+  # page is the original (xct), every other language a translation
+  # document (translation_of → the bo urn). CC BY-NC 4.0 verbatim in the
+  # site's terms (which also license crawling for indexing) → nc. No bulk
+  # export or sitemap: Nabu::LotsawaFetch walks the per-language explore,
+  # Words-of-the-Buddha and author listing pages (persisted under
+  # catalog/, skipped by rule). Restricted-practice texts carry
+  # restricted: true. EXPECTED FIRST SYNC (sample-estimated, the gate
+  # reconciles): ~1,380 bo + ~1,380 en + ~3,000 other-language documents.
+
 madurai:   # P122-3, 02-sources row 268
   adapter: Nabu::Adapters::Madurai
   adopted: "2026-10-12"

@@ -907,6 +907,22 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  lotsawa-house:
+    # kind machine-postured: config/kind_map.yml folds the topic facet
+    # (open vocabulary — the FORM topics only).
+    lect: {posture: identity, note: "the Tibetan pages claim xct, declared coarse (the
+        classical literary language from the imperial-era translations to living authors —
+        no finer Tibetan stage exists to claim); translation pages eng/deu/spa/fra/ita/nld/
+        por/cmn, their inline Tibetan liturgy lines xct, IAST mantra lines san"}
+    dating: {posture: pending, note: "no typed composition date ships; candidates: (1) the
+        author's life dates through the BDRC person id every author page carries
+        (metadata bdrc_person — a person-dates join, the itkc author-era mold, not held
+        yet); (2) the translator credit's year (metadata translation_year) as the
+        translation documents' own edition-class date; colophon dates sit in free-text
+        footnotes"}
+    places: {posture: unplaced, note: "no findspot/composition place on the page; place
+        names occur only as topics (Samyé Chimpu, Wutai Shan) — mentions, not claims"}
+    script: {posture: implied}
   aozora:
     lect: {posture: identity, note: modern Japanese literature}
     dating: {posture: dated, note: "the index's own columns, via MetadataDates :structured —

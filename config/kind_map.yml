@@ -857,6 +857,41 @@ sources:
       # etiquette (礼法 — instruction or record, case by case) · 5xx–6xx
       # technology and industry · 7xx arts (701/702 art history) · 816/817/819 ·
       # 90x general literature.
+  lotsawa-house:      # census 2026-10-21: the site's 300-slug topic vocabulary (/topics/) — the
+    # text page's own category tags, language-independent slugs, riding the topic facet on
+    # every page. Mostly deity/cycle/place subjects (Tārā, Longchen Nyingtik, Samyé Chimpu)
+    # → `vocabulary: open`: an unruled slug mints nothing and counts as uncovered. The rules
+    # read only the FORM topics; per-doc counts land at the first sync's census.
+    facet: topic
+    vocabulary: open
+    map:
+      "prayers": hymn-prayer/prayer              # the site's general prayer class
+      "aspiration-prayers": hymn-prayer/prayer   # smon lam — prayers of aspiration
+      "long-life-prayers": hymn-prayer/prayer    # zhabs brtan — prayers for a master's long life
+      "lineage-prayers": hymn-prayer/prayer      # supplications to a lineage's masters
+      "swift-rebirth-prayers": hymn-prayer/prayer
+      "dedication-prayers": hymn-prayer/prayer   # bsngo ba — dedications of merit
+      "praise": hymn-prayer/hymn                 # bstod pa — praises of deities and masters
+      "sadhanas": ritual/liturgy                 # sgrub thabs — practice liturgies
+      "recitation-manuals": ritual/liturgy       # bzlas yig
+      "tsok": ritual/liturgy                     # the feast-offering liturgies
+      "fire-offering": ritual/liturgy
+      "sang-offering": ritual/liturgy
+      "sur-offering": ritual/liturgy
+      "torma-offering": ritual/liturgy
+      "biography": historiography                # rnam thar — lives fold to historiography by the
+      #                                            ruled biography precedent (the scat/elephantine folds)
+      "history": historiography
+      "autobiography": literary/diary/memoir     # rang rnam — the memoir sub
+      "letters": letter                          # chab shog — letters and epistles
+      "songs-and-poems": literary/poetry         # mgur and poetic songs of realization
+      "sutra": scripture                         # mdo — the Words of the Buddha
+      "commentary": exegesis                     # 'grel pa — commentaries on root texts
+      "advice": literary/wisdom                  # zhal gdams — counsels, the instruction-literature
+      #                                            fold (the cdli/etcsl "instruction" → wisdom precedent)
+      "grammar": lexical/grammar
+      "medicine": scholarly/medicine
+      "astrology": divination/astrology
   bu-ajami:           # census: 80 docs, 2026-10-14 — upstream's own form labels;
     facet: genre      # the identity-grade fold (poetry means poetry)
     map:
