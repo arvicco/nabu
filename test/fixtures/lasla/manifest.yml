@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# adapter_test is null: two entries are documented trims, so a fresh-copy
+# re-run would false-fail the count assertions.
+source: lasla
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: conllup/Cicero_CumQuaestorLilybaeoDecederetFragmenta_CicQuaest.conllup
+    url: https://raw.githubusercontent.com/CIRCSE/LASLA/main/conllup/Cicero_CumQuaestorLilybaeoDecederetFragmenta_CicQuaest.conllup
+    whole: true
+    trim: none
+  - path: conllup/Catullus_Catullus_Catul.conllup
+    url: https://raw.githubusercontent.com/CIRCSE/LASLA/main/conllup/Catullus_Catullus_Catul.conllup
+    whole: false
+    trim: the header line + the first 3 sentence blocks (upstream lines 1-61), byte-verbatim
+  - path: conllup/Tacitus_TacHistoriae_TacHist4.conllup
+    url: https://raw.githubusercontent.com/CIRCSE/LASLA/main/conllup/Tacitus_TacHistoriae_TacHist4.conllup
+    whole: false
+    trim: >-
+      the header line (upstream line 1) + upstream lines 856-906 (block
+      TacHist4-Q-05-1672) + upstream lines 5913-6031 (blocks 1791, 1792,
+      1791, 1792 — the repeated sent_id run), byte-verbatim
+  - path: conllup/Livius_AbVrbeCondita_TLiv08.conllup
+    url: https://raw.githubusercontent.com/CIRCSE/LASLA/main/conllup/Livius_AbVrbeCondita_TLiv08.conllup
+    whole: false
+    trim: the header line + the first sentence block (upstream lines 1-27), byte-verbatim
+  - path: texts/CiceroCum Quaestor Lilybaeo Decederet Fragmenta.ttl.gz
+    url: https://raw.githubusercontent.com/CIRCSE/LASLA/main/texts/CiceroCum%20Quaestor%20Lilybaeo%20Decederet%20Fragmenta.ttl.gz
+    whole: true
+    trim: none (the rejected Turtle grain's specimen)

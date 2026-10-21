@@ -319,6 +319,12 @@ sources:
     fields:
       author: author          # 250 docs, 152 authors ("Agennius Vrbicus")
       work: work              # 372 docs, 359 titles ("De controuersiis agrorum")
+  lasla:                      # 242 files (upstream census 2026-10-21)
+    fields:
+      author: author          # 24 filename authors, verbatim (Cicero 80 · Seneca 26 ·
+      #                         Tacitus 20 · Ovidius 20 · Vergilius 17 · … PseudoCaesar1–3)
+      work: work              # the filename's work field, verbatim ("BellumGallicum" —
+      #                         one value per work across its per-book files)
   bfm:                        # 219 docs, 69 authors incl. "anonyme" (a claim)
     fields:
       author: author

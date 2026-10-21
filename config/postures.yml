@@ -2063,6 +2063,19 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  lasla:
+    kind: {posture: unclassified, note: "the conllup lane carries no genre field — only the
+        filename's author/work/code (mined: author + work facets); a per-work genre table
+        would be a curated overlay, not extraction"}
+    lect: {posture: pending, note: "candidate: a lect_overrides row lat → lat:cla,
+        tier approximation — the perseus-latin shape (classical canon, Plautus/Cato
+        refining to lat:arch per document); the corpus spans Plautus to the 2nd c. AD,
+        so the stage is a corpus-level reading, not the corpus's own definition"}
+    dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
+        24 filename authors (Plautus … Juvenal) as the composition class; the asset
+        carries no date field of its own"}
+    places: {posture: unplaced, note: "no place field in the asset"}
+    script: {posture: implied}
   dss:
     kind: {posture: unclassified}
     dating: {posture: undatable}
