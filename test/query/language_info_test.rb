@@ -13,22 +13,27 @@ module Query
   class LanguageInfoTest < Minitest::Test
     include StoreTestDB
 
+    # The shelf load is identical for every test: replayed once per class
+    # into a template, each test gets its own fresh copy (StoreTestDB).
     def setup
-      @catalog = store_test_db
+      @catalog = class_template_db do |db|
+        recon = Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: db, source: recon)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+        Nabu::Store::Source.create(
+          slug: "texts", name: "Texts", adapter_class: "TestAdapter", license_class: "open"
+        )
+        Nabu::Store::Source.create(
+          slug: "more-texts", name: "More", adapter_class: "TestAdapter", license_class: "open"
+        )
+      end
       @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
-      recon = Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
-      @texts = Nabu::Store::Source.create(
-        slug: "texts", name: "Texts", adapter_class: "TestAdapter", license_class: "open"
-      )
-      @more = Nabu::Store::Source.create(
-        slug: "more-texts", name: "More", adapter_class: "TestAdapter", license_class: "open"
-      )
+      @texts = Nabu::Store::Source.first!(slug: "texts")
+      @more = Nabu::Store::Source.first!(slug: "more-texts")
     end
 
     def teardown

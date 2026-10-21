@@ -242,7 +242,8 @@ class TitusBactrianTest < Minitest::Test
     assert_equal ["A"], metadata["texts"]
     assert_equal "Dat.Doc.", metadata["genre"]
     assert_equal "Dated documents", metadata["genre_name"]
-    assert_equal({ "genre" => { "value" => "Dated documents" } }, metadata["facets"])
+    assert_equal({ "genre" => { "value" => "Dated documents", "raw" => "Dat.Doc." } }, metadata["facets"],
+                 "the facet keeps the corpus's own genre code as its raw claim")
     assert_equal "Corpus of Bactrian Texts", metadata["page_title"]
     assert_match(/Nicholas Sims-Williams/, metadata["data_entry"])
     assert_match(/Bactrian Documents from Northern Afghanistan/, metadata["bibliography"])

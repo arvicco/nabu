@@ -170,13 +170,21 @@ class FacetMapTest < Minitest::Test
                      "objectInfo" => "object_type", "style" => "style" },
       "glaux" => { "dialect" => "dialect", "author" => "author", "work" => "work" },
       "kdsp" => { "canonicity" => "canonicity", "period_slot" => "period", "author" => "author" },
-      "ref" => { "medium" => "medium", "text-type" => "text_type" },
+      "ref" => { "medium" => "medium", "text-type" => "text_type", "genre" => "genre" },
       "rem" => { "topic" => "topic", "text_type" => "text_type" },
       "edr" => { "repository" => "museum" },
       "edh" => { "repository" => "museum" },
       "oncoj" => { "corpus" => "collection" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
+  end
+
+  # The mining-law sweep: DAMOS's per-item writing support (clay ×5,888,
+  # ivory, stone) projects as the material facet — the cdli/rundata
+  # facet name, never a kind.
+  def test_shipped_config_projects_the_damos_material
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
+    assert_equal({ "material" => "material" }, Nabu::FacetMap.load(path).fields_for("damos"))
   end
 
   # ociana: the per-record script (the lect stage-flip key) and the
@@ -276,10 +284,23 @@ class FacetMapTest < Minitest::Test
       "itkc" => { "author" => "author", "subject_class" => "subject", "sabu_class" => "classification" },
       "honkoku" => { "ndl_catalog.author_names" => "author", "ndl_catalog.subjects" => "subject" },
       "obi-burmese" => { "subject" => "subject" },
-      "korba" => { "translator" => "translator" },
+      "korba" => { "translator" => "translator", "region" => "region" },
       "dharma-javanese-texts" => { "author" => "author" }
     }
     expected.each { |slug, fields| assert_equal fields, map.fields_for(slug), slug }
+  end
+
+  # The mining law's places sweep: place-shaped metadata the place lane
+  # never projected — origin grains (coptic's settlement placeName) and
+  # regional classifications — now facet verbatim.
+  def test_shipped_config_projects_the_places_sweep
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "author" => "author", "origPlace" => "place", "placeName" => "place",
+                   "objectType" => "object_type", "repository" => "repository", "corpus" => "corpus" },
+                 map.fields_for("coptic-scriptorium"))
+    assert_equal({ "region" => "region" }, map.fields_for("corpus-gysseling"))
+    assert_equal({ "region" => "region" }, map.fields_for("corpus-oudnederlands"))
+    assert_equal({ "place_key" => "findspot" }, map.fields_for("dharma-deccan"))
   end
 
   def test_shipped_config_loads

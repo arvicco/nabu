@@ -317,7 +317,7 @@ class DerivationFingerprintTest < Minitest::Test
   DATA_BUILD_EXEMPT = [
     /\Anabu\.rb\z/,                          # the require manifest
     %r{\Anabu/data_build(\.rb\z|/)},         # the rail itself
-    %r{\Anabu/cli\.rb\z},                    # the CLI legitimately drives builds
+    %r{\Anabu/cli(\.rb\z|/)},                # the CLI legitimately drives builds
     %r{\Anabu/derivation_fingerprint\.rb\z}, # names the exclusion
     # The offline xct fold-table generator (rake fold:xct): ops/ is already
     # outside every digest (EXCLUDED_DIRS); it borrows DataBuild::CsvWriter's
@@ -342,6 +342,23 @@ class DerivationFingerprintTest < Minitest::Test
                  "#{offenders.join("\n")}"
   end
 
+  # -- the CLI exclusion: cli.rb and its carved-out area files -------------
+
+  # The CLI is the operator surface, not derivation code: cli.rb has always
+  # been an EXCLUDED_FILES entry, and the area files carved out of it under
+  # cli/ inherit that posture through EXCLUDED_DIRS. Without the dir entry
+  # the split would silently move ~13k lines INTO the shared core and dirty
+  # every source's stamp on every CLI edit.
+  def test_cli_and_its_area_files_left_the_shared_core
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "cli.rb"
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_DIRS, "cli"
+    area_files = Dir[File.join(Nabu::DerivationFingerprint::LIB_DIR, "cli", "**", "*.rb")]
+    refute_empty area_files
+    area_files.each do |file|
+      assert computer.send(:excluded?, file), "#{file} must stay outside the shared derivation core"
+    end
+  end
+
   # -- the research exporter exclusion (P121-1, the data_build posture) ----
 
   # `nabu export` tables are producer-only: they READ the catalog and the
@@ -351,7 +368,7 @@ class DerivationFingerprintTest < Minitest::Test
   EXPORT_EXEMPT = [
     /\Anabu\.rb\z/,                          # the require manifest
     %r{\Anabu/export(\.rb\z|/)},             # the exporter itself
-    %r{\Anabu/cli\.rb\z},                    # the CLI drives exports
+    %r{\Anabu/cli(\.rb\z|/)},                # the CLI drives exports
     %r{\Anabu/derivation_fingerprint\.rb\z}  # names the exclusion
   ].freeze
 
@@ -483,8 +500,12 @@ class DerivationFingerprintTest < Minitest::Test
   # links scopes carry, and its own identity changes move the scope stamps
   # it computes (link_stamps_test). Plain exclusion, like the batch
   # producers it stamps.
+  # The mined-layers machinery (the cost law) shapes no catalog row either:
+  # the classification, the gateway, the read union and the mine verbs
+  # live entirely on the links side.
   def test_the_links_stamp_machinery_is_excluded_from_the_shared_core
-    %w[link_stamps.rb store/source_content_identity.rb].each do |rel|
+    %w[link_stamps.rb store/source_content_identity.rb mined_layers.rb store/mined_links.rb
+       store/link_layers.rb links_mine_commands.rb].each do |rel|
       assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, rel
     end
   end

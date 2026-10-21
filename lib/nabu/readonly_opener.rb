@@ -24,8 +24,11 @@ module Nabu
     # const: sweep cadence, not a corpus claim
     WATCH_INTERVAL = 60
 
-    def initialize(path, &open)
-      @path = path
+    # +also+: further files the handle reads through (the links union
+    # attaches the mined-layers store) — the identity covers every one, so
+    # a store appearing, vanishing or being replaced reopens the handle.
+    def initialize(path, *also, &open)
+      @paths = [path, *also]
       @open = open
       @handle = nil
       @identity = nil
@@ -84,12 +87,16 @@ module Nabu
     end
 
     # (device, inode) — a file replaced in place (delete + recreate)
-    # changes inode, which is how a rebuild is noticed. nil when absent.
+    # changes inode, which is how a rebuild is noticed — per file; nil
+    # when every file is absent.
     def file_identity
-      return nil unless File.exist?(@path)
+      identities = @paths.map do |path|
+        next nil unless File.exist?(path)
 
-      stat = File.stat(@path)
-      [stat.dev, stat.ino]
+        stat = File.stat(path)
+        [stat.dev, stat.ino]
+      end
+      identities.compact.empty? ? nil : identities
     end
   end
 end

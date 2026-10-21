@@ -52,7 +52,7 @@ class LinkScopeReplayTest < Minitest::Test
   def test_a_recorded_place_mine_scope_re_mints_candidate_edges
     Nabu::LinkScopeReplay.replay!(
       { "producer" => "place-mine", "scope" => "kanripo", "params" => { "gazetteer" => "chgis" } },
-      db: @catalog, fulltext: nil, journal: @journal, config: nil
+      db: @catalog, fulltext: nil, journal: @journal, config: nil, places: nil # no registry: nothing ruled out
     )
     edges = @journal[:links].where(kind: "place-candidate").all
     assert_equal ["urn:nabu:place:chgis:hvd_1"], edges.map { |e| e[:to_urn] }.uniq

@@ -172,6 +172,43 @@ module Store
       assert_equal "own error", failed.notes
     end
 
+    # `nabu runs close-stale`: a row still "running" past the stale
+    # threshold is a killed run nobody noticed. close_stale settles exactly
+    # those rows "abandoned" (finished_at stamped, the reason in notes) and
+    # returns them; a live row inside the threshold and closed rows stand.
+    def test_close_stale_abandons_only_open_rows_started_before_the_cutoff
+      now = Time.local(2026, 10, 21, 12) # the ledger stores zone-less local time
+      cutoff = now - 3_600
+      stale = Nabu::Store::Run.create(source_slug: "dead", kind: "sync", started_at: cutoff - 60, status: "running")
+      older = Nabu::Store::Run.create(source_slug: "older", kind: "rebuild", started_at: cutoff - 7_200,
+                                      loaded_at: cutoff - 7_000, status: "running")
+      live = Nabu::Store::Run.create(source_slug: "live", kind: "sync", started_at: cutoff + 60, status: "running")
+      done = Nabu::Store::Run.create(source_slug: "done", kind: "sync", started_at: cutoff - 60,
+                                     finished_at: cutoff, status: "failed", notes: "own error")
+
+      closed = Nabu::Store::RunRecorder.close_stale(before: cutoff, clock: -> { now })
+
+      assert_equal(%w[older dead], closed.map(&:source_slug), "oldest first")
+      [stale, older].each do |run|
+        run.refresh
+        assert_equal "abandoned", run.status
+        assert_equal now.to_i, run.finished_at.to_i
+        assert_match(/abandoned/, run.notes)
+      end
+      assert_equal "running", live.refresh.status
+      assert_equal "failed", done.refresh.status
+      assert_equal "own error", done.notes
+    end
+
+    def test_stale_lists_without_writing
+      cutoff = Time.local(2026, 10, 21)
+      run = Nabu::Store::Run.create(source_slug: "dead", kind: "sync", started_at: cutoff - 60, status: "running")
+
+      assert_equal ["dead"], Nabu::Store::RunRecorder.stale(before: cutoff).map(&:source_slug)
+      assert_equal "running", run.refresh.status
+      assert_empty Nabu::Store::RunRecorder.close_stale(before: cutoff - 3_600)
+    end
+
     # P7-1: runs are keyed by SLUG, not source id — a rebuild re-mints every
     # catalog id, and the ledger's history must read continuously across that
     # boundary. Two runs recorded "before" and "after" an id re-mint are the

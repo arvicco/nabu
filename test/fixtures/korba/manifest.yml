@@ -182,3 +182,9 @@ files:
     copied: "2026-10-14"
     whole: false
     trim: first-block(s) trim, consistent across the layers (README)
+  - path: headers/RespList/header.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of korba_xml.zip (TEI_korba2/RespList/header.xml) — not individually fetchable; the descending date range specimen (README)
+    copied: "2026-10-21"
+    whole: true

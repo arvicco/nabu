@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "catalog_join"
+require_relative "../store/link_layers"
 
 module Nabu
   module Query
@@ -34,13 +35,23 @@ module Nabu
       # evidence (P16-2, migration 002): the formula gram, the cognate meet
       # (ref · root [shelf]); nil for parallel edges and journals predating
       # the column (a read-only open never migrates — missing key reads nil).
+      #
+      # +mined_at+ is the edge's mined LAYER date (the heavy class, read
+      # through Store::LinkLayers from local/mined-links.sqlite3); nil on a
+      # rebuild-lane edge.
       Edge = Data.define(:direction, :urn, :title, :language, :license_class,
-                         :score, :detail, :run_id) do
+                         :score, :detail, :run_id, :mined_at) do
         def resolved? = !title.nil? || !language.nil?
       end
 
       # A producer run cited by at least one shown edge — the provenance line.
-      RunInfo = Data.define(:id, :producer, :scope, :params, :code_version, :created_at)
+      # +mined_at+ is set on a mined layer's run (its id negative — the
+      # union's id space, Store::LinkLayers), nil on a rebuild-lane run.
+      RunInfo = Data.define(:id, :producer, :scope, :params, :code_version, :created_at, :mined_at) do
+        def mined? = !mined_at.nil?
+
+        def label = mined? ? "mined layer run #{-id}" : "run #{id}"
+      end
 
       # +groups+ is { kind => [Edge] } (edges score-desc within a kind);
       # +runs+ the RunInfos the edges cite, id-ordered. +title+ is the queried
@@ -173,7 +184,8 @@ module Nabu
         Edge.new(direction: edge[:direction], urn: counterpart(edge),
                  title: resolution[:title], language: resolution[:language],
                  license_class: resolution[:license_class],
-                 score: edge[:score], detail: edge[:detail], run_id: edge[:run_id])
+                 score: edge[:score], detail: edge[:detail], run_id: edge[:run_id],
+                 mined_at: Store::LinkLayers.mined_time(edge[:mined_at]))
       end
 
       def run_infos(edges)
@@ -181,7 +193,8 @@ module Nabu
         @journal[:link_runs].where(id: ids).order(:id).all.map do |row|
           RunInfo.new(id: row[:id], producer: row[:producer], scope: row[:scope],
                       params: JSON.parse(row[:params_json]), code_version: row[:code_version],
-                      created_at: row[:created_at])
+                      created_at: row[:created_at],
+                      mined_at: Store::LinkLayers.mined_time(row[:mined_at]))
         end
       end
     end

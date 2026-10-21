@@ -116,14 +116,27 @@ class OncojTest < Minitest::Test
   end
 
   # Place-name tokens (pos pln / pln-kke) ride a per-passage "places"
-  # annotation: surface + lemma id (+ the lexicon headword) — mentions in
-  # the poem, never a findspot claim.
+  # annotation in the passage facet lane's ENTITY shape — value = the
+  # lexicon headword (else the surface), ref = the lemma id, plus the
+  # surface form — mentions in the poem, never a findspot claim. (The
+  # {form, lemma_id, lemma} shape carried no "value", so the ruled
+  # place facet projected nothing — the places census caught it.)
   def test_place_name_tokens_ride_a_places_annotation
     document = parsed("MYS.1.1")
     line9 = document.passages.find { |passage| passage.annotations["line"] == "9" }
-    assert_equal [{ "form" => "yamato", "lemma_id" => "l052386", "lemma" => "yamato" }],
+    assert_equal [{ "value" => "yamato", "ref" => "l052386", "form" => "yamato" }],
                  line9.annotations["places"]
     assert_nil document.passages.first.annotations["places"], "a place-less line carries no key"
+  end
+
+  # The shipped passage_fields rule reaches the annotation: the place
+  # facet keys the headword with its lemma-id ref.
+  def test_places_annotation_projects_through_the_shipped_passage_facet_rule
+    fields = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+                           .passage_fields_for("oncoj")
+    line9 = parsed("MYS.1.1").passages.find { |passage| passage.annotations["line"] == "9" }
+    assert_equal [%w[place yamato l052386]],
+                 Nabu::Store::PassageFacetBuilder.facet_keys(line9.annotations, fields)
   end
 
   def test_token_less_crux_lines_carry_the_manyogana_as_text_and_are_flagged

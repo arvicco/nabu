@@ -205,15 +205,19 @@ module Nabu
       # (P22-2 — the owner's natural next move was `show <that urn>`, which
       # missed). Withdrawn entries resolve too, flagged: this is show's
       # hides-nothing contract, not define's live-shelf lookup.
+      #
+      # The AES fold: AES tokens carry the TLA lemmaID bare ("550034", the
+      # upstream lemmaID verbatim) while the AED shelf mints the dictionary's
+      # @xml:id verbatim ("tla550034"), so the urn an AES token predicts
+      # misses on exact equality. A bare-numeric aed urn that misses retries
+      # with the "tla" prefix restored — the same fold CclEtymologies applies
+      # to the ORAEC crosswalk's bare aed legs. Live census 2026-10-21: all
+      # 18,733 distinct AES lemma ids resolve this way, none exactly.
       def by_urn(urn)
-        row = @catalog[:dictionary_entries]
-              .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
-              .join(:sources, id: Sequel[:dictionaries][:source_id])
-              .where(Sequel[:dictionary_entries][:urn] => urn)
-              .select(*entry_columns, Sequel[:dictionary_entries][:withdrawn])
-              .first
-        row && build_result(row)
+        entry_by_urn(urn) || ((m = AED_BARE_URN.match(urn)) && entry_by_urn("#{m[1]}tla#{m[2]}"))
       end
+
+      AED_BARE_URN = /\A(urn:nabu:dict:aed:)(\d+)\z/
 
       def glosses(pairs)
         return {} unless shelf?
@@ -228,6 +232,16 @@ module Nabu
       end
 
       private
+
+      def entry_by_urn(urn)
+        row = @catalog[:dictionary_entries]
+              .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+              .join(:sources, id: Sequel[:dictionaries][:source_id])
+              .where(Sequel[:dictionary_entries][:urn] => urn)
+              .select(*entry_columns, Sequel[:dictionary_entries][:withdrawn])
+              .first
+        row && build_result(row)
+      end
 
       def shelf?
         @catalog.table_exists?(:dictionary_entries)

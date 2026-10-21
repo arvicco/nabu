@@ -171,8 +171,13 @@ module Nabu
     # too: a reader waiting on a rollback-mode writer's commit is just as
     # real as the reverse. +rebuild+ (P36-2) layers the fast-and-unsafe
     # rebuild-mode pragmas ON TOP of WAL — for `nabu rebuild` ONLY.
-    def connect(url, readonly: false, rebuild: false)
-      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
+    # +after_connect+ (a callable on each raw connection) is Sequel's
+    # per-connection hook — the links union (Store::LinkLayers) installs
+    # its ATTACH and temp views with it.
+    def connect(url, readonly: false, rebuild: false, after_connect: nil)
+      opts = { readonly: readonly, timeout: BUSY_TIMEOUT_MS }
+      opts[:after_connect] = after_connect if after_connect
+      db = Sequel.connect(sqlite_url(url), **opts)
       if db.database_type == :sqlite
         db.run("PRAGMA foreign_keys = ON")
         live_pragmas!(db)

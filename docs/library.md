@@ -1287,9 +1287,11 @@ and P84 added a fifth:
   the mined cross-reference graph read back — every batch-produced edge
   touching a urn, grouped by kind (parallel, formula, cognate), each with
   native evidence and a provenance footer naming the producer run (scope,
-  params, code version, date). Edges live in their own journal
-  (`db/links.sqlite3`, the third data temperature — architecture §15), so
-  they survive `nabu rebuild` untouched; `show` grows a one-line
+  params, code version, date). Edges live in two stores read as one
+  (architecture §15): the cheap lanes in `db/links.sqlite3`, re-derived by
+  every `nabu rebuild`, and the heavy mined layers (the parallels scopes)
+  in `local/mined-links.sqlite3`, re-mined only by `nabu links mine SCOPE`
+  and shown with their mine date; `show` grows a one-line
   `linked:` footer when edges exist. Seeded so far: **5,089 parallel**
   edges (Matthew anchors), **395 formula** edges (ASPR refrains as stars),
   and **360 cognate** edges (NT got×chu, per-edge meet detail). A fourth

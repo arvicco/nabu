@@ -7,7 +7,14 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-10-18** — the epigraphic-belt refresh (xpg, ecy,
+- **Retrieved 2026-10-21** — the chu:ncs (New Church Slavonic) stage
+  and the Korean ladder (oko/okm, kor → ko codemap row), copied
+  verbatim from canonical/nabu-lects (commit `b3d53b871f71`, `main`).
+  `lects.yml` 143,939 B, sha256
+  `c78c0930a0577f6af52ab26e183ec4c4b0ad99e5b5510c4aa65996c77a38377d`;
+  `codemap.yml` 8,411 B, sha256
+  `791cbe16ba9b4b9dd2e8a27e897a059425a3e9ce5f5c6c212d3306fde4ee1fbd`.
+- Previously retrieved 2026-10-18 — the epigraphic-belt refresh (xpg, ecy,
   xna + saf/his/dad/tay varieties, xsa, inm, the grc/cyp variety —
   the merged mint, copied verbatim from canonical/nabu-lects).
 - Previously retrieved 2026-10-11 — the Slavic-package refresh (the zlw /

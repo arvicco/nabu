@@ -2470,6 +2470,43 @@ module MCP
       journal&.disconnect
     end
 
+    # The cost law's reader half: through the links union a mined-layer
+    # edge (and its run) carries mined_at — ADDITIVE: a rebuild-lane edge's
+    # payload keeps exactly its old keys.
+    def test_links_mined_layer_edges_carry_their_mined_at
+      seed_parallels
+      Dir.mktmpdir("nabu-mcp-links") do |dir|
+        journal = Nabu::Store::LinksJournal.open!(File.join(dir, "links.sqlite3"))
+        run = Nabu::Store::LinksJournal.record_run!(journal, producer: "formulas", scope: "urn:d:od", params: {},
+                                                             code_version: "f/1")
+        Nabu::Store::LinksJournal.write_edge!(journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "formula",
+                                                       score: 1.0, detail: "g", run_id: run)
+        journal.disconnect
+        Nabu::Store::MinedLinks.mine!(File.join(dir, "mined.sqlite3"), producer: "parallels", scope: "urn:d:od",
+                                                                       stamp: nil, inputs: nil, catalog: nil) do |db|
+          mined = Nabu::Store::LinksJournal.record_run!(db, producer: "parallels", scope: "urn:d:od", params: {},
+                                                            code_version: "p/2")
+          Nabu::Store::LinksJournal.write_edge!(db, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "parallel",
+                                                    score: 2.0, run_id: mined)
+          Nabu::Store::LinksJournal.finish_run!(db, mined)
+        end
+        union = Nabu::Store::LinkLayers.open_paths(links_path: File.join(dir, "links.sqlite3"),
+                                                   mined_path: File.join(dir, "mined.sqlite3"))
+        body = payload(tools(links: union).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+        parallel = body.dig("kinds", "parallel").first
+        assert_match(/\A\d{4}-\d\d-\d\d /, parallel.fetch("mined_at"))
+        formula = body.dig("kinds", "formula").first
+        assert_equal %w[detail direction document language license_class score source urn], formula.keys.sort,
+                     "a rebuild-lane edge's payload is unchanged"
+        mined_run = body["runs"].find { |row| row["producer"] == "parallels" }
+        assert_equal(-1, mined_run["id"])
+        assert mined_run.key?("mined_at")
+        refute body["runs"].find { |row| row["producer"] == "formulas" }.key?("mined_at")
+        assert_match(/mined layer/, body["note"])
+        union.disconnect
+      end
+    end
+
     def test_links_excludes_restricted_counterparts_by_default
       seed_parallels
       journal = seed_links_journal
@@ -2504,15 +2541,20 @@ module MCP
 
     # -- nabu_etym (P14-1) --------------------------------------------------------
 
+    # The shelf load is catalog-only and deterministic: replayed once per
+    # class per starting state, restored from the snapshot after that
+    # (StoreTestDB#class_template_step).
     def seed_recon_shelf(source: nil)
-      recon = source || Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon",
-        license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      class_template_step([:recon_shelf, source&.id], db: @catalog) do
+        recon = source || Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon",
+          license: "CC-BY-SA + GFDL", license_class: "attribution", enabled: true
+        )
+        Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      end
     end
 
     def test_etym_walks_an_attested_lemma_with_counts_and_ancestors
@@ -3223,13 +3265,15 @@ module MCP
     # bearing tokens: MARK 1.1 meets grc ἔφᾰγον × chu богъ at PIE *bʰeh₂g-,
     # MARK 2.1 meets ang cāsere × chu цѣсар҄ь at gem-pro *kaisaraz (a loan).
     def seed_cognates_corpus(marianus_override: nil)
-      recon = Nabu::Store::Source.create(
-        slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
-        adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
-      )
-      Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
-                                   .load_from(Nabu::Adapters::WiktionaryRecon.new,
-                                              workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      class_template_step(:cognates_recon, db: @catalog) do
+        recon = Nabu::Store::Source.create(
+          slug: "wiktionary-recon", name: "Wiktionary reconstructions", license: "CC-BY-SA + GFDL",
+          adapter_class: "Nabu::Adapters::WiktionaryRecon", license_class: "attribution"
+        )
+        Nabu::Store::DictionaryLoader.new(db: @catalog, source: recon)
+                                     .load_from(Nabu::Adapters::WiktionaryRecon.new,
+                                                workdir: Nabu::TestSupport.fixtures("wiktionary-recon"))
+      end
       nc = Nabu::Store::Source.create(
         slug: "proiel", name: "PROIEL", adapter_class: "TestAdapter",
         license_class: "nc", enabled: true

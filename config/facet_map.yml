@@ -45,6 +45,11 @@ sources:
     fields:
       author: author          # Besa · Shenoute · Johannes · anonymous hagiographies …
       origPlace: place        # White Monastery 227 · Hagr Edfu · Hamuli …
+      placeName: place        # the origin's SETTLEMENT grain beside origPlace's site (306
+      #                         docs, census 2026-10-21: Atripe 225 — the White Monastery's
+      #                         town · Edfu 40 · Hagr Edfu 11 · This …; life.aphou has
+      #                         origPlace "unknown" but placeName "This") — both grains
+      #                         of the same origin claim filter under one place facet
       objectType: object_type # codex · papyrus …
       repository: repository  # holding libraries (BN Napoli, BL, Morgan …)
       corpus: corpus          # upstream corpus ids (besa.letters, shenoute.a22 …)
@@ -98,6 +103,11 @@ sources:
       objectInfo: object_type # 6,807 docs (runestone 1,963 · fragment of runestone 696 …)
       style: style            # 2,669 docs, 88 ornament styles (Pr 1–5, Rak, Fp …; "?" a claim)
       # carver (1,080 docs) is a PERSON field — the person lane, not a facet (later)
+  damos:                      # census: 5,890 Linear B items (live catalog 2026-10-21)
+    fields:
+      material: material      # 5,890 docs, 3 values (clay 5,888 · ivory 1 · stone 1) — the
+      #                         writing support, a physical-object facet under the cdli/rundata
+      #                         name; never a kind (the object facet already says tablet/label)
   glaux:                      # census: 1,421 works
     fields:
       dialect: dialect        # 1,176 docs, 7 values (Attic/Koine 416 · Attic 322 · Koine 214 …)
@@ -115,7 +125,13 @@ sources:
     fields:
       medium: medium          # Handschrift 97 · Druck 93
       text-type: text_type    # 185 docs, 140 upstream text-type labels verbatim
-  rem:                        # census: 406 Middle High German texts
+      genre: genre            # 190 docs (census 2026-10-21): T 87 · P 69 · V 26 · F 8 — the
+      #                         header's one-letter Textart code verbatim (the ReM genre-facet
+      #                         precedent). The deposit's dokumentation.pdf defines Textart as
+      #                         Prosa/Vers (P/V); T and F are undocumented there (F co-occurs
+      #                         with Flugschrift text-types) — so the codes facet as-is and no
+      #                         kind fold reads them: a form code, never a guessed genre
+  rem:                       # census: 406 Middle High German texts
     fields:
       topic: topic            # 406 docs (Religion 278 · Poesie 47 · Wissen(-schaft) 41 …)
       text_type: text_type    # 388 docs, 105 values (Predigt · Segen · Bibeldichtung …)
@@ -132,6 +148,22 @@ sources:
       places: place           # annotations (3,343 tokens / 910 distinct lemmas) — mentions
       #                         in the poem, never findspots (the posture says so); the
       #                         widened mining census surfaced them unprojected
+  # -- The places sweep (the mining law's places half; live census
+  #    2026-10-21): regional classifications the place lane only reads as
+  #    a fallback, faceted verbatim on every document that carries one.
+  corpus-gysseling:           # 2,226 texts, region on ALL — the atlas regio of the
+    fields: #                   localization (West-Vlaanderen 1,224 · Holland-West 314 ·
+      region: region          # Oost-Vlaanderen 299 · Brabant-West 181 … 12 regions); the
+      #                         place lane falls back to it for the 63 town-less texts
+  dharma-deccan:              # Ollett's origPlace placeName @key on 445 of 1,695 editions:
+    fields: #                   his own pl: site authority, 35 keys (pl:Kanaganahalli 108 ·
+      place_key: findspot     # pl:Sannati 77 · pl:Dhānyakaṭaka 66 — Amarāvatī's ancient
+      #                         name …) — the findspot's IDENTITY, folding the name's spelling
+      #                         variants (Karle/Kārle); verbatim, never a gazetteer ref
+      #                         (place_ref stays NULL for the registry's decisions to fill)
+  corpus-oudnederlands:       # 17 of 89 works carry the witnessLocalization region
+    fields: #                   (Groningen 5 · Zuid-Nederrijn 4 · Friesland 2 …); the place
+      region: region          # lane falls back to it for the 7 place-less ones
   bg-wikisource:              # census 2026-10-12: 16 chu charters, every one carrying the
     fields: #                   wiki's own recension grouping (bulgarian 7 · serbian 9) —
       recension: recension    # projected so the ruled recension facet rule can read it
@@ -460,6 +492,10 @@ sources:
     fields:
       translator: translator  # <editor role="translator"> verbatim (Anonim 82 · Daniel Mikołajewski
       #                         12 · Jakub Wujek 9 …; "(tł. domn.)" hedges as written)
+      region: region          # the places sweep (census 2026-10-21): pubPlace role=region on
+      #                         1,576 of 2,091 texts (Małopolska 534 · Mazowsze 420 · Ziemie
+      #                         Ruskie 160 …; "zagranica"/"inny" claims verbatim; both
+      #                         "Ziemie W. Ks. Lit." and "…Litewskiego" spellings as written)
   dharma-javanese-texts:      # 11 of 98 editions name the work's attributed poet (titleStmt <author>)
     fields:
       author: author          # Mpu Prapañca · Mpu Tantular · Mpu Kaṇva · Vararuci …; the witness

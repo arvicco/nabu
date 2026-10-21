@@ -26,6 +26,8 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 
 **The derivability law (owner-ruled 2026-08-11; the `local/` elevation lands as its own phase).** Every byte of project state is one of five kinds: **asset** (`canonical/`, attic included — the universal library matter), **project definition** (`config/`, git-shared), **local instance** (`local/` — owner shelves and rulings, grants, the operational ledger, acquisitions: everything that makes this instance THIS instance, never in the public repo), **derived** (`db/` — all of it), or **staging** (`incoming/`, locks, sidecars). The backup contract is exactly the three permanent folders, and `nabu rebuild` regenerates every derived store from them, offline. *Derived* is an economic claim — a store counts as derived only if code alone re-creates it for free; anything non-derivable (paid model enrichment, HTR, any output costing money, network, or human review) is an **acquisition** and lands in a local shelf through a sanctioned gateway before it may influence db/. No db is ever backup-required. The repo itself is backed by its git remote — the contract's silent fourth leg. A new db table or top-level directory declares its kind at birth; a derived store without a rebuild stage is a bug, not a posture. Landed by P71: owner rulings and grants live under `local/config/`, the owner shelves under `local/shelves/`, the ledger at `local/history.sqlite3` (a pre-P71 box's legacy locations are honored loudly until `nabu migrate-local`).
 
+**The cost law (owner ruling 2026-10-20) — derived data classifies by regeneration cost.** *Cheap-derived* (seconds to minutes full-corpus) lives in `db/`, dropped and regenerated (or carried on a provable stamp) by every rebuild. *Heavy-derived* — time-heavy derivation products, the rarely-updated heavy pieces (projected beyond ~15 min full-corpus) — is treated as an ENRICHMENT: it sits outside the rebuild's drop zone as local instance data, is produced only by its own separate command (never by `nabu rebuild`, in any flavor), carries its provenance stamped (input identities at mine time, date, code version), and keeps its staleness visible (`nabu health` and the rebuild summary name each layer's age and whether its inputs moved since). Its regeneration is free in money but not in time, so it is re-run when the owner chooses, and every reader shows its date beside it. The first application is the links instrument (§15): the heavy mined layers (`config/mined_layers.yml` — today the parallels scopes) live in `local/mined-links.sqlite3`, written only through `Nabu::Store::MinedLinks` by `nabu links mine SCOPE` / `parallels --batch`; the cheap lanes stay in `db/links.sqlite3`. A future hour-class producer is born heavy — the rebuild pipeline never inherits a new hour-class stage. (`db/vectors.sqlite3`, expensive-derived and maintained only by `nabu embed`, predates the law and stays in its named home.)
+
 `nabu rebuild --incremental` (P36-1) is an optimization OVER this invariant, never a relaxation of it: the full rebuild remains the reference semantics, and an incremental run must land content-equivalent to a fresh full rebuild of the same canonical tree (test-pinned: counts + content shas). Each replay stamps the source with its derivation fingerprint (`derivation_stamps`, in the catalog — dropped and re-stamped by every full rebuild, correct by construction); `--incremental` keeps the catalog, skips fingerprint-clean sources (a non-git tree's canonical identity answered from a census-keyed memo in `db/canonical_identities.json` when no file in it has drifted, and each embedded git repo's tokens from `db/git_identities.json` when neither its working tree nor its HEAD/index/refs metadata has — §5), and re-derives dirty ones through the same replay seam + per-source index refresh. A dirty incremental also re-derives the two P70 sibling dbs (the lect journal and the links instrument) exactly as the full rebuild does; a clean sweep skips them — the write-through CLIs keep both live, so only a hand-edited `lect_rulings.yml`/`link_scopes.yml` waits for the next full rebuild or dirty incremental (or `--full-links`, which runs the links stage regardless; its clean scopes carry on their per-scope stamps, §15). See §5 (derivation stamps bullet) for the fingerprint inputs and refusal rules. **Stage stamps (P87-3):** the per-source fingerprint is blind to *indexer-side* derivation changes, so each heavy fulltext-side stage additionally stamps its own derivation-version token (`stage_stamps`, minted by every full rebuild); `--incremental` compares and surgically re-derives exactly the stage a version bump dirtied against the kept catalog (a stale stage with no standalone corpus re-run — the composite fts/lemma pass — refuses loudly instead), `--trust-stages` mints stamps without re-deriving for an index known built by current code, and carrying stages through a TRUE full rebuild stays deliberately unsupported: a dropped catalog re-mints the row ids the carried tables would dangle on. **Trust-derivations (P89-1):** the derivation-stamp counterpart — `--trust-derivations` re-stamps a source whose ONLY drift is the parser digest without replaying it, but only when a git-backed `Nabu::CodeVoucher` confirms the source's own parser closure predates the run's ELDEST stamp (never each stamp's own time: a long run stamps late from disk bytes while its rows come from code loaded at start, so a mid-run commit can beat a per-stamp horizon — the 2026-08-29 lying-stamp specimen); anything unvouchable replays honestly, never a run refusal. The same hazard is closed at the root for future stamps: both rebuild flavors WARM every source's code tokens before any replay (`DerivationFingerprint#warm`), so stamps describe the code the run loaded. **Builder carve-out (P89-1):** the corpus-wide timeline/facet builders live OUTSIDE the shared-core digest (the P39-1 carve-out pattern), covered by their own `builders_digest` stamped as the `__corpus-builders__` sentinel row; a builder-only edit re-runs the builders on the next incremental (even with zero dirty sources) instead of dirtying every per-source stamp. The silver-lemma projection is NOT a rebuild stage at all since the owner's 2026-08-29 ruling: it applies only on the owner's word (`nabu lemma-enrich --index-only`, cache-backed, bare-table window when unarmed), and routine syncs maintain only an already-armed index. **Index carve-out (P112-4):** the fulltext-index core — files that shape only fulltext.sqlite3 rows (`DerivationFingerprint::INDEX_FILES`: indexer, alignment/silver/reflex indexers, lemma frequencies, cjk bigrams, the index delta) — also lives outside the shared-core digest, covered by its own `index_core_digest` stamped as the `__fulltext-index__` sentinel; an index-only edit re-derives the fulltext index WHOLE on the next incremental (the honest reference: changed index code may shape any index row — announced, and with per-source slice refreshes skipped as subsumed) instead of dirtying every per-source parse stamp and pricing a full catalog replay (the P111 lesson: three index-side commits made the next incremental a full replay). Membership is conservative — a file that also writes catalog rows stays in the shared core; read-only gauge code (fts_structure.rb) is plainly excluded with no covering digest owed.
 
 ## 2. Directory layout
@@ -51,6 +53,9 @@ nabu/
 │   ├── ops/                     # backup, drill, site-data projection
 │   ├── data_build/              # the nabu-data production rail (§17)
 │   ├── export/                  # the research exporter: tables + manifest frame (§18)
+│   ├── cli.rb                   # the CLI registry: root class, subcommand registrations, area requires
+│   ├── cli/                     # the CLI by area — one file per command area or subcommand family,
+│   │                            #   each reopening Nabu::CLI; outside the derivation fingerprint, like cli.rb
 │   └── *.rb                     # normalization, fetch arms, gateways, runners (flat files)
 ├── config/
 │   ├── sources.yml              # registry: adapter class, upstream, license, wired, translations opt-in
@@ -63,18 +68,22 @@ nabu/
 │   │                            #   link_scopes.yml, lect_rulings.yml (see lib/nabu/config.rb),
 │   │                            #   credentials.yml (mode 600; written only by `nabu creds set`)
 │   ├── shelves/<slug>/          # the owner shelves (§16)
-│   └── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
+│   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
+│   └── mined-links.sqlite3      # (the cost law, §1/§15): HEAVY mined link layers — written only by their
+│                                #   mine command through Store::MinedLinks; rebuild never touches it
 ├── db/                          # DERIVED — all of it; `nabu rebuild` re-mints every file but vectors
 │   ├── catalog.sqlite3          # sources, documents, passages, provenance, licenses
 │   ├── fulltext.sqlite3         # FTS5 + passage_lemmas + trigram index (all keyed by passage id)
-│   ├── links.sqlite3            # (P16-1/P70-3b, §15): batch-mined edges — rebuild's links stage re-mints it
+│   ├── links.sqlite3            # (P16-1/P70-3b, §15): the CHEAP batch-mined edges — rebuild's links stage
+│   │                            #   re-mints it (heavy layers: local/mined-links.sqlite3)
 │   ├── lects.sqlite3            # (P58-1, §15a): per-document lect rulings — DERIVED since P70-2,
 │   │                            #   re-derived wholesale from local/config/lect_rulings.yml + rules; needs no backup
 │   ├── vectors.sqlite3          # (P93-4, §5/§6): semantic vectors — EXPENSIVE-derived: `nabu embed` alone
 │   │                            #   maintains it, rebuild never drops it (rows keyed by model+urn+text sha)
 │   ├── migrate/                 # catalog migration track (forward-only)
 │   ├── ledger_migrate/          # ledger migration track (own schema_info per file)
-│   ├── links_migrate/           # links journal migration track
+│   ├── links_migrate/           # links journal migration track (also the mined store's edge tables)
+│   ├── mined_migrate/           # the mined-layers store's own track (mined_layers provenance table)
 │   └── lects_migrate/           # lect journal migration track
 ├── exports/                     # gitignored output of `nabu export` (§18) — neither permanent nor derived
 ├── test/
@@ -471,7 +480,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - **The licence-agree click-through arm (`Nabu::LicenseAgreeFetch`, P80-7) automates the ONE POST-form case that is consent, not a wall.** PORTULAN CLARIN serves its artifact only to a Django form POST (GET the download URL → CSRF token + a licence-agree checkbox → the agreed POST streams the zip; no account, no captcha). An owner ruling (2026-08-19) sanctions representing the owner's licence acceptance, and the mechanism's guardrail keeps that grant verbatim: the adapter DECLARES the licence string being accepted, the form's own hidden licence field must match it exactly, and any drift raises before a POST leaves the machine — it can never silently agree to terms nobody recorded. Shaped like the Faraday connection ZipFetch expects, so the whole staging/attic/state choreography above rides unchanged; upstreams that are still walls (captcha, accounts) stay on the ManualDrop arm.
 - **The credentials seam (`Nabu::Credentials`) serves gated member areas** (the live case: the TITUS members area — HTTP Basic auth, a password that rotates with emailed notice). One home, `local/config/credentials.yml` (per entry `user`, `password` or `token`, `updated_at`), written ONLY by the `nabu creds set NAME` gateway (hidden prompt, or `--stdin` reading `user\npassword\n`), born and kept mode 600; `nabu creds list` shows names and ages only, and there is no `show`. A source opts in with `credentials: NAME` on its sources.yml row; the sync refuses BEFORE any network (and before the grant prompt) with `credentials required: run bin/nabu creds set NAME` when nothing is stored, and SyncRunner hands the stored entry to the adapter (`Adapter#credentials`) for its fetch arm. TitusFetch sends it as Basic auth on each request, never follows a redirect while carrying it (a 3xx aborts naming its target), and turns a 401 to sent credentials into `NAME credentials rejected (rotated?) — run bin/nabu creds set NAME`. Redaction is structural: the entry's inspect/to_s/pretty_print carry `[REDACTED]`, and no message names a value. The file is instance state like grants.yml — inside local/, so it rides backups — and never touches db/.
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
-- Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot. The row closes at OPERATION end, never at load end: `RunRecorder.record_load` stamps the load's counts and `loaded_at` but leaves the row `running`; the terminal status and `finished_at` are written only when the sync's last post-load stage (index slice, lane refreshes) returns, or — for a rebuild — when the corpus stages after ALL replays return (every replay row closes together). A post-load exception closes the open rows `failed` ("failed after the load: …"); a killed process leaves `running` + `loaded_at` + no `finished_at`, the ledger's own signature of a run that died after its load (ledger migration 011).
+- Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot. The row closes at OPERATION end, never at load end: `RunRecorder.record_load` stamps the load's counts and `loaded_at` but leaves the row `running`; the terminal status and `finished_at` are written only when the sync's last post-load stage (index slice, lane refreshes) returns, or — for a rebuild — when the corpus stages after ALL replays return (every replay row closes together). A post-load exception closes the open rows `failed` ("failed after the load: …"); a killed process leaves `running` + `loaded_at` + no `finished_at`, the ledger's own signature of a run that died after its load (ledger migration 011). `nabu health` reports rows still `running` 48 h+ after start (`Health::Invariants::STALE_OPEN_RUN_SECONDS`); `nabu runs close-stale` (`--dry-run` first) settles exactly those rows `abandoned` through `RunRecorder.close_stale` — finished_at stamped, the reason in notes — so the finding clears while the row stays distinguishable from a genuine failure (ledger migration 012 widens the status check; its explicit table rebuild keeps both CHECKs, which Sequel's drop/add emulation does not).
 - **Every long stage says how long it expects to run (P78-r1/r2/r3).** SyncRunner times fetch and load (plus the Indexer's refresh sub-stages) into the ledger's `stage_timings` and announces `Nabu::Eta` estimates at stage start; Rebuild persists its profiler's stages at run end. `rebuild --incremental` (and its `--dry-run`) announces its pre-replay prelude too (owner UX rule 2026-10-07): a `pinning code identities (N sources)` stage, then the verdict sweep — every source's fingerprint is computed UP FRONT, before any replay — as a header carrying the sweep's estimate (`stage_timings` kind `rebuild`, scope `corpus`, stage `verdict_sweep`; recorded by real runs only, a dry run just reads it), one `verdict <slug> (i/N)` stage per fingerprinted tree (non-git trees are sha256-hashed file by file unless their identity memo is census-fresh — see the derivation-stamps bullet in §5 — and the owner sees which tree the minutes go into), and a closing `verdicts: N clean · M dirty · K skipped (elapsed) · memo: trees H hit M miss, repos H hit M miss` tally (the identity memos' counts for this sweep: plain trees, then embedded git repos). The one tree a replay can write — the local-language shelf, via dictionary language-notes accretion — re-verifies at its turn once a replay has run, so the up-front sweep yields exactly the verdicts the former interleaved loop did. An estimate renders "~6m (last run 5m48s over N rows)" — the latest recorded row governs, scaled by row-count drift when a cheap current denominator exists — and the no-history answer is the honest "first run — no estimate", never a guess.
 - **`--verbose` explains the run as it goes.** The composite commands (`rebuild` in both flavors, `sync`, `rake builders:refresh[verbose]`, `lect materialize`/`apply-rules`/`infer-dates`, `place apply`, `data build`) take `--verbose`: before any work, one sentence on what the command is about to do to the library; before each stage, one sentence on what that stage derives and which surfaces read it. The texts live in ONE registry, `Nabu::Ops::StageGuide`, matched against the labels the orchestrators already pass to `ProgressReporter#stage` (exact, or a pattern for per-source labels; a bare registered slug is the source-replay stage). They are deliberately not inlined at the call sites: Rebuild, IncrementalRebuild and the lect facet sit in the shared derivation core, where a UX string would dirty every source stamp. Drift is a red suite instead — `test/ops/stage_guide_test.rb` parses every stage call in the orchestrators and fails on a label with no entry or an entry no call site matches. The seam is `ProgressReporter#on_explain` (called just before each stage; `#explain` for a step that opens no stage, such as the sync's post-load lanes), nil on a plain run so verbosity costs nothing when off; each stage explains once per invocation. Output goes to stderr beside the stage lines, green through `Display.paint` when `Display.color?` allows — NO_COLOR or a non-tty stream drops the color, never the text — so stdout stays byte-identical to a plain run.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch — and never withdraw (P37-r2): a quarantined ref's document is still present in canonical, so its urn shields the held row (prior revision, still served) from the full-load withdrawal sweep. Recognition getting stricter can therefore never unserve held content; the row revives via the normal restore/revise path when the parse succeeds again.
@@ -1541,9 +1550,63 @@ an append-only ledger must never do. So the journal is a third SQLite file
 with the ledger's *mechanics* (its own forward-only migration track in
 `db/links_migrate/`, its own `schema_info`, absent-file = empty state,
 urn keying). DERIVED since P70-3b: `nabu rebuild`'s links stage re-mints
-it (slug-scoped producers from the registry + the batch scopes recorded in
-local/config/link_scopes.yml), so losing it costs nothing a rebuild cannot
-restore — backups may skip it.
+it (slug-scoped producers from the registry + the CHEAP batch scopes
+recorded in local/config/link_scopes.yml), so losing it costs nothing a
+rebuild cannot restore — backups may skip it. The HEAVY scopes left it
+under the cost law (below).
+
+**The cost-law split (owner ruling 2026-10-20; §1).** Of the 6h50m the
+2026-10-20 links stage took, 6h47m was two heavy mined layers; the cheap
+lanes (references, formulas, cognates, concordances) total ~2 min. The
+classification is declared in `config/mined_layers.yml`, one line per
+PRODUCER with its reasoning (the grain is the producer because edges
+dedupe per pair per kind across runs and stamps group scopes by shared
+kind — one producer's scopes cannot straddle two stores; producers sharing
+a kind must share a class, test-pinned). Shipped: **parallels HEAVY**
+(perseus-latin ~2h42m, 466,266 edges; the Matthew scope, 5,315 edges and
+seconds to mine, moves with its family by that grain rule); formulas,
+cognates and the place pair **cheap**. The kanripo place mine
+(2,976,355 candidate edges) runs ~5 min since its single-scan rewrite —
+under the threshold, so it stays a rebuild lane, with a flagged note in
+the config that the owner may move it categorically. The heavy layers
+live in **`local/mined-links.sqlite3`** — instance data, carried by the
+backup's local/ section — whose edge tables are the journal's own
+(`db/links_migrate` applied first, so every `LinksJournal` verb, the
+chunked-run cursor included, works unchanged) plus a `mined_layers`
+provenance table on its own track (`db/mined_migrate`, counter table
+`mined_schema_info`): per layer its runs, edge count, `mined_at` (the
+runs' finish time), engine marker, the `LinkStamps` preimage at mine time
+(code digest, resolved params, member content identities, index
+identity), the members' `sources.last_ingest_identity` (the cheap
+identity health compares), and its origin (mine | migrated). The ONE
+write gateway is `Nabu::Store::MinedLinks` (`#mine!`, `#migrate!`; the
+writable opener is private), reached only through `Nabu::MinedLayers`
+(guard-tested). **Triggers:** `nabu links mine SCOPE` re-mines a recorded
+heavy scope with its recorded params (the same `LinkScopeReplay` engine
+call, same profiles, per-chunk progress on stderr) and runs the
+SELF-CHECK against the layer it replaces — inputs unchanged and digests
+equal is *verified*, unequal is DRIFT (loud); a code-only move is
+*reproduced*/*changed*; anything else names what moved. `parallels
+--batch SCOPE` writes there too (and records the scope); `--db PATH`
+keeps writing a plain scratch journal. **Rebuild:** the links stage
+partitions heavy scopes out before planning — never mined, re-mined,
+dropped or stamped; a heavy producer's runs and stamps still sitting in
+`db/links.sqlite3` are PRESERVED (`LinkStamps#plan(preserve:)`) until
+`nabu links migrate-mined` moves them, so their stamps leave the dirt
+calculus entirely; the stage summary instead reports the layers'
+presence and age (`mined layers: 2 present, oldest 2026-10-20`, plus any
+recorded heavy scope not yet mined and any heavy runs still waiting).
+**The one-time move:** `nabu links migrate-mined [--dry-run]` copies each
+heavy run (run row, chunk rows, edges, via ATTACH + INSERT…SELECT) and
+its scope stamp's preimage into the store, verifies every run's edge
+count, then drops them from the journal in one transaction; idempotent
+(a second call finds nothing), resumable (a crash between copy and drop
+finds the layer already current and only drops the journal copy); a
+layer whose journal stamp still matches the live catalog also records
+its ingest identities. **Health:** one `mined_layer` finding per layer —
+its age, member sources re-ingested since, producer code moved since, and
+an orphaned-edge estimate from a 200-edge sample (info when current, soft
+when stale) — plus `mined_layers_unmigrated` while heavy runs wait.
 
 **Per-scope stamps (`Nabu::LinkStamps`, owner ruling 2026-10-19).** The
 links stage is the heaviest corpus stage of a replay (3h46m of the
@@ -1557,8 +1620,17 @@ profile), the member sources' CONTENT identities
 (`Store::SourceContentIdentity` — live documents' and dictionary entries'
 content shas, so a content-neutral loader edit carries while any content
 change re-mines), and producer extras (parallels: index-core digest +
-stage versions + registry index flags; place-mine: the gazetteer's name
-keys + the hand stop list; place-link: the nabu-places tree). Membership is
+stage versions + registry index flags — since the cost-law split this is
+the heavy layers' PROVENANCE, never a rebuild stamp; place-mine: the
+gazetteer's name keys + the hand stop list + the registry's
+region/rejected names for the scope; place-link: the nabu-places tree).
+The code closure honors declared CARVE-OUTS (the BUILDER_FILES
+precedent, per producer): a file the require closure reaches but the
+producer's replay provably never executes — formulas' place/date filter
+stack behind `Query::Scope`, plus `errors.rb`; the place pair's
+`pleiades.rb` behind `places.rb` — leaves the digest, and a TracePoint
+test fails if a carved file ever runs, so a carve cannot hide an
+output-moving change (formulas' closure: 14 files → 7). Membership is
 declared per producer: formulas and the place pair read only their slice;
 parallels scores by corpus-wide gram document frequency, so every source
 is a member. Carrying is per COMPONENT (scopes sharing an edge kind,
@@ -1714,7 +1786,13 @@ config/place_stop_names.yml). One scan per run: an Aho-Corasick walk
 the census and retains each passage's hits as compact integer arrays; the
 write then bulk-inserts the surviving names' edges from those hits
 (`LinksJournal.write_edges!`, write_edge!'s exact semantics), so output is
-identical to the original census-then-rescan miner. Its review surfaces are `place mine report`
+identical to the original census-then-rescan miner. The registry's rulings
+bind the mine (owner ruling 2026-10-20): a name nabu-places rules
+`region` or `rejected` for the source mints no candidate — still scanned
+(the census and derived stop ceiling are unchanged), censused as RULED
+OUT with its hits, and recorded in the run row's `params.ruled_out`
+(the evidence health's registry-orphan probe accepts once those edges
+are gone). Its review surfaces are `place mine report`
 (per-place, document-spread ranked) and `place mine report --board`
 (per-NAME, the verdict grain: candidates with their index discriminators,
 attestations in context, decided names censused off). `nabu place link
@@ -1726,7 +1804,16 @@ text MENTIONING a place is not FROM it, so document_axes.place_ref (the
 provenance ladder: adapter-asserted refs, then PlaceApply's place_name
 projections) is never touched by either.
 
-**Read surface.** `nabu links <urn>` — edges BOTH directions grouped by
+**Read surface.** Every reader opens the links UNION (`Store::LinkLayers`):
+the journal with the mined store ATTACHed read-only and two temp views
+(`links`, `link_runs`) shadowing the tables — mined rows carry negated
+ids (the two files mint ids independently) and a `mined_at` column, NULL
+on rebuild-lane rows; per-urn probes stay indexed in both arms. An absent
+store is an honest state (fewer links, no error). `nabu links` footers a
+mined run as "mined layer run N … · mined DATE"; `nabu export links`
+gains a trailing `mined_at` column; MCP `nabu_links` adds `mined_at` to a
+mined edge and its run row only (additive — a rebuild-lane payload is
+unchanged). `nabu links <urn>` — edges BOTH directions grouped by
 kind, each counterpart re-resolved against the *current* catalog by urn
 (title/language/license; a counterpart a rebuild dropped reads "(not in
 catalog)", honestly), with the producer run(s) cited in the footer and each

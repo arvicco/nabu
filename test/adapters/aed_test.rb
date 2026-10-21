@@ -114,22 +114,26 @@ class AedTest < Minitest::Test
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
 
-    # HAND-MADE AES-SHAPED ANNOTATION (honestly labeled): the AES corpus
-    # (P28-0, in flight) annotates tokens with TLA lemma references —
-    # "tla:550034" in TEI prefix notation, normalized to the lemmaID
-    # "tla550034" as the gold lemma id. This is that annotation's shape,
-    # not P28-0's code; the contract both sides build to is
-    # urn:nabu:dict:aed:<lemmaID>.
-    aes_lemma_ref = "tla:550034"
-    lemma_id = aes_lemma_ref.delete(":")
-    predicted_urn = "urn:nabu:dict:aed:#{lemma_id}"
-
-    result = Nabu::Query::Define.new(catalog: db).by_urn(predicted_urn)
-    refute_nil result, "the urn an AES annotation predicts must resolve on the shelf"
+    # The AES corpus mints token lemma_id as upstream's lemmaID VERBATIM —
+    # BARE digits ("123130" in the aes fixture; live census 2026-10-21:
+    # 18,733 distinct ids, none prefixed) — while the AED shelf keeps the
+    # dictionary's @xml:id verbatim ("tla550034", all 35,052 entries). The
+    # urn an AES token predicts therefore carries the bare id, and show's
+    # urn seam folds the "tla" prefix back on (every one of the 18,733
+    # live ids lands that way; none lands on exact equality).
+    aes_lemma_id = "550034"
+    result = Nabu::Query::Define.new(catalog: db).by_urn("urn:nabu:dict:aed:#{aes_lemma_id}")
+    refute_nil result, "the urn an AES token predicts must resolve on the shelf"
+    assert_equal "urn:nabu:dict:aed:tla550034", result.urn, "resolves to the entry's own minted urn"
     assert_equal "nfr", result.headword
     assert_equal "egy", result.language
     assert_equal "gut; schön; vollkommen", result.gloss
     assert_equal "attribution", result.license_class
+
+    canonical = Nabu::Query::Define.new(catalog: db).by_urn("urn:nabu:dict:aed:tla550034")
+    assert_equal result.urn, canonical.urn, "the entry's own urn still resolves directly"
+    assert_nil Nabu::Query::Define.new(catalog: db).by_urn("urn:nabu:dict:aed:999999999"),
+               "the fold never invents an entry"
   end
 
   # --- define: folded transliteration lookups -------------------------------------

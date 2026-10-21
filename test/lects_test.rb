@@ -548,7 +548,11 @@ class LectsTest < Minitest::Test
     # P99-5 adds sync_runner.rb deliberately: the post-sync
     # unstaged-share line (LectStaging) needs the registry's stageable
     # anchors at exactly the moment a source's documents arrive.
-    allowlist = %w[nabu/cli.rb nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
+    # The CLI's callsites are named per carved-out file (cli/), never by a
+    # blanket directory entry.
+    allowlist = %w[nabu/cli/admin.rb nabu/cli/lect.rb nabu/cli/layer.rb nabu/cli/lexicon.rb
+                   nabu/cli/query.rb nabu/cli/reference.rb nabu/cli/signs.rb
+                   nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
                    nabu/rebuild.rb nabu/query/define.rb nabu/query/lect_filter.rb
                    nabu/store/lect_journal.rb nabu/incremental_rebuild.rb
                    nabu/sync_runner.rb]

@@ -19,9 +19,9 @@ module Nabu
     # == What one entry yields (Nabu::DictionaryEntry)
     #
     # - entry_id: the @xml:id VERBATIM ("tla550034") — THE JOIN CONTRACT:
-    #   the xml:id is the TLA lemmaID that the AES corpus (P28-0) mints as
-    #   its gold lemma ids, so urn:nabu:dict:aed:<lemmaID> is exactly the
-    #   urn an AES annotation predicts. Never renumbered, never prefixed.
+    #   the xml:id is "tla" + the TLA lemmaID the AES corpus (P28-0) mints
+    #   bare ("550034") as its gold lemma ids; Define#by_urn restores the
+    #   prefix on a bare aed urn. Never renumbered, never re-prefixed.
     # - headword / key_raw: the orth text verbatim (NFC) — Egyptological
     #   transliteration (ꜣ ꜥ ḥ ḫ …); the folded form goes through the P28-1
     #   egy fold (conventions §9) so ASCII-ish lookups land (nfr, hap-r).

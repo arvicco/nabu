@@ -258,13 +258,47 @@ module Nabu
           "iedc" => "toponyms",
           # The OBI header's PLACE OF ORIGIN (720 of 1,121 files, census
           # 2026-10-18: "Mt. Tuyin, Bagan", "Hsu-pyu-kun village, Natogyi").
-          "obi-burmese" => "place_of_origin"
+          "obi-burmese" => "place_of_origin",
+          # The places sweep (census 2026-10-21): the Gysseling atlas
+          # localizes 63 of 2,226 texts to a dialect REGION only
+          # ("Holland-West", "Zeeland") — the region answers when no town
+          # does, a declared-coarse claim at region grain; the region
+          # itself facets on every doc (config/facet_map.yml).
+          "corpus-gysseling" => %w[place region],
+          # The Old Dutch witnessLocalization: 7 of the 17 region-bearing
+          # works name no place ("Zuid-Nederrijn", "Utrecht") — same rule.
+          "corpus-oudnederlands" => %w[place region],
+          # KorBa's pubPlace role=region (the corpus's own classification
+          # of the print/writing place) answers for the 117 of 2,091
+          # texts with no role=place town (sejm acts, sermons).
+          "korba" => %w[place region],
+          # The NDL bibliographic record's 出版地 list (6,037 of 41,685
+          # docs, ~5,040 naming a real place; census 2026-10-21). The
+          # digitized item IS the print or manuscript, so its production
+          # place is the artifact's own — the eebo imprint stance. Names
+          # ride verbatim (京 · 東都 · 浪華 … — the historical spellings;
+          # no registry rows yet, so unresolved: declared coarse).
+          "ndl-kotenseki" => "publication_places",
+          # ReF: the prints place by "place" (92 of 190), the manuscripts by
+          # the header text-place — the Schreibort, the writing place (36;
+          # the two never co-occur, census 2026-10-21).
+          "ref" => %w[place text-place]
         }.freeze
+        # ReF's text-place label ("Schreibort:", "(Schreibort)",
+        # "Herstellungsort/Schreibort") — furniture, stripped before the
+        # sentinel check; the hedges beside it ("(?)", "wahrsch.") stay.
+        PLACE_LABEL = %r{\(?\s*(?:Herstellungsort/)?Schreiborte?\s*\)?\s*[:.]?}i
         # "not listed in teo" — rsti's own absent-findspot sentinel;
         # "s.l" — the imprint world's sine loco (eebo, 1,311 docs);
-        # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29).
+        # "?" — a bare unknown mark (obi-burmese's PLACE OF ORIGIN, 29);
+        # "zagranica" (abroad, 17) / "inny" (other, 6) — KorBa's region
+        # classes that name no place (they still facet, as claims);
+        # "place of origin unknown" — gams-zrcalo's TEI origPlace absence;
+        # 出版地不明 / 製作地不明 / 書写地不明 — the NDL record's publication /
+        # production / copying place unknown (ndl-kotenseki, 855 docs).
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
-                    "s.l", "s.l.", "?"].freeze
+                    "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown",
+                    "出版地不明", "製作地不明", "書写地不明", "unbekannt"].freeze
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -353,6 +387,11 @@ module Nabu
           lower = low == "uuuu" ? nil : Integer(low.tr("u", "0"), 10)
           upper = %w[uuuu 9999].include?(high) ? nil : Integer(high.tr("u", "9"), 10)
           return nil if lower.nil? && upper.nil?
+          # One descending range in the lists (A87970 "1704-1689", header
+          # imprint "1689?]"): the TCP lists are all-CE unsigned years, so
+          # the order-normalizing swap is always safe; the raw keeps the
+          # upstream spelling.
+          return [upper, lower] if lower && upper && lower > upper
 
           [lower, upper]
         end
@@ -448,6 +487,7 @@ module Nabu
           # carrying a value answers.
           key = key.find { |k| !meta[k].to_s.strip.empty? } || key.last if key.is_a?(Array)
           place = meta[key]
+          return string_list_claim(place) if place.is_a?(Array) && place.all?(String)
           return toponym_claim(place) if place.is_a?(Array)
 
           if key != "place"
@@ -456,13 +496,18 @@ module Nabu
             # P109-4: imprint-catalog furniture (leading "[", trailing
             # ":"/","/"."/brackets — the ESTC transcription style eebo
             # carries) strips before the sentinel check and the mint.
-            place = place.to_s.strip.sub(/\A[\[\s]+/, "").sub(/[\s:,.;\[\]]+\z/, "") unless place.nil?
-            return [nil, nil, nil, nil] if place.nil? || place.empty? ||
+            # The places sweep: the ReF header's "Schreibort" label is
+            # catalog furniture too ("(Schreibort) Regensburg (?)").
+            unless place.nil?
+              place = place.to_s.gsub(PLACE_LABEL, " ").strip.sub(/\A[\[\s.:,;]+/, "")
+                           .sub(/[\s:,.;\[\]]+\z/, "")
+            end
+            return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) ||
                                            NO_PLACE.include?(place.downcase)
 
             return [place, nil, nil, nil]
           end
-          return [meta["orig_place"], nil, nil, nil] if place.nil?
+          return [present_place(meta["orig_place"]), nil, nil, nil] if place.nil?
           return [place, string_place_ref(meta), nil, nil] unless place.is_a?(Hash)
 
           refs = []
@@ -478,6 +523,12 @@ module Nabu
                    ladder.empty? ? nil : ladder.join(", ")
                  end
           [name, refs.empty? ? nil : refs.uniq.join(" "), *coordinates(place["geo"])]
+        end
+
+        # The orig_place fallback's value, nil for an unknown-class
+        # sentinel (gams-zrcalo's "place of origin unknown").
+        def present_place(value)
+          value.nil? || NO_PLACE.include?(value.to_s.strip.downcase) ? nil : value
         end
 
         # A string place's sibling "place_ref" (croala's creation placeName
@@ -504,6 +555,18 @@ module Nabu
           end
           lat, lon = points.size == 1 ? points.first : [nil, nil]
           [topos.map { |topo| topo["name"].strip }.uniq.join("; "), nil, lat, lon]
+        end
+
+        # The places sweep: a bare string list (ndl-kotenseki's 出版地
+        # list — co-publishers' cities). Catalog brackets anywhere in a
+        # name are furniture ([京城], 〔江戸〕, 大[坂] — the cataloger's
+        # supplied reading, the ESTC precedent); unknown markers and empty
+        # brackets drop; the rest join "; " deduped, verbatim otherwise.
+        LIST_FURNITURE = /[\[\]〔〕]/
+        def string_list_claim(list)
+          names = list.map { |name| name.gsub(LIST_FURNITURE, "").gsub(/\s+/, " ").strip }
+                      .reject { |name| name.empty? || NO_PLACE.include?(name.downcase) }.uniq
+          [names.empty? ? nil : names.join("; "), nil, nil, nil]
         end
 
         # A WGS84 "lat, lon" string → [lat, lon] floats, both-or-nothing

@@ -730,14 +730,14 @@ class StatusReportTest < Minitest::Test
 
       detail = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "nabu-lects",
                                                 canonical_dir: canonical)
-      assert_match(/holds:\s+246 anchors · 125 stages · 27 varieties · 157 codemap rows/, detail)
+      assert_match(/holds:\s+249 anchors · 130 stages · 27 varieties · 158 codemap rows/, detail)
       places = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "nabu-places",
                                                 canonical_dir: canonical)
       assert_match(/holds:\s+module @ fedcba987654/, places)
 
       long = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: true,
                                        canonical_dir: canonical)
-      assert_match(/nabu-lects\s+-\s+module\s+up=module\s+246 anchors · 125 stages/, long)
+      assert_match(/nabu-lects\s+-\s+module\s+up=module\s+249 anchors · 130 stages/, long)
       assert_match(/nabu-places\s+-\s+module\s+up=module\s+module @ fedcba987654/, long)
 
       compact = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, canonical_dir: canonical)

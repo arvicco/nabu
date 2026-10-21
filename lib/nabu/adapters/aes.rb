@@ -64,10 +64,15 @@ module Nabu
     #
     # "lemma" = lemma_form (the shared treebank contract → passage_lemmas,
     # tier GOLD: TLA lemmatization is editor-verified annotation).
-    # "lemma_id" = the AED lemmaID VERBATIM ("123130") — the TLA lemma
-    # space. P28-1's AED dictionary mints entry ids from the same space, so
-    # the join is EXACT STRING EQUALITY lemma_id == entry_id — no folding,
-    # no transliteration round-trip. Token _id and zaehler are deliberately
+    # "lemma_id" = upstream's lemmaID VERBATIM, bare digits ("123130") —
+    # the TLA lemma space. The AED dictionary mints its entry ids from the
+    # same space but keeps the TEI @xml:id verbatim, PREFIXED ("tla123130"),
+    # so the join is "tla" + lemma_id == entry_id — never exact equality
+    # (census 2026-10-21: 18,733 distinct lemma ids over 779,011 tokens,
+    # 0 equal an entry id, all 18,733 land with the prefix restored).
+    # Query::Define#by_urn folds the prefix back on for a bare aed urn, so
+    # `show urn:nabu:dict:aed:<lemma_id>` resolves; no transliteration
+    # round-trip either way. Token _id and zaehler are deliberately
     # not ingested (zaehler is the position we already keep as order; _id
     # joins only the excluded relANNIS export — journaled).
     #

@@ -23,7 +23,7 @@ class DerivabilityWritersTest < Minitest::Test
   # (b) Journal rows carry config write-throughs: only these callsites
   # may mint lect assignments (cli writes through LectRulings first;
   # the appliers replay config; the test-support rig is suite-only).
-  ASSIGN_ALLOWLIST = %w[nabu/cli.rb nabu/lect_rules.rb nabu/lect_dates.rb nabu/lect_rulings.rb].freeze
+  ASSIGN_ALLOWLIST = %w[nabu/cli/lect.rb nabu/lect_rules.rb nabu/lect_dates.rb nabu/lect_rulings.rb].freeze
 
   def test_lect_journal_assign_callsites_are_allowlisted
     offenders = grep_files(/LectJournal\.assign!/) - ASSIGN_ALLOWLIST - ["nabu/store/lect_journal.rb"]
@@ -201,6 +201,25 @@ class DerivabilityWritersTest < Minitest::Test
     assert_empty offenders,
                  "persistent-file writer outside the gateway census: #{offenders.join(', ')} — " \
                  "declare it here deliberately and name what it writes and its law kind"
+  end
+
+  # (d) The mined-layers store (local/mined-links.sqlite3 — the cost law,
+  # owner ruling 2026-10-20): heavy-derived INSTANCE data, written only
+  # through its gateway's two verbs (Store::MinedLinks.mine!/migrate!),
+  # which only Nabu::MinedLayers calls; its schema track is named nowhere
+  # else; and every file that names the store's path is a deliberate
+  # reader or a pass-through to the gateway.
+  MINED_PATH_ALLOWLIST = %w[
+    nabu/cli/admin.rb nabu/cli/links.rb nabu/config.rb nabu/health/invariants.rb nabu/health/local_check.rb
+    nabu/links_mine_commands.rb nabu/mined_layers.rb nabu/rebuild.rb nabu/store/link_layers.rb
+  ].freeze
+
+  def test_the_mined_layers_store_writes_only_through_its_gateway
+    assert_equal %w[nabu/mined_layers.rb], grep_files(/MinedLinks\.(mine|migrate)!/),
+                 "the gateway's write verbs are reached only through Nabu::MinedLayers"
+    assert_equal %w[nabu/store/mined_links.rb], grep_files(/mined_migrate/)
+    assert_equal MINED_PATH_ALLOWLIST, grep_files(/mined_links_path/),
+                 "a new file naming the mined store's path is a deliberate allowlist decision"
   end
 
   private
