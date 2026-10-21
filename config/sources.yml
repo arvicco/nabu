@@ -783,6 +783,16 @@ cbeta:
                    # sync widens the existing sparse cone (≈161 MB working
                    # tree) and expects ≈370 new documents / ≈1.1M passages
                    # (census at 2026.R2; estimate from sampled bytes/line).
+                   # P140: + the ten historical canons of the copyright
+                   # page's Category A 歷代藏經補輯 group — A 趙城金藏, C 中華藏,
+                   # D 國圖善本佛典, F 房山石經, G 佛教大藏經, L 乾隆藏, M 卍正藏,
+                   # P 永樂北藏, S 宋藏遺珍, U 洪武南藏 (copyright page re-read
+                   # 2026-10-21, A/B lists unchanged). PENDING FIRST FETCH:
+                   # the next sync widens the cone by ≈138 MB (236 XMLs) and
+                   # expects EXACTLY +236 documents / +836,777 passages
+                   # (full parse of every file at dbdea41, 0 errors; per-canon
+                   # counts in the adapter class note). B/GA/GB/I/ZW/ZS/CC
+                   # stay skipped by rule (574 files).
                    # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at

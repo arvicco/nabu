@@ -87,3 +87,33 @@ commit dbdea41 ("CBETA 2026.R2"), upstream path `T/T85/T85n2831.xml`.
 `<byline cb:type="author">釋菩提達摩製</byline>` — the shape where a body
 byline is the document's only author claim (census over the whole tree:
 22,210 bylines, 8,586 typed author).
+
+## The historical canons (P140)
+
+Retrieved **2026-10-21** at master commit
+**dbdea41071e1e260ad84b72faefd4587333cf76d** ("CBETA 2026.R2",
+2026-09-05) via
+`https://raw.githubusercontent.com/cbeta-org/xml-p5/<commit>/<path>`.
+cbeta.org/copyright (re-read 2026-10-21) lists, under Category A
+歷代藏經補輯, 《房山石經》、《趙城金藏》、《永樂北藏》等等 and
+「國家圖書館善本佛典」 — the ten canon dirs below; every file carries the
+in-file grant verbatim. One real specimen per canon: the smallest file
+whole where it is small, otherwise the first 30 own-canon print lines.
+
+Trim recipe (line-verbatim, no element edited): the whole teiHeader,
+`<text><body>` and the body lines through the 30th own-siglum `<lb>`,
+the still-open elements closed in reverse order, `<back>` dropped. The
+`-xu` stem keeps fixture urns disjoint from the corpus urns.
+
+| file | upstream path | trim | why this file |
+|---|---|---|---|
+| `A/A114/A114n1505-xu.xml` | `A/A114/A114n1505.xml` | lb 0395b01–0396b07; 51.7 KB → 7.4 KB (orig sha256 `07c7df83…`) | 趙城金藏 (the smallest A file): 宋 translator byline 智吉祥等譯, n-before-ed attribute order |
+| `C/C071/C071n1666.xml` | same | none (whole, 15.0 KB) | 中華藏 梵本大悲神咒: a seat-less dhāraṇī text (no byline → no date) |
+| `D/D12/D12n8820.xml` | same | none (whole, 10.0 KB) | 國圖善本 新菩薩經 (a Dunhuang manuscript): a PUA gaiji character in running text, 4 back `<app>` entries |
+| `F/F28/F28n1082.xml` | same | none (whole, 4.4 KB) | 房山石經 釋華嚴漩澓偈: first print line 0627a22 (stone-sutra coordinates mid-page), a seat-less monk byline |
+| `G/G084/G084n2084.xml` | same | none (whole, 3.8 KB) | 佛教大藏經 坐禪箴 (Dōgen): the 日本 place seat, which bands nothing |
+| `L/L153/L153n1635.xml` | same | none (whole, 5.9 KB) | 乾隆藏 性相通說（選錄序文）: a 明 byline, the selected-preface shape |
+| `M/M59/M59n1540-xu.xml` | `M/M59/M59n1540.xml` | lb 0789b01–0790a10; 1.24 MB → 28.7 KB (orig sha256 `7b83365d…`) | 卍正藏 大慧普覺禪師普說 (M's only file): 宋 compiler byline |
+| `P/P189/P189n1630.xml` | same | none (whole, 7.9 KB) | 永樂北藏 教乘法數（選錄序文）: 明 byline |
+| `S/S06/S06n0047-xu.xml` | `S/S06/S06n0047.xml` | lb 4201a01–4201a30; 167.9 KB → 19.6 KB (orig sha256 `0e487895…`) | 宋藏遺珍 上生經疏隨新抄科文: a nested `<list>/<item>` outline (12 levels closed), a 【上闕】 lacuna line opening the text |
+| `U/U205/U205n1368-xu.xml` | `U/U205/U205n1368.xml` | lb 0231b01–0232b06; 167.0 KB → 19.6 KB (orig sha256 `516a710c…`) | 洪武南藏 大乘百法明門論疏: 唐 byline, layout-only lines (30 lb → 26 passages) |

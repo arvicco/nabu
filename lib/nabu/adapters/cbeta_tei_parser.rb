@@ -111,7 +111,8 @@ module Nabu
     # Nokogiri::XML::Reader only: T ships 27 files over the house 5 MB DOM
     # limit (max 17.2 MB, T25n1509), X ships 7 (max 9.0 MB). One pass.
     class CbetaTeiParser < StreamingTeiParser
-      # CBETA's T/X/K/J text is Literary Chinese (headers tag zh-Hant, the
+      # CBETA's T/X/K/J text — and the historical canons' (A/C/D/F/G/L/M/P/
+      # S/U) — is Literary Chinese (headers tag zh-Hant, the
       # script; the language is lzh — the SuttaCentral Āgama precedent).
       LANGUAGE = "lzh"
 
