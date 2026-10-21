@@ -43,7 +43,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["vedaweb"]
       refute_nil entry, "vedaweb must be registered in config/sources.yml"
-      refute entry.wired, "wired: false until the gate's first real sync verifies the expected counts"
+      assert entry.wired, "wired since the verified first sync (2026-10-21)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "indic"
       assert_equal KLASS, entry.adapter_class

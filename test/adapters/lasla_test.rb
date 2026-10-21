@@ -48,7 +48,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["lasla"]
       refute_nil entry, "lasla must be registered in config/sources.yml"
-      refute entry.wired, "wired: false until the gate's first real sync verifies the expected counts"
+      assert entry.wired, "wired since the verified first sync (2026-10-21)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "classical"
       assert_equal KLASS, entry.adapter_class
