@@ -1,0 +1,534 @@
+# config/south_indian_reigns.yml — the South-Indian regnal accession table
+# (owner-approved before use). Converts the REGNAL dating statements of
+# the DHARMA Tamil-country edition titles ("time of Rājarāja I Cōḻa,
+# year 19") into CE envelopes through Nabu::SouthIndianReigns.
+#
+# The sibling of config/eras.yml (an ERA-typed year) and
+# config/regnal_years.yml (cdli's Mesopotamian reigns): a regnal year is
+# counted from one king's accession, so the conversion needs the
+# accession, and the accession of most South-Indian kings is known only
+# within a range. Every row keeps that range; nothing is ever pinned to
+# one year it is not known to.
+#
+# SOURCES (one standard chronology per dynasty; see `dynasties:`):
+# accession years follow the cited work; where the field's standard
+# chronologies disagree, the row's accession RANGE spans the
+# disagreement rather than choosing a side.
+#
+# CONVENTIONS (declared, never silent):
+# - accession: the CE year (or [earliest, latest] range) in which regnal
+#   year 1 began. A single integer means the field agrees on the year.
+# - end: the LATEST year the reign (counting regnal years from the same
+#   accession, co-regency included) can have run to. It bounds the
+#   whole-reign span and the highest regnal year the reign can carry:
+#   max year = end − earliest accession + 1. Ends are generous on purpose
+#   — a too-early end would wrongly exclude a candidate.
+# - Regnal year N of a reign → [earliest accession + N − 1, latest
+#   accession + N]: a regnal year runs from one accession anniversary to
+#   the next, so it straddles two Julian years (the Kollam width-1
+#   precedent in eras.yml).
+# - No year, or a year the title cannot give as a number ("year lost",
+#   "year 2[.]", "year 3?") → the whole-reign span [earliest accession,
+#   end]: the inscription is dated within the reign either way.
+# - A year written as a sum ("year 4 + 9", the Tamil "year N opposite
+#   to year M" count) reads as the sum.
+#
+# TITLES: each spelling the census found (DHARMA title wording verbatim,
+# matched after NFC, case-folding and dropping spaces/dots/hyphens) maps
+# to its CANDIDATE reigns:
+# - one candidate: the title names one reign (an ordinal, a reign-unique
+#   name, or a dynastic prefix that singles it out);
+# - several candidates (homonyms — three Kulottuṅgas, two
+#   Nandivikramavarmans …): the conversion is the envelope over the
+#   candidates whose reign can reach year N (a year N exceeding a
+#   candidate's max year drops that candidate; exceeding every one mints
+#   nothing). Never a pick among them.
+# `unconvertible:` lists the censused spellings that deliberately mint
+# NOTHING, each with its reason (alternating titles naming a dozen kings,
+# homonyms with an unruled early king, floating chronologies). An
+# unlisted spelling also mints nothing — never a guess.
+
+# The widest envelope the table will mint. A homonym union whose
+# candidates lie centuries apart (Rājendra I … Rājendra III, 1012–1279;
+# Rājarāja I or III) is honest but says less than the dynasty attribution
+# itself; above this width the conversion mints nothing. 150 years keeps
+# the adjacent-reign unions (Nandivarman II/III, Kulottuṅga I–III).
+max_envelope_years: 150
+
+dynasties:
+  chola:
+    label: Cōḻa (Vijayālaya line and the Cāḷukya-Cōḻas)
+    source: K. A. Nilakanta Sastri, The Cōḷas, 2nd ed. (Madras, University of Madras, 1955), genealogical and chronological tables; accession ranges widened where later lists differ by a year or two
+  pallava:
+    label: Pallava (Siṁhaviṣṇu line and the later Pallavas)
+    source: T. V. Mahalingam, Inscriptions of the Pallavas (New Delhi, ICHR, 1988), introduction (chronology); with E. Francis, Le discours royal dans l'Inde du Sud ancienne, vol. 1 (Louvain-la-Neuve, Institut orientaliste, 2013); ranges span the C. Minakshi / R. Gopalan / Mahalingam disagreements for the 9th-century kings
+  pandya:
+    label: Pāṇḍya (the second empire, 12th–14th c.)
+    source: N. Sethuraman, The Imperial Pandyas — Mathematics Reconstructs the Chronology (Kumbakonam, 1978), accession years from the astronomical data; with K. A. Nilakanta Sastri, The Pāṇḍyan Kingdom (London, Luzac, 1929)
+  rashtrakuta:
+    label: Rāṣṭrakūṭa (Kṛṣṇa III's Tamil-country regnal count)
+    source: A. S. Altekar, The Rashtrakutas and Their Times (Poona, Oriental Book Agency, 1934), Kṛṣṇa III's accession 939/940 and the Tamil records counting regnal years from it
+  kadava:
+    label: Kāḍava (Kōpperuñjiṅga I and II)
+    source: K. A. Nilakanta Sastri, The Cōḷas, 2nd ed. (Madras 1955), the Kāḍava chapter; Kōpperuñjiṅga II's accession 1243 from the astronomical data of his records, Kōpperuñjiṅga I's held as a range
+  vijayanagara:
+    label: Vijayanagara (Saṅgama and Tuḷuva kings)
+    source: K. A. Nilakanta Sastri, A History of South India, 4th ed. (Madras, Oxford University Press, 1975), the Vijayanagara dynastic list
+  madurai_nayaka:
+    label: Nāyakas of Madurai
+    source: R. Sathyanatha Aiyar, History of the Nayaks of Madura (London, Oxford University Press, 1924)
+
+reigns:
+  # -- Pallava ------------------------------------------------------------
+  pallava_simhavishnu:
+    label: Siṁhaviṣṇu
+    dynasty: pallava
+    accession: [555, 575]
+    end: 600
+  pallava_mahendravarman_1:
+    label: Mahendravarman I
+    dynasty: pallava
+    accession: [580, 600]
+    end: 630
+  pallava_narasimhavarman_1:
+    label: Narasiṁhavarman I Mahāmalla
+    dynasty: pallava
+    accession: [630, 638]
+    end: 668
+  pallava_mahendravarman_2:
+    label: Mahendravarman II
+    dynasty: pallava
+    accession: [668, 670]
+    end: 672
+  pallava_paramesvaravarman_1:
+    label: Parameśvaravarman I
+    dynasty: pallava
+    accession: [669, 672]
+    end: 700
+  pallava_narasimhavarman_2:
+    label: Narasiṁhavarman II Rājasiṁha
+    dynasty: pallava
+    accession: [690, 700]
+    end: 728
+  pallava_paramesvaravarman_2:
+    label: Parameśvaravarman II
+    dynasty: pallava
+    accession: [728, 728]
+    end: 731
+  pallava_nandivarman_2:
+    label: Nandivarman II Pallavamalla
+    dynasty: pallava
+    accession: [731, 732]
+    end: 796
+  pallava_dantivarman:
+    label: Dantivarman
+    dynasty: pallava
+    accession: [795, 796]
+    end: 847
+  pallava_nandivarman_3:
+    label: Nandivarman III
+    dynasty: pallava
+    accession: [844, 847]
+    end: 869
+  pallava_nrpatunga:
+    label: Nṛpatuṅgavarman
+    dynasty: pallava
+    accession: [854, 869]
+    end: 912
+  pallava_kampavarman:
+    label: Kampavarman
+    dynasty: pallava
+    accession: [865, 875]
+    end: 912
+  pallava_aparajita:
+    label: Aparājitavarman
+    dynasty: pallava
+    accession: [870, 885]
+    end: 903
+  # -- Rāṣṭrakūṭa ---------------------------------------------------------
+  rashtrakuta_krishna_3:
+    label: Kṛṣṇa III (Kaṉṉaradeva)
+    dynasty: rashtrakuta
+    accession: [939, 940]
+    end: 967
+  # -- Cōḻa ---------------------------------------------------------------
+  chola_parantaka_1:
+    label: Parāntaka I (Parakesari)
+    dynasty: chola
+    accession: 907
+    end: 955
+  chola_sundara:
+    label: Sundara Cōḻa Parāntaka II (Rājakesari)
+    dynasty: chola
+    accession: [956, 957]
+    end: 973
+  chola_uttama:
+    label: Uttama Cōḻa (Parakesari)
+    dynasty: chola
+    accession: [969, 971]
+    end: 987
+  chola_rajaraja_1:
+    label: Rājarāja I (Rājakesari)
+    dynasty: chola
+    accession: 985
+    end: 1014
+  chola_rajendra_1:
+    label: Rājendra I (Parakesari)
+    dynasty: chola
+    accession: 1012
+    end: 1044
+  chola_rajadhiraja_1:
+    label: Rājādhirāja I (Rājakesari)
+    dynasty: chola
+    accession: 1018
+    end: 1054
+  chola_rajendra_2:
+    label: Rājendra II (Parakesari)
+    dynasty: chola
+    accession: [1051, 1052]
+    end: 1064
+  chola_virarajendra:
+    label: Vīrarājendra (Rājakesari)
+    dynasty: chola
+    accession: [1062, 1063]
+    end: 1070
+  chola_kulottunga_1:
+    label: Kulottuṅga I (Rājakesari)
+    dynasty: chola
+    accession: 1070
+    end: 1122
+  chola_vikrama:
+    label: Vikrama Cōḻa (Parakesari)
+    dynasty: chola
+    accession: 1118
+    end: 1136
+  chola_kulottunga_2:
+    label: Kulottuṅga II (Rājakesari)
+    dynasty: chola
+    accession: 1133
+    end: 1150
+  chola_rajaraja_2:
+    label: Rājarāja II (Parakesari)
+    dynasty: chola
+    accession: 1146
+    end: 1173
+  chola_rajadhiraja_2:
+    label: Rājādhirāja II (Rājakesari)
+    dynasty: chola
+    accession: [1163, 1166]
+    end: 1179
+  chola_kulottunga_3:
+    label: Kulottuṅga III (Parakesari; Tribhuvanavīradeva)
+    dynasty: chola
+    accession: 1178
+    end: 1218
+  chola_rajaraja_3:
+    label: Rājarāja III (Rājakesari)
+    dynasty: chola
+    accession: 1216
+    end: 1256
+  chola_rajendra_3:
+    label: Rājendra III (Parakesari)
+    dynasty: chola
+    accession: 1246
+    end: 1279
+  # -- Kāḍava -------------------------------------------------------------
+  kadava_kopperunjinga_1:
+    label: Kōpperuñjiṅga I
+    dynasty: kadava
+    accession: [1216, 1229]
+    end: 1243
+  kadava_kopperunjinga_2:
+    label: Kōpperuñjiṅga II
+    dynasty: kadava
+    accession: 1243
+    end: 1279
+  # -- Pāṇḍya (second empire) ---------------------------------------------
+  # The Pāṇḍya kings reigned in overlapping co-regencies and their
+  # terminal years are the least certain part of the chronology: the ends
+  # below are deliberately generous so the max-year filter never drops a
+  # candidate on a doubtful end.
+  pandya_jatavarman_kulasekhara_1:
+    label: Jaṭāvarman Kulaśekhara I
+    dynasty: pandya
+    accession: 1190
+    end: 1217
+  pandya_maravarman_sundara_1:
+    label: Māṟavarman Sundara Pāṇḍya I
+    dynasty: pandya
+    accession: 1216
+    end: 1245
+  pandya_maravarman_sundara_2:
+    label: Māṟavarman Sundara Pāṇḍya II
+    dynasty: pandya
+    accession: [1238, 1239]
+    end: 1260
+  pandya_jatavarman_sundara_1:
+    label: Jaṭāvarman Sundara Pāṇḍya I
+    dynasty: pandya
+    accession: 1251
+    end: 1280
+  pandya_maravarman_kulasekhara_1:
+    label: Māṟavarman Kulaśekhara I
+    dynasty: pandya
+    accession: 1268
+    end: 1311
+  pandya_jatavarman_sundara_2:
+    label: Jaṭāvarman Sundara Pāṇḍya II
+    dynasty: pandya
+    accession: [1276, 1277]
+    end: 1310
+  pandya_jatavarman_sundara_3:
+    label: Jaṭāvarman Sundara Pāṇḍya III
+    dynasty: pandya
+    accession: [1302, 1304]
+    end: 1330
+  pandya_maravarman_kulasekhara_2:
+    label: Māṟavarman Kulaśekhara II
+    dynasty: pandya
+    accession: [1313, 1314]
+    end: 1346
+  # -- Vijayanagara / Nāyaka ------------------------------------------------
+  vijayanagara_devaraya_2:
+    label: Devarāya II
+    dynasty: vijayanagara
+    accession: [1422, 1426]
+    end: 1446
+  vijayanagara_krishnadevaraya:
+    label: Kṛṣṇadevarāya
+    dynasty: vijayanagara
+    accession: 1509
+    end: 1529
+  madurai_tirumala_nayaka:
+    label: Tirumala Nāyaka
+    dynasty: madurai_nayaka
+    accession: 1623
+    end: 1659
+
+titles:
+  # -- Pallava: reign-unique names ------------------------------------------
+  Siṁhaviṣṇu: [pallava_simhavishnu]
+  Siṁhaviṣṇuvarman: [pallava_simhavishnu]
+  Narasiṁha Mahāmalla: [pallava_narasimhavarman_1]
+  Mahāmalla: [pallava_narasimhavarman_1]
+  Dantivarman: [pallava_dantivarman]
+  Dantivikramavarman: [pallava_dantivarman]
+  Dantivikrama: [pallava_dantivarman]
+  Dantivikramadeva: [pallava_dantivarman]
+  Tantippōttaraiyar: [pallava_dantivarman]
+  Tantippōttaraiyaṉ: [pallava_dantivarman]
+  Tantipōttaraiyaṉ: [pallava_dantivarman]
+  Dantippōttaracar: [pallava_dantivarman]
+  Nr̥patuṅga: [pallava_nrpatunga]
+  Nr̥patuṅgavarman: [pallava_nrpatunga]
+  Nr̥patuṅgavikramavarman: [pallava_nrpatunga]
+  Nr̥patuṅkavikramavarman: [pallava_nrpatunga]
+  Nr̥patuṇgavikramavaram: [pallava_nrpatunga]
+  Nr̥patuṅgavikrama: [pallava_nrpatunga]
+  Nr̥patuṅgappōttaraiyar: [pallava_nrpatunga]
+  Nr̥patuṅka: [pallava_nrpatunga]
+  Nr̥patuṅkapōttatēvaṉ: [pallava_nrpatunga]
+  Kampavarman: [pallava_kampavarman]
+  Kampavikramavarman: [pallava_kampavarman]
+  Kampa: [pallava_kampavarman]
+  Kampar: [pallava_kampavarman]
+  Kampappōttaraiyar: [pallava_kampavarman]
+  Kampapōttaraiyar: [pallava_kampavarman]
+  Kampapperumāḷ: [pallava_kampavarman]
+  Kampapōttairavikramavarman: [pallava_kampavarman]
+  Aparājitavarman: [pallava_aparajita]
+  Aparājitavikramavarman: [pallava_aparajita]
+  Aparājita: [pallava_aparajita]
+  Aparājitavikramapōttaraiyar: [pallava_aparajita]
+  # -- Pallava: homonyms (union over the candidates) --------------------------
+  # Mahendravarman I / II (Mahendravarman III never reigned).
+  Mahendravarman: [pallava_mahendravarman_1, pallava_mahendravarman_2]
+  Mahendravikramavarman: [pallava_mahendravarman_1, pallava_mahendravarman_2]
+  Mahendra: [pallava_mahendravarman_1, pallava_mahendravarman_2]
+  Mayēntirappottaracaru: [pallava_mahendravarman_1, pallava_mahendravarman_2]
+  Narasiṁhavarman: [pallava_narasimhavarman_1, pallava_narasimhavarman_2]
+  Narasiṁavarman: [pallava_narasimhavarman_1, pallava_narasimhavarman_2]
+  Narasiṁhavikramavarman: [pallava_narasimhavarman_1, pallava_narasimhavarman_2]
+  Naraciṅkappōttaraiyaṉ: [pallava_narasimhavarman_1, pallava_narasimhavarman_2]
+  Naraciṅkapōttaracar: [pallava_narasimhavarman_1, pallava_narasimhavarman_2]
+  Parameśvaravarman: [pallava_paramesvaravarman_1, pallava_paramesvaravarman_2]
+  Parameśvara Pōttaraiyar: [pallava_paramesvaravarman_1, pallava_paramesvaravarman_2]
+  Paramēccurappōttaraiyar: [pallava_paramesvaravarman_1, pallava_paramesvaravarman_2]
+  # The -vikrama and Tamil -pōttaraiyar styles are Nandivarman II's and
+  # III's (never the early Nandivarman I's — the bare name is unconvertible).
+  Nandivikramavarman: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nandivikrama: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōttaraiyar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōtaraiyar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōttaraiyaṉ: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōttaraicar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōttaracar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantipōttaraiyar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantipōttaraicar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōttairayaṉ: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōtairayar: [pallava_nandivarman_2, pallava_nandivarman_3]
+  Nantippōtairayaṉ: [pallava_nandivarman_2, pallava_nandivarman_3]
+  # -- Rāṣṭrakūṭa ------------------------------------------------------------
+  Kaṉṉara Deva: [rashtrakuta_krishna_3]
+  Kaṉṉaradeva: [rashtrakuta_krishna_3]
+  Kaṇṇaradeva: [rashtrakuta_krishna_3]
+  # -- Cōḻa: one reign ---------------------------------------------------------
+  Parāntaka I: [chola_parantaka_1]
+  Parāntaka I Cōḻa: [chola_parantaka_1]
+  matirai koṇṭa Parakesarivarman: [chola_parantaka_1] # "who took Madurai": Parāntaka I's epithet
+  Sundara Cōḻa: [chola_sundara]
+  Uttama Cōḻa: [chola_uttama]
+  Parakesarivarman Uttama Cōḻa: [chola_uttama]
+  Rājarāja I: [chola_rajaraja_1]
+  Rājarāja I Cōḻa: [chola_rajaraja_1]
+  Rājarājakesarivarman: [chola_rajaraja_1] # SII's style for Rājarāja I's records
+  Mummuṭi Cōḻa Rājarāja Rājakesarivarman: [chola_rajaraja_1] # Mummuṭi Cōḻa: Rājarāja I's title
+  Rājendra I Cōḻa: [chola_rajendra_1]
+  Rājendracōḻa I: [chola_rajendra_1]
+  Rājādhirāja I Cōḻa: [chola_rajadhiraja_1]
+  Rājendra II: [chola_rajendra_2]
+  Rājendra Cōḻa II: [chola_rajendra_2]
+  Vīra Rājendra Rājakesarivarman: [chola_virarajendra]
+  Rājakēsarivarman Vīrārajēndradeva: [chola_virarajendra]
+  Rājendra / Rājakesarin Vīrarājendra: [chola_virarajendra]
+  Kulottuṅga I: [chola_kulottunga_1]
+  Vikrama Cōḻa: [chola_vikrama]
+  Vikramacōḷadēva: [chola_vikrama]
+  Vikramacōḻa: [chola_vikrama]
+  Kulottuṅga II Cōḻa: [chola_kulottunga_2]
+  Rājarāja II: [chola_rajaraja_2]
+  Parakesarivarman Rājarāja: [chola_rajaraja_2] # the only Parakesari Rājarāja
+  Parakesarivarman Tribhuvanacakravartin Rājarāja: [chola_rajaraja_2]
+  Kulottuṅga III: [chola_kulottunga_3]
+  Parakesarivarman Kulottuṅga Cōḻa: [chola_kulottunga_3] # the only Parakesari Kulottuṅga
+  Parakesarivarman Tribhuvanacakravartin Vīrarājendra: [chola_kulottunga_3] # Vīrarājendra was Rājakesari
+  Vīrarājēndra (Kulottuṅga Cōḻa III) king: [chola_kulottunga_3]
+  Tribhuvana Vīra: [chola_kulottunga_3] # Tribhuvanavīradeva, Kulottuṅga III's title
+  Tribhuvana Vīradeva: [chola_kulottunga_3]
+  # -- Cōḻa: homonyms (union over the candidates) -------------------------------
+  Rājarāja: [chola_rajaraja_1, chola_rajaraja_2, chola_rajaraja_3]
+  Rājārāja: [chola_rajaraja_1, chola_rajaraja_2, chola_rajaraja_3]
+  Tribhuvanacakravartin Rājarāja: [chola_rajaraja_1, chola_rajaraja_2, chola_rajaraja_3]
+  Tribhuvanachakravartin Rājarājadēva: [chola_rajaraja_1, chola_rajaraja_2, chola_rajaraja_3]
+  # Rājakesari Rājarājas: I and III (II was Parakesari).
+  Rājakesarivarman Rājarāja: [chola_rajaraja_1, chola_rajaraja_3]
+  Rājarāja Rājakesarivarman: [chola_rajaraja_1, chola_rajaraja_3]
+  Rājarāja Rājakesarivarman Rājarāja: [chola_rajaraja_1, chola_rajaraja_3]
+  Rajakesarivarman Rājarāja / Kōneriṉmaikoṇṭāṉ: [chola_rajaraja_1, chola_rajaraja_3]
+  # Rājendra I, II and III were all Parakesari.
+  Rājendra Cōḻa: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Rājendra: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Rājendracōḻa: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Uṭaiyār Śrīrājendra: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Tribhuvanachakravartin Śrī Rājendracōḻadeva: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Parakesarivarman Rājendra Cōḻa: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Parakesarivarman Rājendra: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Parakesarivaman Rājendra Cōḻa: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Rājendra Cōḻa Parakesarivarman: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  Rājendra Parakesarivarman: [chola_rajendra_1, chola_rajendra_2, chola_rajendra_3]
+  # Rājādhirāja I and II were both Rājakesari.
+  Rājādhirāja: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  Rājādhirāja Cōḻa: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  Rājadhirāja Cōla: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  king Rājādhirāja: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  Rājakesarivarman Rājādhirāja: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  Rājakesarivarman Rājādhirāja Cōḻa: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  Tribhuvanacakravartin Rājādhirāja: [chola_rajadhiraja_1, chola_rajadhiraja_2]
+  # Vīrarājendra (1062/3) or Kulottuṅga III, whose records open
+  # "Tribhuvanacakravartin Vīrarājendradeva".
+  Vīrarājendra: [chola_virarajendra, chola_kulottunga_3]
+  Vīrarājēndra: [chola_virarajendra, chola_kulottunga_3]
+  Kulottuṅga Cōḻa: [chola_kulottunga_1, chola_kulottunga_2, chola_kulottunga_3]
+  Kulottuṅga: [chola_kulottunga_1, chola_kulottunga_2, chola_kulottunga_3]
+  Kulōttuṅka Cōḻa: [chola_kulottunga_1, chola_kulottunga_2, chola_kulottunga_3]
+  Tribhuvanacakravartin Kulōttuṅga Cōḻa: [chola_kulottunga_1, chola_kulottunga_2, chola_kulottunga_3]
+  # Rājakesari Kulottuṅgas: I and II (III was Parakesari).
+  Rājakesarivarman Kulottuṅga: [chola_kulottunga_1, chola_kulottunga_2]
+  Rājakesarivarman Kulottuṅga Cōḻa: [chola_kulottunga_1, chola_kulottunga_2]
+  Rajakesarivarman Tribhuvanacakravartin Kulottuṅga Cōḻa: [chola_kulottunga_1, chola_kulottunga_2]
+  Rājakesarivarman Tribhuvanacakravartin Kulottuṅga: [chola_kulottunga_1, chola_kulottunga_2]
+  Rājakesarivarman alias Cakravartin Kulottuṅga Cōḻa: [chola_kulottunga_1, chola_kulottunga_2]
+  # -- Kāḍava --------------------------------------------------------------
+  Kōpperuñciṅkaṉ: [kadava_kopperunjinga_1, kadava_kopperunjinga_2]
+  Kōpperuñciṅka: [kadava_kopperunjinga_1, kadava_kopperunjinga_2]
+  king Kōpperuñciṅkaṉ: [kadava_kopperunjinga_1, kadava_kopperunjinga_2]
+  king Kōpperuciṅkaṉ: [kadava_kopperunjinga_1, kadava_kopperunjinga_2]
+  # -- Pāṇḍya (second empire) ------------------------------------------------
+  Māṟavarman Sundara Pāṇḍya I: [pandya_maravarman_sundara_1]
+  Māṟavarmaṉ Sundara Pāṇḍya: [pandya_maravarman_sundara_1, pandya_maravarman_sundara_2]
+  Māṟavarmar Sundara Pāṇḍya: [pandya_maravarman_sundara_1, pandya_maravarman_sundara_2]
+  Jaṭāvarman Sundara Pāṇḍya: [pandya_jatavarman_sundara_1, pandya_jatavarman_sundara_2, pandya_jatavarman_sundara_3]
+  Caṭaiyavarman Sundara Pāṇḍya: [pandya_jatavarman_sundara_1, pandya_jatavarman_sundara_2, pandya_jatavarman_sundara_3]
+  Jatāvārman alias Tribhuvanachakravartin Sundarapāṇdyadēva: [pandya_jatavarman_sundara_1, pandya_jatavarman_sundara_2, pandya_jatavarman_sundara_3]
+  Sundara Pāṇḍya: [pandya_maravarman_sundara_1, pandya_maravarman_sundara_2, pandya_jatavarman_sundara_1, pandya_jatavarman_sundara_2, pandya_jatavarman_sundara_3]
+  Māṟavarman Kulaśekhara: [pandya_maravarman_kulasekhara_1, pandya_maravarman_kulasekhara_2]
+  Pāṇḍya Māṟavarman Kulaśēkharadēva: [pandya_maravarman_kulasekhara_1, pandya_maravarman_kulasekhara_2]
+  Kulaśekhara Pāṇḍya: [pandya_jatavarman_kulasekhara_1, pandya_maravarman_kulasekhara_1, pandya_maravarman_kulasekhara_2]
+  # -- Vijayanagara / Nāyaka -----------------------------------------------
+  Dēvarāya II: [vijayanagara_devaraya_2]
+  Vīrapratāpa Kr̥ṣṇadeva Mahārāya: [vijayanagara_krishnadevaraya]
+  Tirumalai Nāyaka: [madurai_tirumala_nayaka]
+
+unconvertible:
+  Rājakesarivarman: the alternating Cōḻa title — ten kings bore it (Āditya I to Rājarāja III, 871–1256); names no reign
+  Rājakesarin: the alternating Cōḻa title (Rājakesari); names no reign
+  Parakesarivarman: the alternating Cōḻa title — eleven kings bore it (Vijayālaya to Rājendra III, c. 850–1279); names no reign
+  Parakesarin: the alternating Cōḻa title (Parakesari); names no reign
+  Parakesarivarman (?): the alternating Cōḻa title, and doubted by the editor
+  kesarivarman: half of an alternating Cōḻa title; names no reign
+  Rājakesarivarman Rājendra Cōḻa: no Rājakesari Rājendra reigned under that name alone (Kulottuṅga I's early records, or Vīrarājendra) — identification is the editor's to make
+  Karikāla Cōḻa: legendary Karikāla or Āditya II Karikāla — identification open
+  Madhurāntaka: title of Uttama Cōḻa and of Rājendra I — identification open
+  Rājarāja (?): doubted by the editor
+  Sundara Cōḻapāṇḍya: a Cōḻa-Pāṇḍya viceroy, no ruled regnal count
+  Kōṉēriṉmaikoṇṭāṉ: a royal epithet used by 12th–13th-century Cōḻa and Pāṇḍya kings alike; names no reign
+  Kōnēriṉmaikoṇṭāṉ: royal epithet (see Kōṉēriṉmaikoṇṭāṉ); names no reign
+  Kōṉēriṉmaikoṇṭān: royal epithet (see Kōṉēriṉmaikoṇṭāṉ); names no reign
+  Tribhuvanacakravartin Kōṉēriṉmaikoṇṭāṉ: royal epithet (see Kōṉēriṉmaikoṇṭāṉ); names no reign
+  Nandivarman: the bare name covers the early Pallava Nandivarman I (Utayēntiram plates, year 1 — chronology floating) as well as Nandivarman II and III
+  Siṁhavarman: early Pallava kings of that name (Andhra charters) — the early Pallava chronology floats by decades
+  Siṁhavarman or Mahendravarman: the editor's own alternative
+  Mahendravarman (?): doubted by the editor
+  Nr̥patuṅgavarman (?): doubted by the editor
+  Kampavarman (?): doubted by the editor
+  Nantippōttaraiyar (?): doubted by the editor
+  Śiva-Skandavarman: early Pallava (Prakrit charters) — chronology floating
+  Vijaya-Skandavarman: early Pallava — chronology floating
+  Skandavarman: early Pallava — chronology floating
+  Viṣṇugopa: early Pallava — chronology floating
+  Viṣṇugopavarman: early Pallava — chronology floating
+  Kumāraviṣṇu: early Pallava — chronology floating
+  Kumāraviṣṇuvarman: early Pallava — chronology floating
+  Skandaśiṣya: early Pallava — chronology floating
+  Rājasiṁha: a Pallava (Narasiṁhavarman II) and a first-empire Pāṇḍya title alike
+  Māṟaṉ Caṭaiyaṉ: the alternating first-empire Pāṇḍya title (Māṟaṉ / Caṭaiyaṉ); names no reign
+  Māṟañ Caṭaiyaṉ: the alternating first-empire Pāṇḍya title; names no reign
+  Māraṉ Caṭaiyaṉ: the alternating first-empire Pāṇḍya title; names no reign
+  Varaguṇa: Varaguṇa I or II (first empire) — that chronology is not settled
+  Neṭuñcaṭaiyaṉ: first-empire Pāṇḍya — chronology not settled
+  Parāntaka: a Cōḻa (I or II) or a first-empire Pāṇḍya name
+  Jaṭāvarman Parāntaka: first-empire Pāṇḍya — chronology not settled
+  Śrīvallabha: several Pāṇḍya Śrīvallabhas, first and second empire
+  Jaṭāvarman Śrīvallabhadēva: several Pāṇḍya Śrīvallabhas
+  Caṭaiyavarman Śrī Vallabha: several Pāṇḍya Śrīvallabhas
+  Parāṅkucaṉ: first-empire Pāṇḍya epithet — chronology not settled
+  Vīrapāṇḍya: the 10th-century Vīrapāṇḍya and the 13th-century Jaṭāvarman Vīra Pāṇḍyas alike
+  Vīra Pāṇḍya: as Vīrapāṇḍya
+  Vikrama Pāṇḍya: several Pāṇḍya Vikramas, 12th–14th c.
+  Parākrama Pāṇḍya: several Pāṇḍya Parākramas, 12th–15th c.
+  Kulaśekhara: Pāṇḍya Kulaśekharas and the Cēra Kulaśekharas alike
+  Kulaśekhara king: as Kulaśekhara
+  Vīra Harihararāya: Harihara I or II of Vijayanagara — the records date by Śaka, not by reign
+  Vijayarāya Mahārāya: identification open (Vijaya Bukka or a later Vijaya)
+  Pratāpa Devarāya: identification open
+  Veṅkaṭapati Deva Mahārāja: several Āravīḍu Veṅkaṭapatis
+  Tirumalai: bare name — several Tirumalas (Vijayanagara and Madurai)
+  Kumāra Kampaṇṇa: a Vijayanagara prince's viceroyalty, no ruled regnal count
+  the king Vīra Vallāḷa: Hoysaḷa Vīra Ballāḷa II or III — identification open
+  Pārthivendrādhipativarman: identification debated (Āditya II Karikāla, or a distinct Toṇḍaimaṇḍalam ruler)
+  Pārthivendrādivarman: as Pārthivendrādhipativarman
+  Pārthivendra Ādityavarman: as Pārthivendrādhipativarman
+  Pārthivendra Mahārāja: as Pārthivendrādhipativarman
+  Īśvaravarman: a hero-stone-era local king; no ruled regnal chronology
+  Nandīśvaravarman: identification open
+  Vajrameghavarman: a Bāṇa king; no ruled regnal chronology

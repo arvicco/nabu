@@ -18,7 +18,9 @@ require "fileutils"
 # carrying an anuṣṭubh verse, and a lang-less Cōḻa plate (an honest
 # quarantine: no xml:lang anywhere in the edition). P120: a fifth whole
 # file, a Grantha Sanskrit verse whose title pairs a regnal statement with
-# a Śaka-era year ("time of Tammusiddhi, Śaka era, year 1129").
+# a Śaka-era year ("time of Tammusiddhi, Śaka era, year 1129"). A sixth,
+# a Pallava hero-stone-era Tamil record titled "time of Kampavarman, year
+# 2", pins the regnal conversion through config/south_indian_reigns.yml.
 class DharmaTamilTest < Minitest::Test
   include AdapterConformance
 
@@ -27,7 +29,8 @@ class DharmaTamilTest < Minitest::Test
   GRANT = "urn:nabu:dharma-tamil:INSTiruvavatuturai00018"
   LANGLESS = "urn:nabu:dharma-tamil:INSTamilNadu01015"
   TAMMUSIDDHI = "urn:nabu:dharma-tamil:INSTamilNadu00011"
-  CLEAN = [SII, REUNION, GRANT, TAMMUSIDDHI].freeze
+  KAMPA = "urn:nabu:dharma-tamil:INSPallava00196"
+  CLEAN = [SII, REUNION, GRANT, TAMMUSIDDHI, KAMPA].freeze
 
   BY_SA = "https://creativecommons.org/licenses/by-sa/4.0/"
 
@@ -89,7 +92,7 @@ class DharmaTamilTest < Minitest::Test
 
   def test_discover_spans_the_repo_subdirs
     refs = adapter.discover(workdir).to_a
-    assert_equal [LANGLESS, TAMMUSIDDHI, REUNION, GRANT, SII].sort, refs.map(&:id).sort,
+    assert_equal [LANGLESS, TAMMUSIDDHI, REUNION, GRANT, SII, KAMPA].sort, refs.map(&:id).sort,
                  "urn:nabu:dharma-tamil:<stem sans DHARMA_>, one per edition across repos"
     assert(refs.all? { |ref| ref.source_id == "dharma-tamil" })
     assert_equal "tfa-sii-epigraphy", refs.find { |r| r.id == SII }.metadata["repo"]
@@ -142,7 +145,8 @@ class DharmaTamilTest < Minitest::Test
     assert_equal "draft", metadata["revision_status"]
     assert_equal ["time of Rājakesarivarman, year 9"], metadata["title_dating"],
                  "the title's attributed dating statement, verbatim"
-    assert_nil metadata["date"], "a regnal year stays verbatim-only (no ruled regnal table)"
+    assert_nil metadata["date"],
+               "bare Rājakesarivarman is the alternating Cōḻa title (ten kings): declared unconvertible"
     assert_equal "Centalai, Sundareśvara temple, time of Rājakesarivarman, year 9", document.title
   end
 
@@ -205,9 +209,40 @@ class DharmaTamilTest < Minitest::Test
                    "era" => "kollam", "era_year" => 954, "basis" => "title" },
                  date.call("Kollam year 954"), "Kollam is era-typed too: the width-1 envelope")
     assert_equal 1393, date.call("time of Viruppaṇa", "Śaka year 1315")["not_before"]
-    assert_nil date.call("time of Parāntaka I, year 36"), "regnal years stay verbatim-only"
+    assert_nil date.call("time of Parāntaka I, year 36"), "a regnal statement is no era (the reign table's lane)"
     assert_nil date.call("time of Bhūti Vikramakesarin"), "a king's name is no era"
     assert_nil date.call("Śaka year 14??"), "an unreadable digit is no year"
+  end
+
+  # -- the regnal lane: config/south_indian_reigns.yml ----------------------
+
+  def test_a_regnal_title_converts_through_the_reign_table
+    date = adapter.parse(ref_for(KAMPA)).metadata["date"]
+    assert_equal({ "not_before" => 866, "not_after" => 877, "raw" => "time of Kampavarman, year 2",
+                   "reigns" => ["pallava_kampavarman"], "regnal_year" => 2, "basis" => "title regnal" },
+                 date, "Kampavarman's accession held as 865–875: year 2 = [866, 877], the range kept")
+  end
+
+  def test_regnal_date_helper_covers_the_censused_shapes
+    date = ->(*phrases) { Nabu::Adapters::DharmaTamil.regnal_date(phrases) }
+    assert_equal [1048, 1049], date.call("time of Rājādhirāja, year 31").values_at("not_before", "not_after"),
+                 "the Tirukkaḷar plate's year 31 leaves only Rājādhirāja I"
+    assert_equal ["chola_rajadhiraja_1"], date.call("time of Rājādhirāja, year 31")["reigns"]
+    assert_equal 13, date.call("time of Rājarāja I Cōḻa, year 4 + 9")["regnal_year"],
+                 "the 'year opposite' count reads as the sum"
+    whole = date.call("time of Vīrapratāpa Kr̥ṣṇadeva Mahārāya")
+    assert_equal [1509, 1529], whole.values_at("not_before", "not_after"), "no year: the whole-reign span"
+    refute whole.key?("regnal_year")
+    assert_equal [985, 1014], date.call("time of Rājarāja I, year lost").values_at("not_before", "not_after"),
+                 "a lost year is still within the reign"
+    assert_nil date.call("time of Rājakesarivarman, year 9"), "the alternating title names no reign"
+    assert_nil date.call("time of Tammusiddhi"), "an unlisted ruler: never a guess"
+    assert_nil date.call("Śaka year 1589"), "an era phrase is not a regnal statement"
+  end
+
+  def test_an_era_year_outranks_a_regnal_statement
+    metadata = adapter.parse(ref_for(TAMMUSIDDHI)).metadata
+    assert_equal "title", metadata["date"]["basis"], "the era-typed year is the sharper claim"
   end
 
   def test_title_dating_records_every_censused_era_spelling_verbatim

@@ -1370,7 +1370,13 @@ tradition and dcs's composition time slot band through period_bands rows
 `config/work_eras.yml` (attributed composition era, keyed on the work);
 achemenet's archives through `config/archive_axes.yml` (reign volume →
 the regnal table's whole-reign span, else the volume's stated span, else
-the corpus band, plus the archive's findspot). The P81-1 `NikhEntryDates`
+the corpus band, plus the archive's findspot). Parse-time tables convert
+typed dating claims into the stored date envelope before the lane reads
+it: `config/eras.yml` for era-typed years (Śaka, Kollam, Gupta, nengō)
+and `config/south_indian_reigns.yml` for the DHARMA Tamil titles'
+regnal years (candidate reigns per title spelling, accession ranges
+kept, regnal year N → [earliest accession + N − 1, latest accession + N],
+a declared unconvertible list and a maximum envelope width). The P81-1 `NikhEntryDates`
 lane projects the NIKH chronicle family's per-entry machine dates from
 CATALOG annotations (load-verified f(canonical) — no re-parse):
 passage-grain year runs (axis_source `<slug>-entries`) plus document

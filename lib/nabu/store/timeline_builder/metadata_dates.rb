@@ -120,7 +120,8 @@ module Nabu
           "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
           #                              (certainty + evidence ride the date hash)
           "dharma-tamil" => :structured, # P120: the title's era-typed year (Śaka, Kollam —
-          #                                config/eras.yml); regnal years stay verbatim
+          #                                config/eras.yml), else its regnal statement through
+          #                                the accession table (config/south_indian_reigns.yml)
           "diccas" => :structured, # each book's byline author-life span (AH/CE pairs read
           #                          by magnitude), its own class composition; the
           #                          Qurʾān book has no byline and stays undated
