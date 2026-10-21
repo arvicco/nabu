@@ -147,7 +147,7 @@ class SenieTest < Minitest::Test
     refute_nil entry, "senie must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Senie, entry.adapter_class
     assert_equal Nabu::Adapters::Senie.manifest, entry.manifest
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired since the verified first sync (2026-10-21)"
   end
 
   private

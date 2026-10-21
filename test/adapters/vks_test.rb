@@ -110,7 +110,7 @@ class VksTest < Minitest::Test
     refute_nil entry, "vks must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Vks, entry.adapter_class
     assert_equal Nabu::Adapters::Vks.manifest, entry.manifest
-    refute entry.wired, "wired: false until the first real harvest is verified"
+    assert entry.wired, "wired since the verified first harvest (2026-10-21)"
   end
 
   private
