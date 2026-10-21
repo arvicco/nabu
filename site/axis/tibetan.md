@@ -29,7 +29,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages / 56,794 entries |
-| `lotsawa-house` | texts | nc | not yet wired | not synced yet |
+| `lotsawa-house` | texts | nc | not yet wired | nothing held yet |
 | `monlam-lexicon` | dictionary | attribution | wired · manual | 449,829 entries |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |

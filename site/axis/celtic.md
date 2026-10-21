@@ -17,7 +17,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
-| `br-wikisource` | texts | attribution | not yet wired | not synced yet |
+| `br-wikisource` | texts | attribution | not yet wired | nothing held yet |
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
 | `cy-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `gpc` | dictionary | attribution | wired · manual | 89,386 entries |
