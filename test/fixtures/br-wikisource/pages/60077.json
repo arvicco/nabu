@@ -1,0 +1,28 @@
+{
+  "title": "Ar Baro Bleun",
+  "pageid": 60077,
+  "ns": 0,
+  "revid": 179317,
+  "timestamp": "2023-10-25T15:05:50Z",
+  "cone": [
+    "index:Jezegou - Ar Baro Bleun. Ar Vro, 1906.djvu"
+  ],
+  "wikitext": "<pages index=\"Jezegou - Ar Baro Bleun. Ar Vro, 1906.djvu\" header=1 from=1 to=5 />\n\n{{DEFAULTSORT:Baro Bleun, ar}}\n[[Rummad:Kontadennoù]]\n[[Rummad:Ar Vro]]\n[[Rummad:1906]]",
+  "indexes": [
+    {
+      "name": "Jezegou - Ar Baro Bleun. Ar Vro, 1906.djvu",
+      "title": "Meneger:Jezegou - Ar Baro Bleun. Ar Vro, 1906.djvu",
+      "pageid": 60071,
+      "revid": 192320,
+      "fields": {
+        "Title": "[[Ar Baro Bleun]]",
+        "Author": "[[Oberour:Kristof Jezegou|Kristof Jezegou]]",
+        "Publisher": "Ar Vro",
+        "Address": "Karaez",
+        "Year": "1906",
+        "Source": "djvu",
+        "Progress": "T"
+      }
+    }
+  ]
+}

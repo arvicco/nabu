@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
@@ -23,9 +23,11 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `dharma-khmer` | texts | attribution | wired · auto | 1,302 docs / 53,825 passages |
 | `dharma-nusantara` | texts | attribution | wired · auto | 291 docs / 5,898 passages |
 | `dharma-pyu` | texts | attribution | wired · auto | 145 docs / 629 passages |
+| `jv-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `ms-wikisource` | texts | attribution | wired · manual | 64 docs / 5,081 passages |
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
 | `ojw` | dictionary | attribution | wired · manual | 3,632 entries |
+| `su-wikisource` | texts | attribution | not yet wired | not synced yet |
 | `th-wikisource` | texts | attribution | wired · manual | 92 docs / 11,006 passages |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `kaw` 3,632 · `obr` 1,121 · `okz-Latn` 906 · `kaw-Bali` 701 · `ban-Bali` 542 · `san-Latn` 487 · `kaw-Latn` 271 · `pyx-Latn` 124 · `tha` 92 · `ocm-Latn` 75 … and 11 more (`nabu axis sea` lists all).

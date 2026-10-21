@@ -602,6 +602,26 @@ bosworth-toller:
   # serves the terms without a redirect before enabling):
   # license_watch: https://lindat.mff.cuni.cz/repository/handle/11234/1-3532
 
+br-wikisource:   # P140, 02-sources row 287
+  adapter: Nabu::Adapters::BrWikisource
+  adopted: "2026-10-21"
+  axes: [celtic]
+  wired: false   # adapter + fixtures; the first real sync is a gate step (≈ 75 min — see 02-sources)
+  sync_policy: manual
+  # The dated 19th-century Breton cone (the owner-ruled wikisource posture,
+  # the Macedonian precedent), census 2026-10-21 — the cone is drawn at
+  # every fetch from the Meneger (Index) Year= of all 613 Indexes:
+  #   band          Indexes  with pages  pages   verdict
+  #   ≤ 1800            4         4        125   cone
+  #   1800–1900       238       144      3,130   cone (the mechanical band)
+  #   1901–1930       276       276      2,293   after_cone (20th-c. compositions)
+  #   > 1930           63        63        819   edition_taint
+  #   unstated          9         9         49   edition_unstated
+  # Cone: 242 Indexes → 3,255 pages; minus the /a-bezh whole-book
+  # aggregates (62) and the measured French apparatus (the Quellien /
+  # Bourgault-Ducoudray roots) → ≈ 3,150 docs / ≈ 87k passages (60-page sample). Language bre (Modern
+  # Breton). Texts PD; transcription layer CC BY-SA 4.0.
+
 bridging:
   adapter: Nabu::Adapters::Bridging
   adopted: "2026-07-20"
@@ -1290,6 +1310,25 @@ cv-sardinian:
   # accepts sentences only under CC0) → open. Living collection on the
   # main branch — drift rides the FileFetch state.
   sync_policy: manual
+
+cy-wikisource:   # P140, 02-sources row 284
+  adapter: Nabu::Adapters::CyWikisource
+  adopted: "2026-10-21"
+  axes: [celtic]
+  wired: false   # adapter + fixtures; the first real sync is a gate step
+  sync_policy: manual
+  # The early-modern Welsh cone (the owner-ruled wikisource posture),
+  # census 2026-10-21 — drawn at every fetch from the Indecs Year= of all
+  # 641 Indexes: the prints ≤ 1800 (Salesbury 1547, the 1588 and 1620
+  # Bibles, the 1735–1800 ballads — 12 Indexes, 9 with pages, ~96 pages)
+  # + 8 censused EXTRA_INDEXES (1897–1924 editions of pre-1800 works:
+  # Gwaith Dafydd ap Gwilym, Gwaith yr Hen Ficer, Beirdd y Berwyn, Brut y
+  # Tywysogion — Cyfres y Fil, modernized spelling — the J. M. Edwards
+  # Mabinogion I–II, Goronwy Owen 1924, Clasuron Rhyddiaith Cymru 1897):
+  # 346 cone pages; the "(testun cyfansawdd)" composites (aggregate) and
+  # the Rhagymadrodd/Cynhwysiad apparatus skip → census fetch 321 docs / 40,126 passages. Language
+  # cym; metadata orthography original / modernized (Cyfres y Fil) /
+  # unstated. Texts PD; transcription layer CC BY-SA 4.0.
 
 dacon:   # P88-A4, 02-sources row 181
   adapter: Nabu::Adapters::Dacon
@@ -2782,6 +2821,23 @@ ja-wikisource:   # P109-1
   # (action=expandtemplates, content-sha-pinned) — so only the 29
   # {{versions}} disambiguation pages skip by rule. Texts PD;
   # transcription layer CC BY-SA 4.0.
+
+jv-wikisource:   # P140, 02-sources row 285
+  adapter: Nabu::Adapters::JvWikisource
+  adopted: "2026-10-21"
+  axes: [sea]
+  wired: false   # adapter + fixtures; the first real sync is a gate step
+  sync_policy: manual
+  # The dated 19th-century Javanese cone (the owner-ruled wikisource
+  # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
+  # fetch from the Indhèks Year= (else the file-name year) of all 837
+  # Indexes: 104 Indexes ≤ 1900 (most OCR-only) + 3 censused EXTRA prints
+  # (Pararaton 1912, Wulangreh 1929, Wirit Hidayat Jati 1916) → 38 cone
+  # pages (the wiki renders a WHOLE BOOK per page). Out: 1901–1930 (30
+  # Indexes / 33 pages — the Kajawen 1927 issues, the 1920s schoolbooks),
+  # > 1930 (72 / 128), unstated (84 / 230). Measured: Dutch apparatus
+  # (foreign_language); script jav-Java / jav; Wretansacaya (Kern 1875) →
+  # kaw. Census fetch: 36 docs / 2,855 passages. Texts PD; transcription layer CC BY-SA 4.0.
 
 kannada-texts:   # P118-3
   adapter: Nabu::Adapters::KannadaTexts
@@ -5387,6 +5443,22 @@ stgall-priscian:
   # the repo LICENSE covers the repository including the dump → class
   # attribution (verified 2026-10-14).
 
+su-wikisource:   # P140, 02-sources row 286
+  adapter: Nabu::Adapters::SuWikisource
+  adopted: "2026-10-21"
+  axes: [sea]
+  wired: false   # adapter + fixtures; the first real sync is a gate step
+  sync_policy: manual
+  # The dated 19th-century Sundanese cone (the owner-ruled wikisource
+  # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
+  # fetch from the Indéks Year= of all 171 Indexes: 53 Indexes ≤ 1900 (20
+  # with pages) + the censused EXTRA (TBG LXVI, 1926: the Carita
+  # Parahyangan, Old Sundanese → osn) → 79 cone pages. Out: 1901–1930 (38
+  # Indexes / 65 pages — the Poesaka Soenda 1922–24 issues), > 1930 (18 /
+  # 60), unstated (6 / 6). Census fetch: 78 docs / 8,351 passages (sun 56
+  # · sun-Java 21 · osn 1), 1 Dutch introduction measured out. Texts PD;
+  # transcription layer CC BY-SA 4.0.
+
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
   adopted: "2026-07-18"
@@ -5506,6 +5578,25 @@ tamilex:   # P121-3, 02-sources row 266
   # witnesses/wordindex aggregates, TamilneriVilakkam/Ed.xml — the base
   # text the per-verse files duplicate) → ~7,832 docs; empty editions
   # (unfilled poem skeletons) quarantine as "no edition text".
+
+te-wikisource:   # P140, 02-sources row 283
+  adapter: Nabu::Adapters::TeWikisource
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # adapter + fixtures; the first real sync is a gate step
+  sync_policy: manual
+  # The classical Telugu cone (the owner-ruled wikisource posture), census
+  # 2026-10-21: 12,635 pages carry the {{తలకట్టు}} header (సంవత్సరం=
+  # 7,121 after 1930 · 3,097 in 1800–1930 · 2,311 none); the 1800–1930
+  # slice is mostly modern composition, so the cone is the 73 censused
+  # work trees of pre-1800 classical poets in their 1891–1930 prints (+ the
+  # Bhāminīvilāsa Sanskrit specimen) — 565 cone pages. Census fetch
+  # 2026-10-21 (21 min at a 0.5 s delay): 453 docs / 208,794 passages, all
+  # tel; skipped 112 (60 edition_taint — Index years after 1930 — 25
+  # edition_unstated, 21 apparatus, 5 translation, 1 sanskrit_overlap).
+  # The Sanskrit-in-Telugu-script overlap (ఋగ్వేదము 1,035 ·
+  # వ్యాస మహాభారతము 2,016 · the Yajur/Sāma/Atharva trees) is excluded by
+  # rule (sanskrit_overlap). Texts PD; transcription layer CC BY-SA 4.0.
 
 th-wikisource:   # P120-3, 02-sources row 264
   adapter: Nabu::Adapters::ThWikisource
