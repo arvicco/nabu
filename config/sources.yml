@@ -6496,6 +6496,22 @@ wiktionary-cu:
                    # богъ → god with Proto-Slavic chain eyeballed.
   sync_policy: manual
 
+wiktionary-dv:   # 02-sources row 288
+  adapter: Nabu::Adapters::WiktionaryDv
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 2,047 entries / 1,462 reflex rows (one ~3.4 MB GET);
+                 # eyeball nabu define ފޮތް ("book", ← Prakrit 𑀧𑀼𑀢𑁆𑀣), then flip.
+  # The kaikki Dhivehi extraction (2,047 records / "1882 distinct words",
+  # census 2026-10-21): Thaana headwords, etymons through Prakrit and
+  # Sanskrit (768 sa / 103 pra edges) beside the Arabic/Persian donors.
+  # Language div carried verbatim — no Dhivehi node in nabu-lects yet
+  # (the dv anchor + div alias are a named mint candidate). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-hit:
   adapter: Nabu::Adapters::WiktionaryHit
   adopted: "2026-09-13"
@@ -6511,6 +6527,54 @@ wiktionary-hit:
   # (deprecated upstream — fallback = filter the full extract by
   # lang_code hit), CC BY-SA + GFDL → attribution, FileFetch, re-syncs
   # owner-fired.
+  sync_policy: manual
+
+wiktionary-kn:   # 02-sources row 286
+  adapter: Nabu::Adapters::WiktionaryKn
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 2,741 entries / 1,857 reflex rows (one ~8.9 MB GET);
+                 # eyeball nabu define ಒಂದು ("one", ← Proto-Dravidian *onṯu), then flip.
+  # The kaikki Kannada extraction (2,741 records / "2495 distinct words",
+  # census 2026-10-21): Sanskrit, Proto-Dravidian and Old Kannada etymons
+  # (961 sa / 294 dra-pro / 143 dra-okn edges). Language kan (→ kn through
+  # the held codemap alias). The wiktionary-akk mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code kn), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-ml:   # 02-sources row 285
+  adapter: Nabu::Adapters::WiktionaryMl
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 11,505 entries / 5,266 reflex rows (one ~23.5 MB GET);
+                 # eyeball nabu define പുസ്തകം ("book", ← Sanskrit पुस्तक), then flip.
+  # The kaikki Malayalam extraction (11,505 records / "10942 distinct
+  # words", census 2026-10-21): the wave's densest Sanskrit etymon layer
+  # (2,799 sa edges) beside the Syriac/Portuguese/Arabic donor lanes.
+  # Language mal carried verbatim — no Malayalam node in nabu-lects yet
+  # (the ml anchor + mal alias are a named mint candidate). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code ml), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-pra:   # 02-sources row 287
+  adapter: Nabu::Adapters::WiktionaryPra
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 2,712 entries / 20,311 reflex rows (one ~16.2 MB GET);
+                 # eyeball nabu define 𑀫𑀳𑀼 ("honey") and its NIA descendants, then flip.
+  # The kaikki Prakrit extraction (2,712 records / "2452 distinct words",
+  # census 2026-10-21): Brāhmī headwords; 1,131 records carry
+  # descendants trees into New Indo-Aryan (pa/hi/mr/ur/sd/gu/omr …) —
+  # the wave's reflex engine — and the inheritance chains reach back
+  # through Sanskrit to Proto-Indo-European. Language pra (the
+  # collective anchor, held coarse). The wiktionary-akk mold on the
+  # shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code pra),
+  # CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-recon:
@@ -6562,6 +6626,22 @@ wiktionary-recon:
   # grc/el/omn reflex edges from the 4 records with descendants).
   sync_policy: manual
 
+wiktionary-si:   # 02-sources row 289
+  adapter: Nabu::Adapters::WiktionarySi
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 1,281 entries / 854 reflex rows (one ~1.9 MB GET);
+                 # eyeball nabu define අම්මා ("mother", ← Tamil அம்மா), then flip.
+  # The kaikki Sinhala extraction ("Sinhalese" in kaikki's naming —
+  # 1,281 records / "1231 distinct words", census 2026-10-21): Indo-Aryan
+  # descent through Prakrit and Sanskrit (514 sa / 52 pra edges) beside
+  # the Tamil borrowings (150 ta edges into the wiktionary-ta headword
+  # space). Language sin (→ si through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code si), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-sux:
   adapter: Nabu::Adapters::WiktionarySux
   adopted: "2026-08-10"
@@ -6575,6 +6655,36 @@ wiktionary-sux:
   # → reflexes). The wiktionary-cu mold: per-language JSONL (deprecated
   # upstream — fallback = filter the full extract by lang_code sux),
   # CC BY-SA + GFDL → attribution, FileFetch, re-syncs owner-fired.
+  sync_policy: manual
+
+wiktionary-ta:   # 02-sources row 283
+  adapter: Nabu::Adapters::WiktionaryTa
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 13,855 entries / 4,807 reflex rows (one ~88.9 MB GET);
+                 # eyeball nabu define கோடி ("very", ← Sanskrit कोटि), then flip.
+  # The kaikki Tamil extraction (13,855 records / "11180 distinct words",
+  # census 2026-10-21): Sanskrit and Proto-Dravidian etymons (1,803 sa /
+  # 773 dra-pro edges) and descendants trees into Sinhala, Malay and
+  # English. Language tam (→ ta through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code ta), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-te:   # 02-sources row 284
+  adapter: Nabu::Adapters::WiktionaryTe
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # expect 1 doc → 23,325 entries / 2,953 reflex rows (one ~32.7 MB GET);
+                 # eyeball nabu define నాలుగు ("four", ← Proto-Dravidian *nāl), then flip.
+  # The kaikki Telugu extraction (23,325 records / "21803 distinct words",
+  # census 2026-10-21): the wave's largest headword count; Sanskrit and
+  # Proto-Dravidian etymons (1,546 sa / 477 dra-pro edges) beside the
+  # Persian/Arabic donors. Language tel (→ te through the held codemap
+  # alias). The wiktionary-akk mold on the shared WiktionaryKaikki base:
+  # per-language JSONL (deprecated upstream — fallback = filter the full
+  # extract by lang_code te), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wold:
