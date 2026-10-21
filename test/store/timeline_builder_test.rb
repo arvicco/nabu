@@ -693,8 +693,8 @@ module Store
 
     # The parse-time bare town (imprint_place) outranks the verbatim
     # imprint; a doc whose reading is a conjecture carries no
-    # imprint_place and keeps its verbatim axis name — uncertainty
-    # never reads as a claim, and no doc loses its place.
+    # imprint_place and answers with its hedged conjecture town —
+    # uncertainty never reads as a claim, and no doc loses its place.
     def test_metadata_places_eebo_imprint_place_outranks_the_verbatim
       seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:b1",
                         { "imprint_place" => "London",
@@ -706,7 +706,29 @@ module Store
       assert_equal "London", timeline_for("urn:nabu:eebo-tcp:b1")[:place_name],
                    "the bare town is the registry-shaped key"
       assert_equal "London?", timeline_for("urn:nabu:eebo-tcp:b2")[:place_name],
-                   "a conjecture doc keeps the stripped verbatim imprint"
+                   "a conjecture doc mints its town with the cataloguer's ?"
+    end
+
+    # A bracketed conjecture imprint must never reach the name lane as raw
+    # prose: the parse-time conjecture town mints as the house's declared-
+    # uncertain place claim — the bare town with the cataloguer's trailing
+    # "?" (the cataloguer_query certainty carrier). Real PUBPLACE bytes
+    # (canonical/eebo-tcp, A20358 and A00721) run through the adapter's
+    # own reading, then the builder.
+    def test_metadata_places_eebo_conjecture_mints_the_hedged_town_never_the_raw
+      { "c1" => "[London?] printed :",
+        "c2" => "Imprinted we know where, and whan, judge you the place and you can [i.e. Hemel Hempstead?] :",
+        "c3" => "[Imprinted at Nornburg [i.e. Antwerp? or London?] :" }.each do |id, raw|
+        meta = { "source_pub_place" => raw }.merge(Nabu::Adapters::EeboImprintPlace.call(raw))
+        refute meta.key?("imprint_place"), "#{raw} is a conjecture reading"
+        seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:#{id}", meta)
+      end
+      build!
+      assert_equal "London?", timeline_for("urn:nabu:eebo-tcp:c1")[:place_name],
+                   "never \"London?] printed\""
+      assert_equal "Hemel Hempstead?", timeline_for("urn:nabu:eebo-tcp:c2")[:place_name],
+                   "the cataloguer's [i.e. X?] correction, hedged — never the imprint's prose"
+      assert_equal "Antwerp or London?", timeline_for("urn:nabu:eebo-tcp:c3")[:place_name]
     end
 
     # P118-R4 S3: ~10.3k eebo docs whose header imprint date the parser

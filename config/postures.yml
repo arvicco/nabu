@@ -428,7 +428,9 @@ sources:
         imprint_place_conjecture on 2,288 (3.8%) — period furniture,
         Latin/Welsh/French forms and cataloguer [i.e.] corrections read
         to the English town (EeboImprintPlace), the registry-shaped join
-        key for gazetteer refs"}
+        key for gazetteer refs. A conjecture doc projects its conjecture
+        town as the declared-uncertain claim (\"London?\", the cataloguer's
+        trailing ? — never the raw \"[London?] printed\" prose)"}
     script: {posture: implied}
   iswoc:
     kind: {posture: unclassified}
