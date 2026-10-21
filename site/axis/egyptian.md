@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
@@ -24,10 +24,10 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 | `tla-hf` | texts | attribution | wired · manual | 6 docs / 59,524 passages |
-| `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
+| `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `unikemet` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `egy` 51,131 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 24 more (`nabu axis egyptian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `egy` 51,131 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 26 more (`nabu axis egyptian` lists all).
 
 ## The desk's instruments
 

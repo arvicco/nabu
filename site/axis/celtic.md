@@ -15,21 +15,21 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
-| `br-wikisource` | texts | attribution | not yet wired | nothing held yet |
+| `br-wikisource` | texts | attribution | wired · manual | 3,155 docs / 137,115 passages |
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
-| `cy-wikisource` | texts | attribution | not yet wired | not synced yet |
+| `cy-wikisource` | texts | attribution | wired · manual | 321 docs / 40,126 passages |
 | `gpc` | dictionary | attribution | wired · manual | 89,386 entries |
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `stgall-priscian` | texts | attribution | wired · manual | 239 docs / 13,395 passages |
-| `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 365,755 entries |
+| `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `zho` 327,296 · `cy` 89,386 · `sga` 6,838 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 · `ine-pro` 1,928 · `wlm` 1,046 … and 56 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `zho` 327,296 · `cy` 89,386 · `xcl` 8,544 · `sga` 6,838 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `bre` 3,155 · `mnc` 2,577 · `txb` 2,484 … and 61 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 

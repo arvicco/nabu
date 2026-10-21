@@ -15,9 +15,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
-| `betamasaheft-works` | texts | attribution | wired · auto | 3,817 docs / 66,932 passages |
+| `betamasaheft-works` | texts | attribution | wired · auto | 3,818 docs / 66,933 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
 | `coptic-scriptorium` | texts | nc | wired · auto | 482 docs / 74,169 passages |
@@ -28,12 +28,12 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
+| `sefaria` | texts | open | wired · manual | 1,970 docs / 1,066,001 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
-| `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
+| `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `hbo` 30,259 · `gez` 3,795 · `syc` 697 · `eng` 543 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 18 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `hbo` 30,716 · `gez` 3,796 · `eng` 1,132 · `syc` 697 · `cop` 485 · `arc` 364 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 20 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 
