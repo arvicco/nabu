@@ -38,7 +38,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
 | `shabados` | Shabad OS — Gurbāṇī and Panthic texts (Gurmukhī primary text) | open |
 | `siddham` | Siddham Epigraphic Archive — texts in EpiDoc (Gupta-age Sanskrit epigraphy) | attribution |
-| `sii-clean` | South Indian Inscriptions — DHARMA editions (grant-bearing subset) | attribution |
+| `sii-clean` | South Indian Inscriptions — DHARMA editions and conversions | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
 | `tamilex` | TAMILEX — critical editions of the classical Tamil corpus (Universität Hamburg) | nc |
 | `ud` | Universal Dependencies — ancient treebanks | nc |

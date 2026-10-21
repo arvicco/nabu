@@ -1487,22 +1487,29 @@ sources:
         Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
         script_rendition verbatim"}
   sii-clean:
-    # P122-3: the grant-bearing DHARMA conversions of the printed SII volumes.
+    # P122-3: the DHARMA conversions of the printed SII volumes; widened
+    # 2026-10-21 to every clean edition + the raw per-inscription layer.
     kind: {posture: unclassified}
     lect: {posture: identity, note: "tam-Latn/san-Latn/tel-Latn/kan-Latn — the dharma-tamil
         and dharma-deccan codes, all resolving on the canonical rows (tam → ta, tel → te,
-        kan → kn, san-Latn); Tamil stages unminted, the bare anchor declared coarse"}
+        kan → kn, san-Latn); plus pra-Latn (row), nld-Latn (nld → nl), lat-Latn (row),
+        ara-Latn (ara) and fas-Latn (upstream's 639-2/B per-Latn, aliased; fas → fa) on
+        held anchors; Tamil stages unminted, the bare anchor declared coarse; mar-Latn (4)
+        and sin-Latn (1) quarantine until mr/si anchors are minted"}
     dating: {posture: partial, note: "no origDate in any header; the SII headings' own
-        dating is mined: the editor's A.D. conversion (179), else a Śaka year via
-        config/eras.yml (20), else the summary's single reign line 'Year N: YYYY A.D.'
-        (12) — 211 of 589 parsed docs (census 2026-10-12), rows via MetadataDates
-        :structured; regnal-only headings and hedged summary prose stay verbatim"}
-    places: {posture: named, note: "the heading's findspot sentence → village (419 docs,
-        44 distinct names), taluk and district as printed (colonial-era units); no
-        gazetteer refs — a South Asian place authority is the open gap"}
-    script: {posture: qualified, note: "romanized (tam/san/tel/kan -Latn); Tamil, Grantha,
-        Telugu and Kannada scripts are the artifact facts — the edition rendition rides
-        metadata script_rendition verbatim"}
+        dating is mined in both layers: the editor's A.D. conversion, else a Śaka year via
+        config/eras.yml (spelled out or SII 10's 'Ś. NNNN'), else the summary's single
+        reign line 'Year N: YYYY A.D.' — 1,536 of 18,490 parsed docs (census
+        2026-10-21: 200 title A.D., 621 title Śaka, 715 summary), rows via MetadataDates
+        :structured; regnal-only and cyclic-year headings and hedged prose stay verbatim"}
+    places: {posture: named, note: "the heading's findspot sentence → village (10,380 docs,
+        ~3,200 distinct names), taluk and district as printed (colonial-era units);
+        monument descriptions, glosses and inherited 'SAME'/'above place' headings claim
+        nothing; no gazetteer refs — a South Asian place authority is the open gap"}
+    script: {posture: qualified, note: "romanized (tam/san/tel/kan/pra/nld/lat/ara/fas
+        -Latn); Tamil, Grantha, Telugu, Kannada, Nāgarī, Brāhmī and Perso-Arabic scripts
+        are the artifact facts — the edition rendition rides metadata script_rendition
+        verbatim"}
   madurai:
     # P122-3: Project Madurai's classical-Tamil cone (the works list's genre rule).
     kind: {posture: pending, note: "candidate: a kind_map fold over the works list's own

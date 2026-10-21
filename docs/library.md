@@ -1109,9 +1109,10 @@ per source; fuller review sections follow per §10.
 converted (1,267 / 17,993) · `dharma-deccan` — Telugu, Kannada,
 Sanskrit and Prakrit epigraphy (1,694 / 27,929) · `dharma-mdt` — the
 project's works database (734 records; metadata CC0) · `sii-clean` —
-the license-marked DHARMA conversions of the printed *South Indian
-Inscriptions* volumes, original ASI editors credited (589 / 8,372;
-per-file CC BY-SA).
+the DHARMA conversions of the printed *South Indian Inscriptions*
+volumes: every DHARMA edition, and the per-inscription conversion of
+each inscription not yet edited, original ASI editors credited
+(expected 18,490 / 314,882; CC BY-SA, repository-wide).
 
 **The literary canon.** `tamilex` — the Hamburg critical editions of
 classical Tamil with the per-word gold wordsplit layer (7,830 /
