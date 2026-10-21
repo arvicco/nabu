@@ -94,6 +94,8 @@ module Nabu
           "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title
           #                               page, else its standard attribution (raw says which);
           #                               place = the title page's imprint town
+          "br-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
+          #                                         (≤ 1900, the dated cone; date_class edition)
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
           #                            page states (authorship eras class "composition");
           #                            place = the manuscript's Provenance
@@ -108,6 +110,9 @@ module Nabu
           "croala" => :year_range,
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
+          "cy-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
+          #                                         (1547–1800 prints + the censused later
+          #                                         editions; date_class edition)
           "dacon" => :structured,
           "dcs" => :time_slot_band, # the chapter's DCS composition time slot → the ruled
           #                           "DCS time slot N" period_bands rows, composition class
@@ -157,6 +162,8 @@ module Nabu
           "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
           #                                               own year, composition class) else the
           #                                               era-category band (precision era)
+          "jv-wikisource" => :edition_year_text, # P140: the scan Index Year= (else the file
+          #                                         name's year) — the print (date_class edition)
           "ko-wikisource-mk" => :structured,
           "kannada-texts" => :structured, # P118-3: the repo README's work dates
           #                                 (941, 953, ca. 1042), composition class
@@ -215,7 +222,12 @@ module Nabu
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding
           #                                   library) rides "repository", never a place claim
+          "su-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
+          #                                         (date_class edition)
           "syriac-corpus" => :when_key,
+          "te-wikisource" => :edition_year_text, # P140: the scan Index సంవత్సరం= print year,
+          #                                         else the header's (date_class edition —
+          #                                         never the poets' composition era)
           "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
           #                                         BE converted to CE (date_class edition)
           "ticha" => :structured,

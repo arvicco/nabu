@@ -99,7 +99,7 @@ Gothic on the proiel/ud treebanks beside the West and North Germanic branches: O
 
 Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the St Gall Priscian glosses in Latin and Old Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
-**Members** (9): `corph`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `stgall-priscian`, `ud`, `wiktionary-recon`
+**Members** (11): `br-wikisource`, `corph`, `cy-wikisource`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `stgall-priscian`, `ud`, `wiktionary-recon`
 
 ### italic
 
@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (28): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
+**Members** (29): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `te-wikisource`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
 
 ### buddhist
 
@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
-**Members** (10): `ban-wikisource`, `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `ms-wikisource`, `obi-burmese`, `ojw`, `th-wikisource`
+**Members** (12): `ban-wikisource`, `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `jv-wikisource`, `ms-wikisource`, `obi-burmese`, `ojw`, `su-wikisource`, `th-wikisource`
 
 ### sinitic
 

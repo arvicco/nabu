@@ -754,6 +754,69 @@ sources:
     places: {posture: unplaced, note: "the Index สถานที่= (พระนคร) is the print's imprint
         place — declared, never a text place"}
     script: {posture: implied}
+  # P140: the wikisource wave-3 cones (te / cy and the dated 19th-century
+  # jv / su / br cones). Every lect row is PENDING on the ONE aggregated
+  # nabu-lects package of the phase (te:cls, cy:emod, the jv and su
+  # anchors, the jav/sun/bre codemap aliases).
+  te-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: te:cls (Classical Telugu, the kāvya
+        language from Nannaya to the 19th c.) — the cone is composition-bounded (73
+        works of pre-1800 classical poets), so a source-level override onto te:cls lands
+        with the mint; tel resolves to the bare te anchor meanwhile"}
+    dating: {posture: dated, note: "P140: the scan Index సంవత్సరం= print year (else the
+        header's) → source_date → MetadataDates :edition_year_text, date_class edition —
+        never the poets' composition era; every admitted page carries one
+        (REQUIRE_EDITION_YEAR)"}
+    places: {posture: unplaced, note: "the Index చిరునామా= (చెన్నపురి, పిఠాపురము) is the
+        print's imprint place — declared, never a text place"}
+    script: {posture: implied}
+  cy-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: cy:emod (Early Modern Welsh, the 1547–1800
+        prints — Salesbury, the 1588/1620 Bibles, the ballads) staged by the print year;
+        the Cyfres y Fil / Mabinogion editions are MODERNIZED-spelling Middle and Early
+        Modern Welsh and stay bare cy (cym aliases there today), never wlm"}
+    dating: {posture: dated, note: "P140: the Indecs Year= print year → source_date →
+        MetadataDates :edition_year_text, date_class edition; every admitted page
+        carries one (REQUIRE_EDITION_YEAR)"}
+    places: {posture: unplaced, note: "the Indecs Publisher= carries the imprint town
+        (Llanuwchllyn, Wrecsam, Llundain) — the print's, never a text place"}
+    script: {posture: implied}
+  jv-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the jv (Javanese) anchor under kaw + the
+        jav → jv codemap alias — no Javanese anchor exists in nabu-lects (only kaw, Old
+        Javanese); the Wretansacaya page claims kaw today (INDEX_LECTS)"}
+    dating: {posture: dated, note: "P140: the Indhèks Year= print year, else the Index
+        file name's year (Kern 1875) → source_date → MetadataDates :edition_year_text,
+        date_class edition"}
+    places: {posture: unplaced, note: "the Indhèks Address= (Batavia, Amsterdam, Surakarta)
+        is the print's imprint place — declared, never a text place"}
+    script: {posture: mixed, note: "aksara Jawa (jav-Java) and Latin pages, MEASURED per
+        page from the text (metadata script), the Index Language= riding verbatim as
+        index_language"}
+  su-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the su (Sundanese) anchor under osn + the
+        sun → su codemap alias — no Sundanese anchor exists in nabu-lects (only osn, Old
+        Sundanese); the 1926 Carita Parahyangan claims osn today (INDEX_LECTS)"}
+    dating: {posture: dated, note: "P140: the Indéks Year= print year → source_date →
+        MetadataDates :edition_year_text, date_class edition"}
+    places: {posture: unplaced, note: "the Indéks Address= (Batavia, Leiden) is the
+        print's imprint place — declared, never a text place"}
+    script: {posture: mixed, note: "Latin, Cacarakan (Sundanese in Javanese script →
+        sun-Java) and Sundanese-script pages, MEASURED per page (metadata script)"}
+  br-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: pending, note: "candidate: the bre → br codemap alias (the 639-3 ↔
+        639-1 suite has no Breton row); every page is post-1650 Modern Breton — bare br,
+        the Middle Breton node (xbm) never claimed"}
+    dating: {posture: dated, note: "P140: the Meneger Year= print year (≤ 1900, the dated
+        cone) → source_date → MetadataDates :edition_year_text, date_class edition"}
+    places: {posture: unplaced, note: "the Meneger Address= (Kemper, Montroulez, An
+        Oriant) is the print's imprint place — declared, never a text place"}
+    script: {posture: implied}
   litopys:   # P117
     # kind: machine-postured — kind_map.yml source_kind historiography/chronicle
     # (the whole passage shelf IS the Ipatiev chronicle; the glossaries ride
