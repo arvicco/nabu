@@ -813,6 +813,31 @@ module MCP
       assert_equal %w[urn:k:epic:1], family, "the bare head reaches three segments down"
     end
 
+    # The generic facet filter (the CLI's --facet NAME=PATTERN parity): an
+    # object of name → pattern, AND'd, value or ref matching, LIKE passing
+    # through — threaded into the same facets hash kind already rides.
+    def test_search_facets_filter_by_any_named_facet
+      seed_kind_corpus!
+      @catalog[:document_facets].insert(document_id: @letter.id, facet: "collection", value: "Ostraca")
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "facets" => { "collection" => "ostr%" } }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:k:letter:1], urns
+      both = payload(call("nabu_search", { "query" => "στρατηγος", "facets" => { "collection" => "ostraca" },
+                                           "kind" => "funerary" }))
+      assert_empty both.fetch("matches", []), "facets AND with kind"
+    end
+
+    def test_search_facets_refuse_malformed_and_lemma_or_near
+      [[], { "collection" => "" }, { "" => "x" }, { "collection" => 3 }].each do |bad|
+        assert_raises(Nabu::MCP::Tools::InvalidArguments, bad.inspect) do
+          call("nabu_search", { "query" => "arma", "facets" => bad })
+        end
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "facets" => { "collection" => "x" } })
+      end
+    end
+
     def test_search_kind_does_not_compose_with_lemma_or_near
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "lemma" => "λέγω", "kind" => "funerary" })
@@ -2154,6 +2179,27 @@ module MCP
         call("nabu_define", { "lemma" => "μῆνις", "lect" => "grc" })
       end
       assert_match(/nabu-lects module not synced/, error.message)
+    end
+
+    # The entry-facet filter (the CLI's define --facet parity): an object of
+    # name → pattern narrowing the lookup; the payload shape is unchanged.
+    def test_define_facets_narrow_the_lookup
+      seed_shelf
+      entry_id = @catalog[:dictionary_entries].where(headword: "μῆνις").get(:id)
+      source_id = @catalog[:sources].where(slug: "lexica").get(:id)
+      value_id = @catalog[:entry_facet_values].insert(source_id: source_id, facet: "domain", value: "emotion")
+      @catalog[:entry_facets].insert(value_id: value_id, entry_id: entry_id)
+
+      plain = payload(call("nabu_define", { "lemma" => "μῆνις" })).fetch("entries")
+      hits = payload(call("nabu_define", { "lemma" => "μῆνις", "facets" => { "domain" => "Emot%" } }))
+             .fetch("entries")
+      assert_equal plain, hits, "a matching facet keeps the entry — payload byte-identical"
+      miss = payload(call("nabu_define", { "lemma" => "μῆνις", "facets" => { "domain" => "law" } }))
+      assert_empty miss.fetch("entries")
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_define", { "lemma" => "μῆνις", "facets" => { "domain" => "" } })
+      end
+      assert Nabu::MCP::Tools::DEFINE_SCHEMA.fetch(:properties).key?(:facets), "schema-documented, additive"
     end
 
     def test_define_returns_entries_with_license_labels_and_resolved_citations
