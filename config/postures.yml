@@ -246,6 +246,21 @@ sources:
         era-name years (乾隆十三年) and compound seats honestly mint nothing"}
     places: {posture: unplaced}
     script: {posture: mixed, note: "gaiji variant characters ride annotations"}
+  obimd:
+    # kind machine-postured: config/kind_map.yml declares the whole source
+    # divination/oracle.
+    lect: {posture: codemap, note: "och → zho:old (the codemap row) — the oracle bones are
+        the stage's earliest stratum (Late Shang); no finer Shang stage is minted, so the
+        claim stays at Old Chinese"}
+    dating: {posture: pending, note: "no per-record period ships (the paper samples Dong
+        Zuobin's five periods but the data carries none); candidate: the Heji's own
+        volume ranges, which are period-ordered — a RubbingName → period table (H<n>),
+        with the Huadong pit (HD) dated as a group — awaiting a sourced range table"}
+    places: {posture: unplaced, note: "no findspot per record; Heji and Huadong are Yinxu
+        (Anyang) material at collection grain — the collection rides metadata + facet"}
+    script: {posture: qualified, note: "the text is upstream's REFERENCE MODERN CHARACTER per
+        oracle-bone glyph UID (a lookup surrogate, not a decipherment claim); □ = lost
+        position, ⬚ = no encoded glyph; the platform UIDs ride passage annotations"}
   cbeta:
     lect: {posture: codemap, note: "lzh → zho/lit for T/X/K/J; the N canon (漢譯南傳大藏經,
         the Yuan Heng Temple 1990–98 Chinese translation of the Pāli Tipiṭaka via the
