@@ -91,6 +91,36 @@ class SefariaFetchTest < Minitest::Test
     assert_requested :get, TAJ_ENC
   end
 
+  # The 2026-10-02 index generation percent-encodes json_url (19,730 of
+  # 19,815 entries; earlier generations carried the raw bucket key). The
+  # on-disk relpath must stay upstream's raw key and the wire URL must be
+  # encoded exactly once — otherwise every held file reads as "left the
+  # index" (a mass attic) and every GET double-encodes into a 404.
+  def test_a_percent_encoded_index_url_lands_at_the_raw_key_and_is_encoded_once
+    encoded = entry(TAJ_REL).merge("json_url" => TAJ_ENC)
+    stub_index([encoded])
+    stub_file(TAJ_ENC, "taj-bytes")
+
+    sync!
+    assert_requested :get, TAJ_ENC
+    assert_equal "taj-bytes", File.read(File.join(@dir, TAJ_REL)),
+                 "the raw key (spaces, comma, trailing space) is the on-disk path"
+  end
+
+  def test_switching_to_an_encoded_index_dooms_nothing_already_held
+    stub_index([entry(TAJ_REL)])
+    stub_file(TAJ_ENC, "taj-bytes")
+    sync!
+
+    WebMock.reset!
+    stub_index([entry(TAJ_REL).merge("json_url" => TAJ_ENC)], last_modified: "Thu, 02 Oct 2026 06:06:29 GMT")
+    stub_file(TAJ_ENC, "taj-bytes")
+    seen = nil
+    result = sync!(guard: ->(doomed) { seen = doomed })
+    assert_empty seen, "the same bucket key must not read as a deletion"
+    assert_empty result.atticked
+  end
+
   def test_unselected_entries_are_never_requested
     merged = entry("json/Tanakh/Targum/X/Hebrew/merged.json", version: "merged")
     other = { "title" => "Genesis", "language" => "English", "versionTitle" => "W",
