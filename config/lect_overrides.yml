@@ -10,7 +10,9 @@
 #
 # Precedence in Nabu::Lects#resolve, highest first: per-document overlay >
 # THIS FILE (per-source) > codemap.yml (universal) > identity (the code
-# itself). Every entry here is a ratified owner decision — do not add a row
+# itself). Rows transcribing the corpus's own definition onto an existing
+# node are parse-time work with their reasoning (the owner's 2026-10-18
+# generalization); only judgment-grade assignments escalate — do not add such a row
 # without one.
 #
 # Row shape (P81 U-5): either the bare lect id string, or

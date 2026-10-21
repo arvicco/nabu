@@ -380,7 +380,8 @@ class SefariaTest < Minitest::Test
   def test_midrash_documents_cite_upstream_sectioning_with_flat_category_metadata
     document = conformance_adapter.parse(ref(SIFREI_ZUTA_URN))
     assert_equal %w[Midrash Halakhah], document.metadata["categories"]
-    assert_nil document.metadata["facets"], "nothing beyond the shelf prefix — no subshelf facet"
+    assert_equal({ "shelf" => "midrash-halakhah" }, document.metadata["facets"],
+                 "the shelf facet always rides; nothing beyond the prefix — no subshelf")
     assert_equal "#{SIFREI_ZUTA_URN}:5.2.1", document.first.urn,
                  "midrash cites its own upstream grain (Chapter/Verse/Paragraph) — never daf"
     ruth = conformance_adapter.parse(ref(RUTH_SMR_URN))

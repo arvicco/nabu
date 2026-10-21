@@ -606,8 +606,10 @@ module Nabu
       # [<seder>]; tosefta: [<edition>, <seder>]).
       def document_metadata(metadata)
         categories = metadata["categories"] || []
-        base = self.class.shelf_for(categories, title: metadata["title"])&.prefix&.size || 2
-        facets = { "subshelf" => facet(categories[base]), "division" => facet(categories[base + 1]) }.compact
+        shelf = self.class.shelf_for(categories, title: metadata["title"])
+        base = shelf&.prefix&.size || 2
+        facets = { "shelf" => shelf&.id, "subshelf" => facet(categories[base]),
+                   "division" => facet(categories[base + 1]) }.compact
         {
           "title" => metadata["title"],
           "version_title" => metadata["version_title"],
