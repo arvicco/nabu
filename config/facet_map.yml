@@ -178,6 +178,15 @@ sources:
       dialect: dialect        # Labourdin 5 · Souletin 3 · Gipuzkoan 2 · Alavese · Biscayan ·
       #                         Lower Navarrese · Upper Navarrese (14; Lopez unattributed) —
       #                         the standard attribution, the lect lane's future variety key
+  vakk:                       # census 2026-10-21 (the text list, 3,052 rows) — all four on
+    fields: #                   every text but dialect (21 metatexts carry none)
+      class: genre            # K - kohtuprotokoll 2,856 · V - vaimulik 80 · I - ilmalik 67 ·
+      #                         H - vennastekogudus 26 · M - metatekst 22 · S - sõnastik 1 —
+      #                         folded in config/kind_map.yml
+      dialect: dialect        # South Estonian 1,648 · Estonian (unspecified) 749 · North
+      #                         Estonian 634
+      medium: medium          # manuscript 2,949 · print 103
+      author: author          # the list's author column verbatim (a court for the protocols)
   vks:                        # census 2026-10-21 (pre-flight struct_values): 134 files —
     fields: #                   the Korp subcorpus on all
       korp_corpus: collection # VKS_VARIA 71 · LAIT 15 · AGRICOLA 12 · BIBLIA 10 · GANANDER 10 ·

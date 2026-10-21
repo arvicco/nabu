@@ -1198,6 +1198,25 @@ sources:
         a title-page imprint miner is a recorded future look, declared coarse until then"}
     script: {posture: implied, note: "Latin script; the Fraktur-era letter forms are transcribed
         verbatim (ſ, ẜ, Ꞩ, ß, the macron and tilde marks)"}
+  vakk:
+    # kind: machine-postured — the vakk fold in kind_map.yml over the text
+    # list's class column (the genre facet).
+    lect: {posture: dates, note: "et:old (Old Written Estonian) by date-band inference off the
+        text list's years (the registry's 2026-10-21 Baltic–Finnic–Basque mint; band
+        [1520, 1739]) — the three pre-1520 fragments (Henrik's chronicle words, the 1485–95
+        and 1510 marginal notes) and everything after 1739 (the later prints, the
+        Moravian manuscripts, the 1866–1890s court protocols) honestly ride bare et.
+        Sentences whose language-tagged words are mostly German or Latin read de / lat
+        (the metatexts, the bilingual prints). North/South Estonian rides the dialect
+        facet — the variety key in waiting"}
+    dating: {posture: dated, note: "every text: the text list's year (\"1535\", a
+        \"1485-1495\" range as its envelope) on the :structured lane; the protocols'
+        own Kuupäev rides as metadata"}
+    places: {posture: named, note: "the 2,856 court protocols name their sitting commune (the
+        info record's Vald: Kahkva …), a named claim; the 196 corpus texts carry no structured
+        place — imprint towns stay inside the commentary prose (declared coarse)"}
+    script: {posture: implied, note: "Latin script; Fraktur-era spellings transcribed verbatim
+        (the edition's [reconstruction] brackets and _marginalia_ marks kept)"}
   vks:
     # kind: machine-postured — the vks fold in kind_map.yml over the Korp
     # subcorpus (the collection facet).

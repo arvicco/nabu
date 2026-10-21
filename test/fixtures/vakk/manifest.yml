@@ -1,0 +1,192 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The pages are the adapter's own crawl output: the HTML upstream served,
+# byte-verbatim INSIDE gzip (the canonical storage form), so no raw GET is
+# byte-comparable — refetchable: false, re-cut per the README recipe.
+source: vakk
+adapter_test:
+retrieved: "2026-10-21"
+files:
+  - path: map/tekstid.html
+    refetchable: false
+    provenance: local-trim
+    reason: the live text list (1,352,615 B, 3,052 rows) trimmed to the six fixture rows — re-cut per README
+    copied: "2026-10-21"
+    whole: false
+    trim: tbody cut to the rows of 1510-postilla, 1535-Koell, 1535-Wanradt-Koell, 1644-Gutslaff, 1665-Horn, 1866-Kahkva-0001; head and tail verbatim
+  - path: texts/1510-postilla/first.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?kood=1510-postilla)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1510-postilla/info.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=info&kood=1510-postilla)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/first.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/info.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=info&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p10.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=10&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p2.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=2&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p3.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=3&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p4.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=4&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p5.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=5&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p6.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=6&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p7.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=7&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p8.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=8&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Koell/p9.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=9&kood=1535-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Wanradt-Koell/first.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?kood=1535-Wanradt-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1535-Wanradt-Koell/info.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=info&kood=1535-Wanradt-Koell)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1644-Gutslaff/first.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?kood=1644-Gutslaff)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1644-Gutslaff/info.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=info&kood=1644-Gutslaff)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1644-Gutslaff/p258.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=258&kood=1644-Gutslaff)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1644-Gutslaff/p362.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=362&kood=1644-Gutslaff)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1644-Gutslaff/p363.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=363&kood=1644-Gutslaff)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1665-Horn/first.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?kood=1665-Horn)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1665-Horn/info.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=info&kood=1665-Horn)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1665-Horn/p2.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=2&kood=1665-Horn)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1866-Kahkva-0001/first.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?kood=1866-Kahkva-0001)
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: texts/1866-Kahkva-0001/info.html.gz
+    refetchable: false
+    provenance: local-trim
+    reason: crawl output gzip-stored (upstream https://vakk.ut.ee/tekstid.php?lk=info&kood=1866-Kahkva-0001)
+    copied: "2026-10-21"
+    whole: true
+    trim: none

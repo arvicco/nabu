@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 153, lect.size,
+    assert_equal 154, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -312,7 +312,9 @@ class PosturesTest < Minitest::Test
                  "obimd ADDED — codemap och → zho:old (the oracle bones, Old Chinese's " \
                  "earliest stratum; no Shang stage minted): 151→152; lotsawa-house ADDED — " \
                  "identity xct (the Tibetan pages, declared coarse) + the translation " \
-                 "languages: 152→153"
+                 "languages: 152→153; " \
+                 "vakk ADDED — dates (et:old by date band; the et anchor + stage already " \
+                 "canonical): 153→154"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -322,7 +324,8 @@ class PosturesTest < Minitest::Test
     # package's lv:old, eu:arch/eu:old and fi:old. lasla joins as the one
     # pending (its lat:cla approximation candidate awaits a ruling).
     # gretil-legacy joins as identity (119). obimd joins codemap
-    # (och → zho:old): 13→14; lotsawa-house joins identity: 119→120.
-    assert_equal({ "dates" => 18, "codemap" => 14, "identity" => 120, "pending" => 1 }, by_posture)
+    # (och → zho:old): 13→14; lotsawa-house joins identity: 119→120;
+    # vakk joins dates: 18→19.
+    assert_equal({ "dates" => 19, "codemap" => 14, "identity" => 120, "pending" => 1 }, by_posture)
   end
 end

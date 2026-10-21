@@ -225,6 +225,8 @@ module Nabu
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
+          "vakk" => :structured, # the text list's year ("1535", "1485-1495"); the court
+          #                        protocols place at their Vald (the sitting commune)
           "viet-wikisource" => :structured,
           "vks" => :structured, # the Korp text elements' text_datefrom/text_dateto, the file's
           #                       envelope (collection files carry per-passage years too)
