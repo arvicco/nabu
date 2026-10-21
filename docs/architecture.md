@@ -297,6 +297,26 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- text stays byte-identical. The id-bearing sources also derive
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).
+passage_entity_names(id, source_id, type, text, identity, key, ref, subtype, search_key)
+passage_entities(name_id, passage_id)         -- WITHOUT ROWID, PK (name_id, passage_id)
+   -- Migration 049: the inline-entity index — the "entities" passage
+   -- annotation (names marked INSIDE the text: EpidocParser::InlineLayer's
+   -- persName/placeName/name spans on the Perseus editions, CopticTtParser's
+   -- entity spans with Wikification identities, the DHARMA Deccan
+   -- person/place tags), whose typed record shape the facet lane's
+   -- {"value","ref"} rule does not carry. Same dictionary encoding: one
+   -- name row per distinct verbatim record per source, plus search_key —
+   -- text/identity/key/ref each folded (Normalize.fold_diacritics +
+   -- Unicode case fold, language-neutral) and joined by U+001F, so a
+   -- folded-query LIKE over the small dictionary meets the index on both
+   -- sides. Written by Store::EntityIndex over the explicit roster in
+   -- config/entity_index.yml (a rebuild probes only those slices — ~5 s
+   -- for the 2026-10-21 census of 75,974 passages / 318,542 pairs /
+   -- 108,939 names), riding both rebuild flavors, builders:refresh and the
+   -- post-load sync refresh; a builder file (builders digest). Read by
+   -- `nabu entity NAME` (Query::Entities: absent/unbuilt index = an honest
+   -- hint, never a scan). `nabu show --entities` reads the shown rows'
+   -- annotations directly and needs no index.
 entry_facet_values(id, source_id, facet, value, ref)
 entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id); index (entry_id) (049)
    -- Migration 046: the same mold at DICTIONARY-ENTRY grain — the
