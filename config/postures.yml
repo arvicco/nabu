@@ -251,14 +251,19 @@ sources:
         the Yuan Heng Temple 1990–98 Chinese translation of the Pāli Tipiṭaka via the
         Japanese Nanden daizōkyō) is modern written Chinese and claims bare cmn (identity —
         the classical-modern translation-sibling precedent), never lzh; its Pāli source
-        rides metadata translated_from: pli and per-line PTS cRef annotations (P126)"}
+        rides metadata translated_from: pli and per-line PTS cRef annotations (P126).
+        P140: the ten historical canons (A C D F G L M P S U) are lzh like T — incl.
+        G's 49 民國-seat Republican-era works, written in the classical register (the
+        coarseness is declared: no per-file register claim exists upstream)"}
     dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the header byline's dynasty seat
         (3,163 of 3,707 headers censused 2026-09-26) bands via period_bands.yml through
         MetadataDates :dynasty_band — precision `era`, an attributed translation-era claim,
         never a typed date; seat-less bylines (失譯, Indian masters) honestly mint nothing.
         P126: J bylines carry 明/清 seats (both banded rows) and date the same way; N's
         modern translator bylines (悟醒譯) carry no seat and DELIBERATELY mint nothing — the
-        1990–98 translation era is source-level knowledge, not a per-file upstream claim"}
+        1990–98 translation era is source-level knowledge, not a per-file upstream claim.
+        P140: the historical canons' bylines date the same way (157 of 236 band; 日本 ×19
+        is a place seat and bands nothing, as in T)"}
     places: {posture: unplaced}
     script: {posture: implied}
   suttacentral:

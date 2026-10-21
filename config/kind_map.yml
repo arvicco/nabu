@@ -647,7 +647,8 @@ sources:
       "围炉夜话": literary/wisdom      # aphorisms
       "心经": scripture                # the Heart Sutra (the Buddhist canon)
       "文昌孝经": scripture            # a Daoist morality scripture (Daozang jiyao)
-  cbeta:              # the whole source IS the Buddhist canon (Taishō, Xuzangjing, Koreana, Jiaxing, Nanchuan)
+  cbeta:              # the whole source IS the Buddhist canon (Taishō, Xuzangjing, Koreana, Jiaxing, Nanchuan,
+    #                   the historical canon editions A/C/D/F/G/L/M/P/S/U)
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
   # the source IS a canon or a dynastic record — one ruled line each) ---
