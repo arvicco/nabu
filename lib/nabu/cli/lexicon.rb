@@ -132,6 +132,12 @@ module Nabu
       ʰ→h, ʷ→w), so `define '*gʷʰew-'` and `define '*gwhew-'` reach the same
       root. `nabu etym` walks the same crosswalk from the attested side.
 
+      An entry that STATES its etymology (the Wiktionary inherited /
+      derived / borrowed templates) prints an "etymon:" line under the
+      headword — its ascent, each arrow labeled with its relation, climbing
+      through any etymon the shelf holds as an entry of its own (--long:
+      one step per line, with that entry's urn).
+
       --lang grc|lat|ang|san|chu|sla-pro|ine-pro|gem-pro restricts to one
       shelf; --limit caps the entries.
 
@@ -233,6 +239,8 @@ module Nabu
       end. A loan-flagged edge labels its arrow "←(loan)", and a
       loan-flagged cognate reads "(loan)" (the P17-3 borrowed flag; rows
       not yet reparsed carry no label — honest unknown, not a claim).
+      Each entry that states its own etymology also prints its "etymon:"
+      ascent line (the `nabu define` line, relation-labeled arrows).
 
       Every cognate reflex that is a gold lemma in this catalog carries its
       attestation count (searchable via `nabu search --lemma`); the rest
@@ -735,12 +743,53 @@ module Nabu
         say "#{result.headword}#{lang} — #{result.dictionary_title} [#{result.license_class}]" \
             "#{' (withdrawn)' if result.withdrawn}  #{result.urn}"
         say "  gloss: #{result.gloss}" if result.gloss
+        print_etymon_line(result.etymons)
         say ""
         say result.body
         print_reflexes(result.reflexes)
+        print_etymon_ascent(result.etymons) if options[:long]
         print_resolved_citations(result)
         print_crossrefs(result)
       end
+
+      # The etymon line: the entry's OWN stated etymology (the typed UP
+      # edges — inherited / derived / borrowed / learned-borrowing) climbed
+      # up the shelf (Query::EtymonAscent), one compact line under the
+      # headword, each arrow labeled with its relation — the etym chain's
+      # "←(loan)" idiom. Compact by default (house rule): the first
+      # six steps, the tail counted; --long lists every step with
+      # its held entry's urn below the body instead. No stated etymology,
+      # no line.
+      def print_etymon_line(etymons, indent: "")
+        etymons = Array(etymons)
+        return if etymons.empty? || options[:long]
+
+        shown = etymons.first(6)
+        line = shown.map { |step| "#{etymon_arrow(step)} #{etymon_form(step)} [#{step.lang_code}]" }.join(" ")
+        rest = etymons.size - shown.size
+        line += " … and #{rest} more (--long shows all)" if rest.positive?
+        say "#{indent}  etymon: #{line}"
+      end
+
+      # --long: one step per line, indented by climb hop, the code named
+      # (reflex_group_label — the --long reflex groups' label), a held
+      # etymon's own entry urn beside it.
+      def print_etymon_ascent(etymons)
+        etymons = Array(etymons)
+        return if etymons.empty?
+
+        say ""
+        say "etymon (stated ascent):"
+        etymons.each do |step|
+          urn = step.urn ? "  #{step.urn}" : ""
+          say "#{'  ' * (step.hop + 1)}#{etymon_arrow(step)} #{etymon_form(step)} " \
+              "#{reflex_group_label(step.lang_code)}#{urn}"
+        end
+      end
+
+      def etymon_arrow(step) = "←(#{step.relation})"
+
+      def etymon_form(step) = step.roman && step.roman != step.word ? "#{step.word} (#{step.roman})" : step.word
 
       # P123-1: entry→entry cross-references — a resolved pointer names
       # its target entry's urn (one `nabu show` away); an unresolved one
@@ -919,7 +968,9 @@ module Nabu
                 end
         say "#{indent}#{arrow}#{etym_entry_line(result)}  #{result.urn}"
         say "#{indent}  gloss: #{result.gloss}" if result.gloss
+        print_etymon_line(result.etymons, indent: indent)
         print_reflexes(result.cognates)
+        print_etymon_ascent(result.etymons) if options[:long]
         result.ancestors.each do |ancestor|
           say ""
           print_etym_entry(ancestor, depth + 1)

@@ -338,6 +338,39 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The etymon line: an entry's typed UP edges (inherited / derived /
+  # borrowed — the kaikki etymology templates) read as one compact ascent
+  # under the headword, each arrow labeled with its relation.
+  def test_define_prints_the_etymon_ascent_compactly
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *suka]) }
+      assert_nil status
+      assert_match(/^ {2}etymon: ←\(inherited\) \*śaukāˀ \[ine-bsl-pro\] ←\(inherited\) \*ḱowk-eh₂ \[ine-pro\] /, out)
+      assert_match(/←\(derived\) \*sewH- \[ine-pro\]$/, out)
+
+      out, = with_config(config) { run_cli(%w[define *zima]) }
+      refute_match(/etymon:/, out, "an entry stating no etymology prints no line")
+    end
+  end
+
+  def test_define_long_lists_the_ascent_one_step_per_line_with_held_urns
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(["define", "*bogъ", "--long"]) }
+      assert_nil status
+      assert_match(/^etymon \(stated ascent\):$/, out)
+      assert_match(/^ {2}←\(derived\) \*bʰeh₂g- \[ine-pro · .+\] {2}urn:nabu:dict:wiktionary-ine-pro:bʰeh₂g-:root$/,
+                   out, "a held etymon names its entry — one nabu show away")
+    end
+  end
+
+  def test_etym_prints_the_etymon_ascent_under_each_entry
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym *suka]) }
+      assert_nil status
+      assert_match(/^ {2}etymon: ←\(inherited\) \*śaukāˀ \[ine-bsl-pro\] /, out)
+    end
+  end
+
   def test_define_reflexes_are_capped_by_default
     with_recon_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
