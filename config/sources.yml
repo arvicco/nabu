@@ -6345,6 +6345,29 @@ unikemet:
   # → class open, the Unihan class.
   sync_policy: manual
 
+vedaweb:
+  adapter: Nabu::Adapters::Vedaweb
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: false   # the gate's first real sync flips it — expected 1,028 docs /
+                 # 10,552 passages / 164,758 gold tokens (full-parse census 2026-10-21)
+  sync_policy: manual
+  # VedaWeb (Cologne Center for eHumanities): the whole Rigveda with the
+  # University of Zurich's hand-made morphological annotation (Widmer,
+  # Scarlata; Lubotsky's text, Grassmann headwords) → GOLD (lemma_tier
+  # default). github.com/VedaWebProject/vedaweb-data, sparse GitFetch cone
+  # [rigveda/TEI, README.md]: ten book TEI files, streamed. Document = hymn
+  # (urn:nabu:vedaweb:rv.<book>.<hymn>), passage = stanza (text = the
+  # zurich padas, one per line); per token lemma + Leipzig labels verbatim
+  # (lgr) + UD feats for the morph façade; strata per pada, late-addition
+  # flags per stanza, addressee + poet-family group per hymn. LICENSE is
+  # PER LAYER (vedaweb_corpus.tei teiHeader, re-read 2026-10-21): the layers
+  # read here (zurich, strata, stanza_properties, addressees) are each
+  # "Distributed under a Creative Commons Attribution 4.0 International
+  # License." → attribution; the BY-NC-SA text versions (Lubotsky, van
+  # Nooten–Holland, Aufrecht, Padapāṭha, Eichler) and translations are NOT
+  # read (a per-layer scope; an nc sibling lane is the recorded option).
+
 viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
   adopted: "2026-08-18"

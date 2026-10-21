@@ -52,6 +52,10 @@ sources:
   digiliblt:
     # The corpus is defined as "testi latini tardoantichi" — certain.
     lat: { lect: "lat:late", tier: certain }
+  vedaweb:
+    # The corpus IS the Rigveda — Vedic Sanskrit by definition (the D57-f
+    # certain class; the same claim the dcs "rv" facet rule makes per text).
+    san: { lect: "san:ved", tier: certain }
   sblgnt:
     # The SBL Greek New Testament — certain.
     grc: { lect: "grc:koi", tier: certain }
