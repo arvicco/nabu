@@ -1,0 +1,44 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is a documented LINE TRIM of a raw URL pinned at upstream
+# commit 71109ce90a8c3bbbb17b772f2b8287f84e540ee6 — fetched for
+# URL-liveness only on check. adapter_test is null: fresh full copies would
+# false-fail the count assertions.
+source: calfa-lexicon
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: definitions/en-definitions01.tsv
+    url: https://raw.githubusercontent.com/calfa-co/lexical-databases/71109ce90a8c3bbbb17b772f2b8287f84e540ee6/definitions/en-definitions01.tsv
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-5, 25, 26, 394-396, 451, 452, 3112, 6179, 38142 of 41,318, byte-verbatim (CRLF)
+  - path: definitions/fr-definitions01.tsv
+    url: https://raw.githubusercontent.com/calfa-co/lexical-databases/71109ce90a8c3bbbb17b772f2b8287f84e540ee6/definitions/fr-definitions01.tsv
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-3, 54, 386, 387, 393, 437, 741, 1158, 3096, 21730, 27943, 29226 of 31,587, byte-verbatim (CRLF)
+  - path: definitions_proper/en-definitions01.tsv
+    url: https://raw.githubusercontent.com/calfa-co/lexical-databases/71109ce90a8c3bbbb17b772f2b8287f84e540ee6/definitions_proper/en-definitions01.tsv
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-4, 566, 567 of 919, byte-verbatim (CRLF)
+  - path: definitions_proper/fr-definitions01.tsv
+    url: https://raw.githubusercontent.com/calfa-co/lexical-databases/71109ce90a8c3bbbb17b772f2b8287f84e540ee6/definitions_proper/fr-definitions01.tsv
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-4, 567, 568 of 921, byte-verbatim (CRLF)
+  - path: etymology/etymology01.xml
+    url: https://raw.githubusercontent.com/calfa-co/lexical-databases/71109ce90a8c3bbbb17b772f2b8287f84e540ee6/etymology/etymology01.xml
+    refetchable: true
+    whole: false
+    trim: >-
+      upstream lines 1-2, eleven whole <entry> elements (8-19, 155-160,
+      907-912, 1403-1414, 1910-1914, 5190-5195, 9210-9218, 13385-13387,
+      16650-16656) and the closing line 61255, byte-verbatim
+  - path: synonyms/synonyms01.tsv
+    url: https://raw.githubusercontent.com/calfa-co/lexical-databases/71109ce90a8c3bbbb17b772f2b8287f84e540ee6/synonyms/synonyms01.tsv
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-4 of 31,450 (the rejected-grain specimen), byte-verbatim (CRLF)
