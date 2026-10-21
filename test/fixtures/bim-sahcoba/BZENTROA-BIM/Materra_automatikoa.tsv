@@ -1,0 +1,213 @@
+Dotrina	Dotrina	dotrina	IZE	NOUN
+Kristiana	Kristianoa	Kristianoa	IZE	PROPN
+Bigarren	Bigarren	bigarren	DET	DET
+inpresionean	inpresioan	inpresio	IZE	NOUN
+debozinozko	deboziozko	deboziozko	ADJ	ADJ
+othoitz	otoitz	otoitz	IZE	NOUN
+eta	eta	eta	LOT	CONJ
+orazino	orazio	orazio	IZE	NOUN
+batzuez	batzuez	batzuk	DET	DET
+berreturik	berreturik	berretu	ADI	VERB
+.	.	.		PUNCT
+Aita	Aita	aita	IZE	NOUN
+Estebe	Ez	ez	PRT	PART
+Estebe	dute	*edun	ADL	AUX
+Materre	Materra			X
+San	San	san	IZE	NOUN
+Franziskoren	Franziskoren	Franzisko	IZE	PROPN
+ordenako	ordenako	ordena	IZE	NOUN
+fraideak	fraideak	fraide	IZE	NOUN
+hirur	hiru	hiru	DET	NUM
+partetan	partetan	parte	IZE	NOUN
+egina	egina	egin	ADI	VERB
+.	.	.		PUNCT
+Bordelen	Burdelen	burdel	IZE	NOUN
+,	,	,		PUNCT
+Jacques	Jacquez	Jacque	IZE	PROPN
+Millanges	Millanges	Millanges	IZE	PROPN
+erregeren	erregeren	errege	IZE	NOUN
+inprimazaillearenean	inprimatzailearenean	inprimatzaile	IZE	NOUN
+.	.	.		PUNCT
+1623	1623	1623	DET	NUM
+.	.	.		PUNCT
+&lt;	&lt;	&lt;		PUNCT
+i	i	i	IZE	NOUN
+&gt;	&gt;	&gt;		PUNCT
+Liburu	Liburu	liburu	IZE	NOUN
+hunek	honek	hau	DET	DET
+hirur	hiru	hiru	DET	NUM
+parte	parte	parte	IZE	NOUN
+ditu	ditu	ukan	ADT	VERB
+.	.	.		PUNCT
+Lehenbizikoan	Lehenbizikoan	lehenbizi	IZE	NOUN
+ibenzen	ipintzen	ipini	ADI	VERB
+da	da	izan	ADL	AUX
+giristinoak	giristinoak	giristino	IZE	NOUN
+jakin	jakin	jakin	ADI	VERB
+behar	behar	behar	IZE	NOUN
+duen	duen	ukan	ADT	VERB
+doktrina	doktrina	doktrina	IZE	NOUN
+deklarazino	deklarazio	deklarazio	IZE	NOUN
+gabe	gabe	gabe	ADJ	ADJ
+.	.	.		PUNCT
+Bigarrenean	Bigarrenean	bigarren	DET	DET
+doktrina	doktrina	doktrina	IZE	NOUN
+haren	haren	hura	DET	DET
+deklarazinoa	deklarazioa	deklarazio	IZE	NOUN
+galdeginez	galdeginez	galdegin	ADI	VERB
+eta	eta	eta	LOT	CONJ
+ihardetsiz	ihardetsiz	ihardetsi	ADI	VERB
+egina	egina	egin	ADI	VERB
+.	.	.		PUNCT
+Hirurgarrenean	Hirugarrenean	hirugarren	DET	DET
+ezarten	ezartzen	ezarri	ADI	VERB
+dira	dira	izan	ADL	AUX
+debozinozko	deboziozko	deboziozko	ADJ	ADJ
+othoitz	otoitz	otoitz	IZE	NOUN
+eta	eta	eta	LOT	CONJ
+orazino	orazio	orazio	IZE	NOUN
+batzuk	batzuk	batzuk	DET	DET
+bere	bere	bera	DET	DET
+denboretan	denboretan	denbora	IZE	NOUN
+egin	egin	egin	ADI	VERB
+eta	eta	eta	LOT	CONJ
+erran	erran	erran	ADI	VERB
+behar	behar	behar	IZE	NOUN
+direnak	direnak	izan	ADT	VERB
+.	.	.		PUNCT
+&lt;	&lt;	&lt;		PUNCT
+ii	ii	ii	IZE	NOUN
+&gt;	&gt;	&gt;		PUNCT
+&lt;	&lt;	&lt;		PUNCT
+/	/	/		PUNCT
+text	text	test	IZE	NOUN
+&gt;	&gt;	&gt;		PUNCT
+&lt;	&lt;	&lt;		PUNCT
+gap	gap	gap	IZE	NOUN
+&gt;	&gt;	&gt;		PUNCT
+À	À	a	IZE	NOUN
+monseigneur	monseignour	monseignour	ADJ	ADJ
+,	,	,		PUNCT
+Monseigneur	Monseignour	Monseignour	IZE	PROPN
+le	l	l	IZE	NOUN
+reverendissime	erreverendissime	erreverendissime	IZE	NOUN
+Claude	Claude	Claude	IZE	PROPN
+de	de	de	BST	PART
+Rueil	Ruail	Ruail	IZE	PROPN
+,	,	,		PUNCT
+evesque	evesque	evesque	IZE	NOUN
+de	de	de	BST	PART
+Bayonne	Baionne	Baionne	IZE	PROPN
+,	,	,		PUNCT
+conseiller	contseiller	contseiller	ADJ	ADJ
+du	du	ukan	ADT	VERB
+Roy	Erroi	erroi	IZE	NOUN
+en	in	in	HAOS	MWE
+ses	ses	ses	IZE	NOUN
+Conseils	Contseilts	Contseilts	IZE	PROPN
+d&apos;Estat	d&apos;Estat	d&apos;Estat	IZE	PROPN
+et	et	et	ITJ	INTJ
+Privé	Preve	Preve	IZE	PROPN
+,	,	,		PUNCT
+aumosnier	aumuztier	aumuztier	IZE	NOUN
+et	et	et	ITJ	INTJ
+predicateur	predicakeur	predicakeur	IZE	NOUN
+ordinaire	ordeneira	ordenei	IZE	NOUN
+de	de	de	BST	PART
+sa	so	so	IZE	NOUN
+majesté	maieste	maieste	ADJ	ADJ
+,	,	,		PUNCT
+etc	etc	etc.	BST	PART
+.	.	.		PUNCT
+Monseigneur	Monseignour	Monseignour	IZE	PROPN
+,	,	,		PUNCT
+Voicy	Voici	Voic	IZE	PROPN
+ce	c	c	IZE	NOUN
+livret	livrat	livrat	IZE	NOUN
+escrit	ezcdit	ezcdit	ADJ	ADJ
+en	in	in	HAOS	MWE
+basque	basque			X
+et	et	et	ITJ	INTJ
+dressé	dresse			X
+pour	pour	pour	IZE	NOUN
+le	l	l	IZE	NOUN
+profit	profita	profitatu	ADI	VERB
+des	des	despoltsatu	ADI	VERB
+basques	basquez	basqu	IZE	NOUN
+,	,	,		PUNCT
+&lt;	&lt;	&lt;		PUNCT
+iii	iii	iii	IZE	NOUN
+&gt;	&gt;	&gt;		PUNCT
+qui	qui	qui	IZE	NOUN
+se	se	se	HAOS	MWE
+vient	viente	viente	IZE	NOUN
+rendre	errendre	errendre	IZE	NOUN
+à	à	a	IZE	NOUN
+vous	vouz	vou	ADJ	ADJ
+,	,	,		PUNCT
+qui	qui			X
+estes	ez	ez	PRT	PART
+estes	dez	de	IZE	NOUN
+le	l	l	IZE	NOUN
+prelat	prelerat	prel	IZE	NOUN
+tres	trez	tra	IZE	NOUN
+merité	meite	meite	IZE	NOUN
+de	de	de	BST	PART
+cette	ctzte	ctzte	IZE	NOUN
+nation	nation	nati	ADJ	ADJ
+basque	basque	basque	IZE	NOUN
+.	.	.		PUNCT
+Il	Hil	hil	ADI	VERB
+vous	vouz	vou	IZE	NOUN
+est	ez	ez	PRT	PART
+est	da	izan	ADT	VERB
+justement	justementu	justementu	ADJ	ADJ
+deü	du	ukan	ADT	VERB
+,	,	,		PUNCT
+puis	puxa	puxatu	ADI	VERB
+qu	qu	qu	IZE	NOUN
+&apos;	&apos;	&apos;		PUNCT
+il	il	il	IZE	NOUN
+a	a	a	IZE	NOUN
+esté	ez	ez	PRT	PART
+esté	de	de	BST	PART
+conçeü	cou	cou	IZE	NOUN
+dans	dans	dans	ADJ	ADJ
+le	l	l	IZE	NOUN
+territoire	territoira	territoi	ADJ	ADJ
+de	de	de	IZE	NOUN
+vostre	vostre	vostre	ADJ	ADJ
+dioceze	dieceze	dieceze	IZE	NOUN
+,	,	,		PUNCT
+et	et	et	ITJ	INTJ
+d'ailleurs	daileus	daileus	IZE	NOUN
+comme	comme	comme	IZE	NOUN
+il	hil	hil	ADI	VERB
+traicte	traicte	traicte	IZE	NOUN
+de	de	de	IZE	NOUN
+l'instruction	linstruction	linstructi	ADJ	ADJ
+spirituelle	espirituella	espirituell	IZE	NOUN
+des	des	despoltsatu	ADI	VERB
+ames	amez	ama	IZE	NOUN
+,	,	,		PUNCT
+il	hil	hil	ADI	VERB
+se	se	se	HAOS	MWE
+vient	viente	viente	IZE	NOUN
+par	bar	bar	IZE	NOUN
+devoir	evor	evor	ADJ	ADJ
+jetter	jatter	jatter	IZE	NOUN
+entre	entre	entre	ADJ	ADJ
+les	leiz	lei	IZE	NOUN
+bras	beraz	bera	DET	DET
+de	de	de	IZE	NOUN
+celuy	celui	celui	IZE	NOUN
+sous	souz	sou	ADJ	ADJ
+et	et	et	ITJ	INTJ
+par	bar	bar	IZE	NOUN
+l'auctorité	lauctorite	lauctorite	IZE	NOUN
+duquel	duquel	duquel	ADJ	ADJ
+est	ez	ez	PRT	PART
+est	da	izan	ADT	VERB
+departi	departi	depart	IZE	NOUN
+et	et	et	ITJ	INTJ
+administré	aminestre			X

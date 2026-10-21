@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. The BIM/SAHCOBA token streams ship only inside the
+# CLARIAH-EUS bitstream zip; no raw per-file URL serves them. Every fixture
+# was extracted 2026-10-21 from that zip and cut to a line window per the
+# README, so every entry is refetchable: false.
+source: bim-sahcoba
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: BZENTROA-BIM/Materra_automatikoa.tsv
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the BZENTROA-BIM.zip bitstream — no raw per-file URL exists
+    upstream: https://clariah.hitz.eus/server/api/core/bitstreams/ca44acee-b541-458b-a917-fbf5eeb3f71d/content
+    copied: 2026-10-21
+    whole: false
+    trim: lines 1-213 of 21,944 (title page, pages i-iii)
+  - path: BZENTROA-BIM/Beriain_automatikoa.tsv
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the BZENTROA-BIM.zip bitstream — no raw per-file URL exists
+    upstream: https://clariah.hitz.eus/server/api/core/bitstreams/ca44acee-b541-458b-a917-fbf5eeb3f71d/content
+    copied: 2026-10-21
+    whole: false
+    trim: lines 12,203-12,489 of 18,170 (folios 90v, 91r)
+  - path: BZENTROA-BIM/Axular_automatikoa.tsv
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the BZENTROA-BIM.zip bitstream — no raw per-file URL exists
+    upstream: https://clariah.hitz.eus/server/api/core/bitstreams/ca44acee-b541-458b-a917-fbf5eeb3f71d/content
+    copied: 2026-10-21
+    whole: false
+    trim: lines 108,371-108,970 of 116,746 (pages 584, 585, 585)
+  - path: BZENTROA-BIM/Etxepare_automatikoa.tsv
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from the BZENTROA-BIM.zip bitstream — no raw per-file URL exists
+    upstream: https://clariah.hitz.eus/server/api/core/bitstreams/ca44acee-b541-458b-a917-fbf5eeb3f71d/content
+    copied: 2026-10-21
+    whole: false
+    trim: lines 1-1,442 of 4,700 (the opening sentences)

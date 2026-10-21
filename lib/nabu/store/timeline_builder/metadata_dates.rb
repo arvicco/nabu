@@ -91,6 +91,9 @@ module Nabu
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,
+          "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title
+          #                               page, else its standard attribution (raw says which);
+          #                               place = the title page's imprint town
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
           #                            page states (authorship eras class "composition");
           #                            place = the manuscript's Provenance
