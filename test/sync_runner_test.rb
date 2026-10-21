@@ -502,6 +502,23 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 0, @db[:passage_facets].count
   end
 
+  # The inline-entity slice follows a changed load the same way: a source
+  # off the shipped config/entity_index.yml roster drops any stale slice.
+  def test_sync_refreshes_the_entity_index_slice
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker", parse_only: true)
+    source_id = @db[:sources].where(slug: "breaker").get(:id)
+    name_id = @db[:passage_entity_names].insert(source_id: source_id, type: "person", text: "stale",
+                                                search_key: "stale")
+    @db[:passage_entities].insert(name_id: name_id, passage_id: @db[:passages].get(:id))
+
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner.sync("breaker", parse_only: true)
+    assert_equal 0, @db[:passage_entity_names].count
+    assert_equal 0, @db[:passage_entities].count
+  end
+
   def test_parse_only_keeps_prior_last_sync_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"

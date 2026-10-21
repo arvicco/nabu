@@ -237,6 +237,12 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :passage_facets) do
         Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
+      # The inline-entity index projects the same replayed annotations
+      # (the "entities" layer) over config/entity_index.yml's roster.
+      progress&.stage("entity index")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :entity_index) do
+        Store::EntityIndex.rebuild!(catalog: db, sources: Store::EntityIndex.load_default(config: @config))
+      end
       # The dictionary-entry grain of the same config (entry_fields),
       # projected from the replayed entries' annotations.
       progress&.stage("entry facets")

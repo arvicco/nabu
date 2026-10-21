@@ -70,6 +70,26 @@ module Store
       assert_match(/WITHOUT ROWID/i, ddl)
     end
 
+    # The inline-entity index (migration 050): a per-source verbatim name
+    # dictionary carrying a folded search key + a WITHOUT ROWID
+    # (name_id, passage_id) pair table.
+    def test_passage_entity_tables_are_dictionary_encoded
+      names = @db.schema(:passage_entity_names).to_h
+      assert_equal false, names[:source_id][:allow_null]
+      assert_equal false, names[:search_key][:allow_null]
+      %i[type text identity key ref subtype].each do |column|
+        refute names[column][:allow_null] == false, "#{column} is optional (verbatim, often absent)"
+      end
+      assert(@db.indexes(:passage_entity_names).values.any? { |i| i[:columns] == %i[source_id] })
+
+      pairs = @db.schema(:passage_entities).to_h
+      assert_equal %i[name_id passage_id], pairs.keys.sort
+      assert pairs[:name_id][:primary_key]
+      assert pairs[:passage_id][:primary_key]
+      ddl = @db["SELECT sql FROM sqlite_master WHERE name = 'passage_entities'"].get(:sql)
+      assert_match(/WITHOUT ROWID/i, ddl)
+    end
+
     # The dictionary-entry grain of the same mold (migration 046): entries
     # carry their annotations (nullable — NULL is "none", the common case
     # on million-entry shelves), and the facet surface is a per-source

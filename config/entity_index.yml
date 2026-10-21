@@ -1,0 +1,26 @@
+# The inline-entity index roster (Store::EntityIndex → `nabu entity`,
+# `nabu show --entities`): the sources whose adapters mine names marked
+# INSIDE the passage text into the "entities" passage annotation. The
+# builder probes only these slices — a rebuild never scans the whole
+# passages table for the layer. A new adapter emitting the layer joins
+# this list in the same change.
+#
+# Census: live catalog, 2026-10-21 (non-withdrawn passages carrying the
+# layer · records · the type split, verbatim upstream types).
+sources:
+  - coptic-scriptorium  # 46,942 passages · 243,942 records — CopticTtParser entity spans:
+  #                       person 82,932 · abstract 82,464 · place 28,352 · object 21,948 ·
+  #                       time 13,023 · event · substance · animal · organization · plant …;
+  #                       17,287 records carry a Wikification identity
+  - perseus-greek       # 17,976 passages · 66,024 records — EpidocParser::InlineLayer:
+  #                       place 31,928 · person 21,258 · ethnic 9,556 · noclass 2,270 · group ·
+  #                       title …; 51,124 records carry @key (TGN ids, perseus gazetteer names)
+  - perseus-latin       # 10,305 passages · 26,195 records — person 11,590 · place 10,873 ·
+  #                       name 2,763 · ethnic 969; 10,606 with @key
+  - dharma-deccan       # 751 passages · 1,121 records — person 881 · place 240, the editor's
+  #                       pers:/pl: authority keys on 895
+  # Same InlineLayer, no persName/placeName in the held deposits today
+  # (0 records each) — listed so a re-parse that surfaces them is indexed:
+  - first1k-greek
+  - perseus-anglit
+  - perseus-farsilit

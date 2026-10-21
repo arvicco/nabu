@@ -61,6 +61,26 @@ class BuilderRefreshTest < Minitest::Test
     refute_nil summary.kinds
     refute_nil summary.passage_facets, "the passage-grain facet lane rides the refresh"
     refute_nil summary.entry_facets, "the dictionary-entry facet lane rides the refresh"
+    refute_nil summary.entities, "the inline-entity index rides the refresh"
+  end
+
+  # The inline-entity index re-projects over the shipped roster
+  # (config/entity_index.yml lists perseus-greek).
+  def test_refresh_projects_the_entity_index
+    perseus = Nabu::Store::Source.create(slug: "perseus-greek", name: "Perseus", adapter_class: "X", license: "x",
+                                         license_class: "attribution", upstream_url: "x", enabled: true)
+    doc = Nabu::Store::Document.create(source_id: perseus.id, urn: "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2",
+                                       title: "t", language: "grc", canonical_path: "x", content_sha256: "2" * 64)
+    Nabu::Store::Passage.create(document_id: doc.id, urn: "#{doc.urn}:1.1", sequence: 1, language: "grc",
+                                text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+                                annotations_json: JSON.generate("entities" => [{ "type" => "place",
+                                                                                 "text" => "Hellas",
+                                                                                 "key" => "tgn,1000074" }]))
+    summary = Dir.mktmpdir do |dir|
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+    end
+    assert_equal 1, summary.entities.rows
+    assert_equal [%w[place Hellas]], @catalog[:passage_entity_names].select_map(%i[type text])
   end
 
   # The passage-grain lane re-projects under the shipped passage_fields
