@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (16): `aranese`, `bdcamoes`, `bfm`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `openmgh`, `osta`, `salom`, `ud`
+**Members** (17): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `openmgh`, `osta`, `salom`, `ud`
 
 ### epigraphy
 

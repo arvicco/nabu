@@ -172,6 +172,12 @@ sources:
   scat:                       # census 2026-10-20: 24 texts, the release catalog's century on
     fields: #                   all (16 ×8 · 17 ×6 · 18 ×10) — projected so the ruled
       century: century        # scat-century lect rule can read it
+  bim-sahcoba:                # census 2026-10-21: 15 works, all carrying both (the adapter's
+    fields: #                   WORKS/GENRES tables — the deposit names only the author)
+      genre: genre            # 8 labels — folded in config/kind_map.yml
+      dialect: dialect        # Labourdin 5 · Souletin 3 · Gipuzkoan 2 · Alavese · Biscayan ·
+      #                         Lower Navarrese · Upper Navarrese (14; Lopez unattributed) —
+      #                         the standard attribution, the lect lane's future variety key
   senie:                      # census 2026-10-21 (fixture-time, the full release file): 183
     fields: #                   docs; every TEI header carries all four
       genre: genre            # the <domain> text "Garīgie teksti; Bībele, Vecā Derība" —

@@ -865,6 +865,23 @@ sources:
       #   teaching; the nearest ruled head (a religious-instruction sub is a
       #   future class-list call if the family ever grows)
       "miscelaneo": unknown                      # 1 — upstream's own miscellany
+  bim-sahcoba:        # census: 15 works, 2026-10-21 — the adapter's GENRES table (the deposit
+    facet: genre      # carries no genre field; each label is the standard description of the work)
+    map:
+      "poetry": literary/poetry                  # 1 — Etxepare's Linguae Vasconum Primitiae
+      "pastoral romance and verse": literary     # 1 — the Lazarraga manuscript (Silbero and
+      #   Sirena + lyric poems); prose romance and verse together, the bare head
+      "scripture": scripture                     # 1 — Leizarraga's New Testament
+      "catechism": exegesis                      # 4 — Materra, Kapanaga, Belapeire, Otxoa
+      #   (the ticha catecismo precedent)
+      "mass treatise": ritual/liturgy            # 1 — Beriain: how the Mass is heard, its
+      #   prayers expounded clause by clause
+      "ascetic treatise": exegesis               # 2 — Axular's Gero, Tartas' Onsa hilzeko
+      #   bidia: doctrinal-devotional instruction, the nearest ruled head (a devotional
+      #   sub would be a taxonomy change, not this mapping's call)
+      "devotional translation": exegesis         # 4 — the Imitation of Christ ×3 (Pouvreau,
+      #   Chourio, Maister) and Rodríguez's Ejercicio (Lopez): same reading as above
+      "miscellany": unknown                      # 1 — Larramendi's letters, poems and sermons
   senie:              # census: 183 documents, 2026-10-21 — the TEI header <domain>,
     facet: genre      # "<genre>; <subgenre>" in Latvian (split on ";" → two values)
     map:

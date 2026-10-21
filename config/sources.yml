@@ -568,6 +568,28 @@ bibyeonsa:
   license_watch: https://www.data.go.kr/data/15053636/fileData.do
   sync_policy: manual
 
+bim-sahcoba:
+  adapter: Nabu::Adapters::BimSahcoba
+  adopted: "2026-10-21"
+  axes: [romance]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  lemma_tier: silver
+  # BIM/SAHCOBA — the historical Basque corpus of HiTZ, University of the
+  # Basque Country (CLARIAH-EUS hdl:20.500.14614/43, doi:10.71845/hitz-32,
+  # 2026-06-17): 15 works of Archaic and Old Basque, 1545–1782 —
+  # Etxepare, the Lazarraga manuscript, Leizarraga's New Testament,
+  # Materra, Beriain, Axular's Gero, Kapanaga, Tartas, Belapeire, Otxoa,
+  # Larramendi, three Imitation-of-Christ translations, an Avignon
+  # Rodríguez — as token streams (669,109 tokens: form, standardized
+  # form, lemma, Basque POS, UPOS). The lemma/POS layer is machine output
+  # (the files are "_automatikoa") → lemma_tier silver. Passage = the
+  # source page where the stream marks it, else the sentence (the
+  # declared rule, BimTsvParser). Language bare eu. Desk romance: the
+  # Romance-surrounded isolate, read beside the Gascon/Navarro-Aragonese
+  # and Castilian it borrowed from. CC BY 4.0 → class attribution. A
+  # deposited version is frozen → sync_policy manual.
+
 bosworth-toller:
   adapter: Nabu::Adapters::BosworthToller
   adopted: "2026-07-11"

@@ -1129,6 +1129,24 @@ sources:
         Russian North monasteries are the texts' subject, never claimed as the writing place, and
         the README's shelfmarks name holding libraries (present locations)"}
     script: {posture: implied, note: "Cyrillic, diplomatic (titla and superscript letters kept)"}
+  bim-sahcoba:
+    # kind: machine-postured — the bim-sahcoba fold in kind_map.yml over the
+    # adapter's per-work genre.
+    lect: {posture: pending, note: "candidates eu:arch (Archaic Basque, to 1600 — Etxepare,
+        Lazarraga, Leizarraga) and eu:old (Old Basque, 1600–1745 — the rest; Chourio 1760,
+        Maister 1757 and Lopez 1782 fall past BIM's own mid-18th-c. edge) — nabu-lects carries
+        no Basque anchor yet; bare eu until the aggregated Baltic–Finnic–Basque package
+        mints eu + its stages and a date-band rule stages the works. The per-work dialect
+        (Labourdin, Souletin, Biscayan …) rides as a facet — the variety key in waiting"}
+    dating: {posture: partial, note: "13 of 15 works: the imprint year read from the stream's own
+        title page (7 — Axular, Chourio, Lopez, Maister, Materra, Otxoa, Tartas) or the standard
+        attribution, raw marked attributed (6); Larramendi's selected writings and Pouvreau's
+        manuscript Imitation carry no date in the asset — declared"}
+    places: {posture: named, note: "8 of 15: the imprint town the stream's own title page names
+        (Bordeaux, Bayonne, Pau, Orthez, Donostia, Avignon), place_role imprint; attributed
+        imprints are never claimed as places"}
+    script: {posture: implied, note: "Latin script; the corpus's form column
+        is the text, the standardized form rides per token"}
   senie:
     # kind: machine-postured — the senie fold in kind_map.yml over the
     # header <domain> genre facet.
