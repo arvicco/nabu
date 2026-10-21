@@ -670,6 +670,10 @@ sources:
   africa-pd:
     source_kind: scholarly   # P124-1: the PD African-languages reference shelf — grammars,
     #                          text editions, a reader, a proverb collection
+  vedaweb:
+    source_kind: hymn-prayer/hymn   # the Rigveda: 1,028 hymns, each addressed to its deity
+    #                                 (upstream's own addressee per hymn) — hymns by form;
+    #                                 its later scriptural standing is reception, not genre
   stgall-priscian:
     source_kind: scholarly/commentary   # P126: the glosses ARE a commentary on Priscian's
     #                                     grammar (Hofman's edition title: "The Sankt Gall

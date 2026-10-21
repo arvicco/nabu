@@ -2063,6 +2063,17 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  vedaweb:
+    # kind: machine-postured — kind_map.yml source_kind hymn-prayer/hymn.
+    # lect: machine-postured — lect_overrides.yml san → san:ved (certain).
+    dating: {posture: undatable, note: "the asset carries RELATIVE chronology only — the
+        Gunkel/Ryan metrical strata per pada (after Arnold) and the Grassmann/Oldenberg/
+        Arnold/Witzel/Wüst late-addition flags per stanza, all mined into passage
+        annotations; no absolute or attributed composition date exists in it"}
+    places: {posture: unplaced, note: "no place field in the asset"}
+    script: {posture: qualified, note: "ISO-15919 romanization of the Zurich layer
+        (xml:lang san-Latn-x-ISO-15919); the Devanāgarī Eichler layer is a BY-NC-SA
+        source left unread"}
   lasla:
     kind: {posture: unclassified, note: "the conllup lane carries no genre field — only the
         filename's author/work/code (mined: author + work facets); a per-work genre table

@@ -319,6 +319,12 @@ sources:
     fields:
       author: author          # 250 docs, 152 authors ("Agennius Vrbicus")
       work: work              # 372 docs, 359 titles ("De controuersiis agrorum")
+  vedaweb:                    # 1,028 hymns (upstream census 2026-10-21)
+    fields:
+      addressee: addressee    # the deity addressed, upstream's English label verbatim
+      #                         ("Agni", "Indra", "Soma Pavamana" …)
+      group: collection       # the hymn group — poet family or cycle ("Hymns of
+      #                         Madhucchandas", "Valakhilya-Hymns")
   lasla:                      # 242 files (upstream census 2026-10-21)
     fields:
       author: author          # 24 filename authors, verbatim (Cicero 80 · Seneca 26 ·
