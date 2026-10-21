@@ -74,5 +74,4 @@ module Nabu
       end
     end
   end
-
 end
