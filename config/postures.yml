@@ -1132,12 +1132,11 @@ sources:
   bim-sahcoba:
     # kind: machine-postured — the bim-sahcoba fold in kind_map.yml over the
     # adapter's per-work genre.
-    lect: {posture: pending, note: "candidates eu:arch (Archaic Basque, to 1600 — Etxepare,
-        Lazarraga, Leizarraga) and eu:old (Old Basque, 1600–1745 — the rest; Chourio 1760,
-        Maister 1757 and Lopez 1782 fall past BIM's own mid-18th-c. edge) — nabu-lects carries
-        no Basque anchor yet; bare eu until the aggregated Baltic–Finnic–Basque package
-        mints eu + its stages and a date-band rule stages the works. The per-work dialect
-        (Labourdin, Souletin, Biscayan …) rides as a facet — the variety key in waiting"}
+    lect: {posture: dates, note: "eu:arch / eu:old / eu:emod by date-band inference off the
+        works' own dates (the registry's 2026-10-21 Basque mint; Etxepare 1545 → eu:arch,
+        Axular 1643 → eu:old verified live) — the two undated works (Larramendi, Pouvreau)
+        honestly ride bare eu. The per-work dialect (Labourdin, Souletin, Biscayan …) rides
+        as a facet — the variety key in waiting"}
     dating: {posture: partial, note: "13 of 15 works: the imprint year read from the stream's own
         title page (7 — Axular, Chourio, Lopez, Maister, Materra, Otxoa, Tartas) or the standard
         attribution, raw marked attributed (6); Larramendi's selected writings and Pouvreau's
@@ -1150,10 +1149,9 @@ sources:
   senie:
     # kind: machine-postured — the senie fold in kind_map.yml over the
     # header <domain> genre facet.
-    lect: {posture: pending, note: "candidate lv:old (Old Latvian, the 16th–18th-c. written
-        language) — nabu-lects carries no lv anchor at all yet; every passage rides the bare
-        lv code (or its run-majority de/lat/…) until the aggregated Baltic–Finnic–Basque
-        registry package mints lv + lv:old and a date-band rule stages the corpus"}
+    lect: {posture: dates, note: "lv:old by date-band inference off the header dates (the
+        registry's 2026-10-21 mint; all 183 documents fall inside the [1500, 1800] band,
+        verified live) — run-majority de/lat/pol passages stay on their own anchors"}
     dating: {posture: dated, note: "the TEI header <date> on all 183 documents — the print's or
         manuscript's year, a \"1681_90\" span as its envelope (:structured lane)"}
     places: {posture: unplaced, note: "the headers name no imprint or writing place; title-page
@@ -1164,12 +1162,11 @@ sources:
   vks:
     # kind: machine-postured — the vks fold in kind_map.yml over the Korp
     # subcorpus (the collection facet).
-    lect: {posture: pending, note: "candidate fi:old (Old Literary Finnish, vanha kirjasuomi —
-        Agricola 1543 to the turn of the 19th c., the band VKS itself spans: 1543–1810) —
-        nabu-lects carries no fi anchor at all yet; bare fi until the aggregated
-        Baltic–Finnic–Basque package mints fi + fi:old and a date-band rule stages the
-        corpus. Swedish and Latin runs inside the works read fi — the Korp kwic carries no
-        foreign spans (declared coarse)"}
+    lect: {posture: dates, note: "fi:old (Old Literary Finnish, vanha kirjasuomi) by
+        date-band inference off the Korp date envelopes (the registry's 2026-10-21 mint;
+        every text falls inside the [1540, 1810] band, verified live). Swedish and Latin
+        runs inside the works read fi — the Korp kwic carries no foreign spans (declared
+        coarse)"}
     dating: {posture: dated, note: "every Korp text element's text_datefrom/text_dateto — the
         file's envelope on the :structured lane; the collection files (decrees, sermons,
         almanacs) also date each passage by its own element"}
