@@ -80,6 +80,7 @@ module Nabu
       "zh" => "/zh/translations-in-chinese"
     ).freeze
 
+    # const: the site's two author-collection path segments (URL grammar), not a corpus count
     COLLECTIONS = %w[tibetan-masters indian-masters].freeze
     SCRIPTURE = "words-of-the-buddha"
     SLUG = "[a-z0-9][a-z0-9._-]*"

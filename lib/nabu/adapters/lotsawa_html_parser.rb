@@ -2,6 +2,7 @@
 
 require "nokogiri"
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -58,7 +59,7 @@ module Nabu
       # page (lang ≠ bo) is marked kind translation, and translation_of
       # names that urn when the page's own language list carries Tibetan.
       def parse(path, urn:, lang:, metadata: {}, original_urn: nil)
-        html = Nokogiri::HTML(File.read(path, encoding: "UTF-8"))
+        html = Nokogiri::HTML(SourceRead.utf8_file(path, label: "lotsawa-house"))
         @lang = lang
         @page_language = LANGUAGES.fetch(lang)
         main = html.at_css("div#maintext") or raise Nabu::ParseError, "#{path}: no div#maintext — not a text page"

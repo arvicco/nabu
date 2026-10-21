@@ -2,6 +2,7 @@
 
 require "json"
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -137,7 +138,7 @@ module Nabu
       end
 
       def parse(document_ref)
-        record = JSON.parse(File.read(document_ref.path, encoding: "UTF-8"))
+        record = JSON.parse(SourceRead.utf8_file(document_ref.path, label: "shuowen"))
         document = Nabu::DictionaryDocument.new(slug: DICTIONARY_SLUG, language: LANGUAGE, title: TITLE,
                                                 canonical_path: document_ref.path)
         head = head_entry(record)
