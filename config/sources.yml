@@ -4979,6 +4979,27 @@ shkz:   # P107-3b
   # 1,012-word alignment-pairs table fetches into canonical as a
   # DECLARED v1 residue (the alignment-hub look is the future packet).
 
+shuowen:   # 02-sources row 285
+  adapter: Nabu::Adapters::Shuowen
+  adopted: "2026-10-21"
+  group: signs  # the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [sinitic]
+  wired: false   # first sync owner-fired at the gate (checklist §6: bin/nabu
+                 # sync shuowen — sparse git clone ~39 MB — then eyeball
+                 # nabu define 帝, nabu define 弌 (the 重文 entry) and
+                 # nabu char 一 (the Shuowen block), flip)
+  sync_policy: manual
+  # 說文解字 Shuowen Jiezi (Xu Shen, 100 CE; Xu Xuan recension with Duan
+  # Yucai's commentary) from the shuowen.org data repo
+  # (github.com/shuowenjiezi/shuowen) — one JSON record per head
+  # character, 540 radicals. Apache-2.0 verbatim (README "Copyright [2019]
+  # [Shuowen.org]") → attribution. Dictionary slug `shuowen`, language
+  # lzh; the encoded 重文 variant forms mint their own entries pointing
+  # back at the head. Sparse GitFetch of data/*.json + doc/FORMAT.md.
+  # EXPECTED FIRST SYNC: 9,833 dictionary files → 11,081 entries (9,833
+  # heads + 1,248 encoded 重文), 0 parse errors (census run 2026-10-21 on
+  # the 6553a350 tarball); 1 doc file skipped by rule.
+
 siddham:   # P118-4, 02-sources row 256
   adapter: Nabu::Adapters::Siddham
   adopted: "2026-10-11"
