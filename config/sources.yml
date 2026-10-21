@@ -4901,20 +4901,31 @@ sii-clean:   # P122-3, 02-sources row 267
   sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
                        # git-incremental fetch — rides the sync --all sweep
   # South Indian Inscriptions — the DHARMA conversions of the printed SII
-  # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions,
-  # SII_B_clean/; census at HEAD 3ea671b6, 2026-10-12): 4,974 edition files,
-  # NO repo licence. The cone is the files bearing their OWN in-file
-  # <licence> CC BY-SA 4.0 — 907 today (SII 2/3/4/8/17/22/26/41), of which
-  # 258 are ~DHARMA_ in-progress files outside the sparse cone (they arrive
-  # by promotion), so 649 grant-bearing DHARMA_ editions; the other 4,067
-  # stay out by rule (censused per volume at discovery). Romanized Tamil
-  # above all (tam-Latn 579 docs; san/tel/kan-Latn 4/4/2). Headings mined:
-  # findspot/taluk/district/village (419 places), A.R. number, A.D./Śaka
-  # dating (211 dated). Class attribution. FETCH: one sparse GitFetch, cone
-  # /SII_B_clean/*/DHARMA_*.xml + README.txt (SII_A_raw stays out).
-  # EXPECTED FIRST SYNC: 649 discovered (4,067 grant-less skipped by rule)
-  # → 589 docs / 8,372 passages; 60 honest quarantines (40 edition-less
-  # stubs, 14 text-less editions, 6 "und").
+  # volumes 1–42 (github.com/erc-dharma/south-indian-inscriptions). WIDENED
+  # 2026-10-21: the DHARMA maintainer's statement in SII_B_clean/README.txt
+  # ("All files in this repository are under CC BY-SA 4.0 license",
+  # 2026-10-21) admits every clean edition, not only the in-file-grant
+  # subset. Two layers, one inscription one document (census at HEAD
+  # 76608102): all 4,796 SII_B_clean DHARMA_ editions (729 with an in-file
+  # <licence>, the rest on the README statement — license_basis per doc),
+  # plus the SII_A_raw/3out per-inscription conversions (20,554, each with
+  # its own in-file CC BY-SA 4.0) for the inscriptions no clean edition
+  # holds: 4,801 raw files a clean edition covers (exact stem or number
+  # range) are superseded, skipped by rule per volume; 15,753 stand in.
+  # Clean ~DHARMA_ drafts, the contractor dumps (1orig) and the per-volume
+  # master copies (2mastercopy — the same text at volume grain) stay out of
+  # the cone. Languages: tam/tel/kan/san-Latn, pra-Latn 23, nld-Latn 11,
+  # fas-Latn 2 (upstream per-Latn), ara-Latn 1, lat-Latn 1; bare tam/san/
+  # lat aliased; mar-Latn (4) and sin-Latn (1) quarantine (no registry
+  # node). Headings mined in both layers: village/taluk/district (10,380
+  # villages), A.R. number, A.D./Śaka incl. SII 10's "Ś. NNNN" (1,536
+  # dated). Class attribution. FETCH: one sparse GitFetch, cone
+  # /SII_B_clean/*/DHARMA_*.xml + /SII_A_raw/3out/*/~DHARMA_*.xml + both
+  # READMEs (GitFetch widens the held clone's cone on the pull path).
+  # EXPECTED SYNC: 20,549 discovered (4,801 superseded raw skipped by rule)
+  # → 18,490 docs / 314,882 passages (clean 3,969 / 54,626 · raw 14,521 /
+  # 260,256); 2,059 honest quarantines (798 edition-less clean stubs, 848
+  # text-less, 406 "und", 2 lang-less, 4 mar-Latn, 1 sin-Latn).
 
 sillok:
   adapter: Nabu::Adapters::Sillok

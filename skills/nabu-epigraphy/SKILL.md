@@ -50,7 +50,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `riig` | RIIG — Recueil informatisé des inscriptions gauloises (Ausonius/ANR) | attribution |
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |
 | `siddham` | Siddham Epigraphic Archive — texts in EpiDoc (Gupta-age Sanskrit epigraphy) | attribution |
-| `sii-clean` | South Indian Inscriptions — DHARMA editions (grant-bearing subset) | attribution |
+| `sii-clean` | South Indian Inscriptions — DHARMA editions and conversions | attribution |
 | `tir` | Thesaurus Inscriptionum Raeticarum (TIR) — Raetic corpus of record (Univ. Vienna) | nc |
 | `tlhdig` | TLHdig — Thesaurus Linguarum Hethaeorum digitalis (Beta 0.3, Zenodo 20328284) | attribution |
 | `trismegistos` | Trismegistos TexRelations — the cross-project concordance crosswalk (links instrument) | attribution |
