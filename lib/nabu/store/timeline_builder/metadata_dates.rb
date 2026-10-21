@@ -192,6 +192,8 @@ module Nabu
           "scat" => :structured, # the release catalog's century (the witness's, beside the
           #                        shelfmark) as a century envelope; no place claim
           "seal" => :period_label,
+          "senie" => :structured, # the TEI header <date>: the print's or manuscript's year,
+          #                         a "1681_90" span as its envelope — the artifact date
           "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
           #                           or century attribution
           "sii-clean" => :structured, # P122-3: the SII heading's A.D. / Śaka year or the

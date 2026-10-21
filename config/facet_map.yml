@@ -172,6 +172,14 @@ sources:
   scat:                       # census 2026-10-20: 24 texts, the release catalog's century on
     fields: #                   all (16 ×8 · 17 ×6 · 18 ×10) — projected so the ruled
       century: century        # scat-century lect rule can read it
+  senie:                      # census 2026-10-21 (fixture-time, the full release file): 183
+    fields: #                   docs; every TEI header carries all four
+      genre: genre            # the <domain> text "Garīgie teksti; Bībele, Vecā Derība" —
+      #                         folded in config/kind_map.yml
+      domain_type: domain     # its @type: religious 139 · public 40 · education 7 (containers incl.)
+      medium: medium          # print 170 · manuscript 13 (<chanel>manuscript</chanel>)
+      collection_id: collection  # the Bible container a book belongs to (Apokr1689 14 ·
+      #                         JT1685 30 · VD1689_94 40)
   dcs:                        # census 2026-10-12: the corpus's five composition time
     fields: #                   slots (1 early/Vedic … 5 late; 1 ×6,962 · 2 ×2,940 ·
       dcs_time_slot: time_slot  # 3 ×2,315 · 4 ×2,014 · 5 ×1,493) — the upstream claim,

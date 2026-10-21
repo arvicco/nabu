@@ -4829,6 +4829,25 @@ sefaria:
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 
+senie:
+  adapter: Nabu::Adapters::Senie
+  adopted: "2026-10-21"
+  axes: [baltic, slavic]   # the Balto-Slavic lineage dual-tag (the baltic desk ruling)
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL + the
+  # Latvian Language Institute, University of Latvia; CLARIN-LV
+  # hdl:20.500.12574/141, issued 2025-11-27): the written Latvian of
+  # 1507–1800 — the Lord's-prayer specimens, the 1585/1586 catechisms,
+  # Mancelius, Elger, Glück's Bible, the manuscript dictionaries, oaths,
+  # laws and the Enlightenment prints. One 61 MB TEI P5 file (a
+  # teiCorpus of 186 TEIs: 99 leaf sources + 3 Bible containers holding
+  # 84 books) — 183 documents, one passage per page / verse / section.
+  # Every run is language-tagged (Latvian with German, Latin, Polish,
+  # Estonian, Greek, Aramaic …), so passage languages follow their runs.
+  # CC BY-SA 4.0 (the CLARIN-LV item) → class attribution, share-alike.
+  # A deposit version is frozen → sync_policy manual.
+
 shabados:   # P122-3, 02-sources row 269
   adapter: Nabu::Adapters::Shabados
   adopted: "2026-10-12"

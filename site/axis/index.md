@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The 29 research desks of the Nabu library — tags over the
+  The 30 research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The 29 desks
+## The 30 desks
 
 ### classical
 
@@ -253,6 +253,14 @@ The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (C�
 Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai — and the Old Nubian UD treebank, the medieval Nile kingdoms' language parsed word by word.
 
 [Open the africa desk]({{ '/axis/africa/' | relative_url }})
+
+### baltic
+
+> The Balticist — the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish.
+
+The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
+
+[Open the baltic desk]({{ '/axis/baltic/' | relative_url }})
 
 ### local
 

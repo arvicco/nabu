@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (34): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
+**Members** (35): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
 
 ### germanic
 
@@ -276,6 +276,14 @@ The indigenous-Americas lane, colonial-era first: Ticha's Valley Zapotec TEI (C�
 Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa, Mandinka, Fula and Wolof manuscripts in romanized transcription, the public-domain reference shelf in archive.org's uncorrected OCR — Griffith's Old Nubian texts, the Swahili of Steere, Taylor, Büttner and Velten, Schön's and Robinson's Hausa, Hanoteau's Tuareg grammar and Kabyle poetry, Koelle's Vai — and the Old Nubian UD treebank, the medieval Nile kingdoms' language parsed word by word.
 
 **Members** (3): `africa-pd`, `bu-ajami`, `old-nubian-ud`
+
+### baltic
+
+> The Balticist — the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish.
+
+The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
+
+**Members** (1): `senie`
 
 ### local
 

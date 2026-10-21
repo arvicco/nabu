@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 146, lect.size,
+    assert_equal 147, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -299,12 +299,15 @@ class PosturesTest < Minitest::Test
                  "145→146; damos ADDED P130 — identity gmy: 146→147; ig-cyprus + ociana added " \
                  "and MACHINE-POSTURED the same day (the mint merged + canonical-synced, then " \
                  "the ociana-script facet rule and the ig-cyprus grc override shadow both " \
-                 "declarations): 147→148→146"
+                 "declarations): 147→148→146; senie ADDED — PENDING on the aggregated " \
+                 "Baltic–Finnic–Basque nabu-lects package (no lv anchor exists): 146→147"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
     # machine-posture both sources the same day (the shadowing rule):
     # identity 118 (damos stays declared), pending 2→0. Zero pendings.
-    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 118 }, by_posture)
+    # senie joins as pending on the Baltic–Finnic–Basque
+    # package's lv:old.
+    assert_equal({ "dates" => 15, "codemap" => 13, "identity" => 118, "pending" => 1 }, by_posture)
   end
 end

@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 34 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 35 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
@@ -41,6 +41,7 @@ A source wears every desk it serves — these 34 answer this desk. Holdings are 
 | `ru-wikisource` | texts | attribution | wired · manual | 12 docs / 429 passages |
 | `scat` | texts | attribution | wired · manual | 24 docs / 2,446 passages |
 | `scripta-bulgarica` | texts | nc | wired · manual | 124 docs / 4,491 passages |
+| `senie` | texts | attribution | not yet wired | not synced yet |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 | `sl-wikisource` | texts | attribution | wired · manual | 1,539 docs / 145,035 passages |
 | `slavistics-pd` | texts | open | wired · manual | 21 docs / 5,833 passages |
@@ -106,4 +107,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
