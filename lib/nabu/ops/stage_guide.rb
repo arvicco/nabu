@@ -245,6 +245,9 @@ module Nabu
       stage :passage_facets, "passage facets",
             "Projects the passage annotations facet_map.yml names (subject classes, named entities) into the " \
             "passage-grain facet tables."
+      stage :entity_index, "entity index",
+            "Indexes the names marked inside passage text (persons, places and other typed entities the " \
+            "EpiDoc, Coptic and DHARMA parsers mine) under a folded search key — the index behind `nabu entity`."
       stage :entry_facets, "entry facets",
             "Projects the dictionary-entry annotations facet_map.yml names into the entry-grain facet tables " \
             "the dictionary filters read."

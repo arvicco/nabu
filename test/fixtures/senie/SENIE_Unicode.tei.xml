@@ -1,0 +1,1662 @@
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+ <teiHeader>
+  <titleStmt><title>Senie: latviešu valodas seno tekstu korpuss</title></titleStmt>
+  <publicationStmt><p>Distributed by UL IMCS AILab</p></publicationStmt>
+  <sourceDesc><p>Original digital compilation</p></sourceDesc>
+ </teiHeader>
+  <TEI>
+   <teiHeader>
+    <fileDesc id="AP1622">
+     <sourceDesc>
+      <author>nezināms</author>
+      <title>Agenda Parva</title>
+      <date>1622</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <domain type="religious">Garīgie teksti; lūgšanas</domain>
+    </profileDesc>
+   </teiHeader>
+   <text>
+    <body>
+      <pb n="1"/>
+      <div type="Paragraph">
+       <lb id="AP1622_1_1"/>
+       <div type="Language" lang="Latin">AGENDA</div>
+       <lb id="AP1622_1_2"/>
+       <div type="Language" lang="Latin">PARVA.</div>
+       <lb id="AP1622_1_3"/>
+       <div type="Language" lang="Latin">Ɉn commodiorem vſum Sa-</div>
+       <lb id="AP1622_1_4"/>
+       <div type="Language" lang="Latin">cerdotum Prouinciae Li-</div>
+       <lb id="AP1622_1_5"/>
+       <div type="Language" lang="Latin">uoniae conſcripta.</div>
+       <lb id="AP1622_1_6"/>
+       <div type="Language" lang="Latin">I. Corrinth. XIIII.</div>
+       <lb id="AP1622_1_7"/>
+       <div type="Language" lang="Latin">Omnia autem honeſte`, &amp; ſecun-</div>
+       <lb id="AP1622_1_8"/>
+       <div type="Language" lang="Latin">dùm ordinem fiant in</div>
+       <lb id="AP1622_1_9"/>
+       <div type="Language" lang="Latin">vobis.</div>
+       <lb id="AP1622_1_10"/>
+       <div type="Language" lang="Latin">BRVNSBERGAE,</div>
+       <lb id="AP1622_1_11"/>
+       <div type="Language" lang="Latin">Typis Georgij Schönfels,</div>
+       <lb id="AP1622_1_12"/>
+       <div type="Language" lang="Latin">Anno M. DC. XXII.</div>
+      </div>
+      <pb n="6"/>
+      <div type="Paragraph">
+       <lb id="AP1622_6_1"/>
+       <div type="Language" lang="Latin">vna &amp; communi verborum prolatione</div>
+       <lb id="AP1622_6_2"/>
+       <div type="Language" lang="Latin">fingulis ex ordine adminiſtrari. Com-</div>
+       <lb id="AP1622_6_3"/>
+       <div type="Language" lang="Latin">munes orationes conueniunt omnibus.</div>
+       <lb id="AP1622_6_4"/>
+       <div type="Language" lang="Latin">Sacerdos ad baptizandũ paratus dicat.</div>
+       <lb id="AP1622_6_5"/>
+       <div type="Language" lang="Latin">Verſ. Adiutorium noſtrum in nomine Do-</div>
+       <lb id="AP1622_6_6"/>
+       <div type="Language" lang="Latin">mini.</div>
+       <lb id="AP1622_6_7"/>
+       <div type="Language" lang="Latin">Reſp. Qui fecit caelum &amp; terram.</div>
+       <lb id="AP1622_6_8"/>
+       <div type="Language" lang="Latin">Deinde quaerat an non fit baptizatus</div>
+       <lb id="AP1622_6_9"/>
+       <div type="Language" lang="Latin">ab obſtetrice, vel aliquo alio dicens:</div>
+       <lb id="AP1622_6_10"/>
+       <div type="Language" lang="Latin">Lot.</div>
+        <div type="Language" lang="Latvian">Nawayd tas bãrns no ba'dem</div>
+       <div type="Language" lang="German">ôder/</div>
+       <lb id="AP1622_6_11"/>
+        <div type="Language" lang="Latvian">ieb no citte kade kruſtyts?</div>
+       <lb id="AP1622_6_12"/>
+       <div type="Language" lang="Latin">Pol.</div>
+       <div type="Remark">
+        <div type="Language" lang="Latvian">Nie ieſtli iuż okrſcżone od baby/ abo</div></div>
+       <lb id="AP1622_6_13"/>
+       <div type="Remark">
+        <div type="Language" lang="Latvian">o'd kogo innego?</div></div>
+       <lb id="AP1622_6_14"/>
+       <div type="Language" lang="Latin">Ger:</div>
+       <div type="Language" lang="German">Jſt es vor nit getaufft von der Heb-</div>
+       <lb id="AP1622_6_15"/>
+       <div type="Language" lang="German">ammen/ oder ſonſt von jemands?</div>
+       <lb id="AP1622_6_16"/>
+       <div type="Language" lang="Latin">Postea quaerat dicens</div>
+       <lb id="AP1622_6_17"/>
+       <div type="Language" lang="Latin">Lot.</div>
+        <div type="Language" lang="Latvian">Jr tas puyſyts/ ab meytin?</div>
+       <lb id="AP1622_6_18"/>
+       <div type="Language" lang="Latin">Pol.</div>
+       <div type="Remark">
+        <div type="Language" lang="Latvian">Cżo ieſt/ chłopiatko cz'y dz'ieiwczako?</div></div>
+       <lb id="AP1622_6_19"/>
+       <div type="Language" lang="Latin">Germ.</div>
+       <div type="Language" lang="German">Jſts ein Knäblein/ oder Mägde-</div>
+       <lb id="AP1622_6_20"/>
+       <div type="Language" lang="German">lein?</div>
+       <lb id="AP1622_6_21"/>
+       <div type="Language" lang="Latin">Dehinc inquirat e` Patrinis de nomine</div>
+       <lb id="AP1622_6_22"/>
+       <div type="Language" lang="Latin">infantis lingua ipfis nota dicens:</div>
+       <lb id="AP1622_6_23"/>
+       <div type="Language" lang="Latin">Lot.</div>
+        <div type="Language" lang="Latvian">Ka bus to bärne däwät?</div>
+       <lb id="AP1622_6_24"/>
+       <div type="Language" lang="Latin">Eſth.</div>
+       <div type="Language" lang="Estonian">Ommes ſelatz üppres riſtmätä echk</div>
+       <lb id="AP1622_6_25"/>
+       <div type="Language" lang="Estonian">enne riſtit?</div>
+      </div>
+      <pb n="7"/>
+      <div type="Paragraph">
+       <lb id="AP1622_7_1"/>
+       <div type="Language" lang="Latin">Pol.</div>
+       <div type="Remark">
+        <div type="Language" lang="Latvian">Ja'ko ma' byc' imie temu dżięc'iec'iu?</div></div>
+       <lb id="AP1622_7_2"/>
+       <div type="Language" lang="Latin">Ger.</div>
+       <div type="Language" lang="German">Wie ſol diß Kind heiſſen?</div>
+       <lb id="AP1622_7_3"/>
+       <div type="Language" lang="Latin">Cognito nomine inſuſflet in faciem</div>
+       <lb id="AP1622_7_4"/>
+       <div type="Language" lang="Latin">infantis per modum S. Crucis dicens:</div>
+       <lb id="AP1622_7_5"/>
+       <div type="Language" lang="Latin">EXi immunde ſpiritus ab hac imagine</div>
+       <lb id="AP1622_7_6"/>
+       <div type="Language" lang="Latin">Dei, &amp; da locum aduenienti Spiritui</div>
+       <lb id="AP1622_7_7"/>
+       <div type="Language" lang="Latin">Sancto, &amp; da honorem Deo viuo &amp; vero.</div>
+       <lb id="AP1622_7_8"/>
+       <div type="Language" lang="Latin">Deinde faciat crucem pollice vel tri-</div>
+       <lb id="AP1622_7_9"/>
+       <div type="Language" lang="Latin">bus digitis in fronte &amp; pectore eius di-</div>
+       <lb id="AP1622_7_10"/>
+       <div type="Language" lang="Latin">cens.</div>
+       <lb id="AP1622_7_11"/>
+       <div type="Language" lang="Latin">ACcipe ſignac ulum Crucis tam in</div>
+       <lb id="AP1622_7_12"/>
+       <div type="Language" lang="Latin">fron + te quam in pecto + re.</div>
+       <lb id="AP1622_7_13"/>
+       <div type="Language" lang="Latin">Quod ſequitur commune eſt maſculis</div>
+       <lb id="AP1622_7_14"/>
+       <div type="Language" lang="Latin">&amp; faeminis mutato genere &amp; numero ſi</div>
+       <lb id="AP1622_7_15"/>
+       <div type="Language" lang="Latin">plures ſunt.</div>
+       <lb id="AP1622_7_16"/>
+       <div type="Language" lang="Latin">Sume fidem caeleſtium praeceptorum:</div>
+       <lb id="AP1622_7_17"/>
+       <div type="Language" lang="Latin">Talis eſto moribus, vt templum Dei iam</div>
+       <lb id="AP1622_7_18"/>
+       <div type="Language" lang="Latin">eſſe poſsis, <corr>receptuſq'ue</corr><sic>receptuſq'z</sic> in Eccleſiam Chri-</div>
+       <lb id="AP1622_7_19"/>
+       <div type="Language" lang="Latin">ſti, euaſiſſe te laqueos Diaboli laetus a-</div>
+       <lb id="AP1622_7_20"/>
+       <div type="Language" lang="Latin">gnoſce: horreſce idola: reſpue ſimulac h_a:</div>
+       <lb id="AP1622_7_21"/>
+       <div type="Language" lang="Latin">cole Deum Patrem Omnipotentem, &amp; le-</div>
+       <lb id="AP1622_7_22"/>
+       <div type="Language" lang="Latin">sum Chriſtium filium eius, qui cum eodem</div>
+       <lb id="AP1622_7_23"/>
+       <div type="Language" lang="Latin">Patre &amp; Spiritu Sancto viuit, &amp; regnat</div>
+       <lb id="AP1622_7_24"/>
+       <div type="Language" lang="Latin">Deus per omnia ſecula ſeculorum Reſp.</div>
+       <lb id="AP1622_7_25"/>
+       <div type="Language" lang="Latin">Amen.</div>
+      </div>
+    </body>
+   </text>
+  </TEI>
+  <TEI>
+   <teiHeader>
+    <fileDesc id="Depk1681_90_ms">
+     <sourceDesc>
+      <author>Liborijs Depkins</author>
+      <title>Mīļi draugi</title>
+      <date>1681_90</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <chanel>manuscript</chanel>
+     <domain type="religious">Garīgie teksti; lūgšanas</domain>
+    </profileDesc>
+   </teiHeader>
+   <text>
+    <body>
+      <pb n="1"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_1_1"/>
+       <div type="Language" lang="German">Jm Nahmen Gottes.</div>
+       <lb id="Depk1681_90_ms_1_2"/>
+        <div type="Language" lang="Latvian">Miehle drauge, Juhſ redſet ickdenas</div>
+       <lb id="Depk1681_90_ms_1_3"/>
+        <div type="Language" lang="Latvian">ar Atzzehm, ka the zilwäcke mirſt.</div>
+       <lb id="Depk1681_90_ms_1_4"/>
+        <div type="Language" lang="Latvian">No kurren Nahck tock taſz: No them ghrekem,</div>
+       <lb id="Depk1681_90_ms_1_5"/>
+        <div type="Language" lang="Latvian">No kurrenes nahk the ghreke, No wellu:</div>
+       <lb id="Depk1681_90_ms_1_6"/>
+        <div type="Language" lang="Latvian">Kaſz ir tadt ghrecke, wies kaſz pret Dewu</div>
+       <lb id="Depk1681_90_ms_1_7"/>
+        <div type="Language" lang="Latvian">wahrdu vnd bauſſlem ir, ka Neghauſib,</div>
+       <lb id="Depk1681_90_ms_1_8"/>
+        <div type="Language" lang="Latvian">kaſz ahter grib baggaht klugt, Augſtib, Lepnib,</div>
+       <lb id="Depk1681_90_ms_1_9"/>
+        <div type="Language" lang="Latvian">kad kaſz no Baſznizes jb no behrnu Mazibu pa-</div>
+       <lb id="Depk1681_90_ms_1_10"/>
+        <div type="Language" lang="Latvian">leek, ne labprat patarus ſkayt, Lahd, ſchweh,</div>
+       <lb id="Depk1681_90_ms_1_11"/>
+        <div type="Language" lang="Latvian">bur, Jeb pie burwem eet, padohm vnd palig</div>
+       <lb id="Depk1681_90_ms_1_12"/>
+        <div type="Language" lang="Latvian">mecklet, Jeb pie wenu Akmin, edder pie</div>
+       <lb id="Depk1681_90_ms_1_13"/>
+        <div type="Language" lang="Latvian">wenu kohku eet vpperet, plietey zehr v. ſpraxt</div>
+       <lb id="Depk1681_90_ms_1_14"/>
+        <div type="Language" lang="Latvian">ſauwu tuwoko abwiell, abmello, ſauwus</div>
+       <lb id="Depk1681_90_ms_1_15"/>
+        <div type="Language" lang="Latvian">bährnus neeſuht ſkohlan, ka wing war laſſet</div>
+       <lb id="Depk1681_90_ms_1_16"/>
+        <div type="Language" lang="Latvian">mahzitees, vnd Deewu paſiet wahr, kad</div>
+       <lb id="Depk1681_90_ms_1_17"/>
+        <div type="Language" lang="Latvian">kaſz ſauwemſz kuhngehm, Jeb ſäumnekeem nee</div>
+       <lb id="Depk1681_90_ms_1_18"/>
+        <div type="Language" lang="Latvian">lab ſtrada, ne klaus, ka peder v. to denu</div>
+      </div>
+      <pb n="2"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_2_1"/>
+        <div type="Language" lang="Latvian">deewam noſogh, eeht maukot, [Jeb eeht pie</div>
+       <lb id="Depk1681_90_ms_2_2"/>
+        <div type="Language" lang="Latvian">zittu wieru Seewu ghullet], no kauw,</div>
+       <lb id="Depk1681_90_ms_2_3"/>
+        <div type="Language" lang="Latvian">ſauwu Towuku, mantu eehghribbet Jeb nojempt grib</div>
+       <lb id="Depk1681_90_ms_2_4"/>
+        <div type="Language" lang="Latvian">Ir tad taſz wehlſz weens ghrökojis?</div>
+       <lb id="Depk1681_90_ms_2_5"/>
+        <div type="Language" lang="Latvian">Wingſz ir taſz padohm teweis to ghreku,</div>
+       <lb id="Depk1681_90_ms_2_6"/>
+        <div type="Language" lang="Latvian">Wieſz pirmag ir wingſz ſew pret Deewu</div>
+       <lb id="Depk1681_90_ms_2_7"/>
+        <div type="Language" lang="Latvian">zaur lepnibu ghrutu abghrekujis, vnd ta-</div>
+       <lb id="Depk1681_90_ms_2_8"/>
+        <div type="Language" lang="Latvian">dehl no debbes noghruſt, vnd Muhſige pa-</div>
+       <lb id="Depk1681_90_ms_2_9"/>
+        <div type="Language" lang="Latvian">ſuddenats kluwis, pehtz ir wingſz tohſz</div>
+       <lb id="Depk1681_90_ms_2_10"/>
+        <div type="Language" lang="Latvian">zillwekus arridſan ta (dabbogis), pekrapis,</div>
+       <lb id="Depk1681_90_ms_2_11"/>
+        <div type="Language" lang="Latvian">Ka ir tas notiziſz, ka wingſz tohſz zil-</div>
+       <lb id="Depk1681_90_ms_2_12"/>
+        <div type="Language" lang="Latvian">wekus pie ghrekoſchem dabbogis ir,</div>
+       <lb id="Depk1681_90_ms_2_13"/>
+        <div type="Language" lang="Latvian">Kad Deews taſz Kungſ,</div>
+       <div type="Language" lang="Latin">Adam</div>
+        <div type="Language" lang="Latvian">, vnd, Eway</div>
+       <lb id="Depk1681_90_ms_2_14"/>
+        <div type="Language" lang="Latvian">Raddigis by, tad ſähdenage wings wiñu</div>
+       <lb id="Depk1681_90_ms_2_15"/>
+        <div type="Language" lang="Latvian">eckſchan to paradiſu dahrſu, vnd dewwu</div>
+       <lb id="Depk1681_90_ms_2_16"/>
+        <div type="Language" lang="Latvian">wingeems wallu tohſz Auglus no wissem</div>
+       <lb id="Depk1681_90_ms_2_17"/>
+        <div type="Language" lang="Latvian">Kohkeem ehſt, bet wehns kohkſz bie</div>
+       <lb id="Depk1681_90_ms_2_18"/>
+        <div type="Language" lang="Latvian">tur, to Deews ne ghribey, ka winges</div>
+      </div>
+      <pb n="3"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_3_1"/>
+        <div type="Language" lang="Latvian">bie no to ehſt, taſz kogkſz klu ſaukts, taſz</div>
+       <lb id="Depk1681_90_ms_3_2"/>
+        <div type="Language" lang="Latvian">kogks ta Atminiſchana labu v. launu,</div>
+       <lb id="Depk1681_90_ms_3_3"/>
+        <div type="Language" lang="Latvian">vnd Deews ſatzziga, Jeh wing no to ehdeſz,</div>
+       <lb id="Depk1681_90_ms_3_4"/>
+        <div type="Language" lang="Latvian">tad wing ſche layzige vnd muhſige miers,</div>
+       <lb id="Depk1681_90_ms_3_5"/>
+        <div type="Language" lang="Latvian">tas ir, pehtz ſcho laizige nawe, to muhſige</div>
+       <lb id="Depk1681_90_ms_3_6"/>
+        <div type="Language" lang="Latvian">paſuſchen eckſchan Elles: tas wehlſz ghri-</div>
+       <lb id="Depk1681_90_ms_3_7"/>
+        <div type="Language" lang="Latvian">bege tohſz zillwekus labprat nelaimey Ehweſt,</div>
+       <lb id="Depk1681_90_ms_3_8"/>
+        <div type="Language" lang="Latvian">ne wehley wingems to muhſige Dweſſeles prek,</div>
+       <lb id="Depk1681_90_ms_3_9"/>
+        <div type="Language" lang="Latvian">tas tinnas apkahrt to kohk, ka weenu zuhſ-</div>
+       <lb id="Depk1681_90_ms_3_10"/>
+        <div type="Language" lang="Latvian">ku redſot, vnd ſatzy, Jeh wing no to [eddeſet]</div>
+       <lb id="Depk1681_90_ms_3_11"/>
+        <div type="Language" lang="Latvian">Edies, tad wing deewam liedzen buhſz, vnd</div>
+       <lb id="Depk1681_90_ms_3_12"/>
+        <div type="Language" lang="Latvian">tadt kluwe</div>
+       <div type="Language" lang="Latin">Adam</div>
+        <div type="Language" lang="Latvian">v. Ewa eckſcham ghre-</div>
+       <lb id="Depk1681_90_ms_3_13"/>
+        <div type="Language" lang="Latvian">keem, vnd tad kluh ta Nahwe vnd Mir-</div>
+       <lb id="Depk1681_90_ms_3_14"/>
+        <div type="Language" lang="Latvian">ſchana eckſcham Paſſaule nahzies, ka</div>
+       <lb id="Depk1681_90_ms_3_15"/>
+        <div type="Language" lang="Latvian">wiſſe zielweku mirſt, vnd daudſz Nelaym,</div>
+       <lb id="Depk1681_90_ms_3_16"/>
+        <div type="Language" lang="Latvian">v. Neweſſelib iſz ſtawet buhſz,</div>
+       <lb id="Depk1681_90_ms_3_17"/>
+        <div type="Language" lang="Latvian">Darram Mehſz tad arridſan ghreku?</div>
+       <lb id="Depk1681_90_ms_3_18"/>
+        <div type="Language" lang="Latvian">Ja pateehſz, Ar wahrdeem, ar dohmaſchan</div>
+       <lb id="Depk1681_90_ms_3_19"/>
+        <div type="Language" lang="Latvian">vnd [wahrd] Darbeem, kattre tee Jbaſche</div>
+       <lb id="Depk1681_90_ms_3_20"/>
+        <div type="Language" lang="Latvian">darritti ghreke ir.</div>
+      </div>
+      <pb n="4"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_4_1"/>
+        <div type="Language" lang="Latvian">No pellnam Mehſz tadt tapehtz arridſan ſtrape,</div>
+       <lb id="Depk1681_90_ms_4_2"/>
+        <div type="Language" lang="Latvian">Ja pateeſz, to Elle, vnd to Muſige paſſuſchen</div>
+       <lb id="Depk1681_90_ms_4_3"/>
+        <div type="Language" lang="Latvian">Najwaydt tadt Neewenu Seehlaſtibu, edder</div>
+       <lb id="Depk1681_90_ms_4_4"/>
+        <div type="Language" lang="Latvian">pie kam ir Seelaſtibu Ja Meckle,</div>
+       <lb id="Depk1681_90_ms_4_5"/>
+        <div type="Language" lang="Latvian">pie Deewu,</div>
+       <lb id="Depk1681_90_ms_4_6"/>
+        <div type="Language" lang="Latvian">Kaſz ir Deews,</div>
+       <lb id="Depk1681_90_ms_4_7"/>
+        <div type="Language" lang="Latvian">Kahſz debbeſzes dſiewo, vnd kluhſt ſauckts</div>
+       <lb id="Depk1681_90_ms_4_8"/>
+        <div type="Language" lang="Latvian">Teews, Dehls, v. ſchwetz gharſz, wehns</div>
+       <lb id="Depk1681_90_ms_4_9"/>
+        <div type="Language" lang="Latvian">wenigs Deews, v. wiſz 3 perſones ir wiſ-</div>
+       <lb id="Depk1681_90_ms_4_10"/>
+        <div type="Language" lang="Latvian">ſpätzig, Schwätz v. Muhſige.</div>
+       <lb id="Depk1681_90_ms_4_11"/>
+        <div type="Language" lang="Latvian">Ka buhſz mums tadt darrit, ka mehſz</div>
+       <lb id="Depk1681_90_ms_4_12"/>
+        <div type="Language" lang="Latvian">pie Deewu Seeleſtibu dabbagam.</div>
+       <lb id="Depk1681_90_ms_4_13"/>
+        <div type="Language" lang="Latvian">1. Mumſz buhſz tohſz Deeſſmitus Deewa</div>
+       <lb id="Depk1681_90_ms_4_14"/>
+        <div type="Language" lang="Latvian">Bauſſlus preckſcham mumſz gempt,</div>
+       <lb id="Depk1681_90_ms_4_15"/>
+        <div type="Language" lang="Latvian">Skaytet, v. tad ſawus ghrekuſz adſit</div>
+       <lb id="Depk1681_90_ms_4_16"/>
+        <div type="Language" lang="Latvian">Mahzitees.</div>
+       <lb id="Depk1681_90_ms_4_17"/>
+        <div type="Language" lang="Latvian">2. Mumſz buhſz, kad mehſz ſawus ghrekus</div>
+       <lb id="Depk1681_90_ms_4_18"/>
+        <div type="Language" lang="Latvian">atſiñuſche,</div>
+      </div>
+      <pb n="5"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_5_1"/>
+        <div type="Language" lang="Latvian">Schuzeet, preckſz Deewu, v. preckſz Baſzni-</div>
+       <lb id="Depk1681_90_ms_5_2"/>
+        <div type="Language" lang="Latvian">zes kungehm, ko Deews ſauwan wehtan</div>
+       <lb id="Depk1681_90_ms_5_3"/>
+        <div type="Language" lang="Latvian">lietzis ir.</div>
+       <lb id="Depk1681_90_ms_5_4"/>
+        <div type="Language" lang="Latvian">3. Kadt tadt mehſz ſawus ghrekus adſdin-</div>
+       <lb id="Depk1681_90_ms_5_5"/>
+        <div type="Language" lang="Latvian">nus eſſam, tadt buhſz mums no ſirdes,</div>
+       <lb id="Depk1681_90_ms_5_6"/>
+        <div type="Language" lang="Latvian">vnd ar Aſſarim abſehlot.</div>
+       <lb id="Depk1681_90_ms_5_7"/>
+        <div type="Language" lang="Latvian">4. Deewu noluckt, v. pie wing pahmeſchan dabbut.</div>
+       <lb id="Depk1681_90_ms_5_8"/>
+        <div type="Language" lang="Latvian">5. Stippre titzet, ka zaur Jeſum Chriſtum</div>
+       <lb id="Depk1681_90_ms_5_9"/>
+        <div type="Language" lang="Latvian">Zehſchan, Nahwe, wiſſus ghrekus pedoht</div>
+       <lb id="Depk1681_90_ms_5_10"/>
+        <div type="Language" lang="Latvian">warret, kad mehſz Deewu tapehtz ludſam.</div>
+       <lb id="Depk1681_90_ms_5_11"/>
+        <div type="Language" lang="Latvian">6. Mumſz buhſz arridſan Muhſu dſiewoſchan</div>
+       <lb id="Depk1681_90_ms_5_12"/>
+        <div type="Language" lang="Latvian">behteret, v. zeeck Spedam eeckſcham kahde</div>
+       <lb id="Depk1681_90_ms_5_13"/>
+        <div type="Language" lang="Latvian">ghreku wairs ne ehkriſt.</div>
+       <lb id="Depk1681_90_ms_5_14"/>
+        <div type="Language" lang="Latvian">7. Muhſeem tuwakeem arridſan peedoht, ar ko wings</div>
+       <lb id="Depk1681_90_ms_5_15"/>
+        <div type="Language" lang="Latvian">muhmſz [ir] lauhne darrigis ir.</div>
+       <lb id="Depk1681_90_ms_5_16"/>
+        <div type="Language" lang="Latvian">Kaſz ir tadt muhſz tuwakaiſz, wiſſe zilweke,</div>
+       <lb id="Depk1681_90_ms_5_17"/>
+        <div type="Language" lang="Latvian">kaſz ir tadt tohſz zilwekus darrigis,</div>
+       <lb id="Depk1681_90_ms_5_18"/>
+        <div type="Language" lang="Latvian">Teews taſz Teehwſz.</div>
+      </div>
+      <pb n="6"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_6_1"/>
+        <div type="Language" lang="Latvian">No koh wings tohſz darrigis,</div>
+       <lb id="Depk1681_90_ms_6_2"/>
+        <div type="Language" lang="Latvian">No wehnu Mahles pieht,</div>
+       <lb id="Depk1681_90_ms_6_3"/>
+        <div type="Language" lang="Latvian">Zaur ko ir wingſz tohſz darigis,</div>
+       <lb id="Depk1681_90_ms_6_4"/>
+        <div type="Language" lang="Latvian">Zaur wingu wiſz ſpehzigu wahrdu,</div>
+       <lb id="Depk1681_90_ms_6_5"/>
+        <div type="Language" lang="Latvian">Ka pehtz ir wings tohſz zilwekus darrigis,</div>
+       <lb id="Depk1681_90_ms_6_6"/>
+        <div type="Language" lang="Latvian">Tapehtz, ka wingems buhſz labprat paterus</div>
+       <lb id="Depk1681_90_ms_6_7"/>
+        <div type="Language" lang="Latvian">ſkaytet, Deewu no ſirdes Mielot, pateickt</div>
+       <lb id="Depk1681_90_ms_6_8"/>
+        <div type="Language" lang="Latvian">vnd ghodet buhſz, ta Mehl buhſz Dewam</div>
+       <lb id="Depk1681_90_ms_6_9"/>
+        <div type="Language" lang="Latvian">ickdeenaſz ſchlawet, tehm Rohkem buhſz</div>
+       <lb id="Depk1681_90_ms_6_10"/>
+        <div type="Language" lang="Latvian">pareiſze ſtradaht, vnd tehm Nabbagehm</div>
+       <lb id="Depk1681_90_ms_6_11"/>
+        <div type="Language" lang="Latvian">allaſieng ko doht, tehm kahgem buhſz lab-</div>
+       <lb id="Depk1681_90_ms_6_12"/>
+        <div type="Language" lang="Latvian">praht Baſznizan eeht, tah Auhſze buhſz</div>
+       <lb id="Depk1681_90_ms_6_13"/>
+        <div type="Language" lang="Latvian">labprat Deewu wahrdu dſirdet vnd klau-</div>
+       <lb id="Depk1681_90_ms_6_14"/>
+        <div type="Language" lang="Latvian">ſiet, vnd no launnu ſargatees,</div>
+       <lb id="Depk1681_90_ms_6_15"/>
+        <div type="Language" lang="Latvian">Ir tadt tee zilweke to darrigus, ack Neh,</div>
+       <lb id="Depk1681_90_ms_6_16"/>
+        <div type="Language" lang="Latvian">tapehtz ir Deews taſz Thäws wingus</div>
+       <lb id="Depk1681_90_ms_6_17"/>
+        <div type="Language" lang="Latvian">nahwes ehdewwis, beht no lehlaſz Säh-</div>
+       <lb id="Depk1681_90_ms_6_18"/>
+        <div type="Language" lang="Latvian">laſtibu atkal atpeſtit lietzis,</div>
+       <lb id="Depk1681_90_ms_6_19"/>
+        <div type="Language" lang="Latvian">Kahſz ir wingus Atpeſtigis, Jeſus Chriſtus.</div>
+      </div>
+      <pb n="7"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_7_1"/>
+        <div type="Language" lang="Latvian">Kaſz ir Jeſus Chriſtus? Deews vnd Ma-</div>
+       <lb id="Depk1681_90_ms_7_2"/>
+        <div type="Language" lang="Latvian">rias Deewlſz, Deews ir wingſz pehtz</div>
+       <lb id="Depk1681_90_ms_7_3"/>
+        <div type="Language" lang="Latvian">to Deewige buhſzſchana, Marrias Deewlſz</div>
+       <lb id="Depk1681_90_ms_7_4"/>
+        <div type="Language" lang="Latvian">ir wings pehtz to zilwezige buhſchan,</div>
+       <lb id="Depk1681_90_ms_7_5"/>
+        <div type="Language" lang="Latvian">Zaur koh ir tad wingus Jeſus Christus At-</div>
+       <lb id="Depk1681_90_ms_7_6"/>
+        <div type="Language" lang="Latvian">peſtigis, Zaur wingu Schwehtu Aſſin, ghrutu</div>
+       <lb id="Depk1681_90_ms_7_7"/>
+        <div type="Language" lang="Latvian">zehſchanu v. mirſchan, wingſz bie tas ſchwehtz</div>
+       <lb id="Depk1681_90_ms_7_8"/>
+        <div type="Language" lang="Latvian">Deewu Dehls, kaſz ne kahdu ghreku bie dar-</div>
+       <lb id="Depk1681_90_ms_7_9"/>
+        <div type="Language" lang="Latvian">rigis, tapehtz wings ar bie Nenoſehzigs.</div>
+       <lb id="Depk1681_90_ms_7_10"/>
+        <div type="Language" lang="Latvian">Warretu mums tadt ne wehnſz zietz Atpeſtit,</div>
+       <lb id="Depk1681_90_ms_7_11"/>
+        <div type="Language" lang="Latvian">Neh, Muhſige ne warretu wehns zielweckſz</div>
+       <lb id="Depk1681_90_ms_7_12"/>
+        <div type="Language" lang="Latvian">pehtz teem ghreken to darrit,</div>
+       <lb id="Depk1681_90_ms_7_13"/>
+        <div type="Language" lang="Latvian">No kam ir wingſz muhms Atpeſtigis,</div>
+       <lb id="Depk1681_90_ms_7_14"/>
+        <div type="Language" lang="Latvian">No elles, vnd no to Muhſige Mohku,</div>
+       <lb id="Depk1681_90_ms_7_15"/>
+        <div type="Language" lang="Latvian">Biegam mehſz tadt eckſchan tahdu Elle, vnd</div>
+       <lb id="Depk1681_90_ms_7_16"/>
+        <div type="Language" lang="Latvian">paſuhſchan, Jeb mehſz laizige wehl ne-</div>
+       <lb id="Depk1681_90_ms_7_17"/>
+        <div type="Language" lang="Latvian">biegam, tadt mehſz tock wiſſe pehtz to Mirſchan</div>
+       <lb id="Depk1681_90_ms_7_18"/>
+        <div type="Language" lang="Latvian">tur eckſz Kluhtem, kad ne buhtu mums</div>
+       <lb id="Depk1681_90_ms_7_19"/>
+        <div type="Language" lang="Latvian">Jeſus Chriſtus Atpeſtigis.</div>
+      </div>
+      <pb n="8"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_8_1"/>
+        <div type="Language" lang="Latvian">Koh mehſz tadt eſſam tam Kungam Jeſu tapehtz</div>
+       <lb id="Depk1681_90_ms_8_2"/>
+        <div type="Language" lang="Latvian">paradan darrit, Mehſz eſſam paradan win-</div>
+       <lb id="Depk1681_90_ms_8_3"/>
+        <div type="Language" lang="Latvian">gam tapehtz pateickt, ſchlawet, kalpot,</div>
+       <lb id="Depk1681_90_ms_8_4"/>
+        <div type="Language" lang="Latvian">vnd no wiſſem ghrekeem Atſtaht, ka tas</div>
+       <lb id="Depk1681_90_ms_8_5"/>
+        <div type="Language" lang="Latvian">Schwetz Gahrs no mumſz neatſtat war,</div>
+       <lb id="Depk1681_90_ms_8_6"/>
+        <div type="Language" lang="Latvian">Kaſz ir Deews tas ſchweteiſz ghars,</div>
+       <lb id="Depk1681_90_ms_8_7"/>
+        <div type="Language" lang="Latvian">Wingſz ir taſz treſchaiſz Jhpaſchibas, eckſchan</div>
+       <lb id="Depk1681_90_ms_8_8"/>
+        <div type="Language" lang="Latvian">Dewige buhſzſchana, kaſz mumſz ſchwe-</div>
+       <lb id="Depk1681_90_ms_8_9"/>
+        <div type="Language" lang="Latvian">tus dar, ka mehſz zaur Deewu Speck,</div>
+       <lb id="Depk1681_90_ms_8_10"/>
+        <div type="Language" lang="Latvian">vnd klat ſtawiſchan dſiewoht warram,</div>
+       <lb id="Depk1681_90_ms_8_11"/>
+        <div type="Language" lang="Latvian">Atdar muhſu prahtus, ka mehſz Deewu,</div>
+       <lb id="Depk1681_90_ms_8_12"/>
+        <div type="Language" lang="Latvian">vnd wingu ſchwehtu ghribbeſchan atſiet [war-</div>
+       <lb id="Depk1681_90_ms_8_13"/>
+        <div type="Language" lang="Latvian">ram], vnd tadt arridſan ſchwetu dſiewot,</div>
+       <lb id="Depk1681_90_ms_8_14"/>
+        <div type="Language" lang="Latvian">ka ſchiſz Schwetz ghars ne no mumſz Atſtah,</div>
+       <lb id="Depk1681_90_ms_8_15"/>
+        <div type="Language" lang="Latvian">zittadt mehſz muhſige paſuhſt buhtam,</div>
+       <lb id="Depk1681_90_ms_8_16"/>
+        <div type="Language" lang="Latvian">Je wingſz nee buht ar ſauwu ſchwetu gharru</div>
+       <lb id="Depk1681_90_ms_8_17"/>
+        <div type="Language" lang="Latvian">eckſchan muhms ſtradigis.</div>
+       <lb id="Depk1681_90_ms_8_18"/>
+        <div type="Language" lang="Latvian">Ka warram mehſz patturret to ſchwetu</div>
+       <lb id="Depk1681_90_ms_8_19"/>
+        <div type="Language" lang="Latvian">Gharru,</div>
+      </div>
+      <pb n="9"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_9_1"/>
+        <div type="Language" lang="Latvian">Kadt Mehſz lapprat patarus ſkaytem, vnd</div>
+       <lb id="Depk1681_90_ms_9_2"/>
+        <div type="Language" lang="Latvian">ſchwetu dſiewogam,</div>
+       <lb id="Depk1681_90_ms_9_3"/>
+        <div type="Language" lang="Latvian">Ka buhſz mums Skaytet,</div>
+       <lb id="Depk1681_90_ms_9_4"/>
+        <div type="Language" lang="Latvian">Muhſu thews eckſchan Debbes, ſchwetitz top</div>
+       <lb id="Depk1681_90_ms_9_5"/>
+        <div type="Language" lang="Latvian">tauws wahrtz</div>
+       <div type="Language" lang="Latin">etc.</div>
+       <lb id="Depk1681_90_ms_9_6"/>
+        <div type="Language" lang="Latvian">Ka pehtz Skayti tu, tauſſs prahtz no teck</div>
+       <lb id="Depk1681_90_ms_9_7"/>
+        <div type="Language" lang="Latvian">ka eckſchan debbes, ta arridſan wirſon ſem̃es,</div>
+       <lb id="Depk1681_90_ms_9_8"/>
+        <div type="Language" lang="Latvian">Tapehtz, ka meſz beeſz Deewu prahtu Ne Necke</div>
+       <lb id="Depk1681_90_ms_9_9"/>
+        <div type="Language" lang="Latvian">warram darrit, beht eckſchan wiſſam Muhſam</div>
+       <lb id="Depk1681_90_ms_9_10"/>
+        <div type="Language" lang="Latvian">Behdam, buhſz mums Muhſu praht, Eckſchan</div>
+       <lb id="Depk1681_90_ms_9_11"/>
+        <div type="Language" lang="Latvian">Deewu prahtu padohtees, wingſz labbagk</div>
+       <lb id="Depk1681_90_ms_9_12"/>
+        <div type="Language" lang="Latvian">ſin, kaſz mums pee Mehſas vnd Dweſzeles</div>
+       <lb id="Depk1681_90_ms_9_13"/>
+        <div type="Language" lang="Latvian">wayag edder lab [ir] v. ſeeligs ir.</div>
+       <lb id="Depk1681_90_ms_9_14"/>
+        <div type="Language" lang="Latvian">Kapehtz buhſz mums pehtz to deniſzku Mayſe</div>
+       <lb id="Depk1681_90_ms_9_15"/>
+        <div type="Language" lang="Latvian">luckt, Tapehtz, ka behs Deewu ſchwetib,</div>
+       <lb id="Depk1681_90_ms_9_16"/>
+        <div type="Language" lang="Latvian">mehſz, ar muhſu ſpeck vnd darb ne necke</div>
+       <lb id="Depk1681_90_ms_9_17"/>
+        <div type="Language" lang="Latvian">darrit warram, Mums buhſz Deewu luhkt,</div>
+       <lb id="Depk1681_90_ms_9_18"/>
+        <div type="Language" lang="Latvian">ka wingſz muhſu barrib v. dſeren ſchwetit</div>
+       <lb id="Depk1681_90_ms_9_19"/>
+        <div type="Language" lang="Latvian">grib, v. mumſz weſſelieb doht, ka mehſz</div>
+       <lb id="Depk1681_90_ms_9_20"/>
+        <div type="Language" lang="Latvian">ar muhſu darbu ſauwu Mayſiet pelnit war-</div>
+       <lb id="Depk1681_90_ms_9_21"/>
+        <div type="Language" lang="Latvian">ram</div>
+      </div>
+      <pb n="10"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_10_1"/>
+        <div type="Language" lang="Latvian">Ka pehtz luhdſam mehſz, ne weedt mumſz</div>
+       <lb id="Depk1681_90_ms_10_2"/>
+        <div type="Language" lang="Latvian">Eckſchan kahrdienaſchan.</div>
+       <lb id="Depk1681_90_ms_10_3"/>
+        <div type="Language" lang="Latvian">Tapehtz, ka tas wehls mumſz to ghreku pehtz,</div>
+       <lb id="Depk1681_90_ms_10_4"/>
+        <div type="Language" lang="Latvian">kahrdina, vnd no Deewu Sälaſtibu abbeh-</div>
+       <lb id="Depk1681_90_ms_10_5"/>
+        <div type="Language" lang="Latvian">dinat v. bailigu darrit grib, ka Deews</div>
+       <lb id="Depk1681_90_ms_10_6"/>
+        <div type="Language" lang="Latvian">wingam prettie ſtawet, v. mums ſpecku</div>
+       <lb id="Depk1681_90_ms_10_7"/>
+        <div type="Language" lang="Latvian">doht tam wellam arridſan prettie ſtahwet war-</div>
+       <lb id="Depk1681_90_ms_10_8"/>
+        <div type="Language" lang="Latvian">ram, zaur Deewu Specku./.</div>
+       <lb id="Depk1681_90_ms_10_9"/>
+        <div type="Language" lang="Latvian">Ka pehtz luhdſam mehſz, Atpeſty mumſz no</div>
+       <lb id="Depk1681_90_ms_10_10"/>
+        <div type="Language" lang="Latvian">to Launu,</div>
+       <lb id="Depk1681_90_ms_10_11"/>
+        <div type="Language" lang="Latvian">Tahpehtz, ka mumſz Deews, no ſcho Nicknu</div>
+       <lb id="Depk1681_90_ms_10_12"/>
+        <div type="Language" lang="Latvian">paſauhl, kad wingam patick ſeelige at-</div>
+       <lb id="Depk1681_90_ms_10_13"/>
+        <div type="Language" lang="Latvian">peſtit, vnd eckſchan Debbes ehgempt, vnd</div>
+       <lb id="Depk1681_90_ms_10_14"/>
+        <div type="Language" lang="Latvian">zauhr to ſchwtu kruſtibu no lehlas ſähla-</div>
+       <lb id="Depk1681_90_ms_10_15"/>
+        <div type="Language" lang="Latvian">ſtibu vhſzgempt ghrib.</div>
+       <lb id="Depk1681_90_ms_10_16"/>
+        <div type="Language" lang="Latvian">Kahdſ ſpehkſz ir tam kruſtibam,</div>
+       <lb id="Depk1681_90_ms_10_17"/>
+        <div type="Language" lang="Latvian">Wings dar muhms Skiehſt no wiſzem</div>
+       <lb id="Depk1681_90_ms_10_18"/>
+        <div type="Language" lang="Latvian">ghrekeem, eekſchan ſpecku to dargu</div>
+       <lb id="Depk1681_90_ms_10_19"/>
+        <div type="Language" lang="Latvian">Aſſin Jeſu Chriſty,</div>
+      </div>
+      <pb n="11"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_11_1"/>
+        <div type="Language" lang="Latvian">Ka zaur vhdene ſiemot ir, v. ka mehſz paprx</div>
+       <lb id="Depk1681_90_ms_11_2"/>
+        <div type="Language" lang="Latvian">pagan bigam, kattrem pie Dewu nekahdu</div>
+       <lb id="Depk1681_90_ms_11_3"/>
+        <div type="Language" lang="Latvian">dallu ir, tadt ehtam mehſz zaur to ſchwetu</div>
+       <lb id="Depk1681_90_ms_11_4"/>
+        <div type="Language" lang="Latvian">kruſtibu ar Deewu, [vnd] eckſz wenu buh-</div>
+       <lb id="Depk1681_90_ms_11_5"/>
+        <div type="Language" lang="Latvian">ſanu, vnd topam wingu behrnus vhſz-</div>
+       <lb id="Depk1681_90_ms_11_6"/>
+        <div type="Language" lang="Latvian">gempt muhſige.</div>
+       <lb id="Depk1681_90_ms_11_7"/>
+        <div type="Language" lang="Latvian">Ko buhß mumſz Deewam par to darrit,</div>
+       <lb id="Depk1681_90_ms_11_8"/>
+        <div type="Language" lang="Latvian">ka mehſz wingam eckſchan to Schwetu Chriſtibu</div>
+       <lb id="Depk1681_90_ms_11_9"/>
+        <div type="Language" lang="Latvian">abſoligam, tam wellam v. wiſſus ghre-</div>
+       <lb id="Depk1681_90_ms_11_10"/>
+        <div type="Language" lang="Latvian">kus Atſtaht, vnd Dewu bigige dſiewot</div>
+       <lb id="Depk1681_90_ms_11_11"/>
+        <div type="Language" lang="Latvian">vnd mums par wiſſem ghrekem ſargatees,</div>
+       <lb id="Depk1681_90_ms_11_12"/>
+        <div type="Language" lang="Latvian">ka mehſz muhſu Abſoliſchanu pret Dewu</div>
+       <lb id="Depk1681_90_ms_11_13"/>
+        <div type="Language" lang="Latvian">nee Atſtagam.</div>
+       <lb id="Depk1681_90_ms_11_14"/>
+        <div type="Language" lang="Latvian">Kaſz ir tadt to kruſtibu pahzehles,</div>
+       <lb id="Depk1681_90_ms_11_15"/>
+        <div type="Language" lang="Latvian">Deews pahtz, ar ſchem wahrdeem,</div>
+       <lb id="Depk1681_90_ms_11_16"/>
+        <div type="Language" lang="Latvian">Eita eckſchan wiſſu paſaul Mahzeet,</div>
+       <lb id="Depk1681_90_ms_11_17"/>
+        <div type="Language" lang="Latvian">wiſzus laudes, v. kruſtiget eckſchan to</div>
+       <lb id="Depk1681_90_ms_11_18"/>
+        <div type="Language" lang="Latvian">wahrdu deewu to thäwa ta Dehlu vnd</div>
+       <lb id="Depk1681_90_ms_11_19"/>
+        <div type="Language" lang="Latvian">to ſchwetu gharru.</div>
+      </div>
+      <pb n="12"/>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_12_1"/>
+        <div type="Language" lang="Latvian">Ko dar tadt tah Chriſtibu tick Späzig,</div>
+       <lb id="Depk1681_90_ms_12_2"/>
+        <div type="Language" lang="Latvian">Ka mehſz tickey vhden ween redſam,</div>
+       <lb id="Depk1681_90_ms_12_3"/>
+        <div type="Language" lang="Latvian">Vhſz Deewu puſzes ir Deewu wahrdſz,</div>
+       <lb id="Depk1681_90_ms_12_4"/>
+        <div type="Language" lang="Latvian">Kaſz lieds pie to vhden ir, vnd vhſz [puhſz]</div>
+       <lb id="Depk1681_90_ms_12_5"/>
+        <div type="Language" lang="Latvian">muhſz puſzes ir ta titzib.</div>
+       <lb id="Depk1681_90_ms_12_6"/>
+        <div type="Language" lang="Latvian">Beet kadt weenſz Chriſtits zillwäx kaſz</div>
+       <lb id="Depk1681_90_ms_12_7"/>
+        <div type="Language" lang="Latvian">ſauwus ghrekus Atſatzigis jeb noludſis,</div>
+       <lb id="Depk1681_90_ms_12_8"/>
+        <div type="Language" lang="Latvian">Atkal eckſz ghrekem kriet, nee war</div>
+       <lb id="Depk1681_90_ms_12_9"/>
+        <div type="Language" lang="Latvian">wingſz tadt Atkal Sälaſtibu v. pedoſchan</div>
+       <lb id="Depk1681_90_ms_12_10"/>
+        <div type="Language" lang="Latvian">dabbuit.</div>
+       <lb id="Depk1681_90_ms_12_11"/>
+        <div type="Language" lang="Latvian">Ja, Bett wingam nee buhſz tieſche vhſz</div>
+       <lb id="Depk1681_90_ms_12_12"/>
+        <div type="Language" lang="Latvian">Deewu Sälaſtibu atkal ghrekoht, bet</div>
+       <lb id="Depk1681_90_ms_12_13"/>
+        <div type="Language" lang="Latvian">Ja wingſz no ſauwu wayibu Ehteck, ſau-</div>
+       <lb id="Depk1681_90_ms_12_14"/>
+        <div type="Language" lang="Latvian">wus ghrekus ſirdige abbedena Dewu</div>
+       <lb id="Depk1681_90_ms_12_15"/>
+        <div type="Language" lang="Latvian">no luhze, Chriſty Mohkaſz ar ſauwu</div>
+       <lb id="Depk1681_90_ms_12_16"/>
+        <div type="Language" lang="Latvian">tizibu atmin, tad Deews Mums no</div>
+       <lb id="Depk1681_90_ms_12_17"/>
+        <div type="Language" lang="Latvian">lehlas Sähleſtibu Atkal vhſzgem.|.</div>
+       <lb id="Depk1681_90_ms_12_18"/>
+        <div type="Language" lang="Latvian">Bet vhſz to wieſze, par Ehſtiproſchan Muhſu tizibu</div>
+       <lb id="Depk1681_90_ms_12_19"/>
+        <div type="Language" lang="Latvian">tas Kungs Jeſus Chriſtus ſauwu Schwetu Meeſu</div>
+       <lb id="Depk1681_90_ms_12_20"/>
+        <div type="Language" lang="Latvian">vnd Aſſini eckſchan to Schwetu wacker Ehden</div>
+       <lb id="Depk1681_90_ms_12_21"/>
+        <div type="Language" lang="Latvian">vnd Dſeren, Ehſtadigis v. pahzehles ir</div>
+      </div>
+      <pb n="13"/><sic>14</sic>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_13{14}_1"/>
+        <div type="Language" lang="Latvian">Ko palietz Tahde Ehſchan v. Dſerſchan,</div>
+       <lb id="Depk1681_90_ms_13{14}_2"/>
+        <div type="Language" lang="Latvian">wings palietz mumſz tapehtz, ka mehſz</div>
+       <lb id="Depk1681_90_ms_13{14}_3"/>
+        <div type="Language" lang="Latvian">zaur to droſchu warram buht, ka mumſz</div>
+       <lb id="Depk1681_90_ms_13{14}_4"/>
+        <div type="Language" lang="Latvian">patees wieſze ghrecke peedohte ir, vnd Mehſz</div>
+       <lb id="Depk1681_90_ms_13{14}_5"/>
+        <div type="Language" lang="Latvian">muhſchige ſchwet topam,</div>
+       <lb id="Depk1681_90_ms_13{14}_6"/>
+        <div type="Language" lang="Latvian">Palietz tadt taſz wiſſeem Zilweckeem,</div>
+       <lb id="Depk1681_90_ms_13{14}_7"/>
+        <div type="Language" lang="Latvian">Neh, Bett wehn them, no ghreckem Adſtad-</div>
+       <lb id="Depk1681_90_ms_13{14}_8"/>
+        <div type="Language" lang="Latvian">teem, kaſz ſew zaur ſierdige Schelumu</div>
+       <lb id="Depk1681_90_ms_13{14}_9"/>
+        <div type="Language" lang="Latvian">par ſauweem darritem ghreckem Dee-</div>
+       <lb id="Depk1681_90_ms_13{14}_10"/>
+        <div type="Language" lang="Latvian">wam abſohligis wahirs Nehdarrit, v. Ar,</div>
+       <lb id="Depk1681_90_ms_13{14}_11"/>
+        <div type="Language" lang="Latvian">Ar ſauweem Tuwakeem lab ſader-</div>
+       <lb id="Depk1681_90_ms_13{14}_12"/>
+        <div type="Language" lang="Latvian">ret, v. kaſz to Nehdar, tas to ſchwetu</div>
+       <lb id="Depk1681_90_ms_13{14}_13"/>
+        <div type="Language" lang="Latvian">wacker Ehdeen ſajem ſauwan Muhſie-</div>
+       <lb id="Depk1681_90_ms_13{14}_14"/>
+        <div type="Language" lang="Latvian">gan paſuhſzſchanan, ta pehtz ick wehns</div>
+       <lb id="Depk1681_90_ms_13{14}_15"/>
+        <div type="Language" lang="Latvian">ſeew lab vhſzluhko, ka wings, Ne ka-</div>
+       <lb id="Depk1681_90_ms_13{14}_16"/>
+        <div type="Language" lang="Latvian">weens Zuhku tur klaht eet, Beht</div>
+      </div>
+      <pb n="14"/><sic>15</sic>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_14{15}_1"/>
+        <div type="Language" lang="Latvian">ſauwus ghrekus pa precks abraud, Deewam</div>
+       <lb id="Depk1681_90_ms_14{15}_2"/>
+        <div type="Language" lang="Latvian">Noluhtz, vnd ſauwu Dſiewoſchan behterey.</div>
+       <lb id="Depk1681_90_ms_14{15}_3"/>
+        <div type="Language" lang="Latvian">Jr tadt ta pateeſu redſame Meeſz vnd Aſſin Jeſu</div>
+       <lb id="Depk1681_90_ms_14{15}_4"/>
+        <div type="Language" lang="Latvian">Chriſty, ko mehſz eckſchan to ſchwetu wacker=</div>
+       <lb id="Depk1681_90_ms_14{15}_5"/>
+        <div type="Language" lang="Latvian">Ehden baudam, Jeb Jäm̃am. Ja.</div>
+       <lb id="Depk1681_90_ms_14{15}_6"/>
+        <div type="Language" lang="Latvian">Abpakſchan to Mayſe, vnd ar to Mayſe, Jee-</div>
+       <lb id="Depk1681_90_ms_14{15}_7"/>
+        <div type="Language" lang="Latvian">mam Mehſz to pateſu Mehſzu Jeſu Chriſty, vnd</div>
+       <lb id="Depk1681_90_ms_14{15}_8"/>
+        <div type="Language" lang="Latvian">ar Appakſchan to wienu to patteſu Aſſin</div>
+       <lb id="Depk1681_90_ms_14{15}_9"/>
+        <div type="Language" lang="Latvian">Jeſu Chriſty, vhſz weein tadu paſchleptu</div>
+       <lb id="Depk1681_90_ms_14{15}_10"/>
+        <div type="Language" lang="Latvian">wieſzu, ko Mehſ ar muhſu pratu neh ap-</div>
+       <lb id="Depk1681_90_ms_14{15}_11"/>
+        <div type="Language" lang="Latvian">kampt warram, bett kadt taſz Kungſz</div>
+       <lb id="Depk1681_90_ms_14{15}_12"/>
+        <div type="Language" lang="Latvian">Jeſus pahtz Ehſtadigis, vnd vhſz ſauwu</div>
+       <lb id="Depk1681_90_ms_14{15}_13"/>
+        <div type="Language" lang="Latvian">pemiñiſchan pawehlegis, vnd tam paſcham</div>
+       <lb id="Depk1681_90_ms_14{15}_14"/>
+        <div type="Language" lang="Latvian">to ſpeck padohtz, vnd pelickts ir, tadt mums</div>
+       <lb id="Depk1681_90_ms_14{15}_15"/>
+        <div type="Language" lang="Latvian">buhſz arridſan weenteſige tietzet, muhms</div>
+       <lb id="Depk1681_90_ms_14{15}_16"/>
+        <div type="Language" lang="Latvian">Appackſchan to Klauſieſchan Chriſto ween-</div>
+       <lb id="Depk1681_90_ms_14{15}_17"/>
+        <div type="Language" lang="Latvian">teeſige palaiſties:. NB:</div>
+      </div>
+      <pb n="15"/><sic>13</sic>
+      <div type="Paragraph">
+       <lb id="Depk1681_90_ms_15{13}_1"/>
+        <div type="Language" lang="Latvian">NB: Suhze tu tadt tam Zielwekam Jep Baſz-</div>
+       <lb id="Depk1681_90_ms_15{13}_2"/>
+        <div type="Language" lang="Latvian">nitz Kungam ween, tauwus ghrekus, Neh,</div>
+       <lb id="Depk1681_90_ms_15{13}_3"/>
+        <div type="Language" lang="Latvian">Dewam paſcham, taſz pahtz tur klaht ir,</div>
+       <lb id="Depk1681_90_ms_15{13}_4"/>
+        <div type="Language" lang="Latvian">Vnd wieſzu ſin vnd redſz, Ja muhſu Sirdt</div>
+       <lb id="Depk1681_90_ms_15{13}_5"/>
+        <div type="Language" lang="Latvian">vnd praht abſinnas.</div>
+       <lb id="Depk1681_90_ms_15{13}_6"/>
+        <div type="Language" lang="Latvian">Kapehtz buhſz tadt tam Baſznitz kungam</div>
+       <lb id="Depk1681_90_ms_15{13}_7"/>
+        <div type="Language" lang="Latvian">ſuhzet.</div>
+       <lb id="Depk1681_90_ms_15{13}_8"/>
+        <div type="Language" lang="Latvian">Tapehtz ka Deews ſauwu pehtz deelu,</div>
+       <lb id="Depk1681_90_ms_15{13}_9"/>
+        <div type="Language" lang="Latvian">zilwekus eehzelees ka mumſz buhſz zieck</div>
+       <lb id="Depk1681_90_ms_15{13}_10"/>
+        <div type="Language" lang="Latvian">daudſ ſpehdams muhſus ghrekuſz iſzſatzit.</div>
+       <lb id="Depk1681_90_ms_15{13}_11"/>
+        <div type="Language" lang="Latvian">Jr tadt Deews ar, teem <corr>Baſnizkungem</corr><sic>Baſnizkugem</sic></div>
+       <lb id="Depk1681_90_ms_15{13}_12"/>
+        <div type="Language" lang="Latvian">to warru dewwes ghrekus pedoht, Jeb</div>
+       <lb id="Depk1681_90_ms_15{13}_13"/>
+        <div type="Language" lang="Latvian">ghrekus paturret, Ja.</div>
+       <lb id="Depk1681_90_ms_15{13}_14"/>
+        <div type="Language" lang="Latvian">Tha Sacke taſz Kungs Jeſus vhſz ſauweem Mah-</div>
+       <lb id="Depk1681_90_ms_15{13}_15"/>
+        <div type="Language" lang="Latvian">zeklem, Jemeeta to Schwetu <corr>gharru</corr><sic>ghrru</sic>,</div>
+       <lb id="Depk1681_90_ms_15{13}_16"/>
+        <div type="Language" lang="Latvian">Kattrem Juhſz tohſz ghrekus pedohſeta, teem</div>
+       <lb id="Depk1681_90_ms_15{13}_17"/>
+        <div type="Language" lang="Latvian">ir tee pedoht, vnd kattrem Juhſz tohs patur-</div>
+       <lb id="Depk1681_90_ms_15{13}_18"/>
+        <div type="Language" lang="Latvian">refet, tem ir tee paturret: vnd Atkal</div>
+       <lb id="Depk1681_90_ms_15{13}_19"/>
+        <div type="Language" lang="Latvian">vhſz Peter ſagcke wings Eſz grib tauw tohſz Atſchlägus tahſz</div>
+       <lb id="Depk1681_90_ms_15{13}_20"/>
+        <div type="Language" lang="Latvian">deebbeſzis Doht.</div>
+      </div>
+    </body>
+   </text>
+  </TEI>
+  <TEI>
+   <teiHeader>
+    <fileDesc id="Ench1586">
+     <sourceDesc>
+      <author>nezināms</author>
+      <title>Enchiridion, 1586</title>
+      <date>1586</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <domain type="religious">Garīgie teksti; katehisms</domain>
+    </profileDesc>
+   </teiHeader>
+   <text>
+    <body>
+      <pb n="EB"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_1"/>
+        <div type="Language" lang="Latvian">Sczerſchanne / Drebes / Kurpes / Namme /</div>
+       <lb id="Ench1586_EB_2"/>
+        <div type="Language" lang="Latvian">Muyſche / Tyrumme / Lope / Noude / Paddome /</div>
+       <lb id="Ench1586_EB_3"/>
+        <div type="Language" lang="Latvian">wens labs loulätz Droux / Labbe Bherne / labbe</div>
+       <lb id="Ench1586_EB_4"/>
+        <div type="Language" lang="Latvian">Szaime / vnde petitczamme Wuerßeneke /</div>
+       <lb id="Ench1586_EB_5"/>
+        <div type="Language" lang="Latvian">wena labba Waldiſchenne / labs Gayß / Mers /</div>
+       <lb id="Ench1586_EB_6"/>
+        <div type="Language" lang="Latvian">Weſſelibe Kounige / czywoſchenne / Gode / Lab-</div>
+       <lb id="Ench1586_EB_7"/>
+        <div type="Language" lang="Latvian">be drouge petitczame Kaymine / vnde ta pro-</div>
+       <lb id="Ench1586_EB_8"/>
+        <div type="Language" lang="Latvian">iam.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_9"/>
+        <div type="Language" lang="Latvian">Ta Peketa Luuckſchenne.</div>
+       <lb id="Ench1586_EB_10"/>
+        <div type="Language" lang="Latvian">Vnde pammeth mums muße Par-</div>
+       <lb id="Ench1586_EB_11"/>
+        <div type="Language" lang="Latvian">rade kha mhes pammettam muſzims</div>
+       <lb id="Ench1586_EB_12"/>
+        <div type="Language" lang="Latvian">Parradenekims.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_13"/>
+        <div type="Language" lang="Latvian">Kas gir tas? 		Adbilde.</div>
+       <lb id="Ench1586_EB_14"/>
+        <div type="Language" lang="Latvian">Mhes luudtczam exkan ſchäs Luuckſchen-</div>
+       <lb id="Ench1586_EB_15"/>
+        <div type="Language" lang="Latvian">nes / ka tas Thews exkan Debbes / nhe grib vs</div>
+       <lb id="Ench1586_EB_16"/>
+        <div type="Language" lang="Latvian">lukooth Mußes / Greekes / vnd thö peetcz / tha-</div>
+       <lb id="Ench1586_EB_17"/>
+        <div type="Language" lang="Latvian">de Luuckſchenne mums aysleckt / äſto mhes nee</div>
+       <lb id="Ench1586_EB_18"/>
+        <div type="Language" lang="Latvian">eßem <corr>to</corr><sic>toczenige</sic> czenige / ko mhes luudtczam / nedtcz</div>
+       <lb id="Ench1586_EB_19"/>
+        <div type="Language" lang="Latvian">eßem arrydtczan nopelniſche / Beth thas grib</div>
+       <lb id="Ench1586_EB_20"/>
+        <div type="Language" lang="Latvian">to mums <corr>wueſſenotal</corr><sic>wneſſenotal</sic> aran Szeeleſtibe doth /</div>
+       <lb id="Ench1586_EB_21"/>
+        <div type="Language" lang="Latvian">Aeſto mhes greekoyam deniſke doudtcze / vnde</div>
+       <lb id="Ench1586_EB_22"/>
+        <div type="Language" lang="Latvian">nopelnam nhe neke ka Szodibe wen / Tha grib-</div>
+       <lb id="Ench1586_EB_23"/>
+        <div type="Language" lang="Latvian">bam mhes arridtczan to atkal no Szyrde lab-</div>
+      </div>
+      <pb n="E2A"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2A_1"/>
+        <div type="Language" lang="Latvian">prath pammeeſt / vnde labbe darryt / tims / kattre</div>
+       <lb id="Ench1586_E2A_2"/>
+        <div type="Language" lang="Latvian">ßoew prettibe mums apgrekoyas.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2A_3"/>
+        <div type="Language" lang="Latvian">Ta Szeſta Luuckſchenne.</div>
+       <lb id="Ench1586_E2A_4"/>
+        <div type="Language" lang="Latvian">Vnde nhe wedde mums exkan Kär-</div>
+       <lb id="Ench1586_E2A_5"/>
+        <div type="Language" lang="Latvian">denaſchenne.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2A_6"/>
+        <div type="Language" lang="Latvian">Kas gir tas?		Adbilde.</div>
+       <lb id="Ench1586_E2A_7"/>
+        <div type="Language" lang="Latvian">Dews nee kärdena neewene / beth mhes</div>
+       <lb id="Ench1586_E2A_8"/>
+        <div type="Language" lang="Latvian">luudtczam exkan ſchäs Luuckſchennes / ka mums</div>
+       <lb id="Ench1586_E2A_9"/>
+        <div type="Language" lang="Latvian">Dews grib paglabt vnde vſthurreet / ka mums</div>
+       <lb id="Ench1586_E2A_10"/>
+        <div type="Language" lang="Latvian">tas Whelns ta Paſſoule vnde mußa Meßa nhe</div>
+       <lb id="Ench1586_E2A_11"/>
+        <div type="Language" lang="Latvian">pewil vnde nhe wadda exkan Netitczibe Jßa-</div>
+       <lb id="Ench1586_E2A_12"/>
+        <div type="Language" lang="Latvian">miſſchenne / vnde czitte lele koune vnde greeke /</div>
+       <lb id="Ench1586_E2A_13"/>
+        <div type="Language" lang="Latvian">vnde Ja mhes ar to kärdenate topam / ka mhes</div>
+       <lb id="Ench1586_E2A_14"/>
+        <div type="Language" lang="Latvian">peetcz gallige vs warram / vnde to Czixteſchen-</div>
+       <lb id="Ench1586_E2A_15"/>
+        <div type="Language" lang="Latvian">ne patthurram.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2A_16"/>
+        <div type="Language" lang="Latvian">Ta Septita Luuckſchenne.</div>
+       <lb id="Ench1586_E2A_17"/>
+        <div type="Language" lang="Latvian">Beth atpeſty mums no to Loune.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2A_18"/>
+        <div type="Language" lang="Latvian">Ka noteke tas?		Adbilde.</div>
+       <lb id="Ench1586_E2A_19"/>
+        <div type="Language" lang="Latvian">Mhes Luudtczam exkan ſchäs Luuckſchen-</div>
+       <lb id="Ench1586_E2A_20"/>
+        <div type="Language" lang="Latvian">nes / ka mums tas Thews exkan Debbes no</div>
+       <lb id="Ench1586_E2A_21"/>
+        <div type="Language" lang="Latvian">wueſſade loune thäs Meßes vnde thäs Dwhe-</div>
+      </div>
+      <pb n="E2B"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2B_1"/>
+        <div type="Language" lang="Latvian">ſelles / to Paddome vnd to Gode grib atpeſtyt /</div>
+       <lb id="Ench1586_E2B_2"/>
+        <div type="Language" lang="Latvian">Vnd peetcz kad mußa Stunde nake wene ßeli-</div>
+       <lb id="Ench1586_E2B_3"/>
+        <div type="Language" lang="Latvian">ge galle doth / vnd ar Szeeleſtibe no ſcho bhedi-</div>
+       <lb id="Ench1586_E2B_4"/>
+        <div type="Language" lang="Latvian">ge Paſſoule / py ßoew yempt exkan to Debbes.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2B_5"/>
+        <div type="Language" lang="Latvian">AMEN.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2B_6"/>
+        <div type="Language" lang="Latvian">Kas gir tas?		Adbilde.</div>
+       <lb id="Ench1586_E2B_7"/>
+        <div type="Language" lang="Latvian">Ka man buus teſcham titczeeth / thade Luuck-</div>
+       <lb id="Ench1586_E2B_8"/>
+        <div type="Language" lang="Latvian">ſchenne gir tham Thewam exkan Debbes pa-</div>
+       <lb id="Ench1586_E2B_9"/>
+        <div type="Language" lang="Latvian">prate / vnd paklouſite / äſto thas gir mums patcz</div>
+       <lb id="Ench1586_E2B_10"/>
+        <div type="Language" lang="Latvian">pawheleis tha luuckt / vnde peßatczys / ka thas</div>
+       <lb id="Ench1586_E2B_11"/>
+        <div type="Language" lang="Latvian">mums grib packlouſyt. Amen / Amen / tas dhewe</div>
+       <lb id="Ench1586_E2B_12"/>
+        <div type="Language" lang="Latvian">Ja / Ja / tam buhs ta notickt.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2B_13"/>
+       <div type="Language" lang="German">Vom Sacrament der heili-</div>
+       <lb id="Ench1586_E2B_14"/>
+       <div type="Language" lang="German">gen Tauffe.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2B_15"/>
+        <div type="Language" lang="Latvian">No to ſweete Chruſtibe / ka to patte</div>
+       <lb id="Ench1586_E2B_16"/>
+        <div type="Language" lang="Latvian">wenam Namme Thewam ßouwe</div>
+       <lb id="Ench1586_E2B_17"/>
+        <div type="Language" lang="Latvian">Szaime wenkärtige preſchan thur-</div>
+       <lb id="Ench1586_E2B_18"/>
+        <div type="Language" lang="Latvian">reet / vnd maetczy buhs.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E2B_19"/>
+        <div type="Language" lang="Latvian">Pirman Kärtan.</div>
+       <lb id="Ench1586_E2B_20"/>
+        <div type="Language" lang="Latvian">Kas gir ta <corr>Chruſtibe</corr><sic>Chruſt ibe</sic>?		Adbilde.</div>
+      </div>
+      <pb n="E3A"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3A_1"/>
+        <div type="Language" lang="Latvian">Ta Chruſtibe nhe gir wens wenteſyx Vdens /</div>
+       <lb id="Ench1586_E3A_2"/>
+        <div type="Language" lang="Latvian">Beth ta gir tas Vdens / katters exkan Dewe</div>
+       <lb id="Ench1586_E3A_3"/>
+        <div type="Language" lang="Latvian">Boußle ethwertz / vnd ar Dewe Wärde ßaſſetz</div>
+       <lb id="Ench1586_E3A_4"/>
+        <div type="Language" lang="Latvian">gir.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3A_5"/>
+        <div type="Language" lang="Latvian">Katteers gir tad taatcz Dewe Wärdtcz? 	Adbilde.</div>
+       <lb id="Ench1586_E3A_6"/>
+        <div type="Language" lang="Latvian">Kur muße Kunx Chriſtus treße Matthei</div>
+       <lb id="Ench1586_E3A_7"/>
+        <div type="Language" lang="Latvian">tan peedigan wetan. Eyet / exkan wueſ-</div>
+       <lb id="Ench1586_E3A_8"/>
+        <div type="Language" lang="Latvian">ſe Paſſoule / maetceth wueſſes Lou-</div>
+       <lb id="Ench1586_E3A_9"/>
+        <div type="Language" lang="Latvian">des / vnd Chruſtyet thös / exkan to</div>
+       <lb id="Ench1586_E3A_10"/>
+        <div type="Language" lang="Latvian">Wärde to Thewe / vnde to Dhele / vn-</div>
+       <lb id="Ench1586_E3A_11"/>
+        <div type="Language" lang="Latvian">de to ſweete Garre.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3A_12"/>
+        <div type="Language" lang="Latvian">Otran Kärtan.</div>
+       <lb id="Ench1586_E3A_13"/>
+        <div type="Language" lang="Latvian">Ko dode ta Chruſtibe ieb ko ta mums</div>
+       <lb id="Ench1586_E3A_14"/>
+        <div type="Language" lang="Latvian">pallidtcze?		Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3A_15"/>
+        <div type="Language" lang="Latvian">Ta dode Pameſſchen tös Greekes / atpeſty no</div>
+       <lb id="Ench1586_E3A_16"/>
+        <div type="Language" lang="Latvian">Nawe / vnde Whelne / vnde dode to mußige</div>
+       <lb id="Ench1586_E3A_17"/>
+        <div type="Language" lang="Latvian">Cziwoſchenne wueſſims / kattre to Titcze / ka te</div>
+       <lb id="Ench1586_E3A_18"/>
+        <div type="Language" lang="Latvian">Wärde vnde ta Dewe peßatczyſchenne ſkan.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3A_19"/>
+        <div type="Language" lang="Latvian">Kattre gir tade Wärde vnde Dewe Pe-</div>
+       <lb id="Ench1586_E3A_20"/>
+        <div type="Language" lang="Latvian">ßatcyſchenne?		Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3A_21"/>
+        <div type="Language" lang="Latvian">Kur muße Kunx Chriſtus treße Marci tan</div>
+      </div>
+      <pb n="E3B"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3B_1"/>
+        <div type="Language" lang="Latvian">peedigan wetan. Kas tur titcz  / vnde chru-</div>
+       <lb id="Ench1586_E3B_2"/>
+        <div type="Language" lang="Latvian">ſtitcz thope / tas thope ſweetcz / Beth</div>
+       <lb id="Ench1586_E3B_3"/>
+        <div type="Language" lang="Latvian">kas nhe titcz / tas thope paſuſtcz.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3B_4"/>
+        <div type="Language" lang="Latvian">Treſſchan kärtan.</div>
+       <lb id="Ench1586_E3B_5"/>
+        <div type="Language" lang="Latvian">Ka war Vdens / thade lele lethe dar-</div>
+       <lb id="Ench1586_E3B_6"/>
+        <div type="Language" lang="Latvian">ryth?		Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E3B_7"/>
+        <div type="Language" lang="Latvian">Vdens to teſcham nhe dar / Beth tas Dewe</div>
+       <lb id="Ench1586_E3B_8"/>
+        <div type="Language" lang="Latvian">Wärdtcz katters ar vnde py to Vdenne gir / vn-</div>
+       <lb id="Ench1586_E3B_9"/>
+        <div type="Language" lang="Latvian">de ta Titczibe / kattra thadam Dewe wärdam</div>
+       <lb id="Ench1586_E3B_10"/>
+        <div type="Language" lang="Latvian">exkan Vdenne petitcz / Aeeſto / bes Dewe wär-</div>
+       <lb id="Ench1586_E3B_11"/>
+        <div type="Language" lang="Latvian">de / gir tas Vdens wenteſyx Vdens / vnd nhe</div>
+       <lb id="Ench1586_E3B_12"/>
+        <div type="Language" lang="Latvian">wena Chruſtibe. Beth ar to Dewe wärde gir</div>
+       <lb id="Ench1586_E3B_13"/>
+        <div type="Language" lang="Latvian">ta wena Chruſtibe / tas gir / wens ſweetcz</div>
+       <lb id="Ench1586_E3B_14"/>
+        <div type="Language" lang="Latvian">Vdens / thas cziwibes / vnde wena nomaſga-</div>
+       <lb id="Ench1586_E3B_15"/>
+        <div type="Language" lang="Latvian">ſchenne / thäs Jounes Czimptibes exkan to ſwee-</div>
+       <lb id="Ench1586_E3B_16"/>
+        <div type="Language" lang="Latvian">te Garre / ka S. Paulus ßack vs Tito exkan to</div>
+       <lb id="Ench1586_E3B_17"/>
+        <div type="Language" lang="Latvian">treſſche wete.</div>
+       <lb id="Ench1586_E3B_18"/>
+        <div type="Language" lang="Latvian">Czour to Nomaſgaſchenne thäs</div>
+       <lb id="Ench1586_E3B_19"/>
+        <div type="Language" lang="Latvian">adczimptibes vnd atyounaſchennes</div>
+       <lb id="Ench1586_E3B_20"/>
+        <div type="Language" lang="Latvian">tha ſweete Garre / kattre thas Bag-</div>
+       <lb id="Ench1586_E3B_21"/>
+        <div type="Language" lang="Latvian">gatige Jſleys gir / pär mums czour</div>
+       <lb id="Ench1586_E3B_22"/>
+        <div type="Language" lang="Latvian">Jeſum Chriſtum muſzam Peſtita-</div>
+      </div>
+      <pb n="E4A"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4A_1"/>
+        <div type="Language" lang="Latvian">yam / ka mhes czour to patte Szeele-</div>
+       <lb id="Ench1586_E4A_2"/>
+        <div type="Language" lang="Latvian">ſtibe tayſne / vnd Bherne / eſzem täs</div>
+       <lb id="Ench1586_E4A_3"/>
+        <div type="Language" lang="Latvian">muſzige Cziwoſchennes / peetcz tho</div>
+       <lb id="Ench1586_E4A_4"/>
+        <div type="Language" lang="Latvian">Czerribe / tas gir teſcham teſe.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4A_5"/>
+        <div type="Language" lang="Latvian">Czettörtan Kärtan.</div>
+       <lb id="Ench1586_E4A_6"/>
+        <div type="Language" lang="Latvian">Ko czimo tad thada Vdenne Chruſti-</div>
+       <lb id="Ench1586_E4A_7"/>
+        <div type="Language" lang="Latvian">ſchenne		? Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4A_8"/>
+        <div type="Language" lang="Latvian">Ta czimo ka tas whettz Adams exkan mums</div>
+       <lb id="Ench1586_E4A_9"/>
+        <div type="Language" lang="Latvian">czour deniſke waydheſchenne vnde atmitteſchen-</div>
+       <lb id="Ench1586_E4A_10"/>
+        <div type="Language" lang="Latvian">ne nho Greekims buhs apßlitczenatam tapt /</div>
+       <lb id="Ench1586_E4A_11"/>
+        <div type="Language" lang="Latvian">vnde muerth ar wueſſims Greekims / vnde lou-</div>
+       <lb id="Ench1586_E4A_12"/>
+        <div type="Language" lang="Latvian">nims Egribbeſchennims. Vnde atkal deniſke</div>
+       <lb id="Ench1586_E4A_13"/>
+        <div type="Language" lang="Latvian">preſchan nackt / vnde atkal auxkam czheldt we-</div>
+       <lb id="Ench1586_E4A_14"/>
+        <div type="Language" lang="Latvian">nam Jounam czilwhekam / katteers exkan</div>
+       <lb id="Ench1586_E4A_15"/>
+        <div type="Language" lang="Latvian">Tayſnibe vnd Skyſtibe prexan Dewe mußige</div>
+       <lb id="Ench1586_E4A_16"/>
+        <div type="Language" lang="Latvian">cziwo.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4A_17"/>
+        <div type="Language" lang="Latvian">Kur ſthawe tas raxtytz?		Adbilde.</div>
+       <lb id="Ench1586_E4A_18"/>
+        <div type="Language" lang="Latvian">Sweetcz Paulus py tems Römere loudems</div>
+       <lb id="Ench1586_E4A_19"/>
+        <div type="Language" lang="Latvian">than Szeſtan wetan treß ta. Mehs eßem ar</div>
+       <lb id="Ench1586_E4A_20"/>
+        <div type="Language" lang="Latvian">Chriſto czour to Cruſtibe aprackte exkan to Na-</div>
+       <lb id="Ench1586_E4A_21"/>
+        <div type="Language" lang="Latvian">we / Lydtcz ka Chriſtus gir vſmodenaatcz <corr>no</corr><sic>notims</sic></div>
+       <lb id="Ench1586_E4A_22"/>
+        <div type="Language" lang="Latvian">tims Muerronims/ Czour to Godibe tha The-</div>
+       <lb id="Ench1586_E4A_23"/>
+        <div type="Language" lang="Latvian">we / Tha buus mums arridtczan exkan wene</div>
+       <lb id="Ench1586_E4A_24"/>
+        <div type="Language" lang="Latvian">youne Cziwoſchen ſtaygath</div>
+      </div>
+      <pb n="E4B"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4B_1"/>
+       <div type="Language" lang="German">Vom Sacramente des</div>
+       <lb id="Ench1586_E4B_2"/>
+       <div type="Language" lang="German">Altars</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4B_3"/>
+        <div type="Language" lang="Latvian">No tho <corr>Eſtadiuumme</corr><sic>Eſtadiuuwme</sic> ieb Wackarre</div>
+       <lb id="Ench1586_E4B_4"/>
+        <div type="Language" lang="Latvian">ehdene muße Kunge Jeſu Chriſti kha</div>
+       <lb id="Ench1586_E4B_5"/>
+        <div type="Language" lang="Latvian">to wenam Namme thewam ßouwe</div>
+       <lb id="Ench1586_E4B_6"/>
+        <div type="Language" lang="Latvian"><corr>Szaime</corr><sic>Szaiſme</sic> wenkärtige preſchan thur-</div>
+       <lb id="Ench1586_E4B_7"/>
+        <div type="Language" lang="Latvian">reet vnde maetczyt buhs.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4B_8"/>
+        <div type="Language" lang="Latvian">Kas gir tas Eſtadiums ta Wackarre</div>
+       <lb id="Ench1586_E4B_9"/>
+        <div type="Language" lang="Latvian"><corr>ehdene</corr><sic>ehedene</sic>?	Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_E4B_10"/>
+        <div type="Language" lang="Latvian">Ta gir ta patteſa Meßa vnd Aſſens muſſe</div>
+       <lb id="Ench1586_E4B_11"/>
+        <div type="Language" lang="Latvian">Kunge Jeſu Chriſti / appeſkan to Mayſe vnde</div>
+      </div>
+      <pb n="FA"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_FA_1"/>
+        <div type="Language" lang="Latvian">Wyne mums Chruſtitims par ehſchen vnde</div>
+       <lb id="Ench1586_FA_2"/>
+        <div type="Language" lang="Latvian">Sczerſchenne no Chriſto patte eſtadita.</div>
+       <lb id="Ench1586_FA_3"/>
+        <div type="Language" lang="Latvian">Kur ſthawe tas raxtytz?	Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_FA_4"/>
+        <div type="Language" lang="Latvian">Ta raxte te Sweete Maetcetaye. Matthe-</div>
+       <lb id="Ench1586_FA_5"/>
+        <div type="Language" lang="Latvian">us / Marcus / Lucas / S. Paulus.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_FA_6"/>
+        <div type="Language" lang="Latvian">Muſze Kunx Jeſus Chriſtus ex-</div>
+       <lb id="Ench1586_FA_7"/>
+        <div type="Language" lang="Latvian">kan to Nackte / kad thas pewiltcz tap-</div>
+       <lb id="Ench1586_FA_8"/>
+        <div type="Language" lang="Latvian">pe / Jeme thas to Mayſe / patteitcze</div>
+       <lb id="Ench1586_FA_9"/>
+        <div type="Language" lang="Latvian">vnd parlouſe to / vnd doeuwe to ſzou-</div>
+       <lb id="Ench1586_FA_10"/>
+        <div type="Language" lang="Latvian">wims Maetceklims / vnd ſzatcy / jem-</div>
+       <lb id="Ench1586_FA_11"/>
+        <div type="Language" lang="Latvian">met ehdet / Ta gir manna Meſza / kat-</div>
+       <lb id="Ench1586_FA_12"/>
+        <div type="Language" lang="Latvian">tra par yums thope dota / tho darreth</div>
+       <lb id="Ench1586_FA_13"/>
+        <div type="Language" lang="Latvian">exkan manne peminneſchenne.</div>
+       <lb id="Ench1586_FA_14"/>
+        <div type="Language" lang="Latvian">Ta lydtcz arridtczan / yeme thas</div>
+       <lb id="Ench1586_FA_15"/>
+        <div type="Language" lang="Latvian">to Bickerre / peetcz to Wackarre ehde-</div>
+       <lb id="Ench1586_FA_16"/>
+        <div type="Language" lang="Latvian">ne / patteitcze / vnde doeuwe tems to /</div>
+       <lb id="Ench1586_FA_17"/>
+        <div type="Language" lang="Latvian">vnde ſzatcy: Jemmet vnde Sczer-</div>
+       <lb id="Ench1586_FA_18"/>
+        <div type="Language" lang="Latvian">reth wueſſe tur aran / Schis Bickeers</div>
+      </div>
+      <pb n="EB"/>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_1"/>
+        <div type="Language" lang="Latvian">gir ta Joune Eſtadiſchenne exkan</div>
+       <lb id="Ench1586_EB_2"/>
+        <div type="Language" lang="Latvian">manne Aſſen / katters par yums / vnd</div>
+       <lb id="Ench1586_EB_3"/>
+        <div type="Language" lang="Latvian">par doudtczems Jſledtcz thope / par</div>
+       <lb id="Ench1586_EB_4"/>
+        <div type="Language" lang="Latvian">pammeſchenne thös Greekes / Tho</div>
+       <lb id="Ench1586_EB_5"/>
+        <div type="Language" lang="Latvian">darreth / czekarth yuus to ſczeryeth ex-</div>
+       <lb id="Ench1586_EB_6"/>
+        <div type="Language" lang="Latvian">kan manne peminneſchenne.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_7"/>
+        <div type="Language" lang="Latvian">Ko pallidtcze thade Eſchenne vnde Sczer-</div>
+       <lb id="Ench1586_EB_8"/>
+        <div type="Language" lang="Latvian">ſchenne?		Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_9"/>
+        <div type="Language" lang="Latvian">To rade mums ſche Wärde / Pär yums</div>
+       <lb id="Ench1586_EB_10"/>
+        <div type="Language" lang="Latvian">dhotcz vnde jſledtz par pammeſſchen tos gree-</div>
+       <lb id="Ench1586_EB_11"/>
+        <div type="Language" lang="Latvian">kes / Ar Wärde ka mums exkan to Eſtadium-</div>
+       <lb id="Ench1586_EB_12"/>
+        <div type="Language" lang="Latvian">me / pammeſſchen tös greekes ta cziwibe / vnde</div>
+       <lb id="Ench1586_EB_13"/>
+        <div type="Language" lang="Latvian">ßwetibe / czour thadems Wärdems thope dota/</div>
+       <lb id="Ench1586_EB_14"/>
+        <div type="Language" lang="Latvian">Aeſto kur pammeſſchenne tös greekes gir / tur</div>
+       <lb id="Ench1586_EB_15"/>
+        <div type="Language" lang="Latvian">gir arridtczan ta cziwibe vnde ta Szeeleſtibe.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_16"/>
+        <div type="Language" lang="Latvian">Ka war meßige eheſchenne vnde ſczerſchenne /</div>
+       <lb id="Ench1586_EB_17"/>
+        <div type="Language" lang="Latvian">tahde lele lethe darryth?		Adbilde.</div>
+      </div>
+      <div type="Paragraph">
+       <lb id="Ench1586_EB_18"/>
+        <div type="Language" lang="Latvian">Eheſchenne vnde Sczerſchenne to teſcham /</div>
+       <lb id="Ench1586_EB_19"/>
+        <div type="Language" lang="Latvian">nhe dar / beth te wärde kattre tur ſthawe / Par</div>
+       <lb id="Ench1586_EB_20"/>
+        <div type="Language" lang="Latvian">yums dhotz vnde jſledtcz / par pammeſ-</div>
+       <lb id="Ench1586_EB_21"/>
+        <div type="Language" lang="Latvian">ſchenne thös Greekees. Kattre Wärde</div>
+      </div>
+    </body>
+   </text>
+  </TEI>
+ <TEI>
+   <teiHeader>
+    <fileDesc id="JT1685">
+     <sourceDesc>
+      <author>Ernsts Gliks</author>
+      <title>Tas Jauns Testaments</title>
+      <date>1685</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <domain type="religious">Garīgie teksti; Bībele, Jaunā Derība</domain>
+    </profileDesc>
+   </teiHeader>
+  <TEI>
+   <teiHeader>
+    <fileDesc id="JT1685::2J">
+     <sourceDesc>
+      <author>Ernsts Gliks</author>
+      <title>Jahņa ta Apustuļa ohtra Grahmata uhs wisseem rakstita</title>
+      <date>1685</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <domain type="religious">Garīgie teksti; Bībele, Jaunā Derība</domain>
+    </profileDesc>
+   </teiHeader>
+   <text>
+    <body>
+       <lb/>
+       <div type="Comment">
+        <div type="Language" lang="Latvian">Jahņa ta Apuſtuļa ohtra Grahmata uhs wiẜẜeem rakſtita.</div></div>
+       <lb/>
+       <div type="Comment">
+        <div type="Language" lang="Latvian">Ta I.Nodaļļa.</div></div>
+      <div n="0." type="Verse" id="JT1685::2J_1:0.">
+       <lb/>
+        <div type="Language" lang="Latvian">0. Jahnis wehle weenai Deewabijatigai Ꞩeewai</div>
+       <lb/>
+        <div type="Language" lang="Latvian">labbklahẜchanu wiņņas Behrno dehļ: 4.</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Mahza ka buhs eekẜch Mihleſtibas palikt: 5.</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Un no teem Wiltneekeem ẜargatees: 7.</div>
+      </div>
+      <div n="1." type="Verse" id="JT1685::2J_1:1.">
+       <lb/>
+        <div type="Language" lang="Latvian">1. TAs Wezzajs tai</div>
+       <lb/>
+        <div type="Language" lang="Latvian">isredſetai Gaſpa-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ſchai un wiņņa</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Behrneem/ ko es</div>
+       <lb/>
+        <div type="Language" lang="Latvian">teeẜcham mihle-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ju/ un ne ween</div>
+       <lb/>
+        <div type="Language" lang="Latvian">es/ bet arridſan wiẜẜi/ kas to Pa-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">teeẜibu irr atſinnuẜchi.</div>
+      </div>
+      <div n="2." type="Verse" id="JT1685::2J_1:2.">
+       <lb/>
+        <div type="Language" lang="Latvian">2. Tahs Pateeẜibas dehļ/ kas</div>
+       <lb/>
+        <div type="Language" lang="Latvian">eekẜch mums paleek/ un ar mums</div>
+       <lb/>
+        <div type="Language" lang="Latvian">buhs muhſchigi.</div>
+      </div>
+      <div n="3." type="Verse" id="JT1685::2J_1:3.">
+       <lb/>
+        <div type="Language" lang="Latvian">3. Schehlaſtiba/ Apſchehlo-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜchana/ Meers lai irr ar jums no</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Deewa ta Tehwa/ un no ta Kun-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ga JEſus Kriſtus/ to Dehlu ta</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Tehwa eekẜch Pateeẜibas un Mih-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">leſtibas.</div>
+      </div>
+      <div n="4." type="Verse" id="JT1685::2J_1:4.">
+       <lb/>
+        <div type="Language" lang="Latvian">4. Es eẜmu ļohti preezajees/ ka</div>
+       <lb/>
+        <div type="Language" lang="Latvian">es no taweem Behrneem eẜmu at-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">raddis eekẜch Pateeẜibas ſtaiga-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">jam/ itt kà mehs weenu Bauẜli</div>
+       <lb/>
+        <div type="Language" lang="Latvian">dabbujuẜchi eẜẜam no ta Tehwa.</div>
+      </div>
+      <div n="5." type="Verse" id="JT1685::2J_1:5.">
+       <lb/>
+        <div type="Language" lang="Latvian">5. Un nu luhdſu es tew/ Ga-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ſpaſcha/ ne itt kà weenu jaunu</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Bauẜli us tew rakſtidams/ bet kas</div>
+       <lb/>
+        <div type="Language" lang="Latvian">mums no Eeẜahkuma bija/ ka</div>
+       <lb/>
+        <div type="Language" lang="Latvian">mehs weens ohtru mihlejamees.</div>
+       <lb/>
+       <div type="Parallel">w:5. Jahn: 13,34. un: 15,12. Eweſ: 5,2. 1.Teẜẜ: 4,9.</div>
+       <lb/>
+       <div type="Parallel">1.Pet: 4,8. 1.Jahn: 2,7,8. un: 3,11,23. un: 4,21.</div>
+      </div>
+      <div n="6." type="Verse" id="JT1685::2J_1:6.">
+       <lb/>
+        <div type="Language" lang="Latvian">6. Un ẜchi irr ta Mihleſtiba/ ka</div>
+       <lb/>
+        <div type="Language" lang="Latvian">mehs ſtaigajam pehz wiņņa Bau-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜleem: ẜchis irr tas Bauẜlis/ ittin</div>
+       <lb/>
+        <div type="Language" lang="Latvian">kà juhs no Eeẜahkuma eẜẜat dſir-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">dejẜchi/ ka jums eekẜch ta buhs</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ſtaigaht.</div>
+       <lb/>
+       <div type="Parallel">w:6. Jahn: 15,10. 1.Jahn: 2,24.</div>
+      </div>
+      <div n="7." type="Verse" id="JT1685::2J_1:7.">
+       <lb/>
+        <div type="Language" lang="Latvian">7. Jo daudſ Wiltneeki irr Pa-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜaulê nahkuẜchi/ kas ne apleezina</div>
+       <lb/>
+        <div type="Language" lang="Latvian">JEſu Kriſtu eẜẜam Meeẜâ nahku-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜchu: ẜchis irr tas Wiltneeks un</div>
+       <lb/>
+        <div type="Language" lang="Latvian">tas Pretti=Kriſtus.</div>
+       <lb/>
+       <div type="Parallel">w:7. Matt: 24,5. 2.Pet: 2,1. 1.Jahn: 2,18,22. un: 4,1,2,3.</div>
+      </div>
+      <div n="8." type="Verse" id="JT1685::2J_1:8.">
+       <lb/>
+        <div type="Language" lang="Latvian">8. Luhkojeet us ẜew paẜcheem/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ka mehs ne pamettam/ ko mehs eẜ-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜam paſtrahdajuẜchi/ bet pillu</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Algu dabbujam.</div>
+       <lb/>
+       <div type="Parallel">w:8. Gal: 3,4.</div>
+      </div>
+      <div n="9." type="Verse" id="JT1685::2J_1:9.">
+       <lb/>
+        <div type="Language" lang="Latvian">9. Jkweens kas pahrkahpj/ un</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ne paleek eekẜch tahs Mahzibas</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Kriſtus/ tam Deews ne irr: kas</div>
+       <lb/>
+        <div type="Language" lang="Latvian">eekẜch tahs Mahzibas Kriſtus pa-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">leek/ tam irr tik lab tas Tehws/ ka</div>
+       <lb/>
+        <div type="Language" lang="Latvian">tas Dehls.</div>
+       <lb/>
+       <div type="Parallel">w:9. 1.Jahn: 2,23.</div>
+      </div>
+      <div n="10." type="Verse" id="JT1685::2J_1:10.">
+       <lb/>
+        <div type="Language" lang="Latvian">10. Ja kas pee jums nahk/ un</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜcho Mahzibu ne atneẜs/ to ne ņem-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">meet Mahjâs/ un ne apẜweizina-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">jeet wiņņu.</div>
+       <lb/>
+       <div type="Parallel">w:10. Rom: 16,17. 1.Kor: 5,11. un: 16,22. Gal: 1,8,9. 2.Tim: 3,5. Tit: 3,10.</div>
+      </div>
+      <div n="11." type="Verse" id="JT1685::2J_1:11.">
+       <lb/>
+        <div type="Language" lang="Latvian">11. Jo kas wiņņu ẜweizina/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">tam irr Dalliba pee wiņņa ļau-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">neem Darbeem.</div>
+      </div>
+      <div n="12." type="Verse" id="JT1685::2J_1:12.">
+       <lb/>
+        <div type="Language" lang="Latvian">12. Man daudſ jums ja rak-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ſta/ tomehr es ne eẜmu gribbejis</div>
+       <lb/>
+        <div type="Language" lang="Latvian">zaur Papihri un Blakku/ bet es</div>
+       <lb/>
+        <div type="Language" lang="Latvian">zerreju pee jums nahkt/ un Mutti</div>
+       <lb/>
+        <div type="Language" lang="Latvian">prett Mutti runnaht/ ka muhẜu</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Preeks pilnigs eẜẜus.</div>
+       <lb/>
+       <div type="Parallel">w:12. Jahn: 17,13. 1.Jahn: 1,4. 3.Jahn: w:13.</div>
+      </div>
+      <div n="13." type="Verse" id="JT1685::2J_1:13.">
+       <lb/>
+        <div type="Language" lang="Latvian">13. Tee Behrni tawas Mah-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜas tahs Jsredſetas apẜweizina</div>
+       <lb/>
+        <div type="Language" lang="Latvian">tew/ Amen.</div>
+      </div>
+    </body>
+   </text>
+  </TEI>
+  <TEI>
+   <teiHeader>
+    <fileDesc id="JT1685::Prolog_Tit">
+     <sourceDesc>
+      <author>Ernsts Gliks</author>
+      <title>[Jaunās Derības titullapa]</title>
+      <date>1685</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <domain type="religious">Garīgie teksti; Bībele, Jaunā Derība</domain>
+    </profileDesc>
+   </teiHeader>
+   <text>
+    <body>
+      <pb n="0"/>
+      <div type="Paragraph">
+       <lb id="JT1685::Prolog_Tit_0_1"/>
+        <div type="Language" lang="Latvian">Tas</div>
+       <lb id="JT1685::Prolog_Tit_0_2"/>
+        <div type="Language" lang="Latvian">Jauns Teſtaments</div>
+       <lb id="JT1685::Prolog_Tit_0_3"/>
+        <div type="Language" lang="Latvian">Muhẜu KUNGA JESUS KRJSTUS/</div>
+       <lb id="JT1685::Prolog_Tit_0_4"/>
+        <div type="Language" lang="Latvian">Jeb</div>
+       <lb id="JT1685::Prolog_Tit_0_5"/>
+        <div type="Language" lang="Latvian">Deewa Swehtajs Wahrds/</div>
+       <lb id="JT1685::Prolog_Tit_0_6"/>
+        <div type="Language" lang="Latvian">Kas</div>
+       <lb id="JT1685::Prolog_Tit_0_7"/>
+        <div type="Language" lang="Latvian">Pehz ta KUNGA JESUS KRJSTUS</div>
+       <lb id="JT1685::Prolog_Tit_0_8"/>
+        <div type="Language" lang="Latvian">Peedſimẜchanas no teem Ꞩwehteem Preezas=Mahzitajeem un</div>
+       <lb id="JT1685::Prolog_Tit_0_9"/>
+        <div type="Language" lang="Latvian">Apuſtuļeem usrakſtihts.</div>
+       <lb id="JT1685::Prolog_Tit_0_10"/>
+       <div type="Language" lang="Latin">Cum Gratia &amp; Privilegio S.R.M. Sueciae.</div>
+       <lb id="JT1685::Prolog_Tit_0_11"/>
+       <div type="Language" lang="German">RJGA/</div>
+       <lb id="JT1685::Prolog_Tit_0_12"/>
+       <div type="Language" lang="German">Gedruckt durch Johann Georg Wilcken/ Königl. Buchdr:</div>
+       <lb id="JT1685::Prolog_Tit_0_13"/>
+       <div type="Language" lang="German">Jm Jahr MDCLXXXV.</div>
+      </div>
+    </body>
+   </text>
+  </TEI>
+ </TEI>
+  <TEI>
+   <teiHeader>
+    <fileDesc id="SKL1696_KB">
+     <sourceDesc>
+      <author>nezināms</author>
+      <title>Sawadi Karra=Teesas Likkumi, KB</title>
+      <date>1696</date>
+     </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+     <domain type="public">Laicīgie teksti; lietišķie teksti</domain>
+    </profileDesc>
+   </teiHeader>
+   <text>
+    <body>
+      <div n="0." type="Section" id="SKL1696_KB_0.">
+       <lb/>
+        <div type="Language" lang="Latvian">0. Sawadi</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Kaŗŗa=</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Teeſas</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Likkumi/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">No muhẜo Augſta un War-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">rena Ķehniņa no Sweedro=</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Sem̃es Kaŗra=Teeẜas=Loh-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">zekļeem ismeklehti/ pahr tahm</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Leetahm/ ko teem ẜlikteem</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Saldahteem jadarr/ un pa-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">klauẜigi ja=panahk/ ik=Deenâs</div>
+       <lb/>
+        <div type="Language" lang="Latvian">pee Waktes=noleeſeẜchanu no</div>
+       <lb/>
+        <div type="Language" lang="Latvian">teem Under=Ofzeereŗeem eekẜch</div>
+       <lb/>
+        <div type="Language" lang="Latvian">teem Cortegardeem teem Kaŗ-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ra=Kalpeem preekẜch=laẜẜami/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ka ne weens warr aisbildi-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">natees to ne ſinnajis/ jeb</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ne dſirdejis.</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Us ſtipra Pawehleẜchana Rakſtôs</div>
+       <lb/>
+        <div type="Language" lang="Latvian">isſpeeſts. Rigâ 19. Octobr. 1696.</div>
+       <lb/>
+       <div type="Language" lang="German">Riga/ bey Georg Matth. Nöller.</div>
+      </div>
+      <div n="1." type="Section" id="SKL1696_KB_1.">
+       <lb/>
+        <div type="Language" lang="Latvian">1. Lohzeklis.</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Elka=Deewigam/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Burwim un Ee-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">rohtẜchu=Apmahne-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">tajam ne buhs ee-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">redſetam tapt ſtarp</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ohtreem Kaŗra=Ļaudim/ bet</div>
+       <lb/>
+        <div type="Language" lang="Latvian">nomaitatam.</div>
+      </div>
+      <div n="2." type="Section" id="SKL1696_KB_2.">
+       <lb/>
+        <div type="Language" lang="Latvian">2. Kas to Wahrdu Deewa</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ta Kunga/ jeb dſehris jeb ne-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">dſehris/ ſaimo tam buhs/ bes</div>
+       <lb/>
+        <div type="Language" lang="Latvian">wiẜẜas Schehlaſtibas/ mirrt.</div>
+      </div>
+      <div n="3." type="Section" id="SKL1696_KB_3.">
+       <lb/>
+        <div type="Language" lang="Latvian">3. Kas Deewa Wahrdu/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">to ẜwehtu Wakkar= Ehdenu/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">un to ẜwehtu Chriſtibu Ꞩmee-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">klâ ņemm/ tam buhs tapt</div>
+       <lb/>
+        <div type="Language" lang="Latvian">bes wiẜẜas Schehlaſtibas ar</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Sohbinu nokautam.</div>
+      </div>
+      <div n="5.6." type="Section" id="SKL1696_KB_5.6.">
+       <lb/>
+        <div type="Language" lang="Latvian">5.6. Kas to Wahrdu Dee-</div>
+       <lb/>
+        <div type="Language" lang="Latvian">wa ta Kunga/ lahdedams/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ſwehredams/ mellodams/ jeb</div>
+       <lb/>
+        <div type="Language" lang="Latvian">wildams/ welti walko/ jeb no</div>
+       <lb/>
+        <div type="Language" lang="Latvian">nikna Eeradduma/ jeb pee</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Dſehrumu/ negohdigi Muttê</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ņemm/ tam buhs ta/ ka ta</div>
+       <lb/>
+        <div type="Language" lang="Latvian">Noſeegſchana tohp atraſta/</div>
+       <lb/>
+        <div type="Language" lang="Latvian">ẜohditam tapt.</div>
+      </div>
+    </body>
+   </text>
+  </TEI>
+</teiCorpus>

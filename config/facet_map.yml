@@ -172,6 +172,26 @@ sources:
   scat:                       # census 2026-10-20: 24 texts, the release catalog's century on
     fields: #                   all (16 ×8 · 17 ×6 · 18 ×10) — projected so the ruled
       century: century        # scat-century lect rule can read it
+  bim-sahcoba:                # census 2026-10-21: 15 works, all carrying both (the adapter's
+    fields: #                   WORKS/GENRES tables — the deposit names only the author)
+      genre: genre            # 8 labels — folded in config/kind_map.yml
+      dialect: dialect        # Labourdin 5 · Souletin 3 · Gipuzkoan 2 · Alavese · Biscayan ·
+      #                         Lower Navarrese · Upper Navarrese (14; Lopez unattributed) —
+      #                         the standard attribution, the lect lane's future variety key
+  vks:                        # census 2026-10-21 (pre-flight struct_values): 134 files —
+    fields: #                   the Korp subcorpus on all
+      korp_corpus: collection # VKS_VARIA 71 · LAIT 15 · AGRICOLA 12 · BIBLIA 10 · GANANDER 10 ·
+      #                         VIRRET 4 · LIZELIUS 3 · LPETRI 3 · BJORKQVIST 2 · SAARNAT 2 ·
+      #                         ALMANAKAT 1 · FROSTERUS 1 — folded in config/kind_map.yml
+      author: author          # the title's "Name:" head (Mikael Agricola, Hemminki Maskulainen …)
+  senie:                      # census 2026-10-21 (fixture-time, the full release file): 183
+    fields: #                   docs; every TEI header carries all four
+      genre: genre            # the <domain> text "Garīgie teksti; Bībele, Vecā Derība" —
+      #                         folded in config/kind_map.yml
+      domain_type: domain     # its @type: religious 139 · public 40 · education 7 (containers incl.)
+      medium: medium          # print 170 · manuscript 13 (<chanel>manuscript</chanel>)
+      collection_id: collection  # the Bible container a book belongs to (Apokr1689 14 ·
+      #                         JT1685 30 · VD1689_94 40)
   dcs:                        # census 2026-10-12: the corpus's five composition time
     fields: #                   slots (1 early/Vedic … 5 late; 1 ×6,962 · 2 ×2,940 ·
       dcs_time_slot: time_slot  # 3 ×2,315 · 4 ×2,014 · 5 ×1,493) — the upstream claim,

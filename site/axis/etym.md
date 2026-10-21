@@ -13,10 +13,11 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
 |---|---|---|---|---|
+| `calfa-lexicon` | dictionary | nc | wired · manual | 86,067 entries |
 | `cldf-spine` | feature module | attribution | wired · manual | nothing held yet |
 | `clics` | dictionary | attribution | wired · manual | 1,647 entries |
 | `derom` | dictionary | nc | wired · manual | 233 entries |
@@ -32,7 +33,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `zho` 327,296 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 126 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `zho` 327,296 · `xcl` 86,067 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 … and 127 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 
@@ -87,4 +88,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

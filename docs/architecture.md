@@ -297,8 +297,28 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- text stays byte-identical. The id-bearing sources also derive
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).
+passage_entity_names(id, source_id, type, text, identity, key, ref, subtype, search_key)
+passage_entities(name_id, passage_id)         -- WITHOUT ROWID, PK (name_id, passage_id)
+   -- Migration 049: the inline-entity index — the "entities" passage
+   -- annotation (names marked INSIDE the text: EpidocParser::InlineLayer's
+   -- persName/placeName/name spans on the Perseus editions, CopticTtParser's
+   -- entity spans with Wikification identities, the DHARMA Deccan
+   -- person/place tags), whose typed record shape the facet lane's
+   -- {"value","ref"} rule does not carry. Same dictionary encoding: one
+   -- name row per distinct verbatim record per source, plus search_key —
+   -- text/identity/key/ref each folded (Normalize.fold_diacritics +
+   -- Unicode case fold, language-neutral) and joined by U+001F, so a
+   -- folded-query LIKE over the small dictionary meets the index on both
+   -- sides. Written by Store::EntityIndex over the explicit roster in
+   -- config/entity_index.yml (a rebuild probes only those slices — ~5 s
+   -- for the 2026-10-21 census of 75,974 passages / 318,542 pairs /
+   -- 108,939 names), riding both rebuild flavors, builders:refresh and the
+   -- post-load sync refresh; a builder file (builders digest). Read by
+   -- `nabu entity NAME` (Query::Entities: absent/unbuilt index = an honest
+   -- hint, never a scan). `nabu show --entities` reads the shown rows'
+   -- annotations directly and needs no index.
 entry_facet_values(id, source_id, facet, value, ref)
-entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id)
+entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, entry_id); index (entry_id) (049)
    -- Migration 046: the same mold at DICTIONARY-ENTRY grain — the
    -- categorical claims upstream makes per entry (JMdict's <field>
    -- domains, <misc> usage marks, <dial> dialects and <lsource> donor
@@ -316,7 +336,11 @@ entry_facets(value_id, entry_id)              -- WITHOUT ROWID, PK (value_id, en
    -- builders:refresh, and the post-load sync refresh under the
    -- dictionary-stats gate (withdrawals included). Read by `nabu define
    -- --facet NAME=PATTERN` (Query::Define#run facets:): entries whose
-   -- value or ref matches, AND across facets.
+   -- value or ref matches, AND across facets. Migration 049 adds the
+   -- (entry_id) index for the reverse probe: every define card (and
+   -- `show` on an entry urn) prints the entry's own "facets: name=value
+   -- · …" line; a catalog without the index never scans the pairs — an
+   -- annotated entry's card says the facets are not indexed yet.
 kind_stats(source_id, head, documents)
    -- P99 (migration 032): the kind axis' precomputed census — per
    -- (source, class head) distinct documents + a NULL-head per-source
@@ -1174,8 +1198,16 @@ no key; conventions §9). Two structural consequences:
   of a descendants row. Every descent walk (etym's reflex match and
   ascent, the `reflex_roots` closure, an entry's cognate list, the
   nabu-data reflex-chains export) scopes through `Store::ReflexDescent`,
-  so an UP edge never reads as a descendant; the rows are stored data
-  awaiting their own (ascending) surface. `cognate` (the Lewis & Short
+  so an UP edge never reads as a descendant. Their ascending surface is
+  `Query::EtymonAscent`: an entry's own etymon rows in stated order,
+  then UP through the shelf — an etymon held as exactly ONE live entry
+  (dictionary language + folded headword, the crosswalk keys) resolves
+  to that entry's urn and that entry's own etymon rows continue the
+  chain (a (language, folded word) never repeats, an entry is entered
+  once, capped at 4 climbs / 16 steps). `nabu define` and `nabu etym`
+  print it as one compact "etymon: ←(inherited) *śaukāˀ [ine-bsl-pro]
+  ←(inherited) …" line (`--long`: one step per line, held urns
+  beside). `cognate` (the Lewis & Short
   cognate chains) is direction-free and walks like MW's cognate rows.
   `attested` / `attested_year` carry the verbatim first-attestation date
   upstream prints per reflex (DÉRom's "dp. 1220") and its parsed
@@ -1338,7 +1370,13 @@ tradition and dcs's composition time slot band through period_bands rows
 `config/work_eras.yml` (attributed composition era, keyed on the work);
 achemenet's archives through `config/archive_axes.yml` (reign volume →
 the regnal table's whole-reign span, else the volume's stated span, else
-the corpus band, plus the archive's findspot). The P81-1 `NikhEntryDates`
+the corpus band, plus the archive's findspot). Parse-time tables convert
+typed dating claims into the stored date envelope before the lane reads
+it: `config/eras.yml` for era-typed years (Śaka, Kollam, Gupta, nengō)
+and `config/south_indian_reigns.yml` for the DHARMA Tamil titles'
+regnal years (candidate reigns per title spelling, accession ranges
+kept, regnal year N → [earliest accession + N − 1, latest accession + N],
+a declared unconvertible list and a maximum envelope width). The P81-1 `NikhEntryDates`
 lane projects the NIKH chronicle family's per-entry machine dates from
 CATALOG annotations (load-verified f(canonical) — no re-parse):
 passage-grain year runs (axis_source `<slug>-entries`) plus document
@@ -1803,6 +1841,28 @@ supersede on rerun). Both stay passage-grain in the journal by design — a
 text MENTIONING a place is not FROM it, so document_axes.place_ref (the
 provenance ladder: adapter-asserted refs, then PlaceApply's place_name
 projections) is never touched by either.
+
+**The person lanes.** `nabu person mine SOURCE [AUTHORITY]`
+(`Nabu::PersonMine`) stays CENSUS-ONLY — no write path, the person apply
+gate closed by owner ruling — but its scope is explicit and no longer
+Han-bound: SOURCE's passages against any derived person-index authority
+(cbdb by default; edh, elephantine, …). The lane follows the authority's
+own keys: Han keys match as substrings; alphabetic keys (EDH's inscribed
+and nominative Roman names, Elephantine's Greek/Coptic/Egyptian/English
+forms) match as whole-word sequences under the shared fold
+(`Nabu::NameWords`: Leiden sigla inside a word fold out on both sides,
+spelling stays verbatim). `nabu person candidates SOURCE [--dry-run]`
+(`Nabu::PersonCandidates`, links producer person-candidates, a cheap
+rebuild lane per config/mined_layers.yml) is the mechanical candidate
+recipe over the source's OWN case-preserving text — a word occurring ≥3
+times, ≥90% of its occurrences capitalized (well-formed Roman numerals,
+digit-bearing, sub-2-letter and caseless words censused out) — emitting
+kind=person-name-candidate edges from each passage holding the form
+capitalized to `urn:nabu:person-candidate:<folded form>`. Candidates are
+NAME FORMS, never person records: their own kind and urn namespace, no
+authority, no person card, and the edge detail says so. Both lanes walk
+the source in rowid windows (`Nabu::SourcePassageWalk`, the PlaceMine
+walk).
 
 **Read surface.** Every reader opens the links UNION (`Store::LinkLayers`):
 the journal with the mined store ATTACHed read-only and two temp views

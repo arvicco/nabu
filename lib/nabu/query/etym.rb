@@ -5,6 +5,7 @@ require_relative "../normalize"
 require_relative "../store/reflex_descent"
 require_relative "../store/reflex_roots_indexer"
 require_relative "reflex_views"
+require_relative "etymon_ascent"
 
 module Nabu
   module Query
@@ -66,12 +67,16 @@ module Nabu
       # direct edge's flag lives on matched_reflex). +lect_id+/+lect_name+
       # (P57-4, display-only) mirror MatchedVia's, resolved for +language+
       # WITH its +source_slug+ (the dictionary's own source — the per-source
-      # override seam).
+      # override seam). +etymons+ (EtymonAscent::Step values) is the entry's
+      # OWN stated etymology climbed up the shelf — the typed UP edges the
+      # descent walk deliberately skips; [] when the entry states none.
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :gloss, :license, :license_class, :source_slug,
                            :matched_reflex, :edge_borrowed, :cognates, :ancestors,
-                           :lect_id, :lect_name) do
-        def initialize(lect_id: nil, lect_name: nil, **rest) = super(**rest, lect_id: lect_id, lect_name: lect_name)
+                           :lect_id, :lect_name, :etymons) do
+        def initialize(lect_id: nil, lect_name: nil, etymons: [], **rest)
+          super(**rest, lect_id: lect_id, lect_name: lect_name, etymons: etymons)
+        end
       end
 
       DEFAULT_LIMIT = 5
@@ -84,6 +89,7 @@ module Nabu
       def initialize(catalog:, fulltext: nil, lects: :auto)
         @catalog = catalog
         @views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
+        @etymons = EtymonAscent.new(catalog: catalog)
         @lects = lects
       end
 
@@ -291,6 +297,7 @@ module Nabu
           matched_reflex: matched, edge_borrowed: edge_borrowed,
           cognates: @views.for_entry(row.fetch(:entry_row_id)),
           ancestors: row.fetch(:headword_folded) ? ancestors_of(row, visited) : [],
+          etymons: @etymons.for_entry(row.fetch(:entry_row_id)),
           **lect_display(row.fetch(:language), source: row.fetch(:source_slug))
         )
       end

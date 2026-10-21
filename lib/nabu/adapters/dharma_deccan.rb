@@ -67,6 +67,13 @@ module Nabu
     #   not_after (signed years), raw, precision, cert, evidence} — only
     #   cal:gregorian (the in-text cal:regnal <date>s are regnal years,
     #   never CE).
+    # - the edition's cal:regnal <date>s (Ollett: 21 files, Sātavāhana
+    #   kings — Puḷumāvi, the Sātakarṇis, Chimuka) → "regnal_dating"
+    #   [{ruler (the datingPoint key), year, raw}] VERBATIM. Deliberately
+    #   not converted: every one of the 21 files already carries Ollett's
+    #   own CE origDate (his chronology, the editor's conversion), so a
+    #   second, table-based conversion would add no dated document and
+    #   could only contradict the editor.
     # - origPlace (Ollett: 452) → "place" (the placeName), "place_key"
     #   (Ollett's pl: key), "orig_place_text" (the findspot prose).
     # - Vengī Cālukya's own metadata table (DHARMA_mdt_VengiCalukya_v01 -
@@ -278,7 +285,20 @@ module Nabu
         meta["editors"] = editors unless editors.empty?
         date = orig_date(doc) || tsv_date(path, repo, config, stem)
         meta["date"] = date if date
+        regnal = regnal_dating(doc)
+        meta["regnal_dating"] = regnal unless regnal.empty?
         meta.merge(orig_place(doc))
+      end
+
+      # The edition's own cal:regnal <date>s (Ollett: 21 files) — a ruler
+      # key and a regnal year, recorded verbatim, never converted: every one
+      # sits in a file whose editor already states the CE date (origDate).
+      def regnal_dating(doc)
+        doc.xpath('//div[@type="edition"]//date[@datingMethod="cal:regnal"]').filter_map do |node|
+          year = Integer(node["when-custom"].to_s, 10, exception: false) or next
+          { "ruler" => node["datingPoint"].to_s.delete_prefix("pers:"), "year" => year,
+            "raw" => DharmaEpidocParser.clean(node.text) }
+        end.uniq
       end
 
       def licence(doc, path, repo)

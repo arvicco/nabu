@@ -127,7 +127,11 @@ full path narrows, an explicit `%` pattern matches as given. The honesty buckets
 (upstream's own "cannot determine") and `unmapped` (a raw value awaiting a
 fold rule) — and only classified documents can match: most of the corpus
 carries no kind facet and falls out under the filter (`nabu kind census`
-lists the classes).
+lists the classes); `facets` — the CLI's repeatable `--facet NAME=PATTERN`
+as an object of facet name → pattern (`{"subject": "왕실-%"}`), every pair
+required, any facet at document or passage grain, value or ref matched
+case-insensitively with LIKE patterns passing through, at most 8 pairs;
+composes with `kind` (both hold), text search only.
 
 Hits are
 relevance-ranked and bounded, with an honest "showing k of N"
@@ -253,7 +257,11 @@ reconstruction shelves (P14-1), whose entries also carry their descendant
 `reflexes` (bounded, attested-first, honest totals — this conversational
 surface stays capped by design; the CLI `nabu define --long` is the
 unbounded, grouped-by-language expansion, P14-11); proto headwords fold
-to ASCII (§9: ʰ→h, ʷ→w), so `*gwhew-` reaches `*gʷʰew-`.
+to ASCII (§9: ʰ→h, ʷ→w), so `*gwhew-` reaches `*gʷʰew-`. `facets` (the
+CLI `define --facet` parity) narrows to entries the dictionary-entry facet
+surface tags — an object of facet name → pattern (`{"domain":
+"Buddhism"}`), every pair required, value or ref matched; the entry
+payload shape is unchanged.
 
 ### `nabu_etym`
 
@@ -693,6 +701,8 @@ new, present-only keys.
 | Parallels score decomposition | — | `nabu_parallels` `explain: true` — `Query::ParallelsExplain` | **added P137** — MCP-only; the CLI `parallels` prints scores without the per-gram rows (documented gap) |
 | Tibetan word-segmented rendering | `nabu show <urn> --segmented` (P54-2) | `nabu_show` `segmented: true` — present-only `segmented` key per passage record (`Query::Show#segmented_text`, one serializer); not-applicable calls carry `segmentation_note` | **added P54-2** (pinned, incl. the flag-off byte-identical case) |
 | Lect (nabu-lects) search filter | `search --lect LECT-ID` (P57-4) | `nabu_search` `lect` — text mode only, refusal parity with lemma/near; resolution-level filter (Nabu::Lects, prefix semantics), errors naming the module when nabu-lects is not synced | **added P57-4** (pinned; no frozen payload key changed) |
+| Facet filters by name | `search --facet NAME=PATTERN`, `define --facet NAME=PATTERN` (repeatable, AND) | `nabu_search` / `nabu_define` `facets` — an object of name → pattern; search: text mode only, refusal parity with lemma/near, composes with `kind` | **added** (pinned; additive param, no payload key changed) |
+| Entry facets / etymon ascent on the card | `define` "facets:" and "etymon:" lines, `etym` "etymon:" line | not served — `nabu_define` / `nabu_etym` payloads unchanged | **documented gap** — a payload key would change the frozen shape |
 
 ---
 

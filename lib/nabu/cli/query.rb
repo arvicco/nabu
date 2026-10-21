@@ -662,12 +662,21 @@ module Nabu
                                                   # one translated line + its original
         nabu show urn:nabu:oshb:gen:1:1 --tokens  # + the stored token annotations,
                                                   #   verbatim (form, lemma, osm, …)
+        nabu show urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.6 --entities
+                                                  # + the persons/places marked in it
 
       TOKENS (--tokens): appends the passage's stored token annotations as
       one line per token — `form` first, then every key the store holds for
       that token, exactly as stored (the honest raw view; nothing decoded,
       nothing invented). A passage without token annotations, and a
       document/range urn, say so.
+
+      ENTITIES (--entities): appends the names the edition marks INSIDE
+      the text — Perseus persName/placeName/name spans, Coptic Scriptorium
+      entity spans, DHARMA Deccan person/place tags — one line per record:
+      upstream's type, the surface, then any key/identity/ref/subtype,
+      verbatim. A document or range urn groups them under each passage's
+      :suffix. Search by name across the corpus with `nabu entity NAME`.
 
       SEGMENTED (--segmented): renders Tibetan-language rows (xct/bod/otb)
       with word boundaries — the stored text with a space inserted at each
@@ -696,6 +705,8 @@ module Nabu
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
     option :tokens, type: :boolean, default: false,
                     desc: "Append the passage's stored token annotations verbatim (form + every key present)"
+    option :entities, type: :boolean, default: false,
+                      desc: "Append the names the edition marks inside the text (persons, places …), verbatim"
     option :segmented, type: :boolean, default: false,
                        desc: "Render Tibetan (xct/bod/otb) passages with word boundaries " \
                              "(needs the synced nabu-data module)"
@@ -708,6 +719,9 @@ module Nabu
       end
       if options[:segmented] && (options[:random] || options[:parallel])
         raise Thor::Error, "show: --segmented does not compose with --random/--parallel"
+      end
+      if options[:entities] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --entities does not compose with --random/--parallel"
       end
 
       config = Nabu::Config.load
@@ -747,6 +761,7 @@ module Nabu
       print_show(result)
       say seg_note if seg_note
       print_show_tokens(result) if options[:tokens]
+      print_show_entities(result) if options[:entities]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer

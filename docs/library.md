@@ -1109,9 +1109,10 @@ per source; fuller review sections follow per §10.
 converted (1,267 / 17,993) · `dharma-deccan` — Telugu, Kannada,
 Sanskrit and Prakrit epigraphy (1,694 / 27,929) · `dharma-mdt` — the
 project's works database (734 records; metadata CC0) · `sii-clean` —
-the license-marked DHARMA conversions of the printed *South Indian
-Inscriptions* volumes, original ASI editors credited (589 / 8,372;
-per-file CC BY-SA).
+the DHARMA conversions of the printed *South Indian Inscriptions*
+volumes: every DHARMA edition, and the per-inscription conversion of
+each inscription not yet edited, original ASI editors credited
+(expected 18,490 / 314,882; CC BY-SA, repository-wide).
 
 **The literary canon.** `tamilex` — the Hamburg critical editions of
 classical Tamil with the per-word gold wordsplit layer (7,830 /
@@ -1163,6 +1164,33 @@ short scriptural fragments, each word lemmatized, tagged, parsed and
 segmented into glossed morphemes, with Russian or English sentence
 translations (one document, 124 passages by file census; CC BY-NC-SA
 4.0, the author credited).
+
+## 8ao. The Baltic littoral and the Armenian lexicon (P139)
+
+Three historical corpora of languages the library never held, and
+its first Armenian dictionary, in the register shape (counts read
+from the catalog 2026-10-21):
+
+**The Baltic-littoral corpora.** `senie` — SENIE, the Corpus of
+Early Written Latvian (AiLab IMCS UL and the Latvian Language
+Institute): the written Latvian of 1507–1800, from the earliest
+Lord's-prayer specimens through the first catechisms, Mancelius,
+Glück's Bible and the Stenders, every run language-tagged (183 /
+48,995; CC BY-SA 4.0) · `vks` — the Corpus of Old Literary Finnish
+(Kotus, via the Kielipankki Korp API): Agricola's prints of the
+1540s to the end of Swedish rule, the 1642 Bible, laws, sermons,
+almanacs and the first Finnish newspaper (128 / 65,311; EUPL 1.2,
+attribution with share-alike) · `bim-sahcoba` — the historical
+Basque corpus (B.I.M. / SAHCOBA): fifteen lemmatized works from
+Etxepare's 1545 Linguae Vasconum Primitiae and Leizarraga's New
+Testament to the 1782 Avignon Rodríguez (15 / 19,361; CC BY 4.0).
+
+**The Armenian dictionary shelf.** `calfa-lexicon` — the source
+files of the Calfa Classical Armenian dictionary: a compiled,
+standardized update of NBHL, Bedrossian and Calfa 1861 with
+Ačaṙean's etymological dictionary as a working document — 86,067
+entries across English and French definition tables and the
+etymology file (CC BY-NC 4.0, Calfa credited).
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

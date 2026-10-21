@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "aranese bdcamoes bfm cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres openmgh osta salom ud"
+  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres openmgh osta salom ud"
 ---
 
 # The Romanist — the `romance` desk
@@ -26,6 +26,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `aranese` | ES-OC Parallel Corpus — Spanish–Aranese (BSC projecte-aina, WMT24) | attribution |
 | `bdcamoes` | BDCamões — Corpus of Portuguese Literary Documents, Part I (PORTULAN CLARIN) | attribution |
 | `bfm` | Base de français médiéval — BFM2022 (ENS de Lyon / IHRIM) | attribution |
+| `bim-sahcoba` | BIM/SAHCOBA — Syntactically Annotated Historical Corpus in Basque (HiTZ, University of the Basque Country) | attribution |
 | `cantigas` | Cantigas Medievais Galego-Portuguesas (Projeto Littera) | attribution |
 | `corpus-corporum` | Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich) | nc |
 | `croala` | Croatiae auctores Latini — CroALa (Jovanović, ed.) | attribution |

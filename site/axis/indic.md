@@ -32,12 +32,12 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `shabados` | texts | open | wired · auto | 127 docs / 141,264 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
-| `sii-clean` | texts | attribution | wired · auto | 590 docs / 8,376 passages |
+| `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |
 | `suttacentral` | texts | open | wired · auto | 12,393 docs / 699,345 passages |
 | `tamilex` | texts | nc | wired · auto | 7,830 docs / 14,972 passages |
 | `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `san` 510,610 · `tam-Latn` 9,555 · `pli` 7,288 · `eng` 4,790 · `san-Latn` 1,793 · `pra-Latn` 1,131 · `tam` 755 · `und` 583 · `lzh` 297 · `guj` 207 … and 39 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `san` 510,610 · `tam-Latn` 18,527 · `pli` 7,288 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `san-Latn` 1,917 · `pra-Latn` 1,154 · `tam` 755 · `und` 583 … and 45 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
@@ -90,4 +90,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

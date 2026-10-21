@@ -101,6 +101,11 @@ module Nabu
       # measured at the P57 full rebuild, N=921,611; claim holds) (lit
       # passages run longer) — 50 tokens still spans most passages
       SEARCH_MAX_WINDOW = 50
+      # The `facets` arg's pair ceiling (nabu_search / nabu_define): each
+      # pair is one AND'd subquery.
+      # const: a request-shape guard, not a census — no real query ANDs more
+      # than a handful of facets.
+      MAX_FACET_FILTERS = 8
       # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       SHOW_DEFAULT_MAX_PASSAGES = 50
       SHOW_MAX_PASSAGES_CAP = 200
@@ -517,6 +522,15 @@ module Nabu
                                "value awaiting a fold rule). Only classified documents can " \
                                "match — most of the corpus carries no kind facet and falls " \
                                "out under the filter (`nabu kind census` lists the classes)." },
+          facets: { type: "object", additionalProperties: { type: "string" },
+                    description: "Facet filters (text search only), an object of facet name → " \
+                                 "pattern, all required (AND): any facet the catalog carries, at " \
+                                 "document grain (genre, province, material, collection, author…) " \
+                                 "or passage grain (sillok subject, itkc genre) — " \
+                                 "{\"subject\": \"왕실-%\"}. The pattern matches the value or its " \
+                                 "ref case-insensitively; LIKE % patterns pass through. At most " \
+                                 "#{MAX_FACET_FILTERS} pairs; composes with kind (both must hold). " \
+                                 "Unfaceted documents fall out under it." },
           meter: { type: "string",
                    description: "Meter facet (P45-5): only passages carrying a meter enrichment " \
                                 "(the pedecerto/hypotactic scansion layer) whose meter code/name " \
@@ -623,6 +637,15 @@ module Nabu
                                "module; dictionary grain — per-source overrides included, so " \
                                "derom's la-vul scopes under roa, never lat). Errors if the " \
                                "module is not synced on this box." },
+          facets: { type: "object", additionalProperties: { type: "string" },
+                    description: "Entry facet filters, an object of facet name → pattern, all " \
+                                 "required (AND) — the categorical labels dictionaries attach " \
+                                 "per entry: JMdict's domain / usage / dialect / loan_source, " \
+                                 "WOLD's semantic_field / word_class / borrowed_status, TLS's " \
+                                 "concept. {\"domain\": \"Buddhism\"} keeps only Buddhist-domain " \
+                                 "senses. The pattern matches the value or its ref " \
+                                 "case-insensitively; LIKE % patterns pass through. At most " \
+                                 "#{MAX_FACET_FILTERS} pairs; untagged entries fall out." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["lemma"],
@@ -1008,6 +1031,7 @@ module Nabu
         from, to, place = search_date(args, mode, near)
         date_basis = search_date_basis(args, mode, near)
         kind = search_kind(args, mode, near)
+        facets = search_facets(args, mode, near)
         meter, meter_pattern = search_meter(args, mode, near)
         words = search_words?(args, mode, near)
         lect, lects = search_lect(args, mode, near)
@@ -1021,7 +1045,7 @@ module Nabu
           run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
-                                 kind: kind, meter: meter, meter_pattern: meter_pattern, words: words,
+                                 kind: kind, facets: facets, meter: meter, meter_pattern: meter_pattern, words: words,
                                  lect: lect, lects: lects, script: script, date_basis: date_basis)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
@@ -1307,7 +1331,7 @@ module Nabu
           raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
         end
         results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), lects: lects || :auto)
-                               .run(lemma, lang: lang, limit: limit + 1, lect: lect)
+                               .run(lemma, lang: lang, limit: limit + 1, lect: lect, facets: facets_arg(args))
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit, catalog: catalog)
       end
@@ -1534,6 +1558,18 @@ module Nabu
         kind
       end
 
+      # The generic facet filter (the CLI search --facet parity) — text
+      # search only, the kind refusal. Threaded into the same facets hash
+      # kind rides (run_search), so the document-or-passage grain matching
+      # lives once, in Query::Search.
+      def search_facets(args, mode, near)
+        facets = facets_arg(args)
+        return nil if facets.nil?
+        raise InvalidArguments, "facets compose with text search only, not lemma/near" if mode == :lemma || near
+
+        facets
+      end
+
       # The script filter arg (P75 C-2) — text search only, like the
       # timeline; tag shape/fold is enforced once in Search#script_code.
       def search_script(args, mode, near)
@@ -1550,8 +1586,11 @@ module Nabu
       # was too common to rank (plain text mode only — the other searchers
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
-                     from: nil, to: nil, place: nil, kind: nil, meter: nil, meter_pattern: nil, words: false,
-                     lect: nil, lects: nil, script: nil, date_basis: nil)
+                     from: nil, to: nil, place: nil, kind: nil, facets: nil, meter: nil, meter_pattern: nil,
+                     words: false, lect: nil, lects: nil, script: nil, date_basis: nil)
+        # kind is one more named facet (the CLI's facet_filters shape); an
+        # explicit kind arg wins over a facets "kind" key.
+        facets = (facets || {}).merge(kind ? { "kind" => kind } : {})
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1566,7 +1605,7 @@ module Nabu
                                          lects: lects || :auto)
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place, script: script, date_basis: date_basis,
-                                facets: kind ? { "kind" => kind } : nil,
+                                facets: facets.empty? ? nil : facets,
                                 meter: meter, meter_pattern: meter_pattern, words: words, lect: lect), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
@@ -3025,6 +3064,25 @@ module Nabu
       end
 
       # -- argument plumbing -------------------------------------------------------------
+
+      # The facet-filter arg (nabu_search / nabu_define `facets`, the CLI's
+      # repeatable --facet NAME=PATTERN): a JSON object of facet name →
+      # pattern, every pair non-empty strings, at most MAX_FACET_FILTERS.
+      # nil when absent or {} (no filter); anything else is a usage error,
+      # never a silent widening.
+      def facets_arg(args)
+        raw = args["facets"]
+        return nil if raw.nil? || raw == {}
+
+        valid = raw.is_a?(Hash) && raw.size <= MAX_FACET_FILTERS &&
+                raw.all? { |name, pattern| [name, pattern].all? { |s| s.is_a?(String) && !s.strip.empty? } }
+        unless valid
+          raise InvalidArguments, "facets must be an object of facet name → pattern (non-empty strings, at most " \
+                                  "#{MAX_FACET_FILTERS}), e.g. {\"domain\": \"medicine\"}"
+        end
+
+        raw.to_h { |name, pattern| [name.strip, pattern.strip] }
+      end
 
       def string_arg(args, key)
         value = args[key]

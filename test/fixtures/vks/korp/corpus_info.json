@@ -1,0 +1,95 @@
+{
+"corpora": {
+"VKS_FROSTERUS": {
+"attrs": {
+"p": [
+"word",
+"word_completed",
+"word_tilde"
+],
+"s": [
+"text",
+"text_filename",
+"text_title",
+"text_distributor_fi",
+"text_distributor_en",
+"text_year",
+"text_datefrom",
+"text_dateto",
+"text_timefrom",
+"text_timeto",
+"supplement",
+"supplement_cRef",
+"div",
+"div_n",
+"span",
+"span_page",
+"sentence",
+"sentence_type",
+"sentence_id",
+"sentence_code",
+"sentence_cRef",
+"foreign",
+"error"
+],
+"a": []
+},
+"info": {
+"Name": "VKS_FROSTERUS",
+"Size": "26723",
+"Charset": "utf8",
+"Sentences": "967",
+"Updated": "2016-01-21",
+"FirstDate": "1791-01-01 00:00:00",
+"LastDate": "1791-12-31 23:59:59"
+}
+},
+"VKS_LPETRI": {
+"attrs": {
+"p": [
+"word",
+"word_completed",
+"word_tilde"
+],
+"s": [
+"text",
+"text_filename",
+"text_title",
+"text_distributor_fi",
+"text_distributor_en",
+"text_year",
+"text_datefrom",
+"text_dateto",
+"text_timefrom",
+"text_timeto",
+"supplement",
+"supplement_cRef",
+"div",
+"div_n",
+"span",
+"span_page",
+"sentence",
+"sentence_type",
+"sentence_id",
+"sentence_code",
+"sentence_cRef",
+"foreign",
+"error"
+],
+"a": []
+},
+"info": {
+"Name": "VKS_LPETRI",
+"Size": "24416",
+"Charset": "utf8",
+"Sentences": "778",
+"Updated": "2016-01-21",
+"FirstDate": "1644-01-01 00:00:00",
+"LastDate": "1670-12-31 23:59:59"
+}
+}
+},
+"total_size": 51139,
+"total_sentences": 1745,
+"time": 0.0013353824615478516
+}

@@ -91,6 +91,9 @@ module Nabu
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,
+          "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title
+          #                               page, else its standard attribution (raw says which);
+          #                               place = the title page's imprint town
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
           #                            page states (authorship eras class "composition");
           #                            place = the manuscript's Provenance
@@ -117,7 +120,8 @@ module Nabu
           "dharma-mdt" => :structured, # P118-4: the rows' own Date CE / range envelopes
           #                              (certainty + evidence ride the date hash)
           "dharma-tamil" => :structured, # P120: the title's era-typed year (Śaka, Kollam —
-          #                                config/eras.yml); regnal years stay verbatim
+          #                                config/eras.yml), else its regnal statement through
+          #                                the accession table (config/south_indian_reigns.yml)
           "diccas" => :structured, # each book's byline author-life span (AH/CE pairs read
           #                          by magnitude), its own class composition; the
           #                          Qurʾān book has no byline and stays undated
@@ -192,6 +196,8 @@ module Nabu
           "scat" => :structured, # the release catalog's century (the witness's, beside the
           #                        shelfmark) as a century envelope; no place claim
           "seal" => :period_label,
+          "senie" => :structured, # the TEI header <date>: the print's or manuscript's year,
+          #                         a "1681_90" span as its envelope — the artifact date
           "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
           #                           or century attribution
           "sii-clean" => :structured, # P122-3: the SII heading's A.D. / Śaka year or the
@@ -218,6 +224,8 @@ module Nabu
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
           "viet-wikisource" => :structured,
+          "vks" => :structured, # the Korp text elements' text_datefrom/text_dateto, the file's
+          #                       envelope (collection files carry per-passage years too)
           "vuk-danicic" => :structured, # P117-2: the translation era per testament
           #                               (NT 1847, OT 1865–1868), composition class
           "zh-wikisource" => :dynasty_band
@@ -245,11 +253,13 @@ module Nabu
           # imprint place is the artifact's own production place (39k+
           # London). The parse-time bare town (imprint_place) is the
           # registry-shaped key and answers first; a conjecture doc
-          # carries none and falls back to the verbatim imprint, cleaned
-          # of the ESTC-style bracket/colon furniture — uncertainty never
-          # reads as a claim, and no placed doc loses its name. The TCP's
-          # own pub_place (Ann Arbor) is lineage, exempted.
-          "eebo-tcp" => %w[imprint_place source_pub_place],
+          # answers with its parse-time conjecture town as a declared-
+          # uncertain claim (CONJECTURE_KEYS — "London?", never the raw
+          # "[London?] printed" prose); only a doc the reading left
+          # unplaced falls back to the verbatim imprint, cleaned of the
+          # ESTC-style bracket/colon furniture. The TCP's own pub_place
+          # (Ann Arbor) is lineage, exempted.
+          "eebo-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
           "rem" => "orig_place",
@@ -284,6 +294,14 @@ module Nabu
           # the two never co-occur, census 2026-10-21).
           "ref" => %w[place text-place]
         }.freeze
+        # Keys whose value is a parse-time CONJECTURE reading (the bare
+        # town of a ?-marked imprint): it mints as the house's declared-
+        # uncertain place claim — the town with the cataloguer's trailing
+        # "?", the mark the certainty layer glosses as probable
+        # (Certainty :cataloguer_query) — the same shape as the
+        # verbatim-hedged names other sources carry ("Siegburg (?)").
+        CONJECTURE_KEYS = %w[imprint_place_conjecture].freeze
+
         # ReF's text-place label ("Schreibort:", "(Schreibort)",
         # "Herstellungsort/Schreibort") — furniture, stripped before the
         # sentinel check; the hedges beside it ("(?)", "wahrsch.") stay.
@@ -505,6 +523,7 @@ module Nabu
             return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) ||
                                            NO_PLACE.include?(place.downcase)
 
+            place = "#{place}?" if CONJECTURE_KEYS.include?(key) && !place.end_with?("?")
             return [place, nil, nil, nil]
           end
           return [present_place(meta["orig_place"]), nil, nil, nil] if place.nil?

@@ -32,14 +32,14 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `kokubunken` | texts | attribution | wired · manual | 3 docs / 1,723 passages |
 | `kouigenji` | texts | attribution | wired · manual | 54 docs / 25,065 passages |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
-| `ndl-kotenseki` | texts | open | wired · manual | 43,282 docs / 2,128,329 passages |
+| `ndl-kotenseki` | texts | open | wired · manual | 44,534 docs / 2,193,831 passages |
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 365,755 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `zho` 430,294 · `jpn` 337,653 · `lzh` 63,807 · `ojp` 11,413 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 13 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `zho` 430,294 · `jpn` 338,905 · `lzh` 63,807 · `ojp` 11,413 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 · `txb` 2,484 … and 13 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 
@@ -113,4 +113,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [29 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

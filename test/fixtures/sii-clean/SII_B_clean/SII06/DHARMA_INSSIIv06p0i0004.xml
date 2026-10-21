@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+			    <title>SII 6.4: original edition by K. V. Subrahmanya Aiyer</title>
+			    <title>No. 4. (<hi rend="italic">A.R. No.</hi> 55 <hi rend="italic">of</hi> 1897). IN THE SECOND GOPURA OF THE SAME TEMPLE, LEFT OF ENTRANCE.</title>
+			    <respStmt>
+			        <resp key="creator">author of digital edition</resp>
+			        <persName ref="part:emfr">
+			            <forename>Emmanuel</forename>
+			            <surname>Francis</surname>
+			        </persName>
+			    </respStmt>	
+			<funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+			<publicationStmt>
+				<authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+				<pubPlace>Paris, CEIAS</pubPlace>
+				<idno type="filename">DHARMA_INSSIIv06p0i0004.xml</idno>
+			<date from="2019" to="2026">2019-2026</date></publicationStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier><repository>as per external metadata</repository></msIdentifier>
+					<msContents>
+						<summary/>
+					</msContents>
+					<physDesc>
+						<handDesc>
+							<p/>
+						</handDesc>
+					</physDesc>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<revisionDesc>
+		    <change who="part:emfr" when="2025-03-11" status="draft">Further conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+		    <change who="part:mime" when="2025-03-08" status="draft">Conversion of digital encoding to DHARMA encoding scheme according to EGD (Encoding Guide for Diplomatic Editions)</change>
+		</revisionDesc>
+	</teiHeader>
+	<text xml:space="preserve">
+		<body>
+
+<div type="edition" xml:lang="tam" rendition="class:tamil maturity:vernacular">
+
+<p><lb n="1"/>vikkiṟama varuṣam mārkaḻi
+
+<lb n="2"/><num value="17"><unclear><g type="numeral">10</g></unclear> 7</num> <g ref="sym:tam-teti"/> <hi rend="grantha">śrī</hi>maṉmakāmaṇṭali
+
+<lb n="3" break="no"/>curaṉ metiṉimicura kaṇṭakaṭ
+
+<lb n="4" break="no"/>ṭāri cāḷuva cāḷuvat tirumalai
+
+<lb n="5"/>tevamakā<hi rend="grantha">dhi</hi>rācar tirukkāṭṭu
+
+<lb n="6" break="no"/>ppaḷḷi tāṉattāṟku
+
+<lb n="7"/>nirupam taṅkaḷ koyil
+
+<lb n="8"/><unclear>cū</unclear>lavari kottilakkai
+
+<lb n="9"/><unclear>n</unclear>āṭṭukkāṇikkai nāṭṭu
+
+<lb n="10"/><gap reason="lost" quantity="4" unit="character"/> cikkam Ūr<unclear>ta</unclear>
+
+<lb n="11" break="no"/>lai Ārik<unclear>ka</unclear>m pulavari piṟatā
+
+<lb n="12" break="no"/>ṉico<unclear>ṭi</unclear> Atikārico<unclear>ṭi</unclear>
+
+<lb n="13" break="no"/><unclear>k kaṇa</unclear>kkarco<unclear>ṭi</unclear> kallaṇai
+
+<lb n="14"/>kāṭuveṭṭu maṟṟum Eppeṟpaṭ
+
+<lb n="15" break="no"/>ṭa pala Upā<unclear>ti</unclear>yum cantiṟātittava⌈
+
+<lb n="16" break="no"/>raiyum caṟuvamāṉiyamĀka kaḻittu
+
+<lb n="17"/>viṭṭa Aḷavukku Uṭaiyavaṟku ma
+
+<lb n="18" break="no"/>kāpūcaiyum tiruppaṇi<unclear>yum kuṟai</unclear>
+
+<lb n="19" break="no"/>vaṟa naṭatti cukattileyirukka
+
+<lb n="20" break="no"/>vum <g ref="sym:tam-pillaiyarCuli" type="punctuation">.</g></p>
+
+</div>
+
+<div type="apparatus"/>
+
+<div type="commentary"/>
+
+
+<div type="bibliography">
+
+	<p>Digital edition of SII 6.4 by <bibl><ptr target="bib:SubrahmanyaAiyer1928_01"/></bibl> converted to DHARMA conventions by Emmanuel Francis. ARIE/1896-1897/B/1897/55.</p>
+
+	<listBibl type="primary">
+
+		<bibl n="SII">
+			<ptr target="bib:SubrahmanyaAiyer1928_01"/>
+			<citedRange unit="page">2</citedRange>
+			<citedRange unit="item">4</citedRange>
+		</bibl>
+
+	</listBibl>
+
+	<listBibl type="secondary">
+
+		<bibl n="ARIE">
+         			<ptr target="bib:ARIE1896-1897"/>
+         			<citedRange unit="page">7</citedRange>
+         			<citedRange unit="appendix">B/1897</citedRange>
+         			<citedRange unit="item">55</citedRange>
+         		</bibl>
+	    
+	</listBibl>
+
+</div>
+
+	</body>
+</text>
+</TEI>
