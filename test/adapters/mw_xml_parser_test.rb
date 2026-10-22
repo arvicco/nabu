@@ -109,8 +109,8 @@ module Adapters
       tiers = labels.group_by { |label| Nabu::Adapters::MwSigla.classify(label) }
       assert_equal 4, tiers.fetch(:passage).size    # the three RV. citations + Pāṇ. vii, 4, 3
       assert_equal 8, tiers.fetch(:document).size   # Bhaṭṭ. Mn.×2 (bare) Nir.×2 MārkP. R. Sāh.
-      assert_equal 7, tiers.fetch(:authority).size  # L.×2 Br.×2 ib.×2 Kāv.
-      assert_equal 13, tiers.fetch(:unheld).size    # MBh.×4, TS., Dhātup., Suśr., …
+      assert_equal 5, tiers.fetch(:authority).size  # L.×2 Br.×2 Kāv.
+      assert_equal 15, tiers.fetch(:unheld).size    # MBh.×4 + its two ib. (= MBh.), TS., Dhātup., Suśr., …
     end
 
     def test_the_verified_rv_citation_normalizes_to_the_gretil_shape
@@ -224,6 +224,64 @@ module Adapters
     def test_entries_without_the_safe_shapes_carry_no_crossrefs
       assert_empty slice_entry("1715").crossrefs
       assert(entries.all? { |e| e.crossrefs.empty? }, "the main fixture carries no cf./q.v. adjacency")
+    end
+
+    # -- the mining slice (test/fixtures/mw/README.md) ------------------------------
+
+    MINING = File.join(Nabu::TestSupport.fixtures("mw"), "mining-slice.xml")
+
+    def mining_entry(id)
+      @mining ||= Nabu::Adapters::MwXmlParser.new.entries(File.foreach(MINING))
+      @mining.find { |candidate| candidate.entry_id == id } or flunk "no mining entry L=#{id}"
+    end
+
+    def citation_rows(id)
+      mining_entry(id).citations.map { |c| [c.urn_raw, c.label, c.cts_work, c.citation] }
+    end
+
+    PANINI = "urn:nabu:gretil:sa_pANini-aSTAdhyAyI"
+
+    # -- ibid propagation: "ib." inherits the preceding citation's work --------------
+
+    # L 37642 ul-√lī: "Kāś. on Pāṇ. i, 3, 70 … ib.; … ib." — the first ib.
+    # takes the IMMEDIATELY preceding <ls> (Pāṇ.), the second chains through
+    # the first. The work is inherited, never the passage (MW's ib. names the
+    # same text, not the same sūtra): document grain. urn_raw keeps the print.
+    def test_ib_inherits_the_preceding_work_and_chains
+      assert_equal [["Kāś.", "Kāś.", nil, nil],
+                    ["Pāṇ. i, 3, 70", "Pāṇ. i, 3, 70", PANINI, "1,3.70"],
+                    ["ib.", "ib. (= Pāṇ.)", PANINI, nil],
+                    ["ib.", "ib. (= Pāṇ.)", PANINI, nil]], citation_rows("37642")
+    end
+
+    # L 62023 kheṭa: the chain follows the print mechanically — an ib. after
+    # "Kāś." inherits Kāś. (not held: the work is named, the urn stays nil),
+    # and propagation crosses the entry's continuation records.
+    def test_ib_follows_the_nearest_citation_across_continuation_records
+      rows = citation_rows("62023").last(6)
+      assert_equal([["Pāṇ. vi, 2, 126", PANINI], ["ib. (= Pāṇ.)", PANINI], ["Kāś.", nil],
+                    ["ib. (= Kāś.)", nil], ["Kāś.", nil], ["Bālar. ii", nil]],
+                   rows.map { |_raw, label, work, _cit| [label, work] })
+    end
+
+    # Entry boundaries reset the chain: an ib. that OPENS an entry points (in
+    # print) into the previous entry, which the desk never shows beside it —
+    # it stays the bare authority label, unresolved (L 101473 after L 101471's
+    # MBh.; L 25656.1, whose print predecessor is its parent's Pāṇ.).
+    def test_ib_resets_at_entry_boundaries
+      assert_equal [["ib.", "ib.", nil, nil]], citation_rows("101473")
+      assert_equal [["ib.", "ib.", nil, nil]], citation_rows("25656.1")
+      assert_equal(["Pāṇ.", "ib. (= Pāṇ.)"], citation_rows("25656").map { |row| row[1] })
+    end
+
+    def test_inherited_ib_labels_classify_by_the_inherited_siglum
+      sigla = Nabu::Adapters::MwSigla
+      assert_equal "Pāṇ.", sigla.siglum_of("ib. (= Pāṇ.)")
+      assert_equal :document, sigla.classify("ib. (= Pāṇ.)")
+      assert_equal :unheld, sigla.classify("ib. (= MBh.)")
+      assert_equal :authority, sigla.classify("ib. (= L.)")
+      assert_equal :authority, sigla.classify("ib."), "an unpropagated ib. stays a label"
+      assert_equal [PANINI, nil], sigla.resolve("ib. (= Pāṇ.)")
     end
 
     # -- hygiene -------------------------------------------------------------------

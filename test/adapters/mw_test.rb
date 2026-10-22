@@ -252,15 +252,15 @@ class MwTest < Minitest::Test
     seed_rgveda(passages: %w[5.086.05a 5.086.05c 10.109.01a])
 
     lines = Nabu::Adapters::Mw.citation_coverage(catalog: db)
-    assert_equal "mw citations: 32 — 4 passage-grain · 8 document-grain · 7 authority · 13 not-held",
-                 lines.first
+    assert_equal "mw citations: 32 — 4 passage-grain · 8 document-grain · 5 authority · 15 not-held",
+                 lines.first, "the two ib. after MBh. now count as MBh. (ibid propagation)"
     rv = lines.find { |line| line.strip.start_with?("RV.") }
     assert_match(%r{2/3 live at passage grain — urn:nabu:gretil:sa_Rgveda-edAufrecht}, rv,
                  "RV. v,86,5 and x,109,1 resolve via pada probing; v,39,2 is an honest miss")
     mn = lines.find { |line| line.strip.start_with?("Mn.") }
     assert_match(/held — document not in catalog/, mn, "Manusmṛti not synced here — never faked")
     assert_match(/authority labels: .*L\. 2/, lines.join("\n"))
-    assert_match(/not held: MBh\. 4/, lines.join("\n"))
+    assert_match(/not held: MBh\. 6/, lines.join("\n"), "MBh.×4 + two ib. (= MBh.)")
   end
 
   def test_coverage_is_empty_on_a_catalog_without_the_shelf
