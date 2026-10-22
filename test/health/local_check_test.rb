@@ -63,9 +63,9 @@ class LocalCheckTest < Minitest::Test
 
   def test_added_collapse_is_a_soft_warning
     source = seed_source(slug: "dead", wired: true)
-    seed_run(source, added: 9, updated: 2, errored: 0) # historically active
-    seed_run(source, added: 0, updated: 0, errored: 0)
-    seed_run(source, added: 0, updated: 0, errored: 0)
+    seed_run(source, added: 9, updated: 2, errored: 0, finished_at: @now - (3 * 86_400)) # historically active
+    seed_run(source, added: 0, updated: 0, errored: 0, finished_at: @now - (2 * 86_400))
+    seed_run(source, added: 0, updated: 0, errored: 0, finished_at: @now - 86_400)
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_docs(source, live: 11)
 
@@ -74,6 +74,20 @@ class LocalCheckTest < Minitest::Test
     assert_includes findings.map(&:kind), :added_collapse
     refute report.any_loud?, "added collapse is soft — exit 0"
     assert_operator report.soft_count, :>=, 1
+  end
+
+  # The same-afternoon re-sync session (the 2026-10-21 false alarm, read
+  # from the ledger): the zero streak spans an hour, so nothing arms.
+  def test_added_collapse_waits_for_the_zero_streak_to_span_a_day
+    source = seed_source(slug: "busy", wired: true)
+    seed_run(source, added: 3155, updated: 0, errored: 0, finished_at: @now - 3900)
+    seed_run(source, added: 0, updated: 0, errored: 0, finished_at: @now - 3660)
+    seed_run(source, added: 0, updated: 0, errored: 0, finished_at: @now - 2640)
+    seed_run(source, added: 0, updated: 0, errored: 0)
+    seed_docs(source, live: 11)
+
+    report = check(registry_of(["busy", { wired: true }]))
+    refute_includes report.sources.first.findings.map(&:kind), :added_collapse
   end
 
   # P98-1: 0-added is the HEALTHY steady state for a frozen or
