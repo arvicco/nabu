@@ -20,7 +20,7 @@ module Nabu
     #
     # An absent or unbuilt facet surface is an honest error, never a scan.
     class Senses
-      class Error < StandardError; end
+      class Error < Nabu::Error; end
 
       FACET = "sense"
       DEFAULT_LIMIT = 20
