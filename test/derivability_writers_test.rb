@@ -162,6 +162,10 @@ class DerivabilityWritersTest < Minitest::Test
   # crawl law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
+  # The scan-indexed wikisource base (indexed_wikisource) commits its held
+  # page envelopes and writes its cone.json sidecar (the drawn pages + the
+  # Index verdict table, tmp+rename, a declared materialization) into
+  # canonical/<slug>/ inside Adapter#fetch — the slavic_wikisource law kind.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
@@ -191,6 +195,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/ja_wikisource.rb nabu/adapters/zh_wikisource.rb
     nabu/adapters/slavic_wikisource.rb nabu/adapters/ban_wikisource.rb
     nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
+    nabu/adapters/indexed_wikisource.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
     nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb

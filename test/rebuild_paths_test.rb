@@ -43,6 +43,8 @@ class RebuildPathsTest < Minitest::Test
     refresh: {
       "hiero postings" => "f(canonical/aed) alone — no builder-side input; the aed post-sync " \
                           "hook (SyncRunner) re-derives it whenever its only input changes",
+      "sign concordances" => "f(canonical/osl) alone — no builder-side input; the osl post-sync " \
+                             "hook (SyncRunner) re-derives it whenever its only input changes",
       "lect journal" => "written through the lect CLIs in-phase (apply-rules, assign, withdraw) " \
                         "and re-minted wholesale by both rebuild flavors; refresh projects the " \
                         "lect facet FROM it and never re-mints it",

@@ -6,7 +6,13 @@ id	word	wordnet21id	wordnetSupersenseId	wordnetSupersenseName
 574	person	a human being; "there was too much for one person to do"	00007	03	Tops
 5675	engagement	sharing the activities of a group; "the teacher tried to increase his students' engagement in class activities"	_	_	_
 5676	non-engagement	withdrawing from the activities of a group	01223	04	act
+25248	circumference	the size of something as given by the distance around it	05041	07	attribute
+25258	thickness	the dimension through an object as opposed to its length or width	05043	07	attribute
+30125	chapter	a subdivision of a written work; usually numbered and titled; "he read a chapter every night before falling asleep"	06310	10	communication
+59344	finger	the length of breadth of a finger used as a linear measure	13473	23	quantity
 126807	Kathāsaritsāgara	name of a text	_	_	_
 126808	Kathāmukha	name of the second Lambaka or book of the Kathāsaritsāgara	_	_	_
 127090	bāhyadruti	1. one of the Saṃskāras of mercury
 2. amalgamation of a molten metal with mercury	_	_	_
+128218	Dhanvantari	the physician of the gods; produced at the churning of the ocean with a cup of Amṛta in his hands	_	_	_
+128793	Āturopakramaṇīya	name of Suśrutasaṃhitā, Sū. 35	_	_	_

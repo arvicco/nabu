@@ -460,6 +460,39 @@ module MCP
       assert_match(/AGDT/, description, "the tool description names the decoded tagset")
     end
 
+    # BHSA-shaped tokens (real fixture shapes: Dan 2:4 יְדַבְּרוּ "speak",
+    # Hag 2:5 דָּבָר "word" — one consonantal lexeme key) under the bhsa
+    # slug: `gloss` splits the homograph, composes with `morph`, and every
+    # lemma hit carries the token gloss.
+    def test_search_gloss_filters_and_lemma_hits_carry_token_gloss
+      bhsa = Nabu::Store::Source.create(slug: "bhsa", name: "BHSA", adapter_class: "TestAdapter",
+                                        license_class: "nc")
+      doc = make_document(source: bhsa, urn: "urn:nabu:bhsa:dan", title: "Daniel", language: "hbo")
+      make_passage(doc, urn: "urn:nabu:bhsa:dan:2.4", text: "יְדַבְּר֧וּ", sequence: 0, language: "hbo", tokens: [
+                     { "form" => "יְדַבְּר֧וּ", "lex_utf8" => "דבר", "gloss" => "speak", "vs" => "piel",
+                       "vt" => "wayq", "gn" => "m", "nu" => "pl", "ps" => "p3", "st" => "NA" }
+                   ])
+      make_passage(doc, urn: "urn:nabu:bhsa:hag:2.5", text: "דָּבָ֞ר", sequence: 1, language: "hbo", tokens: [
+                     { "form" => "דָּבָ֞ר", "lex_utf8" => "דבר", "gloss" => "word", "vs" => "NA", "vt" => "NA",
+                       "gn" => "m", "nu" => "sg", "ps" => "NA", "st" => "a" }
+                   ])
+      rebuild!
+
+      args = { "lemma" => "דבר", "include_restricted" => true }
+      plain = payload(call("nabu_search", args)).fetch("matches")
+      assert_equal(%w[speak word], plain.map { |hit| hit.fetch("token_gloss") })
+      word = payload(call("nabu_search", args.merge("gloss" => "word"))).fetch("matches")
+      assert_equal(%w[urn:nabu:bhsa:hag:2.5], word.map { |hit| hit.fetch("urn") })
+      verb = payload(call("nabu_search", args.merge("gloss" => "speak", "morph" => "conjugation=wayq")))
+             .fetch("matches")
+      assert_equal(%w[urn:nabu:bhsa:dan:2.4], verb.map { |hit| hit.fetch("urn") })
+      assert_match "stem=piel", verb.first.fetch("morph")
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_search", { "query" => "x", "gloss" => "word" }) }
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", args.merge("gloss" => "word", "near" => "x"))
+      end
+    end
+
     def test_search_morph_requires_lemma
       seed_corpus
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do

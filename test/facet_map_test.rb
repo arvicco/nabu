@@ -312,4 +312,46 @@ class FacetMapTest < Minitest::Test
       assert_includes slugs, slug, "facet_map.yml names #{slug}, which is not a registered source"
     end
   end
+
+  # -- token_fields: the token-MISC lane at passage grain ---------------------
+  # A CoNLL-U source's per-token MISC keys (DCS's WordSem sense ids) project
+  # into the passage facet tables: a key → a facet name, optionally with the
+  # dictionary shelf whose entry ids the values are (the ref is then the
+  # shelf entry's urn). The source joins #passage_sources either way.
+
+  def test_loads_token_fields_with_and_without_a_shelf
+    map = build("sources" => {
+                  "ud" => { "passage_fields" => { "king" => "ruler" }, "token_fields" => { "Ref" => "ref" } },
+                  "dcs" => { "token_fields" => { "WordSem" => { "facet" => "sense", "shelf" => "dcs-senses" } } }
+                })
+    assert_equal %w[ud dcs], map.passage_sources
+    assert_nil map.passage_fields_for("dcs")
+    field = map.token_fields_for("dcs").fetch("WordSem")
+    assert_equal "sense", field.facet
+    assert_equal "dcs-senses", field.shelf
+    assert_nil map.token_fields_for("ud").fetch("Ref").shelf
+    assert_nil map.token_fields_for("sillok")
+    assert_equal %w[dcs-senses], map.token_shelves("sense")
+    assert_empty map.token_shelves("ref")
+  end
+
+  def test_blank_token_field_shapes_are_config_errors
+    [{}, { "WordSem" => "" }, { "WordSem" => { "shelf" => "dcs-senses" } },
+     { "WordSem" => { "facet" => "sense", "shelf" => " " } }, { "WordSem" => ["sense"] }].each do |fields|
+      error = assert_raises(Nabu::FacetMap::ConfigError, fields.inspect) do
+        build("sources" => { "dcs" => { "token_fields" => fields } })
+      end
+      assert_match(/dcs/, error.message)
+    end
+  end
+
+  # The DCS gold tokens' WordSem ids are word-senses.csv's first column
+  # (upstream's conllu readme says so), so the shipped rule names the shelf.
+  def test_shipped_config_projects_the_dcs_token_senses
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    field = map.token_fields_for("dcs").fetch("WordSem")
+    assert_equal %w[sense dcs-senses], [field.facet, field.shelf]
+    assert_includes map.passage_sources, "dcs"
+    assert_equal %w[dcs-senses], map.token_shelves("sense")
+  end
 end

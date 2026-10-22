@@ -6,6 +6,33 @@ require "webmock/minitest"
 # The suite must never touch the network. No allowlist.
 WebMock.disable_net_connect!
 
+# Every git the suite runs (tests and the code under test alike) gets
+# auto-gc and auto-maintenance OFF, through git's env-config channel. A
+# commit in a throwaway repo otherwise may DETACH a background gc/maintenance
+# that repacks loose objects while a local clone copies them ("fatal: failed
+# to copy file") or leaves objects/maintenance.lock behind as mktmpdir's
+# cleanup walks the tree (ENOENT). Timing-dependent, so it surfaces under
+# load — two tests had already pinned `-c gc.auto=0` by hand; this closes the
+# whole class. Appends to any GIT_CONFIG_COUNT already in the environment.
+module Nabu
+  module TestSupport
+    GIT_TEST_CONFIG = { "gc.auto" => "0", "maintenance.auto" => "false" }.freeze
+
+    def self.isolate_git_background_work!(env = ENV)
+      base = Integer(env.fetch("GIT_CONFIG_COUNT", "0"), 10)
+      present = (0...base).to_h { |i| [env["GIT_CONFIG_KEY_#{i}"], env["GIT_CONFIG_VALUE_#{i}"]] }
+      return if GIT_TEST_CONFIG.all? { |key, value| present[key] == value } # inherited from a parent run
+
+      GIT_TEST_CONFIG.each_with_index do |(key, value), offset|
+        env["GIT_CONFIG_KEY_#{base + offset}"] = key
+        env["GIT_CONFIG_VALUE_#{base + offset}"] = value
+      end
+      env["GIT_CONFIG_COUNT"] = (base + GIT_TEST_CONFIG.size).to_s
+    end
+  end
+end
+Nabu::TestSupport.isolate_git_background_work!
+
 require "nabu"
 
 # Shared test support: the adapter conformance suite and its test rig.

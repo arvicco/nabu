@@ -43,6 +43,11 @@ module Nabu
     # §2's "0,0,0 for a year → candidate for frozen"), so this is a nudge to look,
     # not a failure. The "historically active" guard means a brand-new source with
     # three empty runs never trips (it was never active to collapse FROM).
+    # The trailing zero streak must also span COLLAPSE_MIN_SPAN of wall clock
+    # (newest finish minus oldest finish in the streak): three re-syncs in one
+    # afternoon after an active run are a working session, not a dead pipeline
+    # (the 2026-10-21 false alarm: 16:23 / 16:40 / 17:24 after an active 16:19).
+    # A streak run without a finish stamp proves no span, so the rule stays quiet.
     #
     # == Withdrawal / retirement creep (:soft >5%, :loud >15%)
     #
@@ -67,6 +72,8 @@ module Nabu
       # Consecutive most-recent all-zero (added AND updated) runs that, given
       # prior activity, read as a collapsed pipeline.
       COLLAPSE_RUNS = 3
+      # The wall-clock span (seconds) the zero streak must cover before it arms.
+      COLLAPSE_MIN_SPAN = 86_400
       # Cumulative withdrawn+retired fraction thresholds (soft / loud).
       CREEP_SOFT_FRACTION = 0.05
       CREEP_LOUD_FRACTION = 0.15
@@ -88,18 +95,18 @@ module Nabu
         )
       end
 
-      # +successful_runs+: newest-first array of { added:, updated: } for every
-      # successful run of the source.
+      # +successful_runs+: newest-first array of { added:, updated:, finished_at: }
+      # for every successful run of the source.
       def added_collapse(successful_runs:)
-        return nil if successful_runs.size < COLLAPSE_RUNS
-
-        latest = successful_runs.first(COLLAPSE_RUNS)
-        return nil unless latest.all? { |run| run[:added].zero? && run[:updated].zero? }
-        return nil unless successful_runs.drop(COLLAPSE_RUNS).any? { |run| !run[:added].zero? || !run[:updated].zero? }
+        streak = successful_runs.take_while { |run| run[:added].zero? && run[:updated].zero? }
+        return nil if streak.size < COLLAPSE_RUNS
+        return nil if streak.size == successful_runs.size # never active to collapse FROM
+        return nil unless streak_span(streak) >= COLLAPSE_MIN_SPAN
 
         Finding.new(
           kind: :added_collapse, severity: :soft,
-          message: "added collapse: #{COLLAPSE_RUNS} runs with 0 added and 0 updated after prior activity — " \
+          message: "added collapse: #{streak.size} runs over #{(streak_span(streak) / 86_400).floor} day(s) " \
+                   "with 0 added and 0 updated after prior activity — " \
                    "stale upstream pin or dead pipeline?"
         )
       end
@@ -196,6 +203,15 @@ module Nabu
           kind: :stale, severity: :soft,
           message: "stale: last synced #{age_days.floor} days ago (> #{STALE_AFTER_DAYS}) — cadence slipped?"
         )
+      end
+
+      # Seconds between the streak's oldest and newest finish (0 when any
+      # stamp is missing — no span is proven).
+      def streak_span(streak)
+        stamps = streak.map { |run| run[:finished_at] }
+        return 0 if stamps.any?(&:nil?)
+
+        to_time(stamps.first) - to_time(stamps.last)
       end
 
       def creep_severity(shed:, total:)

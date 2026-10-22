@@ -5038,6 +5038,36 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The OSL 00etc concordance block on the cuneiform sign card: read from
+  # the precompiled sign_concordances rows, rendered beside the @list
+  # concordances; a sign no asset joins prints no block at all.
+  def test_char_card_renders_the_osl_concordance_block
+    with_sign_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char AK]) }
+      assert_nil status
+      assert_match(/^concordances \(OSL 00etc\): Labat 097  ·  AKS 70  ·  PGSL 045$/, out)
+      assert_match(/^  more lists \(Wikidata\): ABZ 97  ·  ABZL 052  ·  ELLES 053/, out)
+      assert_match(/^  MZL↔KWU: 127↔073$/, out)
+      assert_match(/^  eBL name: AK$/, out)
+      assert_match(/^  Wikidata: Q87555054$/, out)
+      assert_match(/^  value maps: short forms ak→a₅, ag→a₅$/, out)
+      assert_operator out.index("sign lists:"), :<, out.index("concordances (OSL 00etc)"),
+                      "the block rides beside the @list line"
+
+      out, _err, status = with_config(config) { run_cli(%w[char MIN]) }
+      assert_nil status
+      assert_match(/^  MZL↔KWU: 825↔\(KWU unnumbered\)$/, out)
+
+      out, _err, status = with_config(config) { run_cli(["char", "|A×AN|"]) }
+      assert_nil status
+      refute_match(/concordances/, out, "no joined row → no block, never an empty frame")
+
+      out, _err, status = with_config(config) { run_cli(%w[char AK --json]) }
+      assert_nil status
+      assert_equal ["097"], JSON.parse(out).dig("card", "concordances", "lists", "Labat")
+    end
+  end
+
   # P75 C-1: a namespaced --place is the identity lane — the ref matches in
   # any spelling, and the note names the lane on the page.
   def test_search_place_mint_filters_by_identity_and_notes_the_lane
@@ -5850,6 +5880,33 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[search --lemma λέγω --near κῆρυξ --window 1]) }
       assert_nil status
       assert_match(/:64498 \[grc\]/, out, "εἶπας (a form of λέγω) is one word from κῆρυξ")
+    end
+  end
+
+  # Token glosses (conventions §6.1): achemenet's real fixture, synced. Every
+  # lemma hit shows upstream's token gloss in ‘quotes’; --gloss keeps only
+  # the attestations whose gloss contains the word — ša "of" vs ša "that".
+  def test_search_lemma_shows_token_glosses_and_gloss_filters
+    with_glossed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma eqlu]) }
+      assert_nil status
+      assert_match(/eqlu → A-ŠA₃.*  ‘field’/, out)
+
+      that, _err2, status2 = with_config(config) { run_cli(%w[search --lemma ša --gloss that]) }
+      assert_nil status2
+      assert_match(/ša → ša₂  ‘that’/, that)
+      refute_match(/‘of’/, that, "the evidence names only the matching tokens' glosses")
+    end
+  end
+
+  def test_search_gloss_requires_lemma_and_a_word
+    with_glossed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search ša --gloss that]) }
+      assert_equal 1, status
+      assert_match(/--gloss WORD .* requires --lemma/, err)
+      _out2, err2, status2 = with_config(config) { run_cli(["search", "--lemma", "ša", "--gloss", " "]) }
+      assert_equal 1, status2
+      assert_match(/needs a word/, err2)
     end
   end
 
@@ -9072,9 +9129,11 @@ class CLITest < Minitest::Test
       FileUtils.mkdir_p(osl_dir)
       FileUtils.cp(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"),
                    File.join(osl_dir, "osl.asl"))
+      FileUtils.cp_r(File.join(Nabu::TestSupport.fixtures("osl"), "00etc"), File.join(config.canonical_dir, "osl"))
       catalog = Nabu::Store.connect(config.catalog_path)
       Nabu::Store.migrate!(catalog)
       Nabu::Store.setup!(catalog)
+      Nabu::Store::SignConcordances.rebuild!(catalog: catalog, canonical_dir: config.canonical_dir)
       src = catalog[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "TestAdapter",
                                      license_class: "open", enabled: true)
       { "urn:c:a" => "lugal ag dumu", "urn:c:b" => "nu banda" }.each do |urn, text|
@@ -9538,6 +9597,27 @@ class CLITest < Minitest::Test
       )
       with_config(config) do
         capture_io { Nabu::CLI.start(%w[sync ud --parse-only]) }
+      end
+      yield config
+    end
+  end
+
+  # The achemenet fixture (English token glosses under "eng"), synced
+  # parse-only under its real slug — the gloss registry keys on it.
+  def with_glossed_corpus
+    Dir.mktmpdir("nabu-cli-gloss") do |root|
+      FileUtils.mkdir_p(File.join(root, "canonical"))
+      FileUtils.cp_r(File.expand_path("fixtures/achemenet", __dir__), File.join(root, "canonical", "achemenet"))
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "achemenet:\n  adapter: Nabu::Adapters::Achemenet\n  " \
+                          "wired: true\n  sync_policy: auto\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+      with_config(config) do
+        capture_io { Nabu::CLI.start(%w[sync achemenet --parse-only]) }
       end
       yield config
     end

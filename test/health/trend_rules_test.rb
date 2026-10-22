@@ -33,13 +33,40 @@ class TrendRulesTest < Minitest::Test
 
   # -- added collapse ------------------------------------------------------
 
+  def run_at(stamp, added: 0, updated: 0) = { added: added, updated: updated, finished_at: Time.parse(stamp) }
+
   def test_collapse_fires_after_prior_activity
-    runs = [{ added: 0, updated: 0 }, { added: 0, updated: 0 }, { added: 0, updated: 0 },
-            { added: 5, updated: 1 }]
+    runs = [run_at("2026-10-21 09:00"), run_at("2026-10-14 09:00"), run_at("2026-10-07 09:00"),
+            run_at("2026-09-30 09:00", added: 5, updated: 1)]
     finding = T.added_collapse(successful_runs: runs)
     refute_nil finding
     assert_equal :added_collapse, finding.kind
     assert finding.soft?, "added collapse is a soft warning (a quiet corpus looks the same)"
+  end
+
+  # The diagnosed false alarm (2026-10-21): three same-afternoon re-syncs
+  # after an active 16:19 run are one working session, not a collapsed
+  # pipeline — the zero streak must span COLLAPSE_MIN_SPAN of wall clock.
+  def test_collapse_needs_the_zero_streak_to_span_a_day
+    runs = [run_at("2026-10-21 17:24"), run_at("2026-10-21 16:40"), run_at("2026-10-21 16:23"),
+            run_at("2026-10-21 16:19", added: 3155)]
+    assert_nil T.added_collapse(successful_runs: runs)
+    assert_equal 86_400, T::COLLAPSE_MIN_SPAN
+  end
+
+  # The span is the whole trailing zero streak: a fourth zero run a day
+  # later arms it, even though the newest three alone span hours.
+  def test_collapse_arms_once_the_streak_spans_the_window
+    runs = [run_at("2026-10-22 17:30"), run_at("2026-10-22 17:24"), run_at("2026-10-22 16:40"),
+            run_at("2026-10-21 16:23"), run_at("2026-10-21 16:19", added: 3155)]
+    refute_nil T.added_collapse(successful_runs: runs)
+  end
+
+  # A run without a finish stamp proves no span — the rule stays quiet.
+  def test_collapse_without_timestamps_proves_no_span
+    runs = [{ added: 0, updated: 0 }, { added: 0, updated: 0 }, { added: 0, updated: 0 },
+            { added: 5, updated: 1 }]
+    assert_nil T.added_collapse(successful_runs: runs)
   end
 
   # A brand-new source with only empty runs was never active ⇒ no collapse.

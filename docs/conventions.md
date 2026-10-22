@@ -301,6 +301,13 @@ decoded ones:
 | CoNLL-U / UD (grc-perseus, got, …) | `feats` | UD `Key=Value` string, `\|`-joined | `Case=Dat\|Gender=Masc\|Number=Plur` |
 | PROIEL / TOROT (chu, orv, PROIEL grc/lat) | `morphology` | 10-position positional tag | `-p---mgpwi` (plur masc gen pos) |
 | AGDT (glaux) | `postag` | 9-slot positional tag (pos first) | `v3saia---` (3 sing aor ind act) |
+| Diorisis (diorisis) | `analyses` | list of Morpheus prose analyses (every candidate) | `["fem gen pl", "masc/neut gen pl"]` |
+| ETCBC (bhsa) | `gn` `nu` `ps` `st` `vs` `vt` | one feature per key | `vs=piel vt=wayq nu=pl ps=p3` |
+| Abegg (dss) | `gn` `nu` `ps` `st` `vs` `vt` `md` (beside `morpho`) | one feature per key | `vs=hifil vt=ptca gn=m nu=s` |
+| OSHB (oshb) | `morph` | language + `/`-joined segments | `HC/Vqw3ms/Sp3fs` |
+| CorA (rem, ren) | `msd` | `.`-joined self-describing values | `Ind.Pres.Sg.3`, `Masc-Neut.Dat-Akk.Sg` |
+| IMP (goo300k) | `msd` | coarse closed tag | `Ncf`, `Vmp`, `Agc` |
+| Menota (menota) | `msa` | category-letter codes, `\|`-joined analyses | `xVB fF tPS mIN p3 nS vA` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
@@ -318,9 +325,45 @@ the same eight categories in the same order with the same code letters as
 PROIEL positions 1–8, so they decode through the same rows
 (`AGDT_FIELDS`); slot 1 (part of speech) is undecoded, and AGDT codes the
 PROIEL rows lack (gender `c`, common) are dropped, never guessed. Each tagset
-is one row of `MorphFacets::DECODERS` (token key → decode method, in
-precedence order `morphology` → `feats` → `postag`), so a further tagset is
-one row plus one decoder. ORACC carries no inflectional
+is one row of `MorphFacets::DECODERS` (token key → decode method → source
+scope, in precedence order), so a further tagset is one row plus one decoder.
+
+**The later tagsets: source-scoped rows, readings, Semitic keys.** The keys
+`morph`, `msd`, `analyses`, `msa` each name *different* tagsets in different
+sources (OSHB vs REF/coptic `morph`; CorA vs IMP vs NKJP `msd`), so those rows
+carry a source scope and decode only their own sources' tokens — the passage's
+source slug rides into the façade. A decoder may return alternative
+**readings** (Diorisis lists every candidate analysis; Menota `|`-joins whole
+analyses) whose values may themselves be alternatives (`masc/neut`,
+`Masc-Neut`, `gMFN`, OSHB/Abegg gender `b` = masc|fem): a token matches when
+*any* reading satisfies *every* facet, so cross-feature correlation survives;
+the evidence renders the matching readings with `/`-joined alternatives. The
+Hebrew/Aramaic families add three keys rather than forcing Greek tense values
+onto Semitic conjugations: `state` (`abs`/`cons`/`emph`; `det` is an alias —
+the Aramaic determined state IS the emphatic), `stem` and `conjugation`
+(ETCBC spelling: `perf impf wayq impv infa infc ptca ptcp`); conjugations
+that are moods also set `mood` (`imp`, `inf`, `part`; OSHB/Abegg jussive and
+cohortative set `jus`/`coh`). DSS stems arrive in Abegg's names and are
+recoded to the ETCBC spelling by upstream's own `vs`→`vs_etcbc` pairs; the
+silver `*_etcbc` layer itself is never merged into Abegg's gold features.
+OSHB stems keep OSHB's names (`niphal`, `hiphil` — the two stem systems are
+not 1:1, so no crosswalk is claimed). Every decoder's skipped residue is named
+in its table comment.
+
+**Token glosses — the façade's sibling (`Query::TokenGlosses`).** Some sources
+store upstream's own word meaning on each token: bhsa `gloss` and achemenet
+`eng` (English), aes `gloss` (German contextual translation) and tlhdig
+`gloss` (German, on the selected analysis). One registry row per source (token
+key + gloss language) makes them displayable — every lemma hit from those
+sources carries `token_gloss`, rendered in ‘quotes’ beside any dictionary
+gloss — and filterable on the same lemma-anchored token pass as `--morph`:
+`search --lemma דבר --gloss word` keeps the attestations whose gloss contains
+the word (whole word, case-insensitive), which splits BHSA's consonantal
+lexeme key back into its homographs (דבר "speak" / "word"). Not rows: tla-hf's
+`gloss` is grammatical (Leipzig labels — `PREP`, `N.m`, `-3sg.m`), and ceipom's
+English `meaning` waits on the equivalence tier's Latin keys reaching the
+token pass. Gloss search *across* lemmas (find every word glossed "king") needs
+an index and is a separate, rebuild-class step. ORACC carries no inflectional
 morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
 inflectional facets **never match ORACC** — honest absence, not error. A unified
 `pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and

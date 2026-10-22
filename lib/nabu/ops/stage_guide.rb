@@ -243,8 +243,8 @@ module Nabu
             "Maps upstream genre and kind labels onto the house document-kind taxonomy (config/kind_map.yml) " \
             "— the axis behind `nabu kind census` and the kind filters."
       stage :passage_facets, "passage facets",
-            "Projects the passage annotations facet_map.yml names (subject classes, named entities) into the " \
-            "passage-grain facet tables."
+            "Projects the passage annotations facet_map.yml names (subject classes, named entities, the DCS " \
+            "tokens' sense ids) into the passage-grain facet tables — the index behind `nabu sense`."
       stage :entity_index, "entity index",
             "Indexes the names marked inside passage text (persons, places and other typed entities the " \
             "EpiDoc, Coptic and DHARMA parsers mine) under a folded search key — the index behind `nabu entity`."
@@ -254,6 +254,10 @@ module Nabu
       stage :hiero_postings, "hiero postings",
             "Tallies every hieroglyph attested in the AED text files into one precompiled row per sign — the " \
             "corpus panel of the hieroglyph card."
+      stage :sign_concordances, "sign concordances",
+            "Joins the concordance tables riding in the Oracc Sign List repo (Labat, AKS, ATU and the other " \
+            "printed lists, MZL↔KWU, PGSL, eBL sign names, the Attinger and short-form value maps) onto the " \
+            "OSL sign ids — the concordance block of the cuneiform sign card."
       stage :lect_journal, "lect journal",
             "Re-mints the lect journal from the owner rulings, the compiled facet→lect rules and the date-band " \
             "inferences — the per-document stage assignments the lect facet reads next."

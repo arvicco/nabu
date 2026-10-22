@@ -618,6 +618,19 @@ class SyncRunnerTest < Minitest::Test
     assert_nil runner.sync("breaker", fetch_only: true).module_delta
   end
 
+  # The OSL sign concordances follow the osl cone: the module mints no
+  # documents, so the post-sync hook (never a load gate) re-derives them.
+  def test_an_osl_parse_only_sync_re_derives_the_sign_concordances
+    osl = File.join(@canonical, "osl")
+    FileUtils.mkdir_p(File.join(osl, "00lib"))
+    FileUtils.cp(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"), File.join(osl, "00lib"))
+    FileUtils.cp_r(File.join(Nabu::TestSupport.fixtures("osl"), "00etc"), osl)
+    runner = make_runner(registry(entry("osl", Nabu::Adapters::Osl, wired: true, kind: "module")))
+
+    runner.sync("osl", parse_only: true)
+    assert_equal ["331"], @db[:sign_concordances].where(oid: "o0002834", scheme: "Labat").select_map(:value)
+  end
+
   def test_sync_of_an_ordinary_source_derives_no_place_index
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))

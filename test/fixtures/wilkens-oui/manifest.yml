@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The PDF is a mutool page-merge trim (PDF pages 17, 60, 61, 198, 457) of the
+# real 946-page book — a fresh fetch returns the full file, so the URL is
+# checked for liveness only. adapter_test null: no adapter exists yet (the
+# segmentation parser is tested on its own), and counts would false-fail
+# against the untrimmed PDF anyway.
+source: wilkens-oui
+adapter_test:
+retrieved: "2026-10-22"
+files:
+  - path: wilkens-sample.pdf
+    url: https://univerlag.uni-goettingen.de/bitstream/3/isbn-978-3-86395-481-9/4/Wilkens_handwoerterbuch.pdf
+    refetchable: true
+    whole: false
+    trim: >-
+      PDF pages 17, 60, 61, 198, 457 of the real book via mutool merge
+      (folios 1, 44, 45, 182, 441)
+  - path: wilkens-sample.stext.xml.gz
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool structured-text extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F stext -o - wilkens-sample.pdf | gzip -9`
+    copied: "2026-10-22"
+    whole: false
+    trim: the mutool 1.28.0 stext layer of the 5-page fixture trim, verbatim, gzipped

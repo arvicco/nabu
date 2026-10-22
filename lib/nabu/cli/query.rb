@@ -83,11 +83,21 @@ module Nabu
       key=value, all required). The vocabulary is Universal Dependencies
       feature names — case, number, gender, person, tense, mood, voice,
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
-      their `feats`, PROIEL/TOROT and GLAUx (AGDT postag) are decoded from
-      their positional tags into the same names. Each hit shows the matching surface form(s) and the
-      decoded morph evidence. --morph REQUIRES --lemma (bare morphology search
+      their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
+      OSHB, ReM/ReN (CorA msd), goo300k (IMP msd) and Menota (msa) are
+      decoded into the same names — Hebrew/Aramaic add state, stem and
+      conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous
+      analyses match when any reading fits. Each hit shows the matching
+      surface form(s) and the decoded morph evidence. --morph REQUIRES --lemma (bare morphology search
       is out of scope); ORACC carries no inflectional morphology, so
       inflectional facets never match it (honest absence). See conventions §6.1.
+
+      TOKEN GLOSSES (--gloss WORD): sources that store upstream's own word
+      meaning on each token (bhsa, achemenet: English; aes, tlhdig: German)
+      show it on every lemma hit in ‘quotes’, beside any dictionary gloss.
+      With --lemma, --gloss keeps only attestations whose token gloss
+      contains WORD (whole word, case-insensitive) — e.g. BHSA's consonantal
+      דבר as "word" vs "speak". Composes with --morph; not with --near.
 
       PROXIMITY (A --near B [--window N]): keep only hits where B occurs
       within N words of A in the SAME passage — λόγος near θεός is John 1:1.
@@ -181,6 +191,21 @@ module Nabu
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
       jumps from either side to the aligned line in the other.
 
+      TRANSLATIONS (--translations): search the translations a source keeps
+      INSIDE its passages' annotations rather than as sibling documents —
+      Coptic SCRIPTORIUM's English (and Arabic/German), CDLI's and eBL's ATF
+      #tr lines, the German word glosses of the glossed Hittite corpus,
+      CorPH, the UD treebanks' sentence translations, Tamilex, the Old Dutch
+      corpus, St Gall Priscian, ACLT, DiCCAS, Guaman Poma, the Middle Korean
+      shelf's modern rendering. Each hit is the ORIGINAL passage (its urn
+      and language), with the matched rendering and the original text under
+      it — `nabu show <urn>` opens the text itself. Words AND together,
+      "double quotes" make a phrase, word* a prefix; matching is diacritic-
+      and case-insensitive. --lang filters on the ORIGINAL's language.
+      Composes with --lang/--source/--axis/--license/--limit only. Every
+      render names the sources the index covers; the lane is built by the
+      reference rebuild (or `bundle exec rake index:translations`).
+
       Examples:
         nabu search μηνιν                          # finds μῆνιν, accents optional
         nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
@@ -189,11 +214,16 @@ module Nabu
         nabu search μηνι* --lang grc               # every derivative of the stem
         nabu search αγαπη --license attribution    # only freely re-usable hits
         nabu search "rich-haired" --lang eng       # the ingested translations
+        nabu search --translations "save my soul"  # the Coptic passages whose
+                                                   #   English rendering says so
+        nabu search --translations wettergott --source hittite-glossed
+                                                   # Hittite lines glossed "storm-god"
         nabu search --lemma λέγω --lang grc        # every attestation in the Greek
                                                    #   treebank: λέγουσι, εἶπας, εἰπεῖν…
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
         nabu search --lemma λόγος --morph case=dat,number=pl
                                                    # only the dative-plural λόγοις
+        nabu search --lemma דבר --gloss word       # BHSA דבר as "word", not "speak"
         nabu search λόγος --near θεός --window 5    # λόγος within 5 words of θεός
                                                    #   (John 1:1 and its kin)
         nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
@@ -236,6 +266,9 @@ module Nabu
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
     option :morph, type: :string, banner: "FACETS",
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
+    option :gloss, type: :string, banner: "WORD",
+                   desc: "Token-gloss filter (with --lemma): keep attestations whose upstream gloss " \
+                         "contains WORD (bhsa/aes/achemenet/tlhdig)"
     option :near, type: :string, banner: "TERM",
                   desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
     option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
@@ -317,6 +350,10 @@ module Nabu
                              "characters — floors the cleanest-first order above one-char fragments"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
+    option :translations, type: :boolean, default: false,
+                          desc: "Search the translations held in passage ANNOTATIONS (coptic, cdli/ebl #tr, " \
+                                "hittite-glossed trans_de, corph, …); hits are the original passages — " \
+                                "composes with --lang/--source/--axis/--license/--limit only"
     option :withdrawn, type: :boolean, default: false,
                        desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \
                              "documents, revision-pruned passages) — substring match over the " \
@@ -356,6 +393,7 @@ module Nabu
       query = query.to_s.strip
       display_mode
       date_basis_filter
+      return translations_search(query) if options[:translations]
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
          (options[:near] || options[:lemma])
@@ -376,6 +414,10 @@ module Nabu
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
+      end
+      if options[:gloss] && (!options[:lemma] || options[:near] || options[:gloss].strip.empty?)
+        raise Thor::Error, "search: --gloss WORD filters lemma attestations by upstream's token gloss — " \
+                           "it needs a word and requires --lemma (and does not compose with --near)"
       end
       if options[:exact] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --exact is glyph-literal substring matching over the plain " \
@@ -664,6 +706,7 @@ module Nabu
                                                   #   verbatim (form, lemma, osm, …)
         nabu show urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.6 --entities
                                                   # + the persons/places marked in it
+        nabu show urn:nabu:dcs:5:3363:2612 --senses  # + each token's word senses
 
       TOKENS (--tokens): appends the passage's stored token annotations as
       one line per token — `form` first, then every key the store holds for
@@ -677,6 +720,13 @@ module Nabu
       upstream's type, the surface, then any key/identity/ref/subtype,
       verbatim. A document or range urn groups them under each passage's
       :suffix. Search by name across the corpus with `nabu entity NAME`.
+
+      SENSES (--senses): appends the word senses the passage's gold tokens
+      cite (DCS WordSem ids, the source's token_fields rule in
+      config/facet_map.yml) — one line per citing token, form (lemma) then
+      each sense id with its dcs-senses name and gloss; an id the shelf
+      does not hold says so. A document or range urn groups them under each
+      passage's :suffix. Search by sense with `nabu sense TERM`.
 
       SEGMENTED (--segmented): renders Tibetan-language rows (xct/bod/otb)
       with word boundaries — the stored text with a space inserted at each
@@ -707,6 +757,8 @@ module Nabu
                     desc: "Append the passage's stored token annotations verbatim (form + every key present)"
     option :entities, type: :boolean, default: false,
                       desc: "Append the names the edition marks inside the text (persons, places …), verbatim"
+    option :senses, type: :boolean, default: false,
+                    desc: "Append the word senses the gold tokens cite (DCS WordSem), resolved against dcs-senses"
     option :segmented, type: :boolean, default: false,
                        desc: "Render Tibetan (xct/bod/otb) passages with word boundaries " \
                              "(needs the synced nabu-data module)"
@@ -722,6 +774,9 @@ module Nabu
       end
       if options[:entities] && (options[:random] || options[:parallel])
         raise Thor::Error, "show: --entities does not compose with --random/--parallel"
+      end
+      if options[:senses] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --senses does not compose with --random/--parallel"
       end
 
       config = Nabu::Config.load
@@ -762,6 +817,7 @@ module Nabu
       say seg_note if seg_note
       print_show_tokens(result) if options[:tokens]
       print_show_entities(result) if options[:entities]
+      print_show_senses(result, catalog: catalog, config: config) if options[:senses]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
@@ -2631,6 +2687,71 @@ module Nabu
         fulltext&.disconnect
       end
 
+      # The options --translations does NOT compose with (it is its own
+      # lane — no timeline, facets, morphology or glyph filters there).
+      def translations_incompatible
+        %i[fuzzy near lemma morph exact word words scan withdrawn similar sign charset signset
+           from to century place date_basis within script type kind province material facet
+           loans meter meter_pattern lect gold_only long radical strokes char_component]
+      end
+
+      # search --translations QUERY: the annotation-held translations
+      # lane (Query::TranslationSearch). Desk rule: the precompiled lane or
+      # the honest build hint — never a scan.
+      def translations_search(query)
+        clash = translations_incompatible.select { |key| options[key] }
+        unless clash.empty?
+          raise Thor::Error, "search: --translations searches the annotation-held translations lane and " \
+                             "composes with --lang/--source/--axis/--license/--limit only (not " \
+                             "#{clash.map { |key| "--#{key.to_s.tr('_', '-')}" }.join(', ')})"
+        end
+        raise Thor::Error, "search: --translations needs a query" if query.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        searcher = Nabu::Query::TranslationSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(query, lang: options[:lang], license: options[:license], source: options[:source],
+                                      sources: axis_slugs, limit: options[:limit].to_i)
+        print_translation_results(results, scope: searcher.scope, axis: axis_names,
+                                           incomplete: searcher.incomplete_hint)
+        print_display_footer
+      rescue Nabu::Query::TranslationSearch::IndexMissing => e
+        raise Thor::Error, "search: #{e.message}"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render translations hits: the ORIGINAL passage (urn + [language]),
+      # the matched rendering under its annotation key with the term
+      # bracketed, the original's leading text; then the footer, the
+      # credits, and ONE scope line naming what the lane covers (the
+      # fuzzy-lane honesty rule — a miss explains itself).
+      def print_translation_results(results, scope:, axis: nil, incomplete: nil)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}" \
+                "#{"  — #{result.document_title}" if result.document_title}"
+            say "  #{result.layer}: #{display_snippet(result.snippet, nil)}"
+            say "  original: #{display_snippet(truncate_line(result.text), result.language)}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in annotation-held translations " \
+              "(the urn is the original passage — nabu show <urn>)#{facet_footer(nil, axis: axis)}"
+          print_search_credits(results)
+        end
+        say "note: #{incomplete}" if incomplete
+        covered = scope.map { |slug, passages| "#{slug} #{passages}" }.join(" · ")
+        say "translations index covers: #{covered.empty? ? 'no sources' : covered}"
+      end
+
       def fuzzy_search(query)
         raise Thor::Error, "search: --fuzzy needs a fragment" if query.empty?
 
@@ -2691,10 +2812,11 @@ module Nabu
         results = searcher.run(lemma, lang: options[:lang], license: options[:license],
                                       limit: options[:limit].to_i, morph: options[:morph],
                                       source: options[:source], sources: axis_slugs,
-                                      gold_only: options[:gold_only], loans: loans_filter)
+                                      gold_only: options[:gold_only], loans: loans_filter,
+                                      gloss: options[:gloss])
         print_lemma_results(results, query: lemma, axis: axis_names, incomplete: searcher.incomplete_hint)
         print_display_footer
-      rescue Nabu::Query::MorphFacets::Error => e
+      rescue Nabu::Query::MorphFacets::Error, Nabu::Query::TokenGlosses::Error => e
         raise Thor::Error, "search: #{e.message}"
       ensure
         catalog&.disconnect
@@ -2772,10 +2894,11 @@ module Nabu
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
           gloss = result.gloss ? "  (#{result.gloss})" : ""
+          token_gloss = result.token_gloss ? "  ‘#{result.token_gloss}’" : ""
           morph = result.morph ? "  {#{result.morph}}" : ""
           tier = result.tier == "gold" ? "" : " [#{result.tier}]"
           say "#{result.urn}#{" [#{result.language}]" if result.language}#{tier}  " \
-              "#{result.lemma} → #{forms}#{gloss}#{morph}"
+              "#{result.lemma} → #{forms}#{gloss}#{token_gloss}#{morph}"
           say "  #{display_text(truncate_line(result.text), result.language)}"
         end
         silver = results.count { |result| result.tier == "silver" }

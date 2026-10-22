@@ -8,11 +8,27 @@ $stdout.sync = true
 
 require "rake/testtask"
 
-Rake::TestTask.new(:test) do |t|
+# `rake test` runs the suite across worker processes (test/parallel/runner.rb:
+# N = Etc.nprocessors, NABU_TEST_WORKERS overrides) and prints ONE merged
+# Minitest-shaped report. The single-process path stays: `rake test TEST=path`
+# (one file, unparallelized) and the kill-switch NABU_TEST_SERIAL=1 both run
+# the classic Rake::TestTask, exposed directly as `rake test:serial`.
+Rake::TestTask.new(:"test:serial") do |t|
   t.libs << "test"
   t.libs << "lib"
   t.test_files = FileList["test/**/*_test.rb"]
   t.warning = false
+end
+
+desc "Run the test suite (parallel workers; TEST=path or NABU_TEST_SERIAL=1 → single process)"
+task :test do
+  if ENV["TEST"] || ENV["NABU_TEST_SERIAL"] == "1"
+    Rake::Task[:"test:serial"].invoke
+  else
+    ruby "test/parallel/runner.rb" do |ok, _status|
+      abort "rake test: suite FAILED (see report above)" unless ok
+    end
+  end
 end
 
 desc "Run RuboCop"
@@ -272,6 +288,33 @@ namespace :index do
     elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
     puts "index:clarify done — #{summary.fetch(:entries)} entries in " \
          "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+
+  # The translations lane (`search --translations`): annotation-held
+  # translations (Nabu::TranslationKeys' registry sources) re-derived
+  # standalone over the live catalog — the same stage re-derive shape as
+  # clarify: reads only the registry sources' annotations, writes only
+  # the fulltext passages_translations tables, advances the stage stamp.
+  desc "Re-derive the annotation-held translations index (search --translations) over the live catalog"
+  task :translations do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    summary = Nabu::Store::TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext, stamp: true)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "index:translations done — #{summary.fetch(:passages)} passages from " \
+         "#{summary.fetch(:sources)} sources in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+    fulltext[Nabu::Store::TranslationIndex::SCOPE_TABLE].order(:slug).each do |row|
+      puts "  #{row.fetch(:slug)}: #{row.fetch(:passages)}"
+    end
   ensure
     catalog&.disconnect
     fulltext&.disconnect

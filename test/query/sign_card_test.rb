@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
+require "fileutils"
 
 module Query
   # Nabu::Query::SignCard (P65-1): the cuneiform sign desk card — one sign
@@ -206,6 +208,65 @@ module Query
       assert_equal "C103", didactic["course"]
       assert_equal "unclear", didactic["certainty"], "the never-present-as-fact grade rides the panel"
       assert_includes didactic["attribution"], "Edubba"
+    end
+
+    # -- the OSL 00etc concordances (precompiled — Store::SignConcordances) --
+
+    def concordance_catalog
+      db = store_test_db
+      Dir.mktmpdir do |dir|
+        osl = File.join(dir, "osl")
+        FileUtils.mkdir_p(File.join(osl, "00lib"))
+        FileUtils.cp(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"), File.join(osl, "00lib"))
+        FileUtils.cp_r(File.join(Nabu::TestSupport.fixtures("osl"), "00etc"), osl)
+        Nabu::Store::SignConcordances.rebuild!(catalog: db, canonical_dir: dir)
+      end
+      db
+    end
+
+    def test_the_card_carries_the_precompiled_concordances
+      db = concordance_catalog
+      card = Nabu::Query::SignCard.new(sign_list: SIGN_LIST, readings: READINGS, catalog: db).run("ŠEŠ").card
+      conc = card.concordances
+      assert_equal %w[Labat AKS ATU1 PGSL], conc.lists.keys.first(4), "the headline lists lead"
+      assert_equal ["331"], conc.lists["Labat"]
+      assert_equal ["182"], conc.lists["AKS"], "two assets agreeing fold to one number"
+      assert_equal ["246"], conc.lists["ATU1"]
+      assert_equal ["007"], conc.lists["PGSL"]
+      assert_equal [%w[535 029,032]], conc.mzl_kwu
+      assert_equal ["ŠEŠ"], conc.ebl
+      assert_equal %w[Q87556389 Q87556614], conc.wikidata
+      assert_equal [%w[ses šeš]], conc.value_maps["attinger"]
+      assert_equal [%w[šeš še₁₆], %w[šes še₁₆]].sort, conc.value_maps["csf"].sort
+
+      payload = Nabu::Query::SignCard.json_payload(
+        Nabu::Query::SignCard.new(sign_list: SIGN_LIST, readings: READINGS, catalog: db).run("𒋀")
+      )
+      block = payload["card"]["concordances"]
+      assert_equal ["331"], block["lists"]["Labat"]
+      assert_equal [{ "mzl" => "535", "kwu" => "029,032" }], block["mzl_kwu"]
+      assert_equal [{ "from" => "ses", "to" => "šeš" }], block["value_maps"]["attinger"]
+      assert_equal ["535"], payload["card"]["lists"]["MZL"], "the existing keys are untouched (additive)"
+    ensure
+      db&.disconnect
+    end
+
+    def test_an_unnumbered_kwu_side_stays_null
+      db = concordance_catalog
+      card = Nabu::Query::SignCard.new(sign_list: SIGN_LIST, catalog: db).run("MIN").card
+      assert_equal [["825", nil]], card.concordances.mzl_kwu
+    ensure
+      db&.disconnect
+    end
+
+    def test_no_catalog_or_no_rows_means_an_absent_concordance_block
+      assert_nil card_for("ŠEŠ").card.concordances, "no catalog → absent block"
+      assert_nil Nabu::Query::SignCard.json_payload(card_for("ŠEŠ"))["card"]["concordances"]
+      db = concordance_catalog
+      bare = Nabu::Query::SignCard.new(sign_list: SIGN_LIST, catalog: db).run("|A×AN|").card
+      assert_nil bare.concordances, "a sign no asset joins → absent block, never an empty frame"
+    ensure
+      db&.disconnect
     end
 
     def test_no_overlay_or_no_entry_is_an_absent_panel_never_a_placeholder
