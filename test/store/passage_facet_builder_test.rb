@@ -212,6 +212,69 @@ module Store
       assert_equal ["nikh:p094190"], @db[:passage_facet_values].where(value: "明仲").select_map(:ref)
     end
 
+    # -- token_fields: the DCS gold tokens' WordSem sense ids ------------------
+    # Real fixture tokens through the real adapter + loader (the MISC string
+    # rides each stored token verbatim). The fixture census: 215 WordSem
+    # tokens on 5 sentence passages — 4 in Suśruta Sū. 35, one in the
+    # Aitareyopaniṣad — carrying 121 distinct ids (121 pairs: no id repeats
+    # across passages), one token with two ids (sthaulyāni 25248,25258).
+
+    DCS_PASSAGE = "urn:nabu:dcs:5:3363:2612"
+
+    def load_dcs!
+      @dcs = make_source("dcs")
+      Nabu::Store::Loader.new(db: @db, source: @dcs, ledger: nil)
+                         .load_from(Nabu::Adapters::Dcs.new, workdir: Nabu::TestSupport.fixtures("dcs"))
+    end
+
+    def shipped_map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+
+    def test_misc_values_split_the_conllu_misc_column
+      misc = "LemmaId=103322|OccId=1267962|Unsandhied=sthaulyāni|UnsandhiedReconstructed=True|WordSem=25248,25258"
+      assert_equal %w[25248 25258], Nabu::Store::PassageFacetBuilder.misc_values(misc, "WordSem")
+      assert_equal %w[103322], Nabu::Store::PassageFacetBuilder.misc_values(misc, "LemmaId")
+      assert_empty Nabu::Store::PassageFacetBuilder.misc_values("LemmaId=7467|OccId=1260920", "WordSem")
+      assert_empty Nabu::Store::PassageFacetBuilder.misc_values(nil, "WordSem")
+    end
+
+    def test_projects_dcs_token_senses_as_passage_facets_with_shelf_refs
+      load_dcs!
+      summary = Nabu::Store::PassageFacetBuilder.rebuild!(catalog: @db, facet_map: shipped_map)
+      assert_equal [5, 121, 121], [summary.passages, summary.rows, summary.values]
+
+      passage_id = @db[:passages].where(urn: DCS_PASSAGE).get(:id)
+      rows = pairs_for(passage_id)
+      assert_equal 99, rows.size
+      assert_includes rows, ["sense", "59344", "urn:nabu:dict:dcs-senses:59344"],
+                      "25 aṅgula tokens cite finger — one pair"
+      assert_equal(%w[sense], rows.map(&:first).uniq)
+    end
+
+    # Multi-id tokens are kept: sthaulyāni's two ids are two values, each
+    # reaching its passage on its own.
+    def test_a_multi_id_token_projects_every_id
+      load_dcs!
+      Nabu::Store::PassageFacetBuilder.rebuild!(catalog: @db, facet_map: shipped_map)
+      passage_id = @db[:passages].where(urn: DCS_PASSAGE).get(:id)
+      %w[25248 25258].each do |id|
+        value_id = @db[:passage_facet_values].where(facet: "sense", value: id).get(:id)
+        assert_equal [passage_id], @db[:passage_facets].where(value_id: value_id).select_map(:passage_id), id
+      end
+    end
+
+    def test_dcs_token_senses_are_idempotent_and_refresh_by_slice
+      load_dcs!
+      first = Nabu::Store::PassageFacetBuilder.rebuild!(catalog: @db, facet_map: shipped_map)
+      snapshot = resolved_pairs
+      second = Nabu::Store::PassageFacetBuilder.rebuild!(catalog: @db, facet_map: shipped_map)
+      assert_equal first, second
+      assert_equal snapshot, resolved_pairs
+      assert_equal 121, Nabu::Store::PassageFacetBuilder.refresh_source!(catalog: @db, slug: "dcs",
+                                                                         facet_map: shipped_map)
+      assert_equal snapshot, resolved_pairs, "a slice refresh re-projects the same pairs"
+      assert_equal 121, @db[:passage_facet_values].count
+    end
+
     private
 
     def stored_labels(slug, field)
@@ -220,6 +283,14 @@ module Store
                     .where(Sequel[:documents][:source_id] => source_id)
                     .select_map(Sequel[:passages][:annotations_json])
                     .flat_map { |json| Array(JSON.parse(json)[field]).uniq }
+    end
+
+    # Every pair as [passage urn, facet, value, ref] — id-free, so two
+    # projections compare by content.
+    def resolved_pairs
+      @db[:passage_facets].join(:passage_facet_values, id: :value_id)
+                          .join(:passages, id: Sequel[:passage_facets][:passage_id])
+                          .select_map([Sequel[:passages][:urn], :facet, :value, :ref]).sort_by { |row| row.map(&:to_s) }
     end
 
     def pair_count(facets)

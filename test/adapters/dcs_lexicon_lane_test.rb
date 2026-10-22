@@ -126,7 +126,7 @@ class DcsLexiconLaneTest < Minitest::Test
   def test_senses_document_shape
     assert_equal "dcs-senses", senses.slug
     assert_equal "san", senses.language, "the tls-concepts precedent: the shelf speaks its members' language"
-    assert_equal 10, senses.size
+    assert_equal 16, senses.size
   end
 
   def test_sense_entry_carries_name_gloss_and_wordnet_fields
@@ -189,7 +189,7 @@ class DcsLexiconLaneTest < Minitest::Test
       FileUtils.rm(File.join(lookup, "sembank-attestations.xml"))
 
       document = lane.parse(lane.discover(dir).find { |r| r.id == "dcs-senses" })
-      assert_equal 10, document.size
+      assert_equal 16, document.size
       assert(document.entries.all? { |e| e.crossrefs.empty? })
     end
   end
@@ -199,7 +199,7 @@ class DcsLexiconLaneTest < Minitest::Test
   def test_double_load_is_idempotent_and_crossrefs_resolve_across_both_shelves
     db, loader = loader_setup
     first = loader.load_from(lane, workdir: FIXTURES)
-    assert_equal 21, first.added
+    assert_equal 27, first.added
     assert_equal 0, first.errored
     assert_equal %w[dcs-lexicon dcs-senses], db[:dictionaries].order(:slug).select_map(:slug)
     assert_equal "urn:nabu:dict:dcs-lexicon:25207",
@@ -213,9 +213,9 @@ class DcsLexiconLaneTest < Minitest::Test
     crossrefs = db[:dictionary_crossrefs].order(:id).all
     second = loader.load_from(lane, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 21, second.skipped
+    assert_equal 27, second.skipped
     assert_equal 0, second.withdrawn
-    assert_equal 21, db[:dictionary_entries].count
+    assert_equal 27, db[:dictionary_entries].count
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq, "a re-load must revise nothing"
     assert_equal crossrefs, db[:dictionary_crossrefs].order(:id).all
   end
