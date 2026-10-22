@@ -1177,6 +1177,18 @@ sources:
         bodies — a dictionary shelf, no document timeline}
     places: {posture: unplaced}
     script: {posture: implied}
+  wilkens-oui:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "oui — the nabu-lects anchor (parent otk, band 800–1400);
+        the registry holds no Old Uyghur stages, so the bare code is the whole claim"}
+    dating: {posture: undatable, note: "a dictionary shelf — the book cites no attestation
+        dates (no Belegstellen by design, per its Vorbemerkungen); the regnal dates printed
+        for named rulers ride entry bodies"}
+    places: {posture: unplaced, note: "n. loc. place-name entries ride as entries (labels
+        annotation), never a document place"}
+    script: {posture: qualified, note: "the Turkological transcription (ä ı č š ŋ), not
+        the Uyghur/Manichaean/Brāhmī scripts of the sources; (br)/(m)/(tib)/(r)/(p)
+        labels name the source script per entry"}
   honkoku:   # P108-5
     # The v3 translations/ layer (55,441 en + 55,915 modern-ja pages) is
     # DECLINED: the platform's large-language-model output, unattributable
