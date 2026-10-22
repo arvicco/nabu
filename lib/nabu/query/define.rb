@@ -5,6 +5,7 @@ require_relative "../lects"
 require_relative "lect_filter"
 require_relative "reflex_views"
 require_relative "etymon_ascent"
+require_relative "scan_anchors"
 
 module Nabu
   module Query
@@ -69,8 +70,13 @@ module Nabu
       FacetView = Data.define(:facet, :value, :ref)
 
       # One citation of an entry: display label always; resolved_urn is the
-      # in-catalog passage urn or nil.
-      CitationView = Data.define(:label, :urn_raw, :resolved_urn)
+      # in-catalog passage urn or nil. +scan+ is the ScanAnchors::Anchor of
+      # an unresolved PRINT citation a configured reference work claims
+      # (BDB pages, Wb page.line) — nil when no work claims the label or
+      # the scan lane is off.
+      CitationView = Data.define(:label, :urn_raw, :resolved_urn, :scan) do
+        def initialize(scan: nil, **) = super
+      end
 
       # One entry→entry cross-reference (P123-1): the pointer verbatim
       # (label), its kind, and the TO entry's urn + headword when the
@@ -141,9 +147,13 @@ module Nabu
       # :auto/loaded/nil contract: with the registry present, the "*" scope
       # is the registry's mode field (per-source resolution included);
       # absent, the "-pro" string test stands byte-identically.
+      # +scan_anchors+ is the loaded ScanAnchors table (config/scan_anchors.yml,
+      # the callers load it from their config); nil — the default — leaves
+      # every citation's scan nil, byte-identical to before.
       def initialize(catalog:, fulltext: nil, lila: :auto, form_lemma: :auto, verb_lemma: :auto,
-                     lects: :auto)
+                     lects: :auto, scan_anchors: nil)
         @catalog = catalog
+        @scan_resolver = scan_anchors&.resolver(catalog)
         @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
         @etymons = EtymonAscent.new(catalog: catalog)
         @lila = lila
@@ -564,8 +574,10 @@ module Nabu
                .all
         editions = {}
         rows.map do |row|
+          resolved = resolve(row, editions)
+          scan = @scan_resolver.anchor(row.fetch(:label)) if resolved.nil? && @scan_resolver
           CitationView.new(label: row.fetch(:label), urn_raw: row.fetch(:urn_raw),
-                           resolved_urn: resolve(row, editions))
+                           resolved_urn: resolved, scan: scan)
         end
       end
 
