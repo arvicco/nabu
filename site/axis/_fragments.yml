@@ -63,6 +63,7 @@ kinds:
   bridging: crosswalk module
   # the reconstruction / cognacy shelves that are not plain dictionaries
   iecor: cognacy dataset
+  meloniromance: cognacy dataset
   starling: etymological bases
 
 classical:
