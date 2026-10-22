@@ -411,7 +411,19 @@ ot:
         ZEC: urn:nabu:vulgate:zec
         MAL: urn:nabu:vulgate:mal
         ISA: urn:nabu:vulgate:isa  # Isaias
-        JER: urn:nabu:vulgate:jer  # Jeremias
+        # JER HELD OUT (urn:nabu:vulgate:jer stays per-witness): the
+        # Clementine Jeremias follows the HEBREW chapter order, while this
+        # work's JER token speaks Swete's GREEK order — the LXX puts the
+        # oracles against the nations at 25-31 (MT/Vulgate 46-51), so from
+        # chapter 25 on one number names two different texts. Measured
+        # read-only against the held catalog 2026-10-22: Vulgate ch. 27 has
+        # 22 verses vs Swete's 46, ch. 46 has 28 vs 8; of the 1,120
+        # Swete x Vulgate JER verse pairs the mapping minted, 551 sat in
+        # chapters 25-52 (false alignments). The numbering: remap is
+        # witness-global (it would shift every Vulgate book), so no
+        # chapter-scoped repair exists; the whole book holds out, and the
+        # 569 chapter 1-24 pairs (same order in both traditions) are the
+        # honest price until a book-scoped remap lands.
         BAR: urn:nabu:vulgate:bar
         LAM: urn:nabu:vulgate:lam
         EZK: urn:nabu:vulgate:ezk  # Ezechiel
