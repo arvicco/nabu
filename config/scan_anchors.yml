@@ -1,0 +1,47 @@
+# Print-citation → held reference-scan anchors (Nabu::Query::ScanAnchors):
+# the define desk's bridge from a dictionary entry's PRINT citation to the
+# local-library scan of the cited work, at the PDF leaf of the printed page.
+#
+# Per work:
+#   pattern      regex over the citation label (as `nabu define` prints it),
+#                named captures: page (required), line (optional), volume
+#                (required iff the work declares volumes:)
+#   item         the scan's local-library document urn
+#                (urn:nabu:local-library:<collection>:<file-stem slug>),
+#                null until the scan is ingested
+#   leaf_offset  integer k: printed page N sits on PDF page N + k (the
+#                adapter's `<item>:p<N+k>` passage); null until calibrated
+#   volumes      multi-volume works: {volume as cited => {item, leaf_offset}};
+#                two volumes bound in one PDF share an item, each with its
+#                own offset. A cited volume with no row reads "no scan
+#                configured for … vol. N".
+#
+# Every row reads honestly while null: unconfigured → not held → uncalibrated
+# → anchored, one status per citation on the define card.
+works:
+  # Brown–Driver–Briggs 1906 — the hebrew-lexicon bdb shelf cites the print
+  # page of every outline entry ("BDB p. 135"; census 2026-10-22: 12,962
+  # page anchors, pages 1–1118, all numeric).
+  bdb:
+    title: Brown–Driver–Briggs, Hebrew and English Lexicon (1906)
+    pattern: '\ABDB p\. (?<page>\d+)\z'
+    item: null
+    leaf_offset: null
+
+  # Erman–Grapow, Wörterbuch der aegyptischen Sprache — the aed shelf mints
+  # one citation per bibl segment starting "Wb " ("Wb <vol>, <page>.<line>
+  # [-…]"; census 2026-10-22: 13,403 such segments, the matched ones by
+  # volume 1: 3,935 · 2: 2,615 · 3: 2,349 · 4: 2,274 · 5: 2,229). The pattern also takes
+  # upstream's dot-after-volume quirk ("Wb 3. 293.2-6") and the
+  # space-only separator ("Wb 2 227.1"); the first page.line of a range
+  # anchors. 13,402 of 13,403 match — "Wb 635.5" (no such volume; the
+  # volume is one digit) carries no readable locus and matches nothing.
+  wb:
+    title: Wörterbuch der aegyptischen Sprache
+    pattern: '\AWb (?<volume>\d)(?: ?[,.] ?| )(?<page>\d+)(?:\. ?(?<line>\d+))?'
+    volumes:
+      "1": { item: null, leaf_offset: null }
+      "2": { item: null, leaf_offset: null }
+      "3": { item: null, leaf_offset: null }
+      "4": { item: null, leaf_offset: null }
+      "5": { item: null, leaf_offset: null }
