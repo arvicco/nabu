@@ -481,8 +481,8 @@ module Query
       assert_equal "urn:nabu:gretil:sa_Rgveda-edAufrecht:5.086.05", citation.resolved_urn
     end
 
-    # Document-grain honesty: a held single-blob work resolves to the
-    # DOCUMENT urn; a bare CTS work reference keeps the old nil.
+    # Document-grain honesty: a held work whose cited passage is not in the
+    # catalog resolves to the DOCUMENT urn; a work not held keeps nil.
     def test_document_grain_citations_resolve_to_the_document_urn
       seed_mw_shelf
       make_document(urn: "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", language: "san-Latn")
@@ -512,7 +512,8 @@ module Query
       seed_mw_shelf
       citations = define("bhāṣ").first.citations
       assert_nil citations.find { |c| c.label == "MBh." }.resolved_urn
-      assert_nil citations.find { |c| c.label == "ib." }.resolved_urn
+      ibid = citations.find { |c| c.label == "ib. (= MBh.)" }
+      assert_nil ibid.resolved_urn, "an ib. inheriting a work not held stays unresolved"
     end
 
     # -- the reconstruction shelf (P14-1): the `*` convention ---------------------
