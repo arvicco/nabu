@@ -246,6 +246,73 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The define → reference-scan bridge on the card: the BDB print page
+  # resolves through config/scan_anchors.yml to the held scan's leaf
+  # passage; the `show` card of the same entry urn prints the same line.
+  def test_define_card_anchors_bdb_pages_to_the_held_scan
+    with_hebrew_lexicon_shelf do |config|
+      write_bdb_scan_anchors(config)
+      shelve_bdb_scan(config, leaves: [151])
+      out, _err, status = with_config(config) { run_cli(%w[define ברא]) }
+      assert_nil status
+      assert_match(/^reference scans \(nabu show <urn>\):$/, out)
+      assert_match(/^ {2}BDB p\. 135 → urn:nabu:local-library:dictionaries:bdb-1906:p151 \(scan leaf 151\)$/, out)
+
+      shown, _err, status = with_config(config) { run_cli(%w[show urn:nabu:dict:bdb:b.cw.aa]) }
+      assert_nil status
+      assert_match(/^ {2}BDB p\. 135 → urn:nabu:local-library:dictionaries:bdb-1906:p151 \(scan leaf 151\)$/, shown)
+    end
+  end
+
+  # Desk law: an absent scan is a hint line, never an error or a scan.
+  def test_define_card_hints_when_the_scan_is_not_held
+    with_hebrew_lexicon_shelf do |config|
+      write_bdb_scan_anchors(config)
+      out, _err, status = with_config(config) { run_cli(%w[define ברא]) }
+      assert_nil status
+      assert_match(
+        /^ {2}BDB p\. 135 → scan not held — urn:nabu:local-library:dictionaries:bdb-1906 is not in this catalog/, out
+      )
+    end
+  end
+
+  # No table in the config dir: the lane is off, the card unchanged.
+  def test_define_card_without_scan_anchors_prints_no_scan_section
+    with_hebrew_lexicon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define ברא]) }
+      assert_nil status
+      refute_match(/reference scans/, out)
+    end
+  end
+
+  def write_bdb_scan_anchors(config)
+    FileUtils.mkdir_p(config.config_dir)
+    File.write(File.join(config.config_dir, "scan_anchors.yml"), <<~YAML)
+      works:
+        bdb:
+          title: BDB
+          pattern: '\\ABDB p\\. (?<page>\\d+)\\z'
+          item: urn:nabu:local-library:dictionaries:bdb-1906
+          leaf_offset: 16
+    YAML
+  end
+
+  def shelve_bdb_scan(config, leaves:)
+    db = Nabu::Store.connect(config.catalog_path)
+    Nabu::Store.setup!(db)
+    library = Nabu::Store::Source.create(slug: "local-library", name: "Library",
+                                         adapter_class: "Nabu::Adapters::LocalLibrary",
+                                         license_class: "research_private")
+    doc = Nabu::Store::Document.create(source_id: library.id, urn: "urn:nabu:local-library:dictionaries:bdb-1906",
+                                       title: "BDB 1906", language: "eng", content_sha256: "x", revision: 1,
+                                       withdrawn: false)
+    leaves.each do |leaf|
+      Nabu::Store::Passage.create(document_id: doc.id, urn: "#{doc.urn}:p#{leaf}", sequence: leaf, language: "eng",
+                                  text: "p", text_normalized: "p", content_sha256: "x", revision: 1)
+    end
+    db.disconnect
+  end
+
   # define --facet NAME=PATTERN: the dictionary-entry facet surface narrows
   # the lookup (JMdict's domain labels, projected under the shipped config).
   def test_define_facet_narrows_to_tagged_entries

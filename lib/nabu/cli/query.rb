@@ -799,7 +799,8 @@ module Nabu
       # pleiades: :auto — the findspot line (P44-2) feature-detects the
       # gazetteer dump lazily; nothing loads unless the shown document
       # carries a captured Pleiades id.
-      show_query = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto)
+      show_query = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto,
+                                         scan_anchors: Nabu::Query::ScanAnchors.load_default(config: config))
       result = show_query.run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 

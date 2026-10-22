@@ -212,7 +212,8 @@ module Nabu
       # shelves live a Han headword matches 6+ dictionaries, and the old
       # fetch-time cap hid the tail silently (the gate found `define 棄`
       # missing tls-words). --long lifts the cap; compact announces it.
-      results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
+      results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext,
+                                        scan_anchors: Nabu::Query::ScanAnchors.load_default(config: config))
                                    .run(lemma, lang: options[:lang], limit: nil, lect: options[:lect],
                                                facets: facets)
       shown = options[:long] ? results : results.first(options[:limit].to_i)
@@ -303,7 +304,8 @@ module Nabu
         # runs — one execution path, rendered in the define house format.
         # Fallback fires ONLY on a miss: etym's primary contract stays the
         # walk, hits are never mixed.
-        entries = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
+        entries = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext,
+                                          scan_anchors: Nabu::Query::ScanAnchors.load_default(config: config))
                                      .run(lemma, lang: options[:lang], limit: options[:limit].to_i)
         print_etym_fallback(lemma, entries, shelves: query.crosswalk_shelves)
       else
@@ -751,6 +753,7 @@ module Nabu
         print_reflexes(result.reflexes)
         print_etymon_ascent(result.etymons) if options[:long]
         print_resolved_citations(result)
+        print_scan_anchors(result)
         print_crossrefs(result)
       end
 
@@ -1033,6 +1036,23 @@ module Nabu
         shown = options[:long] ? resolved : resolved.first(12)
         shown.each { |citation| say "  #{citation.label} → #{citation.resolved_urn}" }
         rest = resolved.size - shown.size
+        say "  … and #{rest} more (--long shows all)" if rest.positive?
+      end
+
+      # The define → reference-scan bridge: each print citation a configured
+      # reference work claims (config/scan_anchors.yml — BDB pages, Wb
+      # page.line), pointed at the held local-library scan and its leaf, or
+      # the honest state when the scan is not there yet (the desk law: a
+      # hint line, never an error). Same inline cap as resolved citations.
+      def print_scan_anchors(result)
+        anchored = result.citations.select(&:scan)
+        return if anchored.empty?
+
+        say ""
+        say "reference scans (nabu show <urn>):"
+        shown = options[:long] ? anchored : anchored.first(12)
+        shown.each { |citation| say "  #{citation.label} → #{citation.scan.pointer}" }
+        rest = anchored.size - shown.size
         say "  … and #{rest} more (--long shows all)" if rest.positive?
       end
     end

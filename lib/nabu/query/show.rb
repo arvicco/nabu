@@ -145,10 +145,14 @@ module Nabu
       # or :auto (default), which feature-detects canonical/nabu-data
       # LAZILY and memoizes (define.rb's form_lemma/verb_lemma contract).
       # Nothing loads unless a renderer actually asks for segmented output.
-      def initialize(catalog:, pleiades: nil, tibetan_words: :auto)
+      # +scan_anchors+ (the define → reference-scan bridge): the loaded
+      # ScanAnchors table a dictionary-entry urn's citations resolve
+      # through — nil leaves them unanchored, byte-identical to before.
+      def initialize(catalog:, pleiades: nil, tibetan_words: :auto, scan_anchors: nil)
         @catalog = catalog
         @pleiades = pleiades
         @tibetan_words = tibetan_words
+        @scan_anchors = scan_anchors
       end
 
       # Resolve +urn+ to a PassageResult, a DocumentResult, a RangeResult, or
@@ -179,7 +183,7 @@ module Nabu
       def dictionary_entry(urn)
         return nil unless @catalog.table_exists?(:dictionary_entries)
 
-        Define.new(catalog: @catalog).by_urn(urn)
+        Define.new(catalog: @catalog, scan_anchors: @scan_anchors).by_urn(urn)
       end
 
       # -- segmented rendering (P54-2) ------------------------------------
