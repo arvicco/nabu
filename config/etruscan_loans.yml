@@ -1,0 +1,635 @@
+# Etruscan → Latin curated loan rows (the config/sabellic_loans.yml
+# recipe; the P17-3 `borrowed` pattern from a non-Indo-European donor).
+# Curated 2026-10-22 from the en.wiktionary category pages — member
+# lists via the MediaWiki API (list=categorymembers), etyma read from
+# each Latin entry's OWN etymology (prop=revisions) by
+# Nabu::WiktionaryLoanCuration: the first {{bor|la|ett|…}}/{{der|la|ett|…}}
+# (or {{ety|la|…|ett:…}}) stating a form; Old Italic script verbatim, a
+# leading * marks a reconstructed etymon; {{m}}/{{cog}} mentions are
+# cognates and never promoted.
+# relation: borrowed = the lemma sits in "Latin terms borrowed from
+# Etruscan" (→ borrowed true); derived = only in the "derived from"
+# superset (→ borrowed false). Borrowed wins the overlap: all
+# 69 borrowed members also sit in the derived category.
+# Category counts at retrieval: borrowed 69 · derived 200 pages
+# (199 Latin lemmas + Reconstruction:Latin/piltrum, excluded — a
+# reconstructed form, not an attested lemma) + 4 subcategories (not
+# rows). Rows: 199 (69 borrowed, 130 derived-only).
+# Etymon residue, declared row by row (never dropped): 76 rows cite an
+# Etruscan form; 119 are `no_etymon: unstated` (the entry names
+# Etruscan but cites no form: "-", empty, or a commented-out form);
+# 4 are `no_etymon: no-template` (no Etruscan etymology template in
+# the Latin entry — membership inherited through another word's
+# etymology). `page` keeps a split-page title ("a/languages A to L").
+# The survey-era census (2026-07-13) read 66 borrowed / 191 derived;
+# this curation is the fresh one, at today's counts.
+# License: CC BY-SA 4.0 + GFDL (the Wiktionary dual grant).
+
+retrieved: "2026-10-22"
+sources:
+  ett:
+    name: Etruscan
+    borrowed_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_borrowed_from_Etruscan"
+    derived_category: "https://en.wiktionary.org/wiki/Category:Latin_terms_derived_from_Etruscan"
+    words:
+      - latin: "-eius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "-ensis"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "a"
+        page: "a/languages A to L"
+        relation: derived
+        no_etymon: unstated
+      - latin: "acerra"
+        relation: derived
+        no_etymon: unstated
+      - latin: "agaga"
+        relation: borrowed
+        etymon: "*𐌀𐌂𐌀𐌂𐌀"
+      - latin: "agaso"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Ahala"
+        relation: derived
+        no_etymon: unstated
+      - latin: "alaternus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "amurca"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Anio"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Annaeus"
+        relation: borrowed
+        etymon: "𐌀𐌍𐌀𐌄"
+      - latin: "Antonius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Aprilis"
+        relation: derived
+        etymon: "𐌖𐌓𐌐𐌀"
+        translit: "apru"
+      - latin: "arena"
+        relation: derived
+        no_etymon: unstated
+      - latin: "arillator"
+        relation: derived
+        etymon: "𐌀𐌓𐌉𐌋"
+      - latin: "Ariminum"
+        relation: derived
+        etymon: "𐌀𐌓𐌉𐌌𐌍𐌀"
+      - latin: "Arretium"
+        relation: derived
+        etymon: "𐌀𐌓𐌉𐌕𐌉𐌌"
+      - latin: "Artorius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "as"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "atalla"
+        relation: derived
+        no_etymon: unstated
+      - latin: "atanuvium"
+        relation: derived
+        no_etymon: unstated
+      - latin: "atrium"
+        relation: borrowed
+        etymon: "𐌀𐌈𐌓𐌄"
+      - latin: "Aulus"
+        relation: borrowed
+        etymon: "𐌀𐌅𐌋𐌄"
+      - latin: "autumnus"
+        relation: derived
+        etymon: "𐌀𐌕𐌖𐌍𐌄"
+      - latin: "b"
+        relation: derived
+        no_etymon: no-template
+      - latin: "balteus"
+        relation: borrowed
+        etymon: "𐌁𐌀𐌋𐌕𐌄𐌀"
+      - latin: "barinulae"
+        relation: derived
+        no_etymon: unstated
+      - latin: "basterna"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "be"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Blera"
+        relation: derived
+        etymon: "𐌘𐌋𐌄𐌓𐌀"
+      - latin: "bura"
+        relation: borrowed
+        etymon: "𐌐𐌖𐌓𐌀"
+      - latin: "cacula"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Caere"
+        relation: derived
+        etymon: "𐌊𐌀𐌉𐌔𐌓𐌀"
+      - latin: "Caesena"
+        relation: derived
+        etymon: "𐌂𐌄𐌉𐌔𐌍𐌀"
+      - latin: "calx"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Capena"
+        relation: derived
+        etymon: "𐌊𐌀𐌐𐌍𐌀"
+      - latin: "Capreae"
+        relation: derived
+        etymon: "𐌂𐌀𐌐𐌓𐌀"
+      - latin: "Capua"
+        relation: derived
+        etymon: "𐌂𐌀𐌐𐌄𐌅𐌀"
+      - latin: "capus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "carissa"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Carthada"
+        relation: derived
+        etymon: "*𐌂𐌀𐌓𐌈𐌀𐌆𐌀"
+      - latin: "Carthago"
+        relation: derived
+        etymon: "*𐌂𐌀𐌓𐌈𐌀𐌆𐌀"
+      - latin: "catamitus"
+        relation: derived
+        etymon: "𐌂𐌀𐌕𐌌𐌉𐌕𐌄"
+      - latin: "ce"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Cilnius"
+        relation: derived
+        etymon: "𐌊𐌚𐌄𐌋𐌍𐌄"
+      - latin: "Cinna"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "citrus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "clarnus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Clusium"
+        relation: borrowed
+        etymon: "𐌂𐌋𐌄𐌅𐌔𐌉"
+      - latin: "Cocilius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "cocio"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "cocles"
+        relation: borrowed
+        etymon: "*𐌂𐌖𐌂𐌋𐌖𐌔"
+      - latin: "Corsica"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Cortona"
+        relation: borrowed
+        etymon: "𐌂𐌖𐌓𐌕𐌖𐌍"
+      - latin: "Cosa"
+        relation: derived
+        etymon: "𐌂𐌖𐌔𐌉"
+      - latin: "cuneus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "de"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Etruscus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "excetra"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Faecinius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Faesulae"
+        relation: borrowed
+        etymon: "𐌅𐌉𐌐𐌔𐌖𐌋"
+      - latin: "fala"
+        relation: borrowed
+        etymon: "𐌚𐌀𐌋𐌀"
+      - latin: "Falerii"
+        relation: derived
+        no_etymon: unstated
+      - latin: "favissae"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Felsina"
+        relation: borrowed
+        etymon: "𐌚𐌄𐌋𐌔𐌍𐌀"
+      - latin: "fenestra"
+        relation: borrowed
+        etymon: "*𐌚𐌍𐌄𐌔𐌕𐌓𐌀"
+      - latin: "ferrum"
+        relation: derived
+        no_etymon: unstated
+      - latin: "forma"
+        relation: derived
+        no_etymon: unstated
+      - latin: "fullo"
+        relation: derived
+        etymon: "𐌘𐌖𐌋𐌖"
+      - latin: "ge"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Hadria"
+        relation: derived
+        etymon: "𐌇𐌀𐌕𐌓𐌉𐌀"
+      - latin: "Hadrianus"
+        relation: derived
+        etymon: "𐌇𐌀𐌕𐌓𐌉𐌀"
+      - latin: "harena"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Hercules"
+        relation: derived
+        etymon: "𐌇𐌄𐌓𐌂𐌋𐌄"
+      - latin: "Herennius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Herminius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "histrio"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Holconius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Horatius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Horta"
+        relation: derived
+        etymon: "𐌇𐌖𐌓𐌕𐌀"
+      - latin: "idus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Ignatius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Karkafios"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "laburnum"
+        relation: derived
+        no_etymon: unstated
+      - latin: "lacerna"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "laena"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "lanista"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Lar"
+        relation: derived
+        no_etymon: unstated
+      - latin: "lar"
+        relation: derived
+        etymon: "𐌋𐌀𐌓"
+      - latin: "Lares"
+        relation: derived
+        etymon: "𐌋𐌀𐌓"
+      - latin: "larva"
+        relation: derived
+        no_etymon: no-template
+      - latin: "Latium"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Latona"
+        relation: derived
+        etymon: "Letun"
+      - latin: "lemures"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Libitina"
+        relation: derived
+        etymon: "𐌋𐌖𐌐𐌖"
+      - latin: "Liburni"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Licinius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Licinus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "littera"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "litteratura"
+        relation: derived
+        no_etymon: unstated
+      - latin: "lituus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "lucumo"
+        relation: borrowed
+        etymon: "𐌋𐌀𐌖𐌙𐌖𐌌𐌄"
+      - latin: "Maecenas"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Mamurra"
+        relation: derived
+        etymon: "𐌌𐌀𐌌𐌖𐌓k𐌄𐌔"
+      - latin: "mantisa"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Mantua"
+        relation: borrowed
+        etymon: "*𐌌𐌀𐌍𐌈𐌅𐌀"
+      - latin: "Maro"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Maso"
+        relation: derived
+        etymon: "𐌌𐌀𐌔𐌖"
+        translit: "Masu"
+      - latin: "massa"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Melpum"
+        relation: derived
+        etymon: "𐌌𐌄𐌋𐌐𐌖"
+      - latin: "Mercurius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "merx"
+        relation: derived
+        no_etymon: unstated
+      - latin: "metellus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Mevania"
+        relation: borrowed
+        etymon: "𐌌𐌄𐌚𐌀𐌍𐌀"
+      - latin: "miles"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Minerva"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "mundus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Mutina"
+        relation: borrowed
+        etymon: "𐌌𐌖𐌕𐌍𐌀"
+      - latin: "mutulus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "nacca"
+        relation: derived
+        no_etymon: unstated
+      - latin: "napura"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Nepe"
+        relation: derived
+        etymon: "𐌍𐌄𐌐𐌄𐌕𐌄"
+      - latin: "nepeta"
+        relation: derived
+        etymon: "𐌍𐌄𐌐𐌄𐌕𐌄"
+      - latin: "Nepete"
+        relation: derived
+        etymon: "𐌍𐌄𐌐𐌄𐌕𐌄"
+      - latin: "Neptunus"
+        relation: derived
+        etymon: "𐌍𐌄𐌐𐌄𐌕𐌄"
+      - latin: "norma"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Nortia"
+        relation: derived
+        no_etymon: unstated
+      - latin: "nuntius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Nursia"
+        relation: derived
+        etymon: "𐌍𐌖𐌓𐌆𐌉𐌖"
+      - latin: "o"
+        relation: derived
+        etymon: "𐌏"
+      - latin: "oliva"
+        relation: borrowed
+        etymon: "*𐌄𐌋𐌄𐌉𐌅𐌀"
+      - latin: "Palatium"
+        relation: borrowed
+        etymon: "𐌚𐌀𐌋𐌀𐌃𐌖𐌌"
+      - latin: "palatium"
+        relation: derived
+        no_etymon: no-template
+      - latin: "Pales"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Parma"
+        relation: derived
+        no_etymon: unstated
+      - latin: "pe"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Persius"
+        relation: derived
+        etymon: "𐌐𐌄𐌓𐌔𐌖"
+      - latin: "persona"
+        relation: derived
+        etymon: "𐌘𐌄𐌓𐌔𐌖"
+      - latin: "Perusia"
+        relation: derived
+        no_etymon: unstated
+      - latin: "pincerna"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Pisae"
+        relation: derived
+        no_etymon: unstated
+      - latin: "plumbum"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Populonia"
+        relation: derived
+        etymon: "𐌐𐌖𐌐𐌋𐌖𐌍𐌀"
+      - latin: "populus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Porsena"
+        relation: derived
+        etymon: "𐌐𐌖𐌓𐌔𐌄𐌍𐌀𐌔"
+      - latin: "pulcher"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "pulpitum"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Rasennae"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Ravenna"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Roma"
+        relation: borrowed
+        etymon: "𐌓𐌖𐌌𐌀"
+      - latin: "ruma"
+        relation: borrowed
+        etymon: "𐌓𐌖𐌌"
+      - latin: "Rusellae"
+        relation: derived
+        etymon: "𐌓𐌖𐌔𐌋𐌄"
+      - latin: "Salernum"
+        relation: derived
+        no_etymon: unstated
+      - latin: "santerna"
+        relation: borrowed
+        etymon: "𐌆𐌀𐌌𐌈𐌉𐌂"
+      - latin: "satelles"
+        relation: derived
+        etymon: "𐌆𐌀𐌕𐌋𐌀𐌈"
+      - latin: "Saturnus"
+        relation: derived
+        etymon: "𐌔𐌀𐌕𐌓𐌄"
+      - latin: "sculna"
+        relation: derived
+        no_etymon: unstated
+      - latin: "scurra"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Sergius"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Sisenna"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Spurinna"
+        relation: derived
+        no_etymon: unstated
+      - latin: "spurium"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "spurius"
+        relation: derived
+        etymon: "𐌔𐤂𐌖𐌓𐌀𐌋"
+        translit: "spural"
+      - latin: "Statonia"
+        relation: derived
+        etymon: "𐌔𐌕𐌀𐌕𐌍𐌀"
+      - latin: "Suana"
+        relation: derived
+        etymon: "𐌔𐌖𐌀𐌍𐌀"
+      - latin: "subulo"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Sudernius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Sutrium"
+        relation: derived
+        etymon: "𐌔𐌖𐌈𐌓𐌉"
+      - latin: "tabanus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Tages"
+        relation: derived
+        etymon: "𐌕𐌀𐌓𐌙𐌉𐌄𐌔"
+      - latin: "Tanaquil"
+        relation: borrowed
+        etymon: "𐌈𐌀𐌍𐌙𐌅𐌉𐌋"
+      - latin: "tardus"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Tarquinii"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Tarquinius"
+        relation: derived
+        etymon: "Tarchuna"
+      - latin: "Tarquitius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "te"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Telamon"
+        relation: derived
+        no_etymon: unstated
+      - latin: "tina"
+        relation: borrowed
+        etymon: "𐌈𐌉𐌍𐌀"
+      - latin: "tiro"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "titulo"
+        relation: derived
+        no_etymon: no-template
+      - latin: "titulus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Tolumnius"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "transenna"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "triumphus"
+        relation: derived
+        etymon: "*𐌈𐌓𐌉𐌀𐌌𐌐𐌄"
+      - latin: "Tuder"
+        relation: derived
+        etymon: "𐌕𐌖𐌕𐌄𐌓𐌄"
+      - latin: "tullius"
+        relation: derived
+        etymon: "𐌕𐌖𐌋"
+      - latin: "tunica"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Valutius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Varro"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Veii"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Velitrae"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Vergilius"
+        relation: derived
+        no_etymon: unstated
+      - latin: "verna"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "viburnum"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Volaterrae"
+        relation: derived
+        etymon: "𐌅𐌄𐌋𐌀𐌈𐌓𐌉"
+      - latin: "Volsci"
+        relation: derived
+        no_etymon: unstated
+      - latin: "Volsinii"
+        relation: borrowed
+        etymon: "𐌖𐌄𐌋𐌆𐌍𐌀"
+      - latin: "Vulcanus"
+        relation: borrowed
+        no_etymon: unstated
+      - latin: "Vulturnus"
+        relation: borrowed
+        no_etymon: unstated

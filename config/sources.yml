@@ -2211,7 +2211,7 @@ etcsl:
   sync_policy: frozen   # corpus completed October 2006; the LLDS artifact is immutable
   translations: true    # the English prose translations are half the packet's value
 
-extrabiblical:   # 02-sources row 304
+extrabiblical:   # 02-sources row 306
   adapter: Nabu::Adapters::Extrabiblical
   adopted: "2026-10-22"
   axes: [biblical, hebrew, epigraphy]
@@ -2236,6 +2236,23 @@ extrabiblical:   # 02-sources row 304
   # table (config/work_eras.yml), the kind fold (config/kind_map.yml).
   # 1QS/1QM/1QHa are also held in dss (Abegg's transcription) — a second
   # witness at a different grain, never merged.
+etruscan-loans:   # 02-sources row 306
+  adapter: Nabu::Adapters::EtruscanLoans
+  adopted: "2026-10-22"
+  axes: [italic, etym]
+  wired: false   # awaiting the first sync (no network: vendored copy + LocalFetch pin;
+                   # eyeball `nabu etym persona` for the 𐌘𐌄𐌓𐌔𐌖 edge, then flip)
+  # Etruscan → Latin curated loan edges (the sabellic-loans recipe, the
+  # P17-3 borrowed pattern from a non-IE donor). config/etruscan_loans.yml
+  # IS the artifact — curated 2026-10-22 from the en.wiktionary "Latin
+  # terms borrowed/derived from Etruscan" category pages (69 borrowed ⊂
+  # 200 derived pages; Reconstruction:Latin/piltrum excluded) through the
+  # MediaWiki API, etyma read by Nabu::WiktionaryLoanCuration from each
+  # Latin entry's own template. EXPECTED: 199 entries (69 loan-flagged);
+  # 76 cite an Etruscan form, 119 unstated + 4 no-template declared row by
+  # row. CC BY-SA + GFDL → attribution. No upstream fetch: en.wiktionary
+  # is cited provenance, re-curation is a repo change.
+  sync_policy: frozen
 
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek

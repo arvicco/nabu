@@ -1,0 +1,18 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: etruscan-loans
+adapter_test: null
+retrieved: 2026-10-22
+files:
+  - path: api/members-borrowed.json
+    url: https://en.wiktionary.org/w/api.php?action=query&list=categorymembers&cmtitle=Category%3ALatin+terms+borrowed+from+Etruscan&cmlimit=500&cmtype=page%7Csubcat&format=json&formatversion=2
+    whole: false
+    trim: 4 of 69 member records (the kept pages), re-serialized compactly
+  - path: api/members-derived.json
+    url: https://en.wiktionary.org/w/api.php?action=query&list=categorymembers&cmtitle=Category%3ALatin+terms+derived+from+Etruscan&cmlimit=500&cmtype=page%7Csubcat&format=json&formatversion=2
+    whole: false
+    trim: 12 of 204 member records (the kept pages + the Reconstruction page + one subcategory), re-serialized compactly
+  - path: api/revisions.json
+    url: https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content%7Cids%7Ctimestamp&rvslots=main&titles=Aulus&format=json&formatversion=2
+    whole: false
+    trim: the 10 kept page records (whole wikitext) from the 50-title batches, merged into one response, sorted by title
