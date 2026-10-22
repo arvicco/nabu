@@ -1,33 +1,36 @@
 # Languages of the library
 
-**As of 2026-10-11** (~110.3M live passages across the 233-row
+**As of 2026-10-22** (~117.5M live passages across the 286-row
 registry; live inventory: every code below appears in the catalog, the
 lemma index, or the reference shelf). This page explains the code
 system once, then lists the significant codes with one sentence each
-(the corpus now carries 188 document language codes; the long tail of
+(the corpus now carries 250 document language codes; the long tail of
 single-inscription script variants is folded into grouped rows).
 Figures quoted inside individual rows are dated where they were
-measured.
+measured; the headline figures are held to `site/_data/census.yml` by
+the suite (`test/docs/languages_page_test.rb`).
 
 **The headline pair is Arabic and English.** **`ara` (Classical
 Arabic) remains the library's largest language — 33.3M passages** —
 with **`en` (Early Modern English) second at 24.3M** (EEBO-TCP whole);
-`lzh` (Literary Chinese, 19.0M — the hanmun written tradition beyond
+`lzh` (Literary Chinese, 20.6M — the hanmun written tradition beyond
 China: Korea's state records and Đại Việt's annals ride it) is third,
-Japanese (4.16M — Aozora joined by the NDL classical-book OCR and the
-Honkoku citizen transcriptions) fourth, Latin (3.49M) fifth, Ancient
-Greek (3.19M) sixth, and Sumerian (3.04M) seventh. Below them the
-seven-figure floor has widened: Korean-tradition holdings (`ko` 1.48M
-via OKHC), Classical Tibetan (`xct` 1.36M — the Derge canon), Middle
-English (1.36M), Persian (`fas` 1.35M), German (`de` 1.18M — the DTA
-print era whole), and Akkadian (`akk` 1.11M); just under it sit modern
-Mandarin (`cmn` 0.97M — the modern side of the classical–modern
-parallel corpus), IAST Sanskrit (0.87M), and historical Slovenian
-(0.86M, doubled by the Slovene Wikisource shelf).
+Japanese (`jpn` 5.59M — Aozora joined by the NDL classical-book OCR and
+the Honkoku citizen transcriptions) fourth, Latin (`lat` 3.60M) fifth,
+Ancient Greek (`grc` 3.19M) sixth, and Sumerian (`sux` 3.04M) seventh.
+Below them the seven-figure floor has widened: Korean-tradition
+holdings (`ko` 1.48M via OKHC), Classical Tibetan (`xct` 1.45M — the
+Derge canon), Middle English (`enm` 1.36M), Persian (`fas` 1.35M),
+modern Mandarin (`cmn` 1.30M — the modern side of the classical–modern
+parallel corpus, now past the million line), Tamil (`tam` 1.21M),
+German (`de` 1.18M — the DTA print era whole), and Akkadian (`akk`
+1.11M); just under it sit IAST Sanskrit (0.87M) and historical
+Slovenian (0.86M, doubled by the Slovene Wikisource shelf), both as
+measured 2026-10-11.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
-covers AND the **1,200-code** etymology universe the `etym`
+covers AND the **1,400-code** etymology universe the `etym`
 cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name, family,
 curated context, live holdings, and (since 2026-07-28) the related
 research axes: an `axes:` line naming the desks whose shelves hold the
@@ -164,8 +167,8 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 
 | Code | Language | One sentence |
 |---|---|---|
-| `lzh` | Literary Chinese | The library's third-largest language (19.0M passages, 2026-10-11) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line — and now the hanmun written tradition beyond China: Korea's dynastic records (the sillok, the Royal Secretariat's daily registers, the Goryeo histories, the ITKC classics) and Đại Việt's annals, the Korean wave's first syncs landed 2026-08-18/19. Since P37-2, traditional/simplified/z-variant spellings fold to one search skeleton (conventions §9). |
-| `grc` | Ancient Greek | The third *Western* language (Latin and EEBO's English ahead) — sixth overall at 3.19M passages (2026-10-11) — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
+| `lzh` | Literary Chinese | The library's third-largest language (20.6M passages, 2026-10-22) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line — and now the hanmun written tradition beyond China: Korea's dynastic records (the sillok, the Royal Secretariat's daily registers, the Goryeo histories, the ITKC classics) and Đại Việt's annals, the Korean wave's first syncs landed 2026-08-18/19. Since P37-2, traditional/simplified/z-variant spellings fold to one search skeleton (conventions §9). |
+| `grc` | Ancient Greek | The third *Western* language (Latin and EEBO's English ahead) — sixth overall at 3.19M passages (2026-10-22) — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists — 3.04M passages, the largest cuneiform language. |
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions) — joined at scale by the CDLI and eBL fragment shelves, and since 2026-08-18 by the Achemenet archives: 2,774 Achaemenid-period legal/administrative texts and letters (Murašû, Eanna, Sippar), silver-lemmatized with English glosses. |
 | `san-Latn` | Sanskrit (IAST romanization) | The GRETIL, SARIT, and DCS shelves — Vedas to early-modern śāstra — stored in the international transliteration scheme with accents preserved (0.87M passages). |
@@ -175,7 +178,7 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `hit` | Hittite | The Anatolian cuneiform corpus at fragment scale — the TLHdig transliterations beside the lexical-list entries, gold- and silver-lemmatized (0.36M passages). |
 | `syc` | Classical Syriac | The Digital Syriac Corpus (632 TEI documents) and the ETCBC Peshitta OT — extending the Aramaic axis by a millennium (0.17M passages). |
 | `egy` | Egyptian | The Ancient Egyptian Sentences (AES/TLA) and Late-Egyptian/Demotic Hugging-Face shelves — 0.12M gold-lemmatized passages from the Pyramid Texts onward; `egy-Egyd` holds a couple of Demotic papyri separately. |
-| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments, the Romance-wave shelves (BFM's medieval Latin side, CroALa, digilibLT, openMGH), Migne's Patrologia Latina (corpus-corporum, live 2026-08-21 — 5,248 patristic and medieval works / 0.9M passages, library.md §8ai) — and the EDH + EDR inscriptions, ~196,000 epigraphic documents (library.md §8g, §8aa); 3.49M passages (2026-09-04). |
+| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments, the Romance-wave shelves (BFM's medieval Latin side, CroALa, digilibLT, openMGH), Migne's Patrologia Latina (corpus-corporum, live 2026-08-21 — 5,248 patristic and medieval works / 0.9M passages, library.md §8ai) — and the EDH + EDR inscriptions, ~196,000 epigraphic documents (library.md §8g, §8aa); 3.60M passages (2026-10-22). |
 | `cop` | Coptic | The last stage of Egyptian: documentary papyri plus the literary Coptic Scriptorium shelf in Sahidic and Bohairic, gold-lemmatized (233,020 rows; library.md §8f). |
 | `qpc` | Proto-cuneiform | The pre-linguistic administrative tablets of the late 4th millennium BCE (dcclt archaic lists) — signs before language. |
 | `hbo` | Biblical Hebrew | The Masoretic shelves — OSHB Westminster Leningrad, the BHSA/ETCBC treebank, the Dead Sea Scrolls — gold-lemmatized, NFC-exempt (0.13M passages). |
@@ -201,11 +204,11 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `sv` | Old Swedish (under the modern tag) | Fornsvenska textbanken, live 2026-08-18 — the medieval law codes, prose and rhymed chronicles, 170,872 sentence passages; no ISO code exists for Old Swedish (the IcePaHC-under-`is` precedent of rule 3), so the stage rides the `sv:old` lect minted in nabu-lects (PR #4). |
 | `osp` | Old Spanish | The Old Spanish Textual Archive (osta), live 2026-08-18 — 684 documents of semi-paleographic manuscript transcription (5,091 passages), with the codices' Leonese (`ast`), Navarro-Aragonese (`arg`, under the `an:old` lect) and Latin work layers coded per document from the archive's own works tables. |
 | `spa` | Spanish (diachronic) | The DISCO sonnet corpus, live 2026-08-18 — 4,527 sonnet passages by 1,216 authors, 15th–20th c., under the one modern tag (the etym-desk reflex code, so cognate joins connect); per-line meter and rhyme ride as labelled machine annotations. |
-| `jpn` | Japanese | The library's fourth-largest language (4.16M passages, 2026-10-11): the Aozora Bunko reading desk (synced live 2026-07-21 — Meiji-and-later public-domain literature, ruby readings as annotations, kyūjitai works reachable through the reform fold, rule 5 / conventions §9), joined since late September by the National Diet Library's classical-book OCR (ndl-kotenseki, 26,860 books and counting), the Honkoku citizen transcriptions of premodern manuscripts (6,092 documents), and the Japanese Wikisource. |
-| `cmn` | Mandarin (modern) | The modern-Chinese side of the classical–modern parallel corpus (classical-modern, live 2026-08-30): 7,304 chapter documents, each paired line-by-line with its Literary Chinese original under `lzh` (`show --parallel`); 0.97M passages. |
+| `jpn` | Japanese | The library's fourth-largest language (5.59M passages, 2026-10-22): the Aozora Bunko reading desk (synced live 2026-07-21 — Meiji-and-later public-domain literature, ruby readings as annotations, kyūjitai works reachable through the reform fold, rule 5 / conventions §9), joined since late September by the National Diet Library's classical-book OCR (ndl-kotenseki, 26,860 books and counting), the Honkoku citizen transcriptions of premodern manuscripts (6,092 documents), and the Japanese Wikisource. |
+| `cmn` | Mandarin (modern) | The modern-Chinese side of the classical–modern parallel corpus (classical-modern, live 2026-08-30): 7,304 chapter documents, each paired line-by-line with its Literary Chinese original under `lzh` (`show --parallel`); 1.30M passages (2026-10-22). |
 | `okm` | Middle Korean | The 용비어천가 shelf (ko-wikisource-mk, live since 2026-08-19): the 1447 hangul epic's 125 cantos of Middle Korean verse in the archaic orthography (arae-a, tone dots — hangul NFC-safe, never NFKC), beside their parallel hanmun. |
 | `ko` | Korean (historical, under the modern tag) | The OKHC historical slice (okhc, P91): 1.48M passages — the Samguk sagi (the oldest Korean history), the Ilseongnok daily records, the ITKC munjip mass and the AKS/Kyujanggak old-literature shelves, each record carrying its own PD-vs-nc label; the hanmun state record itself (sillok, Goryeosa…) rides `lzh`. |
-| `xct` | Classical Tibetan | The Derge canon whole — the Public-Domain Digital Kangyur and Tengyur (1.36M passages, Esukhia's exact woodblock representation, Toh numbers as the crosswalk key), OTDO's Old Tibetan documents beside it under `otb`, and the SOAS gold-annotation lane. |
+| `xct` | Classical Tibetan | The Derge canon whole — the Public-Domain Digital Kangyur and Tengyur (1.45M passages as of 2026-10-22, Esukhia's exact woodblock representation, Toh numbers as the crosswalk key), OTDO's Old Tibetan documents beside it under `otb`, and the SOAS gold-annotation lane. |
 | `nwc` | Classical Newar | The DACON corpus (dacon, P88): dated Nepalese manuscript colophons and documents — the Newar written tradition's first machine-readable shelf here. |
 | `okz` / `ocm` / `omy` / `osn` / `kaw` / `pyx` / `obr` | The Southeast Asia family (P92) | Old Khmer (the Cœdès K-numbers), Old Mon (the first digital corpus anywhere — two inscriptions inside the Pyu corpus), Old Malay (Kedukan Bukit to the Laguna copperplate), Old Sundanese, Old Javanese (the DHARMA charters + the kakawin editions + the OJW wordnet), Pyu, and Old Burmese (the Bagan stones, Myanmar-script with a transliteration lane) — ten languages the library never held before P92, most in their only machine-readable form. |
 | `de` | German (ENHG → the print era, under the modern tag) | Two shelves: the ReF reference corpus (190 diplomatically transcribed manuscripts of 1350–1650, silver-lemmatized) and — since P94 — the Deutsches Textarchiv whole (dta: 5,478 prints of 1473–1969 at page grain, 729K passages, orthography as printed with ¬-line-break joins; 562 pre-1650 prints staged de:early by print-year inference). Together 1.18M passages; upstream's own `de` tag kept (the `is`/`sv` modern-tag precedent of rule 3). |
