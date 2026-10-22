@@ -89,6 +89,10 @@ files:
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.ot/sahidic.ot_TT.zip
     whole: false
     trim: "rebuilt zip (zip -X) with 1 of 911 members: 01_Genesis_01.tt cut to meta line + verses 1-11 (upstream member lines 1-381 byte-identical, </meta> re-added; 124,126 B -> 17,389 B); abbr nomSac + <gap reason=\"lacuna\"> + <supplied source= reason=> editorial marks in the collapsed dialect"
+  - path: sahidic.ot/sahidic.ot_CONLLU.zip
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.ot/sahidic.ot_CONLLU.zip
+    whole: false
+    trim: "rebuilt zip (zip -X) with 1 member: 01_Genesis_01.conllu cut to sentences s0001-s0008 (upstream member lines 1-136 byte-identical; 60,187 B -> 8,285 B) — exactly the 80 words of the trimmed 01_Genesis_01.tt TT member, so the FEATS join aligns; cut from the local canonical tree's zip at the same v6.2.0 tag (the zipped-twin join path)"
   # ---- v6.3.0 re-pin drift fixtures (fetched 2026-10-22 from the v6.3.0
   # ---- tag, commit d6332e37c7f92c737f51deb4f6e7ee872bfd603f; the older
   # ---- files above stay at their v6.2.0 bytes) ----

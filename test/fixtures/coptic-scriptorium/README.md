@@ -23,8 +23,15 @@ the adapter's discover walks fixtures exactly as it walks canonical.
   conventions §9 `cop` fold subject); CC-BY 4.0 license string with HTML
   entities (`&lt;a href=…&gt;`) → per-document `attribution` override.
 - `besa-letters/besa.letters_CONLLU/on_lack_of_food.conllu` (whole, 9.7 KB)
-  — the CoNLL-U twin, NOT parsed in v1; checked in for the deferred
-  UD-FEATS join (survey §4b/v2-3). Discover must never yield it.
+  — the CoNLL-U twin: never a document of its own (discover never yields
+  it), it lends its UD FEATS to the TT tokens it aligns with by form
+  (the FEATS join, CopticConlluFeats).
+- `sahidic.ot/sahidic.ot_CONLLU.zip` — rebuilt zip (`zip -X`) with ONE
+  member, `01_Genesis_01.conllu`, cut to sentences s0001-s0008 (upstream
+  member lines 1-136 byte-identical; 60,187 B -> 8,285 B): exactly the 80
+  words of the trimmed `01_Genesis_01.tt` TT member below, so the zipped-
+  twin join path (sahidic.ot ships its CoNLL-U only as a zip) aligns. Cut
+  2026-10-22 from the local canonical tree's zip at the v6.2.0 tag.
 - `sahidica.nt/sahidica.nt_TT.zip` — rebuilt zip with two members
   (in-repo-zip discover path; the four big bible corpora ship TT only as
   zips, and their loose CoNLL-U files are 2-byte placeholders upstream):
