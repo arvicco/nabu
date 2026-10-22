@@ -116,6 +116,7 @@ module Nabu
           - [nabu-data](#{DATA_REPOSITORY}): the derived datasets (CLDF + Frictionless), versioned with DOIs — bulk downloads, not lookups
           - [Source repository](#{REPOSITORY}): the full pipeline, registry and documentation
           - [News](#{page('/news/')}): dated release notes, with an Atom feed at #{page('/feed.xml')}
+          - [Full site text](#{page('/llms-full.txt')}): every navigation page as plain text in one file, rendered at site build
         TEXT
       end
     end

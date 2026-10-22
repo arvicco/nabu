@@ -1,0 +1,43 @@
+{%- comment -%}
+  Renders include.html — one page's rendered HTML body — as plain,
+  markdown-flavoured text for llms-full.txt. Code blocks (<pre>) keep their
+  line breaks inside ``` fences; the prose between them is flattened, with
+  headings, paragraphs, list items and table rows re-broken through a
+  sentinel character (␤) that survives normalize_whitespace. Links keep
+  their text only; llms.txt carries the site map.
+{%- endcomment -%}
+{%- capture nl %}
+{% endcapture -%}
+{%- assign fence = "```" -%}
+{%- assign segments = include.html | split: "<pre" -%}
+{%- for segment in segments -%}
+  {%- if forloop.first -%}
+    {%- assign code = "" -%}
+    {%- assign prose = segment -%}
+  {%- else -%}
+    {%- assign halves = segment | split: "</pre>" -%}
+    {%- assign code = halves[0] | prepend: "<pre" | strip_html
+        | replace: "&lt;", "<" | replace: "&gt;", ">" | replace: "&quot;", '"' | replace: "&#39;", "'"
+        | replace: "&amp;", "&" -%}
+    {%- assign prose = halves[1] | default: "" -%}
+  {%- endif -%}
+  {%- if code != "" -%}
+{{ nl }}{{ nl }}{{ fence }}{{ nl }}{{ code | strip }}{{ nl }}{{ fence }}{{ nl }}{{ nl }}
+  {%- endif -%}
+  {%- assign text = prose
+      | replace: "<h1", "␤␤# <h1" | replace: "<h2", "␤␤## <h2" | replace: "<h3", "␤␤### <h3"
+      | replace: "<h4", "␤␤#### <h4" | replace: "</h1>", "␤␤" | replace: "</h2>", "␤␤"
+      | replace: "</h3>", "␤␤" | replace: "</h4>", "␤␤"
+      | replace: "</p>", "␤␤" | replace: "<br", "␤<br"
+      | replace: "<li", "␤- <li" | replace: "</ul>", "␤␤" | replace: "</ol>", "␤␤"
+      | replace: "<tr", "␤|<tr" | replace: "</td>", " |" | replace: "</th>", " |" | replace: "</table>", "␤␤"
+      | replace: "<blockquote", "␤> <blockquote"
+      | replace: "<code>", "`" | replace: "</code>", "`"
+      | strip_html | normalize_whitespace
+      | replace: " ␤", "␤" | replace: "␤ ", "␤"
+      | replace: "␤␤␤", "␤␤" | replace: "␤␤␤", "␤␤" | replace: "␤␤␤", "␤␤"
+      | replace: "␤", nl
+      | replace: "&lt;", "<" | replace: "&gt;", ">" | replace: "&quot;", '"' | replace: "&#39;", "'"
+      | replace: "&nbsp;", " " | replace: "&amp;", "&" -%}
+{{ text | strip }}
+{%- endfor -%}
