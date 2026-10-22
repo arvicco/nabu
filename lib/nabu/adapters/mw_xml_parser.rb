@@ -153,7 +153,7 @@ module Nabu
         end
       end
 
-      # One line → { tag:, main:, key1:, key2:, l:, body: } or nil for the
+      # One line → { tag:, main:, key1:, key2:, hom:, l:, body: } or nil for the
       # frame lines (<?xml…, DOCTYPE, comments, <mw>, </mw>).
       def parse_record(line)
         return nil unless line.lstrip.start_with?("<H")
@@ -165,6 +165,7 @@ module Nabu
           tag: element.name, main: element.name.match?(MAIN_RECORD),
           key1: element.at_xpath("h/key1")&.text.to_s,
           key2: element.at_xpath("h/key2")&.text.to_s,
+          hom: element.at_xpath("h/hom")&.text.to_s,
           l: element.at_xpath("tail/L")&.text.to_s,
           body: element.at_xpath("body")
         }

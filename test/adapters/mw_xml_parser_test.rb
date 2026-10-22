@@ -223,7 +223,13 @@ module Adapters
 
     def test_entries_without_the_safe_shapes_carry_no_crossrefs
       assert_empty slice_entry("1715").crossrefs
-      assert(entries.all? { |e| e.crossrefs.empty? }, "the main fixture carries no cf./q.v. adjacency")
+      assert(entries.flat_map(&:crossrefs).none? { |c| %w[cf. q.v.].include?(c.kind) },
+             "the main fixture carries no cf./q.v. adjacency")
+      # Its only pointers are structural: aṃsa (H2) printed under √aṃs,
+      # bhāṣaṇa (H2) under √bhāṣ.
+      assert_equal({ "88" => [%w[root 87]], "150481" => [%w[root 150479]] },
+                   entries.reject { |e| e.crossrefs.empty? }
+                          .to_h { |e| [e.entry_id, e.crossrefs.map { |c| [c.kind, c.target_id] }] })
     end
 
     # -- the mining slice (test/fixtures/mw/README.md) ------------------------------
@@ -312,6 +318,40 @@ module Adapters
       assert_equal [["partOf bhāṣaṇī", "bhāṣaṇī", "150481"]], id_crossrefs("150484.1", "partOf")
       assert_equal [["contains bhāṣaṇīkṣaulema", "bhāṣaṇīkṣaulema", "150484.1"]],
                    id_crossrefs("150481", "contains")
+    end
+
+    # -- root families: MW's own print hierarchy + the prefixed-root seam ------------
+
+    # MW prints a root (H1, <info verb="root|genuineroot">) followed by its
+    # primary derivatives as H2 sub-headwords until the next H1: each H2
+    # points "root" at the root entry, id-keyed. H3/H4 compounds belong to
+    # their H2 head, not to the root family (deliberately coarse); a non-root
+    # H1 (2. bhāṣ, L 150550) closes the block and joins no family.
+    def test_h2_derivatives_point_at_the_root_they_are_printed_under
+      %w[150480 150481 150485].each do |id|
+        assert_equal [["root bhāṣ", "bhāṣ", "150479"]], id_crossrefs(id, "root"), "L #{id}"
+      end
+      assert_equal [["root lī", "lī", "182753"]], id_crossrefs("182789", "root")
+      %w[150479 150484.1 150550 62023 101471 182753].each do |id|
+        assert_empty id_crossrefs(id, "root"), "L #{id} is no root-family member"
+      end
+    end
+
+    # A prefixed verb (<info verb="pre" parse="ud+lI"/>, printed ul-√lī)
+    # joins the family of its root — the parse's last member — resolved
+    # among the dictionary's ROOT entries only, by key, never by a fold that
+    # could land on a noun homograph.
+    def test_prefixed_verbs_join_the_family_of_their_root
+      assert_equal [["root lī", "lī", "182753"]], id_crossrefs("37642", "root")
+    end
+
+    # Homonym roots share a key (√1.as "be", √2.as "throw"); the √ mark in
+    # the prefixed verb's printed headword carries the number
+    # (<s>aDy-</s>√ <hom>2.</hom> <s>as</s>), matched against the root
+    # entry's own <hom>.
+    def test_the_root_mark_homonym_number_picks_among_homonym_roots
+      assert_equal [["root as", "as", "20354"]], id_crossrefs("4624", "root")
+      assert_empty id_crossrefs("20353", "root")
     end
 
     # -- hygiene -------------------------------------------------------------------

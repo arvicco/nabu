@@ -209,8 +209,8 @@ class MwTest < Minitest::Test
     assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
   end
 
-  # The whole-file edges of the mining slice (README): phw ties are
-  # id-keyed, so the loader resolves each onto the exact entry.
+  # The whole-file edges of the mining slice (README): phw ties and root
+  # families are id-keyed, so the loader resolves each onto the exact entry.
   def mining_slice_document
     path = File.join(FIXTURES, "mining-slice.xml")
     document = Nabu::DictionaryDocument.new(slug: "mw", language: "san", title: "MW mining slice",
@@ -236,6 +236,19 @@ class MwTest < Minitest::Test
     before = db[:dictionary_crossrefs].order(:id).all
     loader.load([mining_slice_document], full: false)
     assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
+  end
+
+  def test_root_family_pointers_resolve_onto_the_root_entry
+    db, loader = loader_setup
+    loader.load([mining_slice_document], full: false)
+    define = Nabu::Query::Define.new(catalog: db)
+
+    assert_equal [["root bhāṣ", "urn:nabu:dict:mw:150479"]], resolved(define, "150480")
+    assert_equal [["root lī", "urn:nabu:dict:mw:182753"]], resolved(define, "37642")
+    family = db[:dictionary_crossrefs].where(kind: "root")
+                                      .where(to_entry_id: db[:dictionary_entries].where(entry_id: "150479").select(:id))
+                                      .count
+    assert_equal 3, family, "√bhāṣ's printed family: bhāṣaka, bhāṣaṇa, bhāṣā"
   end
 
   def test_citation_and_reflex_rows_land_and_replace_wholesale
