@@ -106,6 +106,18 @@ module Nabu
     # lex_etcbc, the DSS→BHSA lexeme crosswalk; its silver ML members are
     # labeled by name and header, never merged into Abegg's gold features
     # (the goo300k/imp discipline: label or omit, never pass off as gold).
+    #
+    # Crosswalk census (whole tf/2.0 against the held bhsa tf/2021,
+    # 2026-10-22): lex_etcbc rides 422,424 words; 422,325 (99.98%) name a
+    # lexeme bhsa's word-grain "lex" carries (5,287 of 5,313 distinct ids;
+    # the residue is upstream's own "=" placeholder ×44 and a handful of
+    # DSS-only lexemes like F>T=/), so the token-level string join IS the
+    # seam — no separate crosswalk table. Decoder census (why the morph
+    # façade gets NO silver *_etcbc row): of the 30,150 words without an
+    # Abegg tag, vs/vt/nu/ps_etcbc are uniformly "NA" and sp/gn_etcbc fill
+    # only ~121 — a second dss row would decode almost nothing and would
+    # surface silver predictions as morph evidence.
+    #
     # The full per-feature census of what does not ride is
     # DECLINED_TOKEN_FEATURES; the headline skips:
     #
