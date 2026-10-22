@@ -132,6 +132,34 @@ module Adapters
       end
     end
 
+    # The family fetch is all-or-nothing on canonical (SlavicWikisourceHtml
+    # #fetch): a render stage cut off mid-way must not have rewritten any
+    # envelope as an html-less stage-1 shell (parse-only would class it
+    # :empty and withdraw it) — the prior tree stays byte-identical.
+    def test_an_interrupted_fetch_leaves_the_prior_tree_intact
+      pages = [
+        api_page(1, "Хмільницький літопис", "{{версії\n| автор =\n}}\n* [[Лѣтопись Самовидца/Хмельницкая лѣтопись]]"),
+        api_page(2, "Про князя Олега", "{{Про_текст\n| Джерело = x\n}}\nІ жив Олег"),
+        api_page(3, "Лѣтопись Самовидца/Хмельницкая лѣтопись", "{{заголовок\n | рік = 1878\n}}\nЛѣта 1648.")
+      ]
+      Dir.mktmpdir do |dir|
+        stub_api(pages)
+        Nabu::Adapters::UkWikisource.new(delay: 0).fetch(dir)
+        before = tree_bytes(dir)
+        WebMock.reset!
+        stub_api(pages.map { |page| page.merge("revisions" => [page["revisions"][0].merge("revid" => 99)]) })
+        stub_request(:get, API).with(query: hash_including("action" => "parse")).to_return(status: 503)
+        assert_raises(Nabu::FetchError) { Nabu::Adapters::UkWikisource.new(delay: 0).fetch(dir) }
+        assert_equal before, tree_bytes(dir), "no stage writes a half-built envelope into canonical"
+        assert_equal ["urn:nabu:uk-wikisource:3"], Nabu::Adapters::UkWikisource.new.discover(dir).map(&:id)
+      end
+    end
+
+    def tree_bytes(dir)
+      files = Dir.glob(File.join(dir, "**", "*"), File::FNM_DOTMATCH).select { |path| File.file?(path) }
+      files.to_h { |path| [path, File.binread(path)] }
+    end
+
     def test_fetch_failure_is_a_fetch_error
       stub_request(:get, /uk\.wikisource\.org/).to_return(status: 503)
       Dir.mktmpdir do |dir|
