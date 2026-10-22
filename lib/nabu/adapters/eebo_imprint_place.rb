@@ -14,23 +14,37 @@ module Nabu
     # raw strings → 56,678 files (94.0%) with a certain town, 2,293
     # (3.8%) with a ?-marked conjecture, 1,355 unplaced (1,330 of them
     # upstream's own s.l./n.p. sine-loco answer). London alone is 51,697.
+    # The prose-imprint tail (2026-10-22, whole-census before/after diff):
+    # 19 formerly unplaced strings now read their town and 12 former junk
+    # readings their real one (31 files); 32 distinct unplaced strings
+    # remain — the sine-loco family, "abroad"/"unknown", printer-only and
+    # collation values, and four deliberately screened uncertain ones.
     #
     # The reading, in order:
-    #   1. NFC; "[sic]" noted and dropped; scribal brackets spliced back
-    #      into their word ("Lo[n]don" → "London").
+    #   1. NFC; a stray combining accent after a space dropped ("̀a");
+    #      "[sic]" noted and dropped; scribal brackets spliced back into
+    #      their word ("Lo[n]don" → "London", the unclosed "Lon[don", the
+    #      long "[Enprynte]d").
     #   2. A cataloguer "[i.e. X]" correction outranks the printed imprint
     #      (the dating molds' CORRECTED precedent): "Oxford [i.e. London]"
-    #      is London.
+    #      is London. One that merely expands the imprint's own region
+    #      abbreviation ("Boston in N.E. [i.e. New England]") corrects
+    #      nothing and is set aside.
     #   3. The printed text outside cataloguer brackets is the claim; when
     #      it reads nothing (the whole imprint supplied, "[London] :"),
     #      the first bracket's content answers.
     #   4. Period furniture strips: the printing verb in its many
     #      spellings (Imprinted/Imprynted/Enprynted/Imprentit/Excusum/
-    #      Printiedig/…), the preposition (at/in/yn/tot/à …), a leading
-    #      dateline, "the famous cyte of", trailing "printed", and any
-    #      shop/street/printer tail ("in Powles Churchyarde", "by Robert
-    #      Barker"). A reprint names the artifact's own place: "Printed at
-    #      London, and re-printed at Edinburgh" is Edinburgh.
+    #      Printiedig/the split "Im printed"/…) and its adverb
+    #      ("nouuellement"), the preposition (at/in/yn/tot/à …), a leading
+    #      dateline (arabic or roman year: "Anno Domini. 1588.", "Anno.
+    #      M.D.xlix."), a trailing day-dateline ("ye 17. day of July"),
+    #      "the famous cyte of" (never the appositive "a city of …"),
+    #      trailing "printed", and any shop/street/printer tail ("in Powles
+    #      Churchyarde", "by Robert Barker", "at the three Cranes"). A
+    #      reprint names the artifact's own place: "Printed at London, and
+    #      re-printed at Edinburgh" is Edinburgh, "Gedruckt naer de copy
+    #      van Londen, in 's Gravenhage" The Hague.
     #   5. Latin, Welsh, French and period spellings fold to the English
     #      town through ALIASES (Londini/Llundain/Londres → London,
     #      Oxoniæ/Rhydychen → Oxford, Doway → Douai, Hage → The Hague …);
@@ -65,24 +79,52 @@ module Nabu
       CORRECTION = /\[\s*i\.\s*e\.?,?\s*([^\]]*)\]?/i
       SIC = /\[\s*sic\s*\]/i
       # A bracket splicing letters into a word: Lo[n]don, [Lo]ndon.
-      SPLICE = /(?<=[[:alpha:]])\[([[:alpha:]]{1,3})\]|\[([[:alpha:]]{1,3})\](?=[[:alpha:]])/
-      VERB = /(?:[ij]mp[rk]|e[mn]pr|inpr|pr[iyaeo]{1,2}n|prentid|pranted|printhed|reprinted|re-printed|excu|
+      # The unclosed tail form ("Lon[don :"), a long head splice glued to a
+      # lowercase continuation ("[Enprynte]d" — never "[London]Ian. 4"),
+      # and a two-word splice glued on both sides ("Lon[don pri]nted") read
+      # the same way.
+      SPLICE = /(?<=[[:alpha:]])\[([[:alpha:]]{1,3})\]|\[([[:alpha:]]{1,10})\](?=[[:lower:]])|
+                (?<=[[:alpha:]])\[([[:alpha:]]{1,6})(?=\s*[:;,]|\s*\z)|
+                (?<=[[:alpha:]])\[([[:alpha:]]+\s[[:alpha:]]+)\](?=[[:alpha:]])/x
+      # A combining mark stranded after a space ("Imprime ̀a Londres").
+      STRAY_MARK = /(?<=\s)\p{Mn}+/
+      VERB = /(?:[ij]mp[rk]|im\s+pr|imp[yi]nt|ptint|mprint|publi[sc]|e[mn]pr|inpr|
+                pr[iyaeo]{1,2}n|prentid|pranted|printhed|reprinted|re-printed|excu|
                 impress|imprim|stampato|g(?:h)?edruckt|printiedig|argraphwyd|made\b)/ix
-      LEAD_VERB = /\A(?:(?:and\s+)?(?:be\s+)?(?:newe?l[yi]e?|first|re-?)\s*)?#{VERB}[[:alpha:]\[\]]*[\s,.]*/i
-      LEAD_PREP = /\A(?:and|at|att|ad|in|yn|yng|tot|en|à|â|á|a|to|from|de|the|theat(?:er|re)\s+in)\s+/i
+      LEAD_VERB = /\A(?:and\s+)?(?:be\s+)?(?:(?:newe?l[yi]e?|first|re-?)\s*)?#{VERB}[[:alpha:]\[\]]*[\s,.]*/i
+      LEAD_ADVERB = /\A(?:nou[uv]ellement|newe?l[yi]e?)\s+/i
+      LEAD_PREP = /\A(?:and|at|att|t|ad|in|yn|yng|tot|en|à|â|á|a|to|from|de|the|theat(?:er|re)\s+in)\s+/i
       LEAD_JUNK = /\A(?:by|secretly|first|newly|for)\b.*?\b(?:at|in)\s+/i
       WELSH = /\byn\s+(?:y\s+|ninas\s+)?(.+)/i
-      CITY_OF = /\A.*?\b(?:cyte|city|citie|cittie)\s+of\s+/i
+      # The famous-city formula takes a determiner ("in the famous cyte
+      # of"); "Amstelredam a city of Marchandise …" is an appositive tail.
+      CITY_OF = /\A.*?\b(?:the|thys|this|ye|that)\s+(?:[[:alpha:]]+\s+){0,2}(?:cyte|city|citie|cittie)\s+of\s+/i
+      # The reprint-after-a-copy clause ("naer de copy van Londen,"): the
+      # exemplar's town, never the artifact's.
+      COPY_OF = /\bna(?:er|ar|ch)\s+(?:de|dem|der|het)\s+cop(?:y|ie|ye)\s+van\s+[^,]*,\s*/i
       REPRINT = /\b(?:re-?printed|nowe?)\s+(?:at|in)\s+(.+)/i
       TRAIL_VERB = /\s+(?:re-?)?(?:printed|imprinted|reprinted)\b.*\z/i
       LEAD_DATE = /\A(?:(?:[[:alpha:]]+\.|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|set|oct|nov|dec)[[:alpha:]]*)?
                      \s*\d{1,4}\.?\s+)+/ix
-      CUT = /\s*[,:;]\s*|\s+(?:in|by|of|within|neere|near|for|a\s+city)\s+/i
+      # A leading dateline of dateline words only, ending in a year (arabic,
+      # or roman from M.D.): "Anno Domini. 1588.", "Ianuarij primus.
+      # 1582.", "Anno. M.D.xlix.", "the .xi. day of October. Anno. Do.
+      # 1550." — a town name is never a dateline word, so "London 1650."
+      # stays put.
+      DATE_WORD = /(?:an(?:no)?|do(?:m(?:ini)?)?|ianuarij|primus|the|ye|last|da(?:y|ye|ie)|of|[ivxlc]+|\d{1,2}|
+                    (?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[[:alpha:]]*)/ix
+      DATELINE = /\A(?:\.?#{DATE_WORD}\.?,?\s+)*?(?:1[4-7]\d\d|m\.\s?d\.[clxvij.]*?)\.?\s+/i
+      # A trailing day-dateline: "ye 17. day of July", "the. xx. day of …".
+      TRAIL_DAY = /\s+(?:(?:ye|the|this)\.?\s+)?\.?[\dxvilc]+\.?\s+day\b.*\z/i
+      CUT = /\s*[,:;]\s*|\s+(?:in|at|by|of|within|neere|near|for|a\s+city)\s+/i
       US = /\bMass(?:achusetts|achusets)?\b|\bN(?:ew)?[\s.=-]*E(?:ngland)?\b|Nov:?\s*Ang/
       SINE = /\A(?:s\.?\s*[l1]|s\.?\s*n|n\.?\s*p)\.?\z/i
       NOT_A_PLACE = %w[abroad unknown].freeze
       # A leading function word means the reading landed on prose.
-      PROSE_HEAD = %w[by for and our].freeze
+      PROSE_HEAD = %w[by for and our aux].freeze
+      # A cataloguer bracket that only expands the imprint's own region
+      # abbreviation (N.E. → New England) — no correction of the town.
+      EXPANSION = /\[\s*i\.\s*e\.?,?\s*(?:new\s+england|mass(?:achusetts)?\.?)\s*\]/i
       # Cataloguer qualifiers riding after the town ("Oxford [Oxfordshire]").
       QUALIFIER = /\s+(?:mass(?:achusetts?)?|nov\b.*|oxfordshire|cambridgeshire|yorkshire|england)\z/i
 
@@ -114,7 +156,8 @@ module Nabu
         "edynburgh" => "Edinburgh", "holy-rood-house" => "Edinburgh",
         "aberdene" => "Aberdeen", "aberdoniæ" => "Aberdeen", "abredoniæ" => "Aberdeen", "abredeis" => "Aberdeen",
         "dvblin" => "Dublin", "dublinii" => "Dublin",
-        "yorke" => "York", "bristoll" => "Bristol", "exon" => "Exeter", "colechester" => "Colchester",
+        "yorke" => "York", "worceter" => "Worcester",
+        "bristoll" => "Bristol", "exon" => "Exeter", "colechester" => "Colchester",
         "ippeswich" => "Ipswich", "ippeswych" => "Ipswich", "ippyswiche" => "Ipswich",
         "cantorbury" => "Canterbury", "gateside" => "Gateshead",
         "westmestre" => "Westminster", "westmynstre" => "Westminster", "westminister" => "Westminster",
@@ -137,6 +180,7 @@ module Nabu
         "middelborough" => "Middelburg", "midlebrugh" => "Middelburg",
         "hague" => "The Hague", "hage" => "The Hague", "hagh" => "The Hague", "haghe" => "The Hague",
         "the hague" => "The Hague", "the hage" => "The Hague", "gravenhagh" => "The Hague",
+        "'s gravenhage" => "The Hague", "'s-gravenhage" => "The Hague",
         "leyden" => "Leiden", "leida" => "Leiden", "dort" => "Dordrecht", "roterdame" => "Rotterdam",
         "delph" => "Delft", "delf" => "Delft", "delff" => "Delft",
         "flushing" => "Vlissingen", "flishing" => "Vlissingen",
@@ -160,12 +204,12 @@ module Nabu
       def call(raw)
         return {} if raw.nil?
 
-        text = raw.unicode_normalize(:nfc).gsub(/[[:space:]]+/, " ").strip
+        text = raw.unicode_normalize(:nfc).gsub(/[[:space:]]+/, " ").gsub(STRAY_MARK, "").strip
         return {} if text.empty?
 
         sic = SIC.match?(text)
         text = text.gsub(SIC, "").gsub("[[", "[").sub(/\A(?:\.\.\.\s*)+/, "").sub(/\A\[\s*\.\.\.\s*/, "[")
-        text = text.gsub(SPLICE) { Regexp.last_match(1) || Regexp.last_match(2) }
+        text = text.gsub(SPLICE) { Regexp.last_match.captures.compact.first }.gsub(EXPANSION, "")
         us = US.match?(text)
         name, segment = reading(text, sic: sic)
         return {} if name.nil?
@@ -191,8 +235,8 @@ module Nabu
       end
 
       def clean(text)
-        s = text.delete("?").gsub(/\([^)]*\)?/, " ").strip
-        s = s.sub(LEAD_DATE, "") if s.match?(/\d/)
+        s = text.delete("?").strip.sub(/\A\(([^()]*)\)\z/, '\1').gsub(/\([^)]*\)?/, " ").strip
+        s = s.sub(DATELINE, "").sub(LEAD_DATE, "") if s.match?(/\d|\bm\.\s?d\./i)
         if (match = REPRINT.match(s))
           s = match[1]
         end
@@ -200,9 +244,11 @@ module Nabu
         if (match = WELSH.match(s))
           s = match[1]
         end
-        s = s.sub(LEAD_VERB, "").sub(LEAD_JUNK, "")
+        s = s.sub(COPY_OF, "").sub(LEAD_VERB, "").sub(LEAD_ADVERB, "")
+        s = s.sub(DATELINE, "") if s.match?(/\d|\bm\.\s?d\./i)
+        s = s.sub(LEAD_JUNK, "")
         s = s.sub(LEAD_PREP, "") while s.match?(LEAD_PREP)
-        s = s.sub(TRAIL_VERB, "")
+        s = s.sub(TRAIL_VERB, "").sub(TRAIL_DAY, "")
         s = s.split(CUT).first.to_s
         s.gsub(/[\[\]()"]/, "").sub(/[\s.']+\z/, "").strip
       end

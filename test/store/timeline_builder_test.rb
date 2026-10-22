@@ -783,6 +783,26 @@ module Store
       end
     end
 
+    # The DTA transcription template's unfilled imprint slot — the real
+    # docImprint pubPlace of three held texts (canonical/dta,
+    # humboldt_gesetze_1816 "[Erscheinungsort]", humboldt_neumann_1830 and
+    # humboldt_observations_1791 in long-s "[Erſcheinungſort]") — is a
+    # placeholder naming no place, in either spelling.
+    def test_metadata_places_screen_the_dta_template_placeholder
+      { "humboldt_gesetze_1816" => "[Erscheinungsort]", "humboldt_neumann_1830" => "[Erſcheinungſort]",
+        "humboldt_observations_1791" => "[Erſcheinungſort]" }.each do |id, raw|
+        seed_metadata_doc("dta", "urn:nabu:dta:#{id}", { "date" => "1816", "place" => raw })
+      end
+      build!
+      %w[humboldt_gesetze_1816 humboldt_neumann_1830 humboldt_observations_1791].each do |id|
+        row = timeline_for("urn:nabu:dta:#{id}")
+        refute_nil row, "#{id} still rows on its date"
+        assert_nil row[:place_name], "#{id}: the template placeholder names no place"
+      end
+      assert Nabu::Store::TimelineBuilder::MetadataDates.no_place?("Erscheinungsort"), "bare, unbracketed too"
+      refute Nabu::Store::TimelineBuilder::MetadataDates.no_place?("Erscheinungsorte bei Berlin")
+    end
+
     # A05548's two-town conjecture mints its hedged pair, not the raw.
     def test_metadata_places_eebo_two_town_conjecture_mints_hedged
       raw = "[Edinburgh? or St. Andrews?] :"
