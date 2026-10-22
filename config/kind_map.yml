@@ -724,6 +724,29 @@ sources:
         emblem, not a genre"
       "Beneški lev, Totto ex Gavardo": "the Lion of St Mark's book legend (Pax tibi Marce
         evangelista meus) — a state emblem, not a genre"
+  extrabiblical:       # census 2026-10-22: 13 books (tf/0.2 book nodes), one document each
+    metadata: book     # upstream's book name verbatim — each book IS one known artifact
+    #                    group or work, so the fold is the parse-time call per book. The era
+    #                    table over the same key is config/work_eras.yml (adapter-test parity).
+    map:
+      "Arad": letter/official          # the Eliashib ostraca: supply orders from the fortress command
+      "Lachish": letter/official       # Hoshayahu's military dispatches to Yaush, the commander
+      "Mesad_Hashavyahu": legal/petition  # a reaper's plea to the governor for his seized garment
+      "Siloam": building               # records the cutting of the tunnel, on its own wall
+      "Mesa": royal                    # Mesha of Moab's commemorative royal stele
+      "Ketef_Hinnom": magic/amulet     # rolled silver amulets carrying the priestly blessing
+      "Balaam": divination/oracle      # "the book of Balaam son of Beor, a seer of the gods" —
+      #                                  a night vision of divine doom, the seer's oracle
+      "B_1QHa": hymn-prayer/hymn       # the Hodayot: thanksgiving hymns ("I thank you, Lord")
+      "B_1QS": legal/law               # the sect's rule: admission, conduct and penal code (cols.
+      #                                  5–9), with its liturgy and doctrine riding inside it
+      "Pirqe": literary/wisdom         # Avot: the sages' ethical maxims, a chain of tradition
+      "Shirata": exegesis              # Mekhilta: tannaitic midrash on Exodus 15, verse by verse
+    deliberate:
+      "Ajrud": "blessing formulae in epistolary frames ('say to X: I bless you by YHWH') on
+        storage jars and plaster — between letter and dedication, no one class"
+      "B_1QM": "an eschatological war rule — battle order, trumpets and standards, priestly
+        prayers — no class holds it without forcing"
   vulgate:
     source_kind: scripture
   prague-bible-1488:

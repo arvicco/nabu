@@ -573,6 +573,36 @@ sources:
         repository and found/observed provenance are present locations, metadata only;
         no gazetteer refs"}
     script: {posture: implied}
+  extrabiblical:
+    # kind machine-postured — kind_map.yml folds the 13 books over metadata
+    # book (letters, petition, building, royal, amulet, oracle, hymns, rule,
+    # wisdom, midrash; Ajrud and 1QM declared deliberate).
+    lect: {posture: pending, note: "candidates: (1) an obm (Moabite) anchor in nabu-lects,
+        parent sem (Canaanite) — the Mesha Stele rides the bare obm code until it lands;
+        (2) an Iron Age (epigraphic) Hebrew stage on hbo for Arad, Lachish, Kuntillet
+        ʿAjrud, Siloam, Ketef Hinnom and Mesad Hashavyahu (hbo has no stages);
+        (3) the Deir ʿAlla text's language — CONTESTED (Aramaic / Canaanite / a dialect of
+        its own), a ruling; upstream's Hebrew claim rides as hbo meanwhile. Pirqe Avot and
+        Mekhilta Shirata are Rabbinic Hebrew — the heb:rab facet rule (book → heb:rab)
+        waits to land with the package (a rule would machine-posture the source).
+        1QS/1QM/1QHa stay bare hbo by the dss precedent (no Qumran-Hebrew stage)"}
+    dating: {posture: dated, note: "the asset carries no date field; each of the 13 books
+        bands through its attributed era in config/work_eras.yml (handbook consensus,
+        cited per row; MetadataDates :work_era, composition class, precision era) —
+        Iron Age II inscriptions c. 840–586 BCE, the Qumran scrolls' Hasmonean–Herodian
+        composition, the rabbinic works' redaction (3rd–4th c. CE). Per-book grain is
+        declared coarseness (Arad 1/2/40 share one envelope)"}
+    places: {posture: linked, note: "the find-site rides the place hash from the adapter's
+        BOOKS table with its Pleiades id on 9 of 13 books (Qumran ×3, Kuntillet ʿAjrud,
+        Tel Arad, Ketef Hinnom, Lachish, Dibon, Jerusalem); Tell Deir ʿAlla and Mesad
+        Hashavyahu are named only (no held gazetteer entry); Pirqe Avot and Shirata are
+        compositions, not finds — unplaced"}
+    script: {posture: qualified, note: "the held surface is the ETCBC's consonantal Hebrew
+        square-script transcription (with shin/sin dots) for every book; the Iron Age
+        inscriptions and the Mesha Stele were written in the Old Hebrew / Moabite
+        (Phoenician-derived) alphabet. No config/artifact_scripts.yml row yet: the row
+        keys on the language code and hbo here mixes square-script scrolls with
+        Old Hebrew inscriptions; obm → phnx is the candidate row once obm is an anchor"}
   # Variety-less languages as held (no registry stages to refine into):
   ndl-kotenseki:
     # kind: machine-postured — the NDL Search bib join's NDC codes fold in
