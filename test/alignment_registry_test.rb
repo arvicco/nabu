@@ -397,7 +397,7 @@ class AlignmentRegistryTest < Minitest::Test
     refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)",
                   "OSHB (WLC, Masoretic)", "BHSA (ETCBC, Masoretic)", "Targum (Psalms)",
-                  "Peshitta (Syriac, ETCBC)"],
+                  "Peshitta (Syriac, ETCBC)", "Sahidic psalter (CoptOT, Coptic Scriptorium)"],
                  work.witnesses.map(&:label),
                  "P26-3 adds the MT psalter, P30-4 the BHSA psalter (same remap), P30-3 the " \
                  "Psalms Targum, P31-4 the Peshitta psalter (same remap again); the OE Paris " \
@@ -430,6 +430,27 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "PSA", peshitta.book_for("urn:nabu:peshitta:ps")
     assert_equal web.numbering, peshitta.numbering, "the P13-5 table is reused VERBATIM for the Peshitta"
     assert_equal "PSA 22.1", peshitta.normalize_ref("PSA 23.1"), "the shepherd psalm aligns Syriac-beside-LXX"
+  end
+
+  # The Sahidic psalter is GREEK-numbered (measured against the held
+  # catalog: 137 of 151 psalms carry Swete's exact verse set, Ps 22.1 is
+  # the shepherd verse, Ps 9 and 113 are the LXX joins) — so it aligns
+  # directly, no remap. The Bohairic psalter (0 of 151 exact: a title
+  # verse 0 and drifting verse divisions) and both Coptic Jeremiahs stay
+  # out of the hub.
+  def test_shipped_psalms_work_carries_the_sahidic_psalter_greek_numbered
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    registry = Nabu::AlignmentRegistry.load(path)
+    sahidic = registry.work("psalms").witness_for("urn:nabu:coptic-scriptorium:ot.pss.coptot")
+    refute_nil sahidic
+    assert_equal "cts-verse", sahidic.extractor
+    assert_equal "PSA", sahidic.book_for("urn:nabu:coptic-scriptorium:ot.pss.coptot")
+    assert_nil sahidic.numbering, "Greek numbering IS the work vocabulary"
+    assert_equal "PSA 22.1", sahidic.normalize_ref("PSA 22.1")
+    %w[ot.pss.bohairic_ed ot.jer.coptot ot.jer.bohairic_ed].each do |tail|
+      urn = "urn:nabu:coptic-scriptorium:#{tail}"
+      assert_nil(registry.works.find { |work| work.witness_for(urn) }, "#{tail} stays out of the hub")
+    end
   end
 
   # -- ref normalization (the fold-both-sides contract, §10) -------------------
