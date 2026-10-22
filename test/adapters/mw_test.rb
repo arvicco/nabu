@@ -303,6 +303,11 @@ class MwTest < Minitest::Test
     assert_match(/held — document not in catalog/, mn, "Manusmṛti not synced here — never faked")
     assert_match(/authority labels: .*L\. 2/, lines.join("\n"))
     assert_match(/not held: MBh\. 6/, lines.join("\n"), "MBh.×4 + two ib. (= MBh.)")
+    # MW's own key names what a not-held siglum is, and censuses how much of
+    # the not-held mass it covers.
+    assert_match(/not held: MBh\. 6 \(Mahābhārata\)/, lines.join("\n"))
+    assert_equal "  sigla key: 15 of 15 not-held citations name a siglum in MW's works-and-authors key (871 rows)",
+                 lines.last
   end
 
   def test_coverage_is_empty_on_a_catalog_without_the_shelf
