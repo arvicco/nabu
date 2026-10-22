@@ -910,10 +910,12 @@ Everything else — URN-less bibls (inscriptions, AP), non-CTS values
 ingested — stays as display text with a nil resolution: a lexicon's
 citations are best-effort by upstream reality, and the miss-rate is honest,
 never fuzzed. A `cts_work` may also be an in-catalog DOCUMENT urn
-(`urn:nabu:…` — P17-4, MW→GRETIL: Mn./Pāṇ. cite at document grain by
-design), where the held document is itself the resolution when the
-citation is nil — and, since P34-4, also when a passage-grain probe
-MISSES on a held document: TLS attestations cite Kanripo texts by
+(`urn:nabu:…` — P17-4, MW→GRETIL: a bare "Mn." or an "ib." inheriting a
+held work cites at document grain; Manu and Pāṇini themselves resolve at
+verse/sūtra grain since their GRETIL re-split, the sigla and crosswalk
+data-driven from `config/mw_sigla.yml`), where the held document is
+itself the resolution when the citation is nil — and, since P34-4, also
+when a passage-grain probe MISSES on a held document: TLS attestations cite Kanripo texts by
 `<juan>:<page>` (the mandoku passage key), and the held edition's
 pagination only sometimes agrees with TLS's, so the page probe hits where
 it honestly can and falls back to the text — never to nothing — while
@@ -1036,7 +1038,14 @@ so just the two mechanically-safe shapes are mined: `<ab>cf.</ab>`
 whitespace-adjacent to an `<s>`, and `<ab>q.v.</ab>` right after an `<s>`
 (past at most a comma or an opening bracket) — kinds `cf.` / `q.v.`,
 headword-keyed. Looser prose ("cf. also …", "cf. √ …", a q.v. after a
-proper name) stays unextracted; the census sits in the parser.
+proper name) stays unextracted; the census sits in the parser. Two
+structural, id-keyed families ride beside them (`Adapters::MwEntryLinks`,
+a second pass once every record id is known): Cologne's phw ties between
+a parenthetically printed headword and its parent entry (kinds
+`contains` / `partOf`, both ways), and root families — member → root
+pointers (kind `root`) for the H2 derivatives MW prints under an H1 root
+and for prefixed verbs, matched among root entries only (the √ mark's
+homonym number disambiguates; an unmatched one stays display-only).
 
 **Cross-dictionary pointers (P124-3, migration 041).** `to_dictionary`
 names the target dictionary's slug when a pointer leaves its own
