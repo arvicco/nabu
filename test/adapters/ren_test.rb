@@ -230,6 +230,47 @@ class RenTest < Minitest::Test
     assert_equal "unbekannt", metadata["cora_header"]["place"], "…still verbatim in the header"
   end
 
+  def test_coraxml_boundary_and_comment_lanes_join_the_tei_tokens
+    tokens = parse_urn("urn:nabu:ren:hamb-uk-1301-1350").flat_map { |p| p.annotations["tokens"] }
+    by_id = tokens.to_h { |t| [t["id"], t] }
+    assert_equal "keine Kongruenz", by_id["t4_m1"]["comment"], "the annotator's token note, verbatim"
+    assert_equal "Satz", by_id["t6_m1"]["boundary"], "the sentence-boundary lane the TEI <s> flattens"
+    assert_equal "Satzteil_I", by_id["t180_m1"]["boundary"]
+    assert_equal "%CARDA", by_id["t57_m1"]["comment"], "%-prefixed annotator notes ride as shipped"
+    assert_equal({ "id" => "t5_m1", "form" => "den", "pos" => "DDARTA<DD", "msd" => "_.Dat.Pl",
+                   "lemma" => "dê¹,dê¹,dat²A" }, by_id["t5_m1"],
+                 "a token without either lane is byte-identical; the TEI's gold pos/msd/lemma rule")
+    assert_equal 30, tokens.count { |t| t.key?("boundary") } + tokens.count { |t| t.key?("comment") }
+  end
+
+  def test_a_transcribed_text_gains_sentence_boundaries_but_no_annotation
+    tokens = parse_urn("urn:nabu:ren:dub-uk-1301-1350").flat_map { |p| p.annotations["tokens"] }
+    comma = tokens.find { |t| t["id"] == "t4_m1" }
+    assert_equal({ "id" => "t4_m1", "form" => ",", "boundary" => "Satzteil_I" }, comma.except("join", "pc"))
+    refute(tokens.any? { |t| t.key?("lemma") || t.key?("comment") },
+           "the trans/ layer is boundary-only upstream — nothing else is invented")
+  end
+
+  def test_unmatched_tei_tokens_are_censused_loudly
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(Dir.glob(File.join(FIXTURES, "*")), dir)
+      path = File.join(dir, "coraxml", "ReN_anno_2021-01-06", "Hamb._Uk._1301-1350.xml")
+      File.write(path, File.read(path).sub('<mod id="t6_m1"', '<mod id="t6_m9"'))
+      adapter = Nabu::Adapters::Ren.new
+      document = adapter.parse(adapter.discover(dir).find { |r| r.id == "urn:nabu:ren:hamb-uk-1301-1350" })
+      assert_equal 1, document.metadata["coraxml_unmatched_tokens"], "id drift is a loud census"
+      assert_equal 1, document.metadata["coraxml_unjoined_lanes"],
+                   "…in both directions: the drifted unit's boundary value is counted, not silently lost"
+      refute(document.flat_map { |p| p.annotations["tokens"] }.find { |t| t["id"] == "t6_m1" }.key?("boundary"))
+    end
+  end
+
+  def test_a_clean_join_carries_no_census_keys
+    metadata = parse_urn("urn:nabu:ren:hamb-uk-1301-1350").metadata
+    refute metadata.key?("coraxml_unmatched_tokens")
+    refute metadata.key?("coraxml_unjoined_lanes")
+  end
+
   def test_documents_without_a_coraxml_sibling_carry_no_cora_keys
     metadata = parse_urn("urn:nabu:ren:lub-uk-1351-1400").metadata
     %w[cora_header date place dialects facets].each { |key| refute metadata.key?(key), key }

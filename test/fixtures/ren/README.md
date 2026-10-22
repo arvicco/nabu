@@ -64,7 +64,8 @@ per-document absent-sibling path (today's canonical state).
 
 Structure (no XML declaration; standard CorA-XML): `<text id>` →
 `<cora-header sigle name/>` → a **free-text** `<header>` of `key:value` lines
-→ `<layoutinfo>` → `<token><tok_dipl/><tok_anno>…`. The header's key set is
+→ `<layoutinfo>` → `<token><dipl/><mod>…` (ReN's unit is `<mod>`, ReM's
+`<tok_anno>`; `<mod id>` = the TEI `<w xml:id>`). The header's key set is
 closed — **43 keys, one fixed order on all 235 files** (censused 2026-10-01):
 `text_ReN abbr_ddd … place … date_ReN … topic topic_ReN genre time medium
 language-area base_for_transcription token language language-type`; empty
@@ -72,6 +73,14 @@ values and `---` are nulls. `date_ReN` is prose-heavy (`1329`, `1452-1500`,
 `[um 1300]`, `Mitte 15. Jh.`, `REV3: 1453; …`); `time` is upstream's
 century-half grid on all 235 (`14/1`, `15/1-15/2`); `place` is filled on 85
 (5 of them the explicit `unbekannt`); `language-area` on all 235 (9 values).
+
+Token lanes (censused 2026-10-22 over the whole held tree): each `<mod>`
+carries `lemma`/`pos`/`morph` (the same values the TEI's @lemma/@pos/@msd
+ship), `boundary` (181,110 anno + 100,116 trans — Satz, Satzteil_I/M/F,
+Überschrift_Start/Ende; the TEI keeps only the `<s>` shape and no heading
+markup) and `comment` (27,783 annotator notes) — the adapter joins the last
+two by id. The Hamburg sibling pins 17 boundary + 13 comment values; the
+Duisburg (transcribed) sibling pins boundary-only units.
 
 ## Structure notes (for the P46-5 parser — the ReN cora-tei dialect)
 
