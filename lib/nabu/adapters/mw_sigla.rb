@@ -24,9 +24,12 @@ module Nabu
     #   :document   held work at document grain only — edition-numbering mismatches
     #               (Hariv.), prose/drama (Kathās., Śak.), or works whose
     #               passage grain is unverified against the live catalog.
-    #   :authority  MW's lexicographer/author labels (L., W., Sāy., ib. …) —
+    #   :authority  MW's lexicographer/author labels (L., W., Sāy. …) and
+    #               an "ib." with nothing earlier in its entry to inherit —
     #               never passage-resolvable BY NATURE; excluded from the
-    #               resolution denominator, rendered as labels.
+    #               resolution denominator, rendered as labels. A propagated
+    #               "ib. (= X.)" classifies as X. does (document grain at
+    #               best — see #inherit).
     #   :unheld     everything else — a GRETIL-coverage fact (MBh., Vedic
     #               prose, Suśruta), not a parser deficiency.
     #
@@ -88,6 +91,13 @@ module Nabu
       # over "Mn."-style shorter keys.
       KNOWN = (WORKS.keys + AUTHORITY).sort_by { |siglum| -siglum.length }.freeze
 
+      # MW's ibidem. The parser rewrites an "ib." it can propagate (an
+      # earlier citation in the SAME entry) to "ib. (= <siglum>)" — the work
+      # inherited, the print's "ib." kept in urn_raw — so every consumer of
+      # the label (coverage, display) sees which work it means.
+      IBID = "ib."
+      INHERITED = /\Aib\..*? \(= (?<siglum>[^()]+)\)\z/
+
       ROMAN = { "i" => 1, "v" => 5, "x" => 10, "l" => 50,
                 "c" => 100, "d" => 500, "m" => 1000 }.freeze
 
@@ -99,6 +109,9 @@ module Nabu
       # else the first whitespace token.
       def siglum_of(label)
         text = label.to_s.strip
+        inherited = text.match(INHERITED)
+        return inherited[:siglum] if inherited
+
         known = KNOWN.find do |siglum|
           text.start_with?(siglum) && (text.length == siglum.length || text[siglum.length] == " ")
         end
@@ -117,8 +130,20 @@ module Nabu
         held = WORKS[siglum]
         return :unheld if held.nil?
 
-        held.format && normalize_citation(label, siglum, held.format) ? :passage : :document
+        resolve(label).last ? :passage : :document
       end
+
+      # The propagated form of an "ib." label: "ib. (= Pāṇ.)" — the inherited
+      # work at document grain (MW's ib. names the same TEXT, not the same
+      # passage). nil +previous+ (nothing earlier in the entry) leaves the
+      # bare authority label.
+      def inherit(label, previous)
+        previous ? "#{label} (= #{previous})" : label
+      end
+
+      def ibid?(label) = label.to_s.strip.start_with?(IBID) && !inherited?(label)
+
+      def inherited?(label) = label.to_s.strip.match?(INHERITED)
 
       # [cts_work, citation] for a restored label — the dictionary_citations
       # row shape. Held work: its document urn, plus the normalized dot
@@ -128,6 +153,8 @@ module Nabu
         siglum = siglum_of(label)
         held = siglum && WORKS[siglum]
         return [nil, nil] if held.nil?
+
+        return [held.urn, nil] if inherited?(label)
 
         [held.urn, held.format && normalize_citation(label, siglum, held.format)]
       end

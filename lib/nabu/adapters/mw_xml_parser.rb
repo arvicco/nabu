@@ -299,17 +299,36 @@ module Nabu
 
       # -- citations -------------------------------------------------------------
 
+      # Ibid propagation: an "ib." inherits the work of the citation right
+      # before it in the SAME entry (chains carry through successive ib.,
+      # continuation records included); the chain resets at every entry,
+      # because an entry-opening ib. points into the previous entry, which
+      # the desk never shows beside it — that one stays the bare authority
+      # label. urn_raw keeps the print's "ib."; the label says which work it
+      # means ("ib. (= Pāṇ.)", MwSigla.inherit). Census over the full
+      # mw.xml (2026-10-22): 10,374 ib. citations; 6,272 propagate (2,057
+      # onto held works — each gains its GRETIL document urn — 2,304 onto
+      # works not held, 1,911 onto authority labels such as W./MW./L.);
+      # 4,102 open their entry and stay bare.
       def citations(group)
+        previous = nil
         group.flat_map { |record| record[:body].xpath(".//ls") }.filter_map do |ls|
-          label = restored_label(ls)
-          next nil if label.empty?
+          raw = restored_label(ls)
+          next nil if raw.empty?
 
-          cts_work, citation = MwSigla.resolve(label)
-          Nabu::DictionaryCitation.new(
-            urn_raw: Nabu::Normalize.nfc(label), cts_work: cts_work,
-            citation: citation, label: Nabu::Normalize.nfc(label)
-          )
+          label = MwSigla.ibid?(raw) ? MwSigla.inherit(raw, previous) : raw
+          # A bare ib. (nothing to inherit) never becomes the antecedent.
+          previous = MwSigla.siglum_of(label) || previous unless MwSigla.ibid?(label)
+          citation_row(raw, label)
         end
+      end
+
+      def citation_row(raw, label)
+        cts_work, citation = MwSigla.resolve(label)
+        Nabu::DictionaryCitation.new(
+          urn_raw: Nabu::Normalize.nfc(raw), cts_work: cts_work,
+          citation: citation, label: Nabu::Normalize.nfc(label)
+        )
       end
 
       # The @n attribute restores the elided context of continuation

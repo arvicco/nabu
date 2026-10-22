@@ -86,3 +86,23 @@ byte-verbatim (upstream lines 2049, 2062, 12696, 12709).
 | L 1702 aṅguri | "(for `<s>aNguli</s>`, `<ab>q.v.</ab>`)" — the q.v. shape; "(`<ab>cf.</ab>` `<s>an-aNguri</s>`, `<s>pa/YcA<srs/>Nguri</s>`, …)" — only the first, adjacent list item is a pointer |
 | L 1715 aṅguli | the q.v. target (resolves) |
 | L 10608 apratiṣṭabdha / L 10619 apratistabdha | a mutual cf. pair ("cf. … below" / "cf. … above") — both resolve |
+
+## `mining-slice.xml` — the citation/entry-link slice (20 records)
+
+A third separate slice (not named `mw.xml`, so `discover` never picks it up)
+cut 2026-10-22 from the same upstream `xml/mw.xml` (sha256 `1e1932ce…7558b9`,
+inside the zip `092a586e…78cc8` canonical holds): the upstream frame lines 1-4
+and the closing `</mw>`, plus twenty record lines, byte-verbatim (upstream
+lines 29614-29616, 42733, 68809, 68815, 111059-111061, 164586-164593, 164662,
+199092, 199128). Records were dropped from between some kept ones (the Kewa
+H1A/H1B sense records 68810-68814, the rest of √bhāṣ's block); continuation
+records still follow their own main record.
+
+| Records | Why |
+|---|---|
+| L 25656 Āmra-gupta + L 25656.1 / 25656.2 | a phw parent with TWO `<info phwchild>` and both children (`<info phwparent="25656,Amragupta">`); the parent's `ib.` follows `Pāṇ.`, each child's `ib.` OPENS its entry (the entry-boundary reset) |
+| L 37642 ul-√lī | a prefixed verb (`verb="pre" parse="ud+lI"`, `√` in the headword echo) — joins √lī's family; `Kāś.` on `Pāṇ. i, 3, 70` then `ib.` … `ib.` — an ibid chain onto a held work |
+| L 62023 + H1B L 62029 kheṭa | a non-root H1; `Pāṇ. vi, 2, 126` → `ib.` → `Kāś.` → `ib.` — the chain follows the nearest citation across continuation records |
+| L 101471 (+ H3A 101472) / L 101473 | an entry whose only citation is an entry-opening `ib.` right after another entry's `MBh.` |
+| L 150479 √bhāṣ (genuineroot) + H2 150480, 150481 (+ A 150482-3, B 150484), H3 150484.1, H2 150485, then H1 2. bhāṣ L 150550 | MW's printed root family (H2 derivatives under the H1 root until the next H1); the phw tie whose parent record (L 150484, an H2B gender block) is a CONTINUATION of entry 150481 |
+| L 182753 √lī (genuineroot) + H2 L 182789 | the root the prefixed verb resolves to, with one printed derivative |
