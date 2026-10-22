@@ -44,6 +44,13 @@ module Nabu
       character-structure filters (--radical/--strokes/--char-component) are a
       separate term-less path of their own.
 
+      BETA CODE (--betacode): type Greek in TLG Beta Code — the query (and
+      any --lemma/--near term) is transliterated to Greek before matching,
+      and each decode is echoed (`beta code: mh=nin → μῆνιν`). Case-blind
+      (MH=NIN works), * before a letter marks a capital, the FTS quotes and
+      a trailing prefix * pass through. A deliberate flag: Latin-letter
+      queries are never guessed to be Beta Code.
+
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
         '"μηνιν αειδε"'      exact adjacent phrase — FTS quotes, so shell-quote them
@@ -209,6 +216,7 @@ module Nabu
 
       Examples:
         nabu search μηνιν                          # finds μῆνιν, accents optional
+        nabu search mh=nin --betacode              # the same, typed in Beta Code
         nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
                                                    #   papyri that quote it
         nabu search sapientia --lang lat           # Latin corpus only
@@ -389,9 +397,14 @@ module Nabu
                         "(--lect lat matches lat:med; --lect lat:med matches lat:med and " \
                         "lat:med/xyz, not lat:cla). Text search or a term-less browse only, not " \
                         "--lemma/--near; errors if the nabu-lects module is not synced"
+    option :betacode, type: :boolean, default: false,
+                      desc: "Beta Code input: the typed term (and any --lemma/--near) is " \
+                            "transliterated to Greek before matching (mh=nin → μῆνιν; case-blind, " \
+                            "FTS quotes and prefix* pass through) — a deliberate flag, never auto-detected"
     display_option
     def search(query = nil)
       query = query.to_s.strip
+      query = betacode_input(query) if options[:betacode]
       display_mode
       date_basis_filter
       return translations_search(query) if options[:translations]
@@ -1032,6 +1045,27 @@ module Nabu
     ANNOTATIONS_UNREADABLE_NOTE = "stored annotations are unreadable (invalid JSON) — skipped"
 
     no_commands do
+      # The --betacode input flag: decode the typed Greek-bearing terms (the
+      # query, --lemma, --near) from Beta Code before any path reads them,
+      # and echo each decode so the reader sees what was actually searched.
+      # Deliberate, never auto-detected — Latin letters are a legitimate
+      # query in their own right. Returns the decoded query; the decoded
+      # --lemma/--near replace their option values.
+      def betacode_input(query)
+        terms = { "query" => query, "lemma" => options[:lemma], "near" => options[:near] }
+                .reject { |_key, value| value.to_s.strip.empty? }
+        if terms.empty?
+          raise Thor::Error, "search: --betacode decodes a typed Greek term — give a query, " \
+                             "--lemma or --near to decode"
+        end
+
+        decoded = terms.transform_values { |raw| Nabu::Betacode.decode_query(raw.strip) }
+        decoded.each { |key, greek| say "beta code: #{terms.fetch(key).strip} → #{greek}" }
+        overrides = decoded.except("query")
+        self.options = Thor::CoreExt::HashWithIndifferentAccess.new(options.merge(overrides)).freeze
+        decoded.fetch("query", query)
+      end
+
       # Render a SNIPPET — StoredSnippet output with the match in [brackets] —
       # for the terminal (P42-r4, four strikes deep). Square brackets inside
       # RTL text are unrenderable-portably: they are a bidi-mirrored pair,
