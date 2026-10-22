@@ -2211,6 +2211,32 @@ etcsl:
   sync_policy: frozen   # corpus completed October 2006; the LLDS artifact is immutable
   translations: true    # the English prose translations are half the packet's value
 
+extrabiblical:   # 02-sources row 304
+  adapter: Nabu::Adapters::Extrabiblical
+  adopted: "2026-10-22"
+  axes: [biblical, hebrew, epigraphy]
+  wired: false   # awaiting the first real sync (sparse GitFetch cone tf/ + README.md, ~12 MB)
+  sync_policy: manual
+  # ETCBC extrabiblical — "Non Masoretic Texts related to the Hebrew
+  # Bible" (github.com/ETCBC/extrabiblical), the THIRD text-fabric
+  # registrant on the BHSA feature vocabulary: the Iron Age inscriptions
+  # (Arad, Lachish, Kuntillet Ajrud, Siloam, Ketef Hinnom, Mesad
+  # Hashavyahu), the Mesha Stele (language obm), the Deir Alla plaster
+  # text, 1QS/1QM/1QHa and two rabbinic works (Pirqe Avot, Mekhilta
+  # Shirata) with ETCBC morphology and clause/phrase constituency. Census
+  # (tf/0.2 otype.tf): 39,862 words / 13 books / 79 chapters / 1,800
+  # verses / 8,908 clauses / 22,770 phrases. EXPECTED at the first sync:
+  # 13 documents / 1,800 passages; tf/0.1's 10 book nodes skipped by
+  # rule (superseded version). LICENSE: README.md verbatim CC BY-NC 4.0
+  # (the repo's MIT LICENSE covers the conversion code only) → nc;
+  # confirmed by the ETCBC directorate (W. van Peursen, by email,
+  # 2026-10-15): all ETCBC-created data CC BY-NC 4.0, software MIT.
+  # Version PINNED to tf/0.2 (upstream frozen since 2019). Axes
+  # attributed per book: find-site + Pleiades id (place hash), the era
+  # table (config/work_eras.yml), the kind fold (config/kind_map.yml).
+  # 1QS/1QM/1QHa are also held in dss (Abegg's transcription) — a second
+  # witness at a different grain, never merged.
+
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
   adopted: "2026-07-03"

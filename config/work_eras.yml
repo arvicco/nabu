@@ -221,3 +221,56 @@ sources:
         gained the Malayalam anchor; the tradition's dating proposals range over the
         15th–17th c. with no secure anchor in the text or the GRETIL header, so the
         work stays honestly bandless (the 文昌孝经 precedent)"}
+  extrabiblical:
+    # The 13 books of the ETCBC extrabiblical corpus (tf/0.2), keyed on
+    # metadata "book" = upstream's book name verbatim. The asset carries no
+    # date field; each book IS a known artifact or work, so each row is the
+    # handbook-consensus attribution, cited. For an inscription the
+    # composition IS the inscribing (the artifact's own date); for the
+    # Qumran scrolls the band is the work's composition era, the copy's
+    # palaeographic date in the note; for the rabbinic works the
+    # redaction era. Per-book grain is declared coarseness: a book holding
+    # several inscriptions (Arad 1, 2, 40) carries one envelope. The kind
+    # fold over the same key lives in config/kind_map.yml; the adapter's
+    # BOOKS table, this list and the fold are kept identical by the
+    # adapter test.
+    key: book
+    works:
+      # -- Iron Age II inscriptions (BCE years, conventional chronology) --
+      "Ajrud": {band: [-830, -760], label: "c. 800 BCE", note: "Kuntillet ʿAjrud's single-phase
+        occupation — late 9th to early 8th c. BCE by pottery and radiocarbon (Meshel 2012;
+        Finkelstein & Piasetzky 2008)"}
+      "Arad": {band: [-735, -586], label: "late 8th – early 6th c. BCE", note: "Arad 1 and 2
+        belong to the Eliashib archive of stratum VI (c. 600–587 BCE); Arad 40 to an earlier
+        stratum (VIII per Aharoni, late 8th c.) — one envelope over the book's three ostraca"}
+      "Balaam": {band: [-850, -750], label: "c. 800 BCE", note: "Deir ʿAlla phase IX, the plaster
+        text's destruction layer — c. 800 BCE by radiocarbon (Hoftijzer & van der Kooij 1976;
+        van der Kooij 1991)"}
+      "Ketef_Hinnom": {band: [-650, -586], label: "late 7th – early 6th c. BCE", note: "the
+        palaeographic dating of Barkay, Vaughn, Lundberg & Zuckerman (BASOR 334, 2004); a
+        Hellenistic date argued by others is declared, not followed"}
+      "Lachish": {band: [-590, -586], label: "588–586 BCE", note: "the letters of stratum II,
+        sealed by the Babylonian destruction of Lachish (Torczyner 1938; Ussishkin 2004)"}
+      "Mesa": {band: [-850, -830], label: "c. 840 BCE", note: "Mesha of Moab's own commemorative
+        stele, after his revolt against Israel (2 Kgs 3) — mid-9th c. BCE"}
+      "Mesad_Hashavyahu": {band: [-630, -609], label: "c. 630–609 BCE", note: "the fortress's
+        single occupation in Josiah's reign (Naveh 1960; Fantalkin 2001)"}
+      "Siloam": {band: [-715, -686], label: "Hezekiah, c. 700 BCE", note: "the tunnel of 2 Kgs
+        20:20; radiometric dating of the tunnel to c. 700 BCE (Frumkin, Shimron & Rosenbaum,
+        Nature 425, 2003)"}
+      # -- Qumran Cave 1 (composition era; the copy's date in the note) --
+      "B_1QS": {band: [-150, -75], label: "Hasmonean", note: "the Community Rule's composition in
+        the later 2nd c. BCE; the 1QS copy is palaeographically c. 100–75 BCE (Cross)"}
+      "B_1QM": {band: [-150, -1], label: "Hasmonean – early Herodian", note: "the War Scroll's
+        composition in the later 2nd – 1st c. BCE; the 1QM copy is early Herodian, later 1st c.
+        BCE"}
+      "B_1QHa": {band: [-150, -1], label: "Hasmonean – early Herodian", note: "the Hodayot's
+        composition from the later 2nd c. BCE; the 1QHa copy is early Herodian (c. 30–1 BCE)"}
+      # -- rabbinic works (redaction era, CE) ------------------------------
+      "Pirqe": {band: [200, 300], label: "Tannaitic, c. 200–300 CE", note: "Avot, the tractate of
+        the Mishnah redacted under Judah ha-Nasi c. 200 CE, with its later sayings into the 3rd
+        c. (Strack & Stemberger 1996); chapter 6 (Qinyan Torah) is a baraita appended in
+        liturgical use — declared, not dated separately"}
+      "Shirata": {band: [250, 400], label: "late 3rd – 4th c. CE", note: "Mekhilta de-Rabbi
+        Ishmael, the tannaitic midrash on Exodus — redacted after the mid-3rd c. (Strack &
+        Stemberger 1996); Wacholder's 8th-c. dating is declared, not followed"}

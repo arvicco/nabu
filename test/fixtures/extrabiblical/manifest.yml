@@ -1,0 +1,263 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf/otext.tf (tf/0.2) and tf/0.1/otype.tf are byte-verbatim WHOLES
+# (drift there is real drift); every other file is a documented TRIM of a
+# larger upstream feature file (whole: false — a fresh GET returns the
+# full file and is fetched for URL-liveness only, never byte-compared).
+# adapter_test is null: the adapter test asserts slice-level counts, which
+# untrimmed upstream files would false-fail. Re-trim per the README table
+# after any refresh. Pinned upstream commit:
+# 9a56288e6777bad6328856acf055c780e65dd5d9 (master, retrieved 2026-10-22).
+source: extrabiblical
+adapter_test:
+retrieved: "2026-10-22"
+files:
+  - path: tf/0.1/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.1/book.tf
+    whole: false
+    trim: header + the 10 book-node entries
+  - path: tf/0.1/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.1/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.2/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/book.tf
+    whole: false
+    trim: the 3 slice book nodes + their 44 verse-grain entries, gap-anchored
+  - path: tf/0.2/book@en.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/book%40en.tf
+    whole: false
+    trim: the 3 slice book nodes, gap-anchored
+  - path: tf/0.2/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/chapter.tf
+    whole: false
+    trim: the slice's 44 verse-grain entries, gap-anchored
+  - path: tf/0.2/det.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/det.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/dist.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/dist.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/dist_unit.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/dist_unit.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/domain.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/domain.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/function.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/function.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/g_cons.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_cons.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_cons_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_cons_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_lex.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_lex_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_lex_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_nme.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_nme.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_nme_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_nme_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_pfm.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_pfm.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_pfm_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_pfm_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_suffix_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_suffix_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_uvf.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_uvf.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_uvf_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_uvf_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_vbe.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_vbe.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_vbe_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_vbe_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_vbs.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_vbs.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_vbs_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_vbs_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_word.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_word.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/g_word_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/g_word_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/gn.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/kind.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/kind.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/language.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/language.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/lex.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/lex_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/lex_utf8.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/ls.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/ls.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/mother.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/mother.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/mother_object_type.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/mother_object_type.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/nme.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/nme.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/nu.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/number.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/number.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/oslots.tf
+    whole: false
+    trim: the slice verse nodes + its 173 clause / 560 phrase nodes, gap-anchored
+  - path: tf/0.2/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/otext.tf
+    whole: true
+    trim:
+  - path: tf/0.2/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.2/pdp.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/pdp.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/pfm.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/pfm.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/prs.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/prs.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/prs_gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/prs_gn.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/prs_nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/prs_nu.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/prs_ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/prs_ps.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/ps.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/rela.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/rela.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/sp.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/sp.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/st.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/st.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/suffix_gender.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/suffix_gender.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/suffix_number.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/suffix_number.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/suffix_person.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/suffix_person.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/txt.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/txt.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/typ.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/typ.tf
+    whole: false
+    trim: the 733 slice clause/phrase nodes, gap-anchored
+  - path: tf/0.2/uvf.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/uvf.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/vbe.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/vbe.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/vbs.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/vbs.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/verse.tf
+    whole: false
+    trim: the slice's 44 verse-grain entries, gap-anchored
+  - path: tf/0.2/vs.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/vs.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored
+  - path: tf/0.2/vt.tf
+    url: https://raw.githubusercontent.com/ETCBC/extrabiblical/master/tf/0.2/vt.tf
+    whole: false
+    trim: the slice word slots (Lachish, Mesa, Siloam), gap-anchored

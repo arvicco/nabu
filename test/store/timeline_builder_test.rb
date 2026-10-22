@@ -618,6 +618,28 @@ module Store
                  "a contested attribution declared out mints no era"
     end
 
+    # extrabiblical: each ETCBC book's attributed era from the ruled
+    # config/work_eras.yml table (keyed on metadata "book"), and the
+    # find-site place hash the adapter's table carries — Pleiades id
+    # lifted into place_ref; a rabbinic work dates but never places.
+    def test_metadata_dates_extrabiblical_books_band_and_place_by_find_site
+      seed_metadata_doc("extrabiblical", "urn:nabu:extrabiblical:lachish",
+                        { "book" => "Lachish", "place" => { "ancient" => "Lachish", "pleiades" => "687951" } })
+      seed_metadata_doc("extrabiblical", "urn:nabu:extrabiblical:pirqe", { "book" => "Pirqe" })
+      summary = build!
+      assert_equal 2, summary.metadata_dates.fetch("extrabiblical")
+
+      row = timeline_for("urn:nabu:extrabiblical:lachish")
+      assert_equal [-590, -586], [row[:not_before], row[:not_after]], "sealed by the 588/586 destruction"
+      assert_equal "composition", row[:date_class]
+      assert_equal "era", row[:precision]
+      assert_equal "Lachish", row[:place_name]
+      assert_equal "pleiades:687951", row[:place_ref]
+      pirqe = timeline_for("urn:nabu:extrabiblical:pirqe")
+      assert_equal [200, 300], [pirqe[:not_before], pirqe[:not_after]]
+      assert_nil pirqe[:place_name], "a composition, not a find — no place claim"
+    end
+
     # achemenet: the archive table (config/archive_axes.yml) — Strassmaier's
     # reign volumes band through the HELD regnal table (whole-reign span),
     # a volume stating its own span bands to it, the rest take the corpus

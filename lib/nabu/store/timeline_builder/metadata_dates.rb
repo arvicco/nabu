@@ -141,6 +141,9 @@ module Nabu
           "elephantine" => :structured,
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
+          #                               keyed on metadata "book"); place = the find-site hash
+          #                               (ancient name + Pleiades id) the adapter's table carries
           "first1k-greek" => :edition_year_text,
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
