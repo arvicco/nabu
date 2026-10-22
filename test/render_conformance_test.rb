@@ -30,6 +30,10 @@ class RenderConformanceTest < Minitest::Test
       [%w[search --fuzzy arma --lang grc --limit 1], /page may be incomplete under these filters/],
     "search --fuzzy: every render names its documentary scope" =>
       [%w[search --fuzzy zzzz], /fuzzy index covers:/],
+    "search --translations: the same announcement" =>
+      [%w[search --translations arma --license nc --limit 1], /page may be incomplete under these filters/],
+    "search --translations: every render names the lane's scope" =>
+      [%w[search --translations zzzz], /translations index covers: coptic-scriptorium 10 · corph 1/],
     "search: a cross-script zero hit hints instead of missing silently" =>
       [%w[search ⰲⱏⱄⱅⰰ], /Glagolitic/],
     "define: the render cap announces its tail (P34-r2)" =>
@@ -115,6 +119,25 @@ class RenderConformanceTest < Minitest::Test
     bad = document(catalog, open_id, "urn:w:bad", "grc")
     passage(catalog, bad, "urn:w:bad:1", "σῆμα κακόν", 0, "grc", raw_annotations: "{broken")
     seed_shelves(catalog, open_id)
+    seed_translations(catalog)
+  end
+
+  # The annotation-held translations lane (registry slugs, so the lane
+  # indexes them): ten short open renderings outrank one long nc one —
+  # the --license window-exhaustion shape for search --translations.
+  def seed_translations(catalog)
+    coptic = catalog[:sources].insert(slug: "coptic-scriptorium", name: "Coptic", adapter_class: "TestAdapter",
+                                      license_class: "open", enabled: true)
+    corph = catalog[:sources].insert(slug: "corph", name: "CorPH", adapter_class: "TestAdapter",
+                                     license_class: "nc", enabled: true)
+    cop = document(catalog, coptic, "urn:w:cop", "cop")
+    10.times do |i|
+      passage(catalog, cop, "urn:w:cop:#{i}", "ⲡⲛⲟⲩⲧⲉ", i, "cop", raw_annotations: '{"translation":"arma cano"}')
+    end
+    sga = document(catalog, corph, "urn:w:sga", "sga")
+    passage(catalog, sga, "urn:w:sga:1", "dia", 0, "sga",
+            raw_annotations: JSON.generate("translation" => "arma comes first and the long rest follows " \
+                                                            "for many words, ranking it below the short ones"))
   end
 
   # Four dictionaries all defining the same headword — `define --limit 2`

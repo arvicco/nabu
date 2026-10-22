@@ -48,17 +48,17 @@ module Store
     # the expected row population, computed from the catalog directly.
     def expected_ids(slug = nil)
       slugs = slug ? [slug] : SOURCES.keys
-      @catalog[:passages].join(:documents, id: :document_id).join(:sources, id: :source_id)
-                         .where(Sequel[:sources][:slug] => slugs, Sequel[:passages][:withdrawn] => false,
-                                Sequel[:documents][:withdrawn] => false)
-                         .select(Sequel[:passages][:id], Sequel[:passages][:annotations_json],
-                                 Sequel[:sources][:slug])
-                         .all
-                         .reject do |row|
-                           Nabu::TranslationKeys.layers(row[:annotations_json],
-                                                        Nabu::TranslationKeys.specs_for(row[:slug])).empty?
-                         end
-                         .map { |row| row[:id] }.sort
+      rows = @catalog[:passages].join(:documents, id: :document_id).join(:sources, id: :source_id)
+                                .where(Sequel[:sources][:slug] => slugs, Sequel[:passages][:withdrawn] => false,
+                                       Sequel[:documents][:withdrawn] => false)
+                                .select(Sequel[:passages][:id], Sequel[:passages][:annotations_json],
+                                        Sequel[:sources][:slug])
+                                .all
+      rows.select { |row| layered?(row) }.map { |row| row[:id] }.sort
+    end
+
+    def layered?(row)
+      !Nabu::TranslationKeys.layers(row[:annotations_json], Nabu::TranslationKeys.specs_for(row[:slug])).empty?
     end
 
     def indexed_ids = @fulltext[Index::TABLE].select_order_map(:rowid)

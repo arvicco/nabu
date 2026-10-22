@@ -11,7 +11,7 @@ class TranslationKeysTest < Minitest::Test
   def test_scalar_keys_become_labeled_layers_in_registry_order
     annotations = { "translation" => "  She labored to stop him. ", "translation_ar" => "أما هي",
                     "tokens" => [{ "form" => "x" }] }
-    assert_equal [["translation", "She labored to stop him."], %w[translation_ar أما\ هي]],
+    assert_equal [["translation", "She labored to stop him."], ["translation_ar", "أما هي"]],
                  Keys.layers(annotations, Keys.specs_for("coptic-scriptorium"))
   end
 

@@ -181,6 +181,21 @@ module Nabu
       scopes to them, --lang grc keeps them out. `show <hit> --parallel`
       jumps from either side to the aligned line in the other.
 
+      TRANSLATIONS (--translations): search the translations a source keeps
+      INSIDE its passages' annotations rather than as sibling documents —
+      Coptic SCRIPTORIUM's English (and Arabic/German), CDLI's and eBL's ATF
+      #tr lines, the German word glosses of the glossed Hittite corpus,
+      CorPH, the UD treebanks' sentence translations, Tamilex, the Old Dutch
+      corpus, St Gall Priscian, ACLT, DiCCAS, Guaman Poma, the Middle Korean
+      shelf's modern rendering. Each hit is the ORIGINAL passage (its urn
+      and language), with the matched rendering and the original text under
+      it — `nabu show <urn>` opens the text itself. Words AND together,
+      "double quotes" make a phrase, word* a prefix; matching is diacritic-
+      and case-insensitive. --lang filters on the ORIGINAL's language.
+      Composes with --lang/--source/--axis/--license/--limit only. Every
+      render names the sources the index covers; the lane is built by the
+      reference rebuild (or `bundle exec rake index:translations`).
+
       Examples:
         nabu search μηνιν                          # finds μῆνιν, accents optional
         nabu search '"ανδρα μοι εννεπε"'           # Odyssey 1.1 — including the
@@ -189,6 +204,10 @@ module Nabu
         nabu search μηνι* --lang grc               # every derivative of the stem
         nabu search αγαπη --license attribution    # only freely re-usable hits
         nabu search "rich-haired" --lang eng       # the ingested translations
+        nabu search --translations "save my soul"  # the Coptic passages whose
+                                                   #   English rendering says so
+        nabu search --translations wettergott --source hittite-glossed
+                                                   # Hittite lines glossed "storm-god"
         nabu search --lemma λέγω --lang grc        # every attestation in the Greek
                                                    #   treebank: λέγουσι, εἶπας, εἰπεῖν…
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
@@ -317,6 +336,10 @@ module Nabu
                              "characters — floors the cleanest-first order above one-char fragments"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
+    option :translations, type: :boolean, default: false,
+                          desc: "Search the translations held in passage ANNOTATIONS (coptic, cdli/ebl #tr, " \
+                                "hittite-glossed trans_de, corph, …); hits are the original passages — " \
+                                "composes with --lang/--source/--axis/--license/--limit only"
     option :withdrawn, type: :boolean, default: false,
                        desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \
                              "documents, revision-pruned passages) — substring match over the " \
@@ -356,6 +379,7 @@ module Nabu
       query = query.to_s.strip
       display_mode
       date_basis_filter
+      return translations_search(query) if options[:translations]
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
          (options[:near] || options[:lemma])
@@ -2643,6 +2667,71 @@ module Nabu
       ensure
         catalog&.disconnect
         fulltext&.disconnect
+      end
+
+      # The options --translations does NOT compose with (it is its own
+      # lane — no timeline, facets, morphology or glyph filters there).
+      def translations_incompatible
+        %i[fuzzy near lemma morph exact word words scan withdrawn similar sign charset signset
+           from to century place date_basis within script type kind province material facet
+           loans meter meter_pattern lect gold_only long radical strokes char_component]
+      end
+
+      # search --translations QUERY: the annotation-held translations
+      # lane (Query::TranslationSearch). Desk rule: the precompiled lane or
+      # the honest build hint — never a scan.
+      def translations_search(query)
+        clash = translations_incompatible.select { |key| options[key] }
+        unless clash.empty?
+          raise Thor::Error, "search: --translations searches the annotation-held translations lane and " \
+                             "composes with --lang/--source/--axis/--license/--limit only (not " \
+                             "#{clash.map { |key| "--#{key.to_s.tr('_', '-')}" }.join(', ')})"
+        end
+        raise Thor::Error, "search: --translations needs a query" if query.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        searcher = Nabu::Query::TranslationSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(query, lang: options[:lang], license: options[:license], source: options[:source],
+                                      sources: axis_slugs, limit: options[:limit].to_i)
+        print_translation_results(results, scope: searcher.scope, axis: axis_names,
+                                           incomplete: searcher.incomplete_hint)
+        print_display_footer
+      rescue Nabu::Query::TranslationSearch::IndexMissing => e
+        raise Thor::Error, "search: #{e.message}"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render translations hits: the ORIGINAL passage (urn + [language]),
+      # the matched rendering under its annotation key with the term
+      # bracketed, the original's leading text; then the footer, the
+      # credits, and ONE scope line naming what the lane covers (the
+      # fuzzy-lane honesty rule — a miss explains itself).
+      def print_translation_results(results, scope:, axis: nil, incomplete: nil)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}" \
+                "#{"  — #{result.document_title}" if result.document_title}"
+            say "  #{result.layer}: #{display_snippet(result.snippet, nil)}"
+            say "  original: #{display_snippet(truncate_line(result.text), result.language)}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in annotation-held translations " \
+              "(the urn is the original passage — nabu show <urn>)#{facet_footer(nil, axis: axis)}"
+          print_search_credits(results)
+        end
+        say "note: #{incomplete}" if incomplete
+        covered = scope.map { |slug, passages| "#{slug} #{passages}" }.join(" · ")
+        say "translations index covers: #{covered.empty? ? 'no sources' : covered}"
       end
 
       def fuzzy_search(query)
