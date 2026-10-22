@@ -930,8 +930,14 @@ sources:
     script: {posture: implied}
   tlhdig:
     lect: {posture: identity, note: the cuneiform micro-shelves (hit/xhu/xlu…) — no minted stages}
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    dating: {posture: undatable, note: "the AOxml header's only dates are editorial workflow stamps
+        (creation-date, annot/kor/val editor dates, 2016–2025) — the corpus edition's history, never
+        a dating of the tablet; no script/period field is carried (censused 2026-10-22)"}
+    places: {posture: unplaced, note: "no findspot field in the asset — the AOxml header carries the
+        docID (publication siglum) and workflow stamps only. The series sigla imply a site (KBo/KUB
+        Boğazköy, HKM Maşat, Or. Ortaköy …) but that is an inference over the publication, not an
+        upstream place claim; a siglum→site fold through nabu-places is a recorded future look
+        (censused 2026-10-22)"}
     script: {posture: implied}
   rsti:
     kind: {posture: unclassified}
@@ -2080,8 +2086,17 @@ sources:
     kind: {posture: unclassified}
     # lect declaration retired P64-6 (owner-ruled 2026-08-09): the freising sl→sl:old
     # override machine-postures it now (the shadowing rule).
-    dating: {posture: undatable}
-    places: {posture: unplaced}
+    # dating corrected 2026-10-22 from a noteless `undatable`: the edition itself
+    # dates the record — bsBK-ovr.xml (Kos's findings, "čas zapisa BS – 972–1039")
+    # and bsIN §135–137 (terminus post quem Otto I's charter of 28 May 972,
+    # ante quem bishop Egilbert's death 1039). It dates the WRITING of Clm 6426,
+    # not the texts' composition, so Adapters::Freising::WITNESS_DATING rides the
+    # transcription layers as an artifact date (MetadataDates :structured).
+    dating: {posture: dated, note: "the edition's witness dating 972–1039 (Kos) on the 9
+        transcription documents (critical/diplomatic/phonetic × BS I–III); the 18 modern
+        translation siblings stay undated by design"}
+    places: {posture: unplaced, note: "the edition leaves the place of writing open — Freising or
+        Upper Carinthia (bsBK-ovr, Kos's finding 2) — so there is no single claim to carry"}
     script: {posture: implied}
   corpus-oudnederlands:
     kind: {posture: unclassified}
