@@ -63,8 +63,8 @@ module Nabu
     # (West Crete α) is NOT the findspot and rides as metadata. The
     # chronology (Aegean ceramic phases, "LM IIIA2 or LM IIIB", "LH
     # IIIB2/LH IIIC") rides as the "period" label through MetadataDates
-    # :period_label — it mints no envelope until config/period_bands.yml
-    # carries ruled Aegean-phase rows (declared pending). The find-
+    # :period_label, banded by the ruled Aegean rows of
+    # config/period_bands.yml (all 27 held labels covered). The find-
     # context dating rides as "context_chronology". Series(+subseries),
     # set, hand, collection and object type facet; museum location,
     # inventory, find year, Trismegistos id, bibliography, editorial
