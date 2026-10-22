@@ -84,7 +84,8 @@ module Nabu
       feature names — case, number, gender, person, tense, mood, voice,
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
       their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
-      OSHB, ReM/ReN (CorA msd), goo300k (IMP msd) and Menota (msa) are
+      OSHB, ReM/ReN (CorA msd), goo300k (IMP msd), Menota (msa) and Coptic
+      Scriptorium (pos: polarity, prontype, definite, verbform) are
       decoded into the same names — Hebrew/Aramaic add state, stem and
       conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous
       analyses match when any reading fits. Each hit shows the matching
