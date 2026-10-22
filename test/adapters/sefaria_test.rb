@@ -262,6 +262,27 @@ class SefariaTest < Minitest::Test
     assert_equal 21, document.size
   end
 
+  # The kind fold reads the DEEP category path (metadata "genre"), not the
+  # head alone: the Rishonim-on-Tanakh commentaries file under "Tanakh"
+  # beside the targums, and only the second level tells exegesis from
+  # scripture. Folded through the SHIPPED kind_map so the split is pinned
+  # end to end.
+  def test_genre_carries_the_deep_category_path_and_folds_commentary_apart_from_scripture
+    kinds = Nabu::Kinds.load(classes_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_classes.yml"),
+                             map_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_map.yml"))
+    commentary = conformance_adapter.parse(ref(WAVE_URNS["tanakh-rishonim"]))
+    targum = conformance_adapter.parse(ref("urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot"))
+    assert_equal "Tanakh -- Rishonim on Tanakh -- Minchat Shai -- Prophets", commentary.metadata["genre"]
+    assert_equal "Tanakh -- Targum -- Targum Jonathan -- Prophets", targum.metadata["genre"]
+    assert_equal %w[genre], kinds.metadata_for("sefaria")
+    assert_equal ["exegesis"], kinds.normalize("sefaria", commentary.metadata["genre"]),
+                 "a medieval Bible commentary is exegesis, though it files under the Tanakh head"
+    assert_equal ["scripture"], kinds.normalize("sefaria", targum.metadata["genre"])
+    tosefta = conformance_adapter.parse(ref(TOSEFTA_URN))
+    assert_equal ["scripture"], kinds.normalize("sefaria", tosefta.metadata["genre"]),
+                 "every other head folds exactly as the head-only rule did"
+  end
+
   def test_the_ot_hub_witness_documents_parse_to_cts_verse_tails
     document = conformance_adapter.parse(ref("urn:nabu:sefaria:aramaic-targum-to-ruth:mikraot-gedolot"))
     assert_equal "urn:nabu:sefaria:aramaic-targum-to-ruth:mikraot-gedolot:1.1", document.first.urn,
