@@ -144,8 +144,30 @@ module Nabu
         value if value.match?(/\A\d+\z/)
       end
 
+      # One producer, two edge families: the "tm:<n>" reference edges and
+      # the header `witness` field's parallel-witness edges (CopticWitnesses).
       def self.reference_producer(catalog:, journal:)
-        LibraryReferences.new(catalog: catalog, journal: journal, producer: "coptic-scriptorium")
+        CopticWitnesses.new(catalog: catalog, journal: journal)
+      end
+
+      # The header `witness` field → the CTS urns it names, wherever they
+      # sit (bare, comma-joined beside unpublished sigla, inside prose with
+      # a sentence-final period — the censused shapes, CopticWitnesses).
+      # Prose-only values ("none", "unique", MONB sigla) name nothing.
+      WITNESS_URN = /urn:cts:coptic\w+:[^\s,;()]+/
+
+      def self.witness_cts(value)
+        value.to_s.scan(WITNESS_URN).map { |urn| urn.sub(/\.+\z/, "") }.uniq
+      end
+
+      # A named CTS urn → the catalog document urn, through the frozen
+      # document minting (copticLit/copticDoc stripped, copticMag kept).
+      def self.cts_document_urn(cts)
+        "#{URN_PREFIX}#{cts.sub(CTS_NAMESPACE, '')}"
+      end
+
+      def self.witness_targets(value)
+        witness_cts(value).map { |cts| cts_document_urn(cts) }
       end
 
       # Survey §3 verbatim license classes → license_class. nil = no stated

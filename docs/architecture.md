@@ -1893,6 +1893,17 @@ narrower date range; a Pleiades-bearing, else longer, findspot; every
 tie → edh). Both adapters declare it under ONE fixed scope (`edh+edr`),
 so a sync of either side supersedes the same run; it reads
 document_axes, which the links stage replays after.
+#14 `CopticWitnesses` (kind=parallel-witness): Coptic Scriptorium's
+header `witness` field names the OTHER manuscript of the same text as a
+CTS urn (MONB.GL vs MONB.XJ of Shenoute, Budge's two Encomium codices);
+each named urn becomes one document-grain edge, one per unordered pair
+(a mutual assertion is one edge), documents never merged. Prose notes
+(unpublished MONB sigla, "none", "unique") mint nothing and are counted;
+a same-codex continuation note is counted, never an edge; a named urn
+the catalog does not hold still mints and is counted unresolved. It
+EXTENDS the source's existing LibraryReferences producer (the "tm:<n>"
+reference edges) so both families ride one run under the producer name
+`coptic-scriptorium` — a source has one reference producer.
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the
