@@ -1927,6 +1927,17 @@ authority, no person card, and the edge detail says so. Both lanes walk
 the source in rowid windows (`Nabu::SourcePassageWalk`, the PlaceMine
 walk).
 
+**Catalogue mentions on the person card.** A `nabu person NAME` lookup
+also reads the person-shaped DOCUMENT FACETS (`Query::Person::PERSON_FACETS`
+— oracc/cdli ruler, the oracc recipient/eponym/legal parties, the text
+sources' author/translator/editor/commentator) and lists each matching
+value with the sources cataloguing it and their live document counts. A
+catalogue string carries no stable person id, so it never becomes a card
+and never enters person_index (the oracc_catalogue stance); the lookup is
+a prefix range per facet over the existing (facet, value) index, kept at
+a word boundary — no new table, no derivation step, nothing for rebuild
+to replay.
+
 **Read surface.** Every reader opens the links UNION (`Store::LinkLayers`):
 the journal with the mined store ATTACHed read-only and two temp views
 (`links`, `link_runs`) shadowing the tables — mined rows carry negated
