@@ -333,3 +333,44 @@ mymr:
     The Old Burmese inscription shelf holds its texts directly in the
     Unicode Myanmar block, so artifact script and byte surface
     coincide; transliteration rides beside, not instead.
+
+bali:
+  name: Balinese
+  context: >-
+    The Brahmi-derived abugida of Bali, a sister development of
+    Javanese script from Old Kawi, kept alive by the island's lontar
+    (palm-leaf) tradition — the Balinese Wikisource cone's Geguritan
+    and Usada manuscripts are its modern-typed witnesses. The script
+    carries Balinese and, in ritual registers, Kawi and Sanskrit;
+    Unicode encodes it since 5.0.
+
+java:
+  name: Javanese (aksara Jawa)
+  context: >-
+    The hanacaraka abugida of Java, descended from Old Kawi, which
+    carried Old and Middle Javanese on copperplates and lontar before
+    the 19th-century print flowering of the modern script (the 1803–04
+    British Library manuscripts and Gericke's Bible among the cone's
+    witnesses). Dutch-era type and the 20th-century shift to Latin
+    ended everyday use; Unicode encodes it since 5.2.
+
+rjng:
+  name: Rejang (Redjang, Kaganga)
+  context: >-
+    The kaganga abugida of the Rejang country of southwest Sumatra,
+    one of the surat ulu ("upstream writing") family descended from
+    Old Kawi, incised on bamboo, horn and bark for letters, charms and
+    verse. Attestation is thin and late-premodern; the registry row
+    anticipates the ulu manuscripts rather than any held corpus.
+    Unicode encodes it since 5.1.
+
+sund:
+  name: Sundanese
+  context: >-
+    The modern Sundanese abugida (aksara Sunda), standardized in the
+    1990s from the Old Sundanese script of the 14th–18th-century
+    lontar tradition (the Carita Parahyangan's script family) after
+    centuries of Javanese cacarakan and Pegon use in West Java. The
+    cone's 19th-century prints are Latin and cacarakan; the row
+    covers the revived script's editions. Unicode encodes it since
+    5.1.

@@ -73,7 +73,9 @@ module Nabu
         "Phoenician" => /\p{Phoenician}/, "Tibetan" => /\p{Tibetan}/,
         "Ethiopic" => /\p{Ethiopic}/, "Hangul" => /\p{Hangul}/, "Avestan" => /\p{Avestan}/,
         "Ugaritic" => /\p{Ugaritic}/, "Old Persian" => /\p{Old_Persian}/,
-        "Myanmar" => /\p{Myanmar}/, "Gurmukhi" => /\p{Gurmukhi}/
+        "Myanmar" => /\p{Myanmar}/, "Gurmukhi" => /\p{Gurmukhi}/,
+        "Balinese" => /\p{Balinese}/, "Javanese" => /\p{Javanese}/,
+        "Rejang" => /\p{Rejang}/, "Sundanese" => /\p{Sundanese}/
       }.freeze
       private_constant :SCRIPTS
 
