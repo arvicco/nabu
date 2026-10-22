@@ -34,6 +34,10 @@ class CopticTtParserTest < Minitest::Test
   VIGILANCE = File.join(FIXTURES, "besa-letters", "besa.letters_TT", "on_vigilance.tt")
   OCRUM = File.join(FIXTURES, "magical-papyri", "magical.papyri_TT", "OCrum_ST_18.tt")
 
+  # v6.3.0 drift fixtures (trimmed real files, see the fixtures README)
+  THOSE = File.join(FIXTURES, "shenoute-those", "shenoute.those_TT", "shenoute.those.GL269-270.tt")
+  MAG_I_7 = File.join(FIXTURES, "magical-papyri", "magical.papyri_TT", "Pap.Copt.Mag.I_7.tt")
+
   def parse(path, lemmas: :gold)
     Nabu::Adapters::CopticTtParser.new(lemmas: lemmas).parse(File.read(path), label: path)
   end
@@ -406,6 +410,34 @@ class CopticTtParserTest < Minitest::Test
       )
     end
     assert_match(/unsegmented stretch/, error.message)
+  end
+
+  # --- v6.3.0: the attribute-echo spans and the lb_nb spelling -----------------
+
+  # shenoute.those GL269-270 (re-released in v6.3.0) echoes every <norm>
+  # attribute as a span of its own (norm_func, norm_head, norm_xml:id,
+  # norm_new_sent) and every <entity> attribute likewise (entity_text,
+  # entity_head_tok). The <norm> attributes stay the source of record: in
+  # this fixture u4 says func="mark" while its echo span says "case".
+  def test_those_attribute_echo_spans_parse_and_the_norm_attributes_win
+    result = parse(THOSE)
+    assert_equal %w[111.1 111.2], result.units.map(&:citation)
+    tokens = result.units.first.annotations["tokens"]
+    u1 = tokens.find { |t| t["id"] == "u1" }
+    assert_equal "root", u1["func"]
+    assert u1["new_sent"]
+    u4 = tokens.find { |t| t["id"] == "u4" }
+    assert_equal "mark", u4["func"], "the <norm> attribute is the source of record, never the echo span"
+    assert_equal "#u6", u4["head"]
+  end
+
+  # Pap.Copt.Mag.I_7 (new in v6.3.0) spells its line breaks lb_nb — the
+  # only line markers in the file — folded into the lb_n topology.
+  def test_mag_i_7_lb_nb_spelling_folds_into_line_topology
+    result = parse(MAG_I_7)
+    assert_equal %w[1.1 1.2], result.units.map(&:citation)
+    lines = result.units.flat_map { |u| u.annotations["tokens"].map { |t| t["line"] } }.uniq
+    assert_equal %w[1 2 3 4 5 6], lines
   end
 
   # --- guards -----------------------------------------------------------------

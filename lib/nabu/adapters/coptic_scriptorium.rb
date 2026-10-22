@@ -64,9 +64,18 @@ module Nabu
     class CopticScriptorium < Nabu::Adapter
       REPO_URL = "https://github.com/CopticScriptorium/corpora"
 
-      # The pinned release ("Late 2025 Release", 2025-12-12; Zenodo DOI
-      # 10.5281/zenodo.17917497). Owner re-pins per semiannual release.
-      RELEASE_TAG = "v6.2.0"
+      # The pinned release ("Summer 2026 release", published 2026-07-22,
+      # tag commit d6332e37c7f92c737f51deb4f6e7ee872bfd603f). Owner re-pins
+      # per semiannual release. The v6.2.0 → v6.3.0 delta (blob-compared
+      # against the held v6.2.0 tree): 473 TT files/zips byte-identical,
+      # 69 changed (23 of them the excluded coptic-treebank copies), 23
+      # new — six new corpora (bohairic-jonah, life-chrysostom,
+      # life-hilaria, life-marina, lit-fragments, pseudo-cyril-alexandria)
+      # plus new magical-papyri and pseudo-chrysostom documents; no TT
+      # file removed; all in-repo bible zips unchanged. The delta's 58
+      # documents parse clean once the two span families it introduced
+      # are known (CopticTtParser: lb_nb, the attribute-echo spans).
+      RELEASE_TAG = "v6.3.0"
 
       URN_PREFIX = "urn:nabu:coptic-scriptorium:"
       # copticLit/copticDoc namespaces strip; copticMag (the magical-papyri

@@ -342,7 +342,7 @@ near-contemporaries.
 | **Language** | Coptic (`cop`), Sahidic and Bohairic dialects |
 | **Period** | Roughly 3rd–10th c. CE, the Christian-Egypt corpus |
 | **Size** | 482 docs / 74,169 passages — 482 of the 483 upstream corpora aboard (P18-1 coverage pass; the one remainder is an honest quarantine) |
-| **Source** | `coptic-scriptorium` (Coptic Scriptorium, release v6.2.0, TT parser family), license: CC BY per document with source class `nc` (most-restrictive-wins) |
+| **Source** | `coptic-scriptorium` (Coptic Scriptorium, release v6.3.0, TT parser family), license: CC BY per document with source class `nc` (most-restrictive-wins) |
 | **Metadata** | Upstream **gold lemmatization** — **233,020 `cop` lemma rows**, gold-lemma language **#15**; language-of-origin loan tags (the Greek layer inside Coptic); Wikification entities; manuscript-timeline rows (340 dated documents) |
 
 Synced and flipped by the owner 2026-07-13 (the first sync attempt's unzip

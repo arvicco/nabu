@@ -1103,7 +1103,7 @@ coptic-scriptorium:
   # P17-1 (.docs/surveys/coptic-survey.md): the survey's verdict is "versioned" —
   # semiannual tagged releases, Zenodo-archived. In registry vocabulary that
   # is `manual` + the adapter's fetch PINNED to CopticScriptorium::RELEASE_TAG
-  # (v6.2.0; GitFetch ref:) — never master. Owner re-pins per release by
+  # (v6.3.0, re-pinned from v6.2.0; GitFetch ref:) — never master. Owner re-pins per release by
   # bumping the constant, then fires the re-sync.
   sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
                        # git-incremental fetch — rides the sync --all sweep

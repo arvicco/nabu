@@ -32,8 +32,10 @@ class CopticScriptoriumTest < Minitest::Test
     urn:nabu:coptic-scriptorium:pistissophia.1.petermann:1-13
     urn:nabu:coptic-scriptorium:shenoute.abraham.monbya:21-27
     urn:nabu:coptic-scriptorium:shenoute.considering.amelineau:1-2
+    urn:nabu:coptic-scriptorium:shenoute.those.monbgl:111
     urn:nabu:coptic-scriptorium:theodosiusalex.michael.budge_al_ed:9-30
     urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.ocrum_st_18.kypt344
+    urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.tm98063.kypt340
   ].freeze
 
   def conformance_adapter
@@ -59,6 +61,8 @@ class CopticScriptoriumTest < Minitest::Test
   def test_manifest_identifies_the_source_with_the_nc_posture
     manifest = Nabu::Adapters::CopticScriptorium.manifest
     assert_equal "coptic-scriptorium", manifest.id
+    assert_equal "v6.3.0", Nabu::Adapters::CopticScriptorium::RELEASE_TAG, "the Summer 2026 release pin"
+    assert_includes manifest.name, "v6.3.0"
     assert_equal "nc", manifest.license_class
     assert_equal "https://github.com/CopticScriptorium/corpora", manifest.upstream_url
     assert_equal "coptic-tt", manifest.parser_family

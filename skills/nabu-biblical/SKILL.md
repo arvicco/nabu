@@ -26,7 +26,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `betamasaheft-works` | Beta maṣāḥǝft Works — Ethiopic literature (Hiob-Ludolf-Zentrum, Hamburg) | attribution |
 | `bhsa` | BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC, Text-Fabric tf/2021) | nc |
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
-| `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.2.0) | nc |
+| `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.3.0) | nc |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
 | `eng-web` | World English Bible (eBible.org, via open-bibles) | open |
 | `hebrew-lexicon` | OSHB Hebrew Lexicon — augmented Strong's + BDB outline (openscriptures) | attribution |

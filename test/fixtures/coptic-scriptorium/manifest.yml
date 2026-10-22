@@ -89,3 +89,14 @@ files:
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.ot/sahidic.ot_TT.zip
     whole: false
     trim: "rebuilt zip (zip -X) with 1 of 911 members: 01_Genesis_01.tt cut to meta line + verses 1-11 (upstream member lines 1-381 byte-identical, </meta> re-added; 124,126 B -> 17,389 B); abbr nomSac + <gap reason=\"lacuna\"> + <supplied source= reason=> editorial marks in the collapsed dialect"
+  # ---- v6.3.0 re-pin drift fixtures (fetched 2026-10-22 from the v6.3.0
+  # ---- tag, commit d6332e37c7f92c737f51deb4f6e7ee872bfd603f; the older
+  # ---- files above stay at their v6.2.0 bytes) ----
+  - path: shenoute-those/shenoute.those_TT/shenoute.those.GL269-270.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.3.0/shenoute-those/shenoute.those_TT/shenoute.those.GL269-270.tt
+    whole: false
+    trim: "cut to meta line + verses 111.1-111.2 (upstream lines 1-633 byte-identical, </meta> re-added; 170,587 B -> 18,151 B); the v6.3.0 attribute-echo spans (norm_func/norm_head/norm_xml:id/norm_new_sent, entity_text/entity_head_tok) incl. a disagreeing echo (u4 func mark vs norm_func case)"
+  - path: magical-papyri/magical.papyri_TT/Pap.Copt.Mag.I_7.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.3.0/magical-papyri/magical.papyri_TT/Pap.Copt.Mag.I_7.tt
+    whole: false
+    trim: "cut to meta line + verses 1.1-1.2 (upstream lines 1-406 byte-identical, </meta> re-added; 80,559 B -> 13,414 B); the lb_nb line-break spelling"
