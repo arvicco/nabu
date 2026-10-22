@@ -131,10 +131,17 @@ class EdhEdrSameArtifactTest < Minitest::Test
     assert_equal first, again
   end
 
+  # edr declares the concordance alone; edh composes it with its own
+  # citation/GODOT edges (Nabu::EdhReferences, edh_citations_test).
   def test_both_adapters_declare_the_producer
     [Nabu::Adapters::Edh, Nabu::Adapters::Edr].each do |klass|
       assert klass.reference_edges?, "#{klass} re-derives the concordance after its sync"
-      assert_instance_of Nabu::EdhEdrSameArtifact, klass.reference_producer(catalog: @catalog, journal: @journal)
     end
+    assert_instance_of Nabu::EdhEdrSameArtifact,
+                       Nabu::Adapters::Edr.reference_producer(catalog: @catalog, journal: @journal)
+    assert_instance_of Nabu::EdhReferences,
+                       Nabu::Adapters::Edh.reference_producer(catalog: @catalog, journal: @journal)
+    result = Nabu::Adapters::Edh.reference_producer(catalog: @catalog, journal: @journal).run("edh")
+    assert_equal 3, result.parts.first.edges_written, "the composed run still mints the concordance"
   end
 end
