@@ -1122,6 +1122,143 @@
             </cit></sense>
         </entry>
       </superEntry>
+         <entry xml:id="C10766">
+            <form xml:id="CF29267" type="lemma">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+            </form>
+            <form xml:id="CF29268">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <form xml:id="CF29269">
+               <orth>ⲇⲟⲡⲟⲥ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <form xml:id="CF29270">
+               <orth>ⲇⲱⲡⲟⲥ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <form xml:id="CF29271">
+               <orth>ⲧⲟⲡ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <form xml:id="CF29272">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">L</usg>
+            </form>
+            <form xml:id="CF29273">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">B</usg>
+            </form>
+            <form xml:id="CF29274">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">F</usg>
+            </form>
+            <form xml:id="CF29275">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">A</usg>
+            </form>
+            <form xml:id="CF29276">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">M</usg>
+            </form>
+            <form xml:id="CF29277">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">V</usg>
+            </form>
+            <form xml:id="CF29278">
+               <orth>ⲧⲟⲡⲟⲥ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <form xml:id="CF29279">
+               <orth>ⲧⲱⲡⲟⲥ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <form xml:id="CF29280">
+               <orth>ⲧⲱⲡⲱⲥ</orth>
+               <usg type="geo">S</usg>
+            </form>
+            <gramGrp>
+               <pos>Subst.</pos>
+            </gramGrp>
+            <etym>
+               <ref type="greek_lemma::grl_ID">2200</ref>
+               <ref type="greek_lemma::grl_lemma">τόπος</ref>
+               <ref type="greek_lemma::grl_meaning">place. position</ref>
+               <ref type="greek_lemma::grl_pos">noun</ref>
+               <ref type="greek_lemma::grl_ref">LSJ 1806a; Preisigke 2:608</ref>
+            </etym>
+            <sense xml:id="CS14809">
+               <ref type="coptic_usage::cu_ID">909</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">place, space</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14810">
+               <ref type="coptic_usage::cu_ID">7480</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">place, space (inverted attributive; nominal referent)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14811">
+               <ref type="coptic_usage::cu_ID">9862</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">point, place, passage (of text)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14812">
+               <ref type="coptic_usage::cu_ID">2075</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">(holy) place (could designate churches, shrines, or monasteries)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14813">
+               <ref type="coptic_usage::cu_ID">2573</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">shrine, sanctuary</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14814">
+               <ref type="coptic_usage::cu_ID">4210</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">church (referring to the physical building)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14815">
+               <ref type="coptic_usage::cu_ID">9175</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">church (specific physical building and its congregation)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14816">
+               <ref type="coptic_usage::cu_ID">1199</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">monastery, convent</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14817">
+               <ref type="coptic_usage::cu_ID">1359</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">(heavenly) place, station (of rest)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+            <sense xml:id="CS14818">
+               <ref type="coptic_usage::cu_ID">11464</ref>
+               <cit type="translation">
+                  <quote xml:lang="en">(heavenly) place, station (name for the demiurge)</quote>
+                  <bibl>DDGLC</bibl>
+               </cit>
+            </sense>
+         </entry>
         <entry xml:id="C11273">
           <form type="inflected" xml:id="CF1591">
             <usg type="geo">S</usg>
