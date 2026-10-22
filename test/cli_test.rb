@@ -5853,6 +5853,33 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Token glosses (conventions §6.1): achemenet's real fixture, synced. Every
+  # lemma hit shows upstream's token gloss in ‘quotes’; --gloss keeps only
+  # the attestations whose gloss contains the word — ša "of" vs ša "that".
+  def test_search_lemma_shows_token_glosses_and_gloss_filters
+    with_glossed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lemma eqlu]) }
+      assert_nil status
+      assert_match(/eqlu → A-ŠA₃.*  ‘field’/, out)
+
+      that, _err2, status2 = with_config(config) { run_cli(%w[search --lemma ša --gloss that]) }
+      assert_nil status2
+      assert_match(/ša → ša₂  ‘that’/, that)
+      refute_match(/‘of’/, that, "the evidence names only the matching tokens' glosses")
+    end
+  end
+
+  def test_search_gloss_requires_lemma_and_a_word
+    with_glossed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search ša --gloss that]) }
+      assert_equal 1, status
+      assert_match(/--gloss WORD .* requires --lemma/, err)
+      _out2, err2, status2 = with_config(config) { run_cli(["search", "--lemma", "ša", "--gloss", " "]) }
+      assert_equal 1, status2
+      assert_match(/needs a word/, err2)
+    end
+  end
+
   def test_search_near_with_morph_errors
     with_treebank_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[search --lemma λέγω --near κύριος --morph case=nom]) }
@@ -9538,6 +9565,27 @@ class CLITest < Minitest::Test
       )
       with_config(config) do
         capture_io { Nabu::CLI.start(%w[sync ud --parse-only]) }
+      end
+      yield config
+    end
+  end
+
+  # The achemenet fixture (English token glosses under "eng"), synced
+  # parse-only under its real slug — the gloss registry keys on it.
+  def with_glossed_corpus
+    Dir.mktmpdir("nabu-cli-gloss") do |root|
+      FileUtils.mkdir_p(File.join(root, "canonical"))
+      FileUtils.cp_r(File.expand_path("fixtures/achemenet", __dir__), File.join(root, "canonical", "achemenet"))
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "achemenet:\n  adapter: Nabu::Adapters::Achemenet\n  " \
+                          "wired: true\n  sync_policy: auto\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+      with_config(config) do
+        capture_io { Nabu::CLI.start(%w[sync achemenet --parse-only]) }
       end
       yield config
     end

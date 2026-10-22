@@ -348,7 +348,22 @@ recoded to the ETCBC spelling by upstream's own `vs`→`vs_etcbc` pairs; the
 silver `*_etcbc` layer itself is never merged into Abegg's gold features.
 OSHB stems keep OSHB's names (`niphal`, `hiphil` — the two stem systems are
 not 1:1, so no crosswalk is claimed). Every decoder's skipped residue is named
-in its table comment. ORACC carries no inflectional
+in its table comment.
+
+**Token glosses — the façade's sibling (`Query::TokenGlosses`).** Some sources
+store upstream's own word meaning on each token: bhsa `gloss` and achemenet
+`eng` (English), aes `gloss` (German contextual translation) and tlhdig
+`gloss` (German, on the selected analysis). One registry row per source (token
+key + gloss language) makes them displayable — every lemma hit from those
+sources carries `token_gloss`, rendered in ‘quotes’ beside any dictionary
+gloss — and filterable on the same lemma-anchored token pass as `--morph`:
+`search --lemma דבר --gloss word` keeps the attestations whose gloss contains
+the word (whole word, case-insensitive), which splits BHSA's consonantal
+lexeme key back into its homographs (דבר "speak" / "word"). Not rows: tla-hf's
+`gloss` is grammatical (Leipzig labels — `PREP`, `N.m`, `-3sg.m`), and ceipom's
+English `meaning` waits on the equivalence tier's Latin keys reaching the
+token pass. Gloss search *across* lemmas (find every word glossed "king") needs
+an index and is a separate, rebuild-class step. ORACC carries no inflectional
 morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
 inflectional facets **never match ORACC** — honest absence, not error. A unified
 `pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and

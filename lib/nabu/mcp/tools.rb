@@ -468,6 +468,13 @@ module Nabu
                                 "Menota msa are decoded to the same names (Hebrew/Aramaic add " \
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
                                 "ORACC has no inflectional morphology so these facets never match it." },
+          gloss: { type: "string",
+                   description: "Token-gloss filter, only WITH lemma: keep attestations whose upstream " \
+                                "token gloss contains this word (whole word, case-insensitive) — " \
+                                "bhsa/achemenet (English), aes/tlhdig (German). E.g. lemma \"דבר\" + " \
+                                "gloss \"word\" splits BHSA's consonantal homograph from \"speak\". " \
+                                "Composes with morph; not with near. Lemma hits from those sources " \
+                                "always carry token_gloss." },
           near: { type: "string",
                   description: "Proximity: keep only hits where this term occurs within `window` " \
                                "words of query (or lemma) in the SAME passage. FTS5 NEAR over the " \
@@ -1022,7 +1029,8 @@ module Nabu
 
         term, mode = search_term(args)
         morph = search_morph(args, mode)
-        near = search_near(args, morph)
+        gloss = search_gloss(args, mode)
+        near = search_near(args, morph || gloss)
         license = license_arg(args)
         include_restricted = args["include_restricted"] == true
         if license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
@@ -1049,12 +1057,12 @@ module Nabu
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
                                  kind: kind, facets: facets, meter: meter, meter_pattern: meter_pattern, words: words,
-                                 lect: lect, lects: lects, script: script, date_basis: date_basis)
+                                 lect: lect, lects: lects, script: script, date_basis: date_basis, gloss: gloss)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
                                meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note,
                                place_note: place_note)
-      rescue Query::MorphFacets::Error => e
+      rescue Query::MorphFacets::Error, Query::TokenGlosses::Error => e
         raise InvalidArguments, e.message
       end
 
@@ -1481,15 +1489,26 @@ module Nabu
         morph
       end
 
+      # The token-gloss word (Query::TokenGlosses), only valid WITH a lemma —
+      # it filters the lemma-anchored token pass, exactly like morph.
+      def search_gloss(args, mode)
+        gloss = string_arg(args, "gloss")
+        return nil if gloss.nil?
+        raise InvalidArguments, "gloss requires lemma (the gloss filter is anchored on a lemma)" unless mode == :lemma
+
+        gloss
+      end
+
       # The proximity term (P14-8), or nil. Composes with query OR lemma anchor
-      # but NOT with morph (morphology-narrowed proximity is out of scope), so a
-      # near+morph combination is a clear usage error like the CLI's.
-      def search_near(args, morph)
+      # but NOT with the token filters (morph/gloss: token-narrowed proximity
+      # is out of scope), so such a combination is a clear usage error like
+      # the CLI's.
+      def search_near(args, token_filter)
         near = string_arg(args, "near")
         return nil if near.nil?
-        if morph
+        if token_filter
           raise InvalidArguments,
-                "near does not compose with morph (morphology-narrowed proximity is out of scope)"
+                "near does not compose with morph/gloss (token-narrowed proximity is out of scope)"
         end
 
         near
@@ -1590,7 +1609,7 @@ module Nabu
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil, kind: nil, facets: nil, meter: nil, meter_pattern: nil,
-                     words: false, lect: nil, lects: nil, script: nil, date_basis: nil)
+                     words: false, lect: nil, lects: nil, script: nil, date_basis: nil, gloss: nil)
         # kind is one more named facet (the CLI's facet_filters shape); an
         # explicit kind arg wins over a facets "kind" key.
         facets = (facets || {}).merge(kind ? { "kind" => kind } : {})
@@ -1601,7 +1620,7 @@ module Nabu
                           near: near, window: window, lang: lang, license: license, limit: limit), searcher]
           elsif mode == :lemma
             searcher = Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-            [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph), searcher]
+            [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph, gloss: gloss), searcher]
           else
             searcher = Query::Search.new(catalog: catalog, fulltext: fulltext,
                                          tibetan_words: words ? tibetan_words_seam : nil,
@@ -1731,6 +1750,9 @@ module Nabu
           lemma_hit = base.merge(lemma: result.lemma, surface_forms: result.surface_forms,
                                  gloss: result.gloss)
           lemma_hit = lemma_hit.merge(tier: result.tier) unless result.tier == "gold"
+          # token_gloss: upstream's own token-level gloss, present only for a
+          # source carrying a registered gloss layer (Query::TokenGlosses).
+          lemma_hit = lemma_hit.merge(token_gloss: result.token_gloss) if result.token_gloss
           result.morph ? lemma_hit.merge(morph: result.morph) : lemma_hit
         else
           base.merge(snippet: result.snippet)

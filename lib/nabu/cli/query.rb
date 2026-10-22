@@ -92,6 +92,13 @@ module Nabu
       is out of scope); ORACC carries no inflectional morphology, so
       inflectional facets never match it (honest absence). See conventions §6.1.
 
+      TOKEN GLOSSES (--gloss WORD): sources that store upstream's own word
+      meaning on each token (bhsa, achemenet: English; aes, tlhdig: German)
+      show it on every lemma hit in ‘quotes’, beside any dictionary gloss.
+      With --lemma, --gloss keeps only attestations whose token gloss
+      contains WORD (whole word, case-insensitive) — e.g. BHSA's consonantal
+      דבר as "word" vs "speak". Composes with --morph; not with --near.
+
       PROXIMITY (A --near B [--window N]): keep only hits where B occurs
       within N words of A in the SAME passage — λόγος near θεός is John 1:1.
       Built on FTS5 NEAR over the folded search forms: --window N is the max
@@ -216,6 +223,7 @@ module Nabu
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
         nabu search --lemma λόγος --morph case=dat,number=pl
                                                    # only the dative-plural λόγοις
+        nabu search --lemma דבר --gloss word       # BHSA דבר as "word", not "speak"
         nabu search λόγος --near θεός --window 5    # λόγος within 5 words of θεός
                                                    #   (John 1:1 and its kin)
         nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
@@ -258,6 +266,9 @@ module Nabu
                    desc: "Exact-lemma search over the gold treebanks (replaces the text query)"
     option :morph, type: :string, banner: "FACETS",
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
+    option :gloss, type: :string, banner: "WORD",
+                   desc: "Token-gloss filter (with --lemma): keep attestations whose upstream gloss " \
+                         "contains WORD (bhsa/aes/achemenet/tlhdig)"
     option :near, type: :string, banner: "TERM",
                   desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
     option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
@@ -403,6 +414,10 @@ module Nabu
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
                            "(and does not compose with --near)"
+      end
+      if options[:gloss] && (!options[:lemma] || options[:near] || options[:gloss].strip.empty?)
+        raise Thor::Error, "search: --gloss WORD filters lemma attestations by upstream's token gloss — " \
+                           "it needs a word and requires --lemma (and does not compose with --near)"
       end
       if options[:exact] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --exact is glyph-literal substring matching over the plain " \
@@ -2797,10 +2812,11 @@ module Nabu
         results = searcher.run(lemma, lang: options[:lang], license: options[:license],
                                       limit: options[:limit].to_i, morph: options[:morph],
                                       source: options[:source], sources: axis_slugs,
-                                      gold_only: options[:gold_only], loans: loans_filter)
+                                      gold_only: options[:gold_only], loans: loans_filter,
+                                      gloss: options[:gloss])
         print_lemma_results(results, query: lemma, axis: axis_names, incomplete: searcher.incomplete_hint)
         print_display_footer
-      rescue Nabu::Query::MorphFacets::Error => e
+      rescue Nabu::Query::MorphFacets::Error, Nabu::Query::TokenGlosses::Error => e
         raise Thor::Error, "search: #{e.message}"
       ensure
         catalog&.disconnect
@@ -2878,10 +2894,11 @@ module Nabu
         results.each do |result|
           forms = result.surface_forms.empty? ? "(no surface form)" : result.surface_forms
           gloss = result.gloss ? "  (#{result.gloss})" : ""
+          token_gloss = result.token_gloss ? "  ‘#{result.token_gloss}’" : ""
           morph = result.morph ? "  {#{result.morph}}" : ""
           tier = result.tier == "gold" ? "" : " [#{result.tier}]"
           say "#{result.urn}#{" [#{result.language}]" if result.language}#{tier}  " \
-              "#{result.lemma} → #{forms}#{gloss}#{morph}"
+              "#{result.lemma} → #{forms}#{gloss}#{token_gloss}#{morph}"
           say "  #{display_text(truncate_line(result.text), result.language)}"
         end
         silver = results.count { |result| result.tier == "silver" }
