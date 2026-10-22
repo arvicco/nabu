@@ -11,8 +11,10 @@ module Nabu
     # OSL (CC0 — names, @aka, values with %lang, the @list print
     # concordances MZL/LAK/ABZL/HZL/ŠL…, variant forms, codepoints) with
     # the CDLI meaning glosses riding in the same repo's 00etc
-    # (Nabu::CdliSignReadings) and an optional corpus panel off the
-    # fulltext index. The `nabu char` honesty rule binds: an absent shelf
+    # (Nabu::CdliSignReadings), an optional corpus panel off the fulltext
+    # index, and the 00etc concordance block (Labat/AKS/ATU/PGSL, MZL↔KWU,
+    # eBL names, value maps) precompiled into the catalog's
+    # sign_concordances table (Store::SignConcordances). The `nabu char` honesty rule binds: an absent shelf
     # (no readings file, no fulltext) yields an absent section, never "—";
     # ambiguous value input lists ALL candidates, never one silently (the
     # `nabu signs` contract).
@@ -50,9 +52,22 @@ module Nabu
       # frequency ({} when no fulltext handle or nothing attested).
       Card = Data.define(:name, :uname, :oid, :deprecated, :codepoints, :glyph,
                          :aka, :lists, :values, :glosses, :forms, :parent, :corpus, :senses,
-                         :didactic) do
-        def initialize(senses: [], didactic: nil, **) = super
+                         :didactic, :concordances) do
+        def initialize(senses: [], didactic: nil, concordances: nil, **) = super
       end
+
+      # The OSL 00etc concordance block (precompiled sign_concordances rows
+      # for this sign's @oid — Store::SignConcordances): +lists+ = printed
+      # list → numbers, the headline lists first ({"Labat" => ["331"], …});
+      # +mzl_kwu+ = [mzl, kwu] pairs (kwu nil = KWU leaves it unnumbered;
+      # mzl nil = an MZL-less row); +ebl+ = eBL sign names; +wikidata+ =
+      # item ids; +value_maps+ = map → [from, to] pairs ("attinger" OSL
+      # value → Attinger spelling, "csf" long → common short form, "eng"
+      # ŋ-value → ŋ-less twin). nil on the card when nothing joined.
+      Concordances = Data.define(:lists, :mzl_kwu, :ebl, :wikidata, :value_maps)
+      HEADLINE_LISTS = %w[Labat AKS ATU1 PGSL].freeze
+      VALUE_MAP_SCHEMES = %w[attinger csf eng].freeze
+      VALUE_MAP_LABELS = { "attinger" => "Attinger", "csf" => "short forms", "eng" => "ŋ-less" }.freeze
 
       # card XOR candidates (both empty = unknown input, said plainly).
       Result = Data.define(:input, :card, :candidates)
@@ -92,7 +107,8 @@ module Nabu
       # One object: input, card (null when none), candidates[]. Card keys
       # are always present except the present-only pair on values
       # (language/deprecated) and parent/uname/oid/glyph, which are null
-      # when absent. Existing keys never change; additions are new keys.
+      # when absent. Existing keys never change; additions are new keys
+      # (concordances: the OSL 00etc block, null when nothing joined).
       def self.json_payload(result)
         {
           "input" => result.input,
@@ -124,7 +140,21 @@ module Nabu
             { "name" => form.name, "codepoints" => form.codepoints || [], "glyph" => form.glyph }
           end,
           "senses" => card.senses.map { |sense| { "pos" => sense.pos, "gloss" => sense.gloss } },
-          "parent" => card.parent, "corpus" => card.corpus
+          "parent" => card.parent, "corpus" => card.corpus,
+          "concordances" => card.concordances && concordances_record(card.concordances)
+        }
+      end
+
+      # The additive concordance key (null when nothing joined): lists by
+      # name, MZL↔KWU pairs, eBL names, Wikidata ids, value maps by map.
+      def self.concordances_record(block)
+        {
+          "lists" => block.lists,
+          "mzl_kwu" => block.mzl_kwu.map { |mzl, kwu| { "mzl" => mzl, "kwu" => kwu } },
+          "ebl" => block.ebl, "wikidata" => block.wikidata,
+          "value_maps" => block.value_maps.transform_values do |pairs|
+            pairs.map { |from, to| { "from" => from, "to" => to } }
+          end
         }
       end
 
@@ -179,8 +209,38 @@ module Nabu
           values: record.values.map { |v| Value.new(value: v.value, language: v.language, deprecated: v.deprecated) },
           glosses: glosses(record), forms: forms(record),
           parent: record.parent_name, corpus: corpus_panel(record),
-          senses: senses(record), didactic: didactic_panel(record)
+          senses: senses(record), didactic: didactic_panel(record),
+          concordances: concordances(record)
         )
+      end
+
+      # One indexed read of the precompiled sign_concordances rows for this
+      # record's @oid (the desk law — nothing in 00etc is parsed here). No
+      # catalog / pre-051 catalog / no joined row → nil (absent block).
+      def concordances(record)
+        table = Nabu::Store::SignConcordances::TABLE
+        return nil unless record.oid && @catalog&.table_exists?(table)
+
+        rows = @catalog[table].where(oid: record.oid).select_map(%i[scheme key value])
+        return nil if rows.empty?
+
+        by_scheme = rows.group_by(&:first)
+        Concordances.new(
+          lists: concordance_lists(by_scheme),
+          mzl_kwu: Array(by_scheme["MZL-KWU"]).map { |_, key, value| [key, value] }.uniq,
+          ebl: Array(by_scheme["eBL"]).map(&:last).uniq,
+          wikidata: Array(by_scheme["Wikidata"]).map(&:last).uniq.sort,
+          value_maps: VALUE_MAP_SCHEMES.each_with_object({}) do |scheme, out|
+            pairs = Array(by_scheme[scheme]).map { |_, key, value| [key, value] }.uniq
+            out[scheme] = pairs unless pairs.empty?
+          end
+        )
+      end
+
+      def concordance_lists(by_scheme)
+        named = by_scheme.keys - %w[MZL-KWU eBL Wikidata] - VALUE_MAP_SCHEMES
+        ordered = HEADLINE_LISTS.select { |list| named.include?(list) } + (named - HEADLINE_LISTS).sort
+        ordered.to_h { |list| [list, by_scheme[list].map(&:last).uniq] }
       end
 
       # The Edubba cuneiform overlay for this sign (P77-8): the pools key
