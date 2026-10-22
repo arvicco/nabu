@@ -221,6 +221,68 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal :config, flagged.drift_against(stamp_row(plain))
   end
 
+  # -- config DATA read at parse time --------------------------------------
+
+  def test_an_mw_sigla_edit_dirties_the_mw_stamp
+    # The gap: config/mw_sigla.yml shapes mw's citation rows with no code
+    # change — before the config-data input an edit dirtied NO stamp.
+    write_tree("mw", "one.txt" => "agni\n")
+    mw = entry(slug: "mw", adapter: "Nabu::Adapters::Mw")
+    before = computer.for_source(mw)
+
+    with_changed_config_data_file("mw_sigla.yml") do
+      after = computer(fresh: true).for_source(mw)
+      refute_equal before.combined, after.combined, "a sigla edit must move mw's fingerprint"
+      assert_equal :config, after.drift_against(stamp_row(before))
+    end
+  end
+
+  def test_a_config_data_edit_moves_only_its_readers
+    write_tree("corpus", "one.txt" => "Iliad\n")
+    perseus = entry(adapter: "Nabu::Adapters::Perseus")
+    before = computer.for_source(perseus)
+    with_changed_config_data_file("mw_sigla.yml") do
+      assert_equal before.combined, computer(fresh: true).for_source(perseus).combined
+    end
+  end
+
+  def test_config_data_follows_the_parser_closure
+    # dharma_tamil composes SouthIndianReigns (defined in adapters/) and the
+    # shared Eras reader (outside adapters/) — both tables are its inputs.
+    data = computer.config_data(entry(adapter: "Nabu::Adapters::DharmaTamil"))
+    assert_equal %w[config/eras.yml config/south_indian_reigns.yml], data.keys
+    assert_equal ["config/mw_sigla.yml"], computer.config_data(entry(adapter: "Nabu::Adapters::Mw")).keys
+  end
+
+  def test_data_free_sources_keep_their_config_json_shape
+    # No churn: a source reading no config data stores the pre-existing
+    # four-flag JSON byte for byte.
+    json = computer.for_source(entry(adapter: "Nabu::Adapters::Perseus")).config_json
+    assert_equal %w[classes fuzzy_index lemma_tier translations], JSON.parse(json).keys
+  end
+
+  def test_every_config_data_reader_names_existing_files
+    Nabu::DerivationFingerprint::CONFIG_DATA_READERS.each do |reader, paths|
+      paths.each do |rel|
+        assert File.file?(File.join(Nabu::DerivationFingerprint::PROJECT_DIR, rel)), "#{reader}: #{rel} missing"
+      end
+    end
+  end
+
+  # The census guard: every config/ literal in adapter CODE is either a
+  # declared config-data input or a fetch-vendored file (parse reads the
+  # canonical copy). A new parse-time config file must join the map.
+  def test_every_adapter_config_literal_is_covered
+    vendored = %w[config/etruscan_loans.yml config/sabellic_loans.yml]
+    declared = Nabu::DerivationFingerprint::CONFIG_DATA_READERS.values.flatten
+    found = Dir[adapter_path("*.rb")].flat_map do |file|
+      code = File.read(file).lines.grep_v(/\A\s*#/).join
+      code.scan(%r{config/[\w./-]+\.\w+}) + code.scan(/"config", "([\w.-]+)"/).flatten.map { |name| "config/#{name}" }
+    end
+    assert_empty found.uniq - declared - vendored,
+                 "parse-time config data unknown to DerivationFingerprint::CONFIG_DATA_READERS"
+  end
+
   # -- fold-digest granularity (P39-1) -------------------------------------
 
   def test_fold_digest_scopes_modules_by_language
@@ -627,6 +689,18 @@ class DerivationFingerprintTest < Minitest::Test
     yield
   ensure
     singleton.define_method(:code_file_digest, original)
+  end
+
+  # The config-data counterpart of with_changed_fold_file.
+  def with_changed_config_data_file(basename)
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:config_data_file_digest)
+    singleton.define_method(:config_data_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
+    yield
+  ensure
+    singleton.define_method(:config_data_file_digest, original)
   end
 
   # The builders-digest counterpart of with_changed_fold_file (P89-1).
