@@ -156,6 +156,15 @@ module Nabu
       matching is exact under the fold, never fuzzy; homonyms print
       several cards (cbdb first, then edh, elephantine, aozora, kokubunken).
 
+      A name also lists its CATALOGUE MENTIONS: the person-shaped document
+      facets (oracc/cdli ruler, ancient_author, recipient, eponym; the
+      author/translator/editor facets of the text sources) whose value is
+      the name or continues it ("Sargon" → "Sargon II", "Milton, John" →
+      "Milton, John, 1608-1674."), each with the sources cataloguing it and
+      their document counts. These are catalogue strings, not persons —
+      never cards; an indexed prefix probe, matched as catalogued (a
+      lowercase name also tries title case).
+
       `nabu person mine SOURCE [AUTHORITY]` runs the CENSUS-ONLY name scan:
       SOURCE's passages against AUTHORITY's name keys (default cbdb; edh,
       elephantine, … — the scope is always explicit). The lane follows the
@@ -174,6 +183,7 @@ module Nabu
       --dry-run prints the census and writes nothing.
 
       Examples:
+        nabu person Esarhaddon     # the ruler/author catalogue mentions (oracc, cdli)
         nabu person 王安石          # by name
         nabu person "Wang Anshi"   # pinyin, same person
         nabu person 介甫           # the courtesy name resolves too
@@ -198,6 +208,7 @@ module Nabu
 
       result = Nabu::Query::Person.new(catalog: catalog).run(query)
       result.cards.each { |card| print_person_card(card) }
+      print_person_mentions(result)
     rescue Nabu::Query::Person::Error => e
       raise Thor::Error, e.message
     ensure
@@ -423,6 +434,19 @@ module Nabu
 
       # The person card renderer (P97-2): one line of identity, one of
       # dates/dynasty — thin by design, like the slice.
+      # The catalogue-person lane: the document-facet values naming the
+      # person (no person id — a catalogue string), each with its sources.
+      def print_person_mentions(result)
+        return if result.mentions.empty?
+
+        say "catalogue mentions (document facets — names as catalogued, no person id):"
+        result.mentions.each do |mention|
+          counts = mention.sources.map { |slug, count| "#{slug} #{commas(count)}" }.join(" · ")
+          say "  #{mention.value}  [#{mention.facet}]  #{counts}"
+        end
+        say "  … more catalogue values (narrow the name)" if result.mentions_truncated
+      end
+
       def print_person_card(card)
         years = [card.birth_year, card.death_year].compact.join("–")
         dynasty = [card.dynasty_han, card.dynasty].compact.join(" ")
