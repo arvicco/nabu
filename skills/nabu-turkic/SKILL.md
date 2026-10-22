@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: turkic
   origin: generated
-  sources: "atmo ud westoldturkic wiktionary-recon"
+  sources: "atmo ud westoldturkic wiktionary-recon wilkens-oui"
 ---
 
 # The Turkologist — the `turkic` desk
@@ -27,6 +27,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `westoldturkic` | West Old Turkic — Turkic loanwords in Hungarian (Róna-Tas & Berta 2011, CLDF) | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
+| `wilkens-oui` | Wilkens — Handwörterbuch des Altuigurischen (Old Uyghur–German–Turkish, 2021) | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold
