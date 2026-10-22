@@ -164,6 +164,29 @@ gap/supplied typo suffixes, `sup`/`sub`/`hi`/`cb`/`ignore_note`/
 `chapter*`) share a fixture-verified handler path; the tag→path mapping is
 census-verified (occurrence counts in the parser constants).
 
+## The v6.3.0 re-pin drift fixtures
+
+The adapter re-pinned to **v6.3.0** ("Summer 2026 release", published
+2026-07-22, commit `d6332e37c7f92c737f51deb4f6e7ee872bfd603f`). Every file
+above stays at its v6.2.0 bytes (the parse behaviour they pin did not
+change). The v6.2.0 -> v6.3.0 delta (65 changed/new non-treebank TT files,
+58 documents, fetched 2026-10-22 and censused against the parser) surfaced
+two new span families; one trimmed real offender each:
+
+- `shenoute-those/shenoute.those_TT/shenoute.those.GL269-270.tt` — TRIMMED
+  to the meta line + verses 111.1-111.2 (upstream lines 1-633
+  byte-identical, `</meta>` re-added; 170,587 B -> 18,151 B). The
+  ATTRIBUTE-ECHO dialect: every `<norm>` attribute repeated as its own
+  span (`norm_func`, `norm_head`, `norm_xml:id`, `norm_new_sent`) and every
+  `<entity>` attribute likewise (`entity_text`, `entity_head_tok`). The
+  echoes disagree with the attributes on ~5% of tokens — u4 here says
+  `func="mark"` on the norm and `norm_func="case"` in the echo; the
+  attribute stays the source of record.
+- `magical-papyri/magical.papyri_TT/Pap.Copt.Mag.I_7.tt` — TRIMMED to the
+  meta line + verses 1.1-1.2 (upstream lines 1-406 byte-identical,
+  `</meta>` re-added; 80,559 B -> 13,414 B). Line breaks spelled `lb_nb`
+  (the file's only line markers) — folded into the `lb_n` topology.
+
 ## Retrieval URLs
 
 - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/besa-letters/besa.letters_TT/on_lack_of_food.tt
@@ -193,6 +216,9 @@ census-verified (occurrence counts in the parser constants).
   - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/magical-papyri/magical.papyri_TT/OCrum_ST_18.tt (whole)
   - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/bohairic.nt/bohairic.nt_TT.zip (16 MB, 260 members)
   - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidic.ot/sahidic.ot_TT.zip (30 MB, 911 members)
+- v6.3.0 re-pin additions (trimmed):
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.3.0/shenoute-those/shenoute.those_TT/shenoute.those.GL269-270.tt
+  - https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.3.0/magical-papyri/magical.papyri_TT/Pap.Copt.Mag.I_7.tt
 
 ## License chain
 
