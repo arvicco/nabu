@@ -206,6 +206,15 @@ sources:
       dcs_time_slot: time_slot  # 3 ×2,315 · 4 ×2,014 · 5 ×1,493) — the upstream claim,
       #                         verbatim; year-banding waits on the corpus's published
       #                         epoch boundaries (the regnal-table shape)
+    token_fields: #             the gold tokens' MISC sense ids → passage facets (census of
+      WordSem: #                canonical/dcs 2026-10-22: 531,573 tokens carry WordSem, 9,138 of
+        facet: sense #          them two or more ids — each id its own value, never collapsed;
+        shelf: dcs-senses #     20,158 distinct ids, every one held by the dcs-senses shelf).
+      #                         Upstream's conllu readme: "The IDs correspond to the first column
+      #                         in ./files/lookup/word-senses.csv" — so the ref is the shelf
+      #                         entry's urn. Passage grain (the pair surface has no token slot):
+      #                         `nabu sense` and `show --senses` read the token itself off the
+      #                         stored annotations
   ban-wikisource:             # census 2026-10-12 (scratch first-sync run): 1,252 lontars
     fields:
       genre: genre            # the wiki's genre categories: Geguritan 142 · Usada 30 · Wariga 27 …

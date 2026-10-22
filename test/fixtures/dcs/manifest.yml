@@ -50,7 +50,7 @@ files:
   - path: dcs/data/conllu/lookup/word-senses.csv
     url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/word-senses.csv
     whole: false
-    trim: header + 11 upstream lines incl. the newline-broken 127090 pair (10 MB -> 957 B)
+    trim: header + 17 upstream lines incl. the newline-broken 127090 pair and the six token-sense join witnesses (10 MB -> 1,592 B)
   - path: dcs/data/conllu/lookup/sembank-relations.csv
     url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/sembank-relations.csv
     whole: false

@@ -22,6 +22,15 @@ module Nabu
     # - withdrawn passages and passages of withdrawn documents contribute
     #   nothing; a value exists only while a live pair references it.
     #
+    # The token lane (facet_map token_fields): a CoNLL-U MISC key on the
+    # stored tokens (annotations "tokens"[]."misc", e.g. DCS's
+    # "…|WordSem=25248,25258") projects each comma-separated value as one
+    # passage facet value — every id kept, never collapsed — with ref =
+    # urn:nabu:dict:<shelf>:<value> when the rule names the shelf the ids
+    # belong to. Passage grain: the pair says which passage cites the
+    # value; WHICH token does is read back from the stored tokens on the
+    # read path (Query::Senses, show --senses) — no position column.
+    #
     # Lifecycle: wholesale per source. Every value row belongs to one
     # source, so a slice drops by source (value ids → their pair range on
     # the (value_id, passage_id) primary key) and re-projects without
@@ -51,7 +60,8 @@ module Nabu
             source_id = catalog[:sources].where(slug: slug).get(:id)
             next if source_id.nil?
 
-            project_source(catalog, source_id, facet_map.passage_fields_for(slug))
+            project_source(catalog, source_id, facet_map.passage_fields_for(slug),
+                           token_fields: facet_map.token_fields_for(slug))
               .each_with_index { |count, i| totals[i] += count }
           end
           Summary.new(passages: totals[0], rows: totals[1], values: totals[2])
@@ -67,7 +77,10 @@ module Nabu
         catalog.transaction do
           drop_source(catalog, source_id)
           fields = facet_map&.passage_fields_for(slug)
-          fields ? project_source(catalog, source_id, fields)[1] : 0
+          token_fields = facet_map&.token_fields_for(slug)
+          return 0 unless fields || token_fields
+
+          project_source(catalog, source_id, fields, token_fields: token_fields)[1]
         end
       end
 
@@ -80,9 +93,14 @@ module Nabu
       # One source's ruled fields → dictionary values + pairs. Returns
       # [passages, rows, values]. The LIKE probe skips the JSON parse for
       # passages carrying none of the fields (a superset test: "_" in a
-      # field name is a LIKE wildcard, which only widens it).
-      def project_source(catalog, source_id, fields)
-        probe = Sequel.|(*fields.keys.map { |field| Sequel.like(:annotations_json, %(%"#{field}"%)) })
+      # field name is a LIKE wildcard, which only widens it); a token rule
+      # probes for its "KEY=" inside the stored MISC strings.
+      def project_source(catalog, source_id, fields, token_fields: nil)
+        fields ||= {}
+        token_fields ||= {}
+        probes = fields.keys.map { |field| Sequel.like(:annotations_json, %(%"#{field}"%)) } +
+                 token_fields.keys.map { |key| Sequel.like(:annotations_json, %(%#{key}=%)) }
+        probe = Sequel.|(*probes)
         dictionary = {}
         buffer = []
         passages = 0
@@ -92,7 +110,8 @@ module Nabu
         document_ids.each_slice(DOCUMENT_SLICE) do |slice|
           catalog[:passages].where(document_id: slice, withdrawn: false).where(probe)
                             .select_map(%i[id annotations_json]).each do |passage_id, json|
-            keys = facet_keys(JSON.parse(json || "{}"), fields)
+            annotations = JSON.parse(json || "{}")
+            keys = (facet_keys(annotations, fields) + token_keys(annotations, token_fields)).uniq
             next if keys.empty?
 
             passages += 1
@@ -120,6 +139,37 @@ module Nabu
           end
         end
         keys.uniq
+      end
+
+      # The deduped [facet, value, ref] keys the passage's stored tokens
+      # carry under the +token_fields+ MISC rules.
+      def token_keys(annotations, token_fields)
+        tokens = annotations.is_a?(Hash) ? annotations["tokens"] : nil
+        return [] if token_fields.empty? || !tokens.is_a?(Array)
+
+        keys = []
+        tokens.each do |token|
+          next unless token.is_a?(Hash)
+
+          token_fields.each do |key, rule|
+            misc_values(token["misc"], key).each do |value|
+              keys << [rule.facet, value, rule.shelf && "urn:nabu:dict:#{rule.shelf}:#{value}"]
+            end
+          end
+        end
+        keys.uniq
+      end
+
+      # The values of +key+ in one CoNLL-U MISC string ("A=1|B=2,3"): the
+      # comma-separated list after "KEY=", blanks dropped; [] when absent.
+      def misc_values(misc, key)
+        return [] unless misc.is_a?(String)
+
+        misc.split("|").each do |pair|
+          name, value = pair.split("=", 2)
+          return value.to_s.split(",").map(&:strip).reject(&:empty?) if name == key
+        end
+        []
       end
 
       def value_and_ref(element)
