@@ -664,6 +664,7 @@ module Nabu
                                                   #   verbatim (form, lemma, osm, …)
         nabu show urn:cts:greekLit:tlg0016.tlg001.perseus-grc2:1.6 --entities
                                                   # + the persons/places marked in it
+        nabu show urn:nabu:dcs:5:3363:2612 --senses  # + each token's word senses
 
       TOKENS (--tokens): appends the passage's stored token annotations as
       one line per token — `form` first, then every key the store holds for
@@ -677,6 +678,13 @@ module Nabu
       upstream's type, the surface, then any key/identity/ref/subtype,
       verbatim. A document or range urn groups them under each passage's
       :suffix. Search by name across the corpus with `nabu entity NAME`.
+
+      SENSES (--senses): appends the word senses the passage's gold tokens
+      cite (DCS WordSem ids, the source's token_fields rule in
+      config/facet_map.yml) — one line per citing token, form (lemma) then
+      each sense id with its dcs-senses name and gloss; an id the shelf
+      does not hold says so. A document or range urn groups them under each
+      passage's :suffix. Search by sense with `nabu sense TERM`.
 
       SEGMENTED (--segmented): renders Tibetan-language rows (xct/bod/otb)
       with word boundaries — the stored text with a space inserted at each
@@ -707,6 +715,8 @@ module Nabu
                     desc: "Append the passage's stored token annotations verbatim (form + every key present)"
     option :entities, type: :boolean, default: false,
                       desc: "Append the names the edition marks inside the text (persons, places …), verbatim"
+    option :senses, type: :boolean, default: false,
+                    desc: "Append the word senses the gold tokens cite (DCS WordSem), resolved against dcs-senses"
     option :segmented, type: :boolean, default: false,
                        desc: "Render Tibetan (xct/bod/otb) passages with word boundaries " \
                              "(needs the synced nabu-data module)"
@@ -722,6 +732,9 @@ module Nabu
       end
       if options[:entities] && (options[:random] || options[:parallel])
         raise Thor::Error, "show: --entities does not compose with --random/--parallel"
+      end
+      if options[:senses] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --senses does not compose with --random/--parallel"
       end
 
       config = Nabu::Config.load
@@ -762,6 +775,7 @@ module Nabu
       say seg_note if seg_note
       print_show_tokens(result) if options[:tokens]
       print_show_entities(result) if options[:entities]
+      print_show_senses(result, catalog: catalog, config: config) if options[:senses]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
