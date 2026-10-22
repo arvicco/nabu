@@ -5,6 +5,11 @@ description: >-
 url: "https://arvicco.github.io"
 baseurl: "/nabu"
 repository_url: "https://github.com/arvicco/nabu"
+# Citation metadata for the head JSON-LD (_includes/jsonld.html): the
+# concept DOI — the all-versions record, resolving to the latest release —
+# and the author, both as CITATION.cff states them.
+concept_doi: "10.5281/zenodo.21361956"
+author_name: "Ar Vicco"
 
 # Restrained defaults: no theme, hand-rolled layout and CSS only.
 # Two plugins, both in the github-pages whitelist, so
