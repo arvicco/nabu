@@ -1983,7 +1983,9 @@ ingest`; for the local-notes shelf it is `Nabu::NoteShelf` (P24-1),
 driven by `nabu note`; for the local-lemmas shelf it is
 `Nabu::LemmaShelf` (P84-1), driven by `nabu lemma-enrich`; for the
 local-dates shelf it is `Nabu::DateShelf` (P122-1), driven by `nabu
-silver-dates --import`. Everything else stays read-only on the shelves.
+silver-dates --import`; for the local-model-output shelf it is
+`Nabu::ModelShelf`, driven only through `Nabu::ModelCall`.
+Everything else stays read-only on the shelves.
 
 **Shelf one: `local/shelves/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
@@ -2214,6 +2216,53 @@ nothing upstream does — and then always renders labeled. The shelf is not
 (yet) a registered `kind: shelf` source: its integrity rides the gateway's
 validate-on-read (a malformed shard fails the projection loudly, naming
 file:line), not LocalFetch pins.
+
+**Shelf seven: `local/shelves/local-model-output/` — the model-output
+convention.** Minted BEFORE the first paid-model producer, so no
+lane ships ad hoc: the seams every future paid-model lane composes, its
+three rules FIXED (verified against two live implementations, 2026-10-20)
+and only their seams Nabu's own. (1) **The cache/identity key** is
+`sha256("urn|tool|prompt_version|model")` (`Nabu::ModelOutput.key`; a
+component carrying the separator is refused, never escaped). Prompt
+templates are versioned FILES — `config/prompts/<tool>/<version>.md`,
+project definition, never edited in place once a run used them — and the
+producer names its version as a LITERAL, so a bump is a visible code
+change that ORPHANS the stale rows: they stop answering, stay on the
+shelf, and `ModelShelf#orphans` censuses them (auditability — nothing is
+deleted). A multi-stage producer gives each stage its own tool name, so
+stage and tool are one identity and the recipe stays four parts.
+(2) **Per-run sidecar provenance** (`Nabu::ModelShelf`, the shelf's one
+write gateway): `<producer>/runs/<label>/<model>/` holds `config.json`
+(written once, tmp+rename: producer, label, model, backend, the source
+path, every effective param, and per stage the FULL verbatim prompt with
+its version and sha256), an append-only `costs.tsv` (stage, unit, usd,
+backend — one row per PAID call, flushed and fsynced per call, so a run's
+spend survives any interruption) and an append-only `outputs.jsonl` (the
+key, its four recipe parts, the output — the cache). Reopening the same
+(producer, label, model) with the SAME identity resumes the run (finished
+units answer from the cache); a different identity there is a refusal —
+a run is never overwritten — so a rerun under a new model is a SIBLING
+directory under its label by construction. A kill mid-write tears at
+most the row in flight: the reader reports a newline-less tail instead of
+parsing it, and the next append on resume sets it aside to `torn.log`
+first (audit) so no row is ever glued to a fragment. (3) **The budget
+table** is instance state — `local/config/model_budget.yml`, keyed
+`YYYY-MM` → {spend_usd, cap_usd}, written through `Nabu::ModelBudget`
+(tmp+rename; the shed-acceptance write-through pattern): the owner's cap
+via `nabu model-budget --cap USD [--month YYYY-MM]`, the spend booked
+from each call's REAL usage. FAIL-CLOSED: a month without a cap refuses
+every paid call. **The check order lives in ONE place**, `Nabu::ModelCall`
+(no producer re-implements it): key → shelf lookup (a hit answers with no
+call, no cost row and no budget touch — even over the cap) → budget check
+→ the backend call → the costs.tsv row → the spend booking → the output
+row. Costs are booked BEFORE the output so money spent is never
+unrecorded (a kill between them re-pays one call on resume, never hides
+one). The backend is any object with `#name` and `#complete(prompt:,
+model:)` returning text plus usd — the seam tests drive a stub; a real
+backend (and any gem or HTTP decision it carries) is the first
+producer's own change. Like local-dates, the shelf is not a registered
+`kind: shelf` source; a lane's derived product (a projection, an index)
+is a separate owner-armed step over it, the silver-dates mold.
 
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is

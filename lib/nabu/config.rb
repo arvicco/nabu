@@ -273,6 +273,20 @@ module Nabu
       File.join(local_config_dir, "credentials.yml")
     end
 
+    # The monthly model-spend table (architecture §16 "the
+    # model-output convention"): YYYY-MM → spend/cap, instance state
+    # written only through Nabu::ModelBudget.
+    def model_budget_path
+      instance_path("model_budget.yml")
+    end
+
+    # Versioned prompt templates: config/prompts/<tool>/<version>.md
+    # — project definition, one file per version, loaded by
+    # Nabu::ModelOutput.prompt.
+    def prompts_dir
+      File.join(config_dir, "prompts")
+    end
+
     # Quarantine-creep acceptances (P70; local since P71): the owner's
     # --accept-creep rulings; the ledger table is historical.
     def creep_acceptances_path
