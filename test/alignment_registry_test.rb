@@ -301,8 +301,26 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
     vulgate = work.witnesses[1]
     assert_equal "GEN", vulgate.book_for("urn:nabu:vulgate:gen")
+    assert_equal "JER", lxx.book_for("urn:cts:greekLit:tlg0527.tlg049.1st1K-grc1"), "the Swete JER stays"
     web = work.witnesses[4] # BHSA (P30-4) now sits between OSHB and WEB
     assert_equal "JON", web.book_for("urn:nabu:eng-web:jon"), "P11-8 adds the WEB English OT witness"
+  end
+
+  # The Clementine Vulgate numbers Jeremiah in the HEBREW chapter order;
+  # the ot work's JER token speaks Swete's GREEK order (the oracles against
+  # the nations sit at LXX 25-31, MT 46-51), so from chapter 25 on the same
+  # number names a different text — measured: Vulgate ch. 27 = 22 verses vs
+  # Swete 46, ch. 46 = 28 vs 8. The Vulgate's Jeremias is held out (the
+  # registry's numbering remap is witness-global, so no chapter-scoped fix
+  # exists); JER aligns only where a Greek-order witness stands.
+  def test_shipped_ot_vulgate_holds_out_hebrew_ordered_jeremiah
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    work = Nabu::AlignmentRegistry.load(path).work("ot")
+    vulgate = work.witnesses.find { |witness| witness.label == "vulgate (Clementine)" }
+    assert_nil vulgate.book_for("urn:nabu:vulgate:jer"), "the Hebrew-order Jeremias must not ride the JER token"
+    refute_includes vulgate.documents.values, "JER"
+    assert_equal "LAM", vulgate.book_for("urn:nabu:vulgate:lam"), "only Jeremiah holds out"
+    assert_nil work.witness_for("urn:nabu:vulgate:jer")
   end
 
   def test_shipped_ot_targum_witness_mirrors_the_oshb_holdouts
