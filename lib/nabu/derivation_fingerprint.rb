@@ -125,10 +125,14 @@ module Nabu
     # Membership is conservative: a file that also writes catalog rows
     # (hiero_postings_builder — its table is a catalog migration) stays
     # IN the shared core; when in doubt, IN.
+    # The translations lane (store/translation_index.rb) and its key
+    # registry (translation_keys.rb — read by that lane alone) shape only
+    # passages_translations rows.
     INDEX_FILES = %w[
       store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
       store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
       store/cjk_bigrams.rb store/index_delta.rb
+      store/translation_index.rb translation_keys.rb
     ].freeze
 
     # The shared derivation core is EVERYTHING under lib/nabu/ except
