@@ -139,3 +139,36 @@ fixtures above. The remaining 4 quarantines (`sa_abhinavagupta-paramArthasAra`,
 `sa_bIjanighaNTu`, `sa_lagadha-RgvedavedAGgajyotiSa`,
 `sa_vAmadeva-janmamaraNavicAra`) are genuinely unaddressable flat `<lg>`/`<l>`
 with zero `@n`/xml:id/marker/prose and stay quarantined by design.
+
+## Single-blob re-split fixtures (2 more, cut from local canonical)
+
+Two of MW's most-cited held texts parsed to ONE passage each: verse text the
+primary rungs cannot address (no `@n`, no `// Abbr_N //` marker) accumulated
+unflushed until the first `<p>` in the body, which dumped the whole text as
+prose ordinal `p1`, so the fallback rungs never ran. A primary result that is
+a single prose-ordinal blob now re-runs the fallbacks and takes their result
+when it addresses more than one passage. Trimmed REAL slices from the same
+local canonical clone (`mmehner/gretil-corpus-tei@master`), cut
+**2026-10-22**, same CC BY-NC-SA 4.0 notice (`license_class: nc`):
+
+10. **`sa_manusmRti-a1a2.xml`** — `<lg xml:id="Manu_A.V">` verses (pāda
+    `<seg>`s inside `<l>`), each followed by a `<note type="analysis">` copy
+    (dropped), and a closing colophon `<div><p>samāptaṃ mānavaṃ
+    dharmaśāstram</p></div>` — the `<p>` that swallowed the text. TRIM:
+    upstream lines 1..413 (teiHeader + adhyāya 1 verses 1.1-1.3), `</div>`,
+    lines 1699..1709 (adhyāya 2 verse 2.1), `</div>`, lines 30055..30060
+    (colophon + closing tags) → citations `1.1 1.2 1.3 2.1`, addressing
+    `xml-id`.
+11. **`sa_pANini-aSTAdhyAyI-s1.xml`** — flat `<l>` sūtras directly in
+    `<body>`, each closed by a DOUBLE-pipe marker `|| PS_A,P.S ||`, and one
+    sūtra (6,1.130) set as a `<p>` — the paragraph that swallowed the text.
+    TRIM: upstream lines 1..341 (teiHeader + sūtras 1,1.1-1,1.6), lines
+    5404..5411 (6,1.128-6,1.131 around the `<p>`), lines 8232..8235 (closing
+    tags) → 10 citations, addressing `verse-marker`; the pipe fallback now
+    takes `||` as a delimiter of its own, so no stray `|` survives.
+
+Whole-corpus census (784 files, parse-level, 2026-10-22): 25 files parsed to
+a single prose-ordinal blob; 20 now re-split (sa_manusmRti 2,688 verses,
+sa_pANini-aSTAdhyAyI 3,951 sūtras, and 18 smaller texts via the same xml:id
+rung), 5 stay p1 because no fallback rung addresses them. No other file's
+urns move.

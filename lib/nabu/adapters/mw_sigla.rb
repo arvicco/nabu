@@ -21,8 +21,7 @@ module Nabu
     #               pada-suffix probing → …:5.086.05a — end-to-end verified
     #               in the survey). A held work whose tail does NOT parse
     #               falls back to :document, honestly.
-    #   :document   held work at document grain only — single-blob GRETIL
-    #               parses (Mn., Pāṇ.), edition-numbering mismatches
+    #   :document   held work at document grain only — edition-numbering mismatches
     #               (Hariv.), prose/drama (Kathās., Śak.), or works whose
     #               passage grain is unverified against the live catalog.
     #   :authority  MW's lexicographer/author labels (L., W., Sāy., ib. …) —
@@ -58,10 +57,16 @@ module Nabu
         "MārkP." => work("sa_mArkaNDeyapurANa1-93", "%d.%d"),
         "VP." => work("sa_viSNupurANa", "%d,%d.%d"),
         "Daś." => work("sa_daNDin-dazakumAracarita", "%d,%d.%d"),
+        # GRETIL re-split (was a single-blob parse): lg xml:id Manu_A.V and
+        # the "|| PS_A,P.S ||" sūtra markers. Census over the full mw.xml
+        # against the re-split parse (2026-10-22): Mn. 3,764 passage-grain
+        # citations, 3,747 live; Pāṇ. 8,910, 8,785 live (bare "Mn." ×3,609
+        # and "Pāṇ." ×683 stay document grain). With the tail repairs in
+        # #normalize_citation, passage-grain rows rose 8,787 → 25,519.
+        "Mn." => work("sa_manusmRti", "%d.%d"),
+        "Pāṇ." => work("sa_pANini-aSTAdhyAyI", "%d,%d.%d"),
         # -- document grain --------------------------------------------------
-        "Mn." => work("sa_manusmRti"),                       # single-blob parse
-        "Pāṇ." => work("sa_pANini-aSTAdhyAyI"),              # single-blob parse
-        "Hariv." => work("sa_harivaMza"),                    # crit.-ed. numbering ≠ MW's Calcutta
+        "Hariv." => work("sa_harivaMza"), # crit.-ed. numbering ≠ MW's Calcutta
         "Kathās." => work("sa_somadeva-kathAsaritsAgara"),
         "Pañcat." => work("sa_viSNuzarman-paJcatantra"),
         "Hit." => work("sa_nArAyaNa-hitopadeza"),
@@ -128,14 +133,20 @@ module Nabu
       end
 
       # "RV. v, 86, 5" → "5.086.05": strip the siglum, split the tail on
-      # commas, read roman/arabic numerals, apply the work's template. nil —
-      # an honest document-grain fallback — when any component is
-      # non-numeric or the count does not match the template.
+      # commas and spaces, read roman/arabic numerals, apply the work's
+      # template. nil — an honest document-grain fallback — when any
+      # component is non-numeric or the count does not match the template.
+      # Spaces separate too because the @n restoration joins with a space
+      # and upstream's @n sometimes stops before its comma (<ls n="Pāṇ. iv,
+      # 3">5</ls> → "Pāṇ. iv, 3 5"); ONE sentence-final period rides inside
+      # the <ls> on about a quarter of numbered citations ("Mn. viii, 120.")
+      # and is dropped. Anything else non-numeric ("viii f.", "ii, 54; 55")
+      # still falls back.
       def normalize_citation(label, siglum, format)
-        tail = label.to_s.strip.delete_prefix(siglum).strip
+        tail = label.to_s.strip.delete_prefix(siglum).strip.delete_suffix(".")
         return nil if tail.empty?
 
-        parts = tail.split(",").map { |part| numeral(part.strip) }
+        parts = tail.split(/[,\s]+/).reject(&:empty?).map { |part| numeral(part) }
         return nil if parts.any?(&:nil?)
         return nil unless parts.length == format.scan("%").length
 

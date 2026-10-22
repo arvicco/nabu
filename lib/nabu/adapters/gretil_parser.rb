@@ -145,8 +145,11 @@ module Nabu
       # already-loaded docs that contain "| Abbr_N |" spans as ordinary reading
       # text (recognized as prose in the primary pass) keep their urns
       # byte-identical (frozen-urn); only the pure pipe-marked docs that the
-      # primary pass cannot address are recovered here.
-      MARKER_FALLBACK = %r{(?<delim>//|\|)\s*(?<prefix>\p{L}[\p{L}\d]*)_(?<num>\d[\d.,]*)\s*\k<delim>}
+      # primary pass cannot address are recovered here. The DOUBLE pipe
+      # "|| PS_1,1.1 ||" (sa_pANini-aSTAdhyAyI) is a delimiter in its own
+      # right, tried before the single pipe, so no stray "|" is left on
+      # either side of the sūtra it closes.
+      MARKER_FALLBACK = %r{(?<delim>//|\|\||\|)\s*(?<prefix>\p{L}[\p{L}\d]*)_(?<num>\d[\d.,]*)\s*\k<delim>}
 
       # In-text verse marker, LINE-TERMINATED fallback pass (P10-3). Recovers two
       # marker shapes the matched-delimiter passes above cannot address, both of
@@ -254,11 +257,38 @@ module Nabu
       # tests its regex per <l> (not over the running buffer), so it stays linear
       # even on a large markerless flat file that reaches it.
       def extract(source, path:, language:)
-        verses = with_io(source) do |io|
+        primary = with_io(source) do |io|
           run_extraction(io, path: path, language: language, marker: MARKER)
         end
-        return verses unless verses.empty?
+        return primary unless primary.empty? || single_prose_blob?(primary)
 
+        recovered = fallback_extract(path, language: language)
+        return recovered if primary.empty? || recovered.size > 1
+
+        primary
+      rescue Nokogiri::XML::SyntaxError => e
+        raise ParseError, "#{path}: malformed XML: #{e.message}"
+      end
+
+      # The degenerate primary result (the single-blob re-split): ONE passage,
+      # a prose ordinal. Verse text the primary rungs cannot address (an
+      # xml:id-only lg, a "|| Abbr_N ||" marker) accumulates unflushed until
+      # the first <p> — a colophon (sa_manusmRti) or a lone sūtra set as a
+      # paragraph (sa_pANini-aSTAdhyAyI) — and is dumped there whole as p1.
+      # Such a document re-runs the fallback rungs; it takes their result
+      # only when they address MORE than one passage, so a genuine
+      # one-paragraph prose text keeps its p1. Corpus census (784 files,
+      # 2026-10-22): 25 parsed to that one blob; 20 now re-split (19 by the
+      # xml:id rung, the Aṣṭādhyāyī by the pipe rung — 703,068 → 713,718
+      # passages corpus-wide), 5 stay p1 (no fallback addresses them). No
+      # other document's urns move; the double-pipe delimiter below also
+      # strips the stray "|" from two already-addressed pipe-marked texts
+      # (sa_pataJjali-yogasUtra, sa_davuldeNa-…-yazodharAcarita): text only.
+      def single_prose_blob?(verses)
+        verses.size == 1 && verses.first.addressing == "prose-ordinal"
+      end
+
+      def fallback_extract(path, language:)
         verses = File.open(path, "r") do |io|
           XmlIdExtraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, language: language).call
         end
@@ -272,8 +302,6 @@ module Nabu
         File.open(path, "r") do |io|
           LineMarkerExtraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, language: language).call
         end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
       end
 
       def run_extraction(io, path:, language:, marker:)
