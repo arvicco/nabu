@@ -28,3 +28,99 @@ files:
     copied: 2026-08-09
     whole: false
     trim: rows with sign_name in {E2, |NUN.ME|, SZESZ} (P65-1, the CdliSignReadings seam)
+  - path: 00etc/wikidata-script.csv
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/wikidata-script.csv
+    copied: 2026-10-22
+    whole: false
+    trim: "header + lines 2, 3, 716, 742, 1038, 1266, 1414, 1530, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/wikidata/Q-to-oid.tab
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/wikidata/Q-to-oid.tab
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 173, 198, 475, 681, 827, 940, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/wikidata.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/wikidata.tsv
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 4, 30, 326, 554, 702, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/wikidata/oid-aks-lref-name.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/wikidata/oid-aks-lref-name.tsv
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 79, 197, 198, 232, 249, 283, 332, 345, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/aks-add.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/aks-add.tsv
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 79, 197, 198, 249, 283, 332, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/mzl-kwu.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/mzl-kwu.tsv
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 24, 91, 101, 103, 109, 146, 580, 783, 877, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/pgsl.tab
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/pgsl.tab
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 7, 9, 13, 32, 49, 204, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/ebl-sign-names.json
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/ebl-sign-names.json
+    copied: 2026-10-22
+    whole: false
+    trim: "the 8 objects for 1(BAN₂) AK MIN |IGI.DIB| |UD.ŠEŠ.KI| |ŠEŠ.AB| |ŠEŠ.KI| ŠEŠ, CRLF kept, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/attinger.tab
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/attinger.tab
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 188, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/add-attinger.tab
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/add-attinger.tab
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 24, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/csf.tab
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/csf.tab
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 19, 73, 76, 1350, 1351, 1359, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"
+  - path: 00etc/eng.tab
+    refetchable: false
+    provenance: local-trim
+    reason: whole lines copied byte-verbatim from the held canonical/osl/00etc (CC0 with the repo) — rows joining this fixture's signs beside real rows the Store::SignConcordances census must skip (README.md lists what each pins); re-acquiring = re-sync osl and re-cut the same lines
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/eng.tab
+    copied: 2026-10-22
+    whole: false
+    trim: "lines 1, 156, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012"

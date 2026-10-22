@@ -65,6 +65,8 @@ module Nabu
       # value → Attinger spelling, "csf" long → common short form, "eng"
       # ŋ-value → ŋ-less twin). nil on the card when nothing joined.
       Concordances = Data.define(:lists, :mzl_kwu, :ebl, :wikidata, :value_maps)
+      # const: render vocabulary — the lists the card's head line names and
+      # the value-map schemes Store::SignConcordances mints; not a corpus claim
       HEADLINE_LISTS = %w[Labat AKS ATU1 PGSL].freeze
       VALUE_MAP_SCHEMES = %w[attinger csf eng].freeze
       VALUE_MAP_LABELS = { "attinger" => "Attinger", "csf" => "short forms", "eng" => "ŋ-less" }.freeze
