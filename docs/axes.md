@@ -251,7 +251,7 @@ The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition
 
 The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
 
-**Members** (4): `atmo`, `ud`, `westoldturkic`, `wiktionary-recon`
+**Members** (5): `atmo`, `ud`, `westoldturkic`, `wiktionary-recon`, `wilkens-oui`
 
 ### mongolic
 

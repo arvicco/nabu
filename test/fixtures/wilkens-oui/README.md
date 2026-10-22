@@ -16,7 +16,9 @@ Upstream serves ONE grain: the whole book as a single born-digital PDF
 metadata, not text). Inside it: front matter (PDF pp. 1–16: title,
 Vorbemerkungen, Hinweise zur Benutzung, Abkürzungen, Symbole), the
 dictionary body (PDF pp. 17–945 = printed folios 1–929), and the back cover
-(p. 946). The parser takes the dictionary ENTRY as its record grain.
+(p. 946). The parser takes the dictionary ENTRY as its record grain; the
+rule separating body from matter is the printed folio (an arabic folio in
+the bottom band = body; the 17 matter pages carry roman folios or none).
 
 ## The fixture
 
@@ -30,6 +32,16 @@ the layout quirks a segmenter must survive:
 | 3 | 61  | 45  | page-top continuation of p. 44's last entry (sub-entries of *amranmaklıg*) |
 | 4 | 198 | 182 | a sub-entry set at a non-standard indent (*bitigü p(a)ryan*) |
 | 5 | 457 | 441 | page-top orphan lines (the parent *kün* is on folio 440) and multi-line bold headwords, one crossing the column break |
+
+`wilkens-grains.pdf` — a second `mutool merge` trim (PDF pages 3, 15, 185),
+the adapter's grain specimens: the REJECTED matter grain (p. 3, the
+license page — "Dieses Werk ist lizenziert unter einer Creative Commons
+Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International
+Lizenz."; p. 15, the Symbole page with its roman folio IX) and folio 169
+(p. 185), whose Hebrew etymon of *bidilhim* wraps onto an indent line —
+one of the book's two records the segmenter closes with an empty
+headword, skipped by rule. `wilkens-grains.stext.xml.gz` is its recorded
+stext (same command, same mutool).
 
 `wilkens-sample.stext.xml.gz` — the RECORDED `mutool draw -F stext -o -
 wilkens-sample.pdf` output (mutool 1.28.0, 2026-10-22), gzipped, checked in

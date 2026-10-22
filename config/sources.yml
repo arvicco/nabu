@@ -6912,6 +6912,28 @@ wiktionary-te:   # 02-sources row 284
   # extract by lang_code te), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
+wilkens-oui:   # 02-sources row 302
+  adapter: Nabu::Adapters::WilkensOui
+  adopted: "2026-10-22"
+  axes: [turkic]
+  wired: false   # first sync pending: bin/nabu enable wilkens-oui && bin/nabu sync
+                 # wilkens-oui (one ~10 MB PDF GET, sha-pinned; parse ~45 s
+                 # of mutool stext), eyeball nabu define amramak, a homonym
+                 # pair (define a), a sub-entry and a † record, then flip.
+  sync_policy: manual
+  # Jens Wilkens, Handwörterbuch des Altuigurischen (Universitätsverlag
+  # Göttingen 2021, DOI 10.17875/gup2021-1590; CC BY-SA 4.0 → attribution
+  # with the share-alike rider) — the Old Uyghur–German–Turkish
+  # dictionary, segmented from the born-digital PDF's positioned text
+  # layer (Nabu::StextLayout + Nabu::WilkensOui). Dictionary slug
+  # wilkens-oui, language oui; sub-entries are their own entries pointing
+  # at their main entry, → cross-references and † rejected readings ride
+  # as crossrefs. EXPECTED FIRST SYNC (full-book census 2026-10-22): 1
+  # dictionary file → 49,619 entries (29,873 main + 19,746 sub), 0 parse
+  # errors; 2 empty-headword records skipped by rule; 17 matter pages
+  # (front matter + back cover) skipped by rule in the notes; 1,355
+  # entries carry U+FFFD (Chinese characters the text layer cannot yield).
+
 wold:
   adapter: Nabu::Adapters::Wold
   adopted: "2026-07-26"
