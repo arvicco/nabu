@@ -5125,7 +5125,7 @@ sigla:   # P142, 02-sources row 302
   adapter: Nabu::Adapters::Sigla
   adopted: "2026-10-22"
   axes: [epigraphy, classical]
-  wired: false   # awaiting the first real sync (one GET of database.js, ~2.5 MB)
+  wired: true   # awaiting the first real sync (one GET of database.js, ~2.5 MB)
   sync_policy: manual
   # SigLA — The Signs of Linear A (Salgarella & Castellan, sigla.phis.me):
   # the Linear A corpus sign by sign. The whole database ships as ONE
@@ -6934,7 +6934,7 @@ wilkens-oui:   # 02-sources row 302
   adapter: Nabu::Adapters::WilkensOui
   adopted: "2026-10-22"
   axes: [turkic]
-  wired: false   # first sync pending: bin/nabu enable wilkens-oui && bin/nabu sync
+  wired: true   # first sync pending: bin/nabu enable wilkens-oui && bin/nabu sync
                  # wilkens-oui (one ~10 MB PDF GET, sha-pinned; parse ~45 s
                  # of mutool stext), eyeball nabu define amramak, a homonym
                  # pair (define a), a sub-entry and a † record, then flip.
