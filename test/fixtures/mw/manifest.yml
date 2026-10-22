@@ -26,3 +26,7 @@ files:
     url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
     whole: false
     trim: P124-3 cf./q.v. slice — 4 record lines of 286,530 (L1702, L1715, L10608, L10619; upstream lines 2049, 2062, 12696, 12709) + header/footer; recipe in README.md
+  - path: mining-slice.xml
+    url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
+    whole: false
+    trim: citation/entry-link slice — 23 record lines of 286,530 (upstream lines 5488, 23729, 23731, 29614-29616, 42733, 68809, 68815, 111059-111061, 164586-164593, 164662, 199092, 199128) + header/footer; recipe in README.md

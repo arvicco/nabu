@@ -1,0 +1,11 @@
+ID,Form_ID,Form,Cognateset_ID,Doubt,Cognate_Detection_Method,Source,Alignment,Alignment_Method,Alignment_Source
+Romanian-concept_1-1-1,Romanian-concept_1-1,-abil,1,false,expert,,,,
+French-concept_1-1-1,French-concept_1-1,-abl,1,false,expert,,,,
+Italian-concept_1-1-1,Italian-concept_1-1,-abile,1,false,expert,,,,
+Spanish-concept_1-1-1,Spanish-concept_1-1,-aβle,1,false,expert,,,,
+Portuguese-concept_1-1-1,Portuguese-concept_1-1,-avɛl,1,false,expert,,,,
+Latin-concept_1-1-1,Latin-concept_1-1,-aːbɪlɛm,1,false,expert,,,,
+Portuguese-concept_75-1-1,Portuguese-concept_75-1,ɐbʒũŋʒiɹ,75,false,expert,,,,
+Latin-concept_75-1-1,Latin-concept_75-1,abɪʊŋɡɛrɛ,75,false,expert,,,,
+Romanian-concept_358-1-1,Romanian-concept_358-1,albʲ,358,false,expert,,,,
+Latin-concept_358-1-1,Latin-concept_358-1,albeːskɛrɛ,358,false,expert,,,,

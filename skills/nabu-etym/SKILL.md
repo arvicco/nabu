@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: etym
   origin: hand-tuned
-  sources: "calfa-lexicon cldf-spine clics derom edl iecor liv nabu-lects sabellic-loans starling westoldturkic wiktionary-recon wold"
+  sources: "calfa-lexicon cldf-spine clics derom edl etruscan-loans iecor liv meloniromance nabu-lects sabellic-loans starling westoldturkic wiktionary-recon wold"
 ---
 
 # The Comparative Indo-Europeanist — the `etym` desk
@@ -28,8 +28,10 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `clics` | CLICS³ — Database of Cross-Linguistic Colexifications (aggregate network, v1.1) | attribution |
 | `derom` | DÉRom — Dictionnaire Étymologique Roman (ATILF/Ortolang) | nc |
 | `edl` | de Vaan — Etymological Dictionary of Latin (Brill 2008), LiLa LOD skeleton (CIRCSE) | nc |
+| `etruscan-loans` | Etruscan → Latin loans — en.wiktionary curation | attribution |
 | `iecor` | IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2) | attribution |
 | `liv` | LIV — Lexikon der indogermanischen Verben (Rix 2001), LiLa LOD (CIRCSE) | attribution |
+| `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `nabu-lects` | nabu-lects — the lect registry (anchor x stage x variety x orthography resolver) | attribution |
 | `sabellic-loans` | Sabellic → Latin loans — en.wiktionary curation (Oscan/Umbrian/Sabine) | attribution |
 | `starling` | StarLing / Tower of Babel — etymological databases (Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian + Altaic + North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian + IE lexicostatistical wordlists + the Altaic/Caucasian/Dravidian/Kiranti branch bases) | attribution |

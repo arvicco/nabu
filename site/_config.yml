@@ -5,13 +5,21 @@ description: >-
 url: "https://arvicco.github.io"
 baseurl: "/nabu"
 repository_url: "https://github.com/arvicco/nabu"
+# Citation metadata for the head JSON-LD (_includes/jsonld.html): the
+# concept DOI — the all-versions record, resolving to the latest release —
+# and the author, both as CITATION.cff states them.
+concept_doi: "10.5281/zenodo.21361956"
+author_name: "Ar Vicco"
 
 # Restrained defaults: no theme, hand-rolled layout and CSS only.
-# jekyll-feed is the single plugin (Atom feed for /news/, P19-3); it is in
-# the github-pages whitelist, so actions/jekyll-build-pages honors it too.
+# Two plugins, both in the github-pages whitelist, so
+# actions/jekyll-build-pages honors them too: jekyll-feed (Atom feed for
+# /news/, P19-3) and jekyll-sitemap (sitemap.xml over the HTML pages; the
+# hand-written robots.txt points crawlers at it).
 theme: null
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 markdown: kramdown
 kramdown:
   input: GFM

@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 160, lect.size,
+    assert_equal 162, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -323,7 +323,11 @@ class PosturesTest < Minitest::Test
                  "(nothing Linear A exists in nabu-lects): 160→161; " \
                  "the P140 cone package landing (merged + canonical-synced 2026-10-22) RETIRES " \
                  "te-wikisource to the te:cls override (the shadowing rule) and flips " \
-                 "cy to dates, jv/su/br to codemap: 161→160"
+                 "cy to dates, jv/su/br to codemap: 161→160; " \
+                 "memis ADDED — dates (medieval-to-new Latin inscriptions banded by their " \
+                 "own origDate; the edr precedent): 160→161; " \
+                 "extrabiblical ADDED (same phase) — PENDING on an obm (Moabite) anchor, an Iron Age " \
+                 "epigraphic hbo stage and the contested Deir Alla ruling: 161→162"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -341,6 +345,12 @@ class PosturesTest < Minitest::Test
     # retires the five: te leaves the census (override-postured),
     # cy joins dates (emod band inference): 19→20, jv/su/br join
     # codemap (the new aliases): 14→17, pending 7→2 (lasla, sigla).
-    assert_equal({ "dates" => 20, "codemap" => 17, "identity" => 121, "pending" => 2 }, by_posture)
+    # The Linear A package's merge (2026-10-22, same day) retires sigla's
+    # pending: the lab anchor landed, sigla joins identity: 121→122,
+    # pending 2→1 (lasla alone again). memis joins dates (the
+    # inscriptions' own origDate bands): 20→21. extrabiblical joins as
+    # pending on the obm anchor + epigraphic hbo stage + the Deir Alla
+    # ruling: pending 1→2 (lasla, extrabiblical).
+    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 122, "pending" => 2 }, by_posture)
   end
 end

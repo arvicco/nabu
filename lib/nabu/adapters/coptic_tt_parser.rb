@@ -124,7 +124,8 @@ module Nabu
         "Latin" => "lat", "Egyptian" => "egy"
       }.freeze
 
-      # == The P18-1 span inventory (census over the full v6.2.0 release)
+      # == The P18-1 span inventory (census over the full v6.2.0 release;
+      # the v6.3.0 delta — 65 changed/new TT files — re-censused at re-pin)
       #
       # P17-1 verified the inventory on the 5-doc fixture corpora; the first
       # full sync quarantined 277 of 465 documents on 66 span types the
@@ -141,6 +142,9 @@ module Nabu
       ED_PAGE_TAGS = %w[ed_page_n ed_pg_n ed_page].freeze # 869×/80f, 274×/14f, 14×/2f
       ED_LINE_TAGS = %w[ed_line_n ed_lb_n].freeze # 38,285×/113f, 216×/2f
       PAGE_COPTIC_TAGS = %w[pb_coptic_id pb_coptic_xml].freeze # pistis-sophia 714×/27f + 1×
+      # v6.3.0: Pap.Copt.Mag.I_7 spells every line break lb_nb (38×/1f, its
+      # only line markers) — the same lb_n topology under another name.
+      LINE_TAGS = %w[lb_n lb_nb].freeze
 
       # Per-unit aligned spans: tag → annotation key. trans_horner is the
       # Horner translation riding beside the primary one in Pistis Sophia;
@@ -208,18 +212,34 @@ module Nabu
       #   chapter/chapter_name/chapter_2 (1-2× each) duplicate chapter naming;
       #                          the citation already comes from the meta
       #                          chapter field in those corpora.
-      IGNORED_TAGS = %w[
+      #   ATTRIBUTE ECHOES (v6.3.0 census over the 58 changed/new documents:
+      #   8 files — john-constantinople penitence 1-2, proclus 23, five
+      #   shenoute.those parts): each <norm> attribute repeated as a span of
+      #   its own inside the token (norm_func 20,011×/4f, norm_head 17,713×,
+      #   norm_xml:id 20,011×, norm_new_sent 860×) and each <entity>
+      #   attribute likewise (entity_text 3,677×/8f, entity_head_tok 3,677×).
+      #   xml:id/new_sent/entity_text echo verbatim; func and head DISAGREE
+      #   with the attribute on ~5% of tokens (1,048 func, 831 head) and
+      #   entity_head_tok on 36 entities. The <norm>/<entity> ATTRIBUTES stay
+      #   the source of record — the only layer every earlier dialect
+      #   carries — so the echoes are unstored, the disagreement disclosed
+      #   here (pinned by the shenoute.those fixture's u4: func "mark" vs
+      #   echo "case").
+      ATTRIBUTE_ECHO_TAGS = %w[
+        norm_func norm_head norm_xml:id norm_new_sent entity_text entity_head_tok
+      ].freeze
+      IGNORED_TAGS = (%w[
         multiword hi_rend figure figDesc p_n p verse_vid
         hi sup sub cb ignore_note p_source chapter chapter_name chapter_2
-      ].to_set.freeze
+      ] + ATTRIBUTE_ECHO_TAGS).to_set.freeze
 
       # Every span type with a census verdict. Anything else is a surprise
       # and still fails loudly — the widened inventory keeps the tripwire.
       KNOWN_TAGS = (%w[
-        meta cb_n lb_n verse_n verse ed_chapter_n
+        meta cb_n verse_n verse ed_chapter_n
         lang source_lang orig_group norm_group orig norm morph
         entity entity_identity note note_note verse_n_vname
-      ] + VID_TAGS + PAGE_TAGS + CHAPTER_TAGS + ED_PAGE_TAGS + ED_LINE_TAGS +
+      ] + LINE_TAGS + VID_TAGS + PAGE_TAGS + CHAPTER_TAGS + ED_PAGE_TAGS + ED_LINE_TAGS +
         PAGE_COPTIC_TAGS + ALIGNED_TAGS.keys + EDITORIAL_TAGS.keys +
         ENTITY_DETAIL_TAGS.keys + ALT_CITATION_TAGS.keys + IGNORED_TAGS.to_a).to_set.freeze
 
@@ -337,7 +357,7 @@ module Nabu
         when "ed_chapter_n" then state.ed_chapter = attrs[name]
         when *ED_LINE_TAGS then state.ed_line = attrs[name]
         when "cb_n" then state.column = attrs["cb_n"]
-        when "lb_n" then state.line_break(attrs["lb_n"])
+        when *LINE_TAGS then state.line_break(attrs[name])
         when "orig_group" then state.pending_group_orig = attrs["orig_group"]
         when "norm_group" then state.open_group(attrs)
         when "orig" then state.pending_orig = attrs["orig"]

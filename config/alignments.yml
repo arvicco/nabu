@@ -217,8 +217,9 @@ nt:
     # false-double the verse. The OT witnesses (sahidic.ot/bohairic.ot) are
     # NOT wired in v1 — upstream itself flags Septuagint versification
     # drift; spot-check Psalms/Jeremiah first (the P11-5 clean-books-first
-    # precedent), recorded as v2 in the P17-1 findings. "Not synced" until
-    # the owner-fired first `nabu sync coptic-scriptorium`.
+    # precedent), recorded as v2 in the P17-1 findings. The spot-check ran
+    # 2026-10-22 (verdicts beside the psalms work below): only the Sahidic
+    # psalter is wired.
     - label: sahidica NT (Sahidic Coptic)
       extractor: cts-verse
       documents:
@@ -411,7 +412,19 @@ ot:
         ZEC: urn:nabu:vulgate:zec
         MAL: urn:nabu:vulgate:mal
         ISA: urn:nabu:vulgate:isa  # Isaias
-        JER: urn:nabu:vulgate:jer  # Jeremias
+        # JER HELD OUT (urn:nabu:vulgate:jer stays per-witness): the
+        # Clementine Jeremias follows the HEBREW chapter order, while this
+        # work's JER token speaks Swete's GREEK order — the LXX puts the
+        # oracles against the nations at 25-31 (MT/Vulgate 46-51), so from
+        # chapter 25 on one number names two different texts. Measured
+        # read-only against the held catalog 2026-10-22: Vulgate ch. 27 has
+        # 22 verses vs Swete's 46, ch. 46 has 28 vs 8; of the 1,120
+        # Swete x Vulgate JER verse pairs the mapping minted, 551 sat in
+        # chapters 25-52 (false alignments). The numbering: remap is
+        # witness-global (it would shift every Vulgate book), so no
+        # chapter-scoped repair exists; the whole book holds out, and the
+        # 569 chapter 1-24 pairs (same order in both traditions) are the
+        # honest price until a book-scoped remap lands.
         BAR: urn:nabu:vulgate:bar
         LAM: urn:nabu:vulgate:lam
         EZK: urn:nabu:vulgate:ezk  # Ezechiel
@@ -783,3 +796,28 @@ psalms:
           - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
       documents:
         PSA: urn:nabu:peshitta:ps  # Hebrew numbering (remapped)
+    # The SAHIDIC psalter (Coptic Scriptorium's sahidic.ot, CoptOT edition,
+    # CC BY-SA 4.0 per document) — GREEK-numbered, so it aligns directly,
+    # no remap. The versification spot-check (read-only against the held
+    # catalog, 2026-10-22): 151 psalms incl. Ps 151; 137 of 151 carry
+    # Swete's exact verse set (141 the Vulgate's); Ps 22.1 is the shepherd
+    # verse and Ps 9 / 113 are the LXX joins (39 / 26 verses); content
+    # checked verse by verse on Ps 22 and 113. The 14 residual psalms
+    # differ in verse count from Swete (most match the Vulgate's: the
+    # titulus-as-verse edge the P13-5 note already discloses), so a few
+    # refs attest per-witness or sit one verse off. HELD OUT, with the
+    # same spot-check's evidence:
+    #   - the BOHAIRIC psalter (ot.pss.bohairic_ed): 0 of 151 psalms match
+    #     any witness's verse set — a title verse 0 and verse divisions
+    #     that drift inside the psalm (its 22.2 is Swete's 22.3a, its 22.7
+    #     Swete's 22.6), so a shared ref would pair different verses;
+    #   - both Coptic JEREMIAHs (ot work): the Sahidic (ot.jer.coptot,
+    #     fragmentary, 50 chapters) follows the Greek chapter order but
+    #     Brenton-style verse numbers (its ch. 32 opens at verse 15 where
+    #     Swete's opens at 32.1) — 12 of 50 chapters match Swete; the
+    #     Bohairic (ot.jer.bohairic_ed) is a hybrid, chapters 1-26 counted
+    #     like the MT and 27-39 matching no held scheme — 31 of 52.
+    - label: Sahidic psalter (CoptOT, Coptic Scriptorium)
+      extractor: cts-verse
+      documents:
+        PSA: urn:nabu:coptic-scriptorium:ot.pss.coptot  # Greek numbering

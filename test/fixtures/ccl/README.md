@@ -35,11 +35,18 @@ Sprache" + FU Berlin DDGLC).
     body-level upstream);
   - the C1494–C1500 `<superEntry>` (the ⲕⲁϩ homograph cluster — the e2e
     chain row C1494,159410,6439);
+  - entry C10766 (ⲧⲟⲡⲟⲥ, added 2026-10-22 from the held canonical copy of
+    the same v1.2 file, lifted out of its superEntry like C11273, the
+    entry's own 137 lines byte-verbatim): a DDGLC Greek loanword whose
+    `<etym>` carries the structured Greek source lemma
+    (`<ref type="greek_lemma::grl_lemma">τόπος</ref>` + grl_ID/meaning/
+    pos/ref siblings — 3,229 such entries upstream) → the borrowed grc
+    donor reflex;
   - entry C11273 (the corpus's ONE `form[@type="lemma"]`-less entry,
     lifted out of its 27 KB 26-entry superEntry — both body-level and
     superEntry-nested entry shapes exist upstream; the entry's own bytes
     are verbatim).
-  17 entries total; full census (2026-07-18): 11,284 entries, all with
+  18 entries total; full census (2026-07-18): 11,284 entries, all with
   unique `xml:id="C<n>"`, 5,417 at body level + 5,867 inside 1,181
   id-less superEntries; exactly one entry lacks a lemma form; no orth
   folds to empty.

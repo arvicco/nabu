@@ -179,8 +179,11 @@ class DerivabilityWritersTest < Minitest::Test
   # page envelopes and writes its cone.json sidecar (the drawn pages + the
   # Index verdict table, tmp+rename, a declared materialization) into
   # canonical/<slug>/ inside Adapter#fetch — the slavic_wikisource law kind.
+  # etruscan_loans vendors its repo-curated config/etruscan_loans.yml into
+  # canonical/etruscan-loans/ (byte copy, tmp+rename) inside Adapter#fetch —
+  # the sabellic_loans law kind (a declared materialization of the curation).
   WRITER_ALLOWLIST = %w[
-    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/ig_cyprus.rb
+    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/etruscan_loans.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb

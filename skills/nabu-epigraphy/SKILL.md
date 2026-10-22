@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: epigraphy
   origin: hand-tuned
-  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine ig-cyprus iip isicily itant lexlep lexlep-words nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp pleiades riig rundata siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
+  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp pleiades riig rundata siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
 ---
 
 # The Papyrologist-Epigraphist — the `epigraphy` desk
@@ -34,12 +34,14 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `edh` | EDH — Epigraphic Database Heidelberg | attribution |
 | `edr` | EDR — Epigraphic Database Roma (EpiDoc data release) | attribution |
 | `elephantine` | Elephantine — the Berlin ERC papyri and ostraca database | attribution |
+| `extrabiblical` | ETCBC extrabiblical — Non-Masoretic texts related to the Hebrew Bible (Text-Fabric tf/0.2) | nc |
 | `ig-cyprus` | IG XV 1,1 — Inscriptiones Cypri syllabicae (BBAW Inscriptiones Graecae digital edition) | attribution |
 | `iip` | Inscriptions of Israel/Palestine (Brown University) | nc |
 | `isicily` | I.Sicily — the inscriptions of ancient Sicily (Prag, Oxford / ERC Crossreads) | attribution |
 | `itant` | Corpus ItAnt — Languages and Cultures of Ancient Italy (PRIN 2017, CNR-ILC/UniFI) | nc |
 | `lexlep` | Lexicon Leponticum (LexLep) — Cisalpine Celtic inscriptions (Univ. Vienna) | nc |
 | `lexlep-words` | Lexicon Leponticum — Dictionary of Attested Forms (Univ. Vienna) | nc |
+| `memis` | MEMIS — Epigraphic corpus of Medieval and Early Modern inscriptions in Slovenia 1.0 (Pobežin, ZRC SAZU) | attribution |
 | `nabu-places` | nabu-places — the place-matching decisions registry | attribution |
 | `obi-burmese` | OBI — Structured Corpus of Old Burmese Stone Inscriptions | attribution |
 | `ociana` | OCIANA — Online Corpus of the Inscriptions of Ancient North Arabia | research_private |

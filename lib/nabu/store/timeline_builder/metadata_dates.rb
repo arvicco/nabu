@@ -141,6 +141,9 @@ module Nabu
           "elephantine" => :structured,
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
+          #                               keyed on metadata "book"); place = the find-site hash
+          #                               (ancient name + Pleiades id) the adapter's table carries
           "first1k-greek" => :edition_year_text,
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
@@ -172,6 +175,9 @@ module Nabu
           "litopys" => :era_band_key,
           "local-library" => :year_key,
           "mdz-protestant" => :structured,
+          "memis" => :structured, # the inscription's typed origDate (Slovene prose: a year,
+          #                         a day date, "1581/2", "2. pol. 15. stol."); place =
+          #                         the origPlace ("Iustinopolis (Koper)", "Piran")
           "menota" => :structured,
           "mk-wikisource" => :structured,
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header

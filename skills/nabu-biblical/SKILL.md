@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: biblical
   origin: hand-tuned
-  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss eng-web hebrew-lexicon oshb peshitta sblgnt sdbh sefaria syriac-corpus ud vulgate"
+  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss eng-web extrabiblical hebrew-lexicon oshb peshitta sblgnt sdbh sefaria syriac-corpus ud vulgate"
 ---
 
 # The Biblical scholar — the `biblical` desk
@@ -26,9 +26,10 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `betamasaheft-works` | Beta maṣāḥǝft Works — Ethiopic literature (Hiob-Ludolf-Zentrum, Hamburg) | attribution |
 | `bhsa` | BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC, Text-Fabric tf/2021) | nc |
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
-| `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.2.0) | nc |
+| `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.3.0) | nc |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
 | `eng-web` | World English Bible (eBible.org, via open-bibles) | open |
+| `extrabiblical` | ETCBC extrabiblical — Non-Masoretic texts related to the Hebrew Bible (Text-Fabric tf/0.2) | nc |
 | `hebrew-lexicon` | OSHB Hebrew Lexicon — augmented Strong's + BDB outline (openscriptures) | attribution |
 | `oshb` | Open Scriptures Hebrew Bible (Westminster Leningrad Codex + OSHM morphology) | open |
 | `peshitta` | Peshitta OT incl. deuterocanon (ETCBC, Text-Fabric tf/0.2) | nc |

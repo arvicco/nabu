@@ -7,11 +7,11 @@
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
-  members: 17
+  members: 19
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 34
+  members: 36
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -28,19 +28,19 @@
 - slug: italic
   persona: The Italicist
   blurb: the languages of pre-Roman Italy, Oscan to Etruscan to Raetic
-  members: 11
+  members: 12
 - slug: etym
   persona: The Comparative Indo-Europeanist
   blurb: laryngeals, reflex chains, the long descent of words
-  members: 13
+  members: 15
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
-  members: 15
+  members: 16
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums
-  members: 10
+  members: 11
 - slug: syriac
   persona: The Syriacist
   blurb: the Peshitta and the estrangela bookshelf
