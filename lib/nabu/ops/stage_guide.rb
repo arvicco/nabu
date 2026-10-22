@@ -243,8 +243,8 @@ module Nabu
             "Maps upstream genre and kind labels onto the house document-kind taxonomy (config/kind_map.yml) " \
             "— the axis behind `nabu kind census` and the kind filters."
       stage :passage_facets, "passage facets",
-            "Projects the passage annotations facet_map.yml names (subject classes, named entities) into the " \
-            "passage-grain facet tables."
+            "Projects the passage annotations facet_map.yml names (subject classes, named entities, the DCS " \
+            "tokens' sense ids) into the passage-grain facet tables — the index behind `nabu sense`."
       stage :entity_index, "entity index",
             "Indexes the names marked inside passage text (persons, places and other typed entities the " \
             "EpiDoc, Coptic and DHARMA parsers mine) under a folded search key — the index behind `nabu entity`."

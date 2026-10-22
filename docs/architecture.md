@@ -297,6 +297,20 @@ passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, pa
    -- text stays byte-identical. The id-bearing sources also derive
    -- person-index slices from those records (Nabu::NikhPersons: authority
    -- = source slug; `nabu person nikh:<id>` fans out across them).
+   -- The TOKEN lane (facet_map token_fields, same tables): a CoNLL-U MISC
+   -- key on the stored tokens ("tokens"[]."misc") projects each of its
+   -- comma-separated values as a passage facet value — first producer
+   -- DCS's WordSem sense ids (531,573 gold tokens, 20,158 ids, census of
+   -- the box's tree 2026-10-22), facet "sense", ref the dcs-senses entry
+   -- urn (urn:nabu:dict:dcs-senses:<id> — upstream's readme: WordSem ids
+   -- are word-senses.csv's first column). Multi-id tokens keep every id.
+   -- GRAIN, deliberately: the pair says which PASSAGE cites a sense; the
+   -- surface has no token slot, so `nabu sense` (Query::Senses: id, or a
+   -- name/gloss resolved to entry urns in the shelf, then the pair
+   -- ranges) and `show --senses` read WHICH token from the listed
+   -- passages' own stored tokens — at most --limit passages parsed, never
+   -- a scan. A token-grain table (position, sense) would be a new
+   -- migration; nothing reads at that grain yet.
 passage_entity_names(id, source_id, type, text, identity, key, ref, subtype, search_key)
 passage_entities(name_id, passage_id)         -- WITHOUT ROWID, PK (name_id, passage_id)
    -- Migration 049: the inline-entity index — the "entities" passage
