@@ -599,6 +599,13 @@ sources:
       #                         same axis name as the document facet (the itkc precedent)
       author: author          # coptic-bohairic meta::author, newdoc-scoped (Paul the apostle ·
       #                         Mena of Pshati · Palladius · "N/A"/"unknown" — upstream's claims)
+  lotsawa-house:              # sample census of canonical/lotsawa-house 2026-10-22 (354 of 6,388
+    fields: #                   pages, 40 per language): every sampled page carries its topic
+      #                         tags, ~2.5 per page, one label per /topics/ slug
+      topic_labels: topic_label  # the site's own topic NAME in the page's language, verbatim
+      #                         (bo གསོལ་འདེབས། · en Prayers · de Gebete · es Oraciones · fr Prières
+      #                         d'aspiration …; some translation pages keep English labels) —
+      #                         the language-independent slugs ride the adapter's topic facet
   # -- the dictionary-entry grain (entry_fields → Store::EntryFacetBuilder) --
   # Keys name dictionary_entries.annotations_json fields the adapter mines
   # per ENTRY; values project verbatim, one pair per (entry, value).
