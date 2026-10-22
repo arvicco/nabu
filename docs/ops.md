@@ -57,7 +57,9 @@ What each command does and its exit contract:
   owner shelves) fold into one rollup line; `--all` restores the full
   board. Collapse and stale judge only the live-cadence population (wired,
   `sync_policy: auto`, kind `source`) — frozen/manual upstreams, shelves,
-  and modules read 0-added as healthy. Dangling place refs verified
+  and modules read 0-added as healthy; collapse also waits until the
+  trailing 0-added streak spans a day of wall clock (same-session
+  re-syncs never arm it). Dangling place refs verified
   against live Pleiades are recorded in `config/place_ref_errata.yml` and
   report as one info rollup; unreviewed ones stay loud. One summary line,
   with elapsed.
