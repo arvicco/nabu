@@ -64,7 +64,7 @@ module Nabu
       "aclt" => [Spec.new(key: "gloss")],
       "cdli" => [ATF_TR],
       "coptic-scriptorium" => %w[translation translation_ar translation_de translation_horner]
-        .map { |key| Spec.new(key: key) },
+                              .map { |key| Spec.new(key: key) },
       "corph" => [Spec.new(key: "translation")],
       "corpus-oudnederlands" => [Spec.new(key: "translation", reject: OUDNEDERLANDS_TODO)],
       "diccas" => [Spec.new(key: "gloss_en")],

@@ -92,9 +92,7 @@ module Nabu
             sources += 1
           end
         end
-        if stamp
-          Indexer.stamp_stages!(fulltext, versions: { STAGE => Indexer::STAGE_VERSIONS.fetch(STAGE) })
-        end
+        Indexer.stamp_stages!(fulltext, versions: { STAGE => Indexer::STAGE_VERSIONS.fetch(STAGE) }) if stamp
         { passages: total, sources: sources }
       end
 
