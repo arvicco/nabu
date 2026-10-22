@@ -174,13 +174,16 @@ module Nabu
       # The geography sidecar is fetched beside upstream's tree (class note).
       def self.materialized_paths = GEOGRAPHY.keys
 
-      # EDH ↔ EDR same-artifact edges (Nabu::EdhEdrSameArtifact) re-derive
-      # after every edh sync — the shared Trismegistos numbers join the two
-      # editions of one stone; edr declares the same producer and scope.
+      # Two reference producers re-derive after every edh sync, composed
+      # (Nabu::EdhReferences): the EDH ↔ EDR same-artifact edges
+      # (Nabu::EdhEdrSameArtifact — the shared Trismegistos numbers join the
+      # two editions of one stone; edr declares the same producer and scope)
+      # and EDH's own AE/CIL citations + GODOT calendar-date records
+      # (Nabu::EdhCitations, from the literature/godot_uris metadata).
       def self.reference_edges? = true
 
       def self.reference_producer(catalog:, journal:)
-        Nabu::EdhEdrSameArtifact.new(catalog: catalog, journal: journal)
+        Nabu::EdhReferences.new(catalog: catalog, journal: journal)
       end
 
       # The geography sidecar derives the tm→pleiades place crosswalk at

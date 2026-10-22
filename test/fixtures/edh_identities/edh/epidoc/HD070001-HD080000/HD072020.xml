@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Votive inscription from Siscia &amp;ndash; Sisak (Pannonia superior)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>Epigraphische Datenbank Heidelberg</authority>
+                <availability>
+                    <p>Heidelberger Akademie der Wissenschaften</p>
+                    <licence target="http://creativecommons.org/licenses/by-sa/4.0/">This file is licensed under the Creative Commons Attribution-ShareAlike 4.0 license.
+                    </licence>
+                </availability>
+            <idno type="localID">HD072020</idno><idno type="URI">https://edh-www.adw.uni-heidelberg.de/test/edh/inschrift/HD072020</idno></publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>verschollen</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><objectType ref="#">altar?</objectType><rs type="deccoration" ref="http://www.eagle-network.eu/voc/decor/lod/1000">no</rs></support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>description of text field/campus</layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc><ab/></handDesc>
+                    </physDesc>
+                    <history>
+                        <origin><origPlace><placeName type="province">Pannonia superior</placeName><placeName type="ancient" ref="https://pleiades.stoa.org/places/197504">Siscia</placeName></origPlace><origDate><origDate when-custom="0217" datingMethod="http://en.wikipedia.org/wiki/Julian_calendar">217 AD</origDate></origDate></origin>
+                        <provenance type="found" when="1862"><placeName type="country" ref="https://www.geonames.org/3202326">Croatia</placeName><placeName type="modern" ref="http://www.geonames.org/3190813">Sisak</placeName><placeName type="findspot"/><placeName type="region">Sisačko-moslavačka županija</placeName></provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+             <p>Encoded following EpiDoc guidelines 9.2</p>
+        </encodingDesc>             
+        <profileDesc>
+            <langUsage>
+                <language ident="en">English</language>
+                <language ident="de">Deutsch</language>
+                <language ident="lat">Latin</language>
+            </langUsage>
+            <textClass>
+                <keywords><term ref="http://www.eagle-network.eu/voc/typeins/lod/372">votive inscription</term></keywords>
+            </textClass>
+            <particDesc><p><listPerson><person xml:id="HD072020_1" sex="M"><persName ref="http://romans1by1.com/rpeople/18364"><name type="praenomen">L.</name><name type="nomen">Domitius</name><name type="cognomen">Constitutus</name></persName></person><person xml:id="HD072020_2" sex="M"><persName><name type="cognomen">Praesens*</name></persName></person><person xml:id="HD072020_3" sex="M"><persName><name type="cognomen">Extricatus+</name></persName></person></listPerson></p></particDesc>
+        </profileDesc>
+        <revisionDesc><change when="2015-07-31" who="Gräf">checked with drawing</change></revisionDesc>
+    </teiHeader>
+    <facsimile><graphic url="#"/></facsimile>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve"><head>Text</head><ab><lb n="1"/>
+                Marti &amp;lt;et=RI&amp;gt; <lb n="2"/>Victoria<supplied reason="lost">e</supplied> <lb n="3"/><expan><abbr>L</abbr><ex>ucius</ex></expan> Dom&amp;lt;i=T&amp;gt;tius <lb n="4"/>Constitu<lb break="no" n="5"/>tus <expan><abbr>mil</abbr><ex>es</ex></expan> <expan><abbr>leg</abbr><ex>ionis</ex></expan> X <lb n="6"/><expan><abbr>gem</abbr><ex>inae</ex></expan> <expan><abbr>be</abbr><ex>neficiarius</ex></expan> co<expan><ex>n</ex><abbr>s</abbr><ex>ularis</ex></expan> <lb n="7"/><expan><abbr>v</abbr><ex>otum</ex></expan> <expan><abbr>s</abbr><ex>olvit</ex></expan> &amp;lt;l=I&amp;gt;(ibens) <expan><abbr>m</abbr><ex>erito</ex></expan> XI <expan><abbr>K</abbr><ex>alendas</ex></expan> <expan><abbr>Iun</abbr><ex>ias</ex></expan> <lb n="8"/><expan><abbr>Praesen</abbr><ex>te</ex></expan> &amp;lt;e=F&amp;gt;t Extri<lb break="no" n="9"/><supplied reason="lost">cato <expan><abbr>co</abbr><ex>n</ex><abbr>s</abbr><ex>ulibus</ex></expan></supplied> 
+            </ab></div>
+            <div type="commentary">
+                <p>Altar oder Basis. (B): CIL 03, 15180: Z. 3: Domitius; AE 1901: Z. 3: Domittius; Z. 7: l(ibens); Z. 8: et.</p>
+            </div>
+            <div type="bibliography">
+                <listBibl><bibl>AE 1901, 0234. (B)</bibl><bibl>CIL 03, 15180. (B)</bibl><bibl>J. Brunšmid, VHAD 3, 1898/99, 198; sl. 93 (Zeichnung). - AE 1901.</bibl><bibl>E. Schallmayer - K. Eibl - J. Ott - G. Preuß - E. Wittkopf, Der römische Weihebezirk von Osterburken 1 (Stuttgart 1990) 252-253, Nr. 306; Zeichnung.</bibl><bibl>PIR (2. Aufl.) B 166.</bibl><bibl>PIR (2. Aufl.) M 518.</bibl><bibl/></listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>
