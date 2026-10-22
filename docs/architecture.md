@@ -396,6 +396,18 @@ language_mix(document_id, source_id, urn, languages, language_count, switches)
    -- after `lemma-enrich --index-only`; read by `nabu lemma` and
    -- `nabu language --curve/--mixing`, which answer an absent or unbuilt
    -- rollup with the refresh hint, never a scan.
+sign_concordances(oid, scheme, key, value, asset, via)   -- index (oid)
+   -- Migration 051: the concordance assets riding in the held OSL repo's
+   -- 00etc (Wikidata printed-list concordances — Labat, AKS, ATU1 and
+   -- twenty more — the oid-keyed AKS table, MZL↔KWU, PGSL, eBL sign
+   -- names, Wikidata item ids, the Attinger / short-form / ŋ-less value
+   -- maps) joined onto the OSL @oid ids. Written by Store::SignConcordances
+   -- (f(canonical/osl), drop-and-reproject; both rebuild flavors + the osl
+   -- post-sync hook — the hiero_postings mold; a builder file). Every
+   -- source row joins or is censused with a reason in the builder's
+   -- summary. Read by the cuneiform sign card (`nabu char`, MCP
+   -- nabu_char) as one indexed lookup per card — the additive
+   -- `concordances` key of the frozen sign-card contract.
 ```
 
 **The write-time doctrine (P42-0):** anything O(corpus) runs at write time;

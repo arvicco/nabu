@@ -10,8 +10,10 @@ module Nabu
       identity out — dispatched by script. A Han character gets the P37-4
       dictionary-shelf card below; a CUNEIFORM glyph (𒊬, compounds like
       𒋀𒀊 included) gets the OSL sign card (name · @aka · MZL/LAK/ABZL/
-      HZL/ŠL list concordances · values by language · CDLI meaning glosses ·
-      variant forms · fulltext attestation); an EGYPTIAN HIEROGLYPH (𓅃)
+      HZL/ŠL list concordances · the OSL 00etc concordances: Labat/AKS/ATU/
+      PGSL, MZL↔KWU, eBL names, Attinger/short-form value maps · values by
+      language · CDLI meaning glosses · variant forms · fulltext
+      attestation); an EGYPTIAN HIEROGLYPH (𓅃)
       gets the Unikemet card (Gardiner-plus catalog code · description ·
       function · phonetic value · JSesh/Hieroglyphica/IFAO concordances ·
       aes corpus attestation). Multi-character input is the sign-NAME lane,
@@ -769,6 +771,7 @@ module Nabu
         say "form of #{card.parent} — nabu char '#{card.parent}'" if card.parent
         say "aka: #{card.aka.join(' · ')}" if card.aka.any?
         print_sign_card_lists(card)
+        print_sign_card_concordances(card)
         print_sign_card_values(card)
         print_sign_card_glosses(card)
         print_sign_card_senses(card)
@@ -840,6 +843,37 @@ module Nabu
 
         say ""
         say "sign lists: #{card.lists.map { |list, nums| "#{list} #{nums.join(',')}" }.join('  ·  ')}"
+      end
+
+      # The OSL 00etc concordance block (precompiled sign_concordances
+      # rows): the headline lists (Labat/AKS/ATU1/PGSL) on the head line,
+      # the other Wikidata lists, MZL↔KWU, eBL names, Wikidata ids, then
+      # the value maps — each line only where a row backs it.
+      def print_sign_card_concordances(card)
+        block = card.concordances or return
+
+        say ""
+        headline = Nabu::Query::SignCard::HEADLINE_LISTS
+        # Several numbers in one list join with "; " — upstream cells carry
+        # their own commas ("DP 138,VI").
+        head = block.lists.slice(*headline).map { |list, nums| "#{list} #{nums.join('; ')}" }
+        say "concordances (OSL 00etc)#{": #{head.join('  ·  ')}" unless head.empty?}"
+        rest = block.lists.except(*headline)
+        say "  more lists (Wikidata): #{rest.map { |list, nums| "#{list} #{nums.join('; ')}" }.join('  ·  ')}" \
+          unless rest.empty?
+        unless block.mzl_kwu.empty?
+          pairs = block.mzl_kwu.map { |mzl, kwu| "#{mzl || '(no MZL)'}↔#{kwu || '(KWU unnumbered)'}" }
+          say "  MZL↔KWU: #{pairs.join('  ·  ')}"
+        end
+        say "  eBL name: #{block.ebl.join(' · ')}" unless block.ebl.empty?
+        say "  Wikidata: #{block.wikidata.join(' · ')}" unless block.wikidata.empty?
+        return if block.value_maps.empty?
+
+        maps = block.value_maps.map do |scheme, pairs|
+          label = Nabu::Query::SignCard::VALUE_MAP_LABELS.fetch(scheme, scheme)
+          "#{label} #{pairs.map { |from, to| "#{from}→#{to}" }.join(', ')}"
+        end
+        say "  value maps: #{maps.join('  ·  ')}"
       end
 
       def print_sign_card_values(card)

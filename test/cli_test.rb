@@ -5038,6 +5038,36 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The OSL 00etc concordance block on the cuneiform sign card: read from
+  # the precompiled sign_concordances rows, rendered beside the @list
+  # concordances; a sign no asset joins prints no block at all.
+  def test_char_card_renders_the_osl_concordance_block
+    with_sign_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char AK]) }
+      assert_nil status
+      assert_match(/^concordances \(OSL 00etc\): Labat 097  ·  AKS 70  ·  PGSL 045$/, out)
+      assert_match(/^  more lists \(Wikidata\): ABZ 97  ·  ABZL 052  ·  ELLES 053/, out)
+      assert_match(/^  MZL↔KWU: 127↔073$/, out)
+      assert_match(/^  eBL name: AK$/, out)
+      assert_match(/^  Wikidata: Q87555054$/, out)
+      assert_match(/^  value maps: short forms ak→a₅, ag→a₅$/, out)
+      assert_operator out.index("sign lists:"), :<, out.index("concordances (OSL 00etc)"),
+                      "the block rides beside the @list line"
+
+      out, _err, status = with_config(config) { run_cli(%w[char MIN]) }
+      assert_nil status
+      assert_match(/^  MZL↔KWU: 825↔\(KWU unnumbered\)$/, out)
+
+      out, _err, status = with_config(config) { run_cli(["char", "|A×AN|"]) }
+      assert_nil status
+      refute_match(/concordances/, out, "no joined row → no block, never an empty frame")
+
+      out, _err, status = with_config(config) { run_cli(%w[char AK --json]) }
+      assert_nil status
+      assert_equal ["097"], JSON.parse(out).dig("card", "concordances", "lists", "Labat")
+    end
+  end
+
   # P75 C-1: a namespaced --place is the identity lane — the ref matches in
   # any spelling, and the note names the lane on the page.
   def test_search_place_mint_filters_by_identity_and_notes_the_lane
@@ -9099,9 +9129,11 @@ class CLITest < Minitest::Test
       FileUtils.mkdir_p(osl_dir)
       FileUtils.cp(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"),
                    File.join(osl_dir, "osl.asl"))
+      FileUtils.cp_r(File.join(Nabu::TestSupport.fixtures("osl"), "00etc"), File.join(config.canonical_dir, "osl"))
       catalog = Nabu::Store.connect(config.catalog_path)
       Nabu::Store.migrate!(catalog)
       Nabu::Store.setup!(catalog)
+      Nabu::Store::SignConcordances.rebuild!(catalog: catalog, canonical_dir: config.canonical_dir)
       src = catalog[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "TestAdapter",
                                      license_class: "open", enabled: true)
       { "urn:c:a" => "lugal ag dumu", "urn:c:b" => "nu banda" }.each do |urn, text|
