@@ -146,6 +146,9 @@ module Nabu
           #                               (ancient name + Pleiades id) the adapter's table carries
           "first1k-greek" => :edition_year_text,
           "fornsvenska" => :compact_date_keys,
+          "freising" => :structured, # the edition's own witness dating of the Clm 6426 record
+          #                            (Kos: 972–1039, artifact class) on the transcription
+          #                            layers; the modern translation siblings stay undated
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
           "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
