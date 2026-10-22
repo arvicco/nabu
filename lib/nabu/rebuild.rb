@@ -256,6 +256,12 @@ module Nabu
         Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
                                              progress: progress)
       end
+      # The OSL 00etc sign concordances: f(canonical/osl) — an absent
+      # cone yields the honest empty table.
+      progress&.stage("sign concordances")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :sign_concordances) do
+        Store::SignConcordances.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
+      end
       # P89-1 (owner ruling option c): the corpus builders just ran against the current
       # code — mint their sentinel so an incremental run can skip them
       # honestly until a builder file actually changes.

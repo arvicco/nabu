@@ -79,9 +79,10 @@ module Nabu
     #   majority stays absent — lean keys, upstream truth preserved.
     # - "analyses" lists every candidate analysis/@morph in file order.
     #   These are Perseus-style prose morph strings ("fem acc sg (attic epic
-    #   ionic)"), a THIRD morphology dialect — deliberately NOT wired into
-    #   the --morph façade in this packet (MorphFacets speaks UD + PROIEL;
-    #   honest absence over a wrong mapping).
+    #   ionic)"), a THIRD morphology dialect — decoded by the --morph
+    #   façade's scoped diorisis row (MorphFacets DECODERS; 76.1% of
+    #   analyses carry at least one facet, the rest are indeclinables and
+    #   dialect labels, censused there).
     # - punct contributes to text only, never a token — the Indexer's
     #   surface_forms and the fold contract see words exactly.
     class DiorisisParser

@@ -517,6 +517,10 @@ module Nabu
         # of its own: a stage label lives in RebuildProfile (the shared
         # derivation core), whose edit would dirty every source stamp.
         rebuild_clarify!(catalog: catalog, fulltext: fulltext)
+        # The translations lane (annotation-held translations,
+        # Store::TranslationIndex): a scoped pass over the registry's
+        # sources — same umbrella-stage stance as clarify above.
+        TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext)
         # P87-3: the reference path stamps every stage at its current
         # derivation version — the incremental path's comparison baseline.
         stamp_stages!(fulltext)
@@ -787,6 +791,11 @@ module Nabu
         # The clarify lane's slice (names only — cheap; skipped on a
         # fulltext predating the lane, which the reconcile/rake path builds).
         refresh_clarify_source!(catalog: catalog, fulltext: fulltext, slug: slug)
+        # The translations lane's slice (registry sources only; hands-off
+        # on a fulltext predating the lane — no bootstrap, the clarify
+        # stance). Rides the load's delta when this refresh does.
+        TranslationIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
+                                         delta: (delta if use_delta))
         # P112-3: the finish stamp records the catalog state this slice now
         # serves — health's freshness cross-check reads it back.
         live_rows, max_id = source_live_stats(catalog, slug)
@@ -1467,14 +1476,19 @@ module Nabu
         "reflex" => "v1",
         # The clarify lane (nabu_clarify): an index stamped before it existed
         # reads stale here, so `--incremental` builds it standalone.
-        "clarify" => "v1"
+        "clarify" => "v1",
+        # The translations lane (Store::TranslationIndex): an index
+        # stamped before it existed reads stale here, so `--incremental`
+        # (or `rake index:translations`) builds it standalone.
+        "translations" => "v1"
       }.freeze
 
       # The stages reconcile_stages! can re-derive standalone against a
       # kept catalog. A stale stage OUTSIDE this set (fts_lemma — the
       # composite streaming pass; trigram — its scope memory) refuses
       # loudly: a full rebuild is the honest answer there.
-      RECONCILABLE_STAGES = %w[char_postings cjk passage_chars sign_coverage alignment reflex clarify].freeze
+      RECONCILABLE_STAGES = %w[char_postings cjk passage_chars sign_coverage alignment reflex clarify
+                               translations].freeze
 
       def stamp_stages!(fulltext, versions: STAGE_VERSIONS)
         create_stage_stamps_table(fulltext)
@@ -1552,6 +1566,7 @@ module Nabu
             AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
           when "reflex" then ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
           when "clarify" then rebuild_clarify!(catalog: catalog, fulltext: fulltext)
+          when "translations" then TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext)
           end
           stamp_stages!(fulltext, versions: { stage => versions.fetch(stage) })
         end

@@ -62,10 +62,17 @@ Give **exactly one** of:
   gender, person, tense, mood, voice, degree; values `dat`, `pl`/`sg`, `masc`,
   `aor`, `opt`, `sub`…) — keeps only attestations with that morphology, each hit
   returning the decoded `morph` evidence. UD treebanks match on their `feats`;
-  PROIEL/TOROT positional tags and GLAUx's AGDT `postag` are decoded into the
-  same names; ORACC
+  PROIEL/TOROT positional tags, GLAUx's AGDT `postag`, Diorisis `analyses`,
+  BHSA/DSS (ETCBC/Abegg) word features, OSHB `morph`, CorA `msd` (ReM/ReN), IMP
+  `msd` (goo300k) and Menota `msa` are decoded into the same names (Hebrew/
+  Aramaic add `state`, `stem`, `conjugation` — conventions §6.1); ORACC
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
+  Lemma hits from sources that store upstream's own token gloss (bhsa,
+  achemenet: English; aes, tlhdig: German) carry `token_gloss`; an optional
+  `gloss` word (also only with `lemma`, composing with `morph`, not `near`)
+  keeps only attestations whose token gloss contains it — `lemma` "דבר" +
+  `gloss` "word" separates BHSA's consonantal homograph from "speak".
 - `similar_to` — a passage urn: its **semantic** neighbours instead of a text
   search (P93-5), read from the local vector store that `nabu embed` builds
   ([embed.md](embed.md)) — other witnesses of a verse, passages saying the

@@ -27,8 +27,10 @@ Nabu is the hub of a family of small sibling repos, each a `kind: module` source
 ## Commands
 
 ```
-rake test                 # full suite (must pass before any commit)
-rake test TEST=test/adapters/perseus_test.rb
+rake test                 # full suite (must pass before any commit) — parallel worker processes
+                          #   (NABU_TEST_WORKERS=n overrides Etc.nprocessors; NABU_TEST_SERIAL=1 or
+                          #   `rake test:serial` = the classic single process; NABU_TEST_TRACE=1 per-job timings)
+rake test TEST=test/adapters/perseus_test.rb   # one file, single process
 rake lint                 # rubocop
 rake lint:fix             # rubocop -a (safe corrections only)
 bin/nabu --help

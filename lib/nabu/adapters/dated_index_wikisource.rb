@@ -135,7 +135,12 @@ module Nabu
       def cone_index_names(progress)
         names = all_index_names
         progress&.call("Indexes on the wiki: #{names.size}\n")
-        fetch_indexes(names).filter_map { |name, index| name if cone_index?(name, index.fetch("fields")) }.sort
+        fetch_indexes(names).filter_map do |name, index|
+          fields = index.fetch("fields")
+          in_cone = cone_index?(name, fields)
+          record_index_verdict(name, year: fields[self.class::INDEX_FIELDS.fetch("year")], in_cone: in_cone)
+          name if in_cone
+        end.sort
       end
 
       # Every Index page name (namespace stripped); Index SUBPAGES (the

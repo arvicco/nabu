@@ -201,6 +201,32 @@ class LotsawaHouseTest < Minitest::Test
     db&.disconnect
   end
 
+  # The topic tags' page-language labels (metadata topic_labels — one per
+  # slug, the site's localized topic names) project as their own facet
+  # through config/facet_map.yml, beside the language-independent slug facet.
+  def test_topic_labels_project_as_the_topic_label_facet
+    db = store_test_db
+    source = Nabu::Store::Source.create(slug: "lotsawa-house", name: "Lotsawa House",
+                                        adapter_class: "Nabu::Adapters::LotsawaHouse", license_class: "nc")
+    Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: FIXTURES, full: true)
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "topic_labels" => "topic_label" }, map.fields_for("lotsawa-house"))
+    Nabu::Store::FacetBuilder.refresh_source!(catalog: db, slug: "lotsawa-house", facet_map: map)
+    labels = lambda do |urn|
+      id = db[:documents].where(urn: urn).get(:id)
+      db[:document_facets].where(document_id: id, facet: "topic_label").select_map(:value).sort
+    end
+    bo = labels.call("#{URN}bo:tibetan-masters/mipham/instruction-on-point-of-mind")
+    en = labels.call("#{URN}en:tibetan-masters/mipham/instruction-on-point-of-mind")
+    assert_equal 3, bo.size, "one label per topic slug"
+    assert(bo.all? { |label| label.match?(/\p{Tibetan}/) }, "the Tibetan page's labels are Tibetan: #{bo.inspect}")
+    assert_includes en, "Dzogchen", "the English page's labels are English"
+    slugs = db[:document_facets].where(facet: "topic").count
+    assert_operator slugs, :>, 0, "the slug facet still rides beside the labels"
+  ensure
+    db&.disconnect
+  end
+
   # --- fetch wiring ---------------------------------------------------------------
 
   def test_fetch_scope_follows_the_translations_posture

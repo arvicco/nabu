@@ -112,6 +112,103 @@ module Adapters
       assert_in_delta 0.0, Nabu::Adapters::CyWikisource.new.foreign_share(dutch), 1e-9, "cy measures nothing"
     end
 
+    # -- the persisted cone (cone.json) ------------------------------------
+    #
+    # A parse-only pass must re-derive exactly the live cone from the tree
+    # alone. Regression shape (2026-10-21, br-wikisource): a fetch cut off
+    # by a transport timeout had already rewritten the 643 envelopes that
+    # sort before the failing batch as stage-1 shells (wikitext only — no
+    # Index evidence, no rendering); the next parse-only pass classed them
+    # edition_unstated and would have withdrawn them.
+
+    def fetched_tree(dir)
+      stub_api
+      ADAPTER.new(delay: 0).fetch(dir)
+    end
+
+    def tree_bytes(dir)
+      files = Dir.glob(File.join(dir, "**", "*"), File::FNM_DOTMATCH).select { |path| File.file?(path) }
+      files.to_h { |path| [path, File.binread(path)] }
+    end
+
+    def discovered(dir) =ADAPTER.new.discover(dir).map { |ref| ref.metadata["title"] }.sort
+
+    def test_fetch_persists_the_index_verdicts_and_parse_only_discovery_equals_live
+      Dir.mktmpdir do |dir|
+        live = ADAPTER.new(delay: 0)
+        stub_api
+        live.fetch(dir)
+        cone = JSON.parse(File.read(File.join(dir, Nabu::Adapters::IndexedWikisource::CONE_FILE)))
+        assert_equal({ "1" => "Serat Lawas", "2" => "Serat Campur", "3" => "Serat Wulangreh", "4" => "Kakawin" },
+                     cone.fetch("pages"))
+        verdicts = cone.fetch("indexes").transform_values { |row| row.fetch("in_cone") }
+        assert_equal({ "Kajawen 1927.pdf" => false, "Serat Lawas 1848.pdf" => true, "Serat Wulangreh.pdf" => true,
+                       "Tanpa Taun.pdf" => false, "Wretansacaya (Kern 1875).pdf" => true }, verdicts,
+                     "every walked Index with its verdict — the year evidence rides beside it")
+        assert_equal "1927", cone.dig("indexes", "Kajawen 1927.pdf", "year")
+
+        live_titles = live.discover(dir).map { |ref| ref.metadata["title"] }.sort
+        assert_equal ["Kakawin", "Serat Lawas", "Serat Wulangreh"], live_titles
+        assert_equal live_titles, discovered(dir), "a fresh parse-only adapter re-derives the live cone"
+        assert_equal 0, ADAPTER.new.discovery_skips(dir).unrecognized, "the sidecar is no stray"
+      end
+    end
+
+    def test_the_cone_sidecar_is_a_declared_materialization_on_every_indexed_cone
+      [Nabu::Adapters::JvWikisource, Nabu::Adapters::SuWikisource, Nabu::Adapters::CyWikisource,
+       Nabu::Adapters::BrWikisource, Nabu::Adapters::TeWikisource, Nabu::Adapters::GuWikisource,
+       Nabu::Adapters::MsWikisource, Nabu::Adapters::ThWikisource].each do |klass|
+        assert_includes klass.materialized_paths, Nabu::Adapters::IndexedWikisource::CONE_FILE, klass.name
+      end
+    end
+
+    def test_an_interrupted_fetch_leaves_the_prior_tree_intact
+      Dir.mktmpdir do |dir|
+        fetched_tree(dir)
+        before = tree_bytes(dir)
+        WebMock.reset!
+        stub_api
+        stub_request(:get, API).with(query: hash_including("action" => "parse")).to_return(status: 503)
+        assert_raises(Nabu::FetchError) { ADAPTER.new(delay: 0).fetch(dir) }
+        assert_equal before, tree_bytes(dir), "no stage writes a half-built envelope into canonical"
+        assert_equal ["Kakawin", "Serat Lawas", "Serat Wulangreh"], discovered(dir)
+      end
+    end
+
+    def test_a_stage_one_shell_fails_discovery_loudly_with_or_without_the_sidecar
+      Dir.mktmpdir do |dir|
+        fetched_tree(dir)
+        path = File.join(dir, "pages", "1.json")
+        shell = JSON.parse(File.read(path)).slice("title", "pageid", "ns", "revid", "timestamp", "cone", "wikitext")
+        File.write(path, JSON.pretty_generate(shell))
+        error = assert_raises(Nabu::FetchError) { discovered(dir) }
+        assert_match(/1 envelope\(s\) lack the Index stage/, error.message)
+        File.delete(File.join(dir, Nabu::Adapters::IndexedWikisource::CONE_FILE))
+        assert_raises(Nabu::FetchError) { discovered(dir) }
+      end
+    end
+
+    def test_a_sidecar_page_without_its_envelope_fails_discovery_loudly
+      Dir.mktmpdir do |dir|
+        fetched_tree(dir)
+        File.delete(File.join(dir, "pages", "3.json"))
+        error = assert_raises(Nabu::FetchError) { discovered(dir) }
+        assert_match(/1 page\(s\) the last fetch drew have no envelope/, error.message)
+      end
+    end
+
+    def test_an_envelope_outside_the_persisted_cone_skips_by_rule
+      Dir.mktmpdir do |dir|
+        fetched_tree(dir)
+        stale = JSON.parse(File.read(File.join(dir, "pages", "1.json"))).merge("pageid" => 9, "title" => "Lawas Lami")
+        File.write(File.join(dir, "pages", "9.json"), JSON.pretty_generate(stale))
+        assert_equal ["Kakawin", "Serat Lawas", "Serat Wulangreh"], discovered(dir),
+                     "a page the last fetch no longer drew (it left the cone upstream) is not re-admitted"
+        notes = ADAPTER.new.discovery_skips(dir).notes
+        assert(notes.any? { |note| note.start_with?("1 page(s) outside the cone the last fetch drew") }, notes.inspect)
+      end
+    end
+
     def test_fetch_failure_is_a_fetch_error
       stub_request(:get, /jv\.wikisource\.org/).to_return(status: 503)
       Dir.mktmpdir do |dir|

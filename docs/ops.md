@@ -57,7 +57,9 @@ What each command does and its exit contract:
   owner shelves) fold into one rollup line; `--all` restores the full
   board. Collapse and stale judge only the live-cadence population (wired,
   `sync_policy: auto`, kind `source`) — frozen/manual upstreams, shelves,
-  and modules read 0-added as healthy. Dangling place refs verified
+  and modules read 0-added as healthy; collapse also waits until the
+  trailing 0-added streak spans a day of wall clock (same-session
+  re-syncs never arm it). Dangling place refs verified
   against live Pleiades are recorded in `config/place_ref_errata.yml` and
   report as one info rollup; unreviewed ones stay loud. One summary line,
   with elapsed.
@@ -634,7 +636,7 @@ On this box run them as `bundle exec rake …` (§2).
 
 | Task | What / when | Notes |
 |---|---|---|
-| `rake test` | Full offline suite. Before every commit; the gate. | Never piped — read the tail. |
+| `rake test` | Full offline suite. Before every commit; the gate. Runs as parallel worker processes (test/parallel/runner.rb: files batched, heavy files sharded by method, scheduled heaviest-first from `tmp/test-timings.json`) and prints ONE Minitest-shaped summary line; a worker that dies counts as an error and its log is printed. | Never piped — read the tail. `NABU_TEST_WORKERS=n` (default: CPU count); `NABU_TEST_SERIAL=1` or `rake test:serial` = the classic single process; `TEST=path` always single-process; `NABU_TEST_TRACE=1` per-job timings. |
 | `rake lint` / `rake lint:fix` | RuboCop / with safe autocorrections. The gate's second half. | `lint:fix` applies safe cops only. |
 | `rake census:check` | Era-bound literals carry `# census:`/`# const:` markers. Runs in the gate. | Miss = exit 1; recalibration doctrine (dev-loop §6b). |
 | `rake fixtures:check[source]` | Re-fetch upstream samples, drift-check against checked-in fixtures. Monthly cadence (§1); never overwrites. | Network; owner-fired. |

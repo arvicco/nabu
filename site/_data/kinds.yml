@@ -19,9 +19,9 @@ classes:
   documents_display: '114,915'
   sources: 10
 - head: legal
-  documents: 37559
-  documents_display: '37,559'
-  sources: 20
+  documents: 37143
+  documents_display: '37,143'
+  sources: 19
 - head: letter
   documents: 34758
   documents_display: '34,758'
@@ -31,9 +31,9 @@ classes:
   documents_display: '30,134'
   sources: 4
 - head: scripture
-  documents: 24183
-  documents_display: '24,183'
-  sources: 25
+  documents: 23108
+  documents_display: '23,108'
+  sources: 24
 - head: dedicatory
   documents: 22915
   documents_display: '22,915'
@@ -47,9 +47,9 @@ classes:
   documents_display: '16,738'
   sources: 13
 - head: ritual
-  documents: 14157
-  documents_display: '14,157'
-  sources: 9
+  documents: 14069
+  documents_display: '14,069'
+  sources: 8
 - head: scholarly
   documents: 13315
   documents_display: '13,315'
@@ -91,13 +91,13 @@ classes:
   documents_display: '2,322'
   sources: 3
 - head: exegesis
-  documents: 1562
-  documents_display: '1,562'
-  sources: 8
-unclassified_sources: 129
+  documents: 1171
+  documents_display: '1,171'
+  sources: 7
+unclassified_sources: 130
 unknown_documents: 47047
 unknown_documents_display: '47,047'
 unmapped_documents: 11441
 unmapped_documents_display: '11,441'
-unclassified_documents: 488079
-unclassified_documents_display: '488,079'
+unclassified_documents: 490049
+unclassified_documents_display: '490,049'
