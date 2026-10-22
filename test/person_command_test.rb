@@ -70,6 +70,41 @@ class PersonCommandTest < Minitest::Test
     end
   end
 
+  # A name with no derived-authority card still answers from the
+  # person-shaped document facets, each value with its sources (real
+  # catalogue values: the oracc/cdli ruler facet).
+  def test_person_lists_catalogue_mentions_with_their_sources
+    Dir.mktmpdir("nabu-cli-person") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: File.join(root, "config", "nabu.yml"))
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      { "cdli" => 2, "oracc" => 1 }.each do |slug, docs|
+        source = catalog[:sources].insert(slug: slug, name: slug, adapter_class: "T", license_class: "open",
+                                          enabled: true)
+        docs.times do |i|
+          id = catalog[:documents].insert(source_id: source, urn: "urn:#{slug}:#{i}", title: "t", language: "akk",
+                                          content_sha256: "x", revision: 1, withdrawn: false)
+          catalog[:document_facets].insert(document_id: id, facet: "ruler", value: "Esarhaddon")
+        end
+      end
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[person Esarhaddon]) }
+      assert_nil status
+      assert_match(/catalogue mentions \(document facets — names as catalogued, no person id\):/, out)
+      assert_match(/  Esarhaddon  \[ruler\]  cdli 2 · oracc 1/, out)
+
+      _out, err, status = with_config(config) { run_cli(%w[person Nabonidus]) }
+      assert_equal 1, status
+      assert_match(/no person named "Nabonidus"/, err)
+    end
+  end
+
   private
 
   def with_person_env

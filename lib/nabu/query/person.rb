@@ -43,6 +43,7 @@ module Nabu
       # seller/buyer/debtor/creditor ~360 · author_contested 68. The
       # authority-id facets (author_id, translator_id, work_id) are ids,
       # not names — out.
+      # const: the facet vocabulary judged person-shaped, not a corpus claim
       PERSON_FACETS = %w[author ruler ancient_author translator recipient eponym addressee editor commentator
                          translator_tib seal_owner seller buyer debtor creditor author_contested].freeze
       # Distinct catalogue values listed per lookup; the overflow is said.
