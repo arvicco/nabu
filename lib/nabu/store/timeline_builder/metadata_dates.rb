@@ -172,6 +172,9 @@ module Nabu
           "litopys" => :era_band_key,
           "local-library" => :year_key,
           "mdz-protestant" => :structured,
+          "memis" => :structured, # the inscription's typed origDate (Slovene prose: a year,
+          #                         a day date, "1581/2", "2. pol. 15. stol."); place =
+          #                         the origPlace ("Iustinopolis (Koper)", "Piran")
           "menota" => :structured,
           "mk-wikisource" => :structured,
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header

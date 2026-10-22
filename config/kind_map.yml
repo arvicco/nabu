@@ -693,6 +693,37 @@ sources:
       "Clay weight": "an inscribed object type, not a genre claim (content undetermined)"    # 1
       "Metal engraving": "an inscribed object type, not a genre claim (content undetermined)" # 1
       "Plaque": "an inscribed object type, not a genre claim (content undetermined)"         # 1
+  memis:               # census 2026-10-22: 51 inscriptions, 51 Slovene headings (no genre field upstream)
+    # The editor's heading is the only label MEMIS gives an inscription, and most
+    # headings name only the honorand ("Napis za Lorenza Manzaga" — "inscription for
+    # L. M."), which spans honorific, funerary and building texts alike: those stay
+    # uncovered (vocabulary: open), never guessed. Only headings that state the
+    # genre, or whose one text is unambiguous, are ruled.
+    facet: heading
+    vocabulary: open
+    prefix_map:
+      "Posvetilo ": dedicatory      # "dedication to …" (5: Divo Nicolao … dicatum)
+      "Napis v čast ": honorific     # "inscription in honour of …" (22 Gregory XIII, 46 the
+      #   Pallas verses for the city, 51 the elogium of Piran)
+      "Grb in napis za ": honorific  # "coat of arms and inscription for …" — the podestàs'
+      #   armorial commemorations (35 praemium virtuti, 36 praetori integerrimo, 39 …)
+      "Grb ": honorific              # 40 "Grb Giacopa Pesara": the arms + Iacobo Pisauro, dated
+      "Portal ": building            # 49: the podestà's doorway, aequissima cura … auxit
+    map:
+      "Morosinijeva plošča": building    # 2: the 1269 record of Marino Morosini's works
+      #   (the wall on the bridge, two blidaria, wells, the loggia)
+      "Napis na stebru sv. Justine": honorific  # 4: the St Justina column, for Andrea
+      #   Giustiniani after the 1571 victory over the Turks
+      "Napis bratovščine sv Antonija": building  # 8: the confraternity's door, restauratum
+      "Agostino de Bruti": building      # 19: in commodiorem formam adauctum (1740)
+      "Nicolo de Bello": funerary        # 50: sibi suisque heredibus vivus fecit
+    deliberate:
+      "Napis o ustanovitvi Kopra": "a literary pseudo-inscription (Justin's foundation of
+        Koper) known only from Naldini's Corografia — no epigraphic genre claim"
+      "Beneški lev": "the Lion of St Mark's legend (Pax in hac civitate …) — a state
+        emblem, not a genre"
+      "Beneški lev, Totto ex Gavardo": "the Lion of St Mark's book legend (Pax tibi Marce
+        evangelista meus) — a state emblem, not a genre"
   vulgate:
     source_kind: scripture
   prague-bible-1488:

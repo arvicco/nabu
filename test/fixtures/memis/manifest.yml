@@ -1,0 +1,13 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: memis
+adapter_test: null
+retrieved: 2026-10-22
+files:
+  - path: MEMIS.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1376/MEMIS.xml?sequence=3&isAllowed=y
+    whole: false
+    trim: >-
+      teiHeader, front and closing tags whole; 14 of 51 inscription divs
+      (n = 1, 2, 4, 6, 8, 12, 16, 21, 32, 38, 40, 46, 50, 51) byte-verbatim
+      in upstream order, the other 37 removed whole

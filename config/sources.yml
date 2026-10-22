@@ -3450,6 +3450,24 @@ meloniromance:   # 02-sources row 304
   # reflex rows; raw/data.tsv skipped by rule. All forms are broad IPA,
   # not orthography — joins to orthographic gold lemmas are not promised.
 
+memis:   # 02-sources row 305
+  adapter: Nabu::Adapters::Memis
+  adopted: "2026-10-22"
+  axes: [epigraphy, romance]
+  wired: false   # awaiting the first real sync (one GET of MEMIS.xml, 160 KB)
+  sync_policy: manual
+  # MEMIS 1.0 — Epigraphic corpus of Medieval and Early Modern
+  # inscriptions in Slovenia (Gregor Pobežin, ZRC SAZU; CLARIN.SI
+  # 11356/1376): 51 Latin inscriptions of Koper (49) and Piran (2), ONE
+  # TEI file. CC BY-SA 4.0 (deposit DC.rights + the file's own
+  # <availability>) → attribution. Document = inscription (@n — the
+  # idno is not unique upstream), passage = the inscribed line, the
+  # editor's expanded reading with the diplomatic line as annotation.
+  # EXPECTED at the first sync: 51 documents / 473 line passages (476
+  # lines less a Greek placeholder and two empty lines); <front> skipped
+  # by rule. origDate → MetadataDates :structured (49
+  # dated, 1 CE – 1740); origPlace named.
+
 menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
   adapter: Nabu::Adapters::MengguZiyun
   adopted: "2026-08-29"
