@@ -48,16 +48,20 @@ works:
     # Belegstellen fascicle) between the printed pages, so the offset
     # breaks mid-volume: Bd. I +10 through p. 244, +46 from p. 245
     # (printed 241–244 unverified — they sit against the insert); Bd.
-    # III/IV +8 through p. 240, +12 from p. 241. Bd. II rides the
-    # retry ingest batch and calibrates after it lands; Bd. V enters
-    # US PD 2027-01-01.
+    # II/III/IV +8 through p. 240, +12 from p. 241 (each probed at
+    # leaves 200/450 with the Lieferung title insert at leaf 251).
+    # Bd. V enters US PD 2027-01-01.
     volumes:
       "1":
         item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0001unse
         leaf_offset: 10
         breaks:
           - { from_page: 245, leaf_offset: 46 }
-      "2": { item: null, leaf_offset: null }
+      "2":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0002unse
+        leaf_offset: 8
+        breaks:
+          - { from_page: 241, leaf_offset: 12 }
       "3":
         item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0003unse
         leaf_offset: 8
