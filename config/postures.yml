@@ -557,6 +557,22 @@ sources:
         SigLA's sign readings (phonetic values, standard names AB/A/N, Latin logogram
         names) — Latin-script by construction; the artifact script, Linear A, awaits
         the lina registry row for config/artifact_scripts.yml"}
+  memis:
+    # kind machine-postured — kind_map.yml folds the genre-bearing editor
+    # headings (Posvetilo/Napis v čast/Grb/Portal + five single-text rulings);
+    # the honorand-only "Napis za …" headings stay uncovered (open vocabulary).
+    lect: {posture: dates, note: "Latin throughout; the lat stage follows each
+        inscription's own origDate through the registry bands (med 1269 … ren 1430–1548
+        … new 1550–1740; the two Roman stelae land in cla) — the edr precedent"}
+    dating: {posture: dated, note: "the typed origDate (Slovene prose) on 49 of 51
+        (years, day dates, '1581/2', 'ok. 1670', '1591?', centuries and half-centuries)
+        via MetadataDates :structured; '?' and the undated pseudo-inscription stay
+        honestly undated; in-text dates ride raw as text_dates"}
+    places: {posture: named, note: "the origPlace verbatim on 50 of 51 — 'Iustinopolis
+        (Koper)' 48, 'Piran' 2; the pseudo-inscription records none. Settlement,
+        repository and found/observed provenance are present locations, metadata only;
+        no gazetteer refs"}
+    script: {posture: implied}
   # Variety-less languages as held (no registry stages to refine into):
   ndl-kotenseki:
     # kind: machine-postured — the NDL Search bib join's NDC codes fold in

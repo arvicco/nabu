@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="memis" xml:lang="sl">
+  <teiHeader xml:lang="sl">
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Epigrafski korpus srednjeveških in zgodnje novoveških napisov na Slovenskem MEMIS</title>
+        <title type="main" xml:lang="en">Epigraphic corpus of Medieval and Early Modern inscriptions in Slovenia MEMIS</title>
+        <title type="main" xml:lang="la">Corpus inscriptionum Sloveniae medii aevi et recentioris aetatis MEMIS</title>
+        <title type="sub">Elektronska izdaja</title>
+        <author>Pobežin, Gregor</author>
+        <respStmt>
+          <resp>Uredil, komentiral in prevedel</resp>
+          <name xml:id="GP">Gregor Pobežin</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1.0">Prva izdaja (1.0)</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <address>
+            <addrLine>
+              <name>ZRC SAZU, Inštitut za kulturno zgodovino</name>
+            </addrLine>
+            <addrLine>Novi trg 2</addrLine>
+            <name type="place">Ljubljana</name>
+            <addrLine>SI-1000</addrLine>
+          </address>
+        </publisher>
+        <idno type="handle">http://hdl.handle.net/11356/1376</idno>
+        <distributor>
+          <ref target="http://www.clarin.si">CLARIN.SI</ref>
+        </distributor>
+        <pubPlace>
+          <ref target="http://hdl.handle.net/11356/1281">http://hdl.handle.net/11356/1281</ref>
+        </pubPlace>
+        <availability status="free">
+          <p xml:lang="sl"> Avtorske pravice za to izdajo ureja licenca
+          <ref target="https://creativecommons.org/licenses/by-sa/4.0/deed.sl">Priznanje
+          avtorstva-Deljenje pod enakimi pogoji 4.0 Mednarodna (CC BY-SA 4.0)</ref>
+          </p>
+          <p xml:lang="en">This work is licenced under the
+          <ref target="http://creativecommons.org/licenses/by-sa/4.0/">Attribution-ShareAlike
+          4.0 International (CC BY-SA 4.0)</ref>
+          </p>
+        </availability>
+        <date>2020-11-03</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>V korpusu so zbrani napisi z območja Kopra, Izole in Pirana od l. 1222 do srede
+        17. stoletja. Vsi napisi so v latinskem jeziku in z eno izjemo (napis v čast
+        mestu Piran, št. 51) na kamnu.</p>
+        <p xml:lang="en">The Corpus includes inscriptions from Koper, Izola and Piran, made
+        between 1222 and the middle of the 17th century. All inscriptions are in Latin
+        and written on stone (except inscription No. 51, the Elogium for Piran).</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="sl">V Epigrafskem korpusu srednjeveških in zgodnje novoveških napisov
+        na Slovenskem so zbrani latinski napisi, ki se nahajajo oz. so bili odkriti na
+        območju slovenskih obalnih mest (s poudarkom na Kopru in Piranu). Namen korpusa
+        je ustvariti metodološko podlago za obdelavo srednjeveških in zgodnje novoveških
+        napisov v latinskem jeziku (in v vernakulranih jezikih), ki se nahajajo oziroma
+        so bili odkriti na območju slovenskega etničnega ozemlja. Korpus združuje
+        napise, ki se bodisi nahajajo v svojem primarnem kontekstu bodisi so bili
+        premaknjeni ali celo uničeni in so dostopni samo še v prepisih; gradivo za
+        korpus je bilo zbrano s pomočjo terenskih raziskav, tj. evidentiranja in
+        dokumentiranja napisov <emph>in situ</emph>. V korpusu so napisi razvezani
+        (razvezane so abreviature in ligature) in komentirani ter prevedeni, zbrani in
+        razgrnjeni pa so tudi različni metapodatki.</p>
+        <p xml:lang="en">The Epigraphic Corpus of Mediaeval and Early Modern Inscriptions in
+        Slovenia collects Latin inscriptions that are found or have been discovered in
+        the territory of Slovenian coastal towns (with the focus on Koper and Piran).
+        The purpose of the corpus is to provide a methodological basis for the
+        processing of mediaeval and early modern inscriptions in Latin (and in the
+        vernacular languages), which are found or discovered in the territory of the
+        Slovene ethnic territory. The corpus brings together inscriptions that are
+        either still located in their primary context or have been moved or even
+        destroyed and are therefore accessible only in transcriptions; the material for
+        Corpus was collected through field research, i.e. the recording and
+        documentation of inscriptions <emph>in-situ</emph>. In the corpus, the ligatures
+        and abbreviatures in the inscriptions have been unbound and the inscriptions
+        annotated and translated. Various metadata have also been collected and included
+        in the descriptions.</p>
+      </projectDesc>
+      <appInfo>
+        <application xml:id="docxtotei" ident="TEI_fromDOCX" version="2.15.0">
+          <label>DOCX to TEI</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="sl">slovenščina</language>
+        <language ident="la">latinščina</language>
+        <language ident="en">angleščina</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2020-12-06"><name>Tomaž Erjavec</name> Manjši popravki za v1.0</change>
+      <change when="2020-10-15"><name>Gregor Pobežin</name> Dopolnjevanje seznama napisov.</change>
+      <change when="2020-07-31"><name>Gregor Pobežin</name> Dopolnjevanje seznama napisov.</change>
+      <change when="2019-10-16"><name>Gregor Pobežin</name> Zbiranje napisov, pretvorba v TEI.</change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <p>V Epigrafskem korpusu srednjeveških in zgodnje novoveških napisov na Slovenskem so
+      zbrani latinski napisi, ki se nahajajo oz. so bili odkriti na območju slovenskih
+      obalnih mest (s poudarkom na Kopru in Piranu). Namen korpusa v pričujočem obsegu je
+      ustvariti metodološko podlago za obdelavo srednjeveških in zgodnje novoveških
+      napisov v latinskem jeziku (in v vernakulranih jezikih), ki se nahajajo oziroma so
+      bili odkriti na območju slovenskega etničnega ozemlja. Korpus združuje napise, ki se
+      bodisi nahajajo v svojem primarnem kontekstu bodisi so bili premaknjeni ali celo
+      uničeni in so dostopni samo še v prepisih; gradivo za korpus je bilo zbrano s
+      pomočjo terenskih raziskav, tj. evidentiranja in dokumentiranja napisov <emph>in
+      situ</emph>. V korpusu so napisi razvezani (razvezane so abreviature in
+      ligature) in komentirani ter prevedeni, zbrani in razgrnjeni pa so tudi različni
+      metapodatki. <lb/>V korpusu so v trenutnem obsegu zbrani (nekateri) napisi z območja
+      Kopra, Izole in Pirana od l. 1222 do srede 17. stoletja (vsi trenutno zbrani napisi
+      so v latinskem jeziku in z eno izjemo, tj. napisom št. 51 v čast mestu Piran, na
+      kamnu), v kasnejši fazi pa bo korpus vključeval napise do konca 18. stoletja, in
+      sicer na vseh materialih, ki jih zajemajo epigrafske raziskave, in v vseh
+      jezikih.<lb/>Korpus srednjeveških in novoveških napisov bo kot integrirni vir
+      nastajal na spletu, obenem pa po zgledu projekta <ref
+      target="http://www.inschriften.net/">Deutsche Inscriften</ref> izhajal tudi v
+      posameznih zvezkih, urejenih po geografskem kriteriju. Najpomembnejši namen tega
+      projekta je, da dosežene rezultate predstavi različnim javnostim v konkretnih
+      oblikah in korpus poveže z ustvarjalci tujih korpusov, kakršen je denimo projekt
+      <ref target="https://www.epigraphica-europea.uni-muenchen.de/">Epigraphica
+      Europaea</ref>.</p>
+    </front>
+    <body>
+      <div type="inscription" n="1" xml:lang="sl">
+        <head>Napis o ustanovitvi Kopra</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <idno>I-1-001</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc>
+                <supportDesc>
+                  <support>
+                    <objectType>Psevdonapis.</objectType>
+                  </support>
+                </supportDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <acquisition>Napis povzema P. Naldini in omenja, da je »natisnjen v
+              mestnem statutu« (<emph>quale anco nel Marmo fù anticamente incisa,
+              ed oggi nello Statuto della Città impressa</emph>). Napis je
+              citiralo več avtorjev, npr. Raffaello Maffei<note place="bottom"
+              >Carli, 1877, 3</note>), vendar pa je že Gisbert Cuper<note
+              place="bottom">Cuper, 1687, 244ss</note> opazil vrsto
+              nepravilnosti, ki zbujajo dvom, da gre za pristen
+              napis.</acquisition>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>CUPER, Gisbert. <emph>Harpocrates, Sive Explicatio Imagunculae
+                Argenteae Perantiquae. Accedit Stephani Le Moine Epistola De
+                Melanophoris</emph> (Utrecht: Franc. Halma Acad. Typogr.,
+                1687</bibl>
+                <bibl>NALDINI, Paolo. Corografia ecclesiastica o sia descrittione
+                della città e della diocesi di Giustinopoli detto volgarmente
+                Capo d’Istria, Venezia, 1700.</bibl>
+                <bibl>POBEŽIN, Gregor. Latine quae scripserit Paolus Naldini :
+                [predavanje na znanstvenem posvetu ob 300. letnici smrti
+                koprskega škofa Paola Naldinija (1632-1713): "Nardus Olet,
+                Vincitque Leo", Pretorska palača, 20.-21.IV.2013]. Koper; =
+                Capodistria, 2013.</bibl>
+                <bibl>POBEŽIN, Gregor. Gisbert Cuper. V: ZAJC, Neža (ur.), et al.
+                Pogled od zunaj na slovenski jezik, prostor in kulturo : v
+                zgodovinski perspektivi. 1. izd. Ljubljana: Založba ZRC, ZRC
+                SAZU, 2017. Str. 27-34, ilustr. Zbirka Življenja in dela, 14,
+                Biografske študije, 10.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="trans">
+          <head>Prepis</head>
+          <ab xml:lang="la">
+            <lb n="1"/>D<expan>ominus</expan> n<expan>oster</expan>
+            <unclear>p sal</unclear> pius <lb n="2"/>felix victor ac triumphator <lb
+            n="3"/>semper aug<expan>ustus</expan> Pont<expan>icus</expan>
+            max<expan>imus</expan> Franc<expan>icus</expan>
+            <lb n="4"/>max<expan>imus</expan> Gotth<expan>icus</expan>
+            max<expan>imus</expan> Vandalic<expan>us</expan> max<expan>imus</expan>
+            <lb n="5"/>cons<expan>ul</expan> IIII trib<expan>unus</expan> VII
+            imp<expan>erator</expan> V <lb n="6"/>conspicuam hanc
+            <placeName>Aegidis</placeName> insulam <lb n="7"/>intima
+            <geogName>Adriatici maris</geogName>
+            <lb n="8"/>commodiss<expan>ime</expan> interiectam veneran<lb n="9"
+            break="no"/>dae <persName>Palladis</persName> sacrarium quondam <lb
+            n="10"/>et Colchidum Argonautarum <lb n="11"/>persecutorum quietem ob
+            <lb n="12"/>gloriam propagandam imp<expan>erii</expan>
+            <lb n="13"/>s<expan>enatus</expan> c<expan>onsultu</expan> in urbem sui
+            nominis excel<lb n="14" break="no"/>lentiss<expan>imi</expan> nuncupandam
+            <unclear>honestiss</unclear><lb n="15"/>
+            <unclear>p p p</unclear> designavit fundavit <lb n="16"
+            />c<expan>ivibus</expan> R<expan>omanis</expan>
+            p<expan>opulo</expan>q<expan>ue</expan>
+            <unclear>hones</unclear>
+            <lb n="17" break="no"/><unclear>tiss<expan>imo</expan></unclear>
+            <unclear>refer<expan>tam</expan></unclear>
+          </ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Naš gospod, cesar Justin, usmiljeni in blagohotni, vedno vzvišeni zmagovalec
+          nad pontskimi ljudstvi, Franki, Goti in Vandali, štirikrat konzul, sedemkrat
+          tribun in petkrat imperator, je ta lepi Egidin otok, tako srečno umaknjen v
+          skrajni zaliv Jadranskega morja, ki je bil nekoč Paladino svetišče in
+          pribežališče Kolhijcev, preganjalcev Argonavtov, namenil po sklepu senata in
+          v večno slavo imperija za mesto, ki ga je dal na javne stroške postaviti in
+          po svojem presvetlem imenu imenovati; ustanovil ga je za prebivalce in
+          ljudstvo Rima in ga namenil poštenim ljudem.</p>
+        </div>
+      </div>
+      <div type="inscription" n="2" xml:lang="sl">
+        <head>Morosinijeva plošča</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Pokrajinski muzej Koper</repository>
+              <idno>I-1-002</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>, <material>beli
+                    apnenec</material>
+                  </support>
+                  <condition>Stela dobro ohranjena, poškodbe napisnega
+                  polja</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Napisno polje brez obrobe, napisne vrstice segajo od
+                  roba do roba. Na dnu napisa se nahajajo trije stilizirani
+                  grbi družine Morosini.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>1269</origDate>
+              </origin>
+              <provenance type="found">Levji grad</provenance>
+              <provenance type="observed">Pokrajinski muzej Koper</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>CAPRIN, Giuseppe. L' Istria nobilissima. Trieste, Libreria
+                internazionale "Italo Svevo", 1968.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la"><lb n="1"/>Per hanc scripturam omnib<expan>us</expan>
+          <expan>com</expan>pareat manifestum q<expan>uod</expan> sub anno <lb n="2"
+          />d<expan>omi</expan>ni <date>MCCLXIX indicione
+          X<damage><supplied>II</supplied></damage></date> nobilis vir
+          d<expan>ominu</expan>s <persName>Marinus Mau<lb n="3" break="no"
+          />ricin<expan>us</expan></persName> capitaneus
+          Iustinopol<expan>is</expan> filius <expan>quondam</expan> potentis
+          d<expan>omi</expan>ni <persName>Ang<expan>e</expan>li
+          Mauricini</persName> comitis Ar<lb n="4" break="no"
+          />bens<expan>is</expan> fecit fieri in honore<ex>m</ex>
+          <gap reason="illegible"/> civitatis et a mense April<expan>i</expan> usque
+          ad<lb n="5"/>exitu<expan>m</expan> Iulii <expan>pro</expan>vide fecit
+          <expan>com</expan>pleri utile<expan>m</expan> muru<expan>m</expan>
+          <expan>con</expan>ditu<expan>m</expan> sup<expan>er</expan>
+          po<expan>n</expan>te<expan>m</expan> cu<expan>m</expan> travol<lb n="6"
+          break="no"/>co <persName>Ga<expan>nz</expan>ani</persName> et duas
+          figuras Sa<expan>nct</expan>i <expan>Christo</expan>foris in
+          tur<expan>r</expan>e i<expan>psius</expan> p<expan>on</expan>tis
+          nobile<expan>m</expan> villa<expan>m</expan> qu<corr>a</corr>e nun<lb
+          n="7" break="no"/>cupat<expan>ur</expan> Mauricina facta
+          sup<expan>er</expan> tratorium q<expan>uod</expan>
+          d<expan>ominus</expan>
+          <unclear>C<expan>orrado</expan> d<expan>ei</expan>
+          gra<expan>tia</expan></unclear> ep<expan>iscopu</expan>s
+          <placeName>Iustinop<expan>o</expan>l<expan>is</expan></placeName><lb
+          n="8"/>praeocupaverat civitati duo magna aedificia blidarium duos
+          puteos<lb n="9"/>spongiarum unum in curia praetorii aliud super
+          viridarium civitatis et lucid<lb n="10" break="no"/>am logiam
+          int<expan>er</expan> duo p<expan>rae</expan>toria hedificatam et multa
+          alia bona utilia<lb n="11"/>qu<corr>a</corr>e om<expan>n</expan>ia ad
+          exe<expan>m</expan>plu<expan>m</expan> rector<expan>um</expan>
+          seque<expan>n</expan>ciu<expan>m</expan> sc<expan>ri</expan>bere
+          ordinavit</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Te vrstice naj vsem razodenejo, da je v letu Gospodovem <date>1269</date>,
+          med dvanajsto indikcijo plemeniti gospod Marino Morosini, kapitan
+          Justinopolisa, sin nekoč mogočnega gospoda Angela Morosinija, grofa
+          rabskega, povečal čast mesta in od aprila pa vse do konca julija nadzoroval
+          dokončanje koristnega zidu na Kancijanovem mostu ter dveh kipov sv. Krištofa
+          na stolpu prav tega mostu, pa imenitne vile, imenovane "Morosinijeva vila",
+          ki stoji na zemljišču, ki ga je za mesto pridobil gospod Corrado, po božji
+          milosti škof Justinopolisa. Zgraditi je dal tudi dve veliki poslopji z
+          blidami<note place="bottom">Vojni stroji, morda katapulti.</note>, dva
+          vodnjaka iz plovca<note place="bottom" type="editorial">V izvirniku <q
+          xml:lang="la">duos puteos spongiarum</q>; spongia (lahko) pomeni
+          "plovec", ki je bil tu morda uporabljen za filtriranje talne
+          vode.</note>, enega v kuriji pretorske palače, drugega v mestnem
+          parku<note place="bottom" type="editorial">Današnji trg Brolo.</note>,
+          in odprto ložo, postavljeno med dvema palačama. Mestu je izkazal še veliko
+          drugih dobrot, ki jih je dal zapisati v opomin prihodnjim upravnikom.</p>
+        </div>
+      </div>
+      <div type="inscription" n="4" xml:lang="sl">
+        <head>Napis na stebru sv. Justine</head>
+        <div type="description">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>na prostem</repository>
+              <idno>I-1-004</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support><objectType>Pedestal stebra</objectType>,
+                  <material>beli apnenec</material>, </support>
+                  <condition>Pedestal dobro ohranjen.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Napis na pedestalu stebra sv. Justine. Napis je na
+                  straneh A in B komaj berljiv, na strani C je že povsem
+                  izbrisan. Steber sv. Justine je bil izdelan kot spomenik
+                  koprski galeji pod poveljstvom Gian Domenica del Tacca, ki
+                  se je udeležila pomorske bitke pri Lepantu leta 1571.
+                  Postaviti ga je dal podestat Andrea Giustiniani leta 1572,
+                  na dan obletnice bitke. Na vrhu stebra stoji kip sv.
+                  Justine, ki v rokah nosi sulico in ščit z grbom podestata
+                  Giustinianija.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>1572</origDate>
+              </origin>
+              <provenance type="found">Staro mestno pristanišče</provenance>
+              <provenance type="observed">Carpacciov trg</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>Vatova, G., 1884. La colonna di Santa Giustina: eretta dai
+                Capodistriani ad onore del loro podestà Andrea Giustinian ed a
+                ricordo della vittoria di Lepanto. Koper, 247 str.</bibl>
+                <bibl>Schiavi, L. 1896. Giustinopoli alla battaglia di Lepanto:
+                ballata polimetra. Koper, Cobol, Priora, 12 str.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr" xml:lang="la">
+          <head>Prepis</head>
+          <ab xml:lang="la">
+            <title>Stran A</title>
+            <lb n="1"/><persName>Andreae Iusti <lb n="2" break="no"/>niano</persName>
+            <lb n="3"/>qui praet<expan>erito</expan> anno<lb n="4"
+            />max<expan>ime</expan> insignis<lb n="5"/>adversus <geogName
+            type="nationality">Turcas</geogName><lb n="6"/>in <geogName>Ambracio
+            sinu</geogName><lb n="7"/>advocata <geogName type="island"
+            >Curzol<expan>a</expan></geogName><lb n="8"/>victoriae
+            quomod<expan>o</expan><lb n="9"/>et seipsum vincere<lb n="10"/>et aliis
+            bene praeess<expan>e</expan><lb n="11"/>contingit Iustino<lb n="12"
+            break="no"/>polit<expan>ano</expan> suo exemplo<lb n="13"/>praemonstrat </ab>
+            <ab xml:lang="la">
+              <title>Stran B</title>
+              <lb n="1"/><persName>Palladis</persName> et <lb n="2"
+              /><persName>Iustini</persName> civitas <lb n="3"/>tantae virtutis<lb
+              n="4"/>in praecipua uni<lb n="5" break="no"/>versi Christiani<lb n="6"
+              />orbis laetitia<lb n="7"/>spectatrix<lb n="8"/>non ociosa<lb n="9"
+              /><persName>Petro</persName> doct<expan>o</expan>
+              <persName>Ver<lb n="10" break="no"/>gerio</persName>
+              <persName>Favonio</persName> et<lb n="11"/><persName>Iosepho</persName>
+              doct<expan>o</expan>
+              <geogName>Ve<lb n="12" break="no"/>rona</geogName> syndicis<lb n="13"
+              />procurantibus</ab>
+        </div>
+        <div type="translation" xml:lang="sl">
+          <head>Prevod</head>
+          <ab>
+            <title>Stran A</title><lb/>
+            <persName>Andreu Giustinianiju</persName>, ki se je v preteklem letu izkazal
+            proti Turkom v Ambrakijskem zalivu. Ko so poklicali na pomoč s Korčule, je
+          kot Koprčan pokazal, kako je treba poveljevati in zmagati.</ab>
+          <ab>
+            <title>Stran B</title><lb/> Paladino in Justinovo mesto ob izjemnem veselju
+            vsega krščanskega sveta nad tolikšno krepostojo ni ostalo ravnodušno.
+            <supplied>Postavilo je to obeležje</supplied> med županovanjem učenega
+            <persName>Pietra Vergeria Favonia</persName> in <persName>Giuseppeja
+          <nameLink>da</nameLink> Verona</persName>.</ab>
+        </div>
+      </div>
+      <div type="inscription" n="6" xml:lang="sl">
+        <head>Beneški lev, Totto ex Gavardo</head>
+        <div type="description">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>na prostem</repository>
+              <idno>I-1-006</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support><objectType>Kamnit relief</objectType>, <material>beli
+                  apnenec</material>, </support>
+                  <condition>Relief izvrstno ohranjen.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Pod reliefom, ki so ga na pročelje palače Totto ex
+                  Gavardo vzidali 20. 11. 1924, se nahaja stela z napisom v
+                  italijanskem jeziku, ki pojasnjuje okoliščine vgradnje:
+                  <lb/><quote xml:lang="ita"><emph>Simbolo di Veneta
+                  potenza gia infisso sulla facciata<lb/>del Castel
+                  Leone prospiciente la terra ferma <lb/>deposto dai
+                  Francesi nel 1805 sottratto all distruzione <lb/>dal
+                  Cav conte Giov<expan>anni</expan> Totto e conservato
+                  nella sua famiglia <lb/>qui murato il 20 Nov
+                  1924</emph></quote></layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>2. pol. 15. stol.</origDate>
+                <date>20. 11. 1924</date>
+              </origin>
+              <provenance type="found">Levji grad</provenance>
+              <provenance type="observed">Palača Totto ex Gavardo, Kidričeva
+              ulica</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>SAPAČ, Igor. Gradovi, utrdbe, dvorci, vile v Slovenskem
+                primorju in bližnji soseščini. Ljubljana: Viharnik, 2014</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab>
+            <lb n="1"/>Pax<lb n="2"/>tib<add>b</add>i<lb n="3"/><persName>Mar<lb n="4"
+            break="no"/>ce</persName> e<lb n="5" break="no"/>van<lb n="6"
+            break="no"/>geli<lb n="7" break="no"/>sta<lb n="8"/>meus</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Mir s teboj, (moj) evangelist Mark.</p>
+        </div>
+      </div>
+      <div type="inscription" n="8" xml:lang="sl">
+        <head>Napis bratovščine sv Antonija</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Pokrajinski muzej Koper</repository>
+              <idno>I-1-008</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="portal">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnit portal</objectType>, <material>istrski
+                  kamen</material>, </support>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Napisno polje na loku in arhitravu portala.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>29. 8. 1578</origDate>
+              </origin>
+              <provenance type="found">Calle Sant'Antonio</provenance>
+              <provenance type="observed">Kocijančičeva ulica</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>A. CHERINI, Bassorilievi araldici ed epigrafi di Capodistria.
+                Dalle origini al 1945. Trst, 2001.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la">
+            <lb n="1"/>Divi <persName>Antonii</persName> confraternitatis
+            hostiu<expan>m</expan> restauratum sub regimine <persName>Nicolai
+            Scevola</persName> gastaldionis s<expan>er</expan><lb n="2"
+            /><persName>Nicolai a Seno</persName> s<expan>er</expan>
+            <persName>Pauli a Francia</persName> procuratoru<expan>m</expan> et
+            s<expan>er</expan>
+            <persName>Michaelis Sanuto</persName> massarii
+            procurantiu<expan>m</expan><lb n="3"/>anno D<expan>omi</expan>ni
+            n<expan>ostri</expan> Y<expan>esu</expan>
+            <expan>Christi</expan>
+            <date>MDLXXVIII</date> die XXVIIII Hie<expan>ronymus</expan> a
+            <geogName>Pola</geogName>
+          <unclear>pi</unclear><lb n="4"/>Augusti</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Portal Bratovščine sv. Antonija, obnovljen pod vodstvom gastalda Nicolaija
+          Scevole, prokuratorjev gospoda Nicolaia a Seno, gospoda Paulla Francie in
+          skrbnika (masarija) gospoda Micheleja Sanuta. Portal s oobnovili 29. avgusta
+          1578. Hieronim iz Pule.</p>
+        </div>
+      </div>
+      <div type="inscription" n="12" xml:lang="sl">
+        <head>Napis za Giovannija Malipiera</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Pokrajinski muzej Koper</repository>
+              <idno>I-1-012</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                  </support>
+                  <condition>Stela v spodnjem delu precej poškodovana.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Napisno polje brez obrobe, šest vrstični napis zaradi
+                  poškodb napisnega polja mestoma neberljiv.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>1581/2</origDate>
+              </origin>
+              <provenance type="observed">Pokrajinski muzej Koper</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>A. CHERINI, Bassorilievi araldici ed epigrafi di Capodistria.
+                Dalle origini al 1945. Trst, 2001.</bibl>
+                <bibl>G. RADOSSI, Monumenta heraldica iustinopolitana, Collana degli
+                Atti, n. 21, 2003, p. 1-480.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la">
+            <lb n="1"/><persName>Ioani Maripet<expan>ro</expan></persName> praetori
+            opt<expan>imo</expan> qui<lb n="2"/><expan>pon</expan>tem extra arce
+            construi curavit<lb n="3"
+            /><damage><supplied>al</supplied></damage>iaq<expan>ue</expan>
+            in<corr>n</corr>umerabilia benef<expan>icia</expan><lb n="4"
+            /><damage><supplied>ur</supplied></damage>bem
+            co<expan>n</expan>tulit civi<unclear>tas</unclear>
+            uniu<unclear>s</unclear><lb n="5"/><gap reason="illegible"/>petuae
+            obser<expan>vari</expan> monumento dic<gap reason="illegible"/><lb n="6"
+            /><gap reason="illegible"/>zar et Hieronimo Ga<gap reason="illegible"/></ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Odličnemu pretorju Giovanniju Malapieru, ki je dal postaviti most zunaj
+          obzidja in mestu izkazal tudi številna druga dobra dela. Obeležje je
+          sklenilo postaviti ... mesto <supplied cert="low">za časa</supplied> ... in
+          Hieronima Ga... .</p>
+        </div>
+      </div>
+      <div type="inscription" n="16" xml:lang="sl">
+        <head>Napis za Nicoloja Zarotta</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Pokrajinski muzej Koper</repository>
+              <idno>I-1-016</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                    <dimensions>
+                      <height unit="mm">1000</height>
+                      <width unit="mm">600</width>
+                    </dimensions>
+                  </support>
+                  <condition>Slabo ohranjena stela, razlomljena na več delov,
+                  poškodbe napisnega polja.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Klasičen humanističen napis brez dodatnega ornamenta.
+                  Napisno polje z obrobo, enajst vrstični napis je zaradi
+                  poškodb od 6. do 10. vrstice le delno berljiv.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>ok. 1670</origDate>
+              </origin>
+              <provenance type="found">Servitski samostan</provenance>
+              <provenance type="observed">Pokrajinski muzej Koper</provenance>
+              <acquisition>Plošča je bila odkrita l. 1949 med obnovitvenimi deli v
+              koprski mestni bolnišnici, tj. nekdanjem Servitskem samostanu. Napis
+              ne omenja letnic; Nicol(e)o Zarotto je umrl l. 1670.</acquisition>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>G. RADOSSI, Monumenta heraldica iustinopolitana, Collana degli
+                Atti, n. 21, 2003, p. 1-480.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la"><lb n="1"/><persName>Nicoleo Zarott</persName>o<lb n="2"/>et
+          <persName>Urs<corr>a</corr>e</persName> coniugi<lb n="3"/>patriae ac
+          veteris<lb n="4"/>famili<corr>a</corr>e parentib<expan>us</expan><lb
+          n="5"/>graviss<expan>imis</expan> de fide<lb n="6"/>pietate ac
+	  <gap reason="illegible"/>
+	  n<gap reason="illegible"/><lb n="7"/>moderatione
+	  <gap reason="illegible"/><lb n="8"/><damage><expan><unclear>(e)m</unclear></expan></damage>eritis
+          hic rel<gap reason="illegible"/><lb n="9"/>defunctis ac
+          <gap reason="illegible"/><lb n="10"/><persName>Franciscus
+          Zar<expan>ottus</expan></persName><lb n="11"/>p p</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p><persName>Nicoloju Zarottu</persName> in njegovi soprogi Ursi, pomembnima
+          staršema stare družine, ki sta se izkazala z vero, pobožnostjo ... in
+          skromnostjo ... postavil <persName>Francesco Zarotto</persName>.</p>
+        </div>
+      </div>
+      <div type="inscription" n="21" xml:lang="sl">
+        <head>Pripis na spomeniku za Publija Sardija Prudensa</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Pokrajinski muzej Koper</repository>
+              <idno>I-1-002</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                  </support>
+                  <condition>Slabo ohranjena stela.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Sekundarni napis.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <date>1222</date>
+                <origDate>1. stol. po Kr.</origDate>
+              </origin>
+              <provenance type="found">Šmarje, župnijska cerkev</provenance>
+              <provenance type="observed">Pokrajinski muzej Koper</provenance>
+              <acquisition>Srednjeveški napis se nahaja na antičnem napisu, posvečenem
+              osvobojencu Publiju Sardiju. Antični napis iz avgustejskega obdobja
+              se glasi:<lb/>P<expan>ublius</expan>
+              Sardius<lb/>P<expan>ubli</expan> l<expan>ibertus</expan>
+              Prudens<lb/>v<expan>ivus</expan>
+              f<expan>ecit</expan></acquisition>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>CIL V 503</bibl>
+                <bibl>F. und O. Harl, Ubi Erat Lupa, http://lupa.at/23497</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la"><lb n="1"/><date>1222</date><lb n="2"/>V
+          <unclear>S</unclear>alone ch A<lb n="3"/>conser<ex>v</ex><lb n="4"/>ato</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>...</p>
+        </div>
+      </div>
+      <div type="inscription" n="32" xml:lang="sl">
+        <head>Napis za Nicoloja Grimanija</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Na prostem</repository>
+              <idno>I-1-032</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                    <dimensions>
+                      <height unit="mm">1000</height>
+                      <width unit="mm">700</width>
+                    </dimensions>
+                  </support>
+                  <condition>Stela dobro ohranjena, poškodbe napisnega
+                  polja.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Napis je posebnost zaradi dvojezične situacije. Latinsko
+                  posvetilo Nicoloju Grimaniju se nahaja na večjem napisnem
+                  polju; na manjšem napisnem polju spodaj se nahaja citat iz
+                  Homerjeve ... v grškem jeziku.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>1603</origDate>
+              </origin>
+              <provenance type="observed">Pretorska palača</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>G. RADOSSI, Monumenta heraldica iustinopolitana, Collana degli
+                Atti, n. 21, 2003, p. 1-480.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la"><lb n="1"/><persName>Nicolai Grimani</persName><lb n="2"
+          />praet<expan>oris</expan> praef<expan>ecti</expan>
+          fu<gap reason="illegible"/><lb n="3"/>in omne a<gap reason="illegible"/><lb n="4"
+          />iustit munificent<lb n="5"/>accuratan frumentor<lb n="6"/>ac frug
+          provid<lb n="7"/>civitas debita laude<lb n="8"/>et amore hoc pignor<lb
+          n="9"/>corde sculptum marm<lb n="10"/>prosequitur<lb n="11"
+          /><date>MDCIII</date></ab>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="gr"><lb n="1"/>...</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Nicolo Grimani, pretor in prefekt <gap reason="illegible"/>, ki je bil v vsem
+          <gap reason="illegible"/> delivec in vrl skrbnik pravičnosti in dobrote.
+          Mesto mu z dolžno hvalo in ljubeznijo poplačuje dolg s tem obeležjem,
+          izklesanim iz srca. Leta 1603.</p>
+        </div>
+      </div>
+      <div type="inscription" n="38" xml:lang="sl">
+        <head>Grb in napis za Aloisia Soranza</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Na prostem</repository>
+              <idno>I-1-038</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                    <dimensions>
+                      <height unit="mm">1350</height>
+                      <width unit="mm">1300</width>
+                    </dimensions>
+                  </support>
+                  <condition>Dobro ohranjen relief.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Relief je sestavljen iz dveh delov (brez reliefa
+                  beneškega leva meri 135 cm v višino in 130 cm v širino);
+                  napis se nahaja v zgornjem delu ob reliefu beneškega leva,
+                  ki drži običajno knjigo s posvetilom evangelistu
+                  Marku.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>1591?</origDate>
+              </origin>
+              <provenance type="observed">Pretorska palača</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>G. RADOSSI, Monumenta heraldica iustinopolitana, Collana degli
+                Atti, n. 21, 2003, p. 1-480.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr" xml:lang="la">
+          <head>Prepis</head>
+          <ab>
+            <title>A: ozadje napisa</title>
+            <lb n="1"/><persName>Aloys<expan>ius</expan>
+          Super<expan>antius</expan></persName></ab>
+          <lb/>
+          <ab>
+            <title>B: vsebina knjige</title>
+            <lb n="1"/>Pax<lb n="2"/>tibi<lb n="3"/><persName>Mar<lb n="4" break="no"
+            />ce</persName><lb n="5"/>evange<lb n="6" break="no"
+            />lis<expan>ta</expan><lb n="7"/>meus</ab>
+        </div>
+        <div type="translation" xml:lang="sl">
+          <head>Prevod</head>
+          <ab><title>A: ozadnje napisa</title><lb/> Aloisio Soranzo</ab>
+          <lb/>
+          <ab><title>B: vsebina knjige</title><lb/> Mir s teboj, moj evangelist Mark.</ab>
+        </div>
+      </div>
+      <div type="inscription" n="40" xml:lang="sl">
+        <head>Grb Giacopa Pesara</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Na prostem</repository>
+              <idno>I-1-040</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela z grbom</objectType>
+                    <material>Beli apnenec</material>
+                  </support>
+                  <condition>V izvrstnem stanju.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Relief je eden najboljših primerkov heraldike v Kopru;
+                  pod podobo beneškega leva se nahaja grb družine Pesaro,
+                  napis pa vsebuje zgolj Pesarovo ime in letnico nastanka
+                  grba, ki pa je razdeljena v dve vrstici.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>1588</origDate>
+              </origin>
+              <provenance type="observed">Pretorska palača</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>G. RADOSSI, Monumenta heraldica iustinopolitana, Collana degli
+                Atti, n. 21, 2003, p. 1-480.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la"><lb n="1"/><persName>Iacobo Pisauro</persName><lb n="2"/><lb
+          n="2"/><date>MDLXXX<lb n="3"/>VIII</date></ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>Giacopo Pesaro <date>1588</date></p>
+        </div>
+      </div>
+      <div type="inscription" n="46" xml:lang="sl">
+        <head>Napis v čast Ateni</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Koper</settlement>
+              <repository>Na prostem</repository>
+              <idno>I-1-046</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                  </support>
+                  <condition>Stela dobro ohranjena, poškodbe napisnega
+                  polja</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Stela se nahaja pod kipom Justice, tj. antično kamnito
+                  soho, ki ji je bila v srednjem veku dodana glava (ponovno
+                  prenovljena v 90. l. 20. stol). Napis v daktilskih
+                  heksametrih je v gotski pisavi, ki daje napisu
+                  psevdohistorično težo.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Iustinopolis (Koper)</origPlace>
+                <origDate>?</origDate>
+              </origin>
+              <provenance type="observed">Pretorska palača</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>A. CHERINI, Bassorilievi araldici ed epigrafi di Capodistria.
+                Dalle origini al 1945. Trst, 2001.</bibl>
+                <bibl>G. POBEŽIN, Latine quae scripserit Paulus Naldini - nekaj
+                opažanj o prispevkih k Naldinijevi Corografia ecclesiastica v
+                latinskem jeziku. V: V. KAMIN KAJFEŽ (ur.), Eremita doctus -
+                episcopus Iustinopolitanus Paulus Naldini (1686-1713): zapuščina
+                koprskega škofa Paola Naldinija. Koper, 2014.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la"><lb n="1"/>Palladis Acteae fuit hoc memorabile Saxum<lb n="2"
+          /> Effigies quondam, clara haec Urbs dum Aegida mansit,<lb n="3"/> A Capris
+          Divae sic tum de pelle vocata;<lb n="4"/> Quae quoniam reliquos semper
+          superaverat Istros,<lb n="5"/> Artibus Ingenij, semper Caput esse decorum<lb
+          n="6"/> Promeruit Patriae, cui toti haec praestitit una;<lb n="7"/> Inde
+          a Iustino, mox Iustinopolis ultro<lb n="8"/> Principe et a Venetis dicta est
+          Caput Istria tandem,<lb n="9"/> Auspiciis quorum vivet per saecula tuta</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p><lb n="1"/>Nekdaj ta soha mogočna podoba bila je kamnita<lb n="2"/> atiške
+          Pálade; mesto preslavno tedaj kot Egída<lb n="3"/> kozje ime je dobilo po
+          silnem oklepu boginje;<lb n="4"/> v Istri po lepih umetnostih níkdar mu ni
+          bilo para,<lb n="5"/> vedno bilo je na čelu dežele, in to po pravici,<lb
+          n="6"/> vedno nje »glava« edina in njeno lepo okrasje.<lb n="7"/> Novo
+          ime »Justinopolis« cesar Justin mu nadene,<lb n="8"/> zdaj, pod državo
+          beneško, ime Caput Istriae nosi;<lb n="9"/> budno oko Benečanov naj srečo mu
+          nosi na veke! </p>
+        </div>
+      </div>
+      <div type="inscription" n="50" xml:lang="sl">
+        <head>Nicolo de Bello</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Piran</settlement>
+              <repository>Minoritski samostan</repository>
+              <idno>I-3-001</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="stela">
+                <supportDesc material="stone">
+                  <support>
+                    <objectType>Kamnita stela</objectType>
+                    <material>Beli apnenec</material>
+                  </support>
+                  <condition>V dobrem stanju.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Brez posebnosti.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Piran</origPlace>
+                <origDate>1430</origDate>
+              </origin>
+              <provenance type="observed">Minoritski samostan</provenance>
+            </history>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la">
+            <lb n="1"/><c>+</c><date>MCCCXXX</date><lb n="2"/><persName>Nicolaus
+            <nameLink>de</nameLink> Bello</persName><lb n="3"
+            /><expan>quondam</expan> Natalis de Padua<lb n="4"/>sibi
+            suis<expan>que</expan> heredibus<lb n="5"/>v<expan>ivus</expan>
+          f<expan>ecit</expan></ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p><persName>Nicolo <nameLink>de</nameLink> Bello</persName>, nekoč
+          <persName>Natale di Padova</persName>, je dal postaviti <supplied>to
+          obeležje</supplied> zase in za svoje dediče.</p>
+        </div>
+      </div>
+      <div type="inscription" n="51" xml:lang="sl">
+        <head>Napis v čast mestu Piran</head>
+        <div type="descr">
+          <head>Opis</head>
+          <msDesc>
+            <msIdentifier>
+              <country>Slovenija</country>
+              <settlement>Piran</settlement>
+              <repository>Cerkev sv. Jurija</repository>
+              <idno>I-3-002</idno>
+            </msIdentifier>
+            <physDesc>
+              <objectDesc form="painting">
+                <supportDesc material="linen">
+                  <support>
+                    <objectType>Naslikana stela na platnu</objectType>
+                    <material>Platno</material>
+                  </support>
+                  <condition>V izvrstnem stanju.</condition>
+                </supportDesc>
+                <layoutDesc>
+                  <layout>Napis posnema epigrafski dokument; naslikan je v obliki
+                  stele na sliki <emph>Čudež sv. Jurija</emph> beneškega
+                  slikarja <persName>Angela de Costerja</persName>. Napis je
+                  metrični shemi, sestavljajo ga štirje elegični
+                  distihi.</layout>
+                </layoutDesc>
+              </objectDesc>
+            </physDesc>
+            <history>
+              <origin>
+                <origPlace>Piran</origPlace>
+                <origDate>1709</origDate>
+              </origin>
+              <provenance type="observed">Cerkev sv. Jurija</provenance>
+            </history>
+            <additional>
+              <listBibl>
+                <bibl>Z. BACCIO. Marco Petronio Caldana da Pirano e il suo poema.
+                Trieste, 1905.</bibl>
+                <bibl>G. POBEŽIN. Napis na piranski sliki "Čudež sv. Jurija": poskus
+                jezikovne, vsebinske in stilistične interpretacije. Annales:
+                anali za istrske in mediteranske študije. Series historia et
+                sociologia 2012, letn. 22, št. 1, str. 85-92.</bibl>
+                <bibl>V. KAMIN KAJFEŽ, G. POBEŽIN. Pyrrhanensis poeta - avtor napisa
+                na sliki Čudež sv. Jurija Angela de Costerja v Piranu. Keria:
+                studia Latina et Graeca 2012, letn. 14, št. 2, str. 75-88</bibl>
+                <bibl>G. POBEŽIN. On the reading table of an aristocrat: Clodiados
+                libri XII. V: BOUCHARD, François (ur.), FARINELLI, Patrizia
+                (ur.). Les régions slovènes entre XVIIIe et XIXe siècles :
+                plurilinguisme et transferts culturels à la frontière entre
+                empire des Habsbourg et Venise. Paris: Le manuscrit, 2019. Str.
+                287-307.</bibl>
+              </listBibl>
+            </additional>
+          </msDesc>
+        </div>
+        <div type="transcr">
+          <head>Prepis</head>
+          <ab xml:lang="la">
+            <lb n="1"/>Quid metuam <caesura/> Stygium te propugnante draconem<lb n="2"
+            />grande decus populi, <caesura/> praesidiumque mei<lb n="3"/>Gens mea,
+            perdomitis <caesura/> iterum servata, procellis<lb n="4"/>parva memor latae,
+            <caesura/> signa rependit opis.<lb n="5"/>Ipsa dies Iuli <caesura/> prisco
+            decorata triumpho<lb n="6"/>du<expan>m</expan> bis ades votis <caesura/>
+            bina trophaea refert<lb n="7"/>septen<abbr>a</abbr> a decimo <caesura/>
+            monstrabant saecla salutem<lb n="8"/>per verb<expan>um</expan> humanis
+          <caesura/> quintus et annus erat.</ab>
+        </div>
+        <div type="translation">
+          <head>Prevod</head>
+          <p>S tabo ob strani se nič ne bojim peklenskega zmaja,<lb/>ljudstva mogočni
+          ponos, meni pa varen branik;<lb/>ljudstvo si moje otel in razgnal besneče
+          neurje, <lb/>milost poplača ti to z znamenjem skromnim v dar.<lb/>Julijski
+          dan, okrašen s triumfom bleščečim od davna,<lb/>dvakrat srečen je dan: ti si
+          v molitvah vsekdar.<lb/>Tisoč in sedemsto let in pet že mineva, odkar
+          je<lb/>Bog z Besedo ljudem pot zveličanja odstrl.</p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>
