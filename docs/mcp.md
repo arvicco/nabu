@@ -723,7 +723,10 @@ deliberate, dated **contract bump**, pinned by test
 (`test/mcp/tools_lanes_test.rb` holds the schema key sets): the 2026-10-22
 bump widened the `findspot` block (attribution envelope), added nabu_search's
 `fuzzy`/`translations`/`sense`/`sense_gloss` lanes and nabu_show's `senses`
-flag. Live MCP servers serve the old schema until restarted.
+flag; a second 2026-10-22 bump added the MCP tool metadata to every
+`tools/list` entry — a display `title` and an `annotations` object
+`{title, readOnlyHint: true}` (pinned in the same file: every registered
+tool carries both). Live MCP servers serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |
 | --- | --- | --- | --- |

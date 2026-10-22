@@ -134,6 +134,8 @@ module MCP
         schema = tool.fetch("inputSchema")
         assert_equal "object", schema.fetch("type")
         assert_kind_of Hash, schema.fetch("properties")
+        refute_empty tool.fetch("title")
+        assert_equal({ "title" => tool.fetch("title"), "readOnlyHint" => true }, tool.fetch("annotations"))
       end
     end
 
