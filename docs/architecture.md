@@ -1913,6 +1913,19 @@ the catalog does not hold still mints and is counted unresolved. It
 EXTENDS the source's existing LibraryReferences producer (the "tm:<n>"
 reference edges) so both families ride one run under the producer name
 `coptic-scriptorium` — a source has one reference producer.
+#15 `Adapters::MvpCrosswalk` (kind=equivalent): the Mahāvyutpatti's
+Sanskrit = Tibetan equations as entry-grain edges from each Mvy. entry
+onto the lemma nodes the held corpora carry — the DCS lexicon (exact
+NFC-lowercase IAST headword, plus the D48-a nominative↔stem candidates
+validated by existence; NEVER the diacritic-stripped search fold, which
+merges ānanda with ananda) and the 84000 per-publication glossaries of
+the Derge canon (the Wylie lane through the Xct bod fold = the
+glossary's headword_folded). The basis ("exact"/"stem") and the Mvy.
+number ride the detail. GRETIL, SARIT, CBETA and the Derge text carry no
+lemma index, so they get no leg: a token hit in running text is
+attestation, not a lemma bridge. Lives under adapters/ (the lane-helper
+placement) so its edits dirty only the mvp stamp; a dcs or e84000 sync
+does not re-run it — `sync mvp --parse-only` does.
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the

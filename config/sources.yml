@@ -3661,9 +3661,10 @@ mvp:
   # every entry = IAST + Devanāgarī orth pair, Wylie + Tibetan-script +
   # Chinese translation cits. Dictionary language "san" (the glossary's own
   # Sanskrit-headed organization — sits beside mw, so `define` aggregates
-  # both); Tibetan/Chinese equivalents ride gloss/body lanes — structured
-  # crosswalk surfacing is the P48-6 alignment packet's seam, not this
-  # row's. Mvy. numbers are the standard scholarly citation → entry ids =
+  # both); Tibetan/Chinese equivalents ride gloss/body lanes, and the
+  # crosswalk (Nabu::Adapters::MvpCrosswalk, refreshed after every load)
+  # mints kind=equivalent edges onto dcs-lexicon (san) and the 84000
+  # glossaries (bod) — exact joins only. Mvy. numbers are the standard scholarly citation → entry ids =
   # upstream keys (urn:nabu:dict:mvp:625 is a citable address). LICENSE,
   # verbatim from the glossary page (the honest-license doctrine): "We
   # believe this text is in the public domain." — the digitizer's PD-belief
