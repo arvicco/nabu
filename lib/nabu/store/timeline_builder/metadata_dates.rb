@@ -564,6 +564,9 @@ module Nabu
             return [place, nil, nil, nil]
           end
           return [present_place(meta["orig_place"]), nil, nil, nil] if place.nil?
+          # The default key's bare string answers through the same no-place
+          # screen (dta's sourceDesc pubPlace "s. l." — 116 sine loco prints).
+          return [nil, nil, nil, nil] if place.is_a?(String) && no_place?(place)
           return [place, string_place_ref(meta), nil, nil] unless place.is_a?(Hash)
 
           refs = []

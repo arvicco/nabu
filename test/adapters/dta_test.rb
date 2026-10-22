@@ -29,6 +29,7 @@ require "test_helper"
 #   digital edition's timestamp and must not win).
 class DtaTest < Minitest::Test
   include AdapterConformance
+  include StoreTestDB
 
   KANT = "urn:nabu:dta:kant_aufklaerung_1784"
   LUTHER = "urn:nabu:dta:luther_elltern_1524"
@@ -61,6 +62,23 @@ class DtaTest < Minitest::Test
 
   def test_discovers_the_three_fixtures_by_dirname_identity
     assert_equal [FONTANE, KANT, LUTHER], documents.keys.sort
+  end
+
+  # The 1660 Strasbourg ordinance's print names no place: sourceDesc's
+  # pubPlace is the catalogue's sine loco "s. l." (116 DTA texts carry it,
+  # census 2026-10-22). Verbatim in the metadata; never a place on the axis.
+  def test_the_sine_loco_imprint_mints_no_place
+    catalog = store_test_db
+    source = Nabu::Store::Source.create(slug: "dta", name: "DTA", adapter_class: "Nabu::Adapters::Dta",
+                                        license_class: "attribution")
+    workdir = Nabu::TestSupport.fixtures("dta-sine-loco")
+    Nabu::Store::Loader.new(db: catalog, source: source).load_from(conformance_adapter, workdir: workdir, full: true)
+    document = catalog[:documents].where(urn: "urn:nabu:dta:kippenheim_dieberey_1660").first
+    assert_equal "s. l.", JSON.parse(document[:metadata_json])["place"], "the header rides verbatim"
+    Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "dta")
+    row = catalog[:document_axes].where(document_id: document[:id]).first
+    assert_equal [1660, 1660, nil], row.values_at(:not_before, :not_after, :place_name),
+                 "the print year dates the doc; the sine loco mints no place name"
   end
 
   def test_header_metadata_rides_the_document
