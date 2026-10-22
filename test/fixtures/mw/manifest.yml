@@ -29,4 +29,4 @@ files:
   - path: mining-slice.xml
     url: https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/downloads/mwxml.zip
     whole: false
-    trim: citation/entry-link slice — 20 record lines of 286,530 (upstream lines 29614-29616, 42733, 68809, 68815, 111059-111061, 164586-164593, 164662, 199092, 199128) + header/footer; recipe in README.md
+    trim: citation/entry-link slice — 23 record lines of 286,530 (upstream lines 5488, 23729, 23731, 29614-29616, 42733, 68809, 68815, 111059-111061, 164586-164593, 164662, 199092, 199128) + header/footer; recipe in README.md
