@@ -103,12 +103,15 @@ module Nabu
     # P136: the kind fold + its builder join them on the same footing —
     # both run only in builder passes (full/incremental rebuild,
     # builders:refresh, the post-sync per-source refresh); a kind-rule
-    # edit re-runs the kind axis, never a parse.
+    # edit re-runs the kind axis, never a parse. The OSL sign concordances
+    # join them too: a whole-table projection of canonical/osl run in
+    # both rebuild flavors' builder passes and the osl post-sync hook,
+    # never per-source rows.
     BUILDER_FILES = %w[
       store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb
       store/silver_dates.rb date_shelf.rb store/passage_facet_builder.rb
       store/entry_facet_builder.rb store/entity_index.rb
-      kinds.rb store/kind_builder.rb
+      kinds.rb store/kind_builder.rb store/sign_concordances.rb
     ].freeze
 
     # P112-4: the fulltext-index core — files that shape ONLY

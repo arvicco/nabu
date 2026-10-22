@@ -28,7 +28,7 @@ class DerivabilityManifestTest < Minitest::Test
         language_mix language_names language_records lect_stats lemma_rollup passage_facet_values
         passage_entities passage_entity_names passage_facets passages person_index person_index_names
         place_crosswalk place_index
-        place_index_names provenance source_records source_stats
+        place_index_names provenance sign_concordances source_records source_stats
         source_stats_languages sources urn_notes
       ]
     },

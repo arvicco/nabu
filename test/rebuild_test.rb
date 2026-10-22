@@ -244,7 +244,8 @@ class RebuildTest < Minitest::Test
     rebuilder.run(progress: reporter)
 
     assert_equal ["corpus", "honkoku ndl catalog", "timeline", "silver dates", "place apply", "facets", "kind axis",
-                  "passage facets", "entity index", "entry facets", "hiero postings", "lect journal",
+                  "passage facets", "entity index", "entry facets", "hiero postings", "sign concordances",
+                  "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages

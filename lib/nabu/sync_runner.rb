@@ -409,6 +409,11 @@ module Nabu
       if entry.slug == Store::HieroPostingsBuilder::SOURCE_SLUG
         Store::HieroPostingsBuilder.rebuild!(catalog: @db, canonical_dir: @config.canonical_dir)
       end
+      # The OSL sign concordances follow the osl CONE the same way: the
+      # module mints no documents, so no load gate could ever fire.
+      if entry.slug == Store::SignConcordances::SOURCE_SLUG
+        Store::SignConcordances.rebuild!(catalog: @db, canonical_dir: @config.canonical_dir)
+      end
       return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
 
       facet_map = Nabu::FacetMap.load_default(config: @config)

@@ -61,6 +61,7 @@ module Nabu
       entity_index: "entity index",       # the inline-entity name index
       entry_facets: "entry facets",       # the dictionary-entry facet projection
       hiero_postings: "hiero postings",   # P103: the AED per-text glyph census
+      sign_concordances: "sign concordances", # the OSL 00etc concordances on the sign ids
       lect_journal: "lect journal",       # P70: the re-minted lect journal
       lect_facets: "lect facets",         # P58-4: the flattened lect axis
       dictionary_stats: "dictionary stats", # P106-1: the dictionary-group census
