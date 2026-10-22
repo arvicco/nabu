@@ -6048,6 +6048,65 @@ class CLITest < Minitest::Test
     end
   end
 
+  # CLI parity for the MCP explain surface (nabu_parallels explain: true):
+  # the same engine observed, each hit's score decomposed into its shared
+  # grams; the zero rows counted, listed with --long.
+  def test_parallels_explain_decomposes_each_hit_score
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --explain]) }
+      assert_nil status
+      assert_match(/explain \(gram · df · weight → contribution\):/, out)
+      assert_match(/ανδρα μοι εννεπε μουσα · df \d+ · \d\.\d{4} → \d\.\d{4}/, out, "a shared gram's row")
+      assert_match(/… \d+ zero row\(s\): .*not_shared \d+.* \(--long\)/, out, "the zero rows are counted")
+
+      long, = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --explain --long]) }
+      assert_match(/\(not_shared\)/, long, "--long lists the zero rows")
+      refute_match(/zero row\(s\)/, long)
+
+      plain, = with_config(config) { run_cli(%w[parallels urn:h:od:1.1]) }
+      refute_match(/explain/, plain, "no flag = the plain page")
+    end
+  end
+
+  def test_parallels_explain_refuses_batch
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch h --explain]) }
+      assert_equal 1, status
+      assert_match(/--explain is interactive only/, err)
+    end
+  end
+
+  # -- clarify (CLI parity for nabu_clarify) ---------------------------------
+
+  def test_clarify_completes_a_misspelled_title_to_typed_candidates
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[clarify Illiad]) }
+      assert_nil status
+      assert_match(/clarify "Illiad"/, out)
+      assert_match(/candidates \(\d+\):/, out)
+      assert_match(/  Iliad  \[document · fuzzy\]  urn:\S+  corpus \[grc · /, out,
+                   "title, [type · match], the key, the source, [language · license]")
+    end
+  end
+
+  def test_clarify_resolves_a_passage_urn_with_its_citation_shape
+    with_parallels_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[clarify urn:h:od:1.1]) }
+      assert_nil status
+      assert_match(/clarify "urn:h:od:1\.1" — a reference/, out)
+      assert_match(/resolves to urn:h:od:1\.1 \(passage\)/, out)
+      assert_match(/citation shape: 1 passage/, out)
+    end
+  end
+
+  def test_clarify_without_a_query_exits_one
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[clarify]) }
+      assert_equal 1, status
+      assert_match(/give a title/, err)
+    end
+  end
+
   def test_help_parallels_documents_the_engine_and_long
     out, _err, _status = run_cli(%w[help parallels])
     assert_match(/quote|echo|intertext/i, out)

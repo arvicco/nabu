@@ -1192,8 +1192,18 @@ module MCP
       rig = tools(pleiades: lilybaeum_resolver)
 
       shown = payload(rig.call("nabu_show", { "urn" => "#{@stone.urn}:1" }))
+      # Contract bump 2026-10-22 (deliberate, docs/mcp.md): the findspot
+      # block gains the gazetteer's attribution envelope, like the nabu_place
+      # card — the served Pleiades facts carry their CC BY source line.
+      findspot = shown.fetch("findspot")
+      assert_equal %w[pleiades_id title place_types attribution], findspot.keys
       assert_equal({ "pleiades_id" => "462281", "title" => "Lilybaeum", "place_types" => ["settlement"] },
-                   shown.fetch("findspot"), "the passage payload carries the resolved findspot")
+                   findspot.except("attribution"), "the passage payload carries the resolved findspot")
+      attribution = findspot.fetch("attribution")
+      assert_equal %w[source license_class license upstream_url uri], attribution.keys
+      assert_equal %w[pleiades attribution https://pleiades.stoa.org/places/462281],
+                   attribution.values_at("source", "license_class", "uri")
+      assert_match(/CC BY 3\.0/, attribution.fetch("license"))
 
       docp = payload(rig.call("nabu_show", { "urn" => @stone.urn }))
       assert_equal "Lilybaeum", docp.fetch("findspot").fetch("title"), "the document header carries it too"

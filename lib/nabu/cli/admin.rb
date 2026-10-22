@@ -241,7 +241,10 @@ module Nabu
         # once — the rules' tier: words and the override rows' tier: map,
         # joined against each shown document's facet basis.
         lect_rules: Nabu::LectRules.load(config.lect_facet_rules_paths),
-        lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths)
+        lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths),
+        # The facet map (static, loaded once): the token-sense rules behind
+        # nabu_search's `sense` desk and nabu_show's `senses` flag.
+        facet_map: Nabu::FacetMap.load_default(config: config)
       )
       $stdout.sync = true
       install_mcp_signal_traps

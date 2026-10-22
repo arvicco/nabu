@@ -76,13 +76,16 @@ module Nabu
       MATCH_RANK = { "exact" => 0, "prefix" => 1, "token" => 2, "fuzzy" => 3 }.freeze
       TYPE_RANK = { "document" => 0, "source" => 1, "place" => 2, "lemma" => 3 }.freeze
       HIGH = "\u{10FFFF}"
+      # Candidates per page when the caller names no limit.
+      # const: a render bound, not a corpus claim
+      DEFAULT_LIMIT = 10
 
       def initialize(catalog:, fulltext:)
         @catalog = catalog
         @fulltext = fulltext
       end
 
-      def run(input, limit: 10, include_restricted: false)
+      def run(input, limit: DEFAULT_LIMIT, include_restricted: false)
         text = Nabu::Normalize.nfc(input.to_s.strip)
         @include_restricted = include_restricted
         return urn_result(text, limit) if text.start_with?("urn:")
