@@ -42,7 +42,11 @@ module Nabu
       "ugar" => /\p{Ugaritic}/,
       "xpeo" => /\p{Old_Persian}/,
       "mymr" => /\p{Myanmar}/,
-      "guru" => /\p{Gurmukhi}/
+      "guru" => /\p{Gurmukhi}/,
+      "bali" => /\p{Balinese}/,
+      "java" => /\p{Javanese}/,
+      "rjng" => /\p{Rejang}/,
+      "sund" => /\p{Sundanese}/
     }.freeze
 
     # Registry scripts a byte check CANNOT mirror, with the reason stated —

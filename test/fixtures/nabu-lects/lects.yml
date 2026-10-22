@@ -418,6 +418,26 @@ anchors:
   cy:
     name: Welsh
     parent: wlm
+    stages:
+      emod: {name: Early Modern Welsh, band: [1500, 1800], ord: 10,
+             band_note: "Cymraeg Diweddar Cynnar: from the close of Middle
+                         Welsh (wlm) through the Renaissance humanist prints
+                         — Salesbury's Oll synnwyr pen Kembero ygyd (1547)
+                         and New Testament (1567), William Morgan's Bible
+                         (1588) and its 1620 revision, the foundation of the
+                         literary standard — to the end of the 18th c.;
+                         approximate",
+             note: "a STAGE of cy, not a node: Middle Welsh is already its
+                    own ISO node (wlm, cy's parent), so the early-modern
+                    period slices the modern anchor (the lt:old / lv:old /
+                    fi:old precedent). Corpus: cy-wikisource's ≤ 1800
+                    prints in original orthography — Salesbury 1547, the
+                    1588 Bible (front matter + Genesis), the 1620 Bible (67
+                    books), the 1735–1800 ballad and hymn prints (~90
+                    pages). The same source's modernized-spelling editions
+                    of older texts (Cyfres y Fil 1901–1913, the Mabinogion
+                    1901/1921, Goronwy Owen 1924, Clasuron Rhyddiaith 1897)
+                    stay bare cy and are never claimed as wlm text"}
 
   obt:
     name: Old Breton
@@ -430,6 +450,19 @@ anchors:
   br:
     name: Breton
     parent: xbm
+    glottocode: bret1244
+    note: "ISO 639-1 (639-3 bre aliases here). Brythonic Celtic, with
+           Cornish the South-Western Brythonic pair (prose, never an
+           edge). Descent: Old Breton (obt, the 8th–11th-c. glosses) →
+           Middle Breton (xbm, c. 1100–1650: the Catholicon 1499, the
+           mystery plays) → Modern Breton from the mid-17th c. (Maunoir's
+           orthography, 1659), in four historic dialects (KLT — Kerne,
+           Leon, Treger — and Gwened/Vannetais, which wrote its own
+           standard; varieties unminted). Corpus: br-wikisource's dated
+           cone (prints 1779–1900: Marigo's Buez ar Saent 1837, the
+           Vannetais Guerzenneu 1857, Luzel's Gwerziou 1868/1874 and
+           Soniou 1890, the Barzaz Breiz editions, Le Gonidec's Bible
+           1866), all Modern Breton — the xbm node is not claimed"
 
   oco:
     name: Old Cornish
@@ -1061,14 +1094,44 @@ anchors:
   xcl:
     name: Classical Armenian
     parent: ine
+    glottocode: clas1249
+    band: [405, 1100]
+    band_note: "Mesrop Mashtots' alphabet (c. 405) and the 5th-c. Bible
+                translation to the rise of Middle Armenian; continued as the
+                learned language (grabar) to the 19th c.; approximate"
+    note: "grabar, Armenian's own branch of Indo-European: the 5th-c.
+           Bible, Koriwn, Ełišē, Movsēs Xorenacʿi, the translated Greek and
+           Syriac patristics. Glottolog groups Classical and Middle Armenian
+           as one language (clas1249); Wiktionary keeps xcl and axm apart,
+           as here. Descent from Proto-Armenian (Wiktionary hyx-pro, 58
+           etymon edges in the kaikki Old Armenian extract) stays PROSE:
+           minting an hyx family node would re-parent xcl off ine — a
+           structural change deliberately deferred. Consumers: PROIEL (the
+           New Testament), UD CAVaL, kaikki Old Armenian (8,541 records),
+           iip"
 
   axm:
     name: Middle Armenian
     parent: xcl
+    band: [1100, 1700]
+    band_note: "the Cilician kingdom's written vernacular (12th–17th c.);
+                approximate"
+    note: "Cilician Armenian: the law codes, the medical literature
+           (Mxitʿar Heracʿi's Consolation of Fevers, 1184), chronicles and
+           colophons. No glottocode of its own (Glottolog folds it into
+           clas1249 with xcl). Consumers: UD Middle Armenian ArmTDP (27
+           sentences from a law code and a medical treatise), kaikki Middle
+           Armenian (478 records), 481 descendant reflexes"
 
   hy:
     name: Armenian
     parent: axm
+    glottocode: nucl1235
+    note: "ISO 639-1 (639-3 hye and 639-2/B arm alias here). Modern
+           Armenian — Eastern (Glottolog nucl1235, ISO hye) and Western;
+           the two standards are varieties, deliberately unminted until a
+           consumer separates them. Consumers: 6,385 kaikki descendant
+           reflexes"
 
   # ── Slavic lects ───────────────────────────────────────────────────────────
 
@@ -1841,8 +1904,32 @@ anchors:
            (tfb-telugu 101 editions tel-Latn; Vengī Cālukya bilinguals,
            31 tel-Latn textparts), dharma-mdt (98 Telugu metadata rows
            with the estate's richest dating), dharma-tamil (13 tel-Latn
-           passages). Stages unminted: the consumers are epigraphic and
-           date at the document grain"
+           passages). The epigraphic consumers date at the document grain
+           and claim the bare anchor; Old Telugu proper (the pre-Nannaya
+           epigraphic language) is a named candidate stage, unminted"
+    stages:
+      cls: {name: Classical Telugu, band: [1000, 1850], ord: 20,
+            band_note: "the kāvya (grānthika) literary language from
+                        Nannaya's Āndhra Mahābhāratamu (begun under
+                        Rājarājanarēndra, r. 1022–1061) and the Kavitraya
+                        (Tikkana, 13th c.; Errāpragaḍa, 14th c.) through
+                        Śrīnātha and Pōtana (15th c.), the Vijayanagara
+                        prabandha (16th c.) and the Nāyaka/Thanjavur courts,
+                        to the 18th-c. prabandha (Kūcimañci Timmana) — the
+                        register the Āndhraśabdacintāmaṇi codified and
+                        Chinnaya Sūri's Bālavyākaraṇamu (1858) still
+                        prescribed; approximate",
+            note: "a REGISTER stage (cls, not old/mid): Krishnamurti's own
+                   periodization is linguistic (Old Telugu to ~1100 from
+                   the epigraphy, Middle 1100–1600, Modern after 1600), but
+                   the literary corpus is written in the classical kāvya
+                   register whatever the century of composition — the
+                   ms:cls precedent. Old Telugu is the pre-Nannaya
+                   epigraphic language and is NOT this stage (ord 20 leaves
+                   it room). Corpus: te-wikisource — 73 work trees by
+                   pre-1800 poets (Nannaya, Tikkana, Errāpragaḍa, Śrīnātha,
+                   Pōtana, Pālkuriki Sōmanātha, Molla, Kūcimañci Timmana …)
+                   in their 1891–1930 Madras prints, ~533 pages"}
 
   kn:
     name: Kannada
@@ -1869,6 +1956,26 @@ anchors:
                         corpus (Purandara, Kanakadāsa, 16th c.) and the
                         Keḷadi-era prose; approximate"}
 
+  ml:
+    name: Malayalam
+    parent: dra-sou
+    glottocode: mala1464
+    note: "ISO 639-1 (639-3 mal aliases here). South Dravidian I, the
+           Tamil–Malayalam subgroup (Krishnamurti 2003; prose — the
+           anchor parents dra-sou directly, the ta/kn shape): the
+           west-coast (Cēra) speech separated from Middle Tamil around
+           the 9th c. Attestation: the Vāḻappaḷḷi copper plate of
+           Rājaśēkhara (c. 830 CE, Vaṭṭeḻuttu) opens the Old Malayalam
+           record; literature in the pāṭṭu tradition (Rāmacaritam,
+           12th–14th c.) and in Maṇipravāḷam, the Malayalam–Sanskrit
+           literary mix the 14th-c. Līlātilakam describes (Vaiśikatantram,
+           Uṇṇunīlisandēśam); Eḻuttaccan (16th c.) fixes the modern
+           literary language. Corpus: wiktionary-ml (11,505 entries, mal)
+           and GRETIL's Jyotsnikā, a Maṇipravāḷam toxicology text
+           (mal-Latn) — both claim the bare anchor; 2,899 Wiktionary
+           descendant reflexes. Old Malayalam and Maṇipravāḷam stay prose,
+           declared coarse, until a consumer distinguishes them"
+
   inc:
     name: Indo-Aryan
     kind: family
@@ -1893,6 +2000,26 @@ anchors:
            (6th c. BCE); the held corpora reach it through Avestan,
            Middle Persian and the StarLing Iranian comparative material
            (iran wordlist + iranet etymology shelves)"
+
+  os:
+    name: Ossetian
+    parent: ira
+    glottocode: osse1243
+    note: "ISO 639-1 (639-3 oss aliases here). The Eastern Iranian language
+           of North and South Ossetia, the sole living descendant of the
+           Scytho-Sarmatian–Alanic line (Glottolog: Iranian > Sogdic-Ossetic
+           > Ossetic). Parents ira DIRECTLY: its medieval ancestor Alanic
+           (Wiktionary xln — the Zelenchuk inscription, 10th–12th c.; the
+           Alanic phrases in Tzetzes' Theogony, 12th c.; 45 etymon edges in
+           the kaikki Ossetian extract) stays PROSE — no xln node is minted,
+           no consumer holds an Alanic text; the Eastern Iranian / Sogdic-
+           Ossetic intermediates stay prose likewise. Two literary
+           varieties: Iron (iron1242, ISO oss — the standard) and Digor
+           (digo1242), both in the kaikki extract (Digor forms labelled),
+           deliberately unminted until a consumer separates them. Written
+           from the 18th c. (the 1798 catechism, Cyrillic-based; Sjögren's
+           1844 grammar, Kosta Khetagurov's verse). Consumers: kaikki
+           Ossetian (913 records) and 59 descendant reflexes"
 
   inc-dar:
     name: Dardic
@@ -1956,6 +2083,57 @@ anchors:
                    Vārāṅ of Bhāī Gurdās (c. 1551-1636). Corpus:
                    shabados, the consuming library's line-grain
                    scripture database"}
+
+
+  mr:
+    name: Marathi
+    parent: inc
+    glottocode: mara1378
+    note: "ISO 639-1 (639-3 mar aliases here). Southern Indo-Aryan, the
+           continuation of Maharashtri Prakrit (held under pra; the
+           descent stays prose until the registry draws Prakrit
+           lineages). Inscriptional record from the early 11th c. (the
+           Akṣī stone, Śilāhāra period; the Śravaṇabeḷagoḷa Gommaṭa line
+           c. 981 is debated), classical literature from the 13th c.
+           (Jñāneśvarī 1290, the Mahānubhāva prose, the vārakarī sant
+           poets from Nāmdev to Tukārām). Corpus: a handful of romanized
+           Marathi inscriptions (mar-Latn) in the consuming library's
+           South Indian epigraphy, from the Maratha-period volumes; the
+           bare anchor is the honest claim, declared coarse — stages
+           (Old/Middle Marathi) unminted until a consumer needs them"
+
+  si:
+    name: Sinhala
+    parent: inc
+    glottocode: sinh1246
+    note: "ISO 639-1 (639-3 sin aliases here). Insular Indo-Aryan, beside
+           Dhivehi (dv; the shared Insular node stays prose). The
+           longest continuously documented New Indo-Aryan line:
+           Sinhalese Prakrit cave
+           inscriptions from the 3rd–2nd c. BCE, the Sīgiri graffiti
+           (8th–10th c.), classical literature from the 9th–10th c.
+           (Siyabaslakara) through the 13th-c. Sidatsan̆garā grammar.
+           Corpus: one romanized Sinhala record (sin-Latn) in the
+           consuming library's South Indian epigraphy; the bare anchor is
+           the honest claim, declared coarse — stages unminted until a
+           consumer needs them"
+
+  dv:
+    name: Dhivehi
+    parent: inc
+    glottocode: dhiv1236
+    note: "ISO 639-1 (639-3 div aliases here). Insular Indo-Aryan beside
+           Sinhala (si): the two descend from the Sinhalese Prakrit of the
+           early centuries CE, Dhivehi diverging toward the end of the
+           first millennium; the shared Insular node stays prose (the si
+           precedent — no subgroup edge minted). Attestation: the lōmāfānu
+           copper-plate grants of the 12th–13th c. (Isdhoo, c. 1194; Dhivehi
+           Akuru script) and the coral-stone inscriptions; Thaana replaced
+           Dhivehi Akuru from the 17th c. and carries the modern language.
+           Corpus: wiktionary-dv (2,047 entries, Thaana-headed, div); 29
+           Wiktionary descendant reflexes — the bare anchor is the honest
+           claim; the lōmāfānu language (Old Dhivehi) stays unminted, no
+           consumer holds it"
 
   bra:
     name: Braj
@@ -2091,6 +2269,33 @@ anchors:
            its literature. The DHARMA Nusantara philology and epigraphy
            are the corpora; held romanized (kaw-Latn)"
 
+  jv:
+    name: Javanese
+    parent: kaw
+    glottocode: java1254
+    note: "ISO 639-1 (639-3 jav aliases here). The Javanesic language of
+           central and eastern Java — Austronesian, Malayo-Polynesian; the
+           Javanesic placement carries no ISO 639-5 branch code (the kaw
+           precedent: the edge reads through kaw to poz). Descent: Old
+           Javanese (kaw, the kakawin and charter language from the
+           Sukabumi inscription, 804 CE) → the Middle Javanese of the
+           kidung (Majapahit-era, carried on in Bali; unminted, a named
+           candidate stage) → New/Modern Javanese, the literary language of
+           the Islamic pasisir and the Mataram courts (16th c. on), its
+           speech-level (ngoko/krama) system fully grammaticalized in the
+           Surakarta and Yogyakarta court literature of the 18th–19th c.
+           (Yasadipura I–II, Ranggawarsita, Pakubuwana IV, Mangkunegara IV).
+           Written in aksara Jawa (hanacaraka, ISO 15924 Java), in pegon
+           (Arabic script) and, from the 19th-c. mission and colonial
+           presses, in Latin. Corpus: jv-wikisource's dated 19th-century
+           cone — the BL MSS Jav 24/28 manuscripts (1803, 1804), Gericke's
+           New Testament (1848, aksara Jawa) and Old Testament (1854),
+           Winter's Adji Såkå (1857), the Babad Dipa Nagara manuscript (D Or.
+           13, 1866), Palmer van den Broek's Serat Kancil (1878), plus the
+           1912–1929 prints of the Pararaton, Wulangreh and Wirit Hidayat
+           Jati — measured per page jav-Java / jav. Stages unminted: the
+           consumer dates at the print grain"
+
   omy:
     name: Old Malay
     parent: poz
@@ -2107,6 +2312,29 @@ anchors:
     note: "the ancestor stage of Sundanese (sun). Attested 14th-17th c.
            (Kawali, Batutulis, the Sanghyang prose treatises). The DHARMA
            Nusantara corpora attest it; held romanized (osn-Latn)"
+
+  su:
+    name: Sundanese
+    parent: osn
+    glottocode: sund1252
+    note: "ISO 639-1 (639-3 sun aliases here). The language of West Java
+           (Pasundan) — Austronesian, Malayo-Polynesian, its own Sundanese
+           subgroup (no ISO 639-5 code; the edge reads through osn to poz,
+           the ban/kaw precedent). Descent: Old Sundanese (osn — the Kawali
+           and Batutulis inscriptions, 14th c.; the Sanghyang Siksakanda ng
+           Karesian, 1518; the Carita Parahyangan, late 16th c.) → Modern
+           Sundanese, whose literature from the 17th c. is shaped by
+           Javanese-Mataram rule (the wawacan in Javanese-derived metres,
+           the cacarakan script — Sundanese written in aksara Jawa) and the
+           19th-c. Dutch-colonial schoolbook press (Muhamad Musa,
+           Lasminingrat, Moehamad Oemar), alongside the oral pantun
+           tradition (the Badui pantun, recorded 1891). Scripts: cacarakan
+           (ISO 15924 Java), pegon (Arab), Latin; the Old Sundanese script
+           (ISO 15924 Sund) in the old manuscripts and its 1997
+           standardization. Corpus: su-wikisource's dated 19th-century cone
+           (the 1841–1900 prints, measured sun / sun-Java per page) beside
+           the DHARMA Old Sundanese texts held as osn. Stages unminted (the
+           consumer dates at the print grain)"
 
   sit:
     name: Sino-Tibetan
@@ -2207,6 +2435,7 @@ anchors:
   ccs:
     name: Kartvelian
     kind: family
+    glottocode: kart1248
     note: "ISO 639-5 ccs (South Caucasian): Georgian, Mingrelian, Laz, Svan —
            an uncontroversial family. Backfill anchor: starling-kart shipped
            ccs-pro before the registry discipline. Corpus: starling-kart
@@ -2214,6 +2443,65 @@ anchors:
            with S. Starostin's notes)."
     stages:
       pro: {name: Proto-Kartvelian, mode: reconstructed, ord: 5, wikt: ccs-pro}
+
+  # ── Georgian-Zan (2026-10-21). Svan stands outside as Kartvelian's first
+  # split; Georgian and Zan (Mingrelian xmf, Laz lzz) form the other
+  # branch. Old Georgian and Georgian are separate ISO codes and stand as
+  # SIBLINGS under ccs-gzn (the prg/chu separate-code shape, Glottolog's
+  # own sibling placement); the descent between them is stated in prose
+  # both ways, never drawn as an edge. Zan and Svan stay unminted — reflex
+  # evidence only (xmf 291 · sva 247 · lzz 171), no corpus consumer ──
+
+  ccs-gzn:
+    name: Georgian-Zan
+    kind: family
+    parent: ccs
+    glottocode: geor1252
+    note: "Kartvelian > Georgian-Zan: Georgian beside Zan (Mingrelian xmf,
+           Laz lzz), Svan standing outside as the first split (Klimov;
+           Glottolog geor1252). Wiktionary's ccs-gzn family; its
+           reconstructed stage keys 185 etymon edges of the kaikki Old
+           Georgian extract (Proto-Georgian-Zan *kart-ul-, *ert- …)"
+    stages:
+      pro: {name: Proto-Georgian-Zan, mode: reconstructed, ord: 5, wikt: ccs-gzn-pro}
+
+  oge:
+    name: Old Georgian
+    parent: ccs-gzn
+    glottocode: oldg1234
+    band: [430, 1100]
+    band_note: "the earliest inscriptions (Bir el-Qutt in Palestine, 430s;
+                the Bolnisi Sioni building inscription, 493/94) and the
+                first literature (the Martyrdom of Shushanik, late 5th c.)
+                to the close of the classical period around the 11th–12th
+                c., when Middle Georgian takes over; approximate"
+    note: "the classical literary language of the Georgian church: the
+           Gospel and Bible translations (Adishi Gospels 897, the Athonite
+           revisions of Euthymius and George the Hagiorite, 10th–11th c.),
+           hagiography, hymnography and the chronicle tradition; written in
+           the asomtavruli and nuskhuri scripts (khutsuri); held corpora
+           transcribe to Mkhedruli. Its continuation is Georgian (ka) —
+           PROSE, not an edge: oge and ka are separate ISO codes and stand
+           as siblings under ccs-gzn (Glottolog's placement; Wiktionary
+           files oge as ka's ancestor). Consumers: UD Old Georgian GLC (151
+           sentences / 6,884 words), kaikki Old Georgian (728 records), 199
+           descendant reflexes and 10 etymon edges; the TITUS Old Georgian
+           corpora are the waiting large shelf"
+
+  ka:
+    name: Georgian
+    parent: ccs-gzn
+    glottocode: nucl1302
+    note: "ISO 639-1 (639-3 kat and 639-2/B geo alias here). The
+           Mkhedruli-written language of Georgia, the Kartvelian language
+           with the longest record. It continues Old Georgian (oge) — PROSE,
+           not an edge: the two are separate ISO codes, siblings under
+           ccs-gzn. Middle Georgian (12th–18th c.: Rustaveli's Knight in
+           the Panther's Skin, the Kartlis Tskhovreba redactions) is
+           deliberately NOT staged — no consumer holds it (the TITUS Middle
+           Georgian corpora are the candidate). Consumers: 1,195 kaikki
+           descendant reflexes and 27 etymon edges; iip's 14 kat-coded
+           inscriptions"
 
   # ── The StarLing branch-base wing (2026-10-07) ────────────────────────
   # The ALTAIC/CAUC/DRAV/SINTIB packages' 28 branch etymology bases
@@ -2637,6 +2925,223 @@ anchors:
             note: "bat-pro by the family-code + -pro convention; a
                    Moscow-school reconstruction level mainstream scholarship
                    folds into Balto-Slavic"}
+
+
+  # ── The Baltic anchors. East Baltic (Lithuanian, Latvian) vs West Baltic
+  # (Old Prussian) is the standard internal split; it is stated in prose,
+  # never as edges (the sv/non undivided-parent precedent) — every anchor
+  # parents on the bat family node directly. Glottolog has no Baltic
+  # clade (Eastern Baltic east2280 sits directly under Balto-Slavic);
+  # the bat filing node stays the parent, east2280 deliberately unminted ──
+
+  lt:
+    name: Lithuanian
+    parent: bat
+    glottocode: lith1251
+    note: "East Baltic (Glottolog places it under Eastern Baltic east2280
+           within Balto-Slavic). The most conservative living Indo-European
+           language in its nominal accent and inflection. Written from 1547
+           (Martynas Mažvydas' Catechismusa prasty szadei, Königsberg — the
+           first Lithuanian book) in two traditions: Prussian Lithuania
+           (Mažvydas, Bretkūnas' Bible manuscript 1590, the Wolfenbüttel
+           Postil 1573, Donelaitis' Metai, written 1765–75) and the Grand
+           Duchy (Daukša's Catechism 1595 and Postil 1599, Sirvydas'
+           dictionary c. 1620). Modern standard from the late 19th c.
+           (Jablonskis' grammar 1901). Corpus: none held yet; 3,757
+           Wiktionary descendant reflexes resolve here (Zinkevičius,
+           Lietuvių kalbos istorija III–IV, 1987–88)"
+    stages:
+      old: {name: Old Lithuanian, band: [1547, 1800], ord: 10, wikt: olt,
+            band_note: "from the first book (Mažvydas 1547) to the end of
+                        the 18th c. — the conventional Old Lithuanian
+                        (senoji lietuvių kalba) span of the printed
+                        tradition; approximate",
+            note: "the language of the 16th–18th-c. religious prints and
+                   dictionaries of both traditions (Mažvydas, Vilentas,
+                   Bretkūnas, Daukša, Sirvydas, Donelaitis). Wiktionary's
+                   olt — 188 descendant reflexes held. Corpus: none held"}
+
+  lv:
+    name: Latvian
+    parent: bat
+    glottocode: latv1249
+    note: "East Baltic, beside Lithuanian (Glottolog: Eastern Baltic
+           east2280 within Balto-Slavic); heavily shaped by centuries of
+           contact with Middle Low German and Livonian Finnic (prose, never
+           edges). The ISO macrolanguage lav covers Standard Latvian (lvs)
+           and Latgalian (ltg — deliberately unminted until a consumer
+           holds it). Written from the early 16th c.: Lord's-prayer
+           specimens (Gisbert 1507, Grunau 1520), the first books the
+           Catholic catechism of 1585 and the Lutheran Enchiridion of 1586,
+           then Mancelius (Lettus 1638), Glück's Bible (1685–94), the
+           manuscript dictionaries of Fürecker and Langius; the orthography
+           follows German print conventions until the 1908–1920s reform.
+           Corpus: SENIE (the Corpus of Early Written Latvian): 183
+           documents / 48,995 passages, 1507–1800, every run
+           language-tagged; 2,727 Wiktionary descendant reflexes"
+    stages:
+      old: {name: Old Latvian, band: [1500, 1800], ord: 10,
+            band_note: "the written Latvian of the 16th–18th c. — SENIE's
+                        own 16th–18th-century span (earliest specimen 1507,
+                        latest prints 1800); the close is the conventional
+                        turn to the Neo-Latvian (jaunlatviešu) 19th-c.
+                        literary language; approximate",
+            note: "the German-orthography written language of the Lutheran
+                   and Catholic prints, the Bible, the hymnals, the laws and
+                   the manuscript dictionaries — German- and Latin-trained
+                   authors writing for Latvian congregations. Corpus: SENIE
+                   (all 183 documents fall inside the band)"}
+
+  prg:
+    name: Old Prussian
+    parent: bat
+    glottocode: prus1238
+    band: [1350, 1700]
+    band_note: "from the earliest fragment (the Basel epigram, c. 1369) to
+                extinction around 1700; approximate"
+    note: "West Baltic — the best-attested member of the branch (its sister
+           Yotvingian/Sudovian and Curonian are known from names and
+           glosses only; prose, not nodes). Glottolog makes it a direct
+           Balto-Slavic daughter (no Baltic clade). Attested in the Elbing
+           Vocabulary (c. 1400, 802 words, German-Prussian), Simon Grunau's
+           vocabulary (early 16th c.), and three Lutheran catechism
+           translations printed at Königsberg — 1545 (two editions) and Abel
+           Will's Enchiridion of 1561, the longest text. Extinct by c. 1700.
+           Deliberately stage-less (a closed corpus; the hit precedent).
+           Wiktionary prg. Corpus: none held; 1,152 Wiktionary descendant
+           reflexes resolve here (Mažiulis, Prūsų kalbos etimologijos
+           žodynas, 1988–97)"
+
+  # ── Uralic. Glottolog (ural1272) lists the branches flat — Finnic, Saami,
+  # Mordvinic, Mari, Permic, Hungarian, Mansi, Khanty, Samoyedic; the
+  # intermediate Finno-Ugric / Finno-Permic / Finno-Volgaic groupings are
+  # contested and recorded as prose, never edges. Minted with the first
+  # held members ─────────────────────────────────────────────────────────
+
+  urj:
+    name: Uralic
+    kind: family
+    glottocode: ural1272
+    note: "ISO 639-5 urj. No parent edge: the Uralic family has no
+           established external relative (Uralo-Altaic, Indo-Uralic and
+           Uralo-Yukaghir stay hypotheses — prose, never edges, the
+           qfa-kor discipline). Corpus: none held at family grain; the
+           Finnic anchors are its first members"
+    stages:
+      pro: {name: Proto-Uralic, mode: reconstructed, ord: 5, wikt: urj-pro}
+
+  urj-fin:
+    name: Finnic
+    kind: family
+    parent: urj
+    glottocode: finn1317
+    note: "Wiktionary's family code urj-fin (Baltic-Finnic). Finnish,
+           Estonian, Karelian, Veps, Votic, Ingrian, Livonian; the Finnic–
+           Saami tie (\"Finno-Saamic\") is not drawn as an edge. Parent is
+           urj directly per Glottolog's flat Uralic; Glottolog's own
+           internal nesting (Coastal Finnic > Neva > North/Central Finnic)
+           stays prose — the contested-intermediates discipline"
+    stages:
+      pro: {name: Proto-Finnic, mode: reconstructed, ord: 5, wikt: urj-fin-pro}
+
+  fi:
+    name: Finnish
+    parent: urj-fin
+    glottocode: finn1318
+    note: "North Finnic. Written from Mikael Agricola's Abckiria (1543) —
+           the literary language rests on the south-western dialects of
+           Turku, with eastern features admitted through the 19th c. Kotus'
+           periodization: Old Literary Finnish (vanha kirjasuomi) 1540–1810,
+           Early Modern Finnish (varhaisnykysuomi) 1810–1880 (deliberately
+           unminted until a consumer holds it), Modern Finnish from 1880 —
+           the bare anchor's open end. Corpus: VKS (Vanhan kirjasuomen
+           korpus) — 4,133,202 tokens / 134 text files, 1543–1810; 1,620
+           Wiktionary descendant reflexes (Häkkinen, Kehittyvä kieli, 1994)"
+    stages:
+      old: {name: Old Literary Finnish, band: [1540, 1810], ord: 10,
+            band_note: "Kotus' vanha kirjasuomi — Agricola's first prints
+                        (1543) to the end of Swedish rule (1809) and the
+                        turn of the century; VKS's own span 1543–1810",
+            note: "the Reformation-born written language: Agricola's ABC,
+                   prayer book, New Testament (1548) and psalter, the first
+                   full Bible (1642), Hemminki of Masku's hymnal, the
+                   Swedish realm's laws and decrees in Finnish, sermons,
+                   almanacs and Lizelius' first Finnish newspaper (1775–76).
+                   Corpus: VKS — every text inside the band"}
+
+  et:
+    name: Estonian
+    parent: urj-fin
+    glottocode: esto1258
+    note: "South Finnic (Tallinn-based North Estonian is the standard; the
+           South Estonian Võro-Seto tradition is a variety, deliberately
+           unminted until a consumer holds it; Glottolog's ISO is ekk,
+           Standard Estonian — the est macrolanguage aliases here). Written
+           from the 1520s–30s (the Kullamaa prayers c. 1524–32, the
+           Wanradt–Koell catechism of 1535); the first full Bible in North
+           Estonian 1739. Corpus: none held yet (VAKK, the Old Written
+           Estonian corpus, is the candidate shelf); 1,139 Wiktionary
+           descendant reflexes"
+    stages:
+      old: {name: Old Written Estonian, band: [1520, 1739], ord: 10,
+            band_note: "the earliest written records (the Kullamaa prayers,
+                        1520s–30s) to the 1739 North Estonian Bible, the
+                        conventional close of the old written language
+                        (vana kirjakeel); approximate",
+            note: "the German-clergy written language of catechisms,
+                   sermons (Müller's 1600–06), hymnals and the first
+                   grammars (Stahl 1637, Gutslaff 1648). Corpus: none held"}
+
+  # ── Basque: the European isolate. Parentless by the ecy/xht discipline;
+  # the Aquitanian inscriptions of Roman Gaul are its acknowledged
+  # ancestor-or-sister, recorded in prose until a consumer holds them ────
+
+  eu:
+    name: Basque
+    glottocode: basq1248
+    note: "Language isolate of the western Pyrenees (Gipuzkoa, Bizkaia,
+           Araba, Navarre; Lapurdi, Lower Navarre, Zuberoa). The Aquitanian
+           personal and divine names of Roman-era inscriptions are its
+           earliest trace (prose — xaq unminted). Written from the 15th-c.
+           fragments and Bernard Etxepare's Linguae Vasconum Primitiae
+           (Bordeaux 1545) in strongly dialectal literary traditions
+           (Labourdin, Souletin, Biscayan, Gipuzkoan, Navarrese) until the
+           unified standard Euskara Batua (1968) — dialects are varieties,
+           deliberately unminted until a consumer distinguishes them (the
+           BIM/SAHCOBA works carry their dialect as a facet already).
+           Periodization after the BIM/SAHCOBA projects: Archaic and Old
+           Basque (15th c. to the mid-18th), Early and Late Modern Basque
+           (mid-18th to mid-20th). Corpus: BIM/SAHCOBA — 15 works, 669,109
+           tokens, 1545–1782; 13 Wiktionary descendant reflexes (Michelena,
+           Fonética histórica vasca, 1961/1977; Trask, The History of
+           Basque, 1997)"
+    stages:
+      arch: {name: Archaic Basque, band: [1400, 1599], ord: 5,
+             band_note: "BIM's 'Archaic Basque': the earliest connected
+                         texts (15th-c. fragments) through the 16th-c.
+                         books; the 1600 close is the conventional cut;
+                         approximate",
+             note: "Etxepare (1545), Leizarraga's New Testament (1571), the
+                    Lazarraga manuscript (c. 1564–67) — BIM's three Archaic
+                    works"}
+      old: {name: Old Basque, band: [1600, 1744], ord: 10,
+            band_note: "BIM's 'Old Basque', 17th c. to the mid-18th; the
+                        1745 close is Larramendi's trilingual dictionary,
+                        the conventional turn; approximate",
+            note: "the Labourdin classical prose (Materra 1617/1623,
+                   Axular's Gero 1643, Pouvreau), the Souletin
+                   (Tartas 1666, Belapeire 1696), the southern catechisms
+                   (Beriain 1621, Kapanaga 1656, Otxoa de Arin 1713).
+                   Corpus: BIM/SAHCOBA — 7 dated works inside the band"}
+      emod: {name: Early Modern Basque, band: [1745, 1900], ord: 20,
+             band_note: "SAHCOBA's 'Early Modern Basque' from the
+                         mid-18th c.; the record names Early and Late
+                         Modern Basque without a dividing year — 1900 is a
+                         provisional round close, to be refined",
+             note: "Larramendi's school, the Imitation-of-Christ
+                    translations (Chourio's 1760 edition, Maister 1757),
+                    the 1782 Avignon Rodríguez. Corpus: BIM/SAHCOBA — 3
+                    dated works inside the band"}
 
   qfa-cka:
     name: Chukotko-Kamchatkan
@@ -3125,3 +3630,7 @@ scripts:
   ugar: {name: Ugaritic,                             iso15924: Ugar}
   xpeo: {name: Old Persian cuneiform,                iso15924: Xpeo}
   mymr: {name: Myanmar (Burmese),                    iso15924: Mymr}
+  java: {name: Javanese (aksara Jawa),               iso15924: Java}
+  sund: {name: Sundanese,                            iso15924: Sund}
+  bali: {name: Balinese,                             iso15924: Bali}
+  rjng: {name: "Rejang (Redjang, Kaganga)",           iso15924: Rjng}

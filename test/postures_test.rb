@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 161, lect.size,
+    assert_equal 160, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -320,7 +320,10 @@ class PosturesTest < Minitest::Test
                  "wilkens-oui ADDED — identity oui (the Old Uyghur dictionary; a real anchor, " \
                  "no stages): 159→160; " \
                  "sigla ADDED — PENDING on a lab (Linear A) anchor + the lina script row " \
-                 "(nothing Linear A exists in nabu-lects): 160→161"
+                 "(nothing Linear A exists in nabu-lects): 160→161; " \
+                 "the P140 cone package landing (merged + canonical-synced 2026-10-22) RETIRES " \
+                 "te-wikisource to the te:cls override (the shadowing rule) and flips " \
+                 "cy to dates, jv/su/br to codemap: 161→160"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -334,7 +337,10 @@ class PosturesTest < Minitest::Test
     # vakk joins dates: 18→19; the five wave-3 cones join as pending on
     # the phase's aggregated package: 1→6. wilkens-oui joins identity
     # (oui, the Old Uyghur dictionary): 120→121; sigla joins as pending
-    # on a lab (Linear A) anchor: 6→7.
-    assert_equal({ "dates" => 19, "codemap" => 14, "identity" => 121, "pending" => 7 }, by_posture)
+    # on a lab (Linear A) anchor: 6→7. The package's merge (2026-10-22)
+    # retires the five: te leaves the census (override-postured),
+    # cy joins dates (emod band inference): 19→20, jv/su/br join
+    # codemap (the new aliases): 14→17, pending 7→2 (lasla, sigla).
+    assert_equal({ "dates" => 20, "codemap" => 17, "identity" => 121, "pending" => 2 }, by_posture)
   end
 end
