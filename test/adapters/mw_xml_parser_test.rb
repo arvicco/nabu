@@ -284,6 +284,36 @@ module Adapters
       assert_equal [PANINI, nil], sigla.resolve("ib. (= Pāṇ.)")
     end
 
+    # -- phw parent/child ties: entry-to-entry edges, both ways ------------------------
+
+    def id_crossrefs(id, kind)
+      mining_entry(id).crossrefs.select { |c| c.kind == kind }
+                                .map { |c| [c.label, c.target, c.target_id] }
+    end
+
+    # Cologne manufactures an entry for every headword MW prints
+    # PARENTHETICALLY inside another (mw-meta2: <info phwchild="LC"/> in the
+    # parent record, <info phwparent="LP,HWP"/> in the child). Each tie
+    # becomes two id-keyed pointers — the AED vocabulary: the parent
+    # "contains" the child, the child is "partOf" the parent.
+    def test_phw_ties_mint_contains_and_part_of_pointers
+      assert_equal [["contains āmraguptāyani", "āmraguptāyani", "25656.1"],
+                    ["contains āmragupti", "āmragupti", "25656.2"]], id_crossrefs("25656", "contains")
+      assert_equal [["partOf āmragupta", "āmragupta", "25656"]], id_crossrefs("25656.1", "partOf")
+      assert_equal [["partOf āmragupta", "āmragupta", "25656"]], id_crossrefs("25656.2", "partOf")
+    end
+
+    # The tie names RECORD ids; a parent record that is a continuation
+    # (L 150484, an H2B gender block of bhāṣaṇa L 150481) maps onto its
+    # grouped entry, so the pointer lands on an entry_id that exists. The
+    # displayed target is the headword upstream names (bhāṣaṇī, the record's
+    # key), the id the entry it lives in.
+    def test_phw_record_ids_map_onto_their_grouped_entries
+      assert_equal [["partOf bhāṣaṇī", "bhāṣaṇī", "150481"]], id_crossrefs("150484.1", "partOf")
+      assert_equal [["contains bhāṣaṇīkṣaulema", "bhāṣaṇīkṣaulema", "150484.1"]],
+                   id_crossrefs("150481", "contains")
+    end
+
     # -- hygiene -------------------------------------------------------------------
 
     def test_output_is_nfc_everywhere

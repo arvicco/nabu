@@ -209,6 +209,35 @@ class MwTest < Minitest::Test
     assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
   end
 
+  # The whole-file edges of the mining slice (README): phw ties are
+  # id-keyed, so the loader resolves each onto the exact entry.
+  def mining_slice_document
+    path = File.join(FIXTURES, "mining-slice.xml")
+    document = Nabu::DictionaryDocument.new(slug: "mw", language: "san", title: "MW mining slice",
+                                            canonical_path: path)
+    Nabu::Adapters::MwXmlParser.new.entries(File.foreach(path)).each { |entry| document << entry }
+    document
+  end
+
+  def resolved(define, id)
+    define.by_urn("urn:nabu:dict:mw:#{id}").crossrefs.map { |c| [c.label, c.resolved_urn] }
+  end
+
+  def test_phw_ties_resolve_both_ways_by_entry_id
+    db, loader = loader_setup
+    loader.load([mining_slice_document], full: false)
+    define = Nabu::Query::Define.new(catalog: db)
+
+    assert_equal [["contains āmraguptāyani", "urn:nabu:dict:mw:25656.1"],
+                  ["contains āmragupti", "urn:nabu:dict:mw:25656.2"]], resolved(define, "25656")
+    assert_equal [["partOf āmragupta", "urn:nabu:dict:mw:25656"]], resolved(define, "25656.1")
+    assert_equal [["partOf bhāṣaṇī", "urn:nabu:dict:mw:150481"]], resolved(define, "150484.1")
+
+    before = db[:dictionary_crossrefs].order(:id).all
+    loader.load([mining_slice_document], full: false)
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
+  end
+
   def test_citation_and_reflex_rows_land_and_replace_wholesale
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
