@@ -28,10 +28,13 @@ class GretilTest < Minitest::Test
   # P10-3 line-terminated marker recovery fixtures.
   ABHIDHARMADIPA = "urn:nabu:gretil:sa_vimalamitra-abhidharmadIpa-h1" # hyphenated closed "// Abhidh-d_N //"
   SOMANANDA = "urn:nabu:gretil:sa_somAnanda-zAktavijJAna-l1" # leading-"//"-only "// SomSv_N</l>"
+  # Single-blob re-split fixtures: lg/marker shapes a trailing <p> mashed into ONE p1.
+  MANUSMRTI = "urn:nabu:gretil:sa_manusmRti-a1a2" # <lg xml:id="Manu_N.N"> + colophon <p>
+  ASTADHYAYI = "urn:nabu:gretil:sa_pANini-aSTAdhyAyI-s1" # "|| PS_1,1.1 ||" + one <p> sūtra
 
   ALL_FIXTURES = [
     RGVEDA, BRAHMABINDU, HEART_SUTRA, RGVIDHANA, BRAHMASUTRA, VALLALACARITA, DHVANYALOKA,
-    ABHIDHARMADIPA, SOMANANDA
+    ABHIDHARMADIPA, SOMANANDA, MANUSMRTI, ASTADHYAYI
   ].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
@@ -282,6 +285,59 @@ class GretilTest < Minitest::Test
     citations = parse(BRAHMABINDU).map { |p| p.urn.split(":").last }
     assert_equal((1..22).map(&:to_s), citations)
     citations.each { |c| refute_includes c, "BrbUp", "single-prefix file must not be prefix-joined" }
+  end
+
+  # --- single-blob re-split: a lone trailing <p> must not swallow the text -----
+
+  # sa_manusmRti addresses every verse by <lg xml:id="Manu_A.V"> (no @n, no
+  # in-text marker) and closes with a colophon <p>. The primary pass used to
+  # accumulate all 2,7xx verses unflushed and dump them into that <p> as ONE
+  # prose ordinal p1 — so the fallbacks never ran. A primary result that is a
+  # single prose-ordinal blob is now treated as degenerate: the xml:id rung
+  # addresses the verses (Manu_1.1 → 1.1; the analysis <note> copies dropped).
+  def test_manusmrti_resplits_to_verse_grain_via_xml_id
+    doc = parse(MANUSMRTI)
+    assert_equal(%w[1.1 1.2 1.3 2.1], doc.map { |p| p.urn.split(":").last })
+    first = doc.to_a.first
+    assert_equal "#{MANUSMRTI}:1.1", first.urn
+    assert_equal "xml-id", first.annotations["addressing"]
+    assert_equal "manum ekāgram āsīnam abhigamya maharṣayaḥ pratipūjya yathānyāyam idaṃ vacanam abruvan //",
+                 first.text
+    refute(doc.any? { |p| p.text.include?("ekāgram") && p.urn.end_with?(":1.2") },
+           "each verse is its own passage, never the running blob")
+  end
+
+  # sa_pANini-aSTAdhyAyI marks each sūtra "|| PS_1,1.1 ||" (DOUBLE-pipe
+  # delimiters) at the end of its <l>, and one sūtra (6,1.130) sits in a <p>
+  # — which flushed the whole unflushed text as p1. Re-split by the pipe
+  # fallback, the doubled pipe now a delimiter in its own right, so no stray
+  # "|" survives on either side of a sūtra.
+  def test_astadhyayi_resplits_to_sutra_grain_with_double_pipe_markers
+    doc = parse(ASTADHYAYI)
+    assert_equal(%w[1,1.1 1,1.2 1,1.3 1,1.4 1,1.5 1,1.6 6,1.128 6,1.129 6,1.130 6,1.131],
+                 doc.map { |p| p.urn.split(":").last })
+    first = doc.to_a.first
+    assert_equal "verse-marker", first.annotations["addressing"]
+    assert_equal "vṛddhir ād-aic", first.text
+    doc.each do |passage|
+      refute_includes passage.text, "|", "#{passage.urn}: the double-pipe marker must be stripped whole"
+      refute_includes passage.text, "PS_", "#{passage.urn}: the marker abbreviation must be stripped"
+    end
+    assert_equal "ī3 cākravarmaṇasya", doc.find { |p| p.urn.end_with?(":6,1.130") }.text
+  end
+
+  # Guard: a GENUINE one-paragraph prose text (no verse addressing anywhere)
+  # keeps its p1 — the degenerate-blob gate only swaps in a fallback that
+  # actually addresses more than one passage.
+  def test_single_paragraph_prose_without_addressing_keeps_its_p1
+    Dir.mktmpdir do |root|
+      body = File.read(File.join(FIXTURES, "sa_prajJApAramitAhRdayasUtra.xml"))
+      one = body.sub(%r{<body>.*</body>}m, "<body><p>evaṃ mayā śrutam ekasmin samaye</p></body>")
+      path = File.join(root, "sa_one.xml")
+      File.write(path, one)
+      doc = Nabu::Adapters::GretilParser.new.parse(path, urn: "urn:nabu:gretil:sa_one", language: "san-Latn")
+      assert_equal ["urn:nabu:gretil:sa_one:p1"], doc.map(&:urn)
+    end
   end
 
   # --- header mining: author, genre ladder, source edition --------------------

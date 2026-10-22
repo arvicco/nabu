@@ -252,7 +252,7 @@ class MwTest < Minitest::Test
     seed_rgveda(passages: %w[5.086.05a 5.086.05c 10.109.01a])
 
     lines = Nabu::Adapters::Mw.citation_coverage(catalog: db)
-    assert_equal "mw citations: 32 — 3 passage-grain · 9 document-grain · 7 authority · 13 not-held",
+    assert_equal "mw citations: 32 — 4 passage-grain · 8 document-grain · 7 authority · 13 not-held",
                  lines.first
     rv = lines.find { |line| line.strip.start_with?("RV.") }
     assert_match(%r{2/3 live at passage grain — urn:nabu:gretil:sa_Rgveda-edAufrecht}, rv,

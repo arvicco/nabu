@@ -107,8 +107,8 @@ module Adapters
       labels = entries.flat_map(&:citations).map(&:label)
       assert_equal 32, labels.size
       tiers = labels.group_by { |label| Nabu::Adapters::MwSigla.classify(label) }
-      assert_equal 3, tiers.fetch(:passage).size    # the three RV. citations
-      assert_equal 9, tiers.fetch(:document).size   # Bhaṭṭ. Mn.×2 Nir.×2 Pāṇ. MārkP. R. Sāh.
+      assert_equal 4, tiers.fetch(:passage).size    # the three RV. citations + Pāṇ. vii, 4, 3
+      assert_equal 8, tiers.fetch(:document).size   # Bhaṭṭ. Mn.×2 (bare) Nir.×2 MārkP. R. Sāh.
       assert_equal 7, tiers.fetch(:authority).size  # L.×2 Br.×2 ib.×2 Kāv.
       assert_equal 13, tiers.fetch(:unheld).size    # MBh.×4, TS., Dhātup., Suśr., …
     end
@@ -131,9 +131,11 @@ module Adapters
 
     def test_held_document_grain_citations_carry_the_urn_without_a_citation
       pan = entry("150479").citations.find { |c| c.label == "Pāṇ. vii, 4, 3" }
-      assert_equal "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", pan.cts_work,
-                   "Pāṇini is held but single-blob — document grain by design"
-      assert_nil pan.citation
+      assert_equal "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", pan.cts_work
+      assert_equal "7,4.3", pan.citation, "the re-split Aṣṭādhyāyī resolves at sūtra grain"
+      manu = entry("150479").citations.select { |c| c.label == "Mn." }
+      assert_equal ["urn:nabu:gretil:sa_manusmRti"], manu.map(&:cts_work).uniq
+      assert_equal [nil], manu.map(&:citation).uniq, "a bare Mn. names the work — document grain"
       sah = entry("150481").citations.find { |c| c.label == "Sāh." }
       assert_equal "urn:nabu:gretil:sa_vizvanAthakavirAja-sAhityadarpaNa", sah.cts_work
     end
