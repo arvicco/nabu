@@ -329,7 +329,10 @@ module Nabu
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
         "in the local catalog the citation carries a resolved passage urn (open it with " \
-        "nabu_show); otherwise resolved_urn is null and the display text stands. Entries " \
+        "nabu_show); otherwise resolved_urn is null and the display text stands. A PRINT " \
+        "citation of a reference work (a BDB page, a Wb volume/page/line) may carry `scan`: " \
+        "status (anchored/held/uncalibrated/out_of_range/not_held/unconfigured), urn (the " \
+        "held scan's page passage or document — null when not held), leaf, pointer. Entries " \
         "may carry `crossrefs` — pointers to other entries, usually of the same dictionary, " \
         "sometimes of another (the Strong shelf's BDB ids) (kind, label verbatim, resolved_urn " \
         "of the target entry or null — open it with nabu_show). Bounded " \
@@ -989,8 +992,13 @@ module Nabu
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
                      enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
                      readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil,
-                     vectors: nil, facet_map: nil)
+                     vectors: nil, facet_map: nil, scan_anchors: nil)
         @catalog = catalog
+        # The reference-scan anchors (config/scan_anchors.yml — static,
+        # loaded once by the entrypoint): nabu_define/nabu_show citations a
+        # configured print work claims gain a present-only `scan` object.
+        # nil = every citation payload byte-identical (the lane-off rule).
+        @scan_anchors = scan_anchors
         # The facet map (config/facet_map.yml — static, loaded once by the
         # entrypoint): the token-sense rules behind nabu_search's `sense`
         # desk and nabu_show's `senses` flag. nil = both answer their honest
@@ -1301,7 +1309,8 @@ module Nabu
         include_restricted = args["include_restricted"] == true
         return show_parallel(catalog, urn, args, bound, include_restricted) if args["parallel"] == true
 
-        query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words)
+        query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words,
+                                scan_anchors: @scan_anchors)
         result = query.run(urn)
         return urn_not_found(urn) if result.nil?
         return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
@@ -1528,7 +1537,8 @@ module Nabu
           lects = lects_seam
           raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
         end
-        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), lects: lects || :auto)
+        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), lects: lects || :auto,
+                                    scan_anchors: @scan_anchors)
                                .run(lemma, lang: lang, limit: limit + 1, lect: lect, facets: facets_arg(args))
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit, catalog: catalog)
@@ -1553,7 +1563,7 @@ module Nabu
         # consults the SAME Query::Define lookup nabu_define runs — a
         # prose etymological article (Vasmer) answers under an honest
         # note; hits above never mix with the fallback.
-        entries = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
+        entries = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), scan_anchors: @scan_anchors)
                                .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
         entries = entries.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_etym_fallback(entries, lemma: lemma, limit: limit, shelves: query.crosswalk_shelves)
@@ -2039,12 +2049,21 @@ module Nabu
         end
       end
 
-      # Resolved citations first (they are the actionable ones), capped.
+      # Resolved citations first (they are the actionable ones), capped. A
+      # print citation a configured reference work claims carries its scan
+      # anchor (present-only key): status, the show-able urn (nil unless
+      # the scan is held), leaf, and the CLI card's pointer wording.
       def define_citations(result)
         ordered = result.citations.partition(&:resolved_urn).flatten(1)
         ordered.first(DEFINE_MAX_CITATIONS).map do |citation|
-          { label: citation.label, resolved_urn: citation.resolved_urn }
+          base = { label: citation.label, resolved_urn: citation.resolved_urn }
+          citation.scan ? base.merge(scan: scan_payload(citation.scan)) : base
         end
+      end
+
+      def scan_payload(anchor)
+        { status: anchor.status.to_s, work: anchor.work, volume: anchor.volume, page: anchor.page,
+          line: anchor.line, leaf: anchor.leaf, item: anchor.item, urn: anchor.urn, pointer: anchor.pointer }
       end
 
       # -- etym internals -----------------------------------------------------------

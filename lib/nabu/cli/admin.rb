@@ -244,7 +244,10 @@ module Nabu
         lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths),
         # The facet map (static, loaded once): the token-sense rules behind
         # nabu_search's `sense` desk and nabu_show's `senses` flag.
-        facet_map: Nabu::FacetMap.load_default(config: config)
+        facet_map: Nabu::FacetMap.load_default(config: config),
+        # The reference-scan anchors (static, loaded once): nabu_define /
+        # nabu_show citations of configured print works point at the scan.
+        scan_anchors: Nabu::Query::ScanAnchors.load_default(config: config)
       )
       $stdout.sync = true
       install_mcp_signal_traps

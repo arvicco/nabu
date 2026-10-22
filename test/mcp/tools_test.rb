@@ -2224,6 +2224,68 @@ module MCP
       assert_match(/nabu-lects module not synced/, error.message)
     end
 
+    # The define → reference-scan bridge: a BDB print-page citation carries
+    # a present-only `scan` object (status, the show-able urn, leaf,
+    # pointer wording) when the scan_anchors table claims it; without the
+    # table the citation payload is byte-identical to before.
+    def seed_bdb_shelf
+      hebrew = Nabu::Store::Source.create(slug: "hebrew-lexicon", name: "OSHB Hebrew Lexicon",
+                                          adapter_class: "Nabu::Adapters::HebrewLexicon",
+                                          license_class: "attribution", enabled: true)
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: hebrew)
+                                   .load_from(Nabu::Adapters::HebrewLexicon.new,
+                                              workdir: Nabu::TestSupport.fixtures("hebrew-lexicon"))
+    end
+
+    def bdb_scan_table(item: "urn:nabu:local-library:dictionaries:bdb-1906", leaf_offset: 16)
+      Nabu::Query::ScanAnchors.new(
+        "works" => { "bdb" => { "title" => "BDB", "pattern" => '\ABDB p\. (?<page>\d+)\z',
+                                "item" => item, "leaf_offset" => leaf_offset } }
+      )
+    end
+
+    def bdb_citation(rig)
+      entries = payload(rig.call("nabu_define", { "lemma" => "ברא", "limit" => 10 })).fetch("entries")
+      entries.find { |e| e.fetch("urn") == "urn:nabu:dict:bdb:b.cw.aa" }.fetch("citations").first
+    end
+
+    def test_define_citation_carries_the_scan_anchor
+      seed_bdb_shelf
+      scan = make_document(source: @private, urn: "urn:nabu:local-library:dictionaries:bdb-1906",
+                           title: "BDB 1906", language: "eng")
+      make_passage(scan, urn: "#{scan.urn}:p151", text: "ברא", sequence: 151, language: "eng")
+      citation = bdb_citation(Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext,
+                                                   scan_anchors: bdb_scan_table))
+      assert_equal "BDB p. 135", citation.fetch("label")
+      assert_nil citation.fetch("resolved_urn")
+      assert_equal({ "status" => "anchored", "urn" => "#{scan.urn}:p151", "leaf" => 151, "page" => 135,
+                     "pointer" => "#{scan.urn}:p151 (scan leaf 151)" },
+                   citation.fetch("scan").slice("status", "urn", "leaf", "page", "pointer"))
+    end
+
+    def test_define_scan_absent_is_an_honest_hint
+      seed_bdb_shelf
+      citation = bdb_citation(Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext,
+                                                   scan_anchors: bdb_scan_table))
+      assert_equal "not_held", citation.fetch("scan").fetch("status")
+      assert_nil citation.fetch("scan").fetch("urn")
+      assert_match(/not held/, citation.fetch("scan").fetch("pointer"))
+    end
+
+    def test_define_without_the_table_keeps_the_citation_shape
+      seed_bdb_shelf
+      assert_equal({ "label" => "BDB p. 135", "resolved_urn" => nil }, bdb_citation(tools))
+    end
+
+    # A dictionary urn through nabu_show answers the define payload — the
+    # scan anchor rides there too.
+    def test_show_of_a_dictionary_urn_carries_the_scan_anchor
+      seed_bdb_shelf
+      rig = Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext, scan_anchors: bdb_scan_table)
+      shown = payload(rig.call("nabu_show", { "urn" => "urn:nabu:dict:bdb:b.cw.aa" }))
+      assert_equal "not_held", shown.fetch("citations").first.fetch("scan").fetch("status")
+    end
+
     # The entry-facet filter (the CLI's define --facet parity): an object of
     # name → pattern narrowing the lookup; the payload shape is unchanged.
     def test_define_facets_narrow_the_lookup

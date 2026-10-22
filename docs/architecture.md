@@ -927,6 +927,29 @@ coverage grows as kanripo sync waves land, with zero stored state. The
 CLI caps the resolved-citation print (first 12, `--long` expands); MCP
 was already capped.
 
+**Print citations → held reference scans (the define → scan bridges).**
+Some shelves cite a PRINT dictionary by page: the BDB outline its 1906
+page (`BDB p. 135`), the AED the Wörterbuch by volume, page and line
+(`Wb 1, 2.8`). Those rows carry no `cts_work` and never resolve above;
+instead `Query::ScanAnchors` reads `config/scan_anchors.yml` — per cited
+work a siglum pattern over the citation label (named captures `page`,
+optional `line`, and `volume` for multi-volume works), the shelf item
+(the local-library document urn of the scan, §16) per volume, and a
+`leaf_offset` calibration: printed page N sits on PDF page N + k, the
+library adapter's `<item>:p<N+k>` passage. Volumes route by the cited
+volume string; two volumes bound in one PDF share an item with their own
+offsets. Resolution is query-time and read-only (one memoized document
+probe per item, one passage probe per citation — the desk law), stores
+nothing, and degrades by status rather than error: anchored (the page
+passage), held (document + leaf — a scan without a text layer),
+uncalibrated (offset still null), out_of_range, not_held (configured but
+not ingested), unconfigured (no item for the work or volume yet). A label
+no pattern claims stays plain text. `define` and the `show` card of a
+dictionary urn print a "reference scans" block; `nabu_define`/`nabu_show`
+add a present-only `scan` object to the citation. Filling a row after an
+ingest — the item urn, then the offset read off one known page — is a
+one-line config edit; the next lookup shows it.
+
 **Query surface: `nabu define` + MCP `nabu_define`.** The CLI prints
 entries whole (the λόγος entry is ~300 KB of text — the CLI is the
 unbounded surface) with the license label on every entry header and
