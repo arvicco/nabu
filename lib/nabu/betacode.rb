@@ -56,6 +56,17 @@ module Nabu
       finalize_sigmas(out).unicode_normalize(:nfc)
     end
 
+    # Decode a typed SEARCH term (the search surface's deliberate Beta Code
+    # input flag — never auto-detected). Beta Code letter case carries no
+    # meaning (capitals are the * prefix), and TLG-style input is often
+    # typed in upper case ("MH=NIN"), so the term is downcased before the
+    # decode. The query syntax search reads passes through untouched: FTS
+    # double quotes, and a trailing prefix "*" (a "*" not followed by a
+    # letter is kept as itself — the decoder's own honest-keep rule).
+    def decode_query(str)
+      decode(str.downcase)
+    end
+
     # Decode the token starting at +index+ into +out+; return the next index.
     def decode_at(chars, index, out)
       char = chars[index]

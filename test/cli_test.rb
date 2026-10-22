@@ -4839,6 +4839,37 @@ class CLITest < Minitest::Test
     end
   end
 
+  # --betacode: a deliberate input flag (never auto-detected) — the typed
+  # Beta Code term is transliterated to Greek before matching, and the
+  # decoded form is echoed so the reader sees what was searched.
+  def test_search_betacode_flag_transliterates_the_query_before_matching
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search mh=nin --betacode]) }
+      assert_nil status
+      assert_match(/beta code: mh=nin → μῆνιν/, out, "the decoded term is echoed")
+      assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
+
+      plain, = with_config(config) { run_cli(%w[search mh=nin]) }
+      refute_match(/test_adapter:one:1/, plain, "without the flag the Latin letters are searched as typed")
+    end
+  end
+
+  def test_search_betacode_decodes_the_near_term_too
+    with_indexed_corpus do |config|
+      out, = with_config(config) { run_cli(%w[search MH=NIN --near a)/eide --betacode]) }
+      assert_match(/beta code: MH=NIN → μῆνιν/, out, "case-blind: TLG upper-case input")
+      assert_match(%r{beta code: a\)/eide → ἄειδε}, out)
+    end
+  end
+
+  def test_search_betacode_needs_a_term_to_decode
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --betacode --century 2]) }
+      refute_nil status
+      assert_match(/--betacode decodes a typed Greek term/, err)
+    end
+  end
+
   def test_search_zero_hits_says_no_matches_and_succeeds
     with_indexed_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[search zzzznotfound]) }
