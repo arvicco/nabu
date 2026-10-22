@@ -1,0 +1,34 @@
+---
+layout: null
+permalink: /llms-full.txt
+sitemap: false
+---
+{%- comment -%}
+  llms-full.txt (https://llmstxt.org): every page of the site navigation as
+  plain text, for an agent that wants the whole site in one read. Rendered
+  at build time from each page's own rendered content, so every figure is
+  the one that page renders from the census SSOT — this template states
+  none. The file name sorts after every page it reads ON PURPOSE: Jekyll
+  renders site.pages in file-name order, and a page's content is rendered
+  HTML only once its own turn has passed (test/site/agent_discovery_test.rb
+  guards the ordering). News is left out: it is a dated archive, linked
+  from llms.txt.
+{%- endcomment -%}
+# Nabu — the site in full
+
+> {{ site.description | strip_newlines | strip }}
+
+The pages of {{ '/' | absolute_url }} as plain text, in navigation order. Library-wide figures are the census of {{ site.data.census.as_of }}; the curated map with per-desk links is {{ '/llms.txt' | absolute_url }}.
+{% for item in site.nav -%}
+{%- if item.url == "/news/" %}{% continue %}{% endif -%}
+{%- assign source = site.pages | where: "url", item.url | first -%}
+{%- if source == nil %}{% continue %}{% endif %}
+
+---
+
+# {{ item.title }}
+
+Source: {{ item.url | absolute_url }}
+
+{% include plain_text.html html=source.content %}
+{% endfor -%}

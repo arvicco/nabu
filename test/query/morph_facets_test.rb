@@ -177,7 +177,7 @@ module Query
     # ("morph", "msd", "analyses", "msa" each name DIFFERENT tagsets in
     # other sources), so a scoped row decodes only its own sources' tokens.
     def test_decoder_table_is_explicit_and_ordered
-      assert_equal %w[morphology feats postag analyses vt morpho morph msd msd msa],
+      assert_equal %w[morphology feats postag analyses vt morpho morph msd msd msa pos],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -455,6 +455,51 @@ module Query
       assert MF.match?(tense, MF.parse("tense=pres"), source: "menota")
       assert_nil MF.features(tense, source: "menota")["tense"]
       assert MF.match?({ "msa" => "xVB fF tPS mINSU p3 nS vA" }, MF.parse("mood=sub"), source: "menota")
+    end
+
+    # Coptic Scriptorium `pos` (real besa tokens): only what the TAG fixes —
+    # the features upstream's own CoNLL-U conversion attaches to every
+    # feature-bearing token of that tag. Person/number/gender ride the
+    # word form, not the tag (the CoNLL-U FEATS join carries those).
+    def test_coptic_tags_decode_what_the_tag_fixes
+      cop = "coptic-scriptorium"
+      assert_equal({ "polarity" => "neg" }, MF.features({ "lemma" => "ⲙⲡⲉ", "pos" => "ANEGPST" }, source: cop))
+      assert_equal({ "polarity" => "neg" }, MF.features({ "lemma" => "ⲧⲙ", "pos" => "NEG" }, source: cop))
+      assert_equal({ "prontype" => "prs", "definite" => "def" },
+                   MF.features({ "lemma" => "ⲁⲛⲟⲛ", "pos" => "PPERS" }, source: cop))
+      assert_equal({ "prontype" => "prs", "definite" => "def", "poss" => "yes" },
+                   MF.features({ "lemma" => "ⲡⲉⲩ", "pos" => "PPOS" }, source: cop))
+      assert_equal({ "prontype" => "dem", "definite" => "def" },
+                   MF.features({ "lemma" => "ⲡⲁⲓ", "pos" => "PDEM" }, source: cop))
+      assert_equal({ "prontype" => "art" }, MF.features({ "lemma" => "ⲟⲩ", "pos" => "ART" }, source: cop),
+                   "definiteness rides the article's lemma, not the tag")
+      assert_equal({ "numtype" => "card" }, MF.features({ "pos" => "NUM" }, source: cop))
+      assert_equal({ "verbform" => "fin", "mood" => "imp" }, MF.features({ "pos" => "VIMP" }, source: cop))
+      assert_equal({ "verbform" => "fin" }, MF.features({ "pos" => "VSTAT" }, source: cop))
+    end
+
+    # Fused tags (a pronoun cliticized onto its host) decode every part;
+    # tags that fix nothing (V finite-or-infinitive, N, PREP, the plain
+    # auxiliaries) decode nothing — honest absence; another source's "pos"
+    # (ORACC's N/PN/V) is never read as Coptic.
+    def test_coptic_fused_and_featureless_tags
+      cop = "coptic-scriptorium"
+      assert_equal({ "polarity" => "neg", "prontype" => "prs", "definite" => "def" },
+                   MF.features({ "pos" => "ANEGPST_PPERS" }, source: cop))
+      assert_equal({ "prontype" => "prs", "definite" => "def" }, MF.features({ "pos" => "AOPT_PPERS" }, source: cop))
+      %w[V N PREP APST CONJ PINT EXIST].each do |tag|
+        assert_empty MF.features({ "pos" => tag }, source: cop), tag
+      end
+      assert_empty MF.features({ "pos" => "NEG" }, source: "oracc")
+    end
+
+    # The FEATS join (UD feats on the token) outranks the tag decode: the
+    # richer person/number/gender read, never a merge of both.
+    def test_coptic_ud_feats_outrank_the_tag
+      token = { "lemma" => "ⲛⲧⲱⲧⲛ", "pos" => "PPERS",
+                "feats" => "Definite=Def|Number=Plur|Person=2|PronType=Prs" }
+      assert_equal({ "definite" => "def", "number" => "plur", "person" => "2", "prontype" => "prs" },
+                   MF.features(token, source: "coptic-scriptorium"))
     end
   end
 end

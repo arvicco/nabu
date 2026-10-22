@@ -5,6 +5,7 @@ require "nokogiri"
 require_relative "../normalize"
 require_relative "../slp1"
 require_relative "mw_sigla"
+require_relative "mw_entry_links"
 
 module Nabu
   module Adapters
@@ -118,10 +119,11 @@ module Nabu
       def entries(lines)
         out = []
         group = nil
+        links = MwEntryLinks.new
         lines.each do |line|
           record = parse_record(line) or next
           if record[:main]
-            out << build_entry(group) if group
+            out << finish_group(group, links) if group
             group = [record]
           elsif group
             group << record
@@ -129,13 +131,29 @@ module Nabu
             raise Nabu::ParseError, "mw-xml: continuation record L=#{record[:l]} before any main record"
           end
         end
-        out << build_entry(group) if group
-        out
+        out << finish_group(group, links) if group
+        with_entry_links(out, links.crossrefs)
       end
 
       private
 
-      # One line → { tag:, main:, key1:, key2:, l:, body: } or nil for the
+      def finish_group(group, links)
+        links.observe(group)
+        build_entry(group)
+      end
+
+      # The whole-file edges (MwEntryLinks): appended after each entry's own
+      # cf./q.v. pointers, in a second pass once every record id is known.
+      def with_entry_links(entries, extra)
+        return entries if extra.empty?
+
+        entries.map do |entry|
+          edges = extra[entry.entry_id]
+          edges ? entry.with(crossrefs: entry.crossrefs + edges) : entry
+        end
+      end
+
+      # One line → { tag:, main:, key1:, key2:, hom:, l:, body: } or nil for the
       # frame lines (<?xml…, DOCTYPE, comments, <mw>, </mw>).
       def parse_record(line)
         return nil unless line.lstrip.start_with?("<H")
@@ -147,6 +165,7 @@ module Nabu
           tag: element.name, main: element.name.match?(MAIN_RECORD),
           key1: element.at_xpath("h/key1")&.text.to_s,
           key2: element.at_xpath("h/key2")&.text.to_s,
+          hom: element.at_xpath("h/hom")&.text.to_s,
           l: element.at_xpath("tail/L")&.text.to_s,
           body: element.at_xpath("body")
         }
@@ -299,17 +318,36 @@ module Nabu
 
       # -- citations -------------------------------------------------------------
 
+      # Ibid propagation: an "ib." inherits the work of the citation right
+      # before it in the SAME entry (chains carry through successive ib.,
+      # continuation records included); the chain resets at every entry,
+      # because an entry-opening ib. points into the previous entry, which
+      # the desk never shows beside it — that one stays the bare authority
+      # label. urn_raw keeps the print's "ib."; the label says which work it
+      # means ("ib. (= Pāṇ.)", MwSigla.inherit). Census over the full
+      # mw.xml (2026-10-22): 10,374 ib. citations; 6,272 propagate (2,057
+      # onto held works — each gains its GRETIL document urn — 2,304 onto
+      # works not held, 1,911 onto authority labels such as W./MW./L.);
+      # 4,102 open their entry and stay bare.
       def citations(group)
+        previous = nil
         group.flat_map { |record| record[:body].xpath(".//ls") }.filter_map do |ls|
-          label = restored_label(ls)
-          next nil if label.empty?
+          raw = restored_label(ls)
+          next nil if raw.empty?
 
-          cts_work, citation = MwSigla.resolve(label)
-          Nabu::DictionaryCitation.new(
-            urn_raw: Nabu::Normalize.nfc(label), cts_work: cts_work,
-            citation: citation, label: Nabu::Normalize.nfc(label)
-          )
+          label = MwSigla.ibid?(raw) ? MwSigla.inherit(raw, previous) : raw
+          # A bare ib. (nothing to inherit) never becomes the antecedent.
+          previous = MwSigla.siglum_of(label) || previous unless MwSigla.ibid?(label)
+          citation_row(raw, label)
         end
+      end
+
+      def citation_row(raw, label)
+        cts_work, citation = MwSigla.resolve(label)
+        Nabu::DictionaryCitation.new(
+          urn_raw: Nabu::Normalize.nfc(raw), cts_work: cts_work,
+          citation: citation, label: Nabu::Normalize.nfc(label)
+        )
       end
 
       # The @n attribute restores the elided context of continuation

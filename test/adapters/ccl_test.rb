@@ -61,7 +61,7 @@ class CclTest < Minitest::Test
     assert_kind_of Nabu::DictionaryDocument, document
     assert_equal "ccl", document.slug
     assert_equal "cop", document.language
-    assert_equal 17, document.size
+    assert_equal 18, document.size
   end
 
   def test_entry_ids_are_unique_and_stable_across_independent_passes
@@ -152,7 +152,7 @@ class CclTest < Minitest::Test
       FileUtils.cp(File.join(FIXTURES, "lexicon", Nabu::Adapters::Ccl::LEXICON_FILENAME),
                    File.join(workdir, "lexicon"))
       document = adapter.parse(adapter.discover(workdir).first)
-      assert_equal 17, document.size
+      assert_equal 18, document.size
       assert document.all? { |entry| entry.citations.empty? },
              "the day-one pre-crosswalk state parses honestly bare"
     end
@@ -225,13 +225,13 @@ class CclTest < Minitest::Test
   def test_loading_the_fixture_twice_is_idempotent_with_stable_urns
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 17, first.added
+    assert_equal 18, first.added
     assert_equal 0, first.errored
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 17, second.skipped
-    assert_equal 17, db[:dictionary_entries].count
+    assert_equal 18, second.skipped
+    assert_equal 18, db[:dictionary_entries].count
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
 
     kah = db[:dictionary_entries].where(entry_id: "C1494").first
@@ -240,6 +240,25 @@ class CclTest < Minitest::Test
     assert_equal "ⲕⲁϩ", kah[:headword_folded]
     assert_equal 2, db[:dictionary_citations].where(dictionary_entry_id: kah[:id]).count,
                  "both ancestor citations persisted"
+  end
+
+  # The DDGLC borrowing edge end to end: the Greek donor reflex persists
+  # flagged borrowed with the typed "borrowed" relation — an UP edge, so
+  # `define ⲧⲟⲡⲟⲥ` states it on the entry's etymon line (EtymonAscent,
+  # the kaikki {{bor}} surface) and the descent walks never read the
+  # donor as a descendant.
+  def test_define_states_the_greek_donor_of_a_coptic_loanword
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    topos = db[:dictionary_entries].where(entry_id: "C10766").first
+    row = db[:dictionary_reflexes].where(dictionary_entry_id: topos[:id]).first
+    assert_equal ["grc", "τόπος", true, "borrowed"], [row[:language], row[:word], row[:borrowed], row[:relation]]
+
+    result = Nabu::Query::Define.new(catalog: db).by_urn("urn:nabu:dict:ccl:C10766")
+    step = result.etymons.first
+    assert_equal ["borrowed", "grc", "τόπος", 0], [step.relation, step.language, step.word, step.hop]
+    assert_empty Nabu::Query::Etym.new(catalog: db, lects: nil).run("τόπος"),
+                 "a donor is the entry's etymon, never a descendant reflex"
   end
 
   # P124-3: the fixture's xr targets are all outside the slice (or, like

@@ -7,7 +7,16 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-10-21** — the chu:ncs (New Church Slavonic) stage
+- **Retrieved 2026-10-22** — the Linear A package (the parentless `lab`
+  anchor under the no-classification discipline, plus the lina / linb /
+  cprt rows in the global scripts table), copied verbatim from
+  canonical/nabu-lects (commit `9aec64ea1db4`, `main`); the same tree
+  carries the 2026-10-22 registry-merge package (the +8 epigraphy/SEA
+  anchors, Jyotsnikā-era stage rows and +11 codemap aliases) whose
+  re-cut rode the previous phase. `lects.yml` 174,737 B, sha256
+  `e3d039ffaae5e2275cc125c9abaec81b2abf54e7800f1d8e3788be0d33e6da1d`;
+  `codemap.yml` unchanged from the previous cut.
+- Previously retrieved 2026-10-21 — the chu:ncs (New Church Slavonic) stage
   and the Korean ladder (oko/okm, kor → ko codemap row), copied
   verbatim from canonical/nabu-lects (commit `b3d53b871f71`, `main`).
   `lects.yml` 143,939 B, sha256

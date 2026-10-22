@@ -107,10 +107,10 @@ module Adapters
       labels = entries.flat_map(&:citations).map(&:label)
       assert_equal 32, labels.size
       tiers = labels.group_by { |label| Nabu::Adapters::MwSigla.classify(label) }
-      assert_equal 3, tiers.fetch(:passage).size    # the three RV. citations
-      assert_equal 9, tiers.fetch(:document).size   # Bhaṭṭ. Mn.×2 Nir.×2 Pāṇ. MārkP. R. Sāh.
-      assert_equal 7, tiers.fetch(:authority).size  # L.×2 Br.×2 ib.×2 Kāv.
-      assert_equal 13, tiers.fetch(:unheld).size    # MBh.×4, TS., Dhātup., Suśr., …
+      assert_equal 4, tiers.fetch(:passage).size    # the three RV. citations + Pāṇ. vii, 4, 3
+      assert_equal 8, tiers.fetch(:document).size   # Bhaṭṭ. Mn.×2 (bare) Nir.×2 MārkP. R. Sāh.
+      assert_equal 5, tiers.fetch(:authority).size  # L.×2 Br.×2 Kāv.
+      assert_equal 15, tiers.fetch(:unheld).size    # MBh.×4 + its two ib. (= MBh.), TS., Dhātup., Suśr., …
     end
 
     def test_the_verified_rv_citation_normalizes_to_the_gretil_shape
@@ -131,9 +131,11 @@ module Adapters
 
     def test_held_document_grain_citations_carry_the_urn_without_a_citation
       pan = entry("150479").citations.find { |c| c.label == "Pāṇ. vii, 4, 3" }
-      assert_equal "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", pan.cts_work,
-                   "Pāṇini is held but single-blob — document grain by design"
-      assert_nil pan.citation
+      assert_equal "urn:nabu:gretil:sa_pANini-aSTAdhyAyI", pan.cts_work
+      assert_equal "7,4.3", pan.citation, "the re-split Aṣṭādhyāyī resolves at sūtra grain"
+      manu = entry("150479").citations.select { |c| c.label == "Mn." }
+      assert_equal ["urn:nabu:gretil:sa_manusmRti"], manu.map(&:cts_work).uniq
+      assert_equal [nil], manu.map(&:citation).uniq, "a bare Mn. names the work — document grain"
       sah = entry("150481").citations.find { |c| c.label == "Sāh." }
       assert_equal "urn:nabu:gretil:sa_vizvanAthakavirAja-sAhityadarpaNa", sah.cts_work
     end
@@ -221,7 +223,135 @@ module Adapters
 
     def test_entries_without_the_safe_shapes_carry_no_crossrefs
       assert_empty slice_entry("1715").crossrefs
-      assert(entries.all? { |e| e.crossrefs.empty? }, "the main fixture carries no cf./q.v. adjacency")
+      assert(entries.flat_map(&:crossrefs).none? { |c| %w[cf. q.v.].include?(c.kind) },
+             "the main fixture carries no cf./q.v. adjacency")
+      # Its only pointers are structural: aṃsa (H2) printed under √aṃs,
+      # bhāṣaṇa (H2) under √bhāṣ.
+      assert_equal({ "88" => [%w[root 87]], "150481" => [%w[root 150479]] },
+                   entries.reject { |e| e.crossrefs.empty? }
+                          .to_h { |e| [e.entry_id, e.crossrefs.map { |c| [c.kind, c.target_id] }] })
+    end
+
+    # -- the mining slice (test/fixtures/mw/README.md) ------------------------------
+
+    MINING = File.join(Nabu::TestSupport.fixtures("mw"), "mining-slice.xml")
+
+    def mining_entry(id)
+      @mining ||= Nabu::Adapters::MwXmlParser.new.entries(File.foreach(MINING))
+      @mining.find { |candidate| candidate.entry_id == id } or flunk "no mining entry L=#{id}"
+    end
+
+    def citation_rows(id)
+      mining_entry(id).citations.map { |c| [c.urn_raw, c.label, c.cts_work, c.citation] }
+    end
+
+    PANINI = "urn:nabu:gretil:sa_pANini-aSTAdhyAyI"
+
+    # -- ibid propagation: "ib." inherits the preceding citation's work --------------
+
+    # L 37642 ul-√lī: "Kāś. on Pāṇ. i, 3, 70 … ib.; … ib." — the first ib.
+    # takes the IMMEDIATELY preceding <ls> (Pāṇ.), the second chains through
+    # the first. The work is inherited, never the passage (MW's ib. names the
+    # same text, not the same sūtra): document grain. urn_raw keeps the print.
+    def test_ib_inherits_the_preceding_work_and_chains
+      assert_equal [["Kāś.", "Kāś.", nil, nil],
+                    ["Pāṇ. i, 3, 70", "Pāṇ. i, 3, 70", PANINI, "1,3.70"],
+                    ["ib.", "ib. (= Pāṇ.)", PANINI, nil],
+                    ["ib.", "ib. (= Pāṇ.)", PANINI, nil]], citation_rows("37642")
+    end
+
+    # L 62023 kheṭa: the chain follows the print mechanically — an ib. after
+    # "Kāś." inherits Kāś. (not held: the work is named, the urn stays nil),
+    # and propagation crosses the entry's continuation records.
+    def test_ib_follows_the_nearest_citation_across_continuation_records
+      rows = citation_rows("62023").last(6)
+      assert_equal([["Pāṇ. vi, 2, 126", PANINI], ["ib. (= Pāṇ.)", PANINI], ["Kāś.", nil],
+                    ["ib. (= Kāś.)", nil], ["Kāś.", nil], ["Bālar. ii", nil]],
+                   rows.map { |_raw, label, work, _cit| [label, work] })
+    end
+
+    # Entry boundaries reset the chain: an ib. that OPENS an entry points (in
+    # print) into the previous entry, which the desk never shows beside it —
+    # it stays the bare authority label, unresolved (L 101473 after L 101471's
+    # MBh.; L 25656.1, whose print predecessor is its parent's Pāṇ.).
+    def test_ib_resets_at_entry_boundaries
+      assert_equal [["ib.", "ib.", nil, nil]], citation_rows("101473")
+      assert_equal [["ib.", "ib.", nil, nil]], citation_rows("25656.1")
+      assert_equal(["Pāṇ.", "ib. (= Pāṇ.)"], citation_rows("25656").map { |row| row[1] })
+    end
+
+    def test_inherited_ib_labels_classify_by_the_inherited_siglum
+      sigla = Nabu::Adapters::MwSigla
+      assert_equal "Pāṇ.", sigla.siglum_of("ib. (= Pāṇ.)")
+      assert_equal :document, sigla.classify("ib. (= Pāṇ.)")
+      assert_equal :unheld, sigla.classify("ib. (= MBh.)")
+      assert_equal :authority, sigla.classify("ib. (= L.)")
+      assert_equal :authority, sigla.classify("ib."), "an unpropagated ib. stays a label"
+      assert_equal [PANINI, nil], sigla.resolve("ib. (= Pāṇ.)")
+    end
+
+    # -- phw parent/child ties: entry-to-entry edges, both ways ------------------------
+
+    def id_crossrefs(id, kind)
+      mining_entry(id).crossrefs.select { |c| c.kind == kind }
+                                .map { |c| [c.label, c.target, c.target_id] }
+    end
+
+    # Cologne manufactures an entry for every headword MW prints
+    # PARENTHETICALLY inside another (mw-meta2: <info phwchild="LC"/> in the
+    # parent record, <info phwparent="LP,HWP"/> in the child). Each tie
+    # becomes two id-keyed pointers — the AED vocabulary: the parent
+    # "contains" the child, the child is "partOf" the parent.
+    def test_phw_ties_mint_contains_and_part_of_pointers
+      assert_equal [["contains āmraguptāyani", "āmraguptāyani", "25656.1"],
+                    ["contains āmragupti", "āmragupti", "25656.2"]], id_crossrefs("25656", "contains")
+      assert_equal [["partOf āmragupta", "āmragupta", "25656"]], id_crossrefs("25656.1", "partOf")
+      assert_equal [["partOf āmragupta", "āmragupta", "25656"]], id_crossrefs("25656.2", "partOf")
+    end
+
+    # The tie names RECORD ids; a parent record that is a continuation
+    # (L 150484, an H2B gender block of bhāṣaṇa L 150481) maps onto its
+    # grouped entry, so the pointer lands on an entry_id that exists. The
+    # displayed target is the headword upstream names (bhāṣaṇī, the record's
+    # key), the id the entry it lives in.
+    def test_phw_record_ids_map_onto_their_grouped_entries
+      assert_equal [["partOf bhāṣaṇī", "bhāṣaṇī", "150481"]], id_crossrefs("150484.1", "partOf")
+      assert_equal [["contains bhāṣaṇīkṣaulema", "bhāṣaṇīkṣaulema", "150484.1"]],
+                   id_crossrefs("150481", "contains")
+    end
+
+    # -- root families: MW's own print hierarchy + the prefixed-root seam ------------
+
+    # MW prints a root (H1, <info verb="root|genuineroot">) followed by its
+    # primary derivatives as H2 sub-headwords until the next H1: each H2
+    # points "root" at the root entry, id-keyed. H3/H4 compounds belong to
+    # their H2 head, not to the root family (deliberately coarse); a non-root
+    # H1 (2. bhāṣ, L 150550) closes the block and joins no family.
+    def test_h2_derivatives_point_at_the_root_they_are_printed_under
+      %w[150480 150481 150485].each do |id|
+        assert_equal [["root bhāṣ", "bhāṣ", "150479"]], id_crossrefs(id, "root"), "L #{id}"
+      end
+      assert_equal [["root lī", "lī", "182753"]], id_crossrefs("182789", "root")
+      %w[150479 150484.1 150550 62023 101471 182753].each do |id|
+        assert_empty id_crossrefs(id, "root"), "L #{id} is no root-family member"
+      end
+    end
+
+    # A prefixed verb (<info verb="pre" parse="ud+lI"/>, printed ul-√lī)
+    # joins the family of its root — the parse's last member — resolved
+    # among the dictionary's ROOT entries only, by key, never by a fold that
+    # could land on a noun homograph.
+    def test_prefixed_verbs_join_the_family_of_their_root
+      assert_equal [["root lī", "lī", "182753"]], id_crossrefs("37642", "root")
+    end
+
+    # Homonym roots share a key (√1.as "be", √2.as "throw"); the √ mark in
+    # the prefixed verb's printed headword carries the number
+    # (<s>aDy-</s>√ <hom>2.</hom> <s>as</s>), matched against the root
+    # entry's own <hom>.
+    def test_the_root_mark_homonym_number_picks_among_homonym_roots
+      assert_equal [["root as", "as", "20354"]], id_crossrefs("4624", "root")
+      assert_empty id_crossrefs("20353", "root")
     end
 
     # -- hygiene -------------------------------------------------------------------

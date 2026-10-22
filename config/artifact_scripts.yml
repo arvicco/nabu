@@ -70,3 +70,33 @@ sources:
       script: hant
       note: "man'yōgana — Han characters used phonographically (8th c.,
         pre-kana); the ruling's judgment call: hant, not the anachronistic jpan"
+  # The Aegean-syllabary rows the Linear A registry package unblocked
+  # (lina / linb / cprt landed in the registry's global scripts table
+  # 2026-10-22). Every held surface is the conventional Latin
+  # transliteration — each adapter's own census measured 100% latn.
+  sigla:
+    lab:
+      script: lina
+      note: "Linear A originals (tablets, roundels, nodules, libation
+        formulas), held as transliteration — syllabograms by phonetic
+        value, logograms by Latin name"
+  damos:
+    gmy:
+      script: linb
+      note: "Linear B tablets and sealings, held in the conventional
+        transliteration (syllabograms romanized, logograms as Latin
+        abbreviations)"
+  ig-cyprus:
+    grc-Latn:
+      script: cprt
+      note: "the -Latn documents are the Cypriot-syllabary texts in Latin
+        transliteration; alphabetic Greek rides the bare grc code
+        untouched (no row — artifact and held script agree), and the
+        per-passage writing_system annotation carries any line-level mix"
+    ecy-Latn:
+      script: cprt
+      note: "Eteocypriot, Cypriot syllabary held in transliteration"
+    und-Latn:
+      script: cprt
+      note: "one unclassified inscription ('eteokyprisch oder syllabisch?'),
+        upstream's own writing_systems says cypriot-syllabary"

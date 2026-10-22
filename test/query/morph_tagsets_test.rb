@@ -100,6 +100,27 @@ module Query
       assert_empty search("izganjati", morph: "aspect=perf")
     end
 
+    # Besa, On Lack of Food: ⲙⲡⲉ tagged ANEGPST (gold) → polarity neg;
+    # ⲁⲛⲟⲛ tagged PPERS → a personal pronoun.
+    def test_coptic_scriptorium_tags_reach_the_morph_surface
+      load_source("coptic-scriptorium", "CopticScriptorium")
+      hits = search("ⲙⲡⲉ", morph: "polarity=neg")
+      assert(hits.any? { |hit| hit.urn.start_with?("urn:nabu:coptic-scriptorium:besa.food.monbbb:") },
+             "the besa ⲙⲡⲉ is among the gold hits")
+      assert_equal ["polarity=neg"], hits.map(&:morph).uniq
+      refute_empty search("ⲁⲛⲟⲛ", morph: "prontype=prs")
+      assert_empty search("ⲁⲛⲟⲛ", morph: "prontype=dem")
+    end
+
+    # The CoNLL-U FEATS join: Besa's ⲧⲉⲧⲛ (lemma ⲛⲧⲱⲧⲛ, tag PPERS) carries
+    # its twin's Person=2|Number=Plur — features no TT tag states.
+    def test_coptic_scriptorium_joined_ud_feats_reach_the_morph_surface
+      load_source("coptic-scriptorium", "CopticScriptorium")
+      hits = search("ⲛⲧⲱⲧⲛ", morph: "person=2,number=pl")
+      assert_includes hits.map(&:urn), "urn:nabu:coptic-scriptorium:besa.food.monbbb:1.1"
+      assert_empty search("ⲛⲧⲱⲧⲛ", morph: "person=3")
+    end
+
     # AM 1056 IX 4to 2vB.7 þarnast (þarfna): xVB fI tPS vR → inf, middle.
     def test_menota_msa_reaches_the_morph_surface
       load_source("menota", "Menota")

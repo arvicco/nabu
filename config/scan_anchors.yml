@@ -1,0 +1,75 @@
+# Print-citation → held reference-scan anchors (Nabu::Query::ScanAnchors):
+# the define desk's bridge from a dictionary entry's PRINT citation to the
+# local-library scan of the cited work, at the PDF leaf of the printed page.
+#
+# Per work:
+#   pattern      regex over the citation label (as `nabu define` prints it),
+#                named captures: page (required), line (optional), volume
+#                (required iff the work declares volumes:)
+#   item         the scan's local-library document urn
+#                (urn:nabu:local-library:<collection>:<file-stem slug>),
+#                null until the scan is ingested
+#   leaf_offset  integer k: printed page N sits on PDF page N + k (the
+#                adapter's `<item>:p<N+k>` passage); null until calibrated
+#   volumes      multi-volume works: {volume as cited => {item, leaf_offset}};
+#                two volumes bound in one PDF share an item, each with its
+#                own offset. A cited volume with no row reads "no scan
+#                configured for … vol. N".
+#
+# Every row reads honestly while null: unconfigured → not held → uncalibrated
+# → anchored, one status per citation on the define card.
+works:
+  # Brown–Driver–Briggs 1906 — the hebrew-lexicon bdb shelf cites the print
+  # page of every outline entry ("BDB p. 135"; census 2026-10-22: 12,962
+  # page anchors, pages 1–1118, all numeric).
+  bdb:
+    title: Brown–Driver–Briggs, Hebrew and English Lexicon (1906)
+    pattern: '\ABDB p\. (?<page>\d+)\z'
+    # Calibrated 2026-10-22 against the ingested archive.org scan
+    # (hebrewenglishlex00browuoft): printed 126/276/576 sit on PDF
+    # pages 150/300/600 — a constant +24.
+    item: urn:nabu:local-library:lexica:hebrewenglishlex00browuoft
+    leaf_offset: 24
+
+  # Erman–Grapow, Wörterbuch der aegyptischen Sprache — the aed shelf mints
+  # one citation per bibl segment starting "Wb " ("Wb <vol>, <page>.<line>
+  # [-…]"; census 2026-10-22: 13,403 such segments, the matched ones by
+  # volume 1: 3,935 · 2: 2,615 · 3: 2,349 · 4: 2,274 · 5: 2,229). The pattern also takes
+  # upstream's dot-after-volume quirk ("Wb 3. 293.2-6") and the
+  # space-only separator ("Wb 2 227.1"); the first page.line of a range
+  # anchors. 13,402 of 13,403 match — "Wb 635.5" (no such volume; the
+  # volume is one digit) carries no readable locus and matches nothing.
+  wb:
+    title: Wörterbuch der aegyptischen Sprache
+    pattern: '\AWb (?<volume>\d)(?: ?[,.] ?| )(?<page>\d+)(?:\. ?(?<line>\d+))?'
+    # Calibrated 2026-10-22 against the ingested archive.org scans
+    # (wrterbuchderaegy000Nunse, read off rendered leaves). Each volume
+    # binds its Lieferungen with their title leaves (and, in Bd. I, a
+    # Belegstellen fascicle) between the printed pages, so the offset
+    # breaks mid-volume: Bd. I +10 through p. 244, +46 from p. 245
+    # (printed 241–244 unverified — they sit against the insert); Bd.
+    # II/III/IV +8 through p. 240, +12 from p. 241 (each probed at
+    # leaves 200/450 with the Lieferung title insert at leaf 251).
+    # Bd. V enters US PD 2027-01-01.
+    volumes:
+      "1":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0001unse
+        leaf_offset: 10
+        breaks:
+          - { from_page: 245, leaf_offset: 46 }
+      "2":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0002unse
+        leaf_offset: 8
+        breaks:
+          - { from_page: 241, leaf_offset: 12 }
+      "3":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0003unse
+        leaf_offset: 8
+        breaks:
+          - { from_page: 241, leaf_offset: 12 }
+      "4":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0004unse
+        leaf_offset: 8
+        breaks:
+          - { from_page: 241, leaf_offset: 12 }
+      "5": { item: null, leaf_offset: null }

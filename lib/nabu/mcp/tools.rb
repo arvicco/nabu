@@ -329,7 +329,10 @@ module Nabu
         "text (senses labeled; bounded at #{DEFINE_BODY_CAP} chars with an honest note — the " \
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
         "in the local catalog the citation carries a resolved passage urn (open it with " \
-        "nabu_show); otherwise resolved_urn is null and the display text stands. Entries " \
+        "nabu_show); otherwise resolved_urn is null and the display text stands. A PRINT " \
+        "citation of a reference work (a BDB page, a Wb volume/page/line) may carry `scan`: " \
+        "status (anchored/held/uncalibrated/out_of_range/not_held/unconfigured), urn (the " \
+        "held scan's page passage or document — null when not held), leaf, pointer. Entries " \
         "may carry `crossrefs` — pointers to other entries, usually of the same dictionary, " \
         "sometimes of another (the Strong shelf's BDB ids) (kind, label verbatim, resolved_urn " \
         "of the target entry or null — open it with nabu_show). Bounded " \
@@ -484,8 +487,9 @@ module Nabu
                                 "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
                                 "match on feats; PROIEL/TOROT positional tags, GLAUx's AGDT " \
                                 "postags, Diorisis analyses, BHSA/DSS (ETCBC/Abegg) features, " \
-                                "OSHB morph codes, CorA msd (ReM/ReN), IMP msd (goo300k) and " \
-                                "Menota msa are decoded to the same names (Hebrew/Aramaic add " \
+                                "OSHB morph codes, CorA msd (ReM/ReN), IMP msd (goo300k), " \
+                                "Menota msa and Coptic Scriptorium pos tags (polarity, prontype, " \
+                                "definite, verbform) are decoded to the same names (Hebrew/Aramaic add " \
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
                                 "ORACC has no inflectional morphology so these facets never match it." },
           gloss: { type: "string",
@@ -948,35 +952,39 @@ module Nabu
       # nabu_place (the place desk over Query::Place) as the eleventh; P53-2
       # adds nabu_signs (the sign desk over Query::Signs) as the twelfth —
       # nabu_status stays last, the coverage epilogue.
+      #
+      # +title+ (contract bump 2026-10-22): the human-readable display name
+      # the MCP spec's tool metadata carries; #definitions serves it top-level
+      # and inside the `annotations` object beside readOnlyHint.
       TOOLS = {
-        "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
-                           handler: :search },
-        "nabu_show" => { description: SHOW_DESCRIPTION, input_schema: SHOW_SCHEMA,
-                         handler: :show },
-        "nabu_concord" => { description: CONCORD_DESCRIPTION, input_schema: CONCORD_SCHEMA,
-                            handler: :concord },
-        "nabu_align" => { description: ALIGN_DESCRIPTION, input_schema: ALIGN_SCHEMA,
-                          handler: :align },
-        "nabu_define" => { description: DEFINE_DESCRIPTION, input_schema: DEFINE_SCHEMA,
-                           handler: :define },
-        "nabu_etym" => { description: ETYM_DESCRIPTION, input_schema: ETYM_SCHEMA,
-                         handler: :etym },
-        "nabu_parallels" => { description: PARALLELS_DESCRIPTION, input_schema: PARALLELS_SCHEMA,
-                              handler: :parallels },
-        "nabu_cognates" => { description: COGNATES_DESCRIPTION, input_schema: COGNATES_SCHEMA,
-                             handler: :cognates },
-        "nabu_links" => { description: LINKS_DESCRIPTION, input_schema: LINKS_SCHEMA,
-                          handler: :links },
-        "nabu_char" => { description: CHAR_DESCRIPTION, input_schema: CHAR_SCHEMA,
-                         handler: :char_card },
-        "nabu_place" => { description: PLACE_DESCRIPTION, input_schema: PLACE_SCHEMA,
-                          handler: :place },
-        "nabu_signs" => { description: SIGNS_DESCRIPTION, input_schema: SIGNS_SCHEMA,
-                          handler: :signs },
-        "nabu_clarify" => { description: CLARIFY_DESCRIPTION, input_schema: CLARIFY_SCHEMA,
-                            handler: :clarify },
-        "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
-                           handler: :status }
+        "nabu_search" => { title: "Search the corpus", description: SEARCH_DESCRIPTION,
+                           input_schema: SEARCH_SCHEMA, handler: :search },
+        "nabu_show" => { title: "Read passages by URN", description: SHOW_DESCRIPTION,
+                         input_schema: SHOW_SCHEMA, handler: :show },
+        "nabu_concord" => { title: "Concordance (keyword in context)", description: CONCORD_DESCRIPTION,
+                            input_schema: CONCORD_SCHEMA, handler: :concord },
+        "nabu_align" => { title: "Cross-source alignment", description: ALIGN_DESCRIPTION,
+                          input_schema: ALIGN_SCHEMA, handler: :align },
+        "nabu_define" => { title: "Dictionary lookup", description: DEFINE_DESCRIPTION,
+                           input_schema: DEFINE_SCHEMA, handler: :define },
+        "nabu_etym" => { title: "Reconstruction walk", description: ETYM_DESCRIPTION,
+                         input_schema: ETYM_SCHEMA, handler: :etym },
+        "nabu_parallels" => { title: "Intertext parallels", description: PARALLELS_DESCRIPTION,
+                              input_schema: PARALLELS_SCHEMA, handler: :parallels },
+        "nabu_cognates" => { title: "Cognates in parallel", description: COGNATES_DESCRIPTION,
+                             input_schema: COGNATES_SCHEMA, handler: :cognates },
+        "nabu_links" => { title: "Mined links graph", description: LINKS_DESCRIPTION,
+                          input_schema: LINKS_SCHEMA, handler: :links },
+        "nabu_char" => { title: "Character card", description: CHAR_DESCRIPTION,
+                         input_schema: CHAR_SCHEMA, handler: :char_card },
+        "nabu_place" => { title: "Place desk", description: PLACE_DESCRIPTION,
+                          input_schema: PLACE_SCHEMA, handler: :place },
+        "nabu_signs" => { title: "Cuneiform sign desk", description: SIGNS_DESCRIPTION,
+                          input_schema: SIGNS_SCHEMA, handler: :signs },
+        "nabu_clarify" => { title: "Reference normalizer", description: CLARIFY_DESCRIPTION,
+                            input_schema: CLARIFY_SCHEMA, handler: :clarify },
+        "nabu_status" => { title: "Corpus coverage status", description: STATUS_DESCRIPTION,
+                           input_schema: STATUS_SCHEMA, handler: :status }
       }.freeze
 
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
@@ -985,8 +993,13 @@ module Nabu
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
                      enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
                      readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil,
-                     vectors: nil, facet_map: nil)
+                     vectors: nil, facet_map: nil, scan_anchors: nil)
         @catalog = catalog
+        # The reference-scan anchors (config/scan_anchors.yml — static,
+        # loaded once by the entrypoint): nabu_define/nabu_show citations a
+        # configured print work claims gain a present-only `scan` object.
+        # nil = every citation payload byte-identical (the lane-off rule).
+        @scan_anchors = scan_anchors
         # The facet map (config/facet_map.yml — static, loaded once by the
         # entrypoint): the token-sense rules behind nabu_search's `sense`
         # desk and nabu_show's `senses` flag. nil = both answer their honest
@@ -1073,12 +1086,19 @@ module Nabu
         @links = links
       end
 
-      # tools/list shape: [{name:, description:, inputSchema:}]. nabu_define's
-      # lang enum is injected LIVE (#define_langs) so the advertised language
-      # set can never rot into a hand-frozen list again (P35-6 L4).
+      # tools/list shape: [{name:, title:, description:, inputSchema:,
+      # annotations:}]. nabu_define's lang enum is injected LIVE
+      # (#define_langs) so the advertised language set can never rot into a
+      # hand-frozen list again (P35-6 L4). The annotations (contract bump
+      # 2026-10-22) follow the MCP spec's ToolAnnotations shape: every tool is
+      # readOnlyHint true — the surface opens the stores read-only and has no
+      # write tools — and the title rides there too for clients that read the
+      # display name only from the annotations.
       def definitions
         TOOLS.map do |name, tool|
-          { name: name, description: tool.fetch(:description), inputSchema: input_schema(name, tool) }
+          title = tool.fetch(:title)
+          { name: name, title: title, description: tool.fetch(:description),
+            inputSchema: input_schema(name, tool), annotations: { title: title, readOnlyHint: true } }
         end
       end
 
@@ -1290,7 +1310,8 @@ module Nabu
         include_restricted = args["include_restricted"] == true
         return show_parallel(catalog, urn, args, bound, include_restricted) if args["parallel"] == true
 
-        query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words)
+        query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words,
+                                scan_anchors: @scan_anchors)
         result = query.run(urn)
         return urn_not_found(urn) if result.nil?
         return withheld(urn, result.license_class) if withhold?(result.license_class, include_restricted)
@@ -1517,7 +1538,8 @@ module Nabu
           lects = lects_seam
           raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
         end
-        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), lects: lects || :auto)
+        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), lects: lects || :auto,
+                                    scan_anchors: @scan_anchors)
                                .run(lemma, lang: lang, limit: limit + 1, lect: lect, facets: facets_arg(args))
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit, catalog: catalog)
@@ -1542,7 +1564,7 @@ module Nabu
         # consults the SAME Query::Define lookup nabu_define runs — a
         # prose etymological article (Vasmer) answers under an honest
         # note; hits above never mix with the fallback.
-        entries = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
+        entries = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), scan_anchors: @scan_anchors)
                                .run(lemma, lang: string_arg(args, "lang"), limit: limit + 1)
         entries = entries.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_etym_fallback(entries, lemma: lemma, limit: limit, shelves: query.crosswalk_shelves)
@@ -2028,12 +2050,21 @@ module Nabu
         end
       end
 
-      # Resolved citations first (they are the actionable ones), capped.
+      # Resolved citations first (they are the actionable ones), capped. A
+      # print citation a configured reference work claims carries its scan
+      # anchor (present-only key): status, the show-able urn (nil unless
+      # the scan is held), leaf, and the CLI card's pointer wording.
       def define_citations(result)
         ordered = result.citations.partition(&:resolved_urn).flatten(1)
         ordered.first(DEFINE_MAX_CITATIONS).map do |citation|
-          { label: citation.label, resolved_urn: citation.resolved_urn }
+          base = { label: citation.label, resolved_urn: citation.resolved_urn }
+          citation.scan ? base.merge(scan: scan_payload(citation.scan)) : base
         end
+      end
+
+      def scan_payload(anchor)
+        { status: anchor.status.to_s, work: anchor.work, volume: anchor.volume, page: anchor.page,
+          line: anchor.line, leaf: anchor.leaf, item: anchor.item, urn: anchor.urn, pointer: anchor.pointer }
       end
 
       # -- etym internals -----------------------------------------------------------

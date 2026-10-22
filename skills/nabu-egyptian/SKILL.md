@@ -26,7 +26,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `aed` | AED — Ägyptische Wortliste (TLA/BBAW dictionary export) | attribution |
 | `aes` | AES — Ancient Egyptian Sentences (TLA/BBAW snapshot, January 2018) | attribution |
 | `ccl` | Comprehensive Coptic Lexicon v1.2 (BBAW/DDGLC) + ORAEC & KELLIA egy↔cop etymologies | attribution |
-| `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.2.0) | nc |
+| `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.3.0) | nc |
 | `edubba-overlay` | Edubba didactic overlay — hiero sign pedagogy (module) | attribution |
 | `elephantine` | Elephantine — the Berlin ERC papyri and ostraca database | attribution |
 | `tla-hf` | Thesaurus Linguae Aegyptiae — official Hugging Face datasets (Demotic v18 + Late Egyptian v19, premium) | attribution |

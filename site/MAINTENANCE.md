@@ -49,6 +49,13 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    from the committed census + desks files and fails on any difference (a
    hand edit or a skipped refresh), and site_prose_ssot_test refuses a
    headline figure typed into its template (`Nabu::Ops::LlmsTxt`).
+   `/llms-full.txt` (the navigation pages as plain text) needs no refresh
+   step: Jekyll renders it at build from the pages' own rendered content
+   (`site/zz-llms-full.txt` + `_includes/plain_text.html`), so it carries
+   exactly the figures the pages render. Its file name must sort after
+   every page it reads (Jekyll renders pages in name order) —
+   `test/site/agent_discovery_test.rb` guards that, the figure-free
+   template, and the sitemap/robots.txt/JSON-LD wiring.
    **A new headline figure a page needs = add a field to
    `Nabu::Ops::SiteData#census`** (and its shape assertion in
    site_data_test), regenerate, then reference `{{ site.data.census.NEW }}`

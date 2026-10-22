@@ -342,7 +342,7 @@ near-contemporaries.
 | **Language** | Coptic (`cop`), Sahidic and Bohairic dialects |
 | **Period** | Roughly 3rd–10th c. CE, the Christian-Egypt corpus |
 | **Size** | 482 docs / 74,169 passages — 482 of the 483 upstream corpora aboard (P18-1 coverage pass; the one remainder is an honest quarantine) |
-| **Source** | `coptic-scriptorium` (Coptic Scriptorium, release v6.2.0, TT parser family), license: CC BY per document with source class `nc` (most-restrictive-wins) |
+| **Source** | `coptic-scriptorium` (Coptic Scriptorium, release v6.3.0, TT parser family), license: CC BY per document with source class `nc` (most-restrictive-wins) |
 | **Metadata** | Upstream **gold lemmatization** — **233,020 `cop` lemma rows**, gold-lemma language **#15**; language-of-origin loan tags (the Greek layer inside Coptic); Wikification entities; manuscript-timeline rows (340 dated documents) |
 
 Synced and flipped by the owner 2026-07-13 (the first sync attempt's unzip
@@ -1312,6 +1312,48 @@ engine (recall@K over six censused gold sets, baselines pinned), the
 convention every future paid-model enrichment must land on, and the
 person card now listing catalogue mentions (rulers, authors,
 eponyms) beside its authority cards.
+
+## 8as. Iron Age Hebrew epigraphy and the small verified shelves (P143)
+
+Counts from the first syncs, 2026-10-22:
+
+**`extrabiblical`** — the ETCBC's machine-readable corpus of
+Non-Masoretic texts related to the Hebrew Bible: 13 books / 1,800
+verse passages with the full BHSA-style morphology and clause/phrase
+constituency — the Arad and Lachish ostraca, Kuntillet ʿAjrud, the
+Siloam tunnel inscription, the Ketef Hinnom amulets, the Mesad
+Hashavyahu petition, the Mesha Stele (Moabite), the Deir ʿAlla
+plaster text, three Qumran Cave 1 scrolls and two rabbinic works
+(CC BY-NC). The only Iron Age Hebrew epigraphy with parsed grammar
+anywhere, every book dated to its era and placed at its find-site.
+
+**`memis`** — the MEMIS epigraphic corpus of medieval and early
+modern inscriptions in Slovenia (ZRC SAZU, CC BY-SA): 51 Latin
+inscriptions of Koper and Piran / 473 line passages, from a 1st-century
+stele to the painted 1709 elogium of Piran, each with the editor's
+expanded reading beside a diplomatic layer, 49 of 51 dated by their
+own origDate.
+
+**`meloniromance`** — 5,419 expert Romance cognate sets (Meloni,
+Ravfogel & Goldberg 2021; CLDF edition, CC BY): each a Latin etymon
+with its Italian/Spanish/Portuguese/French/Romanian reflexes in broad
+IPA, feeding the cognates desk through the dictionary-reflex seam.
+
+**`etruscan-loans`** — curated Etruscan→Latin loan edges from
+Wiktionary's category pages (199 Latin lemmas, 69 marked borrowed,
+76 citing the Etruscan form in Old Italic script), the Tyrsenian
+counterpart of the Sabellic loan shelf.
+
+Beside them: Monier-Williams citations deep-mined (the full 871-row
+works-and-authors key, ib. propagation, parenthetical-headword ties
+and root families — passage-grain citations tripled, with Manu and
+Pāṇini re-split to verse and sūtra grain), the Coptic shelf re-pinned
+to v6.3.0 with parallel-witness links, Greek-loan donor edges, a
+morph decoder and the CoNLL-U features joined, the Sahidic psalter in
+the psalms alignment hub, print-dictionary citations (BDB, the Wb)
+resolving to the held reference scans, and the reference shelf itself
+grown by the public-domain scan batches (ANE, Hebrew, Egyptian,
+Ossetic, Baltic).
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

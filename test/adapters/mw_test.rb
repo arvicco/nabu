@@ -209,6 +209,48 @@ class MwTest < Minitest::Test
     assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
   end
 
+  # The whole-file edges of the mining slice (README): phw ties and root
+  # families are id-keyed, so the loader resolves each onto the exact entry.
+  def mining_slice_document
+    path = File.join(FIXTURES, "mining-slice.xml")
+    document = Nabu::DictionaryDocument.new(slug: "mw", language: "san", title: "MW mining slice",
+                                            canonical_path: path)
+    Nabu::Adapters::MwXmlParser.new.entries(File.foreach(path)).each { |entry| document << entry }
+    document
+  end
+
+  def resolved(define, id)
+    define.by_urn("urn:nabu:dict:mw:#{id}").crossrefs.map { |c| [c.label, c.resolved_urn] }
+  end
+
+  def test_phw_ties_resolve_both_ways_by_entry_id
+    db, loader = loader_setup
+    loader.load([mining_slice_document], full: false)
+    define = Nabu::Query::Define.new(catalog: db)
+
+    assert_equal [["contains āmraguptāyani", "urn:nabu:dict:mw:25656.1"],
+                  ["contains āmragupti", "urn:nabu:dict:mw:25656.2"]], resolved(define, "25656")
+    assert_equal [["partOf āmragupta", "urn:nabu:dict:mw:25656"]], resolved(define, "25656.1")
+    assert_equal [["partOf bhāṣaṇī", "urn:nabu:dict:mw:150481"]], resolved(define, "150484.1")
+
+    before = db[:dictionary_crossrefs].order(:id).all
+    loader.load([mining_slice_document], full: false)
+    assert_equal before, db[:dictionary_crossrefs].order(:id).all, "idempotent reload"
+  end
+
+  def test_root_family_pointers_resolve_onto_the_root_entry
+    db, loader = loader_setup
+    loader.load([mining_slice_document], full: false)
+    define = Nabu::Query::Define.new(catalog: db)
+
+    assert_equal [["root bhāṣ", "urn:nabu:dict:mw:150479"]], resolved(define, "150480")
+    assert_equal [["root lī", "urn:nabu:dict:mw:182753"]], resolved(define, "37642")
+    family = db[:dictionary_crossrefs].where(kind: "root")
+                                      .where(to_entry_id: db[:dictionary_entries].where(entry_id: "150479").select(:id))
+                                      .count
+    assert_equal 3, family, "√bhāṣ's printed family: bhāṣaka, bhāṣaṇa, bhāṣā"
+  end
+
   def test_citation_and_reflex_rows_land_and_replace_wholesale
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
@@ -252,15 +294,20 @@ class MwTest < Minitest::Test
     seed_rgveda(passages: %w[5.086.05a 5.086.05c 10.109.01a])
 
     lines = Nabu::Adapters::Mw.citation_coverage(catalog: db)
-    assert_equal "mw citations: 32 — 3 passage-grain · 9 document-grain · 7 authority · 13 not-held",
-                 lines.first
+    assert_equal "mw citations: 32 — 4 passage-grain · 8 document-grain · 5 authority · 15 not-held",
+                 lines.first, "the two ib. after MBh. now count as MBh. (ibid propagation)"
     rv = lines.find { |line| line.strip.start_with?("RV.") }
     assert_match(%r{2/3 live at passage grain — urn:nabu:gretil:sa_Rgveda-edAufrecht}, rv,
                  "RV. v,86,5 and x,109,1 resolve via pada probing; v,39,2 is an honest miss")
     mn = lines.find { |line| line.strip.start_with?("Mn.") }
     assert_match(/held — document not in catalog/, mn, "Manusmṛti not synced here — never faked")
     assert_match(/authority labels: .*L\. 2/, lines.join("\n"))
-    assert_match(/not held: MBh\. 4/, lines.join("\n"))
+    assert_match(/not held: MBh\. 6/, lines.join("\n"), "MBh.×4 + two ib. (= MBh.)")
+    # MW's own key names what a not-held siglum is, and censuses how much of
+    # the not-held mass it covers.
+    assert_match(/not held: MBh\. 6 \(Mahābhārata\)/, lines.join("\n"))
+    assert_equal "  sigla key: 15 of 15 not-held citations name a siglum in MW's works-and-authors key (871 rows)",
+                 lines.last
   end
 
   def test_coverage_is_empty_on_a_catalog_without_the_shelf

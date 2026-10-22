@@ -61,6 +61,31 @@ module Nabu
     #   names four entries) keeps most verbatim under the unique-match
     #   rule: 796 resolve, 1,716 meet several homographs, 102 name no
     #   headword.
+    # - reflexes: the Coptic → Greek BORROWING edges. The DDGLC (Database
+    #   and Dictionary of Greek Loanwords in Coptic) half of the lexicon
+    #   states each loanword's Greek source lemma inside <etym> as
+    #   <ref type="greek_lemma::grl_lemma"> (with grl_ID/meaning/pos/ref
+    #   siblings) — 3,229 of 11,284 entries in v1.2, exactly one each. One
+    #   DictionaryReflex per such ref: lang_code/language grc, the Greek
+    #   lemma verbatim (NFC), folded as Greek, borrowed true, relation
+    #   "borrowed" (the kaikki {{bor}} spelling — the donor is the entry's
+    #   own etymon, an UP edge the descent walks skip), so `define ⲧⲟⲡⲟⲥ`
+    #   states "borrowed grc τόπος" on its etymon line, resolved to the
+    #   Greek shelf entry when exactly one holds it. These are the dictionary side of Coptic Scriptorium's
+    #   language-of-origin tags: the corpus lemmatizes to these same
+    #   CDO/CCL headwords. Census 2026-10-22 (held catalog, gold lemmas):
+    #   2,034 Greek-tagged lemma types / 23,488 tokens — 944 types / 20,765
+    #   tokens (88%) fold onto a DDGLC entry carrying its Greek donor; 1,043
+    #   types / 2,515 tokens have no CCL entry at all (proper names —
+    #   ⲡⲉⲧⲣⲟⲥ, ⲡⲁⲩⲗⲟⲥ, ⲡⲓⲗⲁⲧⲟⲥ — and spelling variants such as ϩⲁⲅⲓⲟⲥ);
+    #   47 types / 208 tokens meet a native entry (tagging slips on ⲟⲩ,
+    #   ϩⲁⲡ). Not donors, deliberately: prose etym <note>s ("persisches
+    #   Lehnwort") name a language but no word, and the 587
+    #   <ref type="Greek"> are Crum's Greek TRANSLATION equivalents for
+    #   native words (κόραξ for the raven) — both stay in the body. The
+    #   adapter stays OUT of reflex_bearing? (the JMdict precedent): these
+    #   rows carry no upstream language NAME, so the language_names census
+    #   that promise also checks could never fill.
     class CclTeiParser
       TEI_NS = { "tei" => "http://www.tei-c.org/ns/1.0" }.freeze
 
@@ -71,6 +96,10 @@ module Nabu
       # Gloss preference: the define surface is English-first; de/fr stay
       # in the body verbatim.
       GLOSS_LANGS = %w[en de fr].freeze
+
+      # The DDGLC Greek source-lemma ref (class note).
+      GREEK_LEMMA_XPATH = %(./tei:etym/tei:ref[@type="greek_lemma::grl_lemma"])
+      GREEK = "grc"
 
       # P124-3: xr @type => [kind, printed label prefix].
       XR_KINDS = { "cf" => ["cf.", "cf."], "syn" => ["synonym", "syn."], "ant" => ["antonym", "ant."] }.freeze
@@ -109,8 +138,23 @@ module Nabu
           gloss: gloss(elem),
           body: body(elem, etymology),
           citations: crosswalk_citations(etymology),
-          crossrefs: crossrefs(elem)
+          crossrefs: crossrefs(elem),
+          reflexes: greek_donors(elem)
         )
+      end
+
+      # The DDGLC borrowing edges (class note): one borrowed grc donor
+      # reflex per Greek source-lemma ref, duplicates minted once.
+      def greek_donors(elem)
+        elem.xpath(GREEK_LEMMA_XPATH, TEI_NS).filter_map do |ref|
+          word = Nabu::Normalize.nfc(collapse(ref.text))
+          next if word.empty?
+
+          folded = Nabu::Normalize.search_form(word, language: GREEK)
+          Nabu::DictionaryReflex.new(lang_code: GREEK, language: GREEK, word: word,
+                                     word_folded: folded.empty? ? nil : folded,
+                                     borrowed: true, relation: "borrowed")
+        end.uniq
       end
 
       # P124-3: the xr pointers (census in the class note).

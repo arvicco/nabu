@@ -32,8 +32,10 @@ class CopticScriptoriumTest < Minitest::Test
     urn:nabu:coptic-scriptorium:pistissophia.1.petermann:1-13
     urn:nabu:coptic-scriptorium:shenoute.abraham.monbya:21-27
     urn:nabu:coptic-scriptorium:shenoute.considering.amelineau:1-2
+    urn:nabu:coptic-scriptorium:shenoute.those.monbgl:111
     urn:nabu:coptic-scriptorium:theodosiusalex.michael.budge_al_ed:9-30
     urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.ocrum_st_18.kypt344
+    urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.tm98063.kypt340
   ].freeze
 
   def conformance_adapter
@@ -59,6 +61,8 @@ class CopticScriptoriumTest < Minitest::Test
   def test_manifest_identifies_the_source_with_the_nc_posture
     manifest = Nabu::Adapters::CopticScriptorium.manifest
     assert_equal "coptic-scriptorium", manifest.id
+    assert_equal "v6.3.0", Nabu::Adapters::CopticScriptorium::RELEASE_TAG, "the Summer 2026 release pin"
+    assert_includes manifest.name, "v6.3.0"
     assert_equal "nc", manifest.license_class
     assert_equal "https://github.com/CopticScriptorium/corpora", manifest.upstream_url
     assert_equal "coptic-tt", manifest.parser_family
@@ -327,6 +331,40 @@ class CopticScriptoriumTest < Minitest::Test
     assert_predicate Nabu::Adapters::CopticScriptorium, :reference_edges?
     producer = Nabu::Adapters::CopticScriptorium.reference_producer(catalog: nil, journal: nil)
     assert_equal "coptic-scriptorium", producer.producer
+  end
+
+  # --- the CoNLL-U FEATS join ---------------------------------------------------
+  #
+  # Each TT chunk's CoNLL-U twin (same basename under the corpus's
+  # *_CONLLU dir, or a *_CONLLU.zip member — sahidic.ot) lends its UD FEATS
+  # to the aligned tokens; the per-document tally says which chunks joined.
+
+  def test_a_loose_conllu_twin_joins_ud_feats_onto_the_tokens
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:besa.food.monbbb" }
+    twins = ref.metadata.fetch("chunks").map { |c| c["conllu"] }
+    assert_equal [File.join(FIXTURES, "besa-letters", "besa.letters_CONLLU", "on_lack_of_food.conllu")], twins
+    document = adapter.parse(ref)
+    u2 = document.first.annotations["tokens"].find { |t| t["id"] == "u2" }
+    assert_equal "Definite=Def|Number=Plur|Person=2|PronType=Prs", u2["feats"]
+    assert_equal({ "joined" => 1 }, document.metadata["conllu_feats"])
+  end
+
+  def test_a_zipped_conllu_twin_joins_too
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ot.gen.coptot" }
+    document = adapter.parse(ref)
+    article = document.first.annotations["tokens"].find { |t| t["id"] == "u2" }
+    assert_equal "Definite=Def|Gender=Fem|Number=Sing|PronType=Art", article["feats"]
+    assert_equal({ "joined" => 1 }, document.metadata["conllu_feats"])
+  end
+
+  def test_a_chunk_without_a_twin_is_counted_absent
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:nt.mark.sahidica" }
+    document = adapter.parse(ref)
+    assert_equal({ "absent" => 2 }, document.metadata["conllu_feats"])
+    assert(document.passages.flat_map { |p| p.annotations["tokens"] }.none? { |t| t.key?("feats") })
   end
 
   def test_parse_besa_keeps_diplomatic_text_and_mints_norm_derived_search_form

@@ -1,6 +1,6 @@
 # Nabu
 
-> Nabu is a local, license-honest library of the ancient world: 2,474,515 documents and 117,467,688 citable passages in 244 language codes from 241 live public sources, with 3,277,937 dictionary entries, 25.3 million gold-standard lemma annotations in 52 languages (31.4 million more machine-suggested), and 30 research desks; 93% of documents are public-domain or attribution-class (census of 22 October 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
+> Nabu is a local, license-honest library of the ancient world: 2,474,640 documents and 117,497,186 citable passages in 250 language codes from 242 live public sources, with 3,283,555 dictionary entries, 25.3 million gold-standard lemma annotations in 52 languages (31.4 million more machine-suggested), and 30 research desks; 93% of documents are public-domain or attribution-class (census of 22 October 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
 
 Do not crawl this site page by page to inventory the library — use the lookup files below: the source and language indexes and the desk dossiers answer what is held, and the source registry answers it machine-readably.
 
@@ -63,3 +63,4 @@ Do not crawl this site page by page to inventory the library — use the lookup 
 - [nabu-data](https://github.com/arvicco/nabu-data): the derived datasets (CLDF + Frictionless), versioned with DOIs — bulk downloads, not lookups
 - [Source repository](https://github.com/arvicco/nabu): the full pipeline, registry and documentation
 - [News](https://arvicco.github.io/nabu/news/): dated release notes, with an Atom feed at https://arvicco.github.io/nabu/feed.xml
+- [Full site text](https://arvicco.github.io/nabu/llms-full.txt): every navigation page as plain text in one file, rendered at site build

@@ -10,7 +10,10 @@ module Nabu
     # manuscript metadata. The machine-readable source of record is the
     # TreeTagger-SGML `*.tt` layer (upstream's own "most complete
     # representations" — see CopticTtParser); TEI is absent for the two
-    # biggest corpora and CoNLL-U is deferred (v2 FEATS join).
+    # biggest corpora. The CoNLL-U export joins in for ONE layer the TT
+    # lacks: each chunk's twin lends its UD FEATS to the aligned tokens
+    # (CopticConlluFeats — exact-by-form or nothing; the per-document
+    # "conllu_feats" tally counts joined / misaligned / absent chunks).
     #
     # == Identity (FROZEN minting)
     #
@@ -64,9 +67,18 @@ module Nabu
     class CopticScriptorium < Nabu::Adapter
       REPO_URL = "https://github.com/CopticScriptorium/corpora"
 
-      # The pinned release ("Late 2025 Release", 2025-12-12; Zenodo DOI
-      # 10.5281/zenodo.17917497). Owner re-pins per semiannual release.
-      RELEASE_TAG = "v6.2.0"
+      # The pinned release ("Summer 2026 release", published 2026-07-22,
+      # tag commit d6332e37c7f92c737f51deb4f6e7ee872bfd603f). Owner re-pins
+      # per semiannual release. The v6.2.0 → v6.3.0 delta (blob-compared
+      # against the held v6.2.0 tree): 473 TT files/zips byte-identical,
+      # 69 changed (23 of them the excluded coptic-treebank copies), 23
+      # new — six new corpora (bohairic-jonah, life-chrysostom,
+      # life-hilaria, life-marina, lit-fragments, pseudo-cyril-alexandria)
+      # plus new magical-papyri and pseudo-chrysostom documents; no TT
+      # file removed; all in-repo bible zips unchanged. The delta's 58
+      # documents parse clean once the two span families it introduced
+      # are known (CopticTtParser: lb_nb, the attribute-echo spans).
+      RELEASE_TAG = "v6.3.0"
 
       URN_PREFIX = "urn:nabu:coptic-scriptorium:"
       # copticLit/copticDoc namespaces strip; copticMag (the magical-papyri
@@ -135,8 +147,30 @@ module Nabu
         value if value.match?(/\A\d+\z/)
       end
 
+      # One producer, two edge families: the "tm:<n>" reference edges and
+      # the header `witness` field's parallel-witness edges (CopticWitnesses).
       def self.reference_producer(catalog:, journal:)
-        LibraryReferences.new(catalog: catalog, journal: journal, producer: "coptic-scriptorium")
+        CopticWitnesses.new(catalog: catalog, journal: journal)
+      end
+
+      # The header `witness` field → the CTS urns it names, wherever they
+      # sit (bare, comma-joined beside unpublished sigla, inside prose with
+      # a sentence-final period — the censused shapes, CopticWitnesses).
+      # Prose-only values ("none", "unique", MONB sigla) name nothing.
+      WITNESS_URN = /urn:cts:coptic\w+:[^\s,;()]+/
+
+      def self.witness_cts(value)
+        value.to_s.scan(WITNESS_URN).map { |urn| urn.sub(/\.+\z/, "") }.uniq
+      end
+
+      # A named CTS urn → the catalog document urn, through the frozen
+      # document minting (copticLit/copticDoc stripped, copticMag kept).
+      def self.cts_document_urn(cts)
+        "#{URN_PREFIX}#{cts.sub(CTS_NAMESPACE, '')}"
+      end
+
+      def self.witness_targets(value)
+        witness_cts(value).map { |cts| cts_document_urn(cts) }
       end
 
       # Survey §3 verbatim license classes → license_class. nil = no stated
@@ -185,7 +219,10 @@ module Nabu
         chunks = document_ref.metadata.fetch("chunks")
         parser = CopticTtParser.new(lemmas: @lemmas)
         results = chunks.map { |chunk| parser.parse(chunk_content(chunk), label: chunk_label(chunk)) }
-        document = build_document(document_ref, results)
+        joins = chunks.zip(results).map do |chunk, result|
+          CopticConlluFeats.join!(result.units, conllu_words(chunk))
+        end
+        document = build_document(document_ref, results, feats_join: joins.tally.transform_keys(&:to_s))
         citations = Hash.new(0)
         results.each do |result|
           result.units.each { |unit| append(document, document_ref, unit, citations) }
@@ -208,6 +245,9 @@ module Nabu
       # Data.define constants ignore access modifiers anyway).
       Scan = Data.define(:refs, :skipped_by_rule, :unrecognized)
 
+      # The chunk keys naming its CoNLL-U twin (see #twin).
+      TWIN_KEYS = %w[conllu conllu_zip conllu_member].freeze
+
       private
 
       # Overridable for tests (the PROIEL/SBLGNT local-repo pattern).
@@ -221,13 +261,15 @@ module Nabu
         skipped = 0
         unrecognized = []
         chunks = []
+        @twins = {}
         loose_tt_files(workdir).each do |path|
           if excluded?(workdir, path)
             skipped += 1
             next
           end
           meta = CopticTtParser.header(path)
-          outcome = classify(meta, chunks, source: { "path" => path }, label: path)
+          source = { "path" => path }.merge(twin(File.dirname(path, 2), File.basename(path, ".tt")))
+          outcome = classify(meta, chunks, source: source, label: path)
           skipped += 1 if outcome == :skipped
           unrecognized << path if outcome == :unrecognized
         end
@@ -235,7 +277,8 @@ module Nabu
           each_zip_member(zip) do |member, content|
             meta = CopticTtParser.meta(content.each_line.first.to_s)
             label = "#{zip}!#{member}"
-            outcome = classify(meta, chunks, source: { "zip" => zip, "member" => member }, label: label)
+            source = { "zip" => zip, "member" => member }.merge(twin(File.dirname(zip), File.basename(member, ".tt")))
+            outcome = classify(meta, chunks, source: source, label: label)
             skipped += 1 if outcome == :skipped
             unrecognized << label if outcome == :unrecognized
           end
@@ -279,6 +322,51 @@ module Nabu
         raise FetchError, "#{zip}: unreadable zip archive at discover (unzip exit #{e.status}) — refetch the snapshot"
       end
 
+      # A chunk's CoNLL-U twin location (CopticConlluFeats): the same
+      # basename under the corpus dir's *_CONLLU/ (loose) or inside its
+      # *_CONLLU.zip (sahidic.ot); {} when the corpus ships none. Indexed
+      # once per corpus dir per scan.
+      def twin(corpus_dir, base)
+        @twins[corpus_dir] ||= twin_index(corpus_dir)
+        @twins[corpus_dir].fetch(base, {})
+      end
+
+      def twin_index(corpus_dir)
+        index = {}
+        Dir.glob(File.join(corpus_dir, "*_CONLLU.zip")).each do |zip|
+          conllu_members(zip).each do |member|
+            index[File.basename(member, ".conllu")] = { "conllu_zip" => zip, "conllu_member" => member }
+          end
+        end
+        Dir.glob(File.join(corpus_dir, "*_CONLLU", "*.conllu")).each do |path|
+          index[File.basename(path, ".conllu")] = { "conllu" => path }
+        end
+        index
+      end
+
+      def conllu_members(zip)
+        Shell.run("unzip", "-Z1", zip).split("\n").grep(/\.conllu\z/)
+      rescue Shell::Error => e
+        raise FetchError, "#{zip}: unreadable zip archive at discover (unzip exit #{e.status}) — refetch the snapshot"
+      end
+
+      # The twin's word lines, or nil when the chunk has none. An unreadable
+      # twin member quarantines the document, like an unreadable TT member.
+      def conllu_words(chunk)
+        if chunk["conllu"]
+          CopticConlluFeats.words(SourceRead.utf8_file(chunk["conllu"], label: "coptic-scriptorium conllu"))
+        elsif chunk["conllu_zip"]
+          zip = File.expand_path(chunk["conllu_zip"])
+          member = chunk["conllu_member"]
+          bytes = begin
+            Shell.run("unzip", "-p", zip, member)
+          rescue Shell::Error => e
+            raise ParseError, "#{zip}!#{member}: unreadable zip member (unzip exit #{e.status})"
+          end
+          CopticConlluFeats.words(SourceRead.utf8(bytes, label: "#{zip}!#{member}"))
+        end
+      end
+
       # Group chunks by base work urn (the chapter→book merge), apply the
       # dual-origin precedence rule, order chapters numerically, and mint one
       # ref per document. The override is attribution only when EVERY chunk
@@ -295,7 +383,7 @@ module Nabu
               "language" => LANGUAGE,
               "title" => document_title(group),
               "license_override" => (group.all? { |c| c["license_class"] == "attribution" } ? "attribution" : nil),
-              "chunks" => group.map { |chunk| chunk.slice("path", "zip", "member") }
+              "chunks" => group.map { |chunk| chunk.slice("path", "zip", "member", *TWIN_KEYS) }
             }.compact
           )
         end.sort_by(&:id)
@@ -368,9 +456,12 @@ module Nabu
       # Document metadata = the first chunk's full decoded header (maximum
       # fidelity, JSON-safe) with "dialect" surfaced, the chapter fields
       # dropped for merged books, and the people/places rosters UNIONED
-      # across chapters (the §3.5 prosopography seed at document grain).
-      def build_document(document_ref, results)
+      # across chapters (the §3.5 prosopography seed at document grain),
+      # plus the FEATS-join tally.
+      def build_document(document_ref, results, feats_join:)
         meta = results.first.meta.dup
+        # the CoNLL-U FEATS join tally, chunks by outcome (CopticConlluFeats)
+        meta["conllu_feats"] = feats_join
         if meta["chapter"]
           meta.delete("chapter")
           meta["document_cts_urn"] = meta["document_cts_urn"].sub(CHAPTER_SUFFIX, "")

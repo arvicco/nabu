@@ -308,6 +308,7 @@ decoded ones:
 | CorA (rem, ren) | `msd` | `.`-joined self-describing values | `Ind.Pres.Sg.3`, `Masc-Neut.Dat-Akk.Sg` |
 | IMP (goo300k) | `msd` | coarse closed tag | `Ncf`, `Vmp`, `Agc` |
 | Menota (menota) | `msa` | category-letter codes, `\|`-joined analyses | `xVB fF tPS mIN p3 nS vA` |
+| Coptic Scriptorium (coptic-scriptorium) | `pos` | Scriptorium tag, **no inflection** — decodes only what the tag fixes (polarity, pronoun type, definiteness, finiteness); fused tags `_`-joined | `ANEGPST`, `PPERS`, `AOPT_PPERS` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query

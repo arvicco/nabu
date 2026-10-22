@@ -54,9 +54,10 @@ module Nabu
     # member out of it (system unzip -p through Nabu::Shell — the ZipFetch
     # unzip dependency, no new gem). The fixture dir holds a plain trimmed
     # mw.xml, so discover accepts both shapes under ONE stable ref id.
-    # mwweb1.zip (44 MB display bundle) is NOT fetched: the sigla→work
-    # mapping lives as the curated MwSigla map and the full 871-row key
-    # stays upstream-recoverable. sync_policy: manual, enabled: false until
+    # mwweb1.zip (44 MB display bundle) is NOT fetched: its one table the
+    # parse needs — the 871-row works-and-authors key — is vendored in
+    # config/mw_sigla.yml (with the GRETIL crosswalk and the authority
+    # labels, MwSigla). sync_policy: manual, enabled: false until
     # the owner-fired first sync (~100–130 MB catalog).
     class Mw < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
@@ -150,7 +151,7 @@ module Nabu
         tallies = rows.group_by { |row| MwSigla.siglum_of(row.fetch(:label)) }
         tiers = rows.group_by { |row| MwSigla.classify(row.fetch(:label)) }
         [coverage_header(rows, tiers)] + held_lines(catalog, tallies) +
-          [authority_line(tiers), unheld_line(tiers)].compact
+          [authority_line(tiers), unheld_line(tiers), key_line(tiers)].compact
       end
 
       class << self
@@ -213,14 +214,34 @@ module Nabu
           rows = tiers[:unheld] || []
           return nil if rows.empty?
 
-          "  not held: #{siglum_tally(rows, limit: 8)}"
+          "  not held: #{siglum_tally(rows, limit: 8, expand: true)}"
         end
 
-        def siglum_tally(rows, limit:)
+        # How much of the not-held mass MW's own works-and-authors key names
+        # (config/mw_sigla.yml) — the rest are sigla the key does not list.
+        def key_line(tiers)
+          rows = tiers[:unheld] || []
+          return nil if rows.empty?
+
+          keyed = rows.count { |row| MwSigla.key_rows(MwSigla.siglum_of(row.fetch(:label))).any? }
+          rows_in_key = MwSigla::KEY.values.sum(&:size)
+          "  sigla key: #{keyed} of #{rows.size} not-held citations name a siglum in MW's " \
+            "works-and-authors key (#{rows_in_key} rows)"
+        end
+
+        # "MBh. 6" — with +expand+, the key's expansion of a keyed siglum
+        # rides beside it ("MBh. 6 (Mahābhārata)"; the first row of an
+        # ambiguous siglum).
+        def siglum_tally(rows, limit:, expand: false)
           tally = rows.group_by { |row| MwSigla.siglum_of(row.fetch(:label)) }
                       .transform_values(&:size).sort_by { |siglum, count| [-count, siglum.to_s] }
-          head = tally.first(limit).map { |siglum, count| "#{siglum} #{count}" }.join(" · ")
+          head = tally.first(limit).map { |siglum, count| tally_item(siglum, count, expand) }.join(" · ")
           tally.size > limit ? "#{head} … and #{tally.size - limit} more sigla" : head
+        end
+
+        def tally_item(siglum, count, expand)
+          expansion = expand && MwSigla.key_rows(siglum).first&.expansion
+          expansion ? "#{siglum} #{count} (#{expansion.strip})" : "#{siglum} #{count}"
         end
       end
 

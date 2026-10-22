@@ -64,7 +64,9 @@ Give **exactly one** of:
   returning the decoded `morph` evidence. UD treebanks match on their `feats`;
   PROIEL/TOROT positional tags, GLAUx's AGDT `postag`, Diorisis `analyses`,
   BHSA/DSS (ETCBC/Abegg) word features, OSHB `morph`, CorA `msd` (ReM/ReN), IMP
-  `msd` (goo300k) and Menota `msa` are decoded into the same names (Hebrew/
+  `msd` (goo300k), Menota `msa` and Coptic Scriptorium `pos` tags (what the
+  tag fixes: polarity, pronoun type, definiteness, finiteness) are decoded
+  into the same names (Hebrew/
   Aramaic add `state`, `stem`, `conjugation` — conventions §6.1); ORACC
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
@@ -723,7 +725,10 @@ deliberate, dated **contract bump**, pinned by test
 (`test/mcp/tools_lanes_test.rb` holds the schema key sets): the 2026-10-22
 bump widened the `findspot` block (attribution envelope), added nabu_search's
 `fuzzy`/`translations`/`sense`/`sense_gloss` lanes and nabu_show's `senses`
-flag. Live MCP servers serve the old schema until restarted.
+flag; a second 2026-10-22 bump added the MCP tool metadata to every
+`tools/list` entry — a display `title` and an `annotations` object
+`{title, readOnlyHint: true}` (pinned in the same file: every registered
+tool carries both). Live MCP servers serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |
 | --- | --- | --- | --- |

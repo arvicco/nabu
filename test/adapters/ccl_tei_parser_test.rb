@@ -22,10 +22,39 @@ class CclTeiParserTest < Minitest::Test
   def test_yields_every_entry_flat_whether_body_level_or_super_entry_nested
     ids = entries.map(&:entry_id)
     assert_equal ids.uniq, ids, "C-ids are unique"
-    assert_equal 17, ids.size
+    assert_equal 18, ids.size
     assert_includes ids, "C1", "superEntry-nested entries yield"
     assert_includes ids, "C16", "body-level entries yield"
     assert_includes ids, "C1494"
+  end
+
+  # The DDGLC Greek-loanword layer: an entry's <etym> carries the Greek
+  # source lemma as <ref type="greek_lemma::grl_lemma"> (3,229 entries in
+  # v1.2) — one borrowed donor reflex each, the WOLD/JMdict donor-edge
+  # shape with the typed relation "borrowed" (the kaikki {{bor}}
+  # spelling: the donor is the entry's own etymon), folded as Greek so the
+  # etymon ascent can resolve it to a Greek shelf entry.
+  def test_ddglc_greek_lemma_mints_a_borrowed_greek_donor_reflex
+    topos = entries.find { |entry| entry.entry_id == "C10766" }
+    assert_equal "ⲧⲟⲡⲟⲥ", topos.headword
+    assert_equal 1, topos.reflexes.size
+    reflex = topos.reflexes.first
+    assert_equal "grc", reflex.lang_code
+    assert_equal "grc", reflex.language
+    assert_equal "τόπος", reflex.word
+    assert_equal Nabu::Normalize.search_form("τόπος", language: "grc"), reflex.word_folded
+    assert reflex.borrowed
+    assert_equal "borrowed", reflex.relation
+    assert_predicate reflex, :etymon?, "the donor is the entry's own etymon (an UP edge)"
+  end
+
+  # A prose etym note ("persisches Lehnwort" on C16) names a donor
+  # language but no word — nothing to mint; entries without the DDGLC ref
+  # carry no reflexes.
+  def test_prose_etym_notes_and_native_entries_mint_no_reflexes
+    others = entries.reject { |entry| entry.entry_id == "C10766" }
+    assert(others.all? { |entry| entry.reflexes.empty? })
+    assert_includes entries.find { |entry| entry.entry_id == "C16" }.body, "persisches Lehnwort"
   end
 
   def test_headword_is_the_lemma_form_orth

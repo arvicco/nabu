@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 34 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 36 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
@@ -28,12 +28,14 @@ A source wears every desk it serves — these 34 answer this desk. Holdings are 
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
+| `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `ig-cyprus` | inscriptions | attribution | wired · manual | 982 docs / 1,680 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `memis` | inscriptions | attribution | not yet wired | 51 docs / 473 passages |
 | `nabu-places` | feature module | attribution | wired · manual | nothing held yet |
 | `obi-burmese` | texts | attribution | wired · manual | 1,121 docs / 25,238 passages |
 | `ociana` | inscriptions | research_private | wired · frozen | 36,794 docs / 36,794 passages |
@@ -52,7 +54,7 @@ A source wears every desk it serves — these 34 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `lat` 195,059 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,697 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 89 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `lat` 195,110 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,697 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 91 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 

@@ -1,0 +1,11 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+Romanian-concept_1-1,,Romanian,concept_1,-abil,-abil,a b i l,,Meloni2021,1,,^- a b i l $,default
+French-concept_1-1,,French,concept_1,-abl,-abl,a b l,,Meloni2021,1,,^- a b l $,default
+Italian-concept_1-1,,Italian,concept_1,-abile,-abile,a b i l e,,Meloni2021,1,,^- a b i l e $,default
+Spanish-concept_1-1,,Spanish,concept_1,-aβle,-aβle,a β l e,,Meloni2021,1,,^- a β l e $,default
+Portuguese-concept_1-1,,Portuguese,concept_1,-avɛl,-avɛl,a v ɛ l,,Meloni2021,1,,^- a v ɛ l $,default
+Latin-concept_1-1,,Latin,concept_1,-aːbɪlɛm,-aːbɪlɛm,aː b ɪ l ɛ m,,Meloni2021,1,,^- aː b ɪ l ɛ m $,default
+Portuguese-concept_75-1,,Portuguese,concept_75,ɐbʒũŋʒiɹ,ɐbʒũŋʒiɹ,ɐ b ʒ ũ ŋ ʒ i ɹ,,Meloni2021,75,,^ ɐ bʒ ũ ŋʒ i ɹ $,default
+Latin-concept_75-1,,Latin,concept_75,abɪʊŋɡɛrɛ,abɪʊŋɡɛrɛ,a b ɪ/j ʊ ŋ g ɛ r ɛ,,Meloni2021,75,,^ a b ɪʊ ŋ ɡ ɛ r ɛ $,default
+Romanian-concept_358-1,,Romanian,concept_358,albʲ,albʲ,a l bʲ,,Meloni2021,358,,^ a l bʲ $,default
+Latin-concept_358-1,,Latin,concept_358,albeːskɛrɛ,albeːskɛrɛ,a l b eː s k ɛ r ɛ,,Meloni2021,358,,^ a l b eː s k ɛ r ɛ $,default

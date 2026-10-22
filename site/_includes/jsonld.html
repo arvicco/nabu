@@ -1,0 +1,23 @@
+{%- comment -%}
+  schema.org SoftwareSourceCode for the home page: what Nabu is, where its
+  code lives, its license and its concept DOI (always the latest release).
+  Deliberately figure-free — corpus numbers live in the census SSOT and
+  the prose that renders it. Every value comes from _config.yml.
+{%- endcomment -%}
+{%- if page.url == "/" %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": {{ site.title | jsonify }},
+    "description": {{ site.description | strip_newlines | strip | jsonify }},
+    "url": {{ '/' | absolute_url | jsonify }},
+    "codeRepository": {{ site.repository_url | jsonify }},
+    "programmingLanguage": "Ruby",
+    "license": "https://spdx.org/licenses/MIT.html",
+    "identifier": {{ site.concept_doi | prepend: "https://doi.org/" | jsonify }},
+    "author": { "@type": "Person", "name": {{ site.author_name | jsonify }} },
+    "keywords": ["digital humanities", "ancient languages", "corpora", "philology", "Model Context Protocol"]
+  }
+  </script>
+{%- endif %}

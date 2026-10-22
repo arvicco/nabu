@@ -42,6 +42,7 @@ kinds:
   isicily: inscriptions
   ig-cyprus: inscriptions
   sigla: inscriptions
+  memis: inscriptions
   itant: inscriptions
   ceipom: inscriptions
   open-etruscan: inscriptions
@@ -63,6 +64,7 @@ kinds:
   bridging: crosswalk module
   # the reconstruction / cognacy shelves that are not plain dictionaries
   iecor: cognacy dataset
+  meloniromance: cognacy dataset
   starling: etymological bases
 
 classical:

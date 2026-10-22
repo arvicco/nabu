@@ -481,7 +481,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
 - `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the lemma index — one row per (passage, folded lemma), keyed by catalog `passage_id` only (no stored urn since fts_lemma v2), extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output). Each row carries a `tier` (P26-0; declared per source via `lemma_tier:` in sources.yml, validated against `SourceRegistry::LEMMA_TIERS`): **gold** — verified annotation, the default, the only tier that ever counts as attestation (`attested_count` everywhere means gold); **silver** — upstream-automatic lemmatization (Diorisis/TLHdig/CDLI/eBL), labeled at every render, `--gold-only` excludes; **equivalence** (P34-3, owner-decided as DISTINCT from silver) — scholar-curated cross-language equivalence: CEIPoM's `Classical_Latin_equivalent` values mint LATIN keys (folded and labeled `lat`, read from the `latin_equivalent` token key, never from `lemma`) on the non-Latin passages, so `search --lemma precor` reaches the Iguvine Tables' `pesnimu`. Curated but never attestation in the key's language and never automatic — a different honesty, so its own label at every tier-rendering surface: per-hit `[equivalence]` tags + footer totals in `search --lemma`/`concord` (CLI and MCP), an `equivalence_count` beside — never inside — `attested_count` in ReflexViews/define/etym, and the gold-scoped consumers (cognate closure, language cards, vocab reference corpus) exclude it via their existing gold filters. All tier rows re-derive from stored annotations at every rebuild/refresh. **The per-source lemma-key registry** (P118-R4, `Nabu::LemmaKeys`): sources that keep their gold lexemes under their own upstream token names read those keys instead of `lemma` — bhsa `lex_utf8` (consonantal lexeme), dss Abegg's `lex` (homograph `_N` stripped, `#`-placeholder partials minting nothing) plus the BHSA crosswalk `lex_utf8_etcbc`; a registered source never reads `lemma`.
 - The loans facet (P34-2, honoring P17-1's "a future `--loans` facet reads them without reparse"): `search --loans CODE` / `list SOURCE --loans [CODE]` read the per-passage loan-token counts a language-contact source stores in its OWN `annotations_json` (`"loans": {code => token count}`, tallied from per-token `lang` — Coptic Scriptorium today). Deliberately NOT an index or a projection table: a correlated `json_each` EXISTS in the shared catalog join (`CatalogJoin#loans_exists`), passage-grained, code matched case-insensitively as a bound value. Because it is one more `visible_passages` conjunct it composes with every search path (text, `--fuzzy`, `--lemma`/`--morph`, `--near`, and all catalog filters), and because the loader's `annotations_json` IS the facet store, `nabu rebuild` has nothing extra to maintain — the complement of the `passage_lemmas` pattern: extract-into-an-index when the query needs its own access path, read-in-place when one JSON probe per candidate row suffices.
-- The `spans` annotations contract (P30-4, beside the P7-5 `tokens` contract): a syntax-bearing source stores constituent extents in the SAME per-passage `annotations_json` that carries its tokens — an ordered `"spans"` array beside `"tokens"`, one hash per constituent intersecting the passage: `{"type": "clause"|"phrase"|…, "node": <upstream stable id>, "ranges": [[from, to], …]}` where ranges are 0-based inclusive INDEX PAIRS INTO THAT PASSAGE'S OWN tokens array (passage-relative — no global token table needed to consume them; a discontinuous constituent is a list of ranges, never flattened), plus `"partial": true` on every passage-clipped piece of a constituent that crosses passage boundaries (the shared upstream `node` id joins the pieces), plus the constituent's own features verbatim (BHSA: every clause/phrase-grain scalar under its upstream name — clause `kind` `typ` `txt` `domain` `rela` `dist` `dist_unit` `mother_object_type`, phrase `function` `typ` `det` `rela` `dist` `dist_unit` — and the `mother` dependency edge as the target's node id, the same id space as span `node` and token `n`). No new table: spans survive storage, rebuild, display and MCP exactly as tokens do, and any future span-derived index follows the passage_lemmas pattern (extracted from stored annotations, never by re-parsing canonical). First registrant bhsa. dss (P30-5) reuses the shape under the key `"clusters"` for upstream's text-critical cluster nodes (cor/cor2/cor3, rem/rem2, rec, alt, unc2, vac — degrees verbatim; a vacat covers no token and rides with empty `ranges` as a positioned gap), and deliberately does NOT emit its ML-derived clause/phrase boundaries (silver — 125/315 nodes, all in 1Qisaa; the goo300k/imp discipline, journaled in 02-sources row 88).
+- The `spans` annotations contract (P30-4, beside the P7-5 `tokens` contract): a syntax-bearing source stores constituent extents in the SAME per-passage `annotations_json` that carries its tokens — an ordered `"spans"` array beside `"tokens"`, one hash per constituent intersecting the passage: `{"type": "clause"|"phrase"|…, "node": <upstream stable id>, "ranges": [[from, to], …]}` where ranges are 0-based inclusive INDEX PAIRS INTO THAT PASSAGE'S OWN tokens array (passage-relative — no global token table needed to consume them; a discontinuous constituent is a list of ranges, never flattened), plus `"partial": true` on every passage-clipped piece of a constituent that crosses passage boundaries (the shared upstream `node` id joins the pieces), plus the constituent's own features verbatim (BHSA: every clause/phrase-grain scalar under its upstream name — clause `kind` `typ` `txt` `domain` `rela` `dist` `dist_unit` `mother_object_type`, phrase `function` `typ` `det` `rela` `dist` `dist_unit` — and the `mother` dependency edge as the target's node id, the same id space as span `node` and token `n`). No new table: spans survive storage, rebuild, display and MCP exactly as tokens do, and any future span-derived index follows the passage_lemmas pattern (extracted from stored annotations, never by re-parsing canonical). First registrant bhsa; extrabiblical (the ETCBC's non-Masoretic corpus, same feature vocabulary) emits the identical clause/phrase shape. dss (P30-5) reuses the shape under the key `"clusters"` for upstream's text-critical cluster nodes (cor/cor2/cor3, rem/rem2, rec, alt, unc2, vac — degrees verbatim; a vacat covers no token and rides with empty `ranges` as a positioned gap), and deliberately does NOT emit its ML-derived clause/phrase boundaries (silver — 125/315 nodes, all in 1Qisaa; the goo300k/imp discipline, journaled in 02-sources row 88).
 - The feature-MODULE lane (P34-1): a Text-Fabric sibling repo that ships extra node features over a registrant's frozen slot space (ETCBC/bridging over BHSA tf/2021) gets its own registry row for the sanctioned GitFetch path into `canonical/<module>` — but mints NO documents (discover empty by design, `wired: false` permanently, conformance suite inapplicable) and surfaces exclusively as extra token keys on the core adapter's passages: the bhsa Corpus reads `canonical/bridging/tf/2021` when present and rides `"osm"`/`"osm_sf"` (OSHB's OSM morph tag of each word's first/second aligned morpheme, verbatim incl. upstream's `*` problem marker) beside lex/gloss/qere; absent module = lane off, byte-identical output. A module whose nodes exceed the core dataset's slot space is a ParseError (version misalignment — module data off its own slot numbering is noise). NOT a links-journal producer: word slots have no urns, and verse-grain OSHB↔BHSA edges would only duplicate the ot alignment hub (§10) — the hub joins the verses, the lane joins the words.
 - **Research axes (P35-0, D35 rulings 2026-07-20)**: the grown source list grouped by the owner's research desks — 24 owner-ratified axes as of P78 (korean minted P78-1), each an explicit definition in `config/axes.yml` (`Nabu::AxisRegistry`: name, persona one-liner, desc; file order = render order; the persona is FIRST-CLASS RENDER DATA — the hat in the house voice, printed verbatim by the axis surfaces) plus a REQUIRED list-valued `axes:` key on every source row in sources.yml. Axes are TAGS, not a partition — multi-membership deliberate (tlhdig = cuneiform+hittite by ruling D35-d; the hebrew/syriac language desks coexist with the cross-language biblical hat by design) and membership is whole-source (no per-document axes in v1 — where only part of a shelf fits, the honest note rides the axis desc, never a fake partition). Three load-time invariants in `SourceRegistry`: every source declares ≥ 1 axis once definitions exist; every declared axis is defined; an axis name never equals a source slug — the RESOLUTION GUARANTEE that lets the `nabu sync <axis>` / `list --axis` surfaces (P35-1/2, shipped) resolve one bare token unambiguously. Placement decision: definitions live BESIDE, not inside, sources.yml — the sources file keeps its pure slug ⇒ entry mapping contract (a reserved top-level block would need a magic-key carve-out in the loader and would make a source slug named "axes" silently impossible instead of loudly colliding), while membership stays on the source row like `enabled`/`translations`/`siblings` (the P34-0 owner-posture precedent; a missing axes.yml is bootstrap/test mode — no axes required, a redirected registry brings its own axes file or none). Consumption seam: `SourceRegistry#axes` (the definitions) + `#axis_members(name)` (slugs in registration order). NB "axis" unqualified always means research axis; the §14 date/place mechanism renames to "timeline" (P35-4).
 - `passages_trigram` + `passages_trigram_scope` (P16-4, intertext design §4, same file and lifecycle): the fragment-search index behind `search --fuzzy` — a second FTS5 table over the SAME folded `text_normalized`, tokenized into character trigrams for infix/mid-word matching (`]μηνιν αει[` on a damaged papyrus). DOCUMENTARY SCOPE ONLY: sources flagged `fuzzy_index: true` in config/sources.yml (papyri-ddbdp + oracc; an owner posture like `enabled`/`translations` — the whole corpus would cost 3.6–4.1 GB, the documentary shelves 257 MB measured at 6.43 B/char, 8.6 s build). The scope table records the slugs each build actually indexed, so the query surface reports real coverage instead of trusting config. Query semantics are two-phase: trigram candidates (implicit-AND MATCH of the fragment's trigrams — co-occurrence, not contiguity), then substring verification against the stored folded text (Query::Fuzzy). Sub-ms to ~10 ms measured live.
@@ -580,8 +580,10 @@ decision: the field moves fast, we keep control; the conformant core is
   refreshed per source by `refresh_source!` when present (never
   bootstrapped by a sync), re-derived standalone by the stage reconcile or
   `rake index:clarify`). Translation only: all query logic stays in
-  `lib/nabu/query/`. The tool table is a hash; a new surface is one entry +
-  handler.
+  `lib/nabu/query/`. The tool table is a hash; a new surface is one entry
+  (with its display `title`) + handler. Every `tools/list` entry carries the
+  MCP tool metadata: `title` and `annotations: {title, readOnlyHint: true}`
+  (contract bump 2026-10-22, pinned in `test/mcp/tools_lanes_test.rb`).
 - **The contract**: every returned passage carries urn + language +
   license_class + source; reference data (gazetteer facts, sign cards)
   carries its own license envelope read from the adapter manifests
@@ -908,10 +910,12 @@ Everything else — URN-less bibls (inscriptions, AP), non-CTS values
 ingested — stays as display text with a nil resolution: a lexicon's
 citations are best-effort by upstream reality, and the miss-rate is honest,
 never fuzzed. A `cts_work` may also be an in-catalog DOCUMENT urn
-(`urn:nabu:…` — P17-4, MW→GRETIL: Mn./Pāṇ. cite at document grain by
-design), where the held document is itself the resolution when the
-citation is nil — and, since P34-4, also when a passage-grain probe
-MISSES on a held document: TLS attestations cite Kanripo texts by
+(`urn:nabu:…` — P17-4, MW→GRETIL: a bare "Mn." or an "ib." inheriting a
+held work cites at document grain; Manu and Pāṇini themselves resolve at
+verse/sūtra grain since their GRETIL re-split, the sigla and crosswalk
+data-driven from `config/mw_sigla.yml`), where the held document is
+itself the resolution when the citation is nil — and, since P34-4, also
+when a passage-grain probe MISSES on a held document: TLS attestations cite Kanripo texts by
 `<juan>:<page>` (the mandoku passage key), and the held edition's
 pagination only sometimes agrees with TLS's, so the page probe hits where
 it honestly can and falls back to the text — never to nothing — while
@@ -924,6 +928,29 @@ display-only rows), re-derived at every parse from canonical — resolution
 coverage grows as kanripo sync waves land, with zero stored state. The
 CLI caps the resolved-citation print (first 12, `--long` expands); MCP
 was already capped.
+
+**Print citations → held reference scans (the define → scan bridges).**
+Some shelves cite a PRINT dictionary by page: the BDB outline its 1906
+page (`BDB p. 135`), the AED the Wörterbuch by volume, page and line
+(`Wb 1, 2.8`). Those rows carry no `cts_work` and never resolve above;
+instead `Query::ScanAnchors` reads `config/scan_anchors.yml` — per cited
+work a siglum pattern over the citation label (named captures `page`,
+optional `line`, and `volume` for multi-volume works), the shelf item
+(the local-library document urn of the scan, §16) per volume, and a
+`leaf_offset` calibration: printed page N sits on PDF page N + k, the
+library adapter's `<item>:p<N+k>` passage. Volumes route by the cited
+volume string; two volumes bound in one PDF share an item with their own
+offsets. Resolution is query-time and read-only (one memoized document
+probe per item, one passage probe per citation — the desk law), stores
+nothing, and degrades by status rather than error: anchored (the page
+passage), held (document + leaf — a scan without a text layer),
+uncalibrated (offset still null), out_of_range, not_held (configured but
+not ingested), unconfigured (no item for the work or volume yet). A label
+no pattern claims stays plain text. `define` and the `show` card of a
+dictionary urn print a "reference scans" block; `nabu_define`/`nabu_show`
+add a present-only `scan` object to the citation. Filling a row after an
+ingest — the item urn, then the offset read off one known page — is a
+one-line config edit; the next lookup shows it.
 
 **Query surface: `nabu define` + MCP `nabu_define`.** The CLI prints
 entries whole (the λόγος entry is ~300 KB of text — the CLI is the
@@ -1011,7 +1038,14 @@ so just the two mechanically-safe shapes are mined: `<ab>cf.</ab>`
 whitespace-adjacent to an `<s>`, and `<ab>q.v.</ab>` right after an `<s>`
 (past at most a comma or an opening bracket) — kinds `cf.` / `q.v.`,
 headword-keyed. Looser prose ("cf. also …", "cf. √ …", a q.v. after a
-proper name) stays unextracted; the census sits in the parser.
+proper name) stays unextracted; the census sits in the parser. Two
+structural, id-keyed families ride beside them (`Adapters::MwEntryLinks`,
+a second pass once every record id is known): Cologne's phw ties between
+a parenthetically printed headword and its parent entry (kinds
+`contains` / `partOf`, both ways), and root families — member → root
+pointers (kind `root`) for the H2 derivatives MW prints under an H1 root
+and for prefixed verbs, matched among root entries only (the √ mark's
+homonym number disambiguates; an unmatched one stays display-only).
 
 **Cross-dictionary pointers (P124-3, migration 041).** `to_dictionary`
 names the target dictionary's slug when a pointer leaves its own
@@ -1868,6 +1902,17 @@ narrower date range; a Pleiades-bearing, else longer, findspot; every
 tie → edh). Both adapters declare it under ONE fixed scope (`edh+edr`),
 so a sync of either side supersedes the same run; it reads
 document_axes, which the links stage replays after.
+#14 `CopticWitnesses` (kind=parallel-witness): Coptic Scriptorium's
+header `witness` field names the OTHER manuscript of the same text as a
+CTS urn (MONB.GL vs MONB.XJ of Shenoute, Budge's two Encomium codices);
+each named urn becomes one document-grain edge, one per unordered pair
+(a mutual assertion is one edge), documents never merged. Prose notes
+(unpublished MONB sigla, "none", "unique") mint nothing and are counted;
+a same-codex continuation note is counted, never an edge; a named urn
+the catalog does not hold still mints and is counted unresolved. It
+EXTENDS the source's existing LibraryReferences producer (the "tm:<n>"
+reference edges) so both families ride one run under the producer name
+`coptic-scriptorium` — a source has one reference producer.
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the
