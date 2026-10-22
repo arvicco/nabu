@@ -94,7 +94,12 @@ module Nabu
     #   - the span's own features ride beside it verbatim — "kind" for
     #     clauses (VC/NC/WP), "function" for phrases (Pred/Subj/Objc…) —
     #     the deep-extraction layer that makes spans queryable rather than
-    #     decorative.
+    #     decorative. Widened (2026-10-22) to EVERY clause/phrase-grain
+    #     scalar tf/2021 ships (SPAN_FEATURES: clause type/text type/
+    #     domain/relation, phrase type/determination/relation, the
+    #     distance-to-mother pair) plus the "mother" dependency edge as a
+    #     node id (SPAN_EDGE) — so the ETCBC dependency tree is walkable
+    #     over stored spans and tokens alone.
     #
     # Spans order by first covered token, clauses before phrases at a tie
     # (containment order), node id last. This generalizes: any adapter with
@@ -203,24 +208,16 @@ module Nabu
         "chapter" => "section grain — mints the passage urn",
         "verse" => "section grain — mints the passage urn",
         "label" => "verse/half_verse grain (\"GEN 01,02\") — the urn already carries the citation",
-        "kind" => "clause grain — rides the clause SPANS",
-        "function" => "phrase grain — rides the phrase SPANS",
-        "domain" => "clause grain (text type) — span-feature widening is separate work",
-        "txt" => "clause grain (text type) — span-feature widening is separate work",
-        "typ" => "clause/phrase(_atom) grain — span-feature widening is separate work",
-        "rela" => "clause/phrase/subphrase grain — span-feature widening is separate work",
-        "det" => "phrase(_atom) grain — span-feature widening is separate work",
-        "dist" => "constituent grain (distance to mother) — span-feature widening is separate work",
-        "dist_unit" => "constituent grain — span-feature widening is separate work",
-        "mother_object_type" => "clause/subphrase grain — span-feature widening is separate work",
         "code" => "clause_atom grain — atoms are not ingested as spans",
         "instruction" => "clause_atom grain — atoms are not ingested as spans",
         "is_root" => "clause_atom grain — atoms are not ingested as spans",
         "pargr" => "clause_atom grain — atoms are not ingested as spans",
         "tab" => "clause_atom grain — atoms are not ingested as spans",
-        "mother" => "relational EDGE (linguistic dependency) — not a scalar",
-        "functional_parent" => "relational EDGE — not a scalar",
-        "distributional_parent" => "relational EDGE — not a scalar",
+        "functional_parent" => "containment EDGE (censused: word→phrase, phrase→clause, clause→sentence, " \
+                               "atom→parent) — phrase-in-clause is already the spans' shared token " \
+                               "ranges, and sentence nodes are not ingested as spans",
+        "distributional_parent" => "atom-grain EDGE only (censused: word→phrase_atom, phrase_atom→" \
+                                   "clause_atom, clause_atom→sentence_atom) — atoms are not ingested as spans",
         "oslots" => "structural EDGE — read for slot extents, never a token value",
         "omap@2017-2021" => "@edgeValues version map — refused by the text-fabric family",
         "omap@c-2021" => "@edgeValues version map — refused by the text-fabric family",
@@ -228,8 +225,28 @@ module Nabu
         "otext" => "@config — documents the text formats (form/trailer follow text-orig-full-ketiv)"
       }.freeze
 
-      # Constituent types carried as spans, with their per-type feature.
-      SPAN_FEATURES = { "clause" => "kind", "phrase" => "function" }.freeze
+      # Constituent types carried as spans, with EVERY scalar node feature
+      # tf/2021 ships at that grain, verbatim under upstream's name (the
+      # first of each list is the P30-4 lane). Censused over the whole
+      # dataset (2026-10-22): typ/txt/domain/rela/dist/dist_unit/
+      # mother_object_type cover all 88,131 clauses; typ/rela/det/dist/
+      # dist_unit all 253,203 phrases (det and mother_object_type are not
+      # phrase/clause features respectively upstream, so the lists differ).
+      # Upstream's honest "NA" and dist 0 ride as shipped; ints stay ints.
+      SPAN_FEATURES = {
+        "clause" => %w[kind typ txt domain rela dist dist_unit mother_object_type].freeze,
+        "phrase" => %w[function typ det rela dist dist_unit].freeze
+      }.freeze
+
+      # The linguistic-dependency EDGE (mother.tf) rides each span as the
+      # target's TF node id (Integer) — the same id space as span "node"
+      # (clause/phrase targets) and token "n" (word targets), so the
+      # dependency tree joins without a lookup table. Censused: 20,791
+      # clauses (→ 13,917 clause / 5,305 phrase / 1,569 word) and 612
+      # phrases (→ 552 phrase / 52 clause / 8 word) carry one, every edge
+      # single-target; a span without one carries no key.
+      SPAN_EDGE = "mother"
+
       SPAN_TYPE_ORDER = { "clause" => 0, "phrase" => 1 }.freeze
 
       def self.manifest
@@ -379,8 +396,7 @@ module Nabu
           "ranges" => index_ranges(covered)
         }
         span["partial"] = true if covered.size < constituent.slot_count
-        span[constituent.feature_key] = constituent.feature_value if constituent.feature_value
-        span
+        span.merge(constituent.features)
       end
 
       # Compress ascending indexes into inclusive [from, to] pairs.
@@ -400,7 +416,7 @@ module Nabu
       # The BHSA-shaped view over a TextFabric::Dataset: which features ride
       # where is bhsa POLICY, so it lives here, not in the family.
       class Corpus
-        Constituent = Data.define(:node, :type, :slot_ranges, :slot_count, :feature_key, :feature_value)
+        Constituent = Data.define(:node, :type, :slot_ranges, :slot_count, :features)
 
         def initialize(dataset)
           @dataset = dataset
@@ -534,8 +550,8 @@ module Nabu
         def constituents_by_verse
           @constituents_by_verse ||= begin
             map = Hash.new { |hash, key| hash[key] = [] }
-            SPAN_FEATURES.each do |type, feature_name|
-              each_constituent(type, feature_name) do |constituent|
+            SPAN_FEATURES.each do |type, feature_names|
+              each_constituent(type, feature_names) do |constituent|
                 verses_touching(constituent.slot_ranges).each { |verse_node| map[verse_node] << constituent }
               end
             end
@@ -545,9 +561,9 @@ module Nabu
           end
         end
 
-        def each_constituent(type, feature_name)
+        def each_constituent(type, feature_names)
           span = type_span(type)
-          feature = @dataset.feature(feature_name)
+          features = feature_names.to_h { |name| [name, @dataset.feature(name)] }
           @dataset.feature("oslots").each_pair do |node, spec|
             next unless node.between?(span.first, span.last)
 
@@ -555,9 +571,39 @@ module Nabu
             yield Constituent.new(
               node: node, type: type, slot_ranges: ranges,
               slot_count: ranges.sum { |first, last| last - first + 1 },
-              feature_key: SPAN_FEATURES.fetch(type), feature_value: feature.fetch(node)
+              features: span_features(node, features)
             )
           end
+        end
+
+        # The span's scalar features (absent upstream = absent key) plus
+        # its mother edge as an Integer node id.
+        def span_features(node, features)
+          out = features.each_with_object({}) do |(name, feature), hash|
+            value = feature.fetch(node)
+            hash[name] = value unless value.nil?
+          end
+          mother = mother_of(node)
+          out[SPAN_EDGE] = mother if mother
+          out
+        end
+
+        # mother.tf is single-target at the pin (censused); a multi-target
+        # spec is upstream drift and refuses loudly rather than truncating.
+        def mother_of(node)
+          spec = mother_edges.fetch(node)
+          return nil if spec.nil?
+
+          ranges = Nabu::Adapters::TextFabric.parse_ranges(spec.to_s, path: mother_edges.path)
+          return ranges.first.first if ranges.size == 1 && ranges.first.first == ranges.first.last
+
+          raise Nabu::ParseError,
+                "#{mother_edges.path}: node #{node} has a multi-target mother #{spec.inspect} — " \
+                "tf/2021 is single-target throughout; never truncated to one"
+        end
+
+        def mother_edges
+          @mother_edges ||= @dataset.feature(SPAN_EDGE)
         end
 
         # Verse nodes whose slot spans intersect +ranges+ — binary search

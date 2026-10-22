@@ -163,6 +163,39 @@ module Nabu
       raise Thor::Error, "silver-dates: #{e.message}"
     end
 
+    desc "model-budget", "The monthly paid-model spend table: show it, or set a month's cap"
+    long_desc <<~HELP, wrap: false
+      The model-output convention's budget table (architecture §16):
+      local/config/model_budget.yml, one row per month (YYYY-MM) with the
+      spend booked from every paid model call's real usage and the cap
+      the owner allows. Every paid-model lane checks it AFTER its cache
+      lookup and BEFORE each call; a month without a cap refuses every
+      paid call (fail-closed — a cap is the owner's act, never a default).
+
+      Bare: print the table. --cap USD sets the cap for --month (default:
+      the current UTC month); spend is never reset by a cap change.
+
+      Examples:
+        nabu model-budget
+        nabu model-budget --cap 20
+        nabu model-budget --cap 50 --month 2026-11
+    HELP
+    option :cap, type: :numeric, banner: "USD", desc: "Set the month's spend cap in US dollars"
+    option :month, type: :string, banner: "YYYY-MM", desc: "The month --cap applies to (default: this UTC month)"
+    def model_budget
+      raise Thor::Error, "model-budget: --month only accompanies --cap" if options[:month] && options[:cap].nil?
+
+      budget = Nabu::ModelBudget.new(path: Nabu::Config.load.model_budget_path)
+      if options[:cap]
+        month = options[:month] || Nabu::ModelBudget.month
+        budget.set_cap!(month: month, cap_usd: options[:cap])
+        say format("model budget %<m>s: cap $%<c>.2f (written to %<p>s)", m: month, c: options[:cap], p: budget.path)
+      end
+      model_budget_table(budget)
+    rescue Nabu::Error => e
+      raise Thor::Error, "model-budget: #{e.message}"
+    end
+
     desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4)"
     long_desc <<~HELP, wrap: false
       The semantic-vector build lane (owner-ruled after the P79-5 trial): encodes every
@@ -379,6 +412,19 @@ module Nabu
 
         summary = Nabu::Store::LemmaRollup.rebuild!(catalog: catalog, fulltext_path: config.fulltext_path)
         say "  lemma rollups re-derived: #{commas(summary.lemma_rows)} lemma, #{commas(summary.curve_rows)} curve rows"
+      end
+
+      def model_budget_table(budget)
+        table = budget.table
+        if table.empty?
+          say "no model budget rows — paid model calls are refused until a cap is set (nabu model-budget --cap USD)"
+          return
+        end
+        say "month       spend_usd      cap_usd"
+        table.each do |month, row|
+          cap = row[:cap_usd] ? format("%.2f", row[:cap_usd]) : "(none)"
+          say format("%<m>-8s %<s>12.4f %<c>12s", m: month, s: row[:spend_usd], c: cap)
+        end
       end
 
       def lemma_spot_check(enricher)

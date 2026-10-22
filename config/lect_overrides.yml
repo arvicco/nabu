@@ -198,3 +198,14 @@ sources:
     # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }
+  te-wikisource:
+    # The Telugu Wikisource cone is composition-bounded by construction
+    # (73 works of pre-1800 classical poets, Nannaya onward — the scan
+    # Index year admits only pre-1800 WORKS, whatever the print year), so
+    # the whole source IS the kāvya language: te:cls (Classical Telugu,
+    # the registry's 2026-10-22 stage). The override states the collection
+    # fact the per-document print year cannot (an 1870 edition of Nannaya
+    # is still Classical Telugu). Transcription of the cone's own
+    # admission rule — parse-time work, the 2026-10-18 generalization.
+    tel: { lect: "te:cls", tier: certain }
+    te: { lect: "te:cls", tier: certain }

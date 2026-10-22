@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
@@ -34,10 +34,11 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `perseus-greek` | texts | attribution | wired · auto | 1,419 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 560 docs / 403,319 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `grc` 120,785 · `lat` 58,693 · `gmy` 5,890 · `eng` 874 · `grc-Latn` 510 · `deu` 225 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 · `ota` 5 … and 23 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `grc` 120,785 · `lat` 58,693 · `gmy` 5,890 · `eng` 874 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 … and 24 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

@@ -131,6 +131,71 @@ class EeboImprintPlaceTest < Minitest::Test
     assert_town "London", "Londn [sic] :"
   end
 
+  # The prose-imprint tail (census 2026-10-22: of the 51 distinct raw
+  # strings the reading left unplaced, 19 name their town unambiguously —
+  # each below is a real PUBPLACE, its record id beside it): a leading
+  # dateline (arabic or roman year), a trailing "ye 17. day of July", an
+  # unclosed scribal bracket ("Lon[don"), a long bracket splice
+  # ("[Enprynte]d"), a split verb ("Im printed"), a verb-side adverb
+  # ("Imprimée nouuellement"), a stray combining accent ("̀a Londres"), a
+  # shop tail after "at", the reprint-after-a-copy clause, a parenthesized
+  # supplied town, the abbreviation a cataloguer's [i.e.] merely expands,
+  # and an appositive "a city of …" that is not the famous-city formula.
+  def test_the_readable_prose_imprints_read_their_town
+    assert_town "London", "Lon[don :"                                                  # B06918
+    assert_town "London", "Imprinted at Lon[don :"                                     # A16821
+    assert_town "London", "[Im printed at Lo[n]don :"                                  # A09149
+    assert_town "London", "[[Enprynte]d at London :"                                   # A13936
+    assert_town "London", "[Imprinted t Londo[n] :"                                    # A13956
+    assert_town "London", "[(London)] :"                                               # A94884
+    assert_town "London", "Jmprinted at London at the three Cranes in the Vintree, :"  # B00052
+    assert_town "London", "Anno Domini. 1588. Imprinted at London :"                   # A73530
+    assert_town "London", "Ianuarij primus. 1582. Imprinted at London :"               # A02408
+    assert_town "London", "An. Do. 1555. Londini :"                                    # A23454
+    assert_town "London", "Imprimée nouuellement â Londres :"                          # B00672
+    assert_town "London", "Imprime ̀a Londres :" # A07148
+    assert_town "Worcester", "Anno. M.D.xlix. At Worceter :" # A02432
+    assert_town "Worcester", "[Imprinted the .xi. day of October. Anno. Do. 1550. At worceter :" # B16192
+    assert_town "Edinburgh", "[At Edinburgh ye 17. day of July :"                      # A11727
+    assert_town "Paris", "[Imprentyt in parys the. xx. day of the mowneth of May :"    # A21607
+    assert_town "Amsterdam", "Printed at Amstelredam a city of Marchandise knowen vnto India and all " \
+                             "limites of the Earth :"                                  # A67923
+    assert_town "The Hague", "Gedruckt naer de copy van Londen, in 's Gravenhage :"    # B01991
+    assert_town "Boston", "Boston in N.E. [i.e. New England] :"                        # A50141
+  end
+
+  # The same widening corrects readings that used to mint junk names (the
+  # whole-census before/after diff, 2026-10-22): a [sic]-marked verb
+  # misprint, "And printed", "Published", a splice the old 3-letter cap
+  # missed — and a capitalized continuation is never spliced ("[London]Ian.").
+  def test_the_widened_furniture_turns_former_junk_into_the_town
+    assert_town "London", "Impynted [sic] at London :"                  # A08438 (was "Impynted  at London")
+    assert_town "London", "Ptinted [sic] at London :"                   # A19978
+    assert_town "London", "mprinted [sic] at London :"                  # A20658
+    assert_town "Paris", "And printed at Paris :"                       # A90516 (was "Printed at Paris")
+    assert_town "Paris", "Published at Paris :"                         # A49208
+    assert_town "London", "L[ondo]n :"                                  # A91401 (was "Ondo")
+    assert_town "London", "Prynted at L[ondo]n :"                       # A10405
+    assert_town "London", "Imprinted at Londo[n :"                      # A14477 (was "Londo")
+    assert_town "London", "Lon[don pri]nted at :"                       # A03945 (was "Lon nted at")
+    assert_town "Worcester", "[Worceter :"                              # A03631
+    assert_town "London", "[London]Ian. 4 :"                            # A92325 (unchanged)
+    # The printed imprint stays the claim; its unmarked misprint rides as
+    # written (declared coarseness) — no longer the dateline "Last daye".
+    assert_town "Dorceter", "[[Worcester]Imprinted the last daye of february. Anno Domini. 1549. At Dorceter :" # A02883
+  end
+
+  # The rest of the tail stays screened — none names its printing town with
+  # confidence: a bookseller destination ("For Edinburgh"), a garbled verb
+  # phrase ("Imprinted by London"), a London precinct in French ("aux
+  # Blackefriers"), a reprint naming only its exemplar's towns.
+  def test_the_uncertain_prose_imprints_stay_screened
+    assert_unplaced "For Edinburgh, :"                                                  # B03420
+    assert_unplaced "Imprinted by London :"                                             # A78985
+    assert_unplaced "Anno 1586. Imprimé aux Blackefriers :"                             # A05316
+    assert_unplaced "Aussgefertigt rach dem zu Londen und Amsterdam gedruckten exemplar :" # A42673
+  end
+
   def test_sine_loco_and_non_places_mint_nothing
     assert_unplaced "[S.l. :" # 1,090
     assert_unplaced "[S.l.] :"

@@ -124,6 +124,34 @@ module Store
       assert_equal 75, later[:not_after], "first millennium through the last dated cuneiform text"
     end
 
+    # P142: the Aegean ceramic phases end to end — REAL fixture documents
+    # parsed by their adapters (DĀMOS PY Tn 316, chronology "LH IIIB2/LH
+    # IIIC"; SigLA HT 10a, period "LM IB") seeded with the metadata the
+    # parse minted, then banded by MetadataDates :period_label through
+    # the ruled Aegean rows — the normal machinery, no hand-written shape.
+    def test_metadata_dates_aegean_phases_band_real_damos_and_sigla_documents
+      seed_parsed("damos", Nabu::Adapters::Damos.new, Nabu::TestSupport.fixtures("damos"), "urn:nabu:damos:4985")
+      seed_parsed("sigla", Nabu::Adapters::Sigla.new, Nabu::TestSupport.fixtures("sigla"), "urn:nabu:sigla:HT_10a")
+      summary = build!
+      assert_equal 1, summary.metadata_dates.fetch("damos")
+      assert_equal 1, summary.metadata_dates.fetch("sigla")
+
+      pylos = timeline_for("urn:nabu:damos:4985")
+      assert_equal [-1230, -1070], [pylos[:not_before], pylos[:not_after]], "the Pylos archive horizon envelope"
+      assert_equal "LH IIIB2/LH IIIC", pylos[:date_raw]
+      assert_equal "Pylos", pylos[:place_name]
+
+      ht = timeline_for("urn:nabu:sigla:HT_10a")
+      assert_equal [-1500, -1450], [ht[:not_before], ht[:not_after]], "LM IB, the conventional span"
+      assert_equal "LM IB", ht[:date_raw]
+      assert_equal "Haghia Triada", ht[:place_name]
+    end
+
+    def seed_parsed(slug, adapter, workdir, urn)
+      ref = adapter.discover(workdir).find { |r| r.id == urn } || flunk("#{urn} not discovered")
+      seed_metadata_doc(slug, urn, adapter.parse(ref).metadata)
+    end
+
     # P104-1 (attributed-era dating, its own labeled class): the cbeta shape — the header byline's
     # dynasty seat banded through the ruled table as an ERA claim
     # (precision "era", the distinct honestly-labeled date class; the
@@ -753,6 +781,26 @@ module Store
         refute_nil row, "#{id} still rows on its date"
         assert_nil row[:place_name], "#{id} names no place"
       end
+    end
+
+    # The DTA transcription template's unfilled imprint slot — the real
+    # docImprint pubPlace of three held texts (canonical/dta,
+    # humboldt_gesetze_1816 "[Erscheinungsort]", humboldt_neumann_1830 and
+    # humboldt_observations_1791 in long-s "[Erſcheinungſort]") — is a
+    # placeholder naming no place, in either spelling.
+    def test_metadata_places_screen_the_dta_template_placeholder
+      { "humboldt_gesetze_1816" => "[Erscheinungsort]", "humboldt_neumann_1830" => "[Erſcheinungſort]",
+        "humboldt_observations_1791" => "[Erſcheinungſort]" }.each do |id, raw|
+        seed_metadata_doc("dta", "urn:nabu:dta:#{id}", { "date" => "1816", "place" => raw })
+      end
+      build!
+      %w[humboldt_gesetze_1816 humboldt_neumann_1830 humboldt_observations_1791].each do |id|
+        row = timeline_for("urn:nabu:dta:#{id}")
+        refute_nil row, "#{id} still rows on its date"
+        assert_nil row[:place_name], "#{id}: the template placeholder names no place"
+      end
+      assert Nabu::Store::TimelineBuilder::MetadataDates.no_place?("Erscheinungsort"), "bare, unbracketed too"
+      refute Nabu::Store::TimelineBuilder::MetadataDates.no_place?("Erscheinungsorte bei Berlin")
     end
 
     # A05548's two-town conjecture mints its hedged pair, not the raw.

@@ -1397,7 +1397,7 @@ damos:   # 02-sources row 274
   # .damos-crawl.json. EXPECTED: 5,932 documents after four slices
   # (~25 min each); passages = the transliteration's own labelled lines.
   # Language gmy (identity); the ceramic-phase chronology rides as a
-  # period label awaiting ruled bands.
+  # period label banded by the ruled Aegean rows (config/period_bands.yml).
 
 dcs:
   adapter: Nabu::Adapters::Dcs
@@ -5121,6 +5121,24 @@ siddham:   # P118-4, 02-sources row 256
   # config/eras.yml (Gupta–Valabhī envelope) + 4 century attributions;
   # 88 untyped "year N" titles ride raw, never converted.
 
+sigla:   # P142, 02-sources row 302
+  adapter: Nabu::Adapters::Sigla
+  adopted: "2026-10-22"
+  axes: [epigraphy, classical]
+  wired: true   # awaiting the first real sync (one GET of database.js, ~2.5 MB)
+  sync_policy: manual
+  # SigLA — The Signs of Linear A (Salgarella & Castellan, sigla.phis.me):
+  # the Linear A corpus sign by sign. The whole database ships as ONE
+  # file, database.js — two OCaml Marshal payloads in JS string literals
+  # (the ocaml-marshal parser family). Footer, verbatim (2026-10-22):
+  # "Dataset and drawings are available under the CC BY-NC-SA 4.0
+  # license." → nc. EXPECTED at the first sync: 802 inscriptions in the
+  # 2026-06-26 database → 787 documents (15 with no sign attestation
+  # skipped by rule), 5,144 sign attestations in 1,401 words + the
+  # standalone signs. Language lab (no nabu-lects anchor yet — lect
+  # pending); the Minoan ceramic-phase period bands through
+  # config/period_bands.yml.
+
 sii-clean:   # P122-3, 02-sources row 267
   adapter: Nabu::Adapters::SiiClean
   adopted: "2026-10-12"
@@ -6911,6 +6929,28 @@ wiktionary-te:   # 02-sources row 284
   # per-language JSONL (deprecated upstream — fallback = filter the full
   # extract by lang_code te), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
+
+wilkens-oui:   # 02-sources row 302
+  adapter: Nabu::Adapters::WilkensOui
+  adopted: "2026-10-22"
+  axes: [turkic]
+  wired: true   # first sync pending: bin/nabu enable wilkens-oui && bin/nabu sync
+                 # wilkens-oui (one ~10 MB PDF GET, sha-pinned; parse ~45 s
+                 # of mutool stext), eyeball nabu define amramak, a homonym
+                 # pair (define a), a sub-entry and a † record, then flip.
+  sync_policy: manual
+  # Jens Wilkens, Handwörterbuch des Altuigurischen (Universitätsverlag
+  # Göttingen 2021, DOI 10.17875/gup2021-1590; CC BY-SA 4.0 → attribution
+  # with the share-alike rider) — the Old Uyghur–German–Turkish
+  # dictionary, segmented from the born-digital PDF's positioned text
+  # layer (Nabu::StextLayout + Nabu::WilkensOui). Dictionary slug
+  # wilkens-oui, language oui; sub-entries are their own entries pointing
+  # at their main entry, → cross-references and † rejected readings ride
+  # as crossrefs. EXPECTED FIRST SYNC (full-book census 2026-10-22): 1
+  # dictionary file → 49,619 entries (29,873 main + 19,746 sub), 0 parse
+  # errors; 2 empty-headword records skipped by rule; 17 matter pages
+  # (front matter + back cover) skipped by rule in the notes; 1,355
+  # entries carry U+FFFD (Chinese characters the text layer cannot yield).
 
 wold:
   adapter: Nabu::Adapters::Wold

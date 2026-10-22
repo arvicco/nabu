@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 33 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 34 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
@@ -44,6 +44,7 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
+| `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
 | `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
@@ -51,7 +52,7 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `lat` 195,059 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,697 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 88 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `lat` 195,059 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,697 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 89 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 

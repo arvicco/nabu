@@ -348,18 +348,8 @@ module Nabu
 
       # Fetch internals --------------------------------------------------------
 
-      # Held during a fetch (class note); written through otherwise.
-      def write_envelope!(workdir, envelope)
-        return super if @held_envelopes.nil?
-
-        @held_envelopes[envelope.fetch("pageid")] = envelope
-      end
-
-      def commit_envelopes!(workdir)
-        held = @held_envelopes
-        @held_envelopes = nil
-        held.each_value { |envelope| write_envelope!(workdir, envelope) }
-      end
+      # (The envelope hold + commit_envelopes! live in the base family —
+      # SlavicWikisourceHtml#write_envelope!.)
 
       def write_cone!(workdir, envelopes)
         cone = {

@@ -578,16 +578,17 @@ module Query
     # an attested reflex language never minted as a lects.yml anchor) rides
     # nil, exactly like the absent-Lects case — never a raised error, never
     # a half-composed name. (The original exemplar was got — minted by the
-    # P59 ISO-parentage wave, whose whole point was retiring such misses
-    # for chain-coded languages; fi (Finnish, Uralic — outside every focus
-    # axis, no ISO chain), a loanword reflex in the gem-pro fixture, stands
-    # in. If a future wave mints fi too, pick the next honest miss.)
+    # P59 ISO-parentage wave; fi stood in next and was minted by the
+    # Baltic–Finnic–Basque package (fixture re-cut 2026-10-22); se
+    # (Northern Sami — outside every focus axis), the *raidō borrowing
+    # ráidu in the same gem-pro fixture entry, now stands in. If a future
+    # wave mints se too, pick the next honest miss from the entry.)
     def test_result_lect_fields_are_nil_when_the_resolved_code_has_no_registry_entry
-      make_gold_passages(language: "fi", lemma: "raita", form: "raita")
+      make_gold_passages(language: "se", lemma: "ráidu", form: "ráidu")
       rebuild!
-      raita = etym_with_lects("raita", lang: "fi").first
-      assert_nil raita.matched_reflex.lect_id, "fi is not a minted lects.yml anchor — an honest miss"
-      assert_nil raita.matched_reflex.lect_name
+      raidu = etym_with_lects("ráidu", lang: "se").first
+      assert_nil raidu.matched_reflex.lect_id, "se is not a minted lects.yml anchor — an honest miss"
+      assert_nil raidu.matched_reflex.lect_name
     end
   end
 end

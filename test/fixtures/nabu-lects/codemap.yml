@@ -32,6 +32,26 @@ map:
   kan:     kn
   guj:     gu
   pan:     pa
+  mar:     mr
+  sin:     si
+  mal:     ml
+  div:     dv
+  lit:     lt
+  lav:     lv   # the macrolanguage (Standard Latvian + Latgalian) — read as Latvian
+  lvs:     lv   # Standard Latvian
+  fin:     fi
+  est:     et   # the macrolanguage (Standard Estonian + Võro)
+  ekk:     et   # Standard Estonian
+  eus:     eu
+  baq:     eu   # the 639-2/B bibliographic spelling (eus is the /T twin)
+  bre:     br
+  jav:     jv
+  sun:     su
+  kat:     ka
+  geo:     ka   # the 639-2/B bibliographic spelling (kat is the /T twin)
+  hye:     hy
+  arm:     hy   # the 639-2/B bibliographic spelling (hye is the /T twin)
+  oss:     os
   hau:     ha
   wol:     wo
   swa:     sw
@@ -66,6 +86,7 @@ map:
   gmq-osw: sv:old
   roa-oit: it:old
   gmq-oda: da:old
+  olt:     lt:old   # Wiktionary's Old Lithuanian — 188 reflex rows held
 
   # Old/Middle Polish, Old/Middle Czech, Middle Bulgarian (Wiktionary
   # codes verified 2026-10-10: zlw-opl and zlw-ocs full languages,
@@ -187,6 +208,7 @@ map:
   dra-pem-pro: dra-pem:pro
   ccn-pro:     ccn:pro
   ccs-pro:     ccs:pro
+  ccs-gzn-pro: ccs-gzn:pro
   bat-pro:     bat:pro
   sit-pro:     sit:pro
   dra-pro:     dra:pro
