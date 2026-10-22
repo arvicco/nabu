@@ -68,3 +68,39 @@ Header + the complete E2 / |NUN.ME| / SZESZ row sets, copied byte-verbatim
 with the repo). Covers: ASCII sign-name folding (SZESZ→ŠEŠ), a compound
 name, the 'a3 apostrophe fold, glossed ("n. brother", "n. sage") and
 gloss-less rows. Refresh = re-sync osl, re-cut the same sign_name rows.
+
+## 00etc concordance assets (Store::SignConcordances)
+
+Whole lines copied byte-verbatim 2026-10-22 from the held
+canonical/osl/00etc (CC0 with the repo; upstream commit
+`7749a4bd8589491b987ab3da31660ef4abca5012`, the same as osl.asl above),
+in upstream order. Each file keeps rows that JOIN onto this fixture's
+signs (ŠEŠ o0002834, AK o0000093, MIN o0000456, |IGI.DIB| o0001487,
+|ŠEŠ.KI| o0002740, …) beside real rows that must be CENSUSED as skips:
+
+- `wikidata-script.csv` — header + lines 2, 3 (unencoded items with no
+  oid mapping: no-join), 716 (Q87555001, whose Q-to-oid oid is not in
+  this fixture: oid-not-held), 742/1038/1266/1414 (AK, |IGI.DIB|, MIN,
+  ŠEŠ) and 1530 (URI3 — a multi-oid Q-to-oid row naming ŠEŠ too). Pins
+  the quoted-comma cell ("138,VI") and the nbsp-padded "Char image" column.
+- `wikidata/Q-to-oid.tab` — the six rows for those items.
+- `wikidata.tsv` — lines 1 (U+12000, a sign not held here), 4, 30, 326,
+  554, 702.
+- `wikidata/oid-aks-lref-name.tsv` — lines 1, 79, 197, 198, 232, 249,
+  283, 332, 345: two vacat/listref rows (oid o0000000) and two oids not
+  held here.
+- `aks-add.tsv` — lines 1, 79, 197, 198, 249 (a name-less row), 283, 332.
+- `mzl-kwu.tsv` — lines 1, 24 (trailing tab), 91 and 103 (comment lines,
+  one a commented-out row), 101 (a comma KWU list), 109 (no sign name),
+  146, 580, 783 and 877 (bare "KWU" = KWU unnumbered).
+- `pgsl.tab` — lines 1, 7, 9, 13 (the "=" section separator), 32 (a
+  comment-only row: no sign name), 49, 204.
+- `ebl-sign-names.json` — the 8 objects for 1(BAN₂) (not held) and the
+  seven fixture signs, upstream's CRLF formatting kept (no final newline).
+- `attinger.tab` lines 1, 188; `add-attinger.tab` lines 1, 24 (the
+  duplicate of attinger.tab's appended copy); `csf.tab` lines 19 (idₓ —
+  ambiguous), 73, 76, 1350, 1351, 1359; `eng.tab` lines 1, 156 (no ŋ value
+  is held by this fixture: both rows censused value-not-held).
+
+Refresh = re-sync osl, re-cut the same line numbers (re-grep the sign names
+if upstream renumbers).

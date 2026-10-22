@@ -17,7 +17,8 @@ class VerboseModeTest < Minitest::Test
     assert_equal 1, err.scan(GUIDE.intro(:rebuild)).size, "the intro prints once, before the work"
     assert_operator err.index(GUIDE.intro(:rebuild)), :<, err.index(GUIDE.fetch(:source_replay).text)
     stages = %i[source_replay honkoku_ndl_catalog timeline silver_dates place_apply facets kind_axis
-                passage_facets entity_index entry_facets hiero_postings lect_journal lect_facets dictionary_stats
+                passage_facets entity_index entry_facets hiero_postings sign_concordances lect_journal
+                lect_facets dictionary_stats
                 derge_titles aes_titles artifact_scripts source_stats fulltext_index lemma_rollups
                 links analyze]
     stages.each do |key|

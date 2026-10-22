@@ -603,6 +603,8 @@ module Nabu
       progress&.stage("hiero postings")
       Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
                                            progress: progress)
+      progress&.stage("sign concordances")
+      Store::SignConcordances.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       [axes, facets]
     end
 
