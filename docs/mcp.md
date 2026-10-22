@@ -64,7 +64,9 @@ Give **exactly one** of:
   returning the decoded `morph` evidence. UD treebanks match on their `feats`;
   PROIEL/TOROT positional tags, GLAUx's AGDT `postag`, Diorisis `analyses`,
   BHSA/DSS (ETCBC/Abegg) word features, OSHB `morph`, CorA `msd` (ReM/ReN), IMP
-  `msd` (goo300k) and Menota `msa` are decoded into the same names (Hebrew/
+  `msd` (goo300k), Menota `msa` and Coptic Scriptorium `pos` tags (what the
+  tag fixes: polarity, pronoun type, definiteness, finiteness) are decoded
+  into the same names (Hebrew/
   Aramaic add `state`, `stem`, `conjugation` — conventions §6.1); ORACC
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).

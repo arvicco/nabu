@@ -105,6 +105,23 @@ module Nabu
     #   degree.
     # - Menota `msa` (menota): category-letter codes; word class,
     #   government, inflection class and species are skipped.
+    # - Coptic Scriptorium `pos` (coptic-scriptorium): the Scriptorium
+    #   tagset carries no inflection of its own — person/number/gender sit
+    #   in the word form, and reach the façade only through the UD `feats`
+    #   the CoNLL-U join puts on a token (that row outranks this one). The
+    #   tag decodes exactly what the TAG fixes, measured against upstream's
+    #   OWN UD conversion: over the release's 1,586 CoNLL-U files, the
+    #   features every feature-bearing token of a tag carries (NEG/ANEG*/
+    #   ANY Polarity=Neg 100%; the personal pronouns PronType=Prs +
+    #   Definite=Def 99.9%+; PPOS adds Poss=Yes; PDEM PronType=Dem +
+    #   Definite=Def; ART PronType=Art; NUM NumType=Card; VBD/VIMP/VSTAT
+    #   VerbForm=Fin). VIMP also decodes Mood=Imp (the tagset's imperative;
+    #   upstream's later conversions mark it, 25% of VIMP tokens). Not
+    #   decoded: ART definiteness (ⲟⲩ vs ⲡ — the lemma, not the tag), V
+    #   (finite 95.7% / infinitive 4.3%), PINT (Int/Ind split), EXIST and
+    #   COP (lemma-dependent), the plain auxiliaries (no UD feature). A
+    #   fused tag (ANEGPST_PPERS — a pronoun cliticized on its host)
+    #   decodes every part.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -301,6 +318,23 @@ module Nabu
         "r" => ["degree", { "P" => "pos", "C" => "cmp", "S" => "sup" }]
       }.freeze
 
+      # Coptic Scriptorium tag → the UD features the tag fixes (class note;
+      # censused against upstream's own CoNLL-U conversion).
+      COPTIC_PRONOUN = { "prontype" => "prs", "definite" => "def" }.freeze
+      COPTIC_NEGATIVE = { "polarity" => "neg" }.freeze
+      COPTIC_FINITE = { "verbform" => "fin" }.freeze
+      COPTIC_TAGS = {
+        "PPERS" => COPTIC_PRONOUN, "PPERO" => COPTIC_PRONOUN, "PPERI" => COPTIC_PRONOUN,
+        "PPOS" => COPTIC_PRONOUN.merge("poss" => "yes").freeze,
+        "PDEM" => { "prontype" => "dem", "definite" => "def" }.freeze,
+        "ART" => { "prontype" => "art" }.freeze,
+        "NUM" => { "numtype" => "card" }.freeze,
+        "NEG" => COPTIC_NEGATIVE, "ANEGPST" => COPTIC_NEGATIVE, "ANEGAOR" => COPTIC_NEGATIVE,
+        "ANEGOPT" => COPTIC_NEGATIVE, "ANEGJUS" => COPTIC_NEGATIVE, "ANY" => COPTIC_NEGATIVE,
+        "VBD" => COPTIC_FINITE, "VSTAT" => COPTIC_FINITE,
+        "VIMP" => COPTIC_FINITE.merge("mood" => "imp").freeze
+      }.freeze
+
       # The per-tagset decoder seam: [token key, decode method, source scope]
       # in precedence order (scope nil = any source; otherwise the slugs
       # whose tokens the row decodes — class note). The first APPLICABLE row
@@ -317,7 +351,8 @@ module Nabu
         ["morph", :oshb_features, %w[oshb].freeze],
         ["msd", :cora_features, %w[rem ren].freeze],
         ["msd", :imp_features, %w[goo300k].freeze],
-        ["msa", :menota_features, %w[menota].freeze]
+        ["msa", :menota_features, %w[menota].freeze],
+        ["pos", :coptic_features, %w[coptic-scriptorium].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -325,7 +360,7 @@ module Nabu
       # const: display convention over the UD/PROIEL feature vocabulary; an
       # unlisted key still renders (sorts last), so growth cannot hide one
       DISPLAY_ORDER = %w[person number gender case state stem conjugation tense mood voice aspect
-                         degree verbform polarity prontype definite].freeze
+                         degree verbform polarity prontype definite poss numtype].freeze
 
       module_function
 
@@ -504,6 +539,14 @@ module Nabu
             values = split_codes(code[1..], codes)
             add_values(out, facet, values) if values
           end
+        end
+      end
+
+      # Coptic Scriptorium `pos`: the tag table, a fused tag decoding every
+      # "_"-joined part (class note).
+      def coptic_features(pos, _token = nil)
+        pos.to_s.split("_").each_with_object({}) do |part, out|
+          out.merge!(COPTIC_TAGS.fetch(part, {}))
         end
       end
 
