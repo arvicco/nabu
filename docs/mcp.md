@@ -68,6 +68,11 @@ Give **exactly one** of:
   Aramaic add `state`, `stem`, `conjugation` — conventions §6.1); ORACC
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
+  Lemma hits from sources that store upstream's own token gloss (bhsa,
+  achemenet: English; aes, tlhdig: German) carry `token_gloss`; an optional
+  `gloss` word (also only with `lemma`, composing with `morph`, not `near`)
+  keeps only attestations whose token gloss contains it — `lemma` "דבר" +
+  `gloss` "word" separates BHSA's consonantal homograph from "speak".
 - `similar_to` — a passage urn: its **semantic** neighbours instead of a text
   search (P93-5), read from the local vector store that `nabu embed` builds
   ([embed.md](embed.md)) — other witnesses of a verse, passages saying the

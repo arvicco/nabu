@@ -8,6 +8,7 @@ require_relative "../store/indexer"
 require_relative "catalog_join"
 require_relative "define"
 require_relative "morph_facets"
+require_relative "token_glosses"
 
 module Nabu
   module Query
@@ -51,10 +52,13 @@ module Nabu
       # `--morph` filter narrowed the hit, nil otherwise — so every morph hit
       # SHOWS why it matched; `tier` (P26-0) the hit's lemma tier ("gold" |
       # "silver") — renderers label silver hits so an automatic lemmatization
-      # is never mistakable for a verified one.
+      # is never mistakable for a verified one; `token_gloss` the upstream
+      # token-level gloss(es) of the attesting token(s) ("; "-joined) for a
+      # source carrying a registered gloss layer (TokenGlosses), nil otherwise
+      # — upstream's own word meaning in context, beside the dictionary gloss.
       Result = Data.define(:urn, :language, :lemma, :surface_forms, :text,
-                           :document_title, :license_class, :gloss, :morph, :tier) do
-        def initialize(gloss: nil, morph: nil, tier: Store::Indexer::GOLD_TIER, **rest) = super
+                           :document_title, :license_class, :gloss, :morph, :tier, :token_gloss) do
+        def initialize(gloss: nil, morph: nil, tier: Store::Indexer::GOLD_TIER, token_gloss: nil, **rest) = super
       end
 
       # Pull more index hits than the caller's limit so that catalog-side
@@ -85,20 +89,24 @@ module Nabu
       # (every row IS gold there). +loans+ (P34-2) narrows to passages whose
       # stored annotations carry that loan-origin code — the loans corpus is
       # gold-lemmatized (cop, P17-1), so unlike the document facets this
-      # filter deliberately composes with the lemma anchor.
+      # filter deliberately composes with the lemma anchor. +gloss+, when
+      # present, keeps only attestations whose upstream token gloss contains
+      # that word (TokenGlosses — whole-word, case-insensitive); it rides the
+      # same lemma-anchored token pass as +morph+ and composes with it.
       def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil,
-              sources: nil, gold_only: false, loans: nil)
+              sources: nil, gold_only: false, loans: nil, gloss: nil)
         @incomplete_hint = nil
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         facets = morph.to_s.strip.empty? ? nil : MorphFacets.parse(morph)
-        if facets
-          # The morph path pulls the WHOLE candidate set (no inner window —
+        gloss_matcher = gloss.to_s.strip.empty? ? nil : TokenGlosses.matcher(gloss)
+        if facets || gloss_matcher
+          # The token path pulls the WHOLE candidate set (no inner window —
           # see #run_with_morph), so its pages are always complete.
-          return run_with_morph(variants, facets, lang: lang, license: license, limit: limit,
-                                                  urn: urn, source: source, sources: sources,
-                                                  gold_only: gold_only, loans: loans)
+          return run_with_morph(variants, TokenFilter.new(facets: facets, gloss: gloss_matcher),
+                                lang: lang, license: license, limit: limit, urn: urn, source: source,
+                                sources: sources, gold_only: gold_only, loans: loans)
         end
 
         inner_limit = limit * INNER_LIMIT_FACTOR
@@ -119,10 +127,15 @@ module Nabu
           page_size: page.size, limit: limit
         )
         results = page.map { |row| build_result(row, by_id.fetch(row.fetch(:passage_id))) }
-        attach_glosses(results)
+        attach_glosses(attach_token_glosses(results, page, variants.to_set))
       end
 
       private
+
+      # The token-pass filter: morph facets and/or a gloss matcher (nil =
+      # that dimension unfiltered).
+      TokenFilter = Data.define(:facets, :gloss)
+      private_constant :TokenFilter
 
       # The `--morph` path (P13-6). The lemma index is a fold-both-sides
       # EQUALITY index; morphology is NOT indexed (measured verdict: a facet
@@ -141,7 +154,10 @@ module Nabu
       #   3. a passage with ≥1 such token is a hit — its surface_forms and morph
       #      evidence restricted to the MATCHING tokens (not the whole lemma's
       #      attestations), then the ordinary catalog page-fill and glossing.
-      def run_with_morph(variants, facets, lang:, license:, limit:, urn:, source: nil, sources: nil,
+      #
+      # The --gloss filter (TokenGlosses) rides the same pass: +filter+ holds
+      # the facets and/or the gloss matcher, and a token must satisfy both.
+      def run_with_morph(variants, filter, lang:, license:, limit:, urn:, source: nil, sources: nil,
                          gold_only: false, loans: nil)
         passage_ids, tiers = candidate_passages(variants, urn: urn, gold_only: gold_only)
         return [] if passage_ids.empty?
@@ -151,9 +167,39 @@ module Nabu
                                                    sources: sources, loans: loans)
                .to_h { |row| [row.fetch(:passage_id), row] }
         results = passage_ids.filter_map do |id|
-          row = rows[id] and morph_hit(row, variant_set, facets, tier: tiers[id])
+          row = rows[id] and morph_hit(row, variant_set, filter, tier: tiers[id])
         end
         attach_glosses(results.first(limit))
+      end
+
+      # The plain path's token glosses (TokenGlosses): one extra catalog read
+      # for the PAGE rows of gloss-bearing sources only (≤ limit passages),
+      # then the lemma-matching tokens' glosses per hit. Results from other
+      # sources pass through untouched (token_gloss stays nil).
+      def attach_token_glosses(results, page, variant_set)
+        ids = page.map { |row| row.fetch(:passage_id) }
+        rows = @catalog[:passages]
+               .join(:documents, id: Sequel[:passages][:document_id])
+               .join(:sources, id: Sequel[:documents][:source_id])
+               .where(Sequel[:passages][:id] => ids, Sequel[:sources][:slug] => TokenGlosses.sources)
+               .select(Sequel[:passages][:urn], Sequel[:passages][:language], Sequel[:passages][:annotations_json],
+                       Sequel[:sources][:slug].as(:source_slug))
+               .all.to_h { |row| [row.fetch(:urn), row] }
+        return results if rows.empty?
+
+        results.map do |result|
+          row = rows[result.urn] or next result
+          spec = LemmaKeys.spec_for(row[:source_slug])
+          tokens = passage_tokens(row.fetch(:annotations_json), spec)
+                   .select { |token| lemma_in?(token, variant_set, row.fetch(:language), spec) }
+          result.with(token_gloss: token_gloss(tokens, row[:source_slug]))
+        end
+      end
+
+      # The distinct glosses of +tokens+, "; "-joined; nil when none carries one.
+      def token_gloss(tokens, slug)
+        glosses = tokens.filter_map { |token| TokenGlosses.gloss(token, source: slug) }.uniq
+        glosses.empty? ? nil : glosses.join("; ")
       end
 
       # [passage ids, { passage_id => tier }] for every distinct passage
@@ -219,7 +265,7 @@ module Nabu
       # The passage's source slug scopes the façade's tagset rows and picks
       # the lemma keys (LemmaKeys), so the morph path reads a token's
       # dictionary form exactly as the index did.
-      def morph_hit(row, variant_set, facets, tier: nil)
+      def morph_hit(row, variant_set, filter, tier: nil)
         slug = row[:source_slug]
         spec = LemmaKeys.spec_for(slug)
         tokens = passage_tokens(row.fetch(:annotations_json), spec)
@@ -227,12 +273,17 @@ module Nabu
 
         language = row.fetch(:language)
         matches = tokens.select do |token|
-          MorphFacets.match?(token, facets, source: slug) && lemma_in?(token, variant_set, language, spec)
+          token_passes?(token, filter, slug) && lemma_in?(token, variant_set, language, spec)
         end
         return nil if matches.empty?
 
         forms = matches.filter_map { |token| token["form"] }.reject(&:empty?).uniq
-        build_morph_result(row, matches, forms, tier: tier, spec: spec, facets: facets)
+        build_morph_result(row, matches, forms, tier: tier, spec: spec, facets: filter.facets)
+      end
+
+      def token_passes?(token, filter, slug)
+        (filter.facets.nil? || MorphFacets.match?(token, filter.facets, source: slug)) &&
+          (filter.gloss.nil? || TokenGlosses.match?(token, filter.gloss, source: slug))
       end
 
       def passage_tokens(json, spec)
@@ -255,9 +306,12 @@ module Nabu
           lemma: LemmaKeys.lemmas(matches.first, spec).first, surface_forms: forms.join(", "),
           text: row.fetch(:text), document_title: row.fetch(:document_title),
           license_class: row.fetch(:license_class),
-          morph: matches.map { |token| MorphFacets.describe(token, source: slug, facets: facets) }
-                        .uniq.join("; "),
-          tier: tier || Store::Indexer::GOLD_TIER
+          morph: (if facets
+                    matches.map { |token| MorphFacets.describe(token, source: slug, facets: facets) }
+                           .uniq.join("; ")
+                  end),
+          tier: tier || Store::Indexer::GOLD_TIER,
+          token_gloss: token_gloss(matches, slug)
         )
       end
 
