@@ -217,8 +217,9 @@ nt:
     # false-double the verse. The OT witnesses (sahidic.ot/bohairic.ot) are
     # NOT wired in v1 — upstream itself flags Septuagint versification
     # drift; spot-check Psalms/Jeremiah first (the P11-5 clean-books-first
-    # precedent), recorded as v2 in the P17-1 findings. "Not synced" until
-    # the owner-fired first `nabu sync coptic-scriptorium`.
+    # precedent), recorded as v2 in the P17-1 findings. The spot-check ran
+    # 2026-10-22 (verdicts beside the psalms work below): only the Sahidic
+    # psalter is wired.
     - label: sahidica NT (Sahidic Coptic)
       extractor: cts-verse
       documents:
@@ -795,3 +796,28 @@ psalms:
           - { from: 148, to: 150, shift: 0 }   # Hebrew 148–150 = Greek 148–150
       documents:
         PSA: urn:nabu:peshitta:ps  # Hebrew numbering (remapped)
+    # The SAHIDIC psalter (Coptic Scriptorium's sahidic.ot, CoptOT edition,
+    # CC BY-SA 4.0 per document) — GREEK-numbered, so it aligns directly,
+    # no remap. The versification spot-check (read-only against the held
+    # catalog, 2026-10-22): 151 psalms incl. Ps 151; 137 of 151 carry
+    # Swete's exact verse set (141 the Vulgate's); Ps 22.1 is the shepherd
+    # verse and Ps 9 / 113 are the LXX joins (39 / 26 verses); content
+    # checked verse by verse on Ps 22 and 113. The 14 residual psalms
+    # differ in verse count from Swete (most match the Vulgate's: the
+    # titulus-as-verse edge the P13-5 note already discloses), so a few
+    # refs attest per-witness or sit one verse off. HELD OUT, with the
+    # same spot-check's evidence:
+    #   - the BOHAIRIC psalter (ot.pss.bohairic_ed): 0 of 151 psalms match
+    #     any witness's verse set — a title verse 0 and verse divisions
+    #     that drift inside the psalm (its 22.2 is Swete's 22.3a, its 22.7
+    #     Swete's 22.6), so a shared ref would pair different verses;
+    #   - both Coptic JEREMIAHs (ot work): the Sahidic (ot.jer.coptot,
+    #     fragmentary, 50 chapters) follows the Greek chapter order but
+    #     Brenton-style verse numbers (its ch. 32 opens at verse 15 where
+    #     Swete's opens at 32.1) — 12 of 50 chapters match Swete; the
+    #     Bohairic (ot.jer.bohairic_ed) is a hybrid, chapters 1-26 counted
+    #     like the MT and 27-39 matching no held scheme — 31 of 52.
+    - label: Sahidic psalter (CoptOT, Coptic Scriptorium)
+      extractor: cts-verse
+      documents:
+        PSA: urn:nabu:coptic-scriptorium:ot.pss.coptot  # Greek numbering
