@@ -333,6 +333,40 @@ class CopticScriptoriumTest < Minitest::Test
     assert_equal "coptic-scriptorium", producer.producer
   end
 
+  # --- the CoNLL-U FEATS join ---------------------------------------------------
+  #
+  # Each TT chunk's CoNLL-U twin (same basename under the corpus's
+  # *_CONLLU dir, or a *_CONLLU.zip member — sahidic.ot) lends its UD FEATS
+  # to the aligned tokens; the per-document tally says which chunks joined.
+
+  def test_a_loose_conllu_twin_joins_ud_feats_onto_the_tokens
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:besa.food.monbbb" }
+    twins = ref.metadata.fetch("chunks").map { |c| c["conllu"] }
+    assert_equal [File.join(FIXTURES, "besa-letters", "besa.letters_CONLLU", "on_lack_of_food.conllu")], twins
+    document = adapter.parse(ref)
+    u2 = document.first.annotations["tokens"].find { |t| t["id"] == "u2" }
+    assert_equal "Definite=Def|Number=Plur|Person=2|PronType=Prs", u2["feats"]
+    assert_equal({ "joined" => 1 }, document.metadata["conllu_feats"])
+  end
+
+  def test_a_zipped_conllu_twin_joins_too
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:ot.gen.coptot" }
+    document = adapter.parse(ref)
+    article = document.first.annotations["tokens"].find { |t| t["id"] == "u2" }
+    assert_equal "Definite=Def|Gender=Fem|Number=Sing|PronType=Art", article["feats"]
+    assert_equal({ "joined" => 1 }, document.metadata["conllu_feats"])
+  end
+
+  def test_a_chunk_without_a_twin_is_counted_absent
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:nt.mark.sahidica" }
+    document = adapter.parse(ref)
+    assert_equal({ "absent" => 2 }, document.metadata["conllu_feats"])
+    assert(document.passages.flat_map { |p| p.annotations["tokens"] }.none? { |t| t.key?("feats") })
+  end
+
   def test_parse_besa_keeps_diplomatic_text_and_mints_norm_derived_search_form
     adapter = conformance_adapter
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:coptic-scriptorium:besa.food.monbbb" }
