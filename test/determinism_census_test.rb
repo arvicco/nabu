@@ -31,7 +31,10 @@ class DeterminismCensusTest < Minitest::Test
     "nabu/query/random.rb" => "the `nabu random` feature IS randomness — query-time display, " \
                               "seeded RNG, never reaches minted content",
     "nabu/query/search.rb" => "the random-passage sampling lane of the same feature (@rng, seeded) — " \
-                              "query-time only"
+                              "query-time only",
+    "nabu/ops/parallels_bench.rb" => "the recall@K harness's query sample — Random.new(SEED) over sorted " \
+                                     "gold urns (deterministic per seed); a measurement, never minted " \
+                                     "content (and report.sample is an attribute)"
   }.freeze
 
   UNSORTED_LISTING_ALLOWLIST = {}.freeze

@@ -140,6 +140,35 @@ required, any facet at document or passage grain, value or ref matched
 case-insensitively with LIKE patterns passing through, at most 8 pairs;
 composes with `kind` (both hold), text search only.
 
+Three further **lanes** replace the ranked text search (contract bump
+2026-10-22 — the CLI flags they mirror, the same query classes, the same
+composition sets; any other arg is refused naming the clash):
+
+- `fuzzy: true` — `search --fuzzy` (`Query::Fuzzy`): `query` is a literal
+  fragment (editorial `[ ]` stripped, diacritics folded, at least 3
+  characters after folding — a shorter one is a usage error) matched over
+  the documentary trigram index. Each hit adds a folded `snippet` with the
+  match bracketed; the payload's `coverage` lists the sources the index
+  covers (those flagged `fuzzy_index`). Composes with lang/license/from/to/
+  century/date_basis/place/kind/facets/limit. An index-less fulltext is a
+  note, never an error.
+- `translations: true` — `search --translations` (`Query::TranslationSearch`):
+  `query` (words AND, "phrase", prefix*) over the translations held in
+  passage annotations (coptic, cdli/ebl `#tr`, the glossed `trans_de`,
+  corph, …). Hits are the ORIGINAL passages, each naming the matched `layer`
+  (its annotation key path) with a bracketed `snippet` of it; `coverage`
+  lists `{source, passages}` per indexed source. Composes with lang (the
+  original's language)/license/limit. An unbuilt lane answers the build hint
+  (`rake index:translations`).
+- `sense` — the `nabu sense TERM` desk (`Query::Senses`): a DCS WordSem id
+  (or comma-joined ids) or a sense name matched against the sense shelf
+  (`sense_gloss: true` also matches inside the gloss). The payload (`type:
+  "sense"`) carries `senses` (id, shelf, urn, headword, gloss, passage count
+  — the most-attested first), `sense_total`, `passage_total`, and `matches`
+  — the citing passages, each with its `tokens` ({form, lemma, ids}; lemma
+  omitted when it is the form). Composes with sense_gloss/limit. An unbuilt
+  sense index is a note naming `rake builders:refresh`.
+
 Hits are
 relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result
@@ -171,7 +200,12 @@ fact exists (P44-3): `meter` — a scanned passage's metrical code, foot pattern
 and producer (the Pedecerto/Hypotactic enrichments, P44-6/7) — and `findspot` —
 an epigraphic document's parse-captured Pleiades id resolved through the local
 gazetteer dump (id, title, place types; absent dump, absent id, or unknown id
-all leave the payload unchanged, exactly the CLI's degradation). A document
+all leave the payload unchanged, exactly the CLI's degradation). Since the
+2026-10-22 contract bump the findspot block carries the gazetteer's
+`attribution` — `{source, license_class, license, upstream_url, uri}`, the
+license verbatim from the Pleiades adapter manifest and the place's own
+upstream URI — exactly the envelope the `nabu_place` card carries for the
+same facts. A document
 classified on the kind axis (P99/P100) carries `kind` the same way: an array
 of `{value, raw}` rows — `value` the ruled class path (multi-label documents
 list several), `raw` the upstream vocabulary verbatim, absent when the
@@ -187,6 +221,15 @@ exact rendering `nabu show --segmented` prints, one serializer
 off-language row, or a box that has not run `nabu sync nabu-data` — a
 present-only top-level `segmentation_note` says why, mirroring the CLI's one
 honest note line. Flag off: byte-identical payloads.
+
+`senses: true` (contract bump 2026-10-22) mirrors `nabu show --senses`: each
+shown passage record gains a present-only `senses` list — one row per token
+citing a sense (`{form, lemma, ids}`), read off the annotations the show
+already loaded — and the payload a `sense_entries` map (id → `{headword,
+gloss}`) resolving every cited id the sense shelf holds (an unheld id is
+simply absent from the map). Not applicable (a source with no ruled token
+senses, a dictionary entry, a server started without the facet map): one
+top-level `senses_note`. Flag off: byte-identical payloads.
 
 ### `nabu_concord`
 
@@ -675,7 +718,12 @@ for, the MCP tool that answers it, and the honest status. Statuses: **parity**
 found by this audit, fixed additively — no frozen payload key changed),
 **documented gap** (deliberately not exposed, with the reason). Frozen-contract
 rule: existing payload keys/shapes never change or disappear; additions are
-new, present-only keys.
+new, present-only keys. A key that must change shape moves only in a
+deliberate, dated **contract bump**, pinned by test
+(`test/mcp/tools_lanes_test.rb` holds the schema key sets): the 2026-10-22
+bump widened the `findspot` block (attribution envelope), added nabu_search's
+`fuzzy`/`translations`/`sense`/`sense_gloss` lanes and nabu_show's `senses`
+flag. Live MCP servers serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |
 | --- | --- | --- | --- |
@@ -690,7 +738,11 @@ new, present-only keys.
 | Links kind `reuse` (KITAB) with offset detail | `nabu links <urn>` | `nabu_links` — the kind vocabulary is open; reuse edges flow through with verbatim detail | parity (pinned P44-3) |
 | Credit lines (`sources.credit`, migration 020) | `show`/`search` credit line | `nabu_show` / `nabu_search` — additive `credit` key, only when the source carries one | parity (verified; pinned P43-2) |
 | The place desk | `nabu place NAME\|ID` (P44-2) | `nabu_place` | **added P44-3** — new tool, read-only, `Query::Place` unchanged; dump-absent degradation mirrors the CLI (id counts holdings, name lookup notes the sync hint) |
-| Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump | **added P44-3** (pinned, incl. the dump-absent byte-identical case) |
+| Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump; carries the Pleiades `attribution` envelope since the 2026-10-22 bump | **added P44-3** (pinned, incl. the dump-absent byte-identical case; attribution pinned 2026-10-22) |
+| Fragment search | `search --fuzzy` | `nabu_search` `fuzzy: true` — `Query::Fuzzy`, the CLI's composition set (minus the CLI-only `--source`/`--axis`/`--loans`) | **added 2026-10-22** (pinned) |
+| Annotation-held translations search | `search --translations` | `nabu_search` `translations: true` — `Query::TranslationSearch`, lang/license/limit (the CLI's `--source`/`--axis` have no MCP param) | **added 2026-10-22** (pinned) |
+| The sense desk | `nabu sense TERM [--gloss]` | `nabu_search` `sense` (+ `sense_gloss`) — `Query::Senses`, the desk's senses + citing passages with their tokens | **added 2026-10-22** (pinned; `--source` and the no-term census stay CLI-only) |
+| Token senses on a shown passage | `nabu show URN --senses` | `nabu_show` `senses: true` — present-only `senses` per passage record + `sense_entries` | **added 2026-10-22** (pinned, incl. the flag-off byte-identical case) |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
 | Sign-coverage graded search (`search --signset "ŠEŠ, AK" --max-foreign N`, P77-r16) | CLI only | no `nabu_search` parameter yet | **documented gap** — MCP exposure pending |
 | The Han character card (`nabu char 棄 --json`, contract frozen P72-2; reading lane P77-r15) | CLI only | `nabu_char` answers the state note; `nabu_define` covers dictionary entries | **documented gap** — MCP exposure pending |
@@ -704,8 +756,8 @@ new, present-only keys.
 | Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
 | The sign desk | `nabu signs URN\|TEXT [--lang] [--dialect etcsl] [--json]` (P53-2) | `nabu_signs` — the same `Query::Signs`, the payload IS the CLI's frozen `--json` contract (one serializer); bounded lines with an honest note; lane-off (no canonical/osl) answers the sync-hint note like the CLI's refusal | **added P53-2** — new tool, read-only; urn mode passes the restricted-exclusion gate |
-| The reference normalizer | — (MCP-first) | `nabu_clarify` — `Query::Clarify` over the catalog urn indexes + the fulltext clarify lane | **added P137** — MCP-only for now; a CLI desk is a documented gap |
-| Parallels score decomposition | — | `nabu_parallels` `explain: true` — `Query::ParallelsExplain` | **added P137** — MCP-only; the CLI `parallels` prints scores without the per-gram rows (documented gap) |
+| The reference normalizer | `nabu clarify QUERY [--limit]` (2026-10-22; the local desk shows restricted material too) | `nabu_clarify` — `Query::Clarify` over the catalog urn indexes + the fulltext clarify lane | parity (MCP P137, CLI 2026-10-22; pinned both sides) |
+| Parallels score decomposition | `nabu parallels URN --explain [--long]` (2026-10-22: shared rows printed, zero rows counted by status, listed with `--long`) | `nabu_parallels` `explain: true` — `Query::ParallelsExplain` | parity (MCP P137, CLI 2026-10-22; pinned both sides) |
 | Tibetan word-segmented rendering | `nabu show <urn> --segmented` (P54-2) | `nabu_show` `segmented: true` — present-only `segmented` key per passage record (`Query::Show#segmented_text`, one serializer); not-applicable calls carry `segmentation_note` | **added P54-2** (pinned, incl. the flag-off byte-identical case) |
 | Lect (nabu-lects) search filter | `search --lect LECT-ID` (P57-4) | `nabu_search` `lect` — text mode only, refusal parity with lemma/near; resolution-level filter (Nabu::Lects, prefix semantics), errors naming the module when nabu-lects is not synced | **added P57-4** (pinned; no frozen payload key changed) |
 | Facet filters by name | `search --facet NAME=PATTERN`, `define --facet NAME=PATTERN` (repeatable, AND) | `nabu_search` / `nabu_define` `facets` — an object of name → pattern; search: text mode only, refusal parity with lemma/near, composes with `kind` | **added** (pinned; additive param, no payload key changed) |

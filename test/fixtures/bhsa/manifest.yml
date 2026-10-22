@@ -285,3 +285,39 @@ files:
     url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/voc_lex_utf8.tf
     whole: false
     trim: slice slots, word grain only (4,048,628 B -> 25,721 B; widened lane, added 2026-10-01)
+  - path: tf/2021/typ.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/typ.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (2,592,846 B -> 10,868 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/txt.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/txt.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (251,078 B -> 2,617 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/domain.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/domain.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (176,736 B -> 1,959 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/rela.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/rela.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (2,297,019 B -> 9,176 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/det.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/det.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (1,803,161 B -> 7,422 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/dist.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/dist.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (1,812,610 B -> 6,210 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/dist_unit.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/dist_unit.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (7,891,876 B -> 36,546 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/mother_object_type.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/mother_object_type.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (1,179,340 B -> 5,594 B; span-feature lane, added 2026-10-22)
+  - path: tf/2021/mother.tf
+    url: https://raw.githubusercontent.com/ETCBC/bhsa/master/tf/2021/mother.tf
+    whole: false
+    trim: the intersecting clause/phrase nodes only, gap-anchored (1,857,170 B -> 2,476 B; span-feature lane, added 2026-10-22)

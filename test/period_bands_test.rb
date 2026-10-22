@@ -58,6 +58,21 @@ class PeriodBandsTest < Minitest::Test
     assert_nil table.lookup("-"), "the corpus's own no-claim marker stays nil"
   end
 
+  # The Minoan Middle/Late phases (the Linear A corpus's vocabulary):
+  # the conventional (low) chronology, abutting the ruled LM II at 1450.
+  def test_the_minoan_middle_and_late_phases_band_conventionally
+    assert_equal [-1750, -1700], table.lookup("MM IIB")
+    assert_equal [-1650, -1600], table.lookup("MM IIIB")
+    assert_equal [-1700, -1600], table.lookup("MM III ?"), "the trailing ? folds onto the row"
+    assert_equal [-1600, -1500], table.lookup("LM IA"), "the conventional span, not the Thera high chronology"
+    assert_equal [-1500, -1450], table.lookup("LM IB")
+    assert_equal table.lookup("LM IB").last, table.lookup("LM II").first, "LM IB abuts the ruled LM II"
+    assert_equal [-1600, -1450], table.lookup("LM I general")
+    assert_equal [-1700, -1500], table.lookup("MM III-LM IA"), "a compound label = its envelope"
+    assert_nil table.lookup("unknown")
+    assert_nil table.lookup("n/a")
+  end
+
   # The Ancient North Arabian script-tradition spans (OCIANA's held
   # script field): conventional tradition envelopes after Macdonald 2000
   # and OCIANA's own corpus introductions; the minor classes stay nil.

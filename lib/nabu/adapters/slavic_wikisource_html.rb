@@ -216,7 +216,16 @@ module Nabu
 
       # -- fetch -------------------------------------------------------------
 
+      # All-or-nothing on canonical: every stage's envelope writes are held
+      # in memory (write_envelope!) and committed only after the last stage
+      # lands, so an interrupted fetch leaves the prior tree byte-identical.
+      # (Written through stage by stage, a fetch cut off mid-render left the
+      # envelopes sorting before the failure as stage-1 shells — wikitext,
+      # no html — which the next parse-only pass classed :empty and would
+      # have withdrawn; the br-wikisource incident of 2026-10-21, the same
+      # defect in the IndexedWikisource sub-family.)
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+        @held_envelopes = {}
         cone = cone_titles(progress)
         progress&.call("Cone: #{cone.size} page(s)\n")
         pins = {}
@@ -224,11 +233,14 @@ module Nabu
         follow_versions!(workdir, envelopes, pins, progress)
         render!(workdir, envelopes, pins, progress)
         fetch_extra!(workdir, pins, progress)
+        commit_envelopes!(workdir)
         sha = Digest::SHA256.hexdigest(JSON.generate(pins.transform_keys(&:to_s).sort.to_h))
         write_state!(workdir, sha)
         Nabu::FetchReport.new(sha: sha, fetched_at: Time.now,
                               notes: "pages: #{envelopes.size} envelope(s) over a #{cone.size}-title cone, " \
                                      "revid + rendering pinned")
+      ensure
+        @held_envelopes = nil
       end
 
       # -- discover ----------------------------------------------------------
@@ -574,12 +586,27 @@ module Nabu
         batches
       end
 
+      # Held during a fetch (the all-or-nothing note on #fetch) — a later
+      # stage's write of the same pageid replaces the earlier one in memory;
+      # written through otherwise.
       def write_envelope!(workdir, envelope)
+        return hold_envelope(envelope) if @held_envelopes
+
         dir = File.join(workdir, PAGES_DIRNAME)
         FileUtils.mkdir_p(dir)
         target = File.join(dir, "#{envelope.fetch('pageid')}.json")
         File.binwrite("#{target}.tmp", "#{JSON.pretty_generate(envelope)}\n")
         File.rename("#{target}.tmp", target)
+      end
+
+      def hold_envelope(envelope)
+        @held_envelopes[envelope.fetch("pageid")] = envelope
+      end
+
+      def commit_envelopes!(workdir)
+        held = @held_envelopes
+        @held_envelopes = nil
+        held.each_value { |envelope| write_envelope!(workdir, envelope) }
       end
 
       def write_state!(workdir, sha)

@@ -538,6 +538,25 @@ sources:
     script: {posture: implied, note: "the text is the conventional Linear B
         TRANSLITERATION (syllabograms romanized, logograms as Latin abbreviations) —
         Latin-script by construction, no Linear B Unicode rides"}
+  sigla:
+    # kind machine-postured — kind_map.yml folds SigLA's typology facet
+    # (object: Tablet/Nodule/Roundel administrative, libation tables
+    # dedicatory, graffiti; the object-only types deliberate).
+    lect: {posture: pending, note: "candidate: a lab (Linear A) anchor in nabu-lects —
+        undeciphered, unclassified, parentless (no stage grid to claim), plus the
+        lina script row the artifact-script layer needs; the bare lab code rides
+        until the mint merges"}
+    dating: {posture: dated, note: "the Minoan ceramic-phase label (LM IB 640 · MM IIB
+        34 · MM IIIB 28 …) on 775 of 802 inscriptions bands through the ruled Aegean
+        rows of config/period_bands.yml (conventional low chronology, declared) via
+        MetadataDates :period_label; no-field/empty/unknown/n-a stay honestly undated"}
+    places: {posture: named, note: "the site (Haghia Triada 372 · Khania 220 · Phaistos
+        64 · Zakros 44 · Knossos 37 …) rides the place hash's ancient name verbatim;
+        no gazetteer refs yet"}
+    script: {posture: implied, note: "the text is our consistent TRANSLITERATION of
+        SigLA's sign readings (phonetic values, standard names AB/A/N, Latin logogram
+        names) — Latin-script by construction; the artifact script, Linear A, awaits
+        the lina registry row for config/artifact_scripts.yml"}
   # Variety-less languages as held (no registry stages to refine into):
   ndl-kotenseki:
     # kind: machine-postured — the NDL Search bib join's NDC codes fold in
@@ -760,10 +779,10 @@ sources:
   # anchors, the jav/sun/bre codemap aliases).
   te-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: te:cls (Classical Telugu, the kāvya
-        language from Nannaya to the 19th c.) — the cone is composition-bounded (73
-        works of pre-1800 classical poets), so a source-level override onto te:cls lands
-        with the mint; tel resolves to the bare te anchor meanwhile"}
+    # lect machine-postured: the lect_overrides.yml source row → te:cls
+    # (the registry's 2026-10-22 mint; the cone is composition-bounded —
+    # 73 works of pre-1800 classical poets — so the override states the
+    # collection fact the print year cannot).
     dating: {posture: dated, note: "P140: the scan Index సంవత్సరం= print year (else the
         header's) → source_date → MetadataDates :edition_year_text, date_class edition —
         never the poets' composition era; every admitted page carries one
@@ -773,10 +792,10 @@ sources:
     script: {posture: implied}
   cy-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: cy:emod (Early Modern Welsh, the 1547–1800
-        prints — Salesbury, the 1588/1620 Bibles, the ballads) staged by the print year;
-        the Cyfres y Fil / Mabinogion editions are MODERNIZED-spelling Middle and Early
-        Modern Welsh and stay bare cy (cym aliases there today), never wlm"}
+    lect: {posture: dates, note: "cy:emod (Early Modern Welsh, band 1500–1800 — the
+        registry's 2026-10-22 stage) by print-year inference; the censused later
+        editions (1897–1924, modernized-spelling reprints) fall outside the band and
+        stay bare cy, never wlm"}
     dating: {posture: dated, note: "P140: the Indecs Year= print year → source_date →
         MetadataDates :edition_year_text, date_class edition; every admitted page
         carries one (REQUIRE_EDITION_YEAR)"}
@@ -785,9 +804,8 @@ sources:
     script: {posture: implied}
   jv-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the jv (Javanese) anchor under kaw + the
-        jav → jv codemap alias — no Javanese anchor exists in nabu-lects (only kaw, Old
-        Javanese); the Wretansacaya page claims kaw today (INDEX_LECTS)"}
+    lect: {posture: codemap, note: "jav → jv (the registry's 2026-10-22 anchor + alias);
+        the Wretansacaya page keeps its kaw claim (Old Javanese, INDEX_LECTS)"}
     dating: {posture: dated, note: "P140: the Indhèks Year= print year, else the Index
         file name's year (Kern 1875) → source_date → MetadataDates :edition_year_text,
         date_class edition"}
@@ -798,9 +816,8 @@ sources:
         index_language"}
   su-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the su (Sundanese) anchor under osn + the
-        sun → su codemap alias — no Sundanese anchor exists in nabu-lects (only osn, Old
-        Sundanese); the 1926 Carita Parahyangan claims osn today (INDEX_LECTS)"}
+    lect: {posture: codemap, note: "sun → su (the registry's 2026-10-22 anchor + alias);
+        the 1926 Carita Parahyangan keeps its osn claim (Old Sundanese, INDEX_LECTS)"}
     dating: {posture: dated, note: "P140: the Indéks Year= print year → source_date →
         MetadataDates :edition_year_text, date_class edition"}
     places: {posture: unplaced, note: "the Indéks Address= (Batavia, Leiden) is the
@@ -809,9 +826,9 @@ sources:
         sun-Java) and Sundanese-script pages, MEASURED per page (metadata script)"}
   br-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: pending, note: "candidate: the bre → br codemap alias (the 639-3 ↔
-        639-1 suite has no Breton row); every page is post-1650 Modern Breton — bare br,
-        the Middle Breton node (xbm) never claimed"}
+    lect: {posture: codemap, note: "bre → br (the registry's 2026-10-22 alias); every
+        page is post-1650 Modern Breton — bare br, the Middle Breton node (xbm) never
+        claimed"}
     dating: {posture: dated, note: "P140: the Meneger Year= print year (≤ 1900, the dated
         cone) → source_date → MetadataDates :edition_year_text, date_class edition"}
     places: {posture: unplaced, note: "the Meneger Address= (Kemper, Montroulez, An
@@ -1177,6 +1194,18 @@ sources:
         bodies — a dictionary shelf, no document timeline}
     places: {posture: unplaced}
     script: {posture: implied}
+  wilkens-oui:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "oui — the nabu-lects anchor (parent otk, band 800–1400);
+        the registry holds no Old Uyghur stages, so the bare code is the whole claim"}
+    dating: {posture: undatable, note: "a dictionary shelf — the book cites no attestation
+        dates (no Belegstellen by design, per its Vorbemerkungen); the regnal dates printed
+        for named rulers ride entry bodies"}
+    places: {posture: unplaced, note: "n. loc. place-name entries ride as entries (labels
+        annotation), never a document place"}
+    script: {posture: qualified, note: "the Turkological transcription (ä ı č š ŋ), not
+        the Uyghur/Manichaean/Brāhmī scripts of the sources; (br)/(m)/(tib)/(r)/(p)
+        labels name the source script per entry"}
   honkoku:   # P108-5
     # The v3 translations/ layer (55,441 en + 55,915 modern-ja pages) is
     # DECLINED: the platform's large-language-model output, unattributable

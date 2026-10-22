@@ -3,7 +3,7 @@
 - slug: classical
   persona: The Classicist
   blurb: Greek and Latin letters read whole, Homer to the late grammarians
-  members: 19
+  members: 20
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 33
+  members: 34
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -102,7 +102,7 @@
 - slug: turkic
   persona: The Turkologist
   blurb: the runiform steppe to the Chagatai chancery, one literary continuum
-  members: 4
+  members: 5
 - slug: mongolic
   persona: The Mongolist
   blurb: the Secret History's empire in its own words, hanzi transcription beside

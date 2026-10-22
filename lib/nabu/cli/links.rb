@@ -2,6 +2,11 @@
 
 # Nabu::CLI — links-journal miners and readers: parallels, formulas, links,
 # cognates. Carved out of lib/nabu/cli.rb, the registry that loads it.
+# The explain engine sits outside the batch miner's stamped code closure
+# (Query::ParallelsExplain's class note) — only the interactive surfaces
+# require it.
+require_relative "../query/parallels_explain"
+
 module Nabu
   class CLI < Thor
     # `links mine` / `links migrate-mined` (the mined layers' verbs) dispatch
@@ -51,6 +56,13 @@ module Nabu
       phrase spans and all shared lemmas, untrimmed (compact shows the first few
       with a "… and N more" tail).
 
+      EXPLAIN: --explain decomposes each hit's score (the same engine, observed
+      — the MCP nabu_parallels explain: true surface): one row per anchor gram
+      the hit shares — the folded gram, its document frequency (df), the rarity
+      weight 1/df and its contribution — the rows summing to the score exactly.
+      The zero rows (grams the hit lacks, grams too common to score, all-stop
+      grams never probed) are counted by status; --long lists them too.
+
       BATCH MODE (P16-1, the links journal): `parallels --batch SCOPE` mines a
       whole corpus slice — SCOPE is a source slug or a document-urn prefix,
       exactly the `formulas` scope grammar — looping this same engine over
@@ -87,6 +99,8 @@ module Nabu
                                                          # the Odyssey proem — who quotes it
         nabu parallels urn:nabu:sblgnt:matt:4.4 --long   # Matt 4:4 → Luke, Origen, LXX Deut 8:3
         nabu parallels <urn> --lang grc --limit 30       # Greek parallels only, wider page
+        nabu parallels urn:nabu:sblgnt:matt:4.4 --explain
+                                                         # why each hit scores what it does
         nabu parallels --batch urn:nabu:sblgnt:matt --lang grc
                                                          # mine Matthew's parallels into the journal
         nabu parallels --batch sblgnt --min-score 0.1    # a whole source, stricter floor
@@ -102,6 +116,9 @@ module Nabu
     option :limit, type: :numeric, default: 15, desc: "Maximum hits per signal (default 15)"
     option :long, type: :boolean, default: false,
                   desc: "Expand every truncated list: all shared phrase spans and shared lemmas, untrimmed"
+    option :explain, type: :boolean, default: false,
+                     desc: "Decompose each hit's score into its per-gram contributions (gram, df, " \
+                           "weight, contribution — summing to the score)"
     option :batch, type: :boolean, default: false,
                    desc: "Mine a SCOPE (source slug or urn prefix) and persist edges to the links journal"
     option :min_score, type: :numeric, banner: "S",
@@ -135,6 +152,9 @@ module Nabu
       if options[:batch] && options[:lect]
         raise Thor::Error, "parallels: --lect does not apply with --batch (the miner is corpus-wide)"
       end
+      if options[:batch] && options[:explain]
+        raise Thor::Error, "parallels: --explain is interactive only (the miner persists edges, not score parts)"
+      end
       return batch_parallels(urn) if options[:batch]
 
       %i[min_score per_anchor db profile gram_size chunk_size restart].each do |flag|
@@ -150,10 +170,11 @@ module Nabu
       fulltext = open_fulltext(config)
       raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
 
-      result = Nabu::Query::Parallels.new(catalog: catalog, fulltext: fulltext)
-                                     .run(urn, limit: options[:limit].to_i,
-                                               lang: options[:lang], license: options[:license],
-                                               lect: options[:lect])
+      engine = options[:explain] ? Nabu::Query::ParallelsExplain : Nabu::Query::Parallels
+      result = engine.new(catalog: catalog, fulltext: fulltext)
+                     .run(urn, limit: options[:limit].to_i,
+                               lang: options[:lang], license: options[:license],
+                               lect: options[:lect])
       print_parallels(result, urn: urn, long: options[:long])
       print_display_footer
     ensure
@@ -498,6 +519,25 @@ module Nabu
           display_text(long ? span : truncate_line(span, PARALLELS_SPAN_CHARS), hit.language)
         end
         lines.each { |line| say "  #{line}" }
+        print_parallel_explain(hit.contributions, long: long) if hit.respond_to?(:contributions)
+      end
+
+      # --explain: the shared rows (gram · df · weight → contribution),
+      # summing to the score; the zero rows counted by status, listed with
+      # --long.
+      def print_parallel_explain(rows, long:)
+        shared, zero = rows.partition { |row| row.contribution.positive? }
+        say "  explain (gram · df · weight → contribution):"
+        (long ? rows : shared).each do |row|
+          times = row.positions > 1 ? " ×#{row.positions}" : ""
+          status = row.status == "shared" ? "" : " (#{row.status})"
+          say "    #{row.gram}#{times} · df #{row.df || '—'} · #{format('%.4f', row.weight)} → " \
+              "#{format('%.4f', row.contribution)}#{status}"
+        end
+        return if long || zero.empty?
+
+        counts = zero.group_by(&:status).map { |status, members| "#{status} #{members.size}" }.join(" · ")
+        say "    … #{zero.size} zero row(s): #{counts} (--long)"
       end
 
       def print_lemma_echoes(echoes, long:)

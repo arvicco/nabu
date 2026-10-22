@@ -81,9 +81,9 @@ module Nabu
     # Ardhakathānaka are Braj. The Jñāneśvarī is Marathi (mar → mr; Old
     # Marathi has no stage — declared coarse; the Gītā verses it embeds
     # ride inside its lines). Jyotsnikā, a Maṇipravāḷam (Malayalam +
-    # Sanskrit) toxicology text, QUARANTINES: the registry holds no
-    # Malayalam node (the ml anchor is a named mint candidate) — the sii
-    # precedent, admitted once the node lands.
+    # Sanskrit) toxicology text, quarantined until the ml anchor landed
+    # (the registry's 2026-10-22 merge) and admits since — the sii
+    # precedent, executed.
     #
     # == Grain, metadata, dating
     #
@@ -151,13 +151,14 @@ module Nabu
         "bardhkpu" => "bra-Latn", # Banārasīdās's Ardhakathānaka (CSX+ file)
         "jna1-16u" => "mar-Latn", # Jñāneśvarī, adhyāyas 1–16
         # 4_drav
-        "jyotsniu" => "mal-Latn" # Jyotsnikā (Maṇipravāḷam) — QUARANTINED below
+        "jyotsniu" => "mal-Latn" # Jyotsnikā (Maṇipravāḷam) — admitted since the ml anchor landed
       }.freeze
 
       # Tags with no registry node: the document quarantines loudly.
-      QUARANTINED_LANGUAGES = {
-        "mal-Latn" => "no Malayalam node in the lect registry (the ml anchor is a named mint candidate)"
-      }.freeze
+      # (Emptied 2026-10-22: the ml anchor landed in the registry, so the
+      # Jyotsnikā — the one quarantined file — admits; the mechanism stays
+      # for any future tag without a node.)
+      QUARANTINED_LANGUAGES = {}.freeze
 
       # Admitted collections' files skipped by rule, by stem.
       SKIPPED = {

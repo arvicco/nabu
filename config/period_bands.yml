@@ -206,6 +206,55 @@ periods:
   "LH IIIB or LH IIIC":    {band: [-1300, -1070], basis: aegean}
   "LH IIIA2/LH IIIB1 or LH IIIC": {band: [-1370, -1070], basis: aegean}
   "LH IIIA2-LH IIIC":      {band: [-1370, -1070], basis: aegean}
+  # Re-census 2026-10-22 over the held canonical/damos items (5,890):
+  # COVERED 27 of 27 raw chronology labels = 4,020 items (LM IIIA2 or
+  # LM IIIB 1,252 · LH IIIB2/LH IIIC 981 · LM IIIA1 or LM IIIA2 or LM
+  # IIIB 709 · LM II-LM IIIA1 or LM IIIB 417 · LH IIIB2 350 · … the
+  # "?"-suffixed forms folding onto their rows); UNCOVERED none; 1,870
+  # items carry upstream's "-" (no claim, honestly nil). The live
+  # catalog already holds the 4,020 period-class rows — nothing for
+  # damos is pending here.
+  #
+  # The Minoan Middle/Late phases the Linear A corpus (sigla, SigLA)
+  # dates by — its whole period vocabulary, census 2026-10-22 over the
+  # 802 inscriptions: LM IB 640 · MM IIB 34 · MM IIIB 28 · MM II 19 ·
+  # LM IA 18 (+2 "?") · LM I 17 · MM III 5 (+2 "?") · LM I general 2 ·
+  # LM II 2 · LM IB-II 2 · MM III-LM IA 1 · MM IIA 1 · MM IIIA 1 ·
+  # MH III-LH I 1 = 775 covered; 18 with no period field, 6 empty,
+  # "unknown" 2 and "n/a" 1 stay honestly nil (27). Bounds: the
+  # CONVENTIONAL (low, Egyptian-synchronism) chronology in the round
+  # form the rows above already use — LM II from 1450 — so the phases
+  # abut: MM II 1800–1700 (the Old Palace destructions), MM III
+  # 1700–1600, LM IA 1600–1500, LM IB 1500–1450 (the LM IB
+  # destruction horizon). THE HIGH-VS-LOW DISPUTE: radiocarbon dating
+  # of the Thera (Santorini) eruption, late in LM IA, to c. 1600 BC
+  # (S. W. Manning, A Test of Time, 1999, and later work) supports a
+  # HIGH chronology that raises LM IA to c. 1700–1600 and LM IB into
+  # the 16th century; the archaeological/Egyptian synchronisms of the
+  # conventional scheme (Warren & Hankey 1989) put the eruption c.
+  # 1530–1500. These rows take the CONVENTIONAL span, declared — not
+  # an envelope of both, which would double LM IA's width.
+  "MM II":                 {band: [-1800, -1700], basis: aegean,
+                            note: the Protopalatial MM II phase, unsubphased}
+  "MM IIA":                {band: [-1800, -1750], basis: aegean}
+  "MM IIB":                {band: [-1750, -1700], basis: aegean,
+                            note: the Phaistos palace archive horizon}
+  "MM III":                {band: [-1700, -1600], basis: aegean}
+  "MM IIIA":               {band: [-1700, -1650], basis: aegean}
+  "MM IIIB":               {band: [-1650, -1600], basis: aegean}
+  "LM I":                  {band: [-1600, -1450], basis: aegean, note: LM IA and LM IB joined}
+  "LM I general":          {band: [-1600, -1450], basis: aegean,
+                            note: SigLA's label for an unsubphased LM I}
+  "LM IA":                 {band: [-1600, -1500], basis: aegean,
+                            note: "the conventional (low) span; the high chronology (Thera
+                              radiocarbon) would read c. 1700–1600 — see the block comment"}
+  "LM IB":                 {band: [-1500, -1450], basis: aegean,
+                            note: the Haghia Triada archive horizon (the bulk of Linear A)}
+  "LM IB-II":              {band: [-1500, -1400], basis: aegean, note: the two phases' envelope}
+  "MM III-LM IA":          {band: [-1700, -1500], basis: aegean, note: the two phases' envelope}
+  "MH III-LH I":           {band: [-1700, -1500], basis: aegean,
+                            note: "the mainland (Helladic) pair contemporary with MM III–LM IA —
+                              conventional MH III c. 1700–1600, LH I c. 1600–1500"}
 
   # -- Ancient North Arabian script-tradition spans (basis `ana`; OCIANA's
   # held per-record script field, census 2026-10-19: Safaitic 30,795 ·

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "corpus-corporum croala damos digiliblt diorisis first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel ud vulgate"
+  sources: "corpus-corporum croala damos digiliblt diorisis first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel sigla ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -40,6 +40,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `perseus-greek` | Perseus Digital Library — canonical Greek literature | attribution |
 | `perseus-latin` | Perseus Digital Library — canonical Latin literature | attribution |
 | `proiel` | PROIEL Treebank | nc |
+| `sigla` | SigLA — The Signs of Linear A: a paleographical database (Salgarella & Castellan) | nc |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `vulgate` | Biblia Sacra Vulgata Clementina (Tweedale/eBible.org, via open-bibles) | open |
 <!-- nabu:skill-sources:end -->

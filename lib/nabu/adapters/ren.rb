@@ -69,8 +69,13 @@ module Nabu
     #   dialects — the coarse-to-fine language-type → language-area chain;
     #   facets — the genre code (P/V/U, ReM's vocabulary) as a labeled
     #     facet row (the ReM P109-4 genre facet).
-    # The CorA token layer is NOT read: the TEI already carries the gold
-    # pos/msd/lemma (the inverse of ReM's gap). A tree without the sibling
+    # The CorA token layer is read ONLY for what the TEI lacks (widened
+    # 2026-10-22, censused in CORA_TOKEN_LANES): the boundary lane (the
+    # sentence + heading segmentation, on annotated AND transcribed texts)
+    # and the annotators' token comments, joined by id; the TEI already
+    # carries the gold pos/msd/lemma (the inverse of ReM's gap), and a
+    # TEI token the sibling cannot answer is counted in
+    # "coraxml_unmatched_tokens" (the ReM census). A tree without the sibling
     # (every canonical tree fetched before the arm existed) parses exactly
     # as before — test-pinned. The CorA header's own language line is the
     # source of LOW_RHENISH_SLUGS below; the hardcoded list stays so the
@@ -129,6 +134,32 @@ module Nabu
         pre_editing_by annotation_by proofreading_by topic topic_ReN genre time
         medium language-area base_for_transcription token language language-type
       ].freeze
+
+      # The ReN CorA annotation unit (ReM/ReF call it tok_anno) and the
+      # token lanes the TEI export does NOT carry, joined onto the TEI
+      # token records by id (<mod @id> = TEI <w xml:id>) and riding under
+      # upstream's element names (the ReF keys). Censused 2026-10-22 over
+      # the whole tree (1,485,963 anno + 838,400 trans units):
+      #   boundary — 181,110 anno + 100,116 trans (Satz, Satzteil_I/M/F,
+      #     Überschrift_Start/Ende, combinations): the TEI's 274,669 <s>
+      #     containers carry only the sentence/part shape (and the parser
+      #     reads the line grain, so they flatten), and the TEI has no
+      #     heading markup at all; this lane is the corpus's sentence +
+      #     heading segmentation, and the ONLY annotation the 74
+      #     transcribed-only texts have;
+      #   comment — 27,783 anno (annotator token notes: "keine
+      #     Kongruenz", "%NE" — verbatim).
+      # Two units corpus-wide carry two boundary elements; the later one
+      # rides (the seam keeps one value per element name).
+      # Declined: lemma/pos/morph (the TEI's gold @lemma/@pos/@msd already
+      # ride the same values — the TEI @pos adds a "<"-joined generalized
+      # class: "DDARTA<DD"), cora-flag
+      # (181,109 + 100,115 presence mirrors of boundary, no value), and
+      # the unit attributes (utf = the TEI surface, ascii/trans its
+      # transliterations, checked = y on every anno unit / n on every
+      # trans unit — a mirror of the layer).
+      CORA_UNIT = "mod"
+      CORA_TOKEN_LANES = %w[boundary comment].freeze
 
       # The explicit no-place value (5 headers) — the absence of a claim.
       UNKNOWN_PLACE = "unbekannt"
@@ -221,13 +252,15 @@ module Nabu
       def parse(document_ref)
         body = parser.body(document_ref.path)
         sigle = sigle_for(document_ref.path)
+        tags = cora_tags(document_ref.metadata["cora_path"])
         metadata = document_metadata(body, document_ref, sigle)
                    .merge(cora_metadata(document_ref.metadata["cora_path"]))
+        metadata.merge!(join_census(body, tags)) if tags
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: title_for(sigle),
           canonical_path: document_ref.path, metadata: metadata
         )
-        append_lines(document, body, document_ref)
+        append_lines(document, body, document_ref, tags: tags)
         raise ParseError, "#{document_ref.path}: no manuscript lines in <body>" if document.empty?
 
         document
@@ -322,6 +355,29 @@ module Nabu
         }.compact
       end
 
+      # mod id → { "boundary" => …, "comment" => … } (NFC; CorA's "--" null
+      # never rides), or nil when the document has no sibling.
+      def cora_tags(cora_path)
+        return nil if cora_path.nil?
+
+        CoraXmlParser.new.anno_tags(cora_path, names: CORA_TOKEN_LANES, unit: CORA_UNIT).transform_values do |found|
+          found.each_with_object({}) do |(element, tag), record|
+            record[element] = Normalize.nfc(tag) unless tag.nil? || tag.match?(/\A-+\z/)
+          end
+        end
+      end
+
+      # Both directions of the id join, loud and never a quarantine: TEI
+      # tokens the sibling cannot answer, and sibling lane values on units
+      # with no TEI token (censused over the held tree: 0 and 85 — 78
+      # boundary + 7 comment values on units the TEI export does not emit).
+      def join_census(body, tags)
+        ids = body.lines.flat_map { |line| line.tokens.map { |t| t["id"] } }
+        unjoined = tags.each_value.sum(&:size) - ids.sum { |id| tags.fetch(id, {}).size }
+        { "coraxml_unmatched_tokens" => ids.count { |id| !tags.key?(id) },
+          "coraxml_unjoined_lanes" => unjoined }.select { |_key, count| count.positive? }
+      end
+
       def genre_facet(genre)
         return nil if genre.nil?
 
@@ -367,10 +423,11 @@ module Nabu
       # the charter collections restart pb/lb per entry with NO container
       # element, so remaining collisions take the house :b2 positional
       # disambiguator — never quarantine, never merge.
-      def append_lines(document, body, document_ref)
+      def append_lines(document, body, document_ref, tags: nil)
         seen = Hash.new(0)
         body.lines.each do |line|
-          annotations = { "tokens" => line.tokens }
+          tokens = tags ? line.tokens.map { |t| t.merge(tags.fetch(t["id"], {})) } : line.tokens
+          annotations = { "tokens" => tokens }
           annotations["entry_notes"] = line.notes unless line.notes.empty?
           document << Nabu::Passage.new(
             urn: "#{document_ref.id}:#{line_ref(line, seen)}",

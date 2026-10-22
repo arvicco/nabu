@@ -25,7 +25,7 @@ class GretilLegacyTest < Minitest::Test
   ].freeze
   QUARANTINED = %w[urn:nabu:gretil-legacy:jyotsniu].freeze
 
-  # Jyotsnika quarantines by design (no Malayalam node in the lect
+  # Jyotsnika admits since the ml anchor landed (2026-10-22; formerly the lect
   # registry); the conformance sweep runs over the parseable fixtures
   # (the sii-clean pattern).
   def conformance_adapter
@@ -131,10 +131,11 @@ class GretilLegacyTest < Minitest::Test
     assert_equal "3_nia", document.metadata["collection"]
   end
 
-  def test_the_manipravalam_jyotsnika_quarantines_until_the_registry_carries_malayalam
+  def test_the_manipravalam_jyotsnika_admits_now_that_the_registry_carries_malayalam
     ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:gretil-legacy:jyotsniu" }
-    error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
-    assert_match(/Malayalam/, error.message)
+    document = adapter.parse(ref)
+    assert_equal "mal-Latn", document.language
+    assert_equal "4_drav", document.metadata["collection"]
   end
 
   # -- the dating lane: the ruled per-work era table --------------------------------

@@ -52,6 +52,12 @@ class KoWikisourceMkTest < Minitest::Test
     # pages/*.json and the README are recognized.
     assert_equal 1, skips.unrecognized
     assert_equal ["non-corpus file: manifest.yml"], skips.notes
+    # The grain census (the multi-grain drill): the cone is the named WORKS
+    # list, so upstream's other grains are refused at FETCH — no rejected
+    # grain reaches the tree (held tree 2026-10-22: 1 envelope, 0 skipped
+    # by rule, 0 strays). The tree reconciles with no rule skip.
+    assert_equal 0, skips.skipped_by_rule
+    assert_equal Dir.glob("pages/*.json", base: FIXTURES).size, adapter.discover(FIXTURES).count
   end
 
   # --- parse: the grain -------------------------------------------------------

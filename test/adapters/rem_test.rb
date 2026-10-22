@@ -130,7 +130,9 @@ class RemTest < Minitest::Test
     line = parse_urn("urn:nabu:rem:m058").find { |p| p.urn.end_with?(":100v.5") }
     grimme = line.annotations["tokens"].find { |t| t["id"] == "t5_m1" }
     assert_equal({ "id" => "t5_m1", "form" => "grínme", "norm" => "grinme", "lemma" => "grimme",
-                   "lemma_idmwb" => "65079000", "pos" => "NA", "msd" => "Dat.Sg" }, grimme,
+                   "lemma_idmwb" => "65079000", "pos" => "NA", "msd" => "Dat.Sg",
+                   "norm_cora" => "grimme", "lemma_gen" => "grimme", "pos_gen" => "NA",
+                   "inflClass" => "st.Fem", "inflClass_gen" => "*.Fem" }, grimme,
                  "joined on the upstream token id; CorA's <pos> and <infl> tags verbatim " \
                  "(infl rides as msd — the ReN sibling's key for the same lane)")
   end
@@ -139,7 +141,9 @@ class RemTest < Minitest::Test
     tokens = parse_urn("urn:nabu:rem:m058").flat_map { |p| p.annotations["tokens"] }
     welt = tokens.find { |t| t["id"] == "t3_m1" }
     assert_equal({ "id" => "t3_m1", "form" => "welt", "norm" => "welt", "lemma" => "wër(e)lt",
-                   "lemma_idmwb" => "225300000", "pos" => "NA", "msd" => "Nom.Sg" }, welt,
+                   "lemma_idmwb" => "225300000", "pos" => "NA", "msd" => "Nom.Sg",
+                   "norm_cora" => "werelt", "lemma_gen" => "wër(e)lt", "pos_gen" => "NA",
+                   "inflClass" => "st.Fem", "inflClass_gen" => "st.Fem" }, welt,
                  "the TEI @lemma is CorA's <norm> (\"werelt\"); the true citation form and its " \
                  "MWB id come from the sibling")
     diu = tokens.find { |t| t["id"] == "t2_m1" }
@@ -147,6 +151,21 @@ class RemTest < Minitest::Test
                  "the TEI norm stays under its own key"
     stop = tokens.find { |t| t["id"] == "t7_m1" }
     refute stop.key?("lemma_idmwb"), "punctuation carries no lemma lane"
+  end
+
+  def test_every_coraxml_token_lane_rides_verbatim
+    tokens = parse_urn("urn:nabu:rem:m058").flat_map { |p| p.annotations["tokens"] }
+    welt = tokens.find { |t| t["id"] == "t3_m1" }
+    assert_equal "werelt", welt["norm_cora"],
+                 "CorA's normalized form — lost when the lemma lane switched — rides beside the " \
+                 "TEI norm (which is CorA's ascii form), never overwriting it"
+    stet = tokens.find { |t| t["id"] == "t6_m1" }
+    assert_equal "DE", stet["punc"], "the modern-punctuation lane, the ReF key"
+    stop = tokens.find { |t| t["id"] == "t7_m1" }
+    assert_equal({ "pos" => "$_", "pos_gen" => "$_", "punc" => "$E" }, stop.slice("pos", "pos_gen", "punc"))
+    assert_equal %w[MS1 MS2], tokens.select { |t| t["id"].start_with?("t9_") }.map { |t| t["token_type"] },
+                 "a split diplomatic token's segments carry upstream's token_type verbatim"
+    refute(tokens.any? { |t| t.key?("infl") || t.key?("norm_gen") }, "lanes ride under their declared keys only")
   end
 
   def test_the_citation_form_lemma_reaches_the_lemma_index
@@ -277,7 +296,7 @@ class RemTest < Minitest::Test
     assert_nil row_for.call("urn:nabu:rem:m242"), "no sibling, no place — no row"
   end
 
-  def test_the_sibling_adds_only_pos_msd_and_the_dating_keys
+  def test_the_sibling_adds_only_its_declared_token_lanes_and_the_dating_keys
     Dir.mktmpdir do |dir|
       copy_tree_without(FIXTURES, dir, excluded: "coraxml")
       adapter = Nabu::Adapters::Rem.new
@@ -289,14 +308,14 @@ class RemTest < Minitest::Test
         assert_equal before.map(&:text), merged.map(&:text), ref.id
         stripped = merged.map do |p|
           p.annotations.merge("tokens" => p.annotations["tokens"].map do |t|
-            t.except("pos", "msd", "lemma", "lemma_idmwb")
+            t.except(*Nabu::Adapters::Rem::CORA_TAGS.values)
           end)
         end
         bare_lemmaless = before.map do |p|
           p.annotations.merge("tokens" => p.annotations["tokens"].map { |t| t.except("lemma") })
         end
         assert_equal bare_lemmaless, stripped,
-                     "#{ref.id}: beyond the CorA lemma override (+ lemma_idmwb) and pos/msd, " \
+                     "#{ref.id}: beyond the CorA lemma override and the declared CORA_TAGS lanes, " \
                      "every token key is the TEI's own"
       end
     end

@@ -41,3 +41,17 @@ files:
     copied: "2026-10-10"
     whole: true
     trim: none
+  - path: pages/1907.json
+    refetchable: false
+    provenance: local-trim
+    reason: rejected-grain specimen (navigation index) — byte-verbatim copy of the held canonical envelope
+    copied: "2026-10-22"
+    whole: true
+    trim: none
+  - path: pages/16919.json
+    refetchable: false
+    provenance: local-trim
+    reason: rejected-grain specimen (empty shell) — byte-verbatim copy of the held canonical envelope
+    copied: "2026-10-22"
+    whole: true
+    trim: none

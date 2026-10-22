@@ -58,6 +58,22 @@ module Adapters
       assert_equal "Sta largo, ne srti, er te sad štropijah!", drama.passages[1].text
     end
 
+    # The rejected grains, pinned by REAL specimens (byte-verbatim from the
+    # held canonical tree): the cone reaches part pages (taken) and the
+    # work-level pages above them — Satir's navigation index (1907) and
+    # Gundulić's empty-shell part stub (16919). Each skips by its rule, and
+    # the fixture tree reconciles: every envelope is a document or a
+    # censused skip.
+    def test_rejected_grain_specimens_skip_by_rule_and_the_tree_reconciles
+      skips = conformance_adapter.discovery_skips(FIXTURES)
+      assert_equal ["1 page(s) skipped by rule: index page (navigation list, no hosted text)",
+                    "1 page(s) skipped by rule: no hosted text (empty shell)"], skips.notes.grep(/skipped by rule/)
+      assert_equal 2, skips.skipped_by_rule
+      refute(conformance_adapter.discover(FIXTURES).any? { |ref| ref.id.end_with?(":1907", ":16919") })
+      envelopes = Dir.glob("pages/*.json", base: FIXTURES).size
+      assert_equal envelopes, conformance_adapter.discover(FIXTURES).count + skips.skipped_by_rule
+    end
+
     def test_translator_header_skips_by_rule
       adapter = conformance_adapter
       envelope = JSON.parse(File.read(File.join(FIXTURES, "pages", "16190.json")))
