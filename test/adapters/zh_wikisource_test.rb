@@ -32,6 +32,20 @@ module Adapters
                    conformance_adapter.discover(FIXTURES).map(&:id).sort
     end
 
+    # The grain census (the multi-grain drill): the cone is a NAMED work
+    # list, so upstream's other grains (the work's shell page, its
+    # transcluded pieces, sibling works) are refused at FETCH — a shell's
+    # pieces fold into the one subpage envelope — and no rejected grain
+    # ever reaches the tree (held tree 2026-10-22: 1,238 envelopes, 0
+    # skipped by rule, 0 strays). Pinned: the tree reconciles with no rule
+    # skip, every envelope a document.
+    def test_no_rejected_grain_reaches_the_tree_and_it_reconciles
+      skips = conformance_adapter.discovery_skips(FIXTURES)
+      assert_equal 0, skips.skipped_by_rule
+      envelopes = Dir.glob("pages/*.json", base: FIXTURES).size
+      assert_equal envelopes, conformance_adapter.discover(FIXTURES).count
+    end
+
     # P110-3 (the owner-ruled magic-word scrub) — the two censused junk
     # shapes, both on the real 卷097 fixture: MediaWiki behavior switches
     # (`__TOC__`, `__NOEDITSECTION__`) must never mint passages, and
