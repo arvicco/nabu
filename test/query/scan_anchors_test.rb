@@ -152,6 +152,39 @@ module Query
       assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(doc) }
     end
 
+    # -- offset breaks (a bound-in fascicle insert shifts the offset) ---------
+
+    # The Wb I shape: a Belegstellen fascicle is bound in mid-volume, so
+    # printed pages up to 244 sit at +10 and pages from 245 at +46. The row
+    # declares the base offset plus a breaks list; the page picks its offset.
+    def breaks_doc
+      { "works" => { "x" => { "pattern" => '\AX (?<page>\d+)', "item" => "urn:nabu:local-library:dictionaries:x",
+                              "leaf_offset" => 10,
+                              "breaks" => [{ "from_page" => 245, "leaf_offset" => 46 }] } } }
+    end
+
+    def test_offset_breaks_pick_the_offset_by_printed_page
+      item = "urn:nabu:local-library:dictionaries:x"
+      shelve(item, leaves: [254, 291])
+      resolver = table(breaks_doc).resolver(@catalog)
+      below = resolver.anchor("X 244")
+      assert_equal [:anchored, 254], [below.status, below.leaf], "page 244 rides the base offset"
+      at = resolver.anchor("X 245")
+      assert_equal [:anchored, 291], [at.status, at.leaf], "page 245 rides the break offset"
+    end
+
+    def test_breaks_rows_validate
+      bad_page = breaks_doc
+      bad_page["works"]["x"]["breaks"] = [{ "from_page" => "245", "leaf_offset" => 46 }]
+      assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(bad_page) }
+      bad_offset = breaks_doc
+      bad_offset["works"]["x"]["breaks"] = [{ "from_page" => 245, "leaf_offset" => nil }]
+      assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(bad_offset) }
+      no_base = breaks_doc
+      no_base["works"]["x"]["leaf_offset"] = nil
+      assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(no_base) }
+    end
+
     # The shipped rows parse (the orchestrator fills item/leaf_offset after
     # ingest — until then every row is honestly unconfigured).
     def test_the_shipped_config_loads_and_routes_the_wb_volumes
