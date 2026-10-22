@@ -212,6 +212,27 @@ class CoraXmlParserTest < Minitest::Test
     assert_equal tags.keys, tags.keys.uniq
   end
 
+  def test_anno_tags_read_the_ren_mod_dialect
+    tags = parser.anno_tags(REN_CORA, names: %w[boundary comment], unit: "mod")
+    assert_equal({ "comment" => "keine Kongruenz" }, tags["t4_m1"], "ReN's anno unit is <mod>")
+    assert_equal({ "boundary" => "Satz" }, tags["t6_m1"])
+    assert_equal({}, tags["t5_m1"], "every unit keys an entry, even without a requested tag")
+  end
+
+  def test_anno_tags_never_attach_a_top_level_comment_to_the_previous_unit
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "Hamb.xml")
+      # A real ReN top-level transcriber comment (type="K"; 8,497 sit
+      # between tokens corpus-wide), moved after the t4 token whose unit
+      # carries a token-level comment tag.
+      File.write(path, File.read(REN_CORA).sub(%r{(<token id="t4".*?</token>)}m,
+                                               "\\1\n  <comment type=\"K\">HBG1</comment>"))
+      tags = parser.anno_tags(path, names: %w[comment], unit: "mod")
+      assert_equal({ "comment" => "keine Kongruenz" }, tags["t4_m1"],
+                   "the unit closes at </mod> — apparatus between tokens is never its child")
+    end
+  end
+
   def test_element_header_reads_the_rem_element_dialect
     fields = parser.element_header(REM_CORA)
     assert_equal "13,1", fields["time"]
