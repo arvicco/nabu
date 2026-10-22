@@ -4,7 +4,10 @@
 # backup, mcp. Carved out of lib/nabu/cli.rb, the registry that loads it.
 module Nabu
   class CLI < Thor
-    desc "migrate-local", "Move the instance files (rulings, grants, profile…) from config/ to local/config/ (P71)"
+    # A one-time instance migration: hidden from `nabu help` (every box has
+    # run it), still callable — the legacy-config refusals name it as the fix.
+    desc "migrate-local", "Move the instance files (rulings, grants, profile…) from config/ to local/config/ (P71)",
+         hide: true
     def migrate_local
       config = Nabu::Config.load
       result = Nabu::LocalMigration.run(config: config)

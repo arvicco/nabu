@@ -85,6 +85,15 @@ class CLITest < Minitest::Test
     end
   end
 
+  # migrate-local is a one-time P71 instance migration: off the help
+  # listing (every `nabu --help` read paid a line for it), still callable —
+  # the legacy-config refusals still name it as the fix.
+  def test_help_hides_the_internal_migrate_local_command
+    out, _err, _status = run_cli(["help"])
+    refute_match(/migrate-local/, out)
+    assert Nabu::CLI.all_commands.key?("migrate_local"), "hidden, not removed"
+  end
+
   def test_exit_on_failure_is_enabled
     assert Nabu::CLI.exit_on_failure?
   end
@@ -3722,20 +3731,29 @@ class CLITest < Minitest::Test
     end
   end
 
-  # --list previews the set (slugs, sizes, blurbs) and touches nothing: no
-  # network (WebMock would trip), no catalog, no ledger.
-  def test_quickstart_list_prints_the_starter_set_without_syncing
-    with_empty_registry_env do |config|
-      out, _err, status = with_config(config) { run_cli(%w[quickstart --list]) }
-      assert_nil status
-      assert_match(/starter shelf/, out)
-      %w[sblgnt proiel iswoc lexica].each do |slug|
-        assert_match(/^  #{slug}\b/, out, "--list must name #{slug}")
+  # --dry-run (the house preview flag) prints the set (slugs, sizes, blurbs)
+  # and touches nothing: no network (WebMock would trip), no catalog, no
+  # ledger. The pre-rename --list stays a hidden alias.
+  def test_quickstart_dry_run_prints_the_starter_set_without_syncing
+    %w[--dry-run --list].each do |flag|
+      with_empty_registry_env do |config|
+        out, _err, status = with_config(config) { run_cli(["quickstart", flag]) }
+        assert_nil status
+        assert_match(/starter shelf/, out)
+        %w[sblgnt proiel iswoc lexica].each do |slug|
+          assert_match(/^  #{slug}\b/, out, "#{flag} must name #{slug}")
+        end
+        assert_match(/MB/, out, "#{flag} must carry the measured sizes")
+        refute File.exist?(config.catalog_path), "#{flag} must not create the catalog"
+        refute File.exist?(config.history_path), "#{flag} must not create the ledger"
       end
-      assert_match(/MB/, out, "--list must carry the measured sizes")
-      refute File.exist?(config.catalog_path), "--list must not create the catalog"
-      refute File.exist?(config.history_path), "--list must not create the ledger"
     end
+  end
+
+  def test_quickstart_help_offers_dry_run_and_hides_the_legacy_list_flag
+    out, _err, _status = run_cli(%w[help quickstart])
+    assert_match(/--dry-run/, out)
+    refute_match(/--list/, out, "--list is a hidden alias now")
   end
 
   # The command syncs the starter list IN ORDER through the normal per-source
@@ -3841,7 +3859,7 @@ class CLITest < Minitest::Test
   end
 
   # `nabu help quickstart` must teach the starter shelf: what it holds (with
-  # sizes), the three marvels, --list, and the idempotency promise.
+  # sizes), the three marvels, --dry-run, and the idempotency promise.
   def test_help_quickstart_documents_the_starter_shelf
     out, _err, _status = run_cli(%w[help quickstart])
     %w[sblgnt proiel iswoc lexica].each { |slug| assert_match(/#{slug}/, out) }
@@ -3849,7 +3867,7 @@ class CLITest < Minitest::Test
     assert_match(/align "MARK 2\.3"/, out)
     assert_match(/--lemma/, out)
     assert_match(/define λόγος/, out)
-    assert_match(/--list/, out)
+    assert_match(/--dry-run/, out)
     assert_match(/idempotent/i, out)
     assert_match(/never stops the rest/i, out, "must state the partial-failure posture")
   end
