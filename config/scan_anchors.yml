@@ -25,8 +25,11 @@ works:
   bdb:
     title: Brown–Driver–Briggs, Hebrew and English Lexicon (1906)
     pattern: '\ABDB p\. (?<page>\d+)\z'
-    item: null
-    leaf_offset: null
+    # Calibrated 2026-10-22 against the ingested archive.org scan
+    # (hebrewenglishlex00browuoft): printed 126/276/576 sit on PDF
+    # pages 150/300/600 — a constant +24.
+    item: urn:nabu:local-library:lexica:hebrewenglishlex00browuoft
+    leaf_offset: 24
 
   # Erman–Grapow, Wörterbuch der aegyptischen Sprache — the aed shelf mints
   # one citation per bibl segment starting "Wb " ("Wb <vol>, <page>.<line>
@@ -39,9 +42,30 @@ works:
   wb:
     title: Wörterbuch der aegyptischen Sprache
     pattern: '\AWb (?<volume>\d)(?: ?[,.] ?| )(?<page>\d+)(?:\. ?(?<line>\d+))?'
+    # Calibrated 2026-10-22 against the ingested archive.org scans
+    # (wrterbuchderaegy000Nunse, read off rendered leaves). Each volume
+    # binds its Lieferungen with their title leaves (and, in Bd. I, a
+    # Belegstellen fascicle) between the printed pages, so the offset
+    # breaks mid-volume: Bd. I +10 through p. 244, +46 from p. 245
+    # (printed 241–244 unverified — they sit against the insert); Bd.
+    # III/IV +8 through p. 240, +12 from p. 241. Bd. II rides the
+    # retry ingest batch and calibrates after it lands; Bd. V enters
+    # US PD 2027-01-01.
     volumes:
-      "1": { item: null, leaf_offset: null }
+      "1":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0001unse
+        leaf_offset: 10
+        breaks:
+          - { from_page: 245, leaf_offset: 46 }
       "2": { item: null, leaf_offset: null }
-      "3": { item: null, leaf_offset: null }
-      "4": { item: null, leaf_offset: null }
+      "3":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0003unse
+        leaf_offset: 8
+        breaks:
+          - { from_page: 241, leaf_offset: 12 }
+      "4":
+        item: urn:nabu:local-library:dictionaries:wrterbuchderaegy0004unse
+        leaf_offset: 8
+        breaks:
+          - { from_page: 241, leaf_offset: 12 }
       "5": { item: null, leaf_offset: null }

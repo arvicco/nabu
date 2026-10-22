@@ -38,7 +38,15 @@ module Nabu
       FILENAME = "scan_anchors.yml"
 
       # One configured volume (or the single volume of a one-volume work).
-      Volume = Data.define(:item, :leaf_offset)
+      # +breaks+ is a list of [from_page, leaf_offset] pairs, descending by
+      # from_page — a bound-in fascicle insert shifts the offset mid-volume
+      # (the Wb's Lieferung title leaves); the printed page picks its offset.
+      Volume = Data.define(:item, :leaf_offset, :breaks) do
+        def offset_for(page)
+          hit = breaks.find { |from, _| page >= from }
+          hit ? hit[1] : leaf_offset
+        end
+      end
 
       # One configured work: +volumes+ is {volume-as-cited => Volume}, or
       # {nil => Volume} for a single-volume work.
@@ -127,7 +135,7 @@ module Nabu
           return build(match, item: item, status: :not_held) unless held?(item)
           return build(match, item: item, urn: item, status: :uncalibrated) if volume.leaf_offset.nil?
 
-          leaf = match.page + volume.leaf_offset
+          leaf = match.page + volume.offset_for(match.page)
           return build(match, item: item, urn: item, status: :out_of_range) unless leaf.positive?
 
           page_urn = "#{item}:p#{leaf}"
@@ -193,7 +201,23 @@ module Nabu
         raise ConfigError, "scan_anchors: #{id} leaf_offset must be an integer or null" \
           unless offset.nil? || offset.is_a?(Integer)
 
-        Volume.new(item: item, leaf_offset: offset)
+        Volume.new(item: item, leaf_offset: offset, breaks: parse_breaks(id, row["breaks"], base: offset))
+      end
+
+      def parse_breaks(id, rows, base:)
+        return [] if rows.nil?
+        raise ConfigError, "scan_anchors: #{id} breaks need a calibrated leaf_offset beside them" if base.nil?
+        raise ConfigError, "scan_anchors: #{id} breaks must be a list" unless rows.is_a?(Array)
+
+        parsed = rows.map do |row|
+          from = row.is_a?(Hash) ? row["from_page"] : nil
+          offset = row.is_a?(Hash) ? row["leaf_offset"] : nil
+          raise ConfigError, "scan_anchors: #{id} break rows are {from_page: int, leaf_offset: int}" \
+            unless from.is_a?(Integer) && from.positive? && offset.is_a?(Integer)
+
+          [from, offset]
+        end
+        parsed.sort_by { |from, _| -from }
       end
     end
   end
