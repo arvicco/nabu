@@ -1,6 +1,6 @@
 ---
 title: "Three windows since v1.7.0 — the library learns to answer"
-date: 2026-10-22 12:00:00 +0000
+date: 2026-10-22 10:45:00 +0000
 description: >-
   Two days after the release, three windows already: the entity layer
   became readable, eighteen new sources landed in one content wave —
