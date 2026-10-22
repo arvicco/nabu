@@ -1388,6 +1388,38 @@ one- to three-token lines yield no 4-gram, so the default engine finds 0
 of 6 partner slots and gram size 1 finds 2 — the short-epigraphy blind
 spot the harness exists to expose.
 
+**The first measured borrowing — fuzzy 2-of-3 positional grams**
+(`Query::ParallelsFuzzy`, bench knob `FUZZY=off|fallback|all`). The
+anchor is read as three-token windows; a candidate holding a window in
+which any two of the three slots agree is a match, one mismatched or lost
+slot tolerated: an adjacent pair (a b _ / _ b c) probes as the FTS phrase,
+a gap pair (a _ c) as a `NEAR(a c, 1)` superset VERIFIED positionally
+against the candidate's stored search form; a two-token anchor is a window
+with one lost slot, a one-token anchor stays out of reach. A matched pair
+scores half the exact tier's rarity weight, so a whole window (all three
+masks) outranks two of its slots. Scope `fallback` (the measured default)
+fires only for an anchor the exact tier scored nothing for — every answer
+the exact engine already gives is byte-identical. Measured on the
+2026-10-22 catalog (tier off → fallback, recall@1 / recall@15 micro):
+edh-edr (n 2,000) 41.5% → 71.2% / 48.1% → 81.5%, zero-candidate queries
+865 → 104; tm-same-text (all 869) 10.1% → 22.1% / 16.8% → 39.0%;
+suttacentral (n 100) 15.1% → 19.6% / 48.1% → 61.9%; cdli-composite
+(n 500) 5.2% → 5.4% / 18.2% → 19.2%; kitab-passages (all 96) unchanged;
+kitab-books (n 20) unchanged at K 1/10/15 and one partner slot of 5,860
+lower at K 5 (74 → 73: a fuzzy-scored anchor re-ordering a document sum)
+— the one trade-off measured, and a rounding error beside the gains. Scope `all` (every anchor) adds ≤ 0.4 points on
+edh-edr at four times fallback's cost and is not proposed. Cost, timed
+back to back (300 queries each): a document query over the short-epigraphy
+sets goes from ~0.03 s to ~0.33 s (edh-edr) and ~0.44 s (tm-same-text),
+14–16× — over half of it the gap-pair verification read of candidate
+search forms from the catalog. Like `ParallelsExplain` it is
+a subclass outside the batch miner's links-stamp closure, reachable only
+through the bench, so wiring it into the live surfaces (CLI, MCP, batch
+mining — and the explain decomposition, which must learn fuzzy rows) is
+its own later change. The fixture pin carries both states: the tier
+moves nothing on the fixture editions, whose misses are character-level
+damage and inflection on one-token lines, below its token grain.
+
 ## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
