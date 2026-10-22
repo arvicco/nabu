@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: epigraphy
   origin: hand-tuned
-  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine ig-cyprus iip isicily itant lexlep lexlep-words nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp pleiades riig rundata siddham sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
+  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine ig-cyprus iip isicily itant lexlep lexlep-words nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp pleiades riig rundata siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
 ---
 
 # The Papyrologist-Epigraphist — the `epigraphy` desk
@@ -50,6 +50,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `riig` | RIIG — Recueil informatisé des inscriptions gauloises (Ausonius/ANR) | attribution |
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |
 | `siddham` | Siddham Epigraphic Archive — texts in EpiDoc (Gupta-age Sanskrit epigraphy) | attribution |
+| `sigla` | SigLA — The Signs of Linear A: a paleographical database (Salgarella & Castellan) | nc |
 | `sii-clean` | South Indian Inscriptions — DHARMA editions and conversions | attribution |
 | `tir` | Thesaurus Inscriptionum Raeticarum (TIR) — Raetic corpus of record (Univ. Vienna) | nc |
 | `tlhdig` | TLHdig — Thesaurus Linguarum Hethaeorum digitalis (Beta 0.3, Zenodo 20328284) | attribution |
