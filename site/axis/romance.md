@@ -39,14 +39,14 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `disco` | texts | attribution | wired · manual | 1,215 docs / 4,527 passages |
 | `lo-congres` | texts | attribution | wired · manual | 12 docs / 10,304 passages |
-| `meloniromance` | cognacy dataset | attribution | not yet wired | not synced yet |
-| `memis` | inscriptions | attribution | not yet wired | not synced yet |
+| `meloniromance` | cognacy dataset | attribution | not yet wired | 5,419 entries |
+| `memis` | inscriptions | attribution | not yet wired | 51 docs / 473 passages |
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `osta` | texts | nc | wired · manual | 740 docs / 5,177 passages |
 | `salom` | texts | attribution | wired · manual | 1 docs / 10,685 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `lat` 6,343 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `eu` 15 … and 29 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `lat` 11,813 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `eu` 15 … and 29 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 

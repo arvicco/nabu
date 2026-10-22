@@ -22,10 +22,10 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `clics` | dictionary | attribution | wired · manual | 1,647 entries |
 | `derom` | dictionary | nc | wired · manual | 233 entries |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
-| `etruscan-loans` | dictionary | attribution | not yet wired | not synced yet |
+| `etruscan-loans` | dictionary | attribution | not yet wired | 199 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
-| `meloniromance` | cognacy dataset | attribution | not yet wired | not synced yet |
+| `meloniromance` | cognacy dataset | attribution | not yet wired | 5,419 entries |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `starling` | etymological bases | attribution | wired · manual | 146,798 entries |
@@ -35,7 +35,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `zho` 327,296 · `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 … and 130 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `zho` 327,296 · `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 … and 131 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 

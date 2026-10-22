@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: italic
   origin: generated
-  sources: "burman-concordance ceipom isicily itant larth-etp lexlep lexlep-words open-etruscan sabellic-loans tir wiktionary-recon"
+  sources: "burman-concordance ceipom etruscan-loans isicily itant larth-etp lexlep lexlep-words open-etruscan sabellic-loans tir wiktionary-recon"
 ---
 
 # The Italicist — the `italic` desk
@@ -25,6 +25,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `burman-concordance` | Burman — Digital Concordance of Etruscan, Faliscan and Early Latin Inscriptions | open |
 | `ceipom` | CEIPoM — Corpus of the Epigraphy of the Italian Peninsula in the 1st Millennium BCE (Pitts, KU Leuven; Zenodo v1.3) | attribution |
+| `etruscan-loans` | Etruscan → Latin loans — en.wiktionary curation | attribution |
 | `isicily` | I.Sicily — the inscriptions of ancient Sicily (Prag, Oxford / ERC Crossreads) | attribution |
 | `itant` | Corpus ItAnt — Languages and Cultures of Ancient Italy (PRIN 2017, CNR-ILC/UniFI) | nc |
 | `larth-etp` | Larth ETP glossary — Etruscan vocabulary with POS and translations | attribution |

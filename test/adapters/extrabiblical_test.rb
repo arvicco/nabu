@@ -44,7 +44,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["extrabiblical"]
       refute_nil entry, "extrabiblical must be registered in config/sources.yml"
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired flipped at the gate first sync: 13 documents / 1,800 passages"
       assert_equal "manual", entry.sync_policy
       assert_equal ADAPTER, entry.adapter_class
     end

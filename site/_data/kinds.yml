@@ -3,9 +3,9 @@
 as_of: 22 October 2026
 classes:
 - head: literary
-  documents: 699341
-  documents_display: '699,341'
-  sources: 27
+  documents: 699342
+  documents_display: '699,342'
+  sources: 28
 - head: administrative
   documents: 489119
   documents_display: '489,119'
@@ -15,33 +15,33 @@ classes:
   documents_display: '357,097'
   sources: 24
 - head: funerary
-  documents: 114915
-  documents_display: '114,915'
-  sources: 10
+  documents: 114916
+  documents_display: '114,916'
+  sources: 11
 - head: legal
-  documents: 37143
-  documents_display: '37,143'
-  sources: 19
+  documents: 37145
+  documents_display: '37,145'
+  sources: 20
 - head: letter
-  documents: 34758
-  documents_display: '34,758'
-  sources: 15
+  documents: 34760
+  documents_display: '34,760'
+  sources: 16
 - head: royal
-  documents: 30134
-  documents_display: '30,134'
-  sources: 4
+  documents: 30135
+  documents_display: '30,135'
+  sources: 5
 - head: scripture
   documents: 23108
   documents_display: '23,108'
   sources: 24
 - head: dedicatory
-  documents: 22921
-  documents_display: '22,921'
-  sources: 8
+  documents: 22922
+  documents_display: '22,922'
+  sources: 9
 - head: divination
-  documents: 21061
-  documents_display: '21,061'
-  sources: 13
+  documents: 21062
+  documents_display: '21,062'
+  sources: 14
 - head: lexical
   documents: 16738
   documents_display: '16,738'
@@ -59,17 +59,17 @@ classes:
   documents_display: '12,290'
   sources: 10
 - head: honorific
-  documents: 11413
-  documents_display: '11,413'
-  sources: 4
+  documents: 11422
+  documents_display: '11,422'
+  sources: 5
 - head: hymn-prayer
-  documents: 10449
-  documents_display: '10,449'
-  sources: 16
+  documents: 10450
+  documents_display: '10,450'
+  sources: 17
 - head: building
-  documents: 8016
-  documents_display: '8,016'
-  sources: 4
+  documents: 8021
+  documents_display: '8,021'
+  sources: 6
 - head: school
   documents: 5278
   documents_display: '5,278'
@@ -79,9 +79,9 @@ classes:
   documents_display: '5,188'
   sources: 3
 - head: magic
-  documents: 3327
-  documents_display: '3,327'
-  sources: 8
+  documents: 3328
+  documents_display: '3,328'
+  sources: 9
 - head: boundary
   documents: 2963
   documents_display: '2,963'
@@ -91,13 +91,13 @@ classes:
   documents_display: '2,322'
   sources: 3
 - head: exegesis
-  documents: 1171
-  documents_display: '1,171'
-  sources: 7
+  documents: 1172
+  documents_display: '1,172'
+  sources: 8
 unclassified_sources: 130
 unknown_documents: 47047
 unknown_documents_display: '47,047'
 unmapped_documents: 11441
 unmapped_documents_display: '11,441'
-unclassified_documents: 490070
-unclassified_documents_display: '490,070'
+unclassified_documents: 490169
+unclassified_documents_display: '490,169'

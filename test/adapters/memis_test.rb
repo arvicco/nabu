@@ -202,7 +202,7 @@ module Adapters
       entry = registry["memis"]
       refute_nil entry
       assert_equal Nabu::Adapters::Memis, entry.adapter_class
-      refute entry.wired
+      assert entry.wired, "wired flipped at the first sync: 51 documents / 473 line passages"
       assert_equal "manual", entry.sync_policy
     end
   end

@@ -138,7 +138,7 @@ class EtruscanLoansTest < Minitest::Test
     entry = registry["etruscan-loans"]
     refute_nil entry
     assert_equal Nabu::Adapters::EtruscanLoans, entry.adapter_class
-    refute entry.wired, "wired: false until the first sync is verified"
+    assert entry.wired, "wired flipped at the first sync: 199 entries, 69 loan-flagged"
     assert_equal "frozen", entry.sync_policy, "the vendored curation IS the immutable artifact"
   end
 end

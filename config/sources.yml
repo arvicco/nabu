@@ -2215,7 +2215,7 @@ etruscan-loans:   # 02-sources row 307
   adapter: Nabu::Adapters::EtruscanLoans
   adopted: "2026-10-22"
   axes: [italic, etym]
-  wired: false   # awaiting the first sync (no network: vendored copy + LocalFetch pin;
+  wired: true    # first sync verified 2026-10-22: 199 entries, 69 loan-flagged
                    # eyeball `nabu etym persona` for the 𐌘𐌄𐌓𐌔𐌖 edge, then flip)
   # Etruscan → Latin curated loan edges (the sabellic-loans recipe, the
   # P17-3 borrowed pattern from a non-IE donor). config/etruscan_loans.yml
@@ -2233,7 +2233,7 @@ extrabiblical:   # 02-sources row 306
   adapter: Nabu::Adapters::Extrabiblical
   adopted: "2026-10-22"
   axes: [biblical, hebrew, epigraphy]
-  wired: false   # awaiting the first real sync (sparse GitFetch cone tf/ + README.md, ~12 MB)
+  wired: true    # first sync verified 2026-10-22: 13 documents / 1,800 passages, 10 tf/0.1 book nodes skipped by rule
   sync_policy: manual
   # ETCBC extrabiblical — "Non Masoretic Texts related to the Hebrew
   # Bible" (github.com/ETCBC/extrabiblical), the THIRD text-fabric
@@ -3480,7 +3480,7 @@ meloniromance:   # 02-sources row 304
   adapter: Nabu::Adapters::Meloniromance
   adopted: "2026-10-22"
   axes: [etym, romance]
-  wired: false   # awaiting the first real sync (a GitFetch of the ~3 MB repository)
+  wired: true    # first sync verified 2026-10-22: 5,419 entries / 15,931 reflex rows, raw/data.tsv skipped by rule
   sync_policy: manual
   # Meloni, Ravfogel & Goldberg 2021 ("Ab Antiquo", NAACL) Romance
   # cognate sets in the lexibank CLDF edition (github.com/lexibank/
@@ -3497,7 +3497,7 @@ memis:   # 02-sources row 305
   adapter: Nabu::Adapters::Memis
   adopted: "2026-10-22"
   axes: [epigraphy, romance]
-  wired: false   # awaiting the first real sync (one GET of MEMIS.xml, 160 KB)
+  wired: true    # first sync verified 2026-10-22: 51 documents / 473 line passages, the front-matter div skipped by rule
   sync_policy: manual
   # MEMIS 1.0 — Epigraphic corpus of Medieval and Early Modern
   # inscriptions in Slovenia (Gregor Pobežin, ZRC SAZU; CLARIN.SI

@@ -22,8 +22,8 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `dharma-deccan` | texts | attribution | wired · auto | 1,695 docs / 27,983 passages |
 | `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
 | `dharma-tamil` | texts | attribution | wired · auto | 1,267 docs / 17,993 passages |
-| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
-| `gretil-legacy` | texts | nc | wired · manual | 21 docs / 81,251 passages |
+| `gretil` | texts | nc | wired · manual | 780 docs / 713,718 passages |
+| `gretil-legacy` | texts | nc | wired · manual | 22 docs / 83,383 passages |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |
@@ -47,7 +47,7 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,288 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 53 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,288 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 54 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

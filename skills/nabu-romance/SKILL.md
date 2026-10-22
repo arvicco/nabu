@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres openmgh osta salom ud"
+  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres meloniromance memis openmgh osta salom ud"
 ---
 
 # The Romanist — the `romance` desk
@@ -36,6 +36,8 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `digiliblt` | digilibLT — Biblioteca digitale di testi latini tardoantichi (CIRCSE CoNLL-U) | attribution |
 | `disco` | DISCO — Diachronic Spanish Sonnet Corpus (Ruiz Fabo et al., v5.0) | attribution |
 | `lo-congres` | Lo Congrès Occitan news corpus (six dialects, French-aligned) | attribution |
+| `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
+| `memis` | MEMIS — Epigraphic corpus of Medieval and Early Modern inscriptions in Slovenia 1.0 (Pobežin, ZRC SAZU) | attribution |
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |
 | `osta` | OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies) | nc |
 | `salom` | Şalom Ladino articles text corpus (Col·lectivaT / Sephardic Center of Istanbul) | attribution |
