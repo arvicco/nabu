@@ -2,16 +2,16 @@
 title: "Three windows since v1.7.0 — the library learns to answer"
 date: 2026-10-22 12:00:00 +0000
 description: >-
-  The weeks after the release, in three movements: the entity layer
+  Two days after the release, three windows already: the entity layer
   became readable, eighteen new sources landed in one content wave —
   from the Rigveda's gold morphology to the Anyang oracle bones — and
   a set of reading instruments opened translations, word senses, six
   more morphology tagsets and the printed sign lists to search.
 ---
 
-The release cut on 20 October was an engine milestone; the weeks
-around it have been about what the engine can now say. Three windows,
-three movements — and a library standing at
+The release cut on 20 October was an engine milestone; the two days
+since have been about what the engine can now say. Three windows in
+three days — and a library standing at
 **{{ site.data.census.documents_display }} documents /
 {{ site.data.census.passages_display }} passages** across
 {{ site.data.census.live_sources }} live sources (as of
@@ -44,7 +44,7 @@ five more Wikisource language cones from Telugu to Breton; and the
 Caucasus instruments — Old Georgian and Middle Armenian treebanks on
 the registry's new anchors.
 
-**And now the reading instruments.** This week's window opened four
+**And now the reading instruments.** Today's window opened four
 doors into what those waves had already fetched. Translations that
 ride inside annotations — the cuneiform corpus's translation lines,
 Coptic Scriptorium, the Hittite glossed corpus's German and eleven
