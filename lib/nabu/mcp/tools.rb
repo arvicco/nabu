@@ -15,6 +15,9 @@ require_relative "../query/parallel"
 require_relative "../query/parallels"
 require_relative "../query/parallels_explain"
 require_relative "../query/clarify"
+require_relative "../query/fuzzy"
+require_relative "../query/translation_search"
+require_relative "../query/senses"
 require_relative "../query/align"
 require_relative "../query/collation"
 require_relative "../query/define"
@@ -202,6 +205,10 @@ module Nabu
       LEMMA_REBUILDING_NOTE = "lemma index rebuilding (or the fulltext index predates lemma " \
                               "search) — retry shortly, or run `nabu rebuild`"
       BUSY_NOTE = "corpus is busy (a sync or rebuild may be running) — retry shortly"
+      NO_FUZZY_INDEX_NOTE = "no fuzzy index (the fulltext index predates fragment search, or is " \
+                            "rebuilding) — retry shortly, or run `nabu sync` / `nabu rebuild`"
+      NO_FACET_MAP_NOTE = "token senses need the facet map (config/facet_map.yml), which this " \
+                          "server was started without"
 
       INCLUDE_RESTRICTED_SCHEMA = {
         type: "boolean", default: false,
@@ -233,7 +240,14 @@ module Nabu
         "the note names that layer or explains an empty one. `words` (text search only) is the " \
         "Tibetan word-grain filter: keep only hits whose match aligns with word boundaries per " \
         "the nabu-data segmentation dataset (degrades honestly for non-Tibetan queries or an " \
-        "unsynced module). Use nabu_show with a hit's urn for " \
+        "unsynced module). Three further LANES replace the ranked text search (each composes " \
+        "with the args its schema line names, nothing else): `fuzzy: true` — substring/fragment " \
+        "search over the documentary trigram index (]μηνιν αει[, the CLI's --fuzzy); " \
+        "`translations: true` — the query matched against the translations held in passage " \
+        "annotations, hits being the ORIGINAL passages with the matched `layer` (the CLI's " \
+        "--translations); `sense` — the word-sense desk (a DCS WordSem id or sense name → the " \
+        "passages whose tokens cite it, each with its citing tokens; the CLI's `nabu sense`). " \
+        "Use nabu_show with a hit's urn for " \
         "the full passage, nabu_status for what the corpus covers.".freeze
 
       SHOW_DESCRIPTION =
@@ -257,7 +271,13 @@ module Nabu
         "carries `findspot` (both keys absent otherwise — absence of the dump or of the " \
         "enrichment, not a claimed absence of fact). `segmented: true` adds a word-segmented " \
         "rendering of Tibetan (xct/bod/otb) passages as a present-only `segmented` key per " \
-        "passage record; a not-applicable call carries `segmentation_note` instead.".freeze
+        "passage record; a not-applicable call carries `segmentation_note` instead. " \
+        "`senses: true` adds each shown passage's token senses (DCS WordSem ids — the CLI's " \
+        "show --senses): a present-only `senses` list per passage record plus a `sense_entries` " \
+        "map resolving the ids against the sense shelf; a source with no ruled token senses " \
+        "answers `senses_note` instead. The `findspot` block carries the gazetteer's " \
+        "`attribution` (source, license, the place's upstream URI) — preserve it when quoting " \
+        "the place facts.".freeze
 
       CONCORD_DESCRIPTION =
         "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
@@ -567,12 +587,47 @@ module Nabu
                                "anchor[:stage][/variety][@ortho] grammar (lect: \"lat\" matches " \
                                "lat:med; lect: \"lat:med\" matches lat:med and lat:med/xyz, not " \
                                "lat:cla). Errors if the nabu-lects module is not synced on this box." },
+          fuzzy: { type: "boolean", default: false,
+                   description: "Fragment lane (the CLI's search --fuzzy): `query` is a literal " \
+                                "substring/fragment matched over the documentary trigram index " \
+                                "(editorial [ ] stripped, diacritics folded, at least 3 characters " \
+                                "after folding) — not FTS syntax. Hits carry a folded `snippet` " \
+                                "with the match bracketed; `coverage` lists the sources the index " \
+                                "covers. Composes with lang/license/from/to/century/date_basis/" \
+                                "place/kind/facets/limit only." },
+          translations: { type: "boolean", default: false,
+                          description: "Translations lane (the CLI's search --translations): " \
+                                       "`query` (words AND, \"phrase\", prefix*) is matched " \
+                                       "against the translations held in passage ANNOTATIONS " \
+                                       "(coptic, cdli/ebl #tr, hittite-glossed trans_de, corph, …); " \
+                                       "hits are the ORIGINAL passages, each naming the matched " \
+                                       "`layer` with a bracketed `snippet` of it. Composes with " \
+                                       "lang (the original's language)/license/limit only." },
+          sense: { type: "string",
+                   description: "Sense desk (the CLI's `nabu sense TERM`): a sense id (59344, or " \
+                                "comma-joined ids) or a sense NAME matched case-insensitively " \
+                                "against the sense shelf (finger; LIKE wildcards: circum%). " \
+                                "Returns the matched senses (id, headword, gloss, passage count) " \
+                                "and the passages citing them, each with its citing tokens " \
+                                "(form, lemma, ids). Replaces query/lemma; composes with " \
+                                "sense_gloss/limit only." },
+          sense_gloss: { type: "boolean", default: false,
+                         description: "With sense: also match the term inside the sense's gloss " \
+                                      "(\"linear measure\")." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         additionalProperties: false
       }.freeze
+
+      # The search lanes (fuzzy / translations / sense): each composes with
+      # exactly the args its CLI flag composes with (the MCP-available
+      # subset) — anything else is a usage error, never a silent drop.
+      FUZZY_ARGS = %w[fuzzy query lang license from to century date_basis place kind facets limit
+                      include_restricted].freeze
+      TRANSLATIONS_ARGS = %w[translations query lang license limit include_restricted].freeze
+      SENSE_ARGS = %w[sense sense_gloss limit include_restricted].freeze
 
       SHOW_SCHEMA = {
         type: "object",
@@ -595,6 +650,14 @@ module Nabu
                                     "`segmented` key (text with spaces at word boundaries, " \
                                     "tokens verbatim); when not applicable, a top-level " \
                                     "`segmentation_note` says why." },
+          senses: { type: "boolean", default: false,
+                    description: "Add the token senses (DCS WordSem ids) of each shown passage " \
+                                 "(the CLI's show --senses): a passage record gains a " \
+                                 "present-only `senses` list — one row per citing token (form, " \
+                                 "lemma, ids) — and the payload a `sense_entries` map id → " \
+                                 "{headword, gloss} resolved against the sense shelf (an id the " \
+                                 "shelf lacks is absent from the map). A source with no ruled " \
+                                 "token senses answers a top-level `senses_note` instead." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["urn"],
@@ -919,8 +982,13 @@ module Nabu
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
                      enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
                      readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil,
-                     vectors: nil)
+                     vectors: nil, facet_map: nil)
         @catalog = catalog
+        # The facet map (config/facet_map.yml — static, loaded once by the
+        # entrypoint): the token-sense rules behind nabu_search's `sense`
+        # desk and nabu_show's `senses` flag. nil = both answer their honest
+        # note, every other payload byte-identical (the lane-off rule).
+        @facet_map = facet_map
         @fulltext = fulltext
         @alignments = alignments
         # The vector store (P93-5, nabu_search's similar_to): nil
@@ -1026,6 +1094,10 @@ module Nabu
 
       def search(args)
         return similar_neighbors(args) if args["similar_to"]
+        return sense_search(args) unless args["sense"].nil?
+        raise InvalidArguments, "sense_gloss applies with sense only" if args["sense_gloss"] == true
+        return translations_search(args) if args["translations"] == true
+        return fuzzy_search(args) if args["fuzzy"] == true
 
         term, mode = search_term(args)
         morph = search_morph(args, mode)
@@ -1108,6 +1180,106 @@ module Nabu
         note(e.message)
       end
 
+      # The fragment lane (the CLI's search --fuzzy, Query::Fuzzy): literal
+      # substring matching over the documentary trigram index, with the
+      # CLI's composition set. An index-less fulltext is a corpus STATE
+      # (note); a sub-trigram fragment is a usage error.
+      def fuzzy_search(args)
+        lane_conflicts!(args, "fuzzy", FUZZY_ARGS)
+        fragment = string_arg(args, "query") or raise InvalidArguments, "fuzzy needs a query (the fragment)"
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        refused = restricted_license_note(license, include_restricted) and return refused
+
+        from, to, place = search_date(args, :text, nil)
+        date_basis = search_date_basis(args, :text, nil)
+        kind = search_kind(args, :text, nil)
+        facets = (search_facets(args, :text, nil) || {}).merge(kind ? { "kind" => kind } : {})
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        fulltext = resolve(@fulltext)
+        return note(NO_FUZZY_INDEX_NOTE) unless fulltext&.table_exists?(Store::Indexer::TRIGRAM_TABLE)
+
+        limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        searcher = Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(fragment, lang: args["lang"], license: license, limit: limit + 1,
+                                         from: from, to: to, place: place, date_basis: date_basis,
+                                         facets: facets.empty? ? nil : facets)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        shown = results.first(limit)
+        sources = sources_by_urn(catalog, shown.map(&:urn))
+        json(matches: shown.map do |result|
+          { urn: result.urn, language: result.language, license_class: result.license_class,
+            source: sources[result.urn], document: result.document_title, text: truncate(result.text),
+            snippet: result.snippet }
+        end,
+             note: lane_note(results, limit, "fuzzy substring; snippets are diacritic-folded",
+                             searcher.incomplete_hint),
+             coverage: searcher.scope || [])
+      rescue Query::Fuzzy::QueryTooShort => e
+        raise InvalidArguments, e.message
+      end
+
+      # The translations lane (the CLI's search --translations,
+      # Query::TranslationSearch): the annotation-held translations, hits
+      # the ORIGINAL passages. Desk rule: an unbuilt lane is the honest
+      # build-hint note, never a scan.
+      def translations_search(args)
+        lane_conflicts!(args, "translations", TRANSLATIONS_ARGS)
+        query = string_arg(args, "query") or raise InvalidArguments, "translations needs a query"
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        refused = restricted_license_note(license, include_restricted) and return refused
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        searcher = Query::TranslationSearch.new(catalog: catalog, fulltext: resolve(@fulltext))
+        results = searcher.run(query, lang: args["lang"], license: license, limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        shown = results.first(limit)
+        sources = sources_by_urn(catalog, shown.map(&:urn))
+        json(matches: shown.map do |result|
+          { urn: result.urn, language: result.language, license_class: result.license_class,
+            source: sources[result.urn], document: result.document_title, layer: result.layer,
+            snippet: result.snippet, text: truncate(result.text) }.merge(credit_field(result))
+        end,
+             note: lane_note(results, limit, "annotation-held translations; hits are the original passages",
+                             searcher.incomplete_hint),
+             coverage: searcher.scope.map { |slug, passages| { source: slug, passages: passages } })
+      rescue Query::TranslationSearch::IndexMissing => e
+        note(e.message)
+      end
+
+      # The sense desk (the CLI's `nabu sense TERM`, Query::Senses): the
+      # matched senses and the passages citing them, each hit with its
+      # citing tokens. Precompiled pairs only — an unbuilt index or an
+      # absent shelf is a corpus STATE (note), never a scan.
+      def sense_search(args)
+        lane_conflicts!(args, "sense", SENSE_ARGS)
+        term = string_arg(args, "sense") or raise InvalidArguments, "sense needs a sense id or a sense name"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        return note(NO_FACET_MAP_NOTE) unless @facet_map
+
+        include_restricted = args["include_restricted"] == true
+        limit = clamp(args["limit"], default: Query::Senses::DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        result = Query::Senses.new(catalog: catalog, facet_map: @facet_map)
+                              .run(term, gloss: args["sense_gloss"] == true, limit: limit)
+        licenses = licenses_by_urn(catalog, result.hits.map(&:urn))
+        hits = result.hits.reject { |hit| withhold?(licenses[hit.urn], include_restricted) }
+        json(type: "sense", query: result.query, sense_total: result.sense_total,
+             passage_total: result.passage_total,
+             senses: result.senses.map do |sense|
+               { id: sense.id, shelf: sense.shelf, urn: sense.urn, headword: sense.headword,
+                 gloss: sense.gloss, passages: sense.passages }
+             end,
+             matches: hits.map do |hit|
+               { urn: hit.urn, language: hit.language, license_class: licenses[hit.urn], source: hit.source,
+                 text: truncate(hit.text), tokens: hit.tokens.map { |token| sense_token_row(token) } }
+             end,
+             note: sense_note(result, hits))
+      rescue Query::Senses::Error => e
+        note(e.message)
+      end
+
       def show(args)
         urn = string_arg(args, "urn") or raise InvalidArguments, "nabu_show needs a urn"
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
@@ -1129,6 +1301,7 @@ module Nabu
                   when Query::Define::Result then define_payload(result)
                   end
         payload = segmented_payload(query, result, payload) if args["segmented"] == true
+        payload = senses_payload(catalog, result, payload) if args["senses"] == true
         # Owner notes ride BY DEFAULT (P24-1: "your own library metadata is
         # useful context") — and only here, after the withhold gate, so a
         # note can never leak a withheld text's content frame.
@@ -2446,7 +2619,14 @@ module Nabu
         return {} unless result.respond_to?(:findspot) && result.findspot
 
         spot = result.findspot
-        { findspot: { pleiades_id: spot.id, title: spot.title, place_types: spot.place_types } }
+        block = { pleiades_id: spot.id, title: spot.title, place_types: spot.place_types }
+        # The reference envelope (contract bump 2026-10-22): the served
+        # gazetteer facts carry the gazetteer's attribution — source,
+        # license verbatim from its manifest, the place's upstream URI —
+        # exactly as the nabu_place card does.
+        attribution = Envelope.place_attribution("pleiades", spot.id)
+        block[:attribution] = attribution if attribution
+        { findspot: block }
       end
 
       # The timeline block (P76 U-2 — the uncertainty survey's biggest
@@ -2575,6 +2755,120 @@ module Nabu
         else
           payload
         end
+      end
+
+      # nabu_show `senses` (the CLI's show --senses, Query::Senses): each
+      # shown passage's citing tokens, read off the annotations the show
+      # already loaded (no index needed), as a present-only `senses` list
+      # per passage record; every cited id the shelf holds resolves once in
+      # the top-level `sense_entries` map. Not applicable (no facet map, a
+      # dictionary entry, a source with no ruled token senses): one
+      # top-level `senses_note`. Flag off = byte-identical payloads.
+      def senses_payload(catalog, result, payload)
+        return payload.merge(senses_note: NO_FACET_MAP_NOTE) unless @facet_map
+        return payload.merge(senses_note: "token senses apply to corpus passages only") \
+          unless result.respond_to?(:source_slug)
+
+        senses = Query::Senses.new(catalog: catalog, facet_map: @facet_map)
+        if senses.misc_keys(result.source_slug).empty?
+          return payload.merge(senses_note: "no token senses are ruled for #{result.source_slug} " \
+                                            "(config/facet_map.yml token_fields)")
+        end
+
+        payload, ids = case result
+                       when Query::Show::PassageResult then passage_senses(senses, result, payload)
+                       else listed_senses(senses, result, payload)
+                       end
+        return payload.merge(senses_note: "no token senses stored for the shown passage(s)") if ids.empty?
+
+        entries = senses.entries_for(ids)
+        payload.merge(sense_entries: entries.sort_by { |id, _| [id.to_i, id] }.to_h do |id, entry|
+          [id, { headword: entry.headword, gloss: entry.gloss }]
+        end)
+      end
+
+      def passage_senses(senses, result, payload)
+        cited = senses.token_senses(result.annotations, source: result.source_slug)
+        return [payload, []] if cited.empty?
+
+        [payload.merge(senses: cited.map { |token, ids| sense_token_row(token, ids) }), cited.flat_map(&:last)]
+      end
+
+      # The listed passages (document/range payloads) zip the result's
+      # passage lines in order — passage_lines kept them aligned.
+      def listed_senses(senses, result, payload)
+        ids = []
+        lines = payload.fetch(:passages).each_with_index.map do |line, index|
+          cited = senses.token_senses(result.passages.fetch(index).annotations, source: result.source_slug)
+          next line if cited.empty?
+
+          ids.concat(cited.flat_map(&:last))
+          line.merge(senses: cited.map { |token, ids_of| sense_token_row(token, ids_of) })
+        end
+        [payload.merge(passages: lines), ids.uniq]
+      end
+
+      # One citing token: {form, lemma, ids} — lemma dropped when it is the
+      # form itself (the CLI's "form (lemma)" rule).
+      # +token+ is a stored token hash (with its +ids+) or a Senses::Token.
+      def sense_token_row(token, ids = nil)
+        form, lemma = token.is_a?(Hash) ? token.values_at("form", "lemma") : [token.form, token.lemma]
+        ids ||= token.ids
+        row = { form: form }
+        row[:lemma] = lemma unless lemma.nil? || lemma == form
+        row.merge(ids: ids)
+      end
+
+      def sense_note(result, hits)
+        return "no indexed sense matches #{result.query.inspect} (an id, or a sense name)" if result.sense_total.zero?
+
+        parts = ["#{result.sense_total} sense(s), #{result.passage_total} passage(s)"]
+        listed = result.senses.size
+        parts << "showing the #{listed} most-attested senses" if listed < result.sense_total
+        parts << "showing #{result.hits.size} passage(s) — raise limit" if result.hits.size < result.passage_total
+        withheld = result.hits.size - hits.size
+        parts << "#{withheld} withheld (restricted license class)" if withheld.positive?
+        parts.join(" — ")
+      end
+
+      # The lane composition check: any arg outside +allowed+ that is
+      # actually set (not nil/false) is refused, named.
+      def lane_conflicts!(args, lane, allowed)
+        clash = args.reject { |key, value| allowed.include?(key) || value.nil? || value == false }.keys
+        return if clash.empty?
+
+        raise InvalidArguments, "#{lane} composes with #{(allowed - [lane]).join('/')} only (not #{clash.join(', ')})"
+      end
+
+      def restricted_license_note(license, include_restricted)
+        return nil unless license && EXCLUDED_LICENSE_CLASSES.include?(license) && !include_restricted
+
+        note("license class #{license} is excluded by default from this surface (it must never leak " \
+             "casually); pass include_restricted: true to search it deliberately")
+      end
+
+      def lane_note(results, limit, lane, incomplete)
+        line = if results.empty?
+                 "no matches (#{lane})"
+               elsif results.size > limit
+                 "more than #{limit} matches, showing #{limit} — raise limit (max #{SEARCH_MAX_LIMIT}) or refine " \
+                   "(#{lane})"
+               else
+                 "#{results.size} matches, showing #{results.size} (#{lane})"
+               end
+        incomplete ? "#{line} — #{incomplete}" : line
+      end
+
+      # Effective license class per passage urn (override beats source).
+      def licenses_by_urn(catalog, urns)
+        return {} if urns.empty?
+
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:urn] => urns)
+          .select(Sequel[:passages][:urn].as(:urn), license_expr.as(:license_class))
+          .as_hash(:urn, :license_class)
       end
 
       # Every listed passage carries language + license_class: both are
