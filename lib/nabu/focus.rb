@@ -173,7 +173,9 @@ module Nabu
     end
 
     # A gap up to this size is NAMED in the footer; beyond it the count
-    # summary stands. A fresh box hides ~90 sources — naming them all is the
+    # summary stands. A fresh box hides ~275 of the registry's 286 rows
+    # (2026-10-22: only the 4 quickstart starters and the owner's 5 shelves
+    # show) — naming them all is the
     # name dump the owner refused — but "1 source not enabled" with no name
     # is a guessing game (owner report 2026-07-24, P44-i2).
     FOOTER_NAME_CAP = 6
