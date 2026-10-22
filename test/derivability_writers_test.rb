@@ -160,6 +160,19 @@ class DerivabilityWritersTest < Minitest::Test
   # pages as texts/<kood>/*.html.gz, gzip tmp+rename, plus its
   # .vakk-crawl.json ledger) inside Adapter#fetch — the ndl-kotenseki
   # crawl law kind.
+  # model_shelf (the model-output convention) is the SEVENTH local-shelf gateway: it writes paid
+  # model output + per-run provenance (config.json tmp+rename once per
+  # run; costs.tsv / outputs.jsonl append-only, fsynced per call; the
+  # torn.log set-aside) under local/shelves/local-model-output/ — the
+  # shelf-gateway law kind (non-derivable: money to regenerate).
+  # model_budget (same convention) writes ONE instance file,
+  # local/config/model_budget.yml (tmp+rename), driven by `nabu
+  # model-budget --cap` and ModelCall's per-call spend booking — the
+  # local/config write-through law kind (the shed_acceptance sibling).
+  # ops/parallels_bench writes its machine-readable sidecar (one JSON
+  # report) to the caller-named path, default db/bench/ — the DERIVED
+  # law kind (a deterministic function of catalog + links + seed + code;
+  # deletable, a rerun re-mints it).
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   # The scan-indexed wikisource base (indexed_wikisource) commits its held
@@ -214,6 +227,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/data_build/places_lpf_builder.rb nabu/data_build/readme_index.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
     nabu/canonical_identity_cache.rb nabu/git_identity_cache.rb
+    nabu/model_shelf.rb nabu/model_budget.rb nabu/ops/parallels_bench.rb
   ].freeze
 
   def test_file_writers_are_allowlisted
