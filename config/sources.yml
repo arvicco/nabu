@@ -5750,6 +5750,29 @@ ticha:   # P117-5, 02-sources row 254
   # transcriptions — mostly the period Spanish translations (Ticha's *T
   # ids) of Zapotec testaments and bills of sale; text_role per document.
 
+tipitaka-lk:   # 02-sources row 308
+  adapter: Nabu::Adapters::TipitakaLk
+  adopted: "2026-10-22"
+  axes: [indic, buddhist]
+  siblings: ["-si"]   # census claim: no upstream filename ends in -si (285 files, 2026-10-22)
+  wired: false   # awaiting the first sync: sparse GitFetch cone public/static/text
+                 # (285 JSON files, 355.6 MB at commit 4fe56eb) — expect 563 docs
+                 # (285 pli roots + 278 si siblings; the 7 ap-pat files are Pali-only);
+                 # then eyeball nabu show urn:nabu:tipitaka-lk:kn-khp:2.7 --parallel si,
+                 # an atta- paragraph's bold/footnote annotations and 5 random passages.
+  # tipitaka.lk (Path Nirvana): the proofread Buddha Jayanthi Tripitaka in
+  # Sinhala-script Pali with its facing Sinhala translation, and the CST
+  # atthakatha + Visuddhimagga with their Sinhala translation
+  # (github.com/pathnirvana/tipitaka.lk, public/static/text/*.json).
+  # Document = upstream file x layer: the pli root + its -si sibling,
+  # passage = one printed-page entry, cited <page>.<entry> on both layers.
+  # License: CC BY-ND 4.0 + upstream's sync condition (LICENSE.md, the
+  # Pali text); the Sinhala translation and the atthakatha layers by Path
+  # Nirvana's grant on the same terms (by email, 2026-10-22) →
+  # research_private (ND). The sync condition asks for regular automated
+  # re-pulls (errors are corrected upstream, never locally) → auto.
+  sync_policy: auto
+
 tir:
   adapter: Nabu::Adapters::Tir
   adopted: "2026-07-18"

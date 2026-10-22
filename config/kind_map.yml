@@ -223,6 +223,13 @@ sources:
       "sutta": scripture                         # 5,991
       "vinaya": scripture                        # 422
       "abhidhamma": scripture                    # 1,169
+  tipitaka-lk:        # upstream's own collection split (census 2026-10-22, 285 files):
+    facet: collection # the Sinhala -si translation siblings carry no facet and fold to nothing
+    map:
+      "mula": scripture                          # the Buddha Jayanthi canon (vp/dn/mn/sn/an/kn/ap files)
+      "atta": exegesis                           # the CST aṭṭhakathā — commentary ON the canon
+      #   (the kanripo 'grel pa / sefaria Rishonim precedent); upstream also files the
+      #   Visuddhimagga (anya-vm*) here, Buddhaghosa's commentarial summa — kept with it
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:
