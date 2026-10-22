@@ -81,8 +81,8 @@ module Nabu
       run_id = superseded = nil
       @journal.transaction do
         superseded = Store::LinksJournal.supersede!(@journal, producer: producer, scope: slug)
-        run_id = Store::LinksJournal.record_run!(@journal, producer: producer, scope: slug,
-                                                           params: { kind: KIND }, code_version: CODE_VERSION)
+        run_id = Store::LinksJournal.record_run!(@journal, producer: producer, scope: slug, params: { kind: KIND },
+                                                           code_version: self.class::CODE_VERSION)
         write_edges(slug, run_id, counts)
       end
       Result.new(scope: slug, run_id: run_id,
