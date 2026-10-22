@@ -65,9 +65,12 @@ module Nabu
     # lemmas. With the sibling, "lemma" carries CorA's <lemma> citation
     # form ("wër(e)lt", "dër") and "lemma_idmwb" its Mittelhochdeutsches
     # Wörterbuch id ("225300000") verbatim; the TEI-derived "norm" stays
-    # under its own key. The other CorA token lanes (pos_gen, lemma_gen,
-    # inflClass…) are not read; the element header feeds the dating lane
-    # (below). A tree without the sibling (every canonical tree fetched
+    # under its own key. Every other CorA token lane rides too (widened
+    # 2026-10-22 — censused in CORA_TAGS): CorA's normalized form as
+    # "norm_cora" (the true normalization the pre-switch "lemma" carried,
+    # restored beside the TEI norm rather than lost), the generalized tier
+    # (lemma_gen/pos_gen/inflClass_gen), inflClass, punc and token_type.
+    # The element header feeds the dating lane (below). A tree without the sibling (every canonical tree fetched
     # before the arm existed) keeps the TEI fallback and parses exactly as
     # before — test-pinned.
     #
@@ -133,9 +136,26 @@ module Nabu
 
       # CorA tok_anno children merged into the TEI token records (CorA
       # element → record key); "lemma" OVERRIDES the TEI @lemma (the
-      # normalized form — class note).
+      # normalized form — class note). Every child the tree carries rides
+      # (censused 2026-10-22 over all 406 files, 2,579,276 tok_anno; filled
+      # = non-null): pos 2,457,468 · infl 1,477,979 · lemma 2,291,070 ·
+      # lemma_idmwb 2,070,981 — and the widened lanes, verbatim under
+      # upstream's names: norm 2,267,369 (CorA's NORMALIZED form, keyed
+      # "norm_cora" because the TEI-derived "norm" — which is CorA's ascii
+      # form, class note — already owns "norm" and stays untouched; the
+      # dss "_etcbc" provenance-suffix discipline), lemma_gen 2,291,072 /
+      # pos_gen 2,457,518 / inflClass_gen 795,262 (upstream's generalized
+      # tier beside the specific one), inflClass 795,719, punc 443,389
+      # (the modern-punctuation lane, ReF's key) and token_type 170,242
+      # (MS1/MS2… segments of a split diplomatic token, UL/US/UH…).
+      # tok_anno's own attributes are not read: utf is the TEI surface,
+      # ascii the TEI norm, trans the transcription-internal encoding
+      # (the ReF drop).
       CORA_TAGS = { "pos" => "pos", "infl" => "msd", "lemma" => "lemma",
-                    "lemma_idmwb" => "lemma_idmwb" }.freeze
+                    "lemma_idmwb" => "lemma_idmwb", "norm" => "norm_cora",
+                    "lemma_gen" => "lemma_gen", "pos_gen" => "pos_gen",
+                    "inflClass" => "inflClass", "inflClass_gen" => "inflClass_gen",
+                    "punc" => "punc", "token_type" => "token_type" }.freeze
 
       # CorA's null placeholder ("--"), never a value.
       CORA_NULL = /\A-+\z/
