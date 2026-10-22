@@ -4,6 +4,7 @@ require "digest"
 require "json"
 
 require_relative "slavic_wikisource_html"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -45,6 +46,32 @@ module Nabu
     # namespace, then prop=proofread): a histogram {"0".."4", "missing"}
     # → metadata "proofread" (levels + the lowest level holding text).
     # The level is RECORDED, never a filter — the census reads it.
+    #
+    # == The persisted cone (cone.json — a declared materialization)
+    #
+    # The tree must carry everything discovery needs (the weak-identity
+    # rule), so a parse-only pass re-derives exactly the live cone:
+    #
+    # - The fetch is all-or-nothing on canonical: every stage builds its
+    #   envelopes in memory and nothing is written until the last stage
+    #   lands. (2026-10-21, br-wikisource: a transport timeout mid-fetch
+    #   had already rewritten the 643 envelopes sorting before the failing
+    #   batch as stage-1 shells — no Index evidence, no rendering — and the
+    #   next parse-only pass classed them out; the mass-deletion breaker
+    #   caught it.)
+    # - After the envelopes, CONE_FILE records the cone the fetch drew:
+    #   "pages" (pageid → title, every envelope this fetch wrote) and
+    #   "indexes" (the Index verdict table: every Index the walk judged,
+    #   with its year evidence and in_cone verdict — the dated cones
+    #   record their whole allpages walk, the named-Index cones their
+    #   CONE[:indexes]).
+    # - Discovery reads it: a listed page without its envelope, or any
+    #   envelope lacking the Index stage (a stage-1 shell), stops discovery
+    #   with a FetchError — never a silently smaller cone; an envelope the
+    #   last fetch no longer drew (the page left the cone upstream) skips
+    #   by rule (outside_cone). A tree fetched before the sidecar existed
+    #   discovers from its envelopes' own evidence, under the same
+    #   stage-1-shell guard; its next fetch writes the sidecar.
     class IndexedWikisource < SlavicWikisourceHtml
       INDEX_NS = "Index"
       PAGE_NS = 104
@@ -57,6 +84,7 @@ module Nabu
       EXCLUDED_INDEXES = {}.freeze
       REQUIRE_EDITION_YEAR = false
       QUALITY_KEYS = %w[0 1 2 3 4 missing].freeze
+      CONE_FILE = "cone.json"
       # Index roles that ride index_editions but never the edition statement
       # (workflow status, file type, the scan's contents list).
       STATEMENT_SKIP_ROLES = %w[progress source language notes remarks].freeze
@@ -65,8 +93,12 @@ module Nabu
         excluded_index: "page(s) transcluding a censused excluded Index — each with its reason in " \
                         "EXCLUDED_INDEXES",
         edition_unstated: "page(s) whose edition states no year — an undated edition cannot pass " \
-                          "EDITION_TAINT_POST_1930 (excluded by rule)"
+                          "EDITION_TAINT_POST_1930 (excluded by rule)",
+        outside_cone: "page(s) outside the cone the last fetch drew (CONE_FILE) — the page left the " \
+                      "cone upstream; its envelope stays, never re-admitted"
       ).freeze
+
+      def self.materialized_paths = [CONE_FILE]
 
       # -- the rules ---------------------------------------------------------
 
@@ -76,6 +108,8 @@ module Nabu
 
       # The envelope's rule class before any rendering (nil = admitted).
       def envelope_class(envelope)
+        return :outside_cone if @persisted_cone && !@persisted_cone.key?(envelope.fetch("pageid").to_s)
+
         wikitext_class(envelope.fetch("title"), envelope.fetch("wikitext")) || index_class(envelope)
       end
 
@@ -109,7 +143,13 @@ module Nabu
 
       # -- fetch -------------------------------------------------------------
 
+      # All-or-nothing on canonical (class note): the stages' envelope
+      # writes are held until the last stage lands, then the envelopes,
+      # the cone sidecar, and the state file go down in that order.
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+        @persisted_cone = nil
+        @held_envelopes = {}
+        @index_verdicts = {}
         cone = cone_titles(progress)
         progress&.call("Cone: #{cone.size} page(s)\n")
         pins = {}
@@ -118,11 +158,16 @@ module Nabu
         attach_indexes!(workdir, envelopes, pins, progress)
         render!(workdir, envelopes, pins, progress)
         attach_quality!(workdir, envelopes, pins, progress)
+        commit_envelopes!(workdir)
+        write_cone!(workdir, envelopes)
         sha = Digest::SHA256.hexdigest(JSON.generate(pins.transform_keys(&:to_s).sort.to_h))
         write_state!(workdir, sha)
         Nabu::FetchReport.new(sha: sha, fetched_at: Time.now,
                               notes: "pages: #{envelopes.size} envelope(s) over a #{cone.size}-title cone, " \
                                      "revid + Index + rendering + proofread levels pinned")
+      ensure
+        @held_envelopes = nil
+        @index_verdicts = nil
       end
 
       private
@@ -261,11 +306,81 @@ module Nabu
         parts
       end
 
+      # Discovery internals ----------------------------------------------------
+
+      # The tree's envelopes, checked against the persisted cone (class
+      # note): an incomplete tree stops discovery loudly.
+      def envelope_paths(workdir)
+        paths = super
+        @persisted_cone = read_cone(workdir)
+        check_listed_pages!(workdir, paths) if @persisted_cone
+        shells = paths.reject { |path| read_envelope(path).key?("indexes") }
+        unless shells.empty?
+          raise Nabu::FetchError,
+                "#{workdir}: #{shells.size} envelope(s) lack the Index stage (e.g. " \
+                "#{File.basename(shells.min)}) — the tree holds an interrupted fetch's stage-1 shells; " \
+                "re-run the fetch (a parse-only pass would shrink the cone)"
+        end
+        paths
+      end
+
+      def check_listed_pages!(workdir, paths)
+        held = paths.to_h { |path| [File.basename(path, ".json"), true] }
+        missing = @persisted_cone.keys.reject { |pageid| held.key?(pageid) }
+        return if missing.empty?
+
+        raise Nabu::FetchError,
+              "#{workdir}: #{missing.size} page(s) the last fetch drew have no envelope (e.g. #{missing.min}) " \
+              "— #{CONE_FILE} and #{PAGES_DIRNAME}/ disagree; re-run the fetch"
+      end
+
+      # pageid (string) → title, or nil for a tree that predates the sidecar.
+      def read_cone(workdir)
+        path = File.join(workdir, CONE_FILE)
+        return nil unless File.file?(path)
+
+        JSON.parse(SourceRead.utf8_file(path, label: "cone sidecar")).fetch("pages")
+      rescue JSON::ParserError, KeyError, Nabu::ParseError => e
+        raise Nabu::FetchError, "#{path}: unreadable cone sidecar: #{e.message} — re-run the fetch"
+      end
+
+      def corpus_path?(rel) = rel == CONE_FILE || super
+
       # Fetch internals --------------------------------------------------------
+
+      # Held during a fetch (class note); written through otherwise.
+      def write_envelope!(workdir, envelope)
+        return super if @held_envelopes.nil?
+
+        @held_envelopes[envelope.fetch("pageid")] = envelope
+      end
+
+      def commit_envelopes!(workdir)
+        held = @held_envelopes
+        @held_envelopes = nil
+        held.each_value { |envelope| write_envelope!(workdir, envelope) }
+      end
+
+      def write_cone!(workdir, envelopes)
+        cone = {
+          "pages" => envelopes.values.sort_by { |envelope| envelope.fetch("pageid") }
+                              .to_h { |envelope| [envelope.fetch("pageid").to_s, envelope.fetch("title")] },
+          "indexes" => @index_verdicts.sort.to_h
+        }
+        target = File.join(workdir, CONE_FILE)
+        File.binwrite("#{target}.tmp", "#{JSON.pretty_generate(cone)}\n")
+        File.rename("#{target}.tmp", target)
+      end
+
+      # One walked Index's verdict row for the sidecar (a no-op outside a fetch).
+      def record_index_verdict(name, year:, in_cone:)
+        @index_verdicts[name] = { "year" => year, "in_cone" => in_cone } if @index_verdicts
+      end
 
       def cone_titles(progress)
         cone = super
         self.class::CONE.fetch(:indexes, []).each do |name|
+          record_index_verdict(name, year: nil, in_cone: true)
           embedding_titles("#{self.class::INDEX_NS}:#{name}").each { |title| cone[title] << "index:#{name}" }
           progress&.call("index #{name}: cone at #{cone.size} page(s)\n")
         end
