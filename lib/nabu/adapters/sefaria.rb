@@ -385,6 +385,10 @@ module Nabu
                   urn_axis: true, fetch_versions: nil)
       ].freeze
 
+      # The category-path joiner for the "genre" metadata field (the
+      # gretil ladder's; never one of kind_map's composite splitters).
+      GENRE_SEPARATOR = " -- "
+
       # One discovery walk's yield: refs for licensed named versions, the
       # rule-skip count, and unrecognized notes for unreadable files.
       ScanResult = Data.define(:refs, :skipped, :notes)
@@ -604,6 +608,11 @@ module Nabu
       # prefix (targum: ["Tanakh", "Targum", <subshelf>, <division?>], the
       # P30-3 shape byte-unchanged; mishnah: [<seder>]; bavli/yerushalmi:
       # [<seder>]; tosefta: [<edition>, <seder>]).
+      # "genre" is the WHOLE category path joined " -- " (the gretil ladder
+      # shape): the kind fold's input. The head alone cannot tell the
+      # Rishonim-on-Tanakh commentaries (exegesis) from the targums
+      # (scripture) — both file under "Tanakh" — so config/kind_map.yml
+      # folds this field by prefix instead of categories[0].
       def document_metadata(metadata)
         categories = metadata["categories"] || []
         shelf = self.class.shelf_for(categories, title: metadata["title"])
@@ -615,6 +624,7 @@ module Nabu
           "version_title" => metadata["version_title"],
           "license" => metadata["license"],
           "categories" => categories.empty? ? nil : categories,
+          "genre" => categories.empty? ? nil : categories.join(GENRE_SEPARATOR),
           "he_title" => metadata["he_title"],
           "version_source" => metadata["version_source"],
           "facets" => facets.empty? ? nil : facets

@@ -467,12 +467,13 @@ sources:
     deliberate:
       "Clay tablet inscription": "an object description, not a genre"  # 46 (P105-6)
   # -- metadata graduations (P100-1): fields read from metadata_json ------
-  sefaria:            # categories[0] = the top-level category (hierarchy head)
-    metadata: categories
-    map:
-      "Tanakh": scripture                        # 103 — NB the fold reads categories[0] only, so
-      #   the P140 Rishonim-on-Tanakh commentary shelf (536 docs) rides this head too: a
-      #   declared coarseness (exegesis is the truer class; the rule cannot see past the head)
+  sefaria:            # genre = the DEEP category path, " -- "-joined at parse ("Tanakh --
+    metadata: genre   # Rishonim on Tanakh -- Rashi -- Torah"); first-hit prefix rules, so the
+    #                   deeper exceptions precede their head. Counts are the head-only census.
+    prefix_map:
+      "Tanakh -- Rishonim on Tanakh": exegesis   # 536 — the medieval Bible commentaries (Rashi,
+      #   Ibn Ezra, Ramban, Radak …): commentary ON scripture, filed under the Tanakh head
+      "Tanakh": scripture                        # 103 — the targums (Aramaic scripture renderings)
       "Mishnah": scripture                       # 336
       "Tosefta": scripture                       # 100
       "Talmud": exegesis                         # 300
