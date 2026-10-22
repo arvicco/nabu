@@ -1,0 +1,75 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Text pages are whole as served (2026-10-21); the listing fixtures are
+# documented text-card splices. adapter_test is null: the site is living
+# (versions bump, listings grow), so a re-run against fresh pages would
+# false-fail the content pins.
+source: lotsawa-house
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: pages/bo/tibetan-masters/mipham/instruction-on-point-of-mind.html
+    url: https://www.lotsawahouse.org/bo/tibetan-masters/mipham/instruction-on-point-of-mind
+    whole: true
+    trim: none
+  - path: pages/en/tibetan-masters/mipham/instruction-on-point-of-mind.html
+    url: https://www.lotsawahouse.org/tibetan-masters/mipham/instruction-on-point-of-mind
+    whole: true
+    trim: none
+  - path: pages/bo/tibetan-masters/mipham/acala-sadhana.html
+    url: https://www.lotsawahouse.org/bo/tibetan-masters/mipham/acala-sadhana
+    whole: true
+    trim: none
+  - path: pages/en/tibetan-masters/mipham/acala-sadhana.html
+    url: https://www.lotsawahouse.org/tibetan-masters/mipham/acala-sadhana
+    whole: true
+    trim: none
+  - path: pages/bo/words-of-the-buddha/amitayus-dharani.html
+    url: https://www.lotsawahouse.org/bo/words-of-the-buddha/amitayus-dharani
+    whole: true
+    trim: none
+  - path: pages/en/words-of-the-buddha/amitayus-dharani.html
+    url: https://www.lotsawahouse.org/words-of-the-buddha/amitayus-dharani
+    whole: true
+    trim: none
+  - path: pages/nl/indian-masters/atisha/prayer-to-tara.html
+    url: https://www.lotsawahouse.org/nl/indian-masters/atisha/prayer-to-tara
+    whole: true
+    trim: none
+  - path: pages/zh/indian-masters/tilopa/ganges-mahamudra-instruction.html
+    url: https://www.lotsawahouse.org/zh/indian-masters/tilopa/ganges-mahamudra-instruction
+    whole: true
+    trim: none
+  - path: pages/fr/tibetan-masters/alak-zenkar/patrul-biography.html
+    url: https://www.lotsawahouse.org/fr/tibetan-masters/alak-zenkar/patrul-biography
+    whole: true
+    trim: none
+  - path: catalog/en/tibetan-masters/mipham.html
+    url: https://www.lotsawahouse.org/tibetan-masters/mipham/
+    whole: false
+    trim: text-card splice — kept instruction-on-point-of-mind and acala-sadhana (2 of 141 cards); a byte copy of fetch/en-mipham.html under the crawl's catalog name
+  - path: fetch/en-index.html
+    url: https://www.lotsawahouse.org/free-translations-tibetan-buddhist-texts
+    whole: false
+    trim: text-card splice — kept the Mipham author card (1 of 687)
+  - path: fetch/bo-index.html
+    url: https://www.lotsawahouse.org/bo/free-translations-tibetan-buddhist-texts
+    whole: false
+    trim: text-card splice — kept the Mipham author card (1 of 685)
+  - path: fetch/en-mipham.html
+    url: https://www.lotsawahouse.org/tibetan-masters/mipham/
+    whole: false
+    trim: text-card splice — kept instruction-on-point-of-mind and acala-sadhana (2 of 141)
+  - path: fetch/bo-mipham.html
+    url: https://www.lotsawahouse.org/bo/tibetan-masters/mipham/
+    whole: false
+    trim: text-card splice — kept instruction-on-point-of-mind and acala-sadhana (2 of 141)
+  - path: fetch/en-wotb.html
+    url: https://www.lotsawahouse.org/words-of-the-buddha/
+    whole: false
+    trim: text-card splice — kept amitayus-dharani (1 of 58)
+  - path: fetch/bo-wotb.html
+    url: https://www.lotsawahouse.org/bo/words-of-the-buddha/
+    whole: false
+    trim: text-card splice — kept amitayus-dharani (1 of 58)

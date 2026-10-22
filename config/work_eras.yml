@@ -163,3 +163,56 @@ sources:
       "心经": {era: 唐, note: "Xuanzang's translation, 649"}
       "文昌孝经": {note: "CONTESTED, left undated: a Daoist morality scripture revealed under
         Wenchang's name; no secure composition era (Song to Ming proposals)"}
+  gretil-legacy:
+    # GRETIL's legacy Prakrit and New Indo-Aryan e-texts (21 admitted
+    # files), keyed on metadata "work" = the GRETIL file stem. The headers
+    # carry print years of the editions only, so each work's attributed
+    # composition era is ruled here, explicit envelopes (no Indic rows in
+    # period_bands.yml). Handbook basis: Dundas, The Jains (2002) and
+    # Jacobi for the canon; Ollett, Language of the Snakes (2017) for
+    # Hāla; McGregor, Hindi Literature from its Beginnings (1984) for the
+    # Hindi works; the colophons where they date themselves.
+    key: work
+    works:
+      # -- the Śvetāmbara canon (Ardhamāgadhī) ------------------------------
+      ayarangu: {band: [-300, 466], label: "Āgama strata → Valabhī redaction", note: "Āyāraṅga I is
+        counted among the canon's oldest strata (late centuries BCE); the canon was fixed at the
+        Valabhī council (453 or 466 CE) — the conventional envelope"}
+      suyagadu: {band: [-300, 466], label: "Āgama strata → Valabhī redaction", note: "the second
+        aṅga, book I among the old strata; fixed at Valabhī (453/466) — the envelope"}
+      uttaraju: {band: [-300, 466], label: "Āgama strata → Valabhī redaction", note: "a mūlasūtra
+        with old verse layers; fixed at Valabhī (453/466) — the envelope"}
+      dasaveyu: {band: [-300, 466], label: "Āgama strata → Valabhī redaction", note: "attributed to
+        Sejjaṃbhava (traditionally 4th c. BCE); fixed at Valabhī (453/466) — the envelope"}
+      isibhasu: {band: [-300, 466], label: "Āgama strata → Valabhī redaction", note: "the sayings of
+        the seers, held among the oldest canonical texts; fixed at Valabhī (453/466) — the envelope"}
+      # -- Prakrit kāvya and Apabhraṃśa ------------------------------------
+      halsatsu: {band: [1, 500], label: "Sātavāhana core", note: "attributed to the Sātavāhana king
+        Hāla (traditionally 1st c. CE); the anthology's core is dated to the first centuries CE
+        (Ollett 2017). Weber's text also carries later recensions and an appendix of alaṃkāra
+        citations — the core's envelope, declared"}
+      hadhut_u: {band: [700, 800], label: "8th c.", note: "Haribhadra Sūri, dated c. 700–770
+        (Jinavijaya), against the traditional 5th–6th c."}
+      spaucaru: {band: [800, 950], label: "9th–10th c.", note: "Svayambhū(deva); Bhayani's edition
+        calls it a pre-tenth-century epic — the 9th to early 10th c."}
+      # -- New Indo-Aryan ----------------------------------------------------
+      tulrcm1u: {band: [1574, 1577], label: "1574–1577", note: "Tulsidas began the Rāmcaritmānas in
+        VS 1631 (1574 CE) at Ayodhya and completed it within some two years"}
+      tulrcm2u: {band: [1574, 1577], label: "1574–1577", note: "the Rāmcaritmānas (as tulrcm1u)"}
+      tulrcm3u: {band: [1574, 1577], label: "1574–1577", note: "the Rāmcaritmānas (as tulrcm1u)"}
+      tulrcm4u: {band: [1574, 1577], label: "1574–1577", note: "the Rāmcaritmānas (as tulrcm1u)"}
+      tulrcm5u: {band: [1574, 1577], label: "1574–1577", note: "the Rāmcaritmānas (as tulrcm1u)"}
+      tulrcm6u: {band: [1574, 1577], label: "1574–1577", note: "the Rāmcaritmānas (as tulrcm1u)"}
+      tulrcm7u: {band: [1574, 1577], label: "1574–1577", note: "the Rāmcaritmānas (as tulrcm1u)"}
+      tulkav_u: {band: [1560, 1623], label: "Tulsidas's working life", note: "the Kavitāvalī's
+        late poems allude to the plague of Banaras (1610s); envelope to the poet's death (1623)"}
+      tuldoh_u: {band: [1560, 1623], label: "Tulsidas's working life", note: "the Dohāvalī is a
+        compilation of Tulsidas's dohās, many shared with the Mānas — the poet's span"}
+      kutmir_u: {band: [1503, 1504], label: "AH 909", note: "Qutban dates the Mirigāvatī to AH 909
+        (1503–04), at the Jaunpur court of Ḥusain Shāh Sharqī"}
+      hdas_u: {band: [1500, 1600], label: "16th c.", note: "Svāmī Haridās of Vrindavan, fl. 16th c.
+        (Rosenstein 1997)"}
+      bardhkpu: {band: [1641, 1641], label: "VS 1698", note: "Banārasīdās completed his
+        autobiography in VS 1698 (1641 CE) — the poem's own date"}
+      "jna1-16u": {band: [1290, 1290], label: "Śaka 1212", note: "Jñāneśvara completed the
+        Jñāneśvarī in Śaka 1212 (1290 CE) at Nevāsā, by its own colophon"}

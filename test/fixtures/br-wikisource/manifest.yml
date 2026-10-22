@@ -1,0 +1,50 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# Envelopes are the adapter's own on-disk shape around api.php captures —
+# no per-file raw GET URL exists for the envelope form.
+source: br-wikisource
+adapter_test:
+retrieved: "2026-10-21"
+files:
+  - path: pages/123.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + Index + action=parse + proofread) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: pages/16516.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + Index + action=parse + proofread) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: pages/24543.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture (revisions + Index + action=parse + proofread) wrapped in the adapter envelope — re-cut per README
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: pages/27457.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope; the rendering TRIMMED at a paragraph boundary (see README) — re-cut per README
+    copied: "2026-10-21"
+    whole: false
+    trim: html cut at the first </p> after 12,000 characters (the page class is unchanged)
+  - path: pages/32386.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-21"
+    whole: true
+    trim: none
+  - path: pages/60077.json
+    refetchable: false
+    provenance: local-trim
+    reason: api.php capture wrapped in the adapter envelope (excluded page — no rendering) — re-cut per README
+    copied: "2026-10-21"
+    whole: true
+    trim: none

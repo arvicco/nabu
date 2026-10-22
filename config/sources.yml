@@ -602,6 +602,26 @@ bosworth-toller:
   # serves the terms without a redirect before enabling):
   # license_watch: https://lindat.mff.cuni.cz/repository/handle/11234/1-3532
 
+br-wikisource:   # P140, 02-sources row 287
+  adapter: Nabu::Adapters::BrWikisource
+  adopted: "2026-10-21"
+  axes: [celtic]
+  wired: true    # first sync verified 2026-10-22: 3,155 docs / 137,115 passages, 100 skips-by-rule (the lane's ~3,150 estimate held)
+  sync_policy: manual
+  # The dated 19th-century Breton cone (the owner-ruled wikisource posture,
+  # the Macedonian precedent), census 2026-10-21 — the cone is drawn at
+  # every fetch from the Meneger (Index) Year= of all 613 Indexes:
+  #   band          Indexes  with pages  pages   verdict
+  #   ≤ 1800            4         4        125   cone
+  #   1800–1900       238       144      3,130   cone (the mechanical band)
+  #   1901–1930       276       276      2,293   after_cone (20th-c. compositions)
+  #   > 1930           63        63        819   edition_taint
+  #   unstated          9         9         49   edition_unstated
+  # Cone: 242 Indexes → 3,255 pages; minus the /a-bezh whole-book
+  # aggregates (62) and the measured French apparatus (the Quellien /
+  # Bourgault-Ducoudray roots) → ≈ 3,150 docs / ≈ 87k passages (60-page sample). Language bre (Modern
+  # Breton). Texts PD; transcription layer CC BY-SA 4.0.
+
 bridging:
   adapter: Nabu::Adapters::Bridging
   adopted: "2026-07-20"
@@ -783,6 +803,16 @@ cbeta:
                    # sync widens the existing sparse cone (≈161 MB working
                    # tree) and expects ≈370 new documents / ≈1.1M passages
                    # (census at 2026.R2; estimate from sampled bytes/line).
+                   # P140: + the ten historical canons of the copyright
+                   # page's Category A 歷代藏經補輯 group — A 趙城金藏, C 中華藏,
+                   # D 國圖善本佛典, F 房山石經, G 佛教大藏經, L 乾隆藏, M 卍正藏,
+                   # P 永樂北藏, S 宋藏遺珍, U 洪武南藏 (copyright page re-read
+                   # 2026-10-21, A/B lists unchanged). PENDING FIRST FETCH:
+                   # the next sync widens the cone by ≈138 MB (236 XMLs) and
+                   # expects EXACTLY +236 documents / +836,777 passages
+                   # (full parse of every file at dbdea41, 0 errors; per-canon
+                   # counts in the adapter class note). B/GA/GB/I/ZW/ZS/CC
+                   # stay skipped by rule (574 files).
                    # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
                    # working tree (T 2,471 files / 816 MB + X 1,236 files /
                    # 645 MB at upstream 2026.R1) — expect 3,707 documents at
@@ -1280,6 +1310,25 @@ cv-sardinian:
   # accepts sentences only under CC0) → open. Living collection on the
   # main branch — drift rides the FileFetch state.
   sync_policy: manual
+
+cy-wikisource:   # P140, 02-sources row 284
+  adapter: Nabu::Adapters::CyWikisource
+  adopted: "2026-10-21"
+  axes: [celtic]
+  wired: true    # first sync verified 2026-10-21: 321 docs / 40,126 passages, 0 quarantined (the lane census exactly)
+  sync_policy: manual
+  # The early-modern Welsh cone (the owner-ruled wikisource posture),
+  # census 2026-10-21 — drawn at every fetch from the Indecs Year= of all
+  # 641 Indexes: the prints ≤ 1800 (Salesbury 1547, the 1588 and 1620
+  # Bibles, the 1735–1800 ballads — 12 Indexes, 9 with pages, ~96 pages)
+  # + 8 censused EXTRA_INDEXES (1897–1924 editions of pre-1800 works:
+  # Gwaith Dafydd ap Gwilym, Gwaith yr Hen Ficer, Beirdd y Berwyn, Brut y
+  # Tywysogion — Cyfres y Fil, modernized spelling — the J. M. Edwards
+  # Mabinogion I–II, Goronwy Owen 1924, Clasuron Rhyddiaith Cymru 1897):
+  # 346 cone pages; the "(testun cyfansawdd)" composites (aggregate) and
+  # the Rhagymadrodd/Cynhwysiad apparatus skip → census fetch 321 docs / 40,126 passages. Language
+  # cym; metadata orthography original / modernized (Cyfres y Fil) /
+  # unstated. Texts PD; transcription layer CC BY-SA 4.0.
 
 dacon:   # P88-A4, 02-sources row 181
   adapter: Nabu::Adapters::Dacon
@@ -2317,6 +2366,26 @@ gretil:
   # decision, not a scheduled one — and the corpus has been stable since 2021.
   sync_policy: manual
 
+gretil-legacy:   # 02-sources row 290
+  adapter: Nabu::Adapters::GretilLegacy
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 21 docs / 81,251 passages, 1 honest quarantine + 214 skips-by-rule (the lane census exactly)
+                 # (jyotsniu — Malayalam, no registry node), 214 files skipped by rule
+                 # (8 packaging duplicates · 199 Project Madurai · 2 TEI copies · 3 TEI
+                 # renditions · 2 NIA rules), 0 unrecognized; eyeball nabu show
+                 # urn:nabu:gretil-legacy:dasaveyu:2 and …:jna1-16u:3, then flip.
+  # GRETIL's pre-TEI e-texts from three download zips (2_prakrt, 3_nia,
+  # 4_drav): the Ousaka/Yamazaki Śvetāmbara Āgamas (pka), Hāla, Haribhadra
+  # and Svayambhū's Paumacariu (pra, coarse), Tulsidas, Qutban's Mirigāvatī
+  # (awa), Haridās, Banārasīdās (bra), the Jñāneśvarī (mar). Project
+  # Madurai's romanized copies skip by rule (the madurai source holds them
+  # in Tamil script); the Tamil TEI file is the gretil source's. Physical-
+  # line grain (gretil-legacy family); per-work composition eras in
+  # config/work_eras.yml. GRETIL's notice ("FOR REFERENCE PURPOSES ONLY!
+  # COPYRIGHT AND TERMS OF USAGE AS FOR SOURCE FILE.") → nc.
+  sync_policy: manual
+
 gu-wikisource:   # P120-3, 02-sources row 262
   adapter: Nabu::Adapters::GuWikisource
   adopted: "2026-10-12"
@@ -2753,6 +2822,23 @@ ja-wikisource:   # P109-1
   # {{versions}} disambiguation pages skip by rule. Texts PD;
   # transcription layer CC BY-SA 4.0.
 
+jv-wikisource:   # P140, 02-sources row 285
+  adapter: Nabu::Adapters::JvWikisource
+  adopted: "2026-10-21"
+  axes: [sea]
+  wired: true    # first sync verified 2026-10-21: 36 docs / 2,855 passages (the lane census exactly)
+  sync_policy: manual
+  # The dated 19th-century Javanese cone (the owner-ruled wikisource
+  # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
+  # fetch from the Indhèks Year= (else the file-name year) of all 837
+  # Indexes: 104 Indexes ≤ 1900 (most OCR-only) + 3 censused EXTRA prints
+  # (Pararaton 1912, Wulangreh 1929, Wirit Hidayat Jati 1916) → 38 cone
+  # pages (the wiki renders a WHOLE BOOK per page). Out: 1901–1930 (30
+  # Indexes / 33 pages — the Kajawen 1927 issues, the 1920s schoolbooks),
+  # > 1930 (72 / 128), unstated (84 / 230). Measured: Dutch apparatus
+  # (foreign_language); script jav-Java / jav; Wretansacaya (Kern 1875) →
+  # kaw. Census fetch: 36 docs / 2,855 passages. Texts PD; transcription layer CC BY-SA 4.0.
+
 kannada-texts:   # P118-3
   adapter: Nabu::Adapters::KannadaTexts
   adopted: "2026-10-11"
@@ -3016,6 +3102,29 @@ larth-etp:
   # 2,471/10,783 corpus word tokens (22.9%). Upstream still moves
   # occasionally → manual; a re-pin is an owner decision.
 
+lasla:
+  adapter: Nabu::Adapters::Lasla
+  adopted: "2026-10-21"
+  axes: [classical]
+  wired: true    # first sync verified 2026-10-21: 242 docs / 95,974 passages, 0 quarantined (the lane census exactly)
+                 # 95,974 passages (full-corpus census 2026-10-21)
+  sync_policy: manual
+  # LASLA (Laboratoire d'Analyse Statistique des Langues Anciennes, Liège):
+  # classical Latin from Plautus to the 2nd c. AD — Cicero (80 files), Seneca,
+  # Tacitus, Ovid, Vergil, Pliny, Horace, Caesar, Plautus, Curtius, Lucretius
+  # … — lemmatized and morphologically annotated "with full manual
+  # verification" (README) → GOLD (lemma_tier default). Via CIRCSE's
+  # LiLa-linked CoNLL-U Plus release github.com/CIRCSE/LASLA: 242 conllup
+  # files (131 works, long works split by book), every token carrying its
+  # LiLa LemmaBank lemma id (the held `lila` module's join). Document = file
+  # (urn:nabu:lasla:<LASLA code>), passage = sentence; UD feats ride every
+  # token (the morph façade). Overlap: most works are also held as Perseus
+  # TEI editions — LASLA's text is its own edition, both kept. LICENSE
+  # (README, verbatim): "These resources are licensed under a Creative
+  # Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
+  # → nc (re-read 2026-10-21). Sparse GitFetch cone [conllup, README.md]; the
+  # Turtle lanes (texts/, complete_lasla.ttl.gz) never transfer.
+
 lexica:
   adapter: Nabu::Adapters::Lexica
   adopted: "2026-07-09"
@@ -3251,6 +3360,32 @@ local-source:
   # no upstream, no network; sync re-scans the tree (LocalFetch, per-file
   # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
   # flags dossier-vs-docs/library.md drift.
+
+lotsawa-house:   # 02-sources row 283
+  adapter: Nabu::Adapters::LotsawaHouse
+  adopted: "2026-10-21"
+  axes: [tibetan, buddhist]
+  multilingual: true   # the Tibetan pages + translations in eight languages
+  translations: true   # the translation pages ride (false = the bo pages only)
+  wired: true    # first sync verified 2026-10-21: 6,388 docs / 413,067 passages over the completed nine-language crawl
+                 # all nine languages ≈ 7,000–7,800 requests ≈ 2–2.2 h, bo-only
+                 # (translations: false) ≈ 1,750 ≈ 30 min; resumable at the file
+                 # grain. Then eyeball nabu show on the Mipham fixtures' live
+                 # twins + 4 random texts, reconcile against the site's
+                 # "more than 6000 texts in nine languages", flip
+  sync_policy: manual
+  # Lotsawa House (lotsawahouse.org, Lotsawa House CIC) — the
+  # non-canonical Tibetan Buddhist literature shelf: liturgy, terma,
+  # instructions, praises, biographies by 350+ Tibetan and Indian masters
+  # plus sūtras/dhāraṇīs. Document = one (language, text) page: the bo
+  # page is the original (xct), every other language a translation
+  # document (translation_of → the bo urn). CC BY-NC 4.0 verbatim in the
+  # site's terms (which also license crawling for indexing) → nc. No bulk
+  # export or sitemap: Nabu::LotsawaFetch walks the per-language explore,
+  # Words-of-the-Buddha and author listing pages (persisted under
+  # catalog/, skipped by rule). Restricted-practice texts carry
+  # restricted: true. EXPECTED FIRST SYNC (sample-estimated, the gate
+  # reconciles): ~1,380 bo + ~1,380 en + ~3,000 other-language documents.
 
 madurai:   # P122-3, 02-sources row 268
   adapter: Nabu::Adapters::Madurai
@@ -3606,6 +3741,29 @@ obi-burmese:   # P92-3
   # and intro PDF deliberately not fetched. Page-based files carrying
   # the start of the next inscription mint section keys (37.1) —
   # censused in metadata, never dropped, never duplicated.
+
+obimd:   # 02-sources row 284
+  adapter: Nabu::Adapters::Obimd
+  adopted: "2026-10-21"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-10-21: 10,077 docs / 21,941 passages — the dataset card's own figures exactly
+                 # sync obimd — three revision-pinned HF files, ~42 MB —
+                 # then eyeball nabu show urn:nabu:obimd:H224 and 4 random
+                 # rubbings, flip)
+  sync_policy: manual
+  # OBIMD — the Oracle Bone Inscriptions Multi-modal Dataset (Anyang
+  # Normal University KLOBIP; HF KLOBIP/OBIMD, DOI 10.57967/hf/7821; CC BY
+  # 4.0 on the dataset card + LICENSE → attribution; the Zenodo MIT record
+  # is the code release). The library's earliest Chinese stratum: Late
+  # Shang divination inscriptions from the Heji (H, 9,913) and Huadong
+  # (HD, 164) corpora. Document = rubbing, passage = inscription group
+  # (sentence / oracle sequence / outcome / uncertain) in reading order,
+  # text = upstream's reference modern character per glyph UID (□ lost
+  # position, ⬚ no encoded glyph), UIDs + Mark codes in annotations.
+  # Language och. Images (770 MB of zips) never fetched — text layer only.
+  # EXPECTED FIRST SYNC: 10,077 docs / 21,941 passages, 0 quarantined
+  # (census parse 2026-10-21 of the revision-pinned data.json); 1 card
+  # file skipped by rule.
 
 ociana:
   adapter: Nabu::Adapters::Ociana
@@ -4807,6 +4965,16 @@ sefaria:
                    # urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-
                    # rabbah-2022:petichta.1 (the default-node citation) and a
                    # sifrei-zuta passage (5.2.1 = its real opening).
+                   # P140 adds the commentaries/halakhah/Zohar/liturgy wave
+                   # (six shelves, Sefaria::SHELVES): +1,528 named files
+                   # (≈385 MB) on the 2026-10-02 index → expected EXACTLY
+                   # +1,049 documents / +591,400 passages, 455 rule skips
+                   # (licence "unknown"/absent) and 24 quarantines (13
+                   # de/hu versions, 11 zero-leaf SCT stubs) — a full parse
+                   # of the census tree, per-shelf table in the class note.
+                   # Eyeball urn:nabu:sefaria:minchat-shai-on-jonah:he:
+                   # minchat-shai:1.1.1, a tur:he:onyourway passage, and a
+                   # zohar-chadash:he:zohar-chadash passage (arc).
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version
@@ -4831,7 +4999,10 @@ sefaria:
   # Shimoni, Otzar Midrashim, Ein Yaakov) is not category-separable → out of
   # wave 2; cutting it is a title-level owner ruling.
   # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
-  # (Venice, Mechon-Mamre…) are out by rule. THE LICENSE GATE per version
+  # (Venice, Mechon-Mamre…) are out of the wave-1/2 shelves by rule. P140
+  # opens the Rishonim-on-Tanakh subtree whole (tanakh-rishonim) plus the
+  # Mishneh Torah, Shulchan Arukh, Tur, Zohar and Liturgy shelves, every
+  # named version, their own Commentary subtrees out. THE LICENSE GATE per version
   # FILE (the index carries no license field): PD (both spellings, D46-f)/
   # CC0 → open, CC-BY/CC-BY-SA → attribution override, CC-BY-NC(-SA) → nc
   # override (P10-4, never redistributed — the Davidson lane); "unknown"/absent →
@@ -4912,6 +5083,27 @@ shkz:   # P107-3b
   # citations — the first real Parthian document in the library. The
   # 1,012-word alignment-pairs table fetches into canonical as a
   # DECLARED v1 residue (the alignment-hub look is the future packet).
+
+shuowen:   # 02-sources row 285
+  adapter: Nabu::Adapters::Shuowen
+  adopted: "2026-10-21"
+  group: signs  # the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-10-21: 11,081 entries, 0 errored, 1 skip-by-rule (the lane census exactly)
+                 # sync shuowen — sparse git clone ~39 MB — then eyeball
+                 # nabu define 帝, nabu define 弌 (the 重文 entry) and
+                 # nabu char 一 (the Shuowen block), flip)
+  sync_policy: manual
+  # 說文解字 Shuowen Jiezi (Xu Shen, 100 CE; Xu Xuan recension with Duan
+  # Yucai's commentary) from the shuowen.org data repo
+  # (github.com/shuowenjiezi/shuowen) — one JSON record per head
+  # character, 540 radicals. Apache-2.0 verbatim (README "Copyright [2019]
+  # [Shuowen.org]") → attribution. Dictionary slug `shuowen`, language
+  # lzh; the encoded 重文 variant forms mint their own entries pointing
+  # back at the head. Sparse GitFetch of data/*.json + doc/FORMAT.md.
+  # EXPECTED FIRST SYNC: 9,833 dictionary files → 11,081 entries (9,833
+  # heads + 1,248 encoded 重文), 0 parse errors (census run 2026-10-21 on
+  # the 6553a350 tarball); 1 doc file skipped by rule.
 
 siddham:   # P118-4, 02-sources row 256
   adapter: Nabu::Adapters::Siddham
@@ -5251,6 +5443,22 @@ stgall-priscian:
   # the repo LICENSE covers the repository including the dump → class
   # attribution (verified 2026-10-14).
 
+su-wikisource:   # P140, 02-sources row 286
+  adapter: Nabu::Adapters::SuWikisource
+  adopted: "2026-10-21"
+  axes: [sea]
+  wired: true    # first sync verified 2026-10-21: 78 docs / 8,351 passages (the lane census exactly)
+  sync_policy: manual
+  # The dated 19th-century Sundanese cone (the owner-ruled wikisource
+  # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
+  # fetch from the Indéks Year= of all 171 Indexes: 53 Indexes ≤ 1900 (20
+  # with pages) + the censused EXTRA (TBG LXVI, 1926: the Carita
+  # Parahyangan, Old Sundanese → osn) → 79 cone pages. Out: 1901–1930 (38
+  # Indexes / 65 pages — the Poesaka Soenda 1922–24 issues), > 1930 (18 /
+  # 60), unstated (6 / 6). Census fetch: 78 docs / 8,351 passages (sun 56
+  # · sun-Java 21 · osn 1), 1 Dutch introduction measured out. Texts PD;
+  # transcription layer CC BY-SA 4.0.
+
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
   adopted: "2026-07-18"
@@ -5370,6 +5578,25 @@ tamilex:   # P121-3, 02-sources row 266
   # witnesses/wordindex aggregates, TamilneriVilakkam/Ed.xml — the base
   # text the per-verse files duplicate) → ~7,832 docs; empty editions
   # (unfilled poem skeletons) quarantine as "no edition text".
+
+te-wikisource:   # P140, 02-sources row 283
+  adapter: Nabu::Adapters::TeWikisource
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 453 docs / 208,794 passages, 112 skips-by-rule (the lane census exactly)
+  sync_policy: manual
+  # The classical Telugu cone (the owner-ruled wikisource posture), census
+  # 2026-10-21: 12,635 pages carry the {{తలకట్టు}} header (సంవత్సరం=
+  # 7,121 after 1930 · 3,097 in 1800–1930 · 2,311 none); the 1800–1930
+  # slice is mostly modern composition, so the cone is the 73 censused
+  # work trees of pre-1800 classical poets in their 1891–1930 prints (+ the
+  # Bhāminīvilāsa Sanskrit specimen) — 565 cone pages. Census fetch
+  # 2026-10-21 (21 min at a 0.5 s delay): 453 docs / 208,794 passages, all
+  # tel; skipped 112 (60 edition_taint — Index years after 1930 — 25
+  # edition_unstated, 21 apparatus, 5 translation, 1 sanskrit_overlap).
+  # The Sanskrit-in-Telugu-script overlap (ఋగ్వేదము 1,035 ·
+  # వ్యాస మహాభారతము 2,016 · the Yajur/Sāma/Atharva trees) is excluded by
+  # rule (sanskrit_overlap). Texts PD; transcription layer CC BY-SA 4.0.
 
 th-wikisource:   # P120-3, 02-sources row 264
   adapter: Nabu::Adapters::ThWikisource
@@ -6246,6 +6473,18 @@ ud:
   # (resolves by identity). The fixture pins the first 50 of 203
   # sentence blocks. EXPECTED SYNC DELTA at the next `bin/nabu sync ud`:
   # +1 repo clone / +1 doc / +203 passages (1,927 word lines).
+  # 2026-10-21: TREEBANKS grew to THIRTY-SIX — the Caucasus pair:
+  # old-georgian-glc (UD_Old_Georgian-GLC, Ilia State University; 151
+  # OGLC-sampled sentences / 6,884 word lines, test only; language oge —
+  # the library's first Old Georgian text lane) and middle-armenian-armtdp
+  # (UD_Middle_Armenian-ArmTDP, Yerevan State University; 27 sentences /
+  # 1,093 word lines, test only, a law code + a medical treatise;
+  # language axm — the first axm text lane). Both LICENSE.txt verbatim
+  # BY-SA 4.0 + README agrees → per-document `attribution` override.
+  # Axis-less (no Caucasus desk exists; the classical-armenian-caval
+  # precedent). EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +2
+  # repo clones / +2 docs / +178 passages (151 + 27). The fetch-breaker
+  # minimum tripping count moves 7 → 8 (0.2 × 36 = 7.2).
 
 uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource
@@ -6299,6 +6538,51 @@ unikemet:
   # → class open, the Unihan class.
   sync_policy: manual
 
+vakk:
+  adapter: Nabu::Adapters::Vakk
+  adopted: "2026-10-21"
+  axes: [baltic]
+  wired: false   # the crawl is sliced: ~13,000 paced requests (~4–5 h at
+                 # 1 req/s) over about eleven `bin/nabu sync vakk` runs of
+                 # SLICE 1,200 (~25 min each), the corpus texts first and the
+                 # 2,856 court protocols after; flip at the completed crawl.
+  sync_policy: manual
+  # VAKK — Vana kirjakeele korpus, the Corpus of Old Written Estonian
+  # (University of Tartu, vakk.ut.ee): every surviving Estonian text of
+  # the 15th–16th centuries, most 17th-century prints and Müller's
+  # manuscript sermons, a selection of 18th–19th-century prints (the 1739
+  # Bible, Stahl, the 1715 New Testament), German metatexts on Estonian,
+  # the Moravian Brethren manuscripts, and the hosted 19th-century
+  # parish-court protocols — 3,052 texts / 3,374,325 tokens (census
+  # 2026-10-21). Original spelling; the older texts carry Vakker's
+  # modern-Estonian lemma/POS/form annotation → lemma_tier silver
+  # (semi-automatic by upstream's own account). META-SHARE licence "CC -
+  # BY - NC, Academic - Non Commercial Use" → nc. No bulk download: the
+  # reading view is crawled page by page (gzip-stored verbatim, ~70 MB).
+  lemma_tier: silver
+
+vedaweb:
+  adapter: Nabu::Adapters::Vedaweb
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 1,028 docs / 10,552 passages, 0 quarantined; staged san:ved live
+                 # 10,552 passages / 164,758 gold tokens (full-parse census 2026-10-21)
+  sync_policy: manual
+  # VedaWeb (Cologne Center for eHumanities): the whole Rigveda with the
+  # University of Zurich's hand-made morphological annotation (Widmer,
+  # Scarlata; Lubotsky's text, Grassmann headwords) → GOLD (lemma_tier
+  # default). github.com/VedaWebProject/vedaweb-data, sparse GitFetch cone
+  # [rigveda/TEI, README.md]: ten book TEI files, streamed. Document = hymn
+  # (urn:nabu:vedaweb:rv.<book>.<hymn>), passage = stanza (text = the
+  # zurich padas, one per line); per token lemma + Leipzig labels verbatim
+  # (lgr) + UD feats for the morph façade; strata per pada, late-addition
+  # flags per stanza, addressee + poet-family group per hymn. LICENSE is
+  # PER LAYER (vedaweb_corpus.tei teiHeader, re-read 2026-10-21): the layers
+  # read here (zurich, strata, stanza_properties, addressees) are each
+  # "Distributed under a Creative Commons Attribution 4.0 International
+  # License." → attribution; the BY-NC-SA text versions (Lubotsky, van
+  # Nooten–Holland, Aufrecht, Padapāṭha, Eichler) and translations are NOT
+  # read (a per-layer scope; an nc sibling lane is the recorded option).
 viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
   adopted: "2026-08-18"
@@ -6427,6 +6711,22 @@ wiktionary-cu:
                    # богъ → god with Proto-Slavic chain eyeballed.
   sync_policy: manual
 
+wiktionary-dv:   # 02-sources row 288
+  adapter: Nabu::Adapters::WiktionaryDv
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 2,047 entries (the lane census exactly)
+                 # eyeball nabu define ފޮތް ("book", ← Prakrit 𑀧𑀼𑀢𑁆𑀣), then flip.
+  # The kaikki Dhivehi extraction (2,047 records / "1882 distinct words",
+  # census 2026-10-21): Thaana headwords, etymons through Prakrit and
+  # Sanskrit (768 sa / 103 pra edges) beside the Arabic/Persian donors.
+  # Language div carried verbatim — no Dhivehi node in nabu-lects yet
+  # (the dv anchor + div alias are a named mint candidate). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-hit:
   adapter: Nabu::Adapters::WiktionaryHit
   adopted: "2026-09-13"
@@ -6442,6 +6742,54 @@ wiktionary-hit:
   # (deprecated upstream — fallback = filter the full extract by
   # lang_code hit), CC BY-SA + GFDL → attribution, FileFetch, re-syncs
   # owner-fired.
+  sync_policy: manual
+
+wiktionary-kn:   # 02-sources row 286
+  adapter: Nabu::Adapters::WiktionaryKn
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 2,741 entries (the lane census exactly)
+                 # eyeball nabu define ಒಂದು ("one", ← Proto-Dravidian *onṯu), then flip.
+  # The kaikki Kannada extraction (2,741 records / "2495 distinct words",
+  # census 2026-10-21): Sanskrit, Proto-Dravidian and Old Kannada etymons
+  # (961 sa / 294 dra-pro / 143 dra-okn edges). Language kan (→ kn through
+  # the held codemap alias). The wiktionary-akk mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code kn), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-ml:   # 02-sources row 285
+  adapter: Nabu::Adapters::WiktionaryMl
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 11,505 entries (the lane census exactly)
+                 # eyeball nabu define പുസ്തകം ("book", ← Sanskrit पुस्तक), then flip.
+  # The kaikki Malayalam extraction (11,505 records / "10942 distinct
+  # words", census 2026-10-21): the wave's densest Sanskrit etymon layer
+  # (2,799 sa edges) beside the Syriac/Portuguese/Arabic donor lanes.
+  # Language mal carried verbatim — no Malayalam node in nabu-lects yet
+  # (the ml anchor + mal alias are a named mint candidate). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code ml), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-pra:   # 02-sources row 287
+  adapter: Nabu::Adapters::WiktionaryPra
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 2,712 entries, 20,311 reflex rows (the lane census exactly)
+                 # eyeball nabu define 𑀫𑀳𑀼 ("honey") and its NIA descendants, then flip.
+  # The kaikki Prakrit extraction (2,712 records / "2452 distinct words",
+  # census 2026-10-21): Brāhmī headwords; 1,131 records carry
+  # descendants trees into New Indo-Aryan (pa/hi/mr/ur/sd/gu/omr …) —
+  # the wave's reflex engine — and the inheritance chains reach back
+  # through Sanskrit to Proto-Indo-European. Language pra (the
+  # collective anchor, held coarse). The wiktionary-akk mold on the
+  # shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code pra),
+  # CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-recon:
@@ -6491,6 +6839,32 @@ wiktionary-recon:
   # EXPECTED SYNC DELTA at the next `bin/nabu sync wiktionary-recon`:
   # +1 GET (~0.7 MB) / +542 entries (481 words, 669 senses; a handful of
   # grc/el/omn reflex edges from the 4 records with descendants).
+  # 2026-10-21: FOUR more ATTESTED extracts — the Caucasus four, the
+  # library's first dictionary rows for these lects: wiktionary-xcl Old
+  # Armenian (8,541 records / 7,706 words / 12,881 senses, 48.2 MB),
+  # wiktionary-axm Middle Armenian (478 / 459 / 546, 1.2 MB),
+  # wiktionary-oge Old Georgian (728 / 694 / 930, 1.5 MB), wiktionary-os
+  # Ossetian (913 / 872 / 1,105, 1.3 MB). Full-download censuses
+  # 2026-10-21 (Last-Modified 2026-10-03). EXPECTED SYNC DELTA at the
+  # next `bin/nabu sync wiktionary-recon`: +4 GETs (~52 MB) / +10,660
+  # entries (8,541 + 478 + 728 + 913), the xcl → axm → hy descendant
+  # ladder (~11.7k nodes across the four) and the Caucasus loan lanes.
+  sync_policy: manual
+
+wiktionary-si:   # 02-sources row 289
+  adapter: Nabu::Adapters::WiktionarySi
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 1,281 entries (the lane census exactly)
+                 # eyeball nabu define අම්මා ("mother", ← Tamil அம்மா), then flip.
+  # The kaikki Sinhala extraction ("Sinhalese" in kaikki's naming —
+  # 1,281 records / "1231 distinct words", census 2026-10-21): Indo-Aryan
+  # descent through Prakrit and Sanskrit (514 sa / 52 pra edges) beside
+  # the Tamil borrowings (150 ta edges into the wiktionary-ta headword
+  # space). Language sin (→ si through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code si), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-sux:
@@ -6506,6 +6880,36 @@ wiktionary-sux:
   # → reflexes). The wiktionary-cu mold: per-language JSONL (deprecated
   # upstream — fallback = filter the full extract by lang_code sux),
   # CC BY-SA + GFDL → attribution, FileFetch, re-syncs owner-fired.
+  sync_policy: manual
+
+wiktionary-ta:   # 02-sources row 283
+  adapter: Nabu::Adapters::WiktionaryTa
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 13,855 entries (the lane census exactly)
+                 # eyeball nabu define கோடி ("very", ← Sanskrit कोटि), then flip.
+  # The kaikki Tamil extraction (13,855 records / "11180 distinct words",
+  # census 2026-10-21): Sanskrit and Proto-Dravidian etymons (1,803 sa /
+  # 773 dra-pro edges) and descendants trees into Sinhala, Malay and
+  # English. Language tam (→ ta through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code ta), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-te:   # 02-sources row 284
+  adapter: Nabu::Adapters::WiktionaryTe
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 23,325 entries (the lane census exactly)
+                 # eyeball nabu define నాలుగు ("four", ← Proto-Dravidian *nāl), then flip.
+  # The kaikki Telugu extraction (23,325 records / "21803 distinct words",
+  # census 2026-10-21): the wave's largest headword count; Sanskrit and
+  # Proto-Dravidian etymons (1,546 sa / 477 dra-pro edges) beside the
+  # Persian/Arabic donors. Language tel (→ te through the held codemap
+  # alias). The wiktionary-akk mold on the shared WiktionaryKaikki base:
+  # per-language JSONL (deprecated upstream — fallback = filter the full
+  # extract by lang_code te), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wold:

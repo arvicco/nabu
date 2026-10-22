@@ -1,0 +1,46 @@
+{
+  "title": "Barzhaz Breizh/1846/a-bezh",
+  "pageid": 32386,
+  "ns": 0,
+  "revid": 171022,
+  "timestamp": "2021-09-05T09:50:46Z",
+  "cone": [
+    "index:Barzaz Breiz 4e edition 1846 vol 1.djvu",
+    "index:Barzaz Breiz 4e edition 1846 vol 2.djvu"
+  ],
+  "wikitext": "<pages index=\"Barzaz Breiz 4e edition 1846 vol 1.djvu\" header=Taolenn from=1 prev=\"\" />\n<pages index=\"Barzaz Breiz 4e edition 1846 vol 2.djvu\" from=1 />\n\n[[Rummad:Barzhaz Breizh|*]]",
+  "indexes": [
+    {
+      "name": "Barzaz Breiz 4e edition 1846 vol 1.djvu",
+      "title": "Meneger:Barzaz Breiz 4e edition 1846 vol 1.djvu",
+      "pageid": 7864,
+      "revid": 200503,
+      "fields": {
+        "Title": "[[Barzhaz Breizh/1846|Barzaz Breiz]]",
+        "Author": "[[Oberour:Théodore Hersart de La Villemarqué|Théodore Hersart de La Villemarqué]]",
+        "Publisher": "Franck",
+        "Address": "Paris",
+        "Year": "1846",
+        "Source": "djvu",
+        "Progress": "T",
+        "Remarks": "{{:Barzhaz Breizh/1846}}\n\n[[Rummad:Barzhaz Breizh|*]]\n[[fr:Livre:Barzaz Breiz 4e edition 1846 vol 1.djvu]]"
+      }
+    },
+    {
+      "name": "Barzaz Breiz 4e edition 1846 vol 2.djvu",
+      "title": "Meneger:Barzaz Breiz 4e edition 1846 vol 2.djvu",
+      "pageid": 7866,
+      "revid": 200796,
+      "fields": {
+        "Title": "[[Barzhaz Breizh/1846|Barzaz Breiz]]",
+        "Author": "[[Oberour:Kervarker|Kervarker]]",
+        "Publisher": "Franck",
+        "Address": "Paris",
+        "Year": "1846",
+        "Source": "djvu",
+        "Progress": "T",
+        "Remarks": "{{:Barzhaz Breizh/1846}}\n\n[[Rummad:Barzhaz Breizh|*]]\n[[fr:Livre:Barzaz Breiz 4e edition 1846 vol 2.djvu]]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "title": "Gwaith Dafydd ap Gwilym/Rhagymadrodd",
+  "pageid": 12421,
+  "ns": 0,
+  "revid": 29577,
+  "timestamp": "2022-04-23T06:44:35Z",
+  "cone": [
+    "index:Gwaith Dafydd ap Gwilym.pdf"
+  ],
+  "wikitext": "{{Header\n | title = [[Gwaith Dafydd ap Gwilym]]\n | author   = Owen Morgan Edwards\n | translator = \n | section  = \n | previous = [[../]]\n | next     = [[../Cynhwysiad|Cynhwysiad]]\n | notes    =\n}}\n\n<div style=\"margin-left:10%; margin-right:10%;\">\n<pages index=\"Gwaith Dafydd ap Gwilym.pdf\"  from=5 to=8/>\n</div>\n\n==Nodiadau==\n<references/>\n\n{{DEFAULTSORT:Rhagymadrodd}}\n\n\n[[Categori:Gwaith Dafydd ap Gwilym (Cyfres y Fil)]]",
+  "indexes": [
+    {
+      "name": "Gwaith Dafydd ap Gwilym.pdf",
+      "title": "Indecs:Gwaith Dafydd ap Gwilym.pdf",
+      "pageid": 8351,
+      "revid": 83312,
+      "fields": {
+        "Title": "Gwaith Dafydd ap Gwilym",
+        "Author": "Dafydd ap Gwilym",
+        "Publisher": "ab Owen, Llanuwchllyn",
+        "Year": "1901",
+        "Source": "pdf",
+        "Progress": "T"
+      }
+    }
+  ]
+}

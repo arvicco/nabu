@@ -345,7 +345,10 @@ module Nabu
                                                        "lineage, never the text's date" },
         "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
                                                   "doc — a PRESENT location)" },
-        "ticha" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }
+        "ticha" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" },
+        # Live census 2026-10-21: "imprint" on all 8 of the 15 works that
+        # carry a place (the adapter's WORKS table); the "place" key projects.
+        "bim-sahcoba" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }
       }.freeze
 
       MINING_SAMPLE = 40

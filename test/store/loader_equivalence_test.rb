@@ -48,7 +48,10 @@ module Store
     # Re-taken when the DDbDP parser gained its apparatus layer: the papyri
     # fixture passages carrying <app> now persist an "apparatus" annotation
     # (passage text and urns unchanged — pinned in ddbdp_parser_test).
-    FIXTURE_DIGEST = "ab62606129760b02371d46be20b84aa6803e8c3fda91811226301fc1cddb479b"
+    # Re-taken again when the ud fixture tree gained the Old Georgian GLC
+    # and Middle Armenian ArmTDP treebanks (two new documents, 47
+    # passages, the ArmTDP `doc_title` work titles riding as "title").
+    FIXTURE_DIGEST = "3b183ea63cc5072a56f103348b16229501c00f930d666f78b87d304e490d4e3e"
     WALK_DIGEST = "cf74dd259cfabc229a7828f6e8dc1c662aaf6eba4bb06dd3221af04eefe0fbcb"
 
     def test_fixture_corpora_load_byte_identically_on_both_grains

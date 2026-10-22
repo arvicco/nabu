@@ -29,6 +29,16 @@ class SefariaTest < Minitest::Test
   MISHNAH_REL = "json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/V.json"
   RUTH_SMR_URN = "urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-rabbah-2022"
   SIFREI_ZUTA_URN = "urn:nabu:sefaria:sifrei-zuta:he:leipzig-1917"
+  # The commentaries/halakhah/Zohar/liturgy wave: one real specimen per shelf.
+  WAVE_URNS = {
+    "tanakh-rishonim" => "urn:nabu:sefaria:minchat-shai-on-jonah:he:minchat-shai",
+    "mishneh-torah" => "urn:nabu:sefaria:mishneh-torah-virgin-maiden:he:mechon-mamre",
+    "shulchan-arukh" => "urn:nabu:sefaria:shulchan-arukh-introduction:en:sefaria-community-translation",
+    "tur" => "urn:nabu:sefaria:tur:he:onyourway",
+    "zohar" => "urn:nabu:sefaria:zohar-chadash:he:zohar-chadash",
+    "liturgy" => "urn:nabu:sefaria:shalom-aleichem:he:shalom-alechem"
+  }.freeze
+  TUR_UNKNOWN_FIXTURE = File.join(FIXTURES, "json/Halakhah/Tur/Tur/Hebrew/rp.json")
   ESTHER_TE_FIXTURE = File.join(FIXTURES, "json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/" \
                                           "Midrash Rabbah -- TE.json")
 
@@ -67,7 +77,7 @@ class SefariaTest < Minitest::Test
       urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sefaria-community-translation
       #{SIFREI_ZUTA_URN}
       #{TOSEFTA_URN}
-    ]).sort, urns, "17 licensed named versions; merged, unlicensed and excluded titles never mint"
+    ] + WAVE_URNS.values).sort, urns, "23 licensed named versions; merged, unlicensed and excluded titles never mint"
   end
 
   # --- the Targum regression (P46-1: URNs FROZEN — the wave must not re-mint) -
@@ -279,7 +289,13 @@ class SefariaTest < Minitest::Test
                    RUTH_SMR_URN => 31,
                    SIFREI_ZUTA_URN => 163,
                    "urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sefaria-community-translation" => 5,
-                   "urn:nabu:sefaria:sifra:en:sifra-by-rabbi-shraga-silverstein" => 6
+                   "urn:nabu:sefaria:sifra:en:sifra-by-rabbi-shraga-silverstein" => 6,
+                   WAVE_URNS["tanakh-rishonim"] => 11,
+                   WAVE_URNS["mishneh-torah"] => 11,
+                   WAVE_URNS["shulchan-arukh"] => 7,
+                   WAVE_URNS["tur"] => 3,
+                   WAVE_URNS["zohar"] => 4,
+                   WAVE_URNS["liturgy"] => 4
                  }, counts)
   end
 
@@ -364,7 +380,8 @@ class SefariaTest < Minitest::Test
   def test_midrash_documents_cite_upstream_sectioning_with_flat_category_metadata
     document = conformance_adapter.parse(ref(SIFREI_ZUTA_URN))
     assert_equal %w[Midrash Halakhah], document.metadata["categories"]
-    assert_nil document.metadata["facets"], "nothing beyond the shelf prefix — no subshelf facet"
+    assert_equal({ "shelf" => "midrash-halakhah" }, document.metadata["facets"],
+                 "the shelf facet always rides; nothing beyond the prefix — no subshelf")
     assert_equal "#{SIFREI_ZUTA_URN}:5.2.1", document.first.urn,
                  "midrash cites its own upstream grain (Chapter/Verse/Paragraph) — never daf"
     ruth = conformance_adapter.parse(ref(RUTH_SMR_URN))
@@ -430,12 +447,75 @@ class SefariaTest < Minitest::Test
                "an off-allowlist flat title has NO shelf — never a fetch, never a parse"
   end
 
+  # --- the P140 wave: commentaries, halakhah, Zohar, liturgy ----------------
+
+  def test_wave_shelves_scope_by_category_and_title
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    base = { "language" => "Hebrew", "versionTitle" => "Any Named Edition", "json_url" => "https://b/x.json" }
+    {
+      ["Rashi on Genesis", ["Tanakh", "Rishonim on Tanakh", "Rashi", "Torah"]] => "tanakh-rishonim",
+      ["Mishneh Torah, Prayer", ["Halakhah", "Mishneh Torah", "Sefer Ahavah"]] => "mishneh-torah",
+      ["Mishneh Torah, Introduction", ["Halakhah", "Mishneh Torah", "Introduction"]] => "mishneh-torah",
+      ["Shulchan Arukh, Orach Chayim", ["Halakhah", "Shulchan Arukh"]] => "shulchan-arukh",
+      ["Tur", %w[Halakhah Tur]] => "tur",
+      ["Tikkunei Zohar", %w[Kabbalah Zohar]] => "zohar",
+      ["Siddur Sefard", %w[Liturgy Siddur]] => "liturgy",
+      ["Pesach Haggadah", %w[Liturgy Haggadah]] => "liturgy"
+    }.each do |(title, categories), shelf|
+      entry = base.merge("title" => title, "categories" => categories)
+      assert select.call(entry), "#{title} is in scope"
+      assert_equal shelf, Nabu::Adapters::Sefaria.shelf_for(categories, title: title).id
+    end
+    [
+      ["Kesef Mishneh on Mishneh Torah, Prayer", ["Halakhah", "Mishneh Torah", "Commentary", "Kesef Mishneh"]],
+      ["Beit Yosef", %w[Halakhah Tur Commentary]],
+      ["Peri Megadim on Orach Chayim", ["Halakhah", "Shulchan Arukh"]],
+      ["Sulam on Zohar", %w[Kabbalah Zohar]],
+      ["Kos Eliyahu on Pesach Haggadah", %w[Liturgy Haggadah Commentary]],
+      ["Rabbi Sacks on Siddur", %w[Liturgy Siddur]],
+      ["Bartenura on Mishnah Berakhot", ["Mishnah", "Rishonim on Mishnah", "Bartenura"]]
+    ].each do |title, categories|
+      refute select.call(base.merge("title" => title, "categories" => categories)),
+             "#{title}: commentary subtree / commentary filed flat / modern commentary — out"
+    end
+  end
+
+  def test_wave_language_rulings_and_facets
+    by_shelf = WAVE_URNS.transform_values { |urn| conformance_adapter.parse(ref(urn)) }
+    %w[tanakh-rishonim mishneh-torah tur liturgy].each do |shelf|
+      assert_equal "hbo", by_shelf[shelf].language, "#{shelf}: the Hebrew axis rides the hbo ruling"
+    end
+    assert_equal "eng", by_shelf["shulchan-arukh"].language
+    assert_equal "arc", by_shelf["zohar"].language, "the Zohar's literary Aramaic — never hbo"
+
+    rashi = by_shelf["tanakh-rishonim"]
+    assert_equal({ "value" => "minchat-shai", "raw" => "Minchat Shai" }, rashi.metadata.dig("facets", "subshelf"),
+                 "the commentator is the subshelf facet")
+    assert_equal({ "value" => "prophets", "raw" => "Prophets" }, rashi.metadata.dig("facets", "division"))
+    assert_equal "#{WAVE_URNS['tanakh-rishonim']}:1.1.1", rashi.first.urn, "Chapter.Verse.Comment"
+    assert_equal({ "value" => "sefer-nashim", "raw" => "Sefer Nashim" },
+                 by_shelf["mishneh-torah"].metadata.dig("facets", "subshelf"))
+    assert_equal "#{WAVE_URNS['mishneh-torah']}:3.1", by_shelf["mishneh-torah"].first.urn,
+                 "the Mechon Mamre file is honest about its empty first chapters"
+    assert_equal "#{WAVE_URNS['tur']}:orach-chayim.1.1", by_shelf["tur"].first.urn,
+                 "the four-part schema cites its node path (the default node bare)"
+    assert_equal "#{WAVE_URNS['zohar']}:bereshit.1", by_shelf["zohar"].first.urn
+    assert_equal "attribution", by_shelf["liturgy"].license_override, "CC-BY-SA rides attribution"
+    assert_equal({ "value" => "piyutim", "raw" => "Piyutim" }, by_shelf["liturgy"].metadata.dig("facets", "subshelf"))
+  end
+
+  def test_a_wave_file_with_unknown_license_is_censused_never_ingested
+    assert_equal "unknown", JSON.parse(File.read(TUR_UNKNOWN_FIXTURE))["license"],
+                 "the real Tur 'rp' version says unknown — the per-file gate screens it"
+    assert_empty(refs.select { |r| r.path == TUR_UNKNOWN_FIXTURE })
+  end
+
   # --- discovery census (P11-7) ----------------------------------------------
 
   def test_discovery_skips_census_the_gate
     skips = conformance_adapter.discovery_skips(FIXTURES)
-    assert_equal 5, skips.skipped_by_rule,
-                 "1 merged + 1 absent-license + 2 unknown-license (Lenihan, Esther TE) + 1 excluded title"
+    assert_equal 6, skips.skipped_by_rule,
+                 "1 merged + 1 absent-license + 3 unknown-license (Lenihan, Esther TE, Tur rp) + 1 excluded title"
     assert_predicate skips, :clean?
   end
 
@@ -501,10 +581,15 @@ class SefariaTest < Minitest::Test
     index = JSON.parse(File.read(File.join(FIXTURES, "books.json")))
     selected = index.fetch("books").select { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
     grouped = selected.group_by { |e| e["categories"].first }.transform_values(&:size)
-    assert_equal({ "Tanakh" => 10, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 16 },
+    assert_equal({ "Tanakh" => 11, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 16,
+                   "Halakhah" => 4, "Kabbalah" => 1, "Liturgy" => 1 },
                  grouped)
     rejected = index.fetch("books").reject { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
-    assert_equal 16, rejected.size
+    assert_equal 23, rejected.size,
+                 "16 earlier negatives + the wave's 7: a Tur merged sibling, Peri Megadim (a commentary " \
+                 "filed flat beside the Shulchan Arukh), Sulam on Zohar (off the Zohar allowlist), Rabbi " \
+                 "Sacks on Siddur (excluded title), and one entry from each excluded Commentary subtree " \
+                 "(Mishneh Torah, Tur, Haggadah)"
     assert_includes rejected.map { |e| e["versionTitle"] }, "Venice Edition",
                     "license-unknown Yerushalmi editions are not even fetched — not named"
     assert_includes rejected.map { |e| e["title"] }, "Introductions to the Babylonian Talmud",

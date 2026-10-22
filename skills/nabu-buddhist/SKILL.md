@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: buddhist
   origin: generated
-  sources: "cbeta derge-kangyur derge-tengyur e84000 gretil mvp sarit suttacentral"
+  sources: "cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral"
 ---
 
 # The Buddhologist — the `buddhist` desk
@@ -28,6 +28,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `derge-tengyur` | Digital Derge Tengyur (Esukhia/Barom Theksum Choling faithful copy of the Derge edition) | open |
 | `e84000` | 84000 — Translating the Words of the Buddha (English Kangyur translations) | nc |
 | `gretil` | GRETIL — Göttingen Register of Electronic Texts in Indian Languages (TEI corpus) | nc |
+| `lotsawa-house` | Lotsawa House — Tibetan Buddhist texts and translations | nc |
 | `mvp` | Mahāvyutpatti — Sanskrit–Tibetan–Chinese glossary (DILA TEI edition) | open |
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |

@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# adapter_test is null: the three book files are documented trims, so a
+# fresh-copy re-run would false-fail the count assertions.
+source: vedaweb
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: rigveda/TEI/rv_book_01.tei
+    url: https://raw.githubusercontent.com/VedaWebProject/vedaweb-data/main/rigveda/TEI/rv_book_01.tei
+    whole: false
+    trim: >-
+      book header + hymn 1.1 (dedication, stanzas 1-2) + hymn 1.2 (dedication,
+      stanza 1) + the closing lines, byte-verbatim; each hymn's closing div
+      line restored at its own indentation
+  - path: rigveda/TEI/rv_book_02.tei
+    url: https://raw.githubusercontent.com/VedaWebProject/vedaweb-data/main/rigveda/TEI/rv_book_02.tei
+    whole: false
+    trim: >-
+      book header + hymn 2.1 (dedication, stanza 16) + hymn 2.2 (dedication,
+      stanza 4) + the closing lines, byte-verbatim; hymn closers restored
+  - path: rigveda/TEI/rv_book_08.tei
+    url: https://raw.githubusercontent.com/VedaWebProject/vedaweb-data/main/rigveda/TEI/rv_book_08.tei
+    whole: false
+    trim: >-
+      book header + hymn 8.49 (dedication, stanza 1) + the closing lines,
+      byte-verbatim; the hymn closer restored
+  - path: rigveda/TEI/vedaweb_corpus.tei
+    url: https://raw.githubusercontent.com/VedaWebProject/vedaweb-data/main/rigveda/TEI/vedaweb_corpus.tei
+    whole: true
+    trim: none (the rejected corpus-header grain; the per-layer licences)

@@ -1,11 +1,12 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# All fifteen files are documented TRIMs (whole: false) of the upstream
-# extracts (273 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
+# All nineteen files are documented TRIMs (whole: false) of the upstream
+# extracts (297 kept lines: 226 recon strata + P17-3 goldens + 9 P25-2
 # Celtic + 3 P29-1 Umbrian + 4 P29-0 Etruscan + 5 P32-5 Old Japanese
-# + 15 Mycenaean Greek + 11 P32-3/P104-2 Chinese lines, of which the
-# whitespace-word "Unsupported titles/Space" line mints NO entry — 272
+# + 15 Mycenaean Greek + 24 Caucasus (5 xcl, 6 axm, 5 oge, 8 os)
+# + 11 P32-3/P104-2 Chinese lines, of which the
+# whitespace-word "Unsupported titles/Space" line mints NO entry — 296
 # entries; every
 # kept line byte-verbatim), so a fresh GET
 # returns the full extract and is fetched for URL-liveness only, never
@@ -77,3 +78,19 @@ files:
     url: https://kaikki.org/dictionary/Mycenaean%20Greek/kaikki.org-dictionary-MycenaeanGreek.jsonl
     whole: false
     trim: 15 lines retrieved 2026-10-18 (upstream lines 1/2/4/5/6/15/23/24/25/27/135/199/273/278/279 — 𐀞𐀳 1/2 STRING etymology_number homographs; 𐀃𐀏 noun:1/noun:2/verb:3; 𐀩𐀀 no-etymology noun; 𐀁𐀐 form-of verb; 𐀀𐀯𐀹𐀊 borrowed grc descendants; 𐄇 Aegean numeral; 𐀼𐀓𐀯𐀍 unflagged grc descendant; 𐀏 syllable + logogram split by pos) — 713,109 B -> 22,848 B; recipe in README.md
+  - path: kaikki.org-dictionary-OldArmenian.jsonl
+    url: https://kaikki.org/dictionary/Old%20Armenian/kaikki.org-dictionary-OldArmenian.jsonl
+    whole: false
+    trim: 5 lines retrieved 2026-10-21 (upstream lines 7/8/62/342/361 — ես pron:1/verb:2 STRING etymology_number homographs, the verb a form-of; հայր "father" with axm+hy descendants and the hyx-pro/ine-pro etymons; ջուր "water"; ձու "egg")
+  - path: kaikki.org-dictionary-MiddleArmenian.jsonl
+    url: https://kaikki.org/dictionary/Middle%20Armenian/kaikki.org-dictionary-MiddleArmenian.jsonl
+    whole: false
+    trim: 6 lines retrieved 2026-10-21 (upstream lines 6/7/12/21/27/31 — մորի 1/2 STRING homographs; կարագ "butter" with hy/cpg/ka/udi descendants; ջուր "water" and ձու "egg" from Old Armenian; ունք alternative-form record)
+  - path: kaikki.org-dictionary-OldGeorgian.jsonl
+    url: https://kaikki.org/dictionary/Old%20Georgian/kaikki.org-dictionary-OldGeorgian.jsonl
+    whole: false
+    trim: 5 lines retrieved 2026-10-21 (upstream lines 3/4/8/26/27 — ქართული with ka/sva descendants; შაბათი "Saturday" with the North Caucasian loan lanes; სამი "three" with an xcl descendant; ხელი noun:1 alternative-form / noun:2 Armenian borrowing)
+  - path: kaikki.org-dictionary-Ossetian.jsonl
+    url: https://kaikki.org/dictionary/Ossetian/kaikki.org-dictionary-Ossetian.jsonl
+    whole: false
+    trim: 8 lines retrieved 2026-10-21 (upstream lines 1/77/84/85/86/87/148/294 — б alphabet-letter character record; нӕл with the PIE *h₂nḗr chain; фыд noun:1–4 STRING homographs; къерами Digor-form record; бӕх "horse" with ka descendants)

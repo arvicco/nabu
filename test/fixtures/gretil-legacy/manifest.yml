@@ -1,0 +1,53 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: gretil-legacy
+adapter_test: null   # every content fixture is a trim
+retrieved: 2026-10-21
+files:
+  - path: 2_prakrt/2_prakrt/dasaveyu.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/2_prakrt/dasaveyu.htm
+    whole: false
+    trim: header + GRETIL notice + the first 32 body lines (117 of 1,444 lines), closing tags kept
+  - path: 2_prakrt/2_prakrt/halsatsu.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/2_prakrt/halsatsu.htm
+    whole: false
+    trim: header + GRETIL notice + the first 22 body lines (134 of 2,124 lines), closing tags kept
+  - path: 2_prakrt/home/mmehner/Spiegel_P/2_prakrt/dasaveyu.htm
+    refetchable: false
+    reason: a member of 2_prakrt.zip only (the zip's packaging duplicate) — no per-file URL; same trim as 2_prakrt/2_prakrt/dasaveyu.htm
+  - path: 3_nia/marathi/kutmir_u.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/3_nia/hindi/kutmir_u.htm
+    whole: false
+    trim: header + GRETIL notice + the first 30 body lines (133 of 3,801 lines), closing tags kept (the zip files it under marathi/, the site under hindi/)
+  - path: 3_nia/hindi/bacmadhu.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/3_nia/hindi/bacmadhu.htm
+    whole: false
+    trim: header + GRETIL notice only (99 of 596 lines) — no verse of the in-copyright text, closing tags kept
+  - path: 3_nia/hindi/bardhkcu.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/3_nia/hindi/bardhkcu.htm
+    whole: false
+    trim: header + GRETIL notice + the first 16 body lines (124 of 2,680 lines), closing tags kept
+  - path: 4_drav/malayalam/jyotsniu.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/4_drav/malayalam/jyotsniu.htm
+    whole: false
+    trim: header + GRETIL notice + the first 30 body lines (123 of 3,267 lines), closing tags kept
+  - path: 4_drav/tamil/pm/pm001__u.htm
+    url: https://gretil.sub.uni-goettingen.de/gretil/4_drav/tamil/pm/pm001__u.htm
+    whole: false
+    trim: header + GRETIL notice only (90 of 3,059 lines) — the Project Madurai text stays out, closing tags kept
+  - path: 4_drav/ta-sa_periyavaccanpillai-perumaltiromolivyAkhyAnam.xml
+    url: https://gretil.sub.uni-goettingen.de/gretil/corpustei/ta-sa_periyavaccanpillai-perumaltiromolivyAkhyAnam.xml
+    whole: false
+    trim: the first 495 of 2,191 lines (teiHeader + the first verse group), closed with the file's own end tags
+  - path: 4_drav/tei/ta-sa_periyavaccanpillai-perumaltiromolivyAkhyAnam.xml
+    refetchable: false
+    reason: a member of 4_drav.zip only (the tei/ copy) — byte-identical to the corpustei file above; same trim
+  - path: 4_drav/tei/transformations/plaintext/ta-sa_periyavaccanpillai-perumaltiromolivyAkhyAnam.txt
+    refetchable: false
+    reason: a member of 4_drav.zip only; the first 40 of 829 lines
+  - path: 4_drav/tei/transformations/html/ta-sa_periyavaccanpillai-perumaltiromolivyAkhyAnam.htm
+    refetchable: false
+    reason: a member of 4_drav.zip only; the first 164 of 2,811 lines, closed with the file's own end tags
+  - path: 4_drav/tei/transformations/html/style/html_style.css
+    refetchable: false
+    reason: a member of 4_drav.zip only; whole (2,916 bytes)

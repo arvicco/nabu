@@ -1,0 +1,28 @@
+{
+  "title": "Poesaka Soenda 1922-07-1(01)",
+  "pageid": 47,
+  "ns": 0,
+  "revid": 315,
+  "timestamp": "2023-08-29T10:01:42Z",
+  "cone": [
+    "index:Poesaka Soenda 1922-07-1(01).djvu"
+  ],
+  "wikitext": "<pages index=\"Poesaka_Soenda_1922-07-1(01).djvu\" from=\"1\" to=\"18\" header=\"1\" />\n\n{{Poesaka Soenda}}",
+  "indexes": [
+    {
+      "name": "Poesaka Soenda 1922-07-1(01).djvu",
+      "title": "Indéks:Poesaka Soenda 1922-07-1(01).djvu",
+      "pageid": 816,
+      "revid": 47493,
+      "fields": {
+        "Title": "[[Poesaka Soenda 1922-07-1(01)]]",
+        "Author": "Pagoejoeban Java Instituut",
+        "Publisher": "Pagoejoeban Java Instituut",
+        "Year": "1922",
+        "Source": "djvu",
+        "Progress": "C",
+        "Remarks": "[[category:Poesaka Soenda]]"
+      }
+    }
+  ]
+}

@@ -243,4 +243,14 @@ module Store
       assert_equal expected_rows(docs), ordered_rows
     end
   end
+
+  def test_a_bare_string_facet_entry_projects_as_a_single_value_row
+    doc = make_document("urn:nabu:edh:hd000009",
+                        metadata: { "facets" => { "shelf" => "mishneh-torah" } })
+    Nabu::Store::FacetBuilder.rebuild!(catalog: @db)
+    rows = @db[:document_facets].where(document_id: doc.id, facet: "shelf").all
+    assert_equal ["mishneh-torah"], rows.map { |r| r[:value] },
+                 "a bare string is an honest single-value facet claim"
+    assert_nil rows.first[:raw]
+  end
 end

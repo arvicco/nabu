@@ -4,7 +4,8 @@ require "test_helper"
 require "tmpdir"
 
 # The reconstruction shelf source (P14-1, architecture §12; P17-3 part 2;
-# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese; P32-3 Chinese; Mycenaean Greek): ONE source, FIFTEEN
+# P25-2 Celtic; P29-0 Etruscan; P32-5 Old Japanese; P32-3 Chinese; Mycenaean Greek;
+# the Caucasus four): ONE source, NINETEEN
 # dictionaries — kaikki.org's Proto-Slavic / Proto-Indo-European /
 # Proto-Germanic plus the P17-3 Proto-Balto-Slavic / Proto-West Germanic /
 # Proto-Italic / Proto-Indo-Iranian wiktextract extracts, the P25-2
@@ -59,6 +60,10 @@ class WiktionaryReconTest < Minitest::Test
                   "wiktionary-ett:kaikki.org-dictionary-Etruscan.jsonl",
                   "wiktionary-ojp:kaikki.org-dictionary-OldJapanese.jsonl",
                   "wiktionary-gmy:kaikki.org-dictionary-MycenaeanGreek.jsonl",
+                  "wiktionary-xcl:kaikki.org-dictionary-OldArmenian.jsonl",
+                  "wiktionary-axm:kaikki.org-dictionary-MiddleArmenian.jsonl",
+                  "wiktionary-oge:kaikki.org-dictionary-OldGeorgian.jsonl",
+                  "wiktionary-os:kaikki.org-dictionary-Ossetian.jsonl",
                   "wiktionary-zh:kaikki.org-dictionary-Chinese.jsonl"],
                  refs.map(&:id)
     assert_equal %w[wiktionary-recon], refs.map(&:source_id).uniq
@@ -68,17 +73,18 @@ class WiktionaryReconTest < Minitest::Test
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
-  def test_parse_yields_the_fifteen_dictionaries
+  def test_parse_yields_the_nineteen_dictionaries
     documents = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }
     assert_equal %w[wiktionary-sla-pro wiktionary-ine-pro wiktionary-gem-pro
                     wiktionary-ine-bsl-pro wiktionary-gmw-pro wiktionary-itc-pro
                     wiktionary-iir-pro wiktionary-sga wiktionary-mga wiktionary-wlm
-                    wiktionary-xum wiktionary-ett wiktionary-ojp wiktionary-gmy wiktionary-zh],
+                    wiktionary-xum wiktionary-ett wiktionary-ojp wiktionary-gmy wiktionary-xcl
+                    wiktionary-axm wiktionary-oge wiktionary-os wiktionary-zh],
                  documents.map(&:slug)
     assert_equal %w[sla-pro ine-pro gem-pro ine-bsl-pro gmw-pro itc-pro iir-pro
-                    sga mga wlm xum ett ojp gmy zho],
+                    sga mga wlm xum ett ojp gmy xcl axm oge os zho],
                  documents.map(&:language)
-    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 15, 10], documents.map(&:size)
+    assert_equal [77, 63, 75, 3, 3, 2, 3, 3, 3, 3, 3, 4, 5, 15, 5, 6, 5, 8, 10], documents.map(&:size)
   end
 
   # P32-5: the attested Old Japanese extract (the P25-2/P29 pattern
@@ -316,6 +322,42 @@ class WiktionaryReconTest < Minitest::Test
     assert(asiwija.reflexes.any? { |r| r.language == "grc" && r.borrowed }, "the borrowed grc edge")
   end
 
+  # The Caucasus extracts (attested, the P29-1 shape): Old Armenian xcl,
+  # Middle Armenian axm, Old Georgian oge, Ossetian os. The Armenian
+  # ladder is crosswalked by the descendant trees themselves — xcl հայր
+  # "father" reaches axm and hy, axm ջուր "water" reaches hy — and the
+  # Caucasus loan lanes ride as reflexes (axm կարագ "butter" → ka/udi,
+  # oge სამი "three" → xcl, os бӕх "horse" → ka). STRING
+  # etymology_numbers split homographs (xcl ես pron:1 / verb:2, oge ხელი
+  # noun:1 / noun:2, os фыд noun:1–4).
+  def test_caucasus_extracts_parse_with_their_ladders_and_loan_lanes
+    by_slug = adapter.discover(FIXTURES).map { |ref| adapter.parse(ref) }.to_h { |doc| [doc.slug, doc] }
+    xcl, axm, oge, os = by_slug.values_at("wiktionary-xcl", "wiktionary-axm", "wiktionary-oge", "wiktionary-os")
+    assert_equal %w[xcl axm oge os], [xcl, axm, oge, os].map(&:language)
+
+    hayr = xcl.entries.find { |e| e.headword == "հայր" } || flunk("xcl հայր missing")
+    assert_match(/Proto-Indo-European \*ph₂tḗr/, hayr.body)
+    descendants = ->(entry) { entry.reflexes.reject(&:relation).map(&:language).uniq.sort }
+    assert_equal %w[axm hy], descendants.call(hayr)
+    assert(hayr.reflexes.any? { |r| r.language == "hyx-pro" && r.relation }, "the Proto-Armenian etymon edge")
+    assert_equal %w[ես:pron:1 ես:verb:2], xcl.entries.select { |e| e.headword == "ես" }.map(&:entry_id).sort
+
+    jur = axm.entries.find { |e| e.headword == "ջուր" } || flunk("axm ջուր missing")
+    assert_match(/Old Armenian ջուր/, jur.body)
+    assert_equal ["hy"], descendants.call(jur)
+    karag = axm.entries.find { |e| e.headword == "կարագ" } || flunk("axm կարագ missing")
+    assert_includes descendants.call(karag), "ka"
+
+    sami = oge.entries.find { |e| e.headword == "სამი" } || flunk("oge სამი missing")
+    assert_includes descendants.call(sami), "xcl"
+    assert_equal %w[ხელი:noun:1 ხელი:noun:2], oge.entries.select { |e| e.headword == "ხელი" }.map(&:entry_id).sort
+
+    assert_equal %w[фыд:noun:1 фыд:noun:2 фыд:noun:3 фыд:noun:4],
+                 os.entries.select { |e| e.headword == "фыд" }.map(&:entry_id).sort
+    baex = os.entries.find { |e| e.headword == "бӕх" } || flunk("os бӕх missing")
+    assert_equal ["ka"], descendants.call(baex)
+  end
+
   # --- fetch (WebMock only, no network) ----------------------------------------
 
   def stub_all(status: 200)
@@ -348,11 +390,14 @@ class WiktionaryReconTest < Minitest::Test
       assert_match(/mnc/, report.notes)
       assert_match(/txb/, report.notes)
       assert_match(/gmy/, report.notes)
-      assert_equal 21, adapter.discover(workdir).count, "all twenty-one extracts discoverable in place"
+      assert_match(/xcl/, report.notes)
+      assert_match(/ os /, report.notes)
+      assert_equal 25, adapter.discover(workdir).count, "all twenty-five extracts discoverable in place"
       %w[proto-slavic proto-indo-european proto-germanic proto-balto-slavic
          proto-west-germanic proto-italic proto-indo-iranian
          old-irish middle-irish middle-welsh umbrian etruscan old-japanese
-         old-turkic old-uyghur chagatai manchu tocharian-b tocharian-a mycenaean-greek].each do |subdir|
+         old-turkic old-uyghur chagatai manchu tocharian-b tocharian-a mycenaean-greek
+         old-armenian middle-armenian old-georgian ossetian].each do |subdir|
         assert File.file?(File.join(workdir, subdir, Nabu::FileFetch::STATE_FILE)),
                "per-extract FileFetch state under #{subdir}/"
       end
@@ -372,10 +417,11 @@ class WiktionaryReconTest < Minitest::Test
   def test_probe_targets_head_each_jsonl_with_per_extract_state
     assert_equal :http_zip, Nabu::Adapters::WiktionaryRecon.remote_probe_strategy
     targets = Nabu::Adapters::WiktionaryRecon.http_probe_targets
-    assert_equal 21, targets.size
+    assert_equal 25, targets.size
     assert_equal URLS.values.sort, targets.map(&:zip_url).sort
-    assert_equal %w[chagatai chinese etruscan manchu middle-irish middle-welsh mycenaean-greek old-irish
-                    old-japanese old-turkic old-uyghur proto-balto-slavic proto-germanic
+    assert_equal %w[chagatai chinese etruscan manchu middle-armenian middle-irish middle-welsh mycenaean-greek
+                    old-armenian old-georgian old-irish old-japanese old-turkic old-uyghur ossetian
+                    proto-balto-slavic proto-germanic
                     proto-indo-european proto-indo-iranian proto-italic proto-slavic
                     proto-west-germanic tocharian-a tocharian-b umbrian],
                  targets.map(&:state_subdir).sort
@@ -401,7 +447,7 @@ class WiktionaryReconTest < Minitest::Test
   def test_loading_the_fixtures_twice_is_idempotent_with_stable_urns_and_reflexes
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 272, first.added
+    assert_equal 296, first.added
     assert_equal 0, first.errored
 
     reflex_count = db[:dictionary_reflexes].count
@@ -409,7 +455,7 @@ class WiktionaryReconTest < Minitest::Test
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 272, second.skipped
+    assert_equal 296, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal reflex_count, db[:dictionary_reflexes].count
 

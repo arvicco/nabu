@@ -884,6 +884,196 @@
    "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Pesikta DeRav Kahana/Hebrew/Pesikta de Rav Kahana according to an Oxford manuscript, Dov Mandelbaum ed., N.Y. 1987.txt",
    "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Pesikta DeRav Kahana/Hebrew/Pesikta de Rav Kahana according to an Oxford manuscript, Dov Mandelbaum ed., N.Y. 1987.json",
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Pesikta DeRav Kahana/Hebrew/Pesikta de Rav Kahana according to an Oxford manuscript, Dov Mandelbaum ed., N.Y. 1987.json"
+  },
+  {
+   "title": "Minchat Shai on Jonah",
+   "language": "Hebrew",
+   "versionTitle": "Minchat Shai",
+   "categories": [
+    "Tanakh",
+    "Rishonim on Tanakh",
+    "Minchat Shai",
+    "Prophets"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tanakh/Rishonim%20on%20Tanakh/Minchat%20Shai/Prophets/Minchat%20Shai%20on%20Jonah/Hebrew/Minchat%20Shai.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Rishonim%20on%20Tanakh/Minchat%20Shai/Prophets/Minchat%20Shai%20on%20Jonah/Hebrew/Minchat%20Shai.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Rishonim%20on%20Tanakh/Minchat%20Shai/Prophets/Minchat%20Shai%20on%20Jonah/Hebrew/Minchat%20Shai.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Rishonim%20on%20Tanakh/Minchat%20Shai/Prophets/Minchat%20Shai%20on%20Jonah/Hebrew/Minchat%20Shai.json"
+  },
+  {
+   "title": "Mishneh Torah, Virgin Maiden",
+   "language": "Hebrew",
+   "versionTitle": "Mechon Mamre",
+   "categories": [
+    "Halakhah",
+    "Mishneh Torah",
+    "Sefer Nashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Mishneh%20Torah/Sefer%20Nashim/Mishneh%20Torah%2C%20Virgin%20Maiden/Hebrew/Mechon%20Mamre.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Mishneh%20Torah/Sefer%20Nashim/Mishneh%20Torah%2C%20Virgin%20Maiden/Hebrew/Mechon%20Mamre.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Mishneh%20Torah/Sefer%20Nashim/Mishneh%20Torah%2C%20Virgin%20Maiden/Hebrew/Mechon%20Mamre.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Mishneh%20Torah/Sefer%20Nashim/Mishneh%20Torah%2C%20Virgin%20Maiden/Hebrew/Mechon%20Mamre.json"
+  },
+  {
+   "title": "Shulchan Arukh, Introduction",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Halakhah",
+    "Shulchan Arukh"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Shulchan%20Arukh/Shulchan%20Arukh%2C%20Introduction/English/Sefaria%20Community%20Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Shulchan%20Arukh/Shulchan%20Arukh%2C%20Introduction/English/Sefaria%20Community%20Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Shulchan%20Arukh/Shulchan%20Arukh%2C%20Introduction/English/Sefaria%20Community%20Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Shulchan%20Arukh/Shulchan%20Arukh%2C%20Introduction/English/Sefaria%20Community%20Translation.json"
+  },
+  {
+   "title": "Tur",
+   "language": "Hebrew",
+   "versionTitle": "OnYourWay",
+   "categories": [
+    "Halakhah",
+    "Tur"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Tur/Tur/Hebrew/OnYourWay.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Tur/Tur/Hebrew/OnYourWay.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Tur/Tur/Hebrew/OnYourWay.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Tur/Tur/Hebrew/OnYourWay.json"
+  },
+  {
+   "title": "Tur",
+   "language": "Hebrew",
+   "versionTitle": "rp",
+   "categories": [
+    "Halakhah",
+    "Tur"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Tur/Tur/Hebrew/rp.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Tur/Tur/Hebrew/rp.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Tur/Tur/Hebrew/rp.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Tur/Tur/Hebrew/rp.json"
+  },
+  {
+   "title": "Zohar Chadash",
+   "language": "Hebrew",
+   "versionTitle": "Zohar Chadash",
+   "categories": [
+    "Kabbalah",
+    "Zohar"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Kabbalah/Zohar/Zohar%20Chadash/Hebrew/Zohar%20Chadash.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Kabbalah/Zohar/Zohar%20Chadash/Hebrew/Zohar%20Chadash.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Kabbalah/Zohar/Zohar%20Chadash/Hebrew/Zohar%20Chadash.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Kabbalah/Zohar/Zohar%20Chadash/Hebrew/Zohar%20Chadash.json"
+  },
+  {
+   "title": "Shalom Aleichem",
+   "language": "Hebrew",
+   "versionTitle": "Shalom Alechem",
+   "categories": [
+    "Liturgy",
+    "Piyutim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Liturgy/Piyutim/Shalom%20Aleichem/Hebrew/Shalom%20Alechem.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Liturgy/Piyutim/Shalom%20Aleichem/Hebrew/Shalom%20Alechem.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Liturgy/Piyutim/Shalom%20Aleichem/Hebrew/Shalom%20Alechem.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Liturgy/Piyutim/Shalom%20Aleichem/Hebrew/Shalom%20Alechem.json"
+  },
+  {
+   "title": "Tur",
+   "language": "Hebrew",
+   "versionTitle": "merged",
+   "categories": [
+    "Halakhah",
+    "Tur"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Tur/Tur/Hebrew/merged.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Tur/Tur/Hebrew/merged.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Tur/Tur/Hebrew/merged.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Tur/Tur/Hebrew/merged.json"
+  },
+  {
+   "title": "Peri Megadim on Orach Chayim",
+   "language": "Hebrew",
+   "versionTitle": "Warsaw, 1877",
+   "categories": [
+    "Halakhah",
+    "Shulchan Arukh"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Shulchan%20Arukh/Peri%20Megadim%20on%20Orach%20Chayim/Hebrew/Warsaw%2C%201877.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Shulchan%20Arukh/Peri%20Megadim%20on%20Orach%20Chayim/Hebrew/Warsaw%2C%201877.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Shulchan%20Arukh/Peri%20Megadim%20on%20Orach%20Chayim/Hebrew/Warsaw%2C%201877.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Shulchan%20Arukh/Peri%20Megadim%20on%20Orach%20Chayim/Hebrew/Warsaw%2C%201877.json"
+  },
+  {
+   "title": "Sulam on Zohar",
+   "language": "Hebrew",
+   "versionTitle": "Zohar with Sulam commentary, Jerusalem 1945",
+   "categories": [
+    "Kabbalah",
+    "Zohar"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Kabbalah/Zohar/Sulam%20on%20Zohar/Hebrew/Zohar%20with%20Sulam%20commentary%2C%20Jerusalem%201945.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Kabbalah/Zohar/Sulam%20on%20Zohar/Hebrew/Zohar%20with%20Sulam%20commentary%2C%20Jerusalem%201945.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Kabbalah/Zohar/Sulam%20on%20Zohar/Hebrew/Zohar%20with%20Sulam%20commentary%2C%20Jerusalem%201945.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Kabbalah/Zohar/Sulam%20on%20Zohar/Hebrew/Zohar%20with%20Sulam%20commentary%2C%20Jerusalem%201945.json"
+  },
+  {
+   "title": "Rabbi Sacks on Siddur",
+   "language": "English",
+   "versionTitle": "English Edition; Koren Publishers Jerusalem, 2017",
+   "categories": [
+    "Liturgy",
+    "Siddur"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Liturgy/Siddur/Rabbi%20Sacks%20on%20Siddur/English/English%20Edition%3B%20Koren%20Publishers%20Jerusalem%2C%202017.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Liturgy/Siddur/Rabbi%20Sacks%20on%20Siddur/English/English%20Edition%3B%20Koren%20Publishers%20Jerusalem%2C%202017.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Liturgy/Siddur/Rabbi%20Sacks%20on%20Siddur/English/English%20Edition%3B%20Koren%20Publishers%20Jerusalem%2C%202017.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Liturgy/Siddur/Rabbi%20Sacks%20on%20Siddur/English/English%20Edition%3B%20Koren%20Publishers%20Jerusalem%2C%202017.json"
+  },
+  {
+   "title": "Annotations of Maharatz Chajes on Mishneh Torah, Admission into the Sanctuary",
+   "language": "Hebrew",
+   "versionTitle": "Friedberg Edition",
+   "categories": [
+    "Halakhah",
+    "Mishneh Torah",
+    "Commentary",
+    "Annotations of Maharatz Chajes",
+    "Sefer Avodah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Mishneh%20Torah/Commentary/Annotations%20of%20Maharatz%20Chajes/Sefer%20Avodah/Annotations%20of%20Maharatz%20Chajes%20on%20Mishneh%20Torah%2C%20Admission%20into%20the%20Sanctuary/Hebrew/Friedberg%20Edition.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Mishneh%20Torah/Commentary/Annotations%20of%20Maharatz%20Chajes/Sefer%20Avodah/Annotations%20of%20Maharatz%20Chajes%20on%20Mishneh%20Torah%2C%20Admission%20into%20the%20Sanctuary/Hebrew/Friedberg%20Edition.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Mishneh%20Torah/Commentary/Annotations%20of%20Maharatz%20Chajes/Sefer%20Avodah/Annotations%20of%20Maharatz%20Chajes%20on%20Mishneh%20Torah%2C%20Admission%20into%20the%20Sanctuary/Hebrew/Friedberg%20Edition.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Mishneh%20Torah/Commentary/Annotations%20of%20Maharatz%20Chajes/Sefer%20Avodah/Annotations%20of%20Maharatz%20Chajes%20on%20Mishneh%20Torah%2C%20Admission%20into%20the%20Sanctuary/Hebrew/Friedberg%20Edition.json"
+  },
+  {
+   "title": "Bach",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Halakhah",
+    "Tur",
+    "Commentary"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Halakhah/Tur/Commentary/Bach/English/Sefaria%20Community%20Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Halakhah/Tur/Commentary/Bach/English/Sefaria%20Community%20Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Halakhah/Tur/Commentary/Bach/English/Sefaria%20Community%20Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Halakhah/Tur/Commentary/Bach/English/Sefaria%20Community%20Translation.json"
+  },
+  {
+   "title": "Barukh SheAmar on Pesach Haggadah",
+   "language": "English",
+   "versionTitle": "Rabbi Mark B Greenspan",
+   "categories": [
+    "Liturgy",
+    "Haggadah",
+    "Commentary"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.json"
   }
  ]
 }

@@ -6,12 +6,49 @@ module Nabu
   module Adapters
     # The CBETA adapter (P33-2; sino-survey lanes SINO-D/E): the Chinese
     # Buddhist Electronic Text Archive's TEI P5 corpus from
-    # github.com/cbeta-org/xml-p5, scoped to five Category A canons: the two
+    # github.com/cbeta-org/xml-p5, scoped to fifteen Category A canons: the two
     # central ones — T (Taishō Tripiṭaka 大正新脩大藏經, vols 1–85) and X
     # (Xuzangjing 卍新纂大日本續藏經, vols 1–88) — plus K (the Koreana-only
     # residue, P108-7), J (嘉興大藏經, the Ming–Qing Jiaxing canon) and N
     # (漢譯南傳大藏經, the Yuan Heng Temple Chinese translation of the Pāli
-    # Tipiṭaka) — P126.
+    # Tipiṭaka) — P126 — plus the ten historical canons of the copyright
+    # page's 歷代藏經補輯 group (P140, below).
+    #
+    # == The historical canons (master dbdea41 "CBETA 2026.R2", censused
+    #    2026-10-21 from upstream's own git tree + a full parse of every file)
+    #
+    # The copyright page lists, under Category A 歷代藏經補輯, 《嘉興大藏經》
+    # (J, held), 《房山石經》、《趙城金藏》、《永樂北藏》等等 and
+    # 「國家圖書館善本佛典」. The "等等" covers the remaining historical
+    # canon editions upstream serves; the core grant (「本資料庫未特別說明處
+    # 皆採用」CC BY-NC-SA 4.0) covers them in any case, and every file
+    # carries the header grant (re-verified at parse). Per canon — files /
+    # MB / documents / print-line passages (all files parse; 0 errors):
+    #
+    #   A 趙城金藏 (Jin)                     12 /  7.6 /  12 /  46,426
+    #   C 中華大藏經 (Zhonghua)               12 / 14.7 /  12 /  74,618
+    #   D 國家圖書館善本佛典 (NCL rare books) 64 / 42.7 /  64 / 217,672
+    #   F 房山石經 (Fangshan stone sutras)    27 /  8.5 /  27 /  26,293
+    #   G 佛教大藏經 (Fojiao)                 69 / 18.8 /  69 / 121,059
+    #   L 乾隆大藏經 (Qianlong)               26 / 25.3 /  26 / 198,826
+    #   M 卍正藏經 (Manji)                     1 /  1.2 /   1 /   9,155
+    #   P 永樂北藏 (Northern Yongle)          20 / 16.8 /  20 / 119,486
+    #   S 宋藏遺珍 (Songzang yizhen)           2 /  0.4 /   2 /   2,808
+    #   U 洪武南藏 (Southern Hongwu)           3 /  2.4 /   3 /  20,434
+    #   total                               236 / 138.4 / 236 / 836,777
+    #
+    # Upstream serves only the texts NOT already read through T/X (the
+    # Koreana pattern): the vol dirs are sparse (A 10 of 121 vols, P 15 of
+    # 200). All lzh; no witness edition, no new element — the held family
+    # parses them unchanged. 176 of 236 bylines carry a seat; 157 band
+    # (唐/宋/明/清/元/遼/隋/東晉/劉宋/民國/朝鮮 — all period_bands rows) and
+    # 日本 ×19 is a place seat that bands nothing, as in T.
+    #
+    # Still out (skipped by rule, censused): the modern compilations of
+    # 近代新編文獻 — B 大藏經補編 (204 files), GA 中國佛寺史志彙刊 (58), GB
+    # 中國佛寺志叢刊 (2), I 北朝佛教石刻拓片百品 (101), ZW 藏外佛教文獻
+    # (202), ZS 正史佛教資料類編 (1) — and CC CBETA 選集 (6), a modern
+    # selection the copyright page does not name: a separate scope decision.
     #
     # == J + N census (master dbdea41 "CBETA 2026.R2", 2026-09-05)
     #
@@ -51,8 +88,8 @@ module Nabu
     # the copyright page, IS the CATEGORY_B constant below; #discover
     # refuses LOUDLY (FetchError) if any of those canon dirs ever appears in
     # the workdir, and the fetch cone never asks for them (Category B list
-    # re-read unchanged 2026-10-14). Other Category A canons beyond
-    # T/X/K/J/N (B, D, GA, …) are out of scope so far: skipped by rule,
+    # re-read unchanged 2026-10-14 and 2026-10-21). Category A canons
+    # beyond the scope (B, GA, GB, I, ZW, ZS, CC) are skipped by rule,
     # censused in discovery_skips, a future scope decision.
     #
     # == Identity (FROZEN minting)
@@ -66,9 +103,10 @@ module Nabu
     # == fetch (GitFetch sparse cone)
     #
     # The flat top-level canon layout takes a sparse cone cleanly:
-    # SPARSE_CONE = T/ + X/ + K/ + J/ + N/ + canons.json + schema/ ≈ 1.6 GiB
-    # working tree (T 859 MB + X 679 MB + K 38 MB + J 105 MB + N 56 MB at
-    # 2026.R2) instead of the full 26-canon checkout —
+    # SPARSE_CONE = the 15 scope canon dirs + canons.json + schema/ ≈ 1.74
+    # GiB working tree (T 859 MB + X 679 MB + K 38 MB + J 105 MB + N 56 MB +
+    # the ten historical canons 138 MB at 2026.R2) instead of the full
+    # 26-canon checkout —
     # and the cone is ALSO the Category B firewall: excluded dirs are never
     # materialized. Shared non-destructive path (attic + mass-deletion
     # breaker). Upstream ships dated releases (2026.R1) → sync_policy
@@ -91,7 +129,7 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "cbeta",
         name: "CBETA — Chinese Buddhist Electronic Text Archive (Taishō, Xuzangjing, Koreana, " \
-              "Jiaxing, Nanchuan; TEI P5)",
+              "Jiaxing, Nanchuan + the historical canon editions; TEI P5)",
         license: "CC BY-NC-SA 4.0 — cbeta.org/copyright Category A verbatim: 「Creative Commons " \
                  "姓名標示-非商業性-相同方式分享 4.0 國際授權條款」; per-file header: \"Available for " \
                  "non-commercial use when distributed with this header intact.\"",
@@ -114,7 +152,11 @@ module Nabu
       # Tipiṭaka, cmn, see CbetaTeiParser::CANON_LANGUAGES). Copyright page
       # re-read 2026-10-14: Category A/B lists unchanged but for the
       # widening's own two rows already present.
-      CANONS = %w[T X K J N].freeze
+      # P140: + the 歷代藏經補輯 historical canons — A 趙城金藏, C 中華藏,
+      # D 國圖善本佛典, F 房山石經, G 佛教大藏經, L 乾隆藏, M 卍正藏, P 永樂北藏,
+      # S 宋藏遺珍, U 洪武南藏 (census in the class note; copyright page
+      # re-read 2026-10-21, Category A/B lists unchanged).
+      CANONS = %w[T X K J N A C D F G L M P S U].freeze
 
       # Category B, verbatim from cbeta.org/copyright (類別 B：不屬於創用 CC
       # 條款授權之文獻 — read 2026-07-20): canon dir code → named corpus.
@@ -128,11 +170,12 @@ module Nabu
       }.freeze
 
       # The sparse checkout cone (P26-0 GitFetch mechanics): scope canons +
-      # the canon registry + the RelaxNG schema. ≈1.6 GiB of working tree
-      # at 2026.R2 (J + N add ≈161 MB); everything else — including every
+      # the canon registry + the RelaxNG schema. ≈1.74 GiB of working tree
+      # at 2026.R2 (J + N added ≈161 MB, the historical canons ≈138 MB);
+      # everything else — including every
       # Category B dir — is never materialized. GitFetch widens an existing
       # checkout's cone on the next pull (widen_sparse_cone!).
-      SPARSE_CONE = ["T/", "X/", "K/", "J/", "N/", "canons.json", "schema/"].freeze
+      SPARSE_CONE = (CANONS.map { |canon| "#{canon}/" } + ["canons.json", "schema/"]).freeze
 
       # Upstream's own filename grammar: <canon><vol>n<work>.xml
       # (T85n2884, X01n0001, T85n2917A). The stem IS the document id.
@@ -157,7 +200,7 @@ module Nabu
         document_refs(workdir).each(&block)
       end
 
-      # Non-scope Category A canon dirs (B, D, GA, … — a future scope
+      # Non-scope Category A canon dirs (B, GA, ZW, … — a future scope
       # decision) are skipped by rule; an xml under a scope canon whose stem defies
       # upstream's own grammar is unrecognized, loudly (P11-7).
       def discovery_skips(workdir)

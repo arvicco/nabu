@@ -151,6 +151,15 @@ class DerivabilityWritersTest < Minitest::Test
   # The ig-cyprus adapter writes its crawled IG XV 1,1 records
   # (canonical/ig-cyprus/documents/, tmp+rename) inside Adapter#fetch —
   # the riig crawl law kind.
+  # lotsawa_fetch writes canonical/lotsawa-house/ (text pages under
+  # pages/<lang>/, the listing pages under catalog/<lang>/, tmp+rename;
+  # attic copies + its .lotsawa-fetch.json ledger) inside Adapter#fetch —
+  # the otdo_fetch crawl law kind.
+  # the riig crawl law kind. The vakk adapter writes canonical/vakk/
+  # (the text list under map/, tmp+rename, and the crawled reading/info
+  # pages as texts/<kood>/*.html.gz, gzip tmp+rename, plus its
+  # .vakk-crawl.json ledger) inside Adapter#fetch — the ndl-kotenseki
+  # crawl law kind.
   # ANY new file here is a deliberate allowlist decision, not a
   # drive-by.
   WRITER_ALLOWLIST = %w[
@@ -165,6 +174,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
+    nabu/lotsawa_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
@@ -183,7 +193,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/slavic_wikisource_html.rb nabu/adapters/pl_wikisource_bruckner_lane.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
-    nabu/adapters/mdz_protestant.rb
+    nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb

@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
 | `calfa-lexicon` | dictionary | nc | wired · manual | 86,067 entries |
 | `cldf-spine` | feature module | attribution | wired · manual | nothing held yet |
@@ -28,12 +28,12 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `starling` | etymological bases | attribution | wired · manual | 146,798 entries |
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
-| `wiktionary-recon` | dictionary | attribution | wired · manual | 365,755 entries |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `zho` 327,296 · `xcl` 86,067 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 … and 127 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `zho` 327,296 · `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sga` 6,688 · `tut` 5,756 · `gmw-pro` 5,578 … and 130 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 
