@@ -5,6 +5,7 @@ require "nokogiri"
 require_relative "../normalize"
 require_relative "../slp1"
 require_relative "mw_sigla"
+require_relative "mw_entry_links"
 
 module Nabu
   module Adapters
@@ -118,10 +119,11 @@ module Nabu
       def entries(lines)
         out = []
         group = nil
+        links = MwEntryLinks.new
         lines.each do |line|
           record = parse_record(line) or next
           if record[:main]
-            out << build_entry(group) if group
+            out << finish_group(group, links) if group
             group = [record]
           elsif group
             group << record
@@ -129,11 +131,27 @@ module Nabu
             raise Nabu::ParseError, "mw-xml: continuation record L=#{record[:l]} before any main record"
           end
         end
-        out << build_entry(group) if group
-        out
+        out << finish_group(group, links) if group
+        with_entry_links(out, links.crossrefs)
       end
 
       private
+
+      def finish_group(group, links)
+        links.observe(group)
+        build_entry(group)
+      end
+
+      # The whole-file edges (MwEntryLinks): appended after each entry's own
+      # cf./q.v. pointers, in a second pass once every record id is known.
+      def with_entry_links(entries, extra)
+        return entries if extra.empty?
+
+        entries.map do |entry|
+          edges = extra[entry.entry_id]
+          edges ? entry.with(crossrefs: entry.crossrefs + edges) : entry
+        end
+      end
 
       # One line → { tag:, main:, key1:, key2:, l:, body: } or nil for the
       # frame lines (<?xml…, DOCTYPE, comments, <mw>, </mw>).
