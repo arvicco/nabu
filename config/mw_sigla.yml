@@ -20,6 +20,14 @@
 # mwauthtooltips.sqlite inside its mwweb1.zip display bundle. Text NFC,
 # otherwise byte-verbatim (one expansion keeps upstream's leading space).
 #
+# License note: the underlying list is Monier-Williams 1899 (public
+# domain); csl-pywork, the repository the digitized rows were taken
+# from, is GPL-3.0. To the extent CDSL's tagging and additions attract
+# protection, THIS FILE's key section is redistributed under GPL-3.0 as
+# an aggregated data file with its provenance stated (the repository's
+# own MIT license does not claim it); the crosswalk and authority
+# sections below are this project's own work.
+#
 # == crosswalk: sigla whose work GRETIL holds (the judgment layer)
 #
 # siglum → GRETIL file stem (urn:nabu:gretil:<stem>) and, where the
