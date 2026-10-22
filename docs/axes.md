@@ -107,7 +107,7 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
-**Members** (11): `burman-concordance`, `ceipom`, `isicily`, `itant`, `larth-etp`, `lexlep`, `lexlep-words`, `open-etruscan`, `sabellic-loans`, `tir`, `wiktionary-recon`
+**Members** (12): `burman-concordance`, `ceipom`, `etruscan-loans`, `isicily`, `itant`, `larth-etp`, `lexlep`, `lexlep-words`, `open-etruscan`, `sabellic-loans`, `tir`, `wiktionary-recon`
 
 ### etym
 
@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (14): `calfa-lexicon`, `cldf-spine`, `clics`, `derom`, `edl`, `iecor`, `liv`, `meloniromance`, `nabu-lects`, `sabellic-loans`, `starling`, `westoldturkic`, `wiktionary-recon`, `wold`
+**Members** (15): `calfa-lexicon`, `cldf-spine`, `clics`, `derom`, `edl`, `etruscan-loans`, `iecor`, `liv`, `meloniromance`, `nabu-lects`, `sabellic-loans`, `starling`, `westoldturkic`, `wiktionary-recon`, `wold`
 
 ### biblical
 

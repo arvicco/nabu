@@ -13,12 +13,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
 | `burman-concordance` | feature module | open | wired · manual | nothing held yet |
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
+| `etruscan-loans` | dictionary | attribution | not yet wired | not synced yet |
 | `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
 | `larth-etp` | dictionary | attribution | wired · manual | 1,122 entries |
