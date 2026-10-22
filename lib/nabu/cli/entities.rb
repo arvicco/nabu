@@ -16,6 +16,14 @@ module Nabu
       surface as inscribed or inflected, and any identity, authority key
       (TGN ids, perseus gazetteer names, pers:/pl: keys) or ref.
 
+      TOKEN-GRAIN NAMES: the cuneiform corpora mark names on the token
+      itself, and those tokens index here too — ORACC and Achemenet by
+      the qpn proper-noun POS (PN personal, DN divine, GN geographic, SN
+      settlement, RN royal, MN month …; the key is the citation form,
+      Nabu-mukin-zeri), TLHdig by a resolved morph class (PNm/PNf, DN,
+      GN; the key is the glossary name, Muršili). The type is the class
+      code verbatim: --type PN, --type GN.
+
       NAME matches as a SUBSTRING of a record's surface, identity, key or
       ref, with case and diacritics folded on both sides (Κροισ finds
       Κροῖσος and Κροίσου; macarius finds ⲁⲡⲁ ⲙⲁⲕⲁⲣⲓⲟⲥ through its
@@ -37,6 +45,8 @@ module Nabu
         nabu entity tgn,7002681               # by TGN key (Attica)
         nabu entity "macarius of egypt"       # a Coptic Wikification identity
         nabu entity puḷumāvi --source dharma-deccan
+        nabu entity idrimi --type RN          # a royal name on the ORACC tokens
+        nabu entity muršili --source tlhdig   # a Hittite king by his glossary name
         nabu entity                           # the index census
     HELP
     option :type, type: :string, banner: "TYPE",
@@ -147,7 +157,7 @@ module Nabu
       def print_passage_entities(result)
         return say ANNOTATIONS_UNREADABLE_NOTE if annotations_unreadable?(result)
 
-        records = entity_records(result.annotations)
+        records = entity_records(result.annotations, result.source_slug)
         return say "no inline entities stored for this passage" if records.empty?
 
         say "entities (#{records.size}):"
@@ -156,7 +166,7 @@ module Nabu
 
       def print_document_entities(result)
         listed = result.passages.filter_map do |line|
-          records = entity_records(line.annotations)
+          records = entity_records(line.annotations, result.source_slug)
           [line, records] unless records.empty?
         end
         return say "no inline entities stored for these passages" if listed.empty?
@@ -173,21 +183,28 @@ module Nabu
         records.each { |record| say "#{indent}#{record.type.ljust(width)}  #{record.label}#{entity_details(record)}" }
       end
 
-      def entity_records(annotations)
-        raw = annotations.is_a?(Hash) ? annotations[Nabu::Store::EntityIndex::ANNOTATION] : nil
-        return [] unless raw.is_a?(Array)
+      # The inline span records, then (for a TOKEN_SHAPES source) the
+      # token-grain names the index projects from the same annotations.
+      def entity_records(annotations, slug = nil)
+        return [] unless annotations.is_a?(Hash)
 
-        raw.filter_map do |element|
-          next unless element.is_a?(Hash)
+        raw = annotations[Nabu::Store::EntityIndex::ANNOTATION]
+        spans = raw.is_a?(Array) ? raw.filter_map { |element| span_record(element) } : []
+        tokens = Nabu::Store::EntityIndex.token_records(annotations[Nabu::Store::EntityIndex::TOKENS],
+                                                        Nabu::Store::EntityIndex::TOKEN_SHAPES[slug])
+        spans + tokens.uniq.map { |values| EntityRecord.new(**Nabu::Store::EntityIndex::FIELDS.map(&:to_sym).zip(values).to_h) }
+      end
 
-          fields = Nabu::Store::EntityIndex::FIELDS.to_h do |field|
-            value = element[field]
-            [field.to_sym, value.is_a?(String) && !value.strip.empty? ? value : nil]
-          end
-          fields[:type] ||= "untyped"
-          record = EntityRecord.new(**fields)
-          record if record.label
+      def span_record(element)
+        return nil unless element.is_a?(Hash)
+
+        fields = Nabu::Store::EntityIndex::FIELDS.to_h do |field|
+          value = element[field]
+          [field.to_sym, value.is_a?(String) && !value.strip.empty? ? value : nil]
         end
+        fields[:type] ||= "untyped"
+        record = EntityRecord.new(**fields)
+        record if record.label
       end
     end
   end
