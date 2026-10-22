@@ -345,11 +345,16 @@ module Nabu
         # a printer-only imprint naming no town ("Printed by Iohn Legat");
         # a collation statement catalogued into the place field ("[2], 6
         # p."). Anchored whole-value shapes — "S. Román" and kin never match.
+        # The DTA transcription template's unfilled imprint slot
+        # "[Erscheinungsort]" (long-s "[Erſcheinungſort]" too — 3 held texts,
+        # census 2026-10-22, all in a titlePage docImprint) is a placeholder,
+        # never a town.
         NO_PLACE_SHAPES = [
           /\As\.?\s*[l1n]\.?\z/i, /\An\.?\s*p\.?\z/i,
           /\A(?:printed\s+)?\[?\s*abroad\s*\]?\z/i,
           /\Aprinted\s+by\s+(?!.*\b(?:at|in)\b)/i,
-          /\A[\d\[\]\s,]+p\z/i
+          /\A[\d\[\]\s,]+p\z/i,
+          /\A\[?\s*er[sſ]cheinung[sſ]ort\s*\]?\z/i
         ].freeze
 
         # A value naming no place: a NO_PLACE sentinel or a NO_PLACE_SHAPES form.
