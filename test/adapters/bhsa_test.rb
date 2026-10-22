@@ -197,6 +197,52 @@ module Adapters
                    "spans order by first token, clause before phrase"
     end
 
+    # -- the widened span-feature lane: every clause/phrase-grain feature ----
+
+    def test_clause_spans_carry_every_clause_grain_feature_verbatim
+      spans = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.1").annotations["spans"]
+      main = spans.find { |s| s["node"] == 487_411 }
+      assert_equal({ "kind" => "VC", "typ" => "WayX", "txt" => "N", "domain" => "N", "rela" => "NA",
+                     "dist" => 0, "dist_unit" => "clause_atoms", "mother_object_type" => "clause" },
+                   main.slice("kind", "typ", "txt", "domain", "rela", "dist", "dist_unit", "mother_object_type"),
+                   "clause type/text type/domain/relation ride verbatim under upstream names, NA included")
+      refute main.key?("mother"), "a clause with no linguistic mother carries no mother key — absent, never filled"
+      adjunct = spans.find { |s| s["node"] == 487_412 }
+      assert_equal({ "typ" => "InfC", "rela" => "Adju", "dist" => -1, "mother" => 487_411 },
+                   adjunct.slice("typ", "rela", "dist", "mother"),
+                   "the mother EDGE rides as the target's TF node id — the same id space as span node")
+    end
+
+    def test_a_clause_mother_may_be_a_phrase_node
+      clause = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.3")
+               .annotations["spans"].find { |s| s["node"] == 487_421 }
+      assert_equal({ "typ" => "Ptcp", "rela" => "Attr", "dist" => -2, "dist_unit" => "phrase_atoms",
+                     "mother_object_type" => "phrase", "mother" => 827_749 },
+                   clause.slice("typ", "rela", "dist", "dist_unit", "mother_object_type", "mother"))
+    end
+
+    def test_phrase_spans_carry_every_phrase_grain_feature_verbatim
+      phrases = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.1")
+                .annotations["spans"].select { |s| s["type"] == "phrase" }
+      assert_equal(%w[CP VP NP PP VP], phrases.map { |s| s["typ"] })
+      assert_equal %w[NA NA det det NA], phrases.map { |s| s["det"] }, "determination rides verbatim, NA included"
+      subject = phrases.find { |s| s["node"] == 827_725 }
+      assert_equal({ "function" => "Subj", "typ" => "NP", "rela" => "NA", "det" => "det", "dist" => 0,
+                     "dist_unit" => "clause_atoms" }, subject.except("type", "node", "ranges"),
+                   "phrases carry no mother_object_type (clause/subphrase grain upstream) and no txt/domain")
+      resumptive = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:2.7")
+                   .annotations["spans"].find { |s| s["node"] == 828_038 }
+      assert_equal({ "function" => "Subj", "rela" => "Resu", "dist" => -1, "dist_unit" => "phrase_atoms",
+                     "mother" => 828_037 }, resumptive.slice("function", "rela", "dist", "dist_unit", "mother"))
+    end
+
+    def test_span_features_are_ridden_or_declined_never_both
+      ridden = Nabu::Adapters::Bhsa::SPAN_FEATURES.values.flatten.uniq + [Nabu::Adapters::Bhsa::SPAN_EDGE]
+      declined = Nabu::Adapters::Bhsa::DECLINED_TOKEN_FEATURES.keys
+      assert_empty ridden & declined, "a span feature rides the spans; its decline row is retired"
+      assert_empty ridden & Nabu::Adapters::Bhsa::TOKEN_FEATURES, "span grain never rides tokens"
+    end
+
     def test_discontinuous_clause_keeps_both_pieces_as_ranges
       passage = passage_at("urn:nabu:bhsa:jonah", "urn:nabu:bhsa:jonah:1.5")
       clause = passage.annotations["spans"].find { |s| s["node"] == 487_432 }

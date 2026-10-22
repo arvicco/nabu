@@ -71,6 +71,7 @@ nodes are skipped, e.g. qere_utf8). Per file:
 | `chapter.tf`, `verse.tf` | 66,379 / 61,897 → 726 / 770 | verse-grain entries for slice verses (chapter-node entries dropped — unread) |
 | `oslots.tf` | 13,526,306 → 30,431 | slice verse nodes + every clause (732) and phrase (2,046) node whose slots intersect the slices; all other node types dropped — unread |
 | `kind.tf` (clauses), `function.tf` (phrases) | 264,852 / 1,266,461 → 2,676 / 10,697 | the same clause/phrase node sets as oslots |
+| the span-feature lane (9 files): `typ`, `txt`, `domain`, `rela`, `det`, `dist`, `dist_unit`, `mother_object_type`, and the `mother` EDGE | 0.18–7.9 MB → 2–37 KB | the same 2,778 clause/phrase nodes as oslots (atom/subphrase/sentence entries dropped — unread); range-spec upstream lines expand to per-node lines, anchored after each gap. Added 2026-10-22 from the same pinned commit `4db00e21` (the held canonical tree), with a trimmer that reproduces `kind.tf`/`function.tf` byte-identically |
 
 kq_hybrid(.utf8) pins the empty-line quirk: word-grain files where most
 slots carry EMPTY values (empty data lines that advance the node cursor).
@@ -78,9 +79,8 @@ slots carry EMPTY values (empty data lines that advance the node cursor).
 Features deliberately NOT fixtured (and not read by the adapter — each
 named with its reason in `Bhsa::DECLINED_TOKEN_FEATURES`): the
 transliterated twins whose token key the utf8 alias already owns
-(`trailer`, `qere`, `qere_trailer`, `kq_hybrid`), the clause/phrase/atom
-grain features beyond `kind`/`function` (`typ`, `rela`, `det`, `dist`,
-`domain`, `txt`, `code`, `tab`, `pargr`, …), the *_atom / subphrase /
-sentence / half_verse structure, the mother/functional_parent/
+(`trailer`, `qere`, `qere_trailer`, `kq_hybrid`), the clause_atom-grain
+features (`code`, `tab`, `pargr`, `instruction`, `is_root`), the *_atom /
+subphrase / sentence / half_verse structure, the functional_parent/
 distributional_parent edges, the omap@* version-map edges (@edgeValues —
 refused by the family), `label`, and the book@<lang> translations.
