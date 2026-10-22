@@ -7,9 +7,9 @@ classes:
   documents_display: '699,341'
   sources: 27
 - head: administrative
-  documents: 488363
-  documents_display: '488,363'
-  sources: 15
+  documents: 489119
+  documents_display: '489,119'
+  sources: 16
 - head: historiography
   documents: 357097
   documents_display: '357,097'
@@ -35,9 +35,9 @@ classes:
   documents_display: '23,108'
   sources: 24
 - head: dedicatory
-  documents: 22915
-  documents_display: '22,915'
-  sources: 7
+  documents: 22921
+  documents_display: '22,921'
+  sources: 8
 - head: divination
   documents: 21061
   documents_display: '21,061'
@@ -55,9 +55,9 @@ classes:
   documents_display: '13,315'
   sources: 18
 - head: mark
-  documents: 12286
-  documents_display: '12,286'
-  sources: 9
+  documents: 12290
+  documents_display: '12,290'
+  sources: 10
 - head: honorific
   documents: 11413
   documents_display: '11,413'
@@ -99,5 +99,5 @@ unknown_documents: 47047
 unknown_documents_display: '47,047'
 unmapped_documents: 11441
 unmapped_documents_display: '11,441'
-unclassified_documents: 490049
-unclassified_documents_display: '490,049'
+unclassified_documents: 490070
+unclassified_documents_display: '490,070'

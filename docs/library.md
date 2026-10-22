@@ -1282,6 +1282,37 @@ with persisted cone membership for the scan-indexed Wikisource
 family, and a parallel test runner that cut the suite from ~7 minutes
 to ~90 seconds.
 
+## 8ar. Linear A and the Old Uyghur lexicon (P142)
+
+Two scripts the library could not read before (counts from the first
+syncs, 2026-10-22):
+
+**`sigla`** — the SigLA palaeographic database of **Linear A**, the
+undeciphered script of Minoan Crete: 787 inscriptions / 3,097
+sign-group passages (Haghia Triada, Khania, Phaistos, Zakros,
+Knossos…), every sign attestation classified and read, 760 of 787
+dated through the new Minoan ceramic-phase bands, every one placed at
+its find-site (CC BY-NC-SA). The data ships as OCaml Marshal blobs;
+the new decoder family reads them natively and re-encodes them
+byte-identically as its own proof.
+
+**`wilkens-oui`** — Wilkens's *Handwörterbuch des Altuigurischen*
+(Göttingen 2021, CC BY-SA): 49,619 dictionary entries of Old Uyghur
+glossed in German and Turkish, segmented from the book's positioned
+PDF text layer with the entry stacks, column wraps and homonym
+numbering preserved — the first real Old Uyghur dictionary shelf,
+49,619 + 2 named skips reconciling exactly against the measured
+49,621 records.
+
+Beside them, the phase's rails: the sidecar harvest (Hebrew Bible
+clause/phrase grammar on every span, the Scrolls' lexeme crosswalk
+censused, the Middle German corpora's lost normalization and
+segmentation lanes restored), a measuring stick for the parallels
+engine (recall@K over six censused gold sets, baselines pinned), the
+convention every future paid-model enrichment must land on, and the
+person card now listing catalogue mentions (rulers, authors,
+eponyms) beside its authority cards.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
