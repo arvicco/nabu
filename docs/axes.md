@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (35): `ceipom`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (36): `ceipom`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `pleiades`, `riig`, `rundata`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (15): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `eng-web`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `ud`, `vulgate`
+**Members** (16): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `eng-web`, `extrabiblical`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -131,7 +131,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (10): `bhsa`, `bridging`, `dss`, `elephantine`, `hebrew-lexicon`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`
+**Members** (11): `bhsa`, `bridging`, `dss`, `elephantine`, `extrabiblical`, `hebrew-lexicon`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`
 
 ### syriac
 
