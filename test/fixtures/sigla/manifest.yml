@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: sigla
+adapter_test:
+retrieved: "2026-10-22"
+files:
+  - path: database.js
+    url: https://sigla.phis.me/database.js
+    refetchable: true
+    whole: false
+    trim: the signs line byte-verbatim; the data payload cut to seven inscriptions and re-encoded (README recipe)
+  - path: document/ARKH 1a/index.html
+    url: https://sigla.phis.me/document/ARKH%201a/index.html
+    refetchable: true
+    whole: true
