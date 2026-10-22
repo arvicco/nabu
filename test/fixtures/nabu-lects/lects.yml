@@ -289,6 +289,21 @@ anchors:
            discipline). Corpus: the IG Cypriot syllabary fascicle (18
            Eteocypriot records, censused 2026-10-11)"
 
+  lab:
+    name: Linear A (Minoan)
+    glottocode: mino1236
+    note: "the undeciphered administrative language of palatial Crete,
+           written in the Linear A script, MM II–LM IB (conventionally
+           c. 1800–1450 BCE) — tablets, roundels, nodules and libation
+           formulas from Haghia Triada, Khania, Phaistos, Zakros and the
+           peak sanctuaries. Sign values are read via the Linear B
+           comparanda (Salgarella 2020 on the script relation); the
+           language resists every published affiliation claim —
+           Glottolog: unclassifiable. No parent edge where no
+           classification exists (the ecy/xht discipline). 'lab' is the
+           IETF/SIL code for Linear A. Corpus: sigla (787 inscriptions /
+           5,144 sign attestations, censused 2026-10-22)"
+
   el:
     name: Modern Greek
     parent: grc
@@ -3634,3 +3649,6 @@ scripts:
   sund: {name: Sundanese,                            iso15924: Sund}
   bali: {name: Balinese,                             iso15924: Bali}
   rjng: {name: "Rejang (Redjang, Kaganga)",           iso15924: Rjng}
+  lina: {name: Linear A,                             iso15924: Lina}
+  linb: {name: Linear B,                             iso15924: Linb}
+  cprt: {name: Cypriot syllabary,                    iso15924: Cprt}

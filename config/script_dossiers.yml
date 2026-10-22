@@ -374,3 +374,53 @@ sund:
     cone's 19th-century prints are Latin and cacarakan; the row
     covers the revived script's editions. Unicode encodes it since
     5.1.
+
+lina:
+  name: Linear A
+  context: >-
+    The undeciphered administrative script of Minoan Crete and the
+    islands, MM II–LM IB (conventionally c. 1800–1450 BCE): a syllabary
+    with logograms, fractions and composite commodity signs, incised on
+    clay tablets, roundels and sealing nodules and carved on stone
+    libation tables — Haghia Triada, Khania, Phaistos, Zakros, Knossos
+    and the peak sanctuaries. Ancestral to Linear B, with which it
+    shares much of the sign grid (Salgarella 2020 on the relation);
+    sign values are conventionally read through the Linear B
+    comparanda, and the language behind them resists classification.
+    Unicode encodes it since 7.0.
+  desk: >-
+    Held in transliteration — syllabograms by phonetic value with
+    homophone subscripts, logograms by Latin name, erasures bracketed;
+    no Linear A Unicode rides the shelves, and the artifact-script row
+    carries the original writing system.
+
+linb:
+  name: Linear B
+  context: >-
+    The syllabic script of Mycenaean Greek palace administration,
+    c. 1400–1190 BCE, adapted from Linear A: ~87 syllabograms beside
+    logograms/ideograms, weights and measures, on clay tablets and
+    sealings from Knossos, Pylos, Thebes, Mycenae and Tiryns.
+    Deciphered by Ventris (1952) as Greek — the earliest attested
+    Greek by half a millennium. Unicode encodes the syllabary and
+    ideograms since 4.0.
+  desk: >-
+    Held in the conventional transliteration (syllabograms romanized,
+    logograms as Latin abbreviations); the artifact-script row carries
+    the original writing system.
+
+cprt:
+  name: Cypriot syllabary
+  context: >-
+    The Iron Age syllabary of Cyprus, c. 11th–3rd centuries BCE,
+    descended from Cypro-Minoan: open syllables only, written mostly
+    right-to-left, used for Arcado-Cypriot Greek and for the
+    unclassified Eteocypriot of Amathus. Deciphered through the
+    Idalion bronze and Phoenician bilinguals (George Smith 1871);
+    displaced by the Greek alphabet in the Hellenistic period.
+    Unicode encodes it since 4.0.
+  desk: >-
+    Held in Latin transliteration beside alphabetic Greek lines; the
+    per-passage writing-system annotation separates syllabary from
+    alphabet, and the artifact-script rows carry the original writing
+    system for the transliterated codes.
