@@ -624,9 +624,12 @@ module Nabu
       # The search lanes (fuzzy / translations / sense): each composes with
       # exactly the args its CLI flag composes with (the MCP-available
       # subset) — anything else is a usage error, never a silent drop.
+      # const: argument vocabularies mirroring the CLI flags, not corpus claims
       FUZZY_ARGS = %w[fuzzy query lang license from to century date_basis place kind facets limit
                       include_restricted].freeze
+      # const: the --translations composition set
       TRANSLATIONS_ARGS = %w[translations query lang license limit include_restricted].freeze
+      # const: the sense desk composition set
       SENSE_ARGS = %w[sense sense_gloss limit include_restricted].freeze
 
       SHOW_SCHEMA = {
