@@ -948,35 +948,39 @@ module Nabu
       # nabu_place (the place desk over Query::Place) as the eleventh; P53-2
       # adds nabu_signs (the sign desk over Query::Signs) as the twelfth —
       # nabu_status stays last, the coverage epilogue.
+      #
+      # +title+ (contract bump 2026-10-22): the human-readable display name
+      # the MCP spec's tool metadata carries; #definitions serves it top-level
+      # and inside the `annotations` object beside readOnlyHint.
       TOOLS = {
-        "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
-                           handler: :search },
-        "nabu_show" => { description: SHOW_DESCRIPTION, input_schema: SHOW_SCHEMA,
-                         handler: :show },
-        "nabu_concord" => { description: CONCORD_DESCRIPTION, input_schema: CONCORD_SCHEMA,
-                            handler: :concord },
-        "nabu_align" => { description: ALIGN_DESCRIPTION, input_schema: ALIGN_SCHEMA,
-                          handler: :align },
-        "nabu_define" => { description: DEFINE_DESCRIPTION, input_schema: DEFINE_SCHEMA,
-                           handler: :define },
-        "nabu_etym" => { description: ETYM_DESCRIPTION, input_schema: ETYM_SCHEMA,
-                         handler: :etym },
-        "nabu_parallels" => { description: PARALLELS_DESCRIPTION, input_schema: PARALLELS_SCHEMA,
-                              handler: :parallels },
-        "nabu_cognates" => { description: COGNATES_DESCRIPTION, input_schema: COGNATES_SCHEMA,
-                             handler: :cognates },
-        "nabu_links" => { description: LINKS_DESCRIPTION, input_schema: LINKS_SCHEMA,
-                          handler: :links },
-        "nabu_char" => { description: CHAR_DESCRIPTION, input_schema: CHAR_SCHEMA,
-                         handler: :char_card },
-        "nabu_place" => { description: PLACE_DESCRIPTION, input_schema: PLACE_SCHEMA,
-                          handler: :place },
-        "nabu_signs" => { description: SIGNS_DESCRIPTION, input_schema: SIGNS_SCHEMA,
-                          handler: :signs },
-        "nabu_clarify" => { description: CLARIFY_DESCRIPTION, input_schema: CLARIFY_SCHEMA,
-                            handler: :clarify },
-        "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
-                           handler: :status }
+        "nabu_search" => { title: "Search the corpus", description: SEARCH_DESCRIPTION,
+                           input_schema: SEARCH_SCHEMA, handler: :search },
+        "nabu_show" => { title: "Read passages by URN", description: SHOW_DESCRIPTION,
+                         input_schema: SHOW_SCHEMA, handler: :show },
+        "nabu_concord" => { title: "Concordance (keyword in context)", description: CONCORD_DESCRIPTION,
+                            input_schema: CONCORD_SCHEMA, handler: :concord },
+        "nabu_align" => { title: "Cross-source alignment", description: ALIGN_DESCRIPTION,
+                          input_schema: ALIGN_SCHEMA, handler: :align },
+        "nabu_define" => { title: "Dictionary lookup", description: DEFINE_DESCRIPTION,
+                           input_schema: DEFINE_SCHEMA, handler: :define },
+        "nabu_etym" => { title: "Reconstruction walk", description: ETYM_DESCRIPTION,
+                         input_schema: ETYM_SCHEMA, handler: :etym },
+        "nabu_parallels" => { title: "Intertext parallels", description: PARALLELS_DESCRIPTION,
+                              input_schema: PARALLELS_SCHEMA, handler: :parallels },
+        "nabu_cognates" => { title: "Cognates in parallel", description: COGNATES_DESCRIPTION,
+                             input_schema: COGNATES_SCHEMA, handler: :cognates },
+        "nabu_links" => { title: "Mined links graph", description: LINKS_DESCRIPTION,
+                          input_schema: LINKS_SCHEMA, handler: :links },
+        "nabu_char" => { title: "Character card", description: CHAR_DESCRIPTION,
+                         input_schema: CHAR_SCHEMA, handler: :char_card },
+        "nabu_place" => { title: "Place desk", description: PLACE_DESCRIPTION,
+                          input_schema: PLACE_SCHEMA, handler: :place },
+        "nabu_signs" => { title: "Cuneiform sign desk", description: SIGNS_DESCRIPTION,
+                          input_schema: SIGNS_SCHEMA, handler: :signs },
+        "nabu_clarify" => { title: "Reference normalizer", description: CLARIFY_DESCRIPTION,
+                            input_schema: CLARIFY_SCHEMA, handler: :clarify },
+        "nabu_status" => { title: "Corpus coverage status", description: STATUS_DESCRIPTION,
+                           input_schema: STATUS_SCHEMA, handler: :status }
       }.freeze
 
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
@@ -1073,12 +1077,19 @@ module Nabu
         @links = links
       end
 
-      # tools/list shape: [{name:, description:, inputSchema:}]. nabu_define's
-      # lang enum is injected LIVE (#define_langs) so the advertised language
-      # set can never rot into a hand-frozen list again (P35-6 L4).
+      # tools/list shape: [{name:, title:, description:, inputSchema:,
+      # annotations:}]. nabu_define's lang enum is injected LIVE
+      # (#define_langs) so the advertised language set can never rot into a
+      # hand-frozen list again (P35-6 L4). The annotations (contract bump
+      # 2026-10-22) follow the MCP spec's ToolAnnotations shape: every tool is
+      # readOnlyHint true — the surface opens the stores read-only and has no
+      # write tools — and the title rides there too for clients that read the
+      # display name only from the annotations.
       def definitions
         TOOLS.map do |name, tool|
-          { name: name, description: tool.fetch(:description), inputSchema: input_schema(name, tool) }
+          title = tool.fetch(:title)
+          { name: name, title: title, description: tool.fetch(:description),
+            inputSchema: input_schema(name, tool), annotations: { title: title, readOnlyHint: true } }
         end
       end
 

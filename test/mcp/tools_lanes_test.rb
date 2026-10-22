@@ -41,6 +41,24 @@ module MCP
       assert_equal %i[urn parallel parallel_lang max_passages segmented senses include_restricted], show
     end
 
+    # The tool-annotations bump (2026-10-22): every registered tool advertises
+    # a human-readable title (top-level and in the MCP `annotations` object)
+    # and readOnlyHint: true — the surface has no write tools, and clients use
+    # the hint to skip confirmation prompts on read-only calls.
+    def test_every_tool_carries_a_title_and_the_read_only_hint
+      defs = Nabu::MCP::Tools.new(catalog: nil, fulltext: nil).definitions
+      assert_equal Nabu::MCP::Tools::TOOLS.size, defs.size
+      defs.each do |definition|
+        title = definition[:title]
+        assert_kind_of String, title, "#{definition[:name]} carries a title"
+        refute_empty title.strip, "#{definition[:name]} title is not blank"
+        refute_equal definition[:name], title, "#{definition[:name]} title is a display name, not the id"
+        assert_equal({ title: title, readOnlyHint: true }, definition[:annotations],
+                     "#{definition[:name]} annotations pinned")
+      end
+      assert_equal defs.size, defs.map { |d| d[:title] }.uniq.size, "titles are distinct"
+    end
+
     # -- fuzzy -----------------------------------------------------------------
 
     def seed_papyri

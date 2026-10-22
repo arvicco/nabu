@@ -580,8 +580,10 @@ decision: the field moves fast, we keep control; the conformant core is
   refreshed per source by `refresh_source!` when present (never
   bootstrapped by a sync), re-derived standalone by the stage reconcile or
   `rake index:clarify`). Translation only: all query logic stays in
-  `lib/nabu/query/`. The tool table is a hash; a new surface is one entry +
-  handler.
+  `lib/nabu/query/`. The tool table is a hash; a new surface is one entry
+  (with its display `title`) + handler. Every `tools/list` entry carries the
+  MCP tool metadata: `title` and `annotations: {title, readOnlyHint: true}`
+  (contract bump 2026-10-22, pinned in `test/mcp/tools_lanes_test.rb`).
 - **The contract**: every returned passage carries urn + language +
   license_class + source; reference data (gazetteer facts, sign cards)
   carries its own license envelope read from the adapter manifests
