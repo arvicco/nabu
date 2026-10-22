@@ -63,3 +63,4 @@ Do not crawl this site page by page to inventory the library — use the lookup 
 - [nabu-data](https://github.com/arvicco/nabu-data): the derived datasets (CLDF + Frictionless), versioned with DOIs — bulk downloads, not lookups
 - [Source repository](https://github.com/arvicco/nabu): the full pipeline, registry and documentation
 - [News](https://arvicco.github.io/nabu/news/): dated release notes, with an Atom feed at https://arvicco.github.io/nabu/feed.xml
+- [Full site text](https://arvicco.github.io/nabu/llms-full.txt): every navigation page as plain text in one file, rendered at site build

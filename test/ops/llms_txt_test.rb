@@ -68,6 +68,7 @@ class LlmsTxtTest < Minitest::Test
   def test_the_optional_section_holds_the_heavyweight_dumps
     optional = render.split(/^## Optional$/).last
     assert_includes optional, "github.com/arvicco/nabu-data"
+    assert_includes optional, "](#{BASE}/llms-full.txt)", "the full-text companion is optional reading"
   end
 
   def test_write_renders_from_the_committed_ssot_files
