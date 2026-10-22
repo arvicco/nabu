@@ -71,8 +71,13 @@ module Nabu
     # compatible licence) carrying attribution and notice duties; the
     # share-alike rider is recorded in docs/02-sources.md. The licence
     # page itself was unreachable at adapter time (kielipankki.fi down for
-    # maintenance 2026-10-21; urn.fi behind a browser challenge) — re-read
-    # it verbatim at the first harvest.
+    # maintenance 2026-10-21; urn.fi behind a browser challenge). Re-read
+    # 2026-10-22: kielipankki.fi/corpora/vks confirms "This resource is
+    # available publicly (PUB)" with the licence image linking the same
+    # urn page; urn.fi itself still serves its browser challenge (HTTP
+    # 403 to plain fetchers), so the resource-specific EUPL text rests on
+    # the Korp configuration verbatim + the PUB page — two Kielipankki
+    # surfaces in agreement.
     #
     # == Axes
     #
