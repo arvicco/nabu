@@ -1,0 +1,27 @@
+{
+  "title": "Beirdd y Berwyn 1700-1750 (testun cyfansawdd)",
+  "pageid": 68678,
+  "ns": 0,
+  "revid": 137480,
+  "timestamp": "2025-05-28T22:36:24Z",
+  "cone": [
+    "index:Beirdd y Berwyn 1700-1750.djvu"
+  ],
+  "wikitext": "{{header\n | title =Beirdd y Berwyn 1700-1750 (testun cyfansawdd)\n | author =\n | andauthor =\n | translator =\n | editor =Owen Morgan Edwards\n | section =\n | previous =\n | next = \n | notes =I'w darllen cerdd wrth gerdd gwele [[Beirdd y Berwyn 1700-1750]]\n}}\n{| style=\"margin-left: auto; margin-right: auto; border: none;\"\n|-\n| {{Wicipedia|Owen Morgan Edwards}}\n| {{Wicipedia|Cyfres y Fil}}\n| {{Wicipedia|Y Berwyn}}\n|}\n\n<div style=\"margin-left:10%; margin-right:10%;\">\n<pages index=\"Beirdd y Berwyn 1700-1750.djvu\" from=1 to=132 />\n</div>\n\n==Nodiadau==\n{{Cyfeiriadau}}\n\n{{PD-old}}\n\n[[Categori:Beirdd y Berwyn 1700-1750]]\n[[Categori:Owen Morgan Edwards]]\n[[Categori:Llyfrau 1902]]\n[[Categori:Llyfrau'r 1900au]]\n[[Categori:Barddoniaeth]]\n[[Categori:Cyfres y Fil]]\n[[Categori:Testunau cyfansawdd]]",
+  "indexes": [
+    {
+      "name": "Beirdd y Berwyn 1700-1750.djvu",
+      "title": "Indecs:Beirdd y Berwyn 1700-1750.djvu",
+      "pageid": 59643,
+      "revid": 137581,
+      "fields": {
+        "Title": "Beirdd y Berwyn 1700-1750",
+        "Author": "Owen Morgan Edwards",
+        "Publisher": "ab Owen, Llanuwchllyn",
+        "Year": "1902",
+        "Source": "djvu",
+        "Progress": "V"
+      }
+    }
+  ]
+}

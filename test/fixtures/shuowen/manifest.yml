@@ -1,0 +1,51 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# shuowenjiezi/shuowen ships one JSON record per head character under data/.
+# All fixtures are WHOLE byte-identical upstream copies at commit
+# 6553a350763ce4feca2c5d1cc2cad7e594dc2975. adapter_test is null — upstream
+# is a live correction repo; a corrected record would false-fail the pins.
+source: shuowen
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: data/1.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/1.json
+    whole: true
+    trim: none
+  - path: data/7.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/7.json
+    whole: true
+    trim: none
+  - path: data/530.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/530.json
+    whole: true
+    trim: none
+  - path: data/1000.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/1000.json
+    whole: true
+    trim: none
+  - path: data/1082.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/1082.json
+    whole: true
+    trim: none
+  - path: data/1214.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/1214.json
+    whole: true
+    trim: none
+  - path: data/4354.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/4354.json
+    whole: true
+    trim: none
+  - path: data/6558.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/6558.json
+    whole: true
+    trim: none
+  - path: data/7538.json
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/data/7538.json
+    whole: true
+    trim: none
+  - path: doc/FORMAT.md
+    url: https://raw.githubusercontent.com/shuowenjiezi/shuowen/master/doc/FORMAT.md
+    whole: true
+    trim: none

@@ -94,6 +94,8 @@ module Nabu
           "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title
           #                               page, else its standard attribution (raw says which);
           #                               place = the title page's imprint town
+          "br-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
+          #                                         (≤ 1900, the dated cone; date_class edition)
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
           #                            page states (authorship eras class "composition");
           #                            place = the manuscript's Provenance
@@ -108,6 +110,9 @@ module Nabu
           "croala" => :year_range,
           "cs-wikisource" => :edition_year_text,
           "ctilc" => :structured,
+          "cy-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
+          #                                         (1547–1800 prints + the censused later
+          #                                         editions; date_class edition)
           "dacon" => :structured,
           "dcs" => :time_slot_band, # the chapter's DCS composition time slot → the ruled
           #                           "DCS time slot N" period_bands rows, composition class
@@ -140,6 +145,8 @@ module Nabu
           "fornsvenska" => :compact_date_keys,
           "gams-zrcalo" => :structured,
           "glaux" => :signed_bounds_keys,
+          "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
+          #                               keyed on metadata "work" = the GRETIL file stem)
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
@@ -155,6 +162,8 @@ module Nabu
           "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
           #                                               own year, composition class) else the
           #                                               era-category band (precision era)
+          "jv-wikisource" => :edition_year_text, # P140: the scan Index Year= (else the file
+          #                                         name's year) — the print (date_class edition)
           "ko-wikisource-mk" => :structured,
           "kannada-texts" => :structured, # P118-3: the repo README's work dates
           #                                 (941, 953, ca. 1042), composition class
@@ -213,7 +222,12 @@ module Nabu
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding
           #                                   library) rides "repository", never a place claim
+          "su-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
+          #                                         (date_class edition)
           "syriac-corpus" => :when_key,
+          "te-wikisource" => :edition_year_text, # P140: the scan Index సంవత్సరం= print year,
+          #                                         else the header's (date_class edition —
+          #                                         never the poets' composition era)
           "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
           #                                         BE converted to CE (date_class edition)
           "ticha" => :structured,
@@ -223,6 +237,8 @@ module Nabu
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
           "uk-wikisource" => :era_band_key,
+          "vakk" => :structured, # the text list's year ("1535", "1485-1495"); the court
+          #                        protocols place at their Vald (the sitting commune)
           "viet-wikisource" => :structured,
           "vks" => :structured, # the Korp text elements' text_datefrom/text_dateto, the file's
           #                       envelope (collection files carry per-passage years too)
@@ -257,7 +273,8 @@ module Nabu
           # uncertain claim (CONJECTURE_KEYS — "London?", never the raw
           # "[London?] printed" prose); only a doc the reading left
           # unplaced falls back to the verbatim imprint, cleaned of the
-          # ESTC-style bracket/colon furniture. The TCP's own pub_place
+          # ESTC-style bracket/colon furniture and screened by the
+          # no-place conventions (NO_PLACE_SHAPES). The TCP's own pub_place
           # (Ann Arbor) is lineage, exempted.
           "eebo-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
@@ -317,6 +334,27 @@ module Nabu
         NO_PLACE = ["unknown", "unclear", "uncertain", "none", "not listed in teo",
                     "s.l", "s.l.", "?", "zagranica", "inny", "place of origin unknown",
                     "出版地不明", "製作地不明", "書写地不明", "unbekannt"].freeze
+        # The early-print no-place conventions, by shape (the eebo raw-
+        # imprint fallback, census 2026-10-21 — 22 docs that minted junk
+        # names): sine loco / sine nomine / no place in every catalogue
+        # spelling ("S.n", "N.p", "n.p", "S. l", the OCR'd "S.1");
+        # "printed abroad", bracketed whole or in part ("Printed [abroad");
+        # a printer-only imprint naming no town ("Printed by Iohn Legat");
+        # a collation statement catalogued into the place field ("[2], 6
+        # p."). Anchored whole-value shapes — "S. Román" and kin never match.
+        NO_PLACE_SHAPES = [
+          /\As\.?\s*[l1n]\.?\z/i, /\An\.?\s*p\.?\z/i,
+          /\A(?:printed\s+)?\[?\s*abroad\s*\]?\z/i,
+          /\Aprinted\s+by\s+(?!.*\b(?:at|in)\b)/i,
+          /\A[\d\[\]\s,]+p\z/i
+        ].freeze
+
+        # A value naming no place: a NO_PLACE sentinel or a NO_PLACE_SHAPES form.
+        def no_place?(value)
+          text = value.to_s.strip.downcase
+          NO_PLACE.include?(text) || NO_PLACE_SHAPES.any? { |shape| shape.match?(text) }
+        end
+        module_function :no_place?
 
         # P59-0: sources whose reversed upstream bounds order-normalize at
         # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
@@ -520,8 +558,7 @@ module Nabu
               place = place.to_s.gsub(PLACE_LABEL, " ").strip.sub(/\A[\[\s.:,;]+/, "")
                            .sub(/[\s:,.;\[\]]+\z/, "")
             end
-            return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) ||
-                                           NO_PLACE.include?(place.downcase)
+            return [nil, nil, nil, nil] if place.nil? || !place.match?(/\p{L}/) || no_place?(place)
 
             place = "#{place}?" if CONJECTURE_KEYS.include?(key) && !place.end_with?("?")
             return [place, nil, nil, nil]

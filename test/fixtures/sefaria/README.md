@@ -166,3 +166,48 @@ json/Midrash/Halakhah/Sifra/Hebrew/Venice 1545.json            (license probe on
 json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/Hebrew/Midrash Rabbah -- TE.json      (ranged GET, license probe)
 json/Midrash/Aggadah/Midrash Rabbah/Bereshit Rabbah/Hebrew/Midrash Rabbah -- TE.json  (ranged GET, license probe)
 ```
+
+## P140 wave files — commentaries, halakhah, Zohar, liturgy (retrieved 2026-10-21)
+
+Census against the **2026-10-02 index generation** (`generated_at`
+2026-10-02T06:06:29Z, 19,815 entries). That generation PERCENT-ENCODES
+`json_url` (19,730 of 19,815 entries; every earlier generation carried the
+raw bucket key) — the new `books.json` entry blocks below are verbatim, so
+the slice now carries both shapes; `SefariaFetch` decodes either to the same
+raw key. Licence reality: a ranged GET of every candidate file's metadata
+head (1,547 files) — every string inside the known set (Public Domain, PD,
+CC0, CC-BY, CC-BY-SA, CC-BY-NC, "unknown", absent). Per-shelf numbers are in
+the adapter class note.
+
+Trims follow the house rule (metadata keys byte-identical, only `text`
+sliced, `json.dumps(indent=4, ensure_ascii=False)` round-trip verified
+byte-identical on each untouched file first).
+
+| fixture | whole? | exercises |
+|---|---|---|
+| `json/Tanakh/Rishonim on Tanakh/Minchat Shai/Prophets/Minchat Shai on Jonah/Hebrew/Minchat Shai.json` | whole (3,500 B) | the **tanakh-rishonim** shelf: Public Domain `hbo`; commentator subshelf (Minchat Shai) + Prophets division; `Chapter/Verse/Comment` → `1.1.1`; 11 passages |
+| `json/Halakhah/Mishneh Torah/Sefer Nashim/Mishneh Torah, Virgin Maiden/Hebrew/Mechon Mamre.json` | whole (6,504 B) | the **mishneh-torah** shelf: Public Domain `hbo`; Sefer subshelf; chapters 1–2 empty upstream → first passage `3.1`; 11 passages |
+| `json/Halakhah/Shulchan Arukh/Shulchan Arukh, Introduction/English/Sefaria Community Translation.json` | whole (3,931 B) | the **shulchan-arukh** shelf (title-allowlisted): CC0 `eng`, flat `Paragraph` sectioning; 7 passages |
+| `json/Halakhah/Tur/Tur/Hebrew/OnYourWay.json` | TRIM | the **tur** shelf: Public Domain `hbo`, the four-part schema (`Orach Chayim` … each with an `Introduction` node + the default `""` node) → `orach-chayim.1.1`; Orach Chayim sliced to its first 3 simanim, the other parts are empty upstream (original sha256 `360ebc0b…`, 1,167,489 bytes); 3 passages |
+| `json/Halakhah/Tur/Tur/Hebrew/rp.json` | whole (12,197 B) | the wave's **rejected-licence specimen**: a real named version saying `"license": "unknown"` → skipped by rule, censused |
+| `json/Kabbalah/Zohar/Zohar Chadash/Hebrew/Zohar Chadash.json` | TRIM | the **zohar** shelf: Public Domain, the Hebrew axis ruled `arc` (Zoharic Aramaic); parasha-keyed dict → `bereshit.1`; Bereshit + Noach sliced to 2 paragraphs, the other 28 parashot emptied (original sha256 `c86e5c9d…`, 3,520,475 bytes); 4 passages |
+| `json/Liturgy/Piyutim/Shalom Aleichem/Hebrew/Shalom Alechem.json` | whole (1,510 B) | the **liturgy** shelf: CC-BY-SA → `attribution`, `hbo`, Piyutim subshelf; 4 passages |
+
+`books.json` gained 14 entry blocks (indent=1, verbatim from the
+2026-10-02 generation): the seven files above and seven census negatives —
+a Tur merged sibling, Peri Megadim on Orach Chayim (a commentary filed flat
+beside the Shulchan Arukh parts — off the title allowlist), Sulam on Zohar
+(off the Zohar allowlist), Rabbi Sacks on Siddur (excluded title), and one
+entry under each excluded Commentary subtree (Mishneh Torah, Tur, Haggadah).
+
+Whole-file sha256:
+
+```
+909a6259be3fb24a6feb5a2727061e4283fd861ee592804c99a1bddb90584bf0  Minchat Shai on Jonah
+355255a0c4bb4bf7e3a95be8c5fa42413b3551e8a827730b5a3db013281a0094  Mishneh Torah, Virgin Maiden (Mechon Mamre)
+90596e49d0234dbd8f81f5bfd8b04bbaa5941803e43581abe0b3dab4a2763941  Shulchan Arukh, Introduction (SCT)
+8d2da158a43e134e3295d2522d5ff64ca6bd36d546ee7d900c369c398099a721  Tur (rp, license unknown)
+26bdf7d1b7b294d464eeac03fa0ce03c5ddc0b9be782cc5b856caf526b2f6e79  Shalom Aleichem (Shalom Alechem)
+360ebc0be72897233cab0b319f5d89147484c5a4d69b33d62f429b639f3e913b  Tur (OnYourWay) — original, before trim
+c86e5c9d3a068dfee03b6654bf2b41e604c5d8b2282870c4bf7ab97ef348dfbe  Zohar Chadash — original, before trim
+```

@@ -1,0 +1,27 @@
+# global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC LILA:FLCAT LILA:SENTID LILA:LINE
+# sent_id = TLiv08-T-LI-4771
+# text = iam consules erant C. Plautius iterum L. Aemilius Mamercus cum Setini Norbanique Romam nuntii defectionis Priuernatium cum querimoniis acceptae cladis uenerunt
+1	iam	iam	ADV	M	Degree=Pos	_	_	_	_	i	TLiv08-T-LI-4771	1
+2	consules	consul	NOUN	A3	Case=Nom|Gender=Masc|InflClass=IndEurX|Number=Plur	_	_	_	_	n3	TLiv08-T-LI-4771	2
+3	erant	sum	AUX	B6	Aspect=Imp|InflClass=LatAnom|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin	_	_	_	LASLAVariant=1	v6	TLiv08-T-LI-4771	3
+4	C.	gaius	PROPN	A2	Abbr=Yes|InflClass=Ind	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	4
+5	Plautius	plautius	PROPN	A2	Case=Nom|Gender=Masc|InflClass=IndEurO|Number=Sing	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	5
+6	iterum	iterum	ADV	M	Degree=Pos	_	_	_	_	i	TLiv08-T-LI-4771	6
+7	L.	lucius	PROPN	A2	Abbr=Yes|InflClass=Ind	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	7
+8	Aemilius	aemilius	PROPN	A2	Case=Nom|Gender=Masc|InflClass=IndEurO|Number=Sing	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	8
+9	Mamercus	mamercus	PROPN	A2	Case=Nom|Gender=Masc|InflClass=IndEurO|Number=Sing	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	9
+10	cum	cum	SCONJ	T	_	_	_	_	LASLAVariant=3	i	TLiv08-T-LI-4771	10
+11	Setini	setini	PROPN	A2	Case=Nom|InflClass=IndEurO|Number=Plur	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	11
+12-13	Norbanique	_	_	_	_	_	_	_	_	_	_	_
+12	Norbani	norbani	PROPN	A2	Case=Nom|InflClass=IndEurO|Number=Plur	_	_	_	LASLAVariant=N	n2	TLiv08-T-LI-4771	12
+13	que	que	CCONJ	S	_	_	_	_	_	i	TLiv08-T-LI-4771	13
+14	Romam	roma	PROPN	A1	Case=Acc|Gender=Fem|InflClass=IndEurA|Number=Sing	_	_	_	LASLAVariant=N	n1	TLiv08-T-LI-4771	14
+15	nuntii	nuntius	NOUN	A2	Case=Nom|Gender=Masc|InflClass=IndEurO|Number=Plur	_	_	_	LASLAVariant=1	n2	TLiv08-T-LI-4771	15
+16	defectionis	defectio	NOUN	A3	Case=Gen|Gender=Fem|InflClass=IndEurX|Number=Sing	_	_	_	_	n3	TLiv08-T-LI-4771	16
+17	Priuernatium	priuernates	PROPN	A3	Case=Gen|InflClass=IndEurI|Number=Plur	_	_	_	LASLAVariant=N	n3	TLiv08-T-LI-4771	17
+18	cum	cum	ADP	R	AdpType=Prep	_	_	_	LASLAVariant=2	i	TLiv08-T-LI-4771	18
+19	querimoniis	querimonia	NOUN	A1	Case=Abl|Gender=Fem|InflClass=IndEurA|Number=Plur	_	_	_	_	n1	TLiv08-T-LI-4771	19
+20	acceptae	accipio	VERB	B5	Aspect=Perf|Case=Gen|Degree=Pos|Gender=Fem|InflClass=LatI2|InflClass[nominal]=IndEurA|Number=Sing|VerbForm=Part|Voice=Pass	_	_	_	_	v5	TLiv08-T-LI-4771	20
+21	cladis	clades	NOUN	A3	Case=Gen|Gender=Fem|InflClass=IndEurI|Number=Sing	_	_	_	_	n3	TLiv08-T-LI-4771	21
+22	uenerunt	uenio	VERB	B4	Aspect=Perf|InflClass=LatI|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	_	_	_	_	v4	TLiv08-T-LI-4771	22
+

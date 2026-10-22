@@ -807,6 +807,23 @@ class InvariantsTest < Minitest::Test
     assert_match(/\Aconsumed:/, Nabu::Health::Invariants::MINING_EXEMPT.dig("gams-zrcalo", "orig_place").to_s)
   end
 
+  # bim-sahcoba's place_role is the adapter's constant qualifier
+  # ("imprint", on all 8 of the 15 works that carry a place) beside the
+  # "place" key, which projects — the ticha shape. The live document's
+  # metadata and axis row verbatim (urn:nabu:bim-sahcoba:materra).
+  def test_bim_sahcoba_place_role_qualifier_is_declared
+    meta = '{"author":"Esteve Materra","bim_file":"Materra_automatikoa.tsv",' \
+           '"date":{"not_after":1623,"not_before":1623,"raw":"title page: Bordelen, Jacques Millanges … 1623"},' \
+           '"dialect":"Labourdin","genre":"catechism","language":"eu","place":"Bordeaux","place_role":"imprint"}'
+    doc_id = seed_lane_doc("bim-sahcoba", "urn:nabu:bim-sahcoba:materra", meta)
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1623, not_after: 1623,
+                               date_raw: "title page: Bordelen, Jacques Millanges … 1623",
+                               place_name: "Bordeaux", axis_source: "bim-sahcoba")
+    finding = global_finding(:unmined_axis_metadata)
+    refute_match(/place_role/, finding&.message.to_s, "the imprint qualifier is declared, not ore")
+    assert_match(/qualifier/, Nabu::Health::Invariants::MINING_EXEMPT.dig("bim-sahcoba", "place_role").to_s)
+  end
+
   # P61-4: the ~script claim is byte-checkable BY DESIGN (D60-b — the axis
   # claims the held surface) — this invariant is the P60-1 census made
   # permanent: sample the claimed slice's passages, classify by Unicode

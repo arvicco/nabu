@@ -5,7 +5,7 @@ require "tmpdir"
 require "fileutils"
 
 # CBETA adapter tests (P33-2). The adapter composes CbetaTeiParser with the
-# xml-p5 canon layout (<canon>/<canon><vol>/<stem>.xml), scoped to T + X;
+# xml-p5 canon layout (<canon>/<canon><vol>/<stem>.xml), scoped to the CANONS list;
 # THE CANON-LEVEL LICENSE GATE is the packet's signature: the four Category
 # B corpora named on cbeta.org/copyright are pinned here and refused by
 # canon dir, and the sparse fetch cone never materializes them. Includes
@@ -16,6 +16,16 @@ class CbetaTest < Minitest::Test
 
   FIXTURES = Nabu::TestSupport.fixtures("cbeta")
 
+  A114 = "urn:nabu:cbeta:A114n1505-xu"
+  C071 = "urn:nabu:cbeta:C071n1666"
+  D12 = "urn:nabu:cbeta:D12n8820"
+  F28 = "urn:nabu:cbeta:F28n1082"
+  G084 = "urn:nabu:cbeta:G084n2084"
+  L153 = "urn:nabu:cbeta:L153n1635"
+  M59 = "urn:nabu:cbeta:M59n1540-xu"
+  P189 = "urn:nabu:cbeta:P189n1630"
+  S06 = "urn:nabu:cbeta:S06n0047-xu"
+  U205 = "urn:nabu:cbeta:U205n1368-xu"
   J29 = "urn:nabu:cbeta:J29nB247"
   J36 = "urn:nabu:cbeta:J36nB354"
   K05 = "urn:nabu:cbeta:K05n0016"
@@ -29,7 +39,8 @@ class CbetaTest < Minitest::Test
   X01 = "urn:nabu:cbeta:X01n0001"
   X55 = "urn:nabu:cbeta:X55n0899"
   # discover order (sorted by urn)
-  ALL_FIXTURES = [J29, J36, K05, N26, N44, T01, T10, T45, T85_2831, T85, X01, X55].freeze
+  ALL_FIXTURES = [A114, C071, D12, F28, G084, J29, J36, K05, L153, M59, N26, N44, P189, S06,
+                  T01, T10, T45, T85_2831, T85, U205, X01, X55].freeze
 
   # --- AdapterConformance hooks ----------------------------------------------
 
@@ -77,8 +88,13 @@ class CbetaTest < Minitest::Test
   # P126: the scope is the five Category A canons cbeta.org/copyright names
   # and the ruling admitted — T, X, K, plus J (嘉興大藏經 第一冊至第四十冊)
   # and N (漢譯南傳大藏經 第一冊至第七十冊).
-  def test_scope_canons_are_t_x_k_j_n
-    assert_equal %w[T X K J N], Nabu::Adapters::Cbeta::CANONS
+  #
+  # The historical-canon widening: the 歷代藏經補輯 group the copyright page
+  # lists under Category A (《房山石經》、《趙城金藏》、《永樂北藏》等等 and
+  # 「國家圖書館善本佛典」) — A C D F G L M P S U. The modern compilations
+  # (近代新編文獻: B, GA, GB, I, ZW, ZS) and the CC selection stay out.
+  def test_scope_canons_are_t_x_k_j_n_plus_the_historical_canons
+    assert_equal %w[T X K J N A C D F G L M P S U], Nabu::Adapters::Cbeta::CANONS
     Nabu::Adapters::Cbeta::CATEGORY_B.each_key do |code|
       refute_includes Nabu::Adapters::Cbeta::CANONS, code
     end
@@ -127,7 +143,8 @@ class CbetaTest < Minitest::Test
   # drift apart.
   def test_sparse_cone_covers_scope_and_excludes_every_category_b_dir
     cone = Nabu::Adapters::Cbeta::SPARSE_CONE
-    assert_equal ["T/", "X/", "K/", "J/", "N/", "canons.json", "schema/"], cone
+    assert_equal ["T/", "X/", "K/", "J/", "N/", "A/", "C/", "D/", "F/", "G/", "L/", "M/", "P/", "S/", "U/",
+                  "canons.json", "schema/"], cone
     Nabu::Adapters::Cbeta::CATEGORY_B.each_key do |code|
       refute(cone.any? { |path| path.start_with?(code) }, "cone must not include #{code}")
     end
@@ -215,6 +232,35 @@ class CbetaTest < Minitest::Test
     assert_equal 24, docs[N44].passages.size
   end
 
+  # The historical canons parse on the held family unchanged: each
+  # carries its own siglum lb stream, the header grant, Literary Chinese,
+  # and (where the byline names one) a banded dynasty seat.
+  def test_historical_canons_parse_on_the_held_family
+    adapter = Nabu::Adapters::Cbeta.new
+    docs = adapter.discover(FIXTURES).to_h { |ref| [ref.id, adapter.parse(ref)] }
+    expected = {
+      A114 => ["佛說清淨毘奈耶最上大乘經", 30, "宋"], C071 => ["梵本大悲神咒", 65, nil],
+      D12 => ["新菩薩經", 12, nil], F28 => ["釋華嚴漩澓偈", 9, nil],
+      G084 => ["坐禪箴", 6, "日本"], L153 => ["性相通說（選錄序文）", 32, "明"],
+      M59 => ["大慧普覺禪師普說", 30, "宋"], P189 => ["教乘法數（選錄序文）", 40, "明"],
+      S06 => ["上生經疏隨新抄科文", 30, nil], U205 => ["大乘百法明門論疏", 26, "唐"]
+    }
+    expected.each do |urn, (title, passages, dynasty)|
+      document = docs.fetch(urn)
+      assert_equal title, document.title, urn
+      assert_equal passages, document.passages.size, urn
+      assert_equal "lzh", document.language, urn
+      if dynasty
+        assert_equal dynasty, document.metadata["dynasty"], urn
+      else
+        assert_nil document.metadata["dynasty"], urn
+      end
+    end
+    assert_equal "urn:nabu:cbeta:F28n1082:0627a22", docs[F28].passages.first.urn,
+                 "the Fangshan stone-sutra file cites its own print coordinates"
+    assert_equal "#{U205}:0231b01", docs[U205].passages.first.urn
+  end
+
   # --- load: idempotency (the house double-load rule) -------------------------
 
   def test_double_load_is_idempotent
@@ -222,7 +268,7 @@ class CbetaTest < Minitest::Test
     source = cbeta_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 12, first.added
+    assert_equal 22, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]
@@ -265,9 +311,10 @@ class CbetaTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, "B")), "non-scope canon B stays outside the cone"
       assert File.exist?(File.join(workdir, "J", "J36", "J36nB354.xml")), "J/ is in the cone (P126)"
       assert File.exist?(File.join(workdir, "N", "N26", "N26n0008.xml")), "N/ is in the cone (P126)"
-      # And the materialized tree passes the Category B gate + discovers T, J, N.
+      assert File.exist?(File.join(workdir, "F", "F28", "F28n1082.xml")), "F/ is in the cone"
+      # And the materialized tree passes the Category B gate + discovers T, J, N, F.
       ids = adapter.discover(workdir).to_a.map(&:id)
-      [T85, J36, N26].each { |urn| assert_includes ids, urn }
+      [T85, J36, N26, F28].each { |urn| assert_includes ids, urn }
     end
   end
 
@@ -306,14 +353,15 @@ class CbetaTest < Minitest::Test
 
   # A miniature upstream with the real layout: scope canons, a non-scope
   # canon, a Category B canon, canons.json — the cone must take exactly
-  # T/ + X/ + K/ + J/ + N/ + canons.json + schema/.
+  # the scope canon dirs + canons.json + schema/.
   def make_upstream_repo(dir)
     FileUtils.mkdir_p(dir)
-    %w[T/T85 X/X01 J/J36 N/N26 B/B01 Y/Y44 schema].each { |sub| FileUtils.mkdir_p(File.join(dir, sub)) }
+    %w[T/T85 X/X01 J/J36 N/N26 F/F28 B/B01 Y/Y44 schema].each { |sub| FileUtils.mkdir_p(File.join(dir, sub)) }
     FileUtils.cp(File.join(FIXTURES, "T", "T85", "T85n2884.xml"), File.join(dir, "T", "T85"))
     FileUtils.cp(File.join(FIXTURES, "X", "X01", "X01n0001.xml"), File.join(dir, "X", "X01"))
     FileUtils.cp(File.join(FIXTURES, "J", "J36", "J36nB354.xml"), File.join(dir, "J", "J36"))
     FileUtils.cp(File.join(FIXTURES, "N", "N26", "N26n0008.xml"), File.join(dir, "N", "N26"))
+    FileUtils.cp(File.join(FIXTURES, "F", "F28", "F28n1082.xml"), File.join(dir, "F", "F28"))
     File.write(File.join(dir, "B", "B01", "B01n0001.xml"), "<TEI/>\n")
     File.write(File.join(dir, "Y", "Y44", "Y44n0001.xml"), "<TEI/>\n")
     File.write(File.join(dir, "schema", "cbeta-p5.rnc"), "# schema stub\n")

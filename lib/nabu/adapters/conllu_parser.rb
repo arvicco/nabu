@@ -108,10 +108,13 @@ module Nabu
       # timeline's UdSentenceDates lane reads them. egyptian-pc's
       # place/king/genre/title/spell/section/edition/lang ride with them,
       # and its TLA sentence ids (crosswalk material; "No" ×134 is
-      # upstream's own absence mark). Empty values mint nothing.
+      # upstream's own absence mark). The ArmTDP-style `doc_title` (both
+      # Middle Armenian newdoc runs; one rnc document) folds into "title"
+      # beside the coptic `meta::title`. Empty values mint nothing.
       METADATA_COMMENTS = {
         "newdoc id" => "newdoc_id", "newdoc" => "newdoc_id", "newdoc_id" => "newdoc_id",
-        "title" => "title", "meta::title" => "title", "meta::author" => "author",
+        "title" => "title", "meta::title" => "title", "doc_title" => "title",
+        "meta::author" => "author",
         "meta::document_cts_urn" => "document_cts_urn",
         "date_created" => "date_created", "created" => "created", "date" => "date",
         "place" => "place", "king" => "king", "genre" => "genre", "spell" => "spell",

@@ -1,0 +1,28 @@
+{
+  "title": "Kajawen 041",
+  "pageid": 476,
+  "ns": 0,
+  "revid": 2908,
+  "timestamp": "2021-08-08T12:19:27Z",
+  "cone": [
+    "index:Kajawen 41 1927-10-13.pdf"
+  ],
+  "wikitext": "\n{|\n|- valign=\"top\"\n|<pages index=\"Kajawen_41 1927-10-13.pdf\" from=3 to=3/>\n|\n|}\n\n{{:Majalah Kajawen|1927}}\n[[Category:Kajawen]]\n[[Category:jv Basa Jawa (Javanese)]]",
+  "indexes": [
+    {
+      "name": "Kajawen 41 1927-10-13.pdf",
+      "title": "Indhèks:Kajawen 41 1927-10-13.pdf",
+      "pageid": 604,
+      "revid": 7174,
+      "fields": {
+        "Title": "[[Kajawen 41|Kajawen 41]] 1927-10-13",
+        "Address": "Surakarta",
+        "Year": "1927",
+        "Source": "pdf",
+        "Progress": "T",
+        "Language": "Jv",
+        "Remarks": "[[Category:Kajawen/Index|1927-41]]"
+      }
+    }
+  ]
+}

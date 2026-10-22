@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (18): `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `ud`, `vulgate`
+**Members** (19): `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `ud`, `vulgate`
 
 ### romance
 
@@ -99,7 +99,7 @@ Gothic on the proiel/ud treebanks beside the West and North Germanic branches: O
 
 Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the St Gall Priscian glosses in Latin and Old Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
-**Members** (9): `corph`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `stgall-priscian`, `ud`, `wiktionary-recon`
+**Members** (11): `br-wikisource`, `corph`, `cy-wikisource`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `stgall-priscian`, `ud`, `wiktionary-recon`
 
 ### italic
 
@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (19): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gu-wikisource`, `kannada-texts`, `madurai`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `ud`
+**Members** (29): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mw`, `nabu-data`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `te-wikisource`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
 
 ### buddhist
 
@@ -203,7 +203,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (8): `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `mvp`, `sarit`, `suttacentral`
+**Members** (9): `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `sarit`, `suttacentral`
 
 ### tibetan
 
@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (12): `actib`, `derge-kangyur`, `derge-tengyur`, `e84000`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
+**Members** (13): `actib`, `derge-kangyur`, `derge-tengyur`, `e84000`, `lotsawa-house`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
 
 ### korean
 
@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
-**Members** (10): `ban-wikisource`, `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `ms-wikisource`, `obi-burmese`, `ojw`, `th-wikisource`
+**Members** (12): `ban-wikisource`, `dharma-campa`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `jv-wikisource`, `ms-wikisource`, `obi-burmese`, `ojw`, `su-wikisource`, `th-wikisource`
 
 ### sinitic
 
@@ -235,7 +235,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (20): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `qieyun-restored`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
+**Members** (22): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `shuowen`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
 
 ### japonic
 
@@ -283,7 +283,7 @@ Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa,
 
 The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
 
-**Members** (2): `senie`, `vks`
+**Members** (3): `senie`, `vakk`, `vks`
 
 ### local
 

@@ -3,7 +3,7 @@
 - slug: classical
   persona: The Classicist
   blurb: Greek and Latin letters read whole, Homer to the late grammarians
-  members: 18
+  members: 19
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
@@ -24,7 +24,7 @@
 - slug: celtic
   persona: The Celticist
   blurb: from Lepontic stones to the Old Irish glossators
-  members: 9
+  members: 11
 - slug: italic
   persona: The Italicist
   blurb: the languages of pre-Roman Italy, Oscan to Etruscan to Raetic
@@ -73,15 +73,15 @@
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 19
+  members: 29
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
-  members: 8
+  members: 9
 - slug: tibetan
   persona: The Tibetologist
   blurb: the Land of Snows from Dunhuang documents to the complete Derge canon
-  members: 12
+  members: 13
 - slug: korean
   persona: The Koreanist
   blurb: the hanmun state record and the first hangul vernacular
@@ -90,11 +90,11 @@
   persona: The Southeast Asianist
   blurb: 'the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars
     they seeded'
-  members: 10
+  members: 12
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past
-  members: 20
+  members: 22
 - slug: japonic
   persona: The Japanologist
   blurb: Old Japanese song to the Sino-Japanese dictionary tradition
@@ -121,7 +121,7 @@
 - slug: baltic
   persona: The Balticist
   blurb: the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish
-  members: 2
+  members: 3
 - slug: local
   persona: The Librarian
   blurb: 'the owner''s own shelves: dossiers, library, notes, and the sources'' own

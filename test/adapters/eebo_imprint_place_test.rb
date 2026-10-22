@@ -96,6 +96,16 @@ class EeboImprintPlaceTest < Minitest::Test
     assert_conjecture "London", "From Roane [i.e. London?] :"
   end
 
+  # A two-town conjecture is one hedged claim, never dropped: A05548's
+  # imprint (Lindsay's Dialog, 1554) is the cataloguer's "Edinburgh or St.
+  # Andrews, both queried". Two-place imprints ride as written (declared
+  # coarseness) — the word cap applies per town, not to the pair.
+  def test_a_multi_town_conjecture_rides_hedged_as_written
+    assert_conjecture "Edinburgh or St. Andrews", "[Edinburgh? or St. Andrews?] :" # A05548
+    assert_conjecture "Oxford or London", "[Oxford? or London?] :"
+    assert_town "Oxford or London", "Oxford or London :"
+  end
+
   def test_the_qualifier_never_leaks_into_the_name
     assert_town "Cambridge", "Cambridge [Cambridgeshire] :"
     assert_town "Cambridge", "[Cambridge (England) :"

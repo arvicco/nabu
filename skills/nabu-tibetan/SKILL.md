@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: tibetan
   origin: hand-tuned
-  sources: "actib derge-kangyur derge-tengyur e84000 monlam-lexicon mvp nabu-data old-tibetan otdo soas-tibetan tibetan-verbs wiktionary-bo"
+  sources: "actib derge-kangyur derge-tengyur e84000 lotsawa-house monlam-lexicon mvp nabu-data old-tibetan otdo soas-tibetan tibetan-verbs wiktionary-bo"
 ---
 
 # The Tibetologist — the `tibetan` desk
@@ -27,6 +27,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `derge-kangyur` | Digital Derge Kangyur (Esukhia/Barom proofreading of the UVA-SOAS 2013 eKangyur) | open |
 | `derge-tengyur` | Digital Derge Tengyur (Esukhia/Barom Theksum Choling faithful copy of the Derge edition) | open |
 | `e84000` | 84000 — Translating the Words of the Buddha (English Kangyur translations) | nc |
+| `lotsawa-house` | Lotsawa House — Tibetan Buddhist texts and translations | nc |
 | `monlam-lexicon` | Monlam Tibetan headword lists (MonlamIT/Tibetan-Lexicon) | attribution |
 | `mvp` | Mahāvyutpatti — Sanskrit–Tibetan–Chinese glossary (DILA TEI edition) | open |
 | `nabu-data` | nabu-data — Nabu's own published datasets, consumed back (form→lemma instrument) | attribution |

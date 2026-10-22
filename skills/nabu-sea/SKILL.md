@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sea
   origin: generated
-  sources: "ban-wikisource dharma-campa dharma-javanese-texts dharma-khmer dharma-nusantara dharma-pyu ms-wikisource obi-burmese ojw th-wikisource"
+  sources: "ban-wikisource dharma-campa dharma-javanese-texts dharma-khmer dharma-nusantara dharma-pyu jv-wikisource ms-wikisource obi-burmese ojw su-wikisource th-wikisource"
 ---
 
 # The Southeast Asianist — the `sea` desk
@@ -29,9 +29,11 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dharma-khmer` | DHARMA Corpus des inscriptions khmères (Old Khmer epigraphy) | attribution |
 | `dharma-nusantara` | DHARMA Nusantara epigraphy (Old Javanese/Malay/Sundanese charters) | attribution |
 | `dharma-pyu` | DHARMA Corpus of Pyu Inscriptions | attribution |
+| `jv-wikisource` | Javanese Wikisource — the dated 19th-century cone (manuscripts and prints to 1900) | attribution |
 | `ms-wikisource` | Malay Wikisource — the Jawi manuscript cone (Leiden · BL · BnF · KITLV manuscripts) | attribution |
 | `obi-burmese` | OBI — Structured Corpus of Old Burmese Stone Inscriptions | attribution |
 | `ojw` | OJW — the Old Javanese Wordnet (Moeljadi et al.) | attribution |
+| `su-wikisource` | Sundanese Wikisource — the dated 19th-century cone (prints to 1900 · the Carita Parahyangan) | attribution |
 | `th-wikisource` | Thai Wikisource — ประชุมพงศาวดาร (the Collected Chronicles, parts printed to BE 2473) | attribution |
 <!-- nabu:skill-sources:end -->
 

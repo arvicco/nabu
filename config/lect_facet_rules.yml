@@ -16,7 +16,11 @@
 # nothing and are reported as unmatched — deliberate: an ambiguous dating
 # stays a bare anchor. Every map target must exist in the registry.
 #
-# Every rule here is a ratified owner decision — do not add one without one.
+# Rules that transcribe upstream's OWN metadata onto EXISTING registry
+# nodes are ordinary parse-time work, written with their reasoning (the
+# owner's 2026-10-18 generalization; CLAUDE.md adapter step 7). Only
+# judgment-grade assignments — contested classifications, new bands,
+# re-parenting — escalate to a ruling.
 # Ruled 2026-08-04 (P58 D58-a/b/c + the D57-f survey pattern): tier states
 # certain (the label IS the stage) vs approximation (corpus-level reading;
 # per-document overlay refines later).
@@ -398,3 +402,24 @@ rules:
     match_prefix: "CANONICAL"
     variety: lit
     onto: ["akk:na", "akk:nb"]
+
+  # ── The Sefaria medieval shelves (P140 widen): the shelf facet names the
+  # work class, and the four shelves below are the medieval Hebrew canon by
+  # any standard periodization — the Rishonim's Tanakh commentaries
+  # (11th–15th c.), Rambam's Mishneh Torah (1180), the Tur (c. 1340) and
+  # the Shulchan Arukh (1563). heb:med is a label-based stage (no band),
+  # so the 16th-c. Shulchan Arukh sits on it honestly. Liturgy stays bare
+  # hbo deliberately: piyyutim span antiquity to modernity and the shelf
+  # facet cannot cut them. Zohar documents are arc and keep the existing
+  # Aramaic handling. Transcription of upstream's own shelving onto an
+  # existing node — parse-time work with its reasoning (the header's rule).
+  - id: sefaria-medieval-shelves
+    tier: certain
+    sources: [sefaria]
+    code: hbo
+    facet: shelf
+    map:
+      "tanakh-rishonim": "heb:med"
+      "mishneh-torah": "heb:med"
+      "tur": "heb:med"
+      "shulchan-arukh": "heb:med"

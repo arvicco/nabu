@@ -13,9 +13,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 29 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · auto | 15,900 docs / 769,373 passages / 300,763 entries |
@@ -23,6 +23,7 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
 | `dharma-tamil` | texts | attribution | wired · auto | 1,267 docs / 17,993 passages |
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `gretil-legacy` | texts | nc | wired · manual | 21 docs / 81,251 passages |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |
@@ -35,9 +36,18 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |
 | `suttacentral` | texts | open | wired · auto | 12,393 docs / 699,345 passages |
 | `tamilex` | texts | nc | wired · auto | 7,830 docs / 14,972 passages |
-| `ud` | treebank | nc | wired · manual | 81 docs / 329,802 passages |
+| `te-wikisource` | texts | attribution | wired · manual | 453 docs / 208,794 passages |
+| `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `vedaweb` | texts | attribution | wired · manual | 1,028 docs / 10,552 passages |
+| `wiktionary-dv` | dictionary | attribution | wired · manual | 2,047 entries |
+| `wiktionary-kn` | dictionary | attribution | wired · manual | 2,741 entries |
+| `wiktionary-ml` | dictionary | attribution | wired · manual | 11,505 entries |
+| `wiktionary-pra` | dictionary | attribution | wired · manual | 2,712 entries |
+| `wiktionary-si` | dictionary | attribution | wired · manual | 1,281 entries |
+| `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
+| `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 October 2026)</span>: `san` 510,610 · `tam-Latn` 18,527 · `pli` 7,288 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `san-Latn` 1,917 · `pra-Latn` 1,154 · `tam` 755 · `und` 583 … and 45 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,288 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 53 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

@@ -107,3 +107,32 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Midrash/Halakhah/Sifra/English/Sifra%20by%20Rabbi%20Shraga%20Silverstein.json
     whole: false
     trim: text dict sliced to Baraita DeRabbi Yishmael x2 + the Tazria Parashat Negaim collision quartet (1.7 MB -> 49 KB; retrieved 2026-08-06; original sha256 in README.md; CC-BY, sibling keys "Chapter 2"/"Chapter 2*" collapse under the frozen slug fold -- the "-2" walk-order disambiguation exemplar)
+  # P140 wave: commentaries, halakhah, Zohar, liturgy (2026-10-02 index generation)
+  - path: json/Tanakh/Rishonim on Tanakh/Minchat Shai/Prophets/Minchat Shai on Jonah/Hebrew/Minchat Shai.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Rishonim%20on%20Tanakh/Minchat%20Shai/Prophets/Minchat%20Shai%20on%20Jonah/Hebrew/Minchat%20Shai.json
+    whole: true
+    trim: none (complete file, copied whole 2026-10-21; Public Domain hbo, the tanakh-rishonim shelf -- commentator subshelf + Prophets division, Chapter.Verse.Comment)
+  - path: json/Halakhah/Mishneh Torah/Sefer Nashim/Mishneh Torah, Virgin Maiden/Hebrew/Mechon Mamre.json
+    url: https://storage.googleapis.com/sefaria-export/json/Halakhah/Mishneh%20Torah/Sefer%20Nashim/Mishneh%20Torah%2C%20Virgin%20Maiden/Hebrew/Mechon%20Mamre.json
+    whole: true
+    trim: none (complete file, copied whole 2026-10-21; Public Domain hbo, the mishneh-torah shelf; chapters 1-2 empty upstream, first passage 3.1)
+  - path: json/Halakhah/Shulchan Arukh/Shulchan Arukh, Introduction/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Halakhah/Shulchan%20Arukh/Shulchan%20Arukh%2C%20Introduction/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole 2026-10-21; CC0 English, the shulchan-arukh shelf, flat Paragraph sectioning)
+  - path: json/Halakhah/Tur/Tur/Hebrew/OnYourWay.json
+    url: https://storage.googleapis.com/sefaria-export/json/Halakhah/Tur/Tur/Hebrew/OnYourWay.json
+    whole: false
+    trim: text dict -- Orach Chayim default node sliced to its first 3 simanim, the other parts empty upstream (1.17 MB -> 11 KB; retrieved 2026-10-21; original sha256 in README.md; Public Domain hbo, the four-part schema-node shape)
+  - path: json/Halakhah/Tur/Tur/Hebrew/rp.json
+    url: https://storage.googleapis.com/sefaria-export/json/Halakhah/Tur/Tur/Hebrew/rp.json
+    whole: true
+    trim: none (complete file, copied whole 2026-10-21; license "unknown" -> rule skip, the wave's pinned rejected-license specimen)
+  - path: json/Kabbalah/Zohar/Zohar Chadash/Hebrew/Zohar Chadash.json
+    url: https://storage.googleapis.com/sefaria-export/json/Kabbalah/Zohar/Zohar%20Chadash/Hebrew/Zohar%20Chadash.json
+    whole: false
+    trim: text dict -- Bereshit + Noach sliced to 2 paragraphs each, the other 28 parashot emptied (3.52 MB -> 7 KB; retrieved 2026-10-21; original sha256 in README.md; Public Domain, the zohar shelf he->arc ruling)
+  - path: json/Liturgy/Piyutim/Shalom Aleichem/Hebrew/Shalom Alechem.json
+    url: https://storage.googleapis.com/sefaria-export/json/Liturgy/Piyutim/Shalom%20Aleichem/Hebrew/Shalom%20Alechem.json
+    whole: true
+    trim: none (complete file, copied whole 2026-10-21; CC-BY-SA hbo -> attribution override, the liturgy shelf, Piyutim subshelf)

@@ -731,6 +731,39 @@ module Store
       assert_equal "Antwerp or London?", timeline_for("urn:nabu:eebo-tcp:c3")[:place_name]
     end
 
+    # The raw-imprint fallback screens the early-print no-place
+    # conventions: every value below is a real PUBPLACE (canonical/eebo-tcp,
+    # record ids beside each) that the reading leaves unplaced and that
+    # used to mint as a place name. Sine loco / sine nomine / no place in
+    # their catalogue spellings (incl. the OCR'd "S.1."), "printed abroad"
+    # (bracketed whole or in part), a printer-only imprint naming no town,
+    # and a collation statement catalogued into PUBPLACE.
+    def test_metadata_places_eebo_fallback_screens_no_place_conventions
+      { "A81324" => "[S.n. :", "A52221" => "[N.p. :", "A58439" => "[n.p. :",
+        "A61383" => "[N.p.] :", "A60018" => "[n.p.] :", "A65432" => "[S.1. :",
+        "A31165" => "[S. l. :", "A04810" => "[Printed abroad :",
+        "A08779" => "Printed [abroad :", "A08783" => "Printed [abroad] :",
+        "B12432" => "Printed by Iohn Legat :", "A89106" => "[2], 6 p.," }.each do |id, raw|
+        meta = { "date" => { "not_before" => 1600, "raw" => "1600" }, "source_pub_place" => raw }
+        seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:#{id}", meta.merge(Nabu::Adapters::EeboImprintPlace.call(raw)))
+      end
+      build!
+      %w[A81324 A52221 A58439 A61383 A60018 A65432 A31165 A04810 A08779 A08783 B12432 A89106].each do |id|
+        row = timeline_for("urn:nabu:eebo-tcp:#{id}")
+        refute_nil row, "#{id} still rows on its date"
+        assert_nil row[:place_name], "#{id} names no place"
+      end
+    end
+
+    # A05548's two-town conjecture mints its hedged pair, not the raw.
+    def test_metadata_places_eebo_two_town_conjecture_mints_hedged
+      raw = "[Edinburgh? or St. Andrews?] :"
+      seed_metadata_doc("eebo-tcp", "urn:nabu:eebo-tcp:A05548",
+                        { "source_pub_place" => raw }.merge(Nabu::Adapters::EeboImprintPlace.call(raw)))
+      build!
+      assert_equal "Edinburgh or St. Andrews?", timeline_for("urn:nabu:eebo-tcp:A05548")[:place_name]
+    end
+
     # P118-R4 S3: ~10.3k eebo docs whose header imprint date the parser
     # could not bound ("1700?]", "[between 1670-1696]") — the TCP's own
     # per-id date lists (the fetched sidecars, real trimmed copies under

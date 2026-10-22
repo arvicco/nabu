@@ -287,6 +287,50 @@ module Nabu
           language: "gmy",
           title: "Wiktionary — Mycenaean Greek (kaikki.org extract)"
         },
+        # -- The Caucasus four, ATTESTED (the P29-1 shape: real codes, no
+        # display asterisk). Full-download censuses 2026-10-21 (upstream
+        # Last-Modified 2026-10-03 on all four): Old Armenian xcl 8,541
+        # records / 7,706 words / 12,881 senses (48.2 MB — 4,684 records
+        # with descendants, 8,632 nodes: the xcl → axm → hy ladder and the
+        # Armenian loans into ka/udi/cpg); Middle Armenian axm 478 / 459 /
+        # 546 (1,305 descendant nodes on 325 records, mostly → hy); Old
+        # Georgian oge 728 / 694 / 930 (Mkhedruli headwords; 1,747 nodes on
+        # 514 records → ka/sva/xmf/lzz and the North Caucasian loans);
+        # Ossetian os 913 / 872 / 1,105 (Cyrillic with ӕ; 55 alphabet-letter
+        # `character` records; only 16 records with descendants, but 1,322
+        # etymology templates — the Proto-Iranian/Alanic chains ride the
+        # etymon edges). `os` is Wiktionary's code verbatim (ISO 639-1; the
+        # registry anchors two-letter codes, oss aliasing there), as the
+        # descendant trees of the other extracts already speak it.
+        # etymology_number is a STRING where present on all four.
+        "wiktionary-xcl" => {
+          subdir: "old-armenian",
+          filename: "kaikki.org-dictionary-OldArmenian.jsonl",
+          url: "https://kaikki.org/dictionary/Old%20Armenian/kaikki.org-dictionary-OldArmenian.jsonl",
+          language: "xcl",
+          title: "Wiktionary — Old Armenian (kaikki.org extract)"
+        },
+        "wiktionary-axm" => {
+          subdir: "middle-armenian",
+          filename: "kaikki.org-dictionary-MiddleArmenian.jsonl",
+          url: "https://kaikki.org/dictionary/Middle%20Armenian/kaikki.org-dictionary-MiddleArmenian.jsonl",
+          language: "axm",
+          title: "Wiktionary — Middle Armenian (kaikki.org extract)"
+        },
+        "wiktionary-oge" => {
+          subdir: "old-georgian",
+          filename: "kaikki.org-dictionary-OldGeorgian.jsonl",
+          url: "https://kaikki.org/dictionary/Old%20Georgian/kaikki.org-dictionary-OldGeorgian.jsonl",
+          language: "oge",
+          title: "Wiktionary — Old Georgian (kaikki.org extract)"
+        },
+        "wiktionary-os" => {
+          subdir: "ossetian",
+          filename: "kaikki.org-dictionary-Ossetian.jsonl",
+          url: "https://kaikki.org/dictionary/Ossetian/kaikki.org-dictionary-Ossetian.jsonl",
+          language: "os",
+          title: "Wiktionary — Ossetian (kaikki.org extract)"
+        },
         # -- P32-3 (the Sino reconstruction shelf; OWNER-APPROVED disk
         # call) -- ATTESTED Chinese, the whole-macrolanguage extract:
         # ~1.1 GB / 323,840 records (census 2026-07-19 on the full file;

@@ -52,6 +52,30 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # The Shuowen seam: Xu Shen's Han-dynasty graphology rides its own
+  # diachronic block (between the OC reconstruction and the MC rime
+  # books) — the explanation as the gloss, the fanqie/radical/components/
+  # 重文/Duan lines as the body; absent for a glyph the shelf lacks.
+  def test_char_carries_the_shuowen_block
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 一 --json]) }
+      assert_nil status
+      shuowen = JSON.parse(out).dig("card", "shuowen")
+      assert_equal %w[urn:nabu:dict:shuowen:1 urn:nabu:dict:shuowen:1-v1], shuowen.map { |entry| entry["urn"] },
+                   "the head entry, then its 重文 弌 (reached through its chongwen-of pointer)"
+      assert_equal "shuowen", shuowen.first["slug"]
+      assert_equal "惟初太始，道立於一，造分天地，化成萬物。凡一之屬皆从一。", shuowen.first["gloss"]
+      assert_includes shuowen.first["lines"], "重文 弌: 古文一。"
+
+      text, = with_config(config) { run_cli(%w[char 一]) }
+      assert_match(/^Shuowen Jiezi 說文解字 \(Xu Shen, Han graphology\):$/, text)
+      assert_match(/^    反切: 於悉切$/, text)
+
+      absent, = with_config(config) { run_cli(%w[char 棄 --json]) }
+      assert_empty JSON.parse(absent).dig("card", "shuowen"), "no shelf row for the glyph — an empty block"
+    end
+  end
+
   def test_char_of_the_acceptance_glyph_renders_the_whole_card
     with_char_catalog do |config|
       out, _err, status = with_config(config) { run_cli(%w[char 棄]) }
@@ -400,7 +424,7 @@ class CharCommandTest < Minitest::Test
 
   # --- the empty-Han-card hint distinguishes held from missing (P84-5) ---
 
-  # The rig holds unihan/edrdg/babelstone-ids/kradfile/tls — an unknown Han
+  # The rig holds unihan/edrdg/babelstone-ids/kradfile/shuowen/tls — an unknown Han
   # glyph must name THOSE as held-but-silent and point the sync at the
   # actually-missing shelves, not claim nothing is held.
   def test_empty_han_card_names_held_shelves_apart_from_missing_ones
@@ -408,7 +432,7 @@ class CharCommandTest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[char 玤]) }
       assert_nil status
       assert_match(
-        /the held CJK shelves \(unihan, edrdg, babelstone-ids, kradfile, tls\) don't carry 玤/,
+        /the held CJK shelves \(unihan, edrdg, babelstone-ids, kradfile, shuowen, tls\) don't carry 玤/,
         out
       )
       assert_match(/sync the missing CJK shelves \(baxter-sagart, tshet-uinh, hdic\)/, out)
@@ -429,7 +453,7 @@ class CharCommandTest < Minitest::Test
         /no held shelf carries 玤 yet — sync the CJK shelves \(unihan, edrdg, babelstone-ids, /,
         out
       )
-      assert_match(/kradfile, baxter-sagart, tshet-uinh, hdic, tls\)/, out)
+      assert_match(/kradfile, baxter-sagart, shuowen, tshet-uinh, hdic, tls\)/, out)
       refute_match(/held CJK shelves/, out)
     end
   end
@@ -653,6 +677,9 @@ class CharCommandTest < Minitest::Test
       # side; its sample carries none of 棄/國/国, so every absence
       # assertion above still holds.
       load_dictionary(db, "edrdg", "Nabu::Adapters::Edrdg", Nabu::Adapters::Edrdg.new, "edrdg")
+      # The Shuowen shelf — its sample carries 一 (with the 重文 弌) but
+      # not 棄, so the acceptance card stays an honest-absence witness.
+      load_dictionary(db, "shuowen", "Nabu::Adapters::Shuowen", Nabu::Adapters::Shuowen.new, "shuowen")
 
       kanripo = Nabu::Store::Source.create(
         slug: "kanripo", name: "Kanseki Repository", adapter_class: "Nabu::Adapters::Kanripo",

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "corpus-corporum croala damos digiliblt diorisis first1k-greek glaux hypotactic ig-cyprus lexica lila openmgh pedecerto perseus-greek perseus-latin proiel ud vulgate"
+  sources: "corpus-corporum croala damos digiliblt diorisis first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -32,6 +32,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `glaux` | GLAUx — the Greek Language Automated (Keersmaekers) | attribution |
 | `hypotactic` | Hypotactic — Greek metrical scansions (D. Chamberlain) | attribution |
 | `ig-cyprus` | IG XV 1,1 — Inscriptiones Cypri syllabicae (BBAW Inscriptiones Graecae digital edition) | attribution |
+| `lasla` | LASLA — Latin corpus of the Laboratoire d'Analyse Statistique des Langues Anciennes (Liège), CIRCSE LiLa-linked CoNLL-U release | nc |
 | `lexica` | Perseus Lexica — LSJ + Lewis & Short | attribution |
 | `lila` | LiLa Lemma Bank — Latin canonical forms (lemma-spine instrument) | attribution |
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |

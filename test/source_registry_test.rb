@@ -909,7 +909,7 @@ class SourceRegistryTest < Minitest::Test
     # join the group or this pin fires. Modules (osl, unikemet) carry the
     # identity spines; the sources carry the Han card's shelves, the
     # reading lanes, and the Wiktionary sense lane.
-    assert_equal %w[babelstone-ids baxter-sagart edrdg edubba-overlay hdic kradfile osl tls
+    assert_equal %w[babelstone-ids baxter-sagart edrdg edubba-overlay hdic kradfile osl shuowen tls
                     tshet-uinh unihan unikemet wiktionary-akk wiktionary-hit wiktionary-sux],
                  registry.group_members("signs").sort
     modules = registry.group_members("signs").select { |s| registry[s].feature_module? }
@@ -1153,7 +1153,7 @@ class SourceRegistryTest < Minitest::Test
     assert_equal %w[etym iranian buddhist], registry["titus-khotanese"].axes
     assert_equal %w[titus-khotanese titus-tocharian-a titus-tocharian-b], registry.blocked_axis_members("buddhist"),
                  "the grant-gated TITUS Buddhist corpora ride buddhist, excluded from the public listing"
-    assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil mvp sarit suttacentral],
+    assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral],
                  registry.public_axis_members("buddhist").sort
   end
 

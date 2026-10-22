@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# KLOBIP/OBIMD on Hugging Face, revision 4820d2f11a8f45f3347591fdcd5f6466706b0dce.
+# data.json and Main-character.json are documented record/entry splices of the
+# revision-pinned files; the card is whole. adapter_test is null: a re-run
+# against the full files would false-fail the fixture-count assertions; drift
+# is caught by the adapter's sha256 pins at any real fetch.
+source: obimd
+adapter_test:
+retrieved: 2026-10-21
+files:
+  - path: data/data.json
+    url: https://huggingface.co/datasets/KLOBIP/OBIMD/resolve/4820d2f11a8f45f3347591fdcd5f6466706b0dce/data.json
+    whole: false
+    trim: 8 whole records spliced byte-verbatim (H2 H224 H4413 H8342 H9830 H14717 H17138 HD514) and rejoined as a JSON array with upstream's CRLF layout (41.7 MB -> 18 KB)
+  - path: chars/Main-character.json
+    url: https://huggingface.co/datasets/KLOBIP/OBIMD/resolve/4820d2f11a8f45f3347591fdcd5f6466706b0dce/Hierarchical%20Character%20Metadata%20Supplement/Main-character.json
+    whole: false
+    trim: the 25 entries the fixture records use, byte-verbatim entry splices (3,936 -> 25)
+  - path: card/README.md
+    url: https://huggingface.co/datasets/KLOBIP/OBIMD/resolve/4820d2f11a8f45f3347591fdcd5f6466706b0dce/README.md
+    whole: true
+    trim: none

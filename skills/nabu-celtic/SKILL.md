@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: celtic
   origin: generated
-  sources: "corph gpc lexlep lexlep-words ogham riig stgall-priscian ud wiktionary-recon"
+  sources: "br-wikisource corph cy-wikisource gpc lexlep lexlep-words ogham riig stgall-priscian ud wiktionary-recon"
 ---
 
 # The Celticist — the `celtic` desk
@@ -23,7 +23,9 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `br-wikisource` | Breton Wikisource — the dated 19th-century cone (prints to 1900: Buez ar Saent · Luzel · Barzaz Breiz) | attribution |
 | `corph` | CorPH — Corpus PalaeoHibernicum (ChronHib, Maynooth) | attribution |
+| `cy-wikisource` | Welsh Wikisource — the early-modern cone (Salesbury 1547 · the 1588 and 1620 Bibles · pre-1800 prints · Cyfres y Fil) | attribution |
 | `gpc` | GPC — Geiriadur Prifysgol Cymru (open subset) | attribution |
 | `lexlep` | Lexicon Leponticum (LexLep) — Cisalpine Celtic inscriptions (Univ. Vienna) | nc |
 | `lexlep-words` | Lexicon Leponticum — Dictionary of Attested Forms (Univ. Vienna) | nc |
