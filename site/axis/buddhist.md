@@ -21,7 +21,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages / 56,794 entries |
-| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `gretil` | texts | nc | wired · manual | 780 docs / 713,718 passages |
 | `lotsawa-house` | texts | nc | wired · manual | 6,388 docs / 413,067 passages |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |

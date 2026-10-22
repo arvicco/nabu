@@ -170,7 +170,7 @@ class MeloniromanceTest < Minitest::Test
     entry = registry["meloniromance"]
     refute_nil entry, "meloniromance must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Meloniromance, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired flipped at the first sync: 5,419 entries / 15,931 reflex rows"
     assert_equal "manual", entry.sync_policy
   end
 end

@@ -20,14 +20,14 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
 | `ccl` | dictionary | attribution | wired · manual | 11,284 entries |
-| `coptic-scriptorium` | texts | nc | wired · auto | 482 docs / 74,169 passages |
+| `coptic-scriptorium` | texts | nc | wired · auto | 502 docs / 74,778 passages |
 | `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 | `tla-hf` | texts | attribution | wired · manual | 6 docs / 59,524 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `unikemet` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `egy` 51,131 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 26 more (`nabu axis egyptian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `egy` 51,131 · `ger` 12,985 · `cop` 12,242 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 26 more (`nabu axis egyptian` lists all).
 
 ## The desk's instruments
 

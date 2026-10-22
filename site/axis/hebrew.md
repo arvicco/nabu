@@ -21,7 +21,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
 | `dss` | texts | nc | wired · auto | 1,001 docs / 52,895 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
-| `extrabiblical` | texts | nc | not yet wired | not synced yet |
+| `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
@@ -29,7 +29,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `sefaria` | texts | open | wired · manual | 1,970 docs / 1,066,001 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `hbo` 30,716 · `grc` 6,297 · `eng` 5,909 · `arc` 3,334 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 27 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `hbo` 30,728 · `grc` 6,297 · `eng` 5,909 · `arc` 3,334 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 28 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 
