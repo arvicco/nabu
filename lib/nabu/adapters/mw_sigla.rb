@@ -1,16 +1,25 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Nabu
   module Adapters
-    # The curated MW sigla → GRETIL crosswalk (P17-4; mw-survey §3). MW cites
-    # literature through tagged <ls> elements whose leading siglum comes from
-    # the dictionary's own works-and-authors key (871 rows upstream); this
-    # module is the deliberately SMALL curated slice of it — the works the
-    # GRETIL shelf actually holds (filenames verified against the
-    # mmehner/gretil-corpus-tei mirror listing, 2026-07-13) plus MW's
-    # lexicographic authority labels. Everything else classifies :unheld and
-    # is REPORTED per-siglum at sync, never faked (the LSJ honest-miss
-    # precedent).
+    # MW's citation sigla (P17-4; mw-survey §3), data-driven from
+    # config/mw_sigla.yml. MW cites literature through tagged <ls> elements
+    # whose leading siglum comes from the dictionary's own works-and-authors
+    # key; the config carries that key in full (871 rows, CDSL's digitization
+    # — KEY, #key_rows: what every siglum expands to) plus two judgment
+    # layers over it, each row reasoned there: the crosswalk of works the
+    # GRETIL shelf actually holds (WORKS — stem + citation template) and
+    # MW's lexicographic authority labels (AUTHORITY). Everything else
+    # classifies :unheld and is REPORTED per-siglum at sync, never faked
+    # (the LSJ honest-miss precedent). Census over the full mw.xml
+    # (2026-10-22): the key names the siglum of 328,050 of 328,060
+    # citations (868 distinct sigla seen, 858 keyed); recognizing its
+    # multi-word sigla whole moves 6 citations off a held/authority siglum
+    # (Sāy. on AitBr. ×4, RV. AnuvAnukr., Hariv. (Langlois' transl.)), and
+    # its edition-qualified variants of held works (R. (B.), Śak. (Pi.) …)
+    # and "Yājñ., Sch." (the Mitākṣarā) are crosswalked at document grain.
     #
     # == The four tiers (survey §3 "honest projection")
     #
@@ -44,52 +53,32 @@ module Nabu
       # means document grain.
       Work = Data.define(:urn, :format)
 
-      def self.work(stem, format = nil)
-        Work.new(urn: "urn:nabu:gretil:#{stem}", format: format)
-      end
+      # One row of MW's works-and-authors key: CDSL's row id, the expansion
+      # and CDSL's type (Title, Author, Literary category, subtitle …).
+      KeyRow = Data.define(:id, :siglum, :expansion, :type)
 
-      WORKS = {
-        # -- passage grain (survey §3 verse-grain census) -------------------
-        "RV." => work("sa_Rgveda-edAufrecht", "%d.%03d.%02d"),
-        "BhP." => work("sa_bhAgavatapurANa", "%02d.%02d.%03d"),
-        "R." => work("sa_rAmAyaNa", "%d.%03d.%03d"),
-        "Ragh." => work("sa_kAlidAsa-raghuvaMza", "%d.%d"),
-        "Yājñ." => work("sa_yAjJavalkyasmRti", "%d.%d"),
-        "Kum." => work("sa_kAlidAsa-kumArasaMbhava", "%d.%d"),
-        "Sāh." => work("sa_vizvanAthakavirAja-sAhityadarpaNa", "%d.%d"),
-        "MārkP." => work("sa_mArkaNDeyapurANa1-93", "%d.%d"),
-        "VP." => work("sa_viSNupurANa", "%d,%d.%d"),
-        "Daś." => work("sa_daNDin-dazakumAracarita", "%d,%d.%d"),
-        # GRETIL re-split (was a single-blob parse): lg xml:id Manu_A.V and
-        # the "|| PS_A,P.S ||" sūtra markers. Census over the full mw.xml
-        # against the re-split parse (2026-10-22): Mn. 3,764 passage-grain
-        # citations, 3,747 live; Pāṇ. 8,910, 8,785 live (bare "Mn." ×3,609
-        # and "Pāṇ." ×683 stay document grain). With the tail repairs in
-        # #normalize_citation, passage-grain rows rose 8,787 → 25,519.
-        "Mn." => work("sa_manusmRti", "%d.%d"),
-        "Pāṇ." => work("sa_pANini-aSTAdhyAyI", "%d,%d.%d"),
-        # -- document grain --------------------------------------------------
-        "Hariv." => work("sa_harivaMza"), # crit.-ed. numbering ≠ MW's Calcutta
-        "Kathās." => work("sa_somadeva-kathAsaritsAgara"),
-        "Pañcat." => work("sa_viSNuzarman-paJcatantra"),
-        "Hit." => work("sa_nArAyaNa-hitopadeza"),
-        "Śak." => work("sa_kAlidAsa-abhijJAnazakuntala"),
-        "VarBṛS." => work("sa_varAhamihira-bRhatsaMhitA"),
-        "Bhaṭṭ." => work("sa_bhaTTi-rAvaNavadha"),
-        "Megh." => work("sa_kAlidAsa-meghadUta"),
-        "Kir." => work("sa_bhAravi-kirAtArjunIya"),
-        "Śiś." => work("sa_mAgha-zizupAlavadha"),
-        "Nir." => work("sa_yAska-nirukta"),
-        "Gīt." => work("sa_jayadeva-gItagovinda")
-      }.freeze
+      CONFIG_PATH = File.expand_path("../../../config/mw_sigla.yml", __dir__)
+      CONFIG = YAML.safe_load_file(CONFIG_PATH)
 
-      # MW's lexicographic authority labels (survey §3): citations of
-      # lexicographers/authorities, not of passages.
-      AUTHORITY = %w[L. W. MW. Cat. ib. Kāv. Buddh. Pur. Br. Gal. Sāy.].freeze
+      # siglum => [KeyRow] (an array: six sigla carry two expansions upstream).
+      KEY = CONFIG.fetch("key")
+                  .map { |id, siglum, expansion, type| KeyRow.new(id:, siglum:, expansion:, type:) }
+                  .group_by(&:siglum).transform_values(&:freeze).freeze
 
-      # Known sigla, longest first, so "RV." wins over "R." and "MārkP."
-      # over "Mn."-style shorter keys.
-      KNOWN = (WORKS.keys + AUTHORITY).sort_by { |siglum| -siglum.length }.freeze
+      WORKS = CONFIG.fetch("crosswalk").to_h do |siglum, held|
+        [siglum, Work.new(urn: "urn:nabu:gretil:#{held.fetch('gretil')}", format: held["format"])]
+      end.freeze
+
+      AUTHORITY = CONFIG.fetch("authority").freeze
+
+      # Every recognized siglum, indexed by its first whitespace token (the
+      # label's own first token picks the candidates), longest first within
+      # a token so "MBh. (ed. Bomb.)" wins over "MBh." and "Sāy. on AitBr."
+      # over "Sāy." — the boundary rule then needs a space or the end.
+      KNOWN = (KEY.keys + WORKS.keys + AUTHORITY).uniq
+                                                 .group_by { |siglum| siglum[/\A\S+/] }
+                                                 .transform_values { |list| list.sort_by { -_1.length }.freeze }
+                                                 .freeze
 
       # MW's ibidem. The parser rewrites an "ib." it can propagate (an
       # earlier citation in the SAME entry) to "ib. (= <siglum>)" — the work
@@ -112,7 +101,7 @@ module Nabu
         inherited = text.match(INHERITED)
         return inherited[:siglum] if inherited
 
-        known = KNOWN.find do |siglum|
+        known = KNOWN.fetch(text[/\A\S+/].to_s, []).find do |siglum|
           text.start_with?(siglum) && (text.length == siglum.length || text[siglum.length] == " ")
         end
         return known if known
@@ -120,6 +109,9 @@ module Nabu
         head = text[/\A[^\s]*?\./] || text[/\A[^\s]+/]
         head.to_s.empty? ? nil : head
       end
+
+      # The key rows a siglum expands to ([] for a siglum outside MW's key).
+      def key_rows(siglum) = KEY.fetch(siglum, [])
 
       # Tier of a label: :passage / :document / :authority / :unheld.
       def classify(label)

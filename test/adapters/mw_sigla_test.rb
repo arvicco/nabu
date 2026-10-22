@@ -43,6 +43,53 @@ module Adapters
       assert_equal "8.120", SIGLA.resolve("Mn. viii, 120.").last
     end
 
+    # -- the full works-and-authors key (config/mw_sigla.yml) -------------------------
+
+    def test_the_full_871_row_key_loads_with_cdsl_ids_expansions_and_types
+      assert_equal 871, SIGLA::KEY.values.sum(&:size)
+      manu = SIGLA.key_rows("Mn.")
+      assert_equal([%w[05:17 Manu-smṛti Title]], manu.map { |row| [row.id, row.expansion, row.type] })
+      assert_equal "Literary category", SIGLA.key_rows("Kāv.").first.type
+      assert_empty SIGLA.key_rows("Xyz.")
+    end
+
+    # Six sigla carry two expansions upstream — both rows kept, never one
+    # picked.
+    def test_ambiguous_sigla_keep_every_upstream_row
+      assert_equal 2, SIGLA.key_rows("Ratnāv.").size
+    end
+
+    # The key's multi-word sigla are recognized whole: "Sāy. on AitBr." is
+    # Sāyaṇa's commentary on the Aitareya-brāhmaṇa (a title), not the bare
+    # authority label "Sāy."; edition-qualified MBh. sigla stay MBh.-shaped.
+    def test_multi_word_keyed_sigla_are_recognized_whole
+      assert_equal "Sāy. on AitBr.", SIGLA.siglum_of("Sāy. on AitBr.")
+      assert_equal :unheld, SIGLA.classify("Sāy. on AitBr.")
+      assert_equal "Sāy.", SIGLA.siglum_of("Sāy.")
+      assert_equal "MBh. (ed. Bomb.)", SIGLA.siglum_of("MBh. (ed. Bomb.) iii, 13220")
+    end
+
+    # The key's edition-qualified sigla name a held work in an edition whose
+    # numbering is not GRETIL's: the work resolves, the tail never does.
+    # "Yājñ., Sch." is the Mitākṣarā, a file of its own.
+    def test_edition_qualified_and_commentary_sigla_cross_walk_at_document_grain
+      assert_equal ["urn:nabu:gretil:sa_rAmAyaNa", nil], SIGLA.resolve("R. (B.) ii, 14, 3")
+      assert_equal ["urn:nabu:gretil:sa_rAmAyaNa", "2.014.003"], SIGLA.resolve("R. ii, 14, 3")
+      assert_equal ["urn:nabu:gretil:sa_vijJAnezvara-mitAkSarA", nil], SIGLA.resolve("Yājñ., Sch.")
+      assert_equal :unheld, SIGLA.classify("Hariv. (Langlois' transl.)"), "a translation, not the text"
+    end
+
+    # The two judgment layers live in the same config: every crosswalked
+    # work and every authority label is itself a row of MW's key.
+    def test_crosswalk_and_authority_layers_are_keyed_sigla
+      assert_equal "urn:nabu:gretil:sa_Rgveda-edAufrecht", SIGLA::WORKS.fetch("RV.").urn
+      assert_equal "%d.%03d.%02d", SIGLA::WORKS.fetch("RV.").format
+      assert_nil SIGLA::WORKS.fetch("Hariv.").format
+      (SIGLA::WORKS.keys + SIGLA::AUTHORITY).each do |siglum|
+        refute_empty SIGLA.key_rows(siglum), "#{siglum} is not a row of MW's key"
+      end
+    end
+
     # The @n restoration joins the elided context with a SPACE, and upstream's
     # @n sometimes stops before its comma (<ls n="Pāṇ. iv, 3">5</ls> →
     # "Pāṇ. iv, 3 5"; <ls n="Pāṇ. iv">2, 3</ls> → "Pāṇ. iv 2, 3").
