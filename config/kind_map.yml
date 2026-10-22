@@ -668,6 +668,31 @@ sources:
     # and offerings; the inscribed stirrup jars are transport labels.
     # A whole-source declaration, the parse-time mapping call.
     source_kind: administrative
+  sigla:               # census 2026-10-22: 787 inscriptions with signs, 20 typology values
+    facet: object      # SigLA's own document typology (the paper's "document typology")
+    map:
+      "Tablet": administrative       # 438 — the Linear A accounts (word + logogram + fraction entries)
+      "Nodule": administrative       # 165 — sealed clay nodules, the sealing administration's records
+      "Roundel": administrative      # 146 — inscribed sealed roundels, transaction receipts
+      "Sealing": administrative      # 7
+      "Label": mark/label            # 1
+      "Libation Table": dedicatory/votive  # 6 (+ the lowercase spelling, case fold) — the
+      #   stone offering vessels carrying the "libation formula", read as dedications
+      #   in the scholarship (Davis 2014, Minoan Stone Vessels with Linear A Inscriptions)
+      "Graffiti": mark/graffito      # 3
+    deliberate:
+      "Pithos": "an inscribed object type, not a genre claim (content undetermined)"         # 6
+      "Sherd": "an inscribed object type, not a genre claim (content undetermined)"          # 4
+      "Cup": "an inscribed object type, not a genre claim (content undetermined)"            # 2
+      "Pithoid jar": "an inscribed object type, not a genre claim (content undetermined)"    # 1
+      "Clay vase": "an inscribed object type, not a genre claim (content undetermined)"      # 1
+      "Lamp": "an inscribed object type, not a genre claim (content undetermined)"           # 1
+      "Architecture": "an inscribed object type, not a genre claim (content undetermined)"   # 1
+      "Jewellery": "an inscribed object type, not a genre claim (content undetermined)"      # 1
+      "Stone weight": "an inscribed object type, not a genre claim (content undetermined)"   # 1
+      "Clay weight": "an inscribed object type, not a genre claim (content undetermined)"    # 1
+      "Metal engraving": "an inscribed object type, not a genre claim (content undetermined)" # 1
+      "Plaque": "an inscribed object type, not a genre claim (content undetermined)"         # 1
   vulgate:
     source_kind: scripture
   prague-bible-1488:
