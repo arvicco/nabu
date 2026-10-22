@@ -194,20 +194,23 @@ module Nabu
       Each source syncs through its NORMAL path (fetch → load → index), so
       the command is idempotent — a re-run is an ordinary re-sync — and one
       source's failure never stops the rest: failures are reported at the
-      end, and the exit status is 1 if any source failed. --list prints the
-      set (with sizes) and exits without touching the network.
+      end, and the exit status is 1 if any source failed. --dry-run prints
+      the set (with sizes) and exits without touching the network.
 
       Examples:
-        nabu quickstart          # sync the starter shelf, then try the printed commands
-        nabu quickstart --list   # what would be synced, and why
+        nabu quickstart             # sync the starter shelf, then try the printed commands
+        nabu quickstart --dry-run   # what would be synced, and why
 
       Use cases: a new install's first minutes; the README/site Quickstart's
       one command; rebuilding a demo box.
     HELP
-    option :list, type: :boolean, default: false,
-                  desc: "Print the starter set (slugs, sizes, what each unlocks) and exit without syncing"
+    option :dry_run, type: :boolean, default: false,
+                     desc: "Print the starter set (slugs, sizes, what each unlocks) and exit without syncing"
+    # The pre-rename spelling of --dry-run (the house preview flag), kept
+    # as a hidden alias so existing scripts and docs keep working.
+    option :list, type: :boolean, default: false, hide: true
     def quickstart
-      return print_starter_list if options[:list]
+      return print_starter_list if options[:dry_run] || options[:list]
 
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -790,7 +793,7 @@ module Nabu
 
       # -- quickstart (P18-2) -------------------------------------------------
 
-      # `quickstart --list`: the starter set, sizes, and what each source
+      # `quickstart --dry-run`: the starter set, sizes, and what each source
       # unlocks — no network, no db, nothing created.
       # Additively enable the starter slugs in the enablement config
       # (P44-r3c). Existing entries are preserved; the save carries the

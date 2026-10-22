@@ -64,7 +64,7 @@ Church Slavonic, with gold lemmas; nc), the ISWOC Old English treebank
 479 MB, CC BY-SA) — about **690 MB** all told. On the reference box the
 four first syncs took roughly three minutes of fetch-and-load combined
 (lexica dominates); allow up to ten minutes on an ordinary connection.
-`bin/nabu quickstart --list` previews the set without syncing; a re-run is
+`bin/nabu quickstart --dry-run` previews the set without syncing; a re-run is
 an ordinary re-sync, and one source's failure never stops the rest.
 
 Prefer the smallest possible start? A single source works too:
