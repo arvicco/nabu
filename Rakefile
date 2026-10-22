@@ -473,6 +473,37 @@ namespace :bench do
     catalog&.disconnect
     fulltext&.disconnect
   end
+
+  desc "Parallels recall@K against a held gold set (GOLD=edh-edr|…|census, PRODUCER, K, SAMPLE, SEED; read-only)"
+  task :parallels do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    bench_class = Nabu::Ops::ParallelsBench
+    options = bench_class.options_from_env(ENV)
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    links = Nabu::Store::LinkLayers.open_readonly(config) or abort "bench:parallels: no links journal on this box"
+    bench = bench_class.new(links: links, catalog: catalog)
+    if options.gold == "census"
+      puts bench_class.render_census(bench.census)
+      next
+    end
+
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+    producer = bench_class.producer_for(options, catalog: catalog, fulltext: fulltext, links: links)
+    report = bench.run(gold: bench.gold_set(bench_class.recipe(options.gold)), producer: producer,
+                       ks: options.ks, sample: options.sample, seed: options.seed)
+    puts bench_class.render(report)
+    path = options.out || bench_class.default_sidecar(db_dir: config.db_dir, report: report)
+    puts "  sidecar: #{bench_class.write_sidecar(report, path)}"
+  rescue Nabu::Error => e
+    abort e.message
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+    links&.disconnect
+  end
 end
 
 # Print one check result to stdout.

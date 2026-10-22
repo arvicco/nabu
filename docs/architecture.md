@@ -1318,6 +1318,42 @@ symbolic packets like this one produce as a side effect. Batch/corpus-wide
 mining and its persisted `links` edges (design §7) are a later rider on this
 same gram machinery, not this packet.
 
+**Measuring the engine — the recall@K harness.** Engine borrowings
+(fuzzy positional grams, a contiguous-run bonus, hub demotion, novelty
+weighting, a damage-token filter — each measured elsewhere) are admitted
+only when they measurably help, so the measuring stick ships first:
+`Nabu::Ops::ParallelsBench`, driven by `rake bench:parallels` (read-only
+on every store). A GOLD set is ground truth the library already holds as
+upstream- or curator-asserted edges in the links union (§15), declared as
+a recipe (producer, kind, an optional detail/target filter, `:pair` or
+`:hub` mode — a hub groups co-members sharing one target, capped so an
+O(n²) series cannot swamp the set — and an optional same-language filter,
+since surface grams cannot cross languages): `edh-edr` (two editions of
+one stone, 10,420 pairs on the 2026-10-22 catalog), `tm-same-text` (the
+Trismegistos same-text concordance, 488), `cdli-composite` (exemplars of
+one CDLI composite — witnesses of a composition, not physical joins: CDLI
+join_information is prose and eBL's joins field is empty; 46,775 pairs
+from 3,692 hubs of 2–25 members), `suttacentral` (curated parallels, the
+4,320 same-language pairs of 195,287 edges), `kitab-passages` (96 passim
+alignments at milestone grain) and `kitab-books` (931,847 book pairs —
+upstream machine-computed, sample it). A PRODUCER answers ranked
+candidate documents for a query: the live engine (surface grams only,
+any reuse-profile knob; a document query probes each live passage up to
+`MAX_ANCHORS` and SUMS per-document scores across anchors) or a persisted
+layer (`journal:<producer>:<kind>`; grading a gold set by its own producer
+is refused). Comparison is at DOCUMENT grain — the engine ranks documents
+— so passage-grain gold earns document credit, said in every report. The
+report is one table (recall@K micro and per-query macro, hit@K, and
+precision@K against gold as a declared LOWER BOUND — gold sets are
+incomplete — plus the census: sampled/evaluated queries, unheld queries
+and targets, zero-candidate queries) and a JSON sidecar
+(`nabu.parallels-bench/1`, default `db/bench/` — derived, deletable).
+Sampling is deterministic: sorted gold urns drawn with `Random.new(SEED)`.
+The suite pins a baseline over the real edh/edr fixture editions: their
+one- to three-token lines yield no 4-gram, so the default engine finds 0
+of 6 partner slots and gram size 1 finds 2 — the short-epigraphy blind
+spot the harness exists to expose.
+
 ## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
