@@ -8,11 +8,27 @@ $stdout.sync = true
 
 require "rake/testtask"
 
-Rake::TestTask.new(:test) do |t|
+# `rake test` runs the suite across worker processes (test/parallel/runner.rb:
+# N = Etc.nprocessors, NABU_TEST_WORKERS overrides) and prints ONE merged
+# Minitest-shaped report. The single-process path stays: `rake test TEST=path`
+# (one file, unparallelized) and the kill-switch NABU_TEST_SERIAL=1 both run
+# the classic Rake::TestTask, exposed directly as `rake test:serial`.
+Rake::TestTask.new(:"test:serial") do |t|
   t.libs << "test"
   t.libs << "lib"
   t.test_files = FileList["test/**/*_test.rb"]
   t.warning = false
+end
+
+desc "Run the test suite (parallel workers; TEST=path or NABU_TEST_SERIAL=1 → single process)"
+task :test do
+  if ENV["TEST"] || ENV["NABU_TEST_SERIAL"] == "1"
+    Rake::Task[:"test:serial"].invoke
+  else
+    ruby "test/parallel/runner.rb" do |ok, _status|
+      abort "rake test: suite FAILED (see report above)" unless ok
+    end
+  end
 end
 
 desc "Run RuboCop"
