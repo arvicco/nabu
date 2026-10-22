@@ -75,7 +75,9 @@ module Nabu
         "Ugaritic" => /\p{Ugaritic}/, "Old Persian" => /\p{Old_Persian}/,
         "Myanmar" => /\p{Myanmar}/, "Gurmukhi" => /\p{Gurmukhi}/,
         "Balinese" => /\p{Balinese}/, "Javanese" => /\p{Javanese}/,
-        "Rejang" => /\p{Rejang}/, "Sundanese" => /\p{Sundanese}/
+        "Rejang" => /\p{Rejang}/, "Sundanese" => /\p{Sundanese}/,
+        "Linear A" => /\p{Linear_A}/, "Linear B" => /\p{Linear_B}/,
+        "Cypriot" => /\p{Cypriot}/
       }.freeze
       private_constant :SCRIPTS
 

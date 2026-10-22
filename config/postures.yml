@@ -542,10 +542,10 @@ sources:
     # kind machine-postured — kind_map.yml folds SigLA's typology facet
     # (object: Tablet/Nodule/Roundel administrative, libation tables
     # dedicatory, graffiti; the object-only types deliberate).
-    lect: {posture: pending, note: "candidate: a lab (Linear A) anchor in nabu-lects —
-        undeciphered, unclassified, parentless (no stage grid to claim), plus the
-        lina script row the artifact-script layer needs; the bare lab code rides
-        until the mint merges"}
+    lect: {posture: identity, note: "lab — the nabu-lects anchor (registry package merged
+        2026-10-22): undeciphered Linear A, parentless under the no-classification
+        discipline, no stage grid to refine into; the corpus is the whole attested
+        language"}
     dating: {posture: dated, note: "the Minoan ceramic-phase label (LM IB 640 · MM IIB
         34 · MM IIIB 28 …) on 775 of 802 inscriptions bands through the ruled Aegean
         rows of config/period_bands.yml (conventional low chronology, declared) via

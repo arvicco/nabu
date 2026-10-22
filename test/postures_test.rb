@@ -341,6 +341,9 @@ class PosturesTest < Minitest::Test
     # retires the five: te leaves the census (override-postured),
     # cy joins dates (emod band inference): 19→20, jv/su/br join
     # codemap (the new aliases): 14→17, pending 7→2 (lasla, sigla).
-    assert_equal({ "dates" => 20, "codemap" => 17, "identity" => 121, "pending" => 2 }, by_posture)
+    # The Linear A package's merge (2026-10-22, same day) retires sigla's
+    # pending: the lab anchor landed, sigla joins identity: 121→122,
+    # pending 2→1 (lasla alone again).
+    assert_equal({ "dates" => 20, "codemap" => 17, "identity" => 122, "pending" => 1 }, by_posture)
   end
 end

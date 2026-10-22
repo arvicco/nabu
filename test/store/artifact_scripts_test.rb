@@ -107,8 +107,9 @@ class ArtifactScriptsTest < Minitest::Test
       end
     end
     tags = shipped.values.flat_map { |langs| langs.values.map { |row| row["script"] } }.uniq.sort
-    assert_equal %w[avst egyd hant ital phnx tibt ugar xsux], tags,
-                 "the owner-ruled (2026-08-28) census set — a new tag here means a new owner ruling"
+    assert_equal %w[avst cprt egyd hant ital lina linb phnx tibt ugar xsux], tags,
+                 "the owner-ruled census set (2026-08-28; the Aegean-syllabary tags joined " \
+                 "with the 2026-10-22 registry package that minted them for exactly this layer)"
   end
 
   # The 2026-08-29 regression class: YAML resolves a DUPLICATE source key by
