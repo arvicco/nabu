@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 160, lect.size,
+    assert_equal 161, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -318,7 +318,9 @@ class PosturesTest < Minitest::Test
                  "P140 ADDS te/cy/jv/su/br-wikisource as PENDING on the phase's aggregated " \
                  "nabu-lects package (te:cls, cy:emod, the jv/su anchors, the jav/sun/bre aliases): 154→159; " \
                  "wilkens-oui ADDED — identity oui (the Old Uyghur dictionary; a real anchor, " \
-                 "no stages): 159→160"
+                 "no stages): 159→160; " \
+                 "sigla ADDED — PENDING on a lab (Linear A) anchor + the lina script row " \
+                 "(nothing Linear A exists in nabu-lects): 160→161"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -331,7 +333,8 @@ class PosturesTest < Minitest::Test
     # (och → zho:old): 13→14; lotsawa-house joins identity: 119→120;
     # vakk joins dates: 18→19; the five wave-3 cones join as pending on
     # the phase's aggregated package: 1→6. wilkens-oui joins identity
-    # (oui, the Old Uyghur dictionary): 120→121.
-    assert_equal({ "dates" => 19, "codemap" => 14, "identity" => 121, "pending" => 6 }, by_posture)
+    # (oui, the Old Uyghur dictionary): 120→121; sigla joins as pending
+    # on a lab (Linear A) anchor: 6→7.
+    assert_equal({ "dates" => 19, "codemap" => 14, "identity" => 121, "pending" => 7 }, by_posture)
   end
 end

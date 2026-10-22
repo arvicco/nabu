@@ -117,8 +117,8 @@ module Nabu
           "dcs" => :time_slot_band, # the chapter's DCS composition time slot → the ruled
           #                           "DCS time slot N" period_bands rows, composition class
           "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
-          #   IIIB") bands only once period_bands.yml carries ruled rows; the
-          #   site/findspot place hash projects meanwhile
+          #   IIIB") through the ruled Aegean rows of period_bands.yml (every
+          #   held label covered); the site/findspot place hash rides along
 
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)
@@ -207,6 +207,9 @@ module Nabu
           "seal" => :period_label,
           "senie" => :structured, # the TEI header <date>: the print's or manuscript's year,
           #                         a "1681_90" span as its envelope — the artifact date
+          "sigla" => :period_label, # P142: the Linear A inscription's Minoan ceramic phase
+          #                           ("LM IB", "MM IIB") through the ruled Aegean rows;
+          #                           place = the site (Haghia Triada, Khania …)
           "siddham" => :structured, # P118-4: the title's era-typed year (config/eras.yml)
           #                           or century attribution
           "sii-clean" => :structured, # P122-3: the SII heading's A.D. / Śaka year or the
