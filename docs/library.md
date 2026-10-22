@@ -1244,6 +1244,44 @@ Georgian (GLC) and Middle Armenian (ArmTDP); `wiktionary-recon`
 gains the Old/Middle Armenian, Old Georgian and Ossetian extracts
 (10,660 entries) — all on the registry's new Caucasus anchors.
 
+## 8aq. The reading instruments (P141)
+
+A read-side window over data the previous waves had already fetched
+— no new sources, four new ways in (counts from the 2026-10-22
+builds):
+
+**Translations search.** `search --translations` reaches the ~302k
+passages whose translations ride INSIDE annotations rather than as
+sibling documents — cdli's #tr lines, Coptic Scriptorium, the
+Hittite glossed corpus's German, eBL, Old Dutch, St Gall Priscian
+and nine more — bm25-ranked over a dedicated fulltext lane, each hit
+pointing back at the original passage.
+
+**The morph façade, widened.** Six more tagset families decode
+through `--morph`: the Diorisis Greek analyses (12.9M), the ETCBC
+Hebrew/Aramaic features of BHSA and the Scrolls, OpenScriptures
+Hebrew, the CorA German/Slovene msd sets, and Menota's Old Norse msa
+— with upstream word glosses (`--gloss`) joining the search on BHSA,
+the Egyptian AES, Achemenet and the Hittite tlhdig.
+
+**Word senses.** The Digital Corpus of Sanskrit's 531,573
+sense-tagged gold tokens resolve against the held sense bank:
+`nabu sense` finds passages by sense id, name or gloss, and
+`show --senses` reads a passage's token senses back.
+
+**Sign concordances.** The cuneiform character card carries the
+printed sign-list numbers — Labat, AKS, ATU1, PGSL, MZL↔KWU, the
+eBL names and the Attinger value conventions: 17,090 concordance
+rows over 2,555 signs, precompiled.
+
+Beside the instruments: a layout-aware segmenter for Wilkens's Old
+Uyghur dictionary (49,621 records measured clean — the adapter
+follows), the Sefaria kind fold now reading the deep category path
+(commentary classes as exegesis at the next replay), atomic fetches
+with persisted cone membership for the scan-indexed Wikisource
+family, and a parallel test runner that cut the suite from ~7 minutes
+to ~90 seconds.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
