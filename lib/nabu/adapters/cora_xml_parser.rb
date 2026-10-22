@@ -187,19 +187,25 @@ module Nabu
       # { child element name → @tag } for the requested +names+, in
       # document order, values verbatim (null placeholders included — the
       # null policy is the caller's). A streaming pass with no layout
-      # resolution, so it costs one read of the file.
-      def anno_tags(path, names:)
+      # resolution, so it costs one read of the file. +unit+ names the
+      # dialect's annotation element: ReM/ReF "tok_anno", ReN "mod". The
+      # unit closes at its own end tag, so top-level apparatus between
+      # tokens (ReN: 8,497 <comment type="K"> elements) never lands on the
+      # previous unit.
+      def anno_tags(path, names:, unit: "tok_anno")
         tags = {}
         current = nil
         each_node(path) do |node|
-          next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
-
-          if node.name == "tok_anno"
-            current = tags[node.attribute("id")] = {}
-          elsif current && names.include?(node.name)
-            current[node.name] = node.attribute("tag")
-          elsif node.name == "token"
-            current = nil
+          case node.node_type
+          when Nokogiri::XML::Reader::TYPE_ELEMENT
+            if node.name == unit
+              tags[node.attribute("id")] = {}
+              current = node.empty_element? ? nil : tags[node.attribute("id")]
+            elsif current && names.include?(node.name)
+              current[node.name] = node.attribute("tag")
+            end
+          when Nokogiri::XML::Reader::TYPE_END_ELEMENT
+            current = nil if node.name == unit
           end
         end
         tags
