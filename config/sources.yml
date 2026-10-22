@@ -3433,6 +3433,23 @@ mdz-protestant:   # 02-sources row 243
   # machine-ocr). The Urach Glagolitic/Cyrillic prints are out (OCR
   # noise), Megiser 1592 out (a four-language dictionary), declared.
 
+meloniromance:   # 02-sources row 304
+  adapter: Nabu::Adapters::Meloniromance
+  adopted: "2026-10-22"
+  axes: [etym, romance]
+  wired: false   # awaiting the first real sync (a GitFetch of the ~3 MB repository)
+  sync_policy: manual
+  # Meloni, Ravfogel & Goldberg 2021 ("Ab Antiquo", NAACL) Romance
+  # cognate sets in the lexibank CLDF edition (github.com/lexibank/
+  # meloniromance, rolling main, no tags/release/DOI). CC BY 4.0, read
+  # four ways (LICENSE, GitHub field, README, cldf-metadata.json) →
+  # attribution; the authors' own repository carries no license file.
+  # The IE-CoR seam: one dictionary shelf (lat), one entry per cognate
+  # set headed by its Latin form, the ron/fra/ita/spa/por members as
+  # reflex rows. EXPECTED at the first sync: 5,419 entries / 15,931
+  # reflex rows; raw/data.tsv skipped by rule. All forms are broad IPA,
+  # not orthography — joins to orthographic gold lemmas are not promised.
+
 menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
   adapter: Nabu::Adapters::MengguZiyun
   adopted: "2026-08-29"

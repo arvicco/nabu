@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (17): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `openmgh`, `osta`, `salom`, `ud`
+**Members** (18): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `meloniromance`, `openmgh`, `osta`, `salom`, `ud`
 
 ### epigraphy
 
@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (13): `calfa-lexicon`, `cldf-spine`, `clics`, `derom`, `edl`, `iecor`, `liv`, `nabu-lects`, `sabellic-loans`, `starling`, `westoldturkic`, `wiktionary-recon`, `wold`
+**Members** (14): `calfa-lexicon`, `cldf-spine`, `clics`, `derom`, `edl`, `iecor`, `liv`, `meloniromance`, `nabu-lects`, `sabellic-loans`, `starling`, `westoldturkic`, `wiktionary-recon`, `wold`
 
 ### biblical
 
