@@ -13,6 +13,19 @@ per censused page class:
 - `11930.json` — Novela od Stanca/prizor drugi — Držić, drama in <poem> with speaker lines (whole).
 - `12823.json` — Ah, da 'e meni na svijet dano — Bunić Vučić, filed under 16. AND 17. stoljeće; a bare [[sr:…]] interwiki (whole).
 
+Delivery grains: the cone's category walk reaches PART pages (a poem, a
+canto, a scene — the document grain taken) and the WORK pages above them,
+which host no text — navigation indexes over their parts and empty part
+stubs. The rejected grain is pinned by two real specimens, copied
+byte-verbatim from the held canonical tree (`canonical/hr-wikisource/pages/`,
+fetched 2026-10-10), each skipped by rule:
+
+- `1907.json` — Satir iliti divji čovik — the work's navigation index (skip: index page).
+- `16919.json` — Plac treti. Skruscenie — Gundulić's part stub with an empty poem block (skip: empty shell).
+
+Held-tree census (2026-10-22): 11 skipped by rule — 7 empty shells, 3
+navigation indexes, 1 translation — no strays.
+
 Re-cut: fetch each title's current revision + categories via api.php,
 wrap it with the adapter's write_envelope! (cone label as noted above) and
 re-apply the stated line trims.
