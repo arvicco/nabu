@@ -83,9 +83,12 @@ module Nabu
       key=value, all required). The vocabulary is Universal Dependencies
       feature names — case, number, gender, person, tense, mood, voice,
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
-      their `feats`, PROIEL/TOROT and GLAUx (AGDT postag) are decoded from
-      their positional tags into the same names. Each hit shows the matching surface form(s) and the
-      decoded morph evidence. --morph REQUIRES --lemma (bare morphology search
+      their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
+      OSHB, ReM/ReN (CorA msd), goo300k (IMP msd) and Menota (msa) are
+      decoded into the same names — Hebrew/Aramaic add state, stem and
+      conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous
+      analyses match when any reading fits. Each hit shows the matching
+      surface form(s) and the decoded morph evidence. --morph REQUIRES --lemma (bare morphology search
       is out of scope); ORACC carries no inflectional morphology, so
       inflectional facets never match it (honest absence). See conventions §6.1.
 

@@ -2,6 +2,7 @@
 
 require "json"
 
+require_relative "../lemma_keys"
 require_relative "../normalize"
 require_relative "../store/indexer"
 require_relative "catalog_join"
@@ -198,11 +199,15 @@ module Nabu
       end
 
       # Catalog rows for the candidate passages, carrying annotations_json for
-      # the morph post-filter alongside the usual display/visibility columns.
+      # the morph post-filter alongside the usual display/visibility columns,
+      # plus the source slug: the façade's scoped decoders and the per-source
+      # lemma keys (LemmaKeys — bhsa/dss read their own lexeme fields) both
+      # key on it.
       def annotated_catalog_rows(passage_ids, lang:, license:, source: nil, sources: nil, loans: nil)
         visible_passages(lang: lang, license: license, source: source, sources: sources, loans: loans)
           .where(Sequel[:passages][:id] => passage_ids)
-          .select(*catalog_columns, Sequel[:passages][:annotations_json].as(:annotations_json))
+          .select(*catalog_columns, Sequel[:passages][:annotations_json].as(:annotations_json),
+                  Sequel[:sources][:slug].as(:source_slug))
           .all
       end
 
@@ -211,41 +216,47 @@ module Nabu
       # set; the surface forms and the morph evidence come from THOSE tokens
       # only. The morph filter (cheap string ops) runs before the fold (the
       # per-language Normalize pass) so a selective facet folds only survivors.
+      # The passage's source slug scopes the façade's tagset rows and picks
+      # the lemma keys (LemmaKeys), so the morph path reads a token's
+      # dictionary form exactly as the index did.
       def morph_hit(row, variant_set, facets, tier: nil)
-        tokens = passage_tokens(row.fetch(:annotations_json))
+        slug = row[:source_slug]
+        spec = LemmaKeys.spec_for(slug)
+        tokens = passage_tokens(row.fetch(:annotations_json), spec)
         return nil if tokens.empty?
 
         language = row.fetch(:language)
         matches = tokens.select do |token|
-          MorphFacets.match?(token, facets) && lemma_in?(token, variant_set, language)
+          MorphFacets.match?(token, facets, source: slug) && lemma_in?(token, variant_set, language, spec)
         end
         return nil if matches.empty?
 
         forms = matches.filter_map { |token| token["form"] }.reject(&:empty?).uniq
-        build_morph_result(row, matches, forms, tier: tier)
+        build_morph_result(row, matches, forms, tier: tier, spec: spec, facets: facets)
       end
 
-      def passage_tokens(json)
-        return [] if json.nil? || !json.include?('"lemma"')
+      def passage_tokens(json, spec)
+        return [] if json.nil? || !LemmaKeys.probe?(json, spec)
 
         tokens = JSON.parse(json)["tokens"]
         tokens.is_a?(Array) ? tokens.grep(Hash) : []
       end
 
-      def lemma_in?(token, variant_set, language)
-        lemma = token["lemma"]
-        return false if lemma.nil? || lemma.empty?
-
-        variant_set.include?(Nabu::Normalize.search_form(lemma, language: language))
+      def lemma_in?(token, variant_set, language, spec)
+        LemmaKeys.lemmas(token, spec).any? do |lemma|
+          variant_set.include?(Nabu::Normalize.search_form(lemma, language: language))
+        end
       end
 
-      def build_morph_result(row, matches, forms, tier: nil)
+      def build_morph_result(row, matches, forms, tier:, spec:, facets:)
+        slug = row[:source_slug]
         Result.new(
           urn: row.fetch(:urn), language: row.fetch(:language),
-          lemma: matches.first.fetch("lemma"), surface_forms: forms.join(", "),
+          lemma: LemmaKeys.lemmas(matches.first, spec).first, surface_forms: forms.join(", "),
           text: row.fetch(:text), document_title: row.fetch(:document_title),
           license_class: row.fetch(:license_class),
-          morph: matches.map { |token| MorphFacets.describe(token) }.uniq.join("; "),
+          morph: matches.map { |token| MorphFacets.describe(token, source: slug, facets: facets) }
+                        .uniq.join("; "),
           tier: tier || Store::Indexer::GOLD_TIER
         )
       end
