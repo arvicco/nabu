@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 October 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · auto | 15,900 docs / 769,373 passages / 300,763 entries |
@@ -37,7 +37,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `suttacentral` | texts | open | wired · auto | 12,393 docs / 699,345 passages |
 | `tamilex` | texts | nc | wired · auto | 7,830 docs / 14,972 passages |
 | `te-wikisource` | texts | attribution | wired · manual | 453 docs / 208,794 passages |
-| `tipitaka-lk` | texts | research_private | not yet wired | nothing held yet |
+| `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,967 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vedaweb` | texts | attribution | wired · manual | 1,028 docs / 10,552 passages |
 | `wiktionary-dv` | dictionary | attribution | wired · manual | 2,047 entries |
@@ -48,7 +48,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,288 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 54 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,573 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 55 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
