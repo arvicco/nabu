@@ -1651,3 +1651,21 @@ This document goes stale the moment a sync or a phase lands. Standing plan:
 
 Numbers are always read from the live catalog read-only; this file never
 becomes the source of truth — it's the map, the catalog is the territory.
+
+## 8at. The Sinhala Tipiṭaka (P144)
+
+Counts from the first sync, 2026-10-23:
+
+**`tipitaka-lk`** — the Buddha Jayanthi Tripiṭaka as tipitaka.lk
+(Path Nirvana) proofread it: the whole Pāli canon in Sinhala script,
+each printed page facing its Sinhala translation, plus the
+aṭṭhakathā — the Pāli commentaries on all three piṭakas in the
+Chaṭṭha Saṅgāyana text — and Buddhaghosa's Visuddhimagga, each with
+its own Sinhala translation. 563 documents / 456,967 passages held
+as Pāli–Sinhala pairs, entry for entry on the printed page, with the
+edition's variant-reading footnotes and witness sigla riding every
+passage (CC BY-ND, on tipitaka.lk's condition that the text is kept
+in sync upstream and never corrected locally; granted by Path
+Nirvana, by email 2026-10-22). Beside SuttaCentral's roman-script
+Mahāsaṅgīti (§8m), the library now holds two independent witnesses
+of the canon — and its first complete Sinhala translation layer.
