@@ -100,3 +100,15 @@ sources:
       script: cprt
       note: "one unclassified inscription ('eteokyprisch oder syllabisch?'),
         upstream's own writing_systems says cypriot-syllabary"
+  # The runic manuscripts. Menota's dan holdings are exactly two codices,
+  # both written in runes: Codex Runicus (AM 28 8vo, the Scanian law) and
+  # the Mariaklage (SKB A 120, the Virgin Mary's lament). The adapter
+  # stores the Latin-letter diplomatic level; the facsimile level of both
+  # files is runic (canonical/menota/texts/*.xml, me:facs).
+  menota:
+    dan:
+      script: runr
+      note: "Codex Runicus and the Mariaklage — runic manuscripts, held in
+        Menota's diplomatic transcription (Latin letters); the runes ride
+        the facsimile level. Covers every menota dan document: the two
+        are the whole dan holding"

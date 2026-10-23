@@ -80,6 +80,30 @@ module Nabu
       ROMAN = { 1 => "I", 2 => "II", 3 => "III" }.freeze
       private_constant :ROMAN
 
+      # The witness dating, as the edition itself states it: the literature
+      # overview (bsBK-ovr.xml, item 1 of Kos's findings: "čas zapisa BS –
+      # 972–1039, BS II in III najverjetneje do leta 1000, BS I verjetno do
+      # 1022/23") and the introduction (bsIN §135–137: the Godego notice
+      # written by the BS II/III hand presupposes Otto I's grant to bishop
+      # Abraham, the charter of 28 May 972 — terminus post quem; the
+      # Regensburg/Ergolding notice and bishop Egilbert's death, 1039 —
+      # terminus ante quem). It dates the WRITING of the Clm 6426 record,
+      # not the composition of the texts (which may copy older exemplars),
+      # so it rides as the artifact date (no class — the timeline's NULL)
+      # on the transcription layers only; the modern translations carry
+      # none. The firm termini are the envelope; the narrower "most
+      # probably" bands ride the raw label.
+      WITNESS_DATING = {
+        "not_before" => 972, "not_after" => 1039,
+        "raw" => "972–1039 — the time of writing per M. Kos (the edition's bsBK-ovr/bsIN " \
+                 "§135–137): after Otto I's charter of 28 May 972, before bishop Egilbert's " \
+                 "death in 1039; BS II–III most probably by 1000, BS I probably by 1022/23"
+      }.freeze
+
+      # The transcription layers (the witness itself); translations are not.
+      DATED_LAYERS = %w[bsCT bsDT bsPT].freeze
+      private_constant :DATED_LAYERS
+
       # Upstream line-level @lang ids (langUsage) → our codes.
       LINE_LANGS = { "slv" => "sl", "lat" => "lat", "eng" => "eng", "ger" => "ger",
                      "ita" => "ita", "pol" => "pol", "ocs" => "sl" }.freeze
@@ -117,10 +141,11 @@ module Nabu
                                                 .find { |m| m.n == mon }
         raise ParseError, "#{document_ref.path}: monument #{mon} vanished between discover and parse" if monument.nil?
 
+        metadata = document_ref.metadata.slice("mon", "layer")
+        metadata["date"] = WITNESS_DATING.dup if DATED_LAYERS.include?(layer.file)
         document = Nabu::Document.new(
           urn: document_ref.id, language: layer.language, title: document_ref.metadata["title"],
-          canonical_path: document_ref.path,
-          metadata: document_ref.metadata.slice("mon", "layer")
+          canonical_path: document_ref.path, metadata: metadata
         )
         monument.lines.each { |line| document << passage(document_ref, layer, mon, line, document.size) }
         raise ParseError, "#{document_ref.path}: monument #{mon} has no non-empty lines" if document.empty?

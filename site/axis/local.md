@@ -15,15 +15,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 October 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 656 dossiers |
 | `local-lemmas` | silver lemmas | open | wired · manual | 31,420,938 lemma rows |
-| `local-library` | texts | research_private | wired · manual | 102 docs / 27,107 passages |
+| `local-library` | texts | research_private | wired · manual | 128 docs / 34,751 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
 | `local-source` | source records | open | wired · manual | 257 dossiers |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `eng` 27 · `egy` 11 · `osc` 8 · `sga` 6 · `akk` 4 · `peo` 4 · `ae` 3 · `arc` 3 · `cel` 3 · `ita` 3 … and 23 more (`nabu axis local` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 October 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `sga` 6 · `akk` 4 · `peo` 4 · `ae` 3 · `cel` 3 … and 28 more (`nabu axis local` lists all).
 
 ## The desk's instruments
 

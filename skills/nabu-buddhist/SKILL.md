@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: buddhist
   origin: generated
-  sources: "cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral"
+  sources: "cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral tipitaka-lk"
 ---
 
 # The Buddhologist — the `buddhist` desk
@@ -32,6 +32,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `mvp` | Mahāvyutpatti — Sanskrit–Tibetan–Chinese glossary (DILA TEI edition) | open |
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
+| `tipitaka-lk` | tipitaka.lk — Buddha Jayanthi Tripiṭaka and aṭṭhakathā, Pāli and Sinhala (Path Nirvana) | research_private |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold

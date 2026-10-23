@@ -171,6 +171,16 @@ composition sets; any other arg is refused naming the clash):
   omitted when it is the form). Composes with sense_gloss/limit. An unbuilt
   sense index is a note naming `rake builders:refresh`.
 
+`betacode: true` (contract bump 2026-10-22, the CLI's `search --betacode`)
+reads `query`, `lemma` and `near` as TLG Beta Code and transliterates them
+to Greek (`Nabu::Betacode.decode_query`: case-blind, `*` capitals, the FTS
+quotes and a trailing prefix `*` pass through) before any lane runs — text,
+lemma, proximity, fuzzy and translations alike. The decoded terms come back
+in a present-only `betacode` object (`{"query": "μῆνιν"}`); with the flag off
+the payload is byte-identical. A deliberate flag, never auto-detected; it is
+refused with `sense`/`similar_to` (ids and urns are not Greek text) and
+without a term to decode.
+
 Hits are
 relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result
@@ -728,7 +738,9 @@ bump widened the `findspot` block (attribution envelope), added nabu_search's
 flag; a second 2026-10-22 bump added the MCP tool metadata to every
 `tools/list` entry — a display `title` and an `annotations` object
 `{title, readOnlyHint: true}` (pinned in the same file: every registered
-tool carries both). Live MCP servers serve the old schema until restarted.
+tool carries both); a third 2026-10-22 bump added nabu_search's `betacode`
+input flag (and its present-only `betacode` echo key). Live MCP servers
+serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |
 | --- | --- | --- | --- |
@@ -746,6 +758,7 @@ tool carries both). Live MCP servers serve the old schema until restarted.
 | Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump; carries the Pleiades `attribution` envelope since the 2026-10-22 bump | **added P44-3** (pinned, incl. the dump-absent byte-identical case; attribution pinned 2026-10-22) |
 | Fragment search | `search --fuzzy` | `nabu_search` `fuzzy: true` — `Query::Fuzzy`, the CLI's composition set (minus the CLI-only `--source`/`--axis`/`--loans`) | **added 2026-10-22** (pinned) |
 | Annotation-held translations search | `search --translations` | `nabu_search` `translations: true` — `Query::TranslationSearch`, lang/license/limit (the CLI's `--source`/`--axis` have no MCP param) | **added 2026-10-22** (pinned) |
+| Beta Code input | `search --betacode` (query, `--lemma`, `--near` decoded; each decode echoed) | `nabu_search` `betacode: true` — the same `Betacode.decode_query`, decode echoed in a present-only `betacode` key | **added 2026-10-22** (pinned both sides) |
 | The sense desk | `nabu sense TERM [--gloss]` | `nabu_search` `sense` (+ `sense_gloss`) — `Query::Senses`, the desk's senses + citing passages with their tokens | **added 2026-10-22** (pinned; `--source` and the no-term census stay CLI-only) |
 | Token senses on a shown passage | `nabu show URN --senses` | `nabu_show` `senses: true` — present-only `senses` per passage record + `sense_entries` | **added 2026-10-22** (pinned, incl. the flag-off byte-identical case) |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |

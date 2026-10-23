@@ -227,6 +227,22 @@ module Ops
       assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "nope") }
       assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "PRODUCER" => "bm25") }
       assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "K" => "x") }
+      assert_nil options.fuzzy, "the fuzzy tier is off unless asked for"
+      assert_equal({ "fuzzy" => nil }, engine.params.slice("fuzzy"))
+    ensure
+      fulltext&.disconnect
+    end
+
+    def test_the_fuzzy_tier_is_a_named_switchable_knob
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      %w[fallback all].each do |scope|
+        options = Bench.options_from_env("GOLD" => "edh-edr", "FUZZY" => scope)
+        assert_equal scope.to_sym, options.fuzzy
+        engine = Bench.producer_for(options, catalog: @catalog, fulltext: fulltext, links: @links)
+        assert_equal scope, engine.params["fuzzy"], "the sidecar records which tier ran"
+      end
+      assert_nil Bench.options_from_env("GOLD" => "edh-edr", "FUZZY" => "off").fuzzy
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "FUZZY" => "sometimes") }
     ensure
       fulltext&.disconnect
     end
@@ -244,18 +260,19 @@ module Ops
     # these numbers moves them deliberately.
     BASELINE = { 4 => { 1 => [0, 6], 5 => [0, 6] }, 1 => { 1 => [2, 6], 5 => [2, 6] } }.freeze
 
-    def test_engine_baseline_over_the_edh_edr_fixture_editions
-      root = Nabu::TestSupport.fixtures("edh_edr_same_artifact")
-      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
-      { "edh" => Nabu::Adapters::Edh, "edr" => Nabu::Adapters::Edr }.each do |slug, klass|
-        source = Nabu::Store::Source.create(slug: slug, name: slug, adapter_class: klass.name,
-                                            license_class: "attribution")
-        Nabu::Store::Loader.new(db: @catalog, source: source).load_from(klass.new, workdir: File.join(root, slug))
-      end
-      Nabu::Store::TimelineBuilder.rebuild!(catalog: @catalog, canonical_dir: root)
-      Nabu::EdhEdrSameArtifact.new(catalog: @catalog, journal: @links).run("edr")
-      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
+    # The fuzzy 2-of-3 positional gram tier (Query::ParallelsFuzzy) over
+    # the same editions, both scopes, at the default gram size — pinned
+    # 2026-10-22 beside the off-state above. It moves NOTHING here, and
+    # that is the measured finding, not a defect: a 2-of-3 window needs
+    # two agreeing TOKENS, and these lines carry one ("caecina",
+    # "uicimus", "artemo") or two that their partner never shares ("gai
+    # caecinae", "ius eros"); what separates the misses is character-level
+    # damage ("[…]rtemo") and inflection ("caecina" / "caecinae"), below
+    # the token grain the tier works at.
+    FUZZY_PIN = { fallback: { 1 => [0, 6], 5 => [0, 6] }, all: { 1 => [0, 6], 5 => [0, 6] } }.freeze
 
+    def test_engine_baseline_over_the_edh_edr_fixture_editions
+      fulltext = load_edh_edr_fixture_editions
       gold = bench.gold_set(Bench.recipe("edh-edr"))
       assert_equal 3, gold.pairs
       measured = BASELINE.keys.to_h do |gram_size|
@@ -267,6 +284,35 @@ module Ops
       assert_equal BASELINE, measured, "the engine's recall over the fixture editions moved — re-measure deliberately"
     ensure
       fulltext&.disconnect
+    end
+
+    def test_fuzzy_tier_over_the_edh_edr_fixture_editions
+      fulltext = load_edh_edr_fixture_editions
+      gold = bench.gold_set(Bench.recipe("edh-edr"))
+      measured = FUZZY_PIN.keys.to_h do |scope|
+        producer = Bench::EngineProducer.new(catalog: @catalog, fulltext: fulltext, fuzzy: scope)
+        report = bench.run(gold: gold, producer: producer, ks: [1, 5], sample: nil)
+        [scope, report.rows.to_h { |row| [row[:k], row.values_at(:found, :gold)] }]
+      end
+      assert_equal FUZZY_PIN, measured, "the fuzzy tier's recall over the fixture editions moved — re-measure"
+    ensure
+      fulltext&.disconnect
+    end
+
+    private
+
+    def load_edh_edr_fixture_editions
+      root = Nabu::TestSupport.fixtures("edh_edr_same_artifact")
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      { "edh" => Nabu::Adapters::Edh, "edr" => Nabu::Adapters::Edr }.each do |slug, klass|
+        source = Nabu::Store::Source.create(slug: slug, name: slug, adapter_class: klass.name,
+                                            license_class: "attribution")
+        Nabu::Store::Loader.new(db: @catalog, source: source).load_from(klass.new, workdir: File.join(root, slug))
+      end
+      Nabu::Store::TimelineBuilder.rebuild!(catalog: @catalog, canonical_dir: root)
+      Nabu::EdhEdrSameArtifact.new(catalog: @catalog, journal: @links).run("edr")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
+      fulltext
     end
   end
 end

@@ -85,6 +85,15 @@ class CLITest < Minitest::Test
     end
   end
 
+  # migrate-local is a one-time P71 instance migration: off the help
+  # listing (every `nabu --help` read paid a line for it), still callable —
+  # the legacy-config refusals still name it as the fix.
+  def test_help_hides_the_internal_migrate_local_command
+    out, _err, _status = run_cli(["help"])
+    refute_match(/migrate-local/, out)
+    assert Nabu::CLI.all_commands.key?("migrate_local"), "hidden, not removed"
+  end
+
   def test_exit_on_failure_is_enabled
     assert Nabu::CLI.exit_on_failure?
   end
@@ -3722,20 +3731,29 @@ class CLITest < Minitest::Test
     end
   end
 
-  # --list previews the set (slugs, sizes, blurbs) and touches nothing: no
-  # network (WebMock would trip), no catalog, no ledger.
-  def test_quickstart_list_prints_the_starter_set_without_syncing
-    with_empty_registry_env do |config|
-      out, _err, status = with_config(config) { run_cli(%w[quickstart --list]) }
-      assert_nil status
-      assert_match(/starter shelf/, out)
-      %w[sblgnt proiel iswoc lexica].each do |slug|
-        assert_match(/^  #{slug}\b/, out, "--list must name #{slug}")
+  # --dry-run (the house preview flag) prints the set (slugs, sizes, blurbs)
+  # and touches nothing: no network (WebMock would trip), no catalog, no
+  # ledger. The pre-rename --list stays a hidden alias.
+  def test_quickstart_dry_run_prints_the_starter_set_without_syncing
+    %w[--dry-run --list].each do |flag|
+      with_empty_registry_env do |config|
+        out, _err, status = with_config(config) { run_cli(["quickstart", flag]) }
+        assert_nil status
+        assert_match(/starter shelf/, out)
+        %w[sblgnt proiel iswoc lexica].each do |slug|
+          assert_match(/^  #{slug}\b/, out, "#{flag} must name #{slug}")
+        end
+        assert_match(/MB/, out, "#{flag} must carry the measured sizes")
+        refute File.exist?(config.catalog_path), "#{flag} must not create the catalog"
+        refute File.exist?(config.history_path), "#{flag} must not create the ledger"
       end
-      assert_match(/MB/, out, "--list must carry the measured sizes")
-      refute File.exist?(config.catalog_path), "--list must not create the catalog"
-      refute File.exist?(config.history_path), "--list must not create the ledger"
     end
+  end
+
+  def test_quickstart_help_offers_dry_run_and_hides_the_legacy_list_flag
+    out, _err, _status = run_cli(%w[help quickstart])
+    assert_match(/--dry-run/, out)
+    refute_match(/--list/, out, "--list is a hidden alias now")
   end
 
   # The command syncs the starter list IN ORDER through the normal per-source
@@ -3841,7 +3859,7 @@ class CLITest < Minitest::Test
   end
 
   # `nabu help quickstart` must teach the starter shelf: what it holds (with
-  # sizes), the three marvels, --list, and the idempotency promise.
+  # sizes), the three marvels, --dry-run, and the idempotency promise.
   def test_help_quickstart_documents_the_starter_shelf
     out, _err, _status = run_cli(%w[help quickstart])
     %w[sblgnt proiel iswoc lexica].each { |slug| assert_match(/#{slug}/, out) }
@@ -3849,7 +3867,7 @@ class CLITest < Minitest::Test
     assert_match(/align "MARK 2\.3"/, out)
     assert_match(/--lemma/, out)
     assert_match(/define λόγος/, out)
-    assert_match(/--list/, out)
+    assert_match(/--dry-run/, out)
     assert_match(/idempotent/i, out)
     assert_match(/never stops the rest/i, out, "must state the partial-failure posture")
   end
@@ -4818,6 +4836,37 @@ class CLITest < Minitest::Test
       assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
       assert_match(/\[μῆνιν\]/, out, "the match is highlighted in the STORED (accented) spelling (P39-r3)")
       assert_match(/1 hit\b/, out)
+    end
+  end
+
+  # --betacode: a deliberate input flag (never auto-detected) — the typed
+  # Beta Code term is transliterated to Greek before matching, and the
+  # decoded form is echoed so the reader sees what was searched.
+  def test_search_betacode_flag_transliterates_the_query_before_matching
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search mh=nin --betacode]) }
+      assert_nil status
+      assert_match(/beta code: mh=nin → μῆνιν/, out, "the decoded term is echoed")
+      assert_match(/urn:nabu:test_adapter:one:1 \[grc\]/, out)
+
+      plain, = with_config(config) { run_cli(%w[search mh=nin]) }
+      refute_match(/test_adapter:one:1/, plain, "without the flag the Latin letters are searched as typed")
+    end
+  end
+
+  def test_search_betacode_decodes_the_near_term_too
+    with_indexed_corpus do |config|
+      out, = with_config(config) { run_cli(%w[search MH=NIN --near a)/eide --betacode]) }
+      assert_match(/beta code: MH=NIN → μῆνιν/, out, "case-blind: TLG upper-case input")
+      assert_match(%r{beta code: a\)/eide → ἄειδε}, out)
+    end
+  end
+
+  def test_search_betacode_needs_a_term_to_decode
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search --betacode --century 2]) }
+      refute_nil status
+      assert_match(/--betacode decodes a typed Greek term/, err)
     end
   end
 

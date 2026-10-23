@@ -3,6 +3,7 @@
 require "digest"
 
 require_relative "mvp_tei_parser"
+require_relative "mvp_crosswalk"
 
 module Nabu
   module Adapters
@@ -19,10 +20,12 @@ module Nabu
     # scholarly citation (Mvy. 625 = bodhisattvaḥ), so entry ids ARE the
     # upstream keys and urn:nabu:dict:mvp:625 is a citable address.
     #
-    # SEAM (P48-6, deliberately not here): the Tibetan and Chinese
-    # equivalents land in gloss/body lanes only — Tibetan-side lookup and
-    # structured crosswalk edges into CBETA/GRETIL/SARIT/DCS are the
-    # alignment packet's decision, not this registration's.
+    # The Tibetan and Chinese equivalents land in gloss/body lanes; the
+    # structured crosswalk is Nabu::MvpCrosswalk, refreshed after every
+    # load through the reference_producer seam: kind=equivalent edges from
+    # each Mvy. entry onto the DCS lexicon (san) and the 84000 glossaries
+    # of the Derge canon (bod) — exact normalized-form joins only; the
+    # class note records why GRETIL, SARIT and CBETA carry no leg.
     #
     # == Upstream (verified 2026-07-28)
     #
@@ -70,6 +73,14 @@ module Nabu
       # The routing declaration (architecture §11): entries, not passages —
       # SyncRunner/Rebuild load through Store::DictionaryLoader.
       def self.content_kind = :dictionary
+
+      # The crosswalk edges (class note): re-derived from the catalog after
+      # every load via the shared reference_producer seam.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        MvpCrosswalk.new(catalog: catalog, journal: journal)
+      end
 
       # The probe HEADs the zip itself: reachability + Last-Modified drift
       # vs the .file-fetch.json pin. metadata_url nil — the PD-belief

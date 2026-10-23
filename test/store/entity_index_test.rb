@@ -144,6 +144,63 @@ module Store
       assert_equal 1, @db[INDEX::TABLE].count, "a source ruled out of the list loses its slice"
     end
 
+    # -- the token-grain name lane (live stored token shapes, 2026-10-22) -------
+
+    def test_qpn_pos_tokens_project_as_names_with_their_citation_form
+      source = make_source("oracc")
+      doc = make_document(source, "urn:nabu:oracc:x")
+      passage = make_passage(doc, "tokens" => [
+                               { "epos" => "RN", "form" => "{m}id-ri-mi", "lang" => "akk-x-mbperi",
+                                 "lemma" => "Idrimi", "pos" => "RN" },
+                               { "form" => "{d}IM", "lemma" => "AdduORBaʿluORTeššub", "pos" => "DN" },
+                               { "form" => "a-na", "lemma" => "ana", "pos" => "PRP" }
+                             ])
+      INDEX.rebuild!(catalog: @db, sources: %w[oracc])
+      names = @db[INDEX::NAMES_TABLE].order(:type).select_map(%i[type text key])
+      assert_equal [["DN", "{d}IM", "AdduORBaʿluORTeššub"], ["RN", "{m}id-ri-mi", "Idrimi"]], names,
+                   "the class verbatim, the surface form, the qpn citation form; a preposition is no name"
+      assert_equal [passage.id], @db[INDEX::TABLE].select_map(:passage_id).uniq
+    end
+
+    def test_tlh_morph_tokens_need_one_proper_noun_class
+      source = make_source("tlhdig")
+      doc = make_document(source, "urn:nabu:tlhdig:x")
+      make_passage(doc, "tokens" => [
+                     { "form" => "°M°m]ur-⌈ši-DINGIR-LIM⌉(-)[iš?]", "gloss" => "Muršili",
+                       "lemma" => "murši-DINGIR-LIM-i", "morph" => "PNm.NOM.SG.C" },
+                     { "form" => "°URU°ne-ri-ik", "gloss" => "Nerik", "lemma" => "nerik",
+                       "morph" => "{ a → GN.NOM.SG(UNM)} { b → GN.ACC.SG(UNM)} { c → GN.GEN.SG(UNM)}" },
+                     { "form" => "x", "gloss" => "y", "morph" => "{ a → GN.NOM.SG} { b → NOM.SG}" },
+                     { "analyses" => ["i=a-@Iya@PNf.D/L.SG@37.2"], "form" => "i-[ia-at" }
+                   ])
+      INDEX.rebuild!(catalog: @db, sources: %w[tlhdig])
+      assert_equal [%w[GN Nerik], %w[PNm Muršili]], @db[INDEX::NAMES_TABLE].order(:type).select_map(%i[type key]),
+                   "a mixed analysis and an unresolved candidate list stay out — never guessed"
+      assert_includes @db[INDEX::NAMES_TABLE].where(key: "Muršili").get(:search_key), "mursili"
+    end
+
+    def test_token_names_answer_only_for_their_shaped_sources
+      doc = make_document(@perseus, "urn:cts:g")
+      make_passage(doc, "tokens" => [{ "form" => "Κροῖσος", "lemma" => "Κροῖσος", "pos" => "PN" }])
+      assert_equal 0, INDEX.rebuild!(catalog: @db, sources: SOURCES).rows,
+                   "perseus tokens are not a name lane — the shape is per source"
+    end
+
+    # Through the real adapter: the achemenet CoNLL-U fixture's PN tokens
+    # reach the index after an ordinary load.
+    def test_achemenet_fixture_names_reach_the_index
+      source = Nabu::Store::Source.create(slug: "achemenet", name: "Achemenet",
+                                          adapter_class: Nabu::Adapters::Achemenet.name,
+                                          license_class: "attribution")
+      Nabu::Store::Loader.new(db: @db, source: source)
+                         .load_from(Nabu::Adapters::Achemenet.new, workdir: Nabu::TestSupport.fixtures("achemenet"))
+      summary = INDEX.rebuild!(catalog: @db, sources: %w[achemenet])
+      assert_operator summary.rows, :>, 0
+      types = @db[INDEX::NAMES_TABLE].select_map(:type).uniq
+      assert_includes types, "PN"
+      assert((types - INDEX::QPN_CLASSES).empty?, "only qpn classes project")
+    end
+
     def test_the_fold_meets_both_sides
       assert_equal INDEX.fold("Κροῖσος"), INDEX.fold("ΚΡΟΙΣΟΣ")
       assert_equal "sataka", INDEX.fold("ŚĀTAKA")
@@ -183,6 +240,9 @@ module Store
     def test_the_shipped_config_lists_the_entity_bearing_sources
       sources = INDEX.load_sources(config_dir: File.expand_path("../../config", __dir__))
       %w[perseus-greek perseus-latin coptic-scriptorium dharma-deccan].each { |slug| assert_includes sources, slug }
+      INDEX::TOKEN_SHAPES.each_key do |slug|
+        assert_includes sources, slug, "a token-name shape without its roster line would never project"
+      end
     end
   end
 end

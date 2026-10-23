@@ -43,6 +43,46 @@ module Nabu
 
       CONFIG_FILE = "entity_index.yml"
 
+      # == The token-grain name lane
+      #
+      # Some sources mark names not as inline spans but on the TOKEN: the
+      # word's own part of speech says "personal name", "settlement",
+      # "deity". Those tokens already ride every passage's "tokens"
+      # annotation, so the index projects them beside the span records —
+      # no re-parse, the same verbatim discipline: type = upstream's own
+      # class code, text = the token's surface form, key = upstream's
+      # citation form of the name. One shape per source:
+      #
+      #   :qpn_pos   (achemenet, oracc) — a token whose "pos" is one of
+      #              ORACC's proper-noun classes (QPN_CLASSES); key = its
+      #              "lemma" (the qpn citation form: Nabu-mukin-zeri).
+      #   :tlh_morph (tlhdig) — a token whose resolved "morph" (present
+      #              only on a disambiguated or single analysis — the
+      #              source's silver stance) names ONE proper-noun class
+      #              in every candidate (PNm/PNf/DN/GN); key = its "gloss"
+      #              (the name as the glossary writes it: Muršili, Nerik).
+      #              Mixed analyses (GN beside a common-noun reading) stay
+      #              out — never guessed.
+      #
+      # Census (live catalog, 2026-10-22; tokens · distinct keys):
+      # achemenet PN 40,845 · 3,728, all classes 60,944 tokens over 2,761
+      # passages; oracc PN 440,469 · 35,600, all classes 740,088 over
+      # 651,585 passages (48,771 distinct class+citation forms); tlhdig DN
+      # 13,772 · GN 9,036 · PNm 2,094 · PNf 286 over 20,820 passages (1,207
+      # mixed analyses left out).
+      TOKEN_SHAPES = { "achemenet" => :qpn_pos, "oracc" => :qpn_pos, "tlhdig" => :tlh_morph }.freeze
+      TOKENS = "tokens"
+
+      # ORACC's proper-noun POS classes (the qpn glossary's own tags:
+      # agricultural, celestial, divine, ethnic, field, geographic,
+      # lineage, month, object, personal, quarter, royal, settlement,
+      # temple, watercourse, year names).
+      QPN_CLASSES = %w[AN CN DN EN FN GN LN MN ON PN QN RN SN TN WN YN].freeze
+
+      # TLH's proper-noun morph classes (PNm/PNf the gendered personal names).
+      TLH_CLASSES = %w[PNm PNf DN GN].freeze
+      TLH_CLASS = /(?:\A|→\s*)([A-Za-z]+)\./
+
       class ConfigError < Nabu::Error; end
 
       # What one rebuild projected: passages carrying ≥1 entity, total
@@ -101,7 +141,8 @@ module Nabu
             source_id = catalog[:sources].where(slug: slug).get(:id)
             next if source_id.nil?
 
-            project_source(catalog, source_id).each_with_index { |count, i| totals[i] += count }
+            project_source(catalog, source_id, shape: TOKEN_SHAPES[slug])
+              .each_with_index { |count, i| totals[i] += count }
           end
           Summary.new(passages: totals[0], rows: totals[1], names: totals[2])
         end
@@ -117,7 +158,7 @@ module Nabu
 
         catalog.transaction do
           drop_source(catalog, source_id)
-          sources.include?(slug) ? project_source(catalog, source_id)[1] : 0
+          sources.include?(slug) ? project_source(catalog, source_id, shape: TOKEN_SHAPES[slug])[1] : 0
         end
       end
 
@@ -129,19 +170,21 @@ module Nabu
 
       # One source's records → dictionary names + pairs. Returns
       # [passages, rows, names]. The LIKE probe skips the JSON parse for
-      # passages carrying no entities layer (a superset test).
-      def project_source(catalog, source_id)
+      # passages carrying no entities layer (a superset test); a token
+      # shape (TOKEN_SHAPES) widens it to the tokens layer.
+      def project_source(catalog, source_id, shape: nil)
         dictionary = {}
         buffer = []
         passages = 0
         rows = 0
         probe = Sequel.like(:annotations_json, %(%"#{ANNOTATION}"%))
+        probe |= Sequel.like(:annotations_json, %(%"#{TOKENS}"%)) if shape
         document_ids = catalog[:documents].where(source_id: source_id, withdrawn: false)
                                           .order(:id).select_map(:id)
         document_ids.each_slice(DOCUMENT_SLICE) do |slice|
           catalog[:passages].where(document_id: slice, withdrawn: false).where(probe)
                             .select_map(%i[id annotations_json]).each do |passage_id, json|
-            records = records_of(json)
+            records = records_of(json, shape: shape)
             next if records.empty?
 
             passages += 1
@@ -157,14 +200,46 @@ module Nabu
 
       # The deduped verbatim records (FIELDS-ordered value arrays) one
       # passage's annotations carry; [] for unreadable JSON.
-      def records_of(json)
+      def records_of(json, shape: nil)
         annotations = JSON.parse(json || "{}")
-        raw = annotations.is_a?(Hash) ? annotations[ANNOTATION] : nil
-        return [] unless raw.is_a?(Array)
+        return [] unless annotations.is_a?(Hash)
 
-        raw.filter_map { |element| record_of(element) }.uniq
+        raw = annotations[ANNOTATION]
+        spans = raw.is_a?(Array) ? raw.filter_map { |element| record_of(element) } : []
+        (spans + token_records(annotations[TOKENS], shape)).uniq
       rescue JSON::ParserError
         []
+      end
+
+      # The token-grain name records (module note) — FIELDS-ordered value
+      # arrays like #record_of's; [] without a shape or a tokens layer.
+      def token_records(tokens, shape)
+        return [] if shape.nil? || !tokens.is_a?(Array)
+
+        tokens.filter_map do |token|
+          next unless token.is_a?(Hash)
+
+          type, key = send(shape, token)
+          text = present(token["form"])
+          next if type.nil? || (text.nil? && present(key).nil?)
+
+          [type, text, nil, present(key), nil, nil]
+        end
+      end
+
+      def qpn_pos(token)
+        pos = token["pos"]
+        QPN_CLASSES.include?(pos) ? [pos, token["lemma"]] : nil
+      end
+
+      def tlh_morph(token)
+        morph = token["morph"]
+        return nil unless morph.is_a?(String)
+
+        classes = morph.scan(TLH_CLASS).flatten.uniq
+        return nil unless classes.size == 1 && TLH_CLASSES.include?(classes.first)
+
+        [classes.first, token["gloss"] || token["lemma"]]
       end
 
       def record_of(element)
