@@ -132,13 +132,29 @@ module Nabu
       # token and folded ("1.2" under GEN → "GEN 1.2"; a single-chapter
       # book's flat tail folds to "LJE 5" and stays addressable). A passage
       # urn that does not extend its document urn has no citation tail —
-      # skipped, never guessed.
+      # skipped, never guessed. The tail's all-digit segments fold to their
+      # integer spelling first (unpad_citation), so a zero-padded edition
+      # aligns on the citation NUMBER beside unpadded witnesses.
       def cts_verse_refs(passage_urn, witness, document_urn, book)
         tail = passage_urn.delete_prefix("#{document_urn}:")
         return [] if tail == passage_urn || tail.empty?
+
+        tail = unpad_citation(tail)
         return [] if chapter_zero_apparatus?(tail)
 
         [witness.normalize_ref("#{book} #{tail}")].compact
+      end
+
+      # Coptic Scriptorium's Bohairic biblical corpora zero-pad the chapter
+      # in their CTS citations ("01.1"; the Sahidic and every other held
+      # verse witness cite "1.1"). Every all-digit segment between the
+      # "." / ":" separators drops its leading zeros ("09.05" → "9.5",
+      # "00" → "0"); non-numeric segments (the :b2 duplicate suffix,
+      # Gothic "Incipit") pass through untouched. Index-side only: the
+      # passage urn keeps upstream's spelling, and query refs arrive
+      # unpadded already.
+      def unpad_citation(tail)
+        tail.split(/([.:])/).map { |segment| segment.match?(/\A\d+\z/) ? segment.to_i.to_s : segment }.join
       end
 
       # A leading chapter segment of 0 is manuscript APPARATUS, never a verse:

@@ -791,6 +791,16 @@ NO handling: the generic `:` → `.` fold turns `13.11:b2` into a distinct
 renders only under its own explicit ref). The pin test grew the four CCMH cases
 openly.
 
+A second wrinkle, from Coptic Scriptorium (P145): its Bohairic biblical
+corpora zero-pad the chapter (`…nt.mark.bohairic:01.1`), so the Bohairic NT
+witness indexed `MARK 01.1`. Its chapters 1-9 (3,894 refs) never co-aligned
+with any other witness. `cts_verse_refs` now folds every all-digit tail
+segment to its integer spelling (`01.1` → `1.1`, `00.1` → `0.1`, which then
+drops as chapter-0 apparatus) BEFORE the chapter-0 check. Non-numeric
+segments and `:b2` suffixes pass untouched. The fold is index-side only:
+passage urns keep upstream's spelling, and query refs arrive unpadded. The
+same fold carries the Bohairic OT column of the `ot` work.
+
 ## 11. The dictionary shelf — lexica as data (P11-4)
 
 `nabu define μῆνις` prints the LSJ entry — gloss, sense tree as structured
