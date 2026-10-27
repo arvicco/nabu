@@ -212,6 +212,9 @@ module Nabu
       stage :index_slice_skipped, /\Aindex slice: \S+ skipped\b/,
             "Leaves this source's search-index slice as it is: the load changed no passage text, so the " \
             "index already matches it."
+      stage :alignment_registry_refresh, /\Aalignment refs: \S+ — registry changed\b/,
+            "Rebuilds the verse-alignment index alone: config/alignments.yml changed since it was built and " \
+            "this source holds a witness, so `nabu align` sees the new registry without a full rebuild."
       stage :index_slice, /\Aindex (?:slice|delta): /,
             "Rewrites this source's slice of the search index — folded text, lemma postings, fuzzy trigrams " \
             "— for the passages that changed, so `nabu search` finds the new load."

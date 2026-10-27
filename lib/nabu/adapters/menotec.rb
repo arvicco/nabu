@@ -97,7 +97,11 @@ module Nabu
 
       # Parse the whole treebank: every *.xml under its subdir, in filename
       # order (Dir.glob is lexicographically sorted by default), concatenated
-      # into one Document (sentence ids are treebank-global).
+      # into one Document (sentence ids are treebank-global). The INESS
+      # treebank name rides as the treebank facet: each treebank is one
+      # manuscript tradition, the grain the menotec-treebank lect rule
+      # (config/lect_facet_rules.yml) places — upstream codes all seven
+      # non; six are Old Norwegian, the Codex Regius Old Icelandic.
       def parse(document_ref)
         treebank = document_ref.metadata.fetch("treebank")
         paths = Dir.glob(File.join(document_ref.path, "*.xml"))
@@ -106,7 +110,8 @@ module Nabu
           urn: document_ref.id,
           language: LANGUAGE,
           title: TREEBANKS.fetch(treebank, treebank),
-          canonical_path: document_ref.path
+          canonical_path: document_ref.path,
+          metadata: { "facets" => { "treebank" => { "value" => treebank } } }
         )
       end
 

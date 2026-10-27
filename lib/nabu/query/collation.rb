@@ -77,7 +77,7 @@ module Nabu
         "Balinese" => /\p{Balinese}/, "Javanese" => /\p{Javanese}/,
         "Rejang" => /\p{Rejang}/, "Sundanese" => /\p{Sundanese}/,
         "Linear A" => /\p{Linear_A}/, "Linear B" => /\p{Linear_B}/,
-        "Cypriot" => /\p{Cypriot}/
+        "Cypriot" => /\p{Cypriot}/, "Sinhala" => /\p{Sinhala}/
       }.freeze
       private_constant :SCRIPTS
 

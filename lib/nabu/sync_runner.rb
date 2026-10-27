@@ -355,6 +355,7 @@ module Nabu
             reindex!(entry, adapter, progress)
           else
             progress&.stage("index slice: #{entry.slug} skipped — no passage content changed")
+            refresh_alignment_registry(entry, progress)
             nil
           end
         else
@@ -705,6 +706,24 @@ module Nabu
       ensure
         fulltext.disconnect
       end
+    end
+
+    # The skip's one exception: alignment_refs = f(catalog, alignments.yml),
+    # so a registry edit (a newly wired witness) materializes on the
+    # witness source's next sync even when no passage byte changed — the
+    # stamped registry fingerprint decides; only the alignment refs are
+    # rebuilt, never the slice. Announced when it fires.
+    def refresh_alignment_registry(entry, progress)
+      return unless File.exist?(@config.fulltext_path)
+
+      fulltext = Store.connect_fulltext(@config.fulltext_path)
+      rows = Store::Indexer.refresh_alignment_registry!(
+        catalog: @db, fulltext: fulltext, slug: entry.slug,
+        alignments: AlignmentRegistry.load(@config.alignments_path)
+      )
+      progress&.stage("alignment refs: #{entry.slug} — registry changed, rebuilt (#{rows} refs)") if rows
+    ensure
+      fulltext&.disconnect
     end
 
     # Incrementally refresh THIS source's slice of the fulltext index from

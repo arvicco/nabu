@@ -46,9 +46,11 @@ module Nabu
     #
     # == Script and language
     #
-    # The Pāli is held in Sinhala script (the BJT's own); it claims plain
-    # pli (the registry has no Sinhala script tag; the script posture is
-    # declared qualified). The translation is modern Sinhala, si.
+    # The Pāli is held in Sinhala script (the BJT's own); documents carry
+    # plain pli, and the source's lect override resolves it to pli~sinh
+    # (config/lect_overrides.yml — the surface-script claim rides the
+    # resolution, not the stored code). The translation is modern
+    # Sinhala, si.
     #
     # == License — no derivatives, keep in sync, attribute per passage
     #

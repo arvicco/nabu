@@ -212,6 +212,33 @@ anchors:
                    needs the distinction — the consumer's raw facet
                    preserves it meanwhile"}
 
+  ca:
+    name: Catalan
+    glottocode: stan1289
+    parent: roa
+    note: "ISO 639-1 (639-2/3 cat aliases here). Western Romance;
+           Catalan's closest relative is Occitan, and its place between
+           Gallo-Romance and Ibero-Romance is the classic disputed
+           subgrouping (Badia i Margarit 1981, Gramàtica històrica
+           catalana; Glottolog files it under Shifted Western Romance) —
+           prose, never an edge: the anchor parents roa directly (the
+           ast/an/it shape). Attestation: Catalan glosses and oath
+           formulas in Latin charters from the 11th c. (the Greuges de
+           Guitard Isarn, c. 1080–1095), the Homilies d'Organyà (late
+           12th c.) as the first literary prose; the medieval flowering
+           (Ramon Llull, the four great chronicles, Ausiàs March, Tirant
+           lo Blanc) is Old Catalan, deliberately unminted (Wiktionary
+           roa-oca) until a consumer holds medieval text. Modern dialect
+           division (Wheeler, Yates & Dols 1999, Catalan: A Comprehensive
+           Grammar): Eastern — central, balearic, northern (Rossellonès),
+           Alguerese — and Western — north-western, Valencian; varieties
+           unminted, the consumer's dialect facet carries them meanwhile
+           (central 793 · baleàric 80 · valencià 42 · nord-occidental 41 ·
+           septentrional 10 · alguerès 1). Corpus: ctilc — the Corpus
+           Textual Informatitzat de la Llengua Catalana (Institut
+           d'Estudis Catalans), 967 printed works 1832–1957, claimed bare
+           (censused 2026-10-27)"
+
   it:
     name: Italian
     parent: roa
@@ -253,6 +280,58 @@ anchors:
                    variety, not a stage. Corpus: the IG Cypriot
                    syllabary fascicle (~170 Greek-interpreted records,
                    censused 2026-10-11)"}
+      # The literary dialect groups (2026-10-27): the four the GLAUx
+      # treebank's per-text DIALECT field names (census 2026-10-27, 1,421
+      # texts: Attic 322 · Attic/Koine 416 · Koine 214 · Ionic/Epic 111 ·
+      # Ionic 66 · Doric 45 · Aeolic 2 · unmarked 245). Dialect is
+      # regional and orthogonal to the hom/cla/koi/byz time-grid — hence
+      # varieties, the cyp precedent; a dated text combines both axes
+      # (grc:cla/att, grc:hom/ion). Koine is a STAGE (grc:koi), never a
+      # variety: the paired labels are the consumer's to resolve —
+      # Attic/Koine is the Atticizing literary Koine (grc:koi/att reads
+      # it: the period's language, the dialect it imitates), Ionic/Epic
+      # the Homeric Kunstsprache (grc:hom/ion: Ionic-based, with the
+      # Aeolic layer stated in prose). Buck 1955 (The Greek Dialects) is
+      # the classification followed; Colvin 2007 (A Historical Greek
+      # Reader) and Horrocks 2010 (Greek: A History of the Language and
+      # its Speakers, ch. 1–2) the supporting handbooks. Deliberately
+      # unminted: the minor epichoric dialects Wiktionary codes (Boeotian,
+      # Thessalian, Elean, the Locrians, Pamphylian, Cretan) — no consumer
+      # distinguishes them; Lesbian/Boeotian/Thessalian nest in aeo and
+      # Cretan/Laconian in dor in prose, the oc/aranes discipline.
+      att: {name: Attic Greek, kind: dialect, wikt: grc-att,
+            note: "the dialect of Athens and Attica, East Greek, Attic-Ionic
+                   group (Buck 1955 §§1–8): the language of Athenian drama,
+                   oratory, history (Thucydides, Xenophon) and philosophy
+                   (Plato) — the classical prose standard, and the base of
+                   the Hellenistic Koine (grc:koi), which is why Atticizing
+                   writers of the imperial period can claim it. Corpus:
+                   glaux (322 Attic texts + 416 Attic/Koine)"}
+      ion: {name: Ionic Greek, kind: dialect, wikt: grc-ion,
+            note: "East Greek, Attic-Ionic group: the dialect of the
+                   Cyclades, Euboea and the Ionian coast of Asia Minor —
+                   Herodotus, the Hippocratic corpus, the iambic poets
+                   (Archilochus, Semonides, Hipponax), and the Ionic base
+                   of the epic Kunstsprache (Homer, Hesiod), which carries
+                   an older Aeolic stratum (Horrocks 2010, ch. 2; the
+                   Aeolic-phase hypothesis is contested and stays prose).
+                   Corpus: glaux (66 Ionic texts + 111 Ionic/Epic)"}
+      dor: {name: Doric Greek, kind: dialect, wikt: grc-dor,
+            note: "West Greek: the dialects of the Peloponnese (Laconian,
+                   Argolic, Corinthian), Crete, Rhodes and the western
+                   colonies (Syracuse) — Buck groups Northwest Greek
+                   beside it. Literary Doric is the choral-lyric
+                   convention (Alcman, Pindar, the tragic choruses) and the
+                   bucolic Doric of Theocritus; Archimedes wrote Syracusan.
+                   Corpus: glaux (45 Doric texts — Pindar's odes,
+                   Theocritus, Moschus, the Doric epigrammatists)"}
+      aeo: {name: Aeolic Greek, kind: dialect, wikt: grc-aeo,
+            note: "the Lesbian, Thessalian and Boeotian dialects (Buck's
+                   Aeolic group): literary Aeolic is the Lesbian lyric of
+                   Sappho and Alcaeus (c. 600 BCE) and its Hellenistic
+                   imitations (Theocritus 28–30). Corpus: glaux (2 Aeolic
+                   texts — the epigrams under Sappho's and Heliodorus'
+                   names)"}
 
   gmy:
     name: Mycenaean Greek
@@ -392,7 +471,36 @@ anchors:
 
   ofs:
     name: Old Frisian
+    glottocode: oldf1241
+    band: [1200, 1550]
+    band_note: "the manuscript span, approximate (Bremmer 2009): the
+                oldest codices c. 1300 with texts composed in the 13th c.
+                (a few 12th-c. names and glosses earlier), the West
+                Frisian charters and law books to the mid-16th c., when
+                Dutch replaces Frisian as the written language of the
+                Frisian lands"
     parent: gmw:pro
+    note: "West Germanic, North Sea Germanic: with English the
+           Anglo-Frisian subgroup (Glottolog North Sea Germanic >
+           Anglo-Frisian > Frisian) — the shared Anglo-Frisian node has
+           no ISO 639-5 or Wiktionary code, so the anchor parents gmw:pro
+           and the subgrouping stays prose (the hlu/xlu discipline).
+           Attestation is overwhelmingly LEGAL: the shared core of the
+           Seventeen Statutes (Keuren) and the Twenty-Four Landlaws,
+           copied with local law in the regional codices. The corpus
+           splits by the Lauwers: Old East Frisian (the 'classical'
+           texts, 13th–14th c.: the Rüstringen codices, the Brokmer,
+           Emsingo, Fivelgo and Hunsingo codices) and Old West Frisian
+           (the 'post-classical' texts, 15th–16th c.: the Codex Unia,
+           the Jus Municipale Frisonum, the Codex Roorda, the charters) —
+           Bremmer 2009 (An Introduction to Old Frisian) prefers the
+           geographic labels over the older classical/post-classical
+           periodization, and the registry follows him: the split stays
+           prose, not a stage or variety pair, until a consumer marks it.
+           Runic Frisian (6th–9th c.) precedes it and is not this anchor.
+           Corpus: the Corpus Oudfries (Rita van de Poel's lemmatized
+           Old Frisian corpus, Instituut voor de Nederlandse Taal; 177
+           documents / 235k tokens), incoming in the consuming library"
 
   fy:
     name: Western Frisian
@@ -981,7 +1089,12 @@ anchors:
            edge reads the lineage — Middle Indo-Aryan continues from
            Old Indo-Aryan (san); the literary-register nuance stays
            here as prose. 2026-10-11: pka minted below — the first
-           member a consumer distinguishes; pmh/psu/pgd stay unminted"
+           member a consumer distinguishes. 2026-10-27: pmh (Māhārāṣṭrī)
+           and psu (Śaurasenī) join it, with Wiktionary's etymology-only
+           pra-mah / pra-sau / pra-ard codes aliased onto the three
+           members in the codemap. pgd (Gāndhārī) stays unminted — no
+           consumer holds a Gāndhārī text; the collective stays the
+           claim for everything a source does not distinguish"
 
   pka:
     name: Ardhamāgadhī
@@ -996,6 +1109,56 @@ anchors:
            passages; the Āgamas proper stay excluded upstream — no
            grant on their files). Descent reads through pra (Middle ←
            Old Indo-Aryan); the dialect-geography nuance stays prose"
+
+  pmh:
+    name: Māhārāṣṭrī Prakrit
+    parent: pra
+    glottocode: maha1305
+    note: "ISO 639-3 pmh. The literary Prakrit par excellence — the
+           language of Prakrit verse, which the grammarians from Vararuci
+           (Prākṛtaprakāśa) and Daṇḍin (Kāvyādarśa 1.34, 'the most
+           excellent Prakrit') treat as the standard to which the other
+           Prakrits are described as deviations (Pischel 1900, Grammatik
+           der Prākrit-Sprachen §12; Woolner 1928, Introduction to
+           Prakrit). Ollett 2017 (Language of the Snakes) argues the
+           regional name is a later rationalization of a pan-Indian
+           literary language — the registry records the name, not a
+           geography. Attestation: Hāla's Sattasaī (Gāhākosa, compiled in
+           the early centuries CE under the Sātavāhana name), Pravarasena's
+           Setubandha (5th c.), Vākpatirāja's Gaüḍavaho (8th c.),
+           Kautūhala's Līlāvaī, the Vajjālagga anthology, and the verse
+           of the Sanskrit drama; the Jain narrative prose (Vimala's
+           Paümacariya, Haribhadra's Samarāiccakahā and Dhuttakkhāṇa) is
+           Jain Māhārāṣṭrī — kept here as prose, not a variety, until a
+           consumer distinguishes it. Descendant: Marathi (mr), in prose
+           (see mr). Corpus: prakrit-texts' kāvya and gāhā editions and
+           GRETIL's Sattasaī and Dhuttakkhāṇa (all upstream-coded with
+           the collective pra-Latn — a per-work consumer claim), SARIT's
+           Setubandha, and the 72 Wiktionary pra-mah etymon/descendant
+           rows (the codemap row)"
+
+  psu:
+    name: Śaurasenī Prakrit
+    parent: pra
+    glottocode: saur1252
+    note: "ISO 639-3 psu. The Prakrit of the Midlands (Śūrasena, the
+           Mathurā country) and the PROSE Prakrit of the Sanskrit drama —
+           the speech of the heroines, of the vidūṣaka and of most
+           non-Brahmin characters, where verse switches to Māhārāṣṭrī
+           (Pischel 1900 §§21–22; Woolner 1928, ch. on the dramatic
+           Prakrits); described as a deviation from Māhārāṣṭrī in
+           Vararuci's Prākṛtaprakāśa (ch. 12) and Hemacandra's
+           Siddhahemaśabdānuśāsana (book 8). A second, religious register
+           is Jain Śaurasenī, the canon language of the Digambara
+           tradition (Kundakunda's Samayasāra and Pravacanasāra, the
+           Ṣaṭkhaṇḍāgama) — prose here, not a variety. Glottolog places it
+           under Midlands Indo-Aryan (Shaurasenic) as the ancestor of the
+           western Apabhraṃśa and the Hindi belt — descent in prose,
+           never edges. Corpus: the 99 Wiktionary pra-sau etymon/
+           descendant rows (the codemap row); prakrit-texts' Vararuci
+           describes it (Sanskrit sūtras — san, not psu); the dramatic
+           Prakrit passages of the held Sanskrit plays ride their files'
+           san claim upstream"
 
   # ── Iranian and Armenian (the ISO-parentage wave) ──────────────────────────
 
@@ -1925,10 +2088,52 @@ anchors:
            reads the Tamil–Malayalam–Kannada axis it belongs to. Corpus:
            the DHARMA Tamil-country estate (dharma-tamil, 1,267 editions
            tam-Latn — Pallava to Pāṇḍya epigraphy and the SII
-           selections) joins GRETIL's single document; stages stay
-           unminted — the epigraphic consumer claims the bare anchor,
-           declared coarse (Old/Middle Tamil are named candidates for a
-           later wikisource wave)"
+           selections) joins GRETIL's single document. Stages (2026-10-27):
+           the conventional three-period grid of Tamil philology — Old
+           Tamil to ~700, Middle Tamil to ~1600, Modern Tamil after
+           (Zvelebil 1973, The Smile of Murugan; Lehmann 1998, 'Old
+           Tamil', in Steever ed., The Dravidian Languages) — with the
+           Modern period left as the bare anchor's open end (the kn
+           shape). The classical corpora (tamilex's 7,830 docs over the
+           Caṅkam anthologies to the devotional canons, Project Madurai's
+           755) and the dated epigraphy (dharma-tamil, sii-clean) are the
+           consumers"
+    stages:
+      old: {name: Old Tamil, band: [-300, 700], ord: 10, iso: oty,
+            band_note: "the conventional span of Tamil philology (Zvelebil;
+                        Lehmann 1998: c. 300 BCE – 700 CE) — from the
+                        Tamil-Brāhmī cave inscriptions (Mahadevan 2003,
+                        Early Tamil Epigraphy; the earliest securely
+                        palaeographic dates c. 2nd c. BCE, earlier claims
+                        from stratigraphy contested) to the end of the
+                        post-Caṅkam didactic and epic layer; approximate at
+                        both ends",
+            note: "Caṅkam Tamil: the Eṭṭuttokai and Pattuppāṭṭu anthologies,
+                   the Tolkāppiyam (its oldest strata), the Tirukkuṟaḷ and the
+                   Patiṉeṇkīḻkkaṇakku, closing with the twin epics
+                   Cilappatikāram and Maṇimēkalai (5th–6th c.); Lehmann's
+                   Grammatik des Alttamil (1994) is the reference grammar.
+                   ISO 639-3 oty names exactly this period (Glottolog
+                   oldt1248, under Tamiloid). Corpus: tamilex's Caṅkam works
+                   and Project Madurai's Caṅkam cone (undated at source — a
+                   per-work consumer rule, not date inference) and the
+                   early dated editions of dharma-tamil and sii-clean (26
+                   docs dated inside the band, censused 2026-10-27)"}
+      mid: {name: Middle Tamil, band: [700, 1600], ord: 20, wikt: ta-mid,
+            band_note: "the conventional span (Zvelebil; Wiktionary ta-mid):
+                        the Pallava-era bhakti hymns through the Cōḻa and
+                        Pāṇḍya periods to the Nāyaka era; approximate —
+                        the Tēvāram and Nālāyirat Tivviyap Pirapantam (6th–
+                        9th c.) straddle the opening boundary",
+            note: "the language of the Śaiva Tirumuṟai and the Vaiṣṇava
+                   Āḻvār canon, Kampaṉ's Irāmāvatāram (12th c.), the great
+                   commentaries (Parimēlaḻakar, Nacciṉārkkiṉiyar) and the
+                   Naṉṉūl grammar (13th c.), and of the bulk of the Cōḻa and
+                   Pāṇḍya stone and copper-plate record — Sanskrit loans and
+                   the Grantha script enter in force. Corpus: the dated Tamil
+                   epigraphy (~850 dharma-tamil and sii-clean editions dated
+                   600–1100 alone, censused 2026-10-27) and tamilex's
+                   devotional canons"}
 
   te:
     name: Telugu
@@ -1949,8 +2154,31 @@ anchors:
            with the estate's richest dating), dharma-tamil (13 tel-Latn
            passages). The epigraphic consumers date at the document grain
            and claim the bare anchor; Old Telugu proper (the pre-Nannaya
-           epigraphic language) is a named candidate stage, unminted"
+           epigraphic language) is the te:old stage (minted 2026-10-27),
+           which the dated epigraphy reaches by date inference"
     stages:
+      old: {name: Old Telugu, band: [575, 1100], ord: 10,
+            band_note: "Krishnamurti's periodization (Krishnamurti 1998,
+                        'Telugu', in Steever ed., The Dravidian Languages;
+                        Krishnamurti 2003, The Dravidian Languages): Old
+                        Telugu from the first full Telugu inscription —
+                        the Renāṭi Cōḷa Erragudipāḍu/Kalamalla record
+                        (~575) — to ~1100; Middle Telugu 1100–1600 and
+                        Modern Telugu thereafter are not minted. Overlaps
+                        te:cls (from 1000) by design: cls is a register
+                        stage, old the epigraphic period language",
+            note: "the pre-Nannaya inscriptional language — Renāṭi Cōḷa and
+                   Eastern (Vēṅgī) Cālukya grants and stone records, the
+                   Addaṅki verse inscription of Paṇḍaraṅga (~848, the first
+                   metrical Telugu) — before the kāvya register of te:cls
+                   standardizes the written language. Prehistoric Telugu
+                   (place and personal names in the Prakrit epigraphy of
+                   the Amarāvatī region, ~2nd c. BCE – 5th c. CE) stays
+                   prose: no connected text. Glottolog oldt1249 (no ISO
+                   code). Corpus: sii-clean's Telugu volumes (12 tel-Latn
+                   editions dated inside the band, censused 2026-10-27)
+                   and the dharma-deccan Vēṅgī Cālukya bilinguals (undated
+                   at the axis — a per-document consumer claim)"}
       cls: {name: Classical Telugu, band: [1000, 1850], ord: 20,
             band_note: "the kāvya (grānthika) literary language from
                         Nannaya's Āndhra Mahābhāratamu (begun under
@@ -2133,17 +2361,38 @@ anchors:
     parent: inc
     glottocode: mara1378
     note: "ISO 639-1 (639-3 mar aliases here). Southern Indo-Aryan, the
-           continuation of Maharashtri Prakrit (held under pra; the
-           descent stays prose until the registry draws Prakrit
-           lineages). Inscriptional record from the early 11th c. (the
+           continuation of Māhārāṣṭrī Prakrit (pmh, minted 2026-10-27; the
+           edge stays prose — the Prakrit-to-NIA descent runs through an
+           unattested Apabhraṃśa layer and the registry does not draw it
+           yet). Inscriptional record from the early 11th c. (the
            Akṣī stone, Śilāhāra period; the Śravaṇabeḷagoḷa Gommaṭa line
            c. 981 is debated), classical literature from the 13th c.
            (Jñāneśvarī 1290, the Mahānubhāva prose, the vārakarī sant
            poets from Nāmdev to Tukārām). Corpus: a handful of romanized
            Marathi inscriptions (mar-Latn) in the consuming library's
-           South Indian epigraphy, from the Maratha-period volumes; the
-           bare anchor is the honest claim, declared coarse — stages
-           (Old/Middle Marathi) unminted until a consumer needs them"
+           South Indian epigraphy, from the Maratha-period volumes (bare
+           anchor), and GRETIL's Jñāneśvarī (mr:old). Middle Marathi
+           (1350–1800) stays unminted — no consumer"
+    stages:
+      old: {name: Old Marathi, band: [1000, 1350], ord: 10, iso: omr,
+            band_note: "the Yādava-era language, approximate: from the first
+                        Marathi inscriptions (the Akṣī stone, c. 1012; the
+                        debated Śravaṇabeḷagoḷa line, c. 981, sits just
+                        inside) to the fall of Devagiri (1318) and the end
+                        of the Mahānubhāva founding generation — the
+                        conventional close of Old Marathi (Tulpule 1979,
+                        Classical Marāṭhī Literature; Master 1964, A
+                        Grammar of Old Marathi)",
+            note: "Prācīn Marāṭhī: the Śilāhāra and Yādava inscriptions
+                   (Tulpule 1963, Prācīn Marāṭhī Koriv Lekh), the
+                   Mahānubhāva prose canon (Līḷācaritra, c. 1278) and
+                   Jñānadeva's Jñāneśvarī (1290, Śaka 1212), the Bhagavad-
+                   gītā commentary in ovī verse. ISO 639-3 omr names this
+                   period (Glottolog oldm1244, under Old-Modern Marathi).
+                   Corpus: GRETIL's Jñāneśvarī (mar-Latn, era-dated 1290)
+                   and the Wiktionary descent trees, whose omr nodes (930
+                   held rows across the Prakrit and Indic shelves) ride the
+                   codemap omr row"}
 
   si:
     name: Sinhala
@@ -3680,3 +3929,4 @@ scripts:
   lina: {name: Linear A,                             iso15924: Lina}
   linb: {name: Linear B,                             iso15924: Linb}
   cprt: {name: Cypriot syllabary,                    iso15924: Cprt}
+  sinh: {name: Sinhala,                              iso15924: Sinh}

@@ -53,7 +53,7 @@ class OkhcTest < Minitest::Test
 
   def test_discover_yields_one_document_per_record_across_all_files
     refs = @adapter.discover(FIXTURES).to_a
-    assert_equal 39, refs.size, "39 records across the 7 fixture files"
+    assert_equal 42, refs.size, "42 records across the 7 fixture files"
     assert(refs.all? { |ref| ref.id.start_with?("urn:nabu:okhc:") })
     assert_includes refs.map(&:id), "urn:nabu:okhc:sagi:sg_003_0030_0070"
   end
@@ -151,6 +151,66 @@ class OkhcTest < Minitest::Test
     assert_equal [nil, nil, nil], shape.call({}), "year-less records mint nothing"
     assert_equal [nil, nil, nil], shape.call({ "year" => "1145?" }),
                  "no bounds invented from prose"
+  end
+
+  # --- the named-entity markup (content.body_xml / title_xml) ----------------
+
+  # The deposit carries a parallel *_xml field whose <ner_TYPE> spans mark
+  # names inside the plain body; line N of the xml is line N of the body.
+  # Each passage carries its line's spans as the "entities" annotation
+  # (type verbatim, the ner_ prefix being the tag namespace).
+  def test_body_xml_spans_ride_their_line_as_entities
+    doc = document("urn:nabu:okhc:ilseongnok:1760-01-0-01-영조-GK12811_00-2-000-000")
+    assert_equal [{ "type" => "건물", "text" => "太廟" }, { "type" => "건물", "text" => "毓祥宮" },
+                  { "type" => "지명", "text" => "校洞" }, { "type" => "지명", "text" => "生洞" }],
+                 doc.passages.first.annotations["entities"]
+  end
+
+  # A body-less record's passages come from the title — so the title_xml
+  # spans are the ones that ride.
+  def test_a_title_only_record_carries_the_title_xml_spans
+    doc = document("urn:nabu:okhc:ilseongnok:1767-04-0-23-영조-GK12811_00-11-000-001")
+    assert_equal "藥房入診。余侍坐。", doc.passages.first.text
+    assert_equal [{ "type" => "관서", "text" => "藥房" }], doc.passages.first.annotations["entities"]
+  end
+
+  # With a body present the title is the document title, not a passage —
+  # its spans have no passage to ride (the body's own spans do).
+  def test_title_spans_never_ride_body_passages
+    doc = document("urn:nabu:okhc:ilseongnok:1781-04-0-20-정조-GK12811_00-98-000-003")
+    texts = doc.passages.flat_map { |p| Array(p.annotations["entities"]) }.map { |e| e["text"] }
+    assert_equal ["直提學"], texts, "鄭民始 is marked only in the title"
+  end
+
+  def test_the_aks_person_and_place_markup_rides_verbatim
+    doc = document("urn:nabu:okhc:aks_royal:RD00158")
+    assert_equal [{ "type" => "person", "text" => "人禮" }, { "type" => "place", "text" => "勒薩" },
+                  { "type" => "person", "text" => "朴齊純" }],
+                 doc.passages.first.annotations["entities"]
+  end
+
+  # Not names: ilseongnok's 세주 (interlinear small-note) / 주석 spans and
+  # klc's ner_unknown (cyclical-year heads) / ner_948a54 (a colour class
+  # over 吐 reading particles) are text structure — skipped by rule.
+  def test_non_name_markup_is_skipped_by_rule
+    note = document("urn:nabu:okhc:ilseongnok:1778-06-0-05-정조-GK12811_00-63-000-011")
+    assert_nil note.passages.first.annotations["entities"]
+    particles = document("urn:nabu:okhc:klc:ITKC_MO_0220A_0120_000_0060")
+    assert(particles.passages.none? { |p| p.annotations["entities"] })
+    assert_equal %w[건물 관서 관직 능원 물건 서명 인물 지명 person place].sort,
+                 Nabu::Adapters::OkhcJsonlParser::ENTITY_TYPES.sort
+  end
+
+  def test_a_record_whose_xml_lines_disagree_with_the_body_carries_no_entities
+    row = { "id" => "sagi:x2", "language" => "Hanmun",
+            "content" => { "body" => "甲\n乙", "body_xml" => "<ner_인물>甲</ner_인물>", "title" => "t" } }
+    record = Nabu::Adapters::OkhcJsonlParser.parse_record(JSON.generate(row))
+    assert_equal [nil, nil], record.entities, "line pairing is the only honest join — never guessed"
+  end
+
+  def test_okhc_joins_the_entity_index_roster
+    roster = YAML.safe_load_file(File.expand_path("../../config/entity_index.yml", __dir__)).fetch("sources")
+    assert_includes roster, "okhc"
   end
 
   # --- defensive quarantines ------------------------------------------------

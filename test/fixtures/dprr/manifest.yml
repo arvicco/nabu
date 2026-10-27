@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: dprr
+adapter_test: test/adapters/dprr_test.rb
+retrieved: 2026-10-27
+files:
+  - path: persons.json
+    url: https://romanrepublic.ac.uk/rdf/endpoint/ (Nabu::Adapters::Dprr::PERSONS_QUERY, application/sparql-results+json)
+    whole: false
+    trim: 4 of 4,876 person bindings kept verbatim (Person/1, /146, /1016, /1698); head unchanged; re-indented
+  - path: dates.json
+    url: https://romanrepublic.ac.uk/rdf/endpoint/ (Nabu::Adapters::Dprr::DATES_QUERY, application/sparql-results+json)
+    whole: false
+    trim: the 6 of 1,917 date bindings about the four kept persons, verbatim; head unchanged; re-indented

@@ -135,7 +135,10 @@ module Nabu
     #   through config/eras.yml (Śaka Y → Y+78, the ruled single offset;
     #   basis "title") — spelled out ("Śaka 1460", "ŚAKA 1504") or in the SII
     #   10 editors' abbreviation "Ś. 1066" (513 raw headings), never a
-    #   hedged "Ś. 1169. (?)"; every such phrase rides "title_dating"
+    #   hedged "Ś. 1169. (?)"; a last digit the editor restored in brackets
+    #   ("Ś. 107[3]", "ŚAKA 142(4)") completes the year, a lost one ("Ś.
+    #   108-.", a bare "Ś. 106.") spans its decade (SAKA_ABBR — 48 headings
+    #   once misread as Śaka 1NN, i.e. 179–229 CE); every such phrase rides "title_dating"
     #   verbatim. Failing both, the summary's single reign line "Year N:
     #   YYYY A.D." (SUMMARY_AD; basis "summary A.D."). Regnal years
     #   ("RĀJARĀJA I—19th YEAR") stay in the verbatim alt title only (no
@@ -197,8 +200,28 @@ module Nabu
       # 181 "A.D." headings, 27 Śaka-typed, all in SII 22; 2026-10-21: 513
       # raw headings carry SII 10's "Ś. NNNN" abbreviation).
       AD_PHRASE = /A\.\s?D\.\s*(\d{3,4})(?:\s*[-–—]\s*(\d{1,4}))?/
-      SAKA_PHRASE = /\b([ŚśSs][Aa][Kk][Aa])\s+\[?(\d{3,4})\]?/
-      SAKA_ABBR = /Ś\.\s*(\d{3,4})(?!\d)(?![.\s]*\(\?\))/
+      # SII 39 spells the era out with the same restored last digit, in
+      # brackets or parentheses ("ŚAKA 151[9] (1596-97 A.D.)", "ŚAKA
+      # 142(4) (1502 A.D.)" — the editor's own A.D. gloss confirms it).
+      SAKA_PHRASE = /\b([ŚśSs][Aa][Kk][Aa])\s+\[?(\d{3,4})\]?(?:[\[(](\d)\.?[\])])?/
+      # SII 10's "Ś. NNNN", with the editor's two damaged-year forms (census
+      # of the held vol. 10, 2026-10-27: 45 headings): a last digit restored
+      # in square brackets ("Ś. 107[3]", "Ś. 113[6.]" — the bracketed digit
+      # completes the four-digit year; the stone reads "śakavarṣaṁbulu 107
+      # 3") and a last digit lost ("Ś. 108-.", or the bare surviving three
+      # "Ś. 106." / "Ś. 120. ." over a body reading "śakavarṣaṁbulu 106
+      # <gap>"). A bracket is never a year's end, so a bracket-less reading
+      # stopping at "[" is not taken.
+      SAKA_ABBR = /Ś\.\s*(?<digits>\d{3,4})(?:\[(?<restored>\d)\.?\]|(?<lost>-))?(?![\d\[])(?![.\s]*\(\?\))/
+      # A bare three-digit "Ś. 1NN" is a four-digit year missing its last
+      # digit, read as its decade 1NN0–1NN9 — the deliberate rule: Śaka
+      # 100–199 (178–277 CE) predates every Śaka-dated South Indian
+      # vernacular record by six centuries (SII 10's earliest genuine reading
+      # is Ś. 894), every such heading in the held volume sits in the
+      # volume's chronological run among Ś. 10NN–11NN neighbours, and its
+      # body shows the lost character. Genuine three-digit readings (Ś. 894
+      # … 984, Eastern Chalukya) are untouched; no prefix digit is invented.
+      SAKA_LOST_DIGIT = /\A1\d\d\z/
 
       # SII 17/26/41 summaries open with the editor's reign line "King.
       # Year N: YYYY[-YY] A.D." — a CE conversion read only when the
@@ -269,10 +292,10 @@ module Nabu
       def self.saka_date(alt_title, eras)
         if (match = SAKA_PHRASE.match(alt_title))
           era_word = match[1]
-          year = match[2]
+          # A restored digit completes a three-digit reading only.
+          year = match[3] && match[2].length == 3 ? match[2] + match[3] : match[2]
         elsif (match = SAKA_ABBR.match(alt_title))
-          era_word = "Śaka"
-          year = match[1]
+          return saka_abbr_date(match, eras)
         else
           return nil
         end
@@ -281,6 +304,26 @@ module Nabu
         conversion.to_date_bounds.merge(
           "raw" => match[0].strip, "era" => key, "era_year" => conversion.year, "basis" => "title"
         )
+      end
+
+      # One SAKA_ABBR reading: the restored digit completes the year; a lost
+      # one (dash, or a bare "1NN") spans the decade ("era_years" low/high).
+      def self.saka_abbr_date(match, eras)
+        key = eras&.resolve("Śaka") or return nil
+        digits = match[:digits]
+        base = { "raw" => match[0].strip, "era" => key }
+        if match[:restored]
+          year = Integer(digits + match[:restored], 10)
+        elsif match[:lost] || digits.match?(SAKA_LOST_DIGIT)
+          low = eras.to_ce(key, Integer("#{digits}0", 10))
+          high = eras.to_ce(key, Integer("#{digits}9", 10))
+          bounds = { "not_before" => low.not_before, "not_after" => high.not_after }
+          return bounds.merge(base, "era_years" => [low.year, high.year], "basis" => "title")
+        else
+          year = Integer(digits, 10)
+        end
+        conversion = eras.to_ce(key, year)
+        conversion.to_date_bounds.merge(base, "era_year" => conversion.year, "basis" => "title")
       end
 
       # The summary's single reign-line CE conversion (SUMMARY_AD), or nil.

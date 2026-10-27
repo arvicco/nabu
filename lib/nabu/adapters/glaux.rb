@@ -216,10 +216,11 @@ module Nabu
       # The document-level metadata journaled from the metadata.txt row (the
       # SOURCE_LICENSE rides verbatim — the per-text license record).
       # P104-1: GENRE_STANDARD also projects as a facet. DIALECT
-      # makes no LECT claim here — a Greek-dialect lect story needs a
-      # lects-registry ruling (registry notes carry philology); since
-      # P118-R4 config/facet_map.yml projects it as a plain "dialect"
-      # filter facet (no lect rule reads it); start/end_date ride
+      # makes no LECT claim here — since P118-R4 config/facet_map.yml
+      # projects it as a plain "dialect" facet, and the glaux-dialect-*
+      # compose rules (config/lect_facet_rules.yml) read it to refine
+      # each date-banded stage onto the registry's grc dialect
+      # varieties at journal time; start/end_date ride
       # the timeline separately (MetadataDates :signed_bounds_keys,
       # composition class).
       def document_metadata(ref_metadata)
