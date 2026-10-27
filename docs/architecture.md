@@ -2483,7 +2483,7 @@ row carries both endpoints' classes, and an edge survives the filter only
 when both are allowed (an endpoint the catalog cannot resolve cannot be
 vouched for and drops out).
 
-Two tables today, registered by name in the explicit `Nabu::Export::TABLES`
+The tables are registered by name in the explicit `Nabu::Export::TABLES`
 map — a further table is one file under `export/`, one registry line, and
 one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
 (NAME, SUMMARY, columns, filters, each_row, notes):
@@ -2509,6 +2509,22 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   dictionary-entry grain to its source and license; `--kind` filters,
   `--dated` adds both endpoints' envelopes. Two databases, no ATTACH — each
   page of edges resolves its urns with one batched catalog read per grain.
+- `align` (P145) — verse pairs off the §10 alignment hub: per attested
+  ref, the base witness (the registry's first, or `--base`) against every
+  other attesting witness, each side with its passage urns, the refs its
+  sentences cover, text, source and effective license; a ref the base
+  lacks yields no pairs and is counted, never re-pivoted. REF is `nabu
+  align`'s grammar; no REF walks the whole `--work` chapter by chapter off
+  the ref index (`Export::AlignHub`, shared with `collation`).
+  `--with-morph` adds each side's stored gold tokens — form, lemma (the
+  LemmaKeys registry), feats decoded through the morph façade
+  (`Query::MorphFacets`), the token's own citation — JSONL by default;
+  silver lemmas are not carried. A pair draws on both sides' licenses.
+- `collation` (P145) — the `align --collate` apparatus as rows: per
+  anchor ref, every attesting witness's reading with its urns, its
+  (language, script) cell, its role (base / variant / uncollated), the
+  variant's apparatus against the cell base, and its source and license;
+  a variant quotes its base, so it draws on both.
 
 Streaming is keyset paging (urn for documents, id for links) with one
 batched read per page per concern, so memory is constant at library scale;

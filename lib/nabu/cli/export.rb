@@ -37,6 +37,11 @@ module Nabu
                     endpoint's source + license (--dated: endpoint dates)
         lemmas      the lemma × language × century × grade × source
                     attestation matrix, from the precompiled lemma rollup
+        align       verse pairs off the alignment hub — base witness against
+                    each other witness per ref (--with-morph: gold tokens
+                    with lemma + decoded morphology; jsonl by default)
+        collation   the align --collate apparatus as rows — per anchor ref,
+                    each witness reading, its role and its variants
 
       The passage stream (stdout, no manifest) is the default command:
         passages    --format plain | jsonl — jsonl lines carry the parsed
@@ -46,6 +51,8 @@ module Nabu
         nabu export documents --with-axes
         nabu export documents --lang lat --from -200 --to 200 --license-class open,attribution
         nabu export links --kind parallel --dated --format jsonl
+        nabu export align MARK 2 --with-morph
+        nabu export collation --work nt --base ccmh-marianus
         nabu export --format jsonl --lang got > gothic.jsonl
 
     HELP
@@ -240,7 +247,114 @@ module Nabu
       end
     end
 
+    desc "align [REF]", "Verse pairs off the alignment hub — base witness vs each other witness, per ref"
+    long_desc <<~HELP, wrap: false
+      Writes exports/align.jsonl (or .csv) and align.manifest.yml from the
+      alignment hub (config/alignments.yml, the `nabu align` index). REF is
+      `nabu align`'s grammar — a ref (MARK 2.3), a chapter (MARK 2), a range
+      (MARK 2.1-2.12) or a passage urn; with no REF, --work exports the
+      whole work, chapter by chapter. One row per (ref, witness): the BASE
+      witness (registry's first; --base LABEL to pivot elsewhere) paired
+      with every other witness attesting the ref (--witness narrows them).
+      A ref the base lacks yields no pairs (counted in the manifest).
+
+        work, ref,
+        base_witness, base_document_urn, base_urns, base_covers,
+        base_language, base_text, base_source, base_license_class,
+        witness, witness_document_urn, witness_urns, witness_covers,
+        witness_language, witness_text, witness_source, witness_license_class
+
+      *_covers names every ref a side's sentences span (sentence≠verse).
+      --with-morph adds base_/witness_ morph + tokens: the stored gold
+      tokens, each {form, lemma, feats, citation} — feats DECODED into
+      UD-named features through the morph façade (PROIEL/AGDT positional
+      tags, UD feats, the Hebrew/Coptic tagsets), null where the source
+      has none; morph is "gold" when any token carries a lemma or features.
+      Token arrays need --format jsonl (the default here). A pair draws on
+      both sides: under --license-class both classes must be allowed.
+
+      Examples:
+        nabu export align MARK 2 --with-morph
+        nabu export align --work nt --base greek-nt --witness gothic-nt,marianus --with-morph
+        nabu export align "MATT 5.1-5.12" --format csv --license-class open,attribution
+    HELP
+    table_options
+    option :format, type: :string, default: "jsonl", banner: "jsonl|csv", desc: "Output format"
+    option :work, type: :string, banner: "ID", desc: "Alignment work id (required with no REF when several exist)"
+    option :base, type: :string, banner: "LABEL", desc: "The pivot witness (label or document urn)"
+    option :witness, type: :string, banner: "LABEL[,LABEL...]", desc: "Pair the base only with these witnesses"
+    option :with_morph, type: :boolean, default: false,
+                        desc: "Add each side's gold tokens: form, lemma, decoded morphology"
+    def align(*ref_parts)
+      if options[:with_morph] && options[:format] == "csv"
+        raise Thor::Error, "export align: --with-morph carries token arrays — use --format jsonl"
+      end
+
+      with_writer("align") do |writer, config|
+        with_alignment(config) do |catalog, fulltext, registry|
+          table = Nabu::Export::AlignPairs.new(catalog: catalog, fulltext: fulltext, registry: registry,
+                                               ref: ref_parts.join(" "), work: options[:work],
+                                               base: options[:base], witnesses: list(options[:witness]),
+                                               with_morph: options[:with_morph])
+          report(writer.write(table))
+        end
+      end
+    end
+
+    desc "collation [REF]", "The collation apparatus as rows — per anchor ref, each witness reading"
+    long_desc <<~HELP, wrap: false
+      Writes exports/collation.csv (or .jsonl) and collation.manifest.yml:
+      the `nabu align REF --collate` apparatus, one row per witness reading.
+      REF follows `nabu align` (ref, chapter, range, passage urn); with no
+      REF, --work exports the whole work.
+
+        work, ref, language, script, witness, urns, role, base_witness,
+        reading, agrees, apparatus, collation, source, license_class
+
+      Collation diffs RAW tokens inside one (language, script) cell: role is
+      base or variant there, with the variant's apparatus against the base
+      ("base → variant", "om. base", "add. variant"); a witness alone in its
+      cell is role uncollated, collation sole or cross_script, no apparatus.
+      A variant row quotes its base, so it draws on both licenses. --base
+      heads every cell with that witness wherever it attests.
+
+      Examples:
+        nabu export collation MARK 2
+        nabu export collation --work nt --base ccmh-marianus --format jsonl
+        nabu export collation "MARK 2.1-2.12" --license-class open,attribution
+    HELP
+    table_options
+    option :work, type: :string, banner: "ID", desc: "Alignment work id (required with no REF when several exist)"
+    option :base, type: :string, banner: "LABEL", desc: "The base witness of each cell (label or document urn)"
+    def collation(*ref_parts)
+      with_writer("collation") do |writer, config|
+        with_alignment(config) do |catalog, fulltext, registry|
+          table = Nabu::Export::CollationReadings.new(catalog: catalog, fulltext: fulltext, registry: registry,
+                                                      ref: ref_parts.join(" "), work: options[:work],
+                                                      base: options[:base])
+          report(writer.write(table))
+        end
+      end
+    end
+
     private
+
+    # The alignment-hub inputs, read-only: the catalog, the full-text file
+    # (the ref index lives there), the registry.
+    def with_alignment(config)
+      with_catalog(config) do |catalog|
+        raise Thor::Error, "no full-text index — run nabu sync or nabu rebuild" unless File.exist?(config.fulltext_path)
+
+        begin
+          fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+          yield catalog, fulltext, Nabu::AlignmentRegistry.load(config.alignments_path)
+        ensure
+          fulltext&.disconnect
+        end
+      end
+    rescue Nabu::ValidationError => e
+      raise Thor::Error, e.message
+    end
 
     def list(value) = value.to_s.split(",").map(&:strip).reject(&:empty?)
 

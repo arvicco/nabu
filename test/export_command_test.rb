@@ -103,7 +103,82 @@ class ExportCommandTest < Minitest::Test
     end
   end
 
+  # -- the thesis-grade kinds (P145) -------------------------------------------
+
+  def test_align_with_morph_writes_jsonl_pairs_with_a_manifest
+    with_export_env do |config|
+      seed_alignment(config)
+      out, err, status = with_config(config) { run_cli(%w[export align MARK 2.3 --with-morph]) }
+      assert_nil status, err
+      assert_match(/align: 1 rows .*align\.jsonl/, out)
+      line = JSON.parse(File.read(File.join(config.exports_dir, "align.jsonl")))
+      assert_equal %w[gr la], line.values_at("base_witness", "witness")
+      assert_equal %w[open nc], line.values_at("base_license_class", "witness_license_class")
+      assert_equal({ "form" => "venerunt", "lemma" => "venio", "feats" => "number=plur", "citation" => "MARK 2.3" },
+                   line.fetch("witness_tokens").first)
+      manifest = YAML.safe_load_file(File.join(config.exports_dir, "align.manifest.yml"))
+      assert_equal "MARK 2.3", manifest.dig("filters", "ref")
+      assert_equal(%w[alpha beta], manifest.fetch("sources").map { |entry| entry["source"] })
+      _out, err, status = with_config(config) { run_cli(%w[export align MARK 2.3 --with-morph --format csv]) }
+      assert_equal 1, status
+      assert_match(/use --format jsonl/, err)
+    end
+  end
+
+  def test_collation_writes_reading_rows
+    with_export_env do |config|
+      seed_alignment(config)
+      _out, err, status = with_config(config) { run_cli(%w[export collation --work nt]) }
+      assert_nil status, err
+      table = CSV.read(File.join(config.exports_dir, "collation.csv"), headers: true)
+      assert_equal([%w[gr uncollated open], %w[la uncollated nc]],
+                   table.map { |row| row.values_at("witness", "role", "license_class") })
+      assert_equal ["urn:a:al:s0"], table.map { |row| row["urns"] }.first(1)
+    end
+  end
+
+  def test_help_carries_the_new_kinds_with_examples
+    out, _err, _status = run_cli(%w[help export])
+    %w[align collation].each { |name| assert_match(/export #{name}/, out) }
+    out, _err, _status = run_cli(%w[export align --help])
+    assert_match(/nabu export align MARK 2 --with-morph/, out)
+    out, _err, _status = run_cli(%w[export collation --help])
+    assert_match(/nabu export collation MARK 2/, out)
+  end
+
   private
+
+  # Two witnesses of MARK 2.3 (alpha open grc, beta nc lat) in the catalog,
+  # a registry naming them, and the ref index built in fulltext.
+  def seed_alignment(config)
+    catalog = Nabu::Store.connect(config.catalog_path)
+    Nabu::Store.setup!(catalog)
+    [["urn:a:al", "alpha", "grc", "καὶ ἔρχονται", [{ "form" => "καὶ" }]],
+     ["urn:b:al", "beta", "lat", "venerunt",
+      [{ "form" => "venerunt", "lemma" => "venio", "feats" => "Number=Plur" }]]].each do |urn, slug, lang, text, toks|
+      source_id = catalog[:sources].where(slug: slug).get(:id)
+      doc_id = catalog[:documents].insert(source_id: source_id, urn: urn, title: urn, language: lang,
+                                          content_sha256: "x", revision: 1, withdrawn: false)
+      tokens = toks.map { |token| token.merge("citation_part" => "MARK 2.3") }
+      catalog[:passages].insert(document_id: doc_id, urn: "#{urn}:s0", sequence: 0, language: lang, text: text,
+                                text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+                                annotations_json: JSON.generate("tokens" => tokens))
+    end
+    File.write(config.alignments_path, <<~YAML)
+      nt:
+        title: NT
+        witnesses:
+          - document: urn:a:al
+            label: gr
+          - document: urn:b:al
+            label: la
+    YAML
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    Nabu::Store::AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext,
+                                           registry: Nabu::AlignmentRegistry.load(config.alignments_path))
+    fulltext.disconnect
+    catalog.disconnect
+  end
 
   def with_export_env(links: true)
     Dir.mktmpdir("nabu-export") do |root|

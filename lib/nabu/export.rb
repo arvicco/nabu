@@ -6,6 +6,9 @@ require_relative "export/writer"
 require_relative "export/documents"
 require_relative "export/links"
 require_relative "export/lemmas"
+require_relative "export/align_hub"
+require_relative "export/align_pairs"
+require_relative "export/collation_readings"
 
 module Nabu
   # The research exporter (P121-1, architecture §18): `nabu export <table>`
@@ -48,7 +51,9 @@ module Nabu
     TABLES = {
       Documents::NAME => Documents,
       Links::NAME => Links,
-      Lemmas::NAME => Lemmas
+      Lemmas::NAME => Lemmas,
+      AlignPairs::NAME => AlignPairs,
+      CollationReadings::NAME => CollationReadings
     }.freeze
 
     module_function
