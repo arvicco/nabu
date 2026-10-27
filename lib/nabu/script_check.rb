@@ -49,7 +49,8 @@ module Nabu
       "sund" => /\p{Sundanese}/,
       "lina" => /\p{Linear_A}/,
       "linb" => /\p{Linear_B}/,
-      "cprt" => /\p{Cypriot}/
+      "cprt" => /\p{Cypriot}/,
+      "sinh" => /\p{Sinhala}/
     }.freeze
 
     # Registry scripts a byte check CANNOT mirror, with the reason stated —
