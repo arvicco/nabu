@@ -278,6 +278,17 @@ class OpenitiTest < Minitest::Test
     refute clean.metadata.key?("census"), "an empty census stays absent"
   end
 
+  # The house OCR flag (export passages --exclude-ocr reads text_nature):
+  # stamped ONLY from upstream's own per-version uncorrected_OCR column —
+  # the Ibn Sina fixture row carries "True" in the real sample TSV.
+  def test_upstream_uncorrected_ocr_flag_stamps_text_nature
+    ocr = parse_urn("urn:nabu:openiti:0428IbnSina.RisalaJudiya.AOCP202502141162-per1")
+    assert_equal true, ocr.metadata["uncorrected_ocr"]
+    assert_equal "uncorrected-ocr", ocr.metadata["text_nature"]
+    clean = parse_urn("urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1")
+    refute clean.metadata.key?("text_nature"), "no upstream OCR flag, no stamp"
+  end
+
   def test_document_metadata_carries_tsv_lanes_and_the_meta_block
     document = parse_urn("urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1")
     assert_equal "fas", document.language

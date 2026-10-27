@@ -317,7 +317,9 @@ passage_entities(name_id, passage_id)         -- WITHOUT ROWID, PK (name_id, pas
    -- annotation (names marked INSIDE the text: EpidocParser::InlineLayer's
    -- persName/placeName/name spans on the Perseus editions, CopticTtParser's
    -- entity spans with Wikification identities, the DHARMA Deccan
-   -- person/place tags), whose typed record shape the facet lane's
+   -- person/place tags; okhc's <ner_TYPE> spans from the deposit's
+   -- parallel body_xml/title_xml, at LINE grain — no offsets), whose
+   -- typed record shape the facet lane's
    -- {"value","ref"} rule does not carry. Same dictionary encoding: one
    -- name row per distinct verbatim record per source, plus search_key —
    -- text/identity/key/ref each folded (Normalize.fold_diacritics +
@@ -669,8 +671,16 @@ dropped and rebuilt with them). Since P26-5, a sync regenerates it only
 when the synced source actually holds a registry witness document
 (`Indexer.refresh_source!`'s relevance gate — the index is registry-scoped,
 157k rows live, so the full regeneration is cheap when it fires and skipped
-entirely when it cannot matter). No hand-curated rows exist anywhere in
-db/.
+entirely when it cannot matter). Every alignment build stamps the
+registry's semantic fingerprint (sha256 over its parsed works — a
+comment-only edit is no change) in
+`alignment_registry_stamp`, because a registry edit alone — wiring an
+already-held document as a new witness — changes no passage byte, and the
+P110-1 skip would otherwise leave it unmaterialized: a skipped sync whose
+registry fingerprint differs from the stamp rebuilds `alignment_refs` (and
+only it, never the slice) when the source holds a witness of the new
+registry or documents the standing refs index (so a dropped witness clears
+on its own source's sync). No hand-curated rows exist anywhere in db/.
 
 **Query surface: a new `align` subcommand.** `nabu align REF [--work ID]`
 (REF may also be a passage urn, pivoting from a show/search hit into its
@@ -2108,7 +2118,10 @@ row ids, absent file = empty overlay (byte-identical no-module behavior).
 DERIVED since P70-2: the owner rows live in local/config/lect_rulings.yml
 (write-through from `lect assign`; withdraw removes config-first) and
 `nabu rebuild`'s lect-journal stage re-derives the WHOLE journal —
-rulings, then rules, then infer-dates, deterministic precedence — so the
+rulings, then map rules, then infer-dates, then compose rules,
+deterministic precedence (compose rules refine a variety onto standing
+stage rows of any rule basis, the date-band one included, so they run
+last — the glaux dialect grid composes onto date-inferred stages) — so the
 file needs no backup. The read side is lazy:
 `Lects.load_default` feature-detects the journal and hands `resolve` a
 point-lookup overlay, never an eager hash of the full journal.

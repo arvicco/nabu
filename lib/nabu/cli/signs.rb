@@ -61,6 +61,9 @@ module Nabu
                       them
         — the diachronic column (where nabu exceeds Jisho) —
         Old Chinese   Baxter-Sagart reconstruction + gloss
+        phonetic series 諧聲 neighbours — the other held characters of the
+                      glyph's Karlgren GSR series, with their OC readings
+                      (Baxter-Sagart's GSR column)
         Middle Chinese Qieyun reading, 反切, 音韻地位 (tshet-uinh)
         early Japan   positions in the Heian hanzi dictionaries (HDIC)
         TLS           sense-level concepts + classical attestation counts
@@ -1077,10 +1080,25 @@ module Nabu
       # The diachronic column — the half no dictionary site carries.
       def print_char_diachronic(card)
         print_char_shelf_block("Old Chinese (Baxter-Sagart)", card.old_chinese)
+        print_char_phonetic_series(card.phonetic_series)
         print_char_shelf_block("Shuowen Jiezi 說文解字 (Xu Shen, Han graphology)", card.shuowen)
         print_char_shelf_block("Middle Chinese (Qieyun / Baxter-Sagart)", card.middle_chinese)
         print_char_shelf_block("early-Japan lexicography (HDIC)", card.early_japan)
         print_char_tls(card.tls)
+      end
+
+      # The 諧聲 neighbours (P146): per GSR series, the other held members
+      # with their OC readings — `nabu char <member>` walks into each.
+      def print_char_phonetic_series(series)
+        return if series.nil? || series.empty?
+
+        say ""
+        say "phonetic series 諧聲 (Karlgren GSR, via Baxter-Sagart):"
+        series.each do |group|
+          count = group.neighbours.size
+          members = group.neighbours.map { |m| "#{m.glyph} #{m.old_chinese.join(' / ')}".strip }
+          say "  GSR #{group.series} · #{count} neighbour#{'s' unless count == 1}: #{members.join(' · ')}"
+        end
       end
 
       def print_char_shelf_block(label, entries)

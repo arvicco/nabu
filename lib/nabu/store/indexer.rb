@@ -2104,13 +2104,51 @@ module Nabu
       # registry names as a witness — the index is registry-scoped (157k rows
       # live), so regenerating it whole is cheap and keeps AlignmentIndexer
       # the single owner of its semantics; every other sync skips it.
+      # A changed registry (AlignmentIndexer.registry_changed?) also counts a
+      # source whose documents the STANDING refs index, so a witness the edit
+      # dropped is cleared by its own source's next sync.
       def refresh_alignment(catalog, fulltext, registry, source_id)
-        return if registry.nil? || registry.empty?
+        return if registry.nil?
 
-        witness_urns = registry.works.flat_map(&:witnesses).flat_map(&:document_urns)
-        return if catalog[:documents].where(source_id: source_id, urn: witness_urns).empty?
+        changed = AlignmentIndexer.registry_changed?(fulltext, registry)
+        return unless alignment_witness_source?(catalog, registry, source_id) ||
+                      (changed && alignment_indexed_source?(catalog, fulltext, source_id))
 
         AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: registry)
+      end
+
+      # The registry-only path (the sync skip, SyncRunner): a sync whose load
+      # changed no passage byte skips the whole slice, but alignment_refs =
+      # f(catalog, config/alignments.yml) — so when the registry's
+      # fingerprint (AlignmentIndexer.fingerprint) differs from the stamped
+      # one, rebuild the alignment refs
+      # (and only them) for a source the old or new registry touches. Returns
+      # the ref count when it rebuilt, nil when there was nothing to do (an
+      # unchanged registry, an uninvolved source, or a fulltext predating the
+      # alignment table — the full rebuild owns that).
+      def refresh_alignment_registry!(catalog:, fulltext:, slug:, alignments:)
+        return nil if alignments.nil? || !fulltext.table_exists?(AlignmentIndexer::TABLE)
+        return nil unless AlignmentIndexer.registry_changed?(fulltext, alignments)
+
+        source_id = catalog[:sources].where(slug: slug).get(:id) or return nil
+        return nil unless alignment_witness_source?(catalog, alignments, source_id) ||
+                          alignment_indexed_source?(catalog, fulltext, source_id)
+
+        AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+      end
+
+      def alignment_witness_source?(catalog, registry, source_id)
+        witness_urns = registry.works.flat_map(&:witnesses).flat_map(&:document_urns)
+        !witness_urns.empty? && !catalog[:documents].where(source_id: source_id, urn: witness_urns).empty?
+      end
+
+      # The standing refs name few documents (one per witness book), so the
+      # distinct urn list is small.
+      def alignment_indexed_source?(catalog, fulltext, source_id)
+        return false unless fulltext.table_exists?(AlignmentIndexer::TABLE)
+
+        urns = fulltext[AlignmentIndexer::TABLE].distinct.select_map(:document_urn)
+        !urns.empty? && !catalog[:documents].where(source_id: source_id, urn: urns).empty?
       end
 
       # The source's live passage count (two-level visibility) — what the

@@ -450,8 +450,19 @@ module Nabu
                       "book_subj" => subject,
                       "facets" => facets(subject, document_ref.metadata["death_ah"]),
                       "census" => (body.census unless body.census.empty?),
-                      "version_issues" => sidecar_issues(document_ref.path)
+                      "version_issues" => sidecar_issues(document_ref.path),
+                      "text_nature" => text_nature(document_ref)
                     ).compact
+      end
+
+      # The house OCR flag (export passages --exclude-ocr): stamped ONLY on
+      # upstream's own per-version statement — the metadata TSV's
+      # uncorrected_OCR column = "True" (720 of the 9,106 in-scope versions
+      # at release 2025.1.9 — version ids AOCP 400, Kraken 296, eScriptorium
+      # 17, Tesseract 4, three singletons). Every other version carries no OCR statement, so
+      # nothing is stamped (absence, never a guess about text quality).
+      def text_nature(document_ref)
+        "uncorrected-ocr" if document_ref.metadata["uncorrected_ocr"] == true
       end
 
       # data/<author>/<book>/<version> → the author and book sidecars

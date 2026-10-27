@@ -103,6 +103,19 @@ class LectRulesTest < Minitest::Test
     end
   end
 
+  # Every Menotec treebank is a known manuscript, so the treebank rule maps
+  # the adapter's whole fixed treebank list — a new treebank must be placed
+  # deliberately, never fall through to bare non.
+  def test_the_menotec_treebank_rule_places_every_treebank
+    rule = akk_rules.find("menotec-treebank") || flunk("the shipped rules file must carry menotec-treebank")
+    assert_equal %w[menotec], rule.sources
+    assert_equal "non", rule.code
+    assert_equal "treebank", rule.facet
+    assert_equal Nabu::Adapters::Menotec::TREEBANKS.keys.sort, rule.map.keys.sort
+    assert_equal "isl:old", rule.map.fetch("non-edda-regius-dep"), "the Codex Regius is Icelandic"
+    assert_equal ["no:old"], rule.map.except("non-edda-regius-dep").values.uniq
+  end
+
   def test_validate_names_the_rule_and_the_undefined_target
     rules = Nabu::LectRules.new(rules: [bad_rule])
     error = assert_raises(Nabu::Error) { rules.validate!(registry) }

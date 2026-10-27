@@ -598,6 +598,41 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # --- 諧聲 phonetic-series neighbours (the Baxter-Sagart GSR column) ---
+
+  # The GSR number's four-digit head is the Karlgren series; the card lists
+  # the OTHER held characters of each series the glyph belongs to, each with
+  # its B-S OC reading(s) — a polyphone (衣) once, its readings joined.
+  def test_char_lists_phonetic_series_neighbours_from_the_gsr_column
+    with_series_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 哀]) }
+      assert_nil status
+      assert_match(/^phonetic series 諧聲 \(Karlgren GSR, via Baxter-Sagart\):$/, out)
+      assert_match(%r{^  GSR 0550 · 2 neighbours: 衣 \*ʔ\(r\)əj / \*ʔ\(r\)əj-s · 依 \*ʔəj$}, out)
+
+      payload = JSON.parse(with_config(config) { run_cli(%w[char 哀 --json]) }.first)
+      series = payload.dig("card", "phonetic_series")
+      numbers = series.map { |s| s["series"] }
+      assert_equal ["0550"], numbers
+      glyphs = series.first["neighbours"].map { |m| m["glyph"] }
+      assert_equal %w[衣 依], glyphs
+      assert_equal ["*ʔ(r)əj", "*ʔ(r)əj-s"], series.first["neighbours"].first["old_chinese"]
+      assert_equal %w[0550a], series.first["neighbours"].first["gsr"].uniq
+    end
+  end
+
+  def test_phonetic_series_is_absent_for_a_singleton_or_a_seriesless_glyph
+    with_series_catalog do |config|
+      # 埃 0938b: B-S holds no other 0938 member — the block is absent.
+      out, = with_config(config) { run_cli(%w[char 埃]) }
+      assert_match(/Old Chinese \(Baxter-Sagart\):/, out)
+      refute_match(/phonetic series/, out)
+      # 𠓥 carries GSR "--": no series at all.
+      json, = with_config(config) { run_cli(%w[char 𠓥 --json]) }
+      assert_empty JSON.parse(json).dig("card", "phonetic_series")
+    end
+  end
+
   def test_radical_out_of_range_errors
     with_search_catalog do |config|
       _out, err, status = with_config(config) { run_cli(%w[search --radical 999]) }
@@ -623,6 +658,20 @@ class CharCommandTest < Minitest::Test
         seed_passage(source, slug, text)
       end
       Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      db.disconnect
+      fulltext.disconnect
+      yield config
+    end
+  end
+
+  # The baxter-sagart shelf alone (its fixture carries the 0550/0849
+  # series pairs, the 0938 singleton and one "--" row).
+  def with_series_catalog
+    Dir.mktmpdir("nabu-char-series") do |root|
+      config = char_config(root)
+      db, fulltext = open_dbs(config)
+      load_dictionary(db, "baxter-sagart", "Nabu::Adapters::BaxterSagart",
+                      Nabu::Adapters::BaxterSagart.new, "baxter-sagart")
       db.disconnect
       fulltext.disconnect
       yield config

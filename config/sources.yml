@@ -1179,6 +1179,33 @@ corpus-gysseling:
   # place/region code tables the adapter resolves) into incoming/
   # corpus-gysseling/. See docs/manual/corpus-gysseling.md.
 
+corpus-oudfries:
+  adapter: Nabu::Adapters::CorpusOudfries
+  adopted: "2026-10-27"
+  axes: [germanic]
+  wired: true    # first sync 2026-10-27: 177 docs / 14,136 passages EXACTLY on
+                   # the census (README.txt the 1 skipped-by-rule; 0 errored),
+                   # reconciled against upstream's README and the public index
+                   # (235,462 tokens); eyeballed R1-K17:1 — the first liodkest
+                   # verbatim.
+  sync_policy: manual
+  # The INT/IvdNT Corpus Oudfries v1.0 (hdl 10032/tm-a3-f6), compiled and
+  # annotated by Rita van de Poel (Leiden PhD): 177 Old Frisian (ofs) text
+  # witnesses c. 1200–1550 from 11 manuscripts (114 distinct texts, mostly
+  # the customary laws — the Seventeen Statutes, the Twenty-four Landlaws,
+  # the compensation registers), lemma + PoS + gloss. LICENSE: the corpus
+  # owner's release permission, communicated by INT by email, 2026-10-09;
+  # published in the INT Taalmaterialen catalogue 2026-10-23;
+  # catalogued "Niet-commercieel (non-commercial)", no redistribution grant,
+  # the archive itself carries no licence member → the sibling INT posture,
+  # research_private (never served to third parties, never redistributed);
+  # the Oudfries-specific checkbox text was not captured at download — the
+  # Gysseling/Oudnederlands INT terms stand as the terms evidence. NO corpus
+  # bytes in git (fixtures under gitignored local/fixtures/). ACQUISITION:
+  # Manual Adapter — the owner drops upstream's own CorpusOudfries1.0.zip
+  # into incoming/corpus-oudfries/; the ZIP is the canonical asset. See
+  # docs/manual/corpus-oudfries.md.
+
 corpus-oudnederlands:
   adapter: Nabu::Adapters::CorpusOudnederlands
   adopted: "2026-08-27"
@@ -1792,6 +1819,23 @@ disco:
   axes: [romance]
   wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
+
+dprr:   # 02-sources row 310
+  adapter: Nabu::Adapters::Dprr
+  adopted: "2026-10-27"
+  kind: module   # person authority — zero document rows, the cbdb shape
+  axes: [classical]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # DPRR — Digital Prosopography of the Roman Republic (King's College
+  # London; Mouritsen, Robb, Bradley): the Republican elite from
+  # Broughton/Rüpke/Zmeskal. No bulk file: fetch sends two SELECTs to the
+  # public SPARQL endpoint (romanrepublic.ac.uk/rdf/endpoint/) and lands
+  # the sparql-results+json answers verbatim. LICENSE: CC BY-NC 4.0 — the
+  # RDF documentation footer and every RDF serialization's header
+  # verbatim, read on the live site 2026-10-27 → nc. EXPECTED FIRST SYNC
+  # (~4 MB, seconds): 4,876 persons (ids 1–5,684 with gaps) + 1,917 date
+  # assertions → a 4,876-row "dprr" person-index slice.
 
 dss:
   adapter: Nabu::Adapters::Dss

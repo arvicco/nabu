@@ -424,3 +424,20 @@ cprt:
     per-passage writing-system annotation separates syllabary from
     alphabet, and the artifact-script rows carry the original writing
     system for the transliterated codes.
+
+sinh:
+  name: Sinhala
+  context: >-
+    The Brahmi-derived abugida of Sri Lanka, developed from the island's
+    Brahmi inscriptions (from the 3rd c. BCE) through the medieval
+    Sinhala hand of the palm-leaf (ola) manuscripts, whose rounded
+    letterforms answer the same incising constraint as Burmese. It
+    carries Sinhala and, in the Theravada monastic tradition, the Pāli
+    canon and its commentaries — Sri Lankan editions print Pāli in
+    Sinhala letters, with extra signs for the Pāli/Sanskrit sounds.
+    Unicode encodes it since 3.0.
+  desk: >-
+    The Sri Lankan Tipiṭaka shelf holds its Pāli and its Sinhala
+    translation directly in the Unicode Sinhala block (the Buddha
+    Jayanti print convention), so that Pāli claims pli~sinh while the
+    library's romanized Pāli shelves claim ~latn.

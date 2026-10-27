@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "digest"
 require "json"
 
 module Nabu
@@ -33,6 +34,10 @@ module Nabu
     # registry) so the index can never serve them stale.
     module AlignmentIndexer
       TABLE = :alignment_refs
+      # One row: the fingerprint of the registry the refs were built from
+      # (.fingerprint). The index is f(catalog, registry),
+      # so a registry edit alone makes it stale — registry_changed? reads it.
+      STAMP_TABLE = :alignment_registry_stamp
 
       BATCH_SIZE = 2_000
 
@@ -43,10 +48,12 @@ module Nabu
       # catalog contribute nothing, silently — a registry may legitimately
       # name a witness before its first sync (the OE Mark day-one state).
       # An empty/nil registry still creates the empty table so queries degrade
-      # to "no rows", never "index missing". Returns the row count.
+      # to "no rows", never "index missing". Returns the row count. Every
+      # build stamps the registry's fingerprint.
       def rebuild!(catalog:, fulltext:, registry: nil)
         fulltext.drop_table?(TABLE)
         create_table(fulltext)
+        stamp!(fulltext, registry && fingerprint(registry))
         return 0 if registry.nil? || registry.empty?
 
         count = 0
@@ -58,6 +65,42 @@ module Nabu
           end
         end
         count
+      end
+
+      # True when +registry+'s fingerprint differs from the one the standing
+      # refs were built from — an unstamped index (built before the stamp
+      # existed) reads changed, so the first witness sync after an upgrade
+      # re-derives once. A nil registry never reads changed.
+      def registry_changed?(fulltext, registry)
+        return false if registry.nil?
+        return true unless fulltext.table_exists?(STAMP_TABLE)
+
+        fulltext[STAMP_TABLE].get(:fingerprint) != fingerprint(registry)
+      end
+
+      # The registry's SEMANTIC fingerprint: sha256 over its parsed works
+      # (the Data values, deep-converted to plain JSON), so only an edit
+      # that changes what the index derives from reads as a change — never
+      # a comment or reformatting. Computed here, on the index side, so the
+      # registry reader itself stays untouched by the stamp.
+      def fingerprint(registry)
+        Digest::SHA256.hexdigest(JSON.generate(plain(registry.works)))
+      end
+
+      def plain(value)
+        case value
+        when ::Data then plain(value.to_h)
+        when Hash then value.to_h { |key, item| [key.to_s, plain(item)] }
+        when Array then value.map { |item| plain(item) }
+        when Range then [plain(value.begin), plain(value.end)]
+        else value
+        end
+      end
+
+      def stamp!(fulltext, fingerprint)
+        fulltext.create_table?(STAMP_TABLE) { String :fingerprint }
+        fulltext[STAMP_TABLE].delete
+        fulltext[STAMP_TABLE].insert(fingerprint: fingerprint)
       end
 
       def create_table(fulltext)

@@ -106,6 +106,8 @@ module Nabu
           "cme" => :edition_year_text,
           "corpus-corporum" => :structured,
           "corpus-gysseling" => :bounds_keys,
+          "corpus-oudfries" => :bounds_keys, # the WITNESS span (manuscript_year_*); the composition
+          #                                    span rides metadata composition_* — not this row
           "corpus-oudnederlands" => :bounds_keys,
           "croala" => :year_range,
           "cs-wikisource" => :edition_year_text,
@@ -307,6 +309,10 @@ module Nabu
           # The Old Dutch witnessLocalization: 7 of the 17 region-bearing
           # works name no place ("Zuid-Nederrijn", "Utrecht") — same rule.
           "corpus-oudnederlands" => %w[place region],
+          # The Corpus Oudfries names no town at all: every witness's
+          # manuscript_region (Emsingo, Rüstringen, West Lauwers …) is the
+          # whole claim — region grain, declared coarse in the posture.
+          "corpus-oudfries" => "region",
           # KorBa's pubPlace role=region (the corpus's own classification
           # of the print/writing place) answers for the 117 of 2,091
           # texts with no role=place town (sejm acts, sermons).

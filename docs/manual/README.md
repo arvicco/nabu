@@ -88,13 +88,15 @@ Sources whose adapter is built but awaits the owner's first sync
   Oudnederlands (Old Dutch 475–1200, TEI, gold lemma+POS; P84-7).
 - [corpus-gysseling.md](corpus-gysseling.md) — INT/IvdNT Corpus Gysseling
   (13th-c. Early Middle Dutch, .fromdb, gold lemma+POS; P84-7).
+- [corpus-oudfries.md](corpus-oudfries.md) — INT/IvdNT Corpus Oudfries
+  (Old Frisian text witnesses c. 1200–1550, TEI, lemma+POS+gloss).
 
 Acquisition overview (spans several corpora; the per-source cards above
-are authoritative for the two built adapters):
+are authoritative for the three built adapters):
 
-- [ivdnt-corpora.md](ivdnt-corpora.md) — the IvdNT/INT Dutch corpora
-  behind the taalmaterialen registration wall (Corpus Gysseling,
-  Corpus Oudnederlands; CRM14 and Corpus Oudfries tracked).
+- [ivdnt-corpora.md](ivdnt-corpora.md) — the IvdNT/INT corpora behind
+  the taalmaterialen registration wall (Corpus Gysseling, Corpus
+  Oudnederlands, Corpus Oudfries; CRM14 tracked).
 
 Tool bootstraps (a one-time local setup a human runs once, not a data
 acquisition — kept here because it is the same "replayable human step"

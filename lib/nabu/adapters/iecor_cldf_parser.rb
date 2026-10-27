@@ -80,7 +80,15 @@ module Nabu
     # tags plus every other variety's ISO/Glottocode — with varieties
     # sharing a code (Greek: Ancient + Greek: New Testament → grc) grouped
     # into ONE deterministic body, so the append-only ledger contract
-    # (append only when the latest body differs) never ping-pongs.
+    # (append only when the latest body differs) never ping-pongs. Each
+    # variety's blurb carries its clade, Glottocode, historical flag, map
+    # reference point (Latitude/Longitude + upstream's loc_justification,
+    # all 160) and — for the 52 historical varieties — the tip-date
+    # calibration prior verbatim (P146). Neither has an axis home here:
+    # the place axis is document-grain (document_axes) or a gazetteer
+    # slice whose namespace the nabu-places registry must mint, and the
+    # dating classes date documents, not a phylogeny's sample ages — so
+    # the language note is the honest variety-metadata surface.
     class IecorCldfParser
       # What one read of a CLDF dir yields: entries for the dictionary
       # shelf, language notes for the ledger accretion.
@@ -105,6 +113,14 @@ module Nabu
         "259" => "sl",    # Slovene: Early Modern
         "298" => "ang",   # Old English
         "303" => "got"    # Gothic
+      }.freeze
+
+      # languages.csv's calibration distributions → their parameter
+      # columns, in render order (the census: 50 Normal, 2 offset
+      # log-normal, 108 modern varieties with none).
+      CALIBRATION_PARAMS = {
+        "Normal" => %w[normalMean normalStDev],
+        "Offset log normal" => %w[logNormalOffset logNormalMean logNormalStDev]
       }.freeze
 
       DICTIONARY_LANGUAGE = "ine"
@@ -360,7 +376,38 @@ module Nabu
         bits << "clade #{clade}" unless clade.empty?
         bits << "Glottocode #{variety['Glottocode']}" unless blank?(variety["Glottocode"])
         bits << (variety["historical"] == "true" ? "historical" : "modern")
-        "#{variety.fetch('Name')} (#{bits.join('; ')})"
+        bits << reference_point(variety)
+        bits << calibration(variety)
+        "#{variety.fetch('Name')} (#{bits.compact.join('; ')})"
+      end
+
+      # The variety's map point (all 160 carry one) with upstream's own
+      # justification of where it was set. A doculect's reference point,
+      # not a findspot: no place-axis row exists at dictionary grain, and
+      # a gazetteer slice would need its own namespace in the nabu-places
+      # registry — so the point rides here, the variety metadata home.
+      def reference_point(variety)
+        lat = Float(variety["Latitude"].to_s, exception: false)
+        lon = Float(variety["Longitude"].to_s, exception: false)
+        return nil unless lat && lon
+
+        why = variety["loc_justification"].to_s.strip
+        why.empty? ? "reference point #{lat}, #{lon}" : "reference point #{lat}, #{lon} (#{why})"
+      end
+
+      # The tip-date calibration prior of a historical variety (52 of 160:
+      # 50 Normal, 2 offset log-normal) — the phylogeny's age prior for the
+      # sample, never a document date, so no date_class fits; the
+      # distribution and its parameters ride verbatim under their column
+      # names (upstream declares no unit).
+      def calibration(variety)
+        distribution = variety["distribution"].to_s.strip
+        return nil if distribution.empty?
+
+        params = CALIBRATION_PARAMS.fetch(distribution, []).filter_map do |column|
+          "#{column} #{variety[column]}" unless blank?(variety[column])
+        end
+        "calibration prior #{distribution}(#{params.join(', ')})"
       end
 
       def blank?(value)

@@ -287,10 +287,11 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   tipitaka-lk:
-    lect: {posture: identity, note: "pli — the Buddha Jayanthi canon and the CST
-        aṭṭhakathā/Visuddhimagga Pāli, one language at source grain (the suttacentral
-        posture); si — the modern Sinhala translation siblings, identity on the registry's
-        si anchor"}
+    # lect declaration retired 2026-10-27: the tipitaka-lk pli → pli~sinh
+    # override (config/lect_overrides.yml) machine-postures the source — the
+    # Pāli's Sinhala surface, expressible since the registry's sinh row; the
+    # si translation siblings stay bare si (no override row). Retired under
+    # the shadowing rule.
     dating: {posture: undatable, note: "the JSON carries no date field of any kind (census
         2026-10-22: filename, bookId, pageOffset, collection, pageNum, entries, footnotes —
         nothing date-shaped); the canon's and the commentaries' composition eras are
@@ -299,8 +300,9 @@ sources:
         (Buddha Jayanti series) but that is the print's provenance, not the texts'"}
     script: {posture: qualified, note: "the Pāli is held in SINHALA script (the BJT's own
         print convention), unlike the library's romanized Pāli (suttacentral); the claim
-        stays plain pli because the registry has no Sinhala script tag yet. The translation
-        is Sinhala in Sinhala script"}
+        is pli~sinh through the tipitaka-lk override (the registry's sinh row, 2026-10-27),
+        byte-checkable by the sinh ScriptCheck property. The translation is Sinhala in
+        Sinhala script, the bare si default"}
   ud:
     kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
         all 36 treebanks) rides each split document as the genre facet, verbatim — never
@@ -371,7 +373,10 @@ sources:
     script: {posture: implied}
   menotec:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: non IS Old Norse}
+    # lect declaration retired 2026-10-27: the menotec-treebank facet rule
+    # (config/lect_facet_rules.yml) machine-postures the source — the six
+    # Norwegian codices onto no:old, the Codex Regius onto isl:old, read
+    # off the adapter's treebank facet. Retired under the shadowing rule.
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -1591,7 +1596,12 @@ sources:
     script: {posture: implied}
   glaux:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+    # lect declaration retired 2026-10-27: the glaux-dialect-* compose rules
+    # (config/lect_facet_rules.yml) machine-posture the source — the per-text
+    # DIALECT label refines each date-banded stage onto the registry's grc
+    # att/ion/dor/aeo varieties. D57-f's source-grain "unstaged" stands: no
+    # source-level stage claim is made; the stage stays the text's own date.
+    # Retired under the shadowing rule.
     dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the per-work
         start_date/end_date signed bounds (all 1,421 docs) via MetadataDates
         :signed_bounds_keys — composition-class rows (date_class
@@ -2097,6 +2107,23 @@ sources:
         translation siblings stay undated by design"}
     places: {posture: unplaced, note: "the edition leaves the place of writing open — Freising or
         Upper Carinthia (bsBK-ovr, Kos's finding 2) — so there is no single claim to carry"}
+    script: {posture: implied}
+  corpus-oudfries:
+    # kind: config/kind_map.yml folds upstream's text_category_1..3 ladder
+    # (metadata genre, every file); lect: ofs is a real nabu-lects anchor
+    # (Old Frisian — glottocode oldf1241, band 1200–1550, the Anglo-Frisian
+    # note in prose), no machine rule/override covers it, so identity is the
+    # honest claim. Upstream's East/West Old Frisian split (119/58 witnesses)
+    # rides the dialect facet; no registry sub-lect exists for it, so it stays
+    # facet-grain, deliberately coarse at the lect layer.
+    lect: {posture: identity, note: "ofs — Old Frisian anchor (nabu-lects); bare code is the claim;
+        the East/West dialect split faceted, not staged"}
+    dating: {posture: dated, note: "every witness carries manuscript_year_from/_to (the WITNESS span,
+        timeline artifact date); the attributed composition span text_year_* (76 of 177) rides
+        metadata as composition_*, not a second axis row"}
+    places: {posture: named, note: "manuscript_region on every witness (Brokmerland, Emsingo, Fivelgo,
+        Hunsingo, Rüstringen, West Lauwers) — REGION grain only, declared coarse: upstream names
+        no town; the region facets"}
     script: {posture: implied}
   corpus-oudnederlands:
     kind: {posture: unclassified}

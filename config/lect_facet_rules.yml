@@ -316,6 +316,34 @@ rules:
     map:
       "dan": "da:old"
 
+  # ── The Menotec treebanks (the INESS treebank name, the adapter's
+  # treebank facet; one treebank = one document). Upstream codes all
+  # seven non, and docs/02-sources.md's own line says the Codex Regius
+  # rides Old Icelandic under that tag. The manuscripts settle each: the
+  # six Norwegian codices — the Old Norwegian Homily Book (AM 619 4to,
+  # c. 1200), Konungs skuggsjá (AM 243 bα fol, c. 1275), the Landslov
+  # (Holm perg 34 4to), the Legendary Óláfs saga (DG 8, c. 1250), and
+  # Pamphilus + Strengleikar (DG 4–7, c. 1270) — are Old Norwegian
+  # (no:old, [1050, 1350]); the Poetic Edda's Codex Regius (GKS 2365 4to,
+  # c. 1270) is an Icelandic manuscript, Old Icelandic (isl:old, [1100,
+  # 1350]) — the held text is the codex's language, whatever the poems'
+  # older and partly Norwegian prehistory. Tier certain: the manuscript's
+  # provenance IS the claim. Per-document grain because the per-source
+  # override grammar keys on (source, code) only, and all seven share non.
+  - id: menotec-treebank
+    tier: certain
+    sources: [menotec]
+    code: non
+    facet: treebank
+    map:
+      "non-edda-regius-dep": "isl:old"
+      "non-homiliebok-dep": "no:old"
+      "non-konungs-skuggsia-dep": "no:old"
+      "non-landslov-holmperg34-dep": "no:old"
+      "non-olavssaga-dep": "no:old"
+      "non-pamphilus-dep": "no:old"
+      "non-strengleikar-dep": "no:old"
+
   # ── Owner-ruled 2026-10-12 (as recorded at the Slavic-cone census;
   # targets minted by the Slavic registry package, in canonical since
   # 2026-10-11): the bg-wikisource chu charters carry the wiki's own
@@ -451,3 +479,61 @@ rules:
       "Mesad_Hashavyahu": "hbo:epi"
       "Pirqe": "heb:rab"
       "Shirata": "heb:rab"
+
+  # ── The GLAUx dialect grid (the treebank's per-text DIALECT field, the
+  # registry's grc att/ion/dor/aeo varieties). Census 2026-10-27, 1,421
+  # texts: Attic 322 · Attic/Koine 416 · Koine 214 · Ionic/Epic 111 ·
+  # Ionic 66 · Doric 45 · Aeolic 2 · unmarked 245. Dialect is regional and
+  # orthogonal to the hom/cla/koi/byz time grid (the registry's grc note),
+  # and the date-band inference already stages ~1,330 of these texts from
+  # their own start/end dates — so these are COMPOSE rules, not maps: the
+  # dialect label refines the dated stage in place (Lysias' grc:cla →
+  # grc:cla/att). A map rule would pre-empt the date band at re-derivation
+  # and trade the stage for a bare grc/att — a loss, not a refinement.
+  # The paired labels resolve exactly as the registry reads them, with the
+  # stage taken from the text's own date: the prefix match carries
+  # "Attic/Koine" to <stage>/att (409 of its 416 are koi-dated → grc:koi/att,
+  # the Atticizing literary Koine) and "Ionic/Epic" to <stage>/ion (the
+  # 24 hom-dated → grc:hom/ion, the epic Kunstsprache; the classical- and
+  # Hellenistic-dated epic — the Hymns, Apollonius — keep their own stage).
+  # Deliberately left alone: plain "Koine" (a STAGE, never a variety — the
+  # date band already carries it), and the ~50 undated dialect-labelled
+  # texts (no stage row to refine; a stage-less grc/att would pre-empt any
+  # future dating, so they stay bare grc). Transcription of upstream's own
+  # labels onto existing registry nodes (the header's rule).
+  - id: glaux-dialect-att
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Attic"
+    variety: att
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+  - id: glaux-dialect-ion
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Ionic"
+    variety: ion
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+  - id: glaux-dialect-dor
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Doric"
+    variety: dor
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+  - id: glaux-dialect-aeo
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Aeolic"
+    variety: aeo
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]

@@ -1460,6 +1460,92 @@ module Store
                    "a non-witness source's refresh must not touch the alignment index"
     end
 
+    # The registry fingerprint (alignment_refs = f(catalog, alignments.yml)):
+    # a sync whose content is unchanged skips the slice, so the registry
+    # edit itself must be what triggers the alignment rebuild.
+    def registry_at(dir, yaml)
+      path = File.join(dir, "alignments.yml")
+      File.write(path, yaml)
+      Nabu::AlignmentRegistry.load(path)
+    end
+
+    def test_the_registry_fingerprint_is_semantic
+      fingerprint = ->(reg) { Nabu::Store::AlignmentIndexer.fingerprint(reg) }
+      Dir.mktmpdir do |dir|
+        first = fingerprint.call(registry_at(dir, ALIGN_REGISTRY_YAML))
+        assert_equal first, fingerprint.call(registry_at(dir, ALIGN_REGISTRY_YAML))
+        assert_equal first, fingerprint.call(registry_at(dir, "# a comment\n#{ALIGN_REGISTRY_YAML}")),
+                     "a comment-only edit derives nothing new"
+        refute_equal first, fingerprint.call(registry_at(dir, ALIGN_REGISTRY_YAML.sub("MARK", "LUKE"))),
+                     "a witness edit is a change"
+      end
+    end
+
+    def test_registry_refresh_is_a_no_op_while_the_registry_is_unchanged
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1.1", text_normalized: "verse", sequence: 0)
+      registry = alignment_registry
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+      @fulltext[:alignment_refs].insert(work: "nt", ref: "SENTINEL", document_urn: "x",
+                                        passage_id: 999, passage_urn: "x", seq: 0)
+
+      assert_nil Nabu::Store::Indexer.refresh_alignment_registry!(
+        catalog: @catalog, fulltext: @fulltext, slug: "s", alignments: alignment_registry
+      )
+      assert_equal 1, @fulltext[:alignment_refs].where(ref: "SENTINEL").count, "the table was left alone"
+    end
+
+    def test_a_changed_registry_rebuilds_only_the_alignment_refs_for_a_witness_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1.1", text_normalized: "verse", sequence: 0)
+      Dir.mktmpdir do |dir|
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                      alignments: registry_at(dir, "{}\n"))
+        assert_equal 0, @fulltext[:alignment_refs].count
+        fts_before = @fulltext[:passages_fts].count
+
+        wired = registry_at(dir, ALIGN_REGISTRY_YAML)
+        assert_equal 1, Nabu::Store::Indexer.refresh_alignment_registry!(
+          catalog: @catalog, fulltext: @fulltext, slug: "s", alignments: wired
+        )
+        assert_equal ["MARK 1.1"], @fulltext[:alignment_refs].select_map(:ref), "the new witness materialized"
+        assert_equal fts_before, @fulltext[:passages_fts].count, "the FTS slice was not touched"
+        assert_nil Nabu::Store::Indexer.refresh_alignment_registry!(
+          catalog: @catalog, fulltext: @fulltext, slug: "s", alignments: wired
+        ), "the stamp advanced: the next sync skips again"
+      end
+    end
+
+    def test_a_changed_registry_clears_a_dropped_witness_on_its_sources_sync
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1.1", text_normalized: "verse", sequence: 0)
+      Dir.mktmpdir do |dir|
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                      alignments: registry_at(dir, ALIGN_REGISTRY_YAML))
+        assert_equal 1, @fulltext[:alignment_refs].count
+
+        assert_equal 0, Nabu::Store::Indexer.refresh_alignment_registry!(
+          catalog: @catalog, fulltext: @fulltext, slug: "s", alignments: registry_at(dir, "{}\n")
+        ), "the source no longer witnesses anything, but its stale refs go"
+        assert_equal 0, @fulltext[:alignment_refs].count
+      end
+    end
+
+    def test_a_changed_registry_leaves_a_non_witness_source_alone
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1.1", text_normalized: "verse", sequence: 0)
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "prose", sequence: 0)
+      Dir.mktmpdir do |dir|
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext,
+                                      alignments: registry_at(dir, "{}\n"))
+
+        assert_nil Nabu::Store::Indexer.refresh_alignment_registry!(
+          catalog: @catalog, fulltext: @fulltext, slug: "lit", alignments: registry_at(dir, ALIGN_REGISTRY_YAML)
+        ), "the witness source's own sync materializes it"
+      end
+    end
+
     def reflex_stats = @fulltext[Nabu::Store::ReflexRootsIndexer::STATS_TABLE]
 
     def test_refresh_rebuilds_the_reflex_stats_when_the_sources_lemma_rows_change

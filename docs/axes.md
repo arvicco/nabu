@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (20): `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `sigla`, `ud`, `vulgate`
+**Members** (21): `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `sigla`, `ud`, `vulgate`
 
 ### romance
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (19): `aspr`, `bosworth-toller`, `cme`, `corpus-gysseling`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `ud`
+**Members** (20): `aspr`, `bosworth-toller`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `ud`
 
 ### celtic
 

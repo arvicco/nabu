@@ -76,6 +76,16 @@ class LectsDriftTest < Minitest::Test
     end
   end
 
+  # The surface-script claim rides the same override grain as the ~latn
+  # rows: tipitaka.lk holds its Pāli in Sinhala letters (the Buddha
+  # Jayanti print), so the source's pli resolves to pli~sinh — a script
+  # the registry's global table must actually carry.
+  def test_tipitaka_lk_pali_claims_its_sinhala_surface
+    assert_equal "pli~sinh", lects.resolve("pli", source: "tipitaka-lk")
+    refute_nil lects.lect("pli~sinh")
+    assert_equal "si", lects.resolve("si", source: "tipitaka-lk"), "the translation stays bare si"
+  end
+
   private
 
   def seed_documents
@@ -121,11 +131,12 @@ class LectsDriftTest < Minitest::Test
                "which is not a lect defined in the nabu-lects registry"
   end
 
-  # A resolved id with no stage/variety/ortho separator is a bare anchor —
-  # the identity default rule (codemap.yml, verbatim: "any code not listed
-  # maps to itself as a bare anchor... Bare-anchor targets need no registry
-  # entry").
+  # A resolved id with no stage/variety/script/ortho separator is a bare
+  # anchor — the identity default rule (codemap.yml, verbatim: "any code
+  # not listed maps to itself as a bare anchor... Bare-anchor targets need
+  # no registry entry"). A ~script claim is NOT bare: its tag must exist in
+  # the global scripts table.
   def bare_identity_anchor?(id)
-    !id.match?(%r{[:/@]})
+    !id.match?(%r{[:/~@]})
   end
 end

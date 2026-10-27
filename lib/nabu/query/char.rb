@@ -46,8 +46,22 @@ module Nabu
         :ids, :components, :variants,
         :readings_ja, :readings_sinoxenic, :pedagogy, :desk_reference,
         :old_chinese, :shuowen, :middle_chinese, :early_japan, :tls, :corpus,
-        :corpus_by_source, :held_shelves
+        :corpus_by_source, :held_shelves, :phonetic_series
       )
+
+      # One 諧聲 phonetic series the glyph belongs to (P146): the Karlgren
+      # GSR series number (the four-digit head of B-S's GSR column — GSR is
+      # ordered by phonetic element) and the OTHER held characters in it.
+      PhoneticSeries = Data.define(:series, :neighbours)
+      # A series neighbour: the glyph, its GSR member codes and its B-S OC
+      # reading(s), file order — a polyphone appears once, readings joined.
+      SeriesMember = Data.define(:glyph, :gsr, :old_chinese)
+
+      # The Baxter-Sagart OC shelf whose `refs: GSR …` line backs the series.
+      SERIES_SLUG = "baxter-sagart-oc"
+      # "refs: GSR 0550h · …" → member code "0550h", series "0550". The
+      # file's 12 "--" rows carry no series and never match.
+      GSR_REF = /^refs: GSR (?<code>(?<series>\d{4})\S*)/
 
       # const: the five HDIC databases as their own diachronic buckets — a
       # fixed shelf-slug list (the P32-4 census), not a corpus count.
@@ -360,7 +374,8 @@ module Nabu
           tls: shelf_entries(by_slug, %w[tls-words tls-concepts]),
           corpus: corpus_attestation(glyph),
           corpus_by_source: corpus_attestation_by_source(glyph),
-          held_shelves: by_slug.keys.sort
+          held_shelves: by_slug.keys.sort,
+          phonetic_series: phonetic_series(glyph, by_slug[SERIES_SLUG] || [])
         )
       end
 
@@ -455,7 +470,8 @@ module Nabu
                .where(Sequel[:dictionaries][:slug] => slug)
                .where(Sequel[:dictionary_entries][:withdrawn] => false)
         rows = rows.where(Sequel.like(Sequel[:dictionary_entries][:body], like)) if like
-        rows.select_map([Sequel[:dictionary_entries][:headword], Sequel[:dictionary_entries][:body]])
+        rows.order(Sequel[:dictionary_entries][:id])
+            .select_map([Sequel[:dictionary_entries][:headword], Sequel[:dictionary_entries][:body]])
       end
 
       def codepoint(glyph) = format("U+%04X", glyph.each_char.first.ord)
@@ -589,6 +605,34 @@ module Nabu
             attestations: result.citations.size
           )
         end
+      end
+
+      # The 諧聲 neighbours: every series the glyph's B-S rows name, each
+      # with the other characters of the SAME shelf carrying that series
+      # number. Precompiled data only — one LIKE-prefiltered read of the
+      # ~5k-row baxter-sagart-oc shelf per series (the dictionary_rows
+      # lane the reading reverse-lookups already use). A series holding
+      # only this glyph is omitted (absent, never an empty row).
+      def phonetic_series(glyph, rows)
+        series = rows.filter_map { |row| row.body.to_s[GSR_REF, :series] }.uniq
+        series.filter_map do |number|
+          members = series_members(number, glyph)
+          PhoneticSeries.new(series: number, neighbours: members) if members.any?
+        end
+      end
+
+      def series_members(number, glyph)
+        by_glyph = {}
+        dictionary_rows(SERIES_SLUG, "%refs: GSR #{number}%").each do |headword, body|
+          match = body.to_s.match(GSR_REF)
+          next unless match && match[:series] == number && headword != glyph
+
+          member = (by_glyph[headword] ||= { gsr: [], oc: [] })
+          member[:gsr] << match[:code]
+          oc = body[/^OC: (.+)$/, 1]
+          member[:oc] << oc if oc && !member[:oc].include?(oc)
+        end
+        by_glyph.map { |g, m| SeriesMember.new(glyph: g, gsr: m[:gsr], old_chinese: m[:oc]) }
       end
 
       # Corpus attestation: passages carrying the glyph, per passage
