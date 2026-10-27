@@ -185,6 +185,24 @@ class IecorCldfParserTest < Minitest::Test
     assert_includes chu.body, "Balto-Slavic"
   end
 
+  # languages.csv's Latitude/Longitude (+ loc_justification) and the 52
+  # historical varieties' tip-date calibration priors ride the variety
+  # blurb verbatim — upstream states no unit, so none is claimed.
+  def test_language_notes_carry_the_reference_point_and_the_calibration_prior
+    notes = result.language_notes
+    hit = notes.find { |n| n.lang_code == "hit" }.body
+    assert_includes hit, "reference point 40.01, 34.62 (Site of Boğhazkale (Boğhazköy)"
+    assert_includes hit, "calibration prior Normal(normalMean 3450, normalStDev 125)"
+
+    san = notes.find { |n| n.lang_code == "san" }.body
+    assert_includes san, "calibration prior Offset log normal(logNormalOffset 3000, logNormalMean 700, " \
+                         "logNormalStDev 0.8)"
+
+    lit = notes.find { |n| n.lang_code == "lit" }.body
+    assert_includes lit, "reference point 54.84, 23.17"
+    refute_includes lit, "calibration", "a modern variety carries no prior"
+  end
+
   def test_read_is_deterministic_across_passes
     first = Nabu::Adapters::IecorCldfParser.new.read(FIXTURES)
     second = Nabu::Adapters::IecorCldfParser.new.read(FIXTURES)
