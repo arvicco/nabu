@@ -7,7 +7,14 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-10-22** — the Linear A package (the parentless `lab`
+- **Retrieved 2026-10-27** — the Iron Age Hebrew package (the obm
+  Moabite anchor, parent sem, with its Garr 1985 dialect-geography
+  note, and the hbo:epi Epigraphic Hebrew stage, band [-1000, -586],
+  Gogel 1998), copied verbatim from canonical/nabu-lects (commit
+  `4efe41b800ba`, `main`). `lects.yml` 176,356 B, sha256
+  `7b96c52eed90ac43a74451fe77920d88d5617c1e6c4826c092e1ff71d18c2071`;
+  `codemap.yml` unchanged from the previous cut.
+- Previously retrieved 2026-10-22 — the Linear A package (the parentless `lab`
   anchor under the no-classification discipline, plus the lina / linb /
   cprt rows in the global scripts table), copied verbatim from
   canonical/nabu-lects (commit `9aec64ea1db4`, `main`); the same tree
