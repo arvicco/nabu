@@ -137,6 +137,26 @@ class ExportCommandTest < Minitest::Test
     end
   end
 
+  def test_stratified_passages_write_a_sample_table_and_refuse_stray_flags
+    with_export_env do |config|
+      argv = %w[export passages --stratum language --per-cell 1 --format csv --exclude-ocr]
+      out, err, status = with_config(config) { run_cli(argv) }
+      assert_nil status, err
+      assert_match(/passage_sample: 2 rows .*passage_sample\.csv/, out)
+      table = CSV.read(File.join(config.exports_dir, "passage_sample.csv"), headers: true)
+      assert_equal(%w[grc lat], table.map { |row| row["language"] })
+      assert_equal(%w[1 1], table.map { |row| row["cell_sampled"] })
+      manifest = YAML.safe_load_file(File.join(config.exports_dir, "passage_sample.manifest.yml"))
+      assert_equal 0, manifest.dig("notes", "ocr_documents_excluded")
+      _out, err, status = with_config(config) { run_cli(%w[export passages --format plain --per-cell 3]) }
+      assert_equal 1, status
+      assert_match(/--per-cell needs --stratum/, err)
+      _out, err, status = with_config(config) { run_cli(%w[export passages --stratum era --format csv]) }
+      assert_equal 1, status
+      assert_match(/unknown stratum "era"/, err)
+    end
+  end
+
   def test_help_carries_the_new_kinds_with_examples
     out, _err, _status = run_cli(%w[help export])
     %w[align collation].each { |name| assert_match(/export #{name}/, out) }
@@ -144,6 +164,9 @@ class ExportCommandTest < Minitest::Test
     assert_match(/nabu export align MARK 2 --with-morph/, out)
     out, _err, _status = run_cli(%w[export collation --help])
     assert_match(/nabu export collation MARK 2/, out)
+    out, _err, _status = run_cli(%w[export passages --help])
+    assert_match(/--stratum language,century,script/, out)
+    assert_match(/--exclude-ocr/, out)
   end
 
   private
