@@ -303,6 +303,14 @@ class FacetMapTest < Minitest::Test
     assert_equal({ "place_key" => "findspot" }, map.fields_for("dharma-deccan"))
   end
 
+  # The Corpus Oudfries header ladder: region, dialect, manuscript and the
+  # three-level genre (an array — one row per level) on every witness.
+  def test_shipped_config_projects_the_oudfries_header
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "region" => "region", "dialect" => "dialect", "manuscript" => "manuscript",
+                   "genre" => "genre" }, map.fields_for("corpus-oudfries"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)

@@ -1179,6 +1179,32 @@ corpus-gysseling:
   # place/region code tables the adapter resolves) into incoming/
   # corpus-gysseling/. See docs/manual/corpus-gysseling.md.
 
+corpus-oudfries:
+  adapter: Nabu::Adapters::CorpusOudfries
+  adopted: "2026-10-27"
+  axes: [germanic]
+  wired: false   # until the first real sync is verified. Expected (full-archive
+                   # parse 2026-10-27): 177 docs / 14,136 passages / 235,462
+                   # tokens, 0 quarantines; README.txt skipped by rule; 18
+                   # word-less <l> lines skipped by rule.
+  sync_policy: manual
+  # The INT/IvdNT Corpus Oudfries v1.0 (hdl 10032/tm-a3-f6), compiled and
+  # annotated by Rita van de Poel (Leiden PhD): 177 Old Frisian (ofs) text
+  # witnesses c. 1200–1550 from 11 manuscripts (114 distinct texts, mostly
+  # the customary laws — the Seventeen Statutes, the Twenty-four Landlaws,
+  # the compensation registers), lemma + PoS + gloss. LICENSE: the corpus
+  # owner's release permission, communicated by INT by email, 2026-10-09;
+  # published in the INT Taalmaterialen catalogue 2026-10-23;
+  # catalogued "Niet-commercieel (non-commercial)", no redistribution grant,
+  # the archive itself carries no licence member → the sibling INT posture,
+  # research_private (never served to third parties, never redistributed);
+  # the Oudfries-specific checkbox text was not captured at download — the
+  # Gysseling/Oudnederlands INT terms stand as the terms evidence. NO corpus
+  # bytes in git (fixtures under gitignored local/fixtures/). ACQUISITION:
+  # Manual Adapter — the owner drops upstream's own CorpusOudfries1.0.zip
+  # into incoming/corpus-oudfries/; the ZIP is the canonical asset. See
+  # docs/manual/corpus-oudfries.md.
+
 corpus-oudnederlands:
   adapter: Nabu::Adapters::CorpusOudnederlands
   adopted: "2026-08-27"

@@ -161,6 +161,13 @@ sources:
       #                         name …) — the findspot's IDENTITY, folding the name's spelling
       #                         variants (Karle/Kārle); verbatim, never a gazetteer ref
       #                         (place_ref stays NULL for the registry's decisions to fill)
+  corpus-oudfries:            # census 2026-10-27 (full archive, 177 witnesses):
+    fields: #                   region on ALL — West Lauwers 58 · Emsingo 36 · Rüstringen 31 ·
+      region: region          # Fivelgo 27 · Hunsingo 22 · Brokmerland 3; dialect on ALL —
+      dialect: dialect        # East Old Frisian 119 · West Old Frisian 58; the manuscript on
+      manuscript: manuscript  # ALL (12 codices: Jus Municipale Frisonum 47 · Fivelgo MS 27 · First
+      #                         Rüstringen MS 23 · First Emsingo MS 21 …); genre = the
+      genre: genre            # text_category_1..3 ladder, one row per level (folded by kind_map)
   corpus-oudnederlands:       # 17 of 89 works carry the witnessLocalization region
     fields: #                   (Groningen 5 · Zuid-Nederrijn 4 · Friesland 2 …); the place
       region: region          # lane falls back to it for the 7 place-less ones

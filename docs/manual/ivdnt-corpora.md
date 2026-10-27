@@ -17,8 +17,10 @@ Targets:
   475–1200 (v1.0 published 2026), the Old Dutch corpus.
 - **CRM14** (Corpus Van Reenen–Mulder, 14th-c. charters) — not in the
   logged-out catalog; see below.
-- **Corpus Oudfries** — pending its upstream owners (INT will
-  report); nothing to do yet.
+- **Corpus Oudfries** — 177 Old Frisian text witnesses c. 1200–1550
+  (v1.0, hdl 10032/tm-a3-f6, published in the catalogue 2026-10-23 with
+  the corpus owner's permission); its own card is
+  [corpus-oudfries.md](corpus-oudfries.md).
 
 ## Steps
 
@@ -30,6 +32,8 @@ Targets:
    <https://taalmaterialen.ivdnt.org/download/tstc-corpus-gysseling/>.
 4. **Corpus Oudnederlands:** open
    <https://taalmaterialen.ivdnt.org/download/corpus-oudnederlands-download/>.
+   **Corpus Oudfries:** open
+   <https://taalmaterialen.ivdnt.org/download/corpus-oudfries-download/>.
 5. **License capture — the critical step:** each download page shows
    its license terms at a checkbox before the download. CAPTURE THE
    LICENSE NAME AND TEXT VERBATIM (copy the text or screenshot it)
@@ -59,8 +63,9 @@ first acquisition, in the manual-drop class): until they land, the
 archives go to the repo's gitignored intake folder (`.docs/inbox/`)
 untouched. Once the adapters exist, drops go to
 `incoming/<slug>/` per their ManualDrop instruction cards
-(expected slugs: corpus-gysseling, corpus-oudnederlands), and this
-document gets updated to match — the suite pins the agreement.
+(slugs: corpus-gysseling, corpus-oudnederlands, corpus-oudfries — the
+last keeps upstream's own archive name, `CorpusOudfries1.0.zip`), and
+this document gets updated to match — the suite pins the agreement.
 
 ## Refresh
 

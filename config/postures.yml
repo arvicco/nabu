@@ -2098,6 +2098,23 @@ sources:
     places: {posture: unplaced, note: "the edition leaves the place of writing open — Freising or
         Upper Carinthia (bsBK-ovr, Kos's finding 2) — so there is no single claim to carry"}
     script: {posture: implied}
+  corpus-oudfries:
+    # kind: config/kind_map.yml folds upstream's text_category_1..3 ladder
+    # (metadata genre, every file); lect: ofs is a real nabu-lects anchor
+    # (Old Frisian — glottocode oldf1241, band 1200–1550, the Anglo-Frisian
+    # note in prose), no machine rule/override covers it, so identity is the
+    # honest claim. Upstream's East/West Old Frisian split (119/58 witnesses)
+    # rides the dialect facet; no registry sub-lect exists for it, so it stays
+    # facet-grain, deliberately coarse at the lect layer.
+    lect: {posture: identity, note: "ofs — Old Frisian anchor (nabu-lects); bare code is the claim;
+        the East/West dialect split faceted, not staged"}
+    dating: {posture: dated, note: "every witness carries manuscript_year_from/_to (the WITNESS span,
+        timeline artifact date); the attributed composition span text_year_* (76 of 177) rides
+        metadata as composition_*, not a second axis row"}
+    places: {posture: named, note: "manuscript_region on every witness (Brokmerland, Emsingo, Fivelgo,
+        Hunsingo, Rüstringen, West Lauwers) — REGION grain only, declared coarse: upstream names
+        no town; the region facets"}
+    script: {posture: implied}
   corpus-oudnederlands:
     kind: {posture: unclassified}
     # P84-7: odt is a real nabu-lects anchor (Old Dutch), so identity is
