@@ -602,7 +602,21 @@ anchors:
   hbo:
     name: Biblical Hebrew
     parent: sem
-    note: "Canaanite, Northwest Semitic; the language of the Hebrew Bible"
+    stages:
+      epi: {name: Epigraphic Hebrew, band: [-1000, -586], ord: 10,
+            band_note: "the Iron Age II inscriptional corpus — Gezer, Samaria,
+                Kuntillet Ajrud, Siloam, Arad, Lachish, Mesad Hashavyahu,
+                Ketef Hinnom; Gogel 1998 is the reference grammar. The band
+                closes at the fall of Jerusalem (586 BCE); pre-exilic
+                vernacular beside (and occasionally against) the later
+                Masoretic literary register"}
+    note: "Canaanite, Northwest Semitic; the language of the Hebrew Bible.
+           The epi stage carries the Iron Age inscriptions as their own
+           register — consonantal, in the Old Hebrew (Paleo-Hebrew) script,
+           attested on ostraca, tomb and tunnel inscriptions and amulets;
+           the bare hbo claim stays the biblical/Qumran literary default.
+           Corpus: extrabiblical's epigraphic books (Arad, Lachish, Ajrud,
+           Siloam, Ketef Hinnom, Mesad Hashavyahu; censused 2026-10-22)"
 
   heb:
     name: Hebrew
@@ -610,6 +624,20 @@ anchors:
     stages:
       rab: {name: Rabbinic Hebrew, ord: 10}
       med: {name: Medieval Hebrew, ord: 20}
+
+  obm:
+    name: Moabite
+    glottocode: moab1234
+    parent: sem
+    note: "Canaanite, Northwest Semitic — the language of the Mesha Stele
+           (c. 850–830 BCE, Dibon/Dhiban) plus a handful of seals and
+           fragments; effectively a single-monument language. Within
+           Canaanite it stands closest to Hebrew (shared relative markers,
+           the masc. plural in -n with Aramaic — Garr 1985 maps the dialect
+           geography); written in the Phoenician-derived Moabite lapidary
+           script. Corpus: extrabiblical's mesa book (the stele's 39 lines).
+           'obm' is the ISO 639-3 code"
+    # no stages — one monument does not stage
 
   xna:
     name: Ancient North Arabian
