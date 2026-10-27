@@ -353,7 +353,13 @@ module Nabu
         entry.requires.each do |dep|
           next if by_slug.key?(dep)
 
-          raise ValidationError, "source #{entry.slug.inspect}: requires unknown source #{dep.inspect}"
+          # The registry refuses to load — every command fails — so the
+          # message carries both ways out (a source retirement sweeps
+          # required_by first; architecture §5).
+          raise ValidationError,
+                "source #{entry.slug.inspect}: requires unknown source #{dep.inspect} — " \
+                "drop #{dep.inspect} from #{entry.slug.inspect}'s requires:, or restore the " \
+                "#{dep.inspect} row (config/sources.yml)"
         end
       end
       state = {}
@@ -751,7 +757,9 @@ module Nabu
     # The transitive closure of +slugs+ over `requires:` (P77-r3) — the
     # package-manager expansion: the named slugs plus every requirement
     # down the chain, deduped, discovery order. Unknown slugs pass
-    # through untouched (the caller's drift handling owns them).
+    # through untouched (the caller's drift handling owns them) — a
+    # NAMED slug only: an unknown REQUIREMENT is unreachable here, since
+    # validate_requires! refuses it at load. Defensive, not a contract.
     def requires_closure(slugs)
       seen = []
       queue = slugs.dup
