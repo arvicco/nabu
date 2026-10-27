@@ -1591,7 +1591,12 @@ sources:
     script: {posture: implied}
   glaux:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+    # lect declaration retired 2026-10-27: the glaux-dialect-* compose rules
+    # (config/lect_facet_rules.yml) machine-posture the source — the per-text
+    # DIALECT label refines each date-banded stage onto the registry's grc
+    # att/ion/dor/aeo varieties. D57-f's source-grain "unstaged" stands: no
+    # source-level stage claim is made; the stage stays the text's own date.
+    # Retired under the shadowing rule.
     dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the per-work
         start_date/end_date signed bounds (all 1,421 docs) via MetadataDates
         :signed_bounds_keys — composition-class rows (date_class
