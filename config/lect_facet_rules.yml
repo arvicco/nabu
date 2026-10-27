@@ -316,6 +316,34 @@ rules:
     map:
       "dan": "da:old"
 
+  # ── The Menotec treebanks (the INESS treebank name, the adapter's
+  # treebank facet; one treebank = one document). Upstream codes all
+  # seven non, and docs/02-sources.md's own line says the Codex Regius
+  # rides Old Icelandic under that tag. The manuscripts settle each: the
+  # six Norwegian codices — the Old Norwegian Homily Book (AM 619 4to,
+  # c. 1200), Konungs skuggsjá (AM 243 bα fol, c. 1275), the Landslov
+  # (Holm perg 34 4to), the Legendary Óláfs saga (DG 8, c. 1250), and
+  # Pamphilus + Strengleikar (DG 4–7, c. 1270) — are Old Norwegian
+  # (no:old, [1050, 1350]); the Poetic Edda's Codex Regius (GKS 2365 4to,
+  # c. 1270) is an Icelandic manuscript, Old Icelandic (isl:old, [1100,
+  # 1350]) — the held text is the codex's language, whatever the poems'
+  # older and partly Norwegian prehistory. Tier certain: the manuscript's
+  # provenance IS the claim. Per-document grain because the per-source
+  # override grammar keys on (source, code) only, and all seven share non.
+  - id: menotec-treebank
+    tier: certain
+    sources: [menotec]
+    code: non
+    facet: treebank
+    map:
+      "non-edda-regius-dep": "isl:old"
+      "non-homiliebok-dep": "no:old"
+      "non-konungs-skuggsia-dep": "no:old"
+      "non-landslov-holmperg34-dep": "no:old"
+      "non-olavssaga-dep": "no:old"
+      "non-pamphilus-dep": "no:old"
+      "non-strengleikar-dep": "no:old"
+
   # ── Owner-ruled 2026-10-12 (as recorded at the Slavic-cone census;
   # targets minted by the Slavic registry package, in canonical since
   # 2026-10-11): the bg-wikisource chu charters carry the wiki's own

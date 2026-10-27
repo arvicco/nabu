@@ -373,7 +373,10 @@ sources:
     script: {posture: implied}
   menotec:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: non IS Old Norse}
+    # lect declaration retired 2026-10-27: the menotec-treebank facet rule
+    # (config/lect_facet_rules.yml) machine-postures the source — the six
+    # Norwegian codices onto no:old, the Codex Regius onto isl:old, read
+    # off the adapter's treebank facet. Retired under the shadowing rule.
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
