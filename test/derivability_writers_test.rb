@@ -182,7 +182,11 @@ class DerivabilityWritersTest < Minitest::Test
   # etruscan_loans vendors its repo-curated config/etruscan_loans.yml into
   # canonical/etruscan-loans/ (byte copy, tmp+rename) inside Adapter#fetch —
   # the sabellic_loans law kind (a declared materialization of the curation).
+  # dprr writes its two SPARQL answers (persons.json, dates.json) and the
+  # .dprr-fetch.json state pin into canonical/dprr/ inside Adapter#fetch —
+  # the cbdb law kind (the fetched asset, verbatim).
   WRITER_ALLOWLIST = %w[
+    nabu/adapters/dprr.rb
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/etruscan_loans.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb

@@ -1,0 +1,244 @@
+{
+ "head": {
+  "vars": [
+   "person",
+   "id",
+   "dprrId",
+   "name",
+   "praenomen",
+   "praenomenAbbr",
+   "nomen",
+   "cognomen",
+   "otherNames",
+   "filiation",
+   "sex",
+   "eraFrom",
+   "eraTo",
+   "highestOffice"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "praenomen": {
+     "type": "literal",
+     "value": "Lucius"
+    },
+    "dprrId": {
+     "type": "literal",
+     "value": "IUNI0001"
+    },
+    "praenomenAbbr": {
+     "type": "literal",
+     "value": "L."
+    },
+    "sex": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Sex/Male"
+    },
+    "highestOffice": {
+     "type": "literal",
+     "value": "cos. 509"
+    },
+    "eraFrom": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-540"
+    },
+    "eraTo": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-509"
+    },
+    "filiation": {
+     "type": "literal",
+     "value": "M. f."
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1"
+    },
+    "nomen": {
+     "type": "literal",
+     "value": "Iunius"
+    },
+    "cognomen": {
+     "type": "literal",
+     "value": "Brutus"
+    },
+    "name": {
+     "type": "literal",
+     "value": "IUNI0001 L. Iunius (46a, Supb. 5.356ff.) M. f. Brutus"
+    },
+    "id": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "praenomen": {
+     "type": "literal",
+     "value": "-."
+    },
+    "dprrId": {
+     "type": "literal",
+     "value": "FURI0146"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/146"
+    },
+    "praenomenAbbr": {
+     "type": "literal",
+     "value": "-."
+    },
+    "nomen": {
+     "type": "literal",
+     "value": "(Furius?)"
+    },
+    "cognomen": {
+     "type": "literal",
+     "value": "Carve(tus)"
+    },
+    "sex": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Sex/Male"
+    },
+    "highestOffice": {
+     "type": "literal",
+     "value": "cos. 458"
+    },
+    "name": {
+     "type": "literal",
+     "value": "FURI0146 -. (Furius?) (3.1968) Carve(tus)"
+    },
+    "eraFrom": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-500"
+    },
+    "id": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "146"
+    },
+    "eraTo": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-458"
+    }
+   },
+   {
+    "praenomen": {
+     "type": "literal",
+     "value": "Lucius"
+    },
+    "dprrId": {
+     "type": "literal",
+     "value": "CORN1016"
+    },
+    "praenomenAbbr": {
+     "type": "literal",
+     "value": "L."
+    },
+    "sex": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Sex/Male"
+    },
+    "highestOffice": {
+     "type": "literal",
+     "value": "cos. 190"
+    },
+    "eraFrom": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-230"
+    },
+    "eraTo": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-125"
+    },
+    "filiation": {
+     "type": "literal",
+     "value": "P. f. L. n."
+    },
+    "otherNames": {
+     "type": "literal",
+     "value": "Asiaticus"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1016"
+    },
+    "nomen": {
+     "type": "literal",
+     "value": "Cornelius"
+    },
+    "cognomen": {
+     "type": "literal",
+     "value": "Scipio"
+    },
+    "name": {
+     "type": "literal",
+     "value": "CORN1016 L. Cornelius (337) P. f. L. n. Scipio Asiaticus"
+    },
+    "id": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1016"
+    }
+   },
+   {
+    "praenomen": {
+     "type": "literal",
+     "value": "-."
+    },
+    "dprrId": {
+     "type": "literal",
+     "value": "AEMI1698"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1698"
+    },
+    "praenomenAbbr": {
+     "type": "literal",
+     "value": "-."
+    },
+    "nomen": {
+     "type": "literal",
+     "value": "Aemilia"
+    },
+    "sex": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Sex/Female"
+    },
+    "highestOffice": {
+     "type": "literal",
+     "value": "vestal. 115"
+    },
+    "name": {
+     "type": "literal",
+     "value": "AEMI1698  Aemilia (153)"
+    },
+    "eraFrom": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-140"
+    },
+    "id": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1698"
+    },
+    "eraTo": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-114"
+    }
+   }
+  ]
+ }
+}

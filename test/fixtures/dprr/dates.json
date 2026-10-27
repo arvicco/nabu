@@ -1,0 +1,169 @@
+{
+ "head": {
+  "vars": [
+   "date",
+   "person",
+   "type",
+   "value",
+   "interval",
+   "uncertain"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "date": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateInformation/1167"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1698"
+    },
+    "interval": {
+     "type": "literal",
+     "value": "B"
+    },
+    "type": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateType/1"
+    },
+    "value": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-140"
+    },
+    "uncertain": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+     "type": "literal",
+     "value": "true"
+    }
+   },
+   {
+    "date": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateInformation/185"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/146"
+    },
+    "interval": {
+     "type": "literal",
+     "value": "S"
+    },
+    "type": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateType/2"
+    },
+    "value": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-458"
+    }
+   },
+   {
+    "date": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateInformation/299"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1698"
+    },
+    "interval": {
+     "type": "literal",
+     "value": "S"
+    },
+    "type": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateType/4"
+    },
+    "value": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-114"
+    }
+   },
+   {
+    "date": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateInformation/481"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1"
+    },
+    "interval": {
+     "type": "literal",
+     "value": "S"
+    },
+    "type": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateType/1"
+    },
+    "value": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-540"
+    },
+    "uncertain": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+     "type": "literal",
+     "value": "true"
+    }
+   },
+   {
+    "date": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateInformation/482"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1"
+    },
+    "interval": {
+     "type": "literal",
+     "value": "S"
+    },
+    "type": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateType/4"
+    },
+    "value": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-509"
+    }
+   },
+   {
+    "date": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateInformation/5"
+    },
+    "person": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/Person/1016"
+    },
+    "interval": {
+     "type": "literal",
+     "value": "S"
+    },
+    "type": {
+     "type": "uri",
+     "value": "http://romanrepublic.ac.uk/rdf/entity/DateType/1"
+    },
+    "value": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "-230"
+    },
+    "uncertain": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+     "type": "literal",
+     "value": "true"
+    }
+   }
+  ]
+ }
+}
