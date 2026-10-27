@@ -106,6 +106,60 @@ module Store
       assert_equal "owner", remaining.first[:basis], "hand rulings never superseded by a rule re-run"
     end
 
+    # -- rederive: compose rules refine AFTER date-band inference ---------------
+    #
+    # A compose rule refines a variety onto an existing STAGE row, and the
+    # date-band inference is one of the bases it composes onto (a dated
+    # glaux text: rule:date-band grc:cla, + its Attic dialect label →
+    # grc:cla/att). Re-deriving must therefore run the compose rules after
+    # infer-dates, or the rebuild sees no stage row and the variety is lost
+    # — the live journal (rules applied over standing date rows) and the
+    # rebuilt one would disagree.
+    RederiveConfig = Struct.new(:lect_rulings_paths, :lect_facet_rules_paths, :canonical_dir,
+                                :lect_overrides_paths, :lects_journal_path, keyword_init: true)
+
+    def test_rederive_composes_varieties_onto_date_band_stages
+      Dir.mktmpdir do |dir|
+        rules = File.join(dir, "rules.yml")
+        File.write(rules, <<~YAML)
+          rules:
+            - id: glaux-attic
+              tier: certain
+              kind: compose
+              sources: [glaux]
+              code: grc
+              facet: dialect
+              match_prefix: "Attic"
+              variety: att
+              onto: ["grc:cla", "grc:koi"]
+        YAML
+        config = RederiveConfig.new(
+          lect_rulings_paths: [File.join(dir, "absent.yml")], lect_facet_rules_paths: [rules],
+          canonical_dir: File.dirname(Nabu::TestSupport.fixtures("nabu-lects")),
+          lect_overrides_paths: [], lects_journal_path: File.join(dir, "absent.sqlite3")
+        )
+        catalog = Nabu::Store.connect("sqlite::memory:")
+        Nabu::Store.migrate!(catalog)
+        glaux = catalog[:sources].insert(slug: "glaux", name: "GLAUx", adapter_class: "X", license_class: "open")
+        seed = lambda do |urn, dialect, from, to|
+          doc = catalog[:documents].insert(source_id: glaux, urn: urn, language: "grc", content_sha256: "x")
+          catalog[:document_facets].insert(document_id: doc, facet: "dialect", value: dialect)
+          catalog[:document_axes].insert(document_id: doc, not_before: from, not_after: to, axis_source: "glaux")
+        end
+        seed.call("urn:t:glaux:lys", "Attic", -403, -380)
+        seed.call("urn:t:glaux:luc", "Attic/Koine", 150, 180)
+
+        counts = Nabu::Store::LectJournal.rederive!(@db, catalog: catalog, config: config)
+
+        assert_equal 2, counts[:dates]
+        assert_equal "grc:cla/att", @db[:lect_assignments].first(urn: "urn:t:glaux:lys")[:lect_id]
+        luc = @db[:lect_assignments].first(urn: "urn:t:glaux:luc")
+        assert_equal "grc:koi/att", luc[:lect_id]
+        assert_equal "rule:date-band", luc[:basis], "the composed row keeps its base basis"
+        catalog.disconnect
+      end
+    end
+
     # -- the read side --------------------------------------------------------
 
     def test_overlay_for_returns_the_code_to_lect_map
