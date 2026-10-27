@@ -1756,7 +1756,8 @@ sources:
         kan → kn, san-Latn); plus pra-Latn (row), nld-Latn (nld → nl), lat-Latn (row),
         ara-Latn (ara) and fas-Latn (upstream's 639-2/B per-Latn, aliased; fas → fa) on
         held anchors; Tamil stages unminted, the bare anchor declared coarse; mar-Latn (4)
-        and sin-Latn (1) quarantine until mr/si anchors are minted"}
+        and sin-Latn (1) resolve on mr/si since the 2026-10-21 mint (mar/sin codemap
+        rows held; the adapter admits both codes)"}
     dating: {posture: partial, note: "no origDate in any header; the SII headings' own
         dating is mined in both layers: the editor's A.D. conversion, else a Śaka year via
         config/eras.yml (spelled out or SII 10's 'Ś. NNNN'), else the summary's single
