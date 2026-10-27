@@ -219,7 +219,10 @@ nt:
     # drift; spot-check Psalms/Jeremiah first (the P11-5 clean-books-first
     # precedent), recorded as v2 in the P17-1 findings. The spot-check ran
     # 2026-10-22 (verdicts beside the psalms work below): only the Sahidic
-    # psalter is wired.
+    # psalter is wired. P145 (2026-10-27) wired the Bohairic OT's 20
+    # spot-checked books into the ot work (verdicts beside that entry). The
+    # Bohairic NT below cites zero-padded chapters ("01.1"). Until the
+    # cts-verse extractor folded them, its chapters 1-9 never co-aligned.
     - label: sahidica NT (Sahidic Coptic)
       extractor: cts-verse
       documents:
@@ -654,6 +657,73 @@ ot:
         ZEP: urn:nabu:peshitta:zf
         HAG: urn:nabu:peshitta:hg
         ZEC: urn:nabu:peshitta:sa    # upstream's own siglum for Zechariah
+    # P145: the BOHAIRIC OT (Coptic Scriptorium's bohairic.ot, attribution
+    # class per document), the ot hub's COPTIC leg. Its citations are
+    # zero-padded upstream ("01.1"), and the cts-verse extractor folds them
+    # to the citation number. The versification spot-check ran read-only
+    # against the held catalog on 2026-10-27. Per book it compared
+    # chapter-grain verse sets with every held witness, then checked verse
+    # content at the beginning, middle and end and at the known split
+    # points.
+    #
+    # The Bohairic cites the GREEK/VULGATE scheme wherever the MT splits,
+    # so it aligns directly beside Swete with no remap: JON 2.1 is the fish
+    # verse, JOL has 3 chapters and MAL 4, and DEU 13.1 (the prophet),
+    # ISA 9.6 (the child), HOS 2.1 and ZEC 2.1 carry the LXX/Vulgate text.
+    #
+    # ALIGNED (20 books, 10,493 verses). The best-matching held scheme's
+    # exact chapter verse sets, per book:
+    #   GEN 46/50   EXO 33/40   LEV 27/27   NUM 34/36   DEU 34/34
+    #   JOB 37/42   ISA 63/66   EZK 46/48   HOS 13/14   JOL 3/3
+    #   AMO 9/9     OBA 1/1     JON 4/4     MIC 7/7     NAM 3/3
+    #   HAB 3/3     ZEP 3/3     HAG 2/2     ZEC 14/14   MAL 4/4
+    # Residuals are mostly a one-verse difference at a chapter's end. Two
+    # are chapter-local, and both repeat a divergence the hub's own
+    # witnesses already carry against each other, never a new one:
+    #   - EXO 36-39 follow Swete's LXX order of the tabernacle account
+    #     (BOH 37.1 is "the ten curtains" = Swete 37.1, where the Vulgate
+    #     and MT have the ark).
+    #   - LEV 5-6 follow the MT (BOH 6.10 = MT 6.10, Swete's 6.17).
+    # So those chapters co-align with one tradition and sit off against
+    # the other, exactly as Swete and the MT already do.
+    #
+    # HELD OUT, with evidence:
+    #   - LAM (ot.lam.bohairic_ed): chapter 3's acrostic drifts against
+    #     every witness (BOH 3.30 carries Kaph where Swete's 3.30 is Yod;
+    #     Tsade sits at BOH 3.50, not 3.52), so 64 verses would pair the
+    #     wrong text; chapters 1 and 5 add title verses (.0).
+    #   - DAN (ot.dan.bohairic_ed): its own 19-chapter sectioning. Chapter
+    #     3 stops at the furnace (24 verses), BOH 4.1 is Azariah's prayer
+    #     and BOH 7.1 is Belshazzar's feast; 2 of 19 chapters match any
+    #     witness.
+    #   - JER and the psalter: the P144 verdicts recorded beside the
+    #     psalms work below.
+    # The standalone gold Jonah (ot.Jonah.bohairic_ed, the bohairic-jonah
+    # corpus) stays out under the one-witness-per-edition rule, like the
+    # nt.mark.sahidica_ed precedent: the OT-corpus Jonah is this column's.
+    - label: Bohairic OT (Coptic Scriptorium)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:coptic-scriptorium:ot.gen.bohairic_ed
+        EXO: urn:nabu:coptic-scriptorium:ot.exod.bohairic_ed
+        LEV: urn:nabu:coptic-scriptorium:ot.lev.bohairic_ed
+        NUM: urn:nabu:coptic-scriptorium:ot.num.bohairic_ed
+        DEU: urn:nabu:coptic-scriptorium:ot.deut.bohairic_ed
+        JOB: urn:nabu:coptic-scriptorium:ot.job.bohairic_ed
+        HOS: urn:nabu:coptic-scriptorium:ot.hos.bohairic_ed
+        AMO: urn:nabu:coptic-scriptorium:ot.amos.bohairic_ed
+        MIC: urn:nabu:coptic-scriptorium:ot.mic.bohairic_ed
+        JOL: urn:nabu:coptic-scriptorium:ot.joel.bohairic_ed   # 3 chapters (Greek)
+        OBA: urn:nabu:coptic-scriptorium:ot.obad.bohairic_ed
+        JON: urn:nabu:coptic-scriptorium:ot.jonah.bohairic_ed  # 2.1 = the fish verse (Greek)
+        NAM: urn:nabu:coptic-scriptorium:ot.nah.bohairic_ed
+        HAB: urn:nabu:coptic-scriptorium:ot.hab.bohairic_ed
+        ZEP: urn:nabu:coptic-scriptorium:ot.zeph.bohairic_ed
+        HAG: urn:nabu:coptic-scriptorium:ot.hag.bohairic_ed
+        ZEC: urn:nabu:coptic-scriptorium:ot.zach.bohairic_ed   # upstream's own tail
+        MAL: urn:nabu:coptic-scriptorium:ot.mal.bohairic_ed    # 4 chapters (Greek)
+        ISA: urn:nabu:coptic-scriptorium:ot.isa.bohairic_ed
+        EZK: urn:nabu:coptic-scriptorium:ot.ezek.bohairic_ed
 
 # P13-5: the Psalms work — the one book where the versification divergence
 # BITES, faced head-on (the P11-8 OT WEB witness dodged it by omitting Psalms).
@@ -817,6 +887,8 @@ psalms:
     #     Swete's opens at 32.1) — 12 of 50 chapters match Swete; the
     #     Bohairic (ot.jer.bohairic_ed) is a hybrid, chapters 1-26 counted
     #     like the MT and 27-39 matching no held scheme — 31 of 52.
+    #   The rest of the Bohairic OT is now in the ot work (P145); LAM and
+    #   DAN are held out there, with evidence beside the entry.
     - label: Sahidic psalter (CoptOT, Coptic Scriptorium)
       extractor: cts-verse
       documents:

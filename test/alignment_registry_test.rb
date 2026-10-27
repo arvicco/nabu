@@ -292,10 +292,12 @@ class AlignmentRegistryTest < Minitest::Test
     labels = work.witnesses.map(&:label)
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)",
                   "BHSA (ETCBC, Masoretic)", "WEB (English)",
-                  "Targum (Onkelos/Jonathan/Writings)", "Peshitta (Syriac, ETCBC)"], labels,
+                  "Targum (Onkelos/Jonathan/Writings)", "Peshitta (Syriac, ETCBC)",
+                  "Bohairic OT (Coptic Scriptorium)"], labels,
                  "P26-3 adds the Masoretic witness, P30-4 the second MT leg (BHSA), P30-3 " \
-                 "the Aramaic Targum leg, P31-4 the Syriac Peshitta leg — align GEN 1.1 " \
-                 "spans MT/MT2/LXX/Vulgate/English/Targum/Peshitta"
+                 "the Aramaic Targum leg, P31-4 the Syriac Peshitta leg, P145 the Bohairic " \
+                 "Coptic leg — align GEN 1.1 spans MT/MT2/LXX/Vulgate/English/Targum/" \
+                 "Peshitta/Bohairic"
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
@@ -448,6 +450,47 @@ class AlignmentRegistryTest < Minitest::Test
     assert_nil sahidic.numbering, "Greek numbering IS the work vocabulary"
     assert_equal "PSA 22.1", sahidic.normalize_ref("PSA 22.1")
     %w[ot.pss.bohairic_ed ot.jer.coptot ot.jer.bohairic_ed].each do |tail|
+      urn = "urn:nabu:coptic-scriptorium:#{tail}"
+      assert_nil(registry.works.find { |work| work.witness_for(urn) }, "#{tail} stays out of the hub")
+    end
+  end
+
+  # The Bohairic OT (Coptic Scriptorium's bohairic.ot, attribution class)
+  # joins the ot work for the 20 books its versification spot-check passed
+  # (2026-10-27, read-only against the held catalog). It cites the
+  # Greek/Vulgate scheme where the MT splits (Jonah 2.1 is the fish
+  # verse; Joel 3 and Malachi 4 chapters), so it aligns directly beside
+  # Swete, no remap. Held out with evidence beside the entry: LAM (its
+  # ch. 3 acrostic drifts against every witness), DAN (its own 19-chapter
+  # sectioning), plus the P144 holdouts (JER here, the psalter in the
+  # psalms work). The standalone gold Jonah (ot.Jonah.bohairic_ed)
+  # stays out under the one-witness-per-edition rule.
+  BOHAIRIC_OT_BOOKS = {
+    "GEN" => "gen", "EXO" => "exod", "LEV" => "lev", "NUM" => "num", "DEU" => "deut",
+    "JOB" => "job", "HOS" => "hos", "AMO" => "amos", "MIC" => "mic", "JOL" => "joel",
+    "OBA" => "obad", "JON" => "jonah", "NAM" => "nah", "HAB" => "hab", "ZEP" => "zeph",
+    "HAG" => "hag", "ZEC" => "zach", "MAL" => "mal", "ISA" => "isa", "EZK" => "ezek"
+  }.freeze
+
+  def test_shipped_ot_work_carries_the_bohairic_ot_on_the_spot_checked_books
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    registry = Nabu::AlignmentRegistry.load(path)
+    work = registry.work("ot")
+    bohairic = work.witnesses.find { |witness| witness.label == "Bohairic OT (Coptic Scriptorium)" }
+    refute_nil bohairic, "the Bohairic OT is an ot-work witness"
+    assert_equal "cts-verse", bohairic.extractor
+    assert_nil bohairic.numbering, "Greek/Vulgate-scheme numbering IS the work vocabulary"
+    expected = BOHAIRIC_OT_BOOKS.to_h { |token, tail| ["urn:nabu:coptic-scriptorium:ot.#{tail}.bohairic_ed", token] }
+    assert_equal expected, bohairic.documents
+    assert_equal "Peshitta (Syriac, ETCBC)", work.witnesses[-2].label, "the Bohairic column closes the ot work"
+    assert_equal "Bohairic OT (Coptic Scriptorium)", work.witnesses.last.label
+  end
+
+  def test_bohairic_ot_holdouts_stay_out_of_the_hub
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    registry = Nabu::AlignmentRegistry.load(path)
+    %w[ot.lam.bohairic_ed ot.dan.bohairic_ed ot.jer.bohairic_ed ot.pss.bohairic_ed
+       ot.Jonah.bohairic_ed].each do |tail|
       urn = "urn:nabu:coptic-scriptorium:#{tail}"
       assert_nil(registry.works.find { |work| work.witness_for(urn) }, "#{tail} stays out of the hub")
     end
