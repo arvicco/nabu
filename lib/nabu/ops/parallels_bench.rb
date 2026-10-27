@@ -3,7 +3,7 @@
 require "fileutils"
 require "json"
 require_relative "../errors"
-require_relative "../query/parallels_fuzzy"
+require_relative "../query/parallels_hub"
 
 module Nabu
   module Ops
@@ -174,11 +174,13 @@ module Nabu
       # "journal:<producer>:<kind>" for a persisted layer), K ("1,5,10,15"),
       # SAMPLE (an integer or "all"), SEED, and the engine knobs PROFILE
       # (a config/reuse_profiles.yml name), GRAM_SIZE, LANG, MIN_SCORE,
-      # MAX_ANCHORS, and FUZZY (off | fallback | all — the fuzzy 2-of-3
-      # positional gram tier, Query::ParallelsFuzzy; off by default); OUT
-      # names the sidecar (default under db/bench/).
+      # MAX_ANCHORS, FUZZY (off | fallback | all — the fuzzy 2-of-3
+      # positional gram tier, Query::ParallelsFuzzy; off by default), HUB
+      # (off | on — hub demotion, Query::HubDemotion; off by default) and
+      # HUB_DF (an absolute hub cutoff overriding the corpus-relative one);
+      # OUT names the sidecar (default under db/bench/).
       Options = Data.define(:gold, :producer, :ks, :sample, :seed, :profile, :gram_size, :lang, :min_score,
-                            :max_anchors, :fuzzy, :out)
+                            :max_anchors, :fuzzy, :hub, :hub_df, :out)
 
       def self.options_from_env(env)
         gold = env.fetch("GOLD") { raise Error, "GOLD=<#{RECIPES.keys.join('|')}|census> is required" }
@@ -196,7 +198,8 @@ module Nabu
                     profile: env["PROFILE"], gram_size: env["GRAM_SIZE"]&.then { |v| Integer(v, 10) },
                     lang: env["LANG_FILTER"], min_score: env["MIN_SCORE"]&.then { |v| Float(v) },
                     max_anchors: Integer(env.fetch("MAX_ANCHORS", DEFAULT_MAX_ANCHORS.to_s), 10),
-                    fuzzy: fuzzy_scope(env.fetch("FUZZY", "off")), out: env["OUT"])
+                    fuzzy: fuzzy_scope(env.fetch("FUZZY", "off")), hub: hub_switch(env.fetch("HUB", "off")),
+                    hub_df: env["HUB_DF"]&.then { |v| Integer(v, 10) }, out: env["OUT"])
       rescue ArgumentError => e
         raise Error, "bench:parallels: #{e.message}"
       end
@@ -211,6 +214,13 @@ module Nabu
       end
       private_class_method :fuzzy_scope
 
+      def self.hub_switch(value)
+        return value == "on" if %w[on off].include?(value)
+
+        raise Error, "HUB must be off or on, got #{value.inspect}"
+      end
+      private_class_method :hub_switch
+
       # Build the producer +options+ name. A PROFILE supplies its knobs;
       # explicit GRAM_SIZE / LANG_FILTER / MIN_SCORE override them.
       def self.producer_for(options, catalog:, fulltext:, links:)
@@ -224,7 +234,7 @@ module Nabu
                            lang: options.lang || profile&.lang, gram_size: options.gram_size || profile&.gram_size,
                            stop_tokens: profile&.stop_tokens, candidate_pool: profile&.candidate_pool,
                            min_score: options.min_score || profile&.min_score, profile: options.profile,
-                           fuzzy: options.fuzzy)
+                           fuzzy: options.fuzzy, hub: options.hub, hub_df: options.hub_df)
       end
 
       # The honest table.
@@ -387,17 +397,18 @@ module Nabu
       # reuse-profile knobs. +min_score+ drops hits below the floor (the
       # batch persistence rule) — nil keeps every hit. +fuzzy+ (a
       # Query::ParallelsFuzzy scope; nil = off) adds the fuzzy 2-of-3
-      # positional gram tier, named in the params so a sidecar says so.
+      # positional gram tier, named in the params so a sidecar says so;
+      # +hub+ (true = on) adds hub demotion (Query::HubDemotion) at the
+      # corpus-relative cutoff, or at +hub_df+ when given.
       class EngineProducer
         def initialize(catalog:, fulltext:, max_anchors: DEFAULT_MAX_ANCHORS, lang: nil, gram_size: nil,
-                       stop_tokens: nil, candidate_pool: nil, min_score: nil, profile: nil, fuzzy: nil)
+                       stop_tokens: nil, candidate_pool: nil, min_score: nil, profile: nil, fuzzy: nil,
+                       hub: false, hub_df: nil)
           @catalog = catalog
           @fuzzy = fuzzy
-          @engine = if fuzzy
-                      Nabu::Query::ParallelsFuzzy.new(catalog: catalog, fulltext: fulltext, scope: fuzzy)
-                    else
-                      Nabu::Query::Parallels.new(catalog: catalog, fulltext: fulltext)
-                    end
+          @hub = hub
+          @hub_df = hub ? hub_df : nil
+          @engine = build_engine(catalog, fulltext)
           @max_anchors = max_anchors
           @knobs = { lang: lang, gram_size: gram_size || Nabu::Query::Parallels::GRAM_SIZE,
                      stop_tokens: stop_tokens, candidate_pool: candidate_pool }
@@ -411,7 +422,8 @@ module Nabu
           { "engine" => "query-parallels", "profile" => @profile, "max_anchors" => @max_anchors,
             "lang" => @knobs[:lang], "gram_size" => @knobs[:gram_size],
             "stop_tokens" => @knobs[:stop_tokens]&.size, "candidate_pool" => @knobs[:candidate_pool],
-            "min_score" => @min_score, "fuzzy" => @fuzzy&.to_s,
+            "min_score" => @min_score, "fuzzy" => @fuzzy&.to_s, "hub" => (@hub ? "on" : nil),
+            "hub_df" => @hub_df,
             "aggregation" => "sum of per-anchor document scores" }
         end
 
@@ -431,6 +443,18 @@ module Nabu
         end
 
         private
+
+        def build_engine(catalog, fulltext)
+          base = { catalog: catalog, fulltext: fulltext }
+          base[:scope] = @fuzzy if @fuzzy
+          base[:hub_df] = @hub_df if @hub
+          klass = if @hub
+                    @fuzzy ? Nabu::Query::ParallelsFuzzyHub : Nabu::Query::ParallelsHub
+                  else
+                    @fuzzy ? Nabu::Query::ParallelsFuzzy : Nabu::Query::Parallels
+                  end
+          klass.new(**base)
+        end
 
         def anchor_passages(document_urn)
           @catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])

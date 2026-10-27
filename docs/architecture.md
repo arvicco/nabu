@@ -1431,6 +1431,39 @@ its own later change. The fixture pin carries both states: the tier
 moves nothing on the fixture editions, whose misses are character-level
 damage and inflection on one-token lines, below its token grain.
 
+**The second measured borrowing — hub demotion** (`Query::HubDemotion`,
+`ParallelsHub` / `ParallelsFuzzyHub`, bench knobs `HUB=off|on` and
+`HUB_DF=<n>`). A stock formula is many moderately common grams, and
+every passage carrying it piles them up; the technique splits a
+candidate's score into distinctive mass and hub mass (shared grams whose
+df reaches the hub cutoff) and saturates the hub mass at c·h/(h+c), c =
+1/hub_df — monotone among formula-only candidates, and strictly below the
+weight of any distinctive gram, so one distinctive overlap outranks any
+pile of formula. Candidates are demoted, never dropped; evidence spans
+are untouched. The cutoff is corpus-relative (D36-a shape), floor 10.
+Measured on the 2026-10-22 catalog, cutoffs 5/10/20/50 swept (off → on
+at 10, recall@1 / recall@15 micro): edh-edr (n 2,000) 41.5% → 41.5% /
+48.1% → 48.1%; tm-same-text (all 869) 10.1% → 10.1% / 16.8% → 17.0%;
+suttacentral (n 500) 11.2% → 11.4% / 39.4% → 39.6% (macro @15 56.5% →
+57.3%); cdli-composite (n 500) 5.2% → 5.2% / 18.2% → 18.0%;
+kitab-passages (all 96) unchanged; kitab-books (n 20) 0.3% → 0.3% / 3.3% → 3.2%,
+the one visible loss (macro @5 14.5% → 11.9%, about one query of 20).
+NOT ADMITTED: every set moves by at most a few partner slots either way
+— the exact tier's 1/df weight already does most of the demoting, and
+the sets' misses lie elsewhere (short or damaged epigraphy, which the
+fuzzy tier answers, and gold incompleteness — SuttaCentral's
+neighbouring suttas share whole passages without being listed). Beside
+the fuzzy fallback the two compose without interference (fallback fires
+only where no exact mass exists to demote): fuzzy → fuzzy+hub moves
+edh-edr, tm-same-text and suttacentral by ≤ 2 slots. Cost, timed back
+to back warm (off/on/on/off): none measurable — edh-edr n 300 5.9 s vs
+6.0/5.9 s, suttacentral n 100 16.3 s vs 16.9/16.7 s, tm-same-text n 300
+6.9 s vs 7.0/6.9 s (the hub mass re-reads the recorded probe rows, no
+second FTS read).
+It stays a bench-only module outside the links-stamp closure (no
+persisted scope re-mines); the fixture pin carries the on-state, equal
+to the off-state by construction (no fixture gram reaches df 10).
+
 ## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
