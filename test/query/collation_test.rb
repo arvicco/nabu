@@ -290,6 +290,29 @@ module Query
       assert(result.refs.all? { |rc| rc.cells.size == 1 }, "each ref collates its own witnesses")
     end
 
+    # -- passage urns + collate over an aligned group (the exporter's seam) -------
+
+    def test_readings_and_asides_carry_their_passage_urns
+      registry = seed_chu_witnesses
+      result = collate("MARK 2.3", registry)
+      reading = cell_for(result, "chu", "Latin").readings.find { |candidate| candidate.label == "ccmh-savvina" }
+      assert_equal ["urn:nabu:ccmh:savvina:s0"], reading.urns
+      aside = result.refs.first.asides.find { |candidate| candidate.label == "marianus" }
+      assert_equal ["urn:nabu:proiel:marianus:s0"], aside.urns
+    end
+
+    def test_collate_takes_an_aligned_group_without_the_range_wide_base_check
+      registry = seed_chu_witnesses
+      Nabu::Store::AlignmentIndexer.rebuild!(catalog: @catalog, fulltext: @fulltext, registry: registry)
+      aligned = Nabu::Query::Align.new(catalog: @catalog, fulltext: @fulltext, registry: registry).run("MARK 2.3")
+      collation = Nabu::Query::Collation.new(catalog: @catalog, fulltext: @fulltext, registry: registry)
+      rc = collation.collate(aligned.ref, aligned.witnesses, base: "ccmh-savvina")
+      assert_equal "MARK 2.3", rc.ref
+      assert_equal "ccmh-savvina", rc.cells.first.base_label
+      rc = collation.collate(aligned.ref, aligned.witnesses, base: "absent-here")
+      assert_equal "ccmh-assemanianus", rc.cells.first.base_label, "an absent base falls back to registry order"
+    end
+
     # -- license withholding (the MCP gate) ---------------------------------------
 
     def test_excluded_license_witnesses_are_withheld_from_the_diff
